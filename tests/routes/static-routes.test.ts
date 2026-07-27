@@ -1,12 +1,16 @@
-import { existsSync, readFileSync } from "node:fs";
-import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
 import {
   generateStaticParams,
   officialFarmTypes,
-} from "../../app/farm/[type]/page";
+} from "../../app/(en)/farm/[type]/page";
+import {
+  localizedStaticPages,
+  readStaticPageHtml,
+  staticExportDirectoryPath,
+} from "./static-export-test-support";
 
 const expectedOfficialFarmTypes = [
   "standard",
@@ -19,50 +23,7 @@ const expectedOfficialFarmTypes = [
   "meadowlands",
 ] as const;
 
-const expectedStaticPageFiles = [
-  "index.html",
-  "farm-comparison.html",
-  "farm/standard.html",
-  "farm/riverland.html",
-  "farm/forest.html",
-  "farm/hilltop.html",
-  "farm/wilderness.html",
-  "farm/four-corners.html",
-  "farm/beach.html",
-  "farm/meadowlands.html",
-  "mods.html",
-  "privacy.html",
-  "terms.html",
-] as const;
-
-function runStaticBuild(): void {
-  const buildProcess = spawnSync("pnpm", ["build"], {
-    cwd: process.cwd(),
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      NEXT_TELEMETRY_DISABLED: "1",
-    },
-  });
-
-  if (buildProcess.status !== 0) {
-    throw new Error(
-      `Static build failed. Exit code: ${String(buildProcess.status)}. Stderr: ${buildProcess.stderr}. Stdout: ${buildProcess.stdout}`,
-    );
-  }
-}
-
-function readStaticPageHtml(staticPageFile: string): string {
-  const staticPagePath = join(process.cwd(), "out", staticPageFile);
-
-  if (!existsSync(staticPagePath)) {
-    throw new Error(`Expected static page file does not exist: ${staticPagePath}`);
-  }
-
-  return readFileSync(staticPagePath, "utf8");
-}
-
-describe("static reference-runtime routes", () => {
+describe("static localized routes", () => {
   it("exports static files without image optimization", () => {
     expect(nextConfig.output).toBe("export");
     expect(nextConfig.images?.unoptimized).toBe(true);
@@ -75,20 +36,25 @@ describe("static reference-runtime routes", () => {
     );
   });
 
-  it(
-    "exports every retained route without an eager reference-runtime bootstrap",
-    () => {
-      runStaticBuild();
+  it("exports every English and Chinese physical page with its declared locale without an /en tree", () => {
+    expect(localizedStaticPages).toHaveLength(26);
 
-      for (const staticPageFile of expectedStaticPageFiles) {
-        const staticPageHtml = readStaticPageHtml(staticPageFile);
+    for (const staticPage of localizedStaticPages) {
+      expect(readStaticPageHtml(staticPage.outputPath)).toContain(
+        `<html lang="${staticPage.locale}"`,
+      );
+    }
 
-        expect(staticPageHtml).not.toContain('id="reference-runtime-root"');
-        expect(staticPageHtml).not.toContain(
-          'src="/reference-runtime/bootstrap.mjs"',
-        );
-      }
-    },
-    30_000,
-  );
+    expect(existsSync(join(staticExportDirectoryPath, "en.html"))).toBe(false);
+  });
+
+  it("exports native localized markup without the frozen runtime bootstrap", () => {
+    const englishFarmGuideHtml = readStaticPageHtml("farm/standard.html");
+    const chineseFarmGuideHtml = readStaticPageHtml("zh/farm/standard.html");
+
+    expect(englishFarmGuideHtml).toContain("Standard Farm");
+    expect(chineseFarmGuideHtml).toContain("标准农场");
+    expect(englishFarmGuideHtml).not.toContain("reference-runtime/bootstrap.mjs");
+    expect(chineseFarmGuideHtml).not.toContain("reference-runtime/bootstrap.mjs");
+  });
 });

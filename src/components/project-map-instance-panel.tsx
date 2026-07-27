@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { getPlannerMapDisplayName } from "../i18n/catalog-display";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
 
 export type ProjectMapInstanceSummary = Readonly<{
   id: string;
@@ -18,7 +21,8 @@ export type ProjectMapTransferDestination = Readonly<{
   name: string;
 }>;
 
-type ProjectMapInstancePanelProperties = Readonly<{
+export type ProjectMapInstancePanelProperties = Readonly<{
+  locale?: SiteLocale;
   activeMapInstanceId: string;
   mapInstances: readonly ProjectMapInstanceSummary[];
   mapChoices: readonly ProjectMapChoice[];
@@ -39,6 +43,7 @@ type ProjectMapInstancePanelProperties = Readonly<{
 }>;
 
 export function ProjectMapInstancePanel({
+  locale = "en",
   activeMapInstanceId,
   mapInstances,
   mapChoices,
@@ -80,11 +85,11 @@ export function ProjectMapInstancePanel({
   }
 
   return (
-    <section aria-label="Project maps" className="project-map-instance-panel">
-      <h3>Project maps</h3>
+    <section aria-label={translate(locale, "planner.projectMaps.label")} className="project-map-instance-panel">
+      <h3>{translate(locale, "planner.projectMaps.label")}</h3>
       <div className="project-map-instance-panel__transfer-destination">
         <label>
-          <span>Transfer destination</span>
+          <span>{translate(locale, "planner.projectMaps.transferDestination")}</span>
           <select
             disabled={projectChoices.length === 0}
             onChange={(changeEvent) =>
@@ -93,7 +98,7 @@ export function ProjectMapInstancePanel({
             value={destinationProjectId}
           >
             {projectChoices.length === 0 ? (
-              <option value="">Create another local project first</option>
+              <option value="">{translate(locale, "planner.projectMaps.noDestination")}</option>
             ) : (
               projectChoices.map((projectChoice) => (
                 <option key={projectChoice.id} value={projectChoice.id}>
@@ -117,13 +122,13 @@ export function ProjectMapInstancePanel({
             >
               <div className="project-map-instance-panel__instance-summary">
                 <strong>{mapInstance.name}</strong>
-                <span>{mapInstance.baseMapId}</span>
-                {isActiveMapInstance ? <span>Current</span> : null}
+                <span>{getMapInstanceDisplayName(locale, mapInstance.baseMapId, mapChoices)}</span>
+                {isActiveMapInstance ? <span>{translate(locale, "planner.projectMaps.current")}</span> : null}
               </div>
               {isRenamingMapInstance ? (
                 <div className="project-map-instance-panel__rename-form">
                   <label>
-                    <span className="sr-only">New map name</span>
+                    <span className="sr-only">{translate(locale, "planner.projectMaps.newMapName")}</span>
                     <input
                       onChange={(changeEvent) =>
                         setRequestedMapInstanceName(changeEvent.target.value)
@@ -135,13 +140,13 @@ export function ProjectMapInstancePanel({
                     onClick={() => submitMapInstanceRename(mapInstance.id)}
                     type="button"
                   >
-                    Save name
+                    {translate(locale, "planner.projectMaps.saveName")}
                   </button>
                   <button
                     onClick={() => setRenamingMapInstanceId(null)}
                     type="button"
                   >
-                    Cancel rename
+                    {translate(locale, "planner.projectMaps.cancelRename")}
                   </button>
                 </div>
               ) : (
@@ -150,19 +155,19 @@ export function ProjectMapInstancePanel({
                     onClick={() => onOpenMapInstance(mapInstance.id)}
                     type="button"
                   >
-                    Open
+                    {translate(locale, "planner.projectMaps.open")}
                   </button>
                   <button
                     onClick={() => startRenamingMapInstance(mapInstance)}
                     type="button"
                   >
-                    Rename
+                    {translate(locale, "planner.projectMaps.rename")}
                   </button>
                   <button
                     onClick={() => onDuplicateMapInstance(mapInstance.id)}
                     type="button"
                   >
-                    Duplicate
+                    {translate(locale, "planner.projectMaps.duplicate")}
                   </button>
                   <button
                     disabled={projectChoices.length === 0}
@@ -174,7 +179,7 @@ export function ProjectMapInstancePanel({
                     }
                     type="button"
                   >
-                    Copy to project
+                    {translate(locale, "planner.projectMaps.copy")}
                   </button>
                   <button
                     disabled={projectChoices.length === 0}
@@ -186,13 +191,13 @@ export function ProjectMapInstancePanel({
                     }
                     type="button"
                   >
-                    Move to project
+                    {translate(locale, "planner.projectMaps.move")}
                   </button>
                   <button
                     onClick={() => onDeleteMapInstance(mapInstance.id)}
                     type="button"
                   >
-                    Delete
+                    {translate(locale, "planner.projectMaps.delete")}
                   </button>
                 </div>
               )}
@@ -200,8 +205,8 @@ export function ProjectMapInstancePanel({
           );
         })}
       </ul>
-      <section aria-label="Add map" className="project-map-instance-panel__add-map">
-        <h3>Add map</h3>
+      <section aria-label={translate(locale, "planner.projectMaps.add")} className="project-map-instance-panel__add-map">
+        <h3>{translate(locale, "planner.projectMaps.add")}</h3>
         <div className="project-map-instance-panel__map-grid">
           {mapChoices.map((mapChoice) => (
             <button
@@ -210,11 +215,20 @@ export function ProjectMapInstancePanel({
               onClick={() => onAddMap(mapChoice.id)}
               type="button"
             >
-              {mapChoice.displayName}
+              {getPlannerMapDisplayName(locale, mapChoice.id, mapChoice.displayName)}
             </button>
           ))}
         </div>
       </section>
     </section>
   );
+}
+
+function getMapInstanceDisplayName(
+  locale: SiteLocale,
+  baseMapId: string,
+  mapChoices: readonly ProjectMapChoice[],
+): string {
+  const mapChoice = mapChoices.find((candidateMapChoice) => candidateMapChoice.id === baseMapId);
+  return getPlannerMapDisplayName(locale, baseMapId, mapChoice?.displayName ?? baseMapId);
 }

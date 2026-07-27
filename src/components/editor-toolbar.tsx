@@ -4,8 +4,11 @@ import {
   editorToolAvailability,
   type EditorTool,
 } from "../editor/editor-view-state";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
 
 type EditorToolbarProperties = Readonly<{
+  locale?: SiteLocale;
   tool: EditorTool;
   onToolChange: (tool: EditorTool) => void;
   onUndo: () => void;
@@ -16,15 +19,16 @@ type EditorToolbarProperties = Readonly<{
 
 const editorToolControls: readonly Readonly<{
   tool: EditorTool;
-  label: string;
+  labelKey: string;
   glyph: string;
 }>[] = [
-  { tool: "cursor", label: "Cursor tool", glyph: "↖" },
-  { tool: "multi-select", label: "Multi-select tool", glyph: "▦" },
-  { tool: "erase", label: "Erase tool", glyph: "⌫" },
+  { tool: "cursor", labelKey: "planner.toolbar.cursorTool", glyph: "↖" },
+  { tool: "multi-select", labelKey: "planner.toolbar.multiSelectTool", glyph: "▦" },
+  { tool: "erase", labelKey: "planner.toolbar.eraseTool", glyph: "⌫" },
 ];
 
 export function EditorToolbar({
+  locale = "en",
   tool,
   onToolChange,
   onUndo,
@@ -33,20 +37,21 @@ export function EditorToolbar({
   canRedo,
 }: EditorToolbarProperties) {
   return (
-    <div aria-label="Editor tools" className="editor-toolbar" role="toolbar">
+    <div aria-label={translate(locale, "planner.toolbar.label")} className="editor-toolbar" role="toolbar">
       {editorToolControls.map((editorToolControl) => {
         const isSelected = tool === editorToolControl.tool;
         const isAvailable = editorToolAvailability[editorToolControl.tool];
+        const label = translate(locale, editorToolControl.labelKey);
 
         return (
           <button
-            aria-label={editorToolControl.label}
+            aria-label={label}
             aria-pressed={isSelected}
             className="editor-toolbar__button"
             disabled={!isAvailable}
             key={editorToolControl.tool}
             onClick={() => onToolChange(editorToolControl.tool)}
-            title={editorToolControl.label}
+            title={label}
             type="button"
           >
             <span aria-hidden="true" className="editor-toolbar__glyph">
@@ -57,11 +62,11 @@ export function EditorToolbar({
       })}
       <span aria-hidden="true" className="editor-toolbar__divider" />
       <button
-        aria-label="Undo"
+        aria-label={translate(locale, "planner.toolbar.undo")}
         className="editor-toolbar__button"
         disabled={!canUndo}
         onClick={onUndo}
-        title="Undo (Ctrl+Z)"
+        title={translate(locale, "planner.toolbar.undoShortcut")}
         type="button"
       >
         <span aria-hidden="true" className="editor-toolbar__glyph">
@@ -69,11 +74,11 @@ export function EditorToolbar({
         </span>
       </button>
       <button
-        aria-label="Redo"
+        aria-label={translate(locale, "planner.toolbar.redo")}
         className="editor-toolbar__button"
         disabled={!canRedo}
         onClick={onRedo}
-        title="Redo (Ctrl+Y)"
+        title={translate(locale, "planner.toolbar.redoShortcut")}
         type="button"
       >
         <span aria-hidden="true" className="editor-toolbar__glyph">

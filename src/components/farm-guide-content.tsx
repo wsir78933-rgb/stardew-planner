@@ -1,27 +1,36 @@
-import type { OfficialFarmGuide } from "../reference/official-farm-guides";
+import {
+  formatPublicMessage,
+  getLocalizedOfficialFarmGuide,
+} from "../i18n/public-content";
+import { LocalizedLink } from "../i18n/localized-link";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
+import { officialFarmTypes, type OfficialFarmType } from "../reference/official-farm-guides";
 
 type FarmGuideContentProperties = Readonly<{
-  farmGuide: OfficialFarmGuide;
-  otherFarmGuides: readonly OfficialFarmGuide[];
+  locale: SiteLocale;
+  farmType: OfficialFarmType;
 }>;
 
 function FarmGuideStats({
   farmGuide,
+  locale,
 }: Readonly<{
-  farmGuide: OfficialFarmGuide;
+  farmGuide: ReturnType<typeof getLocalizedOfficialFarmGuide>;
+  locale: SiteLocale;
 }>) {
   return (
     <dl className="farm-guide-stats">
       <div>
-        <dt>Tillable tiles</dt>
+        <dt>{translate(locale, "public.comparison.tillableTiles")}</dt>
         <dd>{farmGuide.tillableTiles}</dd>
       </div>
       <div>
-        <dt>Total buildable</dt>
+        <dt>{translate(locale, "public.comparison.totalBuildable")}</dt>
         <dd>{farmGuide.totalBuildableTiles}</dd>
       </div>
       <div>
-        <dt>Added in</dt>
+        <dt>{translate(locale, "public.comparison.addedIn")}</dt>
         <dd>{farmGuide.addedIn}</dd>
       </div>
     </dl>
@@ -29,40 +38,65 @@ function FarmGuideStats({
 }
 
 export function FarmGuideContent({
-  farmGuide,
-  otherFarmGuides,
+  locale,
+  farmType,
 }: FarmGuideContentProperties) {
+  const farmGuide = getLocalizedOfficialFarmGuide(locale, farmType);
+  const otherFarmGuides = officialFarmTypes
+    .filter((otherFarmType) => otherFarmType !== farmType)
+    .map((otherFarmType) => getLocalizedOfficialFarmGuide(locale, otherFarmType));
+
   return (
     <>
-      <nav aria-label="Breadcrumb" className="public-breadcrumbs">
-        <a href="/">Stardew Planner</a>
+      <nav
+        aria-label={translate(locale, "public.guide.breadcrumb")}
+        className="public-breadcrumbs"
+      >
+        <LocalizedLink canonicalPath="/" locale={locale}>
+          {translate(locale, "public.guide.planner")}
+        </LocalizedLink>
         <span aria-hidden="true">/</span>
-        <a href="/farm-comparison">Farm types</a>
+        <LocalizedLink canonicalPath="/farm-comparison" locale={locale}>
+          {translate(locale, "public.guide.farmTypes")}
+        </LocalizedLink>
         <span aria-hidden="true">/</span>
         <span>{farmGuide.title}</span>
       </nav>
       <header className="farm-guide-hero">
         <img
-          alt={`${farmGuide.title} preview`}
+          alt={formatPublicMessage(locale, "public.guide.preview", {
+            farmName: farmGuide.title,
+          })}
           className="farm-guide-hero__preview"
           src={farmGuide.previewSource}
         />
         <div className="farm-guide-hero__copy">
           <h1>{farmGuide.title}</h1>
           <p>{farmGuide.introduction}</p>
-          <FarmGuideStats farmGuide={farmGuide} />
+          <FarmGuideStats farmGuide={farmGuide} locale={locale} />
           <div className="farm-guide-hero__actions">
-            <a className="public-primary-cta" href={`/?farmType=${farmGuide.id}`}>
-              Plan this farm →
-            </a>
-            <a className="public-secondary-cta" href="/farm-comparison">
-              Compare all farms
-            </a>
+            <LocalizedLink
+              canonicalPath="/"
+              className="public-primary-cta"
+              locale={locale}
+              search={`farmType=${farmGuide.id}`}
+            >
+              {translate(locale, "public.guide.planThisFarm")}
+            </LocalizedLink>
+            <LocalizedLink
+              canonicalPath="/farm-comparison"
+              className="public-secondary-cta"
+              locale={locale}
+            >
+              {translate(locale, "public.guide.compareAllFarms")}
+            </LocalizedLink>
           </div>
         </div>
       </header>
       <section className="farm-guide-section" aria-labelledby="farm-guide-features">
-        <h2 id="farm-guide-features">What makes it different</h2>
+        <h2 id="farm-guide-features">
+          {translate(locale, "public.guide.whatMakesItDifferent")}
+        </h2>
         <ul className="public-feature-list">
           {farmGuide.features.map((feature) => (
             <li key={feature}>{feature}</li>
@@ -70,22 +104,32 @@ export function FarmGuideContent({
         </ul>
         {farmGuide.note ? (
           <p className="public-note">
-            <strong>Note:</strong> {farmGuide.note}
+            <strong>{translate(locale, "public.comparison.note")}</strong>{" "}
+            {farmGuide.note}
           </p>
         ) : null}
       </section>
       <section className="farm-guide-section" aria-labelledby="other-farms-heading">
-        <h2 id="other-farms-heading">Other farms</h2>
+        <h2 id="other-farms-heading">
+          {translate(locale, "public.guide.otherFarms")}
+        </h2>
         <div className="farm-guide-sibling-grid">
           {otherFarmGuides.map((otherFarmGuide) => (
-            <a href={`/farm/${otherFarmGuide.id}`} key={otherFarmGuide.id}>
+            <LocalizedLink
+              canonicalPath={`/farm/${otherFarmGuide.id}`}
+              key={otherFarmGuide.id}
+              locale={locale}
+            >
               {otherFarmGuide.title}
-            </a>
+            </LocalizedLink>
           ))}
         </div>
         <p className="farm-guide-section__footnote">
-          Want them side by side? See the{" "}
-          <a href="/farm-comparison">full comparison</a>.
+          {translate(locale, "public.guide.comparisonPrompt")}{" "}
+          <LocalizedLink canonicalPath="/farm-comparison" locale={locale}>
+            {translate(locale, "public.guide.fullComparison")}
+          </LocalizedLink>
+          {translate(locale, "public.guide.comparisonSentenceEnding")}
         </p>
       </section>
     </>

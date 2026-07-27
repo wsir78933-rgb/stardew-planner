@@ -5,14 +5,22 @@ import {
   createFarmSummaryCsvFile,
   type FarmSummary,
 } from "../projects/farm-summary";
+import {
+  getCatalogDisplayName,
+  getPlannerMapDisplayName,
+} from "../i18n/catalog-display";
+import type { SiteLocale } from "../i18n/locales";
+import { formatTranslation, translate } from "../i18n/messages";
 
 type FarmSummaryModalProperties = Readonly<{
   farmSummary: FarmSummary;
+  locale?: SiteLocale;
   onClose: () => void;
 }>;
 
 export function FarmSummaryModal({
   farmSummary,
+  locale = "en",
   onClose,
 }: FarmSummaryModalProperties) {
   const [exportErrorMessage, setExportErrorMessage] = useState<string | null>(null);
@@ -29,7 +37,7 @@ export function FarmSummaryModal({
       downloadFarmSummaryCsvFile(farmSummaryCsvFile);
       setExportErrorMessage(null);
     } catch (caughtError) {
-      setExportErrorMessage(formatFarmSummaryExportError(caughtError));
+      setExportErrorMessage(formatFarmSummaryExportError(caughtError, locale));
     }
   }
 
@@ -53,13 +61,13 @@ export function FarmSummaryModal({
       >
         <header className="farm-summary-modal__header">
           <div>
-            <h2 id={farmSummaryHeadingId}>Farm Summary</h2>
+            <h2 id={farmSummaryHeadingId}>{translate(locale, "planner.summary.label")}</h2>
             <p>
-              Map: {farmSummary.mapContext.displayName} ({farmSummary.mapContext.baseMapId}) · Season: {formatFarmSummarySeason(farmSummary.mapContext.season)}
+              {formatTranslation(locale, "planner.summary.context", { mapName: getPlannerMapDisplayName(locale, farmSummary.mapContext.baseMapId, farmSummary.mapContext.displayName), mapId: farmSummary.mapContext.baseMapId, season: formatFarmSummarySeason(locale, farmSummary.mapContext.season) })}
             </p>
-            <p>{String(farmSummary.totalItems)} items placed</p>
+            <p>{formatTranslation(locale, "planner.summary.itemsPlaced", { count: farmSummary.totalItems })}</p>
           </div>
-          <button aria-label="Close Farm Summary" onClick={onClose} type="button">
+          <button aria-label={translate(locale, "planner.summary.close")} onClick={onClose} type="button">
             ×
           </button>
         </header>
@@ -69,14 +77,14 @@ export function FarmSummaryModal({
           </p>
         ) : null}
         {farmSummary.rows.length === 0 ? (
-          <p className="farm-summary-modal__empty">No items have been placed yet.</p>
+          <p className="farm-summary-modal__empty">{translate(locale, "planner.summary.empty")}</p>
         ) : (
-          <FarmSummaryGroups farmSummary={farmSummary} />
+          <FarmSummaryGroups farmSummary={farmSummary} locale={locale} />
         )}
         {farmSummary.rows.length > 0 ? (
           <footer className="farm-summary-modal__footer">
             <button onClick={handleExportCsv} type="button">
-              Export CSV
+              {translate(locale, "planner.summary.export")}
             </button>
           </footer>
         ) : null}
@@ -85,7 +93,13 @@ export function FarmSummaryModal({
   );
 }
 
-function FarmSummaryGroups({ farmSummary }: Readonly<{ farmSummary: FarmSummary }>) {
+function FarmSummaryGroups({
+  farmSummary,
+  locale,
+}: Readonly<{
+  farmSummary: FarmSummary;
+  locale: SiteLocale;
+}>) {
   const categories = [...new Set(farmSummary.rows.map((farmSummaryRow) => farmSummaryRow.category))];
 
   return (
@@ -102,12 +116,12 @@ function FarmSummaryGroups({ farmSummary }: Readonly<{ farmSummary: FarmSummary 
         return (
           <section className="farm-summary-modal__group" key={category}>
             <h3>
-              {category} ({String(categoryItemCount)})
+              {getFarmSummaryCategoryDisplayName(locale, category)} ({String(categoryItemCount)})
             </h3>
             <ul>
               {categoryRows.map((farmSummaryRow) => (
                 <li key={`${farmSummaryRow.category}:${farmSummaryRow.name}`}>
-                  <span>{farmSummaryRow.name}</span>
+                  <span>{getCatalogDisplayName(locale, farmSummaryRow.catalogId, farmSummaryRow.name)}</span>
                   <strong>{String(farmSummaryRow.count)}</strong>
                 </li>
               ))}
@@ -119,11 +133,35 @@ function FarmSummaryGroups({ farmSummary }: Readonly<{ farmSummary: FarmSummary 
   );
 }
 
+function getFarmSummaryCategoryDisplayName(
+  locale: SiteLocale,
+  sourceCategory: string,
+): string {
+  const categoryMessageKeys: Readonly<Record<string, string>> = {
+    Buildings: "planner.summary.categories.Buildings",
+    Crops: "planner.summary.categories.Crops",
+    Fences: "planner.summary.categories.Fences",
+    Furniture: "planner.summary.categories.Furniture",
+    Items: "planner.summary.categories.Items",
+    Paths: "planner.summary.categories.Paths",
+    Trees: "planner.summary.categories.Trees",
+  };
+  const categoryMessageKey = categoryMessageKeys[sourceCategory];
+
+  return categoryMessageKey === undefined
+    ? sourceCategory
+    : translate(locale, categoryMessageKey);
+}
+
 function stopModalBackdropClose(mouseEvent: { stopPropagation: () => void }): void {
   mouseEvent.stopPropagation();
 }
 
-function formatFarmSummarySeason(season: string): string {
+function formatFarmSummarySeason(locale: SiteLocale, season: string): string {
+  if (locale === "zh-CN") {
+    return { spring: "春季", summer: "夏季", fall: "秋季", winter: "冬季" }[season] ?? season;
+  }
+
   return `${season.slice(0, 1).toUpperCase()}${season.slice(1)}`;
 }
 
@@ -157,10 +195,15 @@ function downloadFarmSummaryCsvFile(
   window.setTimeout(() => URL.revokeObjectURL(farmSummaryCsvUrl), 0);
 }
 
-function formatFarmSummaryExportError(caughtError: unknown): string {
-  if (caughtError instanceof Error) {
-    return `Farm summary export failed: ${caughtError.message}`;
-  }
+export function formatFarmSummaryExportError(
+  caughtError: unknown,
+  locale: SiteLocale,
+): string {
+  return translate(locale, getFarmSummaryExportErrorMessageKey(caughtError));
+}
 
-  return `Farm summary export failed: ${String(caughtError)}`;
+function getFarmSummaryExportErrorMessageKey(
+  _caughtError: unknown,
+): "planner.summary.error" {
+  return "planner.summary.error";
 }

@@ -1,0 +1,153 @@
+{
+  "site": {
+    "title": "星露谷规划器"
+  },
+  "languageSwitcher": {
+    "label": "语言",
+    "english": "English",
+    "simplifiedChinese": "简体中文"
+  },
+  "seo": {
+    "planner": {
+      "title": "星露谷农场规划器",
+      "description": "使用本地地图、物品和项目规划你的星露谷农场布局。"
+    },
+    "farmComparison": {
+      "title": "星露谷农场类型对比",
+      "description": "在规划布局前，对比《星露谷物语》的全部官方农场地图。"
+    },
+    "farmGuide": {
+      "title": "{farmName} 指南 | 星露谷规划器",
+      "description": "了解{farmName}地图，并开始规划你的星露谷农场布局。"
+    },
+    "mods": {
+      "title": "星露谷模组规划器",
+      "description": "规划你的星露谷模组组合。"
+    },
+    "privacy": {
+      "title": "隐私政策 | 星露谷规划器",
+      "description": "了解星露谷规划器如何将规划方案和偏好保存在你的浏览器中。"
+    },
+    "terms": {
+      "title": "使用条款 | 星露谷规划器",
+      "description": "阅读使用浏览器版星露谷规划器的服务条款。"
+    }
+  },
+  "planner": {
+    "toolbar": {
+      "label": "编辑工具",
+      "cursorTool": "光标工具",
+      "multiSelectTool": "多选工具",
+      "eraseTool": "橡皮擦工具",
+      "undo": "撤销",
+      "undoShortcut": "撤销（Ctrl+Z）",
+      "redo": "重做",
+      "redoShortcut": "重做（Ctrl+Y）"
+    },
+    "menu": {
+      "label": "编辑器菜单", "menu": "菜单", "season": "季节", "map": "地图", "view": "视图", "save": "保存", "settings": "设置"
+    },
+    "catalog": {
+      "label": "物品目录", "buildings": "建筑", "crops": "作物", "placeables": "可摆放物品", "decor": "装饰", "search": "搜索目录", "searchPlaceholder": "搜索…", "help": "帮助与信息", "shortcuts": "快捷键", "whatsNew": "更新内容", "loading": "正在加载本地目录…", "error": "无法加载本地物品目录。", "items": "已验证的目录物品", "select": "选择 {name}，{width} × {height} 格", "empty": "没有已验证的{category}物品匹配 {query}。"
+    },
+    "inspector": {
+      "single": "已选摆放物", "multiple": "已选摆放物", "dismiss": "取消选择", "rotate": "旋转所选物品", "rotateTitle": "旋转所选物品（Q）", "copy": "复制", "copyLabel": "复制所选摆放物", "copyTitle": "复制所选摆放物（C）", "delete": "删除", "deleteLabel": "删除所选摆放物", "deleteTitle": "删除所选摆放物（Delete）", "multipleDeleteLabel": "删除所选摆放物", "multipleDeleteTitle": "删除所选摆放物（Delete）", "selectedCount": "已选择 {count} 个摆放物", "tint": "所选物品染色", "light": "点亮", "lightLabel": "点亮所选灯光", "extinguish": "熄灭", "extinguishLabel": "熄灭所选灯光", "building": "建筑", "roof": "屋顶", "trim": "边饰", "buildingColor": "所选建筑主体颜色", "roofColor": "所选建筑屋顶颜色", "trimColor": "所选建筑边饰颜色"
+    },
+    "interiorDecor": {
+      "label": "室内装饰", "category": "室内装饰类别", "wallpaper": "壁纸", "flooring": "地板", "cancel": "取消", "cancelLabel": "取消室内装饰", "select": "选择 {name}"
+    },
+    "projectMaps": {
+      "label": "项目地图", "transferDestination": "转移目标", "noDestination": "请先创建另一个本地项目", "current": "当前", "open": "打开", "rename": "重命名", "duplicate": "复制", "copy": "复制到项目", "move": "移动到项目", "delete": "删除", "newMapName": "新地图名称", "saveName": "保存名称", "cancelRename": "取消重命名", "add": "添加地图"
+    },
+    "localProjects": {
+      "label": "本地项目", "currentProject": "当前项目：", "currentMap": "当前地图：", "none": "无", "maps": "{count} 张地图", "stored": "已存储在此浏览器中。", "opening": "正在打开浏览器存储…", "save": "保存到此设备", "new": "新建项目", "import": "导入 JSON", "saved": "已保存的本地项目", "current": "当前", "open": "打开", "rename": "重命名", "duplicate": "复制", "export": "导出 JSON", "delete": "删除", "newName": "新项目名称", "applyName": "应用名称", "cancelRename": "取消重命名", "empty": "还没有本地项目。保存将创建一个未命名项目。", "deleteTitle": "删除本地项目？", "deleteConfirm": "要从此浏览器删除 {name} 吗？此操作无法撤销。", "deleteProject": "删除项目", "keepProject": "保留项目", "savedNotice": "已保存到此浏览器。", "createdNotice": "已创建本地项目。", "openedNotice": "已打开 {name}。", "renamedNotice": "已重命名本地项目。", "duplicatedNotice": "已复制本地项目。", "deletedNotice": "已删除本地项目。", "exportedNotice": "已导出 {name}。", "importedNotice": "已导入 {name}。", "error": "本地项目操作失败：{message}"
+    },
+    "export": {
+      "label": "导出", "screenshot": "截图", "screenshotHq": "高清截图", "compactTitle": "1 倍分辨率，文件更小", "hqTitle": "2 倍分辨率，画质更高", "error": "截图导出失败。"
+    },
+    "gameSave": {
+      "label": "导入游戏存档", "title": "导入星露谷物语存档文件以查看农场布局", "importing": "正在导入游戏存档…", "closeResult": "关闭游戏存档导入结果", "farm": "\"{name} 农场\"", "unmapped": "有 {count} 个物品无法映射（可能来自模组）。", "success": "已导入所有可识别的地图摆放物。", "experimental": "游戏存档导入仍属实验功能。未支持的物品不会摆放到地图上。", "browserOnly": "导入的地图仅保存在此浏览器中，直到你将它保存到此设备。", "close": "关闭", "error": "游戏存档导入失败。"
+    },
+    "summary": {
+      "label": "农场汇总", "close": "关闭农场汇总", "context": "地图：{mapName}（{mapId}）· 季节：{season}", "itemsPlaced": "已摆放 {count} 个物品", "empty": "尚未摆放任何物品。", "export": "导出 CSV", "error": "农场汇总导出失败。", "categories": { "Buildings": "建筑", "Crops": "作物", "Items": "物品", "Paths": "小径", "Fences": "栅栏", "Furniture": "家具", "Trees": "树木" }
+    },
+    "modal": {
+      "close": "关闭对话框", "farm": "农场", "interiors": "室内", "exteriors": "室外", "community": "社区", "chooseMap": "选择地图", "chooseSeason": "选择季节", "view": "视图", "save": "保存", "settings": "设置", "help": "帮助与信息", "shortcuts": "键盘快捷键", "whatsNew": "更新内容", "bottomPanel": "底部面板", "leftPanel": "左侧面板", "catalogPosition": "目录位置", "catalogPositionDescription": "选择物品目录在此浏览器中的显示位置。", "overlays": "叠加层", "mapOverlays": "地图叠加层", "display": "显示", "grid": "网格", "sprinklerRadius": "洒水器范围", "scarecrowRadius": "稻草人范围", "beeHouseRange": "蜂房范围", "junimoHutRange": "祝尼魔小屋范围", "blockedBuildings": "不可建造（建筑）", "blockedCrops": "不可种植（作物）", "blockedTrees": "不可生长（树木）", "nightMode": "夜间模式", "npcPaths": "NPC 路径", "resourceClumps": "资源丛", "weather": "天气", "mobile": "移动端", "joystick": "摇杆", "leftHand": "左手模式", "notifications": "通知", "toasts": "提示通知", "interface": "界面", "cursors": "游戏风格光标", "placement": "摆放", "freePlacement": "自由摆放", "freePlacementWarning": "自由摆放会禁用地图摆放规则。部分布局可能无法在游戏中实现。", "cancel": "取消", "enableFreePlacement": "启用自由摆放", "manageMods": "管理模组", "jojaStuff": "Joja 相关", "privacy": "隐私政策", "terms": "服务条款", "titles": { "grid": "显示地图上的格子网格线", "sprinklerRadius": "高亮每个洒水器浇水覆盖的格子", "scarecrowRadius": "高亮受稻草人保护的格子", "beeHouseRange": "高亮蜂蜜生产的花朵范围", "junimoHutRange": "高亮祝尼魔小屋的收获区域", "blockedBuildings": "显示不可放置建筑的位置", "blockedCrops": "显示不可种植作物的位置", "blockedTrees": "显示树木无法生长的位置", "nightMode": "预览带有光源的夜间农场", "npcPaths": "显示 NPC 行走经过的格子", "resourceClumps": "资源丛被选中时显示生成位置", "weather": "模拟雨、雪和其他天气效果", "joystick": "在触控设备上显示方向键以精确摆放物品", "leftHand": "将控件移至屏幕左侧", "toasts": "显示工具切换、撤销重做和操作的短提示", "cursors": "使用像素游戏风格光标替代系统光标", "freePlacement": "禁用摆放规则并在地图任意位置放置物品", "manageMods": "添加和管理 Content Patcher 模组" }
+    },
+    "mapConfiguration": {
+      "gingerIsland": "姜岛", "gingerDescription": "选择要在此地图中显示的已修复岛屿设施。", "farmhouse": "农舍（升级 2）", "married": "已婚布局", "spouseRoom": "配偶房间", "none": "无", "renovations": "改造"
+    },
+    "reference": {
+      "version": "v0.1.1 · 2026 年 4 月", "features": "功能", "clickCycling": "循环点击 · 重复点击同一格即可在重叠物品间切换。", "xray": "透视 · 按住空格键可透过已摆放的精灵图查看。", "drag": "拖动移动 · 拖动所选建筑或物品以重新定位。", "paint": "染色 · 可为支持的建筑、箱子和鱼塘水面重新着色。", "radius": "范围叠加层 · 预览洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。", "goodToKnow": "使用提示", "localProjects": "项目仅保存在此浏览器中。导出 JSON 可保留便携副本。", "freePlacement": "仅在明确需要游戏可能不允许的布局时使用自由摆放。", "interior": "壁纸和地板只能应用到兼容的室内区域。", "maps": "地图", "mapsDescription": "使用地图可在农场、室内、室外和锁定的社区地图间切换。每个本地项目可为多张地图保存独立布局。", "tools": "工具", "camera": "镜头", "history": "历史记录", "cursorMode": "切换到光标模式", "multiSelectMode": "切换到多选模式", "eraseMode": "切换到橡皮擦模式", "fillMode": "切换到填充模式", "rotate": "旋转所选物品", "copy": "复制所选摆放物", "delete": "删除所选摆放物", "cancel": "取消摆放或清除选择", "pan": "平移画布", "zoom": "放大或缩小", "zoomCursor": "朝光标方向缩放", "holdXray": "按住以透视", "undo": "撤销上一步操作", "redo": "重做上一步撤销的操作", "communityMaps": "社区地图", "communityMapsDescription": "可从社区地图标签页使用社区农场地图，它们仍会随此规划器在本地提供。", "tableDecor": "桌面装饰", "tableDecorDescription": "可将灯具、植物和其他兼容物品摆放在桌子和边桌上。", "winterCrops": "冬季作物", "winterCropsDescription": "可从作物选择器中选择冬季甜瓜。", "sprinklerShadows": "洒水器阴影", "sprinklerShadowsDescription": "洒水器会渲染与游戏内外观一致的地面阴影。"
+    }
+  },
+  "public": {
+    "navigation": {
+      "label": "公共导航",
+      "planner": "规划器",
+      "farmComparison": "农场对比",
+      "mods": "模组",
+      "privacy": "隐私",
+      "terms": "条款"
+    },
+    "comparison": {
+      "quickComparison": "快速对比",
+      "farm": "农场",
+      "tillableTiles": "可耕种格数",
+      "totalBuildable": "可建造格数",
+      "added": "加入版本",
+      "addedIn": "加入版本",
+      "knownFor": "特色",
+      "bestFor": "最适合：",
+      "note": "注意：",
+      "farmDetails": "农场详情",
+      "planFarm": "规划 {farmName} →",
+      "preview": "{farmName} 预览图"
+    },
+    "guide": {
+      "breadcrumb": "面包屑导航",
+      "planner": "星露谷规划器",
+      "farmTypes": "农场类型",
+      "planThisFarm": "规划此农场 →",
+      "compareAllFarms": "对比所有农场",
+      "whatMakesItDifferent": "它有什么不同",
+      "otherFarms": "其他农场",
+      "comparisonPrompt": "想并排查看？请查看",
+      "fullComparison": "完整对比",
+      "comparisonSentenceEnding": "。",
+      "preview": "{farmName} 预览图"
+    },
+    "mods": {
+      "availableCommunityFarms": "可用的社区农场",
+      "by": "作者：{authorName}",
+      "planThisFarm": "规划此农场 →",
+      "preview": "{farmName} 预览图"
+    },
+    "legal": {
+      "privacy": {
+        "title": "隐私政策",
+        "introduction": "本政策说明你使用这款仅在浏览器中运行的星露谷规划工具时，星露谷规划器如何处理信息。",
+        "localDataTitle": "浏览器本地数据",
+        "localDataBody": "规划方案和偏好设置只保存在你浏览器的本地存储中，因此它们会保留在当前设备上。我们不提供账户系统，也不会接收这类本地数据的副本。",
+        "noAccountsTitle": "不提供账户或云同步",
+        "noAccountsBody": "星露谷规划器不提供账户、云同步或付款服务，也不提供登录或跨设备项目存储。",
+        "noPaymentsTitle": "不提供付款服务",
+        "noPaymentsBody": "星露谷规划器不提供会员、支付处理或购买功能。",
+        "contactTitle": "本政策的变更",
+        "contactBody": "如果本政策发生变化，更新后的文本会发布在此页面。"
+      },
+      "terms": {
+        "title": "使用条款",
+        "introduction": "使用星露谷规划器即表示你同意以负责任的方式使用这款仅在浏览器中运行的规划工具。",
+        "localStorageTitle": "你的本地规划方案",
+        "localStorageBody": "你的规划方案保存在设备上的浏览器本地存储中。在清除浏览器数据或更换设备前，你有责任导出想要保留的规划方案。",
+        "serviceBoundaryTitle": "服务边界",
+        "serviceBoundaryBody": "星露谷规划器不提供账户、云同步、付款、会员、公开分享，也不保证能够恢复浏览器本地数据。",
+        "gameRelationshipTitle": "与游戏的关系",
+        "gameRelationshipBody": "星露谷规划器是非官方的粉丝制作规划工具，与 ConcernedApe 没有隶属、认可或赞助关系。",
+        "changesTitle": "本条款的变更",
+        "changesBody": "我们可能会通过在此页面发布修订后的文本来更新这些条款。"
+      }
+    }
+  }
+}

@@ -19,6 +19,7 @@ describe("editor shell", () => {
   it("renders the reference-visible tools without a Fill button", () => {
     const toolbarMarkup = renderToStaticMarkup(
       createElement(EditorToolbar, {
+        locale: "zh-CN",
         tool: "cursor",
         onToolChange: ignoreEditorAction,
         onUndo: ignoreEditorAction,
@@ -29,14 +30,14 @@ describe("editor shell", () => {
     );
 
     expect(toolbarMarkup.match(/<button/g)).toHaveLength(5);
-    expect(toolbarMarkup).toContain('aria-label="Cursor tool"');
-    expect(toolbarMarkup).toContain('aria-label="Multi-select tool"');
-    expect(toolbarMarkup).toContain('aria-label="Erase tool"');
+    expect(toolbarMarkup).toContain('aria-label="光标工具"');
+    expect(toolbarMarkup).toContain('aria-label="多选工具"');
+    expect(toolbarMarkup).toContain('aria-label="橡皮擦工具"');
     expect(toolbarMarkup).toContain('aria-pressed="true"');
     expect(toolbarMarkup).not.toContain('aria-label="Fill tool"');
-    expect(toolbarMarkup).not.toMatch(/aria-label="Erase tool"[^>]*disabled=""/);
-    expect(toolbarMarkup).toMatch(/aria-label="Undo"[^>]*disabled=""/);
-    expect(toolbarMarkup).toMatch(/aria-label="Redo"[^>]*disabled=""/);
+    expect(toolbarMarkup).not.toMatch(/aria-label="橡皮擦工具"[^>]*disabled=""/);
+    expect(toolbarMarkup).toMatch(/aria-label="撤销"[^>]*disabled=""/);
+    expect(toolbarMarkup).toMatch(/aria-label="重做"[^>]*disabled=""/);
   });
 
   it("renders a single-entity inspector with independent rotate, copy, and delete actions", () => {
@@ -121,6 +122,24 @@ describe("editor shell", () => {
     );
   });
 
+  it("renders Chinese menu and season labels when the explicit locale is Chinese", () => {
+    const menuMarkup = renderToStaticMarkup(
+      createElement(EditorMenuBar, {
+        activeModalId: null,
+        editorMenuVisibility: "expanded",
+        locale: "zh-CN",
+        mapDisplayName: "河流农场",
+        season: "spring",
+        onOpenModal: ignoreEditorAction,
+        onToggleMenu: ignoreEditorAction,
+      }),
+    );
+
+    expect(menuMarkup).toContain('aria-label="季节: 春季"');
+    expect(menuMarkup).toContain('aria-label="地图: 河流农场"');
+    expect(menuMarkup).not.toContain("Season: spring");
+  });
+
   it("groups every catalogued map into the four editor map headings", () => {
     const mapPickerMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
@@ -149,6 +168,53 @@ describe("editor shell", () => {
     );
     expect(mapPickerMarkup).toContain('role="dialog"');
     expect(mapPickerMarkup).toContain('tabindex="-1"');
+  });
+
+  it("localizes map-picker names, descriptive tooltips, and the What's New date", () => {
+    const mapPickerMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        locale: "zh-CN",
+        modalId: "map-picker",
+        selectedMapId: "riverland",
+        season: "spring",
+        panelPosition: "bottom",
+        onClose: ignoreEditorAction,
+        onMapChange: ignoreEditorAction,
+        onSeasonChange: ignoreEditorAction,
+        onPanelPositionChange: ignoreEditorAction,
+      }),
+    );
+    const viewMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        locale: "zh-CN",
+        modalId: "view-panel",
+        selectedMapId: "standard",
+        season: "spring",
+        panelPosition: "bottom",
+        onClose: ignoreEditorAction,
+        onMapChange: ignoreEditorAction,
+        onSeasonChange: ignoreEditorAction,
+        onPanelPositionChange: ignoreEditorAction,
+      }),
+    );
+    const whatsNewMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        locale: "zh-CN",
+        modalId: "whats-new",
+        selectedMapId: "standard",
+        season: "spring",
+        panelPosition: "bottom",
+        onClose: ignoreEditorAction,
+        onMapChange: ignoreEditorAction,
+        onSeasonChange: ignoreEditorAction,
+        onPanelPositionChange: ignoreEditorAction,
+      }),
+    );
+
+    expect(mapPickerMarkup).toContain("河流农场");
+    expect(mapPickerMarkup).toContain("畜棚");
+    expect(viewMarkup).toContain('title="显示地图上的格子网格线"');
+    expect(whatsNewMarkup).toContain("2026 年 4 月");
   });
 
   it("renders the source-faithful Ginger Island and Farmhouse 2 map configuration controls", () => {

@@ -1,4 +1,3 @@
-import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { FarmComparisonContent } from "../../src/components/farm-comparison-content";
@@ -17,7 +16,7 @@ function getStaticMarkupText(text: string): string {
 describe("public farm pages", () => {
   it("renders every official farm with its local preview and planner entry point", () => {
     const comparisonMarkup = renderToStaticMarkup(
-      createElement(FarmComparisonContent),
+      <FarmComparisonContent locale="en" />,
     );
 
     expect(comparisonMarkup).toContain("Quick comparison");
@@ -34,7 +33,7 @@ describe("public farm pages", () => {
   });
 
   it("renders every available community map with a local preview and planner entry point", () => {
-    const modMapMarkup = renderToStaticMarkup(createElement(ModMapCardGrid));
+    const modMapMarkup = renderToStaticMarkup(<ModMapCardGrid locale="en" />);
     const communityMaps = plannerMaps.filter(
       (plannerMap) =>
         plannerMap.category === "community-farm" ||
@@ -58,12 +57,7 @@ describe("public farm pages", () => {
   it("renders one farm guide with its breadcrumb, map stats, features, and planner entry point", () => {
     const standardFarmGuide = officialFarmGuides.standard;
     const guideMarkup = renderToStaticMarkup(
-      createElement(FarmGuideContent, {
-        farmGuide: standardFarmGuide,
-        otherFarmGuides: Object.values(officialFarmGuides).filter(
-          (farmGuide) => farmGuide.id !== standardFarmGuide.id,
-        ),
-      }),
+      <FarmGuideContent locale="en" farmType="standard" />,
     );
 
     expect(guideMarkup).toContain('aria-label="Breadcrumb"');
@@ -71,5 +65,26 @@ describe("public farm pages", () => {
     expect(guideMarkup).toContain("Tillable tiles");
     expect(guideMarkup).toContain("What makes it different");
     expect(guideMarkup).toContain(`href="/?farmType=${standardFarmGuide.id}"`);
+    expect(guideMarkup).toContain("full comparison</a>.");
+  });
+
+  it("renders Chinese farm content and localized public entry points", () => {
+    const comparisonMarkup = renderToStaticMarkup(
+      <FarmComparisonContent locale="zh-CN" />,
+    );
+    const guideMarkup = renderToStaticMarkup(
+      <FarmGuideContent locale="zh-CN" farmType="standard" />,
+    );
+    const modMapMarkup = renderToStaticMarkup(<ModMapCardGrid locale="zh-CN" />);
+
+    expect(comparisonMarkup).toContain("快速对比");
+    expect(comparisonMarkup).toContain("标准农场");
+    expect(comparisonMarkup).toContain('href="/zh?farmType=standard"');
+    expect(comparisonMarkup).toContain('href="/zh/farm/standard"');
+    expect(guideMarkup).toContain("规划此农场");
+    expect(guideMarkup).toContain('href="/zh?farmType=standard"');
+    expect(modMapMarkup).toContain("沉浸式农场 2");
+    expect(modMapMarkup).toContain("多人游戏");
+    expect(modMapMarkup).toContain('href="/zh?farmType=if2r"');
   });
 });

@@ -87,12 +87,12 @@ describe("farm summary", () => {
     ).toEqual({
       mapContext: standardFarmSummaryMapContext,
       rows: [
-        { category: "Buildings", count: 1, name: "Coop" },
-        { category: "Crops", count: 1, name: "Parsnip" },
-        { category: "Fences", count: 1, name: "Wood Fence" },
-        { category: "Items", count: 2, name: 'Artisan "Tea"' },
-        { category: "Paths", count: 1, name: "Stone Path" },
-        { category: "Trees", count: 1, name: "Wildtree Maple" },
+        { catalogId: "building:Coop", category: "Buildings", count: 1, name: "Coop" },
+        { catalogId: "crop:Parsnip", category: "Crops", count: 1, name: "Parsnip" },
+        { catalogId: "fence:wood", category: "Fences", count: 1, name: "Wood Fence" },
+        { catalogId: "object:900", category: "Items", count: 2, name: 'Artisan "Tea"' },
+        { catalogId: "floor:stone", category: "Paths", count: 1, name: "Stone Path" },
+        { catalogId: "wildtree_maple", category: "Trees", count: 1, name: "Wildtree Maple" },
       ],
       totalItems: 7,
     });

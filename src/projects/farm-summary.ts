@@ -7,6 +7,7 @@ import {
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 
 export type FarmSummaryRow = Readonly<{
+  catalogId?: string;
   category: string;
   count: number;
   name: string;
@@ -31,6 +32,7 @@ export type FarmSummaryCsvFile = Readonly<{
 }>;
 
 type MutableFarmSummaryRow = {
+  catalogId: string;
   category: string;
   count: number;
   name: string;
@@ -57,6 +59,7 @@ export function createFarmSummary(
     appendFarmSummaryRow(
       summaryRowsById,
       placementBuilding.buildingId,
+      `building:${placementBuilding.buildingId}`,
       buildingCatalogItem?.name ?? formatUnknownCatalogItemName(placementBuilding.buildingId),
       "Buildings",
     );
@@ -71,6 +74,7 @@ export function createFarmSummary(
     appendFarmSummaryRow(
       summaryRowsById,
       placementItem.itemId,
+      placementItem.itemId,
       catalogItem?.name ?? formatUnknownCatalogItemName(placementItem.itemId),
       getFarmSummaryItemCategory(placementItem),
     );
@@ -80,6 +84,7 @@ export function createFarmSummary(
     const cropCatalogItem = catalogItemsById.get(placementCrop.cropId);
     appendFarmSummaryRow(
       summaryRowsById,
+      placementCrop.cropId,
       placementCrop.cropId,
       cropCatalogItem?.name ?? formatUnknownCatalogItemName(placementCrop.cropId),
       "Crops",
@@ -211,6 +216,7 @@ function isFarmSummarySeason(value: unknown): value is TilesheetSeason {
 function appendFarmSummaryRow(
   summaryRowsById: Map<string, MutableFarmSummaryRow>,
   summaryItemId: string,
+  catalogId: string,
   name: string,
   category: string,
 ): void {
@@ -221,7 +227,7 @@ function appendFarmSummaryRow(
     return;
   }
 
-  summaryRowsById.set(summaryItemId, { category, count: 1, name });
+  summaryRowsById.set(summaryItemId, { catalogId, category, count: 1, name });
 }
 
 function getFarmSummaryItemCategory(placementItem: PlacementItem): string {

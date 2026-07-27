@@ -16,13 +16,18 @@ import {
   type EditorModalId,
   type EditorPanelPosition,
 } from "../editor/editor-view-state";
+import { getCatalogDisplayName } from "../i18n/catalog-display";
+import type { SiteLocale } from "../i18n/locales";
+import { formatTranslation, translate } from "../i18n/messages";
 
 type ItemCatalogPanelProperties = Readonly<{
+  locale?: SiteLocale;
   category: EditorCatalogCategory;
   panelPosition: EditorPanelPosition;
   searchQuery: string;
   selectedCatalogItemId: string | null;
   onCatalogItemSelect: (catalogItem: CatalogItem) => void;
+  onCatalogReady?: (catalog: Catalog) => void;
   onCategoryChange: (category: EditorCatalogCategory) => void;
   onOpenModal?: (modalId: EditorModalId) => void;
   onSearchQueryChange: (searchQuery: string) => void;
@@ -37,15 +42,16 @@ type CatalogPanelLoader = () => Promise<Catalog>;
 
 type CatalogItemGridProperties = Readonly<{
   catalogItems: readonly CatalogItem[];
+  locale?: SiteLocale;
   selectedCatalogItemId: string | null;
   onCatalogItemSelect: (catalogItem: CatalogItem) => void;
 }>;
 
-const catalogCategoryLabels: Readonly<Record<EditorCatalogCategory, string>> = {
-  buildings: "Buildings",
-  crops: "Crops",
-  placeables: "Placeables",
-  decor: "Decor",
+const catalogCategoryLabelKeys: Readonly<Record<EditorCatalogCategory, string>> = {
+  buildings: "planner.catalog.buildings",
+  crops: "planner.catalog.crops",
+  placeables: "planner.catalog.placeables",
+  decor: "planner.catalog.decor",
 };
 
 const catalogItemCategoriesByPanelCategory: Readonly<
@@ -58,11 +64,13 @@ const catalogItemCategoriesByPanelCategory: Readonly<
 };
 
 export function ItemCatalogPanel({
+  locale = "en",
   category,
   panelPosition,
   searchQuery,
   selectedCatalogItemId,
   onCatalogItemSelect,
+  onCatalogReady,
   onCategoryChange,
   onOpenModal,
   onSearchQueryChange,
@@ -86,6 +94,10 @@ export function ItemCatalogPanel({
     void loadCatalogPanelState().then((nextCatalogPanelLoadState) => {
       if (!hasUnmounted) {
         setCatalogPanelLoadState(nextCatalogPanelLoadState);
+
+        if (nextCatalogPanelLoadState.kind === "ready") {
+          onCatalogReady?.(nextCatalogPanelLoadState.catalog);
+        }
       }
     });
 
@@ -124,7 +136,7 @@ export function ItemCatalogPanel({
 
   return (
     <aside
-      aria-label="Item catalog"
+      aria-label={translate(locale, "planner.catalog.label")}
       className={`item-catalog-panel item-catalog-panel--${panelPosition}`}
     >
       <div className="item-catalog-panel__header">
@@ -148,18 +160,18 @@ export function ItemCatalogPanel({
               tabIndex={category === catalogCategory ? 0 : -1}
               type="button"
             >
-              {catalogCategoryLabels[catalogCategory]}
+              {translate(locale, catalogCategoryLabelKeys[catalogCategory])}
             </button>
           ))}
         </div>
         <label className="item-catalog-panel__search-label">
-          <span className="sr-only">Search catalog</span>
+          <span className="sr-only">{translate(locale, "planner.catalog.search")}</span>
           <input
             className="item-catalog-panel__search"
             onChange={(changeEvent: ChangeEvent<HTMLInputElement>) =>
               onSearchQueryChange(changeEvent.target.value)
             }
-            placeholder="Search..."
+            placeholder={translate(locale, "planner.catalog.searchPlaceholder")}
             type="search"
             value={searchQuery}
           />
@@ -167,13 +179,13 @@ export function ItemCatalogPanel({
         {onOpenModal !== undefined ? (
           <div className="item-catalog-panel__reference-actions">
             <button onClick={() => onOpenModal("help-info")} type="button">
-              Help &amp; Info
+              {translate(locale, "planner.catalog.help")}
             </button>
             <button onClick={() => onOpenModal("keyboard-shortcuts")} type="button">
-              Shortcuts
+              {translate(locale, "planner.catalog.shortcuts")}
             </button>
             <button onClick={() => onOpenModal("whats-new")} type="button">
-              What&apos;s New
+              {translate(locale, "planner.catalog.whatsNew")}
             </button>
           </div>
         ) : null}
@@ -187,6 +199,7 @@ export function ItemCatalogPanel({
         <CatalogPanelContent
           category={category}
           catalogPanelLoadState={catalogPanelLoadState}
+          locale={locale}
           onCatalogItemSelect={onCatalogItemSelect}
           searchQuery={searchQuery}
           selectedCatalogItemId={selectedCatalogItemId}
@@ -199,6 +212,7 @@ export function ItemCatalogPanel({
 type CatalogPanelContentProperties = Readonly<{
   category: EditorCatalogCategory;
   catalogPanelLoadState: CatalogPanelLoadState;
+  locale?: SiteLocale;
   searchQuery: string;
   selectedCatalogItemId: string | null;
   onCatalogItemSelect: (catalogItem: CatalogItem) => void;
@@ -207,6 +221,7 @@ type CatalogPanelContentProperties = Readonly<{
 export function CatalogPanelContent({
   category,
   catalogPanelLoadState,
+  locale = "en",
   searchQuery,
   selectedCatalogItemId,
   onCatalogItemSelect,
@@ -214,7 +229,7 @@ export function CatalogPanelContent({
   if (catalogPanelLoadState.kind === "loading") {
     return (
       <p aria-live="polite" className="item-catalog-panel__state" role="status">
-        Loading local catalog…
+        {translate(locale, "planner.catalog.loading")}
       </p>
     );
   }
@@ -222,7 +237,7 @@ export function CatalogPanelContent({
   if (catalogPanelLoadState.kind === "error") {
     return (
       <p className="item-catalog-panel__error" role="alert">
-        {catalogPanelLoadState.message}
+        {getCatalogLoadErrorDisplayMessage(locale, catalogPanelLoadState.message)}
       </p>
     );
   }
@@ -231,14 +246,16 @@ export function CatalogPanelContent({
     catalogPanelLoadState.catalog,
     category,
     searchQuery,
+    locale,
   );
 
   if (visibleCatalogItems.length === 0) {
     return (
       <p className="item-catalog-panel__state">
-        No verified {catalogCategoryLabels[category].toLowerCase()} items match
-        {" "}
-        {JSON.stringify(searchQuery)}.
+        {formatTranslation(locale, "planner.catalog.empty", {
+          category: translate(locale, catalogCategoryLabelKeys[category]).toLowerCase(),
+          query: JSON.stringify(searchQuery),
+        })}
       </p>
     );
   }
@@ -246,6 +263,7 @@ export function CatalogPanelContent({
   return (
     <CatalogItemGrid
       catalogItems={visibleCatalogItems}
+      locale={locale}
       onCatalogItemSelect={onCatalogItemSelect}
       selectedCatalogItemId={selectedCatalogItemId}
     />
@@ -254,17 +272,23 @@ export function CatalogPanelContent({
 
 export function CatalogItemGrid({
   catalogItems,
+  locale = "en",
   selectedCatalogItemId,
   onCatalogItemSelect,
 }: CatalogItemGridProperties) {
   return (
-    <div aria-label="Verified catalog items" className="item-catalog-panel__grid">
+    <div aria-label={translate(locale, "planner.catalog.items")} className="item-catalog-panel__grid">
       {catalogItems.map((catalogItem) => {
         const isSelectedCatalogItem = catalogItem.id === selectedCatalogItemId;
+        const displayName = getCatalogDisplayName(locale, catalogItem.id, catalogItem.name);
 
         return (
           <button
-            aria-label={`Select ${catalogItem.name}, ${String(catalogItem.tileSize.width)} by ${String(catalogItem.tileSize.height)} tiles`}
+            aria-label={formatTranslation(locale, "planner.catalog.select", {
+              name: displayName,
+              width: catalogItem.tileSize.width,
+              height: catalogItem.tileSize.height,
+            })}
             aria-pressed={isSelectedCatalogItem}
             className="item-catalog-panel__item"
             data-selected={isSelectedCatalogItem}
@@ -277,7 +301,7 @@ export function CatalogItemGrid({
               className="item-catalog-panel__thumbnail"
               style={getCatalogItemThumbnailStyle(catalogItem)}
             />
-            <span className="item-catalog-panel__item-name">{catalogItem.name}</span>
+            <span className="item-catalog-panel__item-name">{displayName}</span>
             <span className="item-catalog-panel__item-size">
               {catalogItem.tileSize.width} × {catalogItem.tileSize.height}
             </span>
@@ -308,6 +332,7 @@ export function getCatalogItemsForPanel(
   catalog: Catalog,
   category: EditorCatalogCategory,
   searchQuery: string,
+  locale: SiteLocale = "en",
 ): readonly CatalogItem[] {
   validateCatalogPanelCategory(category);
   validateCatalogSearchQuery(searchQuery);
@@ -324,7 +349,7 @@ export function getCatalogItemsForPanel(
 
   return catalog.items.filter((catalogItem) =>
     allowedCatalogItemCategories.includes(catalogItem.category) &&
-    matchesCatalogSearchQuery(catalogItem, lowerCaseSearchQuery),
+    matchesCatalogSearchQuery(catalogItem, lowerCaseSearchQuery, locale),
   );
 }
 
@@ -396,10 +421,14 @@ function getCatalogSpriteCoordinates(
 function matchesCatalogSearchQuery(
   catalogItem: CatalogItem,
   lowerCaseSearchQuery: string,
+  locale: SiteLocale,
 ): boolean {
   return lowerCaseSearchQuery.length === 0 ||
     catalogItem.name.toLowerCase().includes(lowerCaseSearchQuery) ||
-    catalogItem.id.toLowerCase().includes(lowerCaseSearchQuery);
+    catalogItem.id.toLowerCase().includes(lowerCaseSearchQuery) ||
+    getCatalogDisplayName(locale, catalogItem.id, catalogItem.name)
+      .toLowerCase()
+      .includes(lowerCaseSearchQuery);
 }
 
 function formatCatalogLoadError(caughtError: unknown): string {
@@ -408,6 +437,13 @@ function formatCatalogLoadError(caughtError: unknown): string {
   }
 
   return `Unable to load the local item catalog: ${describeCatalogPanelValue(caughtError)}`;
+}
+
+function getCatalogLoadErrorDisplayMessage(
+  locale: SiteLocale,
+  _sourceErrorMessage: string,
+): string {
+  return translate(locale, "planner.catalog.error");
 }
 
 function validateCatalogPanelCategory(category: EditorCatalogCategory): void {

@@ -1,0 +1,153 @@
+{
+  "site": {
+    "title": "Stardew Planner"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "english": "English",
+    "simplifiedChinese": "简体中文"
+  },
+  "seo": {
+    "planner": {
+      "title": "Stardew Valley Farm Planner",
+      "description": "Plan Stardew Valley farm layouts with local maps, items, and projects."
+    },
+    "farmComparison": {
+      "title": "Stardew Valley Farm Comparison",
+      "description": "Compare every official Stardew Valley farm map before planning your layout."
+    },
+    "farmGuide": {
+      "title": "{farmName} Guide | Stardew Planner",
+      "description": "Explore the {farmName} map and start planning its Stardew Valley layout."
+    },
+    "mods": {
+      "title": "Stardew Valley Mod Planner",
+      "description": "Plan your Stardew Valley mod collection."
+    },
+    "privacy": {
+      "title": "Privacy Policy | Stardew Planner",
+      "description": "Read how Stardew Planner keeps plans and preferences in your browser."
+    },
+    "terms": {
+      "title": "Terms of Use | Stardew Planner",
+      "description": "Read the terms for using the browser-based Stardew Planner."
+    }
+  },
+  "planner": {
+    "toolbar": {
+      "label": "Editor tools",
+      "cursorTool": "Cursor tool",
+      "multiSelectTool": "Multi-select tool",
+      "eraseTool": "Erase tool",
+      "undo": "Undo",
+      "undoShortcut": "Undo (Ctrl+Z)",
+      "redo": "Redo",
+      "redoShortcut": "Redo (Ctrl+Y)"
+    },
+    "menu": {
+      "label": "Editor menu", "menu": "Menu", "season": "Season", "map": "Map", "view": "View", "save": "Save", "settings": "Settings"
+    },
+    "catalog": {
+      "label": "Item catalog", "buildings": "Buildings", "crops": "Crops", "placeables": "Placeables", "decor": "Decor", "search": "Search catalog", "searchPlaceholder": "Search...", "help": "Help & Info", "shortcuts": "Shortcuts", "whatsNew": "What's New", "loading": "Loading local catalog…", "error": "Unable to load the local item catalog.", "items": "Verified catalog items", "select": "Select {name}, {width} by {height} tiles", "empty": "No verified {category} items match {query}."
+    },
+    "inspector": {
+      "single": "Selected placement", "multiple": "Selected placements", "dismiss": "Dismiss selection", "rotate": "Rotate selected item", "rotateTitle": "Rotate selected item (Q)", "copy": "Copy", "copyLabel": "Copy selected placement", "copyTitle": "Copy selected placement (C)", "delete": "Delete", "deleteLabel": "Delete selected placement", "deleteTitle": "Delete selected placement (Delete)", "multipleDeleteLabel": "Delete selected placements", "multipleDeleteTitle": "Delete selected placements (Delete)", "selectedCount": "{count} selected placements", "tint": "Selected item tint color", "light": "Light", "lightLabel": "Light selected light", "extinguish": "Extinguish", "extinguishLabel": "Extinguish selected light", "building": "Building", "roof": "Roof", "trim": "Trim", "buildingColor": "Selected building building color", "roofColor": "Selected building roof color", "trimColor": "Selected building trim color"
+    },
+    "interiorDecor": {
+      "label": "Interior decor", "category": "Interior decor category", "wallpaper": "Wallpapers", "flooring": "Flooring", "cancel": "Cancel", "cancelLabel": "Cancel interior decor", "select": "Select {name}"
+    },
+    "projectMaps": {
+      "label": "Project maps", "transferDestination": "Transfer destination", "noDestination": "Create another local project first", "current": "Current", "open": "Open", "rename": "Rename", "duplicate": "Duplicate", "copy": "Copy to project", "move": "Move to project", "delete": "Delete", "newMapName": "New map name", "saveName": "Save name", "cancelRename": "Cancel rename", "add": "Add map"
+    },
+    "localProjects": {
+      "label": "Local projects", "currentProject": "Current project:", "currentMap": "Current map:", "none": "None", "maps": "{count} maps", "stored": "Stored in this browser.", "opening": "Opening browser storage…", "save": "Save to this device", "new": "New project", "import": "Import JSON", "saved": "Saved local projects", "current": "Current", "open": "Open", "rename": "Rename", "duplicate": "Duplicate", "export": "Export JSON", "delete": "Delete", "newName": "New project name", "applyName": "Apply name", "cancelRename": "Cancel rename", "empty": "No local projects yet. Saving creates an Untitled Project.", "deleteTitle": "Delete local project?", "deleteConfirm": "Delete {name} from this browser? This cannot be undone.", "deleteProject": "Delete project", "keepProject": "Keep project", "savedNotice": "Saved to this browser.", "createdNotice": "Created a local project.", "openedNotice": "Opened {name}.", "renamedNotice": "Renamed the local project.", "duplicatedNotice": "Duplicated the local project.", "deletedNotice": "Deleted the local project.", "exportedNotice": "Exported {name}.", "importedNotice": "Imported {name}.", "error": "Local project action failed: {message}"
+    },
+    "export": {
+      "label": "Export", "screenshot": "Screenshot", "screenshotHq": "Screenshot (HQ)", "compactTitle": "1x resolution, compact file size", "hqTitle": "2x resolution, higher quality", "error": "Screenshot export failed."
+    },
+    "gameSave": {
+      "label": "Import Game Save", "title": "Import a Stardew Valley save file to view your farm layout", "importing": "Importing Game Save…", "closeResult": "Close game save import result", "farm": "\"{name} Farm\"", "unmapped": "{count} items couldn't be mapped (likely from mods).", "success": "All recognized map placements were imported.", "experimental": "Game save import is experimental. Unsupported items are not placed on the map.", "browserOnly": "The imported map is only in this browser until you save it to this device.", "close": "Close", "error": "Game save import failed."
+    },
+    "summary": {
+      "label": "Farm Summary", "close": "Close Farm Summary", "context": "Map: {mapName} ({mapId}) · Season: {season}", "itemsPlaced": "{count} items placed", "empty": "No items have been placed yet.", "export": "Export CSV", "error": "Farm summary export failed.", "categories": { "Buildings": "Buildings", "Crops": "Crops", "Items": "Items", "Paths": "Paths", "Fences": "Fences", "Furniture": "Furniture", "Trees": "Trees" }
+    },
+    "modal": {
+      "close": "Close dialog", "farm": "Farm", "interiors": "Interiors", "exteriors": "Exteriors", "community": "Community", "chooseMap": "Choose map", "chooseSeason": "Choose season", "view": "View", "save": "Save", "settings": "Settings", "help": "Help & Info", "shortcuts": "Keyboard Shortcuts", "whatsNew": "What's New", "bottomPanel": "Bottom panel", "leftPanel": "Left panel", "catalogPosition": "Catalog Position", "catalogPositionDescription": "Choose where the item catalog appears in this browser.", "overlays": "Overlays", "mapOverlays": "Map Overlays", "display": "Display", "grid": "Grid", "sprinklerRadius": "Sprinkler Radius", "scarecrowRadius": "Scarecrow Radius", "beeHouseRange": "Bee House Range", "junimoHutRange": "Junimo Hut Range", "blockedBuildings": "Blocked (Buildings)", "blockedCrops": "Blocked (Crops)", "blockedTrees": "Blocked (Trees)", "nightMode": "Night Mode", "npcPaths": "NPC Paths", "resourceClumps": "Resource Clumps", "weather": "Weather", "mobile": "Mobile", "joystick": "Joystick", "leftHand": "Left-hand Mode", "notifications": "Notifications", "toasts": "Toast Notifications", "interface": "Interface", "cursors": "Game-Styled Cursors", "placement": "Placement", "freePlacement": "Free Placement", "freePlacementWarning": "Free placement disables map placement rules. Some layouts may not be achievable in-game.", "cancel": "Cancel", "enableFreePlacement": "Enable Free Placement", "manageMods": "Manage Mods", "jojaStuff": "Joja Stuff", "privacy": "Privacy Policy", "terms": "Terms of Service", "titles": { "grid": "Show tile grid lines on the map", "sprinklerRadius": "Highlight tiles watered by each sprinkler", "scarecrowRadius": "Highlight tiles protected from crows", "beeHouseRange": "Highlight flower range for honey production", "junimoHutRange": "Highlight harvest area for Junimo Huts", "blockedBuildings": "Show where buildings cannot be placed", "blockedCrops": "Show where crops cannot be planted", "blockedTrees": "Show where trees cannot grow", "nightMode": "Preview your farm at night with light sources", "npcPaths": "Show tiles NPCs walk through", "resourceClumps": "Show spawn locations while a resource clump is selected", "weather": "Simulate rain, snow, and other weather effects", "joystick": "Show directional pad for precise item placement on touch devices", "leftHand": "Move controls to the left side of the screen", "toasts": "Show brief notifications for tool changes, undo/redo, and actions", "cursors": "Use the pixel-art game-styled cursors instead of your OS cursors", "freePlacement": "Disable placement rules and place items anywhere on the map", "manageMods": "Add and manage Content Patcher mods" }
+    },
+    "mapConfiguration": {
+      "gingerIsland": "Ginger Island", "gingerDescription": "Choose which restored island features appear on this map.", "farmhouse": "Farmhouse (Upgrade 2)", "married": "Married layout", "spouseRoom": "Spouse room", "none": "None", "renovations": "Renovations"
+    },
+    "reference": {
+      "version": "v0.1.1 · April 2026", "features": "Features", "clickCycling": "Click Cycling · Click the same tile repeatedly to cycle through overlapping items.", "xray": "X-ray · Hold Space to see through placed sprites.", "drag": "Drag to Move · Drag a selected building or item to reposition it.", "paint": "Paint · Recolour supported buildings, chests, and fish pond water.", "radius": "Radius Overlays · Preview sprinkler, scarecrow, bee house, and Junimo Hut coverage.", "goodToKnow": "Good to Know", "localProjects": "Projects are saved only in this browser. Export JSON to keep a portable copy.", "freePlacement": "Use Free Placement only when you intentionally want a layout the game may not allow.", "interior": "Wallpaper and flooring can only be applied to compatible interior regions.", "maps": "Maps", "mapsDescription": "Use Map to switch among farm, interior, exterior, and locked community maps. Each local project can keep separate layouts for multiple maps.", "tools": "Tools", "camera": "Camera", "history": "History", "cursorMode": "Switch to cursor mode", "multiSelectMode": "Switch to multi-select mode", "eraseMode": "Switch to erase mode", "fillMode": "Switch to fill mode", "rotate": "Rotate the selected item", "copy": "Copy the selected placement", "delete": "Delete the selected placement", "cancel": "Cancel placement or clear selection", "pan": "Pan the canvas", "zoom": "Zoom in or out", "zoomCursor": "Zoom toward the cursor", "holdXray": "Hold for X-ray", "undo": "Undo the last action", "redo": "Redo the last undone action", "communityMaps": "Community Maps", "communityMapsDescription": "Community farm maps are available from the Community map tab and remain bundled locally with this planner.", "tableDecor": "Table Decor", "tableDecorDescription": "Place lamps, plants, and other compatible objects on tables and end tables.", "winterCrops": "Winter Crops", "winterCropsDescription": "Powdermelon is available from the crop picker.", "sprinklerShadows": "Sprinkler Shadows", "sprinklerShadowsDescription": "Sprinklers render with a ground shadow matching the in-game appearance."
+    }
+  },
+  "public": {
+    "navigation": {
+      "label": "Public navigation",
+      "planner": "Planner",
+      "farmComparison": "Farm Comparison",
+      "mods": "Mods",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
+    "comparison": {
+      "quickComparison": "Quick comparison",
+      "farm": "Farm",
+      "tillableTiles": "Tillable tiles",
+      "totalBuildable": "Total buildable",
+      "added": "Added",
+      "addedIn": "Added in",
+      "knownFor": "Known for",
+      "bestFor": "Best for:",
+      "note": "Note:",
+      "farmDetails": "Farm details",
+      "planFarm": "Plan a {farmName} →",
+      "preview": "{farmName} preview"
+    },
+    "guide": {
+      "breadcrumb": "Breadcrumb",
+      "planner": "Stardew Planner",
+      "farmTypes": "Farm types",
+      "planThisFarm": "Plan this farm →",
+      "compareAllFarms": "Compare all farms",
+      "whatMakesItDifferent": "What makes it different",
+      "otherFarms": "Other farms",
+      "comparisonPrompt": "Want them side by side? See the",
+      "fullComparison": "full comparison",
+      "comparisonSentenceEnding": ".",
+      "preview": "{farmName} preview"
+    },
+    "mods": {
+      "availableCommunityFarms": "Available community farms",
+      "by": "by {authorName}",
+      "planThisFarm": "Plan this farm →",
+      "preview": "{farmName} preview"
+    },
+    "legal": {
+      "privacy": {
+        "title": "Privacy Policy",
+        "introduction": "This policy explains how Stardew Planner handles information when you use this browser-only planning tool.",
+        "localDataTitle": "Local browser data",
+        "localDataBody": "Plans and preferences are stored only in your browser's local storage so they remain available on this device. We do not operate an account system or receive a copy of that local data.",
+        "noAccountsTitle": "No accounts or cloud sync",
+        "noAccountsBody": "Stardew Planner does not provide accounts, sign-in, cloud synchronization, or cross-device project storage.",
+        "noPaymentsTitle": "No payments",
+        "noPaymentsBody": "Stardew Planner does not provide memberships, payment processing, or purchase features.",
+        "contactTitle": "Changes to this policy",
+        "contactBody": "If this policy changes, the updated text will be published on this page."
+      },
+      "terms": {
+        "title": "Terms of Use",
+        "introduction": "By using Stardew Planner, you agree to use this browser-only planning tool responsibly.",
+        "localStorageTitle": "Your local plans",
+        "localStorageBody": "Your plans are stored in local browser storage on your device. You are responsible for exporting any plans you want to keep before clearing browser data or changing devices.",
+        "serviceBoundaryTitle": "Service boundary",
+        "serviceBoundaryBody": "Stardew Planner does not provide accounts, cloud synchronization, or payments. It also does not provide memberships or public sharing, and it cannot guarantee that local browser data can be recovered.",
+        "gameRelationshipTitle": "Game relationship",
+        "gameRelationshipBody": "Stardew Planner is an unofficial fan-made planning tool and is not affiliated with, endorsed by, or sponsored by ConcernedApe.",
+        "changesTitle": "Changes to these terms",
+        "changesBody": "We may update these terms by publishing revised text on this page."
+      }
+    }
+  }
+}

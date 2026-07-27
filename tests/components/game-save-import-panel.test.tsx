@@ -60,9 +60,12 @@ describe("game save import panel", () => {
   it("shows known game-save input errors and rethrows unknown failures", () => {
     expect(
       formatGameSaveImportError(new GameSaveImportError("Farm is missing.")),
-    ).toBe("Game save import failed: Farm is missing.");
+    ).toBe("Game save import failed.");
     expect(() => formatGameSaveImportError(new Error("Unexpected renderer fault."))).toThrow(
       "Unexpected renderer fault.",
     );
+    expect(
+      formatGameSaveImportError(new GameSaveImportError("Farm is missing."), "zh-CN"),
+    ).toBe("游戏存档导入失败。");
   });
 });
