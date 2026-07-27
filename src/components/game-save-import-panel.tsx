@@ -5,17 +5,22 @@ import {
   GameSaveImportError,
   type ImportedGameSaveState,
 } from "../game-save/game-save-import";
+import type { SiteLocale } from "../i18n/locales";
+import { formatTranslation, translate } from "../i18n/messages";
 
 type GameSaveImportControlProperties = Readonly<{
+  locale?: SiteLocale;
   onImportGameSave: (serializedGameSave: string) => void;
 }>;
 
 type GameSaveImportResultModalProperties = Readonly<{
+  locale?: SiteLocale;
   importedGameSaveState: ImportedGameSaveState;
   onClose: () => void;
 }>;
 
 export function GameSaveImportControl({
+  locale = "en",
   onImportGameSave,
 }: GameSaveImportControlProperties) {
   const gameSaveFileInputReference = useRef<HTMLInputElement>(null);
@@ -45,21 +50,21 @@ export function GameSaveImportControl({
         gameSaveFileInputReference.current.value = "";
       }
     } catch (caughtError) {
-      setImportErrorMessage(formatGameSaveImportError(caughtError));
+      setImportErrorMessage(formatGameSaveImportError(caughtError, locale));
     } finally {
       setIsImporting(false);
     }
   }
 
   return (
-    <section aria-label="Import Game Save" className="game-save-import-control">
+    <section aria-label={translate(locale, "planner.gameSave.label")} className="game-save-import-control">
       <label
         className={`game-save-import-control__file-trigger${
           isImporting ? " game-save-import-control__file-trigger--disabled" : ""
         }`}
-        title="Import a Stardew Valley save file to view your farm layout"
+        title={translate(locale, "planner.gameSave.title")}
       >
-        <span>{isImporting ? "Importing Game Save…" : "Import Game Save"}</span>
+        <span>{isImporting ? translate(locale, "planner.gameSave.importing") : translate(locale, "planner.gameSave.label")}</span>
         <input
           accept="*"
           disabled={isImporting}
@@ -78,6 +83,7 @@ export function GameSaveImportControl({
 }
 
 export function GameSaveImportResultModal({
+  locale = "en",
   importedGameSaveState,
   onClose,
 }: GameSaveImportResultModalProperties) {
@@ -93,29 +99,29 @@ export function GameSaveImportResultModal({
         role="dialog"
       >
         <header className="game-save-import-result__header">
-          <h2 id={headingId}>"{importedGameSaveState.farmName} Farm"</h2>
-          <button aria-label="Close game save import result" onClick={onClose} type="button">
+          <h2 id={headingId}>{formatTranslation(locale, "planner.gameSave.farm", { name: importedGameSaveState.farmName })}</h2>
+          <button aria-label={translate(locale, "planner.gameSave.closeResult")} onClick={onClose} type="button">
             ×
           </button>
         </header>
         {unmappedItemCount > 0 ? (
           <p className="game-save-import-result__warning">
-            {String(unmappedItemCount)} items couldn&apos;t be mapped (likely from mods).
+            {formatTranslation(locale, "planner.gameSave.unmapped", { count: unmappedItemCount })}
           </p>
         ) : (
           <p className="game-save-import-result__success">
-            All recognized map placements were imported.
+            {translate(locale, "planner.gameSave.success")}
           </p>
         )}
         <p className="game-save-import-result__notice">
-          Game save import is experimental. Unsupported items are not placed on the map.
+          {translate(locale, "planner.gameSave.experimental")}
         </p>
         <p className="game-save-import-result__notice">
-          The imported map is only in this browser until you save it to this device.
+          {translate(locale, "planner.gameSave.browserOnly")}
         </p>
         <footer className="game-save-import-result__footer">
           <button onClick={onClose} type="button">
-            Close
+            {translate(locale, "planner.gameSave.close")}
           </button>
         </footer>
       </section>
@@ -123,10 +129,19 @@ export function GameSaveImportResultModal({
   );
 }
 
-export function formatGameSaveImportError(caughtError: unknown): string {
-  if (caughtError instanceof GameSaveImportError) {
-    return `Game save import failed: ${caughtError.message}`;
+export function formatGameSaveImportError(
+  caughtError: unknown,
+  locale: SiteLocale = "en",
+): string {
+  if (classifyGameSaveImportError(caughtError) === "game-save-import") {
+    return translate(locale, "planner.gameSave.error");
   }
 
   throw caughtError;
+}
+
+function classifyGameSaveImportError(
+  caughtError: unknown,
+): "game-save-import" | null {
+  return caughtError instanceof GameSaveImportError ? "game-save-import" : null;
 }

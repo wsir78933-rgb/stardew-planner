@@ -13,9 +13,13 @@ import {
   isInteriorDecorSupportedMapId,
   type InteriorDecorCatalogPattern,
 } from "../interior-decor/interior-decor-catalog";
+import { getInteriorDecorDisplayName } from "../i18n/catalog-display";
+import type { SiteLocale } from "../i18n/locales";
+import { formatTranslation, translate } from "../i18n/messages";
 import type { InteriorDecorKind } from "../interior-decor/interior-decor-state";
 
 type InteriorDecorPanelProperties = Readonly<{
+  locale?: SiteLocale;
   mapId: string;
   selectedPattern: InteriorDecorCatalogPattern | null;
   onPatternSelect: (pattern: InteriorDecorCatalogPattern | null) => void;
@@ -28,9 +32,9 @@ const patternsByKind: Readonly<
   flooring: interiorFlooringPatterns,
 };
 
-const interiorDecorKindLabels: Readonly<Record<InteriorDecorKind, string>> = {
-  wallpaper: "Wallpapers",
-  flooring: "Flooring",
+const interiorDecorKindLabelKeys: Readonly<Record<InteriorDecorKind, string>> = {
+  wallpaper: "planner.interiorDecor.wallpaper",
+  flooring: "planner.interiorDecor.flooring",
 };
 const interiorDecorKinds = ["wallpaper", "flooring"] as const;
 
@@ -77,6 +81,7 @@ export function getNextInteriorDecorKind(
 }
 
 export function InteriorDecorPanel({
+  locale = "en",
   mapId,
   selectedPattern,
   onPatternSelect,
@@ -125,9 +130,9 @@ export function InteriorDecorPanel({
   }
 
   return (
-    <section aria-label="Interior decor" className="interior-decor-panel">
+    <section aria-label={translate(locale, "planner.interiorDecor.label")} className="interior-decor-panel">
       <div className="interior-decor-panel__header">
-        <div aria-label="Interior decor category" role="tablist">
+        <div aria-label={translate(locale, "planner.interiorDecor.category")} role="tablist">
           {interiorDecorKinds.map((interiorDecorKind) => (
             <button
               aria-controls={`${panelId}-panel-${interiorDecorKind}`}
@@ -146,23 +151,23 @@ export function InteriorDecorPanel({
               tabIndex={activeKind === interiorDecorKind ? 0 : -1}
               type="button"
             >
-              {interiorDecorKindLabels[interiorDecorKind]}
+              {translate(locale, interiorDecorKindLabelKeys[interiorDecorKind])}
             </button>
           ))}
         </div>
         <button
-          aria-label="Cancel interior decor"
+          aria-label={translate(locale, "planner.interiorDecor.cancelLabel")}
           className="interior-decor-panel__cancel"
           disabled={selectedPattern === null}
           onClick={() => onPatternSelect(null)}
           type="button"
         >
-          Cancel
+          {translate(locale, "planner.interiorDecor.cancel")}
         </button>
       </div>
       {interiorDecorKinds.map((interiorDecorKind) => (
         <div
-          aria-label={interiorDecorKindLabels[interiorDecorKind]}
+          aria-label={translate(locale, interiorDecorKindLabelKeys[interiorDecorKind])}
           aria-labelledby={`${panelId}-tab-${interiorDecorKind}`}
           className="interior-decor-panel__grid"
           hidden={activeKind !== interiorDecorKind}
@@ -172,10 +177,11 @@ export function InteriorDecorPanel({
         >
           {patternsByKind[interiorDecorKind].map((pattern) => {
             const isSelected = selectedPattern?.id === pattern.id;
+            const displayName = getInteriorDecorDisplayName(locale, pattern.kind, pattern.patternId, pattern.name);
 
             return (
               <button
-                aria-label={`Select ${pattern.name}`}
+                aria-label={formatTranslation(locale, "planner.interiorDecor.select", { name: displayName })}
                 aria-pressed={isSelected}
                 className="interior-decor-panel__pattern"
                 data-selected={isSelected}
@@ -193,7 +199,7 @@ export function InteriorDecorPanel({
                     width: `${String(pattern.previewRect.width)}px`,
                   }}
                 />
-                <span className="sr-only">{pattern.name}</span>
+                <span className="sr-only">{displayName}</span>
               </button>
             );
           })}

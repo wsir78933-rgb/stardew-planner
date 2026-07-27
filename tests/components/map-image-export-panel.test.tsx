@@ -27,9 +27,12 @@ describe("map image export panel", () => {
   it("shows known screenshot export errors and rethrows unknown failures", () => {
     expect(
       formatMapImageExportError(new MapImageExportError("Map is loading.")),
-    ).toBe("Screenshot export failed: Map is loading.");
+    ).toBe("Screenshot export failed.");
     expect(() => formatMapImageExportError(new Error("Unexpected Pixi fault."))).toThrow(
       "Unexpected Pixi fault.",
     );
+    expect(
+      formatMapImageExportError(new MapImageExportError("Map is loading."), "zh-CN"),
+    ).toBe("截图导出失败。");
   });
 });

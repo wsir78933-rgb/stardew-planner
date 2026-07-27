@@ -6,16 +6,25 @@ import {
   type ChangeEvent,
 } from "react";
 import { createProjectExportFile } from "../projects/local-project-editor-actions";
-import type { LocalProjectSummary } from "../projects/local-project-store";
+import type {
+  LocalProjectSummary,
+  LocalProjectV2Summary,
+} from "../projects/local-project-store";
+import type { SiteLocale } from "../i18n/locales";
+import { formatTranslation, translate } from "../i18n/messages";
+import { getPlannerMapDisplayName } from "../i18n/catalog-display";
 
 export type LocalProjectStorageStatus = "loading" | "ready" | "error";
 
-type LocalProjectPanelProperties = Readonly<{
+type LocalProjectPanelSummary = LocalProjectSummary | LocalProjectV2Summary;
+
+export type LocalProjectPanelProperties = Readonly<{
+  locale?: SiteLocale;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount?: number | null;
   currentProjectMapInstanceName?: string | null;
-  projects: readonly LocalProjectSummary[];
+  projects: readonly LocalProjectPanelSummary[];
   storageStatus: LocalProjectStorageStatus;
   storageErrorMessage: string | null;
   onCreateProject: () => void;
@@ -29,6 +38,7 @@ type LocalProjectPanelProperties = Readonly<{
 }>;
 
 export function LocalProjectPanel({
+  locale = "en",
   currentProjectId,
   currentProjectName,
   currentProjectMapInstanceCount = null,
@@ -69,23 +79,23 @@ export function LocalProjectPanel({
       setProjectActionNotice(successMessage);
     } catch (caughtError) {
       setProjectActionNotice(null);
-      setProjectActionErrorMessage(formatProjectActionError(caughtError));
+      setProjectActionErrorMessage(formatProjectActionError(locale, caughtError));
     }
   }
 
   function handleSaveCurrentMap(): void {
-    runProjectAction(onSaveCurrentMap, "Saved to this browser.");
+    runProjectAction(onSaveCurrentMap, translate(locale, "planner.localProjects.savedNotice"));
   }
 
   function handleCreateProject(): void {
-    runProjectAction(onCreateProject, "Created a local project.");
+    runProjectAction(onCreateProject, translate(locale, "planner.localProjects.createdNotice"));
   }
 
   function handleOpenProject(projectId: string, projectName: string): void {
-    runProjectAction(() => onOpenProject(projectId), `Opened ${projectName}.`);
+    runProjectAction(() => onOpenProject(projectId), formatTranslation(locale, "planner.localProjects.openedNotice", { name: projectName }));
   }
 
-  function handleStartRename(projectSummary: LocalProjectSummary): void {
+  function handleStartRename(projectSummary: LocalProjectPanelSummary): void {
     setRenamedProjectId(projectSummary.id);
     setRequestedProjectName(projectSummary.name);
     setProjectActionErrorMessage(null);
@@ -96,13 +106,13 @@ export function LocalProjectPanel({
     runProjectAction(() => {
       onRenameProject(projectId, requestedProjectName);
       setRenamedProjectId(null);
-    }, "Renamed the local project.");
+    }, translate(locale, "planner.localProjects.renamedNotice"));
   }
 
   function handleDuplicateProject(projectId: string): void {
     runProjectAction(
       () => onDuplicateProject(projectId),
-      "Duplicated the local project.",
+      translate(locale, "planner.localProjects.duplicatedNotice"),
     );
   }
 
@@ -122,10 +132,10 @@ export function LocalProjectPanel({
     runProjectAction(() => {
       onDeleteProject(projectPendingDeletion.id);
       setProjectIdPendingDeletion(null);
-    }, "Deleted the local project.");
+    }, translate(locale, "planner.localProjects.deletedNotice"));
   }
 
-  function handleExportProject(projectSummary: LocalProjectSummary): void {
+  function handleExportProject(projectSummary: LocalProjectPanelSummary): void {
     try {
       const serializedProject = onExportProject(projectSummary.id);
       const projectExportFile = createProjectExportFile(
@@ -135,10 +145,10 @@ export function LocalProjectPanel({
 
       downloadProjectExportFile(projectExportFile);
       setProjectActionErrorMessage(null);
-      setProjectActionNotice(`Exported ${projectSummary.name}.`);
+      setProjectActionNotice(formatTranslation(locale, "planner.localProjects.exportedNotice", { name: projectSummary.name }));
     } catch (caughtError) {
       setProjectActionNotice(null);
-      setProjectActionErrorMessage(formatProjectActionError(caughtError));
+      setProjectActionErrorMessage(formatProjectActionError(locale, caughtError));
     }
   }
 
@@ -164,32 +174,32 @@ export function LocalProjectPanel({
       }
 
       setProjectActionErrorMessage(null);
-      setProjectActionNotice(`Imported ${selectedProjectFile.name}.`);
+      setProjectActionNotice(formatTranslation(locale, "planner.localProjects.importedNotice", { name: selectedProjectFile.name }));
     } catch (caughtError) {
       setProjectActionNotice(null);
-      setProjectActionErrorMessage(formatProjectActionError(caughtError));
+      setProjectActionErrorMessage(formatProjectActionError(locale, caughtError));
     }
   }
 
   return (
-    <section aria-label="Local projects" className="local-project-panel">
+    <section aria-label={translate(locale, "planner.localProjects.label")} className="local-project-panel">
       <div className="local-project-panel__status">
         <p>
-          Current project: <strong>{currentProjectName ?? "None"}</strong>
+          {translate(locale, "planner.localProjects.currentProject")} <strong>{currentProjectName ?? translate(locale, "planner.localProjects.none")}</strong>
         </p>
         {currentProjectMapInstanceName !== null ? (
           <p>
-            Current map: <strong>{currentProjectMapInstanceName}</strong>
+            {translate(locale, "planner.localProjects.currentMap")} <strong>{currentProjectMapInstanceName}</strong>
             {currentProjectMapInstanceCount !== null
-              ? ` (${String(currentProjectMapInstanceCount)} maps)`
+              ? ` (${formatTranslation(locale, "planner.localProjects.maps", { count: currentProjectMapInstanceCount })})`
               : null}
           </p>
         ) : null}
-        <p>Stored in this browser.</p>
+        <p>{translate(locale, "planner.localProjects.stored")}</p>
       </div>
       {storageStatus === "loading" ? (
         <p className="local-project-panel__message" role="status">
-          Opening browser storage…
+          {translate(locale, "planner.localProjects.opening")}
         </p>
       ) : null}
       {storageErrorMessage !== null ? (
@@ -213,21 +223,21 @@ export function LocalProjectPanel({
           onClick={handleSaveCurrentMap}
           type="button"
         >
-          Save to this device
+          {translate(locale, "planner.localProjects.save")}
         </button>
         <button
           disabled={!isStorageReady}
           onClick={handleCreateProject}
           type="button"
         >
-          New project
+          {translate(locale, "planner.localProjects.new")}
         </button>
         <label
           className={`local-project-panel__import${
             isStorageReady ? "" : " local-project-panel__import--disabled"
           }`}
         >
-          <span>Import JSON</span>
+          <span>{translate(locale, "planner.localProjects.import")}</span>
           <input
             accept="application/json,.json"
             disabled={!isStorageReady}
@@ -237,7 +247,7 @@ export function LocalProjectPanel({
           />
         </label>
       </div>
-      <ul aria-label="Saved local projects" className="local-project-panel__list">
+      <ul aria-label={translate(locale, "planner.localProjects.saved")} className="local-project-panel__list">
         {projects.map((projectSummary) => {
           const isCurrentProject = projectSummary.id === currentProjectId;
           const isRenamingProject = projectSummary.id === renamedProjectId;
@@ -250,13 +260,13 @@ export function LocalProjectPanel({
             >
               <div className="local-project-panel__project-summary">
                 <strong>{projectSummary.name}</strong>
-                <span>{projectSummary.activeMapId}</span>
-                {isCurrentProject ? <span>Current</span> : null}
+                <span>{getProjectSummaryActiveMapDisplayName(locale, projectSummary)}</span>
+                {isCurrentProject ? <span>{translate(locale, "planner.localProjects.current")}</span> : null}
               </div>
               {isRenamingProject ? (
                 <div className="local-project-panel__rename-form">
                   <label>
-                    <span className="sr-only">New project name</span>
+                    <span className="sr-only">{translate(locale, "planner.localProjects.newName")}</span>
                     <input
                       onChange={(changeEvent) =>
                         setRequestedProjectName(changeEvent.currentTarget.value)
@@ -270,13 +280,13 @@ export function LocalProjectPanel({
                     onClick={() => handleRenameProject(projectSummary.id)}
                     type="button"
                   >
-                    Apply name
+                    {translate(locale, "planner.localProjects.applyName")}
                   </button>
                   <button
                     onClick={() => setRenamedProjectId(null)}
                     type="button"
                   >
-                    Cancel rename
+                    {translate(locale, "planner.localProjects.cancelRename")}
                   </button>
                 </div>
               ) : (
@@ -288,35 +298,35 @@ export function LocalProjectPanel({
                     }
                     type="button"
                   >
-                    Open
+                    {translate(locale, "planner.localProjects.open")}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleStartRename(projectSummary)}
                     type="button"
                   >
-                    Rename
+                    {translate(locale, "planner.localProjects.rename")}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleDuplicateProject(projectSummary.id)}
                     type="button"
                   >
-                    Duplicate
+                    {translate(locale, "planner.localProjects.duplicate")}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleExportProject(projectSummary)}
                     type="button"
                   >
-                    Export JSON
+                    {translate(locale, "planner.localProjects.export")}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleRequestProjectDeletion(projectSummary.id)}
                     type="button"
                   >
-                    Delete
+                    {translate(locale, "planner.localProjects.delete")}
                   </button>
                 </div>
               )}
@@ -326,7 +336,7 @@ export function LocalProjectPanel({
       </ul>
       {projects.length === 0 ? (
         <p className="local-project-panel__message">
-          No local projects yet. Saving creates an Untitled Project.
+          {translate(locale, "planner.localProjects.empty")}
         </p>
       ) : null}
       {projectPendingDeletion !== undefined ? (
@@ -335,26 +345,41 @@ export function LocalProjectPanel({
           className="local-project-panel__delete-dialog"
           open
         >
-          <h3 id="delete-local-project-heading">Delete local project?</h3>
+          <h3 id="delete-local-project-heading">{translate(locale, "planner.localProjects.deleteTitle")}</h3>
           <p>
-            Delete <strong>{projectPendingDeletion.name}</strong> from this
-            browser? This cannot be undone.
+            {formatTranslation(locale, "planner.localProjects.deleteConfirm", { name: projectPendingDeletion.name })}
           </p>
           <div>
             <button onClick={handleDeleteProject} type="button">
-              Delete project
+              {translate(locale, "planner.localProjects.deleteProject")}
             </button>
             <button
               onClick={() => setProjectIdPendingDeletion(null)}
               type="button"
             >
-              Keep project
+              {translate(locale, "planner.localProjects.keepProject")}
             </button>
           </div>
         </dialog>
       ) : null}
     </section>
   );
+}
+
+function getProjectSummaryActiveMapId(
+  projectSummary: LocalProjectPanelSummary,
+): string {
+  return "activeBaseMapId" in projectSummary
+    ? projectSummary.activeBaseMapId
+    : projectSummary.activeMapId;
+}
+
+function getProjectSummaryActiveMapDisplayName(
+  locale: SiteLocale,
+  projectSummary: LocalProjectPanelSummary,
+): string {
+  const activeMapId = getProjectSummaryActiveMapId(projectSummary);
+  return getPlannerMapDisplayName(locale, activeMapId, activeMapId);
 }
 
 function downloadProjectExportFile(
@@ -387,10 +412,10 @@ function downloadProjectExportFile(
   window.setTimeout(() => URL.revokeObjectURL(projectExportUrl), 0);
 }
 
-function formatProjectActionError(caughtError: unknown): string {
+function formatProjectActionError(locale: SiteLocale, caughtError: unknown): string {
   if (caughtError instanceof Error) {
-    return `Local project action failed: ${caughtError.message}`;
+    return formatTranslation(locale, "planner.localProjects.error", { message: caughtError.message });
   }
 
-  return `Local project action failed: ${String(caughtError)}`;
+  return formatTranslation(locale, "planner.localProjects.error", { message: String(caughtError) });
 }

@@ -86,6 +86,20 @@ describe("item catalog panel", () => {
     expect(catalogPanelMarkup).toContain('placeholder="Search..."');
   });
 
+  it("renders Chinese catalog labels and translated known item names without changing IDs", () => {
+    const catalogGridMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: [catalogItems[0]],
+        locale: "zh-CN",
+        selectedCatalogItemId: "building:Coop",
+        onCatalogItemSelect: () => undefined,
+      }),
+    );
+
+    expect(catalogGridMarkup).toContain("鸡舍");
+    expect(catalogGridMarkup).toContain('aria-pressed="true"');
+  });
+
   it("loads the catalog through a fake local loader", async () => {
     const requestedUrls: string[] = [];
     const fakeLocalCatalogLoader = async (): Promise<Catalog> => {
@@ -113,6 +127,18 @@ describe("item catalog panel", () => {
     ]);
     expect(getCatalogItemsForPanel(catalog, "decor", "log")).toEqual([
       catalogItems[5],
+    ]);
+  });
+
+  it("matches Chinese display labels while retaining stable-ID and English source-name search", () => {
+    expect(getCatalogItemsForPanel(catalog, "buildings", "鸡舍", "zh-CN")).toEqual([
+      catalogItems[0],
+    ]);
+    expect(getCatalogItemsForPanel(catalog, "buildings", "coop", "zh-CN")).toEqual([
+      catalogItems[0],
+    ]);
+    expect(getCatalogItemsForPanel(catalog, "buildings", "building:Coop", "zh-CN")).toEqual([
+      catalogItems[0],
     ]);
   });
 
@@ -145,6 +171,25 @@ describe("item catalog panel", () => {
       message:
         'Unable to load the local item catalog: Catalog dataset /game-assets/1.6.15/data/Crops.json record "Parsnip" has invalid SpriteIndex -1.',
     });
+  });
+
+  it("shows a localized catalog-load failure without exposing the source error message", () => {
+    const catalogPanelMarkup = renderToStaticMarkup(
+      createElement(CatalogPanelContent, {
+        category: "crops",
+        catalogPanelLoadState: {
+          kind: "error",
+          message: "Catalog dataset /private/secret.json is unavailable.",
+        },
+        locale: "zh-CN",
+        onCatalogItemSelect: () => undefined,
+        searchQuery: "",
+        selectedCatalogItemId: null,
+      }),
+    );
+
+    expect(catalogPanelMarkup).toContain("无法加载本地物品目录。");
+    expect(catalogPanelMarkup).not.toContain("/private/secret.json");
   });
 
   it("renders local texture thumbnails and marks the selected item", () => {

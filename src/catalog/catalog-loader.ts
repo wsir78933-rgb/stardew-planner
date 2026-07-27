@@ -3,6 +3,7 @@ import {
   type RawCatalogDatasets,
 } from "./catalog-schema";
 import type { Catalog, CatalogJsonFetcher, CatalogJsonResponse } from "./catalog-types";
+import { assertChineseCatalogDisplayManifest } from "../i18n/catalog-display";
 
 const catalogAssetRoot = "/game-assets/1.6.15/data";
 
@@ -43,7 +44,13 @@ export async function loadCatalog(
     ),
   };
 
-  return createCatalogFromDatasets(rawCatalogDatasets, catalogDatasetUrls);
+  const catalog = createCatalogFromDatasets(rawCatalogDatasets, catalogDatasetUrls);
+
+  if (fetchCatalogJson === fetchBrowserCatalogJson) {
+    assertChineseCatalogDisplayManifest(catalog);
+  }
+
+  return catalog;
 }
 
 async function fetchCatalogDataset(

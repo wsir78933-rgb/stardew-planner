@@ -31,8 +31,12 @@ import {
 import { getPlannerMapById, plannerMaps, type PlannerMap } from "../maps/map-catalog";
 import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import { getPlannerMapDisplayName } from "../i18n/catalog-display";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
 
-type EditorModalProperties = Readonly<{
+export type EditorModalProperties = Readonly<{
+  locale?: SiteLocale;
   modalId: EditorModalId | null;
   selectedMapId: string;
   season: TilesheetSeason;
@@ -70,20 +74,20 @@ const modalFocusableElementSelector = [
 ].join(",");
 
 const mapGroupDefinitions: readonly Readonly<{
-  heading: string;
+  headingKey: string;
   includesMap: (plannerMap: PlannerMap) => boolean;
 }>[] = [
-  { heading: "Farm", includesMap: (plannerMap) => plannerMap.category === "farm" },
+  { headingKey: "planner.modal.farm", includesMap: (plannerMap) => plannerMap.category === "farm" },
   {
-    heading: "Interiors",
+    headingKey: "planner.modal.interiors",
     includesMap: (plannerMap) => plannerMap.category === "interior",
   },
   {
-    heading: "Exteriors",
+    headingKey: "planner.modal.exteriors",
     includesMap: (plannerMap) => plannerMap.category === "exterior",
   },
   {
-    heading: "Community",
+    headingKey: "planner.modal.community",
     includesMap: (plannerMap) =>
       plannerMap.category === "community-farm" ||
       plannerMap.category === "community-interior",
@@ -91,6 +95,7 @@ const mapGroupDefinitions: readonly Readonly<{
 ];
 
 export function EditorModal({
+  locale = "en",
   modalId,
   selectedMapId,
   season,
@@ -193,8 +198,8 @@ export function EditorModal({
         tabIndex={-1}
       >
         <header className="editor-modal__header">
-          <h2 id={modalHeadingId}>{getModalLabel(modalId)}</h2>
-          <button aria-label="Close dialog" onClick={onClose} type="button">
+          <h2 id={modalHeadingId}>{getModalLabel(locale, modalId)}</h2>
+          <button aria-label={translate(locale, "planner.modal.close")} onClick={onClose} type="button">
             ×
           </button>
         </header>
@@ -202,11 +207,13 @@ export function EditorModal({
           <>
             {projectMapPanelContent ?? (
               <MapPicker
+                locale={locale}
                 onMapChange={onMapChange}
                 selectedMapId={selectedMapId}
               />
             )}
             <MapConfigurationPanel
+              locale={locale}
               mapRenderOptions={mapRenderOptions}
               onMapRenderOptionsChange={onMapRenderOptionsChange}
               selectedMapId={selectedMapId}
@@ -214,12 +221,13 @@ export function EditorModal({
           </>
         ) : null}
         {modalId === "season-picker" ? (
-          <SeasonPicker onSeasonChange={onSeasonChange} season={season} />
+          <SeasonPicker locale={locale} onSeasonChange={onSeasonChange} season={season} />
         ) : null}
         {modalId === "view-panel" ? (
           <ViewPanel
             behaviorOptions={behaviorOptions}
             displayOptions={displayOptions}
+            locale={locale}
             onBehaviorOptionChange={onBehaviorOptionChange}
             onDisplayOptionToggle={onDisplayOptionToggle}
             onPanelPositionChange={onPanelPositionChange}
@@ -231,12 +239,13 @@ export function EditorModal({
         {modalId === "settings-panel" ? (
           <SettingsPanel
             behaviorOptions={behaviorOptions}
+            locale={locale}
             onBehaviorOptionChange={onBehaviorOptionChange}
           />
         ) : null}
-        {modalId === "help-info" ? <HelpInfoPanel /> : null}
-        {modalId === "keyboard-shortcuts" ? <KeyboardShortcutsPanel /> : null}
-        {modalId === "whats-new" ? <WhatsNewPanel /> : null}
+        {modalId === "help-info" ? <HelpInfoPanel locale={locale} /> : null}
+        {modalId === "keyboard-shortcuts" ? <KeyboardShortcutsPanel locale={locale} /> : null}
+        {modalId === "whats-new" ? <WhatsNewPanel locale={locale} /> : null}
       </section>
     </div>
   );
@@ -314,9 +323,11 @@ function restoreModalTriggerFocus(
 }
 
 function MapPicker({
+  locale,
   selectedMapId,
   onMapChange,
 }: Readonly<{
+  locale: SiteLocale;
   selectedMapId: string;
   onMapChange: (mapId: string) => void;
 }>) {
@@ -326,8 +337,8 @@ function MapPicker({
         const groupedMaps = plannerMaps.filter(mapGroupDefinition.includesMap);
 
         return (
-          <section className="editor-modal__map-group" key={mapGroupDefinition.heading}>
-            <h3>{mapGroupDefinition.heading}</h3>
+          <section className="editor-modal__map-group" key={mapGroupDefinition.headingKey}>
+            <h3>{translate(locale, mapGroupDefinition.headingKey)}</h3>
             <div className="editor-modal__map-grid">
               {groupedMaps.map((plannerMap) => (
                 <button
@@ -342,7 +353,7 @@ function MapPicker({
                     aria-hidden="true"
                     src={`/game-assets/1.6.15/${plannerMap.previewOutputPath}`}
                   />
-                  <span>{plannerMap.displayName}</span>
+                  <span>{getPlannerMapDisplayName(locale, plannerMap.id, plannerMap.displayName)}</span>
                 </button>
               ))}
             </div>
@@ -354,9 +365,11 @@ function MapPicker({
 }
 
 function SeasonPicker({
+  locale,
   season,
   onSeasonChange,
 }: Readonly<{
+  locale: SiteLocale;
   season: TilesheetSeason;
   onSeasonChange: (season: TilesheetSeason) => void;
 }>) {
@@ -369,7 +382,7 @@ function SeasonPicker({
           onClick={() => onSeasonChange(editorSeason)}
           type="button"
         >
-          {editorSeason}
+          {formatSeason(locale, editorSeason)}
         </button>
       ))}
     </div>
@@ -377,28 +390,30 @@ function SeasonPicker({
 }
 
 function PanelPositionPicker({
+  locale,
   panelPosition,
   onPanelPositionChange,
 }: Readonly<{
+  locale: SiteLocale;
   panelPosition: EditorPanelPosition;
   onPanelPositionChange: (panelPosition: EditorPanelPosition) => void;
 }>) {
   return (
     <div className="editor-modal__panel-picker">
-      <p>Choose where the item catalog appears in this browser.</p>
+      <p>{translate(locale, "planner.modal.catalogPositionDescription")}</p>
       <button
         aria-pressed={panelPosition === "bottom"}
         onClick={() => onPanelPositionChange("bottom")}
         type="button"
       >
-        Bottom panel
+        {translate(locale, "planner.modal.bottomPanel")}
       </button>
       <button
         aria-pressed={panelPosition === "left"}
         onClick={() => onPanelPositionChange("left")}
         type="button"
       >
-        Left panel
+        {translate(locale, "planner.modal.leftPanel")}
       </button>
     </div>
   );
@@ -409,32 +424,32 @@ const viewOptionGroups: readonly Readonly<{
   options: readonly Readonly<{
     key: EditorDisplayOptionKey;
     label: string;
-    title: string;
+    titleKey: string;
   }>[];
 }>[] = [
   {
     heading: "Overlays",
     options: [
-      { key: "showGrid", label: "Grid", title: "Show tile grid lines on the map" },
+      { key: "showGrid", label: "Grid", titleKey: "planner.modal.titles.grid" },
       {
         key: "showSprinklerRadius",
         label: "Sprinkler Radius",
-        title: "Highlight tiles watered by each sprinkler",
+        titleKey: "planner.modal.titles.sprinklerRadius",
       },
       {
         key: "showScarecrowRadius",
         label: "Scarecrow Radius",
-        title: "Highlight tiles protected from crows",
+        titleKey: "planner.modal.titles.scarecrowRadius",
       },
       {
         key: "showBeeHouseRadius",
         label: "Bee House Range",
-        title: "Highlight flower range for honey production",
+        titleKey: "planner.modal.titles.beeHouseRange",
       },
       {
         key: "showJunimoHutRadius",
         label: "Junimo Hut Range",
-        title: "Highlight harvest area for Junimo Huts",
+        titleKey: "planner.modal.titles.junimoHutRange",
       },
     ],
   },
@@ -444,17 +459,17 @@ const viewOptionGroups: readonly Readonly<{
       {
         key: "showBuildableTiles",
         label: "Blocked (Buildings)",
-        title: "Show where buildings cannot be placed",
+        titleKey: "planner.modal.titles.blockedBuildings",
       },
       {
         key: "showCropTiles",
         label: "Blocked (Crops)",
-        title: "Show where crops cannot be planted",
+        titleKey: "planner.modal.titles.blockedCrops",
       },
       {
         key: "showTreeTiles",
         label: "Blocked (Trees)",
-        title: "Show where trees cannot grow",
+        titleKey: "planner.modal.titles.blockedTrees",
       },
     ],
   },
@@ -464,7 +479,7 @@ const viewOptionGroups: readonly Readonly<{
       {
         key: "showNightMode",
         label: "Night Mode",
-        title: "Preview your farm at night with light sources",
+        titleKey: "planner.modal.titles.nightMode",
       },
     ],
   },
@@ -473,6 +488,7 @@ const viewOptionGroups: readonly Readonly<{
 function ViewPanel({
   behaviorOptions,
   displayOptions,
+  locale,
   onBehaviorOptionChange,
   onDisplayOptionToggle,
   onPanelPositionChange,
@@ -481,6 +497,7 @@ function ViewPanel({
 }: Readonly<{
   behaviorOptions: EditorBehaviorOptions;
   displayOptions: EditorDisplayOptions;
+  locale: SiteLocale;
   onBehaviorOptionChange: (
     editorBehaviorOptionKey: EditorBehaviorOptionKey,
     nextValue: boolean,
@@ -498,17 +515,17 @@ function ViewPanel({
     <div className="editor-modal__view-panel">
       {viewOptionGroups.map((viewOptionGroup) => (
         <section className="editor-modal__view-section" key={viewOptionGroup.heading}>
-          <h3>{viewOptionGroup.heading}</h3>
+          <h3>{getEditorModalText(locale, viewOptionGroup.heading)}</h3>
           <div className="editor-modal__view-options">
             {viewOptionGroup.options.map((viewOption) => (
               <button
                 aria-pressed={displayOptions[viewOption.key]}
                 key={viewOption.key}
                 onClick={() => onDisplayOptionToggle(viewOption.key)}
-                title={viewOption.title}
+                title={translate(locale, viewOption.titleKey)}
                 type="button"
               >
-                {viewOption.label}
+                {getEditorModalText(locale, viewOption.label)}
               </button>
             ))}
             {viewOptionGroup.heading === "Map Overlays" &&
@@ -516,17 +533,17 @@ function ViewPanel({
               <button
                 aria-pressed={displayOptions.showNpcPaths}
                 onClick={() => onDisplayOptionToggle("showNpcPaths")}
-                title="Show tiles NPCs walk through"
+                title={translate(locale, "planner.modal.titles.npcPaths")}
                 type="button"
               >
-                NPC Paths
+                {translate(locale, "planner.modal.npcPaths")}
               </button>
             ) : null}
           </div>
         </section>
       ))}
       <section className="editor-modal__view-section">
-        <h3>Resource Clumps</h3>
+        <h3>{translate(locale, "planner.modal.resourceClumps")}</h3>
         <div className="editor-modal__view-options">
           <button
             aria-pressed={behaviorOptions.autoShowResourceClumps}
@@ -536,24 +553,25 @@ function ViewPanel({
                 !behaviorOptions.autoShowResourceClumps,
               )
             }
-            title="Show spawn locations while a resource clump is selected"
+            title={translate(locale, "planner.modal.titles.resourceClumps")}
             type="button"
           >
-            Resource Clumps
+            {translate(locale, "planner.modal.resourceClumps")}
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Display</h3>
+        <h3>{translate(locale, "planner.modal.display")}</h3>
         <div className="editor-modal__view-options">
-          <button disabled title="Simulate rain, snow, and other weather effects" type="button">
-            Weather
+          <button disabled title={translate(locale, "planner.modal.titles.weather")} type="button">
+            {translate(locale, "planner.modal.weather")}
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Catalog Position</h3>
+        <h3>{translate(locale, "planner.modal.catalogPosition")}</h3>
         <PanelPositionPicker
+          locale={locale}
           onPanelPositionChange={onPanelPositionChange}
           panelPosition={panelPosition}
         />
@@ -567,7 +585,7 @@ const settingsOptionGroups: readonly Readonly<{
   options: readonly Readonly<{
     key: EditorBehaviorOptionKey;
     label: string;
-    title: string;
+    titleKey: string;
   }>[];
 }>[] = [
   {
@@ -576,12 +594,12 @@ const settingsOptionGroups: readonly Readonly<{
       {
         key: "showJoystick",
         label: "Joystick",
-        title: "Show directional pad for precise item placement on touch devices",
+        titleKey: "planner.modal.titles.joystick",
       },
       {
         key: "leftHandMode",
         label: "Left-hand Mode",
-        title: "Move controls to the left side of the screen",
+        titleKey: "planner.modal.titles.leftHand",
       },
     ],
   },
@@ -591,7 +609,7 @@ const settingsOptionGroups: readonly Readonly<{
       {
         key: "showToasts",
         label: "Toast Notifications",
-        title: "Show brief notifications for tool changes, undo/redo, and actions",
+        titleKey: "planner.modal.titles.toasts",
       },
     ],
   },
@@ -601,7 +619,7 @@ const settingsOptionGroups: readonly Readonly<{
       {
         key: "gameCursors",
         label: "Game-Styled Cursors",
-        title: "Use the pixel-art game-styled cursors instead of your OS cursors",
+        titleKey: "planner.modal.titles.cursors",
       },
     ],
   },
@@ -609,9 +627,11 @@ const settingsOptionGroups: readonly Readonly<{
 
 function SettingsPanel({
   behaviorOptions,
+  locale,
   onBehaviorOptionChange,
 }: Readonly<{
   behaviorOptions: EditorBehaviorOptions;
+  locale: SiteLocale;
   onBehaviorOptionChange: (
     editorBehaviorOptionKey: EditorBehaviorOptionKey,
     nextValue: boolean,
@@ -638,7 +658,7 @@ function SettingsPanel({
     <div className="editor-modal__settings-panel">
       {settingsOptionGroups.map((settingsOptionGroup) => (
         <section className="editor-modal__view-section" key={settingsOptionGroup.heading}>
-          <h3>{settingsOptionGroup.heading}</h3>
+          <h3>{getEditorModalText(locale, settingsOptionGroup.heading)}</h3>
           <div className="editor-modal__view-options">
             {settingsOptionGroup.options.map((settingsOption) => (
               <button
@@ -650,180 +670,214 @@ function SettingsPanel({
                     !behaviorOptions[settingsOption.key],
                   )
                 }
-                title={settingsOption.title}
+                title={translate(locale, settingsOption.titleKey)}
                 type="button"
               >
-                {settingsOption.label}
+                {getEditorModalText(locale, settingsOption.label)}
               </button>
             ))}
           </div>
         </section>
       ))}
       <section className="editor-modal__view-section">
-        <h3>Placement</h3>
+        <h3>{translate(locale, "planner.modal.placement")}</h3>
         <div className="editor-modal__view-options">
           <button
             aria-pressed={behaviorOptions.freePlacement}
             onClick={handleFreePlacementClick}
-            title="Disable placement rules, place items anywhere on the map"
+            title={translate(locale, "planner.modal.titles.freePlacement")}
             type="button"
           >
-            Free Placement
+            {translate(locale, "planner.modal.freePlacement")}
           </button>
         </div>
         {isConfirmingFreePlacement ? (
           <div className="editor-modal__free-placement-warning" role="alert">
             <p>
-              Free placement disables map placement rules. Some layouts may not
-              be achievable in-game.
+              {translate(locale, "planner.modal.freePlacementWarning")}
             </p>
             <div>
               <button onClick={() => setIsConfirmingFreePlacement(false)} type="button">
-                Cancel
+                {translate(locale, "planner.modal.cancel")}
               </button>
               <button onClick={confirmFreePlacement} type="button">
-                Enable Free Placement
+                {translate(locale, "planner.modal.enableFreePlacement")}
               </button>
             </div>
           </div>
         ) : null}
       </section>
       <section className="editor-modal__view-section">
-        <h3>Community</h3>
+        <h3>{translate(locale, "planner.modal.community")}</h3>
         <div className="editor-modal__view-options">
-          <button disabled title="Add and manage Content Patcher mods" type="button">
-            Manage Mods
+          <button disabled title={translate(locale, "planner.modal.titles.manageMods")} type="button">
+            {translate(locale, "planner.modal.manageMods")}
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Joja Stuff</h3>
+        <h3>{translate(locale, "planner.modal.jojaStuff")}</h3>
         <div className="editor-modal__view-options">
-          <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
-          <a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a>
+          <a href="/privacy" target="_blank" rel="noreferrer">{translate(locale, "planner.modal.privacy")}</a>
+          <a href="/terms" target="_blank" rel="noreferrer">{translate(locale, "planner.modal.terms")}</a>
         </div>
       </section>
     </div>
   );
 }
 
-function HelpInfoPanel() {
+function HelpInfoPanel({ locale }: Readonly<{ locale: SiteLocale }>) {
   return (
     <div className="editor-reference-info">
       <section>
-        <h3>Features</h3>
+        <h3>{translate(locale, "planner.reference.features")}</h3>
         <ul>
-          <li><strong>Click Cycling</strong> · Click the same tile repeatedly to cycle through overlapping items.</li>
-          <li><strong>X-ray</strong> · Hold Space to see through placed sprites.</li>
-          <li><strong>Drag to Move</strong> · Drag a selected building or item to reposition it.</li>
-          <li><strong>Paint</strong> · Recolour supported buildings, chests, and fish pond water.</li>
-          <li><strong>Radius Overlays</strong> · Preview sprinkler, scarecrow, bee house, and Junimo Hut coverage.</li>
+          <li>{translate(locale, "planner.reference.clickCycling")}</li>
+          <li>{translate(locale, "planner.reference.xray")}</li>
+          <li>{translate(locale, "planner.reference.drag")}</li>
+          <li>{translate(locale, "planner.reference.paint")}</li>
+          <li>{translate(locale, "planner.reference.radius")}</li>
         </ul>
       </section>
       <section>
-        <h3>Good to Know</h3>
+        <h3>{translate(locale, "planner.reference.goodToKnow")}</h3>
         <ul>
-          <li>Projects are saved only in this browser. Export JSON to keep a portable copy.</li>
-          <li>Use Free Placement only when you intentionally want a layout the game may not allow.</li>
-          <li>Wallpaper and flooring can only be applied to compatible interior regions.</li>
+          <li>{translate(locale, "planner.reference.localProjects")}</li>
+          <li>{translate(locale, "planner.reference.freePlacement")}</li>
+          <li>{translate(locale, "planner.reference.interior")}</li>
         </ul>
       </section>
       <section>
-        <h3>Maps</h3>
-        <p>Use Map to switch among farm, interior, exterior, and locked community maps. Each local project can keep separate layouts for multiple maps.</p>
+        <h3>{translate(locale, "planner.reference.maps")}</h3>
+        <p>{translate(locale, "planner.reference.mapsDescription")}</p>
       </section>
     </div>
   );
 }
 
-function KeyboardShortcutsPanel() {
+function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: SiteLocale }>) {
   return (
     <div className="editor-reference-info editor-reference-info--shortcuts">
       <section>
-        <h3>Tools</h3>
+        <h3>{translate(locale, "planner.reference.tools")}</h3>
         <dl>
-          <div><dt>V</dt><dd>Switch to cursor mode</dd></div>
-          <div><dt>M</dt><dd>Switch to multi-select mode</dd></div>
-          <div><dt>E</dt><dd>Switch to erase mode</dd></div>
-          <div><dt>F</dt><dd>Switch to fill mode</dd></div>
-          <div><dt>Q</dt><dd>Rotate the selected item</dd></div>
-          <div><dt>C</dt><dd>Copy the selected placement</dd></div>
-          <div><dt>Delete</dt><dd>Delete the selected placement</dd></div>
-          <div><dt>Esc / Right click</dt><dd>Cancel placement or clear selection</dd></div>
+          <div><dt>V</dt><dd>{translate(locale, "planner.reference.cursorMode")}</dd></div>
+          <div><dt>M</dt><dd>{translate(locale, "planner.reference.multiSelectMode")}</dd></div>
+          <div><dt>E</dt><dd>{translate(locale, "planner.reference.eraseMode")}</dd></div>
+          <div><dt>F</dt><dd>{translate(locale, "planner.reference.fillMode")}</dd></div>
+          <div><dt>Q</dt><dd>{translate(locale, "planner.reference.rotate")}</dd></div>
+          <div><dt>C</dt><dd>{translate(locale, "planner.reference.copy")}</dd></div>
+          <div><dt>Delete</dt><dd>{translate(locale, "planner.reference.delete")}</dd></div>
+          <div><dt>Esc / Right click</dt><dd>{translate(locale, "planner.reference.cancel")}</dd></div>
         </dl>
       </section>
       <section>
-        <h3>Camera</h3>
+        <h3>{translate(locale, "planner.reference.camera")}</h3>
         <dl>
-          <div><dt>WASD / Arrow keys</dt><dd>Pan the canvas</dd></div>
-          <div><dt>R / T</dt><dd>Zoom in or out</dd></div>
-          <div><dt>Wheel / pinch</dt><dd>Zoom toward the cursor</dd></div>
-          <div><dt>Space</dt><dd>Hold for X-ray</dd></div>
+          <div><dt>WASD / Arrow keys</dt><dd>{translate(locale, "planner.reference.pan")}</dd></div>
+          <div><dt>R / T</dt><dd>{translate(locale, "planner.reference.zoom")}</dd></div>
+          <div><dt>Wheel / pinch</dt><dd>{translate(locale, "planner.reference.zoomCursor")}</dd></div>
+          <div><dt>Space</dt><dd>{translate(locale, "planner.reference.holdXray")}</dd></div>
         </dl>
       </section>
       <section>
-        <h3>History</h3>
+        <h3>{translate(locale, "planner.reference.history")}</h3>
         <dl>
-          <div><dt>Ctrl/Cmd + Z</dt><dd>Undo the last action</dd></div>
-          <div><dt>Ctrl/Cmd + Y</dt><dd>Redo the last undone action</dd></div>
+          <div><dt>Ctrl/Cmd + Z</dt><dd>{translate(locale, "planner.reference.undo")}</dd></div>
+          <div><dt>Ctrl/Cmd + Y</dt><dd>{translate(locale, "planner.reference.redo")}</dd></div>
         </dl>
       </section>
     </div>
   );
 }
 
-function WhatsNewPanel() {
+function WhatsNewPanel({ locale }: Readonly<{ locale: SiteLocale }>) {
   return (
     <div className="editor-reference-info">
-      <p className="editor-reference-info__version">v0.1.1 · April 2026</p>
+      <p className="editor-reference-info__version">{translate(locale, "planner.reference.version")}</p>
       <section>
-        <h3>Community Maps</h3>
-        <p>Community farm maps are available from the Community map tab and remain bundled locally with this planner.</p>
+        <h3>{translate(locale, "planner.reference.communityMaps")}</h3>
+        <p>{translate(locale, "planner.reference.communityMapsDescription")}</p>
       </section>
       <section>
-        <h3>Table Decor</h3>
-        <p>Place lamps, plants, and other compatible objects on tables and end tables.</p>
+        <h3>{translate(locale, "planner.reference.tableDecor")}</h3>
+        <p>{translate(locale, "planner.reference.tableDecorDescription")}</p>
       </section>
       <section>
-        <h3>Winter Crops</h3>
-        <p>Powdermelon is available from the crop picker.</p>
+        <h3>{translate(locale, "planner.reference.winterCrops")}</h3>
+        <p>{translate(locale, "planner.reference.winterCropsDescription")}</p>
       </section>
       <section>
-        <h3>Sprinkler Shadows</h3>
-        <p>Sprinklers render with a ground shadow matching the in-game appearance.</p>
+        <h3>{translate(locale, "planner.reference.sprinklerShadows")}</h3>
+        <p>{translate(locale, "planner.reference.sprinklerShadowsDescription")}</p>
       </section>
     </div>
   );
 }
 
-function getModalLabel(modalId: EditorModalId): string {
+function getModalLabel(locale: SiteLocale, modalId: EditorModalId): string {
   if (modalId === "map-picker") {
-    return "Choose map";
+    return translate(locale, "planner.modal.chooseMap");
   }
 
   if (modalId === "season-picker") {
-    return "Choose season";
+    return translate(locale, "planner.modal.chooseSeason");
   }
 
   if (modalId === "view-panel") {
-    return "View";
+    return translate(locale, "planner.modal.view");
   }
 
   if (modalId === "save-panel") {
-    return "Save";
+    return translate(locale, "planner.modal.save");
   }
 
   if (modalId === "help-info") {
-    return "Help & Info";
+    return translate(locale, "planner.modal.help");
   }
 
   if (modalId === "keyboard-shortcuts") {
-    return "Keyboard Shortcuts";
+    return translate(locale, "planner.modal.shortcuts");
   }
 
   if (modalId === "whats-new") {
-    return "What's New";
+    return translate(locale, "planner.modal.whatsNew");
   }
 
-  return "Settings";
+  return translate(locale, "planner.modal.settings");
+}
+
+function formatSeason(locale: SiteLocale, season: TilesheetSeason): string {
+  if (locale === "zh-CN") {
+    return { spring: "春季", summer: "夏季", fall: "秋季", winter: "冬季" }[season];
+  }
+
+  return season;
+}
+
+function getEditorModalText(locale: SiteLocale, sourceText: string): string {
+  const messageKeyBySourceText: Readonly<Record<string, string>> = {
+    Overlays: "planner.modal.overlays",
+    "Map Overlays": "planner.modal.mapOverlays",
+    Display: "planner.modal.display",
+    Grid: "planner.modal.grid",
+    "Sprinkler Radius": "planner.modal.sprinklerRadius",
+    "Scarecrow Radius": "planner.modal.scarecrowRadius",
+    "Bee House Range": "planner.modal.beeHouseRange",
+    "Junimo Hut Range": "planner.modal.junimoHutRange",
+    "Blocked (Buildings)": "planner.modal.blockedBuildings",
+    "Blocked (Crops)": "planner.modal.blockedCrops",
+    "Blocked (Trees)": "planner.modal.blockedTrees",
+    "Night Mode": "planner.modal.nightMode",
+    Mobile: "planner.modal.mobile",
+    Joystick: "planner.modal.joystick",
+    "Left-hand Mode": "planner.modal.leftHand",
+    Notifications: "planner.modal.notifications",
+    "Toast Notifications": "planner.modal.toasts",
+    Interface: "planner.modal.interface",
+    "Game-Styled Cursors": "planner.modal.cursors",
+  };
+  const messageKey = messageKeyBySourceText[sourceText];
+
+  return messageKey === undefined ? sourceText : translate(locale, messageKey);
 }

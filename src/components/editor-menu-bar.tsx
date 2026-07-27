@@ -5,8 +5,11 @@ import type {
   EditorModalId,
 } from "../editor/editor-view-state";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
 
 type EditorMenuBarProperties = Readonly<{
+  locale?: SiteLocale;
   activeModalId: EditorModalId | null;
   editorMenuVisibility: EditorMenuVisibility;
   expandedActionsClassName?: string;
@@ -20,16 +23,17 @@ const editorMenuActionsId = "editor-menu-actions";
 
 const editorMenuControls: readonly Readonly<{
   id: EditorModalId;
-  label: string;
+  labelKey: string;
 }>[] = [
-  { id: "season-picker", label: "Season" },
-  { id: "map-picker", label: "Map" },
-  { id: "view-panel", label: "View" },
-  { id: "save-panel", label: "Save" },
-  { id: "settings-panel", label: "Settings" },
+  { id: "season-picker", labelKey: "planner.menu.season" },
+  { id: "map-picker", labelKey: "planner.menu.map" },
+  { id: "view-panel", labelKey: "planner.menu.view" },
+  { id: "save-panel", labelKey: "planner.menu.save" },
+  { id: "settings-panel", labelKey: "planner.menu.settings" },
 ];
 
 export function EditorMenuBar({
+  locale = "en",
   activeModalId,
   editorMenuVisibility,
   expandedActionsClassName,
@@ -41,16 +45,16 @@ export function EditorMenuBar({
   const isExpanded = editorMenuVisibility === "expanded";
 
   return (
-    <nav aria-label="Editor menu" className="editor-menu-bar">
+    <nav aria-label={translate(locale, "planner.menu.label")} className="editor-menu-bar">
       <button
         aria-controls={isExpanded ? editorMenuActionsId : undefined}
         aria-expanded={isExpanded}
-        aria-label="Menu"
+        aria-label={translate(locale, "planner.menu.menu")}
         className="editor-menu-bar__button"
         onClick={onToggleMenu}
         type="button"
       >
-        Menu
+        {translate(locale, "planner.menu.menu")}
       </button>
       {isExpanded ? (
         <div
@@ -59,12 +63,14 @@ export function EditorMenuBar({
         >
           {editorMenuControls.map((editorMenuControl) => {
             const menuLabel = getMenuLabel(
+              locale,
               editorMenuControl,
               mapDisplayName,
               season,
             );
+            const controlLabel = translate(locale, editorMenuControl.labelKey);
             const accessibleMenuLabel = getAccessibleMenuLabel(
-              editorMenuControl,
+              controlLabel,
               menuLabel,
             );
 
@@ -79,7 +85,7 @@ export function EditorMenuBar({
                 type="button"
               >
                 <span className="editor-menu-bar__label">
-                  {editorMenuControl.label}
+                  {controlLabel}
                 </span>
                 <span aria-hidden="true" className="editor-menu-bar__value">
                   {menuLabel}
@@ -94,12 +100,13 @@ export function EditorMenuBar({
 }
 
 function getMenuLabel(
+  locale: SiteLocale,
   editorMenuControl: (typeof editorMenuControls)[number],
   mapDisplayName: string,
   season: TilesheetSeason,
 ): string {
   if (editorMenuControl.id === "season-picker") {
-    return season;
+    return formatMenuSeason(locale, season);
   }
 
   if (editorMenuControl.id === "map-picker") {
@@ -109,11 +116,24 @@ function getMenuLabel(
   return "";
 }
 
+function formatMenuSeason(locale: SiteLocale, season: TilesheetSeason): string {
+  if (locale !== "zh-CN") {
+    return season;
+  }
+
+  return {
+    spring: "春季",
+    summer: "夏季",
+    fall: "秋季",
+    winter: "冬季",
+  }[season];
+}
+
 function getAccessibleMenuLabel(
-  editorMenuControl: (typeof editorMenuControls)[number],
+  controlLabel: string,
   menuLabel: string,
 ): string {
   return menuLabel.length === 0
-    ? editorMenuControl.label
-    : `${editorMenuControl.label}: ${menuLabel}`;
+    ? controlLabel
+    : `${controlLabel}: ${menuLabel}`;
 }

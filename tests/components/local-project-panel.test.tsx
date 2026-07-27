@@ -17,6 +17,55 @@ const localProjectSummaries: readonly LocalProjectSummary[] = [
 function ignoreLocalProjectAction(): void {}
 
 describe("local project panel", () => {
+  it("localizes local-only project controls for Chinese", () => {
+    const panelMarkup = renderToStaticMarkup(
+      createElement(LocalProjectPanel, {
+        currentProjectId: null,
+        currentProjectName: null,
+        locale: "zh-CN",
+        projects: [],
+        storageStatus: "ready",
+        storageErrorMessage: null,
+        onCreateProject: ignoreLocalProjectAction,
+        onDeleteProject: ignoreLocalProjectAction,
+        onExportProject: () => '{"formatVersion":1}',
+        onImportProject: ignoreLocalProjectAction,
+        onOpenProject: ignoreLocalProjectAction,
+        onRenameProject: ignoreLocalProjectAction,
+        onSaveCurrentMap: ignoreLocalProjectAction,
+        onDuplicateProject: ignoreLocalProjectAction,
+      }),
+    );
+
+    expect(panelMarkup).toContain("保存到此设备");
+    expect(panelMarkup).toContain("新建项目");
+    expect(panelMarkup).not.toContain("Save to this device");
+  });
+
+  it("displays a localized active map name while retaining the stored source map ID", () => {
+    const panelMarkup = renderToStaticMarkup(
+      createElement(LocalProjectPanel, {
+        currentProjectId: "project-forest",
+        currentProjectName: "森林规划",
+        locale: "zh-CN",
+        projects: localProjectSummaries,
+        storageStatus: "ready",
+        storageErrorMessage: null,
+        onCreateProject: ignoreLocalProjectAction,
+        onDeleteProject: ignoreLocalProjectAction,
+        onExportProject: () => '{"formatVersion":1}',
+        onImportProject: ignoreLocalProjectAction,
+        onOpenProject: ignoreLocalProjectAction,
+        onRenameProject: ignoreLocalProjectAction,
+        onSaveCurrentMap: ignoreLocalProjectAction,
+        onDuplicateProject: ignoreLocalProjectAction,
+      }),
+    );
+
+    expect(panelMarkup).toContain("森林农场");
+    expect(panelMarkup).not.toContain(">forest<");
+  });
+
   it("renders the complete account-free local project action set", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(LocalProjectPanel, {

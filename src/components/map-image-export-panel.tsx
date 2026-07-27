@@ -7,14 +7,18 @@ import {
   type ScreenshotResolution,
 } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
 
 type MapImageExportPanelProperties = Readonly<{
+  locale?: SiteLocale;
   mapFile: string;
   onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
   season: TilesheetSeason;
 }>;
 
 export function MapImageExportPanel({
+  locale = "en",
   mapFile,
   onCaptureScreenshot,
   season,
@@ -38,31 +42,31 @@ export function MapImageExportPanel({
       downloadMapImage(screenshotBlob, mapImageDownloadFile.filename);
       setExportErrorMessage(null);
     } catch (caughtError) {
-      setExportErrorMessage(formatMapImageExportError(caughtError));
+      setExportErrorMessage(formatMapImageExportError(caughtError, locale));
     } finally {
       setIsExporting(false);
     }
   }
 
   return (
-    <section aria-label="Export" className="map-image-export-panel">
-      <h3>Export</h3>
+    <section aria-label={translate(locale, "planner.export.label")} className="map-image-export-panel">
+      <h3>{translate(locale, "planner.export.label")}</h3>
       <div className="map-image-export-panel__actions">
         <button
           disabled={isExporting}
           onClick={() => void handleScreenshotExport(1)}
-          title="1x resolution, compact file size"
+          title={translate(locale, "planner.export.compactTitle")}
           type="button"
         >
-          Screenshot
+          {translate(locale, "planner.export.screenshot")}
         </button>
         <button
           disabled={isExporting}
           onClick={() => void handleScreenshotExport(2)}
-          title="2x resolution, higher quality"
+          title={translate(locale, "planner.export.hqTitle")}
           type="button"
         >
-          Screenshot (HQ)
+          {translate(locale, "planner.export.screenshotHq")}
         </button>
       </div>
       {exportErrorMessage !== null ? (
@@ -113,12 +117,21 @@ function downloadMapImage(screenshotBlob: Blob, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(screenshotUrl), 0);
 }
 
-export function formatMapImageExportError(caughtError: unknown): string {
-  if (caughtError instanceof MapImageExportError) {
-    return `Screenshot export failed: ${caughtError.message}`;
+export function formatMapImageExportError(
+  caughtError: unknown,
+  locale: SiteLocale = "en",
+): string {
+  if (classifyMapImageExportError(caughtError) === "map-image-export") {
+    return translate(locale, "planner.export.error");
   }
 
   throw caughtError;
+}
+
+function classifyMapImageExportError(
+  caughtError: unknown,
+): "map-image-export" | null {
+  return caughtError instanceof MapImageExportError ? "map-image-export" : null;
 }
 
 function describeValue(value: unknown): string {

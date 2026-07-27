@@ -13,6 +13,10 @@ import {
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import {
+  localizedStaticPages,
+  readStaticPageHtml,
+} from "../routes/static-export-test-support";
 
 const projectRootPath = process.cwd();
 const staticExportDirectoryPath = join(projectRootPath, "out");
@@ -34,21 +38,9 @@ const referenceRuntimeLockPath = join(
   referenceRuntimeDirectoryPath,
   "reference-runtime-lock.json",
 );
-const expectedStaticPagePaths = [
-  "index.html",
-  "farm-comparison.html",
-  "farm/standard.html",
-  "farm/riverland.html",
-  "farm/forest.html",
-  "farm/hilltop.html",
-  "farm/wilderness.html",
-  "farm/four-corners.html",
-  "farm/beach.html",
-  "farm/meadowlands.html",
-  "mods.html",
-  "privacy.html",
-  "terms.html",
-] as const;
+const expectedStaticPagePaths = localizedStaticPages.map(
+  (staticPage) => staticPage.outputPath,
+);
 const forbiddenReferenceSourceDomains = [
   "https://stardewplan.com",
   "https://assets.stardewplan.com",
@@ -128,14 +120,6 @@ function findExternalScriptOrStylesheetUrl(staticPageHtml: string): string | nul
   }
 
   return null;
-}
-
-function countBootstrapExecutionScripts(staticPageHtml: string): number {
-  return [...staticPageHtml.matchAll(/<script\b[^>]*>/gi)].filter((scriptTagMatch) =>
-    getHtmlAttributeValue(scriptTagMatch[0], "type") === "module" &&
-    getHtmlAttributeValue(scriptTagMatch[0], "src") ===
-      "/reference-runtime/bootstrap.mjs",
-  ).length;
 }
 
 function parseReferenceRuntimeLock(referenceRuntimeLockText: string): ReferenceRuntimeLockAsset[] {
@@ -393,27 +377,27 @@ describe("reference runtime static delivery", () => {
     }
   });
 
-  it("exports every retained route with one local reference-runtime host and no external script or stylesheet", () => {
-    for (const staticPagePath of expectedStaticPagePaths) {
-      const staticPageHtml = readStaticExportText(staticPagePath);
+  it("keeps all 26 localized production pages independent from the retained frozen runtime fixture", () => {
+    expect(localizedStaticPages).toHaveLength(26);
+
+    for (const staticPage of localizedStaticPages) {
+      const staticPageHtml = readStaticPageHtml(staticPage.outputPath);
       const externalScriptOrStylesheetUrl = findExternalScriptOrStylesheetUrl(
         staticPageHtml,
       );
 
-      expect(
-        staticPageHtml.match(/id="reference-runtime-root"/g),
-        `Route ${staticPagePath} must contain exactly one reference runtime root.`,
-      ).toHaveLength(1);
-      expect(
-        countBootstrapExecutionScripts(staticPageHtml),
-        `Route ${staticPagePath} must contain exactly one native bootstrap module.`,
-      ).toBe(1);
-      expect(staticPageHtml, `Route ${staticPagePath} must not contain an iframe.`).not.toMatch(
+      expect(staticPageHtml, `Route ${staticPage.outputPath} must declare ${staticPage.locale}.`)
+        .toContain(`<html lang="${staticPage.locale}"`);
+      expect(staticPageHtml, `Route ${staticPage.outputPath} must not mount the retained reference runtime.`)
+        .not.toContain("reference-runtime-root");
+      expect(staticPageHtml, `Route ${staticPage.outputPath} must not bootstrap the retained reference runtime.`)
+        .not.toContain("/reference-runtime/bootstrap.mjs");
+      expect(staticPageHtml, `Route ${staticPage.outputPath} must not contain an iframe.`).not.toMatch(
         /<iframe\b/i,
       );
       expect(
         externalScriptOrStylesheetUrl,
-        `Route ${staticPagePath} contains an external script or stylesheet URL: ${String(externalScriptOrStylesheetUrl)}.`,
+        `Route ${staticPage.outputPath} contains an external script or stylesheet URL: ${String(externalScriptOrStylesheetUrl)}.`,
       ).toBeNull();
     }
   });

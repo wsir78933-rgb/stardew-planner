@@ -12,14 +12,19 @@ import {
   toggleGingerIslandOverlay,
   type MapRenderOptions,
 } from "../maps/map-render-options";
+import { getMapConfigurationDisplayName } from "../i18n/catalog-display";
+import type { SiteLocale } from "../i18n/locales";
+import { translate } from "../i18n/messages";
 
 type MapConfigurationPanelProperties = Readonly<{
+  locale?: SiteLocale;
   mapRenderOptions: MapRenderOptions;
   selectedMapId: string;
   onMapRenderOptionsChange: (nextMapRenderOptions: MapRenderOptions) => void;
 }>;
 
 export function MapConfigurationPanel({
+  locale = "en",
   mapRenderOptions,
   selectedMapId,
   onMapRenderOptionsChange,
@@ -27,8 +32,8 @@ export function MapConfigurationPanel({
   if (selectedMapId === "ginger-island") {
     return (
       <section className="editor-modal__map-configuration">
-        <h3>Ginger Island</h3>
-        <p>Choose which restored island features appear on this map.</p>
+        <h3>{translate(locale, "planner.mapConfiguration.gingerIsland")}</h3>
+        <p>{translate(locale, "planner.mapConfiguration.gingerDescription")}</p>
         <div className="editor-modal__map-configuration-options">
           {gingerIslandOverlays.map((gingerIslandOverlay) => (
             <label key={gingerIslandOverlay.id}>
@@ -46,7 +51,7 @@ export function MapConfigurationPanel({
                 }
                 type="checkbox"
               />
-              {gingerIslandOverlay.displayName}
+              {getMapConfigurationDisplayName(locale, gingerIslandOverlay.id, gingerIslandOverlay.displayName)}
             </label>
           ))}
         </div>
@@ -64,7 +69,7 @@ export function MapConfigurationPanel({
 
   return (
     <section className="editor-modal__map-configuration">
-      <h3>Farmhouse (Upgrade 2)</h3>
+      <h3>{translate(locale, "planner.mapConfiguration.farmhouse")}</h3>
       <div className="editor-modal__map-configuration-options">
         <label>
           <input
@@ -79,10 +84,10 @@ export function MapConfigurationPanel({
             }
             type="checkbox"
           />
-          Married layout
+          {translate(locale, "planner.mapConfiguration.married")}
         </label>
         <label>
-          Spouse room
+          {translate(locale, "planner.mapConfiguration.spouseRoom")}
           <select
             disabled={!mapRenderOptions.farmhouse2.marriageMapEnabled}
             onChange={(changeEvent) =>
@@ -97,18 +102,18 @@ export function MapConfigurationPanel({
             }
             value={mapRenderOptions.farmhouse2.spouseId ?? ""}
           >
-            <option value="">None</option>
+            <option value="">{translate(locale, "planner.mapConfiguration.none")}</option>
             {spouseRoomLayouts.map((spouseRoomLayout) => (
               <option
                 key={spouseRoomLayout.spouseId}
                 value={spouseRoomLayout.spouseId}
               >
-                {spouseRoomLayout.displayName}
+                {getMapConfigurationDisplayName(locale, spouseRoomLayout.spouseId, spouseRoomLayout.displayName)}
               </option>
             ))}
           </select>
         </label>
-        <span className="editor-modal__map-configuration-label">Renovations</span>
+        <span className="editor-modal__map-configuration-label">{translate(locale, "planner.mapConfiguration.renovations")}</span>
         {farmhouse2Composite.renovations.map((farmhouseRenovation) => (
           <label key={farmhouseRenovation.id}>
             <input
@@ -131,7 +136,7 @@ export function MapConfigurationPanel({
               }
               type="checkbox"
             />
-            {farmhouseRenovation.displayName}
+            {getMapConfigurationDisplayName(locale, farmhouseRenovation.id, farmhouseRenovation.displayName)}
           </label>
         ))}
       </div>

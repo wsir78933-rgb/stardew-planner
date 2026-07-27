@@ -16,7 +16,7 @@ function countBootstrapExecutionScripts(referenceRuntimeHostMarkup: string): num
 }
 
 describe("reference runtime host", () => {
-  it("renders one frozen-runtime mount and one native module bootstrap in static HTML", () => {
+  it("retains the frozen-runtime host fixture with one mount and bootstrap module", () => {
     const referenceRuntimeHostMarkup = renderToStaticMarkup(
       createElement(ReferenceRuntimeHost),
     );

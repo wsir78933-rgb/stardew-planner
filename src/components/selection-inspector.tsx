@@ -1,8 +1,11 @@
 "use client";
 
 import type { BuildingPaintColors } from "../paint/building-paint";
+import type { SiteLocale } from "../i18n/locales";
+import { formatTranslation, translate } from "../i18n/messages";
 
 type SingleSelectionInspectorActionProperties = Readonly<{
+  locale?: SiteLocale;
   kind: "single";
   onCopy: () => void;
   onDelete: () => void;
@@ -65,6 +68,7 @@ type SingleSelectionInspectorProperties =
   | SelectedCropInspectorProperties;
 
 type MultipleSelectionInspectorProperties = Readonly<{
+  locale?: SiteLocale;
   kind: "multiple";
   onDelete: () => void;
   onDismiss: () => void;
@@ -80,13 +84,14 @@ type SelectionInspectorProperties =
 export function SelectionInspector(
   selectionInspectorProperties: SelectionInspectorProperties,
 ) {
+  const locale = selectionInspectorProperties.locale ?? "en";
   if (selectionInspectorProperties.kind === "single") {
     const { onCopy, onDelete, onDismiss, onRotate, selection } =
       selectionInspectorProperties;
     const tintControl =
       isSelectedItemInspector(selectionInspectorProperties) ? (
         <input
-          aria-label="Selected item tint color"
+          aria-label={translate(locale, "planner.inspector.tint")}
           onChange={(changeEvent) =>
             selectionInspectorProperties.onTintChange(changeEvent.currentTarget.value)
           }
@@ -100,8 +105,8 @@ export function SelectionInspector(
         <button
           aria-label={
             selectionInspectorProperties.selection.nightLightState === "off"
-              ? "Light selected light"
-              : "Extinguish selected light"
+              ? translate(locale, "planner.inspector.lightLabel")
+              : translate(locale, "planner.inspector.extinguishLabel")
           }
           onClick={() =>
             selectionInspectorProperties.onNightLightStateChange(
@@ -113,8 +118,8 @@ export function SelectionInspector(
           type="button"
         >
           {selectionInspectorProperties.selection.nightLightState === "off"
-            ? "Light"
-            : "Extinguish"}
+            ? translate(locale, "planner.inspector.light")
+            : translate(locale, "planner.inspector.extinguish")}
         </button>
       ) : null;
     const buildingPaintControls = isPaintableBuildingInspector(
@@ -122,9 +127,9 @@ export function SelectionInspector(
     ) ? (
       <div className="selection-inspector__building-paint">
         <label>
-          Building
+          {translate(locale, "planner.inspector.building")}
           <input
-            aria-label="Selected building building color"
+            aria-label={translate(locale, "planner.inspector.buildingColor")}
             onChange={(changeEvent) =>
               selectionInspectorProperties.onBuildingPaintChange({
                 ...selectionInspectorProperties.selection.paintColors,
@@ -136,9 +141,9 @@ export function SelectionInspector(
           />
         </label>
         <label>
-          Roof
+          {translate(locale, "planner.inspector.roof")}
           <input
-            aria-label="Selected building roof color"
+            aria-label={translate(locale, "planner.inspector.roofColor")}
             onChange={(changeEvent) =>
               selectionInspectorProperties.onBuildingPaintChange({
                 ...selectionInspectorProperties.selection.paintColors,
@@ -150,9 +155,9 @@ export function SelectionInspector(
           />
         </label>
         <label>
-          Trim
+          {translate(locale, "planner.inspector.trim")}
           <input
-            aria-label="Selected building trim color"
+            aria-label={translate(locale, "planner.inspector.trimColor")}
             onChange={(changeEvent) =>
               selectionInspectorProperties.onBuildingPaintChange({
                 ...selectionInspectorProperties.selection.paintColors,
@@ -167,9 +172,9 @@ export function SelectionInspector(
     ) : null;
 
     return (
-      <aside aria-label="Selected placement" className="selection-inspector">
+      <aside aria-label={translate(locale, "planner.inspector.single")} className="selection-inspector">
         <button
-          aria-label="Dismiss selection"
+          aria-label={translate(locale, "planner.inspector.dismiss")}
           className="selection-inspector__dismiss"
           onClick={onDismiss}
           type="button"
@@ -182,29 +187,29 @@ export function SelectionInspector(
           {nightLightControl}
           {buildingPaintControls}
           <button
-            aria-label="Rotate selected item"
+            aria-label={translate(locale, "planner.inspector.rotate")}
             disabled={!selection.canRotate}
             onClick={onRotate}
-            title="Rotate selected item (Q)"
+            title={translate(locale, "planner.inspector.rotateTitle")}
             type="button"
           >
             ↻
           </button>
           <button
-            aria-label="Copy selected placement"
+            aria-label={translate(locale, "planner.inspector.copyLabel")}
             onClick={onCopy}
-            title="Copy selected placement (C)"
+            title={translate(locale, "planner.inspector.copyTitle")}
             type="button"
           >
-            Copy
+            {translate(locale, "planner.inspector.copy")}
           </button>
           <button
-            aria-label="Delete selected placement"
+            aria-label={translate(locale, "planner.inspector.deleteLabel")}
             onClick={onDelete}
-            title="Delete selected placement (Delete)"
+            title={translate(locale, "planner.inspector.deleteTitle")}
             type="button"
           >
-            Delete
+            {translate(locale, "planner.inspector.delete")}
           </button>
         </div>
       </aside>
@@ -212,12 +217,14 @@ export function SelectionInspector(
   }
 
   const { onDelete, onDismiss, selection } = selectionInspectorProperties;
-  const selectionLabel = `${String(selection.count)} selected placements`;
+  const selectionLabel = formatTranslation(locale, "planner.inspector.selectedCount", {
+    count: selection.count,
+  });
 
   return (
-    <aside aria-label="Selected placements" className="selection-inspector">
+    <aside aria-label={translate(locale, "planner.inspector.multiple")} className="selection-inspector">
       <button
-        aria-label="Dismiss selection"
+        aria-label={translate(locale, "planner.inspector.dismiss")}
         className="selection-inspector__dismiss"
         onClick={onDismiss}
         type="button"
@@ -227,12 +234,12 @@ export function SelectionInspector(
       <span className="selection-inspector__name">{selectionLabel}</span>
       <div className="selection-inspector__actions">
         <button
-          aria-label="Delete selected placements"
+          aria-label={translate(locale, "planner.inspector.multipleDeleteLabel")}
           onClick={onDelete}
-          title="Delete selected placements (Delete)"
+          title={translate(locale, "planner.inspector.multipleDeleteTitle")}
           type="button"
         >
-          Delete
+          {translate(locale, "planner.inspector.delete")}
         </button>
       </div>
     </aside>
