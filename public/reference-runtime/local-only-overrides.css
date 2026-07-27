@@ -1,0 +1,29 @@
+.signin-overlay,
+.support-overlay,
+.feedback-overlay,
+.share-overlay,
+.pm-lock-overlay,
+.account-info,
+.account-detail,
+.account-tier,
+.kofi-link-row,
+.kofi-btn,
+.kofi-cup,
+button.support-btn,
+button.donate-btn,
+button[title="Support"],
+button[title="Save your plan and get a shareable link"],
+.help-modal .help-links,
+.help-modal .help-links + .help-divider,
+.feedback-overlay .contact-direct,
+.feedback-overlay .contact-list {
+  display: none !important;
+}
+
+.pm-body-locked > .pm-list,
+.pm-body-locked > .pm-detail {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  user-select: auto !important;
+}

@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "serve out",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "assets:sync": "tsx src/assets/sync-assets.ts",
+    "reference:sync": "tsx src/reference-runtime/sync-reference-runtime.ts"
+  },
+  "dependencies": {
+    "next": "16.2.12",
+    "pixi.js": "8.19.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.17.0",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@xmldom/xmldom": "0.9.10",
+    "serve": "14.2.6",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  },
+  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
+}

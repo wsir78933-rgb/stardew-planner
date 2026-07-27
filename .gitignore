@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Next.js build output and static exports
+.next/
+out/
+
+# Local agent execution records
+.superpowers/
+
+# TypeScript incremental build data
+*.tsbuildinfo
+
+# Local environment files
+.env*
+!.env.example
+
+# Operating system files
+.DS_Store
