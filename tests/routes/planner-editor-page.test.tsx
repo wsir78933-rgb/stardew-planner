@@ -4,15 +4,13 @@ import { describe, expect, it } from "vitest";
 import PlannerPage from "../../app/page";
 
 describe("planner editor page", () => {
-  it("mounts the frozen reference client with its native module bootstrap", () => {
+  it("keeps the frozen reference client out of the static page markup", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
 
-    expect(plannerPageMarkup.match(/id="reference-runtime-root"/g)).toHaveLength(1);
-    expect(
-      plannerPageMarkup.match(
-        /<script\b(?=[^>]*\btype="module")(?=[^>]*\bsrc="\/reference-runtime\/bootstrap\.mjs")[^>]*>/gi,
-      ),
-    ).toHaveLength(1);
+    expect(plannerPageMarkup).not.toContain('id="reference-runtime-root"');
+    expect(plannerPageMarkup).not.toContain(
+      'src="/reference-runtime/bootstrap.mjs"',
+    );
     expect(plannerPageMarkup).not.toContain("planner-workspace");
     expect(plannerPageMarkup).not.toContain("<iframe");
   });

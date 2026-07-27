@@ -62,36 +62,7 @@ function readStaticPageHtml(staticPageFile: string): string {
   return readFileSync(staticPagePath, "utf8");
 }
 
-function getScriptAttributeValue(
-  scriptTag: string,
-  attributeName: string,
-): string | null {
-  const attributePattern = new RegExp(
-    `(?:^|\\s)${attributeName}=["']([^"']*)["']`,
-    "i",
-  );
-  const attributeMatch = scriptTag.match(attributePattern);
-
-  return attributeMatch?.[1] ?? null;
-}
-
-function countBootstrapExecutionScripts(staticPageHtml: string): number {
-  return [...staticPageHtml.matchAll(/<script\b[^>]*>/gi)].filter(
-    (scriptTagMatch) =>
-      getScriptAttributeValue(scriptTagMatch[0], "type") === "module" &&
-      getScriptAttributeValue(scriptTagMatch[0], "src") ===
-        "/reference-runtime/bootstrap.mjs",
-  ).length;
-}
-
 describe("static reference-runtime routes", () => {
-  it("does not count data attributes as the native bootstrap script attributes", () => {
-    const staticPageHtml =
-      '<script data-type="module" data-src="/reference-runtime/bootstrap.mjs"></script>';
-
-    expect(countBootstrapExecutionScripts(staticPageHtml)).toBe(0);
-  });
-
   it("exports static files without image optimization", () => {
     expect(nextConfig.output).toBe("export");
     expect(nextConfig.images?.unoptimized).toBe(true);
@@ -105,15 +76,17 @@ describe("static reference-runtime routes", () => {
   });
 
   it(
-    "exports every retained route with one native reference-runtime bootstrap",
+    "exports every retained route without an eager reference-runtime bootstrap",
     () => {
       runStaticBuild();
 
       for (const staticPageFile of expectedStaticPageFiles) {
         const staticPageHtml = readStaticPageHtml(staticPageFile);
 
-        expect(staticPageHtml.match(/id="reference-runtime-root"/g)).toHaveLength(1);
-        expect(countBootstrapExecutionScripts(staticPageHtml)).toBe(1);
+        expect(staticPageHtml).not.toContain('id="reference-runtime-root"');
+        expect(staticPageHtml).not.toContain(
+          'src="/reference-runtime/bootstrap.mjs"',
+        );
       }
     },
     30_000,

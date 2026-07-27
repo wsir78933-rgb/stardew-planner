@@ -130,14 +130,6 @@ function findExternalScriptOrStylesheetUrl(staticPageHtml: string): string | nul
   return null;
 }
 
-function countBootstrapExecutionScripts(staticPageHtml: string): number {
-  return [...staticPageHtml.matchAll(/<script\b[^>]*>/gi)].filter((scriptTagMatch) =>
-    getHtmlAttributeValue(scriptTagMatch[0], "type") === "module" &&
-    getHtmlAttributeValue(scriptTagMatch[0], "src") ===
-      "/reference-runtime/bootstrap.mjs",
-  ).length;
-}
-
 function parseReferenceRuntimeLock(referenceRuntimeLockText: string): ReferenceRuntimeLockAsset[] {
   const parsedReferenceRuntimeLock: unknown = JSON.parse(referenceRuntimeLockText);
 
@@ -393,7 +385,7 @@ describe("reference runtime static delivery", () => {
     }
   });
 
-  it("exports every retained route with one local reference-runtime host and no external script or stylesheet", () => {
+  it("exports every retained route without an eager reference-runtime host or external script or stylesheet", () => {
     for (const staticPagePath of expectedStaticPagePaths) {
       const staticPageHtml = readStaticExportText(staticPagePath);
       const externalScriptOrStylesheetUrl = findExternalScriptOrStylesheetUrl(
@@ -401,13 +393,13 @@ describe("reference runtime static delivery", () => {
       );
 
       expect(
-        staticPageHtml.match(/id="reference-runtime-root"/g),
-        `Route ${staticPagePath} must contain exactly one reference runtime root.`,
-      ).toHaveLength(1);
+        staticPageHtml,
+        `Route ${staticPagePath} must not contain an eager reference runtime root.`,
+      ).not.toContain('id="reference-runtime-root"');
       expect(
-        countBootstrapExecutionScripts(staticPageHtml),
-        `Route ${staticPagePath} must contain exactly one native bootstrap module.`,
-      ).toBe(1);
+        staticPageHtml,
+        `Route ${staticPagePath} must not contain an eager bootstrap module.`,
+      ).not.toContain('src="/reference-runtime/bootstrap.mjs"');
       expect(staticPageHtml, `Route ${staticPagePath} must not contain an iframe.`).not.toMatch(
         /<iframe\b/i,
       );

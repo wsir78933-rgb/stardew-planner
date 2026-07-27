@@ -4,6 +4,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Stardew Valley Farm Planner",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 type RootLayoutProperties = Readonly<{
