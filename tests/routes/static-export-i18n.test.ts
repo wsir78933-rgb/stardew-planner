@@ -14,7 +14,7 @@ type NativePublicPageSeoExpectation = Readonly<{
   structuredDataType: "WebApplication" | "CollectionPage" | "Article";
 }>;
 
-const nativePublicPageSeoExpectations: readonly NativePublicPageSeoExpectation[] = [
+const nativeNonFarmPageSeoExpectations: readonly NativePublicPageSeoExpectation[] = [
   {
     outputPath: "index.html",
     locale: "en",
@@ -26,12 +26,6 @@ const nativePublicPageSeoExpectations: readonly NativePublicPageSeoExpectation[]
     locale: "en",
     canonicalUrl: "https://stardewvalleyplanner.art/farm-comparison",
     structuredDataType: "CollectionPage",
-  },
-  {
-    outputPath: "farm/standard.html",
-    locale: "en",
-    canonicalUrl: "https://stardewvalleyplanner.art/farm/standard",
-    structuredDataType: "Article",
   },
   {
     outputPath: "mods.html",
@@ -52,18 +46,31 @@ const nativePublicPageSeoExpectations: readonly NativePublicPageSeoExpectation[]
     structuredDataType: "CollectionPage",
   },
   {
-    outputPath: "zh/farm/standard.html",
-    locale: "zh-CN",
-    canonicalUrl: "https://stardewvalleyplanner.art/zh/farm/standard",
-    structuredDataType: "Article",
-  },
-  {
     outputPath: "zh/mods.html",
     locale: "zh-CN",
     canonicalUrl: "https://stardewvalleyplanner.art/zh/mods",
     structuredDataType: "CollectionPage",
   },
 ] as const;
+
+const farmPageSeoExpectations: readonly NativePublicPageSeoExpectation[] =
+  localizedStaticPages
+    .filter(
+      (staticPage) =>
+        staticPage.outputPath.startsWith("farm/") ||
+        staticPage.outputPath.startsWith("zh/farm/"),
+    )
+    .map((staticPage) => ({
+      outputPath: staticPage.outputPath,
+      locale: staticPage.locale,
+      canonicalUrl: `https://stardewvalleyplanner.art/${staticPage.outputPath.replace(/\.html$/, "")}`,
+      structuredDataType: "Article" as const,
+    }));
+
+const nativePublicPageSeoExpectations: readonly NativePublicPageSeoExpectation[] = [
+  ...nativeNonFarmPageSeoExpectations,
+  ...farmPageSeoExpectations,
+];
 
 function expectNativePlannerStaticPage(
   staticPageFile: string,

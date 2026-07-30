@@ -22,11 +22,15 @@ vi.mock("../../src/i18n/public-site-url", () => ({
 describe("SEO static route manifests", () => {
   it("uses the shared URL interface for every localized sitemap entry", () => {
     const sitemapEntries = sitemap();
+    const sitemapUrls = sitemapEntries.map((entry) => entry.url);
 
+    expect(
+      sitemapUrls.some(
+        (sitemapUrl) =>
+          sitemapUrl.endsWith("/privacy") || sitemapUrl.endsWith("/terms"),
+      ),
+    ).toBe(false);
     expect(sitemapEntries).toHaveLength(22);
-    expect(sitemap().map((entry) => entry.url)).not.toContain(
-      "https://stardewvalleyplanner.art/terms",
-    );
 
     for (const canonicalPath of canonicalPublicPaths) {
       const alternateUrls = getAlternateLanguageUrls(canonicalPath);
