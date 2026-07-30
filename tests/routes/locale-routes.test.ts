@@ -8,8 +8,6 @@ const englishRouteFiles = [
   "app/(en)/farm-comparison/page.tsx",
   "app/(en)/farm/[type]/page.tsx",
   "app/(en)/mods/page.tsx",
-  "app/(en)/privacy/page.tsx",
-  "app/(en)/terms/page.tsx",
 ] as const;
 
 const chineseRouteFiles = [
@@ -18,6 +16,11 @@ const chineseRouteFiles = [
   "app/zh/farm-comparison/page.tsx",
   "app/zh/farm/[type]/page.tsx",
   "app/zh/mods/page.tsx",
+] as const;
+
+const removedLegalRouteFiles = [
+  "app/(en)/privacy/page.tsx",
+  "app/(en)/terms/page.tsx",
   "app/zh/privacy/page.tsx",
   "app/zh/terms/page.tsx",
 ] as const;
@@ -29,5 +32,9 @@ describe("physical locale route trees", () => {
     }
 
     expect(existsSync(join(process.cwd(), "app/en"))).toBe(false);
+
+    for (const removedLegalRouteFile of removedLegalRouteFiles) {
+      expect(existsSync(join(process.cwd(), removedLegalRouteFile))).toBe(false);
+    }
   });
 });

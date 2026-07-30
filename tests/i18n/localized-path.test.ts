@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { canonicalPublicPaths } from "../../src/i18n/canonical-public-routes";
+import {
+  assertCanonicalPublicPath,
+  canonicalPublicPaths,
+} from "../../src/i18n/canonical-public-routes";
 import {
   getCanonicalPath,
   getLocalizedPath,
 } from "../../src/i18n/localized-path";
 
 describe("localized paths", () => {
-  it("defines only the thirteen statically exported canonical public paths", () => {
+  it("defines only the eleven retained statically exported canonical public paths", () => {
     expect(canonicalPublicPaths).toEqual([
       "/",
       "/farm-comparison",
@@ -19,8 +22,6 @@ describe("localized paths", () => {
       "/farm/beach",
       "/farm/meadowlands",
       "/mods",
-      "/privacy",
-      "/terms",
     ]);
   });
 
@@ -59,6 +60,15 @@ describe("localized paths", () => {
     );
     expect(() => getCanonicalPath("zh-CN", "/zh/farm/custom")).toThrow(
       'canonical public path "/farm/custom" is not supported',
+    );
+  });
+
+  it("rejects removed legal canonical paths", () => {
+    expect(() => assertCanonicalPublicPath("/privacy")).toThrow(
+      'canonical public path "/privacy" is not supported',
+    );
+    expect(() => assertCanonicalPublicPath("/terms")).toThrow(
+      'canonical public path "/terms" is not supported',
     );
   });
 

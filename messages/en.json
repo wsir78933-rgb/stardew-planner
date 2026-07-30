@@ -23,14 +23,6 @@
     "mods": {
       "title": "Stardew Valley Mod Planner",
       "description": "Plan your Stardew Valley mod collection."
-    },
-    "privacy": {
-      "title": "Privacy Policy | Stardew Planner",
-      "description": "Read how Stardew Planner keeps plans and preferences in your browser."
-    },
-    "terms": {
-      "title": "Terms of Use | Stardew Planner",
-      "description": "Read the terms for using the browser-based Stardew Planner."
     }
   },
   "planner": {
@@ -72,7 +64,7 @@
       "label": "Farm Summary", "close": "Close Farm Summary", "context": "Map: {mapName} ({mapId}) · Season: {season}", "itemsPlaced": "{count} items placed", "empty": "No items have been placed yet.", "export": "Export CSV", "error": "Farm summary export failed.", "categories": { "Buildings": "Buildings", "Crops": "Crops", "Items": "Items", "Paths": "Paths", "Fences": "Fences", "Furniture": "Furniture", "Trees": "Trees" }
     },
     "modal": {
-      "close": "Close dialog", "farm": "Farm", "interiors": "Interiors", "exteriors": "Exteriors", "community": "Community", "chooseMap": "Choose map", "chooseSeason": "Choose season", "view": "View", "save": "Save", "settings": "Settings", "help": "Help & Info", "shortcuts": "Keyboard Shortcuts", "whatsNew": "What's New", "bottomPanel": "Bottom panel", "leftPanel": "Left panel", "catalogPosition": "Catalog Position", "catalogPositionDescription": "Choose where the item catalog appears in this browser.", "overlays": "Overlays", "mapOverlays": "Map Overlays", "display": "Display", "grid": "Grid", "sprinklerRadius": "Sprinkler Radius", "scarecrowRadius": "Scarecrow Radius", "beeHouseRange": "Bee House Range", "junimoHutRange": "Junimo Hut Range", "blockedBuildings": "Blocked (Buildings)", "blockedCrops": "Blocked (Crops)", "blockedTrees": "Blocked (Trees)", "nightMode": "Night Mode", "npcPaths": "NPC Paths", "resourceClumps": "Resource Clumps", "weather": "Weather", "mobile": "Mobile", "joystick": "Joystick", "leftHand": "Left-hand Mode", "notifications": "Notifications", "toasts": "Toast Notifications", "interface": "Interface", "cursors": "Game-Styled Cursors", "placement": "Placement", "freePlacement": "Free Placement", "freePlacementWarning": "Free placement disables map placement rules. Some layouts may not be achievable in-game.", "cancel": "Cancel", "enableFreePlacement": "Enable Free Placement", "manageMods": "Manage Mods", "jojaStuff": "Joja Stuff", "privacy": "Privacy Policy", "terms": "Terms of Service", "titles": { "grid": "Show tile grid lines on the map", "sprinklerRadius": "Highlight tiles watered by each sprinkler", "scarecrowRadius": "Highlight tiles protected from crows", "beeHouseRange": "Highlight flower range for honey production", "junimoHutRange": "Highlight harvest area for Junimo Huts", "blockedBuildings": "Show where buildings cannot be placed", "blockedCrops": "Show where crops cannot be planted", "blockedTrees": "Show where trees cannot grow", "nightMode": "Preview your farm at night with light sources", "npcPaths": "Show tiles NPCs walk through", "resourceClumps": "Show spawn locations while a resource clump is selected", "weather": "Simulate rain, snow, and other weather effects", "joystick": "Show directional pad for precise item placement on touch devices", "leftHand": "Move controls to the left side of the screen", "toasts": "Show brief notifications for tool changes, undo/redo, and actions", "cursors": "Use the pixel-art game-styled cursors instead of your OS cursors", "freePlacement": "Disable placement rules and place items anywhere on the map", "manageMods": "Add and manage Content Patcher mods" }
+      "close": "Close dialog", "farm": "Farm", "interiors": "Interiors", "exteriors": "Exteriors", "community": "Community", "chooseMap": "Choose map", "chooseSeason": "Choose season", "view": "View", "save": "Save", "settings": "Settings", "help": "Help & Info", "shortcuts": "Keyboard Shortcuts", "whatsNew": "What's New", "bottomPanel": "Bottom panel", "leftPanel": "Left panel", "catalogPosition": "Catalog Position", "catalogPositionDescription": "Choose where the item catalog appears in this browser.", "overlays": "Overlays", "mapOverlays": "Map Overlays", "display": "Display", "grid": "Grid", "sprinklerRadius": "Sprinkler Radius", "scarecrowRadius": "Scarecrow Radius", "beeHouseRange": "Bee House Range", "junimoHutRange": "Junimo Hut Range", "blockedBuildings": "Blocked (Buildings)", "blockedCrops": "Blocked (Crops)", "blockedTrees": "Blocked (Trees)", "nightMode": "Night Mode", "npcPaths": "NPC Paths", "resourceClumps": "Resource Clumps", "weather": "Weather", "mobile": "Mobile", "joystick": "Joystick", "leftHand": "Left-hand Mode", "notifications": "Notifications", "toasts": "Toast Notifications", "interface": "Interface", "cursors": "Game-Styled Cursors", "placement": "Placement", "freePlacement": "Free Placement", "freePlacementWarning": "Free placement disables map placement rules. Some layouts may not be achievable in-game.", "cancel": "Cancel", "enableFreePlacement": "Enable Free Placement", "manageMods": "Manage Mods", "titles": { "grid": "Show tile grid lines on the map", "sprinklerRadius": "Highlight tiles watered by each sprinkler", "scarecrowRadius": "Highlight tiles protected from crows", "beeHouseRange": "Highlight flower range for honey production", "junimoHutRange": "Highlight harvest area for Junimo Huts", "blockedBuildings": "Show where buildings cannot be placed", "blockedCrops": "Show where crops cannot be planted", "blockedTrees": "Show where trees cannot grow", "nightMode": "Preview your farm at night with light sources", "npcPaths": "Show tiles NPCs walk through", "resourceClumps": "Show spawn locations while a resource clump is selected", "weather": "Simulate rain, snow, and other weather effects", "joystick": "Show directional pad for precise item placement on touch devices", "leftHand": "Move controls to the left side of the screen", "toasts": "Show brief notifications for tool changes, undo/redo, and actions", "cursors": "Use the pixel-art game-styled cursors instead of your OS cursors", "freePlacement": "Disable placement rules and place items anywhere on the map", "manageMods": "Add and manage Content Patcher mods" }
     },
     "mapConfiguration": {
       "gingerIsland": "Ginger Island", "gingerDescription": "Choose which restored island features appear on this map.", "farmhouse": "Farmhouse (Upgrade 2)", "married": "Married layout", "spouseRoom": "Spouse room", "none": "None", "renovations": "Renovations"
@@ -86,9 +78,7 @@
       "label": "Public navigation",
       "planner": "Planner",
       "farmComparison": "Farm Comparison",
-      "mods": "Mods",
-      "privacy": "Privacy",
-      "terms": "Terms"
+      "mods": "Mods"
     },
     "comparison": {
       "quickComparison": "Quick comparison",
@@ -122,32 +112,6 @@
       "by": "by {authorName}",
       "planThisFarm": "Plan this farm →",
       "preview": "{farmName} preview"
-    },
-    "legal": {
-      "privacy": {
-        "title": "Privacy Policy",
-        "introduction": "This policy explains how Stardew Planner handles information when you use this browser-only planning tool.",
-        "localDataTitle": "Local browser data",
-        "localDataBody": "Plans and preferences are stored only in your browser's local storage so they remain available on this device. We do not operate an account system or receive a copy of that local data.",
-        "noAccountsTitle": "No accounts or cloud sync",
-        "noAccountsBody": "Stardew Planner does not provide accounts, sign-in, cloud synchronization, or cross-device project storage.",
-        "noPaymentsTitle": "No payments",
-        "noPaymentsBody": "Stardew Planner does not provide memberships, payment processing, or purchase features.",
-        "contactTitle": "Changes to this policy",
-        "contactBody": "If this policy changes, the updated text will be published on this page."
-      },
-      "terms": {
-        "title": "Terms of Use",
-        "introduction": "By using Stardew Planner, you agree to use this browser-only planning tool responsibly.",
-        "localStorageTitle": "Your local plans",
-        "localStorageBody": "Your plans are stored in local browser storage on your device. You are responsible for exporting any plans you want to keep before clearing browser data or changing devices.",
-        "serviceBoundaryTitle": "Service boundary",
-        "serviceBoundaryBody": "Stardew Planner does not provide accounts, cloud synchronization, or payments. It also does not provide memberships or public sharing, and it cannot guarantee that local browser data can be recovered.",
-        "gameRelationshipTitle": "Game relationship",
-        "gameRelationshipBody": "Stardew Planner is an unofficial fan-made planning tool and is not affiliated with, endorsed by, or sponsored by ConcernedApe.",
-        "changesTitle": "Changes to these terms",
-        "changesBody": "We may update these terms by publishing revised text on this page."
-      }
     }
   }
 }

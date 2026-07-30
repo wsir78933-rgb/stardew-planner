@@ -422,10 +422,6 @@ function getNavigationMessageKey(
       return "public.navigation.farmComparison";
     case "/mods":
       return "public.navigation.mods";
-    case "/privacy":
-      return "public.navigation.privacy";
-    case "/terms":
-      return "public.navigation.terms";
   }
 }
 

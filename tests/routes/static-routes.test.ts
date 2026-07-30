@@ -37,7 +37,7 @@ describe("static localized routes", () => {
   });
 
   it("exports every English and Chinese physical page with its declared locale without an /en tree", () => {
-    expect(localizedStaticPages).toHaveLength(26);
+    expect(localizedStaticPages).toHaveLength(22);
 
     for (const staticPage of localizedStaticPages) {
       expect(readStaticPageHtml(staticPage.outputPath)).toContain(
@@ -46,6 +46,10 @@ describe("static localized routes", () => {
     }
 
     expect(existsSync(join(staticExportDirectoryPath, "en.html"))).toBe(false);
+    expect(existsSync(join(staticExportDirectoryPath, "privacy.html"))).toBe(false);
+    expect(existsSync(join(staticExportDirectoryPath, "terms.html"))).toBe(false);
+    expect(existsSync(join(staticExportDirectoryPath, "zh/privacy.html"))).toBe(false);
+    expect(existsSync(join(staticExportDirectoryPath, "zh/terms.html"))).toBe(false);
   });
 
   it("exports native localized markup without the frozen runtime bootstrap", () => {

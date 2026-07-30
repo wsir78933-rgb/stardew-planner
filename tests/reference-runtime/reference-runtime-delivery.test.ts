@@ -377,8 +377,8 @@ describe("reference runtime static delivery", () => {
     }
   });
 
-  it("keeps all 26 localized production pages independent from the retained frozen runtime fixture", () => {
-    expect(localizedStaticPages).toHaveLength(26);
+  it("keeps all 22 localized production pages independent from the retained frozen runtime fixture", () => {
+    expect(localizedStaticPages).toHaveLength(22);
 
     for (const staticPage of localizedStaticPages) {
       const staticPageHtml = readStaticPageHtml(staticPage.outputPath);

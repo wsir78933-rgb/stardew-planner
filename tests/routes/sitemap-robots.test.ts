@@ -23,7 +23,10 @@ describe("SEO static route manifests", () => {
   it("uses the shared URL interface for every localized sitemap entry", () => {
     const sitemapEntries = sitemap();
 
-    expect(sitemapEntries).toHaveLength(26);
+    expect(sitemapEntries).toHaveLength(22);
+    expect(sitemap().map((entry) => entry.url)).not.toContain(
+      "https://stardewvalleyplanner.art/terms",
+    );
 
     for (const canonicalPath of canonicalPublicPaths) {
       const alternateUrls = getAlternateLanguageUrls(canonicalPath);

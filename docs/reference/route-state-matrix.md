@@ -8,8 +8,6 @@
 | `farm-comparison` | `/farm-comparison` | `desktop`、`mobile` | 验收响应式农场地图特征比较页面。 |
 | `farm-guide` | `/farm/[type]` | `desktop`、`mobile` | 验收每个官方农场的固定指南路由模板。 |
 | `mods` | `/mods` | `desktop`、`mobile` | 验收响应式 Mod 地图信息和规划入口。 |
-| `privacy` | `/privacy` | `desktop`、`mobile` | 验收浏览器本地隐私说明的法律页面布局。 |
-| `terms` | `/terms` | `desktop`、`mobile` | 验收浏览器本地条款的法律页面布局。 |
 
 ## 规划器（`/`）
 
@@ -106,17 +104,3 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | `desktop-mods-idle` | `desktop` | `null` | `null` | `null` | 打开 Mods 页面。 | 支持的 Mod 地图及其规划器入口在桌面端可见。 |
 | `mobile-mods-idle` | `mobile` | `null` | `null` | `null` | 打开 Mods 页面。 | 支持的 Mod 地图及其规划器入口在移动端可见。 |
-
-## 隐私（`/privacy`）
-
-| 状态 ID | 视口 | 工具模式 | 选中实体 | 模态状态 | 操作 | 应可见结果 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `desktop-privacy-idle` | `desktop` | `null` | `null` | `null` | 打开隐私页面。 | 浏览器本地隐私说明在桌面端可见。 |
-| `mobile-privacy-idle` | `mobile` | `null` | `null` | `null` | 打开隐私页面。 | 浏览器本地隐私说明在移动端可见。 |
-
-## 条款（`/terms`）
-
-| 状态 ID | 视口 | 工具模式 | 选中实体 | 模态状态 | 操作 | 应可见结果 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `desktop-terms-idle` | `desktop` | `null` | `null` | `null` | 打开条款页面。 | 浏览器本地条款在桌面端可见。 |
-| `mobile-terms-idle` | `mobile` | `null` | `null` | `null` | 打开条款页面。 | 浏览器本地条款在移动端可见。 |

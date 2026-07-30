@@ -31,4 +31,23 @@ describe("editor reference information dialogs", () => {
     expect(helpDialogMarkup).not.toContain("Feedback");
     expect(helpDialogMarkup).not.toContain("Support");
   });
+
+  it("omits the removed legal links and their empty Joja Stuff section", () => {
+    const settingsPanelMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "settings-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        onSeasonChange: () => undefined,
+        panelPosition: "bottom",
+        season: "spring",
+        selectedMapId: "standard",
+      }),
+    );
+
+    expect(settingsPanelMarkup).not.toContain('href="/privacy"');
+    expect(settingsPanelMarkup).not.toContain('href="/terms"');
+    expect(settingsPanelMarkup).not.toContain("Joja Stuff");
+  });
 });

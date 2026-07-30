@@ -22,6 +22,8 @@ describe("public navigation", () => {
     expect(markup).toContain('href="/?farmType=beach"');
     expect(markup).toContain('href="/zh?farmType=beach"');
     expect(markup).toContain("页面内容");
+    expect(markup).not.toContain('href="/zh/privacy"');
+    expect(markup).not.toContain('href="/zh/terms"');
   });
 
   it("uses English paths and labels when the explicit locale is English", () => {
@@ -31,5 +33,7 @@ describe("public navigation", () => {
     expect(markup).toContain('href="/mods"');
     expect(markup).toContain(">Farm Comparison<");
     expect(markup).not.toContain('href="/zh/mods"');
+    expect(markup).not.toContain('href="/privacy"');
+    expect(markup).not.toContain('href="/terms"');
   });
 });

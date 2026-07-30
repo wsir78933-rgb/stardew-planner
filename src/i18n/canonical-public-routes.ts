@@ -10,8 +10,6 @@ export const canonicalPublicPaths = [
   "/farm/beach",
   "/farm/meadowlands",
   "/mods",
-  "/privacy",
-  "/terms",
 ] as const;
 
 export type CanonicalPublicPath = (typeof canonicalPublicPaths)[number];

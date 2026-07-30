@@ -23,14 +23,6 @@
     "mods": {
       "title": "星露谷模组规划器",
       "description": "规划你的星露谷模组组合。"
-    },
-    "privacy": {
-      "title": "隐私政策 | 星露谷规划器",
-      "description": "了解星露谷规划器如何将规划方案和偏好保存在你的浏览器中。"
-    },
-    "terms": {
-      "title": "使用条款 | 星露谷规划器",
-      "description": "阅读使用浏览器版星露谷规划器的服务条款。"
     }
   },
   "planner": {
@@ -72,7 +64,7 @@
       "label": "农场汇总", "close": "关闭农场汇总", "context": "地图：{mapName}（{mapId}）· 季节：{season}", "itemsPlaced": "已摆放 {count} 个物品", "empty": "尚未摆放任何物品。", "export": "导出 CSV", "error": "农场汇总导出失败。", "categories": { "Buildings": "建筑", "Crops": "作物", "Items": "物品", "Paths": "小径", "Fences": "栅栏", "Furniture": "家具", "Trees": "树木" }
     },
     "modal": {
-      "close": "关闭对话框", "farm": "农场", "interiors": "室内", "exteriors": "室外", "community": "社区", "chooseMap": "选择地图", "chooseSeason": "选择季节", "view": "视图", "save": "保存", "settings": "设置", "help": "帮助与信息", "shortcuts": "键盘快捷键", "whatsNew": "更新内容", "bottomPanel": "底部面板", "leftPanel": "左侧面板", "catalogPosition": "目录位置", "catalogPositionDescription": "选择物品目录在此浏览器中的显示位置。", "overlays": "叠加层", "mapOverlays": "地图叠加层", "display": "显示", "grid": "网格", "sprinklerRadius": "洒水器范围", "scarecrowRadius": "稻草人范围", "beeHouseRange": "蜂房范围", "junimoHutRange": "祝尼魔小屋范围", "blockedBuildings": "不可建造（建筑）", "blockedCrops": "不可种植（作物）", "blockedTrees": "不可生长（树木）", "nightMode": "夜间模式", "npcPaths": "NPC 路径", "resourceClumps": "资源丛", "weather": "天气", "mobile": "移动端", "joystick": "摇杆", "leftHand": "左手模式", "notifications": "通知", "toasts": "提示通知", "interface": "界面", "cursors": "游戏风格光标", "placement": "摆放", "freePlacement": "自由摆放", "freePlacementWarning": "自由摆放会禁用地图摆放规则。部分布局可能无法在游戏中实现。", "cancel": "取消", "enableFreePlacement": "启用自由摆放", "manageMods": "管理模组", "jojaStuff": "Joja 相关", "privacy": "隐私政策", "terms": "服务条款", "titles": { "grid": "显示地图上的格子网格线", "sprinklerRadius": "高亮每个洒水器浇水覆盖的格子", "scarecrowRadius": "高亮受稻草人保护的格子", "beeHouseRange": "高亮蜂蜜生产的花朵范围", "junimoHutRange": "高亮祝尼魔小屋的收获区域", "blockedBuildings": "显示不可放置建筑的位置", "blockedCrops": "显示不可种植作物的位置", "blockedTrees": "显示树木无法生长的位置", "nightMode": "预览带有光源的夜间农场", "npcPaths": "显示 NPC 行走经过的格子", "resourceClumps": "资源丛被选中时显示生成位置", "weather": "模拟雨、雪和其他天气效果", "joystick": "在触控设备上显示方向键以精确摆放物品", "leftHand": "将控件移至屏幕左侧", "toasts": "显示工具切换、撤销重做和操作的短提示", "cursors": "使用像素游戏风格光标替代系统光标", "freePlacement": "禁用摆放规则并在地图任意位置放置物品", "manageMods": "添加和管理 Content Patcher 模组" }
+      "close": "关闭对话框", "farm": "农场", "interiors": "室内", "exteriors": "室外", "community": "社区", "chooseMap": "选择地图", "chooseSeason": "选择季节", "view": "视图", "save": "保存", "settings": "设置", "help": "帮助与信息", "shortcuts": "键盘快捷键", "whatsNew": "更新内容", "bottomPanel": "底部面板", "leftPanel": "左侧面板", "catalogPosition": "目录位置", "catalogPositionDescription": "选择物品目录在此浏览器中的显示位置。", "overlays": "叠加层", "mapOverlays": "地图叠加层", "display": "显示", "grid": "网格", "sprinklerRadius": "洒水器范围", "scarecrowRadius": "稻草人范围", "beeHouseRange": "蜂房范围", "junimoHutRange": "祝尼魔小屋范围", "blockedBuildings": "不可建造（建筑）", "blockedCrops": "不可种植（作物）", "blockedTrees": "不可生长（树木）", "nightMode": "夜间模式", "npcPaths": "NPC 路径", "resourceClumps": "资源丛", "weather": "天气", "mobile": "移动端", "joystick": "摇杆", "leftHand": "左手模式", "notifications": "通知", "toasts": "提示通知", "interface": "界面", "cursors": "游戏风格光标", "placement": "摆放", "freePlacement": "自由摆放", "freePlacementWarning": "自由摆放会禁用地图摆放规则。部分布局可能无法在游戏中实现。", "cancel": "取消", "enableFreePlacement": "启用自由摆放", "manageMods": "管理模组", "titles": { "grid": "显示地图上的格子网格线", "sprinklerRadius": "高亮每个洒水器浇水覆盖的格子", "scarecrowRadius": "高亮受稻草人保护的格子", "beeHouseRange": "高亮蜂蜜生产的花朵范围", "junimoHutRange": "高亮祝尼魔小屋的收获区域", "blockedBuildings": "显示不可放置建筑的位置", "blockedCrops": "显示不可种植作物的位置", "blockedTrees": "显示树木无法生长的位置", "nightMode": "预览带有光源的夜间农场", "npcPaths": "显示 NPC 行走经过的格子", "resourceClumps": "资源丛被选中时显示生成位置", "weather": "模拟雨、雪和其他天气效果", "joystick": "在触控设备上显示方向键以精确摆放物品", "leftHand": "将控件移至屏幕左侧", "toasts": "显示工具切换、撤销重做和操作的短提示", "cursors": "使用像素游戏风格光标替代系统光标", "freePlacement": "禁用摆放规则并在地图任意位置放置物品", "manageMods": "添加和管理 Content Patcher 模组" }
     },
     "mapConfiguration": {
       "gingerIsland": "姜岛", "gingerDescription": "选择要在此地图中显示的已修复岛屿设施。", "farmhouse": "农舍（升级 2）", "married": "已婚布局", "spouseRoom": "配偶房间", "none": "无", "renovations": "改造"
@@ -86,9 +78,7 @@
       "label": "公共导航",
       "planner": "规划器",
       "farmComparison": "农场对比",
-      "mods": "模组",
-      "privacy": "隐私",
-      "terms": "条款"
+      "mods": "模组"
     },
     "comparison": {
       "quickComparison": "快速对比",
@@ -122,32 +112,6 @@
       "by": "作者：{authorName}",
       "planThisFarm": "规划此农场 →",
       "preview": "{farmName} 预览图"
-    },
-    "legal": {
-      "privacy": {
-        "title": "隐私政策",
-        "introduction": "本政策说明你使用这款仅在浏览器中运行的星露谷规划工具时，星露谷规划器如何处理信息。",
-        "localDataTitle": "浏览器本地数据",
-        "localDataBody": "规划方案和偏好设置只保存在你浏览器的本地存储中，因此它们会保留在当前设备上。我们不提供账户系统，也不会接收这类本地数据的副本。",
-        "noAccountsTitle": "不提供账户或云同步",
-        "noAccountsBody": "星露谷规划器不提供账户、云同步或付款服务，也不提供登录或跨设备项目存储。",
-        "noPaymentsTitle": "不提供付款服务",
-        "noPaymentsBody": "星露谷规划器不提供会员、支付处理或购买功能。",
-        "contactTitle": "本政策的变更",
-        "contactBody": "如果本政策发生变化，更新后的文本会发布在此页面。"
-      },
-      "terms": {
-        "title": "使用条款",
-        "introduction": "使用星露谷规划器即表示你同意以负责任的方式使用这款仅在浏览器中运行的规划工具。",
-        "localStorageTitle": "你的本地规划方案",
-        "localStorageBody": "你的规划方案保存在设备上的浏览器本地存储中。在清除浏览器数据或更换设备前，你有责任导出想要保留的规划方案。",
-        "serviceBoundaryTitle": "服务边界",
-        "serviceBoundaryBody": "星露谷规划器不提供账户、云同步、付款、会员、公开分享，也不保证能够恢复浏览器本地数据。",
-        "gameRelationshipTitle": "与游戏的关系",
-        "gameRelationshipBody": "星露谷规划器是非官方的粉丝制作规划工具，与 ConcernedApe 没有隶属、认可或赞助关系。",
-        "changesTitle": "本条款的变更",
-        "changesBody": "我们可能会通过在此页面发布修订后的文本来更新这些条款。"
-      }
     }
   }
 }

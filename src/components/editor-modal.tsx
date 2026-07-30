@@ -715,13 +715,6 @@ function SettingsPanel({
           </button>
         </div>
       </section>
-      <section className="editor-modal__view-section">
-        <h3>{translate(locale, "planner.modal.jojaStuff")}</h3>
-        <div className="editor-modal__view-options">
-          <a href="/privacy" target="_blank" rel="noreferrer">{translate(locale, "planner.modal.privacy")}</a>
-          <a href="/terms" target="_blank" rel="noreferrer">{translate(locale, "planner.modal.terms")}</a>
-        </div>
-      </section>
     </div>
   );
 }

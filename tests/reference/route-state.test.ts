@@ -8,8 +8,6 @@ const requiredRouteIds = [
   "farm-comparison",
   "farm-guide",
   "mods",
-  "privacy",
-  "terms",
 ] as const;
 
 const requiredPlannerScenarioIds = [

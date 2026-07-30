@@ -22,8 +22,6 @@ export const localizedStaticPages: readonly LocalizedStaticPage[] = [
   { locale: "en", outputPath: "farm/beach.html" },
   { locale: "en", outputPath: "farm/meadowlands.html" },
   { locale: "en", outputPath: "mods.html" },
-  { locale: "en", outputPath: "privacy.html" },
-  { locale: "en", outputPath: "terms.html" },
   { locale: "zh-CN", outputPath: "zh.html" },
   { locale: "zh-CN", outputPath: "zh/farm-comparison.html" },
   { locale: "zh-CN", outputPath: "zh/farm/standard.html" },
@@ -35,8 +33,6 @@ export const localizedStaticPages: readonly LocalizedStaticPage[] = [
   { locale: "zh-CN", outputPath: "zh/farm/beach.html" },
   { locale: "zh-CN", outputPath: "zh/farm/meadowlands.html" },
   { locale: "zh-CN", outputPath: "zh/mods.html" },
-  { locale: "zh-CN", outputPath: "zh/privacy.html" },
-  { locale: "zh-CN", outputPath: "zh/terms.html" },
 ] as const;
 
 export function readStaticPageHtml(staticPageOutputPath: string): string {
