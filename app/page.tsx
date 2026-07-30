@@ -1,5 +1,5 @@
-import { ReferenceRuntimeHost } from "../src/components/reference-runtime-host";
+import { PlannerHomepage } from "../src/components/planner-homepage";
 
 export default function PlannerPage() {
-  return <ReferenceRuntimeHost />;
+  return <PlannerHomepage />;
 }

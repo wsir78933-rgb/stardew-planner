@@ -76,6 +76,16 @@ describe("reference runtime local-only overrides", () => {
     expect(localOnlyOverrideCss).not.toContain(".help-overlay {");
     expect(localOnlyOverrideCss).not.toContain(".pm-action-btn {");
     expect(localOnlyOverrideCss).not.toMatch(/https?:\/\//);
+    expect(localOnlyOverrideCss).toContain(
+      "body.stardew-homepage #reference-runtime-root",
+    );
+    expect(localOnlyOverrideCss).toContain(
+      "body.stardew-homepage #reference-runtime-root > .app",
+    );
+    expect(localOnlyOverrideCss).toContain("transform: translateZ(0);");
+    expect(localOnlyOverrideCss).not.toMatch(
+      /(^|\n)#reference-runtime-root\s*\{/,
+    );
   });
 
   it("uses an exact local-only label manifest without matching project titles", async () => {

@@ -27,3 +27,25 @@ button[title="Save your plan and get a shareable link"],
   pointer-events: auto !important;
   user-select: auto !important;
 }
+
+body.stardew-homepage #reference-runtime-root {
+  background: #ffffff;
+  block-size: 100%;
+  border: 1.5px solid #242a22;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.45rem 0 rgb(36 42 34 / 88%);
+  isolation: isolate;
+  overflow: hidden;
+  position: relative;
+  transform: translateZ(0);
+}
+
+body.stardew-homepage #reference-runtime-root > .app {
+  height: 100% !important;
+}
+
+@media (max-width: 700px) {
+  body.stardew-homepage #reference-runtime-root {
+    border-radius: 0.5rem;
+  }
+}
