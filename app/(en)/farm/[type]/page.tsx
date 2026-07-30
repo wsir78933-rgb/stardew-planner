@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import { FarmGuideContent } from "../../../../src/components/farm-guide-content";
+import { JsonLdScript } from "../../../../src/components/json-ld-script";
 import { PublicPageLayout } from "../../../../src/components/public-page-layout";
 import {
   createFarmGuidePageMetadata,
 } from "../../../../src/i18n/page-metadata";
+import { createFarmGuideArticleStructuredData } from "../../../../src/i18n/page-structured-data";
 import { getLocalizedOfficialFarmGuide } from "../../../../src/i18n/public-content";
 import {
   isOfficialFarmType,
@@ -52,8 +54,17 @@ export default async function EnglishFarmGuidePage({
     notFound();
   }
 
+  const farmGuide = getLocalizedOfficialFarmGuide("en", farmType);
+
   return (
     <PublicPageLayout canonicalPath={`/farm/${farmType}`} locale="en">
+      <JsonLdScript
+        structuredData={createFarmGuideArticleStructuredData({
+          locale: "en",
+          canonicalPath: `/farm/${farmType}`,
+          farmName: farmGuide.title,
+        })}
+      />
       <FarmGuideContent farmType={farmType} locale="en" />
     </PublicPageLayout>
   );
