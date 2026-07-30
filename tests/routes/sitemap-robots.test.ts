@@ -1,34 +1,48 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import robots from "../../app/robots";
 import sitemap from "../../app/sitemap";
+import { canonicalPublicPaths } from "../../src/i18n/canonical-public-routes";
+import {
+  getAbsoluteLocalizedUrl,
+  getAlternateLanguageUrls,
+  publicSiteOrigin,
+} from "../../src/i18n/public-site-url";
+
+vi.mock("../../src/i18n/public-site-url", () => ({
+  publicSiteOrigin: "https://shared-origin.test",
+  getAbsoluteLocalizedUrl: (locale: string, canonicalPath: string) =>
+    `https://localized-url.test/${locale}${canonicalPath}`,
+  getAlternateLanguageUrls: (canonicalPath: string) => ({
+    en: `https://alternate-url.test/en${canonicalPath}`,
+    "zh-CN": `https://alternate-url.test/zh-CN${canonicalPath}`,
+    "x-default": `https://alternate-url.test/en${canonicalPath}`,
+  }),
+}));
 
 describe("SEO static route manifests", () => {
-  it("lists each English and Chinese canonical page with reciprocal language alternates", () => {
+  it("uses the shared URL interface for every localized sitemap entry", () => {
     const sitemapEntries = sitemap();
-    const englishStandardFarm = sitemapEntries.find(
-      (entry) => entry.url === "https://stardewvalleyplanner.art/farm/standard",
-    );
-    const chineseStandardFarm = sitemapEntries.find(
-      (entry) => entry.url === "https://stardewvalleyplanner.art/zh/farm/standard",
-    );
 
     expect(sitemapEntries).toHaveLength(26);
-    expect(englishStandardFarm?.alternates?.languages).toEqual({
-      en: "https://stardewvalleyplanner.art/farm/standard",
-      "zh-CN": "https://stardewvalleyplanner.art/zh/farm/standard",
-      "x-default": "https://stardewvalleyplanner.art/farm/standard",
-    });
-    expect(chineseStandardFarm?.alternates?.languages).toEqual(
-      englishStandardFarm?.alternates?.languages,
-    );
+
+    for (const canonicalPath of canonicalPublicPaths) {
+      const alternateUrls = getAlternateLanguageUrls(canonicalPath);
+
+      expect(sitemapEntries).toContainEqual({
+        url: getAbsoluteLocalizedUrl("en", canonicalPath),
+        alternates: { languages: alternateUrls },
+      });
+      expect(sitemapEntries).toContainEqual({
+        url: getAbsoluteLocalizedUrl("zh-CN", canonicalPath),
+        alternates: { languages: alternateUrls },
+      });
+    }
   });
 
-  it("publishes robots and sitemap at the canonical site origin", () => {
+  it("uses the shared site origin for robots and its sitemap URL", () => {
     const robotsMetadata = robots();
 
-    expect(robotsMetadata.host).toBe("https://stardewvalleyplanner.art");
-    expect(robotsMetadata.sitemap).toBe(
-      "https://stardewvalleyplanner.art/sitemap.xml",
-    );
+    expect(robotsMetadata.host).toBe(publicSiteOrigin);
+    expect(robotsMetadata.sitemap).toBe(`${publicSiteOrigin}/sitemap.xml`);
   });
 });

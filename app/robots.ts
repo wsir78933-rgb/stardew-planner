@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const siteOrigin = "https://stardewvalleyplanner.art";
+import { publicSiteOrigin } from "../src/i18n/public-site-url";
 
 export const dynamic = "force-static";
 
@@ -10,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    host: siteOrigin,
-    sitemap: `${siteOrigin}/sitemap.xml`,
+    host: publicSiteOrigin,
+    sitemap: `${publicSiteOrigin}/sitemap.xml`,
   };
 }
