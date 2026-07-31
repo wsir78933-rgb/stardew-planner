@@ -463,6 +463,13 @@ body.stardew-homepage [data-homepage-shell] > footer a {
   text-decoration: none;
 }
 
+[data-public-page-shell] .public-page-shell-language-switcher {
+  color: #52604e;
+  font-size: 0.9rem;
+  text-underline-offset: 0.2em;
+  white-space: nowrap;
+}
+
 [data-public-page-shell] nav {
   display: flex;
   flex-wrap: wrap;

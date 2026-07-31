@@ -17,7 +17,7 @@ function getStaticMarkupText(text: string): string {
 describe("public farm pages", () => {
   it("renders every official farm with its local preview and planner entry point", () => {
     const comparisonMarkup = renderToStaticMarkup(
-      createElement(FarmComparisonContent),
+      createElement(FarmComparisonContent, { locale: "en" }),
     );
 
     expect(comparisonMarkup).toContain("Quick comparison");
@@ -34,7 +34,9 @@ describe("public farm pages", () => {
   });
 
   it("renders every available community map with a local preview and planner entry point", () => {
-    const modMapMarkup = renderToStaticMarkup(createElement(ModMapCardGrid));
+    const modMapMarkup = renderToStaticMarkup(
+      createElement(ModMapCardGrid, { locale: "en" }),
+    );
     const communityMaps = plannerMaps.filter(
       (plannerMap) =>
         plannerMap.category === "community-farm" ||
@@ -59,6 +61,7 @@ describe("public farm pages", () => {
     const standardFarmGuide = officialFarmGuides.standard;
     const guideMarkup = renderToStaticMarkup(
       createElement(FarmGuideContent, {
+        locale: "en",
         farmGuide: standardFarmGuide,
         otherFarmGuides: Object.values(officialFarmGuides).filter(
           (farmGuide) => farmGuide.id !== standardFarmGuide.id,
@@ -71,5 +74,27 @@ describe("public farm pages", () => {
     expect(guideMarkup).toContain("Tillable tiles");
     expect(guideMarkup).toContain("What makes it different");
     expect(guideMarkup).toContain(`href="/?farmType=${standardFarmGuide.id}"`);
+  });
+
+  it("keeps Chinese planning CTAs on the English planner and localizes public farm links", () => {
+    const comparisonMarkup = renderToStaticMarkup(
+      createElement(FarmComparisonContent, { locale: "zh-CN" }),
+    );
+    const guideMarkup = renderToStaticMarkup(
+      createElement(FarmGuideContent, {
+        locale: "zh-CN",
+        farmGuide: officialFarmGuides.standard,
+        otherFarmGuides: Object.values(officialFarmGuides).filter(
+          (farmGuide) => farmGuide.id !== "standard",
+        ),
+      }),
+    );
+
+    expect(comparisonMarkup).toContain("标准农场");
+    expect(comparisonMarkup).toContain('href="/zh/farm/standard"');
+    expect(comparisonMarkup).toContain('href="/?farmType=standard"');
+    expect(guideMarkup).toContain('href="/zh/farm-comparison"');
+    expect(guideMarkup).toContain('href="/zh/farm/riverland"');
+    expect(guideMarkup).toContain('href="/?farmType=standard"');
   });
 });
