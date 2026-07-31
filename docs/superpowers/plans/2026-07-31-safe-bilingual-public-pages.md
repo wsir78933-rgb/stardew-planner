@@ -352,7 +352,7 @@ git commit -m "feat: add static Chinese public routes"
 **Interfaces:**
 - Consumes: Task 1 getLocalizedPublicRouteEntries() and existing URL helper.
 - Produces: a 22-entry sitemap/static contract with no legal output.
-- Final tests read prebuilt out and never invoke a build.
+- Static-artifact verification rebuilds `out` from the reviewed source before it reads any exported files.
 
 - [ ] **Step 1: Write failing bilingual discovery and removal tests**
 
@@ -446,3 +446,59 @@ Inspect /, /zh, /farm-comparison, /zh/farm-comparison, /mods, /zh/mods, /farm/st
 - [ ] **Step 4: Stop the server and record results**
 
 Expected: server stops cleanly; no source changes are made. If an observed defect requires code, write a failing test before any fix and return to its owning task's review loop.
+
+### Task 6: Resolve final SEO review findings without changing the editor
+
+**Files:**
+- Modify: src/components/chinese-planner-introduction.tsx
+- Modify: src/seo/page-metadata.ts
+- Modify: src/seo/public-site-url.ts
+- Modify: app/page.tsx
+- Modify: app/farm-comparison/page.tsx
+- Modify: app/mods/page.tsx
+- Modify: app/farm/[type]/page.tsx
+- Modify: app/zh/page.tsx
+- Modify: app/zh/farm-comparison/page.tsx
+- Modify: app/zh/mods/page.tsx
+- Modify: app/zh/farm/[type]/page.tsx
+- Modify: tests/components/public-page-shell.test.tsx
+- Modify: tests/seo/page-metadata.test.ts
+- Modify: tests/seo/public-site-url.test.ts
+- Modify: tests/routes/static-routes.test.ts
+
+**Interfaces:**
+- Public metadata accepts required `locale: PublicLocale` and `canonicalPath: PublicCanonicalPath`; no page receives an implicit English locale or an unchecked arbitrary pathname.
+- `createCanonicalUrl()` accepts `/` and no-trailing-slash paths only. A non-root trailing slash throws an error containing the received value.
+- `ChinesePlannerIntroduction` renders the controlled localized `plannerDescription` visibly before its existing English planner-language notice.
+- The static-routes contract runs a fresh static build before inspecting `out`.
+
+**Decision and non-goals:**
+- User selected A on 2026-07-31: keep the editor and frozen runtime unchanged. `/privacy` and `/terms` remain absent from the public site and return 404 even though historical links embedded in frozen editor assets remain out of scope.
+- Do not modify `public/_app/**`, `public/reference-runtime/**`, `src/reference-runtime/**`, `src/projects/**`, editor components, data migrations, styling outside the scoped public shell, package manifests, or dependency configuration.
+
+- [ ] **Step 1: Write focused failing regression tests**
+
+Add behavior tests that prove:
+
+1. Chinese root markup visibly contains the exact controlled Chinese planner description and retains the existing English editor-language notice.
+2. `createPublicPageMetadata()` requires an explicit locale and locale-neutral canonical identity at the TypeScript boundary, and uses those values for canonical and language alternates.
+3. `createCanonicalUrl("/zh/")` throws a diagnostic that includes `"/zh/"`, while `/` remains valid.
+4. Static-route assertions rebuild artifacts from source before reading the `out` directory.
+
+Run the smallest relevant commands and observe the expected failures before production implementation. Do not add source-text or mock-only tests.
+
+- [ ] **Step 2: Implement the smallest strict public boundary**
+
+Render `getPublicPageCopy("zh-CN").plannerDescription` directly in `ChinesePlannerIntroduction`; retain the current English editor-language notice. Make the metadata input fields required, name the identity `canonicalPath`, and remove the fallback/lookup branch. Update only existing public route call sites to pass the renamed field. Reject non-root trailing slashes before canonical URL normalization. Restore isolated build execution inside the static artifact test before its artifact assertions.
+
+- [ ] **Step 3: Verify and commit the final-review fixes**
+
+Run in order:
+
+1. focused TDD regression tests for the four affected test files;
+2. `pnpm typecheck`;
+3. `NEXT_TELEMETRY_DISABLED=1 pnpm build`;
+4. `pnpm test -- --run`;
+5. `git diff --check`.
+
+Commit only the Task 6 files with `fix: tighten bilingual public SEO contracts`.
