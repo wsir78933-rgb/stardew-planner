@@ -3,6 +3,7 @@ import { FarmGuideContent } from "../../../../src/components/farm-guide-content"
 import { JsonLdScript } from "../../../../src/components/json-ld-script";
 import { PublicPageShell } from "../../../../src/components/public-page-shell";
 import {
+  formatPublicPageCopy,
   getLocalizedOfficialFarmGuide,
   getPublicPageCopy,
 } from "../../../../src/i18n/public-page-content";
@@ -12,6 +13,7 @@ import {
   isOfficialFarmType,
   officialFarmGuides,
   officialFarmTypes,
+  type OfficialFarmGuide,
   type OfficialFarmType,
 } from "../../../../src/reference/official-farm-guides";
 import { createPublicPageMetadata } from "../../../../src/seo/page-metadata";
@@ -48,19 +50,34 @@ function resolveFarmGuide(farmType: string) {
   return farmGuide;
 }
 
+function getChineseFarmMetadataCopy(farmGuide: OfficialFarmGuide) {
+  const localizedFarmGuide = getLocalizedOfficialFarmGuide("zh-CN", farmGuide.id);
+  const pageCopy = getPublicPageCopy("zh-CN");
+
+  return {
+    localizedFarmGuide,
+    title: formatPublicPageCopy(pageCopy.farmGuideTitleTemplate, {
+      farmName: localizedFarmGuide.title,
+    }),
+    description: formatPublicPageCopy(pageCopy.farmGuideDescriptionTemplate, {
+      farmName: localizedFarmGuide.title,
+    }),
+  };
+}
+
 export async function generateMetadata({
   params,
 }: ChineseFarmGuidePageProperties) {
   const { type: farmType } = await params;
   const farmGuide = resolveFarmGuide(farmType);
-  const localizedFarmGuide = getLocalizedOfficialFarmGuide("zh-CN", farmGuide.id);
+  const chineseFarmMetadataCopy = getChineseFarmMetadataCopy(farmGuide);
   const canonicalPath: `/farm/${OfficialFarmType}` = `/farm/${farmGuide.id}`;
 
   return createPublicPageMetadata({
     locale: "zh-CN",
     pathname: canonicalPath,
-    title: `${localizedFarmGuide.title} | ${getPublicPageCopy("zh-CN").brandLabel}`,
-    description: `${localizedFarmGuide.title} 农场指南。${localizedFarmGuide.bestFor}`,
+    title: chineseFarmMetadataCopy.title,
+    description: chineseFarmMetadataCopy.description,
     openGraphType: "article",
   });
 }
@@ -70,11 +87,10 @@ export default async function ChineseFarmGuidePage({
 }: ChineseFarmGuidePageProperties) {
   const { type: farmType } = await params;
   const farmGuide = resolveFarmGuide(farmType);
-  const localizedFarmGuide = getLocalizedOfficialFarmGuide("zh-CN", farmGuide.id);
+  const chineseFarmMetadataCopy = getChineseFarmMetadataCopy(farmGuide);
   const pageCopy = getPublicPageCopy("zh-CN");
   const canonicalPath: `/farm/${OfficialFarmType}` = `/farm/${farmGuide.id}`;
   const localizedPathname = getLocalizedPublicPath("zh-CN", canonicalPath);
-  const description = `${localizedFarmGuide.title} 农场指南。${localizedFarmGuide.bestFor}`;
   const otherFarmGuides = officialFarmTypes
     .filter((otherFarmType) => otherFarmType !== farmGuide.id)
     .map((otherFarmType) => officialFarmGuides[otherFarmType]);
@@ -88,8 +104,8 @@ export default async function ChineseFarmGuidePage({
       />
       <JsonLdScript
         structuredData={createArticleStructuredData({
-          headline: localizedFarmGuide.title,
-          description,
+          headline: chineseFarmMetadataCopy.localizedFarmGuide.title,
+          description: chineseFarmMetadataCopy.description,
           pathname: localizedPathname,
         })}
       />
@@ -104,7 +120,10 @@ export default async function ChineseFarmGuidePage({
               name: pageCopy.farmTypesLabel,
               pathname: getLocalizedPublicPath("zh-CN", "/farm-comparison"),
             },
-            { name: localizedFarmGuide.title, pathname: localizedPathname },
+            {
+              name: chineseFarmMetadataCopy.localizedFarmGuide.title,
+              pathname: localizedPathname,
+            },
           ],
         })}
       />

@@ -35,6 +35,8 @@ export type PublicPageCopy = Readonly<{
   planFarmTemplate: string;
   farmComparisonTitle: string;
   farmComparisonDescription: string;
+  farmGuideTitleTemplate: string;
+  farmGuideDescriptionTemplate: string;
   modsTitle: string;
   modsDescription: string;
   quickComparisonLabel: string;
@@ -209,6 +211,8 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     planFarmTemplate: "Plan a {farmName} →",
     farmComparisonTitle: "Stardew Valley Farm Types Compared",
     farmComparisonDescription: "Compare all eight Stardew Valley farm maps, their tillable tiles, buildable space, and unique features.",
+    farmGuideTitleTemplate: "{farmName} Guide | Stardew Planner",
+    farmGuideDescriptionTemplate: "Explore the {farmName} map and start planning its Stardew Valley layout.",
     modsTitle: "Modded Stardew Valley Farms",
     modsDescription: "Browse local planning maps for community-made Stardew Valley farms and interiors.",
     quickComparisonLabel: "Quick comparison",
@@ -248,6 +252,8 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     planFarmTemplate: "规划 {farmName} →",
     farmComparisonTitle: "星露谷农场类型对比",
     farmComparisonDescription: "在规划布局前，对比《星露谷物语》的全部官方农场地图。",
+    farmGuideTitleTemplate: "{farmName} 指南 | 星露谷规划器",
+    farmGuideDescriptionTemplate: "了解{farmName}地图，并开始规划你的星露谷农场布局。",
     modsTitle: "星露谷模组规划器",
     modsDescription: "规划你的星露谷模组组合。",
     quickComparisonLabel: "快速对比",

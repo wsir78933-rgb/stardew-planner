@@ -50,3 +50,22 @@ it("adapts verified Chinese UI strings without legal navigation entries", () => 
     expect.objectContaining({ path: "/terms" }),
   );
 });
+
+it("formats approved Chinese farm metadata templates with the localized farm name", () => {
+  const copy = getPublicPageCopy("zh-CN");
+
+  expect(copy.farmGuideTitleTemplate).toBe("{farmName} 指南 | 星露谷规划器");
+  expect(copy.farmGuideDescriptionTemplate).toBe(
+    "了解{farmName}地图，并开始规划你的星露谷农场布局。",
+  );
+  expect(
+    formatPublicPageCopy(copy.farmGuideTitleTemplate, {
+      farmName: "标准农场",
+    }),
+  ).toBe("标准农场 指南 | 星露谷规划器");
+  expect(
+    formatPublicPageCopy(copy.farmGuideDescriptionTemplate, {
+      farmName: "标准农场",
+    }),
+  ).toBe("了解标准农场地图，并开始规划你的星露谷农场布局。");
+});
