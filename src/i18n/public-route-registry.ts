@@ -47,7 +47,11 @@ export function getLocalizedPublicPath(
   assertPublicLocale(locale);
   assertCanonicalPublicPath(canonicalPath);
 
-  return locale === "en" ? canonicalPath : `/zh${canonicalPath}`;
+  if (locale === "en") {
+    return canonicalPath;
+  }
+
+  return canonicalPath === "/" ? "/zh" : `/zh${canonicalPath}`;
 }
 
 export function getLocalizedPublicRouteEntries(): readonly LocalizedPublicRouteEntry[] {

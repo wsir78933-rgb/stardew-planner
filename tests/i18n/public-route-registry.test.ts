@@ -11,6 +11,7 @@ it("maps public identities to Chinese paths without legal routes", () => {
   expect(canonicalPublicPaths).not.toContain("/privacy");
   expect(canonicalPublicPaths).not.toContain("/terms");
   expect(getLocalizedPublicPath("en", "/farm/standard")).toBe("/farm/standard");
+  expect(getLocalizedPublicPath("zh-CN", "/")).toBe("/zh");
   expect(getLocalizedPublicPath("zh-CN", "/farm/standard")).toBe(
     "/zh/farm/standard",
   );
