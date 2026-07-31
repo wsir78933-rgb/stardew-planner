@@ -1,12 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
 import {
   generateStaticParams,
   officialFarmTypes,
 } from "../../app/farm/[type]/page";
-import { ensureStaticExportArtifactFixture } from "../support/static-export-artifact-fixture";
 
 const expectedOfficialFarmTypes = [
   "standard",
@@ -55,11 +54,6 @@ function readStaticPageHtml(staticPageFile: string): string {
 }
 
 describe("static reference-runtime routes", () => {
-  beforeAll(
-    () => ensureStaticExportArtifactFixture(),
-    120_000,
-  );
-
   it("exports static files without image optimization", () => {
     expect(nextConfig.output).toBe("export");
     expect(nextConfig.images?.unoptimized).toBe(true);

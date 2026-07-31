@@ -1,11 +1,8 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { beforeAll, expect, it } from "vitest";
+import { expect, it } from "vitest";
 import { getLocalizedPublicRouteEntries } from "../../src/i18n/public-route-registry";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
-import { ensureStaticExportArtifactFixture } from "../support/static-export-artifact-fixture";
-
-beforeAll(() => ensureStaticExportArtifactFixture(), 120_000);
 
 it("writes robots.txt with the absolute sitemap URL", () => {
   const robotsText = readFileSync(join(process.cwd(), "out", "robots.txt"), "utf8");
