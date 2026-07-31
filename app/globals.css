@@ -55,8 +55,20 @@ body.stardew-homepage {
   --destructive: #b13a28;
   --radius: 0.5rem;
   background:
-    radial-gradient(circle at 77% 3%, rgb(201 251 69 / 52%), transparent 23rem),
-    radial-gradient(circle at 16% 27%, rgb(240 251 216 / 92%), transparent 24rem),
+    radial-gradient(
+      ellipse 80rem 52rem at -22rem -8rem,
+      rgb(201 251 69 / 56%) 0%,
+      rgb(226 255 173 / 42%) 40%,
+      rgb(245 255 231 / 20%) 65%,
+      rgb(253 255 248 / 0%) 84%
+    ),
+    radial-gradient(
+      ellipse 80rem 52rem at calc(100% + 22rem) -8rem,
+      rgb(201 251 69 / 56%) 0%,
+      rgb(226 255 173 / 42%) 40%,
+      rgb(245 255 231 / 20%) 65%,
+      rgb(253 255 248 / 0%) 84%
+    ),
     var(--background);
   color: var(--foreground);
   overflow-x: hidden;
@@ -65,8 +77,20 @@ body.stardew-homepage {
 
 body.stardew-homepage.planner-active {
   background:
-    radial-gradient(circle at 77% 3%, rgb(201 251 69 / 52%), transparent 23rem),
-    radial-gradient(circle at 16% 27%, rgb(240 251 216 / 92%), transparent 24rem),
+    radial-gradient(
+      ellipse 80rem 52rem at -22rem -8rem,
+      rgb(201 251 69 / 56%) 0%,
+      rgb(226 255 173 / 42%) 40%,
+      rgb(245 255 231 / 20%) 65%,
+      rgb(253 255 248 / 0%) 84%
+    ),
+    radial-gradient(
+      ellipse 80rem 52rem at calc(100% + 22rem) -8rem,
+      rgb(201 251 69 / 56%) 0%,
+      rgb(226 255 173 / 42%) 40%,
+      rgb(245 255 231 / 20%) 65%,
+      rgb(253 255 248 / 0%) 84%
+    ),
     var(--background);
   color: var(--foreground);
   overflow-x: hidden !important;
@@ -267,11 +291,10 @@ body.stardew-homepage [data-homepage-workspace-introduction] p:last-child {
 }
 
 body.stardew-homepage [data-homepage-workspace] {
-  height: clamp(51.25rem, 86vh, 56.25rem);
-  margin: 0 auto clamp(5.5rem, 10vw, 9rem);
-  max-width: 1280px;
+  height: 100vh;
+  margin: 0 0 clamp(5.5rem, 10vw, 9rem);
   min-width: 0;
-  padding-inline: clamp(1.25rem, 3vw, 3rem);
+  padding-inline: 0;
   position: relative;
 }
 
@@ -404,7 +427,7 @@ body.stardew-homepage [data-homepage-shell] > footer a {
 
   body.stardew-homepage [data-homepage-workspace] {
     height: 45rem;
-    padding-inline: 0.5rem;
+    padding-inline: 0;
   }
 
   body.stardew-homepage [data-homepage-shell] > main > section#capabilities > div {
