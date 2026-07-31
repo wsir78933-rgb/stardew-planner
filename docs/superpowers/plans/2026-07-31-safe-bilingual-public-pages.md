@@ -18,7 +18,7 @@
 - Remove /privacy and /terms completely: routes, navigation, legal data/components/tests, canonical registry, sitemap and static assertions. Removed static-export paths intentionally return 404; add neither redirect nor replacement.
 - Keep PlannerHomepage and its reference runtime exclusively on English /. /zh is static and must contain no ReferenceRuntimeHost, reference-runtime-root, or bootstrap script.
 - Do not modify public/_app/**, public/reference-runtime/**, src/reference-runtime/sync-reference-runtime.ts, src/projects/**, planner project data, migrations, or editor components.
-- Do not import next-intl, PlannerWorkspace, local-storage migration code, or any client locale provider. Do not change package.json, pnpm-lock.yaml, or vitest.config.ts.
+- Do not import next-intl, PlannerWorkspace, local-storage migration code, or any client locale provider. Do not change pnpm-lock.yaml or vitest.config.ts. The user authorized exactly one package.json exception in Task 7: add a `pretest` static-build lifecycle command and no dependency or other script changes.
 - Preserve body.stardew-homepage and html, body values. Any new layout CSS stays below [data-public-page-shell].
 - Reuse verified Chinese farm and mod wording from codex/bilingual-seo-port:src/i18n/public-content.ts. For public navigation, headings, descriptions, and CTAs only, copy selected existing strings from codex/bilingual-seo-port:messages/zh-CN.json, the version-controlled text payload consumed by that branch's src/i18n/messages.ts. These are static source materials only: do not import next-intl, a message provider, a locale provider, or client locale code; do not invent game facts or marketing claims.
 - Follow TDD. A test must be observed failing for the intended missing behavior before its production implementation is written.
@@ -502,3 +502,43 @@ Run in order:
 5. `git diff --check`.
 
 Commit only the Task 6 files with `fix: tighten bilingual public SEO contracts`.
+
+### Task 7: Simplify static-artifact verification through the package lifecycle
+
+**Decision:** User selected option A on 2026-08-01. `pnpm test` must run a fresh static build through `pretest`; static-artifact tests must only read that prebuilt output. This replaces the unmerged cross-process test-lock experiment because that experiment is more complex than the verified requirement and cannot safely coordinate independent test commands sharing one `out` directory.
+
+**Files:**
+- Modify: package.json
+- Modify: tests/routes/static-routes.test.ts
+- Modify: tests/routes/sitemap-robots.test.ts
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify: tests/reference-runtime/reference-runtime-delivery.test.ts
+- Delete: tests/support/static-export-artifact-fixture.ts
+- Delete: tests/support/static-export-artifact-fixture.test.ts
+
+**Interfaces:**
+- `pretest` performs `NEXT_TELEMETRY_DISABLED=1 pnpm build` before the existing test command.
+- All static-artifact readers are ordinary read-only tests. None runs a build, creates a lock, writes temporary coordination state, or depends on a test worker identity.
+- The static-output verification contract is `pnpm test -- --run`; a focused direct Vitest invocation, when used, is preceded explicitly by a build command.
+
+**Non-goals:**
+- Do not change the existing `test` script, package dependencies, lockfile, Vitest configuration, production source, editor, frozen runtime, project data, routes, SEO output, or styles.
+
+- [ ] **Step 1: Write and observe the lifecycle regression**
+
+Add the package lifecycle command and remove the barrier-only tests/imports. First prove the fresh-output contract with `pnpm test -- --run`: the command output must show exactly one static build before the test run, while all static-artifact readers complete without a second build or any lock-state output. Do not use source-text tests or test-only mocks for npm lifecycle behavior.
+
+- [ ] **Step 2: Keep static tests read-only**
+
+Delete the fixture and its direct process tests. Remove its imports/calls and the in-test build from every affected static-artifact reader. Retain their existing artifact assertions unchanged except for removing the former coordination setup. Use only the existing read interfaces (`readFileSync`, `existsSync`, and current helpers).
+
+- [ ] **Step 3: Verify and commit**
+
+Run in order:
+
+1. `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run tests/routes/static-routes.test.ts tests/routes/sitemap-robots.test.ts tests/routes/static-public-pages.test.ts tests/reference-runtime/reference-runtime-delivery.test.ts`;
+2. `pnpm typecheck`;
+3. `pnpm test -- --run` and confirm the pretest build occurs exactly once before Vitest;
+4. `git diff --check`.
+
+Commit only the Task 7 files with `test: build static artifacts in pretest`.
