@@ -8,6 +8,7 @@ import {
 describe("public site URL", () => {
   it("uses the confirmed HTTPS origin without a path suffix", () => {
     expect(publicSiteUrl.href).toBe("https://stardewvalleyplanner.art/");
+    expect(createCanonicalUrl("/")).toBe("https://stardewvalleyplanner.art");
     expect(createCanonicalUrl("/farm/standard")).toBe(
       "https://stardewvalleyplanner.art/farm/standard",
     );
@@ -49,5 +50,9 @@ describe("public site URL", () => {
     expect(() => createCanonicalUrl("/\\example.invalid/escaped")).toThrow(
       "Canonical pathname must stay on the public site origin",
     );
+  });
+
+  it("rejects non-root canonical paths with trailing slashes", () => {
+    expect(() => createCanonicalUrl("/zh/")).toThrow('Received: "/zh/"');
   });
 });

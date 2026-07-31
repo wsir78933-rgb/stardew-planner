@@ -7,6 +7,7 @@ export function ChinesePlannerIntroduction() {
     <article className="public-page-content">
       <header className="public-page-header">
         <h1>{pageCopy.plannerTitle}</h1>
+        <p>{pageCopy.plannerDescription}</p>
         <p>{pageCopy.plannerIntroduction}</p>
       </header>
       <a className="public-primary-cta" href="/">

@@ -52,7 +52,7 @@ export async function generateMetadata({
 
   return createPublicPageMetadata({
     locale: "en",
-    pathname,
+    canonicalPath: pathname,
     title: `${farmGuide.title} | Stardew Valley Farm Planner`,
     description: `${farmGuide.title} farm guide. ${farmGuide.bestFor}`,
     openGraphType: "article",

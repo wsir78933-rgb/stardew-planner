@@ -48,6 +48,11 @@ export function createCanonicalUrl(pathname: string): string {
       `Canonical pathname must stay on the public site origin. Received: ${JSON.stringify(pathname)}.`,
     );
   }
+  if (pathname !== "/" && pathname.endsWith("/")) {
+    throw new Error(
+      `Canonical pathname must not end with a slash unless it is root. Received: ${JSON.stringify(pathname)}.`,
+    );
+  }
 
   const canonicalUrl = new URL(pathname, publicSiteUrl);
 

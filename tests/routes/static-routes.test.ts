@@ -1,6 +1,7 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
 import {
   generateStaticParams,
@@ -54,6 +55,20 @@ function readStaticPageHtml(staticPageFile: string): string {
 }
 
 describe("static reference-runtime routes", () => {
+  beforeAll(
+    () => {
+      execFileSync("pnpm", ["build"], {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          NEXT_TELEMETRY_DISABLED: "1",
+        },
+        stdio: "inherit",
+      });
+    },
+    120_000,
+  );
+
   it("exports static files without image optimization", () => {
     expect(nextConfig.output).toBe("export");
     expect(nextConfig.images?.unoptimized).toBe(true);

@@ -10,7 +10,7 @@ const pageCopy = getPublicPageCopy("zh-CN");
 
 export const farmComparisonMetadata = createPublicPageMetadata({
   locale: "zh-CN",
-  pathname: "/farm-comparison",
+  canonicalPath: "/farm-comparison",
   title: pageCopy.farmComparisonTitle,
   description: pageCopy.farmComparisonDescription,
   openGraphType: "article",

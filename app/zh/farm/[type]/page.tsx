@@ -75,7 +75,7 @@ export async function generateMetadata({
 
   return createPublicPageMetadata({
     locale: "zh-CN",
-    pathname: canonicalPath,
+    canonicalPath,
     title: chineseFarmMetadataCopy.title,
     description: chineseFarmMetadataCopy.description,
     openGraphType: "article",

@@ -10,7 +10,7 @@ const pageCopy = getPublicPageCopy("zh-CN");
 
 export const metadata = createPublicPageMetadata({
   locale: "zh-CN",
-  pathname: "/",
+  canonicalPath: "/",
   title: pageCopy.plannerTitle,
   description: pageCopy.plannerDescription,
 });

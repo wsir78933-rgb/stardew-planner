@@ -33,7 +33,16 @@ it("renders Chinese navigation and a static English-planner CTA", () => {
 
   expect(markup).toContain('aria-label="公共导航"');
   expect(markup).toContain('href="/"');
-  expect(markup).toContain("The editing interface opens in English.");
+  const chinesePlannerDescription =
+    "使用本地地图、物品和项目规划你的星露谷农场布局。";
+  const englishPlannerLanguageNotice =
+    "The editing interface opens in English.";
+
+  expect(markup).toContain(chinesePlannerDescription);
+  expect(markup).toContain(englishPlannerLanguageNotice);
+  expect(markup.indexOf(chinesePlannerDescription)).toBeLessThan(
+    markup.indexOf(englishPlannerLanguageNotice),
+  );
   expect(markup).toContain(">规划器</a>");
   expect(markup).not.toContain("开始规划");
   expect(markup).not.toContain("reference-runtime-root");

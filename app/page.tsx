@@ -8,7 +8,7 @@ const plannerPageDescription =
 
 export const metadata = createPublicPageMetadata({
   locale: "en",
-  pathname: "/",
+  canonicalPath: "/",
   title: "Stardew Valley Farm Planner",
   description: plannerPageDescription,
 });

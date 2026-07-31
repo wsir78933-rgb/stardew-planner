@@ -9,7 +9,7 @@ const farmComparisonDescription =
 
 export const farmComparisonMetadata = createPublicPageMetadata({
   locale: "en",
-  pathname: "/farm-comparison",
+  canonicalPath: "/farm-comparison",
   title: "Stardew Valley Farm Types Compared",
   description: farmComparisonDescription,
   openGraphType: "article",

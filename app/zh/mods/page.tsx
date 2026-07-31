@@ -10,7 +10,7 @@ const pageCopy = getPublicPageCopy("zh-CN");
 
 export const modsMetadata = createPublicPageMetadata({
   locale: "zh-CN",
-  pathname: "/mods",
+  canonicalPath: "/mods",
   title: pageCopy.modsTitle,
   description: pageCopy.modsDescription,
 });

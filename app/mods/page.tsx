@@ -9,7 +9,7 @@ const modsDescription =
 
 export const modsMetadata = createPublicPageMetadata({
   locale: "en",
-  pathname: "/mods",
+  canonicalPath: "/mods",
   title: "Modded Stardew Valley Farms",
   description: modsDescription,
 });
