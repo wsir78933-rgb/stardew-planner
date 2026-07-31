@@ -344,6 +344,10 @@ git commit -m "feat: add static Chinese public routes"
 - Modify: tests/routes/public-route-metadata.test.ts
 - Modify: tests/seo/page-metadata.test.ts
 - Modify: tests/reference-runtime/reference-runtime-delivery.test.ts
+- Modify: src/components/public-page-shell.tsx
+- Modify: src/components/public-navigation.tsx
+- Modify: app/globals.css
+- Modify: tests/components/public-page-shell.test.tsx
 
 **Interfaces:**
 - Consumes: Task 1 getLocalizedPublicRouteEntries() and existing URL helper.
@@ -386,7 +390,7 @@ Expected: FAIL because the current build emits legal files and only 13 sitemap U
 
 Delete the six legal-only files through a patch. Public navigation is already made legal-free by Task 2; assert that boundary rather than modifying it again. Make app/sitemap.ts map getLocalizedPublicRouteEntries() to { url: createCanonicalUrl(pathname) }. Do not add lastModified, duplicate route lists, or query-string URLs.
 
-Update static route and style contracts for the 22-page locale-aware output and continue proving no body.stardew-homepage text changed. Remove old legal metadata assertions and add artifact nonexistence checks for the two deleted files. Update the reference-runtime delivery test's expected exported-page list to omit legal HTML while retaining its frozen runtime module integrity assertions; never alter public/_app/**.
+Update static route and style contracts for the 22-page locale-aware output and continue proving no body.stardew-homepage text changed. Remove old legal metadata assertions and add artifact nonexistence checks for the two deleted files. Now that no legal shell remains, make PublicPageShell and PublicNavigation canonicalPath required, always render their language counterpart link, and delete the retiring-legal-page test branch plus now-unreferenced legal CSS. Update the reference-runtime delivery test's expected exported-page list to omit legal HTML while retaining its frozen runtime module integrity assertions; never alter public/_app/**.
 
 - [ ] **Step 4: Verify GREEN and full repository contract**
 
@@ -410,7 +414,9 @@ git add app/sitemap.ts tests/routes/sitemap-robots.test.ts \
   tests/routes/static-public-pages.test.ts tests/routes/static-routes.test.ts \
   tests/routes/public-page-style-contract.test.ts \
   tests/routes/public-route-metadata.test.ts tests/seo/page-metadata.test.ts \
-  tests/reference-runtime/reference-runtime-delivery.test.ts
+  tests/reference-runtime/reference-runtime-delivery.test.ts \
+  src/components/public-page-shell.tsx src/components/public-navigation.tsx \
+  app/globals.css tests/components/public-page-shell.test.tsx
 git commit -m "feat: publish bilingual static discovery pages"
 ~~~
 
