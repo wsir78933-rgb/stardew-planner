@@ -20,7 +20,7 @@ it("renders a shared static navigation frame around route content", () => {
   expect(markup).not.toContain("Terms");
   expect(markup).toContain("© Stardew Valley Farm Planner");
   expect(markup).toContain(
-    'class="public-page-shell-language-switcher" href="/zh/"',
+    'class="public-page-shell-language-switcher" href="/zh"',
   );
 });
 
