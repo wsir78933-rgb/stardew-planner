@@ -7,6 +7,7 @@ const plannerPageDescription =
   "Plan Stardew Valley farm layouts in your browser with an interactive map.";
 
 export const metadata = createPublicPageMetadata({
+  locale: "en",
   pathname: "/",
   title: "Stardew Valley Farm Planner",
   description: plannerPageDescription,

@@ -1,9 +1,18 @@
 import { describe, expect, it } from "vitest";
+import { metadata as plannerMetadata } from "../../app/page";
 import { farmComparisonMetadata } from "../../app/farm-comparison/page";
 import { generateMetadata } from "../../app/farm/[type]/page";
 import { modsMetadata } from "../../app/mods/page";
 import { privacyMetadata } from "../../app/privacy/page";
 import { termsMetadata } from "../../app/terms/page";
+import { metadata as chinesePlannerMetadata } from "../../app/zh/page";
+import { farmComparisonMetadata as chineseFarmComparisonMetadata } from "../../app/zh/farm-comparison/page";
+import {
+  dynamicParams as chineseFarmDynamicParams,
+  generateMetadata as generateChineseFarmMetadata,
+  generateStaticParams as generateChineseFarmStaticParams,
+} from "../../app/zh/farm/[type]/page";
+import { modsMetadata as chineseModsMetadata } from "../../app/zh/mods/page";
 import {
   officialFarmGuides,
   officialFarmTypes,
@@ -36,6 +45,23 @@ const fixedInformationPageMetadataExpectations = [
   ],
 ] as const;
 
+const publicPageMetadataExpectations = [
+  [plannerMetadata, "/"],
+  [farmComparisonMetadata, "/farm-comparison"],
+  [modsMetadata, "/mods"],
+] as const;
+
+function createExpectedLanguageAlternates(pathname: string) {
+  const englishUrl = `https://stardewvalleyplanner.art${pathname === "/" ? "" : pathname}`;
+  const chineseUrl = `https://stardewvalleyplanner.art/zh${pathname === "/" ? "" : pathname}`;
+
+  return {
+    en: englishUrl,
+    "zh-CN": chineseUrl,
+    "x-default": englishUrl,
+  };
+}
+
 describe("public route metadata", () => {
   it("uses exact title, description, and canonical metadata for fixed information pages", () => {
     for (const [pageMetadata, title, description, canonical] of fixedInformationPageMetadataExpectations) {
@@ -58,6 +84,59 @@ describe("public route metadata", () => {
         description: `${farmGuide.title} farm guide. ${farmGuide.bestFor}`,
         alternates: {
           canonical: `https://stardewvalleyplanner.art/farm/${farmType}`,
+        },
+      });
+    }
+  });
+
+  it("publishes paired language alternates for every English public route", async () => {
+    for (const [pageMetadata, pathname] of publicPageMetadataExpectations) {
+      expect(pageMetadata.alternates).toMatchObject({
+        canonical: `https://stardewvalleyplanner.art${pathname === "/" ? "" : pathname}`,
+        languages: createExpectedLanguageAlternates(pathname),
+      });
+    }
+
+    for (const farmType of officialFarmTypes) {
+      await expect(
+        generateMetadata({ params: Promise.resolve({ type: farmType }) }),
+      ).resolves.toMatchObject({
+        alternates: {
+          canonical: `https://stardewvalleyplanner.art/farm/${farmType}`,
+          languages: createExpectedLanguageAlternates(`/farm/${farmType}`),
+        },
+      });
+    }
+  });
+
+  it("assigns Chinese fixed public pages their localized canonicals and language alternates", () => {
+    for (const [pageMetadata, pathname] of [
+      [chinesePlannerMetadata, "/"],
+      [chineseFarmComparisonMetadata, "/farm-comparison"],
+      [chineseModsMetadata, "/mods"],
+    ] as const) {
+      expect(pageMetadata.alternates).toMatchObject({
+        canonical: `https://stardewvalleyplanner.art/zh${pathname === "/" ? "" : pathname}`,
+        languages: createExpectedLanguageAlternates(pathname),
+      });
+    }
+  });
+
+  it("generates every Chinese official farm metadata entry at its localized path", async () => {
+    expect(generateChineseFarmStaticParams()).toEqual(
+      officialFarmTypes.map((type) => ({ type })),
+    );
+    expect(chineseFarmDynamicParams).toBe(false);
+
+    for (const farmType of officialFarmTypes) {
+      await expect(
+        generateChineseFarmMetadata({
+          params: Promise.resolve({ type: farmType }),
+        }),
+      ).resolves.toMatchObject({
+        alternates: {
+          canonical: `https://stardewvalleyplanner.art/zh/farm/${farmType}`,
+          languages: createExpectedLanguageAlternates(`/farm/${farmType}`),
         },
       });
     }
