@@ -36,6 +36,7 @@ it("adapts verified Chinese UI strings without legal navigation entries", () => 
     "使用本地地图、物品和项目规划你的星露谷农场布局。",
   );
   expect(copy.planFarmLabel).toBe("规划器");
+  expect(copy.knownForLabel).toBe("特色");
   expect(
     formatPublicPageCopy(copy.planFarmTemplate, { farmName: "标准农场" }),
   ).toBe("规划 标准农场 →");

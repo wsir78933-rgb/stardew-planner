@@ -255,7 +255,7 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     tillableTilesLabel: "可耕种格数",
     totalBuildableLabel: "可建造格数",
     addedInLabel: "加入版本",
-    knownForLabel: "特点",
+    knownForLabel: "特色",
     bestForLabel: "最适合：",
     noteLabel: "注意：",
     previewTemplate: "{farmName} 预览图",
