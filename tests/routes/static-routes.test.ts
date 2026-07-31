@@ -1,5 +1,4 @@
 import { existsSync, readFileSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
@@ -31,26 +30,18 @@ const expectedStaticPageFiles = [
   "farm/beach.html",
   "farm/meadowlands.html",
   "mods.html",
-  "privacy.html",
-  "terms.html",
+  "zh.html",
+  "zh/farm-comparison.html",
+  "zh/farm/standard.html",
+  "zh/farm/riverland.html",
+  "zh/farm/forest.html",
+  "zh/farm/hilltop.html",
+  "zh/farm/wilderness.html",
+  "zh/farm/four-corners.html",
+  "zh/farm/beach.html",
+  "zh/farm/meadowlands.html",
+  "zh/mods.html",
 ] as const;
-
-function runStaticBuild(): void {
-  const buildProcess = spawnSync("pnpm", ["build"], {
-    cwd: process.cwd(),
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      NEXT_TELEMETRY_DISABLED: "1",
-    },
-  });
-
-  if (buildProcess.status !== 0) {
-    throw new Error(
-      `Static build failed. Exit code: ${String(buildProcess.status)}. Stderr: ${buildProcess.stderr}. Stdout: ${buildProcess.stdout}`,
-    );
-  }
-}
 
 function readStaticPageHtml(staticPageFile: string): string {
   const staticPagePath = join(process.cwd(), "out", staticPageFile);
@@ -76,10 +67,8 @@ describe("static reference-runtime routes", () => {
   });
 
   it(
-    "exports every retained route without an eager reference-runtime bootstrap",
+    "exports every static information route without an eager reference-runtime bootstrap",
     () => {
-      runStaticBuild();
-
       for (const staticPageFile of expectedStaticPageFiles) {
         const staticPageHtml = readStaticPageHtml(staticPageFile);
 
@@ -88,7 +77,9 @@ describe("static reference-runtime routes", () => {
           'src="/reference-runtime/bootstrap.mjs"',
         );
       }
+
+      expect(existsSync(join(process.cwd(), "out", "privacy.html"))).toBe(false);
+      expect(existsSync(join(process.cwd(), "out", "terms.html"))).toBe(false);
     },
-    30_000,
   );
 });

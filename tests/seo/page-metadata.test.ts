@@ -61,15 +61,3 @@ it("creates Chinese metadata from a locale-neutral public identity", () => {
     url: "https://stardewvalleyplanner.art/zh/mods",
   });
 });
-
-it("keeps legal pages outside the localized public route registry", () => {
-  const metadata = createPublicPageMetadata({
-    pathname: "/privacy",
-    title: "Privacy Policy",
-    description: "Learn how this browser-local planner handles local data.",
-  });
-
-  expect(metadata.alternates).toEqual({
-    canonical: "https://stardewvalleyplanner.art/privacy",
-  });
-});

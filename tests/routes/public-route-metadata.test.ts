@@ -3,8 +3,6 @@ import { metadata as plannerMetadata } from "../../app/page";
 import { farmComparisonMetadata } from "../../app/farm-comparison/page";
 import { generateMetadata } from "../../app/farm/[type]/page";
 import { modsMetadata } from "../../app/mods/page";
-import { privacyMetadata } from "../../app/privacy/page";
-import { termsMetadata } from "../../app/terms/page";
 import { metadata as chinesePlannerMetadata } from "../../app/zh/page";
 import { farmComparisonMetadata as chineseFarmComparisonMetadata } from "../../app/zh/farm-comparison/page";
 import {
@@ -30,18 +28,6 @@ const fixedInformationPageMetadataExpectations = [
     "Modded Stardew Valley Farms",
     "Browse local planning maps for community-made Stardew Valley farms and interiors.",
     "https://stardewvalleyplanner.art/mods",
-  ],
-  [
-    privacyMetadata,
-    "Privacy Policy",
-    "Learn how this browser-local planner handles projects, preferences, and local data.",
-    "https://stardewvalleyplanner.art/privacy",
-  ],
-  [
-    termsMetadata,
-    "Terms of Service",
-    "Read the terms for this browser-local Stardew Valley farm planning tool.",
-    "https://stardewvalleyplanner.art/terms",
   ],
 ] as const;
 

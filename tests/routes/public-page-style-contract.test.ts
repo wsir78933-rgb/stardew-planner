@@ -22,5 +22,8 @@ it("does not add public-page declarations to the homepage selector", () => {
   expect(existingHomepageStyles).toContain(
     "  body.stardew-homepage [data-homepage-capability-number] {\n    margin-bottom: 2rem;\n  }",
   );
+  expect(publicStyleBlock).toMatch(
+    /\[data-public-page-shell\] \.public-page-shell-language-switcher\s*\{[^}]*white-space:\s*nowrap;/s,
+  );
   expect(publicStyleBlock).not.toContain("body.stardew-homepage");
 });
