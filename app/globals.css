@@ -420,3 +420,284 @@ body.stardew-homepage [data-homepage-shell] > footer a {
     margin-bottom: 2rem;
   }
 }
+
+[data-public-page-shell] {
+  background: #fdfff8;
+  color: #1c211b;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+[data-public-page-shell] a {
+  color: inherit;
+}
+
+[data-public-page-shell] a:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+[data-public-page-shell] .public-page-shell-header,
+[data-public-page-shell] > footer {
+  align-items: center;
+  border-color: rgb(28 33 27 / 24%);
+  border-style: solid;
+  display: flex;
+  gap: 1.25rem;
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+[data-public-page-shell] .public-page-shell-header {
+  border-width: 0 0 1px;
+  min-height: 4.5rem;
+}
+
+[data-public-page-shell] .public-page-shell-brand {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-right: auto;
+  text-decoration: none;
+}
+
+[data-public-page-shell] nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+[data-public-page-shell] nav a {
+  color: #52604e;
+  font-size: 0.9rem;
+  text-underline-offset: 0.2em;
+}
+
+[data-public-page-shell] nav a:hover {
+  color: #1c211b;
+}
+
+[data-public-page-shell] main {
+  margin-inline: auto;
+  max-width: 72rem;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
+}
+
+[data-public-page-shell] > footer {
+  border-width: 1px 0 0;
+  color: #52604e;
+  font-size: 0.9rem;
+  min-height: 4.5rem;
+}
+
+[data-public-page-shell] h1,
+[data-public-page-shell] h2,
+[data-public-page-shell] h3,
+[data-public-page-shell] p {
+  margin-top: 0;
+}
+
+[data-public-page-shell] h1,
+[data-public-page-shell] h2,
+[data-public-page-shell] h3 {
+  color: #1c211b;
+  line-height: 1.1;
+}
+
+[data-public-page-shell] .public-page-header {
+  border-bottom: 1px solid rgb(28 33 27 / 24%);
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+[data-public-page-shell] .public-page-header h1 {
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  margin-bottom: 0.8rem;
+}
+
+[data-public-page-shell] .public-page-header p,
+[data-public-page-shell] .legal-page-section p,
+[data-public-page-shell] .public-note,
+[data-public-page-shell] .farm-guide-section__footnote {
+  color: #52604e;
+  line-height: 1.6;
+}
+
+[data-public-page-shell] .public-breadcrumbs {
+  align-items: center;
+  color: #52604e;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+[data-public-page-shell] .farm-guide-hero {
+  align-items: center;
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin-bottom: 3rem;
+}
+
+[data-public-page-shell] .farm-guide-hero__copy h1 {
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  margin-bottom: 1rem;
+}
+
+[data-public-page-shell] .farm-guide-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+[data-public-page-shell] .farm-guide-stats,
+[data-public-page-shell] .public-farm-stats {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1.5rem 0;
+}
+
+[data-public-page-shell] .farm-guide-stats div,
+[data-public-page-shell] .public-farm-stats div {
+  border-left: 2px solid #c9fb45;
+  padding-left: 0.65rem;
+}
+
+[data-public-page-shell] .farm-guide-stats dt,
+[data-public-page-shell] .public-farm-stats dt {
+  color: #52604e;
+  font-size: 0.8rem;
+}
+
+[data-public-page-shell] .farm-guide-stats dd,
+[data-public-page-shell] .public-farm-stats dd {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0;
+}
+
+[data-public-page-shell] .farm-guide-section {
+  margin-top: 2.5rem;
+}
+
+[data-public-page-shell] .farm-guide-sibling-grid,
+[data-public-page-shell] .farm-comparison-card-list,
+[data-public-page-shell] .mod-farm-card-list {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+[data-public-page-shell] .farm-guide-sibling-grid a {
+  background: #f1f7e7;
+  border: 1px solid rgb(28 33 27 / 18%);
+  padding: 1rem;
+}
+
+[data-public-page-shell] .farm-comparison-card,
+[data-public-page-shell] .mod-farm-card {
+  border: 1px solid rgb(28 33 27 / 20%);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+[data-public-page-shell] .farm-comparison-card__body,
+[data-public-page-shell] .mod-farm-card__body {
+  padding: 1.25rem;
+}
+
+[data-public-page-shell] .farm-comparison-card__best-for,
+[data-public-page-shell] .mod-farm-card__author {
+  color: #52604e;
+  line-height: 1.5;
+}
+
+[data-public-page-shell] .farm-comparison-table-scroll {
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+}
+
+[data-public-page-shell] .farm-comparison-table {
+  border-collapse: collapse;
+  min-width: 42rem;
+  width: 100%;
+}
+
+[data-public-page-shell] .farm-comparison-table th,
+[data-public-page-shell] .farm-comparison-table td {
+  border-bottom: 1px solid rgb(28 33 27 / 18%);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+[data-public-page-shell] .public-primary-cta,
+[data-public-page-shell] .public-secondary-cta {
+  align-items: center;
+  border: 1px solid #1c211b;
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 2.5rem;
+  padding-inline: 1rem;
+  text-decoration: none;
+}
+
+[data-public-page-shell] .public-primary-cta {
+  background: #c9fb45;
+}
+
+[data-public-page-shell] .public-secondary-cta {
+  background: transparent;
+}
+
+[data-public-page-shell] .legal-page-content {
+  max-width: 48rem;
+}
+
+[data-public-page-shell] .legal-page-section {
+  border-bottom: 1px solid rgb(28 33 27 / 18%);
+  padding: 1.5rem 0;
+}
+
+[data-public-page-shell] .legal-page-section h2 {
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
+}
+
+[data-public-page-shell] .farm-guide-hero__preview,
+[data-public-page-shell] .farm-comparison-card__preview,
+[data-public-page-shell] .mod-farm-card__preview {
+  aspect-ratio: 16 / 9;
+  background: #f1f7e7;
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  [data-public-page-shell] .public-page-shell-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-block: 1rem;
+  }
+
+  [data-public-page-shell] .farm-guide-hero,
+  [data-public-page-shell] .farm-guide-sibling-grid,
+  [data-public-page-shell] .farm-comparison-card-list,
+  [data-public-page-shell] .mod-farm-card-list {
+    grid-template-columns: 1fr;
+  }
+
+  [data-public-page-shell] .farm-guide-stats,
+  [data-public-page-shell] .public-farm-stats {
+    grid-template-columns: 1fr;
+  }
+
+  [data-public-page-shell] .farm-comparison-table-scroll {
+    overflow-x: auto;
+  }
+}
