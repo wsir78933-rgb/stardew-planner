@@ -20,7 +20,7 @@
 - Do not modify public/_app/**, public/reference-runtime/**, src/reference-runtime/sync-reference-runtime.ts, src/projects/**, planner project data, migrations, or editor components.
 - Do not import next-intl, PlannerWorkspace, local-storage migration code, or any client locale provider. Do not change package.json, pnpm-lock.yaml, or vitest.config.ts.
 - Preserve body.stardew-homepage and html, body values. Any new layout CSS stays below [data-public-page-shell].
-- Reuse verified Chinese farm and mod wording from codex/bilingual-seo-port:src/i18n/public-content.ts; do not invent game facts or marketing claims.
+- Reuse verified Chinese farm and mod wording from codex/bilingual-seo-port:src/i18n/public-content.ts. For public navigation, headings, descriptions, and CTAs only, copy selected existing strings from codex/bilingual-seo-port:messages/zh-CN.json, the version-controlled text payload consumed by that branch's src/i18n/messages.ts. These are static source materials only: do not import next-intl, a message provider, a locale provider, or client locale code; do not invent game facts or marketing claims.
 - Follow TDD. A test must be observed failing for the intended missing behavior before its production implementation is written.
 - Each task is implemented and reviewed by different agents. Commit task changes on this isolated branch only; never stage/commit unrelated work.
 
@@ -132,6 +132,11 @@ git commit -m "feat: add locale-aware public route metadata"
 - Modify: src/components/farm-comparison-content.tsx
 - Modify: src/components/mod-map-card-grid.tsx
 - Modify: src/components/farm-guide-content.tsx
+- Modify: app/farm-comparison/page.tsx
+- Modify: app/mods/page.tsx
+- Modify: app/farm/[type]/page.tsx
+- Modify: app/privacy/page.tsx
+- Modify: app/terms/page.tsx
 - Modify: app/globals.css
 - Create: tests/i18n/public-page-content.test.ts
 - Modify: tests/components/public-page-shell.test.tsx
@@ -140,7 +145,7 @@ git commit -m "feat: add locale-aware public route metadata"
 **Interfaces:**
 - Consumes: Task 1 PublicLocale, PublicCanonicalPath, and getLocalizedPublicPath.
 - Produces: getLocalizedOfficialFarmGuide, getLocalizedModFarmCards, getPublicPageCopy, PublicPageShell({ locale, canonicalPath, children }), and locale-aware public content components.
-- Task 3 supplies routes with explicit locale and locale-neutral canonical identities.
+- This task wires the existing English information routes with explicit locale and locale-neutral canonical identities. Task 3 supplies the parallel Chinese routes.
 
 - [ ] **Step 1: Write failing localized content and shell tests**
 
@@ -179,7 +184,7 @@ Expected: FAIL because locale-aware props, Chinese content, and Chinese introduc
 
 - [ ] **Step 3: Implement locale-aware static content**
 
-Copy only verified public farm/mod translations from codex/bilingual-seo-port:src/i18n/public-content.ts into public-page-content.ts. Do not import the branch's planner-map, message-provider, locale-provider, project, or migration dependencies.
+Copy verified public farm/mod translations from codex/bilingual-seo-port:src/i18n/public-content.ts into public-page-content.ts. Copy selected existing Chinese public UI strings only from codex/bilingual-seo-port:messages/zh-CN.json, the static payload used by that branch's messages.ts. Do not import the branch's planner-map, message-provider, locale-provider, project, migration, next-intl, or client dependencies.
 
 ~~~ts
 export function getLocalizedOfficialFarmGuide(
@@ -194,9 +199,9 @@ export function getLocalizedModFarmCards(
 
 Both functions throw received-value diagnostics for missing source records. getPublicPageCopy(locale) supplies navigation labels, page headings/descriptions, Chinese root copy, CTA labels, breadcrumb labels, and the locale counterpart label. It contains no privacy/terms entry.
 
-PublicPageShell receives locale and canonicalPath, derives brand, navigation, and language-counterpart links through Task 1, and retains data-public-page-shell. PublicNavigation receives the same arguments and has no legal links. Add only scoped language-switcher CSS below [data-public-page-shell] if readable header wrapping requires it.
+PublicPageShell receives a required locale and explicit canonicalPath, derives brand, navigation, and language-counterpart links through Task 1, and retains data-public-page-shell. PublicNavigation receives the same arguments and has no legal links. The retiring English-only legal routes pass locale en with no language counterpart until Task 4 deletes them; they must not cause a default locale or root canonical identity. Add only scoped language-switcher CSS below [data-public-page-shell] if readable header wrapping requires it.
 
-Extend FarmComparisonContent, ModMapCardGrid, and FarmGuideContent with a required locale prop. Obtain localized guide/card text, derive public detail links via getLocalizedPublicPath, and always direct planning CTAs to English / with the existing farmType query. Keep map dimensions, preview assets, farm IDs, and numeric stats unchanged.
+Extend FarmComparisonContent, ModMapCardGrid, and FarmGuideContent with a required locale prop. Wire every existing English information route with locale en and its canonical identity in the same atomic change. Obtain localized guide/card text, derive public detail links via getLocalizedPublicPath, and always direct planning CTAs to English / with the existing farmType query. Keep map dimensions, preview assets, farm IDs, and numeric stats unchanged.
 
 ChinesePlannerIntroduction renders exactly one Chinese h1, says the editing interface opens in English, and renders a primary link to /. It imports no planner/runtime module.
 
@@ -221,6 +226,8 @@ git add src/i18n/public-page-content.ts src/components/chinese-planner-introduct
   src/reference/public-navigation.ts src/components/public-navigation.tsx \
   src/components/public-page-shell.tsx src/components/farm-comparison-content.tsx \
   src/components/mod-map-card-grid.tsx src/components/farm-guide-content.tsx \
+  app/farm-comparison/page.tsx app/mods/page.tsx 'app/farm/[type]/page.tsx' \
+  app/privacy/page.tsx app/terms/page.tsx \
   app/globals.css tests/i18n/public-page-content.test.ts \
   tests/components/public-page-shell.test.tsx tests/components/public-farm-pages.test.tsx
 git commit -m "feat: localize static public page content"
@@ -230,9 +237,6 @@ git commit -m "feat: localize static public page content"
 
 **Files:**
 - Modify: app/page.tsx
-- Modify: app/farm-comparison/page.tsx
-- Modify: app/mods/page.tsx
-- Modify: app/farm/[type]/page.tsx
 - Create: app/zh/page.tsx
 - Create: app/zh/farm-comparison/page.tsx
 - Create: app/zh/mods/page.tsx
