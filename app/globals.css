@@ -525,7 +525,6 @@ body.stardew-homepage [data-homepage-shell] > footer a {
 }
 
 [data-public-page-shell] .public-page-header p,
-[data-public-page-shell] .legal-page-section p,
 [data-public-page-shell] .public-note,
 [data-public-page-shell] .farm-guide-section__footnote {
   color: #52604e;
