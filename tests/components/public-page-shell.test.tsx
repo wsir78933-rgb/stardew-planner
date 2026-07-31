@@ -19,6 +19,9 @@ it("renders a shared static navigation frame around route content", () => {
   expect(markup).not.toContain("Privacy");
   expect(markup).not.toContain("Terms");
   expect(markup).toContain("© Stardew Valley Farm Planner");
+  expect(markup).toContain(
+    'class="public-page-shell-language-switcher" href="/zh/"',
+  );
 });
 
 it("renders Chinese navigation and a static English-planner CTA", () => {
@@ -34,17 +37,9 @@ it("renders Chinese navigation and a static English-planner CTA", () => {
   expect(markup).toContain(">规划器</a>");
   expect(markup).not.toContain("开始规划");
   expect(markup).not.toContain("reference-runtime-root");
-});
-
-it("does not infer a root counterpart for a retiring legal page", () => {
-  const markup = renderToStaticMarkup(
-    <PublicPageShell locale="en">
-      <h1>Privacy Policy</h1>
-    </PublicPageShell>,
+  expect(markup).toContain(
+    'class="public-page-shell-language-switcher" href="/"',
   );
-
-  expect(markup).not.toContain("public-page-shell-language-switcher");
-  expect(markup).toContain('aria-label="Public navigation"');
 });
 
 it("rejects an omitted locale instead of rendering English navigation", () => {
@@ -65,4 +60,8 @@ it("requires locale props at the type boundary", () => {
   void <PublicPageShell canonicalPath="/" />;
   // @ts-expect-error PublicNavigation must not infer an English locale.
   void <PublicNavigation canonicalPath="/" />;
+  // @ts-expect-error PublicPageShell must require a canonical identity.
+  void <PublicPageShell locale="en" />;
+  // @ts-expect-error PublicNavigation must require a canonical identity.
+  void <PublicNavigation locale="en" />;
 });

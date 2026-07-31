@@ -10,7 +10,7 @@ import { PublicNavigation } from "./public-navigation";
 type PublicPageShellProperties = Readonly<{
   children: ReactNode;
   locale: PublicLocale;
-  canonicalPath?: PublicCanonicalPath;
+  canonicalPath: PublicCanonicalPath;
 }>;
 
 function getCounterpartLocale(locale: PublicLocale): PublicLocale {
@@ -34,17 +34,15 @@ export function PublicPageShell({
           {pageCopy.brandLabel}
         </a>
         <PublicNavigation canonicalPath={canonicalPath} locale={locale} />
-        {canonicalPath ? (
-          <a
-            className="public-page-shell-language-switcher"
-            href={getLocalizedPublicPath(
-              getCounterpartLocale(locale),
-              canonicalPath,
-            )}
-          >
-            {pageCopy.counterpartLabel}
-          </a>
-        ) : null}
+        <a
+          className="public-page-shell-language-switcher"
+          href={getLocalizedPublicPath(
+            getCounterpartLocale(locale),
+            canonicalPath,
+          )}
+        >
+          {pageCopy.counterpartLabel}
+        </a>
       </header>
       <main>{children}</main>
       <footer>

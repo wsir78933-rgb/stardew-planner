@@ -7,7 +7,7 @@ import {
 
 type PublicNavigationProperties = Readonly<{
   locale: PublicLocale;
-  canonicalPath?: PublicCanonicalPath;
+  canonicalPath: PublicCanonicalPath;
 }>;
 
 export function PublicNavigation({

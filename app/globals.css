@@ -659,20 +659,6 @@ body.stardew-homepage [data-homepage-shell] > footer a {
   background: transparent;
 }
 
-[data-public-page-shell] .legal-page-content {
-  max-width: 48rem;
-}
-
-[data-public-page-shell] .legal-page-section {
-  border-bottom: 1px solid rgb(28 33 27 / 18%);
-  padding: 1.5rem 0;
-}
-
-[data-public-page-shell] .legal-page-section h2 {
-  font-size: 1.35rem;
-  margin-bottom: 0.75rem;
-}
-
 [data-public-page-shell] .farm-guide-hero__preview,
 [data-public-page-shell] .farm-comparison-card__preview,
 [data-public-page-shell] .mod-farm-card__preview {
