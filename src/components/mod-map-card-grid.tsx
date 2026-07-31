@@ -1,14 +1,15 @@
 import {
+  formatPublicPageCopy,
   getLocalizedModFarmCards,
   getPublicPageCopy,
 } from "../i18n/public-page-content";
 import type { PublicLocale } from "../i18n/public-locale";
 
 type ModMapCardGridProperties = Readonly<{
-  locale?: PublicLocale;
+  locale: PublicLocale;
 }>;
 
-export function ModMapCardGrid({ locale = "en" }: ModMapCardGridProperties) {
+export function ModMapCardGrid({ locale }: ModMapCardGridProperties) {
   const pageCopy = getPublicPageCopy(locale);
 
   return (
@@ -16,7 +17,9 @@ export function ModMapCardGrid({ locale = "en" }: ModMapCardGridProperties) {
       {getLocalizedModFarmCards(locale).map((modFarmCard) => (
         <article className="mod-farm-card" id={modFarmCard.id} key={modFarmCard.id}>
           <img
-            alt={`${modFarmCard.displayName} ${pageCopy.previewLabel}`}
+            alt={formatPublicPageCopy(pageCopy.previewTemplate, {
+              farmName: modFarmCard.displayName,
+            })}
             className="mod-farm-card__preview"
             loading="lazy"
             src={modFarmCard.previewSource}
@@ -24,7 +27,9 @@ export function ModMapCardGrid({ locale = "en" }: ModMapCardGridProperties) {
           <div className="mod-farm-card__body">
             <h2>{modFarmCard.displayName}</h2>
             <p className="mod-farm-card__author">
-              {pageCopy.byLabel} {modFarmCard.authorName}
+              {formatPublicPageCopy(pageCopy.byTemplate, {
+                authorName: modFarmCard.authorName,
+              })}
             </p>
             <p>{modFarmCard.description}</p>
             <a

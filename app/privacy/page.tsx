@@ -14,7 +14,7 @@ export const metadata = privacyMetadata;
 
 export default function PrivacyPage() {
   return (
-    <PublicPageShell>
+    <PublicPageShell locale="en">
       <LegalPageContent document={privacyDocument} />
     </PublicPageShell>
   );

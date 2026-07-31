@@ -1,4 +1,5 @@
 import {
+  formatPublicPageCopy,
   getLocalizedOfficialFarmGuide,
   getPublicPageCopy,
 } from "../i18n/public-page-content";
@@ -50,7 +51,9 @@ function FarmComparisonCard({
   return (
     <article className="farm-comparison-card" id={farmGuide.id}>
       <img
-        alt={`${farmGuide.title} ${pageCopy.previewLabel}`}
+        alt={formatPublicPageCopy(pageCopy.previewTemplate, {
+          farmName: farmGuide.title,
+        })}
         className="farm-comparison-card__preview"
         loading="lazy"
         src={farmGuide.previewSource}
@@ -72,7 +75,9 @@ function FarmComparisonCard({
           </p>
         ) : null}
         <a className="public-primary-cta" href={`/?farmType=${farmGuide.id}`}>
-          {pageCopy.planThisFarmLabel}
+          {formatPublicPageCopy(pageCopy.planFarmTemplate, {
+            farmName: farmGuide.title,
+          })}
         </a>
       </div>
     </article>
@@ -122,12 +127,10 @@ function FarmQuickComparisonTable({ locale }: Readonly<{ locale: PublicLocale }>
 }
 
 type FarmComparisonContentProperties = Readonly<{
-  locale?: PublicLocale;
+  locale: PublicLocale;
 }>;
 
-export function FarmComparisonContent({
-  locale = "en",
-}: FarmComparisonContentProperties) {
+export function FarmComparisonContent({ locale }: FarmComparisonContentProperties) {
   const pageCopy = getPublicPageCopy(locale);
 
   return (

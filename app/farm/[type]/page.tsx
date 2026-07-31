@@ -48,9 +48,10 @@ export async function generateMetadata({
 }: FarmGuidePageProperties) {
   const { type: farmType } = await params;
   const farmGuide = resolveFarmGuide(farmType);
-  const pathname = `/farm/${farmGuide.id}`;
+  const pathname: `/farm/${OfficialFarmType}` = `/farm/${farmGuide.id}`;
 
   return createPublicPageMetadata({
+    locale: "en",
     pathname,
     title: `${farmGuide.title} | Stardew Valley Farm Planner`,
     description: `${farmGuide.title} farm guide. ${farmGuide.bestFor}`,
@@ -63,16 +64,17 @@ export default async function FarmGuidePage({
 }: FarmGuidePageProperties) {
   const { type: farmType } = await params;
   const farmGuide = resolveFarmGuide(farmType);
-  const pathname = `/farm/${farmGuide.id}`;
+  const pathname: `/farm/${OfficialFarmType}` = `/farm/${farmGuide.id}`;
   const description = `${farmGuide.title} farm guide. ${farmGuide.bestFor}`;
   const otherFarmGuides = officialFarmTypes
     .filter((otherFarmType) => otherFarmType !== farmGuide.id)
     .map((otherFarmType) => officialFarmGuides[otherFarmType]);
 
   return (
-    <PublicPageShell>
+    <PublicPageShell canonicalPath={pathname} locale="en">
       <FarmGuideContent
         farmGuide={farmGuide}
+        locale="en"
         otherFarmGuides={otherFarmGuides}
       />
       <JsonLdScript

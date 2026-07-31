@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import {
+  formatPublicPageCopy,
   getLocalizedModFarmCards,
   getLocalizedOfficialFarmGuide,
   getPublicPageCopy,
@@ -25,11 +26,22 @@ it("returns verified Chinese community-farm text while preserving planner ids", 
   expect(immersiveFarm?.description).toContain("多人游戏");
 });
 
-it("provides Chinese public labels without legal navigation entries", () => {
+it("adapts verified Chinese UI strings without legal navigation entries", () => {
   const copy = getPublicPageCopy("zh-CN");
 
   expect(copy.navigationLabel).toBe("公共导航");
-  expect(copy.planFarmLabel).toBe("开始规划");
+  expect(copy.brandLabel).toBe("星露谷规划器");
+  expect(copy.plannerTitle).toBe("星露谷农场规划器");
+  expect(copy.plannerDescription).toBe(
+    "使用本地地图、物品和项目规划你的星露谷农场布局。",
+  );
+  expect(copy.planFarmLabel).toBe("规划器");
+  expect(
+    formatPublicPageCopy(copy.planFarmTemplate, { farmName: "标准农场" }),
+  ).toBe("规划 标准农场 →");
+  expect(
+    formatPublicPageCopy(copy.byTemplate, { authorName: "FlashShifter" }),
+  ).toBe("作者：FlashShifter");
   expect(copy.navigation).not.toContainEqual(
     expect.objectContaining({ path: "/privacy" }),
   );

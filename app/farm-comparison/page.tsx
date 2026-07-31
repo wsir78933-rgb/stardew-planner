@@ -8,6 +8,7 @@ const farmComparisonDescription =
   "Compare all eight Stardew Valley farm maps, their tillable tiles, buildable space, and unique features.";
 
 export const farmComparisonMetadata = createPublicPageMetadata({
+  locale: "en",
   pathname: "/farm-comparison",
   title: "Stardew Valley Farm Types Compared",
   description: farmComparisonDescription,
@@ -18,13 +19,13 @@ export const metadata = farmComparisonMetadata;
 
 export default function FarmComparisonPage() {
   return (
-    <PublicPageShell>
+    <PublicPageShell canonicalPath="/farm-comparison" locale="en">
       <article className="public-page-content">
         <header className="public-page-header">
           <h1>Stardew Valley Farm Types Compared</h1>
           <p>{farmComparisonDescription}</p>
         </header>
-        <FarmComparisonContent />
+        <FarmComparisonContent locale="en" />
       </article>
       <JsonLdScript
         structuredData={createArticleStructuredData({

@@ -9,7 +9,7 @@ import { PublicNavigation } from "./public-navigation";
 
 type PublicPageShellProperties = Readonly<{
   children: ReactNode;
-  locale?: PublicLocale;
+  locale: PublicLocale;
   canonicalPath?: PublicCanonicalPath;
 }>;
 
@@ -19,25 +19,32 @@ function getCounterpartLocale(locale: PublicLocale): PublicLocale {
 
 export function PublicPageShell({
   children,
-  locale = "en",
-  canonicalPath = "/",
+  locale,
+  canonicalPath,
 }: PublicPageShellProperties) {
   const pageCopy = getPublicPageCopy(locale);
-  const counterpartLocale = getCounterpartLocale(locale);
 
   return (
     <div data-public-page-shell="true">
       <header className="public-page-shell-header">
-        <a className="public-page-shell-brand" href="/">
+        <a
+          className="public-page-shell-brand"
+          href={getLocalizedPublicPath(locale, "/")}
+        >
           {pageCopy.brandLabel}
         </a>
         <PublicNavigation canonicalPath={canonicalPath} locale={locale} />
-        <a
-          className="public-page-shell-language-switcher"
-          href={getLocalizedPublicPath(counterpartLocale, canonicalPath)}
-        >
-          {pageCopy.counterpartLabel}
-        </a>
+        {canonicalPath ? (
+          <a
+            className="public-page-shell-language-switcher"
+            href={getLocalizedPublicPath(
+              getCounterpartLocale(locale),
+              canonicalPath,
+            )}
+          >
+            {pageCopy.counterpartLabel}
+          </a>
+        ) : null}
       </header>
       <main>{children}</main>
       <footer>

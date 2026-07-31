@@ -14,7 +14,7 @@ export const metadata = termsMetadata;
 
 export default function TermsPage() {
   return (
-    <PublicPageShell>
+    <PublicPageShell locale="en">
       <LegalPageContent document={termsDocument} />
     </PublicPageShell>
   );

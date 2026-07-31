@@ -11,7 +11,7 @@ import {
   publicNavigation,
   type PublicNavigationPath,
 } from "../reference/public-navigation";
-import type { PublicLocale } from "./public-locale";
+import { publicLocales, type PublicLocale } from "./public-locale";
 
 type LocalizedOfficialFarmGuideText = Pick<
   OfficialFarmGuide,
@@ -32,6 +32,7 @@ export type PublicPageCopy = Readonly<{
   plannerDescription: string;
   plannerIntroduction: string;
   planFarmLabel: string;
+  planFarmTemplate: string;
   farmComparisonTitle: string;
   farmComparisonDescription: string;
   modsTitle: string;
@@ -44,10 +45,10 @@ export type PublicPageCopy = Readonly<{
   knownForLabel: string;
   bestForLabel: string;
   noteLabel: string;
-  previewLabel: string;
+  previewTemplate: string;
   planThisFarmLabel: string;
   availableCommunityFarmsLabel: string;
-  byLabel: string;
+  byTemplate: string;
   breadcrumbLabel: string;
   farmTypesLabel: string;
   compareAllFarmsLabel: string;
@@ -55,6 +56,7 @@ export type PublicPageCopy = Readonly<{
   otherFarmsLabel: string;
   comparisonPrompt: string;
   fullComparisonLabel: string;
+  comparisonSentenceEnding: string;
 }>;
 
 const chineseOfficialFarmGuideTexts: Readonly<
@@ -204,6 +206,7 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     plannerDescription: "Plan Stardew Valley farm layouts in your browser with an interactive map.",
     plannerIntroduction: "The editing interface opens in English.",
     planFarmLabel: "Start planning",
+    planFarmTemplate: "Plan a {farmName} →",
     farmComparisonTitle: "Stardew Valley Farm Types Compared",
     farmComparisonDescription: "Compare all eight Stardew Valley farm maps, their tillable tiles, buildable space, and unique features.",
     modsTitle: "Modded Stardew Valley Farms",
@@ -216,10 +219,10 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     knownForLabel: "Known for",
     bestForLabel: "Best for:",
     noteLabel: "Note:",
-    previewLabel: "preview",
+    previewTemplate: "{farmName} preview",
     planThisFarmLabel: "Plan this farm →",
     availableCommunityFarmsLabel: "Available community farms",
-    byLabel: "by",
+    byTemplate: "by {authorName}",
     breadcrumbLabel: "Breadcrumb",
     farmTypesLabel: "Farm types",
     compareAllFarmsLabel: "Compare all farms",
@@ -227,50 +230,79 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     otherFarmsLabel: "Other farms",
     comparisonPrompt: "Want them side by side? See the",
     fullComparisonLabel: "full comparison",
+    comparisonSentenceEnding: ".",
   },
   "zh-CN": {
     navigationLabel: "公共导航",
     navigation: [
       { label: "规划器", path: "/" },
       { label: "农场对比", path: "/farm-comparison" },
-      { label: "模组农场", path: "/mods" },
+      { label: "模组", path: "/mods" },
     ],
-    brandLabel: "星露谷物语农场规划器",
+    brandLabel: "星露谷规划器",
     counterpartLabel: "English",
-    plannerTitle: "星露谷物语农场规划器",
-    plannerDescription: "使用交互式地图在浏览器中规划你的星露谷物语农场布局。",
-    plannerIntroduction: "编辑界面会以英文打开。",
-    planFarmLabel: "开始规划",
-    farmComparisonTitle: "星露谷物语农场类型对比",
-    farmComparisonDescription: "对比八种星露谷物语农场地图的可耕种格数、可建造空间和独特特点。",
-    modsTitle: "星露谷物语模组农场",
-    modsDescription: "浏览社区制作的星露谷物语农场和室内地图的本地规划地图。",
+    plannerTitle: "星露谷农场规划器",
+    plannerDescription: "使用本地地图、物品和项目规划你的星露谷农场布局。",
+    plannerIntroduction: "The editing interface opens in English.",
+    planFarmLabel: "规划器",
+    planFarmTemplate: "规划 {farmName} →",
+    farmComparisonTitle: "星露谷农场类型对比",
+    farmComparisonDescription: "在规划布局前，对比《星露谷物语》的全部官方农场地图。",
+    modsTitle: "星露谷模组规划器",
+    modsDescription: "规划你的星露谷模组组合。",
     quickComparisonLabel: "快速对比",
     farmDetailsLabel: "农场详情",
     tillableTilesLabel: "可耕种格数",
-    totalBuildableLabel: "可建造总数",
+    totalBuildableLabel: "可建造格数",
     addedInLabel: "加入版本",
     knownForLabel: "特点",
-    bestForLabel: "适合：",
+    bestForLabel: "最适合：",
     noteLabel: "注意：",
-    previewLabel: "预览",
+    previewTemplate: "{farmName} 预览图",
     planThisFarmLabel: "规划此农场 →",
     availableCommunityFarmsLabel: "可用的社区农场",
-    byLabel: "作者：",
+    byTemplate: "作者：{authorName}",
     breadcrumbLabel: "面包屑导航",
-    farmTypesLabel: "农场类型",
+    farmTypesLabel: "农场",
     compareAllFarmsLabel: "对比所有农场",
     whatMakesItDifferentLabel: "它有什么不同",
     otherFarmsLabel: "其他农场",
-    comparisonPrompt: "想并排查看？请看",
+    comparisonPrompt: "想并排查看？请查看",
     fullComparisonLabel: "完整对比",
+    comparisonSentenceEnding: "。",
   },
 };
+
+function assertPublicLocale(locale: unknown): asserts locale is PublicLocale {
+  if (!publicLocales.includes(locale as PublicLocale)) {
+    throw new Error(`Unsupported public locale. Received: ${JSON.stringify(locale)}.`);
+  }
+}
+
+export function formatPublicPageCopy(
+  template: string,
+  values: Readonly<Record<string, string>>,
+): string {
+  const formattedCopy = Object.entries(values).reduce(
+    (copy, [valueName, value]) => copy.replaceAll(`{${valueName}}`, value),
+    template,
+  );
+
+  if (/\{[^}]+\}/.test(formattedCopy)) {
+    throw new Error(
+      `Public page copy template has unresolved placeholders. Received: ${JSON.stringify(formattedCopy)}.`,
+    );
+  }
+
+  return formattedCopy;
+}
 
 export function getLocalizedOfficialFarmGuide(
   locale: PublicLocale,
   farmType: OfficialFarmType,
 ): OfficialFarmGuide {
+  assertPublicLocale(locale);
+
   const officialFarmGuide = getOfficialFarmGuide(farmType);
 
   if (!officialFarmGuide) {
@@ -295,6 +327,8 @@ export function getLocalizedOfficialFarmGuide(
 export function getLocalizedModFarmCards(
   locale: PublicLocale,
 ): readonly ModFarmCard[] {
+  assertPublicLocale(locale);
+
   return getModFarmCards().map((modFarmCard) => {
     if (locale === "en") {
       return modFarmCard;
@@ -313,11 +347,8 @@ export function getLocalizedModFarmCards(
 }
 
 export function getPublicPageCopy(locale: PublicLocale): PublicPageCopy {
+  assertPublicLocale(locale);
   const copy = publicPageCopy[locale];
-
-  if (!copy) {
-    throw new Error(`Unsupported public locale. Received: ${JSON.stringify(locale)}.`);
-  }
 
   return copy;
 }

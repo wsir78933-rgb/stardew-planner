@@ -6,13 +6,13 @@ import {
 } from "../i18n/public-route-registry";
 
 type PublicNavigationProperties = Readonly<{
-  locale?: PublicLocale;
+  locale: PublicLocale;
   canonicalPath?: PublicCanonicalPath;
 }>;
 
 export function PublicNavigation({
-  locale = "en",
-  canonicalPath = "/",
+  locale,
+  canonicalPath,
 }: PublicNavigationProperties) {
   const pageCopy = getPublicPageCopy(locale);
 

@@ -1,5 +1,6 @@
 import type { OfficialFarmGuide } from "../reference/official-farm-guides";
 import {
+  formatPublicPageCopy,
   getLocalizedOfficialFarmGuide,
   getPublicPageCopy,
 } from "../i18n/public-page-content";
@@ -9,7 +10,7 @@ import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 type FarmGuideContentProperties = Readonly<{
   farmGuide: OfficialFarmGuide;
   otherFarmGuides: readonly OfficialFarmGuide[];
-  locale?: PublicLocale;
+  locale: PublicLocale;
 }>;
 
 function FarmGuideStats({
@@ -42,7 +43,7 @@ function FarmGuideStats({
 export function FarmGuideContent({
   farmGuide,
   otherFarmGuides,
-  locale = "en",
+  locale,
 }: FarmGuideContentProperties) {
   const localizedFarmGuide = getLocalizedOfficialFarmGuide(locale, farmGuide.id);
   const localizedOtherFarmGuides = otherFarmGuides.map((otherFarmGuide) =>
@@ -63,7 +64,9 @@ export function FarmGuideContent({
       </nav>
       <header className="farm-guide-hero">
         <img
-          alt={`${localizedFarmGuide.title} ${pageCopy.previewLabel}`}
+          alt={formatPublicPageCopy(pageCopy.previewTemplate, {
+            farmName: localizedFarmGuide.title,
+          })}
           className="farm-guide-hero__preview"
           src={localizedFarmGuide.previewSource}
         />
@@ -114,7 +117,7 @@ export function FarmGuideContent({
           <a href={getLocalizedPublicPath(locale, "/farm-comparison")}>
             {pageCopy.fullComparisonLabel}
           </a>
-          .
+          {pageCopy.comparisonSentenceEnding}
         </p>
       </section>
     </>

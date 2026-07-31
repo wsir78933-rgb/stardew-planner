@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, type ComponentProps } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { FarmComparisonContent } from "../../src/components/farm-comparison-content";
@@ -96,5 +96,25 @@ describe("public farm pages", () => {
     expect(guideMarkup).toContain('href="/zh/farm-comparison"');
     expect(guideMarkup).toContain('href="/zh/farm/riverland"');
     expect(guideMarkup).toContain('href="/?farmType=standard"');
+  });
+
+  it("rejects an omitted locale instead of rendering an English comparison", () => {
+    expect(() =>
+      renderToStaticMarkup(
+        createElement(
+          FarmComparisonContent,
+          {} as ComponentProps<typeof FarmComparisonContent>,
+        ),
+      ),
+    ).toThrow("Unsupported public locale. Received: undefined.");
+  });
+
+  it("requires locale props at the type boundary", () => {
+    // @ts-expect-error FarmComparisonContent must not infer an English locale.
+    void <FarmComparisonContent />;
+    // @ts-expect-error ModMapCardGrid must not infer an English locale.
+    void <ModMapCardGrid />;
+    // @ts-expect-error FarmGuideContent must not infer an English locale.
+    void <FarmGuideContent farmGuide={officialFarmGuides.standard} otherFarmGuides={[]} />;
   });
 });

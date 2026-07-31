@@ -8,6 +8,7 @@ const modsDescription =
   "Browse local planning maps for community-made Stardew Valley farms and interiors.";
 
 export const modsMetadata = createPublicPageMetadata({
+  locale: "en",
   pathname: "/mods",
   title: "Modded Stardew Valley Farms",
   description: modsDescription,
@@ -17,13 +18,13 @@ export const metadata = modsMetadata;
 
 export default function ModsPage() {
   return (
-    <PublicPageShell>
+    <PublicPageShell canonicalPath="/mods" locale="en">
       <article className="public-page-content">
         <header className="public-page-header">
           <h1>Modded Stardew Valley Farms</h1>
           <p>{modsDescription}</p>
         </header>
-        <ModMapCardGrid />
+        <ModMapCardGrid locale="en" />
       </article>
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
