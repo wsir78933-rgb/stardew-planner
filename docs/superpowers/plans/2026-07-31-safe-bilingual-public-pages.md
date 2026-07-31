@@ -285,7 +285,7 @@ Expected: FAIL because /zh route modules and locale-aware route metadata are abs
 
 - [ ] **Step 3: Implement route modules without planner migration**
 
-Keep app/page.tsx importing PlannerHomepage exactly as its only runtime component; pass locale en to its metadata builder. Update English information pages to pass locale en and canonical identities to PublicPageShell and public content components.
+Keep app/page.tsx importing PlannerHomepage exactly as its only runtime component; pass locale en to its metadata builder. The existing English information routes already pass explicit locale and canonical identities from Task 2; do not modify them again.
 
 Create Chinese routes with the official farm static-params list and dynamicParams = false. Chinese generateMetadata calls createPublicPageMetadata with locale zh-CN and the locale-neutral canonical identity. Use localized visible Article, CollectionPage, and breadcrumb JSON-LD. Unknown types call notFound().
 
@@ -318,8 +318,7 @@ Expected: no output.
 - [ ] **Step 5: Commit only Task 3 files**
 
 ~~~bash
-git add app/page.tsx app/farm-comparison/page.tsx app/mods/page.tsx \
-  app/farm/[type]/page.tsx app/zh/page.tsx app/zh/farm-comparison/page.tsx \
+git add app/page.tsx app/zh/page.tsx app/zh/farm-comparison/page.tsx \
   app/zh/mods/page.tsx app/zh/farm/[type]/page.tsx \
   tests/routes/public-route-metadata.test.ts tests/routes/chinese-public-routes.test.tsx
 git commit -m "feat: add static Chinese public routes"
