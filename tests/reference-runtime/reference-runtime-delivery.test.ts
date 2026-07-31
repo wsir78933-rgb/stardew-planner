@@ -12,7 +12,8 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { ensureStaticExportArtifactFixture } from "../support/static-export-artifact-fixture";
 
 const projectRootPath = process.cwd();
 const staticExportDirectoryPath = join(projectRootPath, "out");
@@ -332,6 +333,8 @@ function assertReleaseTextHasNoReferenceSourceDomains(
 }
 
 describe("reference runtime static delivery", () => {
+  beforeAll(() => ensureStaticExportArtifactFixture(), 120_000);
+
   it("collects deeply frozen JavaScript modules with both supported extensions", () => {
     const temporaryFrozenRuntimeDirectory = mkdtempSync(
       join(tmpdir(), "stardewplan-frozen-runtime-delivery-"),

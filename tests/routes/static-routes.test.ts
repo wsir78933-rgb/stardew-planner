@@ -1,4 +1,3 @@
-import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
@@ -7,6 +6,7 @@ import {
   generateStaticParams,
   officialFarmTypes,
 } from "../../app/farm/[type]/page";
+import { ensureStaticExportArtifactFixture } from "../support/static-export-artifact-fixture";
 
 const expectedOfficialFarmTypes = [
   "standard",
@@ -56,16 +56,7 @@ function readStaticPageHtml(staticPageFile: string): string {
 
 describe("static reference-runtime routes", () => {
   beforeAll(
-    () => {
-      execFileSync("pnpm", ["build"], {
-        cwd: process.cwd(),
-        env: {
-          ...process.env,
-          NEXT_TELEMETRY_DISABLED: "1",
-        },
-        stdio: "inherit",
-      });
-    },
+    () => ensureStaticExportArtifactFixture(),
     120_000,
   );
 

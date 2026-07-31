@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { ensureStaticExportArtifactFixture } from "../support/static-export-artifact-fixture";
 const staticPublicPageExpectations = [
   [
     "/",
@@ -68,6 +69,8 @@ function escapeHtmlAttributeValue(value: string): string {
 }
 
 describe("static public pages", () => {
+  beforeAll(() => ensureStaticExportArtifactFixture(), 120_000);
+
   it("exports crawler-discovery files alongside the public pages", () => {
     expect(existsSync(join(process.cwd(), "out", "robots.txt"))).toBe(true);
     expect(existsSync(join(process.cwd(), "out", "sitemap.xml"))).toBe(true);
