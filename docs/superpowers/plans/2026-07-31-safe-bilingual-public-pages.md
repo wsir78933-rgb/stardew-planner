@@ -241,8 +241,10 @@ git commit -m "feat: localize static public page content"
 - Create: app/zh/farm-comparison/page.tsx
 - Create: app/zh/mods/page.tsx
 - Create: app/zh/farm/[type]/page.tsx
+- Modify: src/i18n/public-page-content.ts
 - Modify: tests/routes/public-route-metadata.test.ts
 - Create: tests/routes/chinese-public-routes.test.tsx
+- Modify: tests/i18n/public-page-content.test.ts
 
 **Interfaces:**
 - Consumes: Task 1 route/metadata helpers and Task 2 locale-aware shell/content.
@@ -287,7 +289,7 @@ Expected: FAIL because /zh route modules and locale-aware route metadata are abs
 
 Keep app/page.tsx importing PlannerHomepage exactly as its only runtime component; pass locale en to its metadata builder. The existing English information routes already pass explicit locale and canonical identities from Task 2; do not modify them again.
 
-Create Chinese routes with the official farm static-params list and dynamicParams = false. Chinese generateMetadata calls createPublicPageMetadata with locale zh-CN and the locale-neutral canonical identity. Use localized visible Article, CollectionPage, and breadcrumb JSON-LD. Unknown types call notFound().
+Create Chinese routes with the official farm static-params list and dynamicParams = false. Add the approved zh-CN `seo.farmGuide.title` and `seo.farmGuide.description` templates to the public content adapter, then format them with the localized farm name once and reuse the results for Chinese `generateMetadata` and Article JSON-LD. Chinese generateMetadata calls createPublicPageMetadata with locale zh-CN and the locale-neutral canonical identity. Use localized visible Article, CollectionPage, and breadcrumb JSON-LD. Unknown types call notFound(), with a regression test.
 
 ~~~tsx
 export default function ChinesePlannerPage() {
@@ -320,6 +322,7 @@ Expected: no output.
 ~~~bash
 git add app/page.tsx app/zh/page.tsx app/zh/farm-comparison/page.tsx \
   app/zh/mods/page.tsx app/zh/farm/[type]/page.tsx \
+  src/i18n/public-page-content.ts tests/i18n/public-page-content.test.ts \
   tests/routes/public-route-metadata.test.ts tests/routes/chinese-public-routes.test.tsx
 git commit -m "feat: add static Chinese public routes"
 ~~~
