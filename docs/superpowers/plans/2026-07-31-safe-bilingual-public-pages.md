@@ -542,3 +542,48 @@ Run in order:
 4. `git diff --check`.
 
 Commit only the Task 7 files with `test: build static artifacts in pretest`.
+
+### Task 8: Emit the correct initial document language for each locale
+
+**Decision:** User selected option A on 2026-08-01. The generated initial HTML must use `lang="en"` for the 11 English documents and `lang="zh-CN"` for the 11 Chinese documents. Client hydration must not be relied on for this document-level contract.
+
+**Files:**
+- Delete: app/layout.tsx
+- Create: app/(en)/layout.tsx
+- Move: app/page.tsx → app/(en)/page.tsx
+- Move: app/farm-comparison/page.tsx → app/(en)/farm-comparison/page.tsx
+- Move: app/mods/page.tsx → app/(en)/mods/page.tsx
+- Move: app/farm/[type]/page.tsx → app/(en)/farm/[type]/page.tsx
+- Create: app/zh/layout.tsx
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify only tests whose imports or root-layout source assertions reference moved English route/layout files.
+
+**Interfaces:**
+- `(en)` is a URL-invisible route group and owns the English root layout. It preserves current global CSS import, `metadataBase`, favicon metadata, body attributes, and `<html lang="en">`.
+- `app/zh/layout.tsx` is the Chinese root layout and owns the same global CSS/body/metadata-base/favicon contract with `<html lang="zh-CN">`.
+- English and Chinese pages retain their existing URLs, metadata, static output file names, canonical/hreflang links, runtime boundaries, and visible markup.
+
+**Non-goals and risk boundary:**
+- Do not change editor components, `public/_app/**`, `public/reference-runtime/**`, `src/reference-runtime/**`, `src/projects/**`, planner locale-storage behavior, page content, routing registry, sitemap, robots, package manifests, lockfile, Vitest configuration, or CSS rules.
+- Route groups do not enter URLs. Cross-root navigation can be a full document request; existing public navigation already uses normal anchor links, so no public navigation behavior is changed.
+
+- [ ] **Step 1: Add failing initial-document-language coverage**
+
+Extend the current 22-page static artifact loop to read the first `<html ...>` tag and assert its `lang` attribute exactly. Assert the acceptance table still contains 11 English and 11 Chinese paths; every English artifact expects `en`, every `/zh` or `/zh/**` artifact expects `zh-CN`. Include the pathname and static file path in failures. Update root-layout/import tests only as needed to express two equivalent root layout contracts.
+
+Run `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run` on the affected route/static tests. Observe the expected Chinese-language failure before modifying production layouts.
+
+- [ ] **Step 2: Implement two root layouts with URL-invisible English grouping**
+
+Move, do not duplicate, the four English public page modules under `app/(en)`. Correct only their relative `src/**` imports. Move the current root layout contract into `app/(en)/layout.tsx`, then create `app/zh/layout.tsx` with the same metadata base, favicon metadata, global stylesheet import, and body attributes but Chinese document language. Do not create a nested Chinese `<html>` below the old root layout.
+
+- [ ] **Step 3: Verify and commit**
+
+Run in order:
+
+1. `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run` for affected route/static tests;
+2. `pnpm typecheck`;
+3. `pnpm test -- --run` and verify one pretest build before Vitest;
+4. `git diff --check`.
+
+Commit only Task 8 files with `fix: emit localized document language`.
