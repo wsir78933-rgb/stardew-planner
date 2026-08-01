@@ -71,7 +71,7 @@ function readInitialDocumentLanguage(
     );
   }
 
-  const documentLanguage = firstHtmlTag.match(/\blang=(["'])([^"']*)\1/i)?.[2];
+  const documentLanguage = firstHtmlTag.match(/\slang\s*=\s*(["'])([^"']*)\1/i)?.[2];
 
   if (!documentLanguage) {
     throw new Error(
@@ -96,6 +96,22 @@ function escapeHtmlAttributeValue(value: string): string {
 }
 
 describe("static public pages", () => {
+  it("requires a whitespace-delimited lang attribute on the first document html tag", () => {
+    for (const nonLanguageAttributeHtml of [
+      '<html data-lang="en">',
+      '<html aria-lang="en">',
+      '<html xml:lang="en">',
+    ]) {
+      expect(() =>
+        readInitialDocumentLanguage(
+          nonLanguageAttributeHtml,
+          "/parser-fixture",
+          "parser-fixture.html",
+        ),
+      ).toThrow(/first <html \.\.\.> tag to include a lang attribute/);
+    }
+  });
+
   it("exports crawler-discovery files alongside the public pages", () => {
     expect(existsSync(join(process.cwd(), "out", "robots.txt"))).toBe(true);
     expect(existsSync(join(process.cwd(), "out", "sitemap.xml"))).toBe(true);
@@ -180,5 +196,31 @@ describe("static public pages", () => {
   it("does not export deleted legal artifacts", () => {
     expect(existsSync(join(process.cwd(), "out", "privacy.html"))).toBe(false);
     expect(existsSync(join(process.cwd(), "out", "terms.html"))).toBe(false);
+  });
+
+  it("exports global 404 artifacts with the English root document shell", () => {
+    for (const staticPageFile of ["404.html", "_not-found.html"]) {
+      const staticPageHtml = readStaticPageHtml(staticPageFile);
+
+      expect(
+        readInitialDocumentLanguage(
+          staticPageHtml,
+          "/unknown-path",
+          staticPageFile,
+        ),
+      ).toBe("en");
+      expect(staticPageHtml).toMatch(
+        /<link rel="stylesheet" href="\/_next\/static\/chunks\/[^"/]+\.css"/,
+      );
+      expect(staticPageHtml).toContain('<link rel="icon" href="/favicon.ico"/>');
+      expect(staticPageHtml).toContain(
+        '<body data-sveltekit-preload-data="hover">',
+      );
+      expect(staticPageHtml).toContain(
+        "<title>404: This page could not be found.</title>",
+      );
+      expect(staticPageHtml).toContain("This page could not be found.");
+      expect(staticPageHtml).toContain('<meta name="robots" content="noindex"/>');
+    }
   });
 });
