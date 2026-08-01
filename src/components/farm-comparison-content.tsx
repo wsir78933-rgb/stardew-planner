@@ -1,22 +1,37 @@
-import { officialFarmTypes, officialFarmGuides } from "../reference/official-farm-guides";
+import {
+  formatPublicPageCopy,
+  getLocalizedOfficialFarmGuide,
+  getPublicPageCopy,
+} from "../i18n/public-page-content";
+import type { PublicLocale } from "../i18n/public-locale";
+import { getLocalizedPublicPath } from "../i18n/public-route-registry";
+import {
+  officialFarmTypes,
+  type OfficialFarmGuide,
+  type OfficialFarmType,
+} from "../reference/official-farm-guides";
 
 function FarmStats({
   farmGuide,
+  locale,
 }: Readonly<{
-  farmGuide: (typeof officialFarmGuides)[(typeof officialFarmTypes)[number]];
+  farmGuide: OfficialFarmGuide;
+  locale: PublicLocale;
 }>) {
+  const pageCopy = getPublicPageCopy(locale);
+
   return (
     <dl className="public-farm-stats">
       <div>
-        <dt>Tillable tiles</dt>
+        <dt>{pageCopy.tillableTilesLabel}</dt>
         <dd>{farmGuide.tillableTiles}</dd>
       </div>
       <div>
-        <dt>Total buildable</dt>
+        <dt>{pageCopy.totalBuildableLabel}</dt>
         <dd>{farmGuide.totalBuildableTiles}</dd>
       </div>
       <div>
-        <dt>Added in</dt>
+        <dt>{pageCopy.addedInLabel}</dt>
         <dd>{farmGuide.addedIn}</dd>
       </div>
     </dl>
@@ -25,24 +40,29 @@ function FarmStats({
 
 function FarmComparisonCard({
   farmType,
+  locale,
 }: Readonly<{
-  farmType: (typeof officialFarmTypes)[number];
+  farmType: OfficialFarmType;
+  locale: PublicLocale;
 }>) {
-  const farmGuide = officialFarmGuides[farmType];
+  const farmGuide = getLocalizedOfficialFarmGuide(locale, farmType);
+  const pageCopy = getPublicPageCopy(locale);
 
   return (
     <article className="farm-comparison-card" id={farmGuide.id}>
       <img
-        alt={`${farmGuide.title} preview`}
+        alt={formatPublicPageCopy(pageCopy.previewTemplate, {
+          farmName: farmGuide.title,
+        })}
         className="farm-comparison-card__preview"
         loading="lazy"
         src={farmGuide.previewSource}
       />
       <div className="farm-comparison-card__body">
         <h3>{farmGuide.title}</h3>
-        <FarmStats farmGuide={farmGuide} />
+        <FarmStats farmGuide={farmGuide} locale={locale} />
         <p className="farm-comparison-card__best-for">
-          <strong>Best for:</strong> {farmGuide.bestFor}
+          <strong>{pageCopy.bestForLabel}</strong> {farmGuide.bestFor}
         </p>
         <ul className="public-feature-list">
           {farmGuide.features.map((feature) => (
@@ -51,40 +71,46 @@ function FarmComparisonCard({
         </ul>
         {farmGuide.note ? (
           <p className="public-note">
-            <strong>Note:</strong> {farmGuide.note}
+            <strong>{pageCopy.noteLabel}</strong> {farmGuide.note}
           </p>
         ) : null}
         <a className="public-primary-cta" href={`/?farmType=${farmGuide.id}`}>
-          Plan a {farmGuide.title} →
+          {formatPublicPageCopy(pageCopy.planFarmTemplate, {
+            farmName: farmGuide.title,
+          })}
         </a>
       </div>
     </article>
   );
 }
 
-function FarmQuickComparisonTable() {
+function FarmQuickComparisonTable({ locale }: Readonly<{ locale: PublicLocale }>) {
+  const pageCopy = getPublicPageCopy(locale);
+
   return (
     <section aria-labelledby="quick-comparison-heading">
-      <h2 id="quick-comparison-heading">Quick comparison</h2>
+      <h2 id="quick-comparison-heading">{pageCopy.quickComparisonLabel}</h2>
       <div className="farm-comparison-table-scroll">
         <table className="farm-comparison-table">
           <thead>
             <tr>
-              <th scope="col">Farm</th>
-              <th scope="col">Tillable tiles</th>
-              <th scope="col">Total buildable</th>
-              <th scope="col">Added</th>
-              <th scope="col">Known for</th>
+              <th scope="col">{pageCopy.farmTypesLabel}</th>
+              <th scope="col">{pageCopy.tillableTilesLabel}</th>
+              <th scope="col">{pageCopy.totalBuildableLabel}</th>
+              <th scope="col">{pageCopy.addedInLabel}</th>
+              <th scope="col">{pageCopy.knownForLabel}</th>
             </tr>
           </thead>
           <tbody>
             {officialFarmTypes.map((farmType) => {
-              const farmGuide = officialFarmGuides[farmType];
+              const farmGuide = getLocalizedOfficialFarmGuide(locale, farmType);
 
               return (
                 <tr key={farmGuide.id}>
                   <td>
-                    <a href={`/farm/${farmGuide.id}`}>{farmGuide.title}</a>
+                    <a href={getLocalizedPublicPath(locale, `/farm/${farmGuide.id}`)}>
+                      {farmGuide.title}
+                    </a>
                   </td>
                   <td>{farmGuide.tillableTiles}</td>
                   <td>{farmGuide.totalBuildableTiles}</td>
@@ -100,13 +126,19 @@ function FarmQuickComparisonTable() {
   );
 }
 
-export function FarmComparisonContent() {
+type FarmComparisonContentProperties = Readonly<{
+  locale: PublicLocale;
+}>;
+
+export function FarmComparisonContent({ locale }: FarmComparisonContentProperties) {
+  const pageCopy = getPublicPageCopy(locale);
+
   return (
     <>
-      <FarmQuickComparisonTable />
-      <section className="farm-comparison-card-list" aria-label="Farm details">
+      <FarmQuickComparisonTable locale={locale} />
+      <section className="farm-comparison-card-list" aria-label={pageCopy.farmDetailsLabel}>
         {officialFarmTypes.map((farmType) => (
-          <FarmComparisonCard farmType={farmType} key={farmType} />
+          <FarmComparisonCard farmType={farmType} key={farmType} locale={locale} />
         ))}
       </section>
     </>

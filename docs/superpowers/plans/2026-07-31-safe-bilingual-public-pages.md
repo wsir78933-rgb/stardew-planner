@@ -1,0 +1,630 @@
+# Safe Bilingual Public Pages Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to implement this plan task-by-task. Steps use checkbox (- [ ]) syntax for tracking.
+
+**Goal:** Add Chinese /zh public discovery pages with paired SEO alternates while preserving the English reference-runtime planner and browser-local projects.
+
+**Architecture:** A typed locale-aware route registry maps 11 locale-neutral public identities to English root paths and Chinese /zh paths. Existing public components accept an explicit locale and canonical identity; Chinese pages remain static server components and link to the existing English planner instead of importing the bilingual branch's native planner or migration code.
+
+**Tech Stack:** Next.js App Router static export, React server components, TypeScript, Vitest, existing public CSS, JSON-LD helpers.
+
+## Global Constraints
+
+- Work only on codex/bilingual-safe-public in /private/tmp/stardew-planner-bilingual-safe.8qT1yK; never edit the dirty main worktree.
+- Formal origin is exactly https://stardewvalleyplanner.art; canonical URLs never have a trailing slash.
+- Supported locales are exactly en and zh-CN; English uses root paths and Chinese uses /zh; never create /en URLs.
+- Every locale pair exposes en, zh-CN, and x-default alternates; x-default is the English absolute URL.
+- Index exactly 22 routes: English /, /farm-comparison, /mods, and 8 official farms; the same identities under /zh.
+- Remove /privacy and /terms completely: routes, navigation, legal data/components/tests, canonical registry, sitemap and static assertions. Removed static-export paths intentionally return 404; add neither redirect nor replacement.
+- Keep PlannerHomepage and its reference runtime exclusively on English /. /zh is static and must contain no ReferenceRuntimeHost, reference-runtime-root, or bootstrap script.
+- Do not modify public/_app/**, public/reference-runtime/**, src/reference-runtime/sync-reference-runtime.ts, src/projects/**, planner project data, migrations, or editor components.
+- Do not import next-intl, PlannerWorkspace, local-storage migration code, or any client locale provider. Do not change pnpm-lock.yaml or vitest.config.ts. The user authorized exactly one package.json exception in Task 7: add a `pretest` static-build lifecycle command and no dependency or other script changes. The user authorized exactly one next.config.ts exception in Task 9: enable Next's `experimental.globalNotFound` flag.
+- Preserve body.stardew-homepage and html, body values. Any new layout CSS stays below [data-public-page-shell].
+- Reuse verified Chinese farm and mod wording from codex/bilingual-seo-port:src/i18n/public-content.ts. For public navigation, headings, descriptions, and CTAs only, copy selected existing strings from codex/bilingual-seo-port:messages/zh-CN.json, the version-controlled text payload consumed by that branch's src/i18n/messages.ts. These are static source materials only: do not import next-intl, a message provider, a locale provider, or client locale code; do not invent game facts or marketing claims.
+- Follow TDD. A test must be observed failing for the intended missing behavior before its production implementation is written.
+- Each task is implemented and reviewed by different agents. Commit task changes on this isolated branch only; never stage/commit unrelated work.
+
+---
+
+### Task 1: Locale route registry and localized metadata contract
+
+**Files:**
+- Create: src/i18n/public-locale.ts
+- Create: src/i18n/public-route-registry.ts
+- Modify: src/seo/canonical-public-routes.ts
+- Modify: src/seo/page-metadata.ts
+- Create: tests/i18n/public-route-registry.test.ts
+- Modify: tests/seo/canonical-public-routes.test.ts
+- Modify: tests/seo/page-metadata.test.ts
+
+**Interfaces:**
+- Consumes: officialFarmTypes and createCanonicalUrl.
+- Produces: PublicLocale, publicLocales, PublicCanonicalPath, canonicalPublicPaths, getLocalizedPublicPath(locale, canonicalPath), getLocalizedPublicRouteEntries(), createPublicLanguageAlternates(canonicalPath), and locale-aware createPublicPageMetadata.
+- Later tasks use canonical identities such as /farm/standard; no component hardcodes a /zh prefix.
+
+- [ ] **Step 1: Write the failing route registry and metadata tests**
+
+~~~ts
+import { expect, it } from "vitest";
+import {
+  canonicalPublicPaths,
+  createPublicLanguageAlternates,
+  getLocalizedPublicPath,
+  getLocalizedPublicRouteEntries,
+} from "../../src/i18n/public-route-registry";
+
+it("maps public identities to Chinese paths without legal routes", () => {
+  expect(canonicalPublicPaths).toHaveLength(11);
+  expect(canonicalPublicPaths).not.toContain("/privacy");
+  expect(canonicalPublicPaths).not.toContain("/terms");
+  expect(getLocalizedPublicPath("en", "/farm/standard")).toBe("/farm/standard");
+  expect(getLocalizedPublicPath("zh-CN", "/farm/standard")).toBe("/zh/farm/standard");
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(22);
+});
+
+it("returns absolute paired language alternates", () => {
+  expect(createPublicLanguageAlternates("/mods")).toEqual({
+    en: "https://stardewvalleyplanner.art/mods",
+    "zh-CN": "https://stardewvalleyplanner.art/zh/mods",
+    "x-default": "https://stardewvalleyplanner.art/mods",
+  });
+});
+~~~
+
+Also add a metadata assertion using locale zh-CN and canonical identity /mods. It must assert the Chinese canonical and all three alternates using literal expected URLs.
+
+- [ ] **Step 2: Verify RED**
+
+Run: pnpm vitest run tests/i18n/public-route-registry.test.ts tests/seo/canonical-public-routes.test.ts tests/seo/page-metadata.test.ts
+
+Expected: FAIL because locale registry exports and locale-aware metadata do not exist, and current canonical routes still contain legal paths.
+
+- [ ] **Step 3: Implement the minimal route and metadata boundary**
+
+~~~ts
+export const publicLocales = ["en", "zh-CN"] as const;
+export type PublicLocale = (typeof publicLocales)[number];
+
+export function getLocalizedPublicPath(
+  locale: PublicLocale,
+  canonicalPath: PublicCanonicalPath,
+): string {
+  return locale === "en" ? canonicalPath : "/zh" + canonicalPath;
+}
+~~~
+
+Build canonicalPublicPaths from /, /farm-comparison, /mods, and the 8 official farm identities only. Validate locale and identity inputs with errors that include received values. getLocalizedPublicRouteEntries() returns exactly one { locale, canonicalPath, pathname } entry for every locale/identity pair. createPublicLanguageAlternates() calls createCanonicalUrl() for each locale-derived pathname.
+
+Extend PublicPageMetadataInput with locale?: PublicLocale, defaulting to en. Interpret pathname as the locale-neutral identity, use its locale-derived pathname for canonical/OpenGraph URL, and populate alternates.languages from the registry. Keep title, description, OpenGraph type, and Twitter behavior.
+
+- [ ] **Step 4: Verify GREEN and check scope**
+
+Run: pnpm vitest run tests/i18n/public-route-registry.test.ts tests/seo/canonical-public-routes.test.ts tests/seo/page-metadata.test.ts
+
+Expected: PASS.
+
+Run: pnpm typecheck
+
+Expected: PASS.
+
+Run: git diff --check
+
+Expected: no output.
+
+- [ ] **Step 5: Commit only Task 1 files**
+
+~~~bash
+git add src/i18n/public-locale.ts src/i18n/public-route-registry.ts \
+  src/seo/canonical-public-routes.ts src/seo/page-metadata.ts \
+  tests/i18n/public-route-registry.test.ts \
+  tests/seo/canonical-public-routes.test.ts tests/seo/page-metadata.test.ts
+git commit -m "feat: add locale-aware public route metadata"
+~~~
+
+### Task 2: Localized public content, shell, and static components
+
+**Files:**
+- Create: src/i18n/public-page-content.ts
+- Create: src/components/chinese-planner-introduction.tsx
+- Modify: src/reference/public-navigation.ts
+- Modify: src/components/public-navigation.tsx
+- Modify: src/components/public-page-shell.tsx
+- Modify: src/components/farm-comparison-content.tsx
+- Modify: src/components/mod-map-card-grid.tsx
+- Modify: src/components/farm-guide-content.tsx
+- Modify: app/farm-comparison/page.tsx
+- Modify: app/mods/page.tsx
+- Modify: app/farm/[type]/page.tsx
+- Modify: app/privacy/page.tsx
+- Modify: app/terms/page.tsx
+- Modify: app/globals.css
+- Create: tests/i18n/public-page-content.test.ts
+- Modify: tests/components/public-page-shell.test.tsx
+- Modify: tests/components/public-farm-pages.test.tsx
+
+**Interfaces:**
+- Consumes: Task 1 PublicLocale, PublicCanonicalPath, and getLocalizedPublicPath.
+- Produces: getLocalizedOfficialFarmGuide, getLocalizedModFarmCards, getPublicPageCopy, PublicPageShell({ locale, canonicalPath, children }), and locale-aware public content components.
+- This task wires the existing English information routes with explicit locale and locale-neutral canonical identities. Task 3 supplies the parallel Chinese routes.
+
+- [ ] **Step 1: Write failing localized content and shell tests**
+
+~~~tsx
+import { renderToStaticMarkup } from "react-dom/server";
+import { expect, it } from "vitest";
+import { ChinesePlannerIntroduction } from "../../src/components/chinese-planner-introduction";
+import { PublicPageShell } from "../../src/components/public-page-shell";
+import { getLocalizedOfficialFarmGuide } from "../../src/i18n/public-page-content";
+
+it("renders Chinese navigation and a static English-planner CTA", () => {
+  const markup = renderToStaticMarkup(
+    <PublicPageShell canonicalPath="/" locale="zh-CN"><ChinesePlannerIntroduction /></PublicPageShell>,
+  );
+  expect(markup).toContain('aria-label="公共导航"');
+  expect(markup).toContain('href="/"');
+  expect(markup).toContain("开始规划");
+  expect(markup).not.toContain("reference-runtime-root");
+});
+
+it("uses verified Chinese farm copy but retains the map id", () => {
+  const guide = getLocalizedOfficialFarmGuide("zh-CN", "standard");
+  expect(guide.title).toBe("标准农场");
+  expect(guide.id).toBe("standard");
+  expect(guide.features[0]).toContain("63 × 31");
+});
+~~~
+
+Extend the public component contract to assert Chinese comparison/farm links use /zh/farm/... and planning CTAs use /?farmType=<id>, while English output retains root-path links.
+
+- [ ] **Step 2: Verify RED**
+
+Run: pnpm vitest run tests/i18n/public-page-content.test.ts tests/components/public-page-shell.test.tsx tests/components/public-farm-pages.test.tsx
+
+Expected: FAIL because locale-aware props, Chinese content, and Chinese introduction do not exist.
+
+- [ ] **Step 3: Implement locale-aware static content**
+
+Copy verified public farm/mod translations from codex/bilingual-seo-port:src/i18n/public-content.ts into public-page-content.ts. Copy selected existing Chinese public UI strings only from codex/bilingual-seo-port:messages/zh-CN.json, the static payload used by that branch's messages.ts. Do not import the branch's planner-map, message-provider, locale-provider, project, migration, next-intl, or client dependencies.
+
+~~~ts
+export function getLocalizedOfficialFarmGuide(
+  locale: PublicLocale,
+  farmType: OfficialFarmType,
+): OfficialFarmGuide;
+
+export function getLocalizedModFarmCards(
+  locale: PublicLocale,
+): readonly ModFarmCard[];
+~~~
+
+Both functions throw received-value diagnostics for missing source records. getPublicPageCopy(locale) supplies navigation labels, page headings/descriptions, Chinese root copy, CTA labels, breadcrumb labels, and the locale counterpart label. It contains no privacy/terms entry.
+
+PublicPageShell receives a required locale and explicit canonicalPath, derives brand, navigation, and language-counterpart links through Task 1, and retains data-public-page-shell. PublicNavigation receives the same arguments and has no legal links. The retiring English-only legal routes pass locale en with no language counterpart until Task 4 deletes them; they must not cause a default locale or root canonical identity. Add only scoped language-switcher CSS below [data-public-page-shell] if readable header wrapping requires it.
+
+Extend FarmComparisonContent, ModMapCardGrid, and FarmGuideContent with a required locale prop. Wire every existing English information route with locale en and its canonical identity in the same atomic change. Obtain localized guide/card text, derive public detail links via getLocalizedPublicPath, and always direct planning CTAs to English / with the existing farmType query. Keep map dimensions, preview assets, farm IDs, and numeric stats unchanged.
+
+ChinesePlannerIntroduction renders exactly one Chinese h1, says the editing interface opens in English, and renders a primary link to /. It imports no planner/runtime module.
+
+- [ ] **Step 4: Verify GREEN and style isolation**
+
+Run: pnpm vitest run tests/i18n/public-page-content.test.ts tests/components/public-page-shell.test.tsx tests/components/public-farm-pages.test.tsx tests/routes/public-page-style-contract.test.ts
+
+Expected: PASS.
+
+Run: pnpm typecheck
+
+Expected: PASS.
+
+Run: git diff --check
+
+Expected: no output.
+
+- [ ] **Step 5: Commit only Task 2 files**
+
+~~~bash
+git add src/i18n/public-page-content.ts src/components/chinese-planner-introduction.tsx \
+  src/reference/public-navigation.ts src/components/public-navigation.tsx \
+  src/components/public-page-shell.tsx src/components/farm-comparison-content.tsx \
+  src/components/mod-map-card-grid.tsx src/components/farm-guide-content.tsx \
+  app/farm-comparison/page.tsx app/mods/page.tsx 'app/farm/[type]/page.tsx' \
+  app/privacy/page.tsx app/terms/page.tsx \
+  app/globals.css tests/i18n/public-page-content.test.ts \
+  tests/components/public-page-shell.test.tsx tests/components/public-farm-pages.test.tsx
+git commit -m "feat: localize static public page content"
+~~~
+
+### Task 3: English and Chinese route entry points with paired SEO
+
+**Files:**
+- Modify: app/page.tsx
+- Create: app/zh/page.tsx
+- Create: app/zh/farm-comparison/page.tsx
+- Create: app/zh/mods/page.tsx
+- Create: app/zh/farm/[type]/page.tsx
+- Modify: src/i18n/public-page-content.ts
+- Modify: tests/routes/public-route-metadata.test.ts
+- Create: tests/routes/chinese-public-routes.test.tsx
+- Modify: tests/i18n/public-page-content.test.ts
+
+**Interfaces:**
+- Consumes: Task 1 route/metadata helpers and Task 2 locale-aware shell/content.
+- Produces: 11 English and 11 Chinese route renderers. English / remains the only route that imports PlannerHomepage.
+- Task 4 builds and verifies their static artifacts.
+
+- [ ] **Step 1: Write failing Chinese-route and paired-metadata tests**
+
+~~~tsx
+import { renderToStaticMarkup } from "react-dom/server";
+import { expect, it } from "vitest";
+import ChinesePlannerPage, { metadata as chinesePlannerMetadata } from "../../app/zh/page";
+
+it("renders a Chinese static introduction that links to the English planner", () => {
+  const markup = renderToStaticMarkup(<ChinesePlannerPage />);
+  expect(markup).toContain("星露谷物语农场规划器");
+  expect(markup).toContain('href="/"');
+  expect(markup).not.toContain("reference-runtime-root");
+});
+
+it("assigns Chinese root canonical and both language alternates", () => {
+  expect(chinesePlannerMetadata.alternates).toMatchObject({
+    canonical: "https://stardewvalleyplanner.art/zh",
+    languages: {
+      en: "https://stardewvalleyplanner.art/",
+      "zh-CN": "https://stardewvalleyplanner.art/zh",
+      "x-default": "https://stardewvalleyplanner.art/",
+    },
+  });
+});
+~~~
+
+Extend metadata tests to assert all English routes publish paired language alternates and all eight Chinese farm metadata results canonicalize to /zh/farm/<type>.
+
+- [ ] **Step 2: Verify RED**
+
+Run: pnpm vitest run tests/routes/chinese-public-routes.test.tsx tests/routes/public-route-metadata.test.ts
+
+Expected: FAIL because /zh route modules and locale-aware route metadata are absent.
+
+- [ ] **Step 3: Implement route modules without planner migration**
+
+Keep app/page.tsx importing PlannerHomepage exactly as its only runtime component; pass locale en to its metadata builder. The existing English information routes already pass explicit locale and canonical identities from Task 2; do not modify them again.
+
+Create Chinese routes with the official farm static-params list and dynamicParams = false. Add the approved zh-CN `seo.farmGuide.title` and `seo.farmGuide.description` templates to the public content adapter, then format them with the localized farm name once and reuse the results for Chinese `generateMetadata` and Article JSON-LD. Chinese generateMetadata calls createPublicPageMetadata with locale zh-CN and the locale-neutral canonical identity. Use localized visible Article, CollectionPage, and breadcrumb JSON-LD. Unknown types call notFound(), with a regression test.
+
+~~~tsx
+export default function ChinesePlannerPage() {
+  return (
+    <PublicPageShell canonicalPath="/" locale="zh-CN">
+      <ChinesePlannerIntroduction />
+    </PublicPageShell>
+  );
+}
+~~~
+
+Do not import PlannerHomepage, ReferenceRuntimeHost, PlannerWorkspace, or project-store modules from app/zh/**.
+
+- [ ] **Step 4: Verify GREEN**
+
+Run: pnpm vitest run tests/routes/chinese-public-routes.test.tsx tests/routes/public-route-metadata.test.ts
+
+Expected: PASS.
+
+Run: pnpm typecheck
+
+Expected: PASS.
+
+Run: git diff --check
+
+Expected: no output.
+
+- [ ] **Step 5: Commit only Task 3 files**
+
+~~~bash
+git add app/page.tsx app/zh/page.tsx app/zh/farm-comparison/page.tsx \
+  app/zh/mods/page.tsx app/zh/farm/[type]/page.tsx \
+  src/i18n/public-page-content.ts tests/i18n/public-page-content.test.ts \
+  tests/routes/public-route-metadata.test.ts tests/routes/chinese-public-routes.test.tsx
+git commit -m "feat: add static Chinese public routes"
+~~~
+
+### Task 4: Remove legal pages and generate the bilingual discovery contract
+
+**Files:**
+- Delete: app/privacy/page.tsx
+- Delete: app/terms/page.tsx
+- Delete: src/components/legal-page-content.tsx
+- Delete: src/reference/legal-pages.ts
+- Delete: tests/components/legal-page-content.test.tsx
+- Delete: tests/reference/legal-pages.test.ts
+- Modify: app/sitemap.ts
+- Modify: tests/routes/sitemap-robots.test.ts
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify: tests/routes/static-routes.test.ts
+- Modify: tests/routes/public-page-style-contract.test.ts
+- Modify: tests/routes/public-route-metadata.test.ts
+- Modify: tests/seo/page-metadata.test.ts
+- Modify: tests/reference-runtime/reference-runtime-delivery.test.ts
+- Modify: src/components/public-page-shell.tsx
+- Modify: src/components/public-navigation.tsx
+- Modify: app/globals.css
+- Modify: tests/components/public-page-shell.test.tsx
+
+**Interfaces:**
+- Consumes: Task 1 getLocalizedPublicRouteEntries() and existing URL helper.
+- Produces: a 22-entry sitemap/static contract with no legal output.
+- Static-artifact verification rebuilds `out` from the reviewed source before it reads any exported files.
+
+- [ ] **Step 1: Write failing bilingual discovery and removal tests**
+
+~~~ts
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { expect, it } from "vitest";
+import { getLocalizedPublicRouteEntries } from "../../src/i18n/public-route-registry";
+
+it("exports locale-aware URLs without legal paths", () => {
+  const sitemap = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
+  expect((sitemap.match(/<loc>/g) ?? [])).toHaveLength(22);
+  expect(sitemap).not.toContain("/privacy");
+  expect(sitemap).not.toContain("/terms");
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(22);
+});
+
+it("does not export deleted legal artifacts", () => {
+  expect(() => readFileSync(join(process.cwd(), "out", "privacy.html"))).toThrow();
+  expect(() => readFileSync(join(process.cwd(), "out", "terms.html"))).toThrow();
+});
+~~~
+
+Expand static expectations to use literal English and Chinese title, description, canonical, alternate-link, and h1 values for all 22 entries. Assert no information artifact contains a runtime host or bailout marker. Keep / separately asserted as the one allowed planner runtime artifact and assert zh.html has no runtime marker.
+
+- [ ] **Step 2: Build and verify RED**
+
+Run: NEXT_TELEMETRY_DISABLED=1 pnpm build
+
+Run: pnpm vitest run tests/routes/sitemap-robots.test.ts tests/routes/static-public-pages.test.ts tests/routes/static-routes.test.ts
+
+Expected: FAIL because the current build emits legal files and only 13 sitemap URLs.
+
+- [ ] **Step 3: Implement cleanup and discovery output**
+
+Delete the six legal-only files through a patch. Public navigation is already made legal-free by Task 2; assert that boundary rather than modifying it again. Make app/sitemap.ts map getLocalizedPublicRouteEntries() to { url: createCanonicalUrl(pathname) }. Do not add lastModified, duplicate route lists, or query-string URLs.
+
+Update static route and style contracts for the 22-page locale-aware output and continue proving no body.stardew-homepage text changed. Remove old legal metadata assertions and add artifact nonexistence checks for the two deleted files. Now that no legal shell remains, make PublicPageShell and PublicNavigation canonicalPath required, always render their language counterpart link, and delete the retiring-legal-page test branch plus now-unreferenced legal CSS. Update the reference-runtime delivery test's expected exported-page list to omit legal HTML while retaining its frozen runtime module integrity assertions; never alter public/_app/**.
+
+- [ ] **Step 4: Verify GREEN and full repository contract**
+
+Run in order:
+
+1. pnpm typecheck
+2. NEXT_TELEMETRY_DISABLED=1 pnpm build
+3. pnpm test -- --run
+4. pnpm vitest run tests/routes/sitemap-robots.test.ts tests/routes/static-public-pages.test.ts tests/routes/static-routes.test.ts
+5. git diff --check
+
+Expected: every command passes. The production route report shows English root/public pages, /zh plus 10 children, robots.txt, and sitemap.xml, with no privacy or terms route.
+
+- [ ] **Step 5: Commit only Task 4 files**
+
+~~~bash
+git add -u app/privacy/page.tsx app/terms/page.tsx \
+  src/components/legal-page-content.tsx src/reference/legal-pages.ts \
+  tests/components/legal-page-content.test.tsx tests/reference/legal-pages.test.ts
+git add app/sitemap.ts tests/routes/sitemap-robots.test.ts \
+  tests/routes/static-public-pages.test.ts tests/routes/static-routes.test.ts \
+  tests/routes/public-page-style-contract.test.ts \
+  tests/routes/public-route-metadata.test.ts tests/seo/page-metadata.test.ts \
+  tests/reference-runtime/reference-runtime-delivery.test.ts \
+  src/components/public-page-shell.tsx src/components/public-navigation.tsx \
+  app/globals.css tests/components/public-page-shell.test.tsx
+git commit -m "feat: publish bilingual static discovery pages"
+~~~
+
+### Task 5: Local HTTP and browser acceptance
+
+**Files:**
+- Modify: none unless a browser check exposes a reproducible defect. A defect first receives a failing automated regression test in its owning task area.
+
+**Interfaces:**
+- Consumes: final static out generated by Task 4.
+- Produces: evidence that static delivery, language alternates, responsive layout, and runtime boundaries work as designed.
+
+- [ ] **Step 1: Start final static server**
+
+Run: pnpm exec serve out -l 4173
+
+Expected: local static server accepts connections from the isolated worktree.
+
+- [ ] **Step 2: Verify HTTP statuses and removed paths**
+
+Verify 200 for /, /zh, /farm-comparison, /zh/farm-comparison, /farm/standard, /zh/farm/standard, /mods, /zh/mods, /robots.txt, and /sitemap.xml. Verify 404 for /privacy, /terms, /zh/privacy, and a fabricated path.
+
+- [ ] **Step 3: Inspect browser behavior at desktop and 390×844**
+
+Inspect /, /zh, /farm-comparison, /zh/farm-comparison, /mods, /zh/mods, /farm/standard, and /zh/farm/standard. Confirm visible localized navigation, no horizontal page overflow, readable public shell scrolling, matching canonical/alternate links, and no console errors. Click Chinese root and Chinese farm CTAs to confirm they open English / and /?farmType=standard respectively. Confirm only English / contains the planner runtime marker.
+
+- [ ] **Step 4: Stop the server and record results**
+
+Expected: server stops cleanly; no source changes are made. If an observed defect requires code, write a failing test before any fix and return to its owning task's review loop.
+
+### Task 6: Resolve final SEO review findings without changing the editor
+
+**Files:**
+- Modify: src/components/chinese-planner-introduction.tsx
+- Modify: src/seo/page-metadata.ts
+- Modify: src/seo/public-site-url.ts
+- Modify: app/page.tsx
+- Modify: app/farm-comparison/page.tsx
+- Modify: app/mods/page.tsx
+- Modify: app/farm/[type]/page.tsx
+- Modify: app/zh/page.tsx
+- Modify: app/zh/farm-comparison/page.tsx
+- Modify: app/zh/mods/page.tsx
+- Modify: app/zh/farm/[type]/page.tsx
+- Modify: tests/components/public-page-shell.test.tsx
+- Modify: tests/seo/page-metadata.test.ts
+- Modify: tests/seo/public-site-url.test.ts
+- Modify: tests/routes/static-routes.test.ts
+
+**Interfaces:**
+- Public metadata accepts required `locale: PublicLocale` and `canonicalPath: PublicCanonicalPath`; no page receives an implicit English locale or an unchecked arbitrary pathname.
+- `createCanonicalUrl()` accepts `/` and no-trailing-slash paths only. A non-root trailing slash throws an error containing the received value.
+- `ChinesePlannerIntroduction` renders the controlled localized `plannerDescription` visibly before its existing English planner-language notice.
+- The static-routes contract runs a fresh static build before inspecting `out`.
+
+**Decision and non-goals:**
+- User selected A on 2026-07-31: keep the editor and frozen runtime unchanged. `/privacy` and `/terms` remain absent from the public site and return 404 even though historical links embedded in frozen editor assets remain out of scope.
+- Do not modify `public/_app/**`, `public/reference-runtime/**`, `src/reference-runtime/**`, `src/projects/**`, editor components, data migrations, styling outside the scoped public shell, package manifests, or dependency configuration.
+
+- [ ] **Step 1: Write focused failing regression tests**
+
+Add behavior tests that prove:
+
+1. Chinese root markup visibly contains the exact controlled Chinese planner description and retains the existing English editor-language notice.
+2. `createPublicPageMetadata()` requires an explicit locale and locale-neutral canonical identity at the TypeScript boundary, and uses those values for canonical and language alternates.
+3. `createCanonicalUrl("/zh/")` throws a diagnostic that includes `"/zh/"`, while `/` remains valid.
+4. Static-route assertions rebuild artifacts from source before reading the `out` directory.
+
+Run the smallest relevant commands and observe the expected failures before production implementation. Do not add source-text or mock-only tests.
+
+- [ ] **Step 2: Implement the smallest strict public boundary**
+
+Render `getPublicPageCopy("zh-CN").plannerDescription` directly in `ChinesePlannerIntroduction`; retain the current English editor-language notice. Make the metadata input fields required, name the identity `canonicalPath`, and remove the fallback/lookup branch. Update only existing public route call sites to pass the renamed field. Reject non-root trailing slashes before canonical URL normalization. Restore isolated build execution inside the static artifact test before its artifact assertions.
+
+- [ ] **Step 3: Verify and commit the final-review fixes**
+
+Run in order:
+
+1. focused TDD regression tests for the four affected test files;
+2. `pnpm typecheck`;
+3. `NEXT_TELEMETRY_DISABLED=1 pnpm build`;
+4. `pnpm test -- --run`;
+5. `git diff --check`.
+
+Commit only the Task 6 files with `fix: tighten bilingual public SEO contracts`.
+
+### Task 7: Simplify static-artifact verification through the package lifecycle
+
+**Decision:** User selected option A on 2026-08-01. `pnpm test` must run a fresh static build through `pretest`; static-artifact tests must only read that prebuilt output. This replaces the unmerged cross-process test-lock experiment because that experiment is more complex than the verified requirement and cannot safely coordinate independent test commands sharing one `out` directory.
+
+**Files:**
+- Modify: package.json
+- Modify: tests/routes/static-routes.test.ts
+- Modify: tests/routes/sitemap-robots.test.ts
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify: tests/reference-runtime/reference-runtime-delivery.test.ts
+- Delete: tests/support/static-export-artifact-fixture.ts
+- Delete: tests/support/static-export-artifact-fixture.test.ts
+
+**Interfaces:**
+- `pretest` performs `NEXT_TELEMETRY_DISABLED=1 pnpm build` before the existing test command.
+- All static-artifact readers are ordinary read-only tests. None runs a build, creates a lock, writes temporary coordination state, or depends on a test worker identity.
+- The static-output verification contract is `pnpm test -- --run`; a focused direct Vitest invocation, when used, is preceded explicitly by a build command.
+
+**Non-goals:**
+- Do not change the existing `test` script, package dependencies, lockfile, Vitest configuration, production source, editor, frozen runtime, project data, routes, SEO output, or styles.
+
+- [ ] **Step 1: Write and observe the lifecycle regression**
+
+Add the package lifecycle command and remove the barrier-only tests/imports. First prove the fresh-output contract with `pnpm test -- --run`: the command output must show exactly one static build before the test run, while all static-artifact readers complete without a second build or any lock-state output. Do not use source-text tests or test-only mocks for npm lifecycle behavior.
+
+- [ ] **Step 2: Keep static tests read-only**
+
+Delete the fixture and its direct process tests. Remove its imports/calls and the in-test build from every affected static-artifact reader. Retain their existing artifact assertions unchanged except for removing the former coordination setup. Use only the existing read interfaces (`readFileSync`, `existsSync`, and current helpers).
+
+- [ ] **Step 3: Verify and commit**
+
+Run in order:
+
+1. `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run tests/routes/static-routes.test.ts tests/routes/sitemap-robots.test.ts tests/routes/static-public-pages.test.ts tests/reference-runtime/reference-runtime-delivery.test.ts`;
+2. `pnpm typecheck`;
+3. `pnpm test -- --run` and confirm the pretest build occurs exactly once before Vitest;
+4. `git diff --check`.
+
+Commit only the Task 7 files with `test: build static artifacts in pretest`.
+
+### Task 8: Emit the correct initial document language for each locale
+
+**Decision:** User selected option A on 2026-08-01. The generated initial HTML must use `lang="en"` for the 11 English documents and `lang="zh-CN"` for the 11 Chinese documents. Client hydration must not be relied on for this document-level contract.
+
+**Files:**
+- Delete: app/layout.tsx
+- Create: app/(en)/layout.tsx
+- Move: app/page.tsx → app/(en)/page.tsx
+- Move: app/farm-comparison/page.tsx → app/(en)/farm-comparison/page.tsx
+- Move: app/mods/page.tsx → app/(en)/mods/page.tsx
+- Move: app/farm/[type]/page.tsx → app/(en)/farm/[type]/page.tsx
+- Create: app/zh/layout.tsx
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify only tests whose imports or root-layout source assertions reference moved English route/layout files.
+
+**Interfaces:**
+- `(en)` is a URL-invisible route group and owns the English root layout. It preserves current global CSS import, `metadataBase`, favicon metadata, body attributes, and `<html lang="en">`.
+- `app/zh/layout.tsx` is the Chinese root layout and owns the same global CSS/body/metadata-base/favicon contract with `<html lang="zh-CN">`.
+- English and Chinese pages retain their existing URLs, metadata, static output file names, canonical/hreflang links, runtime boundaries, and visible markup.
+
+**Non-goals and risk boundary:**
+- Do not change editor components, `public/_app/**`, `public/reference-runtime/**`, `src/reference-runtime/**`, `src/projects/**`, planner locale-storage behavior, page content, routing registry, sitemap, robots, package manifests, lockfile, Vitest configuration, or CSS rules.
+- Route groups do not enter URLs. Cross-root navigation can be a full document request; existing public navigation already uses normal anchor links, so no public navigation behavior is changed.
+
+- [ ] **Step 1: Add failing initial-document-language coverage**
+
+Extend the current 22-page static artifact loop to read the first `<html ...>` tag and assert its `lang` attribute exactly. Assert the acceptance table still contains 11 English and 11 Chinese paths; every English artifact expects `en`, every `/zh` or `/zh/**` artifact expects `zh-CN`. Include the pathname and static file path in failures. Update root-layout/import tests only as needed to express two equivalent root layout contracts.
+
+Run `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run` on the affected route/static tests. Observe the expected Chinese-language failure before modifying production layouts.
+
+- [ ] **Step 2: Implement two root layouts with URL-invisible English grouping**
+
+Move, do not duplicate, the four English public page modules under `app/(en)`. Correct only their relative `src/**` imports. Move the current root layout contract into `app/(en)/layout.tsx`, then create `app/zh/layout.tsx` with the same metadata base, favicon metadata, global stylesheet import, and body attributes but Chinese document language. Do not create a nested Chinese `<html>` below the old root layout.
+
+- [ ] **Step 3: Verify and commit**
+
+Run in order:
+
+1. `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run` for affected route/static tests;
+2. `pnpm typecheck`;
+3. `pnpm test -- --run` and verify one pretest build before Vitest;
+4. `git diff --check`.
+
+Commit only Task 8 files with `fix: emit localized document language`.
+
+### Task 9: Restore the global English 404 document shell
+
+**Decision:** User selected option A on 2026-08-01. With multiple root layouts, unmatched paths must use a dedicated global English 404 document that restores the document language, global stylesheet, favicon metadata, and existing body attribute. The 404 remains excluded from sitemap/hreflang and keeps a noindex response.
+
+**Files:**
+- Modify: next.config.ts
+- Create: app/global-not-found.tsx
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify only existing layout/static-route tests needed to protect the shared root-shell contract.
+
+**Interfaces:**
+- Enable only `experimental.globalNotFound: true` in the existing Next config.
+- `app/global-not-found.tsx` imports `app/globals.css`, exports English 404 metadata with the existing metadata base and favicon, and returns a complete `<html lang="en"><body data-sveltekit-preload-data="hover">...</body></html>` document.
+- Preserve the existing English default 404 wording and simple centered presentation using local markup/inline styles; do not add CSS rules or a public navigation surface.
+
+**Non-goals:**
+- Do not change the 22 public documents, canonical/hreflang/sitemap/robots contracts, editor, runtime, projects, page content, locale storage, packages, lockfile, Vitest config, or CSS rules.
+- Do not add a Chinese 404 variant, redirect, indexed 404 route, or legal-page replacement.
+
+- [ ] **Step 1: Add failing generated-404 coverage**
+
+After a fresh build, assert both `out/404.html` and `out/_not-found.html` use the first document `<html lang="en">`, load the favicon/global stylesheet, preserve the body attribute, include the English 404 text, and remain noindex. Observe the current bare-document failure before production changes.
+
+Tighten the existing first-`<html>` attribute parser so only an actual whitespace-delimited `lang` attribute matches; add a focused negative case proving `data-lang`, `aria-lang`, or `xml:lang` cannot satisfy it. Protect root-layout parity through rendered static-output assertions rather than a client-hydrated DOM.
+
+- [ ] **Step 2: Implement the minimal global 404 shell**
+
+Enable the official Next flag and create the full-document component exactly at `app/global-not-found.tsx`. Keep the default English 404 title/message and centered presentation. Reuse `publicSiteUrl`, favicon path, stylesheet import, body attribute, and `lang="en"`; do not introduce a shared layout abstraction or new style module.
+
+- [ ] **Step 3: Verify and commit**
+
+Run in order:
+
+1. `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run` for the affected static/layout tests;
+2. `pnpm typecheck`;
+3. `pnpm test -- --run` and verify one pretest build before Vitest;
+4. `git diff --check`;
+5. serve `out` locally and verify an unknown URL plus `/privacy` return a styled English 404 response without console errors.
+
+Commit only Task 9 files with `fix: restore global 404 shell`.

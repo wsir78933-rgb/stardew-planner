@@ -1,27 +1,39 @@
 import type { OfficialFarmGuide } from "../reference/official-farm-guides";
+import {
+  formatPublicPageCopy,
+  getLocalizedOfficialFarmGuide,
+  getPublicPageCopy,
+} from "../i18n/public-page-content";
+import type { PublicLocale } from "../i18n/public-locale";
+import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 
 type FarmGuideContentProperties = Readonly<{
   farmGuide: OfficialFarmGuide;
   otherFarmGuides: readonly OfficialFarmGuide[];
+  locale: PublicLocale;
 }>;
 
 function FarmGuideStats({
   farmGuide,
+  locale,
 }: Readonly<{
   farmGuide: OfficialFarmGuide;
+  locale: PublicLocale;
 }>) {
+  const pageCopy = getPublicPageCopy(locale);
+
   return (
     <dl className="farm-guide-stats">
       <div>
-        <dt>Tillable tiles</dt>
+        <dt>{pageCopy.tillableTilesLabel}</dt>
         <dd>{farmGuide.tillableTiles}</dd>
       </div>
       <div>
-        <dt>Total buildable</dt>
+        <dt>{pageCopy.totalBuildableLabel}</dt>
         <dd>{farmGuide.totalBuildableTiles}</dd>
       </div>
       <div>
-        <dt>Added in</dt>
+        <dt>{pageCopy.addedInLabel}</dt>
         <dd>{farmGuide.addedIn}</dd>
       </div>
     </dl>
@@ -31,61 +43,81 @@ function FarmGuideStats({
 export function FarmGuideContent({
   farmGuide,
   otherFarmGuides,
+  locale,
 }: FarmGuideContentProperties) {
+  const localizedFarmGuide = getLocalizedOfficialFarmGuide(locale, farmGuide.id);
+  const localizedOtherFarmGuides = otherFarmGuides.map((otherFarmGuide) =>
+    getLocalizedOfficialFarmGuide(locale, otherFarmGuide.id),
+  );
+  const pageCopy = getPublicPageCopy(locale);
+
   return (
     <>
-      <nav aria-label="Breadcrumb" className="public-breadcrumbs">
-        <a href="/">Stardew Planner</a>
+      <nav aria-label={pageCopy.breadcrumbLabel} className="public-breadcrumbs">
+        <a href={getLocalizedPublicPath(locale, "/")}>{pageCopy.brandLabel}</a>
         <span aria-hidden="true">/</span>
-        <a href="/farm-comparison">Farm types</a>
+        <a href={getLocalizedPublicPath(locale, "/farm-comparison")}>
+          {pageCopy.farmTypesLabel}
+        </a>
         <span aria-hidden="true">/</span>
-        <span>{farmGuide.title}</span>
+        <span>{localizedFarmGuide.title}</span>
       </nav>
       <header className="farm-guide-hero">
         <img
-          alt={`${farmGuide.title} preview`}
+          alt={formatPublicPageCopy(pageCopy.previewTemplate, {
+            farmName: localizedFarmGuide.title,
+          })}
           className="farm-guide-hero__preview"
-          src={farmGuide.previewSource}
+          src={localizedFarmGuide.previewSource}
         />
         <div className="farm-guide-hero__copy">
-          <h1>{farmGuide.title}</h1>
-          <p>{farmGuide.introduction}</p>
-          <FarmGuideStats farmGuide={farmGuide} />
+          <h1>{localizedFarmGuide.title}</h1>
+          <p>{localizedFarmGuide.introduction}</p>
+          <FarmGuideStats farmGuide={localizedFarmGuide} locale={locale} />
           <div className="farm-guide-hero__actions">
-            <a className="public-primary-cta" href={`/?farmType=${farmGuide.id}`}>
-              Plan this farm →
+            <a className="public-primary-cta" href={`/?farmType=${localizedFarmGuide.id}`}>
+              {pageCopy.planThisFarmLabel}
             </a>
-            <a className="public-secondary-cta" href="/farm-comparison">
-              Compare all farms
+            <a
+              className="public-secondary-cta"
+              href={getLocalizedPublicPath(locale, "/farm-comparison")}
+            >
+              {pageCopy.compareAllFarmsLabel}
             </a>
           </div>
         </div>
       </header>
       <section className="farm-guide-section" aria-labelledby="farm-guide-features">
-        <h2 id="farm-guide-features">What makes it different</h2>
+        <h2 id="farm-guide-features">{pageCopy.whatMakesItDifferentLabel}</h2>
         <ul className="public-feature-list">
-          {farmGuide.features.map((feature) => (
+          {localizedFarmGuide.features.map((feature) => (
             <li key={feature}>{feature}</li>
           ))}
         </ul>
-        {farmGuide.note ? (
+        {localizedFarmGuide.note ? (
           <p className="public-note">
-            <strong>Note:</strong> {farmGuide.note}
+            <strong>{pageCopy.noteLabel}</strong> {localizedFarmGuide.note}
           </p>
         ) : null}
       </section>
       <section className="farm-guide-section" aria-labelledby="other-farms-heading">
-        <h2 id="other-farms-heading">Other farms</h2>
+        <h2 id="other-farms-heading">{pageCopy.otherFarmsLabel}</h2>
         <div className="farm-guide-sibling-grid">
-          {otherFarmGuides.map((otherFarmGuide) => (
-            <a href={`/farm/${otherFarmGuide.id}`} key={otherFarmGuide.id}>
+          {localizedOtherFarmGuides.map((otherFarmGuide) => (
+            <a
+              href={getLocalizedPublicPath(locale, `/farm/${otherFarmGuide.id}`)}
+              key={otherFarmGuide.id}
+            >
               {otherFarmGuide.title}
             </a>
           ))}
         </div>
         <p className="farm-guide-section__footnote">
-          Want them side by side? See the{" "}
-          <a href="/farm-comparison">full comparison</a>.
+          {pageCopy.comparisonPrompt}{" "}
+          <a href={getLocalizedPublicPath(locale, "/farm-comparison")}>
+            {pageCopy.fullComparisonLabel}
+          </a>
+          {pageCopy.comparisonSentenceEnding}
         </p>
       </section>
     </>

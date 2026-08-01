@@ -486,6 +486,13 @@ body.stardew-homepage [data-homepage-shell] > footer a {
   text-decoration: none;
 }
 
+[data-public-page-shell] .public-page-shell-language-switcher {
+  color: #52604e;
+  font-size: 0.9rem;
+  text-underline-offset: 0.2em;
+  white-space: nowrap;
+}
+
 [data-public-page-shell] nav {
   display: flex;
   flex-wrap: wrap;
@@ -541,7 +548,6 @@ body.stardew-homepage [data-homepage-shell] > footer a {
 }
 
 [data-public-page-shell] .public-page-header p,
-[data-public-page-shell] .legal-page-section p,
 [data-public-page-shell] .public-note,
 [data-public-page-shell] .farm-guide-section__footnote {
   color: #52604e;
@@ -673,20 +679,6 @@ body.stardew-homepage [data-homepage-shell] > footer a {
 
 [data-public-page-shell] .public-secondary-cta {
   background: transparent;
-}
-
-[data-public-page-shell] .legal-page-content {
-  max-width: 48rem;
-}
-
-[data-public-page-shell] .legal-page-section {
-  border-bottom: 1px solid rgb(28 33 27 / 18%);
-  padding: 1.5rem 0;
-}
-
-[data-public-page-shell] .legal-page-section h2 {
-  font-size: 1.35rem;
-  margin-bottom: 0.75rem;
 }
 
 [data-public-page-shell] .farm-guide-hero__preview,

@@ -1,0 +1,75 @@
+import {
+  officialFarmTypes,
+  type OfficialFarmType,
+} from "../reference/official-farm-guides";
+import { createCanonicalUrl } from "../seo/public-site-url";
+import { publicLocales, type PublicLocale } from "./public-locale";
+
+const fixedCanonicalPublicPaths = ["/", "/farm-comparison", "/mods"] as const;
+
+export type PublicCanonicalPath =
+  | (typeof fixedCanonicalPublicPaths)[number]
+  | `/farm/${OfficialFarmType}`;
+
+const farmCanonicalPublicPaths = officialFarmTypes.map(
+  (farmType) => `/farm/${farmType}` as const,
+);
+
+export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
+  ...fixedCanonicalPublicPaths,
+  ...farmCanonicalPublicPaths,
+];
+
+export type LocalizedPublicRouteEntry = Readonly<{
+  locale: PublicLocale;
+  canonicalPath: PublicCanonicalPath;
+  pathname: string;
+}>;
+
+function assertPublicLocale(locale: PublicLocale): void {
+  if (!publicLocales.includes(locale)) {
+    throw new Error(`Unsupported public locale. Received: ${JSON.stringify(locale)}.`);
+  }
+}
+
+function assertCanonicalPublicPath(canonicalPath: PublicCanonicalPath): void {
+  if (!canonicalPublicPaths.includes(canonicalPath)) {
+    throw new Error(
+      `Unsupported public canonical path. Received: ${JSON.stringify(canonicalPath)}.`,
+    );
+  }
+}
+
+export function getLocalizedPublicPath(
+  locale: PublicLocale,
+  canonicalPath: PublicCanonicalPath,
+): string {
+  assertPublicLocale(locale);
+  assertCanonicalPublicPath(canonicalPath);
+
+  if (locale === "en") {
+    return canonicalPath;
+  }
+
+  return canonicalPath === "/" ? "/zh" : `/zh${canonicalPath}`;
+}
+
+export function getLocalizedPublicRouteEntries(): readonly LocalizedPublicRouteEntry[] {
+  return publicLocales.flatMap((locale) =>
+    canonicalPublicPaths.map((canonicalPath) => ({
+      locale,
+      canonicalPath,
+      pathname: getLocalizedPublicPath(locale, canonicalPath),
+    })),
+  );
+}
+
+export function createPublicLanguageAlternates(
+  canonicalPath: PublicCanonicalPath,
+): Readonly<Record<PublicLocale | "x-default", string>> {
+  return {
+    en: createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
+    "zh-CN": createCanonicalUrl(getLocalizedPublicPath("zh-CN", canonicalPath)),
+    "x-default": createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
+  };
+}

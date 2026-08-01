@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
-import { canonicalPublicPaths } from "../../src/seo/canonical-public-routes";
+import { getLocalizedPublicRouteEntries } from "../../src/i18n/public-route-registry";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
 
 it("writes robots.txt with the absolute sitemap URL", () => {
@@ -14,16 +14,20 @@ it("writes robots.txt with the absolute sitemap URL", () => {
   );
 });
 
-it("writes exactly the canonical public URLs into sitemap.xml", () => {
+it("writes exactly the localized public URLs into sitemap.xml without legal paths", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
   const sitemapUrlCount = (sitemapText.match(/<loc>/g) ?? []).length;
+  const localizedPublicRouteEntries = getLocalizedPublicRouteEntries();
 
-  expect(sitemapUrlCount).toBe(canonicalPublicPaths.length);
-  for (const canonicalPublicPath of canonicalPublicPaths) {
+  expect(sitemapUrlCount).toBe(22);
+  expect(localizedPublicRouteEntries).toHaveLength(22);
+  for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
-      `<loc>${createCanonicalUrl(canonicalPublicPath)}</loc>`,
+      `<loc>${createCanonicalUrl(pathname)}</loc>`,
     );
   }
   expect(sitemapText).not.toContain("farmType=");
   expect(sitemapText).not.toContain("<lastmod>");
+  expect(sitemapText).not.toContain("/privacy");
+  expect(sitemapText).not.toContain("/terms");
 });

@@ -1,21 +1,21 @@
 import { notFound } from "next/navigation";
-import { FarmGuideContent } from "../../../src/components/farm-guide-content";
-import { JsonLdScript } from "../../../src/components/json-ld-script";
-import { PublicPageShell } from "../../../src/components/public-page-shell";
+import { FarmGuideContent } from "../../../../src/components/farm-guide-content";
+import { JsonLdScript } from "../../../../src/components/json-ld-script";
+import { PublicPageShell } from "../../../../src/components/public-page-shell";
 import {
   getOfficialFarmGuide,
   isOfficialFarmType,
   officialFarmGuides,
   officialFarmTypes,
   type OfficialFarmType,
-} from "../../../src/reference/official-farm-guides";
-import { createPublicPageMetadata } from "../../../src/seo/page-metadata";
+} from "../../../../src/reference/official-farm-guides";
+import { createPublicPageMetadata } from "../../../../src/seo/page-metadata";
 import {
   createArticleStructuredData,
   createBreadcrumbListStructuredData,
-} from "../../../src/seo/page-structured-data";
+} from "../../../../src/seo/page-structured-data";
 
-export { officialFarmTypes } from "../../../src/reference/official-farm-guides";
+export { officialFarmTypes } from "../../../../src/reference/official-farm-guides";
 
 type FarmGuidePageProperties = Readonly<{
   params: Promise<{
@@ -48,10 +48,11 @@ export async function generateMetadata({
 }: FarmGuidePageProperties) {
   const { type: farmType } = await params;
   const farmGuide = resolveFarmGuide(farmType);
-  const pathname = `/farm/${farmGuide.id}`;
+  const pathname: `/farm/${OfficialFarmType}` = `/farm/${farmGuide.id}`;
 
   return createPublicPageMetadata({
-    pathname,
+    locale: "en",
+    canonicalPath: pathname,
     title: `${farmGuide.title} | Stardew Valley Farm Planner`,
     description: `${farmGuide.title} farm guide. ${farmGuide.bestFor}`,
     openGraphType: "article",
@@ -63,16 +64,17 @@ export default async function FarmGuidePage({
 }: FarmGuidePageProperties) {
   const { type: farmType } = await params;
   const farmGuide = resolveFarmGuide(farmType);
-  const pathname = `/farm/${farmGuide.id}`;
+  const pathname: `/farm/${OfficialFarmType}` = `/farm/${farmGuide.id}`;
   const description = `${farmGuide.title} farm guide. ${farmGuide.bestFor}`;
   const otherFarmGuides = officialFarmTypes
     .filter((otherFarmType) => otherFarmType !== farmGuide.id)
     .map((otherFarmType) => officialFarmGuides[otherFarmType]);
 
   return (
-    <PublicPageShell>
+    <PublicPageShell canonicalPath={pathname} locale="en">
       <FarmGuideContent
         farmGuide={farmGuide}
+        locale="en"
         otherFarmGuides={otherFarmGuides}
       />
       <JsonLdScript

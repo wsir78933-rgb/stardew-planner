@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { publicSiteUrl } from "../src/seo/public-site-url";
-import "./globals.css";
+import { publicSiteUrl } from "../../src/seo/public-site-url";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Stardew Valley Farm Planner",
