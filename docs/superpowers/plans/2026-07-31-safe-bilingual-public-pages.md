@@ -18,7 +18,7 @@
 - Remove /privacy and /terms completely: routes, navigation, legal data/components/tests, canonical registry, sitemap and static assertions. Removed static-export paths intentionally return 404; add neither redirect nor replacement.
 - Keep PlannerHomepage and its reference runtime exclusively on English /. /zh is static and must contain no ReferenceRuntimeHost, reference-runtime-root, or bootstrap script.
 - Do not modify public/_app/**, public/reference-runtime/**, src/reference-runtime/sync-reference-runtime.ts, src/projects/**, planner project data, migrations, or editor components.
-- Do not import next-intl, PlannerWorkspace, local-storage migration code, or any client locale provider. Do not change pnpm-lock.yaml or vitest.config.ts. The user authorized exactly one package.json exception in Task 7: add a `pretest` static-build lifecycle command and no dependency or other script changes.
+- Do not import next-intl, PlannerWorkspace, local-storage migration code, or any client locale provider. Do not change pnpm-lock.yaml or vitest.config.ts. The user authorized exactly one package.json exception in Task 7: add a `pretest` static-build lifecycle command and no dependency or other script changes. The user authorized exactly one next.config.ts exception in Task 9: enable Next's `experimental.globalNotFound` flag.
 - Preserve body.stardew-homepage and html, body values. Any new layout CSS stays below [data-public-page-shell].
 - Reuse verified Chinese farm and mod wording from codex/bilingual-seo-port:src/i18n/public-content.ts. For public navigation, headings, descriptions, and CTAs only, copy selected existing strings from codex/bilingual-seo-port:messages/zh-CN.json, the version-controlled text payload consumed by that branch's src/i18n/messages.ts. These are static source materials only: do not import next-intl, a message provider, a locale provider, or client locale code; do not invent game facts or marketing claims.
 - Follow TDD. A test must be observed failing for the intended missing behavior before its production implementation is written.
@@ -587,3 +587,44 @@ Run in order:
 4. `git diff --check`.
 
 Commit only Task 8 files with `fix: emit localized document language`.
+
+### Task 9: Restore the global English 404 document shell
+
+**Decision:** User selected option A on 2026-08-01. With multiple root layouts, unmatched paths must use a dedicated global English 404 document that restores the document language, global stylesheet, favicon metadata, and existing body attribute. The 404 remains excluded from sitemap/hreflang and keeps a noindex response.
+
+**Files:**
+- Modify: next.config.ts
+- Create: app/global-not-found.tsx
+- Modify: tests/routes/static-public-pages.test.ts
+- Modify only existing layout/static-route tests needed to protect the shared root-shell contract.
+
+**Interfaces:**
+- Enable only `experimental.globalNotFound: true` in the existing Next config.
+- `app/global-not-found.tsx` imports `app/globals.css`, exports English 404 metadata with the existing metadata base and favicon, and returns a complete `<html lang="en"><body data-sveltekit-preload-data="hover">...</body></html>` document.
+- Preserve the existing English default 404 wording and simple centered presentation using local markup/inline styles; do not add CSS rules or a public navigation surface.
+
+**Non-goals:**
+- Do not change the 22 public documents, canonical/hreflang/sitemap/robots contracts, editor, runtime, projects, page content, locale storage, packages, lockfile, Vitest config, or CSS rules.
+- Do not add a Chinese 404 variant, redirect, indexed 404 route, or legal-page replacement.
+
+- [ ] **Step 1: Add failing generated-404 coverage**
+
+After a fresh build, assert both `out/404.html` and `out/_not-found.html` use the first document `<html lang="en">`, load the favicon/global stylesheet, preserve the body attribute, include the English 404 text, and remain noindex. Observe the current bare-document failure before production changes.
+
+Tighten the existing first-`<html>` attribute parser so only an actual whitespace-delimited `lang` attribute matches; add a focused negative case proving `data-lang`, `aria-lang`, or `xml:lang` cannot satisfy it. Protect root-layout parity through rendered static-output assertions rather than a client-hydrated DOM.
+
+- [ ] **Step 2: Implement the minimal global 404 shell**
+
+Enable the official Next flag and create the full-document component exactly at `app/global-not-found.tsx`. Keep the default English 404 title/message and centered presentation. Reuse `publicSiteUrl`, favicon path, stylesheet import, body attribute, and `lang="en"`; do not introduce a shared layout abstraction or new style module.
+
+- [ ] **Step 3: Verify and commit**
+
+Run in order:
+
+1. `NEXT_TELEMETRY_DISABLED=1 pnpm build && pnpm vitest run` for the affected static/layout tests;
+2. `pnpm typecheck`;
+3. `pnpm test -- --run` and verify one pretest build before Vitest;
+4. `git diff --check`;
+5. serve `out` locally and verify an unknown URL plus `/privacy` return a styled English 404 response without console errors.
+
+Commit only Task 9 files with `fix: restore global 404 shell`.
