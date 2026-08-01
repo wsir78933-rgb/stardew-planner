@@ -1,21 +1,21 @@
 import { notFound } from "next/navigation";
-import { FarmGuideContent } from "../../../src/components/farm-guide-content";
-import { JsonLdScript } from "../../../src/components/json-ld-script";
-import { PublicPageShell } from "../../../src/components/public-page-shell";
+import { FarmGuideContent } from "../../../../src/components/farm-guide-content";
+import { JsonLdScript } from "../../../../src/components/json-ld-script";
+import { PublicPageShell } from "../../../../src/components/public-page-shell";
 import {
   getOfficialFarmGuide,
   isOfficialFarmType,
   officialFarmGuides,
   officialFarmTypes,
   type OfficialFarmType,
-} from "../../../src/reference/official-farm-guides";
-import { createPublicPageMetadata } from "../../../src/seo/page-metadata";
+} from "../../../../src/reference/official-farm-guides";
+import { createPublicPageMetadata } from "../../../../src/seo/page-metadata";
 import {
   createArticleStructuredData,
   createBreadcrumbListStructuredData,
-} from "../../../src/seo/page-structured-data";
+} from "../../../../src/seo/page-structured-data";
 
-export { officialFarmTypes } from "../../../src/reference/official-farm-guides";
+export { officialFarmTypes } from "../../../../src/reference/official-farm-guides";
 
 type FarmGuidePageProperties = Readonly<{
   params: Promise<{

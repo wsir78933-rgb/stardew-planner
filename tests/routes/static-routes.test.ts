@@ -5,7 +5,7 @@ import nextConfig from "../../next.config";
 import {
   generateStaticParams,
   officialFarmTypes,
-} from "../../app/farm/[type]/page";
+} from "../../app/(en)/farm/[type]/page";
 
 const expectedOfficialFarmTypes = [
   "standard",

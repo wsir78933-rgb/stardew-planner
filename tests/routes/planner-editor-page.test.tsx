@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import PlannerPage from "../../app/page";
+import PlannerPage from "../../app/(en)/page";
 
 describe("planner editor page", () => {
   it("keeps the frozen reference client out of the static homepage markup", () => {

@@ -16,7 +16,7 @@ describe("homepage UI toolchain", () => {
     expect(readProjectFile("components.json")).toContain("https://ui.shadcn.com/schema.json");
     expect(readProjectFile("components/ui/button.tsx")).toContain("Button");
     expect(readProjectFile("components/ui/accordion.tsx")).toContain("Accordion");
-    expect(readProjectFile("app/layout.tsx")).not.toContain("next/font/google");
+    expect(readProjectFile("app/(en)/layout.tsx")).not.toContain("next/font/google");
     expect(readProjectFile("app/globals.css")).not.toContain('shadcn/tailwind.css');
     expect(readProjectFile("app/globals.css")).not.toContain("@layer base");
     expect(readProjectFile("vitest.config.ts")).toContain('alias: { "@":');

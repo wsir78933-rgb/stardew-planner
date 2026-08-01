@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { metadata as plannerMetadata } from "../../app/page";
-import { farmComparisonMetadata } from "../../app/farm-comparison/page";
-import { generateMetadata } from "../../app/farm/[type]/page";
-import { modsMetadata } from "../../app/mods/page";
+import { metadata as plannerMetadata } from "../../app/(en)/page";
+import { farmComparisonMetadata } from "../../app/(en)/farm-comparison/page";
+import { generateMetadata } from "../../app/(en)/farm/[type]/page";
+import { modsMetadata } from "../../app/(en)/mods/page";
 import { metadata as chinesePlannerMetadata } from "../../app/zh/page";
 import { farmComparisonMetadata as chineseFarmComparisonMetadata } from "../../app/zh/farm-comparison/page";
 import {

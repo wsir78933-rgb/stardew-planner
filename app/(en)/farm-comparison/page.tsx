@@ -1,8 +1,8 @@
-import { FarmComparisonContent } from "../../src/components/farm-comparison-content";
-import { JsonLdScript } from "../../src/components/json-ld-script";
-import { PublicPageShell } from "../../src/components/public-page-shell";
-import { createPublicPageMetadata } from "../../src/seo/page-metadata";
-import { createArticleStructuredData } from "../../src/seo/page-structured-data";
+import { FarmComparisonContent } from "../../../src/components/farm-comparison-content";
+import { JsonLdScript } from "../../../src/components/json-ld-script";
+import { PublicPageShell } from "../../../src/components/public-page-shell";
+import { createPublicPageMetadata } from "../../../src/seo/page-metadata";
+import { createArticleStructuredData } from "../../../src/seo/page-structured-data";
 
 const farmComparisonDescription =
   "Compare all eight Stardew Valley farm maps, their tillable tiles, buildable space, and unique features.";
