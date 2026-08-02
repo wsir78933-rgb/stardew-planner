@@ -73,6 +73,9 @@ describe("public farm pages", () => {
     expect(guideMarkup).toContain(standardFarmGuide.previewSource);
     expect(guideMarkup).toContain("Tillable tiles");
     expect(guideMarkup).toContain("What makes it different");
+    expect(guideMarkup).toContain(
+      'href="/">Stardew Valley Farm Planner</a>',
+    );
     expect(guideMarkup).toContain(`href="/?farmType=${standardFarmGuide.id}"`);
   });
 
@@ -93,6 +96,7 @@ describe("public farm pages", () => {
     expect(comparisonMarkup).toContain("标准农场");
     expect(comparisonMarkup).toContain('href="/zh/farm/standard"');
     expect(comparisonMarkup).toContain('href="/?farmType=standard"');
+    expect(guideMarkup).toContain('href="/">星露谷规划器</a>');
     expect(guideMarkup).toContain('href="/zh/farm-comparison"');
     expect(guideMarkup).toContain('href="/zh/farm/riverland"');
     expect(guideMarkup).toContain('href="/?farmType=standard"');

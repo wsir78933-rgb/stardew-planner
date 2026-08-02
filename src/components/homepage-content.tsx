@@ -1,14 +1,12 @@
 import type { ReactNode } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
+import { handleFaqSummaryKeyDown } from "@/src/homepage/faq-disclosure-keyboard";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
+import { HomepageFarmGuideLinks } from "./homepage-farm-guide-links";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
+import { SiteFooter } from "./site-footer";
 
 type HomepageContentProps = {
   copy: HomepageCopy;
@@ -37,7 +35,6 @@ export function HomepageContent({
           </div>
           <div data-homepage-header-actions>
             <HomepageLocaleSwitcher
-              currentLocale={currentLocale}
               label={copy.navigation.languageLabel}
               onLocaleChange={onLocaleChange}
             />
@@ -49,7 +46,6 @@ export function HomepageContent({
       </header>
       <main>
         <section data-homepage-hero>
-          <p data-homepage-eyebrow>{copy.hero.eyebrow}</p>
           <h1>
             {copy.hero.headlineBefore}
             <em data-homepage-hero-emphasis>{copy.hero.headlineEmphasis}</em>
@@ -59,10 +55,6 @@ export function HomepageContent({
           <Button asChild data-homepage-primary-action size="lg">
             <a href="#planner">{copy.hero.primaryActionLabel}</a>
           </Button>
-        </section>
-        <section data-homepage-workspace-introduction>
-          <p>{copy.workspace.label}</p>
-          <p>{copy.workspace.description}</p>
         </section>
         {plannerWorkspace}
         <section id="capabilities">
@@ -79,23 +71,26 @@ export function HomepageContent({
             ))}
           </div>
         </section>
+        <HomepageFarmGuideLinks copy={copy.farmGuides} currentLocale={currentLocale} />
         <section id="faq">
           <h2>{copy.faq.heading}</h2>
-          <Accordion collapsible type="single">
+          <div data-homepage-faq-list>
             {copy.faq.items.map((faqItem, faqIndex) => (
-              <AccordionItem key={`faq-${faqIndex}`} value={`faq-${faqIndex}`}>
-                <AccordionTrigger>{faqItem.question}</AccordionTrigger>
-                <AccordionContent>{faqItem.answer}</AccordionContent>
-              </AccordionItem>
+              <details key={`faq-${faqIndex}`}>
+                <summary onKeyDown={handleFaqSummaryKeyDown}>
+                  {faqItem.question}
+                </summary>
+                <p>{faqItem.answer}</p>
+              </details>
             ))}
-          </Accordion>
+          </div>
+        </section>
+        <section data-homepage-trust>
+          <h2>{copy.trust.heading}</h2>
+          <p>{copy.trust.description}</p>
         </section>
       </main>
-      <footer>
-        <p>{copy.footer.copyright}</p>
-        <a href="/farm-comparison">{copy.footer.farmComparisonLinkLabel}</a>
-        <a href="/mods">{copy.footer.farmGuidesLinkLabel}</a>
-      </footer>
+      <SiteFooter content={createSiteFooterContent(copy.footer, currentLocale)} />
     </>
   );
 }

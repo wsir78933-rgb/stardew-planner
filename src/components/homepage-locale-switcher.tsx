@@ -1,37 +1,92 @@
 "use client";
 
+import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import {
+  applyHomepageLocaleSelection,
+  subscribeToHomepageLanguageMenuDismissal,
+} from "@/src/homepage/homepage-language-menu-behavior";
+import {
+  HOMEPAGE_LOCALE_LABELS,
+  HOMEPAGE_LOCALES,
+  type HomepageLocale,
+} from "@/src/homepage/homepage-locale";
 
 type HomepageLocaleSwitcherProps = {
-  currentLocale: HomepageLocale;
   label: string;
   onLocaleChange: (homepageLocale: HomepageLocale) => void;
 };
 
 export function HomepageLocaleSwitcher({
-  currentLocale,
   label,
   onLocaleChange,
 }: HomepageLocaleSwitcherProps) {
+  const languageMenuId = useId();
+  const languageSwitcherRef = useRef<HTMLDivElement>(null);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+
+  function closeLanguageMenu() {
+    setIsLanguageMenuOpen(false);
+  }
+
+  function restoreTriggerFocus() {
+    languageSwitcherRef.current
+      ?.querySelector<HTMLButtonElement>("[data-homepage-language-trigger]")
+      ?.focus();
+  }
+
+  function selectHomepageLocale(homepageLocale: HomepageLocale) {
+    applyHomepageLocaleSelection({
+      closeLanguageMenu,
+      homepageLocale,
+      onLocaleChange,
+      restoreTriggerFocus,
+    });
+  }
+
+  useEffect(() => {
+    if (!isLanguageMenuOpen) {
+      return;
+    }
+
+    return subscribeToHomepageLanguageMenuDismissal({
+      closeLanguageMenu,
+      eventSource: document,
+      getLanguageSwitcherElement: () => languageSwitcherRef.current,
+      restoreTriggerFocus,
+    });
+  }, [isLanguageMenuOpen]);
+
   return (
-    <div aria-label={label} role="group">
+    <div data-homepage-language-switcher ref={languageSwitcherRef}>
       <Button
-        aria-pressed={currentLocale === "en"}
-        onClick={() => onLocaleChange("en")}
+        aria-controls={languageMenuId}
+        aria-expanded={isLanguageMenuOpen}
+        aria-label={label}
+        data-homepage-language-trigger
+        onClick={() => setIsLanguageMenuOpen((isOpen) => !isOpen)}
         type="button"
         variant="ghost"
       >
-        English
+        Language <span aria-hidden="true">▾</span>
       </Button>
-      <Button
-        aria-pressed={currentLocale === "zh-CN"}
-        onClick={() => onLocaleChange("zh-CN")}
-        type="button"
-        variant="ghost"
+      <ul
+        data-homepage-language-menu
+        hidden={!isLanguageMenuOpen}
+        id={languageMenuId}
       >
-        中文
-      </Button>
+        {HOMEPAGE_LOCALES.map((homepageLocale) => (
+          <li key={homepageLocale}>
+            <button
+              data-homepage-language-option
+              onClick={() => selectHomepageLocale(homepageLocale)}
+              type="button"
+            >
+              {HOMEPAGE_LOCALE_LABELS[homepageLocale]}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

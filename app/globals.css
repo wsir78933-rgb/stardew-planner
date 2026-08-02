@@ -31,12 +31,14 @@
 html,
 body {
   background: #141e17;
-  height: 100%;
   margin: 0;
-  overflow: hidden;
 }
 
-body.stardew-homepage {
+body {
+  min-height: 100vh;
+}
+
+body:has(> [data-homepage-shell]) {
   --background: #fdfff8;
   --foreground: #1c211b;
   --card: #ffffff;
@@ -75,7 +77,7 @@ body.stardew-homepage {
   overflow-y: auto;
 }
 
-body.stardew-homepage.planner-active {
+body:has(> [data-homepage-shell]).planner-active {
   background:
     radial-gradient(
       ellipse 80rem 52rem at -22rem -8rem,
@@ -97,17 +99,17 @@ body.stardew-homepage.planner-active {
   overflow-y: auto !important;
 }
 
-body.stardew-homepage [data-homepage-shell] {
+body:has(> [data-homepage-shell]) [data-homepage-shell] {
   min-height: 100%;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-body.stardew-homepage [data-homepage-header] {
+body:has(> [data-homepage-shell]) [data-homepage-header] {
   border-bottom: 1px solid rgb(36 42 34 / 88%);
 }
 
-body.stardew-homepage [data-homepage-header] nav {
+body:has(> [data-homepage-shell]) [data-homepage-header] nav {
   align-items: center;
   display: flex;
   gap: 1.5rem;
@@ -117,12 +119,12 @@ body.stardew-homepage [data-homepage-header] nav {
   padding-inline: clamp(1.25rem, 3vw, 3rem);
 }
 
-body.stardew-homepage [data-homepage-shell] a {
+body:has(> [data-homepage-shell]) [data-homepage-shell] a {
   color: inherit;
   text-decoration: none;
 }
 
-body.stardew-homepage [data-homepage-brand] {
+body:has(> [data-homepage-shell]) [data-homepage-brand] {
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -130,54 +132,92 @@ body.stardew-homepage [data-homepage-brand] {
   max-width: 13rem;
 }
 
-body.stardew-homepage [data-homepage-navigation-links],
-body.stardew-homepage [data-homepage-header-actions],
-body.stardew-homepage [data-homepage-header-actions] [role="group"] {
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links],
+body:has(> [data-homepage-shell]) [data-homepage-header-actions] {
   align-items: center;
   display: flex;
 }
 
-body.stardew-homepage [data-homepage-navigation-links] {
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] {
   gap: clamp(0.85rem, 2vw, 1.75rem);
 }
 
-body.stardew-homepage [data-homepage-navigation-links] a {
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] a {
   color: var(--muted-foreground);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
-body.stardew-homepage [data-homepage-navigation-links] a:hover,
-body.stardew-homepage [data-homepage-shell] footer a:hover {
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] a:hover,
+body:has(> [data-homepage-shell]) [data-site-footer] a:hover {
   color: var(--foreground);
   text-decoration: underline;
   text-underline-offset: 0.22em;
 }
 
-body.stardew-homepage [data-homepage-header-actions] {
+body:has(> [data-homepage-shell]) [data-homepage-header-actions] {
   gap: 0.55rem;
 }
 
-body.stardew-homepage [data-homepage-header-actions] [role="group"] {
+body:has(> [data-homepage-shell]) [data-homepage-language-switcher] {
+  position: relative;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-language-trigger] {
   border: 1px solid rgb(36 42 34 / 22%);
   border-radius: 0.45rem;
-  gap: 0;
-  padding: 0.15rem;
-}
-
-body.stardew-homepage [data-homepage-header-actions] [role="group"] button {
-  border-radius: 0.3rem;
   color: var(--muted-foreground);
   min-height: 2rem;
+  padding-inline: 0.6rem;
 }
 
-body.stardew-homepage [data-homepage-header-actions] [role="group"] button[aria-pressed="true"] {
+body:has(> [data-homepage-shell]) [data-homepage-language-trigger]:hover,
+body:has(> [data-homepage-shell]) [data-homepage-language-trigger][aria-expanded="true"] {
   background: var(--secondary);
   color: var(--foreground);
 }
 
-body.stardew-homepage [data-homepage-header-action],
-body.stardew-homepage [data-homepage-primary-action] {
+body:has(> [data-homepage-shell]) [data-homepage-language-menu] {
+  background: var(--background);
+  border: 1px solid rgb(36 42 34 / 22%);
+  border-radius: 0.45rem;
+  box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%);
+  list-style: none;
+  margin: 0;
+  min-width: 8.5rem;
+  padding: 0.25rem;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 10;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-language-option] {
+  background: transparent;
+  border: 0;
+  border-radius: 0.3rem;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  min-height: 2.5rem;
+  padding-inline: 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-language-option]:hover {
+  background: var(--secondary);
+  color: var(--foreground);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-language-option]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 0.15rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-header-action],
+body:has(> [data-homepage-shell]) [data-homepage-primary-action] {
   background: var(--primary);
   border: 1.5px solid var(--foreground);
   border-radius: 0.45rem;
@@ -188,18 +228,18 @@ body.stardew-homepage [data-homepage-primary-action] {
   padding-inline: 1.1rem;
 }
 
-body.stardew-homepage [data-homepage-header-action]:hover,
-body.stardew-homepage [data-homepage-primary-action]:hover {
+body:has(> [data-homepage-shell]) [data-homepage-header-action]:hover,
+body:has(> [data-homepage-shell]) [data-homepage-primary-action]:hover {
   background: #d4ff61;
   color: var(--primary-foreground);
   transform: translateY(-0.08rem);
 }
 
-body.stardew-homepage [data-homepage-shell] > main {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main {
   padding-bottom: clamp(4rem, 8vw, 7.5rem);
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section:not(
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section:not(
     [data-homepage-workspace]
   ) {
   margin-inline: auto;
@@ -207,15 +247,19 @@ body.stardew-homepage [data-homepage-shell] > main > section:not(
   padding-inline: clamp(1.25rem, 3vw, 3rem);
 }
 
-body.stardew-homepage [data-homepage-hero] {
+body:has(> [data-homepage-shell]) [data-homepage-hero] {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   isolation: isolate;
   overflow: hidden;
   padding-block: clamp(5rem, 11vw, 10.5rem) clamp(3.5rem, 8vw, 7rem);
   position: relative;
+  text-align: center;
 }
 
-body.stardew-homepage [data-homepage-hero]::after {
-  background: radial-gradient(circle, rgb(201 251 69 / 68%) 0%, rgb(201 251 69 / 0%) 69%);
+body:has(> [data-homepage-shell]) [data-homepage-hero]::after {
+  background: radial-gradient(circle, rgb(201 251 69 / 8%) 0%, rgb(201 251 69 / 0%) 69%);
   content: "";
   height: min(52vw, 42rem);
   pointer-events: none;
@@ -226,46 +270,33 @@ body.stardew-homepage [data-homepage-hero]::after {
   z-index: -1;
 }
 
-body.stardew-homepage [data-homepage-shell] h1,
-body.stardew-homepage [data-homepage-shell] h2,
-body.stardew-homepage [data-homepage-shell] h3,
-body.stardew-homepage [data-homepage-shell] p {
+body:has(> [data-homepage-shell]) [data-homepage-shell] h1,
+body:has(> [data-homepage-shell]) [data-homepage-shell] h2,
+body:has(> [data-homepage-shell]) [data-homepage-shell] h3,
+body:has(> [data-homepage-shell]) [data-homepage-shell] p {
   margin-top: 0;
 }
 
-body.stardew-homepage [data-homepage-shell] h1,
-body.stardew-homepage [data-homepage-shell] h2,
-body.stardew-homepage [data-homepage-shell] h3 {
+body:has(> [data-homepage-shell]) [data-homepage-shell] h1,
+body:has(> [data-homepage-shell]) [data-homepage-shell] h2,
+body:has(> [data-homepage-shell]) [data-homepage-shell] h3 {
   color: var(--foreground);
   letter-spacing: -0.055em;
 }
 
-body.stardew-homepage [data-homepage-shell] h1 {
-  font-size: clamp(3.7rem, 8.2vw, 8.6rem);
-  line-height: 0.88;
+body:has(> [data-homepage-shell]) [data-homepage-shell] h1 {
+  font-size: clamp(3.1rem, 5.8vw, 5.5rem);
+  line-height: 0.94;
   margin-bottom: 2rem;
-  max-width: 10ch;
+  max-width: 13ch;
 }
 
-body.stardew-homepage [data-homepage-hero-emphasis] {
+body:has(> [data-homepage-shell]) [data-homepage-hero-emphasis] {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 400;
 }
 
-body.stardew-homepage [data-homepage-eyebrow],
-body.stardew-homepage [data-homepage-workspace-introduction] p:first-child {
-  color: var(--foreground);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-body.stardew-homepage [data-homepage-eyebrow] {
-  margin-bottom: 1.35rem;
-}
-
-body.stardew-homepage [data-homepage-hero] > p:not([data-homepage-eyebrow]) {
+body:has(> [data-homepage-shell]) [data-homepage-hero] > p {
   color: var(--muted-foreground);
   font-size: clamp(1.05rem, 1.6vw, 1.25rem);
   line-height: 1.55;
@@ -273,65 +304,48 @@ body.stardew-homepage [data-homepage-hero] > p:not([data-homepage-eyebrow]) {
   max-width: 37rem;
 }
 
-body.stardew-homepage [data-homepage-workspace-introduction] {
-  border-top: 1px solid rgb(36 42 34 / 65%);
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  padding-block: 1.35rem 1.5rem;
-}
-
-body.stardew-homepage [data-homepage-workspace-introduction] p {
-  margin-bottom: 0;
-}
-
-body.stardew-homepage [data-homepage-workspace-introduction] p:last-child {
-  color: var(--muted-foreground);
-  line-height: 1.6;
-}
-
-body.stardew-homepage [data-homepage-workspace] {
+body:has(> [data-homepage-shell]) [data-homepage-workspace] {
   height: 100vh;
   margin: 0 0 clamp(5.5rem, 10vw, 9rem);
   min-width: 0;
-  padding-inline: 0;
+  padding-inline: clamp(1.25rem, 3vw, 3rem);
   position: relative;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section[id]:not(
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id]:not(
     [data-homepage-workspace]
   ) {
   padding-block: clamp(4rem, 8vw, 7.5rem);
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section[id] > h2 {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id] > h2 {
   font-size: clamp(2.7rem, 5vw, 5.4rem);
   line-height: 0.94;
   margin-bottom: clamp(2rem, 4vw, 4rem);
   max-width: 11ch;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#capabilities > div {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities > div {
   border-block: 1px solid rgb(36 42 34 / 72%);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#capabilities article {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities article {
   min-height: 15.5rem;
   padding: 1.75rem;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#capabilities article + article {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities article + article {
   border-left: 1px solid rgb(36 42 34 / 72%);
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#capabilities h3 {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities h3 {
   font-size: 1.45rem;
   margin-bottom: 0.85rem;
 }
 
-body.stardew-homepage [data-homepage-capability-number] {
+body:has(> [data-homepage-shell]) [data-homepage-capability-number] {
   color: #5f7b1d;
   display: block;
   font-family: Georgia, "Times New Roman", serif;
@@ -339,118 +353,272 @@ body.stardew-homepage [data-homepage-capability-number] {
   margin-bottom: 3.5rem;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#capabilities p,
-body.stardew-homepage [data-homepage-shell] > main > section#faq p {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities p,
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,
+body:has(> [data-homepage-shell]) [data-homepage-farm-guides] > p,
+body:has(> [data-homepage-shell]) [data-homepage-trust] > p {
   color: var(--muted-foreground);
   line-height: 1.6;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#faq [data-slot="accordion-item"] {
+body:has(> [data-homepage-shell]) [data-homepage-farm-guides] > p {
+  margin-bottom: 1.5rem;
+  max-width: 44rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-farm-comparison-link] {
+  align-items: center;
+  background: var(--primary);
+  border: 1px solid var(--foreground);
+  color: var(--primary-foreground);
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 2.5rem;
+  padding-inline: 1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-farm-comparison-link]:hover {
+  background: #d4ff61;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-farm-comparison-link]:focus-visible,
+body:has(> [data-homepage-shell]) [data-homepage-farm-guide-link]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 0.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-farm-guide-links] {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.5rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-farm-guide-link] {
+  border: 1px solid rgb(36 42 34 / 35%);
+  font-weight: 700;
+  padding: 1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-farm-guide-link]:hover {
+  background: var(--secondary);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-trust] {
+  border-block: 1px solid rgb(36 42 34 / 72%);
+  margin-inline: auto;
+  max-width: 48rem;
+  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  text-align: center;
+  width: calc(100% - clamp(2.5rem, 6vw, 6rem));
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-trust] h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin-bottom: 1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-trust] p {
+  margin-bottom: 0;
+  margin-inline: auto;
+  max-width: 44rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details {
   border-top: 1px solid rgb(36 42 34 / 72%);
   padding-block: 0.25rem;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#faq [data-slot="accordion-item"]:last-child {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details:last-child {
   border-bottom: 1px solid rgb(36 42 34 / 72%);
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#faq [data-slot="accordion-trigger"] {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq summary {
   color: var(--foreground);
   font-size: 1rem;
   padding-block: 1.3rem;
 }
 
-body.stardew-homepage [data-homepage-shell] > main > section#faq [data-slot="accordion-content"] {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 0.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details p {
   color: var(--muted-foreground);
   line-height: 1.6;
   padding-bottom: 1.25rem;
 }
 
-body.stardew-homepage [data-homepage-shell] > footer {
+body:has(> [data-homepage-shell]) [data-site-footer] {
   border-top: 1px solid rgb(36 42 34 / 72%);
+  box-sizing: border-box;
   color: var(--muted-foreground);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
   margin-inline: auto;
   max-width: 1280px;
-  padding: 2rem clamp(1.25rem, 3vw, 3rem) 3rem;
+  min-width: 0;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 3vw, 3rem) 2rem;
+  width: 100%;
 }
 
-body.stardew-homepage [data-homepage-shell] > footer p {
-  margin-bottom: 0;
+body:has(> [data-homepage-shell]) [data-site-footer] > p {
+  border-top: 1px solid rgb(36 42 34 / 72%);
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: 1.25rem;
 }
 
-body.stardew-homepage [data-homepage-shell] > footer a {
+body:has(> [data-homepage-shell]) [data-site-footer] a {
   font-size: 0.9rem;
+  overflow-wrap: anywhere;
+  text-underline-offset: 0.22em;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer] a:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 0.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-identity] {
+  align-self: start;
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-identity] strong {
+  color: var(--foreground);
+  display: block;
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-identity] p {
+  line-height: 1.6;
+  margin: 0.65rem 0 0;
+  max-width: 22rem;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-social-icons] {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  grid-column: 1;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-social-icons] span {
+  align-items: center;
+  color: var(--muted-foreground);
+  display: inline-flex;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-sections] {
+  display: grid;
+  gap: 1.5rem;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-group] {
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-group] h2 {
+  font-size: 0.9rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.85rem;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
+  display: grid;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 @media (max-width: 700px) {
-  body.stardew-homepage [data-homepage-header] nav {
+  body:has(> [data-homepage-shell]) [data-homepage-header] nav {
     flex-wrap: wrap;
     gap: 0.9rem;
     padding-block: 1rem;
   }
 
-  body.stardew-homepage [data-homepage-brand] {
+  body:has(> [data-homepage-shell]) [data-homepage-brand] {
     max-width: none;
   }
 
-  body.stardew-homepage [data-homepage-navigation-links] {
+  body:has(> [data-homepage-shell]) [data-homepage-navigation-links] {
     display: none;
   }
 
-  body.stardew-homepage [data-homepage-header-actions] {
+  body:has(> [data-homepage-shell]) [data-homepage-header-actions] {
     margin-left: auto;
   }
 
-  body.stardew-homepage [data-homepage-header-action] {
+  body:has(> [data-homepage-shell]) [data-homepage-header-action] {
     display: none;
   }
 
-  body.stardew-homepage [data-homepage-hero] {
+  body:has(> [data-homepage-shell]) [data-homepage-hero] {
     padding-block: 4.5rem 3rem;
   }
 
-  body.stardew-homepage [data-homepage-shell] h1 {
-    font-size: clamp(3.35rem, 16vw, 5.6rem);
-    max-width: 8ch;
+  body:has(> [data-homepage-shell]) [data-homepage-shell] h1 {
+    font-size: clamp(2.75rem, 12vw, 4.25rem);
+    max-width: 10ch;
   }
 
-  body.stardew-homepage [data-homepage-workspace-introduction] {
-    display: block;
-  }
-
-  body.stardew-homepage [data-homepage-workspace-introduction] p:first-child {
-    margin-bottom: 0.75rem;
-  }
-
-  body.stardew-homepage [data-homepage-workspace] {
+  body:has(> [data-homepage-shell]) [data-homepage-workspace] {
     height: 45rem;
     padding-inline: 0;
   }
 
-  body.stardew-homepage [data-homepage-shell] > main > section#capabilities > div {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities > div {
     grid-template-columns: 1fr;
   }
 
-  body.stardew-homepage [data-homepage-shell] > main > section#capabilities article + article {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities article + article {
     border-left: 0;
     border-top: 1px solid rgb(36 42 34 / 72%);
   }
 
-  body.stardew-homepage [data-homepage-capability-number] {
+  body:has(> [data-homepage-shell]) [data-homepage-capability-number] {
     margin-bottom: 2rem;
   }
+
+  body:has(> [data-homepage-shell]) [data-homepage-farm-guide-links] {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(> [data-homepage-shell]) [data-site-footer] {
+    gap: 1.75rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body:has(> [data-homepage-shell]) [data-site-footer-social-icons] {
+    grid-column: auto;
+  }
+
+  body:has(> [data-homepage-shell]) [data-site-footer-sections] {
+    grid-column: auto;
+    grid-row: auto;
+    grid-template-columns: 1fr;
+  }
+
 }
 
 [data-public-page-shell] {
   background: #fdfff8;
   color: #1c211b;
   font-family: Arial, Helvetica, sans-serif;
-  height: 100dvh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  min-height: 100dvh;
+  overflow-x: clip;
 }
 
 [data-public-page-shell] a {
@@ -462,8 +630,7 @@ body.stardew-homepage [data-homepage-shell] > footer a {
   outline-offset: 3px;
 }
 
-[data-public-page-shell] .public-page-shell-header,
-[data-public-page-shell] > footer {
+[data-public-page-shell] .public-page-shell-header {
   align-items: center;
   border-color: rgb(28 33 27 / 24%);
   border-style: solid;
@@ -515,11 +682,101 @@ body.stardew-homepage [data-homepage-shell] > footer a {
   padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
 }
 
-[data-public-page-shell] > footer {
-  border-width: 1px 0 0;
+[data-public-page-shell] > [data-site-footer] {
+  border-top: 1px solid rgb(28 33 27 / 24%);
+  box-sizing: border-box;
   color: #52604e;
+  display: grid;
   font-size: 0.9rem;
-  min-height: 4.5rem;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
+  margin-inline: auto;
+  max-width: 72rem;
+  min-width: 0;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem) 2rem;
+  width: 100%;
+}
+
+[data-public-page-shell] > [data-site-footer] > p {
+  border-top: 1px solid rgb(28 33 27 / 24%);
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: 1.25rem;
+}
+
+[data-public-page-shell] > [data-site-footer] a:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-identity] {
+  align-self: start;
+  min-width: 0;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-identity] strong {
+  color: #1c211b;
+  display: block;
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-identity] p {
+  line-height: 1.6;
+  margin: 0.65rem 0 0;
+  max-width: 22rem;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  grid-column: 1;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] span {
+  align-items: center;
+  color: #52604e;
+  display: inline-flex;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-sections] {
+  display: grid;
+  gap: 1.5rem;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-group] {
+  min-width: 0;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-group] h2 {
+  font-size: 0.9rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.85rem;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-group] ul {
+  display: grid;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+[data-public-page-shell] > [data-site-footer] a {
+  overflow-wrap: anywhere;
+  text-underline-offset: 0.22em;
+}
+
+[data-public-page-shell] > [data-site-footer] a:hover {
+  color: #1c211b;
+  text-decoration: underline;
 }
 
 [data-public-page-shell] h1,
@@ -698,6 +955,21 @@ body.stardew-homepage [data-homepage-shell] > footer a {
     flex-direction: column;
     gap: 0.75rem;
     padding-block: 1rem;
+  }
+
+  [data-public-page-shell] > [data-site-footer] {
+    gap: 1.75rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  [data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] {
+    grid-column: auto;
+  }
+
+  [data-public-page-shell] > [data-site-footer] [data-site-footer-sections] {
+    grid-column: auto;
+    grid-row: auto;
+    grid-template-columns: 1fr;
   }
 
   [data-public-page-shell] .farm-guide-hero,

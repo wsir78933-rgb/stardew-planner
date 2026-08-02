@@ -30,6 +30,8 @@ const expectedStaticPageFiles = [
   "farm/beach.html",
   "farm/meadowlands.html",
   "mods.html",
+  "privacy.html",
+  "terms.html",
   "zh.html",
   "zh/farm-comparison.html",
   "zh/farm/standard.html",
@@ -41,6 +43,8 @@ const expectedStaticPageFiles = [
   "zh/farm/beach.html",
   "zh/farm/meadowlands.html",
   "zh/mods.html",
+  "zh/privacy.html",
+  "zh/terms.html",
 ] as const;
 
 function readStaticPageHtml(staticPageFile: string): string {
@@ -77,9 +81,6 @@ describe("static reference-runtime routes", () => {
           'src="/reference-runtime/bootstrap.mjs"',
         );
       }
-
-      expect(existsSync(join(process.cwd(), "out", "privacy.html"))).toBe(false);
-      expect(existsSync(join(process.cwd(), "out", "terms.html"))).toBe(false);
     },
   );
 });

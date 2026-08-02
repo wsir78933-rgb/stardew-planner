@@ -425,6 +425,7 @@ describe("reference runtime static delivery", () => {
       "_app/immutable/entry/app.DTzIUNnu.js",
       "reference-runtime/local-project-api.mjs",
       "reference-runtime/local-only-overrides.css",
+      "reference-runtime/wheel-zoom-mode-toggle.mjs",
       "reference-runtime/reference-runtime-lock.json",
     ]) {
       expect(existsSync(requireStaticExportFile(staticExportRelativePath))).toBe(true);
@@ -480,11 +481,38 @@ describe("reference runtime static delivery", () => {
       "startReferenceRuntimeWhenDocumentIsReady();",
     );
 
+    expect(frozenPlannerChunk).toContain(
+      "async function uc(x,D){if(!ve?.renderer)return;",
+    );
+    expect(frozenPlannerChunk).not.toContain(
+      "async function uc(x,D){if(!ve)return;",
+    );
     expect(frozenPlannerChunk).toContain("Cm=!0");
     expect(localApiImportIndex).toBeGreaterThanOrEqual(0);
     expect(localApiInstallationIndex).toBeGreaterThanOrEqual(0);
     expect(startupSchedulingIndex).toBeGreaterThanOrEqual(0);
     expect(localApiInstallationIndex).toBeLessThan(startupSchedulingIndex);
+  });
+
+  it("imports and installs wheel zoom mode only after the frozen runtime start resolves", () => {
+    const bootstrapModule = readStaticExportText(
+      "reference-runtime/bootstrap.mjs",
+    );
+    const wheelZoomInstallerImportIndex = bootstrapModule.indexOf(
+      'import { installReferenceRuntimeWheelZoomModeToggle } from "/reference-runtime/wheel-zoom-mode-toggle.mjs";',
+    );
+    const awaitedFrozenRuntimeStartIndex = bootstrapModule.indexOf(
+      "await start(referenceRuntimeApplication, referenceRuntimeRoot);",
+    );
+    const wheelZoomInstallerCallIndex = bootstrapModule.indexOf(
+      "installReferenceRuntimeWheelZoomModeToggle(document);",
+    );
+
+    expect(wheelZoomInstallerImportIndex).toBeGreaterThanOrEqual(0);
+    expect(awaitedFrozenRuntimeStartIndex).toBeGreaterThanOrEqual(0);
+    expect(wheelZoomInstallerCallIndex).toBeGreaterThan(
+      awaitedFrozenRuntimeStartIndex,
+    );
   });
 
   it("keeps the generated host and local delivery modules free of reference source URLs", () => {
@@ -493,6 +521,7 @@ describe("reference runtime static delivery", () => {
       requireStaticExportFile("reference-runtime/bootstrap.mjs"),
       requireStaticExportFile("reference-runtime/local-project-api.mjs"),
       requireStaticExportFile("reference-runtime/local-only-overrides.css"),
+      requireStaticExportFile("reference-runtime/wheel-zoom-mode-toggle.mjs"),
       ...collectNextStaticReleaseModulePaths(nextStaticDirectoryPath),
     ];
 

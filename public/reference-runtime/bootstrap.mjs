@@ -1,6 +1,7 @@
 import { start } from "/_app/immutable/entry/start.CLoByjli.js";
 import * as referenceRuntimeApplication from "/_app/immutable/entry/app.DTzIUNnu.js";
 import { installReferenceLocalProjectApi } from "/reference-runtime/local-project-api.mjs";
+import { installReferenceRuntimeWheelZoomModeToggle } from "/reference-runtime/wheel-zoom-mode-toggle.mjs";
 
 const referenceRuntimeRootId = "reference-runtime-root";
 const referenceRuntimeInitializedAttribute = "data-reference-runtime-initialized";
@@ -268,7 +269,7 @@ function getReferenceRuntimeRoot() {
   return referenceRuntimeRoot;
 }
 
-function startReferenceRuntime() {
+async function startReferenceRuntime() {
   const referenceRuntimeRoot = getReferenceRuntimeRoot();
 
   if (referenceRuntimeRoot.hasAttribute(referenceRuntimeInitializedAttribute)) {
@@ -278,14 +279,15 @@ function startReferenceRuntime() {
   }
 
   referenceRuntimeRoot.setAttribute(referenceRuntimeInitializedAttribute, "true");
-  start(referenceRuntimeApplication, referenceRuntimeRoot);
+  await start(referenceRuntimeApplication, referenceRuntimeRoot);
+  installReferenceRuntimeWheelZoomModeToggle(document);
   removeReferenceRuntimeLocalOnlyControls(document);
   observeReferenceRuntimeLocalOnlyControls();
 }
 
 async function startReferenceRuntimeWithLocalOnlyOverrides() {
   await loadReferenceRuntimeLocalOnlyStylesheet();
-  startReferenceRuntime();
+  await startReferenceRuntime();
 }
 
 function startReferenceRuntimeWhenDocumentIsReady() {

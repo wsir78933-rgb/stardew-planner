@@ -14,13 +14,13 @@ it("writes robots.txt with the absolute sitemap URL", () => {
   );
 });
 
-it("writes exactly the localized public URLs into sitemap.xml without legal paths", () => {
+it("writes exactly the localized public URLs into sitemap.xml with legal paths", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
   const sitemapUrlCount = (sitemapText.match(/<loc>/g) ?? []).length;
   const localizedPublicRouteEntries = getLocalizedPublicRouteEntries();
 
-  expect(sitemapUrlCount).toBe(22);
-  expect(localizedPublicRouteEntries).toHaveLength(22);
+  expect(sitemapUrlCount).toBe(26);
+  expect(localizedPublicRouteEntries).toHaveLength(26);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,
@@ -28,6 +28,6 @@ it("writes exactly the localized public URLs into sitemap.xml without legal path
   }
   expect(sitemapText).not.toContain("farmType=");
   expect(sitemapText).not.toContain("<lastmod>");
-  expect(sitemapText).not.toContain("/privacy");
-  expect(sitemapText).not.toContain("/terms");
+  expect(sitemapText).toContain("/privacy");
+  expect(sitemapText).toContain("/terms");
 });

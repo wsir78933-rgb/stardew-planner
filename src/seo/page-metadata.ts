@@ -5,7 +5,12 @@ import {
   type PublicCanonicalPath,
 } from "../i18n/public-route-registry";
 import type { PublicLocale } from "../i18n/public-locale";
-import { createCanonicalUrl } from "./public-site-url";
+import { createCanonicalUrl, publicSiteUrl } from "./public-site-url";
+
+const sharedSocialImageUrl = new URL(
+  "/social-images/stardew-valley-farm-planner.png",
+  publicSiteUrl,
+).toString();
 
 export type PublicPageMetadataInput = Readonly<{
   locale: PublicLocale;
@@ -33,11 +38,13 @@ export function createPublicPageMetadata(
       description: input.description,
       type: openGraphType,
       url: canonicalUrl,
+      images: [sharedSocialImageUrl],
     },
     twitter: {
       card: "summary",
       title: input.title,
       description: input.description,
+      images: [sharedSocialImageUrl],
     },
   };
 }

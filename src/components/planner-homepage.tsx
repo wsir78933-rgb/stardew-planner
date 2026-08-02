@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
 import {
   DEFAULT_HOMEPAGE_LOCALE,
-  getStoredHomepageLocale,
-  saveHomepageLocale,
   type HomepageLocale,
 } from "@/src/homepage/homepage-locale";
 import { HomepageContent } from "./homepage-content";
@@ -16,17 +14,11 @@ export function PlannerHomepage() {
     DEFAULT_HOMEPAGE_LOCALE,
   );
 
-  useEffect(() => {
-    setHomepageLocale(getStoredHomepageLocale(window.localStorage));
-  }, []);
-
   const copy = homepageCopyByLocale[homepageLocale];
 
   useEffect(() => {
     document.documentElement.lang = homepageLocale;
-    document.title = copy.navigation.productName;
-    saveHomepageLocale(window.localStorage, homepageLocale);
-  }, [copy.navigation.productName, homepageLocale]);
+  }, [homepageLocale]);
 
   return (
     <div data-homepage-shell>

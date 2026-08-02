@@ -16,6 +16,9 @@ import {
   officialFarmTypes,
 } from "../../src/reference/official-farm-guides";
 
+const expectedSocialImageUrl =
+  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
+
 const fixedInformationPageMetadataExpectations = [
   [
     farmComparisonMetadata,
@@ -49,6 +52,24 @@ function createExpectedLanguageAlternates(pathname: string) {
 }
 
 describe("public route metadata", () => {
+  it("uses the approved English planner metadata without changing localized routes", () => {
+    expect(plannerMetadata).toMatchObject({
+      title: "Stardew Valley Planner – Free Online Farm Layout Tool",
+      description:
+        "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
+      openGraph: {
+        title: "Stardew Valley Planner – Free Online Farm Layout Tool",
+        description:
+          "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
+      },
+      twitter: {
+        title: "Stardew Valley Planner – Free Online Farm Layout Tool",
+        description:
+          "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
+      },
+    });
+  });
+
   it("uses exact title, description, and canonical metadata for fixed information pages", () => {
     for (const [pageMetadata, title, description, canonical] of fixedInformationPageMetadataExpectations) {
       expect(pageMetadata).toMatchObject({
@@ -81,6 +102,12 @@ describe("public route metadata", () => {
         canonical: `https://stardewvalleyplanner.art${pathname === "/" ? "" : pathname}`,
         languages: createExpectedLanguageAlternates(pathname),
       });
+      expect(pageMetadata.openGraph).toMatchObject({
+        images: [expectedSocialImageUrl],
+      });
+      expect(pageMetadata.twitter).toMatchObject({
+        images: [expectedSocialImageUrl],
+      });
     }
 
     for (const farmType of officialFarmTypes) {
@@ -91,6 +118,8 @@ describe("public route metadata", () => {
           canonical: `https://stardewvalleyplanner.art/farm/${farmType}`,
           languages: createExpectedLanguageAlternates(`/farm/${farmType}`),
         },
+        openGraph: { images: [expectedSocialImageUrl] },
+        twitter: { images: [expectedSocialImageUrl] },
       });
     }
   });
@@ -104,6 +133,12 @@ describe("public route metadata", () => {
       expect(pageMetadata.alternates).toMatchObject({
         canonical: `https://stardewvalleyplanner.art/zh${pathname === "/" ? "" : pathname}`,
         languages: createExpectedLanguageAlternates(pathname),
+      });
+      expect(pageMetadata.openGraph).toMatchObject({
+        images: [expectedSocialImageUrl],
+      });
+      expect(pageMetadata.twitter).toMatchObject({
+        images: [expectedSocialImageUrl],
       });
     }
   });
@@ -124,6 +159,8 @@ describe("public route metadata", () => {
           canonical: `https://stardewvalleyplanner.art/zh/farm/${farmType}`,
           languages: createExpectedLanguageAlternates(`/farm/${farmType}`),
         },
+        openGraph: { images: [expectedSocialImageUrl] },
+        twitter: { images: [expectedSocialImageUrl] },
       });
     }
   });

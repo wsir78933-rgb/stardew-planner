@@ -1,0 +1,77 @@
+import { renderToStaticMarkup } from "react-dom/server";
+import { expect, it } from "vitest";
+import { SiteFooter } from "../../src/components/site-footer";
+import {
+  createSiteFooterContent,
+  type SiteFooterCopy,
+} from "../../src/site-footer/site-footer-content";
+
+const footerCopy: SiteFooterCopy = {
+  brandName: "Stardew Valley Farm Planner",
+  description: "Plan your farm layout.",
+  copyright: "© Stardew Valley Farm Planner",
+  planner: {
+    title: "Planner",
+    home: "Planner home",
+    farmComparison: "Farm comparison",
+    moddedFarms: "Modded farms",
+  },
+  explore: {
+    title: "Explore",
+    capabilities: "Capabilities",
+    faq: "FAQ",
+  },
+  legal: {
+    title: "Legal",
+    privacy: "Privacy policy",
+    terms: "Terms of service",
+  },
+};
+
+function renderFooter(locale: "en" | "zh-CN"): string {
+  return renderToStaticMarkup(
+    <SiteFooter content={createSiteFooterContent(footerCopy, locale)} />,
+  );
+}
+
+it("renders every English footer destination, identity, copyright, and decorative social icons", () => {
+  const footerMarkup = renderFooter("en");
+
+  expect(footerMarkup).toContain('<footer data-site-footer="true">');
+  expect(footerMarkup).toContain('data-site-footer-identity="true"');
+  expect(footerMarkup).toContain(footerCopy.brandName);
+  expect(footerMarkup).toContain(footerCopy.description);
+  expect(footerMarkup).toContain(footerCopy.copyright);
+  expect(footerMarkup).toContain('data-site-footer-sections="true"');
+  expect(
+    footerMarkup.match(/data-site-footer-group="true"/g),
+  ).toHaveLength(3);
+  expect(footerMarkup).toContain('href="/"');
+  expect(footerMarkup).toContain('href="/farm-comparison"');
+  expect(footerMarkup).toContain('href="/mods"');
+  expect(footerMarkup).toContain('href="/#capabilities"');
+  expect(footerMarkup).toContain('href="/#faq"');
+  expect(footerMarkup).toContain('href="/privacy"');
+  expect(footerMarkup).toContain('href="/terms"');
+  expect(footerMarkup).toContain('data-site-footer-social-icons="true"');
+
+  const socialIconRegion = footerMarkup.match(
+    /<div data-site-footer-social-icons="true">([\s\S]*?)<\/div>/,
+  );
+  const socialIconMarkup = socialIconRegion?.[1] ?? "";
+  expect(socialIconMarkup.match(/<span aria-hidden="true">/g)).toHaveLength(4);
+  expect(socialIconMarkup).not.toContain("<a");
+});
+
+it("uses English editor destinations and localized Chinese content destinations", () => {
+  const footerMarkup = renderFooter("zh-CN");
+
+  expect(footerMarkup).toContain('href="/"');
+  expect(footerMarkup).toContain('href="/zh/farm-comparison"');
+  expect(footerMarkup).toContain('href="/zh/mods"');
+  expect(footerMarkup).toContain('href="/#capabilities"');
+  expect(footerMarkup).toContain('href="/#faq"');
+  expect(footerMarkup).toContain('href="/zh/privacy"');
+  expect(footerMarkup).toContain('href="/zh/terms"');
+  expect(footerMarkup).not.toContain('/#planner');
+});

@@ -1,13 +1,28 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-const staticPublicPageExpectations = [
+import { officialFarmTypes } from "../../src/reference/official-farm-guides";
+
+const expectedSocialImageUrl =
+  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
+
+type StaticPublicPageExpectation = readonly [
+  pathname: string,
+  staticPageFile: string,
+  title: string,
+  description: string,
+  heading: string,
+  documentLanguage: string,
+  sectionHeadings?: readonly string[],
+];
+
+const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
   [
     "/",
     "index.html",
-    "Stardew Valley Farm Planner",
-    "Plan Stardew Valley farm layouts in your browser with an interactive map.",
-    "Plan a farm",
+    "Stardew Valley Planner – Free Online Farm Layout Tool",
+    "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
+    "Stardew Valley Planner for Every Farm Layout",
     "en",
   ],
   [
@@ -26,6 +41,41 @@ const staticPublicPageExpectations = [
     "Modded Stardew Valley Farms",
     "en",
   ],
+  [
+    "/privacy",
+    "privacy.html",
+    "Privacy Policy",
+    "Learn how Stardew Valley Planner keeps projects in your browser without accounts, cloud sync, or tracking.",
+    "Privacy Policy",
+    "en",
+    [
+      "What we collect",
+      "Farm data",
+      "Online features",
+      "Analytics",
+      "Cookies",
+      "Third parties",
+      "Data deletion",
+      "Local use",
+    ],
+  ],
+  [
+    "/terms",
+    "terms.html",
+    "Terms of Service",
+    "Read the browser-local terms for Stardew Valley Planner, including local projects, optional JSON import and export, and fan-made status.",
+    "Terms of Service",
+    "en",
+    [
+      "What this is",
+      "Accounts",
+      "Online features",
+      "Your data",
+      "Availability",
+      "Game assets",
+      "Local use",
+    ],
+  ],
   ["/farm/standard", "farm/standard.html", "Standard Farm | Stardew Valley Farm Planner", "Standard Farm farm guide. Highest raw crop output and full layout flexibility.", "Standard Farm", "en"],
   ["/farm/riverland", "farm/riverland.html", "Riverland Farm | Stardew Valley Farm Planner", "Riverland Farm farm guide. Fishing runs. Most of Pelican Town's pool is catchable without leaving home.", "Riverland Farm", "en"],
   ["/farm/forest", "farm/forest.html", "Forest Farm | Stardew Valley Farm Planner", "Forest Farm farm guide. Hardwood and forage passive income. Good match for the Foraging profession.", "Forest Farm", "en"],
@@ -37,6 +87,41 @@ const staticPublicPageExpectations = [
   ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "星露谷农场规划器", "zh-CN"],
   ["/zh/farm-comparison", "zh/farm-comparison.html", "星露谷农场类型对比", "在规划布局前，对比《星露谷物语》的全部官方农场地图。", "星露谷农场类型对比", "zh-CN"],
   ["/zh/mods", "zh/mods.html", "星露谷模组规划器", "规划你的星露谷模组组合。", "星露谷模组规划器", "zh-CN"],
+  [
+    "/zh/privacy",
+    "zh/privacy.html",
+    "隐私政策",
+    "了解星露谷农场规划器如何将项目保留在此浏览器中，不提供账户、云端同步或跟踪服务。",
+    "隐私政策",
+    "zh-CN",
+    [
+      "我们收集什么",
+      "农场数据",
+      "在线功能",
+      "分析",
+      "Cookie",
+      "第三方",
+      "数据删除",
+      "本地使用",
+    ],
+  ],
+  [
+    "/zh/terms",
+    "zh/terms.html",
+    "服务条款",
+    "阅读星露谷农场规划器的浏览器本地服务条款，包括本地项目、由你选择的 JSON 导入和导出，以及同人创作说明。",
+    "服务条款",
+    "zh-CN",
+    [
+      "这是什么",
+      "账户",
+      "在线功能",
+      "你的数据",
+      "可用性",
+      "游戏素材",
+      "本地使用",
+    ],
+  ],
   ["/zh/farm/standard", "zh/farm/standard.html", "标准农场 指南 | 星露谷规划器", "了解标准农场地图，并开始规划你的星露谷农场布局。", "标准农场", "zh-CN"],
   ["/zh/farm/riverland", "zh/farm/riverland.html", "河流农场 指南 | 星露谷规划器", "了解河流农场地图，并开始规划你的星露谷农场布局。", "河流农场", "zh-CN"],
   ["/zh/farm/forest", "zh/farm/forest.html", "森林农场 指南 | 星露谷规划器", "了解森林农场地图，并开始规划你的星露谷农场布局。", "森林农场", "zh-CN"],
@@ -125,6 +210,7 @@ describe("static public pages", () => {
       expectedDescription,
       expectedHeading,
       expectedDocumentLanguage,
+      expectedSectionHeadings,
     ] of staticPublicPageExpectations) {
       const staticPageHtml = readStaticPageHtml(staticPageFile);
       const englishPathname = pathname.startsWith("/zh")
@@ -144,10 +230,15 @@ describe("static public pages", () => {
         `Expected ${pathname} static artifact ${join(process.cwd(), "out", staticPageFile)} to emit lang=${expectedDocumentLanguage} from its first <html ...> tag.`,
       ).toBe(expectedDocumentLanguage);
 
-      expect(staticPageHtml).toContain(`<h1>${expectedHeading}`);
       expect(staticPageHtml).toContain(`<title>${expectedTitle}</title>`);
       expect(staticPageHtml).toContain(
         `<meta name="description" content="${escapeHtmlAttributeValue(expectedDescription)}"/>`,
+      );
+      expect(staticPageHtml).toContain(
+        `<meta property="og:image" content="${expectedSocialImageUrl}"/>`,
+      );
+      expect(staticPageHtml).toContain(
+        `<meta name="twitter:image" content="${expectedSocialImageUrl}"/>`,
       );
       expect(staticPageHtml).toContain(
         `<link rel="canonical" href="${expectedCanonicalUrl(pathname)}"`,
@@ -165,11 +256,46 @@ describe("static public pages", () => {
       if (staticPageFile === "index.html") {
         expect(staticPageHtml).toContain("WebApplication");
         expect(staticPageHtml).toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
+        expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+        expect(staticPageHtml).toContain(
+          `<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout</h1>`,
+        );
+        for (const capabilityDescription of [
+          "Start with Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach or Meadowlands. Ginger Island is also available in the map picker.",
+          "Arrange buildings, crops, placeables and decor while checking sprinkler, scarecrow, Bee House and Junimo Hut coverage.",
+          "Create and save local projects without an account or cloud sync.",
+        ]) {
+          expect(staticPageHtml).toContain(capabilityDescription);
+        }
+        for (const faqAnswer of [
+          "Projects are saved locally in this browser. There is no account or cloud sync, so use the same browser and device to reopen them.",
+          "The planner includes Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is also available in the map picker.",
+          "You can switch between spring, summer, fall, and winter and show sprinkler, scarecrow, Bee House, and Junimo Hut coverage.",
+          "Yes. Game-save import is experimental, and unsupported or modded items may not be mapped.",
+          "Yes. The planner provides standard and high-quality screenshot downloads.",
+        ]) {
+          expect(staticPageHtml).toContain(faqAnswer);
+        }
+        expect(staticPageHtml).toContain("About this planner");
+        expect(staticPageHtml).toContain(
+          "Fan-made Stardew Valley planning tool. Not affiliated with or endorsed by ConcernedApe or Stardew Valley. Projects stay in this browser.",
+        );
+        expect(staticPageHtml.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
+          officialFarmTypes.length,
+        );
+        expect(staticPageHtml).toContain('href="/farm-comparison"');
+        expect(staticPageHtml).toContain('href="/mods">Modded farms</a>');
         continue;
       }
 
+      expect(staticPageHtml).toContain(`<h1>${expectedHeading}`);
       expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+      for (const expectedSectionHeading of expectedSectionHeadings ?? []) {
+        expect(staticPageHtml).toContain(`<h2>${expectedSectionHeading}</h2>`);
+      }
       expect(staticPageHtml).toContain(`aria-label="${expectedNavigationLabel}"`);
+      expect(staticPageHtml).not.toContain("data-homepage-farm-guides");
+      expect(staticPageHtml).not.toContain("data-homepage-farm-guide-links");
       expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
       expect(staticPageHtml).not.toContain("reference-runtime-root");
       expect(staticPageHtml).not.toContain(
@@ -184,18 +310,34 @@ describe("static public pages", () => {
         ([pathname, , , , , expectedDocumentLanguage]) =>
           !pathname.startsWith("/zh") && expectedDocumentLanguage === "en",
       ),
-    ).toHaveLength(11);
+    ).toHaveLength(13);
     expect(
       staticPublicPageExpectations.filter(
         ([pathname, , , , , expectedDocumentLanguage]) =>
           pathname.startsWith("/zh") && expectedDocumentLanguage === "zh-CN",
       ),
-    ).toHaveLength(11);
+    ).toHaveLength(13);
+    expect(
+      existsSync(
+        join(
+          process.cwd(),
+          "out",
+          "social-images",
+          "stardew-valley-farm-planner.png",
+        ),
+      ),
+    ).toBe(true);
   });
 
-  it("does not export deleted legal artifacts", () => {
-    expect(existsSync(join(process.cwd(), "out", "privacy.html"))).toBe(false);
-    expect(existsSync(join(process.cwd(), "out", "terms.html"))).toBe(false);
+  it("exports all English and Chinese legal artifacts", () => {
+    for (const staticPageFile of [
+      "privacy.html",
+      "terms.html",
+      "zh/privacy.html",
+      "zh/terms.html",
+    ]) {
+      expect(existsSync(join(process.cwd(), "out", staticPageFile))).toBe(true);
+    }
   });
 
   it("exports global 404 artifacts with the English root document shell", () => {

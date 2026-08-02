@@ -54,7 +54,7 @@ export function FarmGuideContent({
   return (
     <>
       <nav aria-label={pageCopy.breadcrumbLabel} className="public-breadcrumbs">
-        <a href={getLocalizedPublicPath(locale, "/")}>{pageCopy.brandLabel}</a>
+        <a href="/">{pageCopy.brandLabel}</a>
         <span aria-hidden="true">/</span>
         <a href={getLocalizedPublicPath(locale, "/farm-comparison")}>
           {pageCopy.farmTypesLabel}

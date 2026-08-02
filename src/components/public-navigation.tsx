@@ -15,20 +15,28 @@ export function PublicNavigation({
   canonicalPath,
 }: PublicNavigationProperties) {
   const pageCopy = getPublicPageCopy(locale);
+  const currentLocalizedPath = getLocalizedPublicPath(locale, canonicalPath);
 
   return (
     <nav aria-label={pageCopy.navigationLabel}>
-      {pageCopy.navigation.map((navigationItem) => (
-        <a
-          aria-current={
-            navigationItem.path === canonicalPath ? "page" : undefined
-          }
-          href={getLocalizedPublicPath(locale, navigationItem.path)}
-          key={navigationItem.path}
-        >
-          {navigationItem.label}
-        </a>
-      ))}
+      {pageCopy.navigation.map((navigationItem) => {
+        const navigationDestination =
+          navigationItem.path === "/"
+            ? "/"
+            : getLocalizedPublicPath(locale, navigationItem.path);
+
+        return (
+          <a
+            aria-current={
+              navigationDestination === currentLocalizedPath ? "page" : undefined
+            }
+            href={navigationDestination}
+            key={navigationItem.path}
+          >
+            {navigationItem.label}
+          </a>
+        );
+      })}
     </nav>
   );
 }

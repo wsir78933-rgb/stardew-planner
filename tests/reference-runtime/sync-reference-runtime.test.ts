@@ -2,9 +2,29 @@ import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { assertStagedReferenceRuntimeJavaScriptUsesLocalAssets } from "../../src/reference-runtime/sync-reference-runtime";
+import * as referenceRuntimeSynchronizer from "../../src/reference-runtime/sync-reference-runtime";
 
 const remoteGameAssetBase = "https://assets.stardewplan.com/assets/1.6.15";
+const frozenPlannerChunkPublicOutputPath =
+  "_app/immutable/chunks/CUwsdp_r.js";
+const applicationOnlyRendererGuard =
+  "async function uc(x,D){if(!ve)return;";
+const rendererReadyGuard =
+  "async function uc(x,D){if(!ve?.renderer)return;";
+
+type RendererReadinessTransformer = (
+  sourcePublicOutputPath: string,
+  sourceText: string,
+) => string;
+
+const transformPlannerRendererReadinessGuard = (
+  referenceRuntimeSynchronizer as {
+    transformPlannerRendererReadinessGuard?: RendererReadinessTransformer;
+  }
+).transformPlannerRendererReadinessGuard;
+
+const assertStagedReferenceRuntimeJavaScriptUsesLocalAssets =
+  referenceRuntimeSynchronizer.assertStagedReferenceRuntimeJavaScriptUsesLocalAssets;
 
 async function createStagedRuntimeDirectory(): Promise<string> {
   return mkdtemp(join(tmpdir(), "stardewplan-reference-runtime-"));
@@ -130,4 +150,100 @@ describe("reference runtime staging validation", () => {
       await rm(stagedRuntimeDirectory, { force: true, recursive: true });
     }
   });
+});
+
+describe("planner renderer readiness transformation", () => {
+  it("replaces the premature application-only guard in the frozen planner chunk", () => {
+    expect(transformPlannerRendererReadinessGuard).toBeTypeOf("function");
+
+    if (transformPlannerRendererReadinessGuard === undefined) {
+      return;
+    }
+
+    expect(
+      transformPlannerRendererReadinessGuard(
+        frozenPlannerChunkPublicOutputPath,
+        `before ${applicationOnlyRendererGuard} after`,
+      ),
+    ).toBe(`before ${rendererReadyGuard} after`);
+  });
+
+  it("passes a non-target JavaScript chunk through without changing its guard", () => {
+    expect(transformPlannerRendererReadinessGuard).toBeTypeOf("function");
+
+    if (transformPlannerRendererReadinessGuard === undefined) {
+      return;
+    }
+
+    expect(
+      transformPlannerRendererReadinessGuard(
+        "_app/immutable/chunks/other.js",
+        applicationOnlyRendererGuard,
+      ),
+    ).toBe(applicationOnlyRendererGuard);
+  });
+
+  it("accepts an already transformed frozen planner chunk", () => {
+    expect(transformPlannerRendererReadinessGuard).toBeTypeOf("function");
+
+    if (transformPlannerRendererReadinessGuard === undefined) {
+      return;
+    }
+
+    expect(
+      transformPlannerRendererReadinessGuard(
+        frozenPlannerChunkPublicOutputPath,
+        rendererReadyGuard,
+      ),
+    ).toBe(rendererReadyGuard);
+  });
+
+  it.each([
+    {
+      name: "has no known renderer guard",
+      sourceText: "unrelated source text",
+      applicationOnlyGuardOccurrenceCount: 0,
+      rendererReadyGuardOccurrenceCount: 0,
+    },
+    {
+      name: "duplicates the application-only renderer guard",
+      sourceText: `${applicationOnlyRendererGuard}${applicationOnlyRendererGuard}`,
+      applicationOnlyGuardOccurrenceCount: 2,
+      rendererReadyGuardOccurrenceCount: 0,
+    },
+    {
+      name: "duplicates the renderer-ready guard",
+      sourceText: `${rendererReadyGuard}${rendererReadyGuard}`,
+      applicationOnlyGuardOccurrenceCount: 0,
+      rendererReadyGuardOccurrenceCount: 2,
+    },
+    {
+      name: "mixes the application-only and renderer-ready guards",
+      sourceText: `${applicationOnlyRendererGuard}${rendererReadyGuard}`,
+      applicationOnlyGuardOccurrenceCount: 1,
+      rendererReadyGuardOccurrenceCount: 1,
+    },
+  ])(
+    "fails fast when the frozen planner chunk $name",
+    ({
+      sourceText,
+      applicationOnlyGuardOccurrenceCount,
+      rendererReadyGuardOccurrenceCount,
+    }) => {
+      expect(transformPlannerRendererReadinessGuard).toBeTypeOf("function");
+
+      if (transformPlannerRendererReadinessGuard === undefined) {
+        return;
+      }
+
+      expect(() =>
+        transformPlannerRendererReadinessGuard(
+          frozenPlannerChunkPublicOutputPath,
+          sourceText,
+        ),
+      ).toThrow(
+        `Received public output path: ${JSON.stringify(frozenPlannerChunkPublicOutputPath)}. Application-only guard occurrence count: ${applicationOnlyGuardOccurrenceCount}. Renderer-ready guard occurrence count: ${rendererReadyGuardOccurrenceCount}.`,
+      );
+    },
+  );
 });

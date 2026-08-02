@@ -1,0 +1,18 @@
+<SaveGame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <whichFarm>0</whichFarm>
+  <currentSeason>summer</currentSeason>
+  <player><farmName>Junimo</farmName></player>
+  <locations>
+    <GameLocation>
+      <name>Farm</name>
+      <buildings>
+        <Building><buildingType>Barn</buildingType><tileX>10</tileX><tileY>12</tileY></Building>
+      </buildings>
+      <objects></objects>
+      <terrainFeatures></terrainFeatures>
+      <resourceClumps></resourceClumps>
+      <largeTerrainFeatures></largeTerrainFeatures>
+      <furniture></furniture>
+    </GameLocation>
+  </locations>
+</SaveGame>

@@ -5,7 +5,13 @@ import {
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
 
-const fixedCanonicalPublicPaths = ["/", "/farm-comparison", "/mods"] as const;
+const fixedCanonicalPublicPaths = [
+  "/",
+  "/farm-comparison",
+  "/mods",
+  "/privacy",
+  "/terms",
+] as const;
 
 export type PublicCanonicalPath =
   | (typeof fixedCanonicalPublicPaths)[number]

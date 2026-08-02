@@ -6,6 +6,9 @@ import {
   type PublicPageMetadataInput,
 } from "../../src/seo/page-metadata";
 
+const expectedSocialImageUrl =
+  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
+
 it("requires an explicit locale and canonical public identity at the type boundary", () => {
   expectTypeOf<PublicPageMetadataInput>().toEqualTypeOf<
     Readonly<{
@@ -44,12 +47,14 @@ it("creates absolute canonical metadata with a route description", () => {
     description:
       "Browse local planning maps for community-made Stardew Valley farms and interiors.",
     type: "website",
+    images: [expectedSocialImageUrl],
   });
   expect(metadata.twitter).toMatchObject({
     card: "summary",
     title: "Modded Stardew Valley Farms",
     description:
       "Browse local planning maps for community-made Stardew Valley farms and interiors.",
+    images: [expectedSocialImageUrl],
   });
 });
 
@@ -83,5 +88,9 @@ it("creates Chinese metadata from a locale-neutral public identity", () => {
   });
   expect(metadata.openGraph).toMatchObject({
     url: "https://stardewvalleyplanner.art/zh/mods",
+    images: [expectedSocialImageUrl],
+  });
+  expect(metadata.twitter).toMatchObject({
+    images: [expectedSocialImageUrl],
   });
 });

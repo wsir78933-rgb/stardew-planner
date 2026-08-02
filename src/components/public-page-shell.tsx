@@ -5,7 +5,9 @@ import {
   getLocalizedPublicPath,
   type PublicCanonicalPath,
 } from "../i18n/public-route-registry";
+import { createSiteFooterContent } from "../site-footer/site-footer-content";
 import { PublicNavigation } from "./public-navigation";
+import { SiteFooter } from "./site-footer";
 
 type PublicPageShellProperties = Readonly<{
   children: ReactNode;
@@ -29,7 +31,7 @@ export function PublicPageShell({
       <header className="public-page-shell-header">
         <a
           className="public-page-shell-brand"
-          href={getLocalizedPublicPath(locale, "/")}
+          href="/"
         >
           {pageCopy.brandLabel}
         </a>
@@ -45,9 +47,7 @@ export function PublicPageShell({
         </a>
       </header>
       <main>{children}</main>
-      <footer>
-        <p>© Stardew Valley Farm Planner</p>
-      </footer>
+      <SiteFooter content={createSiteFooterContent(pageCopy.footer, locale)} />
     </div>
   );
 }

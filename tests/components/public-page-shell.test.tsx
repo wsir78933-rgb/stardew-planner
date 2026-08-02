@@ -15,9 +15,23 @@ it("renders a shared static navigation frame around route content", () => {
   expect(markup).toContain('data-public-page-shell="true"');
   expect(markup).toContain('aria-label="Public navigation"');
   expect(markup).toContain('href="/"');
+  expect(markup).toContain(
+    'class="public-page-shell-brand" href="/">Stardew Valley Farm Planner</a>',
+  );
+  expect(markup).toContain('aria-current="page" href="/">Planner</a>');
   expect(markup).toContain("Example route");
-  expect(markup).not.toContain("Privacy");
-  expect(markup).not.toContain("Terms");
+  expect(markup).toContain('data-site-footer="true"');
+  expect(markup).toContain(
+    "A browser-local fan-made tool for planning Stardew Valley farm layouts.",
+  );
+  expect(markup).toContain("<h2>Planner</h2>");
+  expect(markup).toContain("<h2>Explore</h2>");
+  expect(markup).toContain("<h2>Legal</h2>");
+  expect(markup).toContain('<a href="/privacy">Privacy Policy</a>');
+  expect(markup).toContain('<a href="/terms">Terms of Service</a>');
+  expect(markup).toMatch(
+    /<div data-site-footer-social-icons="true">(?:(?!<a).)*<\/div>/,
+  );
   expect(markup).toContain("© Stardew Valley Farm Planner");
   expect(markup).toContain(
     'class="public-page-shell-language-switcher" href="/zh"',
@@ -33,6 +47,15 @@ it("renders Chinese navigation and a static English-planner CTA", () => {
 
   expect(markup).toContain('aria-label="公共导航"');
   expect(markup).toContain('href="/"');
+  expect(markup).toContain(
+    'class="public-page-shell-brand" href="/">星露谷规划器</a>',
+  );
+  expect(markup).toContain('href="/">规划器</a>');
+  expect(markup).not.toContain(
+    'aria-current="page" href="/">规划器</a>',
+  );
+  expect(markup).toContain('href="/zh/farm-comparison">农场对比</a>');
+  expect(markup).toContain('href="/zh/mods">模组</a>');
   const chinesePlannerDescription =
     "使用本地地图、物品和项目规划你的星露谷农场布局。";
   const englishPlannerLanguageNotice =
@@ -48,6 +71,27 @@ it("renders Chinese navigation and a static English-planner CTA", () => {
   expect(markup).not.toContain("reference-runtime-root");
   expect(markup).toContain(
     'class="public-page-shell-language-switcher" href="/"',
+  );
+  expect(markup).toContain('data-site-footer="true"');
+  expect(markup).toContain("在浏览器中本地规划《星露谷物语》农场布局的玩家工具。");
+  expect(markup).toContain("<h2>规划器</h2>");
+  expect(markup).toContain("<h2>探索</h2>");
+  expect(markup).toContain("<h2>法律</h2>");
+  expect(markup).toContain('<a href="/zh/privacy">隐私政策</a>');
+  expect(markup).toContain('<a href="/zh/terms">服务条款</a>');
+  expect(markup).toMatch(
+    /<div data-site-footer-social-icons="true">(?:(?!<a).)*<\/div>/,
+  );
+});
+
+it("marks the matching Chinese public destination current without marking the English Planner entry", () => {
+  const markup = renderToStaticMarkup(
+    <PublicNavigation canonicalPath="/farm-comparison" locale="zh-CN" />,
+  );
+
+  expect(markup).toContain('href="/">规划器</a>');
+  expect(markup).toContain(
+    'aria-current="page" href="/zh/farm-comparison">农场对比</a>',
   );
 });
 

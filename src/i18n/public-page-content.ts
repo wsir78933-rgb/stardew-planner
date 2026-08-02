@@ -11,6 +11,7 @@ import {
   publicNavigation,
   type PublicNavigationPath,
 } from "../reference/public-navigation";
+import type { SiteFooterCopy } from "../site-footer/site-footer-content";
 import { publicLocales, type PublicLocale } from "./public-locale";
 
 type LocalizedOfficialFarmGuideText = Pick<
@@ -24,6 +25,7 @@ type LocalizedModFarmCardText = Pick<
 >;
 
 export type PublicPageCopy = Readonly<{
+  footer: SiteFooterCopy;
   navigationLabel: string;
   navigation: readonly Readonly<{ label: string; path: PublicNavigationPath }>[];
   brandLabel: string;
@@ -200,6 +202,28 @@ const chineseModFarmCardTexts: Readonly<
 
 const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
   en: {
+    footer: {
+      brandName: "Stardew Valley Farm Planner",
+      description:
+        "A browser-local fan-made tool for planning Stardew Valley farm layouts.",
+      copyright: "© Stardew Valley Farm Planner",
+      planner: {
+        title: "Planner",
+        home: "Planner",
+        farmComparison: "Farm comparison",
+        moddedFarms: "Modded farms",
+      },
+      explore: {
+        title: "Explore",
+        capabilities: "How it works",
+        faq: "FAQ",
+      },
+      legal: {
+        title: "Legal",
+        privacy: "Privacy Policy",
+        terms: "Terms of Service",
+      },
+    },
     navigationLabel: "Public navigation",
     navigation: publicNavigation,
     brandLabel: "Stardew Valley Farm Planner",
@@ -237,6 +261,27 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     comparisonSentenceEnding: ".",
   },
   "zh-CN": {
+    footer: {
+      brandName: "星露谷物语农场规划器",
+      description: "在浏览器中本地规划《星露谷物语》农场布局的玩家工具。",
+      copyright: "© 星露谷物语农场规划器",
+      planner: {
+        title: "规划器",
+        home: "规划器",
+        farmComparison: "农场对比",
+        moddedFarms: "模组农场",
+      },
+      explore: {
+        title: "探索",
+        capabilities: "使用方式",
+        faq: "常见问题",
+      },
+      legal: {
+        title: "法律",
+        privacy: "隐私政策",
+        terms: "服务条款",
+      },
+    },
     navigationLabel: "公共导航",
     navigation: [
       { label: "规划器", path: "/" },

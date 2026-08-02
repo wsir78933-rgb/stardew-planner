@@ -31,6 +31,12 @@ const remoteGameAssetBase = "https://assets.stardewplan.com/assets/1.6.15";
 const historicPlannerResolverState =
   'Cm=typeof window<"u"&&window.location.hostname==="127.0.0.1"';
 const localPlannerResolverState = "Cm=!0";
+const frozenPlannerChunkPublicOutputPath =
+  "_app/immutable/chunks/CUwsdp_r.js";
+const applicationOnlyRendererGuard =
+  "async function uc(x,D){if(!ve)return;";
+const rendererReadyGuard =
+  "async function uc(x,D){if(!ve?.renderer)return;";
 const expectedGameAssetCount = 337;
 
 type StaticPageSourceTextTransformation = {
@@ -525,7 +531,11 @@ function transformReferenceRuntimeSourceAsset(
     sourceAsset.publicOutputPath,
     sourceText,
   );
-  const localizedRuntimeSourceText = staticPageTransformedSourceText.replaceAll(
+  const rendererReadySourceText = transformPlannerRendererReadinessGuard(
+    sourceAsset.publicOutputPath,
+    staticPageTransformedSourceText,
+  );
+  const localizedRuntimeSourceText = rendererReadySourceText.replaceAll(
     remoteGameAssetBase,
     "/assets",
   );
@@ -602,6 +612,42 @@ function transformStaticPageSourceText(
   return sourceText.replace(
     staticPageSourceTextTransformation.expectedSourceText,
     staticPageSourceTextTransformation.replacementText,
+  );
+}
+
+export function transformPlannerRendererReadinessGuard(
+  sourcePublicOutputPath: string,
+  sourceText: string,
+): string {
+  if (sourcePublicOutputPath !== frozenPlannerChunkPublicOutputPath) {
+    return sourceText;
+  }
+
+  const applicationOnlyGuardOccurrenceCount = countOccurrences(
+    sourceText,
+    applicationOnlyRendererGuard,
+  );
+  const rendererReadyGuardOccurrenceCount = countOccurrences(
+    sourceText,
+    rendererReadyGuard,
+  );
+
+  if (
+    applicationOnlyGuardOccurrenceCount === 1 &&
+    rendererReadyGuardOccurrenceCount === 0
+  ) {
+    return sourceText.replace(applicationOnlyRendererGuard, rendererReadyGuard);
+  }
+
+  if (
+    applicationOnlyGuardOccurrenceCount === 0 &&
+    rendererReadyGuardOccurrenceCount === 1
+  ) {
+    return sourceText;
+  }
+
+  throw new Error(
+    `Reference runtime planner renderer guard must contain exactly one known state. Received public output path: ${JSON.stringify(sourcePublicOutputPath)}. Application-only guard occurrence count: ${applicationOnlyGuardOccurrenceCount}. Renderer-ready guard occurrence count: ${rendererReadyGuardOccurrenceCount}.`,
   );
 }
 
