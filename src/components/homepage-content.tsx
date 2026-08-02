@@ -31,7 +31,7 @@ export function HomepageContent({
           <div data-homepage-navigation-links>
             <a href="#capabilities">{copy.navigation.capabilitiesLabel}</a>
             <a href="#faq">{copy.navigation.faqLabel}</a>
-            <a href="#planner">{copy.navigation.plannerLabel}</a>
+            <a href="/">{copy.navigation.plannerLabel}</a>
           </div>
           <div data-homepage-header-actions>
             <HomepageLocaleSwitcher
@@ -39,7 +39,7 @@ export function HomepageContent({
               onLocaleChange={onLocaleChange}
             />
             <Button asChild data-homepage-header-action size="lg">
-              <a href="#planner">{copy.navigation.plannerActionLabel}</a>
+              <a href="/">{copy.navigation.plannerActionLabel}</a>
             </Button>
           </div>
         </nav>
@@ -53,7 +53,7 @@ export function HomepageContent({
           </h1>
           <p>{copy.hero.supportingCopy}</p>
           <Button asChild data-homepage-primary-action size="lg">
-            <a href="#planner">{copy.hero.primaryActionLabel}</a>
+            <a href="/">{copy.hero.primaryActionLabel}</a>
           </Button>
         </section>
         {plannerWorkspace}

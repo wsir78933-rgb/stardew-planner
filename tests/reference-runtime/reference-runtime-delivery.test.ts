@@ -425,6 +425,7 @@ describe("reference runtime static delivery", () => {
       "_app/immutable/entry/app.DTzIUNnu.js",
       "reference-runtime/local-project-api.mjs",
       "reference-runtime/local-only-overrides.css",
+      "reference-runtime/public-link-navigation-guard.mjs",
       "reference-runtime/wheel-zoom-mode-toggle.mjs",
       "reference-runtime/reference-runtime-lock.json",
     ]) {
@@ -494,9 +495,18 @@ describe("reference runtime static delivery", () => {
     expect(localApiInstallationIndex).toBeLessThan(startupSchedulingIndex);
   });
 
-  it("imports and installs wheel zoom mode only after the frozen runtime start resolves", () => {
+  it("installs public-link navigation protection before frozen startup and wheel zoom afterward", () => {
     const bootstrapModule = readStaticExportText(
       "reference-runtime/bootstrap.mjs",
+    );
+    const navigationGuardInstallerImportIndex = bootstrapModule.indexOf(
+      'import { installReferenceRuntimePublicLinkNavigationGuard } from "/reference-runtime/public-link-navigation-guard.mjs";',
+    );
+    const navigationGuardInstallerCallIndex = bootstrapModule.indexOf(
+      "installReferenceRuntimePublicLinkNavigationGuard(\n    document,\n    window.location,\n    referenceRuntimeRoot,\n  );",
+    );
+    const initializedAttributeIndex = bootstrapModule.indexOf(
+      'referenceRuntimeRoot.setAttribute(referenceRuntimeInitializedAttribute, "true");',
     );
     const wheelZoomInstallerImportIndex = bootstrapModule.indexOf(
       'import { installReferenceRuntimeWheelZoomModeToggle } from "/reference-runtime/wheel-zoom-mode-toggle.mjs";',
@@ -508,9 +518,21 @@ describe("reference runtime static delivery", () => {
       "installReferenceRuntimeWheelZoomModeToggle(document);",
     );
 
+    expect(navigationGuardInstallerImportIndex).toBeGreaterThanOrEqual(0);
+    expect(navigationGuardInstallerCallIndex).toBeGreaterThanOrEqual(0);
+    expect(initializedAttributeIndex).toBeGreaterThanOrEqual(0);
     expect(wheelZoomInstallerImportIndex).toBeGreaterThanOrEqual(0);
     expect(awaitedFrozenRuntimeStartIndex).toBeGreaterThanOrEqual(0);
     expect(wheelZoomInstallerCallIndex).toBeGreaterThan(
+      awaitedFrozenRuntimeStartIndex,
+    );
+    expect(navigationGuardInstallerImportIndex).toBeLessThan(
+      navigationGuardInstallerCallIndex,
+    );
+    expect(navigationGuardInstallerCallIndex).toBeLessThan(
+      initializedAttributeIndex,
+    );
+    expect(initializedAttributeIndex).toBeLessThan(
       awaitedFrozenRuntimeStartIndex,
     );
   });
@@ -521,6 +543,9 @@ describe("reference runtime static delivery", () => {
       requireStaticExportFile("reference-runtime/bootstrap.mjs"),
       requireStaticExportFile("reference-runtime/local-project-api.mjs"),
       requireStaticExportFile("reference-runtime/local-only-overrides.css"),
+      requireStaticExportFile(
+        "reference-runtime/public-link-navigation-guard.mjs",
+      ),
       requireStaticExportFile("reference-runtime/wheel-zoom-mode-toggle.mjs"),
       ...collectNextStaticReleaseModulePaths(nextStaticDirectoryPath),
     ];

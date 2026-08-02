@@ -1,6 +1,7 @@
 import { start } from "/_app/immutable/entry/start.CLoByjli.js";
 import * as referenceRuntimeApplication from "/_app/immutable/entry/app.DTzIUNnu.js";
 import { installReferenceLocalProjectApi } from "/reference-runtime/local-project-api.mjs";
+import { installReferenceRuntimePublicLinkNavigationGuard } from "/reference-runtime/public-link-navigation-guard.mjs";
 import { installReferenceRuntimeWheelZoomModeToggle } from "/reference-runtime/wheel-zoom-mode-toggle.mjs";
 
 const referenceRuntimeRootId = "reference-runtime-root";
@@ -278,6 +279,11 @@ async function startReferenceRuntime() {
     );
   }
 
+  installReferenceRuntimePublicLinkNavigationGuard(
+    document,
+    window.location,
+    referenceRuntimeRoot,
+  );
   referenceRuntimeRoot.setAttribute(referenceRuntimeInitializedAttribute, "true");
   await start(referenceRuntimeApplication, referenceRuntimeRoot);
   installReferenceRuntimeWheelZoomModeToggle(document);

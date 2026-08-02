@@ -20,9 +20,15 @@ test("limits editor frame styling to the homepage runtime root", () => {
 
 test("keeps the desktop editor frame at viewport height alongside the frozen runtime sidebar", () => {
   const styles = readProjectFile("app/globals.css");
+  const plannerActiveBodyRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\)\.planner-active\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
 
   expect(styles).toContain(homepageBodyScope);
   expect(styles).toContain(`${homepageBodyScope}.planner-active`);
+  expect(plannerActiveBodyRule).toBeDefined();
+  expect(plannerActiveBodyRule).toContain("overflow-x: hidden !important;");
+  expect(plannerActiveBodyRule).toContain("overflow-y: auto !important;");
   expect(styles).not.toContain("body.stardew-homepage");
   expect(styles).toMatch(
     /body:has\(> \[data-homepage-shell\]\)\.planner-active\s*\{[^}]*background:/s,

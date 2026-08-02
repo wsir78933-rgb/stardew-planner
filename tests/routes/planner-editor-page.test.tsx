@@ -19,7 +19,10 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout',
     );
-    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(4);
+    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(1);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/"[^>]*>Planner<\/a>/);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/"[^>]*>Open planner<\/a>/);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/"[^>]*>Start planning<\/a>/);
     expect(plannerPageMarkup.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
       officialFarmTypes.length,
     );
