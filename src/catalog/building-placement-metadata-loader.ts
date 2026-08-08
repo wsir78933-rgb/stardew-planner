@@ -1,15 +1,39 @@
 import { createBuildingPlacementMetadata } from "./building-placement-metadata";
+import {
+  loadBrowserCatalogDataset,
+  type CatalogDatasetLoader,
+} from "./catalog-category-loader";
 import type { BuildingPlacementMetadataById } from "./building-placement-metadata";
 import type { CatalogJsonFetcher, CatalogJsonResponse } from "./catalog-types";
 
 const buildingPlacementMetadataUrl = "/game-assets/1.6.15/data/Buildings.json";
 
 export async function loadBuildingPlacementMetadata(
-  fetchBuildingJson: CatalogJsonFetcher = fetchBrowserBuildingJson,
+  buildingDatasetSource?: CatalogJsonFetcher | CatalogDatasetLoader,
 ): Promise<BuildingPlacementMetadataById> {
-  const rawBuildingRecords = await fetchBuildingRecords(fetchBuildingJson);
+  const rawBuildingRecords = await loadBuildingRecords(buildingDatasetSource);
 
   return createBuildingPlacementMetadata(rawBuildingRecords);
+}
+
+async function loadBuildingRecords(
+  buildingDatasetSource: CatalogJsonFetcher | CatalogDatasetLoader | undefined,
+): Promise<unknown> {
+  if (buildingDatasetSource === undefined) {
+    return loadBrowserCatalogDataset("buildings");
+  }
+
+  if (typeof buildingDatasetSource === "function") {
+    return fetchBuildingRecords(buildingDatasetSource);
+  }
+
+  if (typeof buildingDatasetSource.loadDataset !== "function") {
+    throw new TypeError(
+      `Building placement metadata dataset source must be a fetch function or include loadDataset; received ${describeValue(buildingDatasetSource)}.`,
+    );
+  }
+
+  return buildingDatasetSource.loadDataset("buildings");
 }
 
 async function fetchBuildingRecords(
@@ -57,16 +81,6 @@ async function fetchBuildingRecords(
       { cause: caughtError },
     );
   }
-}
-
-async function fetchBrowserBuildingJson(): Promise<CatalogJsonResponse> {
-  if (typeof globalThis.fetch !== "function") {
-    throw new Error(
-      `Building placement metadata request cannot fetch local URL ${JSON.stringify(buildingPlacementMetadataUrl)} because global fetch is unavailable.`,
-    );
-  }
-
-  return globalThis.fetch(buildingPlacementMetadataUrl);
 }
 
 function describeCaughtError(caughtError: unknown): string {

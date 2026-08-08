@@ -746,7 +746,7 @@ function KeyboardShortcutsPanel() {
           <div><dt>M</dt><dd>Switch to multi-select mode</dd></div>
           <div><dt>E</dt><dd>Switch to erase mode</dd></div>
           <div><dt>F</dt><dd>Switch to fill mode</dd></div>
-          <div><dt>Q</dt><dd>Rotate the selected item</dd></div>
+          <div><dt>Q</dt><dd>Cycle the selected item appearance</dd></div>
           <div><dt>C</dt><dd>Copy the selected placement</dd></div>
           <div><dt>Delete</dt><dd>Delete the selected placement</dd></div>
           <div><dt>Esc / Right click</dt><dd>Cancel placement or clear selection</dd></div>

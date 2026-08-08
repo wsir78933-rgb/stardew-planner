@@ -1,4 +1,10 @@
-import type { BuildingPlacementMetadataById, CatalogItem } from "../catalog";
+import {
+  validateCatalogPresentationCapabilities,
+  type BuildingPlacementMetadataById,
+  type CatalogItem,
+  type CatalogPresentationChoice,
+} from "../catalog";
+import { getCatalogItemPlacementRequirement } from "../placement/catalog-item-placement-requirement";
 import type {
   MapPlacementGrid,
   MapTileCoordinates,
@@ -10,8 +16,10 @@ import {
 import {
   applyPlacementSnapshotAction,
   createPersistentPlacementSnapshot,
+  validatePlacementBuildingWaterColor,
   type PlacementBuilding,
   type PlacementCrop,
+  type PlacementHeldItem,
   type PlacementItem,
   type PlacementSnapshot,
   type PlacementSnapshotAction,
@@ -27,6 +35,14 @@ import {
   type PlacementValidationCandidate,
   type PlacementValidationResult,
 } from "../placement/placement-validation";
+import { getPlacementItemZIndex } from "../placement/placement-item-z-order";
+import { isGardenPotAtTile } from "../placement/garden-pot-placement";
+import {
+  deletePlacementItemOrHeldItem,
+  findPlacementItemOrHeldItem,
+  replacePlacementItemOrHeldItem,
+  type PlacementItemOrHeldItem,
+} from "../placement/table-held-item-semantics";
 
 export type PlacementSelectionKey = string;
 
@@ -40,21 +56,23 @@ export type PlacementSelectionBounds = Readonly<{
 export type PlacementSelectionDetails =
   | Readonly<{
       catalogItemId: string;
-      canRotate: false;
+      canCycleAppearance: boolean;
       canPaint: boolean;
+      canSetWaterColor: boolean;
       kind: "building";
       paintColors?: BuildingPaintColors;
       selectedPlacementKey: PlacementSelectionKey;
+      waterColor?: number;
     }>
   | Readonly<{
       catalogItemId: string;
-      canRotate: false;
+      canCycleAppearance: false;
       kind: "crop";
       selectedPlacementKey: PlacementSelectionKey;
     }>
   | Readonly<{
       catalogItemId: string;
-      canRotate: boolean;
+      canCycleAppearance: boolean;
       kind: "item";
       nightLightState: "off" | undefined;
       selectedPlacementKey: PlacementSelectionKey;
@@ -87,6 +105,7 @@ export type GetPlacementSelectionBoundsInput = Readonly<{
 }>;
 
 export type GetPlacementSelectionDetailsInput = Readonly<{
+  catalogItems: readonly CatalogItem[];
   placementSnapshot: PlacementSnapshot;
   selectedPlacementKey: PlacementSelectionKey;
 }>;
@@ -102,6 +121,7 @@ export type PlacementSelectionSummary = Readonly<{
 
 export type MoveSelectedPlacementsInput = Readonly<{
   buildingMetadataById: BuildingPlacementMetadataById;
+  catalogItems?: readonly CatalogItem[];
   freePlacement?: boolean;
   mapPlacementGrid: MapPlacementGrid;
   placementHistory: PlacementHistory<PlacementSnapshot>;
@@ -109,12 +129,17 @@ export type MoveSelectedPlacementsInput = Readonly<{
   tileDelta: Readonly<{ x: number; y: number }>;
 }>;
 
-export type RotateSelectedPlacementInput = Readonly<{
+export type CycleSelectedPlacementAppearanceInput = Readonly<{
+  buildingMetadataById: BuildingPlacementMetadataById;
+  catalogItems: readonly CatalogItem[];
+  freePlacement?: boolean;
+  mapPlacementGrid: MapPlacementGrid;
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKey: PlacementSelectionKey;
 }>;
 
 export type SetSelectedPlacementItemTintInput = Readonly<{
+  catalogItems: readonly CatalogItem[];
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKey: PlacementSelectionKey;
   tintColor: string;
@@ -126,8 +151,15 @@ export type SetSelectedPlacementBuildingPaintInput = Readonly<{
   selectedPlacementKey: PlacementSelectionKey;
 }>;
 
+export type SetSelectedPlacementBuildingWaterColorInput = Readonly<{
+  catalogItems: readonly CatalogItem[];
+  placementHistory: PlacementHistory<PlacementSnapshot>;
+  selectedPlacementKey: PlacementSelectionKey;
+  waterColor: number | undefined;
+}>;
+
 export type SetSelectedPlacementNightLightStateInput = Readonly<{
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight">[];
+  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight" | "furnitureFire">[];
   nightLightState: "off" | undefined;
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKey: PlacementSelectionKey;
@@ -135,6 +167,7 @@ export type SetSelectedPlacementNightLightStateInput = Readonly<{
 
 export type DuplicateSelectedPlacementAtTileInput = Readonly<{
   buildingMetadataById: BuildingPlacementMetadataById;
+  catalogItems?: readonly CatalogItem[];
   cursorTile: MapTileCoordinates;
   freePlacement?: boolean;
   mapPlacementGrid: MapPlacementGrid;
@@ -172,7 +205,7 @@ export type MoveSelectedPlacementsResult =
     selectedPlacementKeys: readonly PlacementSelectionKey[];
   }>;
 
-export type RotateSelectedPlacementResult =
+export type CycleSelectedPlacementAppearanceResult =
   | Readonly<{
       applied: true;
       placementHistory: PlacementHistory<PlacementSnapshot>;
@@ -181,9 +214,15 @@ export type RotateSelectedPlacementResult =
   | Readonly<{
       applied: false;
       placementHistory: PlacementHistory<PlacementSnapshot>;
-      reason: "not-rotatable";
+      reason: "not-cycleable";
       selectedPlacementKey: PlacementSelectionKey;
-  }>;
+    }>
+  | Readonly<{
+      applied: false;
+      placementHistory: PlacementHistory<PlacementSnapshot>;
+      selectedPlacementKey: PlacementSelectionKey;
+      validation: Extract<PlacementValidationResult, { valid: false }>;
+    }>;
 
 export type SetSelectedPlacementItemTintResult = Readonly<{
   placementHistory: PlacementHistory<PlacementSnapshot>;
@@ -191,6 +230,11 @@ export type SetSelectedPlacementItemTintResult = Readonly<{
 }>;
 
 export type SetSelectedPlacementBuildingPaintResult = Readonly<{
+  placementHistory: PlacementHistory<PlacementSnapshot>;
+  selectedPlacementKey: PlacementSelectionKey;
+}>;
+
+export type SetSelectedPlacementBuildingWaterColorResult = Readonly<{
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKey: PlacementSelectionKey;
 }>;
@@ -254,18 +298,26 @@ export function selectPlacementsInRectangle(
       ? [createCropSelectionKey(placementCrop.x, placementCrop.y)]
       : [],
   );
-  const selectedItemKeys = placementSnapshot.items.flatMap((placementItem) =>
-    !placementItem.locked &&
-    doesRectangleIntersectSelectionRectangle(
+  const selectedItemKeys = placementSnapshot.items.flatMap((placementItem) => {
+    if (!doesRectangleIntersectSelectionRectangle(
       selectionRectangle,
       placementItem.x,
       placementItem.y,
       placementItem.footprint.width,
       placementItem.footprint.height,
-    )
-      ? [createItemSelectionKey(placementItem.instanceId)]
-      : [],
-  );
+    )) {
+      return [];
+    }
+
+    return [
+      ...(placementItem.locked
+        ? []
+        : [createItemSelectionKey(placementItem.instanceId)]),
+      ...(placementItem.heldItem === undefined || placementItem.heldItem.locked
+        ? []
+        : [createItemSelectionKey(placementItem.heldItem.instanceId)]),
+    ];
+  });
 
   return [...selectedBuildingKeys, ...selectedCropKeys, ...selectedItemKeys];
 }
@@ -273,13 +325,16 @@ export function selectPlacementsInRectangle(
 export function selectPlacementAtTile(
   selectPlacementAtTileInput: SelectPlacementAtTileInput,
 ): PlacementSelectionKey | null {
-  const placementSelectionKeys = selectPlacementsInRectangle(
-    {
-      buildingMetadataById: selectPlacementAtTileInput.buildingMetadataById,
-      firstTile: selectPlacementAtTileInput.cursorTile,
-      placementSnapshot: selectPlacementAtTileInput.placementSnapshot,
-      secondTile: selectPlacementAtTileInput.cursorTile,
-    },
+  const placementSelectionKeys = orderSingleTileSelectionKeysByVisualZ(
+    selectPlacementsInRectangle(
+      {
+        buildingMetadataById: selectPlacementAtTileInput.buildingMetadataById,
+        firstTile: selectPlacementAtTileInput.cursorTile,
+        placementSnapshot: selectPlacementAtTileInput.placementSnapshot,
+        secondTile: selectPlacementAtTileInput.cursorTile,
+      },
+    ),
+    selectPlacementAtTileInput.placementSnapshot,
   );
 
   const visuallyHighestSelectionKey = placementSelectionKeys.at(-1) ?? null;
@@ -305,6 +360,68 @@ export function selectPlacementAtTile(
     (currentSelectionIndex - 1 + placementSelectionKeys.length) %
       placementSelectionKeys.length
   ] ?? null;
+}
+
+function orderSingleTileSelectionKeysByVisualZ(
+  placementSelectionKeys: readonly PlacementSelectionKey[],
+  placementSnapshot: PlacementSnapshot,
+): readonly PlacementSelectionKey[] {
+  return placementSelectionKeys
+    .map((placementSelectionKey, sourceIndex) => ({
+      placementSelectionKey,
+      sourceIndex,
+      zIndex: getSelectionKeyZIndex(placementSelectionKey, placementSnapshot),
+    }))
+    .sort((firstSelection, secondSelection) => {
+      if (firstSelection.zIndex === secondSelection.zIndex) {
+        return firstSelection.sourceIndex - secondSelection.sourceIndex;
+      }
+
+      return firstSelection.zIndex - secondSelection.zIndex;
+    })
+    .map(({ placementSelectionKey }) => placementSelectionKey);
+}
+
+function getSelectionKeyZIndex(
+  placementSelectionKey: PlacementSelectionKey,
+  placementSnapshot: PlacementSnapshot,
+): number {
+  const parsedSelectionKey = parsePlacementSelectionKey(placementSelectionKey);
+
+  if (parsedSelectionKey.kind === "crop") {
+    const crop = placementSnapshot.crops.find(
+      (placementCrop) =>
+        placementCrop.x === parsedSelectionKey.coordinate.x
+        && placementCrop.y === parsedSelectionKey.coordinate.y,
+    );
+    if (crop === undefined) {
+      throw new Error(
+        `Selection key crop at (${String(parsedSelectionKey.coordinate.x)}, ${String(parsedSelectionKey.coordinate.y)}) does not exist in the placement snapshot.`,
+      );
+    }
+
+    if (!isGardenPotAtTile(placementSnapshot.items, crop)) {
+      return Number.NEGATIVE_INFINITY;
+    }
+
+    return (crop.y + 1) * 2 - 0.5;
+  }
+
+  if (parsedSelectionKey.kind !== "item") {
+    return Number.NEGATIVE_INFINITY;
+  }
+
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
+    placementSnapshot,
+    parsedSelectionKey.instanceId,
+  );
+  if (resolvedItem.kind === "item") {
+    return getPlacementItemZIndex(resolvedItem.item);
+  }
+
+  return getPlacementItemZIndex(
+    getRequiredPlacementItem(placementSnapshot, resolvedItem.parentInstanceId),
+  ) + 0.001;
 }
 
 export function deleteSelectedPlacements(
@@ -405,17 +522,31 @@ export function getPlacementSelectionDetails(
     );
 
     const canPaint = isBuildingPaintable(placementBuilding.buildingId);
+    const catalogItem = getRequiredExactCatalogItem(
+      getPlacementSelectionDetailsInput.catalogItems,
+      `building:${placementBuilding.buildingId}`,
+    );
+    const canCycleAppearance =
+      catalogItem.presentationCapabilities?.variantCycle !== null &&
+      catalogItem.presentationCapabilities?.variantCycle !== undefined;
+    const canSetWaterColor =
+      catalogItem.renderingMetadata?.kind === "building-multilayer" &&
+      catalogItem.renderingMetadata.waterColors !== undefined;
 
     return {
       catalogItemId: `building:${placementBuilding.buildingId}`,
-      canRotate: false,
+      canCycleAppearance,
       canPaint,
+      canSetWaterColor,
       kind: "building",
       ...(canPaint
         ? {
             paintColors:
               placementBuilding.paintColors ?? createDefaultBuildingPaintColors(),
           }
+        : {}),
+      ...(canSetWaterColor
+        ? { waterColor: placementBuilding.waterColor }
         : {}),
       selectedPlacementKey: getPlacementSelectionDetailsInput.selectedPlacementKey,
     };
@@ -429,25 +560,50 @@ export function getPlacementSelectionDetails(
 
     return {
       catalogItemId: placementCrop.cropId,
-      canRotate: false,
+      canCycleAppearance: false,
       kind: "crop",
       selectedPlacementKey: getPlacementSelectionDetailsInput.selectedPlacementKey,
     };
   }
 
-  const placementItem = getRequiredPlacementItem(
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
     placementSnapshot,
     parsedSelectionKey.instanceId,
+  );
+  const placementItem = resolvedItem.item;
+  const selectedCatalogItem = getRequiredExactCatalogItem(
+    getPlacementSelectionDetailsInput.catalogItems,
+    placementItem.itemId,
+  );
+  const canCycleAppearance = canCyclePlacementItemAppearance(
+    selectedCatalogItem,
+    placementItem,
+    resolvedItem.kind === "held-item",
   );
 
   return {
     catalogItemId: placementItem.itemId,
-    canRotate: placementItem.layer === "item",
+    canCycleAppearance,
     kind: "item",
-    nightLightState: placementItem.nightLightState,
+    nightLightState: getInspectorNightLightState(
+      placementItem,
+      selectedCatalogItem,
+    ),
     selectedPlacementKey: getPlacementSelectionDetailsInput.selectedPlacementKey,
     tintColor: placementItem.tintColor,
   };
+}
+
+function getInspectorNightLightState(
+  placementItem: PlacementItem | PlacementHeldItem,
+  catalogItem: CatalogItem,
+): "off" | undefined {
+  if (catalogItem.furnitureFire !== undefined) {
+    assertNoConflictingFurnitureFireNightLightState(placementItem, catalogItem);
+    return placementItem.variant === 1 ? "off" : undefined;
+  }
+
+  return placementItem.nightLightState;
 }
 
 export function getPlacementSelectionSummary(
@@ -500,17 +656,21 @@ export function moveSelectedPlacements(
   );
   const parsedSelectionKeys = selectedPlacementKeys.map(parsePlacementSelectionKey);
   assertSelectedPlacementKeysExist(placementSnapshot, parsedSelectionKeys);
-  let validationSnapshot = deletePlacementSelectionKeys(
+  const movementTargetSelectionKeys = createMovementTargetSelectionKeys(
     placementSnapshot,
     parsedSelectionKeys,
   );
+  let validationSnapshot = deletePlacementSelectionKeys(
+    placementSnapshot,
+    movementTargetSelectionKeys,
+  );
 
-  for (const parsedSelectionKey of parsedSelectionKeys) {
-    const placementCandidate = createMovedPlacementCandidate(
+  for (const parsedSelectionKey of movementTargetSelectionKeys) {
+    const placementCandidate = addCatalogPlacementRequirement(createMovedPlacementCandidate(
       placementSnapshot,
       parsedSelectionKey,
       tileDelta,
-    );
+    ), moveSelectedPlacementsInput.catalogItems);
     const validation = validatePlacement({
       buildingMetadataById: moveSelectedPlacementsInput.buildingMetadataById,
       candidate: placementCandidate,
@@ -536,7 +696,7 @@ export function moveSelectedPlacements(
 
   const nextPlacementSnapshot = moveSelectedPlacementRecords(
     placementSnapshot,
-    parsedSelectionKeys,
+    movementTargetSelectionKeys,
     tileDelta,
   );
 
@@ -547,52 +707,208 @@ export function moveSelectedPlacements(
   };
 }
 
-export function rotateSelectedPlacement(
-  rotateSelectedPlacementInput: RotateSelectedPlacementInput,
-): RotateSelectedPlacementResult {
-  assertRotateSelectedPlacementInput(rotateSelectedPlacementInput);
-  const { placementHistory, selectedPlacementKey } = rotateSelectedPlacementInput;
+export function cycleSelectedPlacementAppearance(
+  cycleSelectedPlacementAppearanceInput: CycleSelectedPlacementAppearanceInput,
+): CycleSelectedPlacementAppearanceResult {
+  assertCycleSelectedPlacementAppearanceInput(
+    cycleSelectedPlacementAppearanceInput,
+  );
+  const { placementHistory, selectedPlacementKey } =
+    cycleSelectedPlacementAppearanceInput;
   const placementSnapshot = createPersistentPlacementSnapshot(
     placementHistory.currentState,
   );
   const parsedSelectionKey = parsePlacementSelectionKey(selectedPlacementKey);
   assertSelectedPlacementKeysExist(placementSnapshot, [parsedSelectionKey]);
 
+  if (parsedSelectionKey.kind === "building") {
+    return cycleSelectedBuildingAppearance(
+      cycleSelectedPlacementAppearanceInput,
+      placementSnapshot,
+      parsedSelectionKey.instanceId,
+    );
+  }
+
   if (parsedSelectionKey.kind !== "item") {
     return {
       applied: false,
       placementHistory,
-      reason: "not-rotatable",
+      reason: "not-cycleable",
       selectedPlacementKey,
     };
   }
 
-  const placementItem = getRequiredPlacementItem(
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
     placementSnapshot,
     parsedSelectionKey.instanceId,
   );
+  const placementItem = resolvedItem.item;
 
-  if (placementItem.layer !== "item") {
+  const catalogItem = getRequiredExactCatalogItem(
+    cycleSelectedPlacementAppearanceInput.catalogItems,
+    placementItem.itemId,
+  );
+  const currentPresentationChoice = createPlacementItemPresentationChoice(
+    placementItem,
+  );
+  const nextPresentationChoice = getNextPlacementItemPresentationChoice(
+    catalogItem,
+    currentPresentationChoice,
+  );
+
+  if (arePresentationChoicesEqual(
+    currentPresentationChoice,
+    nextPresentationChoice,
+  )) {
     return {
       applied: false,
       placementHistory,
-      reason: "not-rotatable",
+      reason: "not-cycleable",
       selectedPlacementKey,
     };
   }
 
-  const nextPlacementSnapshot = applyPlacementSnapshotAction(placementSnapshot, {
-    type: "replace-item",
-    item: {
-      ...placementItem,
-      rotation: getNextQuarterTurn(placementItem.rotation),
-    },
-  });
+  let nextPlacementItem = createPlacementItemWithPresentationChoice(
+    catalogItem,
+    placementItem,
+    nextPresentationChoice,
+  );
+
+  if (resolvedItem.kind === "held-item") {
+    if (
+      nextPlacementItem.footprint.width !== 1 ||
+      nextPlacementItem.footprint.height !== 1
+    ) {
+      return {
+        applied: false,
+        placementHistory,
+        reason: "not-cycleable",
+        selectedPlacementKey,
+      };
+    }
+
+    const nextPlacementSnapshot = replacePlacementItemOrHeldItem(
+      placementSnapshot,
+      nextPlacementItem,
+    );
+    return {
+      applied: true,
+      placementHistory: commitPlacementHistory(
+        placementHistory,
+        nextPlacementSnapshot,
+      ),
+      selectedPlacementKey,
+    };
+  }
+
+  nextPlacementItem = relinkHeldItemToParentOrigin(nextPlacementItem);
+
+  if (nextPresentationChoice.rotation !== currentPresentationChoice.rotation) {
+    const validationSnapshot = deletePlacementSelectionKeys(
+      placementSnapshot,
+      [parsedSelectionKey],
+    );
+    const validation = validatePlacement({
+      buildingMetadataById:
+        cycleSelectedPlacementAppearanceInput.buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: nextPlacementItem,
+        placementRequirement: getCatalogItemPlacementRequirement(catalogItem),
+      },
+      freePlacement: cycleSelectedPlacementAppearanceInput.freePlacement,
+      mapPlacementGrid: cycleSelectedPlacementAppearanceInput.mapPlacementGrid,
+      placementSnapshot: validationSnapshot,
+    });
+
+    if (!validation.valid) {
+      return {
+        applied: false,
+        placementHistory,
+        selectedPlacementKey,
+        validation,
+      };
+    }
+  }
+
+  const nextPlacementSnapshot = replacePlacementItemOrHeldItem(
+    placementSnapshot,
+    nextPlacementItem,
+  );
 
   return {
     applied: true,
     placementHistory: commitPlacementHistory(placementHistory, nextPlacementSnapshot),
     selectedPlacementKey,
+  };
+}
+
+function cycleSelectedBuildingAppearance(
+  cycleInput: CycleSelectedPlacementAppearanceInput,
+  placementSnapshot: PlacementSnapshot,
+  instanceId: number,
+): CycleSelectedPlacementAppearanceResult {
+  const placementBuilding = getRequiredPlacementBuilding(
+    placementSnapshot,
+    instanceId,
+  );
+  const catalogItem = getRequiredExactCatalogItem(
+    cycleInput.catalogItems,
+    `building:${placementBuilding.buildingId}`,
+  );
+  const presentationCapabilities = catalogItem.presentationCapabilities;
+  if (presentationCapabilities?.variantCycle == null) {
+    return {
+      applied: false,
+      placementHistory: cycleInput.placementHistory,
+      reason: "not-cycleable",
+      selectedPlacementKey: cycleInput.selectedPlacementKey,
+    };
+  }
+  validateCatalogPresentationCapabilities(
+    catalogItem.id,
+    presentationCapabilities,
+  );
+  const variantCount = presentationCapabilities.variantCycle.count;
+  const normalizedVariant = normalizeCycleVariant(
+    placementBuilding.variant ?? 0,
+    variantCount,
+  );
+  const nextPlacementSnapshot = applyPlacementSnapshotAction(
+    placementSnapshot,
+    {
+      type: "replace-building",
+      building: {
+        ...placementBuilding,
+        variant: (normalizedVariant + 1) % variantCount,
+      },
+    },
+  );
+
+  return {
+    applied: true,
+    placementHistory: commitPlacementHistory(
+      cycleInput.placementHistory,
+      nextPlacementSnapshot,
+    ),
+    selectedPlacementKey: cycleInput.selectedPlacementKey,
+  };
+}
+
+function normalizeCycleVariant(variant: number, variantCount: number): number {
+  return ((variant % variantCount) + variantCount) % variantCount;
+}
+
+function relinkHeldItemToParentOrigin(placementItem: PlacementItem): PlacementItem {
+  if (placementItem.heldItem === undefined) return placementItem;
+
+  return {
+    ...placementItem,
+    heldItem: {
+      ...placementItem.heldItem,
+      x: placementItem.x,
+      y: placementItem.y,
+    },
   };
 }
 
@@ -618,10 +934,21 @@ export function setSelectedPlacementItemTint(
     placementSnapshot,
     parsedSelectionKey.instanceId,
   );
-  const nextPlacementSnapshot = applyPlacementSnapshotAction(placementSnapshot, {
-    type: "replace-item",
-    item: { ...placementItem, tintColor },
-  });
+  const catalogItem = setSelectedPlacementItemTintInput.catalogItems.find(
+    (candidateCatalogItem) => candidateCatalogItem.id === placementItem.itemId,
+  );
+  if (catalogItem?.paintableChest === undefined) {
+    throw new Error(
+      `Editor selection item ${describeValue(placementItem.itemId)} does not support chest paint; received catalog item ${describeValue(catalogItem)}.`,
+    );
+  }
+  if (placementItem.tintColor === tintColor) {
+    return { placementHistory, selectedPlacementKey };
+  }
+  const nextPlacementSnapshot = replacePlacementItemThroughSelectionBoundary(
+    placementSnapshot,
+    { ...placementItem, tintColor },
+  );
 
   return {
     placementHistory: commitPlacementHistory(placementHistory, nextPlacementSnapshot),
@@ -674,6 +1001,71 @@ export function setSelectedPlacementBuildingPaint(
   };
 }
 
+export function setSelectedPlacementBuildingWaterColor(
+  setWaterColorInput: SetSelectedPlacementBuildingWaterColorInput,
+): SetSelectedPlacementBuildingWaterColorResult {
+  assertNonNullObject(setWaterColorInput, "set building water color input");
+  assertNonNullObject(
+    setWaterColorInput.placementHistory,
+    "set building water color input.placementHistory",
+  );
+  assertPlacementSelectionKey(setWaterColorInput.selectedPlacementKey);
+  assertCatalogItemsArray(setWaterColorInput.catalogItems);
+  const placementSnapshot = createPersistentPlacementSnapshot(
+    setWaterColorInput.placementHistory.currentState,
+  );
+  const parsedSelectionKey = parsePlacementSelectionKey(
+    setWaterColorInput.selectedPlacementKey,
+  );
+  assertSelectedPlacementKeysExist(placementSnapshot, [parsedSelectionKey]);
+  if (parsedSelectionKey.kind !== "building") {
+    throw new TypeError(
+      `Editor selection selected placement key ${describeValue(setWaterColorInput.selectedPlacementKey)} must refer to a building; received ${describeValue(setWaterColorInput.selectedPlacementKey)}.`,
+    );
+  }
+  const placementBuilding = getRequiredPlacementBuilding(
+    placementSnapshot,
+    parsedSelectionKey.instanceId,
+  );
+  const catalogItem = getRequiredExactCatalogItem(
+    setWaterColorInput.catalogItems,
+    `building:${placementBuilding.buildingId}`,
+  );
+  if (
+    catalogItem.renderingMetadata?.kind !== "building-multilayer" ||
+    catalogItem.renderingMetadata.waterColors === undefined
+  ) {
+    throw new Error(
+      `Editor selection building ${describeValue(placementBuilding.buildingId)} does not support water colors.`,
+    );
+  }
+  const waterColor = setWaterColorInput.waterColor === undefined
+    ? undefined
+    : validatePlacementBuildingWaterColor(
+        setWaterColorInput.waterColor,
+        placementBuilding.buildingId,
+        "waterColor",
+      );
+  const nextBuilding = { ...placementBuilding };
+  if (waterColor === undefined) {
+    delete nextBuilding.waterColor;
+  } else {
+    nextBuilding.waterColor = waterColor;
+  }
+  const nextPlacementSnapshot = applyPlacementSnapshotAction(
+    placementSnapshot,
+    { type: "replace-building", building: nextBuilding },
+  );
+
+  return {
+    placementHistory: commitPlacementHistory(
+      setWaterColorInput.placementHistory,
+      nextPlacementSnapshot,
+    ),
+    selectedPlacementKey: setWaterColorInput.selectedPlacementKey,
+  };
+}
+
 export function setSelectedPlacementNightLightState(
   setSelectedPlacementNightLightStateInput: SetSelectedPlacementNightLightStateInput,
 ): SetSelectedPlacementNightLightStateResult {
@@ -702,9 +1094,13 @@ export function setSelectedPlacementNightLightState(
     placementSnapshot,
     parsedSelectionKey.instanceId,
   );
-  assertCatalogItemIsNightLight(catalogItems, placementItem.itemId);
+  const catalogItem = assertCatalogItemIsNightLight(catalogItems, placementItem.itemId);
+  assertNoConflictingFurnitureFireNightLightState(placementItem, catalogItem);
 
-  if (placementItem.nightLightState === nightLightState) {
+  if (
+    catalogItem.furnitureFire === undefined
+    && placementItem.nightLightState === nightLightState
+  ) {
     return {
       applied: false,
       placementHistory,
@@ -713,10 +1109,14 @@ export function setSelectedPlacementNightLightState(
     };
   }
 
-  const nextPlacementSnapshot = applyPlacementSnapshotAction(placementSnapshot, {
-    type: "replace-item",
-    item: createPlacementItemWithNightLightState(placementItem, nightLightState),
-  });
+  const nextPlacementSnapshot = replacePlacementItemThroughSelectionBoundary(
+    placementSnapshot,
+    createPlacementItemWithNightLightState(
+      placementItem,
+      nightLightState,
+      catalogItem.furnitureFire !== undefined,
+    ),
+  );
 
   return {
     applied: true,
@@ -744,11 +1144,11 @@ export function duplicateSelectedPlacementAtTile(
   );
   const parsedSelectionKey = parsePlacementSelectionKey(selectedPlacementKey);
   assertSelectedPlacementKeysExist(placementSnapshot, [parsedSelectionKey]);
-  const placementCandidate = createDuplicatePlacementCandidate(
+  const placementCandidate = addCatalogPlacementRequirement(createDuplicatePlacementCandidate(
     placementSnapshot,
     parsedSelectionKey,
     cursorTile,
-  );
+  ), duplicateSelectedPlacementAtTileInput.catalogItems);
   const validation = validatePlacement({
     buildingMetadataById,
     candidate: placementCandidate,
@@ -796,7 +1196,7 @@ function createDuplicatePlacementCandidate(
     return {
       kind: "building",
       building: {
-        buildingId: placementBuilding.buildingId,
+        ...copyNewPlacementBuildingFields(placementBuilding),
         x: cursorTile.x,
         y: cursorTile.y,
       },
@@ -839,6 +1239,12 @@ function createDuplicatePlacementCandidate(
     isLongTable: placementItem.isLongTable,
     flipped: placementItem.flipped,
     bedType: placementItem.bedType,
+    ...(placementItem.growthStage === undefined
+      ? {}
+      : { growthStage: placementItem.growthStage }),
+    ...(placementItem.nightLightState === undefined
+      ? {}
+      : { nightLightState: placementItem.nightLightState }),
   };
 
   if (placementItem.layer === "path") {
@@ -868,10 +1274,189 @@ function createDuplicateSelectionKey(
   return createItemSelectionKey(placementSnapshot.nextItemId);
 }
 
-function getNextQuarterTurn(rotation: number): number {
-  const normalizedRotation = ((rotation % 4) + 4) % 4;
+function createPlacementItemPresentationChoice(
+  placementItem: PlacementItem,
+): CatalogPresentationChoice {
+  return {
+    flipped: placementItem.flipped,
+    rotation: placementItem.rotation,
+    variant: placementItem.variant,
+  };
+}
 
-  return (normalizedRotation + 1) % 4;
+function getNextPlacementItemPresentationChoice(
+  catalogItem: CatalogItem,
+  presentationChoice: CatalogPresentationChoice,
+): CatalogPresentationChoice {
+  if (catalogItem.presentationCapabilities === undefined) {
+    return presentationChoice;
+  }
+  const presentationCapabilities = validateCatalogPresentationCapabilities(
+    catalogItem.id,
+    catalogItem.presentationCapabilities,
+  );
+  if (presentationCapabilities.variantCycle !== null) {
+    assertActivePresentationChoiceIndex(
+      catalogItem.id,
+      "variant",
+      presentationChoice.variant,
+      presentationCapabilities.variantCycle.count,
+    );
+    return {
+      ...presentationChoice,
+      variant:
+        (presentationChoice.variant + 1) %
+        presentationCapabilities.variantCycle.count,
+    };
+  }
+  if (
+    presentationCapabilities.rotation !== null &&
+    presentationCapabilities.rotation.count > 1
+  ) {
+    assertActivePresentationChoiceIndex(
+      catalogItem.id,
+      "rotation",
+      presentationChoice.rotation,
+      presentationCapabilities.rotation.count,
+    );
+    return {
+      ...presentationChoice,
+      rotation:
+        (presentationChoice.rotation + 1) %
+        presentationCapabilities.rotation.count,
+    };
+  }
+
+  return presentationChoice;
+}
+
+function assertActivePresentationChoiceIndex(
+  catalogItemId: string,
+  axisName: "rotation" | "variant",
+  axisValue: number,
+  axisCount: number,
+): void {
+  if (
+    !Number.isSafeInteger(axisValue) ||
+    axisValue < 0 ||
+    axisValue >= axisCount
+  ) {
+    throw new RangeError(
+      `Editor selection catalog item ${describeValue(catalogItemId)} ${axisName} must be a safe integer from 0 through ${String(axisCount - 1)}; received ${describeValue(axisValue)}.`,
+    );
+  }
+}
+
+function canCyclePlacementItemAppearance(
+  catalogItem: CatalogItem,
+  placementItem: PlacementItem,
+  requiresOneByOneFootprint: boolean,
+): boolean {
+  const currentChoice = createPlacementItemPresentationChoice(placementItem);
+  const nextChoice = getNextPlacementItemPresentationChoice(
+    catalogItem,
+    currentChoice,
+  );
+
+  if (arePresentationChoicesEqual(currentChoice, nextChoice)) return false;
+  if (!requiresOneByOneFootprint) return true;
+
+  const nextPlacementItem = createPlacementItemWithPresentationChoice(
+    catalogItem,
+    placementItem,
+    nextChoice,
+  );
+  return nextPlacementItem.footprint.width === 1 &&
+    nextPlacementItem.footprint.height === 1;
+}
+
+function arePresentationChoicesEqual(
+  firstChoice: CatalogPresentationChoice,
+  secondChoice: CatalogPresentationChoice,
+): boolean {
+  return firstChoice.flipped === secondChoice.flipped &&
+    firstChoice.rotation === secondChoice.rotation &&
+    firstChoice.variant === secondChoice.variant;
+}
+
+function createPlacementItemWithPresentationChoice(
+  catalogItem: CatalogItem,
+  placementItem: PlacementItem,
+  presentationChoice: CatalogPresentationChoice,
+): PlacementItem {
+  if (presentationChoice.rotation === placementItem.rotation) {
+    return {
+      ...placementItem,
+      flipped: presentationChoice.flipped,
+      variant: presentationChoice.variant,
+    };
+  }
+
+  const rotationFootprint =
+    catalogItem.presentationCapabilities?.rotation?.footprints[
+      presentationChoice.rotation
+    ];
+  if (rotationFootprint === undefined) {
+    throw new Error(
+      `Editor selection catalog item ${describeValue(catalogItem.id)} is missing footprint for rotation ${describeValue(presentationChoice.rotation)}; received ${describeValue(catalogItem.presentationCapabilities?.rotation?.footprints)}.`,
+    );
+  }
+
+  return {
+    ...placementItem,
+    flipped: presentationChoice.flipped,
+    footprint: rotationFootprint,
+    rotation: presentationChoice.rotation,
+    variant: presentationChoice.variant,
+  };
+}
+
+function getRequiredExactCatalogItem(
+  catalogItems: readonly CatalogItem[],
+  catalogItemId: string,
+): CatalogItem {
+  const matchingCatalogItems = catalogItems.filter(
+    (catalogItem) => catalogItem.id === catalogItemId,
+  );
+
+  if (matchingCatalogItems.length !== 1) {
+    throw new Error(
+      `Editor selection catalog item ${describeValue(catalogItemId)} must have exactly one match; received ${describeValue(matchingCatalogItems.length)} matches.`,
+    );
+  }
+
+  const catalogItem = matchingCatalogItems[0];
+  if (catalogItem === undefined) {
+    throw new Error(
+      `Editor selection catalog item ${describeValue(catalogItemId)} must have exactly one match; received 0 matches.`,
+    );
+  }
+
+  return catalogItem;
+}
+
+function addCatalogPlacementRequirement(
+  placementCandidate: PlacementValidationCandidate,
+  catalogItems: readonly CatalogItem[] | undefined,
+): PlacementValidationCandidate {
+  if (placementCandidate.kind !== "item") {
+    return placementCandidate;
+  }
+
+  if (catalogItems === undefined) {
+    throw new Error(
+      `Editor selection item ${describeValue(placementCandidate.item.itemId)} requires catalog items to resolve its placement requirement.`,
+    );
+  }
+
+  const catalogItem = getRequiredExactCatalogItem(
+    catalogItems,
+    placementCandidate.item.itemId,
+  );
+  return {
+    ...placementCandidate,
+    placementRequirement: getCatalogItemPlacementRequirement(catalogItem),
+  };
 }
 
 function createMovedPlacementCandidate(
@@ -888,7 +1473,7 @@ function createMovedPlacementCandidate(
     return {
       kind: "building",
       building: {
-        buildingId: placementBuilding.buildingId,
+        ...copyNewPlacementBuildingFields(placementBuilding),
         x: placementBuilding.x + tileDelta.x,
         y: placementBuilding.y + tileDelta.y,
       },
@@ -920,7 +1505,12 @@ function createMovedPlacementCandidate(
     x: placementItem.x + tileDelta.x,
     y: placementItem.y + tileDelta.y,
   };
-  const { instanceId: _, ...newPlacementItem } = movedItem;
+  const {
+    heldItem: _heldItem,
+    heldItemId: _heldItemId,
+    instanceId: _instanceId,
+    ...newPlacementItem
+  } = movedItem;
 
   if (placementItem.layer === "path") {
     return { kind: "floor", item: newPlacementItem };
@@ -931,6 +1521,15 @@ function createMovedPlacementCandidate(
   }
 
   return { kind: "item", item: newPlacementItem };
+}
+
+function copyNewPlacementBuildingFields(
+  placementBuilding: PlacementBuilding,
+): Omit<PlacementBuilding, "instanceId" | "x" | "y"> {
+  const { instanceId: _instanceId, x: _x, y: _y, ...buildingFields } =
+    placementBuilding;
+
+  return buildingFields;
 }
 
 function createSelectedPlacementRectangle(
@@ -968,10 +1567,24 @@ function createSelectedPlacementRectangle(
     );
   }
 
-  const placementItem = getRequiredPlacementItem(
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
     placementSnapshot,
     parsedSelectionKey.instanceId,
   );
+  const placementItem = resolvedItem.item;
+
+  if (resolvedItem.kind === "held-item") {
+    const parentItem = getRequiredPlacementItem(
+      placementSnapshot,
+      resolvedItem.parentInstanceId,
+    );
+    return createPlacementBounds(
+      parentItem.x,
+      parentItem.y,
+      parentItem.footprint.width,
+      parentItem.footprint.height,
+    );
+  }
 
   return createPlacementBounds(
     placementItem.x,
@@ -1061,14 +1674,68 @@ function moveSelectedPlacementRecords(
     ),
     items: placementSnapshot.items.map((placementItem) =>
       selectedItemInstanceIds.has(placementItem.instanceId)
-        ? {
-            ...placementItem,
-            x: placementItem.x + tileDelta.x,
-            y: placementItem.y + tileDelta.y,
-          }
+        ? movePlacementItemAndHeldItem(placementItem, tileDelta)
         : placementItem,
     ),
   });
+}
+
+function createMovementTargetSelectionKeys(
+  placementSnapshot: PlacementSnapshot,
+  parsedSelectionKeys: readonly ParsedPlacementSelectionKey[],
+): readonly ParsedPlacementSelectionKey[] {
+  const movementTargetSelectionKeys: ParsedPlacementSelectionKey[] = [];
+  const seenSelectionKeys = new Set<string>();
+
+  for (const parsedSelectionKey of parsedSelectionKeys) {
+    const movementTargetSelectionKey = parsedSelectionKey.kind !== "item"
+      ? parsedSelectionKey
+      : createParentItemSelectionTarget(placementSnapshot, parsedSelectionKey);
+    const serializedSelectionKey = movementTargetSelectionKey.kind === "building"
+      ? createBuildingSelectionKey(movementTargetSelectionKey.instanceId)
+      : movementTargetSelectionKey.kind === "item"
+        ? createItemSelectionKey(movementTargetSelectionKey.instanceId)
+        : createCropSelectionKey(
+            movementTargetSelectionKey.coordinate.x,
+            movementTargetSelectionKey.coordinate.y,
+          );
+
+    if (!seenSelectionKeys.has(serializedSelectionKey)) {
+      seenSelectionKeys.add(serializedSelectionKey);
+      movementTargetSelectionKeys.push(movementTargetSelectionKey);
+    }
+  }
+
+  return movementTargetSelectionKeys;
+}
+
+function createParentItemSelectionTarget(
+  placementSnapshot: PlacementSnapshot,
+  parsedSelectionKey: Extract<ParsedPlacementSelectionKey, { kind: "item" }>,
+): Extract<ParsedPlacementSelectionKey, { kind: "item" }> {
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
+    placementSnapshot,
+    parsedSelectionKey.instanceId,
+  );
+  return resolvedItem.kind === "held-item"
+    ? { kind: "item", instanceId: resolvedItem.parentInstanceId }
+    : parsedSelectionKey;
+}
+
+function movePlacementItemAndHeldItem(
+  placementItem: PlacementItem,
+  tileDelta: Readonly<{ x: number; y: number }>,
+): PlacementItem {
+  const x = placementItem.x + tileDelta.x;
+  const y = placementItem.y + tileDelta.y;
+  return {
+    ...placementItem,
+    x,
+    y,
+    ...(placementItem.heldItem === undefined
+      ? {}
+      : { heldItem: { ...placementItem.heldItem, x, y } }),
+  };
 }
 
 function createMovedSelectionKeys(
@@ -1132,17 +1799,44 @@ function getRequiredPlacementItem(
   placementSnapshot: PlacementSnapshot,
   instanceId: number,
 ): PlacementItem {
-  const placementItem = placementSnapshot.items.find(
-    (candidatePlacementItem) => candidatePlacementItem.instanceId === instanceId,
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
+    placementSnapshot,
+    instanceId,
   );
+  return resolvedItem.item;
+}
 
-  if (placementItem === undefined) {
+function getRequiredPlacementItemOrHeldItem(
+  placementSnapshot: PlacementSnapshot,
+  instanceId: number,
+): PlacementItemOrHeldItem {
+  const resolvedItem = findPlacementItemOrHeldItem(placementSnapshot, instanceId);
+
+  if (resolvedItem === null) {
     throw new Error(
       `Editor selection could not find item instance ID ${describeValue(instanceId)} after validation.`,
     );
   }
 
-  return placementItem;
+  return resolvedItem;
+}
+
+function replacePlacementItemThroughSelectionBoundary(
+  placementSnapshot: PlacementSnapshot,
+  replacementItem: PlacementItem,
+): PlacementSnapshot {
+  const resolvedItem = getRequiredPlacementItemOrHeldItem(
+    placementSnapshot,
+    replacementItem.instanceId,
+  );
+  if (resolvedItem.kind === "held-item") {
+    return replacePlacementItemOrHeldItem(placementSnapshot, replacementItem);
+  }
+
+  return applyPlacementSnapshotAction(placementSnapshot, {
+    type: "replace-item",
+    item: replacementItem,
+  });
 }
 
 function createSelectionRectangle(
@@ -1330,18 +2024,18 @@ function assertSelectedPlacementKeysExist(
     }
 
     if (parsedSelectionKey.kind === "item") {
-      const placementItem = placementSnapshot.items.find(
-        (candidatePlacementItem) =>
-          candidatePlacementItem.instanceId === parsedSelectionKey.instanceId,
+      const resolvedItem = findPlacementItemOrHeldItem(
+        placementSnapshot,
+        parsedSelectionKey.instanceId,
       );
 
-      if (placementItem === undefined) {
+      if (resolvedItem === null) {
         throw new Error(
           `Editor selection selected placement key ${describeValue(createItemSelectionKey(parsedSelectionKey.instanceId))} does not exist in the current placement snapshot.`,
         );
       }
 
-      if (placementItem.locked) {
+      if (resolvedItem.item.locked) {
         throw new Error(
           `Editor selection selected placement key ${describeValue(createItemSelectionKey(parsedSelectionKey.instanceId))} resolves to a locked item.`,
         );
@@ -1368,6 +2062,16 @@ function deletePlacementSelectionKeys(
   parsedSelectionKeys: readonly ParsedPlacementSelectionKey[],
 ): PlacementSnapshot {
   let nextPlacementSnapshot = placementSnapshot;
+  const selectedTopLevelItemInstanceIds = new Set(
+    parsedSelectionKeys.flatMap((parsedSelectionKey) => {
+      if (parsedSelectionKey.kind !== "item") return [];
+      const resolvedItem = getRequiredPlacementItemOrHeldItem(
+        placementSnapshot,
+        parsedSelectionKey.instanceId,
+      );
+      return resolvedItem.kind === "item" ? [resolvedItem.item.instanceId] : [];
+    }),
+  );
 
   for (const parsedSelectionKey of parsedSelectionKeys) {
     if (parsedSelectionKey.kind === "building") {
@@ -1379,10 +2083,20 @@ function deletePlacementSelectionKeys(
     }
 
     if (parsedSelectionKey.kind === "item") {
-      nextPlacementSnapshot = applyPlacementSnapshotAction(nextPlacementSnapshot, {
-        type: "delete-item",
-        instanceId: parsedSelectionKey.instanceId,
-      });
+      const resolvedItem = getRequiredPlacementItemOrHeldItem(
+        placementSnapshot,
+        parsedSelectionKey.instanceId,
+      );
+      if (
+        resolvedItem.kind === "held-item" &&
+        selectedTopLevelItemInstanceIds.has(resolvedItem.parentInstanceId)
+      ) {
+        continue;
+      }
+      nextPlacementSnapshot = deletePlacementItemOrHeldItem(
+        nextPlacementSnapshot,
+        parsedSelectionKey.instanceId,
+      );
       continue;
     }
 
@@ -1478,6 +2192,7 @@ function assertGetPlacementSelectionDetailsInput(
   createPersistentPlacementSnapshot(
     getPlacementSelectionDetailsInput.placementSnapshot,
   );
+  assertCatalogItemsArray(getPlacementSelectionDetailsInput.catalogItems);
   assertPlacementSelectionKey(
     getPlacementSelectionDetailsInput.selectedPlacementKey,
   );
@@ -1510,20 +2225,48 @@ function assertMoveSelectedPlacementsInput(
   }
 }
 
-function assertRotateSelectedPlacementInput(
-  rotateSelectedPlacementInput: RotateSelectedPlacementInput,
+function assertCycleSelectedPlacementAppearanceInput(
+  cycleSelectedPlacementAppearanceInput: CycleSelectedPlacementAppearanceInput,
 ): void {
-  assertNonNullObject(rotateSelectedPlacementInput, "rotate input");
   assertNonNullObject(
-    rotateSelectedPlacementInput.placementHistory,
+    cycleSelectedPlacementAppearanceInput,
+    "appearance cycle input",
+  );
+  assertNonNullObject(
+    cycleSelectedPlacementAppearanceInput.buildingMetadataById,
+    "buildingMetadataById",
+  );
+  assertCatalogItemsArray(cycleSelectedPlacementAppearanceInput.catalogItems);
+  assertNonNullObject(
+    cycleSelectedPlacementAppearanceInput.mapPlacementGrid,
+    "mapPlacementGrid",
+  );
+  assertNonNullObject(
+    cycleSelectedPlacementAppearanceInput.placementHistory,
     "placementHistory",
   );
   createPersistentPlacementSnapshot(
-    rotateSelectedPlacementInput.placementHistory.currentState,
+    cycleSelectedPlacementAppearanceInput.placementHistory.currentState,
   );
   assertPlacementSelectionKey(
-    rotateSelectedPlacementInput.selectedPlacementKey,
+    cycleSelectedPlacementAppearanceInput.selectedPlacementKey,
   );
+  if (
+    cycleSelectedPlacementAppearanceInput.freePlacement !== undefined &&
+    typeof cycleSelectedPlacementAppearanceInput.freePlacement !== "boolean"
+  ) {
+    throw new TypeError(
+      `Editor selection freePlacement must be a boolean or undefined; received ${describeValue(cycleSelectedPlacementAppearanceInput.freePlacement)}.`,
+    );
+  }
+}
+
+function assertCatalogItemsArray(catalogItems: readonly CatalogItem[]): void {
+  if (!Array.isArray(catalogItems)) {
+    throw new TypeError(
+      `Editor selection catalogItems must be an array; received ${describeValue(catalogItems)}.`,
+    );
+  }
 }
 
 function assertSetSelectedPlacementItemTintInput(
@@ -1540,6 +2283,7 @@ function assertSetSelectedPlacementItemTintInput(
   assertPlacementSelectionKey(
     setSelectedPlacementItemTintInput.selectedPlacementKey,
   );
+  assertCatalogItemsArray(setSelectedPlacementItemTintInput.catalogItems);
 }
 
 function assertSetSelectedPlacementBuildingPaintInput(
@@ -1591,7 +2335,7 @@ function assertSetSelectedPlacementNightLightStateInput(
 }
 
 function assertNightLightCatalogItems(
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight">[],
+  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight" | "furnitureFire">[],
 ): void {
   if (!Array.isArray(catalogItems)) {
     throw new TypeError(
@@ -1664,9 +2408,9 @@ function assertCatalogItemNightLight(
 }
 
 function assertCatalogItemIsNightLight(
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight">[],
+  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight" | "furnitureFire">[],
   catalogItemId: string,
-): void {
+): Pick<CatalogItem, "id" | "nightLight" | "furnitureFire"> {
   const catalogItem = catalogItems.find(
     (candidateCatalogItem) => candidateCatalogItem.id === catalogItemId,
   );
@@ -1676,12 +2420,23 @@ function assertCatalogItemIsNightLight(
       `Editor selection catalog item ${describeValue(catalogItemId)} must be a catalog-derived night light; received ${describeValue(catalogItemId)}.`,
     );
   }
+
+  return catalogItem;
 }
 
 function createPlacementItemWithNightLightState(
   placementItem: PlacementItem,
   nightLightState: "off" | undefined,
+  isFurnitureFire: boolean,
 ): PlacementItem {
+  if (isFurnitureFire) {
+    const { nightLightState: ignoredNightLightState, ...placementItemWithoutLegacyState } = placementItem;
+    return {
+      ...placementItemWithoutLegacyState,
+      variant: nightLightState === "off" ? 1 : 0,
+    };
+  }
+
   if (nightLightState === "off") {
     return { ...placementItem, nightLightState };
   }
@@ -1690,6 +2445,26 @@ function createPlacementItemWithNightLightState(
     placementItem;
 
   return litPlacementItem;
+}
+
+function assertNoConflictingFurnitureFireNightLightState(
+  placementItem: PlacementItem,
+  catalogItem: Pick<CatalogItem, "id" | "furnitureFire">,
+): void {
+  if (
+    catalogItem.furnitureFire === undefined
+    || placementItem.nightLightState === undefined
+  ) {
+    return;
+  }
+
+  const isVariantUnlit = placementItem.variant === 1;
+  const isLegacyStateUnlit = placementItem.nightLightState === "off";
+  if (isVariantUnlit !== isLegacyStateUnlit) {
+    throw new Error(
+      `Furniture fire item ${describeValue(placementItem.itemId)} has conflicting variant ${String(placementItem.variant)} and nightLightState ${describeValue(placementItem.nightLightState)}.`,
+    );
+  }
 }
 
 function assertDuplicateSelectedPlacementAtTileInput(

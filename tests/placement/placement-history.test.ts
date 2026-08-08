@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  clearPlacementHistoryRedo,
+  clonePlacementHistory,
   commitPlacementHistory,
   createPlacementHistory,
   redoPlacementHistory,
@@ -11,6 +13,51 @@ import {
 } from "../../src/placement/placement-snapshot";
 
 describe("placement history", () => {
+  it("validates and clones every stored state through the supplied clone function", () => {
+    const placementHistory = {
+      currentState: { placementIds: ["current"] },
+      redoStates: [{ placementIds: ["redo"] }],
+      undoStates: [{ placementIds: ["undo"] }],
+    };
+
+    const clonedPlacementHistory = clonePlacementHistory(
+      placementHistory,
+      (placementState) => ({
+        placementIds: [...placementState.placementIds],
+      }),
+    );
+
+    placementHistory.currentState.placementIds.push("mutated");
+    placementHistory.undoStates[0]?.placementIds.push("mutated");
+    placementHistory.redoStates[0]?.placementIds.push("mutated");
+
+    expect(clonedPlacementHistory).toEqual({
+      currentState: { placementIds: ["current"] },
+      redoStates: [{ placementIds: ["redo"] }],
+      undoStates: [{ placementIds: ["undo"] }],
+    });
+  });
+
+  it("clears redo through the public history boundary while preserving current and undo states", () => {
+    const currentState = { placementIds: ["current"] };
+    const undoStates = [{ placementIds: ["undo"] }];
+    const placementHistory = {
+      currentState,
+      redoStates: [{ placementIds: ["redo"] }],
+      undoStates,
+    };
+
+    const clearedPlacementHistory = clearPlacementHistoryRedo(placementHistory);
+
+    expect(clearedPlacementHistory).toEqual({
+      currentState,
+      redoStates: [],
+      undoStates,
+    });
+    expect(clearedPlacementHistory.currentState).toBe(currentState);
+    expect(clearedPlacementHistory.undoStates).toBe(undoStates);
+  });
+
   it("records a new placement state as an undoable transition", () => {
     const initialHistory = createPlacementHistory({ placementIds: [] });
     const updatedHistory = commitPlacementHistory(initialHistory, {
@@ -66,6 +113,72 @@ describe("placement history", () => {
       redoPlacementHistory(undoPlacementHistory(wallpaperHistory)).currentState
         .interiorDecor,
     ).toEqual({ wallpapers: { Bedroom: "0" }, floors: {} });
+  });
+
+  it("undoes and redoes an exact nested table-child state", () => {
+    const initialSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [{
+        bedType: null,
+        flipped: false,
+        footprint: { width: 2, height: 2 },
+        instanceId: 1,
+        isGrass: false,
+        isLongTable: false,
+        isRug: false,
+        isTable: true,
+        itemId: "furniture_724",
+        layer: "item" as const,
+        locked: false,
+        rotation: 0,
+        tintColor: "#ffffff",
+        variant: 0,
+        x: 3,
+        y: 4,
+        heldItem: {
+          bedType: null,
+          flipped: false,
+          footprint: { width: 1, height: 1 },
+          instanceId: 7,
+          isGrass: false,
+          isLongTable: false,
+          isRug: false,
+          isTable: false,
+          itemId: "furniture_0",
+          layer: "item" as const,
+          locked: false,
+          rotation: 0,
+          tintColor: "#ffffff",
+          variant: 0,
+          x: 4,
+          y: 5,
+        },
+      }],
+      nextItemId: 8,
+    };
+    const editedSnapshot = {
+      ...initialSnapshot,
+      items: [{
+        ...initialSnapshot.items[0]!,
+        heldItem: {
+          ...initialSnapshot.items[0]!.heldItem,
+          tintColor: "#123456",
+          variant: 2,
+          x: 3,
+          y: 4,
+        },
+      }],
+    };
+    const editedHistory = commitPlacementHistory(
+      createPlacementHistory(initialSnapshot),
+      editedSnapshot,
+    );
+
+    const undoneHistory = undoPlacementHistory(editedHistory);
+    expect(undoneHistory.currentState).toEqual(initialSnapshot);
+    expect(redoPlacementHistory(undoneHistory).currentState).toEqual(
+      editedSnapshot,
+    );
   });
 
   it("clears the redo branch when a new state is committed after undo", () => {

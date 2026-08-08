@@ -153,7 +153,7 @@ export function createMapRenderingContract(
       ),
     ),
     visibleTileLayers: mapRenderingContractRequest.parsedMap.tileLayers
-      .filter((tileLayer) => tileLayer.visible)
+      .filter((tileLayer) => tileLayer.visible && tileLayer.name !== "Paths")
       .map(createRenderingTileLayer),
   };
 }

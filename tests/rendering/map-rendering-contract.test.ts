@@ -53,20 +53,21 @@ afterAll(() => {
 
 describe("createMapRenderingContract", () => {
   it("keeps Farm tilesets and visible layers in TMX order with manifest-backed local paths", async () => {
+    const parsedFarmMap = await parseLockedMap("maps/Farm.tmx");
     const farmContract = createMapRenderingContract({
       mapId: "standard",
-      parsedMap: await parseLockedMap("maps/Farm.tmx"),
+      parsedMap: parsedFarmMap,
       requestedSeason: "spring",
     });
 
     expect(farmContract.visibleTileLayers.map((layer) => layer.name)).toEqual([
       "Back",
       "Buildings",
-      "Paths",
       "Front",
       "AlwaysFront",
       "AlwaysFront2",
     ]);
+    expect(parsedFarmMap.tileLayers.map((layer) => layer.name)).toContain("Paths");
     const localFarmAssetPaths = getLocalAssetPaths(farmContract.tilesets);
 
     expect(localFarmAssetPaths).toEqual([
@@ -255,20 +256,24 @@ describe("createMapRenderingContract", () => {
   );
 
   it("retains spouseRooms layer dimensions instead of replacing them with map dimensions", async () => {
+    const parsedSpouseRoomsMap = await parseLockedMap("maps/spouseRooms.tmx");
     const spouseRoomsContract = createMapRenderingContract({
       mapId: "farmhouse-2",
-      parsedMap: await parseLockedMap("maps/spouseRooms.tmx"),
+      parsedMap: parsedSpouseRoomsMap,
       requestedSeason: "spring",
     });
 
     expect(
-      spouseRoomsContract.visibleTileLayers.find(
+      parsedSpouseRoomsMap.tileLayers.find(
         (layer) => layer.name === "Paths",
       ),
     ).toMatchObject({
       width: 100,
       height: 25,
     });
+    expect(
+      spouseRoomsContract.visibleTileLayers.some((layer) => layer.name === "Paths"),
+    ).toBe(false);
   });
 
   it("fails fast for invalid request map IDs and seasons", async () => {

@@ -1,7 +1,10 @@
 import type {
   BuildingPlacementMetadataById,
   CatalogItem,
+  CatalogPresentationChoice,
 } from "../catalog";
+import { validateCatalogItemPresentationChoice } from "../catalog";
+import { isMultiTileCropCatalogItem } from "../placement/catalog-item-placement-requirement";
 import type {
   MapPlacementGrid,
   MapTileCoordinates,
@@ -21,6 +24,7 @@ import type { PlacementValidationResult } from "../placement/placement-validatio
 import { applyEditorCursorPlacement } from "./editor-placement-controller";
 
 export type EditorFillInput = Readonly<{
+  catalogPresentationChoice: CatalogPresentationChoice | null;
   selectedCatalogItem: CatalogItem | null;
   firstTile: MapTileCoordinates;
   secondTile: MapTileCoordinates;
@@ -28,6 +32,7 @@ export type EditorFillInput = Readonly<{
   mapPlacementGrid: MapPlacementGrid;
   buildingMetadataById: BuildingPlacementMetadataById;
   placementHistory: PlacementHistory<PlacementSnapshot>;
+  randomFractionSource?: () => number;
 }>;
 
 export type EditorFillResult =
@@ -68,9 +73,21 @@ export function applyEditorFill(
       placementHistory,
     };
   }
+  const catalogPresentationChoice = requireCatalogPresentationChoice(
+    editorFillInput,
+  );
+
+  if (isBedFillCatalogItem(selectedCatalogItem)) {
+    return applyEditorBedFill(
+      editorFillInput,
+      selectedCatalogItem,
+      catalogPresentationChoice,
+    );
+  }
 
   const fillTiles = createFillTiles(
     selectedCatalogItem,
+    catalogPresentationChoice,
     editorFillInput.firstTile,
     editorFillInput.secondTile,
   );
@@ -83,11 +100,13 @@ export function applyEditorFill(
   for (const fillTile of fillTiles) {
     const placementResult = applyEditorCursorPlacement({
       selectedCatalogItem,
+      catalogPresentationChoice,
       cursorTile: fillTile,
       mapPlacementGrid: editorFillInput.mapPlacementGrid,
       buildingMetadataById: editorFillInput.buildingMetadataById,
       freePlacement: editorFillInput.freePlacement,
       placementHistory: validatedPlacementHistory,
+      randomFractionSource: editorFillInput.randomFractionSource,
     });
 
     if (!placementResult.applied) {
@@ -105,7 +124,7 @@ export function applyEditorFill(
     }
 
     appendFillPlacementRecord(
-      selectedCatalogItem.category,
+      selectedCatalogItem,
       placementResult.placementHistory.currentState,
       addedCrops,
       addedItems,
@@ -128,18 +147,93 @@ export function applyEditorFill(
   };
 }
 
+function applyEditorBedFill(
+  editorFillInput: EditorFillInput,
+  selectedCatalogItem: CatalogItem,
+  catalogPresentationChoice: CatalogPresentationChoice,
+): EditorFillResult {
+  const fillTiles = createFillTiles(
+    selectedCatalogItem,
+    catalogPresentationChoice,
+    editorFillInput.firstTile,
+    editorFillInput.secondTile,
+  );
+  let validatedPlacementHistory = createPlacementHistory(
+    editorFillInput.placementHistory.currentState,
+  );
+  let firstRejectedValidation:
+    | Extract<PlacementValidationResult, { valid: false }>
+    | null = null;
+  let placedBedCount = 0;
+
+  for (const fillTile of fillTiles) {
+    const placementResult = applyEditorCursorPlacement({
+      selectedCatalogItem,
+      catalogPresentationChoice,
+      cursorTile: fillTile,
+      mapPlacementGrid: editorFillInput.mapPlacementGrid,
+      buildingMetadataById: editorFillInput.buildingMetadataById,
+      freePlacement: editorFillInput.freePlacement,
+      placementHistory: validatedPlacementHistory,
+      randomFractionSource: editorFillInput.randomFractionSource,
+    });
+
+    if (!placementResult.applied) {
+      if ("validation" in placementResult) {
+        firstRejectedValidation ??= placementResult.validation;
+        continue;
+      }
+
+      throw new Error(
+        `Editor bed fill received unexpected unapplied placement result for catalog item ${describeValue(selectedCatalogItem.id)} at tile ${describeValue(fillTile)}.`,
+      );
+    }
+
+    validatedPlacementHistory = placementResult.placementHistory;
+    placedBedCount += 1;
+  }
+
+  if (placedBedCount === 0) {
+    if (firstRejectedValidation === null) {
+      return {
+        applied: true,
+        placedTileCount: 0,
+        placementHistory: editorFillInput.placementHistory,
+      };
+    }
+
+    return {
+      applied: false,
+      validation: firstRejectedValidation,
+      placementHistory: editorFillInput.placementHistory,
+    };
+  }
+
+  return {
+    applied: true,
+    placedTileCount: placedBedCount,
+    placementHistory: commitPlacementHistory(
+      editorFillInput.placementHistory,
+      validatedPlacementHistory.currentState,
+    ),
+  };
+}
+
 function appendFillPlacementRecord(
-  category: CatalogItem["category"],
+  catalogItem: CatalogItem,
   placementSnapshot: PlacementSnapshot,
   addedCrops: PlacementCrop[],
   addedItems: PlacementItem[],
 ): void {
-  if (category === "crop") {
+  if (
+    catalogItem.category === "crop"
+    && !isMultiTileCropCatalogItem(catalogItem)
+  ) {
     const addedCrop = placementSnapshot.crops.at(-1);
 
     if (addedCrop === undefined) {
       throw new Error(
-        `Editor fill expected a crop placement record for category ${describeValue(category)} but none was added.`,
+        `Editor fill expected a crop placement record for category ${describeValue(catalogItem.category)} but none was added.`,
       );
     }
 
@@ -151,7 +245,7 @@ function appendFillPlacementRecord(
 
   if (addedItem === undefined) {
     throw new Error(
-      `Editor fill expected an item placement record for category ${describeValue(category)} but none was added.`,
+      `Editor fill expected an item placement record for catalog item ${describeValue(catalogItem.id)} but none was added.`,
     );
   }
 
@@ -197,13 +291,25 @@ function incrementPlacementItemIdentifier(
 
 function createFillTiles(
   selectedCatalogItem: CatalogItem,
+  catalogPresentationChoice: CatalogPresentationChoice,
   firstTile: MapTileCoordinates,
   secondTile: MapTileCoordinates,
 ): readonly MapTileCoordinates[] {
+  const renderingMetadata = selectedCatalogItem.renderingMetadata;
+  const isCompositeFurniture =
+    selectedCatalogItem.category === "placeable"
+    && renderingMetadata?.kind === "furniture"
+    && renderingMetadata.compositeSprite !== null;
+  const isBedFurniture =
+    selectedCatalogItem.category === "placeable"
+    && renderingMetadata?.kind === "furniture"
+    && renderingMetadata.bedType !== null;
+
   if (
     selectedCatalogItem.category !== "crop" &&
     selectedCatalogItem.category !== "floor" &&
-    selectedCatalogItem.category !== "fence"
+    selectedCatalogItem.category !== "fence" &&
+    !isCompositeFurniture && !isBedFurniture
   ) {
     throw new Error(
       `Editor fill does not support catalog category ${describeValue(selectedCatalogItem.category)} for item ${describeValue(selectedCatalogItem.id)}.`,
@@ -216,7 +322,64 @@ function createFillTiles(
     return createFencePerimeterTiles(rectangle);
   }
 
+  if (isBedFurniture || isMultiTileCropCatalogItem(selectedCatalogItem)) {
+    return createFootprintTiledRectangleOrigins(
+      rectangle,
+      getFillFootprint(selectedCatalogItem, catalogPresentationChoice),
+    );
+  }
+
   return createRectangleTiles(rectangle);
+}
+
+function isBedFillCatalogItem(catalogItem: CatalogItem): boolean {
+  return catalogItem.category === "placeable"
+    && catalogItem.renderingMetadata?.kind === "furniture"
+    && catalogItem.renderingMetadata.bedType !== null;
+}
+
+function getFillFootprint(
+  catalogItem: CatalogItem,
+  catalogPresentationChoice: CatalogPresentationChoice,
+): CatalogItem["tileSize"] {
+  const rotationFootprints =
+    catalogItem.presentationCapabilities?.rotation?.footprints;
+  const fillFootprint = rotationFootprints === undefined
+    ? catalogItem.tileSize
+    : rotationFootprints[catalogPresentationChoice.rotation];
+
+  if (fillFootprint === undefined) {
+    throw new RangeError(
+      `Editor fill catalog item ${describeValue(catalogItem.id)} has no footprint for rotation ${describeValue(catalogPresentationChoice.rotation)}; received ${describeValue(rotationFootprints)}.`,
+    );
+  }
+
+  return fillFootprint;
+}
+
+function createFootprintTiledRectangleOrigins(
+  fillRectangle: FillRectangle,
+  footprint: CatalogItem["tileSize"],
+): readonly MapTileCoordinates[] {
+  const fillTiles: MapTileCoordinates[] = [];
+  const lastOriginX = fillRectangle.maximumX - footprint.width + 1;
+  const lastOriginY = fillRectangle.maximumY - footprint.height + 1;
+
+  for (
+    let y = fillRectangle.minimumY;
+    y <= lastOriginY;
+    y += footprint.height
+  ) {
+    for (
+      let x = fillRectangle.minimumX;
+      x <= lastOriginX;
+      x += footprint.width
+    ) {
+      fillTiles.push({ x, y });
+    }
+  }
+
+  return fillTiles;
 }
 
 type FillRectangle = Readonly<{
@@ -280,9 +443,37 @@ function assertEditorFillInput(editorFillInput: EditorFillInput): void {
     );
   }
 
+  if (
+    editorFillInput.randomFractionSource !== undefined
+    && typeof editorFillInput.randomFractionSource !== "function"
+  ) {
+    throw new TypeError(
+      `Editor fill randomFractionSource must be a function or undefined; received ${describeValue(editorFillInput.randomFractionSource)}.`,
+    );
+  }
+
   if (editorFillInput.selectedCatalogItem !== null) {
     assertNonNullObject(editorFillInput.selectedCatalogItem, "selectedCatalogItem");
+    validateCatalogItemPresentationChoice(
+      editorFillInput.selectedCatalogItem,
+      requireCatalogPresentationChoice(editorFillInput),
+    );
+  } else if (editorFillInput.catalogPresentationChoice !== null) {
+    throw new TypeError(
+      `Editor fill catalogPresentationChoice must be null without a selected catalog item; received ${describeValue(editorFillInput.catalogPresentationChoice)}.`,
+    );
   }
+}
+
+function requireCatalogPresentationChoice(
+  editorFillInput: EditorFillInput,
+): CatalogPresentationChoice {
+  if (editorFillInput.catalogPresentationChoice === null) {
+    throw new TypeError(
+      `Editor fill catalogPresentationChoice must be a non-null object for selected catalog item ${describeValue(editorFillInput.selectedCatalogItem?.id)}; received null.`,
+    );
+  }
+  return editorFillInput.catalogPresentationChoice;
 }
 
 function assertMapTile(mapTile: MapTileCoordinates, fieldName: string): void {

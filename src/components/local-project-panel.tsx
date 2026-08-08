@@ -1,12 +1,11 @@
 "use client";
 
 import {
-  useRef,
   useState,
   type ChangeEvent,
 } from "react";
-import { createProjectExportFile } from "../projects/local-project-editor-actions";
-import type { LocalProjectSummary } from "../projects/local-project-store";
+import { createReferenceProjectExportFile } from "../projects/reference-project-export-file";
+import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 
 export type LocalProjectStorageStatus = "loading" | "ready" | "error";
 
@@ -15,7 +14,7 @@ type LocalProjectPanelProperties = Readonly<{
   currentProjectName: string | null;
   currentProjectMapInstanceCount?: number | null;
   currentProjectMapInstanceName?: string | null;
-  projects: readonly LocalProjectSummary[];
+  projects: readonly ReferenceProjectSummary[];
   storageStatus: LocalProjectStorageStatus;
   storageErrorMessage: string | null;
   onCreateProject: () => void;
@@ -45,7 +44,6 @@ export function LocalProjectPanel({
   onRenameProject,
   onSaveCurrentMap,
 }: LocalProjectPanelProperties) {
-  const importFileInputReference = useRef<HTMLInputElement>(null);
   const [projectActionErrorMessage, setProjectActionErrorMessage] = useState<
     string | null
   >(null);
@@ -85,9 +83,9 @@ export function LocalProjectPanel({
     runProjectAction(() => onOpenProject(projectId), `Opened ${projectName}.`);
   }
 
-  function handleStartRename(projectSummary: LocalProjectSummary): void {
+  function handleStartRename(projectSummary: ReferenceProjectSummary): void {
     setRenamedProjectId(projectSummary.id);
-    setRequestedProjectName(projectSummary.name);
+    setRequestedProjectName(projectSummary.title);
     setProjectActionErrorMessage(null);
     setProjectActionNotice(null);
   }
@@ -125,17 +123,17 @@ export function LocalProjectPanel({
     }, "Deleted the local project.");
   }
 
-  function handleExportProject(projectSummary: LocalProjectSummary): void {
+  function handleExportProject(projectSummary: ReferenceProjectSummary): void {
     try {
       const serializedProject = onExportProject(projectSummary.id);
-      const projectExportFile = createProjectExportFile(
-        projectSummary.name,
+      const projectExportFile = createReferenceProjectExportFile(
+        projectSummary.title,
         serializedProject,
       );
 
       downloadProjectExportFile(projectExportFile);
       setProjectActionErrorMessage(null);
-      setProjectActionNotice(`Exported ${projectSummary.name}.`);
+      setProjectActionNotice(`Exported ${projectSummary.title}.`);
     } catch (caughtError) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(formatProjectActionError(caughtError));
@@ -145,29 +143,30 @@ export function LocalProjectPanel({
   function handleImportFileChange(
     changeEvent: ChangeEvent<HTMLInputElement>,
   ): void {
-    const selectedProjectFile = changeEvent.currentTarget.files?.[0];
+    const selectedProjectFileInput = changeEvent.currentTarget;
+    const selectedProjectFile = selectedProjectFileInput.files?.[0];
 
     if (selectedProjectFile === undefined) {
       return;
     }
 
-    void importSelectedProjectFile(selectedProjectFile);
+    void importSelectedProjectFile(selectedProjectFile, selectedProjectFileInput);
   }
 
-  async function importSelectedProjectFile(selectedProjectFile: File): Promise<void> {
+  async function importSelectedProjectFile(
+    selectedProjectFile: File,
+    selectedProjectFileInput: HTMLInputElement,
+  ): Promise<void> {
     try {
       const serializedProject = await selectedProjectFile.text();
       onImportProject(serializedProject);
-
-      if (importFileInputReference.current !== null) {
-        importFileInputReference.current.value = "";
-      }
-
       setProjectActionErrorMessage(null);
       setProjectActionNotice(`Imported ${selectedProjectFile.name}.`);
     } catch (caughtError) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(formatProjectActionError(caughtError));
+    } finally {
+      selectedProjectFileInput.value = "";
     }
   }
 
@@ -232,7 +231,6 @@ export function LocalProjectPanel({
             accept="application/json,.json"
             disabled={!isStorageReady}
             onChange={handleImportFileChange}
-            ref={importFileInputReference}
             type="file"
           />
         </label>
@@ -249,8 +247,8 @@ export function LocalProjectPanel({
               key={projectSummary.id}
             >
               <div className="local-project-panel__project-summary">
-                <strong>{projectSummary.name}</strong>
-                <span>{projectSummary.activeMapId}</span>
+                <strong>{projectSummary.title}</strong>
+                <span>{projectSummary.updated_at}</span>
                 {isCurrentProject ? <span>Current</span> : null}
               </div>
               {isRenamingProject ? (
@@ -284,7 +282,7 @@ export function LocalProjectPanel({
                   <button
                     disabled={!isStorageReady}
                     onClick={() =>
-                      handleOpenProject(projectSummary.id, projectSummary.name)
+                      handleOpenProject(projectSummary.id, projectSummary.title)
                     }
                     type="button"
                   >
@@ -326,7 +324,7 @@ export function LocalProjectPanel({
       </ul>
       {projects.length === 0 ? (
         <p className="local-project-panel__message">
-          No local projects yet. Saving creates an Untitled Project.
+          No local projects yet. Create a project to save this map here.
         </p>
       ) : null}
       {projectPendingDeletion !== undefined ? (
@@ -337,7 +335,7 @@ export function LocalProjectPanel({
         >
           <h3 id="delete-local-project-heading">Delete local project?</h3>
           <p>
-            Delete <strong>{projectPendingDeletion.name}</strong> from this
+            Delete <strong>{projectPendingDeletion.title}</strong> from this
             browser? This cannot be undone.
           </p>
           <div>
@@ -358,7 +356,7 @@ export function LocalProjectPanel({
 }
 
 function downloadProjectExportFile(
-  projectExportFile: ReturnType<typeof createProjectExportFile>,
+  projectExportFile: ReturnType<typeof createReferenceProjectExportFile>,
 ): void {
   if (typeof document === "undefined") {
     throw new Error(

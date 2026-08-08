@@ -3,16 +3,44 @@ import type {
   CatalogItem,
   CatalogSeason,
   CatalogSourceRect,
+  CatalogTileSize,
 } from "../catalog";
-import type { PlacementItem } from "../placement/placement-snapshot";
 import {
-  getBuildingPaintMaskLocalPath,
-  type BuildingPaintColors,
-} from "../paint/building-paint";
+  getCropRenderingMetadata,
+  getSeasonalPlaceableFrame,
+  hoeDirtCatalogItemId,
+} from "../catalog";
+import { getFurnitureBedType } from "../catalog/furniture";
+import type { BuildingPaintColors } from "../paint/building-paint";
 import {
   createPersistentPlacementSnapshot,
+  type PlacementHeldItem,
+  type PlacementItem,
   type PlacementSnapshot,
 } from "../placement/placement-snapshot";
+import { getPlacementItemZIndex } from "../placement/placement-item-z-order";
+import { getBedPlacementSemantics } from "../placement/bed-placement-semantics";
+import { isGardenPotAtTile } from "../placement/garden-pot-placement";
+import {
+  createTreePlacementRenderLayers,
+} from "./tree-placement-rendering";
+import { createHoeDirtPlacementRenderLayers } from "./hoe-dirt-placement-rendering";
+import { createSprinklerAttachmentRenderLayer } from "./sprinkler-placement-rendering";
+import { createLitBigCraftablePlacementRenderLayers } from "./lit-big-craftable-placement-rendering";
+import { createPaintableChestPlacementRenderLayers } from "./paintable-chest-placement-rendering";
+import { createFurnitureCompositePlacementRenderLayers } from "./furniture-composite-placement-rendering";
+import { createBuildingMultilayerPlacementRenderEntries } from "./building-multilayer-placement-rendering";
+import { createCrabPotPixelGeometry } from "./crab-pot-placement-rendering";
+import {
+  createObjectPlacementShadowRenderLayer,
+  type ObjectPlacementShadowRenderLayer,
+} from "./object-placement-shadow-rendering";
+import { createGatePlacementRenderLayers } from "./gate-placement-rendering";
+import { createFurnitureFirePlacementRenderLayers } from "./furniture-fire-placement-rendering";
+import { createDaytimeWindowOverlayDescriptorForPlacementItem } from "./daytime-window-overlay-rendering";
+import { createCropPlacementRenderLayers } from "./crop-placement-rendering";
+import type { MapPlacementGrid } from "../placement/map-placement-grids";
+import { createGrassPlacementRenderLayers } from "./grass-placement-rendering";
 
 export type PlacementRenderFrame = Readonly<{
   x: number;
@@ -21,21 +49,57 @@ export type PlacementRenderFrame = Readonly<{
   height: number;
 }> | null;
 
+export type PlacementPixelGeometry = Readonly<{
+  anchorX: number;
+  anchorY: number;
+  horizontalMirrorCenterX?: number;
+  horizontalScale: 1 | -1;
+  positionX: number;
+  positionY: number;
+  uniformScale?: number;
+}>;
+
+export type PlacementFrameCycleAnimation = Readonly<{
+  frameDurationMilliseconds: number;
+  frames: readonly Exclude<PlacementRenderFrame, null>[];
+  kind: "frame-cycle";
+  timeOffsetMilliseconds: number;
+}>;
+
+export type PlacementScalePulseAnimation = Readonly<{
+  baseScale: number;
+  kind: "scale-pulse";
+  phaseOffsetMilliseconds: number;
+  pulseAmplitude: number;
+  timeDivisorMilliseconds: number;
+  timeModuloMilliseconds: number;
+}>;
+
+export type PlacementRenderAnimation =
+  | PlacementFrameCycleAnimation
+  | PlacementScalePulseAnimation;
+
 export type PlacementRenderEntry = Readonly<{
+  animation?: PlacementRenderAnimation;
   buildingPaint?: Readonly<{
     colors: BuildingPaintColors;
     paintMaskLocalPath: string;
   }>;
+  effectiveFootprint: CatalogTileSize;
   key: string;
+  layerId?: string;
   catalogItem: CatalogItem;
   tileX: number;
   tileY: number;
   frame: PlacementRenderFrame;
+  pixelGeometry?: PlacementPixelGeometry;
   rotationQuarterTurns: number;
+  opacity?: number;
+  shouldApplySelectionTint?: boolean;
   textureLocalPath?: string;
   isFlipped?: boolean;
-  isTree?: boolean;
   tintColor?: string;
+  zIndex?: number;
 }>;
 
 type ItemRenderProperties = {
@@ -43,7 +107,6 @@ type ItemRenderProperties = {
   rotationQuarterTurns: number;
   textureLocalPath?: string;
   isFlipped?: boolean;
-  isTree?: boolean;
   tintColor?: string;
 };
 
@@ -51,6 +114,9 @@ export function createPlacementRenderEntries(
   placementSnapshot: PlacementSnapshot,
   catalogItems: readonly CatalogItem[],
   season: CatalogSeason = "spring",
+  mapId = "standard",
+  mapPlacementGrid?: MapPlacementGrid,
+  isNightMode = false,
 ): readonly PlacementRenderEntry[] {
   const persistentPlacementSnapshot = createPersistentPlacementSnapshot(
     placementSnapshot,
@@ -58,77 +124,520 @@ export function createPlacementRenderEntries(
   const catalogItemsById = createCatalogItemsById(catalogItems);
 
   return [
-    ...persistentPlacementSnapshot.buildings.map((building) => {
+    ...persistentPlacementSnapshot.buildings.flatMap((building) => {
       const catalogItem = getRequiredCatalogItem(
         catalogItemsById,
         `building:${building.buildingId}`,
       );
-
-      const paintMaskLocalPath =
-        building.paintColors === undefined
-          ? null
-          : getBuildingPaintMaskLocalPath(building.buildingId);
-
-      if (building.paintColors !== undefined && paintMaskLocalPath === null) {
-        throw new Error(
-          `Placement rendering building ${describeValue(building.buildingId)} has paint colors but no locked paint mask.`,
+      const multilayerRenderEntries =
+        createBuildingMultilayerPlacementRenderEntries(
+          catalogItem,
+          building,
+          season,
+          persistentPlacementSnapshot.items,
         );
-      }
-
-      return {
-        ...(paintMaskLocalPath === null || building.paintColors === undefined
-          ? {}
-          : {
-              buildingPaint: {
-                colors: building.paintColors,
-                paintMaskLocalPath,
-              },
-            }),
-        key: `building:${String(building.instanceId)}`,
-        catalogItem,
-        tileX: building.x,
-        tileY: building.y,
-        frame: getCatalogItemFrame(catalogItem),
-        rotationQuarterTurns: 0,
-      };
+      return multilayerRenderEntries;
     }),
-    ...persistentPlacementSnapshot.crops.map((crop) => {
+    ...createHoeDirtPlacementRenderLayers(
+      persistentPlacementSnapshot,
+      catalogItemsById,
+      season,
+    ).map((hoeDirtRenderLayer) => ({
+      ...hoeDirtRenderLayer,
+      effectiveFootprint: { width: 1, height: 1 },
+      rotationQuarterTurns: 0,
+    })),
+    ...persistentPlacementSnapshot.crops.flatMap((crop) => {
       const catalogItem = getRequiredCatalogItem(catalogItemsById, crop.cropId);
+      const isInGardenPot = isGardenPotAtTile(
+        persistentPlacementSnapshot.items,
+        crop,
+      );
+      const cropZIndex = (crop.y + 1) * 2 - (isInGardenPot ? 0.5 : 1);
 
-      return {
+      return createCropPlacementRenderLayers(catalogItem, crop, {
+        isInGardenPot,
+      }).map((renderLayer) => ({
+        ...renderLayer,
         key: `crop:${String(crop.x)},${String(crop.y)}`,
         catalogItem,
+        effectiveFootprint: catalogItem.tileSize,
         tileX: crop.x,
         tileY: crop.y,
-        frame: getCatalogItemFrame(catalogItem),
         rotationQuarterTurns: 0,
-      };
+        zIndex: cropZIndex,
+      }));
     }),
-    ...persistentPlacementSnapshot.items.map((item) => {
-      const catalogItem = getRequiredCatalogItem(catalogItemsById, item.itemId);
-      const itemRenderProperties = getItemRenderProperties(
-        catalogItem,
-        item,
-        season,
-      );
-
-      return {
-        key: `item:${String(item.instanceId)}`,
-        catalogItem,
-        tileX: item.x,
-        tileY: item.y,
-        ...itemRenderProperties,
-      };
-    }),
+    ...persistentPlacementSnapshot.items
+      .filter((item) => item.itemId !== hoeDirtCatalogItemId)
+      .flatMap(
+        (item): readonly PlacementRenderEntry[] =>
+          createItemAndHeldPlacementRenderEntries(
+            item,
+            catalogItemsById,
+            season,
+            mapId,
+            mapPlacementGrid,
+            persistentPlacementSnapshot.items,
+            !isNightMode,
+          ),
+      ),
   ];
+}
+
+function createItemAndHeldPlacementRenderEntries(
+  placementItem: PlacementItem,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  season: CatalogSeason,
+  mapId: string,
+  mapPlacementGrid: MapPlacementGrid | undefined,
+  placementItems: readonly PlacementItem[],
+  isDaytime: boolean,
+): readonly PlacementRenderEntry[] {
+  const parentRenderEntries = createItemPlacementRenderEntries(
+    placementItem,
+    catalogItemsById,
+    season,
+    mapId,
+    mapPlacementGrid,
+    placementItems,
+  );
+
+  if (placementItem.heldItem === undefined) {
+    return appendDaytimeWindowOverlayRenderEntry(
+      parentRenderEntries,
+      placementItem,
+      catalogItemsById,
+      isDaytime,
+    );
+  }
+
+  const parentCatalogItem = getRequiredCatalogItem(
+    catalogItemsById,
+    placementItem.itemId,
+  );
+
+  return [
+    ...appendDaytimeWindowOverlayRenderEntry(
+      parentRenderEntries,
+      placementItem,
+      catalogItemsById,
+      isDaytime,
+    ),
+    createHeldItemPlacementRenderEntry(
+      placementItem,
+      parentCatalogItem,
+      placementItem.heldItem,
+      catalogItemsById,
+    ),
+  ];
+}
+
+function appendDaytimeWindowOverlayRenderEntry(
+  parentRenderEntries: readonly PlacementRenderEntry[],
+  placementItem: PlacementItem,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  isDaytime: boolean,
+): readonly PlacementRenderEntry[] {
+  const catalogItem = getRequiredCatalogItem(catalogItemsById, placementItem.itemId);
+  const daytimeWindowOverlayDescriptor =
+    createDaytimeWindowOverlayDescriptorForPlacementItem(
+      catalogItem,
+      placementItem,
+      isDaytime,
+    );
+
+  if (daytimeWindowOverlayDescriptor === null) {
+    return parentRenderEntries;
+  }
+
+  return [
+    ...parentRenderEntries,
+    {
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      frame: daytimeWindowOverlayDescriptor.frame,
+      key: `item:${String(daytimeWindowOverlayDescriptor.itemInstanceId)}`,
+      pixelGeometry: daytimeWindowOverlayDescriptor.pixelGeometry,
+      rotationQuarterTurns: 0,
+      shouldApplySelectionTint: false,
+      textureLocalPath: daytimeWindowOverlayDescriptor.textureLocalPath,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+      zIndex: getPlacementItemZIndex(placementItem),
+    },
+  ];
+}
+
+function createItemPlacementRenderEntries(
+  placementItem: PlacementItem,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  season: CatalogSeason,
+  mapId: string,
+  mapPlacementGrid: MapPlacementGrid | undefined,
+  placementItems: readonly PlacementItem[],
+): readonly PlacementRenderEntry[] {
+  const catalogItem = getRequiredCatalogItem(
+    catalogItemsById,
+    placementItem.itemId,
+  );
+  assertPlacementItemFurnitureClassification(catalogItem, placementItem);
+  const placementItemZIndex = getPlacementItemZIndex(placementItem);
+  const grassPlacementRenderLayers = createGrassPlacementRenderLayers(
+    catalogItem,
+    placementItem,
+    season,
+  );
+  const crabPotPixelGeometry = createCrabPotPixelGeometry(
+    catalogItem,
+    placementItem,
+    mapPlacementGrid,
+  );
+  const objectPlacementShadowRenderLayer =
+    createObjectPlacementShadowRenderLayer(catalogItem, placementItem);
+  const litBigCraftablePlacementRenderLayers =
+    createLitBigCraftablePlacementRenderLayers(
+      catalogItem,
+      placementItem,
+      getCatalogItemFrame(catalogItem),
+    );
+  const paintableChestPlacementRenderLayers =
+    createPaintableChestPlacementRenderLayers(catalogItem, placementItem);
+  const furnitureFirePlacementRenderLayers =
+    createFurnitureFirePlacementRenderLayers(catalogItem, placementItem);
+
+  if (grassPlacementRenderLayers !== null) {
+    return grassPlacementRenderLayers.map((renderLayer) => ({
+      ...renderLayer,
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      key: `item:${String(placementItem.instanceId)}`,
+      rotationQuarterTurns: 0,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+    }));
+  }
+  if (litBigCraftablePlacementRenderLayers !== null) {
+    return litBigCraftablePlacementRenderLayers.map((renderLayer) => ({
+      ...renderLayer,
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      key: `item:${String(placementItem.instanceId)}`,
+      rotationQuarterTurns: 0,
+      shouldApplySelectionTint: true,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+      zIndex: placementItemZIndex,
+    }));
+  }
+  if (paintableChestPlacementRenderLayers !== null) {
+    return paintableChestPlacementRenderLayers.map((renderLayer) => ({
+      ...renderLayer,
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      key: `item:${String(placementItem.instanceId)}`,
+      rotationQuarterTurns: 0,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+      zIndex: placementItemZIndex,
+    }));
+  }
+  if (furnitureFirePlacementRenderLayers !== null) {
+    return [
+      createDefaultItemPlacementRenderEntry(catalogItem, placementItem),
+      ...furnitureFirePlacementRenderLayers.map((renderLayer) => ({
+        ...renderLayer,
+        catalogItem,
+        effectiveFootprint: placementItem.footprint,
+        key: `item:${String(placementItem.instanceId)}`,
+        rotationQuarterTurns: 0,
+        tileX: placementItem.x,
+        tileY: placementItem.y,
+        zIndex: placementItemZIndex,
+      })),
+    ];
+  }
+  const gatePlacementRenderLayers = createGatePlacementRenderLayers(
+    catalogItem,
+    placementItem,
+    placementItems,
+  );
+  if (gatePlacementRenderLayers !== null) {
+    return gatePlacementRenderLayers.map((gatePlacementRenderLayer) => ({
+      ...gatePlacementRenderLayer,
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      key: `item:${String(placementItem.instanceId)}`,
+      rotationQuarterTurns: 0,
+      shouldApplySelectionTint: true,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+      zIndex: placementItemZIndex,
+    }));
+  }
+  const furnitureCompositePlacementRenderLayers =
+    createFurnitureCompositePlacementRenderLayers(catalogItem, placementItem);
+
+  if (furnitureCompositePlacementRenderLayers !== null) {
+    return furnitureCompositePlacementRenderLayers.map((renderLayer) => ({
+      ...renderLayer,
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      key: `item:${String(placementItem.instanceId)}`,
+      rotationQuarterTurns: 0,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+      zIndex: placementItemZIndex,
+    }));
+  }
+  const sprinklerAttachmentRenderLayer =
+    createSprinklerAttachmentRenderLayer(catalogItem, placementItem);
+
+  if (sprinklerAttachmentRenderLayer !== null) {
+    return [
+      ...createObjectPlacementShadowRenderEntries(
+        objectPlacementShadowRenderLayer,
+        catalogItem,
+        placementItem,
+        placementItemZIndex,
+      ),
+      createDefaultItemPlacementRenderEntry(catalogItem, placementItem),
+      {
+        key: `item:${String(placementItem.instanceId)}`,
+        catalogItem,
+        effectiveFootprint: placementItem.footprint,
+        tileX: placementItem.x,
+        tileY: placementItem.y,
+        frame: sprinklerAttachmentRenderLayer.frame,
+        pixelGeometry: sprinklerAttachmentRenderLayer.pixelGeometry,
+        rotationQuarterTurns: 0,
+        shouldApplySelectionTint: true,
+        textureLocalPath: sprinklerAttachmentRenderLayer.textureLocalPath,
+        zIndex: placementItemZIndex,
+      },
+    ];
+  }
+
+  const treePlacementRenderLayers = createTreePlacementRenderLayers({
+    catalogItem,
+    mapId,
+    placementItem,
+    season,
+  });
+
+  if (treePlacementRenderLayers !== null) {
+    return treePlacementRenderLayers.map((treePlacementRenderLayer) => ({
+      key: `item:${String(placementItem.instanceId)}`,
+      catalogItem,
+      effectiveFootprint: placementItem.footprint,
+      tileX: placementItem.x,
+      tileY: placementItem.y,
+      frame: treePlacementRenderLayer.frame,
+      pixelGeometry: treePlacementRenderLayer.pixelGeometry,
+      rotationQuarterTurns: 0,
+      shouldApplySelectionTint:
+        treePlacementRenderLayer.shouldApplySelectionTint,
+      textureLocalPath: treePlacementRenderLayer.textureLocalPath,
+      zIndex: placementItemZIndex,
+    }));
+  }
+
+  return [
+    ...createObjectPlacementShadowRenderEntries(
+      objectPlacementShadowRenderLayer,
+      catalogItem,
+      placementItem,
+      placementItemZIndex,
+    ),
+    {
+      ...createDefaultItemPlacementRenderEntry(catalogItem, placementItem, season),
+      ...(crabPotPixelGeometry === null ? {} : { pixelGeometry: crabPotPixelGeometry }),
+    },
+  ];
+}
+
+function createObjectPlacementShadowRenderEntries(
+  objectPlacementShadowRenderLayer: ObjectPlacementShadowRenderLayer | null,
+  catalogItem: CatalogItem,
+  placementItem: PlacementItem,
+  placementItemZIndex: number,
+): readonly PlacementRenderEntry[] {
+  if (objectPlacementShadowRenderLayer === null) {
+    return [];
+  }
+
+  return [{
+    ...objectPlacementShadowRenderLayer,
+    catalogItem,
+    effectiveFootprint: placementItem.footprint,
+    key: `item:${String(placementItem.instanceId)}`,
+    rotationQuarterTurns: 0,
+    tileX: placementItem.x,
+    tileY: placementItem.y,
+    zIndex: placementItemZIndex,
+  }];
+}
+
+function createDefaultItemPlacementRenderEntry(
+  catalogItem: CatalogItem,
+  placementItem: PlacementItem,
+  season: CatalogSeason = "spring",
+): PlacementRenderEntry {
+  return {
+    key: `item:${String(placementItem.instanceId)}`,
+    catalogItem,
+    effectiveFootprint: placementItem.footprint,
+    tileX: placementItem.x,
+    tileY: placementItem.y,
+    zIndex: getPlacementItemZIndex(placementItem),
+    ...getItemRenderProperties(catalogItem, placementItem, season),
+  };
+}
+
+function createHeldItemPlacementRenderEntry(
+  parentPlacementItem: PlacementItem,
+  parentCatalogItem: CatalogItem,
+  heldPlacementItem: PlacementHeldItem,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+): PlacementRenderEntry {
+  const heldCatalogItem = getRequiredCatalogItem(
+    catalogItemsById,
+    heldPlacementItem.itemId,
+  );
+  assertHeldItemCatalogMetadata(heldCatalogItem, heldPlacementItem);
+  const heldItemRenderProperties = getItemRenderProperties(
+    heldCatalogItem,
+    heldPlacementItem,
+  );
+  const heldItemFrame = heldItemRenderProperties.frame;
+
+  if (heldItemFrame === null) {
+    throw new Error(
+      `Placement rendering held item instanceId ${String(heldPlacementItem.instanceId)} catalog item ${describeValue(heldCatalogItem.id)} requires a non-empty furniture frame; received ${describeValue(heldItemFrame)}.`,
+    );
+  }
+
+  const parentCenterX = parentPlacementItem.x * 16
+    + parentPlacementItem.footprint.width * 8;
+  const parentCenterY = parentPlacementItem.y * 16
+    + parentPlacementItem.footprint.height * 8;
+  const isTeaTable = containsTea(parentPlacementItem.itemId)
+    || containsTea(parentCatalogItem.name);
+
+  return {
+    key: `item:${String(heldPlacementItem.instanceId)}`,
+    catalogItem: heldCatalogItem,
+    effectiveFootprint: { width: 1, height: 1 },
+    tileX: parentPlacementItem.x,
+    tileY: parentPlacementItem.y,
+    frame: heldItemFrame,
+    pixelGeometry: {
+      anchorX: 0,
+      anchorY: 0,
+      horizontalScale: 1,
+      positionX: parentCenterX - 8,
+      positionY: parentCenterY - heldItemFrame.height - (isTeaTable ? -4 : 4),
+    },
+    rotationQuarterTurns: 0,
+    shouldApplySelectionTint: true,
+    zIndex: getPlacementItemZIndex(parentPlacementItem) + 0.001,
+  };
+}
+
+function assertHeldItemCatalogMetadata(
+  heldCatalogItem: CatalogItem,
+  heldPlacementItem: PlacementHeldItem,
+): void {
+  if (heldCatalogItem.renderingMetadata?.kind !== "furniture") {
+    throw new Error(
+      `Placement rendering held item instanceId ${String(heldPlacementItem.instanceId)} requires furniture catalog metadata for item ${describeValue(heldCatalogItem.id)}; received ${describeValue(heldCatalogItem.renderingMetadata)}.`,
+    );
+  }
+
+  assertPlacementItemFurnitureClassification(heldCatalogItem, heldPlacementItem);
+}
+
+function containsTea(value: string): boolean {
+  return value.toLowerCase().includes("tea");
+}
+
+function assertPlacementItemFurnitureClassification(
+  catalogItem: CatalogItem,
+  placementItem: PlacementItem,
+): void {
+  const renderingMetadata = catalogItem.renderingMetadata;
+  const catalogIsRug =
+    renderingMetadata?.kind === "furniture"
+    && renderingMetadata.furnitureType === "rug";
+
+  if (
+    renderingMetadata?.kind === "furniture"
+    && renderingMetadata.isRug !== catalogIsRug
+  ) {
+    throw new Error(
+      `Placement rendering catalog item ${describeValue(catalogItem.id)} furniture Type ${describeValue(renderingMetadata.furnitureType)} requires isRug ${String(catalogIsRug)}; received ${describeValue(renderingMetadata.isRug)}.`,
+    );
+  }
+
+  if (placementItem.isRug !== catalogIsRug) {
+    const catalogType = renderingMetadata?.kind === "furniture"
+      ? renderingMetadata.furnitureType
+      : "non-furniture";
+    throw new Error(
+      `Placement rendering placement isRug must match catalog Type ${describeValue(catalogType)} for item ${describeValue(catalogItem.id)}; expected ${String(catalogIsRug)}, received ${describeValue(placementItem.isRug)}.`,
+    );
+  }
+
+  const catalogBedType = renderingMetadata?.kind === "furniture"
+    ? getFurnitureBedType(renderingMetadata.furnitureType)
+    : null;
+
+  if (
+    renderingMetadata?.kind === "furniture"
+    && renderingMetadata.bedType !== catalogBedType
+  ) {
+    throw new Error(
+      `Placement rendering catalog item ${describeValue(catalogItem.id)} furniture Type ${describeValue(renderingMetadata.furnitureType)} requires bedType ${describeValue(catalogBedType)}; received ${describeValue(renderingMetadata.bedType)}.`,
+    );
+  }
+
+  if (placementItem.bedType !== catalogBedType) {
+    const catalogType = renderingMetadata?.kind === "furniture"
+      ? renderingMetadata.furnitureType
+      : "non-furniture";
+    throw new Error(
+      `Placement rendering placement bedType must match catalog Type ${describeValue(catalogType)} for item ${describeValue(catalogItem.id)}; expected ${describeValue(catalogBedType)}, received ${describeValue(placementItem.bedType)}.`,
+    );
+  }
+
+  if (catalogBedType !== null) {
+    getBedPlacementSemantics({
+      bedType: catalogBedType,
+      footprint: placementItem.footprint,
+      rotation: placementItem.rotation,
+    });
+  }
 }
 
 function getItemRenderProperties(
   catalogItem: CatalogItem,
   placementItem: PlacementItem,
-  season: CatalogSeason,
+  season: CatalogSeason = "spring",
 ): ItemRenderProperties {
-  const defaultFrame = getCatalogItemFrame(catalogItem);
+  const seasonalSourceRect = getSeasonalPlaceableFrame(catalogItem, season);
+  const seasonalFrame = seasonalSourceRect === null
+    ? null
+    : {
+        x: seasonalSourceRect.x,
+        y: seasonalSourceRect.y,
+        width: seasonalSourceRect.width,
+        height: seasonalSourceRect.height,
+      };
+  const defaultFrame = seasonalFrame ?? (
+    catalogItem.category === "crop"
+      ? getCropFullyGrownFrame(catalogItem)
+      : getCatalogItemFrame(catalogItem)
+  );
   const defaultRotationQuarterTurns = placementItem.layer === "item"
     ? getNormalizedQuarterTurns(placementItem.rotation)
     : 0;
@@ -137,10 +646,6 @@ function getItemRenderProperties(
     frame: defaultFrame,
     rotationQuarterTurns: defaultRotationQuarterTurns,
   };
-
-  if (placementItem.tintColor !== "#ffffff") {
-    itemRenderProperties.tintColor = placementItem.tintColor;
-  }
 
   if (renderingMetadata?.kind === "furniture") {
     const rotationSprite = getFurnitureRotationSprite(
@@ -160,21 +665,22 @@ function getItemRenderProperties(
     }
   }
 
-  if (renderingMetadata?.kind === "wild-tree") {
-    itemRenderProperties.textureLocalPath =
-      renderingMetadata.seasonalTextureLocalPaths[season];
-    itemRenderProperties.isTree = true;
-  }
-
-  if (renderingMetadata?.kind === "fruit-tree") {
-    itemRenderProperties.isTree = true;
-  }
-
   if (placementItem.flipped) {
     itemRenderProperties.isFlipped = true;
   }
 
   return itemRenderProperties;
+}
+
+function getCropFullyGrownFrame(catalogItem: CatalogItem): PlacementRenderFrame {
+  const fullyGrownRect = getCropRenderingMetadata(catalogItem).fullyGrownRect;
+
+  return {
+    x: fullyGrownRect.x,
+    y: fullyGrownRect.y,
+    width: fullyGrownRect.width,
+    height: fullyGrownRect.height,
+  };
 }
 
 function getFurnitureRotationSprite(

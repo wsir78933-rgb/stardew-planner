@@ -7,6 +7,10 @@ import {
   validateBuildingPaintColors,
   type BuildingPaintColors,
 } from "../paint/building-paint";
+import {
+  placementBedTypes,
+  type PlacementBedType,
+} from "./bed-placement-semantics";
 
 export const placementItemLayers = ["item", "path", "fence"] as const;
 
@@ -27,6 +31,8 @@ export type PlacementBuilding = PlacementCoordinate &
     instanceId: number;
     buildingId: string;
     paintColors?: BuildingPaintColors;
+    variant?: number;
+    waterColor?: number;
   }>;
 
 export type NewPlacementBuilding = Omit<PlacementBuilding, "instanceId">;
@@ -51,12 +57,36 @@ export type PlacementItem = PlacementCoordinate &
     isTable: boolean;
     isLongTable: boolean;
     flipped: boolean;
-    bedType: string | null;
+    bedType: PlacementBedType;
+    growthStage?: number;
+    heldItem?: PlacementHeldItem;
     heldItemId?: string;
     nightLightState?: "off";
   }>;
 
+export type PlacementHeldItem = Readonly<{
+  instanceId: number;
+  itemId: string;
+  x: number;
+  y: number;
+  layer: "item";
+  rotation: number;
+  footprint: PlacementFootprint;
+  variant: number;
+  tintColor: string;
+  locked: boolean;
+  isRug: boolean;
+  isGrass: boolean;
+  isTable: boolean;
+  isLongTable: boolean;
+  flipped: boolean;
+  bedType: PlacementBedType;
+  growthStage?: number;
+  nightLightState?: "off";
+}>;
+
 export type NewPlacementItem = Omit<PlacementItem, "instanceId">;
+export type NewPlacementHeldItem = Omit<PlacementHeldItem, "instanceId">;
 
 export type PlacementSnapshot = Readonly<{
   buildings: readonly PlacementBuilding[];
@@ -109,6 +139,11 @@ export type PlacementSnapshotAction =
   | Readonly<{
       type: "replace-item";
       item: PlacementItem;
+    }>
+  | Readonly<{
+      type: "attach-held-item";
+      parentInstanceId: number;
+      item: NewPlacementHeldItem;
     }>;
 
 type JsonRecord = Readonly<Record<string, unknown>>;
@@ -124,7 +159,11 @@ const optionalSnapshotFields = ["interiorDecor"] as const;
 
 const buildingFields = ["instanceId", "buildingId", "x", "y"] as const;
 const newBuildingFields = ["buildingId", "x", "y"] as const;
-const optionalBuildingFields = ["paintColors"] as const;
+const optionalBuildingFields = [
+  "paintColors",
+  "variant",
+  "waterColor",
+] as const;
 const cropFields = ["cropId", "x", "y"] as const;
 const coordinateFields = ["x", "y"] as const;
 const itemFields = [
@@ -148,8 +187,32 @@ const itemFields = [
 const newItemFields = itemFields.filter(
   (fieldName) => fieldName !== "instanceId",
 );
-const optionalItemFields = ["heldItemId", "nightLightState"] as const;
+const optionalItemFields = [
+  "growthStage",
+  "heldItem",
+  "heldItemId",
+  "nightLightState",
+] as const;
 const footprintFields = ["width", "height"] as const;
+const heldItemFields = [
+  "instanceId",
+  "itemId",
+  "x",
+  "y",
+  "layer",
+  "rotation",
+  "footprint",
+  "variant",
+  "tintColor",
+  "locked",
+  "isRug",
+  "isGrass",
+  "isTable",
+  "isLongTable",
+  "flipped",
+  "bedType",
+] as const;
+const optionalHeldItemFields = ["growthStage", "nightLightState"] as const;
 
 export function createEmptyPlacementSnapshot(): PlacementSnapshot {
   return {
@@ -213,7 +276,20 @@ export function applyPlacementSnapshotAction(
 ): PlacementSnapshot {
   const currentSnapshot = createPersistentPlacementSnapshot(placementSnapshot);
   assertPlacementSnapshotAction(placementAction);
+  assertAddItemActionDoesNotContainHeldItem(placementAction);
 
+  const nextSnapshot = createPlacementSnapshotActionResult(
+    currentSnapshot,
+    placementAction,
+  );
+
+  return createPersistentPlacementSnapshot(nextSnapshot);
+}
+
+function createPlacementSnapshotActionResult(
+  currentSnapshot: PlacementSnapshot,
+  placementAction: PlacementSnapshotAction,
+): PlacementSnapshot {
   switch (placementAction.type) {
     case "add-building":
       return addBuilding(currentSnapshot, placementAction.building);
@@ -237,7 +313,28 @@ export function applyPlacementSnapshotAction(
       return deleteItem(currentSnapshot, placementAction.instanceId);
     case "replace-item":
       return replaceItem(currentSnapshot, placementAction.item);
+    case "attach-held-item":
+      return attachHeldItem(
+        currentSnapshot,
+        placementAction.parentInstanceId,
+        placementAction.item,
+      );
   }
+}
+
+function assertAddItemActionDoesNotContainHeldItem(
+  placementAction: PlacementSnapshotAction,
+): void {
+  if (
+    placementAction.type !== "add-item" ||
+    placementAction.item.heldItem === undefined
+  ) {
+    return;
+  }
+
+  throw new TypeError(
+    `Placement action add-item parent instanceId not-yet-allocated must not contain heldItem child instanceId ${String(placementAction.item.heldItem.instanceId)}; received ${describeValue(placementAction.item.heldItem)}.`,
+  );
 }
 
 function addBuilding(
@@ -379,16 +476,38 @@ function deleteItem(
     (item) => item.instanceId === instanceId,
   );
 
-  if (itemIndex === -1) {
+  if (itemIndex !== -1) {
+    return {
+      ...placementSnapshot,
+      items: placementSnapshot.items.filter((item) => item.instanceId !== instanceId),
+    };
+  }
+
+  const parentItemIndex = placementSnapshot.items.findIndex(
+    (item) => item.heldItem?.instanceId === instanceId,
+  );
+  if (parentItemIndex === -1) {
     throw new Error(
-      `Placement snapshot field "items" must contain item instanceId ${describeValue(instanceId)}; received ${describeValue(placementSnapshot.items.map((item) => item.instanceId))}.`,
+      `Placement snapshot field "items" must contain item or held item instanceId ${describeValue(instanceId)}; received ${describeValue(placementSnapshot.items.map((item) => ({ instanceId: item.instanceId, heldItemInstanceId: item.heldItem?.instanceId })))}.`,
     );
   }
 
   return {
     ...placementSnapshot,
-    items: placementSnapshot.items.filter((item) => item.instanceId !== instanceId),
+    items: placementSnapshot.items.map((item, index) =>
+      index === parentItemIndex
+        ? removeHeldItem(item)
+        : item,
+    ),
   };
+}
+
+function removeHeldItem(placementItem: PlacementItem): PlacementItem {
+  const nextPlacementItem = { ...placementItem } as PlacementItem & {
+    heldItem?: PlacementHeldItem;
+  };
+  delete nextPlacementItem.heldItem;
+  return nextPlacementItem;
 }
 
 function replaceItem(
@@ -413,6 +532,75 @@ function replaceItem(
         : item,
     ),
   };
+}
+
+function attachHeldItem(
+  placementSnapshot: PlacementSnapshot,
+  parentInstanceId: number,
+  newHeldItem: NewPlacementHeldItem,
+): PlacementSnapshot {
+  const parentItemIndex = placementSnapshot.items.findIndex(
+    (placementItem) => placementItem.instanceId === parentInstanceId,
+  );
+  if (parentItemIndex === -1) {
+    throw new Error(
+      `Placement attachment parent instanceId ${describeValue(parentInstanceId)} must exist; received ${describeValue(placementSnapshot.items.map((placementItem) => placementItem.instanceId))}.`,
+    );
+  }
+
+  const parentItem = placementSnapshot.items[parentItemIndex];
+  if (parentItem === undefined) {
+    throw new Error(
+      `Placement attachment parent instanceId ${describeValue(parentInstanceId)} resolved to no item at index ${String(parentItemIndex)}.`,
+    );
+  }
+  if (!parentItem.isTable || parentItem.isLongTable) {
+    throw new TypeError(
+      `Placement attachment parent instanceId ${String(parentInstanceId)} must be an ordinary table; received isTable ${String(parentItem.isTable)} and isLongTable ${String(parentItem.isLongTable)}.`,
+    );
+  }
+  if (parentItem.heldItem !== undefined || parentItem.heldItemId !== undefined) {
+    throw new Error(
+      `Placement attachment parent instanceId ${String(parentInstanceId)} must be empty; received heldItem ${describeValue(parentItem.heldItem)} and heldItemId ${describeValue(parentItem.heldItemId)}.`,
+    );
+  }
+  assertNewPlacementHeldItemStructure(newHeldItem, parentInstanceId);
+
+  const childInstanceId = placementSnapshot.nextItemId;
+  const heldItem: PlacementHeldItem = {
+    ...newHeldItem,
+    footprint: { ...newHeldItem.footprint },
+    instanceId: childInstanceId,
+  };
+
+  return {
+    ...placementSnapshot,
+    items: placementSnapshot.items.map((placementItem, itemIndex) =>
+      itemIndex === parentItemIndex
+        ? { ...placementItem, heldItem }
+        : placementItem,
+    ),
+    nextItemId: incrementIdentifier(childInstanceId, "nextItemId"),
+  };
+}
+
+function assertNewPlacementHeldItemStructure(
+  newHeldItem: NewPlacementHeldItem,
+  parentInstanceId: number,
+): void {
+  if (newHeldItem.layer !== "item") {
+    throw new TypeError(
+      `Placement attachment child for parent instanceId ${String(parentInstanceId)} must use layer "item"; received ${describeValue(newHeldItem.layer)}.`,
+    );
+  }
+  if (
+    newHeldItem.footprint.width !== 1
+    || newHeldItem.footprint.height !== 1
+  ) {
+    throw new TypeError(
+      `Placement attachment child for parent instanceId ${String(parentInstanceId)} must use footprint 1x1; received ${describeValue(newHeldItem.footprint)}.`,
+    );
+  }
 }
 
 function readPlacementSnapshot(
@@ -458,10 +646,10 @@ function readPlacementSnapshot(
     : undefined;
 
   assertUniqueIdentifiers(buildings, "buildings", (building) => building.instanceId);
-  assertUniqueIdentifiers(items, "items", (item) => item.instanceId);
+  assertUniqueItemAndHeldItemIdentifiers(items);
   assertUniqueCropCoordinates(crops);
   assertNextIdentifier(buildings, nextBuildingId, "nextBuildingId", "buildings");
-  assertNextIdentifier(items, nextItemId, "nextItemId", "items");
+  assertNextItemIdentifier(items, nextItemId);
 
   return {
     buildings,
@@ -520,6 +708,16 @@ function readPlacementBuilding(
     buildingId,
     fieldPath,
   );
+  const variant = readOptionalBuildingVariant(
+    buildingRecord,
+    buildingId,
+    fieldPath,
+  );
+  const waterColor = readOptionalBuildingWaterColor(
+    buildingRecord,
+    buildingId,
+    fieldPath,
+  );
 
   return {
     instanceId: readPositiveSafeInteger(
@@ -529,6 +727,8 @@ function readPlacementBuilding(
     buildingId,
     ...readPlacementCoordinate(buildingRecord, fieldPath, false),
     ...(paintColors === undefined ? {} : { paintColors }),
+    ...(variant === undefined ? {} : { variant }),
+    ...(waterColor === undefined ? {} : { waterColor }),
   };
 }
 
@@ -553,12 +753,79 @@ function readNewPlacementBuilding(
     buildingId,
     fieldPath,
   );
+  const variant = readOptionalBuildingVariant(
+    buildingRecord,
+    buildingId,
+    fieldPath,
+  );
+  const waterColor = readOptionalBuildingWaterColor(
+    buildingRecord,
+    buildingId,
+    fieldPath,
+  );
 
   return {
     buildingId,
     ...readPlacementCoordinate(buildingRecord, fieldPath, false),
     ...(paintColors === undefined ? {} : { paintColors }),
+    ...(variant === undefined ? {} : { variant }),
+    ...(waterColor === undefined ? {} : { waterColor }),
   };
+}
+
+function readOptionalBuildingVariant(
+  buildingRecord: JsonRecord,
+  buildingId: string,
+  fieldPath: string,
+): number | undefined {
+  if (!hasOwn(buildingRecord, "variant")) {
+    return undefined;
+  }
+  const variant = buildingRecord.variant;
+
+  if (typeof variant !== "number" || !Number.isSafeInteger(variant)) {
+    throw new TypeError(
+      `Placement snapshot field "${fieldPath}.variant" for building ${describeValue(buildingId)} must be a safe integer; received ${describeValue(variant)}.`,
+    );
+  }
+
+  return variant;
+}
+
+function readOptionalBuildingWaterColor(
+  buildingRecord: JsonRecord,
+  buildingId: string,
+  fieldPath: string,
+): number | undefined {
+  if (!hasOwn(buildingRecord, "waterColor")) {
+    return undefined;
+  }
+  const waterColor = buildingRecord.waterColor;
+
+  return validatePlacementBuildingWaterColor(
+    waterColor,
+    buildingId,
+    `${fieldPath}.waterColor`,
+  );
+}
+
+export function validatePlacementBuildingWaterColor(
+  waterColor: unknown,
+  buildingId: string,
+  fieldPath: string,
+): number {
+  if (
+    typeof waterColor !== "number" ||
+    !Number.isInteger(waterColor) ||
+    waterColor < 0 ||
+    waterColor > 0xffffff
+  ) {
+    throw new TypeError(
+      `Placement snapshot field "${fieldPath}" for building ${describeValue(buildingId)} must be an integer from 0 through 16777215; received ${describeValue(waterColor)}.`,
+    );
+  }
+
+  return waterColor;
 }
 
 function readBuildingPaintColors(
@@ -639,8 +906,17 @@ function readPlacementItemFields(
   fieldPath: string,
   includesInstanceId: boolean,
 ): PlacementItem | NewPlacementItem {
+  const heldItem = hasOwn(itemRecord, "heldItem")
+    ? readPlacementHeldItem(itemRecord.heldItem, `${fieldPath}.heldItem`)
+    : undefined;
   const heldItemId = hasOwn(itemRecord, "heldItemId")
     ? readNonEmptyString(itemRecord.heldItemId, `${fieldPath}.heldItemId`)
+    : undefined;
+  const growthStage = hasOwn(itemRecord, "growthStage")
+    ? readNonNegativeSafeInteger(
+        itemRecord.growthStage,
+        `${fieldPath}.growthStage`,
+      )
     : undefined;
   const nightLightState = hasOwn(itemRecord, "nightLightState")
     ? readNightLightState(itemRecord.nightLightState, `${fieldPath}.nightLightState`)
@@ -659,10 +935,22 @@ function readPlacementItemFields(
     isTable: readBoolean(itemRecord.isTable, `${fieldPath}.isTable`),
     isLongTable: readBoolean(itemRecord.isLongTable, `${fieldPath}.isLongTable`),
     flipped: readBoolean(itemRecord.flipped, `${fieldPath}.flipped`),
-    bedType: readNullableString(itemRecord.bedType, `${fieldPath}.bedType`),
+    bedType: readPlacementBedType(itemRecord.bedType, `${fieldPath}.bedType`),
+    ...(growthStage === undefined ? {} : { growthStage }),
+    ...(heldItem === undefined ? {} : { heldItem }),
     ...(heldItemId === undefined ? {} : { heldItemId }),
     ...(nightLightState === undefined ? {} : { nightLightState }),
   };
+
+  if (heldItem !== undefined && heldItemId !== undefined) {
+    throw new TypeError(
+      `Placement snapshot field "${fieldPath}" must not contain both heldItem and heldItemId; received ${describeValue({ heldItem, heldItemId })}.`,
+    );
+  }
+
+  if (heldItem !== undefined) {
+    assertStoredPlacementHeldItemParent(itemProperties, fieldPath);
+  }
 
   if (!includesInstanceId) {
     return itemProperties;
@@ -674,6 +962,76 @@ function readPlacementItemFields(
       `${fieldPath}.instanceId`,
     ),
     ...itemProperties,
+  };
+}
+
+function assertStoredPlacementHeldItemParent(
+  placementItem: Pick<PlacementItem, "isTable" | "isLongTable">,
+  fieldPath: string,
+): void {
+  if (placementItem.isTable || placementItem.isLongTable) {
+    return;
+  }
+
+  throw new TypeError(
+    `Placement snapshot field "${fieldPath}.heldItem" requires parent table metadata; received isTable ${String(placementItem.isTable)} and isLongTable ${String(placementItem.isLongTable)}.`,
+  );
+}
+
+function readPlacementHeldItem(
+  rawHeldItem: unknown,
+  fieldPath: string,
+): PlacementHeldItem {
+  const heldItemRecord = assertJsonRecord(rawHeldItem, fieldPath);
+  assertAllowedFields(
+    heldItemRecord,
+    fieldPath,
+    heldItemFields,
+    optionalHeldItemFields,
+    true,
+  );
+  const footprint = readPlacementFootprint(
+    heldItemRecord.footprint,
+    `${fieldPath}.footprint`,
+  );
+
+  if (heldItemRecord.layer !== "item") {
+    throw new TypeError(
+      `Placement snapshot field "${fieldPath}.layer" must equal "item"; received ${describeValue(heldItemRecord.layer)}.`,
+    );
+  }
+  if (footprint.width !== 1 || footprint.height !== 1) {
+    throw new TypeError(
+      `Placement snapshot field "${fieldPath}.footprint" must equal 1x1; received ${describeValue(footprint)}.`,
+    );
+  }
+
+  const growthStage = hasOwn(heldItemRecord, "growthStage")
+    ? readNonNegativeSafeInteger(heldItemRecord.growthStage, `${fieldPath}.growthStage`)
+    : undefined;
+  const nightLightState = hasOwn(heldItemRecord, "nightLightState")
+    ? readNightLightState(heldItemRecord.nightLightState, `${fieldPath}.nightLightState`)
+    : undefined;
+
+  return {
+    instanceId: readPositiveSafeInteger(heldItemRecord.instanceId, `${fieldPath}.instanceId`),
+    itemId: readNonEmptyString(heldItemRecord.itemId, `${fieldPath}.itemId`),
+    x: readSafeInteger(heldItemRecord.x, `${fieldPath}.x`),
+    y: readSafeInteger(heldItemRecord.y, `${fieldPath}.y`),
+    layer: "item",
+    rotation: readSafeInteger(heldItemRecord.rotation, `${fieldPath}.rotation`),
+    footprint,
+    variant: readSafeInteger(heldItemRecord.variant, `${fieldPath}.variant`),
+    tintColor: readCanonicalTintColor(heldItemRecord.tintColor, `${fieldPath}.tintColor`),
+    locked: readBoolean(heldItemRecord.locked, `${fieldPath}.locked`),
+    isRug: readBoolean(heldItemRecord.isRug, `${fieldPath}.isRug`),
+    isGrass: readBoolean(heldItemRecord.isGrass, `${fieldPath}.isGrass`),
+    isTable: readBoolean(heldItemRecord.isTable, `${fieldPath}.isTable`),
+    isLongTable: readBoolean(heldItemRecord.isLongTable, `${fieldPath}.isLongTable`),
+    flipped: readBoolean(heldItemRecord.flipped, `${fieldPath}.flipped`),
+    bedType: readPlacementBedType(heldItemRecord.bedType, `${fieldPath}.bedType`),
+    ...(growthStage === undefined ? {} : { growthStage }),
+    ...(nightLightState === undefined ? {} : { nightLightState }),
   };
 }
 
@@ -798,10 +1156,36 @@ function assertPlacementSnapshotAction(
       assertAllowedFields(actionRecord, "action", ["type", "item"], [], true);
       readPlacementItem(actionRecord.item, "item", true);
       return;
+    case "attach-held-item":
+      assertAllowedFields(
+        actionRecord,
+        "action",
+        ["type", "parentInstanceId", "item"],
+        [],
+        true,
+      );
+      readPositiveSafeInteger(actionRecord.parentInstanceId, "parentInstanceId");
+      assertAttachmentChildHasNoHeldItemFields(actionRecord.item);
+      readNewPlacementItem(actionRecord.item, "item");
+      return;
     default:
       throw new TypeError(
-        `Placement action field "type" must be one of "add-building", "delete-building", "replace-building", "add-crop", "delete-crop", "replace-crop", "add-item", "delete-item", "replace-item"; received ${describeValue(actionType)}.`,
+        `Placement action field "type" must be one of "add-building", "delete-building", "replace-building", "add-crop", "delete-crop", "replace-crop", "add-item", "delete-item", "replace-item", "attach-held-item"; received ${describeValue(actionType)}.`,
       );
+  }
+}
+
+function assertAttachmentChildHasNoHeldItemFields(rawItem: unknown): void {
+  const itemRecord = assertJsonRecord(rawItem, "item");
+  if (hasOwn(itemRecord, "heldItem")) {
+    throw new TypeError(
+      `Placement attachment child heldItem must not be present; received ${describeValue(itemRecord.heldItem)}.`,
+    );
+  }
+  if (hasOwn(itemRecord, "heldItemId")) {
+    throw new TypeError(
+      `Placement attachment child heldItemId must not be present; received ${describeValue(itemRecord.heldItemId)}.`,
+    );
   }
 }
 
@@ -862,6 +1246,41 @@ function assertUniqueIdentifiers<PlacementValue>(
   }
 }
 
+function assertUniqueItemAndHeldItemIdentifiers(
+  placementItems: readonly PlacementItem[],
+): void {
+  const identifiers = new Set<number>();
+
+  for (const [itemIndex, placementItem] of placementItems.entries()) {
+    assertUniqueItemIdentifier(
+      identifiers,
+      placementItem.instanceId,
+      `items[${String(itemIndex)}].instanceId`,
+    );
+    if (placementItem.heldItem !== undefined) {
+      assertUniqueItemIdentifier(
+        identifiers,
+        placementItem.heldItem.instanceId,
+        `items[${String(itemIndex)}].heldItem.instanceId`,
+      );
+    }
+  }
+}
+
+function assertUniqueItemIdentifier(
+  identifiers: Set<number>,
+  identifier: number,
+  fieldPath: string,
+): void {
+  if (identifiers.has(identifier)) {
+    throw new Error(
+      `Placement snapshot field "${fieldPath}" must be unique; received ${describeValue(identifier)}. Item and held item identifiers share one namespace.`,
+    );
+  }
+
+  identifiers.add(identifier);
+}
+
 function assertUniqueCropCoordinates(crops: readonly PlacementCrop[]): void {
   const coordinates = new Set<string>();
 
@@ -893,6 +1312,26 @@ function assertNextIdentifier<PlacementValue>(
   if (nextIdentifier <= highestIdentifier) {
     throw new Error(
       `Placement snapshot field "${nextIdentifierFieldPath}" must be greater than every ${collectionFieldPath} instanceId; received ${describeValue(nextIdentifier)} with highest instanceId ${describeValue(highestIdentifier)}.`,
+    );
+  }
+}
+
+function assertNextItemIdentifier(
+  placementItems: readonly PlacementItem[],
+  nextItemId: number,
+): void {
+  const highestIdentifier = placementItems.reduce(
+    (currentHighestIdentifier, placementItem) => Math.max(
+      currentHighestIdentifier,
+      placementItem.instanceId,
+      placementItem.heldItem?.instanceId ?? Number.NEGATIVE_INFINITY,
+    ),
+    Number.NEGATIVE_INFINITY,
+  );
+
+  if (nextItemId <= highestIdentifier) {
+    throw new Error(
+      `Placement snapshot field "nextItemId" must be greater than every items instanceId; received ${describeValue(nextItemId)} with highest instanceId ${describeValue(highestIdentifier)}. Held item instanceIds are included.`,
     );
   }
 }
@@ -1003,6 +1442,23 @@ function readPositiveSafeInteger(rawValue: unknown, fieldPath: string): number {
   return rawValue;
 }
 
+function readNonNegativeSafeInteger(
+  rawValue: unknown,
+  fieldPath: string,
+): number {
+  if (
+    typeof rawValue !== "number" ||
+    !Number.isSafeInteger(rawValue) ||
+    rawValue < 0
+  ) {
+    throw new TypeError(
+      `Placement snapshot field "${fieldPath}" must be a non-negative safe integer; received ${describeValue(rawValue)}.`,
+    );
+  }
+
+  return rawValue;
+}
+
 function readNonEmptyString(rawValue: unknown, fieldPath: string): string {
   if (typeof rawValue !== "string" || rawValue.length === 0) {
     throw new TypeError(
@@ -1026,12 +1482,24 @@ function readCanonicalTintColor(rawValue: unknown, fieldPath: string): string {
   return rawValue;
 }
 
-function readNullableString(rawValue: unknown, fieldPath: string): string | null {
-  if (rawValue === null) {
+function readPlacementBedType(
+  rawBedType: unknown,
+  fieldPath: string,
+): PlacementBedType {
+  if (rawBedType === null) {
     return null;
   }
 
-  return readNonEmptyString(rawValue, fieldPath);
+  if (
+    typeof rawBedType === "string"
+    && placementBedTypes.includes(rawBedType as Exclude<PlacementBedType, null>)
+  ) {
+    return rawBedType as Exclude<PlacementBedType, null>;
+  }
+
+  throw new TypeError(
+    `Placement snapshot field "${fieldPath}" must be one of "single", "double", or "child", or null; received ${describeValue(rawBedType)}.`,
+  );
 }
 
 function readBoolean(rawValue: unknown, fieldPath: string): boolean {
@@ -1063,6 +1531,14 @@ function clonePlacementItem(placementItem: PlacementItem): PlacementItem {
   return {
     ...placementItem,
     footprint: { ...placementItem.footprint },
+    ...(placementItem.heldItem === undefined
+      ? {}
+      : {
+          heldItem: {
+            ...placementItem.heldItem,
+            footprint: { ...placementItem.heldItem.footprint },
+          },
+        }),
   };
 }
 

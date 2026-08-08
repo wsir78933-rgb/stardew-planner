@@ -67,7 +67,7 @@ function createNewItem() {
     isTable: false,
     isLongTable: false,
     flipped: true,
-    bedType: "single",
+    bedType: "single" as const,
   };
 }
 
@@ -95,6 +95,40 @@ describe("placement snapshot", () => {
 
     expect(restoredSnapshot.items[0].footprint).toEqual({ width: 1, height: 1 });
     expect(restoredSnapshot).toEqual(createStoredSnapshot());
+  });
+
+  it("fails fast when a stored placement bedType is outside the typed bed domain", () => {
+    const storedSnapshot = createStoredSnapshot();
+    Object.assign(storedSnapshot.items[0], { bedType: "queen" });
+
+    expect(() => restorePlacementSnapshot(storedSnapshot)).toThrow(
+      'field "items[0].bedType" must be one of "single", "double", or "child", or null; received "queen"',
+    );
+  });
+
+  it("preserves a FreeCactus composite variant through JSON save and load", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        {
+          ...createNewItem(),
+          instanceId: 1,
+          itemId: "furniture_FreeCactus",
+          layer: "item" as const,
+          variant: 4375,
+        },
+      ],
+      nextItemId: 2,
+    };
+    const serializedSnapshot = JSON.stringify(placementSnapshot);
+    const restoredSnapshot = restorePlacementSnapshot(
+      JSON.parse(serializedSnapshot) as unknown,
+    );
+
+    expect(restoredSnapshot.items[0]).toMatchObject({
+      itemId: "furniture_FreeCactus",
+      variant: 4375,
+    });
   });
 
   it("restores a legacy snapshot without interior decor", () => {
@@ -161,6 +195,66 @@ describe("placement snapshot", () => {
       }),
     ).toThrow('cannot be assigned to building "Barn"');
   });
+
+  it("round-trips optional building variant and water color without normalizing opaque integers", () => {
+    const restoredSnapshot = restorePlacementSnapshot({
+      ...createStoredSnapshot(),
+      buildings: [
+        {
+          instanceId: 3,
+          buildingId: "Fish Pond",
+          x: 8,
+          y: 12,
+          variant: -9,
+          waterColor: 16_391_710,
+        },
+      ],
+    });
+
+    expect(restoredSnapshot.buildings[0]).toEqual({
+      instanceId: 3,
+      buildingId: "Fish Pond",
+      x: 8,
+      y: 12,
+      variant: -9,
+      waterColor: 16_391_710,
+    });
+    expect(
+      restorePlacementSnapshot(createStoredSnapshot()).buildings[0],
+    ).not.toHaveProperty("variant");
+    expect(
+      restorePlacementSnapshot(createStoredSnapshot()).buildings[0],
+    ).not.toHaveProperty("waterColor");
+  });
+
+  it.each([
+    ["variant", 1.5, "safe integer"],
+    ["variant", Number.MAX_SAFE_INTEGER + 1, "safe integer"],
+    ["waterColor", -1, "integer from 0 through 16777215"],
+    ["waterColor", 16_777_216, "integer from 0 through 16777215"],
+    ["waterColor", 1.5, "integer from 0 through 16777215"],
+  ])(
+    "fails before persistence allocation for invalid building %s",
+    (fieldName, receivedValue, expectedBoundary) => {
+      expect(() => restorePlacementSnapshot({
+        ...createStoredSnapshot(),
+        buildings: [
+          {
+            instanceId: 3,
+            buildingId: "Fish Pond",
+            x: 8,
+            y: 12,
+            [fieldName]: receivedValue,
+          },
+        ],
+      })).toThrow(
+        new RegExp(
+          `buildings\\[0\\].${fieldName}.*Fish Pond.*${expectedBoundary}.*received`,
+          "i",
+        ),
+      );
+    },
+  );
 
   it("preserves valid interior decor through persistent cloning and snapshot replacement", () => {
     const snapshotWithInteriorDecor = {
@@ -262,6 +356,64 @@ describe("placement snapshot", () => {
 
     expect(restoredItem?.nightLightState).toBeUndefined();
     expect(Object.hasOwn(restoredItem ?? {}, "nightLightState")).toBe(false);
+  });
+
+  it("preserves an optional growth stage through restore, clone, and item actions", () => {
+    const storedSnapshotWithGrowthStage = createStoredSnapshot();
+    Object.assign(storedSnapshotWithGrowthStage.items[0], { growthStage: 3 });
+    const restoredSnapshot = restorePlacementSnapshot(
+      storedSnapshotWithGrowthStage,
+    );
+    const persistentSnapshot = createPersistentPlacementSnapshot(
+      restoredSnapshot,
+    );
+    const placementState = createPlacementState(restoredSnapshot);
+    const snapshotWithNewGrowthStage = applyPlacementSnapshotAction(
+      restoredSnapshot,
+      {
+        type: "add-item",
+        item: { ...createNewItem(), growthStage: 0 },
+      },
+    );
+    const existingPlacementItem = restoredSnapshot.items[0];
+    if (existingPlacementItem === undefined) {
+      throw new Error("Expected the stored snapshot fixture to contain one item.");
+    }
+    const replacedSnapshot = applyPlacementSnapshotAction(restoredSnapshot, {
+      type: "replace-item",
+      item: { ...existingPlacementItem, growthStage: 4 },
+    });
+
+    expect(restoredSnapshot.items[0]?.growthStage).toBe(3);
+    expect(persistentSnapshot.items[0]?.growthStage).toBe(3);
+    expect(placementState.itemIndex.get(7)?.growthStage).toBe(3);
+    expect(snapshotWithNewGrowthStage.items[1]?.growthStage).toBe(0);
+    expect(replacedSnapshot.items[0]?.growthStage).toBe(4);
+    expect(Object.hasOwn(restorePlacementSnapshot(createStoredSnapshot()).items[0] ?? {}, "growthStage")).toBe(false);
+  });
+
+  it("rejects invalid growth stages with the exact item field and received value", () => {
+    for (const invalidGrowthStage of [-1, 1.5, Number.MAX_SAFE_INTEGER + 1]) {
+      const storedSnapshotWithInvalidGrowthStage = createStoredSnapshot();
+      Object.assign(storedSnapshotWithInvalidGrowthStage.items[0], {
+        growthStage: invalidGrowthStage,
+      });
+
+      expect(() => restorePlacementSnapshot(
+        storedSnapshotWithInvalidGrowthStage,
+      )).toThrow(
+        `field "items[0].growthStage" must be a non-negative safe integer; received ${String(invalidGrowthStage)}`,
+      );
+      expect(() => applyPlacementSnapshotAction(
+        restorePlacementSnapshot(createStoredSnapshot()),
+        {
+          type: "add-item",
+          item: { ...createNewItem(), growthStage: invalidGrowthStage },
+        },
+      )).toThrow(
+        `field "item.growthStage" must be a non-negative safe integer; received ${String(invalidGrowthStage)}`,
+      );
+    }
   });
 
   it("preserves an explicit off night light state through snapshot replacement", () => {

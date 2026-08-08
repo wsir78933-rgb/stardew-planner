@@ -19,10 +19,10 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout',
     );
-    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(1);
-    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/"[^>]*>Planner<\/a>/);
-    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/"[^>]*>Open planner<\/a>/);
-    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/"[^>]*>Start planning<\/a>/);
+    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(4);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Open planner<\/a>/);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Start planning<\/a>/);
     expect(plannerPageMarkup.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
       officialFarmTypes.length,
     );
@@ -31,7 +31,12 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).not.toContain(
       'src="/reference-runtime/bootstrap.mjs"',
     );
+    expect(plannerPageMarkup).not.toContain("game-assets/1.6.15");
+    expect(plannerPageMarkup).not.toContain("Buildings.json");
+    expect(plannerPageMarkup).not.toContain("pixi.js");
     expect(plannerPageMarkup).not.toContain("<iframe");
+    expect(plannerPageMarkup).toContain('role="status"');
+    expect(plannerPageMarkup).toContain("Loading planner…");
   });
 
   it("omits the workspace introduction while retaining the planner workspace", () => {

@@ -31,4 +31,26 @@ describe("editor reference information dialogs", () => {
     expect(helpDialogMarkup).not.toContain("Feedback");
     expect(helpDialogMarkup).not.toContain("Support");
   });
+
+  it("describes Q as cycling the selected item appearance", () => {
+    const keyboardShortcutsMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "keyboard-shortcuts",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        onSeasonChange: () => undefined,
+        panelPosition: "bottom",
+        season: "spring",
+        selectedMapId: "standard",
+      }),
+    );
+
+    expect(keyboardShortcutsMarkup).toContain(
+      "<dt>Q</dt><dd>Cycle the selected item appearance</dd>",
+    );
+    expect(keyboardShortcutsMarkup).not.toContain(
+      "Rotate the selected item",
+    );
+  });
 });

@@ -137,7 +137,9 @@ describe("createMapPlacementGrid", () => {
       passable: true,
       treePlantable: true,
       treePlantableOnDirt: false,
+      water: false,
       crabPot: false,
+      wall: false,
     });
   });
 
@@ -150,7 +152,9 @@ describe("createMapPlacementGrid", () => {
       passable: false,
       treePlantable: false,
       treePlantableOnDirt: false,
+      water: true,
       crabPot: false,
+      wall: false,
     });
     expect(getMapPlacementCapabilities(placementGrid, { x: 2, y: 0 })).toEqual({
       buildable: true,
@@ -158,8 +162,25 @@ describe("createMapPlacementGrid", () => {
       passable: true,
       treePlantable: true,
       treePlantableOnDirt: false,
+      water: false,
       crabPot: false,
+      wall: false,
     });
+  });
+
+  it("marks only Back TileData WallID anchors as wall tiles", () => {
+    const placementGrid = createMapPlacementGrid(
+      createPlacementTestMap({
+        tileDataProperties: new Map<string, TmxProperties>([
+          ["Back:1,0", { WallID: "Kitchen" }],
+          ["Buildings:2,0", { WallID: "IgnoredBuildingsWall" }],
+        ]),
+      }),
+    );
+
+    expect(getMapPlacementCapabilities(placementGrid, { x: 0, y: 0 }).wall).toBe(false);
+    expect(getMapPlacementCapabilities(placementGrid, { x: 1, y: 0 }).wall).toBe(true);
+    expect(getMapPlacementCapabilities(placementGrid, { x: 2, y: 0 }).wall).toBe(false);
   });
 
   it("fails with the requested coordinate when capabilities are read outside the map", () => {
@@ -168,6 +189,25 @@ describe("createMapPlacementGrid", () => {
     expect(() =>
       getMapPlacementCapabilities(placementGrid, { x: 3, y: 0 }),
     ).toThrow('x "3"');
+  });
+
+  it("rejects a placement grid capability with a missing wall flag", () => {
+    const placementGrid = {
+      width: 1,
+      height: 1,
+      capabilitiesByTile: [{
+        buildable: true,
+        crabPot: false,
+        diggable: true,
+        passable: true,
+        treePlantable: false,
+        treePlantableOnDirt: false,
+      }],
+    } as unknown as ReturnType<typeof createMapPlacementGrid>;
+
+    expect(() => getMapPlacementCapabilities(placementGrid, { x: 0, y: 0 })).toThrow(
+      "wall",
+    );
   });
 
   it("uses the original crab-pot water corridor and adjacent land rule", () => {

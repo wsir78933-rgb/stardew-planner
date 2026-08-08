@@ -2,6 +2,12 @@ import type {
   BuildingPlacementMetadata,
   BuildingPlacementMetadataById,
 } from "../catalog/building-placement-metadata";
+import { getPathItemPlacementRequirement } from "../catalog/hoe-dirt";
+import { crabPotCatalogItemId } from "../catalog/crab-pot";
+import {
+  gardenPotCatalogItemId,
+  isGardenPotAtTile,
+} from "./garden-pot-placement";
 import {
   getMapPlacementCapabilities,
   type MapPlacementCapabilities,
@@ -16,12 +22,20 @@ import {
   type PlacementItem,
   type PlacementSnapshot,
 } from "./placement-snapshot";
+import {
+  assertPlacementBedType,
+  getBedPlacementSemantics,
+  type BedPlacementSemantics,
+} from "./bed-placement-semantics";
+import type { CatalogItemPlacementRequirement } from "./catalog-item-placement-requirement";
 
 export type PlacementValidationRejectionReason =
   | "outside-map"
   | "not-buildable"
   | "not-diggable"
   | "not-passable"
+  | "not-wall"
+  | "not-crab-pot-tile"
   | "occupied-by-building"
   | "occupied-by-crop"
   | "occupied-by-item"
@@ -50,6 +64,7 @@ export type CropPlacementValidationCandidate = Readonly<{
 export type ItemPlacementValidationCandidate = Readonly<{
   kind: "item";
   item: NewPlacementItem;
+  placementRequirement?: CatalogItemPlacementRequirement;
 }>;
 
 export type FloorPlacementValidationCandidate = Readonly<{
@@ -122,6 +137,7 @@ export function validatePlacement(
         placementSnapshot,
         placementValidationInput.buildingMetadataById,
         mapPlacementGrid,
+        candidate.placementRequirement,
       );
     case "floor":
       return validateFloorPlacement(
@@ -146,6 +162,11 @@ type BuildingPlacementTileRequirement = Readonly<{
 }>;
 
 type BuildingBlockingOccupancy = ReadonlyMap<
+  string,
+  "occupied-by-building" | "occupied-by-crop" | "occupied-by-item" | "occupied-by-fence"
+>;
+
+type BlockingOccupancy = Map<
   string,
   "occupied-by-building" | "occupied-by-crop" | "occupied-by-item" | "occupied-by-fence"
 >;
@@ -226,11 +247,16 @@ function validateCropPlacement(
 
   const capabilities = capabilitiesOrRejection;
 
-  if (!capabilities.diggable) {
+  const cropIsInGardenPot = isGardenPotAtTile(
+    placementSnapshot.items,
+    candidateTile,
+  );
+
+  if (!cropIsInGardenPot && !capabilities.diggable) {
     return rejectPlacement("not-diggable", candidateTile);
   }
 
-  const blockingReason = createBuildingBlockingOccupancy(
+  const blockingReason = createCropBlockingOccupancy(
     placementSnapshot,
     buildingMetadataById,
   ).get(tileKey(candidateTile));
@@ -247,7 +273,17 @@ function validateItemPlacement(
   placementSnapshot: PlacementSnapshot,
   buildingMetadataById: BuildingPlacementMetadataById,
   mapPlacementGrid: MapPlacementGrid,
+  placementRequirement: CatalogItemPlacementRequirement = "passable",
 ): PlacementValidationResult {
+  if (candidateItem.bedType !== null) {
+    return validateBedPlacement(
+      candidateItem,
+      placementSnapshot,
+      buildingMetadataById,
+      mapPlacementGrid,
+    );
+  }
+
   const candidateTiles = createCandidateItemTiles(candidateItem);
 
   for (const candidateTile of candidateTiles) {
@@ -260,14 +296,36 @@ function validateItemPlacement(
       return capabilitiesOrRejection;
     }
 
-    if (!capabilitiesOrRejection.passable) {
+    if (candidateItem.itemId === crabPotCatalogItemId) {
+      if (!capabilitiesOrRejection.crabPot) {
+        return rejectPlacement("not-crab-pot-tile", candidateTile);
+      }
+    } else if (placementRequirement === "wall" && !capabilitiesOrRejection.wall) {
+      return rejectPlacement("not-wall", candidateTile);
+    } else if (
+      placementRequirement === "diggable"
+      && !capabilitiesOrRejection.diggable
+    ) {
+      return rejectPlacement("not-diggable", candidateTile);
+    } else if (!capabilitiesOrRejection.passable) {
       return rejectPlacement("not-passable", candidateTile);
+    }
+
+    if (
+      !candidateItem.isRug
+      && isTileReservedByExistingDoubleBed(
+        placementSnapshot.items,
+        candidateTile,
+      )
+    ) {
+      return rejectPlacement("occupied-by-item", candidateTile);
     }
   }
 
-  const blockingOccupancy = createBuildingBlockingOccupancy(
+  const blockingOccupancy = createItemBlockingOccupancy(
     placementSnapshot,
     buildingMetadataById,
+    candidateItem,
   );
 
   for (const candidateTile of candidateTiles) {
@@ -281,6 +339,327 @@ function validateItemPlacement(
   return { valid: true };
 }
 
+function validateBedPlacement(
+  candidateBed: NewPlacementItem,
+  placementSnapshot: PlacementSnapshot,
+  buildingMetadataById: BuildingPlacementMetadataById,
+  mapPlacementGrid: MapPlacementGrid,
+): PlacementValidationResult {
+  const bedSemantics = getBedPlacementSemantics({
+    bedType: requireConcreteBedType(candidateBed.bedType),
+    footprint: candidateBed.footprint,
+    rotation: candidateBed.rotation,
+  });
+  const bedTileRequirements = createBedTileRequirements(
+    candidateBed,
+    bedSemantics,
+  );
+
+  const rowMajorValidation = validateBedRowMajorRequirements(
+    bedTileRequirements,
+    placementSnapshot,
+    buildingMetadataById,
+    mapPlacementGrid,
+  );
+  if (rowMajorValidation !== null) {
+    return rowMajorValidation;
+  }
+
+  const exitValidation = validateCandidateBedExitClearance(
+    candidateBed,
+    bedSemantics,
+    placementSnapshot.items,
+  );
+  if (exitValidation !== null) {
+    return exitValidation;
+  }
+
+  const itemBlockingOccupancy = createBedItemBlockingOccupancy(
+    placementSnapshot.items,
+  );
+  for (const candidateTile of createCandidateItemTiles(candidateBed)) {
+    const itemBlockingReason = itemBlockingOccupancy.get(tileKey(candidateTile));
+    if (itemBlockingReason !== undefined) {
+      return rejectPlacement(itemBlockingReason, candidateTile);
+    }
+  }
+
+  const buildingBlockingOccupancy = createBuildingBlockingOccupancyOnly(
+    placementSnapshot,
+    buildingMetadataById,
+  );
+  for (const candidateTile of createCandidateItemTiles(candidateBed)) {
+    if (buildingBlockingOccupancy.has(tileKey(candidateTile))) {
+      return rejectPlacement("occupied-by-building", candidateTile);
+    }
+  }
+
+  return { valid: true };
+}
+
+type BedTileRequirement = Readonly<{
+  tile: MapTileCoordinates;
+  collidesWithTerrain: boolean;
+}>;
+
+function createBedTileRequirements(
+  candidateBed: NewPlacementItem,
+  bedSemantics: BedPlacementSemantics,
+): readonly BedTileRequirement[] {
+  const bedTileRequirements: BedTileRequirement[] = [];
+
+  for (let rowIndex = 0; rowIndex < candidateBed.footprint.height; rowIndex += 1) {
+    const collisionMaskRow = bedSemantics.collisionMask[rowIndex];
+    if (collisionMaskRow === undefined) {
+      throw new Error(
+        `Placement validation bed collision mask has no row ${String(rowIndex)}; received ${describeValue(bedSemantics.collisionMask)}.`,
+      );
+    }
+
+    for (
+      let columnIndex = 0;
+      columnIndex < candidateBed.footprint.width;
+      columnIndex += 1
+    ) {
+      const collidesWithTerrain = collisionMaskRow[columnIndex];
+      if (collidesWithTerrain === undefined) {
+        throw new Error(
+          `Placement validation bed collision mask row ${String(rowIndex)} has no column ${String(columnIndex)}; received ${describeValue(collisionMaskRow)}.`,
+        );
+      }
+
+      bedTileRequirements.push({
+        tile: createCandidateTile(
+          candidateBed.x + columnIndex,
+          candidateBed.y + rowIndex,
+        ),
+        collidesWithTerrain,
+      });
+    }
+  }
+
+  return bedTileRequirements;
+}
+
+function validateBedRowMajorRequirements(
+  bedTileRequirements: readonly BedTileRequirement[],
+  placementSnapshot: PlacementSnapshot,
+  buildingMetadataById: BuildingPlacementMetadataById,
+  mapPlacementGrid: MapPlacementGrid,
+): Extract<PlacementValidationResult, { valid: false }> | null {
+  let terrainOccupancy: BlockingOccupancy | null = null;
+
+  for (const bedTileRequirement of bedTileRequirements) {
+    const capabilitiesOrRejection = getPlacementCapabilitiesOrRejection(
+      mapPlacementGrid,
+      bedTileRequirement.tile,
+    );
+    if (isPlacementValidationRejection(capabilitiesOrRejection)) {
+      return capabilitiesOrRejection;
+    }
+
+    if (!bedTileRequirement.collidesWithTerrain) {
+      continue;
+    }
+
+    if (!capabilitiesOrRejection.passable) {
+      return rejectPlacement("not-passable", bedTileRequirement.tile);
+    }
+
+    if (
+      isTileReservedByExistingDoubleBed(
+        placementSnapshot.items,
+        bedTileRequirement.tile,
+      )
+    ) {
+      return rejectPlacement("occupied-by-item", bedTileRequirement.tile);
+    }
+
+    terrainOccupancy ??= createBuildingAndCropBlockingOccupancy(
+      placementSnapshot,
+      buildingMetadataById,
+    );
+    const terrainBlockingReason = terrainOccupancy.get(
+      tileKey(bedTileRequirement.tile),
+    );
+    if (terrainBlockingReason !== undefined) {
+      return rejectPlacement(terrainBlockingReason, bedTileRequirement.tile);
+    }
+  }
+
+  return null;
+}
+
+function validateCandidateBedExitClearance(
+  candidateBed: NewPlacementItem,
+  bedSemantics: BedPlacementSemantics,
+  existingItems: readonly PlacementItem[],
+): Extract<PlacementValidationResult, { valid: false }> | null {
+  const exitBlockers = bedSemantics.exitOffsets.map((exitOffset) => {
+    const exitTile = createBedExitTile(
+      candidateBed.x + exitOffset.x,
+      candidateBed.y + exitOffset.y,
+    );
+
+    return {
+      exitTile,
+      blockingReason: getBedExitBlockingReason(existingItems, exitTile),
+    };
+  });
+
+  if (candidateBed.bedType === "double") {
+    const requiredExit = exitBlockers[0];
+    if (requiredExit?.blockingReason !== undefined) {
+      return rejectPlacement(requiredExit.blockingReason, requiredExit.exitTile);
+    }
+
+    return null;
+  }
+
+  if (candidateBed.bedType === "single") {
+    const everyExitIsBlocked = exitBlockers.length === 2
+      && exitBlockers.every(
+        (exitBlocker) => exitBlocker.blockingReason !== undefined,
+      );
+    if (everyExitIsBlocked) {
+      const firstExitBlocker = exitBlockers[0];
+      if (firstExitBlocker === undefined || firstExitBlocker.blockingReason === undefined) {
+        throw new Error(
+          `Placement validation single bed must have a first blocked exit; received ${describeValue(exitBlockers)}.`,
+        );
+      }
+
+      return rejectPlacement(
+        firstExitBlocker.blockingReason,
+        firstExitBlocker.exitTile,
+      );
+    }
+  }
+
+  return null;
+}
+
+function createBedExitTile(x: number, y: number): MapTileCoordinates {
+  assertSafeInteger(x, "bed exit.x");
+  assertSafeInteger(y, "bed exit.y");
+
+  return { x, y };
+}
+
+function getBedExitBlockingReason(
+  existingItems: readonly PlacementItem[],
+  exitTile: MapTileCoordinates,
+): "occupied-by-item" | "occupied-by-fence" | undefined {
+  const blockingItem = existingItems.find(
+    (existingItem) =>
+      existingItem.layer !== "path"
+      && !existingItem.isRug
+      && isPlacementItemAtTile(existingItem, exitTile),
+  );
+
+  if (blockingItem === undefined) {
+    return undefined;
+  }
+
+  return blockingItem.layer === "fence"
+    ? "occupied-by-fence"
+    : "occupied-by-item";
+}
+
+function createBedItemBlockingOccupancy(
+  existingItems: readonly PlacementItem[],
+): ReadonlyMap<string, "occupied-by-item" | "occupied-by-fence"> {
+  const occupancyByTile = new Map<
+    string,
+    "occupied-by-item" | "occupied-by-fence"
+  >();
+
+  addItemBlockingOccupancy(
+    occupancyByTile,
+    existingItems,
+    (existingItem) =>
+      existingItem.layer !== "path"
+      && !existingItem.isRug
+      && !existingItem.isGrass,
+  );
+
+  return occupancyByTile;
+}
+
+function createBuildingBlockingOccupancyOnly(
+  placementSnapshot: PlacementSnapshot,
+  buildingMetadataById: BuildingPlacementMetadataById,
+): ReadonlyMap<string, "occupied-by-building"> {
+  const occupancyByTile = new Map<string, "occupied-by-building">();
+
+  for (const existingBuilding of placementSnapshot.buildings) {
+    const existingMetadata = getRequiredBuildingMetadata(
+      buildingMetadataById,
+      existingBuilding.buildingId,
+    );
+
+    for (const tileRequirement of createBuildingTileRequirements(
+      existingBuilding,
+      existingMetadata,
+      createExistingTile,
+    )) {
+      occupancyByTile.set(tileKey(tileRequirement.tile), "occupied-by-building");
+    }
+  }
+
+  return occupancyByTile;
+}
+
+function isTileReservedByExistingDoubleBed(
+  existingItems: readonly PlacementItem[],
+  candidateTile: MapTileCoordinates,
+): boolean {
+  return existingItems.some((existingItem) => {
+    if (existingItem.bedType !== "double") {
+      return false;
+    }
+
+    const bedSemantics = getBedPlacementSemantics({
+      bedType: existingItem.bedType,
+      footprint: existingItem.footprint,
+      rotation: existingItem.rotation,
+    });
+    const exitOffset = bedSemantics.exitOffsets[0];
+    if (exitOffset === undefined) {
+      throw new Error(
+        `Placement validation double bed ${describeValue(existingItem.instanceId)} has no exit offset; received ${describeValue(bedSemantics.exitOffsets)}.`,
+      );
+    }
+
+    return candidateTile.x === existingItem.x + exitOffset.x
+      && candidateTile.y === existingItem.y + exitOffset.y;
+  });
+}
+
+function isPlacementItemAtTile(
+  placementItem: PlacementItem,
+  tile: MapTileCoordinates,
+): boolean {
+  return tile.x >= placementItem.x
+    && tile.x < placementItem.x + placementItem.footprint.width
+    && tile.y >= placementItem.y
+    && tile.y < placementItem.y + placementItem.footprint.height;
+}
+
+function requireConcreteBedType(
+  bedType: NewPlacementItem["bedType"],
+): "single" | "double" | "child" {
+  assertPlacementBedType(bedType);
+
+  if (bedType === null) {
+    throw new TypeError(
+      "Placement validation bed type must not be null; received null.",
+    );
+  }
+
+  return bedType;
+}
+
 function validateFloorPlacement(
   candidateItem: NewPlacementItem,
   placementSnapshot: PlacementSnapshot,
@@ -288,6 +667,7 @@ function validateFloorPlacement(
   itemPredicates: PlacementItemPredicates | undefined,
 ): PlacementValidationResult {
   const candidateTiles = createCandidateItemTiles(candidateItem);
+  const mapRequirement = getPathItemPlacementRequirement(candidateItem);
 
   for (const candidateTile of candidateTiles) {
     const capabilitiesOrRejection = getPlacementCapabilitiesOrRejection(
@@ -299,7 +679,11 @@ function validateFloorPlacement(
       return capabilitiesOrRejection;
     }
 
-    if (!capabilitiesOrRejection.passable) {
+    if (mapRequirement === "diggable" && !capabilitiesOrRejection.diggable) {
+      return rejectPlacement("not-diggable", candidateTile);
+    }
+
+    if (mapRequirement === "passable" && !capabilitiesOrRejection.passable) {
       return rejectPlacement("not-passable", candidateTile);
     }
   }
@@ -413,10 +797,67 @@ function createBuildingBlockingOccupancy(
   placementSnapshot: PlacementSnapshot,
   buildingMetadataById: BuildingPlacementMetadataById,
 ): BuildingBlockingOccupancy {
-  const occupancyByTile = new Map<
-    string,
-    "occupied-by-building" | "occupied-by-crop" | "occupied-by-item" | "occupied-by-fence"
-  >();
+  const occupancyByTile = createBuildingAndCropBlockingOccupancy(
+    placementSnapshot,
+    buildingMetadataById,
+  );
+
+  addItemBlockingOccupancy(
+    occupancyByTile,
+    placementSnapshot.items,
+    (existingItem) => existingItem.layer !== "path",
+  );
+
+  return occupancyByTile;
+}
+
+function createCropBlockingOccupancy(
+  placementSnapshot: PlacementSnapshot,
+  buildingMetadataById: BuildingPlacementMetadataById,
+): BuildingBlockingOccupancy {
+  const occupancyByTile = createBuildingAndCropBlockingOccupancy(
+    placementSnapshot,
+    buildingMetadataById,
+  );
+
+  addItemBlockingOccupancy(
+    occupancyByTile,
+    placementSnapshot.items,
+    (existingItem) =>
+      existingItem.layer !== "path"
+      && existingItem.itemId !== gardenPotCatalogItemId,
+  );
+
+  return occupancyByTile;
+}
+
+function createItemBlockingOccupancy(
+  placementSnapshot: PlacementSnapshot,
+  buildingMetadataById: BuildingPlacementMetadataById,
+  candidateItem: NewPlacementItem,
+): BuildingBlockingOccupancy {
+  const occupancyByTile = createBuildingAndCropBlockingOccupancy(
+    placementSnapshot,
+    buildingMetadataById,
+  );
+
+  addItemBlockingOccupancy(
+    occupancyByTile,
+    placementSnapshot.items,
+    (existingItem) => doesExistingItemBlockCandidateItem(
+      existingItem,
+      candidateItem,
+    ),
+  );
+
+  return occupancyByTile;
+}
+
+function createBuildingAndCropBlockingOccupancy(
+  placementSnapshot: PlacementSnapshot,
+  buildingMetadataById: BuildingPlacementMetadataById,
+): BlockingOccupancy {
+  const occupancyByTile: BlockingOccupancy = new Map();
 
   for (const existingBuilding of placementSnapshot.buildings) {
     const existingMetadata = getRequiredBuildingMetadata(
@@ -440,8 +881,16 @@ function createBuildingBlockingOccupancy(
     );
   }
 
-  for (const existingItem of placementSnapshot.items) {
-    if (existingItem.layer === "path") {
+  return occupancyByTile;
+}
+
+function addItemBlockingOccupancy(
+  occupancyByTile: BlockingOccupancy,
+  placementItems: readonly PlacementItem[],
+  blocksPlacement: (placementItem: PlacementItem) => boolean,
+): void {
+  for (const existingItem of placementItems) {
+    if (!blocksPlacement(existingItem)) {
       continue;
     }
 
@@ -453,8 +902,17 @@ function createBuildingBlockingOccupancy(
       occupancyByTile.set(tileKey(itemTile), blockingReason);
     }
   }
+}
 
-  return occupancyByTile;
+function doesExistingItemBlockCandidateItem(
+  existingItem: PlacementItem,
+  candidateItem: NewPlacementItem,
+): boolean {
+  if (candidateItem.isRug) {
+    return existingItem.layer === "item" && existingItem.isRug;
+  }
+
+  return existingItem.layer !== "path" && !existingItem.isRug;
 }
 
 function createFloorBlockingOccupancy(
@@ -639,6 +1097,7 @@ function assertPlacementValidationInput(
       return;
     case "item":
       assertItemCandidate(candidate.item, "item", "item");
+      assertItemPlacementRequirement(candidate.placementRequirement);
       return;
     case "floor":
       assertItemCandidate(candidate.item, "path", "floor");
@@ -650,6 +1109,21 @@ function assertPlacementValidationInput(
       throw new TypeError(
         `Placement validation candidate kind must be one of building, crop, item, floor, or fence; received ${describeValue((candidate as Readonly<Record<string, unknown>>).kind)}.`,
       );
+  }
+}
+
+function assertItemPlacementRequirement(
+  placementRequirement: unknown,
+): void {
+  if (
+    placementRequirement !== undefined &&
+    placementRequirement !== "diggable" &&
+    placementRequirement !== "passable" &&
+    placementRequirement !== "wall"
+  ) {
+    throw new TypeError(
+      `Placement validation item placementRequirement must be \"diggable\", \"passable\", \"wall\", or undefined; received ${describeValue(placementRequirement)}.`,
+    );
   }
 }
 
@@ -737,10 +1211,26 @@ function assertItemCandidate(
     }
   }
 
-  if (item.bedType !== null && typeof item.bedType !== "string") {
+  if (item.isRug && item.layer !== "item") {
     throw new TypeError(
-      `Placement validation ${candidateKind} item.bedType must be a string or null; received ${describeValue(item.bedType)}.`,
+      `Placement validation ${candidateKind} item isRug true requires layer "item"; received ${describeValue(item.layer)}.`,
     );
+  }
+
+  assertPlacementBedType(item.bedType);
+
+  if (item.bedType !== null) {
+    if (item.isRug) {
+      throw new TypeError(
+        `Placement validation ${candidateKind} item bedType ${describeValue(item.bedType)} cannot be combined with isRug true; received ${describeValue(item.isRug)}.`,
+      );
+    }
+
+    getBedPlacementSemantics({
+      bedType: item.bedType,
+      footprint: item.footprint,
+      rotation: item.rotation,
+    });
   }
 
   if (

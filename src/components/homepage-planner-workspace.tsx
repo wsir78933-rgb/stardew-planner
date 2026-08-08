@@ -1,11 +1,11 @@
 "use client";
 
-import { ReferenceRuntimeHost } from "./reference-runtime-host";
+import { EditorRuntimeSelector } from "./editor-runtime-selector";
 
 export function HomepagePlannerWorkspace() {
   return (
     <section data-homepage-workspace id="planner">
-      <ReferenceRuntimeHost />
+      <EditorRuntimeSelector />
     </section>
   );
 }

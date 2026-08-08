@@ -5,7 +5,10 @@ import {
   createResourceClumpOverlayEntries,
 } from "../../src/rendering/map-display-overlays";
 import { createInitialEditorDisplayOptions } from "../../src/editor/editor-display-options";
-import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
+import {
+  createEmptyPlacementSnapshot,
+  type PlacementItem,
+} from "../../src/placement/placement-snapshot";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
 import type { TmxMap } from "../../src/tmx/tmx-types";
 
@@ -21,6 +24,7 @@ function createPlacementGrid(): MapPlacementGrid {
         passable: true,
         treePlantable: true,
         treePlantableOnDirt: false,
+        wall: false,
       },
       {
         buildable: false,
@@ -29,6 +33,7 @@ function createPlacementGrid(): MapPlacementGrid {
         passable: true,
         treePlantable: true,
         treePlantableOnDirt: false,
+        wall: false,
       },
       {
         buildable: true,
@@ -37,6 +42,7 @@ function createPlacementGrid(): MapPlacementGrid {
         passable: true,
         treePlantable: false,
         treePlantableOnDirt: false,
+        wall: false,
       },
       {
         buildable: true,
@@ -45,6 +51,7 @@ function createPlacementGrid(): MapPlacementGrid {
         passable: true,
         treePlantable: false,
         treePlantableOnDirt: true,
+        wall: false,
       },
     ],
   };
@@ -91,6 +98,33 @@ function createMapWithResourceClumpTiles(): TmxMap {
   };
 }
 
+function createPlacementItem(
+  instanceId: number,
+  itemId: string,
+  x: number,
+  y: number,
+  variant = 0,
+): PlacementItem {
+  return {
+    instanceId,
+    itemId,
+    x,
+    y,
+    layer: "item",
+    rotation: 0,
+    footprint: { width: 1, height: 1 },
+    variant,
+    tintColor: "#ffffff",
+    locked: false,
+    isRug: false,
+    isGrass: false,
+    isTable: false,
+    isLongTable: false,
+    flipped: false,
+    bedType: null,
+  };
+}
+
 describe("map display overlays", () => {
   it("marks only blocked map capabilities selected by the View options", () => {
     const displayOptions = {
@@ -113,42 +147,8 @@ describe("map display overlays", () => {
     const placementSnapshot = {
       ...createEmptyPlacementSnapshot(),
       items: [
-        {
-          instanceId: 1,
-          itemId: "object:621",
-          x: 10,
-          y: 20,
-          layer: "item" as const,
-          rotation: 0,
-          footprint: { width: 1, height: 1 },
-          variant: 0,
-          tintColor: "#ffffff",
-          locked: false,
-          isRug: false,
-          isGrass: false,
-          isTable: false,
-          isLongTable: false,
-          flipped: false,
-          bedType: null,
-        },
-        {
-          instanceId: 2,
-          itemId: "big-craftable:8",
-          x: 30,
-          y: 40,
-          layer: "item" as const,
-          rotation: 0,
-          footprint: { width: 1, height: 1 },
-          variant: 0,
-          tintColor: "#ffffff",
-          locked: false,
-          isRug: false,
-          isGrass: false,
-          isTable: false,
-          isLongTable: false,
-          flipped: false,
-          bedType: null,
-        },
+        createPlacementItem(1, "object:621", 10, 20),
+        createPlacementItem(2, "big-craftable:8", 30, 40),
       ],
       nextItemId: 3,
     };
@@ -163,11 +163,18 @@ describe("map display overlays", () => {
     ).toEqual([
       {
         color: 0x3db4ff,
-        height: 3,
-        width: 3,
+        height: 1,
+        width: 1,
         x: 9,
         y: 19,
       },
+      { color: 0x3db4ff, height: 1, width: 1, x: 10, y: 19 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 11, y: 19 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 9, y: 20 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 11, y: 20 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 9, y: 21 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 10, y: 21 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 11, y: 21 },
       {
         color: 0xf6cf4a,
         height: 17,
@@ -175,6 +182,75 @@ describe("map display overlays", () => {
         x: 22,
         y: 32,
       },
+    ]);
+  });
+
+  it("deduplicates exact sprinkler coverage tiles across placed sprinklers", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        createPlacementItem(1, "object:599", 10, 10),
+        createPlacementItem(2, "object:599", 10, 12),
+      ],
+      nextItemId: 3,
+    };
+    const displayOptions = {
+      ...createInitialEditorDisplayOptions(),
+      showSprinklerRadius: true,
+    };
+
+    expect(
+      createPlacementCoverageOverlayRectangles(placementSnapshot, displayOptions),
+    ).toEqual([
+      { color: 0x3db4ff, height: 1, width: 1, x: 10, y: 9 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 10, y: 11 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 9, y: 10 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 11, y: 10 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 10, y: 13 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 9, y: 12 },
+      { color: 0x3db4ff, height: 1, width: 1, x: 11, y: 12 },
+    ]);
+  });
+
+  it("omits sprinkler tiles when the persistent display option is disabled", () => {
+    expect(
+      createPlacementCoverageOverlayRectangles(
+        {
+          ...createEmptyPlacementSnapshot(),
+          items: [createPlacementItem(1, "object:645", 10, 10, 1)],
+          nextItemId: 2,
+        },
+        createInitialEditorDisplayOptions(),
+      ),
+    ).toEqual([]);
+  });
+
+  it("preserves scarecrow, Bee House, and Junimo Hut coverage rectangles", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      buildings: [
+        { instanceId: 1, buildingId: "Junimo Hut", x: 70, y: 80 },
+      ],
+      items: [
+        createPlacementItem(1, "big-craftable:8", 30, 40),
+        createPlacementItem(2, "big-craftable:10", 50, 60),
+      ],
+      nextBuildingId: 2,
+      nextItemId: 3,
+    };
+    const displayOptions = {
+      ...createInitialEditorDisplayOptions(),
+      showScarecrowRadius: true,
+      showBeeHouseRadius: true,
+      showJunimoHutRadius: true,
+    };
+
+    expect(
+      createPlacementCoverageOverlayRectangles(placementSnapshot, displayOptions),
+    ).toEqual([
+      { color: 0xf6cf4a, height: 17, width: 17, x: 22, y: 32 },
+      { color: 0xf078c4, height: 11, width: 11, x: 45, y: 55 },
+      { color: 0x6bcf78, height: 17, width: 17, x: 63, y: 73 },
     ]);
   });
 

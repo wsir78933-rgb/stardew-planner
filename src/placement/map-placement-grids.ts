@@ -12,6 +12,8 @@ export type MapPlacementCapabilities = Readonly<{
   passable: boolean;
   treePlantable: boolean;
   treePlantableOnDirt: boolean;
+  wall: boolean;
+  water?: boolean;
   crabPot: boolean;
 }>;
 
@@ -27,6 +29,8 @@ const emptyMapPlacementCapabilities: MapPlacementCapabilities = {
   passable: false,
   treePlantable: false,
   treePlantableOnDirt: false,
+  wall: false,
+  water: false,
   crabPot: false,
 };
 
@@ -38,6 +42,7 @@ type MapTilePlacementFacts = Readonly<{
   buildingsTileProperties: TmxProperties;
   mergedBackProperties: TmxProperties;
   hasTileDataNoSpawn: boolean;
+  hasTileDataWallAnchor: boolean;
   isBackTileWater: boolean;
   isBuildingsTilePassable: boolean;
 }>;
@@ -161,6 +166,7 @@ function createMapTilePlacementFacts(
     buildingsTileProperties,
     mergedBackProperties,
     hasTileDataNoSpawn: Object.hasOwn(tileDataProperties, "NoSpawn"),
+    hasTileDataWallAnchor: Object.hasOwn(tileDataProperties, "WallID"),
     isBackTileWater: isTmxPropertyTruthy(backTileProperties.Water),
     isBuildingsTilePassable: isTmxPropertyTruthy(
       buildingsTileProperties.Passable,
@@ -212,6 +218,8 @@ function createTilePlacementCapabilities(
         mapTilePlacementFacts.isBuildingsTilePassable),
     treePlantable,
     treePlantableOnDirt,
+    wall: mapTilePlacementFacts.hasTileDataWallAnchor,
+    water: mapTilePlacementFacts.isBackTileWater,
     crabPot,
   };
 }
@@ -501,6 +509,16 @@ function assertMapPlacementGrid(mapPlacementGrid: MapPlacementGrid): void {
     throw new Error(
       `Map placement grid has ${String(mapPlacementGrid.capabilitiesByTile.length)} capabilities for dimensions ${String(mapPlacementGrid.width)}x${String(mapPlacementGrid.height)}; expected ${String(expectedCapabilityCount)}.`,
     );
+  }
+
+  for (let tileIndex = 0; tileIndex < mapPlacementGrid.capabilitiesByTile.length; tileIndex += 1) {
+    const tileCapabilities = mapPlacementGrid.capabilitiesByTile[tileIndex];
+
+    if (tileCapabilities === undefined || typeof tileCapabilities.wall !== "boolean") {
+      throw new TypeError(
+        `Map placement grid capability at index ${String(tileIndex)} must include boolean wall; received ${describeValue(tileCapabilities?.wall)}.`,
+      );
+    }
   }
 }
 

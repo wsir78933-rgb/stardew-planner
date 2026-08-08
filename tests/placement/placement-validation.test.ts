@@ -28,6 +28,7 @@ function createPlacementGrid(
       ...tileCapabilities,
       treePlantable: false,
       treePlantableOnDirt: false,
+      wall: false,
       crabPot: false,
     })),
   };
@@ -127,6 +128,25 @@ function createNewPlacementItem(
   );
 
   return newPlacementItem;
+}
+
+function createBedCandidate(
+  bedType: "single" | "double" | "child",
+  placementItem: Partial<NewPlacementItem> = {},
+) {
+  const footprint = bedType === "double"
+    ? { width: 3, height: 3 }
+    : { width: 2, height: 3 };
+
+  return {
+    kind: "item" as const,
+    item: createNewPlacementItem({
+      itemId: `furniture:test-${bedType}-bed`,
+      bedType,
+      footprint,
+      ...placementItem,
+    }),
+  };
 }
 
 describe("placement validation", () => {
@@ -523,6 +543,191 @@ describe("placement validation", () => {
     ).toEqual({ valid: true });
   });
 
+  it("allows rugs and ordinary items to overlap in either placement order", () => {
+    const mapPlacementGrid = createPlacementGrid(
+      Array.from({ length: 25 }, () => ({
+        buildable: true,
+        diggable: true,
+        passable: true,
+      })),
+      5,
+    );
+    const buildingMetadataById = createBuildingMetadataById();
+    const ordinaryItem = createPlacementItem({
+      instanceId: 1,
+      x: 2,
+      y: 2,
+    });
+    const rugItem = createPlacementItem({
+      instanceId: 2,
+      itemId: "furniture_1451",
+      footprint: { width: 3, height: 2 },
+      isRug: true,
+      x: 1,
+      y: 1,
+    });
+
+    expect(
+      validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: createPlacementSnapshot({ items: [ordinaryItem] }),
+        buildingMetadataById,
+        candidate: {
+          kind: "item",
+          item: createNewPlacementItem(rugItem),
+        },
+      }),
+    ).toEqual({ valid: true });
+
+    expect(
+      validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: createPlacementSnapshot({ items: [rugItem] }),
+        buildingMetadataById,
+        candidate: {
+          kind: "item",
+          item: createNewPlacementItem(ordinaryItem),
+        },
+      }),
+    ).toEqual({ valid: true });
+  });
+
+  it("rejects any rug-rug footprint intersection while keeping ordinary-item overlap blocked", () => {
+    const mapPlacementGrid = createPlacementGrid(
+      Array.from({ length: 25 }, () => ({
+        buildable: true,
+        diggable: true,
+        passable: true,
+      })),
+      5,
+    );
+    const buildingMetadataById = createBuildingMetadataById();
+
+    expect(
+      validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: createPlacementSnapshot({
+          items: [
+            createPlacementItem({
+              instanceId: 1,
+              itemId: "furniture_1451",
+              footprint: { width: 3, height: 2 },
+              isRug: true,
+              x: 1,
+              y: 3,
+            }),
+          ],
+        }),
+        buildingMetadataById,
+        candidate: {
+          kind: "item",
+          item: createNewPlacementItem({
+            itemId: "furniture_1451",
+            footprint: { width: 2, height: 3 },
+            isRug: true,
+            rotation: 1,
+            x: 0,
+            y: 1,
+          }),
+        },
+      }),
+    ).toEqual({
+      valid: false,
+      reason: "occupied-by-item",
+      tile: { x: 1, y: 3 },
+    });
+
+    expect(
+      validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: createPlacementSnapshot({
+          items: [createPlacementItem({ instanceId: 1, x: 1, y: 1 })],
+        }),
+        buildingMetadataById,
+        candidate: {
+          kind: "item",
+          item: createNewPlacementItem({ x: 1, y: 1 }),
+        },
+      }),
+    ).toEqual({
+      valid: false,
+      reason: "occupied-by-item",
+      tile: { x: 1, y: 1 },
+    });
+  });
+
+  it("keeps rug terrain, crop, building, path, and fence rules exact", () => {
+    const rugCandidate = {
+      kind: "item" as const,
+      item: createNewPlacementItem({
+        itemId: "furniture_1451",
+        isRug: true,
+      }),
+    };
+    const buildingMetadataById = createBuildingMetadataById();
+
+    expect(
+      validatePlacement({
+        mapPlacementGrid: createPlacementGrid([
+          { buildable: true, diggable: true, passable: false },
+        ]),
+        placementSnapshot: createPlacementSnapshot(),
+        buildingMetadataById,
+        candidate: rugCandidate,
+      }),
+    ).toEqual({
+      valid: false,
+      reason: "not-passable",
+      tile: { x: 0, y: 0 },
+    });
+
+    for (const [snapshot, expectedValidation] of [
+      [
+        createPlacementSnapshot({
+          crops: [{ cropId: "crop:parsnip", x: 0, y: 0 }],
+        }),
+        {
+          valid: false,
+          reason: "occupied-by-crop",
+          tile: { x: 0, y: 0 },
+        },
+      ],
+      [
+        createPlacementSnapshot({
+          buildings: [{ instanceId: 1, buildingId: "shed", x: 0, y: 0 }],
+        }),
+        {
+          valid: false,
+          reason: "occupied-by-building",
+          tile: { x: 0, y: 0 },
+        },
+      ],
+      [
+        createPlacementSnapshot({
+          items: [createPlacementItem({ layer: "path" })],
+        }),
+        { valid: true },
+      ],
+      [
+        createPlacementSnapshot({
+          items: [createPlacementItem({ layer: "fence" })],
+        }),
+        { valid: true },
+      ],
+    ] as const) {
+      expect(
+        validatePlacement({
+          mapPlacementGrid: createPlacementGrid([
+            { buildable: true, diggable: true, passable: true },
+          ]),
+          placementSnapshot: snapshot,
+          buildingMetadataById,
+          candidate: rugCandidate,
+        }),
+      ).toEqual(expectedValidation);
+    }
+  });
+
   it("rejects floor placement on impassable tiles, paths, crops, trees, and grass", () => {
     const mapPlacementGrid = createPlacementGrid([
       { buildable: true, diggable: true, passable: true },
@@ -774,6 +979,376 @@ describe("placement validation", () => {
     ).toThrow('floor item.itemId must be a non-empty string; received ""');
   });
 
+  it("rejects rug flags on floor and fence candidates before freePlacement", () => {
+    for (const candidate of [
+      {
+        kind: "floor" as const,
+        item: createNewPlacementItem({ isRug: true, layer: "path" }),
+      },
+      {
+        kind: "fence" as const,
+        item: createNewPlacementItem({ isRug: true, layer: "fence" }),
+      },
+    ]) {
+      expect(() =>
+        validatePlacement({
+          freePlacement: true,
+          mapPlacementGrid: createPlacementGrid([
+            { buildable: true, diggable: true, passable: true },
+          ]),
+          placementSnapshot: createPlacementSnapshot(),
+          buildingMetadataById: createBuildingMetadataById(),
+          candidate,
+        })
+      ).toThrow(
+        `item isRug true requires layer "item"; received ${JSON.stringify(candidate.item.layer)}`,
+      );
+    }
+  });
+
+  it("applies the frozen bed terrain mask while retaining full bounds and building collision", () => {
+    const mapPlacementGrid = createPlacementGrid(
+      Array.from({ length: 20 }, (_, tileIndex) => ({
+        buildable: true,
+        diggable: true,
+        passable: tileIndex >= 5,
+      })),
+      5,
+    );
+    const buildingMetadataById = createBuildingMetadataById();
+    const doubleBedCandidate = createBedCandidate("double", { x: 1, y: 0 });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        crops: [{ cropId: "crop:parsnip", x: 1, y: 0 }],
+      }),
+      buildingMetadataById,
+      candidate: doubleBedCandidate,
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        crops: [{ cropId: "crop:parsnip", x: 1, y: 1 }],
+      }),
+      buildingMetadataById,
+      candidate: doubleBedCandidate,
+    })).toEqual({
+      valid: false,
+      reason: "occupied-by-crop",
+      tile: { x: 1, y: 1 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid: createPlacementGrid(
+        Array.from({ length: 20 }, (_, tileIndex) => ({
+          buildable: true,
+          diggable: true,
+          passable: tileIndex !== 6,
+        })),
+        5,
+      ),
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: doubleBedCandidate,
+    })).toEqual({
+      valid: false,
+      reason: "not-passable",
+      tile: { x: 1, y: 1 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        buildings: [{ instanceId: 1, buildingId: "shed", x: 1, y: 0 }],
+      }),
+      buildingMetadataById,
+      candidate: doubleBedCandidate,
+    })).toEqual({
+      valid: false,
+      reason: "occupied-by-building",
+      tile: { x: 1, y: 0 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: createBedCandidate("double", { x: 3, y: 0 }),
+    })).toEqual({
+      valid: false,
+      reason: "outside-map",
+      tile: { x: 5, y: 0 },
+    });
+  });
+
+  it("keeps bed full-footprint item collision while allowing paths, rugs, and grass", () => {
+    const mapPlacementGrid = createPlacementGrid(
+      Array.from({ length: 30 }, () => ({
+        buildable: true,
+        diggable: true,
+        passable: true,
+      })),
+      6,
+    );
+    const buildingMetadataById = createBuildingMetadataById();
+    const singleBedCandidate = createBedCandidate("single", { x: 2, y: 1 });
+
+    for (const existingItem of [
+      createPlacementItem({ instanceId: 1, layer: "path", x: 2, y: 1 }),
+      createPlacementItem({ instanceId: 1, isRug: true, x: 2, y: 1 }),
+      createPlacementItem({ instanceId: 1, isGrass: true, x: 2, y: 1 }),
+    ]) {
+      expect(validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: createPlacementSnapshot({ items: [existingItem] }),
+        buildingMetadataById,
+        candidate: singleBedCandidate,
+      })).toEqual({ valid: true });
+    }
+
+    for (const [existingItem, reason] of [
+      [createPlacementItem({ instanceId: 1, x: 2, y: 1 }), "occupied-by-item"],
+      [
+        createPlacementItem({ instanceId: 1, layer: "fence", x: 2, y: 1 }),
+        "occupied-by-fence",
+      ],
+    ] as const) {
+      expect(validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: createPlacementSnapshot({ items: [existingItem] }),
+        buildingMetadataById,
+        candidate: singleBedCandidate,
+      })).toEqual({
+        valid: false,
+        reason,
+        tile: { x: 2, y: 1 },
+      });
+    }
+  });
+
+  it("enforces exact double, single, and child bed exit clearance with rug exemptions", () => {
+    const mapPlacementGrid = createPlacementGrid(
+      Array.from({ length: 35 }, () => ({
+        buildable: true,
+        diggable: true,
+        passable: true,
+      })),
+      7,
+    );
+    const buildingMetadataById = createBuildingMetadataById();
+    const leftBlocker = createPlacementItem({ instanceId: 1, x: 1, y: 2 });
+    const rightBlocker = createPlacementItem({ instanceId: 2, x: 4, y: 2 });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({ items: [leftBlocker] }),
+      buildingMetadataById,
+      candidate: createBedCandidate("double", { x: 2, y: 1 }),
+    })).toEqual({
+      valid: false,
+      reason: "occupied-by-item",
+      tile: { x: 1, y: 2 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        items: [{ ...leftBlocker, isRug: true }],
+      }),
+      buildingMetadataById,
+      candidate: createBedCandidate("double", { x: 2, y: 1 }),
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        items: [leftBlocker, rightBlocker],
+      }),
+      buildingMetadataById,
+      candidate: createBedCandidate("single", { x: 2, y: 1 }),
+    })).toEqual({
+      valid: false,
+      reason: "occupied-by-item",
+      tile: { x: 1, y: 2 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({ items: [leftBlocker] }),
+      buildingMetadataById,
+      candidate: createBedCandidate("single", { x: 2, y: 1 }),
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        items: [leftBlocker, rightBlocker],
+      }),
+      buildingMetadataById,
+      candidate: createBedCandidate("child", { x: 2, y: 1 }),
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: createBedCandidate("double", { x: 0, y: 1 }),
+    })).toEqual({ valid: true });
+  });
+
+  it("blocks later item-layer candidates only at an existing double-bed left exit", () => {
+    const mapPlacementGrid = createPlacementGrid(
+      Array.from({ length: 35 }, () => ({
+        buildable: true,
+        diggable: true,
+        passable: true,
+      })),
+      7,
+    );
+    const buildingMetadataById = createBuildingMetadataById();
+    const doubleBed = createPlacementItem({
+      instanceId: 1,
+      itemId: "furniture:test-double-bed",
+      bedType: "double",
+      footprint: { width: 3, height: 3 },
+      x: 2,
+      y: 1,
+    });
+    const doubleBedSnapshot = createPlacementSnapshot({ items: [doubleBed] });
+
+    for (const candidateItem of [
+      createNewPlacementItem({ x: 1, y: 2 }),
+      createNewPlacementItem({ isGrass: true, x: 1, y: 2 }),
+      createNewPlacementItem({
+        bedType: "child",
+        footprint: { width: 2, height: 3 },
+        x: 0,
+        y: 1,
+      }),
+    ]) {
+      expect(validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot: doubleBedSnapshot,
+        buildingMetadataById,
+        candidate: { kind: "item", item: candidateItem },
+      })).toEqual({
+        valid: false,
+        reason: "occupied-by-item",
+        tile: { x: 1, y: 2 },
+      });
+    }
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: doubleBedSnapshot,
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({
+          bedType: "child",
+          footprint: { width: 2, height: 3 },
+          x: 0,
+          y: 2,
+        }),
+      },
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid: createPlacementGrid(
+        Array.from({ length: 35 }, (_, tileIndex) => ({
+          buildable: true,
+          diggable: true,
+          passable: tileIndex !== 17,
+        })),
+        7,
+      ),
+      placementSnapshot: createPlacementSnapshot({
+        items: [
+          createPlacementItem({
+            instanceId: 1,
+            itemId: "furniture:test-double-bed",
+            bedType: "double",
+            footprint: { width: 3, height: 3 },
+            x: 3,
+            y: 1,
+          }),
+        ],
+      }),
+      buildingMetadataById,
+      candidate: createBedCandidate("single", { x: 2, y: 1 }),
+    })).toEqual({
+      valid: false,
+      reason: "occupied-by-item",
+      tile: { x: 2, y: 2 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: doubleBedSnapshot,
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ isRug: true, x: 1, y: 2 }),
+      },
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: doubleBedSnapshot,
+      buildingMetadataById,
+      candidate: {
+        kind: "fence",
+        item: createNewPlacementItem({ layer: "fence", x: 1, y: 2 }),
+      },
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot({
+        items: [{ ...doubleBed, bedType: "single" }],
+      }),
+      buildingMetadataById,
+      candidate: { kind: "item", item: createNewPlacementItem({ x: 1, y: 2 }) },
+    })).toEqual({ valid: true });
+  });
+
+  it("fails fast on invalid bed type, rug classification, rotation, and footprint before freePlacement", () => {
+    const validationInput = {
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid([
+        { buildable: true, diggable: true, passable: true },
+      ]),
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById: createBuildingMetadataById(),
+    };
+
+    expect(() => validatePlacement({
+      ...validationInput,
+      candidate: createBedCandidate("single", { bedType: "queen" as never }),
+    })).toThrow('bedType must be one of "single", "double", or "child", or null; received "queen"');
+
+    expect(() => validatePlacement({
+      ...validationInput,
+      candidate: createBedCandidate("single", { isRug: true }),
+    })).toThrow('bedType "single" cannot be combined with isRug true');
+
+    expect(() => validatePlacement({
+      ...validationInput,
+      candidate: createBedCandidate("single", { rotation: 1 }),
+    })).toThrow("bed rotation must be 0; received 1");
+
+    expect(() => validatePlacement({
+      ...validationInput,
+      candidate: createBedCandidate("double", {
+        footprint: { width: 2, height: 3 },
+      }),
+    })).toThrow(
+      "double bed footprint must be 3 by 3; received width 2, height 3",
+    );
+  });
+
   it("returns an outside-map rejection for normal candidates beyond the map boundary", () => {
     const mapPlacementGrid = createPlacementGrid([
       { buildable: true, diggable: true, passable: true },
@@ -896,5 +1471,46 @@ describe("placement validation", () => {
         candidate: undefined as never,
       }),
     ).toThrow("received undefined");
+  });
+
+  it("uses the dedicated crab-pot grid capability instead of ordinary passability", () => {
+    const validCrabPotGrid: MapPlacementGrid = {
+      width: 1,
+      height: 1,
+      capabilitiesByTile: [{
+        buildable: false,
+        crabPot: true,
+        diggable: false,
+        passable: false,
+        treePlantable: false,
+        treePlantableOnDirt: false,
+        wall: false,
+        water: true,
+      }],
+    };
+    const crabPotCandidate = {
+      kind: "item" as const,
+      item: createNewPlacementItem({ itemId: "object:710" }),
+    };
+
+    expect(validatePlacement({
+      mapPlacementGrid: validCrabPotGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById: createBuildingMetadataById(),
+      candidate: crabPotCandidate,
+    })).toEqual({ valid: true });
+
+    expect(validatePlacement({
+      mapPlacementGrid: createPlacementGrid([
+        { buildable: false, diggable: false, passable: true },
+      ]),
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById: createBuildingMetadataById(),
+      candidate: crabPotCandidate,
+    })).toEqual({
+      valid: false,
+      reason: "not-crab-pot-tile",
+      tile: { x: 0, y: 0 },
+    });
   });
 });

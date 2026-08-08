@@ -4,7 +4,11 @@ import {
   applyEditorErase,
   applyEditorEraseRectangle,
 } from "../../src/editor/editor-erase-controller";
-import { createPlacementHistory } from "../../src/placement/placement-history";
+import {
+  createPlacementHistory,
+  redoPlacementHistory,
+  undoPlacementHistory,
+} from "../../src/placement/placement-history";
 import {
   createEmptyPlacementSnapshot,
   type PlacementItem,
@@ -49,7 +53,119 @@ function createPlacementItem(
   };
 }
 
+function createTableWithHeldItem(): PlacementItem {
+  return createPlacementItem({
+    footprint: { width: 2, height: 2 },
+    instanceId: 1,
+    isTable: true,
+    itemId: "furniture_724",
+    x: 3,
+    y: 4,
+    heldItem: {
+      bedType: null,
+      flipped: false,
+      footprint: { width: 1, height: 1 },
+      instanceId: 7,
+      isGrass: false,
+      isLongTable: false,
+      isRug: false,
+      isTable: false,
+      itemId: "furniture_0",
+      layer: "item",
+      locked: false,
+      rotation: 0,
+      tintColor: "#ffffff",
+      variant: 0,
+      x: 4,
+      y: 5,
+    },
+  });
+}
+
 describe("applyEditorErase", () => {
+  it("erases a table and its held child as one undoable parent cascade", () => {
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createTableWithHeldItem()],
+      nextItemId: 8,
+    });
+
+    const eraseResult = applyEditorErase({
+      cursorTile: { x: 4, y: 5 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(eraseResult).toMatchObject({ applied: true, erased: "item" });
+    expect(eraseResult.placementHistory.currentState.items).toEqual([]);
+    expect(eraseResult.placementHistory.currentState.nextItemId).toBe(8);
+    expect(eraseResult.placementHistory.undoStates).toEqual([
+      placementHistory.currentState,
+    ]);
+    const undoneHistory = undoPlacementHistory(eraseResult.placementHistory);
+    expect(undoneHistory.currentState).toEqual(placementHistory.currentState);
+    expect(redoPlacementHistory(undoneHistory).currentState).toEqual(
+      eraseResult.placementHistory.currentState,
+    );
+  });
+
+  it("erases a bed from any tile in its complete placement footprint in one history entry", () => {
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        createPlacementItem({
+          bedType: "double",
+          footprint: { width: 3, height: 3 },
+          instanceId: 1,
+          itemId: "furniture_test_double_bed",
+          x: 2,
+          y: 1,
+        }),
+      ],
+      nextItemId: 2,
+    });
+
+    const eraseResult = applyEditorErase({
+      cursorTile: { x: 4, y: 3 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(eraseResult).toMatchObject({ applied: true, erased: "item" });
+    expect(eraseResult.placementHistory.currentState.items).toEqual([]);
+    expect(eraseResult.placementHistory.undoStates).toEqual([
+      placementHistory.currentState,
+    ]);
+  });
+
+  it("erases a stored giant crop item from any tile in its 3 by 3 footprint", () => {
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlacementItem({
+        footprint: { width: 3, height: 3 },
+        instanceId: 1,
+        itemId: "crop:giant_Cauliflower",
+        x: 2,
+        y: 1,
+      })],
+      nextItemId: 2,
+    });
+
+    const eraseResult = applyEditorErase({
+      cursorTile: { x: 4, y: 3 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(eraseResult).toMatchObject({ applied: true, erased: "item" });
+    expect(eraseResult.placementHistory.currentState.items).toEqual([]);
+    const undoneHistory = undoPlacementHistory(eraseResult.placementHistory);
+    expect(undoneHistory.currentState).toEqual(placementHistory.currentState);
+    expect(redoPlacementHistory(undoneHistory).currentState).toEqual(
+      eraseResult.placementHistory.currentState,
+    );
+  });
+
   it("removes the visible non-path item before the crop, building, or path beneath it", () => {
     const placementHistory = createPlacementHistory({
       ...createEmptyPlacementSnapshot(),
@@ -76,6 +192,68 @@ describe("applyEditorErase", () => {
     expect(erasedPlacement.placementHistory.currentState.items).toEqual([
       createPlacementItem({ instanceId: 1, layer: "path" }),
     ]);
+  });
+
+  it("erases a Garden Pot crop before its pot and preserves undo and redo", () => {
+    const gardenPot = createPlacementItem({
+      instanceId: 1,
+      itemId: "big-craftable:62",
+      x: 2,
+      y: 3,
+    });
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 2, y: 3 }],
+      items: [gardenPot],
+      nextItemId: 2,
+    });
+
+    const eraseResult = applyEditorErase({
+      cursorTile: { x: 2, y: 3 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(eraseResult).toMatchObject({ applied: true, erased: "crop" });
+    expect(eraseResult.placementHistory.currentState).toMatchObject({
+      crops: [],
+      items: [gardenPot],
+    });
+    const undoneHistory = undoPlacementHistory(eraseResult.placementHistory);
+    expect(undoneHistory.currentState).toEqual(placementHistory.currentState);
+    expect(redoPlacementHistory(undoneHistory).currentState).toEqual(
+      eraseResult.placementHistory.currentState,
+    );
+  });
+
+  it("removes an ordinary item above an overlapping rug before the rug", () => {
+    const rug = createPlacementItem({
+      instanceId: 2,
+      itemId: "furniture_1451",
+      footprint: { width: 3, height: 2 },
+      isRug: true,
+      x: 0,
+      y: 0,
+    });
+    const ordinaryItem = createPlacementItem({
+      instanceId: 1,
+      x: 1,
+      y: 1,
+    });
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [ordinaryItem, rug],
+      nextItemId: 3,
+    });
+
+    const erasedPlacement = applyEditorErase({
+      cursorTile: { x: 1, y: 1 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(erasedPlacement).toMatchObject({ applied: true, erased: "item" });
+    expect(erasedPlacement.placementHistory.currentState.items).toEqual([rug]);
   });
 
   it("removes a crop before a building and reports when the cursor has no placement", () => {

@@ -12,7 +12,10 @@ export type NightLightRenderDescriptor = Readonly<{
 }>;
 
 export type CreateNightLightRenderDescriptorsInput = Readonly<{
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight">[];
+  catalogItems: readonly Pick<
+    CatalogItem,
+    "id" | "nightLight" | "renderingMetadata" | "furnitureFire"
+  >[];
   isNightMode: boolean;
   placementSnapshot: PlacementSnapshot;
   tileHeight: number;
@@ -41,16 +44,24 @@ export function createNightLightRenderDescriptors(
       return [];
     }
 
-    const nightLight = catalogNightLightsByItemId.get(placementItem.itemId);
+    const nightLightSource = catalogNightLightsByItemId.get(
+      placementItem.itemId,
+    );
 
-    if (nightLight === undefined) {
+    if (
+      nightLightSource === undefined
+      || (
+        nightLightSource.turnOffForUnlitVariant
+        && placementItem.variant === 1
+      )
+    ) {
       return [];
     }
 
     return [
       createNightLightRenderDescriptor(
         placementItem,
-        nightLight,
+        nightLightSource.nightLight,
         createNightLightRenderDescriptorsInput.tileWidth,
         createNightLightRenderDescriptorsInput.tileHeight,
       ),
@@ -87,15 +98,24 @@ function assertCreateNightLightRenderDescriptorsInput(
 }
 
 function createCatalogNightLightsByItemId(
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight">[],
-): ReadonlyMap<string, CatalogNightLight> {
+  catalogItems: readonly Pick<
+    CatalogItem,
+    "id" | "nightLight" | "renderingMetadata" | "furnitureFire"
+  >[],
+): ReadonlyMap<string, Readonly<{
+  nightLight: CatalogNightLight;
+  turnOffForUnlitVariant: boolean;
+}>> {
   if (!Array.isArray(catalogItems)) {
     throw new TypeError(
       `Night-light catalog items must be an array; received ${describeValue(catalogItems)}.`,
     );
   }
 
-  const catalogNightLightsByItemId = new Map<string, CatalogNightLight>();
+  const catalogNightLightsByItemId = new Map<string, Readonly<{
+    nightLight: CatalogNightLight;
+    turnOffForUnlitVariant: boolean;
+  }>>();
   const catalogItemIds = new Set<string>();
 
   for (const catalogItem of catalogItems) {
@@ -114,14 +134,22 @@ function createCatalogNightLightsByItemId(
     }
 
     assertCatalogNightLight(catalogItem.id, catalogItem.nightLight);
-    catalogNightLightsByItemId.set(catalogItem.id, catalogItem.nightLight);
+    catalogNightLightsByItemId.set(catalogItem.id, {
+      nightLight: catalogItem.nightLight,
+      turnOffForUnlitVariant:
+        catalogItem.renderingMetadata?.kind === "lit-big-craftable"
+        || catalogItem.furnitureFire !== undefined,
+    });
   }
 
   return catalogNightLightsByItemId;
 }
 
 function assertCatalogItem(
-  catalogItem: Pick<CatalogItem, "id" | "nightLight">,
+  catalogItem: Pick<
+    CatalogItem,
+    "id" | "nightLight" | "renderingMetadata" | "furnitureFire"
+  >,
 ): void {
   if (typeof catalogItem !== "object" || catalogItem === null) {
     throw new TypeError(

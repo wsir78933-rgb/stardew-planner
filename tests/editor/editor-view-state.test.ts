@@ -13,15 +13,21 @@ import {
 } from "../../src/editor/editor-view-state";
 
 describe("editor view state", () => {
-  it("starts on the standard farm with the cursor and bottom catalog", () => {
+  it("starts on the standard farm with the cursor and left catalog", () => {
     expect(createInitialEditorViewState()).toEqual({
       season: "spring",
       mapId: "standard",
       tool: "cursor",
       catalogCategory: "buildings",
-      panelPosition: "bottom",
+      panelPosition: "left",
       modalId: null,
     });
+  });
+
+  it("places the initial catalog at the bottom through 640px", () => {
+    expect(createInitialEditorViewState(640).panelPosition).toBe("bottom");
+    expect(createInitialEditorViewState(641).panelPosition).toBe("left");
+    expect(createInitialEditorViewState().panelPosition).toBe("left");
   });
 
   it("changes to a catalogued map and closes the map picker", () => {

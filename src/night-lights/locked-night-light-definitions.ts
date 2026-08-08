@@ -12,6 +12,24 @@ const explicitNightLightCatalogItemIds = new Set([
   "furniture_1369",
   "furniture_1440",
 ]);
+const furnitureFireNightLightRadiusInTilesByCatalogItemId: Readonly<
+  Record<string, number>
+> = {
+  furniture_1792: 10,
+  furniture_1794: 10,
+  furniture_1796: 10,
+  furniture_1798: 10,
+  furniture_1800: 10,
+  furniture_1866: 10,
+  furniture_2331: 3,
+  furniture_2397: 3,
+  furniture_2398: 3,
+  furniture_DesertFireplace: 10,
+  furniture_JojaFireplace: 10,
+  furniture_WizardFireplace: 10,
+  furniture_JunimoFireplace: 10,
+  furniture_RetroFireplace: 10,
+};
 const nightLightFurnitureTypes = new Set([
   "lamp",
   "torch",
@@ -30,6 +48,17 @@ export function getLockedNightLightDescriptor(
 
   if (explicitNightLightCatalogItemIds.has(lockedNightLightSource.catalogItemId)) {
     return defaultNightLight;
+  }
+
+  const furnitureFireRadiusInTiles =
+    furnitureFireNightLightRadiusInTilesByCatalogItemId[
+      lockedNightLightSource.catalogItemId
+    ];
+  if (furnitureFireRadiusInTiles !== undefined) {
+    return createNightLightDescriptor({
+      color: defaultNightLight.color,
+      radiusInTiles: furnitureFireRadiusInTiles,
+    });
   }
 
   if (lockedNightLightSource.contextTags?.includes("light_source")) {

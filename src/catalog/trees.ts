@@ -1,6 +1,7 @@
 import type {
   CatalogFruitTreeRenderingMetadata,
   CatalogItem,
+  CatalogPresentationCapabilities,
   CatalogSeason,
   CatalogSourceRect,
   CatalogWildTreeRenderingMetadata,
@@ -171,6 +172,7 @@ export function createFruitTreeCatalogItems(
       textureLocalPath: fruitTreeTextureLocalPath,
       sprite,
       allowedTools: treePlacementTools,
+      presentationCapabilities: createFruitTreePresentationCapabilities(),
       renderingMetadata: createFruitTreeRenderingMetadata(
         fruitSprite,
         readFruitTreeSeasons(fruitTreeRecord.Seasons, recordLocation),
@@ -190,8 +192,50 @@ export function createWildTreeCatalogItems(): readonly CatalogItem[] {
     textureLocalPath: wildTreeDefinition.seasonalTextureLocalPaths.spring,
     sprite: { kind: "source-rect", x: 0, y: 0, width: 48, height: 96 },
     allowedTools: treePlacementTools,
+    presentationCapabilities: createWildTreePresentationCapabilities(
+      wildTreeDefinition.id,
+    ),
     renderingMetadata: createWildTreeRenderingMetadata(wildTreeDefinition),
   }));
+}
+
+function createFruitTreePresentationCapabilities(): CatalogPresentationCapabilities {
+  return {
+    canFlip: true,
+    rotation: null,
+    variantCycle: { count: 2, family: "tree" },
+    visibleVariants: [
+      createVisiblePresentationVariant(0, "No Fruit"),
+      createVisiblePresentationVariant(1, "Fruit"),
+    ],
+  };
+}
+
+function createWildTreePresentationCapabilities(
+  wildTreeId: string,
+): CatalogPresentationCapabilities {
+  const hasVisibleMossVariants = ["1", "2", "3", "10", "11"].includes(
+    wildTreeId,
+  );
+  return {
+    canFlip: true,
+    rotation: null,
+    variantCycle: { count: 2, family: "tree" },
+    visibleVariants: hasVisibleMossVariants
+      ? [
+          createVisiblePresentationVariant(0, "Normal"),
+          createVisiblePresentationVariant(1, "Moss"),
+        ]
+      : [],
+  };
+}
+
+function createVisiblePresentationVariant(value: number, label: string) {
+  return {
+    label,
+    renderDescriptor: { kind: "variant-index" as const, variant: value },
+    value,
+  };
 }
 
 function createFruitTreeRenderingMetadata(

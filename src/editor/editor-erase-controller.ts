@@ -10,6 +10,8 @@ import {
   type PlacementItem,
   type PlacementSnapshot,
 } from "../placement/placement-snapshot";
+import { getPlacementItemZIndex } from "../placement/placement-item-z-order";
+import { isGardenPotAtTile } from "../placement/garden-pot-placement";
 
 export type EditorEraseInput = Readonly<{
   cursorTile: MapTileCoordinates;
@@ -158,6 +160,23 @@ function findEraseAction(
   cursorTile: MapTileCoordinates,
   buildingMetadataById: BuildingPlacementMetadataById,
 ): EraseAction | null {
+  const gardenPotCrop = placementSnapshot.crops.find(
+    (placementCrop) =>
+      placementCrop.x === cursorTile.x
+      && placementCrop.y === cursorTile.y
+      && isGardenPotAtTile(placementSnapshot.items, placementCrop),
+  );
+
+  if (gardenPotCrop !== undefined) {
+    return {
+      erased: "crop",
+      action: {
+        type: "delete-crop",
+        coordinate: { x: gardenPotCrop.x, y: gardenPotCrop.y },
+      },
+    };
+  }
+
   const ordinaryItem = findTopmostPlacementItem(
     placementSnapshot.items,
     cursorTile,
@@ -348,11 +367,11 @@ function findTopmostPlacementItem(
   cursorTile: MapTileCoordinates,
   acceptsPlacementItem: (placementItem: PlacementItem) => boolean,
 ): PlacementItem | null {
-  for (let itemIndex = placementItems.length - 1; itemIndex >= 0; itemIndex -= 1) {
-    const placementItem = placementItems[itemIndex];
+  let visuallyHighestPlacementItem: PlacementItem | null = null;
+  let visuallyHighestZIndex = Number.NEGATIVE_INFINITY;
 
+  for (const placementItem of placementItems) {
     if (
-      placementItem !== undefined &&
       acceptsPlacementItem(placementItem) &&
       isTileInsideRectangle(
         cursorTile,
@@ -362,11 +381,16 @@ function findTopmostPlacementItem(
         placementItem.footprint.height,
       )
     ) {
-      return placementItem;
+      const placementItemZIndex = getPlacementItemZIndex(placementItem);
+
+      if (placementItemZIndex >= visuallyHighestZIndex) {
+        visuallyHighestPlacementItem = placementItem;
+        visuallyHighestZIndex = placementItemZIndex;
+      }
     }
   }
 
-  return null;
+  return visuallyHighestPlacementItem;
 }
 
 function isTileInsideRectangle(

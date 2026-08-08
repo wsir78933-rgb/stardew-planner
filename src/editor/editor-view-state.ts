@@ -75,13 +75,16 @@ export function collapseEditorMenuForModalOpen(
     : editorMenuVisibility;
 }
 
-export function createInitialEditorViewState(): EditorViewState {
+export function createInitialEditorViewState(
+  viewportWidth?: number,
+): EditorViewState {
   return {
     season: "spring",
     mapId: "standard",
     tool: "cursor",
     catalogCategory: "buildings",
-    panelPosition: "bottom",
+    panelPosition:
+      viewportWidth === undefined || viewportWidth > 640 ? "left" : "bottom",
     modalId: null,
   };
 }

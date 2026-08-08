@@ -1,94 +1,105 @@
 "use client";
 
 import type {
-  EditorMenuVisibility,
   EditorModalId,
 } from "../editor/editor-view-state";
+import { useId, useState } from "react";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import {
+  CloudSun,
+  Eye,
+  Map,
+  Save,
+  Wrench,
+} from "lucide-react";
 
 type EditorMenuBarProperties = Readonly<{
   activeModalId: EditorModalId | null;
-  editorMenuVisibility: EditorMenuVisibility;
-  expandedActionsClassName?: string;
+  leftHandMode?: boolean;
   mapDisplayName: string;
   season: TilesheetSeason;
   onOpenModal: (modalId: EditorModalId) => void;
-  onToggleMenu: () => void;
 }>;
-
-const editorMenuActionsId = "editor-menu-actions";
 
 const editorMenuControls: readonly Readonly<{
   id: EditorModalId;
   label: string;
+  icon: typeof Map;
 }>[] = [
-  { id: "season-picker", label: "Season" },
-  { id: "map-picker", label: "Map" },
-  { id: "view-panel", label: "View" },
-  { id: "save-panel", label: "Save" },
-  { id: "settings-panel", label: "Settings" },
+  { id: "season-picker", label: "Season", icon: CloudSun },
+  { id: "map-picker", label: "Map", icon: Map },
+  { id: "view-panel", label: "View", icon: Eye },
+  { id: "save-panel", label: "Save", icon: Save },
+  { id: "settings-panel", label: "Settings", icon: Wrench },
 ];
 
 export function EditorMenuBar({
   activeModalId,
-  editorMenuVisibility,
-  expandedActionsClassName,
+  leftHandMode = false,
   mapDisplayName,
   season,
   onOpenModal,
-  onToggleMenu,
 }: EditorMenuBarProperties) {
-  const isExpanded = editorMenuVisibility === "expanded";
+  const [isCompactMenuExpanded, setIsCompactMenuExpanded] = useState(false);
+  const menuControlsId = useId();
 
   return (
-    <nav aria-label="Editor menu" className="editor-menu-bar">
+    <nav
+      aria-label="Editor menu"
+      className={`menu-bar editor-menu-bar${leftHandMode ? " left-hand" : ""}`}
+    >
       <button
-        aria-controls={isExpanded ? editorMenuActionsId : undefined}
-        aria-expanded={isExpanded}
+        aria-controls={menuControlsId}
+        aria-expanded={isCompactMenuExpanded}
         aria-label="Menu"
-        className="editor-menu-bar__button"
-        onClick={onToggleMenu}
+        className="menu-btn editor-menu-bar__toggle"
+        onClick={() => setIsCompactMenuExpanded((isExpanded) => !isExpanded)}
+        title="Menu"
         type="button"
       >
-        Menu
+        <Wrench aria-hidden="true" size={18} strokeWidth={2} />
       </button>
-      {isExpanded ? (
-        <div
-          className={`editor-menu-bar__actions${expandedActionsClassName === undefined ? "" : ` ${expandedActionsClassName}`}`}
-          id={editorMenuActionsId}
-        >
-          {editorMenuControls.map((editorMenuControl) => {
-            const menuLabel = getMenuLabel(
-              editorMenuControl,
-              mapDisplayName,
-              season,
-            );
-            const accessibleMenuLabel = getAccessibleMenuLabel(
-              editorMenuControl,
-              menuLabel,
-            );
-
-            return (
-              <button
-                aria-label={accessibleMenuLabel}
-                aria-expanded={activeModalId === editorMenuControl.id}
-                aria-haspopup="dialog"
-                className="editor-menu-bar__button"
-                key={editorMenuControl.id}
-                onClick={() => onOpenModal(editorMenuControl.id)}
-                type="button"
-              >
-                <span className="editor-menu-bar__label">
-                  {editorMenuControl.label}
-                </span>
-                <span aria-hidden="true" className="editor-menu-bar__value">
-                  {menuLabel}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+      {isCompactMenuExpanded ? (
+        <span aria-hidden="true" className="separator-h editor-menu-bar__separator" />
       ) : null}
+      <div
+        className="editor-menu-bar__controls"
+        data-expanded={isCompactMenuExpanded}
+        id={menuControlsId}
+      >
+        {editorMenuControls.map((editorMenuControl) => {
+        const menuLabel = getMenuLabel(
+          editorMenuControl,
+          mapDisplayName,
+          season,
+        );
+        const accessibleMenuLabel = getAccessibleMenuLabel(
+          editorMenuControl,
+          menuLabel,
+        );
+        const MenuIcon = editorMenuControl.icon;
+
+        return (
+          <button
+            aria-label={accessibleMenuLabel}
+            aria-expanded={activeModalId === editorMenuControl.id}
+            aria-haspopup="dialog"
+            className={`menu-btn editor-menu-bar__button${
+              activeModalId === editorMenuControl.id ? " active" : ""
+            }`}
+            key={editorMenuControl.id}
+            onClick={() => {
+              setIsCompactMenuExpanded(false);
+              onOpenModal(editorMenuControl.id);
+            }}
+            title={accessibleMenuLabel}
+            type="button"
+          >
+            <MenuIcon aria-hidden="true" size={16} strokeWidth={2} />
+          </button>
+        );
+        })}
+      </div>
     </nav>
   );
 }

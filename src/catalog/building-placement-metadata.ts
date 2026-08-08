@@ -66,32 +66,104 @@ export function createBuildingPlacementMetadata(
   rawBuildingRecords: unknown,
 ): BuildingPlacementMetadataById {
   const buildingRecords = assertPlainJsonRecord(rawBuildingRecords, "<root>");
-  const metadataEntries = Object.entries(buildingRecords).map(
-    ([buildingId, rawBuildingRecord]) => {
-      assertSafeBuildingId(buildingId);
-      const buildingRecord = assertPlainJsonRecord(rawBuildingRecord, buildingId);
-      const size = readBuildingSize(buildingRecord, buildingId);
+  const metadataById: Record<string, BuildingPlacementMetadata> = {};
 
-      return [
+  for (const [buildingId, rawBuildingRecord] of Object.entries(buildingRecords)) {
+    assertSafeBuildingId(buildingId);
+    const buildingRecord = assertPlainJsonRecord(rawBuildingRecord, buildingId);
+    const size = readBuildingSize(buildingRecord, buildingId);
+    const placementMetadata = freezeBuildingPlacementMetadata({
+      size,
+      collisionMap: readCollisionMap(buildingRecord.CollisionMap, size, buildingId),
+      additionalPlacementTiles: readAdditionalPlacementTiles(
+        buildingRecord.AdditionalPlacementTiles,
         buildingId,
-        freezeBuildingPlacementMetadata({
-          size,
-          collisionMap: readCollisionMap(buildingRecord.CollisionMap, size, buildingId),
-          additionalPlacementTiles: readAdditionalPlacementTiles(
-            buildingRecord.AdditionalPlacementTiles,
-            buildingId,
-          ),
-          humanDoor: readHumanDoor(buildingRecord.HumanDoor, size, buildingId),
-          tilePropertyGrid: readTilePropertyGrid(
-            buildingRecord.TileProperties,
-            buildingId,
-          ),
-        }),
-      ] as const;
-    },
-  );
+      ),
+      humanDoor: readHumanDoor(buildingRecord.HumanDoor, size, buildingId),
+      tilePropertyGrid: readTilePropertyGrid(
+        buildingRecord.TileProperties,
+        buildingId,
+      ),
+    });
+    addPlacementMetadata(metadataById, buildingId, placementMetadata);
+    addSkinPlacementMetadata(metadataById, buildingId, buildingRecord, placementMetadata);
+  }
 
-  return Object.freeze(Object.fromEntries(metadataEntries));
+  addUpgradePlacementMetadata(metadataById, "Farmhouse");
+  for (const cabinBuildingId of [
+    "Cabin",
+    "Plank Cabin",
+    "Log Cabin",
+    "Neighbor Cabin",
+    "Rustic Cabin",
+    "Beach Cabin",
+    "Trailer Cabin",
+  ]) {
+    addUpgradePlacementMetadata(metadataById, cabinBuildingId);
+  }
+
+  return Object.freeze(metadataById);
+}
+
+function addSkinPlacementMetadata(
+  metadataById: Record<string, BuildingPlacementMetadata>,
+  buildingId: string,
+  buildingRecord: JsonRecord,
+  placementMetadata: BuildingPlacementMetadata,
+): void {
+  const rawSkins = buildingRecord.Skins;
+  if (rawSkins === undefined || rawSkins === null) {
+    return;
+  }
+  if (!Array.isArray(rawSkins)) {
+    throw new Error(
+      `building ${JSON.stringify(buildingId)} field "Skins" must be null or an array; received ${describeValue(rawSkins)}.`,
+    );
+  }
+  rawSkins.forEach((rawSkin, skinIndex) => {
+    const skinRecord = assertPlainJsonRecord(
+      rawSkin,
+      buildingId,
+      `Skins[${String(skinIndex)}]`,
+    );
+    const skinId = readNonEmptyString(
+      skinRecord.Id,
+      buildingId,
+      `Skins[${String(skinIndex)}].Id`,
+    );
+    assertSafeBuildingId(skinId);
+    addPlacementMetadata(metadataById, skinId, placementMetadata);
+  });
+}
+
+function addUpgradePlacementMetadata(
+  metadataById: Record<string, BuildingPlacementMetadata>,
+  baseBuildingId: string,
+): void {
+  const placementMetadata = metadataById[baseBuildingId];
+  if (placementMetadata === undefined) {
+    return;
+  }
+  for (const upgradeNumber of [1, 2]) {
+    addPlacementMetadata(
+      metadataById,
+      `${baseBuildingId}_${String(upgradeNumber)}`,
+      placementMetadata,
+    );
+  }
+}
+
+function addPlacementMetadata(
+  metadataById: Record<string, BuildingPlacementMetadata>,
+  buildingId: string,
+  placementMetadata: BuildingPlacementMetadata,
+): void {
+  if (Object.hasOwn(metadataById, buildingId)) {
+    throw new Error(
+      `building placement metadata produced duplicate building ID ${JSON.stringify(buildingId)}.`,
+    );
+  }
+  metadataById[buildingId] = placementMetadata;
 }
 
 function readBuildingSize(

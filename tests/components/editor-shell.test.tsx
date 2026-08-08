@@ -16,7 +16,7 @@ import {
 function ignoreEditorAction(): void {}
 
 describe("editor shell", () => {
-  it("renders the reference-visible tools without a Fill button", () => {
+  it("renders every original editing tool, including Fill", () => {
     const toolbarMarkup = renderToStaticMarkup(
       createElement(EditorToolbar, {
         tool: "cursor",
@@ -28,12 +28,12 @@ describe("editor shell", () => {
       }),
     );
 
-    expect(toolbarMarkup.match(/<button/g)).toHaveLength(5);
+    expect(toolbarMarkup.match(/<button/g)).toHaveLength(7);
     expect(toolbarMarkup).toContain('aria-label="Cursor tool"');
     expect(toolbarMarkup).toContain('aria-label="Multi-select tool"');
+    expect(toolbarMarkup).toContain('aria-label="Fill tool"');
     expect(toolbarMarkup).toContain('aria-label="Erase tool"');
     expect(toolbarMarkup).toContain('aria-pressed="true"');
-    expect(toolbarMarkup).not.toContain('aria-label="Fill tool"');
     expect(toolbarMarkup).not.toMatch(/aria-label="Erase tool"[^>]*disabled=""/);
     expect(toolbarMarkup).toMatch(/aria-label="Undo"[^>]*disabled=""/);
     expect(toolbarMarkup).toMatch(/aria-label="Redo"[^>]*disabled=""/);
@@ -47,10 +47,10 @@ describe("editor shell", () => {
         onDelete: ignoreEditorAction,
         onDismiss: ignoreEditorAction,
         onNightLightStateChange: ignoreEditorAction,
-        onRotate: ignoreEditorAction,
+        onCycleAppearance: ignoreEditorAction,
         onTintChange: ignoreEditorAction,
         selection: {
-          canRotate: true,
+          canCycleAppearance: true,
           entityName: "Sprinkler",
           isNightLight: false,
           kind: "item",
@@ -62,61 +62,35 @@ describe("editor shell", () => {
 
     expect(inspectorMarkup).toContain("Sprinkler");
     expect(inspectorMarkup).toContain('aria-label="Dismiss selection"');
-    expect(inspectorMarkup).toContain('aria-label="Rotate selected item"');
+    expect(inspectorMarkup).toContain(
+      'aria-label="Cycle selected item appearance"',
+    );
     expect(inspectorMarkup).toContain('aria-label="Copy selected placement"');
     expect(inspectorMarkup).toContain('aria-label="Delete selected placement"');
   });
 
-  it("renders Menu separately from its collapsed editor actions", () => {
-    const collapsedMenuMarkup = renderToStaticMarkup(
+  it("renders the original direct-action icon bar without a custom menu layer", () => {
+    const menuMarkup = renderToStaticMarkup(
       createElement(EditorMenuBar, {
         activeModalId: null,
-        editorMenuVisibility: "collapsed",
         mapDisplayName: "Standard Farm",
         season: "spring",
         onOpenModal: ignoreEditorAction,
-        onToggleMenu: ignoreEditorAction,
       }),
     );
-    const expandedMenuMarkup = renderToStaticMarkup(
-      createElement(EditorMenuBar, {
-        activeModalId: null,
-        editorMenuVisibility: "expanded",
-        mapDisplayName: "Standard Farm",
-        season: "spring",
-        onOpenModal: ignoreEditorAction,
-        onToggleMenu: ignoreEditorAction,
-        expandedActionsClassName: "planner-workspace__menu-popover",
-      }),
-    );
-
-    expect(collapsedMenuMarkup.match(/<button/g)).toHaveLength(1);
-    expect(collapsedMenuMarkup).toContain('aria-label="Menu"');
-    expect(collapsedMenuMarkup).toContain('aria-expanded="false"');
-    expect(collapsedMenuMarkup).not.toContain(
-      'aria-controls="editor-menu-actions"',
-    );
-    expect(collapsedMenuMarkup).not.toContain("Season");
-    expect(expandedMenuMarkup.match(/<button/g)).toHaveLength(6);
-    expect(expandedMenuMarkup).toContain('aria-label="Menu"');
-    expect(expandedMenuMarkup).toContain('aria-expanded="true"');
-    expect(expandedMenuMarkup).toContain(
-      'aria-controls="editor-menu-actions"',
-    );
-    expect(expandedMenuMarkup).toContain('id="editor-menu-actions"');
-    expect(expandedMenuMarkup).toContain(
-      'class="editor-menu-bar__actions planner-workspace__menu-popover"',
-    );
-    expect(expandedMenuMarkup).toContain('aria-label="Season: spring"');
-    expect(expandedMenuMarkup).toContain(
+    expect(menuMarkup.match(/<button/g)).toHaveLength(6);
+    expect(menuMarkup).toContain('class="menu-bar editor-menu-bar"');
+    expect(menuMarkup).toContain('aria-label="Menu"');
+    expect(menuMarkup).toContain("editor-menu-bar__controls");
+    expect(menuMarkup).not.toContain('editor-menu-actions');
+    expect(menuMarkup).toContain('aria-label="Season: spring"');
+    expect(menuMarkup).toContain(
       'aria-label="Map: Standard Farm"',
     );
-    expect(expandedMenuMarkup).toContain("Season");
-    expect(expandedMenuMarkup).toContain("Map");
-    expect(expandedMenuMarkup).toContain("View");
-    expect(expandedMenuMarkup).toContain("Save");
-    expect(expandedMenuMarkup).toContain("Settings");
-    expect(expandedMenuMarkup).not.toMatch(
+    expect(menuMarkup).toContain('aria-label="View"');
+    expect(menuMarkup).toContain('aria-label="Save"');
+    expect(menuMarkup).toContain('aria-label="Settings"');
+    expect(menuMarkup).not.toMatch(
       /support|login|member|premium|sync|share|feedback/i,
     );
   });
@@ -284,10 +258,12 @@ describe("editor shell", () => {
   it("renders the four catalog categories and a search field", () => {
     const catalogMarkup = renderToStaticMarkup(
       createElement(ItemCatalogPanel, {
+        catalogPresentationChoicesByItemId: new Map(),
         category: "buildings",
         panelPosition: "bottom",
         searchQuery: "",
         selectedCatalogItemId: null,
+        onCatalogItemPresentationChoiceChange: ignoreEditorAction,
         onCatalogItemSelect: ignoreEditorAction,
         onCategoryChange: ignoreEditorAction,
         onSearchQueryChange: ignoreEditorAction,
@@ -304,10 +280,12 @@ describe("editor shell", () => {
   it("connects every catalog tab to its active tabpanel", () => {
     const catalogMarkup = renderToStaticMarkup(
       createElement(ItemCatalogPanel, {
+        catalogPresentationChoicesByItemId: new Map(),
         category: "crops",
         panelPosition: "bottom",
         searchQuery: "",
         selectedCatalogItemId: null,
+        onCatalogItemPresentationChoiceChange: ignoreEditorAction,
         onCatalogItemSelect: ignoreEditorAction,
         onCategoryChange: ignoreEditorAction,
         onSearchQueryChange: ignoreEditorAction,

@@ -160,11 +160,12 @@ describe("catalog loader", () => {
 
     expect(catalog.items.filter((item) => item.category === "building")).toHaveLength(25);
     expect(catalog.items.filter((item) => item.category === "crop")).toHaveLength(50);
-    expect(catalog.items.filter((item) => item.category === "placeable")).toHaveLength(1563);
-    expect(catalog.items.filter((item) => item.category === "floor")).toHaveLength(13);
+    expect(catalog.items.filter((item) => item.category === "placeable")).toHaveLength(1562);
+    expect(catalog.items.filter((item) => item.category === "floor")).toHaveLength(14);
     expect(catalog.items.filter((item) => item.category === "fence")).toHaveLength(5);
     expect(catalog.items.filter((item) => item.category === "decor")).toHaveLength(4);
-    expect(catalog.items).toContainEqual({
+    expect(catalog.items.find((item) => item.id === "building:Building 0"))
+      .toMatchObject({
       id: "building:Building 0",
       name: "Building 0",
       category: "building",
@@ -178,6 +179,14 @@ describe("catalog loader", () => {
         height: 112,
       },
       allowedTools: ["cursor", "multi-select", "erase"],
+      renderingMetadata: {
+        buildingId: "Building 0",
+        kind: "building-multilayer",
+        layers: expect.arrayContaining([
+          expect.objectContaining({ id: "Base" }),
+        ]),
+        sortTileOffset: 0,
+      },
     });
     expect(catalog.items).toContainEqual({
       id: "crop:Crop 0",
@@ -187,6 +196,12 @@ describe("catalog loader", () => {
       textureLocalPath: "/game-assets/1.6.15/tilesheets/crops.png",
       sprite: { kind: "sprite-index", index: 0 },
       allowedTools: ["cursor", "multi-select", "fill", "erase"],
+      renderingMetadata: {
+        kind: "crop",
+        fullyGrownRect: { kind: "source-rect", x: 16, y: 0, width: 16, height: 32 },
+        tintColors: [],
+        hasForageShadow: false,
+      },
     });
     expect(catalog.items).toContainEqual({
       id: "big-craftable:0",
@@ -216,8 +231,8 @@ describe("catalog loader", () => {
         kind: "source-rect",
         x: 0,
         y: 0,
-        width: 64,
-        height: 64,
+        width: 16,
+        height: 16,
       },
       allowedTools: ["cursor", "multi-select", "fill", "erase"],
     });
@@ -229,10 +244,10 @@ describe("catalog loader", () => {
       textureLocalPath: "/game-assets/1.6.15/tilesheets/Fence1.png",
       sprite: {
         kind: "source-rect",
-        x: 0,
-        y: 0,
-        width: 48,
-        height: 352,
+        x: 32,
+        y: 32,
+        width: 16,
+        height: 32,
       },
       allowedTools: ["cursor", "multi-select", "fill", "erase"],
     });

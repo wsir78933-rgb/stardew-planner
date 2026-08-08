@@ -1,4 +1,8 @@
-import type { CatalogItem } from "../catalog";
+import {
+  getFloorCatalogPlacementRequirement,
+  hoeDirtCatalogItemId,
+  type CatalogItem,
+} from "../catalog";
 import {
   restorePlacementSnapshot,
   type PlacementItem,
@@ -19,13 +23,36 @@ export class GameSaveImportError extends Error {
   }
 }
 
+export type ParsedStardewTree =
+  | Readonly<{
+      flipped: boolean;
+      growthStage: number;
+      hasMoss: boolean;
+      kind: "wild-tree";
+      stump: boolean;
+      treeType: string;
+      x: number;
+      y: number;
+    }>
+  | Readonly<{
+      flipped: boolean;
+      growthStage: number;
+      kind: "fruit-tree";
+      stump: boolean;
+      treeId: string;
+      x: number;
+      y: number;
+    }>;
+
 export type ParsedStardewGameSave = Readonly<{
   buildings: readonly Readonly<{
     buildingType: string;
+    nettingStyle?: number;
     x: number;
     y: number;
   }>[];
   crops: readonly Readonly<{
+    hoeDirtState: number;
     isDead: boolean;
     seedIndex: string | null;
     x: number;
@@ -52,6 +79,7 @@ export type ParsedStardewGameSave = Readonly<{
     y: number;
   }>[];
   season: string;
+  trees: readonly ParsedStardewTree[];
   unmappedEntries: readonly GameSaveUnmappedEntry[];
   whichFarm: string;
 }>;
@@ -77,7 +105,7 @@ const mapIdByFarmType = new Map<string, string>([
 ]);
 
 const supportedSeasons = ["spring", "summer", "fall", "winter"] as const;
-const fenceObjectIds = new Set(["298", "322", "323", "324"]);
+const fenceObjectIds = new Set(["298", "322", "323", "324", "325"]);
 
 export function createImportedGameSaveState(
   parsedStardewGameSave: ParsedStardewGameSave,
@@ -101,6 +129,16 @@ export function createImportedGameSaveState(
     ),
     ...createImportedFloorings(
       parsedStardewGameSave.floorings,
+      catalogItemsById,
+      unmappedEntries,
+    ),
+    ...createImportedEmptyHoeDirts(
+      parsedStardewGameSave.crops,
+      catalogItemsById,
+      unmappedEntries,
+    ),
+    ...createImportedTrees(
+      parsedStardewGameSave.trees,
       catalogItemsById,
       unmappedEntries,
     ),
@@ -135,6 +173,53 @@ export function createImportedGameSaveState(
   };
 }
 
+function createImportedTrees(
+  savedTrees: ParsedStardewGameSave["trees"],
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  unmappedEntries: GameSaveUnmappedEntry[],
+): readonly Omit<PlacementItem, "instanceId">[] {
+  const importedTrees: Array<Omit<PlacementItem, "instanceId">> = [];
+
+  for (const savedTree of savedTrees) {
+    if (savedTree.stump) {
+      continue;
+    }
+
+    const itemId = savedTree.kind === "wild-tree"
+      ? `wildtree_${savedTree.treeType}`
+      : `fruittree_${savedTree.treeId}`;
+    const catalogItem = catalogItemsById.get(itemId);
+
+    if (catalogItem?.category !== "placeable") {
+      unmappedEntries.push({
+        kind: savedTree.kind === "wild-tree" ? "tree" : "fruit-tree",
+        sourceId: itemId,
+      });
+      continue;
+    }
+
+    const growthStageThreshold = savedTree.kind === "wild-tree" ? 5 : 4;
+    importedTrees.push(
+      createImportedPlacementItem({
+        catalogItem,
+        flipped: savedTree.flipped,
+        ...(savedTree.growthStage < growthStageThreshold
+          ? { growthStage: savedTree.growthStage }
+          : {}),
+        itemId,
+        layer: "item",
+        tintColor: "#ffffff",
+        variant:
+          savedTree.kind === "wild-tree" && savedTree.hasMoss ? 1 : 0,
+        x: savedTree.x,
+        y: savedTree.y,
+      }),
+    );
+  }
+
+  return importedTrees;
+}
+
 function createImportedBuildings(
   savedBuildings: ParsedStardewGameSave["buildings"],
   catalogItemsById: ReadonlyMap<string, CatalogItem>,
@@ -154,6 +239,9 @@ function createImportedBuildings(
     importedBuildings.push({
       buildingId: savedBuilding.buildingType,
       instanceId: importedBuildings.length + 1,
+      ...(savedBuilding.nettingStyle === undefined
+        ? {}
+        : { variant: savedBuilding.nettingStyle }),
       x: savedBuilding.x,
       y: savedBuilding.y,
     });
@@ -228,6 +316,41 @@ function createImportedFloorings(
   return importedFloorings;
 }
 
+function createImportedEmptyHoeDirts(
+  savedCrops: ParsedStardewGameSave["crops"],
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  unmappedEntries: GameSaveUnmappedEntry[],
+): readonly Omit<PlacementItem, "instanceId">[] {
+  const importedEmptyHoeDirts: Array<Omit<PlacementItem, "instanceId">> = [];
+
+  for (const savedCrop of savedCrops) {
+    if (savedCrop.isDead || savedCrop.seedIndex !== null) continue;
+
+    const hoeDirtCatalogItem = catalogItemsById.get(hoeDirtCatalogItemId);
+    if (hoeDirtCatalogItem?.category !== "floor") {
+      unmappedEntries.push({
+        kind: "hoe-dirt",
+        sourceId: hoeDirtCatalogItemId,
+      });
+      continue;
+    }
+
+    getFloorCatalogPlacementRequirement(hoeDirtCatalogItem);
+    importedEmptyHoeDirts.push(createImportedPlacementItem({
+      catalogItem: hoeDirtCatalogItem,
+      flipped: false,
+      itemId: hoeDirtCatalogItemId,
+      layer: "path",
+      tintColor: "#ffffff",
+      variant: savedCrop.hoeDirtState === 1 ? 1 : 0,
+      x: savedCrop.x,
+      y: savedCrop.y,
+    }));
+  }
+
+  return importedEmptyHoeDirts;
+}
+
 function createImportedResourceClumps(
   savedResourceClumps: ParsedStardewGameSave["resourceClumps"],
   catalogItemsById: ReadonlyMap<string, CatalogItem>,
@@ -269,13 +392,15 @@ function createImportedCrops(
   const importedCrops = [] as Array<PlacementSnapshot["crops"][number]>;
 
   for (const savedCrop of savedCrops) {
-    if (savedCrop.isDead || savedCrop.seedIndex === null) {
+    if (savedCrop.isDead) {
       unmappedEntries.push({
-        kind: savedCrop.isDead ? "dead-crop" : "hoe-dirt",
+        kind: "dead-crop",
         sourceId: savedCrop.seedIndex ?? "none",
       });
       continue;
     }
+
+    if (savedCrop.seedIndex === null) continue;
 
     const cropId = `crop:${savedCrop.seedIndex}`;
     const catalogItem = catalogItemsById.get(cropId);
@@ -295,6 +420,7 @@ function createImportedPlacementItem(
   input: Readonly<{
     catalogItem: CatalogItem;
     flipped: boolean;
+    growthStage?: number;
     itemId: string;
     layer: PlacementItemLayer;
     tintColor: string;
@@ -322,6 +448,9 @@ function createImportedPlacementItem(
     variant: input.variant,
     x: input.x,
     y: input.y,
+    ...(input.growthStage === undefined
+      ? {}
+      : { growthStage: input.growthStage }),
   };
 }
 
@@ -343,7 +472,9 @@ function getObjectCatalogMapping(
   if (fenceObjectIds.has(savedObject.itemId)) {
     return {
       category: "fence",
-      itemId: `fence:${savedObject.itemId}`,
+      itemId: savedObject.itemId === "325"
+        ? "object:325"
+        : `fence:${savedObject.itemId}`,
       layer: "fence",
     };
   }
@@ -458,12 +589,14 @@ function assertParsedStardewGameSave(
   assertArray(parsedStardewGameSave.floorings, "floorings");
   assertArray(parsedStardewGameSave.objects, "objects");
   assertArray(parsedStardewGameSave.resourceClumps, "resourceClumps");
+  assertArray(parsedStardewGameSave.trees, "trees");
   assertArray(parsedStardewGameSave.unmappedEntries, "unmappedEntries");
   parsedStardewGameSave.buildings.forEach(assertSavedBuilding);
   parsedStardewGameSave.crops.forEach(assertSavedCrop);
   parsedStardewGameSave.floorings.forEach(assertSavedFlooring);
   parsedStardewGameSave.objects.forEach(assertSavedObject);
   parsedStardewGameSave.resourceClumps.forEach(assertSavedResourceClump);
+  parsedStardewGameSave.trees.forEach(assertSavedTree);
   parsedStardewGameSave.unmappedEntries.forEach(assertUnmappedEntry);
 }
 
@@ -486,12 +619,22 @@ function assertNonEmptyString(value: unknown, fieldName: string): asserts value 
 function assertSavedBuilding(value: unknown, entryIndex: number): void {
   const savedBuilding = assertNonNullRecord(value, `buildings[${String(entryIndex)}]`);
   assertNonEmptyString(savedBuilding.buildingType, `buildings[${String(entryIndex)}].buildingType`);
+  if (Object.hasOwn(savedBuilding, "nettingStyle")) {
+    assertSafeInteger(
+      savedBuilding.nettingStyle,
+      `buildings[${String(entryIndex)}].nettingStyle`,
+    );
+  }
   assertSafeInteger(savedBuilding.x, `buildings[${String(entryIndex)}].x`);
   assertSafeInteger(savedBuilding.y, `buildings[${String(entryIndex)}].y`);
 }
 
 function assertSavedCrop(value: unknown, entryIndex: number): void {
   const savedCrop = assertNonNullRecord(value, `crops[${String(entryIndex)}]`);
+  assertSafeInteger(
+    savedCrop.hoeDirtState,
+    `crops[${String(entryIndex)}].hoeDirtState`,
+  );
   assertBoolean(savedCrop.isDead, `crops[${String(entryIndex)}].isDead`);
   assertStringOrNull(savedCrop.seedIndex, `crops[${String(entryIndex)}].seedIndex`);
   assertSafeInteger(savedCrop.x, `crops[${String(entryIndex)}].x`);
@@ -524,6 +667,34 @@ function assertSavedResourceClump(value: unknown, entryIndex: number): void {
   );
   assertSafeInteger(savedResourceClump.x, `resourceClumps[${String(entryIndex)}].x`);
   assertSafeInteger(savedResourceClump.y, `resourceClumps[${String(entryIndex)}].y`);
+}
+
+function assertSavedTree(value: unknown, entryIndex: number): void {
+  const fieldPath = `trees[${String(entryIndex)}]`;
+  const savedTree = assertNonNullRecord(value, fieldPath);
+  assertBoolean(savedTree.flipped, `${fieldPath}.flipped`);
+  assertNonNegativeSafeInteger(
+    savedTree.growthStage,
+    `${fieldPath}.growthStage`,
+  );
+  assertBoolean(savedTree.stump, `${fieldPath}.stump`);
+  assertSafeInteger(savedTree.x, `${fieldPath}.x`);
+  assertSafeInteger(savedTree.y, `${fieldPath}.y`);
+
+  if (savedTree.kind === "wild-tree") {
+    assertBoolean(savedTree.hasMoss, `${fieldPath}.hasMoss`);
+    assertNonEmptyString(savedTree.treeType, `${fieldPath}.treeType`);
+    return;
+  }
+
+  if (savedTree.kind === "fruit-tree") {
+    assertNonEmptyString(savedTree.treeId, `${fieldPath}.treeId`);
+    return;
+  }
+
+  throw new GameSaveImportError(
+    `Game save import field ${JSON.stringify(`${fieldPath}.kind`)} must be "wild-tree" or "fruit-tree"; received ${describeValue(savedTree.kind)}.`,
+  );
 }
 
 function assertUnmappedEntry(value: unknown, entryIndex: number): void {
@@ -570,6 +741,18 @@ function assertSafeInteger(value: unknown, fieldName: string): void {
   if (!Number.isSafeInteger(value)) {
     throw new GameSaveImportError(
       `Game save import field ${JSON.stringify(fieldName)} must be a safe integer; received ${describeValue(value)}.`,
+    );
+  }
+}
+
+function assertNonNegativeSafeInteger(value: unknown, fieldName: string): void {
+  if (
+    typeof value !== "number"
+    || !Number.isSafeInteger(value)
+    || value < 0
+  ) {
+    throw new GameSaveImportError(
+      `Game save import field ${JSON.stringify(fieldName)} must be a non-negative safe integer; received ${describeValue(value)}.`,
     );
   }
 }

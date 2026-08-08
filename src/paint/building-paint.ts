@@ -22,7 +22,7 @@ export type BuildingPaintDefinition = Readonly<{
 }>;
 
 type PaintableBuildingMetadata = Readonly<{
-  buildingId: string;
+  buildingIds: readonly string[];
   paintMaskFilename: string;
 }>;
 
@@ -31,19 +31,63 @@ const localAssetRoot = "/game-assets/1.6.15/buildings";
 const paintableBuildingMetadataByPaintDataName: Readonly<
   Record<string, PaintableBuildingMetadata>
 > = {
-  House: { buildingId: "Farmhouse", paintMaskFilename: "houses_PaintMask.png" },
-  "Log Cabin": { buildingId: "Log Cabin", paintMaskFilename: "Log Cabin_PaintMask.png" },
-  "Stone Cabin": { buildingId: "Stone Cabin", paintMaskFilename: "Stone Cabin_PaintMask.png" },
-  "Plank Cabin": { buildingId: "Plank Cabin", paintMaskFilename: "Plank Cabin_PaintMask.png" },
-  "Beach Cabin": { buildingId: "Beach Cabin", paintMaskFilename: "Beach Cabin_PaintMask.png" },
-  "Neighbor Cabin": { buildingId: "Neighbor Cabin", paintMaskFilename: "Neighbor Cabin_PaintMask.png" },
-  "Rustic Cabin": { buildingId: "Rustic Cabin", paintMaskFilename: "Rustic Cabin_PaintMask.png" },
-  "Trailer Cabin": { buildingId: "Trailer Cabin", paintMaskFilename: "Trailer Cabin_PaintMask.png" },
-  Stable: { buildingId: "Stable", paintMaskFilename: "Stable_PaintMask.png" },
-  "Big Shed": { buildingId: "Big Shed", paintMaskFilename: "Big Shed_PaintMask.png" },
-  "Deluxe Coop": { buildingId: "Deluxe Coop", paintMaskFilename: "Deluxe Coop_PaintMask.png" },
-  "Deluxe Barn": { buildingId: "Deluxe Barn", paintMaskFilename: "Deluxe Barn_PaintMask.png" },
+  House: {
+    buildingIds: ["Farmhouse", "Farmhouse_1", "Farmhouse_2"],
+    paintMaskFilename: "houses_PaintMask.png",
+  },
+  "Log Cabin": {
+    buildingIds: ["Log Cabin_2"],
+    paintMaskFilename: "Log Cabin_PaintMask.png",
+  },
+  // The frozen FI/EI map has no "Stone Cabin" ID. Its source record is
+  // named "Cabin", so this PaintData entry intentionally projects no item.
+  "Stone Cabin": { buildingIds: [], paintMaskFilename: "Stone Cabin_PaintMask.png" },
+  "Plank Cabin": {
+    buildingIds: ["Plank Cabin_2"],
+    paintMaskFilename: "Plank Cabin_PaintMask.png",
+  },
+  "Beach Cabin": {
+    buildingIds: ["Beach Cabin_2"],
+    paintMaskFilename: "Beach Cabin_PaintMask.png",
+  },
+  "Neighbor Cabin": {
+    buildingIds: ["Neighbor Cabin_2"],
+    paintMaskFilename: "Neighbor Cabin_PaintMask.png",
+  },
+  "Rustic Cabin": {
+    buildingIds: ["Rustic Cabin_2"],
+    paintMaskFilename: "Rustic Cabin_PaintMask.png",
+  },
+  "Trailer Cabin": {
+    buildingIds: ["Trailer Cabin_2"],
+    paintMaskFilename: "Trailer Cabin_PaintMask.png",
+  },
+  Stable: { buildingIds: ["Stable"], paintMaskFilename: "Stable_PaintMask.png" },
+  "Big Shed": { buildingIds: ["Big Shed"], paintMaskFilename: "Big Shed_PaintMask.png" },
+  "Deluxe Coop": {
+    buildingIds: ["Deluxe Coop"],
+    paintMaskFilename: "Deluxe Coop_PaintMask.png",
+  },
+  "Deluxe Barn": {
+    buildingIds: ["Deluxe Barn"],
+    paintMaskFilename: "Deluxe Barn_PaintMask.png",
+  },
 };
+
+const lockedPaintDataByName = {
+  House: "Building/-50 -10/Roof/-25 0/Trim/-25 -8",
+  "Log Cabin": "Building/-20 20/Roof/-15 5/Trim/-10 5",
+  "Stone Cabin": "Building/-15 25/Roof/-15 5/Trim/-5 5",
+  "Plank Cabin": "Building/-55 -20/Roof/-10 5/Trim/-55 -30",
+  "Beach Cabin": "Building/-10 0/Roof/0 5/Trim/-5 5",
+  "Neighbor Cabin": "Building/-10 0/Roof/-15 10/Trim/-10 5",
+  "Rustic Cabin": "Building/-20 5/Roof/-5 5/Trim/-5 0",
+  "Trailer Cabin": "Building/-5 0/Roof/-5 5/Trim/-5 0",
+  Stable: "Building/-20 5/Roof/-25 0/Trim/-15 0",
+  "Big Shed": "Building/-45 -10/Roof/-20 5/Trim/-25 0",
+  "Deluxe Coop": "Building/-25 0/Roof/-15 5/Trim/-25 0",
+  "Deluxe Barn": "Building/-15 0/Roof/-10 5/Trim/-10 5",
+} as const;
 
 export function createDefaultBuildingPaintColors(): BuildingPaintColors {
   return { color1: "#ffffff", color2: "#ffffff", color3: "#ffffff" };
@@ -63,11 +107,14 @@ export function parseBuildingPaintDefinitions(
       continue;
     }
 
-    paintDefinitions[paintableBuildingMetadata.buildingId] = {
-      buildingId: paintableBuildingMetadata.buildingId,
-      channels: parseBuildingPaintChannels(paintDataName, rawChannelSource),
-      paintMaskLocalPath: `${localAssetRoot}/${paintableBuildingMetadata.paintMaskFilename}`,
-    };
+    const channels = parseBuildingPaintChannels(paintDataName, rawChannelSource);
+    for (const buildingId of paintableBuildingMetadata.buildingIds) {
+      paintDefinitions[buildingId] = {
+        buildingId,
+        channels,
+        paintMaskLocalPath: `${localAssetRoot}/${paintableBuildingMetadata.paintMaskFilename}`,
+      };
+    }
   }
 
   return paintDefinitions;
@@ -86,6 +133,12 @@ export function getBuildingPaintDefinition(
   return parseBuildingPaintDefinitions(rawPaintData)[buildingId] ?? null;
 }
 
+export function getLockedBuildingPaintDefinition(
+  buildingId: string,
+): BuildingPaintDefinition | null {
+  return getBuildingPaintDefinition(buildingId, lockedPaintDataByName);
+}
+
 export function isBuildingPaintable(buildingId: string): boolean {
   if (typeof buildingId !== "string" || buildingId.length === 0) {
     throw new TypeError(
@@ -95,7 +148,7 @@ export function isBuildingPaintable(buildingId: string): boolean {
 
   return Object.values(paintableBuildingMetadataByPaintDataName).some(
     (paintableBuildingMetadata) =>
-      paintableBuildingMetadata.buildingId === buildingId,
+      paintableBuildingMetadata.buildingIds.includes(buildingId),
   );
 }
 
@@ -110,7 +163,7 @@ export function getBuildingPaintMaskLocalPath(buildingId: string): string | null
     paintableBuildingMetadataByPaintDataName,
   ).find(
     (candidatePaintableBuildingMetadata) =>
-      candidatePaintableBuildingMetadata.buildingId === buildingId,
+      candidatePaintableBuildingMetadata.buildingIds.includes(buildingId),
   );
 
   return paintableBuildingMetadata === undefined

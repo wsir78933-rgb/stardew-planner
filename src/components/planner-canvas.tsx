@@ -11,19 +11,8 @@ import {
   type EditorDisplayOptions,
 } from "../editor/editor-display-options";
 import {
-  farmhouse2Composite,
   getPlannerMapById,
-  gingerIslandOverlays,
-  spouseRoomLayouts,
 } from "../maps/map-catalog";
-import {
-  composeMapTileOverlays,
-  type MapTileCompositionOptions,
-} from "../maps/map-tile-composition";
-import {
-  createInitialMapRenderOptions,
-  type MapRenderOptions,
-} from "../maps/map-render-options";
 import {
   createMapPlacementGrid,
   type MapPlacementGrid,
@@ -73,6 +62,11 @@ import {
   type PlacementRenderEntry,
 } from "../rendering/placement-rendering";
 import {
+  resolvePlacementTextureEntries,
+  type ResolvedPlacementTextureEntry,
+} from "../rendering/resolved-placement-texture";
+import { initializePlannerTextureAssets } from "../rendering/planner-texture-assets";
+import {
   createMapDisplayOverlayTiles,
   createPlacementCoverageOverlayRectangles,
   createResourceClumpOverlayEntries,
@@ -83,11 +77,12 @@ import {
   getMapScreenshotFooterHeight,
 } from "../rendering/map-screenshot";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
-import { parseTmxMap } from "../tmx/parse-tmx-map";
+import { resolveInitialPlannerTextureAssetPath } from "../rendering/initial-planner-texture-path";
 import type { TmxMap } from "../tmx/tmx-types";
+import type { EditorPerformanceMarker } from "../performance/editor-performance-marks";
+import type { PreparedDefaultMap } from "../resources/default-map-resource";
 
 const localGameAssetRoot = "/game-assets/1.6.15/";
-const defaultMapRenderOptions = createInitialMapRenderOptions();
 
 type PointerInteractionMode = "navigate" | "rectangle" | "move-selected";
 
@@ -95,13 +90,19 @@ export type PlannerCanvasProperties = Readonly<{
   catalogItems?: readonly CatalogItem[];
   displayOptions?: EditorDisplayOptions;
   isXRayActive?: boolean;
+  wheelZoomEnabled?: boolean;
   leftHandMode?: boolean;
   mapId: string;
-  mapRenderOptions?: MapRenderOptions;
   pointerInteractionMode?: PointerInteractionMode;
   placementSnapshot?: PlacementSnapshot;
   selectedPlacementKeys?: readonly string[];
   season: TilesheetSeason;
+  preparedCanvasResources: PlannerCanvasPreparedResources;
+  isResourceGenerationCurrent?: (resourceGeneration: number) => boolean;
+  performanceMarker?: EditorPerformanceMarker;
+  onCanvasError?: (message: string) => void;
+  onCanvasReady?: () => void;
+  onInteractive?: () => void;
   showJoystick?: boolean;
   showResourceClumpSpawnLocations?: boolean;
   onMapPlacementGridReady?: (
@@ -113,6 +114,7 @@ export type PlannerCanvasProperties = Readonly<{
     mapImageExporter: MapImageExporter | null,
   ) => void;
   onNudgeSelectedPlacements?: (direction: PlannerJoystickDirection) => void;
+  onMoveSelectedPlacements?: (tileDelta: Readonly<{ x: number; y: number }>) => void;
   onMapTileClick?: (mapId: string, mapTileCoordinates: MapPointerTile) => void;
   onMapTileRectangle?: (
     mapId: string,
@@ -131,6 +133,19 @@ export type PlannerCanvasProperties = Readonly<{
     interiorDecorKind: InteriorDecorKind,
   ) => void;
 }>;
+
+export type PlannerCanvasPreparedResources = Readonly<{
+  pixi: PixiModule;
+  preparedMap: PreparedDefaultMap;
+  resourceGeneration: number;
+}>;
+
+export function shouldRenderPlannerJoystick(
+  showJoystickPreference: boolean,
+  selectedPlacementKeys: readonly string[],
+): boolean {
+  return showJoystickPreference && selectedPlacementKeys.length > 0;
+}
 
 export type MapPlacementGridReadyNotificationProperties = Readonly<{
   isMapLifecycleCurrent: () => boolean;
@@ -177,15 +192,21 @@ type PlannerCameraControlsProperties = Readonly<{
   canvasElement: HTMLCanvasElement;
   getCameraGeometry: () => CameraGeometry;
   getCameraState: () => CameraState;
+  getWheelZoomEnabled?: () => boolean;
   getPointerInteractionMode?: () => PointerInteractionMode;
   getMapTileAtPointer?: (
     pointerCoordinates: PointerCoordinates,
   ) => MapPointerTile | null;
+  getPlacementDragTarget?: (
+    pointerCoordinates: PointerCoordinates,
+  ) => PlacementDragTarget | null;
+  getPlacementDragTileSize?: () => Readonly<{ height: number; width: number }>;
   onMapTileClick?: (mapTileCoordinates: MapPointerTile) => void;
   onMapTileRectangle?: (
     startMapTileCoordinates: MapPointerTile,
     endMapTileCoordinates: MapPointerTile,
   ) => void;
+  onMoveSelectedPlacements?: (tileDelta: Readonly<{ x: number; y: number }>) => void;
   setCameraState: (cameraState: CameraState) => void;
 }>;
 
@@ -193,15 +214,311 @@ type PlannerCameraControls = Readonly<{
   dispose(): void;
 }>;
 
+export type PlannerCanvasInteractionBindingPorts = Readonly<{
+  attachCameraControls(): PlannerCameraControls;
+  createResizeObserver(onResize: () => void): Readonly<{
+    observe(element: Element): void;
+    disconnect(): void;
+  }>;
+  windowPort: Readonly<{
+    addEventListener(eventName: "resize", listener: () => void): void;
+    removeEventListener(eventName: "resize", listener: () => void): void;
+  }>;
+}>;
+
+export type PlannerCanvasInteractionBinding = Readonly<{
+  dispose(): void;
+}>;
+
+export function bindPlannerCanvasInteractions(
+  canvasHostElement: Element,
+  onResize: () => void,
+  ports: PlannerCanvasInteractionBindingPorts,
+): PlannerCanvasInteractionBinding {
+  let hasDisposed = false;
+  let cameraControls: PlannerCameraControls | null = null;
+  let resizeObserver: ReturnType<
+    PlannerCanvasInteractionBindingPorts["createResizeObserver"]
+  > | null = null;
+  let didAddWindowResizeListener = false;
+
+  const dispose = (): void => {
+    if (hasDisposed) {
+      return;
+    }
+    hasDisposed = true;
+    resizeObserver?.disconnect();
+    if (didAddWindowResizeListener) {
+      ports.windowPort.removeEventListener("resize", onResize);
+    }
+    cameraControls?.dispose();
+  };
+
+  try {
+    cameraControls = ports.attachCameraControls();
+    resizeObserver = ports.createResizeObserver(onResize);
+    resizeObserver.observe(canvasHostElement);
+    ports.windowPort.addEventListener("resize", onResize);
+    didAddWindowResizeListener = true;
+    return { dispose };
+  } catch (caughtError) {
+    dispose();
+    throw caughtError;
+  }
+}
+
+export type PlannerCanvasInitializationDependencies = readonly [
+  mapId: string,
+  season: TilesheetSeason,
+  interiorDecorStateRevision: string,
+  pixi: PixiModule,
+  preparedMap: PreparedDefaultMap,
+  resourceGeneration: number,
+];
+
+export function getPlannerCanvasInitializationDependencies(
+  mapId: string,
+  season: TilesheetSeason,
+  interiorDecorStateRevision: string,
+  preparedCanvasResources: PlannerCanvasPreparedResources,
+): PlannerCanvasInitializationDependencies {
+  return [
+    mapId,
+    season,
+    interiorDecorStateRevision,
+    preparedCanvasResources.pixi,
+    preparedCanvasResources.preparedMap,
+    preparedCanvasResources.resourceGeneration,
+  ];
+}
+
 type PlacementOverlayRenderer = () => void;
 type MapDisplayOverlayRenderer = () => void;
 type XRayRenderer = () => void;
 
-type PlacementSprite = Readonly<{
+export type PlacementSpriteAnimation = Readonly<{
+  update(currentTimeMilliseconds: number): boolean;
+}>;
+
+export type PlacementSprite = Readonly<{
+  animation: PlacementSpriteAnimation | null;
+  animationFrameTextures: readonly PixiTexture[];
+  placementKey: string;
   sprite: import("pixi.js").Sprite;
   frameTexture: PixiTexture | null;
   paintedTexture: PixiTexture | null;
 }>;
+
+type PlacementDragTarget = Readonly<{
+  sprites: readonly PlacementSprite[];
+}>;
+
+export type PlacementAnimationController = Readonly<{
+  dispose(): void;
+  replaceAnimations(animations: readonly PlacementSpriteAnimation[]): void;
+}>;
+
+const placementAnimationIntervalMilliseconds = 100;
+
+export function createPlacementAnimationController(
+  renderAnimatedPlacements: () => void,
+): PlacementAnimationController {
+  if (typeof renderAnimatedPlacements !== "function") {
+    throw new TypeError(
+      `Placement animation render callback must be a function; received ${describeValue(renderAnimatedPlacements)}.`,
+    );
+  }
+
+  let animationInterval: ReturnType<typeof setInterval> | null = null;
+  let currentAnimations: readonly PlacementSpriteAnimation[] = [];
+  let hasDisposed = false;
+
+  const stopAnimationInterval = (): void => {
+    if (animationInterval !== null) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+  };
+
+  return {
+    dispose(): void {
+      if (hasDisposed) {
+        return;
+      }
+
+      hasDisposed = true;
+      currentAnimations = [];
+      stopAnimationInterval();
+    },
+    replaceAnimations(animations): void {
+      if (hasDisposed) {
+        throw new Error(
+          "Placement animation controller cannot replace animations after disposal.",
+        );
+      }
+      assertPlacementSpriteAnimations(animations);
+      stopAnimationInterval();
+      currentAnimations = animations;
+
+      if (currentAnimations.length === 0) {
+        return;
+      }
+
+      animationInterval = setInterval(() => {
+        const currentTimeMilliseconds = performance.now();
+        let didChangeVisualState = false;
+
+        for (const animation of currentAnimations) {
+          didChangeVisualState =
+            animation.update(currentTimeMilliseconds) || didChangeVisualState;
+        }
+
+        if (didChangeVisualState) {
+          renderAnimatedPlacements();
+        }
+      }, placementAnimationIntervalMilliseconds);
+    },
+  };
+}
+
+function assertPlacementSpriteAnimations(
+  animations: readonly PlacementSpriteAnimation[],
+): void {
+  if (!Array.isArray(animations)) {
+    throw new TypeError(
+      `Placement animations must be an array; received ${describeValue(animations)}.`,
+    );
+  }
+
+  for (let animationIndex = 0; animationIndex < animations.length; animationIndex += 1) {
+    const animation = animations[animationIndex];
+
+    if (
+      typeof animation !== "object"
+      || animation === null
+      || typeof animation.update !== "function"
+    ) {
+      throw new TypeError(
+        `Placement animation at index ${String(animationIndex)} must expose an update function; received ${describeValue(animation)}.`,
+      );
+    }
+  }
+}
+
+export type PlannerCanvasPlacementRenderStatus = "error" | "ready" | "stale";
+
+export type SettlePlannerCanvasPlacementRenderInput<PlacementSpriteRecord> =
+  Readonly<{
+    createPlacementSprites: () => Promise<readonly PlacementSpriteRecord[]>;
+    isRenderCurrent: () => boolean;
+    mapId: string;
+    onCurrentCommitFailure: (
+      placementSprites: readonly PlacementSpriteRecord[],
+    ) => void;
+    onCurrentError: (message: string, caughtError: unknown) => void;
+    onCurrentReady: (
+      placementSprites: readonly PlacementSpriteRecord[],
+      claimPlacementSpriteOwnership: () => void,
+    ) => void;
+    onStaleReady: (placementSprites: readonly PlacementSpriteRecord[]) => void;
+  }>;
+
+export async function settlePlannerCanvasPlacementRender<PlacementSpriteRecord>(
+  input: SettlePlannerCanvasPlacementRenderInput<PlacementSpriteRecord>,
+): Promise<PlannerCanvasPlacementRenderStatus> {
+  let placementSprites: readonly PlacementSpriteRecord[];
+  try {
+    placementSprites = await input.createPlacementSprites();
+  } catch (caughtError) {
+    if (!input.isRenderCurrent()) {
+      return "stale";
+    }
+    input.onCurrentError(
+      formatPlannerCanvasError(input.mapId, caughtError),
+      caughtError,
+    );
+    return "error";
+  }
+
+  if (!input.isRenderCurrent()) {
+    input.onStaleReady(placementSprites);
+    return "stale";
+  }
+  let hasClaimedPlacementSpriteOwnership = false;
+  try {
+    input.onCurrentReady(placementSprites, () => {
+      hasClaimedPlacementSpriteOwnership = true;
+    });
+    return "ready";
+  } catch (caughtError) {
+    let reportedError = caughtError;
+    if (!hasClaimedPlacementSpriteOwnership) {
+      try {
+        input.onCurrentCommitFailure(placementSprites);
+      } catch (rollbackError) {
+        reportedError = new AggregateError(
+          [caughtError, rollbackError],
+          "Placement sprite commit and rollback both failed.",
+        );
+      }
+    }
+    input.onCurrentError(
+      formatPlannerCanvasError(input.mapId, reportedError),
+      reportedError,
+    );
+    return "error";
+  }
+}
+
+export function reportCurrentPlannerCanvasError(
+  input: Readonly<{
+    isMapLifecycleCurrent: () => boolean;
+    message: string;
+    onCurrentError: (message: string) => void;
+  }>,
+): boolean {
+  if (!input.isMapLifecycleCurrent()) {
+    return false;
+  }
+  input.onCurrentError(input.message);
+  return true;
+}
+
+export async function createPlacementSpriteBatch<PlacementSpriteRecord>(
+  input: Readonly<{
+    destroyCreatedPlacementSprites: (
+      createdPlacementSprites: readonly PlacementSpriteRecord[],
+    ) => void;
+    placementSpritePromises: readonly Promise<PlacementSpriteRecord>[];
+  }>,
+): Promise<readonly PlacementSpriteRecord[]> {
+  const settledPlacementSprites = await Promise.allSettled(
+    input.placementSpritePromises,
+  );
+  const createdPlacementSprites = settledPlacementSprites.flatMap(
+    (settledPlacementSprite) =>
+      settledPlacementSprite.status === "fulfilled"
+        ? [settledPlacementSprite.value]
+        : [],
+  );
+  const firstPlacementFailure = settledPlacementSprites.find(
+    (settledPlacementSprite) => settledPlacementSprite.status === "rejected",
+  );
+
+  if (firstPlacementFailure === undefined) {
+    return createdPlacementSprites;
+  }
+
+  try {
+    input.destroyCreatedPlacementSprites(createdPlacementSprites);
+  } catch (cleanupError) {
+    throw new AggregateError(
+      [firstPlacementFailure.reason, cleanupError],
+      "Placement sprite creation and rollback both failed.",
+    );
+  }
+  throw firstPlacementFailure.reason;
+}
 
 type PointerCoordinates = Readonly<{
   x: number;
@@ -216,6 +533,16 @@ type PointerDragState = Readonly<{
   lastCoordinates: PointerCoordinates;
 }>;
 
+type PlacementDragState = Readonly<{
+  baseSpritePositions: ReadonlyMap<import("pixi.js").Sprite, Readonly<{ x: number; y: number }>>;
+  hasExceededPlacementThreshold: boolean;
+  lastTileDelta: Readonly<{ x: number; y: number }>;
+  pointerId: number;
+  selectedPlacementSprites: readonly PlacementSprite[];
+  startCoordinates: PointerCoordinates;
+  startMapTileCoordinates: MapPointerTile;
+}>;
+
 type PinchGestureState = Readonly<{
   initialCameraState: CameraState;
   initialCenterCoordinates: PointerCoordinates;
@@ -223,6 +550,7 @@ type PinchGestureState = Readonly<{
 }>;
 
 const pointerPanThreshold = 3;
+const placementDragThreshold = 5;
 const keyboardZoomMultiplier = 1.08;
 const xRayPlacementContainerAlpha = 0.18;
 
@@ -236,17 +564,132 @@ export function getPlacementContainerAlpha(isXRayActive: boolean): number {
   return isXRayActive ? xRayPlacementContainerAlpha : 1;
 }
 
+export function assertPreparedCanvasResourcesMatchRequestedMap(
+  preparedCanvasResources: PlannerCanvasPreparedResources,
+  requestedMapId: string,
+  requestedSeason: TilesheetSeason,
+): void {
+  if (preparedCanvasResources.preparedMap.mapId !== requestedMapId) {
+    throw new Error(
+      `Prepared Canvas mapId ${JSON.stringify(preparedCanvasResources.preparedMap.mapId)} does not match requested mapId ${JSON.stringify(requestedMapId)}.`,
+    );
+  }
+  if (preparedCanvasResources.preparedMap.season !== requestedSeason) {
+    throw new Error(
+      `Prepared Canvas season ${JSON.stringify(preparedCanvasResources.preparedMap.season)} does not match requested season ${JSON.stringify(requestedSeason)}.`,
+    );
+  }
+  if (!Number.isInteger(preparedCanvasResources.resourceGeneration) || preparedCanvasResources.resourceGeneration < 0) {
+    throw new TypeError(
+      `Prepared Canvas resourceGeneration must be a non-negative integer; received ${JSON.stringify(preparedCanvasResources.resourceGeneration)}.`,
+    );
+  }
+}
+
+export function getPlannerCanvasRenderingContract(
+  preparedMap: PreparedDefaultMap,
+  renderedMap: TmxMap,
+  createRenderingContract: typeof createMapRenderingContract =
+    createMapRenderingContract,
+): MapRenderingContract {
+  if (renderedMap === preparedMap.parsedMap) {
+    return preparedMap.renderingContract;
+  }
+
+  return createRenderingContract({
+    mapId: preparedMap.mapId,
+    parsedMap: renderedMap,
+    requestedSeason: preparedMap.season,
+  });
+}
+
+export type PlannerCanvasCleanupOperations = Readonly<{
+  disposeInteractionBinding(): void;
+  disposeMapDisplayOverlay(): void;
+  disposePlacementOverlay(): void;
+  clearJoystickCameraPan(): void;
+  clearMapImageExporter(): void;
+  destroyResourceClumpFrameTextures(): void;
+  destroyPixiApplication(): void;
+  clearCanvasHost(): void;
+}>;
+
+export function createPlannerCanvasCleanup(
+  cleanupOperations: PlannerCanvasCleanupOperations,
+): () => void {
+  let hasCleanedUp = false;
+
+  return (): void => {
+    if (hasCleanedUp) {
+      return;
+    }
+    hasCleanedUp = true;
+    cleanupOperations.disposeInteractionBinding();
+    cleanupOperations.disposeMapDisplayOverlay();
+    cleanupOperations.disposePlacementOverlay();
+    cleanupOperations.clearJoystickCameraPan();
+    cleanupOperations.clearMapImageExporter();
+    cleanupOperations.destroyResourceClumpFrameTextures();
+    cleanupOperations.destroyPixiApplication();
+    cleanupOperations.clearCanvasHost();
+  };
+}
+
+export function commitPlannerCanvasExporterAndWarnings(
+  isMapLifecycleCurrent: () => boolean,
+  notifyMapImageExporterReady: () => void,
+  setKnownUnavailableTilesheetWarnings: () => void,
+): boolean {
+  notifyMapImageExporterReady();
+  if (!isMapLifecycleCurrent()) {
+    return false;
+  }
+
+  setKnownUnavailableTilesheetWarnings();
+  return isMapLifecycleCurrent();
+}
+
+export function createInitialResolvedPlacementTextureEntries(
+  input: Readonly<{
+    catalogItems: readonly CatalogItem[] | undefined;
+    isNightMode: boolean;
+    mapId: string;
+    mapPlacementGrid?: MapPlacementGrid;
+    placementSnapshot: PlacementSnapshot | undefined;
+    season: TilesheetSeason;
+  }>,
+): readonly ResolvedPlacementTextureEntry[] {
+  if (input.catalogItems === undefined || input.placementSnapshot === undefined) {
+    return [];
+  }
+
+  return resolvePlacementTextureEntries(createPlacementRenderEntries(
+    input.placementSnapshot,
+    input.catalogItems,
+    input.season,
+    input.mapId,
+    input.mapPlacementGrid,
+    input.isNightMode,
+  ));
+}
+
 export function PlannerCanvas({
   catalogItems,
   displayOptions = createInitialEditorDisplayOptions(),
   isXRayActive = false,
+  wheelZoomEnabled = false,
   leftHandMode = false,
   mapId,
-  mapRenderOptions,
   pointerInteractionMode = "navigate",
   placementSnapshot,
   selectedPlacementKeys = [],
   season,
+  preparedCanvasResources,
+  isResourceGenerationCurrent,
+  performanceMarker,
+  onCanvasError,
+  onCanvasReady,
+  onInteractive,
   showJoystick = false,
   showResourceClumpSpawnLocations = false,
   activeInteriorDecorPattern = null,
@@ -255,10 +698,10 @@ export function PlannerCanvas({
   onInteriorDecorApply,
   onInteriorDecorRejected,
   onNudgeSelectedPlacements,
+  onMoveSelectedPlacements,
   onMapTileClick,
   onMapTileRectangle,
 }: PlannerCanvasProperties) {
-  const effectiveMapRenderOptions = mapRenderOptions ?? defaultMapRenderOptions;
   const canvasHostElementReference = useRef<HTMLDivElement>(null);
   const onMapPlacementGridReadyReference = useRef(onMapPlacementGridReady);
   const onMapImageExporterReadyReference = useRef(onMapImageExporterReady);
@@ -267,6 +710,14 @@ export function PlannerCanvas({
   const activeInteriorDecorPatternReference = useRef(activeInteriorDecorPattern);
   const onInteriorDecorApplyReference = useRef(onInteriorDecorApply);
   const onInteriorDecorRejectedReference = useRef(onInteriorDecorRejected);
+  const isResourceGenerationCurrentReference = useRef(
+    isResourceGenerationCurrent,
+  );
+  const performanceMarkerReference = useRef(performanceMarker);
+  const onCanvasErrorReference = useRef(onCanvasError);
+  const onCanvasReadyReference = useRef(onCanvasReady);
+  const onInteractiveReference = useRef(onInteractive);
+  const onMoveSelectedPlacementsReference = useRef(onMoveSelectedPlacements);
   const pointerInteractionModeReference = useRef(pointerInteractionMode);
   const catalogItemsReference = useRef(catalogItems);
   const placementOverlayRendererReference = useRef<PlacementOverlayRenderer | null>(
@@ -279,6 +730,7 @@ export function PlannerCanvas({
   const selectedPlacementKeysReference = useRef(selectedPlacementKeys);
   const displayOptionsReference = useRef(displayOptions);
   const isXRayActiveReference = useRef(isXRayActive);
+  const wheelZoomEnabledReference = useRef(wheelZoomEnabled);
   const showResourceClumpSpawnLocationsReference = useRef(
     showResourceClumpSpawnLocations,
   );
@@ -292,6 +744,13 @@ export function PlannerCanvas({
   const interiorDecorStateRevision = getInteriorDecorStateRevision(
     placementSnapshot?.interiorDecor,
   );
+  const plannerCanvasInitializationDependencies =
+    getPlannerCanvasInitializationDependencies(
+      mapId,
+      season,
+      interiorDecorStateRevision,
+      preparedCanvasResources,
+    );
 
   onMapPlacementGridReadyReference.current = onMapPlacementGridReady;
   onMapImageExporterReadyReference.current = onMapImageExporterReady;
@@ -300,18 +759,25 @@ export function PlannerCanvas({
   activeInteriorDecorPatternReference.current = activeInteriorDecorPattern;
   onInteriorDecorApplyReference.current = onInteriorDecorApply;
   onInteriorDecorRejectedReference.current = onInteriorDecorRejected;
+  isResourceGenerationCurrentReference.current = isResourceGenerationCurrent;
+  performanceMarkerReference.current = performanceMarker;
+  onCanvasErrorReference.current = onCanvasError;
+  onCanvasReadyReference.current = onCanvasReady;
+  onInteractiveReference.current = onInteractive;
+  onMoveSelectedPlacementsReference.current = onMoveSelectedPlacements;
   pointerInteractionModeReference.current = pointerInteractionMode;
   catalogItemsReference.current = catalogItems;
   placementSnapshotReference.current = placementSnapshot;
   selectedPlacementKeysReference.current = selectedPlacementKeys;
   displayOptionsReference.current = displayOptions;
   isXRayActiveReference.current = isXRayActive;
+  wheelZoomEnabledReference.current = wheelZoomEnabled;
   showResourceClumpSpawnLocationsReference.current =
     showResourceClumpSpawnLocations;
 
   useEffect(() => {
     placementOverlayRendererReference.current?.();
-  }, [catalogItems, placementSnapshot, selectedPlacementKeys]);
+  }, [catalogItems, displayOptions.showNightMode, placementSnapshot, selectedPlacementKeys]);
 
   useEffect(() => {
     xRayRendererReference.current?.();
@@ -322,6 +788,11 @@ export function PlannerCanvas({
   }, [displayOptions, placementSnapshot, showResourceClumpSpawnLocations]);
 
   useEffect(() => {
+    assertPreparedCanvasResourcesMatchRequestedMap(
+      preparedCanvasResources,
+      mapId,
+      season,
+    );
     const canvasHostElement = canvasHostElementReference.current;
 
     if (canvasHostElement === null) {
@@ -335,9 +806,12 @@ export function PlannerCanvas({
     const pixiApplicationLifetime = createPixiApplicationLifetime<PixiApplication>(
       destroyPixiApplication,
     );
-    let viewportResizeObserver: ResizeObserver | null = null;
-    let handleWindowResize: (() => void) | null = null;
-    let plannerCameraControls: PlannerCameraControls | null = null;
+    const isMapLifecycleCurrent = (): boolean =>
+      !pixiApplicationLifetime.isDestructionRequested() &&
+      (isResourceGenerationCurrentReference.current?.(
+        preparedCanvasResources.resourceGeneration,
+      ) ?? true);
+    let interactionBinding: PlannerCanvasInteractionBinding | null = null;
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
     let joystickCameraPan: ((direction: PlannerJoystickDirection) => void) | null =
@@ -347,26 +821,33 @@ export function PlannerCanvas({
       PixiTexture
     > | null = null;
 
+    const cleanUpPlannerCanvas = createPlannerCanvasCleanup({
+      disposeInteractionBinding: () => interactionBinding?.dispose(),
+      disposeMapDisplayOverlay: () => disposeMapDisplayOverlay?.(),
+      disposePlacementOverlay: () => disposePlacementOverlay?.(),
+      clearJoystickCameraPan: () => {
+        if (joystickCameraPanReference.current === joystickCameraPan) {
+          joystickCameraPanReference.current = null;
+        }
+      },
+      clearMapImageExporter: () =>
+        onMapImageExporterReadyReference.current?.(mapId, null),
+      destroyResourceClumpFrameTextures: () => {
+        destroyResourceClumpFrameTextures(
+          resourceClumpFrameTexturesByParentSheetIndex,
+        );
+        resourceClumpFrameTexturesByParentSheetIndex = null;
+      },
+      destroyPixiApplication: () => pixiApplicationLifetime.requestDestruction(),
+      clearCanvasHost: () => mountedCanvasHostElement.replaceChildren(),
+    });
+
     setPlannerCanvasStatus({ kind: "loading" });
     setKnownUnavailableTilesheetWarnings([]);
 
     async function initializePlannerCanvas(): Promise<void> {
       try {
-        const mapAssetPath = getLocalMapAssetPath(
-          mapId,
-          effectiveMapRenderOptions,
-        );
-        const mapXml = await loadMapXml(mapId, mapAssetPath);
-
-        if (pixiApplicationLifetime.isDestructionRequested()) {
-          return;
-        }
-
-        const loadedMap = await loadPlannerMap(
-          mapId,
-          mapXml,
-          effectiveMapRenderOptions,
-        );
+        const loadedMap = preparedCanvasResources.preparedMap.parsedMap;
         const parsedMap = applyPlacementSnapshotInteriorDecor(
           loadedMap,
           placementSnapshot?.interiorDecor,
@@ -376,26 +857,22 @@ export function PlannerCanvas({
 
         notifyMapPlacementGridReady({
           isMapLifecycleCurrent: () =>
-            !pixiApplicationLifetime.isDestructionRequested(),
+            isMapLifecycleCurrent(),
           mapId,
           onMapPlacementGridReady: onMapPlacementGridReadyReference.current,
           parsedMap,
         });
 
-        if (pixiApplicationLifetime.isDestructionRequested()) {
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
           return;
         }
 
-        const renderingContract = createMapRenderingContract({
-          mapId,
+        const renderingContract = getPlannerCanvasRenderingContract(
+          preparedCanvasResources.preparedMap,
           parsedMap,
-          requestedSeason: season,
-        });
-        const pixi = await import("pixi.js");
-
-        if (pixiApplicationLifetime.isDestructionRequested()) {
-          return;
-        }
+        );
+        const pixi = preparedCanvasResources.pixi;
 
         const pixiApplication = new pixi.Application();
         pixiApplicationLifetime.setApplication(pixiApplication);
@@ -405,7 +882,7 @@ export function PlannerCanvas({
             antialias: false,
             autoDensity: true,
             autoStart: false,
-            backgroundColor: 0x111827,
+            backgroundColor: 0x141e17,
             height: 1,
             resolution: window.devicePixelRatio || 1,
             width: 1,
@@ -415,20 +892,42 @@ export function PlannerCanvas({
           pixiApplicationLifetime.finishInitialization();
         }
 
-        if (pixiApplicationLifetime.isDestructionRequested()) {
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
           return;
         }
 
         mountedCanvasHostElement.replaceChildren(pixiApplication.canvas);
 
-        const [tilesheetTextures, resourceClumpTilesheetTexture] = await Promise.all([
-          loadTilesheetTextures(pixi, renderingContract),
-          loadResourceClumpTilesheetTexture(pixi),
-        ]);
+        await initializePlannerTextureAssets(pixi);
 
-        if (pixiApplicationLifetime.isDestructionRequested()) {
+        const placementTexturePromisesByResolvedUrl = new Map<
+          string,
+          Promise<PixiTexture>
+        >();
+        const resolvedInitialPlacementTextureEntries =
+          createInitialResolvedPlacementTextureEntries({
+            catalogItems: catalogItemsReference.current,
+            isNightMode: displayOptionsReference.current.showNightMode,
+            mapId,
+            mapPlacementGrid,
+            placementSnapshot: placementSnapshotReference.current,
+            season,
+          });
+        const { resourceClumpTilesheetTexture, tilesheetTextures } =
+          await loadPlannerCanvasInitialTextures(
+            pixi,
+            renderingContract.tilesets,
+            resolvedInitialPlacementTextureEntries,
+            placementTexturePromisesByResolvedUrl,
+          );
+
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
           return;
         }
+
+        performanceMarkerReference.current?.mark("editor:required-textures-ready");
 
         const resourceClumpFrameTextures = createResourceClumpFrameTextures(
           pixi,
@@ -450,6 +949,7 @@ export function PlannerCanvas({
         mapContainerCreationResult.mapContainer.addChild(mapDisplayOverlayContainer);
         const placementContainer = new pixi.Container();
         placementContainer.label = "placements";
+        placementContainer.sortableChildren = true;
         mapContainerCreationResult.mapContainer.addChild(placementContainer);
         const nightModeOverlayContainer = new pixi.Container();
         nightModeOverlayContainer.label = "nightMode";
@@ -501,12 +1001,12 @@ export function PlannerCanvas({
             mapDisplayOverlayRendererReference.current = null;
           }
         };
-        const placementTexturePromisesByLocalPath = new Map<
-          string,
-          Promise<PixiTexture>
-        >();
         let placementRenderVersion = 0;
         let renderedPlacementSprites: readonly PlacementSprite[] = [];
+        const placementAnimationController =
+          createPlacementAnimationController(() => {
+            pixiApplication.renderer.render(pixiApplication.stage);
+          });
 
         const renderXRay = (): void => {
           placementContainer.alpha = getPlacementContainerAlpha(
@@ -518,7 +1018,17 @@ export function PlannerCanvas({
         xRayRendererReference.current = renderXRay;
         renderXRay();
 
-        const renderPlacementOverlay = (): void => {
+        const reportPlacementRenderError = (message: string): void => {
+          reportCurrentPlannerCanvasError({
+            isMapLifecycleCurrent,
+            message,
+            onCurrentError: (currentMessage) => {
+              setPlannerCanvasStatus({ kind: "error", message: currentMessage });
+              onCanvasErrorReference.current?.(currentMessage);
+            },
+          });
+        };
+        const renderPlacementOverlay = async (): Promise<PlannerCanvasPlacementRenderStatus> => {
           placementRenderVersion += 1;
           const requestedPlacementRenderVersion = placementRenderVersion;
           const currentCatalogItems = catalogItemsReference.current;
@@ -536,63 +1046,75 @@ export function PlannerCanvas({
               [],
             );
             renderedPlacementSprites = [];
+            placementAnimationController.replaceAnimations([]);
             pixiApplication.renderer.render(pixiApplication.stage);
-            return;
+            return "ready";
           }
 
-          void createPlacementSprites({
-            pixi,
-            catalogItems: currentCatalogItems,
-            placementSnapshot: currentPlacementSnapshot,
-            season,
-            selectedPlacementKeys: currentSelectedPlacementKeys,
-            tileWidth: renderingContract.tileWidth,
-            tileHeight: renderingContract.tileHeight,
-            placementTexturePromisesByLocalPath,
-          }).then(
-            (placementSprites) => {
-              if (
-                pixiApplicationLifetime.isDestructionRequested() ||
-                requestedPlacementRenderVersion !== placementRenderVersion
-              ) {
-                destroyPlacementSprites(placementSprites);
-                return;
+          return settlePlannerCanvasPlacementRender({
+            createPlacementSprites: () =>
+              createPlacementSprites({
+                pixi,
+                catalogItems: currentCatalogItems,
+                mapId,
+                mapPlacementGrid,
+                isNightMode: displayOptionsReference.current.showNightMode,
+                placementSnapshot: currentPlacementSnapshot,
+                season,
+                selectedPlacementKeys: currentSelectedPlacementKeys,
+                tileWidth: renderingContract.tileWidth,
+                tileHeight: renderingContract.tileHeight,
+                placementTexturePromisesByResolvedUrl,
+              }),
+            isRenderCurrent: () =>
+              isMapLifecycleCurrent() &&
+              requestedPlacementRenderVersion === placementRenderVersion,
+            mapId,
+            onCurrentCommitFailure: destroyPlacementSprites,
+            onCurrentError: reportPlacementRenderError,
+            onCurrentReady: (
+              placementSprites,
+              claimPlacementSpriteOwnership,
+            ) => {
+              placementContainer.removeChildren();
+              destroyPlacementSprites(renderedPlacementSprites);
+              renderedPlacementSprites = [];
+              if (placementSprites.length > 0) {
+                placementContainer.addChild(
+                  ...placementSprites.map(
+                    (placementSprite) => placementSprite.sprite,
+                  ),
+                );
               }
-
-              replacePlacementSprites(
-                placementContainer,
-                renderedPlacementSprites,
-                placementSprites,
-              );
               renderedPlacementSprites = placementSprites;
+              placementAnimationController.replaceAnimations(
+                getPlacementSpriteAnimations(placementSprites),
+              );
+              claimPlacementSpriteOwnership();
               pixiApplication.renderer.render(pixiApplication.stage);
               setPlannerCanvasStatus({ kind: "ready" });
             },
-            (caughtError: unknown) => {
-              if (
-                pixiApplicationLifetime.isDestructionRequested() ||
-                requestedPlacementRenderVersion !== placementRenderVersion
-              ) {
-                return;
-              }
-
-              setPlannerCanvasStatus({
-                kind: "error",
-                message: formatPlannerCanvasError(mapId, caughtError),
-              });
-            },
-          );
+            onStaleReady: destroyPlacementSprites,
+          });
+        };
+        const requestPlacementOverlayRender = (): void => {
+          void renderPlacementOverlay().catch((caughtError: unknown) => {
+            reportPlacementRenderError(
+              formatPlannerCanvasError(mapId, caughtError),
+            );
+          });
         };
 
-        placementOverlayRendererReference.current = renderPlacementOverlay;
         disposePlacementOverlay = (): void => {
           placementRenderVersion += 1;
+          placementAnimationController.dispose();
           destroyPlacementSprites(renderedPlacementSprites);
           renderedPlacementSprites = [];
           placementContainer.removeChildren();
 
           if (
-            placementOverlayRendererReference.current === renderPlacementOverlay
+            placementOverlayRendererReference.current ===
+            requestPlacementOverlayRender
           ) {
             placementOverlayRendererReference.current = null;
           }
@@ -601,7 +1123,12 @@ export function PlannerCanvas({
             xRayRendererReference.current = null;
           }
         };
-        renderPlacementOverlay();
+        const initialPlacementRenderStatus = await renderPlacementOverlay();
+        if (initialPlacementRenderStatus !== "ready") {
+          cleanUpPlannerCanvas();
+          return;
+        }
+        placementOverlayRendererReference.current = requestPlacementOverlayRender;
 
         let currentCameraGeometry: CameraGeometry | null = null;
         let currentCameraState: CameraState | null = null;
@@ -622,7 +1149,7 @@ export function PlannerCanvas({
         };
 
         const resizeMapToViewport = () => {
-          if (pixiApplicationLifetime.isDestructionRequested()) {
+          if (!isMapLifecycleCurrent()) {
             return;
           }
 
@@ -666,130 +1193,207 @@ export function PlannerCanvas({
           renderCameraState(currentCameraState);
         };
         joystickCameraPanReference.current = joystickCameraPan;
-        plannerCameraControls = attachPlannerCameraControls({
-          canvasElement: pixiApplication.canvas,
-          getCameraGeometry(): CameraGeometry {
-            if (currentCameraGeometry === null) {
-              throw new Error(
-                `Planner camera geometry is unavailable for mapId ${JSON.stringify(mapId)}.`,
-              );
-            }
+        interactionBinding = bindPlannerCanvasInteractions(
+          mountedCanvasHostElement,
+          resizeMapToViewport,
+          {
+            attachCameraControls: () =>
+              attachPlannerCameraControls({
+                canvasElement: pixiApplication.canvas,
+                getCameraGeometry(): CameraGeometry {
+                  if (currentCameraGeometry === null) {
+                    throw new Error(
+                      `Planner camera geometry is unavailable for mapId ${JSON.stringify(mapId)}.`,
+                    );
+                  }
 
-            return currentCameraGeometry;
+                  return currentCameraGeometry;
+                },
+                getCameraState(): CameraState {
+                  if (currentCameraState === null) {
+                    throw new Error(
+                      `Planner camera state is unavailable for mapId ${JSON.stringify(mapId)}.`,
+                    );
+                  }
+
+                  return currentCameraState;
+                },
+                getWheelZoomEnabled(): boolean {
+                  return wheelZoomEnabledReference.current;
+                },
+                getPointerInteractionMode(): PointerInteractionMode {
+                  return pointerInteractionModeReference.current;
+                },
+                getMapTileAtPointer(
+                  pointerCoordinates: PointerCoordinates,
+                ): MapPointerTile | null {
+                  const cameraState = currentCameraState;
+
+                  if (cameraState === null) {
+                    throw new Error(
+                      `Planner camera state is unavailable while finding a map tile for mapId ${JSON.stringify(mapId)}.`,
+                    );
+                  }
+
+                  return getMapTileAtPointer({
+                    pointerX: pointerCoordinates.x,
+                    pointerY: pointerCoordinates.y,
+                    cameraPositionX: cameraState.positionX,
+                    cameraPositionY: cameraState.positionY,
+                    zoom: cameraState.zoom,
+                    mapTileWidth: renderingContract.tileWidth,
+                    mapTileHeight: renderingContract.tileHeight,
+                    mapWidth: renderingContract.mapWidth,
+                    mapHeight: renderingContract.mapHeight,
+                  });
+                },
+                getPlacementDragTarget(
+                  pointerCoordinates: PointerCoordinates,
+                ): PlacementDragTarget | null {
+                  const selectedPlacementKeySet = new Set(
+                    selectedPlacementKeysReference.current,
+                  );
+                  const selectedPlacementSprites = renderedPlacementSprites.filter(
+                    (placementSprite) =>
+                      selectedPlacementKeySet.has(placementSprite.placementKey),
+                  );
+                  const hitSprite = [...selectedPlacementSprites]
+                    .reverse()
+                    .find((placementSprite) =>
+                      placementSprite.sprite.getBounds().containsPoint(
+                        pointerCoordinates.x,
+                        pointerCoordinates.y,
+                      ),
+                    );
+
+                  return hitSprite === undefined
+                    ? null
+                    : { sprites: selectedPlacementSprites };
+                },
+                getPlacementDragTileSize(): Readonly<{
+                  height: number;
+                  width: number;
+                }> {
+                  return {
+                    height: renderingContract.tileHeight,
+                    width: renderingContract.tileWidth,
+                  };
+                },
+                onMapTileClick(mapTileCoordinates: MapPointerTile): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+
+                  const wasInteriorDecorClickHandled =
+                    dispatchInteriorDecorMapTileClick({
+                      activeInteriorDecorPattern:
+                        activeInteriorDecorPatternReference.current,
+                      mapId,
+                      mapTileCoordinates,
+                      onInteriorDecorApply:
+                        onInteriorDecorApplyReference.current,
+                      onInteriorDecorRejected:
+                        onInteriorDecorRejectedReference.current,
+                      parsedMap,
+                    });
+
+                  if (wasInteriorDecorClickHandled) {
+                    return;
+                  }
+
+                  onMapTileClickReference.current?.(
+                    mapId,
+                    mapTileCoordinates,
+                  );
+                },
+                onMapTileRectangle(
+                  startMapTileCoordinates: MapPointerTile,
+                  endMapTileCoordinates: MapPointerTile,
+                ): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+
+                  onMapTileRectangleReference.current?.(
+                    mapId,
+                    startMapTileCoordinates,
+                    endMapTileCoordinates,
+                  );
+                },
+                onMoveSelectedPlacements(tileDelta): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+                  onMoveSelectedPlacementsReference.current?.(tileDelta);
+                },
+                setCameraState(cameraState: CameraState): void {
+                  currentCameraState = cameraState;
+                  renderCameraState(cameraState);
+                },
+              }),
+            createResizeObserver: (onResize) => new ResizeObserver(onResize),
+            windowPort: window,
           },
-          getCameraState(): CameraState {
-            if (currentCameraState === null) {
-              throw new Error(
-                `Planner camera state is unavailable for mapId ${JSON.stringify(mapId)}.`,
-              );
-            }
-
-            return currentCameraState;
-          },
-          getPointerInteractionMode(): PointerInteractionMode {
-            return pointerInteractionModeReference.current;
-          },
-          getMapTileAtPointer(pointerCoordinates: PointerCoordinates): MapPointerTile | null {
-            const cameraState = currentCameraState;
-
-            if (cameraState === null) {
-              throw new Error(
-                `Planner camera state is unavailable while finding a map tile for mapId ${JSON.stringify(mapId)}.`,
-              );
-            }
-
-            return getMapTileAtPointer({
-              pointerX: pointerCoordinates.x,
-              pointerY: pointerCoordinates.y,
-              cameraPositionX: cameraState.positionX,
-              cameraPositionY: cameraState.positionY,
-              zoom: cameraState.zoom,
-              mapTileWidth: renderingContract.tileWidth,
-              mapTileHeight: renderingContract.tileHeight,
-              mapWidth: renderingContract.mapWidth,
-              mapHeight: renderingContract.mapHeight,
-            });
-          },
-          onMapTileClick(mapTileCoordinates: MapPointerTile): void {
-            if (pixiApplicationLifetime.isDestructionRequested()) {
-              return;
-            }
-
-            const wasInteriorDecorClickHandled =
-              dispatchInteriorDecorMapTileClick({
-                activeInteriorDecorPattern:
-                  activeInteriorDecorPatternReference.current,
-                mapId,
-                mapTileCoordinates,
-                onInteriorDecorApply: onInteriorDecorApplyReference.current,
-                onInteriorDecorRejected:
-                  onInteriorDecorRejectedReference.current,
-                parsedMap,
-              });
-
-            if (wasInteriorDecorClickHandled) {
-              return;
-            }
-
-            onMapTileClickReference.current?.(mapId, mapTileCoordinates);
-          },
-          onMapTileRectangle(
-            startMapTileCoordinates: MapPointerTile,
-            endMapTileCoordinates: MapPointerTile,
-          ): void {
-            if (pixiApplicationLifetime.isDestructionRequested()) {
-              return;
-            }
-
-            onMapTileRectangleReference.current?.(
-              mapId,
-              startMapTileCoordinates,
-              endMapTileCoordinates,
-            );
-          },
-          setCameraState(cameraState: CameraState): void {
-            currentCameraState = cameraState;
-            renderCameraState(cameraState);
-          },
-        });
-        viewportResizeObserver = new ResizeObserver(resizeMapToViewport);
-        viewportResizeObserver.observe(mountedCanvasHostElement);
-        handleWindowResize = resizeMapToViewport;
-        window.addEventListener("resize", handleWindowResize);
-
-        onMapImageExporterReadyReference.current?.(mapId, {
-          captureScreenshot: (resolution) =>
-            captureMapScreenshot({
-              mapContainer: mapContainerCreationResult.mapContainer,
-              mapDisplayOverlayContainer,
-              pixi,
-              pixiApplication,
-              renderingContract,
-              resolution,
-            }),
-        });
-
-        setKnownUnavailableTilesheetWarnings(
-          mapContainerCreationResult.knownUnavailableTilesheetWarnings,
         );
+
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
+          return;
+        }
+        performanceMarkerReference.current?.mark("editor:canvas-mounted");
+        onCanvasReadyReference.current?.();
+
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
+          return;
+        }
+
+        const committedExporterAndWarnings =
+          commitPlannerCanvasExporterAndWarnings(
+            isMapLifecycleCurrent,
+            () => {
+              onMapImageExporterReadyReference.current?.(mapId, {
+                captureScreenshot: (resolution) =>
+                  captureMapScreenshot({
+                    mapContainer: mapContainerCreationResult.mapContainer,
+                    mapDisplayOverlayContainer,
+                    pixi,
+                    pixiApplication,
+                    renderingContract,
+                    resolution,
+                  }),
+              });
+            },
+            () => {
+              setKnownUnavailableTilesheetWarnings(
+                mapContainerCreationResult.knownUnavailableTilesheetWarnings,
+              );
+            },
+          );
+        if (!committedExporterAndWarnings) {
+          cleanUpPlannerCanvas();
+          return;
+        }
         setPlannerCanvasStatus({ kind: "ready" });
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
+          return;
+        }
+        performanceMarkerReference.current?.mark("editor:interactive");
+        onInteractiveReference.current?.();
       } catch (caughtError) {
         const wasUnmountedBeforeFailure =
-          pixiApplicationLifetime.isDestructionRequested();
+          !isMapLifecycleCurrent();
 
-        plannerCameraControls?.dispose();
-        plannerCameraControls = null;
-        destroyResourceClumpFrameTextures(
-          resourceClumpFrameTexturesByParentSheetIndex,
-        );
-        resourceClumpFrameTexturesByParentSheetIndex = null;
-        pixiApplicationLifetime.requestDestruction();
+        cleanUpPlannerCanvas();
 
         if (!wasUnmountedBeforeFailure) {
+          const errorMessage = formatPlannerCanvasError(mapId, caughtError);
           setPlannerCanvasStatus({
             kind: "error",
-            message: formatPlannerCanvasError(mapId, caughtError),
+            message: errorMessage,
           });
+          onCanvasErrorReference.current?.(errorMessage);
         }
       }
     }
@@ -797,42 +1401,21 @@ export function PlannerCanvas({
     void initializePlannerCanvas();
 
     return () => {
-      viewportResizeObserver?.disconnect();
-
-      if (handleWindowResize !== null) {
-        window.removeEventListener("resize", handleWindowResize);
-      }
-
-      plannerCameraControls?.dispose();
-      disposeMapDisplayOverlay?.();
-      disposePlacementOverlay?.();
-      if (joystickCameraPanReference.current === joystickCameraPan) {
-        joystickCameraPanReference.current = null;
-      }
-      onMapImageExporterReadyReference.current?.(mapId, null);
-      destroyResourceClumpFrameTextures(
-        resourceClumpFrameTexturesByParentSheetIndex,
-      );
-      resourceClumpFrameTexturesByParentSheetIndex = null;
-      pixiApplicationLifetime.requestDestruction();
-
-      mountedCanvasHostElement.replaceChildren();
+      cleanUpPlannerCanvas();
     };
-  }, [
-    effectiveMapRenderOptions,
-    interiorDecorStateRevision,
-    mapId,
-    season,
-  ]);
+  }, plannerCanvasInitializationDependencies);
 
   return (
     <section
       aria-busy={plannerCanvasStatus.kind === "loading"}
       aria-label={`Farm map canvas for ${mapId}`}
-      className="planner-canvas"
+      className={`planner-canvas canvas-container ${
+        pointerInteractionMode === "navigate" ? "cursor-mode" : "placement-active"
+      }`}
     >
       <div className="planner-canvas__viewport" ref={canvasHostElementReference} />
-      {showJoystick && plannerCanvasStatus.kind === "ready" ? (
+      {shouldRenderPlannerJoystick(showJoystick, selectedPlacementKeys) &&
+      plannerCanvasStatus.kind === "ready" ? (
         <PlannerJoystick
           isLeftHanded={leftHandMode}
           onNudge={onNudgeSelectedPlacements}
@@ -1189,182 +1772,58 @@ export function dispatchInteriorDecorMapTileClick(
   return true;
 }
 
-function getLocalMapAssetPath(
-  mapId: string,
-  mapRenderOptions: MapRenderOptions,
-): string {
-  const plannerMap = getPlannerMapById(mapId);
-  const mapFile = mapId === "farmhouse-2" && mapRenderOptions.farmhouse2.marriageMapEnabled
-    ? farmhouse2Composite.marriageMapFile
-    : plannerMap.mapFile;
-  const mapOutputPath = plannerMap.modId
-    ? `mods/${plannerMap.modId}/${mapFile}`
-    : `maps/${mapFile}`;
-
-  return `${localGameAssetRoot}${mapOutputPath}`;
-}
-
-async function loadMapXml(mapId: string, mapAssetPath: string): Promise<string> {
-  const mapResponse = await fetch(mapAssetPath);
-
-  if (!mapResponse.ok) {
-    throw new Error(
-      `Could not load local TMX asset ${JSON.stringify(mapAssetPath)} for mapId ${JSON.stringify(mapId)}. Received HTTP status ${mapResponse.status}.`,
-    );
-  }
-
-  const mapXml = await mapResponse.text();
-
-  if (mapXml.length === 0) {
-    throw new Error(
-      `Local TMX asset ${JSON.stringify(mapAssetPath)} for mapId ${JSON.stringify(mapId)} is empty.`,
-    );
-  }
-
-  return mapXml;
-}
-
-async function loadPlannerMap(
-  mapId: string,
-  mapXml: string,
-  mapRenderOptions: MapRenderOptions,
-): Promise<TmxMap> {
-  const parsedMap = await parseTmxMap(mapXml);
-
-  if (mapId === "ginger-island") {
-    const gingerIslandMapTileOverlays = await Promise.all(
-      gingerIslandOverlays
-        .filter((gingerIslandOverlay) =>
-          mapRenderOptions.gingerIslandOverlayIds.includes(
-            gingerIslandOverlay.id,
-          ),
-        )
-        .map(async (gingerIslandOverlay) => ({
-          id: gingerIslandOverlay.id,
-          map: await loadMapTileOverlay(
-            mapId,
-            gingerIslandOverlay.id,
-            gingerIslandOverlay.mapFile,
-          ),
-          sourceCrop: gingerIslandOverlay.sourceCrop,
-          target: gingerIslandOverlay.target,
-        })),
-    );
-
-    return composeMapTileOverlays(parsedMap, gingerIslandMapTileOverlays);
-  }
-
-  if (mapId !== "farmhouse-2") {
-    return parsedMap;
-  }
-
-  const farmhouse2MapTileOverlays = await Promise.all(
-    getFarmhouse2MapTileOverlays(mapRenderOptions).map(
-      async (farmhouse2MapTileOverlay) => ({
-        ...farmhouse2MapTileOverlay,
-        map: await loadMapTileOverlay(
-          mapId,
-          farmhouse2MapTileOverlay.id,
-          farmhouse2MapTileOverlay.mapFile,
-        ),
-      }),
-    ),
-  );
-
-  return composeMapTileOverlays(
-    parsedMap,
-    farmhouse2MapTileOverlays,
-    getMapTileCompositionOptions(mapId),
-  );
-}
-
-export function getMapTileCompositionOptions(
-  mapId: string,
-): MapTileCompositionOptions | undefined {
-  return mapId === "farmhouse-2"
-    ? { includeTileDataProperties: true }
-    : undefined;
-}
-
-function getFarmhouse2MapTileOverlays(
-  mapRenderOptions: MapRenderOptions,
-): readonly Readonly<{
-  id: string;
-  mapFile: string;
-  sourceCrop: Readonly<{ x: number; y: number; width: number; height: number }>;
-  target: Readonly<{ x: number; y: number }>;
-}>[] {
-  const selectedRenovationIdSet = new Set(
-    mapRenderOptions.farmhouse2.renovationIds,
-  );
-  const selectedRenovationOverlays = farmhouse2Composite.renovations.flatMap(
-    (farmhouseRenovation) =>
-      selectedRenovationIdSet.has(farmhouseRenovation.id)
-        ? [{ ...farmhouseRenovation }]
-        : [],
-  );
-  const selectedSpouseRoom = mapRenderOptions.farmhouse2.spouseId === null
-    ? null
-    : spouseRoomLayouts.find(
-      (spouseRoomLayout) =>
-        spouseRoomLayout.spouseId === mapRenderOptions.farmhouse2.spouseId,
-    );
-
-  if (selectedSpouseRoom === undefined) {
-    throw new Error(
-      `Farmhouse 2 spouse room ${JSON.stringify(mapRenderOptions.farmhouse2.spouseId)} is unavailable in the locked map catalog.`,
-    );
-  }
-
-  return [
-    ...selectedRenovationOverlays,
-    ...(selectedSpouseRoom === null
-      ? []
-      : [
-        {
-          id: `spouse-${selectedSpouseRoom.spouseId}`,
-          mapFile: farmhouse2Composite.spouseRoomMapFile,
-          sourceCrop: selectedSpouseRoom.sourceCrop,
-          target: selectedSpouseRoom.target,
-        },
-      ]),
+export async function loadPlannerCanvasInitialTextures(
+  pixi: PixiModule,
+  renderingTilesets: readonly RenderingTileset[],
+  resolvedInitialPlacementTextureEntries: readonly ResolvedPlacementTextureEntry[],
+  placementTexturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>,
+): Promise<
+  Readonly<{
+    resourceClumpTilesheetTexture: PixiTexture;
+    tilesheetTextures: ReadonlyMap<number, PixiTexture>;
+  }>
+> {
+  const initialPlacementTextureAssetPaths = [
+    ...new Set(resolvedInitialPlacementTextureEntries.map(
+      (resolvedPlacementTextureEntry) =>
+        resolvedPlacementTextureEntry.resolvedAssetPath,
+    )),
   ];
-}
+  const [tilesheetTextures, resourceClumpTilesheetTexture] = await Promise.all([
+    loadTilesheetTextures(
+      pixi,
+      renderingTilesets,
+      placementTexturePromisesByResolvedUrl,
+    ),
+    loadResourceClumpTilesheetTexture(
+      pixi,
+      placementTexturePromisesByResolvedUrl,
+    ),
+    Promise.all(initialPlacementTextureAssetPaths.map(
+      (resolvedAssetPath) => loadPlannerTextureWithResolvedUrlCache(
+        pixi,
+        resolvedAssetPath,
+        placementTexturePromisesByResolvedUrl,
+      ),
+    )),
+  ]);
 
-async function loadMapTileOverlay(
-  mapId: string,
-  overlayId: string,
-  mapFile: string,
-): Promise<TmxMap> {
-  if (typeof mapFile !== "string" || !/^[A-Za-z0-9_ -]+\.tmx$/.test(mapFile)) {
-    throw new Error(
-      `Map tile overlay ${JSON.stringify(overlayId)} for mapId ${JSON.stringify(mapId)} must use a safe .tmx filename; received ${JSON.stringify(mapFile)}.`,
-    );
-  }
-
-  const overlayMapXml = await loadMapXml(
-    `${mapId}:${overlayId}`,
-    `${localGameAssetRoot}maps/${mapFile}`,
-  );
-
-  return parseTmxMap(overlayMapXml);
+  return { resourceClumpTilesheetTexture, tilesheetTextures };
 }
 
 async function loadTilesheetTextures(
   pixi: PixiModule,
-  renderingContract: MapRenderingContract,
+  renderingTilesets: readonly RenderingTileset[],
+  placementTexturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>,
 ): Promise<ReadonlyMap<number, PixiTexture>> {
   const textureEntries = await Promise.all(
-    getLoadableTilesheets(renderingContract.tilesets).map(
+    getLoadableTilesheets(renderingTilesets).map(
       async ({ assetPath, tilesetIndex }) => {
-        const tilesheetTexture = await pixi.Assets.load<PixiTexture>({
-          src: assetPath,
-          data: {
-            autoGenerateMipmaps: false,
-            mipLevelCount: 1,
-            scaleMode: "nearest",
-          },
-        });
+        const tilesheetTexture = await loadPlannerTextureWithResolvedUrlCache(
+          pixi,
+          resolveInitialPlannerTextureAssetPath(assetPath),
+          placementTexturePromisesByResolvedUrl,
+        );
 
         return [tilesetIndex, tilesheetTexture] as const;
       },
@@ -1376,15 +1835,15 @@ async function loadTilesheetTextures(
 
 async function loadResourceClumpTilesheetTexture(
   pixi: PixiModule,
+  placementTexturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>,
 ): Promise<PixiTexture> {
-  return pixi.Assets.load<PixiTexture>({
-    src: `${localGameAssetRoot}sprites/springobjects.png`,
-    data: {
-      autoGenerateMipmaps: false,
-      mipLevelCount: 1,
-      scaleMode: "nearest",
-    },
-  });
+  return loadPlannerTextureWithResolvedUrlCache(
+    pixi,
+    resolveInitialPlannerTextureAssetPath(
+      `${localGameAssetRoot}sprites/springobjects.png`,
+    ),
+    placementTexturePromisesByResolvedUrl,
+  );
 }
 
 function createResourceClumpFrameTextures(
@@ -1801,12 +2260,15 @@ function createMapContainer(
 type CreatePlacementSpritesInput = Readonly<{
   pixi: PixiModule;
   catalogItems: readonly CatalogItem[];
+  isNightMode: boolean;
+  mapId: string;
+  mapPlacementGrid: MapPlacementGrid;
   placementSnapshot: PlacementSnapshot;
   season: TilesheetSeason;
   selectedPlacementKeys: readonly string[];
   tileWidth: number;
   tileHeight: number;
-  placementTexturePromisesByLocalPath: Map<string, Promise<PixiTexture>>;
+  placementTexturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>;
 }>;
 
 async function createPlacementSprites(
@@ -1816,22 +2278,35 @@ async function createPlacementSprites(
     createPlacementSpritesInput.placementSnapshot,
     createPlacementSpritesInput.catalogItems,
     createPlacementSpritesInput.season,
+    createPlacementSpritesInput.mapId,
+    createPlacementSpritesInput.mapPlacementGrid,
+    createPlacementSpritesInput.isNightMode,
   );
-  const placementTexturesByLocalPath = await loadPlacementTextures(
-    createPlacementSpritesInput.pixi,
+  const resolvedPlacementTextureEntries = resolvePlacementTextureEntries(
     placementRenderEntries,
-    createPlacementSpritesInput.placementTexturePromisesByLocalPath,
+  );
+  const placementTexturesByResolvedAssetPath = await loadPlacementTextures(
+    createPlacementSpritesInput.pixi,
+    resolvedPlacementTextureEntries,
+    createPlacementSpritesInput.placementTexturePromisesByResolvedUrl,
   );
   const selectedPlacementKeySet = new Set(
     createPlacementSpritesInput.selectedPlacementKeys,
   );
 
-  return Promise.all(
-    placementRenderEntries.map(async (placementRenderEntry) => {
+  return createPlacementSpriteBatch({
+    destroyCreatedPlacementSprites: destroyPlacementSprites,
+    placementSpritePromises: resolvedPlacementTextureEntries.map(async (
+      resolvedPlacementTextureEntry,
+    ) => {
+      const placementRenderEntry =
+        resolvedPlacementTextureEntry.placementRenderEntry;
       const placementTexture = getRequiredPlacementTexture(
-        placementTexturesByLocalPath,
-        getPlacementTextureLocalPath(placementRenderEntry),
+        placementTexturesByResolvedAssetPath,
+        resolvedPlacementTextureEntry.resolvedAssetPath,
       );
+      const isSelected = selectedPlacementKeySet.has(placementRenderEntry.key);
+      getPlacementSpriteTintColor(placementRenderEntry.tintColor, isSelected);
       const paintedTexture = await createPaintedBuildingTexture(
         createPlacementSpritesInput.pixi,
         placementRenderEntry,
@@ -1839,34 +2314,38 @@ async function createPlacementSprites(
 
       return createPlacementSprite(
         createPlacementSpritesInput.pixi,
-        placementRenderEntry,
+        {
+          ...placementRenderEntry,
+          frame: resolvedPlacementTextureEntry.resolvedFrame,
+        },
         paintedTexture ?? placementTexture,
         paintedTexture,
         createPlacementSpritesInput.tileWidth,
         createPlacementSpritesInput.tileHeight,
-        selectedPlacementKeySet.has(placementRenderEntry.key),
+        isSelected,
       );
     }),
-  );
+  });
 }
 
-async function loadPlacementTextures(
+export async function loadPlacementTextures(
   pixi: PixiModule,
-  placementRenderEntries: readonly PlacementRenderEntry[],
-  placementTexturePromisesByLocalPath: Map<string, Promise<PixiTexture>>,
+  resolvedPlacementTextureEntries: readonly ResolvedPlacementTextureEntry[],
+  placementTexturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>,
 ): Promise<ReadonlyMap<string, PixiTexture>> {
-  const localTexturePaths = [
-    ...new Set(
-      placementRenderEntries.map(getPlacementTextureLocalPath),
-    ),
+  const resolvedAssetPaths = [
+    ...new Set(resolvedPlacementTextureEntries.map(
+      (resolvedPlacementTextureEntry) =>
+        resolvedPlacementTextureEntry.resolvedAssetPath,
+    )),
   ];
   const textureEntries = await Promise.all(
-    localTexturePaths.map(async (localTexturePath) => [
-      localTexturePath,
-      await loadPlacementTexture(
+    resolvedAssetPaths.map(async (resolvedAssetPath) => [
+      resolvedAssetPath,
+      await loadPlannerTextureWithResolvedUrlCache(
         pixi,
-        localTexturePath,
-        placementTexturePromisesByLocalPath,
+        resolvedAssetPath,
+        placementTexturePromisesByResolvedUrl,
       ),
     ] as const),
   );
@@ -1874,23 +2353,13 @@ async function loadPlacementTextures(
   return new Map(textureEntries);
 }
 
-function getPlacementTextureLocalPath(
-  placementRenderEntry: PlacementRenderEntry,
-): string {
-  return (
-    placementRenderEntry.textureLocalPath ??
-    placementRenderEntry.catalogItem.textureLocalPath
-  );
-}
-
-function loadPlacementTexture(
+function loadPlannerTextureWithResolvedUrlCache(
   pixi: PixiModule,
-  localTexturePath: string,
-  placementTexturePromisesByLocalPath: Map<string, Promise<PixiTexture>>,
+  resolvedTextureAssetPath: string,
+  texturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>,
 ): Promise<PixiTexture> {
-  assertLockedLocalPlacementTexturePath(localTexturePath);
-  const cachedTexturePromise = placementTexturePromisesByLocalPath.get(
-    localTexturePath,
+  const cachedTexturePromise = texturePromisesByResolvedUrl.get(
+    resolvedTextureAssetPath,
   );
 
   if (cachedTexturePromise !== undefined) {
@@ -1898,42 +2367,54 @@ function loadPlacementTexture(
   }
 
   const texturePromise = pixi.Assets.load<PixiTexture>({
-    src: localTexturePath,
+    src: resolvedTextureAssetPath,
     data: {
       autoGenerateMipmaps: false,
       mipLevelCount: 1,
       scaleMode: "nearest",
     },
   });
-  placementTexturePromisesByLocalPath.set(localTexturePath, texturePromise);
+  texturePromisesByResolvedUrl.set(
+    resolvedTextureAssetPath,
+    texturePromise,
+  );
   return texturePromise;
+}
+
+function getRequiredPlacementTexture(
+  placementTexturesByResolvedAssetPath: ReadonlyMap<string, PixiTexture>,
+  resolvedAssetPath: string,
+): PixiTexture {
+  const placementTexture = placementTexturesByResolvedAssetPath.get(
+    resolvedAssetPath,
+  );
+
+  if (placementTexture === undefined) {
+    throw new Error(
+      `Placement sprite texture is unavailable for resolved asset path ${JSON.stringify(resolvedAssetPath)}.`,
+    );
+  }
+
+  return placementTexture;
+}
+
+function getPlacementTextureLocalPath(
+  placementRenderEntry: PlacementRenderEntry,
+): string {
+  return placementRenderEntry.textureLocalPath
+    ?? placementRenderEntry.catalogItem.textureLocalPath;
 }
 
 function assertLockedLocalPlacementTexturePath(localTexturePath: string): void {
   if (
-    typeof localTexturePath !== "string" ||
-    !localTexturePath.startsWith(localGameAssetRoot) ||
-    localTexturePath.includes("..")
+    typeof localTexturePath !== "string"
+    || !localTexturePath.startsWith(localGameAssetRoot)
+    || localTexturePath.includes("..")
   ) {
     throw new Error(
       `Placement sprite texture must be a locked local asset under ${JSON.stringify(localGameAssetRoot)}; received ${JSON.stringify(localTexturePath)}.`,
     );
   }
-}
-
-function getRequiredPlacementTexture(
-  placementTexturesByLocalPath: ReadonlyMap<string, PixiTexture>,
-  localTexturePath: string,
-): PixiTexture {
-  const placementTexture = placementTexturesByLocalPath.get(localTexturePath);
-
-  if (placementTexture === undefined) {
-    throw new Error(
-      `Placement sprite texture is unavailable for locked local path ${JSON.stringify(localTexturePath)}.`,
-    );
-  }
-
-  return placementTexture;
 }
 
 async function createPaintedBuildingTexture(
@@ -2036,7 +2517,7 @@ function loadLocalPlannerImage(localPath: string): Promise<HTMLImageElement> {
   });
 }
 
-function createPlacementSprite(
+export function createPlacementSprite(
   pixi: PixiModule,
   placementRenderEntry: PlacementRenderEntry,
   placementTexture: PixiTexture,
@@ -2045,83 +2526,104 @@ function createPlacementSprite(
   tileHeight: number,
   isSelected: boolean,
 ): PlacementSprite {
+  assertPlacementRenderEntryEffectiveFootprint(placementRenderEntry);
+  assertPlacementRenderEntryVisualProperties(placementRenderEntry);
+  const placementTintColor = getPlacementSpriteTintColor(
+    placementRenderEntry.tintColor,
+    isSelected && placementRenderEntry.shouldApplySelectionTint !== false,
+  );
   const placementFrameTexture = getPlacementFrameTexture(
     pixi,
     placementTexture,
     placementRenderEntry.frame,
   );
-  const placementSprite = new pixi.Sprite({
-    roundPixels: true,
-    texture: placementFrameTexture.texture,
-  });
+  let placementSprite: import("pixi.js").Sprite | null = null;
+  let animationResources: PlacementSpriteAnimationResources | null = null;
 
-  placementSprite.tint = isSelected
-    ? 0xffdf4a
-    : getPlacementTintColor(placementRenderEntry.tintColor);
+  try {
+    placementSprite = new pixi.Sprite({
+      roundPixels: true,
+      texture: placementFrameTexture.texture,
+    });
 
-  const { catalogItem, tileX, tileY } = placementRenderEntry;
+    placementSprite.tint = placementTintColor;
+    placementSprite.alpha = placementRenderEntry.opacity ?? 1;
+    placementSprite.zIndex = placementRenderEntry.zIndex ?? 0;
+    animationResources = createPlacementSpriteAnimationResources(
+      pixi,
+      placementSprite,
+      placementTexture,
+      placementRenderEntry,
+      placementFrameTexture,
+    );
+    const placementSpriteResult = createPlacementSpriteResult(
+      placementSprite,
+      placementFrameTexture.frameTexture,
+      paintedTexture,
+      animationResources,
+      placementRenderEntry,
+    );
 
-  if (catalogItem.category === "building") {
+    const { catalogItem, tileX, tileY } = placementRenderEntry;
+
+    if (placementRenderEntry.pixelGeometry !== undefined) {
+    const pixelGeometry = placementRenderEntry.pixelGeometry;
+    const mirroredPositionX =
+      pixelGeometry.horizontalMirrorCenterX === undefined
+        ? pixelGeometry.positionX
+        : 2 * pixelGeometry.horizontalMirrorCenterX
+          - pixelGeometry.positionX
+          - placementFrameTexture.texture.width;
+    placementSprite.anchor.set(pixelGeometry.anchorX, pixelGeometry.anchorY);
+    placementSprite.position.set(mirroredPositionX, pixelGeometry.positionY);
+    if (pixelGeometry.uniformScale === undefined) {
+      placementSprite.scale.x = pixelGeometry.horizontalScale;
+    } else {
+      placementSprite.scale.set(pixelGeometry.uniformScale);
+      placementSprite.scale.x *= pixelGeometry.horizontalScale;
+    }
+      return placementSpriteResult;
+    }
+
+    if (catalogItem.category === "building") {
     placementSprite.anchor.set(0, 1);
     placementSprite.position.set(
       tileX * tileWidth,
       (tileY + catalogItem.tileSize.height) * tileHeight,
     );
-    return createPlacementSpriteResult(
-      placementSprite,
-      placementFrameTexture.frameTexture,
-      paintedTexture,
-    );
-  }
+      return placementSpriteResult;
+    }
 
-  if (catalogItem.category === "crop") {
+    if (catalogItem.category === "crop") {
     placementSprite.anchor.set(0, 1);
-    placementSprite.position.set(tileX * tileWidth, (tileY + 1) * tileHeight);
-    return createPlacementSpriteResult(
-      placementSprite,
-      placementFrameTexture.frameTexture,
-      paintedTexture,
-    );
-  }
-
-  if (placementRenderEntry.isTree) {
-    placementSprite.anchor.set(0.5, 1);
     placementSprite.position.set(
-      tileX * tileWidth + tileWidth / 2,
-      (tileY + 1) * tileHeight,
+      tileX * tileWidth,
+      (tileY + placementRenderEntry.effectiveFootprint.height) * tileHeight,
     );
-    placementSprite.scale.x = placementRenderEntry.isFlipped ? -1 : 1;
-    return createPlacementSpriteResult(
-      placementSprite,
-      placementFrameTexture.frameTexture,
-      paintedTexture,
-    );
-  }
+      return placementSpriteResult;
+    }
 
-  if (catalogItem.renderingMetadata?.kind === "furniture") {
+    if (catalogItem.renderingMetadata?.kind === "furniture") {
     if (placementRenderEntry.isFlipped) {
       placementSprite.anchor.set(0.5, 1);
       placementSprite.position.set(
-        tileX * tileWidth + (catalogItem.tileSize.width * tileWidth) / 2,
-        (tileY + catalogItem.tileSize.height) * tileHeight,
+        tileX * tileWidth
+          + (placementRenderEntry.effectiveFootprint.width * tileWidth) / 2,
+        (tileY + placementRenderEntry.effectiveFootprint.height) * tileHeight,
       );
       placementSprite.scale.x = -1;
     } else {
       placementSprite.anchor.set(0, 1);
       placementSprite.position.set(
         tileX * tileWidth,
-        (tileY + catalogItem.tileSize.height) * tileHeight,
+        (tileY + placementRenderEntry.effectiveFootprint.height) * tileHeight,
       );
     }
 
-    return createPlacementSpriteResult(
-      placementSprite,
-      placementFrameTexture.frameTexture,
-      paintedTexture,
-    );
-  }
+      return placementSpriteResult;
+    }
 
-  if (
+    if (
     placementRenderEntry.rotationQuarterTurns !== 0 ||
     placementRenderEntry.isFlipped
   ) {
@@ -2133,28 +2635,360 @@ function createPlacementSprite(
     placementSprite.rotation =
       placementRenderEntry.rotationQuarterTurns * (Math.PI / 2);
     placementSprite.scale.x = placementRenderEntry.isFlipped ? -1 : 1;
-    return createPlacementSpriteResult(
-      placementSprite,
-      placementFrameTexture.frameTexture,
-      paintedTexture,
+      return placementSpriteResult;
+    }
+
+    placementSprite.anchor.set(0, 0);
+    placementSprite.position.set(tileX * tileWidth, tileY * tileHeight);
+    return placementSpriteResult;
+  } catch (caughtError) {
+    placementSprite?.destroy();
+    placementFrameTexture.frameTexture?.destroy();
+    paintedTexture?.destroy();
+    for (const animationFrameTexture of animationResources?.animationFrameTextures ?? []) {
+      animationFrameTexture.destroy();
+    }
+    throw caughtError;
+  }
+}
+
+type PlacementSpriteAnimationResources = Readonly<{
+  animation: PlacementSpriteAnimation | null;
+  animationFrameTextures: readonly PixiTexture[];
+}>;
+
+function createPlacementSpriteAnimationResources(
+  pixi: PixiModule,
+  placementSprite: import("pixi.js").Sprite,
+  placementTexture: PixiTexture,
+  placementRenderEntry: PlacementRenderEntry,
+  placementFrameTexture: Readonly<{
+    texture: PixiTexture;
+    frameTexture: PixiTexture | null;
+  }>,
+): PlacementSpriteAnimationResources {
+  const animation = placementRenderEntry.animation;
+
+  if (animation === undefined) {
+    return { animation: null, animationFrameTextures: [] };
+  }
+
+  if (animation.kind === "scale-pulse") {
+    return {
+      animation: {
+        update(currentTimeMilliseconds): boolean {
+          const nextScale = animation.baseScale
+            + Math.sin(
+              ((currentTimeMilliseconds + animation.phaseOffsetMilliseconds)
+                % animation.timeModuloMilliseconds)
+                / animation.timeDivisorMilliseconds,
+            ) * animation.pulseAmplitude;
+          const horizontalScale =
+            placementRenderEntry.pixelGeometry?.horizontalScale ?? 1;
+          const nextScaleX = nextScale * horizontalScale;
+          const didChangeScale =
+            placementSprite.scale.x !== nextScaleX
+            || placementSprite.scale.y !== nextScale;
+
+          if (didChangeScale) {
+            placementSprite.scale.set(nextScale);
+            placementSprite.scale.x *= horizontalScale;
+          }
+
+          return didChangeScale;
+        },
+      },
+      animationFrameTextures: [],
+    };
+  }
+
+  const animationTextures: PixiTexture[] = [placementFrameTexture.texture];
+  const animationFrameTextures: PixiTexture[] = [];
+
+  try {
+    for (const animationFrame of animation.frames.slice(1)) {
+      const animationFrameTexture = getPlacementFrameTexture(
+        pixi,
+        placementTexture,
+        animationFrame,
+      );
+      animationTextures.push(animationFrameTexture.texture);
+      if (animationFrameTexture.frameTexture !== null) {
+        animationFrameTextures.push(animationFrameTexture.frameTexture);
+      }
+    }
+  } catch (caughtError) {
+    for (const animationFrameTexture of animationFrameTextures) {
+      animationFrameTexture.destroy();
+    }
+    throw caughtError;
+  }
+
+  return {
+    animation: {
+      update(currentTimeMilliseconds): boolean {
+        const rawFrameIndex = Math.floor(
+          (currentTimeMilliseconds + animation.timeOffsetMilliseconds)
+            / animation.frameDurationMilliseconds,
+        );
+        const frameIndex =
+          ((rawFrameIndex % animationTextures.length) + animationTextures.length)
+          % animationTextures.length;
+        const nextTexture = animationTextures[frameIndex];
+
+        if (nextTexture === undefined || placementSprite.texture === nextTexture) {
+          return false;
+        }
+
+        placementSprite.texture = nextTexture;
+        return true;
+      },
+    },
+    animationFrameTextures,
+  };
+}
+
+function assertPlacementRenderEntryEffectiveFootprint(
+  placementRenderEntry: PlacementRenderEntry,
+): void {
+  const effectiveFootprint = placementRenderEntry.effectiveFootprint;
+  if (
+    typeof effectiveFootprint !== "object"
+    || effectiveFootprint === null
+    || !Number.isInteger(effectiveFootprint.width)
+    || effectiveFootprint.width <= 0
+    || !Number.isInteger(effectiveFootprint.height)
+    || effectiveFootprint.height <= 0
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementRenderEntry.key)} effective footprint width and height must be positive integers; received ${JSON.stringify(effectiveFootprint)}.`,
+    );
+  }
+}
+
+function assertPlacementRenderEntryVisualProperties(
+  placementRenderEntry: PlacementRenderEntry,
+): void {
+  if (
+    placementRenderEntry.zIndex !== undefined
+    && (
+      typeof placementRenderEntry.zIndex !== "number"
+      || !Number.isFinite(placementRenderEntry.zIndex)
+    )
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementRenderEntry.key)} zIndex must be finite; received ${describeValue(placementRenderEntry.zIndex)}.`,
+    );
+  }
+  if (
+    placementRenderEntry.opacity !== undefined
+    && (
+      typeof placementRenderEntry.opacity !== "number"
+      || !Number.isFinite(placementRenderEntry.opacity)
+      || placementRenderEntry.opacity < 0
+      || placementRenderEntry.opacity > 1
+    )
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementRenderEntry.key)} opacity must be a finite number from 0 through 1; received ${describeValue(placementRenderEntry.opacity)}.`,
     );
   }
 
-  placementSprite.anchor.set(0, 0);
-  placementSprite.position.set(tileX * tileWidth, tileY * tileHeight);
-  return createPlacementSpriteResult(
-    placementSprite,
-    placementFrameTexture.frameTexture,
-    paintedTexture,
+  const uniformScale = placementRenderEntry.pixelGeometry?.uniformScale;
+  if (
+    uniformScale !== undefined
+    && (
+      typeof uniformScale !== "number"
+      || !Number.isFinite(uniformScale)
+      || uniformScale <= 0
+    )
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementRenderEntry.key)} uniform scale must be a positive finite number; received ${describeValue(uniformScale)}.`,
+    );
+  }
+
+  const animation = placementRenderEntry.animation;
+  if (animation === undefined) {
+    return;
+  }
+  if (typeof animation !== "object" || animation === null) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementRenderEntry.key)} animation must be a non-null object; received ${describeValue(animation)}.`,
+    );
+  }
+
+  if (animation.kind === "frame-cycle") {
+    assertPositiveFiniteAnimationNumber(
+      placementRenderEntry.key,
+      animation.frameDurationMilliseconds,
+      "frame-cycle duration",
+    );
+    if (!Array.isArray(animation.frames) || animation.frames.length === 0) {
+      throw new TypeError(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} frame-cycle frames must be a non-empty array; received ${describeValue(animation.frames)}.`,
+      );
+    }
+    if (
+      typeof animation.timeOffsetMilliseconds !== "number"
+      || !Number.isFinite(animation.timeOffsetMilliseconds)
+    ) {
+      throw new TypeError(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} frame-cycle time offset must be finite; received ${describeValue(animation.timeOffsetMilliseconds)}.`,
+      );
+    }
+
+    for (let frameIndex = 0; frameIndex < animation.frames.length; frameIndex += 1) {
+      assertPlacementAnimationFrame(
+        placementRenderEntry.key,
+        animation.frames[frameIndex],
+        frameIndex,
+      );
+    }
+    if (!arePlacementFramesEqual(placementRenderEntry.frame, animation.frames[0])) {
+      throw new Error(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} frame-cycle first frame must equal the render frame; received frame ${describeValue(placementRenderEntry.frame)} and first animation frame ${describeValue(animation.frames[0])}.`,
+      );
+    }
+    return;
+  }
+
+  if (animation.kind === "scale-pulse") {
+    assertPositiveFiniteAnimationNumber(
+      placementRenderEntry.key,
+      animation.baseScale,
+      "scale-pulse base scale",
+    );
+    assertNonNegativeFiniteAnimationNumber(
+      placementRenderEntry.key,
+      animation.pulseAmplitude,
+      "scale-pulse amplitude",
+    );
+    assertPositiveFiniteAnimationNumber(
+      placementRenderEntry.key,
+      animation.timeDivisorMilliseconds,
+      "scale-pulse time divisor",
+    );
+    assertPositiveFiniteAnimationNumber(
+      placementRenderEntry.key,
+      animation.timeModuloMilliseconds,
+      "scale-pulse time modulo",
+    );
+    if (
+      typeof animation.phaseOffsetMilliseconds !== "number"
+      || !Number.isFinite(animation.phaseOffsetMilliseconds)
+    ) {
+      throw new TypeError(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} scale-pulse phase offset must be finite; received ${describeValue(animation.phaseOffsetMilliseconds)}.`,
+      );
+    }
+    if (uniformScale !== animation.baseScale) {
+      throw new Error(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} scale-pulse base scale must equal pixel geometry uniform scale; received ${describeValue(animation.baseScale)} and ${describeValue(uniformScale)}.`,
+      );
+    }
+    return;
+  }
+
+  throw new TypeError(
+    `Placement render entry ${JSON.stringify(placementRenderEntry.key)} animation kind is unsupported; received ${describeValue((animation as { kind?: unknown }).kind)}.`,
   );
+}
+
+function assertPositiveFiniteAnimationNumber(
+  placementKey: string,
+  receivedNumber: unknown,
+  fieldName: string,
+): void {
+  if (
+    typeof receivedNumber !== "number"
+    || !Number.isFinite(receivedNumber)
+    || receivedNumber <= 0
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementKey)} ${fieldName} must be a positive finite number; received ${describeValue(receivedNumber)}.`,
+    );
+  }
+}
+
+function assertNonNegativeFiniteAnimationNumber(
+  placementKey: string,
+  receivedNumber: unknown,
+  fieldName: string,
+): void {
+  if (
+    typeof receivedNumber !== "number"
+    || !Number.isFinite(receivedNumber)
+    || receivedNumber < 0
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementKey)} ${fieldName} must be a non-negative finite number; received ${describeValue(receivedNumber)}.`,
+    );
+  }
+}
+
+function assertPlacementAnimationFrame(
+  placementKey: string,
+  animationFrame: unknown,
+  frameIndex: number,
+): void {
+  const frameRecord = animationFrame as Partial<{
+    height: unknown;
+    width: unknown;
+    x: unknown;
+    y: unknown;
+  }>;
+  if (
+    typeof animationFrame !== "object"
+    || animationFrame === null
+    || !Number.isInteger(frameRecord.x)
+    || (frameRecord.x as number) < 0
+    || !Number.isInteger(frameRecord.y)
+    || (frameRecord.y as number) < 0
+    || !Number.isInteger(frameRecord.width)
+    || (frameRecord.width as number) <= 0
+    || !Number.isInteger(frameRecord.height)
+    || (frameRecord.height as number) <= 0
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementKey)} frame-cycle frame ${String(frameIndex)} must contain non-negative integer x/y and positive integer width/height; received ${JSON.stringify(animationFrame)}.`,
+    );
+  }
+}
+
+function arePlacementFramesEqual(
+  firstFrame: PlacementRenderEntry["frame"],
+  secondFrame: PlacementRenderEntry["frame"],
+): boolean {
+  return firstFrame !== null
+    && secondFrame !== null
+    && firstFrame.x === secondFrame.x
+    && firstFrame.y === secondFrame.y
+    && firstFrame.width === secondFrame.width
+    && firstFrame.height === secondFrame.height;
+}
+
+function getPlacementSpriteTintColor(
+  tintColor: string | undefined,
+  isSelected: boolean,
+): number {
+  return isSelected ? 0xffdf4a : getPlacementTintColor(tintColor);
 }
 
 function createPlacementSpriteResult(
   sprite: import("pixi.js").Sprite,
   frameTexture: PixiTexture | null,
   paintedTexture: PixiTexture | null,
+  animationResources: PlacementSpriteAnimationResources,
+  placementRenderEntry: PlacementRenderEntry,
 ): PlacementSprite {
-  return { sprite, frameTexture, paintedTexture };
+  return {
+    ...animationResources,
+    placementKey: placementRenderEntry.key,
+    sprite,
+    frameTexture,
+    paintedTexture,
+  };
 }
 
 function getPlacementTintColor(tintColor: string | undefined): number {
@@ -2214,8 +3048,19 @@ export function destroyPlacementSprites(
   for (const placementSprite of placementSprites) {
     placementSprite.sprite.destroy();
     placementSprite.frameTexture?.destroy();
+    for (const animationFrameTexture of placementSprite.animationFrameTextures) {
+      animationFrameTexture.destroy();
+    }
     placementSprite.paintedTexture?.destroy();
   }
+}
+
+function getPlacementSpriteAnimations(
+  placementSprites: readonly PlacementSprite[],
+): readonly PlacementSpriteAnimation[] {
+  return placementSprites.flatMap((placementSprite) =>
+    placementSprite.animation === null ? [] : [placementSprite.animation]
+  );
 }
 
 function getFrameTexture(
@@ -2291,20 +3136,29 @@ export function attachPlannerCameraControls(
     getCameraGeometry,
     getCameraState,
     getPointerInteractionMode = () => "navigate",
+    getWheelZoomEnabled = () => false,
     getMapTileAtPointer,
+    getPlacementDragTarget,
+    getPlacementDragTileSize,
     onMapTileClick,
     onMapTileRectangle,
+    onMoveSelectedPlacements,
     setCameraState,
   } = plannerCameraControlsProperties;
   const activePointerCoordinates = new Map<number, PointerCoordinates>();
   const placementClickSuppressedPointerIds = new Set<number>();
   let pointerDragState: PointerDragState | null = null;
+  let placementDragState: PlacementDragState | null = null;
   let pinchGestureState: PinchGestureState | null = null;
 
   canvasElement.tabIndex = 0;
   canvasElement.setAttribute("aria-label", "Interactive farm map camera");
 
   function handleWheel(wheelEvent: WheelEvent): void {
+    if (!getWheelZoomEnabled()) {
+      return;
+    }
+
     wheelEvent.preventDefault();
 
     const canvasBounds = canvasElement.getBoundingClientRect();
@@ -2373,7 +3227,29 @@ export function attachPlannerCameraControls(
     canvasElement.setPointerCapture(pointerEvent.pointerId);
     placementClickSuppressedPointerIds.delete(pointerEvent.pointerId);
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
+    const hadActivePointer = activePointerCoordinates.size > 0;
     activePointerCoordinates.set(pointerEvent.pointerId, pointerCoordinates);
+    const placementDragTarget =
+      !hadActivePointer && getPointerInteractionMode() === "move-selected"
+        ? getPlacementDragTarget?.(pointerCoordinates) ?? null
+        : null;
+
+    if (placementDragTarget !== null) {
+      const startMapTileCoordinates =
+        getMapTileAtPointer?.(pointerCoordinates) ?? null;
+
+      if (startMapTileCoordinates !== null) {
+        placementDragState = createPlacementDragState(
+          pointerEvent.pointerId,
+          pointerCoordinates,
+          startMapTileCoordinates,
+          placementDragTarget,
+        );
+        pointerDragState = null;
+        return;
+      }
+    }
+
     const startMapTileCoordinates =
       isRectanglePointerInteractionMode(getPointerInteractionMode())
         ? getMapTileAtPointer?.(pointerCoordinates) ?? null
@@ -2392,6 +3268,14 @@ export function attachPlannerCameraControls(
 
     if (activePointerCoordinates.size >= 2) {
       updateCameraForPinch();
+      return;
+    }
+
+    if (
+      placementDragState !== null
+      && placementDragState.pointerId === pointerEvent.pointerId
+    ) {
+      updatePlacementDrag(pointerCoordinates);
       return;
     }
 
@@ -2436,6 +3320,14 @@ export function attachPlannerCameraControls(
 
   function handlePointerUp(pointerEvent: PointerEvent): void {
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
+
+    if (
+      placementDragState !== null
+      && placementDragState.pointerId === pointerEvent.pointerId
+    ) {
+      finishPlacementDrag(pointerEvent, pointerCoordinates);
+      return;
+    }
 
     if (isRectanglePointerInteractionMode(getPointerInteractionMode())) {
       const mapTileRectangle =
@@ -2516,6 +3408,150 @@ export function attachPlannerCameraControls(
     };
   }
 
+  function createPlacementDragState(
+    pointerId: number,
+    startCoordinates: PointerCoordinates,
+    startMapTileCoordinates: MapPointerTile,
+    placementDragTarget: PlacementDragTarget,
+  ): PlacementDragState {
+    if (placementDragTarget.sprites.length === 0) {
+      throw new Error("Selected placement drag target must contain at least one sprite.");
+    }
+
+    const baseSpritePositions = new Map<
+      import("pixi.js").Sprite,
+      Readonly<{ x: number; y: number }>
+    >();
+
+    for (const placementSprite of placementDragTarget.sprites) {
+      baseSpritePositions.set(placementSprite.sprite, {
+        x: placementSprite.sprite.position.x,
+        y: placementSprite.sprite.position.y,
+      });
+    }
+
+    return {
+      baseSpritePositions,
+      hasExceededPlacementThreshold: false,
+      lastTileDelta: { x: 0, y: 0 },
+      pointerId,
+      selectedPlacementSprites: placementDragTarget.sprites,
+      startCoordinates,
+      startMapTileCoordinates,
+    };
+  }
+
+  function updatePlacementDrag(pointerCoordinates: PointerCoordinates): void {
+    const currentPlacementDragState = placementDragState;
+
+    if (currentPlacementDragState === null) {
+      return;
+    }
+
+    const movedDistance = Math.hypot(
+      pointerCoordinates.x - currentPlacementDragState.startCoordinates.x,
+      pointerCoordinates.y - currentPlacementDragState.startCoordinates.y,
+    );
+
+    if (
+      !currentPlacementDragState.hasExceededPlacementThreshold
+      && movedDistance <= placementDragThreshold
+    ) {
+      return;
+    }
+
+    const currentMapTileCoordinates = getMapTileAtPointer?.(pointerCoordinates) ?? null;
+    if (currentMapTileCoordinates === null) {
+      return;
+    }
+
+    const nextTileDelta = {
+      x: currentMapTileCoordinates.x - currentPlacementDragState.startMapTileCoordinates.x,
+      y: currentMapTileCoordinates.y - currentPlacementDragState.startMapTileCoordinates.y,
+    };
+    const tileDeltaChanged =
+      nextTileDelta.x !== currentPlacementDragState.lastTileDelta.x
+      || nextTileDelta.y !== currentPlacementDragState.lastTileDelta.y;
+
+    if (!tileDeltaChanged && currentPlacementDragState.hasExceededPlacementThreshold) {
+      return;
+    }
+
+    placementDragState = {
+      ...currentPlacementDragState,
+      hasExceededPlacementThreshold: true,
+      lastTileDelta: nextTileDelta,
+    };
+    applyPlacementDragPreview(placementDragState);
+  }
+
+  function applyPlacementDragPreview(
+    currentPlacementDragState: PlacementDragState,
+  ): void {
+    const tileSize = getPlacementDragTileSize?.();
+    if (tileSize === undefined) {
+      throw new Error("Selected placement drag requires map tile dimensions.");
+    }
+
+    for (const [sprite, basePosition] of currentPlacementDragState.baseSpritePositions) {
+      sprite.position.set(
+        basePosition.x + currentPlacementDragState.lastTileDelta.x * tileSize.width,
+        basePosition.y + currentPlacementDragState.lastTileDelta.y * tileSize.height,
+      );
+    }
+  }
+
+  function restorePlacementDragPreview(
+    currentPlacementDragState: PlacementDragState,
+  ): void {
+    for (const [sprite, basePosition] of currentPlacementDragState.baseSpritePositions) {
+      sprite.position.set(basePosition.x, basePosition.y);
+    }
+  }
+
+  function cancelPlacementDrag(pointerId: number): void {
+    if (placementDragState === null || placementDragState.pointerId !== pointerId) {
+      return;
+    }
+
+    restorePlacementDragPreview(placementDragState);
+    placementDragState = null;
+    placementClickSuppressedPointerIds.add(pointerId);
+  }
+
+  function finishPlacementDrag(
+    pointerEvent: PointerEvent,
+    pointerCoordinates: PointerCoordinates,
+  ): void {
+    const currentPlacementDragState = placementDragState;
+    if (currentPlacementDragState === null) {
+      return;
+    }
+
+    const finalTileDelta = currentPlacementDragState.lastTileDelta;
+    const shouldCommit =
+      pointerEvent.button === 0
+      && currentPlacementDragState.hasExceededPlacementThreshold
+      && (finalTileDelta.x !== 0 || finalTileDelta.y !== 0);
+
+    if (shouldCommit) {
+      restorePlacementDragPreview(currentPlacementDragState);
+      placementDragState = null;
+      handlePointerEnd(pointerEvent);
+      onMoveSelectedPlacements?.(finalTileDelta);
+      return;
+    }
+
+    cancelPlacementDrag(pointerEvent.pointerId);
+    handlePointerEnd(pointerEvent);
+    if (pointerEvent.button === 0) {
+      const mapTileCoordinates = getMapTileAtPointer?.(pointerCoordinates) ?? null;
+      if (mapTileCoordinates !== null) {
+        onMapTileClick?.(mapTileCoordinates);
+      }
+    }
+  }
+
   function handlePointerEnd(pointerEvent: PointerEvent): void {
     if (!activePointerCoordinates.delete(pointerEvent.pointerId)) {
       return;
@@ -2530,10 +3566,19 @@ export function attachPlannerCameraControls(
     synchronizePointerGesture();
   }
 
+  function handlePointerCancel(pointerEvent: PointerEvent): void {
+    cancelPlacementDrag(pointerEvent.pointerId);
+    handlePointerEnd(pointerEvent);
+  }
+
   function synchronizePointerGesture(
     startMapTileCoordinates: MapPointerTile | null = null,
   ): void {
     if (activePointerCoordinates.size >= 2) {
+      if (placementDragState !== null) {
+        cancelPlacementDrag(placementDragState.pointerId);
+      }
+
       for (const pointerId of activePointerCoordinates.keys()) {
         placementClickSuppressedPointerIds.add(pointerId);
       }
@@ -2600,26 +3645,30 @@ export function attachPlannerCameraControls(
   }
 
   canvasElement.addEventListener("keydown", handleKeyDown);
-  canvasElement.addEventListener("pointercancel", handlePointerEnd);
+  canvasElement.addEventListener("pointercancel", handlePointerCancel);
   canvasElement.addEventListener("pointerdown", handlePointerDown);
   canvasElement.addEventListener("pointermove", handlePointerMove);
   canvasElement.addEventListener("pointerup", handlePointerUp);
-  canvasElement.addEventListener("lostpointercapture", handlePointerEnd);
+  canvasElement.addEventListener("lostpointercapture", handlePointerCancel);
   canvasElement.addEventListener("wheel", handleWheel, { passive: false });
 
   return {
     dispose(): void {
       canvasElement.removeEventListener("keydown", handleKeyDown);
-      canvasElement.removeEventListener("pointercancel", handlePointerEnd);
+      canvasElement.removeEventListener("pointercancel", handlePointerCancel);
       canvasElement.removeEventListener("pointerdown", handlePointerDown);
       canvasElement.removeEventListener("pointermove", handlePointerMove);
       canvasElement.removeEventListener("pointerup", handlePointerUp);
-      canvasElement.removeEventListener("lostpointercapture", handlePointerEnd);
+      canvasElement.removeEventListener("lostpointercapture", handlePointerCancel);
       canvasElement.removeEventListener("wheel", handleWheel);
       activePointerCoordinates.clear();
       placementClickSuppressedPointerIds.clear();
       pinchGestureState = null;
       pointerDragState = null;
+      if (placementDragState !== null) {
+        restorePlacementDragPreview(placementDragState);
+      }
+      placementDragState = null;
     },
   };
 }
@@ -2627,10 +3676,7 @@ export function attachPlannerCameraControls(
 function isRectanglePointerInteractionMode(
   pointerInteractionMode: PointerInteractionMode,
 ): boolean {
-  return (
-    pointerInteractionMode === "rectangle" ||
-    pointerInteractionMode === "move-selected"
-  );
+  return pointerInteractionMode === "rectangle";
 }
 
 function getPointerCoordinates(

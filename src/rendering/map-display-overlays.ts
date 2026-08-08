@@ -9,6 +9,10 @@ import {
 } from "../placement/placement-snapshot";
 import { getBaseTileGid } from "../tmx/decode-tile-layer-data";
 import type { TmxMap, TmxTileset } from "../tmx/tmx-types";
+import {
+  createSprinklerCoverageTiles,
+  type SprinklerCoverageTile,
+} from "./sprinkler-placement-rendering";
 
 export type MapDisplayOverlayTile = Readonly<{
   kind: "blocked-buildings" | "blocked-crops" | "blocked-trees";
@@ -32,14 +36,6 @@ export type ResourceClumpOverlayEntry = Readonly<{
   x: number;
   y: number;
 }>;
-
-const sprinklerCoverageByItemId: Readonly<
-  Record<string, Readonly<{ width: number; height: number }>>
-> = {
-  "object:599": { width: 3, height: 3 },
-  "object:621": { width: 3, height: 3 },
-  "object:645": { width: 5, height: 5 },
-};
 
 const scarecrowCoverageByItemId: Readonly<
   Record<string, Readonly<{ width: number; height: number }>>
@@ -108,19 +104,17 @@ export function createPlacementCoverageOverlayRectangles(
   );
   assertEditorDisplayOptions(editorDisplayOptions);
   const coverageOverlayRectangles: PlacementCoverageOverlayRectangle[] = [];
+  const sprinklerCoverageTileKeys = new Set<string>();
 
   for (const placementItem of persistentPlacementSnapshot.items) {
     if (editorDisplayOptions.showSprinklerRadius) {
-      const sprinklerCoverage = sprinklerCoverageByItemId[placementItem.itemId];
+      const sprinklerCoverageTiles = createSprinklerCoverageTiles(placementItem);
 
-      if (sprinklerCoverage !== undefined) {
-        coverageOverlayRectangles.push(
-          createCenteredCoverageRectangle(
-            placementItem.x,
-            placementItem.y,
-            sprinklerCoverage,
-            0x3db4ff,
-          ),
+      if (sprinklerCoverageTiles !== null) {
+        appendUniqueSprinklerCoverageRectangles(
+          coverageOverlayRectangles,
+          sprinklerCoverageTileKeys,
+          sprinklerCoverageTiles,
         );
       }
     }
@@ -173,6 +167,29 @@ export function createPlacementCoverageOverlayRectangles(
   }
 
   return coverageOverlayRectangles;
+}
+
+function appendUniqueSprinklerCoverageRectangles(
+  coverageOverlayRectangles: PlacementCoverageOverlayRectangle[],
+  sprinklerCoverageTileKeys: Set<string>,
+  sprinklerCoverageTiles: readonly SprinklerCoverageTile[],
+): void {
+  for (const sprinklerCoverageTile of sprinklerCoverageTiles) {
+    const coverageTileKey = `${String(sprinklerCoverageTile.x)},${String(sprinklerCoverageTile.y)}`;
+
+    if (sprinklerCoverageTileKeys.has(coverageTileKey)) {
+      continue;
+    }
+
+    sprinklerCoverageTileKeys.add(coverageTileKey);
+    coverageOverlayRectangles.push({
+      color: 0x3db4ff,
+      height: 1,
+      width: 1,
+      x: sprinklerCoverageTile.x,
+      y: sprinklerCoverageTile.y,
+    });
+  }
 }
 
 export function createResourceClumpOverlayEntries(

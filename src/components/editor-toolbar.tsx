@@ -4,6 +4,14 @@ import {
   editorToolAvailability,
   type EditorTool,
 } from "../editor/editor-view-state";
+import {
+  Eraser,
+  MousePointer2,
+  PaintBucket,
+  Redo2,
+  SquareDashedMousePointer,
+  Undo2,
+} from "lucide-react";
 
 type EditorToolbarProperties = Readonly<{
   tool: EditorTool;
@@ -12,16 +20,23 @@ type EditorToolbarProperties = Readonly<{
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  wheelZoomEnabled?: boolean;
+  onWheelZoomToggle?: () => void;
 }>;
 
 const editorToolControls: readonly Readonly<{
   tool: EditorTool;
   label: string;
-  glyph: string;
+  icon: typeof MousePointer2;
 }>[] = [
-  { tool: "cursor", label: "Cursor tool", glyph: "↖" },
-  { tool: "multi-select", label: "Multi-select tool", glyph: "▦" },
-  { tool: "erase", label: "Erase tool", glyph: "⌫" },
+  { tool: "cursor", label: "Cursor tool", icon: MousePointer2 },
+  {
+    tool: "multi-select",
+    label: "Multi-select tool",
+    icon: SquareDashedMousePointer,
+  },
+  { tool: "fill", label: "Fill tool", icon: PaintBucket },
+  { tool: "erase", label: "Erase tool", icon: Eraser },
 ];
 
 export function EditorToolbar({
@@ -31,55 +46,98 @@ export function EditorToolbar({
   onRedo,
   canUndo,
   canRedo,
+  wheelZoomEnabled = false,
+  onWheelZoomToggle = () => undefined,
 }: EditorToolbarProperties) {
-  return (
-    <div aria-label="Editor tools" className="editor-toolbar" role="toolbar">
-      {editorToolControls.map((editorToolControl) => {
-        const isSelected = tool === editorToolControl.tool;
-        const isAvailable = editorToolAvailability[editorToolControl.tool];
+  const renderToolButton = (editorToolControl: (typeof editorToolControls)[number]) => {
+    const isSelected = tool === editorToolControl.tool;
+    const isAvailable = editorToolAvailability[editorToolControl.tool];
+    const ToolIcon = editorToolControl.icon;
 
-        return (
+    return (
+      <button
+        aria-label={editorToolControl.label}
+        aria-pressed={isSelected}
+        className={`tool-btn editor-toolbar__button${
+          editorToolControl.tool === "erase"
+            ? ` erase-hover${isSelected ? " erase" : ""}`
+            : ""
+        }${editorToolControl.tool === "fill" ? " fill" : ""}${
+          isSelected ? " active" : ""
+        }`}
+        disabled={!isAvailable}
+        key={editorToolControl.tool}
+        onClick={() => onToolChange(editorToolControl.tool)}
+        title={editorToolControl.label}
+        type="button"
+      >
+        <ToolIcon aria-hidden="true" size={18} strokeWidth={2} />
+      </button>
+    );
+  };
+
+  return (
+    <div className="toolbar-wrapper planner-editor-toolbar" data-planner-toolbar>
+      <div
+        aria-label="Editor tools"
+        className="toolbar editor-toolbar"
+        role="toolbar"
+      >
+        <div className="tool-group">
+          {editorToolControls
+            .filter((editorToolControl) =>
+              editorToolControl.tool === "cursor" ||
+              editorToolControl.tool === "multi-select" ||
+              editorToolControl.tool === "fill",
+            )
+            .map(renderToolButton)}
+        </div>
+        <span aria-hidden="true" className="separator editor-toolbar__divider" />
+        <div className="tool-group">
+          {renderToolButton(editorToolControls[3])}
+        </div>
+        <span aria-hidden="true" className="separator editor-toolbar__divider" />
+        <div
+          aria-label="Wheel zoom"
+          className="tool-group reference-runtime-wheel-zoom-group"
+          role="group"
+        >
           <button
-            aria-label={editorToolControl.label}
-            aria-pressed={isSelected}
-            className="editor-toolbar__button"
-            disabled={!isAvailable}
-            key={editorToolControl.tool}
-            onClick={() => onToolChange(editorToolControl.tool)}
-            title={editorToolControl.label}
+            aria-label={wheelZoomEnabled ? "Disable wheel zoom" : "Enable wheel zoom"}
+            aria-pressed={wheelZoomEnabled}
+            className="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"
+            data-reference-runtime-wheel-zoom-button="true"
+            onClick={onWheelZoomToggle}
+            title={wheelZoomEnabled ? "Disable wheel zoom" : "Enable wheel zoom"}
             type="button"
           >
-            <span aria-hidden="true" className="editor-toolbar__glyph">
-              {editorToolControl.glyph}
-            </span>
+            Zoom
           </button>
-        );
-      })}
-      <span aria-hidden="true" className="editor-toolbar__divider" />
-      <button
-        aria-label="Undo"
-        className="editor-toolbar__button"
-        disabled={!canUndo}
-        onClick={onUndo}
-        title="Undo (Ctrl+Z)"
-        type="button"
-      >
-        <span aria-hidden="true" className="editor-toolbar__glyph">
-          ↶
-        </span>
-      </button>
-      <button
-        aria-label="Redo"
-        className="editor-toolbar__button"
-        disabled={!canRedo}
-        onClick={onRedo}
-        title="Redo (Ctrl+Y)"
-        type="button"
-      >
-        <span aria-hidden="true" className="editor-toolbar__glyph">
-          ↷
-        </span>
-      </button>
+        </div>
+        <span aria-hidden="true" className="separator editor-toolbar__divider" />
+        <div className="tool-group">
+          <button
+            aria-label="Undo"
+            className="tool-btn editor-toolbar__button"
+            disabled={!canUndo}
+            onClick={onUndo}
+            title="Undo (Ctrl+Z)"
+            type="button"
+          >
+            <Undo2 aria-hidden="true" size={18} strokeWidth={2} />
+          </button>
+          <button
+            aria-label="Redo"
+            className="tool-btn editor-toolbar__button"
+            disabled={!canRedo}
+            onClick={onRedo}
+            title="Redo (Ctrl+Y)"
+            type="button"
+          >
+            <Redo2 aria-hidden="true" size={18} strokeWidth={2} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

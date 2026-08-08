@@ -5,6 +5,8 @@ import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snap
 function createLightPlacementSnapshot(
   itemId: string,
   nightLightState?: "off",
+  variant = 0,
+  footprintWidth = 2,
 ) {
   return {
     ...createEmptyPlacementSnapshot(),
@@ -16,8 +18,8 @@ function createLightPlacementSnapshot(
         y: 3,
         layer: "item" as const,
         rotation: 0,
-        footprint: { width: 2, height: 1 },
-        variant: 0,
+        footprint: { width: footprintWidth, height: 1 },
+        variant,
         tintColor: "#ffffff",
         locked: false,
         isRug: false,
@@ -37,6 +39,29 @@ const catalogItemsWithTorch = [
   {
     id: "object:93",
     nightLight: { radiusInTiles: 4, color: 0xffe3a0 },
+  },
+] as const;
+
+const catalogItemsWithLitBigCraftable = [
+  {
+    id: "big-craftable:146",
+    nightLight: { radiusInTiles: 5, color: 0xffe3a0 },
+    renderingMetadata: {
+      kind: "lit-big-craftable" as const,
+      flameLayers: [
+        { offsetX: 3, offsetY: -2, scale: 0.75, timeOffsetMilliseconds: 0 },
+        { offsetX: 5, offsetY: 0, scale: 0.75, timeOffsetMilliseconds: 137 },
+        { offsetX: 3, offsetY: 3, scale: 0.75, timeOffsetMilliseconds: 274 },
+      ],
+    },
+  },
+] as const;
+
+const catalogItemsWithFurnitureFire = [
+  {
+    id: "furniture_1792",
+    furnitureFire: { kind: "fireplace" as const },
+    nightLight: { radiusInTiles: 10, color: 0xffe3a0 },
   },
 ] as const;
 
@@ -128,5 +153,71 @@ describe("night light rendering", () => {
     ).toThrow(
       'Placement snapshot field "items[0].nightLightState" must equal "off"; received "lit".',
     );
+  });
+
+  it("suppresses the exact BigCraftable night light only for its Unlit variant", () => {
+    expect(
+      createNightLightRenderDescriptors({
+        catalogItems: catalogItemsWithLitBigCraftable,
+        isNightMode: true,
+        placementSnapshot: createLightPlacementSnapshot(
+          "big-craftable:146",
+          undefined,
+          1,
+          1,
+        ),
+        tileHeight: 16,
+        tileWidth: 16,
+      }),
+    ).toEqual([]);
+    expect(
+      createNightLightRenderDescriptors({
+        catalogItems: catalogItemsWithLitBigCraftable,
+        isNightMode: true,
+        placementSnapshot: createLightPlacementSnapshot(
+          "big-craftable:146",
+          undefined,
+          0,
+          1,
+        ),
+        tileHeight: 16,
+        tileWidth: 16,
+      }),
+    ).toEqual([
+      {
+        centerX: 40,
+        centerY: 56,
+        color: 0xffe3a0,
+        radiusInPixels: 80,
+      },
+    ]);
+  });
+
+  it("suppresses a frozen furniture fire only for variant one", () => {
+    expect(
+      createNightLightRenderDescriptors({
+        catalogItems: catalogItemsWithFurnitureFire,
+        isNightMode: true,
+        placementSnapshot: createLightPlacementSnapshot("furniture_1792", undefined, 1),
+        tileHeight: 16,
+        tileWidth: 16,
+      }),
+    ).toEqual([]);
+    expect(
+      createNightLightRenderDescriptors({
+        catalogItems: catalogItemsWithFurnitureFire,
+        isNightMode: true,
+        placementSnapshot: createLightPlacementSnapshot("furniture_1792", undefined, 2),
+        tileHeight: 16,
+        tileWidth: 16,
+      }),
+    ).toEqual([
+      {
+        centerX: 48,
+        centerY: 56,
+        color: 0xffe3a0,
+        radiusInPixels: 160,
+      },
+    ]);
   });
 });

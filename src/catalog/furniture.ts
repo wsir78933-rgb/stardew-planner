@@ -3,10 +3,12 @@ import type {
   CatalogFurnitureRenderingMetadata,
   CatalogFurnitureRotationSprite,
   CatalogItem,
+  CatalogPresentationCapabilities,
   CatalogSourceRect,
   CatalogTileSize,
 } from "./catalog-types";
 import { getLockedNightLightDescriptor } from "../night-lights/locked-night-light-definitions";
+import { getLockedFurnitureFireRenderingMetadata } from "./furniture-fire-definitions";
 
 type FurnitureTextureDefinition = Readonly<{
   localPath: string;
@@ -22,7 +24,28 @@ type FurnitureRecordLocation = Readonly<{
 const localAssetRoot = "/game-assets/1.6.15";
 const furnitureCellSize = 16;
 const excludedFurnitureRecordIds = new Set(["CCFishTank"]);
+const lockedWindowFurnitureRecordIds = new Set([
+  "1614",
+  "1616",
+  "1673",
+  "1678",
+  "1682",
+  "1749",
+  "TriangleWindow",
+]);
 const furniturePlacementTools = ["cursor", "multi-select", "erase"] as const;
+const bedFurniturePlacementTools = [
+  "cursor",
+  "multi-select",
+  "fill",
+  "erase",
+] as const;
+const compositeFurniturePlacementTools = [
+  "cursor",
+  "multi-select",
+  "fill",
+  "erase",
+] as const;
 
 const furnitureTextureDefinitionsByName: Readonly<
   Record<string, FurnitureTextureDefinition>
@@ -35,7 +58,7 @@ const furnitureTextureDefinitionsByName: Readonly<
   FreeCactuses: {
     localPath: `${localAssetRoot}/tilesheets/FreeCactuses.png`,
     width: 128,
-    height: 112,
+    height: 128,
   },
   furniture_2: {
     localPath: `${localAssetRoot}/tilesheets/furniture_2.png`,
@@ -206,6 +229,13 @@ export function createFurnitureCatalogItems(
       "Rotations",
       recordLocation,
     );
+    assertLockedWindowFurnitureRecord(
+      recordId,
+      furnitureType,
+      tileSize,
+      rotationCount,
+      recordLocation,
+    );
     const sourceSpriteIndex = readFurnitureSpriteIndex(
       recordId,
       furnitureRecordFields,
@@ -226,6 +256,17 @@ export function createFurnitureCatalogItems(
       recordLocation,
     );
 
+    const renderingMetadata = createFurnitureRenderingMetadata({
+      recordId,
+      furnitureType,
+      tileSize,
+      initialSprite,
+      rotationCount,
+      placementPermissions,
+    });
+
+    const furnitureFire = getLockedFurnitureFireRenderingMetadata(recordId);
+
     catalogItems.push({
       id: `furniture_${recordId}`,
       name: readNonEmptyField(furnitureRecordFields, 0, "Name", recordLocation),
@@ -233,20 +274,78 @@ export function createFurnitureCatalogItems(
       tileSize,
       textureLocalPath: textureDefinition.localPath,
       sprite,
-      allowedTools: furniturePlacementTools,
-      ...createCatalogNightLightProperties(recordId, furnitureType),
-      renderingMetadata: createFurnitureRenderingMetadata({
-        recordId,
-        furnitureType,
-        tileSize,
-        initialSprite,
+      allowedTools: renderingMetadata.bedType !== null
+        ? bedFurniturePlacementTools
+        : renderingMetadata.compositeSprite === null
+        ? furniturePlacementTools
+        : compositeFurniturePlacementTools,
+      presentationCapabilities: createFurniturePresentationCapabilities(
         rotationCount,
-        placementPermissions,
-      }),
+        tileSize,
+        renderingMetadata.rotationTileSizes,
+      ),
+      ...createCatalogNightLightProperties(recordId, furnitureType),
+      ...(furnitureFire === undefined
+        ? {}
+        : { furnitureFire }),
+      renderingMetadata,
     });
   }
 
   return catalogItems;
+}
+
+function assertLockedWindowFurnitureRecord(
+  recordId: string,
+  furnitureType: string,
+  tileSize: CatalogTileSize,
+  rotationCount: number,
+  recordLocation: FurnitureRecordLocation,
+): void {
+  const isLockedWindowRecord = lockedWindowFurnitureRecordIds.has(recordId);
+
+  if (!isLockedWindowRecord && furnitureType !== "window") {
+    return;
+  }
+  if (!isLockedWindowRecord) {
+    throw new Error(
+      `${formatRecordLocation(recordLocation)} field "Type" has unsupported window record ID ${JSON.stringify(recordId)}.`,
+    );
+  }
+  if (furnitureType !== "window") {
+    throw new Error(
+      `${formatRecordLocation(recordLocation)} locked window record ${JSON.stringify(recordId)} requires Type "window"; received ${JSON.stringify(furnitureType)}.`,
+    );
+  }
+  if (tileSize.width !== 1 || tileSize.height !== 2) {
+    throw new Error(
+      `${formatRecordLocation(recordLocation)} locked window record ${JSON.stringify(recordId)} requires TileSize 1 2; received ${String(tileSize.width)} ${String(tileSize.height)}.`,
+    );
+  }
+  if (rotationCount !== 1) {
+    throw new Error(
+      `${formatRecordLocation(recordLocation)} locked window record ${JSON.stringify(recordId)} requires Rotations 1; received ${String(rotationCount)}.`,
+    );
+  }
+}
+
+function createFurniturePresentationCapabilities(
+  rotationCount: number,
+  tileSize: CatalogTileSize,
+  rotationTileSizes: readonly CatalogTileSize[] | undefined,
+): CatalogPresentationCapabilities {
+  return {
+    canFlip: false,
+    rotation: {
+      count: rotationCount,
+      footprints: rotationTileSizes ?? Array.from(
+        { length: rotationCount },
+        () => ({ ...tileSize }),
+      ),
+    },
+    variantCycle: null,
+    visibleVariants: [],
+  };
 }
 
 function createCatalogNightLightProperties(
@@ -288,6 +387,7 @@ function createFurnitureRenderingMetadata(input: Readonly<{
       input.tileSize,
     ),
     wallMounted: ["painting", "window", "sconce"].includes(input.furnitureType),
+    ...(input.furnitureType === "window" ? { isWindow: true } : {}),
     isRug: input.furnitureType === "rug",
     isTable: furnitureTypeIndexes[input.furnitureType] === 11,
     isLongTable: furnitureTypeIndexes[input.furnitureType] === 5,
@@ -415,7 +515,7 @@ function getFurnitureRotationOffset(furnitureTypeIndex: number): Readonly<{
   return { x: 0, y: 0 };
 }
 
-function getFurnitureBedType(
+export function getFurnitureBedType(
   furnitureType: string,
 ): "single" | "double" | "child" | null {
   if (furnitureType === "bed") {

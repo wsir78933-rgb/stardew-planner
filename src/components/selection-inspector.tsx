@@ -1,13 +1,15 @@
 "use client";
 
+import { fishPondWaterColors, paintableChestPalette } from "../catalog";
 import type { BuildingPaintColors } from "../paint/building-paint";
+import { Copy, MoreHorizontal, Trash2, X } from "lucide-react";
 
 type SingleSelectionInspectorActionProperties = Readonly<{
   kind: "single";
   onCopy: () => void;
   onDelete: () => void;
   onDismiss: () => void;
-  onRotate: () => void;
+  onCycleAppearance: () => void;
 }>;
 
 type SelectedItemInspectorProperties =
@@ -16,7 +18,8 @@ type SelectedItemInspectorProperties =
       onNightLightStateChange: (nightLightState: "off" | undefined) => void;
       onTintChange: (tintColor: string) => void;
       selection: Readonly<{
-        canRotate: boolean;
+        canCycleAppearance: boolean;
+        canPaint?: boolean;
         entityName: string;
         isNightLight: boolean;
         kind: "item";
@@ -30,8 +33,9 @@ type PaintableBuildingInspectorProperties =
     Readonly<{
       onBuildingPaintChange: (paintColors: BuildingPaintColors) => void;
       selection: Readonly<{
-        canRotate: false;
+        canCycleAppearance: false;
         canPaint: true;
+        canSetWaterColor?: false;
         entityName: string;
         kind: "building";
         paintColors: BuildingPaintColors;
@@ -42,17 +46,32 @@ type NonPaintableBuildingInspectorProperties =
   SingleSelectionInspectorActionProperties &
     Readonly<{
       selection: Readonly<{
-        canRotate: false;
+        canCycleAppearance: boolean;
         canPaint: false;
+        canSetWaterColor?: false;
         entityName: string;
         kind: "building";
+      }>;
+    }>;
+
+type FishPondWaterBuildingInspectorProperties =
+  SingleSelectionInspectorActionProperties &
+    Readonly<{
+      onBuildingWaterColorChange: (waterColor: number | undefined) => void;
+      selection: Readonly<{
+        canCycleAppearance: boolean;
+        canPaint: false;
+        canSetWaterColor: true;
+        entityName: string;
+        kind: "building";
+        waterColor: number | undefined;
       }>;
     }>;
 
 type SelectedCropInspectorProperties = SingleSelectionInspectorActionProperties &
   Readonly<{
     selection: Readonly<{
-      canRotate: false;
+      canCycleAppearance: false;
       entityName: string;
       kind: "crop";
     }>;
@@ -61,6 +80,7 @@ type SelectedCropInspectorProperties = SingleSelectionInspectorActionProperties 
 type SingleSelectionInspectorProperties =
   | SelectedItemInspectorProperties
   | PaintableBuildingInspectorProperties
+  | FishPondWaterBuildingInspectorProperties
   | NonPaintableBuildingInspectorProperties
   | SelectedCropInspectorProperties;
 
@@ -81,18 +101,24 @@ export function SelectionInspector(
   selectionInspectorProperties: SelectionInspectorProperties,
 ) {
   if (selectionInspectorProperties.kind === "single") {
-    const { onCopy, onDelete, onDismiss, onRotate, selection } =
+    const { onCopy, onCycleAppearance, onDelete, onDismiss, selection } =
       selectionInspectorProperties;
-    const tintControl =
-      isSelectedItemInspector(selectionInspectorProperties) ? (
-        <input
-          aria-label="Selected item tint color"
-          onChange={(changeEvent) =>
-            selectionInspectorProperties.onTintChange(changeEvent.currentTarget.value)
-          }
-          type="color"
-          value={selectionInspectorProperties.selection.tintColor}
-        />
+    const selectedChestTintColor = isSelectedItemInspector(selectionInspectorProperties)
+      ? selectionInspectorProperties.selection.tintColor
+      : null;
+    const isCustomChestTintColor = selectedChestTintColor !== null
+      && selectedChestTintColor !== "#ffffff"
+      && !paintableChestPalette.some(([, tintColor]) => tintColor === selectedChestTintColor);
+    const tintControl = isSelectedItemInspector(selectionInspectorProperties)
+      && selectionInspectorProperties.selection.canPaint ? (
+        <label>
+          Paint
+          <select aria-label="Selected chest paint color" onChange={(changeEvent) => selectionInspectorProperties.onTintChange(changeEvent.currentTarget.value)} value={selectionInspectorProperties.selection.tintColor}>
+            <option value="#ffffff">Default</option>
+            {isCustomChestTintColor ? <option value={selectedChestTintColor}>Custom</option> : null}
+            {paintableChestPalette.map(([label, tintColor]) => <option key={tintColor} value={tintColor}>{label}</option>)}
+          </select>
+        </label>
       ) : null;
     const nightLightControl =
       isSelectedItemInspector(selectionInspectorProperties) &&
@@ -165,46 +191,83 @@ export function SelectionInspector(
         </label>
       </div>
     ) : null;
+    const fishPondWaterColorControl = isFishPondWaterBuildingInspector(
+      selectionInspectorProperties,
+    ) ? (
+      <label className="selection-inspector__fish-pond-water-color">
+        Water
+        <select
+          aria-label="Selected Fish Pond water color"
+          onChange={(changeEvent) =>
+            selectionInspectorProperties.onBuildingWaterColorChange(
+              changeEvent.currentTarget.value === "default"
+                ? undefined
+                : Number(changeEvent.currentTarget.value),
+            )
+          }
+          value={selectionInspectorProperties.selection.waterColor?.toString() ?? "default"}
+        >
+          <option value="default">Default</option>
+          {fishPondWaterColors.slice(1).map((waterColorOption) => (
+            <option
+              key={waterColorOption.value}
+              value={waterColorOption.value}
+            >
+              {waterColorOption.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    ) : null;
 
     return (
-      <aside aria-label="Selected placement" className="selection-inspector">
+      <aside
+        aria-label="Selected placement"
+        className="selection-pill selection-inspector"
+      >
         <button
           aria-label="Dismiss selection"
-          className="selection-inspector__dismiss"
+          className="pill-dismiss selection-inspector__dismiss"
           onClick={onDismiss}
           type="button"
         >
-          ×
+          <X aria-hidden="true" size={14} strokeWidth={2} />
         </button>
-        <span className="selection-inspector__name">{selection.entityName}</span>
+        <span className="pill-name selection-inspector__name">
+          {selection.entityName}
+        </span>
         <div className="selection-inspector__actions">
           {tintControl}
           {nightLightControl}
           {buildingPaintControls}
+          {fishPondWaterColorControl}
           <button
-            aria-label="Rotate selected item"
-            disabled={!selection.canRotate}
-            onClick={onRotate}
-            title="Rotate selected item (Q)"
+            aria-label="Cycle selected item appearance"
+            className="pill-more"
+            disabled={!selection.canCycleAppearance}
+            onClick={onCycleAppearance}
+            title="Cycle selected item appearance (Q)"
             type="button"
           >
-            ↻
+            <MoreHorizontal aria-hidden="true" size={16} strokeWidth={2} />
           </button>
           <button
             aria-label="Copy selected placement"
+            className="pill-copy"
             onClick={onCopy}
             title="Copy selected placement (C)"
             type="button"
           >
-            Copy
+            <Copy aria-hidden="true" size={15} strokeWidth={2} />
           </button>
           <button
             aria-label="Delete selected placement"
+            className="pill-delete"
             onClick={onDelete}
             title="Delete selected placement (Delete)"
             type="button"
           >
-            Delete
+            <Trash2 aria-hidden="true" size={15} strokeWidth={2} />
           </button>
         </div>
       </aside>
@@ -215,24 +278,28 @@ export function SelectionInspector(
   const selectionLabel = `${String(selection.count)} selected placements`;
 
   return (
-    <aside aria-label="Selected placements" className="selection-inspector">
+    <aside
+      aria-label="Selected placements"
+      className="selection-pill selection-inspector"
+    >
       <button
         aria-label="Dismiss selection"
-        className="selection-inspector__dismiss"
+        className="pill-dismiss selection-inspector__dismiss"
         onClick={onDismiss}
         type="button"
       >
-        ×
+        <X aria-hidden="true" size={14} strokeWidth={2} />
       </button>
-      <span className="selection-inspector__name">{selectionLabel}</span>
+      <span className="pill-name selection-inspector__name">{selectionLabel}</span>
       <div className="selection-inspector__actions">
         <button
           aria-label="Delete selected placements"
+          className="pill-delete"
           onClick={onDelete}
           title="Delete selected placements (Delete)"
           type="button"
         >
-          Delete
+          <Trash2 aria-hidden="true" size={15} strokeWidth={2} />
         </button>
       </div>
     </aside>
@@ -251,5 +318,14 @@ function isPaintableBuildingInspector(
   return (
     selectionInspectorProperties.selection.kind === "building" &&
     selectionInspectorProperties.selection.canPaint
+  );
+}
+
+function isFishPondWaterBuildingInspector(
+  selectionInspectorProperties: SingleSelectionInspectorProperties,
+): selectionInspectorProperties is FishPondWaterBuildingInspectorProperties {
+  return (
+    selectionInspectorProperties.selection.kind === "building" &&
+    selectionInspectorProperties.selection.canSetWaterColor === true
   );
 }

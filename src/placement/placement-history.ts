@@ -18,6 +18,41 @@ export function createPlacementHistory<PlacementState>(
   };
 }
 
+export function clonePlacementHistory<PlacementState>(
+  placementHistory: PlacementHistory<PlacementState>,
+  clonePlacementState: (placementState: PlacementState) => PlacementState,
+): PlacementHistory<PlacementState> {
+  assertPlacementHistory(placementHistory);
+
+  if (typeof clonePlacementState !== "function") {
+    throw new TypeError(
+      `Placement history clonePlacementState must be a function; received ${describeValue(clonePlacementState)}.`,
+    );
+  }
+
+  return {
+    currentState: clonePlacementState(placementHistory.currentState),
+    undoStates: placementHistory.undoStates.map(clonePlacementState),
+    redoStates: placementHistory.redoStates.map(clonePlacementState),
+  };
+}
+
+export function clearPlacementHistoryRedo<PlacementState>(
+  placementHistory: PlacementHistory<PlacementState>,
+): PlacementHistory<PlacementState> {
+  assertPlacementHistory(placementHistory);
+
+  if (placementHistory.redoStates.length === 0) {
+    return placementHistory;
+  }
+
+  return {
+    currentState: placementHistory.currentState,
+    undoStates: placementHistory.undoStates,
+    redoStates: [],
+  };
+}
+
 export function commitPlacementHistory<PlacementState>(
   placementHistory: PlacementHistory<PlacementState>,
   nextState: PlacementState,

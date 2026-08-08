@@ -255,7 +255,9 @@ describe("static public pages", () => {
 
       if (staticPageFile === "index.html") {
         expect(staticPageHtml).toContain("WebApplication");
-        expect(staticPageHtml).toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
+        expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
+        expect(staticPageHtml).toContain('role="status">Loading planner…');
+        expect(staticPageHtml).not.toContain("reference-runtime/bootstrap.mjs");
         expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
         expect(staticPageHtml).toContain(
           `<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout</h1>`,

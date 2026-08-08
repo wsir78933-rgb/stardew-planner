@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type ChangeEvent } from "react";
+import { useId, useState, type ChangeEvent } from "react";
 import {
   GameSaveImportError,
   type ImportedGameSaveState,
@@ -18,35 +18,35 @@ type GameSaveImportResultModalProperties = Readonly<{
 export function GameSaveImportControl({
   onImportGameSave,
 }: GameSaveImportControlProperties) {
-  const gameSaveFileInputReference = useRef<HTMLInputElement>(null);
   const [importErrorMessage, setImportErrorMessage] = useState<string | null>(null);
   const [isImporting, setIsImporting] = useState(false);
 
   function handleGameSaveFileChange(
     changeEvent: ChangeEvent<HTMLInputElement>,
   ): void {
-    const selectedGameSaveFile = changeEvent.currentTarget.files?.[0];
+    const selectedGameSaveFileInput = changeEvent.currentTarget;
+    const selectedGameSaveFile = selectedGameSaveFileInput.files?.[0];
 
     if (selectedGameSaveFile === undefined) {
       return;
     }
 
-    void importGameSaveFile(selectedGameSaveFile);
+    void importGameSaveFile(selectedGameSaveFile, selectedGameSaveFileInput);
   }
 
-  async function importGameSaveFile(selectedGameSaveFile: File): Promise<void> {
+  async function importGameSaveFile(
+    selectedGameSaveFile: File,
+    selectedGameSaveFileInput: HTMLInputElement,
+  ): Promise<void> {
     try {
       setIsImporting(true);
       const serializedGameSave = await selectedGameSaveFile.text();
       onImportGameSave(serializedGameSave);
       setImportErrorMessage(null);
-
-      if (gameSaveFileInputReference.current !== null) {
-        gameSaveFileInputReference.current.value = "";
-      }
     } catch (caughtError) {
       setImportErrorMessage(formatGameSaveImportError(caughtError));
     } finally {
+      selectedGameSaveFileInput.value = "";
       setIsImporting(false);
     }
   }
@@ -64,7 +64,6 @@ export function GameSaveImportControl({
           accept="*"
           disabled={isImporting}
           onChange={handleGameSaveFileChange}
-          ref={gameSaveFileInputReference}
           type="file"
         />
       </label>

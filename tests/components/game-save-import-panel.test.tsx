@@ -1,5 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { ImportedGameSaveState } from "../../src/game-save/game-save-import";
 import { GameSaveImportError } from "../../src/game-save/game-save-import";
@@ -65,4 +67,38 @@ describe("game save import panel", () => {
       "Unexpected renderer fault.",
     );
   });
+
+  it("resets the exact selected game-save input in finally after success or failure", () => {
+    const panelSource = readFileSync(
+      resolve(process.cwd(), "src/components/game-save-import-panel.tsx"),
+      "utf8",
+    );
+    const importOperationSource = getFunctionSource(
+      panelSource,
+      "async function importGameSaveFile",
+      "  return (",
+    );
+
+    expect(importOperationSource).toContain("finally {");
+    expect(importOperationSource).toContain(
+      "selectedGameSaveFileInput.value = \"\";",
+    );
+  });
 });
+
+function getFunctionSource(
+  source: string,
+  functionStartMarker: string,
+  functionEndMarker: string,
+): string {
+  const functionStartIndex = source.indexOf(functionStartMarker);
+  const functionEndIndex = source.indexOf(functionEndMarker, functionStartIndex);
+
+  if (functionStartIndex === -1 || functionEndIndex === -1) {
+    throw new Error(
+      `Cannot find source range from ${JSON.stringify(functionStartMarker)} to ${JSON.stringify(functionEndMarker)}.`,
+    );
+  }
+
+  return source.slice(functionStartIndex, functionEndIndex);
+}

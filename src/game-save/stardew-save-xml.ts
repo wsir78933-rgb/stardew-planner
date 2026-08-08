@@ -38,6 +38,7 @@ export function parseStardewGameSaveXml(
       getRequiredDirectChild(saveGameElement, "currentSeason", "SaveGame"),
       "SaveGame.currentSeason",
     ),
+    trees: parsedTerrainFeatures.trees,
     unmappedEntries,
     whichFarm: readRequiredText(
       getRequiredDirectChild(saveGameElement, "whichFarm", "SaveGame"),
@@ -104,6 +105,8 @@ function parseSavedBuildings(
   }
 
   return getDirectChildElements(buildingsElement).map((buildingElement, buildingIndex) => {
+    const nettingStyleElement = getDirectChild(buildingElement, "nettingStyle");
+
     return {
         buildingType: readRequiredText(
           getRequiredDirectChild(
@@ -129,6 +132,14 @@ function parseSavedBuildings(
           ),
           `Farm.buildings[${String(buildingIndex)}].tileY`,
         ),
+        ...(nettingStyleElement === null
+          ? {}
+          : {
+              nettingStyle: readRequiredSafeInteger(
+                nettingStyleElement,
+                `Farm.buildings[${String(buildingIndex)}].nettingStyle`,
+              ),
+            }),
       };
   });
 }
@@ -182,31 +193,49 @@ function parseTerrainFeatures(
 ): Readonly<{
   crops: ParsedStardewGameSave["crops"];
   floorings: ParsedStardewGameSave["floorings"];
+  trees: ParsedStardewGameSave["trees"];
 }> {
   const terrainFeaturesElement = getDirectChild(farmElement, "terrainFeatures");
   const crops: Array<ParsedStardewGameSave["crops"][number]> = [];
   const floorings: Array<ParsedStardewGameSave["floorings"][number]> = [];
+  const trees: Array<ParsedStardewGameSave["trees"][number]> = [];
 
   if (terrainFeaturesElement === null) {
-    return { crops, floorings };
+    return { crops, floorings, trees };
   }
 
-  for (const { keyElement, valueElement } of parseDictionaryEntries(
+  const terrainFeatureEntries = parseDictionaryEntries(
     terrainFeaturesElement,
     "Farm.terrainFeatures",
-  )) {
-    const coordinates = readSavedCoordinates(keyElement, "Farm.terrainFeatures.key");
+  );
+  for (const [
+    terrainFeatureIndex,
+    { keyElement, valueElement },
+  ] of terrainFeatureEntries.entries()) {
+    const terrainFeatureEntryPath =
+      `Farm.terrainFeatures[${String(terrainFeatureIndex)}]`;
+    const coordinates = readSavedCoordinates(
+      keyElement,
+      `${terrainFeatureEntryPath}.key`,
+    );
     const terrainFeatureElement =
       getFirstDescendantElement(valueElement, "TerrainFeature") ?? valueElement;
     const terrainFeatureType = getElementType(terrainFeatureElement);
+    const terrainFeaturePath = `${terrainFeatureEntryPath}.${terrainFeatureType}`;
 
     if (terrainFeatureType === "HoeDirt") {
+      const hoeDirtState = readOptionalSafeInteger(
+        getDirectChild(terrainFeatureElement, "state"),
+        0,
+        `${terrainFeaturePath}.state`,
+      );
       const cropElement = getDirectChild(terrainFeatureElement, "crop");
       const nestedCropElement =
         cropElement === null
           ? null
           : getFirstDescendantElement(cropElement, "Crop") ?? cropElement;
       crops.push({
+        hoeDirtState,
         isDead:
           nestedCropElement === null
             ? false
@@ -241,13 +270,112 @@ function parseTerrainFeatures(
       continue;
     }
 
+    if (terrainFeatureType === "Tree") {
+      trees.push(parseSavedWildTree(
+        terrainFeatureElement,
+        coordinates,
+        terrainFeaturePath,
+      ));
+      continue;
+    }
+
+    if (terrainFeatureType === "FruitTree") {
+      trees.push(parseSavedFruitTree(
+        terrainFeatureElement,
+        coordinates,
+        terrainFeaturePath,
+      ));
+      continue;
+    }
+
     unmappedEntries.push({
       kind: formatTerrainFeatureKind(terrainFeatureType),
       sourceId: readTerrainFeatureSourceId(terrainFeatureElement, terrainFeatureType),
     });
   }
 
-  return { crops, floorings };
+  return { crops, floorings, trees };
+}
+
+function parseSavedWildTree(
+  terrainFeatureElement: Element,
+  coordinates: Readonly<{ x: number; y: number }>,
+  terrainFeaturePath: string,
+): Extract<ParsedStardewGameSave["trees"][number], { kind: "wild-tree" }> {
+  return {
+    flipped: readOptionalBoolean(
+      getDirectChild(terrainFeatureElement, "flipped"),
+      false,
+      `${terrainFeaturePath}.flipped`,
+    ),
+    growthStage: readRequiredNonNegativeSafeInteger(
+      getRequiredTerrainFeatureField(
+        terrainFeatureElement,
+        "growthStage",
+        `${terrainFeaturePath}.growthStage`,
+      ),
+      `${terrainFeaturePath}.growthStage`,
+    ),
+    hasMoss: readOptionalBoolean(
+      getDirectChild(terrainFeatureElement, "hasMoss"),
+      false,
+      `${terrainFeaturePath}.hasMoss`,
+    ),
+    kind: "wild-tree",
+    stump: readOptionalBoolean(
+      getDirectChild(terrainFeatureElement, "stump"),
+      false,
+      `${terrainFeaturePath}.stump`,
+    ),
+    treeType: readRequiredText(
+      getRequiredTerrainFeatureField(
+        terrainFeatureElement,
+        "treeType",
+        `${terrainFeaturePath}.treeType`,
+      ),
+      `${terrainFeaturePath}.treeType`,
+    ),
+    x: coordinates.x,
+    y: coordinates.y,
+  };
+}
+
+function parseSavedFruitTree(
+  terrainFeatureElement: Element,
+  coordinates: Readonly<{ x: number; y: number }>,
+  terrainFeaturePath: string,
+): Extract<ParsedStardewGameSave["trees"][number], { kind: "fruit-tree" }> {
+  return {
+    flipped: readOptionalBoolean(
+      getDirectChild(terrainFeatureElement, "flipped"),
+      false,
+      `${terrainFeaturePath}.flipped`,
+    ),
+    growthStage: readRequiredNonNegativeSafeInteger(
+      getRequiredTerrainFeatureField(
+        terrainFeatureElement,
+        "growthStage",
+        `${terrainFeaturePath}.growthStage`,
+      ),
+      `${terrainFeaturePath}.growthStage`,
+    ),
+    kind: "fruit-tree",
+    stump: readOptionalBoolean(
+      getDirectChild(terrainFeatureElement, "stump"),
+      false,
+      `${terrainFeaturePath}.stump`,
+    ),
+    treeId: readRequiredText(
+      getRequiredTerrainFeatureField(
+        terrainFeatureElement,
+        "treeId",
+        `${terrainFeaturePath}.treeId`,
+      ),
+      `${terrainFeaturePath}.treeId`,
+    ),
+    x: coordinates.x,
+    y: coordinates.y,
+  };
 }
 
 function parseResourceClumps(
@@ -409,8 +537,10 @@ function readTerrainFeatureSourceId(
   const sourceFieldName =
     terrainFeatureType === "Grass"
       ? "grassType"
-      : terrainFeatureType === "Tree" || terrainFeatureType === "FruitTree"
+      : terrainFeatureType === "Tree"
         ? "treeType"
+        : terrainFeatureType === "FruitTree"
+          ? "treeId"
         : "id";
 
   return readOptionalDescendantText(terrainFeatureElement, sourceFieldName) ?? terrainFeatureType;
@@ -472,6 +602,22 @@ function getRequiredDirectChild(
   }
 
   return childElement;
+}
+
+function getRequiredTerrainFeatureField(
+  terrainFeatureElement: Element,
+  expectedName: string,
+  fieldPath: string,
+): Element {
+  const fieldElement = getDirectChild(terrainFeatureElement, expectedName);
+
+  if (fieldElement === null) {
+    throw new GameSaveImportError(
+      `Game save XML field ${JSON.stringify(fieldPath)} is required; received undefined.`,
+    );
+  }
+
+  return fieldElement;
 }
 
 function getDirectChild(parentElement: Element, expectedName: string): Element | null {
@@ -564,6 +710,32 @@ function readRequiredSafeInteger(element: Element, fieldPath: string): number {
   if (!Number.isSafeInteger(numericValue)) {
     throw new GameSaveImportError(
       `Game save XML field "${fieldPath}" must be a safe integer; received ${JSON.stringify(stringValue)}.`,
+    );
+  }
+
+  return numericValue;
+}
+
+function readOptionalSafeInteger(
+  element: Element | null,
+  defaultValue: number,
+  fieldPath: string,
+): number {
+  return element === null
+    ? defaultValue
+    : readRequiredSafeInteger(element, fieldPath);
+}
+
+function readRequiredNonNegativeSafeInteger(
+  element: Element,
+  fieldPath: string,
+): number {
+  const stringValue = readRequiredText(element, fieldPath);
+  const numericValue = Number(stringValue);
+
+  if (!/^\d+$/.test(stringValue) || !Number.isSafeInteger(numericValue)) {
+    throw new GameSaveImportError(
+      `Game save XML field "${fieldPath}" must be a non-negative safe integer; received ${JSON.stringify(stringValue)}.`,
     );
   }
 

@@ -1,3 +1,11 @@
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  type LucideIcon,
+} from "lucide-react";
+
 export type PlannerJoystickDirection =
   | "ArrowDown"
   | "ArrowLeft"
@@ -16,33 +24,38 @@ type PlannerJoystickProperties = PlannerJoystickIntentHandlers &
 
 const joystickControls: readonly Readonly<{
   direction: PlannerJoystickDirection;
-  glyph: string;
+  icon: LucideIcon;
   nudgeLabel: string;
   panLabel: string;
+  position: "down" | "left" | "right" | "up";
 }>[] = [
   {
     direction: "ArrowUp",
-    glyph: "↑",
+    icon: ChevronUp,
     nudgeLabel: "Move selection up",
     panLabel: "Pan map up",
+    position: "up",
   },
   {
     direction: "ArrowLeft",
-    glyph: "←",
+    icon: ChevronLeft,
     nudgeLabel: "Move selection left",
     panLabel: "Pan map left",
+    position: "left",
   },
   {
     direction: "ArrowRight",
-    glyph: "→",
+    icon: ChevronRight,
     nudgeLabel: "Move selection right",
     panLabel: "Pan map right",
+    position: "right",
   },
   {
     direction: "ArrowDown",
-    glyph: "↓",
+    icon: ChevronDown,
     nudgeLabel: "Move selection down",
     panLabel: "Pan map down",
+    position: "down",
   },
 ];
 
@@ -70,11 +83,12 @@ export function PlannerJoystick({
       aria-label={
         hasNudgeIntent ? "Selection movement controls" : "Map camera controls"
       }
-      className={`planner-joystick planner-joystick--${
+      className={`joystick-outer planner-joystick planner-joystick--${
         isLeftHanded ? "left" : "right"
       }`}
       role="group"
     >
+      <div aria-hidden="true" className="joystick-ring" />
       {joystickControls.map((joystickControl) => (
         <button
           aria-label={
@@ -82,7 +96,7 @@ export function PlannerJoystick({
               ? joystickControl.nudgeLabel
               : joystickControl.panLabel
           }
-          className={`planner-joystick__button planner-joystick__button--${joystickControl.direction.toLowerCase()}`}
+          className={`arrow-btn arrow-btn-${joystickControl.position} planner-joystick__button planner-joystick__button--${joystickControl.direction.toLowerCase()}`}
           key={joystickControl.direction}
           onClick={() =>
             dispatchPlannerJoystickDirection(
@@ -92,9 +106,10 @@ export function PlannerJoystick({
           }
           type="button"
         >
-          {joystickControl.glyph}
+          <joystickControl.icon aria-hidden="true" size={18} strokeWidth={2} />
         </button>
       ))}
+      <div aria-hidden="true" className="joystick-knob" />
     </div>
   );
 }

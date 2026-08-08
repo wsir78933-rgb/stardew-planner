@@ -1,29 +1,16 @@
 "use client";
 
 import { useState } from "react";
-
-export type ProjectMapInstanceSummary = Readonly<{
-  id: string;
-  baseMapId: string;
-  name: string;
-}>;
-
-export type ProjectMapChoice = Readonly<{
-  id: string;
-  displayName: string;
-}>;
-
-export type ProjectMapTransferDestination = Readonly<{
-  id: string;
-  name: string;
-}>;
+import type { PlannerMap } from "../maps/map-catalog";
+import type { ReferenceProjectMap } from "../reference-runtime/local-project-api";
+import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 
 type ProjectMapInstancePanelProperties = Readonly<{
-  activeMapInstanceId: string;
-  mapInstances: readonly ProjectMapInstanceSummary[];
-  mapChoices: readonly ProjectMapChoice[];
-  projectChoices: readonly ProjectMapTransferDestination[];
-  onAddMap: (baseMapId: string) => void;
+  activeMapInstanceId: string | null;
+  mapInstances: readonly ReferenceProjectMap[];
+  mapChoices: readonly Pick<PlannerMap, "id" | "displayName">[];
+  projectChoices: readonly ReferenceProjectSummary[];
+  onAddMap: (plannerMapId: string) => void;
   onCopyMapInstance: (
     mapInstanceId: string,
     destinationProjectId: string,
@@ -58,10 +45,14 @@ export function ProjectMapInstancePanel({
   const [destinationProjectId, setDestinationProjectId] = useState<string>(
     projectChoices[0]?.id ?? "",
   );
+  const availableDestinationProjectId = deriveAvailableDestinationProjectId(
+    destinationProjectId,
+    projectChoices,
+  );
 
-  function startRenamingMapInstance(mapInstance: ProjectMapInstanceSummary): void {
+  function startRenamingMapInstance(mapInstance: ReferenceProjectMap): void {
     setRenamingMapInstanceId(mapInstance.id);
-    setRequestedMapInstanceName(mapInstance.name);
+    setRequestedMapInstanceName(mapInstance.label);
   }
 
   function submitMapInstanceRename(mapInstanceId: string): void {
@@ -70,13 +61,13 @@ export function ProjectMapInstancePanel({
   }
 
   function getRequiredDestinationProjectId(): string {
-    if (destinationProjectId.length === 0) {
+    if (availableDestinationProjectId.length === 0) {
       throw new Error(
         "Cannot transfer a local map instance because no destination project is selected.",
       );
     }
 
-    return destinationProjectId;
+    return availableDestinationProjectId;
   }
 
   return (
@@ -90,14 +81,14 @@ export function ProjectMapInstancePanel({
             onChange={(changeEvent) =>
               setDestinationProjectId(changeEvent.target.value)
             }
-            value={destinationProjectId}
+            value={availableDestinationProjectId}
           >
             {projectChoices.length === 0 ? (
               <option value="">Create another local project first</option>
             ) : (
               projectChoices.map((projectChoice) => (
                 <option key={projectChoice.id} value={projectChoice.id}>
-                  {projectChoice.name}
+                  {projectChoice.title}
                 </option>
               ))
             )}
@@ -116,8 +107,8 @@ export function ProjectMapInstancePanel({
               key={mapInstance.id}
             >
               <div className="project-map-instance-panel__instance-summary">
-                <strong>{mapInstance.name}</strong>
-                <span>{mapInstance.baseMapId}</span>
+                <strong>{mapInstance.label}</strong>
+                <span>{mapInstance.mapFile}</span>
                 {isActiveMapInstance ? <span>Current</span> : null}
               </div>
               {isRenamingMapInstance ? (
@@ -217,4 +208,19 @@ export function ProjectMapInstancePanel({
       </section>
     </section>
   );
+}
+
+export function deriveAvailableDestinationProjectId(
+  requestedDestinationProjectId: string,
+  projectChoices: readonly ReferenceProjectSummary[],
+): string {
+  const selectedProjectIsAvailable = projectChoices.some(
+    (projectChoice) => projectChoice.id === requestedDestinationProjectId,
+  );
+
+  if (selectedProjectIsAvailable) {
+    return requestedDestinationProjectId;
+  }
+
+  return projectChoices[0]?.id ?? "";
 }
