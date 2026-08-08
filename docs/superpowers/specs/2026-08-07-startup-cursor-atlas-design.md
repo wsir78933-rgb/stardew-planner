@@ -2,26 +2,32 @@
 
 ## Decision
 
-Replace the full startup-time `Cursors.webp` dependency with one lossless
-`78x25` WebP atlas that contains only the four cursor frames used by default
-buildings:
+Replace the full startup-time `Cursors.webp` dependency with one lossless,
+sparse `704x2256` WebP atlas that contains only the four cursor regions used
+by default buildings. The sparse atlas keeps those regions at their original
+Cursor-sheet coordinates and decodes every other pixel as transparent RGBA:
 
 - Shipping Bin lid: source `(134, 226, 30, 25)`;
 - building shadow left: source `(656, 394, 16, 16)`;
 - building shadow middle: source `(672, 394, 16, 16)`;
 - building shadow right: source `(688, 394, 16, 16)`.
 
-The atlas layout is one row:
+The atlas uses the original Cursor-sheet coordinate system:
 
-- Shipping Bin lid: atlas `(0, 0, 30, 25)`;
-- building shadow left: atlas `(30, 0, 16, 16)`;
-- building shadow middle: atlas `(46, 0, 16, 16)`;
-- building shadow right: atlas `(62, 0, 16, 16)`.
+- Shipping Bin lid: atlas `(134, 226, 30, 25)`;
+- building shadow left: atlas `(656, 394, 16, 16)`;
+- building shadow middle: atlas `(672, 394, 16, 16)`;
+- building shadow right: atlas `(688, 394, 16, 16)`.
 
-No padding is required because the renderer uses exact integer frames,
-nearest-neighbor sampling, and disabled mipmaps. Verification must still prove
-that every decoded atlas region is byte-identical to the corresponding source
-RGBA region.
+The compact layout is infeasible for pixel-identical Pixi rendering. Pixi
+normalizes frames by the complete texture surface dimensions, so a `78x25`
+texture changes GPU UV sampling even when the cropped RGBA regions match. The
+verified Pixi 8 experiment with nearest sampling, round pixels, fractional
+camera translation, and fractional scale found non-zero differences for the
+compact `78x25` and sparse-short `704x410` variants, and zero difference for
+the sparse original-size surface at the original coordinates. Verification must
+prove that every decoded atlas region is byte-identical to the corresponding
+source RGBA region and that every non-approved pixel is transparent.
 
 ## Goal and success criterion
 
@@ -81,14 +87,15 @@ A dedicated generation script owns only these steps:
 1. validate that the locked source image exists and has the expected
    dimensions;
 2. crop the four exact source regions;
-3. compose the fixed one-row atlas;
+3. create a transparent `704x2256` surface and copy the four exact regions to
+   their original coordinates;
 4. encode the atlas as exact lossless WebP;
 5. write the derived atlas to its independent public asset path.
 
 A separate verification script validates the generated boundary:
 
 - file existence;
-- exact `78x25` dimensions;
+- exact `704x2256` dimensions;
 - lossless encoding and alpha preservation;
 - exact decoded RGBA equality for each of the four mapped regions;
 - a smaller encoded size than the complete `Cursors.webp`.
@@ -113,7 +120,7 @@ The resolver uses the complete key:
 Its behavior is deliberately narrow:
 
 - an exact match for one of the four approved cursor frames returns the startup
-  atlas path and the corresponding atlas rectangle;
+  atlas path and the unchanged original rectangle;
 - another explicit cursor frame returns the existing complete cursor WebP path
   and preserves its original rectangle;
 - a non-cursor texture follows the existing initial-texture path resolver and

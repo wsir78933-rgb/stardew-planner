@@ -1867,7 +1867,7 @@ describe("layered placement sprite rendering", () => {
     const ownedAtlasFrameTexture = placementSprite.frameTexture as unknown as AtlasFrameTexture;
 
     expect(ownedAtlasFrameTexture.options).toEqual(expect.objectContaining({
-      frame: expect.objectContaining({ x: 0, y: 0, width: 30, height: 25 }),
+      frame: expect.objectContaining({ x: 134, y: 226, width: 30, height: 25 }),
     }));
     expect((placementSprite.sprite as unknown as AtlasSprite).positionCoordinates)
       .toEqual([19.25, 44]);

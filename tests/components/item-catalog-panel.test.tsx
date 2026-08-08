@@ -538,7 +538,7 @@ describe("item catalog panel", () => {
     );
     expect(resolvedShippingBinLid).toEqual({
       resolvedAssetPath: "/planner-textures/initial/Cursors-startup.webp",
-      resolvedFrame: { x: 0, y: 0, width: 30, height: 25 },
+      resolvedFrame: { x: 134, y: 226, width: 30, height: 25 },
     });
     if (resolvedShippingBinLid.resolvedFrame === null) {
       throw new Error("Expected Shipping Bin lid resolution to retain a source frame.");
@@ -563,7 +563,7 @@ describe("item catalog panel", () => {
       destinationX: 14,
       destinationY: 2,
       resolvedAssetPath: "/planner-textures/initial/Cursors-startup.webp",
-      sourceFrame: { x: 0, y: 0, width: 30, height: 25 },
+      sourceFrame: { x: 134, y: 226, width: 30, height: 25 },
     });
   });
 
@@ -614,7 +614,7 @@ describe("item catalog panel", () => {
         catalogItemId: "building:Shipping Bin",
         layerId: "ShippingBinLid",
         resolvedAssetPath: startupCursorAtlasPath,
-        resolvedFrame: { x: 0, y: 0, width: 30, height: 25 },
+        resolvedFrame: { x: 134, y: 226, width: 30, height: 25 },
       },
     ]);
     expect(allResolvedAssetPaths.length).toBeGreaterThan(uniqueResolvedAssetPaths.length);

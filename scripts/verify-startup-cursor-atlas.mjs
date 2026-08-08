@@ -25,8 +25,6 @@ const pngSignature = Buffer.from([
   0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
 ]);
 
-await verifyStartupCursorAtlas();
-
 export async function verifyStartupCursorAtlas() {
   const requiredFiles = await assertRequiredFiles();
   const sourcePngDimensions = readPngDimensions(
@@ -41,10 +39,11 @@ export async function verifyStartupCursorAtlas() {
     requiredFiles.completeWebpFileSize,
   );
   await assertMappedRegionsMatchDecodedSourceRgba();
-  await assertUnmappedAtlasPixelsAreTransparent();
+  const atlasWebpRgbaBytes = await decodeImageToRgba(atlasWebpPath);
+  assertUnmappedAtlasPixelsAreTransparent(atlasWebpRgbaBytes);
 
   process.stdout.write(
-    `Verified startup Cursor atlas at ${JSON.stringify(atlasWebpPath)}: 78x25 exact-lossless WebP with four RGBA-identical frames.\n`,
+    `Verified startup Cursor atlas at ${JSON.stringify(atlasWebpPath)}: ${String(STARTUP_CURSOR_ATLAS_CONTRACT.atlasDimensions.width)}x${String(STARTUP_CURSOR_ATLAS_CONTRACT.atlasDimensions.height)} exact-lossless WebP with four RGBA-identical frames.\n`,
   );
 }
 
@@ -226,9 +225,7 @@ async function assertMappedRegionsMatchDecodedSourceRgba() {
   }
 }
 
-async function assertUnmappedAtlasPixelsAreTransparent() {
-  const atlasRgbaBytes = await decodeImageToRgba(atlasWebpPath);
-
+export function assertUnmappedAtlasPixelsAreTransparent(atlasRgbaBytes) {
   assertDecodedRgbaByteLength(
     atlasRgbaBytes,
     STARTUP_CURSOR_ATLAS_CONTRACT.atlasDimensions,
@@ -256,11 +253,20 @@ async function assertUnmappedAtlasPixelsAreTransparent() {
   }
 
   for (let pixelIndex = 0; pixelIndex < coveredPixels.length; pixelIndex += 1) {
-    const alphaByte = atlasRgbaBytes[pixelIndex * 4 + 3];
+    const rgbaByteOffset = pixelIndex * 4;
+    const receivedRgba = Array.from(
+      atlasRgbaBytes.subarray(rgbaByteOffset, rgbaByteOffset + 4),
+    );
 
-    if (coveredPixels[pixelIndex] === 0 && alphaByte !== 0) {
+    if (
+      coveredPixels[pixelIndex] === 0 &&
+      receivedRgba.some((rgbaByte) => rgbaByte !== 0)
+    ) {
+      const pixelX = pixelIndex % width;
+      const pixelY = Math.floor(pixelIndex / width);
+
       throw new Error(
-        `Startup Cursor atlas ${JSON.stringify(atlasWebpPath)} unmapped pixel ${String(pixelIndex)} must be transparent. Received alpha: ${String(alphaByte)}.`,
+        `Startup Cursor atlas ${JSON.stringify(atlasWebpPath)} unmapped pixel at x=${String(pixelX)}, y=${String(pixelY)} must be [0, 0, 0, 0]. Received RGBA: [${receivedRgba.join(", ")}].`,
       );
     }
   }
@@ -384,4 +390,13 @@ function runCommand(commandName, commandArguments, capturesBinaryOutput = false)
       );
     });
   });
+}
+
+function isDirectExecution() {
+  return process.argv[1] !== undefined &&
+    resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+}
+
+if (isDirectExecution()) {
+  await verifyStartupCursorAtlas();
 }

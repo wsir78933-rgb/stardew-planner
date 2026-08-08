@@ -507,12 +507,26 @@ body:has(> [data-homepage-shell]) [data-site-footer-social-icons] {
   grid-column: 1;
 }
 
-body:has(> [data-homepage-shell]) [data-site-footer-social-icons] span {
+body:has(> [data-homepage-shell]) [data-site-footer-social-icons] :is(span, a) {
   align-items: center;
   color: var(--muted-foreground);
   display: inline-flex;
   font-size: 1.1rem;
   line-height: 1;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-social-icons] a {
+  text-decoration: none;
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-social-icons] a:hover {
+  color: var(--foreground);
+}
+
+body:has(> [data-homepage-shell]) [data-site-footer-social-icons] a:focus-visible {
+  border-radius: 0.125rem;
+  outline: 2px solid currentColor;
+  outline-offset: 0.2rem;
 }
 
 body:has(> [data-homepage-shell]) [data-site-footer-sections] {
@@ -734,12 +748,26 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   grid-column: 1;
 }
 
-[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] span {
+[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] :is(span, a) {
   align-items: center;
   color: #52604e;
   display: inline-flex;
   font-size: 1.1rem;
   line-height: 1;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] a {
+  text-decoration: none;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] a:hover {
+  color: #1c211b;
+}
+
+[data-public-page-shell] > [data-site-footer] [data-site-footer-social-icons] a:focus-visible {
+  border-radius: 0.125rem;
+  outline: 2px solid currentColor;
+  outline-offset: 0.2rem;
 }
 
 [data-public-page-shell] > [data-site-footer] [data-site-footer-sections] {

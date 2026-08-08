@@ -34,7 +34,7 @@ function renderFooter(locale: "en" | "zh-CN"): string {
   );
 }
 
-it("renders every English footer destination, identity, copyright, and decorative social icons", () => {
+it("renders every English footer destination, identity, copyright, and linked Twitter icon", () => {
   const footerMarkup = renderFooter("en");
 
   expect(footerMarkup).toContain('<footer data-site-footer="true">');
@@ -59,8 +59,14 @@ it("renders every English footer destination, identity, copyright, and decorativ
     /<div data-site-footer-social-icons="true">([\s\S]*?)<\/div>/,
   );
   const socialIconMarkup = socialIconRegion?.[1] ?? "";
-  expect(socialIconMarkup.match(/<span aria-hidden="true">/g)).toHaveLength(4);
-  expect(socialIconMarkup).not.toContain("<a");
+  expect(socialIconMarkup.match(/<span aria-hidden="true">/g)).toHaveLength(3);
+  expect(socialIconMarkup.match(/<a /g)).toHaveLength(1);
+  expect(socialIconMarkup).toContain('href="https://x.com/wsir1139"');
+  expect(socialIconMarkup).toContain('target="_blank"');
+  expect(socialIconMarkup).toContain('rel="noopener noreferrer"');
+  expect(socialIconMarkup).toContain(
+    'aria-label="Follow @wsir1139 on X (Twitter)"',
+  );
 });
 
 it("uses English editor destinations and localized Chinese content destinations", () => {

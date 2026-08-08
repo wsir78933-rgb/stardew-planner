@@ -30,7 +30,7 @@ it("renders a shared static navigation frame around route content", () => {
   expect(markup).toContain('<a href="/privacy">Privacy Policy</a>');
   expect(markup).toContain('<a href="/terms">Terms of Service</a>');
   expect(markup).toMatch(
-    /<div data-site-footer-social-icons="true">(?:(?!<a).)*<\/div>/,
+    /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
   );
   expect(markup).toContain("© Stardew Valley Farm Planner");
   expect(markup).toContain(
@@ -80,7 +80,7 @@ it("renders Chinese navigation and a static English-planner CTA", () => {
   expect(markup).toContain('<a href="/zh/privacy">隐私政策</a>');
   expect(markup).toContain('<a href="/zh/terms">服务条款</a>');
   expect(markup).toMatch(
-    /<div data-site-footer-social-icons="true">(?:(?!<a).)*<\/div>/,
+    /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
   );
 });
 

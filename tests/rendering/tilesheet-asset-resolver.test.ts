@@ -130,7 +130,7 @@ describe("resolveTilesheetAsset", () => {
     });
   });
 
-  it("keeps dots at the beginning of non-seasonal mod filenames", () => {
+  it("maps Modest Maps hidden duplicate tilesheets to public official assets", () => {
     expect(
       resolveTilesheetAsset({
         tilesetSource: ".paths.png",
@@ -138,8 +138,7 @@ describe("resolveTilesheetAsset", () => {
         modId: "inkubusmods.modestmapsstandardfarm",
       }),
     ).toEqual({
-      localPath:
-        `${localAssetRoot}mods/inkubusmods.modestmapsstandardfarm/.paths.png`,
+      localPath: `${localAssetRoot}tilesheets/paths.png`,
       usedSpringFallback: false,
     });
 
@@ -150,8 +149,7 @@ describe("resolveTilesheetAsset", () => {
         modId: "inkubusmods.modestmapsstandardfarm",
       }),
     ).toEqual({
-      localPath:
-        `${localAssetRoot}mods/inkubusmods.modestmapsstandardfarm/.spring_outdoorsTileSheet.png`,
+      localPath: `${localAssetRoot}tilesheets/spring_outdoorsTileSheet.png`,
       usedSpringFallback: false,
     });
   });

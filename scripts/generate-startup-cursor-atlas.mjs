@@ -181,11 +181,15 @@ async function createGenerationDirectory(temporaryRoot) {
 async function composeStartupCursorAtlasPng(generationDirectory) {
   const intermediatePngPath = join(generationDirectory, "Cursors-startup.png");
   const atlasFilter = [
+    "color=c=black@0.0:s=704x2256,format=rgba[transparent-atlas]",
     "[0:v]crop=30:25:134:226,format=rgba[lid]",
-    "[0:v]crop=16:16:656:394,format=rgba,pad=16:25:0:0:color=0x00000000[left]",
-    "[0:v]crop=16:16:672:394,format=rgba,pad=16:25:0:0:color=0x00000000[middle]",
-    "[0:v]crop=16:16:688:394,format=rgba,pad=16:25:0:0:color=0x00000000[right]",
-    "[lid][left][middle][right]hstack=inputs=4,format=rgba[atlas]",
+    "[0:v]crop=16:16:656:394,format=rgba[left]",
+    "[0:v]crop=16:16:672:394,format=rgba[middle]",
+    "[0:v]crop=16:16:688:394,format=rgba[right]",
+    "[transparent-atlas][lid]overlay=134:226:format=auto[with-lid]",
+    "[with-lid][left]overlay=656:394:format=auto[with-left-shadow]",
+    "[with-left-shadow][middle]overlay=672:394:format=auto[with-middle-shadow]",
+    "[with-middle-shadow][right]overlay=688:394:format=auto,format=rgba[atlas]",
   ].join(";");
 
   await runCommand("ffmpeg", [

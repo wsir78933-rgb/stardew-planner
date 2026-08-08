@@ -18,19 +18,19 @@ const startupCursorAtlasAssetPath = "/planner-textures/initial/Cursors-startup.w
 const startupCursorFrameByLockedFrameKey = new Map<string, PlannerTextureFrame>([
   [
     createFrameKey(cursorLockedTexturePath, { x: 134, y: 226, width: 30, height: 25 }),
-    { x: 0, y: 0, width: 30, height: 25 },
+    { x: 134, y: 226, width: 30, height: 25 },
   ],
   [
     createFrameKey(cursorLockedTexturePath, { x: 656, y: 394, width: 16, height: 16 }),
-    { x: 30, y: 0, width: 16, height: 16 },
+    { x: 656, y: 394, width: 16, height: 16 },
   ],
   [
     createFrameKey(cursorLockedTexturePath, { x: 672, y: 394, width: 16, height: 16 }),
-    { x: 46, y: 0, width: 16, height: 16 },
+    { x: 672, y: 394, width: 16, height: 16 },
   ],
   [
     createFrameKey(cursorLockedTexturePath, { x: 688, y: 394, width: 16, height: 16 }),
-    { x: 62, y: 0, width: 16, height: 16 },
+    { x: 688, y: 394, width: 16, height: 16 },
   ],
 ]);
 

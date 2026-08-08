@@ -75,7 +75,7 @@ function getCursorDescriptors(
 }
 
 describe("startup Cursor atlas default-map coverage", () => {
-  it("maps every approved default Cursors source frame to its exact startup-atlas frame", async () => {
+  it("keeps every approved default Cursors source frame at its original startup-atlas coordinate", async () => {
     const catalogItems = await loadLockedBuildingCatalog();
     const resolvedCursorDescriptors = getCursorDescriptors(
       resolvePlacementTextureEntries(createPlacementRenderEntries(
@@ -94,19 +94,19 @@ describe("startup Cursor atlas default-map coverage", () => {
     ))).toEqual(new Set([
       JSON.stringify({
         source: { x: 134, y: 226, width: 30, height: 25 },
-        atlas: { x: 0, y: 0, width: 30, height: 25 },
+        atlas: { x: 134, y: 226, width: 30, height: 25 },
       }),
       JSON.stringify({
         source: { x: 656, y: 394, width: 16, height: 16 },
-        atlas: { x: 30, y: 0, width: 16, height: 16 },
+        atlas: { x: 656, y: 394, width: 16, height: 16 },
       }),
       JSON.stringify({
         source: { x: 672, y: 394, width: 16, height: 16 },
-        atlas: { x: 46, y: 0, width: 16, height: 16 },
+        atlas: { x: 672, y: 394, width: 16, height: 16 },
       }),
       JSON.stringify({
         source: { x: 688, y: 394, width: 16, height: 16 },
-        atlas: { x: 62, y: 0, width: 16, height: 16 },
+        atlas: { x: 688, y: 394, width: 16, height: 16 },
       }),
     ]));
     expect(

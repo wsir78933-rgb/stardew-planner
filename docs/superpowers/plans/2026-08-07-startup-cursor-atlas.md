@@ -2,7 +2,16 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the complete startup-time cursor sheet with a verified `78x25` lossless WebP atlas while preserving every rendered pixel and reducing the Fast 4G three-run cold-start median to at most `3839.1 ms`.
+**Goal:** Replace the complete startup-time cursor sheet with a verified sparse `704x2256` lossless WebP atlas that preserves every rendered pixel and reduces the Fast 4G three-run cold-start median to at most `3839.1 ms`.
+
+**Task 7 amendment (rejected compact-atlas root cause):** Pixi normalizes a frame against its complete texture
+surface. The verified Pixi 8 experiment found non-zero differences for compact
+`78x25` and sparse-short `704x410` surfaces under nearest sampling, round
+pixels, fractional camera translation, and fractional scale. It found zero
+difference only when the sparse atlas retained the original `704x2256` surface
+and each approved frame's original coordinates. This amendment supersedes every
+compact atlas layout in this plan: the four approved regions stay at their
+source coordinates and every other decoded pixel is transparent RGBA.
 
 **Architecture:** A pure frame resolver maps the four approved locked `Cursors.png` frames to one startup atlas and maps all other frames to the retained complete WebP. Canvas placement entries and building-thumbnail layers carry the resolved asset path together with the resolved frame, so one original locked path can safely use both textures. Initial preload is derived from the current map's actual placement entries, and every runtime, asset, performance, and browser boundary fails fast with value-bearing errors.
 
@@ -31,7 +40,7 @@
 - Create `scripts/startup-cursor-atlas-contract.mjs`: immutable source/atlas paths, dimensions, and four frame mappings used only by generation and verification scripts.
 - Create `scripts/generate-startup-cursor-atlas.mjs`: validate the locked source, compose the fixed atlas, and encode exact lossless WebP.
 - Create `scripts/verify-startup-cursor-atlas.mjs`: independently verify file boundaries, encoding, dimensions, transparency, and per-frame decoded RGBA equality.
-- Create `public/planner-textures/initial/Cursors-startup.webp`: generated `78x25` startup atlas.
+- Create `public/planner-textures/initial/Cursors-startup.webp`: generated sparse `704x2256` startup atlas with four original-coordinate regions.
 - Create `src/rendering/planner-texture-frame-resolution.ts`: shared locked-path/frame to resolved-path/frame interface.
 - Create `tests/rendering/planner-texture-frame-resolution.test.ts`: exact resolver and fail-fast contract.
 - Create `src/rendering/resolved-placement-texture.ts`: bind each `PlacementRenderEntry` to its resolved asset path and frame without changing the original rendering model.
@@ -358,7 +367,7 @@ Save screenshots and request evidence in `baseline/`. Record every crop rectangl
 
 **Interfaces:**
 - Consumes: locked `public/game-assets/1.6.15/sprites/Cursors.png`, retained complete `public/planner-textures/initial/Cursors.webp`, FFmpeg, `cwebp`, and `webpinfo`.
-- Produces: immutable `STARTUP_CURSOR_ATLAS_CONTRACT`; deterministic `78x25` exact-lossless WebP; standalone verifier.
+- Produces: immutable `STARTUP_CURSOR_ATLAS_CONTRACT`; deterministic sparse `704x2256` exact-lossless WebP; standalone verifier.
 
 - [ ] **Step 1: Add the immutable script contract**
 
@@ -370,12 +379,12 @@ export const STARTUP_CURSOR_ATLAS_CONTRACT = Object.freeze({
   completeWebpRelativePath: "public/planner-textures/initial/Cursors.webp",
   atlasWebpRelativePath: "public/planner-textures/initial/Cursors-startup.webp",
   sourceDimensions: Object.freeze({ width: 704, height: 2256 }),
-  atlasDimensions: Object.freeze({ width: 78, height: 25 }),
+  atlasDimensions: Object.freeze({ width: 704, height: 2256 }),
   frames: Object.freeze([
-    Object.freeze({ id: "shipping-bin-lid", source: Object.freeze({ x: 134, y: 226, width: 30, height: 25 }), atlas: Object.freeze({ x: 0, y: 0, width: 30, height: 25 }) }),
-    Object.freeze({ id: "building-shadow-left", source: Object.freeze({ x: 656, y: 394, width: 16, height: 16 }), atlas: Object.freeze({ x: 30, y: 0, width: 16, height: 16 }) }),
-    Object.freeze({ id: "building-shadow-middle", source: Object.freeze({ x: 672, y: 394, width: 16, height: 16 }), atlas: Object.freeze({ x: 46, y: 0, width: 16, height: 16 }) }),
-    Object.freeze({ id: "building-shadow-right", source: Object.freeze({ x: 688, y: 394, width: 16, height: 16 }), atlas: Object.freeze({ x: 62, y: 0, width: 16, height: 16 }) }),
+    Object.freeze({ id: "shipping-bin-lid", source: Object.freeze({ x: 134, y: 226, width: 30, height: 25 }), atlas: Object.freeze({ x: 134, y: 226, width: 30, height: 25 }) }),
+    Object.freeze({ id: "building-shadow-left", source: Object.freeze({ x: 656, y: 394, width: 16, height: 16 }), atlas: Object.freeze({ x: 656, y: 394, width: 16, height: 16 }) }),
+    Object.freeze({ id: "building-shadow-middle", source: Object.freeze({ x: 672, y: 394, width: 16, height: 16 }), atlas: Object.freeze({ x: 672, y: 394, width: 16, height: 16 }) }),
+    Object.freeze({ id: "building-shadow-right", source: Object.freeze({ x: 688, y: 394, width: 16, height: 16 }), atlas: Object.freeze({ x: 688, y: 394, width: 16, height: 16 }) }),
   ]),
 });
 ```
@@ -387,7 +396,7 @@ Implement `verifyStartupCursorAtlas()` with independent functions for required-f
 ```js
 await assertRequiredFiles();
 await assertSourceDimensions({ width: 704, height: 2256 });
-await assertAtlasWebpContract({ width: 78, height: 25, lossless: true, alpha: 1 });
+await assertAtlasWebpContract({ width: 704, height: 2256, lossless: true, alpha: 1 });
 await assertAtlasSmallerThanCompleteWebp();
 await assertMappedRegionsMatchDecodedSourceRgba();
 await assertUnmappedAtlasPixelsAreTransparent();
@@ -438,9 +447,18 @@ function assertUnmappedAtlasPixelsAreTransparent(atlasRgbaBytes) {
     }
   }
   for (let pixelIndex = 0; pixelIndex < coveredPixels.length; pixelIndex += 1) {
-    if (coveredPixels[pixelIndex] === 0 && atlasRgbaBytes[pixelIndex * 4 + 3] !== 0) {
+    const rgbaByteOffset = pixelIndex * 4;
+    const receivedRgba = Array.from(
+      atlasRgbaBytes.subarray(rgbaByteOffset, rgbaByteOffset + 4),
+    );
+    if (
+      coveredPixels[pixelIndex] === 0 &&
+      receivedRgba.some((rgbaByte) => rgbaByte !== 0)
+    ) {
+      const pixelX = pixelIndex % width;
+      const pixelY = Math.floor(pixelIndex / width);
       throw new Error(
-        `Startup Cursor atlas ${JSON.stringify(atlasWebpPath)} unmapped pixel ${String(pixelIndex)} must be transparent; received alpha ${String(atlasRgbaBytes[pixelIndex * 4 + 3])}.`,
+        `Startup Cursor atlas ${JSON.stringify(atlasWebpPath)} unmapped pixel at x=${String(pixelX)}, y=${String(pixelY)} must be [0, 0, 0, 0]. Received RGBA: [${receivedRgba.join(", ")}].`,
       );
     }
   }
@@ -527,15 +545,20 @@ async function parseRequiredTemporaryRoot(argumentValues) {
 Wrap the `stat` failure only to add the received path as `cause`; do not convert
 an unknown filesystem failure into success.
 
-Use this exact FFmpeg graph so the three `16x16` shadows are top-aligned and transparently padded to `16x25` before stacking:
+Use this exact FFmpeg graph to make a transparent original-size surface and
+overlay each approved region at its source coordinate:
 
 ```js
 const atlasFilter = [
+  "color=c=black@0.0:s=704x2256,format=rgba[transparent-atlas]",
   "[0:v]crop=30:25:134:226,format=rgba[lid]",
-  "[0:v]crop=16:16:656:394,format=rgba,pad=16:25:0:0:color=0x00000000[left]",
-  "[0:v]crop=16:16:672:394,format=rgba,pad=16:25:0:0:color=0x00000000[middle]",
-  "[0:v]crop=16:16:688:394,format=rgba,pad=16:25:0:0:color=0x00000000[right]",
-  "[lid][left][middle][right]hstack=inputs=4,format=rgba[atlas]",
+  "[0:v]crop=16:16:656:394,format=rgba[left]",
+  "[0:v]crop=16:16:672:394,format=rgba[middle]",
+  "[0:v]crop=16:16:688:394,format=rgba[right]",
+  "[transparent-atlas][lid]overlay=134:226:format=auto[with-lid]",
+  "[with-lid][left]overlay=656:394:format=auto[with-left-shadow]",
+  "[with-left-shadow][middle]overlay=672:394:format=auto[with-middle-shadow]",
+  "[with-middle-shadow][right]overlay=688:394:format=auto,format=rgba[atlas]",
 ].join(";");
 
 await runCommand("ffmpeg", [
@@ -590,7 +613,7 @@ node scripts/verify-startup-cursor-atlas.mjs
 node scripts/verify-initial-planner-texture-webp.mjs
 ```
 
-Expected: the new verifier reports one valid `78x25` startup atlas; the existing verifier still reports all four complete WebPs valid.
+Expected: the new verifier reports one valid sparse `704x2256` startup atlas; the existing verifier still reports all four complete WebPs valid.
 
 ### Task 3: Add the pure shared texture-frame resolver
 
@@ -623,7 +646,7 @@ export type ResolvedPlannerTextureFrame = Readonly<{
 
 Add tests named:
 
-- `maps every approved Cursors source frame to its exact startup-atlas frame`;
+- `keeps every approved Cursors frame at its original coordinate on the startup atlas`;
 - `keeps a non-startup Cursors frame on the complete WebP with unchanged coordinates`;
 - `preserves a non-Cursors frame through the existing initial path resolver`;
 - `preserves a null full-texture frame`;
@@ -656,10 +679,10 @@ Use `/game-assets/1.6.15/sprites/Cursors.png` as the only atlas-eligible locked 
 
 ```ts
 const startupCursorFrameByLockedFrameKey = new Map<string, PlannerTextureFrame>([
-  [createFrameKey(cursorLockedPath, { x: 134, y: 226, width: 30, height: 25 }), { x: 0, y: 0, width: 30, height: 25 }],
-  [createFrameKey(cursorLockedPath, { x: 656, y: 394, width: 16, height: 16 }), { x: 30, y: 0, width: 16, height: 16 }],
-  [createFrameKey(cursorLockedPath, { x: 672, y: 394, width: 16, height: 16 }), { x: 46, y: 0, width: 16, height: 16 }],
-  [createFrameKey(cursorLockedPath, { x: 688, y: 394, width: 16, height: 16 }), { x: 62, y: 0, width: 16, height: 16 }],
+  [createFrameKey(cursorLockedPath, { x: 134, y: 226, width: 30, height: 25 }), { x: 134, y: 226, width: 30, height: 25 }],
+  [createFrameKey(cursorLockedPath, { x: 656, y: 394, width: 16, height: 16 }), { x: 656, y: 394, width: 16, height: 16 }],
+  [createFrameKey(cursorLockedPath, { x: 672, y: 394, width: 16, height: 16 }), { x: 672, y: 394, width: 16, height: 16 }],
+  [createFrameKey(cursorLockedPath, { x: 688, y: 394, width: 16, height: 16 }), { x: 688, y: 394, width: 16, height: 16 }],
 ]);
 
 function createFrameKey(
@@ -1004,7 +1027,7 @@ export function createBuildingThumbnailLayerDrawCommand(
 ): BuildingThumbnailLayerDrawCommand;
 ```
 
-Tests prove the Shipping Bin lid requests `/planner-textures/initial/Cursors-startup.webp`, uses source frame `{x:0,y:0,width:30,height:25}`, preserves the existing destination formula, and never requests the complete Cursor WebP for the default Buildings catalog. Also add:
+Tests prove the Shipping Bin lid requests `/planner-textures/initial/Cursors-startup.webp`, uses source frame `{x:134,y:226,width:30,height:25}`, preserves the existing destination formula, and never requests the complete Cursor WebP for the default Buildings catalog. Also add:
 
 ```ts
 it("materializes a valid 0x0 full-texture sentinel from image dimensions", () => {

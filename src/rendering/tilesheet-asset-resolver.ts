@@ -48,6 +48,14 @@ const waterfallForestSpringFallbackTilesheetBasenames = new Set<string>([
   "ATK_AToMS_EXmisc",
 ]);
 
+const modestMapsPublicTilesheetOutputPathBySource = new Map<string, string>([
+  [".paths.png", "tilesheets/paths.png"],
+  [
+    ".spring_outdoorsTileSheet.png",
+    "tilesheets/spring_outdoorsTileSheet.png",
+  ],
+]);
+
 const lockedRenderingOutputPaths = new Set(renderingRuntimeAssetOutputPaths);
 
 const knownUnavailableTilesheetReasonByOutputPath = new Map<string, string>([
@@ -136,6 +144,15 @@ function resolveTilesheetOutputPath(
   tilesheetAssetRequest: TilesheetAssetRequest,
 ): string {
   const { tilesetSource, season, modId } = tilesheetAssetRequest;
+
+  if (modId === "inkubusmods.modestmapsstandardfarm") {
+    const publicTilesheetOutputPath =
+      modestMapsPublicTilesheetOutputPathBySource.get(tilesetSource);
+
+    if (publicTilesheetOutputPath !== undefined) {
+      return publicTilesheetOutputPath;
+    }
+  }
 
   if (tilesetSource === "paths" || tilesetSource === "paths.png") {
     return "tilesheets/paths.png";

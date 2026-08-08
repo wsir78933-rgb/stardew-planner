@@ -128,7 +128,7 @@ describe("planner editor page", () => {
         `<a href="${expectedFooter.termsHref}">`,
       );
       expect(homepageMarkup).toMatch(
-        /<div data-site-footer-social-icons="true">(?:(?!<a).)*<\/div>/,
+        /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
       );
     }
   });

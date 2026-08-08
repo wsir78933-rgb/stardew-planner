@@ -37,7 +37,14 @@ export function SiteFooter({ content }: SiteFooterProps): ReactElement {
       <div data-site-footer-social-icons="true">
         <span aria-hidden="true"><FaInstagram /></span>
         <span aria-hidden="true"><FaFacebook /></span>
-        <span aria-hidden="true"><FaTwitter /></span>
+        <a
+          aria-label="Follow @wsir1139 on X (Twitter)"
+          href="https://x.com/wsir1139"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <FaTwitter aria-hidden="true" focusable="false" />
+        </a>
         <span aria-hidden="true"><FaLinkedin /></span>
       </div>
       <div data-site-footer-sections="true">

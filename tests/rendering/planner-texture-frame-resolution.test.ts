@@ -7,23 +7,23 @@ import {
 const cursorLockedTexturePath = "/game-assets/1.6.15/sprites/Cursors.png";
 
 describe("planner texture frame resolution", () => {
-  it("maps every approved Cursors source frame to its exact startup-atlas frame", () => {
+  it("keeps every approved Cursors frame at its original coordinate on the startup atlas", () => {
     const approvedFrameMappings = [
       {
         sourceFrame: { x: 134, y: 226, width: 30, height: 25 },
-        resolvedFrame: { x: 0, y: 0, width: 30, height: 25 },
+        resolvedFrame: { x: 134, y: 226, width: 30, height: 25 },
       },
       {
         sourceFrame: { x: 656, y: 394, width: 16, height: 16 },
-        resolvedFrame: { x: 30, y: 0, width: 16, height: 16 },
+        resolvedFrame: { x: 656, y: 394, width: 16, height: 16 },
       },
       {
         sourceFrame: { x: 672, y: 394, width: 16, height: 16 },
-        resolvedFrame: { x: 46, y: 0, width: 16, height: 16 },
+        resolvedFrame: { x: 672, y: 394, width: 16, height: 16 },
       },
       {
         sourceFrame: { x: 688, y: 394, width: 16, height: 16 },
-        resolvedFrame: { x: 62, y: 0, width: 16, height: 16 },
+        resolvedFrame: { x: 688, y: 394, width: 16, height: 16 },
       },
     ] as const satisfies ReadonlyArray<Readonly<{
       sourceFrame: PlannerTextureFrame;
