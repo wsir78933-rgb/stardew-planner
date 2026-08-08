@@ -10,6 +10,7 @@ describe("editor controls", () => {
       createElement(EditorMenuBar, {
         activeModalId: null,
         mapDisplayName: "Standard Farm",
+        onCycleSeason: () => undefined,
         onOpenModal: () => undefined,
         season: "spring",
       }),

@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   collapseEditorMenuForModalOpen,
   createInitialEditorViewState,
+  editorModalIds,
   getEditorLayout,
+  getNextEditorSeason,
   openEditorModal,
   selectCatalogCategory,
   selectEditorMap,
@@ -44,17 +46,29 @@ describe("editor view state", () => {
     });
   });
 
-  it("changes season and closes the season picker", () => {
-    const seasonPickerState = openEditorModal(
+  it("changes season and closes an active modal", () => {
+    const mapPickerState = openEditorModal(
       createInitialEditorViewState(),
-      "season-picker",
+      "map-picker",
     );
 
-    expect(selectEditorSeason(seasonPickerState, "winter")).toMatchObject({
+    expect(selectEditorSeason(mapPickerState, "winter")).toMatchObject({
       season: "winter",
       modalId: null,
       mapId: "standard",
     });
+  });
+
+  it("does not register a season picker modal", () => {
+    expect(editorModalIds).not.toContain("season-picker");
+  });
+
+  it("cycles editor seasons in calendar order and rejects unsupported values", () => {
+    expect(getNextEditorSeason("spring")).toBe("summer");
+    expect(getNextEditorSeason("summer")).toBe("fall");
+    expect(getNextEditorSeason("fall")).toBe("winter");
+    expect(getNextEditorSeason("winter")).toBe("spring");
+    expect(() => getNextEditorSeason("monsoon" as never)).toThrow("monsoon");
   });
 
   it("allows the available multi-select and fill tools", () => {

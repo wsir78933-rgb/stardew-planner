@@ -47,6 +47,30 @@ const frozenInitialFarmBuildingsByPlannerMapId = [
 ] as const;
 
 describe("planner workspace state", () => {
+  it("cycles seasons through the workspace state boundary without opening a modal", () => {
+    let workspaceState = createInitialPlannerWorkspaceState();
+
+    workspaceState = reducePlannerWorkspaceState(workspaceState, {
+      type: "cycle-season",
+    });
+    expect(workspaceState).toMatchObject({ season: "summer", modalId: null });
+
+    workspaceState = reducePlannerWorkspaceState(workspaceState, {
+      type: "cycle-season",
+    });
+    expect(workspaceState).toMatchObject({ season: "fall", modalId: null });
+
+    workspaceState = reducePlannerWorkspaceState(workspaceState, {
+      type: "cycle-season",
+    });
+    expect(workspaceState).toMatchObject({ season: "winter", modalId: null });
+
+    workspaceState = reducePlannerWorkspaceState(workspaceState, {
+      type: "cycle-season",
+    });
+    expect(workspaceState).toMatchObject({ season: "spring", modalId: null });
+  });
+
   it("uses every frozen Wl default building composition with deterministic IDs", () => {
     for (const [plannerMapId, expectedBuildings] of frozenInitialFarmBuildingsByPlannerMapId) {
       const initialPlacementSnapshot = createInitialPlannerWorkspaceState(

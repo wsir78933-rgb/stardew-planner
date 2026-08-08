@@ -4,11 +4,12 @@ import { useState } from "react";
 import type { PlannerMap } from "../maps/map-catalog";
 import type { ReferenceProjectMap } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import { PlannerMapPicker } from "./planner-map-picker";
 
 type ProjectMapInstancePanelProperties = Readonly<{
   activeMapInstanceId: string | null;
   mapInstances: readonly ReferenceProjectMap[];
-  mapChoices: readonly Pick<PlannerMap, "id" | "displayName">[];
+  mapChoices: readonly PlannerMap[];
   projectChoices: readonly ReferenceProjectSummary[];
   onAddMap: (plannerMapId: string) => void;
   onCopyMapInstance: (
@@ -193,18 +194,12 @@ export function ProjectMapInstancePanel({
       </ul>
       <section aria-label="Add map" className="project-map-instance-panel__add-map">
         <h3>Add map</h3>
-        <div className="project-map-instance-panel__map-grid">
-          {mapChoices.map((mapChoice) => (
-            <button
-              data-project-add-map-id={mapChoice.id}
-              key={mapChoice.id}
-              onClick={() => onAddMap(mapChoice.id)}
-              type="button"
-            >
-              {mapChoice.displayName}
-            </button>
-          ))}
-        </div>
+        <PlannerMapPicker
+          mapIdDataAttribute="data-project-add-map-id"
+          maps={mapChoices}
+          onMapSelect={onAddMap}
+          selectedMapId={null}
+        />
       </section>
     </section>
   );

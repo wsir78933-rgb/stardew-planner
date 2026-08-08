@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import {
-  editorSeasons,
   type EditorModalId,
   type EditorPanelPosition,
 } from "../editor/editor-view-state";
@@ -28,14 +27,13 @@ import {
   createInitialMapRenderOptions,
   type MapRenderOptions,
 } from "../maps/map-render-options";
-import { getPlannerMapById, plannerMaps, type PlannerMap } from "../maps/map-catalog";
+import { getPlannerMapById, plannerMaps } from "../maps/map-catalog";
 import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
-import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import { PlannerMapPicker } from "./planner-map-picker";
 
 type EditorModalProperties = Readonly<{
   modalId: EditorModalId | null;
   selectedMapId: string;
-  season: TilesheetSeason;
   panelPosition: EditorPanelPosition;
   behaviorOptions?: EditorBehaviorOptions;
   displayOptions?: EditorDisplayOptions;
@@ -48,7 +46,6 @@ type EditorModalProperties = Readonly<{
   onDisplayOptionToggle?: (editorDisplayOptionKey: EditorDisplayOptionKey) => void;
   onMapChange: (mapId: string) => void;
   onMapRenderOptionsChange?: (nextMapRenderOptions: MapRenderOptions) => void;
-  onSeasonChange: (season: TilesheetSeason) => void;
   onPanelPositionChange: (panelPosition: EditorPanelPosition) => void;
   projectMapPanelContent?: ReactNode;
   savePanelContent?: ReactNode;
@@ -69,31 +66,9 @@ const modalFocusableElementSelector = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
-const mapGroupDefinitions: readonly Readonly<{
-  heading: string;
-  includesMap: (plannerMap: PlannerMap) => boolean;
-}>[] = [
-  { heading: "Farm", includesMap: (plannerMap) => plannerMap.category === "farm" },
-  {
-    heading: "Interiors",
-    includesMap: (plannerMap) => plannerMap.category === "interior",
-  },
-  {
-    heading: "Exteriors",
-    includesMap: (plannerMap) => plannerMap.category === "exterior",
-  },
-  {
-    heading: "Community",
-    includesMap: (plannerMap) =>
-      plannerMap.category === "community-farm" ||
-      plannerMap.category === "community-interior",
-  },
-];
-
 export function EditorModal({
   modalId,
   selectedMapId,
-  season,
   panelPosition,
   behaviorOptions = createInitialEditorBehaviorOptions(),
   displayOptions = createInitialEditorDisplayOptions(),
@@ -103,7 +78,6 @@ export function EditorModal({
   onDisplayOptionToggle = ignoreEditorDisplayOptionToggle,
   onMapChange,
   onMapRenderOptionsChange = ignoreMapRenderOptionsChange,
-  onSeasonChange,
   onPanelPositionChange,
   projectMapPanelContent,
   savePanelContent,
@@ -186,7 +160,7 @@ export function EditorModal({
       <section
         aria-labelledby={modalHeadingId}
         aria-modal="true"
-        className="editor-modal"
+        className={`editor-modal${modalId === "map-picker" ? " editor-modal--map-picker" : ""}`}
         onKeyDown={handleModalKeyDown}
         ref={modalElementReference}
         role="dialog"
@@ -201,8 +175,10 @@ export function EditorModal({
         {modalId === "map-picker" ? (
           <>
             {projectMapPanelContent ?? (
-              <MapPicker
-                onMapChange={onMapChange}
+              <PlannerMapPicker
+                mapIdDataAttribute="data-editor-map-id"
+                maps={plannerMaps}
+                onMapSelect={onMapChange}
                 selectedMapId={selectedMapId}
               />
             )}
@@ -212,9 +188,6 @@ export function EditorModal({
               selectedMapId={selectedMapId}
             />
           </>
-        ) : null}
-        {modalId === "season-picker" ? (
-          <SeasonPicker onSeasonChange={onSeasonChange} season={season} />
         ) : null}
         {modalId === "view-panel" ? (
           <ViewPanel
@@ -311,69 +284,6 @@ function restoreModalTriggerFocus(
   if (modalTriggerElement?.isConnected) {
     modalTriggerElement.focus();
   }
-}
-
-function MapPicker({
-  selectedMapId,
-  onMapChange,
-}: Readonly<{
-  selectedMapId: string;
-  onMapChange: (mapId: string) => void;
-}>) {
-  return (
-    <div className="editor-modal__map-groups">
-      {mapGroupDefinitions.map((mapGroupDefinition) => {
-        const groupedMaps = plannerMaps.filter(mapGroupDefinition.includesMap);
-
-        return (
-          <section className="editor-modal__map-group" key={mapGroupDefinition.heading}>
-            <h3>{mapGroupDefinition.heading}</h3>
-            <div className="editor-modal__map-grid">
-              {groupedMaps.map((plannerMap) => (
-                <button
-                  aria-pressed={plannerMap.id === selectedMapId}
-                  data-editor-map-id={plannerMap.id}
-                  key={plannerMap.id}
-                  onClick={() => onMapChange(plannerMap.id)}
-                  type="button"
-                >
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    src={`/game-assets/1.6.15/${plannerMap.previewOutputPath}`}
-                  />
-                  <span>{plannerMap.displayName}</span>
-                </button>
-              ))}
-            </div>
-          </section>
-        );
-      })}
-    </div>
-  );
-}
-
-function SeasonPicker({
-  season,
-  onSeasonChange,
-}: Readonly<{
-  season: TilesheetSeason;
-  onSeasonChange: (season: TilesheetSeason) => void;
-}>) {
-  return (
-    <div className="editor-modal__season-picker">
-      {editorSeasons.map((editorSeason) => (
-        <button
-          aria-pressed={editorSeason === season}
-          key={editorSeason}
-          onClick={() => onSeasonChange(editorSeason)}
-          type="button"
-        >
-          {editorSeason}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 function PanelPositionPicker({
@@ -799,10 +709,6 @@ function WhatsNewPanel() {
 function getModalLabel(modalId: EditorModalId): string {
   if (modalId === "map-picker") {
     return "Choose map";
-  }
-
-  if (modalId === "season-picker") {
-    return "Choose season";
   }
 
   if (modalId === "view-panel") {

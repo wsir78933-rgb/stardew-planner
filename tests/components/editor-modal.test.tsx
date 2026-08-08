@@ -9,6 +9,7 @@ describe("editor reference information dialogs", () => {
     expect(editorModalIds).toContain("help-info");
     expect(editorModalIds).toContain("keyboard-shortcuts");
     expect(editorModalIds).toContain("whats-new");
+    expect(editorModalIds).not.toContain("season-picker");
   });
 
   it("renders local-only help without feedback or support actions", () => {
@@ -18,9 +19,7 @@ describe("editor reference information dialogs", () => {
         onClose: () => undefined,
         onMapChange: () => undefined,
         onPanelPositionChange: () => undefined,
-        onSeasonChange: () => undefined,
         panelPosition: "bottom",
-        season: "spring",
         selectedMapId: "standard",
       }),
     );
@@ -39,9 +38,7 @@ describe("editor reference information dialogs", () => {
         onClose: () => undefined,
         onMapChange: () => undefined,
         onPanelPositionChange: () => undefined,
-        onSeasonChange: () => undefined,
         panelPosition: "bottom",
-        season: "spring",
         selectedMapId: "standard",
       }),
     );

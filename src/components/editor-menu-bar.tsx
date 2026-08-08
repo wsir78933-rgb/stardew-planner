@@ -17,26 +17,37 @@ type EditorMenuBarProperties = Readonly<{
   activeModalId: EditorModalId | null;
   leftHandMode?: boolean;
   mapDisplayName: string;
+  onCycleSeason: () => void;
   season: TilesheetSeason;
   onOpenModal: (modalId: EditorModalId) => void;
 }>;
 
-const editorMenuControls: readonly Readonly<{
-  id: EditorModalId;
-  label: string;
-  icon: typeof Map;
-}>[] = [
-  { id: "season-picker", label: "Season", icon: CloudSun },
-  { id: "map-picker", label: "Map", icon: Map },
-  { id: "view-panel", label: "View", icon: Eye },
-  { id: "save-panel", label: "Save", icon: Save },
-  { id: "settings-panel", label: "Settings", icon: Wrench },
+type EditorMenuControl =
+  | Readonly<{
+      action: "cycle-season";
+      icon: typeof Map;
+      label: string;
+    }>
+  | Readonly<{
+      action: "open-modal";
+      icon: typeof Map;
+      label: string;
+      modalId: EditorModalId;
+    }>;
+
+const editorMenuControls: readonly EditorMenuControl[] = [
+  { action: "cycle-season", label: "Season", icon: CloudSun },
+  { action: "open-modal", modalId: "map-picker", label: "Map", icon: Map },
+  { action: "open-modal", modalId: "view-panel", label: "View", icon: Eye },
+  { action: "open-modal", modalId: "save-panel", label: "Save", icon: Save },
+  { action: "open-modal", modalId: "settings-panel", label: "Settings", icon: Wrench },
 ];
 
 export function EditorMenuBar({
   activeModalId,
   leftHandMode = false,
   mapDisplayName,
+  onCycleSeason,
   season,
   onOpenModal,
 }: EditorMenuBarProperties) {
@@ -68,36 +79,43 @@ export function EditorMenuBar({
         id={menuControlsId}
       >
         {editorMenuControls.map((editorMenuControl) => {
-        const menuLabel = getMenuLabel(
-          editorMenuControl,
-          mapDisplayName,
-          season,
-        );
-        const accessibleMenuLabel = getAccessibleMenuLabel(
-          editorMenuControl,
-          menuLabel,
-        );
-        const MenuIcon = editorMenuControl.icon;
+          const menuLabel = getMenuLabel(
+            editorMenuControl,
+            mapDisplayName,
+            season,
+          );
+          const accessibleMenuLabel = getAccessibleMenuLabel(
+            editorMenuControl,
+            menuLabel,
+          );
+          const isModalControl = editorMenuControl.action === "open-modal";
+          const isModalControlActive =
+            isModalControl && activeModalId === editorMenuControl.modalId;
+          const MenuIcon = editorMenuControl.icon;
 
-        return (
-          <button
-            aria-label={accessibleMenuLabel}
-            aria-expanded={activeModalId === editorMenuControl.id}
-            aria-haspopup="dialog"
-            className={`menu-btn editor-menu-bar__button${
-              activeModalId === editorMenuControl.id ? " active" : ""
-            }`}
-            key={editorMenuControl.id}
-            onClick={() => {
-              setIsCompactMenuExpanded(false);
-              onOpenModal(editorMenuControl.id);
-            }}
-            title={accessibleMenuLabel}
-            type="button"
-          >
-            <MenuIcon aria-hidden="true" size={16} strokeWidth={2} />
-          </button>
-        );
+          return (
+            <button
+              aria-expanded={isModalControl ? isModalControlActive : undefined}
+              aria-haspopup={isModalControl ? "dialog" : undefined}
+              aria-label={accessibleMenuLabel}
+              className={`menu-btn editor-menu-bar__button${
+                isModalControlActive ? " active" : ""
+              }`}
+              key={editorMenuControl.action === "cycle-season" ? editorMenuControl.action : editorMenuControl.modalId}
+              onClick={() => {
+                setIsCompactMenuExpanded(false);
+                if (editorMenuControl.action === "cycle-season") {
+                  onCycleSeason();
+                } else {
+                  onOpenModal(editorMenuControl.modalId);
+                }
+              }}
+              title={accessibleMenuLabel}
+              type="button"
+            >
+              <MenuIcon aria-hidden="true" size={16} strokeWidth={2} />
+            </button>
+          );
         })}
       </div>
     </nav>
@@ -105,15 +123,15 @@ export function EditorMenuBar({
 }
 
 function getMenuLabel(
-  editorMenuControl: (typeof editorMenuControls)[number],
+  editorMenuControl: EditorMenuControl,
   mapDisplayName: string,
   season: TilesheetSeason,
 ): string {
-  if (editorMenuControl.id === "season-picker") {
+  if (editorMenuControl.action === "cycle-season") {
     return season;
   }
 
-  if (editorMenuControl.id === "map-picker") {
+  if (editorMenuControl.modalId === "map-picker") {
     return mapDisplayName;
   }
 
@@ -121,7 +139,7 @@ function getMenuLabel(
 }
 
 function getAccessibleMenuLabel(
-  editorMenuControl: (typeof editorMenuControls)[number],
+  editorMenuControl: EditorMenuControl,
   menuLabel: string,
 ): string {
   return menuLabel.length === 0

@@ -53,4 +53,27 @@ describe("planner workspace layout", () => {
       /\.planner-canvas\s*\{[^}]*left:\s*0;/s,
     );
   });
+
+  it("keeps the mobile menu above the overlapping editor toolbar", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+    const mobilePlannerWorkspaceRule = plannerWorkspaceStyles.match(
+      /@media \(max-width: 640px\)\s*\{([\s\S]*)\}\s*$/,
+    )?.[1];
+
+    expect(mobilePlannerWorkspaceRule).toBeDefined();
+    expect(mobilePlannerWorkspaceRule).toMatch(
+      /\.planner-editor-shell \.menu-bar\s*\{[^}]*z-index:\s*26;/s,
+    );
+  });
+
+  it("removes obsolete season dialog styles without moving the mobile menu", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+
+    expect(plannerWorkspaceStyles).not.toContain(
+      ".editor-modal__season-picker",
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.menu-bar\s*\{[^}]*z-index:\s*26;/s,
+    );
+  });
 });

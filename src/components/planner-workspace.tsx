@@ -647,6 +647,11 @@ function PreparedPlannerWorkspaceContent({
         activeModalId={plannerWorkspaceState.modalId}
         leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
         mapDisplayName={getPlannerMapById(plannerWorkspaceState.selectedPlannerMapId).displayName}
+        onCycleSeason={() =>
+          plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
+            type: "cycle-season",
+          })
+        }
         onOpenModal={(modalId) =>
           plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
             modalId,
@@ -786,12 +791,6 @@ function PreparedPlannerWorkspaceContent({
             type: "select-panel-position",
           })
         }
-        onSeasonChange={(season) =>
-          plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
-            season,
-            type: "select-season",
-          })
-        }
         panelPosition={plannerWorkspaceState.panelPosition}
         projectMapPanelContent={createProjectMapPanelContent({
           activeProject: workspaceState.activeProject,
@@ -835,7 +834,6 @@ function PreparedPlannerWorkspaceContent({
             {...localProjectActions}
           />
         }
-        season={plannerWorkspaceState.season}
         selectedMapId={plannerWorkspaceState.selectedPlannerMapId}
       />
     </>

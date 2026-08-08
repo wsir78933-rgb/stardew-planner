@@ -2,6 +2,7 @@ import {
   closeEditorModal,
   collapseEditorMenuForModalOpen,
   createInitialEditorViewState,
+  getNextEditorSeason,
   openEditorModal,
   selectCatalogCategory,
   selectEditorMap,
@@ -120,6 +121,7 @@ export type PlannerWorkspaceAction =
       type: "set-selected-placement-keys";
     }>
   | Readonly<{ type: "close-modal" }>
+  | Readonly<{ type: "cycle-season" }>
   | Readonly<{ type: "open-modal"; modalId: EditorModalId }>
   | Readonly<{
       placementSnapshot: PlacementSnapshot;
@@ -243,6 +245,11 @@ export function reducePlannerWorkspaceState(
       return selectWorkspaceSeason(
         plannerWorkspaceState,
         plannerWorkspaceAction.season,
+      );
+    case "cycle-season":
+      return selectWorkspaceSeason(
+        plannerWorkspaceState,
+        getNextEditorSeason(plannerWorkspaceState.season),
       );
     case "select-tool":
       return selectWorkspaceTool(

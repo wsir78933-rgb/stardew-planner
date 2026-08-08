@@ -21,7 +21,6 @@ export const editorPanelPositions = ["bottom", "left"] as const;
 
 export const editorModalIds = [
   "map-picker",
-  "season-picker",
   "view-panel",
   "save-panel",
   "settings-panel",
@@ -87,6 +86,12 @@ export function createInitialEditorViewState(
       viewportWidth === undefined || viewportWidth > 640 ? "left" : "bottom",
     modalId: null,
   };
+}
+
+export function getNextEditorSeason(season: TilesheetSeason): TilesheetSeason {
+  validateEditorSeason(season);
+  const seasonIndex = editorSeasons.indexOf(season);
+  return editorSeasons[(seasonIndex + 1) % editorSeasons.length];
 }
 
 export function selectEditorMap(

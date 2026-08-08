@@ -74,6 +74,7 @@ describe("editor shell", () => {
       createElement(EditorMenuBar, {
         activeModalId: null,
         mapDisplayName: "Standard Farm",
+        onCycleSeason: ignoreEditorAction,
         season: "spring",
         onOpenModal: ignoreEditorAction,
       }),
@@ -84,6 +85,14 @@ describe("editor shell", () => {
     expect(menuMarkup).toContain("editor-menu-bar__controls");
     expect(menuMarkup).not.toContain('editor-menu-actions');
     expect(menuMarkup).toContain('aria-label="Season: spring"');
+    const seasonButtonMarkup = menuMarkup.match(
+      /<button(?=[^>]*aria-label="Season: spring")[^>]*>/,
+    )?.[0];
+    if (seasonButtonMarkup === undefined) {
+      throw new Error("Expected the season menu button to be rendered.");
+    }
+    expect(seasonButtonMarkup).not.toContain('aria-haspopup="dialog"');
+    expect(seasonButtonMarkup).not.toContain("aria-expanded=");
     expect(menuMarkup).toContain(
       'aria-label="Map: Standard Farm"',
     );
@@ -95,34 +104,53 @@ describe("editor shell", () => {
     );
   });
 
-  it("groups every catalogued map into the four editor map headings", () => {
+  it("renders the shared categorized map picker with the selected Farm tab", () => {
     const mapPickerMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         modalId: "map-picker",
         selectedMapId: "standard",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
 
-    expect(mapPickerMarkup).toContain(">Farm<");
-    expect(mapPickerMarkup).toContain(">Interiors<");
-    expect(mapPickerMarkup).toContain(">Exteriors<");
-    expect(mapPickerMarkup).toContain(">Community<");
-    expect(mapPickerMarkup.match(/data-editor-map-id=/g)).toHaveLength(48);
+    expect(mapPickerMarkup).toContain('aria-label="Map categories"');
+    expect(mapPickerMarkup.match(/role="tab"/g)).toHaveLength(4);
+    expect(mapPickerMarkup.match(/role="tabpanel"/g)).toHaveLength(1);
+    expect(mapPickerMarkup.match(/data-editor-map-id=/g)).toHaveLength(9);
+    expect(mapPickerMarkup).toMatch(/aria-selected="true"[^>]*>Farm</);
     expect(mapPickerMarkup).toContain(
       'src="/game-assets/1.6.15/maps/previews/Farm.png"',
     );
-    expect(mapPickerMarkup).toContain("Waterfall Forest Farm (WaFF)");
-    expect(mapPickerMarkup).toContain(
-      'data-editor-map-id="sve-grandpas-shed-2"',
-    );
+    expect(mapPickerMarkup).not.toContain('data-editor-map-id="farmhouse-2"');
     expect(mapPickerMarkup).toContain('role="dialog"');
     expect(mapPickerMarkup).toContain('tabindex="-1"');
+  });
+
+  it("opens Winery in its Community/Interiors category with the current card selected", () => {
+    const mapPickerMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "map-picker",
+        selectedMapId: "sve-winery",
+        panelPosition: "bottom",
+        onClose: ignoreEditorAction,
+        onMapChange: ignoreEditorAction,
+        onPanelPositionChange: ignoreEditorAction,
+      }),
+    );
+    const wineryButtonMarkup = getButtonMarkupWithAttribute(
+      mapPickerMarkup,
+      'data-editor-map-id="sve-winery"',
+    );
+
+    expect(mapPickerMarkup.match(/data-editor-map-id=/g)).toHaveLength(3);
+    expect(mapPickerMarkup).toMatch(
+      /aria-labelledby="([^"]+)-tab-community \1-community-tab-interiors"/,
+    );
+    expect(wineryButtonMarkup).toContain('aria-pressed="true"');
+    expect(wineryButtonMarkup).toContain("Winery (SVE)");
   });
 
   it("renders the source-faithful Ginger Island and Farmhouse 2 map configuration controls", () => {
@@ -130,11 +158,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "map-picker",
         selectedMapId: "ginger-island",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
@@ -142,11 +168,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "map-picker",
         selectedMapId: "farmhouse-2",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
@@ -165,11 +189,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "save-panel",
         selectedMapId: "standard",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
         savePanelContent: createElement("p", null, "Save to this device"),
       }),
@@ -186,11 +208,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "view-panel",
         selectedMapId: "standard",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
@@ -198,11 +218,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "view-panel",
         selectedMapId: "bus-stop",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
@@ -216,11 +234,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "view-panel",
         selectedMapId: "standard",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
@@ -238,11 +254,9 @@ describe("editor shell", () => {
       createElement(EditorModal, {
         modalId: "settings-panel",
         selectedMapId: "standard",
-        season: "spring",
         panelPosition: "bottom",
         onClose: ignoreEditorAction,
         onMapChange: ignoreEditorAction,
-        onSeasonChange: ignoreEditorAction,
         onPanelPositionChange: ignoreEditorAction,
       }),
     );
@@ -376,4 +390,29 @@ function getMarkupAttribute(
   }
 
   return markup.match(new RegExp(`${attributeName}="([^"]+)"`))?.[1] ?? null;
+}
+
+function getButtonMarkupWithAttribute(
+  containerMarkup: string,
+  requiredAttribute: string,
+): string {
+  const attributePosition = containerMarkup.indexOf(requiredAttribute);
+  const buttonStartPosition = containerMarkup.lastIndexOf(
+    "<button",
+    attributePosition,
+  );
+  const buttonEndPosition = containerMarkup.indexOf(
+    "</button>",
+    attributePosition,
+  );
+
+  if (
+    attributePosition === -1 ||
+    buttonStartPosition === -1 ||
+    buttonEndPosition === -1
+  ) {
+    throw new Error(`Expected a button with attribute ${requiredAttribute}.`);
+  }
+
+  return containerMarkup.slice(buttonStartPosition, buttonEndPosition + 9);
 }

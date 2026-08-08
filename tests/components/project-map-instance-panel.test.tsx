@@ -36,9 +36,28 @@ const referenceProjectMaps: readonly ReferenceProjectMap[] = [
   },
 ];
 
-const plannerMaps: readonly Pick<PlannerMap, "id" | "displayName">[] = [
-  { id: "standard", displayName: "Standard Farm" },
-  { id: "forest", displayName: "Forest Farm" },
+const availablePlannerMaps: readonly PlannerMap[] = [
+  {
+    id: "standard",
+    displayName: "Standard Farm",
+    category: "farm",
+    mapFile: "Farm.tmx",
+    previewOutputPath: "maps/previews/Farm.png",
+  },
+  {
+    id: "forest",
+    displayName: "Forest Farm",
+    category: "farm",
+    mapFile: "Farm_Foraging.tmx",
+    previewOutputPath: "maps/previews/Farm_Foraging.png",
+  },
+  {
+    id: "farmhouse-2",
+    displayName: "Farmhouse (Upgrade 2)",
+    category: "interior",
+    mapFile: "FarmHouse2.tmx",
+    previewOutputPath: "maps/previews/FarmHouse2.png",
+  },
 ];
 
 const destinationProjects: readonly ReferenceProjectSummary[] = [
@@ -64,12 +83,12 @@ describe("project map instance panel", () => {
     expect(deriveAvailableDestinationProjectId("project-other", [])).toBe("");
   });
 
-  it("renders local project instances, their current indicator, instance actions, and the add-map catalog", () => {
+  it("renders local project instances, their current indicator, instance actions, and the categorized add-map picker", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(ProjectMapInstancePanel, {
         activeMapInstanceId: "map-standard-winter",
         mapInstances: referenceProjectMaps,
-        mapChoices: plannerMaps,
+        mapChoices: availablePlannerMaps,
         projectChoices: destinationProjects,
         onAddMap: ignoreProjectMapInstanceAction,
         onCopyMapInstance: ignoreProjectMapInstanceAction,
@@ -95,8 +114,13 @@ describe("project map instance panel", () => {
     expect(panelMarkup).toContain("Other local project");
     expect(panelMarkup).toContain("Delete");
     expect(panelMarkup).toContain("Add map");
+    expect(panelMarkup).toContain('aria-label="Map categories"');
+    expect(panelMarkup.match(/role="tab"/g)).toHaveLength(4);
+    expect(panelMarkup.match(/role="tabpanel"/g)).toHaveLength(1);
+    expect(panelMarkup.match(/data-project-add-map-id=/g)).toHaveLength(2);
     expect(panelMarkup).toContain('data-project-add-map-id="standard"');
     expect(panelMarkup).toContain('data-project-add-map-id="forest"');
+    expect(panelMarkup).not.toContain('data-project-add-map-id="farmhouse-2"');
     expect(panelMarkup).not.toMatch(/account|login|member|premium|sync|share|feedback/i);
     expectTextInOrder(panelMarkup, [
       "Open",
@@ -114,7 +138,8 @@ describe("project map instance panel", () => {
       "project-map-instance-panel__instance-summary",
       "project-map-instance-panel__instance-actions",
       "project-map-instance-panel__add-map",
-      "project-map-instance-panel__map-grid",
+      "planner-map-picker",
+      "editor-modal__map-grid",
     ]);
   });
 
@@ -123,7 +148,7 @@ describe("project map instance panel", () => {
       createElement(ProjectMapInstancePanel, {
         activeMapInstanceId: null,
         mapInstances: [],
-        mapChoices: plannerMaps,
+        mapChoices: availablePlannerMaps,
         projectChoices: destinationProjects,
         onAddMap: ignoreProjectMapInstanceAction,
         onCopyMapInstance: ignoreProjectMapInstanceAction,
@@ -144,7 +169,7 @@ describe("project map instance panel", () => {
       "project-map-instance-panel",
       "project-map-instance-panel__list",
       "project-map-instance-panel__add-map",
-      "project-map-instance-panel__map-grid",
+      "planner-map-picker",
     ]);
   });
 });
