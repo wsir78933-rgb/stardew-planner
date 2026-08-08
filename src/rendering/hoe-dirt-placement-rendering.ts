@@ -88,6 +88,99 @@ export function createHoeDirtPlacementRenderLayers(
   );
 }
 
+export function createCropHoeDirtPlacementPreviewRenderLayers(
+  placementSnapshot: PlacementSnapshot,
+  placementCrop: PlacementCrop,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  season: CatalogSeason,
+): readonly HoeDirtPlacementRenderLayer[] {
+  if (isGardenPotAtTile(placementSnapshot.items, placementCrop)) return [];
+
+  const { connectedCoordinateKeys, wateredCoordinateKeys } =
+    createHoeDirtContextCoordinateKeys(placementSnapshot);
+  const coordinateKey = createCoordinateKey(placementCrop.x, placementCrop.y);
+  const cropCatalogItem = catalogItemsById.get(placementCrop.cropId);
+  if (cropCatalogItem === undefined) {
+    throw new Error(
+      `HoeDirt preview cannot draw crop catalog item ID ${JSON.stringify(placementCrop.cropId)} because it is unavailable.`,
+    );
+  }
+  connectedCoordinateKeys.add(coordinateKey);
+
+  return createCoordinateRenderLayers(
+    coordinateKey,
+    {
+      catalogItem: cropCatalogItem,
+      key: `crop:${String(placementCrop.x)},${String(placementCrop.y)}`,
+      shouldApplySelectionTint: false,
+      tileX: placementCrop.x,
+      tileY: placementCrop.y,
+    },
+    connectedCoordinateKeys,
+    wateredCoordinateKeys,
+    season,
+  );
+}
+
+export function createItemHoeDirtPlacementPreviewRenderLayers(
+  placementSnapshot: PlacementSnapshot,
+  placementItem: PlacementItem,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  season: CatalogSeason,
+): readonly HoeDirtPlacementRenderLayer[] {
+  const { connectedCoordinateKeys, wateredCoordinateKeys } =
+    createHoeDirtContextCoordinateKeys(placementSnapshot);
+  const coordinateSourcesByKey = new Map<string, HoeDirtCoordinateSource>();
+  addHoeDirtItemCoordinate(
+    placementItem,
+    catalogItemsById,
+    coordinateSourcesByKey,
+    connectedCoordinateKeys,
+    wateredCoordinateKeys,
+  );
+  const coordinateKey = createCoordinateKey(placementItem.x, placementItem.y);
+  const coordinateSource = coordinateSourcesByKey.get(coordinateKey);
+  if (coordinateSource === undefined) {
+    throw new Error(
+      `HoeDirt preview did not create a render source for item at ${JSON.stringify(coordinateKey)}.`,
+    );
+  }
+
+  return createCoordinateRenderLayers(
+    coordinateKey,
+    coordinateSource,
+    connectedCoordinateKeys,
+    wateredCoordinateKeys,
+    season,
+  );
+}
+
+function createHoeDirtContextCoordinateKeys(
+  placementSnapshot: PlacementSnapshot,
+): Readonly<{
+  connectedCoordinateKeys: Set<string>;
+  wateredCoordinateKeys: Set<string>;
+}> {
+  const connectedCoordinateKeys = new Set<string>();
+  const wateredCoordinateKeys = new Set<string>();
+
+  for (const placementCrop of placementSnapshot.crops) {
+    if (!isGardenPotAtTile(placementSnapshot.items, placementCrop)) {
+      connectedCoordinateKeys.add(
+        createCoordinateKey(placementCrop.x, placementCrop.y),
+      );
+    }
+  }
+  for (const placementItem of placementSnapshot.items) {
+    if (placementItem.itemId !== hoeDirtCatalogItemId) continue;
+    const coordinateKey = createCoordinateKey(placementItem.x, placementItem.y);
+    connectedCoordinateKeys.add(coordinateKey);
+    if (placementItem.variant === 1) wateredCoordinateKeys.add(coordinateKey);
+  }
+
+  return { connectedCoordinateKeys, wateredCoordinateKeys };
+}
+
 function addCropCoordinate(
   placementCrop: PlacementCrop,
   catalogItemsById: ReadonlyMap<string, CatalogItem>,

@@ -57,6 +57,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
       "Third parties",
       "Data deletion",
       "Local use",
+      "Contact messages",
     ],
   ],
   [
@@ -73,8 +74,16 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
       "Your data",
       "Availability",
       "Game assets",
-      "Local use",
+      "Contact messages",
     ],
+  ],
+  [
+    "/contact",
+    "contact.html",
+    "Contact us | Stardew Valley Farm Planner",
+    "Send a message to the Stardew Valley Farm Planner team.",
+    "Contact us",
+    "en",
   ],
   ["/farm/standard", "farm/standard.html", "Standard Farm | Stardew Valley Farm Planner", "Standard Farm farm guide. Highest raw crop output and full layout flexibility.", "Standard Farm", "en"],
   ["/farm/riverland", "farm/riverland.html", "Riverland Farm | Stardew Valley Farm Planner", "Riverland Farm farm guide. Fishing runs. Most of Pelican Town's pool is catchable without leaving home.", "Riverland Farm", "en"],
@@ -103,6 +112,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
       "第三方",
       "数据删除",
       "本地使用",
+      "联系消息",
     ],
   ],
   [
@@ -119,8 +129,16 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
       "你的数据",
       "可用性",
       "游戏素材",
-      "本地使用",
+      "联系消息",
     ],
+  ],
+  [
+    "/zh/contact",
+    "zh/contact.html",
+    "联系我们 | 星露谷农场规划器",
+    "向星露谷农场规划器团队发送消息。",
+    "联系我们",
+    "zh-CN",
   ],
   ["/zh/farm/standard", "zh/farm/standard.html", "标准农场 指南 | 星露谷规划器", "了解标准农场地图，并开始规划你的星露谷农场布局。", "标准农场", "zh-CN"],
   ["/zh/farm/riverland", "zh/farm/riverland.html", "河流农场 指南 | 星露谷规划器", "了解河流农场地图，并开始规划你的星露谷农场布局。", "河流农场", "zh-CN"],
@@ -253,6 +271,12 @@ describe("static public pages", () => {
         `hrefLang="x-default" href="${expectedCanonicalUrl(englishPathname)}"`,
       );
 
+      if (pathname === "/contact" || pathname === "/zh/contact") {
+        expect(staticPageHtml).toContain(
+          '<meta name="robots" content="noindex, follow"/>',
+        );
+      }
+
       if (staticPageFile === "index.html") {
         expect(staticPageHtml).toContain("WebApplication");
         expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
@@ -290,7 +314,9 @@ describe("static public pages", () => {
         continue;
       }
 
-      expect(staticPageHtml).toContain(`<h1>${expectedHeading}`);
+      expect(staticPageHtml).toMatch(
+        new RegExp(`<h1(?:\\s[^>]*)?>${expectedHeading}`),
+      );
       expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
       for (const expectedSectionHeading of expectedSectionHeadings ?? []) {
         expect(staticPageHtml).toContain(`<h2>${expectedSectionHeading}</h2>`);
@@ -312,13 +338,13 @@ describe("static public pages", () => {
         ([pathname, , , , , expectedDocumentLanguage]) =>
           !pathname.startsWith("/zh") && expectedDocumentLanguage === "en",
       ),
-    ).toHaveLength(13);
+    ).toHaveLength(14);
     expect(
       staticPublicPageExpectations.filter(
         ([pathname, , , , , expectedDocumentLanguage]) =>
           pathname.startsWith("/zh") && expectedDocumentLanguage === "zh-CN",
       ),
-    ).toHaveLength(13);
+    ).toHaveLength(14);
     expect(
       existsSync(
         join(

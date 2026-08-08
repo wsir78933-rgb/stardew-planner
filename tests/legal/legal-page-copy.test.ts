@@ -14,6 +14,7 @@ describe("getLegalPageCopy", () => {
         { heading: "Third parties" },
         { heading: "Data deletion" },
         { heading: "Local use" },
+        { heading: "Contact messages" },
       ],
     });
     expect(getLegalPageCopy("en", "terms")).toMatchObject({
@@ -25,13 +26,32 @@ describe("getLegalPageCopy", () => {
         { heading: "Your data" },
         { heading: "Availability" },
         { heading: "Game assets" },
-        { heading: "Local use" },
+        { heading: "Contact messages" },
       ],
     });
   });
 
   it("returns the approved Chinese privacy title", () => {
     expect(getLegalPageCopy("zh-CN", "privacy").title).toBe("隐私政策");
+  });
+
+  it("discloses Cloudflare contact-message handling and the maximum retention period", () => {
+    const englishContactSection = getLegalPageCopy("en", "privacy").sections.find(
+      (section) => section.heading === "Contact messages",
+    );
+    const chineseContactSection = getLegalPageCopy(
+      "zh-CN",
+      "privacy",
+    ).sections.find((section) => section.heading === "联系消息");
+
+    expect(englishContactSection?.paragraphs).toEqual([
+      expect.stringContaining("Cloudflare"),
+    ]);
+    expect(englishContactSection?.paragraphs.join(" ")).toContain(
+      "no later than 90 days",
+    );
+    expect(chineseContactSection?.paragraphs.join(" ")).toContain("Cloudflare");
+    expect(chineseContactSection?.paragraphs.join(" ")).toContain("最长保留 90 天");
   });
 
   it("rejects an unsupported locale with the rejected value", () => {

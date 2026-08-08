@@ -64,6 +64,12 @@ const legalPageCopyByLocale: Readonly<
           heading: "Local use",
           paragraphs: ["JSON import and export happen only when you choose them."],
         },
+        {
+          heading: "Contact messages",
+          paragraphs: [
+            "When you use the contact form, your name, email address, and message are sent to Cloudflare to verify the form and deliver the message to our inbox. We use this information only to respond and delete it when the issue is resolved, no later than 90 days.",
+          ],
+        },
       ],
     },
     terms: {
@@ -104,9 +110,9 @@ const legalPageCopyByLocale: Readonly<
           ],
         },
         {
-          heading: "Local use",
+          heading: "Contact messages",
           paragraphs: [
-            "This browser-local product does not provide contact or support features.",
+            "If you choose to contact us, do not include sensitive information. We use your message only to respond and delete it when the issue is resolved, no later than 90 days.",
           ],
         },
       ],
@@ -154,6 +160,12 @@ const legalPageCopyByLocale: Readonly<
           heading: "本地使用",
           paragraphs: ["仅当你主动选择时，才会进行 JSON 导入和导出。"],
         },
+        {
+          heading: "联系消息",
+          paragraphs: [
+            "当你使用联系表单时，你的姓名、邮箱和消息会发送给 Cloudflare，用于验证表单并将消息投递到我们的收件箱。我们仅用这些信息进行回复，并会在问题解决后删除，最长保留 90 天。",
+          ],
+        },
       ],
     },
     terms: {
@@ -194,8 +206,10 @@ const legalPageCopyByLocale: Readonly<
           ],
         },
         {
-          heading: "本地使用",
-          paragraphs: ["这款浏览器本地产品不提供联系或支持功能。"],
+          heading: "联系消息",
+          paragraphs: [
+            "如果你选择联系我们，请不要发送敏感信息。我们仅用你的消息进行回复，并会在问题解决后删除，最长保留 90 天。",
+          ],
         },
       ],
     },

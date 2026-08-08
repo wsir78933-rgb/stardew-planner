@@ -3,6 +3,7 @@ import { metadata as plannerMetadata } from "../../app/(en)/page";
 import { farmComparisonMetadata } from "../../app/(en)/farm-comparison/page";
 import { generateMetadata } from "../../app/(en)/farm/[type]/page";
 import { modsMetadata } from "../../app/(en)/mods/page";
+import { metadata as contactMetadata } from "../../app/(en)/contact/page";
 import { metadata as chinesePlannerMetadata } from "../../app/zh/page";
 import { farmComparisonMetadata as chineseFarmComparisonMetadata } from "../../app/zh/farm-comparison/page";
 import {
@@ -11,6 +12,7 @@ import {
   generateStaticParams as generateChineseFarmStaticParams,
 } from "../../app/zh/farm/[type]/page";
 import { modsMetadata as chineseModsMetadata } from "../../app/zh/mods/page";
+import { metadata as chineseContactMetadata } from "../../app/zh/contact/page";
 import {
   officialFarmGuides,
   officialFarmTypes,
@@ -38,6 +40,7 @@ const publicPageMetadataExpectations = [
   [plannerMetadata, "/"],
   [farmComparisonMetadata, "/farm-comparison"],
   [modsMetadata, "/mods"],
+  [contactMetadata, "/contact"],
 ] as const;
 
 function createExpectedLanguageAlternates(pathname: string) {
@@ -129,6 +132,7 @@ describe("public route metadata", () => {
       [chinesePlannerMetadata, "/"],
       [chineseFarmComparisonMetadata, "/farm-comparison"],
       [chineseModsMetadata, "/mods"],
+      [chineseContactMetadata, "/contact"],
     ] as const) {
       expect(pageMetadata.alternates).toMatchObject({
         canonical: `https://stardewvalleyplanner.art/zh${pathname === "/" ? "" : pathname}`,
@@ -139,6 +143,14 @@ describe("public route metadata", () => {
       });
       expect(pageMetadata.twitter).toMatchObject({
         images: [expectedSocialImageUrl],
+      });
+    }
+  });
+
+  it("marks the bilingual contact pages as followable but noindex", () => {
+    for (const pageMetadata of [contactMetadata, chineseContactMetadata]) {
+      expect(pageMetadata).toMatchObject({
+        robots: { index: false, follow: true },
       });
     }
   });

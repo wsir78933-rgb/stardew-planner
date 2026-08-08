@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { CatalogItem } from "../catalog";
+import type {
+  BuildingPlacementMetadataById,
+  CatalogItem,
+  CatalogPresentationChoice,
+} from "../catalog";
+import { evaluateEditorCursorPlacementPreview } from "../editor/editor-placement-controller";
 import {
   PlannerJoystick,
   type PlannerJoystickDirection,
@@ -21,7 +26,10 @@ import {
   getMapTileAtPointer,
   type MapPointerTile,
 } from "../placement/map-pointer-tile";
-import type { PlacementSnapshot } from "../placement/placement-snapshot";
+import type {
+  PlacementSnapshot,
+  PlacementSnapshotAction,
+} from "../placement/placement-snapshot";
 import { applyBuildingPaintToPixels } from "../paint/building-paint-rendering";
 import {
   createNightLightRenderDescriptors,
@@ -59,6 +67,7 @@ import {
 } from "../rendering/camera-state";
 import {
   createPlacementRenderEntries,
+  createTransientPlacementRenderEntries,
   type PlacementRenderEntry,
 } from "../rendering/placement-rendering";
 import {
@@ -83,8 +92,78 @@ import type { EditorPerformanceMarker } from "../performance/editor-performance-
 import type { PreparedDefaultMap } from "../resources/default-map-resource";
 
 const localGameAssetRoot = "/game-assets/1.6.15/";
+const validPlacementPreviewTint = 0x00ff00;
+const invalidPlacementPreviewTint = 0xff0000;
+
+export type PlacementPreviewVisualDescriptor = Readonly<{
+  alpha: number;
+  tint: number;
+}>;
+
+export function createPlacementPreviewVisualDescriptor(
+  isPlacementValid: boolean,
+): PlacementPreviewVisualDescriptor {
+  return isPlacementValid
+    ? { alpha: 0.6, tint: validPlacementPreviewTint }
+    : { alpha: 0.4, tint: invalidPlacementPreviewTint };
+}
 
 type PointerInteractionMode = "navigate" | "rectangle" | "move-selected";
+
+type PlacementPreviewOverlayRenderer = () => void;
+
+export type PlannerCanvasPlacementPreviewInput = Readonly<{
+  buildingMetadataById: BuildingPlacementMetadataById;
+  catalogPresentationChoice: CatalogPresentationChoice;
+  freePlacement: boolean;
+  resolvedCompositeVariant?: number;
+  selectedCatalogItem: CatalogItem;
+}>;
+
+export type PlannerCanvasPlacementPreviewState = Readonly<{
+  previewAction: PlacementSnapshotAction;
+  visualDescriptor: PlacementPreviewVisualDescriptor;
+}>;
+
+export function createPlannerCanvasPlacementPreviewState(
+  input: Readonly<{
+    hoveredMapTile: MapPointerTile | null;
+    mapPlacementGrid: MapPlacementGrid;
+    placementPreview: PlannerCanvasPlacementPreviewInput | null | undefined;
+    placementSnapshot: PlacementSnapshot | undefined;
+  }>,
+): PlannerCanvasPlacementPreviewState | null {
+  if (
+    input.hoveredMapTile === null ||
+    input.placementPreview === null ||
+    input.placementPreview === undefined ||
+    input.placementSnapshot === undefined
+  ) {
+    return null;
+  }
+
+  const previewEvaluation = evaluateEditorCursorPlacementPreview({
+    buildingMetadataById: input.placementPreview.buildingMetadataById,
+    catalogPresentationChoice: input.placementPreview.catalogPresentationChoice,
+    cursorTile: input.hoveredMapTile,
+    freePlacement: input.placementPreview.freePlacement,
+    mapPlacementGrid: input.mapPlacementGrid,
+    placementSnapshot: input.placementSnapshot,
+    resolvedCompositeVariant: input.placementPreview.resolvedCompositeVariant,
+    selectedCatalogItem: input.placementPreview.selectedCatalogItem,
+  });
+
+  if (!previewEvaluation.previewable) {
+    return null;
+  }
+
+  return {
+    previewAction: previewEvaluation.previewAction,
+    visualDescriptor: createPlacementPreviewVisualDescriptor(
+      previewEvaluation.validation.valid,
+    ),
+  };
+}
 
 export type PlannerCanvasProperties = Readonly<{
   catalogItems?: readonly CatalogItem[];
@@ -93,6 +172,7 @@ export type PlannerCanvasProperties = Readonly<{
   wheelZoomEnabled?: boolean;
   leftHandMode?: boolean;
   mapId: string;
+  placementPreview?: PlannerCanvasPlacementPreviewInput | null;
   pointerInteractionMode?: PointerInteractionMode;
   placementSnapshot?: PlacementSnapshot;
   selectedPlacementKeys?: readonly string[];
@@ -201,6 +281,7 @@ type PlannerCameraControlsProperties = Readonly<{
     pointerCoordinates: PointerCoordinates,
   ) => PlacementDragTarget | null;
   getPlacementDragTileSize?: () => Readonly<{ height: number; width: number }>;
+  onMapTileHover?: (mapTileCoordinates: MapPointerTile | null) => void;
   onMapTileClick?: (mapTileCoordinates: MapPointerTile) => void;
   onMapTileRectangle?: (
     startMapTileCoordinates: MapPointerTile,
@@ -470,6 +551,103 @@ export async function settlePlannerCanvasPlacementRender<PlacementSpriteRecord>(
   }
 }
 
+type PlacementPreviewSpriteRecord<Sprite> = Readonly<{
+  sprite: Sprite & { alpha: number; tint: number };
+}>;
+
+export function createPlannerCanvasPlacementPreviewRenderer<
+  Sprite,
+  PlacementSpriteRecord extends PlacementPreviewSpriteRecord<Sprite>,
+  PlacementAnimation,
+>(input: Readonly<{
+  container: Readonly<{
+    addChild: (...sprites: Sprite[]) => unknown;
+    removeChildren: () => unknown;
+  }>;
+  destroyPlacementSprites: (
+    placementSprites: readonly PlacementSpriteRecord[],
+  ) => void;
+  disposeAnimations?: () => void;
+  getPlacementSpriteAnimations: (
+    placementSprites: readonly PlacementSpriteRecord[],
+  ) => readonly PlacementAnimation[];
+  isMapLifecycleCurrent: () => boolean;
+  mapId: string;
+  onCurrentError: (message: string, caughtError: unknown) => void;
+  onRender: () => void;
+  replaceAnimations: (animations: readonly PlacementAnimation[]) => void;
+}>): Readonly<{
+  clear: () => void;
+  dispose: () => void;
+  render: (renderInput: Readonly<{
+    createPlacementSprites: () => Promise<readonly PlacementSpriteRecord[]>;
+    visualDescriptor: PlacementPreviewVisualDescriptor;
+  }>) => Promise<PlannerCanvasPlacementRenderStatus>;
+}> {
+  let renderVersion = 0;
+  let renderedPlacementSprites: readonly PlacementSpriteRecord[] = [];
+
+  const releaseRenderedPlacementSprites = (): void => {
+    input.container.removeChildren();
+    input.destroyPlacementSprites(renderedPlacementSprites);
+    renderedPlacementSprites = [];
+    input.replaceAnimations([]);
+    input.onRender();
+  };
+
+  const clear = (): void => {
+    renderVersion += 1;
+    releaseRenderedPlacementSprites();
+  };
+
+  return {
+    clear,
+    dispose(): void {
+      clear();
+      input.disposeAnimations?.();
+    },
+    render(renderInput): Promise<PlannerCanvasPlacementRenderStatus> {
+      renderVersion += 1;
+      const requestedRenderVersion = renderVersion;
+      releaseRenderedPlacementSprites();
+
+      return settlePlannerCanvasPlacementRender({
+        createPlacementSprites: renderInput.createPlacementSprites,
+        isRenderCurrent: () =>
+          input.isMapLifecycleCurrent()
+          && requestedRenderVersion === renderVersion,
+        mapId: input.mapId,
+        onCurrentCommitFailure: input.destroyPlacementSprites,
+        onCurrentError: input.onCurrentError,
+        onCurrentReady: (
+          placementSprites,
+          claimPlacementSpriteOwnership,
+        ) => {
+          input.container.removeChildren();
+          input.destroyPlacementSprites(renderedPlacementSprites);
+          renderedPlacementSprites = [];
+          for (const placementSprite of placementSprites) {
+            placementSprite.sprite.alpha = renderInput.visualDescriptor.alpha;
+            placementSprite.sprite.tint = renderInput.visualDescriptor.tint;
+          }
+          if (placementSprites.length > 0) {
+            input.container.addChild(
+              ...placementSprites.map((placementSprite) => placementSprite.sprite),
+            );
+          }
+          renderedPlacementSprites = placementSprites;
+          input.replaceAnimations(
+            input.getPlacementSpriteAnimations(placementSprites),
+          );
+          claimPlacementSpriteOwnership();
+          input.onRender();
+        },
+        onStaleReady: input.destroyPlacementSprites,
+      });
+    },
+  };
+}
+
 export function reportCurrentPlannerCanvasError(
   input: Readonly<{
     isMapLifecycleCurrent: () => boolean;
@@ -607,6 +785,7 @@ export type PlannerCanvasCleanupOperations = Readonly<{
   disposeInteractionBinding(): void;
   disposeMapDisplayOverlay(): void;
   disposePlacementOverlay(): void;
+  disposePlacementPreview?(): void;
   clearJoystickCameraPan(): void;
   clearMapImageExporter(): void;
   destroyResourceClumpFrameTextures(): void;
@@ -627,6 +806,7 @@ export function createPlannerCanvasCleanup(
     cleanupOperations.disposeInteractionBinding();
     cleanupOperations.disposeMapDisplayOverlay();
     cleanupOperations.disposePlacementOverlay();
+    cleanupOperations.disposePlacementPreview?.();
     cleanupOperations.clearJoystickCameraPan();
     cleanupOperations.clearMapImageExporter();
     cleanupOperations.destroyResourceClumpFrameTextures();
@@ -680,6 +860,7 @@ export function PlannerCanvas({
   wheelZoomEnabled = false,
   leftHandMode = false,
   mapId,
+  placementPreview = null,
   pointerInteractionMode = "navigate",
   placementSnapshot,
   selectedPlacementKeys = [],
@@ -723,10 +904,14 @@ export function PlannerCanvas({
   const placementOverlayRendererReference = useRef<PlacementOverlayRenderer | null>(
     null,
   );
+  const placementPreviewOverlayRendererReference = useRef<
+    PlacementPreviewOverlayRenderer | null
+  >(null);
   const xRayRendererReference = useRef<XRayRenderer | null>(null);
   const mapDisplayOverlayRendererReference =
     useRef<MapDisplayOverlayRenderer | null>(null);
   const placementSnapshotReference = useRef(placementSnapshot);
+  const placementPreviewReference = useRef(placementPreview);
   const selectedPlacementKeysReference = useRef(selectedPlacementKeys);
   const displayOptionsReference = useRef(displayOptions);
   const isXRayActiveReference = useRef(isXRayActive);
@@ -768,6 +953,7 @@ export function PlannerCanvas({
   pointerInteractionModeReference.current = pointerInteractionMode;
   catalogItemsReference.current = catalogItems;
   placementSnapshotReference.current = placementSnapshot;
+  placementPreviewReference.current = placementPreview;
   selectedPlacementKeysReference.current = selectedPlacementKeys;
   displayOptionsReference.current = displayOptions;
   isXRayActiveReference.current = isXRayActive;
@@ -778,6 +964,10 @@ export function PlannerCanvas({
   useEffect(() => {
     placementOverlayRendererReference.current?.();
   }, [catalogItems, displayOptions.showNightMode, placementSnapshot, selectedPlacementKeys]);
+
+  useEffect(() => {
+    placementPreviewOverlayRendererReference.current?.();
+  }, [catalogItems, displayOptions.showNightMode, placementPreview, placementSnapshot]);
 
   useEffect(() => {
     xRayRendererReference.current?.();
@@ -814,6 +1004,7 @@ export function PlannerCanvas({
     let interactionBinding: PlannerCanvasInteractionBinding | null = null;
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
+    let disposePlacementPreview: (() => void) | null = null;
     let joystickCameraPan: ((direction: PlannerJoystickDirection) => void) | null =
       null;
     let resourceClumpFrameTexturesByParentSheetIndex: ReadonlyMap<
@@ -825,6 +1016,7 @@ export function PlannerCanvas({
       disposeInteractionBinding: () => interactionBinding?.dispose(),
       disposeMapDisplayOverlay: () => disposeMapDisplayOverlay?.(),
       disposePlacementOverlay: () => disposePlacementOverlay?.(),
+      disposePlacementPreview: () => disposePlacementPreview?.(),
       clearJoystickCameraPan: () => {
         if (joystickCameraPanReference.current === joystickCameraPan) {
           joystickCameraPanReference.current = null;
@@ -951,6 +1143,10 @@ export function PlannerCanvas({
         placementContainer.label = "placements";
         placementContainer.sortableChildren = true;
         mapContainerCreationResult.mapContainer.addChild(placementContainer);
+        const placementPreviewContainer = new pixi.Container();
+        placementPreviewContainer.label = "placementPreview";
+        placementPreviewContainer.sortableChildren = true;
+        mapContainerCreationResult.mapContainer.addChild(placementPreviewContainer);
         const nightModeOverlayContainer = new pixi.Container();
         nightModeOverlayContainer.label = "nightMode";
         mapContainerCreationResult.mapContainer.addChild(nightModeOverlayContainer);
@@ -1130,6 +1326,95 @@ export function PlannerCanvas({
         }
         placementOverlayRendererReference.current = requestPlacementOverlayRender;
 
+        let hoveredMapTile: MapPointerTile | null = null;
+        const placementPreviewAnimationController =
+          createPlacementAnimationController(() => {
+            pixiApplication.renderer.render(pixiApplication.stage);
+          });
+        const placementPreviewRenderer =
+          createPlannerCanvasPlacementPreviewRenderer({
+            container: placementPreviewContainer,
+            destroyPlacementSprites,
+            disposeAnimations: () => {
+              placementPreviewAnimationController.dispose();
+            },
+            getPlacementSpriteAnimations,
+            isMapLifecycleCurrent,
+            mapId,
+            onCurrentError: reportPlacementRenderError,
+            onRender: () => {
+              pixiApplication.renderer.render(pixiApplication.stage);
+            },
+            replaceAnimations: (animations) => {
+              placementPreviewAnimationController.replaceAnimations(animations);
+            },
+          });
+        const renderPlacementPreviewOverlay = async (): Promise<PlannerCanvasPlacementRenderStatus> => {
+          const currentPlacementSnapshot = placementSnapshotReference.current;
+          const placementPreviewState = createPlannerCanvasPlacementPreviewState({
+            hoveredMapTile,
+            mapPlacementGrid,
+            placementPreview: placementPreviewReference.current,
+            placementSnapshot: currentPlacementSnapshot,
+          });
+          const currentCatalogItems = catalogItemsReference.current;
+
+          if (
+            placementPreviewState === null
+            || currentCatalogItems === undefined
+            || currentPlacementSnapshot === undefined
+          ) {
+            placementPreviewRenderer.clear();
+            return "ready";
+          }
+
+          return placementPreviewRenderer.render({
+            createPlacementSprites: () =>
+              createPlacementSprites({
+                pixi,
+                catalogItems: currentCatalogItems,
+                mapId,
+                mapPlacementGrid,
+                isNightMode: displayOptionsReference.current.showNightMode,
+                placementRenderEntries: createTransientPlacementRenderEntries(
+                  currentPlacementSnapshot,
+                  placementPreviewState.previewAction,
+                  currentCatalogItems,
+                  season,
+                  mapId,
+                  mapPlacementGrid,
+                  displayOptionsReference.current.showNightMode,
+                ),
+                season,
+                selectedPlacementKeys: [],
+                tileWidth: renderingContract.tileWidth,
+                tileHeight: renderingContract.tileHeight,
+                placementTexturePromisesByResolvedUrl,
+              }),
+            visualDescriptor: placementPreviewState.visualDescriptor,
+          });
+        };
+        const requestPlacementPreviewOverlayRender = (): void => {
+          void renderPlacementPreviewOverlay().catch((caughtError: unknown) => {
+            reportPlacementRenderError(
+              formatPlannerCanvasError(mapId, caughtError),
+            );
+          });
+        };
+
+        disposePlacementPreview = (): void => {
+          placementPreviewRenderer.dispose();
+
+          if (
+            placementPreviewOverlayRendererReference.current ===
+            requestPlacementPreviewOverlayRender
+          ) {
+            placementPreviewOverlayRendererReference.current = null;
+          }
+        };
+        placementPreviewOverlayRendererReference.current =
+          requestPlacementPreviewOverlayRender;
+
         let currentCameraGeometry: CameraGeometry | null = null;
         let currentCameraState: CameraState | null = null;
 
@@ -1279,6 +1564,14 @@ export function PlannerCanvas({
                     width: renderingContract.tileWidth,
                   };
                 },
+                onMapTileHover(mapTileCoordinates: MapPointerTile | null): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+
+                  hoveredMapTile = mapTileCoordinates;
+                  requestPlacementPreviewOverlayRender();
+                },
                 onMapTileClick(mapTileCoordinates: MapPointerTile): void {
                   if (!isMapLifecycleCurrent()) {
                     return;
@@ -1357,6 +1650,7 @@ export function PlannerCanvas({
                   captureMapScreenshot({
                     mapContainer: mapContainerCreationResult.mapContainer,
                     mapDisplayOverlayContainer,
+                    placementPreviewContainer,
                     pixi,
                     pixiApplication,
                     renderingContract,
@@ -1454,6 +1748,7 @@ export function PlannerCanvas({
 type CaptureMapScreenshotInput = Readonly<{
   mapContainer: import("pixi.js").Container;
   mapDisplayOverlayContainer: import("pixi.js").Container;
+  placementPreviewContainer: import("pixi.js").Container;
   pixi: PixiModule;
   pixiApplication: PixiApplication;
   renderingContract: MapRenderingContract;
@@ -1466,6 +1761,7 @@ async function captureMapScreenshot(
   const {
     mapContainer,
     mapDisplayOverlayContainer,
+    placementPreviewContainer,
     pixi,
     pixiApplication,
     renderingContract,
@@ -1486,37 +1782,62 @@ async function captureMapScreenshot(
     x: mapContainer.scale.x,
     y: mapContainer.scale.y,
   };
-  const wasMapDisplayOverlayVisible = mapDisplayOverlayContainer.visible;
-  let screenshotRenderTexture: import("pixi.js").RenderTexture | null = null;
+  const screenshotRenderTextureReference: {
+    current: import("pixi.js").RenderTexture | null;
+  } = { current: null };
 
   try {
-    mapDisplayOverlayContainer.visible = false;
-    mapContainer.position.set(0, 0);
-    mapContainer.scale.set(resolution);
-    screenshotRenderTexture = pixi.RenderTexture.create({
-      height: screenshotDimensions.height,
-      resolution: 1,
-      width: screenshotDimensions.width,
-    });
-    pixiApplication.renderer.render({
-      container: mapContainer,
-      target: screenshotRenderTexture,
-    });
-    const extractedCanvas = pixiApplication.renderer.extract.canvas(
-      screenshotRenderTexture,
-    );
-    const mapScreenshotCanvas = assertHtmlCanvasElement(extractedCanvas);
-    const watermarkedScreenshotCanvas = createWatermarkedScreenshotCanvas(
-      mapScreenshotCanvas,
-    );
+    return await renderMapScreenshotWithoutEditorOverlays({
+      mapDisplayOverlayContainer,
+      placementPreviewContainer,
+      renderScreenshot: () => {
+        mapContainer.position.set(0, 0);
+        mapContainer.scale.set(resolution);
+        screenshotRenderTextureReference.current = pixi.RenderTexture.create({
+          height: screenshotDimensions.height,
+          resolution: 1,
+          width: screenshotDimensions.width,
+        });
+        pixiApplication.renderer.render({
+          container: mapContainer,
+          target: screenshotRenderTextureReference.current,
+        });
+        const extractedCanvas = pixiApplication.renderer.extract.canvas(
+          screenshotRenderTextureReference.current,
+        );
+        const mapScreenshotCanvas = assertHtmlCanvasElement(extractedCanvas);
+        const watermarkedScreenshotCanvas = createWatermarkedScreenshotCanvas(
+          mapScreenshotCanvas,
+        );
 
-    return createPngBlob(watermarkedScreenshotCanvas);
+        return createPngBlob(watermarkedScreenshotCanvas);
+      },
+    });
   } finally {
     mapContainer.scale.set(originalMapScale.x, originalMapScale.y);
     mapContainer.position.set(originalMapPosition.x, originalMapPosition.y);
-    mapDisplayOverlayContainer.visible = wasMapDisplayOverlayVisible;
-    screenshotRenderTexture?.destroy(true);
+    screenshotRenderTextureReference.current?.destroy(true);
     pixiApplication.renderer.render(pixiApplication.stage);
+  }
+}
+
+export async function renderMapScreenshotWithoutEditorOverlays<Result>(
+  input: Readonly<{
+    mapDisplayOverlayContainer: { visible: boolean };
+    placementPreviewContainer: { visible: boolean };
+    renderScreenshot: () => Promise<Result> | Result;
+  }>,
+): Promise<Result> {
+  const wasMapDisplayOverlayVisible = input.mapDisplayOverlayContainer.visible;
+  const wasPlacementPreviewVisible = input.placementPreviewContainer.visible;
+
+  try {
+    input.mapDisplayOverlayContainer.visible = false;
+    input.placementPreviewContainer.visible = false;
+    return await input.renderScreenshot();
+  } finally {
+    input.mapDisplayOverlayContainer.visible = wasMapDisplayOverlayVisible;
+    input.placementPreviewContainer.visible = wasPlacementPreviewVisible;
   }
 }
 
@@ -2257,13 +2578,12 @@ function createMapContainer(
   };
 }
 
-type CreatePlacementSpritesInput = Readonly<{
+type CreatePlacementSpritesBaseInput = Readonly<{
   pixi: PixiModule;
   catalogItems: readonly CatalogItem[];
   isNightMode: boolean;
   mapId: string;
   mapPlacementGrid: MapPlacementGrid;
-  placementSnapshot: PlacementSnapshot;
   season: TilesheetSeason;
   selectedPlacementKeys: readonly string[];
   tileWidth: number;
@@ -2271,19 +2591,32 @@ type CreatePlacementSpritesInput = Readonly<{
   placementTexturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>;
 }>;
 
+type CreatePlacementSpritesInput = CreatePlacementSpritesBaseInput & (
+  | Readonly<{
+      placementRenderEntries?: never;
+      placementSnapshot: PlacementSnapshot;
+    }>
+  | Readonly<{
+      placementRenderEntries: readonly PlacementRenderEntry[];
+      placementSnapshot?: never;
+    }>
+);
+
 async function createPlacementSprites(
   createPlacementSpritesInput: CreatePlacementSpritesInput,
 ): Promise<readonly PlacementSprite[]> {
-  const placementRenderEntries = createPlacementRenderEntries(
-    createPlacementSpritesInput.placementSnapshot,
-    createPlacementSpritesInput.catalogItems,
-    createPlacementSpritesInput.season,
-    createPlacementSpritesInput.mapId,
-    createPlacementSpritesInput.mapPlacementGrid,
-    createPlacementSpritesInput.isNightMode,
-  );
+  const allPlacementRenderEntries =
+    createPlacementSpritesInput.placementRenderEntries
+    ?? createPlacementRenderEntries(
+      createPlacementSpritesInput.placementSnapshot,
+      createPlacementSpritesInput.catalogItems,
+      createPlacementSpritesInput.season,
+      createPlacementSpritesInput.mapId,
+      createPlacementSpritesInput.mapPlacementGrid,
+      createPlacementSpritesInput.isNightMode,
+    );
   const resolvedPlacementTextureEntries = resolvePlacementTextureEntries(
-    placementRenderEntries,
+    allPlacementRenderEntries,
   );
   const placementTexturesByResolvedAssetPath = await loadPlacementTextures(
     createPlacementSpritesInput.pixi,
@@ -3140,6 +3473,7 @@ export function attachPlannerCameraControls(
     getMapTileAtPointer,
     getPlacementDragTarget,
     getPlacementDragTileSize,
+    onMapTileHover,
     onMapTileClick,
     onMapTileRectangle,
     onMoveSelectedPlacements,
@@ -3150,6 +3484,7 @@ export function attachPlannerCameraControls(
   let pointerDragState: PointerDragState | null = null;
   let placementDragState: PlacementDragState | null = null;
   let pinchGestureState: PinchGestureState | null = null;
+  let lastReportedMapTileHover: MapPointerTile | null | undefined;
 
   canvasElement.tabIndex = 0;
   canvasElement.setAttribute("aria-label", "Interactive farm map camera");
@@ -3223,6 +3558,7 @@ export function attachPlannerCameraControls(
     }
 
     pointerEvent.preventDefault();
+    clearMapTileHover(pointerEvent);
     canvasElement.focus({ preventScroll: true });
     canvasElement.setPointerCapture(pointerEvent.pointerId);
     placementClickSuppressedPointerIds.delete(pointerEvent.pointerId);
@@ -3259,6 +3595,7 @@ export function attachPlannerCameraControls(
 
   function handlePointerMove(pointerEvent: PointerEvent): void {
     if (!activePointerCoordinates.has(pointerEvent.pointerId)) {
+      reportMapTileHover(pointerEvent);
       return;
     }
 
@@ -3354,6 +3691,9 @@ export function attachPlannerCameraControls(
     handlePointerEnd(pointerEvent);
 
     if (mapTileCoordinates !== null) {
+      if (pointerEvent.pointerType === "mouse") {
+        reportMapTileHoverIfChanged(mapTileCoordinates);
+      }
       onMapTileClick?.(mapTileCoordinates);
     }
   }
@@ -3569,6 +3909,47 @@ export function attachPlannerCameraControls(
   function handlePointerCancel(pointerEvent: PointerEvent): void {
     cancelPlacementDrag(pointerEvent.pointerId);
     handlePointerEnd(pointerEvent);
+    clearMapTileHover(pointerEvent);
+  }
+
+  function handlePointerLeave(pointerEvent: PointerEvent): void {
+    clearMapTileHover(pointerEvent);
+  }
+
+  function reportMapTileHover(pointerEvent: PointerEvent): void {
+    if (pointerEvent.pointerType !== "mouse") {
+      return;
+    }
+
+    const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
+    reportMapTileHoverIfChanged(
+      getMapTileAtPointer?.(pointerCoordinates) ?? null,
+    );
+  }
+
+  function clearMapTileHover(pointerEvent: PointerEvent): void {
+    if (pointerEvent.pointerType === "mouse") {
+      reportMapTileHoverIfChanged(null);
+    }
+  }
+
+  function reportMapTileHoverIfChanged(
+    mapTileCoordinates: MapPointerTile | null,
+  ): void {
+    if (
+      lastReportedMapTileHover !== undefined
+      && (
+        lastReportedMapTileHover === null
+          ? mapTileCoordinates === null
+          : mapTileCoordinates !== null
+            && lastReportedMapTileHover.x === mapTileCoordinates.x
+            && lastReportedMapTileHover.y === mapTileCoordinates.y
+      )
+    ) {
+      return;
+    }
+    lastReportedMapTileHover = mapTileCoordinates;
+    onMapTileHover?.(mapTileCoordinates);
   }
 
   function synchronizePointerGesture(
@@ -3647,6 +4028,7 @@ export function attachPlannerCameraControls(
   canvasElement.addEventListener("keydown", handleKeyDown);
   canvasElement.addEventListener("pointercancel", handlePointerCancel);
   canvasElement.addEventListener("pointerdown", handlePointerDown);
+  canvasElement.addEventListener("pointerleave", handlePointerLeave);
   canvasElement.addEventListener("pointermove", handlePointerMove);
   canvasElement.addEventListener("pointerup", handlePointerUp);
   canvasElement.addEventListener("lostpointercapture", handlePointerCancel);
@@ -3657,6 +4039,7 @@ export function attachPlannerCameraControls(
       canvasElement.removeEventListener("keydown", handleKeyDown);
       canvasElement.removeEventListener("pointercancel", handlePointerCancel);
       canvasElement.removeEventListener("pointerdown", handlePointerDown);
+      canvasElement.removeEventListener("pointerleave", handlePointerLeave);
       canvasElement.removeEventListener("pointermove", handlePointerMove);
       canvasElement.removeEventListener("pointerup", handlePointerUp);
       canvasElement.removeEventListener("lostpointercapture", handlePointerCancel);
@@ -3668,6 +4051,7 @@ export function attachPlannerCameraControls(
       if (placementDragState !== null) {
         restorePlacementDragPreview(placementDragState);
       }
+      reportMapTileHoverIfChanged(null);
       placementDragState = null;
     },
   };

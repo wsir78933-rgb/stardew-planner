@@ -30,6 +30,7 @@ export type SiteFooterCopy = Readonly<{
     title: string;
     privacy: string;
     terms: string;
+    contact: string;
   }>;
 }>;
 
@@ -87,6 +88,10 @@ export function createSiteFooterContent(
         {
           label: footerCopy.legal.terms,
           href: getLocalizedPublicPath(locale, "/terms"),
+        },
+        {
+          label: footerCopy.legal.contact,
+          href: getLocalizedPublicPath(locale, "/contact"),
         },
       ],
     },

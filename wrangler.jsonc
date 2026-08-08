@@ -1,0 +1,21 @@
+{
+  "name": "stardew-planner-contact",
+  "main": "workers/contact-worker.ts",
+  "compatibility_date": "2026-08-08",
+  "routes": [
+    {
+      "pattern": "stardewvalleyplanner.art/api/contact*",
+      "custom_domain": false
+    }
+  ],
+  "send_email": [
+    {
+      "name": "CONTACT_EMAIL"
+    }
+  ],
+  "vars": {
+    "CONTACT_ALLOWED_ORIGIN": "https://stardewvalleyplanner.art",
+    "CONTACT_EXPECTED_TURNSTILE_HOSTNAME": "stardewvalleyplanner.art",
+    "CONTACT_TURNSTILE_ACTION": "turnstile-spin-v2"
+  }
+}

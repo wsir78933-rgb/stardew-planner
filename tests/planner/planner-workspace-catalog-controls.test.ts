@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CatalogItem } from "../../src/catalog";
 import {
+  advanceWorkspaceCatalogPlacementAttempt,
   changeWorkspaceCatalogItemChoice,
   clearWorkspaceCatalogSelection,
   createInitialWorkspaceCatalogChoiceState,
@@ -9,6 +10,37 @@ import {
 } from "../../src/planner/planner-workspace-catalog-controls";
 
 describe("planner workspace catalog controls", () => {
+  it("resolves one composite variant per selected placement attempt", () => {
+    const compositeCatalogItem = createCompositeCatalogItem();
+    const firstAttemptFractions = [15 / 16, 9 / 24, 11 / 24];
+    let firstAttemptSampleIndex = 0;
+
+    const selectedState = selectWorkspaceCatalogItem(
+      createInitialWorkspaceCatalogChoiceState(),
+      compositeCatalogItem,
+      () => firstAttemptFractions[firstAttemptSampleIndex++]!,
+    );
+    const choiceChangedState = changeWorkspaceCatalogItemChoice(
+      selectedState,
+      compositeCatalogItem,
+      { flipped: false, rotation: 0, variant: 0 },
+    );
+    const nextAttemptState = advanceWorkspaceCatalogPlacementAttempt(
+      choiceChangedState,
+      () => 0,
+    );
+
+    expect(firstAttemptSampleIndex).toBe(3);
+    expect(selectedState.selectedCatalogItem).toMatchObject({
+      catalogItem: compositeCatalogItem,
+      resolvedCompositeVariant: 4383,
+    });
+    expect(choiceChangedState.selectedCatalogItem?.resolvedCompositeVariant)
+      .toBe(4383);
+    expect(nextAttemptState.selectedCatalogItem?.resolvedCompositeVariant)
+      .toBe(0);
+  });
+
   it("remembers each item choice, updates only the matching active selection, and retains choices when cleared", () => {
     const treeItem = createCatalogItem("fruittree_628", {
       canFlip: true,
@@ -157,6 +189,34 @@ function createCatalogItem(
     sprite: { kind: "sprite-index", index: 0 },
     textureLocalPath: "/game-assets/test.png",
     tileSize: { width: 1, height: 1 },
+  };
+}
+
+function createCompositeCatalogItem(): CatalogItem {
+  return {
+    ...createCatalogItem("furniture_FreeCactus"),
+    renderingMetadata: {
+      bedType: null,
+      compositeSprite: {
+        layers: [
+          { baseY: 96, count: 16, offsetY: 0 },
+          { baseY: 48, count: 24, offsetY: -8 },
+          { baseY: 0, count: 24, offsetY: -24 },
+        ],
+        pieceSize: 16,
+        columns: 8,
+      },
+      furnitureType: "randomized_plant",
+      indoors: true,
+      isLongTable: false,
+      isRug: false,
+      isTable: false,
+      kind: "furniture",
+      outdoors: true,
+      rotationSprites: undefined,
+      rotationTileSizes: undefined,
+      wallMounted: false,
+    },
   };
 }
 

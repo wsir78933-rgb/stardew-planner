@@ -165,6 +165,7 @@ test("keeps localized farm discovery, trust, import, and screenshot claims synch
       title: "Legal",
       privacy: "Privacy Policy",
       terms: "Terms of Service",
+      contact: "Contact us",
     },
   });
   expect(homepageCopyByLocale["zh-CN"].footer).toMatchObject({
@@ -186,6 +187,7 @@ test("keeps localized farm discovery, trust, import, and screenshot claims synch
       title: "法律",
       privacy: "隐私政策",
       terms: "服务条款",
+      contact: "联系我们",
     },
   });
 });

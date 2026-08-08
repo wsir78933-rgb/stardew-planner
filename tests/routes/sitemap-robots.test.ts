@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
-import { getLocalizedPublicRouteEntries } from "../../src/i18n/public-route-registry";
+import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
 
 it("writes robots.txt with the absolute sitemap URL", () => {
@@ -14,10 +14,10 @@ it("writes robots.txt with the absolute sitemap URL", () => {
   );
 });
 
-it("writes exactly the localized public URLs into sitemap.xml with legal paths", () => {
+it("writes exactly the indexable localized public URLs into sitemap.xml", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
   const sitemapUrlCount = (sitemapText.match(/<loc>/g) ?? []).length;
-  const localizedPublicRouteEntries = getLocalizedPublicRouteEntries();
+  const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
 
   expect(sitemapUrlCount).toBe(26);
   expect(localizedPublicRouteEntries).toHaveLength(26);
@@ -30,4 +30,5 @@ it("writes exactly the localized public URLs into sitemap.xml with legal paths",
   expect(sitemapText).not.toContain("<lastmod>");
   expect(sitemapText).toContain("/privacy");
   expect(sitemapText).toContain("/terms");
+  expect(sitemapText).not.toContain("/contact");
 });

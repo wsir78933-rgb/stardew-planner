@@ -47,6 +47,7 @@ type PlannerWorkspaceEditingContext = Readonly<{
   freePlacement: boolean;
   mapPlacementGrid: MapPlacementGrid;
   placementHistory: PlacementHistory<PlacementSnapshot>;
+  resolvedCompositeVariant?: number;
   selectedCatalogItem: CatalogItem | null;
   selectedPlacementKeys: readonly PlacementSelectionKey[];
 }>;
@@ -436,6 +437,8 @@ function applyCursorTileClick(
     freePlacement: plannerWorkspaceMapTileClickInput.freePlacement,
     mapPlacementGrid: plannerWorkspaceMapTileClickInput.mapPlacementGrid,
     placementHistory: plannerWorkspaceMapTileClickInput.placementHistory,
+    resolvedCompositeVariant:
+      plannerWorkspaceMapTileClickInput.resolvedCompositeVariant,
     selectedCatalogItem: plannerWorkspaceMapTileClickInput.selectedCatalogItem,
   });
 

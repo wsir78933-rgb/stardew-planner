@@ -25,6 +25,7 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
+import { createWorkspaceCatalogPlacementPreviewInput } from "../../src/components/planner-workspace";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
   return {
@@ -110,6 +111,57 @@ function createAttachableFurnitureCatalogItem(): CatalogItem {
   };
 }
 
+function createCompositeFurnitureCatalogItem(): CatalogItem {
+  return {
+    ...createAttachableFurnitureCatalogItem(),
+    id: "furniture_FreeCactus",
+    name: "Free Cactus",
+    renderingMetadata: {
+      ...createAttachableFurnitureCatalogItem().renderingMetadata,
+      compositeSprite: {
+        columns: 8,
+        layers: [
+          { baseY: 96, count: 16, offsetY: 0 },
+          { baseY: 48, count: 24, offsetY: -8 },
+          { baseY: 0, count: 24, offsetY: -24 },
+        ],
+        pieceSize: 16,
+      },
+      furnitureType: "randomized_plant",
+    } as Extract<CatalogItem["renderingMetadata"], { kind: "furniture" }>,
+  };
+}
+
+describe("workspace catalog placement preview wiring", () => {
+  it("passes the selected catalog item and its current presentation choice only to cursor preview", () => {
+    const selectedCatalogItem = createRotatableCatalogItem();
+    const presentationChoice = { flipped: false, rotation: 2, variant: 0 };
+
+    expect(createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: {
+        catalogItem: selectedCatalogItem,
+        presentationChoice,
+        resolvedCompositeVariant: 4383,
+      },
+      tool: "cursor",
+    })).toEqual({
+      buildingMetadataById: {},
+      catalogPresentationChoice: presentationChoice,
+      freePlacement: true,
+      resolvedCompositeVariant: 4383,
+      selectedCatalogItem,
+    });
+    expect(createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
+      tool: "fill",
+    })).toBeNull();
+  });
+});
+
 function createEditingInput(
   placementSnapshot: PlacementSnapshot = createEmptyPlacementSnapshot(),
 ) {
@@ -148,6 +200,24 @@ function createAdapterSupportedStandardFarmDocument() {
 }
 
 describe("planner workspace basic editing orchestration", () => {
+  it("passes the selected attempt composite variant through cursor placement", () => {
+    const placementTransition = applyPlannerWorkspaceMapTileClick({
+      ...createEditingInput(),
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: true,
+      resolvedCompositeVariant: 4383,
+      selectedCatalogItem: createCompositeFurnitureCatalogItem(),
+      tool: "cursor",
+    });
+
+    expect(placementTransition.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        itemId: "furniture_FreeCactus",
+        variant: 4383,
+      }),
+    ]);
+  });
+
   it("clears the catalog selection with the Cursor tool so the next click selects instead of placing", () => {
     const initialEditingInput = createEditingInput();
     const placedTransition = applyPlannerWorkspaceMapTileClick({

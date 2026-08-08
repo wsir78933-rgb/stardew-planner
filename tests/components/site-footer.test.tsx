@@ -25,6 +25,7 @@ const footerCopy: SiteFooterCopy = {
     title: "Legal",
     privacy: "Privacy policy",
     terms: "Terms of service",
+    contact: "Contact us",
   },
 };
 
@@ -53,6 +54,7 @@ it("renders every English footer destination, identity, copyright, and linked Tw
   expect(footerMarkup).toContain('href="/#faq"');
   expect(footerMarkup).toContain('href="/privacy"');
   expect(footerMarkup).toContain('href="/terms"');
+  expect(footerMarkup).toContain('href="/contact"');
   expect(footerMarkup).toContain('data-site-footer-social-icons="true"');
 
   const socialIconRegion = footerMarkup.match(
@@ -79,5 +81,6 @@ it("uses English editor destinations and localized Chinese content destinations"
   expect(footerMarkup).toContain('href="/#faq"');
   expect(footerMarkup).toContain('href="/zh/privacy"');
   expect(footerMarkup).toContain('href="/zh/terms"');
+  expect(footerMarkup).toContain('href="/zh/contact"');
   expect(footerMarkup).not.toContain('/#planner');
 });

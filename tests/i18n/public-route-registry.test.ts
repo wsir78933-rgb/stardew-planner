@@ -3,23 +3,31 @@ import {
   canonicalPublicPaths,
   createPublicLanguageAlternates,
   getLocalizedPublicPath,
+  getLocalizedIndexablePublicRouteEntries,
   getLocalizedPublicRouteEntries,
 } from "../../src/i18n/public-route-registry";
 
-it("maps public identities, including legal routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(13);
+it("maps public identities, including legal and noindex contact routes, to Chinese paths", () => {
+  expect(canonicalPublicPaths).toHaveLength(14);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
+  expect(canonicalPublicPaths).toContain("/contact");
   expect(getLocalizedPublicPath("en", "/farm/standard")).toBe("/farm/standard");
   expect(getLocalizedPublicPath("zh-CN", "/")).toBe("/zh");
   expect(getLocalizedPublicPath("en", "/privacy")).toBe("/privacy");
   expect(getLocalizedPublicPath("zh-CN", "/privacy")).toBe("/zh/privacy");
   expect(getLocalizedPublicPath("en", "/terms")).toBe("/terms");
   expect(getLocalizedPublicPath("zh-CN", "/terms")).toBe("/zh/terms");
+  expect(getLocalizedPublicPath("en", "/contact")).toBe("/contact");
+  expect(getLocalizedPublicPath("zh-CN", "/contact")).toBe("/zh/contact");
   expect(getLocalizedPublicPath("zh-CN", "/farm/standard")).toBe(
     "/zh/farm/standard",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(26);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(28);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(26);
+  expect(
+    getLocalizedIndexablePublicRouteEntries().map(({ pathname }) => pathname),
+  ).not.toContain("/contact");
 });
 
 it("returns absolute paired language alternates", () => {

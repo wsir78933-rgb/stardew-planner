@@ -44,6 +44,7 @@ import {
   setPlannerWorkspaceSelectedNightLightState,
 } from "../planner/planner-workspace-editing-controller";
 import {
+  advanceWorkspaceCatalogPlacementAttempt,
   changeWorkspaceCatalogItemChoice,
   clearWorkspaceCatalogSelection,
   createInitialWorkspaceCatalogChoiceState,
@@ -91,6 +92,7 @@ import {
   usePlannerWorkspaceState,
   type PlannerWorkspaceStateController,
 } from "../planner/use-planner-workspace-state";
+import type { EditorTool } from "../editor/editor-view-state";
 import { useReferenceProjectWorkspace } from "../reference-runtime/use-reference-project-workspace";
 import { EditorMenuBar } from "./editor-menu-bar";
 import { EditorModal } from "./editor-modal";
@@ -98,7 +100,10 @@ import { EditorToolbar } from "./editor-toolbar";
 import { ItemCatalogPanel } from "./item-catalog-panel";
 import { PlannerGameSaveImportResultLoader } from "./planner-game-save-import-result-loader";
 import { PlannerSaveModalLoader } from "./planner-save-modal-loader";
-import { PlannerCanvas } from "./planner-canvas";
+import {
+  PlannerCanvas,
+  type PlannerCanvasPlacementPreviewInput,
+} from "./planner-canvas";
 import { PlannerRequiredCatalogGate } from "./planner-required-catalog-status";
 import { useRequiredPlacementCatalog } from "./use-required-placement-catalog";
 import {
@@ -162,6 +167,7 @@ type PreparedWorkspaceInitialization = Readonly<{
 }>;
 
 type WorkspaceCatalogControls = Readonly<{
+  advanceSelectedCatalogPlacementAttempt: () => void;
   catalogPresentationChoicesByItemId: ReadonlyMap<
     string,
     CatalogPresentationChoice
@@ -196,6 +202,36 @@ type WorkspaceEditingControls = Readonly<{
   ) => void;
   selectionInspector: ReactNode;
 }>;
+
+export function createWorkspaceCatalogPlacementPreviewInput(
+  input: Readonly<{
+    buildingMetadataById: BuildingPlacementMetadataById | null;
+    freePlacement: boolean;
+    selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
+    tool: EditorTool;
+  }>,
+): PlannerCanvasPlacementPreviewInput | null {
+  if (
+    input.tool !== "cursor" ||
+    input.buildingMetadataById === null ||
+    input.selectedCatalogItem === null
+  ) {
+    return null;
+  }
+
+  return {
+    buildingMetadataById: input.buildingMetadataById,
+    catalogPresentationChoice: input.selectedCatalogItem.presentationChoice,
+    freePlacement: input.freePlacement,
+    ...(input.selectedCatalogItem.resolvedCompositeVariant === undefined
+      ? {}
+      : {
+          resolvedCompositeVariant:
+            input.selectedCatalogItem.resolvedCompositeVariant,
+        }),
+    selectedCatalogItem: input.selectedCatalogItem.catalogItem,
+  };
+}
 
 const startupLoadingMessage = "Loading local planner resources…";
 
@@ -468,6 +504,7 @@ function PreparedPlannerWorkspaceContent({
     selectedPlannerMapId: plannerWorkspaceState.selectedPlannerMapId,
   });
   const {
+    advanceSelectedCatalogPlacementAttempt,
     catalogPresentationChoicesByItemId,
     clearSelectedCatalogItem,
     handleCatalogItemPresentationChoiceChange,
@@ -520,6 +557,7 @@ function PreparedPlannerWorkspaceContent({
   }, []);
   const workspaceEditingControls = useWorkspaceEditingControls({
     activeInteriorDecorPattern,
+    advanceSelectedCatalogPlacementAttempt,
     applyPlacementEditResult,
     buildingMetadataById,
     clearSelectedCatalogItem,
@@ -531,6 +569,12 @@ function PreparedPlannerWorkspaceContent({
     setSelectedPlacementKeys,
     onPendingCatalogChoiceCycle: cyclePendingCatalogChoice,
     onDismissInteriorDecor: handleCancelInteriorDecor,
+  });
+  const placementPreview = createWorkspaceCatalogPlacementPreviewInput({
+    buildingMetadataById,
+    freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
+    selectedCatalogItem,
+    tool: plannerWorkspaceState.tool,
   });
   const handleInteriorDecorPatternSelect = useCallback(
     (pattern: InteriorDecorCatalogPattern | null) => {
@@ -732,6 +776,7 @@ function PreparedPlannerWorkspaceContent({
           onInteriorDecorApply={handleInteriorDecorApply}
           onInteriorDecorRejected={handleInteriorDecorRejected}
           performanceMarker={performanceMarker}
+          placementPreview={placementPreview}
           placementSnapshot={plannerWorkspaceState.placementHistory.currentState}
           pointerInteractionMode={
             plannerWorkspaceState.tool === "multi-select" ||
@@ -1046,6 +1091,9 @@ function useWorkspaceCatalogControls(
     readonly CatalogItem[]
   >([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const advanceSelectedCatalogPlacementAttempt = useCallback(() => {
+    setCatalogChoiceState(advanceWorkspaceCatalogPlacementAttempt);
+  }, []);
   const handleCatalogItemSelect = useCallback(
     (
       catalogItem: CatalogItem,
@@ -1132,6 +1180,7 @@ function useWorkspaceCatalogControls(
   }, [catalogChoiceState]);
 
   return {
+    advanceSelectedCatalogPlacementAttempt,
     catalogPresentationChoicesByItemId:
       catalogChoiceState.presentationChoicesByItemId,
     clearSelectedCatalogItem,
@@ -1149,6 +1198,7 @@ function useWorkspaceCatalogControls(
 
 function useWorkspaceEditingControls({
   activeInteriorDecorPattern,
+  advanceSelectedCatalogPlacementAttempt,
   applyPlacementEditResult,
   buildingMetadataById,
   clearSelectedCatalogItem,
@@ -1162,6 +1212,7 @@ function useWorkspaceEditingControls({
   onDismissInteriorDecor,
 }: Readonly<{
   activeInteriorDecorPattern: InteriorDecorCatalogPattern | null;
+  advanceSelectedCatalogPlacementAttempt: () => void;
   applyPlacementEditResult: PlannerWorkspaceStateController["applyPlacementEditResult"];
   buildingMetadataById: BuildingPlacementMetadataById | null;
   clearSelectedCatalogItem: () => void;
@@ -1207,6 +1258,8 @@ function useWorkspaceEditingControls({
               freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
               mapPlacementGrid,
               placementHistory: plannerWorkspaceState.placementHistory,
+              resolvedCompositeVariant:
+                selectedCatalogItem?.resolvedCompositeVariant,
               selectedCatalogItem: selectedCatalogItem?.catalogItem ?? null,
               selectedPlacementKeys,
               tool: plannerWorkspaceState.tool,
@@ -1225,9 +1278,19 @@ function useWorkspaceEditingControls({
         editingTransition.placementHistory,
         editingTransition.selectedPlacementKeys,
       );
+      if (
+        pendingDuplicateSelectionKey === null
+        && plannerWorkspaceState.tool === "cursor"
+        && selectedCatalogItem !== null
+        && editingTransition.placementHistory !==
+          plannerWorkspaceState.placementHistory
+      ) {
+        advanceSelectedCatalogPlacementAttempt();
+      }
     },
     [
       applyEditingTransition,
+      advanceSelectedCatalogPlacementAttempt,
       buildingMetadataById,
       getRequiredCurrentMapPlacementGrid,
       pendingDuplicateSelectionKey,

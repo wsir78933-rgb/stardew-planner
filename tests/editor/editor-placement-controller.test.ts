@@ -6,6 +6,7 @@ import type {
 } from "../../src/catalog";
 import {
   applyEditorCursorPlacement,
+  evaluateEditorCursorPlacementPreview,
 } from "../../src/editor/editor-placement-controller";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
 import {
@@ -306,6 +307,312 @@ function createEmptyTablePlacement(
 }
 
 describe("applyEditorCursorPlacement", () => {
+  it("evaluates a rotated catalog candidate without persisting a placement", () => {
+    const furnitureItem = createCatalogItem({
+      id: "furniture_724",
+      category: "placeable",
+      presentationCapabilities: {
+        canFlip: false,
+        rotation: {
+          count: 2,
+          footprints: [
+            { width: 2, height: 1 },
+            { width: 1, height: 2 },
+          ],
+        },
+        variantCycle: null,
+        visibleVariants: [],
+      },
+      tileSize: { width: 2, height: 1 },
+    });
+    const placementSnapshot = createEmptyPlacementSnapshot();
+
+    const previewEvaluation = evaluateEditorCursorPlacementPreview({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogPresentationChoice: { flipped: false, rotation: 1, variant: 0 },
+      cursorTile: { x: 2, y: 1 },
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid(undefined, 6, 6),
+      placementSnapshot,
+      selectedCatalogItem: furnitureItem,
+    });
+
+    expect(previewEvaluation).toMatchObject({
+      previewable: true,
+      validation: { valid: true },
+      candidate: {
+        kind: "item",
+        item: {
+          footprint: { width: 1, height: 2 },
+          itemId: "furniture_724",
+          rotation: 1,
+          x: 2,
+          y: 1,
+        },
+      },
+      previewAction: {
+        type: "add-item",
+        item: expect.objectContaining({
+          footprint: { width: 1, height: 2 },
+          itemId: "furniture_724",
+          rotation: 1,
+          x: 2,
+          y: 1,
+        }),
+      },
+      targetMode: "map",
+    });
+    expect(placementSnapshot).toEqual(createEmptyPlacementSnapshot());
+  });
+
+  it("returns a transient action without allocating persistent IDs or counters", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [createExistingPlacementItem({ instanceId: 1, itemId: "object:390" })],
+      nextItemId: 2,
+    };
+
+    const previewEvaluation = evaluateEditorCursorPlacementPreview({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 1, y: 0 },
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid(undefined, 3, 1),
+      placementSnapshot,
+      selectedCatalogItem: createCatalogItem({
+        id: "floor:13",
+        category: "floor",
+      }),
+    });
+
+    expect(previewEvaluation).toMatchObject({
+      previewable: true,
+      previewAction: {
+        type: "add-item",
+        item: expect.objectContaining({
+          itemId: "floor:13",
+          x: 1,
+          y: 0,
+        }),
+      },
+    });
+    expect(previewEvaluation).not.toHaveProperty("previewPlacementSnapshot");
+    expect(previewEvaluation).not.toHaveProperty("previewRenderPlacementSnapshot");
+    expect(previewEvaluation).not.toHaveProperty("previewRenderEntryKeys");
+    expect(JSON.stringify(previewEvaluation)).not.toContain("instanceId");
+    expect(placementSnapshot.nextItemId).toBe(2);
+    expect(placementSnapshot.items).toEqual([
+      expect.objectContaining({ instanceId: 1, itemId: "object:390" }),
+    ]);
+  });
+
+  it("previews a duplicate crop as invalid without throwing or mutating the source", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 1, y: 1 }],
+      nextBuildingId: 9,
+      nextItemId: 12,
+    };
+
+    const previewEvaluation = evaluateEditorCursorPlacementPreview({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 1, y: 1 },
+      mapPlacementGrid: createPlacementGrid(undefined, 3, 3),
+      placementSnapshot,
+      selectedCatalogItem: createCatalogItem({
+        id: "crop:24",
+        category: "crop",
+      }),
+    });
+
+    expect(previewEvaluation).toMatchObject({
+      previewable: true,
+      previewAction: {
+        type: "add-crop",
+        crop: { cropId: "crop:24", x: 1, y: 1 },
+      },
+      targetMode: "map",
+      validation: {
+        valid: false,
+        reason: "occupied-by-crop",
+        tile: { x: 1, y: 1 },
+      },
+    });
+    expect(placementSnapshot).toEqual({
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 1, y: 1 }],
+      nextBuildingId: 9,
+      nextItemId: 12,
+    });
+  });
+
+  it("shares empty-table held-item resolution between preview and click", () => {
+    const selectedCatalogItem = createFurnitureCatalogItem();
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [createEmptyTablePlacement()],
+      nextItemId: 8,
+    };
+    const previewEvaluation = evaluateEditorCursorPlacementPreview({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 2, y: 2 },
+      mapPlacementGrid: createPlacementGrid(
+        { buildable: false, diggable: false, passable: false },
+        5,
+        5,
+      ),
+      placementSnapshot,
+      selectedCatalogItem,
+    });
+    const clickResult = applyEditorCursorPlacement(
+      createPlacementInput(selectedCatalogItem, {
+        cursorTile: { x: 2, y: 2 },
+        mapPlacementGrid: createPlacementGrid(
+          { buildable: false, diggable: false, passable: false },
+          5,
+          5,
+        ),
+        placementHistory: createPlacementHistory(placementSnapshot),
+      }),
+    );
+
+    expect(previewEvaluation).toMatchObject({
+      previewable: true,
+      targetMode: "held-item",
+      targetParentInstanceId: 1,
+      previewAction: {
+        type: "attach-held-item",
+        parentInstanceId: 1,
+        item: expect.objectContaining({ itemId: "furniture_0" }),
+      },
+      validation: { valid: true },
+    });
+    expect(clickResult).toMatchObject({
+      applied: true,
+      placementHistory: {
+        currentState: {
+          items: [expect.objectContaining({
+            heldItem: expect.objectContaining({ itemId: "furniture_0" }),
+          })],
+        },
+      },
+    });
+  });
+
+  it.each([
+    ["long-table", createEmptyTablePlacement({ isLongTable: true, isTable: false })],
+    ["occupied-table", createEmptyTablePlacement({ heldItemId: "legacy-item" })],
+  ] as const)("shares invalid %s target resolution between preview and click", (
+    targetReason,
+    targetPlacementItem,
+  ) => {
+    const selectedCatalogItem = createFurnitureCatalogItem();
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [targetPlacementItem],
+      nextItemId: 2,
+    };
+    const sharedInput = {
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 } as const,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid(undefined, 5, 5),
+      selectedCatalogItem,
+    };
+
+    const previewEvaluation = evaluateEditorCursorPlacementPreview({
+      ...sharedInput,
+      placementSnapshot,
+    });
+    const clickResult = applyEditorCursorPlacement({
+      ...sharedInput,
+      placementHistory: createPlacementHistory(placementSnapshot),
+    });
+
+    expect(previewEvaluation).toMatchObject({
+      previewable: true,
+      targetMode: "invalid-held-item-target",
+      targetParentInstanceId: 1,
+      targetReason,
+      validation: { valid: false },
+    });
+    expect(clickResult).toMatchObject({
+      applied: false,
+      reason: "invalid-held-item-target",
+      targetReason,
+    });
+  });
+
+  it("keeps one explicit composite variant across valid and invalid tiles and click", () => {
+    const selectedCatalogItem = createFreeCactusCatalogItem();
+    const placementSnapshot = createEmptyPlacementSnapshot();
+    const validCapabilities = {
+      buildable: true,
+      crabPot: false,
+      diggable: true,
+      passable: true,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      wall: false,
+    };
+    const invalidCapabilities = {
+      ...validCapabilities,
+      buildable: false,
+      diggable: false,
+      passable: false,
+    };
+    const sharedInput = {
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 } as const,
+      freePlacement: false,
+      mapPlacementGrid: {
+        capabilitiesByTile: [validCapabilities, invalidCapabilities],
+        height: 1,
+        width: 2,
+      },
+      resolvedCompositeVariant: 4383,
+      selectedCatalogItem,
+    };
+
+    const validPreview = evaluateEditorCursorPlacementPreview({
+      ...sharedInput,
+      cursorTile: { x: 0, y: 0 },
+      placementSnapshot,
+    });
+    const invalidPreview = evaluateEditorCursorPlacementPreview({
+      ...sharedInput,
+      cursorTile: { x: 1, y: 0 },
+      placementSnapshot,
+    });
+    const clickResult = applyEditorCursorPlacement({
+      ...sharedInput,
+      cursorTile: { x: 0, y: 0 },
+      placementHistory: createPlacementHistory(placementSnapshot),
+    });
+
+    expect(validPreview).toMatchObject({
+      previewable: true,
+      candidate: { kind: "item", item: { variant: 4383 } },
+      validation: { valid: true },
+    });
+    expect(invalidPreview).toMatchObject({
+      previewable: true,
+      candidate: { kind: "item", item: { variant: 4383 } },
+      validation: { valid: false },
+    });
+    expect(clickResult).toMatchObject({ applied: true });
+    if (!validPreview.previewable || !clickResult.applied) {
+      throw new Error("Expected preview and click to resolve the FreeCactus placement.");
+    }
+    expect(clickResult.placementHistory.currentState.items[0]?.variant)
+      .toBe(validPreview.candidate.kind === "item"
+        ? validPreview.candidate.item.variant
+        : undefined);
+  });
+
   it.each([
     ["single", 2],
     ["double", 3],

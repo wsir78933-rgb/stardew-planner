@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type {
   BuildingPlacementMetadataById,
   CatalogItem,
@@ -287,6 +287,38 @@ describe("applyEditorFill", () => {
         x: 1,
       }),
     ]);
+    expect(sampleIndex).toBe(6);
+  });
+
+  it("uses the runtime random source for FreeCactus Fill by default", () => {
+    const sampledFractions = [
+      0, 0, 0,
+      15 / 16, 23 / 24, 23 / 24,
+    ];
+    let sampleIndex = 0;
+    const randomSpy = vi.spyOn(Math, "random").mockImplementation(
+      () => sampledFractions[sampleIndex++]!,
+    );
+    let fillResult: ReturnType<typeof applyEditorFill> | undefined;
+
+    try {
+      fillResult = applyEditorFill({
+        selectedCatalogItem: createFreeCactusCatalogItem(),
+        catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+        firstTile: { x: 0, y: 0 },
+        secondTile: { x: 1, y: 0 },
+        mapPlacementGrid: createPlacementGrid(2, 1),
+        buildingMetadataById: createBuildingMetadataById(),
+        placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+      });
+    } finally {
+      randomSpy.mockRestore();
+    }
+
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(fillResult?.placementHistory.currentState.items.map((item) =>
+      item.variant
+    )).toEqual([0, 9215]);
     expect(sampleIndex).toBe(6);
   });
 

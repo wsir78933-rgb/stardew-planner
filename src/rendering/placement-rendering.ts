@@ -17,6 +17,7 @@ import {
   type PlacementHeldItem,
   type PlacementItem,
   type PlacementSnapshot,
+  type PlacementSnapshotAction,
 } from "../placement/placement-snapshot";
 import { getPlacementItemZIndex } from "../placement/placement-item-z-order";
 import { getBedPlacementSemantics } from "../placement/bed-placement-semantics";
@@ -24,7 +25,11 @@ import { isGardenPotAtTile } from "../placement/garden-pot-placement";
 import {
   createTreePlacementRenderLayers,
 } from "./tree-placement-rendering";
-import { createHoeDirtPlacementRenderLayers } from "./hoe-dirt-placement-rendering";
+import {
+  createCropHoeDirtPlacementPreviewRenderLayers,
+  createHoeDirtPlacementRenderLayers,
+  createItemHoeDirtPlacementPreviewRenderLayers,
+} from "./hoe-dirt-placement-rendering";
 import { createSprinklerAttachmentRenderLayer } from "./sprinkler-placement-rendering";
 import { createLitBigCraftablePlacementRenderLayers } from "./lit-big-craftable-placement-rendering";
 import { createPaintableChestPlacementRenderLayers } from "./paintable-chest-placement-rendering";
@@ -121,6 +126,157 @@ export function createPlacementRenderEntries(
   const persistentPlacementSnapshot = createPersistentPlacementSnapshot(
     placementSnapshot,
   );
+
+  return createPlacementRenderEntriesFromSnapshot(
+    persistentPlacementSnapshot,
+    catalogItems,
+    season,
+    mapId,
+    mapPlacementGrid,
+    isNightMode,
+  );
+}
+
+export function createTransientPlacementRenderEntries(
+  placementSnapshot: PlacementSnapshot,
+  previewAction: PlacementSnapshotAction,
+  catalogItems: readonly CatalogItem[],
+  season: CatalogSeason = "spring",
+  mapId = "standard",
+  mapPlacementGrid?: MapPlacementGrid,
+  isNightMode = false,
+): readonly PlacementRenderEntry[] {
+  const persistentPlacementSnapshot = createPersistentPlacementSnapshot(
+    placementSnapshot,
+  );
+  const transientInstanceId = -1;
+  const catalogItemsById = createCatalogItemsById(catalogItems);
+  let transientRenderEntries: readonly PlacementRenderEntry[];
+
+  switch (previewAction.type) {
+    case "add-building": {
+      const transientBuilding = {
+        ...previewAction.building,
+        instanceId: transientInstanceId,
+      };
+      const catalogItem = getRequiredCatalogItem(
+        catalogItemsById,
+        `building:${transientBuilding.buildingId}`,
+      );
+      transientRenderEntries = createBuildingMultilayerPlacementRenderEntries(
+        catalogItem,
+        transientBuilding,
+        season,
+        persistentPlacementSnapshot.items,
+      );
+      break;
+    }
+    case "add-crop": {
+      const catalogItem = getRequiredCatalogItem(
+        catalogItemsById,
+        previewAction.crop.cropId,
+      );
+      const isInGardenPot = isGardenPotAtTile(
+        persistentPlacementSnapshot.items,
+        previewAction.crop,
+      );
+      const cropZIndex =
+        (previewAction.crop.y + 1) * 2 - (isInGardenPot ? 0.5 : 1);
+      transientRenderEntries = [
+        ...createCropHoeDirtPlacementPreviewRenderLayers(
+          persistentPlacementSnapshot,
+          previewAction.crop,
+          catalogItemsById,
+          season,
+        ).map((renderLayer) => ({
+          ...renderLayer,
+          effectiveFootprint: { width: 1, height: 1 },
+          rotationQuarterTurns: 0,
+        })),
+        ...createCropPlacementRenderLayers(catalogItem, previewAction.crop, {
+          isInGardenPot,
+        }).map((renderLayer) => ({
+          ...renderLayer,
+          key: `crop:${String(previewAction.crop.x)},${String(previewAction.crop.y)}`,
+          catalogItem,
+          effectiveFootprint: catalogItem.tileSize,
+          tileX: previewAction.crop.x,
+          tileY: previewAction.crop.y,
+          rotationQuarterTurns: 0,
+          zIndex: cropZIndex,
+        })),
+      ];
+      break;
+    }
+    case "add-item": {
+      const transientItem = {
+        ...previewAction.item,
+        instanceId: transientInstanceId,
+      };
+      transientRenderEntries = transientItem.itemId === hoeDirtCatalogItemId
+        ? createItemHoeDirtPlacementPreviewRenderLayers(
+            persistentPlacementSnapshot,
+            transientItem,
+            catalogItemsById,
+            season,
+          ).map((renderLayer) => ({
+            ...renderLayer,
+            effectiveFootprint: { width: 1, height: 1 },
+            rotationQuarterTurns: 0,
+          }))
+        : createItemAndHeldPlacementRenderEntries(
+            transientItem,
+            catalogItemsById,
+            season,
+            mapId,
+            mapPlacementGrid,
+            [...persistentPlacementSnapshot.items, transientItem],
+            !isNightMode,
+          );
+      break;
+    }
+    case "attach-held-item": {
+      const targetParentItem = persistentPlacementSnapshot.items.find(
+        (placementItem) =>
+          placementItem.instanceId === previewAction.parentInstanceId,
+      );
+      if (targetParentItem === undefined) {
+        throw new Error(
+          `Placement preview attachment requires parent instanceId ${String(previewAction.parentInstanceId)}; received ${describeValue(persistentPlacementSnapshot.items.map((placementItem) => placementItem.instanceId))}.`,
+        );
+      }
+      const parentCatalogItem = getRequiredCatalogItem(
+        catalogItemsById,
+        targetParentItem.itemId,
+      );
+      transientRenderEntries = [createHeldItemPlacementRenderEntry(
+        targetParentItem,
+        parentCatalogItem,
+        { ...previewAction.item, instanceId: transientInstanceId },
+        catalogItemsById,
+      )];
+      break;
+    }
+    default:
+      throw new TypeError(
+        `Placement preview action must add a building, crop, item, or held item; received ${describeValue(previewAction.type)}.`,
+      );
+  }
+
+  return transientRenderEntries.map((renderEntry) => ({
+    ...renderEntry,
+    key: "placement-preview",
+  }));
+}
+
+function createPlacementRenderEntriesFromSnapshot(
+  persistentPlacementSnapshot: PlacementSnapshot,
+  catalogItems: readonly CatalogItem[],
+  season: CatalogSeason,
+  mapId: string,
+  mapPlacementGrid: MapPlacementGrid | undefined,
+  isNightMode: boolean,
+): readonly PlacementRenderEntry[] {
   const catalogItemsById = createCatalogItemsById(catalogItems);
 
   return [

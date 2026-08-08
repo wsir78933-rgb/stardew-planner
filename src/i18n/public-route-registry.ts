@@ -11,6 +11,7 @@ const fixedCanonicalPublicPaths = [
   "/mods",
   "/privacy",
   "/terms",
+  "/contact",
 ] as const;
 
 export type PublicCanonicalPath =
@@ -25,6 +26,13 @@ export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
   ...fixedCanonicalPublicPaths,
   ...farmCanonicalPublicPaths,
 ];
+
+const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>(["/contact"]);
+
+export const indexableCanonicalPublicPaths: readonly PublicCanonicalPath[] =
+  canonicalPublicPaths.filter(
+    (canonicalPath) => !noindexCanonicalPublicPaths.has(canonicalPath),
+  );
 
 export type LocalizedPublicRouteEntry = Readonly<{
   locale: PublicLocale;
@@ -63,6 +71,16 @@ export function getLocalizedPublicPath(
 export function getLocalizedPublicRouteEntries(): readonly LocalizedPublicRouteEntry[] {
   return publicLocales.flatMap((locale) =>
     canonicalPublicPaths.map((canonicalPath) => ({
+      locale,
+      canonicalPath,
+      pathname: getLocalizedPublicPath(locale, canonicalPath),
+    })),
+  );
+}
+
+export function getLocalizedIndexablePublicRouteEntries(): readonly LocalizedPublicRouteEntry[] {
+  return publicLocales.flatMap((locale) =>
+    indexableCanonicalPublicPaths.map((canonicalPath) => ({
       locale,
       canonicalPath,
       pathname: getLocalizedPublicPath(locale, canonicalPath),

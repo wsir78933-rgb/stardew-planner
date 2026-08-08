@@ -4,12 +4,15 @@ import { describe, expect, it } from "vitest";
 import {
   catalogDatasetUrls,
   createBuildingCatalogFromDataset,
+  gateCatalogItemId,
+  gateRenderingMetadata,
   getCropRenderingMetadata,
   type CatalogFurnitureRotationSprite,
   type CatalogItem,
 } from "../../src/catalog";
 import {
   createPlacementRenderEntries,
+  createTransientPlacementRenderEntries,
 } from "../../src/rendering/placement-rendering";
 import {
   createEmptyPlacementSnapshot,
@@ -378,6 +381,339 @@ function createCropsForCardinalMask(mask: number) {
 
   return crops;
 }
+
+function createTransientTestItem(
+  itemId: string,
+  layer: "item" | "path" | "fence",
+  footprint: Readonly<{ width: number; height: number }> = {
+    width: 1,
+    height: 1,
+  },
+) {
+  return {
+    itemId,
+    x: 1,
+    y: 2,
+    layer,
+    rotation: 0,
+    footprint,
+    variant: 0,
+    tintColor: "#ffffff",
+    locked: false,
+    isRug: false,
+    isGrass: false,
+    isTable: false,
+    isLongTable: false,
+    flipped: false,
+    bedType: null,
+  } as const;
+}
+
+function createUncataloguedContextItem(instanceId: number): PlacementItem {
+  return {
+    ...createTransientTestItem("object:missing-context", "item"),
+    instanceId,
+  };
+}
+
+describe("createTransientPlacementRenderEntries", () => {
+  it("renders a duplicate crop as an isolated transient entry without persistent allocation", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 2, y: 3 }],
+      items: [createUncataloguedContextItem(10)],
+      nextBuildingId: 7,
+      nextItemId: 11,
+    };
+
+    const renderEntries = createTransientPlacementRenderEntries(
+      placementSnapshot,
+      {
+        type: "add-crop",
+        crop: { cropId: "crop:24", x: 2, y: 3 },
+      },
+      [createCropCatalogItem()],
+    );
+
+    expect(renderEntries).not.toHaveLength(0);
+    expect(renderEntries.every((renderEntry) =>
+      renderEntry.key === "placement-preview"
+      && renderEntry.catalogItem.id === "crop:24"
+    )).toBe(true);
+    expect(JSON.stringify(renderEntries)).not.toContain("instanceId");
+    expect(placementSnapshot).toEqual({
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 2, y: 3 }],
+      items: [createUncataloguedContextItem(10)],
+      nextBuildingId: 7,
+      nextItemId: 11,
+    });
+  });
+
+  it("connects a crop ghost to neighboring committed soil without rendering context", () => {
+    const cropCatalogItem = createCropCatalogItem();
+
+    const renderEntries = createTransientPlacementRenderEntries(
+      {
+        ...createEmptyPlacementSnapshot(),
+        crops: [{ cropId: cropCatalogItem.id, x: 1, y: 2 }],
+        items: [createUncataloguedContextItem(1)],
+        nextItemId: 2,
+      },
+      {
+        type: "add-crop",
+        crop: { cropId: cropCatalogItem.id, x: 2, y: 2 },
+      },
+      [cropCatalogItem],
+    );
+
+    expect(renderEntries.find((renderEntry) =>
+      renderEntry.textureLocalPath
+        === "/game-assets/1.6.15/terrain/hoeDirt.png"
+    )).toMatchObject({
+      frame: { x: 48, y: 48, width: 16, height: 16 },
+      key: "placement-preview",
+      tileX: 2,
+      tileY: 2,
+    });
+  });
+
+  it("uses path occupancy context to hide a building ghost layer", () => {
+    const buildingCatalogItem = createCatalogItem({
+      id: "building:ContextShed",
+      category: "building",
+      sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+      renderingMetadata: {
+        buildingId: "ContextShed",
+        kind: "building-multilayer",
+        layers: [{
+          frame: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+          hideWhenPathOccupiedAt: { x: 0, y: 0 },
+          id: "hidden-by-path",
+          offsetX: 0,
+          offsetY: 0,
+        }],
+        sortTileOffset: 0,
+      },
+    });
+    const contextPath = {
+      ...createTransientTestItem("floor:uncatalogued-context", "path"),
+      instanceId: 1,
+    };
+
+    expect(createTransientPlacementRenderEntries(
+      {
+        ...createEmptyPlacementSnapshot(),
+        items: [contextPath],
+        nextItemId: 2,
+      },
+      {
+        type: "add-building",
+        building: { buildingId: "ContextShed", x: 1, y: 2 },
+      },
+      [buildingCatalogItem],
+    )).toEqual([]);
+  });
+
+  it.each([
+    {
+      action: {
+        type: "add-building" as const,
+        building: { buildingId: "Barn", x: 1, y: 2 },
+      },
+      catalogItem: createBuildingCatalogItem({
+        id: "building:Barn",
+        sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+      }),
+      expectedCatalogItemId: "building:Barn",
+    },
+    {
+      action: {
+        type: "add-item" as const,
+        item: createTransientTestItem("floor:13", "path"),
+      },
+      catalogItem: createCatalogItem({
+        id: "floor:13",
+        category: "floor",
+        sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+      }),
+      expectedCatalogItemId: "floor:13",
+    },
+    {
+      action: {
+        type: "add-item" as const,
+        item: createTransientTestItem("fence:322", "fence"),
+      },
+      catalogItem: createCatalogItem({
+        id: "fence:322",
+        category: "fence",
+        sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+      }),
+      expectedCatalogItemId: "fence:322",
+    },
+    {
+      action: {
+        type: "add-item" as const,
+        item: createTransientTestItem(
+          "clump_602",
+          "item",
+          { width: 2, height: 2 },
+        ),
+      },
+      catalogItem: createCatalogItem({
+        id: "clump_602",
+        category: "decor",
+        tileSize: { width: 2, height: 2 },
+        sprite: { kind: "source-rect", x: 0, y: 0, width: 32, height: 32 },
+      }),
+      expectedCatalogItemId: "clump_602",
+    },
+  ])("renders $expectedCatalogItemId through the transient category path", ({
+    action,
+    catalogItem,
+    expectedCatalogItemId,
+  }) => {
+    const renderEntries = createTransientPlacementRenderEntries(
+      {
+        ...createEmptyPlacementSnapshot(),
+        items: [createUncataloguedContextItem(1)],
+        nextItemId: 2,
+      },
+      action,
+      [catalogItem],
+    );
+
+    expect(renderEntries).not.toHaveLength(0);
+    expect(renderEntries.every((renderEntry) =>
+      renderEntry.key === "placement-preview"
+      && renderEntry.catalogItem.id === expectedCatalogItemId
+    )).toBe(true);
+  });
+
+  it("uses neighboring fence context without rendering unrelated snapshot entries", () => {
+    const gateCatalogItem = createCatalogItem({
+      id: gateCatalogItemId,
+      category: "fence",
+      sprite: { kind: "source-rect", x: 0, y: 0, width: 24, height: 48 },
+      renderingMetadata: gateRenderingMetadata,
+    });
+    const neighboringFence = {
+      ...createTransientTestItem("fence:322", "fence"),
+      instanceId: 1,
+      x: 0,
+      y: 2,
+    };
+
+    const renderEntries = createTransientPlacementRenderEntries(
+      {
+        ...createEmptyPlacementSnapshot(),
+        items: [neighboringFence, createUncataloguedContextItem(2)],
+        nextItemId: 3,
+      },
+      {
+        type: "add-item",
+        item: createTransientTestItem(gateCatalogItemId, "fence"),
+      },
+      [gateCatalogItem],
+    );
+
+    expect(renderEntries).toEqual([
+      expect.objectContaining({
+        key: "placement-preview",
+        catalogItem: gateCatalogItem,
+        frame: { x: 0, y: 192, width: 24, height: 48 },
+      }),
+    ]);
+  });
+
+  it("renders only a transient held item while retaining its table geometry", () => {
+    const tableCatalogItem = createFurnitureCatalogItem(
+      "furniture_table",
+      "table",
+      { width: 2, height: 2 },
+      { x: 0, y: 0, width: 32, height: 32 },
+      { isLongTable: false, isTable: true },
+    );
+    const heldCatalogItem = createFurnitureCatalogItem(
+      "furniture_held",
+      "chair",
+      { width: 1, height: 1 },
+      { x: 0, y: 0, width: 16, height: 16 },
+      { isLongTable: false, isTable: false },
+    );
+    const tablePlacementItem = createTablePlacementItem();
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [tablePlacementItem, createUncataloguedContextItem(30)],
+      nextItemId: 32,
+    };
+
+    const renderEntries = createTransientPlacementRenderEntries(
+      placementSnapshot,
+      {
+        type: "attach-held-item",
+        parentInstanceId: tablePlacementItem.instanceId,
+        item: {
+          itemId: "furniture_held",
+          x: 5,
+          y: 7,
+          layer: "item",
+          rotation: 0,
+          footprint: { width: 1, height: 1 },
+          variant: 0,
+          tintColor: "#ffffff",
+          locked: false,
+          isRug: false,
+          isGrass: false,
+          isTable: false,
+          isLongTable: false,
+          flipped: false,
+          bedType: null,
+        },
+      },
+      [tableCatalogItem, heldCatalogItem],
+    );
+
+    expect(renderEntries).toEqual([
+      expect.objectContaining({
+        key: "placement-preview",
+        catalogItem: expect.objectContaining({ id: "furniture_held" }),
+        pixelGeometry: expect.objectContaining({ positionX: 72 }),
+      }),
+    ]);
+    expect(placementSnapshot.items[0]?.heldItem).toBeUndefined();
+    expect(placementSnapshot.nextItemId).toBe(32);
+  });
+
+  it("preserves every randomized composite layer under one transient identity", () => {
+    const placementItem = createFreeCactusPlacementItem(4383);
+
+    const renderEntries = createTransientPlacementRenderEntries(
+      {
+        ...createEmptyPlacementSnapshot(),
+        items: [createUncataloguedContextItem(1)],
+        nextItemId: 2,
+      },
+      {
+        type: "add-item",
+        item: placementItem,
+      },
+      [createFreeCactusCatalogItem()],
+    );
+
+    expect(renderEntries).toHaveLength(3);
+    expect(renderEntries.map((renderEntry) => renderEntry.key)).toEqual([
+      "placement-preview",
+      "placement-preview",
+      "placement-preview",
+    ]);
+    expect(renderEntries.map((renderEntry) => renderEntry.frame)).toEqual([
+      { x: 112, y: 112, width: 16, height: 16 },
+      { x: 16, y: 64, width: 16, height: 16 },
+      { x: 48, y: 16, width: 16, height: 16 },
+    ]);
+  });
+});
 
 describe("createPlacementRenderEntries", () => {
   it("uses frozen path, rug, and ordinary item z-order without changing item keys", () => {

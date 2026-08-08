@@ -1,4 +1,5 @@
 import {
+  createRandomFurnitureCompositeVariant,
   createDefaultCatalogItemPresentationChoice,
   getNextPendingCatalogPresentationChoice,
   validateCatalogItemPresentationChoice,
@@ -9,6 +10,7 @@ import {
 export type WorkspaceSelectedCatalogItem = Readonly<{
   catalogItem: CatalogItem;
   presentationChoice: CatalogPresentationChoice;
+  resolvedCompositeVariant?: number;
 }>;
 
 export type WorkspaceCatalogChoiceState = Readonly<{
@@ -31,6 +33,7 @@ export function createInitialWorkspaceCatalogChoiceState(): WorkspaceCatalogChoi
 export function selectWorkspaceCatalogItem(
   catalogChoiceState: WorkspaceCatalogChoiceState,
   catalogItem: CatalogItem,
+  randomFractionSource: () => number = Math.random,
 ): WorkspaceCatalogChoiceState {
   const rememberedChoice = catalogChoiceState.presentationChoicesByItemId.get(
     catalogItem.id,
@@ -41,7 +44,35 @@ export function selectWorkspaceCatalogItem(
 
   return {
     ...catalogChoiceState,
-    selectedCatalogItem: { catalogItem, presentationChoice },
+    selectedCatalogItem: {
+      catalogItem,
+      presentationChoice,
+      ...resolveCompositeVariant(catalogItem, randomFractionSource),
+    },
+  };
+}
+
+export function advanceWorkspaceCatalogPlacementAttempt(
+  catalogChoiceState: WorkspaceCatalogChoiceState,
+  randomFractionSource: () => number = Math.random,
+): WorkspaceCatalogChoiceState {
+  const selectedCatalogItem = catalogChoiceState.selectedCatalogItem;
+  if (selectedCatalogItem === null) {
+    return catalogChoiceState;
+  }
+  const resolvedCompositeVariant = resolveCompositeVariant(
+    selectedCatalogItem.catalogItem,
+    randomFractionSource,
+  );
+  if (resolvedCompositeVariant.resolvedCompositeVariant === undefined) {
+    return catalogChoiceState;
+  }
+  return {
+    ...catalogChoiceState,
+    selectedCatalogItem: {
+      ...selectedCatalogItem,
+      ...resolvedCompositeVariant,
+    },
   };
 }
 
@@ -60,12 +91,35 @@ export function changeWorkspaceCatalogItemChoice(
   nextChoicesByItemId.set(catalogItem.id, validatedChoice);
   const selectedCatalogItem =
     catalogChoiceState.selectedCatalogItem?.catalogItem.id === catalogItem.id
-      ? { catalogItem, presentationChoice: validatedChoice }
+      ? {
+          ...catalogChoiceState.selectedCatalogItem,
+          catalogItem,
+          presentationChoice: validatedChoice,
+        }
       : catalogChoiceState.selectedCatalogItem;
 
   return {
     presentationChoicesByItemId: nextChoicesByItemId,
     selectedCatalogItem,
+  };
+}
+
+function resolveCompositeVariant(
+  catalogItem: CatalogItem,
+  randomFractionSource: () => number,
+): Readonly<{ resolvedCompositeVariant?: number }> {
+  const renderingMetadata = catalogItem.renderingMetadata;
+  if (
+    renderingMetadata?.kind !== "furniture"
+    || renderingMetadata.compositeSprite === null
+  ) {
+    return {};
+  }
+  return {
+    resolvedCompositeVariant: createRandomFurnitureCompositeVariant(
+      renderingMetadata.compositeSprite,
+      randomFractionSource,
+    ),
   };
 }
 

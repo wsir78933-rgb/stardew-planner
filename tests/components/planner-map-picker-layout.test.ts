@@ -34,4 +34,12 @@ describe("planner map picker layout", () => {
       /\.planner-editor-shell \.editor-modal__map-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\);/s,
     );
   });
+
+  it("uses the approved compact typography for map card titles", () => {
+    const plannerStyles = readPlannerStyles();
+
+    expect(plannerStyles).toMatch(
+      /\.planner-editor-shell \.editor-modal__map-grid button span\s*\{[^}]*font-size:\s*14px;[^}]*line-height:\s*20px;/s,
+    );
+  });
 });

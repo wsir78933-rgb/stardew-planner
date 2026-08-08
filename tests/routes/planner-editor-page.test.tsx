@@ -97,12 +97,14 @@ describe("planner editor page", () => {
           "A browser-local fan-made tool for planning Stardew Valley farm layouts.",
         privacyHref: "/privacy",
         termsHref: "/terms",
+        contactHref: "/contact",
       }],
       ["zh-CN", {
         groupTitles: ["规划器", "探索", "法律"],
         description: "在浏览器中本地规划《星露谷物语》农场布局的玩家工具。",
         privacyHref: "/zh/privacy",
         termsHref: "/zh/terms",
+        contactHref: "/zh/contact",
       }],
     ] as const) {
       const homepageMarkup = renderToStaticMarkup(
@@ -126,6 +128,9 @@ describe("planner editor page", () => {
       );
       expect(homepageMarkup).toContain(
         `<a href="${expectedFooter.termsHref}">`,
+      );
+      expect(homepageMarkup).toContain(
+        `<a href="${expectedFooter.contactHref}">`,
       );
       expect(homepageMarkup).toMatch(
         /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,

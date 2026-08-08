@@ -32,6 +32,7 @@ const expectedStaticPageFiles = [
   "mods.html",
   "privacy.html",
   "terms.html",
+  "contact.html",
   "zh.html",
   "zh/farm-comparison.html",
   "zh/farm/standard.html",
@@ -45,6 +46,7 @@ const expectedStaticPageFiles = [
   "zh/mods.html",
   "zh/privacy.html",
   "zh/terms.html",
+  "zh/contact.html",
 ] as const;
 
 function readStaticPageHtml(staticPageFile: string): string {

@@ -124,6 +124,40 @@ const shouldRenderPlannerJoystick = (
   }
 ).shouldRenderPlannerJoystick;
 
+const createPlacementPreviewVisualDescriptor = (
+  plannerCanvasModule as unknown as {
+    createPlacementPreviewVisualDescriptor: (isPlacementValid: boolean) => Readonly<{
+      alpha: number;
+      tint: number;
+    }>;
+  }
+).createPlacementPreviewVisualDescriptor;
+
+const createPlannerCanvasPlacementPreviewState = (
+  plannerCanvasModule as unknown as {
+    createPlannerCanvasPlacementPreviewState: (input: unknown) => unknown;
+  }
+).createPlannerCanvasPlacementPreviewState;
+
+const createPlannerCanvasPlacementPreviewRenderer = (
+  plannerCanvasModule as unknown as {
+    createPlannerCanvasPlacementPreviewRenderer: (input: unknown) => {
+      dispose: () => void;
+      render: (input: unknown) => Promise<"error" | "ready" | "stale">;
+    };
+  }
+).createPlannerCanvasPlacementPreviewRenderer;
+
+const renderMapScreenshotWithoutEditorOverlays = (
+  plannerCanvasModule as unknown as {
+    renderMapScreenshotWithoutEditorOverlays: <Result>(input: Readonly<{
+      mapDisplayOverlayContainer: { visible: boolean };
+      placementPreviewContainer: { visible: boolean };
+      renderScreenshot: () => Promise<Result> | Result;
+    }>) => Promise<Result>;
+  }
+).renderMapScreenshotWithoutEditorOverlays;
+
 describe("PlannerCanvas joystick visibility", () => {
   it.each([
     { expected: false, selectedPlacementKeys: [], showJoystickPreference: false },
@@ -154,6 +188,395 @@ describe("PlannerCanvas joystick visibility", () => {
       ).toBe(expected);
     },
   );
+});
+
+describe("PlannerCanvas placement preview visual state", () => {
+  it("uses the locked valid and invalid ghost tint and alpha values", () => {
+    expect(createPlacementPreviewVisualDescriptor(true)).toEqual({
+      alpha: 0.6,
+      tint: 0x00ff00,
+    });
+    expect(createPlacementPreviewVisualDescriptor(false)).toEqual({
+      alpha: 0.4,
+      tint: 0xff0000,
+    });
+  });
+
+  it("builds an invalid transient action at the hovered tile without a source mutation", () => {
+    const placementSnapshot = createEmptyPlacementSnapshot();
+    const placementPreviewState = createPlannerCanvasPlacementPreviewState({
+      hoveredMapTile: { x: 1, y: 0 },
+      mapPlacementGrid: {
+        capabilitiesByTile: [
+          {
+            buildable: false,
+            crabPot: false,
+            diggable: false,
+            passable: false,
+            treePlantable: false,
+            treePlantableOnDirt: false,
+            wall: false,
+          },
+          {
+            buildable: false,
+            crabPot: false,
+            diggable: false,
+            passable: false,
+            treePlantable: false,
+            treePlantableOnDirt: false,
+            wall: false,
+          },
+        ],
+        height: 1,
+        width: 2,
+      },
+      placementPreview: {
+        buildingMetadataById: {},
+        catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+        freePlacement: false,
+        selectedCatalogItem: {
+          allowedTools: ["cursor"],
+          category: "floor",
+          id: "floor:13",
+          name: "Stone Floor",
+          sprite: { kind: "sprite-index", index: 0 },
+          textureLocalPath: "/game-assets/1.6.15/tilesheets/flooring.png",
+          tileSize: { width: 1, height: 1 },
+        },
+      },
+      placementSnapshot,
+    });
+
+    expect(placementPreviewState).toMatchObject({
+      previewAction: {
+        type: "add-item",
+        item: expect.objectContaining({
+          itemId: "floor:13",
+          x: 1,
+          y: 0,
+        }),
+      },
+      visualDescriptor: { alpha: 0.4, tint: 0xff0000 },
+    });
+    expect(placementSnapshot).toEqual(createEmptyPlacementSnapshot());
+  });
+
+  it("returns an exact red duplicate-crop ghost state without throwing", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 1, y: 0 }],
+      nextBuildingId: 5,
+      nextItemId: 8,
+    };
+
+    const placementPreviewState = createPlannerCanvasPlacementPreviewState({
+      hoveredMapTile: { x: 1, y: 0 },
+      mapPlacementGrid: {
+        capabilitiesByTile: Array.from({ length: 2 }, () => ({
+          buildable: true,
+          crabPot: false,
+          diggable: true,
+          passable: true,
+          treePlantable: false,
+          treePlantableOnDirt: false,
+          wall: false,
+        })),
+        height: 1,
+        width: 2,
+      },
+      placementPreview: {
+        buildingMetadataById: {},
+        catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+        freePlacement: false,
+        selectedCatalogItem: {
+          allowedTools: ["cursor"],
+          category: "crop",
+          id: "crop:24",
+          name: "Parsnip",
+          sprite: { kind: "sprite-index", index: 0 },
+          textureLocalPath: "/game-assets/1.6.15/tilesheets/crops.png",
+          tileSize: { width: 1, height: 1 },
+        },
+      },
+      placementSnapshot,
+    });
+
+    expect(placementPreviewState).toMatchObject({
+      previewAction: {
+        type: "add-crop",
+        crop: { cropId: "crop:24", x: 1, y: 0 },
+      },
+      visualDescriptor: { alpha: 0.4, tint: 0xff0000 },
+    });
+    expect(placementSnapshot.nextBuildingId).toBe(5);
+    expect(placementSnapshot.nextItemId).toBe(8);
+    expect(placementSnapshot.crops).toEqual([
+      { cropId: "crop:24", x: 1, y: 0 },
+    ]);
+  });
+
+});
+
+describe("PlannerCanvas placement preview Pixi lifecycle", () => {
+  it("clears the prior ghost before a replacement settles and stays empty on failure", async () => {
+    let rejectReplacement:
+      | ((replacementError: Error) => void)
+      | undefined;
+    const replacementPromise = new Promise<readonly unknown[]>((_, reject) => {
+      rejectReplacement = reject;
+    });
+    const previewContainer = {
+      children: [] as unknown[],
+      addChild(...sprites: unknown[]) {
+        this.children.push(...sprites);
+      },
+      removeChildren() {
+        this.children = [];
+      },
+    };
+    const destroyedSpriteIds: string[] = [];
+    const receivedErrors: string[] = [];
+    const replacedAnimationIds: string[][] = [];
+    const previewRenderer = createPlannerCanvasPlacementPreviewRenderer({
+      container: previewContainer,
+      destroyPlacementSprites: (placementSprites: readonly { id: string }[]) => {
+        destroyedSpriteIds.push(...placementSprites.map((sprite) => sprite.id));
+      },
+      getPlacementSpriteAnimations: (placementSprites: readonly { id: string }[]) =>
+        placementSprites.map((sprite) => sprite.id),
+      isMapLifecycleCurrent: () => true,
+      mapId: "standard",
+      onCurrentError: (message: string) => {
+        receivedErrors.push(message);
+      },
+      onRender: () => undefined,
+      replaceAnimations: (animationIds: readonly string[]) => {
+        replacedAnimationIds.push([...animationIds]);
+      },
+    });
+    await previewRenderer.render({
+      createPlacementSprites: () => Promise.resolve([
+        { id: "first", sprite: { id: "first", alpha: 1, tint: 0xffffff } },
+      ]),
+      visualDescriptor: { alpha: 0.6, tint: 0x00ff00 },
+    });
+
+    const replacementRender = previewRenderer.render({
+      createPlacementSprites: () => replacementPromise,
+      visualDescriptor: { alpha: 0.4, tint: 0xff0000 },
+    });
+
+    expect(previewContainer.children).toEqual([]);
+    expect(destroyedSpriteIds).toEqual(["first"]);
+    expect(replacedAnimationIds.at(-1)).toEqual([]);
+    const replacementError = new Error("replacement texture failed");
+    rejectReplacement?.(replacementError);
+    expect(await replacementRender).toBe("error");
+    expect(previewContainer.children).toEqual([]);
+    expect(receivedErrors).toEqual([
+      'Unable to render mapId "standard". replacement texture failed',
+    ]);
+  });
+
+  it("destroys a deferred ghost when the map lifecycle expires without disposal", async () => {
+    let isMapLifecycleValid = true;
+    let resolvePlacementSprites:
+      | ((placementSprites: readonly unknown[]) => void)
+      | undefined;
+    const placementSpritesPromise = new Promise<readonly unknown[]>((resolve) => {
+      resolvePlacementSprites = resolve;
+    });
+    const previewContainer = {
+      children: [] as unknown[],
+      addChild(...sprites: unknown[]) {
+        this.children.push(...sprites);
+      },
+      removeChildren() {
+        this.children = [];
+      },
+    };
+    const destroyedSpriteIds: string[] = [];
+    const previewRenderer = createPlannerCanvasPlacementPreviewRenderer({
+      container: previewContainer,
+      destroyPlacementSprites: (placementSprites: readonly { id: string }[]) => {
+        destroyedSpriteIds.push(...placementSprites.map((sprite) => sprite.id));
+      },
+      getPlacementSpriteAnimations: () => [],
+      isMapLifecycleCurrent: () => isMapLifecycleValid,
+      mapId: "standard",
+      onCurrentError: () => undefined,
+      onRender: () => undefined,
+      replaceAnimations: () => undefined,
+    });
+    const deferredRender = previewRenderer.render({
+      createPlacementSprites: () => placementSpritesPromise,
+      visualDescriptor: { alpha: 0.6, tint: 0x00ff00 },
+    });
+
+    isMapLifecycleValid = false;
+    resolvePlacementSprites?.([
+      {
+        id: "expired-lifecycle",
+        sprite: {
+          id: "expired-lifecycle",
+          alpha: 1,
+          tint: 0xffffff,
+        },
+      },
+    ]);
+
+    expect(await deferredRender).toBe("stale");
+    expect(previewContainer.children).toEqual([]);
+    expect(destroyedSpriteIds).toEqual(["expired-lifecycle"]);
+  });
+
+  it("commits every layered ghost sprite to only the preview container", async () => {
+    const committedSprite = { id: "committed", alpha: 1, tint: 0xffffff };
+    const committedContainer = { children: [committedSprite] };
+    const previewContainer = {
+      children: [] as Array<{ id: string; alpha: number; tint: number }>,
+      addChild(...sprites: Array<{ id: string; alpha: number; tint: number }>) {
+        this.children.push(...sprites);
+      },
+      removeChildren() {
+        this.children = [];
+      },
+    };
+    const destroyedSpriteIds: string[] = [];
+    const renderer = createPlannerCanvasPlacementPreviewRenderer({
+      container: previewContainer,
+      destroyPlacementSprites: (placementSprites: readonly { id: string }[]) => {
+        destroyedSpriteIds.push(...placementSprites.map((sprite) => sprite.id));
+      },
+      getPlacementSpriteAnimations: () => [],
+      isMapLifecycleCurrent: () => true,
+      mapId: "standard",
+      onCurrentError: () => undefined,
+      onRender: () => undefined,
+      replaceAnimations: () => undefined,
+    });
+    const layeredSprites = [
+      { id: "base", sprite: { id: "base", alpha: 1, tint: 0xffffff } },
+      { id: "overlay", sprite: { id: "overlay", alpha: 1, tint: 0xffffff } },
+    ];
+
+    const renderStatus = await renderer.render({
+      createPlacementSprites: () => Promise.resolve(layeredSprites),
+      visualDescriptor: { alpha: 0.4, tint: 0xff0000 },
+    });
+
+    expect(renderStatus).toBe("ready");
+    expect(previewContainer.children).toEqual([
+      { id: "base", alpha: 0.4, tint: 0xff0000 },
+      { id: "overlay", alpha: 0.4, tint: 0xff0000 },
+    ]);
+    expect(committedContainer.children).toEqual([committedSprite]);
+    expect(destroyedSpriteIds).toEqual([]);
+  });
+
+  it("destroys deferred stale sprites and all owned sprites on dispose", async () => {
+    let resolveStaleSprites: ((sprites: readonly unknown[]) => void) | undefined;
+    const staleSpritesPromise = new Promise<readonly unknown[]>((resolve) => {
+      resolveStaleSprites = resolve;
+    });
+    const previewContainer = {
+      children: [] as unknown[],
+      addChild(...sprites: unknown[]) {
+        this.children.push(...sprites);
+      },
+      removeChildren() {
+        this.children = [];
+      },
+    };
+    const destroyedSpriteIds: string[] = [];
+    let animationDisposeCount = 0;
+    const renderer = createPlannerCanvasPlacementPreviewRenderer({
+      container: previewContainer,
+      destroyPlacementSprites: (placementSprites: readonly { id: string }[]) => {
+        destroyedSpriteIds.push(...placementSprites.map((sprite) => sprite.id));
+      },
+      getPlacementSpriteAnimations: () => [],
+      isMapLifecycleCurrent: () => true,
+      mapId: "standard",
+      onCurrentError: () => undefined,
+      onRender: () => undefined,
+      replaceAnimations: () => undefined,
+      disposeAnimations: () => {
+        animationDisposeCount += 1;
+      },
+    });
+    const staleRender = renderer.render({
+      createPlacementSprites: () => staleSpritesPromise,
+      visualDescriptor: { alpha: 0.6, tint: 0x00ff00 },
+    });
+    await renderer.render({
+      createPlacementSprites: () => Promise.resolve([
+        { id: "current", sprite: { id: "current", alpha: 1, tint: 0xffffff } },
+      ]),
+      visualDescriptor: { alpha: 0.6, tint: 0x00ff00 },
+    });
+    resolveStaleSprites?.([
+      { id: "stale", sprite: { id: "stale", alpha: 1, tint: 0xffffff } },
+    ]);
+
+    expect(await staleRender).toBe("stale");
+    expect(previewContainer.children).toEqual([
+      { id: "current", alpha: 0.6, tint: 0x00ff00 },
+    ]);
+    let resolveDisposedSprites: ((sprites: readonly unknown[]) => void) | undefined;
+    const disposedSpritesPromise = new Promise<readonly unknown[]>((resolve) => {
+      resolveDisposedSprites = resolve;
+    });
+    const disposedRender = renderer.render({
+      createPlacementSprites: () => disposedSpritesPromise,
+      visualDescriptor: { alpha: 0.4, tint: 0xff0000 },
+    });
+    renderer.dispose();
+    resolveDisposedSprites?.([
+      { id: "disposed", sprite: { id: "disposed", alpha: 1, tint: 0xffffff } },
+    ]);
+    expect(await disposedRender).toBe("stale");
+    expect(previewContainer.children).toEqual([]);
+    expect(destroyedSpriteIds).toEqual(["stale", "current", "disposed"]);
+    expect(animationDisposeCount).toBe(1);
+  });
+});
+
+describe("PlannerCanvas screenshot preview exclusion", () => {
+  it("keeps committed content visible while excluding and restoring the ghost", async () => {
+    const committedContainer = { visible: true, children: ["committed"] };
+    const mapDisplayOverlayContainer = { visible: true };
+    const placementPreviewContainer = { visible: true, children: ["ghost"] };
+
+    const capturedChildren = await renderMapScreenshotWithoutEditorOverlays({
+      mapDisplayOverlayContainer,
+      placementPreviewContainer,
+      renderScreenshot: () => {
+        expect(mapDisplayOverlayContainer.visible).toBe(false);
+        expect(placementPreviewContainer.visible).toBe(false);
+        expect(committedContainer.visible).toBe(true);
+        return [...committedContainer.children];
+      },
+    });
+
+    expect(capturedChildren).toEqual(["committed"]);
+    expect(mapDisplayOverlayContainer.visible).toBe(true);
+    expect(placementPreviewContainer.visible).toBe(true);
+  });
+
+  it("restores both editor overlays when screenshot rendering fails", async () => {
+    const screenshotFailure = new Error("extract failed");
+    const mapDisplayOverlayContainer = { visible: false };
+    const placementPreviewContainer = { visible: true };
+
+    await expect(renderMapScreenshotWithoutEditorOverlays({
+      mapDisplayOverlayContainer,
+      placementPreviewContainer,
+      renderScreenshot: () => Promise.reject(screenshotFailure),
+    })).rejects.toBe(screenshotFailure);
+    expect(mapDisplayOverlayContainer.visible).toBe(false);
+    expect(placementPreviewContainer.visible).toBe(true);
+  });
 });
 
 describe("PlannerCanvas Pixi initialization", () => {
@@ -466,6 +889,9 @@ type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{
       }>
     | null;
   getPlacementDragTileSize?: () => Readonly<{ height: number; width: number }>;
+  onMapTileHover?: (
+    mapTileCoordinates: Readonly<{ x: number; y: number }> | null,
+  ) => void;
   onMapTileClick: (mapTileCoordinates: Readonly<{ x: number; y: number }>) => void;
   onMapTileRectangle?: (
     startMapTileCoordinates: Readonly<{ x: number; y: number }>,
@@ -628,6 +1054,7 @@ function createPlacementClickTestControls(
   canvasElement: TestCanvasElement;
   cameraControls: Readonly<{ dispose(): void }>;
   clickedMapTiles: Array<Readonly<{ x: number; y: number }>>;
+  hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null>;
   selectedMapRectangles: Array<
     Readonly<{
       start: Readonly<{ x: number; y: number }>;
@@ -649,6 +1076,7 @@ function createPlacementClickTestControls(
 
   const canvasElement = new TestCanvasElement();
   const clickedMapTiles: Array<Readonly<{ x: number; y: number }>> = [];
+  const hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null> = [];
   const selectedMapRectangles: Array<
     Readonly<{
       start: Readonly<{ x: number; y: number }>;
@@ -691,6 +1119,9 @@ function createPlacementClickTestControls(
     onMapTileClick: (mapTileCoordinates) => {
       clickedMapTiles.push(mapTileCoordinates);
     },
+    onMapTileHover: (mapTileCoordinates) => {
+      hoveredMapTiles.push(mapTileCoordinates);
+    },
     onMapTileRectangle: (startMapTileCoordinates, endMapTileCoordinates) => {
       selectedMapRectangles.push({
         start: startMapTileCoordinates,
@@ -706,6 +1137,7 @@ function createPlacementClickTestControls(
     canvasElement,
     cameraControls,
     clickedMapTiles,
+    hoveredMapTiles,
     selectedMapRectangles,
     readCameraState: () => currentCameraState,
   };
@@ -2970,6 +3402,98 @@ describe("dispatchInteriorDecorMapTileClick", () => {
 
 
 describe("attachPlannerCameraControls map placement clicks", () => {
+  it("reports ordinary mouse hover tiles and clears them without placing", () => {
+    const placementClickTestControls = createPlacementClickTestControls();
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerleave",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerleave",
+      createPointerEvent(1, 100, 80),
+    );
+
+    expect(placementClickTestControls.hoveredMapTiles).toEqual([
+      { x: 5, y: 4 },
+      null,
+    ]);
+    expect(placementClickTestControls.clickedMapTiles).toEqual([]);
+  });
+
+  it("restores the release-tile hover after an ordinary click exactly once", () => {
+    const placementClickTestControls = createPlacementClickTestControls();
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 100, 80),
+    );
+
+    expect(placementClickTestControls.hoveredMapTiles).toEqual([
+      { x: 5, y: 4 },
+      null,
+      { x: 5, y: 4 },
+    ]);
+    expect(placementClickTestControls.clickedMapTiles).toEqual([
+      { x: 5, y: 4 },
+    ]);
+  });
+
+  it("keeps the ghost cleared after a real mouse pan", () => {
+    const placementClickTestControls = createPlacementClickTestControls();
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 108, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 108, 80),
+    );
+
+    expect(placementClickTestControls.hoveredMapTiles).toEqual([
+      { x: 5, y: 4 },
+      null,
+    ]);
+    expect(placementClickTestControls.clickedMapTiles).toEqual([]);
+  });
+
   it("only captures wheel input when wheel zoom is enabled", () => {
     const disabledControls = createPlacementClickTestControls();
     if (disabledControls === null) {
