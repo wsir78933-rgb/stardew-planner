@@ -30,9 +30,9 @@ import {
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
 import {
-  advanceSelectedCatalogPlacementAttemptIfAppropriate,
   createWorkspaceCatalogPlacementPreviewInput,
   getPlannerCanvasInteractionProperties,
+  processPlannerWorkspaceMapTileClick,
 } from "../../src/components/planner-workspace";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
@@ -328,25 +328,6 @@ describe("planner workspace basic editing orchestration", () => {
     }
   });
 
-  it("places a selected catalog item through Zoom using cursor placement", () => {
-    const placementTransition = applyPlannerWorkspaceMapTileClick({
-      ...createEditingInput(),
-      cursorTile: { x: 1, y: 1 },
-      tool: "zoom",
-    });
-
-    expect(placementTransition.placementHistory.currentState.items).toEqual([
-      expect.objectContaining({
-        instanceId: 1,
-        itemId: "floor:Stone Floor",
-        layer: "path",
-        x: 1,
-        y: 1,
-      }),
-    ]);
-    expect(placementTransition.selectedPlacementKeys).toEqual([]);
-  });
-
   it("leaves Zoom clicks unchanged without a selected catalog item", () => {
     const initialEditingInput = createEditingInput();
     const placedTransition = applyPlannerWorkspaceMapTileClick({
@@ -400,98 +381,122 @@ describe("planner workspace basic editing orchestration", () => {
     );
   });
 
-  it("advances a successful Cursor or Zoom catalog placement exactly once", () => {
-    const selectedCatalogItem = createCompositeFurnitureCatalogItem();
-    const selectedCatalogItemState = selectWorkspaceCatalogItem(
-      createInitialWorkspaceCatalogChoiceState(),
-      selectedCatalogItem,
-      () => 0.1,
-    ).selectedCatalogItem;
-    if (selectedCatalogItemState === null) {
-      throw new Error("Expected a selected composite catalog item.");
-    }
-    const editingInput = {
-      ...createEditingInput(),
-      catalogPresentationChoice: selectedCatalogItemState.presentationChoice,
-      freePlacement: true,
-      resolvedCompositeVariant: selectedCatalogItemState.resolvedCompositeVariant,
-      selectedCatalogItem,
-    };
-    const cursorTransition = applyPlannerWorkspaceMapTileClick({
+  it("processes a successful selected-item Zoom click and advances exactly once", () => {
+    const editingInput = createEditingInput();
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKey: null,
+      placementHistory: editingInput.placementHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: {
+        catalogItem: editingInput.selectedCatalogItem,
+        presentationChoice: editingInput.catalogPresentationChoice,
+      },
+      selectedPlacementKeys: editingInput.selectedPlacementKeys,
+      tool: "zoom",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      expect.objectContaining({
+        currentState: expect.objectContaining({
+          items: [
+            expect.objectContaining({
+              instanceId: 1,
+              itemId: "floor:Stone Floor",
+              layer: "path",
+              x: 1,
+              y: 1,
+            }),
+          ],
+        }),
+      }),
+      [],
+    );
+    expect(advanceSelectedCatalogPlacementAttempt).toHaveBeenCalledTimes(1);
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps an invalid selected-item Zoom click unchanged and does not advance", () => {
+    const editingInput = createEditingInput();
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 99, y: 99 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKey: null,
+      placementHistory: editingInput.placementHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: {
+        catalogItem: editingInput.selectedCatalogItem,
+        presentationChoice: editingInput.catalogPresentationChoice,
+      },
+      selectedPlacementKeys: editingInput.selectedPlacementKeys,
+      tool: "zoom",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      editingInput.placementHistory,
+      editingInput.selectedPlacementKeys,
+    );
+    expect(advanceSelectedCatalogPlacementAttempt).not.toHaveBeenCalled();
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not advance a selected catalog attempt during pending duplicate mode", () => {
+    const editingInput = createEditingInput();
+    const placedHistory = applyPlannerWorkspaceMapTileClick({
       ...editingInput,
       cursorTile: { x: 0, y: 0 },
       tool: "cursor",
-    });
-    const zoomTransition = applyPlannerWorkspaceMapTileClick({
-      ...editingInput,
-      cursorTile: { x: 1, y: 0 },
-      tool: "zoom",
-    });
-    const advanceCursorAttempt = vi.fn();
-    const advanceZoomAttempt = vi.fn();
+    }).placementHistory;
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
 
-    advanceSelectedCatalogPlacementAttemptIfAppropriate({
-      nextPlacementHistory: cursorTransition.placementHistory,
-      pendingDuplicateSelectionKey: null,
-      previousPlacementHistory: editingInput.placementHistory,
-      selectedCatalogItem: selectedCatalogItemState,
-      tool: "cursor",
-      advanceSelectedCatalogPlacementAttempt: advanceCursorAttempt,
-    });
-    advanceSelectedCatalogPlacementAttemptIfAppropriate({
-      nextPlacementHistory: zoomTransition.placementHistory,
-      pendingDuplicateSelectionKey: null,
-      previousPlacementHistory: editingInput.placementHistory,
-      selectedCatalogItem: selectedCatalogItemState,
-      tool: "zoom",
-      advanceSelectedCatalogPlacementAttempt: advanceZoomAttempt,
-    });
-
-    expect(advanceCursorAttempt).toHaveBeenCalledTimes(1);
-    expect(advanceZoomAttempt).toHaveBeenCalledTimes(1);
-  });
-
-  it("does not advance for invalid placement, unchanged history, or pending duplicate placement", () => {
-    const editingInput = createEditingInput();
-    const invalidPlacementTransition = applyPlannerWorkspaceMapTileClick({
-      ...editingInput,
-      cursorTile: { x: 99, y: 99 },
-      tool: "cursor",
-    });
-    const advanceInvalidAttempt = vi.fn();
-    const advancePendingDuplicateAttempt = vi.fn();
-
-    expect(invalidPlacementTransition.placementHistory).toBe(
-      editingInput.placementHistory,
-    );
-    advanceSelectedCatalogPlacementAttemptIfAppropriate({
-      nextPlacementHistory: invalidPlacementTransition.placementHistory,
-      pendingDuplicateSelectionKey: null,
-      previousPlacementHistory: editingInput.placementHistory,
-      selectedCatalogItem: {
-        catalogItem: editingInput.selectedCatalogItem,
-        presentationChoice: editingInput.catalogPresentationChoice,
-      },
-      tool: "cursor",
-      advanceSelectedCatalogPlacementAttempt: advanceInvalidAttempt,
-    });
-    advanceSelectedCatalogPlacementAttemptIfAppropriate({
-      nextPlacementHistory: createPlacementHistory({
-        ...createEmptyPlacementSnapshot(),
-        nextItemId: 2,
-      }),
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
       pendingDuplicateSelectionKey: "item:1",
-      previousPlacementHistory: editingInput.placementHistory,
+      placementHistory: placedHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
       selectedCatalogItem: {
         catalogItem: editingInput.selectedCatalogItem,
         presentationChoice: editingInput.catalogPresentationChoice,
       },
+      selectedPlacementKeys: ["item:1"],
       tool: "zoom",
-      advanceSelectedCatalogPlacementAttempt: advancePendingDuplicateAttempt,
     });
 
-    expect(advanceInvalidAttempt).not.toHaveBeenCalled();
-    expect(advancePendingDuplicateAttempt).not.toHaveBeenCalled();
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(advanceSelectedCatalogPlacementAttempt).not.toHaveBeenCalled();
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
   });
 
   it("passes the selected attempt composite variant through cursor placement", () => {
