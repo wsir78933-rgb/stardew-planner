@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { createPlannerCanvasCameraStateRetentionController } from "../../src/components/planner-canvas";
+import { createPlannerCanvasCameraLifecycle } from "../../src/components/planner-canvas";
 import * as plannerCanvasModule from "../../src/components/planner-canvas";
 import {
   catalogDatasetUrls,
@@ -593,46 +593,66 @@ describe("PlannerCanvas Pixi initialization", () => {
 });
 
 describe("PlannerCanvas camera state retention", () => {
-  it("initializes from the retained same-map camera state clamped to current geometry", () => {
+  it("scopes a committed camera state to same-map canvas lifecycles", () => {
     const cameraStateRetention = createPlannerCameraStateRetention();
-    cameraStateRetention.write("standard", {
+    const cameraGeometry: CameraGeometry = {
+      mapPixelHeight: 80,
+      mapPixelWidth: 100,
+      viewportHeight: 160,
+      viewportWidth: 200,
+    };
+    const committedCameraState: CameraState = {
       initialFitZoom: 0.5,
       maximumZoom: 4,
       minimumZoom: 0.25,
       positionX: 120,
       positionY: -40,
       zoom: 1.25,
+    };
+    const firstCanvasLifecycle = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: () => {},
     });
-    const cameraStateRetentionController =
-      createPlannerCanvasCameraStateRetentionController({
-        cameraStateRetention,
-        mapId: "standard",
-      });
 
-    expect(
-      cameraStateRetentionController.getInitialCameraState({
-        mapPixelHeight: 80,
-        mapPixelWidth: 100,
-        viewportHeight: 160,
-        viewportWidth: 200,
-      }),
-    ).toEqual({
-      initialFitZoom: 0.5,
+    firstCanvasLifecycle.resizeCamera(cameraGeometry);
+    firstCanvasLifecycle.commitCameraState(committedCameraState);
+
+    const sameMapCanvasReload = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: () => {},
+    });
+    expect(sameMapCanvasReload.resizeCamera(cameraGeometry)).toEqual({
+      ...committedCameraState,
+      positionY: 62,
+    });
+
+    const changedMapCanvas = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "beach",
+      renderCameraState: () => {},
+    });
+    expect(changedMapCanvas.resizeCamera(cameraGeometry)).toEqual({
+      initialFitZoom: 2,
       maximumZoom: 4,
       minimumZoom: 0.25,
-      positionX: 120,
-      positionY: 62,
-      zoom: 1.25,
+      positionX: 100,
+      positionY: 80,
+      zoom: 2,
     });
   });
 
-  it("retains each committed wheel zoom and pointer pan camera state", () => {
+  it("renders and retains wheel zoom and pointer pan commits", () => {
     const cameraStateRetention = createPlannerCameraStateRetention();
-    const cameraStateRetentionController =
-      createPlannerCanvasCameraStateRetentionController({
-        cameraStateRetention,
-        mapId: "standard",
-      });
+    const renderedCameraStates: CameraState[] = [];
+    const cameraLifecycle = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: (cameraState) => {
+        renderedCameraStates.push(cameraState);
+      },
+    });
     const wheelZoomCameraState: CameraState = {
       initialFitZoom: 0.5,
       maximumZoom: 4,
@@ -647,10 +667,13 @@ describe("PlannerCanvas camera state retention", () => {
       positionY: -20,
     };
 
-    cameraStateRetentionController.retainCameraState(wheelZoomCameraState);
-    expect(cameraStateRetention.read("standard")).toEqual(wheelZoomCameraState);
+    cameraLifecycle.commitCameraState(wheelZoomCameraState);
+    cameraLifecycle.commitCameraState(pointerPanCameraState);
 
-    cameraStateRetentionController.retainCameraState(pointerPanCameraState);
+    expect(renderedCameraStates).toEqual([
+      wheelZoomCameraState,
+      pointerPanCameraState,
+    ]);
     expect(cameraStateRetention.read("standard")).toEqual(pointerPanCameraState);
   });
 });
