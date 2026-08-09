@@ -15,6 +15,7 @@ import {
   duplicateSelectedPlacementAtTile,
   moveSelectedPlacements,
   cycleSelectedPlacementAppearance,
+  selectFirstSelectablePlacementKey,
   selectPlacementAtTile,
   selectPlacementsInRectangle,
   setSelectedPlacementBuildingPaint,
@@ -58,6 +59,11 @@ export type PlannerWorkspaceMapTileClickInput =
       cursorTile: MapTileCoordinates;
       tool: EditorTool | null;
     }>;
+
+export type PlannerWorkspacePlacementSelectionInput = Readonly<{
+  placementHistory: PlacementHistory<PlacementSnapshot>;
+  placementSelectionKeys: readonly PlacementSelectionKey[];
+}>;
 
 export type PlannerWorkspaceMapTileRectangleInput =
   PlannerWorkspaceEditingContext &
@@ -142,6 +148,26 @@ export function applyPlannerWorkspaceMapTileClick(
   }
 
   return createUnchangedTransition(plannerWorkspaceMapTileClickInput);
+}
+
+export function applyPlannerWorkspacePlacementSelection(
+  plannerWorkspacePlacementSelectionInput: PlannerWorkspacePlacementSelectionInput,
+): PlannerWorkspaceEditingTransition {
+  assertPlannerWorkspacePlacementSelectionInput(
+    plannerWorkspacePlacementSelectionInput,
+  );
+  const selectedPlacementKey = selectFirstSelectablePlacementKey({
+    placementSnapshot:
+      plannerWorkspacePlacementSelectionInput.placementHistory.currentState,
+    placementSelectionKeys:
+      plannerWorkspacePlacementSelectionInput.placementSelectionKeys,
+  });
+
+  return {
+    placementHistory: plannerWorkspacePlacementSelectionInput.placementHistory,
+    selectedPlacementKeys:
+      selectedPlacementKey === null ? [] : [selectedPlacementKey],
+  };
 }
 
 export function getPlannerWorkspaceToolSelection(
@@ -538,6 +564,27 @@ function assertPlannerWorkspaceMapTileClickInput(
     "cursorTile",
   );
   assertEditorToolSelection(plannerWorkspaceMapTileClickInput.tool);
+}
+
+function assertPlannerWorkspacePlacementSelectionInput(
+  plannerWorkspacePlacementSelectionInput: PlannerWorkspacePlacementSelectionInput,
+): void {
+  if (
+    typeof plannerWorkspacePlacementSelectionInput !== "object" ||
+    plannerWorkspacePlacementSelectionInput === null
+  ) {
+    throw new TypeError(
+      `Planner workspace placement selection input must be an object; received ${describeValue(plannerWorkspacePlacementSelectionInput)}.`,
+    );
+  }
+  if (
+    typeof plannerWorkspacePlacementSelectionInput.placementHistory !== "object" ||
+    plannerWorkspacePlacementSelectionInput.placementHistory === null
+  ) {
+    throw new TypeError(
+      `Planner workspace placement selection placementHistory must be an object; received ${describeValue(plannerWorkspacePlacementSelectionInput.placementHistory)}.`,
+    );
+  }
 }
 
 function assertPlannerWorkspaceMapTileRectangleInput(

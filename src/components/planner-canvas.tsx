@@ -7,6 +7,7 @@ import type {
   CatalogPresentationChoice,
 } from "../catalog";
 import { evaluateEditorCursorPlacementPreview } from "../editor/editor-placement-controller";
+import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
 import {
   PlannerJoystick,
   type PlannerJoystickDirection,
@@ -108,7 +109,11 @@ export function createPlacementPreviewVisualDescriptor(
     : { alpha: 0.4, tint: invalidPlacementPreviewTint };
 }
 
-type PointerInteractionMode = "navigate" | "rectangle" | "move-selected";
+type PointerInteractionMode =
+  | "navigate"
+  | "rectangle"
+  | "multi-select"
+  | "move-selected";
 
 type PlacementPreviewOverlayRenderer = () => void;
 
@@ -201,6 +206,10 @@ export type PlannerCanvasProperties = Readonly<{
     startMapTileCoordinates: MapPointerTile,
     endMapTileCoordinates: MapPointerTile,
   ) => void;
+  onPlacementSelectionClick?: (
+    mapId: string,
+    placementSelectionKeys: readonly PlacementSelectionKey[],
+  ) => void;
   activeInteriorDecorPattern?: InteriorDecorCatalogPattern | null;
   onInteriorDecorApply?: (
     mapId: string,
@@ -286,6 +295,12 @@ type PlannerCameraControlsProperties = Readonly<{
   onMapTileRectangle?: (
     startMapTileCoordinates: MapPointerTile,
     endMapTileCoordinates: MapPointerTile,
+  ) => void;
+  getPlacementSelectionKeysAtPointer?: (
+    pointerCoordinates: PointerCoordinates,
+  ) => readonly PlacementSelectionKey[];
+  onPlacementSelectionClick?: (
+    placementSelectionKeys: readonly PlacementSelectionKey[],
   ) => void;
   onMoveSelectedPlacements?: (tileDelta: Readonly<{ x: number; y: number }>) => void;
   setCameraState: (cameraState: CameraState) => void;
@@ -882,12 +897,14 @@ export function PlannerCanvas({
   onMoveSelectedPlacements,
   onMapTileClick,
   onMapTileRectangle,
+  onPlacementSelectionClick,
 }: PlannerCanvasProperties) {
   const canvasHostElementReference = useRef<HTMLDivElement>(null);
   const onMapPlacementGridReadyReference = useRef(onMapPlacementGridReady);
   const onMapImageExporterReadyReference = useRef(onMapImageExporterReady);
   const onMapTileClickReference = useRef(onMapTileClick);
   const onMapTileRectangleReference = useRef(onMapTileRectangle);
+  const onPlacementSelectionClickReference = useRef(onPlacementSelectionClick);
   const activeInteriorDecorPatternReference = useRef(activeInteriorDecorPattern);
   const onInteriorDecorApplyReference = useRef(onInteriorDecorApply);
   const onInteriorDecorRejectedReference = useRef(onInteriorDecorRejected);
@@ -941,6 +958,7 @@ export function PlannerCanvas({
   onMapImageExporterReadyReference.current = onMapImageExporterReady;
   onMapTileClickReference.current = onMapTileClick;
   onMapTileRectangleReference.current = onMapTileRectangle;
+  onPlacementSelectionClickReference.current = onPlacementSelectionClick;
   activeInteriorDecorPatternReference.current = activeInteriorDecorPattern;
   onInteriorDecorApplyReference.current = onInteriorDecorApply;
   onInteriorDecorRejectedReference.current = onInteriorDecorRejected;
@@ -1555,6 +1573,14 @@ export function PlannerCanvas({
                     ? null
                     : { sprites: selectedPlacementSprites };
                 },
+                getPlacementSelectionKeysAtPointer(
+                  pointerCoordinates: PointerCoordinates,
+                ): readonly PlacementSelectionKey[] {
+                  return findRenderedPlacementSelectionKeysAtPointer(
+                    renderedPlacementSprites,
+                    pointerCoordinates,
+                  );
+                },
                 getPlacementDragTileSize(): Readonly<{
                   height: number;
                   width: number;
@@ -1611,6 +1637,18 @@ export function PlannerCanvas({
                     mapId,
                     startMapTileCoordinates,
                     endMapTileCoordinates,
+                  );
+                },
+                onPlacementSelectionClick(
+                  placementSelectionKeys: readonly PlacementSelectionKey[],
+                ): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+
+                  onPlacementSelectionClickReference.current?.(
+                    mapId,
+                    placementSelectionKeys,
                   );
                 },
                 onMoveSelectedPlacements(tileDelta): void {
@@ -3473,9 +3511,11 @@ export function attachPlannerCameraControls(
     getMapTileAtPointer,
     getPlacementDragTarget,
     getPlacementDragTileSize,
+    getPlacementSelectionKeysAtPointer,
     onMapTileHover,
     onMapTileClick,
     onMapTileRectangle,
+    onPlacementSelectionClick,
     onMoveSelectedPlacements,
     setCameraState,
   } = plannerCameraControlsProperties;
@@ -3587,7 +3627,7 @@ export function attachPlannerCameraControls(
     }
 
     const startMapTileCoordinates =
-      isRectanglePointerInteractionMode(getPointerInteractionMode())
+      isMapRectanglePointerInteractionMode(getPointerInteractionMode())
         ? getMapTileAtPointer?.(pointerCoordinates) ?? null
         : null;
     synchronizePointerGesture(startMapTileCoordinates);
@@ -3616,7 +3656,8 @@ export function attachPlannerCameraControls(
       return;
     }
 
-    if (isRectanglePointerInteractionMode(getPointerInteractionMode())) {
+    const pointerInteractionMode = getPointerInteractionMode();
+    if (isRectanglePointerInteractionMode(pointerInteractionMode)) {
       return;
     }
 
@@ -3643,6 +3684,10 @@ export function attachPlannerCameraControls(
       };
     }
 
+    if (isMultiSelectPointerInteractionMode(pointerInteractionMode)) {
+      return;
+    }
+
     setCameraState(
       panCameraBy(getCameraState(), getCameraGeometry(), {
         deltaX: pointerCoordinates.x - pointerDragState.lastCoordinates.x,
@@ -3657,6 +3702,44 @@ export function attachPlannerCameraControls(
 
   function handlePointerUp(pointerEvent: PointerEvent): void {
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
+
+    if (isMultiSelectPointerInteractionMode(getPointerInteractionMode())) {
+      if (placementClickSuppressedPointerIds.has(pointerEvent.pointerId)) {
+        handlePointerEnd(pointerEvent);
+        return;
+      }
+
+      if (hasExceededPointerPanThreshold(pointerEvent.pointerId, pointerCoordinates)) {
+        const mapTileRectangle =
+          pointerEvent.button !== 0
+            ? null
+            : getMapTileRectangle(pointerEvent.pointerId, pointerCoordinates);
+
+        handlePointerEnd(pointerEvent);
+
+        if (mapTileRectangle !== null) {
+          onMapTileRectangle?.(
+            mapTileRectangle.startMapTileCoordinates,
+            mapTileRectangle.endMapTileCoordinates,
+          );
+        }
+        return;
+      }
+
+      const placementSelectionKeys =
+        pointerEvent.button !== 0
+          ? []
+          : getPlacementSelectionClickKeys(
+              pointerEvent.pointerId,
+              pointerCoordinates,
+            );
+
+      handlePointerEnd(pointerEvent);
+      if (pointerEvent.button === 0) {
+        onPlacementSelectionClick?.(placementSelectionKeys);
+      }
+      return;
+    }
 
     if (
       placementDragState !== null
@@ -3708,15 +3791,53 @@ export function attachPlannerCameraControls(
       pointerDragState === null ||
       pointerDragState.pointerId !== pointerId ||
       pointerDragState.hasExceededPanThreshold ||
-      Math.hypot(
-        pointerCoordinates.x - pointerDragState.startCoordinates.x,
-        pointerCoordinates.y - pointerDragState.startCoordinates.y,
-      ) > pointerPanThreshold
+      hasExceededPointerPanThreshold(pointerId, pointerCoordinates)
     ) {
       return null;
     }
 
     return getMapTileAtPointer?.(pointerCoordinates) ?? null;
+  }
+
+  function getPlacementSelectionClickKeys(
+    pointerId: number,
+    pointerCoordinates: PointerCoordinates,
+  ): readonly PlacementSelectionKey[] {
+    if (!isShortPointerClick(pointerId, pointerCoordinates)) {
+      return [];
+    }
+
+    return getPlacementSelectionKeysAtPointer?.(pointerCoordinates) ?? [];
+  }
+
+  function isShortPointerClick(
+    pointerId: number,
+    pointerCoordinates: PointerCoordinates,
+  ): boolean {
+    return (
+      activePointerCoordinates.has(pointerId) &&
+      !placementClickSuppressedPointerIds.has(pointerId) &&
+      pointerDragState !== null &&
+      pointerDragState.pointerId === pointerId &&
+      !hasExceededPointerPanThreshold(pointerId, pointerCoordinates)
+    );
+  }
+
+  function hasExceededPointerPanThreshold(
+    pointerId: number,
+    pointerCoordinates: PointerCoordinates,
+  ): boolean {
+    if (pointerDragState === null || pointerDragState.pointerId !== pointerId) {
+      return true;
+    }
+
+    return (
+      pointerDragState.hasExceededPanThreshold ||
+      Math.hypot(
+        pointerCoordinates.x - pointerDragState.startCoordinates.x,
+        pointerCoordinates.y - pointerDragState.startCoordinates.y,
+      ) > pointerPanThreshold
+    );
   }
 
   function getMapTileRectangle(
@@ -4061,6 +4182,55 @@ function isRectanglePointerInteractionMode(
   pointerInteractionMode: PointerInteractionMode,
 ): boolean {
   return pointerInteractionMode === "rectangle";
+}
+
+function isMapRectanglePointerInteractionMode(
+  pointerInteractionMode: PointerInteractionMode,
+): boolean {
+  return (
+    isRectanglePointerInteractionMode(pointerInteractionMode) ||
+    isMultiSelectPointerInteractionMode(pointerInteractionMode)
+  );
+}
+
+function isMultiSelectPointerInteractionMode(
+  pointerInteractionMode: PointerInteractionMode,
+): boolean {
+  return pointerInteractionMode === "multi-select";
+}
+
+export function findRenderedPlacementSelectionKeysAtPointer(
+  renderedPlacementSprites: readonly PlacementSprite[],
+  pointerCoordinates: PointerCoordinates,
+): readonly PlacementSelectionKey[] {
+  const hitPlacementKeys = new Set<PlacementSelectionKey>();
+  const visuallyOrderedPlacementSprites = renderedPlacementSprites
+    .map((placementSprite, sourceIndex) => ({
+      placementSprite,
+      sourceIndex,
+    }))
+    .sort((firstPlacementSprite, secondPlacementSprite) => {
+      const zIndexDifference =
+        secondPlacementSprite.placementSprite.sprite.zIndex -
+        firstPlacementSprite.placementSprite.sprite.zIndex;
+
+      return zIndexDifference !== 0
+        ? zIndexDifference
+        : secondPlacementSprite.sourceIndex - firstPlacementSprite.sourceIndex;
+    });
+
+  for (const { placementSprite } of visuallyOrderedPlacementSprites) {
+    if (
+      placementSprite.sprite.getBounds().containsPoint(
+        pointerCoordinates.x,
+        pointerCoordinates.y,
+      )
+    ) {
+      hitPlacementKeys.add(placementSprite.placementKey);
+    }
+  }
+
+  return [...hitPlacementKeys];
 }
 
 function getPointerCoordinates(

@@ -6,6 +6,7 @@ import type {
 import {
   applyPlannerWorkspaceMapTileClick,
   applyPlannerWorkspaceMapTileRectangle,
+  applyPlannerWorkspacePlacementSelection,
   deletePlannerWorkspaceSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
   getPlannerWorkspaceToolSelection,
@@ -206,7 +207,7 @@ describe("planner canvas interaction properties", () => {
       },
       {
         expectedProperties: {
-          pointerInteractionMode: "rectangle",
+          pointerInteractionMode: "multi-select",
           wheelZoomEnabled: false,
         },
         hasSelectedPlacements: true,
@@ -362,6 +363,39 @@ describe("planner workspace basic editing orchestration", () => {
       selectedCatalogItemId: null,
     });
     expect(selectedTransition.placementHistory).toBe(placedTransition.placementHistory);
+    expect(selectedTransition.selectedPlacementKeys).toEqual(["item:1"]);
+  });
+
+  it("selects an existing placement from a Multi-select direct key without changing placement history", () => {
+    const placementHistory = createPlacementHistory<PlacementSnapshot>({
+      ...createEmptyPlacementSnapshot(),
+      items: [{
+        bedType: null,
+        flipped: false,
+        footprint: { width: 1, height: 1 },
+        instanceId: 1,
+        isGrass: false,
+        isLongTable: false,
+        isRug: false,
+        isTable: false,
+        itemId: "floor:Stone Floor",
+        layer: "path",
+        locked: false,
+        rotation: 0,
+        tintColor: "#ffffff",
+        variant: 0,
+        x: 1,
+        y: 1,
+      }],
+      nextItemId: 2,
+    });
+
+    const selectedTransition = applyPlannerWorkspacePlacementSelection({
+      placementHistory,
+      placementSelectionKeys: ["item:1"],
+    });
+
+    expect(selectedTransition.placementHistory).toBe(placementHistory);
     expect(selectedTransition.selectedPlacementKeys).toEqual(["item:1"]);
   });
 

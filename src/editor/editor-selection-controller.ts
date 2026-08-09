@@ -93,6 +93,16 @@ export type SelectPlacementAtTileInput = Readonly<{
   placementSnapshot: PlacementSnapshot;
 }>;
 
+export type SelectPlacementByKeyInput = Readonly<{
+  placementSnapshot: PlacementSnapshot;
+  selectedPlacementKey: PlacementSelectionKey | null;
+}>;
+
+export type SelectFirstSelectablePlacementKeyInput = Readonly<{
+  placementSnapshot: PlacementSnapshot;
+  placementSelectionKeys: readonly PlacementSelectionKey[];
+}>;
+
 export type DeleteSelectedPlacementsInput = Readonly<{
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKeys: readonly PlacementSelectionKey[];
@@ -360,6 +370,66 @@ export function selectPlacementAtTile(
     (currentSelectionIndex - 1 + placementSelectionKeys.length) %
       placementSelectionKeys.length
   ] ?? null;
+}
+
+export function selectPlacementByKey(
+  selectPlacementByKeyInput: SelectPlacementByKeyInput,
+): PlacementSelectionKey | null {
+  assertSelectPlacementByKeyInput(selectPlacementByKeyInput);
+
+  if (selectPlacementByKeyInput.selectedPlacementKey === null) {
+    return null;
+  }
+
+  const parsedSelectionKey = parsePlacementSelectionKey(
+    selectPlacementByKeyInput.selectedPlacementKey,
+  );
+
+  if (parsedSelectionKey.kind === "item") {
+    const resolvedItem = findPlacementItemOrHeldItem(
+      selectPlacementByKeyInput.placementSnapshot,
+      parsedSelectionKey.instanceId,
+    );
+
+    if (resolvedItem === null) {
+      throw new Error(
+        `Editor selection selected placement key ${describeValue(selectPlacementByKeyInput.selectedPlacementKey)} does not exist in the current placement snapshot.`,
+      );
+    }
+
+    return resolvedItem.item.locked
+      ? null
+      : selectPlacementByKeyInput.selectedPlacementKey;
+  }
+
+  assertSelectedPlacementKeysExist(
+    selectPlacementByKeyInput.placementSnapshot,
+    [parsedSelectionKey],
+  );
+  return selectPlacementByKeyInput.selectedPlacementKey;
+}
+
+export function selectFirstSelectablePlacementKey(
+  selectFirstSelectablePlacementKeyInput: SelectFirstSelectablePlacementKeyInput,
+): PlacementSelectionKey | null {
+  assertSelectFirstSelectablePlacementKeyInput(
+    selectFirstSelectablePlacementKeyInput,
+  );
+
+  for (const placementSelectionKey of
+    selectFirstSelectablePlacementKeyInput.placementSelectionKeys) {
+    const selectedPlacementKey = selectPlacementByKey({
+      placementSnapshot:
+        selectFirstSelectablePlacementKeyInput.placementSnapshot,
+      selectedPlacementKey: placementSelectionKey,
+    });
+
+    if (selectedPlacementKey !== null) {
+      return selectedPlacementKey;
+    }
+  }
+
+  return null;
 }
 
 function orderSingleTileSelectionKeysByVisualZ(
@@ -2122,6 +2192,40 @@ function assertSelectPlacementsInRectangleInput(
   createPersistentPlacementSnapshot(
     selectPlacementsInRectangleInput.placementSnapshot,
   );
+}
+
+function assertSelectPlacementByKeyInput(
+  selectPlacementByKeyInput: SelectPlacementByKeyInput,
+): void {
+  assertNonNullObject(selectPlacementByKeyInput, "direct selection input");
+  createPersistentPlacementSnapshot(selectPlacementByKeyInput.placementSnapshot);
+
+  if (selectPlacementByKeyInput.selectedPlacementKey !== null) {
+    assertPlacementSelectionKey(selectPlacementByKeyInput.selectedPlacementKey);
+  }
+}
+
+function assertSelectFirstSelectablePlacementKeyInput(
+  selectFirstSelectablePlacementKeyInput: SelectFirstSelectablePlacementKeyInput,
+): void {
+  assertNonNullObject(
+    selectFirstSelectablePlacementKeyInput,
+    "direct selection candidates input",
+  );
+  createPersistentPlacementSnapshot(
+    selectFirstSelectablePlacementKeyInput.placementSnapshot,
+  );
+
+  if (!Array.isArray(selectFirstSelectablePlacementKeyInput.placementSelectionKeys)) {
+    throw new TypeError(
+      `Editor selection candidate keys must be an array; received ${describeValue(selectFirstSelectablePlacementKeyInput.placementSelectionKeys)}.`,
+    );
+  }
+
+  for (const placementSelectionKey of
+    selectFirstSelectablePlacementKeyInput.placementSelectionKeys) {
+    assertPlacementSelectionKey(placementSelectionKey);
+  }
 }
 
 function assertDeleteSelectedPlacementsInput(

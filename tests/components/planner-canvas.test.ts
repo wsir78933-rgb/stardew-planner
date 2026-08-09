@@ -879,6 +879,7 @@ type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{
   getPointerInteractionMode?: () =>
     | "navigate"
     | "rectangle"
+    | "multi-select"
     | "move-selected";
   getMapTileAtPointer: (pointerCoordinates: Readonly<{ x: number; y: number }>) =>
     | Readonly<{ x: number; y: number }>
@@ -893,6 +894,10 @@ type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{
     mapTileCoordinates: Readonly<{ x: number; y: number }> | null,
   ) => void;
   onMapTileClick: (mapTileCoordinates: Readonly<{ x: number; y: number }>) => void;
+  getPlacementSelectionKeysAtPointer?: (
+    pointerCoordinates: Readonly<{ x: number; y: number }>,
+  ) => readonly string[];
+  onPlacementSelectionClick?: (placementSelectionKeys: readonly string[]) => void;
   onMapTileRectangle?: (
     startMapTileCoordinates: Readonly<{ x: number; y: number }>,
     endMapTileCoordinates: Readonly<{ x: number; y: number }>,
@@ -1048,12 +1053,14 @@ function createDestroyablePixiResource(): Readonly<{
 }
 
 function createPlacementClickTestControls(
-  interactionMode: "navigate" | "rectangle" | "move-selected" = "navigate",
+  interactionMode: "navigate" | "rectangle" | "multi-select" | "move-selected" = "navigate",
   wheelZoomEnabled = false,
+  placementSelectionKeysAtPointer: readonly string[] = ["item:1"],
 ): Readonly<{
   canvasElement: TestCanvasElement;
   cameraControls: Readonly<{ dispose(): void }>;
   clickedMapTiles: Array<Readonly<{ x: number; y: number }>>;
+  clickedPlacementKeys: Array<readonly string[]>;
   hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null>;
   selectedMapRectangles: Array<
     Readonly<{
@@ -1076,6 +1083,7 @@ function createPlacementClickTestControls(
 
   const canvasElement = new TestCanvasElement();
   const clickedMapTiles: Array<Readonly<{ x: number; y: number }>> = [];
+  const clickedPlacementKeys: Array<readonly string[]> = [];
   const hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null> = [];
   const selectedMapRectangles: Array<
     Readonly<{
@@ -1119,6 +1127,10 @@ function createPlacementClickTestControls(
     onMapTileClick: (mapTileCoordinates) => {
       clickedMapTiles.push(mapTileCoordinates);
     },
+    getPlacementSelectionKeysAtPointer: () => placementSelectionKeysAtPointer,
+    onPlacementSelectionClick: (placementSelectionKeys) => {
+      clickedPlacementKeys.push(placementSelectionKeys);
+    },
     onMapTileHover: (mapTileCoordinates) => {
       hoveredMapTiles.push(mapTileCoordinates);
     },
@@ -1137,6 +1149,7 @@ function createPlacementClickTestControls(
     canvasElement,
     cameraControls,
     clickedMapTiles,
+    clickedPlacementKeys,
     hoveredMapTiles,
     selectedMapRectangles,
     readCameraState: () => currentCameraState,
@@ -3400,6 +3413,112 @@ describe("dispatchInteriorDecorMapTileClick", () => {
   });
 });
 
+describe("findRenderedPlacementSelectionKeysAtPointer", () => {
+  it("orders overlapping hits by descending zIndex and later draw order", () => {
+    const findRenderedPlacementSelectionKeysAtPointer = (
+      plannerCanvasModule as unknown as {
+        findRenderedPlacementSelectionKeysAtPointer?: (
+          renderedPlacementSprites: readonly Readonly<{
+            placementKey: string;
+            sprite: Readonly<{
+              zIndex: number;
+              getBounds(): Readonly<{
+                containsPoint(x: number, y: number): boolean;
+              }>;
+            }>;
+          }>[],
+          pointerCoordinates: Readonly<{ x: number; y: number }>,
+        ) => readonly string[];
+      }
+    ).findRenderedPlacementSelectionKeysAtPointer;
+
+    if (typeof findRenderedPlacementSelectionKeysAtPointer !== "function") {
+      expect(findRenderedPlacementSelectionKeysAtPointer).toBeTypeOf("function");
+      return;
+    }
+
+    const overlappingBounds = {
+      containsPoint: () => true,
+    };
+    const higherZIndexSprite = {
+      placementKey: "item:1",
+      sprite: {
+        zIndex: 20,
+        getBounds: () => overlappingBounds,
+      },
+    };
+    const lowerZIndexSprite = {
+      placementKey: "item:2",
+      sprite: {
+        zIndex: 10,
+        getBounds: () => overlappingBounds,
+      },
+    };
+    const sameZIndexEarlierSprite = {
+      placementKey: "item:3",
+      sprite: {
+        zIndex: 30,
+        getBounds: () => overlappingBounds,
+      },
+    };
+    const sameZIndexLaterSprite = {
+      placementKey: "item:4",
+      sprite: {
+        zIndex: 30,
+        getBounds: () => overlappingBounds,
+      },
+    };
+
+    expect(
+      findRenderedPlacementSelectionKeysAtPointer(
+        [higherZIndexSprite, lowerZIndexSprite],
+        { x: 8, y: 8 },
+      ),
+    ).toEqual(["item:1", "item:2"]);
+    expect(
+      findRenderedPlacementSelectionKeysAtPointer(
+        [sameZIndexEarlierSprite, sameZIndexLaterSprite],
+        { x: 8, y: 8 },
+      ),
+    ).toEqual(["item:4", "item:3"]);
+  });
+
+  it("deduplicates overlapping layers for the same placement key", () => {
+    const findRenderedPlacementSelectionKeysAtPointer = (
+      plannerCanvasModule.findRenderedPlacementSelectionKeysAtPointer as unknown as (
+        renderedPlacementSprites: readonly Readonly<{
+          placementKey: string;
+          sprite: Readonly<{
+            zIndex: number;
+            getBounds(): Readonly<{
+              containsPoint(x: number, y: number): boolean;
+            }>;
+          }>;
+        }>[],
+        pointerCoordinates: Readonly<{ x: number; y: number }>,
+      ) => readonly string[]
+    );
+    const overlappingBounds = {
+      containsPoint: () => true,
+    };
+
+    expect(
+      findRenderedPlacementSelectionKeysAtPointer(
+        [
+          {
+            placementKey: "item:1",
+            sprite: { zIndex: 20, getBounds: () => overlappingBounds },
+          },
+          {
+            placementKey: "item:1",
+            sprite: { zIndex: 10, getBounds: () => overlappingBounds },
+          },
+        ],
+        { x: 8, y: 8 },
+      ),
+    ).toEqual(["item:1"]);
+  });
+});
 
 describe("attachPlannerCameraControls map placement clicks", () => {
   it("reports ordinary mouse hover tiles and clears them without placing", () => {
@@ -3591,6 +3710,109 @@ describe("attachPlannerCameraControls map placement clicks", () => {
         end: { x: 7, y: 6 },
       },
     ]);
+  });
+
+  it("reports a placement key for a short click in dedicated multi-select mode instead of a rectangle", () => {
+    const placementClickTestControls = createPlacementClickTestControls("multi-select");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 100, 80),
+    );
+
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([["item:1"]]);
+    expect(placementClickTestControls.clickedMapTiles).toEqual([]);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
+  });
+
+  it("reports an empty candidate list for a blank multi-select short click", () => {
+    const placementClickTestControls = createPlacementClickTestControls(
+      "multi-select",
+      false,
+      [],
+    );
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 100, 80),
+    );
+
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([[]]);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
+  });
+
+  it("reports a map rectangle after a multi-select drag exceeds the existing threshold", () => {
+    const placementClickTestControls = createPlacementClickTestControls("multi-select");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 132, 112),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 132, 112),
+    );
+
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([]);
+    expect(placementClickTestControls.clickedMapTiles).toEqual([]);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 7, y: 6 },
+      },
+    ]);
+  });
+
+  it("does not report direct selection or a rectangle when a multi-select pinch ends", () => {
+    const placementClickTestControls = createPlacementClickTestControls("multi-select");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(2, 120, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(2, 120, 80, { pointerType: "touch" }),
+    );
+
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([]);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
   });
 
   it("previews and commits a selected-placement drag after the five-pixel threshold", () => {

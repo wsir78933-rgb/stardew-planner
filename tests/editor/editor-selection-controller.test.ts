@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import * as editorSelectionControllerModule from "../../src/editor/editor-selection-controller";
 import type {
   BuildingPlacementMetadataById,
   CatalogItem,
@@ -17,6 +18,7 @@ import {
   setSelectedPlacementNightLightState,
   setSelectedPlacementItemTint,
   selectPlacementAtTile,
+  selectPlacementByKey,
   selectPlacementsInRectangle,
 } from "../../src/editor/editor-selection-controller";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
@@ -842,6 +844,65 @@ describe("editor selection controller", () => {
         placementSnapshot,
       }),
     ).toBe("item:1");
+  });
+
+  it("validates a direct placement key and keeps locked items unselected", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        createPlacementItem({ instanceId: 1 }),
+        createPlacementItem({ instanceId: 2, locked: true }),
+      ],
+      nextItemId: 3,
+    };
+
+    expect(selectPlacementByKey({
+      placementSnapshot,
+      selectedPlacementKey: "item:1",
+    })).toBe("item:1");
+    expect(selectPlacementByKey({
+      placementSnapshot,
+      selectedPlacementKey: "item:2",
+    })).toBeNull();
+    expect(() => selectPlacementByKey({
+      placementSnapshot,
+      selectedPlacementKey: "item:999",
+    })).toThrow(/item:999.*does not exist/);
+  });
+
+  it("selects the first unlocked key after locked direct-hit candidates", () => {
+    const selectFirstSelectablePlacementKey = (
+      editorSelectionControllerModule as typeof editorSelectionControllerModule & {
+        selectFirstSelectablePlacementKey?: (input: Readonly<{
+          placementSnapshot: PlacementSnapshot;
+          placementSelectionKeys: readonly string[];
+        }>) => string | null;
+      }
+    ).selectFirstSelectablePlacementKey;
+
+    if (typeof selectFirstSelectablePlacementKey !== "function") {
+      expect(selectFirstSelectablePlacementKey).toBeTypeOf("function");
+      return;
+    }
+
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        createPlacementItem({ instanceId: 1 }),
+        createPlacementItem({ instanceId: 2, locked: true }),
+        createPlacementItem({ instanceId: 3, locked: true }),
+      ],
+      nextItemId: 4,
+    };
+
+    expect(selectFirstSelectablePlacementKey({
+      placementSnapshot,
+      placementSelectionKeys: ["item:2", "item:1"],
+    })).toBe("item:1");
+    expect(selectFirstSelectablePlacementKey({
+      placementSnapshot,
+      placementSelectionKeys: ["item:3", "item:2"],
+    })).toBeNull();
   });
 
   it("selects a Garden Pot crop above its pot and cycles back to the pot", () => {

@@ -33,6 +33,7 @@ import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import {
   applyPlannerWorkspaceMapTileClick,
   applyPlannerWorkspaceMapTileRectangle,
+  applyPlannerWorkspacePlacementSelection,
   deletePlannerWorkspaceSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
   getPlannerWorkspaceToolSelection,
@@ -213,6 +214,10 @@ type WorkspaceCatalogControls = Readonly<{
 type WorkspaceEditingControls = Readonly<{
   cancelPendingDuplicateSelection: () => void;
   onMapTileClick: (mapId: string, cursorTile: { x: number; y: number }) => void;
+  onPlacementSelectionClick: (
+    mapId: string,
+    placementSelectionKeys: readonly PlacementSelectionKey[],
+  ) => void;
   onMapTileRectangle: (
     mapId: string,
     firstTile: { x: number; y: number },
@@ -260,15 +265,20 @@ export function getPlannerCanvasInteractionProperties(
     tool: EditorTool | null;
   }>,
 ): Readonly<{
-  pointerInteractionMode: "move-selected" | "navigate" | "rectangle";
+  pointerInteractionMode:
+    | "move-selected"
+    | "navigate"
+    | "rectangle"
+    | "multi-select";
   wheelZoomEnabled: boolean;
 }> {
   return {
     pointerInteractionMode:
       input.tool === null || input.tool === "zoom"
         ? "navigate"
-        : input.tool === "multi-select" ||
-            input.tool === "fill" ||
+        : input.tool === "multi-select"
+          ? "multi-select"
+          : input.tool === "fill" ||
             input.tool === "erase"
           ? "rectangle"
           : input.hasSelectedPlacements
@@ -872,6 +882,7 @@ function PreparedPlannerWorkspaceContent({
           onMapImageExporterReady={workspacePersistenceControls.handleMapImageExporterReady}
           onMapTileClick={workspaceEditingControls.handleMapTileClick}
           onMapTileRectangle={workspaceEditingControls.handleMapTileRectangle}
+          onPlacementSelectionClick={workspaceEditingControls.onPlacementSelectionClick}
           onMoveSelectedPlacements={workspaceEditingControls.handleMoveSelectedPlacements}
           onNudgeSelectedPlacements={workspaceEditingControls.handleNudgeSelectedPlacements}
           onInteriorDecorApply={handleInteriorDecorApply}
@@ -1384,6 +1395,31 @@ function useWorkspaceEditingControls({
       selectedCatalogItem,
     ],
   );
+  const handlePlacementSelectionClick = useCallback(
+    (
+      mapId: string,
+      placementSelectionKeys: readonly PlacementSelectionKey[],
+    ) => {
+      if (mapId !== plannerWorkspaceState.selectedPlannerMapId) {
+        throw new Error(
+          `Planner workspace placement selection map ID ${JSON.stringify(mapId)} does not match the selected map ID ${JSON.stringify(plannerWorkspaceState.selectedPlannerMapId)}.`,
+        );
+      }
+      const editingTransition = applyPlannerWorkspacePlacementSelection({
+        placementHistory: plannerWorkspaceState.placementHistory,
+        placementSelectionKeys,
+      });
+      applyEditingTransition(
+        editingTransition.placementHistory,
+        editingTransition.selectedPlacementKeys,
+      );
+    },
+    [
+      applyEditingTransition,
+      plannerWorkspaceState.placementHistory,
+      plannerWorkspaceState.selectedPlannerMapId,
+    ],
+  );
   const handleMapTileRectangle = useCallback(
     (
       mapId: string,
@@ -1677,6 +1713,7 @@ function useWorkspaceEditingControls({
     handleMapTileRectangle,
     handleMoveSelectedPlacements,
     handleNudgeSelectedPlacements,
+    onPlacementSelectionClick: handlePlacementSelectionClick,
     selectionInspector,
   };
 }
