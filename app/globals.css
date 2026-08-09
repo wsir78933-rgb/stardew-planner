@@ -2000,20 +2000,21 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   }
 }
 
-/* React/Pixi editor presentation copied from the locked original editor contract.
- * These rules intentionally use the original dimensions, palette, breakpoints,
- * and local asset paths. They do not load or execute the frozen Svelte runtime. */
+/* React/Pixi editor presentation adapted from the locked original editor contract.
+ * These rules preserve the original dimensions, breakpoints, and local asset paths
+ * while the editor shell palette uses the homepage color system. They do not load
+ * or execute the frozen Svelte runtime. */
 .planner-editor-shell {
-  --bg-deep: #03311c;
-  --bg-raised: #063d25;
-  --bg-surface: #05472a;
-  --border-subtle: #055437;
-  --border-hover: #097343;
-  --accent: #088c59;
-  --accent-muted: rgb(8 140 89 / 25%);
-  --text: #d0e8d8;
-  --text-dim: #6aaa80;
-  --text-bright: #eaf5ee;
+  --bg-deep: #fdfff8;
+  --bg-raised: #f1f7e7;
+  --bg-surface: #ffffff;
+  --border-subtle: #242a22;
+  --border-hover: #759d1c;
+  --accent: #759d1c;
+  --accent-muted: #edf5e3;
+  --text: #1c211b;
+  --text-dim: #5d6659;
+  --text-bright: #1c211b;
   --lk-3xs: calc(1rem / 1.618 / 1.618 / 1.618);
   --lk-2xs: calc(1rem / 1.618 / 1.618);
   --lk-xs: calc(1rem / 1.618);
@@ -2024,7 +2025,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   background: var(--bg-deep);
   border: 1.5px solid #242a22;
   border-radius: 0.75rem;
-  box-shadow: 0 0.45rem 0 rgb(36 42 34 / 88%);
+  box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%);
   color: var(--text);
   display: flex;
   font-family: Arial, Helvetica, sans-serif;
@@ -2044,7 +2045,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 .planner-editor-shell .planner-canvas {
-  background: var(--bg-deep);
+  background: #03311c;
   inset: 0;
   left: 0;
   position: absolute;
@@ -2251,8 +2252,8 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .item-catalog-panel__item-container { min-width: 0; position: relative; }
 .planner-editor-shell .item-catalog-panel__item { flex-direction: row; min-height: 0; }
 .planner-editor-shell .icon-cell { align-items: center; aspect-ratio: 1; background: var(--bg-surface); border: 0; border-radius: var(--lk-3xs); display: flex; justify-content: center; overflow: hidden; padding: var(--lk-3xs); position: relative; width: 100%; }
-.planner-editor-shell .icon-cell:hover { background: #2c4033; }
-.planner-editor-shell .icon-cell.selected { background: linear-gradient(145deg, var(--accent), #3d7a4a); }
+.planner-editor-shell .icon-cell:hover { background: var(--bg-raised); }
+.planner-editor-shell .icon-cell.selected { background: #c9fb45; }
 .planner-editor-shell .item-catalog-panel__thumbnail { image-rendering: pixelated; max-height: 100%; max-width: 100%; }
 .planner-editor-shell .rotate-btn,
 .planner-editor-shell .flip-btn { align-items: center; background: var(--bg-deep); border: 0; border-radius: 50%; bottom: 2px; color: var(--text-dim); display: flex; font-size: 12px; height: 20px; justify-content: center; opacity: .7; padding: 0; position: absolute; width: 20px; z-index: 2; }
@@ -2274,7 +2275,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .left-mode .keybind-title { border-bottom: 1px solid var(--border-subtle); font-size: 12px; grid-column: 1 / -1; margin-bottom: var(--lk-3xs); padding-bottom: var(--lk-3xs); }
 .planner-editor-shell .left-mode .keybind-more { font-size: 12px; }
 .planner-editor-shell ::-webkit-scrollbar { height: 6px; width: 6px; }
-.planner-editor-shell ::-webkit-scrollbar-track { background: rgb(255 255 255 / 3%); border-radius: 10px; }
+.planner-editor-shell ::-webkit-scrollbar-track { background: rgb(36 42 34 / 10%); border-radius: 10px; }
 .planner-editor-shell ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 10px; }
 
 .planner-editor-shell .menu-bar,
@@ -2289,18 +2290,31 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .reference-runtime-wheel-zoom-button:hover { background: var(--bg-surface); color: var(--text); }
 .planner-editor-shell .menu-btn:hover,
 .planner-editor-shell .tool-btn:hover:not(:disabled) { background: var(--bg-surface); color: var(--text); }
-.planner-editor-shell .tool-btn.erase-hover:hover:not(:disabled):not(.active) { background: #ff44441a; color: #ff6b6b; }
+.planner-editor-shell .tool-btn.cursor[aria-pressed="true"] {
+  background: rgb(177 58 40 / 15%);
+  color: #b13a28;
+}
+.planner-editor-shell .tool-btn.reference-runtime-wheel-zoom-button[aria-pressed="true"] {
+  background: rgb(177 58 40 / 15%);
+  color: #b13a28;
+}
+.planner-editor-shell .tool-btn.erase-hover:hover:not(:disabled):not(.active) { background: rgb(177 58 40 / 10%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__toggle,
 .planner-editor-shell .editor-menu-bar__separator { display: none; }
 .planner-editor-shell .editor-menu-bar__controls { display: contents; }
 .planner-editor-shell .menu-btn.active,
 .planner-editor-shell .tool-btn.active { background: var(--accent-muted); color: var(--text-bright); }
-.planner-editor-shell .tool-btn.erase { background: #ff444426; color: #ff6b6b; }
-.planner-editor-shell .editor-menu-bar__actions { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 4px 16px #0000004d; display: flex; max-height: 70vh; min-width: 200px; overflow-y: auto; padding: var(--lk-2xs) 0; position: absolute; right: 0; top: calc(var(--lk-xl) + var(--lk-sm)); }
+.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"] {
+  background: rgb(177 58 40 / 15%);
+  color: #b13a28;
+}
+.planner-editor-shell .tool-btn.erase { background: rgb(177 58 40 / 15%); color: #b13a28; }
+.planner-editor-shell .editor-menu-bar__actions { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); display: flex; max-height: 70vh; min-width: 200px; overflow-y: auto; padding: var(--lk-2xs) 0; position: absolute; right: 0; top: calc(var(--lk-xl) + var(--lk-sm)); }
 .planner-editor-shell .editor-menu-bar__value { display: none; }
 .planner-editor-shell .toolbar-wrapper { align-items: center; display: flex; flex-direction: column; gap: var(--lk-2xs); left: 50%; top: var(--lk-sm); transform: translateX(-50%); }
 .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper { left: calc(170px + 50vw); }
 .planner-editor-shell .toolbar { align-items: center; background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-sm); display: flex; gap: var(--lk-3xs); padding: var(--lk-3xs); }
+.planner-editor-shell .planner-workspace__toast { align-items: center; background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-sm); color: var(--text); display: flex; gap: var(--lk-3xs); left: 50%; margin: 0; padding: var(--lk-xs) var(--lk-sm); position: absolute; top: calc(var(--lk-sm) + var(--lk-xl) + var(--lk-sm)); transform: translateX(-50%); z-index: 26; }
 .planner-editor-shell .tool-group { display: flex; gap: var(--lk-3xs); }
 .planner-editor-shell .separator { background: var(--border-subtle); height: var(--lk-lg); margin: 0 var(--lk-3xs); width: 1px; }
 
@@ -2316,8 +2330,8 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .pill-dismiss:hover,
 .planner-editor-shell .pill-copy:hover,
 .planner-editor-shell .pill-more:hover { background: var(--bg-surface); color: var(--text); }
-.planner-editor-shell .pill-delete { color: #ff6b6b; }
-.planner-editor-shell .pill-delete:hover { background: #ff444426; }
+.planner-editor-shell .pill-delete { color: #b13a28; }
+.planner-editor-shell .pill-delete:hover { background: rgb(177 58 40 / 15%); }
 
 .planner-editor-shell .planner-joystick.joystick-outer { bottom: var(--lk-sm); display: none; height: 96px; position: absolute; right: var(--lk-sm); width: 96px; z-index: 24; }
 .planner-editor-shell .planner-joystick--left.joystick-outer { left: var(--lk-sm); right: auto; }
@@ -2356,15 +2370,15 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .planner-map-picker__tab[aria-selected="true"] { border-bottom-color: #c9fb45 !important; color: var(--text-bright); }
 .planner-editor-shell .planner-map-picker__community-tabs { display: flex; gap: var(--lk-3xs); padding: var(--lk-sm) 0; }
 .planner-editor-shell .planner-map-picker__community-tab { border-radius: var(--lk-xs); min-width: 0; padding: var(--lk-3xs) var(--lk-sm); }
-.planner-editor-shell .planner-map-picker__community-tab[aria-selected="true"] { background: var(--border-hover); border-color: #c9fb45; color: var(--text-bright); }
+.planner-editor-shell .planner-map-picker__community-tab[aria-selected="true"] { background: #c9fb45; border-color: #c9fb45; color: var(--text-bright); }
 .planner-editor-shell .planner-map-picker__tabpanel { flex: 1; min-height: 0; overflow-y: auto; padding: var(--lk-xs) 0 0; }
 .planner-editor-shell .planner-map-picker__tab:focus-visible,
 .planner-editor-shell .planner-map-picker__community-tab:focus-visible,
-.planner-editor-shell .editor-modal__map-grid button:focus-visible { outline: 2px solid #c9fb45; outline-offset: 2px; position: relative; z-index: 1; }
+.planner-editor-shell .editor-modal__map-grid button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; position: relative; z-index: 1; }
 .planner-editor-shell .editor-modal__map-grid { display: grid; gap: var(--lk-xs); grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .planner-editor-shell .editor-modal__map-grid button { align-items: center; background: var(--bg-raised); border: 1px solid transparent; display: flex; flex-direction: column; gap: var(--lk-sm); min-width: 0; padding: var(--lk-xs); }
 .planner-editor-shell .editor-modal__map-grid button span { font-size: 14px; line-height: 20px; }
-.planner-editor-shell .editor-modal__map-grid button[aria-pressed="true"] { background: linear-gradient(145deg, var(--accent), #3d7a4a); }
+.planner-editor-shell .editor-modal__map-grid button[aria-pressed="true"] { background: #c9fb45; }
 .planner-editor-shell .editor-modal__map-grid img { aspect-ratio: 1; object-fit: cover; width: 100%; }
 
 html::-webkit-scrollbar,

@@ -82,6 +82,9 @@ import {
   cancelInteriorDecorBeforeOrdinaryWorkspaceAction,
   createInteriorDecorSelectionTransition,
   getInteriorDecorRejectionMessage,
+  getNextInteriorDecorRejectionNotification,
+  getUnavailableInteriorDecorMessage,
+  type InteriorDecorRejectionNotification,
 } from "../planner/planner-workspace-interior-decor-controls";
 import {
   attachPlannerWorkspaceXRayKeyboardListener,
@@ -226,7 +229,7 @@ export function createWorkspaceCatalogPlacementPreviewInput(
     buildingMetadataById: BuildingPlacementMetadataById | null;
     freePlacement: boolean;
     selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
-    tool: EditorTool;
+    tool: EditorTool | null;
   }>,
 ): PlannerCanvasPlacementPreviewInput | null {
   if (
@@ -248,6 +251,30 @@ export function createWorkspaceCatalogPlacementPreviewInput(
             input.selectedCatalogItem.resolvedCompositeVariant,
         }),
     selectedCatalogItem: input.selectedCatalogItem.catalogItem,
+  };
+}
+
+export function getPlannerCanvasInteractionProperties(
+  input: Readonly<{
+    hasSelectedPlacements: boolean;
+    tool: EditorTool | null;
+  }>,
+): Readonly<{
+  pointerInteractionMode: "move-selected" | "navigate" | "rectangle";
+  wheelZoomEnabled: boolean;
+}> {
+  return {
+    pointerInteractionMode:
+      input.tool === null || input.tool === "zoom"
+        ? "navigate"
+        : input.tool === "multi-select" ||
+            input.tool === "fill" ||
+            input.tool === "erase"
+          ? "rectangle"
+          : input.hasSelectedPlacements
+            ? "move-selected"
+            : "navigate",
+    wheelZoomEnabled: input.tool === "zoom",
   };
 }
 
@@ -572,14 +599,38 @@ function PreparedPlannerWorkspaceContent({
     requiredPlacementCatalogGate.kind === "ready";
   const [activeInteriorDecorPattern, setActiveInteriorDecorPattern] =
     useState<InteriorDecorCatalogPattern | null>(null);
-  const [interiorDecorRejectionMessage, setInteriorDecorRejectionMessage] =
-    useState<string | null>(null);
+  const [interiorDecorRejectionNotification, setInteriorDecorRejectionNotification] =
+    useState<InteriorDecorRejectionNotification | null>(null);
   const [isXRayActive, setIsXRayActive] = useState(false);
-  const [isWheelZoomEnabled, setIsWheelZoomEnabled] = useState(false);
   const handleCancelInteriorDecor = useCallback(() => {
     setActiveInteriorDecorPattern(null);
-    setInteriorDecorRejectionMessage(null);
+    setInteriorDecorRejectionNotification(null);
   }, []);
+  useEffect(() => {
+    if (interiorDecorRejectionNotification === null) {
+      return;
+    }
+
+    const rejectionMessageTimeoutId = window.setTimeout(() => {
+      setInteriorDecorRejectionNotification(null);
+    }, 3_000);
+
+    return () => {
+      window.clearTimeout(rejectionMessageTimeoutId);
+    };
+  }, [interiorDecorRejectionNotification]);
+  const showInteriorDecorRejectionMessage = useCallback(
+    (message: string) => {
+      setInteriorDecorRejectionNotification((currentNotification) =>
+        getNextInteriorDecorRejectionNotification(
+          currentNotification,
+          plannerWorkspaceState.behaviorOptions.showToasts,
+          message,
+        ),
+      );
+    },
+    [plannerWorkspaceState.behaviorOptions.showToasts],
+  );
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -616,7 +667,7 @@ function PreparedPlannerWorkspaceContent({
     (pattern: InteriorDecorCatalogPattern | null) => {
       const selectionTransition = createInteriorDecorSelectionTransition(pattern);
       setActiveInteriorDecorPattern(selectionTransition.activeInteriorDecorPattern);
-      setInteriorDecorRejectionMessage(null);
+      setInteriorDecorRejectionNotification(null);
       if (!selectionTransition.shouldClearOrdinaryPlacementInteraction) {
         return;
       }
@@ -656,17 +707,17 @@ function PreparedPlannerWorkspaceContent({
         interiorDecorTransition.placementHistory,
         interiorDecorTransition.selectedPlacementKeys,
       );
-      setInteriorDecorRejectionMessage(null);
+      setInteriorDecorRejectionNotification(null);
     },
     [activeInteriorDecorPattern, applyPlacementEditResult, plannerWorkspaceState.placementHistory],
   );
   const handleInteriorDecorRejected = useCallback(
     (mapId: string, interiorDecorKind: InteriorDecorCatalogPattern["kind"]) => {
-      setInteriorDecorRejectionMessage(
+      showInteriorDecorRejectionMessage(
         getInteriorDecorRejectionMessage(mapId, interiorDecorKind),
       );
     },
-    [],
+    [showInteriorDecorRejectionMessage],
   );
   const handleOrdinaryCatalogItemSelect = useCallback(
     (
@@ -675,6 +726,14 @@ function PreparedPlannerWorkspaceContent({
     ) => {
       const interiorDecorPattern = interiorDecorPatternByCatalogItemId.get(catalogItem.id);
       if (interiorDecorPattern !== undefined) {
+        const unavailableInteriorDecorMessage = getUnavailableInteriorDecorMessage(
+          plannerWorkspaceState.selectedPlannerMapId,
+          interiorDecorPattern.kind,
+        );
+        if (unavailableInteriorDecorMessage !== null) {
+          showInteriorDecorRejectionMessage(unavailableInteriorDecorMessage);
+          return;
+        }
         handleInteriorDecorPatternSelect(interiorDecorPattern);
         return;
       }
@@ -691,7 +750,9 @@ function PreparedPlannerWorkspaceContent({
       handleCancelInteriorDecor,
       handleInteriorDecorPatternSelect,
       handleCatalogItemSelect,
+      plannerWorkspaceState.selectedPlannerMapId,
       setSelectedPlacementKeys,
+      showInteriorDecorRejectionMessage,
       workspaceEditingControls,
     ],
   );
@@ -720,6 +781,11 @@ function PreparedPlannerWorkspaceContent({
   const localProjectActions = createPlannerLocalProjectActions({
     season: plannerWorkspaceState.season,
     workspaceController,
+  });
+  const plannerCanvasInteractionProperties = getPlannerCanvasInteractionProperties({
+    hasSelectedPlacements:
+      plannerWorkspaceState.selectedPlacementKeys.length > 0,
+    tool: plannerWorkspaceState.tool,
   });
   return (
     <>
@@ -754,9 +820,7 @@ function PreparedPlannerWorkspaceContent({
             type: "undo-placement-history",
           })
         }
-        onWheelZoomToggle={() => setIsWheelZoomEnabled((enabled) => !enabled)}
         tool={plannerWorkspaceState.tool}
-        wheelZoomEnabled={isWheelZoomEnabled}
       />
       <ItemCatalogPanel
         catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
@@ -783,9 +847,10 @@ function PreparedPlannerWorkspaceContent({
         selectedCatalogItemId={plannerWorkspaceState.selectedCatalogItemId}
         shouldLoadThumbnails={runtimeStatus === "interactive"}
       />
-      {interiorDecorRejectionMessage === null ? null : (
-        <p aria-live="polite" role="status">
-          {interiorDecorRejectionMessage}
+      {interiorDecorRejectionNotification === null ? null : (
+        <p aria-live="polite" role="status" className="planner-workspace__toast">
+          <span aria-hidden="true">!</span>
+          {interiorDecorRejectionNotification.message}
         </p>
       )}
       <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
@@ -794,7 +859,7 @@ function PreparedPlannerWorkspaceContent({
           catalogItems={readyCatalogItems}
           displayOptions={plannerWorkspaceState.displayOptions}
           isXRayActive={isXRayActive}
-          wheelZoomEnabled={isWheelZoomEnabled}
+          wheelZoomEnabled={plannerCanvasInteractionProperties.wheelZoomEnabled}
           isResourceGenerationCurrent={(resourceGeneration) =>
             resourceGeneration === preparedWorkspace.resourceGeneration
           }
@@ -815,13 +880,7 @@ function PreparedPlannerWorkspaceContent({
           placementPreview={placementPreview}
           placementSnapshot={plannerWorkspaceState.placementHistory.currentState}
           pointerInteractionMode={
-            plannerWorkspaceState.tool === "multi-select" ||
-            plannerWorkspaceState.tool === "fill" ||
-            plannerWorkspaceState.tool === "erase"
-              ? "rectangle"
-              : plannerWorkspaceState.selectedPlacementKeys.length > 0
-                ? "move-selected"
-                : "navigate"
+            plannerCanvasInteractionProperties.pointerInteractionMode
           }
           preparedCanvasResources={preparedWorkspace.canvasResources}
           season={plannerWorkspaceState.season}

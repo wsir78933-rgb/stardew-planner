@@ -39,7 +39,50 @@ describe("planner workspace Task5A feature-parity composition", () => {
     expect(workspaceSource).toContain("onOpenMapInstance={handleOpenMapInstance}");
     expect(workspaceSource).toContain("projectMapActions.onOpenMapInstance(mapInstanceId)");
     expect(workspaceSource).toContain("cancelInteriorDecorBeforeOrdinaryWorkspaceAction");
+    expect(workspaceSource).toContain("getUnavailableInteriorDecorMessage");
+    expect(workspaceSource).toContain(
+      "plannerWorkspaceState.behaviorOptions.showToasts",
+    );
+    expect(workspaceSource).toContain('className="planner-workspace__toast"');
+    expect(workspaceSource).toContain("window.setTimeout");
     expect(workspaceSource).toContain('aria-live="polite" role="status"');
+  });
+
+  it("routes unavailable catalog and invalid interior target rejections through one toast-aware notification transition", () => {
+    const workspaceSource = readFileSync(workspaceSourcePath, "utf8");
+    const rejectionHandlerStart = workspaceSource.indexOf(
+      "const handleInteriorDecorRejected",
+    );
+    const catalogSelectionHandlerStart = workspaceSource.indexOf(
+      "const handleOrdinaryCatalogItemSelect",
+    );
+    const ordinaryToolHandlerStart = workspaceSource.indexOf(
+      "const handleOrdinaryToolChange",
+    );
+    if (
+      rejectionHandlerStart < 0 ||
+      catalogSelectionHandlerStart < 0 ||
+      ordinaryToolHandlerStart < 0
+    ) {
+      throw new Error("Expected interior decor rejection and catalog selection handlers.");
+    }
+
+    const invalidTargetRejectionSource = workspaceSource.slice(
+      rejectionHandlerStart,
+      catalogSelectionHandlerStart,
+    );
+    const unavailableCatalogSelectionSource = workspaceSource.slice(
+      catalogSelectionHandlerStart,
+      ordinaryToolHandlerStart,
+    );
+
+    expect(workspaceSource).toContain("getNextInteriorDecorRejectionNotification");
+    expect(invalidTargetRejectionSource).toContain(
+      "showInteriorDecorRejectionMessage",
+    );
+    expect(unavailableCatalogSelectionSource).toContain(
+      "showInteriorDecorRejectionMessage(unavailableInteriorDecorMessage)",
+    );
   });
 
   it("keeps Task5A transient interaction fields out of reducer and persistence state", () => {

@@ -14,15 +14,20 @@ import {
 } from "lucide-react";
 
 type EditorToolbarProperties = Readonly<{
-  tool: EditorTool;
-  onToolChange: (tool: EditorTool) => void;
+  tool: EditorTool | null;
+  onToolChange: (tool: EditorTool | null) => void;
   onUndo: () => void;
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  wheelZoomEnabled?: boolean;
-  onWheelZoomToggle?: () => void;
 }>;
+
+export function getEditorToolbarToolSelectionAfterClick(
+  currentTool: EditorTool | null,
+  requestedTool: EditorTool,
+): EditorTool | null {
+  return currentTool === requestedTool ? null : requestedTool;
+}
 
 const editorToolControls: readonly Readonly<{
   tool: EditorTool;
@@ -46,9 +51,8 @@ export function EditorToolbar({
   onRedo,
   canUndo,
   canRedo,
-  wheelZoomEnabled = false,
-  onWheelZoomToggle = () => undefined,
 }: EditorToolbarProperties) {
+  const isZoomSelected = tool === "zoom";
   const renderToolButton = (editorToolControl: (typeof editorToolControls)[number]) => {
     const isSelected = tool === editorToolControl.tool;
     const isAvailable = editorToolAvailability[editorToolControl.tool];
@@ -59,15 +63,23 @@ export function EditorToolbar({
         aria-label={editorToolControl.label}
         aria-pressed={isSelected}
         className={`tool-btn editor-toolbar__button${
+          editorToolControl.tool === "multi-select" ? " multi-select" : ""
+        }${
           editorToolControl.tool === "erase"
             ? ` erase-hover${isSelected ? " erase" : ""}`
             : ""
         }${editorToolControl.tool === "fill" ? " fill" : ""}${
+          editorToolControl.tool === "cursor" ? " cursor" : ""
+        }${
           isSelected ? " active" : ""
         }`}
         disabled={!isAvailable}
         key={editorToolControl.tool}
-        onClick={() => onToolChange(editorToolControl.tool)}
+        onClick={() =>
+          onToolChange(
+            getEditorToolbarToolSelectionAfterClick(tool, editorToolControl.tool),
+          )
+        }
         title={editorToolControl.label}
         type="button"
       >
@@ -103,12 +115,14 @@ export function EditorToolbar({
           role="group"
         >
           <button
-            aria-label={wheelZoomEnabled ? "Disable wheel zoom" : "Enable wheel zoom"}
-            aria-pressed={wheelZoomEnabled}
+            aria-label={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
+            aria-pressed={isZoomSelected}
             className="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"
             data-reference-runtime-wheel-zoom-button="true"
-            onClick={onWheelZoomToggle}
-            title={wheelZoomEnabled ? "Disable wheel zoom" : "Enable wheel zoom"}
+            onClick={() =>
+              onToolChange(getEditorToolbarToolSelectionAfterClick(tool, "zoom"))
+            }
+            title={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
             type="button"
           >
             Zoom

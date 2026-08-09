@@ -25,7 +25,10 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
-import { createWorkspaceCatalogPlacementPreviewInput } from "../../src/components/planner-workspace";
+import {
+  createWorkspaceCatalogPlacementPreviewInput,
+  getPlannerCanvasInteractionProperties,
+} from "../../src/components/planner-workspace";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
   return {
@@ -159,6 +162,90 @@ describe("workspace catalog placement preview wiring", () => {
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: "fill",
     })).toBeNull();
+    expect(createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
+      tool: "zoom",
+    })).toBeNull();
+    expect(createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
+      tool: null,
+    })).toBeNull();
+  });
+});
+
+describe("planner canvas interaction properties", () => {
+  it("derives wheel zoom and pointer mode from the selected tool and placements", () => {
+    const cases = [
+      {
+        expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: true,
+        },
+        hasSelectedPlacements: true,
+        tool: "zoom",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: null,
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "rectangle",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "erase",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "rectangle",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "multi-select",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "rectangle",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "fill",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "move-selected",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "cursor",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: false,
+        tool: "cursor",
+      },
+    ] as const;
+
+    for (const canvasInteractionCase of cases) {
+      expect(
+        getPlannerCanvasInteractionProperties({
+          hasSelectedPlacements: canvasInteractionCase.hasSelectedPlacements,
+          tool: canvasInteractionCase.tool,
+        }),
+      ).toEqual(canvasInteractionCase.expectedProperties);
+    }
   });
 });
 
@@ -200,6 +287,37 @@ function createAdapterSupportedStandardFarmDocument() {
 }
 
 describe("planner workspace basic editing orchestration", () => {
+  it("leaves valid click and rectangle input unchanged for no tool and Zoom", () => {
+    const initialEditingInput = createEditingInput();
+
+    for (const tool of [null, "zoom"] as const) {
+      const clickTransition = applyPlannerWorkspaceMapTileClick({
+        ...initialEditingInput,
+        cursorTile: { x: 1, y: 1 },
+        tool,
+      });
+      const rectangleTransition = applyPlannerWorkspaceMapTileRectangle({
+        ...initialEditingInput,
+        firstTile: { x: 0, y: 0 },
+        secondTile: { x: 1, y: 1 },
+        tool,
+      });
+
+      expect(clickTransition.placementHistory).toBe(
+        initialEditingInput.placementHistory,
+      );
+      expect(clickTransition.selectedPlacementKeys).toBe(
+        initialEditingInput.selectedPlacementKeys,
+      );
+      expect(rectangleTransition.placementHistory).toBe(
+        initialEditingInput.placementHistory,
+      );
+      expect(rectangleTransition.selectedPlacementKeys).toBe(
+        initialEditingInput.selectedPlacementKeys,
+      );
+    }
+  });
+
   it("passes the selected attempt composite variant through cursor placement", () => {
     const placementTransition = applyPlannerWorkspaceMapTileClick({
       ...createEditingInput(),

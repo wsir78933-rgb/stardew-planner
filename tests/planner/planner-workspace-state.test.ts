@@ -358,6 +358,32 @@ describe("planner workspace state", () => {
     });
   });
 
+  it("keeps nullable tool selection outside Undo and Redo history", () => {
+    const initialWorkspaceState = createInitialPlannerWorkspaceState();
+    const zoomWorkspaceState = reducePlannerWorkspaceState(
+      initialWorkspaceState,
+      { tool: "zoom", type: "select-tool" },
+    );
+    const noToolWorkspaceState = reducePlannerWorkspaceState(
+      zoomWorkspaceState,
+      { tool: null, type: "select-tool" },
+    );
+    const undoneWorkspaceState = reducePlannerWorkspaceState(
+      noToolWorkspaceState,
+      { type: "undo-placement-history" },
+    );
+    const redoneWorkspaceState = reducePlannerWorkspaceState(
+      undoneWorkspaceState,
+      { type: "redo-placement-history" },
+    );
+
+    expect(initialWorkspaceState.tool).toBe("cursor");
+    expect(zoomWorkspaceState.tool).toBe("zoom");
+    expect(noToolWorkspaceState.tool).toBeNull();
+    expect(undoneWorkspaceState.tool).toBeNull();
+    expect(redoneWorkspaceState.tool).toBeNull();
+  });
+
   it("rejects unsupported actions with the received action", () => {
     expect(() =>
       reducePlannerWorkspaceState(
