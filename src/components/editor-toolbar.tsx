@@ -14,14 +14,12 @@ import {
 } from "lucide-react";
 
 type EditorToolbarProperties = Readonly<{
-  tool: EditorTool;
-  onToolChange: (tool: EditorTool) => void;
+  tool: EditorTool | null;
+  onToolChange: (tool: EditorTool | null) => void;
   onUndo: () => void;
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  wheelZoomEnabled?: boolean;
-  onWheelZoomToggle?: () => void;
 }>;
 
 const editorToolControls: readonly Readonly<{
@@ -46,9 +44,8 @@ export function EditorToolbar({
   onRedo,
   canUndo,
   canRedo,
-  wheelZoomEnabled = false,
-  onWheelZoomToggle = () => undefined,
 }: EditorToolbarProperties) {
+  const isZoomSelected = tool === "zoom";
   const renderToolButton = (editorToolControl: (typeof editorToolControls)[number]) => {
     const isSelected = tool === editorToolControl.tool;
     const isAvailable = editorToolAvailability[editorToolControl.tool];
@@ -71,7 +68,7 @@ export function EditorToolbar({
         }`}
         disabled={!isAvailable}
         key={editorToolControl.tool}
-        onClick={() => onToolChange(editorToolControl.tool)}
+        onClick={() => onToolChange(isSelected ? null : editorToolControl.tool)}
         title={editorToolControl.label}
         type="button"
       >
@@ -107,12 +104,12 @@ export function EditorToolbar({
           role="group"
         >
           <button
-            aria-label={wheelZoomEnabled ? "Disable wheel zoom" : "Enable wheel zoom"}
-            aria-pressed={wheelZoomEnabled}
+            aria-label={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
+            aria-pressed={isZoomSelected}
             className="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"
             data-reference-runtime-wheel-zoom-button="true"
-            onClick={onWheelZoomToggle}
-            title={wheelZoomEnabled ? "Disable wheel zoom" : "Enable wheel zoom"}
+            onClick={() => onToolChange(isZoomSelected ? null : "zoom")}
+            title={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
             type="button"
           >
             Zoom

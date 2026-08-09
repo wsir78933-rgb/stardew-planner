@@ -159,6 +159,18 @@ describe("workspace catalog placement preview wiring", () => {
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: "fill",
     })).toBeNull();
+    expect(createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
+      tool: "zoom",
+    })).toBeNull();
+    expect(createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
+      tool: null,
+    })).toBeNull();
   });
 });
 

@@ -211,7 +211,7 @@ export function createWorkspaceCatalogPlacementPreviewInput(
     buildingMetadataById: BuildingPlacementMetadataById | null;
     freePlacement: boolean;
     selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
-    tool: EditorTool;
+    tool: EditorTool | null;
   }>,
 ): PlannerCanvasPlacementPreviewInput | null {
   if (
@@ -542,7 +542,6 @@ function PreparedPlannerWorkspaceContent({
   const [interiorDecorRejectionNotification, setInteriorDecorRejectionNotification] =
     useState<InteriorDecorRejectionNotification | null>(null);
   const [isXRayActive, setIsXRayActive] = useState(false);
-  const [isWheelZoomEnabled, setIsWheelZoomEnabled] = useState(false);
   const handleCancelInteriorDecor = useCallback(() => {
     setActiveInteriorDecorPattern(null);
     setInteriorDecorRejectionNotification(null);
@@ -756,9 +755,7 @@ function PreparedPlannerWorkspaceContent({
             type: "undo-placement-history",
           })
         }
-        onWheelZoomToggle={() => setIsWheelZoomEnabled((enabled) => !enabled)}
         tool={plannerWorkspaceState.tool}
-        wheelZoomEnabled={isWheelZoomEnabled}
       />
       <ItemCatalogPanel
         catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
@@ -797,7 +794,7 @@ function PreparedPlannerWorkspaceContent({
           catalogItems={readyCatalogItems}
           displayOptions={plannerWorkspaceState.displayOptions}
           isXRayActive={isXRayActive}
-          wheelZoomEnabled={isWheelZoomEnabled}
+          wheelZoomEnabled={plannerWorkspaceState.tool === "zoom"}
           isResourceGenerationCurrent={(resourceGeneration) =>
             resourceGeneration === preparedWorkspace.resourceGeneration
           }
@@ -818,13 +815,16 @@ function PreparedPlannerWorkspaceContent({
           placementPreview={placementPreview}
           placementSnapshot={plannerWorkspaceState.placementHistory.currentState}
           pointerInteractionMode={
-            plannerWorkspaceState.tool === "multi-select" ||
-            plannerWorkspaceState.tool === "fill" ||
-            plannerWorkspaceState.tool === "erase"
-              ? "rectangle"
-              : plannerWorkspaceState.selectedPlacementKeys.length > 0
-                ? "move-selected"
-                : "navigate"
+            plannerWorkspaceState.tool === null ||
+            plannerWorkspaceState.tool === "zoom"
+              ? "navigate"
+              : plannerWorkspaceState.tool === "multi-select" ||
+                  plannerWorkspaceState.tool === "fill" ||
+                  plannerWorkspaceState.tool === "erase"
+                ? "rectangle"
+                : plannerWorkspaceState.selectedPlacementKeys.length > 0
+                  ? "move-selected"
+                  : "navigate"
           }
           preparedCanvasResources={preparedWorkspace.canvasResources}
           season={plannerWorkspaceState.season}

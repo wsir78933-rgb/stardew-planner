@@ -6,6 +6,21 @@ import { describe, expect, it } from "vitest";
 import { EditorMenuBar } from "../../src/components/editor-menu-bar";
 import { EditorToolbar } from "../../src/components/editor-toolbar";
 
+function renderToolbar(
+  tool: Parameters<typeof EditorToolbar>[0]["tool"],
+): string {
+  return renderToStaticMarkup(
+    createElement(EditorToolbar, {
+      canRedo: false,
+      canUndo: false,
+      onRedo: () => undefined,
+      onToolChange: () => undefined,
+      onUndo: () => undefined,
+      tool,
+    }),
+  );
+}
+
 describe("editor controls", () => {
   it("renders the compact menu trigger alongside the desktop menu controls", () => {
     const markup = renderToStaticMarkup(
@@ -24,43 +39,32 @@ describe("editor controls", () => {
     expect(markup).toContain("editor-menu-bar__controls");
   });
 
-  it("renders the wheel zoom control as a real toggle button", () => {
-    const disabledMarkup = renderToStaticMarkup(
-      createElement(EditorToolbar, {
-        canRedo: false,
-        canUndo: false,
-        onRedo: () => undefined,
-        onToolChange: () => undefined,
-        onUndo: () => undefined,
-        onWheelZoomToggle: () => undefined,
-        tool: "cursor",
-        wheelZoomEnabled: false,
-      }),
-    );
-    const enabledMarkup = renderToStaticMarkup(
-      createElement(EditorToolbar, {
-        canRedo: false,
-        canUndo: false,
-        onRedo: () => undefined,
-        onToolChange: () => undefined,
-        onUndo: () => undefined,
-        onWheelZoomToggle: () => undefined,
-        tool: "cursor",
-        wheelZoomEnabled: true,
-      }),
-    );
+  it("renders exactly one visible selected tool or no selection", () => {
+    const cases = [
+      { expectedPressedLabels: [], tool: null },
+      { expectedPressedLabels: ["Cursor tool"], tool: "cursor" },
+      { expectedPressedLabels: ["Multi-select tool"], tool: "multi-select" },
+      { expectedPressedLabels: ["Erase tool"], tool: "erase" },
+      { expectedPressedLabels: ["Disable wheel zoom"], tool: "zoom" },
+    ] as const;
 
-    expect(disabledMarkup).toContain('data-reference-runtime-wheel-zoom-button="true"');
-    expect(disabledMarkup).toContain(
+    for (const toolbarCase of cases) {
+      const markup = renderToolbar(toolbarCase.tool);
+      const pressedLabels = Array.from(
+        markup.matchAll(/aria-label="([^"]+)" aria-pressed="true"/g),
+        ([, ariaLabel]) => ariaLabel,
+      );
+
+      expect(pressedLabels).toEqual(toolbarCase.expectedPressedLabels);
+    }
+
+    const zoomMarkup = renderToolbar("zoom");
+    expect(zoomMarkup).toContain(
       'class="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"',
     );
-    expect(disabledMarkup).toContain('aria-pressed="false"');
-    expect(disabledMarkup).toContain('aria-label="Enable wheel zoom"');
-    expect(enabledMarkup).toContain('aria-pressed="true"');
-    expect(enabledMarkup).toContain(
-      'class="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"',
+    expect(zoomMarkup).toContain(
+      'data-reference-runtime-wheel-zoom-button="true"',
     );
-    expect(enabledMarkup).toContain('aria-label="Disable wheel zoom"');
   });
 
   it("matches the frozen inactive and active erase button classes", () => {
@@ -185,70 +189,6 @@ describe("editor controls", () => {
       "background: rgb(177 58 40 / 15%);",
     );
     expect(selectedMultiSelectRule).toContain("color: #b13a28;");
-  });
-
-  it("keeps Cursor selection and wheel zoom state independent", () => {
-    const cursorSelectedWheelZoomDisabledMarkup = renderToStaticMarkup(
-      createElement(EditorToolbar, {
-        canRedo: false,
-        canUndo: false,
-        onRedo: () => undefined,
-        onToolChange: () => undefined,
-        onUndo: () => undefined,
-        onWheelZoomToggle: () => undefined,
-        tool: "cursor",
-        wheelZoomEnabled: false,
-      }),
-    );
-    const cursorUnselectedWheelZoomEnabledMarkup = renderToStaticMarkup(
-      createElement(EditorToolbar, {
-        canRedo: false,
-        canUndo: false,
-        onRedo: () => undefined,
-        onToolChange: () => undefined,
-        onUndo: () => undefined,
-        onWheelZoomToggle: () => undefined,
-        tool: "multi-select",
-        wheelZoomEnabled: true,
-      }),
-    );
-    const bothEnabledMarkup = renderToStaticMarkup(
-      createElement(EditorToolbar, {
-        canRedo: false,
-        canUndo: false,
-        onRedo: () => undefined,
-        onToolChange: () => undefined,
-        onUndo: () => undefined,
-        onWheelZoomToggle: () => undefined,
-        tool: "cursor",
-        wheelZoomEnabled: true,
-      }),
-    );
-    const selectedCursorClassName = cursorSelectedWheelZoomDisabledMarkup.match(
-      /<button aria-label="Cursor tool" aria-pressed="true" class="([^"]+)"/,
-    )?.[1];
-    const unselectedCursorClassName = cursorUnselectedWheelZoomEnabledMarkup.match(
-      /<button aria-label="Cursor tool" aria-pressed="false" class="([^"]+)"/,
-    )?.[1];
-
-    expect(bothEnabledMarkup).toMatch(
-      /<button aria-label="Cursor tool" aria-pressed="true" class="(?=[^"]*\bcursor\b)[^"]+"/,
-    );
-    expect(bothEnabledMarkup).toMatch(
-      /<button aria-label="Disable wheel zoom" aria-pressed="true" class="(?=[^"]*\breference-runtime-wheel-zoom-button\b)[^"]+"/,
-    );
-    expect(new Set(selectedCursorClassName?.split(" "))).toEqual(
-      new Set(["tool-btn", "editor-toolbar__button", "cursor", "active"]),
-    );
-    expect(new Set(unselectedCursorClassName?.split(" "))).toEqual(
-      new Set(["tool-btn", "editor-toolbar__button", "cursor"]),
-    );
-    expect(cursorSelectedWheelZoomDisabledMarkup).toContain(
-      'aria-label="Enable wheel zoom" aria-pressed="false"',
-    );
-    expect(cursorUnselectedWheelZoomEnabledMarkup).toContain(
-      'aria-label="Cursor tool" aria-pressed="false"',
-    );
   });
 
   it("locks Cursor and wheel Zoom colors after generic hover without broad or false selectors", () => {
