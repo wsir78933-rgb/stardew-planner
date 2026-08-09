@@ -71,16 +71,18 @@ it("renders every English footer destination, identity, copyright, and linked Tw
   );
 });
 
-it("uses English editor destinations and localized Chinese content destinations", () => {
+it("uses Chinese homepage destinations throughout the Chinese footer", () => {
   const footerMarkup = renderFooter("zh-CN");
 
-  expect(footerMarkup).toContain('href="/"');
+  expect(footerMarkup).toContain('href="/zh"');
   expect(footerMarkup).toContain('href="/zh/farm-comparison"');
   expect(footerMarkup).toContain('href="/zh/mods"');
-  expect(footerMarkup).toContain('href="/#capabilities"');
-  expect(footerMarkup).toContain('href="/#faq"');
+  expect(footerMarkup).toContain('href="/zh#capabilities"');
+  expect(footerMarkup).toContain('href="/zh#faq"');
   expect(footerMarkup).toContain('href="/zh/privacy"');
   expect(footerMarkup).toContain('href="/zh/terms"');
   expect(footerMarkup).toContain('href="/zh/contact"');
-  expect(footerMarkup).not.toContain('/#planner');
+  expect(footerMarkup).not.toContain('href="/"');
+  expect(footerMarkup).not.toContain('href="/#capabilities"');
+  expect(footerMarkup).not.toContain('href="/#faq"');
 });

@@ -20,10 +20,10 @@ export function PublicNavigation({
   return (
     <nav aria-label={pageCopy.navigationLabel}>
       {pageCopy.navigation.map((navigationItem) => {
-        const navigationDestination =
-          navigationItem.path === "/"
-            ? "/"
-            : getLocalizedPublicPath(locale, navigationItem.path);
+        const navigationDestination = getLocalizedPublicPath(
+          locale,
+          navigationItem.path,
+        );
 
         return (
           <a

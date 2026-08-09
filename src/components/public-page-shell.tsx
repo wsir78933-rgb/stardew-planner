@@ -31,7 +31,7 @@ export function PublicPageShell({
       <header className="public-page-shell-header">
         <a
           className="public-page-shell-brand"
-          href="/"
+          href={getLocalizedPublicPath(locale, "/")}
         >
           {pageCopy.brandLabel}
         </a>

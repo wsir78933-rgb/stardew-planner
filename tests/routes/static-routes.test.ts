@@ -57,6 +57,19 @@ const expectedStaticPageFiles = [
   "zh/where-is-robin-stardew-valley.html",
 ] as const;
 
+const expectedStaticHomepageFiles = [
+  {
+    staticPageFile: "index.html",
+    plannerHref: "#planner",
+    localizedHeadline: "Stardew Valley",
+  },
+  {
+    staticPageFile: "zh.html",
+    plannerHref: "#planner",
+    localizedHeadline: "适用于各种农场布局的",
+  },
+] as const;
+
 function readStaticPageHtml(staticPageFile: string): string {
   const staticPagePath = join(process.cwd(), "out", staticPageFile);
 
@@ -81,7 +94,7 @@ describe("static reference-runtime routes", () => {
   });
 
   it(
-    "exports every static information route without an eager reference-runtime bootstrap",
+    "exports every static route without an eager reference-runtime bootstrap",
     () => {
       for (const staticPageFile of expectedStaticPageFiles) {
         const staticPageHtml = readStaticPageHtml(staticPageFile);
@@ -93,4 +106,19 @@ describe("static reference-runtime routes", () => {
       }
     },
   );
+
+  it("exports English and Chinese homepage shells with their own planner anchors", () => {
+    for (const expectedHomepage of expectedStaticHomepageFiles) {
+      const staticPageHtml = readStaticPageHtml(expectedHomepage.staticPageFile);
+
+      expect(staticPageHtml).toContain('data-homepage-shell="true"');
+      expect(staticPageHtml).toContain('data-homepage-workspace="true"');
+      expect(staticPageHtml).toContain(expectedHomepage.localizedHeadline);
+      const plannerAnchorMatches = staticPageHtml.match(
+        new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),
+      );
+
+      expect(plannerAnchorMatches).toHaveLength(4);
+    }
+  });
 });

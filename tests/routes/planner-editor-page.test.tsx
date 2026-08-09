@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import PlannerPage from "../../app/(en)/page";
 import { HomepageContent } from "../../src/components/homepage-content";
 import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
+import { createHomepageNavigationUrls } from "../../src/homepage/homepage-navigation-url";
 import { officialFarmTypes } from "../../src/reference/official-farm-guides";
 
 describe("planner editor page", () => {
@@ -41,15 +42,18 @@ describe("planner editor page", () => {
 
   it("omits the workspace introduction while retaining the planner workspace", () => {
     for (const currentLocale of ["en", "zh-CN"] as const) {
-      const homepageMarkup = renderToStaticMarkup(
-        createElement(HomepageContent, {
-          copy: homepageCopyByLocale[currentLocale],
-          currentLocale,
-          onLocaleChange: () => undefined,
-          plannerWorkspace: createElement("div", {
-            "data-test-planner-workspace": true,
-          }),
+      const homepageContentProps = {
+        copy: homepageCopyByLocale[currentLocale],
+        currentLocale,
+        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        plannerHref:
+          currentLocale === "en" ? "/#planner" : "/zh#planner",
+        plannerWorkspace: createElement("div", {
+          "data-test-planner-workspace": true,
         }),
+      };
+      const homepageMarkup = renderToStaticMarkup(
+        createElement(HomepageContent, homepageContentProps),
       );
 
       expect(homepageMarkup).toContain("data-test-planner-workspace");
@@ -61,13 +65,16 @@ describe("planner editor page", () => {
 
   it("does not render a hero eyebrow in either homepage locale", () => {
     for (const currentLocale of ["en", "zh-CN"] as const) {
+      const homepageContentProps = {
+        copy: homepageCopyByLocale[currentLocale],
+        currentLocale,
+        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        plannerHref:
+          currentLocale === "en" ? "/#planner" : "/zh#planner",
+        plannerWorkspace: null,
+      };
       const homepageMarkup = renderToStaticMarkup(
-        createElement(HomepageContent, {
-          copy: homepageCopyByLocale[currentLocale],
-          currentLocale,
-          onLocaleChange: () => undefined,
-          plannerWorkspace: null,
-        }),
+        createElement(HomepageContent, homepageContentProps),
       );
 
       expect(homepageMarkup).not.toContain("data-homepage-eyebrow");
@@ -107,13 +114,16 @@ describe("planner editor page", () => {
         contactHref: "/zh/contact",
       }],
     ] as const) {
+      const homepageContentProps = {
+        copy: homepageCopyByLocale[currentLocale],
+        currentLocale,
+        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        plannerHref:
+          currentLocale === "en" ? "/#planner" : "/zh#planner",
+        plannerWorkspace: null,
+      };
       const homepageMarkup = renderToStaticMarkup(
-        createElement(HomepageContent, {
-          copy: homepageCopyByLocale[currentLocale],
-          currentLocale,
-          onLocaleChange: () => undefined,
-          plannerWorkspace: null,
-        }),
+        createElement(HomepageContent, homepageContentProps),
       );
 
       expect(homepageMarkup).toContain('data-site-footer="true"');
@@ -136,5 +146,39 @@ describe("planner editor page", () => {
         /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
       );
     }
+  });
+
+  it("uses the route-specific planner anchor for every homepage planner CTA", () => {
+    const navigationUrls = createHomepageNavigationUrls({
+      currentLocale: "zh-CN",
+      hash: "#planner",
+      search: "?farmType=forest",
+    });
+    const homepageMarkup = renderToStaticMarkup(
+      createElement(
+        HomepageContent,
+        {
+          copy: homepageCopyByLocale["zh-CN"],
+          currentLocale: "zh-CN",
+          ...navigationUrls,
+          plannerWorkspace: null,
+        },
+      ),
+    );
+
+    expect(homepageMarkup.match(/href="#planner"/g)).toHaveLength(4);
+    expect(homepageMarkup.match(/href="\/zh\?farmType=forest#planner"/g)).toHaveLength(1);
+    expect(homepageMarkup).toMatch(
+      /<a[^>]*data-homepage-brand[^>]*href="#planner"/,
+    );
+    expect(homepageMarkup).toMatch(
+      /<a[^>]*href="#planner"[^>]*>规划器<\/a>/,
+    );
+    expect(homepageMarkup).toMatch(
+      /<a[^>]*href="#planner"[^>]*>打开规划器<\/a>/,
+    );
+    expect(homepageMarkup).toMatch(
+      /<a[^>]*href="#planner"[^>]*>开始规划<\/a>/,
+    );
   });
 });

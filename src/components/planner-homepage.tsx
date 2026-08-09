@@ -2,30 +2,48 @@
 
 import { useEffect, useState } from "react";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
-import {
-  DEFAULT_HOMEPAGE_LOCALE,
-  type HomepageLocale,
-} from "@/src/homepage/homepage-locale";
+import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import { createHomepageNavigationUrls } from "@/src/homepage/homepage-navigation-url";
 import { HomepageContent } from "./homepage-content";
 import { HomepagePlannerWorkspace } from "./homepage-planner-workspace";
 
-export function PlannerHomepage() {
-  const [homepageLocale, setHomepageLocale] = useState<HomepageLocale>(
-    DEFAULT_HOMEPAGE_LOCALE,
-  );
+type PlannerHomepageProps = Readonly<{
+  locale: HomepageLocale;
+}>;
 
-  const copy = homepageCopyByLocale[homepageLocale];
-
+export function PlannerHomepage({ locale }: PlannerHomepageProps) {
+  const copy = homepageCopyByLocale[locale];
+  const [browserNavigationLocation, setBrowserNavigationLocation] = useState({
+    hash: "",
+    search: "",
+  });
   useEffect(() => {
-    document.documentElement.lang = homepageLocale;
-  }, [homepageLocale]);
+    function synchronizeBrowserNavigationLocation(): void {
+      setBrowserNavigationLocation({
+        hash: window.location.hash,
+        search: window.location.search,
+      });
+    }
+
+    synchronizeBrowserNavigationLocation();
+    window.addEventListener("hashchange", synchronizeBrowserNavigationLocation);
+    window.addEventListener("popstate", synchronizeBrowserNavigationLocation);
+    return () => {
+      window.removeEventListener("hashchange", synchronizeBrowserNavigationLocation);
+      window.removeEventListener("popstate", synchronizeBrowserNavigationLocation);
+    };
+  }, []);
+  const navigationUrls = createHomepageNavigationUrls({
+    currentLocale: locale,
+    ...browserNavigationLocation,
+  });
 
   return (
     <div data-homepage-shell>
       <HomepageContent
         copy={copy}
-        currentLocale={homepageLocale}
-        onLocaleChange={setHomepageLocale}
+        currentLocale={locale}
+        {...navigationUrls}
         plannerWorkspace={<HomepagePlannerWorkspace />}
       />
     </div>

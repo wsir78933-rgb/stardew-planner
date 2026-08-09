@@ -19,7 +19,7 @@ export const metadata = createPublicPageMetadata({
 export default function PlannerPage() {
   return (
     <>
-      <PlannerHomepage />
+      <PlannerHomepage locale="en" />
       <JsonLdScript
         structuredData={createWebApplicationStructuredData({
           name: "Stardew Valley Farm Planner",

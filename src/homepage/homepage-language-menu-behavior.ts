@@ -1,16 +1,6 @@
-import type { HomepageLocale } from "./homepage-locale";
-
 type HomepageLanguageMenuCloseActions = {
   closeLanguageMenu: () => void;
   restoreTriggerFocus: () => void;
-};
-
-type HomepageLocaleSelectionActions = HomepageLanguageMenuCloseActions & {
-  onLocaleChange: (homepageLocale: HomepageLocale) => void;
-};
-
-type HomepageLocaleSelection = HomepageLocaleSelectionActions & {
-  homepageLocale: HomepageLocale;
 };
 
 type HomepageLanguageMenuEscapeDismissal = HomepageLanguageMenuCloseActions & {
@@ -38,17 +28,6 @@ type HomepageLanguageMenuDismissalSubscription =
     eventSource: HomepageLanguageMenuEventSource;
     getLanguageSwitcherElement: () => Pick<Node, "contains"> | null;
   };
-
-export function applyHomepageLocaleSelection({
-  closeLanguageMenu,
-  homepageLocale,
-  onLocaleChange,
-  restoreTriggerFocus,
-}: HomepageLocaleSelection): void {
-  onLocaleChange(homepageLocale);
-  closeLanguageMenu();
-  restoreTriggerFocus();
-}
 
 export function dismissHomepageLanguageMenuOnEscape({
   closeLanguageMenu,

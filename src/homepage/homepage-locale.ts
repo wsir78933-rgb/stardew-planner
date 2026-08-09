@@ -7,8 +7,6 @@ export const HOMEPAGE_LOCALE_LABELS = {
   "zh-CN": "中文",
 } as const satisfies Readonly<Record<HomepageLocale, string>>;
 
-export const DEFAULT_HOMEPAGE_LOCALE: HomepageLocale = "en";
-
 export function isHomepageLocale(localeValue: string): localeValue is HomepageLocale {
   return HOMEPAGE_LOCALES.some((homepageLocale) => homepageLocale === localeValue);
 }

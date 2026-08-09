@@ -1,6 +1,5 @@
-import { ChinesePlannerIntroduction } from "../../src/components/chinese-planner-introduction";
 import { JsonLdScript } from "../../src/components/json-ld-script";
-import { PublicPageShell } from "../../src/components/public-page-shell";
+import { PlannerHomepage } from "../../src/components/planner-homepage";
 import { getPublicPageCopy } from "../../src/i18n/public-page-content";
 import { getLocalizedPublicPath } from "../../src/i18n/public-route-registry";
 import { createPublicPageMetadata } from "../../src/seo/page-metadata";
@@ -17,8 +16,8 @@ export const metadata = createPublicPageMetadata({
 
 export default function ChinesePlannerPage() {
   return (
-    <PublicPageShell canonicalPath="/" locale="zh-CN">
-      <ChinesePlannerIntroduction />
+    <>
+      <PlannerHomepage locale="zh-CN" />
       <JsonLdScript
         structuredData={createWebApplicationStructuredData({
           name: pageCopy.plannerTitle,
@@ -26,6 +25,6 @@ export default function ChinesePlannerPage() {
           pathname: getLocalizedPublicPath("zh-CN", "/"),
         })}
       />
-    </PublicPageShell>
+    </>
   );
 }

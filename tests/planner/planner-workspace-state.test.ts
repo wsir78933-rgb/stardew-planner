@@ -102,6 +102,29 @@ describe("planner workspace state", () => {
     ).toEqual(createEmptyPlacementSnapshot());
   });
 
+  it("allows an opened project canonical map to replace the URL-initialized map", () => {
+    const urlInitializedWorkspaceState = createInitialPlannerWorkspaceState("forest");
+
+    const projectCanonicalWorkspaceState = reducePlannerWorkspaceState(
+      urlInitializedWorkspaceState,
+      {
+        activeMapId: "map-instance-8",
+        activeProjectId: "project-3",
+        placementSnapshot: createEmptyPlacementSnapshot(),
+        plannerMapId: "standard",
+        season: "summer",
+        type: "open-canonical-map",
+      },
+    );
+
+    expect(projectCanonicalWorkspaceState).toMatchObject({
+      activeMapId: "map-instance-8",
+      activeProjectId: "project-3",
+      season: "summer",
+      selectedPlannerMapId: "standard",
+    });
+  });
+
   it("preserves same-map edits and resets a different map to its frozen composition", () => {
     const initialWorkspaceState = createInitialPlannerWorkspaceState("standard");
     const editedPlacementSnapshot = applyPlacementSnapshotAction(

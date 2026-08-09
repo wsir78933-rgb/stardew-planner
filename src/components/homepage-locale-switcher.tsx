@@ -3,23 +3,22 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  applyHomepageLocaleSelection,
   subscribeToHomepageLanguageMenuDismissal,
 } from "@/src/homepage/homepage-language-menu-behavior";
 import {
   HOMEPAGE_LOCALE_LABELS,
   HOMEPAGE_LOCALES,
-  type HomepageLocale,
 } from "@/src/homepage/homepage-locale";
+import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 
 type HomepageLocaleSwitcherProps = {
   label: string;
-  onLocaleChange: (homepageLocale: HomepageLocale) => void;
+  localeHrefByLocale: HomepageLocaleHrefByLocale;
 };
 
 export function HomepageLocaleSwitcher({
   label,
-  onLocaleChange,
+  localeHrefByLocale,
 }: HomepageLocaleSwitcherProps) {
   const languageMenuId = useId();
   const languageSwitcherRef = useRef<HTMLDivElement>(null);
@@ -33,15 +32,6 @@ export function HomepageLocaleSwitcher({
     languageSwitcherRef.current
       ?.querySelector<HTMLButtonElement>("[data-homepage-language-trigger]")
       ?.focus();
-  }
-
-  function selectHomepageLocale(homepageLocale: HomepageLocale) {
-    applyHomepageLocaleSelection({
-      closeLanguageMenu,
-      homepageLocale,
-      onLocaleChange,
-      restoreTriggerFocus,
-    });
   }
 
   useEffect(() => {
@@ -77,13 +67,12 @@ export function HomepageLocaleSwitcher({
       >
         {HOMEPAGE_LOCALES.map((homepageLocale) => (
           <li key={homepageLocale}>
-            <button
+            <a
               data-homepage-language-option
-              onClick={() => selectHomepageLocale(homepageLocale)}
-              type="button"
+              href={localeHrefByLocale[homepageLocale]}
             >
               {HOMEPAGE_LOCALE_LABELS[homepageLocale]}
-            </button>
+            </a>
           </li>
         ))}
       </ul>

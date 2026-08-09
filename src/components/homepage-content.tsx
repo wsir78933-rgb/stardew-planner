@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 import { handleFaqSummaryKeyDown } from "@/src/homepage/faq-disclosure-keyboard";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFarmGuideLinks } from "./homepage-farm-guide-links";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
@@ -11,35 +12,37 @@ import { SiteFooter } from "./site-footer";
 type HomepageContentProps = {
   copy: HomepageCopy;
   currentLocale: HomepageLocale;
-  onLocaleChange: (homepageLocale: HomepageLocale) => void;
+  localeHrefByLocale: HomepageLocaleHrefByLocale;
+  plannerHref: string;
   plannerWorkspace: ReactNode;
 };
 
 export function HomepageContent({
   copy,
   currentLocale,
-  onLocaleChange,
+  localeHrefByLocale,
+  plannerHref,
   plannerWorkspace,
 }: HomepageContentProps) {
   return (
     <>
       <header data-homepage-header>
         <nav aria-label={copy.navigation.productName}>
-          <a data-homepage-brand href="#planner">
+          <a data-homepage-brand href={plannerHref}>
             {copy.navigation.productName}
           </a>
           <div data-homepage-navigation-links>
             <a href="#capabilities">{copy.navigation.capabilitiesLabel}</a>
             <a href="#faq">{copy.navigation.faqLabel}</a>
-            <a href="#planner">{copy.navigation.plannerLabel}</a>
+            <a href={plannerHref}>{copy.navigation.plannerLabel}</a>
           </div>
           <div data-homepage-header-actions>
             <HomepageLocaleSwitcher
               label={copy.navigation.languageLabel}
-              onLocaleChange={onLocaleChange}
+              localeHrefByLocale={localeHrefByLocale}
             />
             <Button asChild data-homepage-header-action size="lg">
-              <a href="#planner">{copy.navigation.plannerActionLabel}</a>
+              <a href={plannerHref}>{copy.navigation.plannerActionLabel}</a>
             </Button>
           </div>
         </nav>
@@ -53,7 +56,7 @@ export function HomepageContent({
           </h1>
           <p>{copy.hero.supportingCopy}</p>
           <Button asChild data-homepage-primary-action size="lg">
-            <a href="#planner">{copy.hero.primaryActionLabel}</a>
+            <a href={plannerHref}>{copy.hero.primaryActionLabel}</a>
           </Button>
         </section>
         {plannerWorkspace}

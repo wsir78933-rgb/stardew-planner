@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   applyReferenceOpenMapEdits,
   createReferenceOpenMapSession,
@@ -27,6 +27,7 @@ export type ReferenceProjectWorkspaceState = Readonly<{
 
 export type ReferenceProjectWorkspaceController = Readonly<{
   getState: () => ReferenceProjectWorkspaceState;
+  subscribe: (subscriber: () => void) => () => void;
   clearActiveProject: () => void;
   refreshProjects: () => void;
   openProject: (projectId: string) => void;
@@ -66,12 +67,29 @@ export function createReferenceProjectWorkspaceController(
 ): ReferenceProjectWorkspaceController {
   assertReferenceProjectWorkspaceInput(input);
   let workspaceState = createInitialWorkspaceState(input.initialProjectSummaries);
+  const stateSubscribers = new Set<() => void>();
 
   function commitWorkspaceState(nextWorkspaceState: ReferenceProjectWorkspaceState): void {
     workspaceState = cloneReferenceProjectWorkspaceState(nextWorkspaceState);
     input.onStateChange?.(
       cloneReferenceProjectWorkspaceState(workspaceState),
     );
+    stateSubscribers.forEach((stateSubscriber) => stateSubscriber());
+  }
+
+  function subscribe(stateSubscriber: () => void): () => void {
+    if (typeof stateSubscriber !== "function") {
+      throw new TypeError(
+        `Reference project workspace subscriber must be a function; received ${JSON.stringify(stateSubscriber)}.`,
+      );
+    }
+    stateSubscribers.add(stateSubscriber);
+    let isSubscribed = true;
+    return () => {
+      if (!isSubscribed) return;
+      isSubscribed = false;
+      stateSubscribers.delete(stateSubscriber);
+    };
   }
 
   function openProject(projectId: string): void {
@@ -259,6 +277,7 @@ export function createReferenceProjectWorkspaceController(
 
   return {
     getState: () => cloneReferenceProjectWorkspaceState(workspaceState),
+    subscribe,
     clearActiveProject,
     refreshProjects,
     openProject,
@@ -331,9 +350,6 @@ export function useReferenceProjectWorkspace(
   workspaceState: ReferenceProjectWorkspaceState;
   workspaceController: ReferenceProjectWorkspaceController;
 }> {
-  const [workspaceState, setWorkspaceState] = useState(() =>
-    createInitialWorkspaceState(input.initialProjectSummaries),
-  );
   const controllerReference = useRef<ReferenceProjectWorkspaceController | null>(null);
   const repositoryReference = useRef<ReferenceProjectRepository | null>(null);
   assertReferenceProjectWorkspaceRepositoryReference(
@@ -343,18 +359,69 @@ export function useReferenceProjectWorkspace(
   if (controllerReference.current === null) {
     controllerReference.current = createReferenceProjectWorkspaceController({
       ...input,
-      onStateChange: setWorkspaceState,
     });
     repositoryReference.current = input.repository;
   }
-  const exposedWorkspaceState = useMemo(
-    () => cloneReferenceProjectWorkspaceState(workspaceState),
-    [workspaceState],
+  const projectWorkspace = useReferenceProjectWorkspaceController(
+    controllerReference.current,
   );
-  return {
-    workspaceState: exposedWorkspaceState,
-    workspaceController: controllerReference.current,
-  };
+  if (projectWorkspace === null) {
+    throw new Error("Reference project workspace controller was not created.");
+  }
+  return projectWorkspace;
+}
+
+type SubscribedReferenceProjectWorkspace = Readonly<{
+  workspaceController: ReferenceProjectWorkspaceController;
+  workspaceState: ReferenceProjectWorkspaceState;
+}>;
+
+export function useReferenceProjectWorkspaceController(
+  workspaceController: ReferenceProjectWorkspaceController | null,
+): SubscribedReferenceProjectWorkspace | null {
+  const [subscribedWorkspace, setSubscribedWorkspace] =
+    useState<SubscribedReferenceProjectWorkspace | null>(() =>
+      workspaceController === null
+        ? null
+        : {
+            workspaceController,
+            workspaceState: workspaceController.getState(),
+          },
+    );
+  useEffect(() => {
+    if (workspaceController === null) {
+      setSubscribedWorkspace(null);
+      return;
+    }
+    const subscribedController = workspaceController;
+    function synchronizeWorkspaceState(): void {
+      setSubscribedWorkspace({
+        workspaceController: subscribedController,
+        workspaceState: subscribedController.getState(),
+      });
+    }
+    synchronizeWorkspaceState();
+    return subscribedController.subscribe(synchronizeWorkspaceState);
+  }, [workspaceController]);
+  const currentWorkspace = subscribedWorkspace?.workspaceController === workspaceController
+    ? subscribedWorkspace
+    : workspaceController === null
+      ? null
+      : {
+          workspaceController,
+          workspaceState: workspaceController.getState(),
+        };
+  return useMemo(
+    () => currentWorkspace === null
+      ? null
+      : {
+          workspaceController: currentWorkspace.workspaceController,
+          workspaceState: cloneReferenceProjectWorkspaceState(
+            currentWorkspace.workspaceState,
+          ),
+        },
+    [currentWorkspace],
+  );
 }
 
 function createInitialWorkspaceState(

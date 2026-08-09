@@ -1,7 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ComponentProps } from "react";
 import { expect, it } from "vitest";
-import { ChinesePlannerIntroduction } from "../../src/components/chinese-planner-introduction";
 import { PublicNavigation } from "../../src/components/public-navigation";
 import { PublicPageShell } from "../../src/components/public-page-shell";
 
@@ -39,37 +38,22 @@ it("renders a shared static navigation frame around route content", () => {
   );
 });
 
-it("renders Chinese navigation and a static English-planner CTA", () => {
+it("keeps every Chinese public homepage link on /zh", () => {
   const markup = renderToStaticMarkup(
     <PublicPageShell canonicalPath="/" locale="zh-CN">
-      <ChinesePlannerIntroduction />
+      <h1>中文公共页</h1>
     </PublicPageShell>,
   );
 
   expect(markup).toContain('aria-label="公共导航"');
-  expect(markup).toContain('href="/"');
   expect(markup).toContain(
-    'class="public-page-shell-brand" href="/">星露谷规划器</a>',
+    'class="public-page-shell-brand" href="/zh">星露谷规划器</a>',
   );
-  expect(markup).toContain('href="/">规划器</a>');
-  expect(markup).not.toContain(
-    'aria-current="page" href="/">规划器</a>',
+  expect(markup).toContain(
+    'aria-current="page" href="/zh">规划器</a>',
   );
   expect(markup).toContain('href="/zh/farm-comparison">农场对比</a>');
   expect(markup).toContain('href="/zh/mods">模组</a>');
-  const chinesePlannerDescription =
-    "使用本地地图、物品和项目规划你的星露谷农场布局。";
-  const englishPlannerLanguageNotice =
-    "The editing interface opens in English.";
-
-  expect(markup).toContain(chinesePlannerDescription);
-  expect(markup).toContain(englishPlannerLanguageNotice);
-  expect(markup.indexOf(chinesePlannerDescription)).toBeLessThan(
-    markup.indexOf(englishPlannerLanguageNotice),
-  );
-  expect(markup).toContain(">规划器</a>");
-  expect(markup).not.toContain("开始规划");
-  expect(markup).not.toContain("reference-runtime-root");
   expect(markup).toContain(
     'class="public-page-shell-language-switcher" href="/"',
   );
@@ -81,17 +65,20 @@ it("renders Chinese navigation and a static English-planner CTA", () => {
   expect(markup).toContain('<a href="/zh/privacy">隐私政策</a>');
   expect(markup).toContain('<a href="/zh/terms">服务条款</a>');
   expect(markup).toContain('<a href="/zh/contact">联系我们</a>');
+  expect(markup).toContain('<a href="/zh">规划器</a>');
+  expect(markup).toContain('<a href="/zh#capabilities">使用方式</a>');
+  expect(markup).toContain('<a href="/zh#faq">常见问题</a>');
   expect(markup).toMatch(
     /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
   );
 });
 
-it("marks the matching Chinese public destination current without marking the English Planner entry", () => {
+it("marks the matching Chinese public destination current while keeping its planner home localized", () => {
   const markup = renderToStaticMarkup(
     <PublicNavigation canonicalPath="/farm-comparison" locale="zh-CN" />,
   );
 
-  expect(markup).toContain('href="/">规划器</a>');
+  expect(markup).toContain('href="/zh">规划器</a>');
   expect(markup).toContain(
     'aria-current="page" href="/zh/farm-comparison">农场对比</a>',
   );

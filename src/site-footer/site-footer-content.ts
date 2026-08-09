@@ -49,7 +49,7 @@ export function createSiteFooterContent(
   footerCopy: SiteFooterCopy,
   locale: PublicLocale,
 ): SiteFooterContent {
-  const editorHomepagePath = "/";
+  const localizedHomepagePath = getLocalizedPublicPath(locale, "/");
 
   return {
     identity: {
@@ -60,7 +60,7 @@ export function createSiteFooterContent(
     planner: {
       title: footerCopy.planner.title,
       links: [
-        { label: footerCopy.planner.home, href: editorHomepagePath },
+        { label: footerCopy.planner.home, href: localizedHomepagePath },
         {
           label: footerCopy.planner.farmComparison,
           href: getLocalizedPublicPath(locale, "/farm-comparison"),
@@ -74,8 +74,11 @@ export function createSiteFooterContent(
     explore: {
       title: footerCopy.explore.title,
       links: [
-        { label: footerCopy.explore.capabilities, href: `${editorHomepagePath}#capabilities` },
-        { label: footerCopy.explore.faq, href: `${editorHomepagePath}#faq` },
+        {
+          label: footerCopy.explore.capabilities,
+          href: `${localizedHomepagePath}#capabilities`,
+        },
+        { label: footerCopy.explore.faq, href: `${localizedHomepagePath}#faq` },
       ],
     },
     legal: {

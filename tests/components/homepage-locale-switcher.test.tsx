@@ -1,8 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { expect, test, vi } from "vitest";
+import { expect, test } from "vitest";
 import { HomepageLocaleSwitcher } from "@/src/components/homepage-locale-switcher";
 import {
-  applyHomepageLocaleSelection,
   dismissHomepageLanguageMenuOnEscape,
   subscribeToHomepageLanguageMenuDismissal,
   shouldCloseHomepageLanguageMenuFromPointer,
@@ -60,10 +59,15 @@ function createHomepageLanguageMenuEventSource() {
   };
 }
 
-test("renders a closed language disclosure with unmarked locale options", () => {
-  const onLocaleChange = vi.fn();
+test("renders a closed language disclosure with real English and Chinese route anchors", () => {
   const markup = renderToStaticMarkup(
-    <HomepageLocaleSwitcher label="Language" onLocaleChange={onLocaleChange} />,
+    <HomepageLocaleSwitcher
+      label="Language"
+      localeHrefByLocale={{
+        en: "/?farmType=forest#planner",
+        "zh-CN": "/zh?farmType=forest#planner",
+      }}
+    />,
   );
 
   expect(markup).toContain('aria-label="Language"');
@@ -74,25 +78,15 @@ test("renders a closed language disclosure with unmarked locale options", () => 
   expect(markup).toContain("aria-controls=");
   expect(markup).toContain("<ul");
   expect(markup).toContain("hidden=\"\"");
+  expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/\?farmType=forest#planner"[^>]*>English<\/a>/,
+  );
+  expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/zh\?farmType=forest#planner"[^>]*>中文<\/a>/,
+  );
+  expect(markup).not.toMatch(/<button[^>]*data-homepage-language-option/);
   expect(markup).not.toContain("aria-current");
   expect(markup).not.toContain("aria-pressed");
-});
-
-test("applies locale selection before closing the language menu and restoring focus", () => {
-  const actionOrder: string[] = [];
-  const onLocaleChange = vi.fn((homepageLocale) => {
-    actionOrder.push(`locale:${homepageLocale}`);
-  });
-
-  applyHomepageLocaleSelection({
-    closeLanguageMenu: () => actionOrder.push("close"),
-    homepageLocale: "zh-CN",
-    onLocaleChange,
-    restoreTriggerFocus: () => actionOrder.push("focus"),
-  });
-
-  expect(onLocaleChange).toHaveBeenCalledExactlyOnceWith("zh-CN");
-  expect(actionOrder).toEqual(["locale:zh-CN", "close", "focus"]);
 });
 
 test("closes and restores trigger focus only when Escape dismisses the language menu", () => {

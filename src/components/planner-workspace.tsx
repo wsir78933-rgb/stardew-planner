@@ -58,7 +58,6 @@ import {
 } from "../planner/planner-workspace-required-catalog";
 import type { BuildingPaintColors } from "../paint/building-paint";
 import {
-  createBrowserPlannerWorkspaceBootstrap,
   type BrowserPlannerWorkspaceBootstrapInput,
   type PreparedPlannerWorkspace,
 } from "../planner/planner-workspace-bootstrap";
@@ -92,8 +91,19 @@ import {
   usePlannerWorkspaceState,
   type PlannerWorkspaceStateController,
 } from "../planner/use-planner-workspace-state";
+import {
+  createPlannerWorkspaceMapRequest,
+  type PlannerWorkspaceInitialStartup,
+} from "../planner/planner-workspace-startup";
+import {
+  retainPlannerWorkspaceProjectLifecycle,
+  type PlannerWorkspaceProjectLifecycle,
+} from "../planner/planner-workspace-project-lifecycle";
 import type { EditorTool } from "../editor/editor-view-state";
-import { useReferenceProjectWorkspace } from "../reference-runtime/use-reference-project-workspace";
+import {
+  useReferenceProjectWorkspace,
+  useReferenceProjectWorkspaceController,
+} from "../reference-runtime/use-reference-project-workspace";
 import { EditorMenuBar } from "./editor-menu-bar";
 import { EditorModal } from "./editor-modal";
 import { EditorToolbar } from "./editor-toolbar";
@@ -119,6 +129,11 @@ export type PlannerWorkspaceBootstrap = (
   browserPlannerWorkspaceBootstrapInput: BrowserPlannerWorkspaceBootstrapInput,
 ) => Promise<PreparedPlannerWorkspace | null>;
 
+export type PlannerWorkspaceStartup = PlannerWorkspaceInitialStartup &
+  Readonly<{
+    bootstrapWorkspace: PlannerWorkspaceBootstrap;
+  }>;
+
 export type PlannerWorkspaceRenderState =
   | Readonly<{ kind: "loading"; message: string }>
   | Readonly<{ kind: "error"; message: string; onRetry: () => void }>
@@ -129,7 +144,7 @@ export type PlannerWorkspaceRenderState =
     }>;
 
 export type PlannerWorkspaceProperties = Readonly<{
-  bootstrapWorkspace?: PlannerWorkspaceBootstrap;
+  startup: PlannerWorkspaceStartup;
   loadBuildingMetadata?: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory?: typeof loadCatalogCategory;
   performanceMarker?: EditorPerformanceMarker;
@@ -142,6 +157,9 @@ type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
 
 type PreparedPlannerWorkspaceContentProperties = Readonly<{
   preparedWorkspace: PreparedPlannerWorkspace;
+  projectWorkspace: NonNullable<
+    ReturnType<typeof useReferenceProjectWorkspaceController>
+  >;
   plannerWorkspaceStateController: PlannerWorkspaceStateController;
   loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory: typeof loadCatalogCategory;
@@ -243,19 +261,24 @@ const interiorDecorPatternByCatalogItemId = new Map<string, InteriorDecorCatalog
 function ignoreImportedGameSave(_importedGameSaveState: ImportedGameSaveState): void {}
 
 export function PlannerWorkspace({
-  bootstrapWorkspace,
+  startup,
   loadBuildingMetadata = loadBuildingPlacementMetadata,
   loadRequiredCatalogCategory = loadCatalogCategory,
   performanceMarker,
 }: PlannerWorkspaceProperties) {
-  const plannerWorkspaceStateController = usePlannerWorkspaceState();
+  const plannerWorkspaceStateController = usePlannerWorkspaceState({
+    initialPlannerWorkspaceState: startup.initialPlannerWorkspaceState,
+  });
   const {
     dispatchPlannerWorkspaceAction,
     plannerWorkspaceState,
   } = plannerWorkspaceStateController;
-  const bootstrapWorkspaceReference = useRef<PlannerWorkspaceBootstrap | null>(
-    bootstrapWorkspace ?? null,
+  const bootstrapWorkspaceReference = useRef<PlannerWorkspaceBootstrap>(
+    startup.bootstrapWorkspace,
   );
+  const initialMapRequestReference = useRef(startup.initialMapRequest);
+  const projectLifecycleReference =
+    useRef<PlannerWorkspaceProjectLifecycle | null>(null);
   const resourceGenerationReference = useRef(0);
   const [workspaceResourceState, setWorkspaceResourceState] = useState(
     createInitialPlannerWorkspaceResourceState,
@@ -264,11 +287,9 @@ export function PlannerWorkspace({
     useState<ImportedGameSaveState | null>(null);
 
   useEffect(() => {
-    const mapRequest = {
-      mapId: plannerWorkspaceState.selectedPlannerMapId,
-      mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
-      season: plannerWorkspaceState.season,
-    };
+    const mapRequest = resourceGenerationReference.current === 0
+      ? initialMapRequestReference.current
+      : createPlannerWorkspaceMapRequest(plannerWorkspaceState);
 
     if (!shouldPreparePlannerWorkspaceRequest(workspaceResourceState, mapRequest)) {
       return;
@@ -286,11 +307,7 @@ export function PlannerWorkspace({
 
     async function prepareWorkspace(): Promise<void> {
       try {
-        const resolvedBootstrapWorkspace =
-          bootstrapWorkspaceReference.current ??
-          createBrowserPlannerWorkspaceBootstrap();
-        bootstrapWorkspaceReference.current = resolvedBootstrapWorkspace;
-        const nextPreparedWorkspace = await resolvedBootstrapWorkspace({
+        const nextPreparedWorkspace = await bootstrapWorkspaceReference.current({
           isGenerationCurrent: isResourceGenerationCurrent,
           mapRequest,
           resourceGeneration,
@@ -333,11 +350,14 @@ export function PlannerWorkspace({
   ]);
 
   const preparedWorkspace = workspaceResourceState.preparedRequest?.preparedWorkspace ?? null;
-  const mapRequest = {
-    mapId: plannerWorkspaceState.selectedPlannerMapId,
-    mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
-    season: plannerWorkspaceState.season,
-  };
+  projectLifecycleReference.current = retainPlannerWorkspaceProjectLifecycle(
+    projectLifecycleReference.current,
+    preparedWorkspace?.projectState ?? null,
+  );
+  const projectWorkspace = useReferenceProjectWorkspaceController(
+    projectLifecycleReference.current?.workspaceController ?? null,
+  );
+  const mapRequest = createPlannerWorkspaceMapRequest(plannerWorkspaceState);
   const isPreparedWorkspaceCurrent =
     preparedWorkspace !== null &&
     !shouldPreparePlannerWorkspaceRequest(workspaceResourceState, mapRequest);
@@ -359,6 +379,7 @@ export function PlannerWorkspace({
         performanceMarker={performanceMarker}
         plannerWorkspaceRenderState={plannerWorkspaceRenderState}
         plannerWorkspaceStateController={plannerWorkspaceStateController}
+        projectWorkspace={projectWorkspace}
       />
       <PlannerGameSaveImportResultLoader
         importedGameSaveState={importedGameSaveResult}
@@ -397,6 +418,18 @@ function StaticPreparedPlannerWorkspace({
   const defaultPlannerWorkspaceStateController = usePlannerWorkspaceState();
   const resolvedPlannerWorkspaceStateController =
     plannerWorkspaceStateController ?? defaultPlannerWorkspaceStateController;
+  const projectLifecycleReference =
+    useRef<PlannerWorkspaceProjectLifecycle | null>(null);
+  const projectLifecycle = projectLifecycleReference.current === null
+    ? retainPlannerWorkspaceProjectLifecycle(null, preparedWorkspace.projectState)
+    : retainPlannerWorkspaceProjectLifecycle(
+        projectLifecycleReference.current,
+        preparedWorkspace.projectState,
+      );
+  projectLifecycleReference.current = projectLifecycle;
+  const projectWorkspace = useReferenceProjectWorkspaceController(
+    projectLifecycle.workspaceController,
+  );
 
   return (
     <PlannerWorkspaceRenderedBoundary
@@ -410,6 +443,7 @@ function StaticPreparedPlannerWorkspace({
         runtimeStatus,
       }}
       plannerWorkspaceStateController={resolvedPlannerWorkspaceStateController}
+      projectWorkspace={projectWorkspace}
     />
   );
 }
@@ -421,6 +455,7 @@ function PlannerWorkspaceRenderedBoundary({
   performanceMarker,
   plannerWorkspaceRenderState,
   plannerWorkspaceStateController,
+  projectWorkspace,
 }: Readonly<{
   loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory: typeof loadCatalogCategory;
@@ -428,15 +463,17 @@ function PlannerWorkspaceRenderedBoundary({
   performanceMarker?: EditorPerformanceMarker;
   plannerWorkspaceRenderState: PlannerWorkspaceRenderState;
   plannerWorkspaceStateController: PlannerWorkspaceStateController;
+  projectWorkspace: ReturnType<typeof useReferenceProjectWorkspaceController>;
 }>) {
   return (
     <PlannerWorkspaceGeometry plannerWorkspaceRenderState={plannerWorkspaceRenderState}>
-      {plannerWorkspaceRenderState.kind === "prepared" ? (
+      {plannerWorkspaceRenderState.kind === "prepared" && projectWorkspace !== null ? (
         <PreparedPlannerWorkspaceContent
           loadBuildingMetadata={loadBuildingMetadata}
           loadRequiredCatalogCategory={loadRequiredCatalogCategory}
           plannerWorkspaceStateController={plannerWorkspaceStateController}
           preparedWorkspace={plannerWorkspaceRenderState.preparedWorkspace}
+          projectWorkspace={projectWorkspace}
           onImportedGameSaveResult={onImportedGameSaveResult}
           performanceMarker={performanceMarker}
           runtimeStatus={plannerWorkspaceRenderState.runtimeStatus}
@@ -468,6 +505,7 @@ function PlannerWorkspaceGeometry({
 
 function PreparedPlannerWorkspaceContent({
   preparedWorkspace,
+  projectWorkspace,
   plannerWorkspaceStateController,
   loadBuildingMetadata,
   loadRequiredCatalogCategory,
@@ -481,9 +519,7 @@ function PreparedPlannerWorkspaceContent({
     plannerWorkspaceState,
     setSelectedPlacementKeys,
   } = plannerWorkspaceStateController;
-  const { workspaceController, workspaceState } = usePreparedWorkspaceProjectState(
-    preparedWorkspace,
-  );
+  const { workspaceController, workspaceState } = projectWorkspace;
   const workspacePersistenceControls = usePlannerWorkspacePersistenceControls({
     dispatchPlannerWorkspaceAction,
     plannerWorkspaceState,
@@ -883,15 +919,6 @@ function PreparedPlannerWorkspaceContent({
       />
     </>
   );
-}
-
-function usePreparedWorkspaceProjectState(
-  preparedWorkspace: PreparedPlannerWorkspace,
-): ReturnType<typeof useReferenceProjectWorkspace> {
-  return useReferenceProjectWorkspace({
-    initialProjectSummaries: preparedWorkspace.projectState.projects,
-    repository: preparedWorkspace.projectState.repository,
-  });
 }
 
 function createProjectMapPanelContent({

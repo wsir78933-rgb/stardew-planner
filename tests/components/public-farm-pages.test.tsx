@@ -79,7 +79,7 @@ describe("public farm pages", () => {
     expect(guideMarkup).toContain(`href="/?farmType=${standardFarmGuide.id}"`);
   });
 
-  it("keeps Chinese planning CTAs on the English planner and localizes public farm links", () => {
+  it("keeps Chinese planner links on the Chinese homepage while localizing public farm links", () => {
     const comparisonMarkup = renderToStaticMarkup(
       createElement(FarmComparisonContent, { locale: "zh-CN" }),
     );
@@ -92,14 +92,32 @@ describe("public farm pages", () => {
         ),
       }),
     );
+    const modMapMarkup = renderToStaticMarkup(
+      createElement(ModMapCardGrid, { locale: "zh-CN" }),
+    );
 
     expect(comparisonMarkup).toContain("标准农场");
     expect(comparisonMarkup).toContain('href="/zh/farm/standard"');
-    expect(comparisonMarkup).toContain('href="/?farmType=standard"');
-    expect(guideMarkup).toContain('href="/">星露谷规划器</a>');
+    expect(comparisonMarkup).toContain('href="/zh?farmType=standard"');
+    expect(guideMarkup).toContain('href="/zh">星露谷规划器</a>');
     expect(guideMarkup).toContain('href="/zh/farm-comparison"');
     expect(guideMarkup).toContain('href="/zh/farm/riverland"');
-    expect(guideMarkup).toContain('href="/?farmType=standard"');
+    expect(guideMarkup).toContain('href="/zh?farmType=standard"');
+
+    for (const plannerMap of plannerMaps) {
+      if (
+        plannerMap.category !== "community-farm" &&
+        plannerMap.category !== "community-interior"
+      ) {
+        continue;
+      }
+
+      expect(modMapMarkup).toContain(`href="/zh?farmType=${plannerMap.id}"`);
+    }
+
+    expect(comparisonMarkup).not.toContain('href="/?farmType=');
+    expect(guideMarkup).not.toContain('href="/?farmType=');
+    expect(modMapMarkup).not.toContain('href="/?farmType=');
   });
 
   it("rejects an omitted locale instead of rendering an English comparison", () => {

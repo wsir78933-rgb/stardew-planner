@@ -5,11 +5,18 @@ import ChinesePlannerPage, {
 } from "../../app/zh/page";
 import { generateMetadata as generateChineseFarmMetadata } from "../../app/zh/farm/[type]/page";
 
-it("renders a Chinese static introduction that links to the English planner", () => {
+it("renders /zh as the Chinese homepage with the shared planner workspace", () => {
   const markup = renderToStaticMarkup(<ChinesePlannerPage />);
 
   expect(markup).toContain("星露谷农场规划器");
+  expect(markup).toContain("适用于各种农场布局的");
+  expect(markup).toContain('data-homepage-shell="true"');
+  expect(markup).toContain("data-homepage-workspace");
+  expect(markup.match(/href="#planner"/g)).toHaveLength(4);
+  expect(markup).toContain('href="/zh"');
   expect(markup).toContain('href="/"');
+  expect(markup).not.toContain('data-public-page-shell="true"');
+  expect(markup).not.toContain("The editing interface opens in English.");
   expect(markup).not.toContain("reference-runtime-root");
 });
 

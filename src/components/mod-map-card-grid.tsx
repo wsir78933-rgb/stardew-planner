@@ -4,6 +4,7 @@ import {
   getPublicPageCopy,
 } from "../i18n/public-page-content";
 import type { PublicLocale } from "../i18n/public-locale";
+import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 
 type ModMapCardGridProperties = Readonly<{
   locale: PublicLocale;
@@ -11,6 +12,7 @@ type ModMapCardGridProperties = Readonly<{
 
 export function ModMapCardGrid({ locale }: ModMapCardGridProperties) {
   const pageCopy = getPublicPageCopy(locale);
+  const localizedPlannerHomepagePath = getLocalizedPublicPath(locale, "/");
 
   return (
     <section className="mod-farm-card-list" aria-label={pageCopy.availableCommunityFarmsLabel}>
@@ -34,7 +36,7 @@ export function ModMapCardGrid({ locale }: ModMapCardGridProperties) {
             <p>{modFarmCard.description}</p>
             <a
               className="public-primary-cta"
-              href={`/?farmType=${modFarmCard.id}`}
+              href={`${localizedPlannerHomepagePath}?farmType=${modFarmCard.id}`}
             >
               {pageCopy.planThisFarmLabel}
             </a>

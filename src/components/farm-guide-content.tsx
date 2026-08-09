@@ -50,11 +50,12 @@ export function FarmGuideContent({
     getLocalizedOfficialFarmGuide(locale, otherFarmGuide.id),
   );
   const pageCopy = getPublicPageCopy(locale);
+  const localizedPlannerHomepagePath = getLocalizedPublicPath(locale, "/");
 
   return (
     <>
       <nav aria-label={pageCopy.breadcrumbLabel} className="public-breadcrumbs">
-        <a href="/">{pageCopy.brandLabel}</a>
+        <a href={localizedPlannerHomepagePath}>{pageCopy.brandLabel}</a>
         <span aria-hidden="true">/</span>
         <a href={getLocalizedPublicPath(locale, "/farm-comparison")}>
           {pageCopy.farmTypesLabel}
@@ -75,7 +76,10 @@ export function FarmGuideContent({
           <p>{localizedFarmGuide.introduction}</p>
           <FarmGuideStats farmGuide={localizedFarmGuide} locale={locale} />
           <div className="farm-guide-hero__actions">
-            <a className="public-primary-cta" href={`/?farmType=${localizedFarmGuide.id}`}>
+            <a
+              className="public-primary-cta"
+              href={`${localizedPlannerHomepagePath}?farmType=${localizedFarmGuide.id}`}
+            >
               {pageCopy.planThisFarmLabel}
             </a>
             <a

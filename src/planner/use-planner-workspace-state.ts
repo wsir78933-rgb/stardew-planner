@@ -23,6 +23,7 @@ export type PlannerWorkspaceKeyboardListenerPort = Readonly<{
 
 export type UsePlannerWorkspaceStateInput = Readonly<{
   initialPlannerMapId?: string;
+  initialPlannerWorkspaceState?: PlannerWorkspaceState;
   keyboardListenerPort?: PlannerWorkspaceKeyboardListenerPort;
 }>;
 
@@ -44,8 +45,9 @@ export function usePlannerWorkspaceState(
 ): PlannerWorkspaceStateController {
   const [plannerWorkspaceState, dispatchPlannerWorkspaceAction] = useReducer(
     reducePlannerWorkspaceState,
-    usePlannerWorkspaceStateInput.initialPlannerMapId,
-    (initialPlannerMapId) =>
+    usePlannerWorkspaceStateInput,
+    ({ initialPlannerMapId, initialPlannerWorkspaceState }) =>
+      initialPlannerWorkspaceState ??
       createInitialPlannerWorkspaceState(
         initialPlannerMapId,
         typeof window === "undefined" ? undefined : window.innerWidth,

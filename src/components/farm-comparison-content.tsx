@@ -47,6 +47,7 @@ function FarmComparisonCard({
 }>) {
   const farmGuide = getLocalizedOfficialFarmGuide(locale, farmType);
   const pageCopy = getPublicPageCopy(locale);
+  const localizedPlannerHomepagePath = getLocalizedPublicPath(locale, "/");
 
   return (
     <article className="farm-comparison-card" id={farmGuide.id}>
@@ -74,7 +75,10 @@ function FarmComparisonCard({
             <strong>{pageCopy.noteLabel}</strong> {farmGuide.note}
           </p>
         ) : null}
-        <a className="public-primary-cta" href={`/?farmType=${farmGuide.id}`}>
+        <a
+          className="public-primary-cta"
+          href={`${localizedPlannerHomepagePath}?farmType=${farmGuide.id}`}
+        >
           {formatPublicPageCopy(pageCopy.planFarmTemplate, {
             farmName: farmGuide.title,
           })}

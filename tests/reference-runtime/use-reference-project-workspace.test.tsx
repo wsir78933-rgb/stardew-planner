@@ -44,6 +44,34 @@ function createController(repository = createRepository()) {
 }
 
 describe("reference project workspace controller", () => {
+  it("notifies active subscribers and removes each subscription once", () => {
+    const controller = createController();
+    const firstSubscriber = vi.fn();
+    const secondSubscriber = vi.fn();
+    const unsubscribeFirstSubscriber = controller.subscribe(firstSubscriber);
+    const unsubscribeSecondSubscriber = controller.subscribe(secondSubscriber);
+
+    controller.openProject("project-alpha");
+    expect(firstSubscriber).toHaveBeenCalledTimes(1);
+    expect(secondSubscriber).toHaveBeenCalledTimes(1);
+
+    unsubscribeFirstSubscriber();
+    unsubscribeFirstSubscriber();
+    controller.clearActiveProject();
+
+    expect(firstSubscriber).toHaveBeenCalledTimes(1);
+    expect(secondSubscriber).toHaveBeenCalledTimes(2);
+    unsubscribeSecondSubscriber();
+  });
+
+  it("rejects a non-function state subscriber with its received value", () => {
+    const controller = createController();
+
+    expect(() =>
+      controller.subscribe("not-a-function" as unknown as () => void),
+    ).toThrow(/subscriber.*not-a-function/);
+  });
+
   it.each([
     "listProjects",
     "openProject",

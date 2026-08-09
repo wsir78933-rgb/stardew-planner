@@ -30,6 +30,26 @@ type StaticBlogPageExpectation = Readonly<{
   coverImages: readonly Readonly<{ src: string; alt: string }>[];
 }>;
 
+type StaticHomepageExpectation = Readonly<{
+  staticPageFile: "index.html" | "zh.html";
+  heroMarkup: string;
+  heroSupportingCopy: string;
+  capabilityHeading: string;
+  capabilityDescriptions: readonly string[];
+  farmGuideHeading: string;
+  faqHeading: string;
+  faqAnswers: readonly string[];
+  trustHeading: string;
+  trustDescription: string;
+  plannerHref: string;
+  farmComparisonHref: string;
+  moddedFarmsHref: string;
+  homepageHref: string;
+  jsonLdName: string;
+  jsonLdDescription: string;
+  jsonLdUrl: string;
+}>;
+
 const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
   [
     "/",
@@ -107,7 +127,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
   ["/farm/four-corners", "farm/four-corners.html", "Four Corners Farm | Stardew Valley Farm Planner", "Four Corners Farm farm guide. Multiplayer runs. Solo players get a taste of every farm in one map.", "Four Corners Farm", "en"],
   ["/farm/beach", "farm/beach.html", "Beach Farm | Stardew Valley Farm Planner", "Beach Farm farm guide. Fishing, foraging, scenic ocean builds, and ranch layouts.", "Beach Farm", "en"],
   ["/farm/meadowlands", "farm/meadowlands.html", "Meadowlands Farm | Stardew Valley Farm Planner", "Meadowlands Farm farm guide. Ranching. Blue Grass removes the winter hay scramble.", "Meadowlands Farm", "en"],
-  ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "星露谷农场规划器", "zh-CN"],
+  ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "适用于各种农场布局的星露谷物语规划器", "zh-CN"],
   ["/zh/farm-comparison", "zh/farm-comparison.html", "星露谷农场类型对比", "在规划布局前，对比《星露谷物语》的全部官方农场地图。", "星露谷农场类型对比", "zh-CN"],
   ["/zh/mods", "zh/mods.html", "星露谷模组规划器", "规划你的星露谷模组组合。", "星露谷模组规划器", "zh-CN"],
   [
@@ -287,6 +307,74 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   },
 ];
 
+const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
+  {
+    staticPageFile: "index.html",
+    heroMarkup:
+      '<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout</h1>',
+    heroSupportingCopy:
+      "Design your farm directly in the browser. Choose from eight official farm types, place buildings, crops and decor, switch between seasons, and visualize important coverage ranges.",
+    capabilityHeading: "Plan with the map in view",
+    capabilityDescriptions: [
+      "Start with Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach or Meadowlands. Ginger Island is also available in the map picker.",
+      "Arrange buildings, crops, placeables and decor while checking sprinkler, scarecrow, Bee House and Junimo Hut coverage.",
+      "Create and save local projects without an account or cloud sync.",
+    ],
+    farmGuideHeading: "Choose a farm type before you plan",
+    faqHeading: "Frequently asked questions",
+    faqAnswers: [
+      "Projects are saved locally in this browser. There is no account or cloud sync, so use the same browser and device to reopen them.",
+      "The planner includes Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is also available in the map picker.",
+      "You can switch between spring, summer, fall, and winter and show sprinkler, scarecrow, Bee House, and Junimo Hut coverage.",
+      "Yes. Game-save import is experimental, and unsupported or modded items may not be mapped.",
+      "Yes. The planner provides standard and high-quality screenshot downloads.",
+    ],
+    trustHeading: "About this planner",
+    trustDescription:
+      "Fan-made Stardew Valley planning tool. Not affiliated with or endorsed by ConcernedApe or Stardew Valley. Projects stay in this browser.",
+    plannerHref: "#planner",
+    farmComparisonHref: "/farm-comparison",
+    moddedFarmsHref: "/mods",
+    homepageHref: "/",
+    jsonLdName: "Stardew Valley Farm Planner",
+    jsonLdDescription:
+      "Plan Stardew Valley farm layouts in your browser with an interactive map.",
+    jsonLdUrl: "https://stardewvalleyplanner.art",
+  },
+  {
+    staticPageFile: "zh.html",
+    heroMarkup:
+      '<h1>适用于各种农场布局的<em data-homepage-hero-emphasis="true">星露谷物语</em>规划器</h1>',
+    heroSupportingCopy:
+      "直接在浏览器中设计农场。选择八种官方农场类型，放置建筑、作物和装饰，切换季节，并查看重要设施的覆盖范围。",
+    capabilityHeading: "在地图中完成规划",
+    capabilityDescriptions: [
+      "从标准、河流、森林、山顶、荒野、四角、海滩或草原农场开始规划。地图选择器中还提供姜岛。",
+      "放置建筑、作物、可放置物和装饰，同时查看洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
+      "无需账号或云同步，直接在当前浏览器中创建并保存本地项目。",
+    ],
+    farmGuideHeading: "规划前先选择农场类型",
+    faqHeading: "常见问题",
+    faqAnswers: [
+      "项目保存在当前浏览器本地。这里没有账号或云同步功能，因此请使用同一浏览器和设备重新打开项目。",
+      "规划器包含标准、河流、森林、山顶、荒野、四角、海滩和草原农场。地图选择器中还提供姜岛。",
+      "你可以在春、夏、秋、冬之间切换，并显示洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
+      "可以。存档导入仍是实验性功能，不受支持或来自模组的物品可能无法映射。",
+      "可以。规划器提供标准画质和高画质的截图下载。",
+    ],
+    trustHeading: "关于这个规划器",
+    trustDescription:
+      "这是一个玩家制作的《星露谷物语》规划工具，与 ConcernedApe 或《星露谷物语》官方无隶属或认可关系。项目只保存在当前浏览器中。",
+    plannerHref: "#planner",
+    farmComparisonHref: "/zh/farm-comparison",
+    moddedFarmsHref: "/zh/mods",
+    homepageHref: "/zh",
+    jsonLdName: "星露谷农场规划器",
+    jsonLdDescription: "使用本地地图、物品和项目规划你的星露谷农场布局。",
+    jsonLdUrl: "https://stardewvalleyplanner.art/zh",
+  },
+];
+
 function readStaticPageHtml(staticPageFile: string): string {
   const staticPagePath = join(process.cwd(), "out", staticPageFile);
 
@@ -357,6 +445,83 @@ function escapeHtmlAttributeValue(value: string): string {
     .replaceAll("'", "&#x27;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
+}
+
+function readWebApplicationStructuredData(
+  staticPageHtml: string,
+  staticPageFile: string,
+): Record<string, unknown> {
+  const serializedStructuredData = staticPageHtml.match(
+    /<script type="application\/ld\+json">([^<]+)<\/script>/,
+  )?.[1];
+
+  if (serializedStructuredData === undefined) {
+    throw new Error(
+      `Expected ${staticPageFile} to contain a WebApplication JSON-LD script.`,
+    );
+  }
+
+  const structuredData: unknown = JSON.parse(serializedStructuredData);
+
+  if (typeof structuredData !== "object" || structuredData === null) {
+    throw new Error(
+      `Expected ${staticPageFile} WebApplication JSON-LD to be an object. Received: ${JSON.stringify(structuredData)}.`,
+    );
+  }
+
+  return structuredData as Record<string, unknown>;
+}
+
+function expectStaticHomepageContent(
+  staticPageHtml: string,
+  expectedHomepage: StaticHomepageExpectation,
+): void {
+  expect(staticPageHtml).toContain('data-homepage-shell="true"');
+  expect(staticPageHtml).toContain(expectedHomepage.heroMarkup);
+  expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+  expect(staticPageHtml).toContain(expectedHomepage.heroSupportingCopy);
+  expect(staticPageHtml).toContain(
+    `<h2>${expectedHomepage.capabilityHeading}</h2>`,
+  );
+  for (const capabilityDescription of expectedHomepage.capabilityDescriptions) {
+    expect(staticPageHtml).toContain(capabilityDescription);
+  }
+  expect(staticPageHtml).toContain(
+    `<h2 id="homepage-farm-guides-heading">${expectedHomepage.farmGuideHeading}</h2>`,
+  );
+  expect(staticPageHtml).toContain(`<h2>${expectedHomepage.faqHeading}</h2>`);
+  for (const faqAnswer of expectedHomepage.faqAnswers) {
+    expect(staticPageHtml).toContain(faqAnswer);
+  }
+  expect(staticPageHtml).toContain(`<h2>${expectedHomepage.trustHeading}</h2>`);
+  expect(staticPageHtml).toContain(expectedHomepage.trustDescription);
+  expect(staticPageHtml).toContain('data-homepage-workspace="true"');
+  expect(staticPageHtml).toContain('role="status">Loading planner…');
+  expect(
+    staticPageHtml.match(
+      new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),
+    ),
+  ).toHaveLength(4);
+  expect(staticPageHtml).toContain(`href="${expectedHomepage.farmComparisonHref}"`);
+  expect(staticPageHtml).toContain(`href="${expectedHomepage.moddedFarmsHref}"`);
+  expect(staticPageHtml).toContain(`href="${expectedHomepage.homepageHref}"`);
+  expect(staticPageHtml.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
+    officialFarmTypes.length,
+  );
+  expect(
+    readWebApplicationStructuredData(
+      staticPageHtml,
+      expectedHomepage.staticPageFile,
+    ),
+  ).toMatchObject({
+    "@type": "WebApplication",
+    name: expectedHomepage.jsonLdName,
+    description: expectedHomepage.jsonLdDescription,
+    url: expectedHomepage.jsonLdUrl,
+  });
+  expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
+  expect(staticPageHtml).not.toContain("reference-runtime-root");
+  expect(staticPageHtml).not.toContain("/reference-runtime/bootstrap.mjs");
 }
 
 describe("static public pages", () => {
@@ -514,40 +679,13 @@ describe("static public pages", () => {
         );
       }
 
-      if (staticPageFile === "index.html") {
-        expect(staticPageHtml).toContain("WebApplication");
-        expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
-        expect(staticPageHtml).toContain('role="status">Loading planner…');
-        expect(staticPageHtml).not.toContain("reference-runtime/bootstrap.mjs");
-        expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
-        expect(staticPageHtml).toContain(
-          `<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout</h1>`,
-        );
-        for (const capabilityDescription of [
-          "Start with Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach or Meadowlands. Ginger Island is also available in the map picker.",
-          "Arrange buildings, crops, placeables and decor while checking sprinkler, scarecrow, Bee House and Junimo Hut coverage.",
-          "Create and save local projects without an account or cloud sync.",
-        ]) {
-          expect(staticPageHtml).toContain(capabilityDescription);
-        }
-        for (const faqAnswer of [
-          "Projects are saved locally in this browser. There is no account or cloud sync, so use the same browser and device to reopen them.",
-          "The planner includes Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is also available in the map picker.",
-          "You can switch between spring, summer, fall, and winter and show sprinkler, scarecrow, Bee House, and Junimo Hut coverage.",
-          "Yes. Game-save import is experimental, and unsupported or modded items may not be mapped.",
-          "Yes. The planner provides standard and high-quality screenshot downloads.",
-        ]) {
-          expect(staticPageHtml).toContain(faqAnswer);
-        }
-        expect(staticPageHtml).toContain("About this planner");
-        expect(staticPageHtml).toContain(
-          "Fan-made Stardew Valley planning tool. Not affiliated with or endorsed by ConcernedApe or Stardew Valley. Projects stay in this browser.",
-        );
-        expect(staticPageHtml.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
-          officialFarmTypes.length,
-        );
-        expect(staticPageHtml).toContain('href="/farm-comparison"');
-        expect(staticPageHtml).toContain('href="/mods">Modded farms</a>');
+      const expectedHomepage = staticHomepageExpectations.find(
+        (homepageExpectation) =>
+          homepageExpectation.staticPageFile === staticPageFile,
+      );
+
+      if (expectedHomepage !== undefined) {
+        expectStaticHomepageContent(staticPageHtml, expectedHomepage);
         continue;
       }
 
@@ -568,8 +706,6 @@ describe("static public pages", () => {
       );
     }
 
-    expect(readStaticPageHtml("zh.html")).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
-    expect(readStaticPageHtml("zh.html")).not.toContain("reference-runtime-root");
     expect(
       staticPublicPageExpectations.filter(
         ([pathname, , , , , expectedDocumentLanguage]) =>
