@@ -65,6 +65,7 @@ import {
   type CameraState,
   zoomCameraAtPoint,
 } from "../rendering/camera-state";
+import type { PlannerCameraStateRetention } from "../planner/planner-camera-state-retention";
 import {
   createPlacementRenderEntries,
   createTransientPlacementRenderEntries,
@@ -166,6 +167,7 @@ export function createPlannerCanvasPlacementPreviewState(
 }
 
 export type PlannerCanvasProperties = Readonly<{
+  cameraStateRetention: PlannerCameraStateRetention;
   catalogItems?: readonly CatalogItem[];
   displayOptions?: EditorDisplayOptions;
   isXRayActive?: boolean;
@@ -241,6 +243,31 @@ type PlannerCanvasStatus =
   | Readonly<{ kind: "loading" }>
   | Readonly<{ kind: "ready" }>
   | Readonly<{ kind: "error"; message: string }>;
+
+export type PlannerCanvasCameraStateRetentionController = Readonly<{
+  getInitialCameraState(cameraGeometry: CameraGeometry): CameraState;
+  retainCameraState(cameraState: CameraState): void;
+}>;
+
+export function createPlannerCanvasCameraStateRetentionController(
+  input: Readonly<{
+    cameraStateRetention: PlannerCameraStateRetention;
+    mapId: string;
+  }>,
+): PlannerCanvasCameraStateRetentionController {
+  return {
+    getInitialCameraState(cameraGeometry): CameraState {
+      const retainedCameraState = input.cameraStateRetention.read(input.mapId);
+
+      return retainedCameraState === null
+        ? createInitialCameraState(cameraGeometry)
+        : clampCameraPosition(retainedCameraState, cameraGeometry);
+    },
+    retainCameraState(cameraState): void {
+      input.cameraStateRetention.write(input.mapId, cameraState);
+    },
+  };
+}
 
 type PixiModule = typeof import("pixi.js");
 type PixiTexture = import("pixi.js").Texture;
@@ -854,6 +881,7 @@ export function createInitialResolvedPlacementTextureEntries(
 }
 
 export function PlannerCanvas({
+  cameraStateRetention,
   catalogItems,
   displayOptions = createInitialEditorDisplayOptions(),
   isXRayActive = false,
@@ -1011,6 +1039,11 @@ export function PlannerCanvas({
       number,
       PixiTexture
     > | null = null;
+    const cameraStateRetentionController =
+      createPlannerCanvasCameraStateRetentionController({
+        cameraStateRetention,
+        mapId,
+      });
 
     const cleanUpPlannerCanvas = createPlannerCanvasCleanup({
       disposeInteractionBinding: () => interactionBinding?.dispose(),
@@ -1433,6 +1466,12 @@ export function PlannerCanvas({
           );
         };
 
+        const commitCameraState = (cameraState: CameraState): void => {
+          currentCameraState = cameraState;
+          renderCameraState(cameraState);
+          cameraStateRetentionController.retainCameraState(cameraState);
+        };
+
         const resizeMapToViewport = () => {
           if (!isMapLifecycleCurrent()) {
             return;
@@ -1446,11 +1485,13 @@ export function PlannerCanvas({
             currentCameraGeometry.viewportWidth,
             currentCameraGeometry.viewportHeight,
           );
-          currentCameraState =
+          const resizedCameraState =
             currentCameraState === null
-              ? createInitialCameraState(currentCameraGeometry)
+              ? cameraStateRetentionController.getInitialCameraState(
+                  currentCameraGeometry,
+                )
               : clampCameraPosition(currentCameraState, currentCameraGeometry);
-          renderCameraState(currentCameraState);
+          commitCameraState(resizedCameraState);
         };
 
         resizeMapToViewport();
@@ -1470,12 +1511,11 @@ export function PlannerCanvas({
             );
           }
 
-          currentCameraState = panCameraBy(
+          commitCameraState(panCameraBy(
             currentCameraState,
             currentCameraGeometry,
             cameraPan,
-          );
-          renderCameraState(currentCameraState);
+          ));
         };
         joystickCameraPanReference.current = joystickCameraPan;
         interactionBinding = bindPlannerCanvasInteractions(
@@ -1620,8 +1660,7 @@ export function PlannerCanvas({
                   onMoveSelectedPlacementsReference.current?.(tileDelta);
                 },
                 setCameraState(cameraState: CameraState): void {
-                  currentCameraState = cameraState;
-                  renderCameraState(cameraState);
+                  commitCameraState(cameraState);
                 },
               }),
             createResizeObserver: (onResize) => new ResizeObserver(onResize),

@@ -62,6 +62,10 @@ import {
   type PreparedPlannerWorkspace,
 } from "../planner/planner-workspace-bootstrap";
 import {
+  createPlannerCameraStateRetention,
+  type PlannerCameraStateRetention,
+} from "../planner/planner-camera-state-retention";
+import {
   createPlannerLocalProjectActions,
   createPlannerProjectMapActions,
 } from "../planner/planner-workspace-project-actions";
@@ -159,6 +163,7 @@ type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
 }>;
 
 type PreparedPlannerWorkspaceContentProperties = Readonly<{
+  cameraStateRetention: PlannerCameraStateRetention;
   preparedWorkspace: PreparedPlannerWorkspace;
   projectWorkspace: NonNullable<
     ReturnType<typeof useReferenceProjectWorkspaceController>
@@ -492,10 +497,18 @@ function PlannerWorkspaceRenderedBoundary({
   plannerWorkspaceStateController: PlannerWorkspaceStateController;
   projectWorkspace: ReturnType<typeof useReferenceProjectWorkspaceController>;
 }>) {
+  const cameraStateRetentionReference =
+    useRef<PlannerCameraStateRetention | null>(null);
+
+  if (cameraStateRetentionReference.current === null) {
+    cameraStateRetentionReference.current = createPlannerCameraStateRetention();
+  }
+
   return (
     <PlannerWorkspaceGeometry plannerWorkspaceRenderState={plannerWorkspaceRenderState}>
       {plannerWorkspaceRenderState.kind === "prepared" && projectWorkspace !== null ? (
         <PreparedPlannerWorkspaceContent
+          cameraStateRetention={cameraStateRetentionReference.current}
           loadBuildingMetadata={loadBuildingMetadata}
           loadRequiredCatalogCategory={loadRequiredCatalogCategory}
           plannerWorkspaceStateController={plannerWorkspaceStateController}
@@ -531,6 +544,7 @@ function PlannerWorkspaceGeometry({
 }
 
 function PreparedPlannerWorkspaceContent({
+  cameraStateRetention,
   preparedWorkspace,
   projectWorkspace,
   plannerWorkspaceStateController,
@@ -856,6 +870,7 @@ function PreparedPlannerWorkspaceContent({
       <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
         <PlannerCanvas
           activeInteriorDecorPattern={activeInteriorDecorPattern}
+          cameraStateRetention={cameraStateRetention}
           catalogItems={readyCatalogItems}
           displayOptions={plannerWorkspaceState.displayOptions}
           isXRayActive={isXRayActive}

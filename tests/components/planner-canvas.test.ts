@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { createPlannerCanvasCameraStateRetentionController } from "../../src/components/planner-canvas";
 import * as plannerCanvasModule from "../../src/components/planner-canvas";
 import {
   catalogDatasetUrls,
@@ -24,6 +25,7 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
+import { createPlannerCameraStateRetention } from "../../src/planner/planner-camera-state-retention";
 
 const {
   applyPlacementSnapshotInteriorDecor,
@@ -587,6 +589,69 @@ describe("PlannerCanvas Pixi initialization", () => {
     );
 
     expect(plannerCanvasSource).toContain("backgroundColor: 0x141e17,");
+  });
+});
+
+describe("PlannerCanvas camera state retention", () => {
+  it("initializes from the retained same-map camera state clamped to current geometry", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    cameraStateRetention.write("standard", {
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: -40,
+      zoom: 1.25,
+    });
+    const cameraStateRetentionController =
+      createPlannerCanvasCameraStateRetentionController({
+        cameraStateRetention,
+        mapId: "standard",
+      });
+
+    expect(
+      cameraStateRetentionController.getInitialCameraState({
+        mapPixelHeight: 80,
+        mapPixelWidth: 100,
+        viewportHeight: 160,
+        viewportWidth: 200,
+      }),
+    ).toEqual({
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: 62,
+      zoom: 1.25,
+    });
+  });
+
+  it("retains each committed wheel zoom and pointer pan camera state", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    const cameraStateRetentionController =
+      createPlannerCanvasCameraStateRetentionController({
+        cameraStateRetention,
+        mapId: "standard",
+      });
+    const wheelZoomCameraState: CameraState = {
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: -40,
+      zoom: 1.5,
+    };
+    const pointerPanCameraState: CameraState = {
+      ...wheelZoomCameraState,
+      positionX: 160,
+      positionY: -20,
+    };
+
+    cameraStateRetentionController.retainCameraState(wheelZoomCameraState);
+    expect(cameraStateRetention.read("standard")).toEqual(wheelZoomCameraState);
+
+    cameraStateRetentionController.retainCameraState(pointerPanCameraState);
+    expect(cameraStateRetention.read("standard")).toEqual(pointerPanCameraState);
   });
 });
 
