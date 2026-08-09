@@ -283,6 +283,21 @@ export function getPlannerCanvasInteractionProperties(
   };
 }
 
+export function shouldAdvanceSelectedCatalogPlacementAttempt(
+  input: Readonly<{
+    nextPlacementHistory: PlacementHistory<PlacementSnapshot>;
+    pendingDuplicateSelectionKey: PlacementSelectionKey | null;
+    previousPlacementHistory: PlacementHistory<PlacementSnapshot>;
+    selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
+    tool: EditorTool | null;
+  }>,
+): boolean {
+  return input.pendingDuplicateSelectionKey === null
+    && (input.tool === "cursor" || input.tool === "zoom")
+    && input.selectedCatalogItem !== null
+    && input.nextPlacementHistory !== input.previousPlacementHistory;
+}
+
 const startupLoadingMessage = "Loading local planner resources…";
 
 const interiorDecorPatternByCatalogItemId = new Map<string, InteriorDecorCatalogPattern>([
@@ -1379,14 +1394,13 @@ function useWorkspaceEditingControls({
         editingTransition.placementHistory,
         editingTransition.selectedPlacementKeys,
       );
-      if (
-        pendingDuplicateSelectionKey === null
-        && (plannerWorkspaceState.tool === "cursor" ||
-          plannerWorkspaceState.tool === "zoom")
-        && selectedCatalogItem !== null
-        && editingTransition.placementHistory !==
-          plannerWorkspaceState.placementHistory
-      ) {
+      if (shouldAdvanceSelectedCatalogPlacementAttempt({
+        nextPlacementHistory: editingTransition.placementHistory,
+        pendingDuplicateSelectionKey,
+        previousPlacementHistory: plannerWorkspaceState.placementHistory,
+        selectedCatalogItem,
+        tool: plannerWorkspaceState.tool,
+      })) {
         advanceSelectedCatalogPlacementAttempt();
       }
     },

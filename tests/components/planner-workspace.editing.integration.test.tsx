@@ -4,6 +4,11 @@ import type {
   CatalogItem,
 } from "../../src/catalog";
 import {
+  advanceWorkspaceCatalogPlacementAttempt,
+  createInitialWorkspaceCatalogChoiceState,
+  selectWorkspaceCatalogItem,
+} from "../../src/planner/planner-workspace-catalog-controls";
+import {
   applyPlannerWorkspaceMapTileClick,
   applyPlannerWorkspaceMapTileRectangle,
   deletePlannerWorkspaceSelection,
@@ -28,6 +33,7 @@ import {
 import {
   createWorkspaceCatalogPlacementPreviewInput,
   getPlannerCanvasInteractionProperties,
+  shouldAdvanceSelectedCatalogPlacementAttempt,
 } from "../../src/components/planner-workspace";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
@@ -364,6 +370,114 @@ describe("planner workspace basic editing orchestration", () => {
       placedTransition.placementHistory,
     );
     expect(zoomTransition.selectedPlacementKeys).toEqual([]);
+  });
+
+  it("leaves a selected catalog item Zoom rectangle unchanged", () => {
+    const initialEditingInput = createEditingInput();
+    const placedTransition = applyPlannerWorkspaceMapTileClick({
+      ...initialEditingInput,
+      cursorTile: { x: 1, y: 1 },
+      tool: "cursor",
+    });
+    const selectedPlacementKeys = ["item:1"] as const;
+
+    const zoomRectangleTransition = applyPlannerWorkspaceMapTileRectangle({
+      ...initialEditingInput,
+      firstTile: { x: 0, y: 0 },
+      placementHistory: placedTransition.placementHistory,
+      secondTile: { x: 1, y: 1 },
+      selectedPlacementKeys,
+      tool: "zoom",
+    });
+
+    expect(zoomRectangleTransition.placementHistory).toBe(
+      placedTransition.placementHistory,
+    );
+    expect(zoomRectangleTransition.placementHistory.currentState).toBe(
+      placedTransition.placementHistory.currentState,
+    );
+    expect(zoomRectangleTransition.selectedPlacementKeys).toBe(
+      selectedPlacementKeys,
+    );
+  });
+
+  it("advances the deterministic catalog attempt for successful Zoom exactly as Cursor, but not for a no-op Zoom", () => {
+    const selectedCatalogItem = createCompositeFurnitureCatalogItem();
+    const selectedCatalogItemState = selectWorkspaceCatalogItem(
+      createInitialWorkspaceCatalogChoiceState(),
+      selectedCatalogItem,
+      () => 0.1,
+    ).selectedCatalogItem;
+    if (selectedCatalogItemState === null) {
+      throw new Error("Expected a selected composite catalog item.");
+    }
+    const editingInput = {
+      ...createEditingInput(),
+      catalogPresentationChoice: selectedCatalogItemState.presentationChoice,
+      freePlacement: true,
+      resolvedCompositeVariant: selectedCatalogItemState.resolvedCompositeVariant,
+      selectedCatalogItem,
+    };
+    const cursorTransition = applyPlannerWorkspaceMapTileClick({
+      ...editingInput,
+      cursorTile: { x: 0, y: 0 },
+      tool: "cursor",
+    });
+    const zoomTransition = applyPlannerWorkspaceMapTileClick({
+      ...editingInput,
+      cursorTile: { x: 1, y: 0 },
+      tool: "zoom",
+    });
+    const cursorAdvancedCatalogState = advanceWorkspaceCatalogPlacementAttempt(
+      selectWorkspaceCatalogItem(
+        createInitialWorkspaceCatalogChoiceState(),
+        selectedCatalogItem,
+        () => 0.1,
+      ),
+      () => 0.9,
+    );
+    const zoomAdvancedCatalogState = advanceWorkspaceCatalogPlacementAttempt(
+      selectWorkspaceCatalogItem(
+        createInitialWorkspaceCatalogChoiceState(),
+        selectedCatalogItem,
+        () => 0.1,
+      ),
+      () => 0.9,
+    );
+
+    expect(shouldAdvanceSelectedCatalogPlacementAttempt({
+      nextPlacementHistory: cursorTransition.placementHistory,
+      pendingDuplicateSelectionKey: null,
+      previousPlacementHistory: editingInput.placementHistory,
+      selectedCatalogItem: selectedCatalogItemState,
+      tool: "cursor",
+    })).toBe(true);
+    expect(shouldAdvanceSelectedCatalogPlacementAttempt({
+      nextPlacementHistory: zoomTransition.placementHistory,
+      pendingDuplicateSelectionKey: null,
+      previousPlacementHistory: editingInput.placementHistory,
+      selectedCatalogItem: selectedCatalogItemState,
+      tool: "zoom",
+    })).toBe(true);
+    expect(zoomAdvancedCatalogState).toEqual(cursorAdvancedCatalogState);
+
+    const noOpZoomTransition = applyPlannerWorkspaceMapTileClick({
+      ...editingInput,
+      catalogPresentationChoice: null,
+      cursorTile: { x: 1, y: 1 },
+      placementHistory: zoomTransition.placementHistory,
+      selectedCatalogItem: null,
+      selectedPlacementKeys: ["item:1"],
+      tool: "zoom",
+    });
+
+    expect(shouldAdvanceSelectedCatalogPlacementAttempt({
+      nextPlacementHistory: noOpZoomTransition.placementHistory,
+      pendingDuplicateSelectionKey: null,
+      previousPlacementHistory: zoomTransition.placementHistory,
+      selectedCatalogItem: null,
+      tool: "zoom",
+    })).toBe(false);
   });
 
   it("passes the selected attempt composite variant through cursor placement", () => {
