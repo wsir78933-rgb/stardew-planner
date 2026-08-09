@@ -133,7 +133,11 @@ export function applyPlannerWorkspaceMapTileClick(
 ): PlannerWorkspaceEditingTransition {
   assertPlannerWorkspaceMapTileClickInput(plannerWorkspaceMapTileClickInput);
 
-  if (plannerWorkspaceMapTileClickInput.tool === "cursor") {
+  if (
+    plannerWorkspaceMapTileClickInput.tool === "cursor" ||
+    (plannerWorkspaceMapTileClickInput.tool === "zoom" &&
+      plannerWorkspaceMapTileClickInput.selectedCatalogItem !== null)
+  ) {
     return applyCursorTileClick(plannerWorkspaceMapTileClickInput);
   }
 

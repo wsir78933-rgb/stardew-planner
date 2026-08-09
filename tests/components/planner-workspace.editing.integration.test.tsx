@@ -136,9 +136,16 @@ function createCompositeFurnitureCatalogItem(): CatalogItem {
 }
 
 describe("workspace catalog placement preview wiring", () => {
-  it("passes the selected catalog item and its current presentation choice only to cursor preview", () => {
+  it("passes the selected catalog item and its current presentation choice to cursor and Zoom preview", () => {
     const selectedCatalogItem = createRotatableCatalogItem();
     const presentationChoice = { flipped: false, rotation: 2, variant: 0 };
+    const expectedPreviewInput = {
+      buildingMetadataById: {},
+      catalogPresentationChoice: presentationChoice,
+      freePlacement: true,
+      resolvedCompositeVariant: 4383,
+      selectedCatalogItem,
+    };
 
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
@@ -149,24 +156,22 @@ describe("workspace catalog placement preview wiring", () => {
         resolvedCompositeVariant: 4383,
       },
       tool: "cursor",
-    })).toEqual({
+    })).toEqual(expectedPreviewInput);
+    expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
-      catalogPresentationChoice: presentationChoice,
       freePlacement: true,
-      resolvedCompositeVariant: 4383,
-      selectedCatalogItem,
-    });
+      selectedCatalogItem: {
+        catalogItem: selectedCatalogItem,
+        presentationChoice,
+        resolvedCompositeVariant: 4383,
+      },
+      tool: "zoom",
+    })).toEqual(expectedPreviewInput);
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
       freePlacement: true,
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: "fill",
-    })).toBeNull();
-    expect(createWorkspaceCatalogPlacementPreviewInput({
-      buildingMetadataById: {},
-      freePlacement: true,
-      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
-      tool: "zoom",
     })).toBeNull();
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
@@ -287,10 +292,10 @@ function createAdapterSupportedStandardFarmDocument() {
 }
 
 describe("planner workspace basic editing orchestration", () => {
-  it("leaves valid click and rectangle input unchanged for no tool and Zoom", () => {
+  it("leaves valid click and rectangle input unchanged for no tool", () => {
     const initialEditingInput = createEditingInput();
 
-    for (const tool of [null, "zoom"] as const) {
+    for (const tool of [null] as const) {
       const clickTransition = applyPlannerWorkspaceMapTileClick({
         ...initialEditingInput,
         cursorTile: { x: 1, y: 1 },
@@ -316,6 +321,49 @@ describe("planner workspace basic editing orchestration", () => {
         initialEditingInput.selectedPlacementKeys,
       );
     }
+  });
+
+  it("places a selected catalog item through Zoom using cursor placement", () => {
+    const placementTransition = applyPlannerWorkspaceMapTileClick({
+      ...createEditingInput(),
+      cursorTile: { x: 1, y: 1 },
+      tool: "zoom",
+    });
+
+    expect(placementTransition.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        instanceId: 1,
+        itemId: "floor:Stone Floor",
+        layer: "path",
+        x: 1,
+        y: 1,
+      }),
+    ]);
+    expect(placementTransition.selectedPlacementKeys).toEqual([]);
+  });
+
+  it("leaves Zoom clicks unchanged without a selected catalog item", () => {
+    const initialEditingInput = createEditingInput();
+    const placedTransition = applyPlannerWorkspaceMapTileClick({
+      ...initialEditingInput,
+      cursorTile: { x: 1, y: 1 },
+      tool: "cursor",
+    });
+
+    const zoomTransition = applyPlannerWorkspaceMapTileClick({
+      ...initialEditingInput,
+      catalogPresentationChoice: null,
+      cursorTile: { x: 1, y: 1 },
+      placementHistory: placedTransition.placementHistory,
+      selectedCatalogItem: null,
+      selectedPlacementKeys: [],
+      tool: "zoom",
+    });
+
+    expect(zoomTransition.placementHistory).toBe(
+      placedTransition.placementHistory,
+    );
+    expect(zoomTransition.selectedPlacementKeys).toEqual([]);
   });
 
   it("passes the selected attempt composite variant through cursor placement", () => {

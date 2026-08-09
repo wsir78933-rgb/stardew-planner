@@ -238,7 +238,7 @@ export function createWorkspaceCatalogPlacementPreviewInput(
   }>,
 ): PlannerCanvasPlacementPreviewInput | null {
   if (
-    input.tool !== "cursor" ||
+    (input.tool !== "cursor" && input.tool !== "zoom") ||
     input.buildingMetadataById === null ||
     input.selectedCatalogItem === null
   ) {
@@ -1381,7 +1381,8 @@ function useWorkspaceEditingControls({
       );
       if (
         pendingDuplicateSelectionKey === null
-        && plannerWorkspaceState.tool === "cursor"
+        && (plannerWorkspaceState.tool === "cursor" ||
+          plannerWorkspaceState.tool === "zoom")
         && selectedCatalogItem !== null
         && editingTransition.placementHistory !==
           plannerWorkspaceState.placementHistory
