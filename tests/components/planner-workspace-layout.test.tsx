@@ -482,14 +482,20 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
-  it("uses the frozen red hover treatment only for an inactive erase button", () => {
+  it("uses high-contrast homepage destructive treatments on light editor surfaces", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
 
     expect(plannerWorkspaceStyles).toMatch(
-      /\.planner-editor-shell \.tool-btn\.erase-hover:hover:not\(:disabled\):not\(\.active\)\s*\{[^}]*background:\s*#ff44441a;[^}]*color:\s*#ff6b6b;/s,
+      /\.planner-editor-shell \.tool-btn\.erase-hover:hover:not\(:disabled\):not\(\.active\)\s*\{[^}]*background:\s*rgb\(177 58 40 \/ 10%\);[^}]*color:\s*#b13a28;/s,
     );
     expect(plannerWorkspaceStyles).toMatch(
-      /\.planner-editor-shell \.tool-btn\.erase\s*\{[^}]*background:\s*#ff444426;[^}]*color:\s*#ff6b6b;/s,
+      /\.planner-editor-shell \.tool-btn\.erase\s*\{[^}]*background:\s*rgb\(177 58 40 \/ 15%\);[^}]*color:\s*#b13a28;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.pill-delete\s*\{[^}]*color:\s*#b13a28;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.pill-delete:hover\s*\{[^}]*background:\s*rgb\(177 58 40 \/ 15%\);/s,
     );
   });
 

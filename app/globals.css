@@ -1628,9 +1628,10 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   }
 }
 
-/* React/Pixi editor presentation copied from the locked original editor contract.
- * These rules intentionally use the original dimensions, palette, breakpoints,
- * and local asset paths. They do not load or execute the frozen Svelte runtime. */
+/* React/Pixi editor presentation adapted from the locked original editor contract.
+ * These rules preserve the original dimensions, breakpoints, and local asset paths
+ * while the editor shell palette uses the homepage color system. They do not load
+ * or execute the frozen Svelte runtime. */
 .planner-editor-shell {
   --bg-deep: #fdfff8;
   --bg-raised: #f1f7e7;
@@ -1917,13 +1918,13 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .reference-runtime-wheel-zoom-button:hover { background: var(--bg-surface); color: var(--text); }
 .planner-editor-shell .menu-btn:hover,
 .planner-editor-shell .tool-btn:hover:not(:disabled) { background: var(--bg-surface); color: var(--text); }
-.planner-editor-shell .tool-btn.erase-hover:hover:not(:disabled):not(.active) { background: #ff44441a; color: #ff6b6b; }
+.planner-editor-shell .tool-btn.erase-hover:hover:not(:disabled):not(.active) { background: rgb(177 58 40 / 10%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__toggle,
 .planner-editor-shell .editor-menu-bar__separator { display: none; }
 .planner-editor-shell .editor-menu-bar__controls { display: contents; }
 .planner-editor-shell .menu-btn.active,
 .planner-editor-shell .tool-btn.active { background: var(--accent-muted); color: var(--text-bright); }
-.planner-editor-shell .tool-btn.erase { background: #ff444426; color: #ff6b6b; }
+.planner-editor-shell .tool-btn.erase { background: rgb(177 58 40 / 15%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__actions { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); display: flex; max-height: 70vh; min-width: 200px; overflow-y: auto; padding: var(--lk-2xs) 0; position: absolute; right: 0; top: calc(var(--lk-xl) + var(--lk-sm)); }
 .planner-editor-shell .editor-menu-bar__value { display: none; }
 .planner-editor-shell .toolbar-wrapper { align-items: center; display: flex; flex-direction: column; gap: var(--lk-2xs); left: 50%; top: var(--lk-sm); transform: translateX(-50%); }
@@ -1944,8 +1945,8 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .pill-dismiss:hover,
 .planner-editor-shell .pill-copy:hover,
 .planner-editor-shell .pill-more:hover { background: var(--bg-surface); color: var(--text); }
-.planner-editor-shell .pill-delete { color: #ff6b6b; }
-.planner-editor-shell .pill-delete:hover { background: #ff444426; }
+.planner-editor-shell .pill-delete { color: #b13a28; }
+.planner-editor-shell .pill-delete:hover { background: rgb(177 58 40 / 15%); }
 
 .planner-editor-shell .planner-joystick.joystick-outer { bottom: var(--lk-sm); display: none; height: 96px; position: absolute; right: var(--lk-sm); width: 96px; z-index: 24; }
 .planner-editor-shell .planner-joystick--left.joystick-outer { left: var(--lk-sm); right: auto; }
