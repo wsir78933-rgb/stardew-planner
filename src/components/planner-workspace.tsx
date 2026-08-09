@@ -63,6 +63,10 @@ import {
   type PreparedPlannerWorkspace,
 } from "../planner/planner-workspace-bootstrap";
 import {
+  createPlannerCameraStateRetention,
+  type PlannerCameraStateRetention,
+} from "../planner/planner-camera-state-retention";
+import {
   createPlannerLocalProjectActions,
   createPlannerProjectMapActions,
 } from "../planner/planner-workspace-project-actions";
@@ -160,6 +164,7 @@ type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
 }>;
 
 type PreparedPlannerWorkspaceContentProperties = Readonly<{
+  cameraStateRetention: PlannerCameraStateRetention;
   preparedWorkspace: PreparedPlannerWorkspace;
   projectWorkspace: NonNullable<
     ReturnType<typeof useReferenceProjectWorkspaceController>
@@ -238,7 +243,7 @@ export function createWorkspaceCatalogPlacementPreviewInput(
   }>,
 ): PlannerCanvasPlacementPreviewInput | null {
   if (
-    input.tool !== "cursor" ||
+    (input.tool !== "cursor" && input.tool !== "zoom") ||
     input.buildingMetadataById === null ||
     input.selectedCatalogItem === null
   ) {
@@ -286,6 +291,80 @@ export function getPlannerCanvasInteractionProperties(
             : "navigate",
     wheelZoomEnabled: input.tool === "zoom",
   };
+}
+
+export function processPlannerWorkspaceMapTileClick(
+  input: Readonly<{
+    advanceSelectedCatalogPlacementAttempt: () => void;
+    applyEditingTransition: (
+      placementHistory: PlacementHistory<PlacementSnapshot>,
+      selectedPlacementKeys: readonly PlacementSelectionKey[],
+    ) => void;
+    buildingMetadataById: BuildingPlacementMetadataById | null;
+    clearPendingDuplicateSelection: () => void;
+    cursorTile: { x: number; y: number };
+    freePlacement: boolean;
+    getRequiredCurrentMapPlacementGrid: (
+      requestedMapId: string,
+    ) => MapPlacementGrid;
+    mapId: string;
+    pendingDuplicateSelectionKey: PlacementSelectionKey | null;
+    placementHistory: PlacementHistory<PlacementSnapshot>;
+    readyCatalogItems: readonly CatalogItem[];
+    selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
+    selectedPlacementKeys: readonly PlacementSelectionKey[];
+    tool: EditorTool | null;
+  }>,
+): void {
+  if (input.buildingMetadataById === null) {
+    throw new Error(
+      `Planner workspace building placement metadata is unavailable for requested map ID ${JSON.stringify(input.mapId)}.`,
+    );
+  }
+  const mapPlacementGrid = input.getRequiredCurrentMapPlacementGrid(input.mapId);
+  const pendingDuplicateSelectionKey = input.pendingDuplicateSelectionKey;
+  const selectedPlacementKeys =
+    pendingDuplicateSelectionKey === null
+      ? input.selectedPlacementKeys
+      : [pendingDuplicateSelectionKey];
+  const editingTransition =
+    pendingDuplicateSelectionKey === null
+          ? applyPlannerWorkspaceMapTileClick({
+              buildingMetadataById: input.buildingMetadataById,
+              catalogPresentationChoice:
+                input.selectedCatalogItem?.presentationChoice ?? null,
+              cursorTile: input.cursorTile,
+              freePlacement: input.freePlacement,
+              mapPlacementGrid,
+              placementHistory: input.placementHistory,
+              resolvedCompositeVariant:
+                input.selectedCatalogItem?.resolvedCompositeVariant,
+              selectedCatalogItem: input.selectedCatalogItem?.catalogItem ?? null,
+              selectedPlacementKeys,
+              tool: input.tool,
+            })
+          : duplicatePlannerWorkspaceSelectionAtTile({
+              buildingMetadataById: input.buildingMetadataById,
+              catalogItems: input.readyCatalogItems,
+              cursorTile: input.cursorTile,
+              freePlacement: input.freePlacement,
+              mapPlacementGrid,
+              placementHistory: input.placementHistory,
+              selectedPlacementKeys,
+            });
+  input.clearPendingDuplicateSelection();
+  input.applyEditingTransition(
+    editingTransition.placementHistory,
+    editingTransition.selectedPlacementKeys,
+  );
+  if (
+    pendingDuplicateSelectionKey === null
+    && (input.tool === "cursor" || input.tool === "zoom")
+    && input.selectedCatalogItem !== null
+    && editingTransition.placementHistory !== input.placementHistory
+  ) {
+    input.advanceSelectedCatalogPlacementAttempt();
+  }
 }
 
 const startupLoadingMessage = "Loading local planner resources…";
@@ -502,10 +581,21 @@ function PlannerWorkspaceRenderedBoundary({
   plannerWorkspaceStateController: PlannerWorkspaceStateController;
   projectWorkspace: ReturnType<typeof useReferenceProjectWorkspaceController>;
 }>) {
+  const cameraStateRetentionReference =
+    useRef<PlannerCameraStateRetention | null>(null);
+
+  if (cameraStateRetentionReference.current === null) {
+    cameraStateRetentionReference.current = createPlannerCameraStateRetention();
+  }
+  cameraStateRetentionReference.current.observeSelectedMapId(
+    plannerWorkspaceStateController.plannerWorkspaceState.selectedPlannerMapId,
+  );
+
   return (
     <PlannerWorkspaceGeometry plannerWorkspaceRenderState={plannerWorkspaceRenderState}>
       {plannerWorkspaceRenderState.kind === "prepared" && projectWorkspace !== null ? (
         <PreparedPlannerWorkspaceContent
+          cameraStateRetention={cameraStateRetentionReference.current}
           loadBuildingMetadata={loadBuildingMetadata}
           loadRequiredCatalogCategory={loadRequiredCatalogCategory}
           plannerWorkspaceStateController={plannerWorkspaceStateController}
@@ -541,6 +631,7 @@ function PlannerWorkspaceGeometry({
 }
 
 function PreparedPlannerWorkspaceContent({
+  cameraStateRetention,
   preparedWorkspace,
   projectWorkspace,
   plannerWorkspaceStateController,
@@ -866,6 +957,7 @@ function PreparedPlannerWorkspaceContent({
       <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
         <PlannerCanvas
           activeInteriorDecorPattern={activeInteriorDecorPattern}
+          cameraStateRetention={cameraStateRetention}
           catalogItems={readyCatalogItems}
           displayOptions={plannerWorkspaceState.displayOptions}
           isXRayActive={isXRayActive}
@@ -1335,55 +1427,23 @@ function useWorkspaceEditingControls({
   );
   const handleMapTileClick = useCallback(
     (mapId: string, cursorTile: { x: number; y: number }) => {
-      if (buildingMetadataById === null) {
-        throw new Error(
-          `Planner workspace building placement metadata is unavailable for requested map ID ${JSON.stringify(mapId)}.`,
-        );
-      }
-      const mapPlacementGrid = getRequiredCurrentMapPlacementGrid(mapId);
-      const selectedPlacementKeys =
-        pendingDuplicateSelectionKey === null
-          ? plannerWorkspaceState.selectedPlacementKeys
-          : [pendingDuplicateSelectionKey];
-      const editingTransition =
-        pendingDuplicateSelectionKey === null
-          ? applyPlannerWorkspaceMapTileClick({
-              buildingMetadataById,
-              catalogPresentationChoice:
-                selectedCatalogItem?.presentationChoice ?? null,
-              cursorTile,
-              freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
-              mapPlacementGrid,
-              placementHistory: plannerWorkspaceState.placementHistory,
-              resolvedCompositeVariant:
-                selectedCatalogItem?.resolvedCompositeVariant,
-              selectedCatalogItem: selectedCatalogItem?.catalogItem ?? null,
-              selectedPlacementKeys,
-              tool: plannerWorkspaceState.tool,
-            })
-          : duplicatePlannerWorkspaceSelectionAtTile({
-              buildingMetadataById,
-              catalogItems: readyCatalogItems,
-              cursorTile,
-              freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
-              mapPlacementGrid,
-              placementHistory: plannerWorkspaceState.placementHistory,
-              selectedPlacementKeys,
-            });
-      setPendingDuplicateSelectionKey(null);
-      applyEditingTransition(
-        editingTransition.placementHistory,
-        editingTransition.selectedPlacementKeys,
-      );
-      if (
-        pendingDuplicateSelectionKey === null
-        && plannerWorkspaceState.tool === "cursor"
-        && selectedCatalogItem !== null
-        && editingTransition.placementHistory !==
-          plannerWorkspaceState.placementHistory
-      ) {
-        advanceSelectedCatalogPlacementAttempt();
-      }
+      processPlannerWorkspaceMapTileClick({
+        advanceSelectedCatalogPlacementAttempt,
+        applyEditingTransition,
+        buildingMetadataById,
+        clearPendingDuplicateSelection: () =>
+          setPendingDuplicateSelectionKey(null),
+        cursorTile,
+        freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
+        getRequiredCurrentMapPlacementGrid,
+        mapId,
+        pendingDuplicateSelectionKey,
+        placementHistory: plannerWorkspaceState.placementHistory,
+        readyCatalogItems,
+        selectedCatalogItem,
+        tool: plannerWorkspaceState.tool,
+        selectedPlacementKeys: plannerWorkspaceState.selectedPlacementKeys,
+      });
     },
     [
       applyEditingTransition,

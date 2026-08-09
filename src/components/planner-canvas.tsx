@@ -66,6 +66,7 @@ import {
   type CameraState,
   zoomCameraAtPoint,
 } from "../rendering/camera-state";
+import type { PlannerCameraStateRetention } from "../planner/planner-camera-state-retention";
 import {
   createPlacementRenderEntries,
   createTransientPlacementRenderEntries,
@@ -171,6 +172,7 @@ export function createPlannerCanvasPlacementPreviewState(
 }
 
 export type PlannerCanvasProperties = Readonly<{
+  cameraStateRetention: PlannerCameraStateRetention;
   catalogItems?: readonly CatalogItem[];
   displayOptions?: EditorDisplayOptions;
   isXRayActive?: boolean;
@@ -250,6 +252,45 @@ type PlannerCanvasStatus =
   | Readonly<{ kind: "loading" }>
   | Readonly<{ kind: "ready" }>
   | Readonly<{ kind: "error"; message: string }>;
+
+export type PlannerCanvasCameraLifecycle = Readonly<{
+  commitCameraState(cameraState: CameraState): void;
+  readCurrentCameraState(): CameraState | null;
+  resizeCamera(cameraGeometry: CameraGeometry): CameraState;
+}>;
+
+export function createPlannerCanvasCameraLifecycle(
+  input: Readonly<{
+    cameraStateRetention: PlannerCameraStateRetention;
+    mapId: string;
+    renderCameraState: (cameraState: CameraState) => void;
+  }>,
+): PlannerCanvasCameraLifecycle {
+  let currentCameraState: CameraState | null = null;
+
+  const commitCameraState = (cameraState: CameraState): void => {
+    currentCameraState = cameraState;
+    input.renderCameraState(cameraState);
+    input.cameraStateRetention.write(input.mapId, cameraState);
+  };
+
+  return {
+    commitCameraState,
+    readCurrentCameraState(): CameraState | null {
+      return currentCameraState;
+    },
+    resizeCamera(cameraGeometry): CameraState {
+      const cameraStateBeforeResize = currentCameraState
+        ?? input.cameraStateRetention.read(input.mapId);
+      const resizedCameraState = cameraStateBeforeResize === null
+        ? createInitialCameraState(cameraGeometry)
+        : clampCameraPosition(cameraStateBeforeResize, cameraGeometry);
+
+      commitCameraState(resizedCameraState);
+      return resizedCameraState;
+    },
+  };
+}
 
 type PixiModule = typeof import("pixi.js");
 type PixiTexture = import("pixi.js").Texture;
@@ -869,6 +910,7 @@ export function createInitialResolvedPlacementTextureEntries(
 }
 
 export function PlannerCanvas({
+  cameraStateRetention,
   catalogItems,
   displayOptions = createInitialEditorDisplayOptions(),
   isXRayActive = false,
@@ -1029,7 +1071,6 @@ export function PlannerCanvas({
       number,
       PixiTexture
     > | null = null;
-
     const cleanUpPlannerCanvas = createPlannerCanvasCleanup({
       disposeInteractionBinding: () => interactionBinding?.dispose(),
       disposeMapDisplayOverlay: () => disposeMapDisplayOverlay?.(),
@@ -1434,7 +1475,6 @@ export function PlannerCanvas({
           requestPlacementPreviewOverlayRender;
 
         let currentCameraGeometry: CameraGeometry | null = null;
-        let currentCameraState: CameraState | null = null;
 
         const renderCameraState = (cameraState: CameraState) => {
           if (currentCameraGeometry === null) {
@@ -1451,6 +1491,12 @@ export function PlannerCanvas({
           );
         };
 
+        const cameraLifecycle = createPlannerCanvasCameraLifecycle({
+          cameraStateRetention,
+          mapId,
+          renderCameraState,
+        });
+
         const resizeMapToViewport = () => {
           if (!isMapLifecycleCurrent()) {
             return;
@@ -1464,11 +1510,7 @@ export function PlannerCanvas({
             currentCameraGeometry.viewportWidth,
             currentCameraGeometry.viewportHeight,
           );
-          currentCameraState =
-            currentCameraState === null
-              ? createInitialCameraState(currentCameraGeometry)
-              : clampCameraPosition(currentCameraState, currentCameraGeometry);
-          renderCameraState(currentCameraState);
+          cameraLifecycle.resizeCamera(currentCameraGeometry);
         };
 
         resizeMapToViewport();
@@ -1482,18 +1524,19 @@ export function PlannerCanvas({
             );
           }
 
+          const currentCameraState = cameraLifecycle.readCurrentCameraState();
+
           if (currentCameraGeometry === null || currentCameraState === null) {
             throw new Error(
               `Planner joystick is unavailable while mapId ${JSON.stringify(mapId)} is loading.`,
             );
           }
 
-          currentCameraState = panCameraBy(
+          cameraLifecycle.commitCameraState(panCameraBy(
             currentCameraState,
             currentCameraGeometry,
             cameraPan,
-          );
-          renderCameraState(currentCameraState);
+          ));
         };
         joystickCameraPanReference.current = joystickCameraPan;
         interactionBinding = bindPlannerCanvasInteractions(
@@ -1513,6 +1556,9 @@ export function PlannerCanvas({
                   return currentCameraGeometry;
                 },
                 getCameraState(): CameraState {
+                  const currentCameraState =
+                    cameraLifecycle.readCurrentCameraState();
+
                   if (currentCameraState === null) {
                     throw new Error(
                       `Planner camera state is unavailable for mapId ${JSON.stringify(mapId)}.`,
@@ -1530,7 +1576,7 @@ export function PlannerCanvas({
                 getMapTileAtPointer(
                   pointerCoordinates: PointerCoordinates,
                 ): MapPointerTile | null {
-                  const cameraState = currentCameraState;
+                  const cameraState = cameraLifecycle.readCurrentCameraState();
 
                   if (cameraState === null) {
                     throw new Error(
@@ -1658,8 +1704,7 @@ export function PlannerCanvas({
                   onMoveSelectedPlacementsReference.current?.(tileDelta);
                 },
                 setCameraState(cameraState: CameraState): void {
-                  currentCameraState = cameraState;
-                  renderCameraState(cameraState);
+                  cameraLifecycle.commitCameraState(cameraState);
                 },
               }),
             createResizeObserver: (onResize) => new ResizeObserver(onResize),

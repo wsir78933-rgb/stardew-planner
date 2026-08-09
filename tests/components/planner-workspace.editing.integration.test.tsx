@@ -1,8 +1,12 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type {
   BuildingPlacementMetadataById,
   CatalogItem,
 } from "../../src/catalog";
+import {
+  createInitialWorkspaceCatalogChoiceState,
+  selectWorkspaceCatalogItem,
+} from "../../src/planner/planner-workspace-catalog-controls";
 import {
   applyPlannerWorkspaceMapTileClick,
   applyPlannerWorkspaceMapTileRectangle,
@@ -29,6 +33,7 @@ import {
 import {
   createWorkspaceCatalogPlacementPreviewInput,
   getPlannerCanvasInteractionProperties,
+  processPlannerWorkspaceMapTileClick,
 } from "../../src/components/planner-workspace";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
@@ -137,9 +142,16 @@ function createCompositeFurnitureCatalogItem(): CatalogItem {
 }
 
 describe("workspace catalog placement preview wiring", () => {
-  it("passes the selected catalog item and its current presentation choice only to cursor preview", () => {
+  it("passes the selected catalog item and its current presentation choice to cursor and Zoom preview", () => {
     const selectedCatalogItem = createRotatableCatalogItem();
     const presentationChoice = { flipped: false, rotation: 2, variant: 0 };
+    const expectedPreviewInput = {
+      buildingMetadataById: {},
+      catalogPresentationChoice: presentationChoice,
+      freePlacement: true,
+      resolvedCompositeVariant: 4383,
+      selectedCatalogItem,
+    };
 
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
@@ -150,24 +162,22 @@ describe("workspace catalog placement preview wiring", () => {
         resolvedCompositeVariant: 4383,
       },
       tool: "cursor",
-    })).toEqual({
+    })).toEqual(expectedPreviewInput);
+    expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
-      catalogPresentationChoice: presentationChoice,
       freePlacement: true,
-      resolvedCompositeVariant: 4383,
-      selectedCatalogItem,
-    });
+      selectedCatalogItem: {
+        catalogItem: selectedCatalogItem,
+        presentationChoice,
+        resolvedCompositeVariant: 4383,
+      },
+      tool: "zoom",
+    })).toEqual(expectedPreviewInput);
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
       freePlacement: true,
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: "fill",
-    })).toBeNull();
-    expect(createWorkspaceCatalogPlacementPreviewInput({
-      buildingMetadataById: {},
-      freePlacement: true,
-      selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
-      tool: "zoom",
     })).toBeNull();
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
@@ -288,10 +298,10 @@ function createAdapterSupportedStandardFarmDocument() {
 }
 
 describe("planner workspace basic editing orchestration", () => {
-  it("leaves valid click and rectangle input unchanged for no tool and Zoom", () => {
+  it("leaves valid click and rectangle input unchanged for no tool", () => {
     const initialEditingInput = createEditingInput();
 
-    for (const tool of [null, "zoom"] as const) {
+    for (const tool of [null] as const) {
       const clickTransition = applyPlannerWorkspaceMapTileClick({
         ...initialEditingInput,
         cursorTile: { x: 1, y: 1 },
@@ -317,6 +327,177 @@ describe("planner workspace basic editing orchestration", () => {
         initialEditingInput.selectedPlacementKeys,
       );
     }
+  });
+
+  it("leaves Zoom clicks unchanged without a selected catalog item", () => {
+    const initialEditingInput = createEditingInput();
+    const placedTransition = applyPlannerWorkspaceMapTileClick({
+      ...initialEditingInput,
+      cursorTile: { x: 1, y: 1 },
+      tool: "cursor",
+    });
+
+    const zoomTransition = applyPlannerWorkspaceMapTileClick({
+      ...initialEditingInput,
+      catalogPresentationChoice: null,
+      cursorTile: { x: 1, y: 1 },
+      placementHistory: placedTransition.placementHistory,
+      selectedCatalogItem: null,
+      selectedPlacementKeys: [],
+      tool: "zoom",
+    });
+
+    expect(zoomTransition.placementHistory).toBe(
+      placedTransition.placementHistory,
+    );
+    expect(zoomTransition.selectedPlacementKeys).toEqual([]);
+  });
+
+  it("leaves a selected catalog item Zoom rectangle unchanged", () => {
+    const initialEditingInput = createEditingInput();
+    const placedTransition = applyPlannerWorkspaceMapTileClick({
+      ...initialEditingInput,
+      cursorTile: { x: 1, y: 1 },
+      tool: "cursor",
+    });
+    const selectedPlacementKeys = ["item:1"] as const;
+
+    const zoomRectangleTransition = applyPlannerWorkspaceMapTileRectangle({
+      ...initialEditingInput,
+      firstTile: { x: 0, y: 0 },
+      placementHistory: placedTransition.placementHistory,
+      secondTile: { x: 1, y: 1 },
+      selectedPlacementKeys,
+      tool: "zoom",
+    });
+
+    expect(zoomRectangleTransition.placementHistory).toBe(
+      placedTransition.placementHistory,
+    );
+    expect(zoomRectangleTransition.placementHistory.currentState).toBe(
+      placedTransition.placementHistory.currentState,
+    );
+    expect(zoomRectangleTransition.selectedPlacementKeys).toBe(
+      selectedPlacementKeys,
+    );
+  });
+
+  it("processes a successful selected-item Zoom click and advances exactly once", () => {
+    const editingInput = createEditingInput();
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKey: null,
+      placementHistory: editingInput.placementHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: {
+        catalogItem: editingInput.selectedCatalogItem,
+        presentationChoice: editingInput.catalogPresentationChoice,
+      },
+      selectedPlacementKeys: editingInput.selectedPlacementKeys,
+      tool: "zoom",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      expect.objectContaining({
+        currentState: expect.objectContaining({
+          items: [
+            expect.objectContaining({
+              instanceId: 1,
+              itemId: "floor:Stone Floor",
+              layer: "path",
+              x: 1,
+              y: 1,
+            }),
+          ],
+        }),
+      }),
+      [],
+    );
+    expect(advanceSelectedCatalogPlacementAttempt).toHaveBeenCalledTimes(1);
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps an invalid selected-item Zoom click unchanged and does not advance", () => {
+    const editingInput = createEditingInput();
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 99, y: 99 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKey: null,
+      placementHistory: editingInput.placementHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: {
+        catalogItem: editingInput.selectedCatalogItem,
+        presentationChoice: editingInput.catalogPresentationChoice,
+      },
+      selectedPlacementKeys: editingInput.selectedPlacementKeys,
+      tool: "zoom",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      editingInput.placementHistory,
+      editingInput.selectedPlacementKeys,
+    );
+    expect(advanceSelectedCatalogPlacementAttempt).not.toHaveBeenCalled();
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not advance a selected catalog attempt during pending duplicate mode", () => {
+    const editingInput = createEditingInput();
+    const placedHistory = applyPlannerWorkspaceMapTileClick({
+      ...editingInput,
+      cursorTile: { x: 0, y: 0 },
+      tool: "cursor",
+    }).placementHistory;
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKey: "item:1",
+      placementHistory: placedHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: {
+        catalogItem: editingInput.selectedCatalogItem,
+        presentationChoice: editingInput.catalogPresentationChoice,
+      },
+      selectedPlacementKeys: ["item:1"],
+      tool: "zoom",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(advanceSelectedCatalogPlacementAttempt).not.toHaveBeenCalled();
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
   });
 
   it("passes the selected attempt composite variant through cursor placement", () => {

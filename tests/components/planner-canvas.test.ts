@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { createPlannerCanvasCameraLifecycle } from "../../src/components/planner-canvas";
 import * as plannerCanvasModule from "../../src/components/planner-canvas";
 import {
   catalogDatasetUrls,
@@ -24,6 +25,7 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
+import { createPlannerCameraStateRetention } from "../../src/planner/planner-camera-state-retention";
 
 const {
   applyPlacementSnapshotInteriorDecor,
@@ -587,6 +589,92 @@ describe("PlannerCanvas Pixi initialization", () => {
     );
 
     expect(plannerCanvasSource).toContain("backgroundColor: 0x141e17,");
+  });
+});
+
+describe("PlannerCanvas camera state retention", () => {
+  it("scopes a committed camera state to same-map canvas lifecycles", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    const cameraGeometry: CameraGeometry = {
+      mapPixelHeight: 80,
+      mapPixelWidth: 100,
+      viewportHeight: 160,
+      viewportWidth: 200,
+    };
+    const committedCameraState: CameraState = {
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: -40,
+      zoom: 1.25,
+    };
+    const firstCanvasLifecycle = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: () => {},
+    });
+
+    firstCanvasLifecycle.resizeCamera(cameraGeometry);
+    firstCanvasLifecycle.commitCameraState(committedCameraState);
+
+    const sameMapCanvasReload = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: () => {},
+    });
+    expect(sameMapCanvasReload.resizeCamera(cameraGeometry)).toEqual({
+      ...committedCameraState,
+      positionY: 62,
+    });
+
+    const changedMapCanvas = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "beach",
+      renderCameraState: () => {},
+    });
+    expect(changedMapCanvas.resizeCamera(cameraGeometry)).toEqual({
+      initialFitZoom: 2,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 100,
+      positionY: 80,
+      zoom: 2,
+    });
+  });
+
+  it("renders and retains wheel zoom and pointer pan commits", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    const renderedCameraStates: CameraState[] = [];
+    const cameraLifecycle = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: (cameraState) => {
+        renderedCameraStates.push(cameraState);
+      },
+    });
+    const wheelZoomCameraState: CameraState = {
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: -40,
+      zoom: 1.5,
+    };
+    const pointerPanCameraState: CameraState = {
+      ...wheelZoomCameraState,
+      positionX: 160,
+      positionY: -20,
+    };
+
+    cameraLifecycle.commitCameraState(wheelZoomCameraState);
+    cameraLifecycle.commitCameraState(pointerPanCameraState);
+
+    expect(renderedCameraStates).toEqual([
+      wheelZoomCameraState,
+      pointerPanCameraState,
+    ]);
+    expect(cameraStateRetention.read("standard")).toEqual(pointerPanCameraState);
   });
 });
 
