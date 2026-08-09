@@ -1924,6 +1924,10 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .editor-menu-bar__controls { display: contents; }
 .planner-editor-shell .menu-btn.active,
 .planner-editor-shell .tool-btn.active { background: var(--accent-muted); color: var(--text-bright); }
+.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"] {
+  background: rgb(177 58 40 / 15%);
+  color: #b13a28;
+}
 .planner-editor-shell .tool-btn.erase { background: rgb(177 58 40 / 15%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__actions { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); display: flex; max-height: 70vh; min-width: 200px; overflow-y: auto; padding: var(--lk-2xs) 0; position: absolute; right: 0; top: calc(var(--lk-xl) + var(--lk-sm)); }
 .planner-editor-shell .editor-menu-bar__value { display: none; }

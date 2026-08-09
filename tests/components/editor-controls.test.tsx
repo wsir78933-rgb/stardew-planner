@@ -96,4 +96,51 @@ describe("editor controls", () => {
       ]),
     );
   });
+
+  it("adds a Multi-select-specific styling hook without changing selected semantics", () => {
+    const inactiveToolbarMarkup = renderToStaticMarkup(
+      createElement(EditorToolbar, {
+        canRedo: false,
+        canUndo: false,
+        onRedo: () => undefined,
+        onToolChange: () => undefined,
+        onUndo: () => undefined,
+        tool: "cursor",
+      }),
+    );
+    const selectedToolbarMarkup = renderToStaticMarkup(
+      createElement(EditorToolbar, {
+        canRedo: false,
+        canUndo: false,
+        onRedo: () => undefined,
+        onToolChange: () => undefined,
+        onUndo: () => undefined,
+        tool: "multi-select",
+      }),
+    );
+    const inactiveMultiSelectClassName = inactiveToolbarMarkup.match(
+      /<button aria-label="Multi-select tool" aria-pressed="false" class="([^"]+)"/,
+    )?.[1];
+    const selectedMultiSelectClassName = selectedToolbarMarkup.match(
+      /<button aria-label="Multi-select tool" aria-pressed="true" class="([^"]+)"/,
+    )?.[1];
+    const selectedCursorClassName = selectedToolbarMarkup.match(
+      /<button aria-label="Cursor tool" aria-pressed="false" class="([^"]+)"/,
+    )?.[1];
+
+    expect(new Set(inactiveMultiSelectClassName?.split(" "))).toEqual(
+      new Set(["tool-btn", "editor-toolbar__button", "multi-select"]),
+    );
+    expect(new Set(selectedMultiSelectClassName?.split(" "))).toEqual(
+      new Set([
+        "tool-btn",
+        "editor-toolbar__button",
+        "multi-select",
+        "active",
+      ]),
+    );
+    expect(new Set(selectedCursorClassName?.split(" "))).toEqual(
+      new Set(["tool-btn", "editor-toolbar__button"]),
+    );
+  });
 });

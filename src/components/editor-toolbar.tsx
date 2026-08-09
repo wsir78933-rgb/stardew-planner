@@ -59,6 +59,8 @@ export function EditorToolbar({
         aria-label={editorToolControl.label}
         aria-pressed={isSelected}
         className={`tool-btn editor-toolbar__button${
+          editorToolControl.tool === "multi-select" ? " multi-select" : ""
+        }${
           editorToolControl.tool === "erase"
             ? ` erase-hover${isSelected ? " erase" : ""}`
             : ""
