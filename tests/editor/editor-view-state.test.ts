@@ -80,6 +80,19 @@ describe("editor view state", () => {
     expect(selectEditorTool(initialEditorViewState, "fill").tool).toBe("fill");
   });
 
+  it("keeps Cursor initial while accepting Zoom and no selected tool", () => {
+    const initialEditorViewState = createInitialEditorViewState();
+    const zoomEditorViewState = selectEditorTool(
+      initialEditorViewState,
+      "zoom",
+    );
+    const noToolEditorViewState = selectEditorTool(zoomEditorViewState, null);
+
+    expect(initialEditorViewState.tool).toBe("cursor");
+    expect(zoomEditorViewState.tool).toBe("zoom");
+    expect(noToolEditorViewState.tool).toBeNull();
+  });
+
   it("keeps map state while moving the catalog to the left", () => {
     const waterfallFarmState = selectEditorMap(
       createInitialEditorViewState(),

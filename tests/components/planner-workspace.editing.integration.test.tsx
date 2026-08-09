@@ -200,6 +200,37 @@ function createAdapterSupportedStandardFarmDocument() {
 }
 
 describe("planner workspace basic editing orchestration", () => {
+  it("leaves valid click and rectangle input unchanged for no tool and Zoom", () => {
+    const initialEditingInput = createEditingInput();
+
+    for (const tool of [null, "zoom"] as const) {
+      const clickTransition = applyPlannerWorkspaceMapTileClick({
+        ...initialEditingInput,
+        cursorTile: { x: 1, y: 1 },
+        tool,
+      });
+      const rectangleTransition = applyPlannerWorkspaceMapTileRectangle({
+        ...initialEditingInput,
+        firstTile: { x: 0, y: 0 },
+        secondTile: { x: 1, y: 1 },
+        tool,
+      });
+
+      expect(clickTransition.placementHistory).toBe(
+        initialEditingInput.placementHistory,
+      );
+      expect(clickTransition.selectedPlacementKeys).toBe(
+        initialEditingInput.selectedPlacementKeys,
+      );
+      expect(rectangleTransition.placementHistory).toBe(
+        initialEditingInput.placementHistory,
+      );
+      expect(rectangleTransition.selectedPlacementKeys).toBe(
+        initialEditingInput.selectedPlacementKeys,
+      );
+    }
+  });
+
   it("passes the selected attempt composite variant through cursor placement", () => {
     const placementTransition = applyPlannerWorkspaceMapTileClick({
       ...createEditingInput(),

@@ -3,7 +3,7 @@ import type {
   CatalogItem,
   CatalogPresentationChoice,
 } from "../catalog";
-import type { EditorTool } from "../editor/editor-view-state";
+import { editorTools, type EditorTool } from "../editor/editor-view-state";
 import {
   applyEditorErase,
   applyEditorEraseRectangle,
@@ -56,7 +56,7 @@ export type PlannerWorkspaceMapTileClickInput =
   PlannerWorkspaceEditingContext &
     Readonly<{
       cursorTile: MapTileCoordinates;
-      tool: EditorTool;
+      tool: EditorTool | null;
     }>;
 
 export type PlannerWorkspaceMapTileRectangleInput =
@@ -64,7 +64,7 @@ export type PlannerWorkspaceMapTileRectangleInput =
     Readonly<{
       firstTile: MapTileCoordinates;
       secondTile: MapTileCoordinates;
-      tool: EditorTool;
+      tool: EditorTool | null;
     }>;
 
 export type PlannerWorkspaceMoveSelectionInput = Readonly<{
@@ -145,7 +145,7 @@ export function applyPlannerWorkspaceMapTileClick(
 }
 
 export function getPlannerWorkspaceToolSelection(
-  tool: EditorTool,
+  tool: EditorTool | null,
   selectedCatalogItem: CatalogItem | null,
 ): PlannerWorkspaceToolSelection {
   if (tool === "cursor") {
@@ -537,7 +537,7 @@ function assertPlannerWorkspaceMapTileClickInput(
     plannerWorkspaceMapTileClickInput.cursorTile,
     "cursorTile",
   );
-  assertEditorTool(plannerWorkspaceMapTileClickInput.tool);
+  assertEditorToolSelection(plannerWorkspaceMapTileClickInput.tool);
 }
 
 function assertPlannerWorkspaceMapTileRectangleInput(
@@ -555,7 +555,7 @@ function assertPlannerWorkspaceMapTileRectangleInput(
     plannerWorkspaceMapTileRectangleInput.secondTile,
     "secondTile",
   );
-  assertEditorTool(plannerWorkspaceMapTileRectangleInput.tool);
+  assertEditorToolSelection(plannerWorkspaceMapTileRectangleInput.tool);
 }
 
 function assertPlannerWorkspaceCatalogChoicePair(
@@ -726,15 +726,14 @@ function assertMapTileCoordinates(
   }
 }
 
-function assertEditorTool(editorTool: EditorTool): void {
-  if (
-    editorTool !== "cursor" &&
-    editorTool !== "multi-select" &&
-    editorTool !== "fill" &&
-    editorTool !== "erase"
-  ) {
+function assertEditorToolSelection(editorTool: EditorTool | null): void {
+  if (editorTool === null) {
+    return;
+  }
+
+  if (!editorTools.includes(editorTool)) {
     throw new TypeError(
-      `Planner workspace editing tool must be cursor, multi-select, fill, or erase; received ${describeValue(editorTool)}.`,
+      `Planner workspace editing tool selection must be null or one of ${editorTools.join(", ")}; received ${describeValue(editorTool)}.`,
     );
   }
 }

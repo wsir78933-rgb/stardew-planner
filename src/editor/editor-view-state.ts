@@ -8,6 +8,7 @@ export const editorTools = [
   "multi-select",
   "fill",
   "erase",
+  "zoom",
 ] as const;
 
 export const editorCatalogCategories = [
@@ -38,7 +39,7 @@ export type EditorMenuVisibility = "collapsed" | "expanded";
 export type EditorViewState = Readonly<{
   season: TilesheetSeason;
   mapId: string;
-  tool: EditorTool;
+  tool: EditorTool | null;
   catalogCategory: EditorCatalogCategory;
   panelPosition: EditorPanelPosition;
   modalId: EditorModalId | null;
@@ -56,6 +57,7 @@ export const editorToolAvailability: Readonly<Record<EditorTool, boolean>> = {
   "multi-select": true,
   fill: true,
   erase: true,
+  zoom: true,
 };
 
 const compactLayoutMaximumWidth = 1400;
@@ -124,12 +126,12 @@ export function selectEditorSeason(
 
 export function selectEditorTool(
   editorViewState: EditorViewState,
-  tool: EditorTool,
+  tool: EditorTool | null,
 ): EditorViewState {
   validateEditorViewState(editorViewState);
   validateEditorTool(tool);
 
-  if (!editorToolAvailability[tool]) {
+  if (tool !== null && !editorToolAvailability[tool]) {
     throw new Error(`Editor tool is unavailable: ${formatValue(tool)}.`);
   }
 
@@ -239,10 +241,14 @@ function validateEditorSeason(season: TilesheetSeason): void {
   }
 }
 
-function validateEditorTool(tool: EditorTool): void {
+function validateEditorTool(tool: EditorTool | null): void {
+  if (tool === null) {
+    return;
+  }
+
   if (!editorTools.includes(tool)) {
     throw new TypeError(
-      `Editor tool must be one of ${editorTools.join(", ")}. Received: ${formatValue(tool)}.`,
+      `Editor tool must be null or one of ${editorTools.join(", ")}. Received: ${formatValue(tool)}.`,
     );
   }
 }

@@ -74,7 +74,7 @@ export type PlannerWorkspaceState = Readonly<{
   selectedCatalogItemId: string | null;
   selectedPlacementKeys: readonly PlacementSelectionKey[];
   selectedPlannerMapId: string;
-  tool: EditorTool;
+  tool: EditorTool | null;
 }>;
 
 export type PlannerWorkspaceAction =
@@ -133,7 +133,7 @@ export type PlannerWorkspaceAction =
     }>
   | Readonly<{ type: "select-map"; plannerMapId: string }>
   | Readonly<{ type: "select-season"; season: TilesheetSeason }>
-  | Readonly<{ type: "select-tool"; tool: EditorTool }>
+  | Readonly<{ type: "select-tool"; tool: EditorTool | null }>
   | Readonly<{ type: "select-panel-position"; panelPosition: EditorPanelPosition }>
   | Readonly<{
       type: "set-behavior-option";
@@ -544,7 +544,7 @@ function selectWorkspaceSeason(
 
 function selectWorkspaceTool(
   plannerWorkspaceState: PlannerWorkspaceState,
-  tool: EditorTool,
+  tool: EditorTool | null,
 ): PlannerWorkspaceState {
   return applyEditorViewState(
     plannerWorkspaceState,
