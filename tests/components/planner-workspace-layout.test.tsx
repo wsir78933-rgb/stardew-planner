@@ -132,6 +132,55 @@ function getPlannerCanvasRootElement(): typescript.JsxElement {
   return plannerCanvasRootExpression;
 }
 
+function getPlannerWorkspaceRenderedBoundary(): typescript.FunctionDeclaration {
+  const plannerWorkspacePath = resolve(
+    process.cwd(),
+    "src/components/planner-workspace.tsx",
+  );
+  const plannerWorkspaceSource = readFileSync(plannerWorkspacePath, "utf8");
+  const plannerWorkspaceSourceFile = typescript.createSourceFile(
+    plannerWorkspacePath,
+    plannerWorkspaceSource,
+    typescript.ScriptTarget.Latest,
+    true,
+    typescript.ScriptKind.TSX,
+  );
+
+  if (plannerWorkspaceSourceFile.parseDiagnostics.length > 0) {
+    throw new Error(`Unable to parse ${plannerWorkspacePath} as TSX.`);
+  }
+
+  const plannerWorkspaceRenderedBoundary = plannerWorkspaceSourceFile.statements.find(
+    (statement): statement is typescript.FunctionDeclaration =>
+      typescript.isFunctionDeclaration(statement) &&
+      statement.name?.text === "PlannerWorkspaceRenderedBoundary",
+  );
+
+  if (plannerWorkspaceRenderedBoundary?.body === undefined) {
+    throw new Error(
+      "Expected PlannerWorkspaceRenderedBoundary to have a function body.",
+    );
+  }
+
+  return plannerWorkspaceRenderedBoundary;
+}
+
+function getPropertyAccessPath(
+  expression: typescript.Expression,
+): readonly string[] {
+  if (typescript.isIdentifier(expression)) {
+    return [expression.text];
+  }
+
+  if (typescript.isPropertyAccessExpression(expression)) {
+    return [...getPropertyAccessPath(expression.expression), expression.name.text];
+  }
+
+  throw new Error(
+    `Expected a property access path; received ${expression.getText()}.`,
+  );
+}
+
 function getStaticClassNamesFromJsxElement(
   jsxElement: typescript.JsxElement,
 ): readonly string[] {
@@ -360,6 +409,52 @@ describe("planner workspace frozen layout contracts", () => {
       expect.arrayContaining(["planner-canvas", "canvas-container"]),
     );
     expect(containsPlannerJoystick(plannerCanvasRootElement)).toBe(true);
+  });
+
+  it("observes the selected map in the rendered boundary before the prepared-only branch", () => {
+    const plannerWorkspaceRenderedBoundary =
+      getPlannerWorkspaceRenderedBoundary();
+    const boundaryStatements = plannerWorkspaceRenderedBoundary.body!.statements;
+    const observationStatementIndex = boundaryStatements.findIndex(
+      (statement) =>
+        typescript.isExpressionStatement(statement) &&
+        typescript.isCallExpression(statement.expression) &&
+        typescript.isPropertyAccessExpression(statement.expression.expression) &&
+        statement.expression.expression.name.text === "observeSelectedMapId",
+    );
+    const returnStatementIndex = boundaryStatements.findIndex(
+      typescript.isReturnStatement,
+    );
+
+    expect(observationStatementIndex).toBeGreaterThanOrEqual(0);
+    expect(returnStatementIndex).toBeGreaterThan(observationStatementIndex);
+
+    const observationStatement = boundaryStatements[
+      observationStatementIndex
+    ];
+    if (
+      !typescript.isExpressionStatement(observationStatement) ||
+      !typescript.isCallExpression(observationStatement.expression) ||
+      !typescript.isPropertyAccessExpression(observationStatement.expression.expression)
+    ) {
+      throw new Error("Expected a direct selected-map observation call.");
+    }
+
+    expect(
+      getPropertyAccessPath(observationStatement.expression.expression),
+    ).toEqual([
+      "cameraStateRetentionReference",
+      "current",
+      "observeSelectedMapId",
+    ]);
+    expect(observationStatement.expression.arguments).toHaveLength(1);
+    expect(
+      getPropertyAccessPath(observationStatement.expression.arguments[0]),
+    ).toEqual([
+      "plannerWorkspaceStateController",
+      "plannerWorkspaceState",
+      "selectedPlannerMapId",
+    ]);
   });
 
   it("places the bottom catalog after the canvas in the desktop editor flex layout", () => {
