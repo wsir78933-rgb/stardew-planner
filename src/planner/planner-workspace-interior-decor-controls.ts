@@ -1,7 +1,10 @@
 import {
   applyInteriorDecorPatternToHistory,
 } from "../interior-decor/interior-decor-controller";
-import type { InteriorDecorCatalogPattern } from "../interior-decor/interior-decor-catalog";
+import {
+  isInteriorDecorSupportedMapId,
+  type InteriorDecorCatalogPattern,
+} from "../interior-decor/interior-decor-catalog";
 import type { InteriorDecorKind } from "../interior-decor/interior-decor-state";
 import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
 import type { PlacementHistory } from "../placement/placement-history";
@@ -69,6 +72,22 @@ export function getInteriorDecorRejectionMessage(
   assertInteriorDecorKind(interiorDecorKind);
 
   return `Cannot apply ${interiorDecorKind} on map ${JSON.stringify(mapId)} at this location.`;
+}
+
+export function getUnavailableInteriorDecorMessage(
+  mapId: string,
+  interiorDecorKind: InteriorDecorKind,
+): string | null {
+  assertMapId(mapId);
+  assertInteriorDecorKind(interiorDecorKind);
+
+  if (isInteriorDecorSupportedMapId(mapId)) {
+    return null;
+  }
+
+  return interiorDecorKind === "wallpaper"
+    ? "Wallpaper can only be applied inside."
+    : "Flooring can only be applied inside.";
 }
 
 function assertMapId(mapId: unknown): asserts mapId is string {

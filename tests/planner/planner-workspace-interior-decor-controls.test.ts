@@ -5,6 +5,7 @@ import {
   cancelInteriorDecorBeforeOrdinaryWorkspaceAction,
   createInteriorDecorSelectionTransition,
   getInteriorDecorRejectionMessage,
+  getUnavailableInteriorDecorMessage,
 } from "../../src/planner/planner-workspace-interior-decor-controls";
 import { createPlacementHistory } from "../../src/placement/placement-history";
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
@@ -52,6 +53,16 @@ describe("planner workspace interior decor controls", () => {
     expect(getInteriorDecorRejectionMessage("farmhouse-0", "flooring")).toBe(
       'Cannot apply flooring on map "farmhouse-0" at this location.',
     );
+  });
+
+  it("explains when wallpaper and flooring are unavailable outside supported interiors", () => {
+    expect(getUnavailableInteriorDecorMessage("standard", "wallpaper")).toBe(
+      "Wallpaper can only be applied inside.",
+    );
+    expect(getUnavailableInteriorDecorMessage("standard", "flooring")).toBe(
+      "Flooring can only be applied inside.",
+    );
+    expect(getUnavailableInteriorDecorMessage("farmhouse-0", "wallpaper")).toBeNull();
   });
 
   it("cancels active decor before an ordinary catalog, tool, or map action proceeds", () => {

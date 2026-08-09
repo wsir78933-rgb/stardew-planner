@@ -376,6 +376,17 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
+  it("styles unavailable interior decor feedback above the editor toolbar", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.toolbar-wrapper\s*\{[^}]*z-index:\s*25;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.planner-workspace__toast\s*\{[^}]*background:\s*var\(--bg-raised\);[^}]*border:\s*1px solid var\(--border-subtle\);[^}]*position:\s*absolute;[^}]*z-index:\s*26;/s,
+    );
+  });
+
   it("forwards the workspace-owned left-hand setting to the ready menu, catalog, and canvas", () => {
     const bottomLeftHandWorkspaceMarkup = renderPreparedWorkspace({
       leftHandMode: true,

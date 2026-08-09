@@ -39,6 +39,12 @@ describe("planner workspace Task5A feature-parity composition", () => {
     expect(workspaceSource).toContain("onOpenMapInstance={handleOpenMapInstance}");
     expect(workspaceSource).toContain("projectMapActions.onOpenMapInstance(mapInstanceId)");
     expect(workspaceSource).toContain("cancelInteriorDecorBeforeOrdinaryWorkspaceAction");
+    expect(workspaceSource).toContain("getUnavailableInteriorDecorMessage");
+    expect(workspaceSource).toContain(
+      "plannerWorkspaceState.behaviorOptions.showToasts",
+    );
+    expect(workspaceSource).toContain('className="planner-workspace__toast"');
+    expect(workspaceSource).toContain("window.setTimeout");
     expect(workspaceSource).toContain('aria-live="polite" role="status"');
   });
 

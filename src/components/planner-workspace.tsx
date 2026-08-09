@@ -83,6 +83,7 @@ import {
   cancelInteriorDecorBeforeOrdinaryWorkspaceAction,
   createInteriorDecorSelectionTransition,
   getInteriorDecorRejectionMessage,
+  getUnavailableInteriorDecorMessage,
 } from "../planner/planner-workspace-interior-decor-controls";
 import {
   attachPlannerWorkspaceXRayKeyboardListener,
@@ -545,6 +546,19 @@ function PreparedPlannerWorkspaceContent({
     setInteriorDecorRejectionMessage(null);
   }, []);
   useEffect(() => {
+    if (interiorDecorRejectionMessage === null) {
+      return;
+    }
+
+    const rejectionMessageTimeoutId = window.setTimeout(() => {
+      setInteriorDecorRejectionMessage(null);
+    }, 3_000);
+
+    return () => {
+      window.clearTimeout(rejectionMessageTimeoutId);
+    };
+  }, [interiorDecorRejectionMessage]);
+  useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -639,6 +653,16 @@ function PreparedPlannerWorkspaceContent({
     ) => {
       const interiorDecorPattern = interiorDecorPatternByCatalogItemId.get(catalogItem.id);
       if (interiorDecorPattern !== undefined) {
+        const unavailableInteriorDecorMessage = getUnavailableInteriorDecorMessage(
+          plannerWorkspaceState.selectedPlannerMapId,
+          interiorDecorPattern.kind,
+        );
+        if (unavailableInteriorDecorMessage !== null) {
+          if (plannerWorkspaceState.behaviorOptions.showToasts) {
+            setInteriorDecorRejectionMessage(unavailableInteriorDecorMessage);
+          }
+          return;
+        }
         handleInteriorDecorPatternSelect(interiorDecorPattern);
         return;
       }
@@ -655,6 +679,8 @@ function PreparedPlannerWorkspaceContent({
       handleCancelInteriorDecor,
       handleInteriorDecorPatternSelect,
       handleCatalogItemSelect,
+      plannerWorkspaceState.behaviorOptions.showToasts,
+      plannerWorkspaceState.selectedPlannerMapId,
       setSelectedPlacementKeys,
       workspaceEditingControls,
     ],
@@ -748,7 +774,8 @@ function PreparedPlannerWorkspaceContent({
         shouldLoadThumbnails={runtimeStatus === "interactive"}
       />
       {interiorDecorRejectionMessage === null ? null : (
-        <p aria-live="polite" role="status">
+        <p aria-live="polite" role="status" className="planner-workspace__toast">
+          <span aria-hidden="true">!</span>
           {interiorDecorRejectionMessage}
         </p>
       )}

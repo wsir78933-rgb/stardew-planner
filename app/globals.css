@@ -1930,6 +1930,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .toolbar-wrapper { align-items: center; display: flex; flex-direction: column; gap: var(--lk-2xs); left: 50%; top: var(--lk-sm); transform: translateX(-50%); }
 .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper { left: calc(170px + 50vw); }
 .planner-editor-shell .toolbar { align-items: center; background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-sm); display: flex; gap: var(--lk-3xs); padding: var(--lk-3xs); }
+.planner-editor-shell .planner-workspace__toast { align-items: center; background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-sm); color: var(--text); display: flex; gap: var(--lk-3xs); left: 50%; margin: 0; padding: var(--lk-xs) var(--lk-sm); position: absolute; top: calc(var(--lk-sm) + var(--lk-xl) + var(--lk-sm)); transform: translateX(-50%); z-index: 26; }
 .planner-editor-shell .tool-group { display: flex; gap: var(--lk-3xs); }
 .planner-editor-shell .separator { background: var(--border-subtle); height: var(--lk-lg); margin: 0 var(--lk-3xs); width: 1px; }
 
