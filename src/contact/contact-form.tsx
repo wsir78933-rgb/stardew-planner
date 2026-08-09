@@ -269,7 +269,7 @@ export function ContactForm({
           onChange={(event) => updateContactRequest("message", event.target.value)}
           placeholder={contactCopy.messagePlaceholder}
           required
-          rows={10}
+          rows={6}
           value={contactRequest.message}
         />
       </div>

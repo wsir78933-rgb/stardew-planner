@@ -18,6 +18,7 @@ it("renders the accessible English contact fields and submit action", () => {
   expect(markup).toContain('<label for="contact-message">Message</label>');
   expect(markup).toContain('id="contact-message"');
   expect(markup).toContain('name="message"');
+  expect(markup).toContain('rows="6"');
   expect(markup).toContain('<button class="contact-form-submit"');
   expect(markup).toContain("Send message");
   expect(markup).toContain('aria-live="polite"');

@@ -2429,7 +2429,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   border-top: 1px solid #25272b;
   color: #f2f2f3;
   min-height: 100vh;
-  padding: clamp(5rem, 12vw, 8.25rem) clamp(1rem, 5vw, 3rem) clamp(6rem, 14vw, 9rem);
+  padding: clamp(3.5rem, 7vw, 5rem) clamp(1rem, 5vw, 3rem) clamp(4rem, 8vw, 5.5rem);
 }
 
 [data-public-page-shell]:has(.contact-page-content) {
@@ -2439,8 +2439,11 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 
 [data-public-page-shell]:has(.contact-page-content) .public-page-shell-header {
   border-color: #25272b;
-  max-width: none;
-  padding-inline: clamp(1rem, 5vw, 5.75rem);
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-width: 60rem;
+  padding-inline: clamp(1rem, 5vw, 2rem);
+  width: 100%;
 }
 
 [data-public-page-shell]:has(.contact-page-content) .public-page-shell-brand,
@@ -2460,7 +2463,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 [data-public-page-shell]:has(.contact-page-content) > [data-site-footer] {
   border-color: #25272b;
   color: #a9a9ad;
-  max-width: 94rem;
+  max-width: 60rem;
 }
 
 [data-public-page-shell]:has(.contact-page-content) > [data-site-footer] > p { border-color: #25272b; }
@@ -2472,10 +2475,10 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .contact-page-header,
 .contact-form {
   margin-inline: auto;
-  max-width: 94rem;
+  max-width: 60rem;
 }
 
-.contact-page-header { margin-bottom: 2.5rem; }
+.contact-page-header { margin-bottom: 1.5rem; }
 
 .contact-page-eyebrow {
   color: #9b908a;
@@ -2506,16 +2509,16 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .contact-form {
   background: linear-gradient(140deg, #15161a 0%, #0d0e10 74%);
   border: 1px solid #303237;
-  border-radius: clamp(2rem, 4vw, 4rem);
+  border-radius: 2rem;
   box-shadow: inset 0 1px rgb(255 255 255 / 3%);
   display: grid;
-  gap: 2.75rem;
-  padding: clamp(1.5rem, 3.4vw, 3.05rem);
+  gap: 2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
 }
 
 .contact-form-name-email {
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -2538,18 +2541,18 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   color: #f4f4f5;
   font: inherit;
   font-size: clamp(1rem, 1.65vw, 1.28rem);
-  min-height: 5.55rem;
+  min-height: 4rem;
   outline: none;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
   transition: border-color 160ms ease, box-shadow 160ms ease;
   width: 100%;
 }
 
 .contact-form-field textarea {
-  border-radius: 2.15rem;
+  border-radius: 2rem;
   line-height: 1.55;
-  min-height: 19rem;
-  padding-block: 1.65rem;
+  min-height: 12rem;
+  padding-block: 1.25rem;
   resize: vertical;
 }
 
@@ -2579,8 +2582,8 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   font-weight: 700;
   gap: .7rem;
   justify-content: center;
-  min-height: 5.25rem;
-  padding: 0 2.2rem;
+  min-height: 3.75rem;
+  padding: 0 1.75rem;
   transition: background 160ms ease, transform 160ms ease;
 }
 
@@ -2593,15 +2596,15 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .contact-form-status--success { color: #a8d797; }
 .contact-form-status--error { color: #ff9f98; }
 
-.contact-form-privacy-notice { color: #858589; font-size: .875rem; line-height: 1.55; margin: -1.5rem 0 0; max-width: 50rem; }
+.contact-form-privacy-notice { color: #858589; font-size: .875rem; line-height: 1.55; margin: -1rem 0 0; max-width: 50rem; }
 
 @media (max-width: 700px) {
   .contact-page-content { padding-inline: 1rem; }
   .contact-page-header { margin-bottom: 1.5rem; }
   .contact-page-eyebrow { letter-spacing: .28em; }
-  .contact-form { border-radius: 2rem; gap: 1.6rem; padding: 1.25rem; }
-  .contact-form-name-email { gap: 1.6rem; grid-template-columns: 1fr; }
-  .contact-form-field input { min-height: 4.25rem; padding-inline: 1.25rem; }
-  .contact-form-field textarea { min-height: 15rem; padding: 1.25rem; }
-  .contact-form-submit { min-height: 4.25rem; width: 100%; }
+  .contact-form { border-radius: 1.5rem; gap: 1.25rem; padding: 1rem; }
+  .contact-form-name-email { gap: 1.25rem; grid-template-columns: 1fr; }
+  .contact-form-field input { min-height: 4rem; padding-inline: 1.25rem; }
+  .contact-form-field textarea { min-height: 12rem; padding: 1.25rem; }
+  .contact-form-submit { min-height: 3.75rem; width: 100%; }
 }
