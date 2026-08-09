@@ -4,6 +4,17 @@ import { expect, it } from "vitest";
 import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
 
+const expectedBlogSitemapPathnames = [
+  "/blog",
+  "/blog/archive",
+  "/carpenter-stardew",
+  "/where-is-robin-stardew-valley",
+  "/zh/blog",
+  "/zh/blog/archive",
+  "/zh/carpenter-stardew",
+  "/zh/where-is-robin-stardew-valley",
+] as const;
+
 it("writes robots.txt with the absolute sitemap URL", () => {
   const robotsText = readFileSync(join(process.cwd(), "out", "robots.txt"), "utf8");
 
@@ -16,19 +27,28 @@ it("writes robots.txt with the absolute sitemap URL", () => {
 
 it("writes exactly the indexable localized public URLs into sitemap.xml", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
-  const sitemapUrlCount = (sitemapText.match(/<loc>/g) ?? []).length;
+  const sitemapLocationValues = Array.from(
+    sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g),
+    ([, sitemapLocationValue]) => sitemapLocationValue,
+  );
+  const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
 
-  expect(sitemapUrlCount).toBe(26);
-  expect(localizedPublicRouteEntries).toHaveLength(26);
+  expect(sitemapUrlCount).toBe(34);
+  expect(localizedPublicRouteEntries).toHaveLength(34);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,
     );
   }
   expect(sitemapText).not.toContain("farmType=");
+  expect(sitemapLocationValues).not.toContainEqual(expect.stringContaining("?"));
   expect(sitemapText).not.toContain("<lastmod>");
   expect(sitemapText).toContain("/privacy");
   expect(sitemapText).toContain("/terms");
   expect(sitemapText).not.toContain("/contact");
+
+  for (const pathname of expectedBlogSitemapPathnames) {
+    expect(sitemapText).toContain(`<loc>${createCanonicalUrl(pathname)}</loc>`);
+  }
 });

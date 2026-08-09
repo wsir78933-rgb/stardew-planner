@@ -2,6 +2,7 @@ import {
   officialFarmTypes,
   type OfficialFarmType,
 } from "../reference/official-farm-guides";
+import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
 
@@ -14,17 +15,30 @@ const fixedCanonicalPublicPaths = [
   "/contact",
 ] as const;
 
+type BlogCanonicalPublicPath =
+  | "/blog"
+  | "/blog/archive"
+  | `/${BlogPostSlug}`;
+
 export type PublicCanonicalPath =
   | (typeof fixedCanonicalPublicPaths)[number]
-  | `/farm/${OfficialFarmType}`;
+  | `/farm/${OfficialFarmType}`
+  | BlogCanonicalPublicPath;
 
 const farmCanonicalPublicPaths = officialFarmTypes.map(
   (farmType) => `/farm/${farmType}` as const,
 );
 
+const blogCanonicalPublicPaths: readonly BlogCanonicalPublicPath[] = [
+  "/blog",
+  "/blog/archive",
+  ...blogPostSlugs.map((slug) => `/${slug}` as const),
+];
+
 export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
   ...fixedCanonicalPublicPaths,
   ...farmCanonicalPublicPaths,
+  ...blogCanonicalPublicPaths,
 ];
 
 const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>(["/contact"]);

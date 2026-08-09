@@ -25,6 +25,13 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Beach Farm guide](https://stardewvalleyplanner.art/farm/beach): Learn about the Beach Farm and start planning its layout.
 - [Meadowlands Farm guide](https://stardewvalleyplanner.art/farm/meadowlands): Learn about the Meadowlands Farm and start planning its layout.
 
+### Planning guides
+
+- [Stardew Valley Planning Guides](https://stardewvalleyplanner.art/blog): Browse practical guides for planning a clearer, more flexible farm.
+- [Planning guide archive](https://stardewvalleyplanner.art/blog/archive): Browse every Stardew Valley planning guide.
+- [Carpenter in Stardew Valley](https://stardewvalleyplanner.art/carpenter-stardew): Find Robin's shop hours, location, and building services before ordering a farm project.
+- [Where Is Robin in Stardew Valley?](https://stardewvalleyplanner.art/where-is-robin-stardew-valley): Find Robin's location, service hours, and the schedule conditions that can change her day.
+
 ## 简体中文
 
 星露谷农场规划器可帮助你在浏览器中规划农场布局。项目保留在浏览器本地，不需要账户或云端同步。
@@ -47,3 +54,10 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [四角农场指南](https://stardewvalleyplanner.art/zh/farm/four-corners): 了解四角农场并开始规划布局。
 - [海滩农场指南](https://stardewvalleyplanner.art/zh/farm/beach): 了解海滩农场并开始规划布局。
 - [草原农场指南](https://stardewvalleyplanner.art/zh/farm/meadowlands): 了解草原农场并开始规划布局。
+
+### 农场规划指南
+
+- [星露谷农场规划指南](https://stardewvalleyplanner.art/zh/blog): 浏览帮助你更清晰、更灵活规划农场的实用指南。
+- [规划指南归档](https://stardewvalleyplanner.art/zh/blog/archive): 浏览全部星露谷农场规划指南。
+- [星露谷木匠指南](https://stardewvalleyplanner.art/zh/carpenter-stardew): 在安排农场建筑项目前，查看罗宾商店的营业时间、位置和建筑服务。
+- [罗宾在星露谷物语的哪里](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley): 查看罗宾的位置、服务时间，以及会改变她每日行程的条件。

@@ -1,4 +1,5 @@
 import { expect, expectTypeOf, it } from "vitest";
+import type { Metadata } from "next";
 import type { PublicLocale } from "../../src/i18n/public-locale";
 import type { PublicCanonicalPath } from "../../src/i18n/public-route-registry";
 import {
@@ -17,6 +18,8 @@ it("requires an explicit locale and canonical public identity at the type bounda
       title: string;
       description: string;
       openGraphType?: "article" | "website";
+      socialImagePath?: string;
+      robots?: Metadata["robots"];
     }>
   >();
 });
@@ -68,6 +71,35 @@ it("preserves the supported article Open Graph type", () => {
   });
 
   expect(metadata.openGraph).toMatchObject({ type: "article" });
+});
+
+it("resolves a route-specific social image against the public site URL", () => {
+  const metadata = createPublicPageMetadata({
+    locale: "en",
+    canonicalPath: "/carpenter-stardew",
+    title: "Carpenter in Stardew Valley",
+    description: "Find Robin's building services.",
+    socialImagePath: "/blog/carpenter-stardew-cover.png",
+  });
+
+  expect(metadata.openGraph).toMatchObject({
+    images: ["https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.png"],
+  });
+  expect(metadata.twitter).toMatchObject({
+    images: ["https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.png"],
+  });
+});
+
+it("preserves an explicit robots directive", () => {
+  const metadata = createPublicPageMetadata({
+    locale: "en",
+    canonicalPath: "/blog",
+    title: "Stardew Valley Planning Guides",
+    description: "Read Stardew Valley planning guides.",
+    robots: { index: false, follow: true },
+  });
+
+  expect(metadata.robots).toEqual({ index: false, follow: true });
 });
 
 it("creates Chinese metadata from a locale-neutral public identity", () => {

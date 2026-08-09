@@ -7,10 +7,7 @@ import {
 import type { PublicLocale } from "../i18n/public-locale";
 import { createCanonicalUrl, publicSiteUrl } from "./public-site-url";
 
-const sharedSocialImageUrl = new URL(
-  "/social-images/stardew-valley-farm-planner.png",
-  publicSiteUrl,
-).toString();
+const sharedSocialImagePath = "/social-images/stardew-valley-farm-planner.png";
 
 export type PublicPageMetadataInput = Readonly<{
   locale: PublicLocale;
@@ -18,7 +15,13 @@ export type PublicPageMetadataInput = Readonly<{
   title: string;
   description: string;
   openGraphType?: "article" | "website";
+  socialImagePath?: string;
+  robots?: Metadata["robots"];
 }>;
+
+function createSocialImageUrl(socialImagePath: string): string {
+  return new URL(socialImagePath, publicSiteUrl).toString();
+}
 
 export function createPublicPageMetadata(
   input: PublicPageMetadataInput,
@@ -28,6 +31,9 @@ export function createPublicPageMetadata(
   );
   const openGraphType = input.openGraphType ?? "website";
   const languages = createPublicLanguageAlternates(input.canonicalPath);
+  const socialImageUrl = createSocialImageUrl(
+    input.socialImagePath ?? sharedSocialImagePath,
+  );
 
   return {
     title: input.title,
@@ -38,13 +44,14 @@ export function createPublicPageMetadata(
       description: input.description,
       type: openGraphType,
       url: canonicalUrl,
-      images: [sharedSocialImageUrl],
+      images: [socialImageUrl],
     },
     twitter: {
       card: "summary",
       title: input.title,
       description: input.description,
-      images: [sharedSocialImageUrl],
+      images: [socialImageUrl],
     },
+    robots: input.robots,
   };
 }

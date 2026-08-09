@@ -12,6 +12,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain("## 简体中文");
   expect(llmsText).toContain("browser-local projects");
   expect(llmsText).toContain("浏览器本地项目");
+  expect(llmsText).toContain(
+    "[Carpenter in Stardew Valley](https://stardewvalleyplanner.art/carpenter-stardew)",
+  );
+  expect(llmsText).toContain(
+    "[罗宾在星露谷物语的哪里](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley)",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

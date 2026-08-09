@@ -1,5 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import {
+  DOMParser,
+  type Document as XmlDocument,
+  type Element as XmlElement,
+} from "@xmldom/xmldom";
 import { describe, expect, it } from "vitest";
 import { officialFarmTypes } from "../../src/reference/official-farm-guides";
 
@@ -15,6 +20,15 @@ type StaticPublicPageExpectation = readonly [
   documentLanguage: string,
   sectionHeadings?: readonly string[],
 ];
+
+type StaticBlogPageExpectation = Readonly<{
+  pathname: string;
+  staticPageFile: string;
+  heading: string;
+  documentLanguage: "en" | "zh-CN";
+  schemaType: "Article" | "CollectionPage";
+  coverImages: readonly Readonly<{ src: string; alt: string }>[];
+}>;
 
 const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
   [
@@ -150,6 +164,129 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
   ["/zh/farm/meadowlands", "zh/farm/meadowlands.html", "草原农场 指南 | 星露谷规划器", "了解草原农场地图，并开始规划你的星露谷农场布局。", "草原农场", "zh-CN"],
 ] as const;
 
+const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
+  {
+    pathname: "/blog",
+    staticPageFile: "blog.html",
+    heading: "Stardew Valley Planning Guides",
+    documentLanguage: "en",
+    schemaType: "CollectionPage",
+    coverImages: [
+      {
+        src: "/blog/carpenter-stardew-cover.png",
+        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+      },
+      {
+        src: "/blog/where-is-robin-stardew-valley-cover.png",
+        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+      },
+    ],
+  },
+  {
+    pathname: "/blog/archive",
+    staticPageFile: "blog/archive.html",
+    heading: "All articles",
+    documentLanguage: "en",
+    schemaType: "CollectionPage",
+    coverImages: [
+      {
+        src: "/blog/carpenter-stardew-cover.png",
+        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+      },
+      {
+        src: "/blog/where-is-robin-stardew-valley-cover.png",
+        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+      },
+    ],
+  },
+  {
+    pathname: "/carpenter-stardew",
+    staticPageFile: "carpenter-stardew.html",
+    heading: "Carpenter in Stardew Valley: Robin's Shop, Hours, and Building Services",
+    documentLanguage: "en",
+    schemaType: "Article",
+    coverImages: [
+      {
+        src: "/blog/carpenter-stardew-cover.png",
+        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+      },
+    ],
+  },
+  {
+    pathname: "/where-is-robin-stardew-valley",
+    staticPageFile: "where-is-robin-stardew-valley.html",
+    heading: "Where Is Robin in Stardew Valley? Location, Hours, and Schedule",
+    documentLanguage: "en",
+    schemaType: "Article",
+    coverImages: [
+      {
+        src: "/blog/where-is-robin-stardew-valley-cover.png",
+        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+      },
+    ],
+  },
+  {
+    pathname: "/zh/blog",
+    staticPageFile: "zh/blog.html",
+    heading: "星露谷农场规划指南",
+    documentLanguage: "zh-CN",
+    schemaType: "CollectionPage",
+    coverImages: [
+      {
+        src: "/blog/carpenter-stardew-cover.png",
+        alt: "松林山脚下木工工坊的原创插画",
+      },
+      {
+        src: "/blog/where-is-robin-stardew-valley-cover.png",
+        alt: "从农场通往山间工坊的小路原创插画",
+      },
+    ],
+  },
+  {
+    pathname: "/zh/blog/archive",
+    staticPageFile: "zh/blog/archive.html",
+    heading: "全部文章",
+    documentLanguage: "zh-CN",
+    schemaType: "CollectionPage",
+    coverImages: [
+      {
+        src: "/blog/carpenter-stardew-cover.png",
+        alt: "松林山脚下木工工坊的原创插画",
+      },
+      {
+        src: "/blog/where-is-robin-stardew-valley-cover.png",
+        alt: "从农场通往山间工坊的小路原创插画",
+      },
+    ],
+  },
+  {
+    pathname: "/zh/carpenter-stardew",
+    staticPageFile: "zh/carpenter-stardew.html",
+    heading: "星露谷木匠指南：罗宾商店、营业时间与建筑升级",
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    coverImages: [
+      {
+        src: "/blog/carpenter-stardew-cover.png",
+        alt: "松林山脚下木工工坊的原创插画",
+      },
+    ],
+  },
+  {
+    pathname: "/zh/where-is-robin-stardew-valley",
+    staticPageFile: "zh/where-is-robin-stardew-valley.html",
+    heading: "罗宾在星露谷物语的哪里？每日行程指南",
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    coverImages: [
+      {
+        src: "/blog/where-is-robin-stardew-valley-cover.png",
+        alt: "从农场通往山间工坊的小路原创插画",
+      },
+    ],
+  },
+];
+
 function readStaticPageHtml(staticPageFile: string): string {
   const staticPagePath = join(process.cwd(), "out", staticPageFile);
 
@@ -158,6 +295,30 @@ function readStaticPageHtml(staticPageFile: string): string {
   }
 
   return readFileSync(staticPagePath, "utf8");
+}
+
+function parseStaticPageDocument(
+  staticPageHtml: string,
+  staticPageFile: string,
+): XmlDocument {
+  return new DOMParser({
+    onError(errorLevel, errorMessage) {
+      throw new Error(
+        `Could not parse static page ${staticPageFile}: ${errorLevel}: ${errorMessage}`,
+      );
+    },
+  }).parseFromString(staticPageHtml, "text/html");
+}
+
+function findMatchingCoverImageElements(
+  staticPageDocument: XmlDocument,
+  expectedCoverImage: Readonly<{ src: string; alt: string }>,
+): XmlElement[] {
+  return Array.from(staticPageDocument.getElementsByTagName("img")).filter(
+    (imageElement) =>
+      imageElement.getAttribute("src") === expectedCoverImage.src &&
+      imageElement.getAttribute("alt") === expectedCoverImage.alt,
+  );
 }
 
 function readInitialDocumentLanguage(
@@ -218,6 +379,82 @@ describe("static public pages", () => {
   it("exports crawler-discovery files alongside the public pages", () => {
     expect(existsSync(join(process.cwd(), "out", "robots.txt"))).toBe(true);
     expect(existsSync(join(process.cwd(), "out", "sitemap.xml"))).toBe(true);
+  });
+
+  it("exports all bilingual blog pages with article discovery metadata and original covers", () => {
+    for (const {
+      pathname,
+      staticPageFile,
+      heading,
+      documentLanguage,
+      schemaType,
+      coverImages,
+    } of staticBlogPageExpectations) {
+      const staticPageHtml = readStaticPageHtml(staticPageFile);
+      const staticPageDocument = parseStaticPageDocument(
+        staticPageHtml,
+        staticPageFile,
+      );
+      const englishPathname = pathname.startsWith("/zh")
+        ? pathname.replace(/^\/zh/, "") || "/"
+        : pathname;
+      const chinesePathname = `/zh${englishPathname === "/" ? "" : englishPathname}`;
+
+      expect(
+        readInitialDocumentLanguage(staticPageHtml, pathname, staticPageFile),
+      ).toBe(documentLanguage);
+      expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+      expect(staticPageHtml).toContain(
+        `<h1>${escapeHtmlAttributeValue(heading)}</h1>`,
+      );
+      expect(staticPageHtml).toContain(
+        `<link rel="canonical" href="${expectedCanonicalUrl(pathname)}"`,
+      );
+      expect(staticPageHtml).toContain(
+        `hrefLang="en" href="${expectedCanonicalUrl(englishPathname)}"`,
+      );
+      expect(staticPageHtml).toContain(
+        `hrefLang="zh-CN" href="${expectedCanonicalUrl(chinesePathname)}"`,
+      );
+      expect(staticPageHtml).toContain(
+        `hrefLang="x-default" href="${expectedCanonicalUrl(englishPathname)}"`,
+      );
+      expect(staticPageHtml).toContain(
+        '<meta name="robots" content="noindex, follow"',
+      );
+      expect(staticPageHtml).toContain(`\"@type\":\"${schemaType}\"`);
+      expect(staticPageHtml).not.toContain('id="reference-runtime-root"');
+      expect(staticPageHtml).not.toContain(
+        'src="/reference-runtime/bootstrap.mjs"',
+      );
+
+      for (const coverImage of coverImages) {
+        const matchingCoverImageElements = findMatchingCoverImageElements(
+          staticPageDocument,
+          coverImage,
+        );
+
+        expect(
+          matchingCoverImageElements,
+          `Expected ${pathname} to contain a cover image with src=${coverImage.src} and alt=${coverImage.alt}.`,
+        ).not.toHaveLength(0);
+
+        for (const matchingCoverImageElement of matchingCoverImageElements) {
+          expect(matchingCoverImageElement.getAttribute("width")).toBe("1672");
+          expect(matchingCoverImageElement.getAttribute("height")).toBe("941");
+
+          if (schemaType === "CollectionPage") {
+            expect(matchingCoverImageElement.getAttribute("loading")).toBe(
+              "lazy",
+            );
+          } else {
+            expect(matchingCoverImageElement.getAttribute("loading")).not.toBe(
+              "lazy",
+            );
+          }
+        }
+      }
+    }
   });
 
   it("exports all bilingual public pages with static metadata and paired language alternates", () => {

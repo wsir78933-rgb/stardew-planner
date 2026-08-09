@@ -4,6 +4,8 @@ import { farmComparisonMetadata } from "../../app/(en)/farm-comparison/page";
 import { generateMetadata } from "../../app/(en)/farm/[type]/page";
 import { modsMetadata } from "../../app/(en)/mods/page";
 import { metadata as contactMetadata } from "../../app/(en)/contact/page";
+import { metadata as blogIndexMetadata } from "../../app/(en)/blog/page";
+import { metadata as blogArchiveMetadata } from "../../app/(en)/blog/archive/page";
 import { metadata as chinesePlannerMetadata } from "../../app/zh/page";
 import { farmComparisonMetadata as chineseFarmComparisonMetadata } from "../../app/zh/farm-comparison/page";
 import {
@@ -13,6 +15,19 @@ import {
 } from "../../app/zh/farm/[type]/page";
 import { modsMetadata as chineseModsMetadata } from "../../app/zh/mods/page";
 import { metadata as chineseContactMetadata } from "../../app/zh/contact/page";
+import { metadata as chineseBlogIndexMetadata } from "../../app/zh/blog/page";
+import { metadata as chineseBlogArchiveMetadata } from "../../app/zh/blog/archive/page";
+import {
+  dynamicParams as blogDynamicParams,
+  generateMetadata as generateBlogMetadata,
+  generateStaticParams as generateBlogStaticParams,
+} from "../../app/(en)/[slug]/page";
+import {
+  dynamicParams as chineseBlogDynamicParams,
+  generateMetadata as generateChineseBlogMetadata,
+  generateStaticParams as generateChineseBlogStaticParams,
+} from "../../app/zh/[slug]/page";
+import { blogPostSlugs, getBlogPostBySlug } from "../../src/blog/blog-post-registry";
 import {
   officialFarmGuides,
   officialFarmTypes,
@@ -155,6 +170,19 @@ describe("public route metadata", () => {
     }
   });
 
+  it("marks every fixed bilingual blog page as followable but noindex", () => {
+    for (const pageMetadata of [
+      blogIndexMetadata,
+      blogArchiveMetadata,
+      chineseBlogIndexMetadata,
+      chineseBlogArchiveMetadata,
+    ]) {
+      expect(pageMetadata).toMatchObject({
+        robots: { index: false, follow: true },
+      });
+    }
+  });
+
   it("generates every Chinese official farm metadata entry at its localized path", async () => {
     expect(generateChineseFarmStaticParams()).toEqual(
       officialFarmTypes.map((type) => ({ type })),
@@ -173,6 +201,62 @@ describe("public route metadata", () => {
         },
         openGraph: { images: [expectedSocialImageUrl] },
         twitter: { images: [expectedSocialImageUrl] },
+      });
+    }
+  });
+
+  it("generates paired article metadata from each localized blog post cover", async () => {
+    expect(generateBlogStaticParams()).toEqual(blogPostSlugs.map((slug) => ({ slug })));
+    expect(generateChineseBlogStaticParams()).toEqual(
+      blogPostSlugs.map((slug) => ({ slug })),
+    );
+    expect(blogDynamicParams).toBe(false);
+    expect(chineseBlogDynamicParams).toBe(false);
+
+    for (const slug of blogPostSlugs) {
+      const englishPost = getBlogPostBySlug("en", slug);
+      const chinesePost = getBlogPostBySlug("zh-CN", slug);
+
+      if (englishPost === undefined || chinesePost === undefined) {
+        throw new Error(`Missing localized blog post metadata for ${slug}.`);
+      }
+
+      await expect(
+        generateBlogMetadata({ params: Promise.resolve({ slug }) }),
+      ).resolves.toMatchObject({
+        title: englishPost.title,
+        description: englishPost.description,
+        alternates: {
+          canonical: `https://stardewvalleyplanner.art/${slug}`,
+          languages: createExpectedLanguageAlternates(`/${slug}`),
+        },
+        openGraph: {
+          type: "article",
+          images: [`https://stardewvalleyplanner.art${englishPost.coverImage.src}`],
+        },
+        twitter: {
+          images: [`https://stardewvalleyplanner.art${englishPost.coverImage.src}`],
+        },
+        robots: { index: false, follow: true },
+      });
+
+      await expect(
+        generateChineseBlogMetadata({ params: Promise.resolve({ slug }) }),
+      ).resolves.toMatchObject({
+        title: chinesePost.title,
+        description: chinesePost.description,
+        alternates: {
+          canonical: `https://stardewvalleyplanner.art/zh/${slug}`,
+          languages: createExpectedLanguageAlternates(`/${slug}`),
+        },
+        openGraph: {
+          type: "article",
+          images: [`https://stardewvalleyplanner.art${chinesePost.coverImage.src}`],
+        },
+        twitter: {
+          images: [`https://stardewvalleyplanner.art${chinesePost.coverImage.src}`],
+        },
+        robots: { index: false, follow: true },
       });
     }
   });

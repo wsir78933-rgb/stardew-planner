@@ -47,6 +47,14 @@ const expectedStaticPageFiles = [
   "zh/privacy.html",
   "zh/terms.html",
   "zh/contact.html",
+  "blog.html",
+  "blog/archive.html",
+  "carpenter-stardew.html",
+  "where-is-robin-stardew-valley.html",
+  "zh/blog.html",
+  "zh/blog/archive.html",
+  "zh/carpenter-stardew.html",
+  "zh/where-is-robin-stardew-valley.html",
 ] as const;
 
 function readStaticPageHtml(staticPageFile: string): string {
