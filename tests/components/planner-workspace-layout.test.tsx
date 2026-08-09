@@ -645,6 +645,60 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
+  it("uses stable mobile canvas flow and 44px coarse-pointer targets without resizing the joystick", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+    const mobilePlannerWorkspaceStyles = getMobilePlannerWorkspaceStyles(
+      plannerWorkspaceStyles,
+    );
+    const coarseMobilePointerRule = plannerWorkspaceStyles.match(
+      /@media \(pointer: coarse\) and \(max-width: 640px\)\s*\{([\s\S]*?)\n\}/,
+    )?.[1];
+    const compactCoarseMobilePointerRule = plannerWorkspaceStyles.match(
+      /@media \(pointer: coarse\) and \(max-width: 394px\)\s*\{([\s\S]*?)\n\}/,
+    )?.[1];
+    const narrowToolbarPointerRule = plannerWorkspaceStyles.match(
+      /@media \(pointer: coarse\) and \(max-width: 374px\)\s*\{([\s\S]*?)\n\}/,
+    )?.[1];
+
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.planner-editor-canvas-area\s*\{[^}]*display:\s*flex;[^}]*flex-direction:\s*column;/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.planner-canvas\s*\{[^}]*flex:\s*1[^;}]*;[^}]*order:\s*1;[^}]*position:\s*relative;/s,
+    );
+    expect(coarseMobilePointerRule).toBeDefined();
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.menu-btn,[\s\S]*?\.planner-editor-shell \.tool-btn\s*\{[^}]*height:\s*44px;[^}]*width:\s*44px;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.toolbar-wrapper\s*\{[^}]*left:\s*var\(--lk-xs\);[^}]*transform:\s*none;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell:has\(\.menu-bar\.left-hand\) \.toolbar-wrapper\s*\{[^}]*left:\s*auto;[^}]*right:\s*var\(--lk-xs\);/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.panel-tabs\s*\{[^}]*flex-basis:\s*52px;[^}]*gap:\s*1px;[^}]*padding:\s*4px;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.tab-icon\s*\{[^}]*flex:\s*0 0 44px;[^}]*height:\s*44px;[^}]*width:\s*44px;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.rotate-btn,[\s\S]*?\.planner-editor-shell \.flip-btn\s*\{[^}]*height:\s*44px;[^}]*width:\s*44px;/s,
+    );
+    expect(coarseMobilePointerRule).not.toContain(".planner-editor-shell .arrow-btn");
+    expect(coarseMobilePointerRule).not.toContain(".planner-joystick");
+    expect(compactCoarseMobilePointerRule).toBeDefined();
+    expect(compactCoarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.item-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/s,
+    );
+    expect(compactCoarseMobilePointerRule).not.toContain(".planner-joystick");
+    expect(narrowToolbarPointerRule).toBeDefined();
+    expect(narrowToolbarPointerRule).toMatch(
+      /\.planner-editor-shell \.toolbar-wrapper\s*\{[^}]*top:\s*64px;/s,
+    );
+    expect(narrowToolbarPointerRule).not.toContain(".planner-joystick");
+  });
+
   it("reserves the frozen safe-area-aware bottom heights for the canvas and controls", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
 

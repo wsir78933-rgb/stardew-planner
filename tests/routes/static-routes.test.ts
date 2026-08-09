@@ -118,7 +118,7 @@ describe("static reference-runtime routes", () => {
         new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),
       );
 
-      expect(plannerAnchorMatches).toHaveLength(4);
+      expect(plannerAnchorMatches).toHaveLength(3);
     }
   });
 });

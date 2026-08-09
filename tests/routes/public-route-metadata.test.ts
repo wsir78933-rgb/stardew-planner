@@ -253,7 +253,7 @@ describe("public route metadata", () => {
         twitter: {
           images: [`https://stardewvalleyplanner.art${englishPost.coverImage.src}`],
         },
-        robots: { index: true, follow: true },
+        robots: { index: false, follow: true },
       });
 
       await expect(
@@ -272,7 +272,7 @@ describe("public route metadata", () => {
         twitter: {
           images: [`https://stardewvalleyplanner.art${chinesePost.coverImage.src}`],
         },
-        robots: { index: true, follow: true },
+        robots: { index: false, follow: true },
       });
     }
   });

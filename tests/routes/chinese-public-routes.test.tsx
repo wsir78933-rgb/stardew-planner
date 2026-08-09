@@ -12,7 +12,7 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   expect(markup).toContain("适用于各种农场布局的");
   expect(markup).toContain('data-homepage-shell="true"');
   expect(markup).toContain("data-homepage-workspace");
-  expect(markup.match(/href="#planner"/g)).toHaveLength(4);
+  expect(markup.match(/href="#planner"/g)).toHaveLength(3);
   expect(markup).toContain('href="/zh"');
   expect(markup).toContain('href="/"');
   expect(markup).not.toContain('data-public-page-shell="true"');

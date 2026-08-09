@@ -248,7 +248,7 @@ test("uses the shared footer contract for a bounded desktop layout and a single 
     "grid-template-columns: repeat(3, minmax(0, 1fr));",
   );
   expect(styles).toContain(
-    "body:has(> [data-homepage-shell]) [data-site-footer-social-icons] span {",
+    "body:has(> [data-homepage-shell]) [data-site-footer-social-icons] :is(span, a) {",
   );
 
   const mobileFooterRule = styles.match(

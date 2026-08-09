@@ -2656,7 +2656,8 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 }
 
 @media (max-width: 640px) {
-  .planner-editor-shell:has(.item-catalog-panel--bottom) .planner-canvas { bottom: auto; flex: 1; inset: auto; order: 1; position: relative; }
+  .planner-editor-shell .planner-editor-canvas-area { display: flex; flex-direction: column; }
+  .planner-editor-shell .planner-canvas { bottom: auto; flex: 1 1 auto; inset: auto; min-height: 0; min-width: 0; order: 1; position: relative; }
   .planner-editor-shell .bottom-wrapper.item-catalog-panel--bottom { flex-basis: calc(190px + env(safe-area-inset-bottom, 0px)); height: calc(190px + env(safe-area-inset-bottom, 0px)); }
   .planner-editor-shell .bottom-panel { flex-direction: row; height: calc(190px + env(safe-area-inset-bottom, 0px)); width: 100%; }
   .planner-editor-shell .panel-tabs { flex: 0 0 49px; height: 189px; }
@@ -2679,6 +2680,25 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   .planner-editor-shell .selection-inspector { bottom: calc(202px + env(safe-area-inset-bottom, 0px)); }
   .planner-editor-shell .planner-joystick.joystick-outer { bottom: var(--lk-xs); right: var(--lk-xs); }
   .planner-editor-shell .planner-joystick--left.joystick-outer { left: var(--lk-xs); right: auto; }
+}
+
+@media (pointer: coarse) and (max-width: 640px) {
+  .planner-editor-shell .menu-btn,
+  .planner-editor-shell .tool-btn { height: 44px; width: 44px; }
+  .planner-editor-shell .toolbar-wrapper { left: var(--lk-xs); transform: none; }
+  .planner-editor-shell:has(.menu-bar.left-hand) .toolbar-wrapper { left: auto; right: var(--lk-xs); }
+  .planner-editor-shell .panel-tabs { flex-basis: 52px; gap: 1px; padding: 4px; }
+  .planner-editor-shell .tab-icon { flex: 0 0 44px; height: 44px; width: 44px; }
+  .planner-editor-shell .rotate-btn,
+  .planner-editor-shell .flip-btn { height: 44px; width: 44px; }
+}
+
+@media (pointer: coarse) and (max-width: 374px) {
+  .planner-editor-shell .toolbar-wrapper { top: 64px; }
+}
+
+@media (pointer: coarse) and (max-width: 394px) {
+  .planner-editor-shell .item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* Contact page: intentionally isolated from the planner editor styles above. */

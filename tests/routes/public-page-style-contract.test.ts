@@ -55,9 +55,6 @@ it("does not add public-page declarations to the homepage selector", () => {
 });
 
 it("replaces the public footer layout with the shared site footer attributes", () => {
-  const publicMobileStyles = globalStyles.slice(
-    globalStyles.lastIndexOf("@media (max-width: 700px)"),
-  );
   const footerRule = globalStyles.match(
     /\[data-public-page-shell\] > \[data-site-footer\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
@@ -67,14 +64,14 @@ it("replaces the public footer layout with the shared site footer attributes", (
   const publicFooterFocusRule = globalStyles.match(
     /\[data-public-page-shell\] > \[data-site-footer\] a:focus-visible\s*\{([\s\S]*?)\n\}/,
   )?.[1];
-  const mobilePublicFooterRule = publicMobileStyles.match(
-    /\[data-public-page-shell\] > \[data-site-footer\]\s*\{([\s\S]*?)\n  \}/,
+  const mobilePublicFooterRule = globalStyles.match(
+    /^  \[data-public-page-shell\] > \[data-site-footer\]\s*\{([\s\S]*?)^  \}/m,
   )?.[1];
-  const mobilePublicFooterSocialIconsRule = publicMobileStyles.match(
-    /\[data-public-page-shell\] > \[data-site-footer\] \[data-site-footer-social-icons\]\s*\{([\s\S]*?)\n  \}/,
+  const mobilePublicFooterSocialIconsRule = globalStyles.match(
+    /^  \[data-public-page-shell\] > \[data-site-footer\] \[data-site-footer-social-icons\]\s*\{([\s\S]*?)^  \}/m,
   )?.[1];
-  const mobilePublicFooterSectionsRule = publicMobileStyles.match(
-    /\[data-public-page-shell\] > \[data-site-footer\] \[data-site-footer-sections\]\s*\{([\s\S]*?)\n  \}/,
+  const mobilePublicFooterSectionsRule = globalStyles.match(
+    /^  \[data-public-page-shell\] > \[data-site-footer\] \[data-site-footer-sections\]\s*\{([\s\S]*?)^  \}/m,
   )?.[1];
 
   expect(globalStyles).not.toContain("[data-public-page-shell] > footer");

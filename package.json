@@ -11,7 +11,8 @@
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "assets:sync": "tsx src/assets/sync-assets.ts",
-    "reference:sync": "tsx src/reference-runtime/sync-reference-runtime.ts"
+    "reference:sync": "tsx src/reference-runtime/sync-reference-runtime.ts",
+    "seo:smoke": "node scripts/production-seo-smoke.mjs --origin https://stardewvalleyplanner.art"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

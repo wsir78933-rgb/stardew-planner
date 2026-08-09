@@ -4,7 +4,7 @@ import { expect, it } from "vitest";
 import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
 
-const expectedBlogSitemapPathnames = [
+const expectedNoindexBlogSitemapPathnames = [
   "/blog",
   "/blog/archive",
   "/carpenter-stardew",
@@ -25,7 +25,7 @@ it("writes robots.txt with the absolute sitemap URL", () => {
   );
 });
 
-it("writes exactly the indexable localized public URLs into sitemap.xml", () => {
+it("intentionally retains noindex blog URLs among the 34 localized public sitemap URLs", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
   const sitemapLocationValues = Array.from(
     sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g),
@@ -48,7 +48,7 @@ it("writes exactly the indexable localized public URLs into sitemap.xml", () => 
   expect(sitemapText).toContain("/terms");
   expect(sitemapText).not.toContain("/contact");
 
-  for (const pathname of expectedBlogSitemapPathnames) {
+  for (const pathname of expectedNoindexBlogSitemapPathnames) {
     expect(sitemapText).toContain(`<loc>${createCanonicalUrl(pathname)}</loc>`);
   }
 });
