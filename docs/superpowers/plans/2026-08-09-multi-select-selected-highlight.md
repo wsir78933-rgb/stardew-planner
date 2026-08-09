@@ -16,7 +16,8 @@
 - Use exactly `background: rgb(177 58 40 / 15%)` and `color: #b13a28` for that state.
 - Keep `aria-label="Multi-select tool"` and `aria-pressed` as the existing accessibility contract; do not introduce a separate selected-state source.
 - Do not change Cursor, Erase, Fill, Wheel Zoom, Undo, Redo, tool availability, callback behavior, keyboard shortcuts, map selection, placement, Toasts, the material panel, or any other page.
-- Do not change layout, dimensions, spacing, grouping, icons, labels, borders, border radii, responsive rules, hover rules, focus-visible rules, or disabled rules.
+- Do not modify the existing generic hover rule, focus-visible rules, or disabled rules. The selected Multi-select rule deliberately follows the generic hover rule, so an already selected Multi-select retains `background: rgb(177 58 40 / 15%)` and `color: #b13a28` while hovered; an unselected Multi-select retains the existing generic hover appearance.
+- Do not change layout, dimensions, spacing, grouping, icons, labels, borders, border radii, or responsive rules.
 - Do not extract a reusable destructive-state component, CSS variable, abstraction, or future extension point.
 - Add no dependency and read no Next.js API documentation: this task changes no Next.js API.
 - Follow high cohesion, low coupling, single responsibility, interface boundaries, KISS, Fail Fast, and YAGNI.
@@ -124,7 +125,7 @@ In `src/components/editor-toolbar.tsx`, replace only the opening portion of the 
 
 - [ ] **Step 4: Add the precise selected-state presentation rule**
 
-In `app/globals.css`, insert this rule directly after the existing generic `.planner-editor-shell .tool-btn.active` rule at line 1926 and before the existing `.planner-editor-shell .tool-btn.erase` rule. The selector is deliberately limited by the editor shell, the new tool-only class, and the existing ARIA state; do not add border, layout, hover, focus, or disabled declarations.
+In `app/globals.css`, insert this rule directly after the existing generic `.planner-editor-shell .tool-btn.active` rule at line 1926 and before the existing `.planner-editor-shell .tool-btn.erase` rule. The selector is deliberately limited by the editor shell, the new tool-only class, and the existing ARIA state; do not add border, layout, hover, focus, or disabled declarations. This order preserves the user-adjudicated result: an already selected Multi-select keeps its red background and foreground while hovered, while an unselected Multi-select retains the existing generic hover appearance.
 
 ```css
 .planner-editor-shell .tool-btn.multi-select[aria-pressed="true"] {
@@ -181,7 +182,7 @@ If the current worktree is not already served on port 3002, start it in a separa
 pnpm dev -- --port 3002
 ```
 
-Using the local Hermes CDP browser, open `http://127.0.0.1:3002/#planner` and wait until the editor toolbar is interactive. Click `Multi-select tool` and verify its button has background `rgb(177 58 40 / 15%)` and icon/foreground color `#b13a28`. Then click `Cursor tool` and verify the Multi-select button immediately loses both red declarations, Cursor retains its existing selected appearance, and the Erase, Wheel Zoom, Undo, Redo, toolbar dimensions, toolbar grouping, hover behavior, focus behavior, and keyboard interactions remain unchanged.
+Using the local Hermes CDP browser, open `http://127.0.0.1:3002/#planner` and wait until the editor toolbar is interactive. Click `Multi-select tool` and verify its button has background `rgb(177 58 40 / 15%)` and icon/foreground color `#b13a28`, including while hovered. Then click `Cursor tool` and verify the Multi-select button immediately loses both red declarations and returns to the existing unselected hover appearance, Cursor retains its existing selected appearance, and the Erase, Wheel Zoom, Undo, Redo, toolbar dimensions, toolbar grouping, focus behavior, and keyboard interactions remain unchanged.
 
 - [ ] **Step 10: Commit the implementation files**
 

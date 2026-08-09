@@ -39,6 +39,7 @@
 - 背景：`rgb(177 58 40 / 15%)`。
 - 图标与前景色：`#b13a28`。
 - 非选中 Multi-select 继续使用当前默认、悬停、焦点和禁用规则。
+- 用户裁定：已选中的 Multi-select 在鼠标悬停时仍保持 `rgb(177 58 40 / 15%)` 背景和 `#b13a28` 图标/前景色；只有非选中的 Multi-select 继续使用现有通用悬停颜色。
 - 切换到任意其他工具后，Multi-select 不再匹配选中条件，红色选中背景与图标色立即移除。
 - 颜色变化是已有 `aria-pressed` 状态的可视化，不是新的交互状态来源。
 
@@ -46,7 +47,7 @@
 
 - 保持 Multi-select 的现有 `aria-label="Multi-select tool"`。
 - 保持 `aria-pressed` 作为唯一的语义选中状态；不得用纯样式状态替代它。
-- 保持现有键盘焦点、悬停、disabled 与点击行为；新增选中样式不得覆盖或屏蔽这些状态。
+- 保持现有键盘焦点、disabled 与点击行为；保留现有通用悬停规则，但已选中的 Multi-select 悬停时保持用户裁定的红色选中视觉。
 - 选中反馈同时由明确的按钮状态语义和明显的颜色变化表达；本次不新增焦点移动、提示文本或键盘操作。
 
 ## 实现边界
@@ -60,7 +61,7 @@
 - 风险：宽泛的 `.active` 或 `[aria-pressed="true"]` 选择器会意外影响 Cursor、Erase、Fill 或 Wheel Zoom。
   - 控制：选择器必须精确限定为 Multi-select，测试同时断言目标按钮选中和非目标按钮维持现有状态。
 - 风险：覆盖现有悬停、焦点或 disabled 规则会降低可用性。
-  - 控制：只在选中条件下增加背景与前景色，不改现有 `:hover`、`:focus-visible` 或 `:disabled` 规则。
+  - 控制：不改现有 `:hover`、`:focus-visible` 或 `:disabled` 规则本身；选中规则只在 `aria-pressed="true"` 时覆盖背景与前景色，因此已选中的 Multi-select 悬停时保持红色，非选中状态继续使用通用悬停规则。
 - 风险：红色外观被误解为改变了工具语义。
   - 控制：不改变工具名称、图标、行为或 ARIA；规格明确该颜色仅表示已确认的选中视觉。
 
@@ -70,7 +71,7 @@
 - 当 Multi-select 的现有 `aria-pressed` 为 `false` 时，按钮不显示该红色选中态。
 - 切换工具后，只有当前 `aria-pressed="true"` 的工具保持其原有选中状态；Multi-select 的红色选中态随其状态正确出现或移除。
 - Cursor、Erase、Fill、Wheel Zoom、Undo 和 Redo 的 JSX、状态逻辑与视觉规则不因本次修改而改变。
-- Multi-select 的 `aria-label`、`aria-pressed`、点击处理、快捷键关联、disabled 行为、悬停和键盘焦点行为保持不变。
+- Multi-select 的 `aria-label`、`aria-pressed`、点击处理、快捷键关联、disabled 行为和键盘焦点行为保持不变；已选中状态的悬停视觉按用户裁定保持红色，非选中状态的悬停视觉保持不变。
 - 改动中不包含产品逻辑、布局、尺寸、圆角、图标、Toast、素材面板或其他页面的变更。
 
 ## 验证命令
