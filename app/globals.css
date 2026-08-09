@@ -1922,7 +1922,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   background: rgb(177 58 40 / 15%);
   color: #b13a28;
 }
-.planner-editor-shell .reference-runtime-wheel-zoom-button[aria-pressed="true"] {
+.planner-editor-shell .tool-btn.reference-runtime-wheel-zoom-button[aria-pressed="true"] {
   background: rgb(177 58 40 / 15%);
   color: #b13a28;
 }
