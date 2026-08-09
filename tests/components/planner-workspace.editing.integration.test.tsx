@@ -25,7 +25,10 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
-import { createWorkspaceCatalogPlacementPreviewInput } from "../../src/components/planner-workspace";
+import {
+  createWorkspaceCatalogPlacementPreviewInput,
+  getPlannerCanvasInteractionProperties,
+} from "../../src/components/planner-workspace";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
   return {
@@ -171,6 +174,78 @@ describe("workspace catalog placement preview wiring", () => {
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: null,
     })).toBeNull();
+  });
+});
+
+describe("planner canvas interaction properties", () => {
+  it("derives wheel zoom and pointer mode from the selected tool and placements", () => {
+    const cases = [
+      {
+        expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: true,
+        },
+        hasSelectedPlacements: true,
+        tool: "zoom",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: null,
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "rectangle",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "erase",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "rectangle",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "multi-select",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "rectangle",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "fill",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "move-selected",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: true,
+        tool: "cursor",
+      },
+      {
+        expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: false,
+        },
+        hasSelectedPlacements: false,
+        tool: "cursor",
+      },
+    ] as const;
+
+    for (const canvasInteractionCase of cases) {
+      expect(
+        getPlannerCanvasInteractionProperties({
+          hasSelectedPlacements: canvasInteractionCase.hasSelectedPlacements,
+          tool: canvasInteractionCase.tool,
+        }),
+      ).toEqual(canvasInteractionCase.expectedProperties);
+    }
   });
 });
 

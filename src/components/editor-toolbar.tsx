@@ -22,6 +22,13 @@ type EditorToolbarProperties = Readonly<{
   canRedo: boolean;
 }>;
 
+export function getEditorToolbarToolSelectionAfterClick(
+  currentTool: EditorTool | null,
+  requestedTool: EditorTool,
+): EditorTool | null {
+  return currentTool === requestedTool ? null : requestedTool;
+}
+
 const editorToolControls: readonly Readonly<{
   tool: EditorTool;
   label: string;
@@ -68,7 +75,11 @@ export function EditorToolbar({
         }`}
         disabled={!isAvailable}
         key={editorToolControl.tool}
-        onClick={() => onToolChange(isSelected ? null : editorToolControl.tool)}
+        onClick={() =>
+          onToolChange(
+            getEditorToolbarToolSelectionAfterClick(tool, editorToolControl.tool),
+          )
+        }
         title={editorToolControl.label}
         type="button"
       >
@@ -108,7 +119,9 @@ export function EditorToolbar({
             aria-pressed={isZoomSelected}
             className="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"
             data-reference-runtime-wheel-zoom-button="true"
-            onClick={() => onToolChange(isZoomSelected ? null : "zoom")}
+            onClick={() =>
+              onToolChange(getEditorToolbarToolSelectionAfterClick(tool, "zoom"))
+            }
             title={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
             type="button"
           >

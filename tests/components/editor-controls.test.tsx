@@ -4,7 +4,10 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { EditorMenuBar } from "../../src/components/editor-menu-bar";
-import { EditorToolbar } from "../../src/components/editor-toolbar";
+import {
+  EditorToolbar,
+  getEditorToolbarToolSelectionAfterClick,
+} from "../../src/components/editor-toolbar";
 
 function renderToolbar(
   tool: Parameters<typeof EditorToolbar>[0]["tool"],
@@ -65,6 +68,44 @@ describe("editor controls", () => {
     expect(zoomMarkup).toContain(
       'data-reference-runtime-wheel-zoom-button="true"',
     );
+  });
+
+  it("deselects the current tool and otherwise selects the requested visible tool", () => {
+    const cases = [
+      { currentTool: "cursor", expectedTool: null, requestedTool: "cursor" },
+      {
+        currentTool: "multi-select",
+        expectedTool: null,
+        requestedTool: "multi-select",
+      },
+      { currentTool: "erase", expectedTool: null, requestedTool: "erase" },
+      { currentTool: "zoom", expectedTool: null, requestedTool: "zoom" },
+      { currentTool: "zoom", expectedTool: "cursor", requestedTool: "cursor" },
+      {
+        currentTool: "cursor",
+        expectedTool: "multi-select",
+        requestedTool: "multi-select",
+      },
+      { currentTool: "cursor", expectedTool: "erase", requestedTool: "erase" },
+      { currentTool: "cursor", expectedTool: "zoom", requestedTool: "zoom" },
+      { currentTool: null, expectedTool: "cursor", requestedTool: "cursor" },
+      {
+        currentTool: null,
+        expectedTool: "multi-select",
+        requestedTool: "multi-select",
+      },
+      { currentTool: null, expectedTool: "erase", requestedTool: "erase" },
+      { currentTool: null, expectedTool: "zoom", requestedTool: "zoom" },
+    ] as const;
+
+    for (const toolbarSelectionCase of cases) {
+      expect(
+        getEditorToolbarToolSelectionAfterClick(
+          toolbarSelectionCase.currentTool,
+          toolbarSelectionCase.requestedTool,
+        ),
+      ).toBe(toolbarSelectionCase.expectedTool);
+    }
   });
 
   it("matches the frozen inactive and active erase button classes", () => {
