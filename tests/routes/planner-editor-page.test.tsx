@@ -20,8 +20,9 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout',
     );
-    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(4);
-    expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
+    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(3);
+    expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/blog"[^>]*>Blog<\/a>/);
+    expect(plannerPageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Open planner<\/a>/);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Start planning<\/a>/);
     expect(plannerPageMarkup.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
@@ -105,6 +106,8 @@ describe("planner editor page", () => {
         privacyHref: "/privacy",
         termsHref: "/terms",
         contactHref: "/contact",
+        blogHref: "/blog",
+        blogLabel: "Blog",
       }],
       ["zh-CN", {
         groupTitles: ["规划器", "探索", "法律"],
@@ -112,6 +115,8 @@ describe("planner editor page", () => {
         privacyHref: "/zh/privacy",
         termsHref: "/zh/terms",
         contactHref: "/zh/contact",
+        blogHref: "/zh/blog",
+        blogLabel: "博客",
       }],
     ] as const) {
       const homepageContentProps = {
@@ -142,6 +147,9 @@ describe("planner editor page", () => {
       expect(homepageMarkup).toContain(
         `<a href="${expectedFooter.contactHref}">`,
       );
+      expect(homepageMarkup).toContain(
+        `<a href="${expectedFooter.blogHref}">${expectedFooter.blogLabel}</a>`,
+      );
       expect(homepageMarkup).toMatch(
         /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
       );
@@ -166,14 +174,13 @@ describe("planner editor page", () => {
       ),
     );
 
-    expect(homepageMarkup.match(/href="#planner"/g)).toHaveLength(4);
+    expect(homepageMarkup.match(/href="#planner"/g)).toHaveLength(3);
     expect(homepageMarkup.match(/href="\/zh\?farmType=forest#planner"/g)).toHaveLength(1);
     expect(homepageMarkup).toMatch(
       /<a[^>]*data-homepage-brand[^>]*href="#planner"/,
     );
-    expect(homepageMarkup).toMatch(
-      /<a[^>]*href="#planner"[^>]*>规划器<\/a>/,
-    );
+    expect(homepageMarkup).toMatch(/<a[^>]*href="\/zh\/blog"[^>]*>博客<\/a>/);
+    expect(homepageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>规划器<\/a>/);
     expect(homepageMarkup).toMatch(
       /<a[^>]*href="#planner"[^>]*>打开规划器<\/a>/,
     );

@@ -20,6 +20,7 @@ const footerCopy: SiteFooterCopy = {
     title: "Explore",
     capabilities: "Capabilities",
     faq: "FAQ",
+    blog: "Blog",
   },
   legal: {
     title: "Legal",
@@ -52,6 +53,7 @@ it("renders every English footer destination, identity, copyright, and linked Tw
   expect(footerMarkup).toContain('href="/mods"');
   expect(footerMarkup).toContain('href="/#capabilities"');
   expect(footerMarkup).toContain('href="/#faq"');
+  expect(footerMarkup).toContain('href="/blog"');
   expect(footerMarkup).toContain('href="/privacy"');
   expect(footerMarkup).toContain('href="/terms"');
   expect(footerMarkup).toContain('href="/contact"');
@@ -79,6 +81,7 @@ it("uses Chinese homepage destinations throughout the Chinese footer", () => {
   expect(footerMarkup).toContain('href="/zh/mods"');
   expect(footerMarkup).toContain('href="/zh#capabilities"');
   expect(footerMarkup).toContain('href="/zh#faq"');
+  expect(footerMarkup).toContain('href="/zh/blog"');
   expect(footerMarkup).toContain('href="/zh/privacy"');
   expect(footerMarkup).toContain('href="/zh/terms"');
   expect(footerMarkup).toContain('href="/zh/contact"');

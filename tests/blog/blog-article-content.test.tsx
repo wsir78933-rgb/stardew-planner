@@ -12,10 +12,12 @@ type ArticleFixture = Readonly<{
   scheduleBoundaryPhrases: readonly (string | RegExp)[];
   constructionClosurePhrase: string;
   houseCounterDistinctionPhrase: string;
+  planningInformationGainPhrase: string;
   plannerPath: string;
   comparisonPath: string;
   meadowlandsPath: string;
   officialSource: string;
+  mediaPaths: readonly string[];
 }>;
 
 function renderArticle(Component: () => ReactNode): string {
@@ -46,9 +48,36 @@ function assertArticleContract(article: ArticleFixture): void {
   expect(article.markup).toContain('href="' + article.comparisonPath + '"');
   expect(article.markup).toContain('href="' + article.meadowlandsPath + '"');
   expect(article.markup).toContain('href="' + article.officialSource + '"');
+  for (const mediaPath of article.mediaPaths) {
+    expect(article.markup).toContain('src="' + mediaPath + '"');
+  }
+  expect(article.markup).toContain('loading="lazy"');
+  expect(article.markup).not.toContain("<iframe");
+  expect(article.markup).not.toContain("youtube.com");
+  expect(article.markup).not.toContain("youtube-nocookie.com");
   expect(article.markup).toContain(article.constructionClosurePhrase);
   expect(article.markup).toContain(article.houseCounterDistinctionPhrase);
+  expect(article.markup).toContain(article.planningInformationGainPhrase);
   expect(countSecondLevelSections(article.markup)).toBeGreaterThanOrEqual(4);
+
+  for (const authorFacingOrAiPhrase of [
+    "Search intent",
+    "Target keyword",
+    "Content brief",
+    "This article will",
+    "Let&apos;s dive",
+    "In conclusion",
+    "[confirm:",
+    "搜索意图",
+    "目标关键词",
+    "内容简报",
+    "本文将",
+    "让我们深入",
+    "总而言之",
+    "[待确认：",
+  ]) {
+    expect(article.markup).not.toContain(authorFacingOrAiPhrase);
+  }
 }
 
 function getOpeningParagraph(markup: string): string {
@@ -70,13 +99,20 @@ it("renders sourced English and Chinese carpenter guides with matching section c
       "Tuesday is normally closed, while rain can change the schedule.",
     ],
     constructionClosurePhrase:
-      "if Robin is constructing a new farm building, she is working at your farm and the shop is closed.",
+      "If Robin is constructing a new farm building, she is working at your farm and the shop is closed.",
     houseCounterDistinctionPhrase:
-      "entering the building is not proof that you can place an order.",
+      "Entering the building is not proof that you can place an order.",
+    planningInformationGainPhrase:
+      "Moving a building is free, takes effect immediately, and keeps its contents inside.",
     plannerPath: "/",
     comparisonPath: "/farm-comparison",
     meadowlandsPath: "/farm/meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
+    mediaPaths: [
+      "/blog/illustrations/carpenter-building-layout.webp",
+      "/blog/illustrations/carpenter-building-move.webp",
+      "/blog/video-posters/carpenter-coop-guide.webp",
+    ],
   };
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewChineseArticle),
@@ -88,10 +124,16 @@ it("renders sourced English and Chinese carpenter guides with matching section c
     constructionClosurePhrase:
       "如果罗宾正在建造新的农场建筑，她会在你的农场工作，商店也会关闭。",
     houseCounterDistinctionPhrase: "房子能进入，不等于柜台一定提供服务；",
+    planningInformationGainPhrase: "搬动建筑免费且立即生效，建筑内的物品会跟着一起移动。",
     plannerPath: "/zh",
     comparisonPath: "/zh/farm-comparison",
     meadowlandsPath: "/zh/farm/meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
+    mediaPaths: [
+      "/blog/illustrations/carpenter-building-layout.webp",
+      "/blog/illustrations/carpenter-building-move.webp",
+      "/blog/video-posters/carpenter-coop-guide.webp",
+    ],
   };
 
   assertArticleContract(englishArticle);
@@ -117,10 +159,17 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
       "When Robin is constructing a new farm building, she is at the farm and the shop is closed.",
     houseCounterDistinctionPhrase:
       "seeing the building open does not guarantee that Robin can sell or start an order.",
+    planningInformationGainPhrase:
+      "Finding Robin and reaching an open service counter are two different problems.",
     plannerPath: "/",
     comparisonPath: "/farm-comparison",
     meadowlandsPath: "/farm/meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
+    mediaPaths: [
+      "/blog/illustrations/robin-location-routes.webp",
+      "/blog/illustrations/robin-schedule-states.webp",
+      "/blog/video-posters/robin-location-guide.webp",
+    ],
   };
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(WhereIsRobinChineseArticle),
@@ -132,10 +181,16 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
     constructionClosurePhrase:
       "罗宾正在建造新的农场建筑时，会在玩家农场施工，木匠商店也会关闭。",
     houseCounterDistinctionPhrase: "房子开着，不代表罗宾可以出售物品或开始订单。",
+    planningInformationGainPhrase: "找到罗宾和找到正在营业的柜台，是两个不同的问题。",
     plannerPath: "/zh",
     comparisonPath: "/zh/farm-comparison",
     meadowlandsPath: "/zh/farm/meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
+    mediaPaths: [
+      "/blog/illustrations/robin-location-routes.webp",
+      "/blog/illustrations/robin-schedule-states.webp",
+      "/blog/video-posters/robin-location-guide.webp",
+    ],
   };
 
   assertArticleContract(englishArticle);

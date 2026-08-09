@@ -11,7 +11,7 @@ const pageCopy = getPublicPageCopy("zh-CN");
 export const farmComparisonMetadata = createPublicPageMetadata({
   locale: "zh-CN",
   canonicalPath: "/farm-comparison",
-  title: pageCopy.farmComparisonTitle,
+  title: pageCopy.farmComparisonMetaTitle,
   description: pageCopy.farmComparisonDescription,
   openGraphType: "article",
 });
@@ -24,7 +24,7 @@ export default function ChineseFarmComparisonPage() {
       <article className="public-page-content">
         <header className="public-page-header">
           <h1>{pageCopy.farmComparisonTitle}</h1>
-          <p>{pageCopy.farmComparisonDescription}</p>
+          <p>{pageCopy.farmComparisonIntroduction}</p>
         </header>
         <FarmComparisonContent locale="zh-CN" />
       </article>

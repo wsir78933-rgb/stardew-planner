@@ -4,6 +4,7 @@ import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 import { handleFaqSummaryKeyDown } from "@/src/homepage/faq-disclosure-keyboard";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
+import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFarmGuideLinks } from "./homepage-farm-guide-links";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
@@ -34,7 +35,9 @@ export function HomepageContent({
           <div data-homepage-navigation-links>
             <a href="#capabilities">{copy.navigation.capabilitiesLabel}</a>
             <a href="#faq">{copy.navigation.faqLabel}</a>
-            <a href={plannerHref}>{copy.navigation.plannerLabel}</a>
+            <a href={getLocalizedPublicPath(currentLocale, "/blog")}>
+              {copy.navigation.blogLabel}
+            </a>
           </div>
           <div data-homepage-header-actions>
             <HomepageLocaleSwitcher

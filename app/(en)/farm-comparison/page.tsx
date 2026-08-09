@@ -1,17 +1,17 @@
 import { FarmComparisonContent } from "../../../src/components/farm-comparison-content";
 import { JsonLdScript } from "../../../src/components/json-ld-script";
 import { PublicPageShell } from "../../../src/components/public-page-shell";
+import { getPublicPageCopy } from "../../../src/i18n/public-page-content";
 import { createPublicPageMetadata } from "../../../src/seo/page-metadata";
 import { createArticleStructuredData } from "../../../src/seo/page-structured-data";
 
-const farmComparisonDescription =
-  "Compare all eight Stardew Valley farm maps, their tillable tiles, buildable space, and unique features.";
+const pageCopy = getPublicPageCopy("en");
 
 export const farmComparisonMetadata = createPublicPageMetadata({
   locale: "en",
   canonicalPath: "/farm-comparison",
-  title: "Stardew Valley Farm Types Compared",
-  description: farmComparisonDescription,
+  title: pageCopy.farmComparisonMetaTitle,
+  description: pageCopy.farmComparisonDescription,
   openGraphType: "article",
 });
 
@@ -22,15 +22,15 @@ export default function FarmComparisonPage() {
     <PublicPageShell canonicalPath="/farm-comparison" locale="en">
       <article className="public-page-content">
         <header className="public-page-header">
-          <h1>Stardew Valley Farm Types Compared</h1>
-          <p>{farmComparisonDescription}</p>
+          <h1>{pageCopy.farmComparisonTitle}</h1>
+          <p>{pageCopy.farmComparisonIntroduction}</p>
         </header>
         <FarmComparisonContent locale="en" />
       </article>
       <JsonLdScript
         structuredData={createArticleStructuredData({
-          headline: "Stardew Valley Farm Types Compared",
-          description: farmComparisonDescription,
+          headline: pageCopy.farmComparisonTitle,
+          description: pageCopy.farmComparisonDescription,
           pathname: "/farm-comparison",
         })}
       />

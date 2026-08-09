@@ -39,14 +39,14 @@ const expectedSocialImageUrl =
 const fixedInformationPageMetadataExpectations = [
   [
     farmComparisonMetadata,
-    "Stardew Valley Farm Types Compared",
-    "Compare all eight Stardew Valley farm maps, their tillable tiles, buildable space, and unique features.",
+    "Stardew Valley Farm Types: Compare All 8 Maps",
+    "Compare all 8 Stardew Valley farm types by usable space, unique resources, and layout trade-offs. Find the right map for crops, fishing, animals, co-op, or a challenge run.",
     "https://stardewvalleyplanner.art/farm-comparison",
   ],
   [
     modsMetadata,
-    "Modded Stardew Valley Farms",
-    "Browse local planning maps for community-made Stardew Valley farms and interiors.",
+    "Stardew Valley Farm Map Mods | Stardew Planner",
+    "Compare 18 Stardew Valley farm map mods and 3 SVE interiors, see who each layout suits, and open every supported map in the online planner.",
     "https://stardewvalleyplanner.art/mods",
   ],
 ] as const;
@@ -162,6 +162,22 @@ describe("public route metadata", () => {
     }
   });
 
+  it("uses search-focused Chinese metadata for the Mod map collection", () => {
+    expect(chineseModsMetadata).toMatchObject({
+      title: "星露谷物语农场地图 Mod | 星露谷规划器",
+      description:
+        "对比 18 张星露谷物语农场地图 Mod 和 3 张 SVE 室内地图，了解每张地图适合谁，并在在线规划器中打开受支持的布局。",
+    });
+  });
+
+  it("uses decision-focused Chinese metadata for the farm comparison", () => {
+    expect(chineseFarmComparisonMetadata).toMatchObject({
+      title: "星露谷物语农场类型对比：8 种地图怎么选",
+      description:
+        "对比《星露谷物语》8 种农场地图的可用空间、独特资源与布局取舍，快速找到适合作物、钓鱼、畜牧、多人联机或挑战玩法的农场。",
+    });
+  });
+
   it("marks the bilingual contact pages as followable but noindex", () => {
     for (const pageMetadata of [contactMetadata, chineseContactMetadata]) {
       expect(pageMetadata).toMatchObject({
@@ -237,7 +253,7 @@ describe("public route metadata", () => {
         twitter: {
           images: [`https://stardewvalleyplanner.art${englishPost.coverImage.src}`],
         },
-        robots: { index: false, follow: true },
+        robots: { index: true, follow: true },
       });
 
       await expect(
@@ -256,7 +272,7 @@ describe("public route metadata", () => {
         twitter: {
           images: [`https://stardewvalleyplanner.art${chinesePost.coverImage.src}`],
         },
-        robots: { index: false, follow: true },
+        robots: { index: true, follow: true },
       });
     }
   });

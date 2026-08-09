@@ -58,7 +58,7 @@ export async function generateMetadata({
     description: post.description,
     openGraphType: "article",
     socialImagePath: post.coverImage.src,
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
   });
 }
 

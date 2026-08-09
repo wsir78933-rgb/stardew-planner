@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { FarmComparisonContent } from "../../src/components/farm-comparison-content";
 import { FarmGuideContent } from "../../src/components/farm-guide-content";
 import { ModMapCardGrid } from "../../src/components/mod-map-card-grid";
+import { getLocalizedOfficialFarmComparisonCards } from "../../src/i18n/public-page-content";
 import {
   officialFarmGuides,
   officialFarmTypes,
@@ -20,16 +21,33 @@ describe("public farm pages", () => {
       createElement(FarmComparisonContent, { locale: "en" }),
     );
 
+    expect(comparisonMarkup).toContain("Quick picks by play style");
+    expect(comparisonMarkup.match(/data-farm-recommendation=/g)).toHaveLength(6);
     expect(comparisonMarkup).toContain("Quick comparison");
+    expect(comparisonMarkup).toContain("How to read this comparison");
+    expect(comparisonMarkup).toContain(
+      'href="https://wiki.stardewvalley.net/Farm_Maps"',
+    );
+    expect(comparisonMarkup.match(/<strong>Best for:<\/strong>/g)).toHaveLength(8);
+    expect(comparisonMarkup.match(/<strong>Trade-off:<\/strong>/g)).toHaveLength(8);
+    expect(comparisonMarkup.match(/<strong>Plan around:<\/strong>/g)).toHaveLength(8);
+    expect(comparisonMarkup.match(/>Read farm guide<\/a>/g)).toHaveLength(8);
 
-    for (const farmType of officialFarmTypes) {
+    const comparisonCards = getLocalizedOfficialFarmComparisonCards("en");
+
+    for (const [index, farmType] of officialFarmTypes.entries()) {
       const farmGuide = officialFarmGuides[farmType];
+      const comparisonCard = comparisonCards[index];
 
       expect(comparisonMarkup).toContain(`id="${farmType}"`);
       expect(comparisonMarkup).toContain(farmGuide.title);
       expect(comparisonMarkup).toContain(farmGuide.previewSource);
       expect(comparisonMarkup).toContain(`href="/?farmType=${farmType}"`);
       expect(comparisonMarkup).toContain(`href="/farm/${farmType}"`);
+      expect(comparisonMarkup).toContain(getStaticMarkupText(comparisonCard.summary));
+      expect(comparisonMarkup).toContain(getStaticMarkupText(comparisonCard.tradeoff));
+      expect(comparisonMarkup).toContain(getStaticMarkupText(comparisonCard.planningNote));
+      expect(comparisonMarkup.match(new RegExp(`href="/farm/${farmType}"`, "g"))).toHaveLength(2);
     }
   });
 
@@ -42,6 +60,22 @@ describe("public farm pages", () => {
         plannerMap.category === "community-farm" ||
         plannerMap.category === "community-interior",
     );
+    const farmSectionMarkup = modMapMarkup.match(
+      /<section[^>]*data-mod-map-kind="farm"[\s\S]*?<\/section>/,
+    )?.[0];
+    const interiorSectionMarkup = modMapMarkup.match(
+      /<section[^>]*data-mod-map-kind="interior"[\s\S]*?<\/section>/,
+    )?.[0];
+
+    expect(farmSectionMarkup).toBeDefined();
+    expect(interiorSectionMarkup).toBeDefined();
+    expect(farmSectionMarkup).toContain("Farm map mods");
+    expect(interiorSectionMarkup).toContain("SVE interior spaces");
+    expect(farmSectionMarkup?.match(/class="mod-farm-card"/g)).toHaveLength(18);
+    expect(interiorSectionMarkup?.match(/class="mod-farm-card"/g)).toHaveLength(3);
+    expect(modMapMarkup.match(/<strong>Best for:<\/strong>/g)).toHaveLength(21);
+    expect(modMapMarkup.match(/<strong>Plan around:<\/strong>/g)).toHaveLength(21);
+    expect(modMapMarkup.match(/>View source<\/a>/g)).toHaveLength(21);
 
     for (const plannerMap of communityMaps) {
       expect(modMapMarkup).toContain(`id="${plannerMap.id}"`);
@@ -96,7 +130,20 @@ describe("public farm pages", () => {
       createElement(ModMapCardGrid, { locale: "zh-CN" }),
     );
 
+    expect(modMapMarkup).toContain("农场地图 Mod");
+    expect(modMapMarkup).toContain("SVE 室内空间");
+    expect(modMapMarkup.match(/<strong>适合：<\/strong>/g)).toHaveLength(21);
+    expect(modMapMarkup.match(/<strong>规划时注意：<\/strong>/g)).toHaveLength(21);
+    expect(modMapMarkup.match(/>查看来源<\/a>/g)).toHaveLength(21);
+
     expect(comparisonMarkup).toContain("标准农场");
+    expect(comparisonMarkup).toContain("按玩法快速选择");
+    expect(comparisonMarkup.match(/data-farm-recommendation=/g)).toHaveLength(6);
+    expect(comparisonMarkup).toContain("本页数据说明");
+    expect(comparisonMarkup.match(/<strong>适合：<\/strong>/g)).toHaveLength(8);
+    expect(comparisonMarkup.match(/<strong>取舍：<\/strong>/g)).toHaveLength(8);
+    expect(comparisonMarkup.match(/<strong>规划时注意：<\/strong>/g)).toHaveLength(8);
+    expect(comparisonMarkup.match(/>查看农场指南<\/a>/g)).toHaveLength(8);
     expect(comparisonMarkup).toContain('href="/zh/farm/standard"');
     expect(comparisonMarkup).toContain('href="/zh?farmType=standard"');
     expect(guideMarkup).toContain('href="/zh">星露谷规划器</a>');

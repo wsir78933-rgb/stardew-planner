@@ -25,6 +25,7 @@ export type SiteFooterCopy = Readonly<{
     title: string;
     capabilities: string;
     faq: string;
+    blog: string;
   }>;
   legal: Readonly<{
     title: string;
@@ -74,6 +75,10 @@ export function createSiteFooterContent(
     explore: {
       title: footerCopy.explore.title,
       links: [
+        {
+          label: footerCopy.explore.blog,
+          href: getLocalizedPublicPath(locale, "/blog"),
+        },
         {
           label: footerCopy.explore.capabilities,
           href: `${localizedHomepagePath}#capabilities`,

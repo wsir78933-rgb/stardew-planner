@@ -16,7 +16,7 @@ export type HomepageCopy = Readonly<{
     productName: string;
     capabilitiesLabel: string;
     faqLabel: string;
-    plannerLabel: string;
+    blogLabel: string;
     plannerActionLabel: string;
     languageLabel: string;
   }>;
@@ -59,7 +59,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       productName: "Stardew Valley Farm Planner",
       capabilitiesLabel: "How it works",
       faqLabel: "FAQ",
-      plannerLabel: "Planner",
+      blogLabel: "Blog",
       plannerActionLabel: "Open planner",
       languageLabel: "Language",
     },
@@ -147,6 +147,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
         title: "Explore",
         capabilities: "How it works",
         faq: "FAQ",
+        blog: "Blog",
       },
       legal: {
         title: "Legal",
@@ -161,7 +162,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       productName: "星露谷物语农场规划器",
       capabilitiesLabel: "使用方式",
       faqLabel: "常见问题",
-      plannerLabel: "规划器",
+      blogLabel: "博客",
       plannerActionLabel: "打开规划器",
       languageLabel: "语言",
     },
@@ -245,6 +246,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
         title: "探索",
         capabilities: "使用方式",
         faq: "常见问题",
+        blog: "博客",
       },
       legal: {
         title: "法律",

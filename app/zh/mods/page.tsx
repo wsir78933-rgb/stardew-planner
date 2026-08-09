@@ -11,7 +11,7 @@ const pageCopy = getPublicPageCopy("zh-CN");
 export const modsMetadata = createPublicPageMetadata({
   locale: "zh-CN",
   canonicalPath: "/mods",
-  title: pageCopy.modsTitle,
+  title: pageCopy.modsMetaTitle,
   description: pageCopy.modsDescription,
 });
 
@@ -23,7 +23,8 @@ export default function ChineseModsPage() {
       <article className="public-page-content">
         <header className="public-page-header">
           <h1>{pageCopy.modsTitle}</h1>
-          <p>{pageCopy.modsDescription}</p>
+          <p>{pageCopy.modsIntroduction}</p>
+          <p className="public-note">{pageCopy.modsPlannerScope}</p>
         </header>
         <ModMapCardGrid locale="zh-CN" />
       </article>
