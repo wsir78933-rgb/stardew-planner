@@ -298,6 +298,21 @@ export function shouldAdvanceSelectedCatalogPlacementAttempt(
     && input.nextPlacementHistory !== input.previousPlacementHistory;
 }
 
+export function advanceSelectedCatalogPlacementAttemptIfAppropriate(
+  input: Readonly<{
+    advanceSelectedCatalogPlacementAttempt: () => void;
+    nextPlacementHistory: PlacementHistory<PlacementSnapshot>;
+    pendingDuplicateSelectionKey: PlacementSelectionKey | null;
+    previousPlacementHistory: PlacementHistory<PlacementSnapshot>;
+    selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
+    tool: EditorTool | null;
+  }>,
+): void {
+  if (shouldAdvanceSelectedCatalogPlacementAttempt(input)) {
+    input.advanceSelectedCatalogPlacementAttempt();
+  }
+}
+
 const startupLoadingMessage = "Loading local planner resources…";
 
 const interiorDecorPatternByCatalogItemId = new Map<string, InteriorDecorCatalogPattern>([
@@ -1394,15 +1409,14 @@ function useWorkspaceEditingControls({
         editingTransition.placementHistory,
         editingTransition.selectedPlacementKeys,
       );
-      if (shouldAdvanceSelectedCatalogPlacementAttempt({
+      advanceSelectedCatalogPlacementAttemptIfAppropriate({
+        advanceSelectedCatalogPlacementAttempt,
         nextPlacementHistory: editingTransition.placementHistory,
         pendingDuplicateSelectionKey,
         previousPlacementHistory: plannerWorkspaceState.placementHistory,
         selectedCatalogItem,
         tool: plannerWorkspaceState.tool,
-      })) {
-        advanceSelectedCatalogPlacementAttempt();
-      }
+      });
     },
     [
       applyEditingTransition,
