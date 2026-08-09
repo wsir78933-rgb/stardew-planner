@@ -20,6 +20,11 @@ export type PlannerWorkspaceInteriorDecorTransition = Readonly<{
   selectedPlacementKeys: readonly PlacementSelectionKey[];
 }>;
 
+export type InteriorDecorRejectionNotification = Readonly<{
+  message: string;
+  version: number;
+}>;
+
 export function cancelInteriorDecorBeforeOrdinaryWorkspaceAction(
   input: Readonly<{
     cancelInteriorDecor: () => void;
@@ -29,6 +34,21 @@ export function cancelInteriorDecorBeforeOrdinaryWorkspaceAction(
   assertOrdinaryWorkspaceActionInput(input);
   input.cancelInteriorDecor();
   input.performOrdinaryWorkspaceAction();
+}
+
+export function getNextInteriorDecorRejectionNotification(
+  currentNotification: InteriorDecorRejectionNotification | null,
+  showToasts: boolean,
+  message: string,
+): InteriorDecorRejectionNotification | null {
+  if (!showToasts) {
+    return null;
+  }
+
+  return {
+    message,
+    version: (currentNotification?.version ?? 0) + 1,
+  };
 }
 
 export function createInteriorDecorSelectionTransition(

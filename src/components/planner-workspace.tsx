@@ -83,7 +83,9 @@ import {
   cancelInteriorDecorBeforeOrdinaryWorkspaceAction,
   createInteriorDecorSelectionTransition,
   getInteriorDecorRejectionMessage,
+  getNextInteriorDecorRejectionNotification,
   getUnavailableInteriorDecorMessage,
+  type InteriorDecorRejectionNotification,
 } from "../planner/planner-workspace-interior-decor-controls";
 import {
   attachPlannerWorkspaceXRayKeyboardListener,
@@ -537,27 +539,39 @@ function PreparedPlannerWorkspaceContent({
     requiredPlacementCatalogGate.kind === "ready";
   const [activeInteriorDecorPattern, setActiveInteriorDecorPattern] =
     useState<InteriorDecorCatalogPattern | null>(null);
-  const [interiorDecorRejectionMessage, setInteriorDecorRejectionMessage] =
-    useState<string | null>(null);
+  const [interiorDecorRejectionNotification, setInteriorDecorRejectionNotification] =
+    useState<InteriorDecorRejectionNotification | null>(null);
   const [isXRayActive, setIsXRayActive] = useState(false);
   const [isWheelZoomEnabled, setIsWheelZoomEnabled] = useState(false);
   const handleCancelInteriorDecor = useCallback(() => {
     setActiveInteriorDecorPattern(null);
-    setInteriorDecorRejectionMessage(null);
+    setInteriorDecorRejectionNotification(null);
   }, []);
   useEffect(() => {
-    if (interiorDecorRejectionMessage === null) {
+    if (interiorDecorRejectionNotification === null) {
       return;
     }
 
     const rejectionMessageTimeoutId = window.setTimeout(() => {
-      setInteriorDecorRejectionMessage(null);
+      setInteriorDecorRejectionNotification(null);
     }, 3_000);
 
     return () => {
       window.clearTimeout(rejectionMessageTimeoutId);
     };
-  }, [interiorDecorRejectionMessage]);
+  }, [interiorDecorRejectionNotification]);
+  const showInteriorDecorRejectionMessage = useCallback(
+    (message: string) => {
+      setInteriorDecorRejectionNotification((currentNotification) =>
+        getNextInteriorDecorRejectionNotification(
+          currentNotification,
+          plannerWorkspaceState.behaviorOptions.showToasts,
+          message,
+        ),
+      );
+    },
+    [plannerWorkspaceState.behaviorOptions.showToasts],
+  );
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -594,7 +608,7 @@ function PreparedPlannerWorkspaceContent({
     (pattern: InteriorDecorCatalogPattern | null) => {
       const selectionTransition = createInteriorDecorSelectionTransition(pattern);
       setActiveInteriorDecorPattern(selectionTransition.activeInteriorDecorPattern);
-      setInteriorDecorRejectionMessage(null);
+      setInteriorDecorRejectionNotification(null);
       if (!selectionTransition.shouldClearOrdinaryPlacementInteraction) {
         return;
       }
@@ -634,17 +648,17 @@ function PreparedPlannerWorkspaceContent({
         interiorDecorTransition.placementHistory,
         interiorDecorTransition.selectedPlacementKeys,
       );
-      setInteriorDecorRejectionMessage(null);
+      setInteriorDecorRejectionNotification(null);
     },
     [activeInteriorDecorPattern, applyPlacementEditResult, plannerWorkspaceState.placementHistory],
   );
   const handleInteriorDecorRejected = useCallback(
     (mapId: string, interiorDecorKind: InteriorDecorCatalogPattern["kind"]) => {
-      setInteriorDecorRejectionMessage(
+      showInteriorDecorRejectionMessage(
         getInteriorDecorRejectionMessage(mapId, interiorDecorKind),
       );
     },
-    [],
+    [showInteriorDecorRejectionMessage],
   );
   const handleOrdinaryCatalogItemSelect = useCallback(
     (
@@ -658,9 +672,7 @@ function PreparedPlannerWorkspaceContent({
           interiorDecorPattern.kind,
         );
         if (unavailableInteriorDecorMessage !== null) {
-          if (plannerWorkspaceState.behaviorOptions.showToasts) {
-            setInteriorDecorRejectionMessage(unavailableInteriorDecorMessage);
-          }
+          showInteriorDecorRejectionMessage(unavailableInteriorDecorMessage);
           return;
         }
         handleInteriorDecorPatternSelect(interiorDecorPattern);
@@ -679,9 +691,9 @@ function PreparedPlannerWorkspaceContent({
       handleCancelInteriorDecor,
       handleInteriorDecorPatternSelect,
       handleCatalogItemSelect,
-      plannerWorkspaceState.behaviorOptions.showToasts,
       plannerWorkspaceState.selectedPlannerMapId,
       setSelectedPlacementKeys,
+      showInteriorDecorRejectionMessage,
       workspaceEditingControls,
     ],
   );
@@ -773,10 +785,10 @@ function PreparedPlannerWorkspaceContent({
         selectedCatalogItemId={plannerWorkspaceState.selectedCatalogItemId}
         shouldLoadThumbnails={runtimeStatus === "interactive"}
       />
-      {interiorDecorRejectionMessage === null ? null : (
+      {interiorDecorRejectionNotification === null ? null : (
         <p aria-live="polite" role="status" className="planner-workspace__toast">
           <span aria-hidden="true">!</span>
-          {interiorDecorRejectionMessage}
+          {interiorDecorRejectionNotification.message}
         </p>
       )}
       <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
