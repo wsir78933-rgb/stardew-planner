@@ -45,4 +45,41 @@ describe("PlannerCameraStateRetention", () => {
     expect(cameraStateRetention.read("standard")).toBeNull();
     expect(cameraStateRetention.read("beach")).toEqual(beachCameraState);
   });
+
+  it("keeps the retained camera while the selected map ID stays the same", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    const standardCameraState: CameraState = {
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: -40,
+      zoom: 1.25,
+    };
+
+    cameraStateRetention.observeSelectedMapId("standard");
+    cameraStateRetention.write("standard", standardCameraState);
+    cameraStateRetention.observeSelectedMapId("standard");
+
+    expect(cameraStateRetention.read("standard")).toEqual(standardCameraState);
+  });
+
+  it("clears stale camera state during an interrupted map selection change", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    const standardCameraState: CameraState = {
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
+      positionY: -40,
+      zoom: 1.25,
+    };
+
+    cameraStateRetention.observeSelectedMapId("standard");
+    cameraStateRetention.write("standard", standardCameraState);
+    cameraStateRetention.observeSelectedMapId("beach");
+    cameraStateRetention.observeSelectedMapId("standard");
+
+    expect(cameraStateRetention.read("standard")).toBeNull();
+  });
 });

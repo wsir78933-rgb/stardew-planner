@@ -577,6 +577,9 @@ function PlannerWorkspaceRenderedBoundary({
   if (cameraStateRetentionReference.current === null) {
     cameraStateRetentionReference.current = createPlannerCameraStateRetention();
   }
+  cameraStateRetentionReference.current.observeSelectedMapId(
+    plannerWorkspaceStateController.plannerWorkspaceState.selectedPlannerMapId,
+  );
 
   return (
     <PlannerWorkspaceGeometry plannerWorkspaceRenderState={plannerWorkspaceRenderState}>
