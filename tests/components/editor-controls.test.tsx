@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -142,5 +144,40 @@ describe("editor controls", () => {
     expect(new Set(selectedCursorClassName?.split(" "))).toEqual(
       new Set(["tool-btn", "editor-toolbar__button"]),
     );
+  });
+
+  it("locks selected Multi-select colors after the generic tool hover rule", () => {
+    const stylesheet = readFileSync(
+      resolve(process.cwd(), "app/globals.css"),
+      "utf8",
+    );
+    const genericToolHoverSelector =
+      ".planner-editor-shell .tool-btn:hover:not(:disabled)";
+    const selectedMultiSelectSelector =
+      '.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"]';
+    const genericToolHoverRuleIndex = stylesheet.indexOf(
+      `${genericToolHoverSelector} {`,
+    );
+    const selectedMultiSelectRuleIndex = stylesheet.indexOf(
+      `${selectedMultiSelectSelector} {`,
+    );
+    const selectedMultiSelectRuleEnd = stylesheet.indexOf(
+      "}",
+      selectedMultiSelectRuleIndex,
+    );
+    const selectedMultiSelectRule = stylesheet.slice(
+      selectedMultiSelectRuleIndex,
+      selectedMultiSelectRuleEnd + 1,
+    );
+
+    expect(stylesheet).not.toContain(
+      '.planner-editor-shell .tool-btn.multi-select[aria-pressed="false"]',
+    );
+    expect(genericToolHoverRuleIndex).toBeGreaterThanOrEqual(0);
+    expect(selectedMultiSelectRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
+    expect(selectedMultiSelectRule).toContain(
+      "background: rgb(177 58 40 / 15%);",
+    );
+    expect(selectedMultiSelectRule).toContain("color: #b13a28;");
   });
 });
