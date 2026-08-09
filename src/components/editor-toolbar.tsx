@@ -65,6 +65,8 @@ export function EditorToolbar({
             ? ` erase-hover${isSelected ? " erase" : ""}`
             : ""
         }${editorToolControl.tool === "fill" ? " fill" : ""}${
+          editorToolControl.tool === "cursor" ? " cursor" : ""
+        }${
           isSelected ? " active" : ""
         }`}
         disabled={!isAvailable}

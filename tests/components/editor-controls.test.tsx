@@ -51,9 +51,15 @@ describe("editor controls", () => {
     );
 
     expect(disabledMarkup).toContain('data-reference-runtime-wheel-zoom-button="true"');
+    expect(disabledMarkup).toContain(
+      'class="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"',
+    );
     expect(disabledMarkup).toContain('aria-pressed="false"');
     expect(disabledMarkup).toContain('aria-label="Enable wheel zoom"');
     expect(enabledMarkup).toContain('aria-pressed="true"');
+    expect(enabledMarkup).toContain(
+      'class="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"',
+    );
     expect(enabledMarkup).toContain('aria-label="Disable wheel zoom"');
   });
 
@@ -142,7 +148,7 @@ describe("editor controls", () => {
       ]),
     );
     expect(new Set(selectedCursorClassName?.split(" "))).toEqual(
-      new Set(["tool-btn", "editor-toolbar__button"]),
+      new Set(["tool-btn", "editor-toolbar__button", "cursor"]),
     );
   });
 
@@ -179,5 +185,129 @@ describe("editor controls", () => {
       "background: rgb(177 58 40 / 15%);",
     );
     expect(selectedMultiSelectRule).toContain("color: #b13a28;");
+  });
+
+  it("keeps Cursor selection and wheel zoom state independent", () => {
+    const cursorSelectedWheelZoomDisabledMarkup = renderToStaticMarkup(
+      createElement(EditorToolbar, {
+        canRedo: false,
+        canUndo: false,
+        onRedo: () => undefined,
+        onToolChange: () => undefined,
+        onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
+        tool: "cursor",
+        wheelZoomEnabled: false,
+      }),
+    );
+    const cursorUnselectedWheelZoomEnabledMarkup = renderToStaticMarkup(
+      createElement(EditorToolbar, {
+        canRedo: false,
+        canUndo: false,
+        onRedo: () => undefined,
+        onToolChange: () => undefined,
+        onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
+        tool: "multi-select",
+        wheelZoomEnabled: true,
+      }),
+    );
+    const bothEnabledMarkup = renderToStaticMarkup(
+      createElement(EditorToolbar, {
+        canRedo: false,
+        canUndo: false,
+        onRedo: () => undefined,
+        onToolChange: () => undefined,
+        onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
+        tool: "cursor",
+        wheelZoomEnabled: true,
+      }),
+    );
+    const selectedCursorClassName = cursorSelectedWheelZoomDisabledMarkup.match(
+      /<button aria-label="Cursor tool" aria-pressed="true" class="([^"]+)"/,
+    )?.[1];
+    const unselectedCursorClassName = cursorUnselectedWheelZoomEnabledMarkup.match(
+      /<button aria-label="Cursor tool" aria-pressed="false" class="([^"]+)"/,
+    )?.[1];
+
+    expect(bothEnabledMarkup).toMatch(
+      /<button aria-label="Cursor tool" aria-pressed="true" class="(?=[^"]*\bcursor\b)[^"]+"/,
+    );
+    expect(bothEnabledMarkup).toMatch(
+      /<button aria-label="Disable wheel zoom" aria-pressed="true" class="(?=[^"]*\breference-runtime-wheel-zoom-button\b)[^"]+"/,
+    );
+    expect(new Set(selectedCursorClassName?.split(" "))).toEqual(
+      new Set(["tool-btn", "editor-toolbar__button", "cursor", "active"]),
+    );
+    expect(new Set(unselectedCursorClassName?.split(" "))).toEqual(
+      new Set(["tool-btn", "editor-toolbar__button", "cursor"]),
+    );
+    expect(cursorSelectedWheelZoomDisabledMarkup).toContain(
+      'aria-label="Enable wheel zoom" aria-pressed="false"',
+    );
+    expect(cursorUnselectedWheelZoomEnabledMarkup).toContain(
+      'aria-label="Cursor tool" aria-pressed="false"',
+    );
+  });
+
+  it("locks Cursor and wheel Zoom colors after generic hover without broad or false selectors", () => {
+    const stylesheet = readFileSync(
+      resolve(process.cwd(), "app/globals.css"),
+      "utf8",
+    );
+    const genericToolHoverSelector =
+      ".planner-editor-shell .tool-btn:hover:not(:disabled)";
+    const selectedCursorSelector =
+      '.planner-editor-shell .tool-btn.cursor[aria-pressed="true"]';
+    const selectedWheelZoomSelector =
+      '.planner-editor-shell .reference-runtime-wheel-zoom-button[aria-pressed="true"]';
+    const genericToolHoverRuleIndex = stylesheet.indexOf(
+      `${genericToolHoverSelector} {`,
+    );
+    const selectedCursorRuleIndex = stylesheet.indexOf(
+      `${selectedCursorSelector} {`,
+    );
+    const selectedWheelZoomRuleIndex = stylesheet.indexOf(
+      `${selectedWheelZoomSelector} {`,
+    );
+    const selectedCursorRuleEnd = stylesheet.indexOf(
+      "}",
+      selectedCursorRuleIndex,
+    );
+    const selectedWheelZoomRuleEnd = stylesheet.indexOf(
+      "}",
+      selectedWheelZoomRuleIndex,
+    );
+    const selectedCursorRule = stylesheet.slice(
+      selectedCursorRuleIndex,
+      selectedCursorRuleEnd + 1,
+    );
+    const selectedWheelZoomRule = stylesheet.slice(
+      selectedWheelZoomRuleIndex,
+      selectedWheelZoomRuleEnd + 1,
+    );
+
+    expect(stylesheet).not.toContain(
+      '.planner-editor-shell .tool-btn[aria-pressed="true"]',
+    );
+    expect(stylesheet).not.toContain(
+      '.planner-editor-shell .editor-toolbar__button[aria-pressed="true"]',
+    );
+    expect(stylesheet).not.toContain(
+      '.planner-editor-shell .tool-btn.cursor[aria-pressed="false"]',
+    );
+    expect(stylesheet).not.toContain(
+      '.planner-editor-shell .reference-runtime-wheel-zoom-button[aria-pressed="false"]',
+    );
+    expect(genericToolHoverRuleIndex).toBeGreaterThanOrEqual(0);
+    expect(selectedCursorRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
+    expect(selectedWheelZoomRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
+    expect(selectedCursorRule).toContain("background: rgb(177 58 40 / 15%);");
+    expect(selectedCursorRule).toContain("color: #b13a28;");
+    expect(selectedWheelZoomRule).toContain(
+      "background: rgb(177 58 40 / 15%);",
+    );
+    expect(selectedWheelZoomRule).toContain("color: #b13a28;");
   });
 });

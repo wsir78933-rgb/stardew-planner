@@ -1918,6 +1918,14 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .reference-runtime-wheel-zoom-button:hover { background: var(--bg-surface); color: var(--text); }
 .planner-editor-shell .menu-btn:hover,
 .planner-editor-shell .tool-btn:hover:not(:disabled) { background: var(--bg-surface); color: var(--text); }
+.planner-editor-shell .tool-btn.cursor[aria-pressed="true"] {
+  background: rgb(177 58 40 / 15%);
+  color: #b13a28;
+}
+.planner-editor-shell .reference-runtime-wheel-zoom-button[aria-pressed="true"] {
+  background: rgb(177 58 40 / 15%);
+  color: #b13a28;
+}
 .planner-editor-shell .tool-btn.erase-hover:hover:not(:disabled):not(.active) { background: rgb(177 58 40 / 10%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__toggle,
 .planner-editor-shell .editor-menu-bar__separator { display: none; }
