@@ -62,7 +62,7 @@ export function createPlannerWorkspaceEditingKeyboardHandler(
       keyboardActions.onCycleSelectedAppearance();
       return;
     }
-    if (keyboardEvent.key === "Delete") {
+    if (keyboardEvent.key === "Delete" || keyboardEvent.key === "Backspace") {
       keyboardEvent.preventDefault();
       keyboardActions.onDelete();
       return;

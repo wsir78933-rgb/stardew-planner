@@ -7,6 +7,7 @@ import {
 function createKeyboardEvent(
   key: string,
   options: Readonly<{
+    altKey?: boolean;
     ctrlKey?: boolean;
     metaKey?: boolean;
     target?: EventTarget | Readonly<{ isContentEditable?: boolean; tagName?: string }>;
@@ -14,7 +15,7 @@ function createKeyboardEvent(
 ): KeyboardEvent {
   let wasDefaultPrevented = false;
   return {
-    altKey: false,
+    altKey: options.altKey ?? false,
     ctrlKey: options.ctrlKey ?? false,
     get defaultPrevented() {
       return wasDefaultPrevented;
@@ -99,6 +100,56 @@ describe("planner workspace editing keyboard", () => {
     );
   });
 
+  it("handles Backspace as a planner delete command for the current selection", () => {
+    const receivedCommands: string[] = [];
+    const handleKeyboardEvent = createEditingKeyboardHandler(
+      ["item:7"],
+      receivedCommands,
+    );
+    const backspaceKeyboardEvent = createKeyboardEvent("Backspace");
+
+    handleKeyboardEvent(backspaceKeyboardEvent);
+
+    expect(receivedCommands).toEqual(["delete"]);
+    expect(backspaceKeyboardEvent.defaultPrevented).toBe(true);
+  });
+
+  it("leaves Backspace available to editable targets and modified shortcuts", () => {
+    const receivedCommands: string[] = [];
+    const handleKeyboardEvent = createEditingKeyboardHandler(
+      ["item:7"],
+      receivedCommands,
+    );
+    const protectedBackspaceCases = [
+      { description: "input", options: { target: { tagName: "INPUT" } } },
+      { description: "text area", options: { target: { tagName: "TEXTAREA" } } },
+      { description: "select", options: { target: { tagName: "SELECT" } } },
+      {
+        description: "contenteditable element",
+        options: { target: { isContentEditable: true, tagName: "DIV" } },
+      },
+      { description: "Alt shortcut", options: { altKey: true } },
+      { description: "Ctrl shortcut", options: { ctrlKey: true } },
+      { description: "Meta shortcut", options: { metaKey: true } },
+    ];
+
+    for (const protectedBackspaceCase of protectedBackspaceCases) {
+      const backspaceKeyboardEvent = createKeyboardEvent(
+        "Backspace",
+        protectedBackspaceCase.options,
+      );
+
+      handleKeyboardEvent(backspaceKeyboardEvent);
+
+      expect(
+        backspaceKeyboardEvent.defaultPrevented,
+        protectedBackspaceCase.description,
+      ).toBe(false);
+    }
+
+    expect(receivedCommands).toEqual([]);
+  });
+
   it("ignores missing selections, editable targets, and modified history shortcuts", () => {
     const receivedCommands: string[] = [];
     const noSelectionHandler = createEditingKeyboardHandler([], receivedCommands);
@@ -179,7 +230,7 @@ describe("planner workspace editing keyboard", () => {
     expect(selectedPlacementKeyboardEvent.defaultPrevented).toBe(true);
   });
 
-  it("keeps C and Delete limited to placed selections", () => {
+  it("keeps C, Delete, and Backspace limited to placed selections", () => {
     const receivedCommands: string[] = [];
     const pendingHandler = createEditingKeyboardHandler(
       [],
@@ -190,13 +241,16 @@ describe("planner workspace editing keyboard", () => {
     );
     const copyKeyboardEvent = createKeyboardEvent("c");
     const deleteKeyboardEvent = createKeyboardEvent("Delete");
+    const backspaceKeyboardEvent = createKeyboardEvent("Backspace");
 
     pendingHandler(copyKeyboardEvent);
     pendingHandler(deleteKeyboardEvent);
+    pendingHandler(backspaceKeyboardEvent);
 
     expect(receivedCommands).toEqual([]);
     expect(copyKeyboardEvent.defaultPrevented).toBe(false);
     expect(deleteKeyboardEvent.defaultPrevented).toBe(false);
+    expect(backspaceKeyboardEvent.defaultPrevented).toBe(false);
   });
 
   it("detaches its listener exactly once", () => {

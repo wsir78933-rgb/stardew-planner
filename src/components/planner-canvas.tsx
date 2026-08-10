@@ -96,6 +96,11 @@ import type { PreparedDefaultMap } from "../resources/default-map-resource";
 const localGameAssetRoot = "/game-assets/1.6.15/";
 const validPlacementPreviewTint = 0x00ff00;
 const invalidPlacementPreviewTint = 0xff0000;
+const mapTileRectanglePreviewColor = 0x4a9eff;
+const mapTileRectanglePreviewFillAlpha = 0.18;
+const mapTileRectanglePreviewDashLength = 5;
+const mapTileRectanglePreviewDashGap = 3;
+const mapTileRectanglePreviewStrokeWidth = 1.5;
 
 export type PlacementPreviewVisualDescriptor = Readonly<{
   alpha: number;
@@ -337,6 +342,11 @@ type PlannerCameraControlsProperties = Readonly<{
     startMapTileCoordinates: MapPointerTile,
     endMapTileCoordinates: MapPointerTile,
   ) => void;
+  onMapTileRectanglePreview?: (
+    startMapTileCoordinates: MapPointerTile,
+    endMapTileCoordinates: MapPointerTile,
+  ) => void;
+  onMapTileRectanglePreviewClear?: () => void;
   getPlacementSelectionKeysAtPointer?: (
     pointerCoordinates: PointerCoordinates,
   ) => readonly PlacementSelectionKey[];
@@ -349,6 +359,15 @@ type PlannerCameraControlsProperties = Readonly<{
 
 type PlannerCameraControls = Readonly<{
   dispose(): void;
+  synchronizePointerInteractionMode(): void;
+}>;
+
+type MapTileRectanglePreviewRenderer = Readonly<{
+  clear(): void;
+  render(
+    startMapTileCoordinates: MapPointerTile,
+    endMapTileCoordinates: MapPointerTile,
+  ): void;
 }>;
 
 export type PlannerCanvasInteractionBindingPorts = Readonly<{
@@ -365,6 +384,7 @@ export type PlannerCanvasInteractionBindingPorts = Readonly<{
 
 export type PlannerCanvasInteractionBinding = Readonly<{
   dispose(): void;
+  synchronizePointerInteractionMode(): void;
 }>;
 
 export function bindPlannerCanvasInteractions(
@@ -390,6 +410,9 @@ export function bindPlannerCanvasInteractions(
     }
     cameraControls?.dispose();
   };
+  const synchronizePointerInteractionMode = (): void => {
+    cameraControls?.synchronizePointerInteractionMode();
+  };
 
   try {
     cameraControls = ports.attachCameraControls();
@@ -397,7 +420,7 @@ export function bindPlannerCanvasInteractions(
     resizeObserver.observe(canvasHostElement);
     ports.windowPort.addEventListener("resize", onResize);
     didAddWindowResizeListener = true;
-    return { dispose };
+    return { dispose, synchronizePointerInteractionMode };
   } catch (caughtError) {
     dispose();
     throw caughtError;
@@ -959,6 +982,9 @@ export function PlannerCanvas({
   const onInteractiveReference = useRef(onInteractive);
   const onMoveSelectedPlacementsReference = useRef(onMoveSelectedPlacements);
   const pointerInteractionModeReference = useRef(pointerInteractionMode);
+  const pointerInteractionModeSynchronizerReference = useRef<
+    (() => void) | null
+  >(null);
   const catalogItemsReference = useRef(catalogItems);
   const placementOverlayRendererReference = useRef<PlacementOverlayRenderer | null>(
     null,
@@ -1038,6 +1064,10 @@ export function PlannerCanvas({
   }, [displayOptions, placementSnapshot, showResourceClumpSpawnLocations]);
 
   useEffect(() => {
+    pointerInteractionModeSynchronizerReference.current?.();
+  }, [pointerInteractionMode]);
+
+  useEffect(() => {
     assertPreparedCanvasResourcesMatchRequestedMap(
       preparedCanvasResources,
       mapId,
@@ -1062,6 +1092,7 @@ export function PlannerCanvas({
         preparedCanvasResources.resourceGeneration,
       ) ?? true);
     let interactionBinding: PlannerCanvasInteractionBinding | null = null;
+    let synchronizePointerInteractionMode: (() => void) | null = null;
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
     let disposePlacementPreview: (() => void) | null = null;
@@ -1072,7 +1103,15 @@ export function PlannerCanvas({
       PixiTexture
     > | null = null;
     const cleanUpPlannerCanvas = createPlannerCanvasCleanup({
-      disposeInteractionBinding: () => interactionBinding?.dispose(),
+      disposeInteractionBinding: () => {
+        if (
+          pointerInteractionModeSynchronizerReference.current ===
+          synchronizePointerInteractionMode
+        ) {
+          pointerInteractionModeSynchronizerReference.current = null;
+        }
+        interactionBinding?.dispose();
+      },
       disposeMapDisplayOverlay: () => disposeMapDisplayOverlay?.(),
       disposePlacementOverlay: () => disposePlacementOverlay?.(),
       disposePlacementPreview: () => disposePlacementPreview?.(),
@@ -1206,6 +1245,9 @@ export function PlannerCanvas({
         placementPreviewContainer.label = "placementPreview";
         placementPreviewContainer.sortableChildren = true;
         mapContainerCreationResult.mapContainer.addChild(placementPreviewContainer);
+        const mapTileRectanglePreviewGraphics = new pixi.Graphics();
+        mapTileRectanglePreviewGraphics.label = "mapTileRectanglePreview";
+        mapContainerCreationResult.mapContainer.addChild(mapTileRectanglePreviewGraphics);
         const nightModeOverlayContainer = new pixi.Container();
         nightModeOverlayContainer.label = "nightMode";
         mapContainerCreationResult.mapContainer.addChild(nightModeOverlayContainer);
@@ -1496,6 +1538,15 @@ export function PlannerCanvas({
           mapId,
           renderCameraState,
         });
+        const mapTileRectanglePreviewRenderer =
+          createMapTileRectanglePreviewRenderer({
+            graphics: mapTileRectanglePreviewGraphics,
+            render: () => {
+              pixiApplication.renderer.render(pixiApplication.stage);
+            },
+            tileHeight: renderingContract.tileHeight,
+            tileWidth: renderingContract.tileWidth,
+          });
 
         const resizeMapToViewport = () => {
           if (!isMapLifecycleCurrent()) {
@@ -1685,6 +1736,26 @@ export function PlannerCanvas({
                     endMapTileCoordinates,
                   );
                 },
+                onMapTileRectanglePreview(
+                  startMapTileCoordinates: MapPointerTile,
+                  endMapTileCoordinates: MapPointerTile,
+                ): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+
+                  mapTileRectanglePreviewRenderer.render(
+                    startMapTileCoordinates,
+                    endMapTileCoordinates,
+                  );
+                },
+                onMapTileRectanglePreviewClear(): void {
+                  if (!isMapLifecycleCurrent()) {
+                    return;
+                  }
+
+                  mapTileRectanglePreviewRenderer.clear();
+                },
                 onPlacementSelectionClick(
                   placementSelectionKeys: readonly PlacementSelectionKey[],
                 ): void {
@@ -1711,6 +1782,12 @@ export function PlannerCanvas({
             windowPort: window,
           },
         );
+        synchronizePointerInteractionMode = (): void => {
+          interactionBinding?.synchronizePointerInteractionMode();
+        };
+        pointerInteractionModeSynchronizerReference.current =
+          synchronizePointerInteractionMode;
+        synchronizePointerInteractionMode();
 
         if (!isMapLifecycleCurrent()) {
           cleanUpPlannerCanvas();
@@ -1733,6 +1810,7 @@ export function PlannerCanvas({
                   captureMapScreenshot({
                     mapContainer: mapContainerCreationResult.mapContainer,
                     mapDisplayOverlayContainer,
+                    mapTileRectanglePreviewGraphics,
                     placementPreviewContainer,
                     pixi,
                     pixiApplication,
@@ -1831,6 +1909,7 @@ export function PlannerCanvas({
 type CaptureMapScreenshotInput = Readonly<{
   mapContainer: import("pixi.js").Container;
   mapDisplayOverlayContainer: import("pixi.js").Container;
+  mapTileRectanglePreviewGraphics: import("pixi.js").Graphics;
   placementPreviewContainer: import("pixi.js").Container;
   pixi: PixiModule;
   pixiApplication: PixiApplication;
@@ -1844,6 +1923,7 @@ async function captureMapScreenshot(
   const {
     mapContainer,
     mapDisplayOverlayContainer,
+    mapTileRectanglePreviewGraphics,
     placementPreviewContainer,
     pixi,
     pixiApplication,
@@ -1872,6 +1952,7 @@ async function captureMapScreenshot(
   try {
     return await renderMapScreenshotWithoutEditorOverlays({
       mapDisplayOverlayContainer,
+      mapTileRectanglePreviewGraphics,
       placementPreviewContainer,
       renderScreenshot: () => {
         mapContainer.position.set(0, 0);
@@ -1907,19 +1988,25 @@ async function captureMapScreenshot(
 export async function renderMapScreenshotWithoutEditorOverlays<Result>(
   input: Readonly<{
     mapDisplayOverlayContainer: { visible: boolean };
+    mapTileRectanglePreviewGraphics: { visible: boolean };
     placementPreviewContainer: { visible: boolean };
     renderScreenshot: () => Promise<Result> | Result;
   }>,
 ): Promise<Result> {
   const wasMapDisplayOverlayVisible = input.mapDisplayOverlayContainer.visible;
+  const wasMapTileRectanglePreviewVisible =
+    input.mapTileRectanglePreviewGraphics.visible;
   const wasPlacementPreviewVisible = input.placementPreviewContainer.visible;
 
   try {
     input.mapDisplayOverlayContainer.visible = false;
+    input.mapTileRectanglePreviewGraphics.visible = false;
     input.placementPreviewContainer.visible = false;
     return await input.renderScreenshot();
   } finally {
     input.mapDisplayOverlayContainer.visible = wasMapDisplayOverlayVisible;
+    input.mapTileRectanglePreviewGraphics.visible =
+      wasMapTileRectanglePreviewVisible;
     input.placementPreviewContainer.visible = wasPlacementPreviewVisible;
   }
 }
@@ -2535,6 +2622,132 @@ function drawMapGridLines(
       .moveTo(0, y * tileHeight)
       .lineTo(mapPlacementGrid.width * tileWidth, y * tileHeight)
       .stroke({ alpha: 0.4, color: 0xe6f1d5, width: 1 });
+  }
+}
+
+export function createMapTileRectanglePreviewRenderer(
+  input: Readonly<{
+    graphics: import("pixi.js").Graphics;
+    render: () => void;
+    tileHeight: number;
+    tileWidth: number;
+  }>,
+): MapTileRectanglePreviewRenderer {
+  const clear = (): void => {
+    input.graphics.clear();
+    input.render();
+  };
+
+  return {
+    clear,
+    render(startMapTileCoordinates, endMapTileCoordinates): void {
+      const mapTileRectangle = getMapTileRectanglePixels(
+        startMapTileCoordinates,
+        endMapTileCoordinates,
+        input.tileWidth,
+        input.tileHeight,
+      );
+
+      input.graphics.clear();
+      input.graphics
+        .rect(
+          mapTileRectangle.x,
+          mapTileRectangle.y,
+          mapTileRectangle.width,
+          mapTileRectangle.height,
+        )
+        .fill({
+          alpha: mapTileRectanglePreviewFillAlpha,
+          color: mapTileRectanglePreviewColor,
+        });
+      drawDashedMapTileRectangleBorder(input.graphics, mapTileRectangle);
+      input.render();
+    },
+  };
+}
+
+function getMapTileRectanglePixels(
+  startMapTileCoordinates: MapPointerTile,
+  endMapTileCoordinates: MapPointerTile,
+  tileWidth: number,
+  tileHeight: number,
+): Readonly<{ height: number; width: number; x: number; y: number }> {
+  const startTileX = Math.min(startMapTileCoordinates.x, endMapTileCoordinates.x);
+  const startTileY = Math.min(startMapTileCoordinates.y, endMapTileCoordinates.y);
+  const endTileX = Math.max(startMapTileCoordinates.x, endMapTileCoordinates.x);
+  const endTileY = Math.max(startMapTileCoordinates.y, endMapTileCoordinates.y);
+
+  return {
+    height: (endTileY - startTileY + 1) * tileHeight,
+    width: (endTileX - startTileX + 1) * tileWidth,
+    x: startTileX * tileWidth,
+    y: startTileY * tileHeight,
+  };
+}
+
+function drawDashedMapTileRectangleBorder(
+  graphics: import("pixi.js").Graphics,
+  mapTileRectangle: Readonly<{ height: number; width: number; x: number; y: number }>,
+): void {
+  drawDashedMapTileRectangleEdge(
+    graphics,
+    { x: mapTileRectangle.x, y: mapTileRectangle.y },
+    { x: mapTileRectangle.x + mapTileRectangle.width, y: mapTileRectangle.y },
+  );
+  drawDashedMapTileRectangleEdge(
+    graphics,
+    { x: mapTileRectangle.x + mapTileRectangle.width, y: mapTileRectangle.y },
+    {
+      x: mapTileRectangle.x + mapTileRectangle.width,
+      y: mapTileRectangle.y + mapTileRectangle.height,
+    },
+  );
+  drawDashedMapTileRectangleEdge(
+    graphics,
+    {
+      x: mapTileRectangle.x + mapTileRectangle.width,
+      y: mapTileRectangle.y + mapTileRectangle.height,
+    },
+    { x: mapTileRectangle.x, y: mapTileRectangle.y + mapTileRectangle.height },
+  );
+  drawDashedMapTileRectangleEdge(
+    graphics,
+    { x: mapTileRectangle.x, y: mapTileRectangle.y + mapTileRectangle.height },
+    { x: mapTileRectangle.x, y: mapTileRectangle.y },
+  );
+}
+
+function drawDashedMapTileRectangleEdge(
+  graphics: import("pixi.js").Graphics,
+  edgeStart: Readonly<{ x: number; y: number }>,
+  edgeEnd: Readonly<{ x: number; y: number }>,
+): void {
+  const edgeLength = Math.hypot(edgeEnd.x - edgeStart.x, edgeEnd.y - edgeStart.y);
+  const directionX = (edgeEnd.x - edgeStart.x) / edgeLength;
+  const directionY = (edgeEnd.y - edgeStart.y) / edgeLength;
+
+  for (
+    let dashStartDistance = 0;
+    dashStartDistance < edgeLength;
+    dashStartDistance += mapTileRectanglePreviewDashLength + mapTileRectanglePreviewDashGap
+  ) {
+    const dashEndDistance = Math.min(
+      dashStartDistance + mapTileRectanglePreviewDashLength,
+      edgeLength,
+    );
+    graphics
+      .moveTo(
+        edgeStart.x + directionX * dashStartDistance,
+        edgeStart.y + directionY * dashStartDistance,
+      )
+      .lineTo(
+        edgeStart.x + directionX * dashEndDistance,
+        edgeStart.y + directionY * dashEndDistance,
+      )
+      .stroke({
+        color: mapTileRectanglePreviewColor,
+        width: mapTileRectanglePreviewStrokeWidth,
+      });
   }
 }
 
@@ -3560,6 +3773,8 @@ export function attachPlannerCameraControls(
     onMapTileHover,
     onMapTileClick,
     onMapTileRectangle,
+    onMapTileRectanglePreview,
+    onMapTileRectanglePreviewClear,
     onPlacementSelectionClick,
     onMoveSelectedPlacements,
     setCameraState,
@@ -3569,6 +3784,7 @@ export function attachPlannerCameraControls(
   let pointerDragState: PointerDragState | null = null;
   let placementDragState: PlacementDragState | null = null;
   let pinchGestureState: PinchGestureState | null = null;
+  let mapTileRectanglePreviewPointerId: number | null = null;
   let lastReportedMapTileHover: MapPointerTile | null | undefined;
 
   canvasElement.tabIndex = 0;
@@ -3676,6 +3892,18 @@ export function attachPlannerCameraControls(
         ? getMapTileAtPointer?.(pointerCoordinates) ?? null
         : null;
     synchronizePointerGesture(startMapTileCoordinates);
+
+    if (
+      isMultiSelectPointerInteractionMode(getPointerInteractionMode())
+      && activePointerCoordinates.size === 1
+      && startMapTileCoordinates !== null
+    ) {
+      mapTileRectanglePreviewPointerId = pointerEvent.pointerId;
+      onMapTileRectanglePreview?.(
+        startMapTileCoordinates,
+        startMapTileCoordinates,
+      );
+    }
   }
 
   function handlePointerMove(pointerEvent: PointerEvent): void {
@@ -3702,7 +3930,17 @@ export function attachPlannerCameraControls(
     }
 
     const pointerInteractionMode = getPointerInteractionMode();
+
+    if (!isMultiSelectPointerInteractionMode(pointerInteractionMode)) {
+      clearMapTileRectanglePreview();
+    }
+
     if (isRectanglePointerInteractionMode(pointerInteractionMode)) {
+      return;
+    }
+
+    if (isMultiSelectPointerInteractionMode(pointerInteractionMode)) {
+      reportMapTileRectanglePreview(pointerEvent.pointerId, pointerCoordinates);
       return;
     }
 
@@ -3727,10 +3965,6 @@ export function attachPlannerCameraControls(
         ...pointerDragState,
         hasExceededPanThreshold: true,
       };
-    }
-
-    if (isMultiSelectPointerInteractionMode(pointerInteractionMode)) {
-      return;
     }
 
     setCameraState(
@@ -3914,6 +4148,40 @@ export function attachPlannerCameraControls(
     };
   }
 
+  function reportMapTileRectanglePreview(
+    pointerId: number,
+    pointerCoordinates: PointerCoordinates,
+  ): void {
+    const mapTileRectangle = getMapTileRectangle(pointerId, pointerCoordinates);
+
+    if (mapTileRectangle === null) {
+      return;
+    }
+
+    onMapTileRectanglePreview?.(
+      mapTileRectangle.startMapTileCoordinates,
+      mapTileRectangle.endMapTileCoordinates,
+    );
+  }
+
+  function clearMapTileRectanglePreviewForPointer(pointerId: number): void {
+    if (mapTileRectanglePreviewPointerId !== pointerId) {
+      return;
+    }
+
+    mapTileRectanglePreviewPointerId = null;
+    onMapTileRectanglePreviewClear?.();
+  }
+
+  function clearMapTileRectanglePreview(force = false): void {
+    if (mapTileRectanglePreviewPointerId === null && !force) {
+      return;
+    }
+
+    mapTileRectanglePreviewPointerId = null;
+    onMapTileRectanglePreviewClear?.();
+  }
+
   function createPlacementDragState(
     pointerId: number,
     startCoordinates: PointerCoordinates,
@@ -4069,6 +4337,7 @@ export function attachPlannerCameraControls(
       canvasElement.releasePointerCapture(pointerEvent.pointerId);
     }
 
+    clearMapTileRectanglePreviewForPointer(pointerEvent.pointerId);
     synchronizePointerGesture();
   }
 
@@ -4130,6 +4399,7 @@ export function attachPlannerCameraControls(
         placementClickSuppressedPointerIds.add(pointerId);
       }
 
+      clearMapTileRectanglePreview();
       pointerDragState = null;
       pinchGestureState = createPinchGestureState(
         activePointerCoordinates,
@@ -4201,6 +4471,11 @@ export function attachPlannerCameraControls(
   canvasElement.addEventListener("wheel", handleWheel, { passive: false });
 
   return {
+    synchronizePointerInteractionMode(): void {
+      if (!isMultiSelectPointerInteractionMode(getPointerInteractionMode())) {
+        clearMapTileRectanglePreview();
+      }
+    },
     dispose(): void {
       canvasElement.removeEventListener("keydown", handleKeyDown);
       canvasElement.removeEventListener("pointercancel", handlePointerCancel);
@@ -4217,6 +4492,7 @@ export function attachPlannerCameraControls(
       if (placementDragState !== null) {
         restorePlacementDragPreview(placementDragState);
       }
+      clearMapTileRectanglePreview(true);
       reportMapTileHoverIfChanged(null);
       placementDragState = null;
     },

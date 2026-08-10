@@ -154,11 +154,40 @@ const renderMapScreenshotWithoutEditorOverlays = (
   plannerCanvasModule as unknown as {
     renderMapScreenshotWithoutEditorOverlays: <Result>(input: Readonly<{
       mapDisplayOverlayContainer: { visible: boolean };
+      mapTileRectanglePreviewGraphics: { visible: boolean };
       placementPreviewContainer: { visible: boolean };
       renderScreenshot: () => Promise<Result> | Result;
     }>) => Promise<Result>;
   }
 ).renderMapScreenshotWithoutEditorOverlays;
+
+type MapTileRectanglePreviewGraphics = Readonly<{
+  clear(): void;
+  fill(style: Readonly<{ alpha: number; color: number }>): MapTileRectanglePreviewGraphics;
+  lineTo(x: number, y: number): MapTileRectanglePreviewGraphics;
+  moveTo(x: number, y: number): MapTileRectanglePreviewGraphics;
+  rect(x: number, y: number, width: number, height: number): MapTileRectanglePreviewGraphics;
+  stroke(style: Readonly<{ color: number; width: number }>): MapTileRectanglePreviewGraphics;
+}>;
+
+type MapTileRectanglePreviewRendererFactory = (input: Readonly<{
+  graphics: MapTileRectanglePreviewGraphics;
+  render: () => void;
+  tileHeight: number;
+  tileWidth: number;
+}>) => Readonly<{
+  clear(): void;
+  render(
+    startMapTileCoordinates: Readonly<{ x: number; y: number }>,
+    endMapTileCoordinates: Readonly<{ x: number; y: number }>,
+  ): void;
+}>;
+
+const createMapTileRectanglePreviewRenderer = (
+  plannerCanvasModule as unknown as {
+    createMapTileRectanglePreviewRenderer?: MapTileRectanglePreviewRendererFactory;
+  }
+).createMapTileRectanglePreviewRenderer;
 
 describe("PlannerCanvas joystick visibility", () => {
   it.each([
@@ -548,13 +577,16 @@ describe("PlannerCanvas screenshot preview exclusion", () => {
   it("keeps committed content visible while excluding and restoring the ghost", async () => {
     const committedContainer = { visible: true, children: ["committed"] };
     const mapDisplayOverlayContainer = { visible: true };
+    const mapTileRectanglePreviewGraphics = { visible: true };
     const placementPreviewContainer = { visible: true, children: ["ghost"] };
 
     const capturedChildren = await renderMapScreenshotWithoutEditorOverlays({
       mapDisplayOverlayContainer,
+      mapTileRectanglePreviewGraphics,
       placementPreviewContainer,
       renderScreenshot: () => {
         expect(mapDisplayOverlayContainer.visible).toBe(false);
+        expect(mapTileRectanglePreviewGraphics.visible).toBe(false);
         expect(placementPreviewContainer.visible).toBe(false);
         expect(committedContainer.visible).toBe(true);
         return [...committedContainer.children];
@@ -563,21 +595,70 @@ describe("PlannerCanvas screenshot preview exclusion", () => {
 
     expect(capturedChildren).toEqual(["committed"]);
     expect(mapDisplayOverlayContainer.visible).toBe(true);
+    expect(mapTileRectanglePreviewGraphics.visible).toBe(true);
     expect(placementPreviewContainer.visible).toBe(true);
   });
 
-  it("restores both editor overlays when screenshot rendering fails", async () => {
+  it("restores every editor overlay when screenshot rendering fails", async () => {
     const screenshotFailure = new Error("extract failed");
     const mapDisplayOverlayContainer = { visible: false };
+    const mapTileRectanglePreviewGraphics = { visible: true };
     const placementPreviewContainer = { visible: true };
 
     await expect(renderMapScreenshotWithoutEditorOverlays({
       mapDisplayOverlayContainer,
+      mapTileRectanglePreviewGraphics,
       placementPreviewContainer,
       renderScreenshot: () => Promise.reject(screenshotFailure),
     })).rejects.toBe(screenshotFailure);
     expect(mapDisplayOverlayContainer.visible).toBe(false);
+    expect(mapTileRectanglePreviewGraphics.visible).toBe(true);
     expect(placementPreviewContainer.visible).toBe(true);
+  });
+});
+
+describe("PlannerCanvas multi-select marquee rendering", () => {
+  it("draws snapped translucent blue rectangles with five-pixel dashed borders", () => {
+    if (typeof createMapTileRectanglePreviewRenderer !== "function") {
+      expect(createMapTileRectanglePreviewRenderer).toBeTypeOf("function");
+      return;
+    }
+
+    const graphics = new TestMapTileRectanglePreviewGraphics();
+    let renderCount = 0;
+    const renderer = createMapTileRectanglePreviewRenderer({
+      graphics,
+      render: () => {
+        renderCount += 1;
+      },
+      tileHeight: 32,
+      tileWidth: 16,
+    });
+
+    renderer.render({ x: 2, y: 3 }, { x: 2, y: 3 });
+    renderer.render({ x: 5, y: 4 }, { x: 3, y: 2 });
+    renderer.clear();
+
+    expect(graphics.rectangles).toEqual([
+      { height: 32, width: 16, x: 32, y: 96 },
+      { height: 96, width: 48, x: 48, y: 64 },
+    ]);
+    expect(graphics.fills).toEqual([
+      { alpha: 0.18, color: 0x4a9eff },
+      { alpha: 0.18, color: 0x4a9eff },
+    ]);
+    expect(graphics.strokes[0]).toEqual({
+      end: { x: 37, y: 96 },
+      start: { x: 32, y: 96 },
+      style: { color: 0x4a9eff, width: 1.5 },
+    });
+    expect(graphics.strokes[1]).toEqual({
+      end: { x: 45, y: 96 },
+      start: { x: 40, y: 96 },
+      style: { color: 0x4a9eff, width: 1.5 },
+    });
+    expect(graphics.clearCount).toBe(3);
+    expect(renderCount).toBe(3);
   });
 });
 
@@ -959,6 +1040,66 @@ class TestNightModeGraphics {
   }
 }
 
+class TestMapTileRectanglePreviewGraphics {
+  readonly fills: Array<Readonly<{ alpha: number; color: number }>> = [];
+  readonly rectangles: Array<Readonly<{ height: number; width: number; x: number; y: number }>> = [];
+  readonly strokes: Array<Readonly<{
+    end: Readonly<{ x: number; y: number }>;
+    start: Readonly<{ x: number; y: number }>;
+    style: Readonly<{ color: number; width: number }>;
+  }>> = [];
+  clearCount = 0;
+  private currentPoint: Readonly<{ x: number; y: number }> | null = null;
+  private pendingSegment: Readonly<{
+    end: Readonly<{ x: number; y: number }>;
+    start: Readonly<{ x: number; y: number }>;
+  }> | null = null;
+
+  clear(): void {
+    this.clearCount += 1;
+    this.currentPoint = null;
+    this.pendingSegment = null;
+  }
+
+  fill(style: Readonly<{ alpha: number; color: number }>): this {
+    this.fills.push(style);
+    return this;
+  }
+
+  lineTo(x: number, y: number): this {
+    if (this.currentPoint === null) {
+      throw new Error("Test graphics received lineTo before moveTo.");
+    }
+
+    this.pendingSegment = {
+      end: { x, y },
+      start: this.currentPoint,
+    };
+    this.currentPoint = { x, y };
+    return this;
+  }
+
+  moveTo(x: number, y: number): this {
+    this.currentPoint = { x, y };
+    return this;
+  }
+
+  rect(x: number, y: number, width: number, height: number): this {
+    this.rectangles.push({ height, width, x, y });
+    return this;
+  }
+
+  stroke(style: Readonly<{ color: number; width: number }>): this {
+    if (this.pendingSegment === null) {
+      throw new Error("Test graphics received stroke without a line segment.");
+    }
+
+    this.strokes.push({ ...this.pendingSegment, style });
+    this.pendingSegment = null;
+    return this;
+  }
+}
+
 type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{
   canvasElement: HTMLCanvasElement;
   getCameraGeometry: () => CameraGeometry;
@@ -990,9 +1131,17 @@ type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{
     startMapTileCoordinates: Readonly<{ x: number; y: number }>,
     endMapTileCoordinates: Readonly<{ x: number; y: number }>,
   ) => void;
+  onMapTileRectanglePreview?: (
+    startMapTileCoordinates: Readonly<{ x: number; y: number }>,
+    endMapTileCoordinates: Readonly<{ x: number; y: number }>,
+  ) => void;
+  onMapTileRectanglePreviewClear?: () => void;
   onMoveSelectedPlacements?: (tileDelta: Readonly<{ x: number; y: number }>) => void;
   setCameraState: (cameraState: CameraState) => void;
-}>) => Readonly<{ dispose(): void }>;
+}>) => Readonly<{
+  dispose(): void;
+  synchronizePointerInteractionMode(): void;
+}>;
 
 type TestPlacementDragSprite = Readonly<{
   position: { x: number; y: number; set(x: number, y: number): void };
@@ -1141,12 +1290,15 @@ function createDestroyablePixiResource(): Readonly<{
 }
 
 function createPlacementClickTestControls(
-  interactionMode: "navigate" | "rectangle" | "multi-select" | "move-selected" = "navigate",
+  interactionMode: "navigate" | "rectangle" | "multi-select" | "move-selected" | (() => "navigate" | "rectangle" | "multi-select" | "move-selected") = "navigate",
   wheelZoomEnabled = false,
   placementSelectionKeysAtPointer: readonly string[] = ["item:1"],
 ): Readonly<{
   canvasElement: TestCanvasElement;
-  cameraControls: Readonly<{ dispose(): void }>;
+  cameraControls: Readonly<{
+    dispose(): void;
+    synchronizePointerInteractionMode(): void;
+  }>;
   clickedMapTiles: Array<Readonly<{ x: number; y: number }>>;
   clickedPlacementKeys: Array<readonly string[]>;
   hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null>;
@@ -1156,6 +1308,13 @@ function createPlacementClickTestControls(
       end: Readonly<{ x: number; y: number }>;
     }>
   >;
+  mapTileRectanglePreviews: Array<
+    Readonly<{
+      start: Readonly<{ x: number; y: number }>;
+      end: Readonly<{ x: number; y: number }>;
+    }>
+  >;
+  mapTileRectanglePreviewClearCount: () => number;
   readCameraState: () => CameraState;
 }> | null {
   const attachPlannerCameraControls = (
@@ -1170,6 +1329,10 @@ function createPlacementClickTestControls(
   }
 
   const canvasElement = new TestCanvasElement();
+  const readInteractionMode =
+    typeof interactionMode === "function"
+      ? interactionMode
+      : () => interactionMode;
   const clickedMapTiles: Array<Readonly<{ x: number; y: number }>> = [];
   const clickedPlacementKeys: Array<readonly string[]> = [];
   const hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null> = [];
@@ -1179,6 +1342,13 @@ function createPlacementClickTestControls(
       end: Readonly<{ x: number; y: number }>;
     }>
   > = [];
+  const mapTileRectanglePreviews: Array<
+    Readonly<{
+      start: Readonly<{ x: number; y: number }>;
+      end: Readonly<{ x: number; y: number }>;
+    }>
+  > = [];
+  let mapTileRectanglePreviewClearCount = 0;
   let currentCameraState: CameraState = {
     initialFitZoom: 1,
     maximumZoom: 4,
@@ -1199,7 +1369,7 @@ function createPlacementClickTestControls(
     getCameraGeometry: () => cameraGeometry,
     getCameraState: () => currentCameraState,
     getWheelZoomEnabled: () => wheelZoomEnabled,
-    getPointerInteractionMode: () => interactionMode,
+    getPointerInteractionMode: readInteractionMode,
     getMapTileAtPointer: (pointerCoordinates) =>
       getMapTileAtPointer({
         pointerX: pointerCoordinates.x,
@@ -1228,6 +1398,18 @@ function createPlacementClickTestControls(
         end: endMapTileCoordinates,
       });
     },
+    onMapTileRectanglePreview: (
+      startMapTileCoordinates,
+      endMapTileCoordinates,
+    ) => {
+      mapTileRectanglePreviews.push({
+        start: startMapTileCoordinates,
+        end: endMapTileCoordinates,
+      });
+    },
+    onMapTileRectanglePreviewClear: () => {
+      mapTileRectanglePreviewClearCount += 1;
+    },
     setCameraState: (cameraState) => {
       currentCameraState = cameraState;
     },
@@ -1239,6 +1421,8 @@ function createPlacementClickTestControls(
     clickedMapTiles,
     clickedPlacementKeys,
     hoveredMapTiles,
+    mapTileRectanglePreviews,
+    mapTileRectanglePreviewClearCount: () => mapTileRectanglePreviewClearCount,
     selectedMapRectangles,
     readCameraState: () => currentCameraState,
   };
@@ -3843,6 +4027,106 @@ describe("attachPlannerCameraControls map placement clicks", () => {
 
     expect(placementClickTestControls.clickedPlacementKeys).toEqual([[]]);
     expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
+  });
+
+  it("previews the tile-snapped multi-select rectangle from pointer down through pointer up", () => {
+    const placementClickTestControls = createPlacementClickTestControls("multi-select");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 132, 112),
+    );
+
+    expect(placementClickTestControls.mapTileRectanglePreviews).toEqual([
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 5, y: 4 },
+      },
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 7, y: 6 },
+      },
+    ]);
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 132, 112),
+    );
+
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(1);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 7, y: 6 },
+      },
+    ]);
+  });
+
+  it("clears the multi-select preview immediately when the interaction mode changes during a stationary drag", () => {
+    let currentInteractionMode: "multi-select" | "navigate" = "multi-select";
+    const placementClickTestControls = createPlacementClickTestControls(
+      () => currentInteractionMode,
+    );
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    currentInteractionMode = "navigate";
+    placementClickTestControls.cameraControls.synchronizePointerInteractionMode();
+
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(1);
+  });
+
+  it("clears the multi-select preview when the gesture is cancelled, loses capture, pinches, or disposes", () => {
+    const placementClickTestControls = createPlacementClickTestControls("multi-select");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointercancel",
+      createPointerEvent(1, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(2, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "lostpointercapture",
+      createPointerEvent(2, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(3, 100, 80, { pointerType: "touch" }),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(4, 120, 80, { pointerType: "touch" }),
+    );
+
+    expect(placementClickTestControls.mapTileRectanglePreviews).toHaveLength(3);
+
+    placementClickTestControls.cameraControls.dispose();
+
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(4);
   });
 
   it("reports a map rectangle after a multi-select drag exceeds the existing threshold", () => {
