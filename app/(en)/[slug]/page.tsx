@@ -67,6 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProperties) {
       <BlogArticleContent copy={getBlogCopy(locale)} locale={locale} post={post} />
       <JsonLdScript
         structuredData={createArticleStructuredData({
+          locale: "en",
           headline: post.title,
           description: post.description,
           pathname: canonicalPath,

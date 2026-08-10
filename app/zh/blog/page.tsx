@@ -26,6 +26,7 @@ export default function ChineseBlogPage() {
       <BlogIndexClientContent copy={copy} locale={locale} posts={getAllBlogPostMeta(locale)} />
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
+          locale: "zh-CN",
           name: copy.blogTitle,
           description: copy.blogDescription,
           pathname: "/zh/blog",

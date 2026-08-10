@@ -29,6 +29,7 @@ export default function ModsPage() {
       </article>
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
+          locale: "en",
           name: pageCopy.modsTitle,
           description: pageCopy.modsDescription,
           pathname: "/mods",

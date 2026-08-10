@@ -58,6 +58,7 @@ function FarmComparisonCard({
           farmName: comparisonCard.title,
         })}
         className="farm-comparison-card__preview"
+        decoding="async"
         loading="lazy"
         src={comparisonCard.previewSource}
       />

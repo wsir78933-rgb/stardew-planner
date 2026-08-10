@@ -9,6 +9,7 @@ import {
   officialFarmGuides,
   officialFarmTypes,
 } from "../../src/reference/official-farm-guides";
+import { getModFarmCards } from "../../src/reference/mod-farm-cards";
 import { plannerMaps } from "../../src/maps/map-catalog";
 
 function getStaticMarkupText(text: string): string {
@@ -42,6 +43,9 @@ describe("public farm pages", () => {
       expect(comparisonMarkup).toContain(`id="${farmType}"`);
       expect(comparisonMarkup).toContain(farmGuide.title);
       expect(comparisonMarkup).toContain(farmGuide.previewSource);
+      expect(farmGuide.previewSource).toMatch(
+        /^\/public-previews\/1\.6\.15\/.+\.webp$/,
+      );
       expect(comparisonMarkup).toContain(`href="/?farmType=${farmType}"`);
       expect(comparisonMarkup).toContain(`href="/farm/${farmType}"`);
       expect(comparisonMarkup).toContain(getStaticMarkupText(comparisonCard.summary));
@@ -49,6 +53,12 @@ describe("public farm pages", () => {
       expect(comparisonMarkup).toContain(getStaticMarkupText(comparisonCard.planningNote));
       expect(comparisonMarkup.match(new RegExp(`href="/farm/${farmType}"`, "g"))).toHaveLength(2);
     }
+
+    expect(
+      comparisonMarkup.match(
+        /<img(?=[^>]*loading="lazy")(?=[^>]*decoding="async")[^>]*>/g,
+      ),
+    ).toHaveLength(8);
   });
 
   it("renders every available community map with a local preview and planner entry point", () => {
@@ -60,6 +70,7 @@ describe("public farm pages", () => {
         plannerMap.category === "community-farm" ||
         plannerMap.category === "community-interior",
     );
+    const modFarmCards = getModFarmCards();
     const farmSectionMarkup = modMapMarkup.match(
       /<section[^>]*data-mod-map-kind="farm"[\s\S]*?<\/section>/,
     )?.[0];
@@ -82,11 +93,21 @@ describe("public farm pages", () => {
       expect(modMapMarkup).toContain(
         getStaticMarkupText(plannerMap.displayName),
       );
-      expect(modMapMarkup).toContain(
-        `/game-assets/1.6.15/${plannerMap.previewOutputPath}`,
-      );
       expect(modMapMarkup).toContain(`href="/?farmType=${plannerMap.id}"`);
     }
+
+    for (const modFarmCard of modFarmCards) {
+      expect(modFarmCard.previewSource).toMatch(
+        /^\/public-previews\/1\.6\.15\/.+\.webp$/,
+      );
+      expect(modMapMarkup).toContain(modFarmCard.previewSource);
+    }
+
+    expect(
+      modMapMarkup.match(
+        /<img(?=[^>]*loading="lazy")(?=[^>]*decoding="async")[^>]*>/g,
+      ),
+    ).toHaveLength(21);
 
     expect(modMapMarkup).not.toMatch(/ko[\s-]*fi|support|feedback/i);
   });

@@ -1,7 +1,10 @@
 import { JsonLdScript } from "../../src/components/json-ld-script";
 import { PlannerHomepage } from "../../src/components/planner-homepage";
 import { createPublicPageMetadata } from "../../src/seo/page-metadata";
-import { createWebApplicationStructuredData } from "../../src/seo/page-structured-data";
+import {
+  createWebApplicationStructuredData,
+  createWebSiteStructuredData,
+} from "../../src/seo/page-structured-data";
 
 const plannerStructuredDataDescription =
   "Plan Stardew Valley farm layouts in your browser with an interactive map.";
@@ -20,8 +23,10 @@ export default function PlannerPage() {
   return (
     <>
       <PlannerHomepage locale="en" />
+      <JsonLdScript structuredData={createWebSiteStructuredData()} />
       <JsonLdScript
         structuredData={createWebApplicationStructuredData({
+          locale: "en",
           name: "Stardew Valley Farm Planner",
           description: plannerStructuredDataDescription,
           pathname: "/",

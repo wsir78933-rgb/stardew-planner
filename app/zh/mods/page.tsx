@@ -30,6 +30,7 @@ export default function ChineseModsPage() {
       </article>
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
+          locale: "zh-CN",
           name: pageCopy.modsTitle,
           description: pageCopy.modsDescription,
           pathname: getLocalizedPublicPath("zh-CN", "/mods"),

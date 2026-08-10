@@ -49,6 +49,7 @@ export function ModMapCardGrid({ locale }: ModMapCardGridProperties) {
                       farmName: modFarmCard.displayName,
                     })}
                     className="mod-farm-card__preview"
+                    decoding="async"
                     loading="lazy"
                     src={modFarmCard.previewSource}
                   />

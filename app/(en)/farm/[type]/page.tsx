@@ -79,9 +79,11 @@ export default async function FarmGuidePage({
       />
       <JsonLdScript
         structuredData={createArticleStructuredData({
+          locale: "en",
           headline: farmGuide.title,
           description,
           pathname,
+          imagePathname: farmGuide.previewSource,
         })}
       />
       <JsonLdScript

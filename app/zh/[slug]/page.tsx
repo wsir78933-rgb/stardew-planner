@@ -74,6 +74,7 @@ export default async function ChineseBlogPostPage({
       <BlogArticleContent copy={getBlogCopy(locale)} locale={locale} post={post} />
       <JsonLdScript
         structuredData={createArticleStructuredData({
+          locale: "zh-CN",
           headline: post.title,
           description: post.description,
           pathname: getLocalizedPublicPath(locale, canonicalPath),

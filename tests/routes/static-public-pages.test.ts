@@ -6,7 +6,10 @@ import {
   type Element as XmlElement,
 } from "@xmldom/xmldom";
 import { describe, expect, it } from "vitest";
-import { officialFarmTypes } from "../../src/reference/official-farm-guides";
+import {
+  officialFarmGuides,
+  officialFarmTypes,
+} from "../../src/reference/official-farm-guides";
 
 const expectedSocialImageUrl =
   "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
@@ -55,6 +58,7 @@ type StaticHomepageExpectation = Readonly<{
   jsonLdName: string;
   jsonLdDescription: string;
   jsonLdUrl: string;
+  jsonLdLocale: "en" | "zh-CN";
 }>;
 
 const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
@@ -375,6 +379,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     jsonLdDescription:
       "Plan Stardew Valley farm layouts in your browser with an interactive map.",
     jsonLdUrl: "https://stardewvalleyplanner.art",
+    jsonLdLocale: "en",
   },
   {
     staticPageFile: "zh.html",
@@ -409,6 +414,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     jsonLdName: "星露谷农场规划器",
     jsonLdDescription: "使用本地地图、物品和项目规划你的星露谷农场布局。",
     jsonLdUrl: "https://stardewvalleyplanner.art/zh",
+    jsonLdLocale: "zh-CN",
   },
 ];
 
@@ -484,29 +490,60 @@ function escapeHtmlAttributeValue(value: string): string {
     .replaceAll(">", "&gt;");
 }
 
-function readWebApplicationStructuredData(
+function readJsonLdStructuredData(
   staticPageHtml: string,
   staticPageFile: string,
-): Record<string, unknown> {
-  const serializedStructuredData = staticPageHtml.match(
-    /<script type="application\/ld\+json">([^<]+)<\/script>/,
-  )?.[1];
+): readonly Record<string, unknown>[] {
+  const staticPageDocument = parseStaticPageDocument(
+    staticPageHtml,
+    staticPageFile,
+  );
+  const jsonLdScriptElements = Array.from(
+    staticPageDocument.getElementsByTagName("script"),
+  ).filter(
+    (scriptElement) =>
+      scriptElement.getAttribute("type") === "application/ld+json",
+  );
 
-  if (serializedStructuredData === undefined) {
+  if (jsonLdScriptElements.length === 0) {
     throw new Error(
-      `Expected ${staticPageFile} to contain a WebApplication JSON-LD script.`,
+      `Expected ${staticPageFile} to contain at least one JSON-LD script.`,
     );
   }
 
-  const structuredData: unknown = JSON.parse(serializedStructuredData);
+  return jsonLdScriptElements.map((scriptElement, index) => {
+    const serializedStructuredData = scriptElement.textContent ?? "";
+    let structuredData: unknown;
 
-  if (typeof structuredData !== "object" || structuredData === null) {
-    throw new Error(
-      `Expected ${staticPageFile} WebApplication JSON-LD to be an object. Received: ${JSON.stringify(structuredData)}.`,
-    );
-  }
+    try {
+      structuredData = JSON.parse(serializedStructuredData);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Expected ${staticPageFile} JSON-LD script ${index + 1} to contain valid JSON. Received: ${JSON.stringify(serializedStructuredData)}.`,
+        );
+      }
 
-  return structuredData as Record<string, unknown>;
+      throw error;
+    }
+
+    if (typeof structuredData !== "object" || structuredData === null) {
+      throw new Error(
+        `Expected ${staticPageFile} JSON-LD script ${index + 1} to be an object. Received: ${JSON.stringify(structuredData)}.`,
+      );
+    }
+
+    return structuredData as Record<string, unknown>;
+  });
+}
+
+function findStructuredDataByType(
+  structuredDataEntries: readonly Record<string, unknown>[],
+  schemaType: string,
+): readonly Record<string, unknown>[] {
+  return structuredDataEntries.filter(
+    (structuredData) => structuredData["@type"] === schemaType,
+  );
 }
 
 function expectStaticHomepageContent(
@@ -548,17 +585,38 @@ function expectStaticHomepageContent(
   expect(staticPageHtml.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
     officialFarmTypes.length,
   );
-  expect(
-    readWebApplicationStructuredData(
-      staticPageHtml,
-      expectedHomepage.staticPageFile,
-    ),
-  ).toMatchObject({
+  const structuredDataEntries = readJsonLdStructuredData(
+    staticPageHtml,
+    expectedHomepage.staticPageFile,
+  );
+  const webApplications = findStructuredDataByType(
+    structuredDataEntries,
+    "WebApplication",
+  );
+  const websites = findStructuredDataByType(structuredDataEntries, "WebSite");
+
+  expect(webApplications).toHaveLength(1);
+  expect(webApplications[0]).toMatchObject({
     "@type": "WebApplication",
     name: expectedHomepage.jsonLdName,
     description: expectedHomepage.jsonLdDescription,
     url: expectedHomepage.jsonLdUrl,
+    inLanguage: expectedHomepage.jsonLdLocale,
+    isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
   });
+
+  if (expectedHomepage.jsonLdLocale === "en") {
+    expect(websites).toHaveLength(1);
+    expect(websites[0]).toMatchObject({
+      "@type": "WebSite",
+      "@id": "https://stardewvalleyplanner.art/#website",
+      name: "Stardew Valley Planner",
+      url: "https://stardewvalleyplanner.art",
+      inLanguage: ["en", "zh-CN"],
+    });
+  } else {
+    expect(websites).toHaveLength(0);
+  }
   expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
   expect(staticPageHtml).not.toContain("reference-runtime-root");
   expect(staticPageHtml).not.toContain("/reference-runtime/bootstrap.mjs");
@@ -579,6 +637,24 @@ describe("static public pages", () => {
         ),
       ).toThrow(/first <html \.\.\.> tag to include a lang attribute/);
     }
+  });
+
+  it("reads real JSON-LD script elements while ignoring commented markup", () => {
+    const fixtureStructuredData = readJsonLdStructuredData(
+      `<!doctype html>
+      <html><head>
+        <!-- <script type="application/ld+json">{"@type":"Ignored"}</script> -->
+        <script data-test="website" type="application/ld+json">{"@type":"WebSite"}</script>
+        <script nonce="fixture" type="application/ld+json">{"@type":"WebApplication"}</script>
+      </head><body></body></html>`,
+      "json-ld-parser-fixture.html",
+    );
+
+    expect(fixtureStructuredData).toHaveLength(2);
+    expect(fixtureStructuredData.map((entry) => entry["@type"])).toEqual([
+      "WebSite",
+      "WebApplication",
+    ]);
   });
 
   it("exports crawler-discovery files alongside the public pages", () => {
@@ -659,6 +735,53 @@ describe("static public pages", () => {
             );
           }
         }
+      }
+    }
+  });
+
+  it("localizes representative public Article and CollectionPage schema entries", () => {
+    for (const [staticPageFile, schemaType, locale] of [
+      ["farm-comparison.html", "Article", "en"],
+      ["zh/farm-comparison.html", "Article", "zh-CN"],
+      ["mods.html", "CollectionPage", "en"],
+      ["zh/mods.html", "CollectionPage", "zh-CN"],
+    ] as const) {
+      const structuredDataEntries = readJsonLdStructuredData(
+        readStaticPageHtml(staticPageFile),
+        staticPageFile,
+      );
+      const schemaEntries = findStructuredDataByType(
+        structuredDataEntries,
+        schemaType,
+      );
+
+      expect(schemaEntries).toHaveLength(1);
+      expect(schemaEntries[0]).toMatchObject({
+        inLanguage: locale,
+        isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
+      });
+    }
+  });
+
+  it("exports every official farm Article with its visible public preview image", () => {
+    for (const locale of ["en", "zh-CN"] as const) {
+      for (const farmType of officialFarmTypes) {
+        const staticPageFile =
+          locale === "en"
+            ? `farm/${farmType}.html`
+            : `zh/farm/${farmType}.html`;
+        const structuredDataEntries = readJsonLdStructuredData(
+          readStaticPageHtml(staticPageFile),
+          staticPageFile,
+        );
+        const articles = findStructuredDataByType(structuredDataEntries, "Article");
+
+        expect(articles).toHaveLength(1);
+        expect(articles[0]).toMatchObject({
+          inLanguage: locale,
+          isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
+          image: `https://stardewvalleyplanner.art${officialFarmGuides[farmType].previewSource}`,
+        });
       }
     }
   });

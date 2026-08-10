@@ -29,6 +29,7 @@ export default function FarmComparisonPage() {
       </article>
       <JsonLdScript
         structuredData={createArticleStructuredData({
+          locale: "en",
           headline: pageCopy.farmComparisonTitle,
           description: pageCopy.farmComparisonDescription,
           pathname: "/farm-comparison",

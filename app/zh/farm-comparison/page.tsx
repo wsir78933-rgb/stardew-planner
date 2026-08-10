@@ -30,6 +30,7 @@ export default function ChineseFarmComparisonPage() {
       </article>
       <JsonLdScript
         structuredData={createArticleStructuredData({
+          locale: "zh-CN",
           headline: pageCopy.farmComparisonTitle,
           description: pageCopy.farmComparisonDescription,
           pathname: getLocalizedPublicPath("zh-CN", "/farm-comparison"),

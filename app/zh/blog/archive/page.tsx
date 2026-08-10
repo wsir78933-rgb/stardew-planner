@@ -26,6 +26,7 @@ export default function ChineseBlogArchivePage() {
       <BlogArchiveClientContent copy={copy} locale={locale} posts={getAllBlogPostMeta(locale)} />
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
+          locale: "zh-CN",
           name: copy.archiveTitle,
           description: copy.blogDescription,
           pathname: "/zh/blog/archive",

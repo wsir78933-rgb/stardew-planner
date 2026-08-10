@@ -104,9 +104,11 @@ export default async function ChineseFarmGuidePage({
       />
       <JsonLdScript
         structuredData={createArticleStructuredData({
+          locale: "zh-CN",
           headline: chineseFarmMetadataCopy.localizedFarmGuide.title,
           description: chineseFarmMetadataCopy.description,
           pathname: localizedPathname,
+          imagePathname: farmGuide.previewSource,
         })}
       />
       <JsonLdScript

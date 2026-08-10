@@ -1,3 +1,4 @@
+import { createPublicPreviewSource } from "../assets/public-preview-source";
 import { getPlannerMapById } from "../maps/map-catalog";
 
 export const officialFarmTypes = [
@@ -30,8 +31,6 @@ type OfficialFarmGuideText = Omit<
   OfficialFarmGuide,
   "id" | "title" | "previewSource"
 >;
-
-const localGameAssetRoot = "/game-assets/1.6.15/";
 
 const officialFarmGuideTexts: Readonly<
   Record<OfficialFarmType, OfficialFarmGuideText>
@@ -179,7 +178,7 @@ function createOfficialFarmGuide(
   return {
     id: farmType,
     title: plannerMap.displayName,
-    previewSource: `${localGameAssetRoot}${plannerMap.previewOutputPath}`,
+    previewSource: createPublicPreviewSource(plannerMap.previewOutputPath),
     ...officialFarmGuideTexts[farmType],
   };
 }

@@ -26,6 +26,7 @@ export default function BlogArchivePage() {
       <BlogArchiveClientContent copy={copy} locale={locale} posts={getAllBlogPostMeta(locale)} />
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
+          locale: "en",
           name: copy.archiveTitle,
           description: copy.blogDescription,
           pathname: canonicalPath,

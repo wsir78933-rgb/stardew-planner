@@ -1,3 +1,4 @@
+import { createPublicPreviewSource } from "../assets/public-preview-source";
 import { plannerMaps, type PlannerMap } from "../maps/map-catalog";
 
 type CommunityMap = Extract<
@@ -24,8 +25,6 @@ type ModFarmCardText = Readonly<{
   planningNote: string;
   sourceHref: string;
 }>;
-
-const localGameAssetRoot = "/game-assets/1.6.15/";
 
 const modFarmCardTexts: Readonly<
   Record<CommunityMap["id"], ModFarmCardText>
@@ -269,7 +268,7 @@ function createModFarmCard(plannerMap: CommunityMap): ModFarmCard {
     planningNote: cardText.planningNote,
     mapKind: plannerMap.category === "community-farm" ? "farm" : "interior",
     sourceHref: cardText.sourceHref,
-    previewSource: `${localGameAssetRoot}${plannerMap.previewOutputPath}`,
+    previewSource: createPublicPreviewSource(plannerMap.previewOutputPath),
   };
 }
 

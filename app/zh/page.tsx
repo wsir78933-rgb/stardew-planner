@@ -20,6 +20,7 @@ export default function ChinesePlannerPage() {
       <PlannerHomepage locale="zh-CN" />
       <JsonLdScript
         structuredData={createWebApplicationStructuredData({
+          locale: "zh-CN",
           name: pageCopy.plannerTitle,
           description: pageCopy.plannerDescription,
           pathname: getLocalizedPublicPath("zh-CN", "/"),

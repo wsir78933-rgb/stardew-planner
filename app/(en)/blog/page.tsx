@@ -26,6 +26,7 @@ export default function BlogPage() {
       <BlogIndexClientContent copy={copy} locale={locale} posts={getAllBlogPostMeta(locale)} />
       <JsonLdScript
         structuredData={createCollectionPageStructuredData({
+          locale: "en",
           name: copy.blogTitle,
           description: copy.blogDescription,
           pathname: canonicalPath,
