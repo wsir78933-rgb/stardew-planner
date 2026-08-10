@@ -121,6 +121,20 @@ export function EditorModal({
   }, []);
 
   function handleModalKeyDown(keyboardEvent: KeyboardEvent<HTMLElement>): void {
+    const modalElement = modalElementReference.current;
+
+    if (modalElement === null) {
+      throw new Error(
+        `Modal element is unavailable for keyboard event in modalId ${JSON.stringify(modalId)}.`,
+      );
+    }
+
+    if (
+      !shouldHandleEditorModalKeyboardEvent(modalElement, keyboardEvent.target)
+    ) {
+      return;
+    }
+
     if (keyboardEvent.key === "Escape") {
       keyboardEvent.preventDefault();
       onClose();
@@ -129,12 +143,6 @@ export function EditorModal({
 
     if (keyboardEvent.key !== "Tab") {
       return;
-    }
-
-    const modalElement = modalElementReference.current;
-
-    if (modalElement === null) {
-      throw new Error(`Modal element is unavailable for Tab key in modalId ${JSON.stringify(modalId)}.`);
     }
 
     const focusTarget = getModalFocusTarget({
@@ -155,12 +163,19 @@ export function EditorModal({
     return null;
   }
 
+  const editorModalClassName =
+    modalId === "map-picker"
+      ? "editor-modal editor-modal--map-picker"
+      : modalId === "save-panel"
+        ? "editor-modal editor-modal--save-panel"
+        : "editor-modal";
+
   return (
     <div className="editor-modal__backdrop">
       <section
         aria-labelledby={modalHeadingId}
         aria-modal="true"
-        className={`editor-modal${modalId === "map-picker" ? " editor-modal--map-picker" : ""}`}
+        className={editorModalClassName}
         onKeyDown={handleModalKeyDown}
         ref={modalElementReference}
         role="dialog"
@@ -213,6 +228,19 @@ export function EditorModal({
       </section>
     </div>
   );
+}
+
+export function shouldHandleEditorModalKeyboardEvent(
+  modalElement: Pick<HTMLElement, "contains">,
+  eventTarget: EventTarget | null,
+): boolean {
+  if (eventTarget === null) {
+    throw new Error(
+      `Cannot handle editor modal keyboard event because the event target is ${JSON.stringify(eventTarget)}.`,
+    );
+  }
+
+  return modalElement.contains(eventTarget as Node);
 }
 
 function ignoreEditorDisplayOptionToggle(): void {}

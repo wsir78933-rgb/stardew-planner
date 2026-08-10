@@ -3159,7 +3159,7 @@ export function createPlacementSprite(
   assertPlacementRenderEntryVisualProperties(placementRenderEntry);
   const placementTintColor = getPlacementSpriteTintColor(
     placementRenderEntry.tintColor,
-    isSelected && placementRenderEntry.shouldApplySelectionTint !== false,
+    isSelected,
   );
   const placementFrameTexture = getPlacementFrameTexture(
     pixi,
@@ -3176,6 +3176,7 @@ export function createPlacementSprite(
     });
 
     placementSprite.tint = placementTintColor;
+    placementSprite.blendMode = isSelected ? "add" : "normal";
     placementSprite.alpha = placementRenderEntry.opacity ?? 1;
     placementSprite.zIndex = placementRenderEntry.zIndex ?? 0;
     animationResources = createPlacementSpriteAnimationResources(

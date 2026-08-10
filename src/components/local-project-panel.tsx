@@ -1,11 +1,14 @@
 "use client";
 
 import {
+  useRef,
   useState,
   type ChangeEvent,
 } from "react";
+import { downloadBrowserFile } from "../projects/browser-file-download";
 import { createReferenceProjectExportFile } from "../projects/reference-project-export-file";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import { LocalProjectDeleteAlertDialog } from "./local-project-delete-alert-dialog";
 
 export type LocalProjectStorageStatus = "loading" | "ready" | "error";
 
@@ -55,6 +58,7 @@ export function LocalProjectPanel({
   const [projectIdPendingDeletion, setProjectIdPendingDeletion] = useState<
     string | null
   >(null);
+  const deleteButtonPendingDeletionRef = useRef<HTMLButtonElement | null>(null);
   const isStorageReady = storageStatus === "ready";
   const projectPendingDeletion = projects.find(
     (projectSummary) => projectSummary.id === projectIdPendingDeletion,
@@ -104,23 +108,31 @@ export function LocalProjectPanel({
     );
   }
 
-  function handleRequestProjectDeletion(projectId: string): void {
+  function handleRequestProjectDeletion(
+    projectId: string,
+    deleteButton: HTMLButtonElement,
+  ): void {
+    deleteButtonPendingDeletionRef.current = deleteButton;
     setProjectIdPendingDeletion(projectId);
     setProjectActionErrorMessage(null);
     setProjectActionNotice(null);
   }
 
-  function handleDeleteProject(): void {
+  function handleDeleteProject(): boolean {
     if (projectPendingDeletion === undefined) {
       throw new Error(
         `Cannot delete local project because the pending project ID ${JSON.stringify(projectIdPendingDeletion)} is not available.`,
       );
     }
 
+    let projectWasDeleted = false;
     runProjectAction(() => {
       onDeleteProject(projectPendingDeletion.id);
       setProjectIdPendingDeletion(null);
+      projectWasDeleted = true;
     }, "Deleted the local project.");
+
+    return projectWasDeleted;
   }
 
   function handleExportProject(projectSummary: ReferenceProjectSummary): void {
@@ -131,7 +143,12 @@ export function LocalProjectPanel({
         serializedProject,
       );
 
-      downloadProjectExportFile(projectExportFile);
+      downloadBrowserFile({
+        blob: new Blob([projectExportFile.serializedProject], {
+          type: projectExportFile.mimeType,
+        }),
+        filename: projectExportFile.filename,
+      });
       setProjectActionErrorMessage(null);
       setProjectActionNotice(`Exported ${projectSummary.title}.`);
     } catch (caughtError) {
@@ -248,7 +265,9 @@ export function LocalProjectPanel({
             >
               <div className="local-project-panel__project-summary">
                 <strong>{projectSummary.title}</strong>
-                <span>{projectSummary.updated_at}</span>
+                <span>
+                  {formatLocalProjectUpdatedAt(projectSummary.updated_at)}
+                </span>
                 {isCurrentProject ? <span>Current</span> : null}
               </div>
               {isRenamingProject ? (
@@ -311,7 +330,12 @@ export function LocalProjectPanel({
                   </button>
                   <button
                     disabled={!isStorageReady}
-                    onClick={() => handleRequestProjectDeletion(projectSummary.id)}
+                    onClick={(clickEvent) =>
+                      handleRequestProjectDeletion(
+                        projectSummary.id,
+                        clickEvent.currentTarget,
+                      )
+                    }
                     type="button"
                   >
                     Delete
@@ -328,61 +352,30 @@ export function LocalProjectPanel({
         </p>
       ) : null}
       {projectPendingDeletion !== undefined ? (
-        <dialog
-          aria-labelledby="delete-local-project-heading"
-          className="local-project-panel__delete-dialog"
-          open
-        >
-          <h3 id="delete-local-project-heading">Delete local project?</h3>
-          <p>
-            Delete <strong>{projectPendingDeletion.title}</strong> from this
-            browser? This cannot be undone.
-          </p>
-          <div>
-            <button onClick={handleDeleteProject} type="button">
-              Delete project
-            </button>
-            <button
-              onClick={() => setProjectIdPendingDeletion(null)}
-              type="button"
-            >
-              Keep project
-            </button>
-          </div>
-        </dialog>
+        <LocalProjectDeleteAlertDialog
+          deleteButtonFocusTarget={deleteButtonPendingDeletionRef.current}
+          onCancel={() => setProjectIdPendingDeletion(null)}
+          onConfirm={handleDeleteProject}
+          projectTitle={projectPendingDeletion.title}
+        />
       ) : null}
     </section>
   );
 }
 
-function downloadProjectExportFile(
-  projectExportFile: ReturnType<typeof createReferenceProjectExportFile>,
-): void {
-  if (typeof document === "undefined") {
+export function formatLocalProjectUpdatedAt(updatedAt: string): string {
+  const parsedUpdatedAt = new Date(updatedAt);
+
+  if (updatedAt.trim().length === 0 || Number.isNaN(parsedUpdatedAt.getTime())) {
     throw new Error(
-      `Cannot download local project export ${JSON.stringify(projectExportFile.filename)} without a browser document.`,
+      `Cannot format local project updated_at value ${JSON.stringify(updatedAt)} because it is not a valid timestamp.`,
     );
   }
 
-  if (typeof URL.createObjectURL !== "function") {
-    throw new Error(
-      `Cannot download local project export ${JSON.stringify(projectExportFile.filename)} because URL.createObjectURL is unavailable.`,
-    );
-  }
-
-  const projectExportBlob = new Blob([projectExportFile.serializedProject], {
-    type: projectExportFile.mimeType,
-  });
-  const projectExportUrl = URL.createObjectURL(projectExportBlob);
-  const projectExportLink = document.createElement("a");
-
-  projectExportLink.download = projectExportFile.filename;
-  projectExportLink.href = projectExportUrl;
-  projectExportLink.style.display = "none";
-  document.body.append(projectExportLink);
-  projectExportLink.click();
-  projectExportLink.remove();
-  window.setTimeout(() => URL.revokeObjectURL(projectExportUrl), 0);
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(parsedUpdatedAt);
 }
 
 function formatProjectActionError(caughtError: unknown): string {

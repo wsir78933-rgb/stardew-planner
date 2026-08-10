@@ -1,7 +1,10 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { EditorModal } from "../../src/components/editor-modal";
+import {
+  EditorModal,
+  shouldHandleEditorModalKeyboardEvent,
+} from "../../src/components/editor-modal";
 import { editorModalIds } from "../../src/editor/editor-view-state";
 
 describe("editor reference information dialogs", () => {
@@ -51,3 +54,74 @@ describe("editor reference information dialogs", () => {
     );
   });
 });
+
+describe("editor modal keyboard event containment", () => {
+  it("handles a keyboard event from inside the outer modal", () => {
+    const containedTarget = {} as EventTarget;
+    const modalElement = createFakeModalElement(containedTarget);
+
+    expect(
+      shouldHandleEditorModalKeyboardEvent(modalElement, containedTarget),
+    ).toBe(true);
+  });
+
+  it("ignores a keyboard event from portalled content", () => {
+    const containedTarget = {} as EventTarget;
+    const portalledTarget = {} as EventTarget;
+    const modalElement = createFakeModalElement(containedTarget);
+
+    expect(
+      shouldHandleEditorModalKeyboardEvent(modalElement, portalledTarget),
+    ).toBe(false);
+  });
+
+  it("rejects a keyboard event without a target", () => {
+    const modalElement = createFakeModalElement({} as EventTarget);
+
+    expect(() =>
+      shouldHandleEditorModalKeyboardEvent(modalElement, null),
+    ).toThrow(/event target.*null/i);
+  });
+});
+
+describe("editor modal visual variants", () => {
+  it("adds the Save-only modal modifier without changing other dialogs", () => {
+    const saveModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "save-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        savePanelContent: createElement("p", null, "Save content"),
+        selectedMapId: "standard",
+      }),
+    );
+    const helpModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "help-info",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "standard",
+      }),
+    );
+
+    expect(saveModalMarkup).toContain(
+      'class="editor-modal editor-modal--save-panel"',
+    );
+    expect(helpModalMarkup).toContain('class="editor-modal"');
+    expect(helpModalMarkup).not.toContain("editor-modal--save-panel");
+  });
+});
+
+function createFakeModalElement(
+  containedTarget: EventTarget,
+): Pick<HTMLElement, "contains"> {
+  return {
+    contains(candidate: Node | null): boolean {
+      return (candidate as EventTarget | null) === containedTarget;
+    },
+  };
+}

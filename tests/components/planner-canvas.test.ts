@@ -1980,6 +1980,7 @@ describe("layered placement sprite rendering", () => {
     rotation = 0;
     scale = { x: 1 };
     tint = 0xffffff;
+    blendMode = "normal";
     zIndex = 0;
     anchor = {
       set: (...coordinates: number[]) => {
@@ -2063,7 +2064,7 @@ describe("layered placement sprite rendering", () => {
     expect(placementSprite.zIndex).toBe(7.5);
   });
 
-  it("keeps shadow layers out of selection tint", () => {
+  it("applies the selected visual to every selected layer and restores unselected custom tint", () => {
     const shadowSprite = createPlacementSprite(
       pixi,
       createLayerRenderEntry(false),
@@ -2082,7 +2083,7 @@ describe("layered placement sprite rendering", () => {
       16,
       true,
     ).sprite as unknown as TestLayerSprite;
-    const customTintTreeSprite = createPlacementSprite(
+    const unselectedCustomTintSprite = createPlacementSprite(
       pixi,
       { ...createLayerRenderEntry(true), tintColor: "#123456" },
       { source: {}, width: 16 } as import("pixi.js").Texture,
@@ -2092,9 +2093,12 @@ describe("layered placement sprite rendering", () => {
       false,
     ).sprite as unknown as TestLayerSprite;
 
-    expect(shadowSprite.tint).toBe(0xffffff);
+    expect(shadowSprite.tint).toBe(0xffdf4a);
     expect(treeSprite.tint).toBe(0xffdf4a);
-    expect(customTintTreeSprite.tint).toBe(0x123456);
+    expect(unselectedCustomTintSprite.tint).toBe(0x123456);
+    expect(shadowSprite.blendMode).toBe("add");
+    expect(treeSprite.blendMode).toBe("add");
+    expect(unselectedCustomTintSprite.blendMode).toBe("normal");
   });
 
   it("loads each resolved layer texture once", async () => {
@@ -2701,6 +2705,62 @@ describe("layered placement sprite rendering", () => {
     expect(ownedFrameTexture.destroyed).toBe(true);
   });
 
+  it("applies the selected visual to every real forage crop layer and restores it when unselected", () => {
+    const forageCropCatalogItem = {
+      id: "crop:495_18",
+      name: "Daffodil",
+      category: "crop" as const,
+      tileSize: { width: 1, height: 1 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
+      sprite: { kind: "sprite-index" as const, index: 23 },
+      allowedTools: ["cursor", "multi-select", "erase"] as const,
+      renderingMetadata: {
+        kind: "crop" as const,
+        fullyGrownRect: { kind: "source-rect" as const, x: 288, y: 0, width: 16, height: 16 },
+        tintColors: [],
+        hasForageShadow: true,
+      },
+    };
+    const forageCropRenderEntries = createPlacementRenderEntries({
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: forageCropCatalogItem.id, x: 2, y: 3 }],
+    }, [forageCropCatalogItem]);
+
+    class CropFrameTexture {
+      constructor(public readonly options: unknown) {}
+    }
+    class CropSprite extends TestLayerSprite {}
+    const cropPixi = {
+      Rectangle: class CropRectangle {},
+      Sprite: CropSprite,
+      Texture: CropFrameTexture,
+    } as unknown as typeof import("pixi.js");
+    const createCropSprites = (isSelected: boolean) => forageCropRenderEntries.map(
+      (renderEntry) => createPlacementSprite(
+        cropPixi,
+        renderEntry,
+        { source: {} } as import("pixi.js").Texture,
+        null,
+        16,
+        16,
+        isSelected,
+      ).sprite as unknown as CropSprite,
+    );
+    const selectedCropSprites = createCropSprites(true);
+    const unselectedCropSprites = createCropSprites(false);
+
+    expect(forageCropRenderEntries.map((renderEntry) => renderEntry.shouldApplySelectionTint))
+      .toEqual([false, false, undefined]);
+    expect(selectedCropSprites.map((placementSprite) => placementSprite.tint))
+      .toEqual([0xffdf4a, 0xffdf4a, 0xffdf4a]);
+    expect(selectedCropSprites.map((placementSprite) => placementSprite.blendMode))
+      .toEqual(["add", "add", "add"]);
+    expect(unselectedCropSprites.map((placementSprite) => placementSprite.tint))
+      .toEqual([0xffffff, 0xffffff, 0xffffff]);
+    expect(unselectedCropSprites.map((placementSprite) => placementSprite.blendMode))
+      .toEqual(["normal", "normal", "normal"]);
+  });
+
   it("shares one sprinkler texture and destroys selected base and attachment sprites", async () => {
     const catalogItem = {
       id: "object:621",
@@ -2809,7 +2869,13 @@ describe("layered placement sprite rendering", () => {
         (placementSprite) =>
           (placementSprite.sprite as unknown as SprinklerSprite).tint,
       ),
-    ).toEqual([0xffffff, 0xffdf4a, 0xffdf4a]);
+    ).toEqual([0xffdf4a, 0xffdf4a, 0xffdf4a]);
+    expect(
+      placementSprites.map(
+        (placementSprite) =>
+          (placementSprite.sprite as unknown as SprinklerSprite).blendMode,
+      ),
+    ).toEqual(["add", "add", "add"]);
     expect(
       (placementSprites[2]?.sprite as unknown as SprinklerSprite)
         .positionCoordinates,
@@ -2920,7 +2986,10 @@ describe("layered placement sprite rendering", () => {
     ]);
     expect(placementSprites.map((placementSprite) =>
       (placementSprite.sprite as unknown as WindowSprite).tint,
-    )).toEqual([0xffdf4a, 0xffffff]);
+    )).toEqual([0xffdf4a, 0xffdf4a]);
+    expect(placementSprites.map((placementSprite) =>
+      (placementSprite.sprite as unknown as WindowSprite).blendMode,
+    )).toEqual(["add", "add"]);
     expect((placementSprites[1]?.sprite as unknown as WindowSprite).positionCoordinates)
       .toEqual([24, 48]);
     expect((placementSprites[1]?.sprite as unknown as WindowSprite).anchorCoordinates)
@@ -3053,6 +3122,95 @@ describe("layered placement sprite rendering", () => {
       .toBe(true);
   });
 
+  it("keeps the selected real fireplace body, flames, and glow golden through animation updates", () => {
+    const fireplaceCatalogItem = {
+      id: "furniture_1792",
+      name: "Fireplace",
+      category: "placeable" as const,
+      tileSize: { width: 2, height: 1 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/furniture.png",
+      sprite: { kind: "source-rect" as const, x: 0, y: 0, width: 32, height: 16 },
+      allowedTools: ["cursor", "multi-select", "erase"] as const,
+      furnitureFire: { kind: "fireplace" as const },
+    };
+    const fireplaceRenderEntries = createPlacementRenderEntries({
+      ...createEmptyPlacementSnapshot(),
+      items: [{
+        instanceId: 77,
+        itemId: fireplaceCatalogItem.id,
+        x: 2,
+        y: 3,
+        layer: "item" as const,
+        rotation: 0,
+        footprint: { width: 2, height: 1 },
+        variant: 0,
+        tintColor: "#ffffff",
+        locked: false,
+        isRug: false,
+        isGrass: false,
+        isTable: false,
+        isLongTable: false,
+        flipped: false,
+        bedType: null,
+      }],
+      nextItemId: 78,
+    }, [fireplaceCatalogItem]);
+
+    class FireplaceFrameTexture {
+      constructor(public readonly options: unknown) {}
+    }
+    class FireplaceSprite extends TestLayerSprite {
+      texture: unknown;
+      scale = {
+        x: 1,
+        y: 1,
+        set: (nextScale: number) => {
+          this.scale.x = nextScale;
+          this.scale.y = nextScale;
+        },
+      };
+      constructor(input: Readonly<{ texture: unknown }>) {
+        super();
+        this.texture = input.texture;
+      }
+    }
+    const fireplacePixi = {
+      Rectangle: class FireplaceRectangle {},
+      Sprite: FireplaceSprite,
+      Texture: FireplaceFrameTexture,
+    } as unknown as typeof import("pixi.js");
+    const fireplaceSprites = fireplaceRenderEntries.map((renderEntry) =>
+      createPlacementSprite(
+        fireplacePixi,
+        renderEntry,
+        { source: {} } as import("pixi.js").Texture,
+        null,
+        16,
+        16,
+        true,
+      ),
+    );
+
+    expect(fireplaceRenderEntries.map((renderEntry) => renderEntry.shouldApplySelectionTint))
+      .toEqual([undefined, false, false, false]);
+    expect(fireplaceSprites.map((placementSprite) =>
+      (placementSprite.sprite as unknown as FireplaceSprite).tint,
+    )).toEqual([0xffdf4a, 0xffdf4a, 0xffdf4a, 0xffdf4a]);
+    expect(fireplaceSprites.map((placementSprite) =>
+      (placementSprite.sprite as unknown as FireplaceSprite).blendMode,
+    )).toEqual(["add", "add", "add", "add"]);
+
+    for (const placementSprite of fireplaceSprites) {
+      placementSprite.animation?.update(1_000);
+    }
+    expect(fireplaceSprites.map((placementSprite) =>
+      (placementSprite.sprite as unknown as FireplaceSprite).tint,
+    )).toEqual([0xffdf4a, 0xffdf4a, 0xffdf4a, 0xffdf4a]);
+    expect(fireplaceSprites.map((placementSprite) =>
+      (placementSprite.sprite as unknown as FireplaceSprite).blendMode,
+    )).toEqual(["add", "add", "add", "add"]);
+  });
+
   it("loads one chest texture and destroys all three chest layer frames", async () => {
     const chestCatalogItem = {
       id: "big-craftable:130",
@@ -3108,7 +3266,8 @@ describe("layered placement sprite rendering", () => {
 
     expect(requestedTexturePaths).toEqual(["/game-assets/1.6.15/sprites/craftables.png"]);
     expect(chestPlacementSprites).toHaveLength(3);
-    expect(chestPlacementSprites.map((placementSprite) => (placementSprite.sprite as unknown as ChestSprite).tint)).toEqual([0x123abc, 0xffffff, 0xffffff]);
+    expect(chestPlacementSprites.map((placementSprite) => (placementSprite.sprite as unknown as ChestSprite).tint)).toEqual([0xffdf4a, 0xffdf4a, 0xffdf4a]);
+    expect(chestPlacementSprites.map((placementSprite) => (placementSprite.sprite as unknown as ChestSprite).blendMode)).toEqual(["add", "add", "add"]);
     destroyPlacementSprites(chestPlacementSprites);
     expect(chestPlacementSprites.map((placementSprite) => (placementSprite.sprite as unknown as ChestSprite).destroyed)).toEqual([true, true, true]);
     expect(chestPlacementSprites.map((placementSprite) => (placementSprite.frameTexture as unknown as ChestFrameTexture).destroyed)).toEqual([true, true, true]);

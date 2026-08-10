@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import {
+  downloadBrowserFile,
+  type BrowserFileDownload,
+  isBrowserFileDownloadError,
+} from "../projects/browser-file-download";
+import {
   createMapImageDownloadFile,
   MapImageExportError,
   type ScreenshotResolution,
@@ -11,6 +16,16 @@ import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 type MapImageExportPanelProperties = Readonly<{
   mapFile: string;
   onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
+  season: TilesheetSeason;
+}>;
+
+type MapImageFileDownloader = (file: BrowserFileDownload) => void;
+
+export type MapImageScreenshotExportRequest = Readonly<{
+  downloadFile?: MapImageFileDownloader;
+  mapFile: string;
+  onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
+  resolution: ScreenshotResolution;
   season: TilesheetSeason;
 }>;
 
@@ -27,15 +42,12 @@ export function MapImageExportPanel({
   ): Promise<void> {
     try {
       setIsExporting(true);
-      const screenshotBlob = await onCaptureScreenshot(resolution);
-      assertPngScreenshotBlob(screenshotBlob);
-      const mapImageDownloadFile = createMapImageDownloadFile({
-        dateStamp: new Date().toISOString().slice(0, 10),
+      await exportMapImageScreenshot({
         mapFile,
+        onCaptureScreenshot,
+        resolution,
         season,
       });
-
-      downloadMapImage(screenshotBlob, mapImageDownloadFile.filename);
       setExportErrorMessage(null);
     } catch (caughtError) {
       setExportErrorMessage(formatMapImageExportError(caughtError));
@@ -74,6 +86,27 @@ export function MapImageExportPanel({
   );
 }
 
+export async function exportMapImageScreenshot({
+  downloadFile = downloadBrowserFile,
+  mapFile,
+  onCaptureScreenshot,
+  resolution,
+  season,
+}: MapImageScreenshotExportRequest): Promise<void> {
+  const screenshotBlob = await onCaptureScreenshot(resolution);
+  assertPngScreenshotBlob(screenshotBlob);
+  const mapImageDownloadFile = createMapImageDownloadFile({
+    dateStamp: new Date().toISOString().slice(0, 10),
+    mapFile,
+    season,
+  });
+
+  downloadFile({
+    blob: screenshotBlob,
+    filename: mapImageDownloadFile.filename,
+  });
+}
+
 function assertPngScreenshotBlob(screenshotBlob: Blob): void {
   if (!(screenshotBlob instanceof Blob)) {
     throw new MapImageExportError(
@@ -88,33 +121,11 @@ function assertPngScreenshotBlob(screenshotBlob: Blob): void {
   }
 }
 
-function downloadMapImage(screenshotBlob: Blob, filename: string): void {
-  if (typeof document === "undefined") {
-    throw new MapImageExportError(
-      `Cannot download map screenshot ${JSON.stringify(filename)} without a browser document.`,
-    );
-  }
-
-  if (typeof URL.createObjectURL !== "function") {
-    throw new MapImageExportError(
-      `Cannot download map screenshot ${JSON.stringify(filename)} because URL.createObjectURL is unavailable.`,
-    );
-  }
-
-  const screenshotUrl = URL.createObjectURL(screenshotBlob);
-  const screenshotLink = document.createElement("a");
-
-  screenshotLink.download = filename;
-  screenshotLink.href = screenshotUrl;
-  screenshotLink.style.display = "none";
-  document.body.append(screenshotLink);
-  screenshotLink.click();
-  screenshotLink.remove();
-  window.setTimeout(() => URL.revokeObjectURL(screenshotUrl), 0);
-}
-
 export function formatMapImageExportError(caughtError: unknown): string {
-  if (caughtError instanceof MapImageExportError) {
+  if (
+    caughtError instanceof MapImageExportError ||
+    isBrowserFileDownloadError(caughtError)
+  ) {
     return `Screenshot export failed: ${caughtError.message}`;
   }
 

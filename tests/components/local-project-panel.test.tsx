@@ -3,7 +3,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { LocalProjectPanel } from "../../src/components/local-project-panel";
+import {
+  formatLocalProjectUpdatedAt,
+  LocalProjectPanel,
+} from "../../src/components/local-project-panel";
 import type {
   ReferenceProjectSummary,
 } from "../../src/reference-runtime/reference-project-repository";
@@ -53,7 +56,10 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain("Winter Layout");
     expect(panelMarkup).toContain("2 maps");
     expect(panelMarkup).toContain("Stored in this browser.");
-    expect(panelMarkup).toContain("2026-07-26T01:00:00.000Z");
+    expect(panelMarkup).toContain(
+      formatLocalProjectUpdatedAt("2026-07-26T01:00:00.000Z"),
+    );
+    expect(panelMarkup).not.toContain("2026-07-26T01:00:00.000Z");
     expect(panelMarkup).not.toMatch(/\baccount\b/i);
     expect(panelMarkup).toContain('type="file"');
     expect(panelMarkup).toContain('accept="application/json,.json"');
@@ -129,18 +135,19 @@ describe("local project panel", () => {
     expect(panelMarkup).not.toContain("Saving creates an Untitled Project.");
   });
 
-  it("keeps the delete dialog source and confirmation button order", () => {
-    const panelSource = readFileSync(
-      resolve(process.cwd(), "src/components/local-project-panel.tsx"),
-      "utf8",
-    );
+  it("formats stored timestamps for people instead of exposing the raw ISO value", () => {
+    const rawUpdatedAt = "2026-08-10T12:00:00.000Z";
+    const formattedUpdatedAt = formatLocalProjectUpdatedAt(rawUpdatedAt);
 
-    expect(panelSource).toContain('className="local-project-panel__delete-dialog"');
-    expectTextInOrder(panelSource, [
-      '<h3 id="delete-local-project-heading">Delete local project?</h3>',
-      "Delete project",
-      "Keep project",
-    ]);
+    expect(formattedUpdatedAt).toContain("2026");
+    expect(formattedUpdatedAt).not.toBe(rawUpdatedAt);
+    expect(formattedUpdatedAt).not.toContain("T12:00:00.000Z");
+  });
+
+  it("rejects an invalid stored timestamp with the offending value", () => {
+    expect(() => formatLocalProjectUpdatedAt("not-a-date")).toThrow(
+      /not-a-date/,
+    );
   });
 
   it("resets the exact selected import input in a finally block", () => {

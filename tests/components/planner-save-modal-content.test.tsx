@@ -59,5 +59,18 @@ describe("planner save modal content", () => {
     expect(markup).toContain("Save thumbnail");
     expect(markup).toContain("Forest Farm");
     expect(markup).toContain("Forest Layout");
+    expect(markup.startsWith('<div class="planner-save-modal-content">')).toBe(
+      true,
+    );
+    expect(
+      markup.match(/class="planner-save-modal-content__exports"/g),
+    ).toHaveLength(1);
+
+    const exportsMarkup = markup.match(
+      /<div class="planner-save-modal-content__exports">([\s\S]+)<\/div><\/div>$/,
+    )?.[1];
+
+    expect(exportsMarkup).toContain('aria-label="Export"');
+    expect(exportsMarkup).toContain('aria-label="Thumbnail"');
   });
 });

@@ -1,10 +1,18 @@
+import { readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
+  exportMapImageScreenshot,
   formatMapImageExportError,
   MapImageExportPanel,
 } from "../../src/components/map-image-export-panel";
+import {
+  downloadBrowserFile,
+  isBrowserFileDownloadError,
+  type BrowserFileDownload,
+  type BrowserFileDownloadPlatform,
+} from "../../src/projects/browser-file-download";
 import { MapImageExportError } from "../../src/projects/map-image-export";
 
 describe("map image export panel", () => {
@@ -24,12 +32,108 @@ describe("map image export panel", () => {
     expect(markup).toContain('title="2x resolution, higher quality"');
   });
 
-  it("shows known screenshot export errors and rethrows unknown failures", () => {
+  it("keeps the screenshot export error container as a role alert", () => {
+    const componentSource = readFileSync(
+      new URL("../../src/components/map-image-export-panel.tsx", import.meta.url),
+      "utf8",
+    );
+
+    expect(componentSource).toContain('role="alert"');
+  });
+
+  it("formats a real browser download capability failure for the alert container", async () => {
     expect(
       formatMapImageExportError(new MapImageExportError("Map is loading.")),
     ).toBe("Screenshot export failed: Map is loading.");
-    expect(() => formatMapImageExportError(new Error("Unexpected Pixi fault."))).toThrow(
-      "Unexpected Pixi fault.",
+
+    let capturedResolution: number | null = null;
+    const browserDownloadError = await getRejectedPromiseError(
+      exportMapImageScreenshot({
+        mapFile: "Farm.tmx",
+        onCaptureScreenshot: async (resolution) => {
+          capturedResolution = resolution;
+          return new Blob(["png"], { type: "image/png" });
+        },
+        resolution: 1,
+        season: "spring",
+      }),
+    );
+
+    expect(capturedResolution).toBe(1);
+    expect(isBrowserFileDownloadError(browserDownloadError)).toBe(true);
+    expect(formatMapImageExportError(browserDownloadError)).toContain(
+      "Browser file download platform requires document",
+    );
+    expect(formatMapImageExportError(browserDownloadError)).toMatch(
+      /Farm_spring_\d{4}-\d{2}-\d{2}\.png/,
     );
   });
+
+  it("rethrows the original screenshot capture failure", async () => {
+    const screenshotCaptureError = new Error("Unexpected screenshot capture fault.");
+
+    await expect(
+      exportMapImageScreenshot({
+        mapFile: "Farm.tmx",
+        onCaptureScreenshot: async () => {
+          throw screenshotCaptureError;
+        },
+        resolution: 1,
+        season: "spring",
+      }),
+    ).rejects.toBe(screenshotCaptureError);
+  });
+
+  it("rethrows the original anchor click failure from the injected downloader", async () => {
+    const anchorClickError = new Error("Unexpected anchor click fault.");
+    const platform = createAnchorClickFailurePlatform(anchorClickError);
+    const downloadFile = (file: BrowserFileDownload): void => {
+      downloadBrowserFile(file, platform);
+    };
+
+    await expect(
+      exportMapImageScreenshot({
+        downloadFile,
+        mapFile: "Farm.tmx",
+        onCaptureScreenshot: async () => new Blob(["png"], { type: "image/png" }),
+        resolution: 2,
+        season: "spring",
+      }),
+    ).rejects.toBe(anchorClickError);
+    expect(isBrowserFileDownloadError(anchorClickError)).toBe(false);
+  });
 });
+
+function createAnchorClickFailurePlatform(
+  anchorClickError: Error,
+): BrowserFileDownloadPlatform {
+  return {
+    appendDownloadAnchor(): void {},
+    createDownloadAnchor() {
+      return {
+        download: "",
+        href: "",
+        style: { display: "" },
+        click(): void {
+          throw anchorClickError;
+        },
+        remove(): void {},
+      };
+    },
+    createObjectUrl(): string {
+      return "blob:map-image";
+    },
+    revokeObjectUrl(): void {},
+    schedule(): void {},
+  };
+}
+
+async function getRejectedPromiseError(promise: Promise<void>): Promise<unknown> {
+  try {
+    await promise;
+  } catch (caughtError) {
+    return caughtError;
+  }
+
+  throw new Error("Expected map image screenshot export to reject.");
+}

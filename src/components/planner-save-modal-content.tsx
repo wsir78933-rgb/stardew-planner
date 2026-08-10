@@ -71,7 +71,7 @@ export function PlannerSaveModalContent({
   }
 
   return (
-    <>
+    <div className="planner-save-modal-content">
       <LocalProjectPanel
         currentProjectId={currentProjectId}
         currentProjectMapInstanceCount={currentProjectMapInstanceCount}
@@ -89,32 +89,34 @@ export function PlannerSaveModalContent({
         storageErrorMessage={storageErrorMessage}
         storageStatus={storageStatus}
       />
-      <MapImageExportPanel
-        mapFile={mapFile}
-        onCaptureScreenshot={onCaptureScreenshot}
-        season={season}
-      />
-      <section aria-label="Thumbnail" className="map-image-export-panel">
-        <h3>Thumbnail</h3>
-        <div className="map-image-export-panel__actions">
-          <button onClick={() => void handleSaveThumbnail()} type="button">
-            Save thumbnail
-          </button>
-        </div>
-        {thumbnailActionState !== null ? (
-          <p
-            className={
-              thumbnailActionState.kind === "error"
-                ? "local-project-panel__error"
-                : "local-project-panel__message"
-            }
-            role={thumbnailActionState.kind === "error" ? "alert" : "status"}
-          >
-            {thumbnailActionState.message}
-          </p>
-        ) : null}
-      </section>
-    </>
+      <div className="planner-save-modal-content__exports">
+        <MapImageExportPanel
+          mapFile={mapFile}
+          onCaptureScreenshot={onCaptureScreenshot}
+          season={season}
+        />
+        <section aria-label="Thumbnail" className="map-image-export-panel">
+          <h3>Thumbnail</h3>
+          <div className="map-image-export-panel__actions">
+            <button onClick={() => void handleSaveThumbnail()} type="button">
+              Save thumbnail
+            </button>
+          </div>
+          {thumbnailActionState !== null ? (
+            <p
+              className={
+                thumbnailActionState.kind === "error"
+                  ? "local-project-panel__error"
+                  : "local-project-panel__message"
+              }
+              role={thumbnailActionState.kind === "error" ? "alert" : "status"}
+            >
+              {thumbnailActionState.message}
+            </p>
+          ) : null}
+        </section>
+      </div>
+    </div>
   );
 }
 
