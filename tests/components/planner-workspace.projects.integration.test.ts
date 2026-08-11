@@ -18,9 +18,619 @@ import {
 } from "../../src/planner/planner-workspace-state";
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
 import type { ReferenceOpenMapSession } from "../../src/reference-runtime/reference-project-editor-adapter";
-import type { ReferenceProjectWorkspaceState } from "../../src/reference-runtime/use-reference-project-workspace";
+import {
+  createReferenceProjectRepository,
+} from "../../src/reference-runtime/reference-project-repository";
+import {
+  createReferenceProjectWorkspaceController,
+  type ReferenceProjectWorkspaceState,
+} from "../../src/reference-runtime/use-reference-project-workspace";
 
 describe("planner workspace project composition", () => {
+  it("creates and saves the current unsaved map in one Untitled Project", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      createIdentifier: (() => {
+        let nextIdentifier = 0;
+        return () => `smart-save-id-${String(++nextIdentifier)}`;
+      })(),
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{ buildingId: "building:Barn", instanceId: 1, x: 8, y: 12 }],
+      crops: [{ cropId: "crop:24", x: 2, y: 4 }],
+      items: [{
+        bedType: null,
+        flipped: false,
+        footprint: { height: 1, width: 1 },
+        instanceId: 1,
+        isGrass: false,
+        isLongTable: false,
+        isRug: false,
+        isTable: false,
+        itemId: "placeable:Chest",
+        layer: "item" as const,
+        locked: false,
+        rotation: 0,
+        tintColor: "#ffffff",
+        variant: 0,
+        x: 3,
+        y: 5,
+      }],
+      nextBuildingId: 2,
+      nextItemId: 2,
+    };
+    const plannerWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      {
+        placementSnapshot,
+        plannerMapId: "standard",
+        season: "summer",
+        type: "open-unsaved-imported-map",
+      },
+    );
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: vi.fn(),
+      initialPlannerWorkspaceState: plannerWorkspaceState,
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController,
+    });
+
+    persistenceRuntime.saveCurrentMap();
+
+    const savedWorkspaceState = workspaceController.getState();
+    expect(savedWorkspaceState.projectSummaries).toHaveLength(1);
+    expect(savedWorkspaceState.activeProject?.title).toBe("Untitled Project");
+    expect(savedWorkspaceState.activeProject?.project.maps).toHaveLength(1);
+    expect(savedWorkspaceState.activeSession?.sourceMap).toMatchObject({
+      label: "Standard Farm",
+      mapFile: "Farm.tmx",
+      season: "summer",
+    });
+    const savedProjectId = savedWorkspaceState.activeProject?.id;
+    if (savedProjectId === undefined) {
+      throw new Error("Expected the one-click save to create a project ID.");
+    }
+    const exportedProject = JSON.parse(workspaceController.exportProject(savedProjectId));
+    expect(exportedProject.projects).toHaveLength(1);
+    expect(exportedProject.projects[0].project.maps).toHaveLength(1);
+    expect(exportedProject.projects[0].project.maps[0]).toMatchObject({
+      label: "Standard Farm",
+      mapFile: "Farm.tmx",
+      season: "summer",
+      state: {
+        buildings: [{ buildingId: "building:Barn", instanceId: "b1", x: 8, y: 12 }],
+        crops: [{ cropId: "crop:24", x: 2, y: 4 }],
+        items: [{
+          instanceId: "i1",
+          itemId: "placeable:Chest",
+          layer: "item",
+          x: 3,
+          y: 5,
+        }],
+      },
+    });
+  });
+
+  it("reuses an active empty project when saving the current unsaved map", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    workspaceController.createProject({
+      projectName: "Existing Empty Project",
+      season: "fall",
+    });
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: vi.fn(),
+      initialPlannerWorkspaceState: reducePlannerWorkspaceState(
+        createInitialPlannerWorkspaceState(),
+        {
+          placementSnapshot: createEmptyPlacementSnapshot(),
+          plannerMapId: "standard",
+          season: "fall",
+          type: "open-unsaved-imported-map",
+        },
+      ),
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController,
+    });
+
+    persistenceRuntime.saveCurrentMap();
+
+    const savedWorkspaceState = workspaceController.getState();
+    expect(savedWorkspaceState.projectSummaries).toHaveLength(1);
+    expect(savedWorkspaceState.activeProject?.title).toBe("Existing Empty Project");
+    expect(savedWorkspaceState.activeProject?.project.maps).toHaveLength(1);
+  });
+
+  it("creates a Forest Farm map with its catalog file and label", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: vi.fn(),
+      initialPlannerWorkspaceState: reducePlannerWorkspaceState(
+        createInitialPlannerWorkspaceState(),
+        {
+          placementSnapshot: createEmptyPlacementSnapshot(),
+          plannerMapId: "forest",
+          season: "winter",
+          type: "open-unsaved-imported-map",
+        },
+      ),
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController,
+    });
+
+    persistenceRuntime.saveCurrentMap();
+
+    expect(workspaceController.getState().activeSession?.sourceMap).toMatchObject({
+      label: "Forest Farm",
+      mapFile: "Farm_Foraging.tmx",
+      season: "winter",
+    });
+  });
+
+  it("keeps a created empty project recoverable when map creation fails", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    const mapCreationError = new Error("Map creation failed.");
+    let shouldFailMapCreation = true;
+    const retryingWorkspaceController = {
+      ...workspaceController,
+      createMap: (input: Parameters<typeof workspaceController.createMap>[0]) => {
+        if (shouldFailMapCreation) {
+          shouldFailMapCreation = false;
+          throw mapCreationError;
+        }
+        workspaceController.createMap(input);
+      },
+    };
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: vi.fn(),
+      initialPlannerWorkspaceState: reducePlannerWorkspaceState(
+        createInitialPlannerWorkspaceState(),
+        {
+          placementSnapshot: createEmptyPlacementSnapshot(),
+          plannerMapId: "standard",
+          season: "spring",
+          type: "open-unsaved-imported-map",
+        },
+      ),
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController: retryingWorkspaceController,
+    });
+
+    expect(() => persistenceRuntime.saveCurrentMap()).toThrow(mapCreationError);
+    expect(workspaceController.getState().activeProject?.project.maps).toHaveLength(0);
+    expect(workspaceController.getState().projectSummaries).toHaveLength(1);
+
+    persistenceRuntime.saveCurrentMap();
+
+    expect(workspaceController.getState().projectSummaries).toHaveLength(1);
+    expect(workspaceController.getState().activeProject?.project.maps).toHaveLength(1);
+  });
+
+  it("keeps the local canvas and Save panel recoverable when the first map snapshot save fails", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    const snapshotSaveError = new Error("Snapshot save failed.");
+    let shouldFailSnapshotSave = true;
+    const retryingWorkspaceController = {
+      ...workspaceController,
+      saveOpenMap: (edits: Parameters<typeof workspaceController.saveOpenMap>[0]) => {
+        if (shouldFailSnapshotSave) {
+          shouldFailSnapshotSave = false;
+          throw snapshotSaveError;
+        }
+        workspaceController.saveOpenMap(edits);
+      },
+    };
+    const originalPlacementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 6, y: 8 }],
+    };
+    let plannerWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      {
+        placementSnapshot: originalPlacementSnapshot,
+        plannerMapId: "standard",
+        season: "spring",
+        type: "open-unsaved-imported-map",
+      },
+    );
+    plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, {
+      modalId: "save-panel",
+      type: "open-modal",
+    });
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: (action) => {
+        plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, action);
+      },
+      initialPlannerWorkspaceState: plannerWorkspaceState,
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController: retryingWorkspaceController,
+    });
+
+    expect(() => persistenceRuntime.saveCurrentMap()).toThrow(snapshotSaveError);
+    expect(workspaceController.getState().projectSummaries).toHaveLength(1);
+    expect(workspaceController.getState().activeProject?.project.maps).toHaveLength(1);
+
+    persistenceRuntime.updateWorkspaceSnapshot(
+      plannerWorkspaceState,
+      workspaceController.getState(),
+    );
+    persistenceRuntime.synchronizeCanonicalSession();
+
+    expect(plannerWorkspaceState.modalId).toBe("save-panel");
+    expect(plannerWorkspaceState.placementHistory.currentState).toEqual(
+      originalPlacementSnapshot,
+    );
+
+    persistenceRuntime.updateWorkspaceSnapshot(
+      plannerWorkspaceState,
+      workspaceController.getState(),
+    );
+    persistenceRuntime.saveCurrentMap();
+
+    const savedProjectId = workspaceController.getState().activeProject?.id;
+    if (savedProjectId === undefined) {
+      throw new Error("Expected the recoverable save to retain its project ID.");
+    }
+    const savedProject = JSON.parse(workspaceController.exportProject(savedProjectId));
+    expect(savedProject.projects).toHaveLength(1);
+    expect(savedProject.projects[0].project.maps).toHaveLength(1);
+    expect(savedProject.projects[0].project.maps[0].state.crops).toEqual(
+      originalPlacementSnapshot.crops,
+    );
+  });
+
+  it("retries a created map snapshot save before canonical synchronization without duplication", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    const snapshotSaveError = new Error("Snapshot save failed before synchronization.");
+    let shouldFailSnapshotSave = true;
+    const retryingWorkspaceController = {
+      ...workspaceController,
+      saveOpenMap: (edits: Parameters<typeof workspaceController.saveOpenMap>[0]) => {
+        if (shouldFailSnapshotSave) {
+          shouldFailSnapshotSave = false;
+          throw snapshotSaveError;
+        }
+        workspaceController.saveOpenMap(edits);
+      },
+    };
+    const originalPlacementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 3, y: 7 }],
+    };
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: vi.fn(),
+      initialPlannerWorkspaceState: reducePlannerWorkspaceState(
+        createInitialPlannerWorkspaceState(),
+        {
+          placementSnapshot: originalPlacementSnapshot,
+          plannerMapId: "standard",
+          season: "spring",
+          type: "open-unsaved-imported-map",
+        },
+      ),
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController: retryingWorkspaceController,
+    });
+
+    expect(() => persistenceRuntime.saveCurrentMap()).toThrow(snapshotSaveError);
+    persistenceRuntime.saveCurrentMap();
+
+    const savedProjectId = workspaceController.getState().activeProject?.id;
+    if (savedProjectId === undefined) {
+      throw new Error("Expected the immediate retry to retain its project ID.");
+    }
+    const savedProject = JSON.parse(workspaceController.exportProject(savedProjectId));
+    expect(savedProject.projects).toHaveLength(1);
+    expect(savedProject.projects[0].project.maps).toHaveLength(1);
+    expect(savedProject.projects[0].project.maps[0].state.crops).toEqual(
+      originalPlacementSnapshot.crops,
+    );
+  });
+
+  it("fails before synchronizing a pending smart save into a different active map", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    const snapshotSaveError = new Error("Snapshot save failed before map switch.");
+    const retryingWorkspaceController = {
+      ...workspaceController,
+      saveOpenMap: () => {
+        throw snapshotSaveError;
+      },
+    };
+    const originalPlacementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 4, y: 6 }],
+    };
+    let plannerWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      {
+        placementSnapshot: originalPlacementSnapshot,
+        plannerMapId: "standard",
+        season: "spring",
+        type: "open-unsaved-imported-map",
+      },
+    );
+    plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, {
+      modalId: "save-panel",
+      type: "open-modal",
+    });
+    const dispatchPlannerWorkspaceAction = vi.fn((action) => {
+      plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, action);
+    });
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction,
+      initialPlannerWorkspaceState: plannerWorkspaceState,
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController: retryingWorkspaceController,
+    });
+
+    expect(() => persistenceRuntime.saveCurrentMap()).toThrow(snapshotSaveError);
+    const pendingProjectId = workspaceController.getState().activeProject?.id;
+    if (pendingProjectId === undefined) {
+      throw new Error("Expected the failed smart save to create its project ID.");
+    }
+    workspaceController.createProject({
+      projectName: "Different Project",
+      season: "summer",
+    });
+    const differentProjectIdForMapCreation = workspaceController.getState().activeProject?.id;
+    if (differentProjectIdForMapCreation === undefined) {
+      throw new Error("Expected setup to create a project before creating its map.");
+    }
+    workspaceController.createMap({
+      label: "Standard Farm",
+      mapFile: "Farm.tmx",
+      projectId: differentProjectIdForMapCreation,
+      season: "summer",
+    });
+    const differentProjectState = workspaceController.getState();
+    const differentProjectId = differentProjectState.activeProject?.id;
+    const differentMapId = differentProjectState.activeSession?.mapId;
+    if (differentProjectId === undefined || differentMapId === undefined) {
+      throw new Error("Expected setup to create an active project and map to switch to.");
+    }
+
+    persistenceRuntime.updateWorkspaceSnapshot(
+      plannerWorkspaceState,
+      differentProjectState,
+    );
+
+    expect(() => persistenceRuntime.synchronizeCanonicalSession()).toThrow(
+      new RegExp(
+        `Received project ID ${JSON.stringify(differentProjectId)}, map ID ${JSON.stringify(differentMapId)}, and planner map ID "standard"`,
+      ),
+    );
+    expect(dispatchPlannerWorkspaceAction).not.toHaveBeenCalled();
+
+    workspaceController.openProject(pendingProjectId);
+    persistenceRuntime.updateWorkspaceSnapshot(
+      plannerWorkspaceState,
+      workspaceController.getState(),
+    );
+    persistenceRuntime.synchronizeCanonicalSession();
+
+    expect(dispatchPlannerWorkspaceAction).toHaveBeenCalledTimes(1);
+    expect(plannerWorkspaceState.modalId).toBe("save-panel");
+    expect(plannerWorkspaceState.placementHistory.currentState).toEqual(
+      originalPlacementSnapshot,
+    );
+  });
+
+  it("fails before overwriting a non-canonical active project map", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    workspaceController.createProject({
+      projectName: "Existing Project",
+      season: "spring",
+    });
+    const existingProjectId = workspaceController.getState().activeProject?.id;
+    if (existingProjectId === undefined) {
+      throw new Error("Expected setup to create an existing project ID.");
+    }
+    workspaceController.createMap({
+      label: "Standard Farm",
+      mapFile: "Farm.tmx",
+      projectId: existingProjectId,
+      season: "spring",
+    });
+    const existingProjectExport = workspaceController.exportProject(existingProjectId);
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: vi.fn(),
+      initialPlannerWorkspaceState: reducePlannerWorkspaceState(
+        createInitialPlannerWorkspaceState(),
+        {
+          placementSnapshot: {
+            ...createEmptyPlacementSnapshot(),
+            crops: [{ cropId: "crop:24", x: 9, y: 9 }],
+          },
+          plannerMapId: "forest",
+          season: "summer",
+          type: "open-unsaved-imported-map",
+        },
+      ),
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController,
+    });
+
+    expect(() => persistenceRuntime.saveCurrentMap()).toThrow(
+      /active project is not empty and without an active session/,
+    );
+
+    expect(workspaceController.exportProject(existingProjectId)).toBe(existingProjectExport);
+  });
+
+  it("updates the same map after canonical state synchronization", () => {
+    let serializedProjectDocument: string | null = null;
+    const repository = createReferenceProjectRepository({
+      now: () => "2026-08-01T00:00:00.000Z",
+      storage: {
+        getItem: () => serializedProjectDocument,
+        setItem: (_storageKey, nextSerializedProjectDocument) => {
+          serializedProjectDocument = nextSerializedProjectDocument;
+        },
+      },
+    });
+    const workspaceController = createReferenceProjectWorkspaceController({
+      initialProjectSummaries: repository.listProjects(),
+      repository,
+    });
+    let plannerWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      {
+        placementSnapshot: {
+          ...createEmptyPlacementSnapshot(),
+          crops: [{ cropId: "crop:24", x: 2, y: 4 }],
+        },
+        plannerMapId: "standard",
+        season: "spring",
+        type: "open-unsaved-imported-map",
+      },
+    );
+    plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, {
+      modalId: "save-panel",
+      type: "open-modal",
+    });
+    const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
+      dispatchPlannerWorkspaceAction: (action) => {
+        plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, action);
+      },
+      initialPlannerWorkspaceState: plannerWorkspaceState,
+      initialWorkspaceState: workspaceController.getState(),
+      workspaceController,
+    });
+
+    persistenceRuntime.saveCurrentMap();
+    persistenceRuntime.updateWorkspaceSnapshot(
+      plannerWorkspaceState,
+      workspaceController.getState(),
+    );
+    persistenceRuntime.synchronizeCanonicalSession();
+    expect(plannerWorkspaceState.modalId).toBe("save-panel");
+    plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, {
+      placementSnapshot: {
+        ...createEmptyPlacementSnapshot(),
+        crops: [{ cropId: "crop:24", x: 7, y: 9 }],
+      },
+      type: "reset-placement-history",
+    });
+    persistenceRuntime.updateWorkspaceSnapshot(
+      plannerWorkspaceState,
+      workspaceController.getState(),
+    );
+
+    persistenceRuntime.saveCurrentMap();
+
+    const savedProjectId = workspaceController.getState().activeProject?.id;
+    if (savedProjectId === undefined) {
+      throw new Error("Expected the synchronized map to retain its project ID.");
+    }
+    const savedProject = JSON.parse(workspaceController.exportProject(savedProjectId));
+    expect(savedProject.projects[0].project.maps).toHaveLength(1);
+    expect(savedProject.projects[0].project.maps[0].state.crops).toEqual([
+      { cropId: "crop:24", x: 7, y: 9 },
+    ]);
+  });
+
   it("keeps canonical and exporter identity across the actual persistence runtime lifecycle", async () => {
     let activeSession = createCanonicalSession();
     let plannerWorkspaceState = createCanonicalPlannerWorkspaceState();
@@ -31,25 +641,35 @@ describe("planner workspace project composition", () => {
         placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
       };
     });
+    const workspaceController = {
+      clearActiveProject: vi.fn(),
+      createMap: vi.fn(),
+      createProject: vi.fn(),
+      getState: () => ({
+        activeProject: null,
+        activeSession,
+        projectSummaries: [],
+      }),
+      getPlannerMapIdForMapFile: (mapFile: string) => {
+        if (mapFile === "Farm.tmx") return "standard";
+        if (mapFile === "Farm_Foraging.tmx") return "forest";
+        throw new Error(`Unexpected map file ${JSON.stringify(mapFile)}.`);
+      },
+      saveOpenMap,
+      saveThumbnail: vi.fn(),
+    };
     const persistenceRuntime = createPlannerWorkspacePersistenceRuntime({
       dispatchPlannerWorkspaceAction,
       initialPlannerWorkspaceState: plannerWorkspaceState,
       initialWorkspaceState: createCanonicalProjectWorkspaceState(activeSession),
-      workspaceController: {
-        clearActiveProject: vi.fn(),
-        getPlannerMapIdForMapFile: (mapFile) => {
-          if (mapFile === "Farm.tmx") return "standard";
-          if (mapFile === "Farm_Foraging.tmx") return "forest";
-          throw new Error(`Unexpected map file ${JSON.stringify(mapFile)}.`);
-        },
-        saveOpenMap,
-        saveThumbnail: vi.fn(),
-      },
+      workspaceController,
     });
 
     persistenceRuntime.synchronizeCanonicalSession();
     expect(dispatchPlannerWorkspaceAction).toHaveBeenCalledTimes(1);
     persistenceRuntime.saveCurrentMap();
+    expect(workspaceController.createProject).not.toHaveBeenCalled();
+    expect(workspaceController.createMap).not.toHaveBeenCalled();
     persistenceRuntime.updateWorkspaceSnapshot(
       plannerWorkspaceState,
       createCanonicalProjectWorkspaceState(activeSession),

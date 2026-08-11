@@ -98,6 +98,14 @@ export type PlannerWorkspaceAction =
       type: "open-canonical-map";
     }>
   | Readonly<{
+      activeMapId: string;
+      activeProjectId: string;
+      placementSnapshot: PlacementSnapshot;
+      plannerMapId: string;
+      season: TilesheetSeason;
+      type: "synchronize-smart-save-canonical-map";
+    }>
+  | Readonly<{
       placementSnapshot: PlacementSnapshot;
       plannerMapId: string;
       season: TilesheetSeason;
@@ -213,6 +221,8 @@ export function reducePlannerWorkspaceState(
         plannerWorkspaceAction.message,
       );
     case "open-canonical-map":
+      return openCanonicalMap(plannerWorkspaceState, plannerWorkspaceAction);
+    case "synchronize-smart-save-canonical-map":
       return openCanonicalMap(plannerWorkspaceState, plannerWorkspaceAction);
     case "open-unsaved-imported-map":
       return openUnsavedImportedMap(plannerWorkspaceState, plannerWorkspaceAction);
@@ -361,7 +371,10 @@ function completeRuntimeError(
 
 function openCanonicalMap(
   plannerWorkspaceState: PlannerWorkspaceState,
-  action: Extract<PlannerWorkspaceAction, { type: "open-canonical-map" }>,
+  action: Extract<
+    PlannerWorkspaceAction,
+    { type: "open-canonical-map" | "synchronize-smart-save-canonical-map" }
+  >,
 ): PlannerWorkspaceState {
   assertCanonicalMapIdentity(action.activeProjectId, action.activeMapId);
   const selectedPlannerMapState = selectEditorMap(
@@ -377,6 +390,11 @@ function openCanonicalMap(
     ...applyEditorViewState(plannerWorkspaceState, selectedSeasonState),
     activeMapId: action.activeMapId,
     activeProjectId: action.activeProjectId,
+    modalId:
+      action.type === "synchronize-smart-save-canonical-map"
+      && plannerWorkspaceState.modalId === "save-panel"
+        ? "save-panel"
+        : selectedSeasonState.modalId,
     placementHistory: createPlacementHistory(
       createPersistentPlacementSnapshot(action.placementSnapshot),
     ),

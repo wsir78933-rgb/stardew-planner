@@ -348,7 +348,7 @@ export function LocalProjectPanel({
       </ul>
       {projects.length === 0 ? (
         <p className="local-project-panel__message">
-          No local projects yet. Create a project to save this map here.
+          No local projects yet. Saving creates an Untitled Project and saves the current map.
         </p>
       ) : null}
       {projectPendingDeletion !== undefined ? (

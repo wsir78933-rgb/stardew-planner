@@ -413,7 +413,10 @@ describe("planner workspace state", () => {
       { type: "add-crop", crop: { cropId: "parsnip", x: 2, y: 3 } },
     );
     const workspaceState = {
-      ...createInitialPlannerWorkspaceState(),
+      ...reducePlannerWorkspaceState(createInitialPlannerWorkspaceState(), {
+        modalId: "save-panel",
+        type: "open-modal",
+      }),
       placementHistory: commitPlacementHistory(
         createInitialPlannerWorkspaceState().placementHistory,
         placementSnapshot,
@@ -437,6 +440,7 @@ describe("planner workspace state", () => {
       activeMapId: "map-instance-8",
       activeProjectId: "project-3",
       season: "summer",
+      modalId: null,
       selectedPlacementKeys: [],
       selectedPlannerMapId: "forest",
     });
@@ -445,6 +449,34 @@ describe("planner workspace state", () => {
       redoStates: [],
       undoStates: [],
     });
+  });
+
+  it("preserves only the save panel during smart-save canonical synchronization", () => {
+    const canonicalSynchronizationAction = {
+      activeMapId: "map-instance-8",
+      activeProjectId: "project-3",
+      placementSnapshot: createEmptyPlacementSnapshot(),
+      plannerMapId: "forest",
+      season: "summer",
+      type: "synchronize-smart-save-canonical-map",
+    } satisfies PlannerWorkspaceAction;
+    const savePanelWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      { modalId: "save-panel", type: "open-modal" },
+    );
+    const settingsPanelWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      { modalId: "settings-panel", type: "open-modal" },
+    );
+
+    expect(reducePlannerWorkspaceState(
+      savePanelWorkspaceState,
+      canonicalSynchronizationAction,
+    ).modalId).toBe("save-panel");
+    expect(reducePlannerWorkspaceState(
+      settingsPanelWorkspaceState,
+      canonicalSynchronizationAction,
+    ).modalId).toBeNull();
   });
 
   it("opens an unsaved imported map atomically without retaining canonical identity or redo history", () => {

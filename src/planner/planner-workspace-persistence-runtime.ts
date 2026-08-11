@@ -17,10 +17,14 @@ import {
 } from "./planner-workspace-map-image-exporter";
 import { saveCurrentCanonicalMapThumbnail } from "./planner-workspace-thumbnail-save";
 import type { PlannerWorkspaceAction, PlannerWorkspaceState } from "./planner-workspace-state";
+import { getPlannerMapById } from "../maps/map-catalog";
 
 type PlannerWorkspacePersistenceController = Pick<
   ReferenceProjectWorkspaceController,
   | "clearActiveProject"
+  | "createMap"
+  | "createProject"
+  | "getState"
   | "getPlannerMapIdForMapFile"
   | "saveOpenMap"
   | "saveThumbnail"
@@ -30,6 +34,16 @@ type PlannerWorkspacePersistenceProjectState = Pick<
   ReferenceProjectWorkspaceState,
   "activeSession"
 >;
+
+type PlannerWorkspaceMapSaveResult =
+  | "created-canonical-session"
+  | "saved-existing-canonical-session";
+
+type PendingSmartSaveCanonicalSession = Readonly<{
+  mapId: string;
+  plannerMapId: string;
+  projectId: string;
+}>;
 
 type PlannerWorkspacePersistenceRuntimeInput = Readonly<{
   dispatchPlannerWorkspaceAction: (plannerWorkspaceAction: PlannerWorkspaceAction) => void;
@@ -65,6 +79,8 @@ export function createPlannerWorkspacePersistenceRuntime({
   const currentMapImageExporterSlot = createCurrentMapImageExporterSlot();
   let currentPlannerWorkspaceState = initialPlannerWorkspaceState;
   let currentWorkspaceState = initialWorkspaceState;
+  let pendingSmartSaveCanonicalSession: PendingSmartSaveCanonicalSession | null = null;
+  let shouldPreserveSavePanelOnCanonicalSynchronization = false;
 
   function updateWorkspaceSnapshot(
     plannerWorkspaceState: PlannerWorkspaceState,
@@ -75,12 +91,33 @@ export function createPlannerWorkspacePersistenceRuntime({
   }
 
   function synchronizeCanonicalSession(): void {
+    if (pendingSmartSaveCanonicalSession !== null) {
+      requireMatchingPendingSmartSaveCanonicalSession({
+        pendingCanonicalSession: pendingSmartSaveCanonicalSession,
+        plannerWorkspaceState: currentPlannerWorkspaceState,
+        workspaceController,
+        workspaceState: workspaceController.getState(),
+      });
+    }
     const canonicalSessionAction = createCanonicalSessionTransition(
       currentWorkspaceState.activeSession,
       workspaceController,
       canonicalMapIdentityReference,
     );
     if (canonicalSessionAction !== null) {
+      if (shouldPreserveSavePanelOnCanonicalSynchronization) {
+        shouldPreserveSavePanelOnCanonicalSynchronization = false;
+        dispatchPlannerWorkspaceAction({
+          ...canonicalSessionAction,
+          placementSnapshot:
+            pendingSmartSaveCanonicalSession === null
+              ? canonicalSessionAction.placementSnapshot
+              : currentPlannerWorkspaceState.placementHistory.currentState,
+          type: "synchronize-smart-save-canonical-map",
+        });
+        pendingSmartSaveCanonicalSession = null;
+        return;
+      }
       dispatchPlannerWorkspaceAction(canonicalSessionAction);
     }
   }
@@ -125,11 +162,28 @@ export function createPlannerWorkspacePersistenceRuntime({
   }
 
   function saveCurrentMap(): void {
-    saveCurrentPlannerWorkspaceMap({
+    if (pendingSmartSaveCanonicalSession !== null) {
+      savePendingSmartSaveCanonicalSession({
+        pendingCanonicalSession: pendingSmartSaveCanonicalSession,
+        plannerWorkspaceState: currentPlannerWorkspaceState,
+        workspaceController,
+      });
+      pendingSmartSaveCanonicalSession = null;
+      shouldPreserveSavePanelOnCanonicalSynchronization = true;
+      return;
+    }
+    const saveResult = saveCurrentPlannerWorkspaceMapOrCreate({
+      onCreatedCanonicalSession: (createdCanonicalSession) => {
+        pendingSmartSaveCanonicalSession = createdCanonicalSession;
+        shouldPreserveSavePanelOnCanonicalSynchronization = true;
+      },
       plannerWorkspaceState: currentPlannerWorkspaceState,
       workspaceController,
       workspaceState: currentWorkspaceState,
     });
+    pendingSmartSaveCanonicalSession = null;
+    shouldPreserveSavePanelOnCanonicalSynchronization =
+      saveResult === "created-canonical-session";
   }
 
   async function saveThumbnail(): Promise<void> {
@@ -218,6 +272,198 @@ export function saveCurrentPlannerWorkspaceMap({
     placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
     season: plannerWorkspaceState.season,
   });
+}
+
+function saveCurrentPlannerWorkspaceMapOrCreate({
+  onCreatedCanonicalSession,
+  plannerWorkspaceState,
+  workspaceController,
+  workspaceState,
+}: Readonly<{
+  onCreatedCanonicalSession: (
+    createdCanonicalSession: PendingSmartSaveCanonicalSession,
+  ) => void;
+  plannerWorkspaceState: PlannerWorkspaceState;
+  workspaceController: PlannerWorkspacePersistenceController;
+  workspaceState: PlannerWorkspacePersistenceProjectState;
+}>): PlannerWorkspaceMapSaveResult {
+  const currentCanonicalSession = getCurrentCanonicalSession(
+    workspaceState.activeSession,
+    plannerWorkspaceState,
+    workspaceController,
+  );
+  if (currentCanonicalSession !== null) {
+    saveCurrentPlannerWorkspaceMap({
+      plannerWorkspaceState,
+      workspaceController,
+      workspaceState,
+    });
+    return "saved-existing-canonical-session";
+  }
+
+  createAndSaveCurrentPlannerWorkspaceMap({
+    onCreatedCanonicalSession,
+    plannerWorkspaceState,
+    workspaceController,
+  });
+  return "created-canonical-session";
+}
+
+function createAndSaveCurrentPlannerWorkspaceMap({
+  onCreatedCanonicalSession,
+  plannerWorkspaceState,
+  workspaceController,
+}: Readonly<{
+  onCreatedCanonicalSession: (
+    createdCanonicalSession: PendingSmartSaveCanonicalSession,
+  ) => void;
+  plannerWorkspaceState: PlannerWorkspaceState;
+  workspaceController: PlannerWorkspacePersistenceController;
+}>): void {
+  const projectForMapCreation = getOrCreateEmptyProjectForCurrentMap(
+    plannerWorkspaceState,
+    workspaceController,
+  );
+  const selectedPlannerMap = getPlannerMapById(
+    plannerWorkspaceState.selectedPlannerMapId,
+  );
+  workspaceController.createMap({
+    label: selectedPlannerMap.displayName,
+    mapFile: selectedPlannerMap.mapFile,
+    projectId: projectForMapCreation.id,
+    season: plannerWorkspaceState.season,
+  });
+  const createdCanonicalSession = requireCreatedCurrentMapSession(
+    workspaceController.getState(),
+    projectForMapCreation.id,
+    selectedPlannerMap.mapFile,
+    plannerWorkspaceState,
+  );
+  onCreatedCanonicalSession(createdCanonicalSession);
+  workspaceController.saveOpenMap({
+    placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
+    season: plannerWorkspaceState.season,
+  });
+}
+
+function getOrCreateEmptyProjectForCurrentMap(
+  plannerWorkspaceState: PlannerWorkspaceState,
+  workspaceController: PlannerWorkspacePersistenceController,
+) {
+  const workspaceStateBeforeCreation = workspaceController.getState();
+  if (workspaceStateBeforeCreation.activeProject === null) {
+    workspaceController.createProject({
+      projectName: "Untitled Project",
+      season: plannerWorkspaceState.season,
+    });
+  }
+  const workspaceStateForMapCreation = workspaceController.getState();
+  const activeProject = workspaceStateForMapCreation.activeProject;
+  if (
+    activeProject === null
+    || workspaceStateForMapCreation.activeSession !== null
+    || activeProject.project.maps.length !== 0
+  ) {
+    throw createSmartSaveStateError(
+      "Cannot create a map because the active project is not empty and without an active session",
+      workspaceStateForMapCreation,
+      plannerWorkspaceState,
+    );
+  }
+  return activeProject;
+}
+
+function requireCreatedCurrentMapSession(
+  workspaceState: ReferenceProjectWorkspaceState,
+  expectedProjectId: string,
+  expectedMapFile: string,
+  plannerWorkspaceState: PlannerWorkspaceState,
+): PendingSmartSaveCanonicalSession {
+  const activeSession = workspaceState.activeSession;
+  if (
+    workspaceState.activeProject?.id !== expectedProjectId
+    || activeSession === null
+    || activeSession.projectId !== expectedProjectId
+    || activeSession.sourceMap.mapFile !== expectedMapFile
+  ) {
+    throw createSmartSaveStateError(
+      "Cannot save the created map because the active session does not match the created project and selected planner map",
+      workspaceState,
+      plannerWorkspaceState,
+    );
+  }
+  return {
+    mapId: activeSession.mapId,
+    plannerMapId: plannerWorkspaceState.selectedPlannerMapId,
+    projectId: activeSession.projectId,
+  };
+}
+
+function savePendingSmartSaveCanonicalSession({
+  pendingCanonicalSession,
+  plannerWorkspaceState,
+  workspaceController,
+}: Readonly<{
+  pendingCanonicalSession: PendingSmartSaveCanonicalSession;
+  plannerWorkspaceState: PlannerWorkspaceState;
+  workspaceController: PlannerWorkspacePersistenceController;
+}>): void {
+  const currentWorkspaceState = workspaceController.getState();
+  requireMatchingPendingSmartSaveCanonicalSession({
+    pendingCanonicalSession,
+    plannerWorkspaceState,
+    workspaceController,
+    workspaceState: currentWorkspaceState,
+  });
+  workspaceController.saveOpenMap({
+    placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
+    season: plannerWorkspaceState.season,
+  });
+}
+
+function requireMatchingPendingSmartSaveCanonicalSession({
+  pendingCanonicalSession,
+  plannerWorkspaceState,
+  workspaceController,
+  workspaceState,
+}: Readonly<{
+  pendingCanonicalSession: PendingSmartSaveCanonicalSession;
+  plannerWorkspaceState: PlannerWorkspaceState;
+  workspaceController: Pick<
+    ReferenceProjectWorkspaceController,
+    "getPlannerMapIdForMapFile"
+  >;
+  workspaceState: ReferenceProjectWorkspaceState;
+}>): void {
+  const activeSession = workspaceState.activeSession;
+  if (
+    workspaceState.activeProject?.id !== pendingCanonicalSession.projectId
+    || activeSession === null
+    || activeSession.projectId !== pendingCanonicalSession.projectId
+    || activeSession.mapId !== pendingCanonicalSession.mapId
+    || workspaceController.getPlannerMapIdForMapFile(activeSession.sourceMap.mapFile)
+      !== pendingCanonicalSession.plannerMapId
+    || plannerWorkspaceState.selectedPlannerMapId
+      !== pendingCanonicalSession.plannerMapId
+  ) {
+    throw createSmartSaveStateError(
+      "Cannot use the unsaved created map because the active session no longer matches it",
+      workspaceState,
+      plannerWorkspaceState,
+    );
+  }
+}
+
+function createSmartSaveStateError(
+  message: string,
+  workspaceState: ReferenceProjectWorkspaceState,
+  plannerWorkspaceState: PlannerWorkspaceState,
+): Error {
+  return new Error(
+    `${message}. Received project ID ${JSON.stringify(workspaceState.activeProject?.id ?? null)}, `
+      + `map ID ${JSON.stringify(workspaceState.activeSession?.mapId ?? null)}, and planner map ID `
+      + `${JSON.stringify(plannerWorkspaceState.selectedPlannerMapId)}.`,
+  );
 }
 
 function createCurrentThumbnailWorkspaceSnapshot(

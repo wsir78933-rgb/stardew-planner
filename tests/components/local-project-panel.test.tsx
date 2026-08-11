@@ -112,7 +112,7 @@ describe("local project panel", () => {
     );
   });
 
-  it("does not claim that saving creates a project when no projects exist", () => {
+  it("explains that saving creates an Untitled Project when no projects exist", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(LocalProjectPanel, {
         currentProjectId: null,
@@ -131,8 +131,9 @@ describe("local project panel", () => {
       }),
     );
 
-    expect(panelMarkup).toContain("Create a project to save this map here.");
-    expect(panelMarkup).not.toContain("Saving creates an Untitled Project.");
+    expect(panelMarkup).toContain(
+      "Saving creates an Untitled Project and saves the current map.",
+    );
   });
 
   it("formats stored timestamps for people instead of exposing the raw ISO value", () => {
