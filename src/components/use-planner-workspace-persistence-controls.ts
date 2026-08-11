@@ -29,6 +29,7 @@ export function usePlannerWorkspacePersistenceControls({
   workspaceController,
   workspaceState,
 }: PlannerWorkspacePersistenceControlsInput): Readonly<{
+  captureCleanMapImage: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   captureScreenshot: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   handleMapChange: (plannerMapId: string) => void;
   handleMapImageExporterReady: (
@@ -65,6 +66,7 @@ export function usePlannerWorkspacePersistenceControls({
   }, [persistenceRuntime, plannerWorkspaceState.selectedPlannerMapId]);
 
   return {
+    captureCleanMapImage: persistenceRuntime.captureCleanMapImage,
     captureScreenshot: persistenceRuntime.captureScreenshot,
     handleMapChange: persistenceRuntime.handleMapChange,
     handleMapImageExporterReady: persistenceRuntime.handleMapImageExporterReady,

@@ -68,6 +68,17 @@ export function captureCurrentMapScreenshot(
   ).captureScreenshot(screenshotResolution);
 }
 
+export function captureCurrentCleanMapImage(
+  currentMapImageExporterSlot: CurrentMapImageExporterSlot,
+  currentPlannerMapId: string,
+  screenshotResolution: ScreenshotResolution,
+): Promise<Blob> {
+  return getCurrentMapImageExporter(
+    currentMapImageExporterSlot,
+    currentPlannerMapId,
+  ).captureCleanMapImage(screenshotResolution);
+}
+
 function assertPlannerMapId(plannerMapId: string, fieldName: string): void {
   if (typeof plannerMapId !== "string" || plannerMapId.length === 0) {
     throw new TypeError(
@@ -80,10 +91,11 @@ function assertMapImageExporter(mapImageExporter: MapImageExporter): void {
   if (
     typeof mapImageExporter !== "object"
     || mapImageExporter === null
+    || typeof mapImageExporter.captureCleanMapImage !== "function"
     || typeof mapImageExporter.captureScreenshot !== "function"
   ) {
     throw new TypeError(
-      `Current map image exporter must expose captureScreenshot; received ${JSON.stringify(mapImageExporter)}.`,
+      `Current map image exporter must expose captureCleanMapImage and captureScreenshot; received ${JSON.stringify(mapImageExporter)}.`,
     );
   }
 }

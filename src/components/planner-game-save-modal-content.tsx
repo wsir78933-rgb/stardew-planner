@@ -101,7 +101,11 @@ export function PlannerGameSaveModalContent({
     });
   }
 
-  return <GameSaveImportControl onImportGameSave={handleImportGameSave} />;
+  return (
+    <div className="planner-save-modal-content planner-save-modal-content--game-save">
+      <GameSaveImportControl onImportGameSave={handleImportGameSave} />
+    </div>
+  );
 }
 
 export function PlannerGameSaveImportResultContent({

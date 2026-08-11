@@ -3,6 +3,7 @@ import {
   clearMapImageExporter,
   createMapImageDownloadFile,
   screenshotResolutions,
+  type MapImageExporter,
 } from "../../src/projects/map-image-export";
 
 describe("map image export", () => {
@@ -47,10 +48,12 @@ describe("map image export", () => {
   });
 
   it("clears an obsolete map exporter before switching maps", () => {
+    const staleMapImageExporter: MapImageExporter = {
+      captureCleanMapImage: async () => new Blob(["clean png"], { type: "image/png" }),
+      captureScreenshot: async () => new Blob(["watermarked png"], { type: "image/png" }),
+    };
     const staleMapExporterReference = {
-      current: {
-        captureScreenshot: async () => new Blob(["png"], { type: "image/png" }),
-      },
+      current: staleMapImageExporter,
     };
 
     clearMapImageExporter(staleMapExporterReference);

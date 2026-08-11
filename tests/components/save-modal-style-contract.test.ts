@@ -42,6 +42,29 @@ describe("Save modal style contract", () => {
     expect(saveModalContentRule).toContain("background: var(--bg-deep)");
   });
 
+  it("scopes the game-save and farm-summary presentation to the editor shell", () => {
+    const requiredSelectors = [
+      ".planner-editor-shell .game-save-import-control",
+      ".planner-editor-shell .game-save-import-control__file-trigger",
+      ".planner-editor-shell .game-save-import-control__file-trigger input",
+      ".planner-editor-shell .farm-summary-panel",
+      ".planner-editor-shell .farm-summary-panel__preview",
+      ".planner-editor-shell .farm-summary-modal__groups",
+      ".planner-editor-shell .farm-summary-modal__footer",
+    ];
+
+    for (const requiredSelector of requiredSelectors) {
+      expect(globalStyles).toContain(requiredSelector);
+    }
+
+    const fileInputRule = globalStyles.match(
+      /\.planner-editor-shell \.game-save-import-control__file-trigger input\s*\{[^}]*\}/,
+    )?.[0];
+
+    expect(fileInputRule).toContain("opacity: 0");
+    expect(fileInputRule).toContain("position: absolute");
+  });
+
   it("keeps the Save responsive block isolated from workspace and homepage layout", () => {
     const saveResponsiveStyles = findCssBlockContaining(
       globalStyles,

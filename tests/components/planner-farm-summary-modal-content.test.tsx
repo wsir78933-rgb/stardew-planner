@@ -5,7 +5,7 @@ import { PlannerFarmSummaryModalContent } from "../../src/components/planner-far
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
 
 describe("planner farm-summary modal content", () => {
-  it("passes the current map, season, placement snapshot, and ready catalog to the summary panel", () => {
+  it("wraps the farm-summary panel and renders its inline preview", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerFarmSummaryModalContent, {
         catalogItems: [],
@@ -16,6 +16,13 @@ describe("planner farm-summary modal content", () => {
       }),
     );
 
-    expect(markup).toContain("Farm Summary");
+    expect(markup).toContain(
+      'class="planner-save-modal-content planner-save-modal-content--farm-summary"',
+    );
+    expect(markup).toContain("Map: Forest Farm");
+    expect(markup).toContain("Season: Winter");
+    expect(markup).toContain("0 items placed");
+    expect(markup).toContain("View detailed summary");
+    expect(markup).toContain("<button");
   });
 });

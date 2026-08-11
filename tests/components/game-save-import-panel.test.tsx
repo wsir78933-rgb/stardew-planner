@@ -6,10 +6,12 @@ import { describe, expect, it } from "vitest";
 import type { ImportedGameSaveState } from "../../src/game-save/game-save-import";
 import { GameSaveImportError } from "../../src/game-save/game-save-import";
 import {
+  createGameSaveImportTriggerLabel,
   formatGameSaveImportError,
   GameSaveImportControl,
   GameSaveImportResultModal,
 } from "../../src/components/game-save-import-panel";
+import { closeModalFromBackdropClick } from "../../src/components/modal-backdrop-close";
 
 const importedGameSaveState: ImportedGameSaveState = {
   farmName: "Junimo",
@@ -29,18 +31,60 @@ const importedGameSaveState: ImportedGameSaveState = {
 };
 
 describe("game save import panel", () => {
-  it("renders the source-shaped game-save file entry", () => {
+  it("calls onClose only when the import result click target is its backdrop", () => {
+    const backdropTarget = {} as EventTarget;
+    const dialogTarget = {} as EventTarget;
+    const nestedTarget = {} as EventTarget;
+    let closeCount = 0;
+    const onClose = (): void => {
+      closeCount += 1;
+    };
+
+    closeModalFromBackdropClick({
+      currentTarget: backdropTarget,
+      eventTarget: backdropTarget,
+      onClose,
+    });
+    expect(closeCount).toBe(1);
+
+    closeModalFromBackdropClick({
+      currentTarget: backdropTarget,
+      eventTarget: dialogTarget,
+      onClose,
+    });
+    expect(closeCount).toBe(1);
+
+    closeModalFromBackdropClick({
+      currentTarget: backdropTarget,
+      eventTarget: nestedTarget,
+      onClose,
+    });
+    expect(closeCount).toBe(1);
+  });
+
+  it("renders the save-file chooser with explanatory copy", () => {
     const markup = renderToStaticMarkup(
       createElement(GameSaveImportControl, {
         onImportGameSave: () => undefined,
       }),
     );
 
-    expect(markup).toContain("Import Game Save");
+    expect(markup).toContain(
+      "Choose a Stardew Valley save file to preview the farm in this planner.",
+    );
+    expect(markup).toContain("Choose save file");
     expect(markup).toContain(
       'title="Import a Stardew Valley save file to view your farm layout"',
     );
     expect(markup).toContain('accept="*"');
+    expect(markup).toContain('type="file"');
+  });
+
+  it("formats the default and pending save-file trigger labels", () => {
+    expect(createGameSaveImportTriggerLabel(null)).toBe("Choose save file");
+    expect(createGameSaveImportTriggerLabel("Farm_123456789")).toBe(
+      "Importing Farm_123456789…",
+    );
   });
 
   it("renders the import result without external feedback or account controls", () => {

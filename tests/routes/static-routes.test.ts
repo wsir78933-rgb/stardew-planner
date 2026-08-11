@@ -66,7 +66,7 @@ const expectedStaticHomepageFiles = [
   {
     staticPageFile: "zh.html",
     plannerHref: "#planner",
-    localizedHeadline: "适用于各种农场布局的",
+    localizedHeadline: "星露谷物语",
   },
 ] as const;
 

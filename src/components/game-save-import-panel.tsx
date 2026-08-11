@@ -5,6 +5,7 @@ import {
   GameSaveImportError,
   type ImportedGameSaveState,
 } from "../game-save/game-save-import";
+import { closeModalFromBackdropClick } from "./modal-backdrop-close";
 
 type GameSaveImportControlProperties = Readonly<{
   onImportGameSave: (serializedGameSave: string) => void;
@@ -19,6 +20,7 @@ export function GameSaveImportControl({
   onImportGameSave,
 }: GameSaveImportControlProperties) {
   const [importErrorMessage, setImportErrorMessage] = useState<string | null>(null);
+  const [importingFileName, setImportingFileName] = useState<string | null>(null);
   const [isImporting, setIsImporting] = useState(false);
 
   function handleGameSaveFileChange(
@@ -31,6 +33,7 @@ export function GameSaveImportControl({
       return;
     }
 
+    setImportingFileName(selectedGameSaveFile.name);
     void importGameSaveFile(selectedGameSaveFile, selectedGameSaveFileInput);
   }
 
@@ -47,19 +50,23 @@ export function GameSaveImportControl({
       setImportErrorMessage(formatGameSaveImportError(caughtError));
     } finally {
       selectedGameSaveFileInput.value = "";
+      setImportingFileName(null);
       setIsImporting(false);
     }
   }
 
   return (
     <section aria-label="Import Game Save" className="game-save-import-control">
+      <p className="game-save-import-control__description">
+        Choose a Stardew Valley save file to preview the farm in this planner.
+      </p>
       <label
         className={`game-save-import-control__file-trigger${
           isImporting ? " game-save-import-control__file-trigger--disabled" : ""
         }`}
         title="Import a Stardew Valley save file to view your farm layout"
       >
-        <span>{isImporting ? "Importing Game Save…" : "Import Game Save"}</span>
+        <span>{createGameSaveImportTriggerLabel(importingFileName)}</span>
         <input
           accept="*"
           disabled={isImporting}
@@ -76,6 +83,16 @@ export function GameSaveImportControl({
   );
 }
 
+export function createGameSaveImportTriggerLabel(
+  importingFileName: string | null,
+): string {
+  if (importingFileName === null) {
+    return "Choose save file";
+  }
+
+  return `Importing ${importingFileName}…`;
+}
+
 export function GameSaveImportResultModal({
   importedGameSaveState,
   onClose,
@@ -84,7 +101,16 @@ export function GameSaveImportResultModal({
   const unmappedItemCount = importedGameSaveState.unmappedEntries.length;
 
   return (
-    <div className="game-save-import-result__backdrop">
+    <div
+      className="game-save-import-result__backdrop"
+      onClick={(mouseEvent) => {
+        closeModalFromBackdropClick({
+          currentTarget: mouseEvent.currentTarget,
+          eventTarget: mouseEvent.target,
+          onClose,
+        });
+      }}
+    >
       <section
         aria-labelledby={headingId}
         aria-modal="true"

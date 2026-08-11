@@ -8,6 +8,7 @@ import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFarmGuideLinks } from "./homepage-farm-guide-links";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
+import { HomepagePlanningGuide } from "./homepage-planning-guide";
 import { SiteFooter } from "./site-footer";
 
 type HomepageContentProps = {
@@ -52,17 +53,20 @@ export function HomepageContent({
       </header>
       <main>
         <section data-homepage-hero>
-          <h1>
-            {copy.hero.headlineBefore}
-            <em data-homepage-hero-emphasis>{copy.hero.headlineEmphasis}</em>
-            {copy.hero.headlineAfter}
-          </h1>
-          <p>{copy.hero.supportingCopy}</p>
-          <Button asChild data-homepage-primary-action size="lg">
-            <a href={plannerHref}>{copy.hero.primaryActionLabel}</a>
-          </Button>
+          <div data-homepage-hero-content>
+            <h1>
+              {copy.hero.headlineBefore}
+              <em data-homepage-hero-emphasis>{copy.hero.headlineEmphasis}</em>
+              {copy.hero.headlineAfter}
+            </h1>
+            <p>{copy.hero.supportingCopy}</p>
+            <Button asChild data-homepage-primary-action size="lg">
+              <a href={plannerHref}>{copy.hero.primaryActionLabel}</a>
+            </Button>
+          </div>
         </section>
         {plannerWorkspace}
+        <HomepagePlanningGuide copy={copy.planningGuide} />
         <section id="capabilities">
           <h2>{copy.capabilities.heading}</h2>
           <div>

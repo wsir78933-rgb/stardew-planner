@@ -20,7 +20,7 @@ describe("planner static delivery", () => {
 
     expect(homepageStaticHtml).toContain("data-homepage-shell");
     expect(homepageStaticHtml).toContain("data-homepage-hero-emphasis");
-    expect(homepageStaticHtml).toContain("for Every Farm Layout");
+    expect(homepageStaticHtml).toContain("Free Online Farm Layout Tool");
     expect(homepageStaticHtml).toContain("About this planner");
     expect(homepageStaticHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
     expect(homepageStaticHtml).toContain('role="status">Loading planner…');

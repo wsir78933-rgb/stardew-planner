@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createPlannerCanvasCameraLifecycle } from "../../src/components/planner-canvas";
 import * as plannerCanvasModule from "../../src/components/planner-canvas";
 import {
@@ -33,6 +33,7 @@ const {
   createPixiApplicationLifetime,
   createNightModeOverlayContainer,
   createPlannerCanvasCleanup,
+  handlePlannerCanvasCopyEvent,
   bindPlannerCanvasInteractions,
   commitPlannerCanvasExporterAndWarnings,
   createPlacementSprite,
@@ -160,6 +161,27 @@ const renderMapScreenshotWithoutEditorOverlays = (
     }>) => Promise<Result>;
   }
 ).renderMapScreenshotWithoutEditorOverlays;
+
+const createMapImageCaptureMethods = (
+  plannerCanvasModule as unknown as {
+    createMapImageCaptureMethods: (input: Readonly<{
+      captureMapScreenshotCanvas: (resolution: 1 | 2) => Promise<HTMLCanvasElement>;
+    }>) => Readonly<{
+      captureCleanMapImage: (resolution: 1 | 2) => Promise<Blob>;
+      captureScreenshot: (resolution: 1 | 2) => Promise<Blob>;
+    }>;
+  }
+).createMapImageCaptureMethods;
+
+const attachPlannerCanvasCopyListener = (
+  plannerCanvasModule as unknown as {
+    attachPlannerCanvasCopyListener?: (input: Readonly<{
+      getOnCopyCleanMapImage: () => (() => Promise<void>) | undefined;
+      pixiCanvas: HTMLCanvasElement;
+      reportCopyError: (message: string) => void;
+    }>) => () => void;
+  }
+).attachPlannerCanvasCopyListener;
 
 type MapTileRectanglePreviewGraphics = Readonly<{
   clear(): void;
@@ -616,6 +638,246 @@ describe("PlannerCanvas screenshot preview exclusion", () => {
     expect(placementPreviewContainer.visible).toBe(true);
   });
 });
+
+describe("PlannerCanvas map image encoding", () => {
+  it("encodes clean maps without a footer while screenshot encoding adds the watermark footer", async () => {
+    const originalDocument = globalThis.document;
+    const createdWatermarkCanvases: TestPngCanvas[] = [];
+    const mapScreenshotCanvas = new TestPngCanvas(160, 100);
+    const capturedResolutions: number[] = [];
+    Object.defineProperty(globalThis, "document", {
+      configurable: true,
+      value: {
+        createElement: (tagName: string): HTMLCanvasElement => {
+          if (tagName !== "canvas") {
+            throw new Error(`Expected only canvas creation; received ${JSON.stringify(tagName)}.`);
+          }
+          const watermarkCanvas = new TestPngCanvas(0, 0);
+          createdWatermarkCanvases.push(watermarkCanvas);
+          return watermarkCanvas as unknown as HTMLCanvasElement;
+        },
+      },
+    });
+
+    try {
+      const mapImageCaptureMethods = createMapImageCaptureMethods({
+        captureMapScreenshotCanvas: async (resolution) => {
+          capturedResolutions.push(resolution);
+          return mapScreenshotCanvas as unknown as HTMLCanvasElement;
+        },
+      });
+      const cleanMapImageBlob = await mapImageCaptureMethods.captureCleanMapImage(1);
+      expect(await cleanMapImageBlob.text()).toBe("160x100");
+      expect(createdWatermarkCanvases).toEqual([]);
+
+      const watermarkedScreenshotBlob = await mapImageCaptureMethods.captureScreenshot(1);
+      expect(await watermarkedScreenshotBlob.text()).toBe("160x124");
+      expect(capturedResolutions).toEqual([1, 1]);
+      expect(createdWatermarkCanvases).toHaveLength(1);
+      expect(createdWatermarkCanvases[0]).toMatchObject({
+        height: 124,
+        width: 160,
+      });
+    } finally {
+      Object.defineProperty(globalThis, "document", {
+        configurable: true,
+        value: originalDocument,
+      });
+    }
+  });
+});
+
+describe("PlannerCanvas native copy event", () => {
+  it("copies only when the event target is the active Pixi canvas", async () => {
+    const pixiCanvas = {} as HTMLCanvasElement;
+    const otherElement = {} as HTMLElement;
+    const onCopyCleanMapImage = vi.fn(async () => {});
+    const reportedCopyErrors: string[] = [];
+    const matchingCopyEvent = createCopyEvent(pixiCanvas);
+
+    await handlePlannerCanvasCopyEvent(
+      matchingCopyEvent,
+      pixiCanvas,
+      onCopyCleanMapImage,
+      (message) => reportedCopyErrors.push(message),
+    );
+
+    expect(matchingCopyEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(onCopyCleanMapImage).toHaveBeenCalledOnce();
+    expect(reportedCopyErrors).toEqual([]);
+
+    const unrelatedCopyEvent = createCopyEvent(otherElement);
+    await handlePlannerCanvasCopyEvent(
+      unrelatedCopyEvent,
+      pixiCanvas,
+      onCopyCleanMapImage,
+      (message) => reportedCopyErrors.push(message),
+    );
+
+    expect(unrelatedCopyEvent.preventDefault).not.toHaveBeenCalled();
+    expect(onCopyCleanMapImage).toHaveBeenCalledOnce();
+  });
+
+  it("reports a rejected clean-copy callback with its original message", async () => {
+    const rejectionMessage = "The clean map image is unavailable for clipboard copy.";
+    const reportedCopyErrors: string[] = [];
+    const pixiCanvas = {} as HTMLCanvasElement;
+
+    await handlePlannerCanvasCopyEvent(
+      createCopyEvent(pixiCanvas),
+      pixiCanvas,
+      async () => {
+        throw new Error(rejectionMessage);
+      },
+      (message) => reportedCopyErrors.push(message),
+    );
+
+    expect(reportedCopyErrors).toEqual([rejectionMessage]);
+  });
+
+  it("attaches one copy listener to each active Pixi canvas and removes its exact handler on cleanup", async () => {
+    expect(attachPlannerCanvasCopyListener).toBeTypeOf("function");
+    if (attachPlannerCanvasCopyListener === undefined) {
+      return;
+    }
+
+    const copiedCanvasIds: string[] = [];
+    const firstPixiCanvas = new RecordingCopyCanvas("first");
+    const firstCleanup = attachPlannerCanvasCopyListener({
+      getOnCopyCleanMapImage: () => async () => {
+        copiedCanvasIds.push("first");
+      },
+      pixiCanvas: firstPixiCanvas as unknown as HTMLCanvasElement,
+      reportCopyError: () => undefined,
+    });
+
+    expect(firstPixiCanvas.copyListenerAdditions).toHaveLength(1);
+    expect(firstPixiCanvas.activeCopyListenerCount()).toBe(1);
+    await firstPixiCanvas.dispatchCopyEvent(firstPixiCanvas);
+    expect(copiedCanvasIds).toEqual(["first"]);
+
+    firstCleanup();
+    firstCleanup();
+
+    expect(firstPixiCanvas.copyListenerRemovals).toEqual(
+      firstPixiCanvas.copyListenerAdditions,
+    );
+    expect(firstPixiCanvas.activeCopyListenerCount()).toBe(0);
+    await firstPixiCanvas.dispatchCopyEvent(firstPixiCanvas);
+    expect(copiedCanvasIds).toEqual(["first"]);
+
+    const secondPixiCanvas = new RecordingCopyCanvas("second");
+    const secondCleanup = attachPlannerCanvasCopyListener({
+      getOnCopyCleanMapImage: () => async () => {
+        copiedCanvasIds.push("second");
+      },
+      pixiCanvas: secondPixiCanvas as unknown as HTMLCanvasElement,
+      reportCopyError: () => undefined,
+    });
+
+    expect(secondPixiCanvas.copyListenerAdditions).toHaveLength(1);
+    await secondPixiCanvas.dispatchCopyEvent(secondPixiCanvas);
+    expect(copiedCanvasIds).toEqual(["first", "second"]);
+    secondCleanup();
+    expect(secondPixiCanvas.copyListenerRemovals).toEqual(
+      secondPixiCanvas.copyListenerAdditions,
+    );
+  });
+});
+
+function createCopyEvent(target: EventTarget): ClipboardEvent & {
+  preventDefault: ReturnType<typeof vi.fn>;
+} {
+  const preventDefault = vi.fn();
+  return {
+    preventDefault,
+    target,
+  } as ClipboardEvent & { preventDefault: ReturnType<typeof vi.fn> };
+}
+
+class RecordingCopyCanvas {
+  readonly copyListenerAdditions: EventListener[] = [];
+  readonly copyListenerRemovals: EventListener[] = [];
+  private readonly copyListeners = new Set<EventListener>();
+
+  constructor(readonly id: string) {}
+
+  addEventListener(
+    eventType: string,
+    eventListener: EventListenerOrEventListenerObject,
+  ): void {
+    if (eventType !== "copy" || typeof eventListener !== "function") {
+      throw new Error("Recording copy canvas only supports function copy listeners.");
+    }
+
+    this.copyListenerAdditions.push(eventListener);
+    this.copyListeners.add(eventListener);
+  }
+
+  removeEventListener(
+    eventType: string,
+    eventListener: EventListenerOrEventListenerObject,
+  ): void {
+    if (eventType !== "copy" || typeof eventListener !== "function") {
+      throw new Error("Recording copy canvas only supports function copy listeners.");
+    }
+
+    this.copyListenerRemovals.push(eventListener);
+    this.copyListeners.delete(eventListener);
+  }
+
+  activeCopyListenerCount(): number {
+    return this.copyListeners.size;
+  }
+
+  dispatchEvent(_event: Event): boolean {
+    return true;
+  }
+
+  async dispatchCopyEvent(target: EventTarget): Promise<void> {
+    const copyEvent = createCopyEvent(target);
+    for (const copyListener of this.copyListeners) {
+      copyListener(copyEvent);
+    }
+    await Promise.resolve();
+    await Promise.resolve();
+  }
+}
+
+class TestPngCanvas {
+  height: number;
+  width: number;
+
+  constructor(width: number, height: number) {
+    this.height = height;
+    this.width = width;
+  }
+
+  getContext(contextId: string): {
+    drawImage: () => void;
+    fillRect: () => void;
+    fillText: () => void;
+    fillStyle: string;
+    font: string;
+    textBaseline: CanvasTextBaseline;
+  } | null {
+    if (contextId !== "2d") return null;
+    return {
+      drawImage: () => {},
+      fillRect: () => {},
+      fillStyle: "",
+      fillText: () => {},
+      font: "",
+      textBaseline: "alphabetic",
+    };
+  }
+
+  toBlob(callback: (blob: Blob | null) => void): void {
+    callback(new Blob([`${String(this.width)}x${String(this.height)}`], {
+      type: "image/png",
+    }));
+  }
+}
 
 describe("PlannerCanvas multi-select marquee rendering", () => {
   it("draws snapped translucent blue rectangles with five-pixel dashed borders", () => {

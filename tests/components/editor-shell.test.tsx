@@ -229,7 +229,7 @@ describe("editor shell", () => {
     expect(busStopViewMarkup).toContain("NPC Paths");
   });
 
-  it("renders original View toggles and keeps Weather unavailable", () => {
+  it("groups View controls clearly while preserving pressed and disabled semantics", () => {
     const viewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         modalId: "view-panel",
@@ -245,11 +245,20 @@ describe("editor shell", () => {
     expect(viewMarkup).toContain("Sprinkler Radius");
     expect(viewMarkup).toContain("Blocked (Buildings)");
     expect(viewMarkup).toContain("Night Mode");
-    expect(viewMarkup).toMatch(/Weather<\/button>/);
+    expect(viewMarkup).toContain("Appearance");
+    expect(viewMarkup).toContain("Map Objects");
+    expect(viewMarkup).toContain("Show resource clumps");
+    expect(viewMarkup).toContain("Unavailable");
+    expect(viewMarkup.match(/<h3>Display<\/h3>/g)).toBeNull();
+    expect(viewMarkup).not.toMatch(/<button[^>]*>Resource Clumps<\/button>/);
+    expect(viewMarkup.match(/aria-pressed=/g)).toHaveLength(12);
     expect(viewMarkup).toMatch(/disabled=""[^>]*>Weather/);
+    expect(viewMarkup).toMatch(
+      /disabled=""[^>]*>Weather<span class="editor-modal__option-status">Unavailable<\/span><\/button>/,
+    );
   });
 
-  it("renders local Settings without account controls and keeps mods unavailable", () => {
+  it("renders local Settings with preserved toggles, unavailable status, and legal links", () => {
     const settingsMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         modalId: "settings-panel",
@@ -265,7 +274,21 @@ describe("editor shell", () => {
     expect(settingsMarkup).toContain("Free Placement");
     expect(settingsMarkup).toContain("Toast Notifications");
     expect(settingsMarkup).toContain("Game-Styled Cursors");
+    expect(settingsMarkup).toContain("Legal");
+    expect(settingsMarkup.match(/aria-pressed=/g)).toHaveLength(5);
     expect(settingsMarkup).toMatch(/disabled=""[^>]*>Manage Mods/);
+    expect(settingsMarkup).toMatch(
+      /disabled=""[^>]*>Manage Mods<span class="editor-modal__option-status">Unavailable<\/span><\/button>/,
+    );
+    expect(settingsMarkup).toContain(
+      'class="editor-modal__view-options editor-modal__legal-links"',
+    );
+    expect(settingsMarkup).toContain(
+      '<a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>',
+    );
+    expect(settingsMarkup).toContain(
+      '<a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a>',
+    );
     expect(settingsMarkup).not.toMatch(/sign in|account|member|premium|sync|share|feedback/i);
   });
 

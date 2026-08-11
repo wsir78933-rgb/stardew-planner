@@ -699,6 +699,33 @@ describe("planner workspace frozen layout contracts", () => {
     expect(narrowToolbarPointerRule).not.toContain(".planner-joystick");
   });
 
+  it("keeps the coarse mobile Help target above the canvas clip at 44 by 44 pixels", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+    const coarseMobilePointerRule = plannerWorkspaceStyles.match(
+      /@media \(pointer: coarse\) and \(max-width: 640px\)\s*\{([\s\S]*?)\n\}/,
+    )?.[1];
+
+    expect(coarseMobilePointerRule).toBeDefined();
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.bottom-wrapper\.item-catalog-panel--bottom\s*\{[^}]*overflow:\s*visible;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.panel-content:has\(\.help-bubble-wrapper\)\s*\{[^}]*overflow:\s*visible;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.help-bubble-wrapper\s*\{[^}]*z-index:\s*3;/s,
+    );
+    expect(coarseMobilePointerRule).toMatch(
+      /\.planner-editor-shell \.help-bubble-wrapper > \.filter-btn\s*\{[^}]*height:\s*44px;[^}]*min-width:\s*44px;[^}]*width:\s*44px;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel__content > \[role="tabpanel"\]\s*\{[^}]*overflow:\s*hidden;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-grid\s*\{[^}]*overflow-y:\s*auto;/s,
+    );
+  });
+
   it("reserves the frozen safe-area-aware bottom heights for the canvas and controls", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
 

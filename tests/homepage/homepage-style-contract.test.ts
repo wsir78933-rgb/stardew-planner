@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "vitest";
 
@@ -7,6 +7,73 @@ const homepageBodyScope = "body:has(> [data-homepage-shell])";
 function readProjectFile(relativePath: string) {
   return readFileSync(resolve(process.cwd(), relativePath), "utf8");
 }
+
+test("contains the hero value proposition and frames the product stage within the homepage scope", () => {
+  const styles = readProjectFile("app/globals.css");
+  const heroContentRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-hero-content\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const productStageRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-product-stage\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const mobileProductStageRule = styles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-product-stage\]\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+
+  expect(heroContentRule).toBeDefined();
+  expect(heroContentRule).toContain("display: grid;");
+  expect(heroContentRule).toContain("justify-items: center;");
+  expect(heroContentRule).toContain("max-width: 42rem;");
+  expect(heroContentRule).toContain("width: 100%;");
+  expect(productStageRule).toBeDefined();
+  expect(productStageRule).toContain("background: var(--card);");
+  expect(productStageRule).toContain("border: 1px solid rgb(36 42 34 / 72%);");
+  expect(productStageRule).toContain("border-radius: var(--radius);");
+  expect(productStageRule).toContain("overflow: hidden;");
+  expect(mobileProductStageRule).toBeDefined();
+  expect(mobileProductStageRule).toContain("border-radius: 0;");
+});
+
+test("ships the planning guide illustration as a static public WebP", () => {
+  const planningGuideImagePath = resolve(
+    process.cwd(),
+    "public/homepage/stardew-valley-planner-layout.webp",
+  );
+
+  expect(existsSync(planningGuideImagePath)).toBe(true);
+});
+
+test("lays out the planning guide as readable copy beside a responsive figure", () => {
+  const homepageStyles = readProjectFile("app/globals.css");
+  const guideRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const guideFigureRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\] figure\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const guideImageRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\] img\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const mobileGuideRule = homepageStyles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\]\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+
+  expect(homepageStyles).toContain("[data-homepage-planning-guide] figure");
+  expect(homepageStyles).toContain("[data-homepage-planning-guide] img");
+  expect(guideRule).toBeDefined();
+  expect(guideRule).toContain("display: grid;");
+  expect(guideRule).toContain(
+    "grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);",
+  );
+  expect(guideFigureRule).toBeDefined();
+  expect(guideFigureRule).toContain("border-radius: var(--radius);");
+  expect(guideImageRule).toBeDefined();
+  expect(guideImageRule).toContain("height: auto;");
+  expect(guideImageRule).toContain("max-width: 100%;");
+  expect(guideImageRule).toContain("width: 100%;");
+  expect(mobileGuideRule).toBeDefined();
+  expect(mobileGuideRule).toContain("grid-template-columns: 1fr;");
+});
 
 test("limits editor frame styling to the homepage runtime root", () => {
   const overrides = readProjectFile("public/reference-runtime/local-only-overrides.css");

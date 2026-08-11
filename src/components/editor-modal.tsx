@@ -30,6 +30,7 @@ import {
 import { getPlannerMapById, plannerMaps } from "../maps/map-catalog";
 import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
 import { PlannerMapPicker } from "./planner-map-picker";
+import { closeModalFromBackdropClick } from "./modal-backdrop-close";
 
 type EditorModalProperties = Readonly<{
   modalId: EditorModalId | null;
@@ -163,15 +164,20 @@ export function EditorModal({
     return null;
   }
 
-  const editorModalClassName =
-    modalId === "map-picker"
-      ? "editor-modal editor-modal--map-picker"
-      : modalId === "save-panel"
-        ? "editor-modal editor-modal--save-panel"
-        : "editor-modal";
+  const editorModalClassName = getEditorModalClassName(modalId);
+  const editorModalBackdropClassName = getEditorModalBackdropClassName(modalId);
 
   return (
-    <div className="editor-modal__backdrop">
+    <div
+      className={editorModalBackdropClassName}
+      onClick={(mouseEvent) => {
+        closeModalFromBackdropClick({
+          currentTarget: mouseEvent.currentTarget,
+          eventTarget: mouseEvent.target,
+          onClose,
+        });
+      }}
+    >
       <section
         aria-labelledby={modalHeadingId}
         aria-modal="true"
@@ -397,7 +403,7 @@ const viewOptionGroups: readonly Readonly<{
     ],
   },
   {
-    heading: "Display",
+    heading: "Appearance",
     options: [
       {
         key: "showNightMode",
@@ -464,7 +470,7 @@ function ViewPanel({
         </section>
       ))}
       <section className="editor-modal__view-section">
-        <h3>Resource Clumps</h3>
+        <h3>Map Objects</h3>
         <div className="editor-modal__view-options">
           <button
             aria-pressed={behaviorOptions.autoShowResourceClumps}
@@ -477,15 +483,16 @@ function ViewPanel({
             title="Show spawn locations while a resource clump is selected"
             type="button"
           >
-            Resource Clumps
+            Show resource clumps
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Display</h3>
+        <h3>Unavailable</h3>
         <div className="editor-modal__view-options">
           <button disabled title="Simulate rain, snow, and other weather effects" type="button">
             Weather
+            <span className="editor-modal__option-status">Unavailable</span>
           </button>
         </div>
       </section>
@@ -631,12 +638,13 @@ function SettingsPanel({
         <div className="editor-modal__view-options">
           <button disabled title="Add and manage Content Patcher mods" type="button">
             Manage Mods
+            <span className="editor-modal__option-status">Unavailable</span>
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Joja Stuff</h3>
-        <div className="editor-modal__view-options">
+        <h3>Legal</h3>
+        <div className="editor-modal__view-options editor-modal__legal-links">
           <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
           <a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a>
         </div>
@@ -732,6 +740,43 @@ function WhatsNewPanel() {
       </section>
     </div>
   );
+}
+
+function getEditorModalClassName(modalId: EditorModalId): string {
+  if (modalId === "map-picker") {
+    return "editor-modal editor-modal--map-picker";
+  }
+
+  if (modalId === "save-panel") {
+    return "editor-modal editor-modal--save-panel";
+  }
+
+  if (modalId === "view-panel") {
+    return "editor-modal editor-modal--view-panel";
+  }
+
+  if (modalId === "settings-panel") {
+    return "editor-modal editor-modal--settings-panel";
+  }
+
+  if (modalId === "help-info") {
+    return "editor-modal editor-modal--help-info";
+  }
+
+  return "editor-modal";
+}
+
+function getEditorModalBackdropClassName(modalId: EditorModalId): string {
+  if (
+    modalId === "save-panel" ||
+    modalId === "view-panel" ||
+    modalId === "settings-panel" ||
+    modalId === "help-info"
+  ) {
+    return "editor-modal__backdrop editor-modal__backdrop--viewport-fixed";
+  }
+
+  return "editor-modal__backdrop";
 }
 
 function getModalLabel(modalId: EditorModalId): string {

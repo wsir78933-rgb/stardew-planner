@@ -26,7 +26,7 @@ const standardFarmSummaryMapContext = {
 } as const;
 
 describe("farm summary panel", () => {
-  it("opens Farm Summary from Save and renders the source-shaped modal", () => {
+  it("renders the inline summary preview and retains the nested modal trigger", () => {
     const placementSnapshot = {
       ...createEmptyPlacementSnapshot(),
       items: [
@@ -69,7 +69,12 @@ describe("farm summary panel", () => {
       }),
     );
 
-    expect(panelMarkup).toContain(">Farm Summary<");
+    expect(panelMarkup).toContain('class="farm-summary-panel__preview"');
+    expect(panelMarkup).toContain("Map: Standard Farm");
+    expect(panelMarkup).toContain("Season: Spring");
+    expect(panelMarkup).toContain("1 items placed");
+    expect(panelMarkup).toContain(">View detailed summary<");
+    expect(panelMarkup).toContain("<button");
     expect(modalMarkup).toContain("1 items placed");
     expect(modalMarkup).toContain("Map: Standard Farm (standard) · Season: Spring");
     expect(modalMarkup).toContain("Items (1)");

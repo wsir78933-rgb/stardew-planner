@@ -2,9 +2,50 @@ import { expect, test } from "vitest";
 import { HOMEPAGE_LOCALES } from "@/src/homepage/homepage-locale";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
 
+function collectVisibleCopyStrings(copyValue: unknown): string[] {
+  if (typeof copyValue === "string") {
+    return [copyValue];
+  }
+
+  if (Array.isArray(copyValue)) {
+    return copyValue.flatMap(collectVisibleCopyStrings);
+  }
+
+  if (copyValue !== null && typeof copyValue === "object") {
+    return Object.values(copyValue).flatMap(collectVisibleCopyStrings);
+  }
+
+  return [];
+}
+
+function countEnglishWords(copyValue: unknown): number {
+  return collectVisibleCopyStrings(copyValue)
+    .join(" ")
+    .match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g)?.length ?? 0;
+}
+
 test("ships every approved locale with the same top-level homepage sections", () => {
   expect(Object.keys(homepageCopyByLocale)).toEqual([...HOMEPAGE_LOCALES]);
   expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale["zh-CN"]));
+});
+
+test("provides a four-step bilingual Stardew Valley Planner planning guide", () => {
+  expect(homepageCopyByLocale.en.planningGuide.steps).toHaveLength(4);
+  expect(homepageCopyByLocale["zh-CN"].planningGuide.steps).toHaveLength(4);
+  expect(homepageCopyByLocale.en.planningGuide.heading).toContain("Stardew Valley Planner");
+});
+
+test("keeps English homepage guidance above the approved 1,200-word minimum", () => {
+  expect(countEnglishWords(homepageCopyByLocale.en)).toBeGreaterThanOrEqual(1200);
+});
+
+test("treats the farmhouse and shipping bin as current planning anchors", () => {
+  expect(homepageCopyByLocale.en.planningGuide.intro[0]).toContain(
+    "current farmhouse and shipping bin are useful starting anchors",
+  );
+  expect(homepageCopyByLocale["zh-CN"].planningGuide.intro[0]).toContain(
+    "当前的农舍和出货箱可作为实用的起始锚点",
+  );
 });
 
 test("provides the Brainfish-style hero fragments and localized language label", () => {
@@ -13,9 +54,10 @@ test("provides the Brainfish-style hero fragments and localized language label",
 
     expect(homepageCopy.navigation.languageLabel).not.toHaveLength(0);
     expect(homepageCopy.hero).not.toHaveProperty("eyebrow");
-    expect(homepageCopy.hero.headlineBefore).not.toHaveLength(0);
     expect(homepageCopy.hero.headlineEmphasis).not.toHaveLength(0);
-    expect(homepageCopy.hero.headlineAfter).not.toHaveLength(0);
+    expect(
+      `${homepageCopy.hero.headlineBefore}${homepageCopy.hero.headlineEmphasis}${homepageCopy.hero.headlineAfter}`,
+    ).not.toHaveLength(0);
   }
 });
 
@@ -23,16 +65,16 @@ test("provides the approved bilingual planner content and capability limits", ()
   expect(homepageCopyByLocale.en.hero).toMatchObject({
     headlineBefore: "Stardew Valley ",
     headlineEmphasis: "Planner",
-    headlineAfter: " for Every Farm Layout",
+    headlineAfter: " – Free Online Farm Layout Tool",
     supportingCopy:
-      "Design your farm directly in the browser. Choose from eight official farm types, place buildings, crops and decor, switch between seasons, and visualize important coverage ranges.",
+      "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
   });
   expect(homepageCopyByLocale["zh-CN"].hero).toMatchObject({
-    headlineBefore: "适用于各种农场布局的",
-    headlineEmphasis: "星露谷物语",
-    headlineAfter: "规划器",
+    headlineBefore: "星露谷物语",
+    headlineEmphasis: "规划器",
+    headlineAfter: "——免费在线农场布局工具",
     supportingCopy:
-      "直接在浏览器中设计农场。选择八种官方农场类型，放置建筑、作物和装饰，切换季节，并查看重要设施的覆盖范围。",
+      "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
   });
 
   expect(homepageCopyByLocale.en.capabilities.items).toEqual([

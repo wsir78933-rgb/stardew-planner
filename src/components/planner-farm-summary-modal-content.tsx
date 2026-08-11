@@ -21,14 +21,16 @@ export function PlannerFarmSummaryModalContent({
   season,
 }: PlannerFarmSummaryModalContentProperties) {
   return (
-    <FarmSummaryPanel
-      catalogItems={catalogItems}
-      mapContext={{
-        baseMapId: selectedPlannerMapId,
-        displayName: mapDisplayName,
-        season,
-      }}
-      placementSnapshot={placementSnapshot}
-    />
+    <div className="planner-save-modal-content planner-save-modal-content--farm-summary">
+      <FarmSummaryPanel
+        catalogItems={catalogItems}
+        mapContext={{
+          baseMapId: selectedPlannerMapId,
+          displayName: mapDisplayName,
+          season,
+        }}
+        placementSnapshot={placementSnapshot}
+      />
+    </div>
   );
 }

@@ -5,7 +5,11 @@ import {
   EditorModal,
   shouldHandleEditorModalKeyboardEvent,
 } from "../../src/components/editor-modal";
-import { editorModalIds } from "../../src/editor/editor-view-state";
+import { closeModalFromBackdropClick } from "../../src/components/modal-backdrop-close";
+import {
+  editorModalIds,
+  type EditorModalId,
+} from "../../src/editor/editor-view-state";
 
 describe("editor reference information dialogs", () => {
   it("registers the three source-reference information dialogs", () => {
@@ -84,8 +88,41 @@ describe("editor modal keyboard event containment", () => {
   });
 });
 
+describe("editor modal backdrop click handling", () => {
+  it("calls onClose only when the click target is the backdrop itself", () => {
+    const backdropTarget = {} as EventTarget;
+    const dialogTarget = {} as EventTarget;
+    const nestedTarget = {} as EventTarget;
+    let closeCount = 0;
+    const onClose = (): void => {
+      closeCount += 1;
+    };
+
+    closeModalFromBackdropClick({
+      currentTarget: backdropTarget,
+      eventTarget: backdropTarget,
+      onClose,
+    });
+    expect(closeCount).toBe(1);
+
+    closeModalFromBackdropClick({
+      currentTarget: backdropTarget,
+      eventTarget: dialogTarget,
+      onClose,
+    });
+    expect(closeCount).toBe(1);
+
+    closeModalFromBackdropClick({
+      currentTarget: backdropTarget,
+      eventTarget: nestedTarget,
+      onClose,
+    });
+    expect(closeCount).toBe(1);
+  });
+});
+
 describe("editor modal visual variants", () => {
-  it("adds the Save-only modal modifier without changing other dialogs", () => {
+  it("adds only the approved content-specific modal modifiers", () => {
     const saveModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         modalId: "save-panel",
@@ -94,6 +131,36 @@ describe("editor modal visual variants", () => {
         onPanelPositionChange: () => undefined,
         panelPosition: "bottom",
         savePanelContent: createElement("p", null, "Save content"),
+        selectedMapId: "standard",
+      }),
+    );
+    const mapPickerModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "map-picker",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "standard",
+      }),
+    );
+    const viewModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "view-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "standard",
+      }),
+    );
+    const settingsModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "settings-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
         selectedMapId: "standard",
       }),
     );
@@ -107,14 +174,90 @@ describe("editor modal visual variants", () => {
         selectedMapId: "standard",
       }),
     );
+    const keyboardModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "keyboard-shortcuts",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "standard",
+      }),
+    );
+    const whatsNewModalMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        modalId: "whats-new",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "standard",
+      }),
+    );
 
     expect(saveModalMarkup).toContain(
       'class="editor-modal editor-modal--save-panel"',
     );
-    expect(helpModalMarkup).toContain('class="editor-modal"');
-    expect(helpModalMarkup).not.toContain("editor-modal--save-panel");
+    expect(mapPickerModalMarkup).toContain(
+      'class="editor-modal editor-modal--map-picker"',
+    );
+    expect(viewModalMarkup).toContain(
+      'class="editor-modal editor-modal--view-panel"',
+    );
+    expect(settingsModalMarkup).toContain(
+      'class="editor-modal editor-modal--settings-panel"',
+    );
+    expect(helpModalMarkup).toContain(
+      'class="editor-modal editor-modal--help-info"',
+    );
+    expect(keyboardModalMarkup).toContain('class="editor-modal"');
+    expect(whatsNewModalMarkup).toContain('class="editor-modal"');
+    expect(keyboardModalMarkup).not.toContain("editor-modal--keyboard-shortcuts");
+    expect(whatsNewModalMarkup).not.toContain("editor-modal--whats-new");
+  });
+
+  it("fixes only Save, View, Settings, and Help backdrops to the viewport", () => {
+    const viewportFixedModalIds = [
+      "save-panel",
+      "view-panel",
+      "settings-panel",
+      "help-info",
+    ] as const satisfies readonly EditorModalId[];
+    const editorShellPositionedModalIds = [
+      "map-picker",
+      "keyboard-shortcuts",
+      "whats-new",
+    ] as const satisfies readonly EditorModalId[];
+
+    for (const modalId of viewportFixedModalIds) {
+      expect(renderEditorModalMarkup(modalId)).toContain(
+        'class="editor-modal__backdrop editor-modal__backdrop--viewport-fixed"',
+      );
+    }
+
+    for (const modalId of editorShellPositionedModalIds) {
+      const modalMarkup = renderEditorModalMarkup(modalId);
+
+      expect(modalMarkup).toContain('class="editor-modal__backdrop"');
+      expect(modalMarkup).not.toContain(
+        "editor-modal__backdrop--viewport-fixed",
+      );
+    }
   });
 });
+
+function renderEditorModalMarkup(modalId: EditorModalId): string {
+  return renderToStaticMarkup(
+    createElement(EditorModal, {
+      modalId,
+      onClose: () => undefined,
+      onMapChange: () => undefined,
+      onPanelPositionChange: () => undefined,
+      panelPosition: "bottom",
+      selectedMapId: "standard",
+    }),
+  );
+}
 
 function createFakeModalElement(
   containedTarget: EventTarget,

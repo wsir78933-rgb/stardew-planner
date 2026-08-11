@@ -129,6 +129,10 @@ import {
   type PlannerStartupStatusState,
 } from "./planner-startup-status";
 import type { EditorPerformanceMarker } from "../performance/editor-performance-marks";
+import {
+  copyPngImageToClipboard,
+} from "../projects/browser-image-clipboard";
+import type { ScreenshotResolution } from "../projects/map-image-export";
 import { SelectionInspector } from "./selection-inspector";
 import { ProjectMapInstancePanel } from "./project-map-instance-panel";
 import { usePlannerWorkspacePersistenceControls } from "./use-planner-workspace-persistence-controls";
@@ -150,6 +154,17 @@ export type PlannerWorkspaceRenderState =
       preparedWorkspace: PreparedPlannerWorkspace;
       runtimeStatus: "loading" | "ready" | "interactive";
     }>;
+
+export function copyPlannerWorkspaceCleanMapImage(
+  captureCleanMapImage: (
+    screenshotResolution: ScreenshotResolution,
+  ) => Promise<Blob>,
+  copyImageToClipboard: (
+    pngImage: Promise<Blob>,
+  ) => Promise<void> = copyPngImageToClipboard,
+): Promise<void> {
+  return copyImageToClipboard(captureCleanMapImage(1));
+}
 
 export type PlannerWorkspaceProperties = Readonly<{
   startup: PlannerWorkspaceStartup;
@@ -667,6 +682,13 @@ function PreparedPlannerWorkspaceContent({
     preparedWorkspace,
     selectedPlannerMapId: plannerWorkspaceState.selectedPlannerMapId,
   });
+  const handleCopyCleanMapImage = useCallback(
+    () =>
+      copyPlannerWorkspaceCleanMapImage(
+        workspacePersistenceControls.captureCleanMapImage,
+      ),
+    [workspacePersistenceControls.captureCleanMapImage],
+  );
   const {
     advanceSelectedCatalogPlacementAttempt,
     catalogPresentationChoicesByItemId,
@@ -968,6 +990,7 @@ function PreparedPlannerWorkspaceContent({
           leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
           mapId={plannerWorkspaceState.selectedPlannerMapId}
           onCanvasError={handleCanvasError}
+          onCopyCleanMapImage={handleCopyCleanMapImage}
           onCanvasReady={handleCanvasReady}
           onInteractive={handleCanvasInteractive}
           onMapPlacementGridReady={handleMapPlacementGridReady}

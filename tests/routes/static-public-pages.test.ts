@@ -140,7 +140,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
   ["/farm/four-corners", "farm/four-corners.html", "Four Corners Farm | Stardew Valley Farm Planner", "Four Corners Farm farm guide. Multiplayer runs. Solo players get a taste of every farm in one map.", "Four Corners Farm", "en"],
   ["/farm/beach", "farm/beach.html", "Beach Farm | Stardew Valley Farm Planner", "Beach Farm farm guide. Fishing, foraging, scenic ocean builds, and ranch layouts.", "Beach Farm", "en"],
   ["/farm/meadowlands", "farm/meadowlands.html", "Meadowlands Farm | Stardew Valley Farm Planner", "Meadowlands Farm farm guide. Ranching. Blue Grass removes the winter hay scramble.", "Meadowlands Farm", "en"],
-  ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "适用于各种农场布局的星露谷物语规划器", "zh-CN"],
+  ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "星露谷物语规划器——免费在线农场布局工具", "zh-CN"],
   [
     "/zh/farm-comparison",
     "zh/farm-comparison.html",
@@ -348,9 +348,9 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
   {
     staticPageFile: "index.html",
     heroMarkup:
-      '<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout</h1>',
+      '<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> – Free Online Farm Layout Tool</h1>',
     heroSupportingCopy:
-      "Design your farm directly in the browser. Choose from eight official farm types, place buildings, crops and decor, switch between seasons, and visualize important coverage ranges.",
+      "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
     capabilityHeading: "Plan with the map in view",
     capabilityDescriptions: [
       "Start with Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach or Meadowlands. Ginger Island is also available in the map picker.",
@@ -384,9 +384,9 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
   {
     staticPageFile: "zh.html",
     heroMarkup:
-      '<h1>适用于各种农场布局的<em data-homepage-hero-emphasis="true">星露谷物语</em>规划器</h1>',
+      '<h1>星露谷物语<em data-homepage-hero-emphasis="true">规划器</em>——免费在线农场布局工具</h1>',
     heroSupportingCopy:
-      "直接在浏览器中设计农场。选择八种官方农场类型，放置建筑、作物和装饰，切换季节，并查看重要设施的覆盖范围。",
+      "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
     capabilityHeading: "在地图中完成规划",
     capabilityDescriptions: [
       "从标准、河流、森林、山顶、荒野、四角、海滩或草原农场开始规划。地图选择器中还提供姜岛。",

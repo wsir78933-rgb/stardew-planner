@@ -5,6 +5,7 @@ export const screenshotResolutions = [1, 2] as const;
 export type ScreenshotResolution = (typeof screenshotResolutions)[number];
 
 export type MapImageExporter = Readonly<{
+  captureCleanMapImage: (resolution: ScreenshotResolution) => Promise<Blob>;
   captureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
 }>;
 

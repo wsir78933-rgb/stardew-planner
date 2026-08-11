@@ -1,11 +1,14 @@
 import { describe, expect, it, vi } from "vitest";
 import { saveCurrentCanonicalMapThumbnail } from "../../src/planner/planner-workspace-thumbnail-save";
 import type { ThumbnailSaveWorkspaceSnapshot } from "../../src/planner/planner-workspace-thumbnail-save";
-import { MapImageExportError } from "../../src/projects/map-image-export";
+import {
+  MapImageExportError,
+  type MapImageExporter,
+} from "../../src/projects/map-image-export";
 import type { ReferenceOpenMapSession } from "../../src/reference-runtime/reference-project-editor-adapter";
 
 function createSnapshot(
-  exporter: { captureScreenshot: (resolution: 1 | 2) => Promise<Blob> },
+  exporter: MapImageExporter,
 ): ThumbnailSaveWorkspaceSnapshot {
   return {
     activeSession: {
@@ -33,7 +36,10 @@ const webpEncoder = {
 
 describe("planner workspace thumbnail save", () => {
   it("saves once after target identities remain stable", async () => {
-    const mapImageExporter = { captureScreenshot: vi.fn(async () => new Blob(["png"], { type: "image/png" })) };
+    const mapImageExporter = {
+      captureCleanMapImage: vi.fn(async () => new Blob(["clean png"], { type: "image/png" })),
+      captureScreenshot: vi.fn(async () => new Blob(["png"], { type: "image/png" })),
+    };
     const workspaceSnapshot = createSnapshot(mapImageExporter);
     const saveThumbnail = vi.fn();
     await saveCurrentCanonicalMapThumbnail({
@@ -47,7 +53,10 @@ describe("planner workspace thumbnail save", () => {
   });
 
   it("never saves when the canonical target changes during encoding", async () => {
-    const mapImageExporter = { captureScreenshot: vi.fn(async () => new Blob(["png"], { type: "image/png" })) };
+    const mapImageExporter = {
+      captureCleanMapImage: vi.fn(async () => new Blob(["clean png"], { type: "image/png" })),
+      captureScreenshot: vi.fn(async () => new Blob(["png"], { type: "image/png" })),
+    };
     let workspaceSnapshot = createSnapshot(mapImageExporter);
     const saveThumbnail = vi.fn();
     const thumbnailSavePromise = saveCurrentCanonicalMapThumbnail({
@@ -72,6 +81,7 @@ describe("planner workspace thumbnail save", () => {
     const saveThumbnail = vi.fn();
     await expect(saveCurrentCanonicalMapThumbnail({
       getCurrentWorkspaceSnapshot: () => createSnapshot({
+        captureCleanMapImage: async () => new Blob(["clean png"], { type: "image/png" }),
         captureScreenshot: async () => { throw new Error("capture failed"); },
       }),
       workspaceController: { saveThumbnail },
@@ -80,6 +90,7 @@ describe("planner workspace thumbnail save", () => {
     })).rejects.toThrow("capture failed");
     await expect(saveCurrentCanonicalMapThumbnail({
       getCurrentWorkspaceSnapshot: () => createSnapshot({
+        captureCleanMapImage: async () => new Blob(["clean png"], { type: "image/png" }),
         captureScreenshot: async () => new Blob(["png"], { type: "image/png" }),
       }),
       workspaceController: { saveThumbnail },
@@ -93,7 +104,10 @@ describe("planner workspace thumbnail save", () => {
     const captureScreenshot = vi.fn(async () => new Blob(["png"], { type: "image/png" }));
     const saveThumbnail = vi.fn();
     const thumbnailSavePromise = saveCurrentCanonicalMapThumbnail({
-      getCurrentWorkspaceSnapshot: () => createSnapshot({ captureScreenshot }),
+      getCurrentWorkspaceSnapshot: () => createSnapshot({
+        captureCleanMapImage: async () => new Blob(["clean png"], { type: "image/png" }),
+        captureScreenshot,
+      }),
       workspaceController: { saveThumbnail },
       getPlannerMapIdForMapFile: () => "forest",
       pngToWebpEncodingPort: webpEncoder,

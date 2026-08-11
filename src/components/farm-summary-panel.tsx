@@ -29,8 +29,13 @@ export function FarmSummaryPanel({
 
   return (
     <section aria-label="Farm Summary" className="farm-summary-panel">
+      <div className="farm-summary-panel__preview">
+        <p>Map: {farmSummary.mapContext.displayName}</p>
+        <p>Season: {formatFarmSummaryPreviewSeason(farmSummary.mapContext.season)}</p>
+        <p>{String(farmSummary.totalItems)} items placed</p>
+      </div>
       <button onClick={() => setIsFarmSummaryOpen(true)} type="button">
-        Farm Summary
+        View detailed summary
       </button>
       {isFarmSummaryOpen ? (
         <FarmSummaryModal
@@ -40,4 +45,8 @@ export function FarmSummaryPanel({
       ) : null}
     </section>
   );
+}
+
+function formatFarmSummaryPreviewSeason(season: string): string {
+  return `${season.slice(0, 1).toUpperCase()}${season.slice(1)}`;
 }

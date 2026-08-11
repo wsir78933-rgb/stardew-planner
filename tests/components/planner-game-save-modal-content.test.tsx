@@ -129,7 +129,7 @@ describe("planner game-save modal content", () => {
     expect(openImportedGameSave).toHaveBeenCalledWith(importedGameSaveState);
   });
 
-  it("preserves the existing game-save controls and feedback shell", () => {
+  it("wraps the game-save controls in the Save branch with the upload copy", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerGameSaveModalContent, {
         catalogItems,
@@ -137,8 +137,15 @@ describe("planner game-save modal content", () => {
       }),
     );
 
-    expect(markup).toContain("Import Game Save");
+    expect(markup).toContain(
+      'class="planner-save-modal-content planner-save-modal-content--game-save"',
+    );
+    expect(markup).toContain(
+      "Choose a Stardew Valley save file to preview the farm in this planner.",
+    );
+    expect(markup).toContain("Choose save file");
     expect(markup).toContain("game-save-import-control");
+    expect(markup).toContain('type="file"');
   });
 
   it("clears the canonical project before opening the imported map as unsaved", () => {

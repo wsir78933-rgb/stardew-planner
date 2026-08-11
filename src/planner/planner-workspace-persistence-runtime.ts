@@ -11,6 +11,7 @@ import {
   getCurrentCanonicalSession,
 } from "./planner-workspace-canonical-session";
 import {
+  captureCurrentCleanMapImage,
   captureCurrentMapScreenshot,
   createCurrentMapImageExporterSlot,
   updateCurrentMapImageExporter,
@@ -53,6 +54,7 @@ type PlannerWorkspacePersistenceRuntimeInput = Readonly<{
 }>;
 
 export type PlannerWorkspacePersistenceRuntime = Readonly<{
+  captureCleanMapImage: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   captureScreenshot: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   clearMapImageExporter: (plannerMapId: string) => void;
   handleMapChange: (plannerMapId: string) => void;
@@ -153,6 +155,16 @@ export function createPlannerWorkspacePersistenceRuntime({
     );
   }
 
+  function captureCleanMapImage(
+    screenshotResolution: ScreenshotResolution,
+  ): Promise<Blob> {
+    return captureCurrentCleanMapImage(
+      currentMapImageExporterSlot,
+      currentPlannerWorkspaceState.selectedPlannerMapId,
+      screenshotResolution,
+    );
+  }
+
   function handleMapChange(plannerMapId: string): void {
     changePlannerWorkspaceMap({
       dispatchPlannerWorkspaceAction,
@@ -219,6 +231,7 @@ export function createPlannerWorkspacePersistenceRuntime({
   }
 
   return {
+    captureCleanMapImage,
     captureScreenshot,
     clearMapImageExporter,
     handleMapChange,

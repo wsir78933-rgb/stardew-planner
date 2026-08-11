@@ -14,11 +14,21 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain("data-homepage-shell");
     expect(plannerPageMarkup).toContain("data-homepage-header");
     expect(plannerPageMarkup).toContain("data-homepage-hero");
+    expect(plannerPageMarkup).toContain("data-homepage-hero-content");
     expect(plannerPageMarkup).toContain("data-homepage-hero-emphasis");
     expect(plannerPageMarkup).toContain("data-homepage-workspace");
+    expect(plannerPageMarkup).toContain("data-homepage-product-stage");
+    expect(plannerPageMarkup).toContain(
+      "How to Plan a Stardew Valley Farm Layout",
+    );
+    expect(plannerPageMarkup).toContain(
+      'src="/homepage/stardew-valley-planner-layout.webp"',
+    );
+    expect(plannerPageMarkup).toContain('height="941"');
+    expect(plannerPageMarkup).toContain('width="1672"');
     expect(plannerPageMarkup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
     expect(plannerPageMarkup).toContain(
-      'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> for Every Farm Layout',
+      'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> – Free Online Farm Layout Tool',
     );
     expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(3);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/blog"[^>]*>Blog<\/a>/);

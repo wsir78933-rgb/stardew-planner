@@ -193,6 +193,7 @@ export type PlannerCanvasProperties = Readonly<{
   isResourceGenerationCurrent?: (resourceGeneration: number) => boolean;
   performanceMarker?: EditorPerformanceMarker;
   onCanvasError?: (message: string) => void;
+  onCopyCleanMapImage?: () => Promise<void>;
   onCanvasReady?: () => void;
   onInteractive?: () => void;
   showJoystick?: boolean;
@@ -229,6 +230,55 @@ export type PlannerCanvasProperties = Readonly<{
     interiorDecorKind: InteriorDecorKind,
   ) => void;
 }>;
+
+export async function handlePlannerCanvasCopyEvent(
+  copyEvent: ClipboardEvent,
+  pixiCanvas: HTMLCanvasElement,
+  onCopyCleanMapImage: (() => Promise<void>) | undefined,
+  reportCopyError: (message: string) => void,
+): Promise<void> {
+  if (copyEvent.target !== pixiCanvas || onCopyCleanMapImage === undefined) {
+    return;
+  }
+
+  copyEvent.preventDefault();
+
+  try {
+    await onCopyCleanMapImage();
+  } catch (caughtError) {
+    reportCopyError(
+      caughtError instanceof Error ? caughtError.message : String(caughtError),
+    );
+  }
+}
+
+export function attachPlannerCanvasCopyListener(
+  input: Readonly<{
+    getOnCopyCleanMapImage: () => (() => Promise<void>) | undefined;
+    pixiCanvas: HTMLCanvasElement;
+    reportCopyError: (message: string) => void;
+  }>,
+): () => void {
+  let hasRemovedCopyListener = false;
+  const handleCanvasCopyEvent = (copyEvent: ClipboardEvent): void => {
+    void handlePlannerCanvasCopyEvent(
+      copyEvent,
+      input.pixiCanvas,
+      input.getOnCopyCleanMapImage(),
+      input.reportCopyError,
+    );
+  };
+
+  input.pixiCanvas.addEventListener("copy", handleCanvasCopyEvent);
+
+  return (): void => {
+    if (hasRemovedCopyListener) {
+      return;
+    }
+    hasRemovedCopyListener = true;
+    input.pixiCanvas.removeEventListener("copy", handleCanvasCopyEvent);
+  };
+}
 
 export type PlannerCanvasPreparedResources = Readonly<{
   pixi: PixiModule;
@@ -949,6 +999,7 @@ export function PlannerCanvas({
   isResourceGenerationCurrent,
   performanceMarker,
   onCanvasError,
+  onCopyCleanMapImage,
   onCanvasReady,
   onInteractive,
   showJoystick = false,
@@ -978,6 +1029,7 @@ export function PlannerCanvas({
   );
   const performanceMarkerReference = useRef(performanceMarker);
   const onCanvasErrorReference = useRef(onCanvasError);
+  const onCopyCleanMapImageReference = useRef(onCopyCleanMapImage);
   const onCanvasReadyReference = useRef(onCanvasReady);
   const onInteractiveReference = useRef(onInteractive);
   const onMoveSelectedPlacementsReference = useRef(onMoveSelectedPlacements);
@@ -1033,6 +1085,7 @@ export function PlannerCanvas({
   isResourceGenerationCurrentReference.current = isResourceGenerationCurrent;
   performanceMarkerReference.current = performanceMarker;
   onCanvasErrorReference.current = onCanvasError;
+  onCopyCleanMapImageReference.current = onCopyCleanMapImage;
   onCanvasReadyReference.current = onCanvasReady;
   onInteractiveReference.current = onInteractive;
   onMoveSelectedPlacementsReference.current = onMoveSelectedPlacements;
@@ -1096,6 +1149,7 @@ export function PlannerCanvas({
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
     let disposePlacementPreview: (() => void) | null = null;
+    let removeCanvasCopyEventListener: (() => void) | null = null;
     let joystickCameraPan: ((direction: PlannerJoystickDirection) => void) | null =
       null;
     let resourceClumpFrameTexturesByParentSheetIndex: ReadonlyMap<
@@ -1129,7 +1183,10 @@ export function PlannerCanvas({
         resourceClumpFrameTexturesByParentSheetIndex = null;
       },
       destroyPixiApplication: () => pixiApplicationLifetime.requestDestruction(),
-      clearCanvasHost: () => mountedCanvasHostElement.replaceChildren(),
+      clearCanvasHost: () => {
+        removeCanvasCopyEventListener?.();
+        mountedCanvasHostElement.replaceChildren();
+      },
     });
 
     setPlannerCanvasStatus({ kind: "loading" });
@@ -1188,6 +1245,21 @@ export function PlannerCanvas({
         }
 
         mountedCanvasHostElement.replaceChildren(pixiApplication.canvas);
+        const pixiCanvas = pixiApplication.canvas;
+        removeCanvasCopyEventListener = attachPlannerCanvasCopyListener({
+          getOnCopyCleanMapImage: () => onCopyCleanMapImageReference.current,
+          pixiCanvas,
+          reportCopyError: (message) => {
+            reportCurrentPlannerCanvasError({
+              isMapLifecycleCurrent,
+              message,
+              onCurrentError: (currentMessage) => {
+                setPlannerCanvasStatus({ kind: "error", message: currentMessage });
+                onCanvasErrorReference.current?.(currentMessage);
+              },
+            });
+          },
+        });
 
         await initializePlannerTextureAssets(pixi);
 
@@ -1805,19 +1877,22 @@ export function PlannerCanvas({
           commitPlannerCanvasExporterAndWarnings(
             isMapLifecycleCurrent,
             () => {
-              onMapImageExporterReadyReference.current?.(mapId, {
-                captureScreenshot: (resolution) =>
-                  captureMapScreenshot({
-                    mapContainer: mapContainerCreationResult.mapContainer,
-                    mapDisplayOverlayContainer,
-                    mapTileRectanglePreviewGraphics,
-                    placementPreviewContainer,
-                    pixi,
-                    pixiApplication,
-                    renderingContract,
-                    resolution,
-                  }),
-              });
+              onMapImageExporterReadyReference.current?.(
+                mapId,
+                createMapImageCaptureMethods({
+                  captureMapScreenshotCanvas: (resolution) =>
+                    captureMapScreenshotCanvas({
+                      mapContainer: mapContainerCreationResult.mapContainer,
+                      mapDisplayOverlayContainer,
+                      mapTileRectanglePreviewGraphics,
+                      placementPreviewContainer,
+                      pixi,
+                      pixiApplication,
+                      renderingContract,
+                      resolution,
+                    }),
+                }),
+              );
             },
             () => {
               setKnownUnavailableTilesheetWarnings(
@@ -1917,9 +1992,27 @@ type CaptureMapScreenshotInput = Readonly<{
   resolution: ScreenshotResolution;
 }>;
 
-async function captureMapScreenshot(
+export function createMapImageCaptureMethods(
+  input: Readonly<{
+    captureMapScreenshotCanvas: (
+      resolution: ScreenshotResolution,
+    ) => Promise<HTMLCanvasElement>;
+  }>,
+): MapImageExporter {
+  return {
+    async captureCleanMapImage(resolution): Promise<Blob> {
+      return createPngBlob(await input.captureMapScreenshotCanvas(resolution));
+    },
+    async captureScreenshot(resolution): Promise<Blob> {
+      const mapScreenshotCanvas = await input.captureMapScreenshotCanvas(resolution);
+      return createPngBlob(createWatermarkedScreenshotCanvas(mapScreenshotCanvas));
+    },
+  };
+}
+
+async function captureMapScreenshotCanvas(
   captureMapScreenshotInput: CaptureMapScreenshotInput,
-): Promise<Blob> {
+): Promise<HTMLCanvasElement> {
   const {
     mapContainer,
     mapDisplayOverlayContainer,
@@ -1970,11 +2063,7 @@ async function captureMapScreenshot(
           screenshotRenderTextureReference.current,
         );
         const mapScreenshotCanvas = assertHtmlCanvasElement(extractedCanvas);
-        const watermarkedScreenshotCanvas = createWatermarkedScreenshotCanvas(
-          mapScreenshotCanvas,
-        );
-
-        return createPngBlob(watermarkedScreenshotCanvas);
+        return mapScreenshotCanvas;
       },
     });
   } finally {

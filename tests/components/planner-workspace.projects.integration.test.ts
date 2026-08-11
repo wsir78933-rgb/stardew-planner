@@ -8,6 +8,8 @@ import {
   createPlannerWorkspacePersistenceRuntime,
   saveCurrentPlannerWorkspaceMap,
 } from "../../src/planner/planner-workspace-persistence-runtime";
+import { copyPlannerWorkspaceCleanMapImage } from "../../src/components/planner-workspace";
+import { attachPlannerCanvasCopyListener } from "../../src/components/planner-canvas";
 import {
   createCanonicalMapIdentityReference,
   createCanonicalSessionTransition,
@@ -27,6 +29,76 @@ import {
 } from "../../src/reference-runtime/use-reference-project-workspace";
 
 describe("planner workspace project composition", () => {
+  it("copies a one-times clean map image through the browser clipboard adapter", async () => {
+    const cleanMapImage = new Blob(["clean map"], { type: "image/png" });
+    const captureCleanMapImage = vi.fn(async () => cleanMapImage);
+    let copiedImage: Blob | null = null;
+
+    await copyPlannerWorkspaceCleanMapImage(
+      captureCleanMapImage,
+      async (pngImage) => {
+        copiedImage = await pngImage;
+      },
+    );
+
+    expect(captureCleanMapImage).toHaveBeenCalledWith(1);
+    expect(copiedImage).toBe(cleanMapImage);
+  });
+
+  it("writes the clean one-times PNG through the default clipboard adapter only for the mounted Pixi canvas", async () => {
+    const cleanMapImage = new Blob(["clean map"], { type: "image/png" });
+    const captureCleanMapImage = vi.fn(async () => cleanMapImage);
+    let writtenClipboardItems: readonly unknown[] | null = null;
+    const clipboardWrite = vi.fn(
+      async (clipboardItems: readonly unknown[]): Promise<void> => {
+        writtenClipboardItems = clipboardItems;
+      },
+    );
+    const pixiCanvas = new ClipboardCopyCanvas();
+    const otherElement = {} as HTMLElement;
+
+    await withGlobalValue(
+      "navigator",
+      { clipboard: { write: clipboardWrite } },
+      async () => {
+        await withGlobalValue("ClipboardItem", RecordingClipboardItem, async () => {
+          const cleanup = attachPlannerCanvasCopyListener({
+            getOnCopyCleanMapImage: () => () =>
+              copyPlannerWorkspaceCleanMapImage(captureCleanMapImage),
+            pixiCanvas: pixiCanvas as unknown as HTMLCanvasElement,
+            reportCopyError: (message) => {
+              throw new Error(`Unexpected clipboard copy error: ${message}`);
+            },
+          });
+
+          const matchingCopyEvent = await pixiCanvas.dispatchCopyEvent(pixiCanvas);
+          expect(matchingCopyEvent.preventDefault).toHaveBeenCalledOnce();
+          expect(captureCleanMapImage).toHaveBeenCalledWith(1);
+          expect(clipboardWrite).toHaveBeenCalledOnce();
+          const clipboardItem = writtenClipboardItems?.[0];
+          if (clipboardItem === undefined) {
+            throw new Error("Expected navigator.clipboard.write to receive one ClipboardItem.");
+          }
+          expect(clipboardItem).toBeInstanceOf(RecordingClipboardItem);
+          await expect((clipboardItem as RecordingClipboardItem).pngImage).resolves.toBe(
+            cleanMapImage,
+          );
+
+          const unrelatedCopyEvent = await pixiCanvas.dispatchCopyEvent(otherElement);
+          expect(unrelatedCopyEvent.preventDefault).not.toHaveBeenCalled();
+          expect(captureCleanMapImage).toHaveBeenCalledOnce();
+          expect(clipboardWrite).toHaveBeenCalledOnce();
+
+          cleanup();
+          const afterCleanupCopyEvent = await pixiCanvas.dispatchCopyEvent(pixiCanvas);
+          expect(afterCleanupCopyEvent.preventDefault).not.toHaveBeenCalled();
+          expect(captureCleanMapImage).toHaveBeenCalledOnce();
+          expect(clipboardWrite).toHaveBeenCalledOnce();
+        });
+      },
+    );
+  });
+
   it("creates and saves the current unsaved map in one Untitled Project", () => {
     let serializedProjectDocument: string | null = null;
     const repository = createReferenceProjectRepository({
@@ -680,11 +752,19 @@ describe("planner workspace project composition", () => {
     const standardCaptureScreenshot = vi.fn(
       async () => new Blob(["standard"], { type: "image/png" }),
     );
+    const standardCaptureCleanMapImage = vi.fn(
+      async () => new Blob(["standard clean"], { type: "image/png" }),
+    );
     persistenceRuntime.handleMapImageExporterReady("standard", {
+      captureCleanMapImage: standardCaptureCleanMapImage,
       captureScreenshot: standardCaptureScreenshot,
     });
     await persistenceRuntime.captureScreenshot(1);
     expect(standardCaptureScreenshot).toHaveBeenCalledWith(1);
+    expect(standardCaptureCleanMapImage).not.toHaveBeenCalled();
+    await persistenceRuntime.captureCleanMapImage(1);
+    expect(standardCaptureCleanMapImage).toHaveBeenCalledWith(1);
+    expect(standardCaptureScreenshot).toHaveBeenCalledTimes(1);
 
     plannerWorkspaceState = reducePlannerWorkspaceState(plannerWorkspaceState, {
       plannerMapId: "forest",
@@ -697,7 +777,11 @@ describe("planner workspace project composition", () => {
     const forestCaptureScreenshot = vi.fn(
       async () => new Blob(["forest"], { type: "image/png" }),
     );
+    const forestCaptureCleanMapImage = vi.fn(
+      async () => new Blob(["forest clean"], { type: "image/png" }),
+    );
     persistenceRuntime.handleMapImageExporterReady("forest", {
+      captureCleanMapImage: forestCaptureCleanMapImage,
       captureScreenshot: forestCaptureScreenshot,
     });
     persistenceRuntime.clearMapImageExporter("standard");
@@ -956,4 +1040,83 @@ function expectOnlyControllerMethodCalled(
     .filter(([, controllerMethod]) => controllerMethod.mock.calls.length > 0)
     .map(([controllerMethodName]) => controllerMethodName);
   expect(calledMethodNames).toEqual([expectedMethodName]);
+}
+
+class ClipboardCopyCanvas {
+  private readonly copyListeners = new Set<EventListener>();
+
+  addEventListener(
+    eventType: string,
+    eventListener: EventListenerOrEventListenerObject,
+  ): void {
+    if (eventType !== "copy" || typeof eventListener !== "function") {
+      throw new Error("Clipboard copy canvas only supports function copy listeners.");
+    }
+
+    this.copyListeners.add(eventListener);
+  }
+
+  removeEventListener(
+    eventType: string,
+    eventListener: EventListenerOrEventListenerObject,
+  ): void {
+    if (eventType !== "copy" || typeof eventListener !== "function") {
+      throw new Error("Clipboard copy canvas only supports function copy listeners.");
+    }
+
+    this.copyListeners.delete(eventListener);
+  }
+
+  dispatchEvent(_event: Event): boolean {
+    return true;
+  }
+
+  async dispatchCopyEvent(target: EventTarget): Promise<ClipboardEvent & {
+    preventDefault: ReturnType<typeof vi.fn>;
+  }> {
+    const preventDefault = vi.fn();
+    const copyEvent = {
+      preventDefault,
+      target,
+    } as ClipboardEvent & { preventDefault: ReturnType<typeof vi.fn> };
+
+    for (const copyListener of this.copyListeners) {
+      copyListener(copyEvent);
+    }
+    await Promise.resolve();
+    await Promise.resolve();
+
+    return copyEvent;
+  }
+}
+
+class RecordingClipboardItem {
+  readonly pngImage: Promise<Blob>;
+
+  constructor(clipboardItemData: Readonly<{ "image/png": Promise<Blob> }>) {
+    this.pngImage = clipboardItemData["image/png"];
+  }
+}
+
+async function withGlobalValue(
+  key: "ClipboardItem" | "navigator",
+  value: unknown,
+  action: () => Promise<void>,
+): Promise<void> {
+  const originalDescriptor = Object.getOwnPropertyDescriptor(globalThis, key);
+  Object.defineProperty(globalThis, key, {
+    configurable: true,
+    value,
+    writable: true,
+  });
+
+  try {
+    await action();
+  } finally {
+    if (originalDescriptor === undefined) {
+      Reflect.deleteProperty(globalThis, key);
+    } else {
+      Object.defineProperty(globalThis, key, originalDescriptor);
+    }
+  }
 }
