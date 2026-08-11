@@ -1,7 +1,4 @@
-export type PublicNavigationPath =
-  | "/"
-  | "/farm-comparison"
-  | "/mods";
+export type PublicNavigationPath = "/";
 
 export type PublicNavigationItem = Readonly<{
   label: string;
@@ -10,6 +7,4 @@ export type PublicNavigationItem = Readonly<{
 
 export const publicNavigation = [
   { label: "Planner", path: "/" },
-  { label: "Farm Comparison", path: "/farm-comparison" },
-  { label: "Mods", path: "/mods" },
 ] as const satisfies readonly PublicNavigationItem[];

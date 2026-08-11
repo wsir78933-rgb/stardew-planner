@@ -82,10 +82,10 @@ export function CarpenterStardewEnglishArticle() {
         may become after an upgrade.
       </p>
       <p>
-        If the map itself is still undecided, compare the usable space in the
-        <a href="/farm-comparison"> farm comparison</a>. The
-        <a href="/farm/meadowlands"> Meadowlands Farm guide</a> is a useful example
-        when animal space is the priority.
+        If the map itself is still undecided, open
+        <a href="/?farmType=meadowlands"> Meadowlands in the planner</a> and test
+        whether its building zones leave enough room for animals, grass, and daily
+        paths.
       </p>
       <p>
         Open the <a href="/">Stardew Valley Planner</a> and place the building beside

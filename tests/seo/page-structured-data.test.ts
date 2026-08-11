@@ -24,27 +24,27 @@ it("builds schema data exclusively from explicit visible fields", () => {
   });
   const article = createArticleStructuredData({
     locale: "en",
-    headline: "Standard Farm Guide",
-    description: "Plan a Standard Farm.",
-    pathname: "/farm/standard",
+    headline: "Carpenter in Stardew Valley",
+    description: "Find Robin's building services.",
+    pathname: "/carpenter-stardew",
   });
   const articleWithImage = createArticleStructuredData({
     locale: "zh-CN",
-    headline: "标准农场指南",
-    description: "规划标准农场。",
-    pathname: "/zh/farm/standard",
-    imagePathname: "/public-previews/1.6.15/farms/standard.webp",
+    headline: "星露谷木匠指南",
+    description: "查看罗宾的建筑服务。",
+    pathname: "/zh/carpenter-stardew",
+    imagePathname: "/blog/carpenter-stardew-cover.png",
   });
   const collectionPage = createCollectionPageStructuredData({
     locale: "zh-CN",
-    name: "Modded Stardew Valley Farms",
-    description: "Browse community-made maps.",
-    pathname: "/mods",
+    name: "星露谷农场规划指南",
+    description: "浏览农场规划文章。",
+    pathname: "/zh/blog",
   });
   const breadcrumbs = createBreadcrumbListStructuredData({
     items: [
       { name: "Planner", pathname: "/" },
-      { name: "Standard Farm", pathname: "/farm/standard" },
+      { name: "Carpenter guide", pathname: "/carpenter-stardew" },
     ],
   });
 
@@ -69,22 +69,22 @@ it("builds schema data exclusively from explicit visible fields", () => {
   });
   expect(article).toMatchObject({
     "@type": "Article",
-    headline: "Standard Farm Guide",
-    url: "https://stardewvalleyplanner.art/farm/standard",
+    headline: "Carpenter in Stardew Valley",
+    url: "https://stardewvalleyplanner.art/carpenter-stardew",
     inLanguage: "en",
     isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
   });
   expect(articleWithImage).toMatchObject({
     "@type": "Article",
-    url: "https://stardewvalleyplanner.art/zh/farm/standard",
+    url: "https://stardewvalleyplanner.art/zh/carpenter-stardew",
     inLanguage: "zh-CN",
     isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
-    image: "https://stardewvalleyplanner.art/public-previews/1.6.15/farms/standard.webp",
+    image: "https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.png",
   });
   expect(collectionPage).toMatchObject({
     "@type": "CollectionPage",
-    name: "Modded Stardew Valley Farms",
-    url: "https://stardewvalleyplanner.art/mods",
+    name: "星露谷农场规划指南",
+    url: "https://stardewvalleyplanner.art/zh/blog",
     inLanguage: "zh-CN",
     isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
   });
@@ -94,8 +94,8 @@ it("builds schema data exclusively from explicit visible fields", () => {
       { position: 1, name: "Planner", item: "https://stardewvalleyplanner.art" },
       {
         position: 2,
-        name: "Standard Farm",
-        item: "https://stardewvalleyplanner.art/farm/standard",
+        name: "Carpenter guide",
+        item: "https://stardewvalleyplanner.art/carpenter-stardew",
       },
     ],
   });

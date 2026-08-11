@@ -4,7 +4,6 @@ import ChinesePlannerPage, {
   metadata as chinesePlannerMetadata,
 } from "../../app/zh/page";
 import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
-import { generateMetadata as generateChineseFarmMetadata } from "../../app/zh/farm/[type]/page";
 
 it("renders /zh as the Chinese homepage with the shared planner workspace", () => {
   const markup = renderToStaticMarkup(<ChinesePlannerPage />);
@@ -35,12 +34,4 @@ it("assigns Chinese root canonical and paired language alternates", () => {
       "x-default": "https://stardewvalleyplanner.art",
     },
   });
-});
-
-it("uses the Next not-found boundary for unknown Chinese farm types", async () => {
-  await expect(
-    generateChineseFarmMetadata({
-      params: Promise.resolve({ type: "unknown-farm" }),
-    }),
-  ).rejects.toMatchObject({ digest: "NEXT_HTTP_ERROR_FALLBACK;404" });
 });

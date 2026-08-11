@@ -6,10 +6,6 @@ import {
   type Element as XmlElement,
 } from "@xmldom/xmldom";
 import { describe, expect, it } from "vitest";
-import {
-  officialFarmGuides,
-  officialFarmTypes,
-} from "../../src/reference/official-farm-guides";
 
 const expectedSocialImageUrl =
   "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
@@ -44,7 +40,6 @@ type StaticHomepageExpectation = Readonly<{
   heroSupportingCopy: string;
   capabilityHeading: string;
   capabilityDescriptions: readonly string[];
-  farmGuideHeading: string;
   faqHeading: string;
   faqAnswers: readonly string[];
   trustHeading: string;
@@ -52,8 +47,6 @@ type StaticHomepageExpectation = Readonly<{
   plannerHref: string;
   blogHref: string;
   blogLabel: string;
-  farmComparisonHref: string;
-  moddedFarmsHref: string;
   homepageHref: string;
   jsonLdName: string;
   jsonLdDescription: string;
@@ -69,24 +62,6 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
     "Stardew Valley Planner for Every Farm Layout",
     "en",
-  ],
-  [
-    "/farm-comparison",
-    "farm-comparison.html",
-    "Stardew Valley Farm Types: Compare All 8 Maps",
-    "Compare all 8 Stardew Valley farm types by usable space, unique resources, and layout trade-offs. Find the right map for crops, fishing, animals, co-op, or a challenge run.",
-    "Which Stardew Valley Farm Type Should You Choose?",
-    "en",
-    ["Quick picks by play style", "Quick comparison", "How to read this comparison", "All 8 farm maps"],
-  ],
-  [
-    "/mods",
-    "mods.html",
-    "Stardew Valley Farm Map Mods | Stardew Planner",
-    "Compare 18 Stardew Valley farm map mods and 3 SVE interiors, see who each layout suits, and open every supported map in the online planner.",
-    "Stardew Valley Farm Map Mods and SVE Interiors",
-    "en",
-    ["Farm map mods", "SVE interior spaces"],
   ],
   [
     "/privacy",
@@ -132,33 +107,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "Contact us",
     "en",
   ],
-  ["/farm/standard", "farm/standard.html", "Standard Farm | Stardew Valley Farm Planner", "Standard Farm farm guide. Highest raw crop output and full layout flexibility.", "Standard Farm", "en"],
-  ["/farm/riverland", "farm/riverland.html", "Riverland Farm | Stardew Valley Farm Planner", "Riverland Farm farm guide. Fishing runs. Most of Pelican Town's pool is catchable without leaving home.", "Riverland Farm", "en"],
-  ["/farm/forest", "farm/forest.html", "Forest Farm | Stardew Valley Farm Planner", "Forest Farm farm guide. Hardwood and forage passive income. Good match for the Foraging profession.", "Forest Farm", "en"],
-  ["/farm/hilltop", "farm/hilltop.html", "Hill-top Farm | Stardew Valley Farm Planner", "Hill-top Farm farm guide. Mining-heavy runs. A steady passive trickle of stone and ore from day one.", "Hill-top Farm", "en"],
-  ["/farm/wilderness", "farm/wilderness.html", "Wilderness Farm | Stardew Valley Farm Planner", "Wilderness Farm farm guide. Combat farming. The only farm that spawns Iridium Golems, and the best Living Hat drop rate in the game.", "Wilderness Farm", "en"],
-  ["/farm/four-corners", "farm/four-corners.html", "Four Corners Farm | Stardew Valley Farm Planner", "Four Corners Farm farm guide. Multiplayer runs. Solo players get a taste of every farm in one map.", "Four Corners Farm", "en"],
-  ["/farm/beach", "farm/beach.html", "Beach Farm | Stardew Valley Farm Planner", "Beach Farm farm guide. Fishing, foraging, scenic ocean builds, and ranch layouts.", "Beach Farm", "en"],
-  ["/farm/meadowlands", "farm/meadowlands.html", "Meadowlands Farm | Stardew Valley Farm Planner", "Meadowlands Farm farm guide. Ranching. Blue Grass removes the winter hay scramble.", "Meadowlands Farm", "en"],
-  ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "星露谷物语规划器——免费在线农场布局工具", "zh-CN"],
-  [
-    "/zh/farm-comparison",
-    "zh/farm-comparison.html",
-    "星露谷物语农场类型对比：8 种地图怎么选",
-    "对比《星露谷物语》8 种农场地图的可用空间、独特资源与布局取舍，快速找到适合作物、钓鱼、畜牧、多人联机或挑战玩法的农场。",
-    "星露谷物语 8 种农场怎么选？",
-    "zh-CN",
-    ["按玩法快速选择", "快速对比", "本页数据说明", "8 种农场地图"],
-  ],
-  [
-    "/zh/mods",
-    "zh/mods.html",
-    "星露谷物语农场地图 Mod | 星露谷规划器",
-    "对比 18 张星露谷物语农场地图 Mod 和 3 张 SVE 室内地图，了解每张地图适合谁，并在在线规划器中打开受支持的布局。",
-    "星露谷物语农场地图 Mod 与 SVE 室内地图",
-    "zh-CN",
-    ["农场地图 Mod", "SVE 室内空间"],
-  ],
+  ["/zh", "zh.html", "星露谷农场规划器", "使用本地地图、物品和项目规划你的星露谷农场布局。", "适用于各种农场布局的星露谷物语规划器", "zh-CN"],
   [
     "/zh/privacy",
     "zh/privacy.html",
@@ -203,14 +152,6 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "联系我们",
     "zh-CN",
   ],
-  ["/zh/farm/standard", "zh/farm/standard.html", "标准农场 指南 | 星露谷规划器", "了解标准农场地图，并开始规划你的星露谷农场布局。", "标准农场", "zh-CN"],
-  ["/zh/farm/riverland", "zh/farm/riverland.html", "河流农场 指南 | 星露谷规划器", "了解河流农场地图，并开始规划你的星露谷农场布局。", "河流农场", "zh-CN"],
-  ["/zh/farm/forest", "zh/farm/forest.html", "森林农场 指南 | 星露谷规划器", "了解森林农场地图，并开始规划你的星露谷农场布局。", "森林农场", "zh-CN"],
-  ["/zh/farm/hilltop", "zh/farm/hilltop.html", "山顶农场 指南 | 星露谷规划器", "了解山顶农场地图，并开始规划你的星露谷农场布局。", "山顶农场", "zh-CN"],
-  ["/zh/farm/wilderness", "zh/farm/wilderness.html", "荒野农场 指南 | 星露谷规划器", "了解荒野农场地图，并开始规划你的星露谷农场布局。", "荒野农场", "zh-CN"],
-  ["/zh/farm/four-corners", "zh/farm/four-corners.html", "四角农场 指南 | 星露谷规划器", "了解四角农场地图，并开始规划你的星露谷农场布局。", "四角农场", "zh-CN"],
-  ["/zh/farm/beach", "zh/farm/beach.html", "海滩农场 指南 | 星露谷规划器", "了解海滩农场地图，并开始规划你的星露谷农场布局。", "海滩农场", "zh-CN"],
-  ["/zh/farm/meadowlands", "zh/farm/meadowlands.html", "草原农场 指南 | 星露谷规划器", "了解草原农场地图，并开始规划你的星露谷农场布局。", "草原农场", "zh-CN"],
 ] as const;
 
 const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
@@ -357,7 +298,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Arrange buildings, crops, placeables and decor while checking sprinkler, scarecrow, Bee House and Junimo Hut coverage.",
       "Create and save local projects without an account or cloud sync.",
     ],
-    farmGuideHeading: "Choose a farm type before you plan",
     faqHeading: "Frequently asked questions",
     faqAnswers: [
       "Projects are saved locally in this browser. There is no account or cloud sync, so use the same browser and device to reopen them.",
@@ -372,8 +312,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     plannerHref: "#planner",
     blogHref: "/blog",
     blogLabel: "Blog",
-    farmComparisonHref: "/farm-comparison",
-    moddedFarmsHref: "/mods",
     homepageHref: "/",
     jsonLdName: "Stardew Valley Farm Planner",
     jsonLdDescription:
@@ -393,7 +331,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "放置建筑、作物、可放置物和装饰，同时查看洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
       "无需账号或云同步，直接在当前浏览器中创建并保存本地项目。",
     ],
-    farmGuideHeading: "规划前先选择农场类型",
     faqHeading: "常见问题",
     faqAnswers: [
       "项目保存在当前浏览器本地。这里没有账号或云同步功能，因此请使用同一浏览器和设备重新打开项目。",
@@ -408,8 +345,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     plannerHref: "#planner",
     blogHref: "/zh/blog",
     blogLabel: "博客",
-    farmComparisonHref: "/zh/farm-comparison",
-    moddedFarmsHref: "/zh/mods",
     homepageHref: "/zh",
     jsonLdName: "星露谷农场规划器",
     jsonLdDescription: "使用本地地图、物品和项目规划你的星露谷农场布局。",
@@ -560,9 +495,8 @@ function expectStaticHomepageContent(
   for (const capabilityDescription of expectedHomepage.capabilityDescriptions) {
     expect(staticPageHtml).toContain(capabilityDescription);
   }
-  expect(staticPageHtml).toContain(
-    `<h2 id="homepage-farm-guides-heading">${expectedHomepage.farmGuideHeading}</h2>`,
-  );
+  expect(staticPageHtml).not.toContain("data-homepage-farm-guides");
+  expect(staticPageHtml).not.toContain("data-homepage-farm-guide-links");
   expect(staticPageHtml).toContain(`<h2>${expectedHomepage.faqHeading}</h2>`);
   for (const faqAnswer of expectedHomepage.faqAnswers) {
     expect(staticPageHtml).toContain(faqAnswer);
@@ -579,12 +513,11 @@ function expectStaticHomepageContent(
   expect(staticPageHtml).toContain(
     `<a href="${expectedHomepage.blogHref}">${expectedHomepage.blogLabel}</a>`,
   );
-  expect(staticPageHtml).toContain(`href="${expectedHomepage.farmComparisonHref}"`);
-  expect(staticPageHtml).toContain(`href="${expectedHomepage.moddedFarmsHref}"`);
+  expect(staticPageHtml).not.toContain('href="/farm-comparison"');
+  expect(staticPageHtml).not.toContain('href="/mods"');
+  expect(staticPageHtml).not.toContain('href="/zh/farm-comparison"');
+  expect(staticPageHtml).not.toContain('href="/zh/mods"');
   expect(staticPageHtml).toContain(`href="${expectedHomepage.homepageHref}"`);
-  expect(staticPageHtml.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
-    officialFarmTypes.length,
-  );
   const structuredDataEntries = readJsonLdStructuredData(
     staticPageHtml,
     expectedHomepage.staticPageFile,
@@ -739,53 +672,6 @@ describe("static public pages", () => {
     }
   });
 
-  it("localizes representative public Article and CollectionPage schema entries", () => {
-    for (const [staticPageFile, schemaType, locale] of [
-      ["farm-comparison.html", "Article", "en"],
-      ["zh/farm-comparison.html", "Article", "zh-CN"],
-      ["mods.html", "CollectionPage", "en"],
-      ["zh/mods.html", "CollectionPage", "zh-CN"],
-    ] as const) {
-      const structuredDataEntries = readJsonLdStructuredData(
-        readStaticPageHtml(staticPageFile),
-        staticPageFile,
-      );
-      const schemaEntries = findStructuredDataByType(
-        structuredDataEntries,
-        schemaType,
-      );
-
-      expect(schemaEntries).toHaveLength(1);
-      expect(schemaEntries[0]).toMatchObject({
-        inLanguage: locale,
-        isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
-      });
-    }
-  });
-
-  it("exports every official farm Article with its visible public preview image", () => {
-    for (const locale of ["en", "zh-CN"] as const) {
-      for (const farmType of officialFarmTypes) {
-        const staticPageFile =
-          locale === "en"
-            ? `farm/${farmType}.html`
-            : `zh/farm/${farmType}.html`;
-        const structuredDataEntries = readJsonLdStructuredData(
-          readStaticPageHtml(staticPageFile),
-          staticPageFile,
-        );
-        const articles = findStructuredDataByType(structuredDataEntries, "Article");
-
-        expect(articles).toHaveLength(1);
-        expect(articles[0]).toMatchObject({
-          inLanguage: locale,
-          isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
-          image: `https://stardewvalleyplanner.art${officialFarmGuides[farmType].previewSource}`,
-        });
-      }
-    }
-  });
-
   it("exports all bilingual public pages with static metadata and paired language alternates", () => {
     for (const [
       pathname,
@@ -879,13 +765,13 @@ describe("static public pages", () => {
         ([pathname, , , , , expectedDocumentLanguage]) =>
           !pathname.startsWith("/zh") && expectedDocumentLanguage === "en",
       ),
-    ).toHaveLength(14);
+    ).toHaveLength(4);
     expect(
       staticPublicPageExpectations.filter(
         ([pathname, , , , , expectedDocumentLanguage]) =>
           pathname.startsWith("/zh") && expectedDocumentLanguage === "zh-CN",
       ),
-    ).toHaveLength(14);
+    ).toHaveLength(4);
     expect(
       existsSync(
         join(

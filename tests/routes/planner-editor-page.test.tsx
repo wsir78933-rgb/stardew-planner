@@ -5,7 +5,18 @@ import PlannerPage from "../../app/(en)/page";
 import { HomepageContent } from "../../src/components/homepage-content";
 import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
 import { createHomepageNavigationUrls } from "../../src/homepage/homepage-navigation-url";
-import { officialFarmTypes } from "../../src/reference/official-farm-guides";
+import { plannerMaps } from "../../src/maps/map-catalog";
+
+const expectedPlannerFarmMapIds = [
+  "standard",
+  "riverland",
+  "forest",
+  "hilltop",
+  "wilderness",
+  "four-corners",
+  "beach",
+  "meadowlands",
+] as const;
 
 describe("planner editor page", () => {
   it("keeps the frozen reference client out of the static homepage markup", () => {
@@ -35,9 +46,13 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Open planner<\/a>/);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Start planning<\/a>/);
-    expect(plannerPageMarkup.match(/data-homepage-farm-guide-link=/g)).toHaveLength(
-      officialFarmTypes.length,
-    );
+    expect(plannerPageMarkup).not.toContain("data-homepage-farm-guide-link");
+    expect(plannerPageMarkup).not.toContain("data-homepage-farm-comparison-link");
+    expect(
+      plannerMaps
+        .filter(({ id }) => expectedPlannerFarmMapIds.includes(id as never))
+        .map(({ id }) => id),
+    ).toEqual(expectedPlannerFarmMapIds);
     expect(plannerPageMarkup).toContain("About this planner");
     expect(plannerPageMarkup).not.toContain('id="reference-runtime-root"');
     expect(plannerPageMarkup).not.toContain(

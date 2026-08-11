@@ -123,10 +123,8 @@ export function WhereIsRobinChineseArticle() {
       <p>
         {"用"}
         <a href="/zh">星露谷规划器</a>
-        {"把目标建筑放到作物、仓储和日常路线旁边试一遍。如果问题在于地图空间，可查看"}
-        <a href="/zh/farm-comparison">农场地图对比</a>
-        {"；重点经营动物时，可参考"}
-        <a href="/zh/farm/meadowlands">草原农场指南</a>
+        {"把目标建筑放到作物、仓储和日常路线旁边试一遍。重点经营动物时，可以直接在"}
+        <a href="/zh?farmType=meadowlands">规划器中打开草原农场</a>
         {"。建筑占地和移动规则则整理在"}
         <a href="/zh/carpenter-stardew">星露谷木匠指南</a>
         {"里。"}

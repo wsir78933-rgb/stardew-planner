@@ -1,6 +1,6 @@
 # Stardew Valley Planner
 
-> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese guides for official farm maps, modded planning maps, and browser-local projects.
+> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese planning articles and browser-local projects.
 
 ## English
 
@@ -9,21 +9,8 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 ### Planner and reference
 
 - [Stardew Valley Planner](https://stardewvalleyplanner.art): Plan a Stardew Valley farm layout in your browser.
-- [Farm types compared](https://stardewvalleyplanner.art/farm-comparison): Compare the eight official farm maps before planning a layout.
-- [Modded farms](https://stardewvalleyplanner.art/mods): Browse local planning maps for community-made farms and interiors.
 - [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn how browser-local projects and site data are handled.
 - [Terms of service](https://stardewvalleyplanner.art/terms): Read the browser-local terms, including optional JSON import and export and the fan-made status.
-
-### Official farm guides
-
-- [Standard Farm guide](https://stardewvalleyplanner.art/farm/standard): Learn about the Standard Farm and start planning its layout.
-- [Riverland Farm guide](https://stardewvalleyplanner.art/farm/riverland): Learn about the Riverland Farm and start planning its layout.
-- [Forest Farm guide](https://stardewvalleyplanner.art/farm/forest): Learn about the Forest Farm and start planning its layout.
-- [Hill-top Farm guide](https://stardewvalleyplanner.art/farm/hilltop): Learn about the Hill-top Farm and start planning its layout.
-- [Wilderness Farm guide](https://stardewvalleyplanner.art/farm/wilderness): Learn about the Wilderness Farm and start planning its layout.
-- [Four Corners Farm guide](https://stardewvalleyplanner.art/farm/four-corners): Learn about the Four Corners Farm and start planning its layout.
-- [Beach Farm guide](https://stardewvalleyplanner.art/farm/beach): Learn about the Beach Farm and start planning its layout.
-- [Meadowlands Farm guide](https://stardewvalleyplanner.art/farm/meadowlands): Learn about the Meadowlands Farm and start planning its layout.
 
 ### Planning guides
 
@@ -39,21 +26,8 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 ### 规划器与参考内容
 
 - [星露谷农场规划器](https://stardewvalleyplanner.art/zh): 在浏览器中规划《星露谷物语》农场布局。
-- [农场类型对比](https://stardewvalleyplanner.art/zh/farm-comparison): 在开始规划前，对比八种官方农场地图。
-- [模组农场](https://stardewvalleyplanner.art/zh/mods): 规划你的星露谷模组组合。
 - [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解浏览器本地项目和站点数据的处理方式。
 - [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读浏览器本地服务条款，包括可选 JSON 导入导出和同人创作说明。
-
-### 官方农场指南
-
-- [标准农场指南](https://stardewvalleyplanner.art/zh/farm/standard): 了解标准农场并开始规划布局。
-- [河流农场指南](https://stardewvalleyplanner.art/zh/farm/riverland): 了解河流农场并开始规划布局。
-- [森林农场指南](https://stardewvalleyplanner.art/zh/farm/forest): 了解森林农场并开始规划布局。
-- [山顶农场指南](https://stardewvalleyplanner.art/zh/farm/hilltop): 了解山顶农场并开始规划布局。
-- [荒野农场指南](https://stardewvalleyplanner.art/zh/farm/wilderness): 了解荒野农场并开始规划布局。
-- [四角农场指南](https://stardewvalleyplanner.art/zh/farm/four-corners): 了解四角农场并开始规划布局。
-- [海滩农场指南](https://stardewvalleyplanner.art/zh/farm/beach): 了解海滩农场并开始规划布局。
-- [草原农场指南](https://stardewvalleyplanner.art/zh/farm/meadowlands): 了解草原农场并开始规划布局。
 
 ### 农场规划指南
 

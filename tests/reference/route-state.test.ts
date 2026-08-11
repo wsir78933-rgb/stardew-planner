@@ -5,9 +5,6 @@ import { referenceRoutes } from "../../src/reference/route-state-manifest";
 
 const requiredRouteIds = [
   "planner",
-  "farm-comparison",
-  "farm-guide",
-  "mods",
   "privacy",
   "terms",
 ] as const;

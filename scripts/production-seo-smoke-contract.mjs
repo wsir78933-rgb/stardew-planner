@@ -1,18 +1,8 @@
 const canonicalPublicPathnames = Object.freeze([
   "/",
-  "/farm-comparison",
-  "/mods",
   "/privacy",
   "/terms",
   "/contact",
-  "/farm/standard",
-  "/farm/riverland",
-  "/farm/forest",
-  "/farm/hilltop",
-  "/farm/wilderness",
-  "/farm/four-corners",
-  "/farm/beach",
-  "/farm/meadowlands",
   "/blog",
   "/blog/archive",
   "/carpenter-stardew",
@@ -158,14 +148,14 @@ assertValidInternalPathname(
   "Production SEO smoke missing-page probe pathname",
 );
 
-if (expectedPublicHtmlPathContracts.length !== 36) {
+if (expectedPublicHtmlPathContracts.length !== 16) {
   throw new Error(
-    `Production SEO smoke must declare 36 public HTML path contracts; received ${String(expectedPublicHtmlPathContracts.length)}.`,
+    `Production SEO smoke must declare 16 public HTML path contracts; received ${String(expectedPublicHtmlPathContracts.length)}.`,
   );
 }
 
-if (expectedSitemapPathnames.length !== 34) {
+if (expectedSitemapPathnames.length !== 14) {
   throw new Error(
-    `Production SEO smoke must declare 34 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
+    `Production SEO smoke must declare 14 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
   );
 }

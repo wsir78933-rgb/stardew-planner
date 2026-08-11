@@ -36,27 +36,7 @@ const referenceRuntimeLockPath = join(
 );
 const expectedStaticPagePaths = [
   "index.html",
-  "farm-comparison.html",
-  "farm/standard.html",
-  "farm/riverland.html",
-  "farm/forest.html",
-  "farm/hilltop.html",
-  "farm/wilderness.html",
-  "farm/four-corners.html",
-  "farm/beach.html",
-  "farm/meadowlands.html",
-  "mods.html",
   "zh.html",
-  "zh/farm-comparison.html",
-  "zh/farm/standard.html",
-  "zh/farm/riverland.html",
-  "zh/farm/forest.html",
-  "zh/farm/hilltop.html",
-  "zh/farm/wilderness.html",
-  "zh/farm/four-corners.html",
-  "zh/farm/beach.html",
-  "zh/farm/meadowlands.html",
-  "zh/mods.html",
 ] as const;
 const forbiddenReferenceSourceDomains = [
   "https://stardewplan.com",

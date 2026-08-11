@@ -6,7 +6,6 @@ import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
-import { HomepageFarmGuideLinks } from "./homepage-farm-guide-links";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 import { HomepagePlanningGuide } from "./homepage-planning-guide";
 import { SiteFooter } from "./site-footer";
@@ -81,7 +80,6 @@ export function HomepageContent({
             ))}
           </div>
         </section>
-        <HomepageFarmGuideLinks copy={copy.farmGuides} currentLocale={currentLocale} />
         <section id="faq">
           <h2>{copy.faq.heading}</h2>
           <div data-homepage-faq-list>

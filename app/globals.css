@@ -437,53 +437,9 @@ body:has(> [data-homepage-shell]) [data-homepage-capability-number] {
 
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities p,
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,
-body:has(> [data-homepage-shell]) [data-homepage-farm-guides] > p,
 body:has(> [data-homepage-shell]) [data-homepage-trust] > p {
   color: var(--muted-foreground);
   line-height: 1.6;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-guides] > p {
-  margin-bottom: 1.5rem;
-  max-width: 44rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-comparison-link] {
-  align-items: center;
-  background: var(--primary);
-  border: 1px solid var(--foreground);
-  color: var(--primary-foreground);
-  display: inline-flex;
-  font-weight: 700;
-  min-height: 2.5rem;
-  padding-inline: 1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-comparison-link]:hover {
-  background: #d4ff61;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-comparison-link]:focus-visible,
-body:has(> [data-homepage-shell]) [data-homepage-farm-guide-link]:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 0.25rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-guide-links] {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-top: 1.5rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-guide-link] {
-  border: 1px solid rgb(36 42 34 / 35%);
-  font-weight: 700;
-  padding: 1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-farm-guide-link]:hover {
-  background: var(--secondary);
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-trust] {
@@ -700,10 +656,6 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 
   body:has(> [data-homepage-shell]) [data-homepage-capability-number] {
     margin-bottom: 2rem;
-  }
-
-  body:has(> [data-homepage-shell]) [data-homepage-farm-guide-links] {
-    grid-template-columns: 1fr;
   }
 
   body:has(> [data-homepage-shell]) [data-site-footer] {

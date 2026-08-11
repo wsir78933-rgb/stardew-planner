@@ -228,24 +228,6 @@ test("keeps the trust statement in its own centered bounded strip", () => {
   expect(trustParagraphRule).toContain("margin-inline: auto;");
 });
 
-test("keeps the farm guide link grid inside the homepage scope at every viewport", () => {
-  const styles = readProjectFile("app/globals.css");
-  const desktopFarmGuideLinksRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-farm-guide-links\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const mobileFarmGuideLinksRule = styles.match(
-    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-farm-guide-links\]\s*\{([\s\S]*?)\n  \}/,
-  )?.[1];
-
-  expect(styles).not.toMatch(/(^|\n)\[data-homepage-farm-guide-links\]\s*\{/);
-  expect(desktopFarmGuideLinksRule).toBeDefined();
-  expect(mobileFarmGuideLinksRule).toBeDefined();
-  expect(desktopFarmGuideLinksRule).toContain(
-    "grid-template-columns: repeat(4, minmax(0, 1fr));",
-  );
-  expect(mobileFarmGuideLinksRule).toContain("grid-template-columns: 1fr;");
-});
-
 test("styles the homepage language dropdown through dedicated data attributes", () => {
   const styles = readProjectFile("app/globals.css");
   const switcherRule = styles.match(

@@ -14,8 +14,7 @@ type ArticleFixture = Readonly<{
   houseCounterDistinctionPhrase: string;
   planningInformationGainPhrase: string;
   plannerPath: string;
-  comparisonPath: string;
-  meadowlandsPath: string;
+  selectedFarmPlannerPath: string;
   officialSource: string;
   mediaPaths: readonly string[];
 }>;
@@ -45,8 +44,19 @@ function assertArticleContract(article: ArticleFixture): void {
   expect(article.markup).not.toContain("<h1");
   expect(article.markup).not.toContain("robin locati0n stardew");
   expect(article.markup).toContain('href="' + article.plannerPath + '"');
-  expect(article.markup).toContain('href="' + article.comparisonPath + '"');
-  expect(article.markup).toContain('href="' + article.meadowlandsPath + '"');
+  expect(article.markup).toContain(
+    'href="' + article.selectedFarmPlannerPath + '"',
+  );
+  for (const removedPublicPath of [
+    "/farm-comparison",
+    "/mods",
+    "/farm/",
+    "/zh/farm-comparison",
+    "/zh/mods",
+    "/zh/farm/",
+  ]) {
+    expect(article.markup).not.toContain(`href="${removedPublicPath}`);
+  }
   expect(article.markup).toContain('href="' + article.officialSource + '"');
   for (const mediaPath of article.mediaPaths) {
     expect(article.markup).toContain('src="' + mediaPath + '"');
@@ -105,8 +115,7 @@ it("renders sourced English and Chinese carpenter guides with matching section c
     planningInformationGainPhrase:
       "Moving a building is free, takes effect immediately, and keeps its contents inside.",
     plannerPath: "/",
-    comparisonPath: "/farm-comparison",
-    meadowlandsPath: "/farm/meadowlands",
+    selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
     mediaPaths: [
       "/blog/illustrations/carpenter-building-layout.webp",
@@ -126,8 +135,7 @@ it("renders sourced English and Chinese carpenter guides with matching section c
     houseCounterDistinctionPhrase: "房子能进入，不等于柜台一定提供服务；",
     planningInformationGainPhrase: "搬动建筑免费且立即生效，建筑内的物品会跟着一起移动。",
     plannerPath: "/zh",
-    comparisonPath: "/zh/farm-comparison",
-    meadowlandsPath: "/zh/farm/meadowlands",
+    selectedFarmPlannerPath: "/zh?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
     mediaPaths: [
       "/blog/illustrations/carpenter-building-layout.webp",
@@ -162,8 +170,7 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
     planningInformationGainPhrase:
       "Finding Robin and reaching an open service counter are two different problems.",
     plannerPath: "/",
-    comparisonPath: "/farm-comparison",
-    meadowlandsPath: "/farm/meadowlands",
+    selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
     mediaPaths: [
       "/blog/illustrations/robin-location-routes.webp",
@@ -183,8 +190,7 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
     houseCounterDistinctionPhrase: "房子开着，不代表罗宾可以出售物品或开始订单。",
     planningInformationGainPhrase: "找到罗宾和找到正在营业的柜台，是两个不同的问题。",
     plannerPath: "/zh",
-    comparisonPath: "/zh/farm-comparison",
-    meadowlandsPath: "/zh/farm/meadowlands",
+    selectedFarmPlannerPath: "/zh?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
     mediaPaths: [
       "/blog/illustrations/robin-location-routes.webp",

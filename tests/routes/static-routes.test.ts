@@ -2,10 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../next.config";
-import {
-  generateStaticParams,
-  officialFarmTypes,
-} from "../../app/(en)/farm/[type]/page";
+import { plannerMaps } from "../../src/maps/map-catalog";
 
 const expectedOfficialFarmTypes = [
   "standard",
@@ -20,30 +17,10 @@ const expectedOfficialFarmTypes = [
 
 const expectedStaticPageFiles = [
   "index.html",
-  "farm-comparison.html",
-  "farm/standard.html",
-  "farm/riverland.html",
-  "farm/forest.html",
-  "farm/hilltop.html",
-  "farm/wilderness.html",
-  "farm/four-corners.html",
-  "farm/beach.html",
-  "farm/meadowlands.html",
-  "mods.html",
   "privacy.html",
   "terms.html",
   "contact.html",
   "zh.html",
-  "zh/farm-comparison.html",
-  "zh/farm/standard.html",
-  "zh/farm/riverland.html",
-  "zh/farm/forest.html",
-  "zh/farm/hilltop.html",
-  "zh/farm/wilderness.html",
-  "zh/farm/four-corners.html",
-  "zh/farm/beach.html",
-  "zh/farm/meadowlands.html",
-  "zh/mods.html",
   "zh/privacy.html",
   "zh/terms.html",
   "zh/contact.html",
@@ -86,11 +63,27 @@ describe("static reference-runtime routes", () => {
     expect(nextConfig.images?.unoptimized).toBe(true);
   });
 
-  it("generates exactly the eight official farm guide paths", () => {
-    expect(officialFarmTypes).toEqual(expectedOfficialFarmTypes);
-    expect(generateStaticParams()).toEqual(
-      expectedOfficialFarmTypes.map((type) => ({ type })),
-    );
+  it("keeps every official farm available to the planner", () => {
+    expect(
+      plannerMaps
+        .filter(({ id }) => expectedOfficialFarmTypes.includes(id as never))
+        .map(({ id }) => id),
+    ).toEqual(expectedOfficialFarmTypes);
+  });
+
+  it("does not export removed public guide pages", () => {
+    for (const removedStaticPageFile of [
+      "farm-comparison.html",
+      "mods.html",
+      ...expectedOfficialFarmTypes.map((farmType) => `farm/${farmType}.html`),
+      "zh/farm-comparison.html",
+      "zh/mods.html",
+      ...expectedOfficialFarmTypes.map((farmType) => `zh/farm/${farmType}.html`),
+    ]) {
+      expect(existsSync(join(process.cwd(), "out", removedStaticPageFile))).toBe(
+        false,
+      );
+    }
   });
 
   it(

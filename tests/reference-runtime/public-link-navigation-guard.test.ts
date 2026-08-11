@@ -190,7 +190,7 @@ describe("installReferenceRuntimePublicLinkNavigationGuard", () => {
     const fakeLocation = { href: "http://localhost:3001/" };
     const fakeRuntimeRoot = createFakeRuntimeRoot();
     const publicRouteAnchor = createFakeAnchor({
-      href: "http://localhost:3001/farm/four-corners",
+      href: "http://localhost:3001/privacy",
     });
     const clickEvent = createFakeClickEvent([
       createNestedFakeLinkTarget(publicRouteAnchor),
@@ -225,13 +225,13 @@ describe("installReferenceRuntimePublicLinkNavigationGuard", () => {
 
   it.each([
     {
-      anchorHref: "http://localhost:3001/zh/farm/four-corners",
+      anchorHref: "http://localhost:3001/zh/privacy",
       clickPathKind: "nested",
       locationHref: "http://localhost:3001/",
       name: "a Chinese public route",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard?season=spring",
+      anchorHref: "http://localhost:3001/terms?source=footer",
       clickPathKind: "nested",
       locationHref: "http://localhost:3001/",
       name: "a public route with a query string",
@@ -243,13 +243,13 @@ describe("installReferenceRuntimePublicLinkNavigationGuard", () => {
       name: "the current document URL",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard?season=spring",
+      anchorHref: "http://localhost:3001/terms?source=footer",
       clickPathKind: "nested",
-      locationHref: "http://localhost:3001/farm/standard?season=spring",
+      locationHref: "http://localhost:3001/terms?source=footer",
       name: "the current path and query URL",
     },
     {
-      anchorHref: "http://localhost:3001/farm/four-corners",
+      anchorHref: "http://localhost:3001/privacy",
       clickPathKind: "direct",
       locationHref: "http://localhost:3001/",
       name: "an anchor that is the direct click target",
@@ -279,7 +279,7 @@ describe("installReferenceRuntimePublicLinkNavigationGuard", () => {
 
   it.each([
     {
-      anchorHref: "http://localhost:3001/farm/four-corners",
+      anchorHref: "http://localhost:3001/privacy",
       name: "a runtime-owned link",
       runtimeOwnsAnchor: true,
     },
@@ -287,77 +287,77 @@ describe("installReferenceRuntimePublicLinkNavigationGuard", () => {
     { anchorHref: "/#", name: "a root empty same-document fragment" },
     { anchorHref: "/#planner", name: "a same-document hash route" },
     {
-      anchorHref: "https://example.com/farm/standard",
+      anchorHref: "https://example.com/privacy",
       name: "an external origin",
     },
     { anchorHref: "mailto:test@example.com", name: "a non-HTTP protocol" },
     {
       anchorAttributes: ["download"],
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       name: "a download",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       anchorRel: "external",
       name: "an external relation",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       anchorRel: "nofollow external noreferrer",
       name: "an external relation token",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       anchorRel: "nofollow EXTERNAL noreferrer",
       name: "a case-insensitive external relation token",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       anchorTarget: "_blank",
       name: "a new browsing context",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       anchorTarget: "_parent",
       name: "a parent browsing context",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       anchorTarget: "_top",
       name: "a top browsing context",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
-      anchorTarget: "farm-guide",
+      anchorHref: "http://localhost:3001/privacy",
+      anchorTarget: "legal-page",
       name: "a named browsing context",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       clickEventOverrides: { metaKey: true },
       name: "a meta-key click",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       clickEventOverrides: { ctrlKey: true },
       name: "a control-key click",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       clickEventOverrides: { shiftKey: true },
       name: "a shift-key click",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       clickEventOverrides: { altKey: true },
       name: "an alt-key click",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       clickEventOverrides: { button: 1 },
       name: "a non-primary click",
     },
     {
-      anchorHref: "http://localhost:3001/farm/standard",
+      anchorHref: "http://localhost:3001/privacy",
       clickEventOverrides: { defaultPrevented: true },
       expectedDefaultPrevented: true,
       name: "an already prevented click",

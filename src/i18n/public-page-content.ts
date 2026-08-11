@@ -583,8 +583,6 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
     navigationLabel: "公共导航",
     navigation: [
       { label: "规划器", path: "/" },
-      { label: "农场对比", path: "/farm-comparison" },
-      { label: "模组", path: "/mods" },
     ],
     brandLabel: "星露谷规划器",
     counterpartLabel: "English",

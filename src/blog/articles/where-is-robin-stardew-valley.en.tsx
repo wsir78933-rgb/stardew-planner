@@ -140,11 +140,10 @@ export function WhereIsRobinEnglishArticle() {
       </p>
       <p>
         Use the <a href="/">Stardew Valley Planner</a> to test the footprint beside
-        crops, storage, and regular travel routes. The
-        <a href="/farm-comparison"> farm comparison</a> helps if map space is the
-        problem, while the <a href="/farm/meadowlands">Meadowlands Farm guide</a> is
-        useful for an animal-focused layout. For the placement and move rules
-        themselves, read the <a href="/carpenter-stardew">Stardew Valley carpenter guide</a>.
+        crops, storage, and regular travel routes. For an animal-focused layout,
+        <a href="/?farmType=meadowlands"> open Meadowlands directly in the planner</a>.
+        For the placement and move rules themselves, read the
+        <a href="/carpenter-stardew"> Stardew Valley carpenter guide</a>.
       </p>
         <p>
         Once the destination is clear, check the day, weather, and current

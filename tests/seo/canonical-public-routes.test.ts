@@ -8,13 +8,15 @@ const expectedBlogCanonicalPaths = [
   "/where-is-robin-stardew-valley",
 ] as const;
 
-it("derives guide and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(18);
+it("derives the remaining content and legal paths without planner query URLs", () => {
+  expect(canonicalPublicPaths).toHaveLength(8);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );
-  expect(canonicalPublicPaths).toContain("/farm/meadowlands");
   expect(canonicalPublicPaths).not.toContain("/?farmType=standard");
+  expect(canonicalPublicPaths).not.toContain("/farm-comparison");
+  expect(canonicalPublicPaths).not.toContain("/mods");
+  expect(canonicalPublicPaths).not.toContain("/farm/meadowlands");
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");

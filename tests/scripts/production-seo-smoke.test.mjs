@@ -36,19 +36,9 @@ const enforcedHtmlSecurityHeaders = {
 
 const expectedCanonicalPublicPathnames = [
   "/",
-  "/farm-comparison",
-  "/mods",
   "/privacy",
   "/terms",
   "/contact",
-  "/farm/standard",
-  "/farm/riverland",
-  "/farm/forest",
-  "/farm/hilltop",
-  "/farm/wilderness",
-  "/farm/four-corners",
-  "/farm/beach",
-  "/farm/meadowlands",
   "/blog",
   "/blog/archive",
   "/carpenter-stardew",
@@ -91,7 +81,7 @@ const bodyReadFailureCases = [
   {
     bodyDescription: "public HTML",
     expectedCheck: "a readable HTML response body",
-    requestUrl: `${productionOrigin}/mods`,
+    requestUrl: `${productionOrigin}/privacy`,
   },
   {
     bodyDescription: "robots.txt",
@@ -175,7 +165,7 @@ function createBodyReadFailureResponse(
   requestUrl,
   bodyReadError,
 ) {
-  const isPublicHtml = requestUrl === `${productionOrigin}/mods`;
+  const isPublicHtml = requestUrl === `${productionOrigin}/privacy`;
   const isMissingPage = requestUrl.endsWith(
     "/__production-seo-smoke-missing-page__",
   );
@@ -229,9 +219,9 @@ function createDeterministicFetch({
 } = {}) {
   const requests = [];
   const redirectProbeUrl =
-    "http://stardewvalleyplanner.art/farm/standard?seo_https_probe=1";
+    "http://stardewvalleyplanner.art/privacy?seo_https_probe=1";
   const expectedRedirectLocation =
-    "https://stardewvalleyplanner.art/farm/standard?seo_https_probe=1";
+    "https://stardewvalleyplanner.art/privacy?seo_https_probe=1";
 
   async function fetchResponse(input, init) {
     const requestUrl = String(input);
@@ -368,7 +358,7 @@ describe("production SEO smoke arguments", () => {
     ],
     [
       "non-root origin",
-      ["--origin", "https://stardewvalleyplanner.art/farm/standard"],
+      ["--origin", "https://stardewvalleyplanner.art/privacy"],
     ],
     [
       "dot-segment non-root origin",
@@ -380,8 +370,8 @@ describe("production SEO smoke arguments", () => {
 });
 
 describe("production SEO smoke static contract", () => {
-  it("declares all 36 localized public HTML paths", () => {
-    expect(expectedPublicHtmlPathContracts).toHaveLength(36);
+  it("declares all 16 localized public HTML paths", () => {
+    expect(expectedPublicHtmlPathContracts).toHaveLength(16);
     expect(
       expectedPublicHtmlPathContracts.map(({ pathname }) => pathname),
     ).toEqual(expectedPublicHtmlPathnames);
@@ -393,8 +383,8 @@ describe("production SEO smoke static contract", () => {
     ).toBe(true);
   });
 
-  it("declares the exact 34 sitemap pathnames without Contact", () => {
-    expect(expectedSitemapPathnames).toHaveLength(34);
+  it("declares the exact 14 sitemap pathnames without Contact", () => {
+    expect(expectedSitemapPathnames).toHaveLength(14);
     expect(expectedSitemapPathnames).toEqual(
       expectedPublicHtmlPathnames.filter(
         (pathname) => pathname !== "/contact" && pathname !== "/zh/contact",
@@ -430,7 +420,7 @@ describe("production SEO smoke static contract", () => {
 describe("production SEO smoke HTTP and HTML checks", () => {
   it("reports the request URL, network check, and built-in fetch TypeError", async () => {
     const redirectProbeUrl =
-      "http://stardewvalleyplanner.art/farm/standard?seo_https_probe=1";
+      "http://stardewvalleyplanner.art/privacy?seo_https_probe=1";
     const fetchResponse = async () => {
       throw new TypeError("fixture network unavailable");
     };
@@ -451,33 +441,33 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
 
     expect(summary).toMatchObject({
-      publicHtmlPageCount: 36,
-      sitemapUrlCount: 34,
+      publicHtmlPageCount: 16,
+      sitemapUrlCount: 14,
       noindexBlogPageCount: 8,
       noindexContactPageCount: 2,
       missingPageCount: 1,
     });
-    expect(requests).toHaveLength(42);
+    expect(requests).toHaveLength(22);
     expect(requests[0]).toEqual({
       requestUrl:
-        "http://stardewvalleyplanner.art/farm/standard?seo_https_probe=1",
+        "http://stardewvalleyplanner.art/privacy?seo_https_probe=1",
       init: { redirect: "manual" },
     });
     expect(requests[1]).toEqual({
       requestUrl:
-        "https://stardewvalleyplanner.art/farm/standard?seo_https_probe=1",
+        "https://stardewvalleyplanner.art/privacy?seo_https_probe=1",
       init: { redirect: "manual" },
     });
     expect(
       requests
-        .slice(2, 38)
+        .slice(2, 18)
         .map(({ requestUrl }) => new URL(requestUrl).pathname),
     ).toEqual(expectedPublicHtmlPathnames);
   });
 
   it("rejects a second redirect from the query-preserving HTTPS target", async () => {
     const httpsRedirectTargetUrl =
-      `${productionOrigin}/farm/standard?seo_https_probe=1`;
+      `${productionOrigin}/privacy?seo_https_probe=1`;
     const { fetchResponse, requests } = createDeterministicFetch({
       responseFactoriesByUrl: new Map([
         [
@@ -485,7 +475,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
           () =>
             new Response(null, {
               status: 302,
-              headers: { location: `${productionOrigin}/farm/standard` },
+              headers: { location: `${productionOrigin}/privacy` },
             }),
         ],
       ]),
@@ -501,7 +491,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
   it("fails immediately when the HTTPS redirect does not preserve path and query", async () => {
     const redirectProbeUrl =
-      "http://stardewvalleyplanner.art/farm/standard?seo_https_probe=1";
+      "http://stardewvalleyplanner.art/privacy?seo_https_probe=1";
     const { fetchResponse, requests } = createDeterministicFetch({
       responseFactoriesByUrl: new Map([
         [
@@ -524,7 +514,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
   });
 
   it("reports the public URL, status check, and actual status", async () => {
-    const failedUrl = `${productionOrigin}/mods`;
+    const failedUrl = `${productionOrigin}/privacy`;
     const { fetchResponse } = createDeterministicFetch({
       responseFactoriesByUrl: new Map([
         [failedUrl, () => createTextResponse("Unavailable", 503, "text/html")],
@@ -550,14 +540,14 @@ describe("production SEO smoke HTTP and HTML checks", () => {
   });
 
   it("requires literal canonical and language-alternate URLs", async () => {
-    const failedPathname = "/zh/farm/forest";
+    const failedPathname = "/zh/privacy";
     const failedUrl = `${productionOrigin}${failedPathname}`;
     const { fetchResponse } = createDeterministicFetch({
       htmlOverridesByPathname: new Map([
         [
           failedPathname,
           {
-            canonicalUrl: `${productionOrigin}/farm/forest`,
+            canonicalUrl: `${productionOrigin}/privacy`,
           },
         ],
       ]),
@@ -566,10 +556,10 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     await expectSmokeFailure(fetchResponse, [
       failedUrl,
       "canonical URL",
-      `${productionOrigin}/farm/forest`,
+      `${productionOrigin}/privacy`,
     ]);
 
-    const wrongAlternatePathname = "/farm/beach";
+    const wrongAlternatePathname = "/terms";
     const wrongAlternateUrl = `${productionOrigin}${wrongAlternatePathname}`;
     const { fetchResponse: fetchWrongAlternate } = createDeterministicFetch({
       htmlOverridesByPathname: new Map([
@@ -578,7 +568,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
           {
             languageAlternates: {
               en: wrongAlternateUrl,
-              "zh-CN": `${productionOrigin}/zh/farm/standard`,
+              "zh-CN": `${productionOrigin}/zh/privacy`,
               "x-default": wrongAlternateUrl,
             },
           },
@@ -589,7 +579,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     await expectSmokeFailure(fetchWrongAlternate, [
       wrongAlternateUrl,
       "zh-CN hreflang URL",
-      `${productionOrigin}/zh/farm/standard`,
+      `${productionOrigin}/zh/privacy`,
     ]);
   });
 
@@ -646,7 +636,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
   });
 
   it("requires index, follow on every public page outside the noindex set", async () => {
-    const failedPathname = "/mods";
+    const failedPathname = "/privacy";
     const failedUrl = `${productionOrigin}${failedPathname}`;
     const { fetchResponse } = createDeterministicFetch({
       htmlOverridesByPathname: new Map([
@@ -695,7 +685,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     ]);
   });
 
-  it("requires the unique sitemap location set to exactly match all 34 URLs", async () => {
+  it("requires the unique sitemap location set to exactly match all 14 URLs", async () => {
     const sitemapUrl = `${productionOrigin}/sitemap.xml`;
     const incompleteSitemapPathnames = expectedSitemapPathnamesForFixture.slice(1);
     const incompleteSitemapXml = `<urlset>${incompleteSitemapPathnames
@@ -714,8 +704,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "34 unique sitemap URLs",
-      "33",
+      "14 unique sitemap URLs",
+      "13",
     ]);
   });
 
@@ -767,7 +757,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "34 unique sitemap URLs",
+      "14 unique sitemap URLs",
       "0",
     ]);
   });
@@ -847,14 +837,14 @@ describe("production SEO smoke security headers and static caching", () => {
     });
 
     expect(summary).toEqual({
-      publicHtmlPageCount: 36,
-      sitemapUrlCount: 34,
+      publicHtmlPageCount: 16,
+      sitemapUrlCount: 14,
       noindexBlogPageCount: 8,
       noindexContactPageCount: 2,
       missingPageCount: 1,
-      securityHeaderResponseCount: 37,
+      securityHeaderResponseCount: 17,
       cachedStaticAssetCount: 1,
-      totalRequestCount: 42,
+      totalRequestCount: 22,
     });
     expect(Object.isFrozen(summary)).toBe(true);
     expect(requests.at(-1)).toEqual({
@@ -907,7 +897,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 37 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 17 });
   });
 
   it("rejects missing CSP and missing enforced frame protection", async () => {
@@ -1015,7 +1005,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 37 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 17 });
   });
 
   it("rejects a quoted zero HSTS max-age", async () => {
@@ -1156,7 +1146,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 37 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 17 });
   });
 
   it("accepts multiple declared policies when their combined frame ancestors are restrictive", async () => {
@@ -1177,7 +1167,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 37 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 17 });
   });
 
   it("checks security headers on the missing-page HTML response", async () => {

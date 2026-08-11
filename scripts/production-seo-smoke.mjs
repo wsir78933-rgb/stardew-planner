@@ -661,8 +661,8 @@ export async function runProductionSeoSmoke({ fetchResponse, origin }) {
     );
   }
 
-  const redirectProbeUrl = `${normalizedOrigin.replace(/^https:/, "http:")}/farm/standard?seo_https_probe=1`;
-  const expectedRedirectLocation = `${normalizedOrigin}/farm/standard?seo_https_probe=1`;
+  const redirectProbeUrl = `${normalizedOrigin.replace(/^https:/, "http:")}/privacy?seo_https_probe=1`;
+  const expectedRedirectLocation = `${normalizedOrigin}/privacy?seo_https_probe=1`;
   const redirectResponse = await requestProductionResponse(
     fetchResponse,
     redirectProbeUrl,

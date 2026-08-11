@@ -27,36 +27,33 @@ it("requires an explicit locale and canonical public identity at the type bounda
 it("creates absolute canonical metadata with a route description", () => {
   const metadata = createPublicPageMetadata({
     locale: "en",
-    canonicalPath: "/mods",
-    title: "Modded Stardew Valley Farms",
-    description:
-      "Browse local planning maps for community-made Stardew Valley farms and interiors.",
+    canonicalPath: "/privacy",
+    title: "Privacy Policy",
+    description: "Learn how browser-local projects and site data are handled.",
   });
 
   expect(metadata.alternates?.canonical).toBe(
-    "https://stardewvalleyplanner.art/mods",
+    "https://stardewvalleyplanner.art/privacy",
   );
   expect(metadata.alternates?.languages).toEqual({
-    en: "https://stardewvalleyplanner.art/mods",
-    "zh-CN": "https://stardewvalleyplanner.art/zh/mods",
-    "x-default": "https://stardewvalleyplanner.art/mods",
+    en: "https://stardewvalleyplanner.art/privacy",
+    "zh-CN": "https://stardewvalleyplanner.art/zh/privacy",
+    "x-default": "https://stardewvalleyplanner.art/privacy",
   });
   expect(metadata.description).toBe(
-    "Browse local planning maps for community-made Stardew Valley farms and interiors.",
+    "Learn how browser-local projects and site data are handled.",
   );
   expect(metadata.openGraph).toMatchObject({
-    url: "https://stardewvalleyplanner.art/mods",
-    title: "Modded Stardew Valley Farms",
-    description:
-      "Browse local planning maps for community-made Stardew Valley farms and interiors.",
+    url: "https://stardewvalleyplanner.art/privacy",
+    title: "Privacy Policy",
+    description: "Learn how browser-local projects and site data are handled.",
     type: "website",
     images: [expectedSocialImageUrl],
   });
   expect(metadata.twitter).toMatchObject({
     card: "summary",
-    title: "Modded Stardew Valley Farms",
-    description:
-      "Browse local planning maps for community-made Stardew Valley farms and interiors.",
+    title: "Privacy Policy",
+    description: "Learn how browser-local projects and site data are handled.",
     images: [expectedSocialImageUrl],
   });
 });
@@ -64,9 +61,9 @@ it("creates absolute canonical metadata with a route description", () => {
 it("preserves the supported article Open Graph type", () => {
   const metadata = createPublicPageMetadata({
     locale: "en",
-    canonicalPath: "/farm/standard",
-    title: "Standard Farm Guide",
-    description: "Plan a Standard Farm.",
+    canonicalPath: "/carpenter-stardew",
+    title: "Carpenter in Stardew Valley",
+    description: "Find Robin's building services.",
     openGraphType: "article",
   });
 
@@ -105,21 +102,21 @@ it("preserves an explicit robots directive", () => {
 it("creates Chinese metadata from a locale-neutral public identity", () => {
   const metadata = createPublicPageMetadata({
     locale: "zh-CN",
-    canonicalPath: "/mods",
-    title: "星露谷物语模组农场",
-    description: "浏览社区制作的星露谷物语农场和室内规划地图。",
+    canonicalPath: "/privacy",
+    title: "隐私政策",
+    description: "了解浏览器本地项目和站点数据的处理方式。",
   });
 
   expect(metadata.alternates).toEqual({
-    canonical: "https://stardewvalleyplanner.art/zh/mods",
+    canonical: "https://stardewvalleyplanner.art/zh/privacy",
     languages: {
-      en: "https://stardewvalleyplanner.art/mods",
-      "zh-CN": "https://stardewvalleyplanner.art/zh/mods",
-      "x-default": "https://stardewvalleyplanner.art/mods",
+      en: "https://stardewvalleyplanner.art/privacy",
+      "zh-CN": "https://stardewvalleyplanner.art/zh/privacy",
+      "x-default": "https://stardewvalleyplanner.art/privacy",
     },
   });
   expect(metadata.openGraph).toMatchObject({
-    url: "https://stardewvalleyplanner.art/zh/mods",
+    url: "https://stardewvalleyplanner.art/zh/privacy",
     images: [expectedSocialImageUrl],
   });
   expect(metadata.twitter).toMatchObject({

@@ -25,7 +25,7 @@ it("writes robots.txt with the absolute sitemap URL", () => {
   );
 });
 
-it("intentionally retains noindex blog URLs among the 34 localized public sitemap URLs", () => {
+it("intentionally retains noindex blog URLs among the 14 localized public sitemap URLs", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
   const sitemapLocationValues = Array.from(
     sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g),
@@ -34,8 +34,8 @@ it("intentionally retains noindex blog URLs among the 34 localized public sitema
   const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
 
-  expect(sitemapUrlCount).toBe(34);
-  expect(localizedPublicRouteEntries).toHaveLength(34);
+  expect(sitemapUrlCount).toBe(14);
+  expect(localizedPublicRouteEntries).toHaveLength(14);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,

@@ -67,11 +67,9 @@ export function CarpenterStardewChineseArticle() {
         }
       </p>
       <p>
-        {"如果连地图都还没选好，可以先查看"}
-        <a href="/zh/farm-comparison">农场地图对比</a>
-        {"。准备重点经营动物时，"}
-        <a href="/zh/farm/meadowlands">草原农场指南</a>
-        {"能提供更具体的空间参考。"}
+        {"如果连地图都还没选好，可以先在"}
+        <a href="/zh?farmType=meadowlands">规划器中打开草原农场</a>
+        {"，试排畜舍、草地和日常通路，看实际空间是否够用。"}
       </p>
       <p>
         {"打开"}

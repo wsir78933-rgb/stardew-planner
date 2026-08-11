@@ -5,9 +5,6 @@
 | 路由 ID | 路径 | 视口 | 验收目的 |
 | --- | --- | --- | --- |
 | `planner` | `/` | `desktop`、`mobile` | 验收桌面和移动端的完整浏览器本地农场规划工作区。 |
-| `farm-comparison` | `/farm-comparison` | `desktop`、`mobile` | 验收响应式农场地图特征比较页面。 |
-| `farm-guide` | `/farm/[type]` | `desktop`、`mobile` | 验收每个官方农场的固定指南路由模板。 |
-| `mods` | `/mods` | `desktop`、`mobile` | 验收响应式 Mod 地图信息和规划入口。 |
 | `privacy` | `/privacy` | `desktop`、`mobile` | 验收浏览器本地隐私说明的法律页面布局。 |
 | `terms` | `/terms` | `desktop`、`mobile` | 验收浏览器本地条款的法律页面布局。 |
 
@@ -85,27 +82,6 @@
 | `mobile-overlay-resource-clump` | `mobile` | `cursor` | `null` | `overlays` | 启用 Resource Clumps 叠加层。 | 资源丛位置标记显示在移动端地图上。 |
 | `desktop-weather-unavailable` | `desktop` | `cursor` | `null` | `overlays` | 打开 Weather 控件。 | Weather 控件在桌面规划器中保持可见但不可用。 |
 | `mobile-weather-unavailable` | `mobile` | `cursor` | `null` | `overlays` | 打开 Weather 控件。 | Weather 控件在移动端规划器中保持可见但不可用。 |
-
-## 农场比较（`/farm-comparison`）
-
-| 状态 ID | 视口 | 工具模式 | 选中实体 | 模态状态 | 操作 | 应可见结果 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `desktop-comparison-idle` | `desktop` | `null` | `null` | `null` | 打开农场比较页面。 | 桌面农场比较内容和规划器导航可见。 |
-| `mobile-comparison-idle` | `mobile` | `null` | `null` | `null` | 打开农场比较页面。 | 移动端农场比较内容和规划器导航可见。 |
-
-## 农场指南（`/farm/[type]`）
-
-| 状态 ID | 视口 | 工具模式 | 选中实体 | 模态状态 | 操作 | 应可见结果 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `desktop-guide-idle` | `desktop` | `null` | `null` | `null` | 打开一个官方农场指南路由。 | 所选农场的指南内容和规划器导航在桌面端可见。 |
-| `mobile-guide-idle` | `mobile` | `null` | `null` | `null` | 打开一个官方农场指南路由。 | 所选农场的指南内容和规划器导航在移动端可见。 |
-
-## Mod 地图（`/mods`）
-
-| 状态 ID | 视口 | 工具模式 | 选中实体 | 模态状态 | 操作 | 应可见结果 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `desktop-mods-idle` | `desktop` | `null` | `null` | `null` | 打开 Mods 页面。 | 支持的 Mod 地图及其规划器入口在桌面端可见。 |
-| `mobile-mods-idle` | `mobile` | `null` | `null` | `null` | 打开 Mods 页面。 | 支持的 Mod 地图及其规划器入口在移动端可见。 |
 
 ## 隐私（`/privacy`）
 

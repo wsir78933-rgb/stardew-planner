@@ -62,14 +62,6 @@ export function createSiteFooterContent(
       title: footerCopy.planner.title,
       links: [
         { label: footerCopy.planner.home, href: localizedHomepagePath },
-        {
-          label: footerCopy.planner.farmComparison,
-          href: getLocalizedPublicPath(locale, "/farm-comparison"),
-        },
-        {
-          label: footerCopy.planner.moddedFarms,
-          href: getLocalizedPublicPath(locale, "/mods"),
-        },
       ],
     },
     explore: {

@@ -9,8 +9,8 @@ describe("public site URL", () => {
   it("uses the confirmed HTTPS origin without a path suffix", () => {
     expect(publicSiteUrl.href).toBe("https://stardewvalleyplanner.art/");
     expect(createCanonicalUrl("/")).toBe("https://stardewvalleyplanner.art");
-    expect(createCanonicalUrl("/farm/standard")).toBe(
-      "https://stardewvalleyplanner.art/farm/standard",
+    expect(createCanonicalUrl("/privacy")).toBe(
+      "https://stardewvalleyplanner.art/privacy",
     );
   });
 
@@ -32,7 +32,7 @@ describe("public site URL", () => {
   });
 
   it("rejects a canonical pathname that is not a query-free absolute path", () => {
-    expect(() => createCanonicalUrl("farm/standard")).toThrow(
+    expect(() => createCanonicalUrl("privacy")).toThrow(
       "Canonical pathname must start with",
     );
     expect(() => createCanonicalUrl("/?farmType=standard")).toThrow(

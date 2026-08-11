@@ -52,8 +52,8 @@ it("keeps every Chinese public homepage link on /zh", () => {
   expect(markup).toContain(
     'aria-current="page" href="/zh">规划器</a>',
   );
-  expect(markup).toContain('href="/zh/farm-comparison">农场对比</a>');
-  expect(markup).toContain('href="/zh/mods">模组</a>');
+  expect(markup).not.toContain('href="/zh/farm-comparison"');
+  expect(markup).not.toContain('href="/zh/mods"');
   expect(markup).toContain(
     'class="public-page-shell-language-switcher" href="/"',
   );
@@ -73,15 +73,14 @@ it("keeps every Chinese public homepage link on /zh", () => {
   );
 });
 
-it("marks the matching Chinese public destination current while keeping its planner home localized", () => {
+it("keeps the planner destination localized on a Chinese information page", () => {
   const markup = renderToStaticMarkup(
-    <PublicNavigation canonicalPath="/farm-comparison" locale="zh-CN" />,
+    <PublicNavigation canonicalPath="/privacy" locale="zh-CN" />,
   );
 
   expect(markup).toContain('href="/zh">规划器</a>');
-  expect(markup).toContain(
-    'aria-current="page" href="/zh/farm-comparison">农场对比</a>',
-  );
+  expect(markup).not.toContain('href="/zh/farm-comparison"');
+  expect(markup).not.toContain('href="/zh/mods"');
 });
 
 it("rejects an omitted locale instead of rendering English navigation", () => {
