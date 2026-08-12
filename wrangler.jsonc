@@ -1,5 +1,5 @@
 {
-  "name": "stardew-planner-contact",
+  "name": "stardew-planner",
   "main": "workers/contact-worker.ts",
   "compatibility_date": "2026-08-08",
   "assets": {
@@ -11,8 +11,8 @@
   },
   "routes": [
     {
-      "pattern": "stardewvalleyplanner.art/api/contact*",
-      "custom_domain": false
+      "pattern": "stardewvalleyplanner.art",
+      "custom_domain": true
     }
   ],
   "send_email": [
