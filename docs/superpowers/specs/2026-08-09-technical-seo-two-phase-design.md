@@ -7,23 +7,23 @@
 ## Confirmed indexing contract
 
 - `/blog`、`/blog/archive`、两篇英文文章及其四个中文对应页面，共 8 个博客 URL，全部输出 `noindex, follow`。
-- 上述 8 个博客 URL 全部继续保留在 `sitemap.xml`；sitemap 总数继续为 34。
+- 上述 8 个博客 URL 不进入 `sitemap.xml`；双语 Contact 页同样不进入 sitemap。当前 sitemap 只包含 6 个可索引的双语公开 URL。
 - 博客页面保持可访问、可抓取，并保留 self canonical、`en` / `zh-CN` / `x-default` hreflang、Open Graph、Twitter metadata 和现有 JSON-LD。
 - `robots.txt` 继续允许抓取，不对博客路径添加 `Disallow`。
 
-这是用户明确选择的例外策略。实现和生产检查不得自行把 noindex 博客 URL 移出 sitemap。
+实现和生产检查必须保持 sitemap 与页面 robots metadata 一致，不得把 noindex URL 放入 sitemap。
 
 ## Phase 1 architecture
 
 ### Blog metadata contract
 
-只修改两个动态文章路由的 robots metadata，使其与现有博客首页和归档一致。现有路由注册表和 sitemap 数据流保持不变，因为它们已经输出用户要求的 34 个 URL，其中包含全部 8 个博客 URL。
+两个动态文章路由的 robots metadata 与博客首页和归档保持一致；路由注册表统一负责标记 noindex 路由，sitemap 只消费可索引路由。
 
 ### Production SEO smoke tool
 
 新增一个不依赖第三方包的 Node.js ESM 工具。CLI 只负责读取 `--origin`、调用检查器、打印结果并在失败时退出非零；契约文件只负责声明路径和预期；检查函数只负责网络请求与断言。测试通过注入 `fetch` 替身运行，不访问生产网络，普通 `pnpm test` 不会触发真实生产检查。
 
-生产检查覆盖：HTTP 到 HTTPS 单跳、HTML 状态与 Content-Type、canonical、robots、hreflang、34 条 sitemap URL、8 个博客 `noindex, follow`、HTML 404、主要安全头，以及基础缓存响应。检查只报告事实，不修改 Cloudflare。
+生产检查覆盖：HTTP 到 HTTPS 单跳、HTML 状态与 Content-Type、canonical、robots、hreflang、6 条可索引 sitemap URL、8 个博客 `noindex, follow`、HTML 404、主要安全头，以及基础缓存响应。检查只报告事实，不修改 Cloudflare。
 
 ### Cloudflare runbook
 

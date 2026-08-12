@@ -74,7 +74,9 @@ const expectedNoindexPathnamesForFixture = new Set([
 ]);
 
 const expectedSitemapPathnamesForFixture = expectedPublicHtmlPathnames.filter(
-  (pathname) => !expectedNoindexContactPathnamesForFixture.includes(pathname),
+  (pathname) =>
+    !expectedNoindexBlogPathnamesForFixture.includes(pathname)
+    && !expectedNoindexContactPathnamesForFixture.includes(pathname),
 );
 
 const bodyReadFailureCases = [
@@ -383,11 +385,13 @@ describe("production SEO smoke static contract", () => {
     ).toBe(true);
   });
 
-  it("declares the exact 14 sitemap pathnames without Contact", () => {
-    expect(expectedSitemapPathnames).toHaveLength(14);
+  it("declares the exact 6 indexable sitemap pathnames", () => {
+    expect(expectedSitemapPathnames).toHaveLength(6);
     expect(expectedSitemapPathnames).toEqual(
       expectedPublicHtmlPathnames.filter(
-        (pathname) => pathname !== "/contact" && pathname !== "/zh/contact",
+        (pathname) =>
+          !expectedNoindexBlogPathnamesForFixture.includes(pathname)
+          && !expectedNoindexContactPathnamesForFixture.includes(pathname),
       ),
     );
   });
@@ -398,12 +402,15 @@ describe("production SEO smoke static contract", () => {
     );
   });
 
-  it("declares only the two noindex Contact paths outside the sitemap", () => {
+  it("keeps every noindex path outside the sitemap", () => {
     expect(expectedNoindexContactPathnames).toEqual(
       expectedNoindexContactPathnamesForFixture,
     );
     for (const contactPathname of expectedNoindexContactPathnames) {
       expect(expectedSitemapPathnames).not.toContain(contactPathname);
+    }
+    for (const blogPathname of expectedNoindexBlogPathnames) {
+      expect(expectedSitemapPathnames).not.toContain(blogPathname);
     }
   });
 
@@ -442,7 +449,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     expect(summary).toMatchObject({
       publicHtmlPageCount: 16,
-      sitemapUrlCount: 14,
+      sitemapUrlCount: 6,
       noindexBlogPageCount: 8,
       noindexContactPageCount: 2,
       missingPageCount: 1,
@@ -685,7 +692,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     ]);
   });
 
-  it("requires the unique sitemap location set to exactly match all 14 URLs", async () => {
+  it("requires the unique sitemap location set to exactly match all 6 URLs", async () => {
     const sitemapUrl = `${productionOrigin}/sitemap.xml`;
     const incompleteSitemapPathnames = expectedSitemapPathnamesForFixture.slice(1);
     const incompleteSitemapXml = `<urlset>${incompleteSitemapPathnames
@@ -704,8 +711,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "14 unique sitemap URLs",
-      "13",
+      "6 unique sitemap URLs",
+      "5",
     ]);
   });
 
@@ -757,7 +764,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "14 unique sitemap URLs",
+      "6 unique sitemap URLs",
       "0",
     ]);
   });
@@ -838,7 +845,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     expect(summary).toEqual({
       publicHtmlPageCount: 16,
-      sitemapUrlCount: 14,
+      sitemapUrlCount: 6,
       noindexBlogPageCount: 8,
       noindexContactPageCount: 2,
       missingPageCount: 1,

@@ -29,7 +29,10 @@ export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
   ...blogCanonicalPublicPaths,
 ];
 
-const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>(["/contact"]);
+const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>([
+  "/contact",
+  ...blogCanonicalPublicPaths,
+]);
 
 export const indexableCanonicalPublicPaths: readonly PublicCanonicalPath[] =
   canonicalPublicPaths.filter(

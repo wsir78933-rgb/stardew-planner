@@ -114,7 +114,11 @@ export const expectedNoindexContactPathnames = Object.freeze([
 export const expectedSitemapPathnames = Object.freeze(
   expectedPublicHtmlPathContracts
     .map(({ pathname }) => pathname)
-    .filter((pathname) => !expectedNoindexContactPathnames.includes(pathname)),
+    .filter(
+      (pathname) =>
+        !expectedNoindexBlogPathnames.includes(pathname)
+        && !expectedNoindexContactPathnames.includes(pathname),
+    ),
 );
 
 export const missingPageProbePathname =
@@ -154,8 +158,8 @@ if (expectedPublicHtmlPathContracts.length !== 16) {
   );
 }
 
-if (expectedSitemapPathnames.length !== 14) {
+if (expectedSitemapPathnames.length !== 6) {
   throw new Error(
-    `Production SEO smoke must declare 14 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
+    `Production SEO smoke must declare 6 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
   );
 }
