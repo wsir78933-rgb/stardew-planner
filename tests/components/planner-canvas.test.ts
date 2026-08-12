@@ -33,7 +33,8 @@ const {
   createPixiApplicationLifetime,
   createNightModeOverlayContainer,
   createPlannerCanvasCleanup,
-  handlePlannerCanvasCopyEvent,
+  handlePlannerCanvasContextMenuCopyAction,
+  handlePlannerCanvasContextMenuEvent,
   bindPlannerCanvasInteractions,
   commitPlannerCanvasExporterAndWarnings,
   createPlacementSprite,
@@ -173,15 +174,44 @@ const createMapImageCaptureMethods = (
   }
 ).createMapImageCaptureMethods;
 
-const attachPlannerCanvasCopyListener = (
+type ScreenshotTransform = Readonly<{
+  pivot: Readonly<{ x: number; y: number; set: (x: number, y: number) => void }>;
+  position: Readonly<{ x: number; y: number; set: (x: number, y: number) => void }>;
+  scale: Readonly<{ x: number; y: number; set: (x: number, y?: number) => void }>;
+}>;
+
+const renderMapScreenshotWithFullMapTransform = (
   plannerCanvasModule as unknown as {
-    attachPlannerCanvasCopyListener?: (input: Readonly<{
-      getOnCopyCleanMapImage: () => (() => Promise<void>) | undefined;
+    renderMapScreenshotWithFullMapTransform?: <Result>(input: Readonly<{
+      mapContainer: ScreenshotTransform;
+      renderScreenshot: () => Promise<Result> | Result;
+      resolution: 1 | 2;
+    }>) => Promise<Result>;
+  }
+).renderMapScreenshotWithFullMapTransform;
+
+const attachPlannerCanvasContextMenuListener = (
+  plannerCanvasModule as unknown as {
+    attachPlannerCanvasContextMenuListener?: (input: Readonly<{
+      onOpen: (point: Readonly<{ x: number; y: number }>) => void;
       pixiCanvas: HTMLCanvasElement;
-      reportCopyError: (message: string) => void;
     }>) => () => void;
   }
-).attachPlannerCanvasCopyListener;
+).attachPlannerCanvasContextMenuListener;
+
+const createPlannerCanvasContextMenuCopyAction = (
+  plannerCanvasModule as unknown as {
+    createPlannerCanvasContextMenuCopyAction?: (input: Readonly<{
+      getOnCopyCleanMapImage: () => (() => Promise<void>) | undefined;
+      isMapLifecycleCurrent: () => boolean;
+      onCanvasError: (message: string) => void;
+      setPlannerCanvasStatus: (status: Readonly<{
+        kind: "error";
+        message: string;
+      }>) => void;
+    }>) => () => Promise<void>;
+  }
+).createPlannerCanvasContextMenuCopyAction;
 
 type MapTileRectanglePreviewGraphics = Readonly<{
   clear(): void;
@@ -639,6 +669,68 @@ describe("PlannerCanvas screenshot preview exclusion", () => {
   });
 });
 
+describe("PlannerCanvas full-map screenshot transform", () => {
+  it("renders from the map origin and restores the editor camera after capture", async () => {
+    expect(renderMapScreenshotWithFullMapTransform).toBeTypeOf("function");
+    if (renderMapScreenshotWithFullMapTransform === undefined) {
+      return;
+    }
+
+    const mapContainer = createScreenshotTransform({
+      pivot: { x: 640, y: 520 },
+      position: { x: 920, y: 680 },
+      scale: { x: 0.75, y: 0.75 },
+    });
+
+    const capturedTransform = await renderMapScreenshotWithFullMapTransform({
+      mapContainer,
+      renderScreenshot: () => ({
+        pivot: { x: mapContainer.pivot.x, y: mapContainer.pivot.y },
+        position: { x: mapContainer.position.x, y: mapContainer.position.y },
+        scale: { x: mapContainer.scale.x, y: mapContainer.scale.y },
+      }),
+      resolution: 2,
+    });
+
+    expect(capturedTransform).toEqual({
+      pivot: { x: 0, y: 0 },
+      position: { x: 0, y: 0 },
+      scale: { x: 2, y: 2 },
+    });
+    expect(getScreenshotTransformValues(mapContainer)).toEqual({
+      pivot: { x: 640, y: 520 },
+      position: { x: 920, y: 680 },
+      scale: { x: 0.75, y: 0.75 },
+    });
+  });
+
+  it("restores the editor camera when full-map capture rejects", async () => {
+    expect(renderMapScreenshotWithFullMapTransform).toBeTypeOf("function");
+    if (renderMapScreenshotWithFullMapTransform === undefined) {
+      return;
+    }
+
+    const mapContainer = createScreenshotTransform({
+      pivot: { x: 640, y: 520 },
+      position: { x: 920, y: 680 },
+      scale: { x: 0.75, y: 0.75 },
+    });
+    const captureFailure = new Error("The map renderer failed.");
+
+    await expect(renderMapScreenshotWithFullMapTransform({
+      mapContainer,
+      renderScreenshot: () => Promise.reject(captureFailure),
+      resolution: 1,
+    })).rejects.toBe(captureFailure);
+
+    expect(getScreenshotTransformValues(mapContainer)).toEqual({
+      pivot: { x: 640, y: 520 },
+      position: { x: 920, y: 680 },
+      scale: { x: 0.75, y: 0.75 },
+    });
+  });
+});
+
 describe("PlannerCanvas map image encoding", () => {
   it("encodes clean maps without a footer while screenshot encoding adds the watermark footer", async () => {
     const originalDocument = globalThis.document;
@@ -687,45 +779,38 @@ describe("PlannerCanvas map image encoding", () => {
   });
 });
 
-describe("PlannerCanvas native copy event", () => {
-  it("copies only when the event target is the active Pixi canvas", async () => {
+describe("PlannerCanvas context-menu event", () => {
+  it("opens only when the event target is the active Pixi canvas", () => {
     const pixiCanvas = {} as HTMLCanvasElement;
     const otherElement = {} as HTMLElement;
-    const onCopyCleanMapImage = vi.fn(async () => {});
-    const reportedCopyErrors: string[] = [];
-    const matchingCopyEvent = createCopyEvent(pixiCanvas);
+    const onOpen = vi.fn();
+    const matchingContextMenuEvent = createContextMenuEvent(pixiCanvas, 120, 80);
 
-    await handlePlannerCanvasCopyEvent(
-      matchingCopyEvent,
+    handlePlannerCanvasContextMenuEvent(
+      matchingContextMenuEvent,
       pixiCanvas,
-      onCopyCleanMapImage,
-      (message) => reportedCopyErrors.push(message),
+      onOpen,
     );
 
-    expect(matchingCopyEvent.preventDefault).toHaveBeenCalledOnce();
-    expect(onCopyCleanMapImage).toHaveBeenCalledOnce();
-    expect(reportedCopyErrors).toEqual([]);
+    expect(matchingContextMenuEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(onOpen).toHaveBeenCalledWith({ x: 120, y: 80 });
 
-    const unrelatedCopyEvent = createCopyEvent(otherElement);
-    await handlePlannerCanvasCopyEvent(
-      unrelatedCopyEvent,
+    const unrelatedContextMenuEvent = createContextMenuEvent(otherElement, 96, 72);
+    handlePlannerCanvasContextMenuEvent(
+      unrelatedContextMenuEvent,
       pixiCanvas,
-      onCopyCleanMapImage,
-      (message) => reportedCopyErrors.push(message),
+      onOpen,
     );
 
-    expect(unrelatedCopyEvent.preventDefault).not.toHaveBeenCalled();
-    expect(onCopyCleanMapImage).toHaveBeenCalledOnce();
+    expect(unrelatedContextMenuEvent.preventDefault).not.toHaveBeenCalled();
+    expect(onOpen).toHaveBeenCalledOnce();
   });
 
-  it("reports a rejected clean-copy callback with its original message", async () => {
+  it("reports a rejected clean-copy action with its original message", async () => {
     const rejectionMessage = "The clean map image is unavailable for clipboard copy.";
     const reportedCopyErrors: string[] = [];
-    const pixiCanvas = {} as HTMLCanvasElement;
 
-    await handlePlannerCanvasCopyEvent(
-      createCopyEvent(pixiCanvas),
-      pixiCanvas,
+    await handlePlannerCanvasContextMenuCopyAction(
       async () => {
         throw new Error(rejectionMessage);
       },
@@ -735,70 +820,136 @@ describe("PlannerCanvas native copy event", () => {
     expect(reportedCopyErrors).toEqual([rejectionMessage]);
   });
 
-  it("attaches one copy listener to each active Pixi canvas and removes its exact handler on cleanup", async () => {
-    expect(attachPlannerCanvasCopyListener).toBeTypeOf("function");
-    if (attachPlannerCanvasCopyListener === undefined) {
+  it("routes a rejected menu copy through the current PlannerCanvas error seam", async () => {
+    expect(createPlannerCanvasContextMenuCopyAction).toBeTypeOf("function");
+    if (createPlannerCanvasContextMenuCopyAction === undefined) {
       return;
     }
 
-    const copiedCanvasIds: string[] = [];
-    const firstPixiCanvas = new RecordingCopyCanvas("first");
-    const firstCleanup = attachPlannerCanvasCopyListener({
+    const rejectionMessage = "Clipboard permission was denied.";
+    const reportedCanvasErrors: string[] = [];
+    const canvasStatuses: unknown[] = [];
+    const copyAction = createPlannerCanvasContextMenuCopyAction({
+      isMapLifecycleCurrent: () => true,
+      onCanvasError: (message) => reportedCanvasErrors.push(message),
       getOnCopyCleanMapImage: () => async () => {
-        copiedCanvasIds.push("first");
+          throw new Error(rejectionMessage);
+        },
+      setPlannerCanvasStatus: (status) => canvasStatuses.push(status),
+    });
+
+    await copyAction();
+
+    expect(canvasStatuses).toEqual([{ kind: "error", message: rejectionMessage }]);
+    expect(reportedCanvasErrors).toEqual([rejectionMessage]);
+  });
+
+  it("attaches one context-menu listener to each active Pixi canvas and removes its exact handler on cleanup", () => {
+    expect(attachPlannerCanvasContextMenuListener).toBeTypeOf("function");
+    if (attachPlannerCanvasContextMenuListener === undefined) {
+      return;
+    }
+
+    const openedPoints: string[] = [];
+    const firstPixiCanvas = new RecordingContextMenuCanvas("first");
+    const firstCleanup = attachPlannerCanvasContextMenuListener({
+      onOpen: (point) => {
+        openedPoints.push(`first:${point.x},${point.y}`);
       },
       pixiCanvas: firstPixiCanvas as unknown as HTMLCanvasElement,
-      reportCopyError: () => undefined,
     });
 
-    expect(firstPixiCanvas.copyListenerAdditions).toHaveLength(1);
-    expect(firstPixiCanvas.activeCopyListenerCount()).toBe(1);
-    await firstPixiCanvas.dispatchCopyEvent(firstPixiCanvas);
-    expect(copiedCanvasIds).toEqual(["first"]);
+    expect(firstPixiCanvas.contextMenuListenerAdditions).toHaveLength(1);
+    expect(firstPixiCanvas.copyListenerAdditions).toEqual([]);
+    expect(firstPixiCanvas.activeContextMenuListenerCount()).toBe(1);
+    firstPixiCanvas.dispatchContextMenuEvent(firstPixiCanvas, 20, 30);
+    expect(openedPoints).toEqual(["first:20,30"]);
 
     firstCleanup();
     firstCleanup();
 
-    expect(firstPixiCanvas.copyListenerRemovals).toEqual(
-      firstPixiCanvas.copyListenerAdditions,
+    expect(firstPixiCanvas.contextMenuListenerRemovals).toEqual(
+      firstPixiCanvas.contextMenuListenerAdditions,
     );
-    expect(firstPixiCanvas.activeCopyListenerCount()).toBe(0);
-    await firstPixiCanvas.dispatchCopyEvent(firstPixiCanvas);
-    expect(copiedCanvasIds).toEqual(["first"]);
+    expect(firstPixiCanvas.activeContextMenuListenerCount()).toBe(0);
+    firstPixiCanvas.dispatchContextMenuEvent(firstPixiCanvas, 40, 50);
+    expect(openedPoints).toEqual(["first:20,30"]);
 
-    const secondPixiCanvas = new RecordingCopyCanvas("second");
-    const secondCleanup = attachPlannerCanvasCopyListener({
-      getOnCopyCleanMapImage: () => async () => {
-        copiedCanvasIds.push("second");
+    const secondPixiCanvas = new RecordingContextMenuCanvas("second");
+    const secondCleanup = attachPlannerCanvasContextMenuListener({
+      onOpen: (point) => {
+        openedPoints.push(`second:${point.x},${point.y}`);
       },
       pixiCanvas: secondPixiCanvas as unknown as HTMLCanvasElement,
-      reportCopyError: () => undefined,
     });
 
-    expect(secondPixiCanvas.copyListenerAdditions).toHaveLength(1);
-    await secondPixiCanvas.dispatchCopyEvent(secondPixiCanvas);
-    expect(copiedCanvasIds).toEqual(["first", "second"]);
+    expect(secondPixiCanvas.contextMenuListenerAdditions).toHaveLength(1);
+    secondPixiCanvas.dispatchContextMenuEvent(secondPixiCanvas, 10, 5);
+    expect(openedPoints).toEqual(["first:20,30", "second:10,5"]);
     secondCleanup();
-    expect(secondPixiCanvas.copyListenerRemovals).toEqual(
-      secondPixiCanvas.copyListenerAdditions,
+    expect(secondPixiCanvas.contextMenuListenerRemovals).toEqual(
+      secondPixiCanvas.contextMenuListenerAdditions,
     );
+  });
+
+  it("does not install a document-level context-menu interceptor", () => {
+    expect(attachPlannerCanvasContextMenuListener).toBeTypeOf("function");
+    if (attachPlannerCanvasContextMenuListener === undefined) {
+      return;
+    }
+
+    const originalDocumentDescriptor = Object.getOwnPropertyDescriptor(
+      globalThis,
+      "document",
+    );
+    Object.defineProperty(globalThis, "document", {
+      configurable: true,
+      value: {
+        addEventListener: () => {
+          throw new Error("PlannerCanvas must not intercept contextmenu globally.");
+        },
+      },
+    });
+
+    try {
+      const pixiCanvas = new RecordingContextMenuCanvas("scoped");
+      const cleanup = attachPlannerCanvasContextMenuListener({
+        onOpen: () => undefined,
+        pixiCanvas: pixiCanvas as unknown as HTMLCanvasElement,
+      });
+      expect(pixiCanvas.contextMenuListenerAdditions).toHaveLength(1);
+      cleanup();
+    } finally {
+      if (originalDocumentDescriptor === undefined) {
+        Reflect.deleteProperty(globalThis, "document");
+      } else {
+        Object.defineProperty(globalThis, "document", originalDocumentDescriptor);
+      }
+    }
   });
 });
 
-function createCopyEvent(target: EventTarget): ClipboardEvent & {
+function createContextMenuEvent(
+  target: EventTarget,
+  offsetX: number,
+  offsetY: number,
+): MouseEvent & {
   preventDefault: ReturnType<typeof vi.fn>;
 } {
   const preventDefault = vi.fn();
   return {
+    offsetX,
+    offsetY,
     preventDefault,
     target,
-  } as ClipboardEvent & { preventDefault: ReturnType<typeof vi.fn> };
+  } as MouseEvent & { preventDefault: ReturnType<typeof vi.fn> };
 }
 
-class RecordingCopyCanvas {
+class RecordingContextMenuCanvas {
   readonly copyListenerAdditions: EventListener[] = [];
-  readonly copyListenerRemovals: EventListener[] = [];
-  private readonly copyListeners = new Set<EventListener>();
+  readonly contextMenuListenerAdditions: EventListener[] = [];
+  readonly contextMenuListenerRemovals: EventListener[] = [];
+  private readonly contextMenuListeners = new Set<EventListener>();
 
   constructor(readonly id: string) {}
 
@@ -806,41 +957,43 @@ class RecordingCopyCanvas {
     eventType: string,
     eventListener: EventListenerOrEventListenerObject,
   ): void {
-    if (eventType !== "copy" || typeof eventListener !== "function") {
-      throw new Error("Recording copy canvas only supports function copy listeners.");
+    if (eventType === "copy" && typeof eventListener === "function") {
+      this.copyListenerAdditions.push(eventListener);
+      throw new Error("PlannerCanvas must not install a copy listener.");
+    }
+    if (eventType !== "contextmenu" || typeof eventListener !== "function") {
+      throw new Error("Recording context-menu canvas only supports function contextmenu listeners.");
     }
 
-    this.copyListenerAdditions.push(eventListener);
-    this.copyListeners.add(eventListener);
+    this.contextMenuListenerAdditions.push(eventListener);
+    this.contextMenuListeners.add(eventListener);
   }
 
   removeEventListener(
     eventType: string,
     eventListener: EventListenerOrEventListenerObject,
   ): void {
-    if (eventType !== "copy" || typeof eventListener !== "function") {
-      throw new Error("Recording copy canvas only supports function copy listeners.");
+    if (eventType !== "contextmenu" || typeof eventListener !== "function") {
+      throw new Error("Recording context-menu canvas only supports function contextmenu listeners.");
     }
 
-    this.copyListenerRemovals.push(eventListener);
-    this.copyListeners.delete(eventListener);
+    this.contextMenuListenerRemovals.push(eventListener);
+    this.contextMenuListeners.delete(eventListener);
   }
 
-  activeCopyListenerCount(): number {
-    return this.copyListeners.size;
+  activeContextMenuListenerCount(): number {
+    return this.contextMenuListeners.size;
   }
 
   dispatchEvent(_event: Event): boolean {
     return true;
   }
 
-  async dispatchCopyEvent(target: EventTarget): Promise<void> {
-    const copyEvent = createCopyEvent(target);
-    for (const copyListener of this.copyListeners) {
-      copyListener(copyEvent);
+  dispatchContextMenuEvent(target: EventTarget, offsetX: number, offsetY: number): void {
+    const contextMenuEvent = createContextMenuEvent(target, offsetX, offsetY);
+    for (const contextMenuListener of this.contextMenuListeners) {
+      contextMenuListener(contextMenuEvent);
     }
-    await Promise.resolve();
-    await Promise.resolve();
   }
 }
 
@@ -4896,3 +5049,42 @@ describe("notifyMapPlacementGridReady", () => {
     expect(reportedPlacementGrids).toEqual([]);
   });
 });
+
+function createScreenshotTransform(input: Readonly<{
+  pivot: Readonly<{ x: number; y: number }>;
+  position: Readonly<{ x: number; y: number }>;
+  scale: Readonly<{ x: number; y: number }>;
+}>): ScreenshotTransform {
+  const pivot = createScreenshotTransformPoint(input.pivot);
+  const position = createScreenshotTransformPoint(input.position);
+  const scale = createScreenshotTransformPoint(input.scale);
+
+  return { pivot, position, scale };
+}
+
+function createScreenshotTransformPoint(input: Readonly<{ x: number; y: number }>): {
+  x: number;
+  y: number;
+  set: (x: number, y?: number) => void;
+} {
+  return {
+    set(x, y = x): void {
+      this.x = x;
+      this.y = y;
+    },
+    x: input.x,
+    y: input.y,
+  };
+}
+
+function getScreenshotTransformValues(transform: ScreenshotTransform): Readonly<{
+  pivot: Readonly<{ x: number; y: number }>;
+  position: Readonly<{ x: number; y: number }>;
+  scale: Readonly<{ x: number; y: number }>;
+}> {
+  return {
+    pivot: { x: transform.pivot.x, y: transform.pivot.y },
+    position: { x: transform.position.x, y: transform.position.y },
+    scale: { x: transform.scale.x, y: transform.scale.y },
+  };
+}

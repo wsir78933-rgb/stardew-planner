@@ -2305,6 +2305,10 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 .planner-editor-shell .tool-btn.erase { background: rgb(177 58 40 / 15%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__actions { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); display: flex; max-height: 70vh; min-width: 200px; overflow-y: auto; padding: var(--lk-2xs) 0; position: absolute; right: 0; top: calc(var(--lk-xl) + var(--lk-sm)); }
+.planner-editor-shell [data-planner-canvas-context-menu] { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); min-width: 12rem; padding: var(--lk-2xs); }
+.planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"] { align-items: center; background: transparent; border: 0; border-radius: var(--lk-xs); color: var(--text); cursor: pointer; display: flex; font: inherit; justify-content: flex-start; min-height: 44px; padding: 0 var(--lk-sm); text-align: left; width: 100%; }
+.planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"]:hover { background: var(--bg-surface); }
+.planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"]:focus-visible { background: var(--bg-surface); outline: 2px solid var(--accent); outline-offset: 2px; }
 .planner-editor-shell .editor-menu-bar__value { display: none; }
 .planner-editor-shell .toolbar-wrapper { align-items: center; display: flex; flex-direction: column; gap: var(--lk-2xs); left: 50%; top: var(--lk-sm); transform: translateX(-50%); }
 .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper { left: calc(170px + 50vw); }

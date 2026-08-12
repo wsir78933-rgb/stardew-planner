@@ -9,7 +9,8 @@ import {
   saveCurrentPlannerWorkspaceMap,
 } from "../../src/planner/planner-workspace-persistence-runtime";
 import { copyPlannerWorkspaceCleanMapImage } from "../../src/components/planner-workspace";
-import { attachPlannerCanvasCopyListener } from "../../src/components/planner-canvas";
+import { attachPlannerCanvasContextMenuListener } from "../../src/components/planner-canvas";
+import * as plannerCanvasContextMenuModule from "../../src/components/planner-canvas-context-menu";
 import {
   createCanonicalMapIdentityReference,
   createCanonicalSessionTransition,
@@ -45,7 +46,20 @@ describe("planner workspace project composition", () => {
     expect(copiedImage).toBe(cleanMapImage);
   });
 
-  it("writes the clean one-times PNG through the default clipboard adapter only for the mounted Pixi canvas", async () => {
+  it("opens a canvas-only menu before the selected action writes the clean one-times PNG", async () => {
+    const handlePlannerCanvasContextMenuCopyAction = (
+      plannerCanvasContextMenuModule as unknown as {
+        handlePlannerCanvasContextMenuCopyAction?: (
+          onClose: () => void,
+          onCopyFullMap: () => Promise<void>,
+        ) => Promise<void>;
+      }
+    ).handlePlannerCanvasContextMenuCopyAction;
+    expect(handlePlannerCanvasContextMenuCopyAction).toBeTypeOf("function");
+    if (handlePlannerCanvasContextMenuCopyAction === undefined) {
+      return;
+    }
+
     const cleanMapImage = new Blob(["clean map"], { type: "image/png" });
     const captureCleanMapImage = vi.fn(async () => cleanMapImage);
     let writtenClipboardItems: readonly unknown[] | null = null;
@@ -54,25 +68,37 @@ describe("planner workspace project composition", () => {
         writtenClipboardItems = clipboardItems;
       },
     );
-    const pixiCanvas = new ClipboardCopyCanvas();
+    const pixiCanvas = new ClipboardContextMenuCanvas();
     const otherElement = {} as HTMLElement;
+    const openedMenuPoints: Readonly<{ x: number; y: number }>[] = [];
+    const menuActionOrder: string[] = [];
 
     await withGlobalValue(
       "navigator",
       { clipboard: { write: clipboardWrite } },
       async () => {
         await withGlobalValue("ClipboardItem", RecordingClipboardItem, async () => {
-          const cleanup = attachPlannerCanvasCopyListener({
-            getOnCopyCleanMapImage: () => () =>
-              copyPlannerWorkspaceCleanMapImage(captureCleanMapImage),
+          const cleanup = attachPlannerCanvasContextMenuListener({
+            onOpen: (point) => openedMenuPoints.push(point),
             pixiCanvas: pixiCanvas as unknown as HTMLCanvasElement,
-            reportCopyError: (message) => {
-              throw new Error(`Unexpected clipboard copy error: ${message}`);
-            },
           });
 
-          const matchingCopyEvent = await pixiCanvas.dispatchCopyEvent(pixiCanvas);
-          expect(matchingCopyEvent.preventDefault).toHaveBeenCalledOnce();
+          const matchingContextMenuEvent = pixiCanvas.dispatchContextMenuEvent(
+            pixiCanvas,
+            120,
+            80,
+          );
+          expect(matchingContextMenuEvent.preventDefault).toHaveBeenCalledOnce();
+          expect(openedMenuPoints).toEqual([{ x: 120, y: 80 }]);
+
+          await handlePlannerCanvasContextMenuCopyAction(
+            () => menuActionOrder.push("close"),
+            async () => {
+              menuActionOrder.push("copy");
+              await copyPlannerWorkspaceCleanMapImage(captureCleanMapImage);
+            },
+          );
+          expect(menuActionOrder).toEqual(["close", "copy"]);
           expect(captureCleanMapImage).toHaveBeenCalledWith(1);
           expect(clipboardWrite).toHaveBeenCalledOnce();
           const clipboardItem = writtenClipboardItems?.[0];
@@ -84,14 +110,24 @@ describe("planner workspace project composition", () => {
             cleanMapImage,
           );
 
-          const unrelatedCopyEvent = await pixiCanvas.dispatchCopyEvent(otherElement);
-          expect(unrelatedCopyEvent.preventDefault).not.toHaveBeenCalled();
+          const unrelatedContextMenuEvent = pixiCanvas.dispatchContextMenuEvent(
+            otherElement,
+            96,
+            72,
+          );
+          expect(unrelatedContextMenuEvent.preventDefault).not.toHaveBeenCalled();
+          expect(openedMenuPoints).toEqual([{ x: 120, y: 80 }]);
           expect(captureCleanMapImage).toHaveBeenCalledOnce();
           expect(clipboardWrite).toHaveBeenCalledOnce();
 
           cleanup();
-          const afterCleanupCopyEvent = await pixiCanvas.dispatchCopyEvent(pixiCanvas);
-          expect(afterCleanupCopyEvent.preventDefault).not.toHaveBeenCalled();
+          const afterCleanupContextMenuEvent = pixiCanvas.dispatchContextMenuEvent(
+            pixiCanvas,
+            20,
+            10,
+          );
+          expect(afterCleanupContextMenuEvent.preventDefault).not.toHaveBeenCalled();
+          expect(openedMenuPoints).toEqual([{ x: 120, y: 80 }]);
           expect(captureCleanMapImage).toHaveBeenCalledOnce();
           expect(clipboardWrite).toHaveBeenCalledOnce();
         });
@@ -1042,51 +1078,55 @@ function expectOnlyControllerMethodCalled(
   expect(calledMethodNames).toEqual([expectedMethodName]);
 }
 
-class ClipboardCopyCanvas {
-  private readonly copyListeners = new Set<EventListener>();
+class ClipboardContextMenuCanvas {
+  private readonly contextMenuListeners = new Set<EventListener>();
 
   addEventListener(
     eventType: string,
     eventListener: EventListenerOrEventListenerObject,
   ): void {
-    if (eventType !== "copy" || typeof eventListener !== "function") {
-      throw new Error("Clipboard copy canvas only supports function copy listeners.");
+    if (eventType !== "contextmenu" || typeof eventListener !== "function") {
+      throw new Error("Clipboard context-menu canvas only supports function contextmenu listeners.");
     }
 
-    this.copyListeners.add(eventListener);
+    this.contextMenuListeners.add(eventListener);
   }
 
   removeEventListener(
     eventType: string,
     eventListener: EventListenerOrEventListenerObject,
   ): void {
-    if (eventType !== "copy" || typeof eventListener !== "function") {
-      throw new Error("Clipboard copy canvas only supports function copy listeners.");
+    if (eventType !== "contextmenu" || typeof eventListener !== "function") {
+      throw new Error("Clipboard context-menu canvas only supports function contextmenu listeners.");
     }
 
-    this.copyListeners.delete(eventListener);
+    this.contextMenuListeners.delete(eventListener);
   }
 
   dispatchEvent(_event: Event): boolean {
     return true;
   }
 
-  async dispatchCopyEvent(target: EventTarget): Promise<ClipboardEvent & {
+  dispatchContextMenuEvent(
+    target: EventTarget,
+    offsetX: number,
+    offsetY: number,
+  ): MouseEvent & {
     preventDefault: ReturnType<typeof vi.fn>;
-  }> {
+  } {
     const preventDefault = vi.fn();
-    const copyEvent = {
+    const contextMenuEvent = {
+      offsetX,
+      offsetY,
       preventDefault,
       target,
-    } as ClipboardEvent & { preventDefault: ReturnType<typeof vi.fn> };
+    } as MouseEvent & { preventDefault: ReturnType<typeof vi.fn> };
 
-    for (const copyListener of this.copyListeners) {
-      copyListener(copyEvent);
+    for (const contextMenuListener of this.contextMenuListeners) {
+      contextMenuListener(contextMenuEvent);
     }
-    await Promise.resolve();
-    await Promise.resolve();
 
-    return copyEvent;
+    return contextMenuEvent;
   }
 }
 

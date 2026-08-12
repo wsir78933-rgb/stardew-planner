@@ -13,6 +13,10 @@ import {
   type PlannerJoystickDirection,
 } from "./planner-joystick";
 import {
+  PlannerCanvasContextMenu,
+  type CanvasContextMenuPoint,
+} from "./planner-canvas-context-menu";
+import {
   createInitialEditorDisplayOptions,
   type EditorDisplayOptions,
 } from "../editor/editor-display-options";
@@ -231,17 +235,26 @@ export type PlannerCanvasProperties = Readonly<{
   ) => void;
 }>;
 
-export async function handlePlannerCanvasCopyEvent(
-  copyEvent: ClipboardEvent,
+export function handlePlannerCanvasContextMenuEvent(
+  contextMenuEvent: MouseEvent,
   pixiCanvas: HTMLCanvasElement,
-  onCopyCleanMapImage: (() => Promise<void>) | undefined,
-  reportCopyError: (message: string) => void,
-): Promise<void> {
-  if (copyEvent.target !== pixiCanvas || onCopyCleanMapImage === undefined) {
+  onOpen: (point: CanvasContextMenuPoint) => void,
+): void {
+  if (contextMenuEvent.target !== pixiCanvas) {
     return;
   }
 
-  copyEvent.preventDefault();
+  contextMenuEvent.preventDefault();
+  onOpen({ x: contextMenuEvent.offsetX, y: contextMenuEvent.offsetY });
+}
+
+export async function handlePlannerCanvasContextMenuCopyAction(
+  onCopyCleanMapImage: (() => Promise<void>) | undefined,
+  reportCopyError: (message: string) => void,
+): Promise<void> {
+  if (onCopyCleanMapImage === undefined) {
+    return;
+  }
 
   try {
     await onCopyCleanMapImage();
@@ -252,31 +265,29 @@ export async function handlePlannerCanvasCopyEvent(
   }
 }
 
-export function attachPlannerCanvasCopyListener(
+export function attachPlannerCanvasContextMenuListener(
   input: Readonly<{
-    getOnCopyCleanMapImage: () => (() => Promise<void>) | undefined;
+    onOpen: (point: CanvasContextMenuPoint) => void;
     pixiCanvas: HTMLCanvasElement;
-    reportCopyError: (message: string) => void;
   }>,
 ): () => void {
-  let hasRemovedCopyListener = false;
-  const handleCanvasCopyEvent = (copyEvent: ClipboardEvent): void => {
-    void handlePlannerCanvasCopyEvent(
-      copyEvent,
+  let hasRemovedContextMenuListener = false;
+  const handleCanvasContextMenuEvent = (contextMenuEvent: MouseEvent): void => {
+    handlePlannerCanvasContextMenuEvent(
+      contextMenuEvent,
       input.pixiCanvas,
-      input.getOnCopyCleanMapImage(),
-      input.reportCopyError,
+      input.onOpen,
     );
   };
 
-  input.pixiCanvas.addEventListener("copy", handleCanvasCopyEvent);
+  input.pixiCanvas.addEventListener("contextmenu", handleCanvasContextMenuEvent);
 
   return (): void => {
-    if (hasRemovedCopyListener) {
+    if (hasRemovedContextMenuListener) {
       return;
     }
-    hasRemovedCopyListener = true;
-    input.pixiCanvas.removeEventListener("copy", handleCanvasCopyEvent);
+    hasRemovedContextMenuListener = true;
+    input.pixiCanvas.removeEventListener("contextmenu", handleCanvasContextMenuEvent);
   };
 }
 
@@ -307,6 +318,30 @@ type PlannerCanvasStatus =
   | Readonly<{ kind: "loading" }>
   | Readonly<{ kind: "ready" }>
   | Readonly<{ kind: "error"; message: string }>;
+
+export function createPlannerCanvasContextMenuCopyAction(
+  input: Readonly<{
+    getOnCopyCleanMapImage: () => (() => Promise<void>) | undefined;
+    isMapLifecycleCurrent: () => boolean;
+    onCanvasError: (message: string) => void;
+    setPlannerCanvasStatus: (status: PlannerCanvasStatus) => void;
+  }>,
+): () => Promise<void> {
+  return () =>
+    handlePlannerCanvasContextMenuCopyAction(
+      input.getOnCopyCleanMapImage(),
+      (message) => {
+        reportCurrentPlannerCanvasError({
+          isMapLifecycleCurrent: input.isMapLifecycleCurrent,
+          message,
+          onCurrentError: (currentMessage) => {
+            input.setPlannerCanvasStatus({ kind: "error", message: currentMessage });
+            input.onCanvasError(currentMessage);
+          },
+        });
+      },
+    );
+}
 
 export type PlannerCanvasCameraLifecycle = Readonly<{
   commitCameraState(cameraState: CameraState): void;
@@ -1030,6 +1065,13 @@ export function PlannerCanvas({
   const performanceMarkerReference = useRef(performanceMarker);
   const onCanvasErrorReference = useRef(onCanvasError);
   const onCopyCleanMapImageReference = useRef(onCopyCleanMapImage);
+  const onCopyFullMapFromContextMenuReference = useRef<
+    (() => Promise<void>) | null
+  >(null);
+  const canvasContextMenuEditorRootReference = useRef<HTMLElement | null>(null);
+  const canvasContextMenuFocusRestoreReference = useRef<HTMLCanvasElement | null>(
+    null,
+  );
   const onCanvasReadyReference = useRef(onCanvasReady);
   const onInteractiveReference = useRef(onInteractive);
   const onMoveSelectedPlacementsReference = useRef(onMoveSelectedPlacements);
@@ -1063,6 +1105,8 @@ export function PlannerCanvas({
     useState<PlannerCanvasStatus>({ kind: "loading" });
   const [knownUnavailableTilesheetWarnings, setKnownUnavailableTilesheetWarnings] =
     useState<readonly string[]>([]);
+  const [canvasContextMenuPoint, setCanvasContextMenuPoint] =
+    useState<CanvasContextMenuPoint | null>(null);
   const interiorDecorStateRevision = getInteriorDecorStateRevision(
     placementSnapshot?.interiorDecor,
   );
@@ -1149,7 +1193,7 @@ export function PlannerCanvas({
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
     let disposePlacementPreview: (() => void) | null = null;
-    let removeCanvasCopyEventListener: (() => void) | null = null;
+    let removeCanvasContextMenuListener: (() => void) | null = null;
     let joystickCameraPan: ((direction: PlannerJoystickDirection) => void) | null =
       null;
     let resourceClumpFrameTexturesByParentSheetIndex: ReadonlyMap<
@@ -1184,7 +1228,9 @@ export function PlannerCanvas({
       },
       destroyPixiApplication: () => pixiApplicationLifetime.requestDestruction(),
       clearCanvasHost: () => {
-        removeCanvasCopyEventListener?.();
+        removeCanvasContextMenuListener?.();
+        onCopyFullMapFromContextMenuReference.current = null;
+        setCanvasContextMenuPoint(null);
         mountedCanvasHostElement.replaceChildren();
       },
     });
@@ -1246,18 +1292,28 @@ export function PlannerCanvas({
 
         mountedCanvasHostElement.replaceChildren(pixiApplication.canvas);
         const pixiCanvas = pixiApplication.canvas;
-        removeCanvasCopyEventListener = attachPlannerCanvasCopyListener({
-          getOnCopyCleanMapImage: () => onCopyCleanMapImageReference.current,
+        const editorRootElement = mountedCanvasHostElement.closest(
+          ".planner-editor-shell",
+        );
+        if (!(editorRootElement instanceof HTMLElement)) {
+          throw new Error(
+            `Planner canvas mapId ${JSON.stringify(mapId)} requires an HTMLElement .planner-editor-shell root.`,
+          );
+        }
+        canvasContextMenuEditorRootReference.current = editorRootElement;
+        onCopyFullMapFromContextMenuReference.current =
+          createPlannerCanvasContextMenuCopyAction({
+            getOnCopyCleanMapImage: () => onCopyCleanMapImageReference.current,
+            isMapLifecycleCurrent,
+            onCanvasError: (currentMessage) =>
+              onCanvasErrorReference.current?.(currentMessage),
+            setPlannerCanvasStatus,
+          });
+        removeCanvasContextMenuListener = attachPlannerCanvasContextMenuListener({
           pixiCanvas,
-          reportCopyError: (message) => {
-            reportCurrentPlannerCanvasError({
-              isMapLifecycleCurrent,
-              message,
-              onCurrentError: (currentMessage) => {
-                setPlannerCanvasStatus({ kind: "error", message: currentMessage });
-                onCanvasErrorReference.current?.(currentMessage);
-              },
-            });
+          onOpen: (point) => {
+            canvasContextMenuFocusRestoreReference.current = pixiCanvas;
+            setCanvasContextMenuPoint(point);
           },
         });
 
@@ -1944,6 +2000,18 @@ export function PlannerCanvas({
       }`}
     >
       <div className="planner-canvas__viewport" ref={canvasHostElementReference} />
+      {canvasContextMenuPoint !== null ? (
+        <PlannerCanvasContextMenu
+          canvasHostElement={canvasHostElementReference.current}
+          editorRootElement={canvasContextMenuEditorRootReference.current}
+          focusRestoreElement={canvasContextMenuFocusRestoreReference.current}
+          onClose={() => setCanvasContextMenuPoint(null)}
+          onCopyFullMap={() =>
+            onCopyFullMapFromContextMenuReference.current?.() ?? Promise.resolve()
+          }
+          position={canvasContextMenuPoint}
+        />
+      ) : null}
       {shouldRenderPlannerJoystick(showJoystick, selectedPlacementKeys) &&
       plannerCanvasStatus.kind === "ready" ? (
         <PlannerJoystick
@@ -2030,14 +2098,6 @@ async function captureMapScreenshotCanvas(
     tileHeight: renderingContract.tileHeight,
     tileWidth: renderingContract.tileWidth,
   });
-  const originalMapPosition = {
-    x: mapContainer.position.x,
-    y: mapContainer.position.y,
-  };
-  const originalMapScale = {
-    x: mapContainer.scale.x,
-    y: mapContainer.scale.y,
-  };
   const screenshotRenderTextureReference: {
     current: import("pixi.js").RenderTexture | null;
   } = { current: null };
@@ -2047,30 +2107,63 @@ async function captureMapScreenshotCanvas(
       mapDisplayOverlayContainer,
       mapTileRectanglePreviewGraphics,
       placementPreviewContainer,
-      renderScreenshot: () => {
-        mapContainer.position.set(0, 0);
-        mapContainer.scale.set(resolution);
-        screenshotRenderTextureReference.current = pixi.RenderTexture.create({
-          height: screenshotDimensions.height,
-          resolution: 1,
-          width: screenshotDimensions.width,
-        });
-        pixiApplication.renderer.render({
-          container: mapContainer,
-          target: screenshotRenderTextureReference.current,
-        });
-        const extractedCanvas = pixiApplication.renderer.extract.canvas(
-          screenshotRenderTextureReference.current,
-        );
-        const mapScreenshotCanvas = assertHtmlCanvasElement(extractedCanvas);
-        return mapScreenshotCanvas;
-      },
+      renderScreenshot: () =>
+        renderMapScreenshotWithFullMapTransform({
+          mapContainer,
+          renderScreenshot: () => {
+            screenshotRenderTextureReference.current = pixi.RenderTexture.create({
+              height: screenshotDimensions.height,
+              resolution: 1,
+              width: screenshotDimensions.width,
+            });
+            pixiApplication.renderer.render({
+              container: mapContainer,
+              target: screenshotRenderTextureReference.current,
+            });
+            const extractedCanvas = pixiApplication.renderer.extract.canvas(
+              screenshotRenderTextureReference.current,
+            );
+            const mapScreenshotCanvas = assertHtmlCanvasElement(extractedCanvas);
+            return mapScreenshotCanvas;
+          },
+          resolution,
+        }),
     });
   } finally {
-    mapContainer.scale.set(originalMapScale.x, originalMapScale.y);
-    mapContainer.position.set(originalMapPosition.x, originalMapPosition.y);
     screenshotRenderTextureReference.current?.destroy(true);
     pixiApplication.renderer.render(pixiApplication.stage);
+  }
+}
+
+export async function renderMapScreenshotWithFullMapTransform<Result>(
+  input: Readonly<{
+    mapContainer: import("pixi.js").Container;
+    renderScreenshot: () => Promise<Result> | Result;
+    resolution: ScreenshotResolution;
+  }>,
+): Promise<Result> {
+  const originalMapPivot = {
+    x: input.mapContainer.pivot.x,
+    y: input.mapContainer.pivot.y,
+  };
+  const originalMapPosition = {
+    x: input.mapContainer.position.x,
+    y: input.mapContainer.position.y,
+  };
+  const originalMapScale = {
+    x: input.mapContainer.scale.x,
+    y: input.mapContainer.scale.y,
+  };
+
+  try {
+    input.mapContainer.pivot.set(0, 0);
+    input.mapContainer.position.set(0, 0);
+    input.mapContainer.scale.set(input.resolution);
+    return await input.renderScreenshot();
+  } finally {
+    input.mapContainer.pivot.set(originalMapPivot.x, originalMapPivot.y);
+    input.mapContainer.scale.set(originalMapScale.x, originalMapScale.y);
+    input.mapContainer.position.set(originalMapPosition.x, originalMapPosition.y);
   }
 }
 
