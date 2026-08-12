@@ -75,6 +75,44 @@ test("lays out the planning guide as readable copy beside a responsive figure", 
   expect(mobileGuideRule).toContain("grid-template-columns: 1fr;");
 });
 
+test("keeps the planning workflow cards readable as the viewport narrows", () => {
+  const homepageStyles = readProjectFile("app/globals.css");
+  const mediumWorkflowRule = homepageStyles.match(
+    /@media \(max-width: 960px\)\s*\{[\s\S]*?\[data-homepage-planning-guide-workflow\] ol\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+  const mobileWorkflowRule = homepageStyles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?\[data-homepage-planning-guide-workflow\] ol\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+
+  expect(mediumWorkflowRule).toBeDefined();
+  expect(mediumWorkflowRule).toContain("grid-template-columns: repeat(2, minmax(0, 1fr));");
+  expect(mobileWorkflowRule).toBeDefined();
+  expect(mobileWorkflowRule).toContain("grid-template-columns: 1fr;");
+});
+
+test("keeps play-style choices as compact cards until a visitor selects one", () => {
+  const homepageStyles = readProjectFile("app/globals.css");
+  const playStyleOptionsRule = homepageStyles.match(
+    /\[data-homepage-planning-guide-play-style-options\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const playStylePanelsRule = homepageStyles.match(
+    /\[data-homepage-planning-guide-play-style-panels\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const mobilePlayStyleOptionsRule = homepageStyles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?\[data-homepage-planning-guide-play-style-options\]\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+
+  expect(playStyleOptionsRule).toBeDefined();
+  expect(playStyleOptionsRule).toContain("display: grid;");
+  expect(playStyleOptionsRule).toContain(
+    "grid-template-columns: repeat(3, minmax(0, 1fr));",
+  );
+  expect(playStylePanelsRule).toBeDefined();
+  expect(playStylePanelsRule).toContain("max-width: 65ch;");
+  expect(mobilePlayStyleOptionsRule).toBeDefined();
+  expect(mobilePlayStyleOptionsRule).toContain("grid-template-columns: 1fr;");
+});
+
 test("limits editor frame styling to the homepage runtime root", () => {
   const overrides = readProjectFile("public/reference-runtime/local-only-overrides.css");
 

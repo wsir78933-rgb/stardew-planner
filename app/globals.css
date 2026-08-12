@@ -348,16 +348,54 @@ body:has(> [data-homepage-shell]) [data-homepage-planning-guide] {
   row-gap: 1.5rem;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] > h2,
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] > p {
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-summary] {
+  align-content: start;
+  display: grid;
+  gap: 1.25rem;
   grid-column: 1;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] > p {
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details {
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] summary {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-weight: 600;
+  gap: 0.75rem;
+  justify-content: space-between;
+  list-style: none;
+  padding: 1rem 1.1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] summary::-webkit-details-marker {
+  display: none;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] summary::after {
+  content: "+";
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details[open] summary {
+  border-bottom: 1px solid rgb(36 42 34 / 35%);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details[open] summary::after {
+  content: "−";
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details p {
   color: var(--muted-foreground);
   line-height: 1.6;
-  margin-bottom: 0;
-  max-width: 42rem;
+  margin: 1rem 1.1rem;
+  max-width: 65ch;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figure {
@@ -366,7 +404,7 @@ body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figure {
   border: 1px solid rgb(36 42 34 / 35%);
   border-radius: var(--radius);
   grid-column: 2;
-  grid-row: 1 / span 3;
+  grid-row: 1;
   margin: 0;
   overflow: hidden;
 }
@@ -396,15 +434,126 @@ body:has(> [data-homepage-shell]) [data-homepage-planning-guide] h3 {
   margin-bottom: 1rem;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] h4 {
-  font-size: 1rem;
-  margin: 0 0 0.4rem;
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] ol {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] > section p {
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] li {
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step] {
+  height: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step] summary {
+  align-items: start;
+  min-height: 9.75rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step] summary > span {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step-title] {
+  flex: 1;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  margin: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-details] > div {
+  display: grid;
+  gap: 0.75rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-options] {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] {
+  min-width: 0;
+  position: relative;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] input {
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] label {
+  align-content: space-between;
+  background: var(--card);
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: grid;
+  gap: 1.25rem;
+  min-height: 9.75rem;
+  padding: 1rem 1.1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] label > span:first-child {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] label > span:last-child {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] input:focus-visible + label {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] input:checked + label {
+  border-color: rgb(36 42 34 / 72%);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-panels] {
+  margin-top: 1rem;
+  max-width: 65ch;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-panel] {
+  background: var(--card);
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: var(--radius);
+  display: none;
+  padding: 1rem 1.1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-panel] p {
   color: var(--muted-foreground);
   line-height: 1.6;
-  max-width: 65ch;
+  margin: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-styles]:has(#planning-guide-play-style-0:checked) [data-play-style-index="0"],
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-styles]:has(#planning-guide-play-style-1:checked) [data-play-style-index="1"],
+body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-styles]:has(#planning-guide-play-style-2:checked) [data-play-style-index="2"] {
+  display: block;
+}
+
+@media (max-width: 960px) {
+  body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities > div {
@@ -643,6 +792,14 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figure {
     grid-column: auto;
     grid-row: auto;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] ol {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-options] {
+    grid-template-columns: 1fr;
   }
 
   body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities > div {

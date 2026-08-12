@@ -23,6 +23,7 @@ type HomepagePlanningPlayStyleCopy = Readonly<{
 
 type HomepagePlanningGuideCopy = Readonly<{
   heading: string;
+  detailsLabel: string;
   intro: readonly string[];
   workflowHeading: string;
   steps: readonly [
@@ -121,6 +122,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     planningGuide: {
       heading: "How to Plan a Stardew Valley Farm Layout with Stardew Valley Planner",
+      detailsLabel: "Read the planning notes",
       intro: [
         "A useful farm layout starts with the map you actually play, not with a decoration or a favorite building. The usable ground on each map has a different outline, and its fixed ponds, rivers, cliffs, bridges, and exits already decide part of the plan. The current farmhouse and shipping bin are useful starting anchors for routes, but they do not define the permanent limits of a zone. Look at the whole map before choosing a field or animal corner. Notice the narrow connections that force you through one tile of land, the edges where a path can stop naturally, and the open areas that can support a larger zone. A layout does not need to fill every tile. It needs to make the places you visit often easy to reach.",
         "Use the planner to test the large decisions first, then refine routes and details before you place anything in-game. Start with a rough sketch that answers practical questions: where will crops go, where will animals live, where will you keep storage and processing, and how will you walk among those jobs? Keep the sketch deliberately simple while you are still deciding. A clear empty area is more useful than a crowded plan that leaves no route or room for the next building. Once the main zones work together, smaller paths, fences, trees, and decorations can support the routine instead of making it harder to change.",
@@ -272,6 +274,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     planningGuide: {
       heading: "如何使用星露谷物语规划器规划农场布局",
+      detailsLabel: "展开规划说明",
       intro: [
         "实用的农场布局要从你实际游玩的地图开始，而不是从一件装饰或喜欢的建筑开始。每张地图的可用土地轮廓都不同，固定的池塘、河流、悬崖、桥梁和出口已经决定了布局的一部分。当前的农舍和出货箱可作为实用的起始锚点来安排路线，但不应被视为分区永久不变的边界。先看完整地图，再决定田地或动物区的位置。留意只能从一格土地通过的狭窄连接、道路可以自然收尾的边缘，以及能容纳较大分区的开阔区域。布局不必填满每一格；重点是让你经常去的地方容易抵达。",
         "先用规划器测试大方向，再在游戏里摆放之前调整路线和细节。先画一张粗略草图，回答几个实际问题：作物放在哪里，动物住在哪里，储存和加工放在哪里，以及这些工作之间怎么走。还在做决定时，草图要保持简单。留出清楚的空地，比挤满物件却没有路线或后续建筑位置的布局更有用。等主要分区能够配合后，再用小路、栅栏、树木和装饰来支持日常动线，而不是让它们变得难以调整。",

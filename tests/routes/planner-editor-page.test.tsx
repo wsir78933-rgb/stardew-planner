@@ -89,6 +89,59 @@ describe("planner editor page", () => {
     }
   });
 
+  it("keeps guide prose available through collapsed planning disclosures", () => {
+    for (const currentLocale of ["en", "zh-CN"] as const) {
+      const guideCopy = homepageCopyByLocale[currentLocale].planningGuide;
+      const homepageMarkup = renderToStaticMarkup(
+        createElement(HomepageContent, {
+          copy: homepageCopyByLocale[currentLocale],
+          currentLocale,
+          localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+          plannerHref: currentLocale === "en" ? "/#planner" : "/zh#planner",
+          plannerWorkspace: null,
+        }),
+      );
+      const guideMarkup = homepageMarkup.match(
+        /<section[^>]*data-homepage-planning-guide[^>]*>[\s\S]*?<\/section><section id="capabilities">/,
+      )?.[0];
+
+      expect(guideMarkup).toBeDefined();
+      expect(homepageMarkup).toContain("data-homepage-planning-guide-summary");
+      expect(homepageMarkup).toContain("data-homepage-planning-guide-details");
+      expect(homepageMarkup).toContain("data-homepage-planning-guide-play-styles");
+      expect(
+        homepageMarkup.match(/data-homepage-planning-guide-step="true"/g),
+      ).toHaveLength(4);
+      expect(
+        homepageMarkup.match(/data-homepage-planning-guide-play-style-option="true"/g),
+      ).toHaveLength(3);
+      expect(
+        homepageMarkup.match(/data-homepage-planning-guide-play-style-panel="true"/g),
+      ).toHaveLength(3);
+      expect(guideMarkup).not.toContain("<details open");
+      expect(guideMarkup).not.toContain('data-homepage-planning-guide-play-style-option="true" checked');
+      expect(guideMarkup).not.toMatch(/<summary[^>]*>[\s\S]*?<h4/);
+
+      for (const paragraph of guideCopy.intro) {
+        expect(homepageMarkup).toContain(paragraph);
+      }
+
+      for (const step of guideCopy.steps) {
+        expect(homepageMarkup).toContain(step.title);
+        expect(homepageMarkup).toContain(step.description);
+      }
+
+      for (const playStyle of guideCopy.playStyles) {
+        expect(homepageMarkup).toContain(playStyle.title);
+        expect(homepageMarkup).toContain(playStyle.description);
+      }
+
+      for (const paragraph of guideCopy.evolutionParagraphs) {
+        expect(homepageMarkup).toContain(paragraph);
+      }
+    }
+  });
+
   it("does not render a hero eyebrow in either homepage locale", () => {
     for (const currentLocale of ["en", "zh-CN"] as const) {
       const homepageContentProps = {
@@ -111,10 +164,14 @@ describe("planner editor page", () => {
 
   it("renders closed native FAQ disclosures with every English answer", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
+    const faqMarkup = plannerPageMarkup.match(
+      /<div data-homepage-faq-list="true">([\s\S]*?)<\/div><\/section>/,
+    )?.[1];
 
-    expect(plannerPageMarkup.match(/<details>/g)).toHaveLength(5);
-    expect(plannerPageMarkup.match(/<summary>/g)).toHaveLength(5);
-    expect(plannerPageMarkup).not.toContain("<details open");
+    expect(faqMarkup).toBeDefined();
+    expect(faqMarkup?.match(/<details>/g)).toHaveLength(5);
+    expect(faqMarkup?.match(/<summary>/g)).toHaveLength(5);
+    expect(faqMarkup).not.toContain("<details open");
 
     for (const faqItem of homepageCopyByLocale.en.faq.items) {
       expect(plannerPageMarkup).toContain(faqItem.question);
