@@ -63,11 +63,6 @@ export type HomepageCopy = Readonly<{
     heading: string;
     items: readonly [HomepageCapabilityCopy, HomepageCapabilityCopy, HomepageCapabilityCopy];
   }>;
-  farmGuides: Readonly<{
-    heading: string;
-    description: string;
-    comparisonLinkLabel: string;
-  }>;
   planningGuide: HomepagePlanningGuideCopy;
   faq: Readonly<{
     heading: string;
@@ -123,12 +118,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
             "Create and save local projects without an account or cloud sync.",
         },
       ],
-    },
-    farmGuides: {
-      heading: "Choose a farm type before you plan",
-      description:
-        "Compare each official farm's space, constraints, and strengths, then open the guide that matches your layout.",
-      comparisonLinkLabel: "Compare all farm types",
     },
     planningGuide: {
       heading: "How to Plan a Stardew Valley Farm Layout with Stardew Valley Planner",
@@ -230,8 +219,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       planner: {
         title: "Planner",
         home: "Planner",
-        farmComparison: "Farm comparison",
-        moddedFarms: "Modded farms",
       },
       explore: {
         title: "Explore",
@@ -282,11 +269,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
           description: "无需账号或云同步，直接在当前浏览器中创建并保存本地项目。",
         },
       ],
-    },
-    farmGuides: {
-      heading: "规划前先选择农场类型",
-      description: "比较每种官方农场的空间、限制和优势，再打开适合你布局的指南。",
-      comparisonLinkLabel: "对比全部农场类型",
     },
     planningGuide: {
       heading: "如何使用星露谷物语规划器规划农场布局",
@@ -384,8 +366,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       planner: {
         title: "规划器",
         home: "规划器",
-        farmComparison: "农场对比",
-        moddedFarms: "模组农场",
       },
       explore: {
         title: "探索",

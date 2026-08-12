@@ -18,8 +18,6 @@ export type SiteFooterCopy = Readonly<{
   planner: Readonly<{
     title: string;
     home: string;
-    farmComparison: string;
-    moddedFarms: string;
   }>;
   explore: Readonly<{
     title: string;

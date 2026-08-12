@@ -48,6 +48,12 @@ test("treats the farmhouse and shipping bin as current planning anchors", () => 
   );
 });
 
+test("does not retain retired farm-guide copy", () => {
+  for (const homepageLocale of HOMEPAGE_LOCALES) {
+    expect(homepageCopyByLocale[homepageLocale]).not.toHaveProperty("farmGuides");
+  }
+});
+
 test("provides the Brainfish-style hero fragments and localized language label", () => {
   for (const homepageLocale of HOMEPAGE_LOCALES) {
     const homepageCopy = homepageCopyByLocale[homepageLocale];
@@ -113,18 +119,7 @@ test("provides the approved bilingual planner content and capability limits", ()
   ]);
 });
 
-test("keeps localized farm discovery, trust, import, and screenshot claims synchronized", () => {
-  expect(homepageCopyByLocale.en.farmGuides).toEqual({
-    heading: "Choose a farm type before you plan",
-    description:
-      "Compare each official farm's space, constraints, and strengths, then open the guide that matches your layout.",
-    comparisonLinkLabel: "Compare all farm types",
-  });
-  expect(homepageCopyByLocale["zh-CN"].farmGuides).toEqual({
-    heading: "规划前先选择农场类型",
-    description: "比较每种官方农场的空间、限制和优势，再打开适合你布局的指南。",
-    comparisonLinkLabel: "对比全部农场类型",
-  });
+test("keeps localized trust, import, and screenshot claims synchronized", () => {
   expect(homepageCopyByLocale.en.trust).toEqual({
     heading: "About this planner",
     description:
@@ -195,8 +190,6 @@ test("keeps localized farm discovery, trust, import, and screenshot claims synch
     planner: {
       title: "Planner",
       home: "Planner",
-      farmComparison: "Farm comparison",
-      moddedFarms: "Modded farms",
     },
     explore: {
       title: "Explore",
@@ -217,8 +210,6 @@ test("keeps localized farm discovery, trust, import, and screenshot claims synch
     planner: {
       title: "规划器",
       home: "规划器",
-      farmComparison: "农场对比",
-      moddedFarms: "模组农场",
     },
     explore: {
       title: "探索",

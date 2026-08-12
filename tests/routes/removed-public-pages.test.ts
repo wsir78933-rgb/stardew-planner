@@ -51,6 +51,20 @@ function listHtmlFiles(directoryPath: string): string[] {
   );
 }
 
+function listJavaScriptFiles(directoryPath: string): string[] {
+  return readdirSync(directoryPath, { withFileTypes: true }).flatMap(
+    (directoryEntry) => {
+      const entryPath = join(directoryPath, directoryEntry.name);
+
+      if (directoryEntry.isDirectory()) {
+        return listJavaScriptFiles(entryPath);
+      }
+
+      return directoryEntry.name.endsWith(".js") ? [entryPath] : [];
+    },
+  );
+}
+
 describe("removed public guide pages", () => {
   it("keeps every planner farm map while removing guide identities", () => {
     const plannerFarmMapIds = plannerMaps
@@ -105,6 +119,29 @@ describe("removed public guide pages", () => {
           )}`,
         ).not.toContain(`href="${removedLocalizedPath}"`);
       }
+    }
+  });
+
+  it("does not ship retired page copy in static client assets", () => {
+    const staticDirectory = join(process.cwd(), "out", "_next", "static");
+    const staticJavaScriptFiles = listJavaScriptFiles(staticDirectory);
+
+    for (const retiredCopy of [
+      "Choose a farm type before you plan",
+      "规划前先选择农场类型",
+      "Stardew Valley Farm Types: Compare All 8 Maps",
+      "Stardew Valley Farm Map Mods | Stardew Planner",
+      "星露谷物语农场类型对比：8 种地图怎么选",
+      "星露谷物语农场地图 Mod | 星露谷规划器",
+    ]) {
+      const copiedToStaticAsset = staticJavaScriptFiles.some((filePath) =>
+        readFileSync(filePath, "utf8").includes(retiredCopy),
+      );
+
+      expect(
+        copiedToStaticAsset,
+        `Retired copy was emitted to a static client asset: ${retiredCopy}`,
+      ).toBe(false);
     }
   });
 });

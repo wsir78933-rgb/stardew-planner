@@ -13,8 +13,6 @@ const footerCopy: SiteFooterCopy = {
   planner: {
     title: "Planner",
     home: "Planner home",
-    farmComparison: "Farm comparison",
-    moddedFarms: "Modded farms",
   },
   explore: {
     title: "Explore",
