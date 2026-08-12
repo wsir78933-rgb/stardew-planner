@@ -820,6 +820,19 @@ describe("PlannerCanvas context-menu event", () => {
     expect(reportedCopyErrors).toEqual([rejectionMessage]);
   });
 
+  it("reports when the clean-copy callback is undefined", async () => {
+    const reportedCopyErrors: string[] = [];
+
+    await handlePlannerCanvasContextMenuCopyAction(
+      undefined,
+      (message) => reportedCopyErrors.push(message),
+    );
+
+    expect(reportedCopyErrors).toEqual([
+      "Planner canvas clean-map copy action is unavailable because the onCopyCleanMapImage callback is undefined.",
+    ]);
+  });
+
   it("routes a rejected menu copy through the current PlannerCanvas error seam", async () => {
     expect(createPlannerCanvasContextMenuCopyAction).toBeTypeOf("function");
     if (createPlannerCanvasContextMenuCopyAction === undefined) {
@@ -842,6 +855,31 @@ describe("PlannerCanvas context-menu event", () => {
 
     expect(canvasStatuses).toEqual([{ kind: "error", message: rejectionMessage }]);
     expect(reportedCanvasErrors).toEqual([rejectionMessage]);
+  });
+
+  it("routes an undefined menu copy callback through the current PlannerCanvas error seam", async () => {
+    expect(createPlannerCanvasContextMenuCopyAction).toBeTypeOf("function");
+    if (createPlannerCanvasContextMenuCopyAction === undefined) {
+      return;
+    }
+
+    const unavailableCopyMessage =
+      "Planner canvas clean-map copy action is unavailable because the onCopyCleanMapImage callback is undefined.";
+    const reportedCanvasErrors: string[] = [];
+    const canvasStatuses: unknown[] = [];
+    const copyAction = createPlannerCanvasContextMenuCopyAction({
+      isMapLifecycleCurrent: () => true,
+      onCanvasError: (message) => reportedCanvasErrors.push(message),
+      getOnCopyCleanMapImage: () => undefined,
+      setPlannerCanvasStatus: (status) => canvasStatuses.push(status),
+    });
+
+    await copyAction();
+
+    expect(canvasStatuses).toEqual([
+      { kind: "error", message: unavailableCopyMessage },
+    ]);
+    expect(reportedCanvasErrors).toEqual([unavailableCopyMessage]);
   });
 
   it("attaches one context-menu listener to each active Pixi canvas and removes its exact handler on cleanup", () => {

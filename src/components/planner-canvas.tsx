@@ -252,11 +252,13 @@ export async function handlePlannerCanvasContextMenuCopyAction(
   onCopyCleanMapImage: (() => Promise<void>) | undefined,
   reportCopyError: (message: string) => void,
 ): Promise<void> {
-  if (onCopyCleanMapImage === undefined) {
-    return;
-  }
-
   try {
+    if (onCopyCleanMapImage === undefined) {
+      throw new Error(
+        "Planner canvas clean-map copy action is unavailable because the onCopyCleanMapImage callback is undefined.",
+      );
+    }
+
     await onCopyCleanMapImage();
   } catch (caughtError) {
     reportCopyError(
@@ -2006,9 +2008,22 @@ export function PlannerCanvas({
           editorRootElement={canvasContextMenuEditorRootReference.current}
           focusRestoreElement={canvasContextMenuFocusRestoreReference.current}
           onClose={() => setCanvasContextMenuPoint(null)}
-          onCopyFullMap={() =>
-            onCopyFullMapFromContextMenuReference.current?.() ?? Promise.resolve()
-          }
+          onCopyFullMap={() => {
+            const copyFullMap = onCopyFullMapFromContextMenuReference.current;
+
+            if (copyFullMap !== null) {
+              return copyFullMap();
+            }
+
+            const unavailableCopyMessage =
+              `Copy full map is unavailable for map ID ${JSON.stringify(mapId)} because the canvas context-menu copy action is null.`;
+            setPlannerCanvasStatus({
+              kind: "error",
+              message: unavailableCopyMessage,
+            });
+            onCanvasErrorReference.current?.(unavailableCopyMessage);
+            return Promise.resolve();
+          }}
           position={canvasContextMenuPoint}
         />
       ) : null}
