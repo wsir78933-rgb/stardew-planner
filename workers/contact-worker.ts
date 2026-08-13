@@ -14,6 +14,10 @@ type TurnstileVerificationResult = Readonly<{
   action?: unknown;
 }>;
 
+type StaticAssetsBinding = Readonly<{
+  fetch: (request: Request) => Promise<Response>;
+}>;
+
 export type ContactWorkerEnvironment = Readonly<{
   CONTACT_ALLOWED_ORIGIN: string;
   CONTACT_EXPECTED_TURNSTILE_HOSTNAME: string;
@@ -24,6 +28,7 @@ export type ContactWorkerEnvironment = Readonly<{
   CONTACT_EMAIL: Readonly<{
     send: (message: ContactEmailMessage) => Promise<void>;
   }>;
+  STATIC_ASSETS: StaticAssetsBinding;
 }>;
 
 const maximumRequestBytes = 16_384;
@@ -248,14 +253,36 @@ export async function handleContactRequest(
   return createJsonResponse(202, "Contact message accepted.");
 }
 
-const contactWorker = {
-  fetch(request: Request, environment: ContactWorkerEnvironment): Promise<Response> {
-    if (new URL(request.url).pathname !== "/api/contact") {
-      return Promise.resolve(createJsonResponse(404, "Not found."));
-    }
+function isContactApiRequest(request: Request): boolean {
+  return new URL(request.url).pathname === "/api/contact";
+}
 
+function serveStaticAsset(
+  request: Request,
+  environment: ContactWorkerEnvironment,
+): Promise<Response> {
+  if (typeof environment.STATIC_ASSETS?.fetch !== "function") {
+    return Promise.resolve(
+      createJsonResponse(500, "Static asset binding is unavailable."),
+    );
+  }
+
+  return environment.STATIC_ASSETS.fetch(request);
+}
+
+function handleWorkerRequest(
+  request: Request,
+  environment: ContactWorkerEnvironment,
+): Promise<Response> {
+  if (isContactApiRequest(request)) {
     return handleContactRequest(request, environment);
-  },
+  }
+
+  return serveStaticAsset(request, environment);
+}
+
+const stardewPlannerWorker = {
+  fetch: handleWorkerRequest,
 };
 
-export default contactWorker;
+export default stardewPlannerWorker;

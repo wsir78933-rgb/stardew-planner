@@ -1,6 +1,13 @@
-# Contact Worker configuration
+# Static Site and Contact Worker configuration
 
-This Worker owns only `POST /api/contact` on `stardewvalleyplanner.art`.
+This Worker serves the static Next.js export from `out/` on
+`stardewvalleyplanner.art`. It reserves only `POST /api/contact` for the
+contact delivery logic; all other requests resolve through the static asset
+binding.
+
+Keep the existing root custom-domain binding for `stardewvalleyplanner.art`.
+The `assets` configuration in `wrangler.jsonc` maps route paths to exported
+HTML files and returns `404.html` for missing pages.
 
 Set these values as Cloudflare Worker secrets. Do not add them to the repository:
 

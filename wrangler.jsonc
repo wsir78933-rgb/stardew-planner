@@ -2,6 +2,12 @@
   "name": "stardew-planner",
   "main": "workers/contact-worker.ts",
   "compatibility_date": "2026-08-08",
+  "assets": {
+    "directory": "./out",
+    "binding": "STATIC_ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
   "routes": [
     {
       "pattern": "stardewvalleyplanner.art/api/contact*",

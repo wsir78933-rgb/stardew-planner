@@ -17,10 +17,16 @@ it("documents mandatory Cloudflare Email Sending and public site-key configurati
   expect(configurationGuide).toContain("NEXT_PUBLIC_TURNSTILE_SITE_KEY");
 });
 
-it("routes only Contact traffic and supplies the Worker binding contract", () => {
+it("publishes the static export while retaining the Contact Worker contract", () => {
   const workerConfiguration = JSON.parse(
     readFileSync(join(process.cwd(), "wrangler.jsonc"), "utf8"),
   ) as Readonly<{
+    assets: Readonly<{
+      binding: string;
+      directory: string;
+      html_handling: string;
+      not_found_handling: string;
+    }>;
     routes: readonly Readonly<{ custom_domain: boolean; pattern: string }>[];
     send_email: readonly Readonly<{ name: string }>[];
     vars: Readonly<Record<string, string>>;
@@ -32,6 +38,12 @@ it("routes only Contact traffic and supplies the Worker binding contract", () =>
       pattern: "stardewvalleyplanner.art/api/contact*",
     },
   ]);
+  expect(workerConfiguration.assets).toEqual({
+    binding: "STATIC_ASSETS",
+    directory: "./out",
+    html_handling: "auto-trailing-slash",
+    not_found_handling: "404-page",
+  });
   expect(workerConfiguration.send_email).toEqual([{ name: "CONTACT_EMAIL" }]);
   expect(workerConfiguration.vars).toEqual({
     CONTACT_ALLOWED_ORIGIN: "https://stardewvalleyplanner.art",

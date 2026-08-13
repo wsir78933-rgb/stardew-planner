@@ -10,6 +10,9 @@ const sendEmail = vi.fn<
   ContactWorkerEnvironment["CONTACT_EMAIL"]["send"]
 >();
 const fetchMock = vi.fn();
+const fetchStaticAsset = vi.fn<
+  ContactWorkerEnvironment["STATIC_ASSETS"]["fetch"]
+>();
 
 function createWorkerEnvironment(): ContactWorkerEnvironment {
   return {
@@ -20,6 +23,7 @@ function createWorkerEnvironment(): ContactWorkerEnvironment {
     CONTACT_TURNSTILE_ACTION: "turnstile-spin-v2",
     TURNSTILE_SECRET: "test-secret",
     CONTACT_EMAIL: { send: sendEmail },
+    STATIC_ASSETS: { fetch: fetchStaticAsset },
   };
 }
 
@@ -88,6 +92,7 @@ describe("handleContactRequest", () => {
     sendEmail.mockReset();
     sendEmail.mockResolvedValue(undefined);
     fetchMock.mockReset();
+    fetchStaticAsset.mockReset();
     fetchMock.mockResolvedValue(
       Response.json({
         success: true,
@@ -228,12 +233,37 @@ describe("handleContactRequest", () => {
     expect(response.status).toBe(502);
   });
 
-  it("returns 404 for every Worker route except the Contact endpoint", async () => {
+  it("serves a static document when a non-contact path reaches the Worker", async () => {
+    fetchStaticAsset.mockResolvedValue(
+      new Response("<!doctype html><title>Robin static document</title>", {
+        headers: { "content-type": "text/html; charset=utf-8" },
+      }),
+    );
+
     const response = await contactWorker.fetch(
-      new Request(`${allowedOrigin}/api/other`),
+      new Request(`${allowedOrigin}/where-is-robin-stardew-valley`),
       createWorkerEnvironment(),
     );
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("text/html; charset=utf-8");
+    await expect(response.text()).resolves.toContain("Robin static document");
+  });
+
+  it("reports an unavailable static asset binding for a non-contact path", async () => {
+    const workerEnvironmentWithoutStaticAssets = {
+      ...createWorkerEnvironment(),
+      STATIC_ASSETS: undefined,
+    } as unknown as ContactWorkerEnvironment;
+
+    const response = await contactWorker.fetch(
+      new Request(`${allowedOrigin}/where-is-robin-stardew-valley`),
+      workerEnvironmentWithoutStaticAssets as ContactWorkerEnvironment,
+    );
+
+    expect(response.status).toBe(500);
+    await expect(response.json()).resolves.toEqual({
+      message: "Static asset binding is unavailable.",
+    });
   });
 });
