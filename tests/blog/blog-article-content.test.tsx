@@ -110,18 +110,24 @@ function assertAgentHunterFriendLink(markup: string, sourceSectionHeading: strin
   expect(markup).toContain('alt="AgentHunter Badge"');
   expect(markup).toContain('target="_blank"');
   expect(markup).toContain('rel="noopener noreferrer"');
+  const friendLinkLogo = markup.match(
+    /<img[^>]+src="https:\/\/www\.agenthunter\.io\/logo-light\.svg"[^>]*\/>/,
+  );
+  expect(friendLinkLogo?.[0]).toContain('loading="lazy"');
   expect(markup.indexOf(renderedFriendLinkHref)).toBeGreaterThan(
     markup.indexOf(sourceSectionHeading),
   );
   expect(markup.split(renderedFriendLinkHref)).toHaveLength(2);
 }
 
-it("puts the AgentHunter friend link at the bottom of both first-blog locales", () => {
+it("puts the AgentHunter friend link at the bottom of both Robin-guide locales", () => {
   assertAgentHunterFriendLink(
-    renderArticle(CarpenterStardewEnglishArticle),
+    renderArticle(WhereIsRobinEnglishArticle),
     "Sources and version boundary",
   );
-  assertAgentHunterFriendLink(renderArticle(CarpenterStardewChineseArticle), "来源与版本边界");
+  assertAgentHunterFriendLink(renderArticle(WhereIsRobinChineseArticle), "来源与版本边界");
+  expect(renderArticle(CarpenterStardewEnglishArticle)).not.toContain("AgentHunter friend link");
+  expect(renderArticle(CarpenterStardewChineseArticle)).not.toContain("AgentHunter friend link");
 });
 
 it("renders sourced English and Chinese carpenter guides with matching section counts", () => {
