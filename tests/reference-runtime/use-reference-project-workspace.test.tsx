@@ -246,6 +246,7 @@ describe("reference project workspace controller", () => {
       decor: initialIslandMap.decor,
       renovations: initialIslandMap.renovations,
       setActive: true,
+      expectedProjectRevision: "2026-08-03T00:00:00.000Z",
     });
     expect(controller.getState().activeSession?.season).toBe("fall");
   });
@@ -266,6 +267,96 @@ describe("reference project workspace controller", () => {
 
     expect(updateMapCallCount).toBe(1);
     expect(controller.getState().activeSession?.mapId).toBe("map-standard");
+  });
+
+  it("rejects a stale current-map save before persistence and preserves the external project revision", () => {
+    const recordingRepository = createRecordingWorkspaceRepository();
+    const controller = createController(recordingRepository.repository);
+    controller.openProject("project-alpha");
+    const staleWorkspaceState = controller.getState();
+    const expectedRevision = staleWorkspaceState.activeProject!.updated_at;
+
+    const externallyUpdatedProject = recordingRepository.repository.renameProject(
+      "project-alpha",
+      "Externally renamed farm",
+    );
+    const actualRevision = externallyUpdatedProject.updated_at;
+    const serializedDocumentAfterExternalUpdate =
+      recordingRepository.getSerializedProjectDocument();
+    const writeCountAfterExternalUpdate = recordingRepository.getWriteCount();
+
+    expect(() => controller.saveOpenMap({ season: "fall" })).toThrow(
+      new RegExp(
+        `project-alpha.*expected revision.*${expectedRevision.replaceAll(".", "\\.")}.*actual revision.*${actualRevision.replaceAll(".", "\\.")}`,
+        "s",
+      ),
+    );
+
+    expect(recordingRepository.getWriteCount()).toBe(writeCountAfterExternalUpdate);
+    expect(recordingRepository.getSerializedProjectDocument()).toBe(
+      serializedDocumentAfterExternalUpdate,
+    );
+    expect(controller.getState()).toStrictEqual(staleWorkspaceState);
+  });
+
+  it("rejects a stale current-map save after a same-clock external map mutation", () => {
+    const sameClockTimestamp = "2026-08-03T00:00:00.000Z";
+    const projectDocument = createAdapterSupportedDocument();
+    projectDocument.projects[0]!.updated_at = sameClockTimestamp;
+    const recordingRepository = createRecordingWorkspaceRepository(projectDocument);
+    const controller = createController(recordingRepository.repository);
+    controller.openProject("project-alpha");
+    const staleWorkspaceState = controller.getState();
+    const externallyEditedMap = recordingRepository.repository
+      .openProject("project-alpha")
+      .project.maps[0]!;
+
+    recordingRepository.repository.updateMap({
+      projectId: "project-alpha",
+      mapId: externallyEditedMap.id,
+      mapFile: externallyEditedMap.mapFile,
+      label: "Externally edited map",
+      season: "winter",
+      state: externallyEditedMap.state,
+      decor: externallyEditedMap.decor,
+      renovations: externallyEditedMap.renovations,
+      setActive: true,
+    });
+    const serializedDocumentAfterExternalUpdate =
+      recordingRepository.getSerializedProjectDocument();
+    const writeCountAfterExternalUpdate = recordingRepository.getWriteCount();
+
+    expect(() => controller.saveOpenMap({ season: "fall" })).toThrow(
+      /project-alpha.*expected revision.*2026-08-03T00:00:00\.000Z.*actual revision.*2026-08-03T00:00:00\.001Z/s,
+    );
+
+    expect(recordingRepository.getWriteCount()).toBe(writeCountAfterExternalUpdate);
+    expect(recordingRepository.getSerializedProjectDocument()).toBe(
+      serializedDocumentAfterExternalUpdate,
+    );
+    expect(controller.getState()).toStrictEqual(staleWorkspaceState);
+  });
+
+  it("saves a frozen-schema project with a parseable noncanonical updated_at as a later canonical revision", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    projectDocument.projects[0]!.created_at = "2026-08-01T00:00:00.000Z";
+    projectDocument.projects[0]!.updated_at = "August 2, 2026";
+    const recordingRepository = createRecordingWorkspaceRepository(projectDocument);
+    expect(
+      recordingRepository.repository.openProject("project-alpha").updated_at,
+    ).toBe("August 2, 2026");
+    const controller = createController(recordingRepository.repository);
+    controller.openProject("project-alpha");
+
+    controller.saveOpenMap({ season: "fall" });
+
+    expect(recordingRepository.getWriteCount()).toBe(1);
+    expect(
+      recordingRepository.repository.openProject("project-alpha").updated_at,
+    ).toBe("2026-08-03T00:00:00.000Z");
+    expect(controller.getState().activeProject?.updated_at).toBe(
+      "2026-08-03T00:00:00.000Z",
+    );
   });
 
   it("preserves controller state when repository or adapter operations fail", () => {
@@ -376,7 +467,12 @@ describe("reference project workspace controller", () => {
       invalidReturnedProject.project.activeMapId = "missing-map";
       const repositoryMethod = vi
         .spyOn(repository, repositoryMethodName)
-        .mockReturnValue(invalidReturnedProject);
+        .mockImplementation(((_projectValue: string, prepareActiveSession: (
+          candidateProject: ReferenceLocalProjectDocument["projects"][number],
+        ) => unknown) => ({
+          project: invalidReturnedProject,
+          preparedActiveSession: prepareActiveSession(invalidReturnedProject),
+        })) as never);
       const deliveredStates: unknown[] = [];
       const controller = createReferenceProjectWorkspaceController({
         repository,
@@ -396,6 +492,54 @@ describe("reference project workspace controller", () => {
       expect(controller.getState()).toStrictEqual(stateBeforeFailure);
     },
   );
+
+  it("rejects an adapter-incompatible project import before persistence and preserves workspace state", () => {
+    const recordingRepository = createRecordingWorkspaceRepository();
+    const controller = createController(recordingRepository.repository);
+    controller.openProject("project-beta");
+    const stateBeforeImport = controller.getState();
+    const serializedDocumentBeforeImport =
+      recordingRepository.getSerializedProjectDocument();
+    const adapterRejectedProject = createAdapterRejectedProject(
+      createAdapterSupportedDocument().projects[0]!,
+    );
+
+    expect(() =>
+      controller.importProject(JSON.stringify({
+        version: 1,
+        projects: [adapterRejectedProject],
+      })),
+    ).toThrow(/cannot be opened.*decor\.wallpapers\.Bedroom/s);
+
+    expect(recordingRepository.getWriteCount()).toBe(0);
+    expect(recordingRepository.getSerializedProjectDocument()).toBe(
+      serializedDocumentBeforeImport,
+    );
+    expect(controller.getState()).toStrictEqual(stateBeforeImport);
+  });
+
+  it("rejects an adapter-incompatible project duplicate before persistence and preserves workspace state", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    projectDocument.projects[0] = createAdapterRejectedProject(
+      projectDocument.projects[0]!,
+    );
+    const recordingRepository = createRecordingWorkspaceRepository(projectDocument);
+    const controller = createController(recordingRepository.repository);
+    controller.openProject("project-beta");
+    const stateBeforeDuplicate = controller.getState();
+    const serializedDocumentBeforeDuplicate =
+      recordingRepository.getSerializedProjectDocument();
+
+    expect(() => controller.duplicateProject("project-alpha")).toThrow(
+      /cannot be opened.*decor\.wallpapers\.Bedroom/s,
+    );
+
+    expect(recordingRepository.getWriteCount()).toBe(0);
+    expect(recordingRepository.getSerializedProjectDocument()).toBe(
+      serializedDocumentBeforeDuplicate,
+    );
+    expect(controller.getState()).toStrictEqual(stateBeforeDuplicate);
+  });
 
   it("keeps state and does not notify on copy or move repository errors", () => {
     const repository = createRepository();
@@ -1154,6 +1298,52 @@ function createAdapterSupportedDocument(): ReferenceLocalProjectDocument {
     }
   }
   return supportedDocument;
+}
+
+function createAdapterRejectedProject(
+  sourceProject: ReferenceLocalProjectDocument["projects"][number],
+): ReferenceLocalProjectDocument["projects"][number] {
+  const adapterRejectedProject = structuredClone(sourceProject);
+  const activeMap = adapterRejectedProject.project.maps.find(
+    (projectMap) => projectMap.id === adapterRejectedProject.project.activeMapId,
+  );
+  if (activeMap === undefined) {
+    throw new Error(
+      `Expected test project ${JSON.stringify(adapterRejectedProject.id)} to contain its active map ${JSON.stringify(adapterRejectedProject.project.activeMapId)}.`,
+    );
+  }
+  activeMap.decor.wallpapers.Bedroom = { pattern: "17" };
+  return adapterRejectedProject;
+}
+
+function createRecordingWorkspaceRepository(
+  projectDocument: ReferenceLocalProjectDocument = createAdapterSupportedDocument(),
+): Readonly<{
+  repository: ReferenceProjectRepository;
+  getWriteCount: () => number;
+  getSerializedProjectDocument: () => string;
+}> {
+  let serializedProjectDocument = JSON.stringify(projectDocument);
+  let writeCount = 0;
+  const repository = createReferenceProjectRepository({
+    storage: {
+      getItem: () => serializedProjectDocument,
+      setItem: (_storageKey, nextSerializedProjectDocument) => {
+        writeCount += 1;
+        serializedProjectDocument = nextSerializedProjectDocument;
+      },
+    },
+    createIdentifier: (() => {
+      let nextIdentifier = 0;
+      return () => `recording-workspace-id-${String(++nextIdentifier)}`;
+    })(),
+    now: () => "2026-08-03T00:00:00.000Z",
+  });
+  return {
+    repository,
+    getWriteCount: () => writeCount,
+    getSerializedProjectDocument: () => serializedProjectDocument,
+  };
 }
 
 function createMissingActiveMapRepository(

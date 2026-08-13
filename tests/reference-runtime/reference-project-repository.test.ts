@@ -831,6 +831,47 @@ describe("reference project repository map mutations", () => {
     );
   });
 
+  it("rejects an update with a stale expected project revision before mutation or persistence", () => {
+    const externallyUpdatedDocument = cloneFixtureProjectDocument();
+    externallyUpdatedDocument.projects[0] = {
+      ...externallyUpdatedDocument.projects[0]!,
+      updated_at: "2026-08-02T14:30:00.000Z",
+    };
+    const originalSerializedProjectDocument = JSON.stringify(
+      externallyUpdatedDocument,
+    );
+    const recordingStorage = createRecordingStorage(
+      originalSerializedProjectDocument,
+    );
+    const recordedRequests: ReferenceApiRequest[] = [];
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      requestHandler: createRecordingRequestHandler(recordedRequests),
+      now: () => "2026-08-02T15:00:00.000Z",
+    });
+    const sourceMap = externallyUpdatedDocument.projects[0]!.project.maps[0]!;
+
+    expect(() => repository.updateMap({
+      projectId: "project-alpha",
+      mapId: sourceMap.id,
+      mapFile: sourceMap.mapFile,
+      label: sourceMap.label,
+      season: "fall",
+      state: sourceMap.state,
+      decor: sourceMap.decor,
+      renovations: sourceMap.renovations,
+      setActive: true,
+      expectedProjectRevision: "2026-08-02T01:00:00.000Z",
+    })).toThrow(
+      /project-alpha.*expected revision.*2026-08-02T01:00:00\.000Z.*actual revision.*2026-08-02T14:30:00\.000Z/s,
+    );
+
+    expect(recordedRequests).toHaveLength(0);
+    expect(recordingStorage.getWriteCount()).toBe(0);
+    expect(recordingStorage.getSerializedProjectDocument()).toBe(
+      originalSerializedProjectDocument,
+    );
+  });
+
   it("renames one map through PATCH with the exact label body", () => {
     const recordingStorage = createRecordingStorage(
       JSON.stringify(referenceProjectDocumentFixture),

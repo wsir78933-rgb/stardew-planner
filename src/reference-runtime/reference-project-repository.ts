@@ -47,6 +47,7 @@ export type ReferenceMapUpdateInput = Readonly<{
   decor: ReferenceProjectMap["decor"];
   renovations: ReferenceJsonValue[];
   setActive: boolean;
+  expectedProjectRevision?: string;
 }>;
 
 export type ReferenceMapRenameInput = Readonly<{
@@ -84,17 +85,34 @@ export type ReferenceThumbnailSaveInput = Readonly<{
   webpBytes: Uint8Array;
 }>;
 
+export type ReferenceProjectPreflight<PreparedActiveSession> = (
+  candidateProject: ReferenceStoredProject,
+) => PreparedActiveSession;
+
+export type ReferencePreparedProjectMutation<PreparedActiveSession> = Readonly<{
+  project: ReferenceStoredProject;
+  preparedActiveSession: PreparedActiveSession;
+}>;
+
+type ReferenceProjectMutationWithPreflight = {
+  (projectValue: string): ReferenceStoredProject;
+  <PreparedActiveSession>(
+    projectValue: string,
+    prepareActiveSession: ReferenceProjectPreflight<PreparedActiveSession>,
+  ): ReferencePreparedProjectMutation<PreparedActiveSession>;
+};
+
 export type ReferenceProjectRepository = Readonly<{
   listProjects(): readonly ReferenceProjectSummary[];
   openProject(projectId: string): ReferenceStoredProject;
   createProject(input: ReferenceProjectCreationInput): ReferenceStoredProject;
-  duplicateProject(projectId: string): ReferenceStoredProject;
+  duplicateProject: ReferenceProjectMutationWithPreflight;
   renameProject(
     projectId: string,
     requestedName: string,
   ): ReferenceStoredProject;
   deleteProject(projectId: string): void;
-  importProject(serializedProject: string): ReferenceStoredProject;
+  importProject: ReferenceProjectMutationWithPreflight;
   exportProject(projectId: string): string;
   updateMap(input: ReferenceMapUpdateInput): ReferenceStoredProject;
   createMap(input: ReferenceMapCreationInput): ReferenceStoredProject;
@@ -264,6 +282,40 @@ function assertMutationTimestamp(receivedTimestamp: unknown): string {
   return receivedTimestamp;
 }
 
+function createNextProjectUpdatedAt(
+  currentProject: ReferenceStoredProject,
+  receivedTimestamp: unknown,
+): string {
+  const requestedTimestamp = assertMutationTimestamp(receivedTimestamp);
+  const currentTimestampMilliseconds = Date.parse(currentProject.updated_at);
+  if (Number.isNaN(currentTimestampMilliseconds)) {
+    throw new Error(
+      `Reference project ${JSON.stringify(currentProject.id)} stored updated_at must be parseable by Date.parse; received ${JSON.stringify(currentProject.updated_at)}.`,
+    );
+  }
+
+  const requestedTimestampMilliseconds = Date.parse(requestedTimestamp);
+  const nextTimestampMilliseconds = Math.max(
+    requestedTimestampMilliseconds,
+    currentTimestampMilliseconds + 1,
+  );
+  let nextTimestamp: string;
+  try {
+    nextTimestamp = new Date(nextTimestampMilliseconds).toISOString();
+  } catch (caughtError) {
+    throw new Error(
+      `Reference project ${JSON.stringify(currentProject.id)} cannot advance updated_at beyond ${JSON.stringify(currentProject.updated_at)} using now() value ${JSON.stringify(requestedTimestamp)}.`,
+      { cause: caughtError },
+    );
+  }
+  if (Date.parse(nextTimestamp) <= currentTimestampMilliseconds) {
+    throw new Error(
+      `Reference project ${JSON.stringify(currentProject.id)} cannot advance updated_at beyond ${JSON.stringify(currentProject.updated_at)} using now() value ${JSON.stringify(requestedTimestamp)}; received next timestamp ${JSON.stringify(nextTimestamp)}.`,
+    );
+  }
+  return nextTimestamp;
+}
+
 function assertPlainResponseBody(
   receivedBody: unknown,
   responseShape: ReferenceMutationResponseShape,
@@ -370,6 +422,31 @@ function requireStoredProject(
   }
 
   return storedProject;
+}
+
+function assertExpectedProjectRevision(
+  projectDocument: ReferenceLocalProjectDocument,
+  projectId: string,
+  expectedProjectRevision: string | undefined,
+): void {
+  if (expectedProjectRevision === undefined) {
+    return;
+  }
+  if (typeof expectedProjectRevision !== "string" || expectedProjectRevision.length === 0) {
+    throw new TypeError(
+      `Reference project ${JSON.stringify(projectId)} expected revision must be a non-empty string; received ${JSON.stringify(expectedProjectRevision)}.`,
+    );
+  }
+
+  const actualProjectRevision = requireStoredProject(
+    projectDocument,
+    projectId,
+  ).updated_at;
+  if (actualProjectRevision !== expectedProjectRevision) {
+    throw new Error(
+      `Reference project ${JSON.stringify(projectId)} save conflict: expected revision ${JSON.stringify(expectedProjectRevision)}; actual revision ${JSON.stringify(actualProjectRevision)}.`,
+    );
+  }
 }
 
 function replaceStoredProject(
@@ -628,9 +705,27 @@ export function createReferenceProjectRepository(
     const serializedProjectDocument = serializeReferenceProjectDocument(
       validatedProjectDocument,
     );
+    const selectedResult = transactionResult.selectResult(
+      validatedProjectDocument,
+    );
 
     storage.setItem(referenceProjectStorageKey, serializedProjectDocument);
-    return transactionResult.selectResult(validatedProjectDocument);
+    return selectedResult;
+  }
+
+  function selectProjectMutationResult<PreparedActiveSession>(
+    candidateProject: ReferenceStoredProject,
+    prepareActiveSession?: ReferenceProjectPreflight<PreparedActiveSession>,
+  ):
+    | ReferenceStoredProject
+    | ReferencePreparedProjectMutation<PreparedActiveSession> {
+    if (prepareActiveSession === undefined) {
+      return candidateProject;
+    }
+    return {
+      project: candidateProject,
+      preparedActiveSession: prepareActiveSession(candidateProject),
+    };
   }
 
   function invokeMutationHandler(
@@ -647,8 +742,22 @@ export function createReferenceProjectRepository(
   function executeSingleProjectMutation(
     request: ReferenceApiRequest,
     projectId: string,
+    expectedProjectRevision?: string,
   ): ReferenceStoredProject {
     return executeReferenceProjectTransaction((currentProjectDocument) => {
+      assertExpectedProjectRevision(
+        currentProjectDocument,
+        projectId,
+        expectedProjectRevision,
+      );
+      const currentProject = requireStoredProject(
+        currentProjectDocument,
+        projectId,
+      );
+      const nextProjectUpdatedAt = createNextProjectUpdatedAt(
+        currentProject,
+        now(),
+      );
       const mutationResponse = invokeMutationHandler(
         request,
         currentProjectDocument,
@@ -657,7 +766,7 @@ export function createReferenceProjectRepository(
       const projectDocument = replaceProjectUpdatedTimestamp(
         mutationResponse.projectDocument,
         projectId,
-        assertMutationTimestamp(now()),
+        nextProjectUpdatedAt,
       );
 
       return {
@@ -721,6 +830,14 @@ export function createReferenceProjectRepository(
     requestedName: string,
   ): ReferenceStoredProject {
     return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const currentProject = requireStoredProject(
+        currentProjectDocument,
+        projectId,
+      );
+      const nextProjectUpdatedAt = createNextProjectUpdatedAt(
+        currentProject,
+        now(),
+      );
       const mutationResponse = invokeMutationHandler(
         {
           method: "PUT",
@@ -739,7 +856,7 @@ export function createReferenceProjectRepository(
         projectId,
         {
           ...renamedProject,
-          updated_at: assertMutationTimestamp(now()),
+          updated_at: nextProjectUpdatedAt,
         },
       );
 
@@ -769,7 +886,17 @@ export function createReferenceProjectRepository(
     });
   }
 
-  function duplicateProject(projectId: string): ReferenceStoredProject {
+  function duplicateProject(projectId: string): ReferenceStoredProject;
+  function duplicateProject<PreparedActiveSession>(
+    projectId: string,
+    prepareActiveSession: ReferenceProjectPreflight<PreparedActiveSession>,
+  ): ReferencePreparedProjectMutation<PreparedActiveSession>;
+  function duplicateProject<PreparedActiveSession>(
+    projectId: string,
+    prepareActiveSession?: ReferenceProjectPreflight<PreparedActiveSession>,
+  ):
+    | ReferenceStoredProject
+    | ReferencePreparedProjectMutation<PreparedActiveSession> {
     return executeReferenceProjectTransaction((currentProjectDocument) => {
       const sourceProject = requireStoredProject(
         currentProjectDocument,
@@ -798,13 +925,24 @@ export function createReferenceProjectRepository(
           projects: [...currentProjectDocument.projects, duplicatedProject],
         },
         selectResult: (validatedProjectDocument) =>
-          requireStoredProject(validatedProjectDocument, duplicateProjectId),
+          selectProjectMutationResult(
+            requireStoredProject(validatedProjectDocument, duplicateProjectId),
+            prepareActiveSession,
+          ),
       };
     });
   }
 
   function createMap(input: ReferenceMapCreationInput): ReferenceStoredProject {
     return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const currentProject = requireStoredProject(
+        currentProjectDocument,
+        input.projectId,
+      );
+      const nextProjectUpdatedAt = createNextProjectUpdatedAt(
+        currentProject,
+        now(),
+      );
       const mutationResponse = invokeMutationHandler(
         {
           method: "POST",
@@ -823,10 +961,6 @@ export function createReferenceProjectRepository(
         mutationResponse.projectDocument,
         input.projectId,
       );
-      const currentProject = requireStoredProject(
-        currentProjectDocument,
-        input.projectId,
-      );
       const createdMapId = allocateUniqueReferenceIdentifier(
         createIdentifier,
         new Set(currentProject.project.maps.map((projectMap) => projectMap.id)),
@@ -843,7 +977,7 @@ export function createReferenceProjectRepository(
         input.projectId,
         {
           ...remappedProject,
-          updated_at: assertMutationTimestamp(now()),
+          updated_at: nextProjectUpdatedAt,
         },
       );
 
@@ -871,6 +1005,7 @@ export function createReferenceProjectRepository(
         },
       },
       input.projectId,
+      input.expectedProjectRevision,
     );
   }
 
@@ -902,6 +1037,10 @@ export function createReferenceProjectRepository(
       const currentProject = requireStoredProject(
         currentProjectDocument,
         input.projectId,
+      );
+      const nextProjectUpdatedAt = createNextProjectUpdatedAt(
+        currentProject,
+        now(),
       );
       const mutationResponse = invokeMutationHandler(
         {
@@ -938,7 +1077,7 @@ export function createReferenceProjectRepository(
         input.projectId,
         {
           ...remappedProject,
-          updated_at: assertMutationTimestamp(now()),
+          updated_at: nextProjectUpdatedAt,
         },
       );
 
@@ -1103,12 +1242,13 @@ export function createReferenceProjectRepository(
     projectDocument: ReferenceLocalProjectDocument,
     sourceProjectId: string,
     targetProjectId: string,
-    transferTimestamp: string,
+    sourceProjectUpdatedAt: string,
+    targetProjectUpdatedAt: string,
   ): ReferenceLocalProjectDocument {
     const sourceTimestampedProjectDocument = replaceProjectUpdatedTimestamp(
       projectDocument,
       sourceProjectId,
-      transferTimestamp,
+      sourceProjectUpdatedAt,
     );
     if (targetProjectId === sourceProjectId) {
       return sourceTimestampedProjectDocument;
@@ -1117,7 +1257,7 @@ export function createReferenceProjectRepository(
     return replaceProjectUpdatedTimestamp(
       sourceTimestampedProjectDocument,
       targetProjectId,
-      transferTimestamp,
+      targetProjectUpdatedAt,
     );
   }
 
@@ -1143,6 +1283,15 @@ export function createReferenceProjectRepository(
     transferAction: "copy" | "move",
   ): ReferenceMapMoveResult {
     return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const requestedMutationTimestamp = assertMutationTimestamp(now());
+      const sourceProject = requireStoredProject(
+        currentProjectDocument,
+        input.projectId,
+      );
+      const sourceProjectUpdatedAt = createNextProjectUpdatedAt(
+        sourceProject,
+        requestedMutationTimestamp,
+      );
       const transferBody =
         input.targetProjectId !== undefined
           ? { targetProjectId: input.targetProjectId }
@@ -1160,25 +1309,36 @@ export function createReferenceProjectRepository(
         currentProjectDocument,
         "projectTitle",
       );
-      const transferTimestamp = assertMutationTimestamp(now());
       const resolvedTarget = resolveAndValidateMapTransferTarget(
         input,
         currentProjectDocument,
         mutationResponse,
       );
+      const targetProjectUpdatedAt = input.targetProjectId === undefined
+        ? requestedMutationTimestamp
+        : input.targetProjectId === input.projectId
+          ? sourceProjectUpdatedAt
+          : createNextProjectUpdatedAt(
+              requireStoredProject(
+                currentProjectDocument,
+                input.targetProjectId,
+              ),
+              requestedMutationTimestamp,
+            );
       const normalizedTarget = normalizeMapTransferTargetIdentity(
         input,
         transferAction,
         currentProjectDocument,
         mutationResponse,
         resolvedTarget,
-        transferTimestamp,
+        requestedMutationTimestamp,
       );
       const projectDocument = applyMapTransferTimestamps(
         normalizedTarget.projectDocument,
         input.projectId,
         normalizedTarget.targetProjectId,
-        transferTimestamp,
+        sourceProjectUpdatedAt,
+        targetProjectUpdatedAt,
       );
 
       return {
@@ -1219,7 +1379,17 @@ export function createReferenceProjectRepository(
     );
   }
 
-  function importProject(serializedProject: string): ReferenceStoredProject {
+  function importProject(serializedProject: string): ReferenceStoredProject;
+  function importProject<PreparedActiveSession>(
+    serializedProject: string,
+    prepareActiveSession: ReferenceProjectPreflight<PreparedActiveSession>,
+  ): ReferencePreparedProjectMutation<PreparedActiveSession>;
+  function importProject<PreparedActiveSession>(
+    serializedProject: string,
+    prepareActiveSession?: ReferenceProjectPreflight<PreparedActiveSession>,
+  ):
+    | ReferenceStoredProject
+    | ReferencePreparedProjectMutation<PreparedActiveSession> {
     const importedProjectDocument = validateReferenceProjectDocument(
       parseReferenceProjectDocument(serializedProject),
     );
@@ -1259,7 +1429,10 @@ export function createReferenceProjectRepository(
           projects: [...currentProjectDocument.projects, appendedProject],
         },
         selectResult: (validatedProjectDocument) =>
-          requireStoredProject(validatedProjectDocument, appendedProject.id),
+          selectProjectMutationResult(
+            requireStoredProject(validatedProjectDocument, appendedProject.id),
+            prepareActiveSession,
+          ),
       };
     });
   }

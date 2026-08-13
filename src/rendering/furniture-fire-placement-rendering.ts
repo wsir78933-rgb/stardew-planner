@@ -1,20 +1,20 @@
 import type { CatalogFurnitureFireRenderingMetadata, CatalogItem } from "../catalog";
 import { getLockedFurnitureFireRenderingMetadata } from "../catalog";
+import { resolveLocalGameAssetPath } from "../assets/local-game-asset-path";
 import type { PlacementItem } from "../placement/placement-snapshot";
 import type {
   PlacementPixelGeometry,
   PlacementRenderAnimation,
   PlacementRenderFrame,
 } from "./placement-rendering";
+import {
+  fireAnimationFrames,
+  fireGlowFrame,
+  resolveFireAnimationTimeOffset,
+  resolveFireGlowPhaseOffset,
+} from "./fire-rendering-primitives";
 
-const cursorTextureLocalPath = "/game-assets/1.6.15/sprites/Cursors.png";
-const largeFlameFrames = [0, 1, 2, 3].map((frameIndex) => ({
-  x: 276 + frameIndex * 12,
-  y: 1985,
-  width: 12,
-  height: 11,
-}));
-const glowFrame = { x: 88, y: 1779, width: 30, height: 30 };
+const cursorTextureLocalPath = resolveLocalGameAssetPath("sprites/Cursors.png");
 
 export type FurnitureFirePlacementRenderLayer = Readonly<{
   animation?: PlacementRenderAnimation;
@@ -84,13 +84,13 @@ function createFlameLayer(
   return {
     animation: {
       frameDurationMilliseconds: 100,
-      frames: largeFlameFrames,
+      frames: fireAnimationFrames,
       kind: "frame-cycle",
       timeOffsetMilliseconds:
-        createFlamePositionTimeOffset(placementItem.x, placementItem.y)
+        resolveFireAnimationTimeOffset(placementItem.x, placementItem.y)
         + timeOffsetMilliseconds,
     },
-    frame: largeFlameFrames[0],
+    frame: fireAnimationFrames[0],
     pixelGeometry: createPixelGeometry(
       placementItem.x * 16 + offsetX,
       placementItem.y * 16 + offsetY,
@@ -111,12 +111,15 @@ function createGlowLayer(
     animation: {
       baseScale: 0.8,
       kind: "scale-pulse",
-      phaseOffsetMilliseconds: createGlowPositionPhaseOffset(placementItem.x, placementItem.y),
+      phaseOffsetMilliseconds: resolveFireGlowPhaseOffset(
+        placementItem.x,
+        placementItem.y,
+      ),
       pulseAmplitude: 0.25,
       timeDivisorMilliseconds: 1000,
       timeModuloMilliseconds: 3140,
     },
-    frame: glowFrame,
+    frame: fireGlowFrame,
     opacity: 0.35,
     pixelGeometry: createPixelGeometry(
       placementItem.x * 16 + 16,
@@ -157,14 +160,6 @@ function assertLockedFurnitureFireRenderingMetadata(
   if (renderingMetadata?.kind !== lockedRenderingMetadata.kind) {
     throw new Error(`Furniture fire catalog item ${describeValue(catalogItemId)} rendering metadata must match the locked definition; received ${describeValue(renderingMetadata)}.`);
   }
-}
-
-function createFlamePositionTimeOffset(x: number, y: number): number {
-  return ((x * 3047 + y * 88 + x * y * 31) ^ 1502) % 400;
-}
-
-function createGlowPositionPhaseOffset(x: number, y: number): number {
-  return ((x * 777 + y * 9746 + x * y * 31) ^ 25214903917) % 3140;
 }
 
 function describeValue(value: unknown): string {

@@ -54,7 +54,10 @@ describe("browser editor preference store", () => {
     expect(JSON.parse(storage.getItem(editorPreferenceStorageKey) ?? "")).toEqual(
       expectedPreferences,
     );
-    expect(editorPreferenceStore.load()).toEqual(expectedPreferences);
+    const remountedEditorPreferenceStore = createBrowserEditorPreferenceStore({
+      storage,
+    });
+    expect(remountedEditorPreferenceStore.load()).toEqual(expectedPreferences);
   });
 
   it("fails fast for malformed persisted preference JSON", () => {
