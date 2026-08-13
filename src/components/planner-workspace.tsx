@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -15,6 +16,7 @@ import {
   type CatalogItem,
   type CatalogPresentationChoice,
 } from "../catalog";
+import type { EditorPreferences } from "../editor/browser-editor-preferences";
 import {
   getPlacementSelectionDetails,
   getPlacementSelectionSummary,
@@ -103,6 +105,7 @@ import {
   createPlannerWorkspaceMapRequest,
   type PlannerWorkspaceInitialStartup,
 } from "../planner/planner-workspace-startup";
+import type { PlannerWorkspaceAction } from "../planner/planner-workspace-state";
 import {
   retainPlannerWorkspaceProjectLifecycle,
   type PlannerWorkspaceProjectLifecycle,
@@ -136,6 +139,10 @@ import type { ScreenshotResolution } from "../projects/map-image-export";
 import { SelectionInspector } from "./selection-inspector";
 import { ProjectMapInstancePanel } from "./project-map-instance-panel";
 import { usePlannerWorkspacePersistenceControls } from "./use-planner-workspace-persistence-controls";
+import {
+  createPlannerWorkspacePreferencePersistence,
+  type PlannerWorkspacePreferencePersistence,
+} from "./planner-workspace-preference-persistence";
 
 export type PlannerWorkspaceBootstrap = (
   browserPlannerWorkspaceBootstrapInput: BrowserPlannerWorkspaceBootstrapInput,
@@ -164,6 +171,28 @@ export function copyPlannerWorkspaceCleanMapImage(
   ) => Promise<void> = copyPngImageToClipboard,
 ): Promise<void> {
   return copyImageToClipboard(captureCleanMapImage(1));
+}
+
+export function persistPlannerWorkspacePreferences({
+  dispatchPlannerWorkspaceAction,
+  preferencePersistence,
+  preferences,
+  resourceGeneration,
+}: Readonly<{
+  dispatchPlannerWorkspaceAction: (plannerWorkspaceAction: PlannerWorkspaceAction) => void;
+  preferencePersistence: PlannerWorkspacePreferencePersistence;
+  preferences: EditorPreferences;
+  resourceGeneration: number;
+}>): void {
+  try {
+    preferencePersistence.observePreferences(preferences);
+  } catch (caughtError) {
+    dispatchPlannerWorkspaceAction({
+      message: getPlannerWorkspaceErrorMessage(caughtError),
+      resourceGeneration,
+      type: "complete-runtime-error",
+    });
+  }
 }
 
 export type PlannerWorkspaceProperties = Readonly<{
@@ -662,6 +691,30 @@ function PreparedPlannerWorkspaceContent({
     plannerWorkspaceState,
     setSelectedPlacementKeys,
   } = plannerWorkspaceStateController;
+  const preferencePersistence = useMemo(
+    () => createPlannerWorkspacePreferencePersistence({
+      initialPreferences: preparedWorkspace.preferences,
+      savePreferences: preparedWorkspace.savePreferences,
+    }),
+    [preparedWorkspace.preferences, preparedWorkspace.savePreferences],
+  );
+  useEffect(() => {
+    persistPlannerWorkspacePreferences({
+      dispatchPlannerWorkspaceAction,
+      preferencePersistence,
+      preferences: {
+        behaviorOptions: plannerWorkspaceState.behaviorOptions,
+        displayOptions: plannerWorkspaceState.displayOptions,
+      },
+      resourceGeneration: preparedWorkspace.resourceGeneration,
+    });
+  }, [
+    dispatchPlannerWorkspaceAction,
+    plannerWorkspaceState.behaviorOptions,
+    plannerWorkspaceState.displayOptions,
+    preferencePersistence,
+    preparedWorkspace.resourceGeneration,
+  ]);
   const { workspaceController, workspaceState } = projectWorkspace;
   const workspacePersistenceControls = usePlannerWorkspacePersistenceControls({
     dispatchPlannerWorkspaceAction,

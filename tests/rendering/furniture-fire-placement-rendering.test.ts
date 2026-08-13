@@ -57,16 +57,24 @@ describe("furniture fire placement rendering", () => {
       ),
     ).toEqual([
       expect.objectContaining({
-        animation: expect.objectContaining({
+        animation: {
+          frames: [
+            { x: 276, y: 1985, width: 12, height: 11 },
+            { x: 288, y: 1985, width: 12, height: 11 },
+            { x: 300, y: 1985, width: 12, height: 11 },
+            { x: 312, y: 1985, width: 12, height: 11 },
+          ],
           kind: "frame-cycle",
           frameDurationMilliseconds: 100,
           timeOffsetMilliseconds: 70,
-        }),
+        },
+        frame: { x: 276, y: 1985, width: 12, height: 11 },
         pixelGeometry: expect.objectContaining({
           positionX: 77,
           positionY: 104,
           uniformScale: 1,
         }),
+        textureLocalPath: "/game-assets/1.6.15/sprites/Cursors.png",
       }),
       expect.objectContaining({
         animation: expect.objectContaining({

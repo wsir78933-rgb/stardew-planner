@@ -94,7 +94,7 @@ export function createReferenceProjectWorkspaceController(
 
   function openProject(projectId: string): void {
     const openedProject = cloneStoredProject(input.repository.openProject(projectId));
-    const openedSession = createSessionForActiveProjectMap(openedProject);
+    const openedSession = prepareReferenceProjectActiveSession(openedProject);
     commitWorkspaceState({
       projectSummaries: workspaceState.projectSummaries,
       activeProject: openedProject,
@@ -123,7 +123,7 @@ export function createReferenceProjectWorkspaceController(
         createdProject,
       ),
       activeProject: createdProject,
-      activeSession: createSessionForActiveProjectMap(createdProject),
+      activeSession: prepareReferenceProjectActiveSession(createdProject),
     });
   }
 
@@ -180,9 +180,16 @@ export function createReferenceProjectWorkspaceController(
 
   function saveOpenMap(edits: ReferenceOpenMapEdits): void {
     const activeSession = requireActiveSession(workspaceState.activeSession);
+    const activeProject = requireActiveProject(workspaceState.activeProject);
     const savedMap = applyReferenceOpenMapEdits(activeSession, edits);
     const updatedProject = cloneStoredProject(
-      input.repository.updateMap(createMapUpdateInput(activeSession.projectId, savedMap)),
+      input.repository.updateMap(
+        createMapUpdateInput(
+          activeSession.projectId,
+          savedMap,
+          activeProject.updated_at,
+        ),
+      ),
     );
     const refreshedSession = createSessionForMap(updatedProject, savedMap.id);
     commitWorkspaceState({
@@ -229,22 +236,28 @@ export function createReferenceProjectWorkspaceController(
   }
 
   function duplicateProject(projectId: string): void {
-    const duplicatedProject = cloneStoredProject(input.repository.duplicateProject(projectId));
-    const duplicatedSession = createSessionForActiveProjectMap(duplicatedProject);
+    const duplicatedMutation = input.repository.duplicateProject(
+      projectId,
+      prepareReferenceProjectActiveSession,
+    );
+    const duplicatedProject = cloneStoredProject(duplicatedMutation.project);
     commitWorkspaceState({
       projectSummaries: replaceProjectSummary(workspaceState.projectSummaries, duplicatedProject),
       activeProject: duplicatedProject,
-      activeSession: duplicatedSession,
+      activeSession: duplicatedMutation.preparedActiveSession,
     });
   }
 
   function importProject(serializedProject: string): void {
-    const importedProject = cloneStoredProject(input.repository.importProject(serializedProject));
-    const importedSession = createSessionForActiveProjectMap(importedProject);
+    const importedMutation = input.repository.importProject(
+      serializedProject,
+      prepareReferenceProjectActiveSession,
+    );
+    const importedProject = cloneStoredProject(importedMutation.project);
     commitWorkspaceState({
       projectSummaries: replaceProjectSummary(workspaceState.projectSummaries, importedProject),
       activeProject: importedProject,
-      activeSession: importedSession,
+      activeSession: importedMutation.preparedActiveSession,
     });
   }
 
@@ -437,7 +450,7 @@ function createInitialWorkspaceState(
   };
 }
 
-function createSessionForActiveProjectMap(
+export function prepareReferenceProjectActiveSession(
   project: ReferenceStoredProject,
 ): ReferenceOpenMapSession | null {
   const activeMapId = project.project.activeMapId;
@@ -473,6 +486,7 @@ function findProjectMap(
 function createMapUpdateInput(
   projectId: string,
   map: ReferenceStoredProject["project"]["maps"][number],
+  expectedProjectRevision?: string,
 ): ReferenceMapUpdateInput {
   return {
     projectId,
@@ -484,6 +498,9 @@ function createMapUpdateInput(
     decor: map.decor,
     renovations: map.renovations,
     setActive: true,
+    ...(expectedProjectRevision === undefined
+      ? {}
+      : { expectedProjectRevision }),
   };
 }
 
@@ -542,7 +559,7 @@ function replaceProjectInWorkspaceState(
   return {
     projectSummaries,
     activeProject: updatedProject,
-    activeSession: createSessionForActiveProjectMap(updatedProject),
+    activeSession: prepareReferenceProjectActiveSession(updatedProject),
   };
 }
 

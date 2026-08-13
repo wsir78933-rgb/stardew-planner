@@ -5,7 +5,10 @@ import {
 } from "../../src/planner/planner-workspace-bootstrap";
 import type { PlannerProjectState } from "../../src/planner/planner-workspace-bootstrap";
 import { createPlannerResourceCoordinator } from "../../src/resources/planner-resource-coordinator";
-import { createInitialEditorPreferences } from "../../src/editor/browser-editor-preferences";
+import {
+  createBrowserEditorPreferenceStore,
+  createInitialEditorPreferences,
+} from "../../src/editor/browser-editor-preferences";
 import { createInitialMapRenderOptions } from "../../src/maps/map-render-options";
 import type { PreparedDefaultMap } from "../../src/resources/planner-resource-coordinator";
 import type { ReferenceProjectRepository } from "../../src/reference-runtime/reference-project-repository";
@@ -48,6 +51,7 @@ describe("planner workspace bootstrap", () => {
       mapRequest: { mapId: "standard", season: "spring", mapRenderOptions: createInitialMapRenderOptions() },
       resourceCoordinator,
       readPreferences: () => { startedOperations.push("preferences"); return preferences.promise; },
+      savePreferences: () => undefined,
     });
 
     expect(startedOperations).toEqual(["pixi", "map", "project", "preferences"]);
@@ -74,6 +78,7 @@ describe("planner workspace bootstrap", () => {
       mapRequest: { mapId: "standard", season: "spring", mapRenderOptions: createInitialMapRenderOptions() },
       resourceCoordinator,
       readPreferences: async () => createInitialEditorPreferences(),
+      savePreferences: () => undefined,
     });
     generationIsCurrent = false;
     deferredMap.resolve({ mapId: "standard", season: "spring", parsedMap: {} as PreparedDefaultMap["parsedMap"], renderingContract: {} as PreparedDefaultMap["renderingContract"] });
@@ -99,6 +104,7 @@ describe("planner workspace bootstrap", () => {
       },
       resourceCoordinator,
       readPreferences: async () => createInitialEditorPreferences(),
+      savePreferences: () => undefined,
       isGenerationCurrent: () => generationIsCurrent,
       onPreparedWorkspace: () => {
         generationIsCurrent = false;
@@ -116,12 +122,22 @@ describe("planner workspace bootstrap", () => {
         return [];
       },
     } as unknown as ReferenceProjectRepository;
-    const preferenceStore = {
+    let serializedPreferences: string | null = null;
+    const persistentPreferenceStore = createBrowserEditorPreferenceStore({
+      storage: {
+        getItem: () => serializedPreferences,
+        setItem: (_storageKey, nextSerializedPreferences) => {
+          serializedPreferences = nextSerializedPreferences;
+        },
+      },
+    });
+    const preferenceStore: EditorPreferenceStore = {
       load: () => {
         startedOperations.push("preferences");
-        return createInitialEditorPreferences();
+        return persistentPreferenceStore.load();
       },
-    } as unknown as EditorPreferenceStore;
+      save: persistentPreferenceStore.save,
+    };
     const bootstrapBrowserWorkspace = createBrowserPlannerWorkspaceBootstrap({
       createProjectRepository: () => projectRepository,
       createPreferenceStore: () => preferenceStore,
@@ -164,5 +180,37 @@ describe("planner workspace bootstrap", () => {
     const canvasResources: PlannerCanvasPreparedResources =
       preparedWorkspace.canvasResources;
     expect(canvasResources.resourceGeneration).toBe(1);
+    preparedWorkspace.savePreferences({
+      behaviorOptions: {
+        ...createInitialEditorPreferences().behaviorOptions,
+        leftHandMode: true,
+      },
+      displayOptions: {
+        ...createInitialEditorPreferences().displayOptions,
+        showGrid: true,
+      },
+    });
+    expect(persistentPreferenceStore.load()).toEqual({
+      behaviorOptions: {
+        autoShowResourceClumps: true,
+        freePlacement: false,
+        gameCursors: true,
+        leftHandMode: true,
+        showJoystick: true,
+        showToasts: true,
+      },
+      displayOptions: {
+        showBeeHouseRadius: false,
+        showBuildableTiles: false,
+        showCropTiles: false,
+        showGrid: true,
+        showJunimoHutRadius: false,
+        showNightMode: false,
+        showNpcPaths: false,
+        showScarecrowRadius: false,
+        showSprinklerRadius: false,
+        showTreeTiles: false,
+      },
+    });
   });
 });

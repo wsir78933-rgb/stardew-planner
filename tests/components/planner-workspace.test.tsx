@@ -1,13 +1,20 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { createInitialEditorPreferences } from "../../src/editor/browser-editor-preferences";
+import {
+  createInitialEditorPreferences,
+  type EditorPreferences,
+} from "../../src/editor/browser-editor-preferences";
 import {
   createPlannerWorkspaceRenderState,
+  persistPlannerWorkspacePreferences,
   PlannerWorkspaceStaticBoundary,
   mergeReadyCatalogItems,
   type PlannerWorkspaceRenderState,
 } from "../../src/components/planner-workspace";
+import {
+  createPlannerWorkspacePreferencePersistence,
+} from "../../src/components/planner-workspace-preference-persistence";
 import {
   createInitialPlannerWorkspaceState,
   reducePlannerWorkspaceState,
@@ -48,6 +55,7 @@ function createPreparedWorkspace(mapId = "standard"): PreparedPlannerWorkspace {
       repository,
     },
     resourceGeneration: 3,
+    savePreferences: () => undefined,
   };
 }
 
@@ -248,5 +256,112 @@ describe("planner workspace static boundary", () => {
         nextReadyCatalogItems,
       ),
     ).toEqual(nextReadyCatalogItems);
+  });
+});
+
+describe("planner workspace preference persistence", () => {
+  it("waits for restored preferences before saving one exact user change", () => {
+    const savedPreferences: EditorPreferences[] = [];
+    const restoredPreferences: EditorPreferences = {
+      behaviorOptions: {
+        ...createInitialEditorPreferences().behaviorOptions,
+        freePlacement: true,
+      },
+      displayOptions: {
+        ...createInitialEditorPreferences().displayOptions,
+        showGrid: true,
+      },
+    };
+    const preferencePersistence = createPlannerWorkspacePreferencePersistence({
+      initialPreferences: restoredPreferences,
+      savePreferences: (nextPreferences) => {
+        savedPreferences.push(structuredClone(nextPreferences));
+      },
+    });
+
+    preferencePersistence.observePreferences(createInitialEditorPreferences());
+    preferencePersistence.observePreferences(restoredPreferences);
+    preferencePersistence.observePreferences({
+      behaviorOptions: {
+        ...restoredPreferences.behaviorOptions,
+        leftHandMode: true,
+      },
+      displayOptions: restoredPreferences.displayOptions,
+    });
+
+    expect(savedPreferences).toEqual([
+      {
+        behaviorOptions: {
+          autoShowResourceClumps: true,
+          freePlacement: true,
+          gameCursors: true,
+          leftHandMode: true,
+          showJoystick: true,
+          showToasts: true,
+        },
+        displayOptions: {
+          showBeeHouseRadius: false,
+          showBuildableTiles: false,
+          showCropTiles: false,
+          showGrid: true,
+          showJunimoHutRadius: false,
+          showNightMode: false,
+          showNpcPaths: false,
+          showScarecrowRadius: false,
+          showSprinklerRadius: false,
+          showTreeTiles: false,
+        },
+      },
+    ]);
+  });
+
+  it("turns a preference storage write failure into the existing alert state", () => {
+    const restoredPreferences = createInitialEditorPreferences();
+    const storageWriteError = new Error(
+      'Cannot save editor preferences for key "stardew-planner.editor-preferences.v2": quota exceeded.',
+    );
+    const preferencePersistence = createPlannerWorkspacePreferencePersistence({
+      initialPreferences: restoredPreferences,
+      savePreferences: () => {
+        throw storageWriteError;
+      },
+    });
+    preferencePersistence.observePreferences(restoredPreferences);
+    let plannerWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      { resourceGeneration: 3, type: "start-runtime-loading" },
+    );
+
+    persistPlannerWorkspacePreferences({
+      dispatchPlannerWorkspaceAction: (plannerWorkspaceAction) => {
+        plannerWorkspaceState = reducePlannerWorkspaceState(
+          plannerWorkspaceState,
+          plannerWorkspaceAction,
+        );
+      },
+      preferencePersistence,
+      preferences: {
+        behaviorOptions: {
+          ...restoredPreferences.behaviorOptions,
+          freePlacement: true,
+        },
+        displayOptions: restoredPreferences.displayOptions,
+      },
+      resourceGeneration: 3,
+    });
+    const errorRenderState = createPlannerWorkspaceRenderState({
+      onRetry: () => undefined,
+      plannerWorkspaceState,
+      preparedWorkspace: createPreparedWorkspace(),
+    });
+
+    expect(errorRenderState.kind).toBe("error");
+    if (errorRenderState.kind !== "error") {
+      throw new Error(
+        `Expected preference persistence to produce an error render state; received ${errorRenderState.kind}.`,
+      );
+    }
+    expect(errorRenderState.message).toBe(storageWriteError.message);
+    expect(renderWorkspace(errorRenderState)).toContain('role="alert"');
   });
 });

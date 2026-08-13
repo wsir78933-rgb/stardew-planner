@@ -49,10 +49,7 @@ import type {
   InteriorDecorKind,
   InteriorDecorState,
 } from "../interior-decor/interior-decor-state";
-import {
-  type MapImageExporter,
-  type ScreenshotResolution,
-} from "../projects/map-image-export";
+import type { MapImageExporter } from "../projects/map-image-export";
 import {
   createMapRenderingContract,
   isKnownUnavailableRenderingTileset,
@@ -87,15 +84,15 @@ import {
   createResourceClumpOverlayEntries,
 } from "../rendering/map-display-overlays";
 import { createNpcPathOverlayTiles } from "../rendering/npc-paths";
-import {
-  createMapScreenshotDimensions,
-  getMapScreenshotFooterHeight,
-} from "../rendering/map-screenshot";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import { resolveInitialPlannerTextureAssetPath } from "../rendering/initial-planner-texture-path";
 import type { TmxMap } from "../tmx/tmx-types";
 import type { EditorPerformanceMarker } from "../performance/editor-performance-marks";
 import type { PreparedDefaultMap } from "../resources/default-map-resource";
+import {
+  captureMapScreenshotCanvas,
+  createMapImageCaptureMethods,
+} from "./planner-canvas-screenshot-exporter";
 
 const localGameAssetRoot = "/game-assets/1.6.15/";
 const validPlacementPreviewTint = 0x00ff00;
@@ -1940,15 +1937,39 @@ export function PlannerCanvas({
                 createMapImageCaptureMethods({
                   captureMapScreenshotCanvas: (resolution) =>
                     captureMapScreenshotCanvas({
+                      createRenderTexture: (dimensions) =>
+                        pixi.RenderTexture.create(dimensions),
+                      extractCanvas: (screenshotRenderTexture) =>
+                        pixiApplication.renderer.extract.canvas(
+                          screenshotRenderTexture,
+                        ),
+                      htmlCanvasElementConstructor:
+                        typeof HTMLCanvasElement === "undefined"
+                          ? undefined
+                          : HTMLCanvasElement,
                       mapContainer: mapContainerCreationResult.mapContainer,
                       mapDisplayOverlayContainer,
+                      mapPixelGeometry: renderingContract,
                       mapTileRectanglePreviewGraphics,
                       placementPreviewContainer,
-                      pixi,
-                      pixiApplication,
-                      renderingContract,
+                      renderEditorStage: () =>
+                        pixiApplication.renderer.render(pixiApplication.stage),
+                      renderMapToTexture: (screenshotRenderTexture) =>
+                        pixiApplication.renderer.render({
+                          container: mapContainerCreationResult.mapContainer,
+                          target: screenshotRenderTexture,
+                        }),
                       resolution,
                     }),
+                  createCanvasElement: () => {
+                    if (typeof document === "undefined") {
+                      throw new Error(
+                        "Map screenshot export requires a browser document.",
+                      );
+                    }
+
+                    return document.createElement("canvas");
+                  },
                 }),
               );
             },
@@ -2062,215 +2083,6 @@ export function PlannerCanvas({
       ))}
     </section>
   );
-}
-
-type CaptureMapScreenshotInput = Readonly<{
-  mapContainer: import("pixi.js").Container;
-  mapDisplayOverlayContainer: import("pixi.js").Container;
-  mapTileRectanglePreviewGraphics: import("pixi.js").Graphics;
-  placementPreviewContainer: import("pixi.js").Container;
-  pixi: PixiModule;
-  pixiApplication: PixiApplication;
-  renderingContract: MapRenderingContract;
-  resolution: ScreenshotResolution;
-}>;
-
-export function createMapImageCaptureMethods(
-  input: Readonly<{
-    captureMapScreenshotCanvas: (
-      resolution: ScreenshotResolution,
-    ) => Promise<HTMLCanvasElement>;
-  }>,
-): MapImageExporter {
-  return {
-    async captureCleanMapImage(resolution): Promise<Blob> {
-      return createPngBlob(await input.captureMapScreenshotCanvas(resolution));
-    },
-    async captureScreenshot(resolution): Promise<Blob> {
-      const mapScreenshotCanvas = await input.captureMapScreenshotCanvas(resolution);
-      return createPngBlob(createWatermarkedScreenshotCanvas(mapScreenshotCanvas));
-    },
-  };
-}
-
-async function captureMapScreenshotCanvas(
-  captureMapScreenshotInput: CaptureMapScreenshotInput,
-): Promise<HTMLCanvasElement> {
-  const {
-    mapContainer,
-    mapDisplayOverlayContainer,
-    mapTileRectanglePreviewGraphics,
-    placementPreviewContainer,
-    pixi,
-    pixiApplication,
-    renderingContract,
-    resolution,
-  } = captureMapScreenshotInput;
-  const screenshotDimensions = createMapScreenshotDimensions({
-    mapHeight: renderingContract.mapHeight,
-    mapWidth: renderingContract.mapWidth,
-    resolution,
-    tileHeight: renderingContract.tileHeight,
-    tileWidth: renderingContract.tileWidth,
-  });
-  const screenshotRenderTextureReference: {
-    current: import("pixi.js").RenderTexture | null;
-  } = { current: null };
-
-  try {
-    return await renderMapScreenshotWithoutEditorOverlays({
-      mapDisplayOverlayContainer,
-      mapTileRectanglePreviewGraphics,
-      placementPreviewContainer,
-      renderScreenshot: () =>
-        renderMapScreenshotWithFullMapTransform({
-          mapContainer,
-          renderScreenshot: () => {
-            screenshotRenderTextureReference.current = pixi.RenderTexture.create({
-              height: screenshotDimensions.height,
-              resolution: 1,
-              width: screenshotDimensions.width,
-            });
-            pixiApplication.renderer.render({
-              container: mapContainer,
-              target: screenshotRenderTextureReference.current,
-            });
-            const extractedCanvas = pixiApplication.renderer.extract.canvas(
-              screenshotRenderTextureReference.current,
-            );
-            const mapScreenshotCanvas = assertHtmlCanvasElement(extractedCanvas);
-            return mapScreenshotCanvas;
-          },
-          resolution,
-        }),
-    });
-  } finally {
-    screenshotRenderTextureReference.current?.destroy(true);
-    pixiApplication.renderer.render(pixiApplication.stage);
-  }
-}
-
-export async function renderMapScreenshotWithFullMapTransform<Result>(
-  input: Readonly<{
-    mapContainer: import("pixi.js").Container;
-    renderScreenshot: () => Promise<Result> | Result;
-    resolution: ScreenshotResolution;
-  }>,
-): Promise<Result> {
-  const originalMapPivot = {
-    x: input.mapContainer.pivot.x,
-    y: input.mapContainer.pivot.y,
-  };
-  const originalMapPosition = {
-    x: input.mapContainer.position.x,
-    y: input.mapContainer.position.y,
-  };
-  const originalMapScale = {
-    x: input.mapContainer.scale.x,
-    y: input.mapContainer.scale.y,
-  };
-
-  try {
-    input.mapContainer.pivot.set(0, 0);
-    input.mapContainer.position.set(0, 0);
-    input.mapContainer.scale.set(input.resolution);
-    return await input.renderScreenshot();
-  } finally {
-    input.mapContainer.pivot.set(originalMapPivot.x, originalMapPivot.y);
-    input.mapContainer.scale.set(originalMapScale.x, originalMapScale.y);
-    input.mapContainer.position.set(originalMapPosition.x, originalMapPosition.y);
-  }
-}
-
-export async function renderMapScreenshotWithoutEditorOverlays<Result>(
-  input: Readonly<{
-    mapDisplayOverlayContainer: { visible: boolean };
-    mapTileRectanglePreviewGraphics: { visible: boolean };
-    placementPreviewContainer: { visible: boolean };
-    renderScreenshot: () => Promise<Result> | Result;
-  }>,
-): Promise<Result> {
-  const wasMapDisplayOverlayVisible = input.mapDisplayOverlayContainer.visible;
-  const wasMapTileRectanglePreviewVisible =
-    input.mapTileRectanglePreviewGraphics.visible;
-  const wasPlacementPreviewVisible = input.placementPreviewContainer.visible;
-
-  try {
-    input.mapDisplayOverlayContainer.visible = false;
-    input.mapTileRectanglePreviewGraphics.visible = false;
-    input.placementPreviewContainer.visible = false;
-    return await input.renderScreenshot();
-  } finally {
-    input.mapDisplayOverlayContainer.visible = wasMapDisplayOverlayVisible;
-    input.mapTileRectanglePreviewGraphics.visible =
-      wasMapTileRectanglePreviewVisible;
-    input.placementPreviewContainer.visible = wasPlacementPreviewVisible;
-  }
-}
-
-function assertHtmlCanvasElement(extractedCanvas: unknown): HTMLCanvasElement {
-  if (typeof HTMLCanvasElement === "undefined") {
-    throw new Error("Map screenshot export requires HTMLCanvasElement support.");
-  }
-
-  if (!(extractedCanvas instanceof HTMLCanvasElement)) {
-    throw new TypeError(
-      `Pixi map screenshot extraction must return an HTMLCanvasElement; received ${describeValue(extractedCanvas)}.`,
-    );
-  }
-
-  return extractedCanvas;
-}
-
-function createWatermarkedScreenshotCanvas(
-  mapScreenshotCanvas: HTMLCanvasElement,
-): HTMLCanvasElement {
-  if (typeof document === "undefined") {
-    throw new Error("Map screenshot export requires a browser document.");
-  }
-
-  const footerHeight = getMapScreenshotFooterHeight(mapScreenshotCanvas.height);
-  const watermarkedScreenshotCanvas = document.createElement("canvas");
-  watermarkedScreenshotCanvas.width = mapScreenshotCanvas.width;
-  watermarkedScreenshotCanvas.height = mapScreenshotCanvas.height + footerHeight;
-  const canvasContext = watermarkedScreenshotCanvas.getContext("2d");
-
-  if (canvasContext === null) {
-    throw new Error("Map screenshot export could not create a 2D canvas context.");
-  }
-
-  canvasContext.drawImage(mapScreenshotCanvas, 0, 0);
-  canvasContext.fillStyle = "#03311C";
-  canvasContext.fillRect(
-    0,
-    mapScreenshotCanvas.height,
-    watermarkedScreenshotCanvas.width,
-    footerHeight,
-  );
-  const watermarkFontSize = Math.max(12, Math.round(footerHeight * 0.55));
-  canvasContext.font = `600 ${String(watermarkFontSize)}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-  canvasContext.fillStyle = "#eaf5ee";
-  canvasContext.textBaseline = "middle";
-  canvasContext.fillText(
-    "StardewPlan.com",
-    Math.round(footerHeight * 0.5),
-    mapScreenshotCanvas.height + footerHeight / 2,
-  );
-
-  return watermarkedScreenshotCanvas;
-}
-
-function createPngBlob(screenshotCanvas: HTMLCanvasElement): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    screenshotCanvas.toBlob((screenshotBlob) => {
-      if (screenshotBlob === null) {
-        reject(new Error("Map screenshot export could not encode the PNG image."));
-        return;
-      }
-
-      resolve(screenshotBlob);
-    }, "image/png");
-  });
 }
 
 function describeValue(value: unknown): string {

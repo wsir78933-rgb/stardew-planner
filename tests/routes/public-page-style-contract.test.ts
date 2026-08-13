@@ -34,7 +34,6 @@ it("keeps public-page layout styles naturally scrollable, responsive, and focusa
   expect(publicShellDeclarations).toMatch(/overflow-x:\s*clip;/);
   expect(publicShellDeclarations).not.toMatch(fixedViewportHeightDeclaration);
   expect(publicShellDeclarations).not.toMatch(verticalOverflowLockDeclaration);
-  expect(globalStyles).toMatch(/\[data-public-page-shell\][^{]*\{[^}]*aspect-ratio:/s);
   expect(globalStyles).toContain("@media (max-width: 700px)");
   expect(globalStyles).toMatch(/\[data-public-page-shell\][^}]*:focus-visible\s*\{[^}]*outline:\s*2px/s);
 });

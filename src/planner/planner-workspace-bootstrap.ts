@@ -25,6 +25,7 @@ export type PlannerWorkspaceBootstrapInput = Readonly<{
   mapRequest: Readonly<{ mapId: string; season: TilesheetSeason; mapRenderOptions: MapRenderOptions }>;
   resourceCoordinator: PlannerResourceCoordinator;
   readPreferences: () => Promise<EditorPreferences>;
+  savePreferences: (editorPreferences: EditorPreferences) => void;
   isGenerationCurrent?: () => boolean;
   onPreparedWorkspace?: (preparedWorkspace: PreparedPlannerWorkspace) => void;
 }>;
@@ -33,6 +34,7 @@ export type PreparedPlannerWorkspace = Readonly<{
   canvasResources: PlannerCanvasPreparedResources;
   projectState: PlannerProjectState;
   preferences: EditorPreferences;
+  savePreferences: (editorPreferences: EditorPreferences) => void;
 }>;
 
 export type BrowserPlannerWorkspaceBootstrapOptions = Readonly<{
@@ -72,6 +74,7 @@ export function createBrowserPlannerWorkspaceBootstrap(
       ...input,
       resourceCoordinator,
       readPreferences: async () => preferenceStore.load(),
+      savePreferences: preferenceStore.save,
     });
 }
 
@@ -98,6 +101,7 @@ export async function bootstrapPlannerWorkspace(
     },
     projectState,
     preferences,
+    savePreferences: input.savePreferences,
   };
   const isGenerationCurrent = input.isGenerationCurrent ?? (() => true);
   if (!isGenerationCurrent()) return null;
@@ -114,6 +118,7 @@ function validateBootstrapInput(input: PlannerWorkspaceBootstrapInput): void {
   }
   for (const [name, operation] of Object.entries({
     readPreferences: input.readPreferences,
+    savePreferences: input.savePreferences,
   })) {
     if (typeof operation !== "function") {
       throw new TypeError(

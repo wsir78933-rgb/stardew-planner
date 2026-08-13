@@ -4,22 +4,25 @@ import type {
   CatalogLitBigCraftableRenderingMetadata,
 } from "../catalog";
 import { getLockedLitBigCraftableRenderingMetadata } from "../catalog";
+import { resolveLocalGameAssetPath } from "../assets/local-game-asset-path";
 import type { PlacementItem } from "../placement/placement-snapshot";
 import type {
   PlacementPixelGeometry,
   PlacementRenderAnimation,
   PlacementRenderFrame,
 } from "./placement-rendering";
+import {
+  fireAnimationFrames,
+  fireGlowFrame,
+  resolveFireAnimationTimeOffset,
+  resolveFireGlowPhaseOffset,
+} from "./fire-rendering-primitives";
 
 const lockedTileSize = 16;
-const cursorTextureLocalPath = "/game-assets/1.6.15/sprites/Cursors.png";
-const flameFrames = [0, 1, 2, 3].map((frameIndex) => ({
-  x: 276 + frameIndex * 12,
-  y: 1985,
-  width: 12,
-  height: 11,
-}));
-const glowFrame = { x: 88, y: 1779, width: 30, height: 30 };
+const cursorTextureLocalPath = resolveLocalGameAssetPath("sprites/Cursors.png");
+const craftablesTextureLocalPath = resolveLocalGameAssetPath(
+  "tilesheets/craftables.png",
+);
 
 export type LitBigCraftablePlacementRenderLayer = Readonly<{
   animation?: PlacementRenderAnimation;
@@ -93,13 +96,13 @@ function createFlameLayer(
   return {
     animation: {
       frameDurationMilliseconds: 100,
-      frames: flameFrames,
+      frames: fireAnimationFrames,
       kind: "frame-cycle",
       timeOffsetMilliseconds:
-        createFlamePositionTimeOffset(placementItem.x, placementItem.y)
+        resolveFireAnimationTimeOffset(placementItem.x, placementItem.y)
         + flameLayer.timeOffsetMilliseconds,
     },
-    frame: flameFrames[0],
+    frame: fireAnimationFrames[0],
     pixelGeometry: createPixelGeometry(
       placementItem.x * lockedTileSize + flameLayer.offsetX,
       placementItem.y * lockedTileSize + flameLayer.offsetY,
@@ -118,7 +121,7 @@ function createGlowLayer(
     animation: {
       baseScale: 0.6,
       kind: "scale-pulse",
-      phaseOffsetMilliseconds: createGlowPositionPhaseOffset(
+      phaseOffsetMilliseconds: resolveFireGlowPhaseOffset(
         placementItem.x,
         placementItem.y,
       ),
@@ -126,7 +129,7 @@ function createGlowLayer(
       timeDivisorMilliseconds: 1000,
       timeModuloMilliseconds: 3140,
     },
-    frame: glowFrame,
+    frame: fireGlowFrame,
     opacity: 0.35,
     pixelGeometry: createPixelGeometry(
       placementItem.x * lockedTileSize + 8,
@@ -155,14 +158,6 @@ function createPixelGeometry(
     positionY,
     ...(uniformScale === undefined ? {} : { uniformScale }),
   };
-}
-
-function createFlamePositionTimeOffset(x: number, y: number): number {
-  return ((x * 3047 + y * 88 + x * y * 31) ^ 1502) % 400;
-}
-
-function createGlowPositionPhaseOffset(x: number, y: number): number {
-  return ((x * 777 + y * 9746 + x * y * 31) ^ 25214903917) % 3140;
 }
 
 function assertLockedRenderingMetadata(
@@ -233,8 +228,7 @@ function assertLitBigCraftableBaseFrame(
   }
 
   if (
-    catalogItem.textureLocalPath
-      !== "/game-assets/1.6.15/tilesheets/craftables.png"
+    catalogItem.textureLocalPath !== craftablesTextureLocalPath
     || baseFrame === null
     || baseFrame.width !== 16
     || baseFrame.height !== 32

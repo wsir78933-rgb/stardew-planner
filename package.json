@@ -10,6 +10,7 @@
     "pretest": "NEXT_TELEMETRY_DISABLED=1 pnpm build",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
+    "performance:editor": "node scripts/measure-editor-performance.mjs",
     "assets:sync": "tsx src/assets/sync-assets.ts",
     "reference:sync": "tsx src/reference-runtime/sync-reference-runtime.ts",
     "seo:smoke": "node scripts/production-seo-smoke.mjs --origin https://stardewvalleyplanner.art"
