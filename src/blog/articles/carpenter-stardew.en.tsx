@@ -195,6 +195,46 @@ export function CarpenterStardewEnglishArticle() {
         Stardew Valley Wiki. Recheck those pages when a game update changes schedules
         or building rules.
       </p>
+      <aside
+        aria-label="AgentHunter friend link"
+        style={{
+          borderTop: "1px solid rgb(28 33 27 / 18%)",
+          marginTop: "2rem",
+          paddingTop: "1.5rem",
+        }}
+      >
+        <a
+          href="https://www.agenthunter.io?utm_source=badge&utm_medium=embed&utm_campaign=token%20maker"
+          rel="noopener noreferrer"
+          style={{
+            alignItems: "center",
+            backgroundColor: "#ffffff",
+            border: "1px solid #e5e7eb",
+            borderRadius: "0.5rem",
+            display: "inline-flex",
+            fontFamily: "sans-serif",
+            gap: "0.5rem",
+            padding: "0.5rem 0.75rem",
+            textDecoration: "none",
+            transition: "all 0.2s",
+          }}
+          target="_blank"
+        >
+          <img
+            alt="AgentHunter Badge"
+            height={40}
+            src="https://www.agenthunter.io/logo-light.svg"
+            style={{ height: "2.5rem", width: "2.5rem" }}
+            width={40}
+          />
+          <span style={{ display: "flex", flexDirection: "column" }}>
+            <span style={{ color: "#6b7280", fontSize: "0.75rem" }}>AgentHunter</span>
+            <span style={{ color: "#111827", fontSize: "0.875rem", fontWeight: 600 }}>
+              Featured AI Agent
+            </span>
+          </span>
+        </a>
+      </aside>
     </article>
   );
 }

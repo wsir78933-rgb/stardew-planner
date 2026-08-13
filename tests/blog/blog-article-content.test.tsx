@@ -100,6 +100,30 @@ function getOpeningParagraph(markup: string): string {
   return openingParagraph[1];
 }
 
+function assertAgentHunterFriendLink(markup: string, sourceSectionHeading: string): void {
+  const friendLinkHref =
+    "https://www.agenthunter.io?utm_source=badge&utm_medium=embed&utm_campaign=token%20maker";
+  const renderedFriendLinkHref = friendLinkHref.replaceAll("&", "&amp;");
+
+  expect(markup).toContain(`href="${renderedFriendLinkHref}"`);
+  expect(markup).toContain('src="https://www.agenthunter.io/logo-light.svg"');
+  expect(markup).toContain('alt="AgentHunter Badge"');
+  expect(markup).toContain('target="_blank"');
+  expect(markup).toContain('rel="noopener noreferrer"');
+  expect(markup.indexOf(renderedFriendLinkHref)).toBeGreaterThan(
+    markup.indexOf(sourceSectionHeading),
+  );
+  expect(markup.split(renderedFriendLinkHref)).toHaveLength(2);
+}
+
+it("puts the AgentHunter friend link at the bottom of both first-blog locales", () => {
+  assertAgentHunterFriendLink(
+    renderArticle(CarpenterStardewEnglishArticle),
+    "Sources and version boundary",
+  );
+  assertAgentHunterFriendLink(renderArticle(CarpenterStardewChineseArticle), "来源与版本边界");
+});
+
 it("renders sourced English and Chinese carpenter guides with matching section counts", () => {
   const englishArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewEnglishArticle),
