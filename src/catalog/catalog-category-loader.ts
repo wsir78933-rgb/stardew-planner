@@ -57,6 +57,7 @@ export function createCatalogCategoryLoader(
   fetchCatalogJson: CatalogJsonFetcher = fetchBrowserCatalogJson,
 ): CatalogCategoryLoader {
   const datasetPromises = new Map<CatalogDatasetName, Promise<unknown>>();
+  const categoryPromises = new Map<CatalogPanelCategory, Promise<Catalog>>();
 
   function loadDataset(datasetName: CatalogDatasetName): Promise<unknown> {
     validateCatalogDatasetName(datasetName);
@@ -80,9 +81,26 @@ export function createCatalogCategoryLoader(
     return datasetPromise;
   }
 
-  async function loadCategory(category: CatalogPanelCategory): Promise<Catalog> {
+  function loadCategory(category: CatalogPanelCategory): Promise<Catalog> {
     validateCatalogPanelCategory(category);
+    const existingCategoryPromise = categoryPromises.get(category);
 
+    if (existingCategoryPromise !== undefined) {
+      return existingCategoryPromise;
+    }
+
+    const categoryPromise = loadCategoryProjection(category);
+    categoryPromises.set(category, categoryPromise);
+    void categoryPromise.catch(() => {
+      if (categoryPromises.get(category) === categoryPromise) {
+        categoryPromises.delete(category);
+      }
+    });
+
+    return categoryPromise;
+  }
+
+  async function loadCategoryProjection(category: CatalogPanelCategory): Promise<Catalog> {
     if (category === "buildings") {
       const buildings = await loadCategoryDataset(category, "buildings", loadDataset);
 

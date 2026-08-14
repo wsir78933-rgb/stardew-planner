@@ -237,7 +237,7 @@ describe("catalog category loader", () => {
     expect((categoryLoadError as Error).cause).toBe(failedResponseError);
   });
 
-  it("evicts a rejected dataset promise so an explicit retry starts a new request", async () => {
+  it("evicts a rejected category promise so an explicit retry starts a new request", async () => {
     let cropsRequestCount = 0;
     const categoryLoader = createCatalogCategoryLoader(async (requestedUrl) => {
       if (requestedUrl === catalogDatasetUrls.crops) {
@@ -325,19 +325,24 @@ describe("catalog category loader", () => {
     );
   });
 
-  it("shares a Buildings request between its category projection and placement metadata", async () => {
+  it("shares one Buildings category promise and projection with placement metadata", async () => {
     const lockedDatasets = await readAllLockedCatalogDatasets();
     const requestedUrls: string[] = [];
     const categoryLoader = createCatalogCategoryLoader(
       createLockedCatalogFetcher(lockedDatasets, requestedUrls),
     );
 
-    const [buildingCatalog, buildingMetadataById] = await Promise.all([
-      categoryLoader.loadCategory("buildings"),
+    const buildingCatalogPromise = categoryLoader.loadCategory("buildings");
+    const duplicateBuildingCatalogPromise = categoryLoader.loadCategory("buildings");
+    const [buildingCatalog, duplicateBuildingCatalog, buildingMetadataById] = await Promise.all([
+      buildingCatalogPromise,
+      duplicateBuildingCatalogPromise,
       loadBuildingPlacementMetadata(categoryLoader),
     ]);
 
+    expect(buildingCatalogPromise).toBe(duplicateBuildingCatalogPromise);
     expect(requestedUrls).toEqual([catalogDatasetUrls.buildings]);
+    expect(buildingCatalog).toBe(duplicateBuildingCatalog);
     expect(buildingCatalog.items).toHaveLength(49);
     expect(buildingMetadataById.Coop.size).toEqual({ width: 6, height: 3 });
   });

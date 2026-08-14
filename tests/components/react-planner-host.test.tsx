@@ -2,6 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
+  createPlannerWorkspaceModuleReadyBoundary,
   createReactPlannerHostStartup,
   ReactPlannerHostWorkspace,
   ReactPlannerHost,
@@ -25,8 +26,10 @@ function createWorkspaceProperties(
     locationSearch,
     viewportWidth: 1024,
   });
+  const performanceMarker = createEditorPerformanceMarker();
+  performanceMarker.mark("editor:island-mounted");
   const plannerWorkspaceElement = ReactPlannerHostWorkspace({
-    performanceMarker: createEditorPerformanceMarker(),
+    performanceMarker,
     plannerHostStartup,
   });
   const plannerWorkspaceProperties =
@@ -52,6 +55,52 @@ function readInitialPlannerMapId(
 }
 
 describe("React planner host", () => {
+  it("does not mark workspace availability before the dynamic workspace module resolves", () => {
+    const markedNames: string[] = [];
+    const performanceMarker = createEditorPerformanceMarker({
+      mark(markName) {
+        markedNames.push(markName);
+      },
+    });
+    performanceMarker.mark("editor:island-mounted");
+    const plannerHostStartup = createReactPlannerHostStartup({
+      bootstrapWorkspace: createWorkspaceBootstrap(),
+      locationSearch: "",
+      viewportWidth: 1024,
+    });
+
+    ReactPlannerHostWorkspace({ performanceMarker, plannerHostStartup });
+
+    expect(markedNames).toEqual(["editor:island-mounted"]);
+  });
+
+  it("marks workspace availability from the resolved dynamic module boundary", () => {
+    const markedNames: string[] = [];
+    const performanceMarker = createEditorPerformanceMarker({
+      mark(markName) {
+        markedNames.push(markName);
+      },
+    });
+    performanceMarker.mark("editor:island-mounted");
+    const plannerHostStartup = createReactPlannerHostStartup({
+      bootstrapWorkspace: createWorkspaceBootstrap(),
+      locationSearch: "",
+      viewportWidth: 1024,
+    });
+    const WorkspaceModuleReadyBoundary = createPlannerWorkspaceModuleReadyBoundary(
+      () => createElement("output", null, "workspace"),
+    );
+
+    expect(renderToStaticMarkup(createElement(WorkspaceModuleReadyBoundary, {
+      performanceMarker,
+      startup: plannerHostStartup,
+    }))).toBe("<output>workspace</output>");
+    expect(markedNames).toEqual([
+      "editor:island-mounted",
+      "editor:workspace-module-ready",
+    ]);
+  });
+
   it("renders an accessible loading status without the workspace or Pixi runtime", () => {
     const reactPlannerHostMarkup = renderToStaticMarkup(
       createElement(ReactPlannerHost),

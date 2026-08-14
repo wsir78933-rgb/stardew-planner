@@ -1284,6 +1284,8 @@ export function PlannerCanvas({
           pixiApplicationLifetime.finishInitialization();
         }
 
+        performanceMarkerReference.current?.mark("editor:pixi-application-ready");
+
         if (!isMapLifecycleCurrent()) {
           cleanUpPlannerCanvas();
           return;
@@ -1331,6 +1333,7 @@ export function PlannerCanvas({
             placementSnapshot: placementSnapshotReference.current,
             season,
           });
+        performanceMarkerReference.current?.mark("editor:initial-textures-started");
         const { resourceClumpTilesheetTexture, tilesheetTextures } =
           await loadPlannerCanvasInitialTextures(
             pixi,
@@ -1352,11 +1355,13 @@ export function PlannerCanvas({
         );
         resourceClumpFrameTexturesByParentSheetIndex = resourceClumpFrameTextures;
 
+        performanceMarkerReference.current?.mark("editor:map-container-started");
         const mapContainerCreationResult = createMapContainer(
           pixi,
           renderingContract,
           tilesheetTextures,
         );
+        performanceMarkerReference.current?.mark("editor:map-container-ready");
 
         pixiApplication.stage.eventMode = "none";
         mapContainerCreationResult.mapContainer.eventMode = "none";

@@ -8,6 +8,7 @@ import {
   type ChangeEvent,
   type CSSProperties,
   type KeyboardEvent,
+  type RefObject,
 } from "react";
 import {
   createDefaultCatalogItemPresentationChoice,
@@ -35,6 +36,10 @@ import {
   type PlannerTextureFrame,
 } from "../rendering/planner-texture-frame-resolution";
 import { Filter, Info, Search } from "lucide-react";
+import {
+  loadBuildingThumbnailImages,
+  useBuildingThumbnailLoadEligibility,
+} from "./building-thumbnail-visibility";
 
 type ItemCatalogPanelProperties = Readonly<{
   catalogPresentationChoicesByItemId: ReadonlyMap<
@@ -456,8 +461,14 @@ export function CatalogItemGrid({
   onCatalogItemSelect,
   shouldLoadThumbnails = true,
 }: CatalogItemGridProperties) {
+  const itemGridScrollRootReference = useRef<HTMLDivElement>(null);
+
   return (
-    <div aria-label="Verified catalog items" className="item-grid item-catalog-panel__grid">
+    <div
+      aria-label="Verified catalog items"
+      className="item-grid item-catalog-panel__grid"
+      ref={itemGridScrollRootReference}
+    >
       {catalogItems.map((catalogItem, catalogItemIndex) => {
         const isSelectedCatalogItem = catalogItem.id === selectedCatalogItemId;
         const presentationChoice = getControlledCatalogItemChoice(
@@ -493,6 +504,7 @@ export function CatalogItemGrid({
               {catalogItem.category === "building" ? (
                 <BuildingCatalogThumbnail
                   catalogItem={catalogItem}
+                  itemGridScrollRootReference={itemGridScrollRootReference}
                   presentationChoice={presentationChoice}
                   shouldLoadThumbnail={shouldLoadThumbnails}
                 />
@@ -601,6 +613,7 @@ function getCatalogDisplayVariantLabel(
 
 type BuildingCatalogThumbnailProperties = Readonly<{
   catalogItem: CatalogItem;
+  itemGridScrollRootReference: RefObject<HTMLDivElement | null>;
   presentationChoice: CatalogPresentationChoice;
   shouldLoadThumbnail: boolean;
 }>;
@@ -839,12 +852,22 @@ export function resolveBuildingThumbnailLayers(
 
 function BuildingCatalogThumbnail({
   catalogItem,
+  itemGridScrollRootReference,
   presentationChoice,
   shouldLoadThumbnail,
 }: BuildingCatalogThumbnailProperties) {
   const canvasReference = useRef<HTMLCanvasElement>(null);
+  const canLoadThumbnail = useBuildingThumbnailLoadEligibility(
+    shouldLoadThumbnail,
+    canvasReference,
+    itemGridScrollRootReference,
+  );
 
   useEffect(() => {
+    if (!canLoadThumbnail) {
+      return;
+    }
+
     const canvas = canvasReference.current;
     if (canvas === null) {
       return;
@@ -856,9 +879,6 @@ function BuildingCatalogThumbnail({
     }
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-    if (!shouldLoadThumbnail) {
-      return;
-    }
 
     if (catalogItem.sprite.kind !== "source-rect") {
       throw new TypeError(`Building thumbnail ${JSON.stringify(catalogItem.id)} requires a source-rect sprite.`);
@@ -955,7 +975,7 @@ function BuildingCatalogThumbnail({
     catalogItem.sprite,
     catalogItem.textureLocalPath,
     presentationChoice.variant,
-    shouldLoadThumbnail,
+    canLoadThumbnail,
   ]);
 
   return (
@@ -1043,19 +1063,6 @@ export function createBuildingThumbnailLayerDrawCommand(
     resolvedAssetPath: input.resolvedAssetPath,
     sourceFrame: input.resolvedFrame,
   };
-}
-
-export function loadBuildingThumbnailImages(
-  resolvedAssetPaths: readonly string[],
-  createBuildingThumbnailImage: () => HTMLImageElement = () => new Image(),
-): Promise<ReadonlyMap<string, HTMLImageElement>> {
-  const uniqueResolvedAssetPaths = [...new Set(resolvedAssetPaths)];
-  return Promise.all(uniqueResolvedAssetPaths.map((resolvedAssetPath) => new Promise<Readonly<[string, HTMLImageElement]>>((resolve, reject) => {
-    const image = createBuildingThumbnailImage();
-    image.onload = () => resolve([resolvedAssetPath, image]);
-    image.onerror = () => reject(new Error(`Unable to load building thumbnail asset ${resolvedAssetPath}.`));
-    image.src = resolvedAssetPath;
-  }))).then((loadedImages) => new Map(loadedImages));
 }
 
 function drawBuildingThumbnailLayer(

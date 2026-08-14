@@ -14,6 +14,8 @@ import type { PreparedDefaultMap } from "../../src/resources/planner-resource-co
 import type { ReferenceProjectRepository } from "../../src/reference-runtime/reference-project-repository";
 import type { EditorPreferenceStore } from "../../src/editor/browser-editor-preferences";
 import type { PlannerCanvasPreparedResources } from "../../src/components/planner-canvas";
+import type { Catalog } from "../../src/catalog";
+import { createEditorPerformanceMarker } from "../../src/performance/editor-performance-marks";
 
 const testRepository = {} as ReferenceProjectRepository;
 
@@ -35,12 +37,13 @@ function createDeferred<Value>() {
 }
 
 describe("planner workspace bootstrap", () => {
-  it("starts Pixi, map, project state, and preferences before awaiting any operation", async () => {
+  it("starts Pixi, map, project state, preferences, and Buildings before awaiting any operation", async () => {
     const startedOperations: string[] = [];
     const pixi = createDeferred<typeof import("pixi.js")>();
     const map = createDeferred<PreparedDefaultMap>();
     const projectState = createDeferred<PlannerProjectState>();
     const preferences = createDeferred<ReturnType<typeof createInitialEditorPreferences>>();
+    const buildingsCatalog = createDeferred<Catalog>();
     const resourceCoordinator = createPlannerResourceCoordinator({
       importPixi: () => { startedOperations.push("pixi"); return pixi.promise; },
       loadDefaultMap: () => { startedOperations.push("map"); return map.promise; },
@@ -51,14 +54,19 @@ describe("planner workspace bootstrap", () => {
       mapRequest: { mapId: "standard", season: "spring", mapRenderOptions: createInitialMapRenderOptions() },
       resourceCoordinator,
       readPreferences: () => { startedOperations.push("preferences"); return preferences.promise; },
+      loadInitialBuildingsCatalog: () => {
+        startedOperations.push("buildings");
+        return buildingsCatalog.promise;
+      },
       savePreferences: () => undefined,
     });
 
-    expect(startedOperations).toEqual(["pixi", "map", "project", "preferences"]);
+    expect(startedOperations).toEqual(["pixi", "map", "project", "preferences", "buildings"]);
     pixi.resolve({} as typeof import("pixi.js"));
     map.resolve({ mapId: "standard", season: "spring", parsedMap: {} as PreparedDefaultMap["parsedMap"], renderingContract: {} as PreparedDefaultMap["renderingContract"] });
     projectState.resolve({ repository: testRepository, projects: [] });
     preferences.resolve(createInitialEditorPreferences());
+    buildingsCatalog.resolve({ items: [] });
     await expect(bootstrapPromise).resolves.toMatchObject({ resourceGeneration: 7 });
   });
 
@@ -78,6 +86,7 @@ describe("planner workspace bootstrap", () => {
       mapRequest: { mapId: "standard", season: "spring", mapRenderOptions: createInitialMapRenderOptions() },
       resourceCoordinator,
       readPreferences: async () => createInitialEditorPreferences(),
+      loadInitialBuildingsCatalog: async () => ({ items: [] }),
       savePreferences: () => undefined,
     });
     generationIsCurrent = false;
@@ -104,6 +113,7 @@ describe("planner workspace bootstrap", () => {
       },
       resourceCoordinator,
       readPreferences: async () => createInitialEditorPreferences(),
+      loadInitialBuildingsCatalog: async () => ({ items: [] }),
       savePreferences: () => undefined,
       isGenerationCurrent: () => generationIsCurrent,
       onPreparedWorkspace: () => {
@@ -112,10 +122,58 @@ describe("planner workspace bootstrap", () => {
     })).resolves.toBeNull();
   });
 
-  it("starts real browser-factory repository, preferences, Pixi, and map operations before awaiting", async () => {
+  it("marks Buildings readiness before an unrelated bootstrap dependency resolves", async () => {
+    const markedNames: string[] = [];
+    const performanceMarker = createEditorPerformanceMarker({
+      mark(markName) {
+        markedNames.push(markName);
+      },
+    });
+    performanceMarker.mark("editor:island-mounted");
+    performanceMarker.mark("editor:workspace-module-ready");
+    const deferredPreferences = createDeferred<ReturnType<typeof createInitialEditorPreferences>>();
+    const deferredBuildingsCatalog = createDeferred<Catalog>();
+    const resourceCoordinator = createPlannerResourceCoordinator({
+      importPixi: async () => ({} as typeof import("pixi.js")),
+      loadDefaultMap: async () => createPreparedMap("spring"),
+      readProjectState: async () => ({ repository: testRepository, projects: [] }),
+    });
+
+    const bootstrapPromise = bootstrapPlannerWorkspace({
+      resourceGeneration: 6,
+      mapRequest: {
+        mapId: "standard",
+        season: "spring",
+        mapRenderOptions: createInitialMapRenderOptions(),
+      },
+      resourceCoordinator,
+      readPreferences: () => deferredPreferences.promise,
+      loadInitialBuildingsCatalog: () => deferredBuildingsCatalog.promise,
+      savePreferences: () => undefined,
+      performanceMarker,
+    });
+
+    deferredBuildingsCatalog.resolve({ items: [] });
+    await Promise.resolve();
+
+    expect(markedNames).toEqual([
+      "editor:island-mounted",
+      "editor:workspace-module-ready",
+      "editor:buildings-dataset-ready",
+    ]);
+    await expect(Promise.race([
+      bootstrapPromise,
+      Promise.resolve("preferences are still loading."),
+    ])).resolves.toBe("preferences are still loading.");
+    deferredPreferences.resolve(createInitialEditorPreferences());
+    await expect(bootstrapPromise).resolves.toMatchObject({ resourceGeneration: 6 });
+  });
+
+  it("waits for the browser-factory Buildings catalog before preparing the workspace", async () => {
     const startedOperations: string[] = [];
     const pixi = createDeferred<typeof import("pixi.js")>();
     const map = createDeferred<PreparedDefaultMap>();
+    const buildingsCatalog = createDeferred<Catalog>();
     const projectRepository = {
       listProjects: () => {
         startedOperations.push("project");
@@ -151,6 +209,10 @@ describe("planner workspace bootstrap", () => {
         progress.onParsed();
         return map.promise;
       },
+      loadInitialBuildingsCatalog: () => {
+        startedOperations.push("buildings");
+        return buildingsCatalog.promise;
+      },
     });
 
     const bootstrapPromise = bootstrapBrowserWorkspace({
@@ -162,7 +224,7 @@ describe("planner workspace bootstrap", () => {
       },
     });
 
-    expect(startedOperations).toEqual(["pixi", "map", "project", "preferences"]);
+    expect(startedOperations).toEqual(["pixi", "map", "project", "preferences", "buildings"]);
     pixi.resolve({} as typeof import("pixi.js"));
     map.resolve({
       mapId: "standard",
@@ -170,6 +232,11 @@ describe("planner workspace bootstrap", () => {
       parsedMap: {} as PreparedDefaultMap["parsedMap"],
       renderingContract: {} as PreparedDefaultMap["renderingContract"],
     });
+    await expect(Promise.race([
+      bootstrapPromise,
+      Promise.resolve("Buildings catalog is still loading."),
+    ])).resolves.toBe("Buildings catalog is still loading.");
+    buildingsCatalog.resolve({ items: [] });
     const preparedWorkspace = await bootstrapPromise;
     expect(preparedWorkspace).toMatchObject({
       resourceGeneration: 1,
@@ -212,5 +279,31 @@ describe("planner workspace bootstrap", () => {
         showTreeTiles: false,
       },
     });
+  });
+
+  it("rejects the browser bootstrap when its Buildings catalog loader fails", async () => {
+    const bootstrapBrowserWorkspace = createBrowserPlannerWorkspaceBootstrap({
+      createProjectRepository: () => ({
+        listProjects: () => [],
+      }) as unknown as ReferenceProjectRepository,
+      createPreferenceStore: () => ({
+        load: () => createInitialEditorPreferences(),
+        save: () => undefined,
+      }),
+      importPixi: async () => ({} as typeof import("pixi.js")),
+      loadDefaultMap: async () => createPreparedMap("spring"),
+      loadInitialBuildingsCatalog: async () => {
+        throw new Error("Buildings catalog unavailable.");
+      },
+    });
+
+    await expect(bootstrapBrowserWorkspace({
+      resourceGeneration: 1,
+      mapRequest: {
+        mapId: "standard",
+        season: "spring",
+        mapRenderOptions: createInitialMapRenderOptions(),
+      },
+    })).rejects.toThrow("Buildings catalog unavailable.");
   });
 });

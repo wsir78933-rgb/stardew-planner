@@ -3,6 +3,7 @@ import {
   type EditorPreferenceStore,
   type EditorPreferences,
 } from "../editor/browser-editor-preferences";
+import { loadCatalogCategory, type Catalog } from "../catalog";
 import type { PlannerCanvasPreparedResources } from "../components/planner-canvas";
 import type { MapRenderOptions } from "../maps/map-render-options";
 import type { EditorPerformanceMarker } from "../performance/editor-performance-marks";
@@ -25,7 +26,9 @@ export type PlannerWorkspaceBootstrapInput = Readonly<{
   mapRequest: Readonly<{ mapId: string; season: TilesheetSeason; mapRenderOptions: MapRenderOptions }>;
   resourceCoordinator: PlannerResourceCoordinator;
   readPreferences: () => Promise<EditorPreferences>;
+  loadInitialBuildingsCatalog: () => Promise<Catalog>;
   savePreferences: (editorPreferences: EditorPreferences) => void;
+  performanceMarker?: EditorPerformanceMarker;
   isGenerationCurrent?: () => boolean;
   onPreparedWorkspace?: (preparedWorkspace: PreparedPlannerWorkspace) => void;
 }>;
@@ -41,6 +44,7 @@ export type BrowserPlannerWorkspaceBootstrapOptions = Readonly<{
   performanceMarker?: EditorPerformanceMarker;
   importPixi?: () => Promise<typeof import("pixi.js")>;
   loadDefaultMap?: PlannerDefaultMapLoader;
+  loadInitialBuildingsCatalog?: () => Promise<Catalog>;
   createProjectRepository?: () => ReferenceProjectRepository;
   createPreferenceStore?: () => EditorPreferenceStore;
 }>;
@@ -74,7 +78,10 @@ export function createBrowserPlannerWorkspaceBootstrap(
       ...input,
       resourceCoordinator,
       readPreferences: async () => preferenceStore.load(),
+      loadInitialBuildingsCatalog: options.loadInitialBuildingsCatalog ??
+        (() => loadCatalogCategory("buildings")),
       savePreferences: preferenceStore.save,
+      performanceMarker: options.performanceMarker,
     });
 }
 
@@ -86,12 +93,20 @@ export async function bootstrapPlannerWorkspace(
   const mapPromise = input.resourceCoordinator.loadDefaultMap(input.mapRequest);
   const projectStatePromise = input.resourceCoordinator.readProjectState();
   const preferencesPromise = input.readPreferences();
-  const [pixi, preparedMap, projectState, preferences] = await Promise.all([
+  const buildingsCatalogPromise = input.loadInitialBuildingsCatalog().then(
+    (buildingsCatalog) => {
+      input.performanceMarker?.mark("editor:buildings-dataset-ready");
+      return buildingsCatalog;
+    },
+  );
+  const [pixi, preparedMap, projectState, preferences, buildingsCatalog] = await Promise.all([
     pixiPromise,
     mapPromise,
     projectStatePromise,
     preferencesPromise,
+    buildingsCatalogPromise,
   ]);
+  void buildingsCatalog;
   const preparedWorkspace: PreparedPlannerWorkspace = {
     resourceGeneration: input.resourceGeneration,
     canvasResources: {
@@ -118,6 +133,7 @@ function validateBootstrapInput(input: PlannerWorkspaceBootstrapInput): void {
   }
   for (const [name, operation] of Object.entries({
     readPreferences: input.readPreferences,
+    loadInitialBuildingsCatalog: input.loadInitialBuildingsCatalog,
     savePreferences: input.savePreferences,
   })) {
     if (typeof operation !== "function") {

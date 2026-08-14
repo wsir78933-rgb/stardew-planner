@@ -13,12 +13,12 @@ import {
   getNextCatalogItemControlChoice,
   getNextCatalogCategory,
   ItemCatalogPanel,
-  loadBuildingThumbnailImages,
   loadCatalogPanelState,
   materializeBuildingThumbnailFrame,
   normalizeBuildingThumbnailSourceFrame,
   resolveBuildingThumbnailLayers,
 } from "../../src/components/item-catalog-panel";
+import { createBuildingThumbnailImageLoader } from "../../src/components/building-thumbnail-visibility";
 import {
   catalogDatasetUrls,
   createBuildingCatalogFromDataset,
@@ -600,12 +600,14 @@ describe("item catalog panel", () => {
     );
     const uniqueResolvedAssetPaths = [...new Set(allResolvedAssetPaths)];
 
-    const imagesByResolvedAssetPath = await loadBuildingThumbnailImages(
-      allResolvedAssetPaths,
+    const loadBuildingThumbnailImages = createBuildingThumbnailImageLoader(
       createSuccessfulBuildingThumbnailImageFactory(
         createdImages,
         requestedImagePaths,
       ),
+    );
+    const imagesByResolvedAssetPath = await loadBuildingThumbnailImages(
+      allResolvedAssetPaths,
     );
 
     expect(defaultBuildingCatalogItems).toHaveLength(49);
@@ -637,12 +639,14 @@ describe("item catalog panel", () => {
     const createdImages: HTMLImageElement[] = [];
     const startupCursorAtlasPath = "/planner-textures/initial/Cursors-startup.webp";
 
-    const imagesByResolvedAssetPath = await loadBuildingThumbnailImages(
-      [startupCursorAtlasPath, startupCursorAtlasPath],
+    const loadBuildingThumbnailImages = createBuildingThumbnailImageLoader(
       createSuccessfulBuildingThumbnailImageFactory(
         createdImages,
         requestedImagePaths,
       ),
+    );
+    const imagesByResolvedAssetPath = await loadBuildingThumbnailImages(
+      [startupCursorAtlasPath, startupCursorAtlasPath],
     );
 
     expect(createdImages).toHaveLength(1);
@@ -761,7 +765,7 @@ describe("item catalog panel", () => {
   it("rejects a building thumbnail image error with its resolved asset path", async () => {
     const rejectedAssetPath = "/planner-textures/initial/Cursors-startup.webp";
 
-    await expect(loadBuildingThumbnailImages([rejectedAssetPath], () => {
+    const loadBuildingThumbnailImages = createBuildingThumbnailImageLoader(() => {
       const image = { onerror: null, onload: null } as unknown as HTMLImageElement;
       Object.defineProperty(image, "src", {
         configurable: true,
@@ -771,7 +775,11 @@ describe("item catalog panel", () => {
         },
       });
       return image;
-    })).rejects.toThrow(`Unable to load building thumbnail asset ${rejectedAssetPath}.`);
+    });
+
+    await expect(loadBuildingThumbnailImages([rejectedAssetPath])).rejects.toThrow(
+      `Unable to load building thumbnail asset ${rejectedAssetPath}.`,
+    );
   });
 
   it.each([

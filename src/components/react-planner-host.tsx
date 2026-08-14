@@ -1,21 +1,37 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import { getPlannerMapIdFromSearch } from "../maps/planner-map-query";
 import { createEditorPerformanceMarker } from "../performance/editor-performance-marks";
 import { createBrowserPlannerWorkspaceBootstrap } from "../planner/planner-workspace-bootstrap";
 import { createPlannerWorkspaceInitialStartup } from "../planner/planner-workspace-startup";
 import type {
   PlannerWorkspaceBootstrap,
+  PlannerWorkspaceProperties,
   PlannerWorkspaceStartup,
 } from "./planner-workspace";
 import { PlannerStartupStatus } from "./planner-startup-status";
 
-const PlannerWorkspace = dynamic(
+export function createPlannerWorkspaceModuleReadyBoundary(
+  LoadedPlannerWorkspace: ComponentType<PlannerWorkspaceProperties>,
+): ComponentType<PlannerWorkspaceProperties> {
+  return function PlannerWorkspaceModuleReadyBoundary(
+    plannerWorkspaceProperties,
+  ) {
+    plannerWorkspaceProperties.performanceMarker?.mark(
+      "editor:workspace-module-ready",
+    );
+
+    return <LoadedPlannerWorkspace {...plannerWorkspaceProperties} />;
+  };
+}
+
+const PlannerWorkspace = dynamic<PlannerWorkspaceProperties>(
   () =>
     import("./planner-workspace").then(
-      ({ PlannerWorkspace: LoadedPlannerWorkspace }) => LoadedPlannerWorkspace,
+      ({ PlannerWorkspace: LoadedPlannerWorkspace }) =>
+        createPlannerWorkspaceModuleReadyBoundary(LoadedPlannerWorkspace),
     ),
   { ssr: false },
 );

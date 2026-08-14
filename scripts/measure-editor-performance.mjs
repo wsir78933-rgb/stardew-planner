@@ -2,11 +2,17 @@ import { fileURLToPath } from "node:url";
 
 export const REQUIRED_EDITOR_PERFORMANCE_MARKS = [
   "editor:island-mounted",
+  "editor:workspace-module-ready",
+  "editor:buildings-dataset-ready",
   "editor:project-state-ready",
   "editor:pixi-module-ready",
   "editor:default-map-fetched",
   "editor:default-map-parsed",
+  "editor:pixi-application-ready",
+  "editor:initial-textures-started",
   "editor:required-textures-ready",
+  "editor:map-container-started",
+  "editor:map-container-ready",
   "editor:canvas-mounted",
   "editor:interactive",
 ];
@@ -214,6 +220,33 @@ export function calculateSortedMedian(recordedValues) {
 export function findMissingEditorPerformanceMarks(recordedMarkNames) {
   return REQUIRED_EDITOR_PERFORMANCE_MARKS.filter(
     (requiredMarkName) => !recordedMarkNames.includes(requiredMarkName),
+  );
+}
+
+function getRequiredPerformanceMarkDuration(entries, markName) {
+  const matchingEntry = entries.find((entry) => entry.name === markName);
+
+  if (matchingEntry === undefined) {
+    throw new Error(
+      `Required editor performance mark ${JSON.stringify(markName)} is missing. Received marks ${JSON.stringify(entries.map((entry) => entry.name))}.`,
+    );
+  }
+
+  if (!Number.isFinite(matchingEntry.startTime)) {
+    throw new Error(
+      `Required editor performance mark ${JSON.stringify(markName)} must have a finite startTime. Received ${JSON.stringify(matchingEntry.startTime)}.`,
+    );
+  }
+
+  return matchingEntry.startTime;
+}
+
+export function createMarkDurationsByName(entries) {
+  return Object.fromEntries(
+    REQUIRED_EDITOR_PERFORMANCE_MARKS.map((markName) => [
+      markName,
+      getRequiredPerformanceMarkDuration(entries, markName),
+    ]),
   );
 }
 
@@ -634,11 +667,15 @@ async function measureEditorSample(measurementOptions) {
     const interactiveMark = measuredPageState.marks.find(
       (mark) => mark.name === "editor:interactive",
     );
+    const markDurationsByName = createMarkDurationsByName(
+      measuredPageState.marks,
+    );
     await recordCanvasInteraction(cdpConnection);
     const pageMetrics = await readPageMetricsAfterInteraction(cdpConnection);
 
     return {
       interactiveMilliseconds: interactiveMark.startTime,
+      markDurationsByName,
       marks: measuredPageState.marks,
       pageMetrics,
       requestedUrls,
@@ -683,6 +720,7 @@ async function runEditorPerformanceMeasurement(measurementOptions) {
     console.log(
       JSON.stringify({
         interactiveMilliseconds: sample.interactiveMilliseconds,
+        markDurationsByName: sample.markDurationsByName,
         marks: sample.marks,
         pageMetrics: sample.pageMetrics,
         requestedUrls: sample.requestedUrls,

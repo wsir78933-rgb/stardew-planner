@@ -1,10 +1,16 @@
 export const EDITOR_PERFORMANCE_MARKS = [
   "editor:island-mounted",
+  "editor:workspace-module-ready",
+  "editor:buildings-dataset-ready",
   "editor:project-state-ready",
   "editor:pixi-module-ready",
   "editor:default-map-fetched",
   "editor:default-map-parsed",
+  "editor:pixi-application-ready",
+  "editor:initial-textures-started",
   "editor:required-textures-ready",
+  "editor:map-container-started",
+  "editor:map-container-ready",
   "editor:canvas-mounted",
   "editor:interactive",
 ] as const;
@@ -14,6 +20,7 @@ export type EditorPerformanceMarkName =
 
 export type EditorPerformanceMarkOwner =
   | "ReactPlannerHost"
+  | "planner workspace bootstrap"
   | "planner resource coordinator"
   | "PlannerCanvas";
 
@@ -21,11 +28,17 @@ export const EDITOR_PERFORMANCE_MARK_RESPONSIBILITIES: Readonly<
   Record<EditorPerformanceMarkName, EditorPerformanceMarkOwner>
 > = {
   "editor:island-mounted": "ReactPlannerHost",
+  "editor:workspace-module-ready": "ReactPlannerHost",
+  "editor:buildings-dataset-ready": "planner workspace bootstrap",
   "editor:project-state-ready": "planner resource coordinator",
   "editor:pixi-module-ready": "planner resource coordinator",
   "editor:default-map-fetched": "planner resource coordinator",
   "editor:default-map-parsed": "planner resource coordinator",
+  "editor:pixi-application-ready": "PlannerCanvas",
+  "editor:initial-textures-started": "PlannerCanvas",
   "editor:required-textures-ready": "PlannerCanvas",
+  "editor:map-container-started": "PlannerCanvas",
+  "editor:map-container-ready": "PlannerCanvas",
   "editor:canvas-mounted": "PlannerCanvas",
   "editor:interactive": "PlannerCanvas",
 };
@@ -42,17 +55,28 @@ const directPredecessors: Readonly<
   Record<EditorPerformanceMarkName, readonly EditorPerformanceMarkName[]>
 > = {
   "editor:island-mounted": [],
-  "editor:project-state-ready": ["editor:island-mounted"],
-  "editor:pixi-module-ready": ["editor:island-mounted"],
-  "editor:default-map-fetched": ["editor:island-mounted"],
+  "editor:workspace-module-ready": ["editor:island-mounted"],
+  "editor:buildings-dataset-ready": ["editor:workspace-module-ready"],
+  "editor:project-state-ready": ["editor:workspace-module-ready"],
+  "editor:pixi-module-ready": ["editor:workspace-module-ready"],
+  "editor:default-map-fetched": ["editor:workspace-module-ready"],
   "editor:default-map-parsed": ["editor:default-map-fetched"],
+  "editor:pixi-application-ready": ["editor:pixi-module-ready"],
+  "editor:initial-textures-started": [
+    "editor:pixi-application-ready",
+    "editor:default-map-parsed",
+  ],
   "editor:required-textures-ready": [
     "editor:pixi-module-ready",
     "editor:default-map-parsed",
+    "editor:initial-textures-started",
   ],
+  "editor:map-container-started": ["editor:required-textures-ready"],
+  "editor:map-container-ready": ["editor:map-container-started"],
   "editor:canvas-mounted": [
     "editor:project-state-ready",
     "editor:required-textures-ready",
+    "editor:map-container-ready",
   ],
   "editor:interactive": ["editor:canvas-mounted"],
 };

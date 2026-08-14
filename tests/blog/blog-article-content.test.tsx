@@ -100,34 +100,15 @@ function getOpeningParagraph(markup: string): string {
   return openingParagraph[1];
 }
 
-function assertAgentHunterFriendLink(markup: string, sourceSectionHeading: string): void {
-  const friendLinkHref =
-    "https://www.agenthunter.io?utm_source=badge&utm_medium=embed&utm_campaign=token%20maker";
-  const renderedFriendLinkHref = friendLinkHref.replaceAll("&", "&amp;");
-
-  expect(markup).toContain(`href="${renderedFriendLinkHref}"`);
-  expect(markup).toContain('src="https://www.agenthunter.io/logo-light.svg"');
-  expect(markup).toContain('alt="AgentHunter Badge"');
-  expect(markup).toContain('target="_blank"');
-  expect(markup).toContain('rel="noopener noreferrer"');
-  const friendLinkLogo = markup.match(
-    /<img[^>]+src="https:\/\/www\.agenthunter\.io\/logo-light\.svg"[^>]*\/>/,
-  );
-  expect(friendLinkLogo?.[0]).toContain('loading="lazy"');
-  expect(markup.indexOf(renderedFriendLinkHref)).toBeGreaterThan(
-    markup.indexOf(sourceSectionHeading),
-  );
-  expect(markup.split(renderedFriendLinkHref)).toHaveLength(2);
-}
-
-it("puts the AgentHunter friend link at the bottom of both Robin-guide locales", () => {
-  assertAgentHunterFriendLink(
+it("does not render the AgentHunter friend link in either Robin-guide locale", () => {
+  for (const articleMarkup of [
     renderArticle(WhereIsRobinEnglishArticle),
-    "Sources and version boundary",
-  );
-  assertAgentHunterFriendLink(renderArticle(WhereIsRobinChineseArticle), "来源与版本边界");
-  expect(renderArticle(CarpenterStardewEnglishArticle)).not.toContain("AgentHunter friend link");
-  expect(renderArticle(CarpenterStardewChineseArticle)).not.toContain("AgentHunter friend link");
+    renderArticle(WhereIsRobinChineseArticle),
+  ]) {
+    expect(articleMarkup).not.toContain("AgentHunter friend link");
+    expect(articleMarkup).not.toContain("https://www.agenthunter.io");
+    expect(articleMarkup).not.toContain("AgentHunter Badge");
+  }
 });
 
 it("renders sourced English and Chinese carpenter guides with matching section counts", () => {

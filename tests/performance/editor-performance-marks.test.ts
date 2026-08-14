@@ -7,11 +7,17 @@ import {
 
 const approvedMarkNames = [
   "editor:island-mounted",
+  "editor:workspace-module-ready",
+  "editor:buildings-dataset-ready",
   "editor:project-state-ready",
   "editor:pixi-module-ready",
   "editor:default-map-fetched",
   "editor:default-map-parsed",
+  "editor:pixi-application-ready",
+  "editor:initial-textures-started",
   "editor:required-textures-ready",
+  "editor:map-container-started",
+  "editor:map-container-ready",
   "editor:canvas-mounted",
   "editor:interactive",
 ] as const;
@@ -46,28 +52,51 @@ describe("editor performance marks", () => {
   it("assigns each mark to the approved runtime owner", () => {
     expect(EDITOR_PERFORMANCE_MARK_RESPONSIBILITIES).toEqual({
       "editor:island-mounted": "ReactPlannerHost",
+      "editor:workspace-module-ready": "ReactPlannerHost",
+      "editor:buildings-dataset-ready": "planner workspace bootstrap",
       "editor:project-state-ready": "planner resource coordinator",
       "editor:pixi-module-ready": "planner resource coordinator",
       "editor:default-map-fetched": "planner resource coordinator",
       "editor:default-map-parsed": "planner resource coordinator",
+      "editor:pixi-application-ready": "PlannerCanvas",
+      "editor:initial-textures-started": "PlannerCanvas",
       "editor:required-textures-ready": "PlannerCanvas",
+      "editor:map-container-started": "PlannerCanvas",
+      "editor:map-container-ready": "PlannerCanvas",
       "editor:canvas-mounted": "PlannerCanvas",
       "editor:interactive": "PlannerCanvas",
     });
   });
 
   it.each([
-    ["editor:project-state-ready", ["editor:island-mounted"]],
-    ["editor:pixi-module-ready", ["editor:island-mounted"]],
-    ["editor:default-map-fetched", ["editor:island-mounted"]],
+    ["editor:workspace-module-ready", ["editor:island-mounted"]],
+    ["editor:buildings-dataset-ready", ["editor:workspace-module-ready"]],
+    ["editor:project-state-ready", ["editor:workspace-module-ready"]],
+    ["editor:pixi-module-ready", ["editor:workspace-module-ready"]],
+    ["editor:default-map-fetched", ["editor:workspace-module-ready"]],
     ["editor:default-map-parsed", ["editor:default-map-fetched"]],
+    ["editor:pixi-application-ready", ["editor:pixi-module-ready"]],
     [
-      "editor:required-textures-ready",
-      ["editor:pixi-module-ready", "editor:default-map-parsed"],
+      "editor:initial-textures-started",
+      ["editor:pixi-application-ready", "editor:default-map-parsed"],
     ],
     [
+      "editor:required-textures-ready",
+      [
+        "editor:pixi-module-ready",
+        "editor:default-map-parsed",
+        "editor:initial-textures-started",
+      ],
+    ],
+    ["editor:map-container-started", ["editor:required-textures-ready"]],
+    ["editor:map-container-ready", ["editor:map-container-started"]],
+    [
       "editor:canvas-mounted",
-      ["editor:project-state-ready", "editor:required-textures-ready"],
+      [
+        "editor:project-state-ready",
+        "editor:required-textures-ready",
+        "editor:map-container-ready",
+      ],
     ],
     ["editor:interactive", ["editor:canvas-mounted"]],
   ] as const)(
@@ -89,7 +118,30 @@ describe("editor performance marks", () => {
     marker.mark("editor:island-mounted");
 
     expect(() => marker.mark("editor:required-textures-ready")).toThrow(
-      /editor:required-textures-ready.*editor:pixi-module-ready.*editor:default-map-parsed/s,
+      /editor:required-textures-ready.*editor:pixi-module-ready.*editor:default-map-parsed.*editor:initial-textures-started/s,
+    );
+  });
+
+  it.each([
+    "editor:project-state-ready",
+    "editor:pixi-module-ready",
+    "editor:default-map-fetched",
+    "editor:buildings-dataset-ready",
+  ] as const)("does not start %s before the workspace module is ready", (markName) => {
+    const marker = createEditorPerformanceMarker(null);
+    marker.mark("editor:island-mounted");
+
+    expect(() => marker.mark(markName)).toThrow(
+      new RegExp(`${markName}.*editor:workspace-module-ready`, "s"),
+    );
+  });
+
+  it("does not allow map-container construction before required textures", () => {
+    const marker = createEditorPerformanceMarker(null);
+    marker.mark("editor:island-mounted");
+
+    expect(() => marker.mark("editor:map-container-started")).toThrow(
+      /editor:map-container-started.*editor:required-textures-ready/s,
     );
   });
 
@@ -129,6 +181,7 @@ describe("editor performance marks", () => {
 
       marker.mark("editor:island-mounted");
       expect(browserPerformanceMarkSpy).not.toHaveBeenCalled();
+      marker.mark("editor:workspace-module-ready");
       expect(() => marker.mark("editor:project-state-ready")).not.toThrow();
     } finally {
       browserPerformanceMarkSpy.mockRestore();
@@ -148,7 +201,7 @@ describe("editor performance marks", () => {
       "Performance mark write failed.",
     );
     expect(() => marker.mark("editor:project-state-ready")).toThrow(
-      /editor:project-state-ready.*editor:island-mounted/s,
+      /editor:project-state-ready.*editor:workspace-module-ready/s,
     );
   });
 });

@@ -41,6 +41,10 @@ export declare function findMissingEditorPerformanceMarks(
   recordedMarkNames: readonly string[],
 ): string[];
 
+export declare function createMarkDurationsByName(
+  entries: readonly Readonly<{ name: string; startTime: number }>[],
+): Record<string, number>;
+
 export declare function findForbiddenFrozenRuntimeRequests(
   requestedUrls: readonly string[],
 ): string[];

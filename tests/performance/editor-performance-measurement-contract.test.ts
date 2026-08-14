@@ -6,12 +6,65 @@ import {
   assertInteractiveThreshold,
   assertCdpRuntimeApis,
   calculateSortedMedian,
+  createMarkDurationsByName,
   findForbiddenFrozenRuntimeRequests,
   findMissingEditorPerformanceMarks,
   parseEditorPerformanceMeasurementArguments,
 } from "../../scripts/measure-editor-performance.mjs";
 
 describe("editor performance measurement contract", () => {
+  it("serializes approved mark durations and rejects non-finite start times", () => {
+    const measuredMarks = REQUIRED_EDITOR_PERFORMANCE_MARKS.map(
+      (name, index) => ({ name, startTime: index * 10 }),
+    );
+
+    expect(createMarkDurationsByName(measuredMarks)).toEqual(
+      Object.fromEntries(
+        REQUIRED_EDITOR_PERFORMANCE_MARKS.map((name, index) => [name, index * 10]),
+      ),
+    );
+    expect(() => createMarkDurationsByName([
+      ...measuredMarks.slice(0, -1),
+      { name: "editor:interactive", startTime: Number.NaN },
+    ])).toThrow(/editor:interactive.*finite startTime/s);
+  });
+
+  it("requires every startup phase mark before producing a CLI result", () => {
+    expect(REQUIRED_EDITOR_PERFORMANCE_MARKS).toEqual([
+      "editor:island-mounted",
+      "editor:workspace-module-ready",
+      "editor:buildings-dataset-ready",
+      "editor:project-state-ready",
+      "editor:pixi-module-ready",
+      "editor:default-map-fetched",
+      "editor:default-map-parsed",
+      "editor:pixi-application-ready",
+      "editor:initial-textures-started",
+      "editor:required-textures-ready",
+      "editor:map-container-started",
+      "editor:map-container-ready",
+      "editor:canvas-mounted",
+      "editor:interactive",
+    ]);
+    expect(
+      findMissingEditorPerformanceMarks([
+        "editor:island-mounted",
+        "editor:workspace-module-ready",
+        "editor:buildings-dataset-ready",
+        "editor:project-state-ready",
+        "editor:pixi-module-ready",
+        "editor:default-map-fetched",
+        "editor:default-map-parsed",
+        "editor:pixi-application-ready",
+        "editor:initial-textures-started",
+        "editor:required-textures-ready",
+        "editor:map-container-started",
+        "editor:canvas-mounted",
+        "editor:interactive",
+      ]),
+    ).toEqual(["editor:map-container-ready"]);
+  });
+
   it("requires explicit valid CLI values and at least three samples", () => {
     expect(() =>
       parseEditorPerformanceMeasurementArguments([
