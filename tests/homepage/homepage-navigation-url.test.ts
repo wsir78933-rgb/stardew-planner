@@ -28,50 +28,6 @@ describe("homepage navigation URLs", () => {
     },
   );
 
-  it.each(["react", "reference"] as const)(
-    "keeps the current %s runtime through the relative planner CTA but not locale URLs",
-    (plannerRuntime) => {
-      expect(
-        createHomepageNavigationUrls({
-          currentLocale: "en",
-          hash: "#planner",
-          search: `?farmType=forest&plannerRuntime=${plannerRuntime}`,
-        }),
-      ).toEqual({
-        localeHrefByLocale: {
-          en: "/?farmType=forest#planner",
-          "zh-CN": "/zh?farmType=forest#planner",
-        },
-        plannerHref: "#planner",
-      });
-    },
-  );
-
-  it.each([
-    ["unknown", "?farmType=forest&plannerRuntime=unknown"],
-    [
-      "repeated",
-      "?farmType=forest&plannerRuntime=react&plannerRuntime=reference",
-    ],
-  ] as const)(
-    "does not forward a %s planner runtime",
-    (_caseName, search) => {
-      expect(
-        createHomepageNavigationUrls({
-          currentLocale: "en",
-          hash: "#planner",
-          search,
-        }),
-      ).toEqual({
-        localeHrefByLocale: {
-          en: "/?farmType=forest#planner",
-          "zh-CN": "/zh?farmType=forest#planner",
-        },
-        plannerHref: "#planner",
-      });
-    },
-  );
-
   it.each([
     ["unknown", "?farmType=unknown"],
     ["repeated", "?farmType=forest&farmType=standard"],
@@ -111,10 +67,10 @@ describe("homepage navigation URLs", () => {
     expect(
       new URL(
         navigationUrls.plannerHref,
-        "https://stardewvalleyplanner.art/zh?farmType=forest&plannerRuntime=reference",
+        "https://stardewvalleyplanner.art/zh?farmType=forest",
       ).href,
     ).toBe(
-      "https://stardewvalleyplanner.art/zh?farmType=forest&plannerRuntime=reference#planner",
+      "https://stardewvalleyplanner.art/zh?farmType=forest#planner",
     );
   });
 
