@@ -90,9 +90,9 @@ it("resolves a route-specific social image against the public site URL", () => {
 it("preserves an explicit robots directive", () => {
   const metadata = createPublicPageMetadata({
     locale: "en",
-    canonicalPath: "/blog",
-    title: "Stardew Valley Planning Guides",
-    description: "Read Stardew Valley planning guides.",
+    canonicalPath: "/contact",
+    title: "Contact Stardew Valley Planner",
+    description: "Get in touch with Stardew Valley Planner.",
     robots: { index: false, follow: true },
   });
 

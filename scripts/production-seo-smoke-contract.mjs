@@ -9,13 +9,6 @@ const canonicalPublicPathnames = Object.freeze([
   "/where-is-robin-stardew-valley",
 ]);
 
-const noindexBlogCanonicalPathnames = Object.freeze([
-  "/blog",
-  "/blog/archive",
-  "/carpenter-stardew",
-  "/where-is-robin-stardew-valley",
-]);
-
 const publicLocales = Object.freeze(["en", "zh-CN"]);
 
 function assertValidInternalPathname(pathname, pathnameDescription) {
@@ -85,23 +78,10 @@ assertUniqueInternalPathnames(
   canonicalPublicPathnames,
   "Production SEO smoke canonical pathname",
 );
-assertUniqueInternalPathnames(
-  noindexBlogCanonicalPathnames,
-  "Production SEO smoke noindex blog canonical pathname",
-);
-
 export const expectedPublicHtmlPathContracts = Object.freeze(
   publicLocales.flatMap((locale) =>
     canonicalPublicPathnames.map((canonicalPathname) =>
       createPublicHtmlPathContract(locale, canonicalPathname),
-    ),
-  ),
-);
-
-export const expectedNoindexBlogPathnames = Object.freeze(
-  publicLocales.flatMap((locale) =>
-    noindexBlogCanonicalPathnames.map((canonicalPathname) =>
-      getLocalizedPathname(locale, canonicalPathname),
     ),
   ),
 );
@@ -115,9 +95,7 @@ export const expectedSitemapPathnames = Object.freeze(
   expectedPublicHtmlPathContracts
     .map(({ pathname }) => pathname)
     .filter(
-      (pathname) =>
-        !expectedNoindexBlogPathnames.includes(pathname)
-        && !expectedNoindexContactPathnames.includes(pathname),
+      (pathname) => !expectedNoindexContactPathnames.includes(pathname),
     ),
 );
 
@@ -140,10 +118,6 @@ assertUniqueInternalPathnames(
   "Production SEO smoke sitemap pathname",
 );
 assertUniqueInternalPathnames(
-  expectedNoindexBlogPathnames,
-  "Production SEO smoke noindex blog pathname",
-);
-assertUniqueInternalPathnames(
   expectedNoindexContactPathnames,
   "Production SEO smoke noindex Contact pathname",
 );
@@ -158,8 +132,8 @@ if (expectedPublicHtmlPathContracts.length !== 16) {
   );
 }
 
-if (expectedSitemapPathnames.length !== 6) {
+if (expectedSitemapPathnames.length !== 14) {
   throw new Error(
-    `Production SEO smoke must declare 6 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
+    `Production SEO smoke must declare 14 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
   );
 }

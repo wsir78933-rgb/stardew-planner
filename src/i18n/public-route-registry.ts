@@ -31,7 +31,6 @@ export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
 
 const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>([
   "/contact",
-  ...blogCanonicalPublicPaths,
 ]);
 
 export const indexableCanonicalPublicPaths: readonly PublicCanonicalPath[] =

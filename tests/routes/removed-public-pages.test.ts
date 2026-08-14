@@ -76,7 +76,7 @@ describe("removed public guide pages", () => {
     expect(plannerFarmMapIds).toEqual(expectedPlannerFarmMapIds);
     expect(canonicalPublicPaths).toHaveLength(8);
     expect(getLocalizedPublicRouteEntries()).toHaveLength(16);
-    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(6);
+    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(14);
 
     for (const removedCanonicalPath of removedCanonicalPaths) {
       expect(canonicalPublicPaths).not.toContain(removedCanonicalPath);
@@ -89,7 +89,7 @@ describe("removed public guide pages", () => {
     const llmsText = readFileSync(join(outputDirectory, "llms.txt"), "utf8");
     const exportedHtmlFiles = listHtmlFiles(outputDirectory);
 
-    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(6);
+    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(14);
 
     for (const removedLocalizedPath of removedLocalizedPaths) {
       const removedStaticPagePath = join(

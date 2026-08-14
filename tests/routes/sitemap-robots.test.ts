@@ -4,7 +4,7 @@ import { expect, it } from "vitest";
 import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
 
-const expectedNoindexSitemapPathnames = [
+const expectedBlogSitemapPathnames = [
   "/blog",
   "/blog/archive",
   "/carpenter-stardew",
@@ -25,7 +25,7 @@ it("writes robots.txt with the absolute sitemap URL", () => {
   );
 });
 
-it("excludes every noindex URL from the localized public sitemap", () => {
+it("lists every indexable blog URL while excluding Contact from the localized public sitemap", () => {
   const sitemapText = readFileSync(join(process.cwd(), "out", "sitemap.xml"), "utf8");
   const sitemapLocationValues = Array.from(
     sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g),
@@ -34,8 +34,8 @@ it("excludes every noindex URL from the localized public sitemap", () => {
   const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
 
-  expect(sitemapUrlCount).toBe(6);
-  expect(localizedPublicRouteEntries).toHaveLength(6);
+  expect(sitemapUrlCount).toBe(14);
+  expect(localizedPublicRouteEntries).toHaveLength(14);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,
@@ -48,8 +48,8 @@ it("excludes every noindex URL from the localized public sitemap", () => {
   expect(sitemapText).toContain("/terms");
   expect(sitemapText).not.toContain("/contact");
 
-  for (const pathname of expectedNoindexSitemapPathnames) {
-    expect(sitemapText).not.toContain(
+  for (const pathname of expectedBlogSitemapPathnames) {
+    expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,
     );
   }

@@ -3,7 +3,6 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
-  expectedNoindexBlogPathnames,
   expectedNoindexContactPathnames,
   expectedPublicHtmlPathContracts,
   expectedSitemapPathnames,
@@ -52,7 +51,7 @@ const expectedPublicHtmlPathnames = [
   ),
 ];
 
-const expectedNoindexBlogPathnamesForFixture = [
+const expectedBlogPathnamesForFixture = [
   "/blog",
   "/blog/archive",
   "/carpenter-stardew",
@@ -68,15 +67,12 @@ const expectedNoindexContactPathnamesForFixture = [
   "/zh/contact",
 ];
 
-const expectedNoindexPathnamesForFixture = new Set([
-  ...expectedNoindexBlogPathnamesForFixture,
-  ...expectedNoindexContactPathnamesForFixture,
-]);
+const expectedNoindexPathnamesForFixture = new Set(
+  expectedNoindexContactPathnamesForFixture,
+);
 
 const expectedSitemapPathnamesForFixture = expectedPublicHtmlPathnames.filter(
-  (pathname) =>
-    !expectedNoindexBlogPathnamesForFixture.includes(pathname)
-    && !expectedNoindexContactPathnamesForFixture.includes(pathname),
+  (pathname) => !expectedNoindexContactPathnamesForFixture.includes(pathname),
 );
 
 const bodyReadFailureCases = [
@@ -385,20 +381,18 @@ describe("production SEO smoke static contract", () => {
     ).toBe(true);
   });
 
-  it("declares the exact 6 indexable sitemap pathnames", () => {
-    expect(expectedSitemapPathnames).toHaveLength(6);
+  it("declares the exact 14 indexable sitemap pathnames", () => {
+    expect(expectedSitemapPathnames).toHaveLength(14);
     expect(expectedSitemapPathnames).toEqual(
       expectedPublicHtmlPathnames.filter(
-        (pathname) =>
-          !expectedNoindexBlogPathnamesForFixture.includes(pathname)
-          && !expectedNoindexContactPathnamesForFixture.includes(pathname),
+        (pathname) => !expectedNoindexContactPathnamesForFixture.includes(pathname),
       ),
     );
   });
 
-  it("retains all eight noindex blog pathnames", () => {
-    expect(expectedNoindexBlogPathnames).toEqual(
-      expectedNoindexBlogPathnamesForFixture,
+  it("adds all eight blog pathnames to the indexable sitemap contract", () => {
+    expect(expectedSitemapPathnames).toEqual(
+      expect.arrayContaining(expectedBlogPathnamesForFixture),
     );
   });
 
@@ -408,9 +402,6 @@ describe("production SEO smoke static contract", () => {
     );
     for (const contactPathname of expectedNoindexContactPathnames) {
       expect(expectedSitemapPathnames).not.toContain(contactPathname);
-    }
-    for (const blogPathname of expectedNoindexBlogPathnames) {
-      expect(expectedSitemapPathnames).not.toContain(blogPathname);
     }
   });
 
@@ -449,8 +440,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     expect(summary).toMatchObject({
       publicHtmlPageCount: 16,
-      sitemapUrlCount: 6,
-      noindexBlogPageCount: 8,
+      sitemapUrlCount: 14,
       noindexContactPageCount: 2,
       missingPageCount: 1,
     });
@@ -599,7 +589,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
       `<link href="${expectedPathContract.languageAlternates.en}" hreflang="en" rel="alternate">`,
       `<link href="${expectedPathContract.languageAlternates["zh-CN"]}" hreflang="zh-CN" rel="alternate">`,
       `<link href="${expectedPathContract.languageAlternates["x-default"]}" hreflang="x-default" rel="alternate">`,
-      '<meta name="robots" content="noindex, follow">',
+      '<meta name="robots" content="index, follow">',
     ].join("");
     const commentOnlyMetadataHtml =
       `<!doctype html><html><head><!--${commentedMetadata}--></head><body>Blog</body></html>`;
@@ -625,8 +615,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     ]);
   });
 
-  it("requires noindex, follow on every blog and Contact page", async () => {
-    for (const failedPathname of ["/blog/archive", "/zh/contact"]) {
+  it("requires noindex, follow on every Contact page", async () => {
+    for (const failedPathname of ["/contact", "/zh/contact"]) {
       const failedUrl = `${productionOrigin}${failedPathname}`;
       const { fetchResponse } = createDeterministicFetch({
         htmlOverridesByPathname: new Map([
@@ -642,8 +632,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     }
   });
 
-  it("requires index, follow on every public page outside the noindex set", async () => {
-    const failedPathname = "/privacy";
+  it("requires index, follow on every indexable public page", async () => {
+    const failedPathname = "/blog/archive";
     const failedUrl = `${productionOrigin}${failedPathname}`;
     const { fetchResponse } = createDeterministicFetch({
       htmlOverridesByPathname: new Map([
@@ -659,7 +649,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
   });
 
   it("rejects conflicting index and noindex directives on noindex pages", async () => {
-    const failedPathname = "/blog";
+    const failedPathname = "/zh/contact";
     const failedUrl = `${productionOrigin}${failedPathname}`;
     const { fetchResponse } = createDeterministicFetch({
       htmlOverridesByPathname: new Map([
@@ -692,7 +682,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     ]);
   });
 
-  it("requires the unique sitemap location set to exactly match all 6 URLs", async () => {
+  it("requires the unique sitemap location set to exactly match all 14 URLs", async () => {
     const sitemapUrl = `${productionOrigin}/sitemap.xml`;
     const incompleteSitemapPathnames = expectedSitemapPathnamesForFixture.slice(1);
     const incompleteSitemapXml = `<urlset>${incompleteSitemapPathnames
@@ -711,8 +701,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "6 unique sitemap URLs",
-      "5",
+      "14 unique sitemap URLs",
+      "13",
     ]);
   });
 
@@ -764,7 +754,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "6 unique sitemap URLs",
+      "14 unique sitemap URLs",
       "0",
     ]);
   });
@@ -845,8 +835,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     expect(summary).toEqual({
       publicHtmlPageCount: 16,
-      sitemapUrlCount: 6,
-      noindexBlogPageCount: 8,
+      sitemapUrlCount: 14,
       noindexContactPageCount: 2,
       missingPageCount: 1,
       securityHeaderResponseCount: 17,

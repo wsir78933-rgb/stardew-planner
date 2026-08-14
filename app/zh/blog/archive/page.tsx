@@ -17,7 +17,7 @@ export const metadata = createPublicPageMetadata({
   canonicalPath,
   title: copy.archiveTitle,
   description: copy.blogDescription,
-  robots: { index: false, follow: true },
+  robots: { index: true, follow: true },
 });
 
 export default function ChineseBlogArchivePage() {

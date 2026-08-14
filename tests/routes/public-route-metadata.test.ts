@@ -84,7 +84,7 @@ describe("public route metadata", () => {
     }
   });
 
-  it("marks every fixed bilingual blog page as followable but noindex", () => {
+  it("marks every fixed bilingual blog page as indexable and followable", () => {
     for (const pageMetadata of [
       blogIndexMetadata,
       blogArchiveMetadata,
@@ -92,7 +92,7 @@ describe("public route metadata", () => {
       chineseBlogArchiveMetadata,
     ]) {
       expect(pageMetadata).toMatchObject({
-        robots: { index: false, follow: true },
+        robots: { index: true, follow: true },
       });
     }
   });
@@ -129,7 +129,7 @@ describe("public route metadata", () => {
             `https://stardewvalleyplanner.art${englishPost.coverImage.src}`,
           ],
         },
-        robots: { index: false, follow: true },
+        robots: { index: true, follow: true },
       });
 
       await expect(
@@ -146,7 +146,7 @@ describe("public route metadata", () => {
             `https://stardewvalleyplanner.art${chinesePost.coverImage.src}`,
           ],
         },
-        robots: { index: false, follow: true },
+        robots: { index: true, follow: true },
       });
     }
   });

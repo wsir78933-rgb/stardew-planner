@@ -161,7 +161,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "Stardew Valley Planning Guides",
     documentLanguage: "en",
     schemaType: "CollectionPage",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.png",
@@ -179,7 +179,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "All articles",
     documentLanguage: "en",
     schemaType: "CollectionPage",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.png",
@@ -197,7 +197,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "Carpenter in Stardew Valley: Robin's Hours and Services",
     documentLanguage: "en",
     schemaType: "Article",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.png",
@@ -211,7 +211,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "Where Is Robin in Stardew Valley? Location and Hours",
     documentLanguage: "en",
     schemaType: "Article",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/where-is-robin-stardew-valley-cover.png",
@@ -225,7 +225,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "星露谷农场规划指南",
     documentLanguage: "zh-CN",
     schemaType: "CollectionPage",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.png",
@@ -243,7 +243,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "全部文章",
     documentLanguage: "zh-CN",
     schemaType: "CollectionPage",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.png",
@@ -261,7 +261,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "星露谷木匠罗宾：营业时间、建筑服务与下单规划",
     documentLanguage: "zh-CN",
     schemaType: "Article",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.png",
@@ -275,7 +275,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     heading: "罗宾在星露谷物语的哪里？位置、营业时间与特殊行程",
     documentLanguage: "zh-CN",
     schemaType: "Article",
-    shouldIndex: false,
+    shouldIndex: true,
     coverImages: [
       {
         src: "/blog/where-is-robin-stardew-valley-cover.png",

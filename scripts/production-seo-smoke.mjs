@@ -1,7 +1,6 @@
 import { pathToFileURL } from "node:url";
 
 import {
-  expectedNoindexBlogPathnames,
   expectedNoindexContactPathnames,
   expectedPublicHtmlPathContracts,
   expectedSitemapPathnames,
@@ -683,10 +682,7 @@ export async function runProductionSeoSmoke({ fetchResponse, origin }) {
     200,
   );
 
-  const noindexPathnames = new Set([
-    ...expectedNoindexBlogPathnames,
-    ...expectedNoindexContactPathnames,
-  ]);
+  const noindexPathnames = new Set(expectedNoindexContactPathnames);
   let homepageHtml;
 
   for (const pathContract of expectedPublicHtmlPathContracts) {
@@ -793,7 +789,6 @@ export async function runProductionSeoSmoke({ fetchResponse, origin }) {
   return Object.freeze({
     publicHtmlPageCount: expectedPublicHtmlPathContracts.length,
     sitemapUrlCount: sitemapLocationValues.length,
-    noindexBlogPageCount: expectedNoindexBlogPathnames.length,
     noindexContactPageCount: expectedNoindexContactPathnames.length,
     missingPageCount: 1,
     securityHeaderResponseCount: expectedPublicHtmlPathContracts.length + 1,
