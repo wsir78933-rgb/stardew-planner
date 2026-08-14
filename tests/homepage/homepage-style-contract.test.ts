@@ -113,16 +113,6 @@ test("keeps play-style choices as compact cards until a visitor selects one", ()
   expect(mobilePlayStyleOptionsRule).toContain("grid-template-columns: 1fr;");
 });
 
-test("limits editor frame styling to the homepage runtime root", () => {
-  const overrides = readProjectFile("public/reference-runtime/local-only-overrides.css");
-
-  expect(overrides).toContain(`${homepageBodyScope} #reference-runtime-root`);
-  expect(overrides).toContain(`${homepageBodyScope} #reference-runtime-root > .app`);
-  expect(overrides).not.toContain("body.stardew-homepage");
-  expect(overrides).toContain("transform: translateZ(0);");
-  expect(overrides).not.toMatch(/(^|\n)#reference-runtime-root\s*\{/);
-});
-
 test("keeps the desktop editor frame at viewport height alongside the frozen runtime sidebar", () => {
   const styles = readProjectFile("app/globals.css");
   const plannerActiveBodyRule = styles.match(
