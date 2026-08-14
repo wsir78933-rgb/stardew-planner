@@ -2438,15 +2438,15 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .tool-btn { align-items: center; background: transparent; border: 0; border-radius: var(--lk-xs); color: var(--text-dim); display: flex; height: var(--lk-xl); justify-content: center; padding: 0; width: var(--lk-xl); }
 .planner-editor-shell .editor-toolbar { left: auto; position: static; top: auto; transform: none; }
 .planner-editor-shell .tool-btn.fill { display: none; }
-.planner-editor-shell .reference-runtime-wheel-zoom-button { color: var(--text-dim); font-size: .8125rem; font-weight: 600; line-height: 1; white-space: nowrap; }
-.planner-editor-shell .reference-runtime-wheel-zoom-button:hover { background: var(--bg-surface); color: var(--text); }
+.planner-editor-shell .editor-wheel-zoom-button { color: var(--text-dim); font-size: .8125rem; font-weight: 600; line-height: 1; white-space: nowrap; }
+.planner-editor-shell .editor-wheel-zoom-button:hover { background: var(--bg-surface); color: var(--text); }
 .planner-editor-shell .menu-btn:hover,
 .planner-editor-shell .tool-btn:hover:not(:disabled) { background: var(--bg-surface); color: var(--text); }
 .planner-editor-shell .tool-btn.cursor[aria-pressed="true"] {
   background: rgb(177 58 40 / 15%);
   color: #b13a28;
 }
-.planner-editor-shell .tool-btn.reference-runtime-wheel-zoom-button[aria-pressed="true"] {
+.planner-editor-shell .tool-btn.editor-wheel-zoom-button[aria-pressed="true"] {
   background: rgb(177 58 40 / 15%);
   color: #b13a28;
 }

@@ -1,4 +1,3 @@
-export type EditorRuntimeKind = "react" | "reference";
 export type EditorViewportKind = "desktop" | "mobile";
 export type EditorCacheMode = "cold" | "warm";
 
@@ -7,7 +6,6 @@ export type EditorPerformanceMeasurementOptions = Readonly<{
   cacheMode: EditorCacheMode;
   cdpHttpUrl: string;
   maximumInteractiveMilliseconds?: number;
-  runtimeKind: EditorRuntimeKind;
   sampleCount: number;
   viewportKind: EditorViewportKind;
 }>;
@@ -43,8 +41,7 @@ export declare function findMissingEditorPerformanceMarks(
   recordedMarkNames: readonly string[],
 ): string[];
 
-export declare function findForbiddenRuntimeRequests(
-  runtimeKind: EditorRuntimeKind,
+export declare function findForbiddenFrozenRuntimeRequests(
   requestedUrls: readonly string[],
 ): string[];
 

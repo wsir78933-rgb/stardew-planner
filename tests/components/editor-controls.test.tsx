@@ -63,10 +63,10 @@ describe("editor controls", () => {
 
     const zoomMarkup = renderToolbar("zoom");
     expect(zoomMarkup).toContain(
-      'class="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"',
+      'class="tool-btn editor-toolbar__button editor-wheel-zoom-button"',
     );
     expect(zoomMarkup).toContain(
-      'data-reference-runtime-wheel-zoom-button="true"',
+      'data-editor-wheel-zoom-button="true"',
     );
   });
 
@@ -242,9 +242,9 @@ describe("editor controls", () => {
     const selectedCursorSelector =
       '.planner-editor-shell .tool-btn.cursor[aria-pressed="true"]';
     const selectedWheelZoomSelector =
-      '.planner-editor-shell .tool-btn.reference-runtime-wheel-zoom-button[aria-pressed="true"]';
+      '.planner-editor-shell .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]';
     const legacySelectedWheelZoomSelector =
-      '.planner-editor-shell .reference-runtime-wheel-zoom-button[aria-pressed="true"]';
+      '.planner-editor-shell .editor-wheel-zoom-button[aria-pressed="true"]';
     const genericToolHoverRuleIndex = stylesheet.indexOf(
       `${genericToolHoverSelector} {`,
     );
@@ -281,7 +281,7 @@ describe("editor controls", () => {
       '.planner-editor-shell .tool-btn.cursor[aria-pressed="false"]',
     );
     expect(stylesheet).not.toContain(
-      '.planner-editor-shell .reference-runtime-wheel-zoom-button[aria-pressed="false"]',
+      '.planner-editor-shell .editor-wheel-zoom-button[aria-pressed="false"]',
     );
     expect(stylesheet).not.toContain(`${legacySelectedWheelZoomSelector} {`);
     expect(genericToolHoverRuleIndex).toBeGreaterThanOrEqual(0);

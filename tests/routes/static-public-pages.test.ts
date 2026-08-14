@@ -553,6 +553,8 @@ function expectStaticHomepageContent(
   expect(staticPageHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
   expect(staticPageHtml).not.toContain("reference-runtime-root");
   expect(staticPageHtml).not.toContain("/reference-runtime/bootstrap.mjs");
+  expect(staticPageHtml).not.toContain("/_app/immutable/");
+  expect(staticPageHtml).not.toContain("data-sveltekit-");
 }
 
 describe("static public pages", () => {
@@ -642,6 +644,8 @@ describe("static public pages", () => {
       expect(staticPageHtml).not.toContain(
         'src="/reference-runtime/bootstrap.mjs"',
       );
+      expect(staticPageHtml).not.toContain("/_app/immutable/");
+      expect(staticPageHtml).not.toContain("data-sveltekit-");
 
       for (const coverImage of coverImages) {
         const matchingCoverImageElements = findMatchingCoverImageElements(
@@ -758,6 +762,8 @@ describe("static public pages", () => {
       expect(staticPageHtml).not.toContain(
         "/reference-runtime/bootstrap.mjs",
       );
+      expect(staticPageHtml).not.toContain("/_app/immutable/");
+      expect(staticPageHtml).not.toContain("data-sveltekit-");
     }
 
     expect(
@@ -810,9 +816,7 @@ describe("static public pages", () => {
         /<link rel="stylesheet" href="\/_next\/static\/chunks\/[^"/]+\.css"/,
       );
       expect(staticPageHtml).toContain('<link rel="icon" href="/favicon.ico"/>');
-      expect(staticPageHtml).toContain(
-        '<body data-sveltekit-preload-data="hover">',
-      );
+      expect(staticPageHtml).not.toContain("data-sveltekit-");
       expect(staticPageHtml).toContain(
         "<title>404: This page could not be found.</title>",
       );

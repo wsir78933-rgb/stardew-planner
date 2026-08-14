@@ -2,12 +2,11 @@
 
 ## Scope
 
-- Default homepage planner runtime: React + Pixi.
-- Reference runtime remains an explicit diagnostic fallback at
-  `?plannerRuntime=reference`; it is not requested by the default React route.
+- Every homepage planner URL uses React + Pixi. Legacy `plannerRuntime` query
+  parameters are ignored.
 - Static SEO shell remains server-rendered. The planner starts only after client
   hydration, so the static output contains the accessible `Loading planner…`
-  status rather than canvas or frozen-runtime markup.
+  status rather than canvas or retired-runtime markup.
 
 ## Production measurement command
 
@@ -17,14 +16,13 @@ pnpm exec serve out --listen 3000
 node scripts/measure-editor-performance.mjs \
   --base-url http://127.0.0.1:3000 \
   --cdp-http-url http://127.0.0.1:9333 \
-  --runtime react \
   --viewport desktop|mobile \
   --cache cold|warm \
   --samples 3
 ```
 
 The script creates a temporary CDP page for each sample, validates all eight
-editor marks, rejects frozen-runtime requests for React, clicks the live canvas,
+editor marks, rejects retired-runtime requests, clicks the live canvas,
 and reports LCP, CLS, Event Timing interaction duration, and long-task count.
 
 Fast 4G uses the Chrome DevTools Fast 4G profile: 8.1 Mbps downstream, 1.35
@@ -51,7 +49,7 @@ recorded sample, and the React request sets contained no
 | --- | --- | --- |
 | Desktop 1280 by 720 | Eight marks, completed Pixi canvas, menu, toolbar, catalog, and farm renderer | pass |
 | Mobile 390 by 844 | Canvas measured 388 by 528, workspace width 390, document scroll width 390 | pass |
-| Default React route | Frozen runtime root count 0 and no frozen-runtime network request | pass |
+| React-only route | Retired runtime root count 0 and no retired-runtime network request | pass |
 
 ## SEO checks
 
@@ -72,7 +70,7 @@ hydration.
 
 ## Performance implementation
 
-- The runtime selector imports exactly one chosen runtime.
+- The homepage mounts the React planner host directly.
 - Pixi texture loading is initialized once with explicit local PNG/WebP
   preferences, avoiding runtime format detection work.
 - Required standard-farm textures use lossless WebP equivalents: 848 KB of PNG

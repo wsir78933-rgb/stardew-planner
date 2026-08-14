@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function GlobalNotFound() {
   return (
     <html lang="en">
-      <body data-sveltekit-preload-data="hover">
+      <body>
         <main
           style={{
             alignItems: "center",

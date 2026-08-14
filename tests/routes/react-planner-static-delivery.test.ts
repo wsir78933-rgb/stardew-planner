@@ -27,6 +27,7 @@ describe("planner static delivery", () => {
     expect(homepageStaticHtml).not.toContain("reference-runtime-root");
     expect(homepageStaticHtml).not.toContain("/reference-runtime/bootstrap.mjs");
     expect(homepageStaticHtml).not.toContain("/_app/immutable/");
+    expect(homepageStaticHtml).not.toContain("data-sveltekit-");
     expect(homepageStaticHtml).not.toContain("/game-assets/1.6.15/");
     expect(homepageStaticHtml).not.toContain("Buildings.json");
     expect(homepageStaticHtml).not.toContain("pixi.js");

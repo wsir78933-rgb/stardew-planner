@@ -111,14 +111,14 @@ export function EditorToolbar({
         <span aria-hidden="true" className="separator editor-toolbar__divider" />
         <div
           aria-label="Wheel zoom"
-          className="tool-group reference-runtime-wheel-zoom-group"
+          className="tool-group editor-wheel-zoom-group"
           role="group"
         >
           <button
             aria-label={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
             aria-pressed={isZoomSelected}
-            className="tool-btn editor-toolbar__button reference-runtime-wheel-zoom-button"
-            data-reference-runtime-wheel-zoom-button="true"
+            className="tool-btn editor-toolbar__button editor-wheel-zoom-button"
+            data-editor-wheel-zoom-button="true"
             onClick={() =>
               onToolChange(getEditorToolbarToolSelectionAfterClick(tool, "zoom"))
             }

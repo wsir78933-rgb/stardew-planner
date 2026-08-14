@@ -6,7 +6,7 @@ import {
   assertInteractiveThreshold,
   assertCdpRuntimeApis,
   calculateSortedMedian,
-  findForbiddenRuntimeRequests,
+  findForbiddenFrozenRuntimeRequests,
   findMissingEditorPerformanceMarks,
   parseEditorPerformanceMeasurementArguments,
 } from "../../scripts/measure-editor-performance.mjs";
@@ -19,8 +19,6 @@ describe("editor performance measurement contract", () => {
         "http://127.0.0.1:3000",
         "--cdp-http-url",
         "http://127.0.0.1:9333",
-        "--runtime",
-        "react",
         "--viewport",
         "desktop",
         "--cache",
@@ -36,8 +34,6 @@ describe("editor performance measurement contract", () => {
         "http://127.0.0.1:3000/",
         "--cdp-http-url",
         "http://127.0.0.1:9333/",
-        "--runtime",
-        "react",
         "--viewport",
         "mobile",
         "--cache",
@@ -49,10 +45,28 @@ describe("editor performance measurement contract", () => {
       baseUrl: "http://127.0.0.1:3000",
       cacheMode: "cold",
       cdpHttpUrl: "http://127.0.0.1:9333",
-      runtimeKind: "react",
       sampleCount: 3,
       viewportKind: "mobile",
     });
+  });
+
+  it("rejects the removed --runtime option", () => {
+    expect(() =>
+      parseEditorPerformanceMeasurementArguments([
+        "--base-url",
+        "http://127.0.0.1:3000",
+        "--cdp-http-url",
+        "http://127.0.0.1:9333",
+        "--runtime",
+        "react",
+        "--viewport",
+        "desktop",
+        "--cache",
+        "cold",
+        "--samples",
+        "3",
+      ]),
+    ).toThrow(/Unsupported measurement option "--runtime"/);
   });
 
   it("uses the median of sorted values without mutating the recorded samples", () => {
@@ -77,13 +91,17 @@ describe("editor performance measurement contract", () => {
     );
   });
 
-  it("rejects frozen runtime requests from a React measurement", () => {
+  it("rejects every frozen runtime resource request", () => {
     expect(
-      findForbiddenRuntimeRequests("react", [
+      findForbiddenFrozenRuntimeRequests([
         "http://127.0.0.1:3000/reference-runtime/bootstrap.mjs",
+        "http://127.0.0.1:3000/_app/immutable/entry/start.js",
         "http://127.0.0.1:3000/_next/static/chunks/app/page.js",
       ]),
-    ).toEqual(["http://127.0.0.1:3000/reference-runtime/bootstrap.mjs"]);
+    ).toEqual([
+      "http://127.0.0.1:3000/reference-runtime/bootstrap.mjs",
+      "http://127.0.0.1:3000/_app/immutable/entry/start.js",
+    ]);
   });
 
   it("keeps the approved threshold contract explicit", () => {
@@ -120,7 +138,6 @@ describe("editor performance measurement contract", () => {
     expect(parseEditorPerformanceMeasurementArguments([
       "--base-url", "http://127.0.0.1:3000",
       "--cdp-http-url", "http://127.0.0.1:9333",
-      "--runtime", "react",
       "--viewport", "mobile",
       "--cache", "cold",
       "--samples", "3",
@@ -130,7 +147,6 @@ describe("editor performance measurement contract", () => {
       cacheMode: "cold",
       cdpHttpUrl: "http://127.0.0.1:9333",
       maximumInteractiveMilliseconds: 3839.1,
-      runtimeKind: "react",
       sampleCount: 3,
       viewportKind: "mobile",
     });
@@ -142,7 +158,6 @@ describe("editor performance measurement contract", () => {
       expect(() => parseEditorPerformanceMeasurementArguments([
         "--base-url", "http://127.0.0.1:3000",
         "--cdp-http-url", "http://127.0.0.1:9333",
-        "--runtime", "react",
         "--viewport", "mobile",
         "--cache", "cold",
         "--samples", "3",
@@ -157,7 +172,6 @@ describe("editor performance measurement contract", () => {
       cacheMode: "cold",
       cdpHttpUrl: "http://127.0.0.1:9333",
       maximumInteractiveMilliseconds: 3839.1,
-      runtimeKind: "react",
       sampleCount: 3,
       viewportKind: "mobile",
     }, 3840)).toThrow(/3840ms.*3839\.1ms.*mobile:cold/);
@@ -168,7 +182,6 @@ describe("editor performance measurement contract", () => {
       baseUrl: "http://127.0.0.1:3000",
       cacheMode: "cold",
       cdpHttpUrl: "http://127.0.0.1:9333",
-      runtimeKind: "react",
       sampleCount: 3,
       viewportKind: "mobile",
     }, 2500.1)).toThrow(/2500\.1ms.*2500ms.*mobile:cold/);

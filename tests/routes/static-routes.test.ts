@@ -57,7 +57,7 @@ function readStaticPageHtml(staticPageFile: string): string {
   return readFileSync(staticPagePath, "utf8");
 }
 
-describe("static reference-runtime routes", () => {
+describe("static React planner routes", () => {
   it("exports static files without image optimization", () => {
     expect(nextConfig.output).toBe("export");
     expect(nextConfig.images?.unoptimized).toBe(true);
@@ -87,7 +87,7 @@ describe("static reference-runtime routes", () => {
   });
 
   it(
-    "exports every static route without an eager reference-runtime bootstrap",
+    "exports every static route without retired runtime markup",
     () => {
       for (const staticPageFile of expectedStaticPageFiles) {
         const staticPageHtml = readStaticPageHtml(staticPageFile);
@@ -96,6 +96,8 @@ describe("static reference-runtime routes", () => {
         expect(staticPageHtml).not.toContain(
           'src="/reference-runtime/bootstrap.mjs"',
         );
+        expect(staticPageHtml).not.toContain("/_app/immutable/");
+        expect(staticPageHtml).not.toContain("data-sveltekit-");
       }
     },
   );

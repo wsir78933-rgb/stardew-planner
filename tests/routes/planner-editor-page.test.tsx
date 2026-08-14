@@ -19,7 +19,7 @@ const expectedPlannerFarmMapIds = [
 ] as const;
 
 describe("planner editor page", () => {
-  it("keeps the frozen reference client out of the static homepage markup", () => {
+  it("renders the React planner shell without retired runtime markup", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
 
     expect(plannerPageMarkup).toContain("data-homepage-shell");
@@ -58,6 +58,8 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).not.toContain(
       'src="/reference-runtime/bootstrap.mjs"',
     );
+    expect(plannerPageMarkup).not.toContain("/_app/immutable/");
+    expect(plannerPageMarkup).not.toContain("data-sveltekit-");
     expect(plannerPageMarkup).not.toContain("game-assets/1.6.15");
     expect(plannerPageMarkup).not.toContain("Buildings.json");
     expect(plannerPageMarkup).not.toContain("pixi.js");

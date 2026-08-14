@@ -23,6 +23,9 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   expect(markup).not.toContain('data-public-page-shell="true"');
   expect(markup).not.toContain("The editing interface opens in English.");
   expect(markup).not.toContain("reference-runtime-root");
+  expect(markup).not.toContain("/reference-runtime/bootstrap.mjs");
+  expect(markup).not.toContain("/_app/immutable/");
+  expect(markup).not.toContain("data-sveltekit-");
 });
 
 it("assigns Chinese root canonical and paired language alternates", () => {

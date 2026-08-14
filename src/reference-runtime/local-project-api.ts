@@ -1,5 +1,5 @@
-// The frozen runtime is loaded directly from public/ at release time, so this
-// typed facade deliberately delegates to that single browser-executable source.
+// The React project repository uses this typed facade so persisted projects and
+// the browser-executable compatibility API share one format implementation.
 // @ts-expect-error The static public module has no TypeScript declaration file.
 import * as browserReferenceProjectApi from "../../public/reference-runtime/local-project-api.mjs";
 

@@ -21,17 +21,11 @@ export const EDITOR_INTERACTIVE_THRESHOLDS = {
 const acceptedArgumentNames = new Set([
   "--base-url",
   "--cdp-http-url",
-  "--runtime",
   "--viewport",
   "--cache",
   "--samples",
   "--max-interactive-ms",
 ]);
-
-const selectedRuntimeQueryValues = {
-  react: "react",
-  reference: "reference",
-};
 
 const viewportMeasurements = {
   desktop: {
@@ -161,10 +155,6 @@ export function parseEditorPerformanceMeasurementArguments(argumentValues) {
     readRequiredArgument(parsedArguments, "--cdp-http-url"),
     "--cdp-http-url",
   );
-  const runtimeKind = readAcceptedChoice(parsedArguments, "--runtime", [
-    "react",
-    "reference",
-  ]);
   const viewportKind = readAcceptedChoice(parsedArguments, "--viewport", [
     "desktop",
     "mobile",
@@ -186,7 +176,6 @@ export function parseEditorPerformanceMeasurementArguments(argumentValues) {
     baseUrl,
     cacheMode,
     cdpHttpUrl,
-    runtimeKind,
     sampleCount,
     viewportKind,
   };
@@ -228,17 +217,7 @@ export function findMissingEditorPerformanceMarks(recordedMarkNames) {
   );
 }
 
-export function findForbiddenRuntimeRequests(runtimeKind, requestedUrls) {
-  if (runtimeKind !== "react" && runtimeKind !== "reference") {
-    throw new Error(
-      `Cannot inspect forbidden runtime requests for runtime ${JSON.stringify(runtimeKind)}.`,
-    );
-  }
-
-  if (runtimeKind === "reference") {
-    return [];
-  }
-
+export function findForbiddenFrozenRuntimeRequests(requestedUrls) {
   return requestedUrls.filter(
     (requestedUrl) =>
       requestedUrl.includes("/reference-runtime/") ||
@@ -562,15 +541,6 @@ async function readPageMetricsAfterInteraction(cdpConnection) {
   );
 }
 
-function createMeasuredPageUrl(baseUrl, runtimeKind) {
-  const measuredPageUrl = new URL(baseUrl);
-  measuredPageUrl.searchParams.set(
-    "plannerRuntime",
-    selectedRuntimeQueryValues[runtimeKind],
-  );
-  return measuredPageUrl.href;
-}
-
 async function configureMeasurementSession(cdpConnection, viewportKind, cacheMode) {
   const viewportMeasurement = viewportMeasurements[viewportKind];
 
@@ -631,10 +601,7 @@ async function measureEditorSample(measurementOptions) {
       source: createPageMeasurementBootstrap(),
     });
     await cdpConnection.send("Page.navigate", {
-      url: createMeasuredPageUrl(
-        measurementOptions.baseUrl,
-        measurementOptions.runtimeKind,
-      ),
+      url: measurementOptions.baseUrl,
     });
 
     const evaluationResult = await cdpConnection.send("Runtime.evaluate", {
@@ -655,14 +622,12 @@ async function measureEditorSample(measurementOptions) {
       );
     }
 
-    const forbiddenRuntimeRequests = findForbiddenRuntimeRequests(
-      measurementOptions.runtimeKind,
-      requestedUrls,
-    );
+    const forbiddenRuntimeRequests =
+      findForbiddenFrozenRuntimeRequests(requestedUrls);
 
     if (forbiddenRuntimeRequests.length > 0) {
       throw new Error(
-        `React measurement requested frozen runtime assets ${JSON.stringify(forbiddenRuntimeRequests)}.`,
+        `React measurement requested retired runtime assets ${JSON.stringify(forbiddenRuntimeRequests)}.`,
       );
     }
 

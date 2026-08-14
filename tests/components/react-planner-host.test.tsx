@@ -52,12 +52,13 @@ function readInitialPlannerMapId(
 }
 
 describe("React planner host", () => {
-  it("keeps the React workspace and Pixi runtime out of static HTML", () => {
+  it("renders an accessible loading status without the workspace or Pixi runtime", () => {
     const reactPlannerHostMarkup = renderToStaticMarkup(
       createElement(ReactPlannerHost),
     );
 
-    expect(reactPlannerHostMarkup).toBe("");
+    expect(reactPlannerHostMarkup).toContain('role="status"');
+    expect(reactPlannerHostMarkup).toContain("Loading planner…");
     expect(reactPlannerHostMarkup).not.toContain("planner-canvas__viewport");
     expect(reactPlannerHostMarkup).not.toContain("reference-runtime-root");
   });

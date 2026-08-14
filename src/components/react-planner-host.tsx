@@ -10,6 +10,7 @@ import type {
   PlannerWorkspaceBootstrap,
   PlannerWorkspaceStartup,
 } from "./planner-workspace";
+import { PlannerStartupStatus } from "./planner-startup-status";
 
 const PlannerWorkspace = dynamic(
   () =>
@@ -73,7 +74,11 @@ export function ReactPlannerHost() {
   }, [performanceMarker]);
 
   if (plannerHostStartup === null) {
-    return null;
+    return (
+      <PlannerStartupStatus
+        state={{ kind: "loading", message: "Loading planner…" }}
+      />
+    );
   }
 
   return <ReactPlannerHostWorkspace

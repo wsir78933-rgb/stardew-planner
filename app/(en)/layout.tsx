@@ -44,7 +44,7 @@ export default function RootLayout({ children }: RootLayoutProperties) {
           `}
         </Script>
       </head>
-      <body data-sveltekit-preload-data="hover">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

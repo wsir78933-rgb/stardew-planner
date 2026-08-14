@@ -113,7 +113,7 @@ test("keeps play-style choices as compact cards until a visitor selects one", ()
   expect(mobilePlayStyleOptionsRule).toContain("grid-template-columns: 1fr;");
 });
 
-test("keeps the desktop editor frame at viewport height alongside the frozen runtime sidebar", () => {
+test("keeps the desktop React editor frame at viewport height alongside its sidebar", () => {
   const styles = readProjectFile("app/globals.css");
   const plannerActiveBodyRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\)\.planner-active\s*\{([\s\S]*?)\n\}/,
