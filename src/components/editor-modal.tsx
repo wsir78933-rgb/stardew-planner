@@ -31,6 +31,7 @@ import { getPlannerMapById, plannerMaps } from "../maps/map-catalog";
 import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
 import { PlannerMapPicker } from "./planner-map-picker";
 import { closeModalFromBackdropClick } from "./modal-backdrop-close";
+import { lockMapPickerPageScroll } from "./map-picker-page-scroll-lock";
 
 type EditorModalProperties = Readonly<{
   modalId: EditorModalId | null;
@@ -120,6 +121,14 @@ export function EditorModal({
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (modalId !== "map-picker") {
+      return;
+    }
+
+    return lockMapPickerPageScroll(document.body.style);
+  }, [modalId]);
 
   function handleModalKeyDown(keyboardEvent: KeyboardEvent<HTMLElement>): void {
     const modalElement = modalElementReference.current;
