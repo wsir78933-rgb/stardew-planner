@@ -11,6 +11,11 @@ import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import type { ScreenshotResolution } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import type {
+  GameSaveCopy,
+  SaveModalCopy,
+  SaveToolsCopy,
+} from "../i18n/save-modal-copy";
 import type { LocalProjectStorageStatus } from "./local-project-panel";
 
 export type PlannerSaveModalBranch = "farm-summary" | "game-save" | "projects";
@@ -22,6 +27,7 @@ type PlannerSaveModalBranchLoadError = Readonly<{
 
 type PlannerSaveModalLoaderProperties = Readonly<{
   catalogItems: readonly CatalogItem[];
+  copy: SaveModalCopy;
   currentProjectId: string | null;
   currentProjectMapInstanceCount: number | null;
   currentProjectMapInstanceName: string | null;
@@ -54,10 +60,17 @@ type PlannerSaveModalContentProperties = Omit<
   | "onImportGameSave"
   | "placementSnapshot"
   | "selectedPlannerMapId"
->;
+  | "copy"
+> & Readonly<{
+  copy: Pick<
+    SaveModalCopy,
+    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+  >;
+}>;
 
 type PlannerGameSaveModalContentProperties = Readonly<{
   catalogItems: readonly CatalogItem[];
+  copy: GameSaveCopy;
   onOpenImportedGameSave: (importedGameSaveState: ImportedGameSaveState) => void;
 }>;
 
@@ -68,7 +81,9 @@ type PlannerFarmSummaryModalContentProperties = Pick<
   | "placementSnapshot"
   | "selectedPlannerMapId"
   | "season"
->;
+> & Readonly<{
+  copy: Pick<SaveModalCopy, "farmSummaryDetail" | "farmSummaryPreview">;
+}>;
 
 export function PlannerSaveModalLoader(
   plannerSaveModalLoaderProperties: PlannerSaveModalLoaderProperties,
@@ -136,6 +151,7 @@ export function PlannerSaveModalLoader(
           message: createPlannerSaveModalBranchLoadErrorMessage(
             selectedPlannerSaveModalBranch,
             caughtError,
+            plannerSaveModalLoaderProperties.copy.saveTools,
           ),
         });
       }
@@ -146,7 +162,11 @@ export function PlannerSaveModalLoader(
     return () => {
       hasDisposed = true;
     };
-  }, [plannerSaveModalBranchLoadGeneration, selectedPlannerSaveModalBranch]);
+  }, [
+    plannerSaveModalBranchLoadGeneration,
+    plannerSaveModalLoaderProperties.copy.saveTools,
+    selectedPlannerSaveModalBranch,
+  ]);
 
   const currentBranchLoadError =
     plannerSaveModalBranchLoadError?.branch === selectedPlannerSaveModalBranch
@@ -164,7 +184,10 @@ export function PlannerSaveModalLoader(
 
   return (
     <>
-      <nav aria-label="Save tools" className="planner-save-modal-loader__branches">
+      <nav
+        aria-label={plannerSaveModalLoaderProperties.copy.saveTools.label}
+        className="planner-save-modal-loader__branches"
+      >
         <button
           aria-pressed={selectedPlannerSaveModalBranch === "projects"}
           onClick={() =>
@@ -174,7 +197,7 @@ export function PlannerSaveModalLoader(
           }
           type="button"
         >
-          Local projects
+          {plannerSaveModalLoaderProperties.copy.saveTools.localProjects}
         </button>
         <button
           aria-pressed={selectedPlannerSaveModalBranch === "game-save"}
@@ -185,7 +208,7 @@ export function PlannerSaveModalLoader(
           }
           type="button"
         >
-          Import Game Save
+          {plannerSaveModalLoaderProperties.copy.saveTools.gameSave}
         </button>
         <button
           aria-pressed={selectedPlannerSaveModalBranch === "farm-summary"}
@@ -196,7 +219,7 @@ export function PlannerSaveModalLoader(
           }
           type="button"
         >
-          Farm Summary
+          {plannerSaveModalLoaderProperties.copy.saveTools.farmSummary}
         </button>
       </nav>
       {currentBranchLoadError !== null ? (
@@ -216,17 +239,27 @@ export function PlannerSaveModalLoader(
           >
             {createPlannerSaveModalBranchRetryLabel(
               selectedPlannerSaveModalBranch,
+              plannerSaveModalLoaderProperties.copy.saveTools,
             )}
           </button>
         </div>
       ) : null}
       {isSelectedPlannerSaveModalBranchLoading ? (
         <p className="local-project-panel__message" role="status">
-          {createPlannerSaveModalBranchLoadingMessage(selectedPlannerSaveModalBranch)}
+          {createPlannerSaveModalBranchLoadingMessage(
+            selectedPlannerSaveModalBranch,
+            plannerSaveModalLoaderProperties.copy.saveTools,
+          )}
         </p>
       ) : null}
       {selectedPlannerSaveModalBranch === "projects" && PlannerSaveModalContent !== null ? (
         <PlannerSaveModalContent
+          copy={{
+            deleteProject: plannerSaveModalLoaderProperties.copy.deleteProject,
+            imageExport: plannerSaveModalLoaderProperties.copy.imageExport,
+            localProjects: plannerSaveModalLoaderProperties.copy.localProjects,
+            thumbnail: plannerSaveModalLoaderProperties.copy.thumbnail,
+          }}
           currentProjectId={plannerSaveModalLoaderProperties.currentProjectId}
           currentProjectMapInstanceCount={
             plannerSaveModalLoaderProperties.currentProjectMapInstanceCount
@@ -257,6 +290,7 @@ export function PlannerSaveModalLoader(
       && gameSaveImportCatalogItems !== null ? (
         <PlannerGameSaveModalContent
           catalogItems={gameSaveImportCatalogItems}
+          copy={plannerSaveModalLoaderProperties.copy.gameSave}
           onOpenImportedGameSave={plannerSaveModalLoaderProperties.onImportGameSave}
         />
       ) : null}
@@ -264,6 +298,10 @@ export function PlannerSaveModalLoader(
       && PlannerFarmSummaryModalContent !== null ? (
         <PlannerFarmSummaryModalContent
           catalogItems={plannerSaveModalLoaderProperties.catalogItems}
+          copy={{
+            farmSummaryDetail: plannerSaveModalLoaderProperties.copy.farmSummaryDetail,
+            farmSummaryPreview: plannerSaveModalLoaderProperties.copy.farmSummaryPreview,
+          }}
           mapDisplayName={plannerSaveModalLoaderProperties.mapDisplayName}
           placementSnapshot={plannerSaveModalLoaderProperties.placementSnapshot}
           selectedPlannerMapId={plannerSaveModalLoaderProperties.selectedPlannerMapId}
@@ -291,24 +329,27 @@ export function selectPlannerSaveModalBranch(
 
 export function createPlannerSaveModalBranchLoadingMessage(
   plannerSaveModalBranch: PlannerSaveModalBranch,
+  saveToolsCopy: SaveToolsCopy,
 ): string {
-  return `Loading ${getPlannerSaveModalBranchLabel(plannerSaveModalBranch)}…`;
+  return saveToolsCopy.loadingBranch(plannerSaveModalBranch);
 }
 
 export function createPlannerSaveModalBranchLoadErrorMessage(
   plannerSaveModalBranch: PlannerSaveModalBranch,
   caughtError: unknown,
+  saveToolsCopy: SaveToolsCopy,
 ): string {
   const errorMessage = caughtError instanceof Error
     ? caughtError.message
     : String(caughtError);
-  return `Cannot load save tool branch ${JSON.stringify(plannerSaveModalBranch)}: ${errorMessage}`;
+  return saveToolsCopy.branchLoadFailure(plannerSaveModalBranch, errorMessage);
 }
 
 export function createPlannerSaveModalBranchRetryLabel(
   plannerSaveModalBranch: PlannerSaveModalBranch,
+  saveToolsCopy: SaveToolsCopy,
 ): string {
-  return `Retry ${getPlannerSaveModalBranchLabel(plannerSaveModalBranch)}`;
+  return saveToolsCopy.retryBranch(plannerSaveModalBranch);
 }
 
 export function createNextPlannerSaveModalBranchLoadGeneration(
@@ -346,12 +387,4 @@ export function isPlannerSaveModalBranchLoaded(
     );
   }
   return plannerFarmSummaryModalContent !== null;
-}
-
-function getPlannerSaveModalBranchLabel(
-  plannerSaveModalBranch: PlannerSaveModalBranch,
-): string {
-  if (plannerSaveModalBranch === "projects") return "Local projects";
-  if (plannerSaveModalBranch === "game-save") return "Import Game Save";
-  return "Farm Summary";
 }

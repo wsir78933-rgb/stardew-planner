@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { editorModalIds } from "../../src/editor/editor-view-state";
 import {
-  lockMapPickerPageScroll,
-  type MapPickerPageScrollLockStyle,
-} from "../../src/components/map-picker-page-scroll-lock";
+  isPlannerModalLayerOpen,
+  lockPlannerModalPageScroll,
+  type PlannerModalPageScrollLockStyle,
+} from "../../src/components/planner-modal-page-scroll-lock";
 
 type OverflowYOperation = Readonly<{
   name: string;
@@ -10,11 +12,34 @@ type OverflowYOperation = Readonly<{
   value?: string;
 }>;
 
-describe("Map picker page scroll lock", () => {
+describe("Planner modal page scroll lock", () => {
+  it("leaves the page unlocked when no modal layer is open", () => {
+    expect(isPlannerModalLayerOpen({
+      editorModalId: null,
+      hasImportedGameSaveResult: false,
+    })).toBe(false);
+  });
+
+  it("locks the page for every editor modal", () => {
+    for (const editorModalId of editorModalIds) {
+      expect(isPlannerModalLayerOpen({
+        editorModalId,
+        hasImportedGameSaveResult: false,
+      })).toBe(true);
+    }
+  });
+
+  it("locks the page for an imported game save result without an editor modal", () => {
+    expect(isPlannerModalLayerOpen({
+      editorModalId: null,
+      hasImportedGameSaveResult: true,
+    })).toBe(true);
+  });
+
   it("sets overflow-y to hidden with important priority when acquired", () => {
     const inMemoryStyle = createInMemoryPageBodyStyle();
 
-    lockMapPickerPageScroll(inMemoryStyle.pageBodyStyle);
+    lockPlannerModalPageScroll(inMemoryStyle.pageBodyStyle);
 
     expect(inMemoryStyle.operations).toEqual([
       {
@@ -31,10 +56,10 @@ describe("Map picker page scroll lock", () => {
       value: "auto",
     });
 
-    const releaseMapPickerPageScroll = lockMapPickerPageScroll(
+    const releasePlannerModalPageScroll = lockPlannerModalPageScroll(
       inMemoryStyle.pageBodyStyle,
     );
-    releaseMapPickerPageScroll();
+    releasePlannerModalPageScroll();
 
     expect(inMemoryStyle.overflowY()).toEqual({
       priority: "important",
@@ -45,10 +70,10 @@ describe("Map picker page scroll lock", () => {
   it("removes overflow-y on cleanup when no inline value existed", () => {
     const inMemoryStyle = createInMemoryPageBodyStyle();
 
-    const releaseMapPickerPageScroll = lockMapPickerPageScroll(
+    const releasePlannerModalPageScroll = lockPlannerModalPageScroll(
       inMemoryStyle.pageBodyStyle,
     );
-    releaseMapPickerPageScroll();
+    releasePlannerModalPageScroll();
 
     expect(inMemoryStyle.operations).toEqual([
       {
@@ -70,7 +95,7 @@ function createInMemoryPageBodyStyle(
 ): Readonly<{
   operations: OverflowYOperation[];
   overflowY: () => Readonly<{ priority: string; value: string }>;
-  pageBodyStyle: MapPickerPageScrollLockStyle;
+  pageBodyStyle: PlannerModalPageScrollLockStyle;
 }> {
   let overflowYValue = initialOverflowY.value;
   let overflowYPriority = initialOverflowY.priority;

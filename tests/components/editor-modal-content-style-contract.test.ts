@@ -76,9 +76,11 @@ describe("Editor modal content style contract", () => {
     expect(disabledOptionRule).toContain("opacity:");
     expect(helpListRule).toContain("list-style: disc");
     expect(stickyHeaderRule).toContain("position: sticky");
-    expect(panelPositionOffStatusRule).toContain('content: "Off"');
+    expect(panelPositionOffStatusRule).toContain("content: attr(data-state-label)");
+    expect(panelPositionOffStatusRule).not.toContain('content: "Off"');
     expect(pressedPanelPositionRule).toContain("background: #c9fb45");
-    expect(panelPositionOnStatusRule).toContain('content: "On"');
+    expect(panelPositionOnStatusRule).toContain("content: attr(data-state-label)");
+    expect(panelPositionOnStatusRule).not.toContain('content: "On"');
   });
 
   it("uses one-column content and 44 px touch targets at 640 px", () => {

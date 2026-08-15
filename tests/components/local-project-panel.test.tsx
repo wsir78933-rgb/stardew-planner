@@ -7,6 +7,7 @@ import {
   formatLocalProjectUpdatedAt,
   LocalProjectPanel,
 } from "../../src/components/local-project-panel";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 import type {
   ReferenceProjectSummary,
 } from "../../src/reference-runtime/reference-project-repository";
@@ -26,10 +27,12 @@ describe("local project panel", () => {
   it("renders the complete account-free local project action set", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(LocalProjectPanel, {
+        copy: getSaveModalCopy("en").localProjects,
         currentProjectId: "project-forest",
         currentProjectName: "Forest Farm",
         currentProjectMapInstanceCount: 2,
         currentProjectMapInstanceName: "Winter Layout",
+        deleteCopy: getSaveModalCopy("en").deleteProject,
         projects: localProjectSummaries,
         storageStatus: "ready",
         storageErrorMessage: null,
@@ -57,7 +60,7 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain("2 maps");
     expect(panelMarkup).toContain("Stored in this browser.");
     expect(panelMarkup).toContain(
-      formatLocalProjectUpdatedAt("2026-07-26T01:00:00.000Z"),
+      formatLocalProjectUpdatedAt("2026-07-26T01:00:00.000Z", "en"),
     );
     expect(panelMarkup).not.toContain("2026-07-26T01:00:00.000Z");
     expect(panelMarkup).not.toMatch(/\baccount\b/i);
@@ -88,8 +91,10 @@ describe("local project panel", () => {
   it("keeps the disabled import input and disabled label class while storage opens", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(LocalProjectPanel, {
+        copy: getSaveModalCopy("en").localProjects,
         currentProjectId: null,
         currentProjectName: null,
+        deleteCopy: getSaveModalCopy("en").deleteProject,
         projects: [],
         storageStatus: "loading",
         storageErrorMessage: null,
@@ -115,8 +120,10 @@ describe("local project panel", () => {
   it("explains that saving creates an Untitled Project when no projects exist", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(LocalProjectPanel, {
+        copy: getSaveModalCopy("zh-CN").localProjects,
         currentProjectId: null,
         currentProjectName: null,
+        deleteCopy: getSaveModalCopy("zh-CN").deleteProject,
         projects: [],
         storageStatus: "ready",
         storageErrorMessage: null,
@@ -131,22 +138,25 @@ describe("local project panel", () => {
       }),
     );
 
-    expect(panelMarkup).toContain(
-      "Saving creates an Untitled Project and saves the current map.",
-    );
+    expect(panelMarkup).toContain("还没有本地项目。保存时会创建“未命名项目”，并保存当前地图。");
   });
 
   it("formats stored timestamps for people instead of exposing the raw ISO value", () => {
     const rawUpdatedAt = "2026-08-10T12:00:00.000Z";
-    const formattedUpdatedAt = formatLocalProjectUpdatedAt(rawUpdatedAt);
+    const formattedUpdatedAt = formatLocalProjectUpdatedAt(rawUpdatedAt, "zh-CN");
 
-    expect(formattedUpdatedAt).toContain("2026");
+    expect(formattedUpdatedAt).toBe(
+      new Intl.DateTimeFormat("zh-CN", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(new Date(rawUpdatedAt)),
+    );
     expect(formattedUpdatedAt).not.toBe(rawUpdatedAt);
     expect(formattedUpdatedAt).not.toContain("T12:00:00.000Z");
   });
 
   it("rejects an invalid stored timestamp with the offending value", () => {
-    expect(() => formatLocalProjectUpdatedAt("not-a-date")).toThrow(
+    expect(() => formatLocalProjectUpdatedAt("not-a-date", "en")).toThrow(
       /not-a-date/,
     );
   });

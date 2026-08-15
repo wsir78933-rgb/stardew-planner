@@ -7,8 +7,13 @@ import type { ScreenshotResolution } from "../projects/map-image-export";
 import { MapImageExportError } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
 
 type PlannerSaveModalContentProperties = Readonly<{
+  copy: Pick<
+    SaveModalCopy,
+    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+  >;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount: number | null;
@@ -31,6 +36,7 @@ type PlannerSaveModalContentProperties = Readonly<{
 }>;
 
 export function PlannerSaveModalContent({
+  copy,
   currentProjectId,
   currentProjectName,
   currentProjectMapInstanceCount,
@@ -60,12 +66,12 @@ export function PlannerSaveModalContent({
       await onSaveThumbnail();
       setThumbnailActionState({
         kind: "success",
-        message: "Thumbnail saved to this browser.",
+        message: copy.thumbnail.saved,
       });
     } catch (caughtError) {
       setThumbnailActionState({
         kind: "error",
-        message: formatPlannerThumbnailSaveError(caughtError),
+        message: formatPlannerThumbnailSaveError(caughtError, copy.thumbnail),
       });
     }
   }
@@ -73,10 +79,12 @@ export function PlannerSaveModalContent({
   return (
     <div className="planner-save-modal-content">
       <LocalProjectPanel
+        copy={copy.localProjects}
         currentProjectId={currentProjectId}
         currentProjectMapInstanceCount={currentProjectMapInstanceCount}
         currentProjectMapInstanceName={currentProjectMapInstanceName}
         currentProjectName={currentProjectName}
+        deleteCopy={copy.deleteProject}
         onCreateProject={onCreateProject}
         onDeleteProject={onDeleteProject}
         onDuplicateProject={onDuplicateProject}
@@ -91,15 +99,16 @@ export function PlannerSaveModalContent({
       />
       <div className="planner-save-modal-content__exports">
         <MapImageExportPanel
+          copy={copy.imageExport}
           mapFile={mapFile}
           onCaptureScreenshot={onCaptureScreenshot}
           season={season}
         />
-        <section aria-label="Thumbnail" className="map-image-export-panel">
-          <h3>Thumbnail</h3>
+        <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
+          <h3>{copy.thumbnail.title}</h3>
           <div className="map-image-export-panel__actions">
             <button onClick={() => void handleSaveThumbnail()} type="button">
-              Save thumbnail
+              {copy.thumbnail.saveLabel}
             </button>
           </div>
           {thumbnailActionState !== null ? (
@@ -120,9 +129,12 @@ export function PlannerSaveModalContent({
   );
 }
 
-export function formatPlannerThumbnailSaveError(caughtError: unknown): string {
+export function formatPlannerThumbnailSaveError(
+  caughtError: unknown,
+  thumbnailCopy: ThumbnailCopy,
+): string {
   if (caughtError instanceof MapImageExportError) {
-    return `Thumbnail save failed: ${caughtError.message}`;
+    return thumbnailCopy.saveFailure(caughtError.message);
   }
 
   throw caughtError;

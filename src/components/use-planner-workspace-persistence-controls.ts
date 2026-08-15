@@ -18,6 +18,7 @@ import type {
 
 type PlannerWorkspacePersistenceControlsInput = Readonly<{
   dispatchPlannerWorkspaceAction: PlannerWorkspaceStateController["dispatchPlannerWorkspaceAction"];
+  newProjectName: string;
   plannerWorkspaceState: PlannerWorkspaceState;
   workspaceController: ReferenceProjectWorkspaceController;
   workspaceState: ReferenceProjectWorkspaceState;
@@ -25,6 +26,7 @@ type PlannerWorkspacePersistenceControlsInput = Readonly<{
 
 export function usePlannerWorkspacePersistenceControls({
   dispatchPlannerWorkspaceAction,
+  newProjectName,
   plannerWorkspaceState,
   workspaceController,
   workspaceState,
@@ -47,6 +49,7 @@ export function usePlannerWorkspacePersistenceControls({
       dispatchPlannerWorkspaceAction,
       initialPlannerWorkspaceState: plannerWorkspaceState,
       initialWorkspaceState: workspaceState,
+      newProjectName,
       workspaceController,
     });
   }

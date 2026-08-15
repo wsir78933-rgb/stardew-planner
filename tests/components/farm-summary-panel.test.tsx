@@ -6,6 +6,7 @@ import { FarmSummaryPanel } from "../../src/components/farm-summary-panel";
 import { FarmSummaryModal } from "../../src/components/farm-summary-modal";
 import { createFarmSummary } from "../../src/projects/farm-summary";
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 
 const catalogItems: readonly CatalogItem[] = [
   {
@@ -26,7 +27,32 @@ const standardFarmSummaryMapContext = {
 } as const;
 
 describe("farm summary panel", () => {
-  it("renders the inline summary preview and retains the nested modal trigger", () => {
+  it.each([
+    ["spring", "春季"],
+    ["summer", "夏季"],
+    ["fall", "秋季"],
+    ["winter", "冬季"],
+  ] as const)("renders the Chinese %s season name", (season, expectedSeasonName) => {
+    const markup = renderToStaticMarkup(
+      createElement(FarmSummaryPanel, {
+        catalogItems: [],
+        copy: {
+          detail: getSaveModalCopy("zh-CN").farmSummaryDetail,
+          preview: getSaveModalCopy("zh-CN").farmSummaryPreview,
+        },
+        mapContext: {
+          baseMapId: "forest",
+          displayName: "Forest Farm",
+          season,
+        },
+        placementSnapshot: createEmptyPlacementSnapshot(),
+      }),
+    );
+
+    expect(markup).toContain(`季节: ${expectedSeasonName}`);
+  });
+
+  it("renders Chinese inline summary preview and retains the nested modal trigger", () => {
     const placementSnapshot = {
       ...createEmptyPlacementSnapshot(),
       items: [
@@ -54,12 +80,17 @@ describe("farm summary panel", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(FarmSummaryPanel, {
         catalogItems,
+        copy: {
+          detail: getSaveModalCopy("zh-CN").farmSummaryDetail,
+          preview: getSaveModalCopy("zh-CN").farmSummaryPreview,
+        },
         mapContext: standardFarmSummaryMapContext,
         placementSnapshot,
       }),
     );
     const modalMarkup = renderToStaticMarkup(
       createElement(FarmSummaryModal, {
+        copy: getSaveModalCopy("zh-CN").farmSummaryDetail,
         farmSummary: createFarmSummary(
           placementSnapshot,
           catalogItems,
@@ -70,16 +101,16 @@ describe("farm summary panel", () => {
     );
 
     expect(panelMarkup).toContain('class="farm-summary-panel__preview"');
-    expect(panelMarkup).toContain("Map: Standard Farm");
-    expect(panelMarkup).toContain("Season: Spring");
-    expect(panelMarkup).toContain("1 items placed");
-    expect(panelMarkup).toContain(">View detailed summary<");
+    expect(panelMarkup).toContain("地图: Standard Farm");
+    expect(panelMarkup).toContain("季节: 春季");
+    expect(panelMarkup).toContain("1 个物品已放置");
+    expect(panelMarkup).toContain(">查看详细摘要<");
     expect(panelMarkup).toContain("<button");
-    expect(modalMarkup).toContain("1 items placed");
-    expect(modalMarkup).toContain("Map: Standard Farm (standard) · Season: Spring");
+    expect(modalMarkup).toContain("1 个物品已放置");
+    expect(modalMarkup).toContain("地图: Standard Farm (standard) · 季节: 春季");
     expect(modalMarkup).toContain("Items (1)");
     expect(modalMarkup).toContain("Stone");
-    expect(modalMarkup).toContain("Export CSV");
+    expect(modalMarkup).toContain("导出 CSV");
     expect(modalMarkup).toContain('role="dialog"');
   });
 });

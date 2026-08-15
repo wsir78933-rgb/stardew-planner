@@ -117,6 +117,10 @@ import {
 } from "../reference-runtime/use-reference-project-workspace";
 import { EditorMenuBar } from "./editor-menu-bar";
 import { EditorModal } from "./editor-modal";
+import {
+  isPlannerModalLayerOpen,
+  lockPlannerModalPageScroll,
+} from "./planner-modal-page-scroll-lock";
 import { EditorToolbar } from "./editor-toolbar";
 import { ItemCatalogPanel } from "./item-catalog-panel";
 import { PlannerGameSaveImportResultLoader } from "./planner-game-save-import-result-loader";
@@ -139,6 +143,12 @@ import type { ScreenshotResolution } from "../projects/map-image-export";
 import { SelectionInspector } from "./selection-inspector";
 import { ProjectMapInstancePanel } from "./project-map-instance-panel";
 import { usePlannerWorkspacePersistenceControls } from "./use-planner-workspace-persistence-controls";
+import type { HomepageLocale } from "../homepage/homepage-locale";
+import {
+  getEditorModalCopy,
+  type EditorModalCopy,
+} from "../i18n/editor-modal-copy";
+import { getSaveModalCopy, type SaveModalCopy } from "../i18n/save-modal-copy";
 import {
   createPlannerWorkspacePreferencePersistence,
   type PlannerWorkspacePreferencePersistence,
@@ -196,6 +206,7 @@ export function persistPlannerWorkspacePreferences({
 }
 
 export type PlannerWorkspaceProperties = Readonly<{
+  locale: HomepageLocale;
   startup: PlannerWorkspaceStartup;
   loadBuildingMetadata?: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory?: typeof loadCatalogCategory;
@@ -209,6 +220,9 @@ type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
 
 type PreparedPlannerWorkspaceContentProperties = Readonly<{
   cameraStateRetention: PlannerCameraStateRetention;
+  editorModalCopy: EditorModalCopy;
+  saveModalCopy: SaveModalCopy;
+  newProjectName: string;
   preparedWorkspace: PreparedPlannerWorkspace;
   projectWorkspace: NonNullable<
     ReturnType<typeof useReferenceProjectWorkspaceController>
@@ -421,11 +435,14 @@ const interiorDecorPatternByCatalogItemId = new Map<string, InteriorDecorCatalog
 function ignoreImportedGameSave(_importedGameSaveState: ImportedGameSaveState): void {}
 
 export function PlannerWorkspace({
+  locale,
   startup,
   loadBuildingMetadata = loadBuildingPlacementMetadata,
   loadRequiredCatalogCategory = loadCatalogCategory,
   performanceMarker,
 }: PlannerWorkspaceProperties) {
+  const editorModalCopy = getEditorModalCopy(locale);
+  const saveModalCopy = getSaveModalCopy(locale);
   const plannerWorkspaceStateController = usePlannerWorkspaceState({
     initialPlannerWorkspaceState: startup.initialPlannerWorkspaceState,
   });
@@ -445,6 +462,18 @@ export function PlannerWorkspace({
   );
   const [importedGameSaveResult, setImportedGameSaveResult] =
     useState<ImportedGameSaveState | null>(null);
+  const isPlannerModalOpen = isPlannerModalLayerOpen({
+    editorModalId: plannerWorkspaceState.modalId,
+    hasImportedGameSaveResult: importedGameSaveResult !== null,
+  });
+
+  useEffect(() => {
+    if (!isPlannerModalOpen) {
+      return;
+    }
+
+    return lockPlannerModalPageScroll(document.body.style);
+  }, [isPlannerModalOpen]);
 
   useEffect(() => {
     const mapRequest = resourceGenerationReference.current === 0
@@ -533,15 +562,22 @@ export function PlannerWorkspace({
   return (
     <>
       <PlannerWorkspaceRenderedBoundary
+        editorModalCopy={editorModalCopy}
         loadBuildingMetadata={loadBuildingMetadata}
         loadRequiredCatalogCategory={loadRequiredCatalogCategory}
+        newProjectName={saveModalCopy.localProjects.defaultProjectName}
         onImportedGameSaveResult={setImportedGameSaveResult}
         performanceMarker={performanceMarker}
         plannerWorkspaceRenderState={plannerWorkspaceRenderState}
         plannerWorkspaceStateController={plannerWorkspaceStateController}
         projectWorkspace={projectWorkspace}
+        saveModalCopy={saveModalCopy}
       />
       <PlannerGameSaveImportResultLoader
+        copy={{
+          gameSave: saveModalCopy.gameSave,
+          gameSaveResultLoader: saveModalCopy.gameSaveResultLoader,
+        }}
         importedGameSaveState={importedGameSaveResult}
         onClose={() => setImportedGameSaveResult(null)}
       />
@@ -593,8 +629,10 @@ function StaticPreparedPlannerWorkspace({
 
   return (
     <PlannerWorkspaceRenderedBoundary
+      editorModalCopy={getEditorModalCopy("en")}
       loadBuildingMetadata={loadBuildingPlacementMetadata}
       loadRequiredCatalogCategory={loadCatalogCategory}
+      newProjectName="Untitled Project"
       onImportedGameSaveResult={ignoreImportedGameSave}
       performanceMarker={undefined}
       plannerWorkspaceRenderState={{
@@ -604,26 +642,33 @@ function StaticPreparedPlannerWorkspace({
       }}
       plannerWorkspaceStateController={resolvedPlannerWorkspaceStateController}
       projectWorkspace={projectWorkspace}
+      saveModalCopy={getSaveModalCopy("en")}
     />
   );
 }
 
 function PlannerWorkspaceRenderedBoundary({
+  editorModalCopy,
   loadBuildingMetadata,
   loadRequiredCatalogCategory,
+  newProjectName,
   onImportedGameSaveResult,
   performanceMarker,
   plannerWorkspaceRenderState,
   plannerWorkspaceStateController,
   projectWorkspace,
+  saveModalCopy,
 }: Readonly<{
+  editorModalCopy: EditorModalCopy;
   loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory: typeof loadCatalogCategory;
+  newProjectName: string;
   onImportedGameSaveResult: (importedGameSaveState: ImportedGameSaveState) => void;
   performanceMarker?: EditorPerformanceMarker;
   plannerWorkspaceRenderState: PlannerWorkspaceRenderState;
   plannerWorkspaceStateController: PlannerWorkspaceStateController;
   projectWorkspace: ReturnType<typeof useReferenceProjectWorkspaceController>;
+  saveModalCopy: SaveModalCopy;
 }>) {
   const cameraStateRetentionReference =
     useRef<PlannerCameraStateRetention | null>(null);
@@ -640,14 +685,17 @@ function PlannerWorkspaceRenderedBoundary({
       {plannerWorkspaceRenderState.kind === "prepared" && projectWorkspace !== null ? (
         <PreparedPlannerWorkspaceContent
           cameraStateRetention={cameraStateRetentionReference.current}
+          editorModalCopy={editorModalCopy}
           loadBuildingMetadata={loadBuildingMetadata}
           loadRequiredCatalogCategory={loadRequiredCatalogCategory}
+          newProjectName={newProjectName}
           plannerWorkspaceStateController={plannerWorkspaceStateController}
           preparedWorkspace={plannerWorkspaceRenderState.preparedWorkspace}
           projectWorkspace={projectWorkspace}
           onImportedGameSaveResult={onImportedGameSaveResult}
           performanceMarker={performanceMarker}
           runtimeStatus={plannerWorkspaceRenderState.runtimeStatus}
+          saveModalCopy={saveModalCopy}
         />
       ) : null}
     </PlannerWorkspaceGeometry>
@@ -676,6 +724,8 @@ function PlannerWorkspaceGeometry({
 
 function PreparedPlannerWorkspaceContent({
   cameraStateRetention,
+  editorModalCopy,
+  newProjectName,
   preparedWorkspace,
   projectWorkspace,
   plannerWorkspaceStateController,
@@ -684,6 +734,7 @@ function PreparedPlannerWorkspaceContent({
   onImportedGameSaveResult,
   performanceMarker,
   runtimeStatus,
+  saveModalCopy,
 }: PreparedPlannerWorkspaceContentProperties) {
   const {
     applyPlacementEditResult,
@@ -718,6 +769,7 @@ function PreparedPlannerWorkspaceContent({
   const { workspaceController, workspaceState } = projectWorkspace;
   const workspacePersistenceControls = usePlannerWorkspacePersistenceControls({
     dispatchPlannerWorkspaceAction,
+    newProjectName,
     plannerWorkspaceState,
     workspaceController,
     workspaceState,
@@ -955,6 +1007,7 @@ function PreparedPlannerWorkspaceContent({
     [handleCancelInteriorDecor, workspacePersistenceControls],
   );
   const localProjectActions = createPlannerLocalProjectActions({
+    newProjectName,
     season: plannerWorkspaceState.season,
     workspaceController,
   });
@@ -1076,6 +1129,7 @@ function PreparedPlannerWorkspaceContent({
       </PlannerRequiredCatalogGate>
       <EditorModal
         behaviorOptions={plannerWorkspaceState.behaviorOptions}
+        copy={editorModalCopy}
         displayOptions={plannerWorkspaceState.displayOptions}
         mapRenderOptions={plannerWorkspaceState.mapRenderOptions}
         modalId={plannerWorkspaceState.modalId}
@@ -1121,6 +1175,7 @@ function PreparedPlannerWorkspaceContent({
         savePanelContent={
           <PlannerSaveModalLoader
             catalogItems={readyCatalogItems}
+            copy={saveModalCopy}
             currentProjectId={workspaceState.activeProject?.id ?? null}
             currentProjectMapInstanceCount={
               workspaceState.activeProject?.project.maps.length ?? null

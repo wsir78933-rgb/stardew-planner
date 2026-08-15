@@ -1,17 +1,35 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { EditorMenuBar } from "../../src/components/editor-menu-bar";
 import {
   EditorModal,
   getModalFocusTarget,
 } from "../../src/components/editor-modal";
+import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
 import { EditorToolbar } from "../../src/components/editor-toolbar";
 import { SelectionInspector } from "../../src/components/selection-inspector";
 import {
   ItemCatalogPanel,
   getNextCatalogCategory,
 } from "../../src/components/item-catalog-panel";
+
+const freePlacementWarningState = vi.hoisted(() => ({ isVisible: false }));
+
+vi.mock("react", async (importOriginal) => {
+  const actualReact = await importOriginal<typeof import("react")>();
+
+  return {
+    ...actualReact,
+    useState: ((initialState: unknown) => {
+      if (freePlacementWarningState.isVisible) {
+        return [true, () => undefined];
+      }
+
+      return actualReact.useState(initialState);
+    }) as typeof actualReact.useState,
+  };
+});
 
 function ignoreEditorAction(): void {}
 
@@ -107,6 +125,7 @@ describe("editor shell", () => {
   it("renders the shared categorized map picker with the selected Farm tab", () => {
     const mapPickerMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "map-picker",
         selectedMapId: "standard",
         panelPosition: "bottom",
@@ -132,6 +151,7 @@ describe("editor shell", () => {
   it("opens Winery in its Community/Interiors category with the current card selected", () => {
     const mapPickerMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "map-picker",
         selectedMapId: "sve-winery",
         panelPosition: "bottom",
@@ -156,6 +176,7 @@ describe("editor shell", () => {
   it("renders the source-faithful Ginger Island and Farmhouse 2 map configuration controls", () => {
     const gingerIslandMapPickerMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "map-picker",
         selectedMapId: "ginger-island",
         panelPosition: "bottom",
@@ -166,6 +187,7 @@ describe("editor shell", () => {
     );
     const farmhouseMapPickerMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "map-picker",
         selectedMapId: "farmhouse-2",
         panelPosition: "bottom",
@@ -187,6 +209,7 @@ describe("editor shell", () => {
   it("renders the supplied local project controls for Save instead of a placeholder", () => {
     const savePanelMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "save-panel",
         selectedMapId: "standard",
         panelPosition: "bottom",
@@ -206,6 +229,7 @@ describe("editor shell", () => {
   it("shows the NPC Paths control only for the Bus Stop source map", () => {
     const standardViewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "view-panel",
         selectedMapId: "standard",
         panelPosition: "bottom",
@@ -216,6 +240,7 @@ describe("editor shell", () => {
     );
     const busStopViewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "view-panel",
         selectedMapId: "bus-stop",
         panelPosition: "bottom",
@@ -232,6 +257,7 @@ describe("editor shell", () => {
   it("groups View controls clearly while preserving pressed and disabled semantics", () => {
     const viewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "view-panel",
         selectedMapId: "standard",
         panelPosition: "bottom",
@@ -261,6 +287,7 @@ describe("editor shell", () => {
   it("renders local Settings with preserved toggles, unavailable status, and legal links", () => {
     const settingsMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "settings-panel",
         selectedMapId: "standard",
         panelPosition: "bottom",
@@ -290,6 +317,30 @@ describe("editor shell", () => {
       '<a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a>',
     );
     expect(settingsMarkup).not.toMatch(/sign in|account|member|premium|sync|share|feedback/i);
+  });
+
+  it("renders the localized Free Placement warning actions", () => {
+    freePlacementWarningState.isVisible = true;
+
+    try {
+      const settingsMarkup = renderToStaticMarkup(
+        createElement(EditorModal, {
+          copy: getEditorModalCopy("zh-CN"),
+          modalId: "settings-panel",
+          selectedMapId: "standard",
+          panelPosition: "bottom",
+          onClose: ignoreEditorAction,
+          onMapChange: ignoreEditorAction,
+          onPanelPositionChange: ignoreEditorAction,
+        }),
+      );
+
+      expect(settingsMarkup).toContain("自由放置会禁用地图放置规则，部分布局可能无法在游戏中实现。");
+      expect(settingsMarkup).toContain("取消");
+      expect(settingsMarkup).toContain("启用自由放置");
+    } finally {
+      freePlacementWarningState.isVisible = false;
+    }
   });
 
   it("renders the four catalog categories and a search field", () => {

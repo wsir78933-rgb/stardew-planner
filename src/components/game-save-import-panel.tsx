@@ -5,18 +5,22 @@ import {
   GameSaveImportError,
   type ImportedGameSaveState,
 } from "../game-save/game-save-import";
+import type { GameSaveCopy } from "../i18n/save-modal-copy";
 import { closeModalFromBackdropClick } from "./modal-backdrop-close";
 
 type GameSaveImportControlProperties = Readonly<{
+  copy: GameSaveCopy;
   onImportGameSave: (serializedGameSave: string) => void;
 }>;
 
 type GameSaveImportResultModalProperties = Readonly<{
+  copy: GameSaveCopy;
   importedGameSaveState: ImportedGameSaveState;
   onClose: () => void;
 }>;
 
 export function GameSaveImportControl({
+  copy,
   onImportGameSave,
 }: GameSaveImportControlProperties) {
   const [importErrorMessage, setImportErrorMessage] = useState<string | null>(null);
@@ -47,7 +51,7 @@ export function GameSaveImportControl({
       onImportGameSave(serializedGameSave);
       setImportErrorMessage(null);
     } catch (caughtError) {
-      setImportErrorMessage(formatGameSaveImportError(caughtError));
+      setImportErrorMessage(formatGameSaveImportError(caughtError, copy));
     } finally {
       selectedGameSaveFileInput.value = "";
       setImportingFileName(null);
@@ -56,17 +60,17 @@ export function GameSaveImportControl({
   }
 
   return (
-    <section aria-label="Import Game Save" className="game-save-import-control">
+    <section aria-label={copy.ariaLabel} className="game-save-import-control">
       <p className="game-save-import-control__description">
-        Choose a Stardew Valley save file to preview the farm in this planner.
+        {copy.description}
       </p>
       <label
         className={`game-save-import-control__file-trigger${
           isImporting ? " game-save-import-control__file-trigger--disabled" : ""
         }`}
-        title="Import a Stardew Valley save file to view your farm layout"
+        title={copy.tooltip}
       >
-        <span>{createGameSaveImportTriggerLabel(importingFileName)}</span>
+        <span>{createGameSaveImportTriggerLabel(importingFileName, copy)}</span>
         <input
           accept="*"
           disabled={isImporting}
@@ -85,15 +89,17 @@ export function GameSaveImportControl({
 
 export function createGameSaveImportTriggerLabel(
   importingFileName: string | null,
+  copy: GameSaveCopy,
 ): string {
   if (importingFileName === null) {
-    return "Choose save file";
+    return copy.chooseFile;
   }
 
-  return `Importing ${importingFileName}…`;
+  return copy.importing(importingFileName);
 }
 
 export function GameSaveImportResultModal({
+  copy,
   importedGameSaveState,
   onClose,
 }: GameSaveImportResultModalProperties) {
@@ -118,29 +124,29 @@ export function GameSaveImportResultModal({
         role="dialog"
       >
         <header className="game-save-import-result__header">
-          <h2 id={headingId}>"{importedGameSaveState.farmName} Farm"</h2>
-          <button aria-label="Close game save import result" onClick={onClose} type="button">
+          <h2 id={headingId}>{copy.resultTitle(importedGameSaveState.farmName)}</h2>
+          <button aria-label={copy.resultCloseLabel} onClick={onClose} type="button">
             ×
           </button>
         </header>
         {unmappedItemCount > 0 ? (
           <p className="game-save-import-result__warning">
-            {String(unmappedItemCount)} items couldn&apos;t be mapped (likely from mods).
+            {copy.unmappedItems(unmappedItemCount)}
           </p>
         ) : (
           <p className="game-save-import-result__success">
-            All recognized map placements were imported.
+            {copy.resultImportedAll}
           </p>
         )}
         <p className="game-save-import-result__notice">
-          Game save import is experimental. Unsupported items are not placed on the map.
+          {copy.experimentalNotice}
         </p>
         <p className="game-save-import-result__notice">
-          The imported map is only in this browser until you save it to this device.
+          {copy.localOnlyNotice}
         </p>
         <footer className="game-save-import-result__footer">
           <button onClick={onClose} type="button">
-            Close
+            {copy.close}
           </button>
         </footer>
       </section>
@@ -148,9 +154,12 @@ export function GameSaveImportResultModal({
   );
 }
 
-export function formatGameSaveImportError(caughtError: unknown): string {
+export function formatGameSaveImportError(
+  caughtError: unknown,
+  copy: GameSaveCopy,
+): string {
   if (caughtError instanceof GameSaveImportError) {
-    return `Game save import failed: ${caughtError.message}`;
+    return copy.importFailure(caughtError.message);
   }
 
   throw caughtError;

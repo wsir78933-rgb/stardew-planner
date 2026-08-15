@@ -8,15 +8,21 @@ import {
 import { downloadBrowserFile } from "../projects/browser-file-download";
 import { createReferenceProjectExportFile } from "../projects/reference-project-export-file";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import type {
+  LocalProjectDeleteCopy,
+  LocalProjectsCopy,
+} from "../i18n/save-modal-copy";
 import { LocalProjectDeleteAlertDialog } from "./local-project-delete-alert-dialog";
 
 export type LocalProjectStorageStatus = "loading" | "ready" | "error";
 
 type LocalProjectPanelProperties = Readonly<{
+  copy: LocalProjectsCopy;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount?: number | null;
   currentProjectMapInstanceName?: string | null;
+  deleteCopy: LocalProjectDeleteCopy;
   projects: readonly ReferenceProjectSummary[];
   storageStatus: LocalProjectStorageStatus;
   storageErrorMessage: string | null;
@@ -31,10 +37,12 @@ type LocalProjectPanelProperties = Readonly<{
 }>;
 
 export function LocalProjectPanel({
+  copy,
   currentProjectId,
   currentProjectName,
   currentProjectMapInstanceCount = null,
   currentProjectMapInstanceName = null,
+  deleteCopy,
   projects,
   storageStatus,
   storageErrorMessage,
@@ -71,20 +79,20 @@ export function LocalProjectPanel({
       setProjectActionNotice(successMessage);
     } catch (caughtError) {
       setProjectActionNotice(null);
-      setProjectActionErrorMessage(formatProjectActionError(caughtError));
+      setProjectActionErrorMessage(formatProjectActionError(caughtError, copy));
     }
   }
 
   function handleSaveCurrentMap(): void {
-    runProjectAction(onSaveCurrentMap, "Saved to this browser.");
+    runProjectAction(onSaveCurrentMap, copy.savedToBrowser);
   }
 
   function handleCreateProject(): void {
-    runProjectAction(onCreateProject, "Created a local project.");
+    runProjectAction(onCreateProject, copy.createdProject);
   }
 
   function handleOpenProject(projectId: string, projectName: string): void {
-    runProjectAction(() => onOpenProject(projectId), `Opened ${projectName}.`);
+    runProjectAction(() => onOpenProject(projectId), copy.openedProject(projectName));
   }
 
   function handleStartRename(projectSummary: ReferenceProjectSummary): void {
@@ -98,13 +106,13 @@ export function LocalProjectPanel({
     runProjectAction(() => {
       onRenameProject(projectId, requestedProjectName);
       setRenamedProjectId(null);
-    }, "Renamed the local project.");
+    }, copy.renamedProject);
   }
 
   function handleDuplicateProject(projectId: string): void {
     runProjectAction(
       () => onDuplicateProject(projectId),
-      "Duplicated the local project.",
+      copy.duplicatedProject,
     );
   }
 
@@ -130,7 +138,7 @@ export function LocalProjectPanel({
       onDeleteProject(projectPendingDeletion.id);
       setProjectIdPendingDeletion(null);
       projectWasDeleted = true;
-    }, "Deleted the local project.");
+    }, copy.deletedProject);
 
     return projectWasDeleted;
   }
@@ -150,10 +158,10 @@ export function LocalProjectPanel({
         filename: projectExportFile.filename,
       });
       setProjectActionErrorMessage(null);
-      setProjectActionNotice(`Exported ${projectSummary.title}.`);
+      setProjectActionNotice(copy.exportedProject(projectSummary.title));
     } catch (caughtError) {
       setProjectActionNotice(null);
-      setProjectActionErrorMessage(formatProjectActionError(caughtError));
+      setProjectActionErrorMessage(formatProjectActionError(caughtError, copy));
     }
   }
 
@@ -178,34 +186,34 @@ export function LocalProjectPanel({
       const serializedProject = await selectedProjectFile.text();
       onImportProject(serializedProject);
       setProjectActionErrorMessage(null);
-      setProjectActionNotice(`Imported ${selectedProjectFile.name}.`);
+      setProjectActionNotice(copy.importedProject(selectedProjectFile.name));
     } catch (caughtError) {
       setProjectActionNotice(null);
-      setProjectActionErrorMessage(formatProjectActionError(caughtError));
+      setProjectActionErrorMessage(formatProjectActionError(caughtError, copy));
     } finally {
       selectedProjectFileInput.value = "";
     }
   }
 
   return (
-    <section aria-label="Local projects" className="local-project-panel">
+    <section aria-label={copy.localProjects} className="local-project-panel">
       <div className="local-project-panel__status">
         <p>
-          Current project: <strong>{currentProjectName ?? "None"}</strong>
+          {copy.currentProject}: <strong>{currentProjectName ?? copy.none}</strong>
         </p>
         {currentProjectMapInstanceName !== null ? (
           <p>
-            Current map: <strong>{currentProjectMapInstanceName}</strong>
+            {copy.currentMap}: <strong>{currentProjectMapInstanceName}</strong>
             {currentProjectMapInstanceCount !== null
-              ? ` (${String(currentProjectMapInstanceCount)} maps)`
+              ? ` (${copy.currentMapCount(currentProjectMapInstanceCount)})`
               : null}
           </p>
         ) : null}
-        <p>Stored in this browser.</p>
+        <p>{copy.storedInBrowser}</p>
       </div>
       {storageStatus === "loading" ? (
         <p className="local-project-panel__message" role="status">
-          Opening browser storage…
+          {copy.openingBrowserStorage}
         </p>
       ) : null}
       {storageErrorMessage !== null ? (
@@ -229,21 +237,21 @@ export function LocalProjectPanel({
           onClick={handleSaveCurrentMap}
           type="button"
         >
-          Save to this device
+          {copy.saveToDevice}
         </button>
         <button
           disabled={!isStorageReady}
           onClick={handleCreateProject}
           type="button"
         >
-          New project
+          {copy.newProject}
         </button>
         <label
           className={`local-project-panel__import${
             isStorageReady ? "" : " local-project-panel__import--disabled"
           }`}
         >
-          <span>Import JSON</span>
+          <span>{copy.importJson}</span>
           <input
             accept="application/json,.json"
             disabled={!isStorageReady}
@@ -252,7 +260,7 @@ export function LocalProjectPanel({
           />
         </label>
       </div>
-      <ul aria-label="Saved local projects" className="local-project-panel__list">
+      <ul aria-label={copy.savedLocalProjects} className="local-project-panel__list">
         {projects.map((projectSummary) => {
           const isCurrentProject = projectSummary.id === currentProjectId;
           const isRenamingProject = projectSummary.id === renamedProjectId;
@@ -266,14 +274,14 @@ export function LocalProjectPanel({
               <div className="local-project-panel__project-summary">
                 <strong>{projectSummary.title}</strong>
                 <span>
-                  {formatLocalProjectUpdatedAt(projectSummary.updated_at)}
+                  {formatLocalProjectUpdatedAt(projectSummary.updated_at, copy.dateTimeLocale)}
                 </span>
-                {isCurrentProject ? <span>Current</span> : null}
+                {isCurrentProject ? <span>{copy.current}</span> : null}
               </div>
               {isRenamingProject ? (
                 <div className="local-project-panel__rename-form">
                   <label>
-                    <span className="sr-only">New project name</span>
+                    <span className="sr-only">{copy.newProjectName}</span>
                     <input
                       onChange={(changeEvent) =>
                         setRequestedProjectName(changeEvent.currentTarget.value)
@@ -287,13 +295,13 @@ export function LocalProjectPanel({
                     onClick={() => handleRenameProject(projectSummary.id)}
                     type="button"
                   >
-                    Apply name
+                    {copy.applyName}
                   </button>
                   <button
                     onClick={() => setRenamedProjectId(null)}
                     type="button"
                   >
-                    Cancel rename
+                    {copy.cancelRename}
                   </button>
                 </div>
               ) : (
@@ -305,28 +313,28 @@ export function LocalProjectPanel({
                     }
                     type="button"
                   >
-                    Open
+                    {copy.open}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleStartRename(projectSummary)}
                     type="button"
                   >
-                    Rename
+                    {copy.rename}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleDuplicateProject(projectSummary.id)}
                     type="button"
                   >
-                    Duplicate
+                    {copy.duplicate}
                   </button>
                   <button
                     disabled={!isStorageReady}
                     onClick={() => handleExportProject(projectSummary)}
                     type="button"
                   >
-                    Export JSON
+                    {copy.exportJson}
                   </button>
                   <button
                     disabled={!isStorageReady}
@@ -338,7 +346,7 @@ export function LocalProjectPanel({
                     }
                     type="button"
                   >
-                    Delete
+                    {copy.delete}
                   </button>
                 </div>
               )}
@@ -348,12 +356,13 @@ export function LocalProjectPanel({
       </ul>
       {projects.length === 0 ? (
         <p className="local-project-panel__message">
-          No local projects yet. Saving creates an Untitled Project and saves the current map.
+          {copy.emptyState}
         </p>
       ) : null}
       {projectPendingDeletion !== undefined ? (
         <LocalProjectDeleteAlertDialog
           deleteButtonFocusTarget={deleteButtonPendingDeletionRef.current}
+          copy={deleteCopy}
           onCancel={() => setProjectIdPendingDeletion(null)}
           onConfirm={handleDeleteProject}
           projectTitle={projectPendingDeletion.title}
@@ -363,7 +372,10 @@ export function LocalProjectPanel({
   );
 }
 
-export function formatLocalProjectUpdatedAt(updatedAt: string): string {
+export function formatLocalProjectUpdatedAt(
+  updatedAt: string,
+  dateTimeLocale: string,
+): string {
   const parsedUpdatedAt = new Date(updatedAt);
 
   if (updatedAt.trim().length === 0 || Number.isNaN(parsedUpdatedAt.getTime())) {
@@ -372,16 +384,19 @@ export function formatLocalProjectUpdatedAt(updatedAt: string): string {
     );
   }
 
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(dateTimeLocale, {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(parsedUpdatedAt);
 }
 
-function formatProjectActionError(caughtError: unknown): string {
+function formatProjectActionError(
+  caughtError: unknown,
+  localProjectsCopy: LocalProjectsCopy,
+): string {
   if (caughtError instanceof Error) {
-    return `Local project action failed: ${caughtError.message}`;
+    return localProjectsCopy.actionFailure(caughtError.message);
   }
 
-  return `Local project action failed: ${String(caughtError)}`;
+  return localProjectsCopy.actionFailure(String(caughtError));
 }

@@ -7,6 +7,7 @@ import {
   formatMapImageExportError,
   MapImageExportPanel,
 } from "../../src/components/map-image-export-panel";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 import {
   downloadBrowserFile,
   isBrowserFileDownloadError,
@@ -19,6 +20,7 @@ describe("map image export panel", () => {
   it("renders the source-shaped 1x and HQ screenshot controls", () => {
     const markup = renderToStaticMarkup(
       createElement(MapImageExportPanel, {
+        copy: getSaveModalCopy("zh-CN").imageExport,
         mapFile: "Farm.tmx",
         onCaptureScreenshot: async () =>
           new Blob(["png"], { type: "image/png" }),
@@ -26,10 +28,10 @@ describe("map image export panel", () => {
       }),
     );
 
-    expect(markup).toContain("Screenshot");
-    expect(markup).toContain("Screenshot (HQ)");
-    expect(markup).toContain('title="1x resolution, compact file size"');
-    expect(markup).toContain('title="2x resolution, higher quality"');
+    expect(markup).toContain("截图");
+    expect(markup).toContain("截图（高清）");
+    expect(markup).toContain('title="1 倍分辨率，文件较小"');
+    expect(markup).toContain('title="2 倍分辨率，画质更高"');
   });
 
   it("keeps the screenshot export error container as a role alert", () => {
@@ -43,8 +45,11 @@ describe("map image export panel", () => {
 
   it("formats a real browser download capability failure for the alert container", async () => {
     expect(
-      formatMapImageExportError(new MapImageExportError("Map is loading.")),
-    ).toBe("Screenshot export failed: Map is loading.");
+      formatMapImageExportError(
+        new MapImageExportError("Map is loading."),
+        getSaveModalCopy("zh-CN").imageExport,
+      ),
+    ).toBe("截图导出失败：Map is loading.");
 
     let capturedResolution: number | null = null;
     const browserDownloadError = await getRejectedPromiseError(
@@ -61,10 +66,16 @@ describe("map image export panel", () => {
 
     expect(capturedResolution).toBe(1);
     expect(isBrowserFileDownloadError(browserDownloadError)).toBe(true);
-    expect(formatMapImageExportError(browserDownloadError)).toContain(
+    expect(formatMapImageExportError(
+      browserDownloadError,
+      getSaveModalCopy("en").imageExport,
+    )).toContain(
       "Browser file download platform requires document",
     );
-    expect(formatMapImageExportError(browserDownloadError)).toMatch(
+    expect(formatMapImageExportError(
+      browserDownloadError,
+      getSaveModalCopy("en").imageExport,
+    )).toMatch(
       /Farm_spring_\d{4}-\d{2}-\d{2}\.png/,
     );
   });

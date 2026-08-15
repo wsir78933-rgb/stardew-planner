@@ -23,6 +23,7 @@ import {
   createNextGameSaveResultLoadGeneration,
   PlannerGameSaveImportResultLoader,
 } from "../../src/components/planner-game-save-import-result-loader";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 
 const catalogItems: readonly CatalogItem[] = [
   {
@@ -129,10 +130,11 @@ describe("planner game-save modal content", () => {
     expect(openImportedGameSave).toHaveBeenCalledWith(importedGameSaveState);
   });
 
-  it("wraps the game-save controls in the Save branch with the upload copy", () => {
+  it("threads Chinese game-save copy through the delayed Save branch", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerGameSaveModalContent, {
         catalogItems,
+        copy: getSaveModalCopy("zh-CN").gameSave,
         onOpenImportedGameSave: () => undefined,
       }),
     );
@@ -141,9 +143,9 @@ describe("planner game-save modal content", () => {
       'class="planner-save-modal-content planner-save-modal-content--game-save"',
     );
     expect(markup).toContain(
-      "Choose a Stardew Valley save file to preview the farm in this planner.",
+      "选择《星露谷物语》存档文件，在规划器中预览农场。",
     );
-    expect(markup).toContain("Choose save file");
+    expect(markup).toContain("选择存档文件");
     expect(markup).toContain("game-save-import-control");
     expect(markup).toContain('type="file"');
   });
@@ -211,6 +213,10 @@ describe("planner game-save modal content", () => {
   it("keeps result delivery behind a dedicated lazy loader", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerGameSaveImportResultLoader, {
+        copy: {
+          gameSave: getSaveModalCopy("zh-CN").gameSave,
+          gameSaveResultLoader: getSaveModalCopy("zh-CN").gameSaveResultLoader,
+        },
         importedGameSaveState: null,
         onClose: () => undefined,
       }),
@@ -219,8 +225,8 @@ describe("planner game-save modal content", () => {
     expect(markup).toBe("");
   });
 
-  it("creates an explicit retry label and advances the result-load generation", () => {
-    expect(createGameSaveResultRetryLabel()).toBe("Retry result loading");
+  it("creates an explicit localized retry label and advances the result-load generation", () => {
+    expect(createGameSaveResultRetryLabel(getSaveModalCopy("zh-CN").gameSaveResultLoader)).toBe("重试加载结果");
     expect(createNextGameSaveResultLoadGeneration(4)).toBe(5);
     expect(() =>
       createNextGameSaveResultLoadGeneration(Number.MAX_SAFE_INTEGER),
@@ -234,8 +240,10 @@ describe("planner game-save modal content", () => {
     );
 
     expect(resultLoaderSource).toContain("setResultLoadErrorMessage(null);");
-    expect(resultLoaderSource).toContain("Retry result loading");
-    expect(resultLoaderSource).toContain(">Close<");
+    expect(resultLoaderSource).toContain(
+      "createGameSaveResultRetryLabel(copy.gameSaveResultLoader)",
+    );
+    expect(resultLoaderSource).toContain("copy.gameSave.close");
     expect(resultLoaderSource).toContain("resultLoadGeneration");
   });
 

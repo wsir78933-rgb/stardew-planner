@@ -45,15 +45,17 @@ export type PlannerProjectMapActions = Readonly<{
 }>;
 
 export function createPlannerLocalProjectActions({
+  newProjectName = "Untitled Project",
   season,
   workspaceController,
 }: Readonly<{
+  newProjectName?: string;
   season: TilesheetSeason;
   workspaceController: LocalProjectController;
 }>): PlannerLocalProjectActions {
   return {
     onCreateProject: () => workspaceController.createProject({
-      projectName: "Untitled Project",
+      projectName: newProjectName,
       season,
     }),
     onDeleteProject: (projectId) => workspaceController.deleteProject(projectId),

@@ -29,6 +29,7 @@ function createWorkspaceProperties(
   const performanceMarker = createEditorPerformanceMarker();
   performanceMarker.mark("editor:island-mounted");
   const plannerWorkspaceElement = ReactPlannerHostWorkspace({
+    locale: "zh-CN",
     performanceMarker,
     plannerHostStartup,
   });
@@ -36,6 +37,7 @@ function createWorkspaceProperties(
     plannerWorkspaceElement.props as PlannerWorkspaceProperties;
 
   expect(plannerWorkspaceProperties.startup).toBe(plannerHostStartup);
+  expect(plannerWorkspaceProperties.locale).toBe("zh-CN");
 
   return plannerWorkspaceProperties;
 }
@@ -69,7 +71,11 @@ describe("React planner host", () => {
       viewportWidth: 1024,
     });
 
-    ReactPlannerHostWorkspace({ performanceMarker, plannerHostStartup });
+    ReactPlannerHostWorkspace({
+      locale: "en",
+      performanceMarker,
+      plannerHostStartup,
+    });
 
     expect(markedNames).toEqual(["editor:island-mounted"]);
   });
@@ -92,6 +98,7 @@ describe("React planner host", () => {
     );
 
     expect(renderToStaticMarkup(createElement(WorkspaceModuleReadyBoundary, {
+      locale: "en",
       performanceMarker,
       startup: plannerHostStartup,
     }))).toBe("<output>workspace</output>");
@@ -103,7 +110,7 @@ describe("React planner host", () => {
 
   it("renders an accessible loading status without the workspace or Pixi runtime", () => {
     const reactPlannerHostMarkup = renderToStaticMarkup(
-      createElement(ReactPlannerHost),
+      createElement(ReactPlannerHost, { locale: "en" }),
     );
 
     expect(reactPlannerHostMarkup).toContain('role="status"');

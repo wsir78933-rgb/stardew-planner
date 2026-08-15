@@ -12,8 +12,10 @@ import {
   type ScreenshotResolution,
 } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { ImageExportCopy } from "../i18n/save-modal-copy";
 
 type MapImageExportPanelProperties = Readonly<{
+  copy: ImageExportCopy;
   mapFile: string;
   onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
   season: TilesheetSeason;
@@ -30,6 +32,7 @@ export type MapImageScreenshotExportRequest = Readonly<{
 }>;
 
 export function MapImageExportPanel({
+  copy,
   mapFile,
   onCaptureScreenshot,
   season,
@@ -50,31 +53,31 @@ export function MapImageExportPanel({
       });
       setExportErrorMessage(null);
     } catch (caughtError) {
-      setExportErrorMessage(formatMapImageExportError(caughtError));
+      setExportErrorMessage(formatMapImageExportError(caughtError, copy));
     } finally {
       setIsExporting(false);
     }
   }
 
   return (
-    <section aria-label="Export" className="map-image-export-panel">
-      <h3>Export</h3>
+    <section aria-label={copy.exportLabel} className="map-image-export-panel">
+      <h3>{copy.exportLabel}</h3>
       <div className="map-image-export-panel__actions">
         <button
           disabled={isExporting}
           onClick={() => void handleScreenshotExport(1)}
-          title="1x resolution, compact file size"
+          title={copy.screenshotTitle}
           type="button"
         >
-          Screenshot
+          {copy.screenshot}
         </button>
         <button
           disabled={isExporting}
           onClick={() => void handleScreenshotExport(2)}
-          title="2x resolution, higher quality"
+          title={copy.screenshotHighQualityTitle}
           type="button"
         >
-          Screenshot (HQ)
+          {copy.screenshotHighQuality}
         </button>
       </div>
       {exportErrorMessage !== null ? (
@@ -121,12 +124,15 @@ function assertPngScreenshotBlob(screenshotBlob: Blob): void {
   }
 }
 
-export function formatMapImageExportError(caughtError: unknown): string {
+export function formatMapImageExportError(
+  caughtError: unknown,
+  imageExportCopy: ImageExportCopy,
+): string {
   if (
     caughtError instanceof MapImageExportError ||
     isBrowserFileDownloadError(caughtError)
   ) {
-    return `Screenshot export failed: ${caughtError.message}`;
+    return imageExportCopy.exportFailure(caughtError.message);
   }
 
   throw caughtError;

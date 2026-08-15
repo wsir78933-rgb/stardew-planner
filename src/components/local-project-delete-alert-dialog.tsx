@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import * as AlertDialog from "radix-ui/alert-dialog";
+import type { LocalProjectDeleteCopy } from "../i18n/save-modal-copy";
 
 export type LocalProjectDeleteButtonFocusTarget = Readonly<{
   isConnected: boolean;
@@ -9,6 +10,7 @@ export type LocalProjectDeleteButtonFocusTarget = Readonly<{
 }>;
 
 export type LocalProjectDeleteAlertDialogProps = Readonly<{
+  copy: LocalProjectDeleteCopy;
   deleteButtonFocusTarget: LocalProjectDeleteButtonFocusTarget | null;
   projectTitle: string;
   onCancel(): void;
@@ -16,6 +18,7 @@ export type LocalProjectDeleteAlertDialogProps = Readonly<{
 }>;
 
 export function LocalProjectDeleteAlertDialog({
+  copy,
   deleteButtonFocusTarget,
   projectTitle,
   onCancel,
@@ -26,6 +29,7 @@ export function LocalProjectDeleteAlertDialog({
       <AlertDialog.Portal>
         <LocalProjectDeleteAlertDialogContent
           deleteButtonFocusTarget={deleteButtonFocusTarget}
+          copy={copy}
           onCancel={onCancel}
           onConfirm={onConfirm}
           projectTitle={projectTitle}
@@ -36,6 +40,7 @@ export function LocalProjectDeleteAlertDialog({
 }
 
 export function LocalProjectDeleteAlertDialogContent({
+  copy,
   deleteButtonFocusTarget,
   projectTitle,
   onCancel,
@@ -67,17 +72,18 @@ export function LocalProjectDeleteAlertDialogContent({
         }}
         onEscapeKeyDown={onCancel}
       >
-        <AlertDialog.Title>Delete local project?</AlertDialog.Title>
+        <AlertDialog.Title>{copy.title}</AlertDialog.Title>
         <AlertDialog.Description>
-          Delete <strong>{projectTitle}</strong> from this browser? This cannot
-          be undone.
+          {copy.descriptionPrefix}
+          <strong>{projectTitle}</strong>
+          {copy.descriptionSuffix}
         </AlertDialog.Description>
         <div className="local-project-panel__delete-alert-actions">
           <AlertDialog.Action onClick={handleConfirm} type="button">
-            Delete project
+            {copy.confirm}
           </AlertDialog.Action>
           <AlertDialog.Cancel onClick={onCancel} type="button">
-            Keep project
+            {copy.dismiss}
           </AlertDialog.Cancel>
         </div>
       </AlertDialog.Content>

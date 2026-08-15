@@ -2,19 +2,29 @@
 
 import { useEffect, useState, type ComponentType } from "react";
 import type { ImportedGameSaveState } from "../game-save/game-save-import";
+import type {
+  GameSaveCopy,
+  GameSaveResultLoaderCopy,
+} from "../i18n/save-modal-copy";
 
 type PlannerGameSaveImportResultContentProperties = Readonly<{
+  copy: GameSaveCopy;
   importedGameSaveState: ImportedGameSaveState;
   onClose: () => void;
 }>;
 
 type PlannerGameSaveImportResultLoaderProperties =
   Readonly<{
+    copy: Readonly<{
+      gameSave: GameSaveCopy;
+      gameSaveResultLoader: GameSaveResultLoaderCopy;
+    }>;
     importedGameSaveState: ImportedGameSaveState | null;
     onClose: () => void;
   }>;
 
 export function PlannerGameSaveImportResultLoader({
+  copy,
   importedGameSaveState,
   onClose,
 }: PlannerGameSaveImportResultLoaderProperties) {
@@ -42,7 +52,9 @@ export function PlannerGameSaveImportResultLoader({
         setResultLoadErrorMessage(null);
       } catch (caughtError) {
         if (hasDisposed) return;
-        setResultLoadErrorMessage(createGameSaveResultLoadErrorMessage(caughtError));
+        setResultLoadErrorMessage(
+          createGameSaveResultLoadErrorMessage(caughtError, copy.gameSaveResultLoader),
+        );
       }
     }
 
@@ -51,7 +63,7 @@ export function PlannerGameSaveImportResultLoader({
     return () => {
       hasDisposed = true;
     };
-  }, [importedGameSaveState, resultLoadGeneration]);
+  }, [copy.gameSaveResultLoader, importedGameSaveState, resultLoadGeneration]);
 
   if (importedGameSaveState === null) return null;
   if (resultLoadErrorMessage !== null) {
@@ -66,36 +78,42 @@ export function PlannerGameSaveImportResultLoader({
           }
           type="button"
         >
-          {createGameSaveResultRetryLabel()}
+          {createGameSaveResultRetryLabel(copy.gameSaveResultLoader)}
         </button>
-        <button onClick={onClose} type="button">Close</button>
+        <button onClick={onClose} type="button">{copy.gameSave.close}</button>
       </div>
     );
   }
   if (PlannerGameSaveImportResultContent === null) {
     return (
       <p className="game-save-import-control__message" role="status">
-        Loading imported game-save result…
+        {copy.gameSaveResultLoader.loading}
       </p>
     );
   }
   return (
     <PlannerGameSaveImportResultContent
+      copy={copy.gameSave}
       importedGameSaveState={importedGameSaveState}
       onClose={onClose}
     />
   );
 }
 
-export function createGameSaveResultLoadErrorMessage(caughtError: unknown): string {
+export function createGameSaveResultLoadErrorMessage(
+  caughtError: unknown,
+  copy: GameSaveResultLoaderCopy,
+): string {
   const errorMessage = caughtError instanceof Error
     ? caughtError.message
     : String(caughtError);
-  return `Cannot load imported game-save result: ${errorMessage}`;
+  return copy.loadFailure(errorMessage);
 }
 
-export function createGameSaveResultRetryLabel(): string {
-  return "Retry result loading";
+export function createGameSaveResultRetryLabel(
+  copy: GameSaveResultLoaderCopy,
+): string {
+  return copy.retry;
 }
 
 export function createNextGameSaveResultLoadGeneration(

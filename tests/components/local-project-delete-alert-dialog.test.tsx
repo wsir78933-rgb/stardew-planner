@@ -6,15 +6,17 @@ import {
   LocalProjectDeleteAlertDialogContent,
   restoreLocalProjectDeleteButtonFocus,
 } from "../../src/components/local-project-delete-alert-dialog";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 
 describe("local project delete alert dialog", () => {
-  it("names the project and exposes explicit destructive and cancellation actions", () => {
+  it("preserves the localized deletion sentence around a strongly emphasized project title", () => {
     const confirmationMarkup = renderToStaticMarkup(
       createElement(
         AlertDialog.Root,
         { open: true },
         createElement(LocalProjectDeleteAlertDialogContent, {
           deleteButtonFocusTarget: null,
+          copy: getSaveModalCopy("zh-CN").deleteProject,
           projectTitle: "Forest Farm",
           onCancel: () => undefined,
           onConfirm: () => false,
@@ -23,8 +25,31 @@ describe("local project delete alert dialog", () => {
     );
 
     expect(confirmationMarkup).toContain("Forest Farm");
-    expect(confirmationMarkup).toContain("Delete project");
-    expect(confirmationMarkup).toContain("Keep project");
+    expect(confirmationMarkup).toContain("删除本地项目？");
+    expect(confirmationMarkup).toContain("要从此浏览器删除“<strong>Forest Farm</strong>”吗？此操作无法撤销。");
+    expect(confirmationMarkup).toContain("删除项目");
+    expect(confirmationMarkup).toContain("保留项目");
+  });
+
+  it("preserves the HEAD English deletion sentence without quotation marks", () => {
+    const confirmationMarkup = renderToStaticMarkup(
+      createElement(
+        AlertDialog.Root,
+        { open: true },
+        createElement(LocalProjectDeleteAlertDialogContent, {
+          deleteButtonFocusTarget: null,
+          copy: getSaveModalCopy("en").deleteProject,
+          projectTitle: "Forest Farm",
+          onCancel: () => undefined,
+          onConfirm: () => false,
+        }),
+      ),
+    );
+
+    expect(confirmationMarkup).toContain(
+      "Delete <strong>Forest Farm</strong> from this browser? This cannot be undone.",
+    );
+    expect(confirmationMarkup).not.toContain('Delete "Forest Farm"');
   });
 
   it("prevents default close focus and restores the connected Delete button", () => {

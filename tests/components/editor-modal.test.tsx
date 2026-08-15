@@ -6,6 +6,7 @@ import {
   shouldHandleEditorModalKeyboardEvent,
 } from "../../src/components/editor-modal";
 import { closeModalFromBackdropClick } from "../../src/components/modal-backdrop-close";
+import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
 import {
   editorModalIds,
   type EditorModalId,
@@ -22,6 +23,7 @@ describe("editor reference information dialogs", () => {
   it("renders local-only help without feedback or support actions", () => {
     const helpDialogMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "help-info",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -41,6 +43,7 @@ describe("editor reference information dialogs", () => {
   it("describes Q as cycling the selected item appearance", () => {
     const keyboardShortcutsMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "keyboard-shortcuts",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -55,6 +58,80 @@ describe("editor reference information dialogs", () => {
     );
     expect(keyboardShortcutsMarkup).not.toContain(
       "Rotate the selected item",
+    );
+  });
+});
+
+describe("editor modal localized View and Settings content", () => {
+  it("renders Chinese headings, controls, tooltips, state labels, and Save dialog copy", () => {
+    const copy = getEditorModalCopy("zh-CN");
+    const viewMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        copy,
+        modalId: "view-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "bus-stop",
+      }),
+    );
+    const settingsMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        copy,
+        modalId: "settings-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        selectedMapId: "standard",
+      }),
+    );
+    const saveMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        copy,
+        modalId: "save-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        savePanelContent: createElement("p", null, "Save content"),
+        selectedMapId: "standard",
+      }),
+    );
+    const englishSaveMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
+        modalId: "save-panel",
+        onClose: () => undefined,
+        onMapChange: () => undefined,
+        onPanelPositionChange: () => undefined,
+        panelPosition: "bottom",
+        savePanelContent: createElement("p", null, "Save content"),
+        selectedMapId: "standard",
+      }),
+    );
+
+    expect(viewMarkup).toContain("视图");
+    expect(viewMarkup).toContain("覆盖层");
+    expect(viewMarkup).toContain("洒水器范围");
+    expect(viewMarkup).toContain('title="在地图上显示地块网格线"');
+    expect(viewMarkup).toContain('data-state-label="开"');
+    expect(viewMarkup).toContain('data-state-label="关"');
+    expect(viewMarkup).toContain("关闭对话框");
+    expect(settingsMarkup).toContain("设置");
+    expect(settingsMarkup).toContain("移动端");
+    expect(settingsMarkup).toContain("自由放置");
+    expect(settingsMarkup).toContain('title="在触控设备上显示方向键，便于精确放置物品"');
+    expect(settingsMarkup).toContain('href="/zh/privacy"');
+    expect(settingsMarkup).toContain('href="/zh/terms"');
+    expect(saveMarkup).toMatch(/<h2[^>]*>保存<\/h2>/);
+    expect(saveMarkup).toMatch(
+      /<header class="editor-modal__header"><h2[^>]*>保存<\/h2><button aria-label="关闭对话框" type="button">×<\/button><\/header>/,
+    );
+    expect(englishSaveMarkup).toMatch(/<h2[^>]*>Save<\/h2>/);
+    expect(englishSaveMarkup).toMatch(
+      /<header class="editor-modal__header"><h2[^>]*>Save<\/h2><button aria-label="Close dialog" type="button">×<\/button><\/header>/,
     );
   });
 });
@@ -125,6 +202,7 @@ describe("editor modal visual variants", () => {
   it("adds only the approved content-specific modal modifiers", () => {
     const saveModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "save-panel",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -136,6 +214,7 @@ describe("editor modal visual variants", () => {
     );
     const mapPickerModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "map-picker",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -146,6 +225,7 @@ describe("editor modal visual variants", () => {
     );
     const viewModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "view-panel",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -156,6 +236,7 @@ describe("editor modal visual variants", () => {
     );
     const settingsModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "settings-panel",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -166,6 +247,7 @@ describe("editor modal visual variants", () => {
     );
     const helpModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "help-info",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -176,6 +258,7 @@ describe("editor modal visual variants", () => {
     );
     const keyboardModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "keyboard-shortcuts",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -186,6 +269,7 @@ describe("editor modal visual variants", () => {
     );
     const whatsNewModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
         modalId: "whats-new",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -249,6 +333,7 @@ describe("editor modal visual variants", () => {
 function renderEditorModalMarkup(modalId: EditorModalId): string {
   return renderToStaticMarkup(
     createElement(EditorModal, {
+      copy: getEditorModalCopy("en"),
       modalId,
       onClose: () => undefined,
       onMapChange: () => undefined,

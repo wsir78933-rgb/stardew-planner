@@ -5,6 +5,7 @@ import {
   formatPlannerThumbnailSaveError,
   PlannerSaveModalContent,
 } from "../../src/components/planner-save-modal-content";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 import { MapImageExportError } from "../../src/projects/map-image-export";
 import type { ReferenceProjectSummary } from "../../src/reference-runtime/reference-project-repository";
 
@@ -22,9 +23,10 @@ describe("planner save modal content", () => {
     expect(
       formatPlannerThumbnailSaveError(
         new MapImageExportError("Current map image exporter is unavailable."),
+        getSaveModalCopy("zh-CN").thumbnail,
       ),
-    ).toBe("Thumbnail save failed: Current map image exporter is unavailable.");
-    expect(() => formatPlannerThumbnailSaveError(new Error("Unexpected Pixi fault."))).toThrow(
+    ).toBe("缩略图保存失败：Current map image exporter is unavailable.");
+    expect(() => formatPlannerThumbnailSaveError(new Error("Unexpected Pixi fault."), getSaveModalCopy("en").thumbnail)).toThrow(
       "Unexpected Pixi fault.",
     );
   });
@@ -32,6 +34,7 @@ describe("planner save modal content", () => {
   it("renders local persistence, screenshot, and thumbnail controls together", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerSaveModalContent, {
+        copy: getSaveModalCopy("zh-CN"),
         currentProjectId: "project-forest",
         currentProjectMapInstanceCount: 1,
         currentProjectMapInstanceName: "Forest Layout",
@@ -54,9 +57,9 @@ describe("planner save modal content", () => {
       }),
     );
 
-    expect(markup).toContain("Save to this device");
-    expect(markup).toContain("Screenshot");
-    expect(markup).toContain("Save thumbnail");
+    expect(markup).toContain("保存到此设备");
+    expect(markup).toContain("截图");
+    expect(markup).toContain("保存缩略图");
     expect(markup).toContain("Forest Farm");
     expect(markup).toContain("Forest Layout");
     expect(markup.startsWith('<div class="planner-save-modal-content">')).toBe(
@@ -70,7 +73,7 @@ describe("planner save modal content", () => {
       /<div class="planner-save-modal-content__exports">([\s\S]+)<\/div><\/div>$/,
     )?.[1];
 
-    expect(exportsMarkup).toContain('aria-label="Export"');
-    expect(exportsMarkup).toContain('aria-label="Thumbnail"');
+    expect(exportsMarkup).toContain('aria-label="导出"');
+    expect(exportsMarkup).toContain('aria-label="缩略图"');
   });
 });

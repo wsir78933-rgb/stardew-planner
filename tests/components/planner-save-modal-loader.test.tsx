@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
   createPlannerSaveModalBranchLoadErrorMessage,
@@ -9,7 +11,9 @@ import {
   createInitialPlannerSaveModalBranch,
   isPlannerSaveModalBranchLoaded,
   selectPlannerSaveModalBranch,
+  PlannerSaveModalLoader,
 } from "../../src/components/planner-save-modal-loader";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 
 describe("planner save-modal loader", () => {
   it("opens local projects first and switches only to an explicit save-tool branch", () => {
@@ -20,23 +24,66 @@ describe("planner save-modal loader", () => {
     );
   });
 
-  it("uses branch-specific visible loading and delivery-error messages", () => {
-    expect(createPlannerSaveModalBranchLoadingMessage("game-save")).toBe(
-      "Loading Import Game Save…",
+  it("uses localized branch loading, delivery-error, and retry messages without changing raw errors", () => {
+    const chineseSaveToolsCopy = getSaveModalCopy("zh-CN").saveTools;
+
+    expect(createPlannerSaveModalBranchLoadingMessage("game-save", chineseSaveToolsCopy)).toBe(
+      "正在加载导入游戏存档…",
     );
     expect(
       createPlannerSaveModalBranchLoadErrorMessage(
         "farm-summary",
         new Error("network unavailable"),
+        chineseSaveToolsCopy,
       ),
-    ).toContain('Cannot load save tool branch "farm-summary"');
-    expect(createPlannerSaveModalBranchRetryLabel("projects")).toBe(
-      "Retry Local projects",
+    ).toBe('无法加载保存工具分支 "farm-summary"：network unavailable');
+    expect(createPlannerSaveModalBranchRetryLabel("projects", chineseSaveToolsCopy)).toBe(
+      "重试加载本地项目",
+    );
+    expect(createPlannerSaveModalBranchLoadingMessage("game-save", getSaveModalCopy("en").saveTools)).toBe(
+      "Loading Import Game Save…",
     );
     expect(createNextPlannerSaveModalBranchLoadGeneration(0)).toBe(1);
     expect(() =>
       createNextPlannerSaveModalBranchLoadGeneration(Number.MAX_SAFE_INTEGER),
     ).toThrow(`received ${String(Number.MAX_SAFE_INTEGER)}`);
+  });
+
+  it("renders Chinese save navigation labels", () => {
+    const markup = renderToStaticMarkup(
+      createElement(PlannerSaveModalLoader, {
+        catalogItems: [],
+        copy: getSaveModalCopy("zh-CN"),
+        currentProjectId: null,
+        currentProjectMapInstanceCount: null,
+        currentProjectMapInstanceName: null,
+        currentProjectName: null,
+        mapDisplayName: "Standard Farm",
+        mapFile: "Farm.tmx",
+        onCaptureScreenshot: async () => new Blob([], { type: "image/png" }),
+        onCreateProject: () => undefined,
+        onDeleteProject: () => undefined,
+        onDuplicateProject: () => undefined,
+        onExportProject: () => "{}",
+        onImportGameSave: () => undefined,
+        onImportProject: () => undefined,
+        onOpenProject: () => undefined,
+        onRenameProject: () => undefined,
+        onSaveCurrentMap: () => undefined,
+        onSaveThumbnail: async () => undefined,
+        placementSnapshot: {} as never,
+        projects: [],
+        season: "spring",
+        selectedPlannerMapId: "standard",
+        storageErrorMessage: null,
+        storageStatus: "ready",
+      }),
+    );
+
+    expect(markup).toContain('aria-label="保存工具"');
+    expect(markup).toContain("本地项目");
+    expect(markup).toContain("导入游戏存档");
+    expect(markup).toContain("农场摘要");
   });
 
   it("uses branch-local imports without static modal-content imports or top-level dynamic", () => {

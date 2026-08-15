@@ -44,7 +44,7 @@ export function PlannerHomepage({ locale }: PlannerHomepageProps) {
         copy={copy}
         currentLocale={locale}
         {...navigationUrls}
-        plannerWorkspace={<HomepagePlannerWorkspace />}
+        plannerWorkspace={<HomepagePlannerWorkspace locale={locale} />}
       />
     </div>
   );

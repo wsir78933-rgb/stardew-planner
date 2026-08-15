@@ -2626,10 +2626,10 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 .planner-editor-shell .editor-modal__view-options { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); min-width: 0; }
 .planner-editor-shell .editor-modal__view-options button { align-items: center; background: var(--bg-raised); border-radius: var(--lk-xs); display: flex; gap: var(--lk-xs); justify-content: space-between; min-width: 0; overflow-wrap: anywhere; padding: var(--lk-xs) var(--lk-sm); text-align: left; }
 .planner-editor-shell .editor-modal__view-options button[aria-pressed]::after,
-.planner-editor-shell .editor-modal__panel-picker button[aria-pressed]::after { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 100em; color: var(--text-dim); content: "Off"; flex: 0 0 auto; font-size: .75rem; line-height: 1; padding: var(--lk-3xs) var(--lk-xs); }
+.planner-editor-shell .editor-modal__panel-picker button[aria-pressed]::after { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 100em; color: var(--text-dim); content: attr(data-state-label); flex: 0 0 auto; font-size: .75rem; line-height: 1; padding: var(--lk-3xs) var(--lk-xs); }
 .planner-editor-shell .editor-modal__view-options button[aria-pressed="true"] { background: #c9fb45; border-color: var(--border-subtle); color: var(--text); }
 .planner-editor-shell .editor-modal__view-options button[aria-pressed="true"]::after,
-.planner-editor-shell .editor-modal__panel-picker button[aria-pressed="true"]::after { background: var(--text); color: var(--bg-surface); content: "On"; }
+.planner-editor-shell .editor-modal__panel-picker button[aria-pressed="true"]::after { background: var(--text); color: var(--bg-surface); content: attr(data-state-label); }
 .planner-editor-shell .editor-modal__view-options button:disabled { cursor: not-allowed; opacity: .56; }
 .planner-editor-shell .editor-modal__panel-picker { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; }
 .planner-editor-shell .editor-modal__panel-picker p { color: var(--text-dim); grid-column: 1 / -1; margin: 0 0 var(--lk-3xs); }

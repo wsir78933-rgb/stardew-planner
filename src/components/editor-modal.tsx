@@ -31,9 +31,10 @@ import { getPlannerMapById, plannerMaps } from "../maps/map-catalog";
 import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
 import { PlannerMapPicker } from "./planner-map-picker";
 import { closeModalFromBackdropClick } from "./modal-backdrop-close";
-import { lockMapPickerPageScroll } from "./map-picker-page-scroll-lock";
+import type { EditorModalCopy } from "../i18n/editor-modal-copy";
 
 type EditorModalProperties = Readonly<{
+  copy: EditorModalCopy;
   modalId: EditorModalId | null;
   selectedMapId: string;
   panelPosition: EditorPanelPosition;
@@ -69,6 +70,7 @@ const modalFocusableElementSelector = [
 ].join(",");
 
 export function EditorModal({
+  copy,
   modalId,
   selectedMapId,
   panelPosition,
@@ -121,14 +123,6 @@ export function EditorModal({
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (modalId !== "map-picker") {
-      return;
-    }
-
-    return lockMapPickerPageScroll(document.body.style);
-  }, [modalId]);
 
   function handleModalKeyDown(keyboardEvent: KeyboardEvent<HTMLElement>): void {
     const modalElement = modalElementReference.current;
@@ -197,8 +191,12 @@ export function EditorModal({
         tabIndex={-1}
       >
         <header className="editor-modal__header">
-          <h2 id={modalHeadingId}>{getModalLabel(modalId)}</h2>
-          <button aria-label="Close dialog" onClick={onClose} type="button">
+          <h2 id={modalHeadingId}>{getModalLabel(modalId, copy)}</h2>
+          <button
+            aria-label={getModalCloseDialogLabel(modalId, copy)}
+            onClick={onClose}
+            type="button"
+          >
             ×
           </button>
         </header>
@@ -222,18 +220,23 @@ export function EditorModal({
         {modalId === "view-panel" ? (
           <ViewPanel
             behaviorOptions={behaviorOptions}
+            copy={copy.view}
             displayOptions={displayOptions}
             onBehaviorOptionChange={onBehaviorOptionChange}
             onDisplayOptionToggle={onDisplayOptionToggle}
             onPanelPositionChange={onPanelPositionChange}
             panelPosition={panelPosition}
             selectedMapId={selectedMapId}
+            stateLabel={copy.stateLabel}
           />
         ) : null}
         {modalId === "save-panel" ? savePanelContent : null}
         {modalId === "settings-panel" ? (
           <SettingsPanel
             behaviorOptions={behaviorOptions}
+            copy={copy.settings}
+            stateLabel={copy.stateLabel}
+            unavailableStatusLabel={copy.view.unavailableWeather.statusLabel}
             onBehaviorOptionChange={onBehaviorOptionChange}
           />
         ) : null}
@@ -330,109 +333,76 @@ function restoreModalTriggerFocus(
 }
 
 function PanelPositionPicker({
+  copy,
   panelPosition,
   onPanelPositionChange,
+  stateLabel,
 }: Readonly<{
+  copy: EditorModalCopy["view"]["catalogPosition"];
   panelPosition: EditorPanelPosition;
   onPanelPositionChange: (panelPosition: EditorPanelPosition) => void;
+  stateLabel: EditorModalCopy["stateLabel"];
 }>) {
   return (
     <div className="editor-modal__panel-picker">
-      <p>Choose where the item catalog appears in this browser.</p>
+      <p>{copy.description}</p>
       <button
         aria-pressed={panelPosition === "bottom"}
+        data-state-label={stateLabel(panelPosition === "bottom")}
         onClick={() => onPanelPositionChange("bottom")}
         type="button"
       >
-        Bottom panel
+        {copy.bottomPanel}
       </button>
       <button
         aria-pressed={panelPosition === "left"}
+        data-state-label={stateLabel(panelPosition === "left")}
         onClick={() => onPanelPositionChange("left")}
         type="button"
       >
-        Left panel
+        {copy.leftPanel}
       </button>
     </div>
   );
 }
 
 const viewOptionGroups: readonly Readonly<{
-  heading: string;
-  options: readonly Readonly<{
-    key: EditorDisplayOptionKey;
-    label: string;
-    title: string;
-  }>[];
+  options: readonly EditorDisplayOptionKey[];
 }>[] = [
   {
-    heading: "Overlays",
     options: [
-      { key: "showGrid", label: "Grid", title: "Show tile grid lines on the map" },
-      {
-        key: "showSprinklerRadius",
-        label: "Sprinkler Radius",
-        title: "Highlight tiles watered by each sprinkler",
-      },
-      {
-        key: "showScarecrowRadius",
-        label: "Scarecrow Radius",
-        title: "Highlight tiles protected from crows",
-      },
-      {
-        key: "showBeeHouseRadius",
-        label: "Bee House Range",
-        title: "Highlight flower range for honey production",
-      },
-      {
-        key: "showJunimoHutRadius",
-        label: "Junimo Hut Range",
-        title: "Highlight harvest area for Junimo Huts",
-      },
+      "showGrid",
+      "showSprinklerRadius",
+      "showScarecrowRadius",
+      "showBeeHouseRadius",
+      "showJunimoHutRadius",
     ],
   },
   {
-    heading: "Map Overlays",
     options: [
-      {
-        key: "showBuildableTiles",
-        label: "Blocked (Buildings)",
-        title: "Show where buildings cannot be placed",
-      },
-      {
-        key: "showCropTiles",
-        label: "Blocked (Crops)",
-        title: "Show where crops cannot be planted",
-      },
-      {
-        key: "showTreeTiles",
-        label: "Blocked (Trees)",
-        title: "Show where trees cannot grow",
-      },
+      "showBuildableTiles",
+      "showCropTiles",
+      "showTreeTiles",
     ],
   },
   {
-    heading: "Appearance",
-    options: [
-      {
-        key: "showNightMode",
-        label: "Night Mode",
-        title: "Preview your farm at night with light sources",
-      },
-    ],
+    options: ["showNightMode"],
   },
 ];
 
 function ViewPanel({
   behaviorOptions,
+  copy,
   displayOptions,
   onBehaviorOptionChange,
   onDisplayOptionToggle,
   onPanelPositionChange,
   panelPosition,
   selectedMapId,
+  stateLabel,
 }: Readonly<{
   behaviorOptions: EditorBehaviorOptions;
+  copy: EditorModalCopy["view"];
   displayOptions: EditorDisplayOptions;
   onBehaviorOptionChange: (
     editorBehaviorOptionKey: EditorBehaviorOptionKey,
@@ -442,6 +412,7 @@ function ViewPanel({
   onPanelPositionChange: (panelPosition: EditorPanelPosition) => void;
   panelPosition: EditorPanelPosition;
   selectedMapId: string;
+  stateLabel: EditorModalCopy["stateLabel"];
 }>) {
   const shouldShowNpcPathOption = isNpcPathSupportedMapFile(
     getPlannerMapById(selectedMapId).mapFile,
@@ -449,67 +420,90 @@ function ViewPanel({
 
   return (
     <div className="editor-modal__view-panel">
-      {viewOptionGroups.map((viewOptionGroup) => (
-        <section className="editor-modal__view-section" key={viewOptionGroup.heading}>
-          <h3>{viewOptionGroup.heading}</h3>
+      {viewOptionGroups.map((viewOptionGroup, groupIndex) => {
+        const viewOptionGroupCopy = copy.optionGroups[groupIndex];
+
+        if (viewOptionGroupCopy === undefined) {
+          throw new Error(`View modal copy is missing option group ${String(groupIndex)}.`);
+        }
+
+        return (
+        <section className="editor-modal__view-section" key={viewOptionGroupCopy.heading}>
+          <h3>{viewOptionGroupCopy.heading}</h3>
           <div className="editor-modal__view-options">
-            {viewOptionGroup.options.map((viewOption) => (
-              <button
-                aria-pressed={displayOptions[viewOption.key]}
-                key={viewOption.key}
-                onClick={() => onDisplayOptionToggle(viewOption.key)}
-                title={viewOption.title}
-                type="button"
-              >
-                {viewOption.label}
-              </button>
-            ))}
-            {viewOptionGroup.heading === "Map Overlays" &&
+            {viewOptionGroup.options.map((viewOptionKey, optionIndex) => {
+              const viewOptionCopy = viewOptionGroupCopy.options[optionIndex];
+
+              if (viewOptionCopy === undefined) {
+                throw new Error(
+                  `View modal copy is missing option ${String(optionIndex)} in group ${String(groupIndex)}.`,
+                );
+              }
+
+              return (
+                <button
+                  aria-pressed={displayOptions[viewOptionKey]}
+                  data-state-label={stateLabel(displayOptions[viewOptionKey])}
+                  key={viewOptionKey}
+                  onClick={() => onDisplayOptionToggle(viewOptionKey)}
+                  title={viewOptionCopy.title}
+                  type="button"
+                >
+                  {viewOptionCopy.label}
+                </button>
+              );
+            })}
+            {groupIndex === 1 &&
             shouldShowNpcPathOption ? (
               <button
                 aria-pressed={displayOptions.showNpcPaths}
+                data-state-label={stateLabel(displayOptions.showNpcPaths)}
                 onClick={() => onDisplayOptionToggle("showNpcPaths")}
-                title="Show tiles NPCs walk through"
+                title={copy.npcPaths.title}
                 type="button"
               >
-                NPC Paths
+                {copy.npcPaths.label}
               </button>
             ) : null}
           </div>
         </section>
-      ))}
+        );
+      })}
       <section className="editor-modal__view-section">
-        <h3>Map Objects</h3>
+        <h3>{copy.mapObjects.heading}</h3>
         <div className="editor-modal__view-options">
           <button
             aria-pressed={behaviorOptions.autoShowResourceClumps}
+            data-state-label={stateLabel(behaviorOptions.autoShowResourceClumps)}
             onClick={() =>
               onBehaviorOptionChange(
                 "autoShowResourceClumps",
                 !behaviorOptions.autoShowResourceClumps,
               )
             }
-            title="Show spawn locations while a resource clump is selected"
+            title={copy.mapObjects.option.title}
             type="button"
           >
-            Show resource clumps
+            {copy.mapObjects.option.label}
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Unavailable</h3>
+        <h3>{copy.unavailableWeather.heading}</h3>
         <div className="editor-modal__view-options">
-          <button disabled title="Simulate rain, snow, and other weather effects" type="button">
-            Weather
-            <span className="editor-modal__option-status">Unavailable</span>
+          <button disabled title={copy.unavailableWeather.title} type="button">
+            {copy.unavailableWeather.label}
+            <span className="editor-modal__option-status">{copy.unavailableWeather.statusLabel}</span>
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Catalog Position</h3>
+        <h3>{copy.catalogPosition.heading}</h3>
         <PanelPositionPicker
+          copy={copy.catalogPosition}
           onPanelPositionChange={onPanelPositionChange}
           panelPosition={panelPosition}
+          stateLabel={stateLabel}
         />
       </section>
     </div>
@@ -517,59 +511,34 @@ function ViewPanel({
 }
 
 const settingsOptionGroups: readonly Readonly<{
-  heading: string;
-  options: readonly Readonly<{
-    key: EditorBehaviorOptionKey;
-    label: string;
-    title: string;
-  }>[];
+  options: readonly EditorBehaviorOptionKey[];
 }>[] = [
   {
-    heading: "Mobile",
-    options: [
-      {
-        key: "showJoystick",
-        label: "Joystick",
-        title: "Show directional pad for precise item placement on touch devices",
-      },
-      {
-        key: "leftHandMode",
-        label: "Left-hand Mode",
-        title: "Move controls to the left side of the screen",
-      },
-    ],
+    options: ["showJoystick", "leftHandMode"],
   },
   {
-    heading: "Notifications",
-    options: [
-      {
-        key: "showToasts",
-        label: "Toast Notifications",
-        title: "Show brief notifications for tool changes, undo/redo, and actions",
-      },
-    ],
+    options: ["showToasts"],
   },
   {
-    heading: "Interface",
-    options: [
-      {
-        key: "gameCursors",
-        label: "Game-Styled Cursors",
-        title: "Use the pixel-art game-styled cursors instead of your OS cursors",
-      },
-    ],
+    options: ["gameCursors"],
   },
 ];
 
 function SettingsPanel({
   behaviorOptions,
+  copy,
   onBehaviorOptionChange,
+  stateLabel,
+  unavailableStatusLabel,
 }: Readonly<{
   behaviorOptions: EditorBehaviorOptions;
+  copy: EditorModalCopy["settings"];
   onBehaviorOptionChange: (
     editorBehaviorOptionKey: EditorBehaviorOptionKey,
     nextValue: boolean,
   ) => void;
+  stateLabel: EditorModalCopy["stateLabel"];
+  unavailableStatusLabel: string;
 }>) {
   const [isConfirmingFreePlacement, setIsConfirmingFreePlacement] =
     useState(false);
@@ -590,72 +559,89 @@ function SettingsPanel({
 
   return (
     <div className="editor-modal__settings-panel">
-      {settingsOptionGroups.map((settingsOptionGroup) => (
-        <section className="editor-modal__view-section" key={settingsOptionGroup.heading}>
-          <h3>{settingsOptionGroup.heading}</h3>
+      {settingsOptionGroups.map((settingsOptionGroup, groupIndex) => {
+        const settingsOptionGroupCopy = copy.optionGroups[groupIndex];
+
+        if (settingsOptionGroupCopy === undefined) {
+          throw new Error(`Settings modal copy is missing option group ${String(groupIndex)}.`);
+        }
+
+        return (
+        <section className="editor-modal__view-section" key={settingsOptionGroupCopy.heading}>
+          <h3>{settingsOptionGroupCopy.heading}</h3>
           <div className="editor-modal__view-options">
-            {settingsOptionGroup.options.map((settingsOption) => (
-              <button
-                aria-pressed={behaviorOptions[settingsOption.key]}
-                key={settingsOption.key}
-                onClick={() =>
-                  onBehaviorOptionChange(
-                    settingsOption.key,
-                    !behaviorOptions[settingsOption.key],
-                  )
-                }
-                title={settingsOption.title}
-                type="button"
-              >
-                {settingsOption.label}
-              </button>
-            ))}
+            {settingsOptionGroup.options.map((settingsOptionKey, optionIndex) => {
+              const settingsOptionCopy = settingsOptionGroupCopy.options[optionIndex];
+
+              if (settingsOptionCopy === undefined) {
+                throw new Error(
+                  `Settings modal copy is missing option ${String(optionIndex)} in group ${String(groupIndex)}.`,
+                );
+              }
+
+              return (
+                <button
+                  aria-pressed={behaviorOptions[settingsOptionKey]}
+                  data-state-label={stateLabel(behaviorOptions[settingsOptionKey])}
+                  key={settingsOptionKey}
+                  onClick={() =>
+                    onBehaviorOptionChange(
+                      settingsOptionKey,
+                      !behaviorOptions[settingsOptionKey],
+                    )
+                  }
+                  title={settingsOptionCopy.title}
+                  type="button"
+                >
+                  {settingsOptionCopy.label}
+                </button>
+              );
+            })}
           </div>
         </section>
-      ))}
+        );
+      })}
       <section className="editor-modal__view-section">
-        <h3>Placement</h3>
+        <h3>{copy.placementHeading}</h3>
         <div className="editor-modal__view-options">
           <button
             aria-pressed={behaviorOptions.freePlacement}
+            data-state-label={stateLabel(behaviorOptions.freePlacement)}
             onClick={handleFreePlacementClick}
-            title="Disable placement rules, place items anywhere on the map"
+            title={copy.freePlacement.title}
             type="button"
           >
-            Free Placement
+            {copy.freePlacement.label}
           </button>
         </div>
         {isConfirmingFreePlacement ? (
           <div className="editor-modal__free-placement-warning" role="alert">
-            <p>
-              Free placement disables map placement rules. Some layouts may not
-              be achievable in-game.
-            </p>
+            <p>{copy.freePlacementWarning}</p>
             <div>
               <button onClick={() => setIsConfirmingFreePlacement(false)} type="button">
-                Cancel
+                {copy.warningActions.cancel}
               </button>
               <button onClick={confirmFreePlacement} type="button">
-                Enable Free Placement
+                {copy.warningActions.confirm}
               </button>
             </div>
           </div>
         ) : null}
       </section>
       <section className="editor-modal__view-section">
-        <h3>Community</h3>
+        <h3>{copy.community.heading}</h3>
         <div className="editor-modal__view-options">
-          <button disabled title="Add and manage Content Patcher mods" type="button">
-            Manage Mods
-            <span className="editor-modal__option-status">Unavailable</span>
+          <button disabled title={copy.community.manageMods.title} type="button">
+            {copy.community.manageMods.label}
+            <span className="editor-modal__option-status">{unavailableStatusLabel}</span>
           </button>
         </div>
       </section>
       <section className="editor-modal__view-section">
-        <h3>Legal</h3>
+        <h3>{copy.legalHeading}</h3>
         <div className="editor-modal__view-options editor-modal__legal-links">
-          <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
-          <a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a>
+          <a href={copy.privacyPolicy.href} target="_blank" rel="noreferrer">{copy.privacyPolicy.label}</a>
+          <a href={copy.termsOfService.href} target="_blank" rel="noreferrer">{copy.termsOfService.label}</a>
         </div>
       </section>
     </div>
@@ -788,17 +774,17 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
   return "editor-modal__backdrop";
 }
 
-function getModalLabel(modalId: EditorModalId): string {
+function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy): string {
   if (modalId === "map-picker") {
     return "Choose map";
   }
 
   if (modalId === "view-panel") {
-    return "View";
+    return copy.modalTitles.view;
   }
 
   if (modalId === "save-panel") {
-    return "Save";
+    return copy.modalTitles.save;
   }
 
   if (modalId === "help-info") {
@@ -813,5 +799,20 @@ function getModalLabel(modalId: EditorModalId): string {
     return "What's New";
   }
 
-  return "Settings";
+  return copy.modalTitles.settings;
+}
+
+function getModalCloseDialogLabel(
+  modalId: EditorModalId,
+  copy: EditorModalCopy,
+): string {
+  if (
+    modalId === "save-panel" ||
+    modalId === "view-panel" ||
+    modalId === "settings-panel"
+  ) {
+    return copy.closeDialogLabel;
+  }
+
+  return "Close dialog";
 }

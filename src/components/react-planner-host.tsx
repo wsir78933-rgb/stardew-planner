@@ -12,6 +12,7 @@ import type {
   PlannerWorkspaceStartup,
 } from "./planner-workspace";
 import { PlannerStartupStatus } from "./planner-startup-status";
+import type { HomepageLocale } from "../homepage/homepage-locale";
 
 export function createPlannerWorkspaceModuleReadyBoundary(
   LoadedPlannerWorkspace: ComponentType<PlannerWorkspaceProperties>,
@@ -57,21 +58,24 @@ export function createReactPlannerHostStartup({
 }
 
 export function ReactPlannerHostWorkspace({
+  locale,
   performanceMarker,
   plannerHostStartup,
 }: Readonly<{
+  locale: HomepageLocale;
   performanceMarker: ReturnType<typeof createEditorPerformanceMarker>;
   plannerHostStartup: PlannerWorkspaceStartup;
 }>) {
   return (
     <PlannerWorkspace
+      locale={locale}
       performanceMarker={performanceMarker}
       startup={plannerHostStartup}
     />
   );
 }
 
-export function ReactPlannerHost() {
+export function ReactPlannerHost({ locale }: Readonly<{ locale: HomepageLocale }>) {
   const [performanceMarker] = useState(createEditorPerformanceMarker);
   const [plannerHostStartup, setPlannerHostStartup] =
     useState<PlannerWorkspaceStartup | null>(null);
@@ -98,6 +102,7 @@ export function ReactPlannerHost() {
   }
 
   return <ReactPlannerHostWorkspace
+    locale={locale}
     performanceMarker={performanceMarker}
     plannerHostStartup={plannerHostStartup}
   />;

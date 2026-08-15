@@ -135,7 +135,7 @@ describe("planner workspace project composition", () => {
     );
   });
 
-  it("creates and saves the current unsaved map in one Untitled Project", () => {
+  it("creates and saves the current unsaved map in the supplied localized project", () => {
     let serializedProjectDocument: string | null = null;
     const repository = createReferenceProjectRepository({
       createIdentifier: (() => {
@@ -192,6 +192,7 @@ describe("planner workspace project composition", () => {
       dispatchPlannerWorkspaceAction: vi.fn(),
       initialPlannerWorkspaceState: plannerWorkspaceState,
       initialWorkspaceState: workspaceController.getState(),
+      newProjectName: "未命名项目",
       workspaceController,
     });
 
@@ -199,7 +200,7 @@ describe("planner workspace project composition", () => {
 
     const savedWorkspaceState = workspaceController.getState();
     expect(savedWorkspaceState.projectSummaries).toHaveLength(1);
-    expect(savedWorkspaceState.activeProject?.title).toBe("Untitled Project");
+    expect(savedWorkspaceState.activeProject?.title).toBe("未命名项目");
     expect(savedWorkspaceState.activeProject?.project.maps).toHaveLength(1);
     expect(savedWorkspaceState.activeSession?.sourceMap).toMatchObject({
       label: "Standard Farm",
@@ -962,6 +963,30 @@ describe("planner workspace project composition", () => {
     projectActions.onDeleteProject("project-delete");
     expectOnlyControllerMethodCalled(controllerMethods, "deleteProject");
     expect(controllerMethods.deleteProject).toHaveBeenCalledWith("project-delete");
+  });
+
+  it("uses the supplied localized name when creating a local project", () => {
+    const controllerMethods = {
+      createProject: vi.fn(),
+      deleteProject: vi.fn(),
+      duplicateProject: vi.fn(),
+      exportProject: vi.fn(() => "serialized-project"),
+      importProject: vi.fn(),
+      openProject: vi.fn(),
+      renameProject: vi.fn(),
+    };
+    const projectActions = createPlannerLocalProjectActions({
+      newProjectName: "未命名项目",
+      season: "summer",
+      workspaceController: controllerMethods,
+    });
+
+    projectActions.onCreateProject();
+
+    expect(controllerMethods.createProject).toHaveBeenCalledWith({
+      projectName: "未命名项目",
+      season: "summer",
+    });
   });
 
   it("maps every project-map action to one controller call with exact IDs", () => {

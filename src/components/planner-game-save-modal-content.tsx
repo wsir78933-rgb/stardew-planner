@@ -11,6 +11,7 @@ import {
   type ImportedGameSaveState,
   type ParsedStardewGameSave,
 } from "../game-save/game-save-import";
+import type { GameSaveCopy } from "../i18n/save-modal-copy";
 import { parseStardewGameSaveXml } from "../game-save/stardew-save-xml";
 import {
   GameSaveImportControl,
@@ -19,10 +20,14 @@ import {
 
 type PlannerGameSaveModalContentProperties = Readonly<{
   catalogItems: readonly CatalogItem[];
+  copy: GameSaveCopy;
   onOpenImportedGameSave: (importedGameSaveState: ImportedGameSaveState) => void;
 }>;
 
-type ImportSerializedGameSaveInput = PlannerGameSaveModalContentProperties &
+type ImportSerializedGameSaveInput = Omit<
+  PlannerGameSaveModalContentProperties,
+  "copy"
+> &
   Readonly<{
     parseGameSave: (serializedGameSave: string) => ParsedStardewGameSave;
     serializedGameSave: string;
@@ -90,6 +95,7 @@ function mergeGameSaveImportCatalogs(
 
 export function PlannerGameSaveModalContent({
   catalogItems,
+  copy,
   onOpenImportedGameSave,
 }: PlannerGameSaveModalContentProperties) {
   function handleImportGameSave(serializedGameSave: string): void {
@@ -103,20 +109,23 @@ export function PlannerGameSaveModalContent({
 
   return (
     <div className="planner-save-modal-content planner-save-modal-content--game-save">
-      <GameSaveImportControl onImportGameSave={handleImportGameSave} />
+      <GameSaveImportControl copy={copy} onImportGameSave={handleImportGameSave} />
     </div>
   );
 }
 
 export function PlannerGameSaveImportResultContent({
+  copy,
   importedGameSaveState,
   onClose,
 }: Readonly<{
+  copy: GameSaveCopy;
   importedGameSaveState: ImportedGameSaveState;
   onClose: () => void;
 }>) {
   return (
     <GameSaveImportResultModal
+      copy={copy}
       importedGameSaveState={importedGameSaveState}
       onClose={onClose}
     />

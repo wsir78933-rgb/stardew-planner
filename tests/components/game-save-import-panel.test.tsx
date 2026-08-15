@@ -12,6 +12,7 @@ import {
   GameSaveImportResultModal,
 } from "../../src/components/game-save-import-panel";
 import { closeModalFromBackdropClick } from "../../src/components/modal-backdrop-close";
+import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 
 const importedGameSaveState: ImportedGameSaveState = {
   farmName: "Junimo",
@@ -62,52 +63,81 @@ describe("game save import panel", () => {
     expect(closeCount).toBe(1);
   });
 
-  it("renders the save-file chooser with explanatory copy", () => {
+  it("renders Chinese save-file control copy while preserving the file input", () => {
     const markup = renderToStaticMarkup(
       createElement(GameSaveImportControl, {
+        copy: getSaveModalCopy("zh-CN").gameSave,
         onImportGameSave: () => undefined,
       }),
     );
 
     expect(markup).toContain(
-      "Choose a Stardew Valley save file to preview the farm in this planner.",
+      "选择《星露谷物语》存档文件，在规划器中预览农场。",
     );
-    expect(markup).toContain("Choose save file");
+    expect(markup).toContain("选择存档文件");
     expect(markup).toContain(
-      'title="Import a Stardew Valley save file to view your farm layout"',
+      'title="导入《星露谷物语》存档文件以查看农场布局"',
     );
     expect(markup).toContain('accept="*"');
     expect(markup).toContain('type="file"');
   });
 
-  it("formats the default and pending save-file trigger labels", () => {
-    expect(createGameSaveImportTriggerLabel(null)).toBe("Choose save file");
-    expect(createGameSaveImportTriggerLabel("Farm_123456789")).toBe(
-      "Importing Farm_123456789…",
+  it("formats Chinese default and pending save-file trigger labels without changing the filename", () => {
+    const copy = getSaveModalCopy("zh-CN").gameSave;
+
+    expect(createGameSaveImportTriggerLabel(null, copy)).toBe("选择存档文件");
+    expect(createGameSaveImportTriggerLabel("Farm_123456789", copy)).toBe(
+      "正在导入 Farm_123456789…",
     );
   });
 
-  it("renders the import result without external feedback or account controls", () => {
+  it("renders Chinese import results without changing farm values or external controls", () => {
     const markup = renderToStaticMarkup(
       createElement(GameSaveImportResultModal, {
+        copy: getSaveModalCopy("zh-CN").gameSave,
         importedGameSaveState,
         onClose: () => undefined,
       }),
     );
 
-    expect(markup).toContain("&quot;Junimo Farm&quot;");
-    expect(markup).toContain("2 items couldn&#x27;t be mapped (likely from mods).");
-    expect(markup).toContain("Game save import is experimental.");
+    expect(markup).toContain("“Junimo农场”");
+    expect(markup).toContain("2 个物品无法匹配（可能来自模组）。");
+    expect(markup).toContain("游戏存档导入仍处于实验阶段，不支持的物品不会放置到地图上。");
+    expect(markup).toContain("导入的地图只保存在此浏览器中，保存到此设备后才会持久保存。");
+    expect(markup).toContain('aria-label="关闭游戏存档导入结果"');
+    expect(markup).toContain(">关闭<");
     expect(markup).toContain('role="dialog"');
     expect(markup).not.toContain("feedback");
     expect(markup).not.toContain("Sign in");
   });
 
-  it("shows known game-save input errors and rethrows unknown failures", () => {
+  it("renders the Chinese success result when every imported item is mapped", () => {
+    const markup = renderToStaticMarkup(
+      createElement(GameSaveImportResultModal, {
+        copy: getSaveModalCopy("zh-CN").gameSave,
+        importedGameSaveState: {
+          ...importedGameSaveState,
+          unmappedEntries: [],
+        },
+        onClose: () => undefined,
+      }),
+    );
+
+    expect(markup).toContain("已导入所有可识别的地图放置内容。");
+    expect(markup).not.toContain("无法匹配");
+  });
+
+  it("prefixes known Chinese game-save input errors and rethrows unknown failures", () => {
     expect(
-      formatGameSaveImportError(new GameSaveImportError("Farm is missing.")),
-    ).toBe("Game save import failed: Farm is missing.");
-    expect(() => formatGameSaveImportError(new Error("Unexpected renderer fault."))).toThrow(
+      formatGameSaveImportError(
+        new GameSaveImportError("Farm is missing."),
+        getSaveModalCopy("zh-CN").gameSave,
+      ),
+    ).toBe("游戏存档导入失败：Farm is missing.");
+    expect(() => formatGameSaveImportError(
+      new Error("Unexpected renderer fault."),
+      getSaveModalCopy("zh-CN").gameSave,
+    )).toThrow(
       "Unexpected renderer fault.",
     );
   });

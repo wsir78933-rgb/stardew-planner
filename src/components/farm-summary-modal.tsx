@@ -5,13 +5,16 @@ import {
   createFarmSummaryCsvFile,
   type FarmSummary,
 } from "../projects/farm-summary";
+import type { FarmSummaryDetailCopy } from "../i18n/save-modal-copy";
 
 type FarmSummaryModalProperties = Readonly<{
+  copy: FarmSummaryDetailCopy;
   farmSummary: FarmSummary;
   onClose: () => void;
 }>;
 
 export function FarmSummaryModal({
+  copy,
   farmSummary,
   onClose,
 }: FarmSummaryModalProperties) {
@@ -29,7 +32,7 @@ export function FarmSummaryModal({
       downloadFarmSummaryCsvFile(farmSummaryCsvFile);
       setExportErrorMessage(null);
     } catch (caughtError) {
-      setExportErrorMessage(formatFarmSummaryExportError(caughtError));
+      setExportErrorMessage(formatFarmSummaryExportError(caughtError, copy));
     }
   }
 
@@ -53,13 +56,13 @@ export function FarmSummaryModal({
       >
         <header className="farm-summary-modal__header">
           <div>
-            <h2 id={farmSummaryHeadingId}>Farm Summary</h2>
+            <h2 id={farmSummaryHeadingId}>{copy.title}</h2>
             <p>
-              Map: {farmSummary.mapContext.displayName} ({farmSummary.mapContext.baseMapId}) · Season: {formatFarmSummarySeason(farmSummary.mapContext.season)}
+              {copy.map}: {farmSummary.mapContext.displayName} ({farmSummary.mapContext.baseMapId}) · {copy.seasonLabel}: {copy.season(farmSummary.mapContext.season)}
             </p>
-            <p>{String(farmSummary.totalItems)} items placed</p>
+            <p>{copy.itemsPlaced(farmSummary.totalItems)}</p>
           </div>
-          <button aria-label="Close Farm Summary" onClick={onClose} type="button">
+          <button aria-label={copy.closeLabel} onClick={onClose} type="button">
             ×
           </button>
         </header>
@@ -69,14 +72,14 @@ export function FarmSummaryModal({
           </p>
         ) : null}
         {farmSummary.rows.length === 0 ? (
-          <p className="farm-summary-modal__empty">No items have been placed yet.</p>
+          <p className="farm-summary-modal__empty">{copy.empty}</p>
         ) : (
           <FarmSummaryGroups farmSummary={farmSummary} />
         )}
         {farmSummary.rows.length > 0 ? (
           <footer className="farm-summary-modal__footer">
             <button onClick={handleExportCsv} type="button">
-              Export CSV
+              {copy.exportCsv}
             </button>
           </footer>
         ) : null}
@@ -123,10 +126,6 @@ function stopModalBackdropClose(mouseEvent: { stopPropagation: () => void }): vo
   mouseEvent.stopPropagation();
 }
 
-function formatFarmSummarySeason(season: string): string {
-  return `${season.slice(0, 1).toUpperCase()}${season.slice(1)}`;
-}
-
 function downloadFarmSummaryCsvFile(
   farmSummaryCsvFile: ReturnType<typeof createFarmSummaryCsvFile>,
 ): void {
@@ -157,10 +156,13 @@ function downloadFarmSummaryCsvFile(
   window.setTimeout(() => URL.revokeObjectURL(farmSummaryCsvUrl), 0);
 }
 
-function formatFarmSummaryExportError(caughtError: unknown): string {
+export function formatFarmSummaryExportError(
+  caughtError: unknown,
+  copy: FarmSummaryDetailCopy,
+): string {
   if (caughtError instanceof Error) {
-    return `Farm summary export failed: ${caughtError.message}`;
+    return copy.exportFailure(caughtError.message);
   }
 
-  return `Farm summary export failed: ${String(caughtError)}`;
+  return copy.exportFailure(String(caughtError));
 }

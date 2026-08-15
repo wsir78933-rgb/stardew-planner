@@ -50,6 +50,7 @@ type PlannerWorkspacePersistenceRuntimeInput = Readonly<{
   dispatchPlannerWorkspaceAction: (plannerWorkspaceAction: PlannerWorkspaceAction) => void;
   initialPlannerWorkspaceState: PlannerWorkspaceState;
   initialWorkspaceState: PlannerWorkspacePersistenceProjectState;
+  newProjectName?: string;
   workspaceController: PlannerWorkspacePersistenceController;
 }>;
 
@@ -75,6 +76,7 @@ export function createPlannerWorkspacePersistenceRuntime({
   dispatchPlannerWorkspaceAction,
   initialPlannerWorkspaceState,
   initialWorkspaceState,
+  newProjectName = "Untitled Project",
   workspaceController,
 }: PlannerWorkspacePersistenceRuntimeInput): PlannerWorkspacePersistenceRuntime {
   const canonicalMapIdentityReference = createCanonicalMapIdentityReference();
@@ -185,6 +187,7 @@ export function createPlannerWorkspacePersistenceRuntime({
       return;
     }
     const saveResult = saveCurrentPlannerWorkspaceMapOrCreate({
+      newProjectName,
       onCreatedCanonicalSession: (createdCanonicalSession) => {
         pendingSmartSaveCanonicalSession = createdCanonicalSession;
         shouldPreserveSavePanelOnCanonicalSynchronization = true;
@@ -288,11 +291,13 @@ export function saveCurrentPlannerWorkspaceMap({
 }
 
 function saveCurrentPlannerWorkspaceMapOrCreate({
+  newProjectName,
   onCreatedCanonicalSession,
   plannerWorkspaceState,
   workspaceController,
   workspaceState,
 }: Readonly<{
+  newProjectName: string;
   onCreatedCanonicalSession: (
     createdCanonicalSession: PendingSmartSaveCanonicalSession,
   ) => void;
@@ -315,6 +320,7 @@ function saveCurrentPlannerWorkspaceMapOrCreate({
   }
 
   createAndSaveCurrentPlannerWorkspaceMap({
+    newProjectName,
     onCreatedCanonicalSession,
     plannerWorkspaceState,
     workspaceController,
@@ -323,10 +329,12 @@ function saveCurrentPlannerWorkspaceMapOrCreate({
 }
 
 function createAndSaveCurrentPlannerWorkspaceMap({
+  newProjectName,
   onCreatedCanonicalSession,
   plannerWorkspaceState,
   workspaceController,
 }: Readonly<{
+  newProjectName: string;
   onCreatedCanonicalSession: (
     createdCanonicalSession: PendingSmartSaveCanonicalSession,
   ) => void;
@@ -334,6 +342,7 @@ function createAndSaveCurrentPlannerWorkspaceMap({
   workspaceController: PlannerWorkspacePersistenceController;
 }>): void {
   const projectForMapCreation = getOrCreateEmptyProjectForCurrentMap(
+    newProjectName,
     plannerWorkspaceState,
     workspaceController,
   );
@@ -360,13 +369,14 @@ function createAndSaveCurrentPlannerWorkspaceMap({
 }
 
 function getOrCreateEmptyProjectForCurrentMap(
+  newProjectName: string,
   plannerWorkspaceState: PlannerWorkspaceState,
   workspaceController: PlannerWorkspacePersistenceController,
 ) {
   const workspaceStateBeforeCreation = workspaceController.getState();
   if (workspaceStateBeforeCreation.activeProject === null) {
     workspaceController.createProject({
-      projectName: "Untitled Project",
+      projectName: newProjectName,
       season: plannerWorkspaceState.season,
     });
   }
