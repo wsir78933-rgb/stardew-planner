@@ -49,6 +49,14 @@ it("defines responsive blog layout and accessibility rules under blog-only scope
   ).toMatch(/\bdisplay:\s*(?:block|grid)/);
 });
 
+it("keeps blog article titles at the full header width", () => {
+  const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
+
+  expect(
+    readScopedRuleBody(stylesheet, "[data-blog-article] > header > h1"),
+  ).not.toMatch(/\bmax-width\s*:/);
+});
+
 it("keeps every blog class selector inside a blog scope without planner or footer selectors", () => {
   const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
   const blogSelectorLines = scopedBlogCssBlock
