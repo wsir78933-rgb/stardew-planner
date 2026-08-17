@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { inflateSync } from "node:zlib";
 import { createElement } from "react";
@@ -13,6 +13,23 @@ const projectRoot = join(import.meta.dirname, "../..");
 const pngSignature = "89504e470d0a1a0a";
 const maximumCoverByteCount = 1.25 * 1024 * 1024;
 const expectedCoverDimensions = { height: 941, width: 1672 } as const;
+const robinArticleMediaExpectations = [
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/robin-location-routes.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/robin-schedule-states.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 100 * 1024,
+    relativeImagePath: "blog/video-posters/robin-location-guide.webp",
+    expectedDimensions: { height: 720, width: 1280 },
+  },
+] as const;
 
 type PngChunk = Readonly<{
   payload: Buffer;
@@ -176,6 +193,78 @@ function readDecodedPng(relativeImagePath: string): Readonly<{
   return { byteCount: imageBytes.length, height: header.height, width: header.width };
 }
 
+function readVp8WebpDimensions(imagePath: string, imageBytes: Buffer): Readonly<{
+  byteCount: number;
+  height: number;
+  width: number;
+}> {
+  if (imageBytes.length < 20) {
+    throw new Error(
+      `Truncated VP8 WebP header at ${imagePath}. Received byte count: ${imageBytes.length}.`,
+    );
+  }
+
+  if (
+    imageBytes.subarray(0, 4).toString("ascii") !== "RIFF" ||
+    imageBytes.subarray(8, 12).toString("ascii") !== "WEBP" ||
+    imageBytes.subarray(12, 16).toString("ascii") !== "VP8 "
+  ) {
+    throw new Error(`Invalid VP8 WebP image at ${imagePath}.`);
+  }
+
+  const declaredRiffByteCount = imageBytes.readUInt32LE(4) + 8;
+  const declaredPayloadByteCount = imageBytes.readUInt32LE(16);
+  const payloadByteOffset = 20;
+  const payloadEndByteOffset = payloadByteOffset + declaredPayloadByteCount;
+  const paddedPayloadEndByteOffset = payloadEndByteOffset + (declaredPayloadByteCount % 2);
+
+  if (declaredRiffByteCount !== imageBytes.length) {
+    throw new Error(
+      `Invalid RIFF byte count at ${imagePath}. Declared: ${declaredRiffByteCount}; received: ${imageBytes.length}.`,
+    );
+  }
+
+  if (declaredPayloadByteCount <= 10) {
+    throw new Error(
+      `VP8 payload is too short at ${imagePath}. Declared byte count: ${declaredPayloadByteCount}.`,
+    );
+  }
+
+  if (paddedPayloadEndByteOffset !== imageBytes.length) {
+    throw new Error(
+      `Invalid VP8 payload length at ${imagePath}. Declared: ${declaredPayloadByteCount}; received file byte count: ${imageBytes.length}.`,
+    );
+  }
+
+  if (imageBytes.subarray(payloadByteOffset + 3, payloadByteOffset + 6).toString("hex") !== "9d012a") {
+    throw new Error(`Invalid VP8 frame header at ${imagePath}.`);
+  }
+
+  const width = imageBytes.readUInt16LE(payloadByteOffset + 6) & 0x3fff;
+  const height = imageBytes.readUInt16LE(payloadByteOffset + 8) & 0x3fff;
+
+  if (width === 0 || height === 0) {
+    throw new Error(`Invalid VP8 dimensions at ${imagePath}. Received: ${width}x${height}.`);
+  }
+
+  return {
+    byteCount: imageBytes.length,
+    height,
+    width,
+  };
+}
+
+function readWebpDimensions(relativeImagePath: string): Readonly<{
+  byteCount: number;
+  height: number;
+  width: number;
+}> {
+  const imagePath = join(projectRoot, "public", relativeImagePath);
+  const imageBytes = readFileSync(imagePath);
+
+  return readVp8WebpDimensions(imagePath, imageBytes);
+}
+
 function readFirstImageMarkup(markup: string): string {
   const imageMarkup = markup.match(/<img\b[^>]*>/)?.[0];
 
@@ -186,15 +275,43 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships two fully decoded, budget-compliant 16:9 PNG blog covers", () => {
-  const carpenterImage = readDecodedPng("blog/carpenter-stardew-cover.png");
-  const robinImage = readDecodedPng("blog/where-is-robin-stardew-valley-cover.png");
+it("ships budget-compliant WebP covers for both blog identities", () => {
+  const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
+  const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+});
+
+it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
+  const truncatedWebp = Buffer.alloc(30);
+  truncatedWebp.write("RIFF", 0, "ascii");
+  truncatedWebp.writeUInt32LE(22, 4);
+  truncatedWebp.write("WEBP", 8, "ascii");
+  truncatedWebp.write("VP8 ", 12, "ascii");
+  truncatedWebp.writeUInt32LE(10, 16);
+  truncatedWebp.write("\x00\x00\x00\x9d\x01\x2a\x88\x06\xad\x03", 20, "binary");
+
+  expect(() => readVp8WebpDimensions("truncated.webp", truncatedWebp)).toThrow(
+    "VP8 payload",
+  );
+});
+
+it("ships budget-compliant WebP media for the Robin location guide", () => {
+  for (const mediaExpectation of robinArticleMediaExpectations) {
+    const image = readWebpDimensions(mediaExpectation.relativeImagePath);
+
+    expect(image).toMatchObject(mediaExpectation.expectedDimensions);
+    expect(image.width / image.height).toBeCloseTo(16 / 9, 2);
+    expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+
+  expect(
+    existsSync(join(projectRoot, "public/blog/where-is-robin-stardew-valley-cover.png")),
+  ).toBe(false);
 });
 
 it("renders intrinsic cover dimensions and lazily loads only article-card images", () => {

@@ -42,7 +42,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
-  expect(articleMarkup).toContain("Carpenter in Stardew Valley");
+  expect(articleMarkup).toContain("Carpenter Stardew: Which Robin Service Do You Need Today?");
   expect((articleMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
   expect(articleMarkup).not.toContain('href="/en/carpenter-stardew"');
 });
@@ -64,7 +64,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
-  expect(articleMarkup).toContain("罗宾在星露谷物语的哪里");
+  expect(articleMarkup).toContain("罗宾的商店没人？今天去哪里找她");
   expect((articleMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
 });
 

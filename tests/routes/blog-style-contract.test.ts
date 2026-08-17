@@ -57,6 +57,17 @@ it("keeps blog article titles at the full header width", () => {
   ).not.toMatch(/\bmax-width\s*:/);
 });
 
+it("uses an accessible pink for planner links inside blog articles", () => {
+  const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
+  const plannerLinkRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-article] .blog-planner-link",
+  );
+
+  expect(plannerLinkRule).toContain("color: #a3155b;");
+  expect(plannerLinkRule).toContain("text-decoration: underline;");
+});
+
 it("keeps every blog class selector inside a blog scope without planner or footer selectors", () => {
   const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
   const blogSelectorLines = scopedBlogCssBlock

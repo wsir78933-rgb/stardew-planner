@@ -16,8 +16,8 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 
 - [Stardew Valley Planning Guides](https://stardewvalleyplanner.art/blog): Browse practical guides for planning a clearer, more flexible farm.
 - [Planning guide archive](https://stardewvalleyplanner.art/blog/archive): Browse every Stardew Valley planning guide.
-- [Carpenter in Stardew Valley](https://stardewvalleyplanner.art/carpenter-stardew): Find Robin's shop hours, location, and building services before ordering a farm project.
-- [Where Is Robin in Stardew Valley?](https://stardewvalleyplanner.art/where-is-robin-stardew-valley): Find Robin's location, service hours, and the schedule conditions that can change her day.
+- [Carpenter Stardew: Which Robin Service Do You Need Today?](https://stardewvalleyplanner.art/carpenter-stardew): Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.
+- [Robin's Shop Is Empty? Find Her in Stardew Valley Today](https://stardewvalleyplanner.art/where-is-robin-stardew-valley): Learn why Robin leaves the counter, where she goes on Tuesday and Friday, and when rain or farm construction changes the answer today.
 
 ## 简体中文
 
@@ -33,5 +33,5 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 
 - [星露谷农场规划指南](https://stardewvalleyplanner.art/zh/blog): 浏览帮助你更清晰、更灵活规划农场的实用指南。
 - [规划指南归档](https://stardewvalleyplanner.art/zh/blog/archive): 浏览全部星露谷农场规划指南。
-- [星露谷木匠指南](https://stardewvalleyplanner.art/zh/carpenter-stardew): 在安排农场建筑项目前，查看罗宾商店的营业时间、位置和建筑服务。
-- [罗宾在星露谷物语的哪里](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley): 查看罗宾的位置、服务时间，以及会改变她每日行程的条件。
+- [星露谷木匠：今天该选罗宾的哪项服务？](https://stardewvalleyplanner.art/zh/carpenter-stardew): 根据购买、建造、升级或移动的实际需求，选择对应菜单并确认罗宾木匠商店能接单。
+- [罗宾的商店没人？今天去哪里找她](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley): 了解罗宾为什么会离开柜台、周二和周五会去哪里，以及下雨或农场施工会如何改变她当天的行程。

@@ -846,6 +846,11 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   text-underline-offset: 0.2em;
 }
 
+[data-blog-article] .blog-planner-link {
+  color: #a3155b;
+  text-decoration: underline;
+}
+
 [data-blog-page] a:focus-visible,
 [data-blog-page] button:focus-visible,
 [data-blog-page] input:focus-visible,

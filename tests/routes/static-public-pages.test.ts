@@ -164,12 +164,12 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "Illustration of Robin's mountain workshop with a farm-building plan",
       },
       {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "Mountain path leading toward Robin's carpenter workshop",
       },
     ],
   },
@@ -182,40 +182,40 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "Illustration of Robin's mountain workshop with a farm-building plan",
       },
       {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "Mountain path leading toward Robin's carpenter workshop",
       },
     ],
   },
   {
     pathname: "/carpenter-stardew",
     staticPageFile: "carpenter-stardew.html",
-    heading: "Carpenter in Stardew Valley: Robin's Hours and Services",
+    heading: "Carpenter Stardew: Which Robin Service Do You Need Today?",
     documentLanguage: "en",
     schemaType: "Article",
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "Illustration of Robin's mountain workshop with a farm-building plan",
       },
     ],
   },
   {
     pathname: "/where-is-robin-stardew-valley",
     staticPageFile: "where-is-robin-stardew-valley.html",
-    heading: "Where Is Robin in Stardew Valley? Location and Hours",
+    heading: "Robin's Shop Is Empty? Find Her in Stardew Valley Today",
     documentLanguage: "en",
     schemaType: "Article",
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "Mountain path leading toward Robin's carpenter workshop",
       },
     ],
   },
@@ -228,12 +228,12 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "松林山脚下木工工坊的原创插画",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "罗宾山间木匠工坊与农场建筑规划示意插画",
       },
       {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "从农场通往山间工坊的小路原创插画",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "通往罗宾山间木匠工坊的暖色山路插画",
       },
     ],
   },
@@ -246,40 +246,40 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "松林山脚下木工工坊的原创插画",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "罗宾山间木匠工坊与农场建筑规划示意插画",
       },
       {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "从农场通往山间工坊的小路原创插画",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "通往罗宾山间木匠工坊的暖色山路插画",
       },
     ],
   },
   {
     pathname: "/zh/carpenter-stardew",
     staticPageFile: "zh/carpenter-stardew.html",
-    heading: "星露谷木匠罗宾：营业时间、建筑服务与下单规划",
+    heading: "星露谷木匠：今天该选罗宾的哪项服务？",
     documentLanguage: "zh-CN",
     schemaType: "Article",
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "松林山脚下木工工坊的原创插画",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "罗宾山间木匠工坊与农场建筑规划示意插画",
       },
     ],
   },
   {
     pathname: "/zh/where-is-robin-stardew-valley",
     staticPageFile: "zh/where-is-robin-stardew-valley.html",
-    heading: "罗宾在星露谷物语的哪里？位置、营业时间与特殊行程",
+    heading: "罗宾的商店没人？今天去哪里找她",
     documentLanguage: "zh-CN",
     schemaType: "Article",
     shouldIndex: true,
     coverImages: [
       {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "从农场通往山间工坊的小路原创插画",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "通往罗宾山间木匠工坊的暖色山路插画",
       },
     ],
   },

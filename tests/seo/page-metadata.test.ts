@@ -74,16 +74,16 @@ it("resolves a route-specific social image against the public site URL", () => {
   const metadata = createPublicPageMetadata({
     locale: "en",
     canonicalPath: "/carpenter-stardew",
-    title: "Carpenter in Stardew Valley",
-    description: "Find Robin's building services.",
-    socialImagePath: "/blog/carpenter-stardew-cover.png",
+    title: "Carpenter Stardew: Which Robin Service Do You Need Today?",
+    description: "Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.",
+    socialImagePath: "/blog/carpenter-stardew-cover.webp",
   });
 
   expect(metadata.openGraph).toMatchObject({
-    images: ["https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.png"],
+    images: ["https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.webp"],
   });
   expect(metadata.twitter).toMatchObject({
-    images: ["https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.png"],
+    images: ["https://stardewvalleyplanner.art/blog/carpenter-stardew-cover.webp"],
   });
 });
 

@@ -45,30 +45,30 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
   en: [
     {
       slug: "carpenter-stardew",
-      title: "Carpenter in Stardew Valley: Robin's Hours and Services",
+      title: "Carpenter Stardew: Which Robin Service Do You Need Today?",
       description:
-        "Find Robin's shop, check its real service hours, and use a practical checklist before placing or moving farm buildings.",
+        "Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 8,
       coverImage: {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "Illustration of a timber workshop beneath pine-covered mountains",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "Illustration of Robin's mountain workshop with a farm-building plan",
       },
       featured: true,
       Content: CarpenterStardewEnglishArticle,
     },
     {
       slug: "where-is-robin-stardew-valley",
-      title: "Where Is Robin in Stardew Valley? Location and Hours",
+      title: "Robin's Shop Is Empty? Find Her in Stardew Valley Today",
       description:
-        "Find Robin at 24 Mountain Road, check her normal hours and special schedules, and know when the Carpenter's Shop counter is open.",
+        "Learn why Robin leaves the counter, where she goes on Tuesday and Friday, and when rain or farm construction changes the answer today.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
-      readTimeMinutes: 7,
+      readTimeMinutes: 8,
       coverImage: {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "Illustration of a path leading from a farm toward a mountain workshop",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "Mountain path leading toward Robin's carpenter workshop",
       },
       featured: true,
       Content: WhereIsRobinEnglishArticle,
@@ -77,28 +77,29 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
   "zh-CN": [
     {
       slug: "carpenter-stardew",
-      title: "星露谷木匠罗宾：营业时间、建筑服务与下单规划",
-      description: "找到罗宾的木匠商店，核对真实营业时间，并在放置或搬动农场建筑前完成占地规划。",
+      title: "星露谷木匠：今天该选罗宾的哪项服务？",
+      description: "根据购买、建造、升级或移动的实际需求，选择对应菜单并确认罗宾木匠商店能接单。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 8,
       coverImage: {
-        src: "/blog/carpenter-stardew-cover.png",
-        alt: "松林山脚下木工工坊的原创插画",
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "罗宾山间木匠工坊与农场建筑规划示意插画",
       },
       featured: true,
       Content: CarpenterStardewChineseArticle,
     },
     {
       slug: "where-is-robin-stardew-valley",
-      title: "罗宾在星露谷物语的哪里？位置、营业时间与特殊行程",
-      description: "前往山区的 24 Mountain Road 找罗宾，并确认木匠商店在普通日期和特殊行程中的营业状态。",
+      title: "罗宾的商店没人？今天去哪里找她",
+      description:
+        "了解罗宾为什么会离开柜台、周二和周五会去哪里，以及下雨或农场施工会如何改变她当天的行程。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
-      readTimeMinutes: 7,
+      readTimeMinutes: 8,
       coverImage: {
-        src: "/blog/where-is-robin-stardew-valley-cover.png",
-        alt: "从农场通往山间工坊的小路原创插画",
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "通往罗宾山间木匠工坊的暖色山路插画",
       },
       featured: true,
       Content: WhereIsRobinChineseArticle,

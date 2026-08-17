@@ -78,13 +78,32 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
   expect(getBlogPostBySlug("en", "carpenter-stardew")?.slug).toBe(
     "carpenter-stardew",
   );
+  expect(englishPosts[0]).toMatchObject({
+    title: "Carpenter Stardew: Which Robin Service Do You Need Today?",
+    description:
+      "Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.",
+  });
+  expect(chinesePosts[0]).toMatchObject({
+    title: "星露谷木匠：今天该选罗宾的哪项服务？",
+    description: "根据购买、建造、升级或移动的实际需求，选择对应菜单并确认罗宾木匠商店能接单。",
+  });
+  expect(englishPosts[1]).toMatchObject({
+    title: "Robin's Shop Is Empty? Find Her in Stardew Valley Today",
+    description:
+      "Learn why Robin leaves the counter, where she goes on Tuesday and Friday, and when rain or farm construction changes the answer today.",
+  });
+  expect(chinesePosts[1]).toMatchObject({
+    title: "罗宾的商店没人？今天去哪里找她",
+    description:
+      "了解罗宾为什么会离开柜台、周二和周五会去哪里，以及下雨或农场施工会如何改变她当天的行程。",
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
 it("binds every localized post to its own original blog cover", () => {
   const expectedCoverPaths = {
-    "carpenter-stardew": "/blog/carpenter-stardew-cover.png",
-    "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.png",
+    "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
+    "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {

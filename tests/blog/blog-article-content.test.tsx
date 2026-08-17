@@ -114,17 +114,16 @@ it("does not render the AgentHunter friend link in either Robin-guide locale", (
 it("renders sourced English and Chinese carpenter guides with matching section counts", () => {
   const englishArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewEnglishArticle),
-    requiredPhrases: ["24 Mountain Road", "09:00", "1.6.15"],
+    requiredPhrases: ["carpenter stardew", "24 Mountain Road", "2026-08-16"],
     scheduleBoundaryPhrases: [
-      "Friday service ends at 16:00.",
-      "Tuesday is normally closed, while rain can change the schedule.",
+      "Tuesday is normally a closed-shop day, but rain keeps Robin at the counter.",
+      "On Friday, treat 4:00 PM as the cutoff.",
     ],
     constructionClosurePhrase:
-      "If Robin is constructing a new farm building, she is working at your farm and the shop is closed.",
+      "If Robin is working on a building at your farm, the shop is closed for that workday.",
     houseCounterDistinctionPhrase:
-      "Entering the building is not proof that you can place an order.",
-    planningInformationGainPhrase:
-      "Moving a building is free, takes effect immediately, and keeps its contents inside.",
+      "Being able to walk inside does not mean she can sell, build, or start an upgrade.",
+    planningInformationGainPhrase: "The move is free, applies immediately, and carries the building contents with it.",
     plannerPath: "/",
     selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
@@ -136,15 +135,15 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   };
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewChineseArticle),
-    requiredPhrases: ["24 Mountain Road", "09:00", "1.6.15"],
+    requiredPhrases: ["星露谷木匠", "24 Mountain Road", "2026 年 8 月 16 日"],
     scheduleBoundaryPhrases: [
-      "周五会在 16:00 结束服务。",
-      /周二通常\s*不营业，但下雨会改变罗宾的日程/,
+      "周二通常不营业，但下雨时罗宾会留在柜台。",
+      "周五则以 16:00 为截止时间。",
     ],
     constructionClosurePhrase:
-      "如果罗宾正在建造新的农场建筑，她会在你的农场工作，商店也会关闭。",
-    houseCounterDistinctionPhrase: "房子能进入，不等于柜台一定提供服务；",
-    planningInformationGainPhrase: "搬动建筑免费且立即生效，建筑内的物品会跟着一起移动。",
+      "如果罗宾正在你的农场施工，木匠商店当天就会关闭。",
+    houseCounterDistinctionPhrase: "能走进房子，不等于她能卖东西、接建筑订单或开始升级。",
+    planningInformationGainPhrase: "移动免费、立即生效，建筑里的物品也会一起过去。",
     plannerPath: "/zh",
     selectedFarmPlannerPath: "/zh?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
@@ -157,6 +156,26 @@ it("renders sourced English and Chinese carpenter guides with matching section c
 
   assertArticleContract(englishArticle);
   assertArticleContract(chineseArticle);
+  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
+  expect(chineseArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
+  expect(englishArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/">',
+  );
+  expect(englishArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/?farmType=meadowlands">',
+  );
+  expect(chineseArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/zh">',
+  );
+  expect(chineseArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/zh?farmType=meadowlands">',
+  );
+  expect(englishArticle.markup).not.toContain(
+    '<a class="blog-planner-link" href="https://wiki.stardewvalley.net/',
+  );
+  expect(chineseArticle.markup).not.toContain(
+    '<a class="blog-planner-link" href="https://wiki.stardewvalley.net/',
+  );
   expect(countSecondLevelSections(englishArticle.markup)).toBe(
     countSecondLevelSections(chineseArticle.markup),
   );
@@ -169,17 +188,22 @@ it("renders sourced English and Chinese carpenter guides with matching section c
 it("renders sourced English and Chinese Robin-location guides with matching section counts", () => {
   const englishArticle: ArticleFixture = {
     markup: renderArticle(WhereIsRobinEnglishArticle),
-    requiredPhrases: ["24 Mountain Road", "Friday", "1.6.15"],
+    requiredPhrases: [
+      "where is Robin in Stardew Valley",
+      "24 Mountain Road",
+      "2026-08-17",
+      "1.6.15",
+    ],
     scheduleBoundaryPhrases: [
-      "Tuesday is normally a closed-shop day, while rain can change that routine.",
-      "Friday, a visit after 16:00 is simply too late for regular service.",
+      "Ordinary rain keeps her home and can open the counter on a Tuesday.",
+      "Friday service ends at 4:00 PM.",
     ],
     constructionClosurePhrase:
-      "When Robin is constructing a new farm building, she is at the farm and the shop is closed.",
+      "If Robin is working at a construction site, she is there and the Carpenter&#x27;s Shop is closed.",
     houseCounterDistinctionPhrase:
-      "seeing the building open does not guarantee that Robin can sell or start an order.",
+      "Walking inside does not mean Robin can sell supplies, accept a building order, move a farm building, or begin a farmhouse upgrade.",
     planningInformationGainPhrase:
-      "Finding Robin and reaching an open service counter are two different problems.",
+      "Use this order because a higher-priority schedule can replace the ordinary weekly routine:",
     plannerPath: "/",
     selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
@@ -191,15 +215,22 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
   };
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(WhereIsRobinChineseArticle),
-    requiredPhrases: ["24 Mountain Road", "周五", "1.6.15"],
+    requiredPhrases: [
+      "星露谷物语罗宾在哪里",
+      "24 Mountain Road",
+      "2026 年 8 月 17 日",
+      "1.6.15",
+    ],
     scheduleBoundaryPhrases: [
-      "周二通常是商店关闭日，但下雨也可能改变这套日程",
-      "周五 16:00 之后则已经超过正常服务时间。",
+      "普通雨天会让她留在家里，周二的柜台也可能因此营业。",
+      "周五的服务在 16:00 结束。",
     ],
     constructionClosurePhrase:
-      "罗宾正在建造新的农场建筑时，会在玩家农场施工，木匠商店也会关闭。",
-    houseCounterDistinctionPhrase: "房子开着，不代表罗宾可以出售物品或开始订单。",
-    planningInformationGainPhrase: "找到罗宾和找到正在营业的柜台，是两个不同的问题。",
+      "如果罗宾正在你的农场工地施工，她就在农场，木匠商店也会关闭。",
+    houseCounterDistinctionPhrase:
+      "能走进房子，不代表罗宾能卖材料、接建筑订单、移动建筑或开始农舍升级。",
+    planningInformationGainPhrase:
+      "按这个顺序检查，因为优先级更高的行程会覆盖普通一周的安排：",
     plannerPath: "/zh",
     selectedFarmPlannerPath: "/zh?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
@@ -212,13 +243,33 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
 
   assertArticleContract(englishArticle);
   assertArticleContract(chineseArticle);
+  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
+  expect(chineseArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
+  expect(englishArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/">',
+  );
+  expect(englishArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/?farmType=meadowlands">',
+  );
+  expect(chineseArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/zh">',
+  );
+  expect(chineseArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/zh?farmType=meadowlands">',
+  );
+  expect(englishArticle.markup).not.toContain(
+    '<a class="blog-planner-link" href="https://wiki.stardewvalley.net/',
+  );
+  expect(chineseArticle.markup).not.toContain(
+    '<a class="blog-planner-link" href="https://wiki.stardewvalley.net/',
+  );
   expect(countSecondLevelSections(englishArticle.markup)).toBe(
     countSecondLevelSections(chineseArticle.markup),
   );
-  expect(englishArticle.markup.length).toBeGreaterThan(2800);
-  expect(chineseArticle.markup.length).toBeGreaterThan(1200);
+  expect(englishArticle.markup.length).toBeGreaterThan(5200);
+  expect(chineseArticle.markup.length).toBeGreaterThan(2600);
   expect(getOpeningParagraph(englishArticle.markup)).toContain("24 Mountain Road");
-  expect(getOpeningParagraph(englishArticle.markup)).toContain("09:00–17:00");
+  expect(getOpeningParagraph(englishArticle.markup)).toContain("9:00 AM to 5:00 PM");
   expect(getOpeningParagraph(chineseArticle.markup)).toContain("24 Mountain Road");
   expect(getOpeningParagraph(chineseArticle.markup)).toContain("09:00–17:00");
 });

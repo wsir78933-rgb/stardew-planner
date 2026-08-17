@@ -13,10 +13,13 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain("browser-local projects");
   expect(llmsText).toContain("浏览器本地项目");
   expect(llmsText).toContain(
-    "[Carpenter in Stardew Valley](https://stardewvalleyplanner.art/carpenter-stardew)",
+    "[Carpenter Stardew: Which Robin Service Do You Need Today?](https://stardewvalleyplanner.art/carpenter-stardew)",
   );
   expect(llmsText).toContain(
-    "[罗宾在星露谷物语的哪里](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley)",
+    "[Robin's Shop Is Empty? Find Her in Stardew Valley Today](https://stardewvalleyplanner.art/where-is-robin-stardew-valley)",
+  );
+  expect(llmsText).toContain(
+    "[罗宾的商店没人？今天去哪里找她](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley)",
   );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {

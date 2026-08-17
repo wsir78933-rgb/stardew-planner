@@ -151,7 +151,7 @@ it("keeps the page-level heading singular across hero, discovery, archive, and a
   expect((archiveMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
   expect((articleMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
   expect(articleMarkup).toContain(
-    'alt="Illustration of a timber workshop beneath pine-covered mountains"',
+    'alt="Illustration of Robin&#x27;s mountain workshop with a farm-building plan"',
   );
 });
 

@@ -4,34 +4,64 @@ export function WhereIsRobinEnglishArticle() {
   return (
     <article>
       <p>
-        Robin lives at 24 Mountain Road in The Mountain, north of Pelican Town. Her
-        home is also the Carpenter&apos;s Shop. On most days, she serves the counter
-        from 09:00–17:00. The shop is normally closed on Tuesday, and Friday service
-        ends at 16:00. If Robin is building something on your farm, she works there
-        and closes the shop for the day.
+        If you&apos;re asking where is Robin in Stardew Valley, start at the
+        Carpenter&apos;s Shop at 24 Mountain Road in The Mountain, north of Pelican
+        Town. Robin normally serves the counter from 9:00 AM to 5:00 PM. Tuesday
+        is usually closed, and Friday service ends at 4:00 PM. If she is
+        constructing a building on your farm, the shop closes for that workday.
       </p>
       <p>
-        That is the reliable starting point for Stardew Valley 1.6.15. Weather,
-        festivals, story progress, and a few special dates can move her elsewhere.
+        The address is simple; knowing whether Robin can help you is the part
+        that saves a wasted trip. Her construction work, festivals, weather,
+        weekday, and story progress can replace the routine you expected.
       </p>
 
-      <h2>Start at 24 Mountain Road</h2>
+      <h2>Where is Robin right now? Use this 15-second check</h2>
       <p>
-        The quickest route from the farm uses the Backwoods exit along the north edge
-        of the farm. Follow the path east into The Mountain, then take the stairs down
-        to Robin&apos;s house. From Pelican Town, walk north along the path beside the
-        Community Center.
+        Use this order because a higher-priority schedule can replace the
+        ordinary weekly routine:
+      </p>
+      <ol>
+        <li>
+          Look at your farm. If Robin is working at a construction site, she is
+          there and the Carpenter&apos;s Shop is closed.
+        </li>
+        <li>
+          Check the calendar. Festivals close the shop, while Summer 18 sends
+          Robin to Harvey&apos;s Clinic.
+        </li>
+        <li>
+          Check the weather. Ordinary rain keeps her home and can open the
+          counter on a Tuesday.
+        </li>
+        <li>
+          Check the weekday and time. Tuesday is normally closed, and Friday
+          service ends at 4:00 PM.
+        </li>
+        <li>
+          If none of those conditions applies, go to 24 Mountain Road and look
+          for Robin behind the counter during regular service hours.
+        </li>
+      </ol>
+      <p>
+        This check is for shop service. If you only need to speak to Robin for a
+        gift or quest, you may still find her away from the counter.
+      </p>
+
+      <h2>How to reach 24 Mountain Road</h2>
+      <p>
+        From the farm, use the north exit into the Backwoods. Follow the path
+        east into The Mountain, then take the steps down toward the large timber
+        house. This route avoids crossing the center of Pelican Town.
       </p>
       <p>
-        The building is both a family home and a business. Demetrius, Maru, and
-        Sebastian live there with Robin. It stays accessible from 09:00–20:00, even
-        when the shop itself is closed. That difference explains a common
-        frustration: seeing the building open does not guarantee that Robin can sell
-        or start an order.
+        From town, walk north along the path beside the Community Center. Both
+        approaches end at the same building: Robin&apos;s family home and the
+        Carpenter&apos;s Shop share one address.
       </p>
       <figure className="blog-article-media">
         <img
-          alt="Two routes leading from the farm and Pelican Town to the mountain carpenter workshop"
+          alt="Two routes from the farm and Pelican Town to Robin's mountain workshop"
           decoding="async"
           height="941"
           loading="lazy"
@@ -39,64 +69,53 @@ export function WhereIsRobinEnglishArticle() {
           width="1672"
         />
         <figcaption>
-          Both the farm&apos;s north exit and the path beside the Community Center lead
-          to Robin&apos;s workshop in The Mountain.
+          The farm&apos;s north exit and the Community Center path both lead to
+          Robin&apos;s workshop in The Mountain.
         </figcaption>
       </figure>
 
-      <h2>Robin&apos;s normal week</h2>
-      <h3>Most days</h3>
+      <h2>Finding Robin and using the shop are different</h2>
       <p>
-        Robin walks to the shop counter in the morning and serves customers from
-        09:00–17:00. Visit during that window to buy shop items, order a building or
-        farmhouse upgrade, or use the controls for an existing building.
+        The house is normally accessible from 9:00 AM to 8:00 PM, but that is
+        not the service schedule. Walking inside does not mean Robin can sell
+        supplies, accept a building order, move a farm building, or begin a
+        farmhouse upgrade.
+      </p>
+      <p>
+        The distinction matters on Tuesday and after Friday&apos;s early close. You
+        can also meet Robin during an exercise group, at the Saloon, or at an
+        event without gaining access to the construction menu. If your task
+        requires the shop, judge the trip by counter hours rather than door
+        hours.
       </p>
 
-      <h3>Tuesday</h3>
+      <h2>The schedule changes that cause most wasted trips</h2>
+      <h3>Construction replaces the shop day</h3>
       <p>
-        Tuesday is normally a closed-shop day, while rain can change that routine. In
-        ordinary weather, Robin leaves home at 09:30 for the exercise group at
-        Pierre&apos;s General Store. She exercises from 13:00–16:00, talks there for a
-        while, and heads home at 18:00.
-      </p>
-      <p>
-        Rain overrides that Tuesday routine. Robin stays home and works at the
-        counter, so checking the weather matters more than memorizing Tuesday as an
-        absolute closed day.
+        When Robin is building on your farm, she spends the day at the worksite
+        and the shop is closed. Check the active build before assuming an empty
+        counter is a bug. A normal Tuesday does not interrupt construction that
+        has already been scheduled, although a festival can delay the work.
       </p>
 
-      <h3>Friday</h3>
+      <h3>Festivals and special dates override the normal week</h3>
       <p>
-        Robin works at the counter until 16:00, then leaves for the Stardrop Saloon
-        with Demetrius. Friday, a visit after 16:00 is simply too late for regular
-        service. Go earlier if the trip involves a building order rather than a
-        social visit.
+        The shop closes on festival days. Summer 18 is another full closure
+        because Robin visits Harvey&apos;s Clinic. The first Green Rain event is a
+        special case too: she stays in Sebastian&apos;s room instead of following
+        the ordinary rainy-day routine.
       </p>
 
-      <h2>Check special schedules in the right order</h2>
-      <h3>Look at the farm first</h3>
+      <h3>Rain can make Tuesday useful</h3>
       <p>
-        An active construction job is the fastest explanation for an empty shop. When
-        Robin is constructing a new farm building, she is at the farm and the shop is
-        closed. Festivals can interrupt the work and push completion back, but an
-        ordinary Tuesday does not stop an active job.
-      </p>
-
-      <h3>Check weather and the calendar</h3>
-      <p>
-        Rain sends Robin to her home schedule and can open the Tuesday counter. The
-        first Green Rain event is different: Robin stays in Sebastian&apos;s room all
-        day. On Summer 18, she leaves for Harvey&apos;s Clinic in the morning, and the
-        shop is closed. Regular festival days close the shop as well.
-      </p>
-      <p>
-        Winter 16 changes her evening rather than the normal workday; after the
-        counter closes, she goes to the Night Market. Once the Community Center is
-        restored, she may spend Monday evening there after work.
+        In ordinary weather, Robin leaves for the exercise group at
+        Pierre&apos;s General Store on Tuesday. Ordinary rain keeps her at home and
+        can put her behind the counter instead. Weather is therefore part of the
+        Tuesday answer, not a footnote.
       </p>
       <figure className="blog-article-media">
         <img
-          alt="Four visual states for Robin working at the counter, exercising, visiting the saloon, and building on the farm"
+          alt="Four service states showing Robin at the counter, away, back in rain, and building on the farm"
           decoding="async"
           height="941"
           loading="lazy"
@@ -104,56 +123,65 @@ export function WhereIsRobinEnglishArticle() {
           width="1672"
         />
         <figcaption>
-          Counter service, Tuesday exercise, Friday evening, and farm construction
-          are separate states; finding Robin does not always mean the shop is open.
+          Counter service, a regular Tuesday, a rainy Tuesday, and farm
+          construction lead to four different answers.
         </figcaption>
       </figure>
 
-      <h3>Check unlocked travel</h3>
+      <h3>Unlocked travel can replace an ordinary route</h3>
       <p>
-        The Island Resort can replace Robin&apos;s ordinary Tuesday routine after it
-        opens. During the Desert Festival, she may travel to Calico Desert as a vendor
-        or spend time near the Adventurer&apos;s Guild challenge booth. These are
-        progression-dependent exceptions, so they only matter after the related area
-        or event is available.
+        After the Island Resort is available, Robin may travel there on a
+        Tuesday. The Desert Festival can also take her to Calico Desert. These
+        exceptions only matter after you unlock the related destination or
+        event, which is why a short priority check is more reliable than one
+        fixed weekly timetable.
       </p>
 
-      <h2>Finding Robin is not the same as using the shop</h2>
+      <h2>Match the location to your task</h2>
       <p>
-        Finding Robin and reaching an open service counter are two different
-        problems. You can meet her at Pierre&apos;s on Tuesday, at the Saloon on Friday
-        evening, or at a festival, but none of those locations lets you commission a
-        barn or move a shed.
+        For wood, stone, furniture, farm buildings, farmhouse upgrades, or
+        building moves, you need Robin at the service counter. For a gift,
+        conversation, or delivery quest, finding her elsewhere may be enough.
+        Decide which result you need before chasing her across the map.
       </p>
       <p>
-        The reverse can also be confusing. The house may be open while the counter is
-        unavailable. When the goal is construction, use the service window rather
-        than the door hours. If she is standing away from the counter, the shop action
-        you need may have to wait for her next work period.
+        A Telephone can reduce uncertainty once you own one. Calling the
+        Carpenter&apos;s Shop lets you check that day&apos;s hours, shop stock, and
+        building or farmhouse-upgrade costs. It does not place an order, but it
+        can tell you whether the trip is worth making and what to bring.
       </p>
 
-      <h2>Plan the building before the trip</h2>
+      <h2>Plan the building before you leave</h2>
       <p>
-        A visit to Robin often ends at the construction screen, where there is little
-        room for improvising a whole farm layout. Decide where the door, path, fences,
-        and future upgrade space belong before you leave.
+        If the trip is for construction, decide the footprint before opening
+        Robin&apos;s building menu. Leave room for doors, paths, fences, animal
+        movement, and later upgrades so the placement screen becomes a quick
+        confirmation instead of a farm-wide redesign.
       </p>
       <p>
-        Use the <a href="/">Stardew Valley Planner</a> to test the footprint beside
-        crops, storage, and regular travel routes. For an animal-focused layout,
-        <a href="/?farmType=meadowlands"> open Meadowlands directly in the planner</a>.
-        For the placement and move rules themselves, read the
-        <a href="/carpenter-stardew"> Stardew Valley carpenter guide</a>.
+        Open the{` `}
+        <a className="blog-planner-link" href="/">
+          Stardew Valley Planner to test the building footprint
+        </a>
+        {` `}beside crops, storage, and your daily routes. For an animal-focused
+        layout, you can{` `}
+        <a className="blog-planner-link" href="/?farmType=meadowlands">
+          open the Meadowlands map directly
+        </a>
+        . The planner helps with layout; it does not track Robin, read your game
+        calendar, or know today&apos;s weather.
       </p>
-        <p>
-        Once the destination is clear, check the day, weather, and current
-        construction status. Then make the trip to 24 Mountain Road.
+      <p>
+        For building placement, construction, upgrade, and move rules, continue
+        with the <a href="/carpenter-stardew">Stardew Valley carpenter guide</a>.
+        Once the layout is settled, run the schedule check above and head to 24
+        Mountain Road.
       </p>
 
       <h2>Watch the route to Robin&apos;s shop</h2>
       <p>
-        This short location guide shows the mountain route, Robin&apos;s workshop, and
-        the service counter. The video loads only after you press play.
+        This short guide shows the route into The Mountain and where the
+        Carpenter&apos;s Shop sits. The video loads only after you choose to play it.
       </p>
       <BlogYouTubeVideo
         playLabel="Play the Robin location guide"
@@ -164,13 +192,17 @@ export function WhereIsRobinEnglishArticle() {
 
       <h2>Sources and version boundary</h2>
       <p>
-        This guide covers Stardew Valley 1.6.15. Robin&apos;s address, weekly routine,
-        weather schedule, special dates, and shop closures were checked against the
-        official <a href="https://wiki.stardewvalley.net/Robin">Robin</a>,
-        <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop"> Carpenter&apos;s Shop</a>,
-        and <a href="https://wiki.stardewvalley.net/Shop_Schedules">Shop Schedules</a>
-        pages on the Stardew Valley Wiki. Recheck those sources after a game update or
-        when a mod changes NPC schedules.
+        This page was checked on 2026-08-17 against Stardew Valley 1.6.15. The
+        address, service hours, weather rules, construction closure, and special
+        schedules were verified with the official Stardew Valley Wiki pages for{` `}
+        <a href="https://wiki.stardewvalley.net/Robin">Robin</a>,{` `}
+        <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">
+          Carpenter&apos;s Shop
+        </a>
+        , <a href="https://wiki.stardewvalley.net/Shop_Schedules">Shop Schedules</a>,
+        and <a href="https://wiki.stardewvalley.net/Telephone">Telephone</a>.
+        Recheck those sources after a game update or when a mod changes NPC
+        schedules.
       </p>
     </article>
   );
