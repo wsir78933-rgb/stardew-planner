@@ -68,6 +68,31 @@ it("uses an accessible pink for planner links inside blog articles", () => {
   expect(plannerLinkRule).toContain("text-decoration: underline;");
 });
 
+it("keeps article tables scrollable and name rosters readable without page overflow", () => {
+  const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
+  const tableScrollRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-article] .blog-table-scroll",
+  );
+  const dataTableRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-article] .blog-data-table",
+  );
+  const nameGridRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-article] .blog-name-grid",
+  );
+
+  expect(tableScrollRule).toContain("overflow-x: auto;");
+  expect(dataTableRule).toContain("border-collapse: collapse;");
+  expect(dataTableRule).toContain("width: 100%;");
+  expect(nameGridRule).toContain("display: grid;");
+  expect(nameGridRule).toMatch(/grid-template-columns:\s*repeat\(auto-fit,/);
+  expect(nameGridRule).toContain("list-style: none;");
+  expect(stylesheet).toMatch(/\.blog-data-table th,[\s\S]*\.blog-data-table td[\s\S]*padding:/);
+  expect(stylesheet).toContain(".blog-table-scroll:focus-visible");
+});
+
 it("keeps every blog class selector inside a blog scope without planner or footer selectors", () => {
   const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
   const blogSelectorLines = scopedBlogCssBlock

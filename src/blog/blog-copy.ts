@@ -84,10 +84,12 @@ const localizedBlogPostPaths: Readonly<
   en: {
     "carpenter-stardew": "/carpenter-stardew",
     "where-is-robin-stardew-valley": "/where-is-robin-stardew-valley",
+    "stardew-valley-npc": "/stardew-valley-npc",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
     "where-is-robin-stardew-valley": "/zh/where-is-robin-stardew-valley",
+    "stardew-valley-npc": "/zh/stardew-valley-npc",
   },
 };
 

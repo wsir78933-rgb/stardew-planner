@@ -171,6 +171,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/where-is-robin-stardew-valley-cover.webp",
         alt: "Mountain path leading toward Robin's carpenter workshop",
       },
+      {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
+      },
     ],
   },
   {
@@ -188,6 +192,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-robin-stardew-valley-cover.webp",
         alt: "Mountain path leading toward Robin's carpenter workshop",
+      },
+      {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
       },
     ],
   },
@@ -220,6 +228,20 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/stardew-valley-npc",
+    staticPageFile: "stardew-valley-npc.html",
+    heading: "Meet Every Stardew Valley NPC in One Practical Guide",
+    documentLanguage: "en",
+    schemaType: "Article",
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
+      },
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -234,6 +256,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-robin-stardew-valley-cover.webp",
         alt: "通往罗宾山间木匠工坊的暖色山路插画",
+      },
+      {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
       },
     ],
   },
@@ -252,6 +278,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-robin-stardew-valley-cover.webp",
         alt: "通往罗宾山间木匠工坊的暖色山路插画",
+      },
+      {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
       },
     ],
   },
@@ -280,6 +310,20 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-robin-stardew-valley-cover.webp",
         alt: "通往罗宾山间木匠工坊的暖色山路插画",
+      },
+    ],
+  },
+  {
+    pathname: "/zh/stardew-valley-npc",
+    staticPageFile: "zh/stardew-valley-npc.html",
+    heading: "一篇实用指南认识星露谷每位 NPC",
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
       },
     ],
   },

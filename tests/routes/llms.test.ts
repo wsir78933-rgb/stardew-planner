@@ -21,6 +21,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[罗宾的商店没人？今天去哪里找她](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley)",
   );
+  expect(llmsText).toContain(
+    "[Meet Every Stardew Valley NPC in One Practical Guide](https://stardewvalleyplanner.art/stardew-valley-npc)",
+  );
+  expect(llmsText).toContain(
+    "[一篇实用指南认识星露谷每位 NPC](https://stardewvalleyplanner.art/zh/stardew-valley-npc)",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

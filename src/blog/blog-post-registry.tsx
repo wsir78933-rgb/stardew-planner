@@ -4,6 +4,8 @@ import { CarpenterStardewEnglishArticle } from "./articles/carpenter-stardew.en"
 import { CarpenterStardewChineseArticle } from "./articles/carpenter-stardew.zh";
 import { WhereIsRobinEnglishArticle } from "./articles/where-is-robin-stardew-valley.en";
 import { WhereIsRobinChineseArticle } from "./articles/where-is-robin-stardew-valley.zh";
+import { StardewValleyNpcEnglishArticle } from "./articles/stardew-valley-npc.en";
+import { StardewValleyNpcChineseArticle } from "./articles/stardew-valley-npc.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -73,6 +75,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: WhereIsRobinEnglishArticle,
     },
+    {
+      slug: "stardew-valley-npc",
+      title: "Meet Every Stardew Valley NPC in One Practical Guide",
+      description:
+        "Meet the current Stardew Valley cast without opening dozens of profiles. Compare friendship groups, key services, and the NPCs new farmers need first.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
+      },
+      featured: true,
+      Content: StardewValleyNpcEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -103,6 +120,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: WhereIsRobinChineseArticle,
+    },
+    {
+      slug: "stardew-valley-npc",
+      title: "一篇实用指南认识星露谷每位 NPC",
+      description:
+        "无需打开几十个角色页面，就能了解当前星露谷角色、好感分类、关键服务，以及新农民最该优先认识的人。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
+      },
+      featured: true,
+      Content: StardewValleyNpcChineseArticle,
     },
   ],
 };

@@ -1,6 +1,7 @@
 export const blogPostSlugs = [
   "carpenter-stardew",
   "where-is-robin-stardew-valley",
+  "stardew-valley-npc",
 ] as const;
 
 export type BlogPostSlug = (typeof blogPostSlugs)[number];

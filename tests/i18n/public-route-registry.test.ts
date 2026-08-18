@@ -9,7 +9,7 @@ import {
 import { getPublicPageCopy } from "../../src/i18n/public-page-content";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(8);
+  expect(canonicalPublicPaths).toHaveLength(9);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -32,8 +32,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/where-is-robin-stardew-valley")).toBe(
     "/zh/where-is-robin-stardew-valley",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(16);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(14);
+  expect(getLocalizedPublicPath("en", "/stardew-valley-npc")).toBe(
+    "/stardew-valley-npc",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/stardew-valley-npc")).toBe(
+    "/zh/stardew-valley-npc",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(18);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(16);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -43,6 +49,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/blog");
   expect(indexablePathnames).toContain("/carpenter-stardew");
   expect(indexablePathnames).toContain("/zh/carpenter-stardew");
+  expect(indexablePathnames).toContain("/stardew-valley-npc");
+  expect(indexablePathnames).toContain("/zh/stardew-valley-npc");
 });
 
 it("registers the direct-entry blog routes without adding them to the public navigation", () => {
@@ -52,6 +60,7 @@ it("registers the direct-entry blog routes without adding them to the public nav
       "/blog/archive",
       "/carpenter-stardew",
       "/where-is-robin-stardew-valley",
+      "/stardew-valley-npc",
     ]),
   );
 

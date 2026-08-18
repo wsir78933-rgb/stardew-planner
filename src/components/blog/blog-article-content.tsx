@@ -18,6 +18,7 @@ export function BlogArticleContent({ copy, locale, post }: BlogArticleContentPro
       <header>
         <p>{post.topic}</p>
         <h1>{post.title}</h1>
+        <p className="blog-article-description">{post.description}</p>
         <p>
           {copy.authorLabel} {post.author} · {formatBlogReadTime(copy, post.readTimeMinutes)}
         </p>

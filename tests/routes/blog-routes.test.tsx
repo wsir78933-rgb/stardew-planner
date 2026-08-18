@@ -39,6 +39,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   );
 
   expect(indexMarkup).toContain('href="/carpenter-stardew"');
+  expect(indexMarkup).toContain('href="/stardew-valley-npc"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -61,6 +62,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   );
 
   expect(indexMarkup).toContain('href="/zh/where-is-robin-stardew-valley"');
+  expect(indexMarkup).toContain('href="/zh/stardew-valley-npc"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');

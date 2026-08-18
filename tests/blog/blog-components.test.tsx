@@ -153,6 +153,41 @@ it("keeps the page-level heading singular across hero, discovery, archive, and a
   expect(articleMarkup).toContain(
     'alt="Illustration of Robin&#x27;s mountain workshop with a farm-building plan"',
   );
+  expect(articleMarkup).toContain(
+    '<p class="blog-article-description">Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.</p>',
+  );
+});
+
+it("renders the selected bilingual NPC title and description in the article header", () => {
+  for (const [locale, expectedTitle, expectedDescription] of [
+    [
+      "en",
+      "Meet Every Stardew Valley NPC in One Practical Guide",
+      "Meet the current Stardew Valley cast without opening dozens of profiles. Compare friendship groups, key services, and the NPCs new farmers need first.",
+    ],
+    [
+      "zh-CN",
+      "一篇实用指南认识星露谷每位 NPC",
+      "无需打开几十个角色页面，就能了解当前星露谷角色、好感分类、关键服务，以及新农民最该优先认识的人。",
+    ],
+  ] as const) {
+    const post = getAllBlogPosts(locale).find(
+      ({ slug }) => slug === "stardew-valley-npc",
+    );
+
+    if (post === undefined) {
+      throw new Error(`Missing NPC post for locale ${locale}.`);
+    }
+
+    const markup = renderToStaticMarkup(
+      <BlogArticleContent copy={getBlogCopy(locale)} locale={locale} post={post} />,
+    );
+
+    expect(markup).toContain(`<h1>${expectedTitle}</h1>`);
+    expect(markup).toContain(
+      `<p class="blog-article-description">${expectedDescription}</p>`,
+    );
+  }
 });
 
 it("marks the current archive page and preserves localized archive links", () => {
