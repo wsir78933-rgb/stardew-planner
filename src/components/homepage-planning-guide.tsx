@@ -1,6 +1,13 @@
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 
-const planningGuideImageSource = "/homepage/stardew-valley-planner-layout.webp";
+const planningGuideDesktopImageSource =
+  "/homepage/stardew-valley-planner-layout.webp";
+const planningGuideMobileImageSource =
+  "/homepage/stardew-valley-planner-layout-800.webp";
+const planningGuideImageWidth = 1672;
+const planningGuideImageHeight = 941;
+const planningGuideImageSizes = "(max-width: 700px) 100vw, 51vw";
+const planningGuideImageSrcSet = `${planningGuideMobileImageSource} 800w, ${planningGuideDesktopImageSource} 1672w`;
 
 type HomepagePlanningGuideProps = Readonly<{
   copy: HomepageCopy["planningGuide"];
@@ -28,10 +35,12 @@ export function HomepagePlanningGuide({ copy }: HomepagePlanningGuideProps) {
         <img
           alt={copy.imageAlt}
           decoding="async"
-          height={941}
+          height={planningGuideImageHeight}
           loading="lazy"
-          src={planningGuideImageSource}
-          width={1672}
+          sizes={planningGuideImageSizes}
+          src={planningGuideDesktopImageSource}
+          srcSet={planningGuideImageSrcSet}
+          width={planningGuideImageWidth}
         />
         <figcaption>{copy.imageCaption}</figcaption>
       </figure>

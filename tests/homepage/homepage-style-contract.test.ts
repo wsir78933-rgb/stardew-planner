@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "vitest";
 
@@ -41,6 +41,35 @@ test("ships the planning guide illustration as a static public WebP", () => {
   );
 
   expect(existsSync(planningGuideImagePath)).toBe(true);
+});
+
+test("ships a narrower planning-guide WebP for mobile viewports", () => {
+  const desktopPlanningGuideImagePath = resolve(
+    process.cwd(),
+    "public/homepage/stardew-valley-planner-layout.webp",
+  );
+  const mobilePlanningGuideImagePath = resolve(
+    process.cwd(),
+    "public/homepage/stardew-valley-planner-layout-800.webp",
+  );
+  const planningGuideMarkup = readProjectFile(
+    "src/components/homepage-planning-guide.tsx",
+  );
+
+  expect(existsSync(mobilePlanningGuideImagePath)).toBe(true);
+  expect(statSync(mobilePlanningGuideImagePath).size).toBeLessThan(150_000);
+  expect(statSync(mobilePlanningGuideImagePath).size).toBeLessThan(
+    statSync(desktopPlanningGuideImagePath).size / 3,
+  );
+  expect(planningGuideMarkup).toContain(
+    '"/homepage/stardew-valley-planner-layout.webp"',
+  );
+  expect(planningGuideMarkup).toContain(
+    "/homepage/stardew-valley-planner-layout-800.webp",
+  );
+  expect(planningGuideMarkup).toContain("src={planningGuideDesktopImageSource}");
+  expect(planningGuideMarkup).toContain("srcSet={planningGuideImageSrcSet}");
+  expect(planningGuideMarkup).toContain("(max-width: 700px) 100vw");
 });
 
 test("lays out the planning guide as readable copy beside a responsive figure", () => {

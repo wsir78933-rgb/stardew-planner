@@ -37,6 +37,10 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       'src="/homepage/stardew-valley-planner-layout.webp"',
     );
+    expect(plannerPageMarkup).toContain(
+      "/homepage/stardew-valley-planner-layout-800.webp",
+    );
+    expect(plannerPageMarkup).toContain('sizes="(max-width: 700px) 100vw, 51vw"');
     expect(plannerPageMarkup).toContain('height="941"');
     expect(plannerPageMarkup).toContain('width="1672"');
     expect(plannerPageMarkup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
