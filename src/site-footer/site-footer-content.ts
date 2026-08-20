@@ -1,6 +1,8 @@
 import type { PublicLocale } from "../i18n/public-locale";
 import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 
+export const discordInviteUrl = "https://discord.gg/GGfUJZsMN";
+
 export type SiteFooterLink = Readonly<{
   label: string;
   href: string;

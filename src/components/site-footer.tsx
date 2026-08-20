@@ -1,8 +1,9 @@
-import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaDiscord, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import type { ReactElement } from "react";
-import type {
-  SiteFooterContent,
-  SiteFooterGroup,
+import {
+  discordInviteUrl,
+  type SiteFooterContent,
+  type SiteFooterGroup,
 } from "../site-footer/site-footer-content";
 
 type SiteFooterProps = Readonly<{
@@ -44,6 +45,14 @@ export function SiteFooter({ content }: SiteFooterProps): ReactElement {
           target="_blank"
         >
           <FaTwitter aria-hidden="true" focusable="false" />
+        </a>
+        <a
+          aria-label="Join the Stardew Valley Planner Discord"
+          href={discordInviteUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <FaDiscord aria-hidden="true" focusable="false" />
         </a>
         <span aria-hidden="true"><FaLinkedin /></span>
       </div>

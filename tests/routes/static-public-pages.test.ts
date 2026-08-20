@@ -775,9 +775,15 @@ describe("static public pages", () => {
         `hrefLang="x-default" href="${expectedCanonicalUrl(englishPathname)}"`,
       );
 
+      expect(staticPageHtml).toContain('href="https://discord.gg/GGfUJZsMN"');
+
       if (pathname === "/contact" || pathname === "/zh/contact") {
         expect(staticPageHtml).toContain(
           '<meta name="robots" content="noindex, follow"/>',
+        );
+        expect(staticPageHtml).toContain('data-contact-discord="true"');
+        expect(staticPageHtml).toContain(
+          pathname === "/zh/contact" ? "加入 Discord" : "Join Discord",
         );
       }
 

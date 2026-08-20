@@ -18,6 +18,8 @@ export type ContactPageCopy = Readonly<{
   verificationLoadingMessage: string;
   verificationFailedMessage: string;
   privacyNotice: string;
+  discordInviteLead: string;
+  discordInviteLabel: string;
 }>;
 
 const contactPageCopyByLocale: Readonly<Record<PublicLocale, ContactPageCopy>> = {
@@ -40,6 +42,9 @@ const contactPageCopyByLocale: Readonly<Record<PublicLocale, ContactPageCopy>> =
     verificationFailedMessage: "The spam check could not be completed. Please try again.",
     privacyNotice:
       "We use your message only to respond and delete it when resolved, no later than 90 days.",
+    discordInviteLead:
+      "You can also join the Discord community for farm layouts, feedback, and support.",
+    discordInviteLabel: "Join Discord",
   },
   "zh-CN": {
     eyebrow: "联系表单",
@@ -59,6 +64,9 @@ const contactPageCopyByLocale: Readonly<Record<PublicLocale, ContactPageCopy>> =
     verificationLoadingMessage: "反垃圾验证仍在加载，请稍后重试。",
     verificationFailedMessage: "反垃圾验证未完成，请重试。",
     privacyNotice: "我们仅用你的消息来回复，并会在问题解决后删除，最长保留 90 天。",
+    discordInviteLead:
+      "也可以加入 Discord 社区，讨论农场布局、反馈问题和获取帮助。",
+    discordInviteLabel: "加入 Discord",
   },
 };
 

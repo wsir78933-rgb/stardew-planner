@@ -2922,13 +2922,33 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   text-wrap: balance;
 }
 
-.contact-page-description {
+.contact-page-description,
+.contact-page-community {
   color: #52604e;
   font-size: clamp(1.05rem, 1.6vw, 1.25rem);
   line-height: 1.55;
   margin: 0;
   max-width: 37rem;
   text-wrap: pretty;
+}
+
+.contact-page-community {
+  margin-top: 1.25rem;
+}
+
+.contact-page-community a {
+  color: #3f6414;
+  font-weight: 700;
+  text-underline-offset: 0.18em;
+}
+
+.contact-page-community a:hover {
+  color: #2d4c0e;
+}
+
+.contact-page-community a:focus-visible {
+  outline: 2px solid #759d1c;
+  outline-offset: 0.2rem;
 }
 
 .contact-form {

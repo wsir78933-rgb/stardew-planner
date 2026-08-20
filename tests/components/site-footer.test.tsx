@@ -34,7 +34,7 @@ function renderFooter(locale: "en" | "zh-CN"): string {
   );
 }
 
-it("renders every English footer destination, identity, copyright, and linked Twitter icon", () => {
+it("renders every English footer destination, identity, copyright, and linked Twitter and Discord icons", () => {
   const footerMarkup = renderFooter("en");
 
   expect(footerMarkup).toContain('<footer data-site-footer="true">');
@@ -62,12 +62,16 @@ it("renders every English footer destination, identity, copyright, and linked Tw
   );
   const socialIconMarkup = socialIconRegion?.[1] ?? "";
   expect(socialIconMarkup.match(/<span aria-hidden="true">/g)).toHaveLength(3);
-  expect(socialIconMarkup.match(/<a /g)).toHaveLength(1);
+  expect(socialIconMarkup.match(/<a /g)).toHaveLength(2);
   expect(socialIconMarkup).toContain('href="https://x.com/wsir1139"');
+  expect(socialIconMarkup).toContain('href="https://discord.gg/GGfUJZsMN"');
   expect(socialIconMarkup).toContain('target="_blank"');
   expect(socialIconMarkup).toContain('rel="noopener noreferrer"');
   expect(socialIconMarkup).toContain(
     'aria-label="Follow @wsir1139 on X (Twitter)"',
+  );
+  expect(socialIconMarkup).toContain(
+    'aria-label="Join the Stardew Valley Planner Discord"',
   );
 });
 
