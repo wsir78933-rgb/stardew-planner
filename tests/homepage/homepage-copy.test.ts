@@ -54,6 +54,15 @@ test("does not retain retired farm-guide copy", () => {
   }
 });
 
+test("provides bilingual planner preview image alt text", () => {
+  expect(homepageCopyByLocale.en.plannerPreview.imageAlt).toBe(
+    "Pixel-art Standard Farm map with a central dirt field, farmhouse, greenhouse, and two ponds",
+  );
+  expect(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt).toBe(
+    "像素风标准农场地图，中央是空地，含农舍、温室和两处水塘",
+  );
+});
+
 test("provides the Brainfish-style hero fragments and localized language label", () => {
   for (const homepageLocale of HOMEPAGE_LOCALES) {
     const homepageCopy = homepageCopyByLocale[homepageLocale];

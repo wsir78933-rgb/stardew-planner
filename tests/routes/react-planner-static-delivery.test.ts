@@ -23,7 +23,11 @@ describe("planner static delivery", () => {
     expect(homepageStaticHtml).toContain("Free Online Farm Layout Tool");
     expect(homepageStaticHtml).toContain("About this planner");
     expect(homepageStaticHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
-    expect(homepageStaticHtml).toContain('role="status">Loading planner…');
+    expect(homepageStaticHtml).toContain("data-homepage-planner-preview");
+    expect(homepageStaticHtml).toContain(
+      'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
+    );
+    expect(homepageStaticHtml).not.toContain("Loading planner…");
     expect(homepageStaticHtml).not.toContain("reference-runtime-root");
     expect(homepageStaticHtml).not.toContain("/reference-runtime/bootstrap.mjs");
     expect(homepageStaticHtml).not.toContain("/_app/immutable/");

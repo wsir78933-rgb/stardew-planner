@@ -327,6 +327,17 @@ body:has(> [data-homepage-shell]) [data-homepage-workspace] {
   position: relative;
 }
 
+body:has(> [data-homepage-shell]) [data-homepage-planner-preview] {
+  height: 100%;
+  image-rendering: pixelated;
+  inset: 0;
+  object-fit: contain;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 41;
+}
+
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id]:not(
     [data-homepage-workspace]
   ) {
@@ -1693,6 +1704,10 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 40;
+}
+
+.planner-startup-status[role="alert"] {
+  z-index: 42;
 }
 
 .planner-canvas {

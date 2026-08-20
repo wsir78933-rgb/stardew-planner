@@ -23,6 +23,8 @@ import type { PlannerWorkspaceStateController } from "../../src/planner/use-plan
 import type { CatalogItem } from "../../src/catalog";
 import { createReferenceProjectRepository } from "../../src/reference-runtime/reference-project-repository";
 import type { PreparedPlannerWorkspace } from "../../src/planner/planner-workspace-bootstrap";
+import { analyzeRequiredPlacementCatalog } from "../../src/planner/planner-workspace-required-catalog";
+import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
 import type { PreparedDefaultMap } from "../../src/resources/default-map-resource";
 import { referenceProjectDocumentFixture } from "../reference-runtime/fixtures/reference-project-document";
 
@@ -55,6 +57,7 @@ function createPreparedWorkspace(mapId = "standard"): PreparedPlannerWorkspace {
       repository,
     },
     resourceGeneration: 3,
+    buildingsCatalog: { items: [] },
     savePreferences: () => undefined,
   };
 }
@@ -256,6 +259,50 @@ describe("planner workspace static boundary", () => {
         nextReadyCatalogItems,
       ),
     ).toEqual(nextReadyCatalogItems);
+  });
+
+  it("lets a buildings-only placement use prepared catalog items instead of an empty array", () => {
+    const barnCatalogItem = createCatalogItem("building:Barn", "Barn");
+    const preparedWorkspace: PreparedPlannerWorkspace = {
+      ...createPreparedWorkspace(),
+      buildingsCatalog: { items: [barnCatalogItem] },
+    };
+    const buildingsOnlySnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{ buildingId: "Barn", instanceId: 1, x: 0, y: 0 }],
+      nextBuildingId: 2,
+    };
+
+    expect(
+      analyzeRequiredPlacementCatalog(buildingsOnlySnapshot, []),
+    ).toEqual({
+      kind: "missing",
+      missingCatalogItems: [
+        { category: "buildings", itemId: "building:Barn" },
+      ],
+    });
+    expect(
+      analyzeRequiredPlacementCatalog(
+        buildingsOnlySnapshot,
+        preparedWorkspace.buildingsCatalog.items,
+      ),
+    ).toEqual({ kind: "ready" });
+  });
+
+  it("merges a later prepared buildings catalog into already-ready catalog items", () => {
+    const cropCatalogItem = createCatalogItem("crop:24", "Parsnip");
+    const barnCatalogItem = createCatalogItem("building:Barn", "Barn");
+    const preparedWorkspace: PreparedPlannerWorkspace = {
+      ...createPreparedWorkspace(),
+      buildingsCatalog: { items: [barnCatalogItem] },
+    };
+
+    expect(
+      mergeReadyCatalogItems(
+        [cropCatalogItem],
+        preparedWorkspace.buildingsCatalog.items,
+      ),
+    ).toEqual([cropCatalogItem, barnCatalogItem]);
   });
 });
 

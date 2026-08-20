@@ -2,6 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import {
+  createPlannerWorkspaceModuleLoader,
   createPlannerWorkspaceModuleReadyBoundary,
   createReactPlannerHostStartup,
   ReactPlannerHostWorkspace,
@@ -137,5 +138,132 @@ describe("React planner host", () => {
     expect(plannerWorkspaceProperties.startup.initialMapRequest).toMatchObject({
       mapId: expectedMapId,
     });
+  });
+});
+
+describe("createPlannerWorkspaceModuleLoader", () => {
+  it("starts one PlannerWorkspace import immediately and reuses it across loader calls", async () => {
+    let importCallCount = 0;
+    let resolvePlannerWorkspaceModule!: (
+      plannerWorkspaceModule: Pick<
+        typeof import("../../src/components/planner-workspace"),
+        "PlannerWorkspace"
+      >,
+    ) => void;
+    const plannerWorkspaceModulePromise = new Promise<
+      Pick<
+        typeof import("../../src/components/planner-workspace"),
+        "PlannerWorkspace"
+      >
+    >((resolve) => {
+      resolvePlannerWorkspaceModule = resolve;
+    });
+    function FakePlannerWorkspace() {
+      return createElement("output", null, "workspace");
+    }
+
+    const loadPlannerWorkspace = createPlannerWorkspaceModuleLoader({
+      importPlannerWorkspace: () => {
+        importCallCount += 1;
+        return plannerWorkspaceModulePromise as Promise<
+          typeof import("../../src/components/planner-workspace")
+        >;
+      },
+      startImmediately: true,
+    });
+
+    expect(importCallCount).toBe(1);
+
+    const firstWorkspaceComponentPromise = loadPlannerWorkspace();
+    const secondWorkspaceComponentPromise = loadPlannerWorkspace();
+    resolvePlannerWorkspaceModule({ PlannerWorkspace: FakePlannerWorkspace });
+
+    const firstWorkspaceComponent = await firstWorkspaceComponentPromise;
+    const secondWorkspaceComponent = await secondWorkspaceComponentPromise;
+    expect(importCallCount).toBe(1);
+
+    const plannerHostStartup = createReactPlannerHostStartup({
+      bootstrapWorkspace: createWorkspaceBootstrap(),
+      locationSearch: "",
+      viewportWidth: 1024,
+    });
+    const markedNames: string[] = [];
+    const performanceMarker = createEditorPerformanceMarker({
+      mark(markName) {
+        markedNames.push(markName);
+      },
+    });
+    performanceMarker.mark("editor:island-mounted");
+
+    expect(
+      renderToStaticMarkup(
+        createElement(firstWorkspaceComponent, {
+          locale: "en",
+          performanceMarker,
+          startup: plannerHostStartup,
+        }),
+      ),
+    ).toBe("<output>workspace</output>");
+    expect(
+      renderToStaticMarkup(
+        createElement(secondWorkspaceComponent, {
+          locale: "en",
+          performanceMarker,
+          startup: plannerHostStartup,
+        }),
+      ),
+    ).toBe("<output>workspace</output>");
+    expect(markedNames).toEqual([
+      "editor:island-mounted",
+      "editor:workspace-module-ready",
+    ]);
+  });
+
+  it("does not import PlannerWorkspace until the loader runs when startImmediately is false", async () => {
+    let importCallCount = 0;
+    function FakePlannerWorkspace() {
+      return createElement("output", null, "workspace");
+    }
+
+    const loadPlannerWorkspace = createPlannerWorkspaceModuleLoader({
+      importPlannerWorkspace: () => {
+        importCallCount += 1;
+        return Promise.resolve({
+          PlannerWorkspace: FakePlannerWorkspace,
+        } as unknown as typeof import("../../src/components/planner-workspace"));
+      },
+      startImmediately: false,
+    });
+
+    expect(importCallCount).toBe(0);
+    await loadPlannerWorkspace();
+    expect(importCallCount).toBe(1);
+    await loadPlannerWorkspace();
+    expect(importCallCount).toBe(1);
+  });
+
+  it("rejects a non-function PlannerWorkspace import with the received value", () => {
+    expect(() =>
+      createPlannerWorkspaceModuleLoader({
+        importPlannerWorkspace: "not-a-function" as never,
+        startImmediately: false,
+      }),
+    ).toThrow(TypeError);
+    expect(() =>
+      createPlannerWorkspaceModuleLoader({
+        importPlannerWorkspace: "not-a-function" as never,
+        startImmediately: false,
+      }),
+    ).toThrow("not-a-function");
+  });
+
+  it("keeps the original PlannerWorkspace import rejection observable", async () => {
+    const importFailure = new Error("planner workspace import failed");
+    const loadPlannerWorkspace = createPlannerWorkspaceModuleLoader({
+      importPlannerWorkspace: () => Promise.reject(importFailure),
+      startImmediately: true,
+    });
+
+    await expect(loadPlannerWorkspace()).rejects.toBe(importFailure);
   });
 });

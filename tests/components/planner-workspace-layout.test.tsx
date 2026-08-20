@@ -269,6 +269,7 @@ function createPreparedWorkspaceFixture(): PreparedPlannerWorkspace {
       repository,
     },
     resourceGeneration: 1,
+    buildingsCatalog: { items: [] },
     savePreferences: () => undefined,
   };
 }

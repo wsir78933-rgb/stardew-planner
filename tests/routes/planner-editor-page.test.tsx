@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -60,12 +62,30 @@ describe("planner editor page", () => {
     );
     expect(plannerPageMarkup).not.toContain("/_app/immutable/");
     expect(plannerPageMarkup).not.toContain("data-sveltekit-");
-    expect(plannerPageMarkup).not.toContain("game-assets/1.6.15");
+    expect(plannerPageMarkup).not.toContain("game-assets");
     expect(plannerPageMarkup).not.toContain("Buildings.json");
     expect(plannerPageMarkup).not.toContain("pixi.js");
+    expect(plannerPageMarkup).not.toContain(".tmx");
     expect(plannerPageMarkup).not.toContain("<iframe");
-    expect(plannerPageMarkup).toContain('role="status"');
-    expect(plannerPageMarkup).toContain("Loading planner…");
+    expect(plannerPageMarkup).toContain('data-homepage-planner-preview');
+    expect(plannerPageMarkup).toContain(
+      'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
+    );
+    expect(plannerPageMarkup).toContain(homepageCopyByLocale.en.plannerPreview.imageAlt);
+    expect(plannerPageMarkup).not.toContain("Loading planner…");
+  });
+
+  it("keeps PlannerHomepage as a server shell without wrapping the page in client state", () => {
+    const plannerHomepageSource = readFileSync(
+      join(process.cwd(), "src/components/planner-homepage.tsx"),
+      "utf8",
+    );
+
+    expect(plannerHomepageSource).not.toContain('"use client"');
+    expect(plannerHomepageSource).not.toContain("useState");
+    expect(plannerHomepageSource).not.toContain("useEffect");
+    expect(plannerHomepageSource).toContain("createHomepageNavigationUrls");
+    expect(plannerHomepageSource).toContain("HomepagePlannerSlot");
   });
 
   it("omits the workspace introduction while retaining the planner workspace", () => {

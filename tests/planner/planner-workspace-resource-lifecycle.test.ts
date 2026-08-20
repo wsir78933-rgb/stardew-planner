@@ -37,6 +37,7 @@ function createPreparedWorkspace(resourceGeneration: number): PreparedPlannerWor
       repository: {} as PreparedPlannerWorkspace["projectState"]["repository"],
     },
     resourceGeneration,
+    buildingsCatalog: { items: [] },
     savePreferences: () => undefined,
   };
 }

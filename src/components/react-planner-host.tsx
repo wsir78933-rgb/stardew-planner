@@ -28,12 +28,44 @@ export function createPlannerWorkspaceModuleReadyBoundary(
   };
 }
 
-const PlannerWorkspace = dynamic<PlannerWorkspaceProperties>(
-  () =>
-    import("./planner-workspace").then(
+type PlannerWorkspaceModule = typeof import("./planner-workspace");
+
+export type CreatePlannerWorkspaceModuleLoaderInput = Readonly<{
+  importPlannerWorkspace: () => Promise<PlannerWorkspaceModule>;
+  startImmediately: boolean;
+}>;
+
+export function createPlannerWorkspaceModuleLoader({
+  importPlannerWorkspace,
+  startImmediately,
+}: CreatePlannerWorkspaceModuleLoaderInput): () => Promise<
+  ComponentType<PlannerWorkspaceProperties>
+> {
+  if (typeof importPlannerWorkspace !== "function") {
+    throw new TypeError(
+      `createPlannerWorkspaceModuleLoader importPlannerWorkspace must be a function; received ${String(importPlannerWorkspace)}.`,
+    );
+  }
+
+  let plannerWorkspaceModulePromise: Promise<PlannerWorkspaceModule> | undefined;
+  if (startImmediately) {
+    plannerWorkspaceModulePromise = importPlannerWorkspace();
+  }
+
+  return () => {
+    plannerWorkspaceModulePromise ??= importPlannerWorkspace();
+    return plannerWorkspaceModulePromise.then(
       ({ PlannerWorkspace: LoadedPlannerWorkspace }) =>
         createPlannerWorkspaceModuleReadyBoundary(LoadedPlannerWorkspace),
-    ),
+    );
+  };
+}
+
+const PlannerWorkspace = dynamic<PlannerWorkspaceProperties>(
+  createPlannerWorkspaceModuleLoader({
+    importPlannerWorkspace: () => import("./planner-workspace"),
+    startImmediately: typeof window !== "undefined",
+  }),
   { ssr: false },
 );
 

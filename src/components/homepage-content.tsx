@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
-import { handleFaqSummaryKeyDown } from "@/src/homepage/faq-disclosure-keyboard";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
+import { HomepageFaqList } from "./homepage-faq-list";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 import { HomepagePlanningGuide } from "./homepage-planning-guide";
 import { SiteFooter } from "./site-footer";
@@ -14,6 +14,7 @@ type HomepageContentProps = {
   copy: HomepageCopy;
   currentLocale: HomepageLocale;
   localeHrefByLocale: HomepageLocaleHrefByLocale;
+  localeSwitcher?: ReactNode;
   plannerHref: string;
   plannerWorkspace: ReactNode;
 };
@@ -22,6 +23,7 @@ export function HomepageContent({
   copy,
   currentLocale,
   localeHrefByLocale,
+  localeSwitcher,
   plannerHref,
   plannerWorkspace,
 }: HomepageContentProps) {
@@ -40,10 +42,12 @@ export function HomepageContent({
             </a>
           </div>
           <div data-homepage-header-actions>
-            <HomepageLocaleSwitcher
-              label={copy.navigation.languageLabel}
-              localeHrefByLocale={localeHrefByLocale}
-            />
+            {localeSwitcher ?? (
+              <HomepageLocaleSwitcher
+                label={copy.navigation.languageLabel}
+                localeHrefByLocale={localeHrefByLocale}
+              />
+            )}
             <Button asChild data-homepage-header-action size="lg">
               <a href={plannerHref}>{copy.navigation.plannerActionLabel}</a>
             </Button>
@@ -82,16 +86,7 @@ export function HomepageContent({
         </section>
         <section id="faq">
           <h2>{copy.faq.heading}</h2>
-          <div data-homepage-faq-list>
-            {copy.faq.items.map((faqItem, faqIndex) => (
-              <details key={`faq-${faqIndex}`}>
-                <summary onKeyDown={handleFaqSummaryKeyDown}>
-                  {faqItem.question}
-                </summary>
-                <p>{faqItem.answer}</p>
-              </details>
-            ))}
-          </div>
+          <HomepageFaqList items={copy.faq.items} />
         </section>
         <section data-homepage-trust>
           <h2>{copy.trust.heading}</h2>

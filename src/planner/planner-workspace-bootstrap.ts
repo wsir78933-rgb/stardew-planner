@@ -37,6 +37,7 @@ export type PreparedPlannerWorkspace = Readonly<{
   canvasResources: PlannerCanvasPreparedResources;
   projectState: PlannerProjectState;
   preferences: EditorPreferences;
+  buildingsCatalog: Catalog;
   savePreferences: (editorPreferences: EditorPreferences) => void;
 }>;
 
@@ -106,7 +107,6 @@ export async function bootstrapPlannerWorkspace(
     preferencesPromise,
     buildingsCatalogPromise,
   ]);
-  void buildingsCatalog;
   const preparedWorkspace: PreparedPlannerWorkspace = {
     resourceGeneration: input.resourceGeneration,
     canvasResources: {
@@ -116,6 +116,7 @@ export async function bootstrapPlannerWorkspace(
     },
     projectState,
     preferences,
+    buildingsCatalog: validateBuildingsCatalog(buildingsCatalog),
     savePreferences: input.savePreferences,
   };
   const isGenerationCurrent = input.isGenerationCurrent ?? (() => true);
@@ -123,6 +124,20 @@ export async function bootstrapPlannerWorkspace(
   input.onPreparedWorkspace?.(preparedWorkspace);
   if (!isGenerationCurrent()) return null;
   return preparedWorkspace;
+}
+
+function validateBuildingsCatalog(buildingsCatalog: unknown): Catalog {
+  if (
+    typeof buildingsCatalog !== "object"
+    || buildingsCatalog === null
+    || !("items" in buildingsCatalog)
+    || !Array.isArray(buildingsCatalog.items)
+  ) {
+    throw new TypeError(
+      `Planner workspace buildingsCatalog must be an object with an items array; received ${JSON.stringify(buildingsCatalog)}.`,
+    );
+  }
+  return buildingsCatalog as Catalog;
 }
 
 function validateBootstrapInput(input: PlannerWorkspaceBootstrapInput): void {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   bootstrapPlannerWorkspace,
   createBrowserPlannerWorkspaceBootstrap,
+  type PlannerWorkspaceBootstrapInput,
 } from "../../src/planner/planner-workspace-bootstrap";
 import type { PlannerProjectState } from "../../src/planner/planner-workspace-bootstrap";
 import { createPlannerResourceCoordinator } from "../../src/resources/planner-resource-coordinator";
@@ -34,6 +35,27 @@ function createDeferred<Value>() {
   let resolve: ((value: Value) => void) | undefined;
   const promise = new Promise<Value>((resolvePromise) => { resolve = resolvePromise; });
   return { promise, resolve: (value: Value) => resolve?.(value) };
+}
+
+function createSuccessfulBootstrapInput(
+  loadInitialBuildingsCatalog: PlannerWorkspaceBootstrapInput["loadInitialBuildingsCatalog"],
+): PlannerWorkspaceBootstrapInput {
+  return {
+    resourceGeneration: 1,
+    mapRequest: {
+      mapId: "standard",
+      season: "spring",
+      mapRenderOptions: createInitialMapRenderOptions(),
+    },
+    resourceCoordinator: createPlannerResourceCoordinator({
+      importPixi: async () => ({} as typeof import("pixi.js")),
+      loadDefaultMap: async () => createPreparedMap("spring"),
+      readProjectState: async () => ({ repository: testRepository, projects: [] }),
+    }),
+    readPreferences: async () => createInitialEditorPreferences(),
+    loadInitialBuildingsCatalog,
+    savePreferences: () => undefined,
+  };
 }
 
 describe("planner workspace bootstrap", () => {
@@ -306,4 +328,51 @@ describe("planner workspace bootstrap", () => {
       },
     })).rejects.toThrow("Buildings catalog unavailable.");
   });
+
+  it("returns the prepared workspace with the same Buildings catalog items array", async () => {
+    const buildingsCatalogItems: Catalog["items"] = [
+      {
+        allowedTools: ["cursor"],
+        category: "building",
+        id: "building:Barn",
+        name: "Barn",
+        sprite: { kind: "sprite-index", index: 0 },
+        textureLocalPath: "/game-assets/1.6.15/Buildings/Barn.png",
+        tileSize: { width: 7, height: 4 },
+      },
+    ];
+    const buildingsCatalog: Catalog = { items: buildingsCatalogItems };
+
+    const preparedWorkspace = await bootstrapPlannerWorkspace(
+      createSuccessfulBootstrapInput(async () => buildingsCatalog),
+    );
+
+    expect(preparedWorkspace).not.toBeNull();
+    if (preparedWorkspace === null) {
+      throw new Error("Expected bootstrap to return a prepared workspace.");
+    }
+    expect(preparedWorkspace.buildingsCatalog.items).toBe(buildingsCatalogItems);
+    expect(preparedWorkspace.buildingsCatalog).toBe(buildingsCatalog);
+  });
+
+  it.each([
+    [null, "null"],
+    [{}, "{}"],
+    [{ items: null }, '{"items":null}'],
+  ] as const)(
+    "rejects an invalid Buildings catalog %s with the received value",
+    async (invalidBuildingsCatalog, receivedValue) => {
+      await expect(
+        bootstrapPlannerWorkspace(
+          createSuccessfulBootstrapInput(
+            async () => invalidBuildingsCatalog as unknown as Catalog,
+          ),
+        ),
+      ).rejects.toThrow(
+        new TypeError(
+          `Planner workspace buildingsCatalog must be an object with an items array; received ${receivedValue}.`,
+        ),
+      );
+    },
+  );
 });

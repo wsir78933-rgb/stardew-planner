@@ -60,6 +60,9 @@ export type HomepageCopy = Readonly<{
     supportingCopy: string;
     primaryActionLabel: string;
   }>;
+  plannerPreview: Readonly<{
+    imageAlt: string;
+  }>;
   capabilities: Readonly<{
     heading: string;
     items: readonly [HomepageCapabilityCopy, HomepageCapabilityCopy, HomepageCapabilityCopy];
@@ -99,6 +102,10 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportingCopy:
         "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
       primaryActionLabel: "Start planning",
+    },
+    plannerPreview: {
+      imageAlt:
+        "Pixel-art Standard Farm map with a central dirt field, farmhouse, greenhouse, and two ponds",
     },
     capabilities: {
       heading: "Plan with the map in view",
@@ -252,6 +259,9 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportingCopy:
         "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
       primaryActionLabel: "开始规划",
+    },
+    plannerPreview: {
+      imageAlt: "像素风标准农场地图，中央是空地，含农舍、温室和两处水塘",
     },
     capabilities: {
       heading: "在地图中完成规划",

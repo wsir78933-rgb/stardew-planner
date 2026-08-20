@@ -807,7 +807,10 @@ function PreparedPlannerWorkspaceContent({
     selectedCatalogItem,
     setSearchQuery,
     cyclePendingCatalogChoice,
-  } = useWorkspaceCatalogControls(dispatchPlannerWorkspaceAction);
+  } = useWorkspaceCatalogControls(
+    dispatchPlannerWorkspaceAction,
+    preparedWorkspace,
+  );
   const requiredPlacementCatalogSnapshot =
     resolveRequiredPlacementCatalogSnapshot({
       activeSession: workspaceState.activeSession,
@@ -1403,14 +1406,39 @@ function usePreparedWorkspaceInitialization({
 
 function useWorkspaceCatalogControls(
   dispatchPlannerWorkspaceAction: PlannerWorkspaceStateController["dispatchPlannerWorkspaceAction"],
+  preparedWorkspace: PreparedPlannerWorkspace,
 ) {
+  const preparedBuildingsCatalogItems =
+    preparedWorkspace.buildingsCatalog.items;
   const [catalogChoiceState, setCatalogChoiceState] = useState(
     createInitialWorkspaceCatalogChoiceState,
   );
   const [readyCatalogItems, setReadyCatalogItems] = useState<
     readonly CatalogItem[]
-  >([]);
+  >(preparedBuildingsCatalogItems);
   const [searchQuery, setSearchQuery] = useState("");
+  const preparedBuildingsCatalogGenerationReference = useRef(
+    preparedWorkspace.resourceGeneration,
+  );
+  useEffect(() => {
+    if (
+      preparedBuildingsCatalogGenerationReference.current ===
+      preparedWorkspace.resourceGeneration
+    ) {
+      return;
+    }
+    preparedBuildingsCatalogGenerationReference.current =
+      preparedWorkspace.resourceGeneration;
+    setReadyCatalogItems((currentCatalogItems) =>
+      mergeReadyCatalogItems(
+        currentCatalogItems,
+        preparedWorkspace.buildingsCatalog.items,
+      ),
+    );
+  }, [
+    preparedWorkspace.buildingsCatalog.items,
+    preparedWorkspace.resourceGeneration,
+  ]);
   const advanceSelectedCatalogPlacementAttempt = useCallback(() => {
     setCatalogChoiceState(advanceWorkspaceCatalogPlacementAttempt);
   }, []);

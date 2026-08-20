@@ -548,7 +548,11 @@ function expectStaticHomepageContent(
   expect(staticPageHtml).toContain(`<h2>${expectedHomepage.trustHeading}</h2>`);
   expect(staticPageHtml).toContain(expectedHomepage.trustDescription);
   expect(staticPageHtml).toContain('data-homepage-workspace="true"');
-  expect(staticPageHtml).toContain('role="status">Loading planner…');
+  expect(staticPageHtml).toContain("data-homepage-planner-preview");
+  expect(staticPageHtml).toContain(
+    'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
+  );
+  expect(staticPageHtml).not.toContain("Loading planner…");
   expect(
     staticPageHtml.match(
       new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),

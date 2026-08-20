@@ -16,6 +16,12 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   );
   expect(markup).toContain('data-homepage-shell="true"');
   expect(markup).toContain("data-homepage-workspace");
+  expect(markup).toContain("data-homepage-planner-preview");
+  expect(markup).toContain(
+    'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
+  );
+  expect(markup).toContain(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt);
+  expect(markup).not.toContain("Loading planner…");
   expect(markup).toContain(homepageCopyByLocale["zh-CN"].planningGuide.heading);
   expect(markup.match(/href="#planner"/g)).toHaveLength(3);
   expect(markup).toContain('href="/zh"');
