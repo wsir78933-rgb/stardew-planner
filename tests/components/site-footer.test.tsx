@@ -34,7 +34,7 @@ function renderFooter(locale: "en" | "zh-CN"): string {
   );
 }
 
-it("renders every English footer destination, identity, copyright, and linked Twitter and Discord icons", () => {
+it("renders every English footer destination, identity, copyright, and linked X and Discord icons", () => {
   const footerMarkup = renderFooter("en");
 
   expect(footerMarkup).toContain('<footer data-site-footer="true">');
@@ -70,6 +70,10 @@ it("renders every English footer destination, identity, copyright, and linked Tw
   expect(socialIconMarkup).toContain(
     'aria-label="Follow @wsir1139 on X (Twitter)"',
   );
+  expect(socialIconMarkup).toContain(
+    "M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48z",
+  );
+  expect(socialIconMarkup).not.toContain("M459.37 151.716");
   expect(socialIconMarkup).toContain(
     'aria-label="Join the Stardew Valley Planner Discord"',
   );

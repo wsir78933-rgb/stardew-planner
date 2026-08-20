@@ -1,4 +1,5 @@
-import { FaDiscord, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaDiscord, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import type { ReactElement } from "react";
 import {
   discordInviteUrl,
@@ -44,7 +45,7 @@ export function SiteFooter({ content }: SiteFooterProps): ReactElement {
           rel="noopener noreferrer"
           target="_blank"
         >
-          <FaTwitter aria-hidden="true" focusable="false" />
+          <FaXTwitter aria-hidden="true" focusable="false" />
         </a>
         <a
           aria-label="Join the Stardew Valley Planner Discord"
