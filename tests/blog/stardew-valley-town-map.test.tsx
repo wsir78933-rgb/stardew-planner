@@ -16,6 +16,14 @@ const chineseTitle = "星露谷物语小镇地图：鹈鹕镇地点与路线";
 const chineseDescription =
   "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。";
 
+function countVisibleEnglishWords(markup: string): number {
+  const visibleText = markup
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&[^;]+;/g, " ");
+
+  return visibleText.match(/[A-Za-z0-9][A-Za-z0-9'-]*/g)?.length ?? 0;
+}
+
 it("publishes a paired town-map guide without misrepresenting the farm planner", () => {
   expect(blogPostSlugs).toContain("stardew-valley-town-map");
   expect(blogPostCanonicalPaths).toContain("/stardew-valley-town-map/");
@@ -53,4 +61,13 @@ it("publishes a paired town-map guide without misrepresenting the farm planner",
   expect(chineseMarkup).toContain("https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87");
   expect(chineseMarkup).toContain('href="/zh#planner"');
   expect(chineseMarkup).toContain("星露谷物语小镇地图常见问题");
+});
+
+it("gives the English town-map guide the source-backed depth promised by its brief", () => {
+  const englishMarkup = renderToStaticMarkup(
+    createElement(StardewValleyTownMapEnglishArticle),
+  );
+
+  expect(countVisibleEnglishWords(englishMarkup)).toBeGreaterThanOrEqual(1250);
+  expect(countVisibleEnglishWords(englishMarkup)).toBeLessThanOrEqual(1500);
 });

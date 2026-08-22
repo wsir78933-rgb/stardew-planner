@@ -78,6 +78,44 @@ export function StardewValleyTownMapEnglishArticle() {
         <a href="/carpenter-stardew">Stardew Valley carpenter guide</a>.
       </p>
 
+      <h2>Read Pelican Town in layers</h2>
+      <p>
+        A useful town map gives you a sequence, not a hundred pins to scan. Start with the
+        center because it holds the services that bring you back most often. Then decide whether
+        the errand is finished there or continues toward one of the four edges. The source page
+        lists the General Store, Clinic, Community Center, Museum, Blacksmith, JojaMart, and
+        Stardrop Saloon as key locations. That is enough to build a practical first layer without
+        turning every visit into a memorization exercise.
+      </p>
+      <p>
+        The second layer is the edge of town. A trip that ends at the Beach should leave south;
+        a trip that continues to Cindersap Forest should leave southwest. The Farm, Bus Stop, and
+        Mountain each have their own side of the same decision. You do not need a “fastest route”
+        promise to use that information well. You only need to stop choosing the next direction
+        after you have already walked past the useful exit.
+      </p>
+      <ul>
+        <li>Use a central landmark to settle where you are.</li>
+        <li>Use the four exits to decide where the current errand continues.</li>
+        <li>Use an individual guide only when the question becomes about a person, service window, or progress condition.</li>
+      </ul>
+
+      <h2>What a town map cannot decide for you</h2>
+      <p>
+        A location guide answers where an area connects. It does not tell you whether a counter is
+        open at this moment, whether a festival has changed the day, or whether your progress has
+        opened a later destination. Those are different questions with different sources. Treat a
+        map as the first step: it gets you into the right part of the Valley. A version-matched
+        schedule or shop page answers the live condition after that.
+      </p>
+      <p>
+        This boundary matters because it keeps the page useful when the game changes. A broad town
+        map should not pretend to know every weather exception or every player state. If the job is
+        tied to Robin, the <a href="/where-is-robin-stardew-valley">Robin location guide</a> is
+        the better next page. If the job concerns a building, the carpenter guide explains the
+        service itself. The town map stays focused on the route that gets you there.
+      </p>
+
       <h2>A simple route for your first town errand</h2>
       <ol>
         <li>Choose one reason to go to town: supplies, a service, a collection stop, or travel onward.</li>
@@ -105,6 +143,22 @@ export function StardewValleyTownMapEnglishArticle() {
         placeable, or decor item, and check the working space before spending materials in-game.
         The planner does not show Pelican Town or track live NPC locations. It is for the Farm:
         footprints, paths, and coverage.
+      </p>
+
+      <h2>Let a town errand change the farm plan</h2>
+      <p>
+        The return trip is where a town reference starts paying off. A supply run can turn into a
+        field-size question. A construction visit can turn into a footprint and path question. A
+        new animal or machine can reveal that a busy corner of the farm needs more walking room.
+        The town map does not make those layout decisions for you, but it helps keep the reason
+        for the decision clear when you get home.
+      </p>
+      <p>
+        Try the decision before committing in-game. Put the planned item on the matching farm map,
+        look at the approach to its door or work area, and check whether nearby crops, fences, or
+        coverage tools still have room to function. If the placement feels awkward, change it in
+        the planner first. The value is not a perfect-looking screenshot. It is catching a bad
+        route or cramped work area before it costs a day of rebuilding.
       </p>
 
       <h2>Printable Pelican Town checklist</h2>
