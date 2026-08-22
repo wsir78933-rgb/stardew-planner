@@ -1,16 +1,16 @@
-import {
-  publicNavigation,
-  type PublicNavigationPath,
-} from "../reference/public-navigation";
 import type { SiteFooterCopy } from "../site-footer/site-footer-content";
 import { publicLocales, type PublicLocale } from "./public-locale";
 
 export type PublicPageCopy = Readonly<{
   footer: SiteFooterCopy;
-  navigationLabel: string;
-  navigation: readonly Readonly<{ label: string; path: PublicNavigationPath }>[];
-  brandLabel: string;
-  counterpartLabel: string;
+  navigation: Readonly<{
+    productName: string;
+    capabilitiesLabel: string;
+    faqLabel: string;
+    blogLabel: string;
+    plannerActionLabel: string;
+    languageLabel: string;
+  }>;
   plannerTitle: string;
   plannerDescription: string;
 }>;
@@ -39,10 +39,14 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
         contact: "Contact us",
       },
     },
-    navigationLabel: "Public navigation",
-    navigation: publicNavigation,
-    brandLabel: "Stardew Valley Farm Planner",
-    counterpartLabel: "简体中文",
+    navigation: {
+      productName: "Stardew Valley Farm Planner",
+      capabilitiesLabel: "How it works",
+      faqLabel: "FAQ",
+      blogLabel: "Blog",
+      plannerActionLabel: "Open planner",
+      languageLabel: "Language",
+    },
     plannerTitle: "Stardew Valley Farm Planner",
     plannerDescription:
       "Plan Stardew Valley farm layouts in your browser with an interactive map.",
@@ -69,10 +73,14 @@ const publicPageCopy: Readonly<Record<PublicLocale, PublicPageCopy>> = {
         contact: "联系我们",
       },
     },
-    navigationLabel: "公共导航",
-    navigation: [{ label: "规划器", path: "/" }],
-    brandLabel: "星露谷规划器",
-    counterpartLabel: "English",
+    navigation: {
+      productName: "星露谷物语农场规划器",
+      capabilitiesLabel: "使用方式",
+      faqLabel: "常见问题",
+      blogLabel: "博客",
+      plannerActionLabel: "打开规划器",
+      languageLabel: "语言",
+    },
     plannerTitle: "星露谷农场规划器",
     plannerDescription: "使用本地地图、物品和项目规划你的星露谷农场布局。",
   },

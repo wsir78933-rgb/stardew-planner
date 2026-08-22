@@ -7,10 +7,11 @@ const expectedBlogCanonicalPaths = [
   "/carpenter-stardew",
   "/where-is-robin-stardew-valley",
   "/stardew-valley-npc",
+  "/stardew-valley-town-map",
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(9);
+  expect(canonicalPublicPaths).toHaveLength(10);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );

@@ -1,10 +1,7 @@
 import type { ReactNode } from "react";
 import { getPublicPageCopy } from "../i18n/public-page-content";
 import type { PublicLocale } from "../i18n/public-locale";
-import {
-  getLocalizedPublicPath,
-  type PublicCanonicalPath,
-} from "../i18n/public-route-registry";
+import type { PublicCanonicalPath } from "../i18n/public-route-registry";
 import { createSiteFooterContent } from "../site-footer/site-footer-content";
 import { PublicNavigation } from "./public-navigation";
 import { SiteFooter } from "./site-footer";
@@ -15,10 +12,6 @@ type PublicPageShellProperties = Readonly<{
   canonicalPath: PublicCanonicalPath;
 }>;
 
-function getCounterpartLocale(locale: PublicLocale): PublicLocale {
-  return locale === "en" ? "zh-CN" : "en";
-}
-
 export function PublicPageShell({
   children,
   locale,
@@ -28,23 +21,8 @@ export function PublicPageShell({
 
   return (
     <div data-public-page-shell="true">
-      <header className="public-page-shell-header">
-        <a
-          className="public-page-shell-brand"
-          href={getLocalizedPublicPath(locale, "/")}
-        >
-          {pageCopy.brandLabel}
-        </a>
+      <header data-public-page-header>
         <PublicNavigation canonicalPath={canonicalPath} locale={locale} />
-        <a
-          className="public-page-shell-language-switcher"
-          href={getLocalizedPublicPath(
-            getCounterpartLocale(locale),
-            canonicalPath,
-          )}
-        >
-          {pageCopy.counterpartLabel}
-        </a>
       </header>
       <main>{children}</main>
       <SiteFooter content={createSiteFooterContent(pageCopy.footer, locale)} />

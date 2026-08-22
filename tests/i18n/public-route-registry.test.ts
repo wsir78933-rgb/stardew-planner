@@ -6,10 +6,9 @@ import {
   getLocalizedIndexablePublicRouteEntries,
   getLocalizedPublicRouteEntries,
 } from "../../src/i18n/public-route-registry";
-import { getPublicPageCopy } from "../../src/i18n/public-page-content";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(9);
+  expect(canonicalPublicPaths).toHaveLength(10);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -38,8 +37,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/stardew-valley-npc")).toBe(
     "/zh/stardew-valley-npc",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(18);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(16);
+  expect(getLocalizedPublicPath("en", "/stardew-valley-town-map")).toBe(
+    "/stardew-valley-town-map",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/stardew-valley-town-map")).toBe(
+    "/zh/stardew-valley-town-map",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(20);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(18);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -51,9 +56,11 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/carpenter-stardew");
   expect(indexablePathnames).toContain("/stardew-valley-npc");
   expect(indexablePathnames).toContain("/zh/stardew-valley-npc");
+  expect(indexablePathnames).toContain("/stardew-valley-town-map");
+  expect(indexablePathnames).toContain("/zh/stardew-valley-town-map");
 });
 
-it("registers the direct-entry blog routes without adding them to the public navigation", () => {
+it("registers the direct-entry blog routes", () => {
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([
       "/blog",
@@ -61,14 +68,9 @@ it("registers the direct-entry blog routes without adding them to the public nav
       "/carpenter-stardew",
       "/where-is-robin-stardew-valley",
       "/stardew-valley-npc",
+      "/stardew-valley-town-map",
     ]),
   );
-
-  for (const locale of ["en", "zh-CN"] as const) {
-    expect(getPublicPageCopy(locale).navigation.map(({ path }) => path)).not.toContain(
-      "/blog",
-    );
-  }
 });
 
 it("returns absolute paired language alternates", () => {

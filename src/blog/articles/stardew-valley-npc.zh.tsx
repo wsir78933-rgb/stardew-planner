@@ -1,8 +1,10 @@
+import { BlogFaqList } from "../../components/blog/blog-faq-list";
+
 export function StardewValleyNpcChineseArticle() {
   return (
     <article>
       <p>
-        这份星露谷 NPC 列表按照当前最新正式版整理，分为三类：12 名可结婚角色、22
+        这份星露谷 NPC 列表按 PC 1.6.15 整理，分为三类：12 名可结婚角色、22
         名可送礼但不可结婚的角色，以及 12 名不可送礼的 NPC，共 46
         名。下面按类别列出这些角色，并说明其中哪些人会影响商店、任务和农场规划。
       </p>
@@ -249,7 +251,7 @@ export function StardewValleyNpcChineseArticle() {
       </p>
       <p>
         花掉材料之前，先试摆占地。打开
-        <a className="blog-planner-link" href="/zh">
+        <a className="blog-planner-link" href="/zh#planner">
           星露谷农场规划器
         </a>
         ，放下建筑，再从农舍沿路走到门口。围栏、草地、干草收纳和附近机器都要留出工作空间。确认布局后再去找 Robin，等建筑完成，然后到 Marnie
@@ -284,43 +286,82 @@ export function StardewValleyNpcChineseArticle() {
       </p>
 
       <h2>星露谷 NPC 常见问题</h2>
-      <h3>《星露谷物语》一共有多少 NPC？</h3>
-      <p>
-        按本文使用的当前 Villagers 分类，共有 46 名角色：34 位可送礼村民和 12 位不可送礼
-        NPC。这里不包括玩家的孩子、其他生物与怪物，或该分类之外的有名角色。
-      </p>
-      <h3>可以和多少位村民结婚？</h3>
-      <p>
-        当前版本共有 12
-        位：Alex、Elliott、Harvey、Sam、Sebastian、Shane、Abigail、Emily、Haley、Leah、Maru 和
-        Penny。
-      </p>
-      <h3>每个 NPC 都能收礼吗？</h3>
-      <p>
-        不能。这份名单中有 34 位村民能正常收礼；另外 12 位不可送礼 NPC
-        要通过任务、事件、商店、捐赠、挑战或其他系统推进。
-      </p>
-      <h3>一周能给同一位村民送几次礼？</h3>
-      <p>
-        普通情况下，每天最多送一份，每周最多两份。即使本周已经送满两次，生日当天仍可额外送礼，而且生日倍率是 8 倍。
-      </p>
-      <h3>谁负责建造农场建筑？</h3>
-      <p>
-        普通农场建筑由 Robin 在木匠商店建造和升级。完成对应前置任务后，Wizard
-        的魔法书还会提供魔法农场建筑。
-      </p>
+      <BlogFaqList
+        items={[
+          {
+            question: "《星露谷物语》一共有多少 NPC？",
+            answer: (
+              <p>
+                按本文使用的当前 Villagers 分类，共有 46 名角色：34 位可送礼村民和 12 位不可送礼
+                NPC。这里不包括玩家的孩子、其他生物与怪物，或该分类之外的有名角色。
+              </p>
+            ),
+          },
+          {
+            question: "可以和多少位村民结婚？",
+            answer: (
+              <p>
+                当前版本共有 12
+                位：Alex、Elliott、Harvey、Sam、Sebastian、Shane、Abigail、Emily、Haley、Leah、Maru 和
+                Penny。
+              </p>
+            ),
+          },
+          {
+            question: "每个 NPC 都能收礼吗？",
+            answer: (
+              <p>
+                不能。这份名单中有 34 位村民能正常收礼；另外 12 位不可送礼 NPC
+                要通过任务、事件、商店、捐赠、挑战或其他系统推进。
+              </p>
+            ),
+          },
+          {
+            question: "一周能给同一位村民送几次礼？",
+            answer: (
+              <p>
+                普通情况下，每天最多送一份，每周最多两份。即使本周已经送满两次，生日当天仍可额外送礼，而且生日倍率是 8 倍。
+              </p>
+            ),
+          },
+          {
+            question: "谁负责建造农场建筑？",
+            answer: (
+              <p>
+                普通农场建筑由 Robin 在木匠商店建造和升级。完成对应前置任务后，Wizard
+                的魔法书还会提供魔法农场建筑。
+              </p>
+            ),
+          },
+        ]}
+      />
 
-      <h2>来源与更新边界</h2>
-      <p>
-        本文在 2026 年 8 月 18 日核对了星露谷 Wiki 的
-        <a href="https://stardewvalleywiki.com/Villagers">Villagers</a>、
-        <a href="https://stardewvalleywiki.com/Friendship">Friendship</a>、
-        <a href="https://stardewvalleywiki.com/Carpenter%27s_Shop">Carpenter&apos;s Shop</a>、
-        <a href="https://stardewvalleywiki.com/Marnie%27s_Ranch">Marnie&apos;s Ranch</a>、
-        <a href="https://stardewvalleywiki.com/Fish_Shop">Fish Shop</a>和
-        <a href="https://stardewvalleywiki.com/Wizard%27s_Tower">Wizard&apos;s Tower</a>
-        页面。本文对应 1.6.15。后续版本可能调整角色名单或关系分类，因此比较人数时请以文中版本为准。
-      </p>
+      <h2>来源</h2>
+      <ul>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/居民">星露谷 Wiki：居民</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/友谊">星露谷 Wiki：友谊</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/木匠的商店">星露谷 Wiki：木匠的商店</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/玛妮的牧场">星露谷 Wiki：玛妮的牧场</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/鱼店">星露谷 Wiki：鱼店</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/法师塔">星露谷 Wiki：法师塔</a>
+        </li>
+        <li>
+          <a href="https://store.steampowered.com/news/app/413150/view/517448731263500640">
+            Steam：PC 1.6.15 补丁说明
+          </a>
+        </li>
+      </ul>
     </article>
   );
 }

@@ -10,6 +10,7 @@ it("publishes the Stardew Valley NPC guide in both supported locales", () => {
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
     "stardew-valley-npc",
+    "stardew-valley-town-map",
   ]);
   expect(isBlogPostSlug("stardew-valley-npc")).toBe(true);
   expect(blogPostCanonicalPaths).toContain("/stardew-valley-npc/");

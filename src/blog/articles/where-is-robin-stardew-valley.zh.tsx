@@ -10,7 +10,7 @@ export function WhereIsRobinChineseArticle() {
       </p>
       <p>
         地址并不难找，真正容易让人扑空的是行程优先级。施工、节日、天气、星期和游戏进度，
-        都可能覆盖你记住的普通安排。
+        都可能覆盖你记住的普通安排。内容按星露谷物语 PC 1.6.15 整理。
       </p>
 
       <h2>罗宾现在在哪里？按 15 秒顺序检查</h2>
@@ -133,15 +133,21 @@ export function WhereIsRobinChineseArticle() {
         youtubeVideoId="bFEEer6Cp3U"
       />
 
-      <h2>来源与版本边界</h2>
-      <p>
-        本文于 2026 年 8 月 17 日按星露谷物语 1.6.15 核对。地址、营业时间、雨天规则、施工闭店和特殊行程，
-        均参考星露谷 Wiki 的 <a href="https://wiki.stardewvalley.net/Robin">Robin</a>、
-        <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">Carpenter&apos;s Shop</a>、
-        <a href="https://wiki.stardewvalley.net/Shop_Schedules">Shop Schedules</a> 和
-        <a href="https://wiki.stardewvalley.net/Telephone">Telephone</a> 页面。
-        游戏更新或模组改变 NPC 行程后，应重新核查这些来源。
-      </p>
+      <h2>来源</h2>
+      <ul>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/罗宾">星露谷 Wiki：罗宾</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/木匠的商店">星露谷 Wiki：木匠的商店</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/营业时间表">星露谷 Wiki：营业时间表</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/电话">星露谷 Wiki：电话</a>
+        </li>
+      </ul>
     </article>
   );
 }

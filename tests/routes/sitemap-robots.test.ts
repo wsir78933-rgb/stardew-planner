@@ -10,11 +10,13 @@ const expectedBlogSitemapPathnames = [
   "/carpenter-stardew",
   "/where-is-robin-stardew-valley",
   "/stardew-valley-npc",
+  "/stardew-valley-town-map",
   "/zh/blog",
   "/zh/blog/archive",
   "/zh/carpenter-stardew",
   "/zh/where-is-robin-stardew-valley",
   "/zh/stardew-valley-npc",
+  "/zh/stardew-valley-town-map",
 ] as const;
 
 it("writes robots.txt with the absolute sitemap URL", () => {
@@ -36,8 +38,8 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
 
-  expect(sitemapUrlCount).toBe(16);
-  expect(localizedPublicRouteEntries).toHaveLength(16);
+  expect(sitemapUrlCount).toBe(18);
+  expect(localizedPublicRouteEntries).toHaveLength(18);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,

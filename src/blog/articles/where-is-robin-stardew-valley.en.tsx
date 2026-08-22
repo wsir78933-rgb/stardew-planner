@@ -13,7 +13,8 @@ export function WhereIsRobinEnglishArticle() {
       <p>
         The address is simple; knowing whether Robin can help you is the part
         that saves a wasted trip. Her construction work, festivals, weather,
-        weekday, and story progress can replace the routine you expected.
+        weekday, and story progress can replace the routine you expected. This
+        guide follows Stardew Valley PC 1.6.15.
       </p>
 
       <h2>Where is Robin right now? Use this 15-second check</h2>
@@ -190,20 +191,27 @@ export function WhereIsRobinEnglishArticle() {
         youtubeVideoId="bFEEer6Cp3U"
       />
 
-      <h2>Sources and version boundary</h2>
-      <p>
-        This page was checked on 2026-08-17 against Stardew Valley 1.6.15. The
-        address, service hours, weather rules, construction closure, and special
-        schedules were verified with the official Stardew Valley Wiki pages for{` `}
-        <a href="https://wiki.stardewvalley.net/Robin">Robin</a>,{` `}
-        <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">
-          Carpenter&apos;s Shop
-        </a>
-        , <a href="https://wiki.stardewvalley.net/Shop_Schedules">Shop Schedules</a>,
-        and <a href="https://wiki.stardewvalley.net/Telephone">Telephone</a>.
-        Recheck those sources after a game update or when a mod changes NPC
-        schedules.
-      </p>
+      <h2>Source</h2>
+      <ul>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Robin">Stardew Valley Wiki: Robin</a>
+        </li>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">
+            Stardew Valley Wiki: Carpenter&apos;s Shop
+          </a>
+        </li>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Shop_Schedules">
+            Stardew Valley Wiki: Shop Schedules
+          </a>
+        </li>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Telephone">
+            Stardew Valley Wiki: Telephone
+          </a>
+        </li>
+      </ul>
     </article>
   );
 }

@@ -63,7 +63,7 @@ it("renders a localized discovery form and latest articles with semantic detail 
   expect(markup).toContain("Latest articles");
   expect(markup).toContain('aria-label="Jump to"');
   expect(markup).toContain('href="#latest-articles"');
-  expect(markup).not.toContain('href="#topic-carousel"');
+  expect(markup).toContain('href="#topic-carousel"');
 });
 
 it("renders only jump targets whose latest and topic sections are present", () => {
@@ -162,13 +162,13 @@ it("renders the selected bilingual NPC title and description in the article head
   for (const [locale, expectedTitle, expectedDescription] of [
     [
       "en",
-      "Meet Every Stardew Valley NPC in One Practical Guide",
-      "Meet the current Stardew Valley cast without opening dozens of profiles. Compare friendship groups, key services, and the NPCs new farmers need first.",
+      "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
+      "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
     ],
     [
       "zh-CN",
-      "一篇实用指南认识星露谷每位 NPC",
-      "无需打开几十个角色页面，就能了解当前星露谷角色、好感分类、关键服务，以及新农民最该优先认识的人。",
+      "星露谷 NPC 指南：礼物、婚姻与服务",
+      "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
     ],
   ] as const) {
     const post = getAllBlogPosts(locale).find(

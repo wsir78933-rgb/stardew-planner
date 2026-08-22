@@ -1,3 +1,4 @@
+import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogYouTubeVideo } from "../../components/blog/blog-youtube-video";
 
 export function CarpenterStardewChineseArticle() {
@@ -8,7 +9,8 @@ export function CarpenterStardewChineseArticle() {
         营业，但周二、周五 16:00 之后、节日、夏季 18 日，以及罗宾到农场施工的日子，都可能让这趟路白跑。
       </p>
       <p>
-        真正要解决的不只是“罗宾在哪里”，还包括“她今天能不能接单”和“建筑落地后会不会把农场越用越别扭”。下面按这两个问题来安排。
+        真正要解决的不只是“罗宾在哪里”，还包括“她今天能不能接单”和“建筑落地后会不会把农场越用越别扭”。下面按这两个问题来安排，对应星露谷物语
+        PC 1.6.15。价格、材料和施工天数以游戏里的建筑菜单为准。
       </p>
 
       <h2>星露谷木匠：先看结论</h2>
@@ -149,21 +151,45 @@ export function CarpenterStardewChineseArticle() {
       />
 
       <h2>星露谷木匠常见问题</h2>
-      <h3>星露谷物语里的木匠在哪里？</h3>
-      <p>
-        木匠是罗宾，她的商店在山区 24 Mountain Road，位于鹈鹕镇北面。如果你要看路线和更细的行程，可以阅读<a href="/zh/where-is-robin-stardew-valley">罗宾在星露谷物语的哪里</a>。
-      </p>
-      <h3>为什么能进罗宾家，却不能下建筑订单？</h3>
-      <p>
-        房屋可进入的时间比柜台服务时间长。房子可能在 9:00–20:00 开着，柜台却已经休息。除了普通的 9:00–17:00，还要留意周二、周五、节日、夏季 18 日、天气和施工状态。
-      </p>
-      <h3>建筑里有东西或动物时，还能移动吗？</h3>
-      <p>可以。建筑菜单会把建筑和内部物品一起移动，移动免费而且立即完成。前提是目标位置的所有占地格都能变成绿色。</p>
+      <BlogFaqList
+        items={[
+          {
+            question: "星露谷物语里的木匠在哪里？",
+            answer: (
+              <p>
+                木匠是罗宾，她的商店在山区 24 Mountain Road，位于鹈鹕镇北面。如果你要看路线和更细的行程，可以阅读<a href="/zh/where-is-robin-stardew-valley">罗宾在星露谷物语的哪里</a>。
+              </p>
+            ),
+          },
+          {
+            question: "为什么能进罗宾家，却不能下建筑订单？",
+            answer: (
+              <p>
+                房屋可进入的时间比柜台服务时间长。房子可能在 9:00–20:00 开着，柜台却已经休息。除了普通的 9:00–17:00，还要留意周二、周五、节日、夏季 18 日、天气和施工状态。
+              </p>
+            ),
+          },
+          {
+            question: "建筑里有东西或动物时，还能移动吗？",
+            answer: (
+              <p>可以。建筑菜单会把建筑和内部物品一起移动，移动免费而且立即完成。前提是目标位置的所有占地格都能变成绿色。</p>
+            ),
+          },
+        ]}
+      />
 
-      <h2>来源与更新边界</h2>
-      <p>
-        本文在 2026 年 8 月 16 日核对了星露谷 Wiki 的<a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">Carpenter&apos;s Shop 页面</a>、<a href="https://wiki.stardewvalley.net/Robin">Robin 页面</a>和<a href="https://wiki.stardewvalley.net/Telephone">Telephone 页面</a>。价格、材料、尺寸和施工时间请以当前游戏内建筑菜单为准；这些内容会随版本和进度变化。
-      </p>
+      <h2>来源</h2>
+      <ul>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/木匠的商店">星露谷 Wiki：木匠的商店</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/罗宾">星露谷 Wiki：罗宾</a>
+        </li>
+        <li>
+          <a href="https://zh.stardewvalleywiki.com/电话">星露谷 Wiki：电话</a>
+        </li>
+      </ul>
     </article>
   );
 }

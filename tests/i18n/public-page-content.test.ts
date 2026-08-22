@@ -6,21 +6,32 @@ it("keeps only the bilingual copy required by the remaining public shell", () =>
   const chineseCopy = getPublicPageCopy("zh-CN");
 
   expect(englishCopy).toMatchObject({
-    navigationLabel: "Public navigation",
-    brandLabel: "Stardew Valley Farm Planner",
-    counterpartLabel: "简体中文",
+    navigation: {
+      productName: "Stardew Valley Farm Planner",
+      capabilitiesLabel: "How it works",
+      faqLabel: "FAQ",
+      blogLabel: "Blog",
+      plannerActionLabel: "Open planner",
+      languageLabel: "Language",
+    },
     plannerTitle: "Stardew Valley Farm Planner",
   });
   expect(chineseCopy).toMatchObject({
-    navigationLabel: "公共导航",
-    brandLabel: "星露谷规划器",
-    counterpartLabel: "English",
+    navigation: {
+      productName: "星露谷物语农场规划器",
+      capabilitiesLabel: "使用方式",
+      faqLabel: "常见问题",
+      blogLabel: "博客",
+      plannerActionLabel: "打开规划器",
+      languageLabel: "语言",
+    },
     plannerTitle: "星露谷农场规划器",
   });
 
   for (const publicPageCopy of [englishCopy, chineseCopy]) {
-    expect(publicPageCopy.navigation).toHaveLength(1);
-    expect(publicPageCopy.navigation[0]).toMatchObject({ path: "/" });
+    expect(publicPageCopy).not.toHaveProperty("navigationLabel");
+    expect(publicPageCopy).not.toHaveProperty("brandLabel");
+    expect(publicPageCopy).not.toHaveProperty("counterpartLabel");
     expect(publicPageCopy).not.toHaveProperty("farmComparisonTitle");
     expect(publicPageCopy).not.toHaveProperty("farmGuideTitleTemplate");
     expect(publicPageCopy).not.toHaveProperty("modsTitle");

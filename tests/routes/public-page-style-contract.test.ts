@@ -48,7 +48,7 @@ it("does not add public-page declarations to the homepage selector", () => {
     "  body:has(> [data-homepage-shell]) [data-homepage-capability-number] {\n    margin-bottom: 2rem;\n  }",
   );
   expect(publicStyleBlock).toMatch(
-    /\[data-public-page-shell\] \.public-page-shell-language-switcher\s*\{[^}]*white-space:\s*nowrap;/s,
+    /\[data-public-page-shell\] \[data-public-page-header\]\s*\{/,
   );
   expect(publicStyleBlock).not.toContain("body:has(> [data-homepage-shell])");
 });

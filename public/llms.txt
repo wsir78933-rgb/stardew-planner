@@ -18,7 +18,8 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Planning guide archive](https://stardewvalleyplanner.art/blog/archive): Browse every Stardew Valley planning guide.
 - [Carpenter Stardew: Which Robin Service Do You Need Today?](https://stardewvalleyplanner.art/carpenter-stardew): Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.
 - [Robin's Shop Is Empty? Find Her in Stardew Valley Today](https://stardewvalleyplanner.art/where-is-robin-stardew-valley): Learn why Robin leaves the counter, where she goes on Tuesday and Friday, and when rain or farm construction changes the answer today.
-- [Meet Every Stardew Valley NPC in One Practical Guide](https://stardewvalleyplanner.art/stardew-valley-npc): Meet the current Stardew Valley cast without opening dozens of profiles. Compare friendship groups, key services, and the NPCs new farmers need first.
+- [Stardew Valley NPC Guide: Gifts, Marriage, and Services](https://stardewvalleyplanner.art/stardew-valley-npc): Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.
+- [Stardew Valley Town Map: Pelican Town Landmarks & Routes](https://stardewvalleyplanner.art/stardew-valley-town-map): Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.
 
 ## 简体中文
 
@@ -36,4 +37,5 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [规划指南归档](https://stardewvalleyplanner.art/zh/blog/archive): 浏览全部星露谷农场规划指南。
 - [星露谷木匠：今天该选罗宾的哪项服务？](https://stardewvalleyplanner.art/zh/carpenter-stardew): 根据购买、建造、升级或移动的实际需求，选择对应菜单并确认罗宾木匠商店能接单。
 - [罗宾的商店没人？今天去哪里找她](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley): 了解罗宾为什么会离开柜台、周二和周五会去哪里，以及下雨或农场施工会如何改变她当天的行程。
-- [一篇实用指南认识星露谷每位 NPC](https://stardewvalleyplanner.art/zh/stardew-valley-npc): 无需打开几十个角色页面，就能了解当前星露谷角色、好感分类、关键服务，以及新农民最该优先认识的人。
+- [星露谷 NPC 指南：礼物、婚姻与服务](https://stardewvalleyplanner.art/zh/stardew-valley-npc): 比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。
+- [星露谷物语小镇地图：鹈鹕镇地点与路线](https://stardewvalleyplanner.art/zh/stardew-valley-town-map): 用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。

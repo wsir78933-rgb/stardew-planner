@@ -28,6 +28,10 @@ type StaticBlogPageExpectation = Readonly<{
   pathname: string;
   staticPageFile: string;
   heading: string;
+  metadata?: Readonly<{
+    title: string;
+    description: string;
+  }>;
   documentLanguage: "en" | "zh-CN";
   schemaType: "Article" | "CollectionPage";
   shouldIndex: boolean;
@@ -175,6 +179,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/stardew-valley-npc-cover.webp",
         alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
       },
+      {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
+      },
     ],
   },
   {
@@ -196,6 +204,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-npc-cover.webp",
         alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
+      },
+      {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
       },
     ],
   },
@@ -230,7 +242,12 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/stardew-valley-npc",
     staticPageFile: "stardew-valley-npc.html",
-    heading: "Meet Every Stardew Valley NPC in One Practical Guide",
+    heading: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
+    metadata: {
+      title: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
+      description:
+        "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
+    },
     documentLanguage: "en",
     schemaType: "Article",
     shouldIndex: true,
@@ -238,6 +255,25 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-npc-cover.webp",
         alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
+      },
+    ],
+  },
+  {
+    pathname: "/stardew-valley-town-map",
+    staticPageFile: "stardew-valley-town-map.html",
+    heading: "Stardew Valley Town Map: Pelican Town Landmarks & Routes",
+    metadata: {
+      title: "Stardew Valley Town Map: Pelican Town Landmarks & Routes",
+      description:
+        "Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
       },
     ],
   },
@@ -261,6 +297,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/stardew-valley-npc-cover.webp",
         alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
       },
+      {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
+      },
     ],
   },
   {
@@ -282,6 +322,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-npc-cover.webp",
         alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
+      },
+      {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
       },
     ],
   },
@@ -316,7 +360,12 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/stardew-valley-npc",
     staticPageFile: "zh/stardew-valley-npc.html",
-    heading: "一篇实用指南认识星露谷每位 NPC",
+    heading: "星露谷 NPC 指南：礼物、婚姻与服务",
+    metadata: {
+      title: "星露谷 NPC 指南：礼物、婚姻与服务",
+      description:
+        "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
+    },
     documentLanguage: "zh-CN",
     schemaType: "Article",
     shouldIndex: true,
@@ -324,6 +373,25 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-npc-cover.webp",
         alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
+      },
+    ],
+  },
+  {
+    pathname: "/zh/stardew-valley-town-map",
+    staticPageFile: "zh/stardew-valley-town-map.html",
+    heading: "星露谷物语小镇地图：鹈鹕镇地点与路线",
+    metadata: {
+      title: "星露谷物语小镇地图：鹈鹕镇地点与路线",
+      description:
+        "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
       },
     ],
   },
@@ -650,6 +718,7 @@ describe("static public pages", () => {
       pathname,
       staticPageFile,
       heading,
+      metadata,
       documentLanguage,
       schemaType,
       shouldIndex,
@@ -672,6 +741,24 @@ describe("static public pages", () => {
       expect(staticPageHtml).toContain(
         `<h1>${escapeHtmlAttributeValue(heading)}</h1>`,
       );
+      if (metadata !== undefined) {
+        expect(staticPageHtml).toContain(
+          `<title>${escapeHtmlAttributeValue(metadata.title)}</title>`,
+        );
+        expect(staticPageHtml).toContain(
+          `<meta name="description" content="${escapeHtmlAttributeValue(metadata.description)}"`,
+        );
+
+        const matchingStructuredData = findStructuredDataByType(
+          readJsonLdStructuredData(staticPageHtml, staticPageFile),
+          schemaType,
+        );
+        expect(matchingStructuredData).toHaveLength(1);
+        expect(matchingStructuredData[0]).toMatchObject({
+          headline: metadata.title,
+          description: metadata.description,
+        });
+      }
       expect(staticPageHtml).toContain(
         `<link rel="canonical" href="${expectedCanonicalUrl(pathname)}"`,
       );
@@ -740,8 +827,8 @@ describe("static public pages", () => {
         : pathname;
       const chinesePathname = `/zh${englishPathname === "/" ? "" : englishPathname}`;
       const expectedNavigationLabel = pathname.startsWith("/zh")
-        ? "公共导航"
-        : "Public navigation";
+        ? "星露谷物语农场规划器"
+        : "Stardew Valley Farm Planner";
 
       expect(
         readInitialDocumentLanguage(

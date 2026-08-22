@@ -1,3 +1,4 @@
+import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogYouTubeVideo } from "../../components/blog/blog-youtube-video";
 
 export function CarpenterStardewEnglishArticle() {
@@ -13,7 +14,8 @@ export function CarpenterStardewEnglishArticle() {
       <p>
         The useful question is not only where Robin is. It is whether she can take the
         order today, and whether the building will still make sense once it reaches the
-        farm. This guide covers both decisions.
+        farm. This guide covers both decisions for Stardew Valley PC 1.6.15. Use the
+        in-game construction menu for current prices, materials, size, and build time.
       </p>
 
       <h2>Carpenter Stardew: quick answer</h2>
@@ -208,34 +210,57 @@ export function CarpenterStardewEnglishArticle() {
       />
 
       <h2>Carpenter Stardew FAQ</h2>
-      <h3>Where is the carpenter in Stardew Valley?</h3>
-      <p>
-        Robin is the town carpenter. Her shop is at 24 Mountain Road in The Mountain,
-        north of Pelican Town. For a route and deeper schedule detail, read{" "}
-        <a href="/where-is-robin-stardew-valley">where to find Robin in Stardew Valley</a>.
-      </p>
-      <h3>Why can I enter Robin&apos;s house but not place an order?</h3>
-      <p>
-        Her house has longer access hours than the Carpenter&apos;s Shop counter. The house can
-        be open from 9:00 AM to 8:00 PM while the counter is closed. Check the normal
-        9:00 AM–5:00 PM window and the Tuesday, Friday, festival, Summer 18, weather, and
-        construction exceptions.
-      </p>
-      <h3>Can I move a building that still has items or animals inside?</h3>
-      <p>
-        Yes. The construction menu moves the building and its contents together. The move
-        is free and immediate. You still need a clear, green destination footprint.
-      </p>
+      <BlogFaqList
+        items={[
+          {
+            question: "Where is the carpenter in Stardew Valley?",
+            answer: (
+              <p>
+                Robin is the town carpenter. Her shop is at 24 Mountain Road in The Mountain,
+                north of Pelican Town. For a route and deeper schedule detail, read{" "}
+                <a href="/where-is-robin-stardew-valley">where to find Robin in Stardew Valley</a>.
+              </p>
+            ),
+          },
+          {
+            question: "Why can I enter Robin's house but not place an order?",
+            answer: (
+              <p>
+                Her house has longer access hours than the Carpenter&apos;s Shop counter. The house can
+                be open from 9:00 AM to 8:00 PM while the counter is closed. Check the normal
+                9:00 AM–5:00 PM window and the Tuesday, Friday, festival, Summer 18, weather, and
+                construction exceptions.
+              </p>
+            ),
+          },
+          {
+            question: "Can I move a building that still has items or animals inside?",
+            answer: (
+              <p>
+                Yes. The construction menu moves the building and its contents together. The move
+                is free and immediate. You still need a clear, green destination footprint.
+              </p>
+            ),
+          },
+        ]}
+      />
 
-      <h2>Sources and update boundary</h2>
-      <p>
-        This guide was checked against the Stardew Valley Wiki&apos;s{" "}
-        <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">Carpenter&apos;s Shop page</a>,
-        the <a href="https://wiki.stardewvalley.net/Robin">Robin page</a>, and the{" "}
-        <a href="https://wiki.stardewvalley.net/Telephone">Telephone page</a> on 2026-08-16.
-        Use the current in-game construction menu for prices, materials, size, and duration;
-        those details can change with game version and progress.
-      </p>
+      <h2>Source</h2>
+      <ul>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">
+            Stardew Valley Wiki: Carpenter&apos;s Shop
+          </a>
+        </li>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Robin">Stardew Valley Wiki: Robin</a>
+        </li>
+        <li>
+          <a href="https://wiki.stardewvalley.net/Telephone">
+            Stardew Valley Wiki: Telephone
+          </a>
+        </li>
+      </ul>
     </article>
   );
 }

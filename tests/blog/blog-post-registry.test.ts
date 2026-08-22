@@ -14,6 +14,7 @@ const expectedSlugs = [
   "carpenter-stardew",
   "where-is-robin-stardew-valley",
   "stardew-valley-npc",
+  "stardew-valley-town-map",
 ] as const;
 
 function createLocalizedPost(
@@ -48,21 +49,23 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the three canonical blog identities in publishing order", () => {
+it("keeps the four canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the six localized root-level canonical article paths", () => {
+it("publishes only the eight localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
     "/stardew-valley-npc/",
+    "/stardew-valley-town-map/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
+    "/zh/stardew-valley-town-map/",
   ]);
 });
 
@@ -101,14 +104,24 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       "了解罗宾为什么会离开柜台、周二和周五会去哪里，以及下雨或农场施工会如何改变她当天的行程。",
   });
   expect(englishPosts[2]).toMatchObject({
-    title: "Meet Every Stardew Valley NPC in One Practical Guide",
+    title: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
     description:
-      "Meet the current Stardew Valley cast without opening dozens of profiles. Compare friendship groups, key services, and the NPCs new farmers need first.",
+      "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
   });
   expect(chinesePosts[2]).toMatchObject({
-    title: "一篇实用指南认识星露谷每位 NPC",
+    title: "星露谷 NPC 指南：礼物、婚姻与服务",
     description:
-      "无需打开几十个角色页面，就能了解当前星露谷角色、好感分类、关键服务，以及新农民最该优先认识的人。",
+      "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
+  });
+  expect(englishPosts[3]).toMatchObject({
+    title: "Stardew Valley Town Map: Pelican Town Landmarks & Routes",
+    description:
+      "Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.",
+  });
+  expect(chinesePosts[3]).toMatchObject({
+    title: "星露谷物语小镇地图：鹈鹕镇地点与路线",
+    description:
+      "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
   });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
@@ -118,6 +131,7 @@ it("binds every localized post to its own original blog cover", () => {
     "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
     "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.webp",
     "stardew-valley-npc": "/blog/stardew-valley-npc-cover.webp",
+    "stardew-valley-town-map": "/blog/stardew-valley-town-map-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -215,7 +229,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
 
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
-  ).toThrow("stardew-valley-npc");
+  ).toThrow("stardew-valley-town-map");
 });
 
 it("rejects unsupported locale entries and names the rejected locale", () => {

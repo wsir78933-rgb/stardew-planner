@@ -22,10 +22,16 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
     "[罗宾的商店没人？今天去哪里找她](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley)",
   );
   expect(llmsText).toContain(
-    "[Meet Every Stardew Valley NPC in One Practical Guide](https://stardewvalleyplanner.art/stardew-valley-npc)",
+    "[Stardew Valley NPC Guide: Gifts, Marriage, and Services](https://stardewvalleyplanner.art/stardew-valley-npc): Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
   );
   expect(llmsText).toContain(
-    "[一篇实用指南认识星露谷每位 NPC](https://stardewvalleyplanner.art/zh/stardew-valley-npc)",
+    "[星露谷 NPC 指南：礼物、婚姻与服务](https://stardewvalleyplanner.art/zh/stardew-valley-npc): 比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
+  );
+  expect(llmsText).toContain(
+    "[Stardew Valley Town Map: Pelican Town Landmarks & Routes](https://stardewvalleyplanner.art/stardew-valley-town-map): Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷物语小镇地图：鹈鹕镇地点与路线](https://stardewvalleyplanner.art/zh/stardew-valley-town-map): 用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
   );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {

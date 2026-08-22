@@ -29,11 +29,13 @@ const expectedStaticPageFiles = [
   "carpenter-stardew.html",
   "where-is-robin-stardew-valley.html",
   "stardew-valley-npc.html",
+  "stardew-valley-town-map.html",
   "zh/blog.html",
   "zh/blog/archive.html",
   "zh/carpenter-stardew.html",
   "zh/where-is-robin-stardew-valley.html",
   "zh/stardew-valley-npc.html",
+  "zh/stardew-valley-town-map.html",
 ] as const;
 
 const expectedStaticHomepageFiles = [

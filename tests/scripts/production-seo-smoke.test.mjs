@@ -43,6 +43,7 @@ const expectedCanonicalPublicPathnames = [
   "/carpenter-stardew",
   "/where-is-robin-stardew-valley",
   "/stardew-valley-npc",
+  "/stardew-valley-town-map",
 ];
 
 const expectedPublicHtmlPathnames = [
@@ -58,11 +59,13 @@ const expectedBlogPathnamesForFixture = [
   "/carpenter-stardew",
   "/where-is-robin-stardew-valley",
   "/stardew-valley-npc",
+  "/stardew-valley-town-map",
   "/zh/blog",
   "/zh/blog/archive",
   "/zh/carpenter-stardew",
   "/zh/where-is-robin-stardew-valley",
   "/zh/stardew-valley-npc",
+  "/zh/stardew-valley-town-map",
 ];
 
 const expectedNoindexContactPathnamesForFixture = [
@@ -371,8 +374,8 @@ describe("production SEO smoke arguments", () => {
 });
 
 describe("production SEO smoke static contract", () => {
-  it("declares all 18 localized public HTML paths", () => {
-    expect(expectedPublicHtmlPathContracts).toHaveLength(18);
+  it("declares all 20 localized public HTML paths", () => {
+    expect(expectedPublicHtmlPathContracts).toHaveLength(20);
     expect(
       expectedPublicHtmlPathContracts.map(({ pathname }) => pathname),
     ).toEqual(expectedPublicHtmlPathnames);
@@ -384,8 +387,8 @@ describe("production SEO smoke static contract", () => {
     ).toBe(true);
   });
 
-  it("declares the exact 16 indexable sitemap pathnames", () => {
-    expect(expectedSitemapPathnames).toHaveLength(16);
+  it("declares the exact 18 indexable sitemap pathnames", () => {
+    expect(expectedSitemapPathnames).toHaveLength(18);
     expect(expectedSitemapPathnames).toEqual(
       expectedPublicHtmlPathnames.filter(
         (pathname) => !expectedNoindexContactPathnamesForFixture.includes(pathname),
@@ -393,7 +396,7 @@ describe("production SEO smoke static contract", () => {
     );
   });
 
-  it("adds all ten blog pathnames to the indexable sitemap contract", () => {
+  it("adds all twelve blog pathnames to the indexable sitemap contract", () => {
     expect(expectedSitemapPathnames).toEqual(
       expect.arrayContaining(expectedBlogPathnamesForFixture),
     );
@@ -442,12 +445,12 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
 
     expect(summary).toMatchObject({
-      publicHtmlPageCount: 18,
-      sitemapUrlCount: 16,
+      publicHtmlPageCount: 20,
+      sitemapUrlCount: 18,
       noindexContactPageCount: 2,
       missingPageCount: 1,
     });
-    expect(requests).toHaveLength(24);
+    expect(requests).toHaveLength(26);
     expect(requests[0]).toEqual({
       requestUrl:
         "http://stardewvalleyplanner.art/privacy?seo_https_probe=1",
@@ -460,7 +463,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
     expect(
       requests
-        .slice(2, 20)
+        .slice(2, 22)
         .map(({ requestUrl }) => new URL(requestUrl).pathname),
     ).toEqual(expectedPublicHtmlPathnames);
   });
@@ -685,7 +688,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     ]);
   });
 
-  it("requires the unique sitemap location set to exactly match all 16 URLs", async () => {
+  it("requires the unique sitemap location set to exactly match all 18 URLs", async () => {
     const sitemapUrl = `${productionOrigin}/sitemap.xml`;
     const incompleteSitemapPathnames = expectedSitemapPathnamesForFixture.slice(1);
     const incompleteSitemapXml = `<urlset>${incompleteSitemapPathnames
@@ -704,8 +707,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "16 unique sitemap URLs",
-      "15",
+      "18 unique sitemap URLs",
+      "17",
     ]);
   });
 
@@ -757,7 +760,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "16 unique sitemap URLs",
+      "18 unique sitemap URLs",
       "0",
     ]);
   });
@@ -837,13 +840,13 @@ describe("production SEO smoke security headers and static caching", () => {
     });
 
     expect(summary).toEqual({
-      publicHtmlPageCount: 18,
-      sitemapUrlCount: 16,
+      publicHtmlPageCount: 20,
+      sitemapUrlCount: 18,
       noindexContactPageCount: 2,
       missingPageCount: 1,
-      securityHeaderResponseCount: 19,
+      securityHeaderResponseCount: 21,
       cachedStaticAssetCount: 1,
-      totalRequestCount: 24,
+      totalRequestCount: 26,
     });
     expect(Object.isFrozen(summary)).toBe(true);
     expect(requests.at(-1)).toEqual({
@@ -896,7 +899,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 19 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 21 });
   });
 
   it("rejects missing CSP and missing enforced frame protection", async () => {
@@ -1004,7 +1007,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 19 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 21 });
   });
 
   it("rejects a quoted zero HSTS max-age", async () => {
@@ -1145,7 +1148,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 19 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 21 });
   });
 
   it("accepts multiple declared policies when their combined frame ancestors are restrictive", async () => {
@@ -1166,7 +1169,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 19 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 21 });
   });
 
   it("checks security headers on the missing-page HTML response", async () => {

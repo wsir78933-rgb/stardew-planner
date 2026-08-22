@@ -12,12 +12,22 @@ it("renders a shared static navigation frame around route content", () => {
   );
 
   expect(markup).toContain('data-public-page-shell="true"');
-  expect(markup).toContain('aria-label="Public navigation"');
+  expect(markup).toContain("data-public-page-header");
+  expect(markup).toContain('aria-label="Stardew Valley Farm Planner"');
+  expect(markup).toContain("data-public-page-brand");
+  expect(markup).not.toContain("data-homepage-header");
+  expect(markup).not.toContain("data-homepage-brand");
   expect(markup).toContain('href="/"');
-  expect(markup).toContain(
-    'class="public-page-shell-brand" href="/">Stardew Valley Farm Planner</a>',
-  );
-  expect(markup).toContain('aria-current="page" href="/">Planner</a>');
+  expect(markup).toContain("Stardew Valley Farm Planner");
+  expect(markup).toContain('href="/#capabilities">How it works</a>');
+  expect(markup).toContain('href="/#faq">FAQ</a>');
+  expect(markup).toContain('href="/blog">Blog</a>');
+  expect(markup).toContain("data-homepage-language-switcher");
+  expect(markup).toContain('href="/zh"');
+  expect(markup).toContain('href="/#planner"');
+  expect(markup).toContain("Open planner");
+  expect(markup).not.toContain('class="public-page-shell-brand"');
+  expect(markup).not.toContain('class="public-page-shell-language-switcher"');
   expect(markup).toContain("Example route");
   expect(markup).toContain('data-site-footer="true"');
   expect(markup).toContain(
@@ -33,9 +43,6 @@ it("renders a shared static navigation frame around route content", () => {
     /<div data-site-footer-social-icons="true">[\s\S]*?href="https:\/\/x\.com\/wsir1139"[\s\S]*?<\/div>/,
   );
   expect(markup).toContain("© Stardew Valley Farm Planner");
-  expect(markup).toContain(
-    'class="public-page-shell-language-switcher" href="/zh"',
-  );
 });
 
 it("keeps every Chinese public homepage link on /zh", () => {
@@ -45,18 +52,20 @@ it("keeps every Chinese public homepage link on /zh", () => {
     </PublicPageShell>,
   );
 
-  expect(markup).toContain('aria-label="公共导航"');
-  expect(markup).toContain(
-    'class="public-page-shell-brand" href="/zh">星露谷规划器</a>',
-  );
-  expect(markup).toContain(
-    'aria-current="page" href="/zh">规划器</a>',
-  );
+  expect(markup).toContain('aria-label="星露谷物语农场规划器"');
+  expect(markup).toContain("data-public-page-brand");
+  expect(markup).not.toContain("data-homepage-brand");
+  expect(markup).toContain('href="/zh"');
+  expect(markup).toContain("星露谷物语农场规划器");
+  expect(markup).toContain('href="/zh#capabilities">使用方式</a>');
+  expect(markup).toContain('href="/zh#faq">常见问题</a>');
+  expect(markup).toContain('href="/zh/blog">博客</a>');
+  expect(markup).toContain("data-homepage-language-switcher");
+  expect(markup).toContain('href="/"');
+  expect(markup).toContain('href="/zh#planner"');
+  expect(markup).toContain("打开规划器");
   expect(markup).not.toContain('href="/zh/farm-comparison"');
   expect(markup).not.toContain('href="/zh/mods"');
-  expect(markup).toContain(
-    'class="public-page-shell-language-switcher" href="/"',
-  );
   expect(markup).toContain('data-site-footer="true"');
   expect(markup).toContain("在浏览器中本地规划《星露谷物语》农场布局的玩家工具。");
   expect(markup).toContain("<h2>规划器</h2>");
@@ -78,7 +87,10 @@ it("keeps the planner destination localized on a Chinese information page", () =
     <PublicNavigation canonicalPath="/privacy" locale="zh-CN" />,
   );
 
-  expect(markup).toContain('href="/zh">规划器</a>');
+  expect(markup).toContain('href="/zh#planner"');
+  expect(markup).toContain("打开规划器");
+  expect(markup).toContain('href="/privacy"');
+  expect(markup).toContain('href="/zh/privacy"');
   expect(markup).not.toContain('href="/zh/farm-comparison"');
   expect(markup).not.toContain('href="/zh/mods"');
 });

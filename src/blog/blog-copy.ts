@@ -85,11 +85,13 @@ const localizedBlogPostPaths: Readonly<
     "carpenter-stardew": "/carpenter-stardew",
     "where-is-robin-stardew-valley": "/where-is-robin-stardew-valley",
     "stardew-valley-npc": "/stardew-valley-npc",
+    "stardew-valley-town-map": "/stardew-valley-town-map",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
     "where-is-robin-stardew-valley": "/zh/where-is-robin-stardew-valley",
     "stardew-valley-npc": "/zh/stardew-valley-npc",
+    "stardew-valley-town-map": "/zh/stardew-valley-town-map",
   },
 };
 

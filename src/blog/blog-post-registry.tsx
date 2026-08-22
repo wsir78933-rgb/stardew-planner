@@ -6,6 +6,8 @@ import { WhereIsRobinEnglishArticle } from "./articles/where-is-robin-stardew-va
 import { WhereIsRobinChineseArticle } from "./articles/where-is-robin-stardew-valley.zh";
 import { StardewValleyNpcEnglishArticle } from "./articles/stardew-valley-npc.en";
 import { StardewValleyNpcChineseArticle } from "./articles/stardew-valley-npc.zh";
+import { StardewValleyTownMapEnglishArticle } from "./articles/stardew-valley-town-map.en";
+import { StardewValleyTownMapChineseArticle } from "./articles/stardew-valley-town-map.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -77,9 +79,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-npc",
-      title: "Meet Every Stardew Valley NPC in One Practical Guide",
+      title: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
       description:
-        "Meet the current Stardew Valley cast without opening dozens of profiles. Compare friendship groups, key services, and the NPCs new farmers need first.",
+        "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 10,
@@ -89,6 +91,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: StardewValleyNpcEnglishArticle,
+    },
+    {
+      slug: "stardew-valley-town-map",
+      title: "Stardew Valley Town Map: Pelican Town Landmarks & Routes",
+      description:
+        "Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
+      },
+      featured: true,
+      Content: StardewValleyTownMapEnglishArticle,
     },
   ],
   "zh-CN": [
@@ -123,9 +140,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-npc",
-      title: "一篇实用指南认识星露谷每位 NPC",
+      title: "星露谷 NPC 指南：礼物、婚姻与服务",
       description:
-        "无需打开几十个角色页面，就能了解当前星露谷角色、好感分类、关键服务，以及新农民最该优先认识的人。",
+        "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 10,
@@ -135,6 +152,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: StardewValleyNpcChineseArticle,
+    },
+    {
+      slug: "stardew-valley-town-map",
+      title: "星露谷物语小镇地图：鹈鹕镇地点与路线",
+      description:
+        "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
+      },
+      featured: true,
+      Content: StardewValleyTownMapChineseArticle,
     },
   ],
 };

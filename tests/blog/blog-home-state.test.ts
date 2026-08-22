@@ -43,7 +43,7 @@ it("returns an empty default home state for no posts", () => {
   });
 });
 
-it("keeps three real posts in registry canonical order", () => {
+it("keeps four real posts in registry canonical order", () => {
   const posts = getAllBlogPosts("en");
   const homeState = getBlogHomeState(posts, {});
 
@@ -51,9 +51,15 @@ it("keeps three real posts in registry canonical order", () => {
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
     "stardew-valley-npc",
+    "stardew-valley-town-map",
   ]);
-  expect(homeState.totalPostCount).toBe(3);
-  expect(homeState.topicCarouselPosts).toEqual([]);
+  expect(homeState.totalPostCount).toBe(4);
+  expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
+    "carpenter-stardew",
+    "where-is-robin-stardew-valley",
+    "stardew-valley-npc",
+    "stardew-valley-town-map",
+  ]);
 });
 
 it("treats every array-valued home parameter as an invalid non-string value", () => {

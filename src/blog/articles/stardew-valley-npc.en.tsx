@@ -1,8 +1,10 @@
+import { BlogFaqList } from "../../components/blog/blog-faq-list";
+
 export function StardewValleyNpcEnglishArticle() {
   return (
     <article>
       <p>
-        This Stardew Valley NPC list follows the current stable release and divides 46
+        This Stardew Valley NPC list uses the PC 1.6.15 roster and divides 46
         characters into three groups: 12 marriage candidates, 22 giftable characters who
         cannot be married, and 12 non-giftable NPCs. The sections below list each group and
         point out the characters whose shops, quests, and services affect farm planning.
@@ -284,7 +286,7 @@ export function StardewValleyNpcEnglishArticle() {
       </p>
       <p>
         Test the footprint before spending the materials. Open the{" "}
-        <a className="blog-planner-link" href="/">
+        <a className="blog-planner-link" href="/#planner">
           Stardew Valley Planner
         </a>
         , place the building, and trace the route from the farmhouse to its door. Leave
@@ -329,48 +331,96 @@ export function StardewValleyNpcEnglishArticle() {
       </p>
 
       <h2>Stardew Valley NPC FAQ</h2>
-      <h3>How many NPCs are in Stardew Valley?</h3>
-      <p>
-        Using the current Villagers page as its scope, this guide covers 46 characters: 34
-        giftable villagers and 12 non-giftable NPCs. It does not include the player&apos;s
-        children, every creature or monster, or named figures outside that page.
-      </p>
-      <h3>How many villagers can you marry?</h3>
-      <p>
-        Twelve in the current version: Alex, Elliott, Harvey, Sam, Sebastian, Shane, Abigail,
-        Emily, Haley, Leah, Maru, and Penny.
-      </p>
-      <h3>Can you give gifts to every NPC?</h3>
-      <p>
-        No. Thirty-four villagers in this roster accept normal gifts. The 12 non-giftable
-        NPCs progress through quests, events, shops, donations, challenges, or other
-        systems instead.
-      </p>
-      <h3>How often can you give a villager a gift?</h3>
-      <p>
-        Normally, you can give one gift to a villager per day and two per week. A birthday
-        allows an extra gift even after the weekly two have been used, and the birthday
-        multiplier is eight.
-      </p>
-      <h3>Which NPC builds farm buildings?</h3>
-      <p>
-        Robin constructs and upgrades ordinary farm buildings through the Carpenter&apos;s
-        Shop. Later, the Wizard&apos;s magic book provides magical farm buildings after the
-        required quest progress.
-      </p>
+      <BlogFaqList
+        items={[
+          {
+            question: "How many NPCs are in Stardew Valley?",
+            answer: (
+              <p>
+                Using the current Villagers page as its scope, this guide covers 46 characters: 34
+                giftable villagers and 12 non-giftable NPCs. It does not include the player&apos;s
+                children, every creature or monster, or named figures outside that page.
+              </p>
+            ),
+          },
+          {
+            question: "How many villagers can you marry?",
+            answer: (
+              <p>
+                Twelve in the current version: Alex, Elliott, Harvey, Sam, Sebastian, Shane, Abigail,
+                Emily, Haley, Leah, Maru, and Penny.
+              </p>
+            ),
+          },
+          {
+            question: "Can you give gifts to every NPC?",
+            answer: (
+              <p>
+                No. Thirty-four villagers in this roster accept normal gifts. The 12 non-giftable
+                NPCs progress through quests, events, shops, donations, challenges, or other
+                systems instead.
+              </p>
+            ),
+          },
+          {
+            question: "How often can you give a villager a gift?",
+            answer: (
+              <p>
+                Normally, you can give one gift to a villager per day and two per week. A birthday
+                allows an extra gift even after the weekly two have been used, and the birthday
+                multiplier is eight.
+              </p>
+            ),
+          },
+          {
+            question: "Which NPC builds farm buildings?",
+            answer: (
+              <p>
+                Robin constructs and upgrades ordinary farm buildings through the Carpenter&apos;s
+                Shop. Later, the Wizard&apos;s magic book provides magical farm buildings after the
+                required quest progress.
+              </p>
+            ),
+          },
+        ]}
+      />
 
-      <h2>Sources and update boundary</h2>
-      <p>
-        This guide was checked on August 18, 2026 against the Stardew Valley Wiki pages for{" "}
-        <a href="https://stardewvalleywiki.com/Villagers">Villagers</a>,{" "}
-        <a href="https://stardewvalleywiki.com/Friendship">Friendship</a>, the{" "}
-        <a href="https://stardewvalleywiki.com/Carpenter%27s_Shop">Carpenter&apos;s Shop</a>,{" "}
-        <a href="https://stardewvalleywiki.com/Marnie%27s_Ranch">Marnie&apos;s Ranch</a>, the{" "}
-        <a href="https://stardewvalleywiki.com/Fish_Shop">Fish Shop</a>, and the{" "}
-        <a href="https://stardewvalleywiki.com/Wizard%27s_Tower">Wizard&apos;s Tower</a>. It
-        covers Stardew Valley 1.6.15. Later releases may change the roster or relationship
-        groups, so compare counts against the version named here.
-      </p>
+      <h2>Source</h2>
+      <ul>
+        <li>
+          <a href="https://stardewvalleywiki.com/Villagers">
+            Stardew Valley Wiki: Villagers
+          </a>
+        </li>
+        <li>
+          <a href="https://stardewvalleywiki.com/Friendship">
+            Stardew Valley Wiki: Friendship
+          </a>
+        </li>
+        <li>
+          <a href="https://stardewvalleywiki.com/Carpenter%27s_Shop">
+            Stardew Valley Wiki: Carpenter&apos;s Shop
+          </a>
+        </li>
+        <li>
+          <a href="https://stardewvalleywiki.com/Marnie%27s_Ranch">
+            Stardew Valley Wiki: Marnie&apos;s Ranch
+          </a>
+        </li>
+        <li>
+          <a href="https://stardewvalleywiki.com/Fish_Shop">Stardew Valley Wiki: Fish Shop</a>
+        </li>
+        <li>
+          <a href="https://stardewvalleywiki.com/Wizard%27s_Tower">
+            Stardew Valley Wiki: Wizard&apos;s Tower
+          </a>
+        </li>
+        <li>
+          <a href="https://store.steampowered.com/news/app/413150/view/517448731263500640">
+            Steam: PC 1.6.15 patch notes
+          </a>
+        </li>
+      </ul>
     </article>
   );
 }
