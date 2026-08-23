@@ -1,13 +1,13 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
 
 export function StardewValleyNpcEnglishArticle() {
   return (
     <article>
       <p>
-        This Stardew Valley NPC list uses the PC 1.6.15 roster and divides 46
-        characters into three groups: 12 marriage candidates, 22 giftable characters who
-        cannot be married, and 12 non-giftable NPCs. The sections below list each group and
-        point out the characters whose shops, quests, and services affect farm planning.
+        The Stardew Valley PC 1.6.15 roster has 46 characters: 12 marriage candidates,
+        22 giftable characters who cannot be married, and 12 non-giftable NPCs. Shops,
+        quests, and services make some of them especially relevant to farm planning.
       </p>
 
       <h2>Stardew Valley NPC list: the quick answer</h2>
@@ -313,8 +313,8 @@ export function StardewValleyNpcEnglishArticle() {
 
       <h2>Why an NPC is not where you expected</h2>
       <p>
-        An NPC&apos;s home address is not a promise that they will stand there all day. Before
-        assuming the guide is wrong, check these conditions:
+        An NPC&apos;s home address is not a promise that they will stand there all day. If an NPC is
+        missing from the expected location, check these conditions:
       </p>
       <ul>
         <li>Current time and weekday</li>
@@ -337,9 +337,9 @@ export function StardewValleyNpcEnglishArticle() {
             question: "How many NPCs are in Stardew Valley?",
             answer: (
               <p>
-                Using the current Villagers page as its scope, this guide covers 46 characters: 34
-                giftable villagers and 12 non-giftable NPCs. It does not include the player&apos;s
-                children, every creature or monster, or named figures outside that page.
+                The current Villagers roster contains 46 characters: 34 giftable villagers and 12
+                non-giftable NPCs. This count does not include the player&apos;s children, every
+                creature or monster, or named figures outside that roster.
               </p>
             ),
           },
@@ -385,42 +385,30 @@ export function StardewValleyNpcEnglishArticle() {
         ]}
       />
 
-      <h2>Source</h2>
-      <ul>
-        <li>
-          <a href="https://stardewvalleywiki.com/Villagers">
-            Stardew Valley Wiki: Villagers
-          </a>
-        </li>
-        <li>
-          <a href="https://stardewvalleywiki.com/Friendship">
-            Stardew Valley Wiki: Friendship
-          </a>
-        </li>
-        <li>
-          <a href="https://stardewvalleywiki.com/Carpenter%27s_Shop">
-            Stardew Valley Wiki: Carpenter&apos;s Shop
-          </a>
-        </li>
-        <li>
-          <a href="https://stardewvalleywiki.com/Marnie%27s_Ranch">
-            Stardew Valley Wiki: Marnie&apos;s Ranch
-          </a>
-        </li>
-        <li>
-          <a href="https://stardewvalleywiki.com/Fish_Shop">Stardew Valley Wiki: Fish Shop</a>
-        </li>
-        <li>
-          <a href="https://stardewvalleywiki.com/Wizard%27s_Tower">
-            Stardew Valley Wiki: Wizard&apos;s Tower
-          </a>
-        </li>
-        <li>
-          <a href="https://store.steampowered.com/news/app/413150/view/517448731263500640">
-            Steam: PC 1.6.15 patch notes
-          </a>
-        </li>
-      </ul>
+      <BlogSources
+        heading="Sources"
+        items={[
+          { href: "https://stardewvalleywiki.com/Villagers", label: "Stardew Valley Wiki: Villagers" },
+          { href: "https://stardewvalleywiki.com/Friendship", label: "Stardew Valley Wiki: Friendship" },
+          {
+            href: "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+            label: "Stardew Valley Wiki: Carpenter's Shop",
+          },
+          {
+            href: "https://stardewvalleywiki.com/Marnie%27s_Ranch",
+            label: "Stardew Valley Wiki: Marnie's Ranch",
+          },
+          { href: "https://stardewvalleywiki.com/Fish_Shop", label: "Stardew Valley Wiki: Fish Shop" },
+          {
+            href: "https://stardewvalleywiki.com/Wizard%27s_Tower",
+            label: "Stardew Valley Wiki: Wizard's Tower",
+          },
+          {
+            href: "https://store.steampowered.com/news/app/413150/view/517448731263500640",
+            label: "Steam: PC 1.6.15 patch notes",
+          },
+        ]}
+      />
     </article>
   );
 }

@@ -1,3 +1,4 @@
+import { BlogSources } from "../../components/blog/blog-sources";
 import { BlogYouTubeVideo } from "../../components/blog/blog-youtube-video";
 
 export function WhereIsRobinEnglishArticle() {
@@ -13,8 +14,8 @@ export function WhereIsRobinEnglishArticle() {
       <p>
         The address is simple; knowing whether Robin can help you is the part
         that saves a wasted trip. Her construction work, festivals, weather,
-        weekday, and story progress can replace the routine you expected. This
-        guide follows Stardew Valley PC 1.6.15.
+        weekday, and story progress can replace the routine you expected. These
+        schedules and exceptions apply to Stardew Valley PC 1.6.15.
       </p>
 
       <h2>Where is Robin right now? Use this 15-second check</h2>
@@ -191,27 +192,21 @@ export function WhereIsRobinEnglishArticle() {
         youtubeVideoId="bFEEer6Cp3U"
       />
 
-      <h2>Source</h2>
-      <ul>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Robin">Stardew Valley Wiki: Robin</a>
-        </li>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">
-            Stardew Valley Wiki: Carpenter&apos;s Shop
-          </a>
-        </li>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Shop_Schedules">
-            Stardew Valley Wiki: Shop Schedules
-          </a>
-        </li>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Telephone">
-            Stardew Valley Wiki: Telephone
-          </a>
-        </li>
-      </ul>
+      <BlogSources
+        heading="Sources"
+        items={[
+          { href: "https://wiki.stardewvalley.net/Robin", label: "Stardew Valley Wiki: Robin" },
+          {
+            href: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
+            label: "Stardew Valley Wiki: Carpenter's Shop",
+          },
+          {
+            href: "https://wiki.stardewvalley.net/Shop_Schedules",
+            label: "Stardew Valley Wiki: Shop Schedules",
+          },
+          { href: "https://wiki.stardewvalley.net/Telephone", label: "Stardew Valley Wiki: Telephone" },
+        ]}
+      />
     </article>
   );
 }

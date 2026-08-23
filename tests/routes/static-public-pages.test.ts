@@ -25,6 +25,7 @@ type StaticPublicPageExpectation = readonly [
 ];
 
 type StaticBlogPageExpectation = Readonly<{
+  articleOnlySchema?: boolean;
   pathname: string;
   staticPageFile: string;
   heading: string;
@@ -36,6 +37,8 @@ type StaticBlogPageExpectation = Readonly<{
   schemaType: "Article" | "CollectionPage";
   shouldIndex: boolean;
   coverImages: readonly Readonly<{ src: string; alt: string }>[];
+  requiredBodyPhrases?: readonly string[];
+  requiredHrefs?: readonly string[];
 }>;
 
 type StaticHomepageExpectation = Readonly<{
@@ -183,6 +186,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/stardew-valley-town-map-cover.webp",
         alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
       },
+      {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
+      },
     ],
   },
   {
@@ -208,6 +215,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-town-map-cover.webp",
         alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
+      },
+      {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
       },
     ],
   },
@@ -278,6 +289,43 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/where-is-stardew-valley-located",
+    staticPageFile: "where-is-stardew-valley-located.html",
+    heading: "Where Is Stardew Valley Located in the Game’s World?",
+    metadata: {
+      title: "Where Is Stardew Valley Located in the Game’s World?",
+      description:
+        "Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Where is Stardew Valley located in the game?",
+      "The dialogue is canon. A specific Earth location is not.",
+      "It does not map the Ferngill Republic or Pelican Town, and it does not track NPCs live.",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/stardew-valley-town-map",
+      "/stardew-valley-npc",
+      "/where-is-robin-stardew-valley",
+      "/carpenter-stardew",
+      "https://www.stardewvalley.net/about/",
+      "https://stardewvalleywiki.com/Setting",
+      "https://stardewvalleywiki.com/Pelican_Town",
+      "https://stardewvalleywiki.com/The_Desert",
+      "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -300,6 +348,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-town-map-cover.webp",
         alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
+      },
+      {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
       },
     ],
   },
@@ -326,6 +378,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-town-map-cover.webp",
         alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
+      },
+      {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
       },
     ],
   },
@@ -393,6 +449,43 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/stardew-valley-town-map-cover.webp",
         alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
       },
+    ],
+  },
+  {
+    pathname: "/zh/where-is-stardew-valley-located",
+    staticPageFile: "zh/where-is-stardew-valley-located.html",
+    heading: "星露谷在游戏世界中位于哪里？",
+    metadata: {
+      title: "星露谷在游戏世界中位于哪里？",
+      description:
+        "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
+      },
+    ],
+    requiredBodyPhrases: [
+      "星露谷在游戏中位于哪里？",
+      "对话属于游戏设定，特定地球位置则不属于。",
+      "农场规划器只用于安排自己的农场布局，不显示芬吉尔共和国或鹈鹕镇，也不实时追踪 NPC。",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/stardew-valley-town-map",
+      "/zh/stardew-valley-npc",
+      "/zh/where-is-robin-stardew-valley",
+      "/zh/carpenter-stardew",
+      "https://www.stardewvalley.net/about/",
+      "https://stardewvalleywiki.com/Setting",
+      "https://stardewvalleywiki.com/Pelican_Town",
+      "https://stardewvalleywiki.com/The_Desert",
+      "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
     ],
   },
 ];
@@ -715,6 +808,7 @@ describe("static public pages", () => {
 
   it("exports all bilingual blog pages with article discovery metadata and original covers", () => {
     for (const {
+      articleOnlySchema,
       pathname,
       staticPageFile,
       heading,
@@ -723,6 +817,8 @@ describe("static public pages", () => {
       schemaType,
       shouldIndex,
       coverImages,
+      requiredBodyPhrases,
+      requiredHrefs,
     } of staticBlogPageExpectations) {
       const staticPageHtml = readStaticPageHtml(staticPageFile);
       const staticPageDocument = parseStaticPageDocument(
@@ -749,8 +845,12 @@ describe("static public pages", () => {
           `<meta name="description" content="${escapeHtmlAttributeValue(metadata.description)}"`,
         );
 
+        const structuredDataEntries = readJsonLdStructuredData(
+          staticPageHtml,
+          staticPageFile,
+        );
         const matchingStructuredData = findStructuredDataByType(
-          readJsonLdStructuredData(staticPageHtml, staticPageFile),
+          structuredDataEntries,
           schemaType,
         );
         expect(matchingStructuredData).toHaveLength(1);
@@ -758,6 +858,21 @@ describe("static public pages", () => {
           headline: metadata.title,
           description: metadata.description,
         });
+
+        if (articleOnlySchema) {
+          expect(
+            structuredDataEntries.map((structuredData) => structuredData["@type"]),
+          ).toEqual(["Article"]);
+          for (const forbiddenSchemaType of [
+            "BlogPosting",
+            "FAQPage",
+            "QAPage",
+          ]) {
+            expect(staticPageHtml).not.toContain(
+              `\"@type\":\"${forbiddenSchemaType}\"`,
+            );
+          }
+        }
       }
       expect(staticPageHtml).toContain(
         `<link rel="canonical" href="${expectedCanonicalUrl(pathname)}"`,
@@ -781,6 +896,15 @@ describe("static public pages", () => {
       );
       expect(staticPageHtml).not.toContain("/_app/immutable/");
       expect(staticPageHtml).not.toContain("data-sveltekit-");
+
+      for (const requiredBodyPhrase of requiredBodyPhrases ?? []) {
+        expect(staticPageHtml).toContain(requiredBodyPhrase);
+      }
+      for (const requiredHref of requiredHrefs ?? []) {
+        expect(staticPageHtml).toContain(
+          `href="${escapeHtmlAttributeValue(requiredHref)}"`,
+        );
+      }
 
       for (const coverImage of coverImages) {
         const matchingCoverImageElements = findMatchingCoverImageElements(

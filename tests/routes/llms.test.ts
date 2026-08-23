@@ -33,6 +33,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷物语小镇地图：鹈鹕镇地点与路线](https://stardewvalleyplanner.art/zh/stardew-valley-town-map): 用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
   );
+  expect(llmsText).toContain(
+    "[Where Is Stardew Valley Located in the Game’s World?](https://stardewvalleyplanner.art/where-is-stardew-valley-located): Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷在游戏世界中位于哪里？](https://stardewvalleyplanner.art/zh/where-is-stardew-valley-located): 了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

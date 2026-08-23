@@ -8,6 +8,8 @@ import { StardewValleyNpcEnglishArticle } from "./articles/stardew-valley-npc.en
 import { StardewValleyNpcChineseArticle } from "./articles/stardew-valley-npc.zh";
 import { StardewValleyTownMapEnglishArticle } from "./articles/stardew-valley-town-map.en";
 import { StardewValleyTownMapChineseArticle } from "./articles/stardew-valley-town-map.zh";
+import { WhereIsStardewValleyLocatedEnglishArticle } from "./articles/where-is-stardew-valley-located.en";
+import { WhereIsStardewValleyLocatedChineseArticle } from "./articles/where-is-stardew-valley-located.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -107,6 +109,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: StardewValleyTownMapEnglishArticle,
     },
+    {
+      slug: "where-is-stardew-valley-located",
+      title: "Where Is Stardew Valley Located in the Game’s World?",
+      description:
+        "Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
+      },
+      featured: true,
+      Content: WhereIsStardewValleyLocatedEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -167,6 +184,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: StardewValleyTownMapChineseArticle,
+    },
+    {
+      slug: "where-is-stardew-valley-located",
+      title: "星露谷在游戏世界中位于哪里？",
+      description:
+        "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
+      },
+      featured: true,
+      Content: WhereIsStardewValleyLocatedChineseArticle,
     },
   ],
 };

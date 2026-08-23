@@ -104,6 +104,7 @@ export function getBlogHomeState(
   const topicMatchedPosts =
     topic.length === 0 ? posts.slice() : posts.filter((post) => post.topic === topic);
   const matchingPosts = filterBlogPostsByTitle(topicMatchedPosts, query);
+  const latestMatchingPosts = matchingPosts.slice().reverse();
   const topicCarouselPosts = getFirstCarouselTopicPosts(posts, topics);
 
   return {
@@ -111,7 +112,7 @@ export function getBlogHomeState(
     topic,
     visible,
     topics,
-    posts: matchingPosts.slice(0, visible),
+    posts: latestMatchingPosts.slice(0, visible),
     topicCarouselPosts,
     totalPostCount: matchingPosts.length,
   };

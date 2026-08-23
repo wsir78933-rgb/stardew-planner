@@ -1,12 +1,13 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
 
 export function StardewValleyNpcChineseArticle() {
   return (
     <article>
       <p>
-        这份星露谷 NPC 列表按 PC 1.6.15 整理，分为三类：12 名可结婚角色、22
+        《星露谷物语》PC 1.6.15 的 NPC 分为三类：12 名可结婚角色、22
         名可送礼但不可结婚的角色，以及 12 名不可送礼的 NPC，共 46
-        名。下面按类别列出这些角色，并说明其中哪些人会影响商店、任务和农场规划。
+        名。其中一些角色还会影响商店、任务和农场规划。
       </p>
 
       <h2>星露谷 NPC 列表：先看结论</h2>
@@ -272,7 +273,7 @@ export function StardewValleyNpcChineseArticle() {
       </p>
 
       <h2>为什么 NPC 不在你以为的位置？</h2>
-      <p>住址只说明角色住在哪里，不保证他们一整天都站在那里。觉得攻略写错之前，先检查：</p>
+      <p>住址只说明角色住在哪里，不保证他们一整天都站在那里。NPC 不在预期地点时，先检查：</p>
       <ul>
         <li>当前时间和星期</li>
         <li>季节和天气</li>
@@ -292,7 +293,7 @@ export function StardewValleyNpcChineseArticle() {
             question: "《星露谷物语》一共有多少 NPC？",
             answer: (
               <p>
-                按本文使用的当前 Villagers 分类，共有 46 名角色：34 位可送礼村民和 12 位不可送礼
+                当前 Villagers 分类共有 46 名角色：34 位可送礼村民和 12 位不可送礼
                 NPC。这里不包括玩家的孩子、其他生物与怪物，或该分类之外的有名角色。
               </p>
             ),
@@ -336,32 +337,21 @@ export function StardewValleyNpcChineseArticle() {
         ]}
       />
 
-      <h2>来源</h2>
-      <ul>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/居民">星露谷 Wiki：居民</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/友谊">星露谷 Wiki：友谊</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/木匠的商店">星露谷 Wiki：木匠的商店</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/玛妮的牧场">星露谷 Wiki：玛妮的牧场</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/鱼店">星露谷 Wiki：鱼店</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/法师塔">星露谷 Wiki：法师塔</a>
-        </li>
-        <li>
-          <a href="https://store.steampowered.com/news/app/413150/view/517448731263500640">
-            Steam：PC 1.6.15 补丁说明
-          </a>
-        </li>
-      </ul>
+      <BlogSources
+        heading="来源"
+        items={[
+          { href: "https://zh.stardewvalleywiki.com/居民", label: "星露谷 Wiki：居民" },
+          { href: "https://zh.stardewvalleywiki.com/友谊", label: "星露谷 Wiki：友谊" },
+          { href: "https://zh.stardewvalleywiki.com/木匠的商店", label: "星露谷 Wiki：木匠的商店" },
+          { href: "https://zh.stardewvalleywiki.com/玛妮的牧场", label: "星露谷 Wiki：玛妮的牧场" },
+          { href: "https://zh.stardewvalleywiki.com/鱼店", label: "星露谷 Wiki：鱼店" },
+          { href: "https://zh.stardewvalleywiki.com/法师塔", label: "星露谷 Wiki：法师塔" },
+          {
+            href: "https://store.steampowered.com/news/app/413150/view/517448731263500640",
+            label: "Steam：PC 1.6.15 补丁说明",
+          },
+        ]}
+      />
     </article>
   );
 }

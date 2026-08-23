@@ -40,6 +40,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
 
   expect(indexMarkup).toContain('href="/carpenter-stardew"');
   expect(indexMarkup).toContain('href="/stardew-valley-npc"');
+  expect(indexMarkup).toContain('href="/where-is-stardew-valley-located"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -63,11 +64,47 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
 
   expect(indexMarkup).toContain('href="/zh/where-is-robin-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/stardew-valley-npc"');
+  expect(indexMarkup).toContain('href="/zh/where-is-stardew-valley-located"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
   expect(articleMarkup).toContain("罗宾的商店没人？今天去哪里找她");
   expect((articleMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+});
+
+it("renders the new paired article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "where-is-stardew-valley-located" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "where-is-stardew-valley-located" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Where Is Stardew Valley Located in the Game’s World?",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷在游戏世界中位于哪里？",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Where Is Stardew Valley Located in the Game’s World?",
+    description:
+      "Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷在游戏世界中位于哪里？",
+    description:
+      "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+  });
 });
 
 it("rejects an unregistered article slug in both localized root routes", async () => {

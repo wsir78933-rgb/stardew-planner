@@ -1,4 +1,5 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
 
 export function StardewValleyTownMapChineseArticle() {
   return (
@@ -6,10 +7,10 @@ export function StardewValleyTownMapChineseArticle() {
       <p>
         要找《星露谷物语》小镇地图时，最实用的不是把每间房子都背下来，而是先记住鹈鹕镇的出口：西北通往巴士站和农场，西南通往煤矿森林，南边通往沙滩，北边通往深山。
         <a href="https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87">星露谷 Wiki 的鹈鹕镇页面</a>
-        列出了这些连接和主要地点。本文是一份找路参考，不是交互式小镇地图，也不会追踪 NPC 的实时位置。
+        列出了这些连接和主要地点。按这四个出口就能判断方向；想查交互式地图或 NPC 实时位置，需要使用其他工具。
       </p>
       <p>
-        先把小镇的边界记清，中央的商店和服务点就不容易混在一起。本文帮你建立方向感；如果某件事取决于某个 NPC 当天是否在柜台，再去看对应的行程页面。
+        先把小镇的边界记清，中央的商店和服务点就不容易混在一起。如果某件事取决于某个 NPC 当天是否在柜台，再去看对应的行程页面。
       </p>
 
       <h2>星露谷物语小镇地图：先记住四个出口</h2>
@@ -57,7 +58,7 @@ export function StardewValleyTownMapChineseArticle() {
 
       <h2>先找到哪些地标？</h2>
       <p>
-        刚开始不用记住所有住址。先认出会反复用到的服务点：皮埃尔的杂货店、哈维的诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧。它们都列在鹈鹕镇的来源页面上，也能帮你把小镇中央区域拼起来。
+        刚开始不用记住所有住址。先认出会反复用到的服务点：皮埃尔的杂货店、哈维的诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧。把这些常用地点连起来，镇内路线就会逐渐清楚。
       </p>
       <p>
         每一趟的目的并不一样。买东西、升级工具、捐赠发现物和找服务柜台，都不用走同一条路。出发前先想清楚这趟要办什么，再决定要不要顺路加站。想知道谁提供某项农场服务，可以看
@@ -67,7 +68,7 @@ export function StardewValleyTownMapChineseArticle() {
 
       <h2>分两层看鹈鹕镇</h2>
       <p>
-        好用的小镇地图不是把一百个图钉塞给你，而是让你有一个判断顺序。先从中央开始，因为会反复用到的服务点都在这里；再决定事情是否已经办完，还是要继续往四个边缘走。来源页面把杂货店、诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧列为主要地点。先记住这层，就不必每次进镇都重新背一遍路线。
+        好用的小镇地图不是把一百个图钉塞给你，而是让你有一个判断顺序。先从中央开始，用杂货店、诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧等主要地点确定方向；再决定事情是否已经办完，还是要继续往四个边缘走。先记住这层，就不必每次进镇都重新背一遍路线。
       </p>
       <p>
         第二层是小镇边缘。下一站在沙滩，就从南边离开；要继续去煤矿森林，就从西南走。农场、巴士站和深山也是同一套判断。你不需要相信所谓“最快路线”，只要别走过了正确出口才开始想下一步。
@@ -83,8 +84,8 @@ export function StardewValleyTownMapChineseArticle() {
         地点指南能告诉你区域之间怎么连接，却不能保证某个柜台此刻营业，也不能判断节日是否改了当天安排，或你的进度是否已经开启后续地点。这些是另一类问题。地图只负责把你带到正确的区域；接下来要看的是匹配版本的行程页或商店页面。
       </p>
       <p>
-        这样分开反而更耐用。通用小镇地图不该假装知道每一个雨天例外或每一种玩家状态。事情和 Robin 有关时，下一页应该是
-        <a href="/zh/where-is-robin-stardew-valley">Robin 位置指南</a>；事情和建筑有关时，再看木匠指南。小镇地图只专注在把你带到目的地区域的路线。
+        要找 Robin 时，用<a href="/zh/where-is-robin-stardew-valley">Robin 位置指南</a>
+        检查她当天的行程；要办建筑业务时，再看木匠指南。小镇地图只显示前往目的地区域的路线，天气、节日和玩家进度仍可能改变现场的人物与可用服务。
       </p>
 
       <h2>第一趟跑镇的简单走法</h2>
@@ -152,22 +153,26 @@ export function StardewValleyTownMapChineseArticle() {
             question: "这份指南会显示 NPC 实时位置或提供小镇地图下载吗？",
             answer: (
               <p>
-                不会。本文提供的是带来源链接的方向参考和可从浏览器打印的检查清单。NPC 当天的位置要看匹配版本的行程页面；农场规划器也只用于农场布局，不是鹈鹕镇导航工具。
+                不会。这里不显示 NPC 实时位置，也不提供小镇地图下载；检查清单可以用浏览器打印。NPC 当天的位置要看对应版本的行程页面；农场规划器只用于农场布局。
               </p>
             ),
           },
         ]}
       />
 
-      <h2>来源</h2>
-      <ul>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87">鹈鹕镇 — Stardew Valley Wiki</a>，核对日期：2026-08-22。
-        </li>
-        <li><a href="/zh/stardew-valley-npc">星露谷 NPC 指南</a></li>
-        <li><a href="/zh/carpenter-stardew">星露谷木匠指南</a></li>
-        <li><a href="/zh/where-is-robin-stardew-valley">Robin 位置指南</a></li>
-      </ul>
+      <BlogSources
+        heading="来源"
+        items={[
+          {
+            href: "https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87",
+            label: "鹈鹕镇 — Stardew Valley Wiki",
+            note: "，核对日期：2026-08-22。",
+          },
+          { href: "/zh/stardew-valley-npc", label: "星露谷 NPC 指南" },
+          { href: "/zh/carpenter-stardew", label: "星露谷木匠指南" },
+          { href: "/zh/where-is-robin-stardew-valley", label: "Robin 位置指南" },
+        ]}
+      />
     </article>
   );
 }

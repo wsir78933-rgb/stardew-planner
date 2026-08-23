@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(10);
+  expect(canonicalPublicPaths).toHaveLength(11);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -43,8 +43,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/stardew-valley-town-map")).toBe(
     "/zh/stardew-valley-town-map",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(20);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(18);
+  expect(getLocalizedPublicPath("en", "/where-is-stardew-valley-located")).toBe(
+    "/where-is-stardew-valley-located",
+  );
+  expect(
+    getLocalizedPublicPath("zh-CN", "/where-is-stardew-valley-located"),
+  ).toBe("/zh/where-is-stardew-valley-located");
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(22);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(20);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -58,6 +64,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/stardew-valley-npc");
   expect(indexablePathnames).toContain("/stardew-valley-town-map");
   expect(indexablePathnames).toContain("/zh/stardew-valley-town-map");
+  expect(indexablePathnames).toContain("/where-is-stardew-valley-located");
+  expect(indexablePathnames).toContain("/zh/where-is-stardew-valley-located");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -69,6 +77,7 @@ it("registers the direct-entry blog routes", () => {
       "/where-is-robin-stardew-valley",
       "/stardew-valley-npc",
       "/stardew-valley-town-map",
+      "/where-is-stardew-valley-located",
     ]),
   );
 });

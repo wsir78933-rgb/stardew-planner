@@ -66,6 +66,52 @@ it("renders a localized discovery form and latest articles with semantic detail 
   expect(markup).toContain('href="#topic-carousel"');
 });
 
+it("renders the latest articles as a named focusable region with localized native controls", () => {
+  const posts = getAllBlogPostMeta("en");
+  const markup = renderToStaticMarkup(
+    <BlogIndexContent
+      copy={getBlogCopy("en")}
+      homeState={getBlogHomeState(posts, {})}
+      locale="en"
+      posts={posts}
+    />,
+  );
+
+  expect(markup).toContain(
+    '<div aria-label="Latest articles" class="blog-latest-articles-track" id="blog-latest-articles-track" role="region" tabindex="0">',
+  );
+  expect(markup).toContain(
+    '<div aria-label="Latest articles" class="blog-latest-articles-controls" role="group">',
+  );
+  expect(
+    markup.match(
+      /<button aria-controls="blog-latest-articles-track" aria-label="(?:Previous|Next) set of articles"(?: disabled="")? type="button">/g,
+    ) ?? [],
+  ).toHaveLength(2);
+  expect(markup).toContain(
+    'aria-label="Previous set of articles" disabled="" type="button"',
+  );
+  expect(markup).toContain('aria-label="Next set of articles"');
+  expect(markup.match(/<svg[^>]*aria-hidden="true"[^>]*>/g) ?? []).toHaveLength(2);
+});
+
+it("keeps a single latest result focusable without rendering carousel controls", () => {
+  const posts = getAllBlogPostMeta("en").slice(0, 1);
+  const markup = renderToStaticMarkup(
+    <BlogIndexContent
+      copy={getBlogCopy("en")}
+      homeState={getBlogHomeState(posts, {})}
+      locale="en"
+      posts={posts}
+    />,
+  );
+
+  expect(markup).toContain('id="blog-latest-articles-track"');
+  expect(markup).toContain('role="region"');
+  expect(markup).toContain('tabindex="0"');
+  expect(markup).not.toContain('class="blog-latest-articles-controls"');
+});
+
 it("renders only jump targets whose latest and topic sections are present", () => {
   const repeatedPosts = repeatPostMeta(getAllBlogPostMeta("en"), 4);
   const carouselOnlyState = getBlogHomeState(repeatedPosts, { q: "no match" });
@@ -97,6 +143,11 @@ it("localizes the default Chinese jump-to-latest link", () => {
 
   expect(markup).toContain('aria-label="跳转至"');
   expect(markup).toContain('href="#latest-articles">最新文章</a>');
+  expect(markup).toContain(
+    '<div aria-label="最新文章" class="blog-latest-articles-controls" role="group">',
+  );
+  expect(markup).toContain('aria-label="上一组文章"');
+  expect(markup).toContain('aria-label="下一组文章"');
 });
 
 it("renders the index client boundary with a static-export-safe metadata projection", () => {

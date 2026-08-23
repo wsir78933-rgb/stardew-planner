@@ -1,21 +1,21 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
 import { BlogYouTubeVideo } from "../../components/blog/blog-youtube-video";
 
 export function CarpenterStardewEnglishArticle() {
   return (
     <article>
       <p>
-        If you searched for <strong>carpenter stardew</strong>, you are looking for Robin.
-        Her Carpenter&apos;s Shop is at 24 Mountain Road in The Mountain, north of Pelican
-        Town. The counter normally runs from 9:00 AM to 5:00 PM, but a trip can still
-        fail on Tuesday, after 4:00 PM Friday, during a festival, on Summer 18, or while
-        Robin is working on your farm.
+        Robin is the carpenter in Stardew Valley. Her Carpenter&apos;s Shop is at 24 Mountain
+        Road in The Mountain, north of Pelican Town. The counter normally runs from 9:00
+        AM to 5:00 PM, but a trip can still fail on Tuesday, after 4:00 PM Friday, during
+        a festival, on Summer 18, or while Robin is working on your farm.
       </p>
       <p>
-        The useful question is not only where Robin is. It is whether she can take the
-        order today, and whether the building will still make sense once it reaches the
-        farm. This guide covers both decisions for Stardew Valley PC 1.6.15. Use the
-        in-game construction menu for current prices, materials, size, and build time.
+        Before leaving the farm, confirm that Robin can take the order today and that the
+        building will fit the layout you want. These details apply to Stardew Valley PC
+        1.6.15. Use the in-game construction menu for current prices, materials, size, and
+        build time.
       </p>
 
       <h2>Carpenter Stardew: quick answer</h2>
@@ -245,22 +245,20 @@ export function CarpenterStardewEnglishArticle() {
         ]}
       />
 
-      <h2>Source</h2>
-      <ul>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Carpenter%27s_Shop">
-            Stardew Valley Wiki: Carpenter&apos;s Shop
-          </a>
-        </li>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Robin">Stardew Valley Wiki: Robin</a>
-        </li>
-        <li>
-          <a href="https://wiki.stardewvalley.net/Telephone">
-            Stardew Valley Wiki: Telephone
-          </a>
-        </li>
-      </ul>
+      <BlogSources
+        heading="Sources"
+        items={[
+          {
+            href: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
+            label: "Stardew Valley Wiki: Carpenter's Shop",
+          },
+          { href: "https://wiki.stardewvalley.net/Robin", label: "Stardew Valley Wiki: Robin" },
+          {
+            href: "https://wiki.stardewvalley.net/Telephone",
+            label: "Stardew Valley Wiki: Telephone",
+          },
+        ]}
+      />
     </article>
   );
 }

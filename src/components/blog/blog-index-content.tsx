@@ -9,6 +9,7 @@ import {
   BlogLandingHero,
   type BlogHeroJumpTarget,
 } from "./blog-landing-hero";
+import { LatestArticlesCarouselControls } from "./latest-articles-carousel-controls";
 import { TopicCarouselControls } from "./topic-carousel-controls";
 
 type BlogIndexContentProperties = Readonly<{
@@ -55,6 +56,7 @@ export function BlogIndexContent({
   const hasMatchingPosts = homeState.totalPostCount > 0;
   const hasMorePosts = homeState.totalPostCount > homeState.posts.length;
   const topicCarouselPosts = homeState.topicCarouselPosts;
+  const latestArticlesTrackId = "blog-latest-articles-track";
   const topicTrackId = "blog-topic-carousel";
   const jumpTargets = createHeroJumpTargets(copy, hasMatchingPosts, topicCarouselPosts);
 
@@ -75,8 +77,26 @@ export function BlogIndexContent({
       ) : null}
       {hasMatchingPosts ? (
         <section aria-labelledby="latest-articles-heading" id="latest-articles">
-          <h2 id="latest-articles-heading">{copy.latestArticlesLabel}</h2>
-          <ArticleGrid copy={copy} locale={locale} posts={homeState.posts} />
+          <div className="blog-latest-articles-heading">
+            <h2 id="latest-articles-heading">{copy.latestArticlesLabel}</h2>
+            {homeState.posts.length > 1 ? (
+              <LatestArticlesCarouselControls
+                ariaLabel={copy.latestArticlesLabel}
+                nextLabel={copy.nextLatestArticlesSetLabel}
+                previousLabel={copy.previousLatestArticlesSetLabel}
+                trackId={latestArticlesTrackId}
+              />
+            ) : null}
+          </div>
+          <div
+            aria-label={copy.latestArticlesLabel}
+            className="blog-latest-articles-track"
+            id={latestArticlesTrackId}
+            role="region"
+            tabIndex={0}
+          >
+            <ArticleGrid copy={copy} locale={locale} posts={homeState.posts} />
+          </div>
         </section>
       ) : null}
       {topicCarouselPosts.length > 0 ? (

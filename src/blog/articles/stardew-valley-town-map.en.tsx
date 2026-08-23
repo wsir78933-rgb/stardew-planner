@@ -1,4 +1,5 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
 
 export function StardewValleyTownMapEnglishArticle() {
   return (
@@ -8,13 +9,12 @@ export function StardewValleyTownMapEnglishArticle() {
         cannot remember which way to leave the square. Start with the exits: northwest leads to
         the Bus Stop and the Farm, southwest to Cindersap Forest, south to the Beach, and north
         to the Mountain. The <a href="https://stardewvalleywiki.com/Pelican_Town">Pelican Town page on Stardew Valley Wiki</a> lists those connections and the town&apos;s key
-        locations. This is an orientation guide, not an interactive town map or a live NPC
-        tracker.
+        locations. A character&apos;s schedule page is still needed for a live NPC location.
       </p>
       <p>
         Once the edges of town make sense, the shops and services in the middle stop feeling
-        scattered. Use this page to get your bearings, then use a character&apos;s schedule page
-        when an errand depends on someone being at a particular counter.
+        scattered. When an errand depends on someone being at a particular counter, check that
+        character&apos;s schedule after choosing the route.
       </p>
 
       <h2>Stardew Valley town map: the four exits to remember</h2>
@@ -66,8 +66,8 @@ export function StardewValleyTownMapEnglishArticle() {
       <p>
         You do not need every house memorized during the first week. Find the services that keep
         pulling you back into town: Pierre&apos;s General Store, Harvey&apos;s Clinic, the Community
-        Center, the Museum, the Blacksmith, JojaMart, and the Stardrop Saloon. They are all named
-        on the town&apos;s source page, and they give the center of Pelican Town a useful shape.
+        Center, the Museum, the Blacksmith, JojaMart, and the Stardrop Saloon. Together, these
+        recurring stops give Pelican Town a useful shape.
       </p>
       <p>
         Each stop answers a different kind of errand. General shopping, tool work, donated
@@ -82,10 +82,9 @@ export function StardewValleyTownMapEnglishArticle() {
       <p>
         A useful town map gives you a sequence, not a hundred pins to scan. Start with the
         center because it holds the services that bring you back most often. Then decide whether
-        the errand is finished there or continues toward one of the four edges. The source page
-        lists the General Store, Clinic, Community Center, Museum, Blacksmith, JojaMart, and
-        Stardrop Saloon as key locations. That is enough to build a practical first layer without
-        turning every visit into a memorization exercise.
+        the errand is finished there or continues toward one of the four edges. The General Store,
+        Clinic, Community Center, Museum, Blacksmith, JojaMart, and Stardrop Saloon form a
+        practical first layer without turning every visit into a memorization exercise.
       </p>
       <p>
         The second layer is the edge of town. A trip that ends at the Beach should leave south;
@@ -109,11 +108,11 @@ export function StardewValleyTownMapEnglishArticle() {
         schedule or shop page answers the live condition after that.
       </p>
       <p>
-        This boundary matters because it keeps the page useful when the game changes. A broad town
-        map should not pretend to know every weather exception or every player state. If the job is
-        tied to Robin, the <a href="/where-is-robin-stardew-valley">Robin location guide</a> is
-        the better next page. If the job concerns a building, the carpenter guide explains the
-        service itself. The town map stays focused on the route that gets you there.
+        For an errand tied to Robin, use the{" "}
+        <a href="/where-is-robin-stardew-valley">Robin location guide</a> to check schedule
+        conditions. For a building job, the carpenter guide explains the service itself. The town
+        map shows the route to the destination area; weather, festivals, and player progress can
+        still change who is there or what is available.
       </p>
 
       <h2>A simple route for your first town errand</h2>
@@ -199,24 +198,29 @@ export function StardewValleyTownMapEnglishArticle() {
             question: "Does this guide show live NPC positions or a downloadable town map?",
             answer: (
               <p>
-                No. This is a source-linked orientation guide with a checklist you can print from
-                the browser. Use a version-matched schedule page for an NPC&apos;s current location.
-                Stardew Valley Planner is a farm-layout tool, not a Pelican Town navigation tool.
+                No. It does not show live NPC positions or provide a downloadable town map. You
+                can print the checklist from your browser. Check a version-matched schedule for an
+                NPC&apos;s current location. Stardew Valley Planner handles farm layouts, not Pelican
+                Town navigation.
               </p>
             ),
           },
         ]}
       />
 
-      <h2>Sources</h2>
-      <ul>
-        <li>
-          <a href="https://stardewvalleywiki.com/Pelican_Town">Pelican Town — Stardew Valley Wiki</a>, checked 2026-08-22.
-        </li>
-        <li><a href="/stardew-valley-npc">Stardew Valley NPC guide</a></li>
-        <li><a href="/carpenter-stardew">Stardew Valley carpenter guide</a></li>
-        <li><a href="/where-is-robin-stardew-valley">Robin location guide</a></li>
-      </ul>
+      <BlogSources
+        heading="Sources"
+        items={[
+          {
+            href: "https://stardewvalleywiki.com/Pelican_Town",
+            label: "Pelican Town — Stardew Valley Wiki",
+            note: ", checked 2026-08-22.",
+          },
+          { href: "/stardew-valley-npc", label: "Stardew Valley NPC guide" },
+          { href: "/carpenter-stardew", label: "Stardew Valley carpenter guide" },
+          { href: "/where-is-robin-stardew-valley", label: "Robin location guide" },
+        ]}
+      />
     </article>
   );
 }

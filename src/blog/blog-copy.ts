@@ -12,9 +12,11 @@ export type BlogCopy = Readonly<{
   latestArticlesLabel: string;
   jumpToLabel: string;
   loadMoreLabel: string;
+  nextLatestArticlesSetLabel: string;
   nextPageLabel: string;
   noResultsLabel: string;
   nextCarouselLabel: string;
+  previousLatestArticlesSetLabel: string;
   previousPageLabel: string;
   previousCarouselLabel: string;
   readTimeTemplate: string;
@@ -39,9 +41,11 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     latestArticlesLabel: "Latest articles",
     jumpToLabel: "Jump to",
     loadMoreLabel: "Load more articles",
+    nextLatestArticlesSetLabel: "Next set of articles",
     nextPageLabel: "Next page",
     noResultsLabel: "No articles match these filters.",
     nextCarouselLabel: "Next",
+    previousLatestArticlesSetLabel: "Previous set of articles",
     previousPageLabel: "Previous page",
     previousCarouselLabel: "Previous",
     readTimeTemplate: "{minutes} min read",
@@ -63,9 +67,11 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     latestArticlesLabel: "最新文章",
     jumpToLabel: "跳转至",
     loadMoreLabel: "加载更多文章",
+    nextLatestArticlesSetLabel: "下一组文章",
     nextPageLabel: "下一页",
     noResultsLabel: "没有文章符合这些筛选条件。",
     nextCarouselLabel: "下一篇",
+    previousLatestArticlesSetLabel: "上一组文章",
     previousPageLabel: "上一页",
     previousCarouselLabel: "上一篇",
     readTimeTemplate: "阅读约 {minutes} 分钟",
@@ -86,12 +92,14 @@ const localizedBlogPostPaths: Readonly<
     "where-is-robin-stardew-valley": "/where-is-robin-stardew-valley",
     "stardew-valley-npc": "/stardew-valley-npc",
     "stardew-valley-town-map": "/stardew-valley-town-map",
+    "where-is-stardew-valley-located": "/where-is-stardew-valley-located",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
     "where-is-robin-stardew-valley": "/zh/where-is-robin-stardew-valley",
     "stardew-valley-npc": "/zh/stardew-valley-npc",
     "stardew-valley-town-map": "/zh/stardew-valley-town-map",
+    "where-is-stardew-valley-located": "/zh/where-is-stardew-valley-located",
   },
 };
 

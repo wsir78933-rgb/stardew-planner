@@ -1,4 +1,5 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
 import { BlogYouTubeVideo } from "../../components/blog/blog-youtube-video";
 
 export function CarpenterStardewChineseArticle() {
@@ -9,8 +10,8 @@ export function CarpenterStardewChineseArticle() {
         营业，但周二、周五 16:00 之后、节日、夏季 18 日，以及罗宾到农场施工的日子，都可能让这趟路白跑。
       </p>
       <p>
-        真正要解决的不只是“罗宾在哪里”，还包括“她今天能不能接单”和“建筑落地后会不会把农场越用越别扭”。下面按这两个问题来安排，对应星露谷物语
-        PC 1.6.15。价格、材料和施工天数以游戏里的建筑菜单为准。
+        出发前先确认罗宾当天能否接单，也要检查建筑布局是否适合日常通行和后续升级。这些行程和建筑规则适用于《星露谷物语》PC
+        1.6.15；价格、材料和施工天数以游戏里的建筑菜单为准。
       </p>
 
       <h2>星露谷木匠：先看结论</h2>
@@ -178,18 +179,14 @@ export function CarpenterStardewChineseArticle() {
         ]}
       />
 
-      <h2>来源</h2>
-      <ul>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/木匠的商店">星露谷 Wiki：木匠的商店</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/罗宾">星露谷 Wiki：罗宾</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/电话">星露谷 Wiki：电话</a>
-        </li>
-      </ul>
+      <BlogSources
+        heading="来源"
+        items={[
+          { href: "https://zh.stardewvalleywiki.com/木匠的商店", label: "星露谷 Wiki：木匠的商店" },
+          { href: "https://zh.stardewvalleywiki.com/罗宾", label: "星露谷 Wiki：罗宾" },
+          { href: "https://zh.stardewvalleywiki.com/电话", label: "星露谷 Wiki：电话" },
+        ]}
+      />
     </article>
   );
 }

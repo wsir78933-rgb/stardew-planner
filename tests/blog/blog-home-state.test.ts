@@ -43,22 +43,24 @@ it("returns an empty default home state for no posts", () => {
   });
 });
 
-it("keeps four real posts in registry canonical order", () => {
+it("shows the newest real post first while keeping the topic carousel in canonical order", () => {
   const posts = getAllBlogPosts("en");
   const homeState = getBlogHomeState(posts, {});
 
   expect(homeState.posts.map((post) => post.slug)).toEqual([
-    "carpenter-stardew",
-    "where-is-robin-stardew-valley",
-    "stardew-valley-npc",
+    "where-is-stardew-valley-located",
     "stardew-valley-town-map",
+    "stardew-valley-npc",
+    "where-is-robin-stardew-valley",
+    "carpenter-stardew",
   ]);
-  expect(homeState.totalPostCount).toBe(4);
+  expect(homeState.totalPostCount).toBe(5);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
     "stardew-valley-npc",
     "stardew-valley-town-map",
+    "where-is-stardew-valley-located",
   ]);
 });
 
@@ -159,22 +161,40 @@ it("returns no topic carousel posts when every topic has fewer than four posts",
   expect(getBlogHomeState(posts, {}).topicCarouselPosts).toEqual([]);
 });
 
-it("limits more than six matching posts while retaining their total", () => {
+it("shows the latest six matches by default and all seven in reverse order when expanded", () => {
   const posts = Array.from({ length: 7 }, (_, index) =>
     createBlogPost(index, { title: `Robin guide ${index}` }),
   );
 
-  const homeState = getBlogHomeState(posts, { q: "Robin" });
+  const defaultHomeState = getBlogHomeState(posts, { q: "Robin" });
+  const expandedHomeState = getBlogHomeState(posts, { q: "Robin", visible: "12" });
 
-  expect(homeState.posts).toHaveLength(6);
-  expect(homeState.totalPostCount).toBe(7);
-  expect(homeState.posts.map((post) => post.title)).toEqual([
+  expect(defaultHomeState.posts.map((post) => post.title)).toEqual([
+    "Robin guide 6",
+    "Robin guide 5",
+    "Robin guide 4",
+    "Robin guide 3",
+    "Robin guide 2",
+    "Robin guide 1",
+  ]);
+  expect(defaultHomeState.totalPostCount).toBe(7);
+  expect(expandedHomeState.posts.map((post) => post.title)).toEqual([
+    "Robin guide 6",
+    "Robin guide 5",
+    "Robin guide 4",
+    "Robin guide 3",
+    "Robin guide 2",
+    "Robin guide 1",
+    "Robin guide 0",
+  ]);
+  expect(posts.map((post) => post.title)).toEqual([
     "Robin guide 0",
     "Robin guide 1",
     "Robin guide 2",
     "Robin guide 3",
     "Robin guide 4",
     "Robin guide 5",
+    "Robin guide 6",
   ]);
 });
 

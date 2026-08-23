@@ -15,6 +15,7 @@ const expectedSlugs = [
   "where-is-robin-stardew-valley",
   "stardew-valley-npc",
   "stardew-valley-town-map",
+  "where-is-stardew-valley-located",
 ] as const;
 
 function createLocalizedPost(
@@ -49,23 +50,25 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the four canonical blog identities in publishing order", () => {
+it("keeps the five canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the eight localized root-level canonical article paths", () => {
+it("publishes only the ten localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
     "/stardew-valley-npc/",
     "/stardew-valley-town-map/",
+    "/where-is-stardew-valley-located/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
     "/zh/stardew-valley-town-map/",
+    "/zh/where-is-stardew-valley-located/",
   ]);
 });
 
@@ -123,6 +126,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     description:
       "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
   });
+  expect(englishPosts[4]).toMatchObject({
+    title: "Where Is Stardew Valley Located in the Game’s World?",
+    description:
+      "Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+    readTimeMinutes: 11,
+    coverImage: {
+      src: "/blog/where-is-stardew-valley-located-cover.webp",
+      alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
+    },
+  });
+  expect(chinesePosts[4]).toMatchObject({
+    title: "星露谷在游戏世界中位于哪里？",
+    description:
+      "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+    readTimeMinutes: 11,
+    coverImage: {
+      src: "/blog/where-is-stardew-valley-located-cover.webp",
+      alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -132,6 +155,8 @@ it("binds every localized post to its own original blog cover", () => {
     "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.webp",
     "stardew-valley-npc": "/blog/stardew-valley-npc-cover.webp",
     "stardew-valley-town-map": "/blog/stardew-valley-town-map-cover.webp",
+    "where-is-stardew-valley-located":
+      "/blog/where-is-stardew-valley-located-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -229,7 +254,9 @@ it("rejects localized posts that reverse canonical publishing order", () => {
 
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
-  ).toThrow("stardew-valley-town-map");
+  ).toThrow(
+    "Expected: carpenter-stardew. Received: where-is-stardew-valley-located.",
+  );
 });
 
 it("rejects unsupported locale entries and names the rejected locale", () => {

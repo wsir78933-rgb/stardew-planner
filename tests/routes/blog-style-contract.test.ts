@@ -49,6 +49,69 @@ it("defines responsive blog layout and accessibility rules under blog-only scope
   ).toMatch(/\bdisplay:\s*(?:block|grid)/);
 });
 
+it("keeps latest articles in a responsive single-row snap track with accessible controls", () => {
+  const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
+
+  expect(stylesheet).toContain("[data-blog-page] .blog-latest-articles-track {");
+  expect(stylesheet).toContain(
+    "[data-blog-page] .blog-latest-articles-controls button:disabled {",
+  );
+
+  const ordinaryGridRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-page] .blog-article-grid",
+  );
+  const trackRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-page] .blog-latest-articles-track",
+  );
+  const latestGridRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-page] .blog-latest-articles-track .blog-article-grid",
+  );
+  const latestCardRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-page] .blog-latest-articles-track .blog-article-card",
+  );
+  const latestButtonRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-page] .blog-latest-articles-controls button",
+  );
+  const disabledLatestButtonRule = readScopedRuleBody(
+    stylesheet,
+    "[data-blog-page] .blog-latest-articles-controls button:disabled",
+  );
+
+  expect(ordinaryGridRule).toContain("display: grid;");
+  expect(ordinaryGridRule).toContain("gap: clamp(1rem, 2.4vw, 1.5rem);");
+  expect(ordinaryGridRule).toContain("grid-template-columns: 1fr;");
+  expect(trackRule).toContain("overflow-x: auto;");
+  expect(trackRule).toContain("overscroll-behavior-inline: contain;");
+  expect(trackRule).toContain("scroll-snap-type: x mandatory;");
+  expect(latestGridRule).toContain("display: flex;");
+  expect(latestGridRule).toContain("flex-wrap: nowrap;");
+  expect(latestGridRule).toContain("gap: var(--blog-latest-articles-gap);");
+  expect(latestCardRule).toContain("flex: 0 0 100%;");
+  expect(latestCardRule).toContain("scroll-snap-align: start;");
+  expect(latestCardRule).not.toContain("scroll-snap-stop: always;");
+  expect(latestButtonRule).toContain("background: #ffffff;");
+  expect(latestButtonRule).toContain("border: 1px solid #1c211b;");
+  expect(latestButtonRule).toContain("border-radius: 5px;");
+  expect(latestButtonRule).toContain("height: 44px;");
+  expect(latestButtonRule).toContain("width: 44px;");
+  expect(disabledLatestButtonRule).toContain("cursor: not-allowed;");
+  expect(disabledLatestButtonRule).toContain("opacity: 0.45;");
+  expect(stylesheet).toMatch(
+    /@media \(min-width:\s*768px\)[\s\S]*\.blog-latest-articles-track \.blog-article-card[\s\S]*flex-basis:\s*calc\(\(100% - var\(--blog-latest-articles-gap\)\) \/ 2\)/,
+  );
+  expect(stylesheet).toMatch(
+    /@media \(min-width:\s*1024px\)[\s\S]*\.blog-latest-articles-track \.blog-article-card[\s\S]*flex-basis:\s*calc\(\(100% - \(2 \* var\(--blog-latest-articles-gap\)\)\) \/ 3\)/,
+  );
+  expect(stylesheet).toMatch(
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.blog-latest-articles-track[\s\S]*scroll-behavior:\s*auto/,
+  );
+});
+
 it("keeps blog article titles at the full header width", () => {
   const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
 

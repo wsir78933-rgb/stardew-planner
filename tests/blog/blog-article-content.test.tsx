@@ -142,12 +142,14 @@ it("renders matching English and Chinese Stardew Valley NPC guides with sourced 
   const englishOpeningParagraph = getOpeningParagraph(englishMarkup);
   const chineseOpeningParagraph = getOpeningParagraph(chineseMarkup);
 
-  expect(englishOpeningParagraph).toContain("uses the PC 1.6.15 roster");
+  expect(englishOpeningParagraph).toContain(
+    "The Stardew Valley PC 1.6.15 roster has 46 characters",
+  );
   expect(englishOpeningParagraph).not.toContain("current stable release");
   expect(englishOpeningParagraph).toContain("12 marriage candidates");
   expect(englishOpeningParagraph).toContain("22 giftable characters");
   expect(englishOpeningParagraph).not.toContain("If your search was");
-  expect(chineseOpeningParagraph).toContain("按 PC 1.6.15 整理");
+  expect(chineseOpeningParagraph).toContain("《星露谷物语》PC 1.6.15 的 NPC 分为三类");
   expect(chineseOpeningParagraph).not.toContain("当前最新正式版");
   expect(chineseOpeningParagraph).toContain("12 名可结婚角色");
   expect(chineseOpeningParagraph).toContain("22 名可送礼但不可结婚的角色");
@@ -168,7 +170,7 @@ it("renders matching English and Chinese Stardew Valley NPC guides with sourced 
   expect(englishMarkup).toContain(
     "The planner handles the farm layout; it does not track either NPC&#x27;s live schedule.",
   );
-  expect(englishMarkup).toContain("<h2>Source</h2>");
+  expect(englishMarkup).toContain("<h2>Sources</h2>");
   expect(englishMarkup).toContain("Stardew Valley Wiki: Villagers");
   expect(englishMarkup).not.toContain("update boundary");
   expect(englishMarkup).not.toContain("Sources and version notes");
@@ -247,7 +249,7 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   const englishArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewEnglishArticle),
     requiredPhrases: [
-      "carpenter stardew",
+      "Robin is the carpenter in Stardew Valley.",
       "24 Mountain Road",
       "PC 1.6.15",
       "Stardew Valley Wiki: Carpenter",
@@ -325,7 +327,7 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   expect(chineseArticle.markup.length).toBeGreaterThan(1200);
   expect(englishArticle.markup).not.toContain("or upgrade may affect access");
   expect(chineseArticle.markup).not.toContain("或升级项目开始后");
-  expect(englishArticle.markup).toContain("<h2>Source</h2>");
+  expect(englishArticle.markup).toContain("<h2>Sources</h2>");
   expect(chineseArticle.markup).toContain("<h2>来源</h2>");
   expect(englishArticle.markup).toContain('class="blog-faq-list"');
   expect(chineseArticle.markup).toContain('class="blog-faq-list"');
@@ -424,7 +426,7 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
   expect(getOpeningParagraph(englishArticle.markup)).toContain("9:00 AM to 5:00 PM");
   expect(getOpeningParagraph(chineseArticle.markup)).toContain("24 Mountain Road");
   expect(getOpeningParagraph(chineseArticle.markup)).toContain("09:00–17:00");
-  expect(englishArticle.markup).toContain("<h2>Source</h2>");
+  expect(englishArticle.markup).toContain("<h2>Sources</h2>");
   expect(chineseArticle.markup).toContain("<h2>来源</h2>");
   expect(englishArticle.markup).not.toContain('class="blog-faq-list"');
   expect(chineseArticle.markup).not.toContain('class="blog-faq-list"');

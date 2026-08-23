@@ -1,3 +1,4 @@
+import { BlogSources } from "../../components/blog/blog-sources";
 import { BlogYouTubeVideo } from "../../components/blog/blog-youtube-video";
 
 export function WhereIsRobinChineseArticle() {
@@ -10,7 +11,7 @@ export function WhereIsRobinChineseArticle() {
       </p>
       <p>
         地址并不难找，真正容易让人扑空的是行程优先级。施工、节日、天气、星期和游戏进度，
-        都可能覆盖你记住的普通安排。内容按星露谷物语 PC 1.6.15 整理。
+        都可能覆盖你记住的普通安排。这些行程规则适用于《星露谷物语》PC 1.6.15。
       </p>
 
       <h2>罗宾现在在哪里？按 15 秒顺序检查</h2>
@@ -133,21 +134,15 @@ export function WhereIsRobinChineseArticle() {
         youtubeVideoId="bFEEer6Cp3U"
       />
 
-      <h2>来源</h2>
-      <ul>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/罗宾">星露谷 Wiki：罗宾</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/木匠的商店">星露谷 Wiki：木匠的商店</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/营业时间表">星露谷 Wiki：营业时间表</a>
-        </li>
-        <li>
-          <a href="https://zh.stardewvalleywiki.com/电话">星露谷 Wiki：电话</a>
-        </li>
-      </ul>
+      <BlogSources
+        heading="来源"
+        items={[
+          { href: "https://zh.stardewvalleywiki.com/罗宾", label: "星露谷 Wiki：罗宾" },
+          { href: "https://zh.stardewvalleywiki.com/木匠的商店", label: "星露谷 Wiki：木匠的商店" },
+          { href: "https://zh.stardewvalleywiki.com/营业时间表", label: "星露谷 Wiki：营业时间表" },
+          { href: "https://zh.stardewvalleywiki.com/电话", label: "星露谷 Wiki：电话" },
+        ]}
+      />
     </article>
   );
 }
