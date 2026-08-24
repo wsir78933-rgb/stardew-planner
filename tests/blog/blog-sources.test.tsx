@@ -206,12 +206,9 @@ function getSourceSectionMarkup(articleMarkup: string, articleName: string) {
   return articleMarkup.slice(sourceSectionStart, sourceSectionEnd + "</section>".length);
 }
 
-function renderExpectedSourceLink(source: ExpectedSource) {
-  return renderToStaticMarkup(<a href={source.href}>{source.label}</a>);
-}
-
-function renderExpectedSourceNote(note: string) {
-  return renderToStaticMarkup(<span className="blog-sources__note">{note}</span>);
+function renderExpectedText(text: string) {
+  const wrapperMarkup = renderToStaticMarkup(<span>{text}</span>);
+  return wrapperMarkup.slice("<span>".length, -"</span>".length);
 }
 
 it("renders source links in a grouped Item list with an optional checked label", () => {
@@ -220,19 +217,33 @@ it("renders source links in a grouped Item list with an optional checked label",
       checkedLabel="Sources checked August 23, 2026."
       heading="Sources"
       items={[
-        { href: "https://example.com/about", label: "About" },
+        {
+          href: "https://example.com/about",
+          label: "About",
+          note: "Checked August 23, 2026.",
+        },
         { href: "https://example.com/wiki", label: "Wiki" },
       ]}
     />,
   );
 
   expect(markup).toContain('<section class="blog-sources">');
+  expect(markup).toContain('data-slot="card"');
+  expect(markup).toContain('data-slot="card-header"');
+  expect(markup).toContain('data-slot="card-content"');
+  expect(markup).toContain('data-slot="card-footer"');
   expect(markup).toContain("<h2>Sources</h2>");
+  expect(markup).toContain("blog-sources__title-icon");
   expect(markup).toContain('role="list"');
   expect(markup.match(/role="listitem"/g) ?? []).toHaveLength(2);
   expect(markup.match(/data-slot="item"/g) ?? []).toHaveLength(2);
-  expect(markup).toContain('<a href="https://example.com/about">');
-  expect(markup).toContain('<a href="https://example.com/wiki">');
+  expect(markup.match(/data-variant="outline"/g) ?? []).toHaveLength(2);
+  expect(markup).toContain("blog-sources__item-icon");
+  expect(markup).toContain("blog-sources__item-chevron");
+  expect(markup).toContain("blog-sources__item-note");
+  expect(markup).toContain('href="https://example.com/about"');
+  expect(markup).toContain('href="https://example.com/wiki"');
+  expect(markup).toContain("Checked August 23, 2026.");
   expect(markup).toContain("Sources checked August 23, 2026.");
 });
 
@@ -246,15 +257,18 @@ it("preserves each localized article's source links, labels, notes, and order", 
 
     let previousSourcePosition = -1;
     for (const source of expectation.sources) {
-      const sourceMarkup = renderExpectedSourceLink(source);
-      const sourcePosition = sourceSectionMarkup.indexOf(sourceMarkup);
+      const sourcePosition = sourceSectionMarkup.indexOf(`href="${source.href}"`);
 
-      expect(sourcePosition, `Missing source "${source.label}" in ${expectation.name}.`).toBeGreaterThan(-1);
+      expect(sourcePosition, `Missing source "${source.href}" in ${expectation.name}.`).toBeGreaterThan(-1);
       expect(sourcePosition, `Source order changed in ${expectation.name}.`).toBeGreaterThan(
         previousSourcePosition,
       );
+      const sourceLinkEnd = sourceSectionMarkup.indexOf("</a>", sourcePosition);
+      const sourceLinkMarkup = sourceSectionMarkup.slice(sourcePosition, sourceLinkEnd);
+
+      expect(sourceLinkMarkup).toContain(renderExpectedText(source.label));
       if (source.note) {
-        expect(sourceSectionMarkup).toContain(`${sourceMarkup}${renderExpectedSourceNote(source.note)}`);
+        expect(sourceLinkMarkup).toContain(renderExpectedText(source.note));
       }
 
       previousSourcePosition = sourcePosition;
