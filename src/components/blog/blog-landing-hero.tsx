@@ -39,7 +39,12 @@ export function BlogLandingHero({
       </div>
       {spotlightPosts.length > 0 ? (
         <section aria-label={copy.latestArticlesLabel}>
-          <ArticleGrid copy={copy} locale={locale} posts={spotlightPosts.slice(0, 2)} />
+          <ArticleGrid
+            copy={copy}
+            headingLevel="h2"
+            locale={locale}
+            posts={spotlightPosts.slice(0, 2)}
+          />
         </section>
       ) : null}
     </header>

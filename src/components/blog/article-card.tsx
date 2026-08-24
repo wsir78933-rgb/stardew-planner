@@ -6,14 +6,34 @@ import {
 import type { BlogPostMeta } from "../../blog/blog-post-registry";
 import type { PublicLocale } from "../../i18n/public-locale";
 
+type ArticleCardHeadingLevel = "h2" | "h3";
+
 type ArticleCardProperties = Readonly<{
   copy: BlogCopy;
+  headingLevel?: ArticleCardHeadingLevel;
   locale: PublicLocale;
   post: BlogPostMeta;
 }>;
 
-export function ArticleCard({ copy, locale, post }: ArticleCardProperties) {
+function assertArticleCardHeadingLevel(
+  headingLevel: unknown,
+): asserts headingLevel is ArticleCardHeadingLevel {
+  if (headingLevel !== "h2" && headingLevel !== "h3") {
+    throw new Error(
+      `Article card headingLevel must be "h2" or "h3"; received ${JSON.stringify(headingLevel)}.`,
+    );
+  }
+}
+
+export function ArticleCard({
+  copy,
+  headingLevel = "h3",
+  locale,
+  post,
+}: ArticleCardProperties) {
+  assertArticleCardHeadingLevel(headingLevel);
   const articleHref = getLocalizedBlogPostHref(locale, post.slug);
+  const HeadingTag = headingLevel;
 
   return (
     <article className="blog-article-card">
@@ -28,9 +48,9 @@ export function ArticleCard({ copy, locale, post }: ArticleCardProperties) {
       </a>
       <div className="blog-article-card__body">
         <p className="blog-article-card__topic">{post.topic}</p>
-        <h3>
+        <HeadingTag>
           <a href={articleHref}>{post.title}</a>
-        </h3>
+        </HeadingTag>
         <p className="blog-article-card__metadata">
           {copy.authorLabel} {post.author} · {formatBlogReadTime(copy, post.readTimeMinutes)}
         </p>

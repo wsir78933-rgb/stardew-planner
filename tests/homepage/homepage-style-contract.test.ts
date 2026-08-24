@@ -8,6 +8,17 @@ function readProjectFile(relativePath: string) {
   return readFileSync(resolve(process.cwd(), relativePath), "utf8");
 }
 
+test("limits header flex layout to the direct site navigation element", () => {
+  const styles = readProjectFile("app/globals.css");
+
+  expect(styles).toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-header] > nav {",
+  );
+  expect(styles).toContain(
+    "[data-public-page-shell] [data-public-page-header] > nav {",
+  );
+});
+
 test("contains the hero value proposition and frames the product stage within the homepage scope", () => {
   const styles = readProjectFile("app/globals.css");
   const heroContentRule = styles.match(

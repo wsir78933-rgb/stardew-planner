@@ -2,6 +2,8 @@ import type { BlogPostSlug } from "./blog-post-identities";
 import type { PublicLocale } from "../i18n/public-locale";
 
 export type BlogCopy = Readonly<{
+  archiveDescription: string;
+  archiveIntro: string;
   archiveTitle: string;
   authorLabel: string;
   allTopicsLabel: string;
@@ -30,6 +32,10 @@ export type BlogCopy = Readonly<{
 
 const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
   en: {
+    archiveDescription:
+      "Browse every Stardew Valley planning guide in one archive, from Robin and Pelican Town to farm layout basics.",
+    archiveIntro:
+      "This archive lists every published Stardew Valley planning guide. Use it to find Robin, Pelican Town, and farm layout articles in one place.",
     archiveTitle: "All articles",
     authorLabel: "By",
     allTopicsLabel: "All",
@@ -57,6 +63,10 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     tableOfContentsLabel: "On this page",
   },
   "zh-CN": {
+    archiveDescription:
+      "按列表查看全部星露谷农场规划指南，覆盖罗宾、鹈鹕镇和农场布局基础。",
+    archiveIntro:
+      "这里列出目前已发布的全部星露谷农场规划指南。你可以在同一页查找罗宾、鹈鹕镇和农场布局相关文章。",
     archiveTitle: "全部文章",
     authorLabel: "作者：",
     allTopicsLabel: "全部",

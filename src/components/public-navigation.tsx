@@ -6,6 +6,7 @@ import {
   type PublicCanonicalPath,
 } from "../i18n/public-route-registry";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
+import { SiteNavigationMenu } from "./site-navigation-menu";
 
 type PublicNavigationProperties = Readonly<{
   locale: PublicLocale;
@@ -43,13 +44,17 @@ export function PublicNavigation({
       <a data-public-page-brand href={headerHrefs.brandHref}>
         {pageCopy.navigation.productName}
       </a>
-      <div data-public-page-navigation-links>
-        <a href={headerHrefs.capabilitiesHref}>
-          {pageCopy.navigation.capabilitiesLabel}
-        </a>
-        <a href={headerHrefs.faqHref}>{pageCopy.navigation.faqLabel}</a>
-        <a href={headerHrefs.blogHref}>{pageCopy.navigation.blogLabel}</a>
-      </div>
+      <SiteNavigationMenu
+        data-public-page-navigation-links
+        items={[
+          {
+            href: headerHrefs.capabilitiesHref,
+            label: pageCopy.navigation.capabilitiesLabel,
+          },
+          { href: headerHrefs.faqHref, label: pageCopy.navigation.faqLabel },
+          { href: headerHrefs.blogHref, label: pageCopy.navigation.blogLabel },
+        ]}
+      />
       <div data-public-page-header-actions>
         <HomepageLocaleSwitcher
           label={pageCopy.navigation.languageLabel}

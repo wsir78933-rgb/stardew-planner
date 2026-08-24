@@ -8,6 +8,7 @@ import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 import { HomepagePlanningGuide } from "./homepage-planning-guide";
+import { SiteNavigationMenu } from "./site-navigation-menu";
 import { SiteFooter } from "./site-footer";
 
 type HomepageContentProps = {
@@ -34,13 +35,17 @@ export function HomepageContent({
           <a data-homepage-brand href={plannerHref}>
             {copy.navigation.productName}
           </a>
-          <div data-homepage-navigation-links>
-            <a href="#capabilities">{copy.navigation.capabilitiesLabel}</a>
-            <a href="#faq">{copy.navigation.faqLabel}</a>
-            <a href={getLocalizedPublicPath(currentLocale, "/blog")}>
-              {copy.navigation.blogLabel}
-            </a>
-          </div>
+          <SiteNavigationMenu
+            data-homepage-navigation-links
+            items={[
+              { href: "#capabilities", label: copy.navigation.capabilitiesLabel },
+              { href: "#faq", label: copy.navigation.faqLabel },
+              {
+                href: getLocalizedPublicPath(currentLocale, "/blog"),
+                label: copy.navigation.blogLabel,
+              },
+            ]}
+          />
           <div data-homepage-header-actions>
             {localeSwitcher ?? (
               <HomepageLocaleSwitcher

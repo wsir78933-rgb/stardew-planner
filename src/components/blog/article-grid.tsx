@@ -5,15 +5,27 @@ import { ArticleCard } from "./article-card";
 
 type ArticleGridProperties = Readonly<{
   copy: BlogCopy;
+  headingLevel?: "h2" | "h3";
   locale: PublicLocale;
   posts: readonly BlogPostMeta[];
 }>;
 
-export function ArticleGrid({ copy, locale, posts }: ArticleGridProperties) {
+export function ArticleGrid({
+  copy,
+  headingLevel,
+  locale,
+  posts,
+}: ArticleGridProperties) {
   return (
     <div className="blog-article-grid">
       {posts.map((post, index) => (
-        <ArticleCard copy={copy} key={`${post.slug}-${index}`} locale={locale} post={post} />
+        <ArticleCard
+          copy={copy}
+          headingLevel={headingLevel}
+          key={`${post.slug}-${index}`}
+          locale={locale}
+          post={post}
+        />
       ))}
     </div>
   );

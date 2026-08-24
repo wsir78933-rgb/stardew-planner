@@ -109,7 +109,7 @@ body:has(> [data-homepage-shell]) [data-homepage-header] {
   border-bottom: 1px solid rgb(36 42 34 / 88%);
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-header] nav {
+body:has(> [data-homepage-shell]) [data-homepage-header] > nav {
   align-items: center;
   display: flex;
   gap: 1.5rem;
@@ -139,7 +139,7 @@ body:has(> [data-homepage-shell]) [data-homepage-header-actions] {
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-navigation-links] {
-  gap: clamp(0.85rem, 2vw, 1.75rem);
+  gap: 0;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-navigation-links] a {
@@ -759,7 +759,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 @media (max-width: 700px) {
-  body:has(> [data-homepage-shell]) [data-homepage-header] nav {
+  body:has(> [data-homepage-shell]) [data-homepage-header] > nav {
     flex-wrap: wrap;
     gap: 0.9rem;
     padding-block: 1rem;
@@ -913,6 +913,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 [data-blog-page] .blog-landing-hero p,
+[data-blog-page] > header > p,
 [data-blog-page] .blog-article-card__topic,
 [data-blog-page] .blog-article-card__metadata,
 [data-blog-article] > header > p,
@@ -920,7 +921,8 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   color: #52604e;
 }
 
-[data-blog-page] .blog-landing-hero > div > p {
+[data-blog-page] .blog-landing-hero > div > p,
+[data-blog-page] > header > p {
   font-size: clamp(1rem, 1.8vw, 1.2rem);
   margin-bottom: 0;
 }
@@ -1128,11 +1130,13 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   margin-bottom: 0.55rem;
 }
 
+[data-blog-page] .blog-article-card h2,
 [data-blog-page] .blog-article-card h3 {
   font-size: 1.35rem;
   margin-bottom: 0.85rem;
 }
 
+[data-blog-page] .blog-article-card h2 a,
 [data-blog-page] .blog-article-card h3 a {
   text-decoration-thickness: 1px;
 }
@@ -1677,7 +1681,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   border-bottom: 1px solid rgb(36 42 34 / 88%);
 }
 
-[data-public-page-shell] [data-public-page-header] nav {
+[data-public-page-shell] [data-public-page-header] > nav {
   align-items: center;
   display: flex;
   gap: 1.5rem;
@@ -1707,7 +1711,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 [data-public-page-shell] [data-public-page-navigation-links] {
-  gap: clamp(0.85rem, 2vw, 1.75rem);
+  gap: 0;
 }
 
 [data-public-page-shell] [data-public-page-navigation-links] a {
@@ -1720,6 +1724,35 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   color: var(--foreground);
   text-decoration: underline;
   text-underline-offset: 0.22em;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="navigation-menu-list"],
+[data-public-page-shell] [data-public-page-navigation-links] [data-slot="navigation-menu-list"] {
+  background: #f1f7e7;
+  border: 1px solid rgb(36 42 34 / 22%);
+  border-radius: 0.45rem;
+  gap: 0.2rem;
+  padding: 0.2rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="navigation-menu-link"],
+[data-public-page-shell] [data-public-page-navigation-links] [data-slot="navigation-menu-link"] {
+  border-radius: 0.3rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 700;
+  min-height: 2.25rem;
+  padding-inline: 0.75rem;
+  text-decoration: none;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="navigation-menu-link"]:hover,
+body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="navigation-menu-link"]:focus,
+[data-public-page-shell] [data-public-page-navigation-links] [data-slot="navigation-menu-link"]:hover,
+[data-public-page-shell] [data-public-page-navigation-links] [data-slot="navigation-menu-link"]:focus {
+  background: #ffffff;
+  color: var(--foreground);
+  text-decoration: none;
 }
 
 [data-public-page-shell] [data-public-page-header-actions] {
@@ -1975,7 +2008,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 @media (max-width: 700px) {
-  [data-public-page-shell] [data-public-page-header] nav {
+  [data-public-page-shell] [data-public-page-header] > nav {
     flex-wrap: wrap;
     gap: 0.9rem;
     padding-block: 1rem;

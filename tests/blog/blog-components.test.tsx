@@ -33,6 +33,7 @@ function createCustomizedEnglishCopy(): BlogCopy {
   return {
     ...getBlogCopy("en"),
     archiveTitle: "Custom archive",
+    archiveIntro: "Custom archive intro",
     authorLabel: "Custom author",
     blogTitle: "Custom guides",
     latestArticlesLabel: "Custom latest articles",
@@ -274,6 +275,51 @@ it("uses the localized archive route interface instead of building archive URLs 
   expect(getLocalizedBlogArchiveHref("zh-CN", 2)).toBe("/zh/blog/archive?page=2");
 });
 
+it("renders an archive intro and uses h2 card titles after the page heading", () => {
+  const posts = getAllBlogPosts("en");
+  const archiveState = getBlogArchiveState(posts, "1");
+  const copy = getBlogCopy("en");
+  const markup = renderToStaticMarkup(
+    <BlogArchiveContent copy={copy} locale="en" archiveState={archiveState} />,
+  );
+
+  expect(markup).toContain(`<h1>${copy.archiveTitle}</h1>`);
+  expect(markup).toContain(copy.archiveIntro);
+  expect(markup).toContain(`<h2><a href="/carpenter-stardew">${posts[0].title}</a></h2>`);
+  expect(markup).not.toContain("<h3>");
+});
+
+it("renders hero spotlight cards as h2 titles under the page heading", () => {
+  const posts = getAllBlogPosts("en");
+  const markup = renderToStaticMarkup(
+    <BlogLandingHero
+      copy={getBlogCopy("en")}
+      jumpTargets={[]}
+      locale="en"
+      spotlightPosts={posts.slice(0, 2)}
+    />,
+  );
+
+  expect(markup).toContain("<h1>Stardew Valley Planning Guides</h1>");
+  expect(markup).toContain(`<h2><a href="/carpenter-stardew">${posts[0].title}</a></h2>`);
+  expect(markup).not.toContain("<h3>");
+});
+
+it("keeps article cards under named index sections as h3 titles", () => {
+  const posts = getAllBlogPosts("en");
+  const markup = renderToStaticMarkup(
+    <BlogIndexContent
+      copy={getBlogCopy("en")}
+      homeState={getBlogHomeState(posts, {})}
+      locale="en"
+      posts={posts}
+    />,
+  );
+
+  expect(markup).toContain('<h2 id="latest-articles-heading">Latest articles</h2>');
+  expect(markup).toContain(`<h3><a href="/carpenter-stardew">${posts[0].title}</a></h3>`);
+});
+
 it("renders caller-provided localized copy through all blog presentation layers", () => {
   const posts = getAllBlogPosts("en");
   const homeState = getBlogHomeState(posts, {});
@@ -296,6 +342,7 @@ it("renders caller-provided localized copy through all blog presentation layers"
   expect(indexMarkup).toContain("Custom latest articles");
   expect(indexMarkup).toContain("Custom search");
   expect(archiveMarkup).toContain("Custom archive");
+  expect(archiveMarkup).toContain("Custom archive intro");
   expect(archiveMarkup).toContain("Custom previous");
   expect(archiveMarkup).toContain("Custom next");
   expect(articleMarkup).toContain("Custom author");

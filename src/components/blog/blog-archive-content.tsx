@@ -57,10 +57,16 @@ export function BlogArchiveContent({
     <div data-blog-page="true">
       <header>
         <h1>{copy.archiveTitle}</h1>
+        <p>{copy.archiveIntro}</p>
       </header>
       {archiveState.posts.length > 0 ? (
         <>
-          <ArticleGrid copy={copy} locale={locale} posts={archiveState.posts} />
+          <ArticleGrid
+            copy={copy}
+            headingLevel="h2"
+            locale={locale}
+            posts={archiveState.posts}
+          />
           <ArchivePagination archiveState={archiveState} copy={copy} locale={locale} />
         </>
       ) : (

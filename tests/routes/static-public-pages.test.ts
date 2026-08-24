@@ -199,6 +199,9 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     documentLanguage: "en",
     schemaType: "CollectionPage",
     shouldIndex: true,
+    requiredBodyPhrases: [
+      "This archive lists every published Stardew Valley planning guide. Use it to find Robin, Pelican Town, and farm layout articles in one place.",
+    ],
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.webp",
@@ -362,6 +365,9 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     documentLanguage: "zh-CN",
     schemaType: "CollectionPage",
     shouldIndex: true,
+    requiredBodyPhrases: [
+      "这里列出目前已发布的全部星露谷农场规划指南。你可以在同一页查找罗宾、鹈鹕镇和农场布局相关文章。",
+    ],
     coverImages: [
       {
         src: "/blog/carpenter-stardew-cover.webp",

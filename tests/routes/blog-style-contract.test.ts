@@ -112,6 +112,18 @@ it("keeps latest articles in a responsive single-row snap track with accessible 
   );
 });
 
+it("keeps card title styles shared by h2 and h3 headings", () => {
+  const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
+
+  expect(
+    readScopedRuleBody(
+      stylesheet,
+      "[data-blog-page] .blog-article-card h2,\n[data-blog-page] .blog-article-card h3",
+    ),
+  ).toContain("font-size: 1.35rem;");
+  expect(stylesheet).toContain("[data-blog-page] > header > p");
+});
+
 it("keeps blog article titles at the full header width", () => {
   const stylesheet = readScopedBlogCssBlock(readBlogStylesheet());
 

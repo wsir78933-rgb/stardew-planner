@@ -16,7 +16,7 @@ export const metadata = createPublicPageMetadata({
   locale,
   canonicalPath,
   title: copy.archiveTitle,
-  description: copy.blogDescription,
+  description: copy.archiveDescription,
   robots: { index: true, follow: true },
 });
 
@@ -28,7 +28,7 @@ export default function BlogArchivePage() {
         structuredData={createCollectionPageStructuredData({
           locale: "en",
           name: copy.archiveTitle,
-          description: copy.blogDescription,
+          description: copy.archiveDescription,
           pathname: canonicalPath,
         })}
       />

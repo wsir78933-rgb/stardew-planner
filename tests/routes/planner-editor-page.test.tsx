@@ -26,6 +26,10 @@ describe("planner editor page", () => {
 
     expect(plannerPageMarkup).toContain("data-homepage-shell");
     expect(plannerPageMarkup).toContain("data-homepage-header");
+    expect(plannerPageMarkup).toContain('data-slot="navigation-menu"');
+    expect(plannerPageMarkup).toContain('data-slot="navigation-menu-list"');
+    expect(plannerPageMarkup.match(/data-slot="navigation-menu-item"/g) ?? []).toHaveLength(3);
+    expect(plannerPageMarkup.match(/data-slot="navigation-menu-link"/g) ?? []).toHaveLength(3);
     expect(plannerPageMarkup).toContain("data-homepage-hero");
     expect(plannerPageMarkup).toContain("data-homepage-hero-content");
     expect(plannerPageMarkup).toContain("data-homepage-hero-emphasis");

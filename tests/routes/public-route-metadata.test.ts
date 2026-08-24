@@ -17,6 +17,7 @@ import { metadata as chineseBlogArchiveMetadata } from "../../app/zh/blog/archiv
 import { metadata as chineseBlogIndexMetadata } from "../../app/zh/blog/page";
 import { metadata as chineseContactMetadata } from "../../app/zh/contact/page";
 import { metadata as chinesePlannerMetadata } from "../../app/zh/page";
+import { getBlogCopy } from "../../src/blog/blog-copy";
 import { blogPostSlugs, getBlogPostBySlug } from "../../src/blog/blog-post-registry";
 
 const expectedSocialImageUrl =
@@ -95,6 +96,18 @@ describe("public route metadata", () => {
         robots: { index: true, follow: true },
       });
     }
+  });
+
+  it("gives blog archive pages their own description instead of reusing the index copy", () => {
+    const englishCopy = getBlogCopy("en");
+    const chineseCopy = getBlogCopy("zh-CN");
+
+    expect(englishCopy.archiveDescription).not.toBe(englishCopy.blogDescription);
+    expect(chineseCopy.archiveDescription).not.toBe(chineseCopy.blogDescription);
+    expect(blogIndexMetadata.description).toBe(englishCopy.blogDescription);
+    expect(blogArchiveMetadata.description).toBe(englishCopy.archiveDescription);
+    expect(chineseBlogIndexMetadata.description).toBe(chineseCopy.blogDescription);
+    expect(chineseBlogArchiveMetadata.description).toBe(chineseCopy.archiveDescription);
   });
 
   it("generates paired article metadata from each localized blog post cover", async () => {
