@@ -41,6 +41,9 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/carpenter-stardew"');
   expect(indexMarkup).toContain('href="/stardew-valley-npc"');
   expect(indexMarkup).toContain('href="/where-is-stardew-valley-located"');
+  expect(indexMarkup).toContain(
+    'href="/stardew-valley-expanded-bachelors-and-bachelorettes"',
+  );
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -65,6 +68,9 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/where-is-robin-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/stardew-valley-npc"');
   expect(indexMarkup).toContain('href="/zh/where-is-stardew-valley-located"');
+  expect(indexMarkup).toContain(
+    'href="/zh/stardew-valley-expanded-bachelors-and-bachelorettes"',
+  );
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -73,6 +79,46 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
 });
 
 it("renders the new paired article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({
+      slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+    }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({
+      slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+    }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+  );
+  expect(chineseMarkup).toContain(
+    "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+    description:
+      "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title:
+      "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+    description:
+      "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+  });
+});
+
+it("still publishes the location article with locked metadata and one page-level heading", async () => {
   const englishParameters = {
     params: Promise.resolve({ slug: "where-is-stardew-valley-located" }),
   };
@@ -89,9 +135,7 @@ it("renders the new paired article routes with locked metadata and one page-leve
   expect(englishMarkup).toContain(
     "Where Is Stardew Valley Located in the Game’s World?",
   );
-  expect(chineseMarkup).toContain(
-    "星露谷在游戏世界中位于哪里？",
-  );
+  expect(chineseMarkup).toContain("星露谷在游戏世界中位于哪里？");
   expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
   expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
 

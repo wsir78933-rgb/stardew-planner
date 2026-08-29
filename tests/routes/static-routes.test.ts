@@ -31,6 +31,7 @@ const expectedStaticPageFiles = [
   "stardew-valley-npc.html",
   "stardew-valley-town-map.html",
   "where-is-stardew-valley-located.html",
+  "stardew-valley-expanded-bachelors-and-bachelorettes.html",
   "zh/blog.html",
   "zh/blog/archive.html",
   "zh/carpenter-stardew.html",
@@ -38,6 +39,7 @@ const expectedStaticPageFiles = [
   "zh/stardew-valley-npc.html",
   "zh/stardew-valley-town-map.html",
   "zh/where-is-stardew-valley-located.html",
+  "zh/stardew-valley-expanded-bachelors-and-bachelorettes.html",
 ] as const;
 
 const expectedStaticHomepageFiles = [

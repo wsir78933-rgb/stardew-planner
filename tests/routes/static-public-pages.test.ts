@@ -190,6 +190,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/where-is-stardew-valley-located-cover.webp",
         alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
       },
+      {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
+      },
     ],
   },
   {
@@ -222,6 +226,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-stardew-valley-located-cover.webp",
         alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
+      },
+      {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
       },
     ],
   },
@@ -329,6 +337,36 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/stardew-valley-expanded-bachelors-and-bachelorettes",
+    staticPageFile: "stardew-valley-expanded-bachelors-and-bachelorettes.html",
+    heading: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+    metadata: {
+      title: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+      description:
+        "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Stardew Valley Expanded bachelors and bachelorettes: there are 7 of them",
+      "This planner does not record hearts, gift counts, or character positions.",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/stardew-valley-npc",
+      "/carpenter-stardew",
+      "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
+      "https://www.nexusmods.com/stardewvalley/mods/3753",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -355,6 +393,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-stardew-valley-located-cover.webp",
         alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
+      },
+      {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
       },
     ],
   },
@@ -388,6 +430,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/where-is-stardew-valley-located-cover.webp",
         alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
+      },
+      {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
       },
     ],
   },
@@ -492,6 +538,38 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://stardewvalleywiki.com/Pelican_Town",
       "https://stardewvalleywiki.com/The_Desert",
       "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
+    ],
+  },
+  {
+    pathname: "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
+    staticPageFile: "zh/stardew-valley-expanded-bachelors-and-bachelorettes.html",
+    heading:
+      "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+    metadata: {
+      title:
+        "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+      description:
+        "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
+      },
+    ],
+    requiredBodyPhrases: [
+      "星露谷SVE 可结婚角色现在是 7 个",
+      "规划器只做布局，不记录红心、送礼次数或角色坐标。",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/stardew-valley-npc",
+      "/zh/carpenter-stardew",
+      "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
+      "https://www.nexusmods.com/stardewvalley/mods/3753",
     ],
   },
 ];

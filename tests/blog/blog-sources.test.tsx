@@ -11,6 +11,8 @@ import { WhereIsRobinEnglishArticle } from "../../src/blog/articles/where-is-rob
 import { WhereIsRobinChineseArticle } from "../../src/blog/articles/where-is-robin-stardew-valley.zh";
 import { WhereIsStardewValleyLocatedEnglishArticle } from "../../src/blog/articles/where-is-stardew-valley-located.en";
 import { WhereIsStardewValleyLocatedChineseArticle } from "../../src/blog/articles/where-is-stardew-valley-located.zh";
+import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
+import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -187,6 +189,124 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
         label: "Eric Barone 太平洋西北地区兴趣采访 — Portland Mercury",
+      },
+    ],
+  },
+  {
+    Article: StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle,
+    heading: "Sources",
+    name: "English SVE bachelors article",
+    sources: [
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
+        label: "SVE Wiki: Villagers",
+        note: " — 7 marriage candidates. Checked 25 August 2026.",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Claire",
+        label: "SVE Wiki: Claire",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Olivia",
+        label: "SVE Wiki: Olivia",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Sophia",
+        label: "SVE Wiki: Sophia",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Scarlett",
+        label: "SVE Wiki: Scarlett",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Lance",
+        label: "SVE Wiki: Lance",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Magnus",
+        label: "SVE Wiki: Magnus",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Victor",
+        label: "SVE Wiki: Victor",
+      },
+      {
+        href: "https://www.nexusmods.com/stardewvalley/mods/3753",
+        label: "SVE on Nexus",
+        note: " — main file 1.15.11.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Marriage",
+        label: "Stardew Valley Wiki: Marriage",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Friendship",
+        label: "Stardew Valley Wiki: Friendship",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/",
+        label: "Stardew Valley Planner",
+      },
+    ],
+  },
+  {
+    Article: StardewValleyExpandedBachelorsAndBachelorettesChineseArticle,
+    heading: "来源",
+    name: "Chinese SVE bachelors article",
+    sources: [
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
+        label: "SVE Wiki：Villagers",
+        note: " — 7 名结婚对象。核对于 2026-08-25。",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Claire",
+        label: "SVE Wiki：克莱尔",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Olivia",
+        label: "SVE Wiki：奥利维亚",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Sophia",
+        label: "SVE Wiki：索菲娅",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Scarlett",
+        label: "SVE Wiki：斯嘉丽",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Lance",
+        label: "SVE Wiki：兰斯",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Magnus",
+        label: "SVE Wiki：马格努斯",
+      },
+      {
+        href: "https://stardewvalleyexpanded.wiki.gg/wiki/Victor",
+        label: "SVE Wiki：维克多",
+      },
+      {
+        href: "https://stardew-valley-expanded.fandom.com/zh/wiki/%E6%98%9F%E9%9C%B2%E8%B0%B7%E7%89%A9%E8%AF%AD%E6%89%A9%E5%B1%95_Wiki?variant=zh-cn",
+        label: "星露谷物语扩展 Wiki 中文首页",
+      },
+      {
+        href: "https://www.nexusmods.com/stardewvalley/mods/3753",
+        label: "SVE on Nexus",
+        note: " — 主文件 1.15.11。",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/婚姻",
+        label: "星露谷 Wiki：婚姻",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/友谊",
+        label: "星露谷 Wiki：友谊",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/zh",
+        label: "星露谷农场规划器",
       },
     ],
   },

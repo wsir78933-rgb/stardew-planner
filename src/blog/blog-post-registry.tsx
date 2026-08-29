@@ -10,6 +10,8 @@ import { StardewValleyTownMapEnglishArticle } from "./articles/stardew-valley-to
 import { StardewValleyTownMapChineseArticle } from "./articles/stardew-valley-town-map.zh";
 import { WhereIsStardewValleyLocatedEnglishArticle } from "./articles/where-is-stardew-valley-located.en";
 import { WhereIsStardewValleyLocatedChineseArticle } from "./articles/where-is-stardew-valley-located.zh";
+import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "./articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
+import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "./articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -124,6 +126,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: WhereIsStardewValleyLocatedEnglishArticle,
     },
+    {
+      slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+      title: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+      description:
+        "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
+      },
+      featured: true,
+      Content: StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -199,6 +216,22 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: WhereIsStardewValleyLocatedChineseArticle,
+    },
+    {
+      slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+      title:
+        "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+      description:
+        "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
+      },
+      featured: true,
+      Content: StardewValleyExpandedBachelorsAndBachelorettesChineseArticle,
     },
   ],
 };

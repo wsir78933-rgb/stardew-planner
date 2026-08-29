@@ -210,6 +210,38 @@ it("keeps the page-level heading singular across hero, discovery, archive, and a
   );
 });
 
+it("renders the selected bilingual SVE bachelors title and description in the article header", () => {
+  for (const [locale, expectedTitle, expectedDescription] of [
+    [
+      "en",
+      "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+      "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+    ],
+    [
+      "zh-CN",
+      "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+      "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+    ],
+  ] as const) {
+    const post = getAllBlogPosts(locale).find(
+      ({ slug }) => slug === "stardew-valley-expanded-bachelors-and-bachelorettes",
+    );
+
+    if (post === undefined) {
+      throw new Error(`Missing SVE bachelors post for locale ${locale}.`);
+    }
+
+    const markup = renderToStaticMarkup(
+      <BlogArticleContent copy={getBlogCopy(locale)} locale={locale} post={post} />,
+    );
+
+    expect(markup).toContain(`<h1>${expectedTitle}</h1>`);
+    expect(markup).toContain(
+      `<p class="blog-article-description">${expectedDescription}</p>`,
+    );
+  }
+});
+
 it("renders the selected bilingual NPC title and description in the article header", () => {
   for (const [locale, expectedTitle, expectedDescription] of [
     [

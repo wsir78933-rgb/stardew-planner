@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(11);
+  expect(canonicalPublicPaths).toHaveLength(12);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -49,8 +49,17 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(
     getLocalizedPublicPath("zh-CN", "/where-is-stardew-valley-located"),
   ).toBe("/zh/where-is-stardew-valley-located");
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(22);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(20);
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-expanded-bachelors-and-bachelorettes"),
+  ).toBe("/stardew-valley-expanded-bachelors-and-bachelorettes");
+  expect(
+    getLocalizedPublicPath(
+      "zh-CN",
+      "/stardew-valley-expanded-bachelors-and-bachelorettes",
+    ),
+  ).toBe("/zh/stardew-valley-expanded-bachelors-and-bachelorettes");
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(24);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(22);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -66,6 +75,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/stardew-valley-town-map");
   expect(indexablePathnames).toContain("/where-is-stardew-valley-located");
   expect(indexablePathnames).toContain("/zh/where-is-stardew-valley-located");
+  expect(indexablePathnames).toContain(
+    "/stardew-valley-expanded-bachelors-and-bachelorettes",
+  );
+  expect(indexablePathnames).toContain(
+    "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
+  );
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -78,6 +93,7 @@ it("registers the direct-entry blog routes", () => {
       "/stardew-valley-npc",
       "/stardew-valley-town-map",
       "/where-is-stardew-valley-located",
+      "/stardew-valley-expanded-bachelors-and-bachelorettes",
     ]),
   );
 });

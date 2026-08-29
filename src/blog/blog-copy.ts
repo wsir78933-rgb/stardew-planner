@@ -103,6 +103,8 @@ const localizedBlogPostPaths: Readonly<
     "stardew-valley-npc": "/stardew-valley-npc",
     "stardew-valley-town-map": "/stardew-valley-town-map",
     "where-is-stardew-valley-located": "/where-is-stardew-valley-located",
+    "stardew-valley-expanded-bachelors-and-bachelorettes":
+      "/stardew-valley-expanded-bachelors-and-bachelorettes",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -110,6 +112,8 @@ const localizedBlogPostPaths: Readonly<
     "stardew-valley-npc": "/zh/stardew-valley-npc",
     "stardew-valley-town-map": "/zh/stardew-valley-town-map",
     "where-is-stardew-valley-located": "/zh/where-is-stardew-valley-located",
+    "stardew-valley-expanded-bachelors-and-bachelorettes":
+      "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
   },
 };
 

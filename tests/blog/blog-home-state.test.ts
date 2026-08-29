@@ -48,19 +48,21 @@ it("shows the newest real post first while keeping the topic carousel in canonic
   const homeState = getBlogHomeState(posts, {});
 
   expect(homeState.posts.map((post) => post.slug)).toEqual([
+    "stardew-valley-expanded-bachelors-and-bachelorettes",
     "where-is-stardew-valley-located",
     "stardew-valley-town-map",
     "stardew-valley-npc",
     "where-is-robin-stardew-valley",
     "carpenter-stardew",
   ]);
-  expect(homeState.totalPostCount).toBe(5);
+  expect(homeState.totalPostCount).toBe(6);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
     "stardew-valley-npc",
     "stardew-valley-town-map",
     "where-is-stardew-valley-located",
+    "stardew-valley-expanded-bachelors-and-bachelorettes",
   ]);
 });
 

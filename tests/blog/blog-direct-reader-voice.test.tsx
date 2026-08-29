@@ -11,6 +11,8 @@ import { WhereIsRobinEnglishArticle } from "../../src/blog/articles/where-is-rob
 import { WhereIsRobinChineseArticle } from "../../src/blog/articles/where-is-robin-stardew-valley.zh";
 import { WhereIsStardewValleyLocatedEnglishArticle } from "../../src/blog/articles/where-is-stardew-valley-located.en";
 import { WhereIsStardewValleyLocatedChineseArticle } from "../../src/blog/articles/where-is-stardew-valley-located.zh";
+import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
+import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -26,6 +28,10 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: WhereIsStardewValleyLocatedEnglishArticle,
     slug: "where-is-stardew-valley-located",
   },
+  {
+    Component: StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle,
+    slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+  },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -36,6 +42,10 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   {
     Component: WhereIsStardewValleyLocatedChineseArticle,
     slug: "where-is-stardew-valley-located",
+  },
+  {
+    Component: StardewValleyExpandedBachelorsAndBachelorettesChineseArticle,
+    slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
   },
 ];
 

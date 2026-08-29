@@ -16,6 +16,7 @@ const expectedSlugs = [
   "stardew-valley-npc",
   "stardew-valley-town-map",
   "where-is-stardew-valley-located",
+  "stardew-valley-expanded-bachelors-and-bachelorettes",
 ] as const;
 
 function createLocalizedPost(
@@ -50,25 +51,27 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the five canonical blog identities in publishing order", () => {
+it("keeps the six canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the ten localized root-level canonical article paths", () => {
+it("publishes only the twelve localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
     "/stardew-valley-npc/",
     "/stardew-valley-town-map/",
     "/where-is-stardew-valley-located/",
+    "/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
     "/zh/stardew-valley-town-map/",
     "/zh/where-is-stardew-valley-located/",
+    "/zh/stardew-valley-expanded-bachelors-and-bachelorettes/",
   ]);
 });
 
@@ -146,6 +149,27 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
     },
   });
+  expect(englishPosts[5]).toMatchObject({
+    title: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+    description:
+      "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+    readTimeMinutes: 12,
+    coverImage: {
+      src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+      alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
+    },
+  });
+  expect(chinesePosts[5]).toMatchObject({
+    title:
+      "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+    description:
+      "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+    readTimeMinutes: 12,
+    coverImage: {
+      src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+      alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -157,6 +181,8 @@ it("binds every localized post to its own original blog cover", () => {
     "stardew-valley-town-map": "/blog/stardew-valley-town-map-cover.webp",
     "where-is-stardew-valley-located":
       "/blog/where-is-stardew-valley-located-cover.webp",
+    "stardew-valley-expanded-bachelors-and-bachelorettes":
+      "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -255,7 +281,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: where-is-stardew-valley-located.",
+    "Expected: carpenter-stardew. Received: stardew-valley-expanded-bachelors-and-bachelorettes.",
   );
 });
 

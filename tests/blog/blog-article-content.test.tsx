@@ -7,6 +7,8 @@ import { WhereIsRobinEnglishArticle } from "../../src/blog/articles/where-is-rob
 import { WhereIsRobinChineseArticle } from "../../src/blog/articles/where-is-robin-stardew-valley.zh";
 import { StardewValleyNpcEnglishArticle } from "../../src/blog/articles/stardew-valley-npc.en";
 import { StardewValleyNpcChineseArticle } from "../../src/blog/articles/stardew-valley-npc.zh";
+import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
+import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 
 type ArticleFixture = Readonly<{
   markup: string;
@@ -200,6 +202,55 @@ it("renders matching English and Chinese Stardew Valley NPC guides with sourced 
   expect(chineseMarkup).toContain("《星露谷物语》一共有多少 NPC？");
   expect(chineseMarkup.match(/class="blog-faq-item"/g)).toHaveLength(5);
 
+  expect(countSecondLevelSections(englishMarkup)).toBeGreaterThanOrEqual(8);
+  expect(countSecondLevelSections(chineseMarkup)).toBe(
+    countSecondLevelSections(englishMarkup),
+  );
+  expect(englishMarkup.length).toBeGreaterThan(8500);
+  expect(chineseMarkup.length).toBeGreaterThan(4200);
+});
+
+it("renders matching English and Chinese SVE bachelors guides without overwriting vanilla NPC copy", () => {
+  const englishMarkup = renderArticle(
+    StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle,
+  );
+  const chineseMarkup = renderArticle(
+    StardewValleyExpandedBachelorsAndBachelorettesChineseArticle,
+  );
+
+  for (const markup of [englishMarkup, chineseMarkup]) {
+    expect(markup).not.toContain("<h1");
+    expect(markup).not.toContain("<iframe");
+    expect(markup).not.toContain("[confirm:");
+    expect(markup).not.toContain("[待确认：");
+    expect(markup).not.toContain("tracks NPC");
+    expect(markup).not.toContain("追踪 NPC");
+    expect(markup).toContain("1.15.11");
+    expect(markup).toContain("7");
+    expect(markup).toContain('class="blog-faq-list"');
+    expect(markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
+  }
+
+  const englishOpeningParagraph = getOpeningParagraph(englishMarkup);
+  const chineseOpeningParagraph = getOpeningParagraph(chineseMarkup);
+
+  expect(englishOpeningParagraph).toContain(
+    "Stardew Valley Expanded bachelors and bachelorettes: there are 7 of them",
+  );
+  expect(englishOpeningParagraph).not.toContain("If your search was");
+  expect(chineseOpeningParagraph).toContain("星露谷SVE 可结婚角色现在是 7 个");
+  expect(chineseOpeningParagraph).not.toContain("本文将");
+
+  expect(englishMarkup).toContain(
+    '<a class="blog-planner-link" href="/#planner">',
+  );
+  expect(englishMarkup).toContain('href="/stardew-valley-npc"');
+  expect(englishMarkup).toContain("<h2>Sources</h2>");
+  expect(chineseMarkup).toContain(
+    '<a class="blog-planner-link" href="/zh#planner">',
+  );
+  expect(chineseMarkup).toContain('href="/zh/stardew-valley-npc"');
+  expect(chineseMarkup).toContain("<h2>来源</h2>");
   expect(countSecondLevelSections(englishMarkup)).toBeGreaterThanOrEqual(8);
   expect(countSecondLevelSections(chineseMarkup)).toBe(
     countSecondLevelSections(englishMarkup),
