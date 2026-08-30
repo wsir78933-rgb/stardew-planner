@@ -168,6 +168,23 @@ it("keeps article tables scrollable and name rosters readable without page overf
   expect(stylesheet).toContain(".blog-table-scroll:focus-visible");
 });
 
+it("restores standard list markers for article body lists while keeping name rosters unbulleted", () => {
+  const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
+  const unorderedListRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout > div ul:not(.blog-name-grid)",
+  );
+  const orderedListRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout > div ol",
+  );
+
+  expect(unorderedListRule).toContain("list-style: disc;");
+  expect(unorderedListRule).toContain("padding-left: 1.25rem;");
+  expect(orderedListRule).toContain("list-style: decimal;");
+  expect(orderedListRule).toContain("padding-left: 1.25rem;");
+});
+
 it("keeps every blog class selector inside a blog scope without planner or footer selectors", () => {
   const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
   const blogSelectorLines = scopedBlogCssBlock
@@ -185,3 +202,4 @@ it("keeps every blog class selector inside a blog scope without planner or foote
   expect(scopedBlogCssBlock).not.toMatch(/\.planner-editor-shell|\[data-site-footer\]/);
   expect(scopedBlogCssBlock).not.toMatch(/(?:^|,)\s*(?:nav|footer)\b/m);
 });
+
