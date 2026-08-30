@@ -17,6 +17,7 @@ const expectedSlugs = [
   "stardew-valley-town-map",
   "where-is-stardew-valley-located",
   "stardew-valley-expanded-bachelors-and-bachelorettes",
+  "sprinkler-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -51,14 +52,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the six canonical blog identities in publishing order", () => {
+it("keeps the seven canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the twelve localized root-level canonical article paths", () => {
+it("publishes only the fourteen localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -66,12 +67,14 @@ it("publishes only the twelve localized root-level canonical article paths", () 
     "/stardew-valley-town-map/",
     "/where-is-stardew-valley-located/",
     "/stardew-valley-expanded-bachelors-and-bachelorettes/",
+    "/sprinkler-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
     "/zh/stardew-valley-town-map/",
     "/zh/where-is-stardew-valley-located/",
     "/zh/stardew-valley-expanded-bachelors-and-bachelorettes/",
+    "/zh/sprinkler-stardew/",
   ]);
 });
 
@@ -170,6 +173,27 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
     },
   });
+  expect(englishPosts[6]).toMatchObject({
+    title: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+    description:
+      "Match each sprinkler to 4, 8, or 24 tiles, then check radius overlay on your farm map. Pressure nozzles and enrichers cannot share one sprinkler.",
+    readTimeMinutes: 10,
+    coverImage: {
+      src: "/blog/sprinkler-stardew-cover.webp",
+      alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+    },
+  });
+  expect(chinesePosts[6]).toMatchObject({
+    title:
+      "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+    description:
+      "星露谷洒水器布局怎么排，先看4格十字、8格3×3、24格5×5三种覆盖，再按农田边角、池塘和通道修正。本文给出数量公式、优质与铱制洒水器摆法、2×2模块示例、沙地与漏浇排查，还教你用在线规划器叠加洒水器和稻草人范围，先在地图上检查并导出截图，再照着布局进游戏摆放。",
+    readTimeMinutes: 10,
+    coverImage: {
+      src: "/blog/sprinkler-stardew-cover.webp",
+      alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -183,6 +207,7 @@ it("binds every localized post to its own original blog cover", () => {
       "/blog/where-is-stardew-valley-located-cover.webp",
     "stardew-valley-expanded-bachelors-and-bachelorettes":
       "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+    "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -281,7 +306,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: stardew-valley-expanded-bachelors-and-bachelorettes.",
+    "Expected: carpenter-stardew. Received: sprinkler-stardew.",
   );
 });
 

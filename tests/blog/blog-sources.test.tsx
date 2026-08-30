@@ -13,6 +13,8 @@ import { WhereIsStardewValleyLocatedEnglishArticle } from "../../src/blog/articl
 import { WhereIsStardewValleyLocatedChineseArticle } from "../../src/blog/articles/where-is-stardew-valley-located.zh";
 import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
 import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
+import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkler-stardew.en";
+import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -307,6 +309,50 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://stardewvalleyplanner.art/zh",
         label: "星露谷农场规划器",
+      },
+    ],
+  },
+  {
+    Article: SprinklerStardewEnglishArticle,
+    checkedLabel:
+      "Ranges, upgrades, and greenhouse occupancy checked against those pages on 2026-08-29 for PC 1.6.15. The planner overlay is a placement preview, not a watering simulation.",
+    heading: "Sources",
+    name: "English sprinkler article",
+    sources: [
+      {
+        href: "https://wiki.stardewvalley.net/Sprinkler",
+        label: "Stardew Valley Wiki: Sprinkler",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Quality_Sprinkler",
+        label: "Stardew Valley Wiki: Quality Sprinkler",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Iridium_Sprinkler",
+        label: "Stardew Valley Wiki: Iridium Sprinkler",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Pressure_Nozzle",
+        label: "Stardew Valley Wiki: Pressure Nozzle",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Greenhouse#Sprinklers",
+        label: "Stardew Valley Wiki: Greenhouse sprinklers",
+      },
+    ],
+  },
+  {
+    Article: SprinklerStardewChineseArticle,
+    heading: "资料来源",
+    name: "Chinese sprinkler article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%B4%92%E6%B0%B4%E5%99%A8&amp;variant=zh-cn",
+        label: "星露谷物语官方中文维基：洒水器",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/zh",
+        label: "星露谷物语农场规划器",
       },
     ],
   },

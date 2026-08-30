@@ -275,7 +275,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all six blog identities", () => {
+it("ships budget-compliant WebP covers for all seven blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -286,6 +286,7 @@ it("ships budget-compliant WebP covers for all six blog identities", () => {
   const sveBachelorsImage = readWebpDimensions(
     "blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
   );
+  const sprinklerImage = readWebpDimensions("blog/sprinkler-stardew-cover.webp");
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -293,17 +294,20 @@ it("ships budget-compliant WebP covers for all six blog identities", () => {
   expect(townMapImage).toMatchObject(expectedCoverDimensions);
   expect(locationImage).toMatchObject(expectedCoverDimensions);
   expect(sveBachelorsImage).toMatchObject(expectedCoverDimensions);
+  expect(sprinklerImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
   expect(locationImage.width / locationImage.height).toBeCloseTo(16 / 9, 2);
   expect(sveBachelorsImage.width / sveBachelorsImage.height).toBeCloseTo(16 / 9, 2);
+  expect(sprinklerImage.width / sprinklerImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(townMapImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(locationImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(sveBachelorsImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(sprinklerImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {

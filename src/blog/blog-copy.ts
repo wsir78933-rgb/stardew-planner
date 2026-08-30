@@ -105,6 +105,7 @@ const localizedBlogPostPaths: Readonly<
     "where-is-stardew-valley-located": "/where-is-stardew-valley-located",
     "stardew-valley-expanded-bachelors-and-bachelorettes":
       "/stardew-valley-expanded-bachelors-and-bachelorettes",
+    "sprinkler-stardew": "/sprinkler-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -114,6 +115,7 @@ const localizedBlogPostPaths: Readonly<
     "where-is-stardew-valley-located": "/zh/where-is-stardew-valley-located",
     "stardew-valley-expanded-bachelors-and-bachelorettes":
       "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
+    "sprinkler-stardew": "/zh/sprinkler-stardew",
   },
 };
 

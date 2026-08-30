@@ -44,6 +44,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain(
     'href="/stardew-valley-expanded-bachelors-and-bachelorettes"',
   );
+  expect(indexMarkup).toContain('href="/sprinkler-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -71,6 +72,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain(
     'href="/zh/stardew-valley-expanded-bachelors-and-bachelorettes"',
   );
+  expect(indexMarkup).toContain('href="/zh/sprinkler-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -148,6 +150,42 @@ it("still publishes the location article with locked metadata and one page-level
     title: "星露谷在游戏世界中位于哪里？",
     description:
       "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+  });
+});
+
+it("renders the paired sprinkler article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "sprinkler-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "sprinkler-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+    description:
+      "Match each sprinkler to 4, 8, or 24 tiles, then check radius overlay on your farm map. Pressure nozzles and enrichers cannot share one sprinkler.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title:
+      "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+    description:
+      "星露谷洒水器布局怎么排，先看4格十字、8格3×3、24格5×5三种覆盖，再按农田边角、池塘和通道修正。本文给出数量公式、优质与铱制洒水器摆法、2×2模块示例、沙地与漏浇排查，还教你用在线规划器叠加洒水器和稻草人范围，先在地图上检查并导出截图，再照着布局进游戏摆放。",
   });
 });
 

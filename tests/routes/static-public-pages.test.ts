@@ -194,6 +194,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
         alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
       },
+      {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+      },
     ],
   },
   {
@@ -230,6 +234,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
         alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
+      },
+      {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
       },
     ],
   },
@@ -367,6 +375,43 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/sprinkler-stardew",
+    staticPageFile: "sprinkler-stardew.html",
+    heading: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+    metadata: {
+      title: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+      description:
+        "Match each sprinkler to 4, 8, or 24 tiles, then check radius overlay on your farm map. Pressure nozzles and enrichers cannot share one sprinkler.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+      },
+    ],
+    requiredBodyPhrases: [
+      "The watering can will eat a morning once the field is bigger than a handful of parsnips.",
+      "Pressure Nozzle grows the radius to 3×3, 5×5, or 7×7.",
+      "The planner overlay is a placement preview, not a watering simulation.",
+    ],
+    requiredHrefs: [
+      "/",
+      "/?farmType=beach",
+      "/?farmType=greenhouse",
+      "/?farmType=meadowlands",
+      "/carpenter-stardew",
+      "https://wiki.stardewvalley.net/Sprinkler",
+      "https://wiki.stardewvalley.net/Quality_Sprinkler",
+      "https://wiki.stardewvalley.net/Iridium_Sprinkler",
+      "https://wiki.stardewvalley.net/Pressure_Nozzle",
+      "https://wiki.stardewvalley.net/Greenhouse#Sprinklers",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -397,6 +442,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
         alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
+      },
+      {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
       },
     ],
   },
@@ -434,6 +483,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
         alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
+      },
+      {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
       },
     ],
   },
@@ -562,7 +615,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
     requiredBodyPhrases: [
       "星露谷SVE 可结婚角色现在是 7 个",
-      "规划器只做布局，不记录红心、送礼次数或角色坐标。",
+      "规划器不追踪红心、礼物次数或 NPC 坐标。",
     ],
     requiredHrefs: [
       "/zh#planner",
@@ -570,6 +623,38 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/zh/carpenter-stardew",
       "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
       "https://www.nexusmods.com/stardewvalley/mods/3753",
+    ],
+  },
+  {
+    pathname: "/zh/sprinkler-stardew",
+    staticPageFile: "zh/sprinkler-stardew.html",
+    heading:
+      "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+    metadata: {
+      title:
+        "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+      description:
+        "星露谷洒水器布局怎么排，先看4格十字、8格3×3、24格5×5三种覆盖，再按农田边角、池塘和通道修正。本文给出数量公式、优质与铱制洒水器摆法、2×2模块示例、沙地与漏浇排查，还教你用在线规划器叠加洒水器和稻草人范围，先在地图上检查并导出截图，再照着布局进游戏摆放。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+      },
+    ],
+    requiredBodyPhrases: [
+      "很多洒水器布局看起来很整齐，放进自己的农场却会漏浇：地图边缘、池塘和通道，会让纸面上的满覆盖失效。",
+      "把洒水器先摆进真实农场地图",
+      "打开星露谷农场规划器",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%B4%92%E6%B0%B4%E5%99%A8&variant=zh-cn",
+      "https://stardewvalleyplanner.art/zh",
     ],
   },
 ];
