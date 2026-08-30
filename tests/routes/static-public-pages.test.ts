@@ -628,13 +628,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/sprinkler-stardew",
     staticPageFile: "zh/sprinkler-stardew.html",
-    heading:
-      "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+    heading: "星露谷洒水器布局先分清4/8/24格",
     metadata: {
-      title:
-        "星露谷洒水器布局别急着照抄模板：先算清4/8/24格覆盖，再排池塘、通道与农场边角，少漏浇也不浪费格",
+      title: "星露谷洒水器布局先分清4/8/24格",
       description:
-        "星露谷洒水器布局怎么排，先看4格十字、8格3×3、24格5×5三种覆盖，再按农田边角、池塘和通道修正。本文给出数量公式、优质与铱制洒水器摆法、2×2模块示例、沙地与漏浇排查，还教你用在线规划器叠加洒水器和稻草人范围，先在地图上检查并导出截图，再照着布局进游戏摆放。",
+        "覆盖落到池塘、通道或边界时，名义覆盖不会都变成作物格。规划器可叠加洒水器与稻草人范围，导出截图后再照着进游戏摆放。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
