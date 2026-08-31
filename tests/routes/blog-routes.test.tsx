@@ -45,6 +45,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
     'href="/stardew-valley-expanded-bachelors-and-bachelorettes"',
   );
   expect(indexMarkup).toContain('href="/sprinkler-stardew"');
+  expect(indexMarkup).toContain('href="/glasshouse-stardew-valley"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -73,6 +74,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
     'href="/zh/stardew-valley-expanded-bachelors-and-bachelorettes"',
   );
   expect(indexMarkup).toContain('href="/zh/sprinkler-stardew"');
+  expect(indexMarkup).toContain('href="/zh/glasshouse-stardew-valley"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -185,6 +187,42 @@ it("renders the paired sprinkler article routes with locked metadata and one pag
     title: "星露谷洒水器布局先分清4/8/24格",
     description:
       "覆盖落到池塘、通道或边界时，名义覆盖不会都变成作物格。规划器可叠加洒水器与稻草人范围，导出截图后再照着进游戏摆放。",
+  });
+});
+
+it("renders the paired glasshouse article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "glasshouse-stardew-valley" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "glasshouse-stardew-valley" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Glasshouse Stardew Valley: 120 Tiles, Sprinklers Steal 4",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷温室布局先别下种：10×12共120格耕地，6个铱制洒水器会占掉4格，先把设备试在木框上再排作物",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Glasshouse Stardew Valley: 120 Tiles, Sprinklers Steal 4",
+    description:
+      "The glasshouse is the Greenhouse: a 10×12 plot that rain never waters. Repair it, then test which sprinklers sit on the wood border before you plant.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title:
+      "星露谷温室布局先别下种：10×12共120格耕地，6个铱制洒水器会占掉4格，先把设备试在木框上再排作物",
+    description:
+      "星露谷温室修好后是10×12共120格耕地，雨天仍要自己浇水。先决定洒水器站在木框还是土里：6个铱制占4格、16个优质占12格。用规划器打开温室地图检查洒水器覆盖并导出截图，再照着进游戏下种；果树留在木框外平地，最多可种18棵，成长时周围3×3不要被设备挡住。",
   });
 });
 

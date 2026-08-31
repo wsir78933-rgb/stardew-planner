@@ -14,6 +14,8 @@ import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "./
 import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "./articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 import { SprinklerStardewEnglishArticle } from "./articles/sprinkler-stardew.en";
 import { SprinklerStardewChineseArticle } from "./articles/sprinkler-stardew.zh";
+import { GlasshouseStardewValleyEnglishArticle } from "./articles/glasshouse-stardew-valley.en";
+import { GlasshouseStardewValleyChineseArticle } from "./articles/glasshouse-stardew-valley.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -158,6 +160,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: SprinklerStardewEnglishArticle,
     },
+    {
+      slug: "glasshouse-stardew-valley",
+      title: "Glasshouse Stardew Valley: 120 Tiles, Sprinklers Steal 4",
+      description:
+        "The glasshouse is the Greenhouse: a 10×12 plot that rain never waters. Repair it, then test which sprinklers sit on the wood border before you plant.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
+      },
+      featured: true,
+      Content: GlasshouseStardewValleyEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -264,6 +281,22 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: SprinklerStardewChineseArticle,
+    },
+    {
+      slug: "glasshouse-stardew-valley",
+      title:
+        "星露谷温室布局先别下种：10×12共120格耕地，6个铱制洒水器会占掉4格，先把设备试在木框上再排作物",
+      description:
+        "星露谷温室修好后是10×12共120格耕地，雨天仍要自己浇水。先决定洒水器站在木框还是土里：6个铱制占4格、16个优质占12格。用规划器打开温室地图检查洒水器覆盖并导出截图，再照着进游戏下种；果树留在木框外平地，最多可种18棵，成长时周围3×3不要被设备挡住。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
+      },
+      featured: true,
+      Content: GlasshouseStardewValleyChineseArticle,
     },
   ],
 };

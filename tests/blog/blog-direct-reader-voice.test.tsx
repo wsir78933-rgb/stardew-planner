@@ -15,6 +15,8 @@ import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "..
 import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkler-stardew.en";
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
+import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
+import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -35,6 +37,7 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
     slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
   },
   { Component: SprinklerStardewEnglishArticle, slug: "sprinkler-stardew" },
+  { Component: GlasshouseStardewValleyEnglishArticle, slug: "glasshouse-stardew-valley" },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -51,6 +54,7 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
     slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
   },
   { Component: SprinklerStardewChineseArticle, slug: "sprinkler-stardew" },
+  { Component: GlasshouseStardewValleyChineseArticle, slug: "glasshouse-stardew-valley" },
 ];
 
 const englishAuthorFacingPatterns = [

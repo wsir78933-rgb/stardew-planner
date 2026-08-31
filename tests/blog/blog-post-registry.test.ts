@@ -18,6 +18,7 @@ const expectedSlugs = [
   "where-is-stardew-valley-located",
   "stardew-valley-expanded-bachelors-and-bachelorettes",
   "sprinkler-stardew",
+  "glasshouse-stardew-valley",
 ] as const;
 
 function createLocalizedPost(
@@ -52,14 +53,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the seven canonical blog identities in publishing order", () => {
+it("keeps the eight canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the fourteen localized root-level canonical article paths", () => {
+it("publishes only the sixteen localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -68,6 +69,7 @@ it("publishes only the fourteen localized root-level canonical article paths", (
     "/where-is-stardew-valley-located/",
     "/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/sprinkler-stardew/",
+    "/glasshouse-stardew-valley/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -75,6 +77,7 @@ it("publishes only the fourteen localized root-level canonical article paths", (
     "/zh/where-is-stardew-valley-located/",
     "/zh/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/zh/sprinkler-stardew/",
+    "/zh/glasshouse-stardew-valley/",
   ]);
 });
 
@@ -193,6 +196,27 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
     },
   });
+  expect(englishPosts[7]).toMatchObject({
+    title: "Glasshouse Stardew Valley: 120 Tiles, Sprinklers Steal 4",
+    description:
+      "The glasshouse is the Greenhouse: a 10×12 plot that rain never waters. Repair it, then test which sprinklers sit on the wood border before you plant.",
+    readTimeMinutes: 11,
+    coverImage: {
+      src: "/blog/glasshouse-stardew-valley-cover.webp",
+      alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
+    },
+  });
+  expect(chinesePosts[7]).toMatchObject({
+    title:
+      "星露谷温室布局先别下种：10×12共120格耕地，6个铱制洒水器会占掉4格，先把设备试在木框上再排作物",
+    description:
+      "星露谷温室修好后是10×12共120格耕地，雨天仍要自己浇水。先决定洒水器站在木框还是土里：6个铱制占4格、16个优质占12格。用规划器打开温室地图检查洒水器覆盖并导出截图，再照着进游戏下种；果树留在木框外平地，最多可种18棵，成长时周围3×3不要被设备挡住。",
+    readTimeMinutes: 11,
+    coverImage: {
+      src: "/blog/glasshouse-stardew-valley-cover.webp",
+      alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -207,6 +231,7 @@ it("binds every localized post to its own original blog cover", () => {
     "stardew-valley-expanded-bachelors-and-bachelorettes":
       "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
     "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
+    "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -305,7 +330,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: sprinkler-stardew.",
+    "Expected: carpenter-stardew. Received: glasshouse-stardew-valley.",
   );
 });
 

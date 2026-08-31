@@ -15,6 +15,7 @@ import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "..
 import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
 import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkler-stardew.en";
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
+import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -353,6 +354,18 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://stardewvalleyplanner.art/zh",
         label: "星露谷物语农场规划器",
+      },
+    ],
+  },
+  {
+    Article: GlasshouseStardewValleyEnglishArticle,
+    checkedLabel: "Checked against Stardew Valley Wiki Greenhouse.",
+    heading: "Sources",
+    name: "English glasshouse article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Greenhouse",
+        label: "Stardew Valley Wiki: Greenhouse",
       },
     ],
   },

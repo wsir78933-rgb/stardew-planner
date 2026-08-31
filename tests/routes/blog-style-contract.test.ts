@@ -185,6 +185,54 @@ it("restores standard list markers for article body lists while keeping name ros
   expect(orderedListRule).toContain("padding-left: 1.25rem;");
 });
 
+it("indents Chinese article body paragraphs without indenting dek, FAQ answers, lists, or English pages", () => {
+  const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
+  const chineseBodyParagraphRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    '[lang="zh-CN"] [data-blog-article] .blog-article-layout p',
+  );
+  const faqAnswerRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout .blog-faq-answer p",
+  );
+  const articleDescriptionRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] > header > .blog-article-description",
+  );
+  const unorderedListRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout > div ul:not(.blog-name-grid)",
+  );
+  const orderedListRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout > div ol",
+  );
+  const figcaptionRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-media figcaption",
+  );
+  const nameGridRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-name-grid",
+  );
+  const tableOfContentsRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-table-of-contents ol",
+  );
+
+  expect(chineseBodyParagraphRule).toContain("text-indent: 2em;");
+  expect(faqAnswerRule).toContain("text-indent: 0;");
+  expect(articleDescriptionRule).not.toMatch(/\btext-indent\s*:/);
+  expect(unorderedListRule).not.toMatch(/\btext-indent\s*:/);
+  expect(orderedListRule).not.toMatch(/\btext-indent\s*:/);
+  expect(figcaptionRule).not.toMatch(/\btext-indent\s*:/);
+  expect(nameGridRule).not.toMatch(/\btext-indent\s*:/);
+  expect(tableOfContentsRule).not.toMatch(/\btext-indent\s*:/);
+  expect(scopedBlogCssBlock).not.toContain(
+    '[lang="en"] [data-blog-article] .blog-article-layout p {',
+  );
+});
+
 it("keeps every blog class selector inside a blog scope without planner or footer selectors", () => {
   const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
   const blogSelectorLines = scopedBlogCssBlock
@@ -196,7 +244,9 @@ it("keeps every blog class selector inside a blog scope without planner or foote
   expect(
     blogSelectorLines.every(
       (line) =>
-        line.startsWith("[data-blog-page]") || line.startsWith("[data-blog-article]"),
+        line.startsWith("[data-blog-page]") ||
+        line.startsWith("[data-blog-article]") ||
+        line.startsWith('[lang="zh-CN"] [data-blog-article]'),
     ),
   ).toBe(true);
   expect(scopedBlogCssBlock).not.toMatch(/\.planner-editor-shell|\[data-site-footer\]/);
