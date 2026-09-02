@@ -323,7 +323,7 @@ body:has(> [data-homepage-shell]) [data-homepage-workspace] {
   height: 100vh;
   margin: 0 0 clamp(5.5rem, 10vw, 9rem);
   min-width: 0;
-  padding-inline: clamp(1.25rem, 3vw, 3rem);
+  padding-inline: 0;
   position: relative;
 }
 
@@ -3090,10 +3090,14 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .map-image-export-panel__actions button { min-width: 0; padding: var(--lk-xs); }
 .planner-editor-shell .local-project-panel__message,
 .planner-editor-shell .local-project-panel__error,
-.planner-editor-shell .map-image-export-panel__error { margin: 0; padding: var(--lk-xs) var(--lk-sm); }
+.planner-editor-shell .map-image-export-panel__error,
+.planner-editor-shell .game-save-import-control__error,
+.planner-editor-shell .farm-summary-modal__error { margin: 0; padding: var(--lk-xs) var(--lk-sm); }
 .planner-editor-shell .local-project-panel__message { background: var(--bg-raised); color: var(--text-dim); }
 .planner-editor-shell .local-project-panel__error,
-.planner-editor-shell .map-image-export-panel__error { background: rgb(177 58 40 / 10%); color: #b13a28; }
+.planner-editor-shell .map-image-export-panel__error,
+.planner-editor-shell .game-save-import-control__error,
+.planner-editor-shell .farm-summary-modal__error { background: rgb(177 58 40 / 10%); color: #b13a28; }
 .planner-editor-shell .local-project-panel__delete-alert-overlay,
 .local-project-panel__delete-alert-overlay { background: #0009; inset: 0; position: fixed; z-index: 10001; }
 .planner-editor-shell .local-project-panel__delete-alert-content,
@@ -3167,6 +3171,7 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .editor-modal__legal-links { display: flex; flex-wrap: wrap; }
 .planner-editor-shell .editor-modal__legal-links a { align-items: center; background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); color: var(--text); display: flex; flex: 1 1 10rem; justify-content: center; padding: var(--lk-xs) var(--lk-sm); text-align: center; text-decoration: none; }
 .planner-editor-shell .editor-modal__legal-links a:hover { color: var(--accent); text-decoration: underline; }
+.planner-editor-shell .editor-modal__legal-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .planner-editor-shell .editor-modal--help-info .editor-reference-info { background: var(--bg-deep); display: grid; gap: var(--lk-sm); grid-template-columns: repeat(3, minmax(0, 1fr)); min-height: 0; overflow-y: auto; padding: var(--lk-sm) var(--lk-md) var(--lk-md); }
 .planner-editor-shell .editor-modal--help-info .editor-reference-info section { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); display: grid; gap: var(--lk-xs); min-width: 0; padding: var(--lk-sm); }
 .planner-editor-shell .editor-modal--help-info .editor-reference-info h3 { color: var(--text-bright); font-size: 1rem; margin: 0; }
@@ -3288,6 +3293,333 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 
 @media (pointer: coarse) and (max-width: 394px) {
   .planner-editor-shell .item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Planner editor controls: rest is raised, press/select/type is inset. */
+.planner-editor-shell,
+.local-project-panel__delete-alert-content,
+.game-save-import-result,
+.game-save-import-control__error,
+.game-save-import-control__message {
+  --planner-neo-light: rgb(255 255 255 / 82%);
+  --planner-neo-dark: rgb(36 42 34 / 18%);
+  --planner-neo-raised-shadow:
+    0.16rem 0.2rem 0.42rem var(--planner-neo-dark),
+    -0.14rem -0.16rem 0.36rem var(--planner-neo-light);
+  --planner-neo-inset-shadow:
+    inset 0.14rem 0.16rem 0.32rem var(--planner-neo-dark),
+    inset -0.12rem -0.14rem 0.28rem var(--planner-neo-light);
+}
+
+.planner-editor-shell {
+  border-color: transparent;
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .icon-cell {
+  overflow: visible;
+}
+
+.planner-editor-shell .menu-bar,
+.planner-editor-shell .toolbar,
+.planner-editor-shell .selection-inspector,
+.planner-editor-shell .planner-workspace__toast,
+.planner-editor-shell .joystick-ring,
+.planner-editor-shell .joystick-knob,
+.planner-editor-shell .editor-menu-bar__actions,
+.planner-editor-shell [data-planner-canvas-context-menu],
+.planner-editor-shell .editor-modal,
+.planner-editor-shell .game-save-import-result,
+.game-save-import-result,
+.planner-editor-shell .farm-summary-modal,
+.planner-editor-shell .menu-btn,
+.planner-editor-shell .tool-btn,
+.planner-editor-shell .tab-icon,
+.planner-editor-shell .item-catalog-panel__item,
+.planner-editor-shell .icon-cell,
+.planner-editor-shell .search-toggle,
+.planner-editor-shell .filter-btn,
+.planner-editor-shell .rotate-btn,
+.planner-editor-shell .flip-btn,
+.planner-editor-shell .branding-btn,
+.planner-editor-shell .pill-dismiss,
+.planner-editor-shell .pill-copy,
+.planner-editor-shell .pill-delete,
+.planner-editor-shell .pill-more,
+.planner-editor-shell .selection-inspector button,
+.planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"],
+.planner-editor-shell .arrow-btn,
+.planner-editor-shell .editor-modal button,
+.planner-editor-shell .game-save-import-result button,
+.game-save-import-result button,
+.game-save-import-control__error button,
+.planner-editor-shell .farm-summary-modal button,
+.planner-editor-shell .game-save-import-control__file-trigger,
+.planner-editor-shell .local-project-panel__import,
+.planner-editor-shell .local-project-panel__primary-actions > :is(button, label),
+.planner-editor-shell .local-project-panel__delete-alert-content,
+.local-project-panel__delete-alert-content,
+.planner-editor-shell .local-project-panel__delete-alert-actions button,
+.local-project-panel__delete-alert-actions button,
+.planner-editor-shell .local-project-panel__project,
+.planner-editor-shell .project-map-instance-panel__instance,
+.planner-editor-shell .editor-modal__legal-links a,
+.planner-editor-shell .planner-map-picker__tab,
+.planner-editor-shell .planner-map-picker__community-tab,
+.planner-editor-shell .editor-modal__map-grid button,
+.planner-editor-shell .planner-startup-status,
+.planner-editor-shell .planner-canvas__status,
+.planner-editor-shell .planner-canvas__warning,
+.planner-editor-shell .local-project-panel__status,
+.planner-editor-shell .local-project-panel__message,
+.game-save-import-control__message,
+.planner-editor-shell .item-catalog-panel__state {
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .menu-bar,
+.planner-editor-shell .toolbar,
+.planner-editor-shell .selection-inspector,
+.planner-editor-shell .planner-workspace__toast,
+.planner-editor-shell .joystick-ring,
+.planner-editor-shell .joystick-knob,
+.planner-editor-shell .editor-menu-bar__actions,
+.planner-editor-shell [data-planner-canvas-context-menu],
+.planner-editor-shell .editor-modal,
+.planner-editor-shell .game-save-import-result,
+.game-save-import-result,
+.planner-editor-shell .farm-summary-modal,
+.planner-editor-shell .editor-modal button,
+.planner-editor-shell .game-save-import-result button,
+.game-save-import-result button,
+.game-save-import-control__error button,
+.planner-editor-shell .farm-summary-modal button,
+.planner-editor-shell .game-save-import-control__file-trigger,
+.planner-editor-shell .local-project-panel__import,
+.planner-editor-shell .local-project-panel__project,
+.planner-editor-shell .editor-modal__legal-links a,
+.planner-editor-shell .planner-startup-status,
+.planner-editor-shell .planner-canvas__status,
+.planner-editor-shell .planner-canvas__warning,
+.planner-editor-shell .local-project-panel__status,
+.planner-editor-shell .local-project-panel__delete-alert-content,
+.local-project-panel__delete-alert-content,
+.planner-editor-shell .local-project-panel__delete-alert-actions button,
+.local-project-panel__delete-alert-actions button,
+.planner-editor-shell .search-input,
+.planner-editor-shell .local-project-panel__rename-form input,
+.planner-editor-shell input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+.planner-editor-shell select,
+.planner-editor-shell textarea,
+.game-save-import-control__error,
+.game-save-import-control__message {
+  border-color: transparent;
+}
+
+.planner-editor-shell .search-input,
+.planner-editor-shell .local-project-panel__rename-form input,
+.planner-editor-shell input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+.planner-editor-shell select:not(:disabled),
+.planner-editor-shell textarea,
+.planner-editor-shell .planner-canvas__error,
+.planner-editor-shell .local-project-panel__error,
+.planner-editor-shell .map-image-export-panel__error,
+.planner-editor-shell .item-catalog-panel__error,
+.planner-editor-shell .game-save-import-control__error,
+.game-save-import-control__error,
+.planner-editor-shell .farm-summary-modal__error {
+  border-color: transparent;
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell input[type="color"]::-webkit-color-swatch,
+.planner-editor-shell input[type="color"]::-moz-color-swatch {
+  border-color: transparent;
+}
+
+.planner-editor-shell .menu-btn:active:not(:disabled),
+.planner-editor-shell .menu-btn.active,
+.planner-editor-shell .menu-btn[aria-expanded="true"],
+.planner-editor-shell .tool-btn:active:not(:disabled),
+.planner-editor-shell .tool-btn.active,
+.planner-editor-shell .tool-btn.erase,
+.planner-editor-shell .tool-btn.cursor[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .tab-icon:active:not(:disabled),
+.planner-editor-shell .tab-icon.active,
+.planner-editor-shell .tab-icon[aria-selected="true"],
+.planner-editor-shell .item-catalog-panel__item:active:not(:disabled),
+.planner-editor-shell .item-catalog-panel__item.selected,
+.planner-editor-shell .item-catalog-panel__item[data-selected="true"],
+.planner-editor-shell .item-catalog-panel__item[aria-pressed="true"],
+.planner-editor-shell .icon-cell:active:not(:disabled),
+.planner-editor-shell .icon-cell.selected,
+.planner-editor-shell .icon-cell[data-selected="true"],
+.planner-editor-shell .icon-cell[aria-pressed="true"],
+.planner-editor-shell .search-toggle:active:not(:disabled),
+.planner-editor-shell .filter-btn:active:not(:disabled),
+.planner-editor-shell .rotate-btn:active:not(:disabled),
+.planner-editor-shell .flip-btn:active:not(:disabled),
+.planner-editor-shell .flip-btn.flipped,
+.planner-editor-shell .branding-btn:active:not(:disabled),
+.planner-editor-shell .pill-dismiss:active:not(:disabled),
+.planner-editor-shell .pill-copy:active:not(:disabled),
+.planner-editor-shell .pill-delete:active:not(:disabled),
+.planner-editor-shell .pill-more:active:not(:disabled),
+.planner-editor-shell .selection-inspector button:active:not(:disabled),
+.planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"]:active:not(:disabled),
+.planner-editor-shell .arrow-btn:active:not(:disabled),
+.planner-editor-shell .editor-modal button:active:not(:disabled),
+.planner-editor-shell .editor-modal button[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .editor-modal button[aria-selected="true"]:not(:disabled),
+.planner-editor-shell .game-save-import-result button:active:not(:disabled),
+.game-save-import-result button:active:not(:disabled),
+.game-save-import-control__error button:active:not(:disabled),
+.planner-editor-shell .farm-summary-modal button:active:not(:disabled),
+.planner-editor-shell .game-save-import-control__file-trigger:active:not(.game-save-import-control__file-trigger--disabled),
+.planner-editor-shell .local-project-panel__import:active:not(.local-project-panel__import--disabled),
+.planner-editor-shell .local-project-panel__primary-actions > :is(button, label):active:not(:disabled),
+.planner-editor-shell .local-project-panel__delete-alert-actions button:active:not(:disabled),
+.local-project-panel__delete-alert-actions button:active:not(:disabled),
+.planner-editor-shell .local-project-panel__project[data-current-project="true"],
+.planner-editor-shell .project-map-instance-panel__instance[data-current-map-instance="true"],
+.planner-editor-shell .editor-modal__legal-links a:active,
+.planner-editor-shell .planner-map-picker__tab:active:not(:disabled),
+.planner-editor-shell .planner-map-picker__tab[aria-selected="true"],
+.planner-editor-shell .planner-map-picker__community-tab:active:not(:disabled),
+.planner-editor-shell .planner-map-picker__community-tab[aria-selected="true"],
+.planner-editor-shell .editor-modal__map-grid button:active:not(:disabled),
+.planner-editor-shell .editor-modal__map-grid button[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .planner-save-modal-loader__branches button[aria-pressed="true"]:not(:disabled) {
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell select:disabled,
+.planner-editor-shell .tool-btn:disabled,
+.planner-editor-shell .menu-btn:disabled,
+.planner-editor-shell .tab-icon:disabled,
+.planner-editor-shell .editor-modal button:disabled,
+.planner-editor-shell .game-save-import-result button:disabled,
+.game-save-import-result button:disabled,
+.game-save-import-control__error button:disabled,
+.planner-editor-shell .farm-summary-modal button:disabled,
+.planner-editor-shell .game-save-import-control__file-trigger--disabled,
+.planner-editor-shell .local-project-panel__import--disabled,
+.planner-editor-shell .local-project-panel__delete-alert-actions button:disabled,
+.local-project-panel__delete-alert-actions button:disabled {
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .editor-modal__view-options button[aria-pressed="true"],
+.planner-editor-shell .editor-modal__panel-picker button[aria-pressed="true"],
+.planner-editor-shell .planner-save-modal-loader__branches button[aria-pressed="true"] {
+  border-color: transparent;
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.game-save-import-control__error {
+  background: rgb(177 58 40 / 10%);
+  color: #b13a28;
+  margin: 0;
+  padding: var(--lk-xs, 0.618rem) var(--lk-sm, 0.786rem);
+}
+
+.game-save-import-control__message {
+  background: var(--bg-raised, #f1f7e7);
+  color: var(--text-dim, #5d6659);
+  margin: 0;
+  padding: var(--lk-xs, 0.618rem) var(--lk-sm, 0.786rem);
+}
+
+.game-save-import-result button,
+.game-save-import-control__error button {
+  background: var(--bg-raised, #f1f7e7);
+  border: 1px solid transparent;
+  color: var(--text, #1c211b);
+}
+
+.planner-editor-shell .editor-modal__map-configuration input[type="checkbox"] {
+  border-color: transparent;
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .editor-modal__map-configuration input[type="checkbox"]:checked:not(:disabled) {
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .editor-modal__map-configuration input[type="checkbox"]:disabled {
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .editor-modal__map-configuration select:not(:disabled),
+.planner-editor-shell .selection-inspector select:not(:disabled) {
+  border-color: transparent;
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .selection-inspector input[type="color"] {
+  appearance: none;
+  border-color: transparent;
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .editor-modal__map-configuration select:disabled,
+.planner-editor-shell .selection-inspector select:disabled,
+.planner-editor-shell .selection-inspector input[type="color"]:disabled {
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .planner-map-picker__tab[aria-selected="true"],
+.planner-editor-shell .planner-map-picker__community-tab[aria-selected="true"] {
+  border-color: transparent !important;
+  border-bottom-color: transparent !important;
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .planner-startup-status[role="alert"],
+.planner-editor-shell [role="alert"]:not([class]) {
+  border-color: transparent;
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .planner-startup-status button,
+.planner-editor-shell [role="alert"]:not([class]) button {
+  background: var(--bg-raised);
+  border: 1px solid transparent;
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .planner-startup-status button:active:not(:disabled),
+.planner-editor-shell [role="alert"]:not([class]) button:active:not(:disabled) {
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .planner-startup-status button:focus-visible,
+.planner-editor-shell [role="alert"]:not([class]) button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.game-save-import-result button:focus-visible,
+.game-save-import-control__error button:focus-visible,
+.local-project-panel__delete-alert-actions button:focus-visible,
+.local-project-panel__delete-alert-content:focus-visible {
+  outline: 2px solid var(--accent, #759d1c);
+  outline-offset: 2px;
+}
+
+.planner-editor-shell .keybind-more {
+  box-shadow: var(--planner-neo-raised-shadow);
+}
+
+.planner-editor-shell .keybind-more:active:not(:disabled) {
+  box-shadow: var(--planner-neo-inset-shadow);
+}
+
+.planner-editor-shell .keybind-more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Contact page: intentionally isolated from the planner editor styles above. */
