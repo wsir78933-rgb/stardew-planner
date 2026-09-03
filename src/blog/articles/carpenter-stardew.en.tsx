@@ -7,39 +7,40 @@ export function CarpenterStardewEnglishArticle() {
     <article>
       <p>
         Robin is the carpenter in Stardew Valley. Her Carpenter&apos;s Shop is at 24 Mountain
-        Road in The Mountain, north of Pelican Town. The counter normally runs from 9:00
-        AM to 5:00 PM, but a trip can still fail on Tuesday, after 4:00 PM Friday, during
-        a festival, on Summer 18, or while Robin is working on your farm.
+        Road in The Mountain, north of Pelican Town. If you need a Carpenter Stardew
+        answer, start with the counter: it normally runs from 9:00 AM to 5:00 PM, Tuesday
+        is normally closed unless it rains, and Friday closes at 4:00 PM.
       </p>
       <p>
         Before leaving the farm, confirm that Robin can take the order today and that the
-        building will fit the layout you want. These details apply to Stardew Valley PC
-        1.6.15. Use the in-game construction menu for current prices, materials, size, and
-        build time.
+        building will fit the layout you want. Use the in-game construction menu for
+        current prices, materials, size, and build time.
       </p>
 
       <h2>Carpenter Stardew: quick answer</h2>
       <ul>
         <li>
-          <strong>Location:</strong> Robin works at 24 Mountain Road in The Mountain.
+          <strong>Location:</strong> Robin works at 24 Mountain Road in The Mountain,
+          north of Pelican Town.
         </li>
         <li>
           <strong>Normal counter hours:</strong> 9:00 AM–5:00 PM.
         </li>
         <li>
-          <strong>Usual exceptions:</strong> Tuesday is normally closed unless it rains;
-          Friday ends at 4:00 PM; Summer 18 and festival days are closed; the counter is
-          closed while Robin is constructing a farm job.
+          <strong>Schedule checks:</strong> Tuesday is normally a closed-shop day, but
+          rain keeps Robin at the counter. On Friday, treat 4:00 PM as the cutoff. For
+          Summer 18, festival days, and days when Robin is working on the farm, verify the
+          day-specific schedule.
         </li>
         <li>
-          <strong>What Robin does:</strong> she sells materials and furniture, builds or
-          upgrades farm buildings, upgrades the farmhouse, and lets you move or demolish
-          existing buildings from the construction menu.
+          <strong>What Robin does:</strong> she sells wood, stone, and furniture, upgrades
+          the farmhouse, constructs farm buildings, and lets you move or demolish existing
+          buildings.
         </li>
         <li>
           <strong>The move rule worth remembering:</strong> moving a building is free and
           immediate. You do not have to empty it, but the destination still has to be
-          clear.
+          clear and valid.
         </li>
       </ul>
 
@@ -56,8 +57,11 @@ export function CarpenterStardewEnglishArticle() {
         </li>
         <li>
           <strong>Check the day and weather.</strong> Tuesday is normally a closed-shop
-          day, but rain keeps Robin at the counter. Festivals and Summer 18 are poor days
-          to plan a shop visit.
+          day, but rain keeps Robin at the counter.
+        </li>
+        <li>
+          <strong>Check day-specific events.</strong> For Summer 18 and festival days,
+          verify the day-specific schedule before making a dedicated trip.
         </li>
         <li>
           <strong>Remember any active construction.</strong> If Robin is working on a
@@ -65,7 +69,7 @@ export function CarpenterStardewEnglishArticle() {
         </li>
         <li>
           <strong>Bring a decision, not just resources.</strong> Know which building,
-          upgrade, or move you want and where it will go before you make the trip.
+          upgrade, or move you want and where it will go.
         </li>
       </ol>
       <p>
@@ -76,32 +80,37 @@ export function CarpenterStardewEnglishArticle() {
 
       <h2>Choose the service you need at Robin&apos;s counter</h2>
       <p>
-        Robin&apos;s counter handles a few different jobs. Keeping them separate stops a
-        simple visit from turning into a second trip.
+        Robin&apos;s counter handles several different jobs. Match the menu to the thing you
+        actually want to change.
       </p>
       <ul>
         <li>
-          <strong>Shop:</strong> wood, stone, furniture, and other stock. Some inventory
-          changes, and prices can change with the game state.
+          <strong>Shop:</strong> buy wood, stone, furniture, and other stock.
         </li>
         <li>
-          <strong>Construct Farm Buildings:</strong> new animal buildings, storage,
-          utility buildings, and their upgrades. The menu is the source of truth for the
-          current gold, materials, footprint, and construction time.
+          <strong>Construct Farm Buildings:</strong> add a new structure to the farm.
         </li>
         <li>
-          <strong>Upgrade House or renovate:</strong> farmhouse work follows its own
-          requirements and timing.
+          <strong>Upgrade House:</strong> improve the farmhouse itself.
         </li>
         <li>
-          <strong>Move Buildings or demolish buildings:</strong> use these construction
-          menu controls when the old farm layout is the real problem.
+          <strong>Move Buildings:</strong> keep an existing building but change its
+          position.
+        </li>
+        <li>
+          <strong>Demolish Buildings:</strong> remove an existing building you no longer
+          want.
         </li>
       </ul>
       <p>
-        Construction begins after the order, and most projects finish in two days, though
-        festivals can delay the work. Read the timing in your own construction menu
-        instead of assuming every project follows the same schedule.
+        A new building is a construction order. A building in the wrong place is a move
+        order. A building you no longer want is a demolition order. Keeping those choices
+        separate prevents a simple layout change from becoming an unnecessary rebuild.
+      </p>
+      <p>
+        Construction starts the day after the order, and most projects finish two days
+        after you place the order. Read the timing in your own construction menu instead
+        of assuming every project follows the same schedule.
       </p>
 
       <h2>Plan a building before you place it</h2>
@@ -127,9 +136,8 @@ export function CarpenterStardewEnglishArticle() {
         <a className="blog-planner-link" href="/">
           Stardew Valley Planner
         </a>{" "}
-        and put the building beside the crop, storage, animal, and travel zones you already
-        expect to use. Test the approach as well as the rectangle. If the entrance forces a
-        turn through a gate or cuts a path in half, move it while the plan is still cheap.
+        and sketch a proposed building layout beside the crop, storage, animal, and travel
+        zones you expect to use. It is a planning aid, not the final placement check.
       </p>
       <figure className="blog-article-media">
         <img
@@ -149,14 +157,13 @@ export function CarpenterStardewEnglishArticle() {
       <h3>Clear every tile that must be green</h3>
       <p>
         Rocks, twigs, weeds, torches, furniture, and other player-placed objects block a
-        building footprint. Clear them before going to Robin. Crafted flooring and paths
-        do not block placement, but covered pieces are destroyed, so pick up anything you
-        want to keep.
+        building footprint. Clear them before going to Robin. The placement preview is
+        still the final check: every required tile needs to show green.
       </p>
       <p>
         Animals and pets can be moved aside when you click to place a building over them.
-        That does not turn a blocked footprint into a valid one. The placement preview is
-        still the final check: every required tile needs to show green.
+        That does not turn a blocked footprint into a valid one. Pick up anything you
+        want to keep before confirming the location.
       </p>
       <p>
         If you are deciding between animal space and paths, try the{" "}
@@ -170,15 +177,13 @@ export function CarpenterStardewEnglishArticle() {
       <h2>Move a building without emptying it</h2>
       <p>
         An early placement does not have to be permanent. At Robin&apos;s construction menu,
-        choose the move control, select the building, then place it on a clear destination.
+        choose the move control, select the building, and place it on a clear destination.
         The move is free, applies immediately, and carries the building contents with it.
-        A coop, barn, or shed does not need to be emptied first.
       </p>
       <p>
-        The catch is the destination. Treat it like a fresh build: clear the footprint,
-        check the door route, and leave the working space you will need after the move. A
-        free move can still become three extra trips if the new spot only looks good from
-        one side.
+        The new location still needs a valid, green footprint. Check the door route and
+        leave the working space you will need after the move. A free move can still become
+        three extra trips if the new spot only looks good from one side.
       </p>
       <figure className="blog-article-media">
         <img
@@ -197,10 +202,9 @@ export function CarpenterStardewEnglishArticle() {
 
       <h2>Watch a building order from start to finish</h2>
       <p>
-        Once the location is settled, a quick walkthrough can make the in-game sequence
-        easier to recognize: visit Robin, choose the construction menu, place the
-        footprint, then return after the work is complete. The player loads only when you
-        press play.
+        Once the location is settled, the in-game sequence is straightforward: visit
+        Robin, choose the construction menu, place the footprint, then return after the
+        work is complete. The player loads only when you press play.
       </p>
       <BlogYouTubeVideo
         playLabel="Play the Stardew Valley coop building guide"
@@ -216,8 +220,9 @@ export function CarpenterStardewEnglishArticle() {
             question: "Where is the carpenter in Stardew Valley?",
             answer: (
               <p>
-                Robin is the town carpenter. Her shop is at 24 Mountain Road in The Mountain,
-                north of Pelican Town. For a route and deeper schedule detail, read{" "}
+                Robin is the town carpenter. Her shop is at 24 Mountain Road in The
+                Mountain, north of Pelican Town. For a route and deeper schedule detail,
+                read{" "}
                 <a href="/where-is-robin-stardew-valley">where to find Robin in Stardew Valley</a>.
               </p>
             ),
@@ -226,10 +231,10 @@ export function CarpenterStardewEnglishArticle() {
             question: "Why can I enter Robin's house but not place an order?",
             answer: (
               <p>
-                Her house has longer access hours than the Carpenter&apos;s Shop counter. The house can
-                be open from 9:00 AM to 8:00 PM while the counter is closed. Check the normal
-                9:00 AM–5:00 PM window and the Tuesday, Friday, festival, Summer 18, weather, and
-                construction exceptions.
+                Her house has longer access hours than the Carpenter&apos;s Shop counter. The
+                house can be open from 9:00 AM to 8:00 PM while the counter is closed.
+                Check the normal 9:00 AM–5:00 PM window, Tuesday and Friday cutoffs, and
+                the day-specific schedule.
               </p>
             ),
           },
@@ -237,8 +242,9 @@ export function CarpenterStardewEnglishArticle() {
             question: "Can I move a building that still has items or animals inside?",
             answer: (
               <p>
-                Yes. The construction menu moves the building and its contents together. The move
-                is free and immediate. You still need a clear, green destination footprint.
+                Yes. The construction menu moves the building and its contents together.
+                The move is free and immediate. You still need a clear, green destination
+                footprint.
               </p>
             ),
           },

@@ -13,7 +13,7 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain("browser-local projects");
   expect(llmsText).toContain("浏览器本地项目");
   expect(llmsText).toContain(
-    "[Carpenter Stardew: Which Robin Service Do You Need Today?](https://stardewvalleyplanner.art/carpenter-stardew)",
+    "[Carpenter Stardew: Robin’s Shop Hours, Services, and Building Guide](https://stardewvalleyplanner.art/carpenter-stardew)",
   );
   expect(llmsText).toContain(
     "[Robin's Shop Is Empty? Find Her in Stardew Valley Today](https://stardewvalleyplanner.art/where-is-robin-stardew-valley)",

@@ -49,7 +49,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
-  expect(articleMarkup).toContain("Carpenter Stardew: Which Robin Service Do You Need Today?");
+  expect(articleMarkup).toContain("Carpenter Stardew: Robin’s Shop Hours, Services, and Building Guide");
   expect((articleMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
   expect(articleMarkup).not.toContain('href="/en/carpenter-stardew"');
 });

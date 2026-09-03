@@ -97,13 +97,14 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     "carpenter-stardew",
   );
   expect(englishPosts[0]).toMatchObject({
-    title: "Carpenter Stardew: Which Robin Service Do You Need Today?",
+    title: "Carpenter Stardew: Robin’s Shop Hours, Services, and Building Guide",
     description:
-      "Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.",
+      "Find Robin’s Carpenter’s Shop in Stardew Valley, check shop hours, choose the right service, and learn how to build, move, or demolish farm buildings.",
   });
   expect(chinesePosts[0]).toMatchObject({
-    title: "星露谷木匠：今天该选罗宾的哪项服务？",
-    description: "根据购买、建造、升级或移动的实际需求，选择对应菜单并确认罗宾木匠商店能接单。",
+    title: "星露谷物语木匠商店：罗宾位置、营业时间与建筑服务",
+    description:
+      "查找星露谷物语木匠商店，了解罗宾的位置、营业时间，以及农舍升级、建筑建造、移动和拆除方法。",
   });
   expect(englishPosts[1]).toMatchObject({
     title: "Robin's Shop Is Empty? Find Her in Stardew Valley Today",

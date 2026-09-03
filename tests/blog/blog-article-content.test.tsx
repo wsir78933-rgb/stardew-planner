@@ -302,7 +302,6 @@ it("renders sourced English and Chinese carpenter guides with matching section c
     requiredPhrases: [
       "Robin is the carpenter in Stardew Valley.",
       "24 Mountain Road",
-      "PC 1.6.15",
       "Stardew Valley Wiki: Carpenter",
     ],
     scheduleBoundaryPhrases: [
@@ -310,10 +309,11 @@ it("renders sourced English and Chinese carpenter guides with matching section c
       "On Friday, treat 4:00 PM as the cutoff.",
     ],
     constructionClosurePhrase:
-      "If Robin is working on a building at your farm, the shop is closed for that workday.",
+      "For Summer 18, festival days, and days when Robin is working on the farm, verify the day-specific schedule.",
     houseCounterDistinctionPhrase:
       "Being able to walk inside does not mean she can sell, build, or start an upgrade.",
-    planningInformationGainPhrase: "The move is free, applies immediately, and carries the building contents with it.",
+    planningInformationGainPhrase:
+      "The move is free, applies immediately, and carries the building contents with it.",
     plannerPath: "/",
     selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
@@ -326,19 +326,19 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewChineseArticle),
     requiredPhrases: [
-      "星露谷木匠",
+      "星露谷物语木匠商店",
       "24 Mountain Road",
-      "PC 1.6.15",
       "星露谷 Wiki：木匠的商店",
     ],
     scheduleBoundaryPhrases: [
-      "周二通常不营业，但下雨时罗宾会留在柜台。",
-      "周五则以 16:00 为截止时间。",
+      "周二通常关闭，但雨天是例外。",
+      "周五不要超过 16:00。",
     ],
     constructionClosurePhrase:
-      "如果罗宾正在你的农场施工，木匠商店当天就会关闭。",
-    houseCounterDistinctionPhrase: "能走进房子，不等于她能卖东西、接建筑订单或开始升级。",
-    planningInformationGainPhrase: "移动免费、立即生效，建筑里的物品也会一起过去。",
+      "请查看当天的游戏日程，不要直接套用普通营业时间。",
+    houseCounterDistinctionPhrase: "能进房子不代表柜台还提供服务。",
+    planningInformationGainPhrase:
+      "移动建筑免费且立即完成，建筑内部的物品会随建筑一起移动",
     plannerPath: "/zh",
     selectedFarmPlannerPath: "/zh?farmType=meadowlands",
     officialSource: "https://zh.stardewvalleywiki.com/木匠的商店",
@@ -383,11 +383,21 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   expect(englishArticle.markup).toContain('class="blog-faq-list"');
   expect(chineseArticle.markup).toContain('class="blog-faq-list"');
   expect(englishArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(3);
-  expect(chineseArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(3);
+  expect(chineseArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
   expect(englishArticle.markup).toContain("Why can I enter Robin");
   expect(englishArticle.markup).toContain("house but not place an order?");
   expect(englishArticle.markup).not.toContain("Robin&amp;apos;");
   expect(englishArticle.markup).not.toContain("Robin&apos;s");
+});
+
+it("opens the Chinese carpenter article with a reader-facing definition", () => {
+  const chineseMarkup = renderArticle(CarpenterStardewChineseArticle);
+  const openingParagraph = getOpeningParagraph(chineseMarkup);
+
+  expect(openingParagraph).toContain("在《星露谷物语》中，木匠商店就是罗宾的家和工坊");
+  expect(openingParagraph).toContain("星露谷物语木匠商店");
+  expect(openingParagraph).not.toContain("搜索");
+  expect(chineseMarkup).not.toContain("这篇指南");
 });
 
 it("renders sourced English and Chinese Robin-location guides with matching section counts", () => {

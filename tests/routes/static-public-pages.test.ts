@@ -244,7 +244,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/carpenter-stardew",
     staticPageFile: "carpenter-stardew.html",
-    heading: "Carpenter Stardew: Which Robin Service Do You Need Today?",
+    heading: "Carpenter Stardew: Robin’s Shop Hours, Services, and Building Guide",
     documentLanguage: "en",
     schemaType: "Article",
     shouldIndex: true,
@@ -493,7 +493,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/carpenter-stardew",
     staticPageFile: "zh/carpenter-stardew.html",
-    heading: "星露谷木匠：今天该选罗宾的哪项服务？",
+    heading: "星露谷物语木匠商店：罗宾位置、营业时间与建筑服务",
     documentLanguage: "zh-CN",
     schemaType: "Article",
     shouldIndex: true,
