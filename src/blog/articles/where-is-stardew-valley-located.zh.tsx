@@ -1,34 +1,131 @@
-import { BlogFaqList } from "../../components/blog/blog-faq-list";
-import { BlogSources } from "../../components/blog/blog-sources";
+import type { ReactNode } from "react";
+import { BlogFaqList, type BlogFaqItem } from "../../components/blog/blog-faq-list";
+import { BlogSources, type BlogSourceItem } from "../../components/blog/blog-sources";
+
+const TOWN_MAP_HREF = "/zh/stardew-valley-town-map";
+const NPC_GUIDE_HREF = "/zh/stardew-valley-npc";
+const ROBIN_GUIDE_HREF = "/zh/where-is-robin-stardew-valley";
+const CARPENTER_GUIDE_HREF = "/zh/carpenter-stardew";
+const PLANNER_HREF = "/zh#planner";
+
+type LocationRow = Readonly<{
+  level: string;
+  place: string;
+  meaning: string;
+}>;
+
+type WorldRelationshipRow = Readonly<{
+  place: ReactNode;
+  relationship: string;
+  limit: string;
+}>;
 
 export function WhereIsStardewValleyLocatedChineseArticle() {
   return (
     <article>
-      <p>
-        星露谷不是现实世界的地点，而是《星露谷物语》中芬吉尔共和国的虚构沿海地区。鹈鹕镇和玩家的农场都在其中。
-      </p>
-      <p>
-        Eric Barone 在太平洋西北地区的生活经历影响了游戏细节，但这种创作影响不能确立地球上的对应地点。哈维提到的坐标也只能在先假定虚构世界使用地球坐标系后，才能落到现实地图上。
-      </p>
+      <ChineseLocationIntroduction />
+      <ChineseShortAnswer />
+      <ChineseLocationHierarchy />
+      <ChinesePelicanTown />
+      <ChineseWiderWorld />
+      <ChineseRealWorldQuestion />
+      <ChineseResourceChoice />
+      <ChineseCanonBoundary />
+      <ChineseLocationFaq />
+      <ChineseLocationSources />
+    </article>
+  );
+}
 
-      <h2>简短答案：星露谷是虚构地区</h2>
-      <p>
-        星露谷位于芬吉尔共和国南部海岸。鹈鹕镇是这片山谷的主要聚居地。农场是一块独立的可玩区域，通过巴士站与鹈鹕镇相连。鹈鹕镇的南部海岸临近宝石海。正在与芬吉尔共和国交战的戈特洛帝国，位于宝石海对岸、星露谷以南。
-      </p>
-      <p>
-        官方 About 页面和游戏内的信息，都没有把星露谷说成地球上的真实城镇、县、州或国家。现实地域经历可以解释部分游戏细节为何这样设计，但设定中有名称的地点仍然是虚构的。
-      </p>
+function PlannerLink({ children }: Readonly<{ children: ReactNode }>) {
+  return (
+    <a className="blog-planner-link" href={PLANNER_HREF}>
+      {children}
+    </a>
+  );
+}
 
-      <h2>从农场到更广阔世界的位置层级</h2>
+function LocationTableRegion({
+  accessibleName,
+  children,
+}: Readonly<{ accessibleName: string; children: ReactNode }>) {
+  if (accessibleName.trim() === "") {
+    throw new Error(
+      "位置表格需要非空的无障碍名称。收到的值：" +
+        JSON.stringify(accessibleName) +
+        "。",
+    );
+  }
+
+  return (
+    <div
+      aria-label={accessibleName}
+      className="blog-table-scroll"
+      role="region"
+      tabIndex={0}
+    >
+      {children}
+    </div>
+  );
+}
+
+function ChineseLocationIntroduction() {
+  return (
+    <>
       <p>
-        先把地区名与你每天往返的小地点分开，关系就容易理清。“星露谷”与“鹈鹕镇”不是同一个概念。
+        星露谷物语位于哪里？如果问的是游戏设定，答案很明确：星露谷是芬吉尔共和国南部海岸的虚构地区，鹈鹕镇是其中的社区，玩家继承的农场也在这里。若问的是现实原型，就不能把氛围影响当成官方地点。
       </p>
-      <div
-        aria-label="星露谷位置层级"
-        className="blog-table-scroll"
-        role="region"
-        tabIndex={0}
-      >
+      <p>
+        宝石海、戈特洛帝国、芬群岛、祖祖城和卡利科沙漠把世界扩展到小镇之外，但没有因此把星露谷变成华盛顿、俄勒冈、俄罗斯或其他现实地点。哈维的坐标也需要放在这个边界内阅读。
+      </p>
+      <p>
+        查设定用资料，找路线用小镇地图，安排农场用规划器；三个尺度不要混在一起。
+      </p>
+    </>
+  );
+}
+
+function ChineseShortAnswer() {
+  return (
+    <>
+      <h2>星露谷在游戏中位于哪里？简短答案</h2>
+      <p>
+        星露谷是芬吉尔共和国南部海岸的虚构沿海地区。鹈鹕镇是这里的主要社区，农场是玩家继承并经营的土地。鹈鹕镇南边是宝石海，戈特洛帝国位于宝石海对岸、星露谷以南。
+      </p>
+      <p>
+        官方 About 页面写的是玩家继承了“一块位于星露谷的农田”，没有给出地球上的国家、州、县或纬度。因此可以确定它在虚构世界中的位置，却不能把它当成 Google 地图上的现实地址。
+      </p>
+    </>
+  );
+}
+
+function locationHierarchyRows(): readonly LocationRow[] {
+  return [
+    { level: "1", place: "农场", meaning: "玩家继承、建设和规划的可玩土地。" },
+    { level: "2", place: "鹈鹕镇", meaning: "大多数村民居住、工作、购物和交流的社区。" },
+    { level: "3", place: "星露谷", meaning: "包含农场和鹈鹕镇的更大沿海地区。" },
+    { level: "4", place: "芬吉尔共和国", meaning: "星露谷所属的虚构国家。" },
+    {
+      level: "5",
+      place: "更广阔的世界",
+      meaning: "宝石海、芬群岛、戈特洛帝国和祖祖城等地点所在的设定层。",
+    },
+  ];
+}
+
+function ChineseLocationHierarchy() {
+  const rows = locationHierarchyRows();
+  if (rows.length !== 5) {
+    throw new Error("位置层级表需要 5 行，收到 " + rows.length + " 行。");
+  }
+
+  return (
+    <>
+      <h2>分清农场、鹈鹕镇、星露谷和芬吉尔共和国</h2>
+      <p>
+        “星露谷”是地区名，不是“鹈鹕镇”的另一种叫法。官方介绍从位于星露谷的农田开始，鹈鹕镇页面则把小镇写成玩家开局搬入的社区。攻略里说“进镇”，通常就是离开农场这块可玩区域。
+      </p>
+      <LocationTableRegion accessibleName="星露谷位置层级">
         <table className="blog-data-table">
           <thead>
             <tr>
@@ -38,277 +135,271 @@ export function WhereIsStardewValleyLocatedChineseArticle() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>农场</td>
-              <td>玩家从祖父手中继承的土地，也是主要设计和建设区域。</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>鹈鹕镇</td>
-              <td>大多数村民居住、工作、购物和交流的社区。</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>星露谷</td>
-              <td>包含鹈鹕镇与玩家农场的更大沿海地区。</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>芬吉尔共和国</td>
-              <td>星露谷所在的虚构国家。</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>更广阔的世界</td>
-              <td>宝石海、芬群岛、戈特洛帝国、祖祖城与其他有名地点把设定延伸到山谷之外。</td>
-            </tr>
+            {rows.map((row) => (
+              <tr key={row.level}>
+                <td>{row.level}</td>
+                <td>{row.place}</td>
+                <td>{row.meaning}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div>
+      </LocationTableRegion>
       <p>
-        官方
-        <a href="https://www.stardewvalley.net/about/">Stardew Valley About 页面</a>
-        一开始就写到，玩家继承了一块“位于星露谷”的农田。这里的星露谷是你开始新生活的更广阔背景。
-        <a href="https://stardewvalleywiki.com/Pelican_Town">星露谷 Wiki 的鹈鹕镇页面</a>
-        则把鹈鹕镇放在星露谷之内，并说明这是玩家开局时搬入的社区。
+        农场、鹈鹕镇、星露谷、芬吉尔共和国依次是土地、社区、地区和国家。
       </p>
-      <p>
-        实际游玩时也能感受到这个区别。攻略让你“进镇”时，指的是离开农场这块可玩区域。鹈鹕镇的西北入口通过巴士站连回农场。
-      </p>
+    </>
+  );
+}
 
-      <h2>鹈鹕镇不等于整个星露谷</h2>
+function ChinesePelicanTown() {
+  return (
+    <>
+      <h2>鹈鹕镇只是星露谷里的一个社区</h2>
       <p>
-        游戏前期的购物和社交活动大多发生在鹈鹕镇，但星露谷还延伸到镇上街道之外。走过几次之后，几个出口就很好理解：
+        鹈鹕镇不是整个星露谷，也不是芬吉尔共和国。玩家在这里认识村民、去皮埃尔商店、使用诊所和博物馆，还从这里走向周边区域。几个出口说明的是本地路线，不是世界地图。
       </p>
       <ul>
-        <li>
-          <strong>西北入口</strong>连向巴士站和农场。
-        </li>
-        <li>
-          <strong>西南通道</strong>通往煤矿森林，其中包括玛妮的牧场、莉亚的农舍与法师塔。
-        </li>
-        <li>
-          <strong>沙滩</strong>就在镇子正南方。
-        </li>
-        <li>
-          <strong>深山</strong>位于镇子北边，罗宾的木匠商店、矿井、冒险家公会、铁路和采石场都在这个方向。
-        </li>
+        <li>西北入口连接巴士站和农场。</li>
+        <li>西南通道通往煤矿森林；玛妮的牧场、莉亚的农舍与法师塔都在这片森林里。</li>
+        <li>沙滩就在小镇正南方。</li>
+        <li>深山在小镇北边，罗宾的木匠商店、矿井、探险家公会、铁路和采石场都在那个方向。</li>
       </ul>
       <p>
-        这些路线回答的是实际问题：怎样从镇上去深山、沙滩，或在凌晨 2:00 前回家？这与“星露谷在虚构世界的什么位置”是两个问题。
-        <a href="/zh/stardew-valley-town-map">鹈鹕镇地标与路线指南</a>
-        负责本地导航，并不是整个虚构世界的地图。
+        需要找商店或地标时，打开<a href={TOWN_MAP_HREF}>鹈鹕镇地点与路线指南</a>。它回答“今天从哪里走到哪里”；设定资料回答“这片区域在虚构世界中属于哪里”，两者不能互相替代。
       </p>
       <p>
-        “星露谷”是地区名。鹈鹕镇、农场、煤矿森林、深山和沙滩都位于这片可玩空间中，或通过它相互连接。谈论《星露谷物语》而不是地理时，玩家常把“星露谷”当成鹈鹕镇的简称。日常交流中这样说没问题，但它会模糊小镇与地区的关系。
+        鹈鹕镇页面还确认小镇属于芬吉尔共和国，戈特洛帝国在宝石海对岸。这个关系比一张带有自创比例的同人世界地图更可靠。
       </p>
+    </>
+  );
+}
 
-      <h2>更广阔的虚构世界如何相互关联</h2>
+function widerWorldRows(): readonly WorldRelationshipRow[] {
+  return [
+    {
+      place: "芬吉尔共和国",
+      relationship: "星露谷所属的虚构国家。",
+      limit: "现有设定信息没有确认现实对应国家，也没有完整国界图。",
+    },
+    {
+      place: "宝石海",
+      relationship: "鹈鹕镇南部海岸外的虚构海域。",
+      limit: "不能直接当成某个现实海洋。",
+    },
+    {
+      place: "戈特洛帝国",
+      relationship: "位于宝石海对岸、星露谷以南。",
+      limit: "游戏没有提供完整政治地图。",
+    },
+    {
+      place: "芬群岛",
+      relationship: "属于芬吉尔共和国、位于宝石海的群岛；姜岛可以到达。",
+      limit: "能访问一个岛，不代表知道整个群岛的范围。",
+    },
+    {
+      place: "祖祖城",
+      relationship: "在角色、事件和电影中被提到的城市。",
+      limit: "与鹈鹕镇的准确距离和方向未被确认。",
+    },
+    {
+      place: <a href="https://stardewvalleywiki.com/The_Desert">卡利科沙漠</a>,
+      relationship: "位于鹈鹕镇西北方、可通过巴士到达的区域。",
+      limit: "更大的政治地理关系没有确认。",
+    },
+  ];
+}
+
+function ChineseWiderWorld() {
+  const rows = widerWorldRows();
+  if (rows.length !== 6) {
+    throw new Error("更广阔世界关系表需要 6 行，收到 " + rows.length + " 行。");
+  }
+
+  return (
+    <>
+      <h2>更广阔的虚构世界怎样连接</h2>
       <p>
-        《星露谷物语》没有直接给你一本完整地图集。地理线索散落在对话、书籍、广播、物品说明和场景中。
-        <a href="https://stardewvalleywiki.com/Setting">星露谷 Wiki 的 Setting 页面</a>
-        汇总了这些细节。其中最清楚的地理表述，把星露谷称为芬吉尔共和国南部海岸上一个宁静的地区。
+        游戏通过对话、遗失之书、物品说明和可访问地点逐步透露地理关系。设定页把这些线索集中起来，但它不是带比例尺和完整边界的现实地图。
       </p>
-      <p>其他名称为这句话补充了背景，但它们仍然拼不出一幅完整的世界地图。</p>
-      <div
-        aria-label="星露谷更广阔世界的关系"
-        className="blog-table-scroll"
-        role="region"
-        tabIndex={0}
-      >
+      <LocationTableRegion accessibleName="星露谷更广阔世界关系">
         <table className="blog-data-table">
           <thead>
             <tr>
               <th scope="col">地点</th>
               <th scope="col">已确认关系</th>
-              <th scope="col">证据边界</th>
+              <th scope="col">仍然未知</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>芬吉尔共和国</td>
-              <td>包含星露谷的国家</td>
-              <td>完整国界和现实世界对应关系均未确立。</td>
-            </tr>
-            <tr>
-              <td>宝石海</td>
-              <td>鹈鹕镇南部海岸的海洋</td>
-              <td>它是虚构海洋，不是某片现实海洋的别名。</td>
-            </tr>
-            <tr>
-              <td>戈特洛帝国</td>
-              <td>与芬吉尔交战的国家，隔着宝石海位于星露谷以南</td>
-              <td>游戏没有提供完整的政治地图集。</td>
-            </tr>
-            <tr>
-              <td>芬群岛</td>
-              <td>宝石海中属于芬吉尔共和国的群岛；姜岛可以前往</td>
-              <td>一座可访问岛屿不能定义整片群岛。</td>
-            </tr>
-            <tr>
-              <td>祖祖城</td>
-              <td>多位角色和事件都提到过的城市</td>
-              <td>已确认的设定没有给出它与鹈鹕镇之间的确切距离或方位。</td>
-            </tr>
-            <tr>
-              <td>
-                <a href="https://stardewvalleywiki.com/The_Desert">卡利科沙漠</a>
-              </td>
-              <td>位于鹈鹕镇遥远西北方向、可以前往的外部区域</td>
-              <td>已确认的设定没有说明它属于哪个国家或政治区域。</td>
-            </tr>
+            {rows.map((row, index) => (
+              <tr key={"world-place-" + index}>
+                <td>{row.place}</td>
+                <td>{row.relationship}</td>
+                <td>{row.limit}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div>
+      </LocationTableRegion>
       <p>
-        巴士服务恢复后，玩家要从巴士站乘车前往卡利科沙漠，而不是通过鹈鹕镇的某个本地步行出口走过去。
-        芬群岛位于宝石海，姜岛是其中可以前往的一座岛。它的农场区域是独立可玩地图，不是鹈鹕镇、本土农场或卡利科沙漠的延伸。
+        卡利科沙漠是“能确定相对方位，但不能和小镇步行相连”的例子。它在鹈鹕镇西北方；社区中心金库组合包完成，或在 Joja 社区发展申请表中支付 40000g 修好巴士后，才能从巴士站乘车前往。它不是鹈鹕镇出口旁边的一块沙地。
       </p>
       <p>
-        芬吉尔共和国、宝石海和戈特洛帝国都是设定中已确认的部分。确切边界和距离则是另一回事。装饰性地图可能看起来有用，但游戏从未赋予它们可靠的国界轮廓、比例尺或地球对应位置。
+        姜岛属于宝石海中的芬群岛，需要修好威利鱼店后面的船才能到达。它通过与本土小镇不同的路线进入。
+      </p>
+      <p>
+        祖祖城也在更大的设定里，但现有资料没有足够的距离与方向来绘制可信的世界地图。把未知保留下来，比用同人地图补上自创国界更准确。
+      </p>
+    </>
+  );
+}
+
+function ChineseRealWorldQuestion() {
+  return (
+    <>
+      <h2>星露谷是以华盛顿、俄勒冈还是其他地方为原型</h2>
+      <p>
+        现有资料没有确认星露谷在地球上的位置。游戏带有太平洋西北地区的感觉，是因为真实生活经验进入了一些食物和采集细节；这属于创作影响，不等于设定声明。Eric Barone 在 Auburn 长大，制作游戏时住在西雅图地区，也在采访里谈过熟悉的食物和采集。
+      </p>
+      <p>
+        采访能解释鲑莓、蘑菇等细节为何亲切，但不能把华盛顿或俄勒冈变成官方答案。没有资料确认它属于这些现实地点，也不是改名后的俄勒冈小镇或俄罗斯村庄。
+      </p>
+      <p>
+        现实影响和虚构地点可以同时存在：现实经验影响了细节，故事中的星露谷仍然属于芬吉尔共和国。
       </p>
 
-      <h2>星露谷是真实地点吗？</h2>
+      <h3>哈维提到的坐标是什么意思</h3>
       <p>
-        不是。《星露谷物语》的公开介绍把它称为开放式乡村生活 RPG，并把玩家继承的农场放在星露谷。设定资料又把这个地区放在芬吉尔共和国。这些信息都没有把星露谷放到地球上的某个国家、城镇或具体农场。
+        哈维的短波广播给出过“北纬 52 度、东经 43.5 度”的线索。星露谷 Wiki 记录了这句游戏文本，但把数字放到地球地图上，前提是先假定虚构地区使用地球坐标系。
       </p>
       <p>
-        《星露谷物语》当然也有现实世界影响。Eric Barone 在华盛顿州 Auburn 长大，并在西雅图地区居住期间开发了《星露谷物语》。在一篇
-        <a href="https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/">
-          2023 年关于太平洋西北地区兴趣的采访
-        </a>
-        中，他谈到家庭烹饪、在雷尼尔山附近采蘑菇与鲑果。Barone 把鲑果形容为一种地域标志，很多太平洋西北地区之外的玩家并不认识它。
+        鹈鹕镇页面讨论现实投影时使用的是条件语气，并指出推算位置不在海岸线上；这和鹈鹕镇位于宝石海海岸的设定发生冲突。一个坐标彩蛋不能推翻整套虚构地理。
       </p>
-      <p>
-        这可以解释为什么星露谷的部分细节会让太平洋西北地区的玩家感到熟悉。但这不代表鹈鹕镇是伪装的西雅图，不代表星露谷是换了名字的华盛顿山谷，也不代表芬吉尔共和国就是美国。
-      </p>
-      <p>
-        太平洋西北地区的经历影响了游戏细节，但故事中的星露谷仍然属于芬吉尔共和国。现实影响不能替代设定中的地点关系。
-      </p>
+      <p>所以，哈维的广播是游戏内线索，不是官方现实地址，不能据此确定国家、城镇、农场或海岸。</p>
+    </>
+  );
+}
 
-      <h3>哈维的坐标呢？</h3>
-      <p>
-        哈维的短波无线电给出了最有名的线索：<code>北纬 52 度，东经 43.5 度</code>。Wiki 的设定摘要记录了这组坐标，数字确实来自游戏文本。但它们不会自动变成地球地图上的定位点。
-      </p>
-      <p>
-        要把它们转成现实地址，必须先假定这组数字使用地球经纬度。鹈鹕镇页面只在“如果星露谷位于地球”这一前提下讨论这种做法。它还指出，套用后的地点不在海岸，这与鹈鹕镇明确毗邻宝石海的设定相冲突。
-      </p>
-      <p>
-        这种地球解读要求你接受地球的坐标系和地理，却又忽略海岸矛盾。一句无线电对话无法独自解决所有问题。官方来源没有把任何现实国家、城镇或某座具体农场称为星露谷的原型。
-      </p>
-      <p>
-        哈维的无线电台词属于虚构世界，不是官方现实地址。这不足以证明游戏对应现实中的任何特定国家。
-      </p>
-
-      <h2>应该使用哪种地图或工具？</h2>
-      <p>
-        “位置”可以指世界观设定、穿过城镇的路线，也可以指农场上某件东西的摆放点。这些任务不同，需要的资源也不同。
-      </p>
+function ChineseResourceChoice() {
+  return (
+    <>
+      <h2>回答地点问题时，该用哪张地图或工具</h2>
+      <p>“地点”可能指世界观、今天的行程，或自己农场上的摆放位置。先按尺度选择资源：</p>
       <ol>
-        <li>查世界观时，使用介绍芬吉尔共和国、宝石海、戈特洛帝国和本地地图以外地点的设定来源。</li>
         <li>
-          办事时，使用镇上路线与 NPC 指南。
-          <a href="/zh/stardew-valley-npc">星露谷 NPC 指南</a>
-          会把居民与其服务联系起来；
-          <a href="/zh/where-is-robin-stardew-valley">罗宾位置指南</a>
-          则聚焦一个受日程影响的目的地。
+          查虚构世界，用<a href="https://stardewvalleywiki.com/Setting">星露谷设定页</a>了解芬吉尔共和国、宝石海、芬群岛和祖祖城。
         </li>
         <li>
-          规划你能控制的土地时，使用农场规划工具。当“这个地方在哪里？”变成“这座建筑、这块田或这条路应该放在哪里？”时，打开
-          <a className="blog-planner-link" href="/zh#planner">
-            星露谷农场规划器
-          </a>
-          。你可以选择农场类型、试摆建筑和作物、切换季节，并在游戏内还原布局前检查覆盖范围。
+          查小镇路线，用<a href={TOWN_MAP_HREF}>鹈鹕镇地图</a>、<a href={NPC_GUIDE_HREF}>NPC 指南</a>或<a href={ROBIN_GUIDE_HREF}>罗宾位置指南</a>。
+        </li>
+        <li>
+          查农场摆放，用<a className="blog-planner-link" href={PLANNER_HREF}>星露谷农场规划器</a>选择正在玩的农场地图，再安排建筑、田地和道路。
         </li>
       </ol>
       <p>
-        农场规划器只用于安排自己的农场布局，不显示芬吉尔共和国或鹈鹕镇，也不实时追踪 NPC。查镇内路线时使用鹈鹕镇路线指南。
+        规划器适合测试农场上的建筑占地、作物区、道路、季节和覆盖范围。它不会绘制芬吉尔共和国，也不会解析哈维的坐标或实时追踪 NPC。需要购买、升级、移动或拆除建筑时，再看<a href={CARPENTER_GUIDE_HREF}>罗宾木匠指南</a>。
       </p>
-      <p>
-        如果你正准备购买、升级或移动建筑，先完成布局，再查看
-        <a href="/zh/carpenter-stardew">星露谷木匠指南</a>
-        。
-      </p>
+    </>
+  );
+}
 
-      <h2>游戏已经确认什么，又没有确认什么</h2>
-      <p>游戏已经确认星露谷位于芬吉尔共和国，但没有把它放到完整的世界地图或现实地球上。</p>
+function ChineseCanonBoundary() {
+  return (
+    <>
+      <h2>游戏确认了什么，又没有确认什么</h2>
+      <p>可靠的地点答案要把已知关系和证据边界放在一起：</p>
       <ul>
-        <li>官方没有命名星露谷对应的现实国家、城镇或农场。</li>
-        <li>哈维的坐标如果套用地球经纬度，得到的地点不在海岸，与鹈鹕镇毗邻宝石海的设定冲突。</li>
-        <li>祖祖城是已确认的城市，但它与鹈鹕镇之间的确切方向和距离仍然未知。</li>
-        <li>模组可以扩展自己的世界和地点，但不会改写本体游戏的设定。</li>
+        <li>星露谷位于虚构的芬吉尔共和国。</li>
+        <li>鹈鹕镇是星露谷里的社区，不是整个地区。</li>
+        <li>宝石海在鹈鹕镇南边，戈特洛帝国在海的对岸。</li>
+        <li>卡利科沙漠和姜岛都能到达，但需要各自的路线。</li>
+        <li>这些资料没有确认地球上的国家、完整国界或世界地图比例。</li>
       </ul>
-      <p>因此，星露谷的虚构世界位置已经确认，它在地球上的具体位置则没有确认。</p>
+      <p>
+        因此，这个问题有明确的虚构答案，也保留着开放的现实答案。现实地图上的对应点属于推测，不应写成游戏官方设定。
+      </p>
+    </>
+  );
+}
 
+const chineseLocationFaqItems: readonly BlogFaqItem[] = [
+  {
+    question: "星露谷在游戏中位于哪里？",
+    answer: (
+      <p>
+        星露谷是芬吉尔共和国南部海岸的虚构地区。鹈鹕镇和玩家农场都在这里，宝石海沿着鹈鹕镇南部海岸展开。
+      </p>
+    ),
+  },
+  {
+    question: "鹈鹕镇和星露谷是同一个地方吗？",
+    answer: (
+      <p>
+        不是。鹈鹕镇是更大星露谷地区中的社区。农场通过巴士站连接小镇，其他出口通往沙滩、深山和煤矿森林。
+      </p>
+    ),
+  },
+  {
+    question: "星露谷属于哪个国家？",
+    answer: (
+      <p>
+        它属于虚构的芬吉尔共和国。戈特洛帝国位于宝石海对岸、星露谷以南，游戏没有把这两个国家对应到现实国家。
+      </p>
+    ),
+  },
+  {
+    question: "星露谷是以华盛顿或俄勒冈为背景吗？",
+    answer: (
+      <p>
+        太平洋西北地区的生活经验影响了部分细节，但那次采访没有确认它属于华盛顿或俄勒冈。那是氛围参考，不是官方坐标。
+      </p>
+    ),
+  },
+  {
+    question: "哈维的坐标能定位现实地点吗？",
+    answer: (
+      <p>
+        不能。“北纬 52 度、东经 43.5 度”是游戏对话；把它放到地球坐标系后得到的是有前提的同人推测，不是官方地址。
+      </p>
+    ),
+  },
+  {
+    question: "戈特洛帝国在星露谷的什么方向？",
+    answer: (
+      <p>
+        设定把它放在宝石海对岸、星露谷以南，但现有资料没有给出完整国界或准确距离。
+      </p>
+    ),
+  },
+];
+
+function ChineseLocationFaq() {
+  return (
+    <>
       <h2>常见问题</h2>
-      <BlogFaqList
-        items={[
-          {
-            question: "星露谷在游戏中位于哪里？",
-            answer: (
-              <p>
-                星露谷是芬吉尔共和国的虚构沿海地区。鹈鹕镇和玩家的农场都位于其中。宝石海毗邻鹈鹕镇南部海岸，戈特洛帝国则隔着海位于星露谷以南。
-              </p>
-            ),
-          },
-          {
-            question: "鹈鹕镇和星露谷是同一个地方吗？",
-            answer: (
-              <p>
-                不是。鹈鹕镇是星露谷中的主要聚居地。星露谷是更大的地区，小镇只是其中一个社区。农场通过巴士站连向鹈鹕镇；其他出口通往沙滩、深山和煤矿森林。
-              </p>
-            ),
-          },
-          {
-            question: "星露谷位于哪个国家？",
-            answer: (
-              <p>
-                星露谷位于芬吉尔共和国，这是一个与戈特洛帝国交战的虚构国家。把芬吉尔称为美国、加拿大、日本或任何其他现实国家，都超出了设定已确认的范围。
-              </p>
-            ),
-          },
-          {
-            question: "星露谷是以华盛顿州或俄勒冈州为背景吗？",
-            answer: (
-              <p>
-                设定没有被官方确认为华盛顿州或俄勒冈州。创作者 Eric Barone 的生活与地域经验带来了鲑果和采蘑菇等太平洋西北地区细节。这些影响能解释游戏质感的一部分，但不能确立地球上的位置。
-              </p>
-            ),
-          },
-          {
-            question: "哈维的坐标能确定现实世界地点吗？",
-            answer: (
-              <p>
-                不能。哈维说的是<code>北纬 52 度，东经 43.5 度</code>，但把数字放到地球上，已经加入了游戏从未确认的假设。Wiki 只在“假设星露谷位于地球”的前提下讨论这种解读，并指出结果不在海岸，而鹈鹕镇明确位于宝石海边。对话属于游戏设定，特定地球位置则不属于。
-              </p>
-            ),
-          },
-          {
-            question: "戈特洛帝国相对星露谷在什么位置？",
-            answer: (
-              <p>
-                戈特洛帝国隔着宝石海位于星露谷以南，并正在与芬吉尔共和国交战。现有细节确定了这种关系，但没有给出完整政治地图、精确距离或玩家可以行走的路线。
-              </p>
-            ),
-          },
-        ]}
-      />
+      <BlogFaqList items={chineseLocationFaqItems} />
+    </>
+  );
+}
 
-      <BlogSources
-        checkedLabel="来源核对日期：2026-08-23。"
-        heading="来源"
-        items={[
-          { href: "https://www.stardewvalley.net/about/", label: "《星露谷物语》— About" },
-          { href: "https://stardewvalleywiki.com/Setting", label: "设定 — Stardew Valley Wiki" },
-          { href: "https://stardewvalleywiki.com/Pelican_Town", label: "鹈鹕镇 — Stardew Valley Wiki" },
-          { href: "https://stardewvalleywiki.com/The_Desert", label: "沙漠 — Stardew Valley Wiki" },
-          {
-            href: "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
-            label: "Eric Barone 太平洋西北地区兴趣采访 — Portland Mercury",
-          },
-        ]}
-      />
-    </article>
+const chineseLocationSourceItems: readonly BlogSourceItem[] = [
+  { href: "https://www.stardewvalley.net/about/", label: "《星露谷物语》— About" },
+  { href: "https://stardewvalleywiki.com/Setting", label: "设定 — Stardew Valley Wiki" },
+  { href: "https://stardewvalleywiki.com/Pelican_Town", label: "鹈鹕镇 — Stardew Valley Wiki" },
+  { href: "https://stardewvalleywiki.com/The_Desert", label: "卡利科沙漠 — Stardew Valley Wiki" },
+  {
+    href: "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
+    label: "Eric Barone 太平洋西北地区影响采访 — Portland Mercury",
+  },
+];
+
+function ChineseLocationSources() {
+  return (
+    <BlogSources
+      checkedLabel="来源核对日期：2026-09-05。"
+      heading="来源"
+      items={chineseLocationSourceItems}
+    />
   );
 }

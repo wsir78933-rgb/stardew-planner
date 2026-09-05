@@ -1,178 +1,404 @@
-import { BlogFaqList } from "../../components/blog/blog-faq-list";
-import { BlogSources } from "../../components/blog/blog-sources";
+import type { ReactNode } from "react";
+import { BlogFaqList, type BlogFaqItem } from "../../components/blog/blog-faq-list";
+import { BlogSources, type BlogSourceItem } from "../../components/blog/blog-sources";
+
+const TOWN_WIKI_HREF = "https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87";
+const NPC_GUIDE_HREF = "/zh/stardew-valley-npc";
+const CARPENTER_GUIDE_HREF = "/zh/carpenter-stardew";
+const ROBIN_GUIDE_HREF = "/zh/where-is-robin-stardew-valley";
+const PLANNER_HREF = "/zh#planner";
+
+type ExitRow = Readonly<{
+  direction: string;
+  destination: string;
+  decision: string;
+}>;
+
+type LandmarkRow = Readonly<{
+  landmark: string;
+  use: string;
+  routeHint: string;
+}>;
 
 export function StardewValleyTownMapChineseArticle() {
   return (
     <article>
-      <p>
-        要找《星露谷物语》小镇地图时，最实用的不是把每间房子都背下来，而是先记住鹈鹕镇的出口：西北通往巴士站和农场，西南通往煤矿森林，南边通往沙滩，北边通往深山。
-        <a href="https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87">星露谷 Wiki 的鹈鹕镇页面</a>
-        列出了这些连接和主要地点。按这四个出口就能判断方向；想查交互式地图或 NPC 实时位置，需要使用其他工具。
-      </p>
-      <p>
-        先把小镇的边界记清，中央的商店和服务点就不容易混在一起。如果某件事取决于某个 NPC 当天是否在柜台，再去看对应的行程页面。
-      </p>
+      <TownMapIntroduction />
+      <TownMapExitGuide />
+      <TownMapLandmarks />
+      <TownMapRouteMethod />
+      <TownMapForagingAndFishing />
+      <TownMapLimits />
+      <TownMapFarmTransition />
+      <TownMapPlannerGuide />
+      <TownMapChecklist />
+      <TownMapFaq />
+      <TownMapSources />
+    </article>
+  );
+}
 
-      <h2>星露谷物语小镇地图：先记住四个出口</h2>
-      <div
-        className="blog-table-scroll"
-        role="region"
-        aria-label="鹈鹕镇出口"
-        tabIndex={0}
-      >
+function PlannerLink({ children }: Readonly<{ children: ReactNode }>) {
+  return (
+    <a className="blog-planner-link" href={PLANNER_HREF}>
+      {children}
+    </a>
+  );
+}
+
+function TownMapTableRegion({
+  accessibleName,
+  children,
+}: Readonly<{ accessibleName: string; children: ReactNode }>) {
+  if (accessibleName.trim() === "") {
+    throw new Error(
+      "小镇地图表格需要非空的无障碍名称。收到的值：" +
+        JSON.stringify(accessibleName) +
+        "。",
+    );
+  }
+
+  return (
+    <div
+      aria-label={accessibleName}
+      className="blog-table-scroll"
+      role="region"
+      tabIndex={0}
+    >
+      {children}
+    </div>
+  );
+}
+
+function TownMapIntroduction() {
+  return (
+    <>
+      <p>
+        找《星露谷物语》小镇地图时，先不要背每栋房子的门牌。鹈鹕镇最有用的记忆点是四个出口：西北去巴士站和农场，西南去煤矿森林，南边去沙滩，北边去深山。官方中文 Wiki 的鹈鹕镇页也按这组连接描述小镇。
+      </p>
+      <p>
+        这份路线重点解决三件事：你现在在哪个区域、下一站该从哪边离开、回到农场后是否需要重新安排布局。NPC 当天在哪里、商店是否营业和农场建筑怎么摆，分别属于日程、服务和规划问题。
+      </p>
+      <p>
+        记住方向比寻找一张塞满图标的截图更耐用。地点会因为版本、节日、天气和玩家进度出现不同情况；地图负责给你方向，具体服务仍要看对应页面。
+      </p>
+    </>
+  );
+}
+
+function exitRows(): readonly ExitRow[] {
+  return [
+    {
+      direction: "西北",
+      destination: "巴士站、农场",
+      decision: "办完镇上事务后回家，或去巴士站换乘。",
+    },
+    {
+      direction: "西南",
+      destination: "煤矿森林",
+      decision: "继续找玛妮的牧场、莉亚的农舍和法师塔。",
+    },
+    {
+      direction: "南",
+      destination: "沙滩",
+      decision: "去海边、鱼店或潮池时从这里离开。",
+    },
+    {
+      direction: "北",
+      destination: "深山",
+      decision: "去木匠商店、矿井、探险家公会、铁路或采石场。",
+    },
+  ];
+}
+
+function TownMapExitGuide() {
+  const rows = exitRows();
+  if (rows.length !== 4) {
+    throw new Error("鹈鹕镇出口表必须包含 4 行，收到 " + rows.length + " 行。");
+  }
+
+  return (
+    <>
+      <h2>鹈鹕镇小镇地图：先记住四个出口</h2>
+      <TownMapTableRegion accessibleName="鹈鹕镇四个出口">
         <table className="blog-data-table">
           <thead>
             <tr>
-              <th scope="col">离开小镇的方向</th>
+              <th scope="col">方向</th>
               <th scope="col">通往哪里</th>
-              <th scope="col">下一步可以做什么</th>
+              <th scope="col">下一步判断</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>西北</td>
-              <td>巴士站和农场</td>
-              <td>办完镇上的事，往这边回家。</td>
-            </tr>
-            <tr>
-              <td>西南</td>
-              <td>煤矿森林</td>
-              <td>继续前往玛妮的牧场、莉亚的农舍或法师塔。</td>
-            </tr>
-            <tr>
-              <td>南</td>
-              <td>沙滩</td>
-              <td>下一站在海边时走这条路。</td>
-            </tr>
-            <tr>
-              <td>北</td>
-              <td>深山</td>
-              <td>去罗宾的木匠商店、矿井、冒险家公会、铁路或采石场。</td>
-            </tr>
+            {rows.map((row) => (
+              <tr key={row.direction}>
+                <td>{row.direction}</td>
+                <td>{row.destination}</td>
+                <td>{row.decision}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div>
+      </TownMapTableRegion>
       <p>
-        还在小镇中央时，就先决定下一步要从哪边离开。要回农场就往西北；要找罗宾或去矿井就往北。这个习惯很小，却能少绕很多沿河的弯路。
+        站在小镇中央时，先问“我下一站在哪一边”。回农场走西北；找罗宾或矿井走北；去沙滩走南；去煤矿森林走西南。不要先搜“最快路线”，先走对出口就已经省掉大部分绕路。
       </p>
+    </>
+  );
+}
 
-      <h2>先找到哪些地标？</h2>
-      <p>
-        刚开始不用记住所有住址。先认出会反复用到的服务点：皮埃尔的杂货店、哈维的诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧。把这些常用地点连起来，镇内路线就会逐渐清楚。
-      </p>
-      <p>
-        每一趟的目的并不一样。买东西、升级工具、捐赠发现物和找服务柜台，都不用走同一条路。出发前先想清楚这趟要办什么，再决定要不要顺路加站。想知道谁提供某项农场服务，可以看
-        <a href="/zh/stardew-valley-npc">星露谷 NPC 指南</a>；想核对深山里的建造菜单，可以看
-        <a href="/zh/carpenter-stardew">星露谷木匠指南</a>。
-      </p>
+function landmarkRows(): readonly LandmarkRow[] {
+  return [
+    {
+      landmark: "皮埃尔的杂货店",
+      use: "买种子和日常补给。",
+      routeHint: "镇中央，适合当作起点。",
+    },
+    {
+      landmark: "哈维的诊所",
+      use: "处理诊所相关服务。",
+      routeHint: "先确认当天营业和 NPC 行程。",
+    },
+    {
+      landmark: "社区中心",
+      use: "推进收集包和社区路线。",
+      routeHint: "靠近镇中央西侧。",
+    },
+    {
+      landmark: "博物馆、铁匠铺",
+      use: "捐赠发现物、处理工具和矿石。",
+      routeHint: "都在镇中央附近，目标不同不必重复跑全镇。",
+    },
+    {
+      landmark: "Joja 超市",
+      use: "处理 Joja 路线下的购物和进度。",
+      routeHint: "与社区中心是两条不同的进度路线。",
+    },
+    {
+      landmark: "星之果实酒吧",
+      use: "找格斯、吃饭和处理酒吧相关事件。",
+      routeHint: "晚上仍可能是镇内路线的一站。",
+    },
+    {
+      landmark: "书摊",
+      use: "寻找 1.6 版本新增的书摊老板。",
+      routeHint: "先把它当作镇内地标，不要和固定商店混为一谈。",
+    },
+  ];
+}
 
-      <h2>分两层看鹈鹕镇</h2>
-      <p>
-        好用的小镇地图不是把一百个图钉塞给你，而是让你有一个判断顺序。先从中央开始，用杂货店、诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧等主要地点确定方向；再决定事情是否已经办完，还是要继续往四个边缘走。先记住这层，就不必每次进镇都重新背一遍路线。
-      </p>
-      <p>
-        第二层是小镇边缘。下一站在沙滩，就从南边离开；要继续去煤矿森林，就从西南走。农场、巴士站和深山也是同一套判断。你不需要相信所谓“最快路线”，只要别走过了正确出口才开始想下一步。
-      </p>
-      <ul>
-        <li>先用中央地标确认自己在哪里。</li>
-        <li>再用四个出口决定这趟下一站。</li>
-        <li>问题变成某个人、营业时间或进度条件时，再打开对应的单独指南。</li>
-      </ul>
+function TownMapLandmarks() {
+  const rows = landmarkRows();
+  if (rows.length !== 7) {
+    throw new Error("鹈鹕镇地标表必须包含 7 行，收到 " + rows.length + " 行。");
+  }
 
-      <h2>小镇地图不能替你判断什么</h2>
+  return (
+    <>
+      <h2>先认出哪些鹈鹕镇地标</h2>
       <p>
-        地点指南能告诉你区域之间怎么连接，却不能保证某个柜台此刻营业，也不能判断节日是否改了当天安排，或你的进度是否已经开启后续地点。这些是另一类问题。地图只负责把你带到正确的区域；接下来要看的是匹配版本的行程页或商店页面。
+        进入小镇后，先找反复会用到的服务点，再决定要不要走向边缘出口。皮埃尔商店、诊所、社区中心、博物馆、铁匠铺、Joja 超市和星之果实酒吧，是一张实用路线里最值得先认出的节点。
       </p>
+      <TownMapTableRegion accessibleName="鹈鹕镇主要地标">
+        <table className="blog-data-table">
+          <thead>
+            <tr>
+              <th scope="col">地标</th>
+              <th scope="col">用途</th>
+              <th scope="col">路线提示</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.landmark}>
+                <td>{row.landmark}</td>
+                <td>{row.use}</td>
+                <td>{row.routeHint}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </TownMapTableRegion>
       <p>
-        要找 Robin 时，用<a href="/zh/where-is-robin-stardew-valley">Robin 位置指南</a>
-        检查她当天的行程；要办建筑业务时，再看木匠指南。小镇地图只显示前往目的地区域的路线，天气、节日和玩家进度仍可能改变现场的人物与可用服务。
+        购物、升级工具、捐赠发现物和找 NPC，不一定要走同一条路线。先确定本趟唯一的主要目的，再加一个顺路地标，通常比把所有店铺都逛一遍更省时间。
       </p>
+    </>
+  );
+}
 
-      <h2>第一趟跑镇的简单走法</h2>
+function TownMapRouteMethod() {
+  return (
+    <>
+      <h2>把小镇路线分成中央和边缘两层</h2>
+      <p>
+        第一层是中央服务区：先用杂货店、诊所、社区中心、博物馆、铁匠铺、Joja 超市和酒吧确认自己的位置。第二层是边缘出口：根据下一站选择西北、西南、南或北。
+      </p>
       <ol>
-        <li>先定一个目的：买补给、办服务、交收藏，或继续赶路。</li>
-        <li>用中央地标靠近目的地。</li>
-        <li>按下一件事所在的方向离开小镇。</li>
-        <li>只有下一步真的要在农场做时，才往农场回。</li>
+        <li>先说清楚这趟是买补给、办服务、交收藏还是继续赶路。</li>
+        <li>用中央地标靠近主要目的地，不要一进镇就横穿整张图。</li>
+        <li>办完主事项后，再判断顺路地标是否值得加入。</li>
+        <li>只有下一步真的要回农场时，才从西北出口离开。</li>
       </ol>
       <p>
-        这套走法不花哨，但方便在游戏里快速确认方向，也不会假装地图能回答所有行程问题。到了深山却发现罗宾的柜台没人，可以用
-        <a href="/zh/where-is-robin-stardew-valley">Robin 位置指南</a>
-        检查星期、天气和施工例外。
+        如果目的是找某个 NPC，路线还要叠加日期、天气、节日和进度条件。鹈鹕镇居民页说明不同居民有不同每日行程；需要具体人物位置时，去看<a href={NPC_GUIDE_HREF}>星露谷 NPC 指南</a>或对应角色页。
       </p>
-
-      <h2>认清小镇后，再规划农场</h2>
-      <p>
-        小镇找路和农场布局是两件事。小镇参考告诉你这趟要去哪里；回到农场后，才需要决定新建筑、作物或道路该怎么放。
-      </p>
-      <p>
-        有了具体的农场决定后，再打开
-        <a className="blog-planner-link" href="/zh#planner">星露谷农场规划器</a>。选择农场类型，试摆建筑、作物、可放置物或装饰，并在游戏里花材料前检查工作空间。规划器不显示鹈鹕镇，也不会追踪 NPC 的实时位置；它处理的是农场里的占地、道路和覆盖范围。
-      </p>
-
-      <h2>让一趟跑镇变成农场决定</h2>
-      <p>
-        回到农场后，小镇参考才开始发挥作用。一次补给采购可能让你重新估算田地大小；一次建造咨询可能变成占地和道路的问题；一件新机器或新动物也会提醒你，原本拥挤的角落没有足够的行走空间。小镇地图不会替你摆好布局，但它能让你回家时还记得这次调整到底是为了解决什么。
-      </p>
-      <p>
-        花材料前先试摆。把计划中的物品放到对应的农场地图上，看一看门口或工作区的进出路线，再检查附近的作物、栅栏和覆盖工具是否还有位置。如果试摆已经觉得别扭，就先在规划器里改掉。重点不是做出一张完美截图，而是在重建花掉一天之前，先发现一条不好走的路或一个过于拥挤的工作区。
-      </p>
-
-      <h2>可打印的鹈鹕镇检查清单</h2>
-      <p>需要纸质参考时，可以直接用浏览器的打印功能。</p>
-      <ul>
-        <li>我知道从西北出口回农场。</li>
-        <li>我知道往北去深山和罗宾的商店。</li>
-        <li>我知道往南去沙滩。</li>
-        <li>我知道往西南去煤矿森林。</li>
-        <li>我能找到杂货店、诊所、社区中心、博物馆、铁匠铺和酒吧。</li>
-        <li>如果这趟取决于某个 NPC 是否在场，我已经看过行程页面。</li>
-        <li>我知道下一步该留在镇上，还是回农场试摆布局。</li>
-      </ul>
-
-      <h2>星露谷物语小镇地图常见问题</h2>
-      <BlogFaqList
-        items={[
-          {
-            question: "鹈鹕镇和农场地图是一回事吗？",
-            answer: (
-              <p>
-                不是。大部分居民都在鹈鹕镇生活、工作和社交；农场是另一张区域地图，需要从西北方向经巴士站连接过去。小镇指南解决服务点和出口，农场规划器解决你自己的土地怎么安排。
-              </p>
-            ),
-          },
-          {
-            question: "从鹈鹕镇怎么回农场？",
-            answer: (
-              <p>
-                走西北出口。鹈鹕镇 Wiki 将这一侧说明为通往巴士站和农场的连接。
-              </p>
-            ),
-          },
-          {
-            question: "这份指南会显示 NPC 实时位置或提供小镇地图下载吗？",
-            answer: (
-              <p>
-                不会。这里不显示 NPC 实时位置，也不提供小镇地图下载；检查清单可以用浏览器打印。NPC 当天的位置要看对应版本的行程页面；农场规划器只用于农场布局。
-              </p>
-            ),
-          },
-        ]}
-      />
-
-      <BlogSources
-        heading="来源"
-        items={[
-          {
-            href: "https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87",
-            label: "鹈鹕镇 — Stardew Valley Wiki",
-            note: "，核对日期：2026-08-22。",
-          },
-          { href: "/zh/stardew-valley-npc", label: "星露谷 NPC 指南" },
-          { href: "/zh/carpenter-stardew", label: "星露谷木匠指南" },
-          { href: "/zh/where-is-robin-stardew-valley", label: "Robin 位置指南" },
-        ]}
-      />
-    </article>
+    </>
   );
+}
+
+function TownMapForagingAndFishing() {
+  return (
+    <>
+      <h2>小镇地图也能帮你安排采集和钓鱼</h2>
+      <p>
+        鹈鹕镇不是只有商店。中文 Wiki 的采集资料列出：春季常见黄水仙，夏季是甜豌豆，秋季是黑莓，冬季则会出现番红花、冬青和水晶果。季节改变时，顺路搜集的目标也会改变。
+      </p>
+      <p>
+        河流横穿鹈鹕镇，可以按季节和天气安排河钓。秋季河的北端还能钓到传说鱼安康鱼。要找海鱼，则从南出口去沙滩；不要把河流和海边当成同一种钓鱼位置。
+      </p>
+      <p>
+        这些内容适合放进“今天跑镇”的顺路计划：先办必须完成的服务，再经过路线上的采集点或河边，最后决定是否从西北出口回家。完整出现时间和概率仍以中文居民页的对应表格为准。
+      </p>
+    </>
+  );
+}
+
+function TownMapLimits() {
+  return (
+    <>
+      <h2>小镇地图不能替你判断什么</h2>
+      <p>
+        地点连接和当天可用服务是两类信息。小镇地图能告诉你往哪里走，却不能保证某个柜台此刻营业，也不能替你读取 NPC 的实时位置、节日改动或存档进度。
+      </p>
+      <ul>
+        <li>要找罗宾，先看<a href={ROBIN_GUIDE_HREF}>Robin 位置指南</a>的日程和例外。</li>
+        <li>要升级、建造、移动或拆除建筑，去看<a href={CARPENTER_GUIDE_HREF}>星露谷木匠指南</a>。</li>
+        <li>要规划农场占地，使用规划器，不要把鹈鹕镇截图当成农场地图。</li>
+      </ul>
+      <p>
+        天气、节日、施工和玩家进度都可能改变现场情况。遇到“地图上找得到、游戏里却没有”的情况，先检查匹配版本的日程页，再判断路线是否需要改变。
+      </p>
+    </>
+  );
+}
+
+function TownMapFarmTransition() {
+  return (
+    <>
+      <h2>回农场前，先把这一趟变成一个决定</h2>
+      <p>
+        一趟进镇不只是移动：买种子可能改变田地大小，升级工具可能改变下一块工作区，找到新机器或动物也可能暴露农场道路太窄。回家前先说清楚“这趟要解决什么”，回到农场才不会只留下零散物品。
+      </p>
+      <p>
+        小镇地图解决目的地，农场规划解决占地。两者衔接起来的顺序很简单：认出目标地标，办完服务，回西北出口到农场，再检查门口、生产区、作物区和出货箱之间的路线。
+      </p>
+    </>
+  );
+}
+
+function TownMapPlannerGuide() {
+  return (
+    <>
+      <h2>认清鹈鹕镇后，再规划自己的农场</h2>
+      <p>
+        农场布局是另一张地图。打开<a className="blog-planner-link" href={PLANNER_HREF}>星露谷农场规划器</a>，先选择正在玩的农场类型，再试摆建筑、作物、可放置物和装饰，检查门口与道路是否留出工作空间。
+      </p>
+      <ol>
+        <li>先放农舍、出货箱和必须保留的固定路线。</li>
+        <li>再安排田地、动物区、储存和加工设备。</li>
+        <li>把装饰放到最后，避免把每天要走的通道填满。</li>
+        <li>确认方案后，再回游戏里花材料建造。</li>
+      </ol>
+      <p>
+        规划器只处理你控制的农场布局，不显示鹈鹕镇，也不实时追踪 NPC。小镇路线、NPC 日程和建筑规则仍然分别回到对应参考页。
+      </p>
+    </>
+  );
+}
+
+function TownMapChecklist() {
+  return (
+    <>
+      <h2>可打印的鹈鹕镇跑图清单</h2>
+      <p>需要纸质参考时，可以直接使用浏览器打印这组检查项：</p>
+      <ul>
+        <li>我知道西北出口通往巴士站和农场。</li>
+        <li>我知道北边去深山，南边去沙滩。</li>
+        <li>我知道西南通往煤矿森林和其中的几个住处。</li>
+        <li>我能找到杂货店、诊所、社区中心、博物馆、铁匠铺和酒吧。</li>
+        <li>我已经按日期、天气和进度检查了需要寻找的 NPC。</li>
+        <li>我已经决定办完事情后是继续跑镇，还是回农场试摆布局。</li>
+      </ul>
+    </>
+  );
+}
+
+const townMapFaqItems: readonly BlogFaqItem[] = [
+  {
+    question: "鹈鹕镇和农场地图是一回事吗？",
+    answer: (
+      <p>
+        不是。鹈鹕镇是居民生活、工作和社交的社区；农场是另一块可玩区域，从西北出口经巴士站连接。小镇地图解决路线，规划器解决农场摆放。
+      </p>
+    ),
+  },
+  {
+    question: "从鹈鹕镇怎么回农场？",
+    answer: (
+      <p>
+        从西北出口走向巴士站，再回到农场。鹈鹕镇中文 Wiki 明确把这一侧写成通往巴士站和农场。
+      </p>
+    ),
+  },
+  {
+    question: "鹈鹕镇四个出口分别通往哪里？",
+    answer: (
+      <p>
+        西北通往巴士站和农场，西南通往煤矿森林，南边通往沙滩，北边通往深山。
+      </p>
+    ),
+  },
+  {
+    question: "小镇地图会显示 NPC 实时位置吗？",
+    answer: (
+      <p>
+        不会。NPC 位置会随日期、天气、节日和进度变化，要看对应角色的日程页。规划器也只用于农场布局，不是 NPC 追踪器。
+      </p>
+    ),
+  },
+  {
+    question: "需要下载鹈鹕镇地图吗？",
+    answer: (
+      <p>
+        不需要下载才能使用这份路线清单；浏览器打印即可。要查游戏内的具体地标和当前版本资料，直接打开中文鹈鹕镇 Wiki 页面。
+      </p>
+    ),
+  },
+];
+
+function TownMapFaq() {
+  return (
+    <>
+      <h2>星露谷物语小镇地图常见问题</h2>
+      <BlogFaqList items={townMapFaqItems} />
+    </>
+  );
+}
+
+const townMapSourceItems: readonly BlogSourceItem[] = [
+  {
+    href: TOWN_WIKI_HREF,
+    label: "鹈鹕镇 — Stardew Valley Wiki",
+    note: "，出口、主要地点、采集和钓鱼资料核对日期：2026-09-05。",
+  },
+  { href: "https://zh.stardewvalleywiki.com/%E5%B1%85%E6%B0%91", label: "居民 — Stardew Valley Wiki" },
+  { href: "https://zh.stardewvalleywiki.com/%E5%86%9C%E5%9C%BA", label: "农场 — Stardew Valley Wiki" },
+  { href: NPC_GUIDE_HREF, label: "星露谷 NPC 指南" },
+  { href: CARPENTER_GUIDE_HREF, label: "星露谷木匠指南" },
+  { href: ROBIN_GUIDE_HREF, label: "Robin 位置指南" },
+  { href: "https://stardewvalleyplanner.art/zh", label: "星露谷农场规划器" },
+];
+
+function TownMapSources() {
+  return <BlogSources heading="来源" items={townMapSourceItems} />;
 }

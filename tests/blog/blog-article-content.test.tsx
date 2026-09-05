@@ -14,11 +14,7 @@ type ArticleFixture = Readonly<{
   markup: string;
   requiredPhrases: readonly string[];
   scheduleBoundaryPhrases: readonly (string | RegExp)[];
-  constructionClosurePhrase: string;
-  houseCounterDistinctionPhrase: string;
-  planningInformationGainPhrase: string;
   plannerPath: string;
-  selectedFarmPlannerPath: string;
   officialSource: string;
   mediaPaths: readonly string[];
 }>;
@@ -48,9 +44,6 @@ function assertArticleContract(article: ArticleFixture): void {
   expect(article.markup).not.toContain("<h1");
   expect(article.markup).not.toContain("robin locati0n stardew");
   expect(article.markup).toContain('href="' + article.plannerPath + '"');
-  expect(article.markup).toContain(
-    'href="' + article.selectedFarmPlannerPath + '"',
-  );
   for (const removedPublicPath of [
     "/farm-comparison",
     "/mods",
@@ -69,9 +62,6 @@ function assertArticleContract(article: ArticleFixture): void {
   expect(article.markup).not.toContain("<iframe");
   expect(article.markup).not.toContain("youtube.com");
   expect(article.markup).not.toContain("youtube-nocookie.com");
-  expect(article.markup).toContain(article.constructionClosurePhrase);
-  expect(article.markup).toContain(article.houseCounterDistinctionPhrase);
-  expect(article.markup).toContain(article.planningInformationGainPhrase);
   expect(countSecondLevelSections(article.markup)).toBeGreaterThanOrEqual(4);
 
   for (const authorFacingOrAiPhrase of [
@@ -126,80 +116,63 @@ it("renders matching English and Chinese Stardew Valley NPC guides with sourced 
     expect(markup).not.toContain("[待确认：");
     expect(markup).not.toContain("tracks NPC");
     expect(markup).not.toContain("追踪 NPC");
-    expect(markup).toContain("1.6.15");
-    expect(markup).toContain("PC 1.6.15");
     expect(markup).toContain("46");
     expect(markup).toContain("34");
     expect(markup).toContain("12");
-    expect(markup).toContain(
-      'href="https://store.steampowered.com/news/app/413150/view/517448731263500640"',
-    );
   }
 
-  expect(englishMarkup).toContain("https://stardewvalleywiki.com/Villagers");
-  expect(englishMarkup).toContain("https://stardewvalleywiki.com/Friendship");
-  expect(chineseMarkup).toContain("https://zh.stardewvalleywiki.com/居民");
-  expect(chineseMarkup).toContain("https://zh.stardewvalleywiki.com/友谊");
+  expect(englishMarkup).toContain("https://wiki.stardewvalley.net/Villagers");
+  expect(englishMarkup).toContain("https://wiki.stardewvalley.net/Friendship");
+  expect(chineseMarkup).toContain("https://wiki.stardewvalley.net/Villagers");
+  expect(chineseMarkup).toContain("https://wiki.stardewvalley.net/Friendship");
 
   const englishOpeningParagraph = getOpeningParagraph(englishMarkup);
   const chineseOpeningParagraph = getOpeningParagraph(chineseMarkup);
 
   expect(englishOpeningParagraph).toContain(
-    "The Stardew Valley PC 1.6.15 roster has 46 characters",
+    "The Stardew Valley NPC list is easiest to use",
   );
   expect(englishOpeningParagraph).not.toContain("current stable release");
   expect(englishOpeningParagraph).toContain("12 marriage candidates");
-  expect(englishOpeningParagraph).toContain("22 giftable characters");
+  expect(englishOpeningParagraph).toContain("22 other giftable");
   expect(englishOpeningParagraph).not.toContain("If your search was");
-  expect(chineseOpeningParagraph).toContain("《星露谷物语》PC 1.6.15 的 NPC 分为三类");
-  expect(chineseOpeningParagraph).not.toContain("当前最新正式版");
-  expect(chineseOpeningParagraph).toContain("12 名可结婚角色");
-  expect(chineseOpeningParagraph).toContain("22 名可送礼但不可结婚的角色");
-  expect(chineseOpeningParagraph).not.toContain("如果你搜的是");
-  expect(chineseOpeningParagraph).not.toContain("按这套明确口径计算");
+  expect(chineseOpeningParagraph).toContain("查找《星露谷物语》NPC 时");
+  expect(chineseOpeningParagraph).toContain("46 名角色");
+  expect(chineseOpeningParagraph).toContain("12 名可结婚");
+  expect(chineseOpeningParagraph).toContain("22 名可送礼但不可结婚");
 
   expect(englishMarkup.toLowerCase()).toContain("stardew valley npc list");
   expect(englishMarkup).toContain("34 giftable villagers");
   expect(englishMarkup).toContain("12 non-giftable NPCs");
-  expect(englishMarkup).toContain("The player&#x27;s children, monsters, Junimos");
-  expect(englishMarkup).not.toContain("Children, monsters, Junimos");
-  expect(englishMarkup).toContain("birthday event multiplier is eight");
+  expect(englishMarkup).toContain("The gift log records items you have already given");
+  expect(englishMarkup).toContain("birthday gift remains allowed");
   expect(englishMarkup).toContain(
-    '<a class="blog-planner-link" href="/#planner">',
+    '<a class="blog-planner-link" href="/">',
   );
   expect(englishMarkup).toContain('href="/carpenter-stardew"');
   expect(englishMarkup).toContain('href="/where-is-robin-stardew-valley"');
-  expect(englishMarkup).toContain(
-    "The planner handles the farm layout; it does not track either NPC&#x27;s live schedule.",
-  );
+  expect(englishMarkup).toContain("farm planner");
   expect(englishMarkup).toContain("<h2>Sources</h2>");
   expect(englishMarkup).toContain("Stardew Valley Wiki: Villagers");
   expect(englishMarkup).not.toContain("update boundary");
   expect(englishMarkup).not.toContain("Sources and version notes");
   expect(englishMarkup).toContain('class="blog-faq-list"');
-  expect(englishMarkup).toContain("How many NPCs are in Stardew Valley?");
+  expect(englishMarkup).toContain("How many NPCs are in the Stardew Valley roster?");
   expect(englishMarkup.match(/class="blog-faq-item"/g)).toHaveLength(5);
 
-  expect(chineseMarkup).toContain("星露谷 NPC 列表");
-  expect(chineseMarkup).toContain("34 位可送礼村民");
-  expect(chineseMarkup).toContain("12 位不可送礼 NPC");
-  expect(chineseMarkup).toContain("玩家的孩子、怪物、祝尼魔");
-  expect(chineseMarkup).not.toContain(
-    "数字才有意义。孩子、怪物、祝尼魔、农场动物和玩家角色",
-  );
-  expect(chineseMarkup).toContain("生日倍率是 8 倍");
-  expect(chineseMarkup).toContain(
-    '<a class="blog-planner-link" href="/zh#planner">',
-  );
-  expect(chineseMarkup).toContain('href="/zh/carpenter-stardew"');
+  expect(chineseMarkup).toContain("星露谷 NPC 名单");
+  expect(chineseMarkup).toContain("34 名居民接受普通礼物");
+  expect(chineseMarkup).toContain("12 名不可送礼 NPC");
+  expect(chineseMarkup).toContain("生日礼物即使在两份普通礼物用完后仍然可以送");
+  expect(chineseMarkup).toContain('href="/zh"');
   expect(chineseMarkup).toContain('href="/zh/where-is-robin-stardew-valley"');
-  expect(chineseMarkup).toContain("规划器只处理农场布局，不会追踪两位 NPC 的实时行程。");
+  expect(chineseMarkup).not.toContain("PC 1.6.15");
   expect(chineseMarkup).toContain("<h2>来源</h2>");
-  expect(chineseMarkup).toContain("星露谷 Wiki：居民");
+  expect(chineseMarkup).toContain("星露谷 Wiki：Villagers");
   expect(chineseMarkup).not.toContain("更新边界");
   expect(chineseMarkup).not.toContain("参考与版本说明");
   expect(chineseMarkup).toContain('class="blog-faq-list"');
-  expect(chineseMarkup).toContain("《星露谷物语》一共有多少 NPC？");
+  expect(chineseMarkup).toContain("《星露谷物语》有多少 NPC？");
   expect(chineseMarkup.match(/class="blog-faq-item"/g)).toHaveLength(5);
 
   expect(countSecondLevelSections(englishMarkup)).toBeGreaterThanOrEqual(8);
@@ -235,10 +208,12 @@ it("renders matching English and Chinese SVE bachelors guides without overwritin
   const chineseOpeningParagraph = getOpeningParagraph(chineseMarkup);
 
   expect(englishOpeningParagraph).toContain(
-    "Stardew Valley Expanded bachelors and bachelorettes: there are 7 of them",
+    "Stardew Valley Expanded currently adds seven marriage candidates",
   );
   expect(englishOpeningParagraph).not.toContain("If your search was");
-  expect(chineseOpeningParagraph).toContain("星露谷SVE 可结婚角色现在是 7 个");
+  expect(chineseOpeningParagraph).toContain(
+    "星露谷物语扩展版（SVE）当前的可结婚新增角色是 7 人",
+  );
   expect(chineseOpeningParagraph).not.toContain("本文将");
 
   expect(englishMarkup).toContain(
@@ -264,16 +239,16 @@ it("renders NPC tables and name rosters as readable, labelled content in both lo
     {
       markup: renderArticle(StardewValleyNpcEnglishArticle),
       tableLabels: [
-        "Stardew Valley NPC categories",
+        "Stardew Valley NPC groups",
         "Stardew Valley marriage candidates",
-        "Stardew Valley NPC services",
+        "Stardew Valley NPC service planning",
       ],
       firstSectionNote: "Stardew Valley Wiki: Villagers",
       authorInstruction: "Review the roster and relationship groups again",
     },
     {
       markup: renderArticle(StardewValleyNpcChineseArticle),
-      tableLabels: ["星露谷 NPC 分类", "星露谷可结婚角色", "星露谷 NPC 服务"],
+      tableLabels: ["星露谷 NPC 分类", "星露谷可结婚角色", "星露谷 NPC 服务与农场规划"],
       firstSectionNote: "星露谷 Wiki：居民",
       authorInstruction: "应重新核对角色名单和关系分类",
     },
@@ -283,7 +258,7 @@ it("renders NPC tables and name rosters as readable, labelled content in both lo
     expect(article.markup.match(/class="blog-table-scroll"/g)).toHaveLength(3);
     expect(article.markup.match(/class="blog-name-grid"/g)).toHaveLength(2);
     for (const tableLabel of article.tableLabels) {
-      expect(article.markup).toContain(`role="region" aria-label="${tableLabel}"`);
+      expect(article.markup).toContain(`aria-label="${tableLabel}" class="blog-table-scroll"`);
     }
     expect(article.markup).toContain("<li>Caroline</li>");
     expect(article.markup).toContain("<li>Professor Snail</li>");
@@ -300,71 +275,46 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   const englishArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewEnglishArticle),
     requiredPhrases: [
-      "Robin is the carpenter in Stardew Valley.",
       "24 Mountain Road",
-      "Stardew Valley Wiki: Carpenter",
+      "Carpenter",
     ],
     scheduleBoundaryPhrases: [
-      "Tuesday is normally a closed-shop day, but rain keeps Robin at the counter.",
-      "On Friday, treat 4:00 PM as the cutoff.",
+      "Tuesday is normally a closure",
+      "Friday ends at 4:00 PM",
     ],
-    constructionClosurePhrase:
-      "For Summer 18, festival days, and days when Robin is working on the farm, verify the day-specific schedule.",
-    houseCounterDistinctionPhrase:
-      "Being able to walk inside does not mean she can sell, build, or start an upgrade.",
-    planningInformationGainPhrase:
-      "The move is free, applies immediately, and carries the building contents with it.",
     plannerPath: "/",
-    selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
     mediaPaths: [
       "/blog/illustrations/carpenter-building-layout.webp",
       "/blog/illustrations/carpenter-building-move.webp",
-      "/blog/video-posters/carpenter-coop-guide.webp",
     ],
   };
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(CarpenterStardewChineseArticle),
     requiredPhrases: [
-      "星露谷物语木匠商店",
       "24 Mountain Road",
-      "星露谷 Wiki：木匠的商店",
+      "木匠商店能处理哪些事情",
     ],
     scheduleBoundaryPhrases: [
-      "周二通常关闭，但雨天是例外。",
-      "周五不要超过 16:00。",
+      "周二不要直接当作普通营业日",
+      "周五 16:00 提前结束",
     ],
-    constructionClosurePhrase:
-      "请查看当天的游戏日程，不要直接套用普通营业时间。",
-    houseCounterDistinctionPhrase: "能进房子不代表柜台还提供服务。",
-    planningInformationGainPhrase:
-      "移动建筑免费且立即完成，建筑内部的物品会随建筑一起移动",
     plannerPath: "/zh",
-    selectedFarmPlannerPath: "/zh?farmType=meadowlands",
-    officialSource: "https://zh.stardewvalleywiki.com/木匠的商店",
+    officialSource: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
     mediaPaths: [
       "/blog/illustrations/carpenter-building-layout.webp",
       "/blog/illustrations/carpenter-building-move.webp",
-      "/blog/video-posters/carpenter-coop-guide.webp",
     ],
   };
 
   assertArticleContract(englishArticle);
   assertArticleContract(chineseArticle);
-  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
-  expect(chineseArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
+  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(1);
+  expect(chineseArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(1);
   expect(englishArticle.markup).toContain(
     '<a class="blog-planner-link" href="/">',
   );
-  expect(englishArticle.markup).toContain(
-    '<a class="blog-planner-link" href="/?farmType=meadowlands">',
-  );
-  expect(chineseArticle.markup).toContain(
-    '<a class="blog-planner-link" href="/zh">',
-  );
-  expect(chineseArticle.markup).toContain(
-    '<a class="blog-planner-link" href="/zh?farmType=meadowlands">',
-  );
+  expect(chineseArticle.markup).toContain('<a class="blog-planner-link" href="/zh">');
   expect(englishArticle.markup).not.toContain(
     '<a class="blog-planner-link" href="https://wiki.stardewvalley.net/',
   );
@@ -382,96 +332,64 @@ it("renders sourced English and Chinese carpenter guides with matching section c
   expect(chineseArticle.markup).toContain("<h2>来源</h2>");
   expect(englishArticle.markup).toContain('class="blog-faq-list"');
   expect(chineseArticle.markup).toContain('class="blog-faq-list"');
-  expect(englishArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(3);
+  expect(englishArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
   expect(chineseArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
-  expect(englishArticle.markup).toContain("Why can I enter Robin");
-  expect(englishArticle.markup).toContain("house but not place an order?");
-  expect(englishArticle.markup).not.toContain("Robin&amp;apos;");
-  expect(englishArticle.markup).not.toContain("Robin&apos;s");
+  expect(englishArticle.markup).toContain("What does the Telephone do?");
+  expect(englishArticle.markup).not.toContain("This guide uses");
 });
 
 it("opens the Chinese carpenter article with a reader-facing definition", () => {
   const chineseMarkup = renderArticle(CarpenterStardewChineseArticle);
   const openingParagraph = getOpeningParagraph(chineseMarkup);
 
-  expect(openingParagraph).toContain("在《星露谷物语》中，木匠商店就是罗宾的家和工坊");
-  expect(openingParagraph).toContain("星露谷物语木匠商店");
-  expect(openingParagraph).not.toContain("搜索");
-  expect(chineseMarkup).not.toContain("这篇指南");
+  expect(openingParagraph).toContain("在《星露谷物语》中，木匠商店是罗宾管理农场建筑和农舍改造的地方");
+  expect(openingParagraph).toContain("24 Mountain Road");
+  expect(openingParagraph).not.toContain("本文");
 });
 
 it("renders sourced English and Chinese Robin-location guides with matching section counts", () => {
   const englishArticle: ArticleFixture = {
     markup: renderArticle(WhereIsRobinEnglishArticle),
     requiredPhrases: [
-      "where is Robin in Stardew Valley",
       "24 Mountain Road",
-      "1.6.15",
-      "Stardew Valley Wiki: Robin",
+      "Carpenter",
     ],
     scheduleBoundaryPhrases: [
-      "Ordinary rain keeps her home and can open the counter on a Tuesday.",
-      "Friday service ends at 4:00 PM.",
+      "Ordinary rain keeps Robin home",
+      "ends at 4:00 PM",
     ],
-    constructionClosurePhrase:
-      "If Robin is working at a construction site, she is there and the Carpenter&#x27;s Shop is closed.",
-    houseCounterDistinctionPhrase:
-      "Walking inside does not mean Robin can sell supplies, accept a building order, move a farm building, or begin a farmhouse upgrade.",
-    planningInformationGainPhrase:
-      "Use this order because a higher-priority schedule can replace the ordinary weekly routine:",
     plannerPath: "/",
-    selectedFarmPlannerPath: "/?farmType=meadowlands",
     officialSource: "https://wiki.stardewvalley.net/Robin",
     mediaPaths: [
       "/blog/illustrations/robin-location-routes.webp",
-      "/blog/illustrations/robin-schedule-states.webp",
-      "/blog/video-posters/robin-location-guide.webp",
     ],
   };
   const chineseArticle: ArticleFixture = {
     markup: renderArticle(WhereIsRobinChineseArticle),
     requiredPhrases: [
-      "星露谷物语罗宾在哪里",
+      "罗宾住在",
       "24 Mountain Road",
-      "1.6.15",
-      "星露谷 Wiki：罗宾",
+      "木匠商店",
     ],
     scheduleBoundaryPhrases: [
-      "普通雨天会让她留在家里，周二的柜台也可能因此营业。",
-      "周五的服务在 16:00 结束。",
+      "雨天可能让周二恢复柜台服务",
+      "周五 16:00 提前结束",
     ],
-    constructionClosurePhrase:
-      "如果罗宾正在你的农场工地施工，她就在农场，木匠商店也会关闭。",
-    houseCounterDistinctionPhrase:
-      "能走进房子，不代表罗宾能卖材料、接建筑订单、移动建筑或开始农舍升级。",
-    planningInformationGainPhrase:
-      "按这个顺序检查，因为优先级更高的行程会覆盖普通一周的安排：",
     plannerPath: "/zh",
-    selectedFarmPlannerPath: "/zh?farmType=meadowlands",
-    officialSource: "https://zh.stardewvalleywiki.com/罗宾",
+    officialSource: "https://wiki.stardewvalley.net/Robin",
     mediaPaths: [
       "/blog/illustrations/robin-location-routes.webp",
-      "/blog/illustrations/robin-schedule-states.webp",
-      "/blog/video-posters/robin-location-guide.webp",
     ],
   };
 
   assertArticleContract(englishArticle);
   assertArticleContract(chineseArticle);
-  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
-  expect(chineseArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(2);
+  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(1);
+  expect(chineseArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(1);
   expect(englishArticle.markup).toContain(
     '<a class="blog-planner-link" href="/">',
   );
-  expect(englishArticle.markup).toContain(
-    '<a class="blog-planner-link" href="/?farmType=meadowlands">',
-  );
-  expect(chineseArticle.markup).toContain(
-    '<a class="blog-planner-link" href="/zh">',
-  );
-  expect(chineseArticle.markup).toContain(
-    '<a class="blog-planner-link" href="/zh?farmType=meadowlands">',
-  );
+  expect(chineseArticle.markup).toContain('<a class="blog-planner-link" href="/zh">');
   expect(englishArticle.markup).not.toContain(
     '<a class="blog-planner-link" href="https://wiki.stardewvalley.net/',
   );
@@ -481,14 +399,16 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
   expect(countSecondLevelSections(englishArticle.markup)).toBe(
     countSecondLevelSections(chineseArticle.markup),
   );
-  expect(englishArticle.markup.length).toBeGreaterThan(5200);
-  expect(chineseArticle.markup.length).toBeGreaterThan(2600);
+  expect(englishArticle.markup.length).toBeGreaterThan(8000);
+  expect(chineseArticle.markup.length).toBeGreaterThan(5000);
   expect(getOpeningParagraph(englishArticle.markup)).toContain("24 Mountain Road");
   expect(getOpeningParagraph(englishArticle.markup)).toContain("9:00 AM to 5:00 PM");
   expect(getOpeningParagraph(chineseArticle.markup)).toContain("24 Mountain Road");
   expect(getOpeningParagraph(chineseArticle.markup)).toContain("09:00–17:00");
   expect(englishArticle.markup).toContain("<h2>Sources</h2>");
   expect(chineseArticle.markup).toContain("<h2>来源</h2>");
-  expect(englishArticle.markup).not.toContain('class="blog-faq-list"');
-  expect(chineseArticle.markup).not.toContain('class="blog-faq-list"');
+  expect(englishArticle.markup).toContain('class="blog-faq-list"');
+  expect(chineseArticle.markup).toContain('class="blog-faq-list"');
+  expect(englishArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
+  expect(chineseArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
 });

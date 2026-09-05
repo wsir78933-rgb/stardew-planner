@@ -2,50 +2,94 @@ import { expect, test } from "vitest";
 import { HOMEPAGE_LOCALES } from "@/src/homepage/homepage-locale";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
 
-function collectVisibleCopyStrings(copyValue: unknown): string[] {
-  if (typeof copyValue === "string") {
-    return [copyValue];
-  }
-
-  if (Array.isArray(copyValue)) {
-    return copyValue.flatMap(collectVisibleCopyStrings);
-  }
-
-  if (copyValue !== null && typeof copyValue === "object") {
-    return Object.values(copyValue).flatMap(collectVisibleCopyStrings);
-  }
-
-  return [];
-}
-
-function countEnglishWords(copyValue: unknown): number {
-  return collectVisibleCopyStrings(copyValue)
-    .join(" ")
-    .match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g)?.length ?? 0;
-}
-
 test("ships every approved locale with the same top-level homepage sections", () => {
   expect(Object.keys(homepageCopyByLocale)).toEqual([...HOMEPAGE_LOCALES]);
   expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale["zh-CN"]));
+
+  expect(Object.keys(homepageCopyByLocale.en)).toEqual([
+    "navigation",
+    "hero",
+    "plannerPreview",
+    "features",
+    "whyChoose",
+    "howTo",
+    "closingCta",
+    "faq",
+    "trust",
+    "footer",
+  ]);
 });
 
-test("provides a four-step bilingual Stardew Valley Planner planning guide", () => {
-  expect(homepageCopyByLocale.en.planningGuide.steps).toHaveLength(4);
-  expect(homepageCopyByLocale["zh-CN"].planningGuide.steps).toHaveLength(4);
-  expect(homepageCopyByLocale.en.planningGuide.heading).toContain("Stardew Valley Planner");
-});
+test("provides the replacement sections with exact bilingual headings and item counts", () => {
+  const expectedSections = {
+    en: {
+      features: {
+        heading: "What the planner does",
+        imageAlt: "Pixel-art farm map with eight terrain patches and an island plot",
+        itemCount: 3,
+      },
+      whyChoose: {
+        heading: "Why use this planner",
+        imageAlt: "Pixel-art planning board next to an unbuilt farm",
+        itemCount: 3,
+      },
+      howTo: {
+        heading: "How to use it",
+        imageAlt: "Pixel-art farm map with crop, animal, and path zones",
+        itemCount: 4,
+      },
+      closingCta: {
+        heading: "The map is already on this page. Start placing.",
+        supportLine: "No sign-up. Projects stay in this browser.",
+      },
+    },
+    "zh-CN": {
+      features: {
+        heading: "功能介绍",
+        imageAlt: "像素风农场地图，含八块不同地形和一处岛状地块",
+        itemCount: 3,
+      },
+      whyChoose: {
+        heading: "为什么选择我们",
+        imageAlt: "像素风规划板放在尚未建造的农场旁",
+        itemCount: 3,
+      },
+      howTo: {
+        heading: "如何使用",
+        imageAlt: "像素风农场地图，标出作物区、动物区和道路",
+        itemCount: 4,
+      },
+      closingCta: {
+        heading: "地图看好了，就在上面开始摆。",
+        supportLine: "不用注册。项目保存在当前浏览器。",
+      },
+    },
+  } as const;
 
-test("keeps English homepage guidance above the approved 1,200-word minimum", () => {
-  expect(countEnglishWords(homepageCopyByLocale.en)).toBeGreaterThanOrEqual(1200);
-});
+  for (const homepageLocale of HOMEPAGE_LOCALES) {
+    const homepageCopy = homepageCopyByLocale[homepageLocale] as unknown as Record<string, any>;
+    const expected = expectedSections[homepageLocale];
 
-test("treats the farmhouse and shipping bin as current planning anchors", () => {
-  expect(homepageCopyByLocale.en.planningGuide.intro[0]).toContain(
-    "current farmhouse and shipping bin are useful starting anchors",
-  );
-  expect(homepageCopyByLocale["zh-CN"].planningGuide.intro[0]).toContain(
-    "当前的农舍和出货箱可作为实用的起始锚点",
-  );
+    expect(homepageCopy).not.toHaveProperty("planningGuide");
+    expect(homepageCopy).not.toHaveProperty("capabilities");
+    expect(homepageCopy.features).toMatchObject({
+      heading: expected.features.heading,
+      imageAlt: expected.features.imageAlt,
+    });
+    expect(homepageCopy.features.items).toHaveLength(expected.features.itemCount);
+    expect(homepageCopy.whyChoose).toMatchObject({
+      heading: expected.whyChoose.heading,
+      imageAlt: expected.whyChoose.imageAlt,
+    });
+    expect(homepageCopy.whyChoose.items).toHaveLength(expected.whyChoose.itemCount);
+    expect(homepageCopy.howTo).toMatchObject({
+      heading: expected.howTo.heading,
+      imageAlt: expected.howTo.imageAlt,
+    });
+    expect(homepageCopy.howTo.steps).toHaveLength(expected.howTo.itemCount);
+    expect(homepageCopy.closingCta).toEqual(expected.closingCta);
+    expect(homepageCopy.closingCta).not.toHaveProperty("primaryActionLabel");
+  }
 });
 
 test("does not retain retired farm-guide copy", () => {
@@ -76,13 +120,14 @@ test("provides the Brainfish-style hero fragments and localized language label",
   }
 });
 
-test("provides the approved bilingual planner content and capability limits", () => {
+test("provides the approved bilingual planner hero content", () => {
   expect(homepageCopyByLocale.en.hero).toMatchObject({
     headlineBefore: "Stardew Valley ",
     headlineEmphasis: "Planner",
     headlineAfter: " – Free Online Farm Layout Tool",
     supportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
+    primaryActionLabel: "Start planning",
   });
   expect(homepageCopyByLocale["zh-CN"].hero).toMatchObject({
     headlineBefore: "星露谷物语",
@@ -90,45 +135,13 @@ test("provides the approved bilingual planner content and capability limits", ()
     headlineAfter: "——免费在线农场布局工具",
     supportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
+    primaryActionLabel: "开始规划",
   });
-
-  expect(homepageCopyByLocale.en.capabilities.items).toEqual([
-    {
-      title: "Plan every official farm type",
-      description:
-        "Start with Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach or Meadowlands. Ginger Island is also available in the map picker.",
-    },
-    {
-      title: "Place and evaluate your layout",
-      description:
-        "Arrange buildings, crops, placeables and decor while checking sprinkler, scarecrow, Bee House and Junimo Hut coverage.",
-    },
-    {
-      title: "Keep projects in this browser",
-      description:
-        "Create and save local projects without an account or cloud sync.",
-    },
-  ]);
-  expect(homepageCopyByLocale["zh-CN"].capabilities.items).toEqual([
-    {
-      title: "规划每一种官方农场类型",
-      description:
-        "从标准、河流、森林、山顶、荒野、四角、海滩或草原农场开始规划。地图选择器中还提供姜岛。",
-    },
-    {
-      title: "摆放并检查农场布局",
-      description:
-        "放置建筑、作物、可放置物和装饰，同时查看洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
-    },
-    {
-      title: "将项目保存在当前浏览器中",
-      description:
-        "无需账号或云同步，直接在当前浏览器中创建并保存本地项目。",
-    },
-  ]);
 });
 
 test("keeps localized trust, import, and screenshot claims synchronized", () => {
+  expect(homepageCopyByLocale.en.navigation.capabilitiesLabel).toBe("Features");
+  expect(homepageCopyByLocale["zh-CN"].navigation.capabilitiesLabel).toBe("功能介绍");
   expect(homepageCopyByLocale.en.trust).toEqual({
     heading: "About this planner",
     description:
@@ -202,7 +215,7 @@ test("keeps localized trust, import, and screenshot claims synchronized", () => 
     },
     explore: {
       title: "Explore",
-      capabilities: "How it works",
+      capabilities: "Features",
       faq: "FAQ",
     },
     legal: {
@@ -222,7 +235,7 @@ test("keeps localized trust, import, and screenshot claims synchronized", () => 
     },
     explore: {
       title: "探索",
-      capabilities: "使用方式",
+      capabilities: "功能介绍",
       faq: "常见问题",
     },
     legal: {

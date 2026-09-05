@@ -57,9 +57,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
   en: [
     {
       slug: "carpenter-stardew",
-      title: "Carpenter Stardew: Robin’s Shop Hours, Services, and Building Guide",
+      title: "Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades",
       description:
-        "Find Robin’s Carpenter’s Shop in Stardew Valley, check shop hours, choose the right service, and learn how to build, move, or demolish farm buildings.",
+        "Use Robin's Carpenter's Shop for farm buildings, farmhouse upgrades, moves, demolition, and shop supplies, with a placement plan before you order.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 8,
@@ -72,9 +72,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-robin-stardew-valley",
-      title: "Robin's Shop Is Empty? Find Her in Stardew Valley Today",
+      title: "Where Is Robin in Stardew Valley? Hours, Schedule, and Exceptions",
       description:
-        "Learn why Robin leaves the counter, where she goes on Tuesday and Friday, and when rain or farm construction changes the answer today.",
+        "Find Robin at 24 Mountain Road, check Tuesday, Friday, rain, festival, clinic, and construction closures, and plan your Carpenter's Shop trip.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 8,
@@ -87,9 +87,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-npc",
-      title: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
+      title: "Stardew Valley NPC List: Villagers, Marriage Candidates, and Services",
       description:
-        "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
+        "Sort the current Stardew Valley NPC list by marriage, giftable, and non-giftable roles, then plan gifts, schedules, and farm services.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 10,
@@ -117,9 +117,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-stardew-valley-located",
-      title: "Where Is Stardew Valley Located in the Game’s World?",
+      title: "Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory",
       description:
-        "Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+        "Find Stardew Valley on the in-game map: separate Pelican Town, the Farm, and the Ferngill Republic, then test what Harvey's coordinates and Pacific Northwest influences do—and do not—prove.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 11,
@@ -132,9 +132,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
-      title: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+      title: "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes",
       description:
-        "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+        "Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 12,
@@ -147,9 +147,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "sprinkler-stardew",
-      title: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+      title: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
       description:
-        "Match each sprinkler to 4, 8, or 24 tiles, then check radius overlay on your farm map. Pressure nozzles and enrichers cannot share one sprinkler.",
+        "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 10,
@@ -162,9 +162,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "glasshouse-stardew-valley",
-      title: "Glasshouse Stardew Valley: 120 Tiles, Sprinklers Steal 4",
+      title: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
       description:
-        "The glasshouse is the Greenhouse: a 10×12 plot that rain never waters. Repair it, then test which sprinklers sit on the wood border before you plant.",
+        "Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.",
       topic: "Stardew Valley Guides",
       author: "Stardew Valley Planner Team",
       readTimeMinutes: 11,
@@ -179,8 +179,8 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
   "zh-CN": [
     {
       slug: "carpenter-stardew",
-      title: "星露谷物语木匠商店：罗宾位置、营业时间与建筑服务",
-      description: "查找星露谷物语木匠商店，了解罗宾的位置、营业时间，以及农舍升级、建筑建造、移动和拆除方法。",
+      title: "星露谷物语木匠商店：罗宾位置、营业时间、建筑与升级",
+      description: "了解罗宾木匠商店的营业时间、农场建筑、农舍升级、移动和拆除，并在下单前先规划放置位置。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 8,
@@ -193,9 +193,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-robin-stardew-valley",
-      title: "罗宾的商店没人？今天去哪里找她",
+      title: "罗宾在星露谷物语哪里？木匠商店位置、营业时间与行程",
       description:
-        "了解罗宾为什么会离开柜台、周二和周五会去哪里，以及下雨或农场施工会如何改变她当天的行程。",
+        "查找罗宾的 24 Mountain Road 木匠商店，核对周二、周五、雨天、节日、诊所和农场施工例外。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 8,
@@ -208,9 +208,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-npc",
-      title: "星露谷 NPC 指南：礼物、婚姻与服务",
+      title: "星露谷 NPC 名单：可结婚角色、可送礼村民与服务",
       description:
-        "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
+        "按可结婚、可送礼和不可送礼分类整理星露谷 NPC，并核对送礼、好感度、商店服务与农场规划关系。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 10,
@@ -238,9 +238,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-stardew-valley-located",
-      title: "星露谷在游戏世界中位于哪里？",
+      title: "星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点",
       description:
-        "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+        "理清星露谷、鹈鹕镇、农场和芬吉尔共和国的关系，再看哈维坐标与太平洋西北地区影响能否证明现实地点。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 11,
@@ -253,10 +253,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
-      title:
-        "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+      title: "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物",
       description:
-        "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+        "整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 12,
@@ -269,9 +268,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "sprinkler-stardew",
-      title: "星露谷洒水器布局先分清4/8/24格",
+      title: "星露谷洒水器布局：4、8、24格覆盖与摆放",
       description:
-        "覆盖落到池塘、通道或边界时，名义覆盖不会都变成作物格。规划器可叠加洒水器与稻草人范围，导出截图后再照着进游戏摆放。",
+        "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 10,
@@ -284,10 +283,9 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "glasshouse-stardew-valley",
-      title:
-        "星露谷温室布局先别下种：10×12共120格耕地，6个铱制洒水器会占掉4格，先把设备试在木框上再排作物",
+      title: "星露谷物语温室布局：120格耕地与洒水器摆放指南",
       description:
-        "星露谷温室修好后是10×12共120格耕地，雨天仍要自己浇水。先决定洒水器站在木框还是土里：6个铱制占4格、16个优质占12格。用规划器打开温室地图检查洒水器覆盖并导出截图，再照着进游戏下种；果树留在木框外平地，最多可种18棵，成长时周围3×3不要被设备挡住。",
+        "了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。",
       topic: "星露谷物语指南",
       author: "星露谷规划器团队",
       readTimeMinutes: 11,

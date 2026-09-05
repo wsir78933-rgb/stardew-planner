@@ -6,39 +6,38 @@ const VANILLA_NPC_GUIDE_HREF = "/stardew-valley-npc";
 const CARPENTER_HREF = "/carpenter-stardew";
 const PLANNER_HREF = "/#planner";
 
-type SveMarriageGroupRow = Readonly<{
+type MarriageCandidateRow = Readonly<{
   group: string;
   count: string;
   names: ReactNode;
 }>;
 
-type SveAccessGateRow = Readonly<{
+type AccessGateRow = Readonly<{
   candidate: string;
-  appearsInPelicanTown: string;
-  gateToClear: ReactNode;
+  whereToLook: string;
+  accessNote: string;
 }>;
 
-type SveStarterGiftRow = Readonly<{
+type GiftStarterRow = Readonly<{
   candidate: string;
   birthday: string;
-  starterLovedGifts: string;
-  fastNote: string;
+  gifts: string;
+  planningNote: string;
 }>;
 
 export function StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle() {
   return (
     <article>
-      <SveMarriageLead />
-      <SveMarriageQuickList />
-      <SveMarriageListScope />
-      <SveBachelorettes />
-      <SveBachelors />
-      <SveTownAccessGates />
-      <SveStarterLovedGifts />
-      <SveDatingAndMarriageRules />
-      <SveFarmPlanningAfterChoice />
-      <SveMarriageFaq />
-      <SveMarriageSources />
+      <EnglishSVEIntroduction />
+      <EnglishSVERoster />
+      <EnglishSVEAccessOverview />
+      <EnglishSVEBachelorettes />
+      <EnglishSVEBachelors />
+      <EnglishSVEGiftStarters />
+      <EnglishSVEDatingSteps />
+      <EnglishSVEFarmPlanning />
+      <EnglishSVEFaq />
+      <EnglishSVESources />
     </article>
   );
 }
@@ -47,7 +46,7 @@ function VanillaNpcGuideLink({ children }: Readonly<{ children: ReactNode }>) {
   return <a href={VANILLA_NPC_GUIDE_HREF}>{children}</a>;
 }
 
-function PlannerCtaLink({ children }: Readonly<{ children: ReactNode }>) {
+function PlannerLink({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <a className="blog-planner-link" href={PLANNER_HREF}>
       {children}
@@ -55,16 +54,13 @@ function PlannerCtaLink({ children }: Readonly<{ children: ReactNode }>) {
   );
 }
 
-function SveMarriageTableScroll({
+function TableRegion({
   accessibleName,
   children,
-}: Readonly<{
-  accessibleName: string;
-  children: ReactNode;
-}>) {
-  if (typeof accessibleName !== "string" || accessibleName.trim() === "") {
+}: Readonly<{ accessibleName: string; children: ReactNode }>) {
+  if (accessibleName.trim() === "") {
     throw new Error(
-      `SVE marriage table region requires a non-empty accessible name. Received: ${JSON.stringify(accessibleName)}.`,
+      `SVE table region requires a non-empty accessible name. Received: ${JSON.stringify(accessibleName)}.`,
     );
   }
 
@@ -80,35 +76,36 @@ function SveMarriageTableScroll({
   );
 }
 
-function SveMarriageLead() {
+function EnglishSVEIntroduction() {
   return (
     <>
       <p>
-        Stardew Valley Expanded bachelors and bachelorettes: there are 7 of them on a
-        current SVE 1.15.11 save. Four bachelorettes, three bachelors, sitting next to
-        the vanilla 12. A 2021 guide that stops at Claire, Olivia, Sophia, and Victor is
-        missing people. The names now are Claire, Olivia, Scarlett, Sophia, Lance, Magnus,
-        and Victor.
+        Stardew Valley Expanded currently adds seven marriage candidates to the
+        relationship roster: Claire, Lance, Magnus, Olivia, Scarlett, Sophia, and
+        Victor. The SVE Villagers page separates these candidates from villagers who
+        can be befriended but not married. That distinction is the useful answer when a
+        portrait looks romanceable but the bouquet dialogue never appears.
       </p>
       <p>
-        Full gift tables and heart-event branches live on the{" "}
-        <a href="https://stardewvalleyexpanded.wiki.gg/wiki/Villagers">
-          Stardew Valley Expanded Wiki
-        </a>
-        . The original 12 stay on the{" "}
-        <VanillaNpcGuideLink>vanilla NPC guide</VanillaNpcGuideLink>. After you pick
-        someone, leave farmhouse space in the{" "}
-        <a href={PLANNER_HREF}>Stardew Valley Planner</a>.
+        The seven split into four bachelorettes and three bachelors. The base game's
+        twelve candidates remain available, so a save with SVE has a practical pool of
+        nineteen marriage candidates. This guide focuses on the SVE additions; use the{" "}
+        <VanillaNpcGuideLink>vanilla NPC guide</VanillaNpcGuideLink> for the original
+        roster, their gifts, and their town services.
       </p>
       <p>
-        Checked against the SVE Wiki Villagers page and the seven candidate pages on 25
-        August 2026. Mod build on Nexus: SVE 1.15.11.
+        The mod listing used for this check identifies SVE 1.15.11. Candidate pages can
+        change as the mod changes, so treat the tables below as a route into the current
+        Wiki pages, not as a replacement for the full gift and heart-event tables. When
+        you have picked a spouse, sketch the farmhouse and paths in the{" "}
+        <PlannerLink>Stardew Valley Planner</PlannerLink> before committing to a crowded
+        farm layout.
       </p>
     </>
   );
 }
 
-function sveMarriageGroupRows(): readonly SveMarriageGroupRow[] {
+function marriageCandidateRows(): readonly MarriageCandidateRow[] {
   return [
     {
       group: "SVE bachelorettes",
@@ -121,39 +118,28 @@ function sveMarriageGroupRows(): readonly SveMarriageGroupRow[] {
       names: "Lance, Magnus, Victor",
     },
     {
-      group: "SVE marriage candidates",
+      group: "SVE additions",
       count: "7",
-      names: "The seven names above",
+      names: "Claire, Lance, Magnus, Olivia, Scarlett, Sophia, Victor",
     },
     {
-      group: "Vanilla marriage candidates (unchanged)",
+      group: "Vanilla candidates still present",
       count: "12",
-      names: (
-        <>
-          See the <VanillaNpcGuideLink>vanilla NPC guide</VanillaNpcGuideLink>
-        </>
-      ),
-    },
-    {
-      group: "Total marriage candidates with SVE installed",
-      count: "19",
-      names: "Vanilla 12 + SVE 7",
+      names: <VanillaNpcGuideLink>See the vanilla NPC guide</VanillaNpcGuideLink>,
     },
   ];
 }
 
-function SveMarriageQuickList() {
-  const groupRows = sveMarriageGroupRows();
-  if (groupRows.length === 0) {
-    throw new Error(
-      `SVE marriage group table requires at least one row. Received: length ${groupRows.length}.`,
-    );
+function EnglishSVERoster() {
+  const rows = marriageCandidateRows();
+  if (rows.length === 0) {
+    throw new Error(`SVE roster requires rows. Received: ${rows.length}.`);
   }
 
   return (
     <>
-      <h2>Stardew Valley Expanded bachelors and bachelorettes: the quick list</h2>
-      <SveMarriageTableScroll accessibleName="Stardew Valley Expanded marriage groups">
+      <h2>Stardew Valley Expanded marriage candidates at a glance</h2>
+      <TableRegion accessibleName="Stardew Valley Expanded marriage candidate roster">
         <table className="blog-data-table">
           <thead>
             <tr>
@@ -163,668 +149,501 @@ function SveMarriageQuickList() {
             </tr>
           </thead>
           <tbody>
-            {groupRows.map((groupRow) => {
-              if (groupRow.group.trim() === "" || groupRow.count.trim() === "") {
+            {rows.map((row) => {
+              if (row.group.trim() === "" || row.count.trim() === "") {
                 throw new Error(
-                  `SVE marriage group table row is missing group or count. Received group: ${JSON.stringify(groupRow.group)}, count: ${JSON.stringify(groupRow.count)}.`,
+                  `SVE roster row requires group and count. Received group: ${JSON.stringify(row.group)}, count: ${JSON.stringify(row.count)}.`,
                 );
               }
 
               return (
-                <tr key={groupRow.group}>
-                  <td>{groupRow.group}</td>
-                  <td>{groupRow.count}</td>
-                  <td>{groupRow.names}</td>
+                <tr key={row.group}>
+                  <td>{row.group}</td>
+                  <td>{row.count}</td>
+                  <td>{row.names}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-      </SveMarriageTableScroll>
+      </TableRegion>
       <p>
-        They take gifts and run heart events. Dating still starts with a Bouquet, and
-        marriage still needs a Mermaid&apos;s Pendant. Martin, Andy, Susan, Morris, Marlon,
-        and the other befriendable SVE villagers are not on this list.
+        The short version is seven SVE additions, not seven characters in the whole
+        game. The original twelve are not removed or replaced. A character being
+        friendly, having a portrait, or appearing in a heart event does not by itself
+        make that character a marriage candidate.
       </p>
     </>
   );
 }
 
-function SveMarriageListScope() {
-  return (
-    <>
-      <h2>What this SVE marriage list includes</h2>
-      <p>
-        &quot;Bachelors and bachelorettes&quot; here means current SVE marriage candidates, not
-        every new face in the mod. The Villagers page also lists people you can befriend
-        and people you cannot gift. Those columns are not the marriage list.
-      </p>
-      <p>
-        The vanilla twelve are still there: Alex, Elliott, Harvey, Sam, Sebastian, Shane,
-        Abigail, Emily, Haley, Leah, Maru, and Penny. Use the{" "}
-        <VanillaNpcGuideLink>vanilla gifts, marriage, and services</VanillaNpcGuideLink>{" "}
-        page for them.
-      </p>
-      <p>
-        The SVE seven are in the table above. Magnus is the Wizard. He already lived in
-        the tower. Expanded makes him dateable.
-      </p>
-      <p>
-        Andy, Apples, Gunther, Henchman, Marlon, Martin, Morgan, Morris, and Susan are
-        befriendable on the current Villagers page. They are not marriage candidates.
-        Alesia, Isaac, and Camilla are planned for later updates. They are not current
-        bachelors or bachelorettes.
-      </p>
-      <p>
-        If a character is missing from town, use the access table below before you assume
-        the roster is wrong.
-      </p>
-    </>
-  );
-}
-
-function ClaireProfile() {
-  return (
-    <>
-      <h3>Claire</h3>
-      <p>
-        Watch her 6-heart event while she still has a job. Claire only comes to Pelican
-        Town on work days. If JojaMart closes and you have not seen that event, she has no
-        reason to show up. Do this even if you never plan to marry her.
-      </p>
-      <p>
-        She buses in as a JojaMart cashier. Finish the Community Center and unlock the
-        movie theater, and she works the concession stand instead. Her house at 103
-        Prairie Road is not accessible. Birthday: Fall 8.
-      </p>
-      <p>
-        Loved gifts to start with, from the SVE Wiki: Apricot, Glazed Butterfish, Green
-        Tea, Mixed Berry Pie, Sunflower.
-      </p>
-      <p>
-        After marriage she keeps the Joja or theater shift and takes Friday and rainy days
-        off. Outside, she turns the spouse area into a small garden for tea saplings.
-      </p>
-    </>
-  );
-}
-
-function OliviaProfile() {
-  return (
-    <>
-      <h3>Olivia</h3>
-      <p>
-        Olivia&apos;s loved gifts are a rough year 1. Wine, Blue Moon Wine, Chocolate Cake,
-        Goldenrod. Blue Moon Wine comes from Sophia&apos;s ledger at Blue Moon Vineyard, so an
-        Olivia save often walks Sophia&apos;s map even if you never date Sophia.
-      </p>
-      <p>
-        She lives at Jenkins&apos; Residence with her son Victor, east of Pierre&apos;s. Retired.
-        Birthday: Spring 15.
-      </p>
-      <p>
-        Dating Olivia and Victor at the same time fires an extra event inside Jenkins&apos;
-        Residence. Without a Rabbit&apos;s Foot in your inventory, they confront you and you
-        lose a large friendship chunk with both. Carry a Rabbit&apos;s Foot in and they greet
-        you instead; you lose no points.
-      </p>
-    </>
-  );
-}
-
-function SophiaProfile() {
-  return (
-    <>
-      <h3>Sophia</h3>
-      <p>
-        If you want Scarlett, you go through Sophia first. Sophia&apos;s 2-heart event is the
-        first meeting. Her 8-heart event is one of the locks before Scarlett becomes
-        giftable.
-      </p>
-      <p>
-        Sophia runs Blue Moon Vineyard west of Pelican Town. She is shy with strangers and
-        close with Scarlett, Victor, Emily, Haley, and Gus. Birthday: Winter 27.
-      </p>
-      <p>
-        Fairy Rose, Grampleton Orange Chicken, and Puppyfish are easy loved-gift starters.
-        The chicken is sold at the Saloon. She also peels off to Harvey&apos;s Clinic on a
-        regular cycle, so the vineyard is empty some days.
-      </p>
-    </>
-  );
-}
-
-function ScarlettProfile() {
-  return (
-    <>
-      <h3>Scarlett</h3>
-      <p>
-        Scarlett is not a town bachelorette on day one. You meet her in Sophia&apos;s 2-heart
-        event, while her father is buying animal goods at Marnie&apos;s. She becomes giftable
-        after Sophia&apos;s 8-heart event and after you restore the Community Center or
-        complete the Joja development form. Festivals come after that.
-      </p>
-      <p>
-        She lives at 106 Pondwood Road in the Pondwood Suburbs. Farmhand for Andy in
-        spring and Susan in summer. Birthday: Summer 7.
-      </p>
-      <p>Grampleton Orange Chicken, Blueberry Tart, Baked Berry Oatmeal.</p>
-    </>
-  );
-}
-
-function SveBachelorettes() {
-  return (
-    <>
-      <h2>The 4 SVE bachelorettes</h2>
-      <ClaireProfile />
-      <OliviaProfile />
-      <SophiaProfile />
-      <ScarlettProfile />
-    </>
-  );
-}
-
-function LanceProfile() {
-  return (
-    <>
-      <h3>Lance</h3>
-      <p>
-        Do not plan a spring year 1 Bouquet rush. Lance&apos;s regular schedule starts after
-        the Forge introduction cutscene. Until that plays, there is no Pelican Town gift
-        loop. Afterward he rotates Castle Village Outpost, the Adventurer&apos;s Guild, Ginger
-        Island, and the Highlands.
-      </p>
-      <p>
-        He is a combat mage and second-in-command of the First Slash Guild. Birthday:
-        Spring 8. Address: First Slash Guild Hall.
-      </p>
-      <p>
-        Monster Mushroom, Pineapple Custard Crepe, Tropical Curry to start. A lot of his
-        other loves are late-game fish, mushrooms, and combat loot.
-      </p>
-    </>
-  );
-}
-
-function MagnusProfile() {
-  return (
-    <>
-      <h3>Magnus</h3>
-      <p>
-        Magnus Rasmodius is the Wizard. In vanilla he takes gifts and you cannot marry
-        him. In SVE he is one of the three bachelors. Birthday: Winter 17. Address:
-        Wizard&apos;s Tower.
-      </p>
-      <p>
-        Void Delight, Void Salmon Sushi, Solar Essence, Void Essence. Combat and void
-        items land better than crops.
-      </p>
-      <p>
-        Once married, Magnus still works from the Wizard&apos;s Tower on weekdays and stays on
-        the farm Friday, Saturday, and Sunday. After Morgan arrives in year 3, the 7th and
-        26th may keep him out that evening. After you meet Camilla, Monday nights on the
-        farm drop too. Do not lay out the farm as if he is home every night.
-      </p>
-    </>
-  );
-}
-
-function VictorProfile() {
-  return (
-    <>
-      <h3>Victor</h3>
-      <p>
-        Victor is in town from the first day of an SVE save. No Ginger Island gate. No
-        Sophia heart gate. The catch is the house he shares with Olivia, including the
-        extra event if you date both.
-      </p>
-      <p>
-        He finished an engineering degree and does not have a settled job in town.
-        Birthday: Summer 23. Jenkins&apos; Residence, same building as Olivia.
-      </p>
-      <p>
-        Battery Pack, Duck Feather, Spaghetti, Blue Moon Wine. The first two come off the
-        farm. The wine points back at Sophia&apos;s vineyard.
-      </p>
-    </>
-  );
-}
-
-function SveBachelors() {
-  return (
-    <>
-      <h2>The 3 SVE bachelors</h2>
-      <LanceProfile />
-      <MagnusProfile />
-      <VictorProfile />
-    </>
-  );
-}
-
-function sveAccessGateRows(): readonly SveAccessGateRow[] {
-  return [
+function EnglishSVEAccessOverview() {
+  const rows: readonly AccessGateRow[] = [
     {
-      candidate: "Olivia",
-      appearsInPelicanTown: "Yes, from the start",
-      gateToClear: "None beyond normal schedules",
+      candidate: "Claire",
+      whereToLook: "Her work location in Pelican Town",
+      accessNote: "She appears on work days; see her 6-heart event before she is left without a reason to come to town.",
     },
     {
-      candidate: "Victor",
-      appearsInPelicanTown: "Yes, from the start",
-      gateToClear: "None beyond normal schedules",
+      candidate: "Olivia",
+      whereToLook: "Jenkins' Residence",
+      accessNote: "Her candidate page places her there with Victor; follow her normal schedule.",
     },
     {
       candidate: "Sophia",
-      appearsInPelicanTown: "At Blue Moon Vineyard from the start",
-      gateToClear: "None to meet; Clinic days pull her off the farm",
-    },
-    {
-      candidate: "Claire",
-      appearsInPelicanTown: "Only on work days",
-      gateToClear:
-        "See the 6-heart event before JojaMart closes, or she stops entering town",
+      whereToLook: "Blue Moon Vineyard",
+      accessNote: "Her candidate page places her at the vineyard west of Pelican Town.",
     },
     {
       candidate: "Scarlett",
-      appearsInPelicanTown: "Not as a giftable villager at start",
-      gateToClear:
-        "Sophia 2-heart to meet; Sophia 8-heart plus Community Center or Joja form to gift",
-    },
-    {
-      candidate: "Magnus",
-      appearsInPelicanTown: "Wizard's Tower",
-      gateToClear: "Tower access, same as vanilla",
+      whereToLook: "Sophia's heart-event path first",
+      accessNote: "Meet her in Sophia's 2-heart event, then complete Sophia's 8-heart event and either the Community Center or Joja development route before gifting.",
     },
     {
       candidate: "Lance",
-      appearsInPelicanTown: "Not on a town loop at start",
-      gateToClear: "Forge introduction cutscene, then a multi-map rotation",
+      whereToLook: "Forge and later SVE locations",
+      accessNote: "His regular schedule starts after the Forge introduction cutscene.",
+    },
+    {
+      candidate: "Magnus",
+      whereToLook: "Wizard's Tower",
+      accessNote: "The Magnus page identifies him as the Wizard and an SVE bachelor; use his schedule rather than a regular-town search.",
+    },
+    {
+      candidate: "Victor",
+      whereToLook: "Jenkins' Residence and his town route",
+      accessNote: "His candidate page places him with Olivia and describes his museum, park, ocean, and arcade routines.",
     },
   ];
-}
 
-function SveTownAccessGates() {
-  const accessGateRows = sveAccessGateRows();
-  if (accessGateRows.length === 0) {
-    throw new Error(
-      `SVE access-gate table requires at least one row. Received: length ${accessGateRows.length}.`,
-    );
+  if (rows.length !== 7) {
+    throw new Error(`SVE access table must contain seven candidates. Received: ${rows.length}.`);
   }
 
   return (
     <>
-      <h2>Who is missing from town, and why</h2>
+      <h2>Check the access gate before assuming someone is missing</h2>
       <p>
-        If a Stardew Valley Expanded bachelor or bachelorette is missing from town, check
-        the gate before you check the wiki roster.
+        SVE spreads its candidates across work schedules, a vineyard, a wizard's tower,
+        and locations outside the normal town loop. The most useful troubleshooting
+        step is to identify the candidate's gate first, then check the schedule for that
+        unlocked state.
       </p>
-      <SveMarriageTableScroll accessibleName="Stardew Valley Expanded candidate access gates">
+      <TableRegion accessibleName="SVE candidate access gates">
         <table className="blog-data-table">
           <thead>
             <tr>
               <th scope="col">Candidate</th>
-              <th scope="col">Appears in Pelican Town?</th>
-              <th scope="col">Gate you must clear</th>
+              <th scope="col">Where to look</th>
+              <th scope="col">Access note</th>
             </tr>
           </thead>
           <tbody>
-            {accessGateRows.map((accessGateRow) => {
-              if (
-                accessGateRow.candidate.trim() === "" ||
-                accessGateRow.appearsInPelicanTown.trim() === ""
-              ) {
-                throw new Error(
-                  `SVE access-gate table row is missing candidate or appearance. Received candidate: ${JSON.stringify(accessGateRow.candidate)}, appearsInPelicanTown: ${JSON.stringify(accessGateRow.appearsInPelicanTown)}.`,
-                );
-              }
-
-              return (
-                <tr key={accessGateRow.candidate}>
-                  <td>{accessGateRow.candidate}</td>
-                  <td>{accessGateRow.appearsInPelicanTown}</td>
-                  <td>{accessGateRow.gateToClear}</td>
-                </tr>
-              );
-            })}
+            {rows.map((row) => (
+              <tr key={row.candidate}>
+                <td>{row.candidate}</td>
+                <td>{row.whereToLook}</td>
+                <td>{row.accessNote}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </SveMarriageTableScroll>
+      </TableRegion>
       <p>
-        Andy, Martin, and Susan look dateable because they have portraits, dialogue, and
-        jobs. On the current Villagers page they are befriendable, not marriageable.
+        Scarlett is the clearest example of an event gate, while Claire and Lance are
+        schedule problems that look like missing-character bugs. If the target is not
+        listed as single in the Social tab after the relevant gate, check the candidate
+        page and your save's event progress before spending rare gifts.
       </p>
     </>
   );
 }
 
-function sveStarterGiftRows(): readonly SveStarterGiftRow[] {
+function EnglishSVEBachelorettes() {
+  return (
+    <>
+      <h2>The four SVE bachelorettes</h2>
+      <h3>Claire</h3>
+      <p>
+        Claire lives in the countryside outside Pelican Town and buses in to work as a
+        JojaMart cashier. That makes her different from a town resident with an
+        all-season route: her page says she appears in Pelican Town on days she works.
+        If the Community Center is complete and the movie theater is unlocked, her work
+        location changes to the theater.
+      </p>
+      <p>
+        The practical Claire check is the 6-heart event. Her page notes that a temporarily
+        unemployed Claire has no reason to enter town unless that event has been seen.
+        For early gifts, Apricot, Green Tea, Sunflower, Mixed Berry Pie, and Glazed
+        Butterfish are readable starting points from her loves table. Her full schedule
+        and exclusions belong to the linked Wiki page.
+      </p>
+
+      <h3>Olivia</h3>
+      <p>
+        Olivia lives at Jenkins' Residence with her son Victor, east of the General Store
+        and north of 1 River Road. Her route is therefore a residence-and-town question,
+        not a vineyard question. The character page also describes her as someone who
+        has retired from JojaCo and now spends time around art, wine, and the people of
+        Pelican Town.
+      </p>
+      <p>
+        Wine, Blue Moon Wine, Chocolate Cake, and Goldenrod are useful starter examples
+        from the current gift notes. Blue Moon Wine also connects her route to Sophia's
+        Blue Moon Vineyard, which is a helpful map clue when you are planning one gift
+        run for more than one SVE candidate. Check Olivia's own table before treating
+        any short list as exhaustive.
+      </p>
+
+      <h3>Sophia</h3>
+      <p>
+        Sophia lives and farms at Blue Moon Vineyard west of Pelican Town. Her page
+        describes her as shy, with interests in anime, manga, and cosplay. Fairy Rose,
+        Grampleton Orange Chicken, and Puppyfish are convenient examples from her loved
+        gifts. The full table includes SVE-specific items, so the best gift is often the
+        one your current farm can produce rather than the rarest item on the page.
+      </p>
+      <p>
+        Sophia is also the route into Scarlett. Scarlett's page says their first meeting
+        occurs during Sophia's 2-heart event. If Scarlett is your target, raise Sophia
+        far enough to see that event and continue to the 8-heart gate before deciding
+        that Scarlett is absent from the save.
+      </p>
+
+      <h3>Scarlett</h3>
+      <p>
+        Scarlett is not a day-one giftable town resident. Her page places her at 106
+        Pondwood Road in the Pondwood Suburbs and says she first appears during Sophia's
+        2-heart event. She becomes giftable after Sophia's 8-heart event plus one of two
+        world-state routes: repair the Community Center or complete the Joja development
+        form.
+      </p>
+      <p>
+        Her early gifts include Baked Berry Oatmeal, Cheese Charcuterie, Grampleton
+        Orange Chicken, Large Goat Milk, Maple Syrup, and Cherry. She works as a farmhand
+        for Andy in spring and Susan in summer, so her schedule is a better search key
+        than the center of Pelican Town. Festivals come after the access step described
+        above.
+      </p>
+    </>
+  );
+}
+
+function EnglishSVEBachelors() {
+  return (
+    <>
+      <h2>The three SVE bachelors</h2>
+      <h3>Lance</h3>
+      <p>
+        Lance is a combat mage and second-in-command of the First Slash Guild. His page
+        says his regular schedule begins after you view his introduction cutscene at the
+        Forge. Once that happens, he rotates through Castle Village Outpost, the
+        Adventurer's Guild, Ginger Island, and the Highlands. Searching only the usual
+        Pelican Town routes will miss the point of his schedule.
+      </p>
+      <p>
+        Monster Mushroom, Pineapple Custard Crepe, Tropical Curry, Gemfish, and Daggerfish
+        are useful examples from his current loves tables. Because many of his gifts are
+        connected to combat, fishing, or later SVE areas, Lance is a candidate to plan
+        for rather than a candidate to rush in the first spring.
+      </p>
+
+      <h3>Magnus</h3>
+      <p>
+        Magnus Rasmodius is the Wizard. His SVE page identifies him as one of the
+        bachelors available in the expansion and points readers to the vanilla Wizard
+        page for canon information about the character. In other words, the name is
+        Magnus on the SVE route, while the tower remains the obvious starting location.
+      </p>
+      <p>
+        Frog Legs, Void Delight, Void Salmon Sushi, Ancient Fiber, Void Root, and the
+        elixir entries on his loves table are practical examples. His page has separate
+        schedule sections for rain, later-year deviations, and marriage, so use that
+        schedule when a tower visit does not find him.
+      </p>
+
+      <h3>Victor</h3>
+      <p>
+        Victor lives with Olivia at Jenkins' Residence. His page describes a recent
+        engineering graduate who is still deciding what he wants to do, and it places
+        him around the museum, park, ocean, arcade games, and books. That gives Victor a
+        very different feel from Lance's travel-heavy route and Magnus's tower route.
+      </p>
+      <p>
+        Ramen, Spaghetti, Duck Feather, Battery Pack, Blue Moon Wine, and Ancient Fiber
+        are starter examples from his loves table. The first two farm-friendly choices
+        are especially easy to understand: Duck Feather comes from ducks and Battery
+        Pack comes from a Lightning Rod. Use the full Victor page for every exception.
+      </p>
+    </>
+  );
+}
+
+function GiftStarterRows(): readonly GiftStarterRow[] {
   return [
     {
       candidate: "Olivia",
       birthday: "Spring 15",
-      starterLovedGifts: "Wine, Blue Moon Wine, Chocolate Cake, Goldenrod",
-      fastNote: "Expensive early; vineyard wine is a reliable path",
+      gifts: "Wine, Blue Moon Wine, Chocolate Cake, Goldenrod",
+      planningNote: "Wine route points toward Sophia's vineyard",
     },
     {
       candidate: "Lance",
       birthday: "Spring 8",
-      starterLovedGifts: "Monster Mushroom, Pineapple Custard Crepe, Tropical Curry",
-      fastNote: "Late combat / island loot",
+      gifts: "Monster Mushroom, Pineapple Custard Crepe, Tropical Curry",
+      planningNote: "Expect later-area and combat-related options",
     },
     {
       candidate: "Scarlett",
       birthday: "Summer 7",
-      starterLovedGifts: "Grampleton Orange Chicken, Blueberry Tart, Baked Berry Oatmeal",
-      fastNote: "Not giftable until Sophia's 8-heart gate",
+      gifts: "Baked Berry Oatmeal, Cheese Charcuterie, Grampleton Orange Chicken",
+      planningNote: "Unlock gifting through Sophia first",
     },
     {
       candidate: "Victor",
       birthday: "Summer 23",
-      starterLovedGifts: "Battery Pack, Duck Feather, Spaghetti, Blue Moon Wine",
-      fastNote: "In town from day one",
+      gifts: "Ramen, Spaghetti, Duck Feather, Battery Pack",
+      planningNote: "Two farm-friendly examples are easy to map",
     },
     {
       candidate: "Claire",
       birthday: "Fall 8",
-      starterLovedGifts: "Apricot, Glazed Butterfish, Green Tea, Mixed Berry Pie, Sunflower",
-      fastNote: "Gift her on work days; protect the 6-heart event",
+      gifts: "Apricot, Green Tea, Sunflower, Mixed Berry Pie",
+      planningNote: "Search her work route before gifting",
     },
     {
       candidate: "Magnus",
       birthday: "Winter 17",
-      starterLovedGifts: "Void Delight, Void Salmon Sushi, Solar Essence, Void Essence",
-      fastNote: "Combat / void items",
+      gifts: "Frog Legs, Void Delight, Void Salmon Sushi",
+      planningNote: "Check the tower schedule and item exclusions",
     },
     {
       candidate: "Sophia",
       birthday: "Winter 27",
-      starterLovedGifts: "Fairy Rose, Grampleton Orange Chicken, Puppyfish",
-      fastNote: "Saloon chicken is an easy loved gift",
+      gifts: "Fairy Rose, Grampleton Orange Chicken, Puppyfish",
+      planningNote: "Her route also opens Scarlett's path",
     },
   ];
 }
 
-function SveStarterLovedGifts() {
-  const starterGiftRows = sveStarterGiftRows();
-  if (starterGiftRows.length === 0) {
-    throw new Error(
-      `SVE starter-gift table requires at least one row. Received: length ${starterGiftRows.length}.`,
-    );
+function EnglishSVEGiftStarters() {
+  const rows = GiftStarterRows();
+  if (rows.length !== 7) {
+    throw new Error(`SVE gift table must contain seven candidates. Received: ${rows.length}.`);
   }
 
   return (
     <>
       <h2>Starter loved gifts and birthdays</h2>
       <p>
-        The gifts below are wiki infobox and loves-table starters, not the full taste
-        list. Universal loves still apply unless a candidate page excludes them. Check
-        that page before you spend a rare item.
+        This is a short planning list, not a replacement for each candidate's complete
+        Gift Tastes table. The SVE pages also include universal gifts, SVE-specific
+        items, movie preferences, and exceptions. Use the table to choose a route for
+        the next few gifts, then open the character page before spending a rare item on
+        a birthday.
       </p>
-      <SveMarriageTableScroll accessibleName="Stardew Valley Expanded starter loved gifts">
+      <TableRegion accessibleName="SVE starter loved gifts and birthdays">
         <table className="blog-data-table">
           <thead>
             <tr>
               <th scope="col">Candidate</th>
               <th scope="col">Birthday</th>
               <th scope="col">Starter loved gifts</th>
-              <th scope="col">Fast note</th>
+              <th scope="col">Planning note</th>
             </tr>
           </thead>
           <tbody>
-            {starterGiftRows.map((starterGiftRow) => {
-              if (
-                starterGiftRow.candidate.trim() === "" ||
-                starterGiftRow.birthday.trim() === "" ||
-                starterGiftRow.starterLovedGifts.trim() === ""
-              ) {
-                throw new Error(
-                  `SVE starter-gift table row is missing candidate, birthday, or gifts. Received candidate: ${JSON.stringify(starterGiftRow.candidate)}, birthday: ${JSON.stringify(starterGiftRow.birthday)}, starterLovedGifts: ${JSON.stringify(starterGiftRow.starterLovedGifts)}.`,
-                );
-              }
-
-              return (
-                <tr key={starterGiftRow.candidate}>
-                  <td>{starterGiftRow.candidate}</td>
-                  <td>{starterGiftRow.birthday}</td>
-                  <td>{starterGiftRow.starterLovedGifts}</td>
-                  <td>{starterGiftRow.fastNote}</td>
-                </tr>
-              );
-            })}
+            {rows.map((row) => (
+              <tr key={row.candidate}>
+                <td>{row.candidate}</td>
+                <td>{row.birthday}</td>
+                <td>{row.gifts}</td>
+                <td>{row.planningNote}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </SveMarriageTableScroll>
+      </TableRegion>
       <p>
-        Birthday gifts still use the vanilla multiplier. Two gifts per week, birthday
-        excepted. SVE does not replace those rules.
+        Birthday gifts and the weekly gift limit are still explained by the vanilla
+        friendship rules. The SVE-specific part is the candidate's route, item list, and
+        heart-event path. Keep those two layers separate while planning a year-one
+        routine.
       </p>
     </>
   );
 }
 
-function SveDatingAndMarriageRules() {
+function EnglishSVEDatingSteps() {
   return (
     <>
-      <h2>Dating and marriage rules that still apply</h2>
-      <p>Friendship, dating, and marriage use the vanilla thresholds:</p>
-      <ol>
-        <li>Talk and gift to 8 hearts.</li>
-        <li>
-          Give a Bouquet from Pierre to start dating. The meter then opens to 10 hearts
-          for that candidate.
-        </li>
-        <li>
-          Upgrade the farmhouse far enough for a spouse.{" "}
-          <a href={CARPENTER_HREF}>Robin&apos;s build and upgrade menu</a> is the vanilla
-          carpenter flow.
-        </li>
-        <li>
-          Give a Mermaid&apos;s Pendant from the Old Mariner (rain, repaired beach bridge,
-          5,000g) at 10 hearts.
-        </li>
-      </ol>
+      <h2>Use the vanilla dating and marriage sequence after the SVE gate</h2>
       <p>
-        SVE uses that same sequence. What changes is where you stand to trigger events,
-        and which new items they like. There is no second Bouquet.
-      </p>
-      <p>
-        Jealousy, break-ups, and dating more than one person still exist. Olivia and
-        Victor share a house. Dating both triggers that extra Jenkins&apos; Residence event.
-        A Rabbit&apos;s Foot in inventory turns the confrontation into a friendly greeting.
-      </p>
-      <p>Krobus remains a roommate path, not an SVE bachelor.</p>
-    </>
-  );
-}
-
-function SveFarmPlanningAfterChoice() {
-  return (
-    <>
-      <h2>After you choose a candidate, plan the farm</h2>
-      <p>
-        Marriage moves a spouse into the farmhouse and adds a spouse room. That does not
-        pin everyone to the farm. Claire keeps a work shift, Lance still runs guild and
-        island maps, and Magnus still has the tower. Lay the farm out before the wedding.
-        Choose among the Stardew Valley Expanded bachelors and bachelorettes first, then
-        place the farm.
+        The Stardew Valley marriage guide documents the general relationship sequence.
+        Apply it after the SVE candidate is visible and giftable; the individual SVE
+        pages remain the authority for each character's access gate and heart events.
       </p>
       <ol>
         <li>
-          Pick the candidate using the access table. Scarlett is a bad year 1 daily gift
-          target. Lance is a bad target before the Forge intro.
+          Raise friendship to 8 hearts. Marriage candidates pause at that point until
+          you show romantic intent.
         </li>
         <li>
-          Open the <PlannerCtaLink>Stardew Valley Planner</PlannerCtaLink> and reserve
-          farmhouse space, a clear path to the shipping bin, and room for the spouse tile
-          that every married farm uses.
+          Buy a Bouquet from Pierre's General Store and give it to the candidate. That
+          changes the Social tab status and lets the relationship progress to 10 hearts.
         </li>
         <li>
-          If you play SVE&apos;s farm maps, switch the editor to Grandpa&apos;s Farm, Frontier Farm,
-          or Immersive Farm 2. Those maps are already in the planner editor. The public
-          mods marketing page is gone. There is no separate mods marketing URL.
+          Upgrade the farmhouse at least once and repair the bridge to the Tide Pools.
+          The linked <a href={CARPENTER_HREF}>carpenter guide</a> covers the building
+          side of that preparation.
         </li>
         <li>
-          Keep vanilla relationship math on the{" "}
-          <VanillaNpcGuideLink>vanilla NPC guide</VanillaNpcGuideLink>. This planner does
-          not record hearts, gift counts, or character positions.
+          Reach 10 hearts, then buy the Mermaid's Pendant from the Old Mariner on a rainy
+          day for 5,000g and give it to the person you want to marry.
+        </li>
+        <li>
+          Allow the wedding schedule to complete, then use the spouse area and farmhouse
+          layout as the new constraint for your farm plan.
         </li>
       </ol>
       <p>
-        Projects stay in this browser. There is no account and no NPC tracker. Use the
-        planner for footprints and paths, then handle gifts in-game.
+        You can date more than one eligible candidate, but the vanilla game has group
+        heart-event and cold-shoulder consequences for dating every bachelor or every
+        bachelorette. If you want one clean relationship route, choose one candidate and
+        spend your weekly gifts consistently.
       </p>
     </>
   );
 }
 
-function sveMarriageFaqItems(): readonly BlogFaqItem[] {
-  return [
-    {
-      question: "How many Stardew Valley Expanded bachelors and bachelorettes are there?",
-      answer: (
-        <p>
-          Seven current marriage candidates. Four bachelorettes: Claire, Olivia,
-          Scarlett, Sophia. Three bachelors: Lance, Magnus, Victor. That sits on top of
-          the vanilla 12. Alesia, Isaac, and Camilla are planned for later updates and do
-          not count today.
-        </p>
-      ),
-    },
-    {
-      question: "Who can you marry in Stardew Valley Expanded?",
-      answer: (
-        <p>
-          The seven names above, plus the original twelve if you still want a vanilla
-          spouse. Andy, Martin, Susan, Morris, Marlon, and the other befriendable SVE NPCs
-          are not marriage candidates on the current Villagers page.
-        </p>
-      ),
-    },
-    {
-      question: "Is the Wizard marriageable in Stardew Valley Expanded?",
-      answer: (
-        <p>
-          Yes. In SVE the Wizard is listed as Magnus and is one of the three bachelors. In
-          vanilla he is giftable and not marriageable. Use the{" "}
-          <VanillaNpcGuideLink>vanilla NPC guide</VanillaNpcGuideLink> for the
-          non-marriage Wizard role, and this page for the SVE romance path.
-        </p>
-      ),
-    },
-    {
-      question: "Why can't I find Claire or Scarlett?",
-      answer: (
-        <p>
-          Claire only visits on work days and stops coming if JojaMart closes before her
-          6-heart event. Scarlett is not giftable at the start of the save. Meet her in
-          Sophia&apos;s 2-heart event. Unlock gifting after Sophia&apos;s 8-heart event plus
-          Community Center or Joja completion.
-        </p>
-      ),
-    },
-    {
-      question: "Does this page replace the vanilla NPC list?",
-      answer: (
-        <p>
-          No. Vanilla gifts, the original 12, and service NPCs such as Robin and Marnie
-          stay on <VanillaNpcGuideLink>stardew-valley-npc</VanillaNpcGuideLink>. This page
-          is only the SVE marriage add-on.
-        </p>
-      ),
-    },
-  ];
+function EnglishSVEFarmPlanning() {
+  return (
+    <>
+      <h2>Plan the farm after you choose a candidate</h2>
+      <p>
+        Choosing a spouse changes the question from “where do I find this NPC?” to
+        “what must stay open around the farmhouse?” Leave room for a spouse area, a clear
+        path to the shipping box, and the crop or animal systems that supply your chosen
+        candidate's easiest gifts. This is especially helpful when the gift route points
+        toward a vineyard, a lightning rod, a kitchen, or a later SVE location.
+      </p>
+      <p>
+        There is no single best SVE spouse for every farm. A vineyard-focused save may
+        make Sophia's route feel natural, while a farm with ducks and lightning rods has
+        an obvious starting point for Victor's listed gifts. A player who enjoys the
+        expansion's combat areas may prefer to build a routine around Lance or Magnus.
+        The useful comparison is not a tier list; it is the distance between your
+        existing production, the candidate's access gate, and the route you will
+        actually walk each week. Pick the option that makes your current save easier to
+        play.
+      </p>
+      <ol>
+        <li>Use the roster table to separate a true candidate from a befriendable NPC.</li>
+        <li>Use the access table to identify the event or schedule gate.</li>
+        <li>Pick two or three repeatable gifts instead of designing around every rare love.</li>
+        <li>
+          Open the <PlannerLink>Stardew Valley Planner</PlannerLink> and reserve farmhouse
+          space, walkable paths, fields, and production areas before decorating.
+        </li>
+      </ol>
+      <p>
+        The planner is for testing placement and layout ideas. It does not replace the
+        SVE Wiki's gift tables, event conditions, or schedule pages. Keep the factual
+        lookup and the farm drawing as two small jobs, and the decision is much easier to
+        revisit when the save changes.
+      </p>
+    </>
+  );
 }
 
-function SveMarriageFaq() {
+const englishFaqItems: readonly BlogFaqItem[] = [
+  {
+    question: "How many Stardew Valley Expanded marriage candidates are there?",
+    answer: (
+      <p>
+        The current SVE Villagers page lists seven: Claire, Lance, Magnus, Olivia,
+        Scarlett, Sophia, and Victor. They are additions to the twelve vanilla marriage
+        candidates, not a replacement for them.
+      </p>
+    ),
+  },
+  {
+    question: "Who can you marry in Stardew Valley Expanded?",
+    answer: (
+      <p>
+        The SVE additions are Claire, Olivia, Scarlett, Sophia, Lance, Magnus, and
+        Victor. You can also marry the original twelve; use the{" "}
+        <VanillaNpcGuideLink>vanilla NPC guide</VanillaNpcGuideLink> for that roster.
+      </p>
+    ),
+  },
+  {
+    question: "Is the Wizard marriageable in Stardew Valley Expanded?",
+    answer: (
+      <p>
+        The SVE Magnus page identifies the Wizard as one of the expansion's bachelors.
+        Start with his SVE schedule and gift table, then use the vanilla Wizard page for
+        canon details about the character.
+      </p>
+    ),
+  },
+  {
+    question: "Why can&apos;t I find Scarlett?",
+    answer: (
+      <p>
+        Scarlett's page says to meet her in Sophia's 2-heart event. She becomes giftable
+        after Sophia's 8-heart event and after you either repair the Community Center or
+        complete the Joja development form.
+      </p>
+    ),
+  },
+  {
+    question: "Does SVE remove the original marriage candidates?",
+    answer: (
+      <p>
+        No. The expansion adds its seven candidates alongside the original twelve. The
+        access gates and gift tables are the SVE-specific part of this guide; the vanilla
+        candidate list and general marriage sequence remain useful references.
+      </p>
+    ),
+  },
+];
+
+function EnglishSVEFaq() {
   return (
     <>
       <h2>Stardew Valley Expanded marriage FAQ</h2>
-      <BlogFaqList items={sveMarriageFaqItems()} />
+      <BlogFaqList items={englishFaqItems} />
     </>
   );
 }
 
-function sveMarriageSourceItems(): readonly BlogSourceItem[] {
-  return [
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
-      label: "SVE Wiki: Villagers",
-      note: " — 7 marriage candidates. Checked 25 August 2026.",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Claire",
-      label: "SVE Wiki: Claire",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Olivia",
-      label: "SVE Wiki: Olivia",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Sophia",
-      label: "SVE Wiki: Sophia",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Scarlett",
-      label: "SVE Wiki: Scarlett",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Lance",
-      label: "SVE Wiki: Lance",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Magnus",
-      label: "SVE Wiki: Magnus",
-    },
-    {
-      href: "https://stardewvalleyexpanded.wiki.gg/wiki/Victor",
-      label: "SVE Wiki: Victor",
-    },
-    {
-      href: "https://www.nexusmods.com/stardewvalley/mods/3753",
-      label: "SVE on Nexus",
-      note: " — main file 1.15.11.",
-    },
-    {
-      href: "https://stardewvalleywiki.com/Marriage",
-      label: "Stardew Valley Wiki: Marriage",
-    },
-    {
-      href: "https://stardewvalleywiki.com/Friendship",
-      label: "Stardew Valley Wiki: Friendship",
-    },
-    {
-      href: "https://stardewvalleyplanner.art/",
-      label: "Stardew Valley Planner",
-    },
-  ];
-}
+const englishSourceItems: readonly BlogSourceItem[] = [
+  {
+    href: "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
+    label: "SVE Wiki: Villagers",
+    note: " — marriage-candidate roster checked in ego-browser on September 5, 2026.",
+  },
+  { href: "https://stardewvalleyexpanded.wiki.gg/wiki/Claire", label: "SVE Wiki: Claire" },
+  { href: "https://stardewvalleyexpanded.wiki.gg/wiki/Olivia", label: "SVE Wiki: Olivia" },
+  { href: "https://stardewvalleyexpanded.wiki.gg/wiki/Sophia", label: "SVE Wiki: Sophia" },
+  {
+    href: "https://stardewvalleyexpanded.wiki.gg/wiki/Scarlett",
+    label: "SVE Wiki: Scarlett",
+  },
+  { href: "https://stardewvalleyexpanded.wiki.gg/wiki/Lance", label: "SVE Wiki: Lance" },
+  { href: "https://stardewvalleyexpanded.wiki.gg/wiki/Magnus", label: "SVE Wiki: Magnus" },
+  { href: "https://stardewvalleyexpanded.wiki.gg/wiki/Victor", label: "SVE Wiki: Victor" },
+  {
+    href: "https://www.nexusmods.com/stardewvalley/mods/3753",
+    label: "SVE on Nexus",
+    note: " — version 1.15.11 shown during the browser check.",
+  },
+  { href: "https://stardewvalleywiki.com/Marriage", label: "Stardew Valley Wiki: Marriage" },
+  { href: "https://stardewvalleywiki.com/Friendship", label: "Stardew Valley Wiki: Friendship" },
+  { href: "https://stardewvalleyplanner.art/", label: "Stardew Valley Planner" },
+];
 
-function assertSveMarriageSourceItems(sourceItems: readonly BlogSourceItem[]): void {
-  if (sourceItems.length === 0) {
-    throw new Error(
-      `SVE marriage sources require at least one item. Received: length ${sourceItems.length}.`,
-    );
-  }
-
-  sourceItems.forEach((sourceItem, sourceIndex) => {
-    if (typeof sourceItem.href !== "string" || sourceItem.href.trim() === "") {
-      throw new Error(
-        `SVE marriage source ${sourceIndex} is missing href. Received: ${JSON.stringify(sourceItem.href)}.`,
-      );
-    }
-
-    if (typeof sourceItem.label !== "string" || sourceItem.label.trim() === "") {
-      throw new Error(
-        `SVE marriage source ${sourceIndex} is missing label. Received: ${JSON.stringify(sourceItem.label)}.`,
-      );
-    }
-  });
-}
-
-function SveMarriageSources() {
-  const sourceItems = sveMarriageSourceItems();
-  assertSveMarriageSourceItems(sourceItems);
-
-  return <BlogSources heading="Sources" items={sourceItems} />;
+function EnglishSVESources() {
+  return <BlogSources heading="Sources" items={englishSourceItems} />;
 }

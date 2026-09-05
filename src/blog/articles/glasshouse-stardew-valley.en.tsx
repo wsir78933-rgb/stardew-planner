@@ -6,283 +6,266 @@ export function GlasshouseStardewValleyEnglishArticle() {
   return (
     <article>
       <p>
-        You typed glasshouse because the indoor plot is still boarded, or because
-        you repaired the glass and then watched a storm leave every tile dry. The
-        building is already on your farm. The game calls it the Greenhouse.
+        “Glasshouse” and “Greenhouse” point to the same building in Stardew Valley. If
+        you are searching for a glasshouse layout, the practical problem is the
+        Greenhouse interior: one 10-by-12 crop bed, a wooden border, and a narrow
+        outside ring that can hold fruit trees. The building begins on the farm in a
+        damaged state, so the layout job starts after you restore it.
       </p>
       <p>
-        Repair it first. The crop rectangle is 10 by 12. Rain never waters those
-        120 tiles, so occupancy matters more than how many sprinklers you own. Sit
-        some of them on the wood border. Six iridium sprinklers occupy four crop
-        tiles when some of them sit on wood. Count those four soil tiles, then
-        plant.
+        Plan the greenhouse around decisions, not a picture. Decide which tiles must
+        remain crop soil, which border tiles can hold sprinklers, and whether the
+        outside ring is reserved for fruit trees. This order prevents a common reset:
+        planting every soil tile first, then removing crops because a sprinkler or a
+        growing tree needs the space.
       </p>
 
-      <h2>The glasshouse is the greenhouse on your farm</h2>
+      <h2>Repair the Greenhouse before planning its interior</h2>
       <p>
-        If you heard glasshouse from a friend or a video, they meant this indoor
-        building. Walk the farm until you find the boarded glass. That is the
-        Greenhouse, and it has been sitting there since you started the save. You
-        do not unlock a second plot by using a different word.
+        The Greenhouse is present from the start, but its broken state makes the room
+        unusable. The Community Center route repairs it when you complete the Pantry
+        Bundles. The Joja route repairs the same building when you purchase the
+        Greenhouse development for 35,000g. These are two unlock routes for one
+        building, not two glasshouses and not two crop beds.
       </p>
       <p>
-        The name mix-up ends at the door. It does not change the repair work, and
-        it does not change the dirt. After the glass is back you still have one
-        interior: ten rows, twelve columns, and a wood frame around the soil.
+        After either route, Robin can move the building from the Carpenter&apos;s Shop.
+        That is an outdoor placement decision. The building occupies a 7-by-6 area
+        with a 3-by-2 entrance, so check the outdoor footprint before you spend time
+        arranging the indoor bed. The planner can help you preview placements, but it
+        does not repair the Greenhouse or move it in your save.
       </p>
       <p>
-        Once the building is repaired, Robin&apos;s carpenter shop is still farm
-        work, not a second indoor plot. Use{" "}
-        <a className="blog-planner-link" href="/where-is-robin-stardew-valley">
-          Find Robin today
-        </a>{" "}
-        when she is missing from the counter, and{" "}
+        If the repair route or Robin&apos;s service is your immediate problem, open the{" "}
         <a className="blog-planner-link" href="/carpenter-stardew">
-          Robin carpenter services
+          Carpenter Stardew guide
         </a>{" "}
-        for the shop jobs. Those pages do not complete Pantry bundles and they do
-        not pay the Joja row for you.
+        for the building-service context. Once the room is usable, come back to the
+        crop grid. The indoor layout does not change when you choose Community Center
+        instead of Joja.
       </p>
 
-      <h2>Repair the building on one of two routes</h2>
+      <h2>Read the room as three separate zones</h2>
       <p>
-        There is one Greenhouse. Two routes restore it. Stay with the Community
-        Center and the Pantry bundles are the repair. Pay Joja 35,000g and the same
-        building comes back. Doing both does not add a second glasshouse. Switching
-        towns does not stretch the dirt.
+        The farmable rectangle has 10 rows and 12 columns: 120 soil tiles. Crops can
+        grow there in any season, and regrowing crops do not die when the season
+        changes. The soil still needs water on rainy days. A trough along the north
+        wall refills your Watering Can, so manual watering remains possible when you
+        have not built enough sprinklers.
       </p>
       <p>
-        Pick the route that already matches how you play the town. If you have been
-        stuffing the Community Center, finish the Pantry list and wait for the
-        restoration cutscene. If you already bought the Joja membership and the
-        shipping bin is holding 35,000g, buy that community development row. Do not
-        wait on bundle fish you do not want to catch.
+        The first zone is the 120-tile crop bed. The second is the one-tile wooden
+        border around that bed. The border is not crop soil, but sprinklers placed
+        there can water nearby crop tiles. The third is the two-tile area between the
+        border and the walls. It is not crop soil; it is the space where fruit trees
+        can grow when decorations and other player-placed items do not block their
+        growth.
       </p>
       <ul>
-        <li>
-          Community Center path: complete the Pantry bundles. That restores the one
-          building on the farm.
-        </li>
-        <li>
-          Joja path: pay 35,000g. That restores the same building, not a larger
-          one.
-        </li>
-        <li>
-          After either route: walk in from the farm and look at the dirt before you
-          dump a backpack of seeds. You still have one crop rectangle, 10 by 12,
-          and rain still skips it.
-        </li>
+        <li>Crop zone: reserve it for plants, then subtract every soil tile occupied by a sprinkler.</li>
+        <li>Wood zone: test sprinkler positions here before sacrificing crop soil.</li>
+        <li>Tree zone: reserve trunk positions and growth space before filling the wood border.</li>
       </ul>
       <p>
-        Repair only opens the room. The job after that is the grid. Joja versus the
-        Community Center is not a way to own two indoor farms.
+        Scarecrows are not needed inside the Greenhouse. Lightning also does not hit
+        crops or fruit trees there. Those rules remove two outdoor-farm concerns, but
+        they do not remove watering or make every decorative tile plantable. Keep the
+        crop bed, border, and tree ring separate while you plan.
       </p>
 
-      <h2>Walk the 10-by-12 before you plant</h2>
+      <h2>Choose sprinkler math by occupied soil</h2>
       <p>
-        Stand in the doorway and count. Ten rows of dirt. Twelve columns. That is
-        120 plantable tiles. Crops from any season can grow on that soil, so a
-        summer crop can sit here in winter. Scarecrows are not required inside this
-        building. Water still matters. Rain does not reach these tiles, even when
-        the rest of the farm is soaked.
+        A sprinkler count is not the same as a crop-space count. Every sprinkler on
+        soil removes one crop tile, while a sprinkler on the wooden border can water
+        soil without consuming a crop tile. The Greenhouse is also wider than a single
+        sprinkler radius, so a tidy outer row may still leave the center dry.
       </p>
       <p>
-        Treat it as a grid, not as a pretty room. Coverage that looks even on a
-        square outdoor patch will leave dry corners here, or it will park extra
-        machines on soil you wanted for plants. The wood border around the rectangle
-        is the first place to test a sprinkler that would otherwise steal a crop
-        tile. Outside that border is the exterior ring for fruit trees. Those ring
-        tiles are not part of the 120.
+        When six iridium sprinklers are your ceiling, the standard wiki layout occupies
+        four crop tiles and leaves 116 crop spaces. The four is the important number:
+        six machines do not mean six lost plants. Some of the machines use the wood
+        border. Place the devices you actually own, then count occupied soil rather
+        than copying a machine count into your crop plan.
       </p>
       <p>
-        If you want the rain rule in front of you, plant one cheap crop, wait for a
-        storm, and check the tile. If it is dry, rain did not skip your farm. Rain
-        never waters this interior. Plan water as a placement job before you spend
-        the seeds you actually care about.
+        Sixteen quality sprinklers can cover the room while occupying 12 crop tiles,
+        leaving 108 crop spaces. That is a different trade-off, not a failed version
+        of the iridium layout. If you have pressure nozzles, four upgraded iridium
+        sprinklers can occupy two crop tiles, and five can occupy one crop tile in the
+        listed layouts. The crop total changes because the occupied soil changes.
       </p>
-
-      <h2>Count occupied crop tiles, not sprinkler count</h2>
+      <ul>
+        <li>33 regular sprinklers: 24 crop tiles occupied, 96 crop spaces left.</li>
+        <li>16 quality sprinklers: 12 crop tiles occupied, 108 crop spaces left.</li>
+        <li>6 iridium sprinklers: 4 crop tiles occupied, 116 crop spaces left.</li>
+        <li>4 iridium sprinklers with Pressure Nozzles: 2 crop tiles occupied, 118 crop spaces left.</li>
+        <li>5 iridium sprinklers with Pressure Nozzles: 1 crop tile occupied, 119 crop spaces left.</li>
+      </ul>
       <p>
-        The rectangle is larger than one sprinkler radius, and it is not a square.
-        You can seat a sprinkler on the wood border and still water soil in range.
-        If every device sits on dirt, you spend more of the 120 on machines.
-        Occupancy is the soil you lose, not the number of items in the inventory.
-      </p>
-      <p>
-        Start with one sprinkler on a wood-border tile along a long side, not on a
-        corner of the frame. See which soil tiles get coverage. Add the next
-        sprinkler only where dry soil remains, and prefer another wood seat when
-        the radius still reaches in. Sit on dirt only when wood cannot finish the
-        job, and mark that dirt tile as occupied.
-      </p>
-      <p>
-        On the wiki iridium layout, six iridium sprinklers occupy four crop tiles,
-        which leaves 116 plants. Six is how many devices you placed. Four is how
-        many of the 120 you lost. Some of those six sit on wood. Wood is not a crop
-        tile, so it does not count against the 120.
-      </p>
-      <p>
-        On the wiki quality layout, sixteen quality sprinklers occupy twelve crop
-        tiles, which leaves 108 plants. Subtract twelve from 120; that is 108. If a
-        diagram subtracts sixteen because you placed sixteen machines, it is
-        counting devices. If it subtracts six because you placed six iridium
-        sprinklers, it is making the same mistake on the other layout.
-      </p>
-      <figure className="blog-article-media">
-        <img
-          alt="Overhead greenhouse plot with sprinklers on the wood border and four occupied crop tiles marked"
-          decoding="async"
-          height="941"
-          loading="lazy"
-          src="/blog/illustrations/glasshouse-wood-border-sprinklers.webp"
-          width="1672"
-        />
-        <figcaption>
-          Wood-border seats do not come out of the 120. Four occupied crop tiles
-          under six iridium sprinklers leave 116 plants.
-        </figcaption>
-      </figure>
-      <p>
-        Keep a running occupied-soil count while you place. Stop when that count
-        matches the layout you meant to use: four for the wiki iridium six, or
-        twelve for the wiki quality sixteen. Do not plant on a marked tile.
-      </p>
-      <p>
-        Use{" "}
-        <a className="blog-planner-link" href="/sprinkler-stardew">
-          Sprinkler coverage 4 / 8 / 24
-        </a>{" "}
-        for the radii, then test the same items on the Greenhouse map. A radius
-        that covers a square outdoor patch still has to reach this 10-by-12 from a
-        mix of soil seats and wood-border seats. Open the map, place the devices
-        you actually own, turn the sprinkler overlay on, and read occupied crop
-        tiles. Do not plant first and discover a sprinkler sitting on a tile you
-        already seeded.
-      </p>
-      <p>
-        If you only have quality sprinklers, use the quality numbers. Sixteen
-        devices and twelve occupied tiles is still a full water plan; it is not a
-        failed iridium plan. If the overlay shows six occupied crop tiles under six
-        iridium sprinklers, the wood border is empty. Move devices onto the frame
-        until only four crop tiles stay occupied, or accept a lower plant count on
-        purpose.
+        Deluxe Retaining Soil is the non-sprinkler option. It has a 100% chance of
+        staying watered overnight, so it can free the crop bed from sprinkler
+        footprints. That choice moves the check into the game: the planner can show
+        placement and coverage, but it does not simulate fertilizer or next-morning
+        soil moisture.
       </p>
 
-      <h2>Plant fruit trees on the ring, then wait</h2>
+      <h2>Place fruit trees without blocking their growth</h2>
       <p>
-        Fruit trees go in the exterior ring, not in the 10-by-12. They cannot sit in
-        the greenhouse corners. Leave two empty tiles between trunks. Grow the
-        3-by-3 around each trunk before you block it. The wiki maximum is 18 trees.
-        Those 18 do not come out of the 120. They sit outside the wood border.
+        Fruit trees use the exterior ring, not the 120 crop tiles. They cannot be
+        planted in the Greenhouse corners. The current wiki layout supports up to 18
+        fruit trees, with two tiles between tree positions. Decorations built into the
+        room can make some positions unavailable, so count the free ring rather than
+        assuming every wall tile is open.
       </p>
       <p>
-        The 3-by-3 is the growth footprint. A sprinkler on the nearby wood border is
-        an adjacent tile. If you seat that sprinkler while the sapling still needs
-        the 3-by-3 empty, the tree does not grow. A layout that is correct for the
-        120 can still stall a sapling on the ring. Walk the crop grid as one job
-        and the tree footprints as another.
+        A tree needs its surrounding eight tiles clear while it grows. The wall and
+        the wood border themselves do not stop growth, but an item you place on the
+        border or outer ring can. That includes a sprinkler added after the sapling is
+        planted. A crop layout can be mathematically complete and still delay a tree
+        if the tree&apos;s growth area is treated as spare space.
       </p>
       <ol>
-        <li>
-          Walk the ring and pick up to 18 trunk tiles. Skip the corners. Keep two
-          empty tiles between trunks. Hoe the gaps if you need a visual count.
-        </li>
-        <li>
-          Keep each trunk&apos;s 3-by-3 clear until that tree has grown. Do not put
-          a sprinkler on the nearby wood border until that 3-by-3 can take a block.
-        </li>
-        <li>
-          Leave the 120 for crops. The trees sit outside the wood border. Grow the
-          3-by-3 before you block it.
-        </li>
+        <li>Mark the trunk positions first, skip the corners, and keep two tiles between tree positions.</li>
+        <li>Leave the surrounding eight tiles clear until each tree is fully grown.</li>
+        <li>Add border sprinklers only after checking that they do not sit beside an unfinished tree.</li>
       </ol>
       <p>
-        If a sapling fails to grow, an adjacent tile is not empty. That includes a
-        sprinkler you placed too early on the wood border, and a second trunk that
-        sat too close. The wait is for the 3-by-3, not for weather. Rain still does
-        not water the 120 while you stand there.
+        Treat trees and crops as separate budgets. The 18 tree positions do not reduce
+        the 120 crop tiles, but a poorly timed border placement can still delay a
+        sapling. If you want trellis crops such as Hops, leave walking lanes before
+        filling the grid; the room rules do not make trellises walk-through objects.
       </p>
 
-      <h2>What this building will not do</h2>
+      <h2>Pick crops by the job you want the room to do</h2>
       <p>
-        Bee houses inside produce no honey. Put them outside on flowers if honey is
-        the job. Giant crops cannot grow on this soil, so do not hold a tile empty
-        waiting for one. Lightning does not hit the interior.
+        The Greenhouse removes normal season restrictions, so a crop can remain in the
+        room when the outdoor calendar changes. A regrowing crop also keeps producing
+        instead of dying at the end of a season. That makes the room useful for a
+        steady harvest, seed multiplication, or a crop you do not want to replant
+        outdoors. The right choice depends on the seeds and processing routine you
+        already use, not on a universal best crop.
       </p>
       <p>
-        Do not spend the 120 on a bee house or a giant-crop experiment. Those
-        rules belong to the building. You still need a can or sprinklers for the
-        120, because rain does not water this plot.
-      </p>
-      <p>
-        There is still only one Greenhouse. Joja versus the Community Center are
-        two repair routes for that one building. After either route you walk into
-        the same 10-by-12.
+        If you are still deciding, start with a temporary crop on the tiles that your
+        water plan covers. Harvest it, then replace it once the tree ring and sprinkler
+        positions are stable. Do not hold a tile empty for giant crops: giant crops
+        cannot grow inside the Greenhouse. Bee houses also produce no honey indoors,
+        so move that production outside near flowers instead of giving up a crop or
+        border tile to test it.
       </p>
 
-      <h2>Check occupancy on the Greenhouse map before you plant</h2>
+      <h2>Define the finish line before you place</h2>
       <p>
+        “Finished” can mean full water coverage, the fewest sprinklers on soil, the
+        most crop spaces, or a layout that is comfortable to walk through. Those goals
+        overlap, but they are not identical. A six-iridium layout that leaves 116 crop
+        spaces is solving an occupancy problem. A trellis-heavy room has an additional
+        walking problem. Decide which result matters before you judge a layout as good
+        or bad.
+      </p>
+      <p>
+        For a maximum-crop plan, record three numbers: total soil, occupied soil, and
+        uncovered soil. The target starts at 120 total. Occupied soil comes from
+        sprinklers you placed on the bed. Uncovered soil is any crop tile outside the
+        actual watering range. A plan is not ready just because the first two numbers
+        look right; one dry cell still creates a daily watering task.
+      </p>
+      <ul>
+        <li>Coverage check: every crop tile has a sprinkler range or a deliberate manual-watering plan.</li>
+        <li>Occupancy check: every machine on soil is included in the crop-space subtraction.</li>
+        <li>Tree check: every unfinished sapling has its surrounding eight tiles clear.</li>
+        <li>Walking check: trellis crops leave a route between the door and the plants.</li>
+      </ul>
+      <p>
+        The visual center of a diagram is not necessarily the useful center of the
+        room. A sprinkler can look close to a corner while missing a tile because the
+        crop bed is rectangular and its watering shape is square. Read the cells that
+        matter. Move one device, check the overlay again, and keep the arrangement that
+        matches your inventory instead of chasing a diagram that assumes equipment you
+        do not own.
+      </p>
+      <p>
+        The same discipline helps when the room changes. Replacing quality sprinklers
+        with iridium devices changes occupied soil. Adding a new tree changes the
+        clearance around nearby border positions. Switching from ordinary crops to
+        Hops changes how easy the room is to walk. Recount after each change rather
+        than treating an old screenshot as a permanent blueprint.
+      </p>
+      <p>
+        Keep the final decision visible in the map: mark the crop tiles you are giving
+        up, the border positions you are using, and the trunk positions you are
+        protecting. That small record turns a layout from a one-time puzzle into a
+        plan you can repair when a sprinkler upgrade or a new crop changes the room.
+      </p>
+      <p>
+        Before calling the layout finished, imagine the next three visits. Can you
+        reach every crop without walking through a trellis? Can you refill the
+        Watering Can quickly if one row is manual? Can you harvest fruit without
+        moving a border sprinkler? These are ordinary play questions, not extra game
+        rules. They expose whether the diagram fits the way you enter, water, and
+        harvest the room.
+      </p>
+      <p>
+        If the answer is no, keep the verified constraints and change the arrangement.
+        Move a machine to another valid border tile, swap a crop for one that leaves a
+        lane, or delay a tree until its growth space is safe. The room gives you
+        several legal layouts. A useful Stardew Valley greenhouse layout is the one
+        whose occupied soil, water coverage, tree clearance, and walking route you can
+        still explain after you close the map.
+      </p>
+
+      <h2>Test the layout in the Greenhouse map</h2>
+      <p>
+        Open the{" "}
         <a className="blog-planner-link" href="/?farmType=greenhouse">
-          Open the Greenhouse map
+          Greenhouse map
         </a>
-        . Place the iridium or quality sprinklers you actually own. Seat some on
-        the wood border. Turn on sprinkler overlay so occupied tiles light up. Read
-        the overlay on the 120. Count occupied crop tiles. For the wiki iridium
-        six, you want four occupied. For the wiki quality sixteen, you want twelve
-        occupied.
+        , then place the sprinkler type and tree positions you actually plan to use.
+        Turn on the sprinkler coverage overlay and read the soil cells, not just the
+        circles around the machines. The useful result is a dry-cell check and an
+        occupied-soil count before the first valuable seed goes down.
       </p>
       <p>
-        Projects stay in this browser. There is no account and no cloud copy. The
-        planner does not repair the building. It does not grow the crops. Overlay
-        is a placement preview. If a tile is dry in game, water it or cover it with
-        a sprinkler. Do not wait on rain.
+        The planner is a placement check, not a game-state simulator. It can show the
+        Greenhouse map and placement relationships, but it does not verify that you
+        completed Pantry Bundles, does not purchase the Joja development, does not
+        grow a sapling, and does not water crops the next morning. Keep those actions
+        in the game. Use the map to catch geometry mistakes before they become a
+        harvest-day problem.
       </p>
       <p>
-        If the occupied count is higher than four on an iridium six, move a device
-        onto wood. If a device on wood sits in a fruit-tree 3-by-3 you still need
-        empty, move it or delay that tree. Then plant.
+        If the overlay leaves a dry soil cell, move a sprinkler or choose manual
+        watering for that row. If the occupied count is higher than the layout you
+        intended, move a device from soil to a working border position. If a sapling
+        is delayed, remove the nearby player-placed item until its eight surrounding
+        tiles are clear. These checks answer different questions; do not use one as a
+        substitute for the other.
       </p>
       <p>
-        If you still need the farm around the building,{" "}
-        <a className="blog-planner-link" href="/">
-          Open the planner
-        </a>
-        , then switch back to the Greenhouse interior to place the crop grid. Test
-        sprinklers on the interior map. Use{" "}
+        For sprinkler radius details outside the Greenhouse, open{" "}
         <a className="blog-planner-link" href="/sprinkler-stardew">
-          Sprinkler coverage 4 / 8 / 24
-        </a>{" "}
-        when you need the radii before you sit a device.
+          Sprinkler Stardew coverage
+        </a>
+        . It explains the 4, 8, and 24 tile ranges. Return to the Greenhouse map for
+        the border and tree-ring constraints, because the same radius behaves
+        differently when soil, wood, decorations, and tree growth share a room.
       </p>
 
-      <h2>Fill the plot in stages</h2>
-      <p>
-        Automate water first, then replace filler crops, then trees. Water first
-        because rain never waters this plot. Mark the 18 trunk tiles early so a
-        border sprinkler does not land in a 3-by-3 you still need empty.
-      </p>
+      <h2>A low-regret order for your first layout</h2>
       <ol>
-        <li>
-          Cover as much of the 120 as you can with the sprinklers you already have.
-          Use the wood border where a radius reaches in. Count occupied crop tiles.
-          Aim at four occupied for six iridium, or twelve occupied for sixteen
-          quality, if that is the layout you are testing.
-        </li>
-        <li>
-          Plant filler crops on the watered tiles. Harvest them. Replace those
-          filler crops later with the crop you actually want. Keep the water plan
-          in place while the center crop changes.
-        </li>
-        <li>
-          Start the fruit-tree ring while the center can still change. Keep each
-          3-by-3 empty until the tree grows. Do not block a sapling with a border
-          sprinkler.
-        </li>
+        <li>Confirm the Greenhouse is repaired and decide whether the building also needs to move outdoors.</li>
+        <li>Mark tree trunks and keep their surrounding growth space empty.</li>
+        <li>Place sprinklers on the wooden border where coverage reaches the bed.</li>
+        <li>Count occupied crop soil and check every soil cell for coverage.</li>
+        <li>Plant temporary or permanent crops only after the water plan is stable.</li>
+        <li>Recheck the tree ring after every later border change.</li>
       </ol>
       <p>
-        Keep that order. The planner does not grow the crops. It shows occupancy.
-        If you lock trees after you have already filled the wood border, you will
-        pull sprinklers off the 120 to free a 3-by-3. Finish water first.
+        This sequence preserves the expensive decisions first: building state, tree
+        growth space, and water coverage. Crop selection stays flexible until the
+        geometry works. It also gives you a clear reason to change one tile: move a
+        sprinkler for coverage, free a tree&apos;s growth space, or reclaim soil for a
+        crop. A layout is easier to maintain when each change has a visible job.
       </p>
 
       <p>The Ultimate Stardew Valley Greenhouse Guide loads after you click play.</p>
@@ -293,66 +276,46 @@ export function GlasshouseStardewValleyEnglishArticle() {
         youtubeVideoId="hPswcSfYAyw"
       />
 
-      <h2>Glasshouse Stardew Valley FAQ</h2>
+      <h2>Stardew Valley Greenhouse FAQ</h2>
       <BlogFaqList
         items={[
           {
-            question: "Is the glasshouse the same as the Greenhouse?",
+            question: "Is a glasshouse different from the Greenhouse?",
             answer: (
               <p>
-                Yes. The glasshouse you typed is the Greenhouse already standing on
-                the farm. Repair that one building through the Pantry bundles or
-                the Joja path for 35,000g. After either route, walk into a 10-by-12
-                crop plot that rain never waters.
+                No. “Glasshouse” is the search wording; the in-game building is the Greenhouse. It starts damaged and is restored through the Pantry Bundles or the Joja development purchase for 35,000g.
               </p>
             ),
           },
           {
-            question: "What do I need to use the greenhouse?",
+            question: "How many crops fit in the Greenhouse?",
             answer: (
               <p>
-                Repair it through the Pantry bundles or the Joja path for 35,000g.
-                Inside you still need a watering can or sprinklers, because rain
-                does not water the 10-by-12. Scarecrows are not required. Fruit
-                trees go on the exterior ring: skip the corners, leave two empty
-                tiles between trunks, and keep each 3-by-3 clear until the tree
-                grows. Test which sprinklers sit on the wood border before you
-                plant the 120.
+                The soil bed has 120 tiles before sprinkler footprints are counted. Six iridium sprinklers can leave 116 crop spaces in the standard layout, while 16 quality sprinklers can leave 108.
               </p>
             ),
           },
           {
-            question: "What is the best thing to put in the greenhouse?",
+            question: "Do sprinklers work on the wooden border?",
             answer: (
               <p>
-                Put water first, then filler crops you can replace, then trees on
-                the outer ring rather than on the 120. Bee houses produce no honey
-                here. Giant crops cannot grow. Open the Greenhouse map and read
-                occupancy so you can see four crop tiles occupied under six iridium
-                sprinklers, or twelve occupied under sixteen quality sprinklers,
-                before you plant.
+                Yes. A sprinkler on the one-tile wooden border can water crop soil in its range. Check the actual soil cells because a border position still may not reach every part of the 10-by-12 bed.
               </p>
             ),
           },
           {
-            question: "Can I have two greenhouses?",
+            question: "Can fruit trees grow inside the Greenhouse?",
             answer: (
               <p>
-                No. There is one Greenhouse building. Joja and the Community Center
-                are two ways to repair that one building, not two interiors. After
-                either route you still walk into the same 10-by-12 crop plot.
+                Yes. Fruit trees use the exterior ring, cannot use the corners, and can reach 18 trees in the listed layout. Keep the surrounding eight tiles clear while each tree grows.
               </p>
             ),
           },
           {
-            question: "What is the fastest way to get a greenhouse?",
+            question: "Does rain water Greenhouse crops?",
             answer: (
               <p>
-                If you already have 35,000g and you are on the Joja path, that
-                purchase restores the one building. If you stay with the Community
-                Center, speed is the Pantry bundle list. Both routes repair one
-                building. After either route, rain still does not water the
-                10-by-12.
+                No. Crops still need water on rainy days. Use a Watering Can, sprinklers, or Deluxe Retaining Soil.
               </p>
             ),
           },
@@ -361,10 +324,10 @@ export function GlasshouseStardewValleyEnglishArticle() {
 
       <BlogSources
         heading="Sources"
-        checkedLabel="Checked against Stardew Valley Wiki Greenhouse."
+        checkedLabel="Checked against the Stardew Valley Wiki Greenhouse on September 5, 2026."
         items={[
           {
-            href: "https://stardewvalleywiki.com/Greenhouse",
+            href: "https://wiki.stardewvalley.net/Greenhouse",
             label: "Stardew Valley Wiki: Greenhouse",
           },
         ]}

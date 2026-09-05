@@ -16,6 +16,7 @@ import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "..
 import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkler-stardew.en";
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
+import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -44,6 +45,10 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       },
       { href: "https://wiki.stardewvalley.net/Robin", label: "Stardew Valley Wiki: Robin" },
       {
+        href: "https://wiki.stardewvalley.net/Shop_Schedules",
+        label: "Stardew Valley Wiki: Shop Schedules",
+      },
+      {
         href: "https://wiki.stardewvalley.net/Telephone",
         label: "Stardew Valley Wiki: Telephone",
       },
@@ -54,9 +59,10 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
     heading: "来源",
     name: "Chinese carpenter article",
     sources: [
-      { href: "https://zh.stardewvalleywiki.com/木匠的商店", label: "星露谷 Wiki：木匠的商店" },
-      { href: "https://zh.stardewvalleywiki.com/罗宾", label: "星露谷 Wiki：罗宾" },
-      { href: "https://zh.stardewvalleywiki.com/电话", label: "星露谷 Wiki：电话" },
+      { href: "https://wiki.stardewvalley.net/Carpenter%27s_Shop", label: "星露谷 Wiki：Carpenter Shop" },
+      { href: "https://wiki.stardewvalley.net/Robin", label: "星露谷 Wiki：Robin" },
+      { href: "https://wiki.stardewvalley.net/Shop_Schedules", label: "星露谷 Wiki：Shop Schedules" },
+      { href: "https://wiki.stardewvalley.net/Telephone", label: "星露谷 Wiki：Telephone" },
     ],
   },
   {
@@ -64,25 +70,20 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
     heading: "Sources",
     name: "English NPC article",
     sources: [
-      { href: "https://stardewvalleywiki.com/Villagers", label: "Stardew Valley Wiki: Villagers" },
-      { href: "https://stardewvalleywiki.com/Friendship", label: "Stardew Valley Wiki: Friendship" },
+      { href: "https://wiki.stardewvalley.net/Villagers", label: "Stardew Valley Wiki: Villagers" },
+      { href: "https://wiki.stardewvalley.net/Friendship", label: "Stardew Valley Wiki: Friendship" },
+      { href: "https://wiki.stardewvalley.net/Robin", label: "Stardew Valley Wiki: Robin" },
       {
-        href: "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+        href: "https://wiki.stardewvalley.net/Carpenter%27s_Shop",
         label: "Stardew Valley Wiki: Carpenter's Shop",
       },
       {
-        href: "https://stardewvalleywiki.com/Marnie%27s_Ranch",
+        href: "https://wiki.stardewvalley.net/Marnie%27s_Ranch",
         label: "Stardew Valley Wiki: Marnie's Ranch",
       },
-      { href: "https://stardewvalleywiki.com/Fish_Shop", label: "Stardew Valley Wiki: Fish Shop" },
-      {
-        href: "https://stardewvalleywiki.com/Wizard%27s_Tower",
-        label: "Stardew Valley Wiki: Wizard's Tower",
-      },
-      {
-        href: "https://store.steampowered.com/news/app/413150/view/517448731263500640",
-        label: "Steam: PC 1.6.15 patch notes",
-      },
+      { href: "https://wiki.stardewvalley.net/Pierre%27s_General_Store", label: "Stardew Valley Wiki: Pierre's General Store" },
+      { href: "https://wiki.stardewvalley.net/Blacksmith", label: "Stardew Valley Wiki: Blacksmith" },
+      { href: "https://wiki.stardewvalley.net/Fish_Shop", label: "Stardew Valley Wiki: Fish Shop" },
     ],
   },
   {
@@ -90,16 +91,14 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
     heading: "来源",
     name: "Chinese NPC article",
     sources: [
-      { href: "https://zh.stardewvalleywiki.com/居民", label: "星露谷 Wiki：居民" },
-      { href: "https://zh.stardewvalleywiki.com/友谊", label: "星露谷 Wiki：友谊" },
-      { href: "https://zh.stardewvalleywiki.com/木匠的商店", label: "星露谷 Wiki：木匠的商店" },
-      { href: "https://zh.stardewvalleywiki.com/玛妮的牧场", label: "星露谷 Wiki：玛妮的牧场" },
-      { href: "https://zh.stardewvalleywiki.com/鱼店", label: "星露谷 Wiki：鱼店" },
-      { href: "https://zh.stardewvalleywiki.com/法师塔", label: "星露谷 Wiki：法师塔" },
-      {
-        href: "https://store.steampowered.com/news/app/413150/view/517448731263500640",
-        label: "Steam：PC 1.6.15 补丁说明",
-      },
+      { href: "https://wiki.stardewvalley.net/Villagers", label: "星露谷 Wiki：Villagers" },
+      { href: "https://wiki.stardewvalley.net/Friendship", label: "星露谷 Wiki：Friendship" },
+      { href: "https://wiki.stardewvalley.net/Robin", label: "星露谷 Wiki：Robin" },
+      { href: "https://wiki.stardewvalley.net/Carpenter%27s_Shop", label: "星露谷 Wiki：Carpenter Shop" },
+      { href: "https://wiki.stardewvalley.net/Marnie%27s_Ranch", label: "星露谷 Wiki：Marnie's Ranch" },
+      { href: "https://wiki.stardewvalley.net/Pierre%27s_General_Store", label: "星露谷 Wiki：Pierre's General Store" },
+      { href: "https://wiki.stardewvalley.net/Blacksmith", label: "星露谷 Wiki：Blacksmith" },
+      { href: "https://wiki.stardewvalley.net/Fish_Shop", label: "星露谷 Wiki：Fish Shop" },
     ],
   },
   {
@@ -125,11 +124,14 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://zh.stardewvalleywiki.com/%E9%B9%88%E9%B9%95%E9%95%87",
         label: "鹈鹕镇 — Stardew Valley Wiki",
-        note: "，核对日期：2026-08-22。",
+        note: "，出口、主要地点、采集和钓鱼资料核对日期：2026-09-05。",
       },
+      { href: "https://zh.stardewvalleywiki.com/%E5%B1%85%E6%B0%91", label: "居民 — Stardew Valley Wiki" },
+      { href: "https://zh.stardewvalleywiki.com/%E5%86%9C%E5%9C%BA", label: "农场 — Stardew Valley Wiki" },
       { href: "/zh/stardew-valley-npc", label: "星露谷 NPC 指南" },
       { href: "/zh/carpenter-stardew", label: "星露谷木匠指南" },
       { href: "/zh/where-is-robin-stardew-valley", label: "Robin 位置指南" },
+      { href: "https://stardewvalleyplanner.art/zh", label: "星露谷农场规划器" },
     ],
   },
   {
@@ -154,15 +156,15 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
     heading: "来源",
     name: "Chinese Robin article",
     sources: [
-      { href: "https://zh.stardewvalleywiki.com/罗宾", label: "星露谷 Wiki：罗宾" },
-      { href: "https://zh.stardewvalleywiki.com/木匠的商店", label: "星露谷 Wiki：木匠的商店" },
-      { href: "https://zh.stardewvalleywiki.com/营业时间表", label: "星露谷 Wiki：营业时间表" },
-      { href: "https://zh.stardewvalleywiki.com/电话", label: "星露谷 Wiki：电话" },
+      { href: "https://wiki.stardewvalley.net/Robin", label: "星露谷 Wiki：Robin" },
+      { href: "https://wiki.stardewvalley.net/Carpenter%27s_Shop", label: "星露谷 Wiki：Carpenter Shop" },
+      { href: "https://wiki.stardewvalley.net/Shop_Schedules", label: "星露谷 Wiki：Shop Schedules" },
+      { href: "https://wiki.stardewvalley.net/Telephone", label: "星露谷 Wiki：Telephone" },
     ],
   },
   {
     Article: WhereIsStardewValleyLocatedEnglishArticle,
-    checkedLabel: "Sources checked August 23, 2026.",
+    checkedLabel: "Sources checked September 5, 2026.",
     heading: "Sources",
     name: "English location article",
     sources: [
@@ -172,26 +174,26 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
         href: "https://stardewvalleywiki.com/Pelican_Town",
         label: "Pelican Town — Stardew Valley Wiki",
       },
-      { href: "https://stardewvalleywiki.com/The_Desert", label: "The Desert — Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/The_Desert", label: "Calico Desert — Stardew Valley Wiki" },
       {
         href: "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
-        label: "Eric Barone interview about Pacific Northwest interests — Portland Mercury",
+        label: "Eric Barone interview about Pacific Northwest influences — Portland Mercury",
       },
     ],
   },
   {
     Article: WhereIsStardewValleyLocatedChineseArticle,
-    checkedLabel: "来源核对日期：2026-08-23。",
+    checkedLabel: "来源核对日期：2026-09-05。",
     heading: "来源",
     name: "Chinese location article",
     sources: [
       { href: "https://www.stardewvalley.net/about/", label: "《星露谷物语》— About" },
       { href: "https://stardewvalleywiki.com/Setting", label: "设定 — Stardew Valley Wiki" },
       { href: "https://stardewvalleywiki.com/Pelican_Town", label: "鹈鹕镇 — Stardew Valley Wiki" },
-      { href: "https://stardewvalleywiki.com/The_Desert", label: "沙漠 — Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/The_Desert", label: "卡利科沙漠 — Stardew Valley Wiki" },
       {
         href: "https://www.portlandmercury.com/games/the-ultimate-stardew-valley-creator-interview-about-pacific-northwest-interests-46567629/",
-        label: "Eric Barone 太平洋西北地区兴趣采访 — Portland Mercury",
+        label: "Eric Barone 太平洋西北地区影响采访 — Portland Mercury",
       },
     ],
   },
@@ -203,7 +205,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
         label: "SVE Wiki: Villagers",
-        note: " — 7 marriage candidates. Checked 25 August 2026.",
+        note: " — marriage-candidate roster checked in ego-browser on September 5, 2026.",
       },
       {
         href: "https://stardewvalleyexpanded.wiki.gg/wiki/Claire",
@@ -236,7 +238,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://www.nexusmods.com/stardewvalley/mods/3753",
         label: "SVE on Nexus",
-        note: " — main file 1.15.11.",
+        note: " — version 1.15.11 shown during the browser check.",
       },
       {
         href: "https://stardewvalleywiki.com/Marriage",
@@ -260,7 +262,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://stardewvalleyexpanded.wiki.gg/wiki/Villagers",
         label: "SVE Wiki：Villagers",
-        note: " — 7 名结婚对象。核对于 2026-08-25。",
+        note: " — 可结婚角色名单已于 2026-09-05 通过 ego-browser 核对。",
       },
       {
         href: "https://stardewvalleyexpanded.wiki.gg/wiki/Claire",
@@ -291,13 +293,9 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
         label: "SVE Wiki：维克多",
       },
       {
-        href: "https://stardew-valley-expanded.fandom.com/zh/wiki/%E6%98%9F%E9%9C%B2%E8%B0%B7%E7%89%A9%E8%AF%AD%E6%89%A9%E5%B1%95_Wiki?variant=zh-cn",
-        label: "星露谷物语扩展 Wiki 中文首页",
-      },
-      {
         href: "https://www.nexusmods.com/stardewvalley/mods/3753",
         label: "SVE on Nexus",
-        note: " — 主文件 1.15.11。",
+        note: " — 浏览器核对到版本 1.15.11。",
       },
       {
         href: "https://zh.stardewvalleywiki.com/婚姻",
@@ -316,7 +314,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   {
     Article: SprinklerStardewEnglishArticle,
     checkedLabel:
-      "Ranges, upgrades, and greenhouse occupancy checked against those pages on 2026-08-29 for PC 1.6.15. The planner overlay is a placement preview, not a watering simulation.",
+      "Ranges, recipes, upgrades, and placement limits checked against Stardew Valley Wiki pages on September 5, 2026. The planner is a placement preview, not a watering simulation.",
     heading: "Sources",
     name: "English sprinkler article",
     sources: [
@@ -344,28 +342,48 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   },
   {
     Article: SprinklerStardewChineseArticle,
+    checkedLabel:
+      "洒水器范围、配方、升级和放置限制已于 2026 年 9 月 5 日根据星露谷物语 Wiki 页面核对；规划器仅作摆放预览。",
     heading: "资料来源",
     name: "Chinese sprinkler article",
     sources: [
       {
-        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%B4%92%E6%B0%B4%E5%99%A8&amp;variant=zh-cn",
+        href: "https://zh.stardewvalleywiki.com/%E6%B4%92%E6%B0%B4%E5%99%A8",
         label: "星露谷物语官方中文维基：洒水器",
       },
       {
-        href: "https://stardewvalleyplanner.art/zh",
-        label: "星露谷物语农场规划器",
+        href: "https://zh.stardewvalleywiki.com/%E5%8A%A0%E5%8E%8B%E5%96%B7%E5%A4%B4",
+        label: "星露谷物语官方中文维基：加压喷头",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%B8%A9%E5%AE%A4",
+        label: "星露谷物语官方中文维基：温室",
       },
     ],
   },
   {
     Article: GlasshouseStardewValleyEnglishArticle,
-    checkedLabel: "Checked against Stardew Valley Wiki Greenhouse.",
+    checkedLabel:
+      "Checked against the Stardew Valley Wiki Greenhouse on September 5, 2026.",
     heading: "Sources",
     name: "English glasshouse article",
     sources: [
       {
-        href: "https://stardewvalleywiki.com/Greenhouse",
+            href: "https://wiki.stardewvalley.net/Greenhouse",
         label: "Stardew Valley Wiki: Greenhouse",
+      },
+    ],
+  },
+  {
+    Article: GlasshouseStardewValleyChineseArticle,
+    checkedLabel:
+      "来源已于 2026 年 9 月 5 日根据星露谷物语 Wiki 温室页面核对。",
+    heading: "来源",
+    name: "Chinese glasshouse article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/温室",
+        label: "星露谷物语 Wiki：温室",
       },
     ],
   },

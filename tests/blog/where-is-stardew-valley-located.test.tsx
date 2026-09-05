@@ -88,26 +88,26 @@ function countVisibleEnglishWords(visibleText: string): number {
 it("renders the complete English explainer with the promised depth and visible structure", () => {
   const englishArticle = renderArticle(WhereIsStardewValleyLocatedEnglishArticle);
 
-  expect(countVisibleEnglishWords(englishArticle.visibleText)).toBeGreaterThanOrEqual(1900);
-  expect(countVisibleEnglishWords(englishArticle.visibleText)).toBeLessThanOrEqual(2100);
+  expect(countVisibleEnglishWords(englishArticle.visibleText)).toBeGreaterThanOrEqual(2000);
+  expect(countVisibleEnglishWords(englishArticle.visibleText)).toBeLessThanOrEqual(2300);
   expect(readElementTexts(englishArticle.document, "h2")).toEqual([
-    "The short answer: Stardew Valley is a fictional region",
-    "The location hierarchy, from your farm to the wider world",
-    "Pelican Town is not the whole valley",
+    "Where is Stardew Valley located? The short answer",
+    "Separate the Farm, Pelican Town, Stardew Valley, and the republic",
+    "Pelican Town is one community inside the valley",
     "How the wider fictional world fits together",
-    "Is Stardew Valley a real place?",
-    "Which map or tool should you use?",
-    "What the game confirms—and what it does not",
+    "Is Stardew Valley based in Washington, Oregon, or somewhere else?",
+    "Which map or tool answers your location question?",
+    "What the game confirms—and what it leaves open",
     "Frequently asked questions",
     "Sources",
   ]);
   expect(readElementTexts(englishArticle.document, "h3")).toEqual([
-    "What about Harvey’s coordinates?",
+    "What do Harvey's coordinates mean?",
     "Where is Stardew Valley located in the game?",
     "Is Pelican Town the same place as Stardew Valley?",
     "What country is Stardew Valley in?",
     "Is Stardew Valley based in Washington or Oregon?",
-    "Do Harvey’s coordinates identify a real-world location?",
+    "Do Harvey's coordinates identify a real-world location?",
     "Where is the Gotoro Empire relative to Stardew Valley?",
   ]);
   expect(englishArticle.document.getElementsByTagName("table")).toHaveLength(2);
@@ -119,25 +119,25 @@ it("keeps the English canon answer, evidence limits, planner boundary, and ten l
   const englishArticle = renderArticle(WhereIsStardewValleyLocatedEnglishArticle);
 
   expect(englishArticle.visibleText).toContain(
-    "Stardew Valley is a fictional region on the southern coast of the fictional Ferngill Republic.",
+    "Stardew Valley is a fictional coastal region in the Ferngill Republic.",
   );
   expect(englishArticle.visibleText).toContain(
-    "Its precise distance and compass direction from Pelican Town are not established.",
+    "The setting pages do not establish its exact distance and direction from Pelican Town.",
   );
   expect(englishArticle.visibleText).toContain(
-    "Its wider political geography is not established.",
+    "The setting pages do not establish its wider political geography.",
   );
   expect(englishArticle.visibleText).toContain(
-    "After bus service is restored, the player reaches Calico Desert by taking the bus from the Bus Stop, rather than walking there through one of Pelican Town's local exits.",
+    "After that, the player takes the Bus from the Bus Stop; there is no local town exit that lets you walk there.",
   );
   expect(englishArticle.visibleText).toContain(
-    "Harvey's radio line belongs to the fictional world, not an official real-world address.",
+    "Treat Harvey's line as an in-world detail, not an official address.",
   );
   expect(englishArticle.visibleText).toContain(
-    "Pacific Northwest experiences fed into the game's details.",
+    "real experiences influenced some details",
   );
   expect(englishArticle.visibleText).toContain(
-    "It does not map the Ferngill Republic or Pelican Town, and it does not track NPCs live.",
+    "The planner helps test building footprints, crop areas, paths, seasons, and coverage on your farm.",
   );
   expect(englishArticle.visibleText).not.toMatch(
     /Stardew Valley (?:is|takes place) in (?:Washington|Oregon|Russia)/i,
@@ -188,7 +188,7 @@ it("renders a naturally localized Chinese article with matching structure and fa
     expect(chineseArticle.visibleText).toContain(requiredChineseTerm);
   }
   expect(chineseArticle.visibleText).toContain(
-    "巴士服务恢复后，玩家要从巴士站乘车前往卡利科沙漠，而不是通过鹈鹕镇的某个本地步行出口走过去。",
+    "社区中心金库组合包完成，或在 Joja 社区发展申请表中支付 40000g 修好巴士后，才能从巴士站乘车前往。",
   );
   expect(chineseArticle.visibleText).toContain(
     "玛妮的牧场、莉亚的农舍与法师塔",
@@ -201,7 +201,7 @@ it("renders a naturally localized Chinese article with matching structure and fa
     expect(chineseArticle.visibleText).not.toContain(incorrectChineseTerm);
   }
   expect(chineseArticle.visibleText).toContain(
-    "农场规划器只用于安排自己的农场布局，不显示芬吉尔共和国或鹈鹕镇，也不实时追踪 NPC。",
+    "规划器适合测试农场上的建筑占地、作物区、道路、季节和覆盖范围",
   );
   expect(chineseArticle.visibleText).not.toMatch(
     /星露谷(?:位于|在)(?:美国|华盛顿|俄勒冈|俄罗斯)/,

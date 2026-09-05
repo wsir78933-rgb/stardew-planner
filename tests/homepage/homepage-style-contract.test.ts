@@ -45,112 +45,104 @@ test("contains the hero value proposition and frames the product stage within th
   expect(mobileProductStageRule).toContain("border-radius: 0;");
 });
 
-test("ships the planning guide illustration as a static public WebP", () => {
-  const planningGuideImagePath = resolve(
-    process.cwd(),
-    "public/homepage/stardew-valley-planner-layout.webp",
-  );
+test("ships the homepage image-and-text section assets as public WebP files", () => {
+  const homepageSectionImages = [
+    {
+      sourcePath: "src/components/homepage-features-section.tsx",
+      imagePath: "public/homepage/features-pixel-farm.webp",
+      imageSource: "/homepage/features-pixel-farm.webp",
+    },
+    {
+      sourcePath: "src/components/homepage-why-choose-section.tsx",
+      imagePath: "public/homepage/why-choose-pixel-farm.webp",
+      imageSource: "/homepage/why-choose-pixel-farm.webp",
+    },
+    {
+      sourcePath: "src/components/homepage-how-to-section.tsx",
+      imagePath: "public/homepage/how-to-pixel-farm.webp",
+      imageSource: "/homepage/how-to-pixel-farm.webp",
+    },
+  ] as const;
 
-  expect(existsSync(planningGuideImagePath)).toBe(true);
+  for (const homepageSectionImage of homepageSectionImages) {
+    const imageFilePath = resolve(process.cwd(), homepageSectionImage.imagePath);
+    const sectionMarkup = readProjectFile(homepageSectionImage.sourcePath);
+
+    expect(existsSync(imageFilePath), `Expected ${homepageSectionImage.imagePath}`).toBe(true);
+    expect(statSync(imageFilePath).size).toBeGreaterThan(0);
+    expect(sectionMarkup).toContain(`"${homepageSectionImage.imageSource}"`);
+  }
 });
 
-test("ships a narrower planning-guide WebP for mobile viewports", () => {
-  const desktopPlanningGuideImagePath = resolve(
-    process.cwd(),
-    "public/homepage/stardew-valley-planner-layout.webp",
-  );
-  const mobilePlanningGuideImagePath = resolve(
-    process.cwd(),
-    "public/homepage/stardew-valley-planner-layout-800.webp",
-  );
-  const planningGuideMarkup = readProjectFile(
-    "src/components/homepage-planning-guide.tsx",
-  );
-
-  expect(existsSync(mobilePlanningGuideImagePath)).toBe(true);
-  expect(statSync(mobilePlanningGuideImagePath).size).toBeLessThan(150_000);
-  expect(statSync(mobilePlanningGuideImagePath).size).toBeLessThan(
-    statSync(desktopPlanningGuideImagePath).size / 3,
-  );
-  expect(planningGuideMarkup).toContain(
-    '"/homepage/stardew-valley-planner-layout.webp"',
-  );
-  expect(planningGuideMarkup).toContain(
-    "/homepage/stardew-valley-planner-layout-800.webp",
-  );
-  expect(planningGuideMarkup).toContain("src={planningGuideDesktopImageSource}");
-  expect(planningGuideMarkup).toContain("srcSet={planningGuideImageSrcSet}");
-  expect(planningGuideMarkup).toContain("(max-width: 700px) 100vw");
-});
-
-test("lays out the planning guide as readable copy beside a responsive figure", () => {
+test("lays out homepage image-and-text sections with scoped responsive hooks", () => {
   const homepageStyles = readProjectFile("app/globals.css");
-  const guideRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\]\s*\{([\s\S]*?)\n\}/,
+  const sectionLayoutRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-layout\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
-  const guideFigureRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\] figure\s*\{([\s\S]*?)\n\}/,
+  const sectionMediaRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-media\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
-  const guideImageRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\] img\s*\{([\s\S]*?)\n\}/,
+  const sectionImageRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-media\] img\s*\{([\s\S]*?)\n\}/,
   )?.[1];
-  const mobileGuideRule = homepageStyles.match(
-    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-planning-guide\]\s*\{([\s\S]*?)\n  \}/,
+  const sectionListRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-list\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const sectionItemRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-list\] li\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const mobileSectionLayoutRule = homepageStyles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-layout\]\s*\{([\s\S]*?)\n  \}/,
   )?.[1];
 
-  expect(homepageStyles).toContain("[data-homepage-planning-guide] figure");
-  expect(homepageStyles).toContain("[data-homepage-planning-guide] img");
-  expect(guideRule).toBeDefined();
-  expect(guideRule).toContain("display: grid;");
-  expect(guideRule).toContain(
-    "grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);",
+  expect(homepageStyles).not.toContain("data-homepage-planning-guide");
+  expect(sectionLayoutRule).toBeDefined();
+  expect(sectionLayoutRule).toContain("align-items: start;");
+  expect(sectionLayoutRule).toContain("column-gap: clamp(2rem, 5vw, 5rem);");
+  expect(sectionLayoutRule).toContain("display: grid;");
+  expect(sectionLayoutRule).toContain(
+    "grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);",
   );
-  expect(guideFigureRule).toBeDefined();
-  expect(guideFigureRule).toContain("border-radius: var(--radius);");
-  expect(guideImageRule).toBeDefined();
-  expect(guideImageRule).toContain("height: auto;");
-  expect(guideImageRule).toContain("max-width: 100%;");
-  expect(guideImageRule).toContain("width: 100%;");
-  expect(mobileGuideRule).toBeDefined();
-  expect(mobileGuideRule).toContain("grid-template-columns: 1fr;");
-});
-
-test("keeps the planning workflow cards readable as the viewport narrows", () => {
-  const homepageStyles = readProjectFile("app/globals.css");
-  const mediumWorkflowRule = homepageStyles.match(
-    /@media \(max-width: 960px\)\s*\{[\s\S]*?\[data-homepage-planning-guide-workflow\] ol\s*\{([\s\S]*?)\n  \}/,
-  )?.[1];
-  const mobileWorkflowRule = homepageStyles.match(
-    /@media \(max-width: 700px\)\s*\{[\s\S]*?\[data-homepage-planning-guide-workflow\] ol\s*\{([\s\S]*?)\n  \}/,
-  )?.[1];
-
-  expect(mediumWorkflowRule).toBeDefined();
-  expect(mediumWorkflowRule).toContain("grid-template-columns: repeat(2, minmax(0, 1fr));");
-  expect(mobileWorkflowRule).toBeDefined();
-  expect(mobileWorkflowRule).toContain("grid-template-columns: 1fr;");
-});
-
-test("keeps play-style choices as compact cards until a visitor selects one", () => {
-  const homepageStyles = readProjectFile("app/globals.css");
-  const playStyleOptionsRule = homepageStyles.match(
-    /\[data-homepage-planning-guide-play-style-options\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const playStylePanelsRule = homepageStyles.match(
-    /\[data-homepage-planning-guide-play-style-panels\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const mobilePlayStyleOptionsRule = homepageStyles.match(
-    /@media \(max-width: 700px\)\s*\{[\s\S]*?\[data-homepage-planning-guide-play-style-options\]\s*\{([\s\S]*?)\n  \}/,
-  )?.[1];
-
-  expect(playStyleOptionsRule).toBeDefined();
-  expect(playStyleOptionsRule).toContain("display: grid;");
-  expect(playStyleOptionsRule).toContain(
-    "grid-template-columns: repeat(3, minmax(0, 1fr));",
+  expect(sectionMediaRule).toBeDefined();
+  expect(sectionMediaRule).toContain("background: var(--secondary);");
+  expect(sectionMediaRule).toContain("border-radius: var(--radius);");
+  expect(sectionMediaRule).toContain("grid-column: 2;");
+  expect(sectionMediaRule).toContain("grid-row: 1;");
+  expect(sectionMediaRule).toContain("overflow: hidden;");
+  expect(sectionImageRule).toBeDefined();
+  expect(sectionImageRule).toContain("aspect-ratio: 1672 / 941;");
+  expect(sectionImageRule).toContain("display: block;");
+  expect(sectionImageRule).toContain("height: auto;");
+  expect(sectionImageRule).toContain("max-width: 100%;");
+  expect(sectionImageRule).toContain("width: 100%;");
+  expect(sectionListRule).toBeDefined();
+  expect(sectionListRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
+  expect(sectionListRule).toContain("display: grid;");
+  expect(sectionListRule).toContain("grid-column: 1;");
+  expect(sectionListRule).toContain("grid-row: 1;");
+  expect(sectionListRule).toContain("list-style: none;");
+  expect(sectionListRule).toContain("min-width: 0;");
+  expect(sectionItemRule).toBeDefined();
+  expect(sectionItemRule).toContain("gap: 1rem;");
+  expect(sectionItemRule).toContain(
+    "grid-template-columns: 2.25rem minmax(0, 1fr);",
   );
-  expect(playStylePanelsRule).toBeDefined();
-  expect(playStylePanelsRule).toContain("max-width: 65ch;");
-  expect(mobilePlayStyleOptionsRule).toBeDefined();
-  expect(mobilePlayStyleOptionsRule).toContain("grid-template-columns: 1fr;");
+  expect(sectionItemRule).toContain("padding: 1.35rem 0;");
+  expect(homepageStyles).toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-media] {",
+  );
+  expect(homepageStyles).toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-list] {",
+  );
+  expect(homepageStyles).toMatch(
+    /\[data-homepage-why-choose\] \[data-homepage-section-media\]\s*\{[^}]*grid-column: 1;/s,
+  );
+  expect(homepageStyles).toMatch(
+    /\[data-homepage-why-choose\] \[data-homepage-section-list\]\s*\{[^}]*grid-column: 2;/s,
+  );
+  expect(mobileSectionLayoutRule).toBeDefined();
+  expect(mobileSectionLayoutRule).toContain("gap: 1.5rem;");
+  expect(mobileSectionLayoutRule).toContain("grid-template-columns: 1fr;");
 });
 
 test("keeps the desktop React editor frame at viewport height alongside its sidebar", () => {
@@ -276,24 +268,189 @@ test("uses a compact wider hero headline without an eyebrow spacing rule", () =>
   expect(styles).not.toContain("[data-homepage-eyebrow]");
 });
 
+test("keeps section headings readable without a poster measure", () => {
+  const styles = readProjectFile("app/globals.css");
+  const sectionHeadingRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section\[id\] > h2\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+
+  expect(sectionHeadingRule).toBeDefined();
+  expect(sectionHeadingRule).toContain("font-size: clamp(1.75rem, 3vw, 2.5rem);");
+  expect(sectionHeadingRule).toContain("line-height: 1.15;");
+  expect(sectionHeadingRule).toContain("margin-bottom: 1.5rem;");
+  expect(sectionHeadingRule).toContain("text-wrap: balance;");
+  expect(sectionHeadingRule).not.toContain("max-width: 11ch");
+  expect(sectionHeadingRule).not.toContain("line-height: 0.94;");
+  expect(sectionHeadingRule).not.toContain("clamp(2.7rem, 5vw, 5.4rem)");
+  expect(styles).not.toContain("max-width: 11ch");
+  expect(styles).not.toContain("max-width: 15ch");
+  expect(styles).not.toContain("clamp(2.7rem, 5vw, 5.4rem)");
+});
+
+test("stacks the closing CTA as a compact product bar", () => {
+  const styles = readProjectFile("app/globals.css");
+  const closingCtaRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const closingCtaHeadingRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\] h2\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const closingCtaContentRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta-content\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const mobileClosingCtaRule = styles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\]\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+  const mobileClosingCtaHeadingRule = styles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\] h2\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+
+  expect(closingCtaRule).toBeDefined();
+  expect(closingCtaRule).toContain("align-items: center;");
+  expect(closingCtaRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
+  expect(closingCtaRule).toContain("display: flex;");
+  expect(closingCtaRule).toContain("justify-content: space-between;");
+  expect(closingCtaRule).toContain("max-width: 1280px;");
+  expect(closingCtaHeadingRule).toBeDefined();
+  expect(closingCtaHeadingRule).toContain(
+    "font-size: clamp(1.25rem, 2.2vw, 1.75rem);",
+  );
+  expect(closingCtaHeadingRule).toContain("line-height: 1.2;");
+  expect(closingCtaHeadingRule).toContain("text-wrap: balance;");
+  expect(closingCtaHeadingRule).not.toContain("max-width: 15ch");
+  expect(closingCtaHeadingRule).not.toContain("clamp(2.4rem, 4.8vw, 5rem)");
+  expect(closingCtaContentRule).toBeDefined();
+  expect(closingCtaContentRule).toContain("align-items: center;");
+  expect(closingCtaContentRule).toContain("display: flex;");
+  expect(mobileClosingCtaRule).toBeDefined();
+  expect(mobileClosingCtaRule).toContain("flex-direction: column;");
+  expect(mobileClosingCtaHeadingRule).toBeDefined();
+  expect(mobileClosingCtaHeadingRule).toContain("min-width: 0;");
+});
+
 test("keeps the trust statement in its own centered bounded strip", () => {
   const styles = readProjectFile("app/globals.css");
   const trustRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section\[data-homepage-trust\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const trustHeadingRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-trust\] h2\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const trustParagraphRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-trust\] p\s*\{([\s\S]*?)\n\}/,
   )?.[1];
 
   expect(trustRule).toBeDefined();
+  expect(trustRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
   expect(trustRule).toContain("max-width: 48rem;");
   expect(trustRule).toContain("padding: clamp(2rem, 4vw, 3.5rem) 0;");
   expect(trustRule).toContain("text-align: center;");
   expect(trustRule).toContain(
     "width: calc(100% - clamp(2.5rem, 6vw, 6rem));",
   );
+  expect(trustHeadingRule).toBeDefined();
+  expect(trustHeadingRule).toContain("font-size: clamp(1.05rem, 1.6vw, 1.25rem);");
+  expect(trustHeadingRule).toContain("line-height: 1.25;");
+  expect(trustHeadingRule).toContain("text-wrap: balance;");
+  expect(trustHeadingRule).not.toContain("clamp(1.75rem, 3vw, 2.5rem)");
   expect(trustParagraphRule).toBeDefined();
   expect(trustParagraphRule).toContain("margin-inline: auto;");
+  expect(trustParagraphRule).toContain("max-width: 44rem;");
+  expect(trustParagraphRule).toContain("text-wrap: pretty;");
+});
+
+test("tightens the FAQ block below the section heading scale", () => {
+  const styles = readProjectFile("app/globals.css");
+  const faqSectionRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqHeadingRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq > h2\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqListRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqItemRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] > \*\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqTriggerRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] button\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqTriggerFocusRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] button:focus-visible\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqChevronRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] button svg\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqRegionRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] \[role="region"\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqRegionOpenRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] \[role="region"\]\[data-state="open"\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqRegionInnerRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] \[role="region"\] > div\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const faqAnswerRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] p\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+
+  expect(styles).toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,",
+  );
+  expect(faqSectionRule).toBeDefined();
+  expect(faqSectionRule).toContain("padding-block: clamp(2.25rem, 4vw, 3.5rem);");
+  expect(faqHeadingRule).toBeDefined();
+  expect(faqHeadingRule).toContain("margin-bottom: 1rem;");
+  expect(faqHeadingRule).not.toContain("max-width: 11ch");
+  expect(faqListRule).toBeDefined();
+  expect(faqListRule).toContain("background: transparent;");
+  expect(faqListRule).toContain("color: var(--foreground);");
+  expect(faqItemRule).toBeDefined();
+  expect(faqItemRule).toContain("border-color: var(--border);");
+  expect(faqTriggerRule).toBeDefined();
+  expect(faqTriggerRule).toContain("background: transparent;");
+  expect(faqTriggerRule).toContain("box-shadow: none;");
+  expect(faqTriggerRule).toContain("color: var(--foreground);");
+  expect(faqTriggerRule).toContain("cursor: pointer;");
+  expect(faqTriggerRule).toContain("font-size: 1rem;");
+  expect(faqTriggerRule).toContain("font-weight: 600;");
+  expect(faqTriggerRule).toContain("min-height: 44px;");
+  expect(faqTriggerRule).toContain("padding-block: 1rem;");
+  expect(faqTriggerFocusRule).toBeDefined();
+  expect(faqTriggerFocusRule).toContain("outline: 2px solid var(--ring);");
+  expect(faqTriggerFocusRule).toContain("outline-offset: 0.25rem;");
+  expect(faqChevronRule).toBeDefined();
+  expect(faqChevronRule).toContain("color: var(--muted-foreground);");
+  expect(faqRegionRule).toBeDefined();
+  expect(faqRegionRule).toContain("animation: none;");
+  expect(faqRegionRule).toContain("display: grid;");
+  expect(faqRegionRule).toContain("grid-template-rows: 0fr;");
+  expect(faqRegionRule).toContain("overflow: hidden;");
+  expect(faqRegionRule).toContain("transition: grid-template-rows 200ms ease-out;");
+  expect(faqRegionOpenRule).toBeDefined();
+  expect(faqRegionOpenRule).toContain("grid-template-rows: 1fr;");
+  expect(faqRegionInnerRule).toBeDefined();
+  expect(faqRegionInnerRule).toContain("height: auto;");
+  expect(faqRegionInnerRule).toContain("min-height: 0;");
+  expect(faqRegionInnerRule).toContain("overflow: hidden;");
+  expect(faqRegionInnerRule).toContain("padding-bottom: 0;");
+  expect(faqRegionInnerRule).toContain("padding-top: 0;");
+  expect(faqAnswerRule).toBeDefined();
+  expect(faqAnswerRule).toContain("color: var(--muted-foreground);");
+  expect(faqAnswerRule).toContain("padding-bottom: 1rem;");
+  expect(faqAnswerRule).toContain("text-wrap: pretty;");
+  expect(styles).not.toContain('[data-slot="accordion"]');
+  expect(styles).not.toContain('[data-slot="accordion-item"]');
+  expect(styles).not.toContain('[data-slot="accordion-trigger"]');
+  expect(styles).not.toContain('[data-slot="accordion-content"]');
+  expect(styles).not.toContain('[data-slot="accordion-trigger-icon"]');
+  expect(styles).not.toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details",
+  );
+  expect(styles).not.toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq summary",
+  );
 });
 
 test("styles the homepage language dropdown through dedicated data attributes", () => {

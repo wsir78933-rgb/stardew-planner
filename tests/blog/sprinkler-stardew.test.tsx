@@ -8,12 +8,12 @@ import {
   isBlogPostSlug,
 } from "../../src/blog/blog-post-registry";
 
-const englishTitle = "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant";
+const englishTitle = "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles";
 const englishDescription =
-  "Match each sprinkler to 4, 8, or 24 tiles, then check radius overlay on your farm map. Pressure nozzles and enrichers cannot share one sprinkler.";
-const chineseTitle = "星露谷洒水器布局先分清4/8/24格";
+  "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.";
+const chineseTitle = "星露谷洒水器布局：4、8、24格覆盖与摆放";
 const chineseDescription =
-  "覆盖落到池塘、通道或边界时，名义覆盖不会都变成作物格。规划器可叠加洒水器与稻草人范围，导出截图后再照着进游戏摆放。";
+  "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。";
 
 it("publishes the locked localized sprinkler metadata on the shared identity", () => {
   expect(isBlogPostSlug("sprinkler-stardew")).toBe(true);
@@ -53,10 +53,11 @@ it("renders the exact gated English body, FAQ, CTA, and source boundaries withou
   expect(markup).toMatch(/^<article><p>/);
   expect(markup).not.toContain("<h1");
   expect(markup).toContain(
-    "The watering can will eat a morning once the field is bigger than a handful of parsnips.",
+    "Treat every sprinkler as a shape before you treat it as a farm plan.",
   );
-  expect(markup).toContain("Count the tiles the sprinkler actually waters");
+  expect(markup).toContain("A coverage number is not a crop count.");
   expect(markup).toContain("Pressure Nozzle grows the radius to 3×3, 5×5, or 7×7.");
+  expect(markup).toContain("The planner shows placement geometry, not tomorrow morning.");
   expect(markup).toContain('href="/"');
   expect(markup.match(/class="blog-faq-item"/g) ?? []).toHaveLength(4);
   expect(markup).toContain("Stardew Valley Wiki: Greenhouse sprinklers");
@@ -69,10 +70,11 @@ it("renders the exact gated Chinese body, CTA, FAQ, and source boundaries withou
   expect(markup).toMatch(/^<article><p>/);
   expect(markup).not.toContain("<h1");
   expect(markup).toContain(
-    "很多洒水器布局看起来很整齐，放进自己的农场却会漏浇：地图边缘、池塘和通道，会让纸面上的满覆盖失效。",
+    "先把洒水器当成覆盖形状，再把它放进农场路线",
   );
-  expect(markup).toContain("理论最少数量 = 向上取整（计划浇水格数 ÷ 单个洒水器覆盖格数）");
+  expect(markup).toContain("名义覆盖不是有效作物格");
   expect(markup).toContain("把洒水器先摆进真实农场地图");
+  expect(markup).toContain("规划器只显示摆放关系，不代替第二天早晨的浇水");
   expect(markup).toContain('href="/zh#planner"');
   expect(markup).toContain("打开星露谷农场规划器");
   expect(markup.match(/class="blog-faq-item"/g) ?? []).toHaveLength(5);

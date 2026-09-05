@@ -5,230 +5,318 @@ export function SprinklerStardewEnglishArticle() {
   return (
     <article>
       <p>
-        The watering can will eat a morning once the field is bigger than a handful of
-        parsnips. A sprinkler does not fix that by magic. It wets a fixed set of tiles at
-        dawn and ignores everything else.
+        A Stardew Valley sprinkler layout starts with one small correction: 4, 8, or 24
+        is a watering count, not a promise that the same number of crop tiles will be
+        useful. The item waters a fixed shape every morning. Soil, ponds, paths, map
+        edges, buildings, and walking lanes decide how much of that shape becomes a
+        working farm.
       </p>
       <p>
-        Count those tiles first: 4, 8, or 24. A basic sprinkler never reaches the corners.
-        When the count matches the field you actually want, place the sprinkler on the map
-        and turn on radius overlay before you plant.
-      </p>
-
-      <h2>Count the tiles the sprinkler actually waters</h2>
-      <p>
-        Call it a sprinkler only after you know which tiles get wet. The item name does not
-        describe a whole field. It describes a shape around the sprinkler itself, and the
-        sprinkler’s own tile is not a crop.
-      </p>
-      <div
-        className="blog-table-scroll"
-        role="region"
-        aria-label="Sprinkler watering ranges"
-        tabIndex={0}
-      >
-        <table className="blog-data-table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Tiles watered</th>
-              <th>Shape</th>
-              <th>Corners</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Sprinkler</td>
-              <td>4</td>
-              <td>Up, down, left, right</td>
-              <td>Dry</td>
-            </tr>
-            <tr>
-              <td>Quality Sprinkler</td>
-              <td>8</td>
-              <td>3×3 minus the sprinkler</td>
-              <td>Wet</td>
-            </tr>
-            <tr>
-              <td>Iridium Sprinkler</td>
-              <td>24</td>
-              <td>5×5 minus the sprinkler</td>
-              <td>Wet</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        Only tilled tiles take that water. Untilled dirt, paths, and chests in the radius
-        stay dry. If a corner crop dies while the four neighbors live, you placed a basic
-        sprinkler and expected a Quality shape.
+        Treat every sprinkler as a shape before you treat it as a farm plan. Place the
+        device around the route you actually walk, then check the tiles that receive
+        water. A layout that looks tidy in a screenshot can still leave a corner dry or
+        put every harvest behind a crop you cannot walk through.
       </p>
 
-      <h2>Unlock the recipe that matches that count</h2>
+      <h2>Start with the three watering shapes</h2>
       <p>
-        You do not upgrade a placed sprinkler into the next tier. You craft the next item,
-        or you find it. The recipes unlock with Farming:
+        A basic Sprinkler waters the four cardinal tiles: one above, below, left, and
+        right. It does not water the four diagonal corners. A Quality Sprinkler waters
+        the eight surrounding tiles, which makes a 3-by-3 block with the machine in
+        the center. An Iridium Sprinkler waters the 24 surrounding tiles in a 5-by-5
+        block.
+      </p>
+      <p>
+        Only tilled tiles can receive the water. The sprinkler&apos;s own tile is occupied
+        by the machine, so it is not a crop tile. A path inside the radius does not
+        become a watered crop, and an un-tilled patch does not count just because the
+        coverage overlay touches it.
       </p>
       <ul>
-        <li>Farming 2 — Sprinkler: 1 Copper Bar and 1 Iron Bar.</li>
-        <li>
-          Farming 6 — Quality Sprinkler: 1 Iron Bar, 1 Gold Bar, and 1 Refined Quartz.
-          Completing the Summer Crops Bundle (or the remixed Garden Bundle) also awards a
-          Quality Sprinkler.
-        </li>
-        <li>
-          Farming 9 — Iridium Sprinkler: 1 Gold Bar, 1 Iridium Bar, and 1 Battery Pack.
-          Krobus sells one every Friday for 10,000g.
-        </li>
+        <li>Sprinkler: 4 adjacent tiles in a plus shape; diagonal corners stay dry.</li>
+        <li>Quality Sprinkler: 8 surrounding tiles in a 3-by-3 shape.</li>
+        <li>Iridium Sprinkler: 24 surrounding tiles in a 5-by-5 shape.</li>
       </ul>
       <p>
-        If you are still on the starter can, the Farming 2 recipe is the whole point of the
-        keyword. Craft a handful, test the 4-tile plus sign, and do not wait for iridium to
-        start automating a small patch.
+        A coverage number is not a crop count. Four water targets do not mean four
+        available plants if one target is a path. Twenty-four targets do not mean 24
+        harvestable crops if the machine sits on tilled soil. Count the valid,
+        reachable tiles after the shape meets the map.
       </p>
 
-      <h2>Lay a grid that still leaves a path</h2>
+      <h2>Craft the tier that matches your current farm</h2>
       <p>
-        A sprinkler that waters a crop you cannot harvest is a bad placement. Leave walking
-        tiles on purpose.
+        The first Sprinkler recipe unlocks at Farming level 2 and uses one Copper Bar
+        and one Iron Bar. It is an early automation tool for small patches, not a
+        reason to wait until you can afford a complete field. Put a few plus shapes
+        around the field you already have and keep a route between them.
       </p>
       <p>
-        Basic sprinklers need a staggered pattern because the corners are dry. Treat each
-        plus sign as a unit. Offset the next plus so a dry corner of one unit sits on a wet
-        arm of another, and keep a one-tile path where you actually walk at harvest.
+        Quality Sprinklers unlock at Farming level 6. Each recipe uses one Iron Bar,
+        one Gold Bar, and one Refined Quartz. The 3-by-3 shape is easier to repeat than
+        the basic plus, but the center tile still belongs to the machine and every
+        edge still has to fit your field.
       </p>
       <p>
-        Quality sprinklers pack as 3×3 blocks. The sprinkler sits in the center of eight
-        crops. Repeat the block, then leave a lane between groups for chests, scarecrows,
-        and your own feet. Mid-game fields fail when every tile is a crop and you have to
-        pick a path through wet dirt.
+        Iridium Sprinklers unlock at Farming level 9. Each recipe uses one Gold Bar,
+        one Iridium Bar, and one Battery Pack. The 5-by-5 shape covers more ground, so
+        the cost of a bad placement is also larger: one device can put a wide block
+        over a pond, a building entrance, or the only useful walking lane.
       </p>
       <p>
-        Iridium sprinklers pack as 5×5 blocks. Twenty-four crops surround one sprinkler.
-        Duplicate that square across the field and keep a lane for the daily loop. The
-        late-game mistake is sliding two 5×5 blocks together until you cannot reach the
-        middle without walking on a trellis.
-      </p>
-
-      <h2>Choose one upgrade: pressure nozzle or enricher</h2>
-      <p>
-        A placed sprinkler can take one upgrade, not two. Picking the sprinkler up returns
-        the upgrade. You cannot run a Pressure Nozzle and an Enricher on the same machine.
-      </p>
-      <p>
-        A Pressure Nozzle stretches the same three shapes: basic becomes a 3×3, Quality
-        becomes a 5×5, Iridium becomes a 7×7. Qi’s Walnut Room sells four nozzles for 20 Qi
-        Gems. One nozzle is enough for one sprinkler even though the icon looks like a
-        single spout.
-      </p>
-      <p>
-        An Enricher holds fertilizer and applies it when you plant in range. That is a
-        planting job, not extra water. If the field is still dry in the corners, the
-        Enricher will not save it.
-      </p>
-      <p>
-        Choose the nozzle when the missing tiles are the problem. Choose the Enricher when
-        the radius is already enough and you are tired of walking fertilizer out by hand.
-        The planner can show both appearances. It does not spend Qi Gems or empty a
-        fertilizer stack for you.
+        Do not build a layout around a future tier before the items exist. Start with
+        the devices in your chest, leave room to replace the pattern, and recheck the
+        map when the next recipe becomes available. A temporary 4-tile patch that
+        saves watering today is more useful than an empty field waiting for iridium.
       </p>
 
-      <h2>Greenhouse, sand, pots, and troughs</h2>
+      <h2>Build repeatable modules, then add the path</h2>
       <p>
-        The greenhouse crop rectangle is 12 tiles wide and 10 tiles deep. Sprinklers can
-        sit on the wood border and still water soil in range. The plot is not a clean stack
-        of 5×5 squares, so some soil tiles have to hold sprinklers if you want full
-        automation.
+        Basic Sprinklers work best as small staggered modules. A plus shape leaves dry
+        diagonals, so offset the next device until those corners are covered by a
+        neighbor. Do not force a large rectangle if the pattern pushes the useful
+        water outside the tillable land. Split the field into pieces that you can
+        expand without moving every existing crop.
       </p>
       <p>
-        Wiki layouts that minimize lost soil with Iridium Sprinklers use six of them and
-        occupy four crop tiles, leaving 116 plants. Five Iridium Sprinklers with Pressure
-        Nozzles occupy one crop tile and leave 119 plants. Four with nozzles occupy two crop
-        tiles and leave 118. Quality layouts occupy twelve crop tiles. Those counts assume
-        the indoor plot, not your outdoor farm.
+        Quality Sprinklers make a clean 3-by-3 module: one machine in the middle and
+        eight crop tiles around it. Repeat the module with three tiles between
+        neighboring centers. If a route crosses the field, reserve that lane first
+        and let the modules stop at the route rather than burying the route under
+        crops.
       </p>
       <p>
-        If you need Robin to move the greenhouse building on the outdoor map, use the{" "}
-        <a href="/carpenter-stardew">Stardew Valley carpenter guide</a>. Moving the building
-        does not change the indoor grid.
+        Iridium Sprinklers make a 5-by-5 module: one machine in the middle and 24
+        surrounding targets. Neighboring centers are five tiles apart when you repeat
+        the full block. On an irregular farm, it is often better to trim a module at
+        the edge than to pretend that water landing on a cliff or pond is productive.
       </p>
+      <ul>
+        <li>Set the main walking lane before filling the last crop row.</li>
+        <li>Keep chests and processing near the route, not in the only covered corner.</li>
+        <li>Leave a working edge when a field may grow after a tool upgrade.</li>
+        <li>Recount the tiles after moving one device; overlapping shapes do not add a new crop tile.</li>
+      </ul>
       <p>
-        Sprinklers cannot sit on sand, so a Beach farm dirt patch is not the beach itself.
-        They cannot water Garden Pots or the pet bowl. They can water Slime Hutch troughs.
-        A torch can sit on a sprinkler. None of those rules care what the planner sprite
-        looks like if you forced Free Placement.
+        A sprinkler that waters a crop you cannot reach has solved watering and created
+        a harvest problem. Walk the route from the farmhouse to the field, then from
+        the field to storage or the shipping bin. The shortest theoretical pattern is
+        not automatically the easiest daily pattern.
       </p>
 
-      <h2>Check the radius in the planner before you plant</h2>
+      <h2>Count effective coverage, not the biggest number</h2>
       <p>
-        Open the <a className="blog-planner-link" href="/">Stardew Valley Planner</a> and
-        put the sprinkler on the map you actually play. Catalog items include the three
-        sprinklers. Cycle the appearance through Base, Pressure, and Enricher. Turn on
-        sprinkler radius so the watered tiles light up. Scarecrow, Bee House, and Junimo
-        Hut overlays are separate toggles if the field also needs those radii.
+        Begin with the number of crop tiles you want to keep. Mark tiles that are
+        already unavailable because of water, cliffs, entrances, buildings, or map
+        boundaries. Only then compare the nominal 4, 8, or 24 targets against the
+        remaining soil. This prevents a three-Iridium calculation from looking better
+        than a four-Iridium calculation that actually waters the whole field.
       </p>
       <p>
-        Beach dirt versus sand is easier to see on{" "}
-        <a className="blog-planner-link" href="/?farmType=beach">the Beach map</a>. Indoor
-        occupancy is easier to see on{" "}
-        <a className="blog-planner-link" href="/?farmType=greenhouse">the Greenhouse map</a>.
-        Crop-heavy early layouts are easier to test on{" "}
-        <a className="blog-planner-link" href="/?farmType=meadowlands">Meadowlands</a> if
-        that is the farm you opened in-game.
+        Ponds and rivers are not just empty-looking cells. They break a rectangular
+        plan and change where a device can sit. The Beach farm has another boundary:
+        sprinklers cannot be placed on sand. A dirt patch on that map can support a
+        plan, while the surrounding sand cannot accept the machine even if the sprite
+        appears there under a permissive placement mode.
       </p>
       <p>
-        Projects stay in this browser. There is no account and no cloud copy. Screenshot
-        export is available if you want a still of the overlay. Game-save import is
-        experimental; unsupported or modded items may not map.
+        The same distinction matters for Garden Pots and the pet water bowl. A
+        sprinkler does not water Garden Pots or fill the pet bowl. Sprinklers can
+        water Slime Hutch troughs. These are object rules, not visual guesses, so keep
+        them in the constraint list beside the shape and the route.
       </p>
       <p>
-        The overlay is a placement preview. It does not run the morning watering tick,
-        grant Farming XP, spend Qi Gems, or apply Enricher fertilizer. Free Placement can
-        show a layout the game will reject. If the game forbids sand and the planner still
-        drew a sprite, believe the game.
+        Greenhouse planning has its own geometry. The crop bed is 10 rows by 12
+        columns, and a sprinkler can sit on the surrounding wood border while watering
+        soil in range. Six Iridium Sprinklers can leave four crop tiles occupied in a
+        standard efficient arrangement; 16 Quality Sprinklers can leave 12 crop tiles
+        occupied. Those numbers describe a particular indoor layout, not every farm
+        map.
+      </p>
+
+      <h2>Choose one upgrade for one job</h2>
+      <p>
+        A placed sprinkler can hold one upgrade at a time. A Pressure Nozzle increases
+        the watering shapes. Pressure Nozzle grows the radius to 3×3, 5×5, or 7×7.
+        That means basic Sprinkler, Quality Sprinkler, and Iridium Sprinkler
+        respectively. Qi&apos;s Walnut Room sells four Pressure Nozzles for 20 Qi Gems.
+      </p>
+      <p>
+        An Enricher is a different job. Load it with fertilizer and it applies that
+        fertilizer when you plant nearby. It does not make the watering shape larger.
+        A sprinkler cannot use a Pressure Nozzle and an Enricher together, so choose
+        the missing capability instead of trying to stack both attachments.
+      </p>
+      <p>
+        Use a Pressure Nozzle when your field is short on reachable water targets or
+        when the larger shape lets you reclaim a machine tile. Use an Enricher when
+        water coverage is already correct and planting fertilizer is the repetitive
+        task. After installing either upgrade, redraw the grid: the old center spacing
+        no longer describes the same coverage.
+      </p>
+      <p>
+        Picking up the placed sprinkler removes the upgrade without destroying it.
+        That makes experimentation reversible, but it does not make every position
+        valid. Check the new shape against soil, paths, buildings, and the route again
+        before planting around it.
+      </p>
+
+      <h2>Keep greenhouse and outdoor rules separate</h2>
+      <p>
+        The Greenhouse is a useful test case because its crop rectangle and its border
+        do not behave like an open farm field. Sprinklers on the wood border can water
+        nearby soil, while the 10-by-12 crop bed remains a finite pool of planting
+        tiles. If a device sits on soil, subtract that tile from your crop total.
+        If you also need to move a farm building, check{" "}
+        <a href="/carpenter-stardew">the carpenter guide</a> before fixing the field
+        route.
+      </p>
+      <p>
+        The outer greenhouse area can hold fruit trees, but tree growth needs a clear
+        surrounding area. A border sprinkler that is harmless to crop coverage can
+        still be badly timed beside an unfinished sapling. Mark tree positions before
+        committing the border pattern when the greenhouse is also an orchard.
+      </p>
+      <p>
+        Rain does not water greenhouse crops, and the room does not need scarecrows.
+        Those rules do not transfer to an outdoor field. Outdoor crops still depend on
+        the sprinkler shape, tilled soil, and any map obstacles between the device and
+        the crop.
+      </p>
+
+      <h2>Plan for the day you actually play</h2>
+      <p>
+        A crop-heavy layout needs a route for planting, harvesting, and replacing
+        fertilizer. An animal-heavy farm needs the route between the farmhouse, barns,
+        coops, hay storage, and shipping. A processing corner needs enough space to
+        approach the machines without walking through a crop row. Sprinkler coverage
+        is only one layer of the plan.
+      </p>
+      <p>
+        Put a lane where your character will cross the field, then fit the 3-by-3 or
+        5-by-5 modules around it. When a path breaks a module, count the new effective
+        crop tiles instead of preserving the original arithmetic. A slightly smaller
+        field that you can harvest without detours may save more time every day.
+      </p>
+      <p>
+        If you use trellis crops, reserve the walking side before the crop is planted.
+        Trellises block movement. If you add a Junimo Hut, Bee House, scarecrow, or
+        storage after the sprinkler grid, treat it as a new obstacle and inspect the
+        coverage and route again.
+      </p>
+
+      <h2>Use the planner to check geometry before planting</h2>
+      <p>
+        Open the{" "}
+        <a className="blog-planner-link" href="/">
+          Stardew Valley Planner
+        </a>
+        , choose the farm map you actually use, and place the sprinkler tier you own.
+        Turn on the sprinkler-radius overlay so the target tiles are visible. Use the
+        Greenhouse map for indoor layouts, the{" "}
+        <a className="blog-planner-link" href="/?farmType=beach">
+          Beach map
+        </a>{" "}
+        for sand boundaries, and the other farm maps for ponds, cliffs, and unusual
+        entrances.
+      </p>
+      <p>
+        The planner shows placement geometry, not tomorrow morning. It can display the
+        coverage relationship between a placed sprinkler and the map, but it does not
+        run the watering tick, grant Farming XP, spend Qi Gems, apply fertilizer, or
+        change your game save. If a Free Placement preview shows a sprite where the
+        game rejects sand, the game rule wins.
+      </p>
+      <p>
+        Read the map in three passes. First find uncovered tilled tiles. Next find
+        water that falls on ponds, paths, boundaries, or already-covered targets.
+        Finally walk the route from the entrance to the crops and storage. Fix one
+        category at a time so a coverage repair does not quietly create a path problem.
+      </p>
+      <p>
+        Projects stay in this browser, and screenshot export gives you a still image
+        of the layout when you want to rebuild it in-game. Save import is experimental;
+        unsupported or modded items may not map. The preview helps you decide where
+        items belong, while the game remains the authority for whether the placement
+        and watering action is accepted.
+      </p>
+      <p>
+        If you want the indoor version first, open{" "}
+        <a className="blog-planner-link" href="/?farmType=greenhouse">
+          the Greenhouse map
+        </a>
+        . For a general radius reference, use{" "}
+        <a className="blog-planner-link" href="/?farmType=meadowlands">
+          a farm map with open crop space
+        </a>
+        , place one tier, and verify its shape before expanding the pattern.
+      </p>
+
+      <h2>Fix a dry tile without rebuilding the farm</h2>
+      <ul>
+        <li>A dry diagonal beside a machine usually means you used a basic Sprinkler.</li>
+        <li>A dry crop on an un-tilled tile is not a sprinkler failure; prepare the soil first.</li>
+        <li>A machine on sand is invalid even if a permissive preview lets you see it there.</li>
+        <li>A covered pond or path is nominal coverage that does not become a harvestable crop tile.</li>
+        <li>A new Pressure Nozzle requires a new center spacing and a fresh path check.</li>
+        <li>A Garden Pot and the pet bowl need their own water rules, not a larger sprinkler.</li>
+      </ul>
+      <p>
+        Move the smallest number of devices that fixes the specific failure. If the
+        problem is one dry edge, change the edge module. If the problem is a blocked
+        route, reclaim that lane and recount the field. If the problem is the wrong
+        object type, replace the watering plan instead of adding more machines.
+      </p>
+
+      <h2>A repeatable Stardew Valley sprinkler workflow</h2>
+      <ol>
+        <li>Count the crop tiles you want and mark every hard map boundary.</li>
+        <li>Choose the sprinkler tier that exists in your inventory now.</li>
+        <li>Set the main walking lane before placing the last crop row.</li>
+        <li>Place repeatable plus, 3-by-3, or 5-by-5 modules around that lane.</li>
+        <li>Turn on the planner overlay and check uncovered soil, invalid targets, and overlap.</li>
+        <li>Plant only after the water shape and daily route both work.</li>
+        <li>Recheck after a Pressure Nozzle, a new building, a pond-side change, or a new crop.</li>
+      </ol>
+      <p>
+        The reliable question is not “How many tiles does this item advertise?” It is
+        “Which of my crop tiles will be watered, reachable, and still available after
+        every boundary is respected?” Answer that question on the map before you spend
+        a season walking around a pattern that looked perfect from above.
       </p>
 
       <h2>Sprinkler Stardew FAQ</h2>
       <BlogFaqList
         items={[
           {
-            question: "Is it worth using sprinklers in Stardew Valley?",
+            question: "What is the best sprinkler layout in Stardew Valley?",
             answer: (
               <p>
-                Yes if the field is large enough that the watering can eats the morning. A
-                sprinkler only wets 4, 8, or 24 tiles and only if those tiles are tilled.
-                Deluxe Retaining Soil is the documented alternative that keeps a tile
-                watered overnight without a sprinkler.
+                The best layout depends on the tier you own and the field you need to water. Basic Sprinklers use a plus shape, Quality Sprinklers use a 3-by-3 block, and Iridium Sprinklers use a 5-by-5 block. Fit the shape around soil and a walking route, then check the actual covered tiles.
               </p>
             ),
           },
           {
-            question: "How do you get the first sprinkler?",
+            question: "How many tiles does each sprinkler water?",
             answer: (
               <p>
-                Reach Farming 2 and craft it with 1 Copper Bar and 1 Iron Bar. That recipe
-                waters four orthogonal tiles. Quality Sprinklers unlock at Farming 6;
-                Iridium Sprinklers unlock at Farming 9.
+                A basic Sprinkler waters 4 cardinal tiles, a Quality Sprinkler waters 8 surrounding tiles, and an Iridium Sprinkler waters 24 surrounding tiles every morning. Only tilled tiles can receive that water, and the sprinkler&apos;s own tile is occupied.
               </p>
             ),
           },
           {
-            question: "Can a sprinkler take a Pressure Nozzle and an Enricher together?",
+            question: "Do a Pressure Nozzle and an Enricher work together?",
             answer: (
               <p>
-                No. One upgrade per sprinkler. Pressure Nozzle grows the radius to 3×3,
-                5×5, or 7×7. Enricher applies loaded fertilizer when you plant. Qi’s Walnut
-                Room sells four Pressure Nozzles for 20 Qi Gems.
+                No. One placed sprinkler can use one upgrade at a time. A Pressure Nozzle increases the range to 3-by-3, 5-by-5, or 7-by-7 depending on the sprinkler. An Enricher applies loaded fertilizer when you plant nearby.
               </p>
             ),
           },
           {
-            question: "Why will the sprinkler not water a garden pot or sit on the beach?",
+            question: "Why does the planner show a sprinkler where the game will not accept it?",
             answer: (
               <p>
-                Sprinklers cannot water Garden Pots or the pet bowl, and they cannot be
-                placed on sand. They can water Slime Hutch troughs. Check those rules
-                in-game even if a planner sprite still appears under Free Placement.
+                The planner is a placement preview and can show geometry under Free Placement. The game still controls valid placement, including the rule that sprinklers cannot be placed on sand. Check the game rule before treating a preview sprite as a legal item.
               </p>
             ),
           },
@@ -236,7 +324,7 @@ export function SprinklerStardewEnglishArticle() {
       />
 
       <BlogSources
-        checkedLabel="Ranges, upgrades, and greenhouse occupancy checked against those pages on 2026-08-29 for PC 1.6.15. The planner overlay is a placement preview, not a watering simulation."
+        checkedLabel="Ranges, recipes, upgrades, and placement limits checked against Stardew Valley Wiki pages on September 5, 2026. The planner is a placement preview, not a watering simulation."
         heading="Sources"
         items={[
           {

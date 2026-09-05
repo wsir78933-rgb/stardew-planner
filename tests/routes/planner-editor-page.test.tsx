@@ -35,23 +35,55 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain("data-homepage-hero-emphasis");
     expect(plannerPageMarkup).toContain("data-homepage-workspace");
     expect(plannerPageMarkup).toContain("data-homepage-product-stage");
+    expect(plannerPageMarkup).toContain('data-homepage-features="true"');
+    expect(plannerPageMarkup).toContain('data-homepage-why-choose="true"');
+    expect(plannerPageMarkup).toContain('data-homepage-how-to="true"');
+    expect(plannerPageMarkup).toContain('data-homepage-closing-cta="true"');
+    expect(plannerPageMarkup).toContain("What the planner does");
+    expect(plannerPageMarkup).toContain("Why use this planner");
+    expect(plannerPageMarkup).toContain("How to use it");
     expect(plannerPageMarkup).toContain(
-      "How to Plan a Stardew Valley Farm Layout",
+      "The map is already on this page. Start placing.",
     );
     expect(plannerPageMarkup).toContain(
-      'src="/homepage/stardew-valley-planner-layout.webp"',
+      'src="/homepage/features-pixel-farm.webp"',
     );
     expect(plannerPageMarkup).toContain(
-      "/homepage/stardew-valley-planner-layout-800.webp",
+      'src="/homepage/why-choose-pixel-farm.webp"',
     );
-    expect(plannerPageMarkup).toContain('sizes="(max-width: 700px) 100vw, 51vw"');
-    expect(plannerPageMarkup).toContain('height="941"');
-    expect(plannerPageMarkup).toContain('width="1672"');
+    expect(plannerPageMarkup).toContain(
+      'src="/homepage/how-to-pixel-farm.webp"',
+    );
+    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toHaveLength(3);
+    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toHaveLength(3);
+    expect(plannerPageMarkup).not.toContain("data-homepage-planning-guide");
+    expect(plannerPageMarkup).not.toContain("stardew-valley-planner-layout");
+    const homepageSectionMarkers = [
+      'data-homepage-workspace="true"',
+      'id="capabilities"',
+      'id="why-choose"',
+      'id="how-to"',
+      'data-homepage-closing-cta="true"',
+      'id="faq"',
+    ] as const;
+    let previousHomepageSectionPosition = plannerPageMarkup.indexOf(
+      homepageSectionMarkers[0],
+    );
+    expect(previousHomepageSectionPosition).toBeGreaterThanOrEqual(0);
+    for (const homepageSectionMarker of homepageSectionMarkers.slice(1)) {
+      const homepageSectionPosition = plannerPageMarkup.indexOf(
+        homepageSectionMarker,
+      );
+      expect(homepageSectionPosition).toBeGreaterThan(
+        previousHomepageSectionPosition,
+      );
+      previousHomepageSectionPosition = homepageSectionPosition;
+    }
     expect(plannerPageMarkup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
     expect(plannerPageMarkup).toContain(
       'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> – Free Online Farm Layout Tool',
     );
-    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(3);
+    expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(4);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/blog"[^>]*>Blog<\/a>/);
     expect(plannerPageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Open planner<\/a>/);
@@ -119,56 +151,77 @@ describe("planner editor page", () => {
     }
   });
 
-  it("keeps guide prose available through collapsed planning disclosures", () => {
+  it("renders the replacement sections and their copy in order for both locales", () => {
     for (const currentLocale of ["en", "zh-CN"] as const) {
-      const guideCopy = homepageCopyByLocale[currentLocale].planningGuide;
+      const homepageCopy = homepageCopyByLocale[currentLocale];
       const homepageMarkup = renderToStaticMarkup(
         createElement(HomepageContent, {
-          copy: homepageCopyByLocale[currentLocale],
+          copy: homepageCopy,
           currentLocale,
           localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
           plannerHref: currentLocale === "en" ? "/#planner" : "/zh#planner",
-          plannerWorkspace: null,
+          plannerWorkspace: createElement("div", {
+            "data-test-planner-workspace": true,
+          }),
         }),
       );
-      const guideMarkup = homepageMarkup.match(
-        /<section[^>]*data-homepage-planning-guide[^>]*>[\s\S]*?<\/section><section id="capabilities">/,
-      )?.[0];
-
-      expect(guideMarkup).toBeDefined();
-      expect(homepageMarkup).toContain("data-homepage-planning-guide-summary");
-      expect(homepageMarkup).toContain("data-homepage-planning-guide-details");
-      expect(homepageMarkup).toContain("data-homepage-planning-guide-play-styles");
-      expect(
-        homepageMarkup.match(/data-homepage-planning-guide-step="true"/g),
-      ).toHaveLength(4);
-      expect(
-        homepageMarkup.match(/data-homepage-planning-guide-play-style-option="true"/g),
-      ).toHaveLength(3);
-      expect(
-        homepageMarkup.match(/data-homepage-planning-guide-play-style-panel="true"/g),
-      ).toHaveLength(3);
-      expect(guideMarkup).not.toContain("<details open");
-      expect(guideMarkup).not.toContain('data-homepage-planning-guide-play-style-option="true" checked');
-      expect(guideMarkup).not.toMatch(/<summary[^>]*>[\s\S]*?<h4/);
-
-      for (const paragraph of guideCopy.intro) {
-        expect(homepageMarkup).toContain(paragraph);
+      const homepageSectionMarkers = [
+        "data-test-planner-workspace",
+        'id="capabilities"',
+        'id="why-choose"',
+        'id="how-to"',
+        'data-homepage-closing-cta="true"',
+        'id="faq"',
+      ] as const;
+      let previousHomepageSectionPosition = homepageMarkup.indexOf(
+        homepageSectionMarkers[0],
+      );
+      expect(previousHomepageSectionPosition).toBeGreaterThanOrEqual(0);
+      for (const homepageSectionMarker of homepageSectionMarkers.slice(1)) {
+        const homepageSectionPosition = homepageMarkup.indexOf(
+          homepageSectionMarker,
+        );
+        expect(homepageSectionPosition).toBeGreaterThan(
+          previousHomepageSectionPosition,
+        );
+        previousHomepageSectionPosition = homepageSectionPosition;
       }
 
-      for (const step of guideCopy.steps) {
-        expect(homepageMarkup).toContain(step.title);
-        expect(homepageMarkup).toContain(step.description);
+      const replacementSections = [
+        {
+          marker: 'data-homepage-features="true"',
+          heading: homepageCopy.features.heading,
+          imageAlt: homepageCopy.features.imageAlt,
+          items: homepageCopy.features.items,
+        },
+        {
+          marker: 'data-homepage-why-choose="true"',
+          heading: homepageCopy.whyChoose.heading,
+          imageAlt: homepageCopy.whyChoose.imageAlt,
+          items: homepageCopy.whyChoose.items,
+        },
+        {
+          marker: 'data-homepage-how-to="true"',
+          heading: homepageCopy.howTo.heading,
+          imageAlt: homepageCopy.howTo.imageAlt,
+          items: homepageCopy.howTo.steps,
+        },
+      ] as const;
+
+      for (const replacementSection of replacementSections) {
+        expect(homepageMarkup).toContain(replacementSection.marker);
+        expect(homepageMarkup).toContain(replacementSection.heading);
+        expect(homepageMarkup).toContain(replacementSection.imageAlt);
+        for (const item of replacementSection.items) {
+          expect(homepageMarkup).toContain(item.title);
+          expect(homepageMarkup).toContain(item.description);
+        }
       }
 
-      for (const playStyle of guideCopy.playStyles) {
-        expect(homepageMarkup).toContain(playStyle.title);
-        expect(homepageMarkup).toContain(playStyle.description);
-      }
-
-      for (const paragraph of guideCopy.evolutionParagraphs) {
-        expect(homepageMarkup).toContain(paragraph);
-      }
+      expect(homepageMarkup).toContain(homepageCopy.closingCta.heading);
+      expect(homepageMarkup).toContain(homepageCopy.closingCta.supportLine);
+      expect(homepageMarkup).not.toContain("data-homepage-planning-guide");
+      expect(homepageMarkup).not.toContain("stardew-valley-planner-layout");
     }
   });
 
@@ -192,20 +245,39 @@ describe("planner editor page", () => {
     }
   });
 
-  it("renders closed native FAQ disclosures with every English answer", () => {
+  it("renders closed accordion FAQ items with every English answer", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
-    const faqMarkup = plannerPageMarkup.match(
-      /<div data-homepage-faq-list="true">([\s\S]*?)<\/div><\/section>/,
-    )?.[1];
+    const faqSectionStart = plannerPageMarkup.indexOf('id="faq"');
+    const faqSectionEnd = plannerPageMarkup.indexOf("</section>", faqSectionStart);
+    const faqMarkup = plannerPageMarkup.slice(faqSectionStart, faqSectionEnd);
 
-    expect(faqMarkup).toBeDefined();
-    expect(faqMarkup?.match(/<details>/g)).toHaveLength(5);
-    expect(faqMarkup?.match(/<summary>/g)).toHaveLength(5);
-    expect(faqMarkup).not.toContain("<details open");
+    expect(faqSectionStart).toBeGreaterThanOrEqual(0);
+    expect(faqMarkup).toContain('data-homepage-faq-list="true"');
+    expect(
+      faqMarkup.match(
+        /data-state="closed" data-orientation="vertical" class="border-b border-border"/g,
+      ),
+    ).toHaveLength(5);
+    expect(faqMarkup.match(/aria-expanded="false"/g)).toHaveLength(5);
+    expect(faqMarkup.match(/role="region"/g)).toHaveLength(5);
+    expect(faqMarkup.match(/<h3 /g)).toHaveLength(5);
+    expect(faqMarkup.match(/<svg /g)).toHaveLength(5);
+    expect(faqMarkup.match(/M3\.13523 6\.15803/g)).toHaveLength(5);
+    expect(faqMarkup).toContain('viewBox="0 0 15 15"');
+    expect(faqMarkup).toContain('data-state="closed"');
+    expect(faqMarkup).not.toContain('data-state="open"');
+    expect(faqMarkup).not.toContain("<details");
+    expect(faqMarkup).not.toContain("<summary");
+    expect(faqMarkup).not.toContain("lucide");
+    expect(faqMarkup).not.toContain('data-slot="accordion"');
+    expect(faqMarkup).not.toContain('data-slot="accordion-item"');
+    expect(faqMarkup).not.toContain('data-slot="accordion-trigger"');
+    expect(faqMarkup).not.toContain('data-slot="accordion-content"');
+    expect(faqMarkup).not.toContain('data-slot="accordion-trigger-icon"');
 
     for (const faqItem of homepageCopyByLocale.en.faq.items) {
-      expect(plannerPageMarkup).toContain(faqItem.question);
-      expect(plannerPageMarkup).toContain(faqItem.answer);
+      expect(faqMarkup).toContain(faqItem.question);
+      expect(faqMarkup).toContain(faqItem.answer);
     }
   });
 
@@ -286,7 +358,7 @@ describe("planner editor page", () => {
       ),
     );
 
-    expect(homepageMarkup.match(/href="#planner"/g)).toHaveLength(3);
+    expect(homepageMarkup.match(/href="#planner"/g)).toHaveLength(4);
     expect(homepageMarkup.match(/href="\/zh\?farmType=forest#planner"/g)).toHaveLength(1);
     expect(homepageMarkup).toMatch(
       /<a[^>]*data-homepage-brand[^>]*href="#planner"/,

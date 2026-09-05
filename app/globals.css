@@ -349,71 +349,20 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id]:not
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id] > h2 {
-  font-size: clamp(2.7rem, 5vw, 5.4rem);
-  line-height: 0.94;
-  margin-bottom: clamp(2rem, 4vw, 4rem);
-  max-width: 11ch;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  text-wrap: balance;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] {
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-layout] {
   align-items: start;
   column-gap: clamp(2rem, 5vw, 5rem);
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  row-gap: 1.5rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-summary] {
-  align-content: start;
-  display: grid;
-  gap: 1.25rem;
-  grid-column: 1;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details {
-  border: 1px solid rgb(36 42 34 / 35%);
-  border-radius: var(--radius);
-  background: var(--card);
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] summary {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  font-weight: 600;
-  gap: 0.75rem;
-  justify-content: space-between;
-  list-style: none;
-  padding: 1rem 1.1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] summary::-webkit-details-marker {
-  display: none;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] summary::after {
-  content: "+";
-  font-size: 1.35rem;
-  font-weight: 400;
-  line-height: 1;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details[open] summary {
-  border-bottom: 1px solid rgb(36 42 34 / 35%);
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details[open] summary::after {
-  content: "−";
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] details p {
-  color: var(--muted-foreground);
-  line-height: 1.6;
-  margin: 1rem 1.1rem;
-  max-width: 65ch;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figure {
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-media] {
   align-self: start;
   background: var(--secondary);
   border: 1px solid rgb(36 42 34 / 35%);
@@ -424,186 +373,108 @@ body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figure {
   overflow: hidden;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] img {
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-media] img {
+  aspect-ratio: 1672 / 941;
   display: block;
   height: auto;
   max-width: 100%;
   width: 100%;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figcaption {
-  color: var(--muted-foreground);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  padding: 0.9rem 1rem 1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] > section {
-  border-top: 1px solid rgb(36 42 34 / 35%);
-  grid-column: 1 / -1;
-  padding-top: 1.75rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide] h3 {
-  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
-  margin-bottom: 1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] ol {
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] {
+  border-block: 1px solid rgb(36 42 34 / 72%);
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  grid-column: 1;
+  grid-row: 1;
   list-style: none;
   margin: 0;
+  min-width: 0;
   padding: 0;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] li {
-  min-width: 0;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step] {
-  height: 100%;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step] summary {
-  align-items: start;
-  min-height: 9.75rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step] summary > span {
-  color: var(--muted-foreground);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-step-title] {
-  flex: 1;
-  font-size: 1.05rem;
-  line-height: 1.25;
-  margin: 0;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-details] > div {
-  display: grid;
-  gap: 0.75rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-options] {
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] li {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] {
+  grid-template-columns: 2.25rem minmax(0, 1fr);
   min-width: 0;
-  position: relative;
+  padding: 1.35rem 0;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] input {
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-  position: absolute;
-  width: 1px;
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] li + li {
+  border-top: 1px solid rgb(36 42 34 / 35%);
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] label {
-  align-content: space-between;
-  background: var(--card);
-  border: 1px solid rgb(36 42 34 / 35%);
-  border-radius: var(--radius);
-  cursor: pointer;
-  display: grid;
-  gap: 1.25rem;
-  min-height: 9.75rem;
-  padding: 1rem 1.1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] label > span:first-child {
-  color: var(--muted-foreground);
-  font-size: 0.8rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] label > span:last-child {
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] input:focus-visible + label {
-  outline: 2px solid var(--foreground);
-  outline-offset: 3px;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-option] input:checked + label {
-  border-color: rgb(36 42 34 / 72%);
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-panels] {
-  margin-top: 1rem;
-  max-width: 65ch;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-panel] {
-  background: var(--card);
-  border: 1px solid rgb(36 42 34 / 35%);
-  border-radius: var(--radius);
-  display: none;
-  padding: 1rem 1.1rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-panel] p {
-  color: var(--muted-foreground);
-  line-height: 1.6;
-  margin: 0;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-styles]:has(#planning-guide-play-style-0:checked) [data-play-style-index="0"],
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-styles]:has(#planning-guide-play-style-1:checked) [data-play-style-index="1"],
-body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-styles]:has(#planning-guide-play-style-2:checked) [data-play-style-index="2"] {
-  display: block;
-}
-
-@media (max-width: 960px) {
-  body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] ol {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities > div {
-  border-block: 1px solid rgb(36 42 34 / 72%);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities article {
-  min-height: 15.5rem;
-  padding: 1.75rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities article + article {
-  border-left: 1px solid rgb(36 42 34 / 72%);
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities h3 {
-  font-size: 1.45rem;
-  margin-bottom: 0.85rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-capability-number] {
+body:has(> [data-homepage-shell]) [data-homepage-section-index] {
   color: #5f7b1d;
-  display: block;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
-  margin-bottom: 3.5rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding-top: 0.2rem;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities p,
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] h3 {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] p,
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,
 body:has(> [data-homepage-shell]) [data-homepage-trust] > p {
   color: var(--muted-foreground);
   line-height: 1.6;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] p {
+  margin-bottom: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-media] {
+  grid-column: 1;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-list] {
+  grid-column: 2;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-closing-cta] {
+  align-items: center;
+  border-block: 1px solid rgb(36 42 34 / 72%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  justify-content: space-between;
+  margin-inline: auto;
+  max-width: 1280px;
+  padding: 1.35rem clamp(1.25rem, 3vw, 3rem);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-closing-cta] h2 {
+  flex: 1 1 auto;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height: 1.2;
+  margin-bottom: 0;
+  min-width: min(100%, 16rem);
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-closing-cta-content] {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.9rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-closing-cta] [data-homepage-primary-action] {
+  min-height: 44px;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-closing-cta-content] p {
+  color: var(--muted-foreground);
+  line-height: 1.4;
+  margin: 0;
+  text-wrap: pretty;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-trust] {
@@ -616,40 +487,81 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-ho
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-trust] h2 {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  margin-bottom: 1rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.25;
+  margin-bottom: 0.65rem;
+  text-wrap: balance;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-trust] p {
   margin-bottom: 0;
   margin-inline: auto;
   max-width: 44rem;
+  text-wrap: pretty;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details {
-  border-top: 1px solid rgb(36 42 34 / 72%);
-  padding-block: 0.25rem;
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq {
+  padding-block: clamp(2.25rem, 4vw, 3.5rem);
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details:last-child {
-  border-bottom: 1px solid rgb(36 42 34 / 72%);
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq > h2 {
+  margin-bottom: 1rem;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq summary {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] {
+  background: transparent;
   color: var(--foreground);
-  font-size: 1rem;
-  padding-block: 1.3rem;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq summary:focus-visible {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] > * {
+  border-color: var(--border);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] button {
+  background: transparent;
+  box-shadow: none;
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 44px;
+  padding-block: 1rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] button:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 0.25rem;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details p {
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] button svg {
+  color: var(--muted-foreground);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] [role="region"] {
+  animation: none;
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 200ms ease-out;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] [role="region"][data-state="open"] {
+  grid-template-rows: 1fr;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] [role="region"] > div {
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] p {
   color: var(--muted-foreground);
   line-height: 1.6;
-  padding-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  text-wrap: pretty;
 }
 
 body:has(> [data-homepage-shell]) [data-site-footer] {
@@ -799,35 +711,28 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
     padding-inline: 0;
   }
 
-  body:has(> [data-homepage-shell]) [data-homepage-planning-guide] {
+  body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-layout] {
     gap: 1.5rem;
     grid-template-columns: 1fr;
   }
 
-  body:has(> [data-homepage-shell]) [data-homepage-planning-guide] figure {
+  body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-media],
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-media],
+  body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list],
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-list] {
     grid-column: auto;
     grid-row: auto;
   }
 
-  body:has(> [data-homepage-shell]) [data-homepage-planning-guide-workflow] ol {
-    grid-template-columns: 1fr;
+  body:has(> [data-homepage-shell]) [data-homepage-closing-cta] {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-block: 1.15rem;
   }
 
-  body:has(> [data-homepage-shell]) [data-homepage-planning-guide-play-style-options] {
-    grid-template-columns: 1fr;
-  }
-
-  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities > div {
-    grid-template-columns: 1fr;
-  }
-
-  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#capabilities article + article {
-    border-left: 0;
-    border-top: 1px solid rgb(36 42 34 / 72%);
-  }
-
-  body:has(> [data-homepage-shell]) [data-homepage-capability-number] {
-    margin-bottom: 2rem;
+  body:has(> [data-homepage-shell]) [data-homepage-closing-cta] h2 {
+    min-width: 0;
   }
 
   body:has(> [data-homepage-shell]) [data-site-footer] {

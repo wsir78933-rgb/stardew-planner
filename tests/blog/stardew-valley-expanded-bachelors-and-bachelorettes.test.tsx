@@ -6,13 +6,13 @@ import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "..
 import { getBlogPostBySlug } from "../../src/blog/blog-post-registry";
 
 const slug = "stardew-valley-expanded-bachelors-and-bachelorettes";
-const englishTitle = "7 Stardew Valley Expanded Bachelors and Bachelorettes";
+const englishTitle =
+  "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes";
 const englishDescription =
-  "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.";
-const chineseTitle =
-  "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多";
+  "Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.";
+const chineseTitle = "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物";
 const chineseDescription =
-  "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。";
+  "整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。";
 
 function renderArticle(
   Component:
@@ -84,22 +84,25 @@ it("renders sourced English and Chinese SVE marriage bodies with matching sectio
   expect(chineseMarkup).toContain('href="/zh/stardew-valley-npc"');
   expect(chineseMarkup).toContain('href="/zh/carpenter-stardew"');
   expect(englishMarkup).toContain("Claire");
-  expect(englishMarkup).toContain("How many Stardew Valley Expanded bachelors");
+  expect(englishMarkup).toContain("How many Stardew Valley Expanded marriage candidates");
   expect(chineseMarkup).toContain("克莱尔");
-  expect(chineseMarkup).toContain("星露谷SVE 可结婚角色现在有几人？");
+  expect(chineseMarkup).toContain("星露谷 SVE 当前有几位可结婚角色？");
   expect(englishMarkup).toContain("<h2>Sources</h2>");
   expect(chineseMarkup).toContain("来源");
-  expect(englishMarkup).toContain("Rabbit");
-  expect(englishMarkup).toContain("tea saplings");
-  expect(englishMarkup).toContain("Friday, Saturday, and Sunday");
-  expect(chineseMarkup).toContain("兔脚");
-  expect(chineseMarkup).toContain("茶树苗");
-  expect(chineseMarkup).toContain("周五、周六、周日");
-  expect(englishMarkup).toContain("Alesia, Isaac, and Camilla are planned");
-  expect(countSecondLevelSections(englishMarkup)).toBeGreaterThanOrEqual(8);
+    expect(englishMarkup).toContain("Scarlett");
+    expect(englishMarkup).toContain("Monster Mushroom");
+    expect(englishMarkup).toContain("Mermaid");
+    expect(chineseMarkup).toContain("斯嘉丽");
+    expect(chineseMarkup).toContain("美人鱼吊坠");
+    expect(chineseMarkup).toContain("怪兽菇");
+    expect(englishMarkup).not.toContain("Alesia, Isaac, and Camilla are planned");
+    expect(englishMarkup).not.toContain("Friday, Saturday, and Sunday");
+    expect(chineseMarkup).not.toContain("兔脚");
+    expect(chineseMarkup).not.toContain("周五、周六、周日");
+    expect(countSecondLevelSections(englishMarkup)).toBeGreaterThanOrEqual(8);
   expect(countSecondLevelSections(chineseMarkup)).toBe(
     countSecondLevelSections(englishMarkup),
   );
-  expect(englishMarkup.length).toBeGreaterThan(8500);
-  expect(chineseMarkup.length).toBeGreaterThan(4200);
+  expect(englishMarkup.length).toBeGreaterThan(7000);
+  expect(chineseMarkup.length).toBeGreaterThan(3500);
 });

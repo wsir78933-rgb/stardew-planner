@@ -1,6 +1,11 @@
 "use client";
 
-import { handleFaqSummaryKeyDown } from "@/src/homepage/faq-disclosure-keyboard";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 
 type HomepageFaqListProps = Readonly<{
@@ -9,15 +14,15 @@ type HomepageFaqListProps = Readonly<{
 
 export function HomepageFaqList({ items }: HomepageFaqListProps) {
   return (
-    <div data-homepage-faq-list>
+    <Accordion collapsible data-homepage-faq-list type="single">
       {items.map((faqItem, faqIndex) => (
-        <details key={`faq-${faqIndex}`}>
-          <summary onKeyDown={handleFaqSummaryKeyDown}>
-            {faqItem.question}
-          </summary>
-          <p>{faqItem.answer}</p>
-        </details>
+        <AccordionItem key={`faq-${faqIndex}`} value={`faq-${faqIndex}`}>
+          <AccordionTrigger>{faqItem.question}</AccordionTrigger>
+          <AccordionContent forceMount>
+            <p>{faqItem.answer}</p>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </div>
+    </Accordion>
   );
 }

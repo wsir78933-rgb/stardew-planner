@@ -45,8 +45,15 @@ type StaticHomepageExpectation = Readonly<{
   staticPageFile: "index.html" | "zh.html";
   heroMarkup: string;
   heroSupportingCopy: string;
-  capabilityHeading: string;
-  capabilityDescriptions: readonly string[];
+  featuresHeading: string;
+  featuresDescriptions: readonly string[];
+  whyChooseHeading: string;
+  whyChooseDescriptions: readonly string[];
+  howToHeading: string;
+  howToDescriptions: readonly string[];
+  closingCtaHeading: string;
+  closingCtaSupportLine: string;
+  sectionImageSources: readonly string[];
   faqHeading: string;
   faqAnswers: readonly string[];
   trustHeading: string;
@@ -244,7 +251,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/carpenter-stardew",
     staticPageFile: "carpenter-stardew.html",
-    heading: "Carpenter Stardew: Robin’s Shop Hours, Services, and Building Guide",
+    heading: "Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades",
     documentLanguage: "en",
     schemaType: "Article",
     shouldIndex: true,
@@ -258,7 +265,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/where-is-robin-stardew-valley",
     staticPageFile: "where-is-robin-stardew-valley.html",
-    heading: "Robin's Shop Is Empty? Find Her in Stardew Valley Today",
+    heading: "Where Is Robin in Stardew Valley? Hours, Schedule, and Exceptions",
     documentLanguage: "en",
     schemaType: "Article",
     shouldIndex: true,
@@ -272,11 +279,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/stardew-valley-npc",
     staticPageFile: "stardew-valley-npc.html",
-    heading: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
+    heading: "Stardew Valley NPC List: Villagers, Marriage Candidates, and Services",
     metadata: {
-      title: "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
+      title: "Stardew Valley NPC List: Villagers, Marriage Candidates, and Services",
       description:
-        "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
+        "Sort the current Stardew Valley NPC list by marriage, giftable, and non-giftable roles, then plan gifts, schedules, and farm services.",
     },
     documentLanguage: "en",
     schemaType: "Article",
@@ -310,11 +317,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/where-is-stardew-valley-located",
     staticPageFile: "where-is-stardew-valley-located.html",
-    heading: "Where Is Stardew Valley Located in the Game’s World?",
+    heading: "Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory",
     metadata: {
-      title: "Where Is Stardew Valley Located in the Game’s World?",
+      title: "Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory",
       description:
-        "Understand the game’s fictional geography, the role of the Gem Sea and Gotoro Empire, and the clear limits of real-world comparisons.",
+        "Find Stardew Valley on the in-game map: separate Pelican Town, the Farm, and the Ferngill Republic, then test what Harvey's coordinates and Pacific Northwest influences do—and do not—prove.",
     },
     documentLanguage: "en",
     schemaType: "Article",
@@ -327,9 +334,9 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "Where is Stardew Valley located in the game?",
-      "The dialogue is canon. A specific Earth location is not.",
-      "It does not map the Ferngill Republic or Pelican Town, and it does not track NPCs live.",
+      "Where is Stardew Valley located? The answer depends",
+      "One coordinate joke cannot override the broader fictional geography.",
+      "The planner helps test building footprints, crop areas, paths, seasons, and coverage on your farm.",
     ],
     requiredHrefs: [
       "/#planner",
@@ -347,11 +354,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/stardew-valley-expanded-bachelors-and-bachelorettes",
     staticPageFile: "stardew-valley-expanded-bachelors-and-bachelorettes.html",
-    heading: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+    heading: "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes",
     metadata: {
-      title: "7 Stardew Valley Expanded Bachelors and Bachelorettes",
+      title: "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes",
       description:
-        "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+        "Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.",
     },
     documentLanguage: "en",
     schemaType: "Article",
@@ -363,8 +370,8 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "Stardew Valley Expanded bachelors and bachelorettes: there are 7 of them",
-      "This planner does not record hearts, gift counts, or character positions.",
+      "Stardew Valley Expanded currently adds seven marriage candidates",
+      "The planner is for testing placement and layout ideas.",
     ],
     requiredHrefs: [
       "/#planner",
@@ -377,11 +384,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/sprinkler-stardew",
     staticPageFile: "sprinkler-stardew.html",
-    heading: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+    heading: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
     metadata: {
-      title: "Sprinkler Stardew: 4, 8, or 24 Tiles Before You Plant",
+      title: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
       description:
-        "Match each sprinkler to 4, 8, or 24 tiles, then check radius overlay on your farm map. Pressure nozzles and enrichers cannot share one sprinkler.",
+        "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
     },
     documentLanguage: "en",
     schemaType: "Article",
@@ -394,9 +401,9 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "The watering can will eat a morning once the field is bigger than a handful of parsnips.",
+      "Treat every sprinkler as a shape before you treat it as a farm plan.",
       "Pressure Nozzle grows the radius to 3×3, 5×5, or 7×7.",
-      "The planner overlay is a placement preview, not a watering simulation.",
+      "The planner shows placement geometry, not tomorrow morning.",
     ],
     requiredHrefs: [
       "/",
@@ -493,7 +500,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/carpenter-stardew",
     staticPageFile: "zh/carpenter-stardew.html",
-    heading: "星露谷物语木匠商店：罗宾位置、营业时间与建筑服务",
+    heading: "星露谷物语木匠商店：罗宾位置、营业时间、建筑与升级",
     documentLanguage: "zh-CN",
     schemaType: "Article",
     shouldIndex: true,
@@ -507,7 +514,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/where-is-robin-stardew-valley",
     staticPageFile: "zh/where-is-robin-stardew-valley.html",
-    heading: "罗宾的商店没人？今天去哪里找她",
+    heading: "罗宾在星露谷物语哪里？木匠商店位置、营业时间与行程",
     documentLanguage: "zh-CN",
     schemaType: "Article",
     shouldIndex: true,
@@ -521,11 +528,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/stardew-valley-npc",
     staticPageFile: "zh/stardew-valley-npc.html",
-    heading: "星露谷 NPC 指南：礼物、婚姻与服务",
+    heading: "星露谷 NPC 名单：可结婚角色、可送礼村民与服务",
     metadata: {
-      title: "星露谷 NPC 指南：礼物、婚姻与服务",
+      title: "星露谷 NPC 名单：可结婚角色、可送礼村民与服务",
       description:
-        "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
+        "按可结婚、可送礼和不可送礼分类整理星露谷 NPC，并核对送礼、好感度、商店服务与农场规划关系。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
@@ -559,11 +566,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/where-is-stardew-valley-located",
     staticPageFile: "zh/where-is-stardew-valley-located.html",
-    heading: "星露谷在游戏世界中位于哪里？",
+    heading: "星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点",
     metadata: {
-      title: "星露谷在游戏世界中位于哪里？",
+      title: "星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点",
       description:
-        "了解游戏中的虚构地理、宝石海与戈特洛帝国的关系，以及将游戏地点与现实世界进行类比时的明确边界。",
+        "理清星露谷、鹈鹕镇、农场和芬吉尔共和国的关系，再看哈维坐标与太平洋西北地区影响能否证明现实地点。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
@@ -576,9 +583,9 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "星露谷在游戏中位于哪里？",
-      "对话属于游戏设定，特定地球位置则不属于。",
-      "农场规划器只用于安排自己的农场布局，不显示芬吉尔共和国或鹈鹕镇，也不实时追踪 NPC。",
+      "星露谷物语位于哪里？如果问的是游戏设定",
+      "一个坐标彩蛋不能推翻整套虚构地理。",
+      "规划器适合测试农场上的建筑占地、作物区、道路、季节和覆盖范围",
     ],
     requiredHrefs: [
       "/zh#planner",
@@ -597,12 +604,12 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     pathname: "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
     staticPageFile: "zh/stardew-valley-expanded-bachelors-and-bachelorettes.html",
     heading:
-      "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+      "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物",
     metadata: {
       title:
-        "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
+        "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物",
       description:
-        "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+        "整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
@@ -614,8 +621,8 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "星露谷SVE 可结婚角色现在是 7 个",
-      "规划器不追踪红心、礼物次数或 NPC 坐标。",
+      "星露谷物语扩展版（SVE）当前的可结婚新增角色是 7 人",
+      "规划器适合测试摆放和道路",
     ],
     requiredHrefs: [
       "/zh#planner",
@@ -628,11 +635,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/sprinkler-stardew",
     staticPageFile: "zh/sprinkler-stardew.html",
-    heading: "星露谷洒水器布局先分清4/8/24格",
+    heading: "星露谷洒水器布局：4、8、24格覆盖与摆放",
     metadata: {
-      title: "星露谷洒水器布局先分清4/8/24格",
+      title: "星露谷洒水器布局：4、8、24格覆盖与摆放",
       description:
-        "覆盖落到池塘、通道或边界时，名义覆盖不会都变成作物格。规划器可叠加洒水器与稻草人范围，导出截图后再照着进游戏摆放。",
+        "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
@@ -645,14 +652,16 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "很多洒水器布局看起来很整齐，放进自己的农场却会漏浇：地图边缘、池塘和通道，会让纸面上的满覆盖失效。",
+      "先把洒水器当成覆盖形状，再把它放进农场路线",
+      "名义覆盖不是有效作物格",
       "把洒水器先摆进真实农场地图",
-      "打开星露谷农场规划器",
+      "规划器只显示摆放关系，不代替第二天早晨的浇水",
     ],
     requiredHrefs: [
       "/zh#planner",
-      "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%B4%92%E6%B0%B4%E5%99%A8&variant=zh-cn",
-      "https://stardewvalleyplanner.art/zh",
+      "https://zh.stardewvalleywiki.com/%E6%B4%92%E6%B0%B4%E5%99%A8",
+      "https://zh.stardewvalleywiki.com/%E5%8A%A0%E5%8E%8B%E5%96%B7%E5%A4%B4",
+      "https://zh.stardewvalleywiki.com/%E6%B8%A9%E5%AE%A4",
     ],
   },
 ];
@@ -664,11 +673,31 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       '<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> – Free Online Farm Layout Tool</h1>',
     heroSupportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
-    capabilityHeading: "Plan with the map in view",
-    capabilityDescriptions: [
-      "Start with Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach or Meadowlands. Ginger Island is also available in the map picker.",
-      "Arrange buildings, crops, placeables and decor while checking sprinkler, scarecrow, Bee House and Junimo Hut coverage.",
-      "Create and save local projects without an account or cloud sync.",
+    featuresHeading: "What the planner does",
+    featuresDescriptions: [
+      "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
+      "Arrange buildings, crops, placeables, and decor. Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work.",
+      "Spring, summer, fall, and winter are available. Save import is experimental, and modded items may not map. Export a standard or high-quality screenshot.",
+    ],
+    whyChooseHeading: "Why use this planner",
+    whyChooseDescriptions: [
+      "A barn in the wrong spot, or a field blocking the door, takes a long time to undo. Test a few placements here, then build from the plan.",
+      "There is no cloud sync. A different browser or a data wipe will lose them, so reopen the plan on the same device and browser.",
+      "No payment. This planner is fan-made and is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
+    ],
+    howToHeading: "How to use it",
+    howToDescriptions: [
+      "Ponds, rivers, cliffs, bridges, and exits stay put. Use the farmhouse and shipping bin as route anchors, and leave the ground around them open for now.",
+      "Give crops, animals, trees, storage, and processing their own areas. Draw wide boundaries. Do not lock in every row yet.",
+      "Barns, coops, sheds, and fields set the scale. Leave room at the entrance and in front. Decor comes last.",
+      "Farmhouse to fields, animals, chests, then the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
+    ],
+    closingCtaHeading: "The map is already on this page. Start placing.",
+    closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
+    sectionImageSources: [
+      "/homepage/features-pixel-farm.webp",
+      "/homepage/why-choose-pixel-farm.webp",
+      "/homepage/how-to-pixel-farm.webp",
     ],
     faqHeading: "Frequently asked questions",
     faqAnswers: [
@@ -697,11 +726,31 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       '<h1>星露谷物语<em data-homepage-hero-emphasis="true">规划器</em>——免费在线农场布局工具</h1>',
     heroSupportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
-    capabilityHeading: "在地图中完成规划",
-    capabilityDescriptions: [
-      "从标准、河流、森林、山顶、荒野、四角、海滩或草原农场开始规划。地图选择器中还提供姜岛。",
-      "放置建筑、作物、可放置物和装饰，同时查看洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
-      "无需账号或云同步，直接在当前浏览器中创建并保存本地项目。",
+    featuresHeading: "功能介绍",
+    featuresDescriptions: [
+      "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
+      "建筑、作物、可放置物和装饰都能放。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖范围可以直接看。",
+      "春、夏、秋、冬都能切。存档导入仍是实验性的，模组物品可能对不上。导出有普通和高清截图。",
+    ],
+    whyChooseHeading: "为什么选择我们",
+    whyChooseDescriptions: [
+      "畜棚放错、田地挡住出门，在游戏里拆了再建很慢。先在浏览器里试几个位置，再照着方案去建。",
+      "没有云同步。换浏览器或清数据会丢，所以用同一台设备、同一个浏览器打开即可。",
+      "不收费。这是玩家做的规划器，和 ConcernedApe 或《星露谷物语》官方没有隶属或认可关系。",
+    ],
+    howToHeading: "如何使用",
+    howToDescriptions: [
+      "池塘、河流、悬崖、桥和出口不会动。农舍和出货箱先当路线锚点，周围先别填满。",
+      "作物、动物、树木、储存、加工各留一块。先画宽边界，别急着摆每一行。",
+      "这些决定整张图的尺度。入口和正前方留出路。小装饰最后再填。",
+      "从农舍走到田地、动物区、箱子、出货箱。堵住了就改这张图，别等游戏里再建。",
+    ],
+    closingCtaHeading: "地图看好了，就在上面开始摆。",
+    closingCtaSupportLine: "不用注册。项目保存在当前浏览器。",
+    sectionImageSources: [
+      "/homepage/features-pixel-farm.webp",
+      "/homepage/why-choose-pixel-farm.webp",
+      "/homepage/how-to-pixel-farm.webp",
     ],
     faqHeading: "常见问题",
     faqAnswers: [
@@ -861,19 +910,32 @@ function expectStaticHomepageContent(
   expect(staticPageHtml).toContain(expectedHomepage.heroMarkup);
   expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
   expect(staticPageHtml).toContain(expectedHomepage.heroSupportingCopy);
-  expect(staticPageHtml).toContain(
-    `<h2>${expectedHomepage.capabilityHeading}</h2>`,
-  );
-  for (const capabilityDescription of expectedHomepage.capabilityDescriptions) {
-    expect(staticPageHtml).toContain(capabilityDescription);
+  expect(staticPageHtml).toContain(`>${expectedHomepage.featuresHeading}</h2>`);
+  for (const featuresDescription of expectedHomepage.featuresDescriptions) {
+    expect(staticPageHtml).toContain(featuresDescription);
+  }
+  expect(staticPageHtml).toContain(`>${expectedHomepage.whyChooseHeading}</h2>`);
+  for (const whyChooseDescription of expectedHomepage.whyChooseDescriptions) {
+    expect(staticPageHtml).toContain(whyChooseDescription);
+  }
+  expect(staticPageHtml).toContain(`>${expectedHomepage.howToHeading}</h2>`);
+  for (const howToDescription of expectedHomepage.howToDescriptions) {
+    expect(staticPageHtml).toContain(howToDescription);
+  }
+  expect(staticPageHtml).toContain(expectedHomepage.closingCtaHeading);
+  expect(staticPageHtml).toContain(expectedHomepage.closingCtaSupportLine);
+  for (const sectionImageSource of expectedHomepage.sectionImageSources) {
+    expect(staticPageHtml).toContain(`src="${sectionImageSource}"`);
   }
   expect(staticPageHtml).not.toContain("data-homepage-farm-guides");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guide-links");
-  expect(staticPageHtml).toContain(`<h2>${expectedHomepage.faqHeading}</h2>`);
+  expect(staticPageHtml).not.toContain("data-homepage-planning-guide");
+  expect(staticPageHtml).not.toContain("stardew-valley-planner-layout");
+  expect(staticPageHtml).toContain(`>${expectedHomepage.faqHeading}</h2>`);
   for (const faqAnswer of expectedHomepage.faqAnswers) {
     expect(staticPageHtml).toContain(faqAnswer);
   }
-  expect(staticPageHtml).toContain(`<h2>${expectedHomepage.trustHeading}</h2>`);
+  expect(staticPageHtml).toContain(`>${expectedHomepage.trustHeading}</h2>`);
   expect(staticPageHtml).toContain(expectedHomepage.trustDescription);
   expect(staticPageHtml).toContain('data-homepage-workspace="true"');
   expect(staticPageHtml).toContain("data-homepage-planner-preview");
@@ -881,6 +943,27 @@ function expectStaticHomepageContent(
     'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
   );
   expect(staticPageHtml).not.toContain("Loading planner…");
+  const homepageSectionMarkers = [
+    'data-homepage-workspace="true"',
+    'id="capabilities"',
+    'id="why-choose"',
+    'id="how-to"',
+    'data-homepage-closing-cta="true"',
+    'id="faq"',
+  ] as const;
+  let previousHomepageSectionPosition = staticPageHtml.indexOf(
+    homepageSectionMarkers[0],
+  );
+  expect(previousHomepageSectionPosition).toBeGreaterThanOrEqual(0);
+  for (const homepageSectionMarker of homepageSectionMarkers.slice(1)) {
+    const homepageSectionPosition = staticPageHtml.indexOf(
+      homepageSectionMarker,
+    );
+    expect(homepageSectionPosition).toBeGreaterThan(
+      previousHomepageSectionPosition,
+    );
+    previousHomepageSectionPosition = homepageSectionPosition;
+  }
   expect(
     staticPageHtml.match(
       new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),

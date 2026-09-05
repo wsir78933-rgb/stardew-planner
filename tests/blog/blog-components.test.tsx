@@ -206,7 +206,7 @@ it("keeps the page-level heading singular across hero, discovery, archive, and a
     'alt="Illustration of Robin&#x27;s mountain workshop with a farm-building plan"',
   );
   expect(articleMarkup).toContain(
-    '<p class="blog-article-description">Match your task—buy, build, upgrade, or move—to the menu and verify the shop can serve you.</p>',
+    '<p class="blog-article-description">Use Robin&#x27;s Carpenter&#x27;s Shop for farm buildings, farmhouse upgrades, moves, demolition, and shop supplies, with a placement plan before you order.</p>',
   );
 });
 
@@ -214,13 +214,13 @@ it("renders the selected bilingual SVE bachelors title and description in the ar
   for (const [locale, expectedTitle, expectedDescription] of [
     [
       "en",
-      "7 Stardew Valley Expanded Bachelors and Bachelorettes",
-      "See all 7 current SVE bachelors and bachelorettes, who is event-gated, starter loved gifts, and how to plan the farm after you choose.",
+      "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes",
+      "Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.",
     ],
     [
       "zh-CN",
-      "当前星露谷SVE 可结婚角色完整名单是7人：克莱尔、兰斯、马格努斯、奥利维亚、斯嘉丽、索菲娅、维克多",
-      "先对照当前7位星露谷SVE可结婚角色名单，分清4位女性和3位男性，再核对克莱尔、斯嘉丽、兰斯的出现闸门和入门最爱礼物。选定对象后打开星露谷农场规划器，给农舍、配偶房和出货箱道路留空；规划器只做布局，不追踪红心或NPC行程。来源核对于2026年8月25日SVE Wiki村民页。",
+      "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物",
+      "整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。",
     ],
   ] as const) {
     const post = getAllBlogPosts(locale).find(
@@ -246,13 +246,13 @@ it("renders the selected bilingual NPC title and description in the article head
   for (const [locale, expectedTitle, expectedDescription] of [
     [
       "en",
-      "Stardew Valley NPC Guide: Gifts, Marriage, and Services",
-      "Compare current friendship groups, gift rules, marriage candidates, and the NPC services that shape your building, animal, and tool plans.",
+      "Stardew Valley NPC List: Villagers, Marriage Candidates, and Services",
+      "Sort the current Stardew Valley NPC list by marriage, giftable, and non-giftable roles, then plan gifts, schedules, and farm services.",
     ],
     [
       "zh-CN",
-      "星露谷 NPC 指南：礼物、婚姻与服务",
-      "比较当前好感度分类、送礼规则、可结婚候选，以及会影响建筑、动物和工具规划的 NPC 服务。",
+      "星露谷 NPC 名单：可结婚角色、可送礼村民与服务",
+      "按可结婚、可送礼和不可送礼分类整理星露谷 NPC，并核对送礼、好感度、商店服务与农场规划关系。",
     ],
   ] as const) {
     const post = getAllBlogPosts(locale).find(

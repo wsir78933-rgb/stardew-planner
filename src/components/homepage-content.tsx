@@ -6,8 +6,11 @@ import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigat
 import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
+import { HomepageClosingCta } from "./homepage-closing-cta";
+import { HomepageFeaturesSection } from "./homepage-features-section";
+import { HomepageHowToSection } from "./homepage-how-to-section";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
-import { HomepagePlanningGuide } from "./homepage-planning-guide";
+import { HomepageWhyChooseSection } from "./homepage-why-choose-section";
 import { SiteNavigationMenu } from "./site-navigation-menu";
 import { SiteFooter } from "./site-footer";
 
@@ -74,22 +77,15 @@ export function HomepageContent({
           </div>
         </section>
         {plannerWorkspace}
-        <HomepagePlanningGuide copy={copy.planningGuide} />
-        <section id="capabilities">
-          <h2>{copy.capabilities.heading}</h2>
-          <div>
-            {copy.capabilities.items.map((capability, capabilityIndex) => (
-              <article key={`capability-${capabilityIndex}`}>
-                <span aria-hidden="true" data-homepage-capability-number>
-                  {String(capabilityIndex + 1).padStart(2, "0")}
-                </span>
-                <h3>{capability.title}</h3>
-                <p>{capability.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-        <section id="faq">
+        <HomepageFeaturesSection copy={copy.features} />
+        <HomepageWhyChooseSection copy={copy.whyChoose} />
+        <HomepageHowToSection copy={copy.howTo} />
+        <HomepageClosingCta
+          copy={copy.closingCta}
+          plannerHref={plannerHref}
+          primaryActionLabel={copy.hero.primaryActionLabel}
+        />
+        <section data-homepage-faq id="faq">
           <h2>{copy.faq.heading}</h2>
           <HomepageFaqList items={copy.faq.items} />
         </section>
