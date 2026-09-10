@@ -46,10 +46,10 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
     "[星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物](https://stardewvalleyplanner.art/zh/stardew-valley-expanded-bachelors-and-bachelorettes): 整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。",
   );
   expect(llmsText).toContain(
-    "[Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles](https://stardewvalleyplanner.art/sprinkler-stardew): Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
+    "[Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails](https://stardewvalleyplanner.art/sprinkler-stardew): Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
   );
   expect(llmsText).toContain(
-    "[星露谷洒水器布局：4、8、24格覆盖与摆放](https://stardewvalleyplanner.art/zh/sprinkler-stardew): 分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
+    "[星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地](https://stardewvalleyplanner.art/zh/sprinkler-stardew): 说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
   );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {

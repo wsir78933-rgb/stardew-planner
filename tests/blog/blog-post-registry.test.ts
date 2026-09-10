@@ -177,23 +177,24 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     },
   });
   expect(englishPosts[6]).toMatchObject({
-    title: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+    title:
+      "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
     description:
-      "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
-    readTimeMinutes: 10,
+      "Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
+    readTimeMinutes: 14,
     coverImage: {
       src: "/blog/sprinkler-stardew-cover.webp",
-      alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+      alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
     },
   });
   expect(chinesePosts[6]).toMatchObject({
-    title: "星露谷洒水器布局：4、8、24格覆盖与摆放",
+    title: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
     description:
-      "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
-    readTimeMinutes: 10,
+      "说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
+    readTimeMinutes: 13,
     coverImage: {
       src: "/blog/sprinkler-stardew-cover.webp",
-      alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+      alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
     },
   });
   expect(englishPosts[7]).toMatchObject({

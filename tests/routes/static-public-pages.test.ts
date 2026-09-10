@@ -203,7 +203,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
       {
         src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+        alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
       },
     ],
   },
@@ -244,7 +244,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
       {
         src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+        alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
       },
     ],
   },
@@ -384,11 +384,13 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/sprinkler-stardew",
     staticPageFile: "sprinkler-stardew.html",
-    heading: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+    heading:
+      "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
     metadata: {
-      title: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+      title:
+        "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
       description:
-        "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
+        "Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
     },
     documentLanguage: "en",
     schemaType: "Article",
@@ -397,25 +399,22 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     coverImages: [
       {
         src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+        alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
       },
     ],
     requiredBodyPhrases: [
-      "Treat every sprinkler as a shape before you treat it as a farm plan.",
-      "Pressure Nozzle grows the radius to 3×3, 5×5, or 7×7.",
-      "The planner shows placement geometry, not tomorrow morning.",
+      "waters the four tiles above, below, left, and right",
+      "the crafting pages say they fire automatically every morning at 6am",
+      "place sprinklers and turn on sprinkler radius",
     ],
     requiredHrefs: [
       "/",
-      "/?farmType=beach",
-      "/?farmType=greenhouse",
-      "/?farmType=meadowlands",
-      "/carpenter-stardew",
-      "https://wiki.stardewvalley.net/Sprinkler",
-      "https://wiki.stardewvalley.net/Quality_Sprinkler",
-      "https://wiki.stardewvalley.net/Iridium_Sprinkler",
-      "https://wiki.stardewvalley.net/Pressure_Nozzle",
-      "https://wiki.stardewvalley.net/Greenhouse#Sprinklers",
+      "/#planner",
+      "https://stardewvalleywiki.com/Sprinkler",
+      "https://stardewvalleywiki.com/Quality_Sprinkler",
+      "https://stardewvalleywiki.com/Iridium_Sprinkler",
+      "https://stardewvalleywiki.com/Pressure_Nozzle",
+      "https://stardewvalleywiki.com/Greenhouse",
     ],
   },
   {
@@ -452,7 +451,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
       {
         src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+        alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
       },
     ],
   },
@@ -493,7 +492,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
       {
         src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+        alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
       },
     ],
   },
@@ -635,11 +634,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/sprinkler-stardew",
     staticPageFile: "zh/sprinkler-stardew.html",
-    heading: "星露谷洒水器布局：4、8、24格覆盖与摆放",
+    heading: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
     metadata: {
-      title: "星露谷洒水器布局：4、8、24格覆盖与摆放",
+      title: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
       description:
-        "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
+        "说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
@@ -648,20 +647,19 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     coverImages: [
       {
         src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+        alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
       },
     ],
     requiredBodyPhrases: [
-      "先把洒水器当成覆盖形状，再把它放进农场路线",
-      "名义覆盖不是有效作物格",
-      "把洒水器先摆进真实农场地图",
-      "规划器只显示摆放关系，不代替第二天早晨的浇水",
+      "洒水器只浇上下左右 4 格",
+      "耕种 6 级解锁的是优质洒水器",
+      "本站规划器只用来试摆覆盖范围，不能反过来证明游戏怎么浇水",
     ],
     requiredHrefs: [
-      "/zh#planner",
-      "https://zh.stardewvalleywiki.com/%E6%B4%92%E6%B0%B4%E5%99%A8",
-      "https://zh.stardewvalleywiki.com/%E5%8A%A0%E5%8E%8B%E5%96%B7%E5%A4%B4",
-      "https://zh.stardewvalleywiki.com/%E6%B8%A9%E5%AE%A4",
+      "/zh",
+      "https://zh.stardewvalleywiki.com/洒水器",
+      "https://zh.stardewvalleywiki.com/加压喷头",
+      "https://zh.stardewvalleywiki.com/温室",
     ],
   },
 ];
@@ -681,9 +679,13 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     ],
     whyChooseHeading: "Why use this planner",
     whyChooseDescriptions: [
-      "A barn in the wrong spot, or a field blocking the door, takes a long time to undo. Test a few placements here, then build from the plan.",
-      "There is no cloud sync. A different browser or a data wipe will lose them, so reopen the plan on the same device and browser.",
-      "No payment. This planner is fan-made and is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
+      "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
+      "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
+      "Paths look tidy, but they take crop tiles. Keep the farmhouse, chests, and shipping bin reachable on a normal day.",
+      "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage as you work. Processing only pays off on a route you already walk.",
+      "Each corner is its own farm. Decide what belongs in which quadrant before you drop barns and fields that are slow to move.",
+      "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
+      "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
     ],
     howToHeading: "How to use it",
     howToDescriptions: [
@@ -696,7 +698,13 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
     sectionImageSources: [
       "/homepage/features-pixel-farm.webp",
-      "/homepage/why-choose-pixel-farm.webp",
+      "/homepage/why-choose/beach-decorative-machooo.webp",
+      "/homepage/why-choose/beach-geometric-jennameeps.webp",
+      "/homepage/why-choose/beach-organized-justkuwl.webp",
+      "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+      "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+      "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+      "/homepage/why-choose/fourcorners-coop-hallofax.webp",
       "/homepage/how-to-pixel-farm.webp",
     ],
     faqHeading: "Frequently asked questions",
@@ -734,9 +742,13 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     ],
     whyChooseHeading: "为什么选择我们",
     whyChooseDescriptions: [
-      "畜棚放错、田地挡住出门，在游戏里拆了再建很慢。先在浏览器里试几个位置，再照着方案去建。",
-      "没有云同步。换浏览器或清数据会丢，所以用同一台设备、同一个浏览器打开即可。",
-      "不收费。这是玩家做的规划器，和 ConcernedApe 或《星露谷物语》官方没有隶属或认可关系。",
+      "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
+      "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
+      "路好看，但会占耕地。农舍、箱子、出货箱周围先留通路，一天的活才走得通。",
+      "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开对着摆。加工区放在每天会路过的地方才划算。",
+      "四个角等于四块地。先定每块干什么，再放大件，避免畜棚和田地放完难挪。",
+      "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
+      "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
     ],
     howToHeading: "如何使用",
     howToDescriptions: [
@@ -749,7 +761,13 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaSupportLine: "不用注册。项目保存在当前浏览器。",
     sectionImageSources: [
       "/homepage/features-pixel-farm.webp",
-      "/homepage/why-choose-pixel-farm.webp",
+      "/homepage/why-choose/beach-decorative-machooo.webp",
+      "/homepage/why-choose/beach-geometric-jennameeps.webp",
+      "/homepage/why-choose/beach-organized-justkuwl.webp",
+      "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+      "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+      "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+      "/homepage/why-choose/fourcorners-coop-hallofax.webp",
       "/homepage/how-to-pixel-farm.webp",
     ],
     faqHeading: "常见问题",
@@ -968,7 +986,7 @@ function expectStaticHomepageContent(
     staticPageHtml.match(
       new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),
     ),
-  ).toHaveLength(3);
+  ).toHaveLength(4);
   expect(staticPageHtml).toContain(
     `<a href="${expectedHomepage.blogHref}">${expectedHomepage.blogLabel}</a>`,
   );

@@ -11,10 +11,11 @@ const expectedBlogCanonicalPaths = [
   "/where-is-stardew-valley-located",
   "/stardew-valley-expanded-bachelors-and-bachelorettes",
   "/sprinkler-stardew",
+  "/glasshouse-stardew-valley",
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(13);
+  expect(canonicalPublicPaths).toHaveLength(14);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );

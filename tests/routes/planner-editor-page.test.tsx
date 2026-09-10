@@ -20,6 +20,16 @@ const expectedPlannerFarmMapIds = [
   "meadowlands",
 ] as const;
 
+const whyChooseImageSources = [
+  "/homepage/why-choose/beach-decorative-machooo.webp",
+  "/homepage/why-choose/beach-geometric-jennameeps.webp",
+  "/homepage/why-choose/beach-organized-justkuwl.webp",
+  "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+  "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+  "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+  "/homepage/why-choose/fourcorners-coop-hallofax.webp",
+] as const;
+
 describe("planner editor page", () => {
   it("renders the React planner shell without retired runtime markup", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
@@ -48,14 +58,16 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       'src="/homepage/features-pixel-farm.webp"',
     );
-    expect(plannerPageMarkup).toContain(
-      'src="/homepage/why-choose-pixel-farm.webp"',
-    );
+    expect(plannerPageMarkup).toContain("data-homepage-why-choose");
+    expect(plannerPageMarkup).toContain("data-homepage-animated-testimonials");
+    for (const whyChooseImageSource of whyChooseImageSources) {
+      expect(plannerPageMarkup).toContain(`src="${whyChooseImageSource}"`);
+    }
     expect(plannerPageMarkup).toContain(
       'src="/homepage/how-to-pixel-farm.webp"',
     );
-    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toHaveLength(3);
-    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toHaveLength(3);
+    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toHaveLength(2);
+    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toHaveLength(2);
     expect(plannerPageMarkup).not.toContain("data-homepage-planning-guide");
     expect(plannerPageMarkup).not.toContain("stardew-valley-planner-layout");
     const homepageSectionMarkers = [
@@ -187,18 +199,12 @@ describe("planner editor page", () => {
         previousHomepageSectionPosition = homepageSectionPosition;
       }
 
-      const replacementSections = [
+      const imageAndTextSections = [
         {
           marker: 'data-homepage-features="true"',
           heading: homepageCopy.features.heading,
           imageAlt: homepageCopy.features.imageAlt,
           items: homepageCopy.features.items,
-        },
-        {
-          marker: 'data-homepage-why-choose="true"',
-          heading: homepageCopy.whyChoose.heading,
-          imageAlt: homepageCopy.whyChoose.imageAlt,
-          items: homepageCopy.whyChoose.items,
         },
         {
           marker: 'data-homepage-how-to="true"',
@@ -208,14 +214,29 @@ describe("planner editor page", () => {
         },
       ] as const;
 
-      for (const replacementSection of replacementSections) {
-        expect(homepageMarkup).toContain(replacementSection.marker);
-        expect(homepageMarkup).toContain(replacementSection.heading);
-        expect(homepageMarkup).toContain(replacementSection.imageAlt);
-        for (const item of replacementSection.items) {
+      for (const imageAndTextSection of imageAndTextSections) {
+        expect(homepageMarkup).toContain(imageAndTextSection.marker);
+        expect(homepageMarkup).toContain(imageAndTextSection.heading);
+        expect(homepageMarkup).toContain(imageAndTextSection.imageAlt);
+        for (const item of imageAndTextSection.items) {
           expect(homepageMarkup).toContain(item.title);
           expect(homepageMarkup).toContain(item.description);
         }
+      }
+
+      expect(homepageMarkup).toContain('data-homepage-why-choose="true"');
+      expect(homepageMarkup).toContain("data-homepage-animated-testimonials");
+      expect(homepageMarkup).toContain(homepageCopy.whyChoose.heading);
+      expect(homepageMarkup).toContain(homepageCopy.whyChoose.previousLabel);
+      expect(homepageMarkup).toContain(homepageCopy.whyChoose.nextLabel);
+      const firstFarmLayoutSlide = homepageCopy.whyChoose.testimonials[0];
+      expect(homepageMarkup).toContain(firstFarmLayoutSlide.quote);
+      expect(homepageMarkup).toContain(firstFarmLayoutSlide.name);
+      expect(homepageMarkup).toContain(firstFarmLayoutSlide.designation);
+      expect(homepageMarkup).toContain(firstFarmLayoutSlide.imageAlt);
+      for (const farmLayoutSlide of homepageCopy.whyChoose.testimonials) {
+        expect(homepageMarkup).toContain(`src="${farmLayoutSlide.src}"`);
+        expect(homepageMarkup).toContain(farmLayoutSlide.imageAlt);
       }
 
       expect(homepageMarkup).toContain(homepageCopy.closingCta.heading);

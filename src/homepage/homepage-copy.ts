@@ -6,6 +6,14 @@ type HomepageFeatureItem = Readonly<{
   description: string;
 }>;
 
+type HomepageFarmLayoutSlide = Readonly<{
+  quote: string;
+  name: string;
+  designation: string;
+  src: string;
+  imageAlt: string;
+}>;
+
 type HomepageHowToStep = Readonly<{
   title: string;
   description: string;
@@ -42,8 +50,17 @@ export type HomepageCopy = Readonly<{
   }>;
   whyChoose: Readonly<{
     heading: string;
-    imageAlt: string;
-    items: readonly [HomepageFeatureItem, HomepageFeatureItem, HomepageFeatureItem];
+    previousLabel: string;
+    nextLabel: string;
+    testimonials: readonly [
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+    ];
   }>;
   howTo: Readonly<{
     heading: string;
@@ -121,22 +138,64 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     whyChoose: {
       heading: "Why use this planner",
-      imageAlt: "Pixel-art planning board next to an unbuilt farm",
-      items: [
+      previousLabel: "Previous farm layout",
+      nextLabel: "Next farm layout",
+      testimonials: [
         {
-          title: "Try the layout before you build in-game",
-          description:
-            "A barn in the wrong spot, or a field blocking the door, takes a long time to undo. Test a few placements here, then build from the plan.",
+          quote:
+            "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
+          name: "Plan the map you actually play",
+          designation: "Shown on a Beach farm",
+          src: "/homepage/why-choose/beach-decorative-machooo.webp",
+          imageAlt: "Decorative Beach farm layout by machooo, year 15",
         },
         {
-          title: "No account. Projects stay in this browser.",
-          description:
-            "There is no cloud sync. A different browser or a data wipe will lose them, so reopen the plan on the same device and browser.",
+          quote:
+            "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
+          name: "Place buildings and crops on one grid",
+          designation: "Shown on a Beach farm",
+          src: "/homepage/why-choose/beach-geometric-jennameeps.webp",
+          imageAlt: "Geometric diamond Beach farm layout by jennameeps",
         },
         {
-          title: "A free fan-made tool",
-          description:
-            "No payment. This planner is fan-made and is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
+          quote:
+            "Paths look tidy, but they take crop tiles. Keep the farmhouse, chests, and shipping bin reachable on a normal day.",
+          name: "Leave the walking route first",
+          designation: "Shown on a Beach farm",
+          src: "/homepage/why-choose/beach-organized-justkuwl.webp",
+          imageAlt: "Organized Beach farm with stone paths by justkuwl",
+        },
+        {
+          quote:
+            "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage as you work. Processing only pays off on a route you already walk.",
+          name: "Check coverage while you place",
+          designation: "Shown on a Beach farm",
+          src: "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+          imageAlt: "Processing-focused Beach farm layout by shady kegyard",
+        },
+        {
+          quote:
+            "Each corner is its own farm. Decide what belongs in which quadrant before you drop barns and fields that are slow to move.",
+          name: "Plan Four Corners by quadrant",
+          designation: "Shown on a Four Corners farm",
+          src: "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+          imageAlt: "Balanced Four Corners farm layout by rp2-phobos",
+        },
+        {
+          quote:
+            "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
+          name: "Switch seasons, then export a screenshot",
+          designation: "Shown on a Four Corners farm",
+          src: "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+          imageAlt: "Balanced Four Corners farm layout by emerald",
+        },
+        {
+          quote:
+            "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
+          name: "No account. Projects stay in this browser",
+          designation: "Shown on a Four Corners farm",
+          src: "/homepage/why-choose/fourcorners-coop-hallofax.webp",
+          imageAlt: "Coop-focused Four Corners farm layout by hallofax, year 5",
         },
       ],
     },
@@ -271,22 +330,64 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     whyChoose: {
       heading: "为什么选择我们",
-      imageAlt: "像素风规划板放在尚未建造的农场旁",
-      items: [
+      previousLabel: "上一张农场布局",
+      nextLabel: "下一张农场布局",
+      testimonials: [
         {
-          title: "进游戏前先试排",
-          description:
-            "畜棚放错、田地挡住出门，在游戏里拆了再建很慢。先在浏览器里试几个位置，再照着方案去建。",
+          quote:
+            "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
+          name: "先选你正在玩的那张图",
+          designation: "图例：海滩农场",
+          src: "/homepage/why-choose/beach-decorative-machooo.webp",
+          imageAlt: "machooo 的海滩农场装饰向布局，第 15 年",
         },
         {
-          title: "不用账号，项目留在当前浏览器",
-          description:
-            "没有云同步。换浏览器或清数据会丢，所以用同一台设备、同一个浏览器打开即可。",
+          quote:
+            "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
+          name: "建筑和作物放在同一张图上",
+          designation: "图例：海滩农场",
+          src: "/homepage/why-choose/beach-geometric-jennameeps.webp",
+          imageAlt: "jennameeps 的海滩农场几何菱形布局",
         },
         {
-          title: "免费的玩家工具",
-          description:
-            "不收费。这是玩家做的规划器，和 ConcernedApe 或《星露谷物语》官方没有隶属或认可关系。",
+          quote:
+            "路好看，但会占耕地。农舍、箱子、出货箱周围先留通路，一天的活才走得通。",
+          name: "每天走的路要先留出来",
+          designation: "图例：海滩农场",
+          src: "/homepage/why-choose/beach-organized-justkuwl.webp",
+          imageAlt: "justkuwl 用石路整理过的海滩农场",
+        },
+        {
+          quote:
+            "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开对着摆。加工区放在每天会路过的地方才划算。",
+          name: "边摆边看覆盖范围",
+          designation: "图例：海滩农场",
+          src: "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+          imageAlt: "shady kegyard 以加工区为主的海滩农场布局",
+        },
+        {
+          quote:
+            "四个角等于四块地。先定每块干什么，再放大件，避免畜棚和田地放完难挪。",
+          name: "四角农场按四个象限来排",
+          designation: "图例：四角农场",
+          src: "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+          imageAlt: "rp2-phobos 的均衡四角农场布局",
+        },
+        {
+          quote:
+            "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
+          name: "切四季，再导出截图",
+          designation: "图例：四角农场",
+          src: "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+          imageAlt: "emerald 的均衡四角农场完美布局",
+        },
+        {
+          quote:
+            "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
+          name: "不用账号，项目留在当前浏览器",
+          designation: "图例：四角农场",
+          src: "/homepage/why-choose/fourcorners-coop-hallofax.webp",
+          imageAlt: "hallofax 以鸡舍为主的四角农场布局，第 5 年",
         },
       ],
     },
