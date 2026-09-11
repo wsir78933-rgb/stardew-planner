@@ -51,6 +51,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地](https://stardewvalleyplanner.art/zh/sprinkler-stardew): 说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
   );
+  expect(llmsText).toContain(
+    "[Mark keep, orchard, and clear tiles before you chop Stardew Valley trees](https://stardewvalleyplanner.art/stardew-valley-trees): Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷种树：先分普通树和果树，再在农场图上留间隔](https://stardewvalleyplanner.art/zh/stardew-valley-trees): 温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

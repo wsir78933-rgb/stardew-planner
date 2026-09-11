@@ -24,6 +24,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes](https://stardewvalleyplanner.art/stardew-valley-expanded-bachelors-and-bachelorettes): Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.
 - [Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails](https://stardewvalleyplanner.art/sprinkler-stardew): Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.
 - [Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers](https://stardewvalleyplanner.art/glasshouse-stardew-valley): Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.
+- [Mark keep, orchard, and clear tiles before you chop Stardew Valley trees](https://stardewvalleyplanner.art/stardew-valley-trees): Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.
 
 ## 简体中文
 
@@ -47,3 +48,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物](https://stardewvalleyplanner.art/zh/stardew-valley-expanded-bachelors-and-bachelorettes): 整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。
 - [星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地](https://stardewvalleyplanner.art/zh/sprinkler-stardew): 说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。
 - [星露谷物语温室布局：120格耕地与洒水器摆放指南](https://stardewvalleyplanner.art/zh/glasshouse-stardew-valley): 了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。
+- [星露谷种树：先分普通树和果树，再在农场图上留间隔](https://stardewvalleyplanner.art/zh/stardew-valley-trees): 温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。

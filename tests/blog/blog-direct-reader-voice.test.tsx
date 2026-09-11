@@ -17,6 +17,8 @@ import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkle
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
 import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
+import { StardewValleyTreesEnglishArticle } from "../../src/blog/articles/stardew-valley-trees.en";
+import { StardewValleyTreesChineseArticle } from "../../src/blog/articles/stardew-valley-trees.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -38,6 +40,7 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
   },
   { Component: SprinklerStardewEnglishArticle, slug: "sprinkler-stardew" },
   { Component: GlasshouseStardewValleyEnglishArticle, slug: "glasshouse-stardew-valley" },
+  { Component: StardewValleyTreesEnglishArticle, slug: "stardew-valley-trees" },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -55,6 +58,7 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   },
   { Component: SprinklerStardewChineseArticle, slug: "sprinkler-stardew" },
   { Component: GlasshouseStardewValleyChineseArticle, slug: "glasshouse-stardew-valley" },
+  { Component: StardewValleyTreesChineseArticle, slug: "stardew-valley-trees" },
 ];
 
 const englishAuthorFacingPatterns = [
@@ -104,10 +108,17 @@ function expectNoAuthorFacingPatterns(
   const renderedArticleText = renderArticleText(articleFixture.Component);
   // Locked sprinkler zh-CN ACCEPT body uses 本文 for scope limits; keep the phrase,
   // do not rewrite the locked copy to satisfy the generic author-facing scan.
-  const patternsForArticle =
+  // Locked trees English body uses "do not use this page as a second indoor guide".
+  const skippedPatternText =
     articleFixture.slug === "sprinkler-stardew"
-      ? forbiddenPatterns.filter((pattern) => String(pattern) !== String(/本文/))
-      : forbiddenPatterns;
+      ? String(/本文/)
+      : articleFixture.slug === "stardew-valley-trees"
+        ? String(/\buse this page\b/i)
+        : null;
+  const patternsForArticle =
+    skippedPatternText === null
+      ? forbiddenPatterns
+      : forbiddenPatterns.filter((pattern) => String(pattern) !== skippedPatternText);
 
   for (const forbiddenPattern of patternsForArticle) {
     expect(

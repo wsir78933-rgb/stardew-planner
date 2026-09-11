@@ -7,6 +7,7 @@ export const blogPostSlugs = [
   "stardew-valley-expanded-bachelors-and-bachelorettes",
   "sprinkler-stardew",
   "glasshouse-stardew-valley",
+  "stardew-valley-trees",
 ] as const;
 
 export type BlogPostSlug = (typeof blogPostSlugs)[number];

@@ -16,6 +16,8 @@ import { SprinklerStardewEnglishArticle } from "./articles/sprinkler-stardew.en"
 import { SprinklerStardewChineseArticle } from "./articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "./articles/glasshouse-stardew-valley.en";
 import { GlasshouseStardewValleyChineseArticle } from "./articles/glasshouse-stardew-valley.zh";
+import { StardewValleyTreesEnglishArticle } from "./articles/stardew-valley-trees.en";
+import { StardewValleyTreesChineseArticle } from "./articles/stardew-valley-trees.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -175,6 +177,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: GlasshouseStardewValleyEnglishArticle,
     },
+    {
+      slug: "stardew-valley-trees",
+      title: "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
+      description:
+        "Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/stardew-valley-trees-cover.webp",
+        alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
+      },
+      featured: true,
+      Content: StardewValleyTreesEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -295,6 +312,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: GlasshouseStardewValleyChineseArticle,
+    },
+    {
+      slug: "stardew-valley-trees",
+      title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
+      description:
+        "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/stardew-valley-trees-cover.webp",
+        alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
+      },
+      featured: true,
+      Content: StardewValleyTreesChineseArticle,
     },
   ],
 };

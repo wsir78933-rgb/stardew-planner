@@ -19,6 +19,7 @@ const expectedSlugs = [
   "stardew-valley-expanded-bachelors-and-bachelorettes",
   "sprinkler-stardew",
   "glasshouse-stardew-valley",
+  "stardew-valley-trees",
 ] as const;
 
 function createLocalizedPost(
@@ -53,14 +54,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the eight canonical blog identities in publishing order", () => {
+it("keeps the nine canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the sixteen localized root-level canonical article paths", () => {
+it("publishes only the eighteen localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -70,6 +71,7 @@ it("publishes only the sixteen localized root-level canonical article paths", ()
     "/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/sprinkler-stardew/",
     "/glasshouse-stardew-valley/",
+    "/stardew-valley-trees/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -78,6 +80,7 @@ it("publishes only the sixteen localized root-level canonical article paths", ()
     "/zh/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/zh/sprinkler-stardew/",
     "/zh/glasshouse-stardew-valley/",
+    "/zh/stardew-valley-trees/",
   ]);
 });
 
@@ -217,6 +220,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
     },
   });
+  expect(englishPosts[8]).toMatchObject({
+    title: "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
+    description:
+      "Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
+    readTimeMinutes: 12,
+    coverImage: {
+      src: "/blog/stardew-valley-trees-cover.webp",
+      alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
+    },
+  });
+  expect(chinesePosts[8]).toMatchObject({
+    title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
+    description:
+      "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
+    readTimeMinutes: 13,
+    coverImage: {
+      src: "/blog/stardew-valley-trees-cover.webp",
+      alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -232,6 +255,7 @@ it("binds every localized post to its own original blog cover", () => {
       "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
     "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
     "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
+    "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -330,7 +354,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: glasshouse-stardew-valley.",
+    "Expected: carpenter-stardew. Received: stardew-valley-trees.",
   );
 });
 

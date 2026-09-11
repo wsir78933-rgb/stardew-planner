@@ -17,6 +17,8 @@ import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkle
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
 import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
+import { StardewValleyTreesEnglishArticle } from "../../src/blog/articles/stardew-valley-trees.en";
+import { StardewValleyTreesChineseArticle } from "../../src/blog/articles/stardew-valley-trees.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -474,6 +476,69 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
         href: "https://zh.stardewvalleywiki.com/温室",
         label: "星露谷物语 Wiki：温室",
       },
+    ],
+  },
+  {
+    Article: StardewValleyTreesEnglishArticle,
+    heading: "Sources",
+    name: "English trees article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Trees", label: "Stardew Valley Wiki: Trees" },
+      {
+        href: "https://stardewvalleywiki.com/Fruit_Trees",
+        label: "Stardew Valley Wiki: Fruit Trees",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Tree_Fertilizer",
+        label: "Stardew Valley Wiki: Tree Fertilizer",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Version_History#1.6.9",
+        label: "Stardew Valley Wiki: Version History 1.6.9",
+        note: " — 1.6.9 patch note: fruit-tree growth is no longer blocked by grass and seed spots.",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog",
+        label: "Official Stardew Valley 1.6 full changelog",
+        note: " — 1.6: cannot plant trees in town; cannot plant trees in the Beach farm tunnel.",
+      },
+      { href: "/#planner", label: "Stardew Valley Planner" },
+      { href: "/", label: "Stardew Valley Planner homepage" },
+      {
+        href: "/glasshouse-stardew-valley",
+        label: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
+      },
+      {
+        href: "/sprinkler-stardew",
+        label: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+      },
+    ],
+  },
+  {
+    Article: StardewValleyTreesChineseArticle,
+    heading: "来源",
+    name: "Chinese trees article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%A0%91&amp;variant=zh-cn",
+        label: "官方中文维基：树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%9E%9C%E6%A0%91&amp;variant=zh-cn",
+        label: "官方中文维基：果树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%A0%91%E8%82%A5&amp;variant=zh-cn",
+        label: "官方中文维基：树肥",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog",
+        label: "Stardew Valley 1.6 完整更新说明",
+        note: " — 1.6：不能再在镇上种树，也不能在海滩农场隧道里种树。",
+      },
+      { href: "/zh#planner", label: "星露谷农场规划器（中文页）" },
+      { href: "/zh/glasshouse-stardew-valley", label: "本站中文温室布局" },
+      { href: "/zh/sprinkler-stardew", label: "本站中文洒水器布局" },
     ],
   },
 ];
