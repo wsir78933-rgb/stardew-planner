@@ -47,6 +47,8 @@ const expectedCanonicalPublicPathnames = [
   "/where-is-stardew-valley-located",
   "/stardew-valley-expanded-bachelors-and-bachelorettes",
   "/sprinkler-stardew",
+  "/glasshouse-stardew-valley",
+  "/oak-tree-stardew",
 ];
 
 const expectedPublicHtmlPathnames = [
@@ -66,6 +68,8 @@ const expectedBlogPathnamesForFixture = [
   "/where-is-stardew-valley-located",
   "/stardew-valley-expanded-bachelors-and-bachelorettes",
   "/sprinkler-stardew",
+  "/glasshouse-stardew-valley",
+  "/oak-tree-stardew",
   "/zh/blog",
   "/zh/blog/archive",
   "/zh/carpenter-stardew",
@@ -75,6 +79,8 @@ const expectedBlogPathnamesForFixture = [
   "/zh/where-is-stardew-valley-located",
   "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
   "/zh/sprinkler-stardew",
+  "/zh/glasshouse-stardew-valley",
+  "/zh/oak-tree-stardew",
 ];
 
 const expectedNoindexContactPathnamesForFixture = [
@@ -383,8 +389,8 @@ describe("production SEO smoke arguments", () => {
 });
 
 describe("production SEO smoke static contract", () => {
-  it("declares all 26 localized public HTML paths", () => {
-    expect(expectedPublicHtmlPathContracts).toHaveLength(26);
+  it("declares all 30 localized public HTML paths", () => {
+    expect(expectedPublicHtmlPathContracts).toHaveLength(30);
     expect(
       expectedPublicHtmlPathContracts.map(({ pathname }) => pathname),
     ).toEqual(expectedPublicHtmlPathnames);
@@ -396,8 +402,8 @@ describe("production SEO smoke static contract", () => {
     ).toBe(true);
   });
 
-  it("declares the exact 24 indexable sitemap pathnames", () => {
-    expect(expectedSitemapPathnames).toHaveLength(24);
+  it("declares the exact 28 indexable sitemap pathnames", () => {
+    expect(expectedSitemapPathnames).toHaveLength(28);
     expect(expectedSitemapPathnames).toEqual(
       expectedPublicHtmlPathnames.filter(
         (pathname) => !expectedNoindexContactPathnamesForFixture.includes(pathname),
@@ -405,7 +411,7 @@ describe("production SEO smoke static contract", () => {
     );
   });
 
-  it("adds all eighteen blog pathnames to the indexable sitemap contract", () => {
+  it("adds all twenty-two blog pathnames to the indexable sitemap contract", () => {
     expect(expectedSitemapPathnames).toEqual(
       expect.arrayContaining(expectedBlogPathnamesForFixture),
     );
@@ -454,12 +460,12 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
 
     expect(summary).toMatchObject({
-      publicHtmlPageCount: 26,
-      sitemapUrlCount: 24,
+      publicHtmlPageCount: 30,
+      sitemapUrlCount: 28,
       noindexContactPageCount: 2,
       missingPageCount: 1,
     });
-    expect(requests).toHaveLength(32);
+    expect(requests).toHaveLength(36);
     expect(requests[0]).toEqual({
       requestUrl:
         "http://stardewvalleyplanner.art/privacy?seo_https_probe=1",
@@ -472,7 +478,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
     expect(
       requests
-        .slice(2, 28)
+        .slice(2, 32)
         .map(({ requestUrl }) => new URL(requestUrl).pathname),
     ).toEqual(expectedPublicHtmlPathnames);
   });
@@ -697,7 +703,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     ]);
   });
 
-  it("requires the unique sitemap location set to exactly match all 24 URLs", async () => {
+  it("requires the unique sitemap location set to exactly match all 28 URLs", async () => {
     const sitemapUrl = `${productionOrigin}/sitemap.xml`;
     const incompleteSitemapPathnames = expectedSitemapPathnamesForFixture.slice(1);
     const incompleteSitemapXml = `<urlset>${incompleteSitemapPathnames
@@ -716,8 +722,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "24 unique sitemap URLs",
-      "23",
+      "28 unique sitemap URLs",
+      "27",
     ]);
   });
 
@@ -769,7 +775,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "24 unique sitemap URLs",
+      "28 unique sitemap URLs",
       "0",
     ]);
   });
@@ -849,13 +855,13 @@ describe("production SEO smoke security headers and static caching", () => {
     });
 
     expect(summary).toEqual({
-      publicHtmlPageCount: 26,
-      sitemapUrlCount: 24,
+      publicHtmlPageCount: 30,
+      sitemapUrlCount: 28,
       noindexContactPageCount: 2,
       missingPageCount: 1,
-      securityHeaderResponseCount: 27,
+      securityHeaderResponseCount: 31,
       cachedStaticAssetCount: 1,
-      totalRequestCount: 32,
+      totalRequestCount: 36,
     });
     expect(Object.isFrozen(summary)).toBe(true);
     expect(requests.at(-1)).toEqual({
@@ -908,7 +914,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 27 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 31 });
   });
 
   it("rejects missing CSP and missing enforced frame protection", async () => {
@@ -1016,7 +1022,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 27 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 31 });
   });
 
   it("rejects a quoted zero HSTS max-age", async () => {
@@ -1157,7 +1163,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 27 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 31 });
   });
 
   it("accepts multiple declared policies when their combined frame ancestors are restrictive", async () => {
@@ -1178,7 +1184,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 27 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 31 });
   });
 
   it("checks security headers on the missing-page HTML response", async () => {

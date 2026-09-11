@@ -17,6 +17,8 @@ import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkle
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
 import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
+import { OakTreeStardewEnglishArticle } from "../../src/blog/articles/oak-tree-stardew.en";
+import { OakTreeStardewChineseArticle } from "../../src/blog/articles/oak-tree-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -38,6 +40,7 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
   },
   { Component: SprinklerStardewEnglishArticle, slug: "sprinkler-stardew" },
   { Component: GlasshouseStardewValleyEnglishArticle, slug: "glasshouse-stardew-valley" },
+  { Component: OakTreeStardewEnglishArticle, slug: "oak-tree-stardew" },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -55,6 +58,7 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   },
   { Component: SprinklerStardewChineseArticle, slug: "sprinkler-stardew" },
   { Component: GlasshouseStardewValleyChineseArticle, slug: "glasshouse-stardew-valley" },
+  { Component: OakTreeStardewChineseArticle, slug: "oak-tree-stardew" },
 ];
 
 const englishAuthorFacingPatterns = [

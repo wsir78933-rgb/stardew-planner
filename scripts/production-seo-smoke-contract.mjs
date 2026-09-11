@@ -12,6 +12,8 @@ const canonicalPublicPathnames = Object.freeze([
   "/where-is-stardew-valley-located",
   "/stardew-valley-expanded-bachelors-and-bachelorettes",
   "/sprinkler-stardew",
+  "/glasshouse-stardew-valley",
+  "/oak-tree-stardew",
 ]);
 
 const publicLocales = Object.freeze(["en", "zh-CN"]);
@@ -131,14 +133,14 @@ assertValidInternalPathname(
   "Production SEO smoke missing-page probe pathname",
 );
 
-if (expectedPublicHtmlPathContracts.length !== 26) {
+if (expectedPublicHtmlPathContracts.length !== 30) {
   throw new Error(
-    `Production SEO smoke must declare 26 public HTML path contracts; received ${String(expectedPublicHtmlPathContracts.length)}.`,
+    `Production SEO smoke must declare 30 public HTML path contracts; received ${String(expectedPublicHtmlPathContracts.length)}.`,
   );
 }
 
-if (expectedSitemapPathnames.length !== 24) {
+if (expectedSitemapPathnames.length !== 28) {
   throw new Error(
-    `Production SEO smoke must declare 24 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
+    `Production SEO smoke must declare 28 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
   );
 }

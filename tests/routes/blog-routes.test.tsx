@@ -46,6 +46,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   );
   expect(indexMarkup).toContain('href="/sprinkler-stardew"');
   expect(indexMarkup).toContain('href="/glasshouse-stardew-valley"');
+  expect(indexMarkup).toContain('href="/oak-tree-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -75,6 +76,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   );
   expect(indexMarkup).toContain('href="/zh/sprinkler-stardew"');
   expect(indexMarkup).toContain('href="/zh/glasshouse-stardew-valley"');
+  expect(indexMarkup).toContain('href="/zh/oak-tree-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -221,6 +223,41 @@ it("renders the paired glasshouse article routes with locked metadata and one pa
     title: "星露谷物语温室布局：120格耕地与洒水器摆放指南",
     description:
       "了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。",
+  });
+});
+
+it("renders the paired oak tree article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "oak-tree-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "oak-tree-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷物语橡树：橡子种植、间距与树脂采集",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+    description:
+      "Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷物语橡树：橡子种植、间距与树脂采集",
+    description:
+      "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
   });
 });
 

@@ -23,6 +23,8 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory](https://stardewvalleyplanner.art/where-is-stardew-valley-located): Find Stardew Valley on the in-game map: separate Pelican Town, the Farm, and the Ferngill Republic, then test what Harvey's coordinates and Pacific Northwest influences do—and do not—prove.
 - [Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes](https://stardewvalleyplanner.art/stardew-valley-expanded-bachelors-and-bachelorettes): Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.
 - [Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles](https://stardewvalleyplanner.art/sprinkler-stardew): Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.
+- [Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers](https://stardewvalleyplanner.art/glasshouse-stardew-valley): Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.
+- [Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin](https://stardewvalleyplanner.art/oak-tree-stardew): Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.
 
 ## 简体中文
 
@@ -45,3 +47,5 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点](https://stardewvalleyplanner.art/zh/where-is-stardew-valley-located): 理清星露谷、鹈鹕镇、农场和芬吉尔共和国的关系，再看哈维坐标与太平洋西北地区影响能否证明现实地点。
 - [星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物](https://stardewvalleyplanner.art/zh/stardew-valley-expanded-bachelors-and-bachelorettes): 整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。
 - [星露谷洒水器布局：4、8、24格覆盖与摆放](https://stardewvalleyplanner.art/zh/sprinkler-stardew): 分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。
+- [星露谷物语温室布局：120格耕地与洒水器摆放指南](https://stardewvalleyplanner.art/zh/glasshouse-stardew-valley): 了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。
+- [星露谷物语橡树：橡子种植、间距与树脂采集](https://stardewvalleyplanner.art/zh/oak-tree-stardew): 认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。

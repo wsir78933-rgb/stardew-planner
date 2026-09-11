@@ -17,6 +17,8 @@ import { SprinklerStardewEnglishArticle } from "../../src/blog/articles/sprinkle
 import { SprinklerStardewChineseArticle } from "../../src/blog/articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/glasshouse-stardew-valley.en";
 import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
+import { OakTreeStardewEnglishArticle } from "../../src/blog/articles/oak-tree-stardew.en";
+import { OakTreeStardewChineseArticle } from "../../src/blog/articles/oak-tree-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -384,6 +386,100 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://zh.stardewvalleywiki.com/温室",
         label: "星露谷物语 Wiki：温室",
+      },
+    ],
+  },
+  {
+    Article: OakTreeStardewEnglishArticle,
+    checkedLabel:
+      "Oak growth, tapping, chopping, spacing, and 1.6 Fall leaf-shed checked against Stardew Valley Wiki pages on September 11, 2026. Median 18-day and 24-day figures are recorded as a wiki conflict and are not averaged. The planner is a placement sketch, not a growth or tapping simulation.",
+    heading: "Sources",
+    name: "English oak tree article",
+    sources: [
+      {
+        href: "https://wiki.stardewvalley.net/Oak_Tree",
+        label: "Stardew Valley Wiki: Oak Tree",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Trees",
+        label: "Stardew Valley Wiki: Trees",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Acorn",
+        label: "Stardew Valley Wiki: Acorn",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Oak_Resin",
+        label: "Stardew Valley Wiki: Oak Resin",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Tapper",
+        label: "Stardew Valley Wiki: Tapper",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Heavy_Tapper",
+        label: "Stardew Valley Wiki: Heavy Tapper",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Tree_Fertilizer",
+        label: "Stardew Valley Wiki: Tree Fertilizer",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Fruit_Trees",
+        label: "Stardew Valley Wiki: Fruit Trees",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Keg",
+        label: "Stardew Valley Wiki: Keg",
+      },
+    ],
+  },
+  {
+    Article: OakTreeStardewChineseArticle,
+    checkedLabel:
+      "橡树、橡子、树液采集器、橡树树脂及相关配方已于 2026 年 9 月 11 日根据星露谷物语官方中文维基核对；规划器仅作树位预排，不模拟生长或采集。",
+    heading: "资料来源",
+    name: "Chinese oak tree article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%A9%A1%E6%A0%91",
+        label: "星露谷物语官方中文维基：橡树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%A9%A1%E5%AD%90",
+        label: "星露谷物语官方中文维基：橡子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%A0%91%E6%B6%B2%E9%87%87%E9%9B%86%E5%99%A8",
+        label: "星露谷物语官方中文维基：树液采集器",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E9%87%8D%E5%9E%8B%E6%A0%91%E6%B6%B2%E9%87%87%E9%9B%86%E5%99%A8",
+        label: "星露谷物语官方中文维基：重型树液采集器",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%A9%A1%E6%A0%91%E6%A0%91%E8%84%82",
+        label: "星露谷物语官方中文维基：橡树树脂",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%A0%91",
+        label: "星露谷物语官方中文维基：树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%A0%91%E8%82%A5",
+        label: "星露谷物语官方中文维基：树肥",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E6%9E%9C%E6%A0%91",
+        label: "星露谷物语官方中文维基：果树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E5%B0%8F%E6%A1%B6",
+        label: "星露谷物语官方中文维基：小桶",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/%E9%AB%98%E7%BA%A7%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0",
+        label: "星露谷物语官方中文维基：高级生长激素",
       },
     ],
   },

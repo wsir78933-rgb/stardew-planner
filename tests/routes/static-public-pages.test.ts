@@ -205,6 +205,14 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/sprinkler-stardew-cover.webp",
         alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
       },
+      {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
+      },
+      {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
+      },
     ],
   },
   {
@@ -245,6 +253,14 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/sprinkler-stardew-cover.webp",
         alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+      },
+      {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
+      },
+      {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
       },
     ],
   },
@@ -419,6 +435,64 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/glasshouse-stardew-valley",
+    staticPageFile: "glasshouse-stardew-valley.html",
+    heading: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
+    metadata: {
+      title: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
+      description:
+        "Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Plan the greenhouse around decisions, not a picture",
+      "The planner is a placement check, not a game-state simulator",
+    ],
+    requiredHrefs: [
+      "/carpenter-stardew",
+      "/?farmType=greenhouse",
+      "/sprinkler-stardew",
+    ],
+  },
+  {
+    pathname: "/oak-tree-stardew",
+    staticPageFile: "oak-tree-stardew.html",
+    heading: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+    metadata: {
+      title: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+      description:
+        "Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Identify an oak tree, not a fruit tree",
+      "The planner is a placement sketch",
+    ],
+    requiredHrefs: [
+      "/glasshouse-stardew-valley",
+      "/?farmType=standard",
+      "/carpenter-stardew",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -453,6 +527,14 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/sprinkler-stardew-cover.webp",
         alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+      },
+      {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
+      },
+      {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
       },
     ],
   },
@@ -494,6 +576,14 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/sprinkler-stardew-cover.webp",
         alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+      },
+      {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
+      },
+      {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
       },
     ],
   },
@@ -662,6 +752,61 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://zh.stardewvalleywiki.com/%E6%B4%92%E6%B0%B4%E5%99%A8",
       "https://zh.stardewvalleywiki.com/%E5%8A%A0%E5%8E%8B%E5%96%B7%E5%A4%B4",
       "https://zh.stardewvalleywiki.com/%E6%B8%A9%E5%AE%A4",
+    ],
+  },
+  {
+    pathname: "/zh/glasshouse-stardew-valley",
+    staticPageFile: "zh/glasshouse-stardew-valley.html",
+    heading: "星露谷物语温室布局：120格耕地与洒水器摆放指南",
+    metadata: {
+      title: "星露谷物语温室布局：120格耕地与洒水器摆放指南",
+      description:
+        "了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
+      },
+    ],
+    requiredBodyPhrases: [
+      "先决定温室要服务哪种玩法",
+      "规划器只检查摆放关系，不代替游戏状态",
+    ],
+    requiredHrefs: [
+      "/zh?farmType=greenhouse",
+      "/zh/sprinkler-stardew",
+    ],
+  },
+  {
+    pathname: "/zh/oak-tree-stardew",
+    staticPageFile: "zh/oak-tree-stardew.html",
+    heading: "星露谷物语橡树：橡子种植、间距与树脂采集",
+    metadata: {
+      title: "星露谷物语橡树：橡子种植、间距与树脂采集",
+      description:
+        "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
+      },
+    ],
+    requiredBodyPhrases: [
+      "先认星露谷物语橡树，别种成枫树",
+      "规划器只显示摆放关系",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
     ],
   },
 ];

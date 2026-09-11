@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(13);
+  expect(canonicalPublicPaths).toHaveLength(15);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -64,8 +64,20 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/sprinkler-stardew")).toBe(
     "/zh/sprinkler-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(26);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(24);
+  expect(getLocalizedPublicPath("en", "/glasshouse-stardew-valley")).toBe(
+    "/glasshouse-stardew-valley",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/glasshouse-stardew-valley")).toBe(
+    "/zh/glasshouse-stardew-valley",
+  );
+  expect(getLocalizedPublicPath("en", "/oak-tree-stardew")).toBe(
+    "/oak-tree-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/oak-tree-stardew")).toBe(
+    "/zh/oak-tree-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(30);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(28);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -89,6 +101,10 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   );
   expect(indexablePathnames).toContain("/sprinkler-stardew");
   expect(indexablePathnames).toContain("/zh/sprinkler-stardew");
+  expect(indexablePathnames).toContain("/glasshouse-stardew-valley");
+  expect(indexablePathnames).toContain("/zh/glasshouse-stardew-valley");
+  expect(indexablePathnames).toContain("/oak-tree-stardew");
+  expect(indexablePathnames).toContain("/zh/oak-tree-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -103,6 +119,8 @@ it("registers the direct-entry blog routes", () => {
       "/where-is-stardew-valley-located",
       "/stardew-valley-expanded-bachelors-and-bachelorettes",
       "/sprinkler-stardew",
+      "/glasshouse-stardew-valley",
+      "/oak-tree-stardew",
     ]),
   );
 });

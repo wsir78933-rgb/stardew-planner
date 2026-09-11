@@ -16,6 +16,8 @@ import { SprinklerStardewEnglishArticle } from "./articles/sprinkler-stardew.en"
 import { SprinklerStardewChineseArticle } from "./articles/sprinkler-stardew.zh";
 import { GlasshouseStardewValleyEnglishArticle } from "./articles/glasshouse-stardew-valley.en";
 import { GlasshouseStardewValleyChineseArticle } from "./articles/glasshouse-stardew-valley.zh";
+import { OakTreeStardewEnglishArticle } from "./articles/oak-tree-stardew.en";
+import { OakTreeStardewChineseArticle } from "./articles/oak-tree-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -175,6 +177,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: GlasshouseStardewValleyEnglishArticle,
     },
+    {
+      slug: "oak-tree-stardew",
+      title: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+      description:
+        "Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
+      },
+      featured: true,
+      Content: OakTreeStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -295,6 +312,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: GlasshouseStardewValleyChineseArticle,
+    },
+    {
+      slug: "oak-tree-stardew",
+      title: "星露谷物语橡树：橡子种植、间距与树脂采集",
+      description:
+        "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
+      },
+      featured: true,
+      Content: OakTreeStardewChineseArticle,
     },
   ],
 };

@@ -19,6 +19,7 @@ const expectedSlugs = [
   "stardew-valley-expanded-bachelors-and-bachelorettes",
   "sprinkler-stardew",
   "glasshouse-stardew-valley",
+  "oak-tree-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -53,14 +54,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the eight canonical blog identities in publishing order", () => {
+it("keeps the nine canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the sixteen localized root-level canonical article paths", () => {
+it("publishes only the eighteen localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -70,6 +71,7 @@ it("publishes only the sixteen localized root-level canonical article paths", ()
     "/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/sprinkler-stardew/",
     "/glasshouse-stardew-valley/",
+    "/oak-tree-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -78,6 +80,7 @@ it("publishes only the sixteen localized root-level canonical article paths", ()
     "/zh/stardew-valley-expanded-bachelors-and-bachelorettes/",
     "/zh/sprinkler-stardew/",
     "/zh/glasshouse-stardew-valley/",
+    "/zh/oak-tree-stardew/",
   ]);
 });
 
@@ -216,6 +219,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
     },
   });
+  expect(englishPosts[8]).toMatchObject({
+    title: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+    description:
+      "Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.",
+    readTimeMinutes: 12,
+    coverImage: {
+      src: "/blog/oak-tree-stardew-cover.webp",
+      alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
+    },
+  });
+  expect(chinesePosts[8]).toMatchObject({
+    title: "星露谷物语橡树：橡子种植、间距与树脂采集",
+    description:
+      "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
+    readTimeMinutes: 12,
+    coverImage: {
+      src: "/blog/oak-tree-stardew-cover.webp",
+      alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -231,6 +254,7 @@ it("binds every localized post to its own original blog cover", () => {
       "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
     "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
     "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
+    "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -329,7 +353,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: glasshouse-stardew-valley.",
+    "Expected: carpenter-stardew. Received: oak-tree-stardew.",
   );
 });
 

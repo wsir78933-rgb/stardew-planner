@@ -107,6 +107,7 @@ const localizedBlogPostPaths: Readonly<
       "/stardew-valley-expanded-bachelors-and-bachelorettes",
     "sprinkler-stardew": "/sprinkler-stardew",
     "glasshouse-stardew-valley": "/glasshouse-stardew-valley",
+    "oak-tree-stardew": "/oak-tree-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -118,6 +119,7 @@ const localizedBlogPostPaths: Readonly<
       "/zh/stardew-valley-expanded-bachelors-and-bachelorettes",
     "sprinkler-stardew": "/zh/sprinkler-stardew",
     "glasshouse-stardew-valley": "/zh/glasshouse-stardew-valley",
+    "oak-tree-stardew": "/zh/oak-tree-stardew",
   },
 };
 
