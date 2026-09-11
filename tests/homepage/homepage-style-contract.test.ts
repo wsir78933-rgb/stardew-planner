@@ -45,17 +45,38 @@ test("contains the hero value proposition and frames the product stage within th
   expect(mobileProductStageRule).toContain("border-radius: 0;");
 });
 
+const whyChooseImageSources = [
+  "/homepage/why-choose/beach-decorative-machooo.webp",
+  "/homepage/why-choose/beach-geometric-jennameeps.webp",
+  "/homepage/why-choose/beach-organized-justkuwl.webp",
+  "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+  "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+  "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+  "/homepage/why-choose/fourcorners-coop-hallofax.webp",
+] as const;
+
+const whyChooseImageReferencePaths = [
+  "src/homepage/homepage-copy.ts",
+  "src/components/homepage-why-choose-section.tsx",
+  "src/components/homepage-animated-testimonials.tsx",
+] as const;
+
+function readExistingProjectFile(relativePath: string): string | null {
+  const filePath = resolve(process.cwd(), relativePath);
+
+  if (!existsSync(filePath)) {
+    return null;
+  }
+
+  return readProjectFile(relativePath);
+}
+
 test("ships the homepage image-and-text section assets as public WebP files", () => {
   const homepageSectionImages = [
     {
       sourcePath: "src/components/homepage-features-section.tsx",
       imagePath: "public/homepage/features-pixel-farm.webp",
       imageSource: "/homepage/features-pixel-farm.webp",
-    },
-    {
-      sourcePath: "src/components/homepage-why-choose-section.tsx",
-      imagePath: "public/homepage/why-choose-pixel-farm.webp",
-      imageSource: "/homepage/why-choose-pixel-farm.webp",
     },
     {
       sourcePath: "src/components/homepage-how-to-section.tsx",
@@ -71,6 +92,22 @@ test("ships the homepage image-and-text section assets as public WebP files", ()
     expect(existsSync(imageFilePath), `Expected ${homepageSectionImage.imagePath}`).toBe(true);
     expect(statSync(imageFilePath).size).toBeGreaterThan(0);
     expect(sectionMarkup).toContain(`"${homepageSectionImage.imageSource}"`);
+  }
+
+  const whyChooseImageReferenceMarkup = whyChooseImageReferencePaths
+    .map((relativePath) => readExistingProjectFile(relativePath))
+    .filter((fileContents): fileContents is string => fileContents !== null)
+    .join("\n");
+
+  for (const whyChooseImageSource of whyChooseImageSources) {
+    const whyChooseImagePath = `public${whyChooseImageSource}`;
+    const whyChooseImageFilePath = resolve(process.cwd(), whyChooseImagePath);
+
+    expect(existsSync(whyChooseImageFilePath), `Expected ${whyChooseImagePath}`).toBe(
+      true,
+    );
+    expect(statSync(whyChooseImageFilePath).size).toBeGreaterThan(0);
+    expect(whyChooseImageReferenceMarkup).toContain(`"${whyChooseImageSource}"`);
   }
 });
 
@@ -129,16 +166,14 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   );
   expect(sectionItemRule).toContain("padding: 1.35rem 0;");
   expect(homepageStyles).toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-media] {",
+    "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-animated-testimonials] {",
   );
-  expect(homepageStyles).toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-section-list] {",
-  );
-  expect(homepageStyles).toMatch(
-    /\[data-homepage-why-choose\] \[data-homepage-section-media\]\s*\{[^}]*grid-column: 1;/s,
-  );
-  expect(homepageStyles).toMatch(
-    /\[data-homepage-why-choose\] \[data-homepage-section-list\]\s*\{[^}]*grid-column: 2;/s,
+  const mobileWhyChooseAnimatedTestimonialsRule = homepageStyles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+  expect(mobileWhyChooseAnimatedTestimonialsRule).toBeDefined();
+  expect(mobileWhyChooseAnimatedTestimonialsRule).toMatch(
+    /flex-direction:\s*column|grid-template-columns:\s*1fr/,
   );
   expect(mobileSectionLayoutRule).toBeDefined();
   expect(mobileSectionLayoutRule).toContain("gap: 1.5rem;");

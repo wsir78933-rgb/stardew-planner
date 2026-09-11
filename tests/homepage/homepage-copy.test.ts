@@ -2,6 +2,16 @@ import { expect, test } from "vitest";
 import { HOMEPAGE_LOCALES } from "@/src/homepage/homepage-locale";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
 
+const whyChooseImageSources = [
+  "/homepage/why-choose/beach-decorative-machooo.webp",
+  "/homepage/why-choose/beach-geometric-jennameeps.webp",
+  "/homepage/why-choose/beach-organized-justkuwl.webp",
+  "/homepage/why-choose/beach-processing-shady-kegyard.webp",
+  "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
+  "/homepage/why-choose/fourcorners-balanced-emerald.webp",
+  "/homepage/why-choose/fourcorners-coop-hallofax.webp",
+] as const;
+
 test("ships every approved locale with the same top-level homepage sections", () => {
   expect(Object.keys(homepageCopyByLocale)).toEqual([...HOMEPAGE_LOCALES]);
   expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale["zh-CN"]));
@@ -30,8 +40,27 @@ test("provides the replacement sections with exact bilingual headings and item c
       },
       whyChoose: {
         heading: "Why use this planner",
-        imageAlt: "Pixel-art planning board next to an unbuilt farm",
-        itemCount: 3,
+        previousLabel: "Previous farm layout",
+        nextLabel: "Next farm layout",
+        testimonialCount: 7,
+        quotes: [
+          "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
+          "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
+          "Paths look tidy, but they take crop tiles. Keep the farmhouse, chests, and shipping bin reachable on a normal day.",
+          "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage as you work. Processing only pays off on a route you already walk.",
+          "Each corner is its own farm. Decide what belongs in which quadrant before you drop barns and fields that are slow to move.",
+          "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
+          "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
+        ],
+        names: [
+          "Plan the map you actually play",
+          "Place buildings and crops on one grid",
+          "Leave the walking route first",
+          "Check coverage while you place",
+          "Plan Four Corners by quadrant",
+          "Switch seasons, then export a screenshot",
+          "No account. Projects stay in this browser",
+        ],
       },
       howTo: {
         heading: "How to use it",
@@ -51,8 +80,27 @@ test("provides the replacement sections with exact bilingual headings and item c
       },
       whyChoose: {
         heading: "为什么选择我们",
-        imageAlt: "像素风规划板放在尚未建造的农场旁",
-        itemCount: 3,
+        previousLabel: "上一张农场布局",
+        nextLabel: "下一张农场布局",
+        testimonialCount: 7,
+        quotes: [
+          "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
+          "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
+          "路好看，但会占耕地。农舍、箱子、出货箱周围先留通路，一天的活才走得通。",
+          "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开对着摆。加工区放在每天会路过的地方才划算。",
+          "四个角等于四块地。先定每块干什么，再放大件，避免畜棚和田地放完难挪。",
+          "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
+          "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
+        ],
+        names: [
+          "先选你正在玩的那张图",
+          "建筑和作物放在同一张图上",
+          "每天走的路要先留出来",
+          "边摆边看覆盖范围",
+          "四角农场按四个象限来排",
+          "切四季，再导出截图",
+          "不用账号，项目留在当前浏览器",
+        ],
       },
       howTo: {
         heading: "如何使用",
@@ -67,7 +115,7 @@ test("provides the replacement sections with exact bilingual headings and item c
   } as const;
 
   for (const homepageLocale of HOMEPAGE_LOCALES) {
-    const homepageCopy = homepageCopyByLocale[homepageLocale] as unknown as Record<string, any>;
+    const homepageCopy = homepageCopyByLocale[homepageLocale];
     const expected = expectedSections[homepageLocale];
 
     expect(homepageCopy).not.toHaveProperty("planningGuide");
@@ -79,9 +127,29 @@ test("provides the replacement sections with exact bilingual headings and item c
     expect(homepageCopy.features.items).toHaveLength(expected.features.itemCount);
     expect(homepageCopy.whyChoose).toMatchObject({
       heading: expected.whyChoose.heading,
-      imageAlt: expected.whyChoose.imageAlt,
+      previousLabel: expected.whyChoose.previousLabel,
+      nextLabel: expected.whyChoose.nextLabel,
     });
-    expect(homepageCopy.whyChoose.items).toHaveLength(expected.whyChoose.itemCount);
+    expect(homepageCopy.whyChoose).not.toHaveProperty("items");
+    expect(homepageCopy.whyChoose).not.toHaveProperty("imageAlt");
+    expect(homepageCopy.whyChoose.testimonials).toHaveLength(
+      expected.whyChoose.testimonialCount,
+    );
+    expect(
+      homepageCopy.whyChoose.testimonials.map(
+        (farmLayoutSlide) => farmLayoutSlide.src,
+      ),
+    ).toEqual([...whyChooseImageSources]);
+    expect(
+      homepageCopy.whyChoose.testimonials.map(
+        (farmLayoutSlide) => farmLayoutSlide.quote,
+      ),
+    ).toEqual([...expected.whyChoose.quotes]);
+    expect(
+      homepageCopy.whyChoose.testimonials.map(
+        (farmLayoutSlide) => farmLayoutSlide.name,
+      ),
+    ).toEqual([...expected.whyChoose.names]);
     expect(homepageCopy.howTo).toMatchObject({
       heading: expected.howTo.heading,
       imageAlt: expected.howTo.imageAlt,

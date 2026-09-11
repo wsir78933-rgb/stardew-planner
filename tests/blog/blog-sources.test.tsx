@@ -19,6 +19,8 @@ import { GlasshouseStardewValleyEnglishArticle } from "../../src/blog/articles/g
 import { GlasshouseStardewValleyChineseArticle } from "../../src/blog/articles/glasshouse-stardew-valley.zh";
 import { OakTreeStardewEnglishArticle } from "../../src/blog/articles/oak-tree-stardew.en";
 import { OakTreeStardewChineseArticle } from "../../src/blog/articles/oak-tree-stardew.zh";
+import { StardewValleyTreesEnglishArticle } from "../../src/blog/articles/stardew-valley-trees.en";
+import { StardewValleyTreesChineseArticle } from "../../src/blog/articles/stardew-valley-trees.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -315,51 +317,140 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   },
   {
     Article: SprinklerStardewEnglishArticle,
-    checkedLabel:
-      "Ranges, recipes, upgrades, and placement limits checked against Stardew Valley Wiki pages on September 5, 2026. The planner is a placement preview, not a watering simulation.",
     heading: "Sources",
     name: "English sprinkler article",
     sources: [
+      { href: "https://stardewvalleywiki.com/Sprinkler", label: "Sprinkler" },
       {
-        href: "https://wiki.stardewvalley.net/Sprinkler",
-        label: "Stardew Valley Wiki: Sprinkler",
+        href: "https://stardewvalleywiki.com/Quality_Sprinkler",
+        label: "Quality Sprinkler",
       },
       {
-        href: "https://wiki.stardewvalley.net/Quality_Sprinkler",
-        label: "Stardew Valley Wiki: Quality Sprinkler",
+        href: "https://stardewvalleywiki.com/Iridium_Sprinkler",
+        label: "Iridium Sprinkler",
       },
       {
-        href: "https://wiki.stardewvalley.net/Iridium_Sprinkler",
-        label: "Stardew Valley Wiki: Iridium Sprinkler",
+        href: "https://stardewvalleywiki.com/Crafting#Sprinklers",
+        label: "Crafting: Sprinklers",
       },
       {
-        href: "https://wiki.stardewvalley.net/Pressure_Nozzle",
-        label: "Stardew Valley Wiki: Pressure Nozzle",
+        href: "https://stardewvalleywiki.com/Pierre%27s_General_Store",
+        label: "Pierre's General Store",
+      },
+      { href: "https://stardewvalleywiki.com/Oasis", label: "Oasis" },
+      { href: "https://stardewvalleywiki.com/Dwarf", label: "Dwarf" },
+      {
+        href: "https://stardewvalleywiki.com/Pressure_Nozzle",
+        label: "Pressure Nozzle",
+      },
+      { href: "https://stardewvalleywiki.com/Enricher", label: "Enricher" },
+      { href: "https://stardewvalleywiki.com/Greenhouse", label: "Greenhouse" },
+      { href: "https://stardewvalleywiki.com/Garden_Pot", label: "Garden Pot" },
+      {
+        href: "https://stardewvalleywiki.com/Watering_Cans",
+        label: "Watering Cans",
       },
       {
-        href: "https://wiki.stardewvalley.net/Greenhouse#Sprinklers",
-        label: "Stardew Valley Wiki: Greenhouse sprinklers",
+        href: "https://stardewvalleywiki.com/Deluxe_Retaining_Soil",
+        label: "Deluxe Retaining Soil",
       },
+      { href: "https://stardewvalleywiki.com/Farm_Maps", label: "Farm Maps" },
+      { href: "https://stardewvalleywiki.com/Krobus", label: "Krobus" },
+      {
+        href: "https://stardewvalleywiki.com/Qi%27s_Walnut_Room",
+        label: "Qi's Walnut Room",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Ginger_Island",
+        label: "Ginger Island",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fruit_Trees",
+        label: "Fruit Trees",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fiber_Seeds",
+        label: "Fiber Seeds",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Slime_Hutch",
+        label: "Slime Hutch",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Traveling_Cart",
+        label: "Traveling Cart",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-5-update-full-changelog/",
+        label: "Stardew Valley 1.5 changelog",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-5-update-out-now-on-pc/",
+        label: "Stardew Valley 1.5 out now (Beach Farm wording)",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+        label: "Stardew Valley 1.6 changelog",
+      },
+      { href: "/", label: "Stardew Valley Planner" },
     ],
   },
   {
     Article: SprinklerStardewChineseArticle,
-    checkedLabel:
-      "洒水器范围、配方、升级和放置限制已于 2026 年 9 月 5 日根据星露谷物语 Wiki 页面核对；规划器仅作摆放预览。",
-    heading: "资料来源",
+    heading: "来源",
     name: "Chinese sprinkler article",
     sources: [
       {
-        href: "https://zh.stardewvalleywiki.com/%E6%B4%92%E6%B0%B4%E5%99%A8",
-        label: "星露谷物语官方中文维基：洒水器",
+        href: "https://zh.stardewvalleywiki.com/洒水器",
+        label: "洒水器 - 星露谷物语官方中文维基",
       },
       {
-        href: "https://zh.stardewvalleywiki.com/%E5%8A%A0%E5%8E%8B%E5%96%B7%E5%A4%B4",
-        label: "星露谷物语官方中文维基：加压喷头",
+        href: "https://zh.stardewvalleywiki.com/优质洒水器",
+        label: "优质洒水器 - 星露谷物语官方中文维基",
       },
       {
-        href: "https://zh.stardewvalleywiki.com/%E6%B8%A9%E5%AE%A4",
-        label: "星露谷物语官方中文维基：温室",
+        href: "https://zh.stardewvalleywiki.com/铱制洒水器",
+        label: "铱制洒水器 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/加压喷头",
+        label: "加压喷头 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/施肥器",
+        label: "施肥器 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/温室",
+        label: "温室 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/科罗布斯",
+        label: "科罗布斯 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/下水道",
+        label: "下水道 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/齐先生的核桃房",
+        label: "齐先生的核桃房 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/花盆",
+        label: "花盆 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/农场地图",
+        label: "农场地图 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/史莱姆屋",
+        label: "史莱姆屋 - 星露谷物语官方中文维基",
+      },
+      {
+        href: "/zh",
+        label: "星露谷物语规划器（简体中文首页）",
       },
     ],
   },
@@ -481,6 +572,69 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
         href: "https://zh.stardewvalleywiki.com/%E9%AB%98%E7%BA%A7%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0",
         label: "星露谷物语官方中文维基：高级生长激素",
       },
+    ],
+  },
+  {
+    Article: StardewValleyTreesEnglishArticle,
+    heading: "Sources",
+    name: "English trees article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Trees", label: "Stardew Valley Wiki: Trees" },
+      {
+        href: "https://stardewvalleywiki.com/Fruit_Trees",
+        label: "Stardew Valley Wiki: Fruit Trees",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Tree_Fertilizer",
+        label: "Stardew Valley Wiki: Tree Fertilizer",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Version_History#1.6.9",
+        label: "Stardew Valley Wiki: Version History 1.6.9",
+        note: " — 1.6.9 patch note: fruit-tree growth is no longer blocked by grass and seed spots.",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog",
+        label: "Official Stardew Valley 1.6 full changelog",
+        note: " — 1.6: cannot plant trees in town; cannot plant trees in the Beach farm tunnel.",
+      },
+      { href: "/#planner", label: "Stardew Valley Planner" },
+      { href: "/", label: "Stardew Valley Planner homepage" },
+      {
+        href: "/glasshouse-stardew-valley",
+        label: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
+      },
+      {
+        href: "/sprinkler-stardew",
+        label: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+      },
+    ],
+  },
+  {
+    Article: StardewValleyTreesChineseArticle,
+    heading: "来源",
+    name: "Chinese trees article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%A0%91&amp;variant=zh-cn",
+        label: "官方中文维基：树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%9E%9C%E6%A0%91&amp;variant=zh-cn",
+        label: "官方中文维基：果树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%A0%91%E8%82%A5&amp;variant=zh-cn",
+        label: "官方中文维基：树肥",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog",
+        label: "Stardew Valley 1.6 完整更新说明",
+        note: " — 1.6：不能再在镇上种树，也不能在海滩农场隧道里种树。",
+      },
+      { href: "/zh#planner", label: "星露谷农场规划器（中文页）" },
+      { href: "/zh/glasshouse-stardew-valley", label: "本站中文温室布局" },
+      { href: "/zh/sprinkler-stardew", label: "本站中文洒水器布局" },
     ],
   },
 ];

@@ -20,6 +20,7 @@ const expectedSlugs = [
   "sprinkler-stardew",
   "glasshouse-stardew-valley",
   "oak-tree-stardew",
+  "stardew-valley-trees",
 ] as const;
 
 function createLocalizedPost(
@@ -54,14 +55,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the nine canonical blog identities in publishing order", () => {
+it("keeps the ten canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the eighteen localized root-level canonical article paths", () => {
+it("publishes only the twenty localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -72,6 +73,7 @@ it("publishes only the eighteen localized root-level canonical article paths", (
     "/sprinkler-stardew/",
     "/glasshouse-stardew-valley/",
     "/oak-tree-stardew/",
+    "/stardew-valley-trees/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -81,6 +83,7 @@ it("publishes only the eighteen localized root-level canonical article paths", (
     "/zh/sprinkler-stardew/",
     "/zh/glasshouse-stardew-valley/",
     "/zh/oak-tree-stardew/",
+    "/zh/stardew-valley-trees/",
   ]);
 });
 
@@ -180,23 +183,24 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     },
   });
   expect(englishPosts[6]).toMatchObject({
-    title: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+    title:
+      "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
     description:
-      "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
-    readTimeMinutes: 10,
+      "Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
+    readTimeMinutes: 14,
     coverImage: {
       src: "/blog/sprinkler-stardew-cover.webp",
-      alt: "Original illustration of a farm field with three empty sprinkler footprints: a four-tile plus, an eight-tile ring, and a twenty-four-tile square",
+      alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
     },
   });
   expect(chinesePosts[6]).toMatchObject({
-    title: "星露谷洒水器布局：4、8、24格覆盖与摆放",
+    title: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
     description:
-      "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
-    readTimeMinutes: 10,
+      "说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
+    readTimeMinutes: 13,
     coverImage: {
       src: "/blog/sprinkler-stardew-cover.webp",
-      alt: "俯视农田网格中对比优质与铱制洒水器覆盖范围的星露谷洒水器布局示意",
+      alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
     },
   });
   expect(englishPosts[7]).toMatchObject({
@@ -239,6 +243,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
     },
   });
+  expect(englishPosts[9]).toMatchObject({
+    title: "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
+    description:
+      "Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
+    readTimeMinutes: 12,
+    coverImage: {
+      src: "/blog/stardew-valley-trees-cover.webp",
+      alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
+    },
+  });
+  expect(chinesePosts[9]).toMatchObject({
+    title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
+    description:
+      "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
+    readTimeMinutes: 13,
+    coverImage: {
+      src: "/blog/stardew-valley-trees-cover.webp",
+      alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -255,6 +279,7 @@ it("binds every localized post to its own original blog cover", () => {
     "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
     "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
     "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
+    "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -353,7 +378,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: oak-tree-stardew.",
+    "Expected: carpenter-stardew. Received: stardew-valley-trees.",
   );
 });
 

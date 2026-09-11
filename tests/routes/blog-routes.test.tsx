@@ -47,6 +47,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/sprinkler-stardew"');
   expect(indexMarkup).toContain('href="/glasshouse-stardew-valley"');
   expect(indexMarkup).toContain('href="/oak-tree-stardew"');
+  expect(indexMarkup).toContain('href="/stardew-valley-trees"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -77,6 +78,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/sprinkler-stardew"');
   expect(indexMarkup).toContain('href="/zh/glasshouse-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/oak-tree-stardew"');
+  expect(indexMarkup).toContain('href="/zh/stardew-valley-trees"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -171,23 +173,24 @@ it("renders the paired sprinkler article routes with locked metadata and one pag
   );
 
   expect(englishMarkup).toContain(
-    "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+    "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
   );
   expect(chineseMarkup).toContain(
-    "星露谷洒水器布局：4、8、24格覆盖与摆放",
+    "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
   );
   expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
   expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
 
   await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
-    title: "Stardew Valley Sprinkler Layout: 4, 8 & 24 Tiles",
+    title:
+      "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
     description:
-      "Compare 4, 8, and 24-tile sprinklers, choose a grid for your farm, and check coverage before planting with the Stardew Valley Planner.",
+      "Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
   });
   await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
-    title: "星露谷洒水器布局：4、8、24格覆盖与摆放",
+    title: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
     description:
-      "分清普通、优质和铱制洒水器的4/8/24格范围，再用规划器检查田块、边界和通道，避免漏浇。",
+      "说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
   });
 });
 
@@ -258,6 +261,41 @@ it("renders the paired oak tree article routes with locked metadata and one page
     title: "星露谷物语橡树：橡子种植、间距与树脂采集",
     description:
       "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
+  });
+});
+
+it("renders the paired trees article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "stardew-valley-trees" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "stardew-valley-trees" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷种树：先分普通树和果树，再在农场图上留间隔",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
+    description:
+      "Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
+    description:
+      "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
   });
 });
 

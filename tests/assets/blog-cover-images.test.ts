@@ -275,7 +275,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all nine blog identities", () => {
+it("ships budget-compliant WebP covers for all ten blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -289,6 +289,7 @@ it("ships budget-compliant WebP covers for all nine blog identities", () => {
   const sprinklerImage = readWebpDimensions("blog/sprinkler-stardew-cover.webp");
   const glasshouseImage = readWebpDimensions("blog/glasshouse-stardew-valley-cover.webp");
   const oakTreeImage = readWebpDimensions("blog/oak-tree-stardew-cover.webp");
+  const treesImage = readWebpDimensions("blog/stardew-valley-trees-cover.webp");
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -299,6 +300,7 @@ it("ships budget-compliant WebP covers for all nine blog identities", () => {
   expect(sprinklerImage).toMatchObject(expectedCoverDimensions);
   expect(glasshouseImage).toMatchObject(expectedCoverDimensions);
   expect(oakTreeImage).toMatchObject(expectedCoverDimensions);
+  expect(treesImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
@@ -307,6 +309,7 @@ it("ships budget-compliant WebP covers for all nine blog identities", () => {
   expect(sprinklerImage.width / sprinklerImage.height).toBeCloseTo(16 / 9, 2);
   expect(glasshouseImage.width / glasshouseImage.height).toBeCloseTo(16 / 9, 2);
   expect(oakTreeImage.width / oakTreeImage.height).toBeCloseTo(16 / 9, 2);
+  expect(treesImage.width / treesImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
@@ -316,6 +319,7 @@ it("ships budget-compliant WebP covers for all nine blog identities", () => {
   expect(sprinklerImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(glasshouseImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(oakTreeImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(treesImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
