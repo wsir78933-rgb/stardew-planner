@@ -96,7 +96,7 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       '<em data-homepage-hero-emphasis="true">Planner</em>',
     );
-    expect(plannerPageMarkup).toContain(" – Free Online Farm Layout Tool");
+    expect(plannerPageMarkup).toContain("Free Online Farm Layout Tool");
     expect(plannerPageMarkup).toContain("data-homepage-hero-fan");
     expect(plannerPageMarkup).toContain('src="/homepage/hero/spring-crops.webp"');
     expect(plannerPageMarkup).toContain('src="/homepage/hero/beach-farm.webp"');

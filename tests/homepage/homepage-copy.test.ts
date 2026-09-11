@@ -192,7 +192,7 @@ test("provides the approved bilingual planner hero content", () => {
   expect(homepageCopyByLocale.en.hero).toMatchObject({
     headlineBefore: "Stardew Valley ",
     headlineEmphasis: "Planner",
-    headlineAfter: " – Free Online Farm Layout Tool",
+    headlineAfter: "Free Online Farm Layout Tool",
     supportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
     primaryActionLabel: "Start planning",
@@ -215,7 +215,7 @@ test("provides the approved bilingual planner hero content", () => {
   expect(homepageCopyByLocale["zh-CN"].hero).toMatchObject({
     headlineBefore: "星露谷物语",
     headlineEmphasis: "规划器",
-    headlineAfter: "——免费在线农场布局工具",
+    headlineAfter: "免费在线农场布局工具",
     supportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
     primaryActionLabel: "开始规划",

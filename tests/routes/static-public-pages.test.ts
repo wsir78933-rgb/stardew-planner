@@ -891,7 +891,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     staticPageFile: "index.html",
     heroTitleBefore: "Stardew Valley ",
     heroEmphasis: "Planner",
-    heroTitleAfter: " – Free Online Farm Layout Tool",
+    heroTitleAfter: "Free Online Farm Layout Tool",
     heroSupportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
     heroTrustedBy: "Free fan-made planner. Projects stay in this browser.",
@@ -959,7 +959,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     staticPageFile: "zh.html",
     heroTitleBefore: "星露谷物语",
     heroEmphasis: "规划器",
-    heroTitleAfter: "——免费在线农场布局工具",
+    heroTitleAfter: "免费在线农场布局工具",
     heroSupportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
     heroTrustedBy: "免费玩家规划器。项目保存在当前浏览器。",

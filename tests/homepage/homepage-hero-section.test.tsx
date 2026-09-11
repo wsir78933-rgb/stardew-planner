@@ -29,7 +29,7 @@ test("renders the locked hero title, supporting copy, actions, and three fan ima
   expect(markup).toContain(
     '<em data-homepage-hero-emphasis="true">Planner</em>',
   );
-  expect(markup).toContain(" – Free Online Farm Layout Tool");
+  expect(markup).toContain("Free Online Farm Layout Tool");
   expect(markup).toContain(copy.hero.supportingCopy);
   expect(markup).toMatch(
     /<a[^>]*href="\/#planner"[^>]*>Start planning<\/a>/,
@@ -62,7 +62,7 @@ test("keeps the Chinese hero title and description strings unchanged", () => {
   expect(markup).toContain(
     '<em data-homepage-hero-emphasis="true">规划器</em>',
   );
-  expect(markup).toContain("——免费在线农场布局工具");
+  expect(markup).toContain("免费在线农场布局工具");
   expect(markup).toContain(copy.hero.supportingCopy);
   expect(markup).toContain("开始规划");
   expect(markup).toContain("功能介绍");
