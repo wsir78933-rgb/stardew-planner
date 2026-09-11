@@ -34,7 +34,7 @@ test("contains the hero value proposition and frames the product stage within th
   expect(heroContentRule).toBeDefined();
   expect(heroContentRule).toContain("display: grid;");
   expect(heroContentRule).toContain("justify-items: center;");
-  expect(heroContentRule).toContain("max-width: 42rem;");
+  expect(heroContentRule).toContain("max-width: 60rem;");
   expect(heroContentRule).toContain("width: 100%;");
   expect(productStageRule).toBeDefined();
   expect(productStageRule).toContain("background: var(--card);");
@@ -82,6 +82,21 @@ test("ships the homepage image-and-text section assets as public WebP files", ()
       sourcePath: "src/components/homepage-how-to-section.tsx",
       imagePath: "public/homepage/how-to-pixel-farm.webp",
       imageSource: "/homepage/how-to-pixel-farm.webp",
+    },
+    {
+      sourcePath: "src/homepage/homepage-copy.ts",
+      imagePath: "public/homepage/hero/spring-crops.webp",
+      imageSource: "/homepage/hero/spring-crops.webp",
+    },
+    {
+      sourcePath: "src/homepage/homepage-copy.ts",
+      imagePath: "public/homepage/hero/beach-farm.webp",
+      imageSource: "/homepage/hero/beach-farm.webp",
+    },
+    {
+      sourcePath: "src/homepage/homepage-copy.ts",
+      imagePath: "public/homepage/hero/forest-farm.webp",
+      imageSource: "/homepage/hero/forest-farm.webp",
     },
   ] as const;
 
@@ -297,6 +312,25 @@ test("centers the homepage hero as one vertical content stack", () => {
   expect(heroRule).toContain("text-align: center;");
 });
 
+test("lays out the homepage hero image fan with overlapping site-token frames", () => {
+  const styles = readProjectFile("app/globals.css");
+  const fanRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-hero-fan\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const fanFrameRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-hero-fan-frame\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+
+  expect(fanRule).toBeDefined();
+  expect(fanRule).toContain("display: flex;");
+  expect(fanRule).toContain("justify-content: center;");
+  expect(fanFrameRule).toBeDefined();
+  expect(fanFrameRule).toContain("aspect-ratio: 3 / 4;");
+  expect(fanFrameRule).toContain("border-radius: var(--radius);");
+  expect(fanFrameRule).toContain("border: 1px solid rgb(36 42 34 / 72%);");
+  expect(styles).not.toContain("oklch(1 0 0)");
+});
+
 test("uses a compact wider hero headline without an eyebrow spacing rule", () => {
   const styles = readProjectFile("app/globals.css");
   const desktopHeadlineRule = styles.match(
@@ -308,16 +342,21 @@ test("uses a compact wider hero headline without an eyebrow spacing rule", () =>
 
   expect(desktopHeadlineRule).toBeDefined();
   expect(desktopHeadlineRule).toContain(
-    "font-size: clamp(3.1rem, 5.8vw, 5.5rem);",
+    "font-size: clamp(2.6rem, 4.4vw, 3.9rem);",
   );
   expect(desktopHeadlineRule).toContain("line-height: 0.94;");
-  expect(desktopHeadlineRule).toContain("max-width: 13ch;");
+  expect(desktopHeadlineRule).toContain("display: flex;");
+  expect(desktopHeadlineRule).toContain("flex-direction: column;");
+  expect(desktopHeadlineRule).toContain("max-width: 100%;");
   expect(mobileHeadlineRule).toBeDefined();
   expect(mobileHeadlineRule).toContain(
-    "font-size: clamp(2.75rem, 12vw, 4.25rem);",
+    "font-size: clamp(2.35rem, 10vw, 3.25rem);",
   );
-  expect(mobileHeadlineRule).toContain("max-width: 10ch;");
+  expect(mobileHeadlineRule).toContain("max-width: 100%;");
   expect(styles).not.toContain("[data-homepage-eyebrow]");
+  expect(styles).not.toMatch(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-hero-title-line\]\s*\{[^}]*white-space:\s*nowrap/s,
+  );
 });
 
 test("keeps section headings readable without a poster measure", () => {

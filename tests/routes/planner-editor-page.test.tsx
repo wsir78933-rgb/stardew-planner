@@ -92,9 +92,15 @@ describe("planner editor page", () => {
       previousHomepageSectionPosition = homepageSectionPosition;
     }
     expect(plannerPageMarkup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+    expect(plannerPageMarkup).toContain("Stardew Valley ");
     expect(plannerPageMarkup).toContain(
-      'Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> – Free Online Farm Layout Tool',
+      '<em data-homepage-hero-emphasis="true">Planner</em>',
     );
+    expect(plannerPageMarkup).toContain(" – Free Online Farm Layout Tool");
+    expect(plannerPageMarkup).toContain("data-homepage-hero-fan");
+    expect(plannerPageMarkup).toContain('src="/homepage/hero/spring-crops.webp"');
+    expect(plannerPageMarkup).toContain('src="/homepage/hero/beach-farm.webp"');
+    expect(plannerPageMarkup).toContain('src="/homepage/hero/forest-farm.webp"');
     expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(4);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/blog"[^>]*>Blog<\/a>/);
     expect(plannerPageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);

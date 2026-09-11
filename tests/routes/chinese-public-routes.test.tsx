@@ -8,9 +8,11 @@ import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
 it("renders /zh as the Chinese homepage with the shared planner workspace", () => {
   const markup = renderToStaticMarkup(<ChinesePlannerPage />);
 
+  expect(markup).toContain("星露谷物语");
   expect(markup).toContain(
-    '<h1>星露谷物语<em data-homepage-hero-emphasis="true">规划器</em>——免费在线农场布局工具</h1>',
+    '<em data-homepage-hero-emphasis="true">规划器</em>',
   );
+  expect(markup).toContain("——免费在线农场布局工具");
   expect(markup).toContain(
     "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
   );

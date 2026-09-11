@@ -43,8 +43,11 @@ type StaticBlogPageExpectation = Readonly<{
 
 type StaticHomepageExpectation = Readonly<{
   staticPageFile: "index.html" | "zh.html";
-  heroMarkup: string;
+  heroTitleBefore: string;
+  heroEmphasis: string;
+  heroTitleAfter: string;
   heroSupportingCopy: string;
+  heroTrustedBy: string;
   featuresHeading: string;
   featuresDescriptions: readonly string[];
   whyChooseHeading: string;
@@ -886,10 +889,12 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
 const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
   {
     staticPageFile: "index.html",
-    heroMarkup:
-      '<h1>Stardew Valley <em data-homepage-hero-emphasis="true">Planner</em> – Free Online Farm Layout Tool</h1>',
+    heroTitleBefore: "Stardew Valley ",
+    heroEmphasis: "Planner",
+    heroTitleAfter: " – Free Online Farm Layout Tool",
     heroSupportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
+    heroTrustedBy: "Free fan-made planner. Projects stay in this browser.",
     featuresHeading: "What the planner does",
     featuresDescriptions: [
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
@@ -916,6 +921,9 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "Finish the layout on this page, then build in-game.",
     closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
     sectionImageSources: [
+      "/homepage/hero/spring-crops.webp",
+      "/homepage/hero/beach-farm.webp",
+      "/homepage/hero/forest-farm.webp",
       "/homepage/features-pixel-farm.webp",
       "/homepage/why-choose/beach-decorative-machooo.webp",
       "/homepage/why-choose/beach-geometric-jennameeps.webp",
@@ -949,10 +957,12 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
   },
   {
     staticPageFile: "zh.html",
-    heroMarkup:
-      '<h1>星露谷物语<em data-homepage-hero-emphasis="true">规划器</em>——免费在线农场布局工具</h1>',
+    heroTitleBefore: "星露谷物语",
+    heroEmphasis: "规划器",
+    heroTitleAfter: "——免费在线农场布局工具",
     heroSupportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
+    heroTrustedBy: "免费玩家规划器。项目保存在当前浏览器。",
     featuresHeading: "功能介绍",
     featuresDescriptions: [
       "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
@@ -979,6 +989,9 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "先在这页摆完，再进游戏建。",
     closingCtaSupportLine: "不用注册。方案留在这台浏览器。",
     sectionImageSources: [
+      "/homepage/hero/spring-crops.webp",
+      "/homepage/hero/beach-farm.webp",
+      "/homepage/hero/forest-farm.webp",
       "/homepage/features-pixel-farm.webp",
       "/homepage/why-choose/beach-decorative-machooo.webp",
       "/homepage/why-choose/beach-geometric-jennameeps.webp",
@@ -1143,9 +1156,14 @@ function expectStaticHomepageContent(
   expectedHomepage: StaticHomepageExpectation,
 ): void {
   expect(staticPageHtml).toContain('data-homepage-shell="true"');
-  expect(staticPageHtml).toContain(expectedHomepage.heroMarkup);
+  expect(staticPageHtml).toContain(expectedHomepage.heroTitleBefore);
+  expect(staticPageHtml).toContain(
+    `<em data-homepage-hero-emphasis="true">${expectedHomepage.heroEmphasis}</em>`,
+  );
+  expect(staticPageHtml).toContain(expectedHomepage.heroTitleAfter);
   expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
   expect(staticPageHtml).toContain(expectedHomepage.heroSupportingCopy);
+  expect(staticPageHtml).toContain(expectedHomepage.heroTrustedBy);
   expect(staticPageHtml).toContain(`>${expectedHomepage.featuresHeading}</h2>`);
   for (const featuresDescription of expectedHomepage.featuresDescriptions) {
     expect(staticPageHtml).toContain(featuresDescription);

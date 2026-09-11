@@ -24,6 +24,11 @@ type HomepageFaqItem = Readonly<{
   answer: string;
 }>;
 
+export type HomepageHeroFanImage = Readonly<{
+  src: string;
+  alt: string;
+}>;
+
 export type HomepageCopy = Readonly<{
   navigation: Readonly<{
     productName: string;
@@ -39,6 +44,12 @@ export type HomepageCopy = Readonly<{
     headlineAfter: string;
     supportingCopy: string;
     primaryActionLabel: string;
+    trustedBy: string;
+    fanImages: readonly [
+      HomepageHeroFanImage,
+      HomepageHeroFanImage,
+      HomepageHeroFanImage,
+    ];
   }>;
   plannerPreview: Readonly<{
     imageAlt: string;
@@ -110,6 +121,21 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportingCopy:
         "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
       primaryActionLabel: "Start planning",
+      trustedBy: "Free fan-made planner. Projects stay in this browser.",
+      fanImages: [
+        {
+          src: "/homepage/hero/spring-crops.webp",
+          alt: "Watercolor spring farm with crop rows, a farmhouse, scarecrow, and greenhouse",
+        },
+        {
+          src: "/homepage/hero/beach-farm.webp",
+          alt: "Watercolor beach farm with a cabin, fenced plots, and a rocky shoreline",
+        },
+        {
+          src: "/homepage/hero/forest-farm.webp",
+          alt: "Watercolor forest farm clearing with a dirt path, fruit tree, and mossy cabin",
+        },
+      ],
     },
     plannerPreview: {
       imageAlt:
@@ -301,6 +327,21 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportingCopy:
         "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
       primaryActionLabel: "开始规划",
+      trustedBy: "免费玩家规划器。项目保存在当前浏览器。",
+      fanImages: [
+        {
+          src: "/homepage/hero/spring-crops.webp",
+          alt: "水彩春日农场：菜畦、农舍、稻草人和温室",
+        },
+        {
+          src: "/homepage/hero/beach-farm.webp",
+          alt: "水彩海滩农场：木屋、围栏菜地和礁石海岸",
+        },
+        {
+          src: "/homepage/hero/forest-farm.webp",
+          alt: "水彩森林农场：土路、果树和长满青苔的小屋",
+        },
+      ],
     },
     plannerPreview: {
       imageAlt: "像素风标准农场地图，中央是空地，含农舍、温室和两处水塘",

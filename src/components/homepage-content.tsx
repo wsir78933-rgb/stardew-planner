@@ -8,6 +8,7 @@ import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
 import { HomepageClosingCta } from "./homepage-closing-cta";
 import { HomepageFeaturesSection } from "./homepage-features-section";
+import { HomepageHeroSection } from "./homepage-hero-section";
 import { HomepageHowToSection } from "./homepage-how-to-section";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 import { HomepageWhyChooseSection } from "./homepage-why-choose-section";
@@ -63,19 +64,12 @@ export function HomepageContent({
         </nav>
       </header>
       <main>
-        <section data-homepage-hero>
-          <div data-homepage-hero-content>
-            <h1>
-              {copy.hero.headlineBefore}
-              <em data-homepage-hero-emphasis>{copy.hero.headlineEmphasis}</em>
-              {copy.hero.headlineAfter}
-            </h1>
-            <p>{copy.hero.supportingCopy}</p>
-            <Button asChild data-homepage-primary-action size="lg">
-              <a href={plannerHref}>{copy.hero.primaryActionLabel}</a>
-            </Button>
-          </div>
-        </section>
+        <HomepageHeroSection
+          capabilitiesHref="#capabilities"
+          capabilitiesLabel={copy.navigation.capabilitiesLabel}
+          copy={copy.hero}
+          plannerHref={plannerHref}
+        />
         {plannerWorkspace}
         <HomepageFeaturesSection copy={copy.features} />
         <HomepageWhyChooseSection copy={copy.whyChoose} />
