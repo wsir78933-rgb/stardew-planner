@@ -1,7 +1,7 @@
 "use client";
 
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
 export type HomepageFarmLayoutSlide = Readonly<{
@@ -111,16 +111,6 @@ export function assertHomepageAnimatedTestimonialsInput(
   for (let slideIndex = 0; slideIndex < testimonials.length; slideIndex += 1) {
     assertHomepageFarmLayoutSlide(testimonials[slideIndex], slideIndex);
   }
-}
-
-export function rotateYForIndex(index: number): number {
-  if (!Number.isInteger(index) || index < 0) {
-    throw new TypeError(
-      `Homepage testimonial rotate index must be a non-negative integer; received ${describeValue(index)}.`,
-    );
-  }
-
-  return ((index * 7 + 3) % 21) - 10;
 }
 
 export function splitQuoteIntoMotionUnits(quote: string): string[] {
@@ -262,57 +252,35 @@ export function HomepageAnimatedTestimonials(props: HomepageAnimatedTestimonials
   return (
     <div data-homepage-animated-testimonials>
       <div data-homepage-testimonial-media>
-        <AnimatePresence initial={false}>
-          {testimonials.map((testimonial, testimonialIndex) => {
-            const isActive = testimonialIndex === activeIndex;
-            const rotation = rotateYForIndex(testimonialIndex);
+        {testimonials.map((testimonial, testimonialIndex) => {
+          const isActive = testimonialIndex === activeIndex;
 
-            return (
-              <motion.div
-                animate={{
-                  opacity: isActive ? 1 : 0.7,
-                  rotate: isActive ? 0 : rotation,
-                  scale: isActive ? 1 : 0.95,
-                  y: isActive && !prefersReducedMotion ? [0, -80, 0] : 0,
-                  z: isActive ? 0 : -100,
-                  zIndex: isActive ? 40 : testimonials.length + 2 - testimonialIndex,
-                }}
-                data-homepage-testimonial-image
-                exit={{
-                  opacity: 0,
-                  rotate: rotation,
-                  scale: 0.9,
-                  z: 100,
-                }}
-                initial={false}
-                key={testimonial.src}
-                transition={{
-                  duration: prefersReducedMotion ? 0 : 0.4,
-                  ease: "easeInOut",
-                }}
-              >
-                <img
-                  alt={testimonial.imageAlt}
-                  decoding="async"
-                  draggable={false}
-                  loading="lazy"
-                  src={testimonial.src}
-                />
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </div>
-      <div data-homepage-testimonial-copy>
-        {testimonials.map((testimonial, testimonialIndex) => (
-          <HomepageFarmLayoutSlideCopy
-            canAnimateQuoteWords={canAnimateQuoteWords}
-            isActive={testimonialIndex === activeIndex}
-            key={testimonial.src}
-            prefersReducedMotion={prefersReducedMotion}
-            testimonial={testimonial}
-          />
-        ))}
+          return (
+            <motion.div
+              animate={{
+                opacity: isActive ? 1 : 0,
+                zIndex: isActive ? 1 : 0,
+              }}
+              aria-hidden={isActive ? undefined : true}
+              data-homepage-testimonial-image
+              initial={false}
+              key={testimonial.src}
+              style={{ pointerEvents: isActive ? "auto" : "none" }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.4,
+                ease: "easeInOut",
+              }}
+            >
+              <img
+                alt={testimonial.imageAlt}
+                decoding="async"
+                draggable={false}
+                loading="lazy"
+                src={testimonial.src}
+              />
+            </motion.div>
+          );
+        })}
         <div data-homepage-testimonial-controls>
           <button
             aria-label={previousLabel}
@@ -339,6 +307,17 @@ export function HomepageAnimatedTestimonials(props: HomepageAnimatedTestimonials
             <IconArrowRight aria-hidden="true" />
           </button>
         </div>
+      </div>
+      <div data-homepage-testimonial-copy>
+        {testimonials.map((testimonial, testimonialIndex) => (
+          <HomepageFarmLayoutSlideCopy
+            canAnimateQuoteWords={canAnimateQuoteWords}
+            isActive={testimonialIndex === activeIndex}
+            key={testimonial.src}
+            prefersReducedMotion={prefersReducedMotion}
+            testimonial={testimonial}
+          />
+        ))}
       </div>
     </div>
   );

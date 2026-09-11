@@ -167,9 +167,9 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
         },
         {
           quote:
-            "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage as you work. Processing only pays off on a route you already walk.",
-          name: "Check coverage while you place",
-          designation: "Shown on a Beach farm",
+            "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
+          name: "Check coverage as you place",
+          designation: "Example: Beach farm",
           src: "/homepage/why-choose/beach-processing-shady-kegyard.webp",
           imageAlt: "Processing-focused Beach farm layout by shady kegyard",
         },
@@ -226,43 +226,41 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     closingCta: {
-      heading: "The map is already on this page. Start placing.",
+      heading: "Finish the layout on this page, then build in-game.",
       supportLine: "No sign-up. Projects stay in this browser.",
     },
     faq: {
-      heading: "Frequently asked questions",
+      heading: "Check these before you start",
       items: [
         {
-          question: "Where are my projects stored?",
+          question: "Will I lose my work?",
           answer:
-            "Projects are saved locally in this browser. There is no account or cloud sync, so use the same browser and device to reopen them.",
+            "Projects stay in this browser. No account, no cloud sync. A different device or a data wipe will lose them.",
         },
         {
-          question: "Which Stardew Valley farm types can I plan?",
+          question: "Is my farm type here?",
           answer:
-            "The planner includes Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is also available in the map picker.",
+            "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, Meadowlands, plus Ginger Island.",
         },
         {
-          question: "Which seasons and coverage views are available?",
+          question: "Can I see seasons and coverage?",
           answer:
-            "You can switch between spring, summer, fall, and winter and show sprinkler, scarecrow, Bee House, and Junimo Hut coverage.",
+            "Spring, summer, fall, and winter. Sprinkler, scarecrow, Bee House, and Junimo Hut coverage can be turned on.",
         },
         {
-          question: "Can I import a Stardew Valley save?",
-          answer:
-            "Yes. Game-save import is experimental, and unsupported or modded items may not be mapped.",
+          question: "Can I import a save?",
+          answer: "Yes, but it is experimental. Modded items may not map.",
         },
         {
-          question: "Can I export my farm layout?",
-          answer:
-            "Yes. The planner provides standard and high-quality screenshot downloads.",
+          question: "Can I export a screenshot?",
+          answer: "Yes. Standard and high-quality downloads.",
         },
       ],
     },
     trust: {
       heading: "About this planner",
       description:
-        "Fan-made Stardew Valley planning tool. Not affiliated with or endorsed by ConcernedApe or Stardew Valley. Projects stay in this browser.",
+        "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
     },
     footer: {
       brandName: "Stardew Valley Farm Planner",
@@ -329,7 +327,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     whyChoose: {
-      heading: "为什么选择我们",
+      heading: "为什么用这个规划器",
       previousLabel: "上一张农场布局",
       nextLabel: "下一张农场布局",
       testimonials: [
@@ -359,9 +357,9 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
         },
         {
           quote:
-            "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开对着摆。加工区放在每天会路过的地方才划算。",
-          name: "边摆边看覆盖范围",
-          designation: "图例：海滩农场",
+            "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
+          name: "对着覆盖圈摆",
+          designation: "示例：海滩农场",
           src: "/homepage/why-choose/beach-processing-shady-kegyard.webp",
           imageAlt: "shady kegyard 以加工区为主的海滩农场布局",
         },
@@ -418,42 +416,39 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     closingCta: {
-      heading: "地图看好了，就在上面开始摆。",
-      supportLine: "不用注册。项目保存在当前浏览器。",
+      heading: "先在这页摆完，再进游戏建。",
+      supportLine: "不用注册。方案留在这台浏览器。",
     },
     faq: {
-      heading: "常见问题",
+      heading: "开始前先看这几件事",
       items: [
         {
-          question: "项目保存在哪里？",
+          question: "会丢吗？",
           answer:
-            "项目保存在当前浏览器本地。这里没有账号或云同步功能，因此请使用同一浏览器和设备重新打开项目。",
+            "只存在你正在用的浏览器。没有账号，也没有云同步。换设备或清数据会丢。",
         },
         {
-          question: "支持规划哪些星露谷物语农场类型？",
-          answer:
-            "规划器包含标准、河流、森林、山顶、荒野、四角、海滩和草原农场。地图选择器中还提供姜岛。",
+          question: "我玩的农场有吗？",
+          answer: "标准、河流、森林、山顶、荒野、四角、海滩、草原，加上姜岛。",
         },
         {
-          question: "可以查看哪些季节和覆盖范围？",
+          question: "四季和覆盖能看吗？",
           answer:
-            "你可以在春、夏、秋、冬之间切换，并显示洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
+            "春夏秋冬都能切。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开。",
         },
         {
-          question: "可以导入星露谷物语存档吗？",
-          answer:
-            "可以。存档导入仍是实验性功能，不受支持或来自模组的物品可能无法映射。",
+          question: "能导存档吗？",
+          answer: "能，但是实验功能。模组物品可能对不上。",
         },
         {
-          question: "可以导出农场布局吗？",
-          answer: "可以。规划器提供标准画质和高画质的截图下载。",
+          question: "能导出图吗？",
+          answer: "能。普通和高清截图都可以下。",
         },
       ],
     },
     trust: {
-      heading: "关于这个规划器",
-      description:
-        "这是一个玩家制作的《星露谷物语》规划工具，与 ConcernedApe 或《星露谷物语》官方无隶属或认可关系。项目只保存在当前浏览器中。",
+      heading: "玩家做的工具",
+      description: "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
     },
     footer: {
       brandName: "星露谷物语农场规划器",

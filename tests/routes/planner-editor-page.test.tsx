@@ -53,7 +53,7 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain("Why use this planner");
     expect(plannerPageMarkup).toContain("How to use it");
     expect(plannerPageMarkup).toContain(
-      "The map is already on this page. Start placing.",
+      "Finish the layout on this page, then build in-game.",
     );
     expect(plannerPageMarkup).toContain(
       'src="/homepage/features-pixel-farm.webp"',
@@ -240,7 +240,8 @@ describe("planner editor page", () => {
       }
 
       expect(homepageMarkup).toContain(homepageCopy.closingCta.heading);
-      expect(homepageMarkup).toContain(homepageCopy.closingCta.supportLine);
+      expect(homepageMarkup).toContain(homepageCopy.hero.primaryActionLabel);
+      expect(homepageMarkup).not.toContain(homepageCopy.closingCta.supportLine);
       expect(homepageMarkup).not.toContain("data-homepage-planning-guide");
       expect(homepageMarkup).not.toContain("stardew-valley-planner-layout");
     }
@@ -266,27 +267,26 @@ describe("planner editor page", () => {
     }
   });
 
-  it("renders closed accordion FAQ items with every English answer", () => {
+  it("renders always-visible numbered FAQ items with every English answer", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
     const faqSectionStart = plannerPageMarkup.indexOf('id="faq"');
     const faqSectionEnd = plannerPageMarkup.indexOf("</section>", faqSectionStart);
     const faqMarkup = plannerPageMarkup.slice(faqSectionStart, faqSectionEnd);
 
     expect(faqSectionStart).toBeGreaterThanOrEqual(0);
+    expect(plannerPageMarkup).toContain('data-homepage-faq="true"');
     expect(faqMarkup).toContain('data-homepage-faq-list="true"');
-    expect(
-      faqMarkup.match(
-        /data-state="closed" data-orientation="vertical" class="border-b border-border"/g,
-      ),
-    ).toHaveLength(5);
-    expect(faqMarkup.match(/aria-expanded="false"/g)).toHaveLength(5);
-    expect(faqMarkup.match(/role="region"/g)).toHaveLength(5);
-    expect(faqMarkup.match(/<h3 /g)).toHaveLength(5);
-    expect(faqMarkup.match(/<svg /g)).toHaveLength(5);
-    expect(faqMarkup.match(/M3\.13523 6\.15803/g)).toHaveLength(5);
-    expect(faqMarkup).toContain('viewBox="0 0 15 15"');
-    expect(faqMarkup).toContain('data-state="closed"');
-    expect(faqMarkup).not.toContain('data-state="open"');
+    expect(faqMarkup.match(/data-homepage-section-index="true"/g)).toHaveLength(5);
+    expect(faqMarkup).toContain(">01</span>");
+    expect(faqMarkup).toContain(">02</span>");
+    expect(faqMarkup).toContain(">03</span>");
+    expect(faqMarkup).toContain(">04</span>");
+    expect(faqMarkup).toContain(">05</span>");
+    expect(faqMarkup.match(/<h3>/g)).toHaveLength(5);
+    expect(faqMarkup).not.toContain('data-state="closed"');
+    expect(faqMarkup).not.toContain('aria-expanded="false"');
+    expect(faqMarkup).not.toContain('role="region"');
+    expect(faqMarkup).not.toContain("<svg");
     expect(faqMarkup).not.toContain("<details");
     expect(faqMarkup).not.toContain("<summary");
     expect(faqMarkup).not.toContain("lucide");

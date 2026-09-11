@@ -901,7 +901,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
       "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
       "Paths look tidy, but they take crop tiles. Keep the farmhouse, chests, and shipping bin reachable on a normal day.",
-      "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage as you work. Processing only pays off on a route you already walk.",
+      "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
       "Each corner is its own farm. Decide what belongs in which quadrant before you drop barns and fields that are slow to move.",
       "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
       "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
@@ -913,7 +913,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Barns, coops, sheds, and fields set the scale. Leave room at the entrance and in front. Decor comes last.",
       "Farmhouse to fields, animals, chests, then the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
     ],
-    closingCtaHeading: "The map is already on this page. Start placing.",
+    closingCtaHeading: "Finish the layout on this page, then build in-game.",
     closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
     sectionImageSources: [
       "/homepage/features-pixel-farm.webp",
@@ -926,17 +926,17 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/why-choose/fourcorners-coop-hallofax.webp",
       "/homepage/how-to-pixel-farm.webp",
     ],
-    faqHeading: "Frequently asked questions",
+    faqHeading: "Check these before you start",
     faqAnswers: [
-      "Projects are saved locally in this browser. There is no account or cloud sync, so use the same browser and device to reopen them.",
-      "The planner includes Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is also available in the map picker.",
-      "You can switch between spring, summer, fall, and winter and show sprinkler, scarecrow, Bee House, and Junimo Hut coverage.",
-      "Yes. Game-save import is experimental, and unsupported or modded items may not be mapped.",
-      "Yes. The planner provides standard and high-quality screenshot downloads.",
+      "Projects stay in this browser. No account, no cloud sync. A different device or a data wipe will lose them.",
+      "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, Meadowlands, plus Ginger Island.",
+      "Spring, summer, fall, and winter. Sprinkler, scarecrow, Bee House, and Junimo Hut coverage can be turned on.",
+      "Yes, but it is experimental. Modded items may not map.",
+      "Yes. Standard and high-quality downloads.",
     ],
     trustHeading: "About this planner",
     trustDescription:
-      "Fan-made Stardew Valley planning tool. Not affiliated with or endorsed by ConcernedApe or Stardew Valley. Projects stay in this browser.",
+      "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
     plannerHref: "#planner",
     blogHref: "/blog",
     blogLabel: "Blog",
@@ -959,12 +959,12 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "建筑、作物、可放置物和装饰都能放。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖范围可以直接看。",
       "春、夏、秋、冬都能切。存档导入仍是实验性的，模组物品可能对不上。导出有普通和高清截图。",
     ],
-    whyChooseHeading: "为什么选择我们",
+    whyChooseHeading: "为什么用这个规划器",
     whyChooseDescriptions: [
       "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
       "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
       "路好看，但会占耕地。农舍、箱子、出货箱周围先留通路，一天的活才走得通。",
-      "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开对着摆。加工区放在每天会路过的地方才划算。",
+      "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
       "四个角等于四块地。先定每块干什么，再放大件，避免畜棚和田地放完难挪。",
       "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
       "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
@@ -976,8 +976,8 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "这些决定整张图的尺度。入口和正前方留出路。小装饰最后再填。",
       "从农舍走到田地、动物区、箱子、出货箱。堵住了就改这张图，别等游戏里再建。",
     ],
-    closingCtaHeading: "地图看好了，就在上面开始摆。",
-    closingCtaSupportLine: "不用注册。项目保存在当前浏览器。",
+    closingCtaHeading: "先在这页摆完，再进游戏建。",
+    closingCtaSupportLine: "不用注册。方案留在这台浏览器。",
     sectionImageSources: [
       "/homepage/features-pixel-farm.webp",
       "/homepage/why-choose/beach-decorative-machooo.webp",
@@ -989,17 +989,16 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/why-choose/fourcorners-coop-hallofax.webp",
       "/homepage/how-to-pixel-farm.webp",
     ],
-    faqHeading: "常见问题",
+    faqHeading: "开始前先看这几件事",
     faqAnswers: [
-      "项目保存在当前浏览器本地。这里没有账号或云同步功能，因此请使用同一浏览器和设备重新打开项目。",
-      "规划器包含标准、河流、森林、山顶、荒野、四角、海滩和草原农场。地图选择器中还提供姜岛。",
-      "你可以在春、夏、秋、冬之间切换，并显示洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。",
-      "可以。存档导入仍是实验性功能，不受支持或来自模组的物品可能无法映射。",
-      "可以。规划器提供标准画质和高画质的截图下载。",
+      "只存在你正在用的浏览器。没有账号，也没有云同步。换设备或清数据会丢。",
+      "标准、河流、森林、山顶、荒野、四角、海滩、草原，加上姜岛。",
+      "春夏秋冬都能切。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开。",
+      "能，但是实验功能。模组物品可能对不上。",
+      "能。普通和高清截图都可以下。",
     ],
-    trustHeading: "关于这个规划器",
-    trustDescription:
-      "这是一个玩家制作的《星露谷物语》规划工具，与 ConcernedApe 或《星露谷物语》官方无隶属或认可关系。项目只保存在当前浏览器中。",
+    trustHeading: "玩家做的工具",
+    trustDescription: "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
     plannerHref: "#planner",
     blogHref: "/zh/blog",
     blogLabel: "博客",
@@ -1160,7 +1159,7 @@ function expectStaticHomepageContent(
     expect(staticPageHtml).toContain(howToDescription);
   }
   expect(staticPageHtml).toContain(expectedHomepage.closingCtaHeading);
-  expect(staticPageHtml).toContain(expectedHomepage.closingCtaSupportLine);
+  expect(staticPageHtml).not.toContain(expectedHomepage.closingCtaSupportLine);
   for (const sectionImageSource of expectedHomepage.sectionImageSources) {
     expect(staticPageHtml).toContain(`src="${sectionImageSource}"`);
   }
@@ -1172,7 +1171,9 @@ function expectStaticHomepageContent(
   for (const faqAnswer of expectedHomepage.faqAnswers) {
     expect(staticPageHtml).toContain(faqAnswer);
   }
-  expect(staticPageHtml).toContain(`>${expectedHomepage.trustHeading}</h2>`);
+  expect(staticPageHtml).toContain(
+    `aria-label="${expectedHomepage.trustHeading}"`,
+  );
   expect(staticPageHtml).toContain(expectedHomepage.trustDescription);
   expect(staticPageHtml).toContain('data-homepage-workspace="true"');
   expect(staticPageHtml).toContain("data-homepage-planner-preview");

@@ -17,12 +17,11 @@ export function HomepageClosingCta({
       aria-labelledby="homepage-closing-cta-heading"
       data-homepage-closing-cta
     >
-      <h2 id="homepage-closing-cta-heading">{copy.heading}</h2>
       <div data-homepage-closing-cta-content>
+        <h2 id="homepage-closing-cta-heading">{copy.heading}</h2>
         <Button asChild data-homepage-primary-action size="lg">
           <a href={plannerHref}>{primaryActionLabel}</a>
         </Button>
-        <p>{copy.supportLine}</p>
       </div>
     </section>
   );

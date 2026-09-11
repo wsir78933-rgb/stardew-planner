@@ -41,6 +41,14 @@ describe("HomepageAnimatedTestimonials", () => {
     expect(testimonialsMarkup).toContain(`src="${firstFarmLayoutSlide.src}"`);
     expect(testimonialsMarkup).toContain(`aria-label="${previousFarmLayoutLabel}"`);
     expect(testimonialsMarkup).toContain(`aria-label="${nextFarmLayoutLabel}"`);
+
+    const mediaIndex = testimonialsMarkup.indexOf("data-homepage-testimonial-media");
+    const controlsIndex = testimonialsMarkup.indexOf(
+      "data-homepage-testimonial-controls",
+    );
+    const copyIndex = testimonialsMarkup.indexOf("data-homepage-testimonial-copy");
+    expect(controlsIndex).toBeGreaterThan(mediaIndex);
+    expect(controlsIndex).toBeLessThan(copyIndex);
   });
 
   it("rejects an empty testimonials list with the received length", () => {

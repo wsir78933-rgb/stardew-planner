@@ -168,6 +168,25 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   expect(homepageStyles).toContain(
     "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-animated-testimonials] {",
   );
+  const whyChooseMediaRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-media\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const whyChooseImageRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-media\] img\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const whyChooseControlsRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-controls\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  expect(whyChooseMediaRule).toBeDefined();
+  expect(whyChooseMediaRule).toContain("aspect-ratio: 1 / 1;");
+  expect(whyChooseMediaRule).toContain("overflow: hidden;");
+  expect(whyChooseMediaRule).not.toContain("height: 20rem;");
+  expect(whyChooseImageRule).toBeDefined();
+  expect(whyChooseImageRule).toContain("object-fit: contain;");
+  expect(whyChooseImageRule).not.toContain("object-fit: cover;");
+  expect(whyChooseControlsRule).toBeDefined();
+  expect(whyChooseControlsRule).toContain("position: absolute;");
+  expect(whyChooseControlsRule).toContain("pointer-events: none;");
   const mobileWhyChooseAnimatedTestimonialsRule = homepageStyles.match(
     /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n  \}/,
   )?.[1];
@@ -218,9 +237,7 @@ test("adds desktop gutters while keeping the mobile workspace flush with the vie
   expect(desktopWorkspaceRule).toBeDefined();
   expect(mobileWorkspaceRule).toBeDefined();
   expect(desktopWorkspaceRule).toContain("margin: 0 0 clamp(5.5rem, 10vw, 9rem);");
-  expect(desktopWorkspaceRule).toContain(
-    "padding-inline: clamp(1.25rem, 3vw, 3rem);",
-  );
+  expect(desktopWorkspaceRule).toContain("padding-inline: 0;");
   expect(desktopWorkspaceRule).not.toContain("max-width:");
   expect(mobileWorkspaceRule).toContain("padding-inline: 0;");
   expect(mobileWorkspaceRule).not.toMatch(/margin(?:-inline)?:\s*auto/);
@@ -322,7 +339,7 @@ test("keeps section headings readable without a poster measure", () => {
   expect(styles).not.toContain("clamp(2.7rem, 5vw, 5.4rem)");
 });
 
-test("stacks the closing CTA as a compact product bar", () => {
+test("renders the closing CTA as one lime action slab", () => {
   const styles = readProjectFile("app/globals.css");
   const closingCtaRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\]\s*\{([\s\S]*?)\n\}/,
@@ -333,68 +350,66 @@ test("stacks the closing CTA as a compact product bar", () => {
   const closingCtaContentRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta-content\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
-  const mobileClosingCtaRule = styles.match(
-    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\]\s*\{([\s\S]*?)\n  \}/,
+  const mobileClosingCtaContentRule = styles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta-content\]\s*\{([\s\S]*?)\n  \}/,
   )?.[1];
   const mobileClosingCtaHeadingRule = styles.match(
     /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-closing-cta\] h2\s*\{([\s\S]*?)\n  \}/,
   )?.[1];
 
   expect(closingCtaRule).toBeDefined();
-  expect(closingCtaRule).toContain("align-items: center;");
-  expect(closingCtaRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
-  expect(closingCtaRule).toContain("display: flex;");
-  expect(closingCtaRule).toContain("justify-content: space-between;");
   expect(closingCtaRule).toContain("max-width: 1280px;");
+  expect(closingCtaRule).not.toContain("border-block:");
   expect(closingCtaHeadingRule).toBeDefined();
   expect(closingCtaHeadingRule).toContain(
-    "font-size: clamp(1.25rem, 2.2vw, 1.75rem);",
+    "font-size: clamp(1.75rem, 3vw, 2.5rem);",
   );
-  expect(closingCtaHeadingRule).toContain("line-height: 1.2;");
+  expect(closingCtaHeadingRule).toContain("line-height: 1.15;");
   expect(closingCtaHeadingRule).toContain("text-wrap: balance;");
   expect(closingCtaHeadingRule).not.toContain("max-width: 15ch");
   expect(closingCtaHeadingRule).not.toContain("clamp(2.4rem, 4.8vw, 5rem)");
   expect(closingCtaContentRule).toBeDefined();
   expect(closingCtaContentRule).toContain("align-items: center;");
+  expect(closingCtaContentRule).toContain("background: var(--primary);");
+  expect(closingCtaContentRule).toContain("border: 1px solid rgb(36 42 34 / 72%);");
   expect(closingCtaContentRule).toContain("display: flex;");
-  expect(mobileClosingCtaRule).toBeDefined();
-  expect(mobileClosingCtaRule).toContain("flex-direction: column;");
+  expect(closingCtaContentRule).toContain("justify-content: space-between;");
+  expect(styles).not.toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-closing-cta-content] p",
+  );
+  expect(mobileClosingCtaContentRule).toBeDefined();
+  expect(mobileClosingCtaContentRule).toContain("flex-direction: column;");
   expect(mobileClosingCtaHeadingRule).toBeDefined();
   expect(mobileClosingCtaHeadingRule).toContain("min-width: 0;");
 });
 
-test("keeps the trust statement in its own centered bounded strip", () => {
+test("keeps the trust statement as one muted line under the FAQ", () => {
   const styles = readProjectFile("app/globals.css");
   const trustRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section\[data-homepage-trust\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const trustHeadingRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-trust\] h2\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const trustParagraphRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-trust\] p\s*\{([\s\S]*?)\n\}/,
   )?.[1];
 
   expect(trustRule).toBeDefined();
-  expect(trustRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
-  expect(trustRule).toContain("max-width: 48rem;");
-  expect(trustRule).toContain("padding: clamp(2rem, 4vw, 3.5rem) 0;");
-  expect(trustRule).toContain("text-align: center;");
-  expect(trustRule).toContain(
+  expect(trustRule).toContain("padding-top: 0;");
+  expect(trustRule).not.toContain("border-block:");
+  expect(trustRule).not.toContain("max-width: 48rem");
+  expect(trustRule).not.toContain("text-align: center");
+  expect(trustRule).not.toContain(
     "width: calc(100% - clamp(2.5rem, 6vw, 6rem));",
   );
-  expect(trustHeadingRule).toBeDefined();
-  expect(trustHeadingRule).toContain("font-size: clamp(1.05rem, 1.6vw, 1.25rem);");
-  expect(trustHeadingRule).toContain("line-height: 1.25;");
-  expect(trustHeadingRule).toContain("text-wrap: balance;");
-  expect(trustHeadingRule).not.toContain("clamp(1.75rem, 3vw, 2.5rem)");
+  expect(styles).not.toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-trust] h2",
+  );
   expect(trustParagraphRule).toBeDefined();
-  expect(trustParagraphRule).toContain("margin-inline: auto;");
-  expect(trustParagraphRule).toContain("max-width: 44rem;");
+  expect(trustParagraphRule).not.toContain("margin-inline: auto");
+  expect(trustParagraphRule).not.toContain("max-width: 44rem");
   expect(trustParagraphRule).toContain("text-wrap: pretty;");
 });
 
-test("tightens the FAQ block below the section heading scale", () => {
+test("lays out the FAQ as an always-visible numbered list", () => {
   const styles = readProjectFile("app/globals.css");
   const faqSectionRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq\s*\{([\s\S]*?)\n\}/,
@@ -406,25 +421,7 @@ test("tightens the FAQ block below the section heading scale", () => {
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const faqItemRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] > \*\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqTriggerRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] button\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqTriggerFocusRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] button:focus-visible\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqChevronRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] button svg\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqRegionRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] \[role="region"\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqRegionOpenRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] \[role="region"\]\[data-state="open"\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqRegionInnerRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] \[role="region"\] > div\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] li\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const faqAnswerRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] p\s*\{([\s\S]*?)\n\}/,
@@ -434,47 +431,30 @@ test("tightens the FAQ block below the section heading scale", () => {
     "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,",
   );
   expect(faqSectionRule).toBeDefined();
-  expect(faqSectionRule).toContain("padding-block: clamp(2.25rem, 4vw, 3.5rem);");
+  expect(faqSectionRule).toContain("padding-bottom: 1.25rem;");
   expect(faqHeadingRule).toBeDefined();
-  expect(faqHeadingRule).toContain("margin-bottom: 1rem;");
+  expect(faqHeadingRule).toContain("margin-bottom: 1.5rem;");
   expect(faqHeadingRule).not.toContain("max-width: 11ch");
   expect(faqListRule).toBeDefined();
-  expect(faqListRule).toContain("background: transparent;");
+  expect(faqListRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
   expect(faqListRule).toContain("color: var(--foreground);");
+  expect(faqListRule).toContain("display: grid;");
+  expect(faqListRule).toContain("list-style: none;");
   expect(faqItemRule).toBeDefined();
-  expect(faqItemRule).toContain("border-color: var(--border);");
-  expect(faqTriggerRule).toBeDefined();
-  expect(faqTriggerRule).toContain("background: transparent;");
-  expect(faqTriggerRule).toContain("box-shadow: none;");
-  expect(faqTriggerRule).toContain("color: var(--foreground);");
-  expect(faqTriggerRule).toContain("cursor: pointer;");
-  expect(faqTriggerRule).toContain("font-size: 1rem;");
-  expect(faqTriggerRule).toContain("font-weight: 600;");
-  expect(faqTriggerRule).toContain("min-height: 44px;");
-  expect(faqTriggerRule).toContain("padding-block: 1rem;");
-  expect(faqTriggerFocusRule).toBeDefined();
-  expect(faqTriggerFocusRule).toContain("outline: 2px solid var(--ring);");
-  expect(faqTriggerFocusRule).toContain("outline-offset: 0.25rem;");
-  expect(faqChevronRule).toBeDefined();
-  expect(faqChevronRule).toContain("color: var(--muted-foreground);");
-  expect(faqRegionRule).toBeDefined();
-  expect(faqRegionRule).toContain("animation: none;");
-  expect(faqRegionRule).toContain("display: grid;");
-  expect(faqRegionRule).toContain("grid-template-rows: 0fr;");
-  expect(faqRegionRule).toContain("overflow: hidden;");
-  expect(faqRegionRule).toContain("transition: grid-template-rows 200ms ease-out;");
-  expect(faqRegionOpenRule).toBeDefined();
-  expect(faqRegionOpenRule).toContain("grid-template-rows: 1fr;");
-  expect(faqRegionInnerRule).toBeDefined();
-  expect(faqRegionInnerRule).toContain("height: auto;");
-  expect(faqRegionInnerRule).toContain("min-height: 0;");
-  expect(faqRegionInnerRule).toContain("overflow: hidden;");
-  expect(faqRegionInnerRule).toContain("padding-bottom: 0;");
-  expect(faqRegionInnerRule).toContain("padding-top: 0;");
+  expect(faqItemRule).toContain("gap: 1rem;");
+  expect(faqItemRule).toContain(
+    "grid-template-columns: 2.25rem minmax(0, 1fr);",
+  );
+  expect(faqItemRule).toContain("padding: 1.35rem 0;");
   expect(faqAnswerRule).toBeDefined();
   expect(faqAnswerRule).toContain("color: var(--muted-foreground);");
-  expect(faqAnswerRule).toContain("padding-bottom: 1rem;");
   expect(faqAnswerRule).toContain("text-wrap: pretty;");
+  expect(styles).not.toContain(
+    '[data-homepage-faq-list] button',
+  );
+  expect(styles).not.toContain(
+    '[data-homepage-faq-list] [role="region"]',
+  );
   expect(styles).not.toContain('[data-slot="accordion"]');
   expect(styles).not.toContain('[data-slot="accordion-item"]');
   expect(styles).not.toContain('[data-slot="accordion-trigger"]');

@@ -89,8 +89,7 @@ export function HomepageContent({
           <h2>{copy.faq.heading}</h2>
           <HomepageFaqList items={copy.faq.items} />
         </section>
-        <section data-homepage-trust>
-          <h2>{copy.trust.heading}</h2>
+        <section aria-label={copy.trust.heading} data-homepage-trust>
           <p>{copy.trust.description}</p>
         </section>
       </main>
