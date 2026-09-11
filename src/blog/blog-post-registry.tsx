@@ -20,6 +20,8 @@ import { OakTreeStardewEnglishArticle } from "./articles/oak-tree-stardew.en";
 import { OakTreeStardewChineseArticle } from "./articles/oak-tree-stardew.zh";
 import { StardewValleyTreesEnglishArticle } from "./articles/stardew-valley-trees.en";
 import { StardewValleyTreesChineseArticle } from "./articles/stardew-valley-trees.zh";
+import { MapleTreeStardewEnglishArticle } from "./articles/maple-tree-stardew.en";
+import { MapleTreeStardewChineseArticle } from "./articles/maple-tree-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -209,6 +211,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: StardewValleyTreesEnglishArticle,
     },
+    {
+      slug: "maple-tree-stardew",
+      title: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+      description:
+        "Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
+      },
+      featured: true,
+      Content: MapleTreeStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -359,6 +376,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: StardewValleyTreesChineseArticle,
+    },
+    {
+      slug: "maple-tree-stardew",
+      title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+      description:
+        "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
+      },
+      featured: true,
+      Content: MapleTreeStardewChineseArticle,
     },
   ],
 };

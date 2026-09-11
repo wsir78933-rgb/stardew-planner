@@ -21,6 +21,7 @@ const expectedSlugs = [
   "glasshouse-stardew-valley",
   "oak-tree-stardew",
   "stardew-valley-trees",
+  "maple-tree-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -55,14 +56,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the ten canonical blog identities in publishing order", () => {
+it("keeps the eleven canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the twenty localized root-level canonical article paths", () => {
+it("publishes only the twenty-two localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -74,6 +75,7 @@ it("publishes only the twenty localized root-level canonical article paths", () 
     "/glasshouse-stardew-valley/",
     "/oak-tree-stardew/",
     "/stardew-valley-trees/",
+    "/maple-tree-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -84,6 +86,7 @@ it("publishes only the twenty localized root-level canonical article paths", () 
     "/zh/glasshouse-stardew-valley/",
     "/zh/oak-tree-stardew/",
     "/zh/stardew-valley-trees/",
+    "/zh/maple-tree-stardew/",
   ]);
 });
 
@@ -263,6 +266,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
     },
   });
+  expect(englishPosts[10]).toMatchObject({
+    title: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+    description:
+      "Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
+    readTimeMinutes: 14,
+    coverImage: {
+      src: "/blog/maple-tree-stardew-cover.webp",
+      alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
+    },
+  });
+  expect(chinesePosts[10]).toMatchObject({
+    title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+    description:
+      "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
+    readTimeMinutes: 14,
+    coverImage: {
+      src: "/blog/maple-tree-stardew-cover.webp",
+      alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -280,6 +303,7 @@ it("binds every localized post to its own original blog cover", () => {
     "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
     "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
     "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
+    "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -378,7 +402,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: stardew-valley-trees.",
+    "Expected: carpenter-stardew. Received: maple-tree-stardew.",
   );
 });
 

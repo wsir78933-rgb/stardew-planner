@@ -21,6 +21,8 @@ import { OakTreeStardewEnglishArticle } from "../../src/blog/articles/oak-tree-s
 import { OakTreeStardewChineseArticle } from "../../src/blog/articles/oak-tree-stardew.zh";
 import { StardewValleyTreesEnglishArticle } from "../../src/blog/articles/stardew-valley-trees.en";
 import { StardewValleyTreesChineseArticle } from "../../src/blog/articles/stardew-valley-trees.zh";
+import { MapleTreeStardewEnglishArticle } from "../../src/blog/articles/maple-tree-stardew.en";
+import { MapleTreeStardewChineseArticle } from "../../src/blog/articles/maple-tree-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -635,6 +637,114 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       { href: "/zh#planner", label: "星露谷农场规划器（中文页）" },
       { href: "/zh/glasshouse-stardew-valley", label: "本站中文温室布局" },
       { href: "/zh/sprinkler-stardew", label: "本站中文洒水器布局" },
+    ],
+  },
+  {
+    Article: MapleTreeStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-11 against Stardew Valley 1.6 wiki pages and the official 1.6 changelog. Median 24-day growth is taken from the Maple Tree and Trees pages; the Maple Seed page&#x27;s 18-day median is recorded as a conflict and is not adopted. Heavy Tapper Fall Green Rain transformation is cited as a wiki Bugs note. The planner is a placement sketch, not a growth or tapping simulation.",
+    heading: "Sources",
+    name: "English maple tree article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Maple_Tree",
+        label: "Stardew Valley Wiki: Maple Tree",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Maple_Seed",
+        label: "Stardew Valley Wiki: Maple Seed",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Maple_Syrup",
+        label: "Stardew Valley Wiki: Maple Syrup",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Tapper",
+        label: "Stardew Valley Wiki: Tapper",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Heavy_Tapper",
+        label: "Stardew Valley Wiki: Heavy Tapper",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Trees",
+        label: "Stardew Valley Wiki: Trees",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Tree_Fertilizer",
+        label: "Stardew Valley Wiki: Tree Fertilizer",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Green_Rain_Trees",
+        label: "Stardew Valley Wiki: Green Rain Trees",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Maple_Bar",
+        label: "Stardew Valley Wiki: Maple Bar",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fruit_Trees",
+        label: "Stardew Valley Wiki: Fruit Trees",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+        label: "Stardew Valley 1.6 Update Full Changelog",
+      },
+    ],
+  },
+  {
+    Article: MapleTreeStardewChineseArticle,
+    checkedLabel:
+      "枫树、枫树种子、树液采集器、枫糖浆及相关配方已于 2026-09-11 按星露谷物语 1.6 与官方中文维基核对；树液采集器配方等级以官方 1.6 更新说明为准。规划器只预排树位，不产出枫糖浆。",
+    heading: "资料来源",
+    name: "Chinese maple tree article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/枫树",
+        label: "星露谷物语官方中文维基：枫树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/枫树种子",
+        label: "星露谷物语官方中文维基：枫树种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/枫糖浆",
+        label: "星露谷物语官方中文维基：枫糖浆",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/树液采集器",
+        label: "星露谷物语官方中文维基：树液采集器",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/重型树液采集器",
+        label: "星露谷物语官方中文维基：重型树液采集器",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/树肥",
+        label: "星露谷物语官方中文维基：树肥",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/绿雨树",
+        label: "星露谷物语官方中文维基：绿雨树",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+        label: "ConcernedApe：Stardew Valley 1.6 完整更新说明",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Trees",
+        label: "Stardew Valley Wiki: Trees",
+        note: "（邻格、90%/38 日、镇内河东河西）",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Heavy_Tapper",
+        label: "Stardew Valley Wiki: Heavy Tapper",
+        note: "（Bugs：重型采集器秋季绿雨树）",
+      },
+      {
+        href: "/zh#planner",
+        label: "星露谷农场规划器",
+      },
     ],
   },
 ];

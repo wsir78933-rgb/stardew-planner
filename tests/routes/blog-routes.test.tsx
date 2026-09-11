@@ -48,6 +48,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/glasshouse-stardew-valley"');
   expect(indexMarkup).toContain('href="/oak-tree-stardew"');
   expect(indexMarkup).toContain('href="/stardew-valley-trees"');
+  expect(indexMarkup).toContain('href="/maple-tree-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -79,6 +80,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/glasshouse-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/oak-tree-stardew"');
   expect(indexMarkup).toContain('href="/zh/stardew-valley-trees"');
+  expect(indexMarkup).toContain('href="/zh/maple-tree-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -296,6 +298,41 @@ it("renders the paired trees article routes with locked metadata and one page-le
     title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
     description:
       "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
+  });
+});
+
+it("renders the paired maple tree article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "maple-tree-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "maple-tree-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+    description:
+      "Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+    description:
+      "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
   });
 });
 

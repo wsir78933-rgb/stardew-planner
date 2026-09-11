@@ -26,6 +26,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers](https://stardewvalleyplanner.art/glasshouse-stardew-valley): Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.
 - [Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin](https://stardewvalleyplanner.art/oak-tree-stardew): Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.
 - [Mark keep, orchard, and clear tiles before you chop Stardew Valley trees](https://stardewvalleyplanner.art/stardew-valley-trees): Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.
+- [Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup](https://stardewvalleyplanner.art/maple-tree-stardew): Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.
 
 ## 简体中文
 
@@ -51,3 +52,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷物语温室布局：120格耕地与洒水器摆放指南](https://stardewvalleyplanner.art/zh/glasshouse-stardew-valley): 了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。
 - [星露谷物语橡树：橡子种植、间距与树脂采集](https://stardewvalleyplanner.art/zh/oak-tree-stardew): 认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。
 - [星露谷种树：先分普通树和果树，再在农场图上留间隔](https://stardewvalleyplanner.art/zh/stardew-valley-trees): 温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。
+- [星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆](https://stardewvalleyplanner.art/zh/maple-tree-stardew): 先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。

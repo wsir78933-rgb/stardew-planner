@@ -14,10 +14,11 @@ const expectedBlogCanonicalPaths = [
   "/glasshouse-stardew-valley",
   "/oak-tree-stardew",
   "/stardew-valley-trees",
+  "/maple-tree-stardew",
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(16);
+  expect(canonicalPublicPaths).toHaveLength(17);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );

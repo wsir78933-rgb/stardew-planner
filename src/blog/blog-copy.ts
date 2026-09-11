@@ -109,6 +109,7 @@ const localizedBlogPostPaths: Readonly<
     "glasshouse-stardew-valley": "/glasshouse-stardew-valley",
     "oak-tree-stardew": "/oak-tree-stardew",
     "stardew-valley-trees": "/stardew-valley-trees",
+    "maple-tree-stardew": "/maple-tree-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -122,6 +123,7 @@ const localizedBlogPostPaths: Readonly<
     "glasshouse-stardew-valley": "/zh/glasshouse-stardew-valley",
     "oak-tree-stardew": "/zh/oak-tree-stardew",
     "stardew-valley-trees": "/zh/stardew-valley-trees",
+    "maple-tree-stardew": "/zh/maple-tree-stardew",
   },
 };
 

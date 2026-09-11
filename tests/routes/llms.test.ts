@@ -69,6 +69,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷物语橡树：橡子种植、间距与树脂采集](https://stardewvalleyplanner.art/zh/oak-tree-stardew): 认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
   );
+  expect(llmsText).toContain(
+    "[Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup](https://stardewvalleyplanner.art/maple-tree-stardew): Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆](https://stardewvalleyplanner.art/zh/maple-tree-stardew): 先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

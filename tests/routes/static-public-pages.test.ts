@@ -220,6 +220,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/stardew-valley-trees-cover.webp",
         alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
       },
+      {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
+      },
     ],
   },
   {
@@ -268,10 +272,6 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/oak-tree-stardew-cover.webp",
         alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
-      },
-      {
-        src: "/blog/stardew-valley-trees-cover.webp",
-        alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
       },
     ],
   },
@@ -532,6 +532,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/maple-tree-stardew",
+    staticPageFile: "maple-tree-stardew.html",
+    heading: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+    metadata: {
+      title: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+      description:
+        "Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Identify a maple by seed and syrup, not by leaf adjectives",
+      "The planner is a placement sketch",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/?farmType=standard",
+      "/oak-tree-stardew",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -578,6 +607,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/stardew-valley-trees-cover.webp",
         alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
+      },
+      {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
       },
     ],
   },
@@ -627,10 +660,6 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/oak-tree-stardew-cover.webp",
         alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
-      },
-      {
-        src: "/blog/stardew-valley-trees-cover.webp",
-        alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
       },
     ],
   },
@@ -882,6 +911,34 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/zh#planner",
       "/zh/glasshouse-stardew-valley",
       "/zh/sprinkler-stardew",
+    ],
+  },
+  {
+    pathname: "/zh/maple-tree-stardew",
+    staticPageFile: "zh/maple-tree-stardew.html",
+    heading: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+    metadata: {
+      title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+      description:
+        "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
+      },
+    ],
+    requiredBodyPhrases: [
+      "先认枫树，别种成橡树",
+      "在规划器里标 Maple Tree",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/oak-tree-stardew",
     ],
   },
 ];
