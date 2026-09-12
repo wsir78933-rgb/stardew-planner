@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DockIconButton } from "@/components/ui/dock";
 import {
   subscribeToHomepageLanguageMenuDismissal,
 } from "@/src/homepage/homepage-language-menu-behavior";
@@ -12,11 +14,57 @@ import {
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 
 type HomepageLocaleSwitcherProps = {
+  icon?: LucideIcon;
   label: string;
   localeHrefByLocale: HomepageLocaleHrefByLocale;
 };
 
+type HomepageLanguageSwitcherTriggerProps = Readonly<{
+  icon?: LucideIcon;
+  isLanguageMenuOpen: boolean;
+  label: string;
+  languageMenuId: string;
+  onToggleLanguageMenu: () => void;
+}>;
+
+function HomepageLanguageSwitcherTrigger({
+  icon,
+  isLanguageMenuOpen,
+  label,
+  languageMenuId,
+  onToggleLanguageMenu,
+}: HomepageLanguageSwitcherTriggerProps) {
+  if (icon === undefined) {
+    return (
+      <Button
+        aria-controls={languageMenuId}
+        aria-expanded={isLanguageMenuOpen}
+        aria-label={label}
+        data-homepage-language-trigger
+        onClick={onToggleLanguageMenu}
+        type="button"
+        variant="ghost"
+      >
+        Language <span aria-hidden="true">▾</span>
+      </Button>
+    );
+  }
+
+  return (
+    <DockIconButton
+      aria-controls={languageMenuId}
+      aria-expanded={isLanguageMenuOpen}
+      aria-label={label}
+      data-homepage-language-trigger
+      icon={icon}
+      label={label}
+      onClick={onToggleLanguageMenu}
+    />
+  );
+}
+
 export function HomepageLocaleSwitcher({
+  icon,
   label,
   localeHrefByLocale,
 }: HomepageLocaleSwitcherProps) {
@@ -49,17 +97,15 @@ export function HomepageLocaleSwitcher({
 
   return (
     <div data-homepage-language-switcher ref={languageSwitcherRef}>
-      <Button
-        aria-controls={languageMenuId}
-        aria-expanded={isLanguageMenuOpen}
-        aria-label={label}
-        data-homepage-language-trigger
-        onClick={() => setIsLanguageMenuOpen((isOpen) => !isOpen)}
-        type="button"
-        variant="ghost"
-      >
-        Language <span aria-hidden="true">▾</span>
-      </Button>
+      <HomepageLanguageSwitcherTrigger
+        icon={icon}
+        isLanguageMenuOpen={isLanguageMenuOpen}
+        label={label}
+        languageMenuId={languageMenuId}
+        onToggleLanguageMenu={() =>
+          setIsLanguageMenuOpen((isOpen) => !isOpen)
+        }
+      />
       <ul
         data-homepage-language-menu
         hidden={!isLanguageMenuOpen}

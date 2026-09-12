@@ -1,18 +1,15 @@
 import type { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
-import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
 import { HomepageClosingCta } from "./homepage-closing-cta";
 import { HomepageFeaturesSection } from "./homepage-features-section";
 import { HomepageHeroSection } from "./homepage-hero-section";
 import { HomepageHowToSection } from "./homepage-how-to-section";
-import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
+import { HomepageNavigationDock } from "./homepage-navigation-dock";
 import { HomepageWhyChooseSection } from "./homepage-why-choose-section";
-import { SiteNavigationMenu } from "./site-navigation-menu";
 import { SiteFooter } from "./site-footer";
 
 type HomepageContentProps = {
@@ -35,33 +32,13 @@ export function HomepageContent({
   return (
     <>
       <header data-homepage-header>
-        <nav aria-label={copy.navigation.productName}>
-          <a data-homepage-brand href={plannerHref}>
-            {copy.navigation.productName}
-          </a>
-          <SiteNavigationMenu
-            data-homepage-navigation-links
-            items={[
-              { href: "#capabilities", label: copy.navigation.capabilitiesLabel },
-              { href: "#faq", label: copy.navigation.faqLabel },
-              {
-                href: getLocalizedPublicPath(currentLocale, "/blog"),
-                label: copy.navigation.blogLabel,
-              },
-            ]}
-          />
-          <div data-homepage-header-actions>
-            {localeSwitcher ?? (
-              <HomepageLocaleSwitcher
-                label={copy.navigation.languageLabel}
-                localeHrefByLocale={localeHrefByLocale}
-              />
-            )}
-            <Button asChild data-homepage-header-action size="lg">
-              <a href={plannerHref}>{copy.navigation.plannerActionLabel}</a>
-            </Button>
-          </div>
-        </nav>
+        <HomepageNavigationDock
+          copy={copy}
+          currentLocale={currentLocale}
+          localeHrefByLocale={localeHrefByLocale}
+          localeSwitcher={localeSwitcher}
+          plannerHref={plannerHref}
+        />
       </header>
       <main>
         <HomepageHeroSection

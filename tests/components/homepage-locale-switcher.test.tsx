@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vitest";
+import { Languages } from "lucide-react";
 import { HomepageLocaleSwitcher } from "@/src/components/homepage-locale-switcher";
 import {
   dismissHomepageLanguageMenuOnEscape,
@@ -180,5 +181,30 @@ test("subscribes, routes dismissal events, and removes the same listeners once",
   expect(eventSource.removedEventListeners).toHaveLength(2);
   expect(eventSource.removedEventListeners).toEqual(
     eventSource.addedEventListeners,
+  );
+});
+
+test("icon trigger keeps the language accessible name and locale anchors without Language disclosure text", () => {
+  const markup = renderToStaticMarkup(
+    <HomepageLocaleSwitcher
+      icon={Languages}
+      label="Language"
+      localeHrefByLocale={{
+        en: "/?farmType=forest#planner",
+        "zh-CN": "/zh?farmType=forest#planner",
+      }}
+    />,
+  );
+
+  expect(markup).toContain('aria-label="Language"');
+  expect(markup).not.toContain(">Language <span");
+  expect(markup).toContain("data-homepage-language-switcher");
+  expect(markup).toContain("data-homepage-language-trigger");
+  expect(markup).toContain("data-homepage-language-menu");
+  expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/\?farmType=forest#planner"[^>]*>English<\/a>/,
+  );
+  expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/zh\?farmType=forest#planner"[^>]*>中文<\/a>/,
   );
 });

@@ -533,9 +533,12 @@ test("styles the homepage language dropdown through dedicated data attributes", 
     '[data-homepage-header-actions] [role="group"]',
   );
   expect(switcherRule).toContain("position: relative;");
-  expect(triggerRule).toContain("border: 1px solid rgb(36 42 34 / 22%);");
-  expect(triggerRule).toContain("border-radius: 0.45rem;");
-  expect(triggerRule).toContain("min-height: 2rem;");
+  expect(triggerRule).toBeDefined();
+  expect(triggerRule).toContain("background: transparent;");
+  expect(triggerRule).toContain("border: 0;");
+  expect(triggerRule).not.toContain("border: 1px solid rgb(36 42 34 / 22%);");
+  expect(triggerRule).not.toContain("min-height: 2rem;");
+  expect(triggerRule).not.toContain("padding-inline: 0.6rem;");
   expect(menuRule).toContain("background: var(--background);");
   expect(menuRule).toContain("border: 1px solid rgb(36 42 34 / 22%);");
   expect(menuRule).toContain("border-radius: 0.45rem;");
