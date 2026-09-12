@@ -17,6 +17,7 @@ type HomepageFarmLayoutSlide = Readonly<{
 type HomepageHowToStep = Readonly<{
   title: string;
   description: string;
+  benefits: readonly string[];
 }>;
 
 type HomepageFaqItem = Readonly<{
@@ -75,13 +76,8 @@ export type HomepageCopy = Readonly<{
   }>;
   howTo: Readonly<{
     heading: string;
-    imageAlt: string;
-    steps: readonly [
-      HomepageHowToStep,
-      HomepageHowToStep,
-      HomepageHowToStep,
-      HomepageHowToStep,
-    ];
+    description: string;
+    steps: readonly [HomepageHowToStep, HomepageHowToStep, HomepageHowToStep];
   }>;
   closingCta: Readonly<{
     heading: string;
@@ -226,28 +222,38 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     howTo: {
-      heading: "How to use it",
-      imageAlt: "Pixel-art farm map with crop, animal, and path zones",
+      heading: "Lay out the farm in three passes",
+      description:
+        "Pin the tiles that never move. Reserve work zones, then place barns, coops, sheds, and fields. Walk one ordinary day's route last, and fix blocked paths on this grid.",
       steps: [
         {
-          title: "Pick the farm map and mark what does not move",
+          title: "Pin the tiles that never move",
           description:
-            "Ponds, rivers, cliffs, bridges, and exits stay put. Use the farmhouse and shipping bin as route anchors, and leave the ground around them open for now.",
+            "Pick the farm map you actually play. Water, cliffs, bridges, and exits stay put. Use the farmhouse and shipping bin as route anchors, and leave the ground around them open.",
+          benefits: [
+            "Ponds, rivers, and cliffs will not shift later.",
+            "Bridges and exits stay put, so keep those paths open.",
+            "The farmhouse and shipping bin pin the day's start and end.",
+          ],
         },
         {
-          title: "Reserve work zones first",
+          title: "Zone the work, then drop the large pieces",
           description:
-            "Give crops, animals, trees, storage, and processing their own areas. Draw wide boundaries. Do not lock in every row yet.",
+            "Give crops, animals, trees, storage, and processing their own areas. Draw wide boundaries first. Then place barns, coops, sheds, and fields. Decor comes last.",
+          benefits: [
+            "Crops, animals, trees, storage, and processing each get a block.",
+            "Barns, coops, sheds, and fields set the scale of the map.",
+            "Leave room at each entrance and in front of the buildings.",
+          ],
         },
         {
-          title: "Place the large pieces next",
+          title: "Walk the day's chores on this grid",
           description:
-            "Barns, coops, sheds, and fields set the scale. Leave room at the entrance and in front. Decor comes last.",
-        },
-        {
-          title: "Walk a normal day’s route",
-          description:
-            "Farmhouse to fields, animals, chests, then the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
+            "Start at the farmhouse, then fields, animals, chests, and the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
+          benefits: [
+            "Farmhouse → fields → animals → chests → shipping bin.",
+            "A blocked tile is cheaper to move here than in-game.",
+          ],
         },
       ],
     },
@@ -431,28 +437,38 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     howTo: {
-      heading: "如何使用",
-      imageAlt: "像素风农场地图，标出作物区、动物区和道路",
+      heading: "分三步排出农场",
+      description:
+        "先标不会动的地，再分区放大件，最后按一天的活走一遍。堵住了就改这张图，别等进游戏再建。",
       steps: [
         {
-          title: "选对农场地图，标出固定地形",
+          title: "先标出不会动的地",
           description:
-            "池塘、河流、悬崖、桥和出口不会动。农舍和出货箱先当路线锚点，周围先别填满。",
+            "选你正在玩的那张农场。水、悬崖、桥和出口不会挪。农舍和出货箱当路线锚点，周围先别填满。",
+          benefits: [
+            "池塘、河流、悬崖后面改不了。",
+            "桥和出口决定你每天怎么进出。",
+            "农舍和出货箱钉死一天的起点和终点。",
+          ],
         },
         {
-          title: "先画出功能分区",
+          title: "先分区，再放大件",
           description:
-            "作物、动物、树木、储存、加工各留一块。先画宽边界，别急着摆每一行。",
+            "作物、动物、树木、储存、加工先各留一块，边界画宽一点。再放畜棚、鸡舍、棚屋和田地。小装饰最后填。",
+          benefits: [
+            "作物、动物、树木、储存、加工各占一块。",
+            "畜棚、鸡舍、棚屋、田地决定整张图的尺度。",
+            "入口和建筑正前方先留出路。",
+          ],
         },
         {
-          title: "先放大件：畜棚、鸡舍、棚屋、田地",
+          title: "按一天的活把路走通",
           description:
-            "这些决定整张图的尺度。入口和正前方留出路。小装饰最后再填。",
-        },
-        {
-          title: "按一天的活走一遍路线",
-          description:
-            "从农舍走到田地、动物区、箱子、出货箱。堵住了就改这张图，别等游戏里再建。",
+            "从农舍出发，再到田地、动物区、箱子、出货箱。哪条路堵住了，就改这张图，别等游戏里拆。",
+          benefits: [
+            "农舍 → 田地 → 动物 → 箱子 → 出货箱。",
+            "格子上挪一块，比进游戏拆重建便宜。",
+          ],
         },
       ],
     },

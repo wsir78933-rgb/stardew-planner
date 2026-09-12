@@ -63,9 +63,15 @@ test("provides the replacement sections with exact bilingual headings and item c
         ],
       },
       howTo: {
-        heading: "How to use it",
-        imageAlt: "Pixel-art farm map with crop, animal, and path zones",
-        itemCount: 4,
+        heading: "Lay out the farm in three passes",
+        description:
+          "Pin the tiles that never move. Reserve work zones, then place barns, coops, sheds, and fields. Walk one ordinary day's route last, and fix blocked paths on this grid.",
+        itemCount: 3,
+        stepTitles: [
+          "Pin the tiles that never move",
+          "Zone the work, then drop the large pieces",
+          "Walk the day's chores on this grid",
+        ],
       },
       closingCta: {
         heading: "Finish the layout on this page, then build in-game.",
@@ -103,9 +109,15 @@ test("provides the replacement sections with exact bilingual headings and item c
         ],
       },
       howTo: {
-        heading: "如何使用",
-        imageAlt: "像素风农场地图，标出作物区、动物区和道路",
-        itemCount: 4,
+        heading: "分三步排出农场",
+        description:
+          "先标不会动的地，再分区放大件，最后按一天的活走一遍。堵住了就改这张图，别等进游戏再建。",
+        itemCount: 3,
+        stepTitles: [
+          "先标出不会动的地",
+          "先分区，再放大件",
+          "按一天的活把路走通",
+        ],
       },
       closingCta: {
         heading: "先在这页摆完，再进游戏建。",
@@ -152,9 +164,13 @@ test("provides the replacement sections with exact bilingual headings and item c
     ).toEqual([...expected.whyChoose.names]);
     expect(homepageCopy.howTo).toMatchObject({
       heading: expected.howTo.heading,
-      imageAlt: expected.howTo.imageAlt,
+      description: expected.howTo.description,
     });
+    expect(homepageCopy.howTo).not.toHaveProperty("imageAlt");
     expect(homepageCopy.howTo.steps).toHaveLength(expected.howTo.itemCount);
+    expect(homepageCopy.howTo.steps.map((howToStep) => howToStep.title)).toEqual(
+      [...expected.howTo.stepTitles],
+    );
     expect(homepageCopy.closingCta).toEqual(expected.closingCta);
     expect(homepageCopy.closingCta).not.toHaveProperty("primaryActionLabel");
   }

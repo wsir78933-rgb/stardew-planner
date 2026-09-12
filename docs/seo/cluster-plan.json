@@ -1,0 +1,651 @@
+{
+  "version": "2.2.5",
+  "seed_keyword": "best spring crop stardew",
+  "seed_keyword_zh": "星露谷 春季作物",
+  "created_at": "2026-09-12T00:00:00Z",
+  "locale_pair": ["en", "zh-CN"],
+  "v7": {
+    "rule": "one primary search intent only",
+    "primary_intent": "Rank outdoor Spring crops in Stardew Valley by gold, with Year 1 vs later as a modifier of the same ranking job.",
+    "primary_intent_zh": "给室外春季作物按金币排序；第一年/第二年是同一排序问题的条件，不是第二篇主意图。",
+    "do_not_turn_required_subquestions_into_separate_posts": true
+  },
+  "data_notes": {
+    "volume": "Not collected. DataForSEO / Keyword Planner were not used. volume fields are 0.",
+    "serp_sources": [
+      "Google US organic (hl=en, gl=us, num=10) for 10 English queries before a sorry/captcha page",
+      "DuckDuckGo HTML organic as second source and for Chinese queries",
+      "Official wiki pages used only as SERP destinations, not as clustering input"
+    ],
+    "ubiquitous_domains": [
+      "stardewvalleywiki.com",
+      "zh.stardewvalleywiki.com",
+      "reddit.com",
+      "forums.stardewvalley.net",
+      "steamcommunity.com"
+    ],
+    "scoring": "Primary matrix uses Google URL overlap when both keywords have Google organic. DuckDuckGo overlap is stored alongside for publisher-SERP checks. Near-duplicate ranking phrases use the skip rule (same head term + same intent)."
+  },
+  "this_article": {
+    "role": "pillar",
+    "hub_query_en": "best spring crops stardew valley",
+    "hub_query_zh": "星露谷 春季作物",
+    "hub_query_zh_merged": ["星露谷 春天种什么", "星露谷 春天最赚钱"],
+    "why_hub": "Broadest ranking query. PAA and related searches on the seed already ask 'most profitable', Year 1/2, and 'besides strawberry'. Chinese DDG overlap between 春季作物 and 春天种什么 is 7/10 (same post).",
+    "template": "best-of",
+    "intent": "Commercial",
+    "intent_justification": "SERP is ranked crop lists plus PAA 'most profitable'. Informational list pages (wiki Spring / Crops) also rank, so the article must include a complete Spring table, but the winning format is a ranked best-of, not a wiki clone.",
+    "wordCount": 3200,
+    "url_en": "/best-spring-crops-stardew",
+    "url_zh": "/zh/best-spring-crops-stardew",
+    "status": "planned",
+    "scope": "Outdoor Spring crops on the farm. Gold/day from wiki sell prices. Year 1 cash + Egg Festival strawberry timing. Year 2 garlic/rhubarb gates. 1.6 carrot as a free-seed option. One-line pointers to watering, greenhouse, summer, artisan, and bundles.",
+    "merged_primary_keywords": [
+      "best spring crop stardew",
+      "best spring crops stardew valley",
+      "most profitable spring crop stardew",
+      "stardew valley spring crops",
+      "stardew valley spring crops list",
+      "stardew valley spring crops profit",
+      "all spring crops stardew",
+      "best spring crop stardew besides strawberry",
+      "stardew valley best spring crop year 1",
+      "stardew valley best spring crop year 2",
+      "how to maximize profits in spring stardew valley",
+      "what is the most profitable crop in spring",
+      "星露谷 春季作物",
+      "星露谷 春天种什么",
+      "星露谷 春天最赚钱",
+      "星露谷 第一年春天种什么"
+    ],
+    "required_subquestions": [
+      {
+        "query": "stardew valley best spring crop year 1",
+        "query_zh": "星露谷 第一年春天种什么",
+        "action": "same_post_section",
+        "why": "Google URL overlap with the hub is only 2, but PAA/related searches on the hub are Year 1/2 questions, and DDG publisher overlap is 6/10. Splitting Year 1 would cannibalize the ranking intent.",
+        "section": "Year 1 cash plan (parsnip starter, potato bulk, save for Egg Festival)"
+      },
+      {
+        "query": "stardew strawberry year 1",
+        "query_zh": "星露谷 草莓 第一年",
+        "action": "same_post_section_brief",
+        "why": "Google overlap with the hub is 0. It is still a required sub-question of 'best spring crop' because every ranking SERP treats strawberry as the default winner. Answer harvest count if planted on Spring 13, not a full item page.",
+        "section": "Egg Festival strawberries: 2 harvests if planted on the festival day; do not write a strawberry-seeds article"
+      },
+      {
+        "query": "best spring crop stardew besides strawberry",
+        "query_zh": "星露谷 春天除了草莓种什么",
+        "action": "same_post_section",
+        "why": "Google overlap 4–5 with hub ranking queries. Same commercial-rank intent.",
+        "section": "If not strawberries: potato, cauliflower, kale, rhubarb (Oasis), coffee bean, 1.6 carrot"
+      },
+      {
+        "query": "stardew valley spring crops list / gold per day",
+        "query_zh": "星露谷 春季作物 列表",
+        "action": "same_post_section",
+        "why": "Hub PAA asks for the list and gold/day. Wiki Spring/Crops rank for the unranked list query. A ranking article that omits the table loses the informational SERP.",
+        "section": "Complete Spring crop table: seed price, days, harvests, gold/day from wiki formula"
+      },
+      {
+        "query": "stardew cauliflower vs potato",
+        "query_zh": "星露谷 花椰菜 还是 土豆",
+        "action": "same_post_section_brief",
+        "why": "Comparison is a ranking tie-break, not a new intent. Extra potato chance and giant cauliflower are one-paragraph facts.",
+        "section": "Potato extra-yield vs cauliflower gold/day and giant-crop note"
+      },
+      {
+        "query": "stardew rhubarb / garlic year 2 / coffee bean spring / carrot 1.6",
+        "query_zh": "星露谷 大黄 / 蒜 / 咖啡豆 / 胡萝卜",
+        "action": "same_post_rows",
+        "why": "These are rows in the ranking table plus unlock gates. Item-page SERPs are wiki destinations; do not clone wiki item pages.",
+        "section": "Unlock gates inside the ranking: Oasis rhubarb, Year 2 garlic, Traveling Cart/Dust Sprite coffee, 1.6 carrot seeds"
+      },
+      {
+        "query": "stardew green bean trellis",
+        "query_zh": "星露谷 青豆 架子",
+        "action": "same_post_one_paragraph",
+        "why": "Needed so the ranking does not send players into a blocked plot. Not a layout guide.",
+        "section": "Green Bean needs walkable trellis lanes; do not expand into a farm-layout article"
+      }
+    ],
+    "do_not_expand": [
+      {
+        "query": "stardew greenhouse crops / stardew greenhouse layout / 星露谷 温室",
+        "why": "Google overlap 0 with the hub. DDG greenhouse SERP is wiki Greenhouse, TheGamer greenhouse crops, layout tools. Different job: year-round indoor bed, not Spring outdoor ranking. Existing page already owns layout.",
+        "leave_to": "https://stardewvalleyplanner.art/glasshouse-stardew-valley",
+        "leave_to_zh": "https://stardewvalleyplanner.art/zh/glasshouse-stardew-valley",
+        "allowed_in_this_article": "One sentence: greenhouse ignores season; link out. Do not rank Ancient Fruit / Starfruit indoor."
+      },
+      {
+        "query": "stardew sprinkler layout / 星露谷 洒水器",
+        "why": "Google overlap 0. SERP is coverage grids, Siliconera layouts, wiki Sprinkler. Existing page already owns 4/8/24-tile placement.",
+        "leave_to": "https://stardewvalleyplanner.art/sprinkler-stardew",
+        "leave_to_zh": "https://stardewvalleyplanner.art/zh/sprinkler-stardew",
+        "allowed_in_this_article": "One sentence: Spring watering is a can or a sprinkler problem; link out. Do not draw coverage diagrams."
+      },
+      {
+        "query": "best summer crops stardew valley / 星露谷 夏季作物",
+        "why": "Google overlap 2 (forum all-season thread + one all-crops blog). DDG summer URLs are gamerant/stardewguide/carlsguides *summer* paths, not Spring paths. Related searches on the hub include summer/fall as next-season queries, which is interlink, not same post.",
+        "leave_to": "planned /best-summer-crops-stardew",
+        "allowed_in_this_article": "Close with one line that Spring crops die on Summer 1 except coffee/ancient; link when the summer post exists."
+      },
+      {
+        "query": "best fall crops stardew valley",
+        "why": "DDG fall SERP is a parallel ranked list on different URLs. Overlap with Spring ranking pages is 0–1 exact URLs.",
+        "leave_to": "planned /best-fall-crops-stardew",
+        "allowed_in_this_article": "Do not rank cranberries/pumpkin here."
+      },
+      {
+        "query": "stardew valley best crops (all seasons)",
+        "why": "A mega-guide would compete with this Spring post and with future summer/fall posts. IGN all-season pages appear in several SERPs; that is a different URL pattern, not a reason to merge seasons.",
+        "leave_to": "do not write",
+        "allowed_in_this_article": "None. Keep the H1 on Spring."
+      },
+      {
+        "query": "stardew artisan goods / keg vs preserves jar / 星露谷 小桶",
+        "why": "Google overlap 0. SERP is wiki Keg/Preserves Jar and keg-vs-jar calculators. Processing is a later-game machine problem, not a Spring seed choice.",
+        "leave_to": "planned artisan article (not on site)",
+        "allowed_in_this_article": "At most: strawberry jelly is a later multiplier; do not compute keg tables."
+      },
+      {
+        "query": "stardew community center spring crops bundle / 星露谷 社区中心 收集包",
+        "why": "DDG bundle SERP is wiki Bundles, pantry checklists, Speed-Gro reward pages. Intent is donate-four-crops, not gold/day ranking.",
+        "leave_to": "planned bundles article (not on site)",
+        "allowed_in_this_article": "One line: pantry Spring Crops Bundle is Parsnip, Green Bean, Cauliflower, Potato; keep one of each, then link out when a bundles post exists."
+      },
+      {
+        "query": "stardew ancient fruit / greenhouse ancient fruit",
+        "why": "Related searches on greenhouse, not on Spring ranking. Outdoor Spring cannot finish Ancient Fruit in 28 days as a Year 1 plan.",
+        "leave_to": "greenhouse article + future crop-processing posts",
+        "allowed_in_this_article": "Do not rank it as a Spring outdoor crop."
+      },
+      {
+        "query": "stardew strawberry (item) / 星露谷 草莓",
+        "why": "Google strawberry Year 1 SERP is wiki Strawberry, wiki Strawberry Seeds, ScreenRant seed-timing. Overlap 0 with the ranking hub. A strawberry item clone would cannibalize nothing useful and would steal the festival section from this post if it also tried to rank 'best spring crop'.",
+        "leave_to": "do not write a separate strawberry post for this cluster",
+        "allowed_in_this_article": "Festival timing + harvest count only."
+      }
+    ]
+  },
+  "pillar": {
+    "title": "Best Spring Crops in Stardew Valley (Year 1 vs Later)",
+    "title_zh": "星露谷春季作物怎么选：第一年与之后的金币排序",
+    "keyword": "best spring crops stardew valley",
+    "keyword_zh": "星露谷 春季作物",
+    "volume": 0,
+    "template": "best-of",
+    "wordCount": 3200,
+    "url": "/best-spring-crops-stardew",
+    "status": "planned"
+  },
+  "clusters": [
+    {
+      "name": "Other-season ranking (separate articles, interlink only)",
+      "relationship_to_this_article": "interlink",
+      "serp_note": "Google overlap with the Spring hub is 1–2. Same listicle pattern on different seasonal URLs. Do not expand inside the Spring post.",
+      "posts": [
+        {
+          "id": "cluster-0-post-0",
+          "title": "Best Summer Crops in Stardew Valley",
+          "keyword": "best summer crops stardew valley",
+          "keyword_zh": "星露谷 夏季作物",
+          "volume": 0,
+          "template": "best-of",
+          "wordCount": 1500,
+          "url": "/best-summer-crops-stardew",
+          "status": "planned",
+          "expand_in_spring_article": false
+        },
+        {
+          "id": "cluster-0-post-1",
+          "title": "Best Fall Crops in Stardew Valley",
+          "keyword": "best fall crops stardew valley",
+          "keyword_zh": "星露谷 秋季作物",
+          "volume": 0,
+          "template": "best-of",
+          "wordCount": 1500,
+          "url": "/best-fall-crops-stardew",
+          "status": "planned",
+          "expand_in_spring_article": false
+        }
+      ]
+    },
+    {
+      "name": "Existing farm systems (written, exclude from this article)",
+      "relationship_to_this_article": "separate_optional_interlink",
+      "serp_note": "Google overlap with the Spring hub is 0. These pages already exist. Link out; do not rewrite them.",
+      "posts": [
+        {
+          "id": "cluster-1-post-0",
+          "title": "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
+          "keyword": "stardew greenhouse layout",
+          "keyword_zh": "星露谷 温室",
+          "volume": 0,
+          "template": "how-to",
+          "wordCount": 1800,
+          "url": "/glasshouse-stardew-valley",
+          "status": "written",
+          "expand_in_spring_article": false
+        },
+        {
+          "id": "cluster-1-post-1",
+          "title": "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
+          "keyword": "stardew sprinkler layout",
+          "keyword_zh": "星露谷 洒水器",
+          "volume": 0,
+          "template": "how-to",
+          "wordCount": 1800,
+          "url": "/sprinkler-stardew",
+          "status": "written",
+          "expand_in_spring_article": false
+        }
+      ]
+    },
+    {
+      "name": "Processing and bundles (not on site, exclude from this article)",
+      "relationship_to_this_article": "separate",
+      "serp_note": "Google/DDG overlap with the Spring hub is 0–1. Different SERP destinations (Keg/Jar wiki, Bundles wiki).",
+      "posts": [
+        {
+          "id": "cluster-2-post-0",
+          "title": "Stardew Valley Keg vs Preserves Jar",
+          "keyword": "stardew keg vs preserves jar",
+          "keyword_zh": "星露谷 小桶 果酱罐",
+          "volume": 0,
+          "template": "comparison",
+          "wordCount": 1500,
+          "url": "/stardew-keg-vs-preserves-jar",
+          "status": "planned",
+          "expand_in_spring_article": false
+        },
+        {
+          "id": "cluster-2-post-1",
+          "title": "Stardew Valley Community Center Bundles by Season",
+          "keyword": "stardew community center spring crops bundle",
+          "keyword_zh": "星露谷 社区中心 收集包",
+          "volume": 0,
+          "template": "how-to",
+          "wordCount": 1600,
+          "url": "/stardew-community-center-bundles",
+          "status": "planned",
+          "expand_in_spring_article": false
+        }
+      ]
+    }
+  ],
+  "existing_internal_link_opportunities": [
+    {
+      "from": "this article",
+      "to": "https://stardewvalleyplanner.art/",
+      "to_zh": "https://stardewvalleyplanner.art/zh",
+      "type": "mandatory",
+      "anchor_en": "sketch the Spring plot on the planner",
+      "anchor_zh": "用农场规划器先画春季田",
+      "why": "Site product. Layout is not the ranking job, but readers who accept a crop still need a grid."
+    },
+    {
+      "from": "this article",
+      "to": "https://stardewvalleyplanner.art/sprinkler-stardew",
+      "to_zh": "https://stardewvalleyplanner.art/zh/sprinkler-stardew",
+      "type": "mandatory",
+      "anchor_en": "sprinkler coverage (4, 8, or 24 tiles)",
+      "anchor_zh": "洒水器覆盖格数",
+      "why": "Watering is the next job after seed choice. SERP is a different page type. Page already exists."
+    },
+    {
+      "from": "this article",
+      "to": "https://stardewvalleyplanner.art/glasshouse-stardew-valley",
+      "to_zh": "https://stardewvalleyplanner.art/zh/glasshouse-stardew-valley",
+      "type": "mandatory",
+      "anchor_en": "Greenhouse 10×12 bed (any season)",
+      "anchor_zh": "温室 10×12 耕地",
+      "why": "PAA on the hub asks 'do you have the Greenhouse?'. Answer is a link, not a second greenhouse guide."
+    },
+    {
+      "from": "this article",
+      "to": "https://stardewvalleyplanner.art/stardew-valley-town-map",
+      "to_zh": "https://stardewvalleyplanner.art/zh/stardew-valley-town-map",
+      "type": "optional",
+      "anchor_en": "Pelican Town route to Pierre and the Egg Festival",
+      "anchor_zh": "去皮埃尔杂货店和复活节的小镇路线",
+      "why": "Egg Festival strawberry seeds are bought in town. Town-map is a location page, not a crop page."
+    },
+    {
+      "from": "https://stardewvalleyplanner.art/sprinkler-stardew",
+      "to": "this article (once written)",
+      "type": "recommended_backward",
+      "anchor_en": "which Spring crop is worth watering",
+      "why": "Sprinkler page currently has no crop-ranking outbound. One sentence after publish."
+    },
+    {
+      "from": "https://stardewvalleyplanner.art/glasshouse-stardew-valley",
+      "to": "this article (once written)",
+      "type": "recommended_backward",
+      "anchor_en": "outdoor Spring ranking is a different job",
+      "why": "Greenhouse article already says there is no universal best indoor crop. Point outdoor ranking here."
+    },
+    {
+      "from": "this article",
+      "to": "https://stardewvalleyplanner.art/carpenter-stardew",
+      "type": "skip",
+      "why": "Robin/buildings are not part of the Spring ranking SERP. Do not force a carpenter link."
+    },
+    {
+      "from": "this article",
+      "to": "https://stardewvalleyplanner.art/stardew-valley-trees",
+      "type": "skip",
+      "why": "Trees are a keep/clear/orchard job. Not a Spring crop SERP."
+    }
+  ],
+  "links": [
+    { "from": "pillar", "to": "cluster-0-post-0", "type": "optional", "anchor": "best summer crops" },
+    { "from": "pillar", "to": "cluster-0-post-1", "type": "optional", "anchor": "best fall crops" },
+    { "from": "cluster-0-post-0", "to": "pillar", "type": "optional", "anchor": "best spring crops" },
+    { "from": "cluster-0-post-1", "to": "pillar", "type": "optional", "anchor": "best spring crops" },
+    { "from": "cluster-0-post-0", "to": "cluster-0-post-1", "type": "recommended", "anchor": "best fall crops" },
+    { "from": "cluster-0-post-1", "to": "cluster-0-post-0", "type": "recommended", "anchor": "best summer crops" },
+    { "from": "pillar", "to": "cluster-1-post-0", "type": "mandatory", "anchor": "greenhouse 10×12 layout" },
+    { "from": "pillar", "to": "cluster-1-post-1", "type": "mandatory", "anchor": "sprinkler coverage" },
+    { "from": "cluster-1-post-0", "to": "pillar", "type": "recommended", "anchor": "outdoor Spring crop ranking" },
+    { "from": "cluster-1-post-1", "to": "pillar", "type": "recommended", "anchor": "which Spring crop to water" },
+    { "from": "cluster-1-post-0", "to": "cluster-1-post-1", "type": "mandatory", "anchor": "sprinkler placement" },
+    { "from": "pillar", "to": "cluster-2-post-0", "type": "optional", "anchor": "keg vs jar" },
+    { "from": "pillar", "to": "cluster-2-post-1", "type": "optional", "anchor": "Spring Crops Bundle" },
+    { "from": "cluster-2-post-0", "to": "pillar", "type": "optional", "anchor": "raw Spring crop ranking" },
+    { "from": "cluster-2-post-1", "to": "pillar", "type": "optional", "anchor": "Spring gold ranking" }
+  ],
+  "keyword_expansion": [
+    { "keyword": "best spring crop stardew", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "best spring crops stardew valley", "intent": "Commercial", "locale": "en", "cluster_action": "hub" },
+    { "keyword": "stardew valley spring crops", "intent": "Informational", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "stardew valley spring crops list", "intent": "Informational", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "stardew valley spring crops profit", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "all spring crops stardew", "intent": "Informational", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "most profitable spring crop stardew", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "stardew valley best spring crop year 1", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "stardew valley best spring crop year 2", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "best spring crop stardew besides strawberry", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "best spring crop stardew tier list", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "how to maximize profits in spring stardew valley", "intent": "Informational", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "what is the most profitable crop in spring", "intent": "Commercial", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "what is the best vegetable to grow in stardew valley during the spring", "intent": "Informational", "locale": "en", "cluster_action": "same_post" },
+    { "keyword": "stardew strawberry year 1", "intent": "Informational", "locale": "en", "cluster_action": "same_post_brief" },
+    { "keyword": "stardew egg festival strawberries", "intent": "Informational", "locale": "en", "cluster_action": "same_post_brief" },
+    { "keyword": "stardew cauliflower vs potato", "intent": "Commercial", "locale": "en", "cluster_action": "same_post_brief" },
+    { "keyword": "stardew kale vs potato", "intent": "Commercial", "locale": "en", "cluster_action": "same_post_brief" },
+    { "keyword": "stardew rhubarb", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew garlic year 2", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew coffee bean spring", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew carrot 1.6", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew parsnip year 1", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew green bean trellis", "intent": "Informational", "locale": "en", "cluster_action": "same_post_one_paragraph" },
+    { "keyword": "stardew giant cauliflower", "intent": "Informational", "locale": "en", "cluster_action": "same_post_one_paragraph" },
+    { "keyword": "stardew tulip vs blue jazz", "intent": "Commercial", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew unmilled rice", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "stardew spring seeds", "intent": "Informational", "locale": "en", "cluster_action": "same_post_row" },
+    { "keyword": "best summer crops stardew valley", "intent": "Commercial", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "best fall crops stardew valley", "intent": "Commercial", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew valley best crops", "intent": "Commercial", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew greenhouse crops", "intent": "Commercial", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew greenhouse layout", "intent": "Informational", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew sprinkler layout", "intent": "Informational", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew keg vs preserves jar", "intent": "Commercial", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew community center spring crops bundle", "intent": "Informational", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "stardew ancient fruit", "intent": "Informational", "locale": "en", "cluster_action": "exclude" },
+    { "keyword": "best spring crop stardew reddit", "intent": "Navigational", "locale": "en", "cluster_action": "removed" },
+    { "keyword": "stardew valley wiki spring", "intent": "Navigational", "locale": "en", "cluster_action": "removed" },
+    { "keyword": "星露谷 春季作物", "intent": "Informational", "locale": "zh-CN", "cluster_action": "hub" },
+    { "keyword": "星露谷 春天种什么", "intent": "Commercial", "locale": "zh-CN", "cluster_action": "same_post" },
+    { "keyword": "星露谷 春天最赚钱", "intent": "Commercial", "locale": "zh-CN", "cluster_action": "same_post" },
+    { "keyword": "星露谷 第一年春天种什么", "intent": "Commercial", "locale": "zh-CN", "cluster_action": "same_post" },
+    { "keyword": "星露谷 草莓", "intent": "Informational", "locale": "zh-CN", "cluster_action": "same_post_brief" },
+    { "keyword": "星露谷 花椰菜", "intent": "Informational", "locale": "zh-CN", "cluster_action": "same_post_row" },
+    { "keyword": "星露谷 土豆", "intent": "Informational", "locale": "zh-CN", "cluster_action": "same_post_row" },
+    { "keyword": "星露谷 夏季作物", "intent": "Informational", "locale": "zh-CN", "cluster_action": "exclude" },
+    { "keyword": "星露谷 温室", "intent": "Informational", "locale": "zh-CN", "cluster_action": "exclude" },
+    { "keyword": "星露谷 洒水器", "intent": "Informational", "locale": "zh-CN", "cluster_action": "exclude" },
+    { "keyword": "星露谷 小桶", "intent": "Informational", "locale": "zh-CN", "cluster_action": "exclude" },
+    { "keyword": "星露谷 社区中心", "intent": "Informational", "locale": "zh-CN", "cluster_action": "exclude" }
+  ],
+  "serp_matrix": {
+    "keywords": [
+      "best spring crop stardew",
+      "best spring crops stardew valley",
+      "stardew valley spring crops",
+      "stardew valley best spring crop year 1",
+      "most profitable spring crop stardew",
+      "best spring crop stardew besides strawberry",
+      "stardew strawberry year 1",
+      "best summer crops stardew valley",
+      "best fall crops stardew valley",
+      "stardew greenhouse crops",
+      "stardew sprinkler layout",
+      "stardew artisan goods keg preserves jar",
+      "stardew community center spring crops bundle",
+      "星露谷 春季作物",
+      "星露谷 春天种什么",
+      "星露谷 温室",
+      "星露谷 洒水器",
+      "星露谷 夏季作物"
+    ],
+    "scores": [
+      [10, 8, 5, 2, 3, 5, 0, 2, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [8, 10, 5, 2, 3, 4, 0, 2, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [5, 5, 10, 2, 3, 3, 0, 2, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+      [2, 2, 2, 10, 2, 3, 1, 2, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [3, 3, 3, 2, 10, 3, 1, 2, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [5, 4, 3, 3, 3, 10, 0, 2, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [2, 2, 2, 2, 2, 2, 0, 10, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+      [1, 1, 1, 1, 1, 1, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 2, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 10, 7, 1, 0, 1],
+      [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 7, 10, 1, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 1, 10, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 10, 0],
+      [0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 1, 1, 0, 10]
+    ],
+    "ddg_publisher_overlap_overrides": {
+      "best spring crop stardew | stardew valley best spring crop year 1": {
+        "google": 2,
+        "ddg": 6,
+        "decision": "same_post under V7 (PAA/related + publisher overlap 6). Not a second URL."
+      },
+      "best spring crop stardew | most profitable spring crop stardew": {
+        "google": 3,
+        "decision": "same_post (synonym rank intent + identical PAA)."
+      },
+      "星露谷 春季作物 | 星露谷 春天种什么": {
+        "ddg": 7,
+        "decision": "same_post"
+      }
+    },
+    "organic_url_sets": {
+      "best spring crop stardew": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/1f926g9",
+          "forums.stardewvalley.net/threads/best-crops-per-season.31399",
+          "stardewvalleywiki.com/spring",
+          "steamcommunity.com/app/413150/discussions/0/4477100383813930258",
+          "shockbyte.com/blog/the-best-crops-in-stardew-valley",
+          "outof.games/realms/stardew-valley/guides/428-top-money-making-crops-to-plant-during-spring-in-stardew-valley",
+          "namehero.com/gaming-blog/stardew-valley-best-crops-maximize-your-farm-profits",
+          "gamerant.com/stardew-valley-best-spring-crops"
+        ]
+      },
+      "best spring crops stardew valley": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/1f926g9",
+          "forums.stardewvalley.net/threads/best-crops-per-season.31399",
+          "stardewvalleywiki.com/spring",
+          "steamcommunity.com/app/413150/discussions/0/4477100383813930258",
+          "outof.games/realms/stardew-valley/guides/428-top-money-making-crops-to-plant-during-spring-in-stardew-valley",
+          "steamcommunity.com/app/413150/discussions/0/4509876948599627981",
+          "stardewvalleywiki.com/crops"
+        ]
+      },
+      "stardew valley spring crops": {
+        "source": "google_us",
+        "urls": [
+          "stardewvalleywiki.com/spring",
+          "reddit.com/r/stardewvalley/comments/14oowvy",
+          "steamcommunity.com/app/413150/discussions/0/4477100383813930258",
+          "stardewvalleywiki.com/crops",
+          "youtube.com/shorts/Q1CY0Wp9Ido",
+          "forums.stardewvalley.net/threads/best-crops-per-season.31399",
+          "stardewvalley.fandom.com/wiki/spring",
+          "outof.games/realms/stardew-valley/guides/428-top-money-making-crops-to-plant-during-spring-in-stardew-valley"
+        ]
+      },
+      "stardew valley best spring crop year 1": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/8ih57y",
+          "forums.stardewvalley.net/threads/what-is-the-best-crop-in-each-season-to-make-the-most-amount-of-money.7188",
+          "stardewprofit.com/blog/best-crops-year-1",
+          "steamcommunity.com/app/413150/discussions/0/4477100383813930258",
+          "shockbyte.com/blog/the-best-crops-in-stardew-valley",
+          "namehero.com/gaming-blog/stardew-valley-best-crops-maximize-your-farm-profits",
+          "facebook.com/groups/svplayersandroid/posts/1177902887656976",
+          "stardewvalleywiki.com/crops"
+        ]
+      },
+      "most profitable spring crop stardew": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/xhzz8z",
+          "forums.stardewvalley.net/threads/best-crops-per-season.31399",
+          "outof.games/realms/stardew-valley/guides/428-top-money-making-crops-to-plant-during-spring-in-stardew-valley",
+          "stardewvalleywiki.com/crops",
+          "hrothmar.com/guides/stardew-valley-most-profitable-cash-crops",
+          "ign.com/wikis/stardew-valley/best_and_most_profitable_crops",
+          "youtube.com/shorts/MyKHLjeCmz4"
+        ]
+      },
+      "best spring crop stardew besides strawberry": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/4haytc",
+          "forums.stardewvalley.net/threads/best-crops-per-season.31399",
+          "outof.games/realms/stardew-valley/guides/428-top-money-making-crops-to-plant-during-spring-in-stardew-valley",
+          "namehero.com/gaming-blog/stardew-valley-best-crops-maximize-your-farm-profits",
+          "steamcommunity.com/app/413150/discussions/0/4477100383813930258",
+          "stardewvalleywiki.com/crops",
+          "facebook.com/groups/svplayersandroid/posts/1177902887656976",
+          "ign.com/wikis/stardew-valley/best_and_most_profitable_crops"
+        ]
+      },
+      "stardew strawberry year 1": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/v6rtto",
+          "stardewvalleywiki.com/strawberry",
+          "forums.stardewvalley.net/threads/tip-slightly-different-timing-for-strawberries-in-spring-year-1.2168",
+          "steamcommunity.com/app/413150/discussions/0/333656722984748112",
+          "youtube.com/watch?v=Q6fSvHKf_bs",
+          "youtube.com/shorts/MyKHLjeCmz4",
+          "community.playstarbound.com/threads/starting-out-with-strawberries.159648",
+          "stardewvalleywiki.com/strawberry_seeds",
+          "screenrant.com/stardew-valley-year-1-strawberry-seeds"
+        ]
+      },
+      "best summer crops stardew valley": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/11uncqb",
+          "shockbyte.com/blog/the-best-stardew-valley-summer-crops",
+          "forums.stardewvalley.net/threads/best-crops-per-season.31399",
+          "gamerant.com/stardew-valley-best-summer-crops",
+          "community.playstarbound.com/threads/farming-strategy-for-summer-year-1.158834",
+          "stardewvalleywiki.com/summer",
+          "outof.games/realms/stardew-valley/guides/429-top-money-making-crops-to-plant-during-summer-in-stardew-valley",
+          "steamcommunity.com/app/413150/discussions/0/341537388319674543",
+          "namehero.com/gaming-blog/stardew-valley-best-crops-maximize-your-farm-profits"
+        ]
+      },
+      "stardew greenhouse crops": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/5rd3cz",
+          "forums.stardewvalley.net/threads/what-should-i-do-with-my-greenhouse.14814",
+          "stardewvalleywiki.com/greenhouse",
+          "facebook.com/groups/svplayersandroid/posts/823690449744890",
+          "stardewpricedb.com/guide/best-greenhouse-crops",
+          "thegamer.com/stardew-valley-greenhouse-best-crops"
+        ]
+      },
+      "stardew sprinkler layout": {
+        "source": "google_us",
+        "urls": [
+          "reddit.com/r/stardewvalley/comments/47ygnr",
+          "stardewvalleywiki.com/sprinkler",
+          "facebook.com/mypotatogames/posts/777768671273488",
+          "siliconera.com/best-sprinkler-layouts-in-stardew-valley-sprinkler-guide",
+          "forums.stardewvalley.net/threads/a-casual-guide-to-getting-your-sprinklers-up-and-running.2668",
+          "pinterest.com/ideas/stardew-valley-sprinkler-layout/952353515132",
+          "youtube.com/shorts/wgbtcHDNDv0"
+        ]
+      },
+      "stardew artisan goods keg preserves jar": {
+        "source": "google_us",
+        "urls": [
+          "stardewvalleywiki.com/preserves_jar",
+          "reddit.com/r/stardewvalley/comments/4azdyc",
+          "xgamingserver.com/blog/kegs-vs-preserves-jars-the-best-artisan-goods-in-stardew-valley",
+          "forums.stardewvalley.net/threads/preserves-jars-vs-kegs-profitability.14109",
+          "jeu.video/en/guide/stardew-valley-kegs-jars",
+          "stardewvalleywiki.com/keg",
+          "steamcommunity.com/app/413150/discussions/0/1697168437856150925"
+        ]
+      }
+    }
+  },
+  "cannibalization_check": {
+    "same_primary_keyword_collisions": 0,
+    "near_duplicates_merged_into_this_article": [
+      "best spring crop stardew",
+      "best spring crops stardew valley",
+      "most profitable spring crop stardew",
+      "星露谷 春季作物",
+      "星露谷 春天种什么",
+      "星露谷 春天最赚钱"
+    ],
+    "risk_if_ignored": [
+      "A Year 1 Spring post plus a 'best spring crops' post would share PAA and related searches.",
+      "An all-season best-crops mega-guide would compete with this H1.",
+      "A strawberry item post that also ranks Year 1 festival timing would steal the required sub-question."
+    ],
+    "safe_if_v7_followed": true
+  },
+  "scorecard": {
+    "coverage": 0.0,
+    "linkDensity": 0.0,
+    "orphanPages": 0,
+    "cannibalization": 0,
+    "contentGaps": 4,
+    "notes": [
+      "V7 override: this seed is one article, not a 12-post hub. Greenhouse/sprinkler/summer/artisan/bundles stay off this URL.",
+      "Skill rule 'spoke overlap >= 4 with cluster peers' is not used to force extra Spring posts. Year 1 Google overlap is 2; it is still merged because PAA/related + DDG publisher overlap 6.",
+      "Existing greenhouse and sprinkler pages already interlink. This article must add bidirectional links after publish so it is not an orphan.",
+      "Volume not collected. Pillar selected by breadth + SERP format, not by volume.",
+      "contentGaps count planned-not-written related posts: summer, fall, keg-vs-jar, bundles."
+    ]
+  },
+  "validation_checklist": {
+    "no_two_posts_share_primary_keyword": true,
+    "every_spoke_three_incoming": "n/a for this article; future seasonal posts need pillar + sibling + one existing farm-system link",
+    "every_spoke_links_to_pillar": "planned for seasonal posts; greenhouse/sprinkler need a one-line add after publish",
+    "pillar_links_to_every_spoke": "pillar links to existing greenhouse and sprinkler; seasonal posts only if they exist",
+    "no_orphan_pages": "this article needs inbound from sprinkler + greenhouse + planner after publish",
+    "template_matches_intent": true,
+    "word_count_in_spec": true,
+    "cluster_size_note": "Related site IA is 3 clusters of 2 posts. Those clusters are exclude/interlink, not extra Spring URLs.",
+    "serp_supports_same_post_merge": true
+  }
+}

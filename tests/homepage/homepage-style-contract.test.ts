@@ -79,11 +79,6 @@ test("ships the homepage image-and-text section assets as public WebP files", ()
       imageSource: "/homepage/features-pixel-farm.webp",
     },
     {
-      sourcePath: "src/components/homepage-how-to-section.tsx",
-      imagePath: "public/homepage/how-to-pixel-farm.webp",
-      imageSource: "/homepage/how-to-pixel-farm.webp",
-    },
-    {
       sourcePath: "src/homepage/homepage-copy.ts",
       imagePath: "public/homepage/hero/spring-crops.webp",
       imageSource: "/homepage/hero/spring-crops.webp",
@@ -108,6 +103,10 @@ test("ships the homepage image-and-text section assets as public WebP files", ()
     expect(statSync(imageFilePath).size).toBeGreaterThan(0);
     expect(sectionMarkup).toContain(`"${homepageSectionImage.imageSource}"`);
   }
+
+  expect(readProjectFile("src/components/homepage-how-to-section.tsx")).not.toContain(
+    "/homepage/how-to-pixel-farm.webp",
+  );
 
   const whyChooseImageReferenceMarkup = whyChooseImageReferencePaths
     .map((relativePath) => readExistingProjectFile(relativePath))
