@@ -911,12 +911,12 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
       "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
     ],
-    howToHeading: "How to use it",
+    howToHeading: "Lay out the farm in three passes",
     howToDescriptions: [
-      "Ponds, rivers, cliffs, bridges, and exits stay put. Use the farmhouse and shipping bin as route anchors, and leave the ground around them open for now.",
-      "Give crops, animals, trees, storage, and processing their own areas. Draw wide boundaries. Do not lock in every row yet.",
-      "Barns, coops, sheds, and fields set the scale. Leave room at the entrance and in front. Decor comes last.",
-      "Farmhouse to fields, animals, chests, then the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
+      "Pin the tiles that never move. Reserve work zones, then place barns, coops, sheds, and fields. Walk one ordinary day's route last, and fix blocked paths on this grid.",
+      "Pick the farm map you actually play. Water, cliffs, bridges, and exits stay put. Use the farmhouse and shipping bin as route anchors, and leave the ground around them open.",
+      "Give crops, animals, trees, storage, and processing their own areas. Draw wide boundaries first. Then place barns, coops, sheds, and fields. Decor comes last.",
+      "Start at the farmhouse, then fields, animals, chests, and the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
     ],
     closingCtaHeading: "Finish the layout on this page, then build in-game.",
     closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
@@ -932,7 +932,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
       "/homepage/why-choose/fourcorners-balanced-emerald.webp",
       "/homepage/why-choose/fourcorners-coop-hallofax.webp",
-      "/homepage/how-to-pixel-farm.webp",
     ],
     faqHeading: "Check these before you start",
     faqAnswers: [
@@ -979,12 +978,12 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
       "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
     ],
-    howToHeading: "如何使用",
+    howToHeading: "分三步排出农场",
     howToDescriptions: [
-      "池塘、河流、悬崖、桥和出口不会动。农舍和出货箱先当路线锚点，周围先别填满。",
-      "作物、动物、树木、储存、加工各留一块。先画宽边界，别急着摆每一行。",
-      "这些决定整张图的尺度。入口和正前方留出路。小装饰最后再填。",
-      "从农舍走到田地、动物区、箱子、出货箱。堵住了就改这张图，别等游戏里再建。",
+      "先标不会动的地，再分区放大件，最后按一天的活走一遍。堵住了就改这张图，别等进游戏再建。",
+      "选你正在玩的那张农场。水、悬崖、桥和出口不会挪。农舍和出货箱当路线锚点，周围先别填满。",
+      "作物、动物、树木、储存、加工先各留一块，边界画宽一点。再放畜棚、鸡舍、棚屋和田地。小装饰最后填。",
+      "从农舍出发，再到田地、动物区、箱子、出货箱。哪条路堵住了，就改这张图，别等游戏里拆。",
     ],
     closingCtaHeading: "先在这页摆完，再进游戏建。",
     closingCtaSupportLine: "不用注册。方案留在这台浏览器。",
@@ -1000,7 +999,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
       "/homepage/why-choose/fourcorners-balanced-emerald.webp",
       "/homepage/why-choose/fourcorners-coop-hallofax.webp",
-      "/homepage/how-to-pixel-farm.webp",
     ],
     faqHeading: "开始前先看这几件事",
     faqAnswers: [
@@ -1181,6 +1179,7 @@ function expectStaticHomepageContent(
   for (const sectionImageSource of expectedHomepage.sectionImageSources) {
     expect(staticPageHtml).toContain(`src="${sectionImageSource}"`);
   }
+  expect(staticPageHtml).not.toContain("/homepage/how-to-pixel-farm.webp");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guides");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guide-links");
   expect(staticPageHtml).not.toContain("data-homepage-planning-guide");

@@ -1,12 +1,35 @@
+import { LayoutGrid, Mountain, Route } from "lucide-react";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
-
-const howToImageSource = "/homepage/how-to-pixel-farm.webp";
-const howToImageWidth = 1672;
-const howToImageHeight = 941;
+import { HowItWorks, type HowItWorksStep } from "./how-it-works";
 
 type HomepageHowToSectionProps = Readonly<{
   copy: HomepageCopy["howTo"];
 }>;
+
+function createHowItWorksSteps(
+  copySteps: HomepageCopy["howTo"]["steps"],
+): readonly [HowItWorksStep, HowItWorksStep, HowItWorksStep] {
+  return [
+    {
+      icon: <Mountain className="h-6 w-6" />,
+      title: copySteps[0].title,
+      description: copySteps[0].description,
+      benefits: copySteps[0].benefits,
+    },
+    {
+      icon: <LayoutGrid className="h-6 w-6" />,
+      title: copySteps[1].title,
+      description: copySteps[1].description,
+      benefits: copySteps[1].benefits,
+    },
+    {
+      icon: <Route className="h-6 w-6" />,
+      title: copySteps[2].title,
+      description: copySteps[2].description,
+      benefits: copySteps[2].benefits,
+    },
+  ];
+}
 
 export function HomepageHowToSection({ copy }: HomepageHowToSectionProps) {
   return (
@@ -16,32 +39,13 @@ export function HomepageHowToSection({ copy }: HomepageHowToSectionProps) {
       data-homepage-how-to
       id="how-to"
     >
-      <h2 id="homepage-how-to-heading">{copy.heading}</h2>
-      <div data-homepage-section-layout>
-        <figure data-homepage-section-media>
-          <img
-            alt={copy.imageAlt}
-            decoding="async"
-            height={howToImageHeight}
-            loading="lazy"
-            src={howToImageSource}
-            width={howToImageWidth}
-          />
-        </figure>
-        <ol data-homepage-section-list>
-          {copy.steps.map((step, stepIndex) => (
-            <li key={step.title}>
-              <span aria-hidden="true" data-homepage-section-index>
-                {String(stepIndex + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
+      <HowItWorks
+        className="px-0 py-0 sm:py-0"
+        description={copy.description}
+        heading={copy.heading}
+        headingId="homepage-how-to-heading"
+        steps={createHowItWorksSteps(copy.steps)}
+      />
     </section>
   );
 }

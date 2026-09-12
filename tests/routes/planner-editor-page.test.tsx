@@ -30,16 +30,51 @@ const whyChooseImageSources = [
   "/homepage/why-choose/fourcorners-coop-hallofax.webp",
 ] as const;
 
+function readHomepageHeaderMarkup(pageMarkup: string): string {
+  const homepageHeaderAttributePosition = pageMarkup.indexOf(
+    "data-homepage-header",
+  );
+  if (homepageHeaderAttributePosition < 0) {
+    throw new Error(
+      "Cannot read homepage header: data-homepage-header is missing from markup.",
+    );
+  }
+
+  const homepageHeaderEnd = pageMarkup.indexOf(
+    "</header>",
+    homepageHeaderAttributePosition,
+  );
+  if (homepageHeaderEnd < 0) {
+    throw new Error(
+      "Cannot read homepage header: closing </header> is missing after data-homepage-header.",
+    );
+  }
+
+  return pageMarkup.slice(homepageHeaderAttributePosition, homepageHeaderEnd);
+}
+
 describe("planner editor page", () => {
   it("renders the React planner shell without retired runtime markup", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
 
     expect(plannerPageMarkup).toContain("data-homepage-shell");
     expect(plannerPageMarkup).toContain("data-homepage-header");
-    expect(plannerPageMarkup).toContain('data-slot="navigation-menu"');
-    expect(plannerPageMarkup).toContain('data-slot="navigation-menu-list"');
-    expect(plannerPageMarkup.match(/data-slot="navigation-menu-item"/g) ?? []).toHaveLength(3);
-    expect(plannerPageMarkup.match(/data-slot="navigation-menu-link"/g) ?? []).toHaveLength(3);
+    const homepageHeaderMarkup = readHomepageHeaderMarkup(plannerPageMarkup);
+    expect(homepageHeaderMarkup).toMatch(
+      /<a[^>]*data-homepage-brand[^>]*href="#planner"/,
+    );
+    expect(homepageHeaderMarkup).toContain("data-homepage-navigation-links");
+    expect(homepageHeaderMarkup).toContain('href="#capabilities"');
+    expect(homepageHeaderMarkup).toContain('href="#faq"');
+    expect(homepageHeaderMarkup).toContain('href="/blog"');
+    expect(homepageHeaderMarkup).toContain("Features");
+    expect(homepageHeaderMarkup).toContain("FAQ");
+    expect(homepageHeaderMarkup).toContain("Blog");
+    expect(homepageHeaderMarkup).toContain("data-homepage-header-action");
+    expect(homepageHeaderMarkup).toContain("Open planner");
+    expect(homepageHeaderMarkup).toContain("data-homepage-language-switcher");
+    expect(homepageHeaderMarkup).toContain("data-homepage-language-menu");
+    expect(homepageHeaderMarkup).toContain("data-homepage-language-option");
     expect(plannerPageMarkup).toContain("data-homepage-hero");
     expect(plannerPageMarkup).toContain("data-homepage-hero-content");
     expect(plannerPageMarkup).toContain("data-homepage-hero-emphasis");
@@ -51,7 +86,7 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain('data-homepage-closing-cta="true"');
     expect(plannerPageMarkup).toContain("What the planner does");
     expect(plannerPageMarkup).toContain("Why use this planner");
-    expect(plannerPageMarkup).toContain("How to use it");
+    expect(plannerPageMarkup).toContain("Lay out the farm in three passes");
     expect(plannerPageMarkup).toContain(
       "Finish the layout on this page, then build in-game.",
     );
@@ -63,11 +98,12 @@ describe("planner editor page", () => {
     for (const whyChooseImageSource of whyChooseImageSources) {
       expect(plannerPageMarkup).toContain(`src="${whyChooseImageSource}"`);
     }
-    expect(plannerPageMarkup).toContain(
+    expect(plannerPageMarkup).not.toContain(
       'src="/homepage/how-to-pixel-farm.webp"',
     );
-    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toHaveLength(2);
-    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toHaveLength(2);
+    expect(plannerPageMarkup).toContain('id="homepage-how-to-heading"');
+    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toHaveLength(1);
+    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toHaveLength(1);
     expect(plannerPageMarkup).not.toContain("data-homepage-planning-guide");
     expect(plannerPageMarkup).not.toContain("stardew-valley-planner-layout");
     const homepageSectionMarkers = [
@@ -104,7 +140,7 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(4);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/blog"[^>]*>Blog<\/a>/);
     expect(plannerPageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
-    expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Open planner<\/a>/);
+    expect(plannerPageMarkup).toContain("Open planner");
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Start planning<\/a>/);
     expect(plannerPageMarkup).not.toContain("data-homepage-farm-guide-link");
     expect(plannerPageMarkup).not.toContain("data-homepage-farm-comparison-link");
@@ -205,28 +241,30 @@ describe("planner editor page", () => {
         previousHomepageSectionPosition = homepageSectionPosition;
       }
 
-      const imageAndTextSections = [
-        {
-          marker: 'data-homepage-features="true"',
-          heading: homepageCopy.features.heading,
-          imageAlt: homepageCopy.features.imageAlt,
-          items: homepageCopy.features.items,
-        },
-        {
-          marker: 'data-homepage-how-to="true"',
-          heading: homepageCopy.howTo.heading,
-          imageAlt: homepageCopy.howTo.imageAlt,
-          items: homepageCopy.howTo.steps,
-        },
-      ] as const;
+      expect(homepageMarkup).toContain('data-homepage-features="true"');
+      expect(homepageMarkup).toContain(homepageCopy.features.heading);
+      expect(homepageMarkup).toContain(homepageCopy.features.imageAlt);
+      for (const featureItem of homepageCopy.features.items) {
+        expect(homepageMarkup).toContain(featureItem.title);
+        expect(homepageMarkup).toContain(featureItem.description);
+      }
 
-      for (const imageAndTextSection of imageAndTextSections) {
-        expect(homepageMarkup).toContain(imageAndTextSection.marker);
-        expect(homepageMarkup).toContain(imageAndTextSection.heading);
-        expect(homepageMarkup).toContain(imageAndTextSection.imageAlt);
-        for (const item of imageAndTextSection.items) {
-          expect(homepageMarkup).toContain(item.title);
-          expect(homepageMarkup).toContain(item.description);
+      expect(homepageMarkup).toContain('data-homepage-how-to="true"');
+      expect(homepageMarkup).toContain('id="how-to"');
+      expect(homepageMarkup).toContain('id="homepage-how-to-heading"');
+      expect(homepageMarkup).toContain(homepageCopy.howTo.heading);
+      expect(homepageMarkup).toContain(
+        homepageCopy.howTo.description.replaceAll("'", "&#x27;"),
+      );
+      expect(homepageMarkup).not.toContain("/homepage/how-to-pixel-farm.webp");
+      expect(homepageCopy.howTo.steps).toHaveLength(3);
+      for (const howToStep of homepageCopy.howTo.steps) {
+        expect(homepageMarkup).toContain(howToStep.title.replaceAll("'", "&#x27;"));
+        expect(homepageMarkup).toContain(howToStep.description);
+        for (const howToBenefit of howToStep.benefits) {
+          expect(homepageMarkup).toContain(
+            howToBenefit.replaceAll("'", "&#x27;"),
+          );
         }
       }
 
@@ -387,14 +425,27 @@ describe("planner editor page", () => {
 
     expect(homepageMarkup.match(/href="#planner"/g)).toHaveLength(4);
     expect(homepageMarkup.match(/href="\/zh\?farmType=forest#planner"/g)).toHaveLength(1);
+    const homepageHeaderMarkup = readHomepageHeaderMarkup(homepageMarkup);
     expect(homepageMarkup).toMatch(
       /<a[^>]*data-homepage-brand[^>]*href="#planner"/,
     );
-    expect(homepageMarkup).toMatch(/<a[^>]*href="\/zh\/blog"[^>]*>博客<\/a>/);
-    expect(homepageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>规划器<\/a>/);
-    expect(homepageMarkup).toMatch(
-      /<a[^>]*href="#planner"[^>]*>打开规划器<\/a>/,
+    expect(homepageHeaderMarkup).toContain("data-homepage-navigation-links");
+    expect(homepageHeaderMarkup).toContain('href="#capabilities"');
+    expect(homepageHeaderMarkup).toContain('href="#faq"');
+    expect(homepageHeaderMarkup).toContain('href="/zh/blog"');
+    expect(homepageHeaderMarkup).toContain("功能介绍");
+    expect(homepageHeaderMarkup).toContain("常见问题");
+    expect(homepageHeaderMarkup).toContain("博客");
+    expect(homepageHeaderMarkup).toContain("data-homepage-header-action");
+    expect(homepageHeaderMarkup).toContain("打开规划器");
+    expect(homepageHeaderMarkup).toContain("data-homepage-language-switcher");
+    expect(homepageHeaderMarkup).toContain("data-homepage-language-menu");
+    expect(homepageHeaderMarkup).toContain("data-homepage-language-option");
+    expect(homepageMarkup).toContain(
+      '<a href="/zh/blog">博客</a>',
     );
+    expect(homepageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>规划器<\/a>/);
+    expect(homepageMarkup).toContain("打开规划器");
     expect(homepageMarkup).toMatch(
       /<a[^>]*href="#planner"[^>]*>开始规划<\/a>/,
     );
