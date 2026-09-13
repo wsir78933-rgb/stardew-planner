@@ -27,6 +27,8 @@ import { BestSpringCropStardewEnglishArticle } from "../../src/blog/articles/bes
 import { BestSpringCropStardewChineseArticle } from "../../src/blog/articles/best-spring-crop-stardew.zh";
 import { HowToEarnMoneyStardewEnglishArticle } from "../../src/blog/articles/how-to-earn-money-stardew.en";
 import { HowToEarnMoneyStardewChineseArticle } from "../../src/blog/articles/how-to-earn-money-stardew.zh";
+import { RancherOrTillerStardewEnglishArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.en";
+import { RancherOrTillerStardewChineseArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1126,6 +1128,172 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       },
     ],
   },
+  {
+    Article: RancherOrTillerStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-13 against Stardew Valley wiki pages listed below (1.6.15). The planner is a placement sketch, not a profession picker.",
+    heading: "Sources",
+    name: "English rancher or tiller article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Skills", label: "Stardew Valley Wiki: Skills" },
+      { href: "https://stardewvalleywiki.com/Farming", label: "Stardew Valley Wiki: Farming" },
+      {
+        href: "https://stardewvalleywiki.com/Artisan_Goods",
+        label: "Stardew Valley Wiki: Artisan Goods",
+        note: "(Artisan +40%; oil and coffee excepted)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Mayonnaise",
+        label: "Stardew Valley Wiki: Mayonnaise",
+        note: "(190g → Rancher 228g / Artisan 266g)",
+      },
+      { href: "https://stardewvalleywiki.com/Cheese", label: "Stardew Valley Wiki: Cheese" },
+      { href: "https://stardewvalleywiki.com/Cloth", label: "Stardew Valley Wiki: Cloth" },
+      { href: "https://stardewvalleywiki.com/Egg", label: "Stardew Valley Wiki: Egg" },
+      { href: "https://stardewvalleywiki.com/Milk", label: "Stardew Valley Wiki: Milk" },
+      {
+        href: "https://stardewvalleywiki.com/Truffle",
+        label: "Stardew Valley Wiki: Truffle",
+        note: "(no Rancher)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Truffle_Oil",
+        label: "Stardew Valley Wiki: Truffle Oil",
+        note: "(Artisan column only)",
+      },
+      { href: "https://stardewvalleywiki.com/Flowers", label: "Stardew Valley Wiki: Flowers" },
+      { href: "https://stardewvalleywiki.com/Fruits", label: "Stardew Valley Wiki: Fruits" },
+      {
+        href: "https://stardewvalleywiki.com/Coffee_Bean",
+        label: "Stardew Valley Wiki: Coffee Bean",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Sweet_Gem_Berry",
+        label: "Stardew Valley Wiki: Sweet Gem Berry",
+      },
+      { href: "https://stardewvalleywiki.com/Oil", label: "Stardew Valley Wiki: Oil" },
+      { href: "https://stardewvalleywiki.com/Honey", label: "Stardew Valley Wiki: Honey" },
+      { href: "https://stardewvalleywiki.com/Wine", label: "Stardew Valley Wiki: Wine" },
+      {
+        href: "https://stardewvalleywiki.com/The_Sewers",
+        label: "Stardew Valley Wiki: The Sewers",
+        note: "(Statue of Uncertainty, 10,000g)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Mastery_Cave",
+        label: "Stardew Valley Wiki: Mastery Cave",
+      },
+      { href: "https://stardewvalleywiki.com/Farm_Maps", label: "Stardew Valley Wiki: Farm Maps" },
+      { href: "https://stardewvalleywiki.com/Incubator", label: "Stardew Valley Wiki: Incubator" },
+      { href: "/#planner", label: "Stardew Valley Planner" },
+    ],
+  },
+  {
+    Article: RancherOrTillerStardewChineseArticle,
+    checkedLabel:
+      "2026-09-13 对照下方星露谷中文维基（条目版本含 1.6.15 相关页）。规划器只是摆放草图，不能替你选职业。",
+    heading: "来源",
+    name: "Chinese rancher or tiller article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/技能",
+        label: "星露谷物语官方中文维基：技能",
+        note: "（农耕人 / 畜牧人、10 级分支、头衔、改职业）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/耕种",
+        label: "星露谷物语官方中文维基：耕种",
+        note: "（两列锁定、隐藏品质）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/工匠物品",
+        label: "星露谷物语官方中文维基：工匠物品",
+        note: "（工匠 +40%；醋、油、咖啡、树浆例外）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/蔬菜",
+        label: "星露谷物语官方中文维基：蔬菜",
+        note: "（农耕人 +10%）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/水果",
+        label: "星露谷物语官方中文维基：水果",
+        note: "（非采集水果加农耕人）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/花",
+        label: "星露谷物语官方中文维基：花",
+        note: "（甜豌豆、番红花不加农耕人）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/咖啡豆",
+        label: "星露谷物语官方中文维基：咖啡豆",
+        note: "（不加农耕人）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/松露",
+        label: "星露谷物语官方中文维基：松露",
+        note: "（不加畜牧人）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/松露油",
+        label: "星露谷物语官方中文维基：松露油",
+        note: "（工匠列，无畜牧人列）",
+      },
+      { href: "https://zh.stardewvalleywiki.com/蛋", label: "星露谷物语官方中文维基：蛋" },
+      {
+        href: "https://zh.stardewvalleywiki.com/蛋黄酱",
+        label: "星露谷物语官方中文维基：蛋黄酱",
+        note: "（190→畜牧人 228 / 工匠 266）",
+      },
+      { href: "https://zh.stardewvalleywiki.com/牛奶", label: "星露谷物语官方中文维基：牛奶" },
+      { href: "https://zh.stardewvalleywiki.com/奶酪", label: "星露谷物语官方中文维基：奶酪" },
+      { href: "https://zh.stardewvalleywiki.com/布料", label: "星露谷物语官方中文维基：布料" },
+      { href: "https://zh.stardewvalleywiki.com/蜂蜜", label: "星露谷物语官方中文维基：蜂蜜" },
+      { href: "https://zh.stardewvalleywiki.com/果酒", label: "星露谷物语官方中文维基：果酒" },
+      { href: "https://zh.stardewvalleywiki.com/果酱", label: "星露谷物语官方中文维基：果酱" },
+      {
+        href: "https://zh.stardewvalleywiki.com/油",
+        label: "星露谷物语官方中文维基：油",
+        note: "（不加工匠）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/咖啡",
+        label: "星露谷物语官方中文维基：咖啡",
+        note: "（不加工匠）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/生长激素",
+        label: "星露谷物语官方中文维基：生长激素",
+        note: "（有农业学家共 20%）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/高级生长激素",
+        label: "星露谷物语官方中文维基：高级生长激素",
+        note: "（有农业学家共 35%）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/顶级生长激素",
+        label: "星露谷物语官方中文维基：顶级生长激素",
+        note: "（有农业学家共 43%）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/下水道",
+        label: "星露谷物语官方中文维基：下水道",
+        note: "（不确定雕像 10,000 金）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/精通山洞",
+        label: "星露谷物语官方中文维基：精通山洞",
+        note: "（耕种精通不是第二职业）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/农场",
+        label: "星露谷物语官方中文维基：农场",
+        note: "（草原农场开局鸡舍不是必须畜牧人）",
+      },
+    ],
+  },
 ];
 
 function getSourceSectionMarkup(articleMarkup: string, articleName: string) {
@@ -1219,3 +1387,5 @@ it("preserves each localized article's source links, labels, notes, and order", 
     }
   }
 });
+
+

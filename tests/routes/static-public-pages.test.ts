@@ -232,6 +232,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/how-to-earn-money-stardew-cover.webp",
         alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
       },
+      {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
+      },
     ],
   },
   {
@@ -628,6 +632,36 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/rancher-or-tiller-stardew",
+    staticPageFile: "rancher-or-tiller-stardew.html",
+    heading: "Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair",
+    metadata: {
+      title: "Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair",
+      description:
+        "Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.",
+    },
+
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "This click locks your Farming 10 pair",
+      "It does not pick professions",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/best-spring-crop-stardew",
+    ],
+  },
+
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -686,6 +720,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/how-to-earn-money-stardew-cover.webp",
         alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
+      },
+      {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
       },
     ],
   },
@@ -1074,7 +1112,38 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/zh/sprinkler-stardew",
     ],
   },
+  {
+    pathname: "/zh/rancher-or-tiller-stardew",
+    staticPageFile: "zh/rancher-or-tiller-stardew.html",
+    heading: "星露谷农耕人还是畜牧人：20%和10%加的不是一类货",
+    metadata: {
+      title: "星露谷农耕人还是畜牧人：20%和10%加的不是一类货",
+      description:
+        "过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
+    },
+
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "5 级这一选会锁住 10 级",
+      "白天技能栏里选不了",
+    ],
+    requiredHrefs: [
+      "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%8A%80%E8%83%BD&variant=zh-cn",
+      "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E8%80%95%E7%A7%8D&variant=zh-cn",
+      "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E8%9B%8B%E9%BB%84%E9%85%B1&variant=zh-cn",
+    ],
+  },
 ];
+
 
 const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
   {

@@ -27,6 +27,8 @@ import { BestSpringCropStardewEnglishArticle } from "../../src/blog/articles/bes
 import { BestSpringCropStardewChineseArticle } from "../../src/blog/articles/best-spring-crop-stardew.zh";
 import { HowToEarnMoneyStardewEnglishArticle } from "../../src/blog/articles/how-to-earn-money-stardew.en";
 import { HowToEarnMoneyStardewChineseArticle } from "../../src/blog/articles/how-to-earn-money-stardew.zh";
+import { RancherOrTillerStardewEnglishArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.en";
+import { RancherOrTillerStardewChineseArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -53,6 +55,7 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
   { Component: MapleTreeStardewEnglishArticle, slug: "maple-tree-stardew" },
   { Component: BestSpringCropStardewEnglishArticle, slug: "best-spring-crop-stardew" },
   { Component: HowToEarnMoneyStardewEnglishArticle, slug: "how-to-earn-money-stardew" },
+  { Component: RancherOrTillerStardewEnglishArticle, slug: "rancher-or-tiller-stardew" },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -75,6 +78,7 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   { Component: MapleTreeStardewChineseArticle, slug: "maple-tree-stardew" },
   { Component: BestSpringCropStardewChineseArticle, slug: "best-spring-crop-stardew" },
   { Component: HowToEarnMoneyStardewChineseArticle, slug: "how-to-earn-money-stardew" },
+  { Component: RancherOrTillerStardewChineseArticle, slug: "rancher-or-tiller-stardew" },
 ];
 
 const englishAuthorFacingPatterns = [

@@ -112,6 +112,7 @@ const localizedBlogPostPaths: Readonly<
     "maple-tree-stardew": "/maple-tree-stardew",
     "best-spring-crop-stardew": "/best-spring-crop-stardew",
     "how-to-earn-money-stardew": "/how-to-earn-money-stardew",
+    "rancher-or-tiller-stardew": "/rancher-or-tiller-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -128,6 +129,7 @@ const localizedBlogPostPaths: Readonly<
     "maple-tree-stardew": "/zh/maple-tree-stardew",
     "best-spring-crop-stardew": "/zh/best-spring-crop-stardew",
     "how-to-earn-money-stardew": "/zh/how-to-earn-money-stardew",
+    "rancher-or-tiller-stardew": "/zh/rancher-or-tiller-stardew",
   },
 };
 

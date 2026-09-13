@@ -54,6 +54,18 @@ const year1GoldArticleMediaExpectations = [
     expectedDimensions: { height: 941, width: 1672 },
   },
 ] as const;
+const rancherOrTillerArticleMediaExpectations = [
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/rancher-or-tiller-profession-tree-en.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/rancher-or-tiller-profession-tree-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+] as const;
 
 type PngChunk = Readonly<{
   payload: Buffer;
@@ -299,7 +311,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all thirteen blog identities", () => {
+it("ships budget-compliant WebP covers for all fourteen blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -317,6 +329,9 @@ it("ships budget-compliant WebP covers for all thirteen blog identities", () => 
   const mapleTreeImage = readWebpDimensions("blog/maple-tree-stardew-cover.webp");
   const springCropImage = readWebpDimensions("blog/best-spring-crop-stardew-cover.webp");
   const year1GoldImage = readWebpDimensions("blog/how-to-earn-money-stardew-cover.webp");
+  const rancherOrTillerImage = readWebpDimensions(
+    "blog/rancher-or-tiller-stardew-cover.webp",
+  );
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -331,6 +346,7 @@ it("ships budget-compliant WebP covers for all thirteen blog identities", () => 
   expect(mapleTreeImage).toMatchObject(expectedCoverDimensions);
   expect(springCropImage).toMatchObject(expectedCoverDimensions);
   expect(year1GoldImage).toMatchObject(expectedCoverDimensions);
+  expect(rancherOrTillerImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
@@ -343,6 +359,7 @@ it("ships budget-compliant WebP covers for all thirteen blog identities", () => 
   expect(mapleTreeImage.width / mapleTreeImage.height).toBeCloseTo(16 / 9, 2);
   expect(springCropImage.width / springCropImage.height).toBeCloseTo(16 / 9, 2);
   expect(year1GoldImage.width / year1GoldImage.height).toBeCloseTo(16 / 9, 2);
+  expect(rancherOrTillerImage.width / rancherOrTillerImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
@@ -356,6 +373,7 @@ it("ships budget-compliant WebP covers for all thirteen blog identities", () => 
   expect(mapleTreeImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(springCropImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(year1GoldImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(rancherOrTillerImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
@@ -398,6 +416,16 @@ it("ships budget-compliant WebP media for the spring crop guide", () => {
 
 it("ships budget-compliant WebP media for the year 1 gold guide", () => {
   for (const mediaExpectation of year1GoldArticleMediaExpectations) {
+    const image = readWebpDimensions(mediaExpectation.relativeImagePath);
+
+    expect(image).toMatchObject(mediaExpectation.expectedDimensions);
+    expect(image.width / image.height).toBeCloseTo(16 / 9, 2);
+    expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+});
+
+it("ships budget-compliant WebP media for the rancher or tiller guide", () => {
+  for (const mediaExpectation of rancherOrTillerArticleMediaExpectations) {
     const image = readWebpDimensions(mediaExpectation.relativeImagePath);
 
     expect(image).toMatchObject(mediaExpectation.expectedDimensions);

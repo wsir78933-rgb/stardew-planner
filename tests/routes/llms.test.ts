@@ -87,6 +87,13 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶](https://stardewvalleyplanner.art/zh/how-to-earn-money-stardew): 12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
   );
+  expect(llmsText).toContain(
+    "[Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair](https://stardewvalleyplanner.art/rancher-or-tiller-stardew): Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷农耕人还是畜牧人：20%和10%加的不是一类货](https://stardewvalleyplanner.art/zh/rancher-or-tiller-stardew): 过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
+  );
+
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

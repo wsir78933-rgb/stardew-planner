@@ -12,6 +12,7 @@ export const blogPostSlugs = [
   "maple-tree-stardew",
   "best-spring-crop-stardew",
   "how-to-earn-money-stardew",
+  "rancher-or-tiller-stardew",
 ] as const;
 
 export type BlogPostSlug = (typeof blogPostSlugs)[number];

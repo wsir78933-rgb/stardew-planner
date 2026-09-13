@@ -26,6 +26,8 @@ import { BestSpringCropStardewEnglishArticle } from "./articles/best-spring-crop
 import { BestSpringCropStardewChineseArticle } from "./articles/best-spring-crop-stardew.zh";
 import { HowToEarnMoneyStardewEnglishArticle } from "./articles/how-to-earn-money-stardew.en";
 import { HowToEarnMoneyStardewChineseArticle } from "./articles/how-to-earn-money-stardew.zh";
+import { RancherOrTillerStardewEnglishArticle } from "./articles/rancher-or-tiller-stardew.en";
+import { RancherOrTillerStardewChineseArticle } from "./articles/rancher-or-tiller-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -260,6 +262,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: HowToEarnMoneyStardewEnglishArticle,
     },
+    {
+      slug: "rancher-or-tiller-stardew",
+      title: "Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair",
+      description:
+        "Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
+      },
+      featured: true,
+      Content: RancherOrTillerStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -455,6 +472,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: HowToEarnMoneyStardewChineseArticle,
+    },
+    {
+      slug: "rancher-or-tiller-stardew",
+      title: "星露谷农耕人还是畜牧人：20%和10%加的不是一类货",
+      description:
+        "过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 9,
+      coverImage: {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
+      },
+      featured: true,
+      Content: RancherOrTillerStardewChineseArticle,
     },
   ],
 };

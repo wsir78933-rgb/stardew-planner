@@ -24,6 +24,7 @@ const expectedSlugs = [
   "maple-tree-stardew",
   "best-spring-crop-stardew",
   "how-to-earn-money-stardew",
+  "rancher-or-tiller-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -58,14 +59,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the thirteen canonical blog identities in publishing order", () => {
+it("keeps the fourteen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the twenty-six localized root-level canonical article paths", () => {
+it("publishes only the twenty-eight localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -80,6 +81,7 @@ it("publishes only the twenty-six localized root-level canonical article paths",
     "/maple-tree-stardew/",
     "/best-spring-crop-stardew/",
     "/how-to-earn-money-stardew/",
+    "/rancher-or-tiller-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -93,6 +95,7 @@ it("publishes only the twenty-six localized root-level canonical article paths",
     "/zh/maple-tree-stardew/",
     "/zh/best-spring-crop-stardew/",
     "/zh/how-to-earn-money-stardew/",
+    "/zh/rancher-or-tiller-stardew/",
   ]);
 });
 
@@ -332,6 +335,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
     },
   });
+  expect(englishPosts[13]).toMatchObject({
+    title: "Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair",
+    description:
+      "Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.",
+    readTimeMinutes: 11,
+    coverImage: {
+      src: "/blog/rancher-or-tiller-stardew-cover.webp",
+      alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
+    },
+  });
+  expect(chinesePosts[13]).toMatchObject({
+    title: "星露谷农耕人还是畜牧人：20%和10%加的不是一类货",
+    description:
+      "过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
+    readTimeMinutes: 9,
+    coverImage: {
+      src: "/blog/rancher-or-tiller-stardew-cover.webp",
+      alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -352,6 +375,7 @@ it("binds every localized post to its own original blog cover", () => {
     "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
     "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
     "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
+    "rancher-or-tiller-stardew": "/blog/rancher-or-tiller-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -450,7 +474,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: how-to-earn-money-stardew.",
+    "Expected: carpenter-stardew. Received: rancher-or-tiller-stardew.",
   );
 });
 

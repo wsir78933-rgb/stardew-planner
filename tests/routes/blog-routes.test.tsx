@@ -51,6 +51,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/maple-tree-stardew"');
   expect(indexMarkup).toContain('href="/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('href="/how-to-earn-money-stardew"');
+  expect(indexMarkup).toContain('href="/rancher-or-tiller-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -85,6 +86,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/maple-tree-stardew"');
   expect(indexMarkup).toContain('href="/zh/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('href="/zh/how-to-earn-money-stardew"');
+  expect(indexMarkup).toContain('href="/zh/rancher-or-tiller-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
