@@ -30,6 +30,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1](https://stardewvalleyplanner.art/best-spring-crop-stardew): There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.
 - [How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning](https://stardewvalleyplanner.art/how-to-earn-money-stardew): Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.
 - [Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair](https://stardewvalleyplanner.art/rancher-or-tiller-stardew): Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.
+- [Summer Crops in Stardew: Rank by the Shop You Can Open This Morning](https://stardewvalleyplanner.art/summer-crops-stardew): Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.
 
 ## 简体中文
 
@@ -59,3 +60,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷物语春天种什么：第一年草莓种子春13才卖](https://stardewvalleyplanner.art/zh/best-spring-crop-stardew): 春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。
 - [星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶](https://stardewvalleyplanner.art/zh/how-to-earn-money-stardew): 12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。
 - [星露谷农耕人还是畜牧人：20%和10%加的不是一类货](https://stardewvalleyplanner.art/zh/rancher-or-tiller-stardew): 过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。
+- [星露谷夏天种什么：按买得到的种子和浇得完的格子选](https://stardewvalleyplanner.art/zh/summer-crops-stardew): 夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。

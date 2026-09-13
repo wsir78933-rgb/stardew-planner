@@ -25,6 +25,7 @@ const expectedSlugs = [
   "best-spring-crop-stardew",
   "how-to-earn-money-stardew",
   "rancher-or-tiller-stardew",
+  "summer-crops-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -59,14 +60,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the fourteen canonical blog identities in publishing order", () => {
+it("keeps the fifteen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the twenty-eight localized root-level canonical article paths", () => {
+it("publishes only the thirty localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -82,6 +83,7 @@ it("publishes only the twenty-eight localized root-level canonical article paths
     "/best-spring-crop-stardew/",
     "/how-to-earn-money-stardew/",
     "/rancher-or-tiller-stardew/",
+    "/summer-crops-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -96,6 +98,7 @@ it("publishes only the twenty-eight localized root-level canonical article paths
     "/zh/best-spring-crop-stardew/",
     "/zh/how-to-earn-money-stardew/",
     "/zh/rancher-or-tiller-stardew/",
+    "/zh/summer-crops-stardew/",
   ]);
 });
 
@@ -355,6 +358,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
     },
   });
+  expect(englishPosts[14]).toMatchObject({
+    title: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+    description:
+      "Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
+    readTimeMinutes: 16,
+    coverImage: {
+      src: "/blog/summer-crops-stardew-cover.webp",
+      alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
+    },
+  });
+  expect(chinesePosts[14]).toMatchObject({
+    title: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+    description:
+      "夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
+    readTimeMinutes: 16,
+    coverImage: {
+      src: "/blog/summer-crops-stardew-cover.webp",
+      alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -376,6 +399,7 @@ it("binds every localized post to its own original blog cover", () => {
     "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
     "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
     "rancher-or-tiller-stardew": "/blog/rancher-or-tiller-stardew-cover.webp",
+    "summer-crops-stardew": "/blog/summer-crops-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -474,7 +498,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: rancher-or-tiller-stardew.",
+    "Expected: carpenter-stardew. Received: summer-crops-stardew.",
   );
 });
 

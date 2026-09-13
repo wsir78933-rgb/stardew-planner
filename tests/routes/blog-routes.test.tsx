@@ -52,6 +52,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('href="/how-to-earn-money-stardew"');
   expect(indexMarkup).toContain('href="/rancher-or-tiller-stardew"');
+  expect(indexMarkup).toContain('href="/summer-crops-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -87,6 +88,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('href="/zh/how-to-earn-money-stardew"');
   expect(indexMarkup).toContain('href="/zh/rancher-or-tiller-stardew"');
+  expect(indexMarkup).toContain('href="/zh/summer-crops-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -374,6 +376,41 @@ it("renders the paired spring crop article routes with locked metadata and one p
     title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
     description:
       "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
+  });
+});
+
+it("renders the paired summer crops article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "summer-crops-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "summer-crops-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+    description:
+      "Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+    description:
+      "夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
   });
 });
 

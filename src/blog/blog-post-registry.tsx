@@ -28,6 +28,8 @@ import { HowToEarnMoneyStardewEnglishArticle } from "./articles/how-to-earn-mone
 import { HowToEarnMoneyStardewChineseArticle } from "./articles/how-to-earn-money-stardew.zh";
 import { RancherOrTillerStardewEnglishArticle } from "./articles/rancher-or-tiller-stardew.en";
 import { RancherOrTillerStardewChineseArticle } from "./articles/rancher-or-tiller-stardew.zh";
+import { SummerCropsStardewEnglishArticle } from "./articles/summer-crops-stardew.en";
+import { SummerCropsStardewChineseArticle } from "./articles/summer-crops-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -277,6 +279,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: RancherOrTillerStardewEnglishArticle,
     },
+    {
+      slug: "summer-crops-stardew",
+      title: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+      description:
+        "Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
+      },
+      featured: true,
+      Content: SummerCropsStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -487,6 +504,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: RancherOrTillerStardewChineseArticle,
+    },
+    {
+      slug: "summer-crops-stardew",
+      title: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+      description:
+        "夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
+      },
+      featured: true,
+      Content: SummerCropsStardewChineseArticle,
     },
   ],
 };

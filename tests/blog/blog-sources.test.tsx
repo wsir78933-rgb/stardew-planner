@@ -29,6 +29,8 @@ import { HowToEarnMoneyStardewEnglishArticle } from "../../src/blog/articles/how
 import { HowToEarnMoneyStardewChineseArticle } from "../../src/blog/articles/how-to-earn-money-stardew.zh";
 import { RancherOrTillerStardewEnglishArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.en";
 import { RancherOrTillerStardewChineseArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.zh";
+import { SummerCropsStardewEnglishArticle } from "../../src/blog/articles/summer-crops-stardew.en";
+import { SummerCropsStardewChineseArticle } from "../../src/blog/articles/summer-crops-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1291,6 +1293,162 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
         href: "https://zh.stardewvalleywiki.com/农场",
         label: "星露谷物语官方中文维基：农场",
         note: "（草原农场开局鸡舍不是必须畜牧人）",
+      },
+    ],
+  },
+  {
+    Article: SummerCropsStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-13 against Stardew Valley Wiki Summer, Crops, and the crop pages listed below. Last-plant dates are derived as 28 minus grow days for a harvest on Summer 28, excluding the plant day, with no Speed-Gro and with watering on the plant day. Wiki gold/day figures are the Crops page values with no fertilizer and no Tiller. The planner is a placement sketch; it does not compute gold/day, last-plant dates, or giant 1% rolls.",
+    heading: "Sources",
+    name: "English summer crops article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Summer", label: "Stardew Valley Wiki: Summer" },
+      {
+        href: "https://stardewvalleywiki.com/Crops",
+        label: "Stardew Valley Wiki: Crops (gold per day)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Pierre%27s_General_Store",
+        label: "Stardew Valley Wiki: Pierre's General Store (Summer Stock)",
+      },
+      { href: "https://stardewvalleywiki.com/Starfruit", label: "Stardew Valley Wiki: Starfruit" },
+      {
+        href: "https://stardewvalleywiki.com/Starfruit_Seeds",
+        label: "Stardew Valley Wiki: Starfruit Seeds",
+      },
+      { href: "https://stardewvalleywiki.com/Oasis", label: "Stardew Valley Wiki: Oasis" },
+      { href: "https://stardewvalleywiki.com/The_Desert", label: "Stardew Valley Wiki: The Desert" },
+      { href: "https://stardewvalleywiki.com/Bus_Stop", label: "Stardew Valley Wiki: Bus Stop" },
+      { href: "https://stardewvalleywiki.com/Bundles", label: "Stardew Valley Wiki: Bundles (Vault)" },
+      { href: "https://stardewvalleywiki.com/Blueberry", label: "Stardew Valley Wiki: Blueberry" },
+      { href: "https://stardewvalleywiki.com/Melon", label: "Stardew Valley Wiki: Melon" },
+      { href: "https://stardewvalleywiki.com/Hops", label: "Stardew Valley Wiki: Hops" },
+      {
+        href: "https://stardewvalleywiki.com/Red_Cabbage",
+        label: "Stardew Valley Wiki: Red Cabbage",
+      },
+      { href: "https://stardewvalleywiki.com/Corn", label: "Stardew Valley Wiki: Corn" },
+      { href: "https://stardewvalleywiki.com/Tomato", label: "Stardew Valley Wiki: Tomato" },
+      { href: "https://stardewvalleywiki.com/Hot_Pepper", label: "Stardew Valley Wiki: Hot Pepper" },
+      { href: "https://stardewvalleywiki.com/Radish", label: "Stardew Valley Wiki: Radish" },
+      { href: "https://stardewvalleywiki.com/Wheat", label: "Stardew Valley Wiki: Wheat" },
+      { href: "https://stardewvalleywiki.com/Poppy", label: "Stardew Valley Wiki: Poppy" },
+      { href: "https://stardewvalleywiki.com/Sunflower", label: "Stardew Valley Wiki: Sunflower" },
+      {
+        href: "https://stardewvalleywiki.com/Summer_Squash",
+        label: "Stardew Valley Wiki: Summer Squash",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Summer_Squash_Seeds",
+        label: "Stardew Valley Wiki: Summer Squash Seeds",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Coffee_Bean",
+        label: "Stardew Valley Wiki: Coffee Bean",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Ancient_Fruit",
+        label: "Stardew Valley Wiki: Ancient Fruit",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Ancient_Seeds",
+        label: "Stardew Valley Wiki: Ancient Seeds",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/",
+        label: "Stardew Valley Planner (homepage)",
+        note: "This site, not the wiki.",
+      },
+    ],
+  },
+  {
+    Article: SummerCropsStardewChineseArticle,
+    checkedLabel:
+      "2026-09-13 对照下方星露谷中文维基农作物、夏季及各作物页。最晚播种由 28 减生长天数推算，不是维基字段。规划器只是摆放草图，不算金币、不浇水、不掷每天 1%。",
+    heading: "来源",
+    name: "Chinese summer crops article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/农作物",
+        label: "星露谷物语官方中文维基：农作物",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/夏季",
+        label: "星露谷物语官方中文维基：夏季",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/蓝莓",
+        label: "星露谷物语官方中文维基：蓝莓",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/蓝莓种子",
+        label: "星露谷物语官方中文维基：蓝莓种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/甜瓜",
+        label: "星露谷物语官方中文维基：甜瓜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/甜瓜种子",
+        label: "星露谷物语官方中文维基：甜瓜种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/啤酒花",
+        label: "星露谷物语官方中文维基：啤酒花",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/啤酒花种子",
+        label: "星露谷物语官方中文维基：啤酒花种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/淡啤酒",
+        label: "星露谷物语官方中文维基：淡啤酒",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/杨桃",
+        label: "星露谷物语官方中文维基：杨桃",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/杨桃种子",
+        label: "星露谷物语官方中文维基：杨桃种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/沙漠",
+        label: "星露谷物语官方中文维基：沙漠",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/绿洲",
+        label: "星露谷物语官方中文维基：绿洲",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/红叶卷心菜",
+        label: "星露谷物语官方中文维基：红叶卷心菜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/辣椒",
+        label: "星露谷物语官方中文维基：辣椒",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/玉米",
+        label: "星露谷物语官方中文维基：玉米",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/金皮西葫芦",
+        label: "星露谷物语官方中文维基：金皮西葫芦",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/收集包",
+        label: "星露谷物语官方中文维基：收集包",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/zh/how-to-earn-money-stardew",
+        label: "本站：星露谷第一年怎么赚钱（夏天：只种你浇得完的格子）",
+        note: "本站页面，不是维基。",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/zh",
+        label: "本站中文规划器首页（目录语言）",
       },
     ],
   },

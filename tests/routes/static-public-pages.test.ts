@@ -236,6 +236,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/rancher-or-tiller-stardew-cover.webp",
         alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
       },
+      {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
+      },
     ],
   },
   {
@@ -660,6 +664,37 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/best-spring-crop-stardew",
     ],
   },
+  {
+    pathname: "/summer-crops-stardew",
+    staticPageFile: "summer-crops-stardew.html",
+    heading: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+    metadata: {
+      title: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+      description:
+        "Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "There is no single best outdoor summer crop",
+      "It does not compute gold/day, last-plant dates, or giant 1% rolls",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/best-spring-crop-stardew",
+      "/how-to-earn-money-stardew",
+      "/sprinkler-stardew",
+      "/glasshouse-stardew-valley",
+    ],
+  },
 
   {
     pathname: "/zh/blog",
@@ -724,6 +759,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/rancher-or-tiller-stardew-cover.webp",
         alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
+      },
+      {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
       },
     ],
   },
@@ -1140,6 +1179,37 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E6%8A%80%E8%83%BD&variant=zh-cn",
       "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E8%80%95%E7%A7%8D&variant=zh-cn",
       "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E8%9B%8B%E9%BB%84%E9%85%B1&variant=zh-cn",
+    ],
+  },
+  {
+    pathname: "/zh/summer-crops-stardew",
+    staticPageFile: "zh/summer-crops-stardew.html",
+    heading: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+    metadata: {
+      title: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+      description:
+        "夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "星露谷夏天种什么，按你今年买得到的种子和浇得完的格子选",
+      "它不算金币、不浇水、不掷每天 1%",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/best-spring-crop-stardew",
+      "/zh/how-to-earn-money-stardew",
+      "/zh/sprinkler-stardew",
+      "/zh/glasshouse-stardew-valley",
     ],
   },
 ];

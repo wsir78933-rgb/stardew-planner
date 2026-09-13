@@ -93,7 +93,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷农耕人还是畜牧人：20%和10%加的不是一类货](https://stardewvalleyplanner.art/zh/rancher-or-tiller-stardew): 过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
   );
-
+  expect(llmsText).toContain(
+    "[Summer Crops in Stardew: Rank by the Shop You Can Open This Morning](https://stardewvalleyplanner.art/summer-crops-stardew): Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷夏天种什么：按买得到的种子和浇得完的格子选](https://stardewvalleyplanner.art/zh/summer-crops-stardew): 夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);
