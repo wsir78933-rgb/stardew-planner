@@ -111,9 +111,9 @@ body:has(> [data-homepage-shell]) [data-homepage-header] {
 
 body:has(> [data-homepage-shell]) [data-homepage-header] > nav {
   align-items: center;
-  display: flex;
+  display: grid;
   gap: 1rem;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   margin-inline: auto;
   max-width: 1280px;
   overflow: visible;
@@ -128,9 +128,19 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] a {
 
 body:has(> [data-homepage-shell]) [data-homepage-brand] {
   color: var(--foreground);
-  flex-shrink: 0;
+  justify-self: start;
   letter-spacing: -0.03em;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
   text-decoration: none;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-brand] span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-navigation-links],
@@ -847,6 +857,10 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 @media (max-width: 700px) {
+  body:has(> [data-homepage-shell]) [data-homepage-brand] span {
+    display: none;
+  }
+
   body:has(> [data-homepage-shell]) [data-homepage-hero] {
     padding-block: 4.5rem 3rem;
   }
@@ -1786,9 +1800,9 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 
 [data-public-page-shell] [data-public-page-header] > nav {
   align-items: center;
-  display: flex;
+  display: grid;
   gap: 1rem;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   margin-inline: auto;
   max-width: 1280px;
   overflow: visible;
@@ -1803,9 +1817,19 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 
 [data-public-page-shell] [data-public-page-brand] {
   color: inherit;
-  flex-shrink: 0;
+  justify-self: start;
   letter-spacing: -0.03em;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
   text-decoration: none;
+}
+
+[data-public-page-shell] [data-public-page-brand] span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 [data-public-page-shell] [data-public-page-navigation-links],
@@ -2086,6 +2110,10 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 }
 
 @media (max-width: 700px) {
+  [data-public-page-shell] [data-public-page-brand] span {
+    display: none;
+  }
+
   [data-public-page-shell] > [data-site-footer] {
     gap: 1.75rem;
     grid-template-columns: minmax(0, 1fr);

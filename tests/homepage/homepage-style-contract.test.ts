@@ -8,14 +8,48 @@ function readProjectFile(relativePath: string) {
   return readFileSync(resolve(process.cwd(), relativePath), "utf8");
 }
 
-test("limits header flex layout to the direct site navigation element", () => {
+test("centers the site navigation dock while keeping the brand on the left", () => {
   const styles = readProjectFile("app/globals.css");
+  const homepageNavRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-header\] > nav \{([\s\S]*?)\n\}/,
+  )?.[1];
+  const publicNavRule = styles.match(
+    /\[data-public-page-shell\] \[data-public-page-header\] > nav \{([\s\S]*?)\n\}/,
+  )?.[1];
+  const homepageBrandRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-brand\] \{([\s\S]*?)\n\}/,
+  )?.[1];
+  const publicBrandRule = styles.match(
+    /\[data-public-page-shell\] \[data-public-page-brand\] \{([\s\S]*?)\n\}/,
+  )?.[1];
 
   expect(styles).toContain(
     "body:has(> [data-homepage-shell]) [data-homepage-header] > nav {",
   );
   expect(styles).toContain(
     "[data-public-page-shell] [data-public-page-header] > nav {",
+  );
+  expect(homepageNavRule).toBeDefined();
+  expect(homepageNavRule).toContain("display: grid;");
+  expect(homepageNavRule).toContain(
+    "grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);",
+  );
+  expect(homepageNavRule).not.toContain("justify-content: space-between;");
+  expect(publicNavRule).toBeDefined();
+  expect(publicNavRule).toContain("display: grid;");
+  expect(publicNavRule).toContain(
+    "grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);",
+  );
+  expect(publicNavRule).not.toContain("justify-content: space-between;");
+  expect(homepageBrandRule).toContain("justify-self: start;");
+  expect(homepageBrandRule).toContain("min-width: 0;");
+  expect(publicBrandRule).toContain("justify-self: start;");
+  expect(publicBrandRule).toContain("min-width: 0;");
+  expect(styles).toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-brand] span {\n    display: none;\n  }",
+  );
+  expect(styles).toContain(
+    "[data-public-page-shell] [data-public-page-brand] span {\n    display: none;\n  }",
   );
 });
 
