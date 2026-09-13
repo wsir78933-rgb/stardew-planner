@@ -38,6 +38,7 @@ const expectedStaticPageFiles = [
   "stardew-valley-trees.html",
   "maple-tree-stardew.html",
   "best-spring-crop-stardew.html",
+  "how-to-earn-money-stardew.html",
   "zh/blog.html",
   "zh/blog/archive.html",
   "zh/carpenter-stardew.html",
@@ -52,6 +53,7 @@ const expectedStaticPageFiles = [
   "zh/stardew-valley-trees.html",
   "zh/maple-tree-stardew.html",
   "zh/best-spring-crop-stardew.html",
+  "zh/how-to-earn-money-stardew.html",
 ] as const;
 
 const expectedStaticHomepageFiles = [

@@ -23,6 +23,7 @@ const expectedSlugs = [
   "stardew-valley-trees",
   "maple-tree-stardew",
   "best-spring-crop-stardew",
+  "how-to-earn-money-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -57,14 +58,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twelve canonical blog identities in publishing order", () => {
+it("keeps the thirteen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the twenty-four localized root-level canonical article paths", () => {
+it("publishes only the twenty-six localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -78,6 +79,7 @@ it("publishes only the twenty-four localized root-level canonical article paths"
     "/stardew-valley-trees/",
     "/maple-tree-stardew/",
     "/best-spring-crop-stardew/",
+    "/how-to-earn-money-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -90,6 +92,7 @@ it("publishes only the twenty-four localized root-level canonical article paths"
     "/zh/stardew-valley-trees/",
     "/zh/maple-tree-stardew/",
     "/zh/best-spring-crop-stardew/",
+    "/zh/how-to-earn-money-stardew/",
   ]);
 });
 
@@ -309,6 +312,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
     },
   });
+  expect(englishPosts[12]).toMatchObject({
+    title: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
+    description:
+      "Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.",
+    readTimeMinutes: 16,
+    coverImage: {
+      src: "/blog/how-to-earn-money-stardew-cover.webp",
+      alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
+    },
+  });
+  expect(chinesePosts[12]).toMatchObject({
+    title: "星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶",
+    description:
+      "12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
+    readTimeMinutes: 16,
+    coverImage: {
+      src: "/blog/how-to-earn-money-stardew-cover.webp",
+      alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -328,6 +351,7 @@ it("binds every localized post to its own original blog cover", () => {
     "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
     "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
     "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
+    "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -426,7 +450,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: best-spring-crop-stardew.",
+    "Expected: carpenter-stardew. Received: how-to-earn-money-stardew.",
   );
 });
 

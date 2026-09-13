@@ -24,6 +24,8 @@ import { MapleTreeStardewEnglishArticle } from "./articles/maple-tree-stardew.en
 import { MapleTreeStardewChineseArticle } from "./articles/maple-tree-stardew.zh";
 import { BestSpringCropStardewEnglishArticle } from "./articles/best-spring-crop-stardew.en";
 import { BestSpringCropStardewChineseArticle } from "./articles/best-spring-crop-stardew.zh";
+import { HowToEarnMoneyStardewEnglishArticle } from "./articles/how-to-earn-money-stardew.en";
+import { HowToEarnMoneyStardewChineseArticle } from "./articles/how-to-earn-money-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -243,6 +245,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: BestSpringCropStardewEnglishArticle,
     },
+    {
+      slug: "how-to-earn-money-stardew",
+      title: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
+      description:
+        "Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
+      },
+      featured: true,
+      Content: HowToEarnMoneyStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -423,6 +440,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: BestSpringCropStardewChineseArticle,
+    },
+    {
+      slug: "how-to-earn-money-stardew",
+      title: "星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶",
+      description:
+        "12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
+      },
+      featured: true,
+      Content: HowToEarnMoneyStardewChineseArticle,
     },
   ],
 };

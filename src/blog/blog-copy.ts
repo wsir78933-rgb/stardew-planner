@@ -111,6 +111,7 @@ const localizedBlogPostPaths: Readonly<
     "stardew-valley-trees": "/stardew-valley-trees",
     "maple-tree-stardew": "/maple-tree-stardew",
     "best-spring-crop-stardew": "/best-spring-crop-stardew",
+    "how-to-earn-money-stardew": "/how-to-earn-money-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -126,6 +127,7 @@ const localizedBlogPostPaths: Readonly<
     "stardew-valley-trees": "/zh/stardew-valley-trees",
     "maple-tree-stardew": "/zh/maple-tree-stardew",
     "best-spring-crop-stardew": "/zh/best-spring-crop-stardew",
+    "how-to-earn-money-stardew": "/zh/how-to-earn-money-stardew",
   },
 };
 

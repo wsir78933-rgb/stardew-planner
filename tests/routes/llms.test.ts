@@ -81,6 +81,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷物语春天种什么：第一年草莓种子春13才卖](https://stardewvalleyplanner.art/zh/best-spring-crop-stardew): 春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
   );
+  expect(llmsText).toContain(
+    "[How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning](https://stardewvalleyplanner.art/how-to-earn-money-stardew): Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶](https://stardewvalleyplanner.art/zh/how-to-earn-money-stardew): 12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

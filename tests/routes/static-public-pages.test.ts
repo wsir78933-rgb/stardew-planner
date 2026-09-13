@@ -228,6 +228,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/best-spring-crop-stardew-cover.webp",
         alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
       },
+      {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
+      },
     ],
   },
   {
@@ -595,6 +599,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/how-to-earn-money-stardew",
+    staticPageFile: "how-to-earn-money-stardew.html",
+    heading: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
+    metadata: {
+      title: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
+      description:
+        "Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Spring 1–12: fish, plant, or buy the backpack",
+      "It does not earn gold",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/best-spring-crop-stardew",
+      "/sprinkler-stardew",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -649,6 +682,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/best-spring-crop-stardew-cover.webp",
         alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
+      },
+      {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
       },
     ],
   },
@@ -1005,6 +1042,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
     requiredHrefs: [
       "/zh#planner",
+      "/zh/sprinkler-stardew",
+    ],
+  },
+  {
+    pathname: "/zh/how-to-earn-money-stardew",
+    staticPageFile: "zh/how-to-earn-money-stardew.html",
+    heading: "星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶",
+    metadata: {
+      title: "星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶",
+      description:
+        "12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
+      },
+    ],
+    requiredBodyPhrases: [
+      "春 1 到春 12：下一步是钓鱼、种田，还是买背包",
+      "不算金币",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/best-spring-crop-stardew",
       "/zh/sprinkler-stardew",
     ],
   },

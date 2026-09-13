@@ -25,6 +25,8 @@ import { MapleTreeStardewEnglishArticle } from "../../src/blog/articles/maple-tr
 import { MapleTreeStardewChineseArticle } from "../../src/blog/articles/maple-tree-stardew.zh";
 import { BestSpringCropStardewEnglishArticle } from "../../src/blog/articles/best-spring-crop-stardew.en";
 import { BestSpringCropStardewChineseArticle } from "../../src/blog/articles/best-spring-crop-stardew.zh";
+import { HowToEarnMoneyStardewEnglishArticle } from "../../src/blog/articles/how-to-earn-money-stardew.en";
+import { HowToEarnMoneyStardewChineseArticle } from "../../src/blog/articles/how-to-earn-money-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -907,6 +909,220 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "/zh/glasshouse-stardew-valley",
         label: "星露谷物语温室",
+      },
+    ],
+  },
+  {
+    Article: HowToEarnMoneyStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-13 against Stardew Valley wiki pages listed below (1.6 content including Fish Smoker). The planner is a placement sketch, not a gold calculator.",
+    heading: "Sources",
+    name: "English year 1 gold article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Gold",
+        label: "Stardew Valley Wiki: Gold",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Day_Cycle",
+        label: "Stardew Valley Wiki: Day Cycle",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fishing",
+        label: "Stardew Valley Wiki: Fishing",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fish_Shop",
+        label: "Stardew Valley Wiki: Fish Shop",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fish_Smoker",
+        label: "Stardew Valley Wiki: Fish Smoker",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Inventory",
+        label: "Stardew Valley Wiki: Inventory",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Pierre%27s_General_Store",
+        label: "Stardew Valley Wiki: Pierre's General Store",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Watering_Cans",
+        label: "Stardew Valley Wiki: Watering Cans",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Energy",
+        label: "Stardew Valley Wiki: Energy",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Potato",
+        label: "Stardew Valley Wiki: Potato",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Strawberry",
+        label: "Stardew Valley Wiki: Strawberry",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Egg_Festival",
+        label: "Stardew Valley Wiki: Egg Festival",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Crops",
+        label: "Stardew Valley Wiki: Crops",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Farming",
+        label: "Stardew Valley Wiki: Farming",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Keg",
+        label: "Stardew Valley Wiki: Keg",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Preserves_Jar",
+        label: "Stardew Valley Wiki: Preserves Jar",
+      },
+      {
+        href: "https://stardewvalleywiki.com/The_Mines",
+        label: "Stardew Valley Wiki: The Mines",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Blacksmith",
+        label: "Stardew Valley Wiki: Blacksmith",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Greenhouse",
+        label: "Stardew Valley Wiki: Greenhouse",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Bundles",
+        label: "Stardew Valley Wiki: Bundles",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Joja_Community_Development_Form",
+        label: "Stardew Valley Wiki: Joja Community Development Form",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Skills",
+        label: "Stardew Valley Wiki: Skills",
+      },
+    ],
+  },
+  {
+    Article: HowToEarnMoneyStardewChineseArticle,
+    checkedLabel:
+      "2026-09-13 对照下方星露谷中文维基（含 1.6 熏鱼机）。规划器只是放置草图，不是金币计算器。",
+    heading: "来源",
+    name: "Chinese year 1 gold article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/金币",
+        label: "星露谷物语官方中文维基：金币",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/钓鱼",
+        label: "星露谷物语官方中文维基：钓鱼",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/鱼店",
+        label: "星露谷物语官方中文维基：鱼店",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/熏鱼机",
+        label: "星露谷物语官方中文维基：熏鱼机",
+        note: "（1.6；威利不收熏鱼）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/物品栏",
+        label: "星露谷物语官方中文维基：物品栏",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/喷壶",
+        label: "星露谷物语官方中文维基：喷壶",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/土豆",
+        label: "星露谷物语官方中文维基：土豆",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/草莓",
+        label: "星露谷物语官方中文维基：草莓",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/复活节",
+        label: "星露谷物语官方中文维基：复活节",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/农作物",
+        label: "星露谷物语官方中文维基：农作物",
+        note: "（生长天数不含种植当天、换季枯萎、缺水不停死）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/耕种",
+        label: "星露谷物语官方中文维基：耕种",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/技能",
+        label: "星露谷物语官方中文维基：技能",
+        note: "（喷壶每次 2 点、抛竿 8 点、每级 −0.1）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/能量",
+        label: "星露谷物语官方中文维基：能量",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/小桶",
+        label: "星露谷物语官方中文维基：小桶",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/罐头瓶",
+        label: "星露谷物语官方中文维基：罐头瓶",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/矿井",
+        label: "星露谷物语官方中文维基：矿井",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/十字镐",
+        label: "星露谷物语官方中文维基：十字镐",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/温室",
+        label: "星露谷物语官方中文维基：温室",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/收集包",
+        label: "星露谷物语官方中文维基：收集包",
+        note: "（金库 42,500）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/Joja社区发展申请书",
+        label: "星露谷物语官方中文维基：Joja社区发展申请书",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/皮埃尔的杂货店",
+        label: "星露谷物语官方中文维基：皮埃尔的杂货店",
+      },
+      {
+        href: "/zh#planner",
+        label: "星露谷农场规划器",
+      },
+      {
+        href: "/zh/best-spring-crop-stardew",
+        label: "星露谷春天种什么",
+      },
+      {
+        href: "/zh/sprinkler-stardew",
+        label: "星露谷洒水器",
+      },
+      {
+        href: "/zh/glasshouse-stardew-valley",
+        label: "星露谷物语温室",
+      },
+      {
+        href: "/zh/carpenter-stardew",
+        label: "星露谷木匠商店",
       },
     ],
   },

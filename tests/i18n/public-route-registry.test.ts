@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(18);
+  expect(canonicalPublicPaths).toHaveLength(19);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -94,8 +94,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/best-spring-crop-stardew")).toBe(
     "/zh/best-spring-crop-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(36);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(34);
+  expect(getLocalizedPublicPath("en", "/how-to-earn-money-stardew")).toBe(
+    "/how-to-earn-money-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/how-to-earn-money-stardew")).toBe(
+    "/zh/how-to-earn-money-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(38);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(36);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -129,6 +135,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/maple-tree-stardew");
   expect(indexablePathnames).toContain("/best-spring-crop-stardew");
   expect(indexablePathnames).toContain("/zh/best-spring-crop-stardew");
+  expect(indexablePathnames).toContain("/how-to-earn-money-stardew");
+  expect(indexablePathnames).toContain("/zh/how-to-earn-money-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -148,6 +156,7 @@ it("registers the direct-entry blog routes", () => {
       "/stardew-valley-trees",
       "/maple-tree-stardew",
       "/best-spring-crop-stardew",
+      "/how-to-earn-money-stardew",
     ]),
   );
 });
