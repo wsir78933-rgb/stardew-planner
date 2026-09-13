@@ -48,14 +48,14 @@ it("shows the newest real post first while keeping the topic carousel in canonic
   const homeState = getBlogHomeState(posts, {});
 
   expect(homeState.posts.map((post) => post.slug)).toEqual([
+    "best-spring-crop-stardew",
     "maple-tree-stardew",
     "stardew-valley-trees",
     "oak-tree-stardew",
     "glasshouse-stardew-valley",
     "sprinkler-stardew",
-    "stardew-valley-expanded-bachelors-and-bachelorettes",
   ]);
-  expect(homeState.totalPostCount).toBe(11);
+  expect(homeState.totalPostCount).toBe(12);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
@@ -68,6 +68,7 @@ it("shows the newest real post first while keeping the topic carousel in canonic
     "oak-tree-stardew",
     "stardew-valley-trees",
     "maple-tree-stardew",
+    "best-spring-crop-stardew",
   ]);
 });
 

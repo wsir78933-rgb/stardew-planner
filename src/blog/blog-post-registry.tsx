@@ -22,6 +22,8 @@ import { StardewValleyTreesEnglishArticle } from "./articles/stardew-valley-tree
 import { StardewValleyTreesChineseArticle } from "./articles/stardew-valley-trees.zh";
 import { MapleTreeStardewEnglishArticle } from "./articles/maple-tree-stardew.en";
 import { MapleTreeStardewChineseArticle } from "./articles/maple-tree-stardew.zh";
+import { BestSpringCropStardewEnglishArticle } from "./articles/best-spring-crop-stardew.en";
+import { BestSpringCropStardewChineseArticle } from "./articles/best-spring-crop-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -226,6 +228,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: MapleTreeStardewEnglishArticle,
     },
+    {
+      slug: "best-spring-crop-stardew",
+      title: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+      description:
+        "There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
+      },
+      featured: true,
+      Content: BestSpringCropStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -391,6 +408,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: MapleTreeStardewChineseArticle,
+    },
+    {
+      slug: "best-spring-crop-stardew",
+      title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
+      description:
+        "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
+      },
+      featured: true,
+      Content: BestSpringCropStardewChineseArticle,
     },
   ],
 };

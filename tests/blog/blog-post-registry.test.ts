@@ -22,6 +22,7 @@ const expectedSlugs = [
   "oak-tree-stardew",
   "stardew-valley-trees",
   "maple-tree-stardew",
+  "best-spring-crop-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -56,14 +57,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the eleven canonical blog identities in publishing order", () => {
+it("keeps the twelve canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the twenty-two localized root-level canonical article paths", () => {
+it("publishes only the twenty-four localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -76,6 +77,7 @@ it("publishes only the twenty-two localized root-level canonical article paths",
     "/oak-tree-stardew/",
     "/stardew-valley-trees/",
     "/maple-tree-stardew/",
+    "/best-spring-crop-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -87,6 +89,7 @@ it("publishes only the twenty-two localized root-level canonical article paths",
     "/zh/oak-tree-stardew/",
     "/zh/stardew-valley-trees/",
     "/zh/maple-tree-stardew/",
+    "/zh/best-spring-crop-stardew/",
   ]);
 });
 
@@ -286,6 +289,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
     },
   });
+  expect(englishPosts[11]).toMatchObject({
+    title: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+    description:
+      "There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
+    readTimeMinutes: 14,
+    coverImage: {
+      src: "/blog/best-spring-crop-stardew-cover.webp",
+      alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
+    },
+  });
+  expect(chinesePosts[11]).toMatchObject({
+    title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
+    description:
+      "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
+    readTimeMinutes: 14,
+    coverImage: {
+      src: "/blog/best-spring-crop-stardew-cover.webp",
+      alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -304,6 +327,7 @@ it("binds every localized post to its own original blog cover", () => {
     "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
     "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
     "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
+    "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -402,7 +426,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: maple-tree-stardew.",
+    "Expected: carpenter-stardew. Received: best-spring-crop-stardew.",
   );
 });
 

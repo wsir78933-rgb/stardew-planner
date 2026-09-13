@@ -224,6 +224,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/maple-tree-stardew-cover.webp",
         alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
       },
+      {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
+      },
     ],
   },
   {
@@ -561,6 +565,36 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     ],
   },
   {
+    pathname: "/best-spring-crop-stardew",
+    staticPageFile: "best-spring-crop-stardew.html",
+    heading: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+    metadata: {
+      title: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+      description:
+        "There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
+      },
+    ],
+    requiredBodyPhrases: [
+      "Best depends on year, gold, and the plot you can water",
+      "Sketch the spring bed in the planner",
+      "The planner does not water",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/?farmType=standard",
+      "/sprinkler-stardew",
+    ],
+  },
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -611,6 +645,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/maple-tree-stardew-cover.webp",
         alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
+      },
+      {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
       },
     ],
   },
@@ -939,6 +977,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     requiredHrefs: [
       "/zh#planner",
       "/zh/oak-tree-stardew",
+    ],
+  },
+  {
+    pathname: "/zh/best-spring-crop-stardew",
+    staticPageFile: "zh/best-spring-crop-stardew.html",
+    heading: "星露谷物语春天种什么：第一年草莓种子春13才卖",
+    metadata: {
+      title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
+      description:
+        "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
+      },
+    ],
+    requiredBodyPhrases: [
+      "第一年春天种什么",
+      "先在规划器里画出春季那块田",
+      "规划器里的春季田只是草图",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/sprinkler-stardew",
     ],
   },
 ];

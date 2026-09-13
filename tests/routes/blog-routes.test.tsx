@@ -49,6 +49,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/oak-tree-stardew"');
   expect(indexMarkup).toContain('href="/stardew-valley-trees"');
   expect(indexMarkup).toContain('href="/maple-tree-stardew"');
+  expect(indexMarkup).toContain('href="/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -81,6 +82,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/oak-tree-stardew"');
   expect(indexMarkup).toContain('href="/zh/stardew-valley-trees"');
   expect(indexMarkup).toContain('href="/zh/maple-tree-stardew"');
+  expect(indexMarkup).toContain('href="/zh/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -333,6 +335,41 @@ it("renders the paired maple tree article routes with locked metadata and one pa
     title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
     description:
       "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
+  });
+});
+
+it("renders the paired spring crop article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "best-spring-crop-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "best-spring-crop-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷物语春天种什么：第一年草莓种子春13才卖",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+    description:
+      "There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
+    description:
+      "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
   });
 });
 

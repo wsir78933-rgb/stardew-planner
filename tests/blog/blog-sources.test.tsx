@@ -23,6 +23,8 @@ import { StardewValleyTreesEnglishArticle } from "../../src/blog/articles/starde
 import { StardewValleyTreesChineseArticle } from "../../src/blog/articles/stardew-valley-trees.zh";
 import { MapleTreeStardewEnglishArticle } from "../../src/blog/articles/maple-tree-stardew.en";
 import { MapleTreeStardewChineseArticle } from "../../src/blog/articles/maple-tree-stardew.zh";
+import { BestSpringCropStardewEnglishArticle } from "../../src/blog/articles/best-spring-crop-stardew.en";
+import { BestSpringCropStardewChineseArticle } from "../../src/blog/articles/best-spring-crop-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -744,6 +746,167 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "/zh#planner",
         label: "星露谷农场规划器",
+      },
+    ],
+  },
+  {
+    Article: BestSpringCropStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-12 against Stardew Valley 1.6.15 wiki pages and the official 1.6 changelog. Last-plant dates are derived as 28 minus grow days for a harvest on Spring 28, excluding the plant day, with no Speed-Gro and with watering on the plant day. Wiki gold/day figures are the Crops page values with no fertilizer and no Tiller. The planner is a placement sketch, not a gold calculator or crop simulator.",
+    heading: "Sources",
+    name: "English spring crop article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Crops",
+        label: "Stardew Valley Wiki: Crops",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Egg_Festival",
+        label: "Stardew Valley Wiki: Egg Festival",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Parsnip",
+        label: "Stardew Valley Wiki: Parsnip",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Potato",
+        label: "Stardew Valley Wiki: Potato",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Cauliflower",
+        label: "Stardew Valley Wiki: Cauliflower",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Strawberry",
+        label: "Stardew Valley Wiki: Strawberry",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Green_Bean",
+        label: "Stardew Valley Wiki: Green Bean",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Rhubarb",
+        label: "Stardew Valley Wiki: Rhubarb",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Garlic",
+        label: "Stardew Valley Wiki: Garlic",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Coffee_Bean",
+        label: "Stardew Valley Wiki: Coffee Bean",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Carrot",
+        label: "Stardew Valley Wiki: Carrot",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Ancient_Fruit",
+        label: "Stardew Valley Wiki: Ancient Fruit",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Speed-Gro",
+        label: "Stardew Valley Wiki: Speed-Gro",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Scarecrow",
+        label: "Stardew Valley Wiki: Scarecrow",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Sprinkler",
+        label: "Stardew Valley Wiki: Sprinkler",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Farm_Maps",
+        label: "Stardew Valley Wiki: Farm Maps",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Pierre%27s_General_Store",
+        label: "Stardew Valley Wiki: Pierre's General Store",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+        label: "Stardew Valley 1.6 Update Full Changelog",
+      },
+    ],
+  },
+  {
+    Article: BestSpringCropStardewChineseArticle,
+    checkedLabel:
+      "复活节、防风草、土豆、花椰菜、草莓、农作物、大黄种子、蒜、咖啡豆、胡萝卜种子、青豆、生长激素与农场地图已于 2026-09-12 对照星露谷物语 1.6.15 中文维基；斧头敲 3 下以英文农作物页为准。最晚播种日由生长天数和 28 天季节推算，不是维基字段。规划器只是摆放草图，不浇水、不算金币、不买蛋节种子。",
+    heading: "来源",
+    name: "Chinese spring crop article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/复活节",
+        label: "星露谷物语官方中文维基：复活节",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/防风草种子",
+        label: "星露谷物语官方中文维基：防风草种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/土豆",
+        label: "星露谷物语官方中文维基：土豆",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/花椰菜",
+        label: "星露谷物语官方中文维基：花椰菜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/草莓种子",
+        label: "星露谷物语官方中文维基：草莓种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/农作物",
+        label: "星露谷物语官方中文维基：农作物",
+        note: "（生长天数、换季枯死、乌鸦、巨大作物、日均）",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Crops",
+        label: "Stardew Valley Wiki: Crops",
+        note: "（巨大作物斧头 3 下）",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/大黄种子",
+        label: "星露谷物语官方中文维基：大黄种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/蒜",
+        label: "星露谷物语官方中文维基：蒜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/咖啡豆",
+        label: "星露谷物语官方中文维基：咖啡豆",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/胡萝卜种子",
+        label: "星露谷物语官方中文维基：胡萝卜种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/青豆",
+        label: "星露谷物语官方中文维基：青豆",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/生长激素",
+        label: "星露谷物语官方中文维基：生长激素",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/农场地图",
+        label: "星露谷物语官方中文维基：农场地图",
+        note: "（草原农场开局干草）",
+      },
+      {
+        href: "/zh#planner",
+        label: "星露谷农场规划器",
+      },
+      {
+        href: "/zh/sprinkler-stardew",
+        label: "星露谷洒水器",
+      },
+      {
+        href: "/zh/glasshouse-stardew-valley",
+        label: "星露谷物语温室",
       },
     ],
   },

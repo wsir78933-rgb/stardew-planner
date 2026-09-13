@@ -75,6 +75,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆](https://stardewvalleyplanner.art/zh/maple-tree-stardew): 先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
   );
+  expect(llmsText).toContain(
+    "[Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1](https://stardewvalleyplanner.art/best-spring-crop-stardew): There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷物语春天种什么：第一年草莓种子春13才卖](https://stardewvalleyplanner.art/zh/best-spring-crop-stardew): 春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);
