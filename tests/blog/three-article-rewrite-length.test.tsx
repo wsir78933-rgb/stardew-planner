@@ -50,7 +50,9 @@ function hasExcludedAncestor(element: XmlNode): boolean {
       const classAttribute =
         (ancestorNode as XmlElement).getAttribute("class") ?? "";
       if (classAttribute.split(/\s+/).some((className) =>
-        className === "blog-faq-list" || className === "blog-sources",
+        className === "blog-faq-list" ||
+        className === "blog-sources" ||
+        className === "blog-planner-cta",
       )) {
         return true;
       }

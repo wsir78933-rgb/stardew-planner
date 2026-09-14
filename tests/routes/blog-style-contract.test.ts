@@ -166,6 +166,9 @@ it("keeps article tables scrollable and name rosters readable without page overf
   expect(nameGridRule).toContain("list-style: none;");
   expect(stylesheet).toMatch(/\.blog-data-table th,[\s\S]*\.blog-data-table td[\s\S]*padding:/);
   expect(stylesheet).toContain(".blog-table-scroll:focus-visible");
+  expect(stylesheet).toContain(".blog-data-table.blog-data-table--wrap th");
+  expect(stylesheet).toContain("table-layout: fixed");
+  expect(stylesheet).toContain("overflow-wrap: anywhere");
 });
 
 it("restores standard list markers for article body lists while keeping name rosters unbulleted", () => {

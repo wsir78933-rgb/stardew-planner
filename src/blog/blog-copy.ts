@@ -28,6 +28,7 @@ export type BlogCopy = Readonly<{
   searchSubmitLabel: string;
   topicLabel: string;
   tableOfContentsLabel: string;
+  plannerCtaHeading: string;
 }>;
 
 const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
@@ -61,6 +62,7 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     searchSubmitLabel: "Search",
     topicLabel: "Topic",
     tableOfContentsLabel: "On this page",
+    plannerCtaHeading: "Finish the layout in the planner, then build in-game.",
   },
   "zh-CN": {
     archiveDescription:
@@ -91,6 +93,7 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     searchSubmitLabel: "搜索",
     topicLabel: "专题",
     tableOfContentsLabel: "本页目录",
+    plannerCtaHeading: "先在规划器里摆完，再进游戏建。",
   },
 };
 

@@ -33,4 +33,21 @@ it("exposes the locked fall crops angle in both independent article bodies", () 
     "秋 1 先用镰刀清掉非当季枯株；夏 28 还在地里的玉米不枯",
   );
   expect(chineseMarkup).toContain("它不算金币、不浇水、不掷每天 1%");
+
+  const englishRankingTable = englishMarkup.slice(
+    englishMarkup.indexOf("<table"),
+    englishMarkup.indexOf("</table>"),
+  );
+  const chineseRankingTable = chineseMarkup.slice(
+    chineseMarkup.indexOf("<table"),
+    chineseMarkup.indexOf("</table>"),
+  );
+  expect(englishRankingTable.match(/<th /g) ?? []).toHaveLength(4);
+  expect(chineseRankingTable.match(/<th /g) ?? []).toHaveLength(4);
+  expect(englishRankingTable).toContain(">Crop<");
+  expect(englishRankingTable).toContain(">Gold/day<");
+  expect(englishRankingTable).not.toContain("Access / occupancy");
+  expect(chineseRankingTable).toContain(">作物<");
+  expect(chineseRankingTable).toContain(">日均<");
+  expect(chineseRankingTable).not.toContain("第一年门槛");
 });
