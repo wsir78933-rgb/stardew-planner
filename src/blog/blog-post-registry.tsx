@@ -30,6 +30,8 @@ import { RancherOrTillerStardewEnglishArticle } from "./articles/rancher-or-till
 import { RancherOrTillerStardewChineseArticle } from "./articles/rancher-or-tiller-stardew.zh";
 import { SummerCropsStardewEnglishArticle } from "./articles/summer-crops-stardew.en";
 import { SummerCropsStardewChineseArticle } from "./articles/summer-crops-stardew.zh";
+import { FallCropsStardewEnglishArticle } from "./articles/fall-crops-stardew.en";
+import { FallCropsStardewChineseArticle } from "./articles/fall-crops-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -294,6 +296,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: SummerCropsStardewEnglishArticle,
     },
+    {
+      slug: "fall-crops-stardew",
+      title: "Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed",
+      description:
+        "Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 19,
+      coverImage: {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
+      },
+      featured: true,
+      Content: FallCropsStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -519,6 +536,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: SummerCropsStardewChineseArticle,
+    },
+    {
+      slug: "fall-crops-stardew",
+      title: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
+      description:
+        "现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 19,
+      coverImage: {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
+      },
+      featured: true,
+      Content: FallCropsStardewChineseArticle,
     },
   ],
 };

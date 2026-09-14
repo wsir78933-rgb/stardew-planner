@@ -240,6 +240,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/summer-crops-stardew-cover.webp",
         alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
       },
+      {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
+      },
     ],
   },
   {
@@ -695,6 +699,38 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/glasshouse-stardew-valley",
     ],
   },
+  {
+    pathname: "/fall-crops-stardew",
+    staticPageFile: "fall-crops-stardew.html",
+    heading: "Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed",
+    metadata: {
+      title: "Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed",
+      description:
+        "Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "There is no single best outdoor fall crop",
+      "It does not compute gold/day, last-plant dates, or giant 1% rolls",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/best-spring-crop-stardew",
+      "/summer-crops-stardew",
+      "/how-to-earn-money-stardew",
+      "/sprinkler-stardew",
+      "/glasshouse-stardew-valley",
+    ],
+  },
 
   {
     pathname: "/zh/blog",
@@ -763,6 +799,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/summer-crops-stardew-cover.webp",
         alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
+      },
+      {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
       },
     ],
   },
@@ -1207,6 +1247,38 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     requiredHrefs: [
       "/zh#planner",
       "/zh/best-spring-crop-stardew",
+      "/zh/how-to-earn-money-stardew",
+      "/zh/sprinkler-stardew",
+      "/zh/glasshouse-stardew-valley",
+    ],
+  },
+  {
+    pathname: "/zh/fall-crops-stardew",
+    staticPageFile: "zh/fall-crops-stardew.html",
+    heading: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
+    metadata: {
+      title: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
+      description:
+        "现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "秋 1 先用镰刀清掉非当季枯株；夏 28 还在地里的玉米不枯",
+      "它不算金币、不浇水、不掷每天 1%",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/best-spring-crop-stardew",
+      "/zh/summer-crops-stardew",
       "/zh/how-to-earn-money-stardew",
       "/zh/sprinkler-stardew",
       "/zh/glasshouse-stardew-valley",

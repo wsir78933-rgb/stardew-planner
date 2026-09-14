@@ -31,6 +31,8 @@ import { RancherOrTillerStardewEnglishArticle } from "../../src/blog/articles/ra
 import { RancherOrTillerStardewChineseArticle } from "../../src/blog/articles/rancher-or-tiller-stardew.zh";
 import { SummerCropsStardewEnglishArticle } from "../../src/blog/articles/summer-crops-stardew.en";
 import { SummerCropsStardewChineseArticle } from "../../src/blog/articles/summer-crops-stardew.zh";
+import { FallCropsStardewEnglishArticle } from "../../src/blog/articles/fall-crops-stardew.en";
+import { FallCropsStardewChineseArticle } from "../../src/blog/articles/fall-crops-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1449,6 +1451,214 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "https://stardewvalleyplanner.art/zh",
         label: "本站中文规划器首页（目录语言）",
+      },
+    ],
+  },
+  {
+    Article: FallCropsStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-14 against Stardew Valley Wiki Fall, Crops (including Gold per Day and Giant Crops), and Pierre’s General Store Fall Stock. Wiki gold/day figures assume no fertilizer and no Tiller. Last-plant dates are derived as 28 minus grow days for a harvest on Fall 28, excluding the plant day, with watering on the plant day; the wiki does not name that field. The planner is a placement sketch; it does not compute gold/day, last-plant dates, or giant 1% rolls.",
+    heading: "Sources",
+    name: "English fall crops article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Fall", label: "Stardew Valley Wiki: Fall" },
+      { href: "https://stardewvalleywiki.com/Crops", label: "Stardew Valley Wiki: Crops" },
+      {
+        href: "https://stardewvalleywiki.com/Crops#Gold_per_Day",
+        label: "Stardew Valley Wiki: Crops (Gold per Day)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Crops#Giant_Crops",
+        label: "Stardew Valley Wiki: Crops (Giant Crops)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Pierre%27s_General_Store",
+        label: "Stardew Valley Wiki: Pierre's General Store",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Pierre%27s_General_Store#Fall_Stock",
+        label: "Stardew Valley Wiki: Pierre's General Store (Fall Stock)",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/",
+        label: "Stardew Valley Planner",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/best-spring-crop-stardew",
+        label: "This site: spring crop ranking",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/summer-crops-stardew",
+        label: "This site: summer crop ranking",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/how-to-earn-money-stardew",
+        label: "This site: Year 1 gold",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/glasshouse-stardew-valley",
+        label: "This site: greenhouse 10×12",
+      },
+    ],
+  },
+  {
+    Article: FallCropsStardewChineseArticle,
+    checkedLabel:
+      "2026-09-14 对照下方星露谷中文维基。日均按农作物「每日收益」：普通品质，不计肥料、农耕人、农业学家。最晚播种由 28 减生长天数推算，不是维基字段。规划器不算金币、不浇水、不掷每天 1%。",
+    heading: "来源",
+    name: "Chinese fall crops article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/农作物",
+        label: "星露谷物语官方中文维基：农作物",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/秋季",
+        label: "星露谷物语官方中文维基：秋季",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/皮埃尔的杂货店",
+        label: "星露谷物语官方中文维基：皮埃尔的杂货店",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/南瓜",
+        label: "星露谷物语官方中文维基：南瓜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/南瓜种子",
+        label: "星露谷物语官方中文维基：南瓜种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/蔓越莓",
+        label: "星露谷物语官方中文维基：蔓越莓",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/蔓越莓种子",
+        label: "星露谷物语官方中文维基：蔓越莓种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/葡萄",
+        label: "星露谷物语官方中文维基：葡萄",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/葡萄种子",
+        label: "星露谷物语官方中文维基：葡萄种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/玫瑰仙子",
+        label: "星露谷物语官方中文维基：玫瑰仙子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/洋蓟",
+        label: "星露谷物语官方中文维基：洋蓟",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/甜菜",
+        label: "星露谷物语官方中文维基：甜菜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/绿洲",
+        label: "星露谷物语官方中文维基：绿洲",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/沙漠",
+        label: "星露谷物语官方中文维基：沙漠",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/西蓝花",
+        label: "星露谷物语官方中文维基：西蓝花",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/西蓝花种子",
+        label: "星露谷物语官方中文维基：西蓝花种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/稀有种子",
+        label: "星露谷物语官方中文维基：稀有种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/宝石甜莓",
+        label: "星露谷物语官方中文维基：宝石甜莓",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/上古水果",
+        label: "星露谷物语官方中文维基：上古水果",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/上古种子",
+        label: "星露谷物语官方中文维基：上古种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/玉米",
+        label: "星露谷物语官方中文维基：玉米",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/向日葵",
+        label: "星露谷物语官方中文维基：向日葵",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/向日葵种子",
+        label: "星露谷物语官方中文维基：向日葵种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/旅行货车",
+        label: "星露谷物语官方中文维基：旅行货车",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/星露谷展览会",
+        label: "星露谷物语官方中文维基：星露谷展览会",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/收集包",
+        label: "星露谷物语官方中文维基：收集包",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/秋季种子",
+        label: "星露谷物语官方中文维基：秋季种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/苋菜",
+        label: "星露谷物语官方中文维基：苋菜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/茄子",
+        label: "星露谷物语官方中文维基：茄子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/山药",
+        label: "星露谷物语官方中文维基：山药",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/小白菜",
+        label: "星露谷物语官方中文维基：小白菜",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/小麦",
+        label: "星露谷物语官方中文维基：小麦",
+      },
+      {
+        href: "/zh/best-spring-crop-stardew",
+        label: "本站：春天种什么",
+      },
+      {
+        href: "/zh/summer-crops-stardew",
+        label: "本站：夏天种什么",
+      },
+      {
+        href: "/zh/how-to-earn-money-stardew",
+        label: "本站：第一年怎么赚钱",
+      },
+      {
+        href: "/zh/glasshouse-stardew-valley",
+        label: "本站：温室布局",
+      },
+      {
+        href: "/zh/sprinkler-stardew",
+        label: "本站：洒水器",
+      },
+      {
+        href: "/zh#planner",
+        label: "本站：农场规划器",
       },
     ],
   },

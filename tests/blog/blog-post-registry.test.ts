@@ -26,6 +26,7 @@ const expectedSlugs = [
   "how-to-earn-money-stardew",
   "rancher-or-tiller-stardew",
   "summer-crops-stardew",
+  "fall-crops-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -60,14 +61,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the fifteen canonical blog identities in publishing order", () => {
+it("keeps the sixteen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the thirty localized root-level canonical article paths", () => {
+it("publishes only the thirty-two localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -84,6 +85,7 @@ it("publishes only the thirty localized root-level canonical article paths", () 
     "/how-to-earn-money-stardew/",
     "/rancher-or-tiller-stardew/",
     "/summer-crops-stardew/",
+    "/fall-crops-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -99,6 +101,7 @@ it("publishes only the thirty localized root-level canonical article paths", () 
     "/zh/how-to-earn-money-stardew/",
     "/zh/rancher-or-tiller-stardew/",
     "/zh/summer-crops-stardew/",
+    "/zh/fall-crops-stardew/",
   ]);
 });
 
@@ -378,6 +381,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
     },
   });
+  expect(englishPosts[15]).toMatchObject({
+    title: "Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed",
+    description:
+      "Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.",
+    readTimeMinutes: 19,
+    coverImage: {
+      src: "/blog/fall-crops-stardew-cover.webp",
+      alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
+    },
+  });
+  expect(chinesePosts[15]).toMatchObject({
+    title: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
+    description:
+      "现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
+    readTimeMinutes: 19,
+    coverImage: {
+      src: "/blog/fall-crops-stardew-cover.webp",
+      alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -400,6 +423,7 @@ it("binds every localized post to its own original blog cover", () => {
     "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
     "rancher-or-tiller-stardew": "/blog/rancher-or-tiller-stardew-cover.webp",
     "summer-crops-stardew": "/blog/summer-crops-stardew-cover.webp",
+    "fall-crops-stardew": "/blog/fall-crops-stardew-cover.webp",
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
@@ -498,7 +522,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: summer-crops-stardew.",
+    "Expected: carpenter-stardew. Received: fall-crops-stardew.",
   );
 });
 

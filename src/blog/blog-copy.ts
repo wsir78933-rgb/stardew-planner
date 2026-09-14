@@ -114,6 +114,7 @@ const localizedBlogPostPaths: Readonly<
     "how-to-earn-money-stardew": "/how-to-earn-money-stardew",
     "rancher-or-tiller-stardew": "/rancher-or-tiller-stardew",
     "summer-crops-stardew": "/summer-crops-stardew",
+    "fall-crops-stardew": "/fall-crops-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -132,6 +133,7 @@ const localizedBlogPostPaths: Readonly<
     "how-to-earn-money-stardew": "/zh/how-to-earn-money-stardew",
     "rancher-or-tiller-stardew": "/zh/rancher-or-tiller-stardew",
     "summer-crops-stardew": "/zh/summer-crops-stardew",
+    "fall-crops-stardew": "/zh/fall-crops-stardew",
   },
 };
 

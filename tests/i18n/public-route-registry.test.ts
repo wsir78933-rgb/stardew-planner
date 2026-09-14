@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(21);
+  expect(canonicalPublicPaths).toHaveLength(22);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -112,8 +112,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/summer-crops-stardew")).toBe(
     "/zh/summer-crops-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(42);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(40);
+  expect(getLocalizedPublicPath("en", "/fall-crops-stardew")).toBe(
+    "/fall-crops-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/fall-crops-stardew")).toBe(
+    "/zh/fall-crops-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(44);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(42);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -153,6 +159,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/rancher-or-tiller-stardew");
   expect(indexablePathnames).toContain("/summer-crops-stardew");
   expect(indexablePathnames).toContain("/zh/summer-crops-stardew");
+  expect(indexablePathnames).toContain("/fall-crops-stardew");
+  expect(indexablePathnames).toContain("/zh/fall-crops-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -175,6 +183,7 @@ it("registers the direct-entry blog routes", () => {
       "/how-to-earn-money-stardew",
       "/rancher-or-tiller-stardew",
       "/summer-crops-stardew",
+      "/fall-crops-stardew",
     ]),
   );
 });
