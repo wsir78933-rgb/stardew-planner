@@ -1,14 +1,12 @@
 "use client";
 
 import * as React from "react";
-import type { LucideIcon } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
 export interface DockItem {
   id?: string;
-  icon: LucideIcon;
   label: string;
   href?: string;
   onClick?: () => void;
@@ -22,7 +20,6 @@ export interface DockProps {
 }
 
 export interface DockIconButtonProps {
-  icon: LucideIcon;
   label: string;
   href?: string;
   onClick?: () => void;
@@ -67,16 +64,6 @@ function validateDockLabel(label: unknown, context: string): void {
   if (typeof label !== "string" || label.trim() === "") {
     throw new TypeError(
       `Cannot render Dock: ${context} label must be a non-empty string; received: ${describeReceivedValue(label)}`,
-    );
-  }
-}
-
-function validateDockIcon(icon: unknown, context: string): void {
-  const iconIsComponentFunction = typeof icon === "function";
-  const iconIsComponentObject = typeof icon === "object" && icon !== null;
-  if (!iconIsComponentFunction && !iconIsComponentObject) {
-    throw new TypeError(
-      `Cannot render Dock: ${context} icon must be a component; received: ${describeReceivedValue(icon)}`,
     );
   }
 }
@@ -129,7 +116,6 @@ function validateDockItem(item: unknown, itemIndex: number): void {
 
   const dockItem = item as Record<string, unknown>;
   validateDockLabel(dockItem.label, context);
-  validateDockIcon(dockItem.icon, context);
   validateDockHref(dockItem.href, context);
   validateDockOnClick(dockItem.onClick, context);
   validateDockHasAction(dockItem.href, dockItem.onClick, context);
@@ -163,14 +149,12 @@ function validateDockProps(items: unknown, children: unknown): void {
 }
 
 function validateDockIconButtonProps(
-  icon: unknown,
   label: unknown,
   href: unknown,
   onClick: unknown,
 ): void {
   const context = "DockIconButton";
   validateDockLabel(label, context);
-  validateDockIcon(icon, context);
   validateDockHref(href, context);
   validateDockOnClick(onClick, context);
   validateDockHasAction(href, onClick, context);
@@ -180,14 +164,14 @@ export const DockIconButton = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement,
   DockIconButtonComponentProps
 >(function DockIconButton(
-  { className, href, icon: Icon, label, onClick, ...htmlAttributes },
+  { children, className, href, label, onClick, ...htmlAttributes },
   forwardedRef,
 ) {
   const prefersReducedMotion = useReducedMotion() === true;
-  validateDockIconButtonProps(Icon, label, href, onClick);
+  validateDockIconButtonProps(label, href, onClick);
 
   const dockIconButtonClassName = cn(
-    "group relative rounded-lg p-3 hover:bg-secondary transition-colors",
+    "group relative inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap hover:bg-secondary transition-colors",
     className,
   );
   const dockIconButtonHoverMotion = prefersReducedMotion
@@ -198,10 +182,8 @@ export const DockIconButton = React.forwardRef<
     : { scale: 0.95 };
   const dockIconButtonContents = (
     <>
-      <Icon aria-hidden="true" className="text-foreground size-5" />
-      <span className="pointer-events-none absolute top-full left-1/2 z-20 mt-1 -translate-x-1/2 whitespace-nowrap rounded px-2 py-1 text-xs bg-popover text-popover-foreground opacity-0 transition-opacity group-hover:opacity-100">
-        {label}
-      </span>
+      <span>{label}</span>
+      {children}
     </>
   );
 
@@ -258,7 +240,6 @@ export const Dock = React.forwardRef<HTMLDivElement, DockProps>(
                 <DockIconButton
                   className={item.className}
                   href={item.href}
-                  icon={item.icon}
                   key={item.id ?? `${item.label}-${String(itemIndex)}`}
                   label={item.label}
                   onClick={item.onClick}

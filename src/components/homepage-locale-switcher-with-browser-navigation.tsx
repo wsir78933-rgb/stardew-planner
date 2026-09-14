@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Languages } from "lucide-react";
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { createHomepageNavigationUrls } from "../homepage/homepage-navigation-url";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
@@ -44,7 +43,6 @@ export function HomepageLocaleSwitcherWithBrowserNavigation({
 
   return (
     <HomepageLocaleSwitcher
-      icon={Languages}
       label={label}
       localeHrefByLocale={localeHrefByLocale}
     />

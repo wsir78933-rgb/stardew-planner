@@ -1,6 +1,5 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { Home } from "lucide-react";
 import { describe, expect, it } from "vitest";
 import { Dock, DockIconButton } from "@/components/ui/dock";
 
@@ -8,7 +7,7 @@ describe("Dock", () => {
   it("renders links when href is set", () => {
     const dockMarkup = renderToStaticMarkup(
       createElement(Dock, {
-        items: [{ href: "/planner", icon: Home, label: "Home" }],
+        items: [{ href: "/planner", label: "Home" }],
       }),
     );
 
@@ -18,35 +17,39 @@ describe("Dock", () => {
     expect(dockMarkup).toContain('data-slot="dock"');
     expect(dockMarkup).toContain('data-slot="dock-icon-button"');
     expect(dockMarkup).toContain('aria-label="Home"');
+    expect(dockMarkup).toContain("<span>Home</span>");
+    expect(dockMarkup).not.toContain("<svg");
     expect(dockMarkup).not.toContain("h-64");
   });
 
   it("renders a button when only onClick is set", () => {
     const dockMarkup = renderToStaticMarkup(
       createElement(Dock, {
-        items: [{ icon: Home, label: "Home", onClick: () => undefined }],
+        items: [{ label: "Home", onClick: () => undefined }],
       }),
     );
 
     expect(dockMarkup).toContain("<button");
     expect(dockMarkup).toContain('type="button"');
     expect(dockMarkup).toContain('aria-label="Home"');
+    expect(dockMarkup).toContain("<span>Home</span>");
     expect(dockMarkup).not.toContain("<a");
+    expect(dockMarkup).not.toContain("<svg");
   });
 
-  it("renders tooltip label text", () => {
+  it("renders visible label text instead of a hover tooltip", () => {
     const dockMarkup = renderToStaticMarkup(
       createElement(Dock, {
-        items: [{ href: "/#planner", icon: Home, label: "Open planner" }],
+        items: [{ href: "/#planner", label: "Open planner" }],
       }),
     );
 
-    expect(dockMarkup).toContain("Open planner");
-    expect(dockMarkup).toContain("bg-popover");
-    expect(dockMarkup).toContain("text-popover-foreground");
-    expect(dockMarkup).toContain("opacity-0");
-    expect(dockMarkup).toContain("group-hover:opacity-100");
-    expect(dockMarkup).toContain("pointer-events-none");
+    expect(dockMarkup).toContain("<span>Open planner</span>");
+    expect(dockMarkup).not.toContain("bg-popover");
+    expect(dockMarkup).not.toContain("text-popover-foreground");
+    expect(dockMarkup).not.toContain("opacity-0");
+    expect(dockMarkup).not.toContain("group-hover:opacity-100");
+    expect(dockMarkup).not.toContain("<svg");
   });
 
   it("throws on empty items and no children, with the received value", () => {
@@ -63,14 +66,14 @@ describe("Dock", () => {
     expect(() =>
       renderToStaticMarkup(
         createElement(Dock, {
-          items: [{ href: "/", icon: Home, label: "" }],
+          items: [{ href: "/", label: "" }],
         }),
       ),
     ).toThrow(TypeError);
     expect(() =>
       renderToStaticMarkup(
         createElement(Dock, {
-          items: [{ href: "/", icon: Home, label: "" }],
+          items: [{ href: "/", label: "" }],
         }),
       ),
     ).toThrow('received: ""');
@@ -80,21 +83,21 @@ describe("Dock", () => {
     expect(() =>
       renderToStaticMarkup(
         createElement(Dock, {
-          items: [{ icon: Home, label: "Home" }],
+          items: [{ label: "Home" }],
         }),
       ),
     ).toThrow(TypeError);
     expect(() =>
       renderToStaticMarkup(
         createElement(Dock, {
-          items: [{ icon: Home, label: "Home" }],
+          items: [{ label: "Home" }],
         }),
       ),
     ).toThrow("must have href or onClick");
     expect(() =>
       renderToStaticMarkup(
         createElement(Dock, {
-          items: [{ icon: Home, label: "Home" }],
+          items: [{ label: "Home" }],
         }),
       ),
     ).toThrow("received href: undefined, onClick: undefined");
@@ -107,7 +110,6 @@ describe("Dock", () => {
         null,
         createElement(DockIconButton, {
           href: "/",
-          icon: Home,
           label: "Home",
         }),
       ),
@@ -127,7 +129,6 @@ describe("Dock", () => {
           "data-homepage-brand": true,
           "data-homepage-header-action": "open-planner",
           href: "/",
-          icon: Home,
           label: "Stardew Valley Farm Planner",
         }),
       ),

@@ -29,6 +29,16 @@ test("centers the site navigation dock while keeping the brand on the left", () 
   expect(styles).toContain(
     "[data-public-page-shell] [data-public-page-header] > nav {",
   );
+  const homepageHeaderRule = styles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-header\] \{([\s\S]*?)\n\}/,
+  )?.[1];
+  const publicHeaderRule = styles.match(
+    /\[data-public-page-shell\] \[data-public-page-header\] \{([\s\S]*?)\n\}/,
+  )?.[1];
+  expect(homepageHeaderRule).toContain("position: relative;");
+  expect(homepageHeaderRule).toContain("z-index: 20;");
+  expect(publicHeaderRule).toContain("position: relative;");
+  expect(publicHeaderRule).toContain("z-index: 20;");
   expect(homepageNavRule).toBeDefined();
   expect(homepageNavRule).toContain("display: grid;");
   expect(homepageNavRule).toContain(

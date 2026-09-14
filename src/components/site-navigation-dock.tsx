@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Languages, Map, Newspaper } from "lucide-react";
 import { Dock, DockIconButton } from "@/components/ui/dock";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
@@ -66,7 +65,6 @@ function renderSiteNavigationLanguageSwitcher(input: Readonly<{
 
   return (
     <HomepageLocaleSwitcher
-      icon={Languages}
       label={input.languageLabel}
       localeHrefByLocale={input.localeHrefByLocale}
     />
@@ -144,7 +142,6 @@ export function SiteNavigationDock({
         >
           <DockIconButton
             href={resolvedBlogHref}
-            icon={Newspaper}
             label={resolvedBlogLabel}
           />
         </div>
@@ -169,7 +166,6 @@ export function SiteNavigationDock({
               isHomepageSurface ? undefined : true
             }
             href={resolvedPlannerHref}
-            icon={Map}
             label={resolvedPlannerLabel}
           />
         </div>

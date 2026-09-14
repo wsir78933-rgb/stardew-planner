@@ -107,6 +107,8 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] {
 
 body:has(> [data-homepage-shell]) [data-homepage-header] {
   overflow: visible;
+  position: relative;
+  z-index: 20;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-header] > nav {
@@ -1796,6 +1798,8 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 
 [data-public-page-shell] [data-public-page-header] {
   overflow: visible;
+  position: relative;
+  z-index: 20;
 }
 
 [data-public-page-shell] [data-public-page-header] > nav {

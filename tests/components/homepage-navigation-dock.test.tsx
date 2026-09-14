@@ -1,7 +1,6 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vitest";
-import { Languages } from "lucide-react";
 import { HomepageContent } from "@/src/components/homepage-content";
 import { HomepageLocaleSwitcher } from "@/src/components/homepage-locale-switcher";
 import { HomepageNavigationDock } from "@/src/components/homepage-navigation-dock";
@@ -38,7 +37,6 @@ function renderHomepageNavigationDockMarkup(input: Readonly<{
       localeSwitcher={
         <HomepageLocaleSwitcher
           key="homepage-dock-language"
-          icon={Languages}
           label={homepageCopyByLocale[input.currentLocale].navigation.languageLabel}
           localeHrefByLocale={englishLocaleHrefByLocale}
         />
@@ -86,8 +84,11 @@ test("renders homepage dock brand, section, blog, and planner anchors without a 
   expect(markup).toContain("Stardew Valley Farm Planner");
   expect(markup).not.toContain("Features");
   expect(markup).not.toContain("FAQ");
-  expect(markup).toContain("Blog");
-  expect(markup).toContain("Open planner");
+  expect(markup).toContain("<span>Blog</span>");
+  expect(markup).toContain("<span>Language</span>");
+  expect(markup).toContain('<span aria-hidden="true">▾</span>');
+  expect(markup).toContain("<span>Open planner</span>");
+  expect(markup).not.toContain("<svg");
   expect(markup).not.toContain('data-slot="navigation-menu"');
 });
 
@@ -111,8 +112,11 @@ test("HomepageContent keeps the header contract and drops NavigationMenu from th
   expect(headerMarkup).toContain("Stardew Valley Farm Planner");
   expect(headerMarkup).not.toContain("Features");
   expect(headerMarkup).not.toContain("FAQ");
-  expect(headerMarkup).toContain("Blog");
-  expect(headerMarkup).toContain("Open planner");
+  expect(headerMarkup).toContain("<span>Blog</span>");
+  expect(headerMarkup).toContain("<span>Language</span>");
+  expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
+  expect(headerMarkup).toContain("<span>Open planner</span>");
+  expect(headerMarkup).not.toContain("<svg");
   expect(headerMarkup).not.toContain('data-slot="navigation-menu"');
 });
 
@@ -124,8 +128,11 @@ test("uses localized blog and planner labels for zh-CN", () => {
   const headerMarkup = readHomepageHeaderMarkup(markup);
 
   expect(headerMarkup).toMatch(/<a[^>]*href="\/zh\/blog"/);
-  expect(headerMarkup).toContain("博客");
-  expect(headerMarkup).toContain("打开规划器");
+  expect(headerMarkup).toContain("<span>博客</span>");
+  expect(headerMarkup).toContain("<span>语言</span>");
+  expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
+  expect(headerMarkup).toContain("<span>打开规划器</span>");
+  expect(headerMarkup).not.toContain("<svg");
 });
 
 test("throws when plannerHref is empty", () => {

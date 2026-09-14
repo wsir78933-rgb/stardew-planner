@@ -1,6 +1,5 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vitest";
-import { Languages } from "lucide-react";
 import { HomepageLocaleSwitcher } from "@/src/components/homepage-locale-switcher";
 import {
   dismissHomepageLanguageMenuOnEscape,
@@ -72,7 +71,10 @@ test("renders a closed language disclosure with real English and Chinese route a
   );
 
   expect(markup).toContain('aria-label="Language"');
-  expect(markup).toContain(">Language <span aria-hidden=\"true\">▾</span><");
+  expect(markup).toContain("<span>Language</span>");
+  expect(markup).toContain('<span aria-hidden="true">▾</span>');
+  expect(markup).toContain('data-slot="dock-icon-button"');
+  expect(markup).not.toContain("<svg");
   expect(markup).toContain("中文");
   expect(markup).toContain("English");
   expect(markup).toContain('aria-expanded="false"');
@@ -184,10 +186,9 @@ test("subscribes, routes dismissal events, and removes the same listeners once",
   );
 });
 
-test("icon trigger keeps the language accessible name and locale anchors without Language disclosure text", () => {
+test("text trigger keeps the language accessible name, visible label, caret, and locale anchors", () => {
   const markup = renderToStaticMarkup(
     <HomepageLocaleSwitcher
-      icon={Languages}
       label="Language"
       localeHrefByLocale={{
         en: "/?farmType=forest#planner",
@@ -197,7 +198,9 @@ test("icon trigger keeps the language accessible name and locale anchors without
   );
 
   expect(markup).toContain('aria-label="Language"');
-  expect(markup).not.toContain(">Language <span");
+  expect(markup).toContain("<span>Language</span>");
+  expect(markup).toContain('<span aria-hidden="true">▾</span>');
+  expect(markup).not.toContain("<svg");
   expect(markup).toContain("data-homepage-language-switcher");
   expect(markup).toContain("data-homepage-language-trigger");
   expect(markup).toContain("data-homepage-language-menu");
