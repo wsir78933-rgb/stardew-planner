@@ -121,15 +121,15 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
-          alt: "Watercolor spring farm with crop rows, a farmhouse, scarecrow, and greenhouse",
+          alt: "Pixel-art farm with purple houses, crop fields, trees, and a winding river",
         },
         {
           src: "/homepage/hero/beach-farm.webp",
-          alt: "Watercolor beach farm with a cabin, fenced plots, and a rocky shoreline",
+          alt: "Pixel-art Standard Farm with a red farmhouse, crop fields, barns, trees, and ponds",
         },
         {
           src: "/homepage/hero/forest-farm.webp",
-          alt: "Watercolor forest farm clearing with a dirt path, fruit tree, and mossy cabin",
+          alt: "Pixel-art island farm with red-roof buildings, crop fields, trees, and surrounding water",
         },
       ],
     },
@@ -337,15 +337,15 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
-          alt: "水彩春日农场：菜畦、农舍、稻草人和温室",
+          alt: "像素风农场：紫色房屋、作物田、树木和蜿蜒河道",
         },
         {
           src: "/homepage/hero/beach-farm.webp",
-          alt: "水彩海滩农场：木屋、围栏菜地和礁石海岸",
+          alt: "像素风标准农场：红色农舍、作物田、畜棚、树木和水塘",
         },
         {
           src: "/homepage/hero/forest-farm.webp",
-          alt: "水彩森林农场：土路、果树和长满青苔的小屋",
+          alt: "像素风水上岛屿农场：红色屋顶建筑、作物田、树木和环绕水域",
         },
       ],
     },
