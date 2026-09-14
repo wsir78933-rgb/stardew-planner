@@ -38,6 +38,10 @@ body {
   min-height: 100vh;
 }
 
+.public-picture {
+  display: contents;
+}
+
 body:has(> [data-homepage-shell]) {
   --background: #fdfff8;
   --foreground: #1c211b;
@@ -1210,7 +1214,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
 }
 
 [data-blog-page] .blog-article-card__image-link img,
-[data-blog-article] > header > img {
+[data-blog-article] > header > .public-picture img {
   display: block;
   height: 100%;
   object-fit: cover;
@@ -1289,7 +1293,7 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   max-width: 48rem;
 }
 
-[data-blog-article] > header > img {
+[data-blog-article] > header > .public-picture img {
   aspect-ratio: 16 / 9;
   border: 1px solid rgb(28 33 27 / 18%);
   border-radius: 5px;

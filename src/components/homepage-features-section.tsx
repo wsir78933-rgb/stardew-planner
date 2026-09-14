@@ -1,4 +1,5 @@
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
+import { PublicPicture } from "./public-picture";
 
 const featuresImageSource = "/homepage/features-pixel-farm.webp";
 const featuresImageWidth = 1672;
@@ -19,7 +20,7 @@ export function HomepageFeaturesSection({ copy }: HomepageFeaturesSectionProps) 
       <h2 id="homepage-features-heading">{copy.heading}</h2>
       <div data-homepage-section-layout>
         <figure data-homepage-section-media>
-          <img
+          <PublicPicture
             alt={copy.imageAlt}
             decoding="async"
             height={featuresImageHeight}

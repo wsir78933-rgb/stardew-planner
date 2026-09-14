@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function CarpenterStardewChineseArticle() {
   return (
@@ -91,7 +92,7 @@ export function CarpenterStardewChineseArticle() {
         可以打开<a className="blog-planner-link" href="/zh">星露谷农场规划器</a>，把建筑、田地、动物区、仓储和道路放在一起比较。规划器只用于布局草案，最终能不能放置，仍由游戏内的绿色预览决定。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="木匠商店建筑占地、门口和农场通路规划"
           decoding="async"
           height="941"
@@ -124,7 +125,7 @@ export function CarpenterStardewChineseArticle() {
         新位置仍必须满足放置规则，每个占地格都要空闲并显示绿色。移动后从农舍、出货箱、机器区和动物出口各走一次，确认不是把旧问题从入口换到了另一条路上。已修复的温室和默认出货箱等起始设施，也可以通过木匠商店建造菜单移动。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="把农场建筑从拥挤路线移动到清晰位置"
           decoding="async"
           height="941"

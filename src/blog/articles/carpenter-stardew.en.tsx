@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function CarpenterStardewEnglishArticle() {
   return (
@@ -196,7 +197,7 @@ export function CarpenterStardewEnglishArticle() {
         preview remains the final placement check.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Farm building footprint with a clear entrance and working path"
           decoding="async"
           height="941"
@@ -248,7 +249,7 @@ export function CarpenterStardewEnglishArticle() {
         edit.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Farm building moved from a blocked route to a clear location"
           decoding="async"
           height="941"

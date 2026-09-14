@@ -5,6 +5,7 @@ import {
 } from "../../blog/blog-copy";
 import type { BlogPostMeta } from "../../blog/blog-post-registry";
 import type { PublicLocale } from "../../i18n/public-locale";
+import { PublicPicture } from "../public-picture";
 
 type ArticleCardHeadingLevel = "h2" | "h3";
 
@@ -38,7 +39,7 @@ export function ArticleCard({
   return (
     <article className="blog-article-card">
       <a className="blog-article-card__image-link" href={articleHref}>
-        <img
+        <PublicPicture
           alt={post.coverImage.alt}
           height={941}
           loading="lazy"

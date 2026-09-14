@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function BestSpringCropStardewEnglishArticle() {
   return (
@@ -176,7 +177,7 @@ export function BestSpringCropStardewEnglishArticle() {
         you skip a watering day, move the derived date earlier by each missed night.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Year 1 spring crop calendar from Spring 1 Pierre seeds through Egg Festival night strawberries"
           decoding="async"
           height="941"
@@ -387,7 +388,7 @@ export function BestSpringCropStardewEnglishArticle() {
         still there on Summer 1.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Nine cauliflower plants in a 3-by-3 square with walking space around the block so a giant can form"
           decoding="async"
           height="941"

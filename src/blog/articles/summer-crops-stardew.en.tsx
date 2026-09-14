@@ -1,4 +1,5 @@
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function SummerCropsStardewEnglishArticle() {
   return (
@@ -438,7 +439,7 @@ export function SummerCropsStardewEnglishArticle() {
         Hops first pick is plant day plus 11, then every day through 28.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Calendar schematic of Summer 1–28 occupancy: blueberry picks on 14, 18, 22, and 26; hops from day 12 through 28; melon last-plant 16; starfruit last-plant 15. Not a screenshot."
           decoding="async"
           height="941"
@@ -720,7 +721,7 @@ export function SummerCropsStardewEnglishArticle() {
         without crossing trellis.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Bed grid schematic: hops row with a walk tile, melon 3-by-3 with marked top-left, blueberry rectangle not behind hops. Not a 1% giant already rolled."
           decoding="async"
           height="941"

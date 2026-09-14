@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PublicPicture } from "../public-picture";
 
 type BlogYouTubeVideoProps = Readonly<{
   youtubeVideoId: string;
@@ -46,7 +47,7 @@ export function BlogYouTubeVideo({
           onClick={() => setIsPlaying(true)}
           type="button"
         >
-          <img
+          <PublicPicture
             alt=""
             decoding="async"
             height="720"

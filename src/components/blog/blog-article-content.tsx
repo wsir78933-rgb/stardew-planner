@@ -1,6 +1,7 @@
 import { formatBlogReadTime, type BlogCopy } from "../../blog/blog-copy";
 import type { LocalizedBlogPost } from "../../blog/blog-post-registry";
 import type { PublicLocale } from "../../i18n/public-locale";
+import { PublicPicture } from "../public-picture";
 import { TableOfContents } from "./table-of-contents";
 
 type BlogArticleContentProperties = Readonly<{
@@ -22,7 +23,7 @@ export function BlogArticleContent({ copy, locale, post }: BlogArticleContentPro
         <p>
           {copy.authorLabel} {post.author} · {formatBlogReadTime(copy, post.readTimeMinutes)}
         </p>
-        <img
+        <PublicPicture
           alt={post.coverImage.alt}
           height={941}
           src={post.coverImage.src}

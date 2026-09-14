@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import type { HomepageCopy, HomepageHeroFanImage } from "@/src/homepage/homepage-copy";
+import { PublicPicture } from "./public-picture";
 
 const HOMEPAGE_HERO_FAN_IMAGE_COUNT = 3;
 const HOMEPAGE_HERO_FAN_IMAGE_WIDTH = 864;
@@ -75,7 +76,7 @@ function HomepageHeroImageFan({
     <div data-homepage-hero-fan>
       {fanImages.map((fanImage) => (
         <div data-homepage-hero-fan-frame key={fanImage.src}>
-          <img
+          <PublicPicture
             alt={fanImage.alt}
             decoding="async"
             height={HOMEPAGE_HERO_FAN_IMAGE_HEIGHT}

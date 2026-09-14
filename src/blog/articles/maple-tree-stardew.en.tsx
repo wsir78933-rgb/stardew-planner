@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function MapleTreeStardewEnglishArticle() {
   return (
@@ -41,7 +42,7 @@ export function MapleTreeStardewEnglishArticle() {
         it can be planted to grow a maple tree.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Maple Seed, Acorn, and a fruit sapling in a row so you match the maple by the seed item"
           decoding="async"
           height="941"
@@ -163,7 +164,7 @@ export function MapleTreeStardewEnglishArticle() {
         use the same stage 4 neighbor stop.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Spaced maple trunks with a walking lane and wooden tappers on the trunks so the grove is a visit route"
           decoding="async"
           height="941"

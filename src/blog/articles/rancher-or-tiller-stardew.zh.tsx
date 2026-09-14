@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function RancherOrTillerStardewChineseArticle() {
   return (
@@ -58,7 +59,7 @@ export function RancherOrTillerStardewChineseArticle() {
         <a href="https://zh.stardewvalleywiki.com/mediawiki/index.php?title=%E8%80%95%E7%A7%8D&variant=zh-cn">耕种</a>技能表把 10 级分成两列。5 级选了畜牧人，10 级只在鸡舍大师和牧羊人里再选一项；选了农耕人，10 级只在工匠和农业学家里再选一项。5 级、10 级各选一项；不能 5 级畜牧人再接 10 级工匠。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="左侧从畜牧人分出鸡舍大师和牧羊人，右侧从农耕人分出工匠和农业学家的两列示意图"
           decoding="async"
           height="941"

@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function MapleTreeStardewChineseArticle() {
   return (
@@ -53,7 +54,7 @@ export function MapleTreeStardewChineseArticle() {
         果树是另一套：要 28 天成熟、按季节结果、必须种在 3×3 清空格中心；<a href="https://zh.stardewvalleywiki.com/树肥">树肥</a>对果树无效；树液采集器也不能放上果树。手里若是带木签的果树苗，不要按枫树去排。枫树和<a className="blog-planner-link" href="/zh/oak-tree-stardew">橡树</a>都按野树邻格长，采集器产物不同：这边要枫糖浆。果树那套 3×3 不要套过来，<a className="blog-planner-link" href="/zh/stardew-valley-trees">星露谷种树</a>把普通树邻格和果树间隔写在同一张对照里。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="窗边从左到右是带翅的枫树种子、带壳的橡子，以及木箱里的果树苗，认树先看物品栏名字。"
           decoding="async"
           height="941"
@@ -149,7 +150,7 @@ export function MapleTreeStardewChineseArticle() {
         闪电打到普通树会毁掉整棵，只留树桩和一些木材、树液。糖浆树避开容易被炸到的矿点通道。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="间隔开的枫树沿土路挂着木桶，采集器走同一条路，树与树之间留出能通过的空位。"
           decoding="async"
           height="941"

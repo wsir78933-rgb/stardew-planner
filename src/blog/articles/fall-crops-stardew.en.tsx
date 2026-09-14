@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function FallCropsStardewEnglishArticle() {
   return (
@@ -317,7 +318,7 @@ export function FallCropsStardewEnglishArticle() {
         </table>
       </div>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Calendar schematic of Fall 1–28 occupancy: cranberry picks on 8, 13, 18, 23, and 28; pumpkin 13-day cycle and last plant 15. Not a screenshot."
           decoding="async"
           height="941"
@@ -400,7 +401,7 @@ export function FallCropsStardewEnglishArticle() {
         crossing trellis.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Bed grid schematic: grape row with a walk tile, pumpkin 3-by-3 with marked top-left, cranberry rectangle not behind grapes. Not a 1% giant already rolled."
           decoding="async"
           height="941"

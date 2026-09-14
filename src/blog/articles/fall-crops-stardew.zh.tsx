@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function FallCropsStardewChineseArticle() {
   return (
@@ -285,7 +286,7 @@ export function FallCropsStardewChineseArticle() {
         </table>
       </div>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="蔓越莓秋 1 种才可能满 5 次，收日 8、13、18、23、28；南瓜两茬推算秋 1 种、秋 14 收，当天再种、秋 27 收；只赶一茬最晚秋 15。漏浇则后移。这是日历示意图，不是游戏截图。"
           decoding="async"
           height="941"
@@ -319,7 +320,7 @@ export function FallCropsStardewChineseArticle() {
         3×3 外面。路边采的葡萄不是这行日均 16.8。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="两行葡萄架子夹一条空路才能走到每一株；空路不是浪费，是收割资格。任意生长阶段不能从植株上走过去，枯了才能穿。"
           decoding="async"
           height="941"
@@ -349,7 +350,7 @@ export function FallCropsStardewChineseArticle() {
         。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="九格同种南瓜才有巨大资格；洒水器占一格则无资格；左上角须成熟且浇水；Giant Pumpkin 外观不等于九格资格。"
           decoding="async"
           height="941"

@@ -3,6 +3,7 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import { PublicPicture } from "./public-picture";
 
 export type HomepageFarmLayoutSlide = Readonly<{
   quote: string;
@@ -271,7 +272,7 @@ export function HomepageAnimatedTestimonials(props: HomepageAnimatedTestimonials
                 ease: "easeInOut",
               }}
             >
-              <img
+              <PublicPicture
                 alt={testimonial.imageAlt}
                 decoding="async"
                 draggable={false}

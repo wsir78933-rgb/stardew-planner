@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function HowToEarnMoneyStardewEnglishArticle() {
   return (
@@ -43,7 +44,7 @@ export function HowToEarnMoneyStardewEnglishArticle() {
 
       <h2>Spring 1–12: fish, plant, or buy the backpack</h2>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Year 1 morning split: a river pier with a fishing rod, a small potato patch, and a general-store backpack on the counter"
           decoding="async"
           height={941}
@@ -405,7 +406,7 @@ export function HowToEarnMoneyStardewEnglishArticle() {
         the count that matches tomorrow&apos;s watering, then stop.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="A compact watered crop rectangle beside dry untilled dirt, with a watering can on the wet edge and gold split toward a backpack"
           decoding="async"
           height={941}

@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function WhereIsRobinEnglishArticle() {
   return (
@@ -32,7 +33,7 @@ export function WhereIsRobinEnglishArticle() {
         worksite as the first checks.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Map route to Robin's Carpenter's Shop at 24 Mountain Road"
           decoding="async"
           height="941"

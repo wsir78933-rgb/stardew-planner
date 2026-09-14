@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function BestSpringCropStardewChineseArticle() {
   return (
@@ -85,7 +86,7 @@ export function BestSpringCropStardewChineseArticle() {
         室外作物超过 15 棵，且有格子落在稻草人够不到的地方，乌鸦才可能来吃。第一年田很小可以先不放；格子一过 15，就在规划器里打开稻草人覆盖，再回游戏插一根。稻草人本身不浇水。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="第一年春季日历从春1种防风草、土豆、花椰菜，画到春13蛋节换成草莓下地。"
           decoding="async"
           height="941"
@@ -170,7 +171,7 @@ export function BestSpringCropStardewChineseArticle() {
         推算中最晚春 16 下种，春 28 才能收普通花椰菜。春 16 以后再种，春 28 没收成，夏 1 枯死。巨大作物那条 1% 不是规划器能掷出来的，田里九格对齐只是资格。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="左侧九格花椰菜齐整排成 3×3，右侧同一块田已经长成巨大花椰菜，斧头靠在土边。"
           decoding="async"
           height="941"

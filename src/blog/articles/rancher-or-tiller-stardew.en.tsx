@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function RancherOrTillerStardewEnglishArticle() {
   return (
@@ -35,7 +36,7 @@ export function RancherOrTillerStardewEnglishArticle() {
         The two bonuses are not a scoreboard. They never share a stack on one item.
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="Diagram of two Farming profession trees: Tiller at level 5 branches only to Artisan or Agriculturist at level 10; Rancher branches only to Coopmaster or Shepherd."
           decoding="async"
           height="941"

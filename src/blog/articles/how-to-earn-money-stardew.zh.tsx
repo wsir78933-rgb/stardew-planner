@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function HowToEarnMoneyStardewChineseArticle() {
   return (
@@ -161,7 +162,7 @@ export function HowToEarnMoneyStardewChineseArticle() {
         不算金币，不浇水，也不替你钓鱼。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="河边钓竿、一小块土豆田、杂货店柜台上的背包，三件第一年前期工作并排放着。"
           decoding="async"
           height="941"
@@ -220,7 +221,7 @@ export function HowToEarnMoneyStardewChineseArticle() {
         示例（维基数字，不是存档实测）：仍用初级喷壶、耕种 0 级，满水 40 格就要跑去补水；铜喷壶蓄力走直线，一次 3 格、满水 55 次，理论上一次灌满能覆盖远多于 40 格，但体力按蓄力次数扣，不是按格子免费。夏 1 把田从 20 格扩到 80 格、喷壶还在铁匠铺，中间两天全是干土，那 80 格等于停长两夜。只种你浇得完的格子，现金才会滚向背包和下一座门槛，而不是滚进枯土。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="浇过的密实田块对着浇不到的干土，喷壶放在湿土边，金币分向背包。"
           decoding="async"
           height="941"

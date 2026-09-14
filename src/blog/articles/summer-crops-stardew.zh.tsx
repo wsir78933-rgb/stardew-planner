@@ -1,4 +1,5 @@
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function SummerCropsStardewChineseArticle() {
   return (
@@ -276,7 +277,7 @@ export function SummerCropsStardewChineseArticle() {
         22；漏浇一天，这些日子往后移。这是日历示意图，不是游戏截图。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="夏 1 种蓝莓才可能按维基最大 4 次收；甜瓜最晚夏 16，杨桃和蓝莓首次最晚夏 15，萝卜最晚夏 22；漏浇则后移。这是日历示意图，不是游戏截图。"
           decoding="async"
           height="941"
@@ -405,7 +406,7 @@ export function SummerCropsStardewChineseArticle() {
         对着下面这张格子图看四件事：九格同种甜瓜才有巨大资格；洒水器占其中一格则无资格；左上角那株须成熟且浇过水；巨大外观不等于这九格已经具备资格。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="九格同种甜瓜才有巨大资格；洒水器占一格则无资格；左上角须成熟且浇水；巨大外观不等于九格资格。"
           decoding="async"
           height="941"

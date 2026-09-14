@@ -42,8 +42,12 @@ function collectPublicPreviewFilePaths(
       if (directoryEntry.isDirectory()) {
         return collectPublicPreviewFilePaths(entryPath);
       }
-      if (directoryEntry.isFile()) {
+      if (directoryEntry.isFile() && entryPath.endsWith(".webp")) {
         return [entryPath];
+      }
+
+      if (directoryEntry.isFile()) {
+        return [];
       }
 
       throw new Error(

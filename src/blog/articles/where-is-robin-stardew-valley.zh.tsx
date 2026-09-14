@@ -1,5 +1,6 @@
 import { BlogFaqList } from "../../components/blog/blog-faq-list";
 import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
 
 export function WhereIsRobinChineseArticle() {
   return (
@@ -19,7 +20,7 @@ export function WhereIsRobinChineseArticle() {
         罗宾的生日是秋季 21 日，角色资料显示她不能与玩家结婚。这些信息适合送礼和好感度判断；如果你是来改造农场，就应该优先检查木匠商店营业状态和农场是否有正在进行的工程。
       </p>
       <figure className="blog-article-media">
-        <img
+        <PublicPicture
           alt="前往 24 Mountain Road 罗宾木匠商店的路线示意"
           decoding="async"
           height="941"
