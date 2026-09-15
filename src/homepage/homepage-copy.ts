@@ -84,7 +84,9 @@ export type HomepageCopy = Readonly<{
     supportLine: string;
   }>;
   faq: Readonly<{
+    eyebrow: string;
     heading: string;
+    description: string;
     items: readonly [
       HomepageFaqItem,
       HomepageFaqItem,
@@ -92,10 +94,6 @@ export type HomepageCopy = Readonly<{
       HomepageFaqItem,
       HomepageFaqItem,
     ];
-  }>;
-  trust: Readonly<{
-    heading: string;
-    description: string;
   }>;
   footer: SiteFooterCopy;
 }>;
@@ -262,7 +260,10 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportLine: "No sign-up. Projects stay in this browser.",
     },
     faq: {
-      heading: "Check these before you start",
+      eyebrow: "FAQ",
+      heading: "Frequently Asked Questions",
+      description:
+        "Where your plan is stored, which farms you can use, and what you can export.",
       items: [
         {
           question: "Will I lose my work?",
@@ -288,11 +289,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
           answer: "Yes. Standard and high-quality downloads.",
         },
       ],
-    },
-    trust: {
-      heading: "About this planner",
-      description:
-        "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
     },
     footer: {
       brandName: "Stardew Valley Farm Planner",
@@ -477,7 +473,9 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportLine: "不用注册。方案留在这台浏览器。",
     },
     faq: {
-      heading: "开始前先看这几件事",
+      eyebrow: "FAQ",
+      heading: "常见问题",
+      description: "方案存在哪、农场有哪些、能导出什么。",
       items: [
         {
           question: "会丢吗？",
@@ -502,10 +500,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
           answer: "能。普通和高清截图都可以下。",
         },
       ],
-    },
-    trust: {
-      heading: "玩家做的工具",
-      description: "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
     },
     footer: {
       brandName: "星露谷物语农场规划器",

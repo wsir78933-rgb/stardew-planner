@@ -57,11 +57,12 @@ export function HomepageContent({
           primaryActionLabel={copy.hero.primaryActionLabel}
         />
         <section data-homepage-faq id="faq">
-          <h2>{copy.faq.heading}</h2>
-          <HomepageFaqList items={copy.faq.items} />
-        </section>
-        <section aria-label={copy.trust.heading} data-homepage-trust>
-          <p>{copy.trust.description}</p>
+          <HomepageFaqList
+            description={copy.faq.description}
+            eyebrow={copy.faq.eyebrow}
+            heading={copy.faq.heading}
+            items={copy.faq.items}
+          />
         </section>
       </main>
       <SiteFooter content={createSiteFooterContent(copy.footer, currentLocale)} />

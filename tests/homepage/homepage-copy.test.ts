@@ -25,7 +25,6 @@ test("ships every approved locale with the same top-level homepage sections", ()
     "howTo",
     "closingCta",
     "faq",
-    "trust",
     "footer",
   ]);
 });
@@ -253,21 +252,20 @@ test("provides the approved bilingual planner hero content", () => {
   });
 });
 
-test("keeps localized trust, import, and screenshot claims synchronized", () => {
+test("keeps localized import and screenshot claims synchronized", () => {
   expect(homepageCopyByLocale.en.navigation.capabilitiesLabel).toBe("Features");
   expect(homepageCopyByLocale["zh-CN"].navigation.capabilitiesLabel).toBe("功能介绍");
-  expect(homepageCopyByLocale.en.trust).toEqual({
-    heading: "About this planner",
-    description:
-      "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
-  });
-  expect(homepageCopyByLocale["zh-CN"].trust).toEqual({
-    heading: "玩家做的工具",
-    description: "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
-  });
 
-  expect(homepageCopyByLocale.en.faq.heading).toBe("Check these before you start");
-  expect(homepageCopyByLocale["zh-CN"].faq.heading).toBe("开始前先看这几件事");
+  expect(homepageCopyByLocale.en.faq.eyebrow).toBe("FAQ");
+  expect(homepageCopyByLocale["zh-CN"].faq.eyebrow).toBe("FAQ");
+  expect(homepageCopyByLocale.en.faq.heading).toBe("Frequently Asked Questions");
+  expect(homepageCopyByLocale["zh-CN"].faq.heading).toBe("常见问题");
+  expect(homepageCopyByLocale.en.faq.description).toBe(
+    "Where your plan is stored, which farms you can use, and what you can export.",
+  );
+  expect(homepageCopyByLocale["zh-CN"].faq.description).toBe(
+    "方案存在哪、农场有哪些、能导出什么。",
+  );
   expect(homepageCopyByLocale.en.faq.items).toEqual([
     {
       question: "Will I lose my work?",

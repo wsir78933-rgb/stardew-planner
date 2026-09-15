@@ -465,89 +465,29 @@ test("renders the closing CTA as one lime action slab", () => {
   expect(mobileClosingCtaHeadingRule).toContain("min-width: 0;");
 });
 
-test("keeps the trust statement as one muted line under the FAQ", () => {
-  const styles = readProjectFile("app/globals.css");
-  const trustRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section\[data-homepage-trust\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const trustParagraphRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-trust\] p\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-
-  expect(trustRule).toBeDefined();
-  expect(trustRule).toContain("padding-top: 0;");
-  expect(trustRule).not.toContain("border-block:");
-  expect(trustRule).not.toContain("max-width: 48rem");
-  expect(trustRule).not.toContain("text-align: center");
-  expect(trustRule).not.toContain(
-    "width: calc(100% - clamp(2.5rem, 6vw, 6rem));",
-  );
-  expect(styles).not.toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-trust] h2",
-  );
-  expect(trustParagraphRule).toBeDefined();
-  expect(trustParagraphRule).not.toContain("margin-inline: auto");
-  expect(trustParagraphRule).not.toContain("max-width: 44rem");
-  expect(trustParagraphRule).toContain("text-wrap: pretty;");
-});
-
-test("lays out the FAQ as an always-visible numbered list", () => {
+test("lays out the FAQ accordion with Tailwind in the component", () => {
   const styles = readProjectFile("app/globals.css");
   const faqSectionRule = styles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq\s*\{([\s\S]*?)\n\}/,
   )?.[1];
-  const faqHeadingRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq > h2\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqListRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\]\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqItemRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] li\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
-  const faqAnswerRule = styles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#faq \[data-homepage-faq-list\] p\s*\{([\s\S]*?)\n\}/,
-  )?.[1];
 
-  expect(styles).toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,",
-  );
   expect(faqSectionRule).toBeDefined();
   expect(faqSectionRule).toContain("padding-bottom: 1.25rem;");
-  expect(faqHeadingRule).toBeDefined();
-  expect(faqHeadingRule).toContain("margin-bottom: 1.5rem;");
-  expect(faqHeadingRule).not.toContain("max-width: 11ch");
-  expect(faqListRule).toBeDefined();
-  expect(faqListRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");
-  expect(faqListRule).toContain("color: var(--foreground);");
-  expect(faqListRule).toContain("display: grid;");
-  expect(faqListRule).toContain("list-style: none;");
-  expect(faqItemRule).toBeDefined();
-  expect(faqItemRule).toContain("gap: 1rem;");
-  expect(faqItemRule).toContain(
+  expect(styles).not.toContain("[data-homepage-faq-list]");
+  expect(styles).not.toContain("section#faq > h2");
+  expect(faqSectionRule).not.toContain(
     "grid-template-columns: 2.25rem minmax(0, 1fr);",
   );
-  expect(faqItemRule).toContain("padding: 1.35rem 0;");
-  expect(faqAnswerRule).toBeDefined();
-  expect(faqAnswerRule).toContain("color: var(--muted-foreground);");
-  expect(faqAnswerRule).toContain("text-wrap: pretty;");
   expect(styles).not.toContain(
-    '[data-homepage-faq-list] button',
-  );
-  expect(styles).not.toContain(
-    '[data-homepage-faq-list] [role="region"]',
+    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,",
   );
   expect(styles).not.toContain('[data-slot="accordion"]');
   expect(styles).not.toContain('[data-slot="accordion-item"]');
   expect(styles).not.toContain('[data-slot="accordion-trigger"]');
   expect(styles).not.toContain('[data-slot="accordion-content"]');
   expect(styles).not.toContain('[data-slot="accordion-trigger-icon"]');
-  expect(styles).not.toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq details",
-  );
-  expect(styles).not.toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq summary",
-  );
+  expect(styles).not.toContain("section#faq details");
+  expect(styles).not.toContain("section#faq summary");
 });
 
 test("styles the homepage language dropdown through dedicated data attributes", () => {

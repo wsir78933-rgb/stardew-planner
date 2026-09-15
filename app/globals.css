@@ -524,8 +524,7 @@ body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] p,
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq p,
-body:has(> [data-homepage-shell]) [data-homepage-trust] > p {
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-list] p {
   color: var(--muted-foreground);
   line-height: 1.6;
 }
@@ -703,57 +702,8 @@ body:has(> [data-homepage-shell]) [data-homepage-closing-cta] [data-homepage-pri
   color: var(--primary-foreground);
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-trust] {
-  padding-top: 0;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-trust] p {
-  margin-bottom: 0;
-  text-wrap: pretty;
-}
-
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq {
   padding-bottom: 1.25rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq > h2 {
-  margin-bottom: 1.5rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] {
-  border-block: 1px solid rgb(36 42 34 / 72%);
-  color: var(--foreground);
-  display: grid;
-  gap: 0;
-  list-style: none;
-  margin: 0;
-  min-width: 0;
-  padding: 0;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] li {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 2.25rem minmax(0, 1fr);
-  min-width: 0;
-  padding: 1.35rem 0;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] li + li {
-  border-top: 1px solid rgb(36 42 34 / 35%);
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] h3 {
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
-  line-height: 1.15;
-  margin-bottom: 0.65rem;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#faq [data-homepage-faq-list] p {
-  color: var(--muted-foreground);
-  line-height: 1.6;
-  margin-bottom: 0;
-  text-wrap: pretty;
 }
 
 body:has(> [data-homepage-shell]) [data-site-footer] {

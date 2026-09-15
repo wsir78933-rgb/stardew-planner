@@ -59,8 +59,6 @@ type StaticHomepageExpectation = Readonly<{
   sectionImageSources: readonly string[];
   faqHeading: string;
   faqAnswers: readonly string[];
-  trustHeading: string;
-  trustDescription: string;
   plannerHref: string;
   blogHref: string;
   blogLabel: string;
@@ -1334,7 +1332,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/why-choose/fourcorners-balanced-emerald.webp",
       "/homepage/why-choose/fourcorners-coop-hallofax.webp",
     ],
-    faqHeading: "Check these before you start",
+    faqHeading: "Frequently Asked Questions",
     faqAnswers: [
       "Projects stay in this browser. No account, no cloud sync. A different device or a data wipe will lose them.",
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, Meadowlands, plus Ginger Island.",
@@ -1342,9 +1340,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Yes, but it is experimental. Modded items may not map.",
       "Yes. Standard and high-quality downloads.",
     ],
-    trustHeading: "About this planner",
-    trustDescription:
-      "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
     plannerHref: "#planner",
     blogHref: "/blog",
     blogLabel: "Blog",
@@ -1401,7 +1396,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/why-choose/fourcorners-balanced-emerald.webp",
       "/homepage/why-choose/fourcorners-coop-hallofax.webp",
     ],
-    faqHeading: "开始前先看这几件事",
+    faqHeading: "常见问题",
     faqAnswers: [
       "只存在你正在用的浏览器。没有账号，也没有云同步。换设备或清数据会丢。",
       "标准、河流、森林、山顶、荒野、四角、海滩、草原，加上姜岛。",
@@ -1409,8 +1404,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "能，但是实验功能。模组物品可能对不上。",
       "能。普通和高清截图都可以下。",
     ],
-    trustHeading: "玩家做的工具",
-    trustDescription: "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
     plannerHref: "#planner",
     blogHref: "/zh/blog",
     blogLabel: "博客",
@@ -1589,10 +1582,12 @@ function expectStaticHomepageContent(
   for (const faqAnswer of expectedHomepage.faqAnswers) {
     expect(staticPageHtml).toContain(faqAnswer);
   }
-  expect(staticPageHtml).toContain(
-    `aria-label="${expectedHomepage.trustHeading}"`,
+  expect(staticPageHtml).not.toContain(
+    "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
   );
-  expect(staticPageHtml).toContain(expectedHomepage.trustDescription);
+  expect(staticPageHtml).not.toContain(
+    "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
+  );
   expect(staticPageHtml).toContain('data-homepage-workspace="true"');
   expect(staticPageHtml).toContain("data-homepage-planner-preview");
   expect(staticPageHtml).toContain(

@@ -153,7 +153,10 @@ describe("planner editor page", () => {
         .filter(({ id }) => expectedPlannerFarmMapIds.includes(id as never))
         .map(({ id }) => id),
     ).toEqual(expectedPlannerFarmMapIds);
-    expect(plannerPageMarkup).toContain("About this planner");
+    expect(plannerPageMarkup).not.toContain(
+      "Fan-made. Not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
+    );
+    expect(plannerPageMarkup).not.toContain('data-homepage-trust="true"');
     expect(plannerPageMarkup).not.toContain('id="reference-runtime-root"');
     expect(plannerPageMarkup).not.toContain(
       'src="/reference-runtime/bootstrap.mjs"',
@@ -315,26 +318,26 @@ describe("planner editor page", () => {
     }
   });
 
-  it("renders always-visible numbered FAQ items with every English answer", () => {
+  it("renders the FAQ accordion with every English question and answer", () => {
     const plannerPageMarkup = renderToStaticMarkup(createElement(PlannerPage));
     const faqSectionStart = plannerPageMarkup.indexOf('id="faq"');
     const faqSectionEnd = plannerPageMarkup.indexOf("</section>", faqSectionStart);
     const faqMarkup = plannerPageMarkup.slice(faqSectionStart, faqSectionEnd);
+    const englishFaqCopy = homepageCopyByLocale.en.faq;
 
     expect(faqSectionStart).toBeGreaterThanOrEqual(0);
     expect(plannerPageMarkup).toContain('data-homepage-faq="true"');
-    expect(faqMarkup).toContain('data-homepage-faq-list="true"');
-    expect(faqMarkup.match(/data-homepage-section-index="true"/g)).toHaveLength(5);
-    expect(faqMarkup).toContain(">01</span>");
-    expect(faqMarkup).toContain(">02</span>");
-    expect(faqMarkup).toContain(">03</span>");
-    expect(faqMarkup).toContain(">04</span>");
-    expect(faqMarkup).toContain(">05</span>");
-    expect(faqMarkup.match(/<h3>/g)).toHaveLength(5);
-    expect(faqMarkup).not.toContain('data-state="closed"');
-    expect(faqMarkup).not.toContain('aria-expanded="false"');
-    expect(faqMarkup).not.toContain('role="region"');
-    expect(faqMarkup).not.toContain("<svg");
+    expect(faqMarkup).toContain("FAQ");
+    expect(faqMarkup).toContain("Frequently Asked Questions");
+    expect(faqMarkup).toContain(
+      "Where your plan is stored, which farms you can use, and what you can export.",
+    );
+    expect(faqMarkup.match(/type="button"/g)).toHaveLength(5);
+    expect(faqMarkup).toContain('aria-expanded="false"');
+    expect(faqMarkup).toContain("<svg");
+    expect(faqMarkup).not.toContain("data-homepage-section-index");
+    expect(faqMarkup).not.toContain(">01</span>");
+    expect(faqMarkup).not.toContain("<h3");
     expect(faqMarkup).not.toContain("<details");
     expect(faqMarkup).not.toContain("<summary");
     expect(faqMarkup).not.toContain("lucide");
@@ -344,7 +347,7 @@ describe("planner editor page", () => {
     expect(faqMarkup).not.toContain('data-slot="accordion-content"');
     expect(faqMarkup).not.toContain('data-slot="accordion-trigger-icon"');
 
-    for (const faqItem of homepageCopyByLocale.en.faq.items) {
+    for (const faqItem of englishFaqCopy.items) {
       expect(faqMarkup).toContain(faqItem.question);
       expect(faqMarkup).toContain(faqItem.answer);
     }
