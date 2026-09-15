@@ -38,7 +38,6 @@ test("provides the replacement sections with exact bilingual headings and item c
         itemCount: 3,
       },
       whyChoose: {
-        heading: "Why use this planner",
         previousLabel: "Previous farm layout",
         nextLabel: "Next farm layout",
         testimonialCount: 7,
@@ -84,7 +83,6 @@ test("provides the replacement sections with exact bilingual headings and item c
         itemCount: 3,
       },
       whyChoose: {
-        heading: "为什么用这个规划器",
         previousLabel: "上一张农场布局",
         nextLabel: "下一张农场布局",
         testimonialCount: 7,
@@ -137,7 +135,6 @@ test("provides the replacement sections with exact bilingual headings and item c
     });
     expect(homepageCopy.features.items).toHaveLength(expected.features.itemCount);
     expect(homepageCopy.whyChoose).toMatchObject({
-      heading: expected.whyChoose.heading,
       previousLabel: expected.whyChoose.previousLabel,
       nextLabel: expected.whyChoose.nextLabel,
     });

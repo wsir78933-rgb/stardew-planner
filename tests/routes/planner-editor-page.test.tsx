@@ -89,7 +89,10 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain('data-homepage-how-to="true"');
     expect(plannerPageMarkup).toContain('data-homepage-closing-cta="true"');
     expect(plannerPageMarkup).toContain("What the planner does");
-    expect(plannerPageMarkup).toContain("Why use this planner");
+    expect(plannerPageMarkup).not.toContain("Why use this planner");
+    expect(plannerPageMarkup).not.toContain(
+      'id="homepage-why-choose-heading"',
+    );
     expect(plannerPageMarkup).toContain("Lay out the farm in three passes");
     expect(plannerPageMarkup).toContain(
       "Finish the layout on this page, then build in-game.",
@@ -277,7 +280,6 @@ describe("planner editor page", () => {
 
       expect(homepageMarkup).toContain('data-homepage-why-choose="true"');
       expect(homepageMarkup).toContain("data-homepage-animated-testimonials");
-      expect(homepageMarkup).toContain(homepageCopy.whyChoose.heading);
       expect(homepageMarkup).toContain(homepageCopy.whyChoose.previousLabel);
       expect(homepageMarkup).toContain(homepageCopy.whyChoose.nextLabel);
       const firstFarmLayoutSlide = homepageCopy.whyChoose.testimonials[0];

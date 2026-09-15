@@ -50,7 +50,6 @@ type StaticHomepageExpectation = Readonly<{
   heroTrustedBy: string;
   featuresHeading: string;
   featuresDescriptions: readonly string[];
-  whyChooseHeading: string;
   whyChooseDescriptions: readonly string[];
   howToHeading: string;
   howToDescriptions: readonly string[];
@@ -1300,7 +1299,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Arrange buildings, crops, placeables, and decor. Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work.",
       "Spring, summer, fall, and winter are available. Save import is experimental, and modded items may not map. Export a standard or high-quality screenshot.",
     ],
-    whyChooseHeading: "Why use this planner",
     whyChooseDescriptions: [
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
       "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
@@ -1364,7 +1362,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "建筑、作物、可放置物和装饰都能放。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖范围可以直接看。",
       "春、夏、秋、冬都能切。存档导入仍是实验性的，模组物品可能对不上。导出有普通和高清截图。",
     ],
-    whyChooseHeading: "为什么用这个规划器",
     whyChooseDescriptions: [
       "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
       "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
@@ -1560,7 +1557,6 @@ function expectStaticHomepageContent(
   for (const featuresDescription of expectedHomepage.featuresDescriptions) {
     expect(staticPageHtml).toContain(featuresDescription);
   }
-  expect(staticPageHtml).toContain(`>${expectedHomepage.whyChooseHeading}</h2>`);
   for (const whyChooseDescription of expectedHomepage.whyChooseDescriptions) {
     expect(staticPageHtml).toContain(whyChooseDescription);
   }

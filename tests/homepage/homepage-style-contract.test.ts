@@ -226,6 +226,12 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   expect(homepageStyles).toContain(
     "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-animated-testimonials] {",
   );
+  const whyChooseLayoutRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const whyChooseCopyRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-copy\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
   const whyChooseMediaRule = homepageStyles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-media\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
@@ -235,6 +241,10 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   const whyChooseControlsRule = homepageStyles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-controls\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
+  expect(whyChooseLayoutRule).toBeDefined();
+  expect(whyChooseLayoutRule).toContain("align-items: stretch;");
+  expect(whyChooseCopyRule).toBeDefined();
+  expect(whyChooseCopyRule).toContain("justify-content: space-between;");
   expect(whyChooseMediaRule).toBeDefined();
   expect(whyChooseMediaRule).toContain("aspect-ratio: 1 / 1;");
   expect(whyChooseMediaRule).toContain("background: transparent;");

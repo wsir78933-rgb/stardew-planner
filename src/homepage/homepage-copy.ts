@@ -61,7 +61,6 @@ export type HomepageCopy = Readonly<{
     items: readonly [HomepageFeatureItem, HomepageFeatureItem, HomepageFeatureItem];
   }>;
   whyChoose: Readonly<{
-    heading: string;
     previousLabel: string;
     nextLabel: string;
     testimonials: readonly [
@@ -157,7 +156,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     whyChoose: {
-      heading: "Why use this planner",
       previousLabel: "Previous farm layout",
       nextLabel: "Next farm layout",
       testimonials: [
@@ -370,7 +368,6 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       ],
     },
     whyChoose: {
-      heading: "为什么用这个规划器",
       previousLabel: "上一张农场布局",
       nextLabel: "下一张农场布局",
       testimonials: [

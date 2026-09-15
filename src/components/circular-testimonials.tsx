@@ -251,7 +251,7 @@ export function getCircularImageStyle({
       opacity: 1,
       pointerEvents: "auto",
       transform:
-        "translate(-50%, -50%) translateX(0px) translateY(0px) scale(1) rotateY(0deg)",
+        "translate(-50%, 0) translateX(0px) translateY(0px) scale(1) rotateY(0deg)",
       transition,
     };
   }
@@ -261,7 +261,7 @@ export function getCircularImageStyle({
       zIndex: 2,
       opacity: 1,
       pointerEvents: "auto",
-      transform: `translate(-50%, -50%) translateX(-${String(gap)}px) translateY(-${String(maxStickUp)}px) scale(0.85) rotateY(15deg)`,
+      transform: `translate(-50%, 0) translateX(-${String(gap)}px) translateY(-${String(maxStickUp)}px) scale(0.85) rotateY(15deg)`,
       transition,
     };
   }
@@ -271,7 +271,7 @@ export function getCircularImageStyle({
       zIndex: 2,
       opacity: 1,
       pointerEvents: "auto",
-      transform: `translate(-50%, -50%) translateX(${String(gap)}px) translateY(-${String(maxStickUp)}px) scale(0.85) rotateY(-15deg)`,
+      transform: `translate(-50%, 0) translateX(${String(gap)}px) translateY(-${String(maxStickUp)}px) scale(0.85) rotateY(-15deg)`,
       transition,
     };
   }
@@ -281,7 +281,7 @@ export function getCircularImageStyle({
     opacity: 0,
     pointerEvents: "none",
     transform:
-      "translate(-50%, -50%) translateX(0px) translateY(0px) scale(0.74) rotateY(0deg)",
+      "translate(-50%, 0) translateX(0px) translateY(0px) scale(0.74) rotateY(0deg)",
     transition,
   };
 }

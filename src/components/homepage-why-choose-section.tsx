@@ -16,12 +16,10 @@ export function HomepageWhyChooseSection({ copy }: HomepageWhyChooseSectionProps
 
   return (
     <section
-      aria-labelledby="homepage-why-choose-heading"
       data-homepage-content-section
       data-homepage-why-choose
       id="why-choose"
     >
-      <h2 id="homepage-why-choose-heading">{copy.heading}</h2>
       <CircularTestimonials
         colors={{
           arrowBackground: "var(--foreground)",
