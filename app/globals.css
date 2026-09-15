@@ -542,14 +542,46 @@ body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-anim
 
 body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-testimonial-media] {
   aspect-ratio: 1 / 1;
-  background: var(--secondary);
-  border: 1px solid rgb(36 42 34 / 35%);
-  border-radius: var(--radius);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
   grid-column: 1;
   grid-row: 1;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-stage] {
+  height: 100%;
+  inset: 0;
+  perspective: 1000px;
+  position: absolute;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-image] {
+  aspect-ratio: 1 / 1;
+  background: var(--card);
+  border: 1px solid rgb(36 42 34 / 72%);
+  border-radius: 1.5rem;
+  box-shadow: 0 0.75rem 1.75rem rgb(28 33 27 / 22%);
+  left: 50%;
+  max-width: min(24rem, 76%);
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  width: 76%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-image] img {
+  background: var(--card);
+  border-radius: 1.35rem;
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   width: 100%;
 }
 
@@ -575,6 +607,77 @@ body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-test
   grid-column: 2;
   grid-row: 1;
   min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-copy-body] {
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonial-active] {
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonial-name] {
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonial-designation] {
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonial-quote] {
+  line-height: 1.6;
+  margin: 2rem 0 0;
+  max-width: 34rem;
+  text-wrap: pretty;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] .circular-testimonial-word {
+  display: inline-block;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-hidden-copy] {
+  display: none;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] {
+  display: flex;
+  gap: 1rem;
+  padding-top: 3rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] button {
+  align-items: center;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 44px;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0;
+  transition: transform 180ms ease, background-color 180ms ease;
+  width: 44px;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] button:hover {
+  transform: translateY(-0.1rem);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 0.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] svg {
+  height: 1.5rem;
+  pointer-events: none;
+  width: 1.5rem;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-testimonial-name] {
@@ -879,6 +982,19 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
     grid-row: auto;
   }
 
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-media] {
+    min-height: min(86vw, 24rem);
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-image] {
+    max-width: 72%;
+    width: 72%;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] {
+    padding-top: 2rem;
+  }
+
   body:has(> [data-homepage-shell]) [data-homepage-closing-cta-content] {
     align-items: flex-start;
     flex-direction: column;
@@ -903,6 +1019,13 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
     grid-template-columns: 1fr;
   }
 
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-image],
+  body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-controls] button {
+    transition: none !important;
+  }
 }
 
 /* Blog module: isolated from the planner and site-wide public-page surfaces. */

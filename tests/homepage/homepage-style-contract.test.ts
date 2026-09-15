@@ -237,7 +237,14 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   )?.[1];
   expect(whyChooseMediaRule).toBeDefined();
   expect(whyChooseMediaRule).toContain("aspect-ratio: 1 / 1;");
-  expect(whyChooseMediaRule).toContain("overflow: hidden;");
+  expect(whyChooseMediaRule).toContain("background: transparent;");
+  expect(whyChooseMediaRule).toContain("border: 0;");
+  expect(whyChooseMediaRule).toContain("border-radius: 0;");
+  expect(whyChooseMediaRule).toContain("overflow: visible;");
+  expect(whyChooseMediaRule).not.toContain("background: var(--secondary);");
+  expect(whyChooseMediaRule).not.toContain(
+    "border: 1px solid rgb(36 42 34 / 35%);",
+  );
   expect(whyChooseMediaRule).not.toContain("height: 20rem;");
   expect(whyChooseImageRule).toBeDefined();
   expect(whyChooseImageRule).toContain("object-fit: contain;");
