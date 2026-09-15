@@ -246,7 +246,8 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   expect(whyChooseCopyRule).toBeDefined();
   expect(whyChooseCopyRule).toContain("justify-content: space-between;");
   expect(whyChooseMediaRule).toBeDefined();
-  expect(whyChooseMediaRule).toContain("aspect-ratio: 1 / 1;");
+  expect(whyChooseMediaRule).toContain("height: 24rem;");
+  expect(whyChooseMediaRule).not.toContain("aspect-ratio: 1 / 1;");
   expect(whyChooseMediaRule).toContain("background: transparent;");
   expect(whyChooseMediaRule).toContain("border: 0;");
   expect(whyChooseMediaRule).toContain("border-radius: 0;");

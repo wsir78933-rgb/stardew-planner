@@ -541,13 +541,13 @@ body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-anim
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-testimonial-media] {
-  aspect-ratio: 1 / 1;
   background: transparent;
   border: 0;
   border-radius: 0;
   grid-column: 1;
   grid-row: 1;
   isolation: isolate;
+  height: 24rem;
   overflow: visible;
   position: relative;
   width: 100%;
@@ -984,7 +984,8 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   }
 
   body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-media] {
-    min-height: min(86vw, 24rem);
+    height: min(86vw, 24rem);
+    min-height: 0;
   }
 
   body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-circular-testimonials-image] {
