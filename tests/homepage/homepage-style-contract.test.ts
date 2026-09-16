@@ -115,12 +115,32 @@ function readExistingProjectFile(relativePath: string): string | null {
   return readProjectFile(relativePath);
 }
 
-test("ships the homepage image-and-text section assets as public WebP files", () => {
+test("ships the homepage image-and-text section assets as public image files", () => {
   const homepageSectionImages = [
     {
-      sourcePath: "src/components/homepage-features-section.tsx",
-      imagePath: "public/homepage/features-pixel-farm.webp",
-      imageSource: "/homepage/features-pixel-farm.webp",
+      sourcePath: "src/components/homepage-features-gallery.tsx",
+      imagePath: "public/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+      imageSource: "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+    },
+    {
+      sourcePath: "src/components/homepage-features-gallery.tsx",
+      imagePath: "public/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+      imageSource: "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+    },
+    {
+      sourcePath: "src/components/homepage-features-gallery.tsx",
+      imagePath: "public/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+      imageSource: "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+    },
+    {
+      sourcePath: "src/components/homepage-features-gallery.tsx",
+      imagePath: "public/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+      imageSource: "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+    },
+    {
+      sourcePath: "src/components/homepage-features-gallery.tsx",
+      imagePath: "public/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
+      imageSource: "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
     },
     {
       sourcePath: "src/homepage/homepage-copy.ts",
@@ -178,7 +198,10 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-media\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const sectionImageRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-media\] img\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-features-gallery-image\] img\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const sectionGalleryRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-features-gallery\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const sectionListRule = homepageStyles.match(
     /body:has\(> \[data-homepage-shell\]\) \[data-homepage-content-section\] \[data-homepage-section-list\]\s*\{([\s\S]*?)\n\}/,
@@ -204,11 +227,16 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   expect(sectionMediaRule).toContain("grid-column: 2;");
   expect(sectionMediaRule).toContain("grid-row: 1;");
   expect(sectionMediaRule).toContain("overflow: hidden;");
+  expect(sectionGalleryRule).toBeDefined();
+  expect(sectionGalleryRule).toContain("aspect-ratio: 4 / 3;");
+  expect(sectionGalleryRule).toContain("background: var(--secondary);");
+  expect(sectionGalleryRule).toContain("position: relative;");
+  expect(sectionGalleryRule).toContain("width: 100%;");
   expect(sectionImageRule).toBeDefined();
-  expect(sectionImageRule).toContain("aspect-ratio: 1672 / 941;");
   expect(sectionImageRule).toContain("display: block;");
-  expect(sectionImageRule).toContain("height: auto;");
-  expect(sectionImageRule).toContain("max-width: 100%;");
+  expect(sectionImageRule).toContain("height: 100%;");
+  expect(sectionImageRule).toContain("object-fit: contain;");
+  expect(sectionImageRule).toContain("object-position: center;");
   expect(sectionImageRule).toContain("width: 100%;");
   expect(sectionListRule).toBeDefined();
   expect(sectionListRule).toContain("border-block: 1px solid rgb(36 42 34 / 72%);");

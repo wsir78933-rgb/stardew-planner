@@ -1,9 +1,8 @@
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
-import { PublicPicture } from "./public-picture";
-
-const featuresImageSource = "/homepage/features-pixel-farm.webp";
-const featuresImageWidth = 1672;
-const featuresImageHeight = 941;
+import {
+  HomepageFeaturesGallery,
+  homepageFeaturesGalleryImages,
+} from "./homepage-features-gallery";
 
 type HomepageFeaturesSectionProps = Readonly<{
   copy: HomepageCopy["features"];
@@ -20,13 +19,9 @@ export function HomepageFeaturesSection({ copy }: HomepageFeaturesSectionProps) 
       <h2 id="homepage-features-heading">{copy.heading}</h2>
       <div data-homepage-section-layout>
         <figure data-homepage-section-media>
-          <PublicPicture
+          <HomepageFeaturesGallery
             alt={copy.imageAlt}
-            decoding="async"
-            height={featuresImageHeight}
-            loading="lazy"
-            src={featuresImageSource}
-            width={featuresImageWidth}
+            images={homepageFeaturesGalleryImages}
           />
         </figure>
         <ol data-homepage-section-list>

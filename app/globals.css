@@ -477,11 +477,25 @@ body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage
   overflow: hidden;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-media] img {
-  aspect-ratio: 1672 / 941;
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-features-gallery] {
+  aspect-ratio: 4 / 3;
+  background: var(--secondary);
+  position: relative;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-features-gallery-image] {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-features-gallery-image] img {
   display: block;
-  height: auto;
-  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   width: 100%;
 }
 

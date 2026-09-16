@@ -34,7 +34,7 @@ test("provides the replacement sections with exact bilingual headings and item c
     en: {
       features: {
         heading: "What the planner does",
-        imageAlt: "Pixel-art farm map with eight terrain patches and an island plot",
+        imageAlt: "Pixel-art Meadowlands farm layouts across seasons and farm styles",
         itemCount: 3,
       },
       whyChoose: {
@@ -79,7 +79,7 @@ test("provides the replacement sections with exact bilingual headings and item c
     "zh-CN": {
       features: {
         heading: "功能介绍",
-        imageAlt: "像素风农场地图，含八块不同地形和一处岛状地块",
+        imageAlt: "像素风草原农场布局，展示不同季节和农场风格",
         itemCount: 3,
       },
       whyChoose: {

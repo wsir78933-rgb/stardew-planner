@@ -1321,7 +1321,11 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
-      "/homepage/features-pixel-farm.webp",
+      "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+      "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+      "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+      "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+      "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
       "/homepage/why-choose/beach-decorative-machooo.webp",
       "/homepage/why-choose/beach-geometric-jennameeps.webp",
       "/homepage/why-choose/beach-organized-justkuwl.webp",
@@ -1384,7 +1388,11 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
-      "/homepage/features-pixel-farm.webp",
+      "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+      "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+      "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+      "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+      "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
       "/homepage/why-choose/beach-decorative-machooo.webp",
       "/homepage/why-choose/beach-geometric-jennameeps.webp",
       "/homepage/why-choose/beach-organized-justkuwl.webp",
@@ -1565,7 +1573,22 @@ function expectStaticHomepageContent(
     expect(staticPageHtml).toContain(howToDescription);
   }
   expect(staticPageHtml).toContain(expectedHomepage.closingCtaHeading);
-  expect(staticPageHtml).not.toContain(expectedHomepage.closingCtaSupportLine);
+  const closingCtaAttributePosition = staticPageHtml.indexOf(
+    'data-homepage-closing-cta="true"',
+  );
+  expect(closingCtaAttributePosition).toBeGreaterThanOrEqual(0);
+  const closingCtaSectionEnd = staticPageHtml.indexOf(
+    "</section>",
+    closingCtaAttributePosition,
+  );
+  expect(closingCtaSectionEnd).toBeGreaterThan(closingCtaAttributePosition);
+  const closingCtaMarkup = staticPageHtml.slice(
+    closingCtaAttributePosition,
+    closingCtaSectionEnd,
+  );
+  expect(closingCtaMarkup).not.toContain(
+    expectedHomepage.closingCtaSupportLine,
+  );
   for (const sectionImageSource of expectedHomepage.sectionImageSources) {
     expect(staticPageHtml).toContain(`src="${sectionImageSource}"`);
   }
@@ -1615,7 +1638,7 @@ function expectStaticHomepageContent(
     staticPageHtml.match(
       new RegExp(`href="${expectedHomepage.plannerHref}"`, "g"),
     ),
-  ).toHaveLength(4);
+  ).toHaveLength(3);
   expect(staticPageHtml).toContain(
     `<a href="${expectedHomepage.blogHref}">${expectedHomepage.blogLabel}</a>`,
   );

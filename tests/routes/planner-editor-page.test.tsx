@@ -30,6 +30,14 @@ const whyChooseImageSources = [
   "/homepage/why-choose/fourcorners-coop-hallofax.webp",
 ] as const;
 
+const featuresGalleryImageSources = [
+  "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+  "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+  "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+  "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+  "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
+] as const;
+
 function readHomepageHeaderMarkup(pageMarkup: string): string {
   const homepageHeaderAttributePosition = pageMarkup.indexOf(
     "data-homepage-header",
@@ -97,9 +105,9 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain(
       "Finish the layout on this page, then build in-game.",
     );
-    expect(plannerPageMarkup).toContain(
-      'src="/homepage/features-pixel-farm.webp"',
-    );
+    for (const featuresGalleryImageSource of featuresGalleryImageSources) {
+      expect(plannerPageMarkup).toContain(`src="${featuresGalleryImageSource}"`);
+    }
     expect(plannerPageMarkup).toContain("data-homepage-why-choose");
     expect(plannerPageMarkup).toContain("data-homepage-animated-testimonials");
     for (const whyChooseImageSource of whyChooseImageSources) {

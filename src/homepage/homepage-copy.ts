@@ -136,7 +136,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     features: {
       heading: "What the planner does",
-      imageAlt: "Pixel-art farm map with eight terrain patches and an island plot",
+      imageAlt: "Pixel-art Meadowlands farm layouts across seasons and farm styles",
       items: [
         {
           title: "Plan all 8 official farms, plus Ginger Island",
@@ -348,7 +348,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     features: {
       heading: "功能介绍",
-      imageAlt: "像素风农场地图，含八块不同地形和一处岛状地块",
+      imageAlt: "像素风草原农场布局，展示不同季节和农场风格",
       items: [
         {
           title: "规划 8 种官方农场和姜岛",
