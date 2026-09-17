@@ -15,13 +15,17 @@ function readHomepageStaticHtml(): string {
 }
 
 describe("planner static delivery", () => {
-  it("keeps the SEO homepage shell and accessible startup status while excluding editor-heavy resources", () => {
+  it("keeps the SEO homepage shell and Features SSR while excluding editor-heavy resources", () => {
     const homepageStaticHtml = readHomepageStaticHtml();
 
     expect(homepageStaticHtml).toContain("data-homepage-shell");
     expect(homepageStaticHtml).toContain("data-homepage-hero-emphasis");
     expect(homepageStaticHtml).toContain("Free Online Farm Layout Tool");
-    expect(homepageStaticHtml).toContain("About this planner");
+    expect(homepageStaticHtml).toContain('data-homepage-features="true"');
+    expect(homepageStaticHtml).toContain(
+      '<h2 id="homepage-features-heading">What the planner does</h2>',
+    );
+    expect(homepageStaticHtml).toContain('data-circular-testimonials="true"');
     expect(homepageStaticHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
     expect(homepageStaticHtml).toContain("data-homepage-planner-preview");
     expect(homepageStaticHtml).toContain(

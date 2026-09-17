@@ -634,6 +634,8 @@ body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage
 
 body:has(> [data-homepage-shell]) [data-homepage-features] [data-homepage-testimonial-copy] {
   grid-column: 1;
+  justify-content: flex-start;
+  position: relative;
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-features] [data-homepage-testimonial-media] {
@@ -680,6 +682,10 @@ body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage
   padding-top: 3rem;
 }
 
+body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-controls] {
+  justify-content: flex-end;
+}
+
 body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage-features]) [data-circular-testimonials-controls] button {
   align-items: center;
   border: 0;
@@ -698,6 +704,14 @@ body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage
 
 body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage-features]) [data-circular-testimonials-controls] button:hover {
   transform: translateY(-0.1rem);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-controls] button {
+  transition: background-color 180ms ease;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-controls] button:hover {
+  transform: none;
 }
 
 body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage-features]) [data-circular-testimonials-controls] button:focus-visible {
@@ -1051,6 +1065,20 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
     grid-template-columns: 1fr;
   }
 
+}
+
+@media (min-width: 901px) {
+  body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-controls] {
+    bottom: 8rem;
+    position: absolute;
+    right: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-copy-body] {
+    min-height: 16rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

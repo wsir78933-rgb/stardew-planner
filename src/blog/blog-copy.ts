@@ -118,6 +118,7 @@ const localizedBlogPostPaths: Readonly<
     "rancher-or-tiller-stardew": "/rancher-or-tiller-stardew",
     "summer-crops-stardew": "/summer-crops-stardew",
     "fall-crops-stardew": "/fall-crops-stardew",
+    "do-you-have-to-water-trees-stardew": "/do-you-have-to-water-trees-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -137,6 +138,7 @@ const localizedBlogPostPaths: Readonly<
     "rancher-or-tiller-stardew": "/zh/rancher-or-tiller-stardew",
     "summer-crops-stardew": "/zh/summer-crops-stardew",
     "fall-crops-stardew": "/zh/fall-crops-stardew",
+    "do-you-have-to-water-trees-stardew": "/zh/do-you-have-to-water-trees-stardew",
   },
 };
 

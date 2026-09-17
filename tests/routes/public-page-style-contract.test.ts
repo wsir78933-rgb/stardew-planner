@@ -38,19 +38,24 @@ it("keeps public-page layout styles naturally scrollable, responsive, and focusa
   expect(globalStyles).toMatch(/\[data-public-page-shell\][^}]*:focus-visible\s*\{[^}]*outline:\s*2px/s);
 });
 
-it("does not add public-page declarations to the homepage selector", () => {
+it("keeps homepage Features styles separate from public-page styles", () => {
   const publicShellIndex = globalStyles.indexOf("[data-public-page-shell]");
   const existingHomepageStyles = globalStyles.slice(0, publicShellIndex);
   const publicStyleBlock = globalStyles.slice(publicShellIndex);
 
   expect(publicShellIndex).toBeGreaterThanOrEqual(0);
   expect(existingHomepageStyles).toContain(
-    "  body:has(> [data-homepage-shell]) [data-homepage-capability-number] {\n    margin-bottom: 2rem;\n  }",
+    "body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-image] {\n  aspect-ratio: 4 / 3;\n}",
+  );
+  expect(existingHomepageStyles).toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-features] [data-circular-testimonials-image] img {\n  object-fit: cover;\n}",
   );
   expect(publicStyleBlock).toMatch(
     /\[data-public-page-shell\] \[data-public-page-header\]\s*\{/,
   );
-  expect(publicStyleBlock).not.toContain("body:has(> [data-homepage-shell])");
+  expect(publicStyleBlock).not.toContain(
+    "body:has(> [data-homepage-shell]) [data-homepage-features]",
+  );
 });
 
 it("replaces the public footer layout with the shared site footer attributes", () => {

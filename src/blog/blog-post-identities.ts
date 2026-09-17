@@ -15,6 +15,7 @@ export const blogPostSlugs = [
   "rancher-or-tiller-stardew",
   "summer-crops-stardew",
   "fall-crops-stardew",
+  "do-you-have-to-water-trees-stardew",
 ] as const;
 
 export type BlogPostSlug = (typeof blogPostSlugs)[number];

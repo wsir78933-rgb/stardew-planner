@@ -25,7 +25,7 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   expect(markup).toContain(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt);
   expect(markup).not.toContain("Loading planner…");
   expect(markup).toContain(homepageCopyByLocale["zh-CN"].features.heading);
-  expect(markup.match(/href="#planner"/g)).toHaveLength(4);
+  expect(markup.match(/href="#planner"/g)).toHaveLength(3);
   expect(markup).toContain('href="/zh"');
   expect(markup).toContain('href="/"');
   expect(markup).not.toContain('data-public-page-shell="true"');

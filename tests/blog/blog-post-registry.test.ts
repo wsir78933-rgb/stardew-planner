@@ -27,6 +27,7 @@ const expectedSlugs = [
   "rancher-or-tiller-stardew",
   "summer-crops-stardew",
   "fall-crops-stardew",
+  "do-you-have-to-water-trees-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -61,14 +62,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the sixteen canonical blog identities in publishing order", () => {
+it("keeps the seventeen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the thirty-two localized root-level canonical article paths", () => {
+it("publishes only the thirty-four localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -86,6 +87,7 @@ it("publishes only the thirty-two localized root-level canonical article paths",
     "/rancher-or-tiller-stardew/",
     "/summer-crops-stardew/",
     "/fall-crops-stardew/",
+    "/do-you-have-to-water-trees-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -102,6 +104,7 @@ it("publishes only the thirty-two localized root-level canonical article paths",
     "/zh/rancher-or-tiller-stardew/",
     "/zh/summer-crops-stardew/",
     "/zh/fall-crops-stardew/",
+    "/zh/do-you-have-to-water-trees-stardew/",
   ]);
 });
 
@@ -401,34 +404,81 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
     },
   });
+  expect(englishPosts[16]).toMatchObject({
+    title:
+      "Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3",
+    description:
+      "Common trees and fruit-tree saplings do not need watering. If a common sapling is stuck at stage 4, check its eight adjacent tiles for a mature tree; for a fruit sapling, check its 3×3 for blocking objects. Crops follow a separate watering rule.",
+    readTimeMinutes: 14,
+    coverImage: {
+      src: "/blog/do-you-have-to-water-trees-stardew-cover.webp",
+      alt: "Farm planning illustration separating a common tree, a fruit-tree sapling, tilled crop soil, and a sprinkler.",
+    },
+  });
+  expect(chinesePosts[16]).toMatchObject({
+    title: "星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3",
+    description:
+      "普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。",
+    readTimeMinutes: 17,
+    coverImage: {
+      src: "/blog/do-you-have-to-water-trees-stardew-cover-zh.webp",
+      alt: "农场规划示意图，将普通树、果树苗、耕地作物和洒水器分成不同判断对象。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
 it("binds every localized post to its own original blog cover", () => {
   const expectedCoverPaths = {
-    "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
-    "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.webp",
-    "stardew-valley-npc": "/blog/stardew-valley-npc-cover.webp",
-    "stardew-valley-town-map": "/blog/stardew-valley-town-map-cover.webp",
-    "where-is-stardew-valley-located":
-      "/blog/where-is-stardew-valley-located-cover.webp",
-    "stardew-valley-expanded-bachelors-and-bachelorettes":
-      "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
-    "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
-    "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
-    "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
-    "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
-    "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
-    "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
-    "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
-    "rancher-or-tiller-stardew": "/blog/rancher-or-tiller-stardew-cover.webp",
-    "summer-crops-stardew": "/blog/summer-crops-stardew-cover.webp",
-    "fall-crops-stardew": "/blog/fall-crops-stardew-cover.webp",
+    en: {
+      "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
+      "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.webp",
+      "stardew-valley-npc": "/blog/stardew-valley-npc-cover.webp",
+      "stardew-valley-town-map": "/blog/stardew-valley-town-map-cover.webp",
+      "where-is-stardew-valley-located":
+        "/blog/where-is-stardew-valley-located-cover.webp",
+      "stardew-valley-expanded-bachelors-and-bachelorettes":
+        "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+      "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
+      "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
+      "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
+      "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
+      "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
+      "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
+      "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
+      "rancher-or-tiller-stardew": "/blog/rancher-or-tiller-stardew-cover.webp",
+      "summer-crops-stardew": "/blog/summer-crops-stardew-cover.webp",
+      "fall-crops-stardew": "/blog/fall-crops-stardew-cover.webp",
+      "do-you-have-to-water-trees-stardew":
+        "/blog/do-you-have-to-water-trees-stardew-cover.webp",
+    },
+    "zh-CN": {
+      "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
+      "where-is-robin-stardew-valley": "/blog/where-is-robin-stardew-valley-cover.webp",
+      "stardew-valley-npc": "/blog/stardew-valley-npc-cover.webp",
+      "stardew-valley-town-map": "/blog/stardew-valley-town-map-cover.webp",
+      "where-is-stardew-valley-located":
+        "/blog/where-is-stardew-valley-located-cover.webp",
+      "stardew-valley-expanded-bachelors-and-bachelorettes":
+        "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+      "sprinkler-stardew": "/blog/sprinkler-stardew-cover.webp",
+      "glasshouse-stardew-valley": "/blog/glasshouse-stardew-valley-cover.webp",
+      "oak-tree-stardew": "/blog/oak-tree-stardew-cover.webp",
+      "stardew-valley-trees": "/blog/stardew-valley-trees-cover.webp",
+      "maple-tree-stardew": "/blog/maple-tree-stardew-cover.webp",
+      "best-spring-crop-stardew": "/blog/best-spring-crop-stardew-cover.webp",
+      "how-to-earn-money-stardew": "/blog/how-to-earn-money-stardew-cover.webp",
+      "rancher-or-tiller-stardew": "/blog/rancher-or-tiller-stardew-cover.webp",
+      "summer-crops-stardew": "/blog/summer-crops-stardew-cover.webp",
+      "fall-crops-stardew": "/blog/fall-crops-stardew-cover.webp",
+      "do-you-have-to-water-trees-stardew":
+        "/blog/do-you-have-to-water-trees-stardew-cover-zh.webp",
+    },
   } as const;
 
   for (const locale of ["en", "zh-CN"] as const) {
     for (const post of getAllBlogPosts(locale)) {
-      expect(post.coverImage.src).toBe(expectedCoverPaths[post.slug]);
+      expect(post.coverImage.src).toBe(expectedCoverPaths[locale][post.slug]);
       expect(post.coverImage.src).not.toBe("/social-images/stardew-valley-farm-planner.png");
     }
   }
@@ -522,7 +572,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: fall-crops-stardew.",
+    "Expected: carpenter-stardew. Received: do-you-have-to-water-trees-stardew.",
   );
 });
 

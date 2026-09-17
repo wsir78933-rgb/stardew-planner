@@ -80,6 +80,7 @@ describe("planner resource coordinator", () => {
       },
     });
     performanceMarker.mark("editor:island-mounted");
+    performanceMarker.mark("editor:workspace-module-ready");
     const pixi = createDeferred<typeof import("pixi.js")>();
     const projectState = createDeferred<{
       repository: ReferenceProjectRepository;
@@ -110,12 +111,16 @@ describe("planner resource coordinator", () => {
     const firstMapPromise = coordinator.loadDefaultMap(request);
     const duplicateMapPromise = coordinator.loadDefaultMap(request);
 
-    expect(markedNames).toEqual(["editor:island-mounted"]);
+    expect(markedNames).toEqual([
+      "editor:island-mounted",
+      "editor:workspace-module-ready",
+    ]);
     expect(loadDefaultMap).toHaveBeenCalledTimes(1);
 
     reportFetched?.();
     expect(markedNames).toEqual([
       "editor:island-mounted",
+      "editor:workspace-module-ready",
       "editor:default-map-fetched",
     ]);
     reportParsed?.();
@@ -123,6 +128,7 @@ describe("planner resource coordinator", () => {
     await expect(firstMapPromise).resolves.toEqual(await duplicateMapPromise);
     expect(markedNames).toEqual([
       "editor:island-mounted",
+      "editor:workspace-module-ready",
       "editor:default-map-fetched",
       "editor:default-map-parsed",
     ]);
@@ -132,6 +138,7 @@ describe("planner resource coordinator", () => {
     await Promise.all([pixiPromise, projectPromise]);
     expect(markedNames).toEqual([
       "editor:island-mounted",
+      "editor:workspace-module-ready",
       "editor:default-map-fetched",
       "editor:default-map-parsed",
       "editor:pixi-module-ready",

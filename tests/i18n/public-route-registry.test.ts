@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(22);
+  expect(canonicalPublicPaths).toHaveLength(23);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -118,8 +118,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/fall-crops-stardew")).toBe(
     "/zh/fall-crops-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(44);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(42);
+  expect(getLocalizedPublicPath("en", "/do-you-have-to-water-trees-stardew")).toBe(
+    "/do-you-have-to-water-trees-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/do-you-have-to-water-trees-stardew")).toBe(
+    "/zh/do-you-have-to-water-trees-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(46);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(44);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -161,6 +167,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/summer-crops-stardew");
   expect(indexablePathnames).toContain("/fall-crops-stardew");
   expect(indexablePathnames).toContain("/zh/fall-crops-stardew");
+  expect(indexablePathnames).toContain("/do-you-have-to-water-trees-stardew");
+  expect(indexablePathnames).toContain("/zh/do-you-have-to-water-trees-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -184,6 +192,7 @@ it("registers the direct-entry blog routes", () => {
       "/rancher-or-tiller-stardew",
       "/summer-crops-stardew",
       "/fall-crops-stardew",
+      "/do-you-have-to-water-trees-stardew",
     ]),
   );
 });

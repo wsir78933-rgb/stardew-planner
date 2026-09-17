@@ -32,6 +32,8 @@ import { SummerCropsStardewEnglishArticle } from "./articles/summer-crops-starde
 import { SummerCropsStardewChineseArticle } from "./articles/summer-crops-stardew.zh";
 import { FallCropsStardewEnglishArticle } from "./articles/fall-crops-stardew.en";
 import { FallCropsStardewChineseArticle } from "./articles/fall-crops-stardew.zh";
+import { DoYouHaveToWaterTreesStardewEnglishArticle } from "./articles/do-you-have-to-water-trees-stardew.en";
+import { DoYouHaveToWaterTreesStardewChineseArticle } from "./articles/do-you-have-to-water-trees-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -311,6 +313,22 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: FallCropsStardewEnglishArticle,
     },
+    {
+      slug: "do-you-have-to-water-trees-stardew",
+      title:
+        "Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3",
+      description:
+        "Common trees and fruit-tree saplings do not need watering. If a common sapling is stuck at stage 4, check its eight adjacent tiles for a mature tree; for a fruit sapling, check its 3×3 for blocking objects. Crops follow a separate watering rule.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/do-you-have-to-water-trees-stardew-cover.webp",
+        alt: "Farm planning illustration separating a common tree, a fruit-tree sapling, tilled crop soil, and a sprinkler.",
+      },
+      featured: true,
+      Content: DoYouHaveToWaterTreesStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -551,6 +569,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: FallCropsStardewChineseArticle,
+    },
+    {
+      slug: "do-you-have-to-water-trees-stardew",
+      title: "星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3",
+      description:
+        "普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 17,
+      coverImage: {
+        src: "/blog/do-you-have-to-water-trees-stardew-cover-zh.webp",
+        alt: "农场规划示意图，将普通树、果树苗、耕地作物和洒水器分成不同判断对象。",
+      },
+      featured: true,
+      Content: DoYouHaveToWaterTreesStardewChineseArticle,
     },
   ],
 };
