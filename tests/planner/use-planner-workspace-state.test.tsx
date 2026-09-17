@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   attachPlannerWorkspaceHistoryKeyboardListener,
+  attachPlannerWorkspacePanelPositionResizeListener,
   createPlannerWorkspaceHistoryKeyboardHandler,
   resolvePlannerWorkspaceKeyboardListenerPort,
+  resolvePlannerWorkspaceResizeListenerPort,
   type PlannerWorkspaceKeyboardListenerPort,
+  type PlannerWorkspaceResizeListenerPort,
 } from "../../src/planner/use-planner-workspace-state";
 import type { PlannerWorkspaceAction } from "../../src/planner/planner-workspace-state";
 
@@ -181,6 +184,52 @@ describe("planner workspace keyboard history handling", () => {
   });
 });
 
+describe("planner workspace panel position resize handling", () => {
+  it("resolves the injected resize listener before the browser listener", () => {
+    const injectedResizeListenerPort = createResizeListenerPort(640);
+    const browserResizeListenerPort = createResizeListenerPort(641);
+
+    expect(
+      resolvePlannerWorkspaceResizeListenerPort(
+        injectedResizeListenerPort,
+        browserResizeListenerPort,
+      ),
+    ).toBe(injectedResizeListenerPort);
+    expect(
+      resolvePlannerWorkspaceResizeListenerPort(
+        undefined,
+        browserResizeListenerPort,
+      ),
+    ).toBe(browserResizeListenerPort);
+    expect(
+      resolvePlannerWorkspaceResizeListenerPort(undefined, undefined),
+    ).toBeUndefined();
+  });
+
+  it("dispatches the current viewport width for each resize and detaches cleanly", () => {
+    const resizeListenerPort = createResizeListenerPort(640);
+    const receivedActions: PlannerWorkspaceAction[] = [];
+    const detachResizeListener = attachPlannerWorkspacePanelPositionResizeListener(
+      resizeListenerPort,
+      (plannerWorkspaceAction) => receivedActions.push(plannerWorkspaceAction),
+    );
+
+    resizeListenerPort.setViewportWidth(641);
+    resizeListenerPort.dispatchResize();
+    detachResizeListener();
+    resizeListenerPort.setViewportWidth(640);
+    resizeListenerPort.dispatchResize();
+
+    expect(receivedActions).toEqual([
+      {
+        previousViewportWidth: 640,
+        type: "synchronize-panel-position",
+        viewportWidth: 641,
+      },
+    ]);
+  });
+});
+
 function createKeyboardEvent(
   key: string,
   keyboardModifiers: Readonly<{ ctrlKey: boolean }>,
@@ -194,4 +243,30 @@ function createKeyboardEvent(
     shiftKey: { value: false },
   });
   return keyboardEvent as KeyboardEvent;
+}
+
+function createResizeListenerPort(
+  initialViewportWidth: number,
+): PlannerWorkspaceResizeListenerPort & {
+  dispatchResize: () => void;
+  setViewportWidth: (viewportWidth: number) => void;
+} {
+  const resizeEventTarget = new EventTarget();
+  let viewportWidth = initialViewportWidth;
+
+  return {
+    addEventListener: (eventName, eventListener) =>
+      resizeEventTarget.addEventListener(eventName, eventListener),
+    dispatchResize: () => {
+      resizeEventTarget.dispatchEvent(new Event("resize"));
+    },
+    get innerWidth() {
+      return viewportWidth;
+    },
+    removeEventListener: (eventName, eventListener) =>
+      resizeEventTarget.removeEventListener(eventName, eventListener),
+    setViewportWidth: (nextViewportWidth) => {
+      viewportWidth = nextViewportWidth;
+    },
+  };
 }

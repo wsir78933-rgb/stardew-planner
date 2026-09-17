@@ -58,6 +58,29 @@ export function createInitialCameraState(
   };
 }
 
+export function resizeCameraState(
+  cameraState: CameraState,
+  cameraGeometry: CameraGeometry,
+): CameraState {
+  assertCameraState(cameraState);
+  assertCameraGeometry(cameraGeometry);
+
+  const nextInitialCameraState = createInitialCameraState(cameraGeometry);
+  const zoom = cameraState.zoom === cameraState.initialFitZoom
+    ? nextInitialCameraState.initialFitZoom
+    : Math.max(cameraState.zoom, nextInitialCameraState.initialFitZoom);
+
+  return clampCameraPosition(
+    {
+      ...cameraState,
+      initialFitZoom: nextInitialCameraState.initialFitZoom,
+      maximumZoom: nextInitialCameraState.maximumZoom,
+      zoom,
+    },
+    cameraGeometry,
+  );
+}
+
 export function panCameraBy(
   cameraState: CameraState,
   cameraGeometry: CameraGeometry,

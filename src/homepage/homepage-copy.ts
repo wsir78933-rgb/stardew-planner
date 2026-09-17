@@ -1,11 +1,6 @@
 import type { HomepageLocale } from "./homepage-locale";
 import type { SiteFooterCopy } from "../site-footer/site-footer-content";
 
-type HomepageFeatureItem = Readonly<{
-  title: string;
-  description: string;
-}>;
-
 type HomepageFarmLayoutSlide = Readonly<{
   quote: string;
   name: string;
@@ -57,8 +52,15 @@ export type HomepageCopy = Readonly<{
   }>;
   features: Readonly<{
     heading: string;
-    imageAlt: string;
-    items: readonly [HomepageFeatureItem, HomepageFeatureItem, HomepageFeatureItem];
+    previousLabel: string;
+    nextLabel: string;
+    testimonials: readonly [
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+      HomepageFarmLayoutSlide,
+    ];
   }>;
   whyChoose: Readonly<{
     previousLabel: string;
@@ -136,22 +138,51 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     features: {
       heading: "What the planner does",
-      imageAlt: "Pixel-art Meadowlands farm layouts across seasons and farm styles",
-      items: [
+      previousLabel: "Previous feature",
+      nextLabel: "Next feature",
+      testimonials: [
         {
-          title: "Plan all 8 official farms, plus Ginger Island",
-          description:
+          quote:
             "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
+          name: "Plan all 8 official farms, plus Ginger Island",
+          designation: "Shown on Meadowlands in fall",
+          src: "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+          imageAlt:
+            "Pixel-art Meadowlands farm layout with prismatic seasonal styling in fall",
         },
         {
-          title: "Place buildings and crops, then check coverage",
-          description:
-            "Arrange buildings, crops, placeables, and decor. Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work.",
+          quote:
+            "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
+          name: "Place buildings and crops on one grid",
+          designation: "Shown on Meadowlands in spring",
+          src: "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+          imageAlt:
+            "Pixel-art Meadowlands farm layout with prismatic seasonal styling in spring",
         },
         {
-          title: "Switch seasons, import a save, export a screenshot",
-          description:
-            "Spring, summer, fall, and winter are available. Save import is experimental, and modded items may not map. Export a standard or high-quality screenshot.",
+          quote:
+            "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
+          name: "Check coverage as you place",
+          designation: "Shown on Meadowlands in summer",
+          src: "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+          imageAlt:
+            "Pixel-art Meadowlands farm layout with prismatic seasonal styling in summer",
+        },
+        {
+          quote:
+            "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
+          name: "Switch seasons, then export a screenshot",
+          designation: "Modded Meadowlands overview",
+          src: "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+          imageAlt: "Pixel-art modded Meadowlands farm overview layout",
+        },
+        {
+          quote:
+            "Save import is experimental, and modded items may not map. There is no cloud sync. A different browser or a data wipe will lose them. This planner is free and fan-made.",
+          name: "Import a save. Projects stay in this browser",
+          designation: "Vanilla Meadowlands, year 7",
+          src: "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
+          imageAlt: "Pixel-art vanilla Meadowlands farm layout in year 7",
         },
       ],
     },
@@ -348,22 +379,48 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     features: {
       heading: "功能介绍",
-      imageAlt: "像素风草原农场布局，展示不同季节和农场风格",
-      items: [
+      previousLabel: "上一项功能",
+      nextLabel: "下一项功能",
+      testimonials: [
         {
-          title: "规划 8 种官方农场和姜岛",
-          description:
+          quote:
             "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
+          name: "规划 8 种官方农场和姜岛",
+          designation: "图例：草原农场·秋",
+          src: "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+          imageAlt: "像素风草原农场棱镜风格秋季布局",
         },
         {
-          title: "摆放建筑和作物，并检查覆盖",
-          description:
-            "建筑、作物、可放置物和装饰都能放。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖范围可以直接看。",
+          quote:
+            "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
+          name: "建筑和作物放在同一张图上",
+          designation: "图例：草原农场·春",
+          src: "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+          imageAlt: "像素风草原农场棱镜风格春季布局",
         },
         {
-          title: "切换四季，导入存档，导出截图",
-          description:
-            "春、夏、秋、冬都能切。存档导入仍是实验性的，模组物品可能对不上。导出有普通和高清截图。",
+          quote:
+            "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
+          name: "对着覆盖圈摆",
+          designation: "图例：草原农场·夏",
+          src: "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+          imageAlt: "像素风草原农场棱镜风格夏季布局",
+        },
+        {
+          quote:
+            "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
+          name: "切四季，再导出截图",
+          designation: "模组草原农场总览",
+          src: "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+          imageAlt: "像素风模组草原农场总览布局",
+        },
+        {
+          quote:
+            "存档导入仍是实验性的，模组物品可能对不上。没有云同步。换浏览器或清数据会丢。这是免费的玩家工具，和官方没有隶属或认可关系。",
+          name: "能导存档，项目留在当前浏览器",
+          designation: "原版草原农场，第 7 年",
+          src: "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
+          imageAlt: "像素风原版草原农场第 7 年布局",
         },
       ],
     },

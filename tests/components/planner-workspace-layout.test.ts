@@ -66,6 +66,26 @@ describe("planner workspace layout", () => {
     );
   });
 
+  it("keeps a wide bottom catalog usable without clipping category labels", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.bottom-panel\s*\{[^}]*flex-direction:\s*column;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.panel-tabs\s*\{[^}]*flex-direction:\s*row;[^}]*overflow-x:\s*auto;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.tab-icon\s*\{[^}]*flex-direction:\s*row;[^}]*width:\s*auto;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.panel-content\s*\{[^}]*padding-left:\s*0;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /@media \(max-width: 640px\)[\s\S]*?\.planner-editor-shell \.item-catalog-panel--bottom \.bottom-panel\s*\{[^}]*flex-direction:\s*row;/s,
+    );
+  });
+
   it("removes obsolete season dialog styles without moving the mobile menu", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
 

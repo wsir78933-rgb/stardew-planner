@@ -118,27 +118,27 @@ function readExistingProjectFile(relativePath: string): string | null {
 test("ships the homepage image-and-text section assets as public image files", () => {
   const homepageSectionImages = [
     {
-      sourcePath: "src/components/homepage-features-gallery.tsx",
+      sourcePath: "src/homepage/homepage-copy.ts",
       imagePath: "public/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
       imageSource: "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
     },
     {
-      sourcePath: "src/components/homepage-features-gallery.tsx",
+      sourcePath: "src/homepage/homepage-copy.ts",
       imagePath: "public/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
       imageSource: "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
     },
     {
-      sourcePath: "src/components/homepage-features-gallery.tsx",
+      sourcePath: "src/homepage/homepage-copy.ts",
       imagePath: "public/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
       imageSource: "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
     },
     {
-      sourcePath: "src/components/homepage-features-gallery.tsx",
+      sourcePath: "src/homepage/homepage-copy.ts",
       imagePath: "public/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
       imageSource: "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
     },
     {
-      sourcePath: "src/components/homepage-features-gallery.tsx",
+      sourcePath: "src/homepage/homepage-copy.ts",
       imagePath: "public/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
       imageSource: "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
     },
@@ -252,29 +252,43 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   );
   expect(sectionItemRule).toContain("padding: 1.35rem 0;");
   expect(homepageStyles).toContain(
-    "body:has(> [data-homepage-shell]) [data-homepage-why-choose] [data-homepage-animated-testimonials] {",
+    "body:has(> [data-homepage-shell]) :is([data-homepage-why-choose], [data-homepage-features]) [data-homepage-animated-testimonials] {",
   );
   const whyChooseLayoutRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const whyChooseCopyRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-copy\]\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-testimonial-copy\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const whyChooseMediaRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-media\]\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-testimonial-media\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const whyChooseImageRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-media\] img\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-testimonial-media\] img\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   const whyChooseControlsRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-testimonial-controls\]\s*\{([\s\S]*?)\n\}/,
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-testimonial-controls\]\s*\{([\s\S]*?)\n\}/,
   )?.[1];
   expect(whyChooseLayoutRule).toBeDefined();
   expect(whyChooseLayoutRule).toContain("align-items: stretch;");
   expect(whyChooseCopyRule).toBeDefined();
   expect(whyChooseCopyRule).toContain("justify-content: space-between;");
+  expect(whyChooseCopyRule).toContain("grid-column: 2;");
   expect(whyChooseMediaRule).toBeDefined();
   expect(whyChooseMediaRule).toContain("height: 24rem;");
+  expect(whyChooseMediaRule).toContain("grid-column: 1;");
+  const featuresTestimonialCopyRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-features\] \[data-homepage-testimonial-copy\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const featuresTestimonialMediaRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-features\] \[data-homepage-testimonial-media\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  expect(featuresTestimonialCopyRule).toBeDefined();
+  expect(featuresTestimonialCopyRule).toContain("grid-column: 1;");
+  expect(featuresTestimonialCopyRule).not.toContain("grid-column: 2;");
+  expect(featuresTestimonialMediaRule).toBeDefined();
+  expect(featuresTestimonialMediaRule).toContain("grid-column: 2;");
+  expect(featuresTestimonialMediaRule).not.toContain("grid-column: 1;");
   expect(whyChooseMediaRule).not.toContain("aspect-ratio: 1 / 1;");
   expect(whyChooseMediaRule).toContain("background: transparent;");
   expect(whyChooseMediaRule).toContain("border: 0;");
@@ -288,16 +302,54 @@ test("lays out homepage image-and-text sections with scoped responsive hooks", (
   expect(whyChooseImageRule).toBeDefined();
   expect(whyChooseImageRule).toContain("object-fit: contain;");
   expect(whyChooseImageRule).not.toContain("object-fit: cover;");
+  const sharedCircularTestimonialsImageRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-circular-testimonials-image\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const featuresCircularTestimonialsImageRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-features\] \[data-circular-testimonials-image\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  expect(sharedCircularTestimonialsImageRule).toBeDefined();
+  expect(sharedCircularTestimonialsImageRule).toContain("aspect-ratio: 1 / 1;");
+  expect(featuresCircularTestimonialsImageRule).toBeDefined();
+  expect(featuresCircularTestimonialsImageRule).toContain("aspect-ratio: 4 / 3;");
+  expect(featuresCircularTestimonialsImageRule).not.toContain(
+    "aspect-ratio: 1 / 1;",
+  );
+  const sharedCircularTestimonialsImageElementRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-circular-testimonials-image\] img\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const featuresCircularTestimonialsImageElementRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-features\] \[data-circular-testimonials-image\] img\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  expect(sharedCircularTestimonialsImageElementRule).toBeDefined();
+  expect(sharedCircularTestimonialsImageElementRule).toContain(
+    "object-fit: contain;",
+  );
+  expect(featuresCircularTestimonialsImageElementRule).toBeDefined();
+  expect(featuresCircularTestimonialsImageElementRule).toContain(
+    "object-fit: cover;",
+  );
+  expect(featuresCircularTestimonialsImageElementRule).not.toContain(
+    "object-fit: contain;",
+  );
+  expect(homepageStyles).not.toMatch(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-circular-testimonials-image\] img\s*\{[\s\S]*?object-fit:\s*cover;/,
+  );
   expect(whyChooseControlsRule).toBeDefined();
   expect(whyChooseControlsRule).toContain("position: absolute;");
   expect(whyChooseControlsRule).toContain("pointer-events: none;");
   const mobileWhyChooseAnimatedTestimonialsRule = homepageStyles.match(
-    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) \[data-homepage-why-choose\] \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n  \}/,
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-animated-testimonials\]\s*\{([\s\S]*?)\n  \}/,
   )?.[1];
   expect(mobileWhyChooseAnimatedTestimonialsRule).toBeDefined();
   expect(mobileWhyChooseAnimatedTestimonialsRule).toMatch(
     /flex-direction:\s*column|grid-template-columns:\s*1fr/,
   );
+  const mobileTestimonialPlacementRule = homepageStyles.match(
+    /@media \(max-width: 700px\)\s*\{[\s\S]*?body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-testimonial-media\],\s*body:has\(> \[data-homepage-shell\]\) :is\(\[data-homepage-why-choose\], \[data-homepage-features\]\) \[data-homepage-testimonial-copy\]\s*\{([\s\S]*?)\n  \}/,
+  )?.[1];
+  expect(mobileTestimonialPlacementRule).toBeDefined();
+  expect(mobileTestimonialPlacementRule).toContain("grid-column: auto;");
   expect(mobileSectionLayoutRule).toBeDefined();
   expect(mobileSectionLayoutRule).toContain("gap: 1.5rem;");
   expect(mobileSectionLayoutRule).toContain("grid-template-columns: 1fr;");

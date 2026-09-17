@@ -6,11 +6,13 @@ import {
   getEditorLayout,
   getNextEditorSeason,
   openEditorModal,
+  resolveEditorPanelPosition,
   selectCatalogCategory,
   selectEditorMap,
   selectEditorSeason,
   selectEditorTool,
   selectPanelPosition,
+  synchronizeEditorPanelPosition,
   toggleEditorMenuVisibility,
 } from "../../src/editor/editor-view-state";
 
@@ -22,14 +24,50 @@ describe("editor view state", () => {
       tool: "cursor",
       catalogCategory: "buildings",
       panelPosition: "left",
+      panelPositionSource: "responsive",
       modalId: null,
     });
   });
 
-  it("places the initial catalog at the bottom through 640px", () => {
+  it("resolves the responsive catalog position at the 640px threshold", () => {
+    expect(resolveEditorPanelPosition(0)).toBe("bottom");
+    expect(resolveEditorPanelPosition(640)).toBe("bottom");
+    expect(resolveEditorPanelPosition(641)).toBe("left");
     expect(createInitialEditorViewState(640).panelPosition).toBe("bottom");
     expect(createInitialEditorViewState(641).panelPosition).toBe("left");
     expect(createInitialEditorViewState().panelPosition).toBe("left");
+  });
+
+  it("synchronizes responsive positions without overriding an explicit selection", () => {
+    const compactResponsiveState = createInitialEditorViewState(640);
+    const desktopResponsiveState = synchronizeEditorPanelPosition(
+      compactResponsiveState,
+      641,
+    );
+    const explicitBottomState = selectPanelPosition(
+      createInitialEditorViewState(641),
+      "bottom",
+    );
+
+    expect(desktopResponsiveState).toMatchObject({
+      panelPosition: "left",
+      panelPositionSource: "responsive",
+    });
+    expect(
+      synchronizeEditorPanelPosition(explicitBottomState, 641, 641),
+    ).toEqual(explicitBottomState);
+
+    const explicitLeftState = selectPanelPosition(
+      createInitialEditorViewState(641),
+      "left",
+    );
+
+    expect(
+      synchronizeEditorPanelPosition(explicitLeftState, 640, 641),
+    ).toMatchObject({
+      panelPosition: "bottom",
+      panelPositionSource: "responsive",
+    });
   });
 
   it("changes to a catalogued map and closes the map picker", () => {

@@ -213,6 +213,77 @@ describe("planner workspace state", () => {
     expect(createInitialPlannerWorkspaceState().panelPosition).toBe("left");
   });
 
+  it("synchronizes the catalog position when the viewport crosses 640px", () => {
+    const compactWorkspaceState = createInitialPlannerWorkspaceState(
+      "standard",
+      640,
+    );
+    const desktopWorkspaceState = reducePlannerWorkspaceState(
+      compactWorkspaceState,
+      {
+        previousViewportWidth: 640,
+        type: "synchronize-panel-position",
+        viewportWidth: 641,
+      },
+    );
+    const compactAgainWorkspaceState = reducePlannerWorkspaceState(
+      desktopWorkspaceState,
+      {
+        previousViewportWidth: 641,
+        type: "synchronize-panel-position",
+        viewportWidth: 640,
+      },
+    );
+
+    expect(desktopWorkspaceState).toMatchObject({
+      panelPosition: "left",
+      panelPositionSource: "responsive",
+    });
+    expect(compactAgainWorkspaceState).toMatchObject({
+      panelPosition: "bottom",
+      panelPositionSource: "responsive",
+    });
+  });
+
+  it("preserves an explicitly selected catalog position during resize", () => {
+    const explicitlyBottomWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState("standard", 641),
+      { panelPosition: "bottom", type: "select-panel-position" },
+    );
+
+    const resizedWorkspaceState = reducePlannerWorkspaceState(
+      explicitlyBottomWorkspaceState,
+      {
+        previousViewportWidth: 641,
+        type: "synchronize-panel-position",
+        viewportWidth: 641,
+      },
+    );
+
+    expect(resizedWorkspaceState).toEqual(explicitlyBottomWorkspaceState);
+  });
+
+  it("moves an explicit desktop catalog position to the compact layout", () => {
+    const explicitlyLeftWorkspaceState = reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState("standard", 641),
+      { panelPosition: "left", type: "select-panel-position" },
+    );
+
+    const resizedWorkspaceState = reducePlannerWorkspaceState(
+      explicitlyLeftWorkspaceState,
+      {
+        previousViewportWidth: 641,
+        type: "synchronize-panel-position",
+        viewportWidth: 640,
+      },
+    );
+
+    expect(resizedWorkspaceState).toMatchObject({
+      panelPosition: "bottom",
+      panelPositionSource: "responsive",
+    });
+  });
+
   it("restores prepared display and behavior preferences in one reducer transition", () => {
     const preparedPreferences = {
       ...createInitialEditorPreferences(),

@@ -34,8 +34,30 @@ test("provides the replacement sections with exact bilingual headings and item c
     en: {
       features: {
         heading: "What the planner does",
-        imageAlt: "Pixel-art Meadowlands farm layouts across seasons and farm styles",
-        itemCount: 3,
+        previousLabel: "Previous feature",
+        nextLabel: "Next feature",
+        testimonialCount: 5,
+        quotes: [
+          "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
+          "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
+          "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
+          "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
+          "Save import is experimental, and modded items may not map. There is no cloud sync. A different browser or a data wipe will lose them. This planner is free and fan-made.",
+        ],
+        names: [
+          "Plan all 8 official farms, plus Ginger Island",
+          "Place buildings and crops on one grid",
+          "Check coverage as you place",
+          "Switch seasons, then export a screenshot",
+          "Import a save. Projects stay in this browser",
+        ],
+        sources: [
+          "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+          "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+          "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+          "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+          "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
+        ],
       },
       whyChoose: {
         previousLabel: "Previous farm layout",
@@ -79,8 +101,30 @@ test("provides the replacement sections with exact bilingual headings and item c
     "zh-CN": {
       features: {
         heading: "功能介绍",
-        imageAlt: "像素风草原农场布局，展示不同季节和农场风格",
-        itemCount: 3,
+        previousLabel: "上一项功能",
+        nextLabel: "下一项功能",
+        testimonialCount: 5,
+        quotes: [
+          "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
+          "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
+          "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
+          "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
+          "存档导入仍是实验性的，模组物品可能对不上。没有云同步。换浏览器或清数据会丢。这是免费的玩家工具，和官方没有隶属或认可关系。",
+        ],
+        names: [
+          "规划 8 种官方农场和姜岛",
+          "建筑和作物放在同一张图上",
+          "对着覆盖圈摆",
+          "切四季，再导出截图",
+          "能导存档，项目留在当前浏览器",
+        ],
+        sources: [
+          "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
+          "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
+          "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
+          "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
+          "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
+        ],
       },
       whyChoose: {
         previousLabel: "上一张农场布局",
@@ -131,9 +175,29 @@ test("provides the replacement sections with exact bilingual headings and item c
     expect(homepageCopy).not.toHaveProperty("capabilities");
     expect(homepageCopy.features).toMatchObject({
       heading: expected.features.heading,
-      imageAlt: expected.features.imageAlt,
+      previousLabel: expected.features.previousLabel,
+      nextLabel: expected.features.nextLabel,
     });
-    expect(homepageCopy.features.items).toHaveLength(expected.features.itemCount);
+    expect(homepageCopy.features).not.toHaveProperty("items");
+    expect(homepageCopy.features).not.toHaveProperty("imageAlt");
+    expect(homepageCopy.features.testimonials).toHaveLength(
+      expected.features.testimonialCount,
+    );
+    expect(
+      homepageCopy.features.testimonials.map(
+        (featureSlide) => featureSlide.src,
+      ),
+    ).toEqual([...expected.features.sources]);
+    expect(
+      homepageCopy.features.testimonials.map(
+        (featureSlide) => featureSlide.quote,
+      ),
+    ).toEqual([...expected.features.quotes]);
+    expect(
+      homepageCopy.features.testimonials.map(
+        (featureSlide) => featureSlide.name,
+      ),
+    ).toEqual([...expected.features.names]);
     expect(homepageCopy.whyChoose).toMatchObject({
       previousLabel: expected.whyChoose.previousLabel,
       nextLabel: expected.whyChoose.nextLabel,

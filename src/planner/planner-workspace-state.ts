@@ -9,11 +9,13 @@ import {
   selectEditorSeason,
   selectEditorTool,
   selectPanelPosition,
+  synchronizeEditorPanelPosition,
   toggleEditorMenuVisibility,
   type EditorCatalogCategory,
   type EditorMenuVisibility,
   type EditorModalId,
   type EditorPanelPosition,
+  type EditorPanelPositionSource,
   type EditorTool,
   type EditorViewState,
 } from "../editor/editor-view-state";
@@ -68,6 +70,7 @@ export type PlannerWorkspaceState = Readonly<{
   mapRenderOptions: MapRenderOptions;
   modalId: EditorModalId | null;
   panelPosition: EditorPanelPosition;
+  panelPositionSource: EditorPanelPositionSource;
   placementHistory: PlacementHistory<PlacementSnapshot>;
   runtimeState: PlannerWorkspaceRuntimeState;
   season: TilesheetSeason;
@@ -144,6 +147,11 @@ export type PlannerWorkspaceAction =
   | Readonly<{ type: "select-tool"; tool: EditorTool | null }>
   | Readonly<{ type: "select-panel-position"; panelPosition: EditorPanelPosition }>
   | Readonly<{
+      previousViewportWidth: number;
+      type: "synchronize-panel-position";
+      viewportWidth: number;
+    }>
+  | Readonly<{
       type: "set-behavior-option";
       option: EditorBehaviorOptionKey;
       value: boolean;
@@ -176,6 +184,7 @@ export function createInitialPlannerWorkspaceState(
     mapRenderOptions: createInitialMapRenderOptions(),
     modalId: initialEditorViewState.modalId,
     panelPosition: initialEditorViewState.panelPosition,
+    panelPositionSource: initialEditorViewState.panelPositionSource,
     placementHistory: createPlacementHistory(
       createInitialMapPlacementSnapshot(initialEditorViewState.mapId),
     ),
@@ -275,6 +284,12 @@ export function reducePlannerWorkspaceState(
       return selectWorkspacePanelPosition(
         plannerWorkspaceState,
         plannerWorkspaceAction.panelPosition,
+      );
+    case "synchronize-panel-position":
+      return synchronizeWorkspacePanelPosition(
+        plannerWorkspaceState,
+        plannerWorkspaceAction.previousViewportWidth,
+        plannerWorkspaceAction.viewportWidth,
       );
     case "open-modal":
       return openWorkspaceModal(
@@ -596,6 +611,21 @@ function selectWorkspacePanelPosition(
   );
 }
 
+function synchronizeWorkspacePanelPosition(
+  plannerWorkspaceState: PlannerWorkspaceState,
+  previousViewportWidth: number,
+  viewportWidth: number,
+): PlannerWorkspaceState {
+  return applyEditorViewState(
+    plannerWorkspaceState,
+    synchronizeEditorPanelPosition(
+      createEditorViewState(plannerWorkspaceState),
+      viewportWidth,
+      previousViewportWidth,
+    ),
+  );
+}
+
 function openWorkspaceModal(
   plannerWorkspaceState: PlannerWorkspaceState,
   modalId: EditorModalId,
@@ -757,6 +787,7 @@ function createEditorViewState(
     mapId: plannerWorkspaceState.selectedPlannerMapId,
     modalId: plannerWorkspaceState.modalId,
     panelPosition: plannerWorkspaceState.panelPosition,
+    panelPositionSource: plannerWorkspaceState.panelPositionSource,
     season: plannerWorkspaceState.season,
     tool: plannerWorkspaceState.tool,
   };
@@ -771,6 +802,7 @@ function applyEditorViewState(
     catalogCategory: editorViewState.catalogCategory,
     modalId: editorViewState.modalId,
     panelPosition: editorViewState.panelPosition,
+    panelPositionSource: editorViewState.panelPositionSource,
     season: editorViewState.season,
     selectedPlannerMapId: editorViewState.mapId,
     tool: editorViewState.tool,

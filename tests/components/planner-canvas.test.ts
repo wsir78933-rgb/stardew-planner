@@ -900,6 +900,34 @@ describe("PlannerCanvas Pixi initialization", () => {
 });
 
 describe("PlannerCanvas camera state retention", () => {
+  it("re-fits the camera when the same canvas changes from compact to expanded geometry", () => {
+    const cameraStateRetention = createPlannerCameraStateRetention();
+    const cameraLifecycle = createPlannerCanvasCameraLifecycle({
+      cameraStateRetention,
+      mapId: "standard",
+      renderCameraState: () => {},
+    });
+    const compactViewportGeometry: CameraGeometry = {
+      mapPixelHeight: 600,
+      mapPixelWidth: 1_000,
+      viewportHeight: 300,
+      viewportWidth: 500,
+    };
+    const expandedViewportGeometry: CameraGeometry = {
+      mapPixelHeight: 600,
+      mapPixelWidth: 1_000,
+      viewportHeight: 480,
+      viewportWidth: 800,
+    };
+
+    cameraLifecycle.resizeCamera(compactViewportGeometry);
+
+    expect(cameraLifecycle.resizeCamera(expandedViewportGeometry)).toMatchObject({
+      initialFitZoom: 0.8,
+      zoom: 0.8,
+    });
+  });
+
   it("scopes a committed camera state to same-map canvas lifecycles", () => {
     const cameraStateRetention = createPlannerCameraStateRetention();
     const cameraGeometry: CameraGeometry = {
@@ -932,7 +960,9 @@ describe("PlannerCanvas camera state retention", () => {
     });
     expect(sameMapCanvasReload.resizeCamera(cameraGeometry)).toEqual({
       ...committedCameraState,
-      positionY: 62,
+      initialFitZoom: 2,
+      positionY: 32,
+      zoom: 2,
     });
 
     const changedMapCanvas = createPlannerCanvasCameraLifecycle({

@@ -4,6 +4,7 @@ import {
   getCameraKeyboardPan,
   getWheelRequestedZoom,
   panCameraBy,
+  resizeCameraState,
   zoomCameraAtPoint,
 } from "../../src/rendering/camera-state";
 
@@ -23,6 +24,92 @@ describe("createInitialCameraState", () => {
       positionX: 250,
       positionY: 150,
       zoom: 0.5,
+    });
+  });
+});
+
+describe("resizeCameraState", () => {
+  const compactViewportGeometry = {
+    mapPixelHeight: 600,
+    mapPixelWidth: 1_000,
+    viewportHeight: 300,
+    viewportWidth: 500,
+  } as const;
+  const expandedViewportGeometry = {
+    mapPixelHeight: 600,
+    mapPixelWidth: 1_000,
+    viewportHeight: 480,
+    viewportWidth: 800,
+  } as const;
+
+  it("raises an auto-fitted camera to the fit required by a larger viewport", () => {
+    expect(
+      resizeCameraState(
+        createInitialCameraState(compactViewportGeometry),
+        expandedViewportGeometry,
+      ),
+    ).toEqual({
+      initialFitZoom: 0.8,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 250,
+      positionY: 150,
+      zoom: 0.8,
+    });
+  });
+
+  it("recomputes the fit zoom when an auto-fitted camera gets a smaller viewport", () => {
+    expect(
+      resizeCameraState(
+        createInitialCameraState(expandedViewportGeometry),
+        compactViewportGeometry,
+      ),
+    ).toEqual({
+      initialFitZoom: 0.5,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 400,
+      positionY: 240,
+      zoom: 0.5,
+    });
+  });
+
+  it("preserves a deliberate zoom-in state when the viewport becomes smaller", () => {
+    const manuallyZoomedCameraState = zoomCameraAtPoint(
+      createInitialCameraState(expandedViewportGeometry),
+      expandedViewportGeometry,
+      {
+        anchorX: 400,
+        anchorY: 240,
+        requestedZoom: 1.5,
+      },
+    );
+
+    expect(
+      resizeCameraState(manuallyZoomedCameraState, compactViewportGeometry),
+    ).toMatchObject({
+      initialFitZoom: 0.5,
+      zoom: 1.5,
+    });
+  });
+
+  it("clamps a refitted camera position to the new viewport bounds", () => {
+    const cameraStateOutsideNextViewport = {
+      ...createInitialCameraState(compactViewportGeometry),
+      positionX: -1_000,
+      positionY: 1_000,
+    };
+
+    expect(
+      resizeCameraState(
+        cameraStateOutsideNextViewport,
+        expandedViewportGeometry,
+      ),
+    ).toMatchObject({
+      initialFitZoom: 0.8,
+      positionX: 160,
+      positionY: 384,
+      zoom: 0.8,
     });
   });
 });

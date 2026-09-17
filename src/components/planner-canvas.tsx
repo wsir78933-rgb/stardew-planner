@@ -58,11 +58,11 @@ import {
 } from "../rendering/map-rendering-contract";
 import { createLayerTileGeometryResolver } from "../rendering/map-tile-geometry";
 import {
-  clampCameraPosition,
   createInitialCameraState,
   getCameraKeyboardPan,
   getWheelRequestedZoom,
   panCameraBy,
+  resizeCameraState,
   type CameraGeometry,
   type CameraState,
   zoomCameraAtPoint,
@@ -373,7 +373,7 @@ export function createPlannerCanvasCameraLifecycle(
         ?? input.cameraStateRetention.read(input.mapId);
       const resizedCameraState = cameraStateBeforeResize === null
         ? createInitialCameraState(cameraGeometry)
-        : clampCameraPosition(cameraStateBeforeResize, cameraGeometry);
+        : resizeCameraState(cameraStateBeforeResize, cameraGeometry);
 
       commitCameraState(resizedCameraState);
       return resizedCameraState;

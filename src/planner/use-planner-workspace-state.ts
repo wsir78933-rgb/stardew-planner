@@ -21,10 +21,23 @@ export type PlannerWorkspaceKeyboardListenerPort = Readonly<{
   ) => void;
 }>;
 
+export type PlannerWorkspaceResizeListenerPort = Readonly<{
+  addEventListener: (
+    eventName: "resize",
+    eventListener: EventListener,
+  ) => void;
+  removeEventListener: (
+    eventName: "resize",
+    eventListener: EventListener,
+  ) => void;
+  innerWidth: number;
+}>;
+
 export type UsePlannerWorkspaceStateInput = Readonly<{
   initialPlannerMapId?: string;
   initialPlannerWorkspaceState?: PlannerWorkspaceState;
   keyboardListenerPort?: PlannerWorkspaceKeyboardListenerPort;
+  resizeListenerPort?: PlannerWorkspaceResizeListenerPort;
 }>;
 
 export type PlannerWorkspaceStateController = Readonly<{
@@ -71,6 +84,24 @@ export function usePlannerWorkspaceState(
       dispatchPlannerWorkspaceAction,
     );
   }, [usePlannerWorkspaceStateInput.keyboardListenerPort]);
+
+  useEffect(() => {
+    const browserResizeListenerPort =
+      typeof window === "undefined" ? undefined : window;
+    const resizeListenerPort = resolvePlannerWorkspaceResizeListenerPort(
+      usePlannerWorkspaceStateInput.resizeListenerPort,
+      browserResizeListenerPort,
+    );
+
+    if (resizeListenerPort === undefined) {
+      return;
+    }
+
+    return attachPlannerWorkspacePanelPositionResizeListener(
+      resizeListenerPort,
+      dispatchPlannerWorkspaceAction,
+    );
+  }, [usePlannerWorkspaceStateInput.resizeListenerPort]);
 
   const applyPlacementEditResult = useCallback(
     (
@@ -164,6 +195,43 @@ export function attachPlannerWorkspaceHistoryKeyboardListener(
   };
 }
 
+export function resolvePlannerWorkspaceResizeListenerPort(
+  injectedResizeListenerPort: PlannerWorkspaceResizeListenerPort | undefined,
+  browserResizeListenerPort: PlannerWorkspaceResizeListenerPort | undefined,
+): PlannerWorkspaceResizeListenerPort | undefined {
+  return injectedResizeListenerPort ?? browserResizeListenerPort;
+}
+
+export function attachPlannerWorkspacePanelPositionResizeListener(
+  resizeListenerPort: PlannerWorkspaceResizeListenerPort,
+  dispatchPlannerWorkspaceAction: Dispatch<PlannerWorkspaceAction>,
+): () => void {
+  assertResizeListenerPort(resizeListenerPort);
+  assertPlannerWorkspaceActionDispatch(dispatchPlannerWorkspaceAction);
+  let currentViewportWidth = getResizeListenerViewportWidth(resizeListenerPort);
+  const handleResize = () => {
+    const previousViewportWidth = currentViewportWidth;
+    currentViewportWidth = getResizeListenerViewportWidth(resizeListenerPort);
+    dispatchPlannerWorkspaceAction({
+      previousViewportWidth,
+      type: "synchronize-panel-position",
+      viewportWidth: currentViewportWidth,
+    });
+  };
+
+  resizeListenerPort.addEventListener("resize", handleResize);
+  let isResizeListenerAttached = true;
+
+  return () => {
+    if (!isResizeListenerAttached) {
+      return;
+    }
+
+    resizeListenerPort.removeEventListener("resize", handleResize);
+    isResizeListenerAttached = false;
+  };
+}
+
 export function createPlannerWorkspaceHistoryKeyboardHandler(
   dispatchPlannerWorkspaceAction: Dispatch<PlannerWorkspaceAction>,
 ): (keyboardEvent: KeyboardEvent) => void {
@@ -223,6 +291,36 @@ function assertKeyboardListenerPort(
       `Planner workspace keyboard listener port must provide addEventListener and removeEventListener functions; received ${JSON.stringify(keyboardListenerPort)}.`,
     );
   }
+}
+
+function assertResizeListenerPort(
+  resizeListenerPort: PlannerWorkspaceResizeListenerPort,
+): void {
+  if (
+    typeof resizeListenerPort !== "object" ||
+    resizeListenerPort === null ||
+    typeof resizeListenerPort.addEventListener !== "function" ||
+    typeof resizeListenerPort.removeEventListener !== "function"
+  ) {
+    throw new TypeError(
+      `Planner workspace resize listener port must provide addEventListener and removeEventListener functions; received ${JSON.stringify(resizeListenerPort)}.`,
+    );
+  }
+
+  getResizeListenerViewportWidth(resizeListenerPort);
+}
+
+function getResizeListenerViewportWidth(
+  resizeListenerPort: PlannerWorkspaceResizeListenerPort,
+): number {
+  const viewportWidth = resizeListenerPort.innerWidth;
+  if (!Number.isFinite(viewportWidth) || viewportWidth < 0) {
+    throw new TypeError(
+      `Planner workspace resize listener innerWidth must be a non-negative finite number; received ${JSON.stringify(viewportWidth)}.`,
+    );
+  }
+
+  return viewportWidth;
 }
 
 function assertPlannerWorkspaceActionDispatch(

@@ -1296,8 +1296,10 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     featuresHeading: "What the planner does",
     featuresDescriptions: [
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
-      "Arrange buildings, crops, placeables, and decor. Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work.",
-      "Spring, summer, fall, and winter are available. Save import is experimental, and modded items may not map. Export a standard or high-quality screenshot.",
+      "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
+      "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
+      "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
+      "Save import is experimental, and modded items may not map. There is no cloud sync. A different browser or a data wipe will lose them. This planner is free and fan-made.",
     ],
     whyChooseDescriptions: [
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
@@ -1363,8 +1365,10 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     featuresHeading: "功能介绍",
     featuresDescriptions: [
       "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
-      "建筑、作物、可放置物和装饰都能放。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖范围可以直接看。",
-      "春、夏、秋、冬都能切。存档导入仍是实验性的，模组物品可能对不上。导出有普通和高清截图。",
+      "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
+      "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
+      "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
+      "存档导入仍是实验性的，模组物品可能对不上。没有云同步。换浏览器或清数据会丢。这是免费的玩家工具，和官方没有隶属或认可关系。",
     ],
     whyChooseDescriptions: [
       "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",

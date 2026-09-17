@@ -35,6 +35,7 @@ export type EditorCatalogCategory = (typeof editorCatalogCategories)[number];
 export type EditorPanelPosition = (typeof editorPanelPositions)[number];
 export type EditorModalId = (typeof editorModalIds)[number];
 export type EditorMenuVisibility = "collapsed" | "expanded";
+export type EditorPanelPositionSource = "responsive" | "user";
 
 export type EditorViewState = Readonly<{
   season: TilesheetSeason;
@@ -42,6 +43,7 @@ export type EditorViewState = Readonly<{
   tool: EditorTool | null;
   catalogCategory: EditorCatalogCategory;
   panelPosition: EditorPanelPosition;
+  panelPositionSource: EditorPanelPositionSource;
   modalId: EditorModalId | null;
 }>;
 
@@ -61,6 +63,7 @@ export const editorToolAvailability: Readonly<Record<EditorTool, boolean>> = {
 };
 
 const compactLayoutMaximumWidth = 1400;
+const responsivePanelPositionMaximumWidth = 640;
 
 export function toggleEditorMenuVisibility(
   editorMenuVisibility: EditorMenuVisibility,
@@ -85,9 +88,22 @@ export function createInitialEditorViewState(
     tool: "cursor",
     catalogCategory: "buildings",
     panelPosition:
-      viewportWidth === undefined || viewportWidth > 640 ? "left" : "bottom",
+      viewportWidth === undefined
+        ? "left"
+        : resolveEditorPanelPosition(viewportWidth),
+    panelPositionSource: "responsive",
     modalId: null,
   };
+}
+
+export function resolveEditorPanelPosition(
+  viewportWidth: number,
+): EditorPanelPosition {
+  validateViewportWidth(viewportWidth);
+
+  return viewportWidth <= responsivePanelPositionMaximumWidth
+    ? "bottom"
+    : "left";
 }
 
 export function getNextEditorSeason(season: TilesheetSeason): TilesheetSeason {
@@ -164,6 +180,36 @@ export function selectPanelPosition(
   return {
     ...editorViewState,
     panelPosition,
+    panelPositionSource: "user",
+  };
+}
+
+export function synchronizeEditorPanelPosition(
+  editorViewState: EditorViewState,
+  viewportWidth: number,
+  previousViewportWidth = viewportWidth,
+): EditorViewState {
+  validateEditorViewState(editorViewState);
+  const responsivePanelPosition = resolveEditorPanelPosition(viewportWidth);
+  const previousResponsivePanelPosition = resolveEditorPanelPosition(
+    previousViewportWidth,
+  );
+
+  if (
+    editorViewState.panelPositionSource === "user" &&
+    previousResponsivePanelPosition === responsivePanelPosition
+  ) {
+    return editorViewState;
+  }
+
+  if (editorViewState.panelPosition === responsivePanelPosition) {
+    return editorViewState;
+  }
+
+  return {
+    ...editorViewState,
+    panelPosition: responsivePanelPosition,
+    panelPositionSource: "responsive",
   };
 }
 
@@ -212,6 +258,7 @@ function validateEditorViewState(editorViewState: EditorViewState): void {
   validateEditorTool(editorViewState.tool);
   validateCatalogCategory(editorViewState.catalogCategory);
   validatePanelPosition(editorViewState.panelPosition);
+  validatePanelPositionSource(editorViewState.panelPositionSource);
 
   if (
     editorViewState.modalId !== null &&
@@ -269,6 +316,16 @@ function validatePanelPosition(panelPosition: EditorPanelPosition): void {
   }
 }
 
+function validatePanelPositionSource(
+  panelPositionSource: EditorPanelPositionSource,
+): void {
+  if (panelPositionSource !== "responsive" && panelPositionSource !== "user") {
+    throw new TypeError(
+      `Editor panel position source must be "responsive" or "user". Received: ${formatValue(panelPositionSource)}.`,
+    );
+  }
+}
+
 function validateModalId(modalId: EditorModalId): void {
   if (!editorModalIds.includes(modalId)) {
     throw new TypeError(
@@ -281,12 +338,20 @@ function validateEditorLayoutInput(editorLayoutInput: EditorLayoutInput): void {
   if (
     typeof editorLayoutInput !== "object" ||
     editorLayoutInput === null ||
-    !Number.isFinite(editorLayoutInput.viewportWidth) ||
-    editorLayoutInput.viewportWidth < 0 ||
     typeof editorLayoutInput.hasCoarsePointer !== "boolean"
   ) {
     throw new TypeError(
       `Editor layout input must include a non-negative finite viewportWidth and boolean hasCoarsePointer. Received: ${formatValue(editorLayoutInput)}.`,
+    );
+  }
+
+  validateViewportWidth(editorLayoutInput.viewportWidth);
+}
+
+function validateViewportWidth(viewportWidth: number): void {
+  if (!Number.isFinite(viewportWidth) || viewportWidth < 0) {
+    throw new TypeError(
+      `Editor viewport width must be a non-negative finite number. Received: ${formatValue(viewportWidth)}.`,
     );
   }
 }

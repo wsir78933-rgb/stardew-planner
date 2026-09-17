@@ -110,6 +110,8 @@ describe("planner editor page", () => {
     }
     expect(plannerPageMarkup).toContain("data-homepage-why-choose");
     expect(plannerPageMarkup).toContain("data-homepage-animated-testimonials");
+    expect(plannerPageMarkup).toContain("data-circular-testimonials");
+    expect(plannerPageMarkup).not.toContain("data-homepage-features-gallery");
     for (const whyChooseImageSource of whyChooseImageSources) {
       expect(plannerPageMarkup).toContain(`src="${whyChooseImageSource}"`);
     }
@@ -117,8 +119,8 @@ describe("planner editor page", () => {
       'src="/homepage/how-to-pixel-farm.webp"',
     );
     expect(plannerPageMarkup).toContain('id="homepage-how-to-heading"');
-    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toHaveLength(1);
-    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toHaveLength(1);
+    expect(plannerPageMarkup.match(/data-homepage-section-media="true"/g)).toBeNull();
+    expect(plannerPageMarkup.match(/data-homepage-section-list="true"/g)).toBeNull();
     expect(plannerPageMarkup).not.toContain("data-homepage-planning-guide");
     expect(plannerPageMarkup).not.toContain("stardew-valley-planner-layout");
     const homepageSectionMarkers = [
@@ -261,10 +263,13 @@ describe("planner editor page", () => {
 
       expect(homepageMarkup).toContain('data-homepage-features="true"');
       expect(homepageMarkup).toContain(homepageCopy.features.heading);
-      expect(homepageMarkup).toContain(homepageCopy.features.imageAlt);
-      for (const featureItem of homepageCopy.features.items) {
-        expect(homepageMarkup).toContain(featureItem.title);
-        expect(homepageMarkup).toContain(featureItem.description);
+      expect(homepageMarkup).toContain("data-circular-testimonials");
+      expect(homepageMarkup).not.toContain("data-homepage-features-gallery");
+      for (const featureSlide of homepageCopy.features.testimonials) {
+        expect(homepageMarkup).toContain(featureSlide.name);
+        expect(homepageMarkup).toContain(featureSlide.quote);
+        expect(homepageMarkup).toContain(featureSlide.imageAlt);
+        expect(homepageMarkup).toContain(`src="${featureSlide.src}"`);
       }
 
       expect(homepageMarkup).toContain('data-homepage-how-to="true"');
