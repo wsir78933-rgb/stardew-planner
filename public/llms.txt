@@ -33,6 +33,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Summer Crops in Stardew: Rank by the Shop You Can Open This Morning](https://stardewvalleyplanner.art/summer-crops-stardew): Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.
 - [Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed](https://stardewvalleyplanner.art/fall-crops-stardew): Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.
 - [Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3](https://stardewvalleyplanner.art/do-you-have-to-water-trees-stardew): Common trees and fruit-tree saplings do not need watering. If a common sapling is stuck at stage 4, check its eight adjacent tiles for a mature tree; for a fruit sapling, check its 3×3 for blocking objects. Crops follow a separate watering rule.
+- [How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150](https://stardewvalleyplanner.art/how-to-level-up-farming-stardew): Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.
 
 ## 简体中文
 
@@ -65,3 +66,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷夏天种什么：按买得到的种子和浇得完的格子选](https://stardewvalleyplanner.art/zh/summer-crops-stardew): 夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。
 - [星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊](https://stardewvalleyplanner.art/zh/fall-crops-stardew): 现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。
 - [星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3](https://stardewvalleyplanner.art/zh/do-you-have-to-water-trees-stardew): 普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。
+- [星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150](https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew): 收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。

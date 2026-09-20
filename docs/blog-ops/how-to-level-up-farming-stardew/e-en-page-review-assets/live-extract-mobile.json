@@ -1,0 +1,104 @@
+{
+  "url": "http://127.0.0.1:3003/how-to-level-up-farming-stardew",
+  "lang": "en",
+  "title": "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+  "h1": "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+  "h1Box": {
+    "w": 358,
+    "h": 187,
+    "right": 374
+  },
+  "description": "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+  "h2s": [
+    "Farming XP comes from harvests, animals, and two books",
+    "How much XP each Farming level takes",
+    "Harvest for Farming XP, not for gold per day",
+    "Winter: outdoor harvest XP almost stops",
+    "Sources",
+    "Planner",
+    "Explore",
+    "Legal"
+  ],
+  "viewport": {
+    "innerWidth": 390,
+    "innerHeight": 844,
+    "dpr": 2,
+    "clientWidth": 390,
+    "scrollWidth": 390,
+    "overflowing": false
+  },
+  "offenders": [],
+  "tables": [
+    {
+      "index": 0,
+      "inBlogTableScroll": true,
+      "cols": 4,
+      "rows": 11,
+      "tableWidth": 356,
+      "tableRight": 373,
+      "wrapClientWidth": 356,
+      "wrapScrollWidth": 356,
+      "wrapOverflowX": "visible",
+      "tableOverflowsViewport": false,
+      "firstRow": [
+        "Level",
+        "Total XP",
+        "Lifetime parsnips (wiki)",
+        "Overnight unlock"
+      ]
+    },
+    {
+      "index": 1,
+      "inBlogTableScroll": true,
+      "cols": 3,
+      "rows": 21,
+      "tableWidth": 356,
+      "tableRight": 373,
+      "wrapClientWidth": 356,
+      "wrapScrollWidth": 356,
+      "wrapOverflowX": "visible",
+      "tableOverflowsViewport": false,
+      "firstRow": [
+        "Crop",
+        "XP per harvest (first product)",
+        "Why it is on this table"
+      ]
+    }
+  ],
+  "imgs": [
+    {
+      "src": "http://127.0.0.1:3003/blog/how-to-level-up-farming-stardew-cover.avif",
+      "alt": "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop fro",
+      "nw": 1672,
+      "displayedW": 358,
+      "displayedH": 201,
+      "right": 374,
+      "inFigure": false,
+      "overflows": false
+    },
+    {
+      "src": "http://127.0.0.1:3003/blog/illustrations/farming-xp-source-map.avif",
+      "alt": "Rule diagram of Farming XP sources versus non-sources: harvest of the first prod",
+      "nw": 1672,
+      "displayedW": 358,
+      "displayedH": 201,
+      "right": 374,
+      "inFigure": true,
+      "overflows": false
+    },
+    {
+      "src": "/blog/illustrations/farming-xp-first-product-only.webp",
+      "alt": "One blueberry, cranberry, or potato harvest: the first product is marked as Farm",
+      "nw": 0,
+      "displayedW": 358,
+      "displayedH": 201,
+      "right": 374,
+      "inFigure": true,
+      "overflows": false
+    }
+  ],
+  "rancher": [
+    "Rancher or Tiller"
+  ],
+  "bodyOpen": "Farming skill in Stardew Valley rises when you harvest a crop (only the first product of that harvest), when you pet, milk, or shear animals or pick up a coop product, and when you read the Stardew Va"
+}

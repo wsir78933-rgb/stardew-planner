@@ -1,0 +1,95 @@
+{
+  "headerText": "Stardew Valley Farm PlannerBlogLanguage▾English中文Open planner",
+  "headerLinks": [
+    {
+      "tag": "A",
+      "text": "Stardew Valley Farm Planner",
+      "href": "/",
+      "aria": null,
+      "box": {
+        "w": 26,
+        "h": 46,
+        "left": 20,
+        "right": 46,
+        "visible": true
+      }
+    },
+    {
+      "tag": "A",
+      "text": "Blog",
+      "href": "/blog",
+      "aria": "Blog",
+      "box": {
+        "w": 52,
+        "h": 36,
+        "left": 59,
+        "right": 111,
+        "visible": true
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Language▾",
+      "href": null,
+      "aria": "Language",
+      "box": {
+        "w": 99,
+        "h": 36,
+        "left": 115,
+        "right": 214,
+        "visible": true
+      }
+    },
+    {
+      "tag": "A",
+      "text": "English",
+      "href": "/how-to-level-up-farming-stardew",
+      "aria": null,
+      "box": {
+        "w": 0,
+        "h": 0,
+        "left": 0,
+        "right": 0,
+        "visible": false
+      }
+    },
+    {
+      "tag": "A",
+      "text": "中文",
+      "href": "/zh/how-to-level-up-farming-stardew",
+      "aria": null,
+      "box": {
+        "w": 0,
+        "h": 0,
+        "left": 0,
+        "right": 0,
+        "visible": false
+      }
+    },
+    {
+      "tag": "A",
+      "text": "Open planner",
+      "href": "/#planner",
+      "aria": "Open planner",
+      "box": {
+        "w": 109,
+        "h": 36,
+        "left": 223,
+        "right": 331,
+        "visible": true
+      }
+    }
+  ],
+  "residue": [],
+  "rancher": [
+    "Rancher or Tiller"
+  ],
+  "articleH2": [
+    "Farming XP comes from harvests, animals, and two books",
+    "How much XP each Farming level takes",
+    "Harvest for Farming XP, not for gold per day",
+    "Winter: outdoor harvest XP almost stops",
+    "Sources"
+  ],
+  "lang": "en"
+}

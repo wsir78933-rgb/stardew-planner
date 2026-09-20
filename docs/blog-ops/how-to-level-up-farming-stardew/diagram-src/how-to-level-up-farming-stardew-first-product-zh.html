@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>一次多收只算第一个</title>
+    <link rel="stylesheet" href="./diagram.css" />
+  </head>
+  <body>
+    <div class="board">
+      <h1 class="title">一次收多个，只记第一个</h1>
+      <p class="subtitle">规则示意图，不是游戏收获截图</p>
+      <div class="rows">
+        <div class="row">
+          <div class="crop-name">蓝莓</div>
+          <div class="product first">
+            <div class="berries"><span class="berry"></span></div>
+            <div class="mark xp yes">10</div>
+          </div>
+          <div class="subtitle">只算第一个</div>
+          <div class="product extra">
+            <div class="berries">
+              <span class="berry"></span><span class="berry"></span
+              ><span class="berry"></span>
+            </div>
+            <div class="mark xp no">不按个数翻倍</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="crop-name">蔓越莓</div>
+          <div class="product first">
+            <div class="berries"><span class="berry cran"></span></div>
+            <div class="mark xp yes">14</div>
+          </div>
+          <div class="subtitle">只算第一个</div>
+          <div class="product extra">
+            <div class="berries">
+              <span class="berry cran"></span><span class="berry cran"></span>
+            </div>
+            <div class="mark xp no">不按个数翻倍</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="crop-name">土豆</div>
+          <div class="product first">
+            <div class="tuber"></div>
+            <div class="mark xp yes">14</div>
+          </div>
+          <div class="subtitle">额外产量</div>
+          <div class="product extra">
+            <div class="tuber"></div>
+            <div class="mark xp no">不再另给 14</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

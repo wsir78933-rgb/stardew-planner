@@ -34,6 +34,8 @@ import { FallCropsStardewEnglishArticle } from "./articles/fall-crops-stardew.en
 import { FallCropsStardewChineseArticle } from "./articles/fall-crops-stardew.zh";
 import { DoYouHaveToWaterTreesStardewEnglishArticle } from "./articles/do-you-have-to-water-trees-stardew.en";
 import { DoYouHaveToWaterTreesStardewChineseArticle } from "./articles/do-you-have-to-water-trees-stardew.zh";
+import { HowToLevelUpFarmingStardewEnglishArticle } from "./articles/how-to-level-up-farming-stardew.en";
+import { HowToLevelUpFarmingStardewChineseArticle } from "./articles/how-to-level-up-farming-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -329,6 +331,22 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: DoYouHaveToWaterTreesStardewEnglishArticle,
     },
+    {
+      slug: "how-to-level-up-farming-stardew",
+      title:
+        "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+      description:
+        "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
+      },
+      featured: true,
+      Content: HowToLevelUpFarmingStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -584,6 +602,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: DoYouHaveToWaterTreesStardewChineseArticle,
+    },
+    {
+      slug: "how-to-level-up-farming-stardew",
+      title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
+      description:
+        "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
+      },
+      featured: true,
+      Content: HowToLevelUpFarmingStardewChineseArticle,
     },
   ],
 };

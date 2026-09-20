@@ -78,6 +78,36 @@ const summerCropsArticleMediaExpectations = [
     expectedDimensions: { height: 941, width: 1672 },
   },
 ] as const;
+const howToLevelUpFarmingArticleMediaExpectations = [
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/farming-xp-source-map.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/farming-xp-first-product-only.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath:
+      "blog/illustrations/how-to-level-up-farming-stardew-add-or-not-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath:
+      "blog/illustrations/how-to-level-up-farming-stardew-first-product-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath:
+      "blog/illustrations/how-to-level-up-farming-stardew-level-ladder-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+] as const;
 const fallCropsArticleMediaExpectations = [
   {
     maximumByteCount: 400 * 1024,
@@ -350,7 +380,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all sixteen blog identities", () => {
+it("ships budget-compliant WebP covers for all eighteen blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -373,6 +403,12 @@ it("ships budget-compliant WebP covers for all sixteen blog identities", () => {
   );
   const summerCropsImage = readWebpDimensions("blog/summer-crops-stardew-cover.webp");
   const fallCropsImage = readWebpDimensions("blog/fall-crops-stardew-cover.webp");
+  const waterTreesImage = readWebpDimensions(
+    "blog/do-you-have-to-water-trees-stardew-cover.webp",
+  );
+  const farmingXpImage = readWebpDimensions(
+    "blog/how-to-level-up-farming-stardew-cover.webp",
+  );
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -390,6 +426,8 @@ it("ships budget-compliant WebP covers for all sixteen blog identities", () => {
   expect(rancherOrTillerImage).toMatchObject(expectedCoverDimensions);
   expect(summerCropsImage).toMatchObject(expectedCoverDimensions);
   expect(fallCropsImage).toMatchObject(expectedCoverDimensions);
+  expect(waterTreesImage).toMatchObject(expectedCoverDimensions);
+  expect(farmingXpImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
@@ -405,6 +443,8 @@ it("ships budget-compliant WebP covers for all sixteen blog identities", () => {
   expect(rancherOrTillerImage.width / rancherOrTillerImage.height).toBeCloseTo(16 / 9, 2);
   expect(summerCropsImage.width / summerCropsImage.height).toBeCloseTo(16 / 9, 2);
   expect(fallCropsImage.width / fallCropsImage.height).toBeCloseTo(16 / 9, 2);
+  expect(waterTreesImage.width / waterTreesImage.height).toBeCloseTo(16 / 9, 2);
+  expect(farmingXpImage.width / farmingXpImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
@@ -421,6 +461,8 @@ it("ships budget-compliant WebP covers for all sixteen blog identities", () => {
   expect(rancherOrTillerImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(summerCropsImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(fallCropsImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(waterTreesImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(farmingXpImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
@@ -493,6 +535,16 @@ it("ships budget-compliant WebP media for the summer crops guide", () => {
 
 it("ships budget-compliant WebP media for the fall crops guide", () => {
   for (const mediaExpectation of fallCropsArticleMediaExpectations) {
+    const image = readWebpDimensions(mediaExpectation.relativeImagePath);
+
+    expect(image).toMatchObject(mediaExpectation.expectedDimensions);
+    expect(image.width / image.height).toBeCloseTo(16 / 9, 2);
+    expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+});
+
+it("ships budget-compliant WebP media for the farming XP guide", () => {
+  for (const mediaExpectation of howToLevelUpFarmingArticleMediaExpectations) {
     const image = readWebpDimensions(mediaExpectation.relativeImagePath);
 
     expect(image).toMatchObject(mediaExpectation.expectedDimensions);

@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(23);
+  expect(canonicalPublicPaths).toHaveLength(24);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -124,8 +124,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/do-you-have-to-water-trees-stardew")).toBe(
     "/zh/do-you-have-to-water-trees-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(46);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(44);
+  expect(getLocalizedPublicPath("en", "/how-to-level-up-farming-stardew")).toBe(
+    "/how-to-level-up-farming-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/how-to-level-up-farming-stardew")).toBe(
+    "/zh/how-to-level-up-farming-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(48);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(46);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -169,6 +175,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/fall-crops-stardew");
   expect(indexablePathnames).toContain("/do-you-have-to-water-trees-stardew");
   expect(indexablePathnames).toContain("/zh/do-you-have-to-water-trees-stardew");
+  expect(indexablePathnames).toContain("/how-to-level-up-farming-stardew");
+  expect(indexablePathnames).toContain("/zh/how-to-level-up-farming-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -193,6 +201,7 @@ it("registers the direct-entry blog routes", () => {
       "/summer-crops-stardew",
       "/fall-crops-stardew",
       "/do-you-have-to-water-trees-stardew",
+      "/how-to-level-up-farming-stardew",
     ]),
   );
 });

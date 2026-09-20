@@ -119,6 +119,7 @@ const localizedBlogPostPaths: Readonly<
     "summer-crops-stardew": "/summer-crops-stardew",
     "fall-crops-stardew": "/fall-crops-stardew",
     "do-you-have-to-water-trees-stardew": "/do-you-have-to-water-trees-stardew",
+    "how-to-level-up-farming-stardew": "/how-to-level-up-farming-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -139,6 +140,7 @@ const localizedBlogPostPaths: Readonly<
     "summer-crops-stardew": "/zh/summer-crops-stardew",
     "fall-crops-stardew": "/zh/fall-crops-stardew",
     "do-you-have-to-water-trees-stardew": "/zh/do-you-have-to-water-trees-stardew",
+    "how-to-level-up-farming-stardew": "/zh/how-to-level-up-farming-stardew",
   },
 };
 

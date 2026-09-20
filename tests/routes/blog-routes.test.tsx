@@ -54,6 +54,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/rancher-or-tiller-stardew"');
   expect(indexMarkup).toContain('href="/summer-crops-stardew"');
   expect(indexMarkup).toContain('href="/fall-crops-stardew"');
+  expect(indexMarkup).toContain('href="/how-to-level-up-farming-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -91,6 +92,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/rancher-or-tiller-stardew"');
   expect(indexMarkup).toContain('href="/zh/summer-crops-stardew"');
   expect(indexMarkup).toContain('href="/zh/fall-crops-stardew"');
+  expect(indexMarkup).toContain('href="/zh/how-to-level-up-farming-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -448,6 +450,40 @@ it("renders the paired fall crops article routes with locked metadata and one pa
     title: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
     description:
       "现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
+  });
+});
+
+it("renders the paired farming XP article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "how-to-level-up-farming-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "how-to-level-up-farming-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+  );
+  expect(chineseMarkup).toContain("星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150");
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title:
+      "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+    description:
+      "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
+    description:
+      "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
   });
 });
 

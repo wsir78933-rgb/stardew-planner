@@ -42,6 +42,7 @@ const expectedStaticPageFiles = [
   "rancher-or-tiller-stardew.html",
   "summer-crops-stardew.html",
   "fall-crops-stardew.html",
+  "how-to-level-up-farming-stardew.html",
   "zh/blog.html",
   "zh/blog/archive.html",
   "zh/carpenter-stardew.html",
@@ -60,6 +61,7 @@ const expectedStaticPageFiles = [
   "zh/rancher-or-tiller-stardew.html",
   "zh/summer-crops-stardew.html",
   "zh/fall-crops-stardew.html",
+  "zh/how-to-level-up-farming-stardew.html",
 ] as const;
 
 const expectedStaticHomepageFiles = [

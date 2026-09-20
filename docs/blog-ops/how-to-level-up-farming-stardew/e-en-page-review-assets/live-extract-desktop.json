@@ -1,0 +1,341 @@
+{
+  "url": "http://127.0.0.1:3003/how-to-level-up-farming-stardew",
+  "lang": "en",
+  "title": "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+  "h1": "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+  "description": "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+  "ogTitle": "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+  "ogDescription": "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+  "ogType": "article",
+  "ogImage": "https://stardewvalleyplanner.art/blog/how-to-level-up-farming-stardew-cover.webp",
+  "canonical": "https://stardewvalleyplanner.art/how-to-level-up-farming-stardew",
+  "robots": "index, follow",
+  "hreflang": [
+    {
+      "hreflang": "en",
+      "href": "https://stardewvalleyplanner.art/how-to-level-up-farming-stardew"
+    },
+    {
+      "hreflang": "zh-CN",
+      "href": "https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew"
+    },
+    {
+      "hreflang": "x-default",
+      "href": "https://stardewvalleyplanner.art/how-to-level-up-farming-stardew"
+    }
+  ],
+  "jsonLdTypes": [
+    "Article"
+  ],
+  "jsonLd": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+      "description": "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+      "url": "https://stardewvalleyplanner.art/how-to-level-up-farming-stardew",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://stardewvalleyplanner.art/#website"
+      }
+    }
+  ],
+  "h2s": [
+    "Farming XP comes from harvests, animals, and two books",
+    "How much XP each Farming level takes",
+    "Harvest for Farming XP, not for gold per day",
+    "Winter: outdoor harvest XP almost stops",
+    "Sources",
+    "Planner",
+    "Explore",
+    "Legal"
+  ],
+  "h3s": [
+    "Watering and hoeing do not grant Farming XP",
+    "Extra potatoes, blueberries, and cranberries do not add XP",
+    "Animals are 5 XP; the Almanac and Book of Stars are 250",
+    "The skills tab updates now; recipes wait until morning"
+  ],
+  "opening": "Stardew Valley Guides",
+  "openingStarts": "Stardew Valley Guides",
+  "imgs": [
+    {
+      "src": "http://127.0.0.1:3003/favicon.png",
+      "alt": "",
+      "width": 64,
+      "height": 64,
+      "displayedW": 28,
+      "displayedH": 28,
+      "inArticle": false,
+      "inFigure": false,
+      "figureCaption": null,
+      "parentTag": "A",
+      "headingContext": null,
+      "sources": []
+    },
+    {
+      "src": "http://127.0.0.1:3003/blog/how-to-level-up-farming-stardew-cover.avif",
+      "alt": "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
+      "width": 1672,
+      "height": 941,
+      "displayedW": 1088,
+      "displayedH": 612,
+      "inArticle": true,
+      "inFigure": false,
+      "figureCaption": null,
+      "parentTag": "PICTURE",
+      "headingContext": null,
+      "sources": [
+        {
+          "srcset": "/blog/how-to-level-up-farming-stardew-cover.avif",
+          "type": "image/avif"
+        }
+      ]
+    },
+    {
+      "src": "http://127.0.0.1:3003/blog/illustrations/farming-xp-source-map.avif",
+      "alt": "Rule diagram of Farming XP sources versus non-sources: harvest of the first product, animal pet/milk/shear/coop pickup at 5 XP, Almanac and Book Of Stars at 250 XP each; hoe, watering can, sprinkler watering, extra berries or potatoes, and truffles do not grant Farming XP. Not a game screenshot.",
+      "width": 1672,
+      "height": 941,
+      "displayedW": 704,
+      "displayedH": 396,
+      "inArticle": true,
+      "inFigure": true,
+      "figureCaption": "Farming XP sources and non-sources, from the Farming and Skills pages, not from a harvest test. Harvest of the first product grants crop XP. Petting, milking, shearing, or picking up a coop product grants 5 XP. The Almanac and the Book Of Stars grant 250 Farming XP each. A hoe swing, a watering-can swing, and a sprinkler’s morning water do not grant Farming XP. Extra berries and extra potatoes on the same harvest do not add XP. Truffles grant Foraging XP, not Farming. If you only water and never harvest, the skills tab does not move.",
+      "parentTag": "PICTURE",
+      "headingContext": null,
+      "sources": [
+        {
+          "srcset": "/blog/illustrations/farming-xp-source-map.avif",
+          "type": "image/avif"
+        }
+      ]
+    },
+    {
+      "src": "/blog/illustrations/farming-xp-first-product-only.webp",
+      "alt": "One blueberry, cranberry, or potato harvest: the first product is marked as Farming XP, the extra berries or extra tuber are marked as no Farming XP. Not a game screenshot.",
+      "width": 0,
+      "height": 0,
+      "displayedW": 704,
+      "displayedH": 396,
+      "inArticle": true,
+      "inFigure": true,
+      "figureCaption": "First product only, on one harvest. A blueberry pull that yields three berries still grants 10 Farming XP once. A cranberry pull that yields two berries still grants 14 once. A potato pull that yields an extra tuber still grants 14 once. The next harvest date on a blueberry or cranberry plant is a new harvest, and that new harvest grants XP again. This is the Farming page rule, not a count of berries in a test save.",
+      "parentTag": "PICTURE",
+      "headingContext": null,
+      "sources": [
+        {
+          "srcset": "/blog/illustrations/farming-xp-first-product-only.avif",
+          "type": "image/avif"
+        }
+      ]
+    }
+  ],
+  "rancherLinks": [
+    {
+      "href": "/rancher-or-tiller-stardew",
+      "text": "Rancher or Tiller",
+      "inArticle": true
+    },
+    {
+      "href": "https://stardewvalleyplanner.art/rancher-or-tiller-stardew",
+      "text": "This site: Rancher or Tiller",
+      "inArticle": true
+    }
+  ],
+  "langSwitchCandidates": [
+    {
+      "href": "/how-to-level-up-farming-stardew",
+      "text": "English"
+    },
+    {
+      "href": "/zh/how-to-level-up-farming-stardew",
+      "text": "中文"
+    }
+  ],
+  "headerNav": [
+    {
+      "href": "/",
+      "text": "Stardew Valley Farm Planner"
+    },
+    {
+      "href": "/blog",
+      "text": "Blog"
+    },
+    {
+      "href": "/how-to-level-up-farming-stardew",
+      "text": "English"
+    },
+    {
+      "href": "/zh/how-to-level-up-farming-stardew",
+      "text": "中文"
+    },
+    {
+      "href": "/#planner",
+      "text": "Open planner"
+    },
+    {
+      "href": "#farming-xp-comes-from-harvests-animals-and-two-books",
+      "text": "Farming XP comes from harvests, animals, and two books"
+    },
+    {
+      "href": "#watering-and-hoeing-do-not-grant-farming-xp",
+      "text": "Watering and hoeing do not grant Farming XP"
+    },
+    {
+      "href": "#extra-potatoes-blueberries-and-cranberries-do-not-add-xp",
+      "text": "Extra potatoes, blueberries, and cranberries do not add XP"
+    },
+    {
+      "href": "#animals-are-5-xp-the-almanac-and-book-of-stars-are-250",
+      "text": "Animals are 5 XP; the Almanac and Book of Stars are 250"
+    },
+    {
+      "href": "#how-much-xp-each-farming-level-takes",
+      "text": "How much XP each Farming level takes"
+    },
+    {
+      "href": "#the-skills-tab-updates-now-recipes-wait-until-morning",
+      "text": "The skills tab updates now; recipes wait until morning"
+    },
+    {
+      "href": "#harvest-for-farming-xp-not-for-gold-per-day",
+      "text": "Harvest for Farming XP, not for gold per day"
+    },
+    {
+      "href": "#winter-outdoor-harvest-xp-almost-stops",
+      "text": "Winter: outdoor harvest XP almost stops"
+    },
+    {
+      "href": "#sources",
+      "text": "Sources"
+    }
+  ],
+  "xpNeedles": {
+    "hoe0": true,
+    "wateringHoeH3": true,
+    "level5": true,
+    "level8": true,
+    "level9": true,
+    "level10": true,
+    "animals5": true,
+    "books250": true,
+    "blueberry10": true,
+    "cranberry14": true,
+    "potato14": true,
+    "cauliflower23": true
+  },
+  "residueHits": [],
+  "faqH2": false,
+  "hasFAQPage": false,
+  "viewport": {
+    "innerWidth": 1280,
+    "innerHeight": 800,
+    "devicePixelRatio": 1,
+    "scrollWidth": 1274,
+    "overflowing": false
+  },
+  "offenders": [],
+  "tables": [
+    {
+      "index": 0,
+      "inBlogTableScroll": true,
+      "cols": 4,
+      "rows": 11,
+      "tableWidth": 702,
+      "wrapClientWidth": 702,
+      "wrapScrollWidth": 702,
+      "wrapOverflowX": "visible",
+      "tableOverflowsViewport": false,
+      "firstRow": [
+        "Level",
+        "Total XP",
+        "Lifetime parsnips (wiki)",
+        "Overnight unlock"
+      ]
+    },
+    {
+      "index": 1,
+      "inBlogTableScroll": true,
+      "cols": 3,
+      "rows": 21,
+      "tableWidth": 702,
+      "wrapClientWidth": 702,
+      "wrapScrollWidth": 702,
+      "wrapOverflowX": "visible",
+      "tableOverflowsViewport": false,
+      "firstRow": [
+        "Crop",
+        "XP per harvest (first product)",
+        "Why it is on this table"
+      ]
+    }
+  ],
+  "articleLinkHrefs": [
+    "#farming-xp-comes-from-harvests-animals-and-two-books",
+    "#watering-and-hoeing-do-not-grant-farming-xp",
+    "#extra-potatoes-blueberries-and-cranberries-do-not-add-xp",
+    "#animals-are-5-xp-the-almanac-and-book-of-stars-are-250",
+    "#how-much-xp-each-farming-level-takes",
+    "#the-skills-tab-updates-now-recipes-wait-until-morning",
+    "#harvest-for-farming-xp-not-for-gold-per-day",
+    "#winter-outdoor-harvest-xp-almost-stops",
+    "#sources",
+    "https://stardewvalleywiki.com/Stardew_Valley_Almanac",
+    "https://stardewvalleywiki.com/Book_Of_Stars",
+    "https://stardewvalleywiki.com/Stardew_Valley_Wiki",
+    "https://stardewvalleywiki.com/Farming",
+    "https://stardewvalleywiki.com/Skills",
+    "https://stardewvalleywiki.com/Farming",
+    "https://stardewvalleywiki.com/Farming#Experience_Points",
+    "https://stardewvalleywiki.com/Skills",
+    "https://stardewvalleywiki.com/Sprinkler",
+    "https://stardewvalleywiki.com/Quality_Sprinkler",
+    "https://stardewvalleywiki.com/Iridium_Sprinkler",
+    "/sprinkler-stardew",
+    "https://stardewvalleywiki.com/Farming#Experience_Points",
+    "https://stardewvalleywiki.com/Stardew_Valley_Almanac",
+    "https://stardewvalleywiki.com/Book_Of_Stars",
+    "https://stardewvalleywiki.com/Skills",
+    "https://stardewvalleywiki.com/Sprinkler",
+    "https://stardewvalleywiki.com/Quality_Sprinkler",
+    "https://stardewvalleywiki.com/Keg",
+    "https://stardewvalleywiki.com/Seed_Maker",
+    "https://stardewvalleywiki.com/Iridium_Sprinkler",
+    "/sprinkler-stardew",
+    "/rancher-or-tiller-stardew",
+    "/best-spring-crop-stardew",
+    "/summer-crops-stardew",
+    "/fall-crops-stardew",
+    "/best-spring-crop-stardew",
+    "/how-to-earn-money-stardew",
+    "https://stardewvalleywiki.com/Winter",
+    "/glasshouse-stardew-valley",
+    "https://stardewvalleywiki.com/Winter_Seeds",
+    "/glasshouse-stardew-valley",
+    "/#planner",
+    "https://stardewvalleywiki.com/Stardew_Valley_Wiki",
+    "https://stardewvalleywiki.com/Farming",
+    "https://stardewvalleywiki.com/Farming#Experience_Points",
+    "https://stardewvalleywiki.com/Skills",
+    "https://stardewvalleywiki.com/Stardew_Valley_Almanac",
+    "https://stardewvalleywiki.com/Book_Of_Stars",
+    "https://stardewvalleywiki.com/Keg",
+    "https://stardewvalleywiki.com/Sprinkler",
+    "https://stardewvalleywiki.com/Quality_Sprinkler",
+    "https://stardewvalleywiki.com/Iridium_Sprinkler",
+    "https://stardewvalleywiki.com/Seed_Maker",
+    "https://stardewvalleywiki.com/Winter",
+    "https://stardewvalleywiki.com/Winter_Seeds",
+    "https://stardewvalleyplanner.art/rancher-or-tiller-stardew",
+    "https://stardewvalleyplanner.art/sprinkler-stardew",
+    "https://stardewvalleyplanner.art/how-to-earn-money-stardew",
+    "https://stardewvalleyplanner.art/best-spring-crop-stardew",
+    "https://stardewvalleyplanner.art/summer-crops-stardew",
+    "https://stardewvalleyplanner.art/fall-crops-stardew",
+    "https://stardewvalleyplanner.art/glasshouse-stardew-valley"
+  ],
+  "bodyHasSources": true,
+  "bodyHasHoeSentence": true,
+  "blueberrySentence": true
+}

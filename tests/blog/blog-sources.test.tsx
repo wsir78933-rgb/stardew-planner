@@ -33,6 +33,8 @@ import { SummerCropsStardewEnglishArticle } from "../../src/blog/articles/summer
 import { SummerCropsStardewChineseArticle } from "../../src/blog/articles/summer-crops-stardew.zh";
 import { FallCropsStardewEnglishArticle } from "../../src/blog/articles/fall-crops-stardew.en";
 import { FallCropsStardewChineseArticle } from "../../src/blog/articles/fall-crops-stardew.zh";
+import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.en";
+import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1659,6 +1661,135 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "/zh#planner",
         label: "本站：农场规划器",
+      },
+    ],
+  },
+  {
+    Article: HowToLevelUpFarmingStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-20 against Stardew Valley Wiki Farming (including Experience Points), Skills, Stardew Valley Almanac, Book Of Stars, Keg, Sprinkler, Quality Sprinkler, Iridium Sprinkler, Seed Maker, Winter, and Winter Seeds. The wiki home names computer version 1.6.15. Winter Seeds Farming XP is not used: the Farming page and the Winter page disagree, and the Winter Seeds page does not print a number. No in-game harvest test was run. This site’s planner is a layout tool; it does not compute Farming XP or skill levels.",
+    heading: "Sources",
+    name: "English farming XP article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Stardew_Valley_Wiki", label: "Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Farming", label: "Stardew Valley Wiki: Farming" },
+      {
+        href: "https://stardewvalleywiki.com/Farming#Experience_Points",
+        label: "Stardew Valley Wiki: Farming (Experience Points)",
+      },
+      { href: "https://stardewvalleywiki.com/Skills", label: "Stardew Valley Wiki: Skills" },
+      {
+        href: "https://stardewvalleywiki.com/Stardew_Valley_Almanac",
+        label: "Stardew Valley Wiki: Stardew Valley Almanac",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Book_Of_Stars",
+        label: "Stardew Valley Wiki: Book Of Stars",
+      },
+      { href: "https://stardewvalleywiki.com/Keg", label: "Stardew Valley Wiki: Keg" },
+      { href: "https://stardewvalleywiki.com/Sprinkler", label: "Stardew Valley Wiki: Sprinkler" },
+      {
+        href: "https://stardewvalleywiki.com/Quality_Sprinkler",
+        label: "Stardew Valley Wiki: Quality Sprinkler",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Iridium_Sprinkler",
+        label: "Stardew Valley Wiki: Iridium Sprinkler",
+      },
+      { href: "https://stardewvalleywiki.com/Seed_Maker", label: "Stardew Valley Wiki: Seed Maker" },
+      { href: "https://stardewvalleywiki.com/Winter", label: "Stardew Valley Wiki: Winter" },
+      {
+        href: "https://stardewvalleywiki.com/Winter_Seeds",
+        label: "Stardew Valley Wiki: Winter Seeds",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/rancher-or-tiller-stardew",
+        label: "This site: Rancher or Tiller",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/sprinkler-stardew",
+        label: "This site: sprinklers",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/how-to-earn-money-stardew",
+        label: "This site: Year 1 gold",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/best-spring-crop-stardew",
+        label: "This site: spring crops",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/summer-crops-stardew",
+        label: "This site: summer crops",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/fall-crops-stardew",
+        label: "This site: fall crops",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/glasshouse-stardew-valley",
+        label: "This site: greenhouse",
+      },
+    ],
+  },
+  {
+    Article: HowToLevelUpFarmingStardewChineseArticle,
+    checkedLabel:
+      "2026-09-20 对照下方星露谷官方中文维基。经验规则以官方中文维基为准；年历 250 来自年历页；规划器不算耕种经验。作物单次经验摘自耕种页表，不是某份存档实测。",
+    heading: "来源",
+    name: "Chinese farming XP article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=耕种&amp;variant=zh-cn",
+        label: "星露谷物语官方中文维基：耕种",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=技能&amp;variant=zh-cn",
+        label: "星露谷物语官方中文维基：技能",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/mediawiki/index.php?title=星露谷年历&amp;variant=zh-cn",
+        label: "星露谷物语官方中文维基：星露谷年历",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Farming",
+        label: "星露谷物语英文维基：Farming",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Skills",
+        label: "星露谷物语英文维基：Skills",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Stardew_Valley_Almanac",
+        label: "星露谷物语英文维基：Stardew Valley Almanac",
+      },
+      {
+        href: "/zh/rancher-or-tiller-stardew",
+        label: "本站：农耕人还是畜牧人",
+      },
+      {
+        href: "/zh/sprinkler-stardew",
+        label: "本站：星露谷洒水器",
+      },
+      {
+        href: "/zh/how-to-earn-money-stardew",
+        label: "本站：第一年怎么赚钱",
+      },
+      {
+        href: "/zh/best-spring-crop-stardew",
+        label: "本站：春天种什么",
+      },
+      {
+        href: "/zh/summer-crops-stardew",
+        label: "本站：夏天种什么",
+      },
+      {
+        href: "/zh/fall-crops-stardew",
+        label: "本站：秋季作物",
+      },
+      {
+        href: "/zh",
+        label: "本站：农场规划器（简体中文首页）",
       },
     ],
   },

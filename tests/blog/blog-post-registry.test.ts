@@ -28,6 +28,7 @@ const expectedSlugs = [
   "summer-crops-stardew",
   "fall-crops-stardew",
   "do-you-have-to-water-trees-stardew",
+  "how-to-level-up-farming-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -62,14 +63,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the seventeen canonical blog identities in publishing order", () => {
+it("keeps the eighteen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the thirty-four localized root-level canonical article paths", () => {
+it("publishes only the thirty-six localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -88,6 +89,7 @@ it("publishes only the thirty-four localized root-level canonical article paths"
     "/summer-crops-stardew/",
     "/fall-crops-stardew/",
     "/do-you-have-to-water-trees-stardew/",
+    "/how-to-level-up-farming-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -105,6 +107,7 @@ it("publishes only the thirty-four localized root-level canonical article paths"
     "/zh/summer-crops-stardew/",
     "/zh/fall-crops-stardew/",
     "/zh/do-you-have-to-water-trees-stardew/",
+    "/zh/how-to-level-up-farming-stardew/",
   ]);
 });
 
@@ -425,6 +428,27 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "农场规划示意图，将普通树、果树苗、耕地作物和洒水器分成不同判断对象。",
     },
   });
+  expect(englishPosts[17]).toMatchObject({
+    title:
+      "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+    description:
+      "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+    readTimeMinutes: 16,
+    coverImage: {
+      src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+      alt: "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
+    },
+  });
+  expect(chinesePosts[17]).toMatchObject({
+    title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
+    description:
+      "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
+    readTimeMinutes: 14,
+    coverImage: {
+      src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+      alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -451,6 +475,8 @@ it("binds every localized post to its own original blog cover", () => {
       "fall-crops-stardew": "/blog/fall-crops-stardew-cover.webp",
       "do-you-have-to-water-trees-stardew":
         "/blog/do-you-have-to-water-trees-stardew-cover.webp",
+      "how-to-level-up-farming-stardew":
+        "/blog/how-to-level-up-farming-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -473,6 +499,8 @@ it("binds every localized post to its own original blog cover", () => {
       "fall-crops-stardew": "/blog/fall-crops-stardew-cover.webp",
       "do-you-have-to-water-trees-stardew":
         "/blog/do-you-have-to-water-trees-stardew-cover-zh.webp",
+      "how-to-level-up-farming-stardew":
+        "/blog/how-to-level-up-farming-stardew-cover.webp",
     },
   } as const;
 
@@ -572,7 +600,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: do-you-have-to-water-trees-stardew.",
+    "Expected: carpenter-stardew. Received: how-to-level-up-farming-stardew.",
   );
 });
 

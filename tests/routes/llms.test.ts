@@ -105,6 +105,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊](https://stardewvalleyplanner.art/zh/fall-crops-stardew): 现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
   );
+  expect(llmsText).toContain(
+    "[How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150](https://stardewvalleyplanner.art/how-to-level-up-farming-stardew): Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150](https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew): 收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

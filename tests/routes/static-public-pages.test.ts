@@ -241,6 +241,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/fall-crops-stardew-cover.webp",
         alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
       },
+      {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
+      },
     ],
   },
   {
@@ -728,6 +732,42 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/glasshouse-stardew-valley",
     ],
   },
+  {
+    pathname: "/how-to-level-up-farming-stardew",
+    staticPageFile: "how-to-level-up-farming-stardew.html",
+    heading:
+      "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+    metadata: {
+      title:
+        "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+      description:
+        "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "using a hoe or watering can does not grant experience by itself",
+      "This site’s planner is a layout tool; it does not compute Farming XP or skill levels.",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/sprinkler-stardew",
+      "/rancher-or-tiller-stardew",
+      "/best-spring-crop-stardew",
+      "/summer-crops-stardew",
+      "/fall-crops-stardew",
+      "/how-to-earn-money-stardew",
+      "/glasshouse-stardew-valley",
+    ],
+  },
 
   {
     pathname: "/zh/blog",
@@ -800,6 +840,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/fall-crops-stardew-cover.webp",
         alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
+      },
+      {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
       },
     ],
   },
@@ -1279,6 +1323,40 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/zh/how-to-earn-money-stardew",
       "/zh/sprinkler-stardew",
       "/zh/glasshouse-stardew-valley",
+    ],
+  },
+  {
+    pathname: "/zh/how-to-level-up-farming-stardew",
+    staticPageFile: "zh/how-to-level-up-farming-stardew.html",
+    heading: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
+    metadata: {
+      title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
+      description:
+        "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "使用锄头和喷壶不会获得经验。",
+      "规划器不算耕种经验。",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/rancher-or-tiller-stardew",
+      "/zh/sprinkler-stardew",
+      "/zh/how-to-earn-money-stardew",
+      "/zh/best-spring-crop-stardew",
+      "/zh/summer-crops-stardew",
+      "/zh/fall-crops-stardew",
+      "/zh",
     ],
   },
 ];
