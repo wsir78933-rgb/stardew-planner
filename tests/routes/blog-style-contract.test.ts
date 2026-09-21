@@ -40,6 +40,9 @@ it("defines responsive blog layout and accessibility rules under blog-only scope
   expect(stylesheet).toMatch(/\[data-blog-page\][^{]*\.blog-article-grid[\s\S]*grid-template-columns:\s*1fr/);
   expect(stylesheet).toMatch(/@media \(min-width:\s*768px\)[\s\S]*\[data-blog-page\][^{]*\.blog-article-grid[\s\S]*repeat\(2,/);
   expect(stylesheet).toMatch(/@media \(min-width:\s*1024px\)[\s\S]*\[data-blog-page\][^{]*\.blog-article-grid[\s\S]*repeat\(3,/);
+  expect(stylesheet).toMatch(
+    /@media \(min-width:\s*1024px\)[\s\S]*\[data-blog-page\][^{]*\.blog-topic-articles \.blog-article-grid[\s\S]*repeat\(4,/,
+  );
   expect(stylesheet).toMatch(/@media \(min-width:\s*1024px\)[\s\S]*\[data-blog-article\][^{]*\.blog-table-of-contents[\s\S]*position:\s*sticky/);
   expect(stylesheet).toMatch(/\[data-blog-page\][^{]*:focus-visible/);
   expect(stylesheet).toMatch(/\[data-blog-article\][^{]*:focus-visible/);

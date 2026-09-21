@@ -36,6 +36,8 @@ it("returns an empty default home state for no posts", () => {
     query: "",
     topic: "",
     visible: 6,
+    topicArticlesPage: 1,
+    topicArticlesPageCount: 0,
     topics: [],
     posts: [],
     topicCarouselPosts: [],
@@ -56,6 +58,8 @@ it("shows the newest real post first while keeping the topic carousel in canonic
     "rancher-or-tiller-stardew",
   ]);
   expect(homeState.totalPostCount).toBe(19);
+  expect(homeState.topicArticlesPage).toBe(1);
+  expect(homeState.topicArticlesPageCount).toBe(2);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
@@ -69,6 +73,15 @@ it("shows the newest real post first while keeping the topic carousel in canonic
     "stardew-valley-trees",
     "maple-tree-stardew",
     "best-spring-crop-stardew",
+  ]);
+});
+
+it("shows the remaining topic articles on page two", () => {
+  const homeState = getBlogHomeState(getAllBlogPosts("en"), { page: "2" });
+
+  expect(homeState.topicArticlesPage).toBe(2);
+  expect(homeState.topicArticlesPageCount).toBe(2);
+  expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "how-to-earn-money-stardew",
     "rancher-or-tiller-stardew",
     "summer-crops-stardew",
@@ -79,23 +92,33 @@ it("shows the newest real post first while keeping the topic carousel in canonic
   ]);
 });
 
+it("clamps an oversized topic articles page to the last page", () => {
+  const homeState = getBlogHomeState(getAllBlogPosts("en"), { page: "99" });
+
+  expect(homeState.topicArticlesPage).toBe(2);
+  expect(homeState.topicCarouselPosts).toHaveLength(7);
+});
+
 it("treats every array-valued home parameter as an invalid non-string value", () => {
   const posts = Array.from({ length: 7 }, (_, index) => createBlogPost(index));
   const homeState = getBlogHomeState(posts, {
     q: ["Robin"],
     topic: ["Stardew Valley Guides"],
     visible: ["12"],
+    page: ["2"],
   });
 
   expect(homeState.query).toBe("");
   expect(homeState.topic).toBe("");
   expect(homeState.visible).toBe(6);
+  expect(homeState.topicArticlesPage).toBe(1);
   expect(homeState.posts).toHaveLength(6);
   expect(
     buildBlogHomeHref("en", {
       q: ["Robin"],
       topic: ["Stardew Valley Guides"],
       visible: ["12"],
+      page: ["2"],
     }),
   ).toBe("/blog");
 });
@@ -219,15 +242,16 @@ it("preserves a query, topic, and non-default visible count in localized links",
       q: "Robin's hours",
       topic: "Stardew Valley Guides",
       visible: "9",
+      page: "2",
     }),
   ).toBe(
-    "/zh/blog?q=Robin%27s+hours&topic=Stardew+Valley+Guides&visible=9",
+    "/zh/blog?q=Robin%27s+hours&topic=Stardew+Valley+Guides&visible=9&page=2",
   );
 });
 
 it("omits empty query parameters and the default visible count from home links", () => {
   expect(
-    buildBlogHomeHref("en", { q: " ", topic: "", visible: "6" }),
+    buildBlogHomeHref("en", { q: " ", topic: "", visible: "6", page: "1" }),
   ).toBe("/blog");
 });
 

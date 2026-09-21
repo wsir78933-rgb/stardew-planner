@@ -13,7 +13,6 @@ export type BlogCopy = Readonly<{
   emptyBlogLabel: string;
   latestArticlesLabel: string;
   jumpToLabel: string;
-  loadMoreLabel: string;
   nextLatestArticlesSetLabel: string;
   nextPageLabel: string;
   noResultsLabel: string;
@@ -47,7 +46,6 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     emptyBlogLabel: "There are no planning guides available yet.",
     latestArticlesLabel: "Latest articles",
     jumpToLabel: "Jump to",
-    loadMoreLabel: "Load more articles",
     nextLatestArticlesSetLabel: "Next set of articles",
     nextPageLabel: "Next page",
     noResultsLabel: "No articles match these filters.",
@@ -78,7 +76,6 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     emptyBlogLabel: "暂时还没有可用的规划指南。",
     latestArticlesLabel: "最新文章",
     jumpToLabel: "跳转至",
-    loadMoreLabel: "加载更多文章",
     nextLatestArticlesSetLabel: "下一组文章",
     nextPageLabel: "下一页",
     noResultsLabel: "没有文章符合这些筛选条件。",

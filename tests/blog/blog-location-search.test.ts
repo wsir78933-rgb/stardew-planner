@@ -7,12 +7,13 @@ import {
 it("projects home query parameters from a browser location search string", () => {
   expect(
     getBlogHomeSearchParametersFromLocationSearch(
-      "?q=%20Robin%20&topic=Stardew+Valley+Guides&visible=12",
+      "?q=%20Robin%20&topic=Stardew+Valley+Guides&visible=12&page=2",
     ),
   ).toEqual({
     q: " Robin ",
     topic: "Stardew Valley Guides",
     visible: "12",
+    page: "2",
   });
 });
 

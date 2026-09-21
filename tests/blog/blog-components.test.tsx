@@ -396,3 +396,42 @@ it("renders caller-provided Chinese carousel controls", () => {
   expect(markup).not.toContain(">Previous</button>");
   expect(markup).not.toContain(">Next</button>");
 });
+
+it("paginates the Chinese topic articles with previous, next, and page numbers", () => {
+  const posts = getAllBlogPosts("zh-CN");
+  const markup = renderToStaticMarkup(
+    <BlogIndexContent
+      copy={getBlogCopy("zh-CN")}
+      homeState={getBlogHomeState(posts, {})}
+      locale="zh-CN"
+      posts={posts}
+    />,
+  );
+
+  expect(markup).toContain('class="blog-topic-articles"');
+  expect(markup).toContain(">星露谷物语指南</h2>");
+  expect(markup).toContain(">上一篇</span>");
+  expect(markup).toContain('href="/zh/blog?page=2#topic-carousel">下一篇</a>');
+  expect(markup).toContain('aria-current="page"');
+  expect(markup).toContain('href="/zh/blog#topic-carousel">1</a>');
+  expect(markup).toContain('href="/zh/blog?page=2#topic-carousel">2</a>');
+  expect(markup).not.toContain("加载更多文章");
+  expect(markup).not.toContain("blog-topic-carousel-controls");
+});
+
+it("links the previous topic page from page two", () => {
+  const posts = getAllBlogPosts("en");
+  const markup = renderToStaticMarkup(
+    <BlogIndexContent
+      copy={getBlogCopy("en")}
+      homeState={getBlogHomeState(posts, { page: "2" })}
+      locale="en"
+      posts={posts}
+    />,
+  );
+
+  expect(markup).toContain('href="/blog#topic-carousel">Previous</a>');
+  expect(markup).toContain(">Next</span>");
+  expect(markup).toContain('href="/blog#topic-carousel">1</a>');
+  expect(markup).toContain('aria-current="page" href="/blog?page=2#topic-carousel">2</a>');
+});

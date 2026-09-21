@@ -10,7 +10,7 @@ import {
   type BlogHeroJumpTarget,
 } from "./blog-landing-hero";
 import { LatestArticlesCarouselControls } from "./latest-articles-carousel-controls";
-import { TopicCarouselControls } from "./topic-carousel-controls";
+import { TopicArticlesPagination } from "./topic-articles-pagination";
 
 type BlogIndexContentProperties = Readonly<{
   copy: BlogCopy;
@@ -38,14 +38,6 @@ function createHeroJumpTargets(
   return jumpTargets;
 }
 
-function createLoadMoreHref(locale: PublicLocale, homeState: BlogHomeState): string {
-  return buildBlogHomeHref(locale, {
-    q: homeState.query,
-    topic: homeState.topic,
-    visible: String(homeState.visible + 6),
-  });
-}
-
 export function BlogIndexContent({
   copy,
   homeState,
@@ -54,10 +46,8 @@ export function BlogIndexContent({
 }: BlogIndexContentProperties) {
   const hasPosts = posts.length > 0;
   const hasMatchingPosts = homeState.totalPostCount > 0;
-  const hasMorePosts = homeState.totalPostCount > homeState.posts.length;
   const topicCarouselPosts = homeState.topicCarouselPosts;
   const latestArticlesTrackId = "blog-latest-articles-track";
-  const topicTrackId = "blog-topic-carousel";
   const jumpTargets = createHeroJumpTargets(copy, hasMatchingPosts, topicCarouselPosts);
 
   return (
@@ -100,21 +90,16 @@ export function BlogIndexContent({
         </section>
       ) : null}
       {topicCarouselPosts.length > 0 ? (
-        <section aria-labelledby="topic-carousel-heading" id="topic-carousel">
+        <section
+          aria-labelledby="topic-carousel-heading"
+          className="blog-topic-articles"
+          id="topic-carousel"
+        >
           <h2 id="topic-carousel-heading">{topicCarouselPosts[0].topic}</h2>
-          <div id={topicTrackId}>
-            <ArticleGrid copy={copy} locale={locale} posts={topicCarouselPosts} />
-          </div>
-          <TopicCarouselControls
-            ariaLabel={copy.topicLabel}
-            hasItems={true}
-            nextLabel={copy.nextCarouselLabel}
-            previousLabel={copy.previousCarouselLabel}
-            trackId={topicTrackId}
-          />
+          <ArticleGrid copy={copy} locale={locale} posts={topicCarouselPosts} />
+          <TopicArticlesPagination copy={copy} homeState={homeState} locale={locale} />
         </section>
       ) : null}
-      {hasMorePosts ? <a href={createLoadMoreHref(locale, homeState)}>{copy.loadMoreLabel}</a> : null}
     </div>
   );
 }

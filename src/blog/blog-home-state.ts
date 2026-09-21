@@ -1,7 +1,10 @@
 import { publicLocales, type PublicLocale } from "../i18n/public-locale";
 import type { BlogPostMeta } from "./blog-post-registry";
 
+const defaultTopicArticlesPage = 1;
 const defaultVisiblePostCount = 6;
+
+export const topicArticlesPageSize = 12;
 
 type BlogSearchParameterValue = string | readonly string[] | undefined;
 
@@ -9,12 +12,15 @@ export type BlogHomeSearchParameters = Readonly<{
   q?: BlogSearchParameterValue;
   topic?: BlogSearchParameterValue;
   visible?: BlogSearchParameterValue;
+  page?: BlogSearchParameterValue;
 }>;
 
 export type BlogHomeState = Readonly<{
   query: string;
   topic: string;
   visible: number;
+  topicArticlesPage: number;
+  topicArticlesPageCount: number;
   topics: readonly string[];
   posts: readonly BlogPostMeta[];
   topicCarouselPosts: readonly BlogPostMeta[];
@@ -90,6 +96,33 @@ export function paginateBlogPosts(
   return posts.slice(startIndex, startIndex + pageSize);
 }
 
+function paginateTopicArticles(
+  topicArticles: readonly BlogPostMeta[],
+  requestedPage: number,
+): Readonly<{
+  page: number;
+  pageCount: number;
+  posts: readonly BlogPostMeta[];
+}> {
+  const pageCount = Math.ceil(topicArticles.length / topicArticlesPageSize);
+
+  if (pageCount === 0) {
+    return {
+      page: defaultTopicArticlesPage,
+      pageCount: 0,
+      posts: [],
+    };
+  }
+
+  const page = Math.min(requestedPage, pageCount);
+
+  return {
+    page,
+    pageCount,
+    posts: paginateBlogPosts(topicArticles, page, topicArticlesPageSize),
+  };
+}
+
 export function getBlogHomeState(
   posts: readonly BlogPostMeta[],
   searchParameters: BlogHomeSearchParameters,
@@ -100,20 +133,29 @@ export function getBlogHomeState(
     searchParameters.visible,
     defaultVisiblePostCount,
   );
+  const requestedTopicArticlesPage = normalizePositiveInteger(
+    searchParameters.page,
+    defaultTopicArticlesPage,
+  );
   const topics = Array.from(new Set(posts.map((post) => post.topic)));
   const topicMatchedPosts =
     topic.length === 0 ? posts.slice() : posts.filter((post) => post.topic === topic);
   const matchingPosts = filterBlogPostsByTitle(topicMatchedPosts, query);
   const latestMatchingPosts = matchingPosts.slice().reverse();
-  const topicCarouselPosts = getFirstCarouselTopicPosts(posts, topics);
+  const topicArticlesPageState = paginateTopicArticles(
+    getFirstCarouselTopicPosts(posts, topics),
+    requestedTopicArticlesPage,
+  );
 
   return {
     query,
     topic,
     visible,
+    topicArticlesPage: topicArticlesPageState.page,
+    topicArticlesPageCount: topicArticlesPageState.pageCount,
     topics,
     posts: latestMatchingPosts.slice(0, visible),
-    topicCarouselPosts,
+    topicCarouselPosts: topicArticlesPageState.posts,
     totalPostCount: matchingPosts.length,
   };
 }
@@ -130,6 +172,10 @@ export function buildBlogHomeHref(
     searchParameters.visible,
     defaultVisiblePostCount,
   );
+  const page = normalizePositiveInteger(
+    searchParameters.page,
+    defaultTopicArticlesPage,
+  );
   const urlSearchParameters = new URLSearchParams();
 
   if (query.length > 0) {
@@ -142,6 +188,10 @@ export function buildBlogHomeHref(
 
   if (visible !== defaultVisiblePostCount) {
     urlSearchParameters.set("visible", String(visible));
+  }
+
+  if (page !== defaultTopicArticlesPage) {
+    urlSearchParameters.set("page", String(page));
   }
 
   const pathname = locale === "en" ? "/blog" : "/zh/blog";

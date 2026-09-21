@@ -16,11 +16,13 @@ export function getBlogHomeSearchParametersFromLocationSearch(
   const query = getLocationSearchParameter(searchParameters, "q");
   const topic = getLocationSearchParameter(searchParameters, "topic");
   const visible = getLocationSearchParameter(searchParameters, "visible");
+  const page = getLocationSearchParameter(searchParameters, "page");
 
   return {
     ...(query === undefined ? {} : { q: query }),
     ...(topic === undefined ? {} : { topic }),
     ...(visible === undefined ? {} : { visible }),
+    ...(page === undefined ? {} : { page }),
   };
 }
 
