@@ -42,7 +42,9 @@ const expectedStaticPageFiles = [
   "rancher-or-tiller-stardew.html",
   "summer-crops-stardew.html",
   "fall-crops-stardew.html",
+  "do-you-have-to-water-trees-stardew.html",
   "how-to-level-up-farming-stardew.html",
+  "last-day-to-plant-stardew.html",
   "zh/blog.html",
   "zh/blog/archive.html",
   "zh/carpenter-stardew.html",
@@ -61,7 +63,9 @@ const expectedStaticPageFiles = [
   "zh/rancher-or-tiller-stardew.html",
   "zh/summer-crops-stardew.html",
   "zh/fall-crops-stardew.html",
+  "zh/do-you-have-to-water-trees-stardew.html",
   "zh/how-to-level-up-farming-stardew.html",
+  "zh/last-day-to-plant-stardew.html",
 ] as const;
 
 const expectedStaticHomepageFiles = [

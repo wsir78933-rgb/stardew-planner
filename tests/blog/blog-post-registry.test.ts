@@ -29,6 +29,7 @@ const expectedSlugs = [
   "fall-crops-stardew",
   "do-you-have-to-water-trees-stardew",
   "how-to-level-up-farming-stardew",
+  "last-day-to-plant-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -63,14 +64,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the eighteen canonical blog identities in publishing order", () => {
+it("keeps the nineteen canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the thirty-six localized root-level canonical article paths", () => {
+it("publishes only the thirty-eight localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -90,6 +91,7 @@ it("publishes only the thirty-six localized root-level canonical article paths",
     "/fall-crops-stardew/",
     "/do-you-have-to-water-trees-stardew/",
     "/how-to-level-up-farming-stardew/",
+    "/last-day-to-plant-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -108,6 +110,7 @@ it("publishes only the thirty-six localized root-level canonical article paths",
     "/zh/fall-crops-stardew/",
     "/zh/do-you-have-to-water-trees-stardew/",
     "/zh/how-to-level-up-farming-stardew/",
+    "/zh/last-day-to-plant-stardew/",
   ]);
 });
 
@@ -449,6 +452,26 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
     },
   });
+  expect(englishPosts[18]).toMatchObject({
+    title: "Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days",
+    description:
+      "The last outdoor plant day for a first harvest on day 28 is 28 minus the crop's wiki grow days. Parsnip derives 24, cauliflower 16, pumpkin or starfruit 15. Count days after the plant day, water that day, and leave Speed-Gro off; the Crops page has no last-plant field.",
+    readTimeMinutes: 15,
+    coverImage: {
+      src: "/blog/last-day-to-plant-stardew-cover.webp",
+      alt: "Watercolor of an outdoor vegetable patch with cabbages and leafy rows, a metal watering can on the dirt, a farmhouse and windmill at sunset, and a wooden Spring board numbered 1 through 28 with day 28 marked.",
+    },
+  });
+  expect(chinesePosts[18]).toMatchObject({
+    title: "星露谷最晚播种：把维基写的生长天数从 28 里减掉",
+    description:
+      "要在当季第 28 天收到这一次成熟，把维基写的生长天数从 28 里减掉。防风草 4 天对应春 24，南瓜 13 天对应秋 15。生长天数不含播种当天，播种当天浇了水，没有生长激素也没有农业学家；农作物页和作物生长日历都没有名叫「最晚播种」的栏。",
+    readTimeMinutes: 16,
+    coverImage: {
+      src: "/blog/last-day-to-plant-stardew-cover.webp",
+      alt: "水彩插画：室外菜畦里种着卷心菜和绿叶作物，土路上放着喷壶，远处农舍和风车映着日落，右侧木牌写着 Spring，格子从 1 到 28，第 28 格标了出来。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -477,6 +500,7 @@ it("binds every localized post to its own original blog cover", () => {
         "/blog/do-you-have-to-water-trees-stardew-cover.webp",
       "how-to-level-up-farming-stardew":
         "/blog/how-to-level-up-farming-stardew-cover.webp",
+      "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -501,6 +525,7 @@ it("binds every localized post to its own original blog cover", () => {
         "/blog/do-you-have-to-water-trees-stardew-cover-zh.webp",
       "how-to-level-up-farming-stardew":
         "/blog/how-to-level-up-farming-stardew-cover.webp",
+      "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
     },
   } as const;
 
@@ -600,7 +625,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: how-to-level-up-farming-stardew.",
+    "Expected: carpenter-stardew. Received: last-day-to-plant-stardew.",
   );
 });
 

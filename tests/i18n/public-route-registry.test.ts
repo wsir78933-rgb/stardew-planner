@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(24);
+  expect(canonicalPublicPaths).toHaveLength(25);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -130,8 +130,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/how-to-level-up-farming-stardew")).toBe(
     "/zh/how-to-level-up-farming-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(48);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(46);
+  expect(getLocalizedPublicPath("en", "/last-day-to-plant-stardew")).toBe(
+    "/last-day-to-plant-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/last-day-to-plant-stardew")).toBe(
+    "/zh/last-day-to-plant-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(50);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(48);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -177,6 +183,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/do-you-have-to-water-trees-stardew");
   expect(indexablePathnames).toContain("/how-to-level-up-farming-stardew");
   expect(indexablePathnames).toContain("/zh/how-to-level-up-farming-stardew");
+  expect(indexablePathnames).toContain("/last-day-to-plant-stardew");
+  expect(indexablePathnames).toContain("/zh/last-day-to-plant-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -202,6 +210,7 @@ it("registers the direct-entry blog routes", () => {
       "/fall-crops-stardew",
       "/do-you-have-to-water-trees-stardew",
       "/how-to-level-up-farming-stardew",
+      "/last-day-to-plant-stardew",
     ]),
   );
 });

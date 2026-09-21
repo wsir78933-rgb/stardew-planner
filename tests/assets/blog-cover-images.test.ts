@@ -108,6 +108,34 @@ const howToLevelUpFarmingArticleMediaExpectations = [
     expectedDimensions: { height: 941, width: 1672 },
   },
 ] as const;
+const lastDayToPlantArticleMediaExpectations = [
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/last-plant-grow-clock.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/last-plant-season-calendar.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/last-plant-parsnip-calendar-gap-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath:
+      "blog/illustrations/last-plant-cranberry-first-vs-full-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/last-plant-four-season-calendar-zh.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+] as const;
 const fallCropsArticleMediaExpectations = [
   {
     maximumByteCount: 400 * 1024,
@@ -380,7 +408,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all eighteen blog identities", () => {
+it("ships budget-compliant WebP covers for all nineteen blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -409,6 +437,9 @@ it("ships budget-compliant WebP covers for all eighteen blog identities", () => 
   const farmingXpImage = readWebpDimensions(
     "blog/how-to-level-up-farming-stardew-cover.webp",
   );
+  const lastDayToPlantImage = readWebpDimensions(
+    "blog/last-day-to-plant-stardew-cover.webp",
+  );
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -428,6 +459,7 @@ it("ships budget-compliant WebP covers for all eighteen blog identities", () => 
   expect(fallCropsImage).toMatchObject(expectedCoverDimensions);
   expect(waterTreesImage).toMatchObject(expectedCoverDimensions);
   expect(farmingXpImage).toMatchObject(expectedCoverDimensions);
+  expect(lastDayToPlantImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
@@ -445,6 +477,7 @@ it("ships budget-compliant WebP covers for all eighteen blog identities", () => 
   expect(fallCropsImage.width / fallCropsImage.height).toBeCloseTo(16 / 9, 2);
   expect(waterTreesImage.width / waterTreesImage.height).toBeCloseTo(16 / 9, 2);
   expect(farmingXpImage.width / farmingXpImage.height).toBeCloseTo(16 / 9, 2);
+  expect(lastDayToPlantImage.width / lastDayToPlantImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
@@ -463,6 +496,7 @@ it("ships budget-compliant WebP covers for all eighteen blog identities", () => 
   expect(fallCropsImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(waterTreesImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(farmingXpImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(lastDayToPlantImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
@@ -545,6 +579,16 @@ it("ships budget-compliant WebP media for the fall crops guide", () => {
 
 it("ships budget-compliant WebP media for the farming XP guide", () => {
   for (const mediaExpectation of howToLevelUpFarmingArticleMediaExpectations) {
+    const image = readWebpDimensions(mediaExpectation.relativeImagePath);
+
+    expect(image).toMatchObject(mediaExpectation.expectedDimensions);
+    expect(image.width / image.height).toBeCloseTo(16 / 9, 2);
+    expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+});
+
+it("ships budget-compliant WebP media for the last-day-to-plant guide", () => {
+  for (const mediaExpectation of lastDayToPlantArticleMediaExpectations) {
     const image = readWebpDimensions(mediaExpectation.relativeImagePath);
 
     expect(image).toMatchObject(mediaExpectation.expectedDimensions);

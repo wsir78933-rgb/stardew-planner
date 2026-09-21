@@ -35,6 +35,8 @@ import { FallCropsStardewEnglishArticle } from "../../src/blog/articles/fall-cro
 import { FallCropsStardewChineseArticle } from "../../src/blog/articles/fall-crops-stardew.zh";
 import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.en";
 import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
+import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/last-day-to-plant-stardew.en";
+import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1790,6 +1792,194 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "/zh",
         label: "本站：农场规划器（简体中文首页）",
+      },
+    ],
+  },
+  {
+    Article: LastDayToPlantStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-21 against Stardew Valley Wiki pages. Last-plant days are derived as `28 − grow days` for a first harvest on day 28, excluding the plant day, with watering on the plant day. The tables have no Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, or Agriculturist columns. This site’s farm planner switches seasons as a layout view; it does not compute last-plant days.",
+    heading: "Sources",
+    name: "English last-plant article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Crops", label: "Stardew Valley Wiki: Crops" },
+      {
+        href: "https://stardewvalleywiki.com/Crops#Grow_Times",
+        label: "Stardew Valley Wiki: Crops (Grow Times)",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Crops#End_of_Season",
+        label: "Stardew Valley Wiki: Crops (End of Season)",
+      },
+      { href: "https://stardewvalleywiki.com/Seasons", label: "Stardew Valley Wiki: Seasons" },
+      { href: "https://stardewvalleywiki.com/Spring", label: "Stardew Valley Wiki: Spring" },
+      { href: "https://stardewvalleywiki.com/Summer", label: "Stardew Valley Wiki: Summer" },
+      { href: "https://stardewvalleywiki.com/Fall", label: "Stardew Valley Wiki: Fall" },
+      { href: "https://stardewvalleywiki.com/Winter", label: "Stardew Valley Wiki: Winter" },
+      { href: "https://stardewvalleywiki.com/Parsnip", label: "Stardew Valley Wiki: Parsnip" },
+      {
+        href: "https://stardewvalleywiki.com/Cauliflower",
+        label: "Stardew Valley Wiki: Cauliflower",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Unmilled_Rice",
+        label: "Stardew Valley Wiki: Unmilled Rice",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Coffee_Bean",
+        label: "Stardew Valley Wiki: Coffee Bean",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Ancient_Fruit",
+        label: "Stardew Valley Wiki: Ancient Fruit",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Spring_Seeds",
+        label: "Stardew Valley Wiki: Spring Seeds",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Summer_Seeds",
+        label: "Stardew Valley Wiki: Summer Seeds",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fall_Seeds",
+        label: "Stardew Valley Wiki: Fall Seeds",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Winter_Seeds",
+        label: "Stardew Valley Wiki: Winter Seeds",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fiber_Seeds",
+        label: "Stardew Valley Wiki: Fiber Seeds",
+      },
+      { href: "https://stardewvalleywiki.com/Speed-Gro", label: "Stardew Valley Wiki: Speed-Gro" },
+      {
+        href: "https://stardewvalleywiki.com/Deluxe_Speed-Gro",
+        label: "Stardew Valley Wiki: Deluxe Speed-Gro",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Hyper_Speed-Gro",
+        label: "Stardew Valley Wiki: Hyper Speed-Gro",
+      },
+      { href: "https://stardewvalleywiki.com/Farming", label: "Stardew Valley Wiki: Farming" },
+      {
+        href: "https://stardewvalleywiki.com/Greenhouse",
+        label: "Stardew Valley Wiki: Greenhouse",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Ginger_Island",
+        label: "Stardew Valley Wiki: Ginger Island",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Fruit_Trees",
+        label: "Stardew Valley Wiki: Fruit Trees",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Tea_Sapling",
+        label: "Stardew Valley Wiki: Tea Sapling",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Cactus_Seeds",
+        label: "Stardew Valley Wiki: Cactus Seeds",
+      },
+      { href: "https://stardewvalleywiki.com/Farm_Maps", label: "Stardew Valley Wiki: Farm Maps" },
+      {
+        href: "https://stardewvalleyplanner.art/best-spring-crop-stardew",
+        label: "This site: spring crop ranking",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/summer-crops-stardew",
+        label: "This site: summer crop ranking",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/fall-crops-stardew",
+        label: "This site: fall crop ranking",
+      },
+      {
+        href: "https://stardewvalleyplanner.art/glasshouse-stardew-valley",
+        label: "This site: greenhouse layout",
+      },
+    ],
+  },
+  {
+    Article: LastDayToPlantStardewChineseArticle,
+    checkedLabel:
+      "2026-09-21 对照下方星露谷中文维基（英文 Rare Seed、Crop Growth Calendars 仅作对照）。生长天数来自农作物各作物节。最晚播种日由 28 减生长天数推算，不是维基字段。作物生长日历是第 1 天种、收获当天再种的循环表。规划器可以摆作物、切四季，不算最晚播种日。",
+    heading: "来源",
+    name: "Chinese last-plant article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/农作物",
+        label: "星露谷物语官方中文维基：农作物",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/作物生长日历",
+        label: "星露谷物语官方中文维基：作物生长日历",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Crop_Growth_Calendars",
+        label: "Stardew Valley Wiki: Crop Growth Calendars",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/季节",
+        label: "星露谷物语官方中文维基：季节",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/生长激素",
+        label: "星露谷物语官方中文维基：生长激素",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/高级生长激素",
+        label: "星露谷物语官方中文维基：高级生长激素",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/顶级生长激素",
+        label: "星露谷物语官方中文维基：顶级生长激素",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/耕种",
+        label: "星露谷物语官方中文维基：耕种",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/稀有种子",
+        label: "星露谷物语官方中文维基：稀有种子",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Rare_Seed",
+        label: "Stardew Valley Wiki: Rare Seed",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/春季种子",
+        label: "星露谷物语官方中文维基：春季种子",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/茶叶",
+        label: "星露谷物语官方中文维基：茶叶",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/温室",
+        label: "星露谷物语官方中文维基：温室",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/姜岛",
+        label: "星露谷物语官方中文维基：姜岛",
+      },
+      {
+        href: "/zh/best-spring-crop-stardew",
+        label: "本站：春天种什么",
+      },
+      {
+        href: "/zh/summer-crops-stardew",
+        label: "本站：夏天种什么",
+      },
+      {
+        href: "/zh/fall-crops-stardew",
+        label: "本站：秋季作物",
+      },
+      {
+        href: "/zh/glasshouse-stardew-valley",
+        label: "本站：温室布局",
       },
     ],
   },

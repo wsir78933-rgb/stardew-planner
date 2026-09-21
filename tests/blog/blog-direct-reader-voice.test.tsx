@@ -35,6 +35,8 @@ import { FallCropsStardewEnglishArticle } from "../../src/blog/articles/fall-cro
 import { FallCropsStardewChineseArticle } from "../../src/blog/articles/fall-crops-stardew.zh";
 import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.en";
 import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
+import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/last-day-to-plant-stardew.en";
+import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -68,6 +70,10 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: HowToLevelUpFarmingStardewEnglishArticle,
     slug: "how-to-level-up-farming-stardew",
   },
+  {
+    Component: LastDayToPlantStardewEnglishArticle,
+    slug: "last-day-to-plant-stardew",
+  },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -96,6 +102,10 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   {
     Component: HowToLevelUpFarmingStardewChineseArticle,
     slug: "how-to-level-up-farming-stardew",
+  },
+  {
+    Component: LastDayToPlantStardewChineseArticle,
+    slug: "last-day-to-plant-stardew",
   },
 ];
 
@@ -147,12 +157,15 @@ function expectNoAuthorFacingPatterns(
   // Locked sprinkler zh-CN ACCEPT body uses 本文 for scope limits; keep the phrase,
   // do not rewrite the locked copy to satisfy the generic author-facing scan.
   // Locked trees English body uses "do not use this page as a second indoor guide".
+  // Locked last-day zh-CN body uses 下面按季节查表 as a lookup instruction.
   const skippedPatternText =
     articleFixture.slug === "sprinkler-stardew"
       ? String(/本文/)
       : articleFixture.slug === "stardew-valley-trees"
         ? String(/\buse this page\b/i)
-        : null;
+        : articleFixture.slug === "last-day-to-plant-stardew"
+          ? String(/下面按/)
+          : null;
   const patternsForArticle =
     skippedPatternText === null
       ? forbiddenPatterns

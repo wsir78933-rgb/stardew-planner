@@ -55,6 +55,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/summer-crops-stardew"');
   expect(indexMarkup).toContain('href="/fall-crops-stardew"');
   expect(indexMarkup).toContain('href="/how-to-level-up-farming-stardew"');
+  expect(indexMarkup).toContain('href="/last-day-to-plant-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -93,6 +94,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/summer-crops-stardew"');
   expect(indexMarkup).toContain('href="/zh/fall-crops-stardew"');
   expect(indexMarkup).toContain('href="/zh/how-to-level-up-farming-stardew"');
+  expect(indexMarkup).toContain('href="/zh/last-day-to-plant-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -484,6 +486,39 @@ it("renders the paired farming XP article routes with locked metadata and one pa
     title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
     description:
       "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
+  });
+});
+
+it("renders the paired last-plant article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "last-day-to-plant-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "last-day-to-plant-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days",
+  );
+  expect(chineseMarkup).toContain("星露谷最晚播种：把维基写的生长天数从 28 里减掉");
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days",
+    description:
+      "The last outdoor plant day for a first harvest on day 28 is 28 minus the crop's wiki grow days. Parsnip derives 24, cauliflower 16, pumpkin or starfruit 15. Count days after the plant day, water that day, and leave Speed-Gro off; the Crops page has no last-plant field.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷最晚播种：把维基写的生长天数从 28 里减掉",
+    description:
+      "要在当季第 28 天收到这一次成熟，把维基写的生长天数从 28 里减掉。防风草 4 天对应春 24，南瓜 13 天对应秋 15。生长天数不含播种当天，播种当天浇了水，没有生长激素也没有农业学家；农作物页和作物生长日历都没有名叫「最晚播种」的栏。",
   });
 });
 

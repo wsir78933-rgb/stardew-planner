@@ -111,6 +111,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150](https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew): 收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
   );
+  expect(llmsText).toContain(
+    "[Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days](https://stardewvalleyplanner.art/last-day-to-plant-stardew): The last outdoor plant day for a first harvest on day 28 is 28 minus the crop's wiki grow days. Parsnip derives 24, cauliflower 16, pumpkin or starfruit 15. Count days after the plant day, water that day, and leave Speed-Gro off; the Crops page has no last-plant field.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷最晚播种：把维基写的生长天数从 28 里减掉](https://stardewvalleyplanner.art/zh/last-day-to-plant-stardew): 要在当季第 28 天收到这一次成熟，把维基写的生长天数从 28 里减掉。防风草 4 天对应春 24，南瓜 13 天对应秋 15。生长天数不含播种当天，播种当天浇了水，没有生长激素也没有农业学家；农作物页和作物生长日历都没有名叫「最晚播种」的栏。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

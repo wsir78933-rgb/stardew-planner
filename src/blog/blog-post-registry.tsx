@@ -36,6 +36,8 @@ import { DoYouHaveToWaterTreesStardewEnglishArticle } from "./articles/do-you-ha
 import { DoYouHaveToWaterTreesStardewChineseArticle } from "./articles/do-you-have-to-water-trees-stardew.zh";
 import { HowToLevelUpFarmingStardewEnglishArticle } from "./articles/how-to-level-up-farming-stardew.en";
 import { HowToLevelUpFarmingStardewChineseArticle } from "./articles/how-to-level-up-farming-stardew.zh";
+import { LastDayToPlantStardewEnglishArticle } from "./articles/last-day-to-plant-stardew.en";
+import { LastDayToPlantStardewChineseArticle } from "./articles/last-day-to-plant-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -347,6 +349,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: HowToLevelUpFarmingStardewEnglishArticle,
     },
+    {
+      slug: "last-day-to-plant-stardew",
+      title: "Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days",
+      description:
+        "The last outdoor plant day for a first harvest on day 28 is 28 minus the crop's wiki grow days. Parsnip derives 24, cauliflower 16, pumpkin or starfruit 15. Count days after the plant day, water that day, and leave Speed-Gro off; the Crops page has no last-plant field.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 15,
+      coverImage: {
+        src: "/blog/last-day-to-plant-stardew-cover.webp",
+        alt: "Watercolor of an outdoor vegetable patch with cabbages and leafy rows, a metal watering can on the dirt, a farmhouse and windmill at sunset, and a wooden Spring board numbered 1 through 28 with day 28 marked.",
+      },
+      featured: true,
+      Content: LastDayToPlantStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -617,6 +634,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: HowToLevelUpFarmingStardewChineseArticle,
+    },
+    {
+      slug: "last-day-to-plant-stardew",
+      title: "星露谷最晚播种：把维基写的生长天数从 28 里减掉",
+      description:
+        "要在当季第 28 天收到这一次成熟，把维基写的生长天数从 28 里减掉。防风草 4 天对应春 24，南瓜 13 天对应秋 15。生长天数不含播种当天，播种当天浇了水，没有生长激素也没有农业学家；农作物页和作物生长日历都没有名叫「最晚播种」的栏。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/last-day-to-plant-stardew-cover.webp",
+        alt: "水彩插画：室外菜畦里种着卷心菜和绿叶作物，土路上放着喷壶，远处农舍和风车映着日落，右侧木牌写着 Spring，格子从 1 到 28，第 28 格标了出来。",
+      },
+      featured: true,
+      Content: LastDayToPlantStardewChineseArticle,
     },
   ],
 };
