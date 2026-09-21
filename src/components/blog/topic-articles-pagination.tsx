@@ -33,6 +33,30 @@ function createTopicArticlesPageHref(
   })}#topic-carousel`;
 }
 
+function createTopicArticlesAdjacentPageHref(
+  locale: PublicLocale,
+  homeState: BlogHomeState,
+  page: number,
+  isEnabled: boolean,
+): string | null {
+  if (!isEnabled) {
+    return null;
+  }
+
+  return createTopicArticlesPageHref(locale, homeState, page);
+}
+
+function readTopicArticlesPaginationLabel(homeState: BlogHomeState): string {
+  const topicName = homeState.topicCarouselPosts[0]?.topic;
+  if (topicName === undefined) {
+    throw new Error(
+      `Topic articles pagination requires a topic name. Received pageCount=${String(homeState.topicArticlesPageCount)}, posts=${String(homeState.topicCarouselPosts.length)}.`,
+    );
+  }
+
+  return topicName;
+}
+
 function TopicArticlesStepControl({
   href,
   isEnabled,
@@ -55,6 +79,28 @@ function TopicArticlesStepControl({
   return <span aria-disabled="true">{label}</span>;
 }
 
+function TopicArticlesPageLinks({
+  currentPage,
+  homeState,
+  locale,
+  pageCount,
+}: Readonly<{
+  currentPage: number;
+  homeState: BlogHomeState;
+  locale: PublicLocale;
+  pageCount: number;
+}>) {
+  return createTopicArticlesPageNumbers(pageCount).map((page) => (
+    <a
+      aria-current={page === currentPage ? "page" : undefined}
+      href={createTopicArticlesPageHref(locale, homeState, page)}
+      key={page}
+    >
+      {page}
+    </a>
+  ));
+}
+
 export function TopicArticlesPagination({
   copy,
   homeState,
@@ -64,49 +110,40 @@ export function TopicArticlesPagination({
     return null;
   }
 
-  const topicName = homeState.topicCarouselPosts[0]?.topic;
-  if (topicName === undefined) {
-    throw new Error(
-      `Topic articles pagination requires a topic name. Received pageCount=${String(homeState.topicArticlesPageCount)}, posts=${String(homeState.topicCarouselPosts.length)}.`,
-    );
-  }
-
+  const topicName = readTopicArticlesPaginationLabel(homeState);
   const currentPage = homeState.topicArticlesPage;
   const pageCount = homeState.topicArticlesPageCount;
+  const hasPreviousPage = currentPage > 1;
+  const hasNextPage = currentPage < pageCount;
 
   return (
     <nav aria-label={topicName} className="blog-topic-articles-pagination">
-      <div className="blog-topic-articles-pagination__steps">
-        <TopicArticlesStepControl
-          href={
-            currentPage > 1
-              ? createTopicArticlesPageHref(locale, homeState, currentPage - 1)
-              : null
-          }
-          isEnabled={currentPage > 1}
-          label={copy.previousCarouselLabel}
-        />
-        <TopicArticlesStepControl
-          href={
-            currentPage < pageCount
-              ? createTopicArticlesPageHref(locale, homeState, currentPage + 1)
-              : null
-          }
-          isEnabled={currentPage < pageCount}
-          label={copy.nextCarouselLabel}
-        />
-      </div>
-      <div className="blog-topic-articles-pagination__pages">
-        {createTopicArticlesPageNumbers(pageCount).map((page) => (
-          <a
-            aria-current={page === currentPage ? "page" : undefined}
-            href={createTopicArticlesPageHref(locale, homeState, page)}
-            key={page}
-          >
-            {page}
-          </a>
-        ))}
-      </div>
+      <TopicArticlesStepControl
+        href={createTopicArticlesAdjacentPageHref(
+          locale,
+          homeState,
+          currentPage - 1,
+          hasPreviousPage,
+        )}
+        isEnabled={hasPreviousPage}
+        label={copy.previousCarouselLabel}
+      />
+      <TopicArticlesPageLinks
+        currentPage={currentPage}
+        homeState={homeState}
+        locale={locale}
+        pageCount={pageCount}
+      />
+      <TopicArticlesStepControl
+        href={createTopicArticlesAdjacentPageHref(
+          locale,
+          homeState,
+          currentPage + 1,
+          hasNextPage,
+        )}
+        isEnabled={hasNextPage}
+        label={copy.nextCarouselLabel}
+      />
     </nav>
   );
 }
