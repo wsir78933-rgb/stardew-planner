@@ -1798,7 +1798,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   {
     Article: LastDayToPlantStardewEnglishArticle,
     checkedLabel:
-      "Checked 2026-09-21 against Stardew Valley Wiki pages. Last-plant days are derived as `28 − grow days` for a first harvest on day 28, excluding the plant day, with watering on the plant day. The tables have no Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, or Agriculturist columns. This site’s farm planner switches seasons as a layout view; it does not compute last-plant days.",
+      "Checked 2026-09-21 against Stardew Valley Wiki pages. Last plant days are 28 minus grow time, for a first harvest on day 28. The plant day does not count, and you water that day. The tables leave Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist off. This site’s farm planner switches seasons as a layout view; it does not compute last-plant days.",
     heading: "Sources",
     name: "English last-plant article",
     sources: [
@@ -1905,7 +1905,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   {
     Article: LastDayToPlantStardewChineseArticle,
     checkedLabel:
-      "2026-09-21 对照下方星露谷中文维基（英文 Rare Seed、Crop Growth Calendars 仅作对照）。生长天数来自农作物各作物节。最晚播种日由 28 减生长天数推算，不是维基字段。作物生长日历是第 1 天种、收获当天再种的循环表。规划器可以摆作物、切四季，不算最晚播种日。",
+      "2026-09-21 对照下方星露谷中文维基（英文 Rare Seed、Crop Growth Calendars 仅作对照）。生长天数来自农作物各作物节。最晚播种日用 28 减去生长天数，种下去的那一天不算在内。作物生长日历是第 1 天种、收获当天再种的循环表。规划器可以摆作物、切四季，不算最晚播种日。",
     heading: "来源",
     name: "Chinese last-plant article",
     sources: [

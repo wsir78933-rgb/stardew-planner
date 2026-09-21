@@ -775,11 +775,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/last-day-to-plant-stardew",
     staticPageFile: "last-day-to-plant-stardew.html",
-    heading: "Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days",
+    heading: "Last Day to Plant in Stardew Valley: Parsnips by Spring 24",
     metadata: {
-      title: "Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days",
+      title: "Last Day to Plant in Stardew Valley: Parsnips by Spring 24",
       description:
-        "The last outdoor plant day for a first harvest on day 28 is 28 minus the crop's wiki grow days. Parsnip derives 24, cauliflower 16, pumpkin or starfruit 15. Count days after the plant day, water that day, and leave Speed-Gro off; the Crops page has no last-plant field.",
+        "Plant parsnips by Spring 24 if you want them ready on Spring 28. Water that day. For other outdoor crops, subtract grow time from 28. Tables cover spring through winter.",
     },
     documentLanguage: "en",
     schemaType: "Article",
@@ -792,7 +792,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "page has no last-plant field",
+      "by Spring 24 if you still want it ready on Spring 28",
       "This site’s farm planner switches seasons as a layout view; it does not compute last-plant days.",
     ],
     requiredHrefs: [
@@ -1400,11 +1400,11 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   {
     pathname: "/zh/last-day-to-plant-stardew",
     staticPageFile: "zh/last-day-to-plant-stardew.html",
-    heading: "星露谷最晚播种：把维基写的生长天数从 28 里减掉",
+    heading: "星露谷最晚播种日：春天防风草最晚在第 24 天种下",
     metadata: {
-      title: "星露谷最晚播种：把维基写的生长天数从 28 里减掉",
+      title: "星露谷最晚播种日：春天防风草最晚在第 24 天种下",
       description:
-        "要在当季第 28 天收到这一次成熟，把维基写的生长天数从 28 里减掉。防风草 4 天对应春 24，南瓜 13 天对应秋 15。生长天数不含播种当天，播种当天浇了水，没有生长激素也没有农业学家；农作物页和作物生长日历都没有名叫「最晚播种」的栏。",
+        "春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。",
     },
     documentLanguage: "zh-CN",
     schemaType: "Article",
@@ -1417,7 +1417,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       },
     ],
     requiredBodyPhrases: [
-      "都没有名叫「最晚播种」的栏",
+      "春天想在第 28 天收到防风草，最晚在第 24 天种下",
       "规划器可以摆作物、切四季，不算最晚播种日。",
     ],
     requiredHrefs: [

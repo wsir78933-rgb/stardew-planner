@@ -112,10 +112,10 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
     "[星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150](https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew): 收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
   );
   expect(llmsText).toContain(
-    "[Last Day to Plant in Stardew: 28 Minus the Crop's Wiki Grow Days](https://stardewvalleyplanner.art/last-day-to-plant-stardew): The last outdoor plant day for a first harvest on day 28 is 28 minus the crop's wiki grow days. Parsnip derives 24, cauliflower 16, pumpkin or starfruit 15. Count days after the plant day, water that day, and leave Speed-Gro off; the Crops page has no last-plant field.",
+    "[Last Day to Plant in Stardew Valley: Parsnips by Spring 24](https://stardewvalleyplanner.art/last-day-to-plant-stardew): Plant parsnips by Spring 24 if you want them ready on Spring 28. Water that day. For other outdoor crops, subtract grow time from 28. Tables cover spring through winter.",
   );
   expect(llmsText).toContain(
-    "[星露谷最晚播种：把维基写的生长天数从 28 里减掉](https://stardewvalleyplanner.art/zh/last-day-to-plant-stardew): 要在当季第 28 天收到这一次成熟，把维基写的生长天数从 28 里减掉。防风草 4 天对应春 24，南瓜 13 天对应秋 15。生长天数不含播种当天，播种当天浇了水，没有生长激素也没有农业学家；农作物页和作物生长日历都没有名叫「最晚播种」的栏。",
+    "[星露谷最晚播种日：春天防风草最晚在第 24 天种下](https://stardewvalleyplanner.art/zh/last-day-to-plant-stardew): 春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。",
   );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {

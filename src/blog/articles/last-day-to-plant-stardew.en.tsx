@@ -5,25 +5,25 @@ export function LastDayToPlantStardewEnglishArticle() {
   return (
     <article>
       <p>
-        The last outdoor day to plant a seed in Stardew Valley, so the first harvest still lands on day 28 of that season, is 28 minus the crop’s wiki grow days. Count those days after the plant day, water the seed the day you put it in, and leave Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist off; the <a href="https://stardewvalleywiki.com/Crops">Crops</a> page has no last-plant field, so the calendar day is derived. <a href="https://stardewvalleywiki.com/Parsnip">Parsnip</a> at 4 days derives 24, <a href="https://stardewvalleywiki.com/Cauliflower">cauliflower</a> at 12 days derives 16, and pumpkin or starfruit at 13 days derive 15: look the packet up in the seasonal tables, then plant on or before that day.
+        Plant a <a href="https://stardewvalleywiki.com/Parsnip">parsnip</a> by Spring 24 if you still want it ready on Spring 28. Water it the day you plant. For any outdoor crop, take 28 minus the grow time on the <a href="https://stardewvalleywiki.com/Crops">crop page</a> (the plant day does not count).
+      </p>
+
+      <p>
+        A <a href="https://stardewvalleywiki.com/Cauliflower">cauliflower</a> planted by Spring 16 is ready on Spring 28. Pumpkin and starfruit take 13 days, so plant them by day 15 of their season. Leave Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist off for the dates in the tables.
       </p>
 
       <h2>Count grow days after the plant day, then subtract from 28</h2>
 
       <p>
-        Each of Spring, Summer, Fall, and Winter lasts 28 days on the <a href="https://stardewvalleywiki.com/Seasons">Seasons</a> page. A crop that can grow only in the current season withers when the season ends (end of day 28) and is a dead crop on the 1st of the next month. Fully grown crops that are ready to harvest also wither when they move into a season they cannot occupy. Multi-season plants named on Crops (Ancient Fruit, Coffee Bean, Corn, Sunflower, and Wheat) keep growing through every season listed for them.
+        Each of Spring, Summer, Fall, and Winter lasts 28 days on the <a href="https://stardewvalleywiki.com/Seasons">Seasons</a> page. A crop that can grow only in the current season withers when the season ends (end of day 28) and is a dead crop on the 1st of the next month. Fully grown crops that are ready to harvest also wither when they move into a season they cannot occupy. Ancient Fruit, Coffee Bean, Corn, Sunflower, and Wheat keep growing through every season listed for them.
       </p>
 
       <p>
-        The number you subtract is the wiki Total days, under the rules in <a href="https://stardewvalleywiki.com/Crops#Grow_Times">Grow Times</a>. Those times exclude the day the seeds were planted. If you plant on the first of a season, a 5-day crop is ready on day 6. Harvest day is plant day plus grow days. Crops must be watered every day for that clock to run; an unwatered day does not kill the plant and does not count as growth. The same heading assumes the seed is watered the day it is planted. Planting after midnight still counts as the current day. Fertilizer and the Agriculturist profession are not taken into account on that page.
+        The number you subtract is the Total days on the crop page, under the rules in <a href="https://stardewvalleywiki.com/Crops#Grow_Times">Grow Times</a>. Those times exclude the day the seeds were planted. If you plant on the first of a season, a 5-day crop is ready on day 6. Harvest day is plant day plus grow days. Crops must be watered every day for that clock to run; an unwatered day does not kill the plant and does not count as growth. Water the seed the day you plant. Planting after midnight still counts as the current day. Fertilizer and the Agriculturist profession are left off for the dates below.
       </p>
 
       <p>
-        For a first harvest on day 28, the derived last plant day is <code>28 − days_to_grow</code>. That arithmetic is analysis on the 28-day season and the Grow Times clock. It is not a wiki column name.
-      </p>
-
-      <p>
-        Work the named packets the same way, with the plant day already watered.
+        For a first harvest on day 28, the last plant day is <code>28 − days_to_grow</code>. Work the named packets the same way, with the plant day already watered.
       </p>
 
       <p>
@@ -39,16 +39,16 @@ export function LastDayToPlantStardewEnglishArticle() {
       </p>
 
       <p>
-        Starfruit on the <a href="https://stardewvalleywiki.com/Summer">Summer</a> table is also 13 days, so the derived last plant day is Summer 15 for a harvest on Summer 28.
+        Starfruit on the <a href="https://stardewvalleywiki.com/Summer">Summer</a> table is also 13 days, so plant by Summer 15 for a harvest on Summer 28.
       </p>
 
       <p>
-        A seed that is not in the tables below uses the same inputs: read Total days from Crops, confirm the tile is outdoor and in a legal season, then subtract from 28. If you miss a watering night, that night does not grow, so move the derived day earlier by one for each missed night. That shift follows Grow Times; the wiki does not print a second last-plant table for dry nights.
+        A seed that is not in the tables below uses the same inputs: read Total days from the crop page, confirm the tile is outdoor and in a legal season, then subtract from 28. If you miss a watering night, that night does not grow, so move the last plant day earlier by one for each missed night.
       </p>
 
       <figure className="blog-article-media">
         <PublicPicture
-          alt="Grow-clock schematic: the plant day is excluded; a 5-day crop planted on day 1 is ready on day 6; parsnip planted on 24 is ready on 28; cauliflower planted on 16 is ready on 28. Watered plant day, no Speed-Gro. Derived days, not a wiki field."
+          alt="Grow-clock drawing: the plant day does not count; a 5-day crop planted on day 1 is ready on day 6; a parsnip planted on 24 is ready on 28; a cauliflower planted on 16 is ready on 28. Water the plant day. No Speed-Gro."
           decoding="async"
           height="941"
           loading="lazy"
@@ -56,18 +56,18 @@ export function LastDayToPlantStardewEnglishArticle() {
           width="1672"
         />
         <figcaption>
-          The plant day does not count as a growing day. A 5-day crop planted on day 1 is ready on day 6. The same axis puts parsnip planted on 24 ready on 28, and cauliflower planted on 16 ready on 28. Water the plant day. Leave Speed-Gro off. The day numbers are derived as 28 minus grow days.
+          The plant day does not count as a growing day. A 5-day crop planted on day 1 is ready on day 6. The same axis puts a parsnip planted on 24 ready on 28, and a cauliflower planted on 16 ready on 28. Water the plant day. Leave Speed-Gro off.
         </figcaption>
       </figure>
 
       <h2>Last outdoor plant day for a first harvest on day 28</h2>
 
       <p>
-        Use this lookup on the outdoor valley farm. Wiki days to grow are Total days from the Crops infoboxes and the matching season tables. The last plant day is derived as <code>28 − grow days</code> for a first harvest on day 28. Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist are off. The plant day is already watered. Regrow rows are the last day that still yields one harvest, not a full-season pick count.
+        These tables are for the outdoor valley farm. Days to grow are Total days from the crop page and the matching season tables. The last plant day is <code>28 − grow days</code>, so the first harvest lands on day 28. Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist are off. Water the plant day. For a crop that keeps producing, the date is the last day that still yields one harvest, not a full-season pick count.
       </p>
 
       <p>
-        Carrot, summer squash, broccoli, and powdermelon are on the Crops page History as 1.6 additions. They sit in the same formula as the older packets.
+        Carrot, summer squash, broccoli, and powdermelon arrived in 1.6. They use the same 28-minus-grow-time count as the older packets.
       </p>
 
       <h3>Spring</h3>
@@ -82,9 +82,9 @@ export function LastDayToPlantStardewEnglishArticle() {
           <thead>
             <tr>
               <th scope="col">Crop</th>
-              <th scope="col">Wiki days to grow</th>
-              <th scope="col">Derived last plant day (first harvest on day 28)</th>
-              <th scope="col">Read-as</th>
+              <th scope="col">Days to grow</th>
+              <th scope="col">Last day to plant (ready on day 28)</th>
+              <th scope="col">Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -170,9 +170,9 @@ export function LastDayToPlantStardewEnglishArticle() {
           <thead>
             <tr>
               <th scope="col">Crop</th>
-              <th scope="col">Wiki days to grow</th>
-              <th scope="col">Derived last plant day (first harvest on day 28)</th>
-              <th scope="col">Read-as</th>
+              <th scope="col">Days to grow</th>
+              <th scope="col">Last day to plant (ready on day 28)</th>
+              <th scope="col">Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -180,7 +180,7 @@ export function LastDayToPlantStardewEnglishArticle() {
               <td><a href="https://stardewvalleywiki.com/Crops#Wheat">Wheat</a></td>
               <td>4</td>
               <td>24</td>
-              <td>same-season first harvest; the wiki’s Summer 25 soil-keep line is a different goal</td>
+              <td>same-season first harvest; the Summer 25 soil-keep line is a different goal</td>
             </tr>
             <tr>
               <td><a href="https://stardewvalleywiki.com/Crops#Hot_Pepper">Hot Pepper</a></td>
@@ -276,9 +276,9 @@ export function LastDayToPlantStardewEnglishArticle() {
           <thead>
             <tr>
               <th scope="col">Crop</th>
-              <th scope="col">Wiki days to grow</th>
-              <th scope="col">Derived last plant day (first harvest on day 28)</th>
-              <th scope="col">Read-as</th>
+              <th scope="col">Days to grow</th>
+              <th scope="col">Last day to plant (ready on day 28)</th>
+              <th scope="col">Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -368,9 +368,9 @@ export function LastDayToPlantStardewEnglishArticle() {
           <thead>
             <tr>
               <th scope="col">Crop</th>
-              <th scope="col">Wiki days to grow</th>
-              <th scope="col">Derived last plant day (first harvest on day 28)</th>
-              <th scope="col">Read-as</th>
+              <th scope="col">Days to grow</th>
+              <th scope="col">Last day to plant (ready on day 28)</th>
+              <th scope="col">Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -397,11 +397,11 @@ export function LastDayToPlantStardewEnglishArticle() {
       </div>
 
       <p>
-        <a href="https://stardewvalleywiki.com/Spring_Seeds">Spring Seeds</a>, <a href="https://stardewvalleywiki.com/Summer_Seeds">Summer Seeds</a>, and <a href="https://stardewvalleywiki.com/Fall_Seeds">Fall Seeds</a> print the same 7-day infobox. In their legal outdoor season they derive 21, on the same wild-seed rule as Winter Seeds. Fiber Seeds derive 21 in every season, including winter.
+        <a href="https://stardewvalleywiki.com/Spring_Seeds">Spring Seeds</a>, <a href="https://stardewvalleywiki.com/Summer_Seeds">Summer Seeds</a>, and <a href="https://stardewvalleywiki.com/Fall_Seeds">Fall Seeds</a> all take 7 days. In their legal outdoor season, plant them by the 21st, on the same wild-seed rule as Winter Seeds. Fiber Seeds also need to be planted by the 21st in every season, including winter.
       </p>
 
       <p>
-        Table notes. Days are derived as 28 minus wiki Total days. The Crops page does not name a last-plant field. The plant day is watered. Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist are off. A regrow cell is one harvest on day 28. Sweet Gem planted on Fall 4 uses growing days 5 through 28 (24 days) and ripens on Fall 28; Fall 5 leaves the berry unfinished.
+        Sweet Gem planted on Fall 4 uses growing days 5 through 28 (24 days) and ripens on Fall 28; Fall 5 leaves the berry unfinished. Water the plant day. Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist are off. A crop that keeps producing is timed to one harvest on day 28.
       </p>
 
       <p>
@@ -413,10 +413,10 @@ export function LastDayToPlantStardewEnglishArticle() {
           Is this seed legal outdoors in the current season?
         </li>
         <li>
-          Is today on or before the derived last plant day?
+          Is today on or before the last plant day in the table?
         </li>
         <li>
-          Do you need the first harvest, or more picks from a regrow plant?
+          Do you need the first harvest, or more picks from a crop that keeps producing?
         </li>
       </ul>
 
@@ -426,7 +426,7 @@ export function LastDayToPlantStardewEnglishArticle() {
 
       <figure className="blog-article-media">
         <PublicPicture
-          alt="Four season bands on a 1–28 axis with crops on their derived last plant days: day 15 rhubarb, starfruit, and pumpkin; day 16 cauliflower, melon, and fairy rose; day 24 parsnip and other 4-day crops; winter 21 powdermelon and Winter Seeds; 1.6 carrot 25, summer squash 22, broccoli 20, powdermelon 21; rice irrigated 22 and unirrigated 20. Outdoor, no Speed-Gro, first harvest on day 28."
+          alt="Four season bands on a 1–28 axis with crops on the last day you can plant them and still harvest on day 28: day 15 rhubarb, starfruit, and pumpkin; day 16 cauliflower, melon, and fairy rose; day 24 parsnip and other 4-day crops; winter 21 powdermelon and Winter Seeds; 1.6 carrot 25, summer squash 22, broccoli 20, powdermelon 21; rice irrigated 22 and unirrigated 20. Outdoor farm, no Speed-Gro."
           decoding="async"
           height="941"
           loading="lazy"
@@ -434,7 +434,7 @@ export function LastDayToPlantStardewEnglishArticle() {
           width="1672"
         />
         <figcaption>
-          Four outdoor season bands, days 1–28. Each crop name sits on its derived last plant day for a first harvest on day 28. Day 15 holds rhubarb, starfruit, and pumpkin. Day 16 holds cauliflower, melon, and fairy rose. Day 24 holds parsnip and the other 4-day crops. Winter 21 holds powdermelon and Winter Seeds. The 1.6 packets on this axis are carrot 25, summer squash 22, broccoli 20, and powdermelon 21. Rice is marked irrigated 22 and unirrigated 20. No Speed-Gro columns. If a label and the table disagree, use wiki Total days minus from 28.
+          Four outdoor season bands, days 1–28. Each crop name sits on the last day you can plant it and still harvest on day 28. Day 15 holds rhubarb, starfruit, and pumpkin. Day 16 holds cauliflower, melon, and fairy rose. Day 24 holds parsnip and the other 4-day crops. Winter 21 holds powdermelon and Winter Seeds. The 1.6 packets on this axis are carrot 25, summer squash 22, broccoli 20, and powdermelon 21. Rice is marked irrigated 22 and unirrigated 20. No Speed-Gro columns. If a label and the table disagree, take 28 minus the grow time on the crop page.
         </figcaption>
       </figure>
 
@@ -443,33 +443,33 @@ export function LastDayToPlantStardewEnglishArticle() {
       <h3>Rice is 22 irrigated or 20 unirrigated</h3>
 
       <p>
-        <a href="https://stardewvalleywiki.com/Unmilled_Rice">Unmilled Rice</a> grows from Rice Shoots after 8 days, or after 6 days when irrigated. Rice Shoots planted approximately within 3 tiles of a water source are irrigated. Irrigated shoots mature in 6 days and do not need to be watered. Keep both rows. A dry tile uses 8 days and derives 20. An irrigated tile uses 6 days and derives 22. Planting on 22 without irrigation leaves only six growing days for an 8-day crop.
+        <a href="https://stardewvalleywiki.com/Unmilled_Rice">Unmilled Rice</a> grows from Rice Shoots after 8 days, or after 6 days when irrigated. Rice Shoots planted approximately within 3 tiles of a water source are irrigated. Irrigated shoots mature in 6 days and do not need to be watered. Keep both rows. A dry tile uses 8 days, so plant by Spring 20. An irrigated tile uses 6 days, so plant by Spring 22. Planting on 22 without irrigation leaves only six growing days for an 8-day crop.
       </p>
 
-      <h3>Seasonal and wild seeds last-plant on the 21st</h3>
+      <h3>Seasonal and wild seeds: plant by the 21st</h3>
 
       <p>
-        Wild Seeds take 7 days to mature regardless of which forage crop appears, not counting the day planted. Spring Seeds, Summer Seeds, Fall Seeds, Winter Seeds, and Fiber Seeds all print 7 days, so they derive 21 in a legal outdoor season. Fiber grows in all seasons and does not need to be watered.
-      </p>
-
-      <p>
-        Fall Seeds are a fall packet. Summer 28 is not a legal outdoor plant day for that packet. Use the season on the seed, then the 21st inside that season.
-      </p>
-
-      <h3>Regrow rows are the last day for one harvest</h3>
-
-      <p>
-        Blueberry, cranberry, coffee, green bean, grape, hops, tomato, hot pepper, eggplant, strawberry, corn, and the other regrow rows in the tables are timed to the first harvest. Extra picks after that first fruit need an earlier plant and leftover days in the season.
+        Wild Seeds take 7 days to mature regardless of which forage crop appears, not counting the day planted. Spring Seeds, Summer Seeds, Fall Seeds, Winter Seeds, and Fiber Seeds all print 7 days, so plant them by the 21st in a legal outdoor season. Fiber grows in all seasons and does not need to be watered.
       </p>
 
       <p>
-        The season pages print Maximum Harvests per Season with no fertilizer and without Agriculturist. That field assumes a season-long occupancy pattern, often from a day-1 plant with replant-on-harvest for single-harvest crops. It is a different number from the first-harvest last plant day. For more picks, plant earlier than the first-harvest cell. For which crop to buy, use the seasonal ranking pages above.
+        Fall Seeds are a fall packet. Summer 28 is not a legal outdoor plant day for that packet. Use the season on the seed, then plant by the 21st inside that season.
+      </p>
+
+      <h3>Crops that keep producing: the table date is for one harvest</h3>
+
+      <p>
+        Blueberry, cranberry, coffee, green bean, grape, hops, tomato, hot pepper, eggplant, strawberry, corn, and the other crops that keep producing are timed to the first harvest. Extra picks after that first fruit need an earlier plant and leftover days in the season.
+      </p>
+
+      <p>
+        The season pages print Maximum Harvests per Season with no fertilizer and without Agriculturist. That count assumes a season-long occupancy pattern, often from a day-1 plant with replant-on-harvest for single-harvest crops. It is a different number from the first-harvest last plant day. For more picks, plant earlier than the first-harvest cell. For which crop to buy, use the seasonal ranking pages above.
       </p>
 
       <h3>Multi-season crops do not always die on day 28</h3>
 
       <p>
-        The Crops page names five plants that continue through every season listed for them: Ancient Fruit, Coffee Bean, Corn, Sunflower, and Wheat.
+        Five plants continue through every season listed for them: Ancient Fruit, Coffee Bean, Corn, Sunflower, and Wheat.
       </p>
 
       <p>
@@ -481,7 +481,7 @@ export function LastDayToPlantStardewEnglishArticle() {
       </p>
 
       <p>
-        Wheat has two separate goals. Same-season first harvest derives 24 (<code>28 − 4</code>). The Crops Notes line is a soil-keep trick: if wheat is planted on or before the 25th of Summer and left unharvested until the 1st of Fall, it can be scythed on Fall 1, leaving tilled and fertilized soil ready for fall crops. Summer 25 is that keep-alive date. It is not the same-season first-harvest cutoff.
+        Wheat has two separate goals. Same-season first harvest is Summer 24 (<code>28 − 4</code>). The crop notes describe a soil-keep trick: if wheat is planted on or before the 25th of Summer and left unharvested until the 1st of Fall, it can be scythed on Fall 1, leaving tilled and fertilized soil ready for fall crops. Summer 25 is that keep-alive date. It is not the same-season first-harvest cutoff.
       </p>
 
       <p>
@@ -495,7 +495,7 @@ export function LastDayToPlantStardewEnglishArticle() {
       <h2>Skip this outdoor table in the greenhouse, on Ginger Island, and with Speed-Gro</h2>
 
       <p>
-        The <a href="https://stardewvalleywiki.com/Greenhouse">greenhouse</a> lets crops be planted, grown, and harvested at any time of year without the outdoor season list. They still need water, including on rainy days. Crops that regrow keep regrowing and do not die at the end of a season. Indoor beds do not use the 28-day outdoor cutoff. Year-round indoor planting is the <a className="blog-planner-link" href="/glasshouse-stardew-valley">greenhouse guide</a>.
+        The <a href="https://stardewvalleywiki.com/Greenhouse">greenhouse</a> lets crops be planted, grown, and harvested at any time of year without the outdoor season list. They still need water, including on rainy days. Crops that keep producing keep producing and do not die at the end of a season. Indoor beds do not use the 28-day outdoor cutoff. Year-round indoor planting is the <a className="blog-planner-link" href="/glasshouse-stardew-valley">greenhouse guide</a>.
       </p>
 
       <p>
@@ -507,7 +507,7 @@ export function LastDayToPlantStardewEnglishArticle() {
       </p>
 
       <p>
-        An unwatered day does not grow. Each missed night moves the derived last plant day earlier by one. That is the Grow Times rule applied to the same formula.
+        An unwatered day does not grow. Each missed night moves the last plant day earlier by one. That is the Grow Times rule applied to the same count.
       </p>
 
       <p>
@@ -515,20 +515,20 @@ export function LastDayToPlantStardewEnglishArticle() {
       </p>
 
       <p>
-        A <a href="https://stardewvalleywiki.com/Tea_Sapling">Tea Sapling</a> takes 20 days to become a Tea Bush. The bush produces one Tea Leaves item each day of the final week (days 22–28) of spring, summer, and fall, and in winter if it is indoors. An immature bush grows at any time, including outdoors in winter, without watering. Tree Fertilizer cannot be used on tea bushes. The Tea Sapling page gives the 20-day grow time and the 22–28 harvest week; it does not give a last plant day for a sapling placed after day 1.
+        A <a href="https://stardewvalleywiki.com/Tea_Sapling">Tea Sapling</a> takes 20 days to become a Tea Bush. The bush produces one Tea Leaves item each day of the final week (days 22–28) of spring, summer, and fall, and in winter if it is indoors. An immature bush grows at any time, including outdoors in winter, without watering. Tree Fertilizer cannot be used on tea bushes. Plant the sapling on day 1 if you want that harvest week; a later plant is not given a later cutoff here.
       </p>
 
       <p>
-        On the <a href="https://stardewvalleywiki.com/Farm_Maps">Beach Farm</a>, sprinklers do not work in the sandy soil. There is a contiguous patch of 202 non-sandy tiles where sprinklers can be placed, plus 28 additional non-sandy tiles. That is a watering constraint. The Farm Maps page does not give the Beach Farm a different last-plant calendar.
+        On the <a href="https://stardewvalleywiki.com/Farm_Maps">Beach Farm</a>, sprinklers do not work in the sandy soil. There is a contiguous patch of 202 non-sandy tiles where sprinklers can be placed, plus 28 additional non-sandy tiles. That is a watering constraint. The Beach Farm uses the same outdoor last-plant dates as the other maps.
       </p>
 
       <p>
-        To check a packet in hand: confirm the tile is outdoor and in season, read wiki Total days, derive <code>28 − grow days</code>, and plant on or before that day with the plant day watered. If today is later and the crop is a single-season outdoor plant, the first harvest will not land on day 28.
+        To check a packet in hand: confirm the tile is outdoor and in season, read Total days on the crop page, subtract that number from 28, and plant on or before that day with the plant day watered. If today is later and the crop is a single-season outdoor plant, the first harvest will not land on day 28.
       </p>
 
       <BlogSources
         heading="Sources"
-        checkedLabel="Checked 2026-09-21 against Stardew Valley Wiki pages. Last-plant days are derived as `28 − grow days` for a first harvest on day 28, excluding the plant day, with watering on the plant day. The tables have no Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, or Agriculturist columns. This site’s farm planner switches seasons as a layout view; it does not compute last-plant days."
+        checkedLabel="Checked 2026-09-21 against Stardew Valley Wiki pages. Last plant days are 28 minus grow time, for a first harvest on day 28. The plant day does not count, and you water that day. The tables leave Speed-Gro, Deluxe Speed-Gro, Hyper Speed-Gro, and Agriculturist off. This site’s farm planner switches seasons as a layout view; it does not compute last-plant days."
         items={[
           {
             href: "https://stardewvalleywiki.com/Crops",

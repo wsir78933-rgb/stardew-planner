@@ -45,7 +45,9 @@ it("exposes the locked last-plant formula in both independent article bodies", (
     createElement(LastDayToPlantStardewChineseArticle),
   );
 
-  expect(englishMarkup).toContain("page has no last-plant field");
+  expect(englishMarkup).toContain(
+    "by Spring 24 if you still want it ready on Spring 28",
+  );
   expect(englishMarkup).toContain("28 − 4 = 24");
   expect(englishMarkup).toContain("28 − 12 = 16");
   expect(englishMarkup).toContain("/blog/illustrations/last-plant-grow-clock.webp");
@@ -53,8 +55,11 @@ it("exposes the locked last-plant formula in both independent article bodies", (
     "/blog/illustrations/last-plant-season-calendar.webp",
   );
   expect(englishMarkup).not.toContain("<h2>FAQ</h2>");
-  expect(chineseMarkup).toContain("都没有名叫「最晚播种」的栏");
-  expect(chineseMarkup).toContain("防风草 4 天对应春 24，南瓜 13 天对应秋 15");
+  expect(chineseMarkup).toContain(
+    "春天想在第 28 天收到防风草，最晚在第 24 天种下",
+  );
+  expect(chineseMarkup).toContain("播种日 = 28 − 4 = 24");
+  expect(chineseMarkup).toContain("最晚在秋天第 15 天种下");
   expect(chineseMarkup).toContain(
     "/blog/illustrations/last-plant-parsnip-calendar-gap-zh.webp",
   );
