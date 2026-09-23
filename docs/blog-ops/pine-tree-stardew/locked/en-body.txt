@@ -150,7 +150,7 @@ Pine Tar is more than an item to sell. The [Pine Tar reference](https://wiki.sta
 - Pine Tar can be used in Floppy Beanie tailoring.
 - A Woodskip Fish Pond can request Pine Tar.
 
-You do not need every use to decide whether to keep a Pine. If a Loom, Speed-Gro, Rain Totem, bundle, clothing project, or Woodskip request is on your current plan, the Tapper output has a concrete job. If none of those uses matters and you only need open space, the layout decision can be different; the page does not need to turn that choice into a universal “best tree” ranking.
+You do not need every use to decide whether to keep a Pine. If a Loom, Speed-Gro, Rain Totem, bundle, clothing project, or Woodskip request is on your current plan, the Tapper output has a concrete job. If none of those uses matters and you only need open space, the layout decision can be different. Do not turn this choice into a universal “best tree” ranking.
 
 ### Pine Tar value is not a tree-profit ranking
 
@@ -172,7 +172,7 @@ Before you leave a Pine Cone in the ground or walk away from a mature Pine, run 
 
 ## Sources
 
-The following public pages support the specific Pine identity, planting, growth, Tapper, map-limit, and use claims in this draft. The current Pine references disagree on an unfertilized growth median, so this draft preserves that conflict instead of selecting one number.
+The public pages below cover Pine identity, planting, growth, Tapper, map limits, and uses. The Pine Tree, Pine Cone, and Trees pages disagree on the unfertilized growth median, so no single number should be treated as a universal Pine growth time.
 
 - [Stardew Valley Wiki: Pine Tree](https://wiki.stardewvalley.net/Pine_Tree) — Pine identity, Pine Tar output, common-tree behavior, natural Pine interaction, and the Pine-specific growth summary.
 - [Stardew Valley Wiki: Pine Cone](https://wiki.stardewvalley.net/Pine_Cone) — Pine Cone sources, planting conditions, and the conflicting growth summary.

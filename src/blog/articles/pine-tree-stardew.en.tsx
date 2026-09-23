@@ -457,8 +457,8 @@ export function PineTreeStardewEnglishArticle() {
       <p>
         You do not need every use to decide whether to keep a Pine. If a Loom, Speed-Gro, Rain Totem, bundle, clothing project, or Woodskip request is on your current
         plan, the Tapper output has a concrete job. If none of those uses matters and you
-        only need open space, the layout decision can be different; the page does not
-        need to turn that choice into a universal “best tree” ranking.
+        only need open space, the layout decision can be different. Do not turn this
+        choice into a universal “best tree” ranking.
       </p>
 
       <h3>Pine Tar value is not a tree-profit ranking</h3>
@@ -524,7 +524,7 @@ export function PineTreeStardewEnglishArticle() {
       </ol>
 
       <BlogSources
-        checkedLabel="The following public pages support the specific Pine identity, planting, growth, Tapper, map-limit, and use claims in this draft. The current Pine references disagree on an unfertilized growth median, so this draft preserves that conflict instead of selecting one number."
+        checkedLabel="The public pages below cover Pine identity, planting, growth, Tapper, map limits, and uses. The Pine Tree, Pine Cone, and Trees pages disagree on the unfertilized growth median, so no single number should be treated as a universal Pine growth time."
         heading="Sources"
         items={[
           {
