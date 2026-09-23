@@ -249,6 +249,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
         src: "/blog/last-day-to-plant-stardew-cover.webp",
         alt: "Watercolor of an outdoor vegetable patch with cabbages and leafy rows, a metal watering can on the dirt, a farmhouse and windmill at sunset, and a wooden Spring board numbered 1 through 28 with day 28 marked.",
       },
+      {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground.",
+      },
     ],
   },
   {
@@ -802,6 +806,40 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/glasshouse-stardew-valley",
     ],
   },
+  {
+    pathname: "/pine-tree-stardew",
+    staticPageFile: "pine-tree-stardew.html",
+    heading: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+    metadata: {
+      title: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+      description:
+        "Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "The Stardew Valley chain is",
+      "A common-tree seedling can stop at stage 4",
+      "Pine Tar is more than an item to sell.",
+    ],
+    requiredHrefs: [
+      "/stardew-valley-trees",
+      "https://wiki.stardewvalley.net/Pine_Tree",
+      "https://wiki.stardewvalley.net/Pine_Cone",
+      "https://wiki.stardewvalley.net/Trees",
+      "https://wiki.stardewvalley.net/Tapper",
+      "https://wiki.stardewvalley.net/Tree_Fertilizer",
+      "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+    ],
+  },
 
   {
     pathname: "/zh/blog",
@@ -882,6 +920,10 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       {
         src: "/blog/last-day-to-plant-stardew-cover.webp",
         alt: "水彩插画：室外菜畦里种着卷心菜和绿叶作物，土路上放着喷壶，远处农舍和风车映着日落，右侧木牌写着 Spring，格子从 1 到 28，第 28 格标了出来。",
+      },
+      {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
       },
     ],
   },
@@ -1427,6 +1469,41 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/zh/glasshouse-stardew-valley",
       "/zh/sprinkler-stardew",
       "/zh/how-to-earn-money-stardew",
+    ],
+  },
+  {
+    pathname: "/zh/pine-tree-stardew",
+    staticPageFile: "zh/pine-tree-stardew.html",
+    heading: "星露谷松树种植先看格子，不浇水也不能随便种",
+    metadata: {
+      title: "星露谷松树种植先看格子，不浇水也不能随便种",
+      description:
+        "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "松果是松树的种子入口",
+      "树苗卡在第 4 阶段时",
+      "树成熟后，普通采集器按 5 天、重型采集器按 2 天规划",
+    ],
+    requiredHrefs: [
+      "/zh/stardew-valley-trees",
+      "https://zh.stardewvalleywiki.com/松树",
+      "https://zh.stardewvalleywiki.com/松果",
+      "https://zh.stardewvalleywiki.com/树",
+      "https://zh.stardewvalleywiki.com/树液采集器",
+      "https://zh.stardewvalleywiki.com/树肥",
+      "https://zh.stardewvalleywiki.com/松焦油",
+      "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
     ],
   },
 ];

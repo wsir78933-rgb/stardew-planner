@@ -9,6 +9,8 @@ import { StardewValleyNpcEnglishArticle } from "../../src/blog/articles/stardew-
 import { StardewValleyNpcChineseArticle } from "../../src/blog/articles/stardew-valley-npc.zh";
 import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
 import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "../../src/blog/articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
+import { PineTreeStardewEnglishArticle } from "../../src/blog/articles/pine-tree-stardew.en";
+import { PineTreeStardewChineseArticle } from "../../src/blog/articles/pine-tree-stardew.zh";
 
 type ArticleFixture = Readonly<{
   markup: string;
@@ -411,4 +413,67 @@ it("renders sourced English and Chinese Robin-location guides with matching sect
   expect(chineseArticle.markup).toContain('class="blog-faq-list"');
   expect(englishArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
   expect(chineseArticle.markup.match(/class="blog-faq-item"/g)).toHaveLength(5);
+});
+
+it("renders sourced English and Chinese Pine Tree guides with the locked growth boundaries", () => {
+  const englishArticle: ArticleFixture = {
+    markup: renderArticle(PineTreeStardewEnglishArticle),
+    requiredPhrases: [
+      "Pine Cone → Pine Tree → Pine Tar",
+      "The current Pine references do not agree on one growth-time summary.",
+      "Pine Tapper production continues in Winter.",
+    ],
+    scheduleBoundaryPhrases: [
+      "all eight adjacent tiles",
+      "five-night interval",
+      "two-day Pine Tar interval",
+    ],
+    plannerPath: "/#planner",
+    officialSource: "https://wiki.stardewvalley.net/Pine_Tree",
+    mediaPaths: [
+      "/blog/illustrations/pine-tree-seed-to-tar.webp",
+      "/blog/illustrations/pine-tree-stage-four-neighbor.webp",
+    ],
+  };
+  const chineseArticle: ArticleFixture = {
+    markup: renderArticle(PineTreeStardewChineseArticle),
+    requiredPhrases: [
+      "松果 → 种出普通松树 → 等树成熟 → 在成熟松树上挂采集器 → 得到松焦油。",
+      "八个相邻格",
+      "本文不发布阶段数字",
+    ],
+    scheduleBoundaryPhrases: [
+      "普通采集器按 5 天、重型采集器按 2 天规划",
+      "不要拿这两个数字倒推成熟时间。",
+      "第 4 阶段卡住时，八个相邻格没有成熟普通树。",
+    ],
+    plannerPath: "/zh#planner",
+    officialSource: "https://zh.stardewvalleywiki.com/松树",
+    mediaPaths: [
+      "/blog/illustrations/pine-tree-seed-to-tar.webp",
+      "/blog/illustrations/pine-tree-stage-four-neighbor.webp",
+    ],
+  };
+
+  assertArticleContract(englishArticle);
+  assertArticleContract(chineseArticle);
+
+  expect(englishArticle.markup.match(/class="blog-planner-link"/g) ?? []).toHaveLength(1);
+  expect(englishArticle.markup.match(/data-blog-planner-cta="true"/g) ?? []).toHaveLength(1);
+  expect(chineseArticle.markup.match(/data-blog-planner-cta="true"/g) ?? []).toHaveLength(1);
+  expect(englishArticle.markup).toContain(
+    '<a class="blog-planner-link" href="/stardew-valley-trees">',
+  );
+  expect(englishArticle.markup).toContain('href="/#planner"');
+  expect(chineseArticle.markup).toContain('href="/zh#planner"');
+  expect(englishArticle.markup).toContain(
+    "A Pine Tar price alone cannot rank trees under a shared time horizon.",
+  );
+  expect(chineseArticle.markup).toContain(
+    "普通采集器和重型采集器都可以挂在成熟松树上",
+  );
+  expect(englishArticle.markup).not.toContain("<h2>FAQ</h2>");
+  expect(chineseArticle.markup).not.toContain("<h2>FAQ</h2>");
+  expect(englishArticle.markup.length).toBeGreaterThan(10000);
+  expect(chineseArticle.markup.length).toBeGreaterThan(8000);
 });

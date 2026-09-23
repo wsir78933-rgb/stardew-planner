@@ -118,6 +118,7 @@ const localizedBlogPostPaths: Readonly<
     "do-you-have-to-water-trees-stardew": "/do-you-have-to-water-trees-stardew",
     "how-to-level-up-farming-stardew": "/how-to-level-up-farming-stardew",
     "last-day-to-plant-stardew": "/last-day-to-plant-stardew",
+    "pine-tree-stardew": "/pine-tree-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -140,6 +141,7 @@ const localizedBlogPostPaths: Readonly<
     "do-you-have-to-water-trees-stardew": "/zh/do-you-have-to-water-trees-stardew",
     "how-to-level-up-farming-stardew": "/zh/how-to-level-up-farming-stardew",
     "last-day-to-plant-stardew": "/zh/last-day-to-plant-stardew",
+    "pine-tree-stardew": "/zh/pine-tree-stardew",
   },
 };
 

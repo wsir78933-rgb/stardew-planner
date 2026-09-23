@@ -117,6 +117,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷最晚播种日：春天防风草最晚在第 24 天种下](https://stardewvalleyplanner.art/zh/last-day-to-plant-stardew): 春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。",
   );
+  expect(llmsText).toContain(
+    "[Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar](https://stardewvalleyplanner.art/pine-tree-stardew): Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷松树种植先看格子，不浇水也不能随便种](https://stardewvalleyplanner.art/zh/pine-tree-stardew): 松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

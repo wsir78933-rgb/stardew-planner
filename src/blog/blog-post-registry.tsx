@@ -38,6 +38,8 @@ import { HowToLevelUpFarmingStardewEnglishArticle } from "./articles/how-to-leve
 import { HowToLevelUpFarmingStardewChineseArticle } from "./articles/how-to-level-up-farming-stardew.zh";
 import { LastDayToPlantStardewEnglishArticle } from "./articles/last-day-to-plant-stardew.en";
 import { LastDayToPlantStardewChineseArticle } from "./articles/last-day-to-plant-stardew.zh";
+import { PineTreeStardewEnglishArticle } from "./articles/pine-tree-stardew.en";
+import { PineTreeStardewChineseArticle } from "./articles/pine-tree-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -364,6 +366,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: LastDayToPlantStardewEnglishArticle,
     },
+    {
+      slug: "pine-tree-stardew",
+      title: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+      description:
+        "Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground.",
+      },
+      featured: true,
+      Content: PineTreeStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -649,6 +666,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: LastDayToPlantStardewChineseArticle,
+    },
+    {
+      slug: "pine-tree-stardew",
+      title: "星露谷松树种植先看格子，不浇水也不能随便种",
+      description:
+        "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
+      },
+      featured: true,
+      Content: PineTreeStardewChineseArticle,
     },
   ],
 };
