@@ -13,7 +13,7 @@ function ProfitMarginPriceBoundaryFigure() {
         width={1672}
       />
       <figcaption>
-        This diagram separates selected sale and seed prices from categories outside the multiplier. It labels Wheat as 6g at 25% instead of 25g and Willy's Crab Pots as 1,500g, so the examples are not mistaken for a rule covering every shop item.
+        At 25%, Wheat sells for 6g instead of 25g, while Willy's Crab Pots still cost 1,500g. Selected sale and seed prices change; the multiplier does not apply to every shop item.
       </figcaption>
     </figure>
   );
@@ -31,7 +31,7 @@ function ProfitMarginAdvancedOptionsFigure() {
         width={1672}
       />
       <figcaption>
-        This platform-neutral menu-path diagram is not a platform-specific screenshot. It shows New Game → wrench/Advanced Options → Profit Margin → Normal/75%/50%/25% → create the farm, based on the documented path in the Stardew Valley Wiki's Options page.
+        Schematic, not a game screenshot. New Game → wrench/Advanced Options → Profit Margin → Normal/75%/50%/25% → create the farm.
       </figcaption>
     </figure>
   );
@@ -107,15 +107,15 @@ export function ProfitMarginStardewEnglishArticle() {
         </table>
       </div>
       <p>The <a href="https://stardewvalleywiki.com/Options">Stardew Valley Wiki's Options page</a> states that fractional prices are truncated to an integer and never fall below 1g. A result such as 6.25g becomes 6g, not 6.25g. The floor matters for low-value prices, while truncation matters whenever the multiplier does not produce a whole number.</p>
-      <p>When checking a price, first read what is being sold or bought and compare it with the source-backed category list. A crop sale, a Pierre seed, and a named selected Joja price belong to the affected side; a building or tool upgrade does not. Only after that classification should you read Normal/100%, 75%, 50%, or 25% as the multiplier and apply truncation and the 1g floor. Keep the affected amount and the next planned expense separate: a lower sale does not imply a lower building price, and a lower seed price does not imply a lower quest reward. For a quick budget check, compare those two categories instead of treating the percentage as a discount for the whole plan. If the item or service is absent from the named categories, mark it unclassified and stop before estimating from another example; check a current source that names that item or category.</p>
+      <p>Before budgeting, check whether a price is a sale, a seed purchase, or a fixed expense. Crop sales, Pierre's seeds, and the selected Joja goods listed below are affected; buildings and tool upgrades are not. For an affected price, apply Normal/100%, 75%, 50%, or 25%, then drop any fractional amount and keep the 1g minimum. Compare that income with your next expense: lower sale income does not make a building cheaper, and cheaper seeds do not reduce quest rewards. If you are unsure which category an item belongs to, check its price and category before including it in your budget instead of borrowing a number from another item.</p>
       <h3>What does 75% Profit Margin mean?</h3>
       <p>At 75%, an affected item or seed uses the 75% setting, then the result follows the integer and 1g rules. It does not mean that every coin you earn is worth 75% or that every purchase costs 75%. The same setting can lower a crop sale and lower a covered seed price while leaving a building, tool upgrade, or quest reward unchanged.</p>
       <p>The two sides are easy to miss when you look only at the sale-box number. A lower margin makes selected sales less valuable, but it also makes selected seeds cheaper. That does not cancel the challenge in a simple one-for-one way, because costs outside the multiplier still have to be paid at their normal values.</p>
-      <p>One concrete source example shows why the rounding rule belongs next to the percentage table: the <a href="https://stardewvalleywiki.com/Multiplayer">Multiplayer page</a> gives Wheat as 6g at 25% instead of 25g. That is a truncated 25% result, not a rule that every item or shop can be inferred from one Wheat price.</p>
+      <p>At 25%, Wheat sells for 6g instead of 25g, as shown on the <a href="https://stardewvalleywiki.com/Multiplayer">Multiplayer page</a>. The calculation gives 6.25g, then the fractional part is dropped; affected prices never fall below 1g. Use this rounding rule only for prices covered by Profit Margin.</p>
       <h2>What Profit Margin affects—and what it leaves unchanged</h2>
       <p>The setting is easiest to use when you classify a price before planning around it. The <a href="https://stardewvalleywiki.com/Multiplayer">Stardew Valley Wiki's Multiplayer page</a> lists the affected sale categories and the costs that remain outside the multiplier. It also explains lower margins as an economy rebalance for the productivity of multiple active players.</p>
       <h3>Prices that scale</h3>
-      <p>The affected side includes selected item sales such as crops, forage, minerals, and cooked foods. Pierre's seed prices scale, and the Wiki also names selected Joja prices: Grass Starter, Sugar, Wheat Flour, and Rice. “Selected” is important: the rule is not a license to multiply every number in every shop. Treat the selected Joja list as a narrow category and do not extend its multiplier to a different Joja purchase without source support.</p>
+      <p>The affected side includes selected item sales such as crops, forage, minerals, and cooked foods. Pierre's seed prices scale, along with selected Joja prices: Grass Starter, Sugar, Wheat Flour, and Rice. Apply the multiplier to these listed purchases, not to every item in Joja or every shop price.</p>
       <h3>Costs, shops, and rewards that stay fixed</h3>
       <p>The unchanged side includes the Blacksmith, Fish Shop, Traveling Cart, buildings, tool upgrades, and quest gold rewards. The same source gives Willy's Crab Pots as a boundary example: they remain 1,500g even when income from affected sales is reduced.</p>
       <p>Use this matrix as a category check rather than as a second price table:</p>
@@ -157,10 +157,10 @@ export function ProfitMarginStardewEnglishArticle() {
         </table>
       </div>
       <p>The practical result is a mixed economy. If your income comes from a covered crop sale, that income is reduced at a lower setting. If your next goal is a building or tool upgrade, the named fixed-cost category does not become 25% cheaper just because your crop sale did. Use the matrix when a price looks surprising, and do not turn the nearest example into a rule for an unnamed category.</p>
-      <p>Read the matrix item by item when making a budget. A Wheat sale and a Crab Pot purchase can appear in the same plan, but the source examples place them on different sides: the sale example changes at 25%, while the Crab Pot example remains 1,500g. Do not combine them into one discount rate. This boundary lets you compare a changing income amount with a fixed-cost target without claiming that the setting moves both together. For a separate Year 1 income plan, see <a className="blog-planner-link" href="/how-to-earn-money-stardew">How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning</a>.</p>
+      <p>Budget separately for affected sale income and fixed expenses. At 25%, a Wheat sale brings in less, while a Crab Pot still costs 1,500g. Compare that reduced income with the full cost of your next purchase rather than applying one discount rate to both. For a separate Year 1 income plan, see <a className="blog-planner-link" href="/how-to-earn-money-stardew">How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning</a>.</p>
       <ProfitMarginPriceBoundaryFigure />
       <h2>What is the best Profit Margin for a new farm?</h2>
-      <p>There is no source-backed universal best value. Choose from the farm you are starting, the number of active players, the pace or constraint you actually want, and whether you accept that fixed costs will not drop with every sale price. Normal/100% is the reference economy. A lower value is a deliberate change to selected income and seed prices, not an achievement badge or a measured promise about how many days a run will take.</p>
+      <p>There is no single best value for every farm. Choose based on your active players, goals, and budget, including the fixed costs you will still need to pay. Normal/100% keeps the reference economy. A lower value reduces selected income and seed prices; it does not determine how many days your goals will take.</p>
       <p>Use the decision matrix as a lookup, not as a ranking. Before selecting a value, write down who will be active, whether the goal is the reference economy or a tighter constraint, and which upcoming expense matters to the plan. Then classify that expense: a covered sale or seed responds to the setting, while a named fixed category does not. The choice is sound when those inputs describe the experience you want; it is not sound merely because a percentage is popular or sounds moderate.</p>
       <div
         aria-label="New farm Profit Margin choices"
@@ -200,26 +200,26 @@ export function ProfitMarginStardewEnglishArticle() {
           </tbody>
         </table>
       </div>
-      <p>“Best” is a match between the chosen setting and the farm’s stated inputs, not a ranking in which one percentage wins for everyone. The available choices can be organized, but no lookup can supply a goal that the group has not named. If the group cannot say what pressure it wants to feel, it has not supplied enough input to make a best-setting judgment.</p>
+      <p>Choose Normal/100% if you want standard sale and seed prices, or a lower margin if you want a tighter budget. Talk with your group about the upcoming purchases you care about and how much pressure you want from reduced sale income. Match the setting to that plan rather than looking for a percentage that wins for everyone.</p>
       <h3>A worked choice for a fixed-cost plan</h3>
-      <p>Imagine two experienced players planning an early building purchase while wanting a visible constraint on selected sales. They can list the affected sales they expect to rely on, identify the building as a fixed-cost target, and use that plan as the test: if 75% still leaves the affected-sale budget workable, it may fit; if the constraint is too mild, they can consider a lower value. If a price in the plan cannot be classified from the named categories, they should pause the comparison instead of estimating it from another item. This is a planning scenario, not a measured pacing result, and it does not establish a completion date.</p>
+      <p>Imagine two experienced players planning an early building purchase while wanting a tighter budget from selected sales. They can compare the affected sales they expect to rely on with the building's unchanged cost: if 75% leaves enough income for their plan, it may fit; if they want a tighter constraint, they can consider a lower value. They should check any unfamiliar item's price category before adding it to the budget. The day they can afford the building will depend on their actual sales and spending.</p>
       <p>The word “best” should stay tied to that reasoning. A setting may fit a group's intended constraint and still be a poor fit for a different group with another budget or pace. If the chosen constraint makes the first farm less enjoyable, a later new farm can use a different value; the percentage is a setup choice, not a permanent judgment about player skill.</p>
       <h3>Is 75% Profit Margin good?</h3>
-      <p>75% is a reasonable choice when you want a visible economy constraint without selecting the lowest setting. It is good for that purpose only if the reduced selected sale income, cheaper covered seeds, and unchanged fixed costs match your group and desired pace. It is not automatically better for solo play, automatically correct for co-op, or proof that the farm will progress at a specific rate.</p>
+      <p>75% is a reasonable choice when you want a visible economy constraint without selecting the lowest setting. It is good for that purpose only if the reduced selected sale income, cheaper covered seeds, and unchanged fixed costs match your group and desired pace. The same setting can feel different on solo and co-op farms, so judge it against your own budget rather than expecting a particular progress rate.</p>
       <p>Before confirming a percentage, check the next kind of cost you care about. If it is a crop or covered seed, the setting is relevant. If it is a building, tool upgrade, or quest reward, expect that category to remain outside the multiplier. Then ask whether the lower selected income still produces the pace you want.</p>
-      <p>That answer makes 75% a middle option in the lookup, not a promise of middle difficulty. Its effect is defined by the affected price categories; whether it feels mild or tight depends on what the farm sells and which fixed costs the group plans to pay. Use the category boundary and the group's stated constraint instead of reading the label as a prediction.</p>
+      <p>75% is a middle option among the available values, but how tight it feels depends on what your farm sells and which fixed costs you plan to pay. Compare those prices with your group's goals before settling on the setting.</p>
       <h2>Where to choose Profit Margin when starting a new farm</h2>
-      <p>The public <a href="https://stardewvalleywiki.com/Options">Stardew Valley Wiki Options page</a> documents the high-level new-game path. Treat the labels and placement below as the documented path, not a promise that every platform and version shows identical wording.</p>
+      <p>Check the <a href="https://stardewvalleywiki.com/Options">Stardew Valley Wiki Options page</a> for the new-game setup path. Menu labels and placement can differ by platform and version, so use the controls shown in your game.</p>
       <h3>Open Advanced Options from the new-game setup</h3>
       <ol>
         <li>Start a new farm and open the new-game setup screen.</li>
-        <li>Open the wrench or Advanced Options control documented for the setup screen.</li>
+        <li>Open the wrench icon or Advanced Options control on the setup screen.</li>
         <li>Find the Profit Margin selector.</li>
         <li>Choose Normal/100%, 75%, 50%, or 25%.</li>
         <li>Create the farm after checking that the selected value matches the economy you intend to play.</li>
       </ol>
-      <p>This path is for a new-farm decision only; it does not establish an existing-farm procedure.</p>
-      <p>The important check is the selected value before the farm is created. Read it together with the price boundary above: the choice controls the documented sale and seed categories, while fixed costs and rewards remain outside that multiplier. The menu path tells you where to make the choice; it does not turn the percentage into a universal discount.</p>
+      <p>Use these steps when creating a new farm, before you confirm the save.</p>
+      <p>Before creating the farm, double-check the selected value against your budget. It changes the selected sale and seed prices listed above; fixed costs and rewards stay outside the multiplier.</p>
       <ProfitMarginAdvancedOptionsFigure />
       <h3>Check the choice before creating the save</h3>
       <ul>
@@ -228,7 +228,7 @@ export function ProfitMarginStardewEnglishArticle() {
         <li>Confirm that you understand which selected sales and seed prices scale and which listed costs and rewards stay fixed.</li>
       </ul>
       <p>Use all three answers together rather than treating one label as a recommendation. If the player context, intended constraint, and price categories agree, the new-farm choice is ready to confirm.</p>
-      <p>If the wrench or Advanced Options labels differ from the documented path on your platform or version, pause and check current, platform-specific guidance rather than guessing at an unsupported procedure. If the menu matches and the selected value fits the intended economy, create the farm with that choice.</p>
+      <p>If you cannot find the wrench icon or Advanced Options, or the labels differ, check the Options page above and guidance for your platform and version before creating the farm. Once you have found the selector, confirm the value you want and create the farm.</p>
       <ProfitMarginSources />
     </article>
   );
