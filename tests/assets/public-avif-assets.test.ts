@@ -56,7 +56,7 @@ describe("public AVIF derivatives", () => {
       .sort();
     const opaqueWebpRelativePaths = webpRelativePaths;
 
-    expect(opaqueWebpRelativePaths).toHaveLength(70);
+    expect(opaqueWebpRelativePaths).toHaveLength(73);
     for (const relativeImagePath of opaqueWebpRelativePaths) {
       const avifHeader = readAvifHeader(relativeImagePath);
       expect(avifHeader.includes(Buffer.from("ftypavif"))).toBe(true);

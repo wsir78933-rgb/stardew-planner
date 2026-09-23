@@ -38,6 +38,8 @@ import { HowToLevelUpFarmingStardewEnglishArticle } from "./articles/how-to-leve
 import { HowToLevelUpFarmingStardewChineseArticle } from "./articles/how-to-level-up-farming-stardew.zh";
 import { LastDayToPlantStardewEnglishArticle } from "./articles/last-day-to-plant-stardew.en";
 import { LastDayToPlantStardewChineseArticle } from "./articles/last-day-to-plant-stardew.zh";
+import { ProfitMarginStardewEnglishArticle } from "./articles/profit-margin-stardew.en";
+import { ProfitMarginStardewChineseArticle } from "./articles/profit-margin-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -364,6 +366,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: LastDayToPlantStardewEnglishArticle,
     },
+    {
+      slug: "profit-margin-stardew",
+      title: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+      description:
+        "Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/profit-margin-stardew-cover.webp",
+        alt: "Original local illustration of an outdoor Stardew Valley field with cranberry rows, a pumpkin patch, and a grape trellis; it is not a game screenshot.",
+      },
+      featured: true,
+      Content: ProfitMarginStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -649,6 +666,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: LastDayToPlantStardewChineseArticle,
+    },
+    {
+      slug: "profit-margin-stardew",
+      title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+      description:
+        "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/profit-margin-stardew-cover.webp",
+        alt: "原创本地插画：星露谷物语室外田地里有蔓越莓行、南瓜畦和葡萄架，不是游戏截图。",
+      },
+      featured: true,
+      Content: ProfitMarginStardewChineseArticle,
     },
   ],
 };

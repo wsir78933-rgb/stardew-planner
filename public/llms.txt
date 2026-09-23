@@ -35,6 +35,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3](https://stardewvalleyplanner.art/do-you-have-to-water-trees-stardew): Common trees and fruit-tree saplings do not need watering. If a common sapling is stuck at stage 4, check its eight adjacent tiles for a mature tree; for a fruit sapling, check its 3×3 for blocking objects. Crops follow a separate watering rule.
 - [How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150](https://stardewvalleyplanner.art/how-to-level-up-farming-stardew): Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.
 - [Last Day to Plant in Stardew Valley: Parsnips by Spring 24](https://stardewvalleyplanner.art/last-day-to-plant-stardew): Plant parsnips by Spring 24 if you want them ready on Spring 28. Water that day. For other outdoor crops, subtract grow time from 28. Tables cover spring through winter.
+- [Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change](https://stardewvalleyplanner.art/profit-margin-stardew): Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.
 
 ## 简体中文
 
@@ -69,3 +70,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3](https://stardewvalleyplanner.art/zh/do-you-have-to-water-trees-stardew): 普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。
 - [星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150](https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew): 收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。
 - [星露谷最晚播种日：春天防风草最晚在第 24 天种下](https://stardewvalleyplanner.art/zh/last-day-to-plant-stardew): 春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。
+- [Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选](https://stardewvalleyplanner.art/zh/profit-margin-stardew): Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。

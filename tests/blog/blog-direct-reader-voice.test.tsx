@@ -37,6 +37,8 @@ import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/article
 import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
 import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/last-day-to-plant-stardew.en";
 import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
+import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profit-margin-stardew.en";
+import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -74,6 +76,7 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: LastDayToPlantStardewEnglishArticle,
     slug: "last-day-to-plant-stardew",
   },
+  { Component: ProfitMarginStardewEnglishArticle, slug: "profit-margin-stardew" },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -107,6 +110,7 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: LastDayToPlantStardewChineseArticle,
     slug: "last-day-to-plant-stardew",
   },
+  { Component: ProfitMarginStardewChineseArticle, slug: "profit-margin-stardew" },
 ];
 
 const englishAuthorFacingPatterns = [

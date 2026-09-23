@@ -37,6 +37,8 @@ import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/article
 import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
 import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/last-day-to-plant-stardew.en";
 import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
+import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profit-margin-stardew.en";
+import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1983,6 +1985,56 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       },
     ],
   },
+  {
+    Article: ProfitMarginStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-22 against Stardew Valley Wiki: Options and Multiplayer.",
+    heading: "Sources",
+    name: "English profit-margin article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Options",
+        label: "Stardew Valley Wiki: Options",
+        note:
+          " — the four values, selected sale and seed price multiplier, integer truncation and 1g floor, and the documented new-game Advanced Options path.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Multiplayer",
+        label: "Stardew Valley Wiki: Multiplayer",
+        note:
+          " — affected sale categories, scaled seed and selected Joja prices, unchanged categories and rewards, Wheat and Crab Pot examples, and the multiplayer rebalance explanation.",
+      },
+    ],
+  },
+  {
+    Article: ProfitMarginStardewChineseArticle,
+    checkedLabel:
+      "Checked 2026-09-22 against Stardew Valley Wiki: Options and Multiplayer. This review also checked the Chinese Options and Getting Started pages listed below.",
+    heading: "Sources",
+    name: "Chinese profit-margin article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/选项",
+        label: "Stardew Valley Wiki：选项",
+        note: "：中文高级游戏设置、利润率档位与新游戏入口。",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Options",
+        label: "Stardew Valley Wiki：Options",
+        note: "：Profit Margin 的价格倍数、种子价格、整数截断与 1g 下限。",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Multiplayer#Profit_margins",
+        label: "Stardew Valley Wiki：Multiplayer — Profit margins",
+        note: "：多人再平衡、受影响范围与明确不受影响类别。",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Getting_Started",
+        label: "Stardew Valley Wiki：Getting Started",
+        note: "：角色创建界面的高级选项路径。",
+      },
+    ],
+  },
 ];
 
 function getSourceSectionMarkup(articleMarkup: string, articleName: string) {
@@ -2076,5 +2128,4 @@ it("preserves each localized article's source links, labels, notes, and order", 
     }
   }
 });
-
 
