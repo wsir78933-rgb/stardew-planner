@@ -56,6 +56,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/fall-crops-stardew"');
   expect(indexMarkup).toContain('href="/how-to-level-up-farming-stardew"');
   expect(indexMarkup).toContain('href="/last-day-to-plant-stardew"');
+  expect(indexMarkup).toContain('href="/pine-tree-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -95,6 +96,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/fall-crops-stardew"');
   expect(indexMarkup).toContain('href="/zh/how-to-level-up-farming-stardew"');
   expect(indexMarkup).toContain('href="/zh/last-day-to-plant-stardew"');
+  expect(indexMarkup).toContain('href="/zh/pine-tree-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -519,6 +521,39 @@ it("renders the paired last-plant article routes with locked metadata and one pa
     title: "星露谷最晚播种日：春天防风草最晚在第 24 天种下",
     description:
       "春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。",
+  });
+});
+
+it("renders the paired Pine Tree article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "pine-tree-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "pine-tree-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+  );
+  expect(chineseMarkup).toContain("星露谷松树种植先看格子，不浇水也不能随便种");
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+    description:
+      "Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷松树种植先看格子，不浇水也不能随便种",
+    description:
+      "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
   });
 });
 

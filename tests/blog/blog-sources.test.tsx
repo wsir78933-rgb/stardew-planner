@@ -37,6 +37,8 @@ import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/article
 import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
 import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/last-day-to-plant-stardew.en";
 import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
+import { PineTreeStardewEnglishArticle } from "../../src/blog/articles/pine-tree-stardew.en";
+import { PineTreeStardewChineseArticle } from "../../src/blog/articles/pine-tree-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -1980,6 +1982,100 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "/zh/glasshouse-stardew-valley",
         label: "本站：温室布局",
+      },
+    ],
+  },
+  {
+    Article: PineTreeStardewEnglishArticle,
+    checkedLabel:
+      "The following public pages support the specific Pine identity, planting, growth, Tapper, map-limit, and use claims in this draft. The current Pine references disagree on an unfertilized growth median, so this draft preserves that conflict instead of selecting one number.",
+    heading: "Sources",
+    name: "English pine tree article",
+    sources: [
+      {
+        href: "https://wiki.stardewvalley.net/Pine_Tree",
+        label: "Stardew Valley Wiki: Pine Tree",
+        note:
+          " — Pine identity, Pine Tar output, common-tree behavior, natural Pine interaction, and the Pine-specific growth summary.",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Pine_Cone",
+        label: "Stardew Valley Wiki: Pine Cone",
+        note: " — Pine Cone sources, planting conditions, and the conflicting growth summary.",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Trees",
+        label: "Stardew Valley Wiki: Trees",
+        note:
+          " — common-tree watering, eight-neighbor stage-4 rule, seasonal/map exceptions, and natural-tree limits.",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Pine_Tar",
+        label: "Stardew Valley Wiki: Pine Tar",
+        note: " — Tapper output, Pine Tar values, uses, and Winter production context.",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Tapper",
+        label: "Stardew Valley Wiki: Tapper",
+        note:
+          " — normal and Heavy Tapper intervals, recipe/placement context, and Winter production.",
+      },
+      {
+        href: "https://wiki.stardewvalley.net/Tree_Fertilizer",
+        label: "Stardew Valley Wiki: Tree Fertilizer",
+        note:
+          " — apply-after-planting behavior, five-day fertilized Pine path, and Winter growth.",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+        label: "Stardew Valley 1.6 Update Full Changelog",
+        note:
+          " — official town/Beach Farm tunnel planting restrictions and Tapper recipe-level context.",
+      },
+    ],
+  },
+  {
+    Article: PineTreeStardewChineseArticle,
+    checkedLabel:
+      "下列公开页面分别支撑本文的游戏规则和工具边界；涉及具体条件时，正文已链接到对应条目。中文 Stardew Valley Wiki 负责松树、松果、普通树、采集器、树肥和松焦油的游戏规则，官方 1.6 更新说明负责城镇与海滩农场隧道的种树限制，本站中文树木页和规划器负责说明布局工具的能力边界。",
+    heading: "来源",
+    name: "Chinese pine tree article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/松树",
+        label: "Stardew Valley Wiki 中文：松树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/松果",
+        label: "Stardew Valley Wiki 中文：松果",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/树",
+        label: "Stardew Valley Wiki 中文：树",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/树液采集器",
+        label: "Stardew Valley Wiki 中文：树液采集器",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/重型树液采集器",
+        label: "Stardew Valley Wiki 中文：重型树液采集器",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/树肥",
+        label: "Stardew Valley Wiki 中文：树肥",
+      },
+      {
+        href: "https://zh.stardewvalleywiki.com/松焦油",
+        label: "Stardew Valley Wiki 中文：松焦油",
+      },
+      {
+        href: "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+        label: "Stardew Valley 1.6 更新完整改动",
+      },
+      {
+        href: "/zh/stardew-valley-trees",
+        label: "本站：星露谷种树：普通树和果树的区别",
       },
     ],
   },

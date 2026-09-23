@@ -30,6 +30,7 @@ const expectedSlugs = [
   "do-you-have-to-water-trees-stardew",
   "how-to-level-up-farming-stardew",
   "last-day-to-plant-stardew",
+  "pine-tree-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -64,14 +65,14 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the nineteen canonical blog identities in publishing order", () => {
+it("keeps the twenty canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the thirty-eight localized root-level canonical article paths", () => {
+it("publishes only the forty localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -92,6 +93,7 @@ it("publishes only the thirty-eight localized root-level canonical article paths
     "/do-you-have-to-water-trees-stardew/",
     "/how-to-level-up-farming-stardew/",
     "/last-day-to-plant-stardew/",
+    "/pine-tree-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -111,6 +113,7 @@ it("publishes only the thirty-eight localized root-level canonical article paths
     "/zh/do-you-have-to-water-trees-stardew/",
     "/zh/how-to-level-up-farming-stardew/",
     "/zh/last-day-to-plant-stardew/",
+    "/zh/pine-tree-stardew/",
   ]);
 });
 
@@ -472,6 +475,32 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "水彩插画：室外菜畦里种着卷心菜和绿叶作物，土路上放着喷壶，远处农舍和风车映着日落，右侧木牌写着 Spring，格子从 1 到 28，第 28 格标了出来。",
     },
   });
+  expect(englishPosts[19]).toMatchObject({
+    title: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+    description:
+      "Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
+    topic: "Stardew Valley Guides",
+    author: "Stardew Valley Planner Team",
+    readTimeMinutes: 12,
+    featured: true,
+    coverImage: {
+      src: "/blog/pine-tree-stardew-cover.webp",
+      alt: "Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground.",
+    },
+  });
+  expect(chinesePosts[19]).toMatchObject({
+    title: "星露谷松树种植先看格子，不浇水也不能随便种",
+    description:
+      "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
+    topic: "星露谷物语指南",
+    author: "星露谷规划器团队",
+    readTimeMinutes: 13,
+    featured: true,
+    coverImage: {
+      src: "/blog/pine-tree-stardew-cover.webp",
+      alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -501,6 +530,7 @@ it("binds every localized post to its own original blog cover", () => {
       "how-to-level-up-farming-stardew":
         "/blog/how-to-level-up-farming-stardew-cover.webp",
       "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
+      "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -526,6 +556,7 @@ it("binds every localized post to its own original blog cover", () => {
       "how-to-level-up-farming-stardew":
         "/blog/how-to-level-up-farming-stardew-cover.webp",
       "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
+      "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
     },
   } as const;
 
@@ -625,7 +656,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: last-day-to-plant-stardew.",
+    "Expected: carpenter-stardew. Received: pine-tree-stardew.",
   );
 });
 

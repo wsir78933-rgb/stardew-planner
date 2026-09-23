@@ -37,6 +37,8 @@ import { HowToLevelUpFarmingStardewEnglishArticle } from "../../src/blog/article
 import { HowToLevelUpFarmingStardewChineseArticle } from "../../src/blog/articles/how-to-level-up-farming-stardew.zh";
 import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/last-day-to-plant-stardew.en";
 import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
+import { PineTreeStardewEnglishArticle } from "../../src/blog/articles/pine-tree-stardew.en";
+import { PineTreeStardewChineseArticle } from "../../src/blog/articles/pine-tree-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -74,6 +76,7 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: LastDayToPlantStardewEnglishArticle,
     slug: "last-day-to-plant-stardew",
   },
+  { Component: PineTreeStardewEnglishArticle, slug: "pine-tree-stardew" },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -107,6 +110,7 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: LastDayToPlantStardewChineseArticle,
     slug: "last-day-to-plant-stardew",
   },
+  { Component: PineTreeStardewChineseArticle, slug: "pine-tree-stardew" },
 ];
 
 const englishAuthorFacingPatterns = [
@@ -158,6 +162,7 @@ function expectNoAuthorFacingPatterns(
   // do not rewrite the locked copy to satisfy the generic author-facing scan.
   // Locked trees English body uses "do not use this page as a second indoor guide".
   // Locked last-day zh-CN body uses 下面按季节查表 as a lookup instruction.
+  // Locked Pine zh-CN body uses 本文 to preserve an unresolved natural-tree-stage boundary.
   const skippedPatternText =
     articleFixture.slug === "sprinkler-stardew"
       ? String(/本文/)
@@ -165,7 +170,9 @@ function expectNoAuthorFacingPatterns(
         ? String(/\buse this page\b/i)
         : articleFixture.slug === "last-day-to-plant-stardew"
           ? String(/下面按/)
-          : null;
+          : articleFixture.slug === "pine-tree-stardew"
+            ? String(/本文/)
+            : null;
   const patternsForArticle =
     skippedPatternText === null
       ? forbiddenPatterns
