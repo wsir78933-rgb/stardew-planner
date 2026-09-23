@@ -842,6 +842,37 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
   },
 
   {
+    pathname: "/profit-margin-stardew",
+    staticPageFile: "profit-margin-stardew.html",
+    heading: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+    metadata: {
+      title: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+      description:
+        "Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/profit-margin-stardew-cover.webp",
+        alt: "Original local illustration of an outdoor Stardew Valley field with cranberry rows, a pumpkin patch, and a grape trellis; it is not a game screenshot.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "The four choices are multipliers for the prices covered by the setting.",
+      "This platform-neutral menu-path diagram is not a platform-specific screenshot.",
+    ],
+    requiredHrefs: [
+      "/#planner",
+      "/how-to-earn-money-stardew",
+      "https://stardewvalleywiki.com/Options",
+      "https://stardewvalleywiki.com/Multiplayer",
+    ],
+  },
+
+  {
     pathname: "/zh/blog",
     staticPageFile: "zh/blog.html",
     heading: "星露谷农场规划指南",
@@ -1504,6 +1535,36 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://zh.stardewvalleywiki.com/树肥",
       "https://zh.stardewvalleywiki.com/松焦油",
       "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+    ],
+  },
+  {
+    pathname: "/zh/profit-margin-stardew",
+    staticPageFile: "zh/profit-margin-stardew.html",
+    heading: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+    metadata: {
+      title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+      description:
+        "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/profit-margin-stardew-cover.webp",
+        alt: "原创本地插画：星露谷物语室外田地里有蔓越莓行、南瓜畦和葡萄架，不是游戏截图。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "普通/100%、75%、50%、25% 会调整来源明确列出的出售物品价格和种子价格。",
+      "这是一条根据公开 Wiki 整理的平台中立路径，不是逐平台截图实测。",
+    ],
+    requiredHrefs: [
+      "/zh#planner",
+      "/zh/how-to-earn-money-stardew",
+      "https://zh.stardewvalleywiki.com/选项",
+      "https://stardewvalleywiki.com/Multiplayer#Profit_margins",
     ],
   },
 ];

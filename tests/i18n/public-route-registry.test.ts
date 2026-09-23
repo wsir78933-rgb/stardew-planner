@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(26);
+  expect(canonicalPublicPaths).toHaveLength(27);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -142,8 +142,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/pine-tree-stardew")).toBe(
     "/zh/pine-tree-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(52);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(50);
+  expect(getLocalizedPublicPath("en", "/profit-margin-stardew")).toBe(
+    "/profit-margin-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/profit-margin-stardew")).toBe(
+    "/zh/profit-margin-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(54);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(52);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -193,6 +199,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/last-day-to-plant-stardew");
   expect(indexablePathnames).toContain("/pine-tree-stardew");
   expect(indexablePathnames).toContain("/zh/pine-tree-stardew");
+  expect(indexablePathnames).toContain("/profit-margin-stardew");
+  expect(indexablePathnames).toContain("/zh/profit-margin-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -220,6 +228,7 @@ it("registers the direct-entry blog routes", () => {
       "/how-to-level-up-farming-stardew",
       "/last-day-to-plant-stardew",
       "/pine-tree-stardew",
+      "/profit-margin-stardew",
     ]),
   );
 });

@@ -39,6 +39,8 @@ import { LastDayToPlantStardewEnglishArticle } from "../../src/blog/articles/las
 import { LastDayToPlantStardewChineseArticle } from "../../src/blog/articles/last-day-to-plant-stardew.zh";
 import { PineTreeStardewEnglishArticle } from "../../src/blog/articles/pine-tree-stardew.en";
 import { PineTreeStardewChineseArticle } from "../../src/blog/articles/pine-tree-stardew.zh";
+import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profit-margin-stardew.en";
+import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -2035,6 +2037,27 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
     ],
   },
   {
+    Article: ProfitMarginStardewEnglishArticle,
+    checkedLabel:
+      "Checked 2026-09-22 against Stardew Valley Wiki: Options and Multiplayer.",
+    heading: "Sources",
+    name: "English profit-margin article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Options",
+        label: "Stardew Valley Wiki: Options",
+        note:
+          " — the four values, selected sale and seed price multiplier, integer truncation and 1g floor, and the documented new-game Advanced Options path.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Multiplayer",
+        label: "Stardew Valley Wiki: Multiplayer",
+        note:
+          " — affected sale categories, scaled seed and selected Joja prices, unchanged categories and rewards, Wheat and Crab Pot examples, and the multiplayer rebalance explanation.",
+      },
+    ],
+  },
+  {
     Article: PineTreeStardewChineseArticle,
     checkedLabel:
       "下列公开页面分别支撑本文的游戏规则和工具边界；涉及具体条件时，正文已链接到对应条目。中文 Stardew Valley Wiki 负责松树、松果、普通树、采集器、树肥和松焦油的游戏规则，官方 1.6 更新说明负责城镇与海滩农场隧道的种树限制，本站中文树木页和规划器负责说明布局工具的能力边界。",
@@ -2076,6 +2099,35 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       {
         href: "/zh/stardew-valley-trees",
         label: "本站：星露谷种树：普通树和果树的区别",
+      },
+    ],
+  },
+  {
+    Article: ProfitMarginStardewChineseArticle,
+    checkedLabel:
+      "Checked 2026-09-22 against Stardew Valley Wiki: Options and Multiplayer. This review also checked the Chinese Options and Getting Started pages listed below.",
+    heading: "Sources",
+    name: "Chinese profit-margin article",
+    sources: [
+      {
+        href: "https://zh.stardewvalleywiki.com/选项",
+        label: "Stardew Valley Wiki：选项",
+        note: "：中文高级游戏设置、利润率档位与新游戏入口。",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Options",
+        label: "Stardew Valley Wiki：Options",
+        note: "：Profit Margin 的价格倍数、种子价格、整数截断与 1g 下限。",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Multiplayer#Profit_margins",
+        label: "Stardew Valley Wiki：Multiplayer — Profit margins",
+        note: "：多人再平衡、受影响范围与明确不受影响类别。",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Getting_Started",
+        label: "Stardew Valley Wiki：Getting Started",
+        note: "：角色创建界面的高级选项路径。",
       },
     ],
   },
@@ -2172,5 +2224,4 @@ it("preserves each localized article's source links, labels, notes, and order", 
     }
   }
 });
-
 

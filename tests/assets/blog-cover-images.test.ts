@@ -175,6 +175,18 @@ const pineTreeArticleMediaExpectations = [
     expectedDimensions: { height: 941, width: 1672 },
   },
 ] as const;
+const profitMarginArticleMediaExpectations = [
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/profit-margin-stardew-price-boundary.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath: "blog/illustrations/profit-margin-stardew-advanced-options.webp",
+    expectedDimensions: { height: 941, width: 1672 },
+  },
+] as const;
 
 type PngChunk = Readonly<{
   payload: Buffer;
@@ -420,7 +432,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all twenty blog identities", () => {
+it("ships budget-compliant WebP covers for all twenty-one blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -453,6 +465,9 @@ it("ships budget-compliant WebP covers for all twenty blog identities", () => {
     "blog/last-day-to-plant-stardew-cover.webp",
   );
   const pineTreeImage = readWebpDimensions("blog/pine-tree-stardew-cover.webp");
+  const profitMarginImage = readWebpDimensions(
+    "blog/profit-margin-stardew-cover.webp",
+  );
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -474,6 +489,7 @@ it("ships budget-compliant WebP covers for all twenty blog identities", () => {
   expect(farmingXpImage).toMatchObject(expectedCoverDimensions);
   expect(lastDayToPlantImage).toMatchObject(expectedCoverDimensions);
   expect(pineTreeImage).toMatchObject(expectedCoverDimensions);
+  expect(profitMarginImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
@@ -493,6 +509,7 @@ it("ships budget-compliant WebP covers for all twenty blog identities", () => {
   expect(farmingXpImage.width / farmingXpImage.height).toBeCloseTo(16 / 9, 2);
   expect(lastDayToPlantImage.width / lastDayToPlantImage.height).toBeCloseTo(16 / 9, 2);
   expect(pineTreeImage.width / pineTreeImage.height).toBeCloseTo(16 / 9, 2);
+  expect(profitMarginImage.width / profitMarginImage.height).toBeCloseTo(16 / 9, 2);
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
@@ -513,6 +530,7 @@ it("ships budget-compliant WebP covers for all twenty blog identities", () => {
   expect(farmingXpImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(lastDayToPlantImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(pineTreeImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(profitMarginImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
@@ -615,6 +633,16 @@ it("ships budget-compliant WebP media for the last-day-to-plant guide", () => {
 
 it("ships budget-compliant WebP media for the Pine Tree guide", () => {
   for (const mediaExpectation of pineTreeArticleMediaExpectations) {
+    const image = readWebpDimensions(mediaExpectation.relativeImagePath);
+
+    expect(image).toMatchObject(mediaExpectation.expectedDimensions);
+    expect(image.width / image.height).toBeCloseTo(16 / 9, 2);
+    expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+});
+
+it("ships budget-compliant WebP media for the profit-margin guide", () => {
+  for (const mediaExpectation of profitMarginArticleMediaExpectations) {
     const image = readWebpDimensions(mediaExpectation.relativeImagePath);
 
     expect(image).toMatchObject(mediaExpectation.expectedDimensions);

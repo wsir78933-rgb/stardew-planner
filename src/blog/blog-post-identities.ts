@@ -19,6 +19,7 @@ export const blogPostSlugs = [
   "how-to-level-up-farming-stardew",
   "last-day-to-plant-stardew",
   "pine-tree-stardew",
+  "profit-margin-stardew",
 ] as const;
 
 export type BlogPostSlug = (typeof blogPostSlugs)[number];

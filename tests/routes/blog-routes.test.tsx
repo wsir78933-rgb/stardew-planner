@@ -57,6 +57,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/how-to-level-up-farming-stardew"');
   expect(indexMarkup).toContain('href="/last-day-to-plant-stardew"');
   expect(indexMarkup).toContain('href="/pine-tree-stardew"');
+  expect(indexMarkup).toContain('href="/profit-margin-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -97,6 +98,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/how-to-level-up-farming-stardew"');
   expect(indexMarkup).toContain('href="/zh/last-day-to-plant-stardew"');
   expect(indexMarkup).toContain('href="/zh/pine-tree-stardew"');
+  expect(indexMarkup).toContain('href="/zh/profit-margin-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -554,6 +556,45 @@ it("renders the paired Pine Tree article routes with locked metadata and one pag
     title: "星露谷松树种植先看格子，不浇水也不能随便种",
     description:
       "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
+  });
+});
+
+it("renders the paired profit-margin article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "profit-margin-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "profit-margin-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+  );
+  expect(chineseMarkup).toContain(
+    "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+  );
+  expect(englishMarkup).toContain("/blog/illustrations/profit-margin-stardew-price-boundary.webp");
+  expect(chineseMarkup).toContain("/blog/illustrations/profit-margin-stardew-advanced-options.webp");
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect(englishMarkup).not.toContain("FAQPage");
+  expect(chineseMarkup).not.toContain("FAQPage");
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+    description:
+      "Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+    description:
+      "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
   });
 });
 

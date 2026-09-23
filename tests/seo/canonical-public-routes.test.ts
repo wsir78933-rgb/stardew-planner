@@ -24,10 +24,11 @@ const expectedBlogCanonicalPaths = [
   "/how-to-level-up-farming-stardew",
   "/last-day-to-plant-stardew",
   "/pine-tree-stardew",
+  "/profit-margin-stardew",
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(26);
+  expect(canonicalPublicPaths).toHaveLength(27);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );

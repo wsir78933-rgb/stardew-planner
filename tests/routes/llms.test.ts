@@ -123,6 +123,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷松树种植先看格子，不浇水也不能随便种](https://stardewvalleyplanner.art/zh/pine-tree-stardew): 松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
   );
+  expect(llmsText).toContain(
+    "[Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change](https://stardewvalleyplanner.art/profit-margin-stardew): Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
+  );
+  expect(llmsText).toContain(
+    "[Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选](https://stardewvalleyplanner.art/zh/profit-margin-stardew): Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

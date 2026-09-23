@@ -119,6 +119,7 @@ const localizedBlogPostPaths: Readonly<
     "how-to-level-up-farming-stardew": "/how-to-level-up-farming-stardew",
     "last-day-to-plant-stardew": "/last-day-to-plant-stardew",
     "pine-tree-stardew": "/pine-tree-stardew",
+    "profit-margin-stardew": "/profit-margin-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -142,6 +143,7 @@ const localizedBlogPostPaths: Readonly<
     "how-to-level-up-farming-stardew": "/zh/how-to-level-up-farming-stardew",
     "last-day-to-plant-stardew": "/zh/last-day-to-plant-stardew",
     "pine-tree-stardew": "/zh/pine-tree-stardew",
+    "profit-margin-stardew": "/zh/profit-margin-stardew",
   },
 };
 

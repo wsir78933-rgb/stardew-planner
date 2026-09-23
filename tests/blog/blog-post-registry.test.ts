@@ -31,6 +31,7 @@ const expectedSlugs = [
   "how-to-level-up-farming-stardew",
   "last-day-to-plant-stardew",
   "pine-tree-stardew",
+  "profit-margin-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -65,14 +66,16 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twenty canonical blog identities in publishing order", () => {
+it("keeps the twenty-one canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
+  expect(isBlogPostSlug("pine-tree-stardew")).toBe(true);
+  expect(isBlogPostSlug("profit-margin-stardew")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the forty localized root-level canonical article paths", () => {
+it("publishes only the forty-two localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -94,6 +97,7 @@ it("publishes only the forty localized root-level canonical article paths", () =
     "/how-to-level-up-farming-stardew/",
     "/last-day-to-plant-stardew/",
     "/pine-tree-stardew/",
+    "/profit-margin-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -114,6 +118,7 @@ it("publishes only the forty localized root-level canonical article paths", () =
     "/zh/how-to-level-up-farming-stardew/",
     "/zh/last-day-to-plant-stardew/",
     "/zh/pine-tree-stardew/",
+    "/zh/profit-margin-stardew/",
   ]);
 });
 
@@ -501,6 +506,32 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
     },
   });
+  expect(englishPosts[20]).toMatchObject({
+    title: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+    description:
+      "Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
+    topic: "Stardew Valley Guides",
+    author: "Stardew Valley Planner Team",
+    readTimeMinutes: 10,
+    featured: true,
+    coverImage: {
+      src: "/blog/profit-margin-stardew-cover.webp",
+      alt: "Original local illustration of an outdoor Stardew Valley field with cranberry rows, a pumpkin patch, and a grape trellis; it is not a game screenshot.",
+    },
+  });
+  expect(chinesePosts[20]).toMatchObject({
+    title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+    description:
+      "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
+    topic: "星露谷物语指南",
+    author: "星露谷规划器团队",
+    readTimeMinutes: 10,
+    featured: true,
+    coverImage: {
+      src: "/blog/profit-margin-stardew-cover.webp",
+      alt: "原创本地插画：星露谷物语室外田地里有蔓越莓行、南瓜畦和葡萄架，不是游戏截图。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -531,6 +562,7 @@ it("binds every localized post to its own original blog cover", () => {
         "/blog/how-to-level-up-farming-stardew-cover.webp",
       "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
       "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
+      "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -557,6 +589,7 @@ it("binds every localized post to its own original blog cover", () => {
         "/blog/how-to-level-up-farming-stardew-cover.webp",
       "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
       "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
+      "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
     },
   } as const;
 
@@ -656,7 +689,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: pine-tree-stardew.",
+    "Expected: carpenter-stardew. Received: profit-margin-stardew.",
   );
 });
 
