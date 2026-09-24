@@ -5,7 +5,7 @@ function ProfitMarginPriceBoundaryFigure() {
   return (
     <figure className="blog-article-media">
       <PublicPicture
-        alt="星露谷物语 Profit Margin 价格示意图：作物等出售物品、皮埃尔种子和乔家指定商品随档位调整；铁匠、鱼店、旅行货车商品、建筑、工具升级和任务金币奖励不变。"
+        alt="25% 利润率下，小麦售价从 25g 降至 6g，蟹笼价格仍为 1,500g。"
         decoding="async"
         height={941}
         loading="lazy"
@@ -23,7 +23,7 @@ function ProfitMarginAdvancedOptionsFigure() {
   return (
     <figure className="blog-article-media">
       <PublicPicture
-        alt="星露谷物语利润率设置流程示意：100% 通过 New Game 和 Advanced Options 创建普通农场；75%/50%/25% 从“合作”中的 Host New Farm 进入多人创建流程，选择 Profit Margin 后创建多人存档。"
+        alt="100%、75%、50%、25% 四个利润率档位，分别配有四枚、三枚、两枚和一枚象征性金币。"
         decoding="async"
         height={941}
         loading="lazy"
@@ -31,7 +31,7 @@ function ProfitMarginAdvancedOptionsFigure() {
         width={1672}
       />
       <figcaption>
-        设置流程示意：普通/100% 为 <code>New Game</code> → <code>Advanced Options</code>；75%/50%/25% 为“合作” → <code>Host New Farm</code> → 多人角色创建 → <code>Profit Margin</code> → 创建多人存档。房主也可以独自游玩这个存档。
+        利润率有 100%、75%、50%、25% 四个档位；较低档位会降低受利润率影响的价格。
       </figcaption>
     </figure>
   );

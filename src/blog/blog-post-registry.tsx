@@ -393,7 +393,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       readTimeMinutes: 10,
       coverImage: {
         src: "/blog/profit-margin-stardew-cover.webp",
-        alt: "Original local illustration of an outdoor Stardew Valley field with cranberry rows, a pumpkin patch, and a grape trellis; it is not a game screenshot.",
+        alt: "Pixel-art farm scene with a crop-filled shipping crate, a coin pouch, and gold coins.",
       },
       featured: true,
       Content: ProfitMarginStardewEnglishArticle,
@@ -709,7 +709,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       readTimeMinutes: 10,
       coverImage: {
         src: "/blog/profit-margin-stardew-cover.webp",
-        alt: "原创本地插画：星露谷物语室外田地里有蔓越莓行、南瓜畦和葡萄架，不是游戏截图。",
+        alt: "像素风农场封面：装满作物的出货箱旁摆着钱袋和金币。",
       },
       featured: true,
       Content: ProfitMarginStardewChineseArticle,

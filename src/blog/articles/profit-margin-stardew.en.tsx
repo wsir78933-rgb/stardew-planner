@@ -5,7 +5,7 @@ function ProfitMarginPriceBoundaryFigure() {
   return (
     <figure className="blog-article-media">
       <PublicPicture
-        alt="Diagram showing Stardew Valley Profit Margin prices that scale and shop costs and rewards that stay unchanged"
+        alt="At 25% Profit Margin, Wheat sells for 6g instead of 25g, while a Crab Pot still costs 1,500g"
         decoding="async"
         height={941}
         loading="lazy"
@@ -23,7 +23,7 @@ function ProfitMarginAdvancedOptionsFigure() {
   return (
     <figure className="blog-article-media">
       <PublicPicture
-        alt="Schematic of the Stardew Valley new-game path to Advanced Options and the Profit Margin selector"
+        alt="Four Profit Margin settings, 100%, 75%, 50%, and 25%, with decreasing groups of gold coins"
         decoding="async"
         height={941}
         loading="lazy"
@@ -31,7 +31,7 @@ function ProfitMarginAdvancedOptionsFigure() {
         width={1672}
       />
       <figcaption>
-        Schematic, not a game screenshot. New Game → wrench/Advanced Options → Profit Margin → Normal/75%/50%/25% → create the farm.
+        Profit Margin has four settings: 100%, 75%, 50%, and 25%. Lower settings reduce the prices affected by Profit Margin.
       </figcaption>
     </figure>
   );

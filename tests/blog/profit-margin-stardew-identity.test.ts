@@ -189,7 +189,7 @@ it("preserves the English price boundaries, setup caveats, and source transparen
   expect(articleText).toContain("selected Joja");
   expect(articleText).toContain("Grass Starter, Sugar, Wheat Flour, and Rice");
   expect(articleText).toContain("Blacksmith, Fish Shop, Traveling Cart, buildings, tool upgrades, and quest gold rewards");
-  expect(articleText).toContain("Schematic, not a game screenshot.");
+  expect(articleText).toContain("Profit Margin has four settings: 100%, 75%, 50%, and 25%. Lower settings reduce the prices affected by Profit Margin.");
   expect(articleText).toContain("platform and version");
   expect(markup).toContain('href="/how-to-earn-money-stardew"');
   expect(markup).toContain("Checked 2026-09-22 against Stardew Valley Wiki: Options and Multiplayer.");
