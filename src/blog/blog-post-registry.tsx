@@ -44,6 +44,8 @@ import { ProfitMarginStardewEnglishArticle } from "./articles/profit-margin-star
 import { ProfitMarginStardewChineseArticle } from "./articles/profit-margin-stardew.zh";
 import { WhatToGrowInGreenhouseStardewEnglishArticle } from "./articles/what-to-grow-in-greenhouse-stardew.en";
 import { WhatToGrowInGreenhouseStardewChineseArticle } from "./articles/what-to-grow-in-greenhouse-stardew.zh";
+import { StardewFruitEnglishArticle } from "./articles/stardew-fruit.en";
+import { StardewFruitChineseArticle } from "./articles/stardew-fruit.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -415,6 +417,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: WhatToGrowInGreenhouseStardewEnglishArticle,
     },
+    {
+      slug: "stardew-fruit",
+      title: "Stardew Fruit: Find Its Source Before Buying Seeds",
+      description:
+        "Find Stardew Valley fruit by crop, tree, or forage source. Check seasons, seed and sapling access, and the inputs needed for Jelly, Wine, or drying.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/stardew-fruit-cover.webp",
+        alt: "Original illustration of strawberries, apples, and blackberries in a basket beside strawberry plants, an apple tree, and a wild bramble.",
+      },
+      featured: false,
+      Content: StardewFruitEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -745,6 +762,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: WhatToGrowInGreenhouseStardewChineseArticle,
+    },
+    {
+      slug: "stardew-fruit",
+      title: "星露谷物语水果清单：辣椒也在列，按来源查找",
+      description:
+        "按原版 1.6 系列的 27 项水果清单，查作物、果树与采集来源、季节和取得条件；对照普通品质基础售价及果酱、果酒、果干路线，并辨清葡萄干、齐瓜任务与烘干投料限制。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/stardew-fruit-cover.webp",
+        alt: "水果来源插画：篮中装着草莓、苹果和黑莓，后方分别是草莓田、苹果树和黑莓灌木。",
+      },
+      featured: true,
+      Content: StardewFruitChineseArticle,
     },
   ],
 };

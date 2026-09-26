@@ -121,6 +121,7 @@ const localizedBlogPostPaths: Readonly<
     "pine-tree-stardew": "/pine-tree-stardew",
     "profit-margin-stardew": "/profit-margin-stardew",
     "what-to-grow-in-greenhouse-stardew": "/what-to-grow-in-greenhouse-stardew",
+    "stardew-fruit": "/stardew-fruit",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -146,6 +147,7 @@ const localizedBlogPostPaths: Readonly<
     "pine-tree-stardew": "/zh/pine-tree-stardew",
     "profit-margin-stardew": "/zh/profit-margin-stardew",
     "what-to-grow-in-greenhouse-stardew": "/zh/what-to-grow-in-greenhouse-stardew",
+    "stardew-fruit": "/zh/stardew-fruit",
   },
 };
 

@@ -33,6 +33,7 @@ const expectedSlugs = [
   "pine-tree-stardew",
   "profit-margin-stardew",
   "what-to-grow-in-greenhouse-stardew",
+  "stardew-fruit",
 ] as const;
 
 function createLocalizedPost(
@@ -67,7 +68,7 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twenty-two canonical blog identities in publishing order", () => {
+it("keeps the twenty-three canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
@@ -77,7 +78,7 @@ it("keeps the twenty-two canonical blog identities in publishing order", () => {
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the forty-four localized root-level canonical article paths", () => {
+it("publishes only the forty-six localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -101,6 +102,7 @@ it("publishes only the forty-four localized root-level canonical article paths",
     "/pine-tree-stardew/",
     "/profit-margin-stardew/",
     "/what-to-grow-in-greenhouse-stardew/",
+    "/stardew-fruit/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -123,6 +125,7 @@ it("publishes only the forty-four localized root-level canonical article paths",
     "/zh/pine-tree-stardew/",
     "/zh/profit-margin-stardew/",
     "/zh/what-to-grow-in-greenhouse-stardew/",
+    "/zh/stardew-fruit/",
   ]);
 });
 
@@ -136,7 +139,31 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     true,
   );
   expect(chinesePosts.every((post) => post.author === "星露谷规划器团队")).toBe(true);
-  expect(englishPosts.every((post) => post.featured)).toBe(true);
+  expect(englishPosts.map((post) => post.featured)).toEqual([
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+  ]);
   expect(chinesePosts.every((post) => post.featured)).toBe(true);
   expect(getBlogPostBySlug("en", "carpenter-stardew")?.slug).toBe(
     "carpenter-stardew",
@@ -594,6 +621,7 @@ it("binds every localized post to its own original blog cover", () => {
       "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
       "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+      "stardew-fruit": "/blog/stardew-fruit-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -622,6 +650,7 @@ it("binds every localized post to its own original blog cover", () => {
       "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
       "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+      "stardew-fruit": "/blog/stardew-fruit-cover.webp",
     },
   } as const;
 
@@ -721,7 +750,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: what-to-grow-in-greenhouse-stardew.",
+    "Expected: carpenter-stardew. Received: stardew-fruit.",
   );
 });
 
