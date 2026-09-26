@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="1040" viewBox="0 0 390 1040" role="img" aria-labelledby="title desc">
+  <title id="title">草莓春季第 13 日播种的收获时间线</title>
+  <desc id="desc">在相同的浇水和地点前提下，无肥料首次收获为春季第 21 日，生长激素首次收获为春季第 20 日；后续都按四天再生长。</desc>
+  <defs>
+    <marker id="timelineArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4e7894"/>
+    </marker>
+    <filter id="timelineShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#17352d" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="390" height="1040" fill="#fbfaf5"/>
+  <rect x="8" y="8" width="374" height="1024" rx="22" fill="#fffdf8" stroke="#d9e4d7" stroke-width="3"/>
+
+  <text x="24" y="44" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="22" font-weight="700" fill="#1e3d33">草莓：首次成长提前，</text>
+  <text x="24" y="72" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="22" font-weight="700" fill="#1e3d33">4 天再生长不变</text>
+  <text x="24" y="104" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#5f7069">共同前提：室外普通耕地</text>
+  <text x="24" y="128" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#5f7069">春季第 13 日播种，当天浇水，肥料当天生效</text>
+  <text x="24" y="152" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#5f7069">不跨季，也没有其他地点或机制加成</text>
+
+  <g filter="url(#timelineShadow)">
+    <rect x="24" y="180" width="342" height="64" rx="16" fill="#e9f0e6" stroke="#8db19b" stroke-width="2"/>
+    <text x="195" y="220" text-anchor="middle" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="18" font-weight="700" fill="#315d46">共同起点：春季第 13 日播种</text>
+  </g>
+  <path d="M195 246 V270" stroke="#4e7894" stroke-width="3" fill="none" marker-end="url(#timelineArrow)"/>
+
+  <g filter="url(#timelineShadow)">
+    <rect x="24" y="278" width="342" height="190" rx="16" fill="#edf5ef" stroke="#78a88a" stroke-width="2"/>
+    <text x="42" y="314" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="19" font-weight="700" fill="#315d46">无肥料</text>
+    <line x1="56" y1="340" x2="56" y2="430" stroke="#4b8466" stroke-width="4"/>
+    <circle cx="56" cy="340" r="7" fill="#fffdf8" stroke="#4b8466" stroke-width="3"/>
+    <circle cx="56" cy="430" r="9" fill="#4b8466"/>
+    <text x="78" y="346" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#315d46">首次成长</text>
+    <text x="78" y="371" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="16" font-weight="700" fill="#315d46">首次收获：春季第 21 日</text>
+    <text x="78" y="410" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#315d46">后续：春季第 25 日……（每 4 天）</text>
+    <text x="78" y="447" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#315d46">再生长间隔没有被肥料改变</text>
+  </g>
+  <path d="M195 474 V498" stroke="#4e7894" stroke-width="3" fill="none" marker-end="url(#timelineArrow)"/>
+
+  <g filter="url(#timelineShadow)">
+    <rect x="24" y="506" width="342" height="226" rx="16" fill="#edf3f7" stroke="#6f94aa" stroke-width="2"/>
+    <text x="42" y="542" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="19" font-weight="700" fill="#31576a">生长激素（Speed-Gro）</text>
+    <line x1="56" y1="566" x2="56" y2="690" stroke="#4e7894" stroke-width="4"/>
+    <circle cx="56" cy="566" r="7" fill="#fffdf8" stroke="#4e7894" stroke-width="3"/>
+    <circle cx="56" cy="690" r="9" fill="#4e7894"/>
+    <text x="78" y="572" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#31576a">首次成长</text>
+    <text x="78" y="597" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="16" font-weight="700" fill="#31576a">首次收获：春季第 20 日</text>
+    <text x="78" y="636" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#31576a">后续：春季第 24 日 → 第 28 日</text>
+    <text x="78" y="674" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#31576a">每次再生长仍为 4 天</text>
+    <text x="78" y="708" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#31576a">只改变第一次成长的日期</text>
+  </g>
+
+  <g>
+    <rect x="24" y="774" width="342" height="118" rx="16" fill="#f7ead4" stroke="#c79d53" stroke-width="2"/>
+    <text x="42" y="810" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="18" font-weight="700" fill="#6a4b1d">读图重点</text>
+    <text x="42" y="840" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#6a4b1d">比较首次收获，再单独看后续 4 天箭头。</text>
+    <text x="42" y="868" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="15" fill="#6a4b1d">不要把成长修正值套到再生长字段。</text>
+  </g>
+  <text x="24" y="940" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#6a4b1d">日期为公开阶段数据与规则的条件化演算，</text>
+  <text x="24" y="966" font-family="Noto Sans SC, PingFang SC, sans-serif" font-size="14" fill="#6a4b1d">不是游戏内实测。</text>
+</svg>

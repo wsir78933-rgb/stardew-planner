@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="1250" viewBox="0 0 390 1250" role="img" aria-labelledby="title desc">
+  <title id="title">Strawberry first growth and fixed regrowth calendar</title>
+  <desc id="desc">Strawberry planted on Spring 13 has stage vector 1, 1, 2, 2, 2 and a four-day regrowth interval. The vertical cards show the first harvest and each later harvest: without fertilizer Spring 21, 25, and Spring 29 outside the season; Speed-Gro Spring 20, 24, and 28; Deluxe Speed-Gro Spring 19, 23, and 27; Hyper Speed-Gro Spring 18, 22, and 26. Fertilizer changes only first growth; every later interval remains four days.</desc>
+  <style>
+    .title { font: 700 22px system-ui, -apple-system, sans-serif; fill: #24352a; }
+    .subtitle { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .meta { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .section { font: 700 14px system-ui, -apple-system, sans-serif; letter-spacing: 0.6px; fill: #526357; }
+    .card-title { font: 700 18px system-ui, -apple-system, sans-serif; fill: #24352a; }
+    .card-meta { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .date { font: 700 16px system-ui, -apple-system, sans-serif; fill: #24352a; }
+    .row-label { font: 600 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .note { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+  </style>
+  <rect width="390" height="1250" rx="18" fill="#fbfaf6"/>
+  <rect x="12" y="12" width="366" height="1226" rx="14" fill="none" stroke="#d7dfd5" stroke-width="2"/>
+
+  <text x="24" y="48" class="title">Strawberry planted on Spring 13</text>
+  <text x="24" y="75" class="subtitle">Fertilizer changes first growth; every later harvest keeps</text>
+  <text x="24" y="96" class="subtitle">the crop's fixed four-day regrowth interval.</text>
+  <text x="24" y="126" class="meta">Stage vector [1, 1, 2, 2, 2] · plant: Spring 13</text>
+  <text x="24" y="148" class="meta">Season ends after Spring 28; Spring 29 is out.</text>
+  <line x1="24" y1="168" x2="366" y2="168" stroke="#d7dfd5" stroke-width="2"/>
+  <text x="24" y="196" class="section">FIRST GROWTH AND +4-DAY REGROWTH</text>
+
+  <g>
+    <rect x="24" y="212" width="342" height="220" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="242" class="card-title">None</text>
+    <text x="40" y="264" class="card-meta">Initial growth: 8 days · no fertilizer</text>
+    <line x1="44" y1="291" x2="44" y2="394" stroke="#8d9a8c" stroke-width="4"/>
+    <circle cx="44" cy="291" r="7" fill="#526357"/>
+    <circle cx="44" cy="325" r="7" fill="#526357"/>
+    <circle cx="44" cy="359" r="7" fill="#6b91a1"/>
+    <circle cx="44" cy="393" r="7" fill="none" stroke="#aa6b55" stroke-width="3"/>
+    <text x="62" y="296" class="row-label">Plant</text><text x="140" y="296" class="date">Spring 13</text>
+    <text x="62" y="330" class="row-label">First harvest</text><text x="174" y="330" class="date">Spring 21</text>
+    <text x="62" y="364" class="row-label">+4-day regrowth</text><text x="214" y="364" class="date">Spring 25</text>
+    <text x="62" y="398" class="row-label">+4-day regrowth</text><text x="214" y="398" class="date">Spring 29*</text>
+  </g>
+
+  <g>
+    <rect x="24" y="450" width="342" height="220" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="480" class="card-title">Speed-Gro</text>
+    <text x="40" y="502" class="card-meta">Initial growth: 7 days · first growth only</text>
+    <line x1="44" y1="529" x2="44" y2="632" stroke="#4f8b59" stroke-width="4"/>
+    <circle cx="44" cy="529" r="7" fill="#526357"/>
+    <circle cx="44" cy="563" r="7" fill="#4f8b59"/>
+    <circle cx="44" cy="597" r="7" fill="#6b91a1"/>
+    <circle cx="44" cy="631" r="7" fill="#6b91a1"/>
+    <text x="62" y="534" class="row-label">Plant</text><text x="140" y="534" class="date">Spring 13</text>
+    <text x="62" y="568" class="row-label">First harvest</text><text x="174" y="568" class="date">Spring 20</text>
+    <text x="62" y="602" class="row-label">+4-day regrowth</text><text x="214" y="602" class="date">Spring 24</text>
+    <text x="62" y="636" class="row-label">+4-day regrowth</text><text x="214" y="636" class="date">Spring 28</text>
+  </g>
+
+  <g>
+    <rect x="24" y="688" width="342" height="220" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="718" class="card-title">Deluxe Speed-Gro</text>
+    <text x="40" y="740" class="card-meta">Initial growth: 6 days · first growth only</text>
+    <line x1="44" y1="767" x2="44" y2="870" stroke="#c28d32" stroke-width="4"/>
+    <circle cx="44" cy="767" r="7" fill="#526357"/>
+    <circle cx="44" cy="801" r="7" fill="#c28d32"/>
+    <circle cx="44" cy="835" r="7" fill="#6b91a1"/>
+    <circle cx="44" cy="869" r="7" fill="#6b91a1"/>
+    <text x="62" y="772" class="row-label">Plant</text><text x="140" y="772" class="date">Spring 13</text>
+    <text x="62" y="806" class="row-label">First harvest</text><text x="174" y="806" class="date">Spring 19</text>
+    <text x="62" y="840" class="row-label">+4-day regrowth</text><text x="214" y="840" class="date">Spring 23</text>
+    <text x="62" y="874" class="row-label">+4-day regrowth</text><text x="214" y="874" class="date">Spring 27</text>
+  </g>
+
+  <g>
+    <rect x="24" y="926" width="342" height="220" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="956" class="card-title">Hyper Speed-Gro</text>
+    <text x="40" y="978" class="card-meta">Initial growth: 5 days · first growth only</text>
+    <line x1="44" y1="1005" x2="44" y2="1108" stroke="#a34f67" stroke-width="4"/>
+    <circle cx="44" cy="1005" r="7" fill="#526357"/>
+    <circle cx="44" cy="1039" r="7" fill="#a34f67"/>
+    <circle cx="44" cy="1073" r="7" fill="#6b91a1"/>
+    <circle cx="44" cy="1107" r="7" fill="#6b91a1"/>
+    <text x="62" y="1010" class="row-label">Plant</text><text x="140" y="1010" class="date">Spring 13</text>
+    <text x="62" y="1044" class="row-label">First harvest</text><text x="174" y="1044" class="date">Spring 18</text>
+    <text x="62" y="1078" class="row-label">+4-day regrowth</text><text x="214" y="1078" class="date">Spring 22</text>
+    <text x="62" y="1112" class="row-label">+4-day regrowth</text><text x="214" y="1112" class="date">Spring 26</text>
+  </g>
+
+  <line x1="24" y1="1168" x2="366" y2="1168" stroke="#d7dfd5" stroke-width="2"/>
+  <circle cx="40" cy="1190" r="7" fill="#6b91a1"/>
+  <text x="56" y="1195" class="note">blue markers and rows = fixed 4-day regrowth</text>
+  <text x="24" y="1220" class="note">* Spring 29 is outside the 28-day season.</text>
+  <text x="24" y="1241" class="note">Only first growth changes; later intervals do not.</text>
+</svg>

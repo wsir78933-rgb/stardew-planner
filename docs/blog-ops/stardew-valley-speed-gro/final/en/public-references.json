@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "locale": "en",
+  "bodyHash": "9c4c78a1f27e217a3eaa51ce3164e57021fe90d88187f0e298746d4678bbea46",
+  "references": [
+    {
+      "id": "stardew-valley-1-6-15-pc",
+      "label": "Stardew Valley 1.6.15 Patch on Steam",
+      "url": "https://store.steampowered.com/news/app/413150/view/517448731263500640?l=english",
+      "versionNote": "PC/Steam version boundary for the worked calculations.",
+      "appliesTo": [
+        {
+          "quote": "The version boundary is the documented [1.6.15 PC/Steam patch](https://store.steampowered.com/news/app/413150/view/517448731263500640?l=english)",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "stardew-valley-1-6-15-1-console",
+      "label": "Stardew Valley 1.6.15.1 Console Patch",
+      "url": "https://www.stardewvalley.net/1-6-15-1-patch-for-xbox-playstation/",
+      "versionNote": "Console version boundary for the worked calculations.",
+      "appliesTo": [
+        {
+          "quote": "and [1.6.15.1 console patch](https://www.stardewvalley.net/1-6-15-1-patch-for-xbox-playstation/); check your own game version before carrying a date across a later update.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "speed-gro-item-data",
+      "label": "Speed-Gro - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Speed-Gro?oldid=190630",
+      "versionNote": "Community-maintained item data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "| [Speed-Gro](https://stardewvalleywiki.com/Speed-Gro?oldid=190630) | 10% | 20% | Farming Level 3 recipe: 1 Pine Tar + 5 Moss makes 5; Pierre's sells it for 100g from Spring 15 of Year 1. |",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "deluxe-speed-gro-item-data",
+      "label": "Deluxe Speed-Gro - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Deluxe_Speed-Gro?oldid=191196",
+      "versionNote": "Community-maintained item data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "| [Deluxe Speed-Gro](https://stardewvalleywiki.com/Deluxe_Speed-Gro?oldid=191196) | 25% | 35% | Farming Level 8 recipe: 1 Oak Resin + 5 Bone Fragments makes 5; Pierre's sells it for 150g from Year 2, and Oasis sells it for 80g on Thursdays. |",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "hyper-speed-gro-item-data",
+      "label": "Hyper Speed-Gro - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377",
+      "versionNote": "Community-maintained item data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "| [Hyper Speed-Gro](https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377) | 33% | 43% | Buy the recipe in Qi's Walnut Room for 30 Qi Gems; 1 Radioactive Ore + 3 Bone Fragments + 1 Solar Essence makes 1. |",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "stardew-valley-1-6-changelog",
+      "label": "Stardew Valley 1.6 Update Full Changelog",
+      "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+      "versionNote": "First-party source for the 1.6 recipe ingredient changes.",
+      "appliesTo": [
+        {
+          "quote": "The official [1.6 full changelog](https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/) says that Speed-Gro changed from 1 Clam to 5 Moss and Deluxe Speed-Gro changed from 1 Coral to 5 Bone Fragments.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "fertilizer-mechanics",
+      "label": "Fertilizer - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Fertilizer?oldid=194274",
+      "versionNote": "Community-maintained mechanics data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "The [Fertilizer mechanics page](https://stardewvalleywiki.com/Fertilizer?oldid=194274) also states the important multi-harvest limit: fertilizer does not reduce the time between harvests.",
+          "occurrence": 1
+        },
+        {
+          "quote": "The [Fertilizer page](https://stardewvalleywiki.com/Fertilizer?oldid=194274) supports the one-fertilizer-per-tile constraint.",
+          "occurrence": 1
+        },
+        {
+          "quote": "The [Fertilizer rules](https://stardewvalleywiki.com/Fertilizer?oldid=194274) list examples such as Coffee Bean, Ancient Fruit, Corn, Sunflower, and Wheat for multi-season persistence.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "speed-gro-stage-implementation",
+      "label": "Public decompiled HoeDirt implementation cross-check",
+      "url": "https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629",
+      "versionNote": "Public decompiled snapshot used as implementation cross-check, not an official source-code release.",
+      "appliesTo": [
+        {
+          "quote": "A fixed [1.6 decompiled HoeDirt implementation](https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629) cross-checks the `ceil` and pass-based reduction",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "crop-stage-context",
+      "label": "Public decompiled Crop implementation context",
+      "url": "https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley/Crop.cs#L403-L411",
+      "versionNote": "Public decompiled snapshot used for stage-day context, not an official source-code release.",
+      "appliesTo": [
+        {
+          "quote": "while [Crop.cs](https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley/Crop.cs#L403-L411) provides the stage-day context.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "parsnip-crop-data",
+      "label": "Parsnip - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Parsnip?oldid=191123",
+      "versionNote": "Community-maintained crop data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "Take a [Parsnip](https://stardewvalleywiki.com/Parsnip?oldid=191123) planted on Spring 1. Its stage vector is `[1, 1, 1, 1]`, for 4 base days.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "crop-growth-calendars",
+      "label": "Crop Growth Calendars - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Crop_Growth_Calendars?oldid=189875",
+      "versionNote": "Community-maintained calendar convention and crop-date data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "Under the shared [crop-calendar](https://stardewvalleywiki.com/Crop_Growth_Calendars?oldid=189875) date convention, the source-based results are:",
+          "occurrence": 1
+        },
+        {
+          "quote": "With a watered Summer 1 planting and the [crop-calendar convention](https://stardewvalleywiki.com/Crop_Growth_Calendars?oldid=189875), the source-based first-harvest dates are:",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "melon-crop-data",
+      "label": "Melon - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Melon?oldid=193510",
+      "versionNote": "Community-maintained crop data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "For a [Melon](https://stardewvalleywiki.com/Melon?oldid=193510) planted on Summer 1, the base vector is `[1, 2, 3, 3, 3]`, or 12 days.",
+          "occurrence": 1
+        },
+        {
+          "quote": "The [Melon page](https://stardewvalleywiki.com/Melon?oldid=193510) supplies the 12-day base growth and `[1, 2, 3, 3, 3]` stage vector.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "strawberry-crop-data",
+      "label": "Strawberry - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Strawberry?oldid=192732",
+      "versionNote": "Community-maintained crop data, fixed to the cited page revision.",
+      "appliesTo": [
+        {
+          "quote": "The [Strawberry page](https://stardewvalleywiki.com/Strawberry?oldid=192732) gives 8 days of initial growth, stage vector `[1, 1, 2, 2, 2]`, and a 4-day regrowth interval.",
+          "occurrence": 1
+        }
+      ]
+    }
+  ]
+}

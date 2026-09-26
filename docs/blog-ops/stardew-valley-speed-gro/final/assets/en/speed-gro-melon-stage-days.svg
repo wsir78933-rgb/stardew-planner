@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="1070" viewBox="0 0 390 1070" role="img" aria-labelledby="title desc">
+  <title id="title">Melon Speed-Gro stage-day reduction</title>
+  <desc id="desc">Melon planted on Summer 1 starts with stage vector 1, 2, 3, 3, 3 and 12 growth days. The diagram stacks four readable calculation cards: no fertilizer keeps the vector and harvests Summer 13; Speed-Gro changes it to 1, 1, 2, 3, 3 for 10 days and Summer 11; Deluxe Speed-Gro changes it to 1, 1, 2, 2, 3 for 9 days and Summer 10; Hyper Speed-Gro changes it to 1, 1, 2, 2, 2 for 8 days and Summer 9. Days removed are ceil(12 times the effective modifier); the modifier itself is not rounded up.</desc>
+  <style>
+    .title { font: 700 22px system-ui, -apple-system, sans-serif; fill: #24352a; }
+    .subtitle { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .meta { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .section { font: 700 14px system-ui, -apple-system, sans-serif; letter-spacing: 0.6px; fill: #526357; }
+    .card-title { font: 700 18px system-ui, -apple-system, sans-serif; fill: #24352a; }
+    .card-meta { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .stage-label { font: 600 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+    .stage-value { font: 700 18px system-ui, -apple-system, sans-serif; fill: #24352a; }
+    .outcome { font: 700 16px system-ui, -apple-system, sans-serif; fill: #315c43; }
+    .note { font: 400 14px system-ui, -apple-system, sans-serif; fill: #526357; }
+  </style>
+  <rect width="390" height="1070" rx="18" fill="#fbfaf6"/>
+  <rect x="12" y="12" width="366" height="1046" rx="14" fill="none" stroke="#d7dfd5" stroke-width="2"/>
+
+  <text x="24" y="48" class="title">Melon planted on Summer 1</text>
+  <text x="24" y="75" class="subtitle">Whole stage-days are removed after calculating the</text>
+  <text x="24" y="96" class="subtitle">effective modifier.</text>
+  <text x="24" y="124" class="meta">Base vector [1, 2, 3, 3, 3] · 12 days</text>
+  <text x="24" y="146" class="meta">Days removed = ceil(12 × effective modifier)</text>
+  <text x="24" y="168" class="meta">The modifier is not rounded separately.</text>
+  <line x1="24" y1="188" x2="366" y2="188" stroke="#d7dfd5" stroke-width="2"/>
+  <text x="24" y="216" class="section">CALCULATED STATES · FULL VECTORS</text>
+
+  <g>
+    <rect x="24" y="232" width="342" height="190" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="262" class="card-title">None</text>
+    <text x="40" y="284" class="card-meta">No fertilizer · 0% modifier</text>
+    <text x="64" y="309" text-anchor="middle" class="stage-label">S1</text>
+    <text x="126" y="309" text-anchor="middle" class="stage-label">S2</text>
+    <text x="188" y="309" text-anchor="middle" class="stage-label">S3</text>
+    <text x="250" y="309" text-anchor="middle" class="stage-label">S4</text>
+    <text x="312" y="309" text-anchor="middle" class="stage-label">S5</text>
+    <rect x="40" y="318" width="48" height="38" rx="7" fill="#e6eee5"/><text x="64" y="344" text-anchor="middle" class="stage-value">1</text>
+    <rect x="102" y="318" width="48" height="38" rx="7" fill="#e6eee5"/><text x="126" y="344" text-anchor="middle" class="stage-value">2</text>
+    <rect x="164" y="318" width="48" height="38" rx="7" fill="#e6eee5"/><text x="188" y="344" text-anchor="middle" class="stage-value">3</text>
+    <rect x="226" y="318" width="48" height="38" rx="7" fill="#e6eee5"/><text x="250" y="344" text-anchor="middle" class="stage-value">3</text>
+    <rect x="288" y="318" width="48" height="38" rx="7" fill="#e6eee5"/><text x="312" y="344" text-anchor="middle" class="stage-value">3</text>
+    <text x="40" y="382" class="outcome">Effective first growth: 12 days</text>
+    <text x="40" y="407" class="outcome">First harvest: Summer 13</text>
+  </g>
+
+  <g>
+    <rect x="24" y="438" width="342" height="190" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="468" class="card-title">Speed-Gro</text>
+    <text x="40" y="490" class="card-meta">10% modifier · 2 stage-days removed</text>
+    <text x="64" y="515" text-anchor="middle" class="stage-label">S1</text>
+    <text x="126" y="515" text-anchor="middle" class="stage-label">S2</text>
+    <text x="188" y="515" text-anchor="middle" class="stage-label">S3</text>
+    <text x="250" y="515" text-anchor="middle" class="stage-label">S4</text>
+    <text x="312" y="515" text-anchor="middle" class="stage-label">S5</text>
+    <rect x="40" y="524" width="48" height="38" rx="7" fill="#d8ead9"/><text x="64" y="550" text-anchor="middle" class="stage-value">1</text>
+    <rect x="102" y="524" width="48" height="38" rx="7" fill="#b8d9bd"/><text x="126" y="550" text-anchor="middle" class="stage-value">1</text>
+    <rect x="164" y="524" width="48" height="38" rx="7" fill="#d8ead9"/><text x="188" y="550" text-anchor="middle" class="stage-value">2</text>
+    <rect x="226" y="524" width="48" height="38" rx="7" fill="#d8ead9"/><text x="250" y="550" text-anchor="middle" class="stage-value">3</text>
+    <rect x="288" y="524" width="48" height="38" rx="7" fill="#d8ead9"/><text x="312" y="550" text-anchor="middle" class="stage-value">3</text>
+    <text x="40" y="588" class="outcome">Effective first growth: 10 days</text>
+    <text x="40" y="613" class="outcome">First harvest: Summer 11</text>
+  </g>
+
+  <g>
+    <rect x="24" y="644" width="342" height="190" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="674" class="card-title">Deluxe Speed-Gro</text>
+    <text x="40" y="696" class="card-meta">25% modifier · 3 stage-days removed</text>
+    <text x="64" y="721" text-anchor="middle" class="stage-label">S1</text>
+    <text x="126" y="721" text-anchor="middle" class="stage-label">S2</text>
+    <text x="188" y="721" text-anchor="middle" class="stage-label">S3</text>
+    <text x="250" y="721" text-anchor="middle" class="stage-label">S4</text>
+    <text x="312" y="721" text-anchor="middle" class="stage-label">S5</text>
+    <rect x="40" y="730" width="48" height="38" rx="7" fill="#f1ddb0"/><text x="64" y="756" text-anchor="middle" class="stage-value">1</text>
+    <rect x="102" y="730" width="48" height="38" rx="7" fill="#e5c77d"/><text x="126" y="756" text-anchor="middle" class="stage-value">1</text>
+    <rect x="164" y="730" width="48" height="38" rx="7" fill="#f1ddb0"/><text x="188" y="756" text-anchor="middle" class="stage-value">2</text>
+    <rect x="226" y="730" width="48" height="38" rx="7" fill="#e5c77d"/><text x="250" y="756" text-anchor="middle" class="stage-value">2</text>
+    <rect x="288" y="730" width="48" height="38" rx="7" fill="#f1ddb0"/><text x="312" y="756" text-anchor="middle" class="stage-value">3</text>
+    <text x="40" y="794" class="outcome">Effective first growth: 9 days</text>
+    <text x="40" y="819" class="outcome">First harvest: Summer 10</text>
+  </g>
+
+  <g>
+    <rect x="24" y="850" width="342" height="190" rx="12" fill="#ffffff" stroke="#d7dfd5" stroke-width="2"/>
+    <text x="40" y="880" class="card-title">Hyper Speed-Gro</text>
+    <text x="40" y="902" class="card-meta">33% modifier · 4 stage-days removed</text>
+    <text x="64" y="927" text-anchor="middle" class="stage-label">S1</text>
+    <text x="126" y="927" text-anchor="middle" class="stage-label">S2</text>
+    <text x="188" y="927" text-anchor="middle" class="stage-label">S3</text>
+    <text x="250" y="927" text-anchor="middle" class="stage-label">S4</text>
+    <text x="312" y="927" text-anchor="middle" class="stage-label">S5</text>
+    <rect x="40" y="936" width="48" height="38" rx="7" fill="#ead0d7"/><text x="64" y="962" text-anchor="middle" class="stage-value">1</text>
+    <rect x="102" y="936" width="48" height="38" rx="7" fill="#dca9b7"/><text x="126" y="962" text-anchor="middle" class="stage-value">1</text>
+    <rect x="164" y="936" width="48" height="38" rx="7" fill="#ead0d7"/><text x="188" y="962" text-anchor="middle" class="stage-value">2</text>
+    <rect x="226" y="936" width="48" height="38" rx="7" fill="#dca9b7"/><text x="250" y="962" text-anchor="middle" class="stage-value">2</text>
+    <rect x="288" y="936" width="48" height="38" rx="7" fill="#dca9b7"/><text x="312" y="962" text-anchor="middle" class="stage-value">2</text>
+    <text x="40" y="1000" class="outcome">Effective first growth: 8 days</text>
+    <text x="40" y="1025" class="outcome">First harvest: Summer 9</text>
+  </g>
+
+  <line x1="24" y1="1048" x2="366" y2="1048" stroke="#d7dfd5" stroke-width="2"/>
+  <text x="24" y="1068" class="note">Each card shows its vector and first-harvest date.</text>
+</svg>

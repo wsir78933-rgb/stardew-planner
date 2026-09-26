@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "locale": "zh-CN",
+  "bodyHash": "a19d3a55d114238f8b05811b35f7267ff3d66dbc79c1900f35361c03b628c6a2",
+  "references": [
+    {
+      "id": "stardew-valley-speed-gro-zh-term",
+      "label": "生长激素 - 星露谷物语中文维基",
+      "url": "https://zh.stardewvalleywiki.com/%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0",
+      "versionNote": "公开中文游戏资料页面；用于 Speed-Gro 术语与成长速度规则。",
+      "appliesTo": [
+        {
+          "quote": "这里最容易混淆的地方是“加速 10%”（[生长激素中文条目](https://zh.stardewvalleywiki.com/%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0)）并不等于日历一定少 10%",
+          "occurrence": 1
+        },
+        {
+          "quote": "普通档位的 10% 与农业学家后的 20% 可在 [生长激素中文条目](https://zh.stardewvalleywiki.com/%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0) 核对",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "stardew-valley-version-pc",
+      "label": "Stardew Valley 1.6.15 Patch on Steam",
+      "url": "https://store.steampowered.com/news/app/413150/view/517448731263500640?l=english",
+      "versionNote": "PC/Steam 版本边界。",
+      "appliesTo": [
+        {
+          "quote": "下文按目前可核对的 1.6.15 PC 版本线与 1.6.15.1 主机版本线整理；如果你的游戏显示其他版本，应以游戏内版本为准。版本锚点可分别查看 [Steam 的 1.6.15 公告](https://store.steampowered.com/news/app/413150/view/517448731263500640?l=english) 和 [主机 1.6.15.1 补丁公告](https://www.stardewvalley.net/1-6-15-1-patch-for-xbox-playstation/)。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "stardew-valley-version-console",
+      "label": "Stardew Valley 1.6.15.1 Console Patch",
+      "url": "https://www.stardewvalley.net/1-6-15-1-patch-for-xbox-playstation/",
+      "versionNote": "主机版本边界。",
+      "appliesTo": [
+        {
+          "quote": "下文按目前可核对的 1.6.15 PC 版本线与 1.6.15.1 主机版本线整理；如果你的游戏显示其他版本，应以游戏内版本为准。版本锚点可分别查看 [Steam 的 1.6.15 公告](https://store.steampowered.com/news/app/413150/view/517448731263500640?l=english) 和 [主机 1.6.15.1 补丁公告](https://www.stardewvalley.net/1-6-15-1-patch-for-xbox-playstation/)。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "speed-gro-zh-term-bridge",
+      "label": "生长激素 - Stardew Valley 中文维基",
+      "url": "https://xinglugu.huijiwiki.com/wiki/%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0",
+      "versionNote": "仅用于中文名称与 Speed-Gro 的术语桥接；不用于配方或施用惩罚。",
+      "appliesTo": [
+        {
+          "quote": "[中文资料页面把“生长激素”与 `Speed-Gro` 并列](https://xinglugu.huijiwiki.com/wiki/%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0)，所以",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "deluxe-speed-gro-zh-item",
+      "label": "高级生长激素 - 星露谷物语中文维基",
+      "url": "https://zh.stardewvalleywiki.com/%E9%AB%98%E7%BA%A7%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0",
+      "versionNote": "公开中文游戏资料页面；用于高级生长激素标称修正值。",
+      "appliesTo": [
+        {
+          "quote": "25% 和 35% 见 [高级生长激素条目](https://zh.stardewvalleywiki.com/%E9%AB%98%E7%BA%A7%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0)",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "hyper-speed-gro-item",
+      "label": "Hyper Speed-Gro - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377",
+      "versionNote": "固定版本页面；用于顶级生长激素标称修正值。",
+      "appliesTo": [
+        {
+          "quote": "33% 和 43% 见 [顶级生长激素条目](https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377)",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "fertilizer-zh-mechanics",
+      "label": "肥料 - Stardew Valley Wiki",
+      "url": "https://zh.stardewvalleywiki.com/%E8%82%A5%E6%96%99",
+      "versionNote": "公开中文机制页面；用于一格一种肥料及施用边界。",
+      "appliesTo": [
+        {
+          "quote": "目标必须是已经锄好的土地。未锄地不能直接当作施肥目标；已经有另一种肥料的地块也不能再叠加生长激素。每一格只能保留一种肥料，这条限制在 [肥料机制页面](https://zh.stardewvalleywiki.com/%E8%82%A5%E6%96%99) 中有明确说明。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "speed-gro-item",
+      "label": "Speed-Gro - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Speed-Gro?oldid=190630",
+      "versionNote": "固定版本页面；用于 Speed-Gro 标称修正值与施用时机。",
+      "appliesTo": [
+        {
+          "quote": "三种生长激素的资料都允许播种前、播种后或任何成长阶段施用：[Speed-Gro 的条目](https://stardewvalleywiki.com/Speed-Gro?oldid=190630)、[Deluxe Speed-Gro 的条目](https://stardewvalleywiki.com/Deluxe_Speed-Gro?oldid=191196) 与 [Hyper Speed-Gro 的条目](https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377) 都列出这些时机；Speed-Gro 条目还说明，晚一点施用时只会按尚未完成的成长阶段处理，不会把已经通过的阶段追回来。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "deluxe-speed-gro-item",
+      "label": "Deluxe Speed-Gro - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Deluxe_Speed-Gro?oldid=191196",
+      "versionNote": "固定版本页面；用于 Deluxe Speed-Gro 的施用时机。",
+      "appliesTo": [
+        {
+          "quote": "三种生长激素的资料都允许播种前、播种后或任何成长阶段施用：[Speed-Gro 的条目](https://stardewvalleywiki.com/Speed-Gro?oldid=190630)、[Deluxe Speed-Gro 的条目](https://stardewvalleywiki.com/Deluxe_Speed-Gro?oldid=191196) 与 [Hyper Speed-Gro 的条目](https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377) 都列出这些时机；Speed-Gro 条目还说明，晚一点施用时只会按尚未完成的成长阶段处理，不会把已经通过的阶段追回来。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "fertilizer-item",
+      "label": "Fertilizer - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Fertilizer?oldid=194274",
+      "versionNote": "固定版本页面；用于肥料保留与再生长边界。",
+      "appliesTo": [
+        {
+          "quote": "换季时还要把“肥料是否保留”和“生长是否加速”分开看。普通情况下，肥料会随换季消失；多季作物在下一季仍能生长时，或温室中的地块，肥料可以保留。保留描述的是地块状态，并不代表生长激素开始影响下一次再生长间隔。这个边界也可在 [Fertilizer 的版本页面](https://stardewvalleywiki.com/Fertilizer?oldid=194274) 对照。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "hoedirt-decompiled",
+      "label": "Public 1.6 decompiled HoeDirt implementation cross-check",
+      "url": "https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629",
+      "versionNote": "固定提交的公开 decompiled snapshot，仅作实现交叉证据，不是官方源代码发布。",
+      "appliesTo": [
+        {
+          "quote": "公开的 1.6 反编译快照（decompiled snapshot）可以作为实现交叉证据：它先恢复各阶段日数，计算 `ceil(基础成长天数 × 修正值)`，再从前往后把可减少的阶段日数逐步扣除。这个 [固定提交中的 HoeDirt.cs 实现](https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629) 不是开发者发布的官方源代码，也不是本次运行游戏实测",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "parsnip-data",
+      "label": "Parsnip - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Parsnip?oldid=191123",
+      "versionNote": "固定版本页面；用于 Parsnip 阶段日数示例。",
+      "appliesTo": [
+        {
+          "quote": "Parsnip 的公开阶段数据是 `[1, 1, 1, 1]`，基础成长时间为 4 天。[Parsnip 条目](https://stardewvalleywiki.com/Parsnip?oldid=191123) 以春季作物资料列出这组阶段日数。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "melon-data",
+      "label": "Melon - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Melon?oldid=193510",
+      "versionNote": "固定版本页面；用于 Melon 阶段日数示例。",
+      "appliesTo": [
+        {
+          "quote": "Melon 的公开阶段数据是 `[1, 2, 3, 3, 3]`，基础成长时间为 12 天。[Melon 条目](https://stardewvalleywiki.com/Melon?oldid=193510) 列出了这组阶段日数。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "farming-item",
+      "label": "Farming - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Farming?oldid=191914",
+      "versionNote": "固定版本页面；用于农业学家额外修正值的交叉核对。",
+      "appliesTo": [
+        {
+          "quote": "如果同时有农业学家，成长速度修正值分别变成 20%、35% 和 43%，同一组前提下的日期演算为 Speed-Gro 夏季第 10 日、Deluxe Speed-Gro 夏季第 8 日、Hyper Speed-Gro 夏季第 7 日。农业学家提供的是额外 10 个百分点，而不是把已经算出的肥料百分比再乘一次；[Farming 条目](https://stardewvalleywiki.com/Farming?oldid=191914) 与上面的公开实现可以交叉核对这一点。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "strawberry-data",
+      "label": "草莓 - 星露谷物语中文维基",
+      "url": "https://zh.stardewvalleywiki.com/%E8%8D%89%E8%8E%93",
+      "versionNote": "公开中文游戏资料页面；用于草莓成长、再生长和条件案例。",
+      "appliesTo": [
+        {
+          "quote": "草莓（Strawberry）很适合用来分辨“首次成长”和“再生长”这两件事。它的基础成长时间是 8 天，成熟后每 4 天收获一次；公开草莓资料也把成长和再生长分成两个数据。生长激素进入的是第一次 8 天成长的计算，不会把成熟后的 4 天间隔改成更短。[草莓条目](https://zh.stardewvalleywiki.com/%E8%8D%89%E8%8E%93) 提供了成长、再生长和春季种植条件的核对入口。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "coffee-bean-data",
+      "label": "Coffee Bean - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Coffee_Bean?oldid=193175",
+      "versionNote": "固定版本页面；用于再生长间隔边界示例。",
+      "appliesTo": [
+        {
+          "quote": "2. **我想提前的是第一次成熟，还是下一次再生长？** Speed-Gro 适合判断第一次成长和首次收获；若目标是缩短草莓成熟后的 4 天、[咖啡豆条目中的 2 天](https://stardewvalleywiki.com/Coffee_Bean?oldid=193175)等再生长间隔，它不是这个判断的依据。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "crop-growth-calendars",
+      "label": "Crop Growth Calendars - Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Crop_Growth_Calendars?oldid=189875",
+      "versionNote": "固定版本页面；用于阶段日数与日历演算的公开约定。",
+      "appliesTo": [
+        {
+          "quote": "下面只看一个有明确前提的日期案例：室外普通耕地，春季第 13 日播种，当天浇水，肥料当天已经生效，不跨季，也没有其他地点或机制加成。表格中的日期按公开阶段数据和上面的规则演算，只描述第一次成长及其后的固定再生长。",
+          "occurrence": 1
+        }
+      ]
+    }
+  ]
+}

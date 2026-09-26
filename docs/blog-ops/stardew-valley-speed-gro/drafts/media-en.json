@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "locale": "en",
+  "pathBase": "manifest-directory",
+  "assets": [
+    {
+      "id": "speed-gro-melon-stage-days",
+      "path": "../assets/en/speed-gro-melon-stage-days.svg",
+      "format": "svg",
+      "width": 390,
+      "height": 1070,
+      "role": "explanatory-diagram",
+      "usedIn": "Turn a percentage into a harvest date",
+      "caption": "Melon planted on Summer 1: days removed are ceil(12 × effective modifier), so the base growth days multiplied by the modifier are rounded up; the modifier itself is not rounded up.",
+      "alt": "Melon planted on Summer 1 with base stage vector 1, 2, 3, 3, 3 and four calculated states: no fertilizer remains 12 days and harvests Summer 13; Speed-Gro becomes 1, 1, 2, 3, 3 for 10 days and Summer 11; Deluxe Speed-Gro becomes 1, 1, 2, 2, 3 for 9 days and Summer 10; Hyper Speed-Gro becomes 1, 1, 2, 2, 2 for 8 days and Summer 9. Days removed are ceil(12 times the effective modifier), not a rounded modifier.",
+      "sources": [
+        "https://stardewvalleywiki.com/Melon?oldid=193510",
+        "https://stardewvalleywiki.com/Crop_Growth_Calendars?oldid=189875",
+        "https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629"
+      ]
+    },
+    {
+      "id": "speed-gro-strawberry-regrowth-calendar",
+      "path": "../assets/en/speed-gro-strawberry-regrowth-calendar.svg",
+      "format": "svg",
+      "width": 390,
+      "height": 1250,
+      "role": "explanatory-timeline",
+      "usedIn": "Worked calendar examples",
+      "caption": "Strawberry planted on Spring 13: fertilizer changes the initial growth segment, while every later harvest follows the crop's fixed four-day regrowth interval. Spring 29 is outside the 28-day season.",
+      "alt": "Strawberry planted on Spring 13: no fertilizer harvests Spring 21 and 25 with the next Spring 29 outside the season; Speed-Gro harvests Spring 20, 24, and 28; Deluxe Speed-Gro harvests Spring 19, 23, and 27; Hyper Speed-Gro harvests Spring 18, 22, and 26. Each later interval is four days.",
+      "sources": [
+        "https://stardewvalleywiki.com/Strawberry?oldid=192732",
+        "https://stardewvalleywiki.com/Fertilizer?oldid=194274"
+      ]
+    }
+  ]
+}

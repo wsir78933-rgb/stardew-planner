@@ -1,0 +1,71 @@
+{
+  "locale": "zh-CN",
+  "keyword": "stardew valley speed gro",
+  "pathBase": "manifest-directory",
+  "assets": [
+    {
+      "id": "speed-gro-application-flow",
+      "path": "../assets/zh/speed-gro-application-flow.svg",
+      "format": "svg",
+      "width": 390,
+      "height": 1040,
+      "placement": "H2-2 after timing and作用范围 explanation",
+      "alt": "流程图显示生长激素在犁地、播种前后和成长阶段的施用路径，以及首次成长与再生长的作用边界",
+      "caption": "生长激素可以在犁过的土地上于播种前、播种后或成长中施用，但多次收获作物的再生长间隔不因此缩短。",
+      "is_screenshot": false,
+      "evidence_type": "rule diagram",
+      "source_urls": [
+        "https://zh.stardewvalleywiki.com/%E7%94%9F%E9%95%BF%E6%BF%80%E7%B4%A0",
+        "https://zh.stardewvalleywiki.com/%E8%82%A5%E6%96%99",
+        "https://stardewvalleywiki.com/Speed-Gro?oldid=190630",
+        "https://stardewvalleywiki.com/Fertilizer?oldid=194274"
+      ]
+    },
+    {
+      "id": "speed-gro-stage-comparison",
+      "path": "../assets/zh/speed-gro-stage-comparison.svg",
+      "format": "svg",
+      "width": 390,
+      "height": 1160,
+      "placement": "H2-3 between short-stage and long-stage examples",
+      "alt": "Parsnip 和 Melon 的成长阶段条带对比，展示 Speed-Gro、Deluxe Speed-Gro 与 Hyper Speed-Gro 的首次收获日期差异",
+      "caption": "示例按公开阶段数据和固定 1.6 反编译实现演算；阶段分配与向上取整决定首次日期，非游戏内实测。",
+      "is_screenshot": false,
+      "evidence_type": "calculation diagram",
+      "source_urls": [
+        "https://stardewvalleywiki.com/Parsnip?oldid=191123",
+        "https://stardewvalleywiki.com/Melon?oldid=193510",
+        "https://stardewvalleywiki.com/Speed-Gro?oldid=190630",
+        "https://stardewvalleywiki.com/Deluxe_Speed-Gro?oldid=191196",
+        "https://stardewvalleywiki.com/Hyper_Speed-Gro?oldid=190377",
+        "https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629"
+      ]
+    },
+    {
+      "id": "strawberry-harvest-timeline",
+      "path": "../assets/zh/strawberry-harvest-timeline.svg",
+      "format": "svg",
+      "width": 390,
+      "height": 1040,
+      "placement": "H2-4 after Spring 13 strawberry case",
+      "alt": "草莓在春季第 13 日播种时的收获时间线，比较无肥料与 Speed-Gro 的首次收获和每次四天再生长",
+      "caption": "在 Spring 13 播种、当天浇水且无其他条件变化的演算中，Speed-Gro 将首次收获从 Spring 21 提前到 Spring 20；后续仍按 4 天再生长。",
+      "is_screenshot": false,
+      "evidence_type": "date timeline",
+      "source_urls": [
+        "https://zh.stardewvalleywiki.com/%E8%8D%89%E8%8E%93",
+        "https://stardewvalleywiki.com/Strawberry?oldid=192732",
+        "https://stardewvalleywiki.com/Fertilizer?oldid=194274",
+        "https://github.com/AcidicNic/StardewValleyDecompiled1.6/blob/2878fb248092f9f5b8704ad2cc7e19d0abe1cf45/StardewValley.TerrainFeatures/HoeDirt.cs#L584-L629"
+      ],
+      "assumptions": [
+        "室外普通耕地",
+        "春季第 13 日播种",
+        "当天浇水",
+        "肥料当天生效",
+        "不跨季且无其他地点或机制加成",
+        "首次成长使用 Speed-Gro，后续再生长固定为 4 天"
+      ]
+    }
+  ]
+}
