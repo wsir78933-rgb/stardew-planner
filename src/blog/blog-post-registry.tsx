@@ -42,6 +42,8 @@ import { PineTreeStardewEnglishArticle } from "./articles/pine-tree-stardew.en";
 import { PineTreeStardewChineseArticle } from "./articles/pine-tree-stardew.zh";
 import { ProfitMarginStardewEnglishArticle } from "./articles/profit-margin-stardew.en";
 import { ProfitMarginStardewChineseArticle } from "./articles/profit-margin-stardew.zh";
+import { WhatToGrowInGreenhouseStardewEnglishArticle } from "./articles/what-to-grow-in-greenhouse-stardew.en";
+import { WhatToGrowInGreenhouseStardewChineseArticle } from "./articles/what-to-grow-in-greenhouse-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -398,6 +400,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: true,
       Content: ProfitMarginStardewEnglishArticle,
     },
+    {
+      slug: "what-to-grow-in-greenhouse-stardew",
+      title: "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting",
+      description:
+        "Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+        alt: "Watercolor greenhouse interior with a central tilled crop bed, recognizable vegetables, two fruit trees on untiled side soil, and a watering can",
+      },
+      featured: true,
+      Content: WhatToGrowInGreenhouseStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -713,6 +730,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: ProfitMarginStardewChineseArticle,
+    },
+    {
+      slug: "what-to-grow-in-greenhouse-stardew",
+      title: "星露谷温室种什么？按手头种源、等待时间与收获节奏选择",
+      description:
+        "星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+        alt: "水彩温室内景：中央翻过的耕地里长着可辨认的蔬菜，左右未翻土边缘各有一棵果树，前景放着喷壶。",
+      },
+      featured: true,
+      Content: WhatToGrowInGreenhouseStardewChineseArticle,
     },
   ],
 };

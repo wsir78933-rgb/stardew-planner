@@ -28,6 +28,7 @@ const expectedBlogSitemapPathnames = [
   "/last-day-to-plant-stardew",
   "/pine-tree-stardew",
   "/profit-margin-stardew",
+  "/what-to-grow-in-greenhouse-stardew",
   "/zh/blog",
   "/zh/blog/archive",
   "/zh/carpenter-stardew",
@@ -51,6 +52,7 @@ const expectedBlogSitemapPathnames = [
   "/zh/last-day-to-plant-stardew",
   "/zh/pine-tree-stardew",
   "/zh/profit-margin-stardew",
+  "/zh/what-to-grow-in-greenhouse-stardew",
 ] as const;
 
 it("writes robots.txt with the absolute sitemap URL", () => {

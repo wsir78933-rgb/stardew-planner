@@ -871,6 +871,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://stardewvalleywiki.com/Multiplayer",
     ],
   },
+  {
+    pathname: "/what-to-grow-in-greenhouse-stardew",
+    staticPageFile: "what-to-grow-in-greenhouse-stardew.html",
+    heading: "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting",
+    metadata: {
+      title: "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting",
+      description:
+        "Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+        alt: "Watercolor greenhouse interior with a central tilled crop bed, recognizable vegetables, two fruit trees on untiled side soil, and a watering can",
+      },
+    ],
+    requiredBodyPhrases: [
+      "There is no single crop that fits every Greenhouse",
+      "Use the two choice tables above as the tie-breaker",
+    ],
+    requiredHrefs: [
+      "https://stardewvalleywiki.com/Greenhouse",
+      "https://stardewvalleywiki.com/Ancient_Fruit",
+      "https://stardewvalleywiki.com/Starfruit_Seeds",
+    ],
+  },
 
   {
     pathname: "/zh/blog",
@@ -1565,6 +1594,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "/zh/how-to-earn-money-stardew",
       "https://zh.stardewvalleywiki.com/选项",
       "https://stardewvalleywiki.com/Multiplayer#Profit_margins",
+    ],
+  },
+  {
+    pathname: "/zh/what-to-grow-in-greenhouse-stardew",
+    staticPageFile: "zh/what-to-grow-in-greenhouse-stardew.html",
+    heading: "星露谷温室种什么？按手头种源、等待时间与收获节奏选择",
+    metadata: {
+      title: "星露谷温室种什么？按手头种源、等待时间与收获节奏选择",
+      description:
+        "星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+        alt: "水彩温室内景：中央翻过的耕地里长着可辨认的蔬菜，左右未翻土边缘各有一棵果树，前景放着喷壶。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "温室能用后，种什么要看你的进度和手上的种源",
+      "把手头的种源填进第一列，再按首收等待、再生或结果间隔和页面原文产出来判断",
+    ],
+    requiredHrefs: [
+      "https://stardewvalleywiki.com/Greenhouse",
+      "https://zh.stardewvalleywiki.com/%E4%B8%8A%E5%8F%A4%E6%B0%B4%E6%9E%9C",
+      "https://zh.stardewvalleywiki.com/%E8%8B%B9%E6%9E%9C%E6%A0%91%E8%8B%97",
     ],
   },
 ];

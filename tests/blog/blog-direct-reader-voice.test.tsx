@@ -41,6 +41,8 @@ import { PineTreeStardewEnglishArticle } from "../../src/blog/articles/pine-tree
 import { PineTreeStardewChineseArticle } from "../../src/blog/articles/pine-tree-stardew.zh";
 import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profit-margin-stardew.en";
 import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
+import { WhatToGrowInGreenhouseStardewEnglishArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.en";
+import { WhatToGrowInGreenhouseStardewChineseArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -80,6 +82,10 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
   },
   { Component: PineTreeStardewEnglishArticle, slug: "pine-tree-stardew" },
   { Component: ProfitMarginStardewEnglishArticle, slug: "profit-margin-stardew" },
+  {
+    Component: WhatToGrowInGreenhouseStardewEnglishArticle,
+    slug: "what-to-grow-in-greenhouse-stardew",
+  },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -115,6 +121,10 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   },
   { Component: PineTreeStardewChineseArticle, slug: "pine-tree-stardew" },
   { Component: ProfitMarginStardewChineseArticle, slug: "profit-margin-stardew" },
+  {
+    Component: WhatToGrowInGreenhouseStardewChineseArticle,
+    slug: "what-to-grow-in-greenhouse-stardew",
+  },
 ];
 
 const englishAuthorFacingPatterns = [
@@ -166,6 +176,7 @@ function expectNoAuthorFacingPatterns(
   // do not rewrite the locked copy to satisfy the generic author-facing scan.
   // Locked trees English body uses "do not use this page as a second indoor guide".
   // Locked last-day zh-CN body uses 下面按季节查表 as a lookup instruction.
+  // Locked greenhouse zh-CN body uses 下面按首收、再生和种源拆开候选 as a lookup instruction.
   // Locked Pine zh-CN body uses 本文 to preserve an unresolved natural-tree-stage boundary.
   const skippedPatternText =
     articleFixture.slug === "sprinkler-stardew"
@@ -174,9 +185,11 @@ function expectNoAuthorFacingPatterns(
         ? String(/\buse this page\b/i)
         : articleFixture.slug === "last-day-to-plant-stardew"
           ? String(/下面按/)
-          : articleFixture.slug === "pine-tree-stardew"
-            ? String(/本文/)
-            : null;
+          : articleFixture.slug === "what-to-grow-in-greenhouse-stardew"
+            ? String(/下面按/)
+            : articleFixture.slug === "pine-tree-stardew"
+              ? String(/本文/)
+              : null;
   const patternsForArticle =
     skippedPatternText === null
       ? forbiddenPatterns

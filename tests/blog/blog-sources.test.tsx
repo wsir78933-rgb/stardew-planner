@@ -41,6 +41,8 @@ import { PineTreeStardewEnglishArticle } from "../../src/blog/articles/pine-tree
 import { PineTreeStardewChineseArticle } from "../../src/blog/articles/pine-tree-stardew.zh";
 import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profit-margin-stardew.en";
 import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
+import { WhatToGrowInGreenhouseStardewEnglishArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.en";
+import { WhatToGrowInGreenhouseStardewChineseArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -2131,6 +2133,83 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       },
     ],
   },
+  {
+    Article: WhatToGrowInGreenhouseStardewEnglishArticle,
+    heading: "Sources",
+    name: "English what-to-grow-in-greenhouse-stardew article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Greenhouse", label: "Greenhouse - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Ancient_Fruit", label: "Ancient Fruit - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Ancient_Seeds", label: "Ancient Seeds - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Starfruit", label: "Starfruit - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Starfruit_Seeds", label: "Starfruit Seeds - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Sweet_Gem_Berry", label: "Sweet Gem Berry - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Rare_Seed", label: "Rare Seed - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Hops", label: "Hops - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Hops_Starter", label: "Hops Starter - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Blueberry", label: "Blueberry - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Blueberry_Seeds", label: "Blueberry Seeds - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Cranberries", label: "Cranberries - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Cranberry_Seeds", label: "Cranberry Seeds - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Strawberry", label: "Strawberry - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Strawberry_Seeds", label: "Strawberry Seeds - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Pineapple", label: "Pineapple - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Pineapple_Seeds", label: "Pineapple Seeds - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Apple", label: "Apple - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Apple_Sapling", label: "Apple Sapling - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Peach", label: "Peach - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Peach_Sapling", label: "Peach Sapling - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Pomegranate", label: "Pomegranate - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Pomegranate_Sapling", label: "Pomegranate Sapling - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Banana", label: "Banana - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Banana_Sapling", label: "Banana Sapling - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Mango", label: "Mango - Stardew Valley Wiki" },
+      { href: "https://stardewvalleywiki.com/Mango_Sapling", label: "Mango Sapling - Stardew Valley Wiki" },
+    ],
+  },
+  {
+    Article: WhatToGrowInGreenhouseStardewChineseArticle,
+    heading: "来源",
+    name: "Chinese what-to-grow-in-greenhouse-stardew article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Greenhouse", label: "温室 - Stardew Valley Wiki" },
+      { href: "https://zh.stardewvalleywiki.com/%E4%B8%8A%E5%8F%A4%E6%B0%B4%E6%9E%9C", label: "上古水果" },
+      { href: "https://zh.stardewvalleywiki.com/%E4%B8%8A%E5%8F%A4%E7%A7%8D%E5%AD%90", label: "上古种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%9D%A8%E6%A1%83", label: "杨桃" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%9D%A8%E6%A1%83%E7%A7%8D%E5%AD%90", label: "杨桃种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E5%AE%9D%E7%9F%B3%E7%94%9C%E8%8E%93", label: "宝石甜莓" },
+      { href: "https://zh.stardewvalleywiki.com/%E7%A8%80%E6%9C%89%E7%A7%8D%E5%AD%90", label: "稀有种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8F%A0%E8%90%9D", label: "菠萝" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8F%A0%E8%90%9D%E7%A7%8D%E5%AD%90", label: "菠萝种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E5%95%A4%E9%85%92%E8%8A%B1", label: "啤酒花" },
+      { href: "https://zh.stardewvalleywiki.com/%E5%95%A4%E9%85%92%E8%8A%B1%E7%A7%8D%E5%AD%90", label: "啤酒花种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8D%89%E8%8E%93", label: "草莓" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8D%89%E8%8E%93%E7%A7%8D%E5%AD%90", label: "草莓种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%93%9D%E8%8E%93", label: "蓝莓" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%93%9D%E8%8E%93%E7%A7%8D%E5%AD%90", label: "蓝莓种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%94%93%E8%B6%8A%E8%8E%93", label: "蔓越莓" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%94%93%E8%B6%8A%E8%8E%93%E7%A7%8D%E5%AD%90", label: "蔓越莓种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E4%BB%99%E4%BA%BA%E6%8E%8C%E6%9E%9C%E5%AD%90", label: "仙人掌果子" },
+      { href: "https://zh.stardewvalleywiki.com/%E4%BB%99%E4%BA%BA%E6%8E%8C%E7%A7%8D%E5%AD%90", label: "仙人掌种子" },
+      { href: "https://zh.stardewvalleywiki.com/%E5%92%96%E5%95%A1%E8%B1%86", label: "咖啡豆" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8B%B9%E6%9E%9C", label: "苹果" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8B%B9%E6%9E%9C%E6%A0%91%E8%8B%97", label: "苹果树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%9D%8F%E5%AD%90", label: "杏子" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%9D%8F%E5%AD%90%E6%A0%91%E8%8B%97", label: "杏子树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%A8%B1%E6%A1%83", label: "樱桃" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%A8%B1%E6%A1%83%E6%A0%91%E8%8B%97", label: "樱桃树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%A9%99%E5%AD%90", label: "橙子" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%A9%99%E5%AD%90%E6%A0%91%E8%8B%97", label: "橙子树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%A1%83%E5%AD%90", label: "桃子" },
+      { href: "https://zh.stardewvalleywiki.com/%E6%A1%83%E5%AD%90%E6%A0%91%E8%8B%97", label: "桃子树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E7%9F%B3%E6%A6%B4", label: "石榴" },
+      { href: "https://zh.stardewvalleywiki.com/%E7%9F%B3%E6%A6%B4%E6%A0%91%E8%8B%97", label: "石榴树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E9%A6%99%E8%95%89", label: "香蕉" },
+      { href: "https://zh.stardewvalleywiki.com/%E9%A6%99%E8%95%89%E6%A0%91%E8%8B%97", label: "香蕉树苗" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8A%92%E6%9E%9C", label: "芒果" },
+      { href: "https://zh.stardewvalleywiki.com/%E8%8A%92%E6%9E%9C%E5%B9%BC%E8%8B%97", label: "芒果幼苗" },
+    ],
+  },
 ];
 
 function getSourceSectionMarkup(articleMarkup: string, articleName: string) {
@@ -2224,4 +2303,3 @@ it("preserves each localized article's source links, labels, notes, and order", 
     }
   }
 });
-

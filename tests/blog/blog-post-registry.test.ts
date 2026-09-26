@@ -32,6 +32,7 @@ const expectedSlugs = [
   "last-day-to-plant-stardew",
   "pine-tree-stardew",
   "profit-margin-stardew",
+  "what-to-grow-in-greenhouse-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -66,16 +67,17 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twenty-one canonical blog identities in publishing order", () => {
+it("keeps the twenty-two canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
   expect(isBlogPostSlug("pine-tree-stardew")).toBe(true);
   expect(isBlogPostSlug("profit-margin-stardew")).toBe(true);
+  expect(isBlogPostSlug("what-to-grow-in-greenhouse-stardew")).toBe(true);
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the forty-two localized root-level canonical article paths", () => {
+it("publishes only the forty-four localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -98,6 +100,7 @@ it("publishes only the forty-two localized root-level canonical article paths", 
     "/last-day-to-plant-stardew/",
     "/pine-tree-stardew/",
     "/profit-margin-stardew/",
+    "/what-to-grow-in-greenhouse-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -119,6 +122,7 @@ it("publishes only the forty-two localized root-level canonical article paths", 
     "/zh/last-day-to-plant-stardew/",
     "/zh/pine-tree-stardew/",
     "/zh/profit-margin-stardew/",
+    "/zh/what-to-grow-in-greenhouse-stardew/",
   ]);
 });
 
@@ -532,6 +536,32 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "像素风农场封面：装满作物的出货箱旁摆着钱袋和金币。",
     },
   });
+  expect(englishPosts[21]).toMatchObject({
+    title: "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting",
+    description:
+      "Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.",
+    topic: "Stardew Valley Guides",
+    author: "Stardew Valley Planner Team",
+    readTimeMinutes: 10,
+    featured: true,
+    coverImage: {
+      src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+      alt: "Watercolor greenhouse interior with a central tilled crop bed, recognizable vegetables, two fruit trees on untiled side soil, and a watering can",
+    },
+  });
+  expect(chinesePosts[21]).toMatchObject({
+    title: "星露谷温室种什么？按手头种源、等待时间与收获节奏选择",
+    description:
+      "星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。",
+    topic: "星露谷物语指南",
+    author: "星露谷规划器团队",
+    readTimeMinutes: 10,
+    featured: true,
+    coverImage: {
+      src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+      alt: "水彩温室内景：中央翻过的耕地里长着可辨认的蔬菜，左右未翻土边缘各有一棵果树，前景放着喷壶。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -563,6 +593,7 @@ it("binds every localized post to its own original blog cover", () => {
       "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
       "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
       "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
+      "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -590,6 +621,7 @@ it("binds every localized post to its own original blog cover", () => {
       "last-day-to-plant-stardew": "/blog/last-day-to-plant-stardew-cover.webp",
       "pine-tree-stardew": "/blog/pine-tree-stardew-cover.webp",
       "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
+      "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
     },
   } as const;
 
@@ -689,7 +721,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: profit-margin-stardew.",
+    "Expected: carpenter-stardew. Received: what-to-grow-in-greenhouse-stardew.",
   );
 });
 
