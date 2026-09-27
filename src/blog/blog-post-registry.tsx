@@ -46,6 +46,8 @@ import { WhatToGrowInGreenhouseStardewEnglishArticle } from "./articles/what-to-
 import { WhatToGrowInGreenhouseStardewChineseArticle } from "./articles/what-to-grow-in-greenhouse-stardew.zh";
 import { StardewFruitEnglishArticle } from "./articles/stardew-fruit.en";
 import { StardewFruitChineseArticle } from "./articles/stardew-fruit.zh";
+import { OakTreeVsMapleStardewEnglishArticle } from "./articles/oak-tree-vs-maple-stardew.en";
+import { OakTreeVsMapleStardewChineseArticle } from "./articles/oak-tree-vs-maple-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -432,6 +434,22 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: false,
       Content: StardewFruitEnglishArticle,
     },
+    {
+      slug: "oak-tree-vs-maple-stardew",
+      title:
+        "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+      description:
+        "Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 26,
+      coverImage: {
+        src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+        alt: "Watercolor of a mature oak with a wooden bucket and acorns beside a mature maple with a wooden bucket and maple seeds, along a farm road.",
+      },
+      featured: true,
+      Content: OakTreeVsMapleStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -777,6 +795,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: StardewFruitChineseArticle,
+    },
+    {
+      slug: "oak-tree-vs-maple-stardew",
+      title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+      description:
+        "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 18,
+      coverImage: {
+        src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+        alt: "水彩：橡树挂着木桶，树下是橡子；枫树挂着木桶，树下是枫树种子。土路通向远处的农舍。",
+      },
+      featured: true,
+      Content: OakTreeVsMapleStardewChineseArticle,
     },
   ],
 };

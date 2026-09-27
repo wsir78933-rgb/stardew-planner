@@ -122,6 +122,7 @@ const localizedBlogPostPaths: Readonly<
     "profit-margin-stardew": "/profit-margin-stardew",
     "what-to-grow-in-greenhouse-stardew": "/what-to-grow-in-greenhouse-stardew",
     "stardew-fruit": "/stardew-fruit",
+    "oak-tree-vs-maple-stardew": "/oak-tree-vs-maple-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -148,6 +149,7 @@ const localizedBlogPostPaths: Readonly<
     "profit-margin-stardew": "/zh/profit-margin-stardew",
     "what-to-grow-in-greenhouse-stardew": "/zh/what-to-grow-in-greenhouse-stardew",
     "stardew-fruit": "/zh/stardew-fruit",
+    "oak-tree-vs-maple-stardew": "/zh/oak-tree-vs-maple-stardew",
   },
 };
 

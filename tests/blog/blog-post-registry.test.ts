@@ -34,6 +34,7 @@ const expectedSlugs = [
   "profit-margin-stardew",
   "what-to-grow-in-greenhouse-stardew",
   "stardew-fruit",
+  "oak-tree-vs-maple-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -68,7 +69,7 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twenty-three canonical blog identities in publishing order", () => {
+it("keeps the twenty-four canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
@@ -78,7 +79,7 @@ it("keeps the twenty-three canonical blog identities in publishing order", () =>
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the forty-six localized root-level canonical article paths", () => {
+it("publishes only the forty-eight localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -103,6 +104,7 @@ it("publishes only the forty-six localized root-level canonical article paths", 
     "/profit-margin-stardew/",
     "/what-to-grow-in-greenhouse-stardew/",
     "/stardew-fruit/",
+    "/oak-tree-vs-maple-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -126,6 +128,7 @@ it("publishes only the forty-six localized root-level canonical article paths", 
     "/zh/profit-margin-stardew/",
     "/zh/what-to-grow-in-greenhouse-stardew/",
     "/zh/stardew-fruit/",
+    "/zh/oak-tree-vs-maple-stardew/",
   ]);
 });
 
@@ -163,6 +166,7 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     true,
     true,
     false,
+    true,
   ]);
   expect(chinesePosts.every((post) => post.featured)).toBe(true);
   expect(getBlogPostBySlug("en", "carpenter-stardew")?.slug).toBe(
@@ -589,6 +593,33 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
       alt: "水彩温室内景：中央翻过的耕地里长着可辨认的蔬菜，左右未翻土边缘各有一棵果树，前景放着喷壶。",
     },
   });
+  expect(englishPosts[23]).toMatchObject({
+    title:
+      "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+    description:
+      "Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.",
+    topic: "Stardew Valley Guides",
+    author: "Stardew Valley Planner Team",
+    readTimeMinutes: 26,
+    featured: true,
+    coverImage: {
+      src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+      alt: "Watercolor of a mature oak with a wooden bucket and acorns beside a mature maple with a wooden bucket and maple seeds, along a farm road.",
+    },
+  });
+  expect(chinesePosts[23]).toMatchObject({
+    title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+    description:
+      "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
+    topic: "星露谷物语指南",
+    author: "星露谷规划器团队",
+    readTimeMinutes: 18,
+    featured: true,
+    coverImage: {
+      src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+      alt: "水彩：橡树挂着木桶，树下是橡子；枫树挂着木桶，树下是枫树种子。土路通向远处的农舍。",
+    },
+  });
   expect(getBlogPostBySlug("zh-CN", "missing-post" as never)).toBeUndefined();
 });
 
@@ -622,6 +653,7 @@ it("binds every localized post to its own original blog cover", () => {
       "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
+      "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -651,6 +683,7 @@ it("binds every localized post to its own original blog cover", () => {
       "profit-margin-stardew": "/blog/profit-margin-stardew-cover.webp",
       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
+      "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
     },
   } as const;
 
@@ -750,7 +783,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: stardew-fruit.",
+    "Expected: carpenter-stardew. Received: oak-tree-vs-maple-stardew.",
   );
 });
 

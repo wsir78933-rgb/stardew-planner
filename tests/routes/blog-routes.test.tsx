@@ -50,11 +50,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/stardew-valley-trees"');
   expect(indexMarkup).toContain('href="/maple-tree-stardew"');
   expect(indexMarkup).toContain('href="/best-spring-crop-stardew"');
-  expect(indexMarkup).toContain('href="/how-to-earn-money-stardew"');
-  expect(indexMarkup).toContain('href="/rancher-or-tiller-stardew"');
-  expect(indexMarkup).toContain('href="/summer-crops-stardew"');
-  expect(indexMarkup).toContain('href="/fall-crops-stardew"');
-  expect(indexMarkup).toContain('href="/how-to-level-up-farming-stardew"');
+  expect(indexMarkup).toContain('href="/oak-tree-vs-maple-stardew"');
   expect(indexMarkup).toContain('href="/last-day-to-plant-stardew"');
   expect(indexMarkup).toContain('href="/pine-tree-stardew"');
   expect(indexMarkup).toContain('href="/profit-margin-stardew"');
@@ -91,11 +87,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/stardew-valley-trees"');
   expect(indexMarkup).toContain('href="/zh/maple-tree-stardew"');
   expect(indexMarkup).toContain('href="/zh/best-spring-crop-stardew"');
-  expect(indexMarkup).toContain('href="/zh/how-to-earn-money-stardew"');
-  expect(indexMarkup).toContain('href="/zh/rancher-or-tiller-stardew"');
-  expect(indexMarkup).toContain('href="/zh/summer-crops-stardew"');
-  expect(indexMarkup).toContain('href="/zh/fall-crops-stardew"');
-  expect(indexMarkup).toContain('href="/zh/how-to-level-up-farming-stardew"');
+  expect(indexMarkup).toContain('href="/zh/oak-tree-vs-maple-stardew"');
   expect(indexMarkup).toContain('href="/zh/last-day-to-plant-stardew"');
   expect(indexMarkup).toContain('href="/zh/pine-tree-stardew"');
   expect(indexMarkup).toContain('href="/zh/profit-margin-stardew"');
@@ -595,6 +587,55 @@ it("renders the paired profit-margin article routes with locked metadata and one
     title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
     description:
       "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
+  });
+});
+
+it("renders the paired oak and maple article routes with locked metadata and one page-level heading", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "oak-tree-vs-maple-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "oak-tree-vs-maple-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+  );
+  expect(englishMarkup).toContain(
+    "/blog/illustrations/oak-tree-vs-maple-stardew-en-names.webp",
+  );
+  expect(englishMarkup).toContain(
+    "/blog/illustrations/oak-tree-vs-maple-stardew-en-check.webp",
+  );
+  expect(chineseMarkup).toContain(
+    "/blog/illustrations/oak-tree-vs-maple-stardew-zh-products.webp",
+  );
+  expect(englishMarkup).toContain('loading="lazy"');
+  expect(chineseMarkup).toContain('loading="lazy"');
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect(englishMarkup).not.toContain("FAQPage");
+  expect(chineseMarkup).not.toContain("FAQPage");
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title:
+      "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+    description:
+      "Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.",
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+    description:
+      "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
   });
 });
 

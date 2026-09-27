@@ -1,0 +1,14 @@
+{
+  "kind": "internal-operation-canary",
+  "visibility": "internal-only",
+  "runId": "oak-tree-vs-maple-stardew-2026-09-27",
+  "canary": "sv-oakmaple-6f6aae348784a67c717d502dd77522d9fc9b6f4ec9bded5c",
+  "canarySha256": "3b00758cb3cb818d1ff6c814fa80dbee8486205cc3c43acf0e0722cc1cd0f9d0",
+  "writtenAt": "2026-09-27T17:24:13.904664+08:00",
+  "publicOutput": false,
+  "readback": {
+    "method": "read UTF-8 JSON, hash canary field with SHA-256",
+    "observedCanarySha256": "3b00758cb3cb818d1ff6c814fa80dbee8486205cc3c43acf0e0722cc1cd0f9d0",
+    "matchesWrittenHash": true
+  }
+}

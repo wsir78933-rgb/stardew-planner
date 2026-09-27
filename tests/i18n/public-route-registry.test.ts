@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(29);
+  expect(canonicalPublicPaths).toHaveLength(30);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -154,8 +154,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/stardew-fruit")).toBe(
     "/zh/stardew-fruit",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(58);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(56);
+  expect(getLocalizedPublicPath("en", "/oak-tree-vs-maple-stardew")).toBe(
+    "/oak-tree-vs-maple-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/oak-tree-vs-maple-stardew")).toBe(
+    "/zh/oak-tree-vs-maple-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(60);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(58);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -209,6 +215,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/profit-margin-stardew");
   expect(indexablePathnames).toContain("/stardew-fruit");
   expect(indexablePathnames).toContain("/zh/stardew-fruit");
+  expect(indexablePathnames).toContain("/oak-tree-vs-maple-stardew");
+  expect(indexablePathnames).toContain("/zh/oak-tree-vs-maple-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -238,6 +246,7 @@ it("registers the direct-entry blog routes", () => {
       "/pine-tree-stardew",
       "/profit-margin-stardew",
       "/stardew-fruit",
+      "/oak-tree-vs-maple-stardew",
     ]),
   );
 });

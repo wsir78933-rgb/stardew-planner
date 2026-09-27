@@ -43,6 +43,8 @@ import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profi
 import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
 import { WhatToGrowInGreenhouseStardewEnglishArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.en";
 import { WhatToGrowInGreenhouseStardewChineseArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.zh";
+import { OakTreeVsMapleStardewEnglishArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.en";
+import { OakTreeVsMapleStardewChineseArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -2208,6 +2210,83 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       { href: "https://zh.stardewvalleywiki.com/%E9%A6%99%E8%95%89%E6%A0%91%E8%8B%97", label: "香蕉树苗" },
       { href: "https://zh.stardewvalleywiki.com/%E8%8A%92%E6%9E%9C", label: "芒果" },
       { href: "https://zh.stardewvalleywiki.com/%E8%8A%92%E6%9E%9C%E5%B9%BC%E8%8B%97", label: "芒果幼苗" },
+    ],
+  },
+  {
+    Article: OakTreeVsMapleStardewEnglishArticle,
+    heading: "Sources",
+    name: "English oak-tree-vs-maple-stardew article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/Oak_Tree",
+        label: "Oak Tree on the Stardew Valley Wiki",
+        note: ": grows from an Acorn; 7 days with an ordinary Tapper and 3 days with a Heavy Tapper; fall change outside Pelican Town and the Greenhouse unless a Tapper is on the tree; an oak outside the farm, but not in Pelican Town, can be chopped or tapped; this page does not replace the Acorn by season.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Maple_Tree",
+        label: "Maple Tree on the Stardew Valley Wiki",
+        note: ": grows from a Maple Seed; 9 days with an ordinary Tapper and 4 days with a Heavy Tapper; a shake on Fall 14–28 drops a Hazelnut instead of a Maple Seed; the same fall change as the oak page; a maple outside the farm, but not in Pelican Town, can be chopped or tapped.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Trees",
+        label: "Trees on the Stardew Valley Wiki",
+        note: ": stage 5 can be shaken, tapped, or chopped; Wood 12–16 and the listed modifiers; Sap 5; chop seed count 0–2 at Foraging level 1 or higher; that count is not stated for a shake; shake seeds can drop immediately after the level-up, while chop seeds wait until you sleep and see the level-up; maple shake in the last two weeks of fall, with no dates printed; a Tapper blocks the chop and the seed shake until removed; a moss shake is not documented as a seed drop; the 1.6 history line for the fall change; Pine Cone, Pine Tar, mahogany sap, and mahogany hardwood only as names that are not this pair.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Tapper",
+        label: "Tapper on the Stardew Valley Wiki",
+        note: ": Oak Resin in 7 Nights and Maple Syrup in 9 Nights; winter production continues on oak and maple; a Tapper cannot go on a fruit tree; remove it with one axe or pickaxe hit and the Tapper remains; lightning or a bomb destroys it and its contents; recipe listed at Foraging level 4, with a 1.6 history line from level 3.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Heavy_Tapper",
+        label: "Heavy Tapper on the Stardew Valley Wiki",
+        note: ": Oak Resin in 3 Nights and Maple Syrup in 4 Nights; twice the speed does not replace the 3 Night and 4 Night waits; winter production continues on oak and maple; bugs note on the fall green-rain change; 1.6 history fixes heavy tappers turning normal trees into mushroom trees and does not say the green-rain bug was fixed; the lightning sentence on that page does not mention bombs.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Oak_Resin",
+        label: "Oak Resin on the Stardew Valley Wiki",
+        note: ": 7 days or 3 days; not edible; Keg and Deluxe Speed-Gro ingredients and Farming level 8; Enchanter’s Bundle; Exotic Foraging as an option; Haunted Skull at 1.30 percent; Wood Chipper at 0.66 percent.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Maple_Syrup",
+        label: "Maple Syrup on the Stardew Valley Wiki",
+        note: ": 9 days or 4 days; Energy 50 and Health 22; Bee House and Maple Bar ingredients; Chef’s Bundle; Exotic Foraging as an option; Wood Chipper at 0.66 percent.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Acorn",
+        label: "Acorn on the Stardew Valley Wiki",
+        note: ": the item name, the Foraging level 1 shake or chop drop, and Field Snack using one Acorn together with a Maple Seed and a Pine Cone; a Mystic Tree Seed recipe on that page also uses an Acorn and a Maple Seed.",
+      },
+      {
+        href: "https://stardewvalleywiki.com/Maple_Seed",
+        label: "Maple Seed on the Stardew Valley Wiki",
+        note: ": the item name, the same Foraging level 1 drop, and Field Snack as on the Acorn page.",
+      },
+    ],
+  },
+  {
+    Article: OakTreeVsMapleStardewChineseArticle,
+    checkedLabel:
+      "正文里的配方、采集间隔、售价和季节限制，来自下面这些维基页面。某条只链到英文维基时，是因为中文维基那一页没有这句。",
+    heading: "来源",
+    name: "Chinese oak-tree-vs-maple-stardew article",
+    sources: [
+      { href: "https://zh.stardewvalleywiki.com/橡树", label: "中文星露谷维基：橡树" },
+      { href: "https://zh.stardewvalleywiki.com/枫树", label: "中文星露谷维基：枫树" },
+      { href: "https://zh.stardewvalleywiki.com/橡子", label: "中文星露谷维基：橡子" },
+      { href: "https://zh.stardewvalleywiki.com/枫树种子", label: "中文星露谷维基：枫树种子" },
+      { href: "https://zh.stardewvalleywiki.com/橡树树脂", label: "中文星露谷维基：橡树树脂" },
+      { href: "https://zh.stardewvalleywiki.com/枫糖浆", label: "中文星露谷维基：枫糖浆" },
+      { href: "https://zh.stardewvalleywiki.com/树液采集器", label: "中文星露谷维基：树液采集器" },
+      { href: "https://zh.stardewvalleywiki.com/重型树液采集器", label: "中文星露谷维基：重型树液采集器" },
+      { href: "https://zh.stardewvalleywiki.com/树", label: "中文星露谷维基：树" },
+      { href: "https://zh.stardewvalleywiki.com/果树", label: "中文星露谷维基：果树" },
+      { href: "https://stardewvalleywiki.com/Tapper", label: "Stardew Valley Wiki: Tapper" },
+      { href: "https://stardewvalleywiki.com/Heavy_Tapper", label: "Stardew Valley Wiki: Heavy Tapper" },
+      { href: "https://stardewvalleywiki.com/Trees", label: "Stardew Valley Wiki: Trees" },
+      { href: "https://stardewvalleywiki.com/Acorn", label: "Stardew Valley Wiki: Acorn" },
+      { href: "https://stardewvalleywiki.com/Maple_Seed", label: "Stardew Valley Wiki: Maple Seed" },
+      { href: "https://stardewvalleywiki.com/Maple_Tree", label: "Stardew Valley Wiki: Maple Tree" },
     ],
   },
 ];

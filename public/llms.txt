@@ -38,6 +38,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar](https://stardewvalleyplanner.art/pine-tree-stardew): Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.
 - [Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change](https://stardewvalleyplanner.art/profit-margin-stardew): Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.
 - [What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting](https://stardewvalleyplanner.art/what-to-grow-in-greenhouse-stardew): Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.
+- [Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree](https://stardewvalleyplanner.art/oak-tree-vs-maple-stardew): Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.
 
 ## 简体中文
 
@@ -75,3 +76,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷松树种植先看格子，不浇水也不能随便种](https://stardewvalleyplanner.art/zh/pine-tree-stardew): 松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。
 - [Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选](https://stardewvalleyplanner.art/zh/profit-margin-stardew): Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。
 - [星露谷温室种什么？按手头种源、等待时间与收获节奏选择](https://stardewvalleyplanner.art/zh/what-to-grow-in-greenhouse-stardew): 星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。
+- [星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。

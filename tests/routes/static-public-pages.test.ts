@@ -900,6 +900,37 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://stardewvalleywiki.com/Starfruit_Seeds",
     ],
   },
+  {
+    pathname: "/oak-tree-vs-maple-stardew",
+    staticPageFile: "oak-tree-vs-maple-stardew.html",
+    heading:
+      "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+    metadata: {
+      title:
+        "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+      description:
+        "Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.",
+    },
+    documentLanguage: "en",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+        alt: "Watercolor of a mature oak with a wooden bucket and acorns beside a mature maple with a wooden bucket and maple seeds, along a farm road.",
+      },
+    ],
+    requiredBodyPhrases: [
+      "On a mature tree, an Acorn or Oak Resin means the tree is an oak",
+      "Wood in the 12–16 band does not mean a species",
+    ],
+    requiredHrefs: [
+      "https://stardewvalleywiki.com/Oak_Tree",
+      "/oak-tree-stardew",
+      "/maple-tree-stardew",
+    ],
+  },
 
   {
     pathname: "/zh/blog",
@@ -1623,6 +1654,35 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
       "https://stardewvalleywiki.com/Greenhouse",
       "https://zh.stardewvalleywiki.com/%E4%B8%8A%E5%8F%A4%E6%B0%B4%E6%9E%9C",
       "https://zh.stardewvalleywiki.com/%E8%8B%B9%E6%9E%9C%E6%A0%91%E8%8B%97",
+    ],
+  },
+  {
+    pathname: "/zh/oak-tree-vs-maple-stardew",
+    staticPageFile: "zh/oak-tree-vs-maple-stardew.html",
+    heading: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+    metadata: {
+      title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+      description:
+        "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
+    },
+    documentLanguage: "zh-CN",
+    schemaType: "Article",
+    articleOnlySchema: true,
+    shouldIndex: true,
+    coverImages: [
+      {
+        src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+        alt: "水彩：橡树挂着木桶，树下是橡子；枫树挂着木桶，树下是枫树种子。土路通向远处的农舍。",
+      },
+    ],
+    requiredBodyPhrases: [
+      "缺橡树树脂就留橡树",
+      "约 21.43 金一个间隔",
+    ],
+    requiredHrefs: [
+      "https://zh.stardewvalleywiki.com/橡树",
+      "https://zh.stardewvalleywiki.com/枫糖浆",
+      "/zh/stardew-valley-trees",
     ],
   },
 ];

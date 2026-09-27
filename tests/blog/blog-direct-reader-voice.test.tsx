@@ -43,6 +43,8 @@ import { ProfitMarginStardewEnglishArticle } from "../../src/blog/articles/profi
 import { ProfitMarginStardewChineseArticle } from "../../src/blog/articles/profit-margin-stardew.zh";
 import { WhatToGrowInGreenhouseStardewEnglishArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.en";
 import { WhatToGrowInGreenhouseStardewChineseArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.zh";
+import { OakTreeVsMapleStardewEnglishArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.en";
+import { OakTreeVsMapleStardewChineseArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.zh";
 
 type LocalizedArticleFixture = Readonly<{
   Component: () => ReactNode;
@@ -86,6 +88,10 @@ const englishArticleFixtures: readonly LocalizedArticleFixture[] = [
     Component: WhatToGrowInGreenhouseStardewEnglishArticle,
     slug: "what-to-grow-in-greenhouse-stardew",
   },
+  {
+    Component: OakTreeVsMapleStardewEnglishArticle,
+    slug: "oak-tree-vs-maple-stardew",
+  },
 ];
 
 const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
@@ -124,6 +130,10 @@ const chineseArticleFixtures: readonly LocalizedArticleFixture[] = [
   {
     Component: WhatToGrowInGreenhouseStardewChineseArticle,
     slug: "what-to-grow-in-greenhouse-stardew",
+  },
+  {
+    Component: OakTreeVsMapleStardewChineseArticle,
+    slug: "oak-tree-vs-maple-stardew",
   },
 ];
 
