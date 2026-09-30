@@ -2862,7 +2862,7 @@ function createMapContainer(
         resolvedTileGeometry.frameHeight,
       );
       const tileSprite = new pixi.Sprite({
-        roundPixels: true,
+        roundPixels: false,
         texture: tileTexture,
       });
 
