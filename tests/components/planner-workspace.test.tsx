@@ -340,7 +340,7 @@ describe("planner workspace preference persistence", () => {
     expect(savedPreferences).toEqual([
       {
         behaviorOptions: {
-          autoShowResourceClumps: true,
+          autoShowResourceClumps: false,
           freePlacement: true,
           gameCursors: true,
           leftHandMode: true,

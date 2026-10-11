@@ -20,7 +20,7 @@ export type EditorBehaviorOptions = Readonly<{
 
 export function createInitialEditorBehaviorOptions(): EditorBehaviorOptions {
   return {
-    autoShowResourceClumps: true,
+    autoShowResourceClumps: false,
     freePlacement: false,
     gameCursors: true,
     leftHandMode: false,

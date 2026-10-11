@@ -236,7 +236,7 @@ it("toggles range and resource-clump options and disables NPC paths on unsupport
   clickButton(requireButton(viewPanel, "Resource clumps"));
   expect(onBehaviorChange).toHaveBeenCalledExactlyOnceWith(
     "autoShowResourceClumps",
-    false,
+    true,
   );
 
   const unsupportedNpcPathButton = requireButton(viewPanel, "NPC paths");

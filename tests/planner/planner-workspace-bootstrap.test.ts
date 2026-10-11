@@ -281,7 +281,7 @@ describe("planner workspace bootstrap", () => {
     });
     expect(persistentPreferenceStore.load()).toEqual({
       behaviorOptions: {
-        autoShowResourceClumps: true,
+        autoShowResourceClumps: false,
         freePlacement: false,
         gameCursors: true,
         leftHandMode: true,

@@ -48,7 +48,7 @@ describe("planner save modal content", () => {
         onImportProject: () => undefined,
         onOpenProject: () => undefined,
         onRenameProject: () => undefined,
-        onSaveCurrentMap: () => undefined,
+        onSaveCurrentMap: async () => undefined,
         onSaveThumbnail: async () => undefined,
         projects: projectSummaries,
         season: "spring",

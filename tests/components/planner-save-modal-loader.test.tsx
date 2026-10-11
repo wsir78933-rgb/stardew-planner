@@ -69,7 +69,7 @@ describe("planner save-modal loader", () => {
         onImportProject: () => undefined,
         onOpenProject: () => undefined,
         onRenameProject: () => undefined,
-        onSaveCurrentMap: () => undefined,
+        onSaveCurrentMap: async () => undefined,
         onSaveThumbnail: async () => undefined,
         placementSnapshot: {} as never,
         projects: [],

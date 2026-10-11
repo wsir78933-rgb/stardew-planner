@@ -43,7 +43,7 @@ type PlannerSaveModalLoaderProperties = Readonly<{
   onImportProject: (serializedProject: string) => void;
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
-  onSaveCurrentMap: () => void;
+  onSaveCurrentMap: () => Promise<void>;
   onSaveThumbnail: () => Promise<void>;
   placementSnapshot: PlacementSnapshot;
   projects: readonly ReferenceProjectSummary[];

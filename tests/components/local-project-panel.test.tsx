@@ -32,7 +32,7 @@ const localProjectSummaries: readonly ReferenceProjectSummary[] = [
   },
 ];
 
-function ignoreLocalProjectAction(): void {}
+async function ignoreLocalProjectAction(): Promise<void> {}
 
 describe("local project panel", () => {
   it("renders the complete account-free local project action set", () => {

@@ -3,6 +3,8 @@ import {
   type MapImageExporter,
   type ScreenshotResolution,
 } from "../projects/map-image-export";
+import { createEmptyInteriorDecorState } from "../interior-decor/interior-decor-state";
+import { createPersistentPlacementSnapshot } from "../placement/placement-snapshot";
 import type { ReferenceProjectWorkspaceState } from "../reference-runtime/use-reference-project-workspace";
 import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import {
@@ -16,7 +18,10 @@ import {
   createCurrentMapImageExporterSlot,
   updateCurrentMapImageExporter,
 } from "./planner-workspace-map-image-exporter";
-import { saveCurrentCanonicalMapThumbnail } from "./planner-workspace-thumbnail-save";
+import {
+  capturePlannerMapThumbnail,
+  saveCurrentCanonicalMapThumbnail,
+} from "./planner-workspace-thumbnail-save";
 import type { PlannerWorkspaceAction, PlannerWorkspaceState } from "./planner-workspace-state";
 import { getPlannerMapById } from "../maps/map-catalog";
 
@@ -46,6 +51,21 @@ type PendingSmartSaveCanonicalSession = Readonly<{
   projectId: string;
 }>;
 
+type PlannerWorkspaceMapLayoutSnapshot = Readonly<{
+  mapRenderOptions: PlannerWorkspaceState["mapRenderOptions"];
+  placementSnapshot: PlannerWorkspaceState["placementHistory"]["currentState"];
+  season: PlannerWorkspaceState["season"];
+  selectedPlannerMapId: PlannerWorkspaceState["selectedPlannerMapId"];
+}>;
+
+type PlannerWorkspaceMapSaveContext = Readonly<{
+  activeProjectId: string | null;
+  activeSessionMapId: string | null;
+  activeSessionProjectId: string | null;
+  mapImageExporter: MapImageExporter;
+  plannerMapId: string;
+}>;
+
 type PlannerWorkspacePersistenceRuntimeInput = Readonly<{
   dispatchPlannerWorkspaceAction: (plannerWorkspaceAction: PlannerWorkspaceAction) => void;
   initialPlannerWorkspaceState: PlannerWorkspaceState;
@@ -64,6 +84,7 @@ export type PlannerWorkspacePersistenceRuntime = Readonly<{
     receivedMapImageExporter: MapImageExporter | null,
   ) => void;
   saveCurrentMap: () => void;
+  saveCurrentMapAndRefreshThumbnail: () => Promise<void>;
   saveThumbnail: () => Promise<void>;
   synchronizeCanonicalSession: () => void;
   updateWorkspaceSnapshot: (
@@ -201,6 +222,40 @@ export function createPlannerWorkspacePersistenceRuntime({
       saveResult === "created-canonical-session";
   }
 
+  async function saveCurrentMapAndRefreshThumbnail(): Promise<void> {
+    const savedPlannerWorkspaceMapLayout = createPlannerWorkspaceMapLayoutSnapshot(
+      currentPlannerWorkspaceState,
+    );
+    const capturedMapSaveContext = createPlannerWorkspaceMapSaveContext(
+      currentPlannerWorkspaceState,
+      currentWorkspaceState,
+      currentMapImageExporterSlot.current,
+      workspaceController,
+    );
+    const capturedPlannerMapThumbnail = await capturePlannerMapThumbnail(
+      capturedMapSaveContext.plannerMapId,
+      capturedMapSaveContext.mapImageExporter,
+    );
+    assertPlannerWorkspaceMapSaveContextIsCurrent(
+      capturedMapSaveContext,
+      savedPlannerWorkspaceMapLayout,
+      currentPlannerWorkspaceState,
+      currentWorkspaceState,
+      currentMapImageExporterSlot.current,
+      workspaceController,
+    );
+    saveCurrentMap();
+    const savedCanonicalSession = requireSavedPlannerWorkspaceMapSession(
+      capturedPlannerMapThumbnail.plannerMapId,
+      workspaceController,
+    );
+    workspaceController.saveThumbnail({
+      projectId: savedCanonicalSession.projectId,
+      mapId: savedCanonicalSession.mapId,
+      webpBytes: capturedPlannerMapThumbnail.webpBytes,
+    });
+  }
+
   async function saveThumbnail(): Promise<void> {
     const registeredMapImageExporter = currentMapImageExporterSlot.current;
     const currentCanonicalSession = getCurrentCanonicalSession(
@@ -240,6 +295,7 @@ export function createPlannerWorkspacePersistenceRuntime({
     handleMapChange,
     handleMapImageExporterReady,
     saveCurrentMap,
+    saveCurrentMapAndRefreshThumbnail,
     saveThumbnail,
     synchronizeCanonicalSession,
     updateWorkspaceSnapshot,
@@ -516,5 +572,253 @@ function createCurrentThumbnailWorkspaceSnapshot(
       registeredMapImageExporter?.plannerMapId === plannerWorkspaceState.selectedPlannerMapId
         ? registeredMapImageExporter.mapImageExporter
         : null,
+  };
+}
+
+function createPlannerWorkspaceMapSaveContext(
+  plannerWorkspaceState: PlannerWorkspaceState,
+  workspaceState: PlannerWorkspacePersistenceProjectState,
+  registeredMapImageExporter: Readonly<{
+    plannerMapId: string;
+    mapImageExporter: MapImageExporter;
+  }> | null,
+  workspaceController: Pick<
+    ReferenceProjectWorkspaceController,
+    "getPlannerMapIdForMapFile" | "getState"
+  >,
+): PlannerWorkspaceMapSaveContext {
+  const plannerMapId = plannerWorkspaceState.selectedPlannerMapId;
+  if (
+    registeredMapImageExporter === null
+    || registeredMapImageExporter.plannerMapId !== plannerMapId
+  ) {
+    const controllerState = workspaceController.getState();
+    throw new MapImageExportError(
+      "Cannot capture the current map preview because its exporter is unavailable; received project ID "
+        + `${JSON.stringify(controllerState.activeSession?.projectId ?? controllerState.activeProject?.id ?? null)}, map ID `
+        + `${JSON.stringify(controllerState.activeSession?.mapId ?? null)}, planner map ID `
+        + `${JSON.stringify(plannerMapId)}, and exporter planner map ID `
+        + `${JSON.stringify(registeredMapImageExporter?.plannerMapId ?? null)}.`,
+    );
+  }
+
+  const controllerState = workspaceController.getState();
+  const workspaceCanonicalSession = getCurrentCanonicalSession(
+    workspaceState.activeSession,
+    plannerWorkspaceState,
+    workspaceController,
+  );
+  if (!hasSameCanonicalSessionIdentity(
+    workspaceCanonicalSession,
+    controllerState.activeSession,
+  )) {
+    throw new MapImageExportError(
+      "Cannot capture the current map preview because the workspace and controller sessions differ; received workspace project ID "
+        + `${JSON.stringify(workspaceCanonicalSession?.projectId ?? null)}, map ID `
+        + `${JSON.stringify(workspaceCanonicalSession?.mapId ?? null)}, controller project ID `
+        + `${JSON.stringify(controllerState.activeSession?.projectId ?? null)}, map ID `
+        + `${JSON.stringify(controllerState.activeSession?.mapId ?? null)}, and planner map ID `
+        + `${JSON.stringify(plannerMapId)}.`,
+    );
+  }
+
+  if (controllerState.activeSession !== null) {
+    const activeSessionPlannerMapId = workspaceController.getPlannerMapIdForMapFile(
+      controllerState.activeSession.sourceMap.mapFile,
+    );
+    if (activeSessionPlannerMapId !== plannerMapId) {
+      throw new MapImageExportError(
+        "Cannot capture the current map preview because the active session resolves to another planner map; received project ID "
+          + `${JSON.stringify(controllerState.activeSession.projectId)}, map ID `
+          + `${JSON.stringify(controllerState.activeSession.mapId)}, resolved planner map ID `
+          + `${JSON.stringify(activeSessionPlannerMapId)}, and current planner map ID `
+          + `${JSON.stringify(plannerMapId)}.`,
+      );
+    }
+  }
+
+  return {
+    activeProjectId: controllerState.activeProject?.id ?? null,
+    activeSessionMapId: controllerState.activeSession?.mapId ?? null,
+    activeSessionProjectId: controllerState.activeSession?.projectId ?? null,
+    mapImageExporter: registeredMapImageExporter.mapImageExporter,
+    plannerMapId,
+  };
+}
+
+function assertPlannerWorkspaceMapSaveContextIsCurrent(
+  capturedMapSaveContext: PlannerWorkspaceMapSaveContext,
+  savedPlannerWorkspaceMapLayout: PlannerWorkspaceMapLayoutSnapshot,
+  currentPlannerWorkspaceState: PlannerWorkspaceState,
+  currentWorkspaceState: PlannerWorkspacePersistenceProjectState,
+  registeredMapImageExporter: Readonly<{
+    plannerMapId: string;
+    mapImageExporter: MapImageExporter;
+  }> | null,
+  workspaceController: Pick<
+    ReferenceProjectWorkspaceController,
+    "getPlannerMapIdForMapFile" | "getState"
+  >,
+): void {
+  const currentMapSaveContext = createPlannerWorkspaceMapSaveContext(
+    currentPlannerWorkspaceState,
+    currentWorkspaceState,
+    registeredMapImageExporter,
+    workspaceController,
+  );
+  if (
+    !hasSamePlannerWorkspaceMapSaveContext(
+      capturedMapSaveContext,
+      currentMapSaveContext,
+    )
+  ) {
+    throw new MapImageExportError(
+      "Planner map save context changed during thumbnail capture; received current project ID "
+        + `${JSON.stringify(currentMapSaveContext.activeProjectId)}, current session project ID `
+        + `${JSON.stringify(currentMapSaveContext.activeSessionProjectId)}, map ID `
+        + `${JSON.stringify(currentMapSaveContext.activeSessionMapId)}, planner map ID `
+        + `${JSON.stringify(currentMapSaveContext.plannerMapId)}, and exporter `
+        + `${JSON.stringify(currentMapSaveContext.mapImageExporter === capturedMapSaveContext.mapImageExporter ? "captured" : "different")}; captured project ID `
+        + `${JSON.stringify(capturedMapSaveContext.activeProjectId)}, session project ID `
+        + `${JSON.stringify(capturedMapSaveContext.activeSessionProjectId)}, map ID `
+        + `${JSON.stringify(capturedMapSaveContext.activeSessionMapId)}, and planner map ID `
+        + `${JSON.stringify(capturedMapSaveContext.plannerMapId)}.`,
+    );
+  }
+
+  const currentActiveSession = workspaceController.getState().activeSession;
+  assertPlannerWorkspaceMapLayoutMatchesSave(
+    savedPlannerWorkspaceMapLayout,
+    currentPlannerWorkspaceState,
+    currentActiveSession,
+  );
+}
+
+function hasSameCanonicalSessionIdentity(
+  firstSession: ReferenceProjectWorkspaceState["activeSession"],
+  secondSession: ReferenceProjectWorkspaceState["activeSession"],
+): boolean {
+  return firstSession === null
+    ? secondSession === null
+    : secondSession !== null
+      && firstSession.projectId === secondSession.projectId
+      && firstSession.mapId === secondSession.mapId;
+}
+
+function hasSamePlannerWorkspaceMapSaveContext(
+  firstContext: PlannerWorkspaceMapSaveContext,
+  secondContext: PlannerWorkspaceMapSaveContext,
+): boolean {
+  return firstContext.activeProjectId === secondContext.activeProjectId
+    && firstContext.activeSessionMapId === secondContext.activeSessionMapId
+    && firstContext.activeSessionProjectId === secondContext.activeSessionProjectId
+    && firstContext.mapImageExporter === secondContext.mapImageExporter
+    && firstContext.plannerMapId === secondContext.plannerMapId;
+}
+
+function requireSavedPlannerWorkspaceMapSession(
+  plannerMapId: string,
+  workspaceController: Pick<
+    ReferenceProjectWorkspaceController,
+    "getPlannerMapIdForMapFile" | "getState"
+  >,
+) {
+  const workspaceState = workspaceController.getState();
+  const activeSession = workspaceState.activeSession;
+  if (
+    activeSession === null
+    || workspaceState.activeProject?.id !== activeSession.projectId
+  ) {
+    throw new MapImageExportError(
+      "Cannot save the map preview after saving the current map because its canonical session is unavailable; received project ID "
+        + `${JSON.stringify(activeSession?.projectId ?? workspaceState.activeProject?.id ?? null)}, map ID `
+        + `${JSON.stringify(activeSession?.mapId ?? null)}, and planner map ID `
+        + `${JSON.stringify(plannerMapId)}.`,
+    );
+  }
+
+  const savedSessionPlannerMapId = workspaceController.getPlannerMapIdForMapFile(
+    activeSession.sourceMap.mapFile,
+  );
+  if (savedSessionPlannerMapId !== plannerMapId) {
+    throw new MapImageExportError(
+      "Cannot save the map preview because the saved canonical session resolves to another planner map; received project ID "
+        + `${JSON.stringify(activeSession.projectId)}, map ID `
+        + `${JSON.stringify(activeSession.mapId)}, resolved planner map ID `
+        + `${JSON.stringify(savedSessionPlannerMapId)}, and captured planner map ID `
+        + `${JSON.stringify(plannerMapId)}.`,
+    );
+  }
+  return activeSession;
+}
+
+function createPlannerWorkspaceMapLayoutSnapshot(
+  plannerWorkspaceState: PlannerWorkspaceState,
+): PlannerWorkspaceMapLayoutSnapshot {
+  return {
+    mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
+    placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
+    season: plannerWorkspaceState.season,
+    selectedPlannerMapId: plannerWorkspaceState.selectedPlannerMapId,
+  };
+}
+
+function assertPlannerWorkspaceMapLayoutMatchesSave(
+  savedPlannerWorkspaceMapLayout: PlannerWorkspaceMapLayoutSnapshot,
+  currentPlannerWorkspaceState: PlannerWorkspaceState,
+  currentSession: ReferenceProjectWorkspaceState["activeSession"],
+): void {
+  const changedLayoutFields: string[] = [];
+  if (
+    savedPlannerWorkspaceMapLayout.selectedPlannerMapId
+    !== currentPlannerWorkspaceState.selectedPlannerMapId
+  ) {
+    changedLayoutFields.push("selectedPlannerMapId");
+  }
+  if (savedPlannerWorkspaceMapLayout.season !== currentPlannerWorkspaceState.season) {
+    changedLayoutFields.push("season");
+  }
+  if (
+    JSON.stringify(savedPlannerWorkspaceMapLayout.mapRenderOptions)
+    !== JSON.stringify(currentPlannerWorkspaceState.mapRenderOptions)
+  ) {
+    changedLayoutFields.push("mapRenderOptions");
+  }
+  if (
+    JSON.stringify(
+      createNormalizedPlacementSnapshotForComparison(
+        savedPlannerWorkspaceMapLayout.placementSnapshot,
+      ),
+    )
+    !== JSON.stringify(
+      createNormalizedPlacementSnapshotForComparison(
+        currentPlannerWorkspaceState.placementHistory.currentState,
+      ),
+    )
+  ) {
+    changedLayoutFields.push("placementSnapshot");
+  }
+  if (changedLayoutFields.length === 0) return;
+
+  throw new MapImageExportError(
+    "Cannot save the map preview because the current planner layout changed during thumbnail capture; received changed fields "
+      + `${JSON.stringify(changedLayoutFields)}, current project ID `
+      + `${JSON.stringify(currentSession?.projectId ?? null)}, map ID `
+      + `${JSON.stringify(currentSession?.mapId ?? null)}, saved planner map ID `
+      + `${JSON.stringify(savedPlannerWorkspaceMapLayout.selectedPlannerMapId)}, and current planner map ID `
+      + `${JSON.stringify(currentPlannerWorkspaceState.selectedPlannerMapId)}.`,
+  );
+}
+
+function createNormalizedPlacementSnapshotForComparison(
+  placementSnapshot: PlannerWorkspaceState["placementHistory"]["currentState"],
+) {
+  const persistentPlacementSnapshot = createPersistentPlacementSnapshot(
+    placementSnapshot,
+  );
+  return {
+    ...persistentPlacementSnapshot,
+    interiorDecor:
+      persistentPlacementSnapshot.interiorDecor ?? createEmptyInteriorDecorState(),
   };
 }

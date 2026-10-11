@@ -34,7 +34,7 @@ type LocalProjectPanelProperties = Readonly<{
   onImportProject: (serializedProject: string) => void;
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
-  onSaveCurrentMap: () => void;
+  onSaveCurrentMap: () => Promise<void>;
 }>;
 
 export function LocalProjectPanel({
@@ -68,6 +68,8 @@ export function LocalProjectPanel({
   const [projectIdPendingDeletion, setProjectIdPendingDeletion] = useState<
     string | null
   >(null);
+  const [isSavingCurrentMap, setIsSavingCurrentMap] = useState(false);
+  const isSavingCurrentMapReference = useRef(false);
   const deleteButtonPendingDeletionRef = useRef<HTMLButtonElement | null>(null);
   const isStorageReady = storageStatus === "ready";
   const projectPendingDeletion = projects.find(
@@ -89,8 +91,21 @@ export function LocalProjectPanel({
     }
   }
 
-  function handleSaveCurrentMap(): void {
-    runProjectAction(onSaveCurrentMap, copy.savedToBrowser);
+  async function handleSaveCurrentMap(): Promise<void> {
+    if (isSavingCurrentMapReference.current) return;
+    isSavingCurrentMapReference.current = true;
+    setIsSavingCurrentMap(true);
+    try {
+      await onSaveCurrentMap();
+      setProjectActionErrorMessage(null);
+      setProjectActionNotice(copy.savedToBrowser);
+    } catch (caughtError) {
+      setProjectActionNotice(null);
+      setProjectActionErrorMessage(formatProjectActionError(caughtError, copy));
+    } finally {
+      isSavingCurrentMapReference.current = false;
+      setIsSavingCurrentMap(false);
+    }
   }
 
   function handleCreateProject(): void {
@@ -248,8 +263,9 @@ export function LocalProjectPanel({
           ) : null}
           <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
             <button
-              disabled={!isStorageReady}
-              onClick={handleSaveCurrentMap}
+              aria-busy={isSavingCurrentMap}
+              disabled={!isStorageReady || isSavingCurrentMap}
+              onClick={() => void handleSaveCurrentMap()}
               type="button"
             >
               {copy.saveToDevice}

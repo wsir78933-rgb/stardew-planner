@@ -38,7 +38,7 @@ export function usePlannerWorkspacePersistenceControls({
     receivedPlannerMapId: string,
     receivedMapImageExporter: MapImageExporter | null,
   ) => void;
-  saveCurrentMap: () => void;
+  saveCurrentMap: () => Promise<void>;
   saveThumbnail: () => Promise<void>;
 }> {
   const persistenceRuntimeReference = useRef<
@@ -73,7 +73,7 @@ export function usePlannerWorkspacePersistenceControls({
     captureScreenshot: persistenceRuntime.captureScreenshot,
     handleMapChange: persistenceRuntime.handleMapChange,
     handleMapImageExporterReady: persistenceRuntime.handleMapImageExporterReady,
-    saveCurrentMap: persistenceRuntime.saveCurrentMap,
+    saveCurrentMap: persistenceRuntime.saveCurrentMapAndRefreshThumbnail,
     saveThumbnail: persistenceRuntime.saveThumbnail,
   };
 }

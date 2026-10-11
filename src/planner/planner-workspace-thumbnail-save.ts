@@ -20,6 +20,24 @@ export type ThumbnailSaveOrchestratorInput = Readonly<{
   pngToWebpEncodingPort?: PngToWebpEncodingPort;
 }>;
 
+export type CapturedPlannerMapThumbnail = Readonly<{
+  mapImageExporter: MapImageExporter;
+  plannerMapId: string;
+  webpBytes: Uint8Array;
+}>;
+
+export async function capturePlannerMapThumbnail(
+  plannerMapId: string,
+  mapImageExporter: MapImageExporter,
+  pngToWebpEncodingPort?: PngToWebpEncodingPort,
+): Promise<CapturedPlannerMapThumbnail> {
+  assertNonEmptyIdentifier(plannerMapId, "planner map ID");
+  assertMapImageExporter(mapImageExporter);
+  const pngBlob = await mapImageExporter.captureScreenshot(1);
+  const webpBytes = await encodePngAsWebp(pngBlob, pngToWebpEncodingPort);
+  return { mapImageExporter, plannerMapId, webpBytes };
+}
+
 export async function saveCurrentCanonicalMapThumbnail(
   thumbnailSaveOrchestratorInput: ThumbnailSaveOrchestratorInput,
 ): Promise<void> {
@@ -28,9 +46,9 @@ export async function saveCurrentCanonicalMapThumbnail(
     capturedWorkspaceSnapshot,
     thumbnailSaveOrchestratorInput.getPlannerMapIdForMapFile,
   );
-  const pngBlob = await capturedThumbnailTarget.mapImageExporter.captureScreenshot(1);
-  const webpBytes = await encodePngAsWebp(
-    pngBlob,
+  const capturedPlannerMapThumbnail = await capturePlannerMapThumbnail(
+    capturedThumbnailTarget.plannerMapId,
+    capturedThumbnailTarget.mapImageExporter,
     thumbnailSaveOrchestratorInput.pngToWebpEncodingPort,
   );
   assertThumbnailTargetIsCurrent(
@@ -41,7 +59,7 @@ export async function saveCurrentCanonicalMapThumbnail(
   thumbnailSaveOrchestratorInput.workspaceController.saveThumbnail({
     projectId: capturedThumbnailTarget.projectId,
     mapId: capturedThumbnailTarget.mapId,
-    webpBytes,
+    webpBytes: capturedPlannerMapThumbnail.webpBytes,
   });
 }
 
@@ -141,6 +159,21 @@ function assertNonEmptyIdentifier(identifier: string, identifierDescription: str
     throw new TypeError(
       `Canonical thumbnail ${identifierDescription} must be a non-empty string; received `
         + `${JSON.stringify(identifier)}.`,
+    );
+  }
+}
+
+function assertMapImageExporter(
+  mapImageExporter: MapImageExporter,
+): void {
+  if (
+    typeof mapImageExporter !== "object"
+    || mapImageExporter === null
+    || typeof mapImageExporter.captureScreenshot !== "function"
+  ) {
+    throw new TypeError(
+      "Planner map thumbnail exporter must expose captureScreenshot; received "
+        + `${JSON.stringify(mapImageExporter)}.`,
     );
   }
 }

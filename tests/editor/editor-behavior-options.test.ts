@@ -7,7 +7,7 @@ import {
 describe("editor behavior options", () => {
   it("uses source-aligned local behavior defaults", () => {
     expect(createInitialEditorBehaviorOptions()).toEqual({
-      autoShowResourceClumps: true,
+      autoShowResourceClumps: false,
       freePlacement: false,
       gameCursors: true,
       leftHandMode: false,
