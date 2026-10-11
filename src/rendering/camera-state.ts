@@ -33,7 +33,7 @@ type CameraPositionBounds = Readonly<{
 }>;
 
 const minimumCameraZoom = 0.25;
-const maximumBlankViewportRatio = 0.3;
+const maximumBlankViewportRatio = 0.7;
 const cameraKeyboardPanDistance = 4;
 const standardWheelZoomMultiplier = 0.001;
 const controlWheelZoomMultiplier = 0.01;
@@ -233,10 +233,6 @@ function getAxisMinimumPosition(
 ): number {
   const scaledMapPixelSize = mapPixelSize * zoom;
 
-  if (scaledMapPixelSize < viewportSize * (1 - maximumBlankViewportRatio * 2)) {
-    return viewportSize / 2;
-  }
-
   return viewportSize * (1 - maximumBlankViewportRatio) - scaledMapPixelSize / 2;
 }
 
@@ -246,10 +242,6 @@ function getAxisMaximumPosition(
   zoom: number,
 ): number {
   const scaledMapPixelSize = mapPixelSize * zoom;
-
-  if (scaledMapPixelSize < viewportSize * (1 - maximumBlankViewportRatio * 2)) {
-    return viewportSize / 2;
-  }
 
   return viewportSize * maximumBlankViewportRatio + scaledMapPixelSize / 2;
 }

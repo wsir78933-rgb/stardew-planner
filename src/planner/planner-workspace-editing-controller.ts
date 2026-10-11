@@ -191,6 +191,21 @@ export function getPlannerWorkspaceToolSelection(
   };
 }
 
+export function getPlannerWorkspaceCatalogItemSelectionTool(
+  currentTool: EditorTool | null,
+  catalogItem: CatalogItem,
+): EditorTool {
+  if (currentTool === "zoom") {
+    return "zoom";
+  }
+
+  if (currentTool === "fill" && catalogItem.allowedTools.includes("fill")) {
+    return "fill";
+  }
+
+  return "cursor";
+}
+
 export function applyPlannerWorkspaceMapTileRectangle(
   plannerWorkspaceMapTileRectangleInput: PlannerWorkspaceMapTileRectangleInput,
 ): PlannerWorkspaceEditingTransition {

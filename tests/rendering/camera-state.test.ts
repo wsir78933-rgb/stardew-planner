@@ -100,17 +100,17 @@ describe("resizeCameraState", () => {
       positionY: 1_000,
     };
 
-    expect(
-      resizeCameraState(
-        cameraStateOutsideNextViewport,
-        expandedViewportGeometry,
-      ),
-    ).toMatchObject({
+    const resizedCameraState = resizeCameraState(
+      cameraStateOutsideNextViewport,
+      expandedViewportGeometry,
+    );
+
+    expect(resizedCameraState).toMatchObject({
       initialFitZoom: 0.8,
-      positionX: 160,
-      positionY: 384,
+      positionY: 576,
       zoom: 0.8,
     });
+    expect(resizedCameraState.positionX).toBeCloseTo(-160);
   });
 });
 
@@ -155,7 +155,7 @@ describe("zoomCameraAtPoint", () => {
 });
 
 describe("panCameraBy", () => {
-  it("limits a drag so blank space on each side cannot exceed thirty percent", () => {
+  it("clamps large drags to the .3/.7 viewport boundary ratios", () => {
     const zoomedCameraState = zoomCameraAtPoint(
       createInitialCameraState(cameraGeometry),
       cameraGeometry,
@@ -172,13 +172,13 @@ describe("panCameraBy", () => {
         deltaY: -10_000,
       }),
     ).toMatchObject({
-      positionX: 650,
-      positionY: -90,
+      positionX: 850,
+      positionY: -210,
       zoom: 1,
     });
   });
 
-  it("centers maps that are too small to satisfy the blank-space limit", () => {
+  it("allows maps smaller than forty percent of the viewport to pan", () => {
     const compactMapGeometry = {
       mapPixelHeight: 100,
       mapPixelWidth: 100,
@@ -195,15 +195,17 @@ describe("panCameraBy", () => {
       },
     );
 
-    expect(
-      panCameraBy(minimumZoomCameraState, compactMapGeometry, {
+    const pannedCameraState = panCameraBy(
+      minimumZoomCameraState,
+      compactMapGeometry,
+      {
         deltaX: 400,
         deltaY: -400,
-      }),
-    ).toMatchObject({
-      positionX: 250,
-      positionY: 250,
-    });
+      },
+    );
+
+    expect(pannedCameraState.positionX).toBeCloseTo(362.5);
+    expect(pannedCameraState.positionY).toBeCloseTo(137.5);
   });
 });
 

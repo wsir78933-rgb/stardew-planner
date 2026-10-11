@@ -38,6 +38,7 @@ import {
   applyPlannerWorkspacePlacementSelection,
   deletePlannerWorkspaceSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
+  getPlannerWorkspaceCatalogItemSelectionTool,
   getPlannerWorkspaceToolSelection,
   movePlannerWorkspaceSelection,
   cyclePlannerWorkspaceSelectedAppearance,
@@ -813,6 +814,7 @@ function PreparedPlannerWorkspaceContent({
   } = useWorkspaceCatalogControls(
     dispatchPlannerWorkspaceAction,
     preparedWorkspace,
+    plannerWorkspaceState.tool,
   );
   const requiredPlacementCatalogSnapshot =
     resolveRequiredPlacementCatalogSnapshot({
@@ -1419,6 +1421,7 @@ function usePreparedWorkspaceInitialization({
 function useWorkspaceCatalogControls(
   dispatchPlannerWorkspaceAction: PlannerWorkspaceStateController["dispatchPlannerWorkspaceAction"],
   preparedWorkspace: PreparedPlannerWorkspace,
+  currentTool: EditorTool | null,
 ) {
   const preparedBuildingsCatalogItems =
     preparedWorkspace.buildingsCatalog.items;
@@ -1459,6 +1462,9 @@ function useWorkspaceCatalogControls(
       catalogItem: CatalogItem,
       presentationChoice: CatalogPresentationChoice,
     ) => {
+      const catalogItemSelectionTool =
+        getPlannerWorkspaceCatalogItemSelectionTool(currentTool, catalogItem);
+
       setCatalogChoiceState((currentCatalogChoiceState) =>
         selectWorkspaceCatalogItem(
           changeWorkspaceCatalogItemChoice(
@@ -1476,8 +1482,12 @@ function useWorkspaceCatalogControls(
         catalogItemId: catalogItem.id,
         type: "set-selected-catalog-item",
       });
+      dispatchPlannerWorkspaceAction({
+        tool: catalogItemSelectionTool,
+        type: "select-tool",
+      });
     },
-    [dispatchPlannerWorkspaceAction],
+    [currentTool, dispatchPlannerWorkspaceAction],
   );
   const clearSelectedCatalogItem = useCallback(() => {
     setCatalogChoiceState(clearWorkspaceCatalogSelection);

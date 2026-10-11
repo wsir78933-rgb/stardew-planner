@@ -958,12 +958,16 @@ describe("PlannerCanvas camera state retention", () => {
       mapId: "standard",
       renderCameraState: () => {},
     });
-    expect(sameMapCanvasReload.resizeCamera(cameraGeometry)).toEqual({
-      ...committedCameraState,
+    const reloadedCameraState = sameMapCanvasReload.resizeCamera(cameraGeometry);
+
+    expect(reloadedCameraState).toMatchObject({
       initialFitZoom: 2,
-      positionY: 32,
+      maximumZoom: 4,
+      minimumZoom: 0.25,
+      positionX: 120,
       zoom: 2,
     });
+    expect(reloadedCameraState.positionY).toBeCloseTo(-32);
 
     const changedMapCanvas = createPlannerCanvasCameraLifecycle({
       cameraStateRetention,
@@ -1557,6 +1561,7 @@ function createPlacementClickTestControls(
   }>;
   clickedMapTiles: Array<Readonly<{ x: number; y: number }>>;
   clickedPlacementKeys: Array<readonly string[]>;
+  committedPlacementMoves: Array<Readonly<{ x: number; y: number }>>;
   hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null>;
   selectedMapRectangles: Array<
     Readonly<{
@@ -1591,6 +1596,7 @@ function createPlacementClickTestControls(
       : () => interactionMode;
   const clickedMapTiles: Array<Readonly<{ x: number; y: number }>> = [];
   const clickedPlacementKeys: Array<readonly string[]> = [];
+  const committedPlacementMoves: Array<Readonly<{ x: number; y: number }>> = [];
   const hoveredMapTiles: Array<Readonly<{ x: number; y: number }> | null> = [];
   const selectedMapRectangles: Array<
     Readonly<{
@@ -1645,6 +1651,9 @@ function createPlacementClickTestControls(
     onPlacementSelectionClick: (placementSelectionKeys) => {
       clickedPlacementKeys.push(placementSelectionKeys);
     },
+    onMoveSelectedPlacements: (tileDelta) => {
+      committedPlacementMoves.push(tileDelta);
+    },
     onMapTileHover: (mapTileCoordinates) => {
       hoveredMapTiles.push(mapTileCoordinates);
     },
@@ -1676,6 +1685,7 @@ function createPlacementClickTestControls(
     cameraControls,
     clickedMapTiles,
     clickedPlacementKeys,
+    committedPlacementMoves,
     hoveredMapTiles,
     mapTileRectanglePreviews,
     mapTileRectanglePreviewClearCount: () => mapTileRectanglePreviewClearCount,
@@ -4269,7 +4279,7 @@ describe("attachPlannerCameraControls map placement clicks", () => {
     ]);
   });
 
-  it("keeps the ghost cleared after a real mouse pan", () => {
+  it("pans the camera without placing or moving a placement after a real drag", () => {
     const placementClickTestControls = createPlacementClickTestControls();
 
     if (placementClickTestControls === null) {
@@ -4297,7 +4307,13 @@ describe("attachPlannerCameraControls map placement clicks", () => {
       { x: 5, y: 4 },
       null,
     ]);
+    expect(placementClickTestControls.readCameraState()).toMatchObject({
+      positionX: 108,
+      positionY: 80,
+    });
     expect(placementClickTestControls.clickedMapTiles).toEqual([]);
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([]);
+    expect(placementClickTestControls.committedPlacementMoves).toEqual([]);
   });
 
   it("only captures wheel input when wheel zoom is enabled", () => {

@@ -13,6 +13,7 @@ import {
   applyPlannerWorkspacePlacementSelection,
   deletePlannerWorkspaceSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
+  getPlannerWorkspaceCatalogItemSelectionTool,
   getPlannerWorkspaceToolSelection,
   movePlannerWorkspaceSelection,
   cyclePlannerWorkspaceSelectedAppearance,
@@ -25,7 +26,10 @@ import { createReferenceProjectRepository } from "../../src/reference-runtime/re
 import { createReferenceProjectWorkspaceController } from "../../src/reference-runtime/use-reference-project-workspace";
 import { referenceProjectDocumentFixture } from "../reference-runtime/fixtures/reference-project-document";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
-import { createPlacementHistory } from "../../src/placement/placement-history";
+import {
+  createPlacementHistory,
+  undoPlacementHistory,
+} from "../../src/placement/placement-history";
 import {
   createEmptyPlacementSnapshot,
   type PlacementSnapshot,
@@ -35,6 +39,7 @@ import {
   getPlannerCanvasInteractionProperties,
   processPlannerWorkspaceMapTileClick,
 } from "../../src/components/planner-workspace";
+import { createPlannerCanvasPlacementPreviewState } from "../../src/components/planner-canvas";
 
 function createStandardFarmPlacementGrid(): MapPlacementGrid {
   return {
@@ -65,6 +70,62 @@ function createFloorCatalogItem(): CatalogItem {
     sprite: { kind: "sprite-index", index: 0 },
     textureLocalPath: "/game-assets/1.6.15/tilesheets/flooring.png",
     tileSize: { width: 1, height: 1 },
+  };
+}
+
+function createCropCatalogItem(): CatalogItem {
+  return {
+    allowedTools: ["cursor", "fill", "multi-select", "erase"],
+    category: "crop",
+    id: "crop:24",
+    name: "Parsnip",
+    sprite: { kind: "sprite-index", index: 0 },
+    textureLocalPath: "/game-assets/1.6.15/objects/Parsnip.png",
+    tileSize: { width: 1, height: 1 },
+  };
+}
+
+function createDeluxeCoopCatalogItem(): CatalogItem {
+  return {
+    allowedTools: ["cursor"],
+    category: "building",
+    id: "building:Deluxe Coop",
+    name: "Deluxe Coop",
+    sprite: { kind: "sprite-index", index: 0 },
+    textureLocalPath: "/game-assets/1.6.15/buildings/Deluxe Coop.png",
+    tileSize: { width: 6, height: 3 },
+  };
+}
+
+function createBuildableDeluxeCoopMetadataById(): BuildingPlacementMetadataById {
+  return {
+    "Deluxe Coop": {
+      size: { width: 6, height: 3 },
+      collisionMap: Array.from({ length: 3 }, () =>
+        Array.from({ length: 6 }, () => ({ requiresBuildable: true }))),
+      additionalPlacementTiles: [],
+      humanDoor: { x: -1, y: -1 },
+      tilePropertyGrid: [],
+    },
+  };
+}
+
+function createDeluxeCoopPlacementGrid(): MapPlacementGrid {
+  const width = 8;
+  const height = 6;
+
+  return {
+    width,
+    height,
+    capabilitiesByTile: Array.from({ length: width * height }, () => ({
+      buildable: true,
+      crabPot: false,
+      diggable: true,
+      passable: true,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      wall: false,
+    })),
   };
 }
 
@@ -257,6 +318,143 @@ describe("planner canvas interaction properties", () => {
         }),
       ).toEqual(canvasInteractionCase.expectedProperties);
     }
+  });
+});
+
+describe("catalog item selection tools", () => {
+  it.each(["cursor", "multi-select", "erase", "fill", null] as const)(
+    "uses Cursor for a building selected while the current tool is %s, then previews and places it",
+    (currentTool) => {
+      const catalogItem = createDeluxeCoopCatalogItem();
+      const buildingMetadataById = createBuildableDeluxeCoopMetadataById();
+      const placementGrid = createDeluxeCoopPlacementGrid();
+      const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+      const presentationChoice = { flipped: false, rotation: 0, variant: 0 };
+      const selectedCatalogItem = { catalogItem, presentationChoice };
+      const selectionTool = getPlannerWorkspaceCatalogItemSelectionTool(
+        currentTool,
+        catalogItem,
+      );
+
+      expect(selectionTool).toBe("cursor");
+
+      const placementPreviewInput = createWorkspaceCatalogPlacementPreviewInput({
+        buildingMetadataById,
+        freePlacement: false,
+        selectedCatalogItem,
+        tool: selectionTool,
+      });
+      expect(placementPreviewInput).not.toBeNull();
+      if (placementPreviewInput === null) {
+        throw new Error("A selected Deluxe Coop must produce a Cursor preview input.");
+      }
+
+      const placementPreview = createPlannerCanvasPlacementPreviewState({
+        hoveredMapTile: { x: 1, y: 1 },
+        mapPlacementGrid: placementGrid,
+        placementPreview: placementPreviewInput,
+        placementSnapshot: placementHistory.currentState,
+      });
+      expect(placementPreview).not.toBeNull();
+
+      const placementTransition = applyPlannerWorkspaceMapTileClick({
+        buildingMetadataById,
+        catalogPresentationChoice: presentationChoice,
+        cursorTile: { x: 1, y: 1 },
+        freePlacement: false,
+        mapPlacementGrid: placementGrid,
+        placementHistory,
+        selectedCatalogItem: catalogItem,
+        selectedPlacementKeys: [],
+        tool: selectionTool,
+      });
+
+      expect(placementTransition.placementHistory.currentState.buildings).toEqual([
+        { buildingId: "Deluxe Coop", instanceId: 1, x: 1, y: 1 },
+      ]);
+      expect(placementTransition.placementHistory.undoStates).toEqual([
+        placementHistory.currentState,
+      ]);
+      const undonePlacementHistory = undoPlacementHistory(
+        placementTransition.placementHistory,
+      );
+      expect(undonePlacementHistory.currentState.buildings).toEqual([]);
+      expect(undonePlacementHistory.redoStates).toEqual([
+        placementTransition.placementHistory.currentState,
+      ]);
+    },
+  );
+
+  it("keeps Zoom selected for catalog placement preview and placement", () => {
+    const catalogItem = createDeluxeCoopCatalogItem();
+    const buildingMetadataById = createBuildableDeluxeCoopMetadataById();
+    const placementGrid = createDeluxeCoopPlacementGrid();
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const presentationChoice = { flipped: false, rotation: 0, variant: 0 };
+    const selectedCatalogItem = { catalogItem, presentationChoice };
+    const selectionTool = getPlannerWorkspaceCatalogItemSelectionTool(
+      "zoom",
+      catalogItem,
+    );
+
+    expect(selectionTool).toBe("zoom");
+
+    const placementPreviewInput = createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById,
+      freePlacement: false,
+      selectedCatalogItem,
+      tool: selectionTool,
+    });
+    expect(placementPreviewInput).not.toBeNull();
+    if (placementPreviewInput === null) {
+      throw new Error("Zoom must produce a selected Deluxe Coop preview input.");
+    }
+    expect(createPlannerCanvasPlacementPreviewState({
+      hoveredMapTile: { x: 1, y: 1 },
+      mapPlacementGrid: placementGrid,
+      placementPreview: placementPreviewInput,
+      placementSnapshot: placementHistory.currentState,
+    })).not.toBeNull();
+
+    const placementTransition = applyPlannerWorkspaceMapTileClick({
+      buildingMetadataById,
+      catalogPresentationChoice: presentationChoice,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: false,
+      mapPlacementGrid: placementGrid,
+      placementHistory,
+      selectedCatalogItem: catalogItem,
+      selectedPlacementKeys: [],
+      tool: selectionTool,
+    });
+
+    expect(placementTransition.placementHistory.currentState.buildings).toEqual([
+      { buildingId: "Deluxe Coop", instanceId: 1, x: 1, y: 1 },
+    ]);
+  });
+
+  it.each([
+    { category: "floor", catalogItem: createFloorCatalogItem() },
+    { category: "crop", catalogItem: createCropCatalogItem() },
+  ])("keeps Fill for fill-compatible $category items", ({ catalogItem }) => {
+    const selectionTool = getPlannerWorkspaceCatalogItemSelectionTool(
+      "fill",
+      catalogItem,
+    );
+    expect(selectionTool).toBe("fill");
+
+    const fillTransition = applyPlannerWorkspaceMapTileRectangle({
+      ...createEditingInput(),
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      selectedCatalogItem: catalogItem,
+      tool: selectionTool,
+    });
+    const placedRecords = catalogItem.category === "crop"
+      ? fillTransition.placementHistory.currentState.crops
+      : fillTransition.placementHistory.currentState.items;
+
+    expect(placedRecords).toHaveLength(2);
   });
 });
 
