@@ -459,6 +459,55 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id] > h
   text-wrap: balance;
 }
 
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-what-is] > h2 {
+  font-size: clamp(1.75rem, 4.4vw, 3.25rem);
+  line-height: 1.05;
+  margin-bottom: 0;
+  max-width: 20ch;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-what-is] > h2:lang(zh-CN) {
+  max-width: none;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-what-is-layout] {
+  align-items: start;
+  display: grid;
+  gap: 3.5rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin-top: 2.5rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-what-is-copy] {
+  grid-column: span 7;
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-what-is-copy] p + p {
+  margin-top: 1.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-what-is-copy] p {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 0;
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-what-is-media] {
+  grid-column: span 5;
+  margin: 0;
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-what-is-media] img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
 body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-layout] {
   align-items: start;
   column-gap: clamp(2rem, 5vw, 5rem);
@@ -958,6 +1007,18 @@ body:has(> [data-homepage-shell]) [data-site-footer-group] ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+@media (max-width: 1023px) {
+  body:has(> [data-homepage-shell]) [data-homepage-what-is-layout] {
+    gap: 2.5rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-what-is-copy],
+  body:has(> [data-homepage-shell]) [data-homepage-what-is-media] {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 700px) {

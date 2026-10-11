@@ -9,6 +9,7 @@ import { HomepageFeaturesSection } from "./homepage-features-section";
 import { HomepageHeroSection } from "./homepage-hero-section";
 import { HomepageHowToSection } from "./homepage-how-to-section";
 import { HomepageNavigationDock } from "./homepage-navigation-dock";
+import { HomepageWhatIsSection } from "./homepage-what-is-section";
 import { HomepageWhyChooseSection } from "./homepage-why-choose-section";
 import { SiteFooter } from "./site-footer";
 
@@ -48,6 +49,7 @@ export function HomepageContent({
           plannerHref={plannerHref}
         />
         {plannerWorkspace}
+        <HomepageWhatIsSection copy={copy.whatIs} />
         <HomepageFeaturesSection copy={copy.features} />
         <HomepageWhyChooseSection copy={copy.whyChoose} />
         <HomepageHowToSection copy={copy.howTo} />

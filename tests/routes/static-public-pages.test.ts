@@ -48,8 +48,11 @@ type StaticHomepageExpectation = Readonly<{
   heroTitleAfter: string;
   heroSupportingCopy: string;
   heroTrustedBy: string;
+  whatIsHeading: string;
+  whatIsDescriptions: readonly string[];
   featuresHeading: string;
   featuresDescriptions: readonly string[];
+  whyChooseHeading: string;
   whyChooseDescriptions: readonly string[];
   howToHeading: string;
   howToDescriptions: readonly string[];
@@ -1697,22 +1700,30 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     heroSupportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
     heroTrustedBy: "Free fan-made planner. Projects stay in this browser.",
-    featuresHeading: "What the planner does",
-    featuresDescriptions: [
-      "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
-      "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
-      "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
-      "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
-      "Save import is experimental, and modded items may not map. There is no cloud sync. A different browser or a data wipe will lose them. This planner is free and fan-made.",
+    whatIsHeading: "What is Stardew Valley Planner?",
+    whatIsDescriptions: [
+      "Stardew Valley Planner is a free online farm layout tool. Preview and adjust your layout on a map before building in-game, so you can decide how to use the space and work from a clear plan.",
+      "Choose from all eight farm types, including Standard, Forest, Beach, and Meadowlands, plus Ginger Island. Place buildings, crops, trees, paths, and decorations; display sprinkler and scarecrow coverage; preview each season; save projects in this browser; and export layout screenshots.",
+      "Before starting a farm, decide where fields, barns, and paths will go. When expanding or rearranging, try positions for the greenhouse, coops, and processing areas while leaving routes between buildings. For a redesign, experiment with paths, trees, and garden spaces.",
+      "New players planning their first farm, experienced players expanding or reorganizing, and anyone who enjoys designing paths, gardens, and farm scenery.",
     ],
+    featuresHeading: "Meadowlands Farm Layout Examples",
+    featuresDescriptions: [
+      "Autumn colors run through a dense mix of crop rows, paths, ponds, and farm buildings.",
+      "Spring trees and decorations surround crop plots, ponds, paths, and farm buildings.",
+      "Fields, trees, ponds, and farm buildings share the map in a bright summer palette.",
+      "A forested map brings paths, crop plots, ponds, buildings, and decorative areas together.",
+      "This vanilla Year 7 layout places crop plots, buildings, paths, and ponds across Meadowlands.",
+    ],
+    whyChooseHeading: "Beach & Four Corners Farm Layout Examples",
     whyChooseDescriptions: [
-      "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
-      "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
-      "Paths look tidy, but they take crop tiles. Keep the farmhouse, chests, and shipping bin reachable on a normal day.",
-      "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
-      "Each corner is its own farm. Decide what belongs in which quadrant before you drop barns and fields that are slow to move.",
-      "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
-      "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
+      "Flowering trees, small garden plots, and paths give this coastal layout a garden-like feel.",
+      "Paths and crop plots form a diamond pattern around the farm buildings.",
+      "Stone paths connect the fields and buildings while tracing the coastal map.",
+      "Rows of processing machines sit among paths, crop plots, and farm buildings.",
+      "Paths, crop plots, trees, and buildings occupy separate areas across the map.",
+      "Crop plots, farm buildings, paths, and water share this map in a balanced layout.",
+      "Rows of coops and crop fields fill the map alongside paths and work areas.",
     ],
     howToHeading: "Lay out the farm in three passes",
     howToDescriptions: [
@@ -1724,6 +1735,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "Finish the layout on this page, then build in-game.",
     closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
     sectionImageSources: [
+      "/homepage/what-is/farm-layout-overview.png",
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
@@ -1766,22 +1778,30 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     heroSupportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
     heroTrustedBy: "免费玩家规划器。项目保存在当前浏览器。",
-    featuresHeading: "功能介绍",
-    featuresDescriptions: [
-      "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
-      "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
-      "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
-      "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
-      "存档导入仍是实验性的，模组物品可能对不上。没有云同步。换浏览器或清数据会丢。这是免费的玩家工具，和官方没有隶属或认可关系。",
+    whatIsHeading: "什么是星露谷物语农场规划器？",
+    whatIsDescriptions: [
+      "星露谷物语农场规划器是一款免费的在线布局设计工具，帮助你在游戏内动工前确定农场方案。通过俯视地图预览整体布局，调整各个区域的位置，让后续建造有清晰的参考。",
+      "支持标准、森林、海滩、草原等 8 种农场和姜岛地图，可以摆放建筑、作物、树木、道路与装饰，查看洒水器和稻草人的覆盖范围。你也可以切换四季外观，将规划项目保存在当前浏览器，并导出布局截图。",
+      "开新农场时，先决定农田、畜棚和道路的位置；扩建或重排现有农场时，试摆温室、鸡舍和加工区，给建筑之间的通路留出空间；准备重新装饰时，先尝试道路、树木和庭院的不同组合。",
+      "适合第一次规划农场的新手、准备扩建或重新分区的老玩家，以及喜欢设计道路、庭院和农场景观的玩家。",
     ],
+    featuresHeading: "草原农场布局案例",
+    featuresDescriptions: [
+      "秋色铺满草原农场，田地、道路、水塘和建筑分布在各处。",
+      "春色树木和装饰围绕着田地、水塘、道路与农场建筑。",
+      "田地、树木、水塘和农场建筑铺在明亮的夏日配色中。",
+      "这张林木茂密的地图里，田地、水塘、建筑、道路和装饰区交错分布。",
+      "这张原版第 7 年农场把田地、建筑、道路和水塘分布在草原农场各处。",
+    ],
+    whyChooseHeading: "海滩与四角农场布局案例",
     whyChooseDescriptions: [
-      "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
-      "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
-      "路好看，但会占耕地。农舍、箱子、出货箱周围先留通路，一天的活才走得通。",
-      "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
-      "四个角等于四块地。先定每块干什么，再放大件，避免畜棚和田地放完难挪。",
-      "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
-      "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
+      "开花树木、小块花园和道路让这张海岸布局显得像一座花园。",
+      "道路和田地围绕农场建筑排成菱形图案。",
+      "石路把田地和建筑连在一起，并沿着海岸地图延伸。",
+      "成排的加工设备位于农场中央，周围分布道路、田地和建筑。",
+      "道路、田地、树木和建筑分布在地图的不同区域。",
+      "田地、农场建筑、道路和水塘构成一张分布均衡的农场布局。",
+      "多排鸡舍与作物田分布在地图各处，并由道路和工作区连接。",
     ],
     howToHeading: "分三步排出农场",
     howToDescriptions: [
@@ -1793,6 +1813,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "先在这页摆完，再进游戏建。",
     closingCtaSupportLine: "不用注册。方案留在这台浏览器。",
     sectionImageSources: [
+      "/homepage/what-is/farm-layout-overview.png",
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
@@ -1969,10 +1990,15 @@ function expectStaticHomepageContent(
   expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
   expect(staticPageHtml).toContain(expectedHomepage.heroSupportingCopy);
   expect(staticPageHtml).toContain(expectedHomepage.heroTrustedBy);
+  expect(staticPageHtml).toContain(`>${expectedHomepage.whatIsHeading}</h2>`);
+  for (const whatIsDescription of expectedHomepage.whatIsDescriptions) {
+    expect(staticPageHtml).toContain(whatIsDescription);
+  }
   expect(staticPageHtml).toContain(`>${expectedHomepage.featuresHeading}</h2>`);
   for (const featuresDescription of expectedHomepage.featuresDescriptions) {
     expect(staticPageHtml).toContain(featuresDescription);
   }
+  expect(staticPageHtml).toContain(`>${expectedHomepage.whyChooseHeading.replaceAll("&", "&amp;")}</h2>`);
   for (const whyChooseDescription of expectedHomepage.whyChooseDescriptions) {
     expect(staticPageHtml).toContain(whyChooseDescription);
   }
@@ -2023,6 +2049,7 @@ function expectStaticHomepageContent(
   expect(staticPageHtml).not.toContain("Loading planner…");
   const homepageSectionMarkers = [
     'data-homepage-workspace="true"',
+    'id="what-is"',
     'id="capabilities"',
     'id="why-choose"',
     'id="how-to"',

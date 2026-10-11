@@ -84,7 +84,11 @@ export function EditorToolbar({
         data-editor-tool={editorToolbarControl.tool}
         disabled={!isAvailable}
         key={editorToolbarControl.tool}
-        onClick={() => onToolChange(getEditorToolbarToolSelectionAfterClick(editorToolbarControl.tool))}
+        onClick={() =>
+          onToolChange(
+            getEditorToolbarToolSelectionAfterClick(editorToolbarControl.tool),
+          )
+        }
         title={controlLabel}
         type="button"
       >

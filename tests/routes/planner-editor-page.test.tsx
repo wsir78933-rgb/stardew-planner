@@ -96,9 +96,11 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain('data-homepage-why-choose="true"');
     expect(plannerPageMarkup).toContain('data-homepage-how-to="true"');
     expect(plannerPageMarkup).toContain('data-homepage-closing-cta="true"');
-    expect(plannerPageMarkup).toContain("What the planner does");
+    expect(plannerPageMarkup).toContain("What is Stardew Valley Planner?");
+    expect(plannerPageMarkup).toContain("Meadowlands Farm Layout Examples");
+    expect(plannerPageMarkup).toContain("Beach &amp; Four Corners Farm Layout Examples");
     expect(plannerPageMarkup).not.toContain("Why use this planner");
-    expect(plannerPageMarkup).not.toContain(
+    expect(plannerPageMarkup).toContain(
       'id="homepage-why-choose-heading"',
     );
     expect(plannerPageMarkup).toContain("Lay out the farm in three passes");
@@ -125,6 +127,7 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).not.toContain("stardew-valley-planner-layout");
     const homepageSectionMarkers = [
       'data-homepage-workspace="true"',
+      'id="what-is"',
       'id="capabilities"',
       'id="why-choose"',
       'id="how-to"',
@@ -241,6 +244,7 @@ describe("planner editor page", () => {
       );
       const homepageSectionMarkers = [
         "data-test-planner-workspace",
+        'id="what-is"',
         'id="capabilities"',
         'id="why-choose"',
         'id="how-to"',
@@ -260,6 +264,19 @@ describe("planner editor page", () => {
         );
         previousHomepageSectionPosition = homepageSectionPosition;
       }
+
+      expect(homepageMarkup).toContain('data-homepage-what-is="true"');
+      expect(homepageMarkup).toContain(homepageCopy.whatIs.heading);
+      expect(homepageMarkup).toContain(homepageCopy.whatIs.description);
+      for (const introductionItem of homepageCopy.whatIs.items) {
+        expect(homepageMarkup).toContain(introductionItem.description);
+      }
+      const whatIsSectionMarkup = homepageMarkup.slice(
+        homepageMarkup.indexOf('data-homepage-what-is="true"'),
+        homepageMarkup.indexOf('id="capabilities"'),
+      );
+      expect(whatIsSectionMarkup).toContain('src="/homepage/what-is/farm-layout-overview.png"');
+      expect(whatIsSectionMarkup).toContain(`alt="${homepageCopy.whatIs.imageAlt}"`);
 
       expect(homepageMarkup).toContain('data-homepage-features="true"');
       expect(homepageMarkup).toContain(homepageCopy.features.heading);
@@ -292,6 +309,7 @@ describe("planner editor page", () => {
       }
 
       expect(homepageMarkup).toContain('data-homepage-why-choose="true"');
+      expect(homepageMarkup).toContain(homepageCopy.whyChoose.heading.replaceAll("&", "&amp;"));
       expect(homepageMarkup).toContain("data-homepage-animated-testimonials");
       expect(homepageMarkup).toContain(homepageCopy.whyChoose.previousLabel);
       expect(homepageMarkup).toContain(homepageCopy.whyChoose.nextLabel);

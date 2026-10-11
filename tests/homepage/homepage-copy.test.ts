@@ -20,6 +20,7 @@ test("ships every approved locale with the same top-level homepage sections", ()
     "navigation",
     "hero",
     "plannerPreview",
+    "whatIs",
     "features",
     "whyChoose",
     "howTo",
@@ -32,24 +33,54 @@ test("ships every approved locale with the same top-level homepage sections", ()
 test("provides the replacement sections with exact bilingual headings and item counts", () => {
   const expectedSections = {
     en: {
+      whatIs: {
+        heading: "What is Stardew Valley Planner?",
+        imageAlt: "Stardew Valley farm layout with buildings, crop fields, paths, and ponds in autumn",
+        description:
+          "Stardew Valley Planner is a free online farm layout tool. Preview and adjust your layout on a map before building in-game, so you can decide how to use the space and work from a clear plan.",
+        items: [
+          {
+            title: "Planning features",
+            description:
+              "Choose from all eight farm types, including Standard, Forest, Beach, and Meadowlands, plus Ginger Island. Place buildings, crops, trees, paths, and decorations; display sprinkler and scarecrow coverage; preview each season; save projects in this browser; and export layout screenshots.",
+          },
+          {
+            title: "When it is useful",
+            description:
+              "Before starting a farm, decide where fields, barns, and paths will go. When expanding or rearranging, try positions for the greenhouse, coops, and processing areas while leaving routes between buildings. For a redesign, experiment with paths, trees, and garden spaces.",
+          },
+          {
+            title: "Who can use it",
+            description:
+              "New players planning their first farm, experienced players expanding or reorganizing, and anyone who enjoys designing paths, gardens, and farm scenery.",
+          },
+        ],
+      },
       features: {
-        heading: "What the planner does",
-        previousLabel: "Previous feature",
-        nextLabel: "Next feature",
+        heading: "Meadowlands Farm Layout Examples",
+        previousLabel: "Previous example",
+        nextLabel: "Next example",
         testimonialCount: 5,
         quotes: [
-          "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands. Ginger Island is in the map picker. Pick the map you actually play before you place anything.",
-          "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
-          "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
-          "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
-          "Save import is experimental, and modded items may not map. There is no cloud sync. A different browser or a data wipe will lose them. This planner is free and fan-made.",
+          "Autumn colors run through a dense mix of crop rows, paths, ponds, and farm buildings.",
+          "Spring trees and decorations surround crop plots, ponds, paths, and farm buildings.",
+          "Fields, trees, ponds, and farm buildings share the map in a bright summer palette.",
+          "A forested map brings paths, crop plots, ponds, buildings, and decorative areas together.",
+          "This vanilla Year 7 layout places crop plots, buildings, paths, and ponds across Meadowlands.",
         ],
         names: [
-          "Plan all 8 official farms, plus Ginger Island",
-          "Place buildings and crops on one grid",
-          "Check coverage as you place",
-          "Switch seasons, then export a screenshot",
-          "Import a save. Projects stay in this browser",
+          "Meadowlands Farm in Fall",
+          "Spring Colors Across Meadowlands",
+          "Summer Fields Around the Ponds",
+          "Modded Meadowlands Overview",
+          "Vanilla Meadowlands in Year 7",
+        ],
+        designations: [
+          "Meadowlands · Fall",
+          "Meadowlands · Spring",
+          "Meadowlands · Summer",
+          "Modded Meadowlands",
+          "Vanilla Meadowlands · Year 7",
         ],
         sources: [
           "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
@@ -60,26 +91,36 @@ test("provides the replacement sections with exact bilingual headings and item c
         ],
       },
       whyChoose: {
-        previousLabel: "Previous farm layout",
-        nextLabel: "Next farm layout",
+        heading: "Beach & Four Corners Farm Layout Examples",
+        previousLabel: "Previous example",
+        nextLabel: "Next example",
         testimonialCount: 7,
         quotes: [
-          "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, and Meadowlands are in the picker, plus Ginger Island. Choose that map first, then place anything.",
-          "Arrange buildings, crops, placeables, and decor together. You can see a blocked path before you rebuild it in-game.",
-          "Paths look tidy, but they take crop tiles. Keep the farmhouse, chests, and shipping bin reachable on a normal day.",
-          "Turn on sprinkler, scarecrow, Bee House, and Junimo Hut coverage while you work. Put processing on a path you already walk.",
-          "Each corner is its own farm. Decide what belongs in which quadrant before you drop barns and fields that are slow to move.",
-          "Spring, summer, fall, and winter are available. When the layout holds, export a standard or high-quality screenshot and build from that.",
-          "There is no cloud sync. A different browser or a data wipe will lose them. Save import is experimental, and modded items may not map. This planner is free and fan-made.",
+          "Flowering trees, small garden plots, and paths give this coastal layout a garden-like feel.",
+          "Paths and crop plots form a diamond pattern around the farm buildings.",
+          "Stone paths connect the fields and buildings while tracing the coastal map.",
+          "Rows of processing machines sit among paths, crop plots, and farm buildings.",
+          "Paths, crop plots, trees, and buildings occupy separate areas across the map.",
+          "Crop plots, farm buildings, paths, and water share this map in a balanced layout.",
+          "Rows of coops and crop fields fill the map alongside paths and work areas.",
         ],
         names: [
-          "Plan the map you actually play",
-          "Place buildings and crops on one grid",
-          "Leave the walking route first",
-          "Check coverage as you place",
-          "Plan Four Corners by quadrant",
-          "Switch seasons, then export a screenshot",
-          "No account. Projects stay in this browser",
+          "Decorative Beach Farm",
+          "Diamond-Path Beach Farm",
+          "Beach Farm with Stone Paths",
+          "Beach Farm with a Processing Yard",
+          "Balanced Four Corners Farm",
+          "Four Corners Farm with Balanced Zones",
+          "Coops and Crops on Four Corners",
+        ],
+        designations: [
+          "machooo · Year 15",
+          "jennameeps · Beach Farm",
+          "justkuwl · Beach Farm",
+          "shady kegyard · Beach Farm",
+          "rp2-phobos · Four Corners Farm",
+          "emerald · Four Corners Farm",
+          "hallofax · Year 5",
         ],
       },
       howTo: {
@@ -99,24 +140,54 @@ test("provides the replacement sections with exact bilingual headings and item c
       },
     },
     "zh-CN": {
+      whatIs: {
+        heading: "什么是星露谷物语农场规划器？",
+        imageAlt: "星露谷物语秋季农场布局：建筑、农田、道路和水塘分布在地图上",
+        description:
+          "星露谷物语农场规划器是一款免费的在线布局设计工具，帮助你在游戏内动工前确定农场方案。通过俯视地图预览整体布局，调整各个区域的位置，让后续建造有清晰的参考。",
+        items: [
+          {
+            title: "主要功能",
+            description:
+              "支持标准、森林、海滩、草原等 8 种农场和姜岛地图，可以摆放建筑、作物、树木、道路与装饰，查看洒水器和稻草人的覆盖范围。你也可以切换四季外观，将规划项目保存在当前浏览器，并导出布局截图。",
+          },
+          {
+            title: "使用场景",
+            description:
+              "开新农场时，先决定农田、畜棚和道路的位置；扩建或重排现有农场时，试摆温室、鸡舍和加工区，给建筑之间的通路留出空间；准备重新装饰时，先尝试道路、树木和庭院的不同组合。",
+          },
+          {
+            title: "适用人群",
+            description:
+              "适合第一次规划农场的新手、准备扩建或重新分区的老玩家，以及喜欢设计道路、庭院和农场景观的玩家。",
+          },
+        ],
+      },
       features: {
-        heading: "功能介绍",
-        previousLabel: "上一项功能",
-        nextLabel: "下一项功能",
+        heading: "草原农场布局案例",
+        previousLabel: "上一个案例",
+        nextLabel: "下一个案例",
         testimonialCount: 5,
         quotes: [
-          "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开。地图选择器里还有姜岛。先选你正在玩的那张图，再摆东西。",
-          "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
-          "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
-          "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
-          "存档导入仍是实验性的，模组物品可能对不上。没有云同步。换浏览器或清数据会丢。这是免费的玩家工具，和官方没有隶属或认可关系。",
+          "秋色铺满草原农场，田地、道路、水塘和建筑分布在各处。",
+          "春色树木和装饰围绕着田地、水塘、道路与农场建筑。",
+          "田地、树木、水塘和农场建筑铺在明亮的夏日配色中。",
+          "这张林木茂密的地图里，田地、水塘、建筑、道路和装饰区交错分布。",
+          "这张原版第 7 年农场把田地、建筑、道路和水塘分布在草原农场各处。",
         ],
         names: [
-          "规划 8 种官方农场和姜岛",
-          "建筑和作物放在同一张图上",
-          "对着覆盖圈摆",
-          "切四季，再导出截图",
-          "能导存档，项目留在当前浏览器",
+          "草原农场秋季布局",
+          "草原农场春日景色",
+          "水塘边的夏日田地",
+          "模组草原农场总览",
+          "原版草原农场：第 7 年",
+        ],
+        designations: [
+          "草原农场 · 秋季",
+          "草原农场 · 春季",
+          "草原农场 · 夏季",
+          "模组草原农场",
+          "原版草原农场 · 第 7 年",
         ],
         sources: [
           "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
@@ -127,26 +198,36 @@ test("provides the replacement sections with exact bilingual headings and item c
         ],
       },
       whyChoose: {
-        previousLabel: "上一张农场布局",
-        nextLabel: "下一张农场布局",
+        heading: "海滩与四角农场布局案例",
+        previousLabel: "上一个案例",
+        nextLabel: "下一个案例",
         testimonialCount: 7,
         quotes: [
-          "标准、河流、森林、山顶、荒野、四角、海滩、草原都能开，地图选择器里还有姜岛。先选对地图，再摆东西。",
-          "建筑、作物、可放置物和装饰都在同一格网上排。哪条路被堵住，进游戏前就能看出来。",
-          "路好看，但会占耕地。农舍、箱子、出货箱周围先留通路，一天的活才走得通。",
-          "洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以随时打开。加工设备放在每天会走的路上，收的时候才不用绕。",
-          "四个角等于四块地。先定每块干什么，再放大件，避免畜棚和田地放完难挪。",
-          "春、夏、秋、冬都能切。方案定了就导出普通或高清截图，照着进游戏建。",
-          "没有云同步。换浏览器或清数据会丢。存档导入仍是实验性的，模组物品可能对不上。这是免费的玩家工具，和官方没有隶属或认可关系。",
+          "开花树木、小块花园和道路让这张海岸布局显得像一座花园。",
+          "道路和田地围绕农场建筑排成菱形图案。",
+          "石路把田地和建筑连在一起，并沿着海岸地图延伸。",
+          "成排的加工设备位于农场中央，周围分布道路、田地和建筑。",
+          "道路、田地、树木和建筑分布在地图的不同区域。",
+          "田地、农场建筑、道路和水塘构成一张分布均衡的农场布局。",
+          "多排鸡舍与作物田分布在地图各处，并由道路和工作区连接。",
         ],
         names: [
-          "先选你正在玩的那张图",
-          "建筑和作物放在同一张图上",
-          "每天走的路要先留出来",
-          "对着覆盖圈摆",
-          "四角农场按四个象限来排",
-          "切四季，再导出截图",
-          "不用账号，项目留在当前浏览器",
+          "装饰风格的海滩农场",
+          "菱形道路海滩农场",
+          "石路整理的海滩农场",
+          "海滩农场加工区布局",
+          "分区均衡的四角农场",
+          "均衡布局的四角农场",
+          "四角农场的鸡舍与田地",
+        ],
+        designations: [
+          "machooo · 第 15 年",
+          "jennameeps · 海滩农场",
+          "justkuwl · 海滩农场",
+          "shady kegyard · 海滩农场",
+          "rp2-phobos · 四角农场",
+          "emerald · 四角农场",
+          "hallofax · 第 5 年",
         ],
       },
       howTo: {
@@ -173,6 +254,8 @@ test("provides the replacement sections with exact bilingual headings and item c
 
     expect(homepageCopy).not.toHaveProperty("planningGuide");
     expect(homepageCopy).not.toHaveProperty("capabilities");
+    expect(homepageCopy.whatIs).toEqual(expected.whatIs);
+    expect(homepageCopy.whatIs.items).toHaveLength(3);
     expect(homepageCopy.features).toMatchObject({
       heading: expected.features.heading,
       previousLabel: expected.features.previousLabel,
@@ -198,7 +281,13 @@ test("provides the replacement sections with exact bilingual headings and item c
         (featureSlide) => featureSlide.name,
       ),
     ).toEqual([...expected.features.names]);
+    expect(
+      homepageCopy.features.testimonials.map(
+        (featureSlide) => featureSlide.designation,
+      ),
+    ).toEqual([...expected.features.designations]);
     expect(homepageCopy.whyChoose).toMatchObject({
+      heading: expected.whyChoose.heading,
       previousLabel: expected.whyChoose.previousLabel,
       nextLabel: expected.whyChoose.nextLabel,
     });
@@ -222,6 +311,11 @@ test("provides the replacement sections with exact bilingual headings and item c
         (farmLayoutSlide) => farmLayoutSlide.name,
       ),
     ).toEqual([...expected.whyChoose.names]);
+    expect(
+      homepageCopy.whyChoose.testimonials.map(
+        (farmLayoutSlide) => farmLayoutSlide.designation,
+      ),
+    ).toEqual([...expected.whyChoose.designations]);
     expect(homepageCopy.howTo).toMatchObject({
       heading: expected.howTo.heading,
       description: expected.howTo.description,
@@ -314,8 +408,8 @@ test("provides the approved bilingual planner hero content", () => {
 });
 
 test("keeps localized import and screenshot claims synchronized", () => {
-  expect(homepageCopyByLocale.en.navigation.capabilitiesLabel).toBe("Features");
-  expect(homepageCopyByLocale["zh-CN"].navigation.capabilitiesLabel).toBe("功能介绍");
+  expect(homepageCopyByLocale.en.navigation.capabilitiesLabel).toBe("Farm examples");
+  expect(homepageCopyByLocale["zh-CN"].navigation.capabilitiesLabel).toBe("案例展示");
 
   expect(homepageCopyByLocale.en.faq.eyebrow).toBe("FAQ");
   expect(homepageCopyByLocale["zh-CN"].faq.eyebrow).toBe("FAQ");
@@ -387,7 +481,7 @@ test("keeps localized import and screenshot claims synchronized", () => {
     },
     explore: {
       title: "Explore",
-      capabilities: "Features",
+      capabilities: "Farm examples",
       faq: "FAQ",
     },
     legal: {
@@ -407,7 +501,7 @@ test("keeps localized import and screenshot claims synchronized", () => {
     },
     explore: {
       title: "探索",
-      capabilities: "功能介绍",
+      capabilities: "案例展示",
       faq: "常见问题",
     },
     legal: {

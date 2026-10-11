@@ -35,7 +35,7 @@ test("renders the locked hero title, supporting copy, actions, and three fan ima
     /<a[^>]*href="\/#planner"[^>]*>Start planning<\/a>/,
   );
   expect(markup).toMatch(
-    /<a[^>]*href="#capabilities"[^>]*>Features<\/a>/,
+    /<a[^>]*href="#capabilities"[^>]*>Farm examples<\/a>/,
   );
   expect(markup).toContain("Free fan-made planner. Projects stay in this browser.");
   expect(markup).toContain("data-homepage-hero-fan");
@@ -65,7 +65,7 @@ test("keeps the Chinese hero title and description strings unchanged", () => {
   expect(markup).toContain("免费在线农场布局工具");
   expect(markup).toContain(copy.hero.supportingCopy);
   expect(markup).toContain("开始规划");
-  expect(markup).toContain("功能介绍");
+  expect(markup).toContain("案例展示");
   expect(markup).toContain("免费玩家规划器。项目保存在当前浏览器。");
 });
 

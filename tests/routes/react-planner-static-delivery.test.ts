@@ -15,7 +15,7 @@ function readHomepageStaticHtml(): string {
 }
 
 describe("planner static delivery", () => {
-  it("keeps the SEO homepage shell and Features SSR while excluding editor-heavy resources", () => {
+  it("keeps the SEO homepage shell and farm examples SSR while excluding editor-heavy resources", () => {
     const homepageStaticHtml = readHomepageStaticHtml();
 
     expect(homepageStaticHtml).toContain("data-homepage-shell");
@@ -23,7 +23,7 @@ describe("planner static delivery", () => {
     expect(homepageStaticHtml).toContain("Free Online Farm Layout Tool");
     expect(homepageStaticHtml).toContain('data-homepage-features="true"');
     expect(homepageStaticHtml).toContain(
-      '<h2 id="homepage-features-heading">What the planner does</h2>',
+      '<h2 id="homepage-features-heading">Meadowlands Farm Layout Examples</h2>',
     );
     expect(homepageStaticHtml).toContain('data-circular-testimonials="true"');
     expect(homepageStaticHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
