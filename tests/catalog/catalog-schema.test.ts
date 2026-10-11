@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   catalogDatasetUrls,
   createCatalogFromDatasets,
+  createPlaceableCatalogFromDatasets,
   fishPondWaterColors,
 } from "../../src/catalog";
 
@@ -34,6 +35,46 @@ describe("catalog schema", () => {
     );
 
     expect(catalog.items).toHaveLength(1703);
+    const [bigCraftables, objects, fences, floorsAndPaths, furniture, fruitTrees] =
+      await Promise.all([
+        readLockedCatalogDataset("BigCraftables.json"),
+        readLockedCatalogDataset("Objects.json"),
+        readLockedCatalogDataset("Fences.json"),
+        readLockedCatalogDataset("FloorsAndPaths.json"),
+        readLockedCatalogDataset("Furniture.json"),
+        readLockedCatalogDataset("FruitTrees.json"),
+      ]);
+    const placeableCatalog = createPlaceableCatalogFromDatasets(
+      bigCraftables,
+      objects,
+      fences,
+      floorsAndPaths,
+      furniture,
+      fruitTrees,
+      catalogDatasetUrls,
+    );
+    expect(placeableCatalog.items.find((catalogItem) => catalogItem.id === "grass_7"))
+      .toMatchObject({
+        id: "grass_7",
+        name: "Blue Grass Starter",
+        category: "placeable",
+        tileSize: { width: 1, height: 1 },
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
+        renderingMetadata: {
+          kind: "seasonal-placeable",
+          composition: "grass-clumps",
+          seasonalFrames: {
+            spring: { kind: "source-rect", x: 0, y: 160, width: 15, height: 20 },
+            summer: { kind: "source-rect", x: 0, y: 180, width: 15, height: 20 },
+            fall: { kind: "source-rect", x: 0, y: 200, width: 15, height: 20 },
+            winter: { kind: "source-rect", x: 0, y: 220, width: 15, height: 20 },
+          },
+        },
+      });
+    expect(placeableCatalog.items.find((catalogItem) => catalogItem.id === "grass_1"))
+      .toMatchObject({
+        allowedTools: ["cursor", "multi-select", "erase"],
+      });
     expect(catalog.items).toEqual(expect.arrayContaining([
       expect.objectContaining({
         id: "bush:small",

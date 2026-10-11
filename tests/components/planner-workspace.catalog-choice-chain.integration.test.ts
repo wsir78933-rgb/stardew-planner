@@ -444,6 +444,7 @@ function createPendingCatalogPillInteraction(
   );
   const placementControls = CatalogPlacementControls({
     catalogItem,
+    presentationChoice: pendingCatalogChoiceState.selectedCatalogItem?.presentationChoice ?? null,
     isFilling: false,
     locale: "en",
     onCancel: () => {
@@ -493,7 +494,10 @@ function getPendingCatalogPillButtons(
     children?: ReactNode;
   }>;
   const pillChildren = Children.toArray(placementControlsProperties.children);
-  const actionContainer = pillChildren[1];
+  const actionContainer = pillChildren.find(
+    (pillChild) => isValidElement<{ className?: string }>(pillChild)
+      && pillChild.props.className === "catalog-placement-controls__actions",
+  );
   if (!isValidElement<{ children?: ReactNode }>(actionContainer)) {
     throw new Error("Pending catalog pill has no action container.");
   }

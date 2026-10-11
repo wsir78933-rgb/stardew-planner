@@ -540,7 +540,7 @@ function createReferenceSupplementaryPlaceableItems(): readonly CatalogItem[] {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: grassTextureLocalPath,
       sprite: { kind: "source-rect", x: 0, y: 160, width: 15, height: 20 },
-      allowedTools: placementTools,
+      allowedTools: fillablePlacementTools,
       ...createSeasonalPlaceableCatalogProperties("grass_7"),
     },
   ];

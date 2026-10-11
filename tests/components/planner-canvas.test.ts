@@ -190,13 +190,17 @@ type MapTileRectanglePreviewGraphics = Readonly<{
 type MapTileRectanglePreviewRendererFactory = (input: Readonly<{
   graphics: MapTileRectanglePreviewGraphics;
   render: () => void;
+  sizeLabel: TestMapTileRectanglePreviewSizeLabel;
   tileHeight: number;
   tileWidth: number;
 }>) => Readonly<{
   clear(): void;
+    updateCameraZoom(cameraZoom: number): void;
   render(
     startMapTileCoordinates: Readonly<{ x: number; y: number }>,
     endMapTileCoordinates: Readonly<{ x: number; y: number }>,
+    showSizeLabel?: boolean,
+    fillableSpotCount?: number,
   ): void;
 }>;
 
@@ -1077,7 +1081,7 @@ class RecordingContextMenuCanvas {
   }
 }
 
-describe("PlannerCanvas multi-select marquee rendering", () => {
+describe("PlannerCanvas rectangle preview rendering", () => {
   it("draws snapped translucent blue rectangles with five-pixel dashed borders", () => {
     if (typeof createMapTileRectanglePreviewRenderer !== "function") {
       expect(createMapTileRectanglePreviewRenderer).toBeTypeOf("function");
@@ -1085,12 +1089,14 @@ describe("PlannerCanvas multi-select marquee rendering", () => {
     }
 
     const graphics = new TestMapTileRectanglePreviewGraphics();
+    const sizeLabel = new TestMapTileRectanglePreviewSizeLabel();
     let renderCount = 0;
     const renderer = createMapTileRectanglePreviewRenderer({
       graphics,
       render: () => {
         renderCount += 1;
       },
+      sizeLabel,
       tileHeight: 32,
       tileWidth: 16,
     });
@@ -1119,6 +1125,104 @@ describe("PlannerCanvas multi-select marquee rendering", () => {
     });
     expect(graphics.clearCount).toBe(3);
     expect(renderCount).toBe(3);
+    expect(sizeLabel).toMatchObject({ text: "", visible: false });
+  });
+
+  it("labels reverse-dragged and single-tile Fill rectangles above their center, then clears the label", () => {
+    if (typeof createMapTileRectanglePreviewRenderer !== "function") {
+      expect(createMapTileRectanglePreviewRenderer).toBeTypeOf("function");
+      return;
+    }
+
+    const sizeLabel = new TestMapTileRectanglePreviewSizeLabel();
+    const renderer = createMapTileRectanglePreviewRenderer({
+      graphics: new TestMapTileRectanglePreviewGraphics(),
+      render: () => undefined,
+      sizeLabel,
+      tileHeight: 32,
+      tileWidth: 16,
+    });
+
+    renderer.updateCameraZoom(2);
+    renderer.render({ x: 5, y: 4 }, { x: 3, y: 2 }, true);
+
+    expect(sizeLabel).toMatchObject({
+      position: { x: 72, y: 62 },
+      scale: { x: 0.5, y: 0.5 },
+      text: "3 × 3 (9)",
+      visible: true,
+    });
+
+    renderer.render({ x: 5, y: 4 }, { x: 3, y: 2 }, true, 4);
+
+    expect(sizeLabel.text).toBe("3 × 3 (4)");
+
+    renderer.updateCameraZoom(0.5);
+
+    expect(sizeLabel).toMatchObject({
+      position: { x: 72, y: 56 },
+      scale: { x: 2, y: 2 },
+      text: "3 × 3 (4)",
+      visible: true,
+    });
+
+    renderer.updateCameraZoom(1);
+    renderer.render({ x: 2, y: 3 }, { x: 2, y: 3 }, true);
+
+    expect(sizeLabel).toMatchObject({
+      position: { x: 40, y: 92 },
+      scale: { x: 1, y: 1 },
+      text: "1 × 1 (1)",
+      visible: true,
+    });
+
+    renderer.clear();
+
+    expect(sizeLabel).toMatchObject({ text: "", visible: false });
+  });
+
+  it("rejects invalid camera zoom and Fill counts with their values", () => {
+    if (typeof createMapTileRectanglePreviewRenderer !== "function") {
+      expect(createMapTileRectanglePreviewRenderer).toBeTypeOf("function");
+      return;
+    }
+
+    const sizeLabel = new TestMapTileRectanglePreviewSizeLabel();
+    const renderer = createMapTileRectanglePreviewRenderer({
+      graphics: new TestMapTileRectanglePreviewGraphics(),
+      render: () => undefined,
+      sizeLabel,
+      tileHeight: 16,
+      tileWidth: 16,
+    });
+
+    expect(() => renderer.updateCameraZoom(0)).toThrow(
+      "Planner Canvas rectangle preview cameraZoom must be finite and positive; received 0.",
+    );
+    expect(() => renderer.render({ x: 0, y: 0 }, { x: 0, y: 0 }, true, -1)).toThrow(
+      "Planner Canvas rectangle preview fillableSpotCount must be a non-negative safe integer; received -1.",
+    );
+    expect(sizeLabel.scale).toMatchObject({ x: 1, y: 1 });
+  });
+
+  it("does not show the Fill size label when a shared Erase or Multi preview disables it", () => {
+    if (typeof createMapTileRectanglePreviewRenderer !== "function") {
+      expect(createMapTileRectanglePreviewRenderer).toBeTypeOf("function");
+      return;
+    }
+
+    const sizeLabel = new TestMapTileRectanglePreviewSizeLabel();
+    const renderer = createMapTileRectanglePreviewRenderer({
+      graphics: new TestMapTileRectanglePreviewGraphics(),
+      render: () => undefined,
+      sizeLabel,
+      tileHeight: 16,
+      tileWidth: 16,
+    });
+
+    renderer.render({ x: 0, y: 0 }, { x: 2, y: 1 }, false);
+
+    expect(sizeLabel).toMatchObject({ text: "", visible: false });
   });
 });
 
@@ -1679,6 +1783,27 @@ class TestMapTileRectanglePreviewGraphics {
     this.pendingSegment = null;
     return this;
   }
+}
+
+class TestMapTileRectanglePreviewSizeLabel {
+  text = "";
+  visible = false;
+  readonly scale = {
+    x: 1,
+    y: 1,
+    set: (x: number, y = x): void => {
+      this.scale.x = x;
+      this.scale.y = y;
+    },
+  };
+  readonly position = {
+    x: 0,
+    y: 0,
+    set: (x: number, y: number): void => {
+      this.position.x = x;
+      this.position.y = y;
+    },
+  };
 }
 
 type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{

@@ -1,7 +1,17 @@
-import { Children, isValidElement, type MouseEvent, type ReactElement, type ReactNode } from "react";
+import {
+  Children,
+  isValidElement,
+  type CSSProperties,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import type { CatalogItem } from "../../src/catalog";
+import type {
+  CatalogItem,
+  CatalogPresentationChoice,
+} from "../../src/catalog";
 import { CatalogPlacementControls } from "../../src/components/catalog-placement-controls";
 
 type PlacementControlButtonProperties = Readonly<{
@@ -9,6 +19,12 @@ type PlacementControlButtonProperties = Readonly<{
   "data-control"?: "rotation" | "variant";
   onClick?: (mouseEvent: MouseEvent<HTMLButtonElement>) => void;
 }>;
+
+const defaultPresentationChoice: CatalogPresentationChoice = {
+  flipped: false,
+  rotation: 0,
+  variant: 0,
+};
 
 describe("catalog placement controls", () => {
   it("renders nothing when there is no pending catalog item", () => {
@@ -18,7 +34,24 @@ describe("catalog placement controls", () => {
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
+      presentationChoice: null,
     })).toBeNull();
+  });
+
+  it("fails with the item ID when a pending item has no presentation choice", () => {
+    const catalogItem = {
+      ...createCatalogItem({ name: "Oak Chair", rotationCount: 0, variantLabels: [] }),
+      id: "furniture_OakChair",
+    };
+
+    expect(() => CatalogPlacementControls({
+      catalogItem,
+      isFilling: false,
+      locale: "en",
+      onCancel: () => undefined,
+      onCyclePendingChoice: () => true,
+      presentationChoice: null,
+    })).toThrow("furniture_OakChair");
   });
 
   it("uses the same spaced base name in the pending status as in the catalog", () => {
@@ -32,6 +65,7 @@ describe("catalog placement controls", () => {
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
+      presentationChoice: defaultPresentationChoice,
     });
 
     expect(renderToStaticMarkup(placementControls)).toContain("Placing Joja Bed");
@@ -57,6 +91,7 @@ describe("catalog placement controls", () => {
         cycleCallCount += 1;
         return true;
       },
+      presentationChoice: defaultPresentationChoice,
     });
     if (placementControls === null) {
       throw new Error("Expected placement controls for the pending Oak Chair.");
@@ -96,6 +131,7 @@ describe("catalog placement controls", () => {
       locale: "zh-CN",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
+      presentationChoice: defaultPresentationChoice,
     });
     if (placementControls === null) {
       throw new Error("Expected placement controls for the pending Cherry Sapling.");
@@ -128,6 +164,7 @@ describe("catalog placement controls", () => {
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
+      presentationChoice: defaultPresentationChoice,
     });
     if (placementControls === null) {
       throw new Error("Expected placement controls for the pending Stone.");
@@ -150,6 +187,7 @@ describe("catalog placement controls", () => {
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
+      presentationChoice: defaultPresentationChoice,
     });
     const chineseFillControls = CatalogPlacementControls({
       catalogItem: createCatalogItem({
@@ -161,6 +199,7 @@ describe("catalog placement controls", () => {
       locale: "zh-CN",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
+      presentationChoice: defaultPresentationChoice,
     });
 
     expect(renderToStaticMarkup(englishFillControls)).toContain("Filling Oak Chair");
@@ -169,6 +208,60 @@ describe("catalog placement controls", () => {
     );
     expect(renderToStaticMarkup(chineseFillControls)).toContain("正在填充Oak Chair");
     expect(renderToStaticMarkup(chineseFillControls)).toContain("拖动填充 · 按 Esc 取消");
+  });
+
+  it("shows the sprite for the current presentation choice", () => {
+    const catalogItem: CatalogItem = {
+      ...createCatalogItem({
+        name: "Coffee Table",
+        rotationCount: 2,
+        variantLabels: [],
+      }),
+      renderingMetadata: {
+        bedType: null,
+        compositeSprite: null,
+        furnitureType: "table",
+        indoors: true,
+        isLongTable: false,
+        isRug: false,
+        isTable: true,
+        kind: "furniture",
+        outdoors: true,
+        rotationSprites: [
+          { sprite: { kind: "source-rect", x: 0, y: 0, width: 32, height: 16 } },
+          { sprite: { kind: "source-rect", x: 32, y: 0, width: 16, height: 32 } },
+        ],
+        rotationTileSizes: [
+          { width: 2, height: 1 },
+          { width: 1, height: 2 },
+        ],
+        wallMounted: false,
+      },
+    };
+    const rotatedPresentationChoice: CatalogPresentationChoice = {
+      flipped: false,
+      rotation: 1,
+      variant: 0,
+    };
+    const placementControls = CatalogPlacementControls({
+      catalogItem,
+      isFilling: false,
+      locale: "en",
+      onCancel: () => undefined,
+      onCyclePendingChoice: () => true,
+      presentationChoice: rotatedPresentationChoice,
+    });
+    if (placementControls === null) {
+      throw new Error("Expected placement controls for the pending Coffee Table.");
+    }
+
+    const thumbnail = getPlacementThumbnail(placementControls);
+    expect(thumbnail.props.style).toMatchObject({
+      backgroundImage: 'url("/game-assets/test.png")',
+      backgroundPosition: "-32px 0px",
+      height: 32,
+      width: 16,
+    });
   });
 });
 
@@ -181,7 +274,7 @@ function getPlacementActionButtons(
   const placementControlsChildren = Children.toArray(
     placementControlsProperties.children,
   );
-  const actionContainer = placementControlsChildren[1];
+  const actionContainer = placementControlsChildren[2];
   if (!isValidElement<{ children?: ReactNode }>(actionContainer)) {
     throw new Error("Pending catalog pill has no action container.");
   }
@@ -194,6 +287,30 @@ function getPlacementActionButtons(
     throw new Error("Pending catalog pill has no action buttons.");
   }
   return actionButtons;
+}
+
+function getPlacementThumbnail(
+  placementControls: ReactElement,
+): ReactElement<Readonly<{ style?: CSSProperties }>> {
+  const placementControlsProperties = placementControls.props as Readonly<{
+    children?: ReactNode;
+  }>;
+  const placementControlsChildren = Children.toArray(
+    placementControlsProperties.children,
+  );
+  const thumbnailFrame = placementControlsChildren[0];
+  if (!isValidElement<Readonly<{ children?: ReactNode }>>(thumbnailFrame)) {
+    throw new Error("Pending catalog pill has no thumbnail frame.");
+  }
+  const thumbnailScale = Children.toArray(thumbnailFrame.props.children)[0];
+  if (!isValidElement<Readonly<{ children?: ReactNode }>>(thumbnailScale)) {
+    throw new Error("Pending catalog pill has no scaled thumbnail.");
+  }
+  const thumbnail = Children.toArray(thumbnailScale.props.children)[0];
+  if (!isValidElement<Readonly<{ style?: CSSProperties }>>(thumbnail)) {
+    throw new Error("Pending catalog pill has no sprite thumbnail.");
+  }
+  return thumbnail;
 }
 
 function createCatalogItem(input: Readonly<{

@@ -1206,6 +1206,7 @@ function PreparedPlannerWorkspaceContent({
         ) : (
           <CatalogPlacementControls
             catalogItem={selectedCatalogItem?.catalogItem ?? null}
+            presentationChoice={selectedCatalogItem?.presentationChoice ?? null}
             isFilling={plannerWorkspaceState.tool === "fill"}
             locale={locale}
             onCancel={clearSelectedCatalogItem}

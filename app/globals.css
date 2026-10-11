@@ -3404,6 +3404,9 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .selection-pill { align-items: center; display: flex; gap: var(--lk-3xs); min-height: var(--lk-xl); }
 .planner-editor-shell .pill-name { font-size: .887rem; margin: 0; padding: 0 var(--lk-3xs); }
 .planner-editor-shell .catalog-placement-controls { gap: var(--lk-2xs); pointer-events: auto; box-shadow: var(--planner-neo-raised-shadow); }
+.planner-editor-shell .catalog-placement-controls__thumbnail-frame { align-items: center; display: flex; flex: 0 0 44px; height: 44px; justify-content: center; overflow: hidden; width: 44px; }
+.planner-editor-shell .catalog-placement-controls__thumbnail-scale { display: flex; flex: 0 0 auto; transform-origin: center; }
+.planner-editor-shell .catalog-placement-controls__thumbnail { background-repeat: no-repeat; display: block; flex: 0 0 auto; image-rendering: pixelated; }
 .planner-editor-shell .catalog-placement-controls__info { display: flex; flex: 1 1 auto; flex-direction: column; gap: 2px; min-width: 0; }
 .planner-editor-shell .catalog-placement-controls__name { color: var(--text); font-size: .875rem; font-weight: 600; line-height: 1.1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .planner-editor-shell .catalog-placement-controls__hint { color: var(--text-dim); font-size: .75rem; line-height: 1.1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -5053,7 +5056,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
  * Colours and pressed shadows remain those of the existing editor. */
 .planner-editor-shell {
   --planner-topbar-height: 38px;
-  --planner-editing-toolbar-width: 477.375px;
+  --planner-editing-toolbar-width: 281px;
 }
 .planner-editor-shell .editor-menu-bar {
   align-items: center;
@@ -5098,17 +5101,31 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .planner-canvas { top: var(--planner-topbar-height); }
 .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { bottom: 18px; left: 50%; max-width: calc(100% - 24px); top: auto; }
 .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: calc(50% + 170px); max-width: calc(100% - 364px); }
+.planner-editor-shell:has(.item-catalog-panel--left) .catalog-placement-controls { left: calc(50% + 170px); }
 .planner-editor-shell .editor-toolbar { box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
 .planner-editor-shell .editor-toolbar__tool-group,
 .planner-editor-shell .editor-toolbar__history-group,
 .planner-editor-shell .editor-wheel-zoom-group { display: contents; }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button { display: flex; flex: 0 0 99.546875px; font-size: 14px; font-weight: 500; gap: 8px; height: 40px; width: 99.546875px; }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"] { flex-basis: 89.9765625px; width: 89.9765625px; }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"] { flex-basis: 76.7109375px; width: 76.7109375px; }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"] { flex-basis: 94.140625px; width: 94.140625px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button { display: flex; flex: 0 0 40px; font-size: 14px; font-weight: 500; gap: 0; height: 40px; width: 40px; }
 .planner-editor-shell .editor-toolbar .editor-wheel-zoom-button { flex-basis: 72px; width: 72px; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__history-button { flex-basis: 40px; width: 40px; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__divider { flex: 0 0 1px; height: 22px; margin: 0 3px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { position: relative; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]::after { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 6px 16px rgb(0 0 0 / 30%); color: var(--text); content: attr(data-tooltip); font-size: 12px; font-weight: 500; left: 50%; line-height: 1.3; max-width: calc(100vw - 20px); opacity: 0; padding: 8px 10px; pointer-events: none; position: absolute; text-align: center; bottom: calc(100% + 8px); transform: translate(-50%, 3px); transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease; visibility: hidden; white-space: nowrap; width: max-content; z-index: 80; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]::after { left: 0; text-align: left; transform: translateY(3px); }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]::after { left: auto; right: 0; text-align: right; transform: translateY(3px); }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]:hover::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); visibility: visible; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:hover::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:focus-visible::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:hover::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:focus-visible::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:hover::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:focus-visible::after { transform: translateY(0); }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:hover::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:focus-visible::after { transform: translateY(0); }
 .planner-editor-shell .selection-inspector,
 .planner-editor-shell .catalog-placement-controls { bottom: 80px; }
 .planner-editor-shell .planner-workspace__toast { top: calc(var(--planner-topbar-height) + 12px); }
@@ -5191,9 +5208,24 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   .planner-editor-shell .editor-modal--save-panel { max-width: calc(100vw - 24px); width: calc(100vw - 24px); }
   .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { max-width: calc(100% - 16px); }
   .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: 50%; max-width: calc(100% - 16px); }
+  .planner-editor-shell .catalog-placement-controls { left: 50%; transform: translateX(-50%); }
+  .planner-editor-shell:has(.item-catalog-panel--left) .catalog-placement-controls { left: 50%; }
   .planner-editor-shell .editor-toolbar { height: 54px; padding: 4px; width: min(var(--planner-editing-toolbar-width), calc(100vw - 20px)); }
   .planner-editor-shell .editor-toolbar .editor-toolbar__button,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { flex: 1 1 0; font-size: 12px; gap: 2px; height: 44px; min-width: 44px; width: auto; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { flex: 1 1 0; font-size: 12px; gap: 0; height: 44px; min-width: 40px; width: auto; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { position: static; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]::after { box-sizing: border-box; left: 50%; max-width: calc(100vw - 20px); right: auto; text-align: center; transform: translate(-50%, 3px); white-space: normal; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:hover::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:focus-visible::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:hover::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:focus-visible::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:hover::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:focus-visible::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:hover::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:focus-visible::after { transform: translate(-50%, 0); }
   .planner-editor-shell .editor-toolbar__label { display: none; }
   .planner-editor-shell .editor-wheel-zoom-button .editor-toolbar__label { display: inline; }
   .planner-editor-shell .editor-toolbar .editor-toolbar__history-button { flex: 0 0 44px; width: 44px; }
@@ -5213,4 +5245,9 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .planner-editor-shell .editor-menu-bar__chevron { transition: none; }
+}
+
+.planner-editor-shell .catalog-placement-controls {
+  transform: translateX(-50%) scale(0.5);
+  transform-origin: bottom center;
 }

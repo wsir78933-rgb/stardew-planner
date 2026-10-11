@@ -108,6 +108,7 @@ const validPlacementPreviewTint = 0x00ff00;
 const invalidPlacementPreviewTint = 0xff0000;
 const mapTileRectanglePreviewColor = 0x4a9eff;
 const mapTileRectanglePreviewFillAlpha = 0.18;
+const mapTileRectanglePreviewSizeLabelOffset = 4;
 const mapTileRectanglePreviewDashLength = 5;
 const mapTileRectanglePreviewDashGap = 3;
 const mapTileRectanglePreviewStrokeWidth = 1.5;
@@ -575,10 +576,27 @@ type PlannerCameraControls = Readonly<{
 
 type MapTileRectanglePreviewRenderer = Readonly<{
   clear(): void;
+  updateCameraZoom(cameraZoom: number): void;
   render(
     startMapTileCoordinates: MapPointerTile,
     endMapTileCoordinates: MapPointerTile,
+    showSizeLabel?: boolean,
+    fillableSpotCount?: number,
   ): void;
+}>;
+
+type MapTileRectanglePreviewSizeLabel = {
+  position: Readonly<{ set(x: number, y: number): void }>;
+  scale: Readonly<{ set(x: number, y?: number): void }>;
+  text: string;
+  visible: boolean;
+};
+
+type MapTileRectanglePixels = Readonly<{
+  height: number;
+  width: number;
+  x: number;
+  y: number;
 }>;
 
 type MapTileRectanglePreview = Readonly<{
@@ -1666,6 +1684,22 @@ export function PlannerCanvas({
         const mapTileRectanglePreviewGraphics = new pixi.Graphics();
         mapTileRectanglePreviewGraphics.label = "mapTileRectanglePreview";
         mapContainerCreationResult.mapContainer.addChild(mapTileRectanglePreviewGraphics);
+        const mapTileRectanglePreviewSizeLabel = new pixi.Text({
+          anchor: { x: 0.5, y: 1 },
+          style: {
+            fill: "#ffffff",
+            fontFamily: "sans-serif",
+            fontSize: 13,
+            fontWeight: "bold",
+            stroke: { color: "#000000", width: 3 },
+          },
+          text: "",
+        });
+        mapTileRectanglePreviewSizeLabel.label = "mapTileRectanglePreviewSize";
+        mapTileRectanglePreviewSizeLabel.visible = false;
+        mapContainerCreationResult.mapContainer.addChild(
+          mapTileRectanglePreviewSizeLabel,
+        );
         const nightModeOverlayContainer = new pixi.Container();
         nightModeOverlayContainer.label = "nightMode";
         mapContainerCreationResult.mapContainer.addChild(nightModeOverlayContainer);
@@ -1855,6 +1889,16 @@ export function PlannerCanvas({
 
         let hoveredMapTile: MapPointerTile | null = null;
         let currentMapTileRectanglePreview: MapTileRectanglePreview | null = null;
+        const mapTileRectanglePreviewRenderer =
+          createMapTileRectanglePreviewRenderer({
+            graphics: mapTileRectanglePreviewGraphics,
+            sizeLabel: mapTileRectanglePreviewSizeLabel,
+            render: () => {
+              pixiApplication.renderer.render(pixiApplication.stage);
+            },
+            tileHeight: renderingContract.tileHeight,
+            tileWidth: renderingContract.tileWidth,
+          });
         const placementPreviewAnimationController =
           createPlacementAnimationController(() => {
             pixiApplication.renderer.render(pixiApplication.stage);
@@ -1913,6 +1957,14 @@ export function PlannerCanvas({
               fillPreviewActions,
               "fill rectangle preview",
             );
+            if (shortRectangleClickBehaviorReference.current === "rectangle") {
+              mapTileRectanglePreviewRenderer.render(
+                currentMapTileRectanglePreview.startMapTileCoordinates,
+                currentMapTileRectanglePreview.endMapTileCoordinates,
+                true,
+                fillPreviewActions?.length ?? 0,
+              );
+            }
             if (fillPreviewActions !== null) {
               previewActions = fillPreviewActions;
               hasInteractionPreview = true;
@@ -2012,7 +2064,6 @@ export function PlannerCanvas({
           requestPlacementPreviewOverlayRender;
 
         let currentCameraGeometry: CameraGeometry | null = null;
-
         const renderCameraState = (cameraState: CameraState) => {
           if (currentCameraGeometry === null) {
             throw new Error(
@@ -2020,6 +2071,7 @@ export function PlannerCanvas({
             );
           }
 
+          mapTileRectanglePreviewRenderer.updateCameraZoom(cameraState.zoom);
           applyCameraState(
             pixiApplication,
             mapContainerCreationResult.mapContainer,
@@ -2064,15 +2116,6 @@ export function PlannerCanvas({
           mapId,
           renderCameraState,
         });
-        const mapTileRectanglePreviewRenderer =
-          createMapTileRectanglePreviewRenderer({
-            graphics: mapTileRectanglePreviewGraphics,
-            render: () => {
-              pixiApplication.renderer.render(pixiApplication.stage);
-            },
-            tileHeight: renderingContract.tileHeight,
-            tileWidth: renderingContract.tileWidth,
-          });
 
         const resizeMapToViewport = () => {
           if (!isMapLifecycleCurrent()) {
@@ -2280,6 +2323,7 @@ export function PlannerCanvas({
                   mapTileRectanglePreviewRenderer.render(
                     startMapTileCoordinates,
                     endMapTileCoordinates,
+                    shortRectangleClickBehaviorReference.current === "rectangle",
                   );
                   requestPlacementPreviewOverlayRender();
                 },
@@ -3071,18 +3115,69 @@ export function createMapTileRectanglePreviewRenderer(
   input: Readonly<{
     graphics: import("pixi.js").Graphics;
     render: () => void;
+    sizeLabel: MapTileRectanglePreviewSizeLabel;
     tileHeight: number;
     tileWidth: number;
   }>,
 ): MapTileRectanglePreviewRenderer {
+  let cameraZoom = 1;
+  let currentSizeLabelMapTileRectangle: MapTileRectanglePixels | null = null;
+  let isSizeLabelVisible = false;
+
+  const updateSizeLabelPosition = (
+    mapTileRectangle: MapTileRectanglePixels,
+  ): void => {
+    input.sizeLabel.position.set(
+      mapTileRectangle.x + mapTileRectangle.width / 2,
+      mapTileRectangle.y - mapTileRectanglePreviewSizeLabelOffset / cameraZoom,
+    );
+  };
+
   const clear = (): void => {
     input.graphics.clear();
+    currentSizeLabelMapTileRectangle = null;
+    isSizeLabelVisible = false;
+    input.sizeLabel.text = "";
+    input.sizeLabel.visible = false;
     input.render();
   };
 
   return {
     clear,
-    render(startMapTileCoordinates, endMapTileCoordinates): void {
+    updateCameraZoom(nextCameraZoom): void {
+      if (!Number.isFinite(nextCameraZoom) || nextCameraZoom <= 0) {
+        throw new RangeError(
+          `Planner Canvas rectangle preview cameraZoom must be finite and positive; received ${String(nextCameraZoom)}.`,
+        );
+      }
+
+      cameraZoom = nextCameraZoom;
+      input.sizeLabel.scale.set(1 / cameraZoom);
+
+      if (isSizeLabelVisible && currentSizeLabelMapTileRectangle !== null) {
+        updateSizeLabelPosition(currentSizeLabelMapTileRectangle);
+      }
+    },
+    render(
+      startMapTileCoordinates,
+      endMapTileCoordinates,
+      showSizeLabel = false,
+      fillableSpotCount,
+    ): void {
+      if (typeof showSizeLabel !== "boolean") {
+        throw new TypeError(
+          `Planner Canvas rectangle preview showSizeLabel must be a boolean; received ${describeValue(showSizeLabel)}.`,
+        );
+      }
+      if (
+        fillableSpotCount !== undefined
+        && (!Number.isSafeInteger(fillableSpotCount) || fillableSpotCount < 0)
+      ) {
+        throw new RangeError(
+          `Planner Canvas rectangle preview fillableSpotCount must be a non-negative safe integer; received ${String(fillableSpotCount)}.`,
+        );
+      }
+
       const mapTileRectangle = getMapTileRectanglePixels(
         startMapTileCoordinates,
         endMapTileCoordinates,
@@ -3103,6 +3198,30 @@ export function createMapTileRectanglePreviewRenderer(
           color: mapTileRectanglePreviewColor,
         });
       drawDashedMapTileRectangleBorder(input.graphics, mapTileRectangle);
+
+      if (showSizeLabel) {
+        const rectangleWidthInTiles = Math.abs(
+          endMapTileCoordinates.x - startMapTileCoordinates.x,
+        ) + 1;
+        const rectangleHeightInTiles = Math.abs(
+          endMapTileCoordinates.y - startMapTileCoordinates.y,
+        ) + 1;
+
+        const rectangleTileCount = rectangleWidthInTiles * rectangleHeightInTiles;
+        const displayedFillableSpotCount = fillableSpotCount ?? rectangleTileCount;
+        input.sizeLabel.text = `${rectangleWidthInTiles} × ${rectangleHeightInTiles} (${displayedFillableSpotCount})`;
+        currentSizeLabelMapTileRectangle = mapTileRectangle;
+        isSizeLabelVisible = true;
+        input.sizeLabel.scale.set(1 / cameraZoom);
+        updateSizeLabelPosition(mapTileRectangle);
+        input.sizeLabel.visible = true;
+      } else {
+        currentSizeLabelMapTileRectangle = null;
+        isSizeLabelVisible = false;
+        input.sizeLabel.text = "";
+        input.sizeLabel.visible = false;
+      }
+
       input.render();
     },
   };
@@ -3113,7 +3232,7 @@ function getMapTileRectanglePixels(
   endMapTileCoordinates: MapPointerTile,
   tileWidth: number,
   tileHeight: number,
-): Readonly<{ height: number; width: number; x: number; y: number }> {
+): MapTileRectanglePixels {
   const startTileX = Math.min(startMapTileCoordinates.x, endMapTileCoordinates.x);
   const startTileY = Math.min(startMapTileCoordinates.y, endMapTileCoordinates.y);
   const endTileX = Math.max(startMapTileCoordinates.x, endMapTileCoordinates.x);

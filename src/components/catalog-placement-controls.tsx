@@ -1,9 +1,15 @@
 "use client";
 
-import type { CatalogItem } from "../catalog";
+import type {
+  CatalogItem,
+  CatalogPresentationChoice,
+} from "../catalog";
 import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
+import { getCatalogItemThumbnailStyle } from "./item-catalog-panel";
+
+const catalogPlacementThumbnailSize = 44;
 
 type CatalogPlacementControlsProperties = Readonly<{
   catalogItem: CatalogItem | null;
@@ -11,6 +17,7 @@ type CatalogPlacementControlsProperties = Readonly<{
   locale: HomepageLocale;
   onCancel: () => void;
   onCyclePendingChoice: () => boolean;
+  presentationChoice: CatalogPresentationChoice | null;
 }>;
 
 type PendingCatalogControl = "rotation" | "variant" | null;
@@ -21,9 +28,15 @@ export function CatalogPlacementControls({
   locale,
   onCancel,
   onCyclePendingChoice,
+  presentationChoice,
 }: CatalogPlacementControlsProperties) {
   if (catalogItem === null) {
     return null;
+  }
+  if (presentationChoice === null) {
+    throw new TypeError(
+      `Catalog presentation choice is unavailable for item ID ${JSON.stringify(catalogItem.id)}.`,
+    );
   }
 
   const copy = getCatalogPanelCopy(locale);
@@ -33,6 +46,24 @@ export function CatalogPlacementControls({
     ? copy.fillingItem(itemName)
     : copy.placingItem(itemName);
   const placementHint = isFilling ? copy.fillItemHint : copy.placeItemHint;
+  const thumbnailStyle = getCatalogItemThumbnailStyle(
+    catalogItem,
+    presentationChoice,
+    true,
+    "grid",
+  );
+  const thumbnailWidth =
+    typeof thumbnailStyle.width === "number"
+      ? thumbnailStyle.width
+      : catalogPlacementThumbnailSize;
+  const thumbnailHeight =
+    typeof thumbnailStyle.height === "number"
+      ? thumbnailStyle.height
+      : catalogPlacementThumbnailSize;
+  const thumbnailScale = Math.min(
+    1,
+    catalogPlacementThumbnailSize / Math.max(thumbnailWidth, thumbnailHeight),
+  );
 
   return (
     <div
@@ -40,6 +71,24 @@ export function CatalogPlacementControls({
       className="catalog-placement-controls selection-pill"
       role="group"
     >
+      <span
+        aria-hidden="true"
+        className="catalog-placement-controls__thumbnail-frame"
+      >
+        <span
+          className="catalog-placement-controls__thumbnail-scale"
+          style={{ transform: `scale(${String(thumbnailScale)})` }}
+        >
+          <span
+            className="catalog-placement-controls__thumbnail"
+            style={{
+              ...thumbnailStyle,
+              height: thumbnailHeight,
+              width: thumbnailWidth,
+            }}
+          />
+        </span>
+      </span>
       <div className="catalog-placement-controls__info">
         <span className="catalog-placement-controls__name">{placementStatusLabel}</span>
         <span className="catalog-placement-controls__hint">{placementHint}</span>

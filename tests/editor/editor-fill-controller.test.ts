@@ -1,13 +1,22 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import type {
-  BuildingPlacementMetadataById,
-  CatalogItem,
+import {
+  catalogDatasetUrls,
+  createPlaceableCatalogFromDatasets,
+  type BuildingPlacementMetadataById,
+  type CatalogItem,
 } from "../../src/catalog";
 import {
   applyEditorFill,
 } from "../../src/editor/editor-fill-controller";
+import { previewPlannerWorkspaceFillRectangle } from "../../src/planner/planner-workspace-editing-controller";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
-import { createPlacementHistory } from "../../src/placement/placement-history";
+import {
+  createPlacementHistory,
+  redoPlacementHistory,
+  undoPlacementHistory,
+} from "../../src/placement/placement-history";
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
 
 function createCatalogItem(
@@ -21,6 +30,37 @@ function createCatalogItem(
     allowedTools: ["cursor", "fill"],
     ...catalogItem,
   };
+}
+
+function createBlueGrassCatalogItemFromLockedDatasets(): CatalogItem {
+  const catalog = createPlaceableCatalogFromDatasets(
+    readLockedCatalogDataset("BigCraftables.json"),
+    readLockedCatalogDataset("Objects.json"),
+    readLockedCatalogDataset("Fences.json"),
+    readLockedCatalogDataset("FloorsAndPaths.json"),
+    readLockedCatalogDataset("Furniture.json"),
+    readLockedCatalogDataset("FruitTrees.json"),
+    catalogDatasetUrls,
+  );
+  const blueGrassCatalogItem = catalog.items.find(
+    (catalogItem) => catalogItem.id === "grass_7",
+  );
+
+  if (blueGrassCatalogItem === undefined) {
+    throw new Error('Locked catalog did not contain item "grass_7".');
+  }
+
+  return blueGrassCatalogItem;
+}
+
+function readLockedCatalogDataset(filename: string): unknown {
+  const absolutePath = resolve(
+    process.cwd(),
+    "public/game-assets/1.6.15/data",
+    filename,
+  );
+
+  return JSON.parse(readFileSync(absolutePath, "utf8")) as unknown;
 }
 
 function createPlacementGrid(width: number, height: number): MapPlacementGrid {
@@ -182,6 +222,79 @@ function createBuildingMetadataById(): BuildingPlacementMetadataById {
 }
 
 describe("applyEditorFill", () => {
+  it("fills Blue Grass Starter on valid single tiles, previews the same placements, and supports undo and redo", () => {
+    const blueGrassCatalogItem = createBlueGrassCatalogItemFromLockedDatasets();
+    const basePlacementGrid = createPlacementGrid(3, 2);
+    const mapPlacementGrid: MapPlacementGrid = {
+      ...basePlacementGrid,
+      capabilitiesByTile: basePlacementGrid.capabilitiesByTile.map(
+        (tileCapabilities, tileIndex) => tileIndex === 1
+          ? { ...tileCapabilities, passable: false }
+          : tileCapabilities,
+      ),
+    };
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillInput = {
+      selectedCatalogItem: blueGrassCatalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 2, y: 1 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    } as const;
+    const previewActions = previewPlannerWorkspaceFillRectangle({
+      ...fillInput,
+      freePlacement: false,
+      selectedPlacementKeys: [],
+      tool: "fill",
+    });
+    const fillResult = applyEditorFill(fillInput);
+
+    if (!fillResult.applied) {
+      throw new Error("Blue Grass Starter Fill did not produce a placement history.");
+    }
+    if (previewActions === null) {
+      throw new Error("Blue Grass Starter Fill preview did not produce placement actions.");
+    }
+
+    const filledItems = fillResult.placementHistory.currentState.items;
+    const expectedPreviewActions = filledItems.map((filledItem) => {
+      const { instanceId: omittedInstanceId, ...previewItem } = filledItem;
+      return { type: "add-item" as const, item: previewItem };
+    });
+
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 5 });
+    expect(filledItems).toHaveLength(5);
+    expect(filledItems).toEqual([
+      expect.objectContaining({ itemId: "grass_7", x: 0, y: 0, isGrass: true }),
+      expect.objectContaining({ itemId: "grass_7", x: 2, y: 0, isGrass: true }),
+      expect.objectContaining({ itemId: "grass_7", x: 0, y: 1, isGrass: true }),
+      expect.objectContaining({ itemId: "grass_7", x: 1, y: 1, isGrass: true }),
+      expect.objectContaining({ itemId: "grass_7", x: 2, y: 1, isGrass: true }),
+    ]);
+    expect(previewActions).toEqual(expectedPreviewActions);
+    expect(fillResult.placementHistory.undoStates).toEqual([
+      placementHistory.currentState,
+    ]);
+    expect(fillResult.placementHistory.redoStates).toEqual([]);
+
+    const undonePlacementHistory = undoPlacementHistory(fillResult.placementHistory);
+    expect(undonePlacementHistory.currentState.items).toEqual([]);
+    expect(undonePlacementHistory.redoStates).toEqual([
+      fillResult.placementHistory.currentState,
+    ]);
+
+    const redonePlacementHistory = redoPlacementHistory(undonePlacementHistory);
+    expect(redonePlacementHistory.currentState).toEqual(
+      fillResult.placementHistory.currentState,
+    );
+    expect(redonePlacementHistory.undoStates).toEqual([
+      placementHistory.currentState,
+    ]);
+    expect(redonePlacementHistory.redoStates).toEqual([]);
+  });
+
   it("fills a floor rectangle atomically as one undoable history entry", () => {
     const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
 

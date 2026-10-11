@@ -24,14 +24,34 @@ type EditorToolbarProperties = Readonly<{
 type EditorToolbarControl = Readonly<{
   icon: PlannerReferenceIconName;
   key: "select" | "multi" | "fill" | "erase";
+  tooltipKey:
+    | "selectTooltip"
+    | "multiTooltip"
+    | "fillTooltip"
+    | "eraseTooltip";
   tool: Extract<EditorTool, "cursor" | "multi-select" | "fill" | "erase">;
 }>;
 
 const editorToolbarControls = [
-  { tool: "cursor", key: "select", icon: "Select" },
-  { tool: "multi-select", key: "multi", icon: "Multi" },
-  { tool: "fill", key: "fill", icon: "Fill" },
-  { tool: "erase", key: "erase", icon: "Erase" },
+  {
+    tool: "cursor",
+    key: "select",
+    tooltipKey: "selectTooltip",
+    icon: "Select",
+  },
+  {
+    tool: "multi-select",
+    key: "multi",
+    tooltipKey: "multiTooltip",
+    icon: "Multi",
+  },
+  { tool: "fill", key: "fill", tooltipKey: "fillTooltip", icon: "Fill" },
+  {
+    tool: "erase",
+    key: "erase",
+    tooltipKey: "eraseTooltip",
+    icon: "Erase",
+  },
 ] as const satisfies readonly EditorToolbarControl[];
 
 const editorToolbarCopyByLocale = {
@@ -41,6 +61,10 @@ const editorToolbarCopyByLocale = {
     multi: "Multi",
     fill: "Fill",
     erase: "Erase",
+    selectTooltip: "Select and move items (V)",
+    multiTooltip: "Click or drag to select multiple items (M)",
+    fillTooltip: "Drag a rectangle to fill items (F)",
+    eraseTooltip: "Click or drag a rectangle to erase items (E)",
     undo: "Undo",
     redo: "Redo",
   },
@@ -50,6 +74,10 @@ const editorToolbarCopyByLocale = {
     multi: "多选",
     fill: "填充",
     erase: "擦除",
+    selectTooltip: "选择并移动物品（V）",
+    multiTooltip: "点击或拖框多选物品（M）",
+    fillTooltip: "拖动矩形批量填充（F）",
+    eraseTooltip: "点击或拖框擦除物品（E）",
     undo: "撤销",
     redo: "重做",
   },
@@ -89,11 +117,10 @@ export function EditorToolbar({
             getEditorToolbarToolSelectionAfterClick(editorToolbarControl.tool),
           )
         }
-        title={controlLabel}
+        data-tooltip={editorToolbarCopy[editorToolbarControl.tooltipKey]}
         type="button"
       >
         <PlannerReferenceIcon name={editorToolbarControl.icon} size={20} />
-        <span className="editor-toolbar__label">{controlLabel}</span>
       </button>
     );
   };

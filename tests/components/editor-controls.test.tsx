@@ -94,16 +94,59 @@ describe("editor controls", () => {
     expect(toolbarMarkup).not.toContain("Zoom");
     expect(toolbarMarkup).not.toContain("滚轮缩放");
     expect(toolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(1);
-    expect(toolbarMarkup).toContain("Select");
-    expect(toolbarMarkup).toContain("Multi");
-    expect(toolbarMarkup).toContain("Fill");
-    expect(toolbarMarkup).toContain("Erase");
+    expect(toolbarMarkup).not.toContain('class="editor-toolbar__label"');
+    expect(toolbarMarkup).toContain('aria-label="Select"');
+    expect(toolbarMarkup).toContain('aria-label="Multi"');
+    expect(toolbarMarkup).toContain('aria-label="Fill"');
+    expect(toolbarMarkup).toContain('aria-label="Erase"');
+    expect(toolbarMarkup).toContain('data-tooltip="Select and move items (V)"');
+    expect(toolbarMarkup).toContain(
+      'data-tooltip="Click or drag to select multiple items (M)"',
+    );
+    expect(toolbarMarkup).toContain(
+      'data-tooltip="Drag a rectangle to fill items (F)"',
+    );
+    expect(toolbarMarkup).toContain(
+      'data-tooltip="Click or drag a rectangle to erase items (E)"',
+    );
+    expect(toolbarMarkup).not.toMatch(
+      /<button[^>]*data-editor-tool="[^"]+"[^>]*title=/,
+    );
 
     const localizedToolbarMarkup = renderToolbar("cursor", "zh");
     expect(localizedToolbarMarkup).not.toContain('data-editor-tool="zoom"');
     expect(localizedToolbarMarkup).toContain('aria-label="选择"');
+    expect(localizedToolbarMarkup).toContain('aria-label="多选"');
+    expect(localizedToolbarMarkup).toContain('aria-label="填充"');
+    expect(localizedToolbarMarkup).toContain('aria-label="擦除"');
+    expect(localizedToolbarMarkup).toContain('data-tooltip="选择并移动物品（V）"');
+    expect(localizedToolbarMarkup).toContain(
+      'data-tooltip="点击或拖框多选物品（M）"',
+    );
+    expect(localizedToolbarMarkup).toContain(
+      'data-tooltip="拖动矩形批量填充（F）"',
+    );
+    expect(localizedToolbarMarkup).toContain(
+      'data-tooltip="点击或拖框擦除物品（E）"',
+    );
     expect(localizedToolbarMarkup).toContain('aria-label="撤销"');
     expect(localizedToolbarMarkup).toContain('aria-label="重做"');
+  });
+
+  it("shows each tool usage tooltip on hover and keyboard focus", () => {
+    const stylesheet = readFileSync(
+      resolve(process.cwd(), "app/globals.css"),
+      "utf8",
+    );
+    const editorToolTooltipSelector =
+      ".planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]";
+
+    expect(stylesheet).toContain(`${editorToolTooltipSelector}::after`);
+    expect(stylesheet).toContain("content: attr(data-tooltip);");
+    expect(stylesheet).toContain(`${editorToolTooltipSelector}:hover::after`);
+    expect(stylesheet).toContain(
+      `${editorToolTooltipSelector}:focus-visible::after`,
+    );
   });
 
   it("renders exactly one visible selected tool or no selection", () => {

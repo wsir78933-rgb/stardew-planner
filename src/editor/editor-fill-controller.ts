@@ -312,12 +312,16 @@ function createFillTiles(
     selectedCatalogItem.category === "placeable"
     && renderingMetadata?.kind === "furniture"
     && renderingMetadata.bedType !== null;
+  const isSingleTilePlaceable =
+    selectedCatalogItem.category === "placeable"
+    && selectedCatalogItem.tileSize.width === 1
+    && selectedCatalogItem.tileSize.height === 1;
 
   if (
     selectedCatalogItem.category !== "crop" &&
     selectedCatalogItem.category !== "floor" &&
     selectedCatalogItem.category !== "fence" &&
-    !isCompositeFurniture && !isBedFurniture
+    !isCompositeFurniture && !isBedFurniture && !isSingleTilePlaceable
   ) {
     throw new Error(
       `Editor fill does not support catalog category ${describeValue(selectedCatalogItem.category)} for item ${describeValue(selectedCatalogItem.id)}.`,

@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type {
-  BuildingPlacementMetadataById,
-  CatalogItem,
-  CatalogPresentationChoice,
+import {
+  createSeasonalPlaceableCatalogProperties,
+  type BuildingPlacementMetadataById,
+  type CatalogItem,
+  type CatalogPresentationChoice,
 } from "../../src/catalog";
 import {
   applyEditorCursorPlacement,
@@ -18,6 +19,7 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementItem,
 } from "../../src/placement/placement-snapshot";
+import { createGrassPlacementRenderLayers } from "../../src/rendering/grass-placement-rendering";
 
 function createCatalogItem(
   catalogItem: Partial<CatalogItem> & Pick<CatalogItem, "id" | "category">,
@@ -30,6 +32,16 @@ function createCatalogItem(
     allowedTools: ["cursor"],
     ...catalogItem,
   };
+}
+
+function createGrassStarterCatalogItem(
+  catalogItemId: "grass_1" | "grass_7",
+): CatalogItem {
+  return createCatalogItem({
+    id: catalogItemId,
+    category: "placeable",
+    ...createSeasonalPlaceableCatalogProperties(catalogItemId),
+  });
 }
 
 function createPlacementGrid(
@@ -307,6 +319,49 @@ function createEmptyTablePlacement(
 }
 
 describe("applyEditorCursorPlacement", () => {
+  it.each(["grass_1", "grass_7"] as const)(
+    "places %s through the normal cursor path and marks its seasonal grass rendering",
+    (catalogItemId) => {
+      const grassStarter = createGrassStarterCatalogItem(catalogItemId);
+      const placementInput = createPlacementInput(grassStarter, {
+        cursorTile: { x: 0, y: 0 },
+      });
+      const preview = evaluateEditorCursorPlacementPreview({
+        ...placementInput,
+        placementSnapshot: placementInput.placementHistory.currentState,
+      });
+      const placementResult = applyEditorCursorPlacement(placementInput);
+
+      if (!placementResult.applied) {
+        throw new Error(
+          `Cursor placement did not apply for ${catalogItemId}; received ${JSON.stringify(placementResult)}.`,
+        );
+      }
+
+      const placedGrass = placementResult.placementHistory.currentState.items[0];
+      if (placedGrass === undefined) {
+        throw new Error(`Cursor placement did not create an item for ${catalogItemId}.`);
+      }
+
+      expect(preview).toMatchObject({
+        previewable: true,
+        validation: { valid: true },
+        previewAction: {
+          type: "add-item",
+          item: { itemId: catalogItemId, isGrass: true },
+        },
+      });
+      expect(placedGrass).toMatchObject({
+        itemId: catalogItemId,
+        x: 0,
+        y: 0,
+        isGrass: true,
+      });
+      expect(createGrassPlacementRenderLayers(grassStarter, placedGrass, "spring"))
+        .toHaveLength(4);
+    },
+  );
+
   it("evaluates a rotated catalog candidate without persisting a placement", () => {
     const furnitureItem = createCatalogItem({
       id: "furniture_724",

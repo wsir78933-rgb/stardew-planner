@@ -635,7 +635,7 @@ function createNewPlacementItem(
     tintColor: "#ffffff",
     locked: false,
     isRug: furnitureRenderingMetadata?.isRug ?? false,
-    isGrass: false,
+    isGrass: isGrassClumpPlaceable(catalogItem),
     isTable: furnitureRenderingMetadata?.isTable ?? false,
     isLongTable: furnitureRenderingMetadata?.isLongTable ?? false,
     flipped: catalogPresentationChoice.flipped,
@@ -686,6 +686,8 @@ function createPlacementSnapshotAction(
 }
 
 function assertPlaceableCatalogItemId(catalogItem: CatalogItem): void {
+  const isGrassStarterCatalogItem =
+    catalogItem.id === "grass_1" || catalogItem.id === "grass_7";
   const validCatalogItemPrefixes = [
     "object:",
     "big-craftable:",
@@ -695,6 +697,7 @@ function assertPlaceableCatalogItemId(catalogItem: CatalogItem): void {
   ];
 
   if (
+    !isGrassStarterCatalogItem &&
     !validCatalogItemPrefixes.some(
       (validCatalogItemPrefix) =>
         catalogItem.id.startsWith(validCatalogItemPrefix) &&
@@ -705,6 +708,14 @@ function assertPlaceableCatalogItemId(catalogItem: CatalogItem): void {
       `Editor placement placeable catalog ID must match an approved object, big-craftable, furniture_, fruittree_, or wildtree_ identifier; received ${describeValue(catalogItem.id)}.`,
     );
   }
+}
+
+function isGrassClumpPlaceable(catalogItem: CatalogItem): boolean {
+  const renderingMetadata = catalogItem.renderingMetadata;
+
+  return catalogItem.category === "placeable"
+    && renderingMetadata?.kind === "seasonal-placeable"
+    && renderingMetadata.composition === "grass-clumps";
 }
 
 function assertResourceClumpCatalogItem(catalogItem: CatalogItem): void {
