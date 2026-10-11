@@ -23,6 +23,7 @@ const catalogPanelFilterLabelIds = [
   "chairs",
   "benches",
   "couches",
+  "cushions",
   "armchairs",
   "tables",
   "long-tables",
@@ -43,6 +44,7 @@ const catalogPanelFilterLabelIds = [
   "special",
   "wallpaper",
   "flooring",
+  "bushes",
   "other",
 ] as const;
 
@@ -69,9 +71,21 @@ describe("catalog panel copy", () => {
     const englishCopy = getCatalogPanelCopy("en");
 
     expect(englishCopy.catalogLabel).toBe("Item catalog");
+    expect(englishCopy.filterItems).toBe("Filter items");
     expect(englishCopy.searchAllItems).toBe("Search all items");
     expect(englishCopy.placingItem("Oak Chair")).toBe("Placing Oak Chair");
     expect(englishCopy.placeItemHint).toBe("Click to place · Esc to cancel");
+    expect(englishCopy.sceneAvailabilityReason("indoor-only")).toBe(
+      "This item can only be placed indoors.",
+    );
+    expect(englishCopy.sceneAvailabilityReason("outdoor-only")).toBe(
+      "This item can only be placed outdoors.",
+    );
+    expect(englishCopy.unavailableGroup(3)).toBe("3 items can't be placed here");
+    expect(englishCopy.unavailableGroup(1)).toBe("1 item can't be placed here");
+    expect(englishCopy.unavailableGroup(3, true)).toBe(
+      "3 results can't be placed here",
+    );
     expect(englishCopy.rotate).toBe("Rotate");
     expect(englishCopy.variant).toBe("Variant");
     expect(englishCopy.cancelPlacement).toBe("Cancel placement (Esc)");
@@ -92,6 +106,8 @@ describe("catalog panel copy", () => {
       "giant-crops": "Giant crops",
       "windows-doors": "Windows & Doors",
       wallpaper: "Wallpaper",
+      cushions: "Cushions",
+      bushes: "Bushes",
     });
     expect(Object.keys(englishCopy.filterLabels).sort()).toEqual(
       [...catalogPanelFilterLabelIds].sort(),
@@ -128,9 +144,20 @@ describe("catalog panel copy", () => {
     const chineseCopy = getCatalogPanelCopy("zh-CN");
 
     expect(chineseCopy.brand).toBe("Stardew Planner");
+    expect(chineseCopy.filterItems).toBe("筛选物品");
     expect(chineseCopy.all).toBe("全部");
     expect(chineseCopy.placingItem("Oak Chair")).toBe("正在放置Oak Chair");
     expect(chineseCopy.placeItemHint).toBe("点击放置 · 按 Esc 取消");
+    expect(chineseCopy.sceneAvailabilityReason("indoor-only")).toBe(
+      "该物品只能放置在室内。",
+    );
+    expect(chineseCopy.sceneAvailabilityReason("outdoor-only")).toBe(
+      "该物品只能放置在室外。",
+    );
+    expect(chineseCopy.unavailableGroup(3)).toBe("3 件物品不能放置在这里");
+    expect(chineseCopy.unavailableGroup(3, true)).toBe(
+      "3 个搜索结果不能放置在这里",
+    );
     expect(chineseCopy.rotate).toBe("旋转");
     expect(chineseCopy.variant).toBe("变体");
     expect(chineseCopy.cancelPlacement).toBe("取消放置（Esc）");
@@ -144,6 +171,8 @@ describe("catalog panel copy", () => {
       "giant-crops": "巨型作物",
       "windows-doors": "门窗",
       wallpaper: "墙纸",
+      cushions: "垫子",
+      bushes: "灌木",
     });
     expect(Object.keys(chineseCopy.filterLabels).sort()).toEqual(
       [...catalogPanelFilterLabelIds].sort(),
@@ -179,6 +208,22 @@ describe("catalog panel copy", () => {
   it("rejects a locale outside the supported set and includes its value", () => {
     expect(() => getCatalogPanelCopy("fr" as HomepageLocale)).toThrow(
       'Unsupported catalog-panel locale. Received: "fr".',
+    );
+  });
+
+  it("rejects invalid unavailable-group arguments with their values", () => {
+    const englishCopy = getCatalogPanelCopy("en");
+
+    expect(() => englishCopy.unavailableGroup(-1)).toThrow(
+      "Unavailable catalog item count must be a non-negative integer; received -1.",
+    );
+    expect(() => englishCopy.unavailableGroup(1.5)).toThrow(
+      "Unavailable catalog item count must be a non-negative integer; received 1.5.",
+    );
+    expect(() =>
+      englishCopy.unavailableGroup(1, "true" as unknown as boolean),
+    ).toThrow(
+      'Unavailable catalog search flag must be a boolean; received "true".',
     );
   });
 });

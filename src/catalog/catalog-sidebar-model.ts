@@ -1,5 +1,15 @@
 import { catalogItemCategories, type CatalogItem } from "./catalog-types";
-import { referencePlaceableCatalogNames } from "./reference-placeable-order";
+import { referencePlaceableCatalogItemIds } from "./reference-placeable-order";
+import {
+  getCatalogSidebarReferenceEntry as findCatalogSidebarReferenceEntry,
+} from "./catalog-sidebar-reference";
+
+export {
+  getCatalogSidebarReferenceEntry,
+} from "./catalog-sidebar-reference";
+export type {
+  CatalogSidebarReferenceEntry,
+} from "./catalog-sidebar-reference";
 
 export const catalogSidebarCategories = [
   "buildings",
@@ -66,6 +76,7 @@ const catalogSidebarFiltersByCategory: Readonly<
   trees: [
     { id: "wild-trees", label: "Wild trees" },
     { id: "fruit-trees", label: "Fruit trees" },
+    { id: "bushes", label: "Bushes" },
   ],
   equipment: [
     { id: "utility", label: "Utility" },
@@ -78,6 +89,7 @@ const catalogSidebarFiltersByCategory: Readonly<
     { id: "benches", label: "Benches" },
     { id: "couches", label: "Couches" },
     { id: "armchairs", label: "Armchairs" },
+    { id: "cushions", label: "Cushions" },
     { id: "tables", label: "Tables" },
     { id: "long-tables", label: "Long tables" },
     { id: "bookcases", label: "Bookcases" },
@@ -87,7 +99,6 @@ const catalogSidebarFiltersByCategory: Readonly<
     { id: "rugs", label: "Rugs" },
     { id: "tvs", label: "TVs" },
     { id: "fish-tanks", label: "Fish tanks" },
-    { id: "other", label: "Other" },
   ],
   decor: [
     { id: "functional", label: "Functional" },
@@ -97,10 +108,9 @@ const catalogSidebarFiltersByCategory: Readonly<
     { id: "windows-doors", label: "Windows & doors" },
     { id: "large-decor", label: "Large decor" },
     { id: "small-decor", label: "Small decor" },
-    { id: "special", label: "Special" },
+    { id: "special-items", label: "Special items" },
     { id: "wallpaper", label: "Wallpaper" },
     { id: "flooring", label: "Flooring" },
-    { id: "other", label: "Other" },
   ],
 };
 
@@ -187,97 +197,6 @@ const referencePlaceableUtilityNames = new Set([
   "Crab Pot",
 ]);
 
-const referencePlaceableFunctionalDecorNames = new Set([
-  "Mini-Obelisk",
-  "Feed Hopper",
-  "Incubator",
-  "Heater",
-  "Tub o' Flowers",
-  "Soda Machine",
-  "Telephone",
-  "Mini-Fridge",
-  "Mini-Jukebox",
-  "Camera",
-  "Statue Of Endless Fortune",
-  "Statue Of Perfection",
-  "Statue Of True Perfection",
-  "Statue Of Blessings",
-  "Statue Of The Dwarf King",
-]);
-
-const cropSeasonByCatalogItemId = new Map<string, string>([
-  ...[
-    "crop:472", "crop:473", "crop:474", "crop:475", "crop:476", "crop:273",
-    "crop:477", "crop:478", "crop:745", "crop:427", "crop:429", "crop:495",
-    "crop:CarrotSeeds", "crop:495_18", "crop:495_20", "crop:495_22",
-  ].map((itemId) => [itemId, "spring"] as const),
-  ...[
-    "crop:831", "crop:479", "crop:480", "crop:481", "crop:482", "crop:484",
-    "crop:485", "crop:486", "crop:833", "crop:302", "crop:453", "crop:455",
-    "crop:496", "crop:SummerSquashSeeds", "crop:496_398", "crop:496_402",
-  ].map((itemId) => [itemId, "summer"] as const),
-  ...[
-    "crop:301", "crop:299", "crop:488", "crop:489", "crop:490", "crop:491",
-    "crop:492", "crop:493", "crop:494", "crop:425", "crop:347", "crop:497",
-    "crop:BroccoliSeeds", "crop:497_406", "crop:497_408", "crop:497_410",
-  ].map((itemId) => [itemId, "fall"] as const),
-  ...[
-    "crop:498", "crop:PowdermelonSeeds", "crop:498_414", "crop:498_416",
-    "crop:498_418",
-  ].map((itemId) => [itemId, "winter"] as const),
-  ...[
-    "crop:483", "crop:433", "crop:802", "crop:487", "crop:499", "crop:431",
-    "crop:885", "crop:890",
-  ].map((itemId) => [itemId, "multi-season"] as const),
-]);
-
-const giantCropIds = new Set([
-  "crop:giant_Cauliflower",
-  "crop:giant_Melon",
-  "crop:giant_Pumpkin",
-  "crop:giant_Powdermelon",
-  "crop:giant_QiFruit",
-]);
-
-const animalBuildingIds = new Set([
-  "Barn",
-  "Big Barn",
-  "Deluxe Barn",
-  "Coop",
-  "Big Coop",
-  "Deluxe Coop",
-  "Slime Hutch",
-]);
-
-const productionBuildingIds = new Set([
-  "Fish Pond",
-  "Mill",
-]);
-
-const storageBuildingIds = new Set([
-  "Big Shed",
-  "Shed",
-  "Silo",
-]);
-
-const utilityBuildingIds = new Set([
-  "Greenhouse",
-  "Hay Pet Bowl",
-  "Pet Bowl",
-  "Shipping Bin",
-  "Stone Pet Bowl",
-  "Stable",
-  "Well",
-]);
-
-const luxuryBuildingIds = new Set([
-  "Desert Obelisk",
-  "Earth Obelisk",
-  "Gold Clock",
-  "Island Obelisk",
-  "Water Obelisk",
-]);
-
 const furnitureFacetByFurnitureType: Readonly<Record<string, string>> = {
   chair: "chairs",
   bench: "benches",
@@ -293,13 +212,16 @@ const furnitureFacetByFurnitureType: Readonly<Record<string, string>> = {
   fireplace: "fireplaces",
   rug: "rugs",
   fishtank: "fish-tanks",
-  other: "other",
 };
 
 export function getCatalogSidebarCategory(
   catalogItem: CatalogItem,
 ): CatalogSidebarCategory {
   validateCatalogItem(catalogItem);
+  const referenceEntry = findCatalogSidebarReferenceEntry(catalogItem.id);
+  if (referenceEntry !== undefined) {
+    return referenceEntry.category;
+  }
 
   if (catalogItem.category === "building") {
     return "buildings";
@@ -350,16 +272,21 @@ export function getCatalogSidebarFilters(
   category: CatalogSidebarCategory,
 ): readonly CatalogSidebarFilter[] {
   validateCatalogSidebarCategory(category);
-  const categoryItems = deduplicateCatalogItems(catalogItems).filter(
-    (catalogItem) => getCatalogSidebarCategory(catalogItem) === category,
+  const categoryItems = getReferenceCategoryItems(
+    deduplicateCatalogItems(catalogItems),
+    category,
   );
   const filters: CatalogSidebarFilter[] = [
-    { id: "all", label: "All", count: categoryItems.length },
+    {
+      id: "all",
+      label: "All",
+      count: categoryItems.length,
+    },
   ];
 
   for (const filterDefinition of catalogSidebarFiltersByCategory[category]) {
-    const count = categoryItems.filter(
-      (catalogItem) => getCatalogSidebarFacetId(catalogItem, category) === filterDefinition.id,
+    const count = categoryItems.filter((catalogItem) =>
+      getCatalogSidebarFacetId(catalogItem) === filterDefinition.id,
     ).length;
     if (count > 0) {
       filters.push({ ...filterDefinition, count });
@@ -382,191 +309,119 @@ export function getCatalogSidebarItems(
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
   if (normalizedSearchQuery.length > 0) {
-    return uniqueCatalogItems.filter((catalogItem) =>
-      catalogItem.name.toLowerCase().includes(normalizedSearchQuery) ||
-      catalogItem.id.toLowerCase().includes(normalizedSearchQuery),
-    );
+    return sortCatalogItemsBySidebarOrder(uniqueCatalogItems.filter((catalogItem) => {
+      const referenceEntry = findCatalogSidebarReferenceEntry(catalogItem.id);
+      if (referenceEntry === undefined && !isInteriorPattern(catalogItem)) {
+        return false;
+      }
+      const displayName = normalizeCatalogDisplayName(
+        referenceEntry?.displayName ?? catalogItem.name,
+      );
+      return catalogItem.name.toLowerCase().includes(normalizedSearchQuery) ||
+        displayName.toLowerCase().includes(normalizedSearchQuery) ||
+        catalogItem.id.toLowerCase().includes(normalizedSearchQuery);
+    }));
   }
 
-  return uniqueCatalogItems.filter((catalogItem) =>
-    getCatalogSidebarCategory(catalogItem) === category &&
-    (filterId === "all" || getCatalogSidebarFacetId(catalogItem, category) === filterId),
-  );
+  return sortCatalogItemsBySidebarOrder(getReferenceCategoryItems(uniqueCatalogItems, category)
+    .filter((catalogItem) => {
+      if (filterId === "all") {
+        return true;
+      }
+      return getCatalogSidebarFacetId(catalogItem) === filterId;
+    }));
+}
+
+export function getCatalogSidebarDisplayName(catalogItem: CatalogItem): string {
+  validateCatalogItem(catalogItem);
+  const referenceEntry = findCatalogSidebarReferenceEntry(catalogItem.id);
+  return normalizeCatalogDisplayName(referenceEntry?.displayName ?? catalogItem.name);
 }
 
 export function selectCatalogSidebarPlaceableItems(
   catalogItems: readonly CatalogItem[],
 ): readonly CatalogItem[] {
   validateCatalogItems(catalogItems);
-  const candidates = catalogItems.filter((catalogItem) =>
+  const uniqueCatalogItems = deduplicateCatalogItems(catalogItems);
+  const candidateCatalogItemById = new Map(uniqueCatalogItems.filter((catalogItem) =>
     catalogItem.renderingMetadata?.kind !== "furniture" &&
     (catalogItem.category === "placeable" ||
       catalogItem.category === "floor" ||
       catalogItem.category === "fence" ||
       catalogItem.id.startsWith("clump_")),
-  );
+  ).map((catalogItem) => [catalogItem.id, catalogItem]));
   const selectedCatalogItems: CatalogItem[] = [];
-  const consumedCatalogItemIds = new Set<string>();
 
-  for (const referenceName of referencePlaceableCatalogNames) {
-    const baseName = normalizeReferencePlaceableName(referenceName);
-    const familyName = getReferencePlaceableFamilyName(referenceName);
-    const matchingCatalogItems = candidates.filter((catalogItem) =>
-      !consumedCatalogItemIds.has(catalogItem.id) &&
-      matchesReferencePlaceableName(catalogItem, referenceName, baseName, familyName),
-    );
-    const selectedCatalogItem = matchingCatalogItems[0];
+  for (const referenceItemId of referencePlaceableCatalogItemIds) {
+    const selectedCatalogItem = candidateCatalogItemById.get(referenceItemId);
 
     if (selectedCatalogItem === undefined) {
       throw new Error(
-        `Reference placeables require catalog item ${JSON.stringify(referenceName)}; no unused local item matched it.`,
+        `Reference placeables require local catalog item ID ${JSON.stringify(referenceItemId)}; no placeable source item matched it.`,
       );
     }
 
-    consumedCatalogItemIds.add(selectedCatalogItem.id);
     selectedCatalogItems.push(selectedCatalogItem);
   }
 
   return selectedCatalogItems;
 }
 
-function getCatalogSidebarFacetId(
-  catalogItem: CatalogItem,
+function getReferenceCategoryItems(
+  catalogItems: readonly CatalogItem[],
   category: CatalogSidebarCategory,
-): string {
-  if (category === "buildings") {
-    return getBuildingFacetId(catalogItem);
-  }
-  if (category === "crops") {
-    return getCropFacetId(catalogItem);
-  }
-  if (category === "trees") {
-    return catalogItem.renderingMetadata?.kind === "fruit-tree"
-      ? "fruit-trees"
-      : "wild-trees";
-  }
-  if (category === "equipment") {
-    return referencePlaceableMachineNames.has(catalogItem.name) ? "machines" : "utility";
-  }
-  if (category === "furniture") {
-    return getFurnitureFacetId(catalogItem);
-  }
-  if (category === "decor") {
-    return getDecorFacetId(catalogItem);
-  }
-
-  return "all";
+): CatalogItem[] {
+  return catalogItems.filter((catalogItem) =>
+    findCatalogSidebarReferenceEntry(catalogItem.id)?.category === category ||
+    (category === "decor" && isInteriorPattern(catalogItem)),
+  );
 }
 
-function getBuildingFacetId(catalogItem: CatalogItem): string {
-  const buildingId = catalogItem.id.startsWith("building:")
-    ? catalogItem.id.slice("building:".length)
-    : catalogItem.id;
-  const baseBuildingId = buildingId.replace(/_[12]$/, "");
-
-  if (baseBuildingId.includes("Cabin")) {
-    return "cabins";
-  }
-  if (animalBuildingIds.has(baseBuildingId)) {
-    return "animal";
-  }
-  if (productionBuildingIds.has(baseBuildingId)) {
-    return "production";
-  }
-  if (storageBuildingIds.has(baseBuildingId)) {
-    return "storage";
-  }
-  if (utilityBuildingIds.has(baseBuildingId)) {
-    return "utility";
-  }
-  if (luxuryBuildingIds.has(baseBuildingId)) {
-    return "luxury";
-  }
-
-  return "structures";
+function sortCatalogItemsBySidebarOrder(catalogItems: readonly CatalogItem[]): CatalogItem[] {
+  return [...catalogItems].sort((leftItem, rightItem) => {
+    const leftEntry = findCatalogSidebarReferenceEntry(leftItem.id);
+    const rightEntry = findCatalogSidebarReferenceEntry(rightItem.id);
+    if (leftEntry === undefined && rightEntry === undefined) {
+      return 0;
+    }
+    if (leftEntry === undefined) {
+      return 1;
+    }
+    if (rightEntry === undefined) {
+      return -1;
+    }
+    const categoryOrderDifference = catalogSidebarCategories.indexOf(leftEntry.category) -
+      catalogSidebarCategories.indexOf(rightEntry.category);
+    return categoryOrderDifference || leftEntry.order - rightEntry.order;
+  });
 }
 
-function getCropFacetId(catalogItem: CatalogItem): string {
-  if (catalogItem.id === "object:251") {
-    return "saplings";
+function getCatalogSidebarFacetId(catalogItem: CatalogItem): string {
+  const referenceEntry = findCatalogSidebarReferenceEntry(catalogItem.id);
+  if (referenceEntry !== undefined) {
+    return referenceEntry.facetId;
   }
-  if (giantCropIds.has(catalogItem.id)) {
-    return "giant-crops";
-  }
-
-  const cropFacetId = cropSeasonByCatalogItemId.get(catalogItem.id);
-  if (cropFacetId === undefined) {
-    throw new Error(
-      `Crop ${JSON.stringify(catalogItem.id)} has no locked 1.6.15 sidebar season mapping.`,
-    );
-  }
-
-  return cropFacetId;
-}
-
-function getFurnitureFacetId(catalogItem: CatalogItem): string {
-  if (catalogItem.name.toLowerCase().includes(" tv") ||
-      catalogItem.name.toLowerCase().endsWith("tv")) {
-    return "tvs";
-  }
-  if (catalogItem.furnitureFire?.kind === "fireplace") {
-    return "fireplaces";
-  }
-  const furnitureType = catalogItem.renderingMetadata?.kind === "furniture"
-    ? catalogItem.renderingMetadata.furnitureType
-    : "";
-
-  return furnitureFacetByFurnitureType[furnitureType] ?? "other";
-}
-
-function getDecorFacetId(catalogItem: CatalogItem): string {
   if (catalogItem.interiorDecorKind === "wallpaper") {
     return "wallpaper";
   }
   if (catalogItem.interiorDecorKind === "flooring") {
     return "flooring";
   }
-  if (referencePlaceableFunctionalDecorNames.has(catalogItem.name)) {
-    return "functional";
-  }
-  const furnitureMetadata = catalogItem.renderingMetadata?.kind === "furniture"
-    ? catalogItem.renderingMetadata
-    : undefined;
-  const lowerCaseName = catalogItem.name.toLowerCase();
 
-  if (furnitureMetadata?.furnitureType === "painting") {
-    return "paintings";
-  }
-  if (
-    furnitureMetadata?.furnitureType === "randomized_plant" ||
-    furnitureMetadata?.compositeSprite !== null &&
-      furnitureMetadata?.compositeSprite !== undefined ||
-    lowerCaseName.includes("plant") ||
-    lowerCaseName.includes("cactus") ||
-    (lowerCaseName.includes("tree") &&
-      catalogItem.id !== "furniture_CatTree" &&
-      catalogItem.id !== "furniture_DarkCatTree")
-  ) {
-    return "plants";
-  }
-  if (furnitureMetadata?.furnitureType === "window" || furnitureMetadata?.isWindow === true ||
-      catalogItem.name === "Door" || catalogItem.name === "Locked Door") {
-    return "windows-doors";
-  }
-  if (furnitureMetadata?.wallMounted === true) {
-    return "wall-hangings";
-  }
-  if (catalogItem.id.startsWith("clump_") || lowerCaseName.includes("mannequin")) {
-    return "special";
-  }
-  if (catalogItem.tileSize.width >= 3 || catalogItem.tileSize.height >= 3) {
-    return "large-decor";
-  }
-  if (furnitureMetadata?.furnitureType === "decor" || catalogItem.category === "placeable") {
-    return "small-decor";
-  }
+  throw new Error(
+    `Catalog item ${JSON.stringify(catalogItem.id)} has no sidebar facet mapping.`,
+  );
+}
 
-  return "other";
+function isInteriorPattern(
+  catalogItem: CatalogItem,
+): catalogItem is CatalogItem & { interiorDecorKind: "wallpaper" | "flooring" } {
+  return catalogItem.interiorDecorKind === "wallpaper" ||
+    catalogItem.interiorDecorKind === "flooring";
+}
+
+function normalizeCatalogDisplayName(displayName: string): string {
+  return displayName.replace(/\s+\((?:Normal|No Fruit|Lit|Dry)\)$/, "");
 }
 
 function isFurnitureFireplace(catalogItem: CatalogItem): boolean {
@@ -605,78 +460,6 @@ function isEquipmentItem(catalogItem: CatalogItem): boolean {
   }
 
   return false;
-}
-
-function matchesReferencePlaceableName(
-  catalogItem: CatalogItem,
-  referenceName: string,
-  baseName: string,
-  familyName: string | undefined,
-): boolean {
-  if (referenceName === "Tilled Dirt (Dry)") {
-    return catalogItem.id === "hoedirt";
-  }
-  if (referenceName === "Grass Starter" || referenceName === "Blue Grass Starter") {
-    return catalogItem.id === (referenceName === "Grass Starter" ? "grass_1" : "grass_7");
-  }
-  if (isReferenceFloorName(referenceName)) {
-    return catalogItem.category === "floor" && catalogItem.name === baseName;
-  }
-  if (isReferenceFenceName(referenceName)) {
-    return referenceName === "Gate"
-      ? catalogItem.id === "object:325"
-      : catalogItem.category === "fence" && catalogItem.name === baseName;
-  }
-  if (familyName !== undefined) {
-    return catalogItem.name === familyName;
-  }
-  if (referenceName.includes("Tree")) {
-    return (catalogItem.id.startsWith("wildtree_") || catalogItem.id.startsWith("fruittree_")) &&
-      catalogItem.name === baseName;
-  }
-
-  return catalogItem.name === referenceName || catalogItem.name === baseName;
-}
-
-function normalizeReferencePlaceableName(referenceName: string): string {
-  return referenceName
-    .replace(/ \(Lit\)$/, "")
-    .replace(/ \(Normal\)$/, "")
-    .replace(/ \(No Fruit\)$/, "");
-}
-
-function getReferencePlaceableFamilyName(referenceName: string): string | undefined {
-  if (/^Rarecrow(?: \d+)?$/.test(referenceName)) {
-    return "Rarecrow";
-  }
-  if (referenceName === "Campfire" || /^Campfire(?: \d+)? \(Lit\)$/.test(referenceName)) {
-    return "Campfire";
-  }
-  return undefined;
-}
-
-function isReferenceFloorName(referenceName: string): boolean {
-  return [
-    "Wood Floor",
-    "Stone Floor",
-    "Weathered Floor",
-    "Crystal Floor",
-    "Straw Floor",
-    "Gravel Path",
-    "Wood Path",
-    "Crystal Path",
-    "Cobblestone Path",
-    "Stepping Stone Path",
-    "Brick Floor",
-    "Rustic Plank Floor",
-    "Stone Walkway Floor",
-  ].includes(referenceName);
-}
-
-function isReferenceFenceName(referenceName: string): boolean {
-  return ["Gate", "Hardwood Fence", "Wood Fence", "Stone Fence", "Iron Fence"].includes(
-    referenceName,
-  );
 }
 
 export function deduplicateCatalogItems(

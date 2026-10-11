@@ -28,6 +28,7 @@ import {
   createSeasonalPlaceableCatalogProperties,
   getCatalogSidebarFilters,
 } from "../../src/catalog";
+import { createBushCatalogItems } from "../../src/catalog/bushes";
 import { resolvePlannerTextureFrame } from "../../src/rendering/planner-texture-frame-resolution";
 import type {
   Catalog,
@@ -46,7 +47,7 @@ const catalogItems: readonly CatalogItem[] = [
     allowedTools: ["cursor", "multi-select", "erase"],
   },
   {
-    id: "crop:Parsnip",
+    id: "crop:472",
     name: "Parsnip",
     category: "crop",
     tileSize: { width: 1, height: 1 },
@@ -61,16 +62,16 @@ const catalogItems: readonly CatalogItem[] = [
     },
   },
   {
-    id: "object:Stone",
-    name: "Stone",
+    id: "big-craftable:232",
+    name: "Stone Chest",
     category: "placeable",
     tileSize: { width: 1, height: 1 },
-    textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
-    sprite: { kind: "sprite-index", index: 2 },
+    textureLocalPath: "/game-assets/1.6.15/tilesheets/craftables.png",
+    sprite: { kind: "sprite-index", index: 232 },
     allowedTools: ["cursor", "multi-select", "erase"],
   },
   {
-    id: "floor:Stone Floor",
+    id: "floor:1",
     name: "Stone Floor",
     category: "floor",
     tileSize: { width: 1, height: 1 },
@@ -79,7 +80,7 @@ const catalogItems: readonly CatalogItem[] = [
     allowedTools: ["cursor", "multi-select", "fill", "erase"],
   },
   {
-    id: "fence:Wood Fence",
+    id: "fence:322",
     name: "Wood Fence",
     category: "fence",
     tileSize: { width: 1, height: 1 },
@@ -1105,6 +1106,28 @@ describe("item catalog panel", () => {
     });
   });
 
+  it("uses the selected berry frame in the Medium Bush thumbnail", () => {
+    const mediumBush = createBushCatalogItems().find(
+      (catalogItem) => catalogItem.id === "bush:medium",
+    );
+    if (mediumBush === undefined) {
+      throw new Error("Expected the Medium Bush catalog item.");
+    }
+
+    const plainBushThumbnail = getCatalogItemThumbnailStyle(
+      mediumBush,
+      { flipped: false, rotation: 0, variant: 0 },
+    );
+    const berryBushThumbnail = getCatalogItemThumbnailStyle(
+      mediumBush,
+      { flipped: false, rotation: 0, variant: 1 },
+    );
+
+    expect(plainBushThumbnail.backgroundPosition).toBe("0px 0px");
+    expect(berryBushThumbnail.backgroundPosition).toBe("-40px 0px");
+    expect(berryBushThumbnail.backgroundSize).toBe("160px 440px");
+  });
+
   it("does not request catalog thumbnail textures before the workspace is interactive", () => {
     const catalogGridMarkup = renderToStaticMarkup(
       createElement(CatalogItemGrid, {
@@ -1147,10 +1170,202 @@ describe("item catalog panel", () => {
     expect(catalogGridMarkup).toContain("transform:scaleX(-1)");
   });
 
-  it("keeps catalog variant names in English inside Chinese selection cards", () => {
+  it("keeps scene-unavailable furniture selectable and groups it after available items", () => {
+    const controlledItems = createControlledCatalogItems();
+    const sourceFurniture = controlledItems[0];
+    if (
+      sourceFurniture === undefined ||
+      sourceFurniture.renderingMetadata?.kind !== "furniture"
+    ) {
+      throw new Error("Expected a furniture catalog fixture with scene permissions.");
+    }
+
+    const availableFurniture: CatalogItem = {
+      ...sourceFurniture,
+      id: "furniture_available",
+      name: "Available Table",
+    };
+    const indoorOnlyFurniture: CatalogItem = {
+      ...sourceFurniture,
+      id: "furniture_indoor_only",
+      name: "Indoor Table",
+      renderingMetadata: {
+        ...sourceFurniture.renderingMetadata,
+        outdoors: false,
+      },
+    };
+    for (const viewMode of ["grid", "list"] as const) {
+      const catalogGridMarkup = renderToStaticMarkup(
+        createElement(CatalogItemGrid, {
+          catalogItems: [indoorOnlyFurniture, availableFurniture],
+          catalogPresentationChoicesByItemId: new Map(),
+          selectedCatalogItemId: null,
+          onCatalogItemSelect: () => undefined,
+          mapId: "standard",
+          isSearch: true,
+          viewMode,
+        }),
+      );
+
+      expect(catalogGridMarkup.indexOf("Available Table")).toBeLessThan(
+        catalogGridMarkup.indexOf("Indoor Table"),
+      );
+      expect(catalogGridMarkup).toContain(
+        'aria-level="3" class="item-catalog-panel__unavailable-divider" role="heading"',
+      );
+      expect(catalogGridMarkup).toContain("1 result can&#x27;t be placed here");
+      expect(catalogGridMarkup).toContain('data-scene-availability="indoor-only"');
+      expect(catalogGridMarkup).toContain(
+        'aria-label="Select Indoor Table, 1 by 1 tiles. This item can only be placed indoors."',
+      );
+      expect(catalogGridMarkup).toContain(
+        'title="Indoor Table. This item can only be placed indoors."',
+      );
+      expect(catalogGridMarkup).not.toContain('disabled=""');
+      expect(catalogGridMarkup.match(/role="listitem"/g)).toHaveLength(2);
+    }
+  });
+
+  it("labels outdoor-only items on indoor maps in both grid and list modes", () => {
+    const sourceFurniture = createControlledCatalogItems()[0];
+    if (
+      sourceFurniture === undefined ||
+      sourceFurniture.renderingMetadata?.kind !== "furniture"
+    ) {
+      throw new Error("Expected a furniture catalog fixture with scene permissions.");
+    }
+    const outdoorOnlyFurniture: CatalogItem = {
+      ...sourceFurniture,
+      id: "furniture_outdoor_only",
+      name: "Outdoor Lamp",
+      renderingMetadata: {
+        ...sourceFurniture.renderingMetadata,
+        indoors: false,
+      },
+    };
+
+    for (const viewMode of ["grid", "list"] as const) {
+      const catalogGridMarkup = renderToStaticMarkup(
+        createElement(CatalogItemGrid, {
+          catalogItems: [outdoorOnlyFurniture],
+          catalogPresentationChoicesByItemId: new Map(),
+          selectedCatalogItemId: null,
+          onCatalogItemSelect: () => undefined,
+          mapId: "farmhouse-0",
+          viewMode,
+        }),
+      );
+
+      expect(catalogGridMarkup).toContain('data-scene-availability="outdoor-only"');
+      expect(catalogGridMarkup).toContain(
+        'aria-label="Select Outdoor Lamp, 1 by 1 tiles. This item can only be placed outdoors."',
+      );
+      expect(catalogGridMarkup).toContain("1 item can&#x27;t be placed here");
+      expect(catalogGridMarkup).not.toContain('disabled=""');
+    }
+  });
+
+  it("shows base names without normal, fruit, lit, or dry state suffixes", () => {
+    const statefulCatalogItems: readonly CatalogItem[] = [
+      "Oak Tree (Normal)",
+      "Cherry Tree (No Fruit)",
+      "Campfire (Lit)",
+      "Tilled Dirt (Dry)",
+    ].map<CatalogItem>((name, index) => ({
+      id: `catalog-item-${String(index)}`,
+      name,
+      category: "placeable",
+      tileSize: { width: 1, height: 1 },
+      textureLocalPath: "/game-assets/test.png",
+      sprite: { kind: "sprite-index", index: 0 },
+      allowedTools: ["cursor"],
+    }));
+    const catalogGridMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: statefulCatalogItems,
+        catalogPresentationChoicesByItemId: new Map(),
+        selectedCatalogItemId: null,
+        onCatalogItemSelect: () => undefined,
+      }),
+    );
+
+    expect(catalogGridMarkup).toContain("Oak Tree");
+    expect(catalogGridMarkup).toContain("Cherry Tree");
+    expect(catalogGridMarkup).toContain("Campfire");
+    expect(catalogGridMarkup).toContain("Tilled Dirt");
+    expect(catalogGridMarkup).not.toContain("(Normal)");
+    expect(catalogGridMarkup).not.toContain("(No Fruit)");
+    expect(catalogGridMarkup).not.toContain("(Lit)");
+    expect(catalogGridMarkup).not.toContain("(Dry)");
+  });
+
+  it("keeps Rarecrow and Campfire family numbering while cleaning state suffixes", () => {
+    const rarecrowReferenceIds = [
+      "big-craftable:110",
+      "big-craftable:113",
+      "big-craftable:126",
+      "big-craftable:136",
+      "big-craftable:137",
+      "big-craftable:138",
+      "big-craftable:139",
+      "big-craftable:140",
+    ];
+    const rarecrowCatalogItems = rarecrowReferenceIds.map<CatalogItem>(
+      (id) => ({
+        id,
+        name: "Rarecrow",
+        category: "placeable",
+        tileSize: { width: 1, height: 1 },
+        textureLocalPath: "/game-assets/test.png",
+        sprite: { kind: "sprite-index", index: 0 },
+        allowedTools: ["cursor"],
+      }),
+    );
+    const catalogGridMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: rarecrowCatalogItems,
+        catalogPresentationChoicesByItemId: new Map(),
+        selectedCatalogItemId: null,
+        onCatalogItemSelect: () => undefined,
+      }),
+    );
+
+    expect(catalogGridMarkup).toContain("Rarecrow");
+    expect(catalogGridMarkup).toContain("Rarecrow 2");
+    expect(catalogGridMarkup).toContain("Rarecrow 8");
+  });
+
+  it("cleans the lit suffix from Campfire names", () => {
+    const campfireCatalogItems: readonly CatalogItem[] = [
+      { id: "big-craftable:146", name: "Campfire (Lit)" },
+      { id: "big-craftable:278", name: "Campfire (Lit)" },
+    ].map<CatalogItem>(({ id, name }) => ({
+      id,
+      name,
+      category: "placeable",
+      tileSize: { width: 1, height: 1 },
+      textureLocalPath: "/game-assets/test.png",
+      sprite: { kind: "sprite-index", index: 0 },
+      allowedTools: ["cursor"],
+    }));
+    const catalogGridMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: campfireCatalogItems,
+        catalogPresentationChoicesByItemId: new Map(),
+        selectedCatalogItemId: null,
+        onCatalogItemSelect: () => undefined,
+      }),
+    );
+
+    expect(catalogGridMarkup).toContain("Campfire");
+    expect(catalogGridMarkup).toContain("Campfire 2");
+    expect(catalogGridMarkup).not.toContain("(Lit)");
+  });
+
+  it("uses the reference base name in Chinese catalog lists", () => {
     const cherrySapling = createControlledCatalogItems()[2];
     if (cherrySapling === undefined) {
-      throw new Error("Expected the Cherry Sapling catalog fixture.");
+      throw new Error("Expected the Cherry Tree catalog fixture.");
     }
 
     const catalogGridMarkup = renderToStaticMarkup(
@@ -1163,8 +1378,9 @@ describe("item catalog panel", () => {
       }),
     );
 
-    expect(catalogGridMarkup).toContain("Cherry Sapling (No Fruit)");
-    expect(catalogGridMarkup).toContain('title="Cherry Sapling (No Fruit)"');
+    expect(catalogGridMarkup).toContain("Cherry Tree");
+    expect(catalogGridMarkup).not.toContain("Cherry Tree (No Fruit)");
+    expect(catalogGridMarkup).toContain('title="Cherry Tree"');
     expect(catalogGridMarkup).not.toContain("无果");
     expect(catalogGridMarkup).not.toContain("presentation-control");
     expect(catalogGridMarkup.match(/<button/g)).toHaveLength(1);

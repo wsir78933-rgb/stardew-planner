@@ -33,7 +33,27 @@ describe("catalog schema", () => {
       catalogDatasetUrls,
     );
 
-    expect(catalog.items).toHaveLength(1700);
+    expect(catalog.items).toHaveLength(1703);
+    expect(catalog.items).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: "bush:small",
+        name: "Small Bush",
+        category: "placeable",
+        tileSize: { width: 1, height: 1 },
+      }),
+      expect.objectContaining({
+        id: "bush:medium",
+        name: "Medium Bush",
+        category: "placeable",
+        tileSize: { width: 2, height: 1 },
+      }),
+      expect.objectContaining({
+        id: "bush:large",
+        name: "Large Bush",
+        category: "placeable",
+        tileSize: { width: 3, height: 1 },
+      }),
+    ]));
     expect(catalog.items.find((catalogItem) => catalogItem.id === "building:Coop"))
       .toMatchObject({
         id: "building:Coop",

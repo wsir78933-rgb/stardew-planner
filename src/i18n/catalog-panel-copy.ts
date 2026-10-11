@@ -13,6 +13,7 @@ export type CatalogPanelCopy = Readonly<{
   cancelPlacement: string;
   cycleVariant: (name: string, currentLabel: string) => string;
   filterLabels: Readonly<Record<string, string>>;
+  filterItems: string;
   flip: string;
   gridView: string;
   help: string;
@@ -27,6 +28,10 @@ export type CatalogPanelCopy = Readonly<{
   rotate: string;
   searchAllItems: string;
   searchResults: string;
+  sceneAvailabilityReason: (
+    availability: "indoor-only" | "outdoor-only",
+  ) => string;
+  unavailableGroup: (count: number, isSearch?: boolean) => string;
   selectItem: (name: string, width: number, height: number) => string;
   unflip: string;
   variant: string;
@@ -54,6 +59,7 @@ const sharedFilterLabels = {
   chairs: { en: "Chairs", "zh-CN": "椅子" },
   benches: { en: "Benches", "zh-CN": "长椅" },
   couches: { en: "Couches", "zh-CN": "沙发" },
+  cushions: { en: "Cushions", "zh-CN": "垫子" },
   armchairs: { en: "Armchairs", "zh-CN": "扶手椅" },
   tables: { en: "Tables", "zh-CN": "桌子" },
   "long-tables": { en: "Long tables", "zh-CN": "长桌" },
@@ -74,6 +80,7 @@ const sharedFilterLabels = {
   special: { en: "Special", "zh-CN": "特殊物品" },
   flooring: { en: "Flooring", "zh-CN": "地板" },
   wallpaper: { en: "Wallpaper", "zh-CN": "墙纸" },
+  bushes: { en: "Bushes", "zh-CN": "灌木" },
   other: { en: "Other", "zh-CN": "其他" },
 } as const;
 
@@ -117,6 +124,58 @@ function createVariantLabels(
   );
 }
 
+function createUnavailableGroupLabel(
+  locale: HomepageLocale,
+  count: number,
+  isSearch = false,
+): string {
+  if (!Number.isInteger(count) || count < 0) {
+    throw new TypeError(
+      `Unavailable catalog item count must be a non-negative integer; received ${String(count)}.`,
+    );
+  }
+
+  if (typeof isSearch !== "boolean") {
+    throw new TypeError(
+      `Unavailable catalog search flag must be a boolean; received ${JSON.stringify(isSearch)}.`,
+    );
+  }
+
+  if (locale === "en") {
+    let unavailableEntryNoun: string;
+    if (isSearch) {
+      unavailableEntryNoun = count === 1 ? "result" : "results";
+    } else {
+      unavailableEntryNoun = count === 1 ? "item" : "items";
+    }
+    return `${String(count)} ${unavailableEntryNoun} can't be placed here`;
+  }
+
+  return isSearch
+    ? `${String(count)} 个搜索结果不能放置在这里`
+    : `${String(count)} 件物品不能放置在这里`;
+}
+
+function createSceneAvailabilityReason(
+  locale: HomepageLocale,
+  availability: "indoor-only" | "outdoor-only",
+): string {
+  if (availability === "indoor-only") {
+    return locale === "en"
+      ? "This item can only be placed indoors."
+      : "该物品只能放置在室内。";
+  }
+  if (availability === "outdoor-only") {
+    return locale === "en"
+      ? "This item can only be placed outdoors."
+      : "该物品只能放置在室外。";
+  }
+
+  throw new TypeError(
+    `Unsupported catalog scene availability. Received: ${JSON.stringify(availability)}.`,
+  );
+}
+
 const catalogPanelCopyByLocale = {
   en: {
     all: "All",
@@ -139,6 +198,7 @@ const catalogPanelCopyByLocale = {
     cycleVariant: (name: string, currentLabel: string) =>
       `Cycle ${name} variant, current ${currentLabel}`,
     filterLabels: createFilterLabels("en"),
+    filterItems: "Filter items",
     flip: "Flip",
     gridView: "Grid view",
     help: "Help & Info",
@@ -153,6 +213,10 @@ const catalogPanelCopyByLocale = {
     rotate: "Rotate",
     searchAllItems: "Search all items",
     searchResults: "Search results",
+    sceneAvailabilityReason: (availability) =>
+      createSceneAvailabilityReason("en", availability),
+    unavailableGroup: (count, isSearch) =>
+      createUnavailableGroupLabel("en", count, isSearch),
     selectItem: (name: string, width: number, height: number) =>
       `Select ${name}, ${width} by ${height} tiles`,
     unflip: "Unflip",
@@ -180,6 +244,7 @@ const catalogPanelCopyByLocale = {
     cycleVariant: (name: string, currentLabel: string) =>
       `切换${name}外观，当前为${currentLabel}`,
     filterLabels: createFilterLabels("zh-CN"),
+    filterItems: "筛选物品",
     flip: "翻转",
     gridView: "网格视图",
     help: "帮助与说明",
@@ -194,6 +259,10 @@ const catalogPanelCopyByLocale = {
     rotate: "旋转",
     searchAllItems: "搜索全部物品",
     searchResults: "搜索结果",
+    sceneAvailabilityReason: (availability) =>
+      createSceneAvailabilityReason("zh-CN", availability),
+    unavailableGroup: (count, isSearch) =>
+      createUnavailableGroupLabel("zh-CN", count, isSearch),
     selectItem: (name: string, width: number, height: number) =>
       `选择${name}，占地 ${width} × ${height} 格`,
     unflip: "取消翻转",

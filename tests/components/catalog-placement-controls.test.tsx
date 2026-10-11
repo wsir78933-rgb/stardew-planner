@@ -20,6 +20,22 @@ describe("catalog placement controls", () => {
     })).toBeNull();
   });
 
+  it("uses the same spaced base name in the pending status as in the catalog", () => {
+    const catalogItem = {
+      ...createCatalogItem({ name: "JojaBed", rotationCount: 0, variantLabels: [] }),
+      id: "furniture_JojaBed",
+    };
+    const placementControls = CatalogPlacementControls({
+      catalogItem,
+      locale: "en",
+      onCancel: () => undefined,
+      onCyclePendingChoice: () => true,
+    });
+
+    expect(renderToStaticMarkup(placementControls)).toContain("Placing Joja Bed");
+    expect(catalogItem.name).toBe("JojaBed");
+  });
+
   it("uses rotation before variants and wires the pending action and cancel callbacks", () => {
     const catalogItem = createCatalogItem({
       name: "Oak Chair",

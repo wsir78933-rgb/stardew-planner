@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Check,
   ChevronDown,
   ChevronUp,
   CircleHelp,
@@ -20,6 +21,7 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from "react";
+import { Select } from "radix-ui";
 import {
   createDefaultCatalogItemPresentationChoice,
   getBuildingThumbnailCompositionLayers,
@@ -48,7 +50,16 @@ import {
   type PlannerTextureFrame,
 } from "../rendering/planner-texture-frame-resolution";
 import type { HomepageLocale } from "../homepage/homepage-locale";
-import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
+import {
+  getCatalogPanelCopy,
+  type CatalogPanelCopy,
+} from "../i18n/catalog-panel-copy";
+import {
+  getCatalogItemSceneAvailability,
+  isCatalogItemVisibleOnMap,
+  type CatalogItemSceneAvailability,
+} from "../catalog/catalog-scene-availability";
+import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
 import {
   loadBuildingThumbnailImages,
   useBuildingThumbnailLoadEligibility,
@@ -62,6 +73,7 @@ type ItemCatalogPanelProperties = Readonly<{
   category: EditorCatalogCategory;
   leftHandMode?: boolean;
   locale?: HomepageLocale;
+  mapId?: string;
   panelPosition: EditorPanelPosition;
   searchQuery: string;
   selectedCatalogItemId: string | null;
@@ -122,6 +134,24 @@ type CatalogItemGridProperties = Readonly<{
   shouldLoadThumbnails?: boolean;
   viewMode?: CatalogItemViewMode;
   locale?: HomepageLocale;
+  mapId?: string;
+  isSearch?: boolean;
+}>;
+
+type UnavailableCatalogItem = Readonly<{
+  catalogItem: CatalogItem;
+  availability: Exclude<CatalogItemSceneAvailability, "available">;
+}>;
+
+type CatalogItemSceneGroups = Readonly<{
+  availableCatalogItems: readonly CatalogItem[];
+  unavailableCatalogItems: readonly UnavailableCatalogItem[];
+}>;
+
+type CatalogPanelFilterOption = Readonly<{
+  count: number;
+  id: string;
+  label: string;
 }>;
 
 export type CatalogItemControl = "flip" | "rotation" | "variant";
@@ -131,6 +161,7 @@ export function ItemCatalogPanel({
   category,
   leftHandMode = false,
   locale = "en",
+  mapId = "standard",
   panelPosition,
   searchQuery,
   selectedCatalogItemId,
@@ -292,18 +323,34 @@ export function ItemCatalogPanel({
   const activeCatalog = activeCatalogPanelLoadState.kind === "ready"
     ? activeCatalogPanelLoadState.catalog
     : null;
-  const categoryFilters = activeCatalog === null
+  const mapVisibleCatalogItems = activeCatalog === null
+    ? null
+    : activeCatalog.items.filter((catalogItem) =>
+        isCatalogItemVisibleOnMap(catalogItem, mapId),
+      );
+  const sceneAvailableCatalogItems = mapVisibleCatalogItems === null
+    ? null
+    : mapVisibleCatalogItems.filter((catalogItem) =>
+        getCatalogItemSceneAvailability(catalogItem, mapId) === "available",
+      );
+  const categoryFilters = sceneAvailableCatalogItems === null
     ? []
-    : getCatalogSidebarFilters(activeCatalog.items, category);
+    : getCatalogSidebarFilters(sceneAvailableCatalogItems, category);
   const activeFilterId = categoryFilters.some(
     (catalogFilter) => catalogFilter.id === selectedFilterId,
   )
     ? selectedFilterId
     : "all";
-  const visibleCatalogItems = activeCatalog === null
+  const activeCatalogFilter = categoryFilters.find(
+    (catalogFilter) => catalogFilter.id === activeFilterId,
+  );
+  const activeCatalogFilterLabel = activeCatalogFilter === undefined
+    ? copy.all
+    : getCatalogFilterOptionLabel(activeCatalogFilter, copy);
+  const visibleCatalogItems = mapVisibleCatalogItems === null
     ? null
     : getCatalogSidebarItems(
-        activeCatalog.items,
+        mapVisibleCatalogItems,
         category,
         searchQuery,
         activeFilterId,
@@ -361,10 +408,7 @@ export function ItemCatalogPanel({
     onSearchQueryChange("");
   }
 
-  function handleCatalogFilterChange(
-    changeEvent: ChangeEvent<HTMLSelectElement>,
-  ): void {
-    const nextFilterId = changeEvent.target.value;
+  function handleCatalogFilterChange(nextFilterId: string): void {
     if (!categoryFilters.some((catalogFilter) => catalogFilter.id === nextFilterId)) {
       throw new Error(
         `Item catalog received unavailable filter ${JSON.stringify(nextFilterId)} for category ${JSON.stringify(category)}.`,
@@ -514,19 +558,54 @@ export function ItemCatalogPanel({
               )}
             </div>
             <div className="item-catalog-panel__heading-controls">
-              {!hasSearchQuery && categoryFilters.length > 1 ? (
-                <label className="item-catalog-panel__filter">
-                  <span className="sr-only">{copy.categories[category]}</span>
-                  <select onChange={handleCatalogFilterChange} value={activeFilterId}>
-                    {categoryFilters.map((catalogFilter) => (
-                      <option key={catalogFilter.id} value={catalogFilter.id}>
-                        {catalogFilter.id === "all"
-                          ? copy.all
-                          : `${copy.filterLabels[catalogFilter.id] ?? catalogFilter.label} (${catalogFilter.count})`}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+              {categoryFilters.length > 1 ? (
+                <div className="item-catalog-panel__filter-menu">
+                  <Select.Root
+                    onValueChange={handleCatalogFilterChange}
+                    value={activeFilterId}
+                  >
+                    <Select.Trigger
+                      aria-label={copy.filterItems}
+                      className="item-catalog-panel__filter-trigger"
+                    >
+                      <Select.Value>{activeCatalogFilterLabel}</Select.Value>
+                      <Select.Icon aria-hidden="true">
+                        <ChevronDown size={16} />
+                      </Select.Icon>
+                    </Select.Trigger>
+                    <Select.Portal>
+                      <Select.Content
+                        className="item-catalog-panel__filter-menu-content"
+                        collisionPadding={8}
+                        position="popper"
+                        sideOffset={4}
+                      >
+                        <Select.Viewport className="item-catalog-panel__filter-menu-list">
+                          {categoryFilters.map((catalogFilter) => {
+                            const catalogFilterOptionLabel =
+                              getCatalogFilterOptionLabel(catalogFilter, copy);
+
+                            return (
+                              <Select.Item
+                                className="item-catalog-panel__filter-option"
+                                key={catalogFilter.id}
+                                textValue={catalogFilterOptionLabel}
+                                value={catalogFilter.id}
+                              >
+                                <Select.ItemText>
+                                  {catalogFilterOptionLabel}
+                                </Select.ItemText>
+                                <Select.ItemIndicator aria-hidden="true">
+                                  <Check size={16} />
+                                </Select.ItemIndicator>
+                              </Select.Item>
+                            );
+                          })}
+                        </Select.Viewport>
+                      </Select.Content>
+                    </Select.Portal>
+                  </Select.Root>
+                </div>
               ) : null}
               <div className="item-catalog-panel__views" role="group">
                 <button
@@ -567,6 +646,8 @@ export function ItemCatalogPanel({
               selectedCatalogItemId={selectedCatalogItemId}
               viewMode={viewMode}
               locale={locale}
+              mapId={mapId}
+              isSearch={hasSearchQuery}
               shouldLoadThumbnails={shouldLoadThumbnails}
             />
           </div>
@@ -631,6 +712,8 @@ type CatalogPanelContentProperties = Readonly<{
   shouldLoadThumbnails?: boolean;
   viewMode: CatalogItemViewMode;
   locale: HomepageLocale;
+  mapId?: string;
+  isSearch?: boolean;
 }>;
 
 export function CatalogPanelContent({
@@ -644,6 +727,8 @@ export function CatalogPanelContent({
   shouldLoadThumbnails = true,
   viewMode,
   locale,
+  mapId = "standard",
+  isSearch = false,
 }: CatalogPanelContentProperties) {
   const copy = getCatalogPanelCopy(locale);
 
@@ -695,6 +780,8 @@ export function CatalogPanelContent({
       shouldLoadThumbnails={shouldLoadThumbnails}
       viewMode={viewMode}
       locale={locale}
+      mapId={mapId}
+      isSearch={isSearch}
     />
   );
 }
@@ -707,9 +794,105 @@ export function CatalogItemGrid({
   shouldLoadThumbnails = true,
   viewMode = "grid",
   locale = "en",
+  mapId = "standard",
+  isSearch = false,
 }: CatalogItemGridProperties) {
   const itemGridScrollRootReference = useRef<HTMLDivElement>(null);
   const copy = getCatalogPanelCopy(locale);
+  const { availableCatalogItems, unavailableCatalogItems } =
+    getCatalogItemSceneGroups(catalogItems, mapId);
+  const unavailableGroupLabel = unavailableCatalogItems.length === 0
+    ? null
+    : copy.unavailableGroup(unavailableCatalogItems.length, isSearch);
+
+  function renderCatalogItem(
+    catalogItem: CatalogItem,
+    availability: CatalogItemSceneAvailability,
+  ) {
+    const isSelectedCatalogItem = catalogItem.id === selectedCatalogItemId;
+    const presentationChoice = getControlledCatalogItemChoice(
+      catalogItem,
+      catalogPresentationChoicesByItemId,
+    );
+    const displayName = getCatalogSidebarDisplayName(catalogItem);
+    const unavailableReason = availability === "available"
+      ? null
+      : copy.sceneAvailabilityReason(availability);
+    const accessibleSelectionLabel = unavailableReason === null
+      ? copy.selectItem(
+          displayName,
+          catalogItem.tileSize.width,
+          catalogItem.tileSize.height,
+        )
+      : `${copy.selectItem(
+          displayName,
+          catalogItem.tileSize.width,
+          catalogItem.tileSize.height,
+        )}. ${unavailableReason}`;
+    const itemTitle = unavailableReason === null
+      ? displayName
+      : `${displayName}. ${unavailableReason}`;
+
+    return (
+      <div
+        className="item-catalog-panel__item-container"
+        key={catalogItem.id}
+        role="listitem"
+      >
+        <button
+          aria-label={accessibleSelectionLabel}
+          aria-pressed={isSelectedCatalogItem}
+          className={`icon-cell item-catalog-panel__item${
+            isSelectedCatalogItem ? " selected" : ""
+          }`}
+          data-scene-availability={availability}
+          data-selected={isSelectedCatalogItem}
+          onClick={() => onCatalogItemSelect(catalogItem, presentationChoice)}
+          title={itemTitle}
+          type="button"
+        >
+          <span aria-hidden="true" className="item-catalog-panel__art">
+            {catalogItem.category === "building" ? (
+              <BuildingCatalogThumbnail
+                catalogItem={catalogItem}
+                itemGridScrollRootReference={itemGridScrollRootReference}
+                presentationChoice={presentationChoice}
+                shouldLoadThumbnail={shouldLoadThumbnails}
+              />
+            ) : catalogItem.category === "crop" ? (
+              <CropCatalogThumbnail
+                catalogItem={catalogItem}
+                shouldLoadThumbnail={shouldLoadThumbnails}
+              />
+            ) : catalogItem.interiorDecorKind !== undefined ? (
+              <InteriorDecorCatalogThumbnail
+                catalogItem={catalogItem}
+                shouldLoadThumbnail={shouldLoadThumbnails}
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="item-catalog-panel__thumbnail"
+                style={getCatalogItemThumbnailStyle(
+                  catalogItem,
+                  presentationChoice,
+                  shouldLoadThumbnails,
+                  viewMode,
+                )}
+              />
+            )}
+          </span>
+          <span aria-hidden="true" className="item-catalog-panel__item-name">
+            {displayName}
+          </span>
+          <span className="sr-only">
+            {unavailableReason === null ? null : `${unavailableReason} `}
+            {displayName}, {catalogItem.tileSize.width} × {catalogItem.tileSize.height}
+          </span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -720,122 +903,53 @@ export function CatalogItemGrid({
       role="list"
       ref={itemGridScrollRootReference}
     >
-      {catalogItems.map((catalogItem, catalogItemIndex) => {
-        const isSelectedCatalogItem = catalogItem.id === selectedCatalogItemId;
-        const presentationChoice = getControlledCatalogItemChoice(
-          catalogItem,
-          catalogPresentationChoicesByItemId,
-        );
-        const displayName = getCatalogItemDisplayName(
-          catalogItem,
-          catalogItems,
-          catalogItemIndex,
-          presentationChoice,
-        );
-
-        return (
-          <div
-            className="item-catalog-panel__item-container"
-            key={catalogItem.id}
-            role="listitem"
-          >
-            <button
-              aria-label={copy.selectItem(
-                displayName,
-                catalogItem.tileSize.width,
-                catalogItem.tileSize.height,
-              )}
-              aria-pressed={isSelectedCatalogItem}
-              className={`icon-cell item-catalog-panel__item${
-                isSelectedCatalogItem ? " selected" : ""
-              }`}
-              data-selected={isSelectedCatalogItem}
-              onClick={() => onCatalogItemSelect(catalogItem, presentationChoice)}
-              title={displayName}
-              type="button"
-            >
-              {catalogItem.category === "building" ? (
-                <BuildingCatalogThumbnail
-                  catalogItem={catalogItem}
-                  itemGridScrollRootReference={itemGridScrollRootReference}
-                  presentationChoice={presentationChoice}
-                  shouldLoadThumbnail={shouldLoadThumbnails}
-                />
-              ) : catalogItem.category === "crop" ? (
-                <CropCatalogThumbnail
-                  catalogItem={catalogItem}
-                  shouldLoadThumbnail={shouldLoadThumbnails}
-                />
-              ) : catalogItem.interiorDecorKind !== undefined ? (
-                <InteriorDecorCatalogThumbnail
-                  catalogItem={catalogItem}
-                  shouldLoadThumbnail={shouldLoadThumbnails}
-                />
-              ) : (
-                <span
-                  aria-hidden="true"
-                  className="item-catalog-panel__thumbnail"
-                  style={getCatalogItemThumbnailStyle(
-                    catalogItem,
-                    presentationChoice,
-                    shouldLoadThumbnails,
-                  )}
-                />
-              )}
-              <span aria-hidden="true" className="item-catalog-panel__item-name">
-                {displayName}
-              </span>
-              <span className="sr-only">
-                {displayName}, {catalogItem.tileSize.width} × {catalogItem.tileSize.height}
-              </span>
-            </button>
-          </div>
-        );
-      })}
+      {availableCatalogItems.map((catalogItem) =>
+        renderCatalogItem(catalogItem, "available"),
+      )}
+      {unavailableGroupLabel === null ? null : (
+        <div
+          aria-level={3}
+          className="item-catalog-panel__unavailable-divider"
+          role="heading"
+        >
+          {unavailableGroupLabel}
+        </div>
+      )}
+      {unavailableCatalogItems.map(({ catalogItem, availability }) =>
+        renderCatalogItem(catalogItem, availability),
+      )}
     </div>
   );
 }
 
-function getCatalogItemDisplayName(
-  catalogItem: CatalogItem,
+function getCatalogItemSceneGroups(
   catalogItems: readonly CatalogItem[],
-  catalogItemIndex: number,
-  presentationChoice: CatalogPresentationChoice,
-): string {
-  const familyName = getReferencePlaceableFamilyName(catalogItem.name);
-  const occurrence = familyName === undefined
-    ? 1
-    : catalogItems
-      .slice(0, catalogItemIndex + 1)
-      .filter((candidate) => candidate.name === familyName)
-      .length;
-  const numberedName = occurrence > 1
-    ? `${catalogItem.name} ${String(occurrence)}`
-    : catalogItem.name;
-  const visibleVariant = getCatalogDisplayVariantLabel(
-    catalogItem,
-    presentationChoice,
-  );
+  mapId: string,
+): CatalogItemSceneGroups {
+  const availableCatalogItems: CatalogItem[] = [];
+  const unavailableCatalogItems: UnavailableCatalogItem[] = [];
 
-  return visibleVariant === null
-    ? numberedName
-    : `${numberedName} (${visibleVariant})`;
+  for (const catalogItem of catalogItems) {
+    const availability = getCatalogItemSceneAvailability(catalogItem, mapId);
+    if (availability === "available") {
+      availableCatalogItems.push(catalogItem);
+    } else {
+      unavailableCatalogItems.push({ catalogItem, availability });
+    }
+  }
+
+  return { availableCatalogItems, unavailableCatalogItems };
 }
 
-function getCatalogDisplayVariantLabel(
-  catalogItem: CatalogItem,
-  presentationChoice: CatalogPresentationChoice,
-): string | null {
-  const visibleVariant = catalogItem.presentationCapabilities?.visibleVariants.find(
-    (candidateVariant) => candidateVariant.value === presentationChoice.variant,
-  );
-  if (
-    visibleVariant === undefined ||
-    !["Dry", "Normal", "No Fruit", "Lit", "Unlit"].includes(visibleVariant.label)
-  ) {
-    return null;
-  }
-  return visibleVariant.label;
+function getCatalogFilterOptionLabel(
+  catalogFilter: CatalogPanelFilterOption,
+  copy: CatalogPanelCopy,
+): string {
+  const catalogFilterLabel = catalogFilter.id === "all"
+    ? copy.all
+    : copy.filterLabels[catalogFilter.id] ?? catalogFilter.label;
+
+  return `${catalogFilterLabel} (${String(catalogFilter.count)})`;
 }
 
 type BuildingCatalogThumbnailProperties = Readonly<{
@@ -1521,23 +1635,11 @@ export function getCatalogItemsForPanel(
   return getCatalogSidebarItems(catalog.items, category, searchQuery, filterId);
 }
 
-function getReferencePlaceableFamilyName(referenceName: string): string | undefined {
-  if (/^Rarecrow(?: \d+)?$/.test(referenceName)) {
-    return "Rarecrow";
-  }
-  if (referenceName === "Campfire") {
-    return "Campfire";
-  }
-  if (/^Campfire(?: \d+)? \(Lit\)$/.test(referenceName)) {
-    return "Campfire";
-  }
-  return undefined;
-}
-
 export function getCatalogItemThumbnailStyle(
   catalogItem: CatalogItem,
   presentationChoice: CatalogPresentationChoice,
   shouldLoadThumbnail = true,
+  viewMode: CatalogItemViewMode = "grid",
 ): CSSProperties {
   const validatedChoice = validateCatalogItemPresentationChoice(
     catalogItem,
@@ -1554,7 +1656,7 @@ export function getCatalogItemThumbnailStyle(
     cropRenderingMetadata?.fullyGrownRect ??
     furnitureRotationSprite?.sprite ??
     catalogItem.thumbnailSprite ??
-    getDefaultCatalogThumbnailSprite(catalogItem) ??
+    getDefaultCatalogThumbnailSprite(catalogItem, validatedChoice.variant) ??
     catalogItem.sprite;
   const spriteCoordinates = getCatalogSpriteCoordinates(
     thumbnailSprite,
@@ -1571,12 +1673,21 @@ export function getCatalogItemThumbnailStyle(
     validatedChoice.flipped !== (furnitureRotationSprite?.flipped === true);
   const preservesFurnitureNegativeZero = furnitureRotationSprite?.flipped === true;
 
+  const maximumSpriteDimension = viewMode === "list" ? 24 : 60;
   const thumbnailScale =
     catalogItem.category === "building"
       ? 1
       : cropRenderingMetadata !== undefined
-        ? Math.min(60 / spriteSize.width, 60 / spriteSize.height, 2.5)
-      : Math.min(60 / spriteSize.width, 60 / spriteSize.height, 4);
+        ? Math.min(
+            maximumSpriteDimension / spriteSize.width,
+            maximumSpriteDimension / spriteSize.height,
+            2.5,
+          )
+      : Math.min(
+          maximumSpriteDimension / spriteSize.width,
+          maximumSpriteDimension / spriteSize.height,
+          4,
+        );
   const textureDimensions = getCatalogTextureDimensions(
     catalogItem.textureLocalPath,
   );
@@ -1620,8 +1731,13 @@ export function getCatalogItemThumbnailStyle(
 
 function getDefaultCatalogThumbnailSprite(
   catalogItem: CatalogItem,
+  presentationVariant = 0,
 ): CatalogItem["sprite"] | undefined {
-  const seasonalSpringFrame = getSeasonalPlaceableFrame(catalogItem, "spring");
+  const seasonalSpringFrame = getSeasonalPlaceableFrame(
+    catalogItem,
+    "spring",
+    presentationVariant,
+  );
   if (seasonalSpringFrame !== null) {
     return seasonalSpringFrame;
   }

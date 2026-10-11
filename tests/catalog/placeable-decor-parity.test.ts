@@ -152,13 +152,31 @@ describe("frozen Placeables and Decor catalog parity", () => {
     expect(getSeasonalFrameSelector()).toBeTypeOf("function");
   });
 
-  it("locks all 149 original placeable IDs across asset, base frame, season, rotation, and footprint", async () => {
+  it("preserves the 149 frozen placeables and checks the four explicit additions", async () => {
     const getSeasonalPlaceableFrame = getSeasonalFrameSelector();
     expect(getSeasonalPlaceableFrame).toBeTypeOf("function");
     if (getSeasonalPlaceableFrame === undefined) return;
 
     const { placeableItems } = await createLockedRuntimeCatalogs();
-    expect(placeableItems).toHaveLength(149);
+    const addedPlaceableCatalogIds = [
+      "big-craftable:56",
+      "bush:small",
+      "bush:medium",
+      "bush:large",
+    ] as const;
+    const addedPlaceableCatalogIdSet = new Set<string>(addedPlaceableCatalogIds);
+    const frozenPlaceableItems = placeableItems.filter(
+      (catalogItem) => !addedPlaceableCatalogIdSet.has(catalogItem.id),
+    );
+    const newlyAddedPlaceableItems = placeableItems.filter(
+      (catalogItem) => addedPlaceableCatalogIdSet.has(catalogItem.id),
+    );
+
+    expect(placeableItems).toHaveLength(153);
+    expect(frozenPlaceableItems).toHaveLength(149);
+    expect(newlyAddedPlaceableItems.map((catalogItem) => catalogItem.id)).toEqual(
+      addedPlaceableCatalogIds,
+    );
     expect(placeableItems.filter((item) => item.id.startsWith("clump_")))
       .toHaveLength(4);
     expect(placeableItems.filter((item) => item.id.startsWith("clump_")).every(
@@ -166,7 +184,7 @@ describe("frozen Placeables and Decor catalog parity", () => {
         "/game-assets/1.6.15/tilesheets/springobjects.png",
     )).toBe(true);
     expect(hashManifest(createLockedItemManifest(
-      placeableItems,
+      frozenPlaceableItems,
       getSeasonalPlaceableFrame,
     ))).toBe(lockedPlaceableManifestHash);
   });

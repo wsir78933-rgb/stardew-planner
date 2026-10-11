@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { catalogGeist } from "../../src/components/catalog-font";
 import { PublicSiteAnalytics } from "../../src/components/public-site-analytics";
 import { publicSiteUrl } from "../../src/seo/public-site-url";
 import "../globals.css";
@@ -21,7 +22,7 @@ type RootLayoutProperties = Readonly<{
 export default function RootLayout({ children }: RootLayoutProperties) {
   return (
     <html lang="zh-CN">
-      <body>
+      <body className={catalogGeist.variable}>
         {children}
         <PublicSiteAnalytics />
       </body>

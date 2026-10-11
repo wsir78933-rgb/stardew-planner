@@ -15,6 +15,11 @@ import {
   type CatalogItem,
   type CatalogSidebarCategory,
 } from "../../src/catalog";
+import {
+  deduplicateCatalogItems,
+  getCatalogSidebarDisplayName,
+  getCatalogSidebarReferenceEntry,
+} from "../../src/catalog/catalog-sidebar-model";
 
 type LockedCatalogDatasetName = keyof typeof catalogDatasetUrls;
 type LockedCropRecord = Readonly<{ Seasons?: unknown }>;
@@ -118,6 +123,19 @@ async function createLockedSidebarCatalog(): Promise<Readonly<{
   };
 }
 
+function getSceneAvailableCatalogItems(
+  catalogItems: readonly CatalogItem[],
+  scene: "indoors" | "outdoors",
+): CatalogItem[] {
+  return catalogItems.filter((catalogItem) => {
+    const referenceEntry = getCatalogSidebarReferenceEntry(catalogItem.id);
+    if (referenceEntry !== undefined) {
+      return referenceEntry[scene];
+    }
+    return scene === "indoors" && catalogItem.interiorDecorKind !== undefined;
+  });
+}
+
 function getExpectedCropFacetId(
   catalogItemId: string,
   cropRecords: Readonly<Record<string, LockedCropRecord>>,
@@ -186,30 +204,18 @@ describe("catalog sidebar model", () => {
       allowedTools: ["cursor", "erase"],
     };
 
-    expect(
-      getCatalogSidebarItems(
-        [originalCatalogItem, { ...originalCatalogItem }],
-        "buildings",
-        "test barn",
-      ),
-    ).toEqual([originalCatalogItem]);
-    expect(
-      getCatalogSidebarItems(
-        [
-          originalCatalogItem,
-          { ...originalCatalogItem, tileSize: { height: 3, width: 4 } },
-        ],
-        "buildings",
-        "test barn",
-      ),
-    ).toEqual([originalCatalogItem]);
+    expect(deduplicateCatalogItems([originalCatalogItem, { ...originalCatalogItem }]))
+      .toEqual([originalCatalogItem]);
+    expect(deduplicateCatalogItems([
+      originalCatalogItem,
+      { ...originalCatalogItem, tileSize: { height: 3, width: 4 } },
+    ])).toEqual([originalCatalogItem]);
 
     expect(() =>
-      getCatalogSidebarItems(
-        [originalCatalogItem, { ...originalCatalogItem, allowedTools: ["erase", "cursor"] }],
-        "buildings",
-        "test barn",
-      ),
+      deduplicateCatalogItems([
+        originalCatalogItem,
+        { ...originalCatalogItem, allowedTools: ["erase", "cursor"] },
+      ]),
     ).toThrow(
       'Catalog item ID "building:test-barn" has conflicting values: allowedTools: ["cursor","erase"] vs ["erase","cursor"].',
     );
@@ -222,17 +228,13 @@ describe("catalog sidebar model", () => {
     };
 
     expect(() =>
-      getCatalogSidebarItems(
-        [originalCatalogItem, conflictingCatalogItem],
-        "buildings",
-        "test barn",
-      ),
+      deduplicateCatalogItems([originalCatalogItem, conflictingCatalogItem]),
     ).toThrow(
       'Catalog item ID "building:test-barn" has conflicting values: tileSize: {"height":3,"width":4} vs {"height":3,"width":5}; textureLocalPath: "/buildings.png" vs "/alternate-buildings.png"; sprite: {"height":48,"kind":"source-rect","width":64,"x":0,"y":0} vs {"height":48,"kind":"source-rect","width":80,"x":64,"y":0}.',
     );
   });
 
-  it("selects the original 149 visible placeables in reference order", async () => {
+  it("selects all reference placeables by stable local ID", async () => {
     const [
       bigCraftables,
       objects,
@@ -259,34 +261,55 @@ describe("catalog sidebar model", () => {
     );
     const selectedItems = selectCatalogSidebarPlaceableItems(placeableCatalog.items);
 
-    expect(selectedItems).toHaveLength(149);
-    expect(new Set(selectedItems.map(({ id }) => id)).size).toBe(149);
+    expect(selectedItems).toHaveLength(153);
+    expect(new Set(selectedItems.map(({ id }) => id)).size).toBe(153);
     expect(selectedItems).toContainEqual(
       expect.objectContaining({ id: "object:251", name: "Tea Sapling" }),
     );
-    expect(selectedItems.at(-1)).toMatchObject({
-      id: "furniture_mannequin_cursed_female",
-      name: "Cursed Mannequin (Female)",
-    });
+    expect(selectedItems).toContainEqual(
+      expect.objectContaining({ id: "big-craftable:56", name: "Slime Ball" }),
+    );
+    expect(selectedItems.map(({ id }) => id)).toEqual(
+      expect.arrayContaining(["bush:small", "bush:medium", "bush:large"]),
+    );
   });
 
-  it("partitions every current visible ID into one category and one visible facet", async () => {
+  it("projects exactly 949 reference items into stable categories and facets", async () => {
     const { items } = await createLockedSidebarCatalog();
-    const catalogItemIds = items.map(({ id }) => id);
+    const referenceItems = items.filter(({ id }) =>
+      getCatalogSidebarReferenceEntry(id) !== undefined,
+    );
+    const catalogItemIds = referenceItems.map(({ id }) => id);
+    const expectedCategoryCounts: Readonly<Record<CatalogSidebarCategory, number>> = {
+      buildings: 49,
+      crops: 67,
+      trees: 22,
+      equipment: 71,
+      paths: 21,
+      lighting: 39,
+      furniture: 257,
+      decor: 423,
+    };
 
+    expect(referenceItems).toHaveLength(949);
     expect(new Set(catalogItemIds).size).toBe(catalogItemIds.length);
 
     for (const category of catalogSidebarCategories) {
-      const categoryItems = getCatalogSidebarItems(items, category, "");
-      const filters = getCatalogSidebarFilters(items, category);
+      const categoryItems = getCatalogSidebarItems(referenceItems, category, "");
+      const filters = getCatalogSidebarFilters(referenceItems, category);
       const facetGroups = filters.slice(1).map((filter) => {
-        const filteredItems = getCatalogSidebarItems(items, category, "", filter.id);
+        const filteredItems = getCatalogSidebarItems(referenceItems, category, "", filter.id);
         expect(filteredItems).toHaveLength(filter.count);
         return filteredItems;
       });
       const facetItemIds = facetGroups.flatMap((group) => group.map(({ id }) => id));
 
-      expect(filters[0]).toMatchObject({ id: "all", label: "All", count: categoryItems.length });
+      expect(categoryItems).toHaveLength(expectedCategoryCounts[category]);
+      expect(filters[0]).toMatchObject({
+        id: "all",
+        label: "All",
+        count: expectedCategoryCounts[category],
+      });
       expect(new Set(facetItemIds).size).toBe(facetItemIds.length);
       if (filters.length > 1) {
         expect([...facetItemIds].sort()).toEqual(categoryItems.map(({ id }) => id).sort());
@@ -316,6 +339,129 @@ describe("catalog sidebar model", () => {
     });
   });
 
+  it("matches Standard farm availability counts while retaining refused facet rows", async () => {
+    const { items } = await createLockedSidebarCatalog();
+    const referenceItems = items.filter(({ id }) =>
+      getCatalogSidebarReferenceEntry(id) !== undefined,
+    );
+    const farmAvailableItems = getSceneAvailableCatalogItems(referenceItems, "outdoors");
+    const expectedFarmFiltersByCategory: Readonly<
+      Record<CatalogSidebarCategory, Readonly<Record<string, number>>>
+    > = {
+      buildings: {
+        all: 49, animal: 7, production: 2, storage: 3, utility: 7,
+        luxury: 5, cabins: 21, structures: 4,
+      },
+      crops: {
+        all: 67, spring: 16, summer: 16, fall: 16, winter: 5,
+        "multi-season": 8, "giant-crops": 5, saplings: 1,
+      },
+      trees: { all: 22, "wild-trees": 11, "fruit-trees": 8, bushes: 3 },
+      equipment: { all: 69, utility: 32, machines: 37 },
+      paths: { all: 21 },
+      lighting: { all: 17 },
+      furniture: {
+        all: 100, chairs: 37, benches: 5, couches: 1,
+        tables: 51, "long-tables": 5, tvs: 1,
+      },
+      decor: {
+        all: 237, functional: 19, plants: 64,
+        "large-decor": 43, "small-decor": 80, "special-items": 31,
+      },
+    };
+
+    for (const category of catalogSidebarCategories) {
+      const actualFilterCounts = Object.fromEntries(
+        getCatalogSidebarFilters(farmAvailableItems, category)
+          .map(({ id, count }) => [id, count]),
+      );
+      expect(actualFilterCounts).toEqual(expectedFarmFiltersByCategory[category]);
+    }
+
+    expect(getCatalogSidebarItems(referenceItems, "furniture", "", "couches"))
+      .toHaveLength(13);
+    expect(getCatalogSidebarItems(referenceItems, "furniture", "", "tvs"))
+      .toHaveLength(6);
+    expect(getCatalogSidebarItems(referenceItems, "decor", "", "plants"))
+      .toHaveLength(85);
+  });
+
+  it("uses Farmhouse availability for the full indoor furniture and decor facets", async () => {
+    const { items } = await createLockedSidebarCatalog();
+    const referenceItems = items.filter(({ id }) =>
+      getCatalogSidebarReferenceEntry(id) !== undefined,
+    );
+    const farmhouseAvailableItems = getSceneAvailableCatalogItems(referenceItems, "indoors");
+    const expectedIndoorFiltersByCategory: Readonly<
+      Partial<Record<CatalogSidebarCategory, Readonly<Record<string, number>>>>
+    > = {
+      equipment: { all: 71, utility: 33, machines: 38 },
+      furniture: {
+        all: 257, chairs: 37, benches: 5, couches: 13, armchairs: 5,
+        cushions: 14, tables: 51, "long-tables": 5, bookcases: 13,
+        dressers: 9, beds: 22, fireplaces: 11, rugs: 60, tvs: 6,
+        "fish-tanks": 6,
+      },
+      decor: {
+        all: 414, functional: 15, plants: 85, paintings: 89,
+        "wall-hangings": 56, "windows-doors": 18, "large-decor": 41,
+        "small-decor": 79, "special-items": 31,
+      },
+    };
+
+    for (const [category, expectedCounts] of Object.entries(expectedIndoorFiltersByCategory)) {
+      const sidebarCategory = category as CatalogSidebarCategory;
+      const actualFilterCounts = Object.fromEntries(
+        getCatalogSidebarFilters(farmhouseAvailableItems, sidebarCategory)
+          .map(({ id, count }) => [id, count]),
+      );
+      expect(actualFilterCounts).toEqual(expectedCounts);
+    }
+
+    expect(getCatalogSidebarItems(referenceItems, "decor", "", "functional"))
+      .toHaveLength(19);
+    expect(getCatalogSidebarItems(referenceItems, "decor", "", "large-decor"))
+      .toHaveLength(45);
+    expect(getCatalogSidebarItems(referenceItems, "decor", "", "small-decor"))
+      .toHaveLength(80);
+  });
+
+  it("searches and displays reference aliases while preserving distinct stable IDs", async () => {
+    const { items } = await createLockedSidebarCatalog();
+    const itemsById = new Map(items.map((catalogItem) => [catalogItem.id, catalogItem]));
+    const getItemById = (itemId: string): CatalogItem => {
+      const catalogItem = itemsById.get(itemId);
+      if (catalogItem === undefined) {
+        throw new Error(`Locked sidebar fixture is missing ${JSON.stringify(itemId)}.`);
+      }
+      return catalogItem;
+    };
+
+    expect(getCatalogSidebarItems(items, "buildings", "joja cola painting"))
+      .toContainEqual(expect.objectContaining({ id: "furniture_JojaColaPainting" }));
+    expect(getCatalogSidebarDisplayName(getItemById("furniture_JojaColaPainting")))
+      .toBe("Joja Cola Painting");
+    expect(getCatalogSidebarItems(items, "buildings", "crop:496_398"))
+      .toContainEqual(expect.objectContaining({ id: "crop:496_398" }));
+    expect(getCatalogSidebarItems(items, "crops", "grape").map(({ id }) => id))
+      .toEqual(["crop:496_398", "crop:301"]);
+    expect(getCatalogSidebarDisplayName(getItemById("big-craftable:113")))
+      .toBe("Rarecrow 2");
+    expect(getCatalogSidebarDisplayName(getItemById("big-craftable:278")))
+      .toBe("Campfire 2");
+
+    const fallbackCatalogItem: CatalogItem = {
+      id: "placeable:test-status-name",
+      name: "Test Decoration (Dry)",
+      category: "placeable",
+      tileSize: { width: 1, height: 1 },
+      textureLocalPath: "/test.png",
+      sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+      allowedTools: ["cursor", "erase"],
+    };
+    expect(getCatalogSidebarDisplayName(fallbackCatalogItem)).toBe("Test Decoration");
+  });
+
   it("maps the approved equipment, lighting, furniture, decor, tree, and path boundaries", async () => {
     const { items } = await createLockedSidebarCatalog();
     const hasItemInFilter = (
@@ -341,19 +487,22 @@ describe("catalog sidebar model", () => {
       catalogItem.renderingMetadata?.kind === "fruit-tree",
     );
     const painting = items.find((catalogItem) =>
-      catalogItem.renderingMetadata?.kind === "furniture" &&
-      catalogItem.renderingMetadata.furnitureType === "painting",
+      getCatalogSidebarReferenceEntry(catalogItem.id)?.facetId === "paintings",
     );
     const plant = itemByName("Topiary Tree");
 
     expect(hasItemInFilter("equipment", "machines", itemByName("Keg")?.id ?? "missing"))
       .toBe(true);
-    for (const name of ["Chest", "Sprinkler", "Scarecrow", "Wood Sign", "Pierre's Sign"]) {
+    for (const name of ["Chest", "Sprinkler", "Scarecrow", "Wood Sign"]) {
       const catalogItem = itemByName(name);
       expect(catalogItem).toBeDefined();
       expect(hasItemInFilter("equipment", "utility", catalogItem?.id ?? "missing"))
         .toBe(true);
     }
+    const pierreSign = itemByName("Pierre's Sign");
+    expect(getCatalogSidebarCategory(pierreSign!)).toBe("decor");
+    expect(hasItemInFilter("decor", "wall-hangings", pierreSign?.id ?? "missing"))
+      .toBe(true);
     expect(hasItemInFilter("lighting", "all", itemByName("Wood Lamp-post")?.id ?? "missing"))
       .toBe(true);
     expect(getCatalogSidebarCategory(fireplace!)).toBe("furniture");

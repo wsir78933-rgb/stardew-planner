@@ -16,6 +16,9 @@ import {
   type CatalogItem,
   type CatalogPresentationChoice,
 } from "../catalog";
+import {
+  getCatalogItemSceneAvailability,
+} from "../catalog/catalog-scene-availability";
 import type { EditorPreferences } from "../editor/browser-editor-preferences";
 import {
   getPlacementSelectionDetails,
@@ -75,6 +78,7 @@ import {
 } from "../planner/planner-workspace-project-actions";
 import { openImportedGameSaveAndPreserveResult } from "../planner/planner-workspace-game-save-import";
 import type { ImportedGameSaveState } from "../game-save/game-save-import";
+import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
 import {
   completePlannerWorkspaceRequest,
   createInitialPlannerWorkspaceResourceState,
@@ -973,12 +977,23 @@ function PreparedPlannerWorkspaceContent({
         handleInteriorDecorPatternSelect(interiorDecorPattern);
         return;
       }
+      const sceneAvailability = getCatalogItemSceneAvailability(
+        catalogItem,
+        plannerWorkspaceState.selectedPlannerMapId,
+      );
       cancelInteriorDecorBeforeOrdinaryWorkspaceAction({
         cancelInteriorDecor: handleCancelInteriorDecor,
         performOrdinaryWorkspaceAction: () => {
           workspaceEditingControls.cancelPendingDuplicateSelection();
           setSelectedPlacementKeys([]);
           handleCatalogItemSelect(catalogItem, presentationChoice);
+          if (sceneAvailability !== "available") {
+            showInteriorDecorRejectionMessage(
+              getCatalogPanelCopy(locale).sceneAvailabilityReason(
+                sceneAvailability,
+              ),
+            );
+          }
         },
       });
     },
@@ -986,6 +1001,7 @@ function PreparedPlannerWorkspaceContent({
       handleCancelInteriorDecor,
       handleInteriorDecorPatternSelect,
       handleCatalogItemSelect,
+      locale,
       plannerWorkspaceState.selectedPlannerMapId,
       setSelectedPlacementKeys,
       showInteriorDecorRejectionMessage,
@@ -1063,6 +1079,7 @@ function PreparedPlannerWorkspaceContent({
         catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
         category={plannerWorkspaceState.catalogCategory}
         locale={locale}
+        mapId={plannerWorkspaceState.selectedPlannerMapId}
         leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
         onCatalogItemSelect={handleOrdinaryCatalogItemSelect}
         onCategoryChange={(catalogCategory) =>

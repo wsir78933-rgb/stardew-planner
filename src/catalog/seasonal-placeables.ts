@@ -4,6 +4,7 @@ import type {
   CatalogSeasonalPlaceableRenderingMetadata,
   CatalogSourceRect,
 } from "./catalog-types";
+import { getBushSourceRect, isBushCatalogItemId } from "./bushes";
 
 type SeasonalPlaceableDefinition = Readonly<{
   composition: CatalogSeasonalPlaceableRenderingMetadata["composition"];
@@ -24,6 +25,9 @@ const seasonalPlaceableDefinitionsById: Readonly<
       winter: createSourceRect(96, 288, 16, 32),
     },
   },
+  "bush:small": createBushDefinition("bush:small"),
+  "bush:medium": createBushDefinition("bush:medium"),
+  "bush:large": createBushDefinition("bush:large"),
   grass_1: createGrassDefinition([0, 20, 40, 80]),
   grass_7: createGrassDefinition([160, 180, 200, 220]),
   "big-craftable:48": createConsecutiveCraftablesDefinition(48),
@@ -66,6 +70,7 @@ export function createSeasonalPlaceableCatalogProperties(
 export function getSeasonalPlaceableFrame(
   catalogItem: CatalogItem,
   season: CatalogSeason,
+  variant = 0,
 ): CatalogSourceRect | null {
   const lockedDefinition = seasonalPlaceableDefinitionsById[catalogItem.id];
   const renderingMetadata = catalogItem.renderingMetadata;
@@ -89,7 +94,25 @@ export function getSeasonalPlaceableFrame(
     lockedDefinition,
   );
 
+  if (isBushCatalogItemId(catalogItem.id)) {
+    return getBushSourceRect(catalogItem.id, season, variant);
+  }
+
   return renderingMetadata.seasonalFrames[season];
+}
+
+function createBushDefinition(
+  bushItemId: "bush:small" | "bush:medium" | "bush:large",
+): SeasonalPlaceableDefinition {
+  return {
+    composition: "single-sprite",
+    seasonalFrames: {
+      spring: getBushSourceRect(bushItemId, "spring"),
+      summer: getBushSourceRect(bushItemId, "summer"),
+      fall: getBushSourceRect(bushItemId, "fall"),
+      winter: getBushSourceRect(bushItemId, "winter"),
+    },
+  };
 }
 
 function createGrassDefinition(

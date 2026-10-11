@@ -780,7 +780,11 @@ function getItemRenderProperties(
   placementItem: PlacementItem,
   season: CatalogSeason = "spring",
 ): ItemRenderProperties {
-  const seasonalSourceRect = getSeasonalPlaceableFrame(catalogItem, season);
+  const seasonalSourceRect = getSeasonalPlaceableFrame(
+    catalogItem,
+    season,
+    placementItem.variant,
+  );
   const seasonalFrame = seasonalSourceRect === null
     ? null
     : {

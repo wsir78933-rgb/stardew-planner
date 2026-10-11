@@ -1,6 +1,7 @@
 "use client";
 
 import type { CatalogItem } from "../catalog";
+import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
 
@@ -25,7 +26,7 @@ export function CatalogPlacementControls({
 
   const copy = getCatalogPanelCopy(locale);
   const pendingCatalogControl = getPendingCatalogControl(catalogItem);
-  const placingItemLabel = copy.placingItem(catalogItem.name);
+  const placingItemLabel = copy.placingItem(getCatalogSidebarDisplayName(catalogItem));
 
   return (
     <div

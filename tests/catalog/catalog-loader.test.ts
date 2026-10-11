@@ -150,7 +150,7 @@ describe("catalog loader", () => {
     expect(requestedUrls.every((requestedUrl) => requestedUrl.startsWith("/game-assets/1.6.15/data/"))).toBe(
       true,
     );
-    expect(catalog.items).toHaveLength(1660);
+    expect(catalog.items).toHaveLength(1663);
   });
 
   it("creates precise item contracts for every verified rendering category", async () => {
@@ -160,7 +160,7 @@ describe("catalog loader", () => {
 
     expect(catalog.items.filter((item) => item.category === "building")).toHaveLength(25);
     expect(catalog.items.filter((item) => item.category === "crop")).toHaveLength(50);
-    expect(catalog.items.filter((item) => item.category === "placeable")).toHaveLength(1562);
+    expect(catalog.items.filter((item) => item.category === "placeable")).toHaveLength(1565);
     expect(catalog.items.filter((item) => item.category === "floor")).toHaveLength(14);
     expect(catalog.items.filter((item) => item.category === "fence")).toHaveLength(5);
     expect(catalog.items.filter((item) => item.category === "decor")).toHaveLength(4);

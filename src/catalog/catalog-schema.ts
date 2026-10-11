@@ -8,6 +8,7 @@ import type {
   CatalogSourceRect,
 } from "./catalog-types";
 import { createFrozenBuildingCompositionCatalogProperties } from "./building-composition";
+import { createBushCatalogItems } from "./bushes";
 import { createFurnitureCatalogItems } from "./furniture";
 import { createHoeDirtCatalogItem } from "./hoe-dirt";
 import { createCrabPotCatalogRenderingProperties } from "./crab-pot";
@@ -374,6 +375,7 @@ export function createCatalogFromDatasets(
       catalogDatasetUrls.fruitTrees,
     ),
     ...createWildTreeCatalogItems(),
+    ...createBushCatalogItems(),
     ...createResourceClumpCatalogItems(),
   ];
 
@@ -491,6 +493,7 @@ export function createPlaceableCatalogFromDatasets(
     ...createFurnitureCatalogItems(furnitureById, catalogDatasetUrls.furniture),
     ...createFruitTreeCatalogItems(fruitTreesById, catalogDatasetUrls.fruitTrees),
     ...createWildTreeCatalogItems(),
+    ...createBushCatalogItems(),
   ];
 
   return {
