@@ -1,4 +1,10 @@
 import {
+  createFarmMapDecorationPlan,
+  farmSpouseDefinitions,
+  getFarmSpousePatioTarget,
+  type FarmMapDecorationPlan,
+} from "../maps/farm-map-rendering";
+import {
   farmhouse2Composite,
   getPlannerMapById,
   gingerIslandOverlays,
@@ -33,6 +39,7 @@ export type PreparedDefaultMap = Readonly<{
   season: TilesheetSeason;
   parsedMap: TmxMap;
   renderingContract: MapRenderingContract;
+  farmMapDecorationPlan?: FarmMapDecorationPlan;
 }>;
 
 export type MapAssetResponse = Readonly<{
@@ -80,6 +87,12 @@ export async function loadPreparedDefaultMap(
     mapId: normalizedRequest.mapId,
     season: normalizedRequest.season,
     parsedMap,
+    farmMapDecorationPlan: createFarmMapDecorationPlan({
+      mapId: normalizedRequest.mapId,
+      parsedMap,
+      spouseId: normalizedRequest.mapRenderOptions.farm?.spouseId ?? null,
+      caveChoice: normalizedRequest.mapRenderOptions.farm?.caveChoice ?? "none",
+    }),
     renderingContract: createMapRenderingContract({
       mapId: normalizedRequest.mapId,
       parsedMap,
@@ -229,22 +242,78 @@ async function loadPlannerMap(
     })));
     return composeMapTileOverlays(parsedMap, overlays);
   }
-  if (request.mapId !== "farmhouse-2") return parsedMap;
-  const overlays = await Promise.all(
-    getFarmhouse2MapTileOverlays(request.mapRenderOptions).map(
-      async (overlay) => ({
-        ...overlay,
-        map: await loadMapTileOverlay(
-          request,
-          overlay.id,
-          overlay.mapFile,
-          fetchMapAsset,
-          parseMapXml,
-        ),
-      }),
-    ),
+  if (request.mapId === "farmhouse-2") {
+    const overlays = await Promise.all(
+      getFarmhouse2MapTileOverlays(request.mapRenderOptions).map(
+        async (overlay) => ({
+          ...overlay,
+          map: await loadMapTileOverlay(
+            request,
+            overlay.id,
+            overlay.mapFile,
+            fetchMapAsset,
+            parseMapXml,
+          ),
+        }),
+      ),
+    );
+    return composeMapTileOverlays(
+      parsedMap,
+      overlays,
+      getMapTileCompositionOptions(request.mapId),
+    );
+  }
+
+  const spousePatioOverlay = getFarmSpousePatioOverlay(
+    request.mapId,
+    parsedMap,
+    request.mapRenderOptions,
   );
-  return composeMapTileOverlays(parsedMap, overlays, getMapTileCompositionOptions(request.mapId));
+  if (spousePatioOverlay === null) {
+    return parsedMap;
+  }
+  const spousePatioMap = await loadMapTileOverlay(
+    request,
+    spousePatioOverlay.id,
+    spousePatioOverlay.mapFile,
+    fetchMapAsset,
+    parseMapXml,
+  );
+  return composeMapTileOverlays(parsedMap, [
+    { ...spousePatioOverlay, map: spousePatioMap },
+  ]);
+}
+
+function getFarmSpousePatioOverlay(
+  mapId: string,
+  parsedMap: TmxMap,
+  mapRenderOptions: MapRenderOptions,
+) {
+  const plannerMap = getPlannerMapById(mapId);
+  const spouseId = mapRenderOptions.farm?.spouseId ?? null;
+  if (
+    plannerMap.category !== "farm" ||
+    plannerMap.mapFile === "Island_W.tmx" ||
+    spouseId === null
+  ) {
+    return null;
+  }
+
+  const spouseDefinition = farmSpouseDefinitions.find(
+    (candidate) => candidate.id === spouseId,
+  );
+  if (spouseDefinition === undefined) {
+    throw new Error(
+      `Farm spouse ${JSON.stringify(spouseId)} is missing from the local patio asset catalog.`,
+    );
+  }
+
+  return {
+    id: `farm-spouse-patio-${spouseId}`,
+    mapFile: "spousePatios.tmx",
+    sourceCrop: spouseDefinition.sourceCrop,
+    target: getFarmSpousePatioTarget(parsedMap),
+  };
 }
 
 export function getMapTileCompositionOptions(

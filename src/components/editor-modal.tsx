@@ -4,7 +4,6 @@ import {
   useEffect,
   useId,
   useRef,
-  useState,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
@@ -12,6 +11,7 @@ import {
   type EditorModalId,
   type EditorPanelPosition,
 } from "../editor/editor-view-state";
+import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import {
   createInitialEditorDisplayOptions,
   type EditorDisplayOptionKey,
@@ -27,13 +27,23 @@ import {
   createInitialMapRenderOptions,
   type MapRenderOptions,
 } from "../maps/map-render-options";
-import { getPlannerMapById, plannerMaps } from "../maps/map-catalog";
-import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
+import { plannerMaps } from "../maps/map-catalog";
 import { PlannerMapPicker } from "./planner-map-picker";
 import { closeModalFromBackdropClick } from "./modal-backdrop-close";
 import type { EditorModalCopy } from "../i18n/editor-modal-copy";
+import { createInitialPlannerAmbienceOptions, type PlannerAmbienceOptions } from "../editor/planner-ambience-options";
+import { AmbienceConfigPanel, FarmMapConfigPanel, ViewConfigPanel, SettingsConfigPanel } from "./editor-config-panels";
+import { PlannerFeedbackForm } from "../contact/planner-feedback-form";
 
 type EditorModalProperties = Readonly<{
+  locale?: "en" | "zh";
+  season?: TilesheetSeason;
+  ambienceOptions?: PlannerAmbienceOptions;
+  onSeasonChange?: (season: TilesheetSeason) => void;
+  onAmbienceChange?: (options: PlannerAmbienceOptions) => void;
+  toolIsZoom?: boolean;
+  showZoomOption?: boolean;
+  onZoomToggle?: () => void;
   copy: EditorModalCopy;
   modalId: EditorModalId | null;
   selectedMapId: string;
@@ -70,6 +80,14 @@ const modalFocusableElementSelector = [
 ].join(",");
 
 export function EditorModal({
+  locale = "en",
+  season = "spring",
+  ambienceOptions = createInitialPlannerAmbienceOptions(),
+  onSeasonChange = missingSceneControl,
+  onAmbienceChange = missingSceneControl,
+  toolIsZoom = false,
+  showZoomOption = false,
+  onZoomToggle = missingSceneControl,
   copy,
   modalId,
   selectedMapId,
@@ -141,6 +159,7 @@ export function EditorModal({
 
     if (keyboardEvent.key === "Escape") {
       keyboardEvent.preventDefault();
+      keyboardEvent.stopPropagation();
       onClose();
       return;
     }
@@ -191,7 +210,7 @@ export function EditorModal({
         tabIndex={-1}
       >
         <header className="editor-modal__header">
-          <h2 id={modalHeadingId}>{getModalLabel(modalId, copy)}</h2>
+          <h2 id={modalHeadingId}>{getModalLabel(modalId, copy, locale)}</h2>
           <button
             aria-label={getModalCloseDialogLabel(modalId, copy)}
             onClick={onClose}
@@ -200,6 +219,9 @@ export function EditorModal({
             ×
           </button>
         </header>
+        {modalId === "ambience-panel" ? <AmbienceConfigPanel locale={locale} season={season} ambienceOptions={ambienceOptions} nightMode={displayOptions.showNightMode} onSeasonChange={onSeasonChange} onAmbienceChange={onAmbienceChange} onNightModeToggle={() => onDisplayOptionToggle("showNightMode")} /> : null}
+        {modalId === "map-options" ? <FarmMapConfigPanel locale={locale} selectedMapId={selectedMapId} mapRenderOptions={mapRenderOptions} onMapRenderOptionsChange={onMapRenderOptionsChange} /> : null}
+        {modalId === "feedback" ? <PlannerFeedbackForm locale={locale} /> : null}
         {modalId === "map-picker" ? (
           <>
             {projectMapPanelContent ?? (
@@ -218,34 +240,39 @@ export function EditorModal({
           </>
         ) : null}
         {modalId === "view-panel" ? (
-          <ViewPanel
+          <ViewConfigPanel
+            locale={locale}
             behaviorOptions={behaviorOptions}
-            copy={copy.view}
             displayOptions={displayOptions}
-            onBehaviorOptionChange={onBehaviorOptionChange}
-            onDisplayOptionToggle={onDisplayOptionToggle}
+            onBehaviorChange={onBehaviorOptionChange}
+            onDisplayToggle={onDisplayOptionToggle}
             onPanelPositionChange={onPanelPositionChange}
             panelPosition={panelPosition}
             selectedMapId={selectedMapId}
-            stateLabel={copy.stateLabel}
+            toolIsZoom={toolIsZoom}
+            showZoomOption={showZoomOption}
+            onZoomToggle={onZoomToggle}
           />
         ) : null}
         {modalId === "save-panel" ? savePanelContent : null}
         {modalId === "settings-panel" ? (
-          <SettingsPanel
+          <SettingsConfigPanel
+            locale={locale}
             behaviorOptions={behaviorOptions}
             copy={copy.settings}
-            stateLabel={copy.stateLabel}
-            unavailableStatusLabel={copy.view.unavailableWeather.statusLabel}
-            onBehaviorOptionChange={onBehaviorOptionChange}
+            onBehaviorChange={onBehaviorOptionChange}
           />
         ) : null}
         {modalId === "help-info" ? <HelpInfoPanel /> : null}
-        {modalId === "keyboard-shortcuts" ? <KeyboardShortcutsPanel /> : null}
+        {modalId === "keyboard-shortcuts" ? <KeyboardShortcutsPanel locale={locale} /> : null}
         {modalId === "whats-new" ? <WhatsNewPanel /> : null}
       </section>
     </div>
   );
+}
+
+function missingSceneControl(): never {
+  throw new Error("The open editor panel has no scene-control callback configured.");
 }
 
 export function shouldHandleEditorModalKeyboardEvent(
@@ -332,322 +359,6 @@ function restoreModalTriggerFocus(
   }
 }
 
-function PanelPositionPicker({
-  copy,
-  panelPosition,
-  onPanelPositionChange,
-  stateLabel,
-}: Readonly<{
-  copy: EditorModalCopy["view"]["catalogPosition"];
-  panelPosition: EditorPanelPosition;
-  onPanelPositionChange: (panelPosition: EditorPanelPosition) => void;
-  stateLabel: EditorModalCopy["stateLabel"];
-}>) {
-  return (
-    <div className="editor-modal__panel-picker">
-      <p>{copy.description}</p>
-      <button
-        aria-pressed={panelPosition === "bottom"}
-        data-state-label={stateLabel(panelPosition === "bottom")}
-        onClick={() => onPanelPositionChange("bottom")}
-        type="button"
-      >
-        {copy.bottomPanel}
-      </button>
-      <button
-        aria-pressed={panelPosition === "left"}
-        data-state-label={stateLabel(panelPosition === "left")}
-        onClick={() => onPanelPositionChange("left")}
-        type="button"
-      >
-        {copy.leftPanel}
-      </button>
-    </div>
-  );
-}
-
-const viewOptionGroups: readonly Readonly<{
-  options: readonly EditorDisplayOptionKey[];
-}>[] = [
-  {
-    options: [
-      "showGrid",
-      "showSprinklerRadius",
-      "showScarecrowRadius",
-      "showBeeHouseRadius",
-      "showJunimoHutRadius",
-    ],
-  },
-  {
-    options: [
-      "showBuildableTiles",
-      "showCropTiles",
-      "showTreeTiles",
-    ],
-  },
-  {
-    options: ["showNightMode"],
-  },
-];
-
-function ViewPanel({
-  behaviorOptions,
-  copy,
-  displayOptions,
-  onBehaviorOptionChange,
-  onDisplayOptionToggle,
-  onPanelPositionChange,
-  panelPosition,
-  selectedMapId,
-  stateLabel,
-}: Readonly<{
-  behaviorOptions: EditorBehaviorOptions;
-  copy: EditorModalCopy["view"];
-  displayOptions: EditorDisplayOptions;
-  onBehaviorOptionChange: (
-    editorBehaviorOptionKey: EditorBehaviorOptionKey,
-    nextValue: boolean,
-  ) => void;
-  onDisplayOptionToggle: (editorDisplayOptionKey: EditorDisplayOptionKey) => void;
-  onPanelPositionChange: (panelPosition: EditorPanelPosition) => void;
-  panelPosition: EditorPanelPosition;
-  selectedMapId: string;
-  stateLabel: EditorModalCopy["stateLabel"];
-}>) {
-  const shouldShowNpcPathOption = isNpcPathSupportedMapFile(
-    getPlannerMapById(selectedMapId).mapFile,
-  );
-
-  return (
-    <div className="editor-modal__view-panel">
-      {viewOptionGroups.map((viewOptionGroup, groupIndex) => {
-        const viewOptionGroupCopy = copy.optionGroups[groupIndex];
-
-        if (viewOptionGroupCopy === undefined) {
-          throw new Error(`View modal copy is missing option group ${String(groupIndex)}.`);
-        }
-
-        return (
-        <section className="editor-modal__view-section" key={viewOptionGroupCopy.heading}>
-          <h3>{viewOptionGroupCopy.heading}</h3>
-          <div className="editor-modal__view-options">
-            {viewOptionGroup.options.map((viewOptionKey, optionIndex) => {
-              const viewOptionCopy = viewOptionGroupCopy.options[optionIndex];
-
-              if (viewOptionCopy === undefined) {
-                throw new Error(
-                  `View modal copy is missing option ${String(optionIndex)} in group ${String(groupIndex)}.`,
-                );
-              }
-
-              return (
-                <button
-                  aria-pressed={displayOptions[viewOptionKey]}
-                  data-state-label={stateLabel(displayOptions[viewOptionKey])}
-                  key={viewOptionKey}
-                  onClick={() => onDisplayOptionToggle(viewOptionKey)}
-                  title={viewOptionCopy.title}
-                  type="button"
-                >
-                  {viewOptionCopy.label}
-                </button>
-              );
-            })}
-            {groupIndex === 1 &&
-            shouldShowNpcPathOption ? (
-              <button
-                aria-pressed={displayOptions.showNpcPaths}
-                data-state-label={stateLabel(displayOptions.showNpcPaths)}
-                onClick={() => onDisplayOptionToggle("showNpcPaths")}
-                title={copy.npcPaths.title}
-                type="button"
-              >
-                {copy.npcPaths.label}
-              </button>
-            ) : null}
-          </div>
-        </section>
-        );
-      })}
-      <section className="editor-modal__view-section">
-        <h3>{copy.mapObjects.heading}</h3>
-        <div className="editor-modal__view-options">
-          <button
-            aria-pressed={behaviorOptions.autoShowResourceClumps}
-            data-state-label={stateLabel(behaviorOptions.autoShowResourceClumps)}
-            onClick={() =>
-              onBehaviorOptionChange(
-                "autoShowResourceClumps",
-                !behaviorOptions.autoShowResourceClumps,
-              )
-            }
-            title={copy.mapObjects.option.title}
-            type="button"
-          >
-            {copy.mapObjects.option.label}
-          </button>
-        </div>
-      </section>
-      <section className="editor-modal__view-section">
-        <h3>{copy.unavailableWeather.heading}</h3>
-        <div className="editor-modal__view-options">
-          <button disabled title={copy.unavailableWeather.title} type="button">
-            {copy.unavailableWeather.label}
-            <span className="editor-modal__option-status">{copy.unavailableWeather.statusLabel}</span>
-          </button>
-        </div>
-      </section>
-      <section className="editor-modal__view-section">
-        <h3>{copy.catalogPosition.heading}</h3>
-        <PanelPositionPicker
-          copy={copy.catalogPosition}
-          onPanelPositionChange={onPanelPositionChange}
-          panelPosition={panelPosition}
-          stateLabel={stateLabel}
-        />
-      </section>
-    </div>
-  );
-}
-
-const settingsOptionGroups: readonly Readonly<{
-  options: readonly EditorBehaviorOptionKey[];
-}>[] = [
-  {
-    options: ["showJoystick", "leftHandMode"],
-  },
-  {
-    options: ["showToasts"],
-  },
-  {
-    options: ["gameCursors"],
-  },
-];
-
-function SettingsPanel({
-  behaviorOptions,
-  copy,
-  onBehaviorOptionChange,
-  stateLabel,
-  unavailableStatusLabel,
-}: Readonly<{
-  behaviorOptions: EditorBehaviorOptions;
-  copy: EditorModalCopy["settings"];
-  onBehaviorOptionChange: (
-    editorBehaviorOptionKey: EditorBehaviorOptionKey,
-    nextValue: boolean,
-  ) => void;
-  stateLabel: EditorModalCopy["stateLabel"];
-  unavailableStatusLabel: string;
-}>) {
-  const [isConfirmingFreePlacement, setIsConfirmingFreePlacement] =
-    useState(false);
-
-  function handleFreePlacementClick(): void {
-    if (behaviorOptions.freePlacement) {
-      onBehaviorOptionChange("freePlacement", false);
-      return;
-    }
-
-    setIsConfirmingFreePlacement(true);
-  }
-
-  function confirmFreePlacement(): void {
-    onBehaviorOptionChange("freePlacement", true);
-    setIsConfirmingFreePlacement(false);
-  }
-
-  return (
-    <div className="editor-modal__settings-panel">
-      {settingsOptionGroups.map((settingsOptionGroup, groupIndex) => {
-        const settingsOptionGroupCopy = copy.optionGroups[groupIndex];
-
-        if (settingsOptionGroupCopy === undefined) {
-          throw new Error(`Settings modal copy is missing option group ${String(groupIndex)}.`);
-        }
-
-        return (
-        <section className="editor-modal__view-section" key={settingsOptionGroupCopy.heading}>
-          <h3>{settingsOptionGroupCopy.heading}</h3>
-          <div className="editor-modal__view-options">
-            {settingsOptionGroup.options.map((settingsOptionKey, optionIndex) => {
-              const settingsOptionCopy = settingsOptionGroupCopy.options[optionIndex];
-
-              if (settingsOptionCopy === undefined) {
-                throw new Error(
-                  `Settings modal copy is missing option ${String(optionIndex)} in group ${String(groupIndex)}.`,
-                );
-              }
-
-              return (
-                <button
-                  aria-pressed={behaviorOptions[settingsOptionKey]}
-                  data-state-label={stateLabel(behaviorOptions[settingsOptionKey])}
-                  key={settingsOptionKey}
-                  onClick={() =>
-                    onBehaviorOptionChange(
-                      settingsOptionKey,
-                      !behaviorOptions[settingsOptionKey],
-                    )
-                  }
-                  title={settingsOptionCopy.title}
-                  type="button"
-                >
-                  {settingsOptionCopy.label}
-                </button>
-              );
-            })}
-          </div>
-        </section>
-        );
-      })}
-      <section className="editor-modal__view-section">
-        <h3>{copy.placementHeading}</h3>
-        <div className="editor-modal__view-options">
-          <button
-            aria-pressed={behaviorOptions.freePlacement}
-            data-state-label={stateLabel(behaviorOptions.freePlacement)}
-            onClick={handleFreePlacementClick}
-            title={copy.freePlacement.title}
-            type="button"
-          >
-            {copy.freePlacement.label}
-          </button>
-        </div>
-        {isConfirmingFreePlacement ? (
-          <div className="editor-modal__free-placement-warning" role="alert">
-            <p>{copy.freePlacementWarning}</p>
-            <div>
-              <button onClick={() => setIsConfirmingFreePlacement(false)} type="button">
-                {copy.warningActions.cancel}
-              </button>
-              <button onClick={confirmFreePlacement} type="button">
-                {copy.warningActions.confirm}
-              </button>
-            </div>
-          </div>
-        ) : null}
-      </section>
-      <section className="editor-modal__view-section">
-        <h3>{copy.community.heading}</h3>
-        <div className="editor-modal__view-options">
-          <button disabled title={copy.community.manageMods.title} type="button">
-            {copy.community.manageMods.label}
-            <span className="editor-modal__option-status">{unavailableStatusLabel}</span>
-          </button>
-        </div>
-      </section>
-      <section className="editor-modal__view-section">
-        <h3>{copy.legalHeading}</h3>
-        <div className="editor-modal__view-options editor-modal__legal-links">
-          <a href={copy.privacyPolicy.href} target="_blank" rel="noreferrer">{copy.privacyPolicy.label}</a>
-          <a href={copy.termsOfService.href} target="_blank" rel="noreferrer">{copy.termsOfService.label}</a>
-        </div>
-      </section>
-    </div>
-  );
-}
-
 function HelpInfoPanel() {
   return (
     <div className="editor-reference-info">
@@ -677,38 +388,37 @@ function HelpInfoPanel() {
   );
 }
 
-function KeyboardShortcutsPanel() {
+function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: "en" | "zh" }>) {
+  const isChinese = locale === "zh";
+  const shortcutGroups = [
+    { heading: isChinese ? "工具" : "Tools", entries: [
+      ["V", isChinese ? "切换到选择模式" : "Switch to cursor mode"],
+      ["M", isChinese ? "切换到多选模式" : "Switch to multi-select mode"],
+      ["E", isChinese ? "切换到擦除模式" : "Switch to erase mode"],
+      ["F", isChinese ? "切换到填充模式" : "Switch to fill mode"],
+      ["Q", isChinese ? "旋转或切换所选 / 待放置物品外观" : "Rotate or cycle variant on selected/placed item"],
+      ["C", isChinese ? "复制选中物品或建筑" : "Duplicate selected item or building"],
+      ["Del", isChinese ? "删除选中物品或建筑" : "Delete selected item or building"],
+      ["Esc", isChinese ? "取消放置或取消选择" : "Cancel placement or deselect"],
+      ["RMB", isChinese ? "右键取消放置或取消选择" : "Cancel placement or deselect (right-click)"],
+    ] },
+    { heading: isChinese ? "导航" : "Navigation", entries: [
+      ["W A S D", isChinese ? "平移画布" : "Pan the canvas"],
+      ["↑ ← ↓ →", isChinese ? "平移画布（方向键）" : "Pan the canvas (alternative)"],
+      ["R", isChinese ? "放大" : "Zoom in"],
+      ["T", isChinese ? "缩小" : "Zoom out"],
+      ["Ctrl / ⌘", isChinese ? "按住透视重叠的物品" : "X-ray: hold to see behind overlapping sprites"],
+      ["Space", isChinese ? "按住透视（原有快捷键）" : "Hold for X-ray (alternative)"],
+    ] },
+    { heading: isChinese ? "历史" : "History", entries: [
+      ["Ctrl / ⌘ Z", isChinese ? "撤销上一次操作" : "Undo last action"],
+      ["Ctrl / ⌘ Y", isChinese ? "重做上一次撤销的操作" : "Redo last action"],
+      ["Ctrl / ⌘ ⇧ Z", isChinese ? "重做（备用快捷键）" : "Redo (alternative)"],
+    ] },
+  ];
   return (
     <div className="editor-reference-info editor-reference-info--shortcuts">
-      <section>
-        <h3>Tools</h3>
-        <dl>
-          <div><dt>V</dt><dd>Switch to cursor mode</dd></div>
-          <div><dt>M</dt><dd>Switch to multi-select mode</dd></div>
-          <div><dt>E</dt><dd>Switch to erase mode</dd></div>
-          <div><dt>F</dt><dd>Switch to fill mode</dd></div>
-          <div><dt>Q</dt><dd>Cycle the selected item appearance</dd></div>
-          <div><dt>C</dt><dd>Copy the selected placement</dd></div>
-          <div><dt>Delete</dt><dd>Delete the selected placement</dd></div>
-          <div><dt>Esc / Right click</dt><dd>Cancel placement or clear selection</dd></div>
-        </dl>
-      </section>
-      <section>
-        <h3>Camera</h3>
-        <dl>
-          <div><dt>WASD / Arrow keys</dt><dd>Pan the canvas</dd></div>
-          <div><dt>R / T</dt><dd>Zoom in or out</dd></div>
-          <div><dt>Wheel / pinch</dt><dd>Zoom toward the cursor</dd></div>
-          <div><dt>Space</dt><dd>Hold for X-ray</dd></div>
-        </dl>
-      </section>
-      <section>
-        <h3>History</h3>
-        <dl>
-          <div><dt>Ctrl/Cmd + Z</dt><dd>Undo the last action</dd></div>
-          <div><dt>Ctrl/Cmd + Y</dt><dd>Redo the last undone action</dd></div>
-        </dl>
-      </section>
+      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{isChinese ? "滚轮或双指捏合缩放" : "Scroll wheel or pinch to zoom"}</p> : null}</section>)}
     </div>
   );
 }
@@ -738,6 +448,11 @@ function WhatsNewPanel() {
 }
 
 function getEditorModalClassName(modalId: EditorModalId): string {
+  if (["ambience-panel", "map-options", "view-panel", "settings-panel"].includes(modalId)) {
+    return `editor-modal editor-modal--${modalId} editor-modal--popover`;
+  }
+  if (modalId === "feedback") return "editor-modal editor-modal--feedback";
+  if (modalId === "keyboard-shortcuts") return "editor-modal editor-modal--shortcuts";
   if (modalId === "map-picker") {
     return "editor-modal editor-modal--map-picker";
   }
@@ -766,7 +481,9 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
     modalId === "save-panel" ||
     modalId === "view-panel" ||
     modalId === "settings-panel" ||
-    modalId === "help-info"
+    modalId === "help-info" ||
+    modalId === "feedback" ||
+    modalId === "keyboard-shortcuts"
   ) {
     return "editor-modal__backdrop editor-modal__backdrop--viewport-fixed";
   }
@@ -774,9 +491,12 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
   return "editor-modal__backdrop";
 }
 
-function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy): string {
+function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: "en" | "zh"): string {
+  if (modalId === "ambience-panel") return locale === "zh" ? "氛围" : "Ambience";
+  if (modalId === "map-options") return locale === "zh" ? "地图" : "Map";
+  if (modalId === "feedback") return locale === "zh" ? "发送反馈" : "Send feedback";
   if (modalId === "map-picker") {
-    return "Choose map";
+    return locale === "zh" ? "选择地图" : "Choose map";
   }
 
   if (modalId === "view-panel") {
@@ -784,15 +504,15 @@ function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy): string {
   }
 
   if (modalId === "save-panel") {
-    return copy.modalTitles.save;
+    return locale === "zh" ? "本地项目" : "Library";
   }
 
   if (modalId === "help-info") {
-    return "Help & Info";
+    return locale === "zh" ? "帮助与说明" : "Help & Info";
   }
 
   if (modalId === "keyboard-shortcuts") {
-    return "Keyboard Shortcuts";
+    return locale === "zh" ? "键盘快捷键" : "Keyboard Shortcuts";
   }
 
   if (modalId === "whats-new") {
@@ -803,16 +523,8 @@ function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy): string {
 }
 
 function getModalCloseDialogLabel(
-  modalId: EditorModalId,
+  _modalId: EditorModalId,
   copy: EditorModalCopy,
 ): string {
-  if (
-    modalId === "save-panel" ||
-    modalId === "view-panel" ||
-    modalId === "settings-panel"
-  ) {
-    return copy.closeDialogLabel;
-  }
-
-  return "Close dialog";
+  return copy.closeDialogLabel;
 }

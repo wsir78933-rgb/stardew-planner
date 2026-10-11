@@ -15,6 +15,10 @@ import {
   restoreInteriorDecorState,
   type InteriorDecorState,
 } from "../interior-decor/interior-decor-state";
+import {
+  restoreMapRenderOptions,
+  type MapRenderOptions,
+} from "../maps/map-render-options";
 import type {
   ReferenceJsonValue,
   ReferenceProjectMap,
@@ -40,6 +44,7 @@ export type ReferenceOpenMapEdits = Readonly<{
   placementSnapshot?: PlacementSnapshot;
   season?: ReferenceProjectMap["season"];
   interiorDecor?: InteriorDecorState;
+  mapRenderOptions?: MapRenderOptions;
   renovations?: readonly ReferenceJsonValue[];
 }>;
 
@@ -49,6 +54,7 @@ type NormalizedReferenceOpenMapEdits = Readonly<{
   placementSnapshot: PlacementSnapshot;
   season: ReferenceProjectMap["season"];
   interiorDecor: InteriorDecorState;
+  mapRenderOptions?: MapRenderOptions;
   renovations: ReferenceJsonValue[];
 }>;
 
@@ -410,6 +416,16 @@ export function applyReferenceOpenMapEdits(
     wallpapers: { ...normalizedEdits.interiorDecor.wallpapers },
     floors: { ...normalizedEdits.interiorDecor.floors },
   };
+  if (normalizedEdits.mapRenderOptions !== undefined) {
+    savedMap.state = {
+      ...savedMap.state,
+      mapRenderOptions: cloneReferenceJsonValue(
+        normalizedEdits.mapRenderOptions,
+        "state.mapRenderOptions",
+        new WeakSet(),
+      ),
+    };
+  }
   savedMap.renovations = normalizedEdits.renovations;
 
   return savedMap;
@@ -451,10 +467,35 @@ function normalizeReferenceOpenMapEdits(
       session,
       rawInteriorDecor,
     ),
+    mapRenderOptions: Object.hasOwn(edits, "mapRenderOptions")
+      ? restoreReferenceSaveMapRenderOptions(session, rawEdits.mapRenderOptions)
+      : undefined,
     renovations: Object.hasOwn(edits, "renovations")
       ? validateReferenceSaveRenovations(session, rawEdits.renovations)
       : structuredClone(session.sourceMap.renovations),
   };
+}
+
+function restoreReferenceSaveMapRenderOptions(
+  session: ReferenceOpenMapSession,
+  rawMapRenderOptions: unknown,
+): MapRenderOptions {
+  if (rawMapRenderOptions === undefined) {
+    throw new TypeError(
+      `Reference project ${JSON.stringify(session.projectId)} map ${JSON.stringify(session.mapId)} cannot apply edits: field "mapRenderOptions" must be defined when provided; received ${describeValue(rawMapRenderOptions)}.`,
+    );
+  }
+  try {
+    return restoreMapRenderOptions(rawMapRenderOptions);
+  } catch (caughtError) {
+    if (!(caughtError instanceof Error)) {
+      throw caughtError;
+    }
+    throw new TypeError(
+      `Reference project ${JSON.stringify(session.projectId)} map ${JSON.stringify(session.mapId)} cannot apply edits: ${caughtError.message}`,
+      { cause: caughtError },
+    );
+  }
 }
 
 function restoreReferenceSavePlacementSnapshot(
@@ -650,6 +691,7 @@ function assertAllowedEditFields(edits: ReferenceOpenMapEdits): void {
     "placementSnapshot",
     "season",
     "interiorDecor",
+    "mapRenderOptions",
     "renovations",
   ]);
   for (const editField of Object.keys(edits)) {

@@ -6,6 +6,7 @@ import {
   undoPlacementHistory,
 } from "../../src/placement/placement-history";
 import { applyPlacementSnapshotAction } from "../../src/placement/placement-snapshot";
+import { restoreMapRenderOptions } from "../../src/maps/map-render-options";
 import {
   validateReferenceProjectDocument,
   type ReferenceJsonValue,
@@ -1020,6 +1021,15 @@ describe("reference project editor adapter", () => {
   it("merges edited placement, decor, renovations, and season onto preserved envelopes", () => {
     const sourceMap = createSupportedReferenceMap();
     const session = createReferenceOpenMapSession("project-alpha", sourceMap);
+    const savedMapRenderOptions = restoreMapRenderOptions({
+      gingerIslandOverlayIds: ["cave"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: "abigail",
+      },
+      farm: { spouseId: "Abigail", caveChoice: "bats" },
+    });
     const paintedBuilding = session.placementSnapshot.buildings[0];
     const editedItem = session.placementSnapshot.items[0];
     if (paintedBuilding === undefined || editedItem === undefined) {
@@ -1067,6 +1077,7 @@ describe("reference project editor adapter", () => {
     const savedMap = applyReferenceOpenMapEdits(session, {
       placementSnapshot: editedPlacementSnapshot,
       season: "winter",
+      mapRenderOptions: savedMapRenderOptions,
       interiorDecor: {
         wallpapers: { Bedroom: "111" },
         floors: { MainFloor: "87" },
@@ -1084,6 +1095,7 @@ describe("reference project editor adapter", () => {
         floors: { MainFloor: "87" },
       },
       renovations: ["cellar", { enabled: true }],
+      state: { mapRenderOptions: savedMapRenderOptions },
       thumbnail: "/api/projects/project-alpha/maps/map-standard/thumbnail",
     });
     expect(savedMap.state.buildings).toEqual([
@@ -1309,6 +1321,26 @@ describe("reference project editor adapter", () => {
       name: "non-array renovations",
       edits: { renovations: { unexpected: true } },
       expectedContext: /renovations.*unexpected.*true/s,
+    },
+    {
+      name: "invalid map render options",
+      edits: {
+        mapRenderOptions: {
+          gingerIslandOverlayIds: ["cave"],
+          farmhouse2: {
+            marriageMapEnabled: false,
+            renovationIds: [],
+            spouseId: "not-a-spouse",
+          },
+          farm: { spouseId: null, caveChoice: "none" },
+        },
+      },
+      expectedContext: /farmhouse2\.spouseId.*not-a-spouse/s,
+    },
+    {
+      name: "undefined map render options field",
+      edits: { mapRenderOptions: undefined },
+      expectedContext: /mapRenderOptions.*undefined/s,
     },
   ])(
     "fails save-side $name with project, map, path, and value",

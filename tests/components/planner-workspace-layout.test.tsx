@@ -560,10 +560,10 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
-  it("shows resource-clump spawn locations only for an enabled selected resource clump", () => {
-    const renderResourceClumpSelection = (
-      selectedCatalogItemId: string | null,
+  it("shows resource-clump spawn locations from the global option regardless of selection", () => {
+    const renderResourceClumpSetting = (
       autoShowResourceClumps: boolean,
+      selectedCatalogItemId?: string | null,
     ) => renderPreparedWorkspace({
       autoShowResourceClumps,
       leftHandMode: false,
@@ -571,19 +571,25 @@ describe("planner workspace frozen layout contracts", () => {
       selectedCatalogItemId,
     });
 
-    expect(renderResourceClumpSelection("clump_600", true)).toContain(
+    expect(renderResourceClumpSetting(true, "clump_600")).toContain(
       'data-planner-canvas-show-resource-clump-spawn-locations="true"',
     );
-    expect(renderResourceClumpSelection("clump_622", true)).toContain(
+    expect(renderResourceClumpSetting(true, "clump_622")).toContain(
+      'data-planner-canvas-show-resource-clump-spawn-locations="true"',
+    );
+    expect(renderResourceClumpSetting(true, null)).toContain(
+      'data-planner-canvas-show-resource-clump-spawn-locations="true"',
+    );
+    expect(renderResourceClumpSetting(true, "object:390")).toContain(
+      'data-planner-canvas-show-resource-clump-spawn-locations="true"',
+    );
+    expect(renderResourceClumpSetting(false, "clump_600")).toContain(
       'data-planner-canvas-show-resource-clump-spawn-locations="false"',
     );
-    expect(renderResourceClumpSelection(null, true)).toContain(
+    expect(renderResourceClumpSetting(false, null)).toContain(
       'data-planner-canvas-show-resource-clump-spawn-locations="false"',
     );
-    expect(renderResourceClumpSelection("object:390", true)).toContain(
-      'data-planner-canvas-show-resource-clump-spawn-locations="false"',
-    );
-    expect(renderResourceClumpSelection("clump_600", false)).toContain(
+    expect(renderResourceClumpSetting(false, "object:390")).toContain(
       'data-planner-canvas-show-resource-clump-spawn-locations="false"',
     );
   });

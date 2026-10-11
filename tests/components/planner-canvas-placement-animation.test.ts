@@ -272,6 +272,43 @@ describe("PlannerCanvas placement animation", () => {
     }
   });
 
+  it("stops and resumes animated placements with the global animation option", () => {
+    vi.useFakeTimers();
+    const render = vi.fn();
+    const animation = { update: vi.fn(() => true) };
+    const animationController = createPlacementAnimationController(
+      render,
+      false,
+    );
+
+    try {
+      animationController.replaceAnimations([animation]);
+      expect(vi.getTimerCount()).toBe(0);
+
+      animationController.setEnabled(true);
+      expect(vi.getTimerCount()).toBe(1);
+      vi.advanceTimersByTime(100);
+      expect(animation.update).toHaveBeenCalledOnce();
+      expect(render).toHaveBeenCalledOnce();
+
+      animationController.setEnabled(false);
+      expect(vi.getTimerCount()).toBe(0);
+      vi.advanceTimersByTime(300);
+      expect(animation.update).toHaveBeenCalledOnce();
+
+      animationController.setEnabled(true);
+      expect(vi.getTimerCount()).toBe(1);
+      animationController.dispose();
+      expect(vi.getTimerCount()).toBe(0);
+      expect(() => animationController.setEnabled(false)).toThrow(
+        "Placement animation controller cannot change its enabled state after disposal.",
+      );
+    } finally {
+      animationController.dispose();
+      vi.useRealTimers();
+    }
+  });
+
   it("rejects an invalid animation descriptor before Pixi allocation", () => {
     let frameTextureAllocationCount = 0;
     let spriteAllocationCount = 0;

@@ -4,13 +4,15 @@ import {
   createCanonicalSessionTransition,
   getCurrentCanonicalSession,
 } from "../../src/planner/planner-workspace-canonical-session";
+import { createInitialMapRenderOptions } from "../../src/maps/map-render-options";
+import type { ReferenceJsonValue } from "../../src/reference-runtime/local-project-api";
 import type { ReferenceOpenMapSession } from "../../src/reference-runtime/reference-project-editor-adapter";
 
 function createSession(projectId: string, mapId: string, mapFile: string): ReferenceOpenMapSession {
   return {
     projectId,
     mapId,
-    sourceMap: { id: mapId, mapFile },
+    sourceMap: { id: mapId, mapFile, state: {} },
     placementSnapshot: {
       buildings: [], crops: [], items: [], nextBuildingId: 1, nextItemId: 1,
       interiorDecor: { wallpapers: {}, floors: {} },
@@ -46,6 +48,74 @@ describe("planner workspace canonical session", () => {
       canonicalMapIdentityReference,
     )).toBeNull();
     expect(getPlannerMapIdForMapFile).toHaveBeenCalledTimes(1);
+  });
+
+  it("restores stored map render options and defaults legacy maps without them", () => {
+    const legacySession = createSession("project-legacy", "map-legacy", "Farm.tmx");
+    const legacyTransition = createCanonicalSessionTransition(
+      legacySession,
+      { getPlannerMapIdForMapFile: () => "standard" },
+      createCanonicalMapIdentityReference(),
+    );
+    const storedMapRenderOptions: ReferenceJsonValue = {
+      gingerIslandOverlayIds: ["cave"],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "bats" },
+    };
+    const sessionWithStoredMapRenderOptions = {
+      ...createSession("project-saved", "map-saved", "Farm.tmx"),
+      sourceMap: {
+        id: "map-saved",
+        mapFile: "Farm.tmx",
+        state: { mapRenderOptions: storedMapRenderOptions },
+      },
+    } as unknown as ReferenceOpenMapSession;
+    const storedTransition = createCanonicalSessionTransition(
+      sessionWithStoredMapRenderOptions,
+      { getPlannerMapIdForMapFile: () => "standard" },
+      createCanonicalMapIdentityReference(),
+    );
+
+    expect(legacyTransition?.mapRenderOptions).toEqual(
+      createInitialMapRenderOptions(),
+    );
+    expect(storedTransition?.mapRenderOptions).toEqual(storedMapRenderOptions);
+  });
+
+  it("rejects invalid stored map render options with the offending value", () => {
+    const canonicalMapIdentityReference = createCanonicalMapIdentityReference();
+    const sessionWithInvalidMapRenderOptions = {
+      ...createSession("project-invalid", "map-invalid", "Farm.tmx"),
+      sourceMap: {
+        id: "map-invalid",
+        mapFile: "Farm.tmx",
+        state: {
+          mapRenderOptions: {
+            ...createInitialMapRenderOptions(),
+            farmhouse2: {
+              ...createInitialMapRenderOptions().farmhouse2,
+              spouseId: "not-a-spouse",
+            },
+          },
+        },
+      },
+    } as unknown as ReferenceOpenMapSession;
+
+    expect(() => createCanonicalSessionTransition(
+      sessionWithInvalidMapRenderOptions,
+      { getPlannerMapIdForMapFile: () => "standard" },
+      canonicalMapIdentityReference,
+    )).toThrow(/spouseId.*not-a-spouse/);
+    expect(canonicalMapIdentityReference.current).toBeNull();
+    expect(createCanonicalSessionTransition(
+      createSession("project-invalid", "map-invalid", "Farm.tmx"),
+      { getPlannerMapIdForMapFile: () => "standard" },
+      canonicalMapIdentityReference,
+    )).not.toBeNull();
   });
 
   it("clears a null identity so the same canonical map may open again", () => {

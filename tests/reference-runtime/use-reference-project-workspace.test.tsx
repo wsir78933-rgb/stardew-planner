@@ -17,10 +17,17 @@ import {
 } from "../../src/reference-runtime/reference-project-repository";
 import type { ReferenceLocalProjectDocument } from "../../src/reference-runtime/local-project-api";
 import { plannerMaps } from "../../src/maps/map-catalog";
+import {
+  createInitialMapRenderOptions,
+  setFarmCaveChoice,
+  setFarmSpouseId,
+} from "../../src/maps/map-render-options";
 import { referenceProjectDocumentFixture } from "./fixtures/reference-project-document";
 
-function createRepository(): ReferenceProjectRepository {
-  let serializedProjectDocument = JSON.stringify(createAdapterSupportedDocument());
+function createRepository(
+  projectDocument: ReferenceLocalProjectDocument = createAdapterSupportedDocument(),
+): ReferenceProjectRepository {
+  let serializedProjectDocument = JSON.stringify(projectDocument);
   return createReferenceProjectRepository({
     storage: {
       getItem: () => serializedProjectDocument,
@@ -133,18 +140,20 @@ describe("reference project workspace controller", () => {
       }),
     ).toThrow(/onStateChange.*not-a-function/);
 
-    for (const summaryField of [
-      "id",
-      "title",
-      "created_at",
-      "updated_at",
+    for (const [summaryField, invalidFieldValue] of [
+      ["id", 42],
+      ["title", 42],
+      ["created_at", 42],
+      ["updated_at", 42],
+      ["mapCount", 1.5],
+      ["activeMapThumbnailDataUrl", 42],
     ] as const) {
       const invalidSummary = {
         id: "project-alpha",
         title: "Alpha Farm",
         created_at: "created",
         updated_at: "updated",
-        [summaryField]: 42,
+        [summaryField]: invalidFieldValue,
       };
       expect(() =>
         createReferenceProjectWorkspaceController({
@@ -153,7 +162,7 @@ describe("reference project workspace controller", () => {
             invalidSummary as unknown as ReferenceProjectSummary,
           ],
         }),
-      ).toThrow(new RegExp(`${summaryField}.*42`));
+      ).toThrow(new RegExp(`${summaryField}.*${String(invalidFieldValue)}`));
     }
   });
   it("refreshes summaries without changing an open session", () => {
@@ -653,6 +662,38 @@ describe("reference project workspace controller", () => {
     expect(controller.getState().projectSummaries[0]?.title).toBe("Alpha Farm");
   });
 
+  it("restores missing farm settings when duplicated or imported projects open", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    const alphaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-alpha",
+    )!;
+    alphaProject.project.maps[1]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    };
+    const repository = createRepository(projectDocument);
+    const controller = createController(repository);
+
+    controller.duplicateProject("project-alpha");
+    expect(
+      controller.getState().activeSession?.sourceMap.state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+
+    controller.importProject(repository.exportProject("project-alpha"));
+    expect(
+      controller.getState().activeSession?.sourceMap.state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+  });
+
   it("opens remapped project IDs after duplicate/import and updates summaries after copy", () => {
     const repository = createRepository();
     const controller = createController(repository);
@@ -666,6 +707,346 @@ describe("reference project workspace controller", () => {
     const summariesBeforeCopy = controller.getState().projectSummaries;
     controller.copyMap({ projectId: "project-alpha", mapId: "map-island", targetProjectId: "project-beta" });
     expect(controller.getState().projectSummaries).not.toBe(summariesBeforeCopy);
+  });
+
+  it("copies a source map with the existing target project's farm settings", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    const alphaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-alpha",
+    )!;
+    const sourceMap = alphaProject.project.maps.find(
+      (projectMap) => projectMap.id === "map-standard",
+    )!;
+    const sourceMapRenderOptions = {
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    };
+    const sourceMapState = {
+      ...sourceMap.state,
+      items: [
+        {
+          instanceId: "copied-farm-item",
+          itemId: "furniture_1123",
+          x: 8,
+          y: 9,
+          layer: "item",
+          rotation: 1,
+          footprint: { w: 2, h: 1 },
+          variant: 3,
+          tint: "#ffffff",
+          locked: false,
+          rug: false,
+          table: true,
+          bed: false,
+        },
+      ],
+      nextItemId: 2,
+      mapRenderOptions: sourceMapRenderOptions,
+      preservedTransferState: { marker: "source-state" },
+    };
+    const sourceMapDecor = {
+      wallpapers: { "wall-3": "wallpaper_3" },
+      floors: { "floor-9": "flooring_4" },
+    };
+    const sourceMapRenovations = [{ id: "source-renovation", enabled: true }];
+    sourceMap.state = sourceMapState;
+    sourceMap.decor = sourceMapDecor;
+    sourceMap.renovations = sourceMapRenovations;
+
+    const betaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-beta",
+    )!;
+    betaProject.project.maps[0]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: ["restored", "bin", "cave", "obelisk"],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    };
+
+    const recordingWorkspace = createRecordingWorkspaceRepository(projectDocument);
+    const controller = createController(recordingWorkspace.repository);
+    controller.openProject("project-beta");
+    const existingTargetMapIds = new Set(
+      controller.getState().activeProject!.project.maps.map((projectMap) => projectMap.id),
+    );
+
+    controller.copyMap({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      targetProjectId: "project-beta",
+    });
+
+    const copiedProject = controller.getState().activeProject!;
+    const copiedMap = copiedProject.project.maps.find(
+      (projectMap) => !existingTargetMapIds.has(projectMap.id),
+    )!;
+    expect(copiedMap.state.mapRenderOptions).toMatchObject({
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    });
+    expect(copiedMap.state.items).toEqual(sourceMapState.items);
+    expect(copiedMap.state.preservedTransferState).toEqual({
+      marker: "source-state",
+    });
+    expect(copiedMap.decor).toEqual(sourceMapDecor);
+    expect(copiedMap.renovations).toEqual(sourceMapRenovations);
+    for (const projectMap of copiedProject.project.maps) {
+      expect(projectMap.state.mapRenderOptions).toMatchObject({
+        farm: { spouseId: "Penny", caveChoice: "bats" },
+      });
+    }
+
+    const persistedAlphaProject = JSON.parse(
+      recordingWorkspace.getSerializedProjectDocument(),
+    ).projects.find((storedProject: { id: string }) => storedProject.id === "project-alpha");
+    const persistedSourceMap = persistedAlphaProject.project.maps.find(
+      (projectMap: { id: string }) => projectMap.id === "map-standard",
+    );
+    expect(persistedSourceMap.state).toEqual(sourceMapState);
+    expect(persistedSourceMap.decor).toEqual(sourceMapDecor);
+    expect(persistedSourceMap.renovations).toEqual(sourceMapRenovations);
+    expect(recordingWorkspace.getWriteCount()).toBe(1);
+  });
+
+  it("moves a source map with the existing target project's farm settings", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    const alphaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-alpha",
+    )!;
+    const sourceMap = alphaProject.project.maps.find(
+      (projectMap) => projectMap.id === "map-standard",
+    )!;
+    const movedMapItems = [
+      {
+        instanceId: "moved-farm-item",
+        itemId: "furniture_1123",
+        x: 5,
+        y: 7,
+        layer: "item",
+        rotation: 0,
+        footprint: { w: 1, h: 2 },
+        variant: 2,
+        tint: "#ffffff",
+        locked: false,
+        rug: false,
+        table: true,
+        bed: false,
+      },
+    ];
+    const movedMapDecor = {
+      wallpapers: { "moved-wall": "wallpaper_12" },
+      floors: { "moved-floor": "flooring_4" },
+    };
+    const movedMapRenovations = [{ id: "moved-renovation", enabled: true }];
+    sourceMap.state = {
+      ...sourceMap.state,
+      items: movedMapItems,
+      mapRenderOptions: {
+        gingerIslandOverlayIds: ["bin"],
+        farmhouse2: {
+          marriageMapEnabled: true,
+          renovationIds: [],
+          spouseId: null,
+        },
+        farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+      },
+      preservedTransferState: { marker: "moved-state" },
+    };
+    sourceMap.decor = movedMapDecor;
+    sourceMap.renovations = movedMapRenovations;
+
+    const betaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-beta",
+    )!;
+    betaProject.project.maps[0]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: ["restored", "bin", "cave", "obelisk"],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    };
+
+    const recordingWorkspace = createRecordingWorkspaceRepository(projectDocument);
+    const controller = createController(recordingWorkspace.repository);
+    controller.openProject("project-beta");
+
+    controller.moveMap({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      targetProjectId: "project-beta",
+    });
+
+    const movedProject = controller.getState().activeProject!;
+    const movedMap = movedProject.project.maps.find(
+      (projectMap) => projectMap.id === "map-standard",
+    )!;
+    expect(movedMap.state.mapRenderOptions).toMatchObject({
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    });
+    expect(movedMap.state.items).toEqual(movedMapItems);
+    expect(movedMap.state.preservedTransferState).toEqual({
+      marker: "moved-state",
+    });
+    expect(movedMap.decor).toEqual(movedMapDecor);
+    expect(movedMap.renovations).toEqual(movedMapRenovations);
+    for (const projectMap of movedProject.project.maps) {
+      expect(projectMap.state.mapRenderOptions).toMatchObject({
+        farm: { spouseId: "Penny", caveChoice: "bats" },
+      });
+    }
+
+    const persistedDocument = JSON.parse(
+      recordingWorkspace.getSerializedProjectDocument(),
+    );
+    const persistedAlphaProject = persistedDocument.projects.find(
+      (storedProject: { id: string }) => storedProject.id === "project-alpha",
+    );
+    expect(
+      persistedAlphaProject.project.maps.some(
+        (projectMap: { id: string }) => projectMap.id === "map-standard",
+      ),
+    ).toBe(false);
+    expect(recordingWorkspace.getWriteCount()).toBe(1);
+  });
+
+  it("inherits a source farm setting when the existing copy target has none", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    const alphaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-alpha",
+    )!;
+    alphaProject.project.maps[0]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: [],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    };
+
+    const controller = createController(createRepository(projectDocument));
+    controller.openProject("project-beta");
+    controller.copyMap({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      targetProjectId: "project-beta",
+    });
+
+    for (const projectMap of controller.getState().activeProject!.project.maps) {
+      expect(projectMap.state.mapRenderOptions).toMatchObject({
+        farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+      });
+    }
+  });
+
+  it("restores mixed legacy farm settings across workspace project mutations", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    const alphaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-alpha",
+    )!;
+    alphaProject.project.maps[1]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: [],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    };
+    const betaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-beta",
+    )!;
+    betaProject.project.maps[0]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: [],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    };
+
+    const repository = createRepository(projectDocument);
+    const controller = createController(repository);
+
+    function expectAllActiveProjectMapsToUseStoredFarmOptions(): void {
+      const activeProject = controller.getState().activeProject;
+      expect(activeProject?.id).toBe("project-alpha");
+      for (const projectMap of activeProject!.project.maps) {
+        expect(projectMap.state.mapRenderOptions).toMatchObject({
+          farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+        });
+      }
+    }
+
+    controller.openProject("project-alpha");
+    controller.copyMap({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      targetProjectId: "project-alpha",
+    });
+    expectAllActiveProjectMapsToUseStoredFarmOptions();
+
+    controller.renameMap({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      requestedLabel: "Renamed Standard Farm",
+    });
+    expectAllActiveProjectMapsToUseStoredFarmOptions();
+
+    controller.saveThumbnail({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      webpBytes: createStructurallyValidWebpBytes(),
+    });
+    expectAllActiveProjectMapsToUseStoredFarmOptions();
+
+    const mapIdsBeforeDuplicate = new Set(
+      controller.getState().activeProject!.project.maps.map((projectMap) => projectMap.id),
+    );
+    controller.duplicateMap({ projectId: "project-alpha", mapId: "map-standard" });
+    expectAllActiveProjectMapsToUseStoredFarmOptions();
+
+    const duplicatedMapId = controller
+      .getState()
+      .activeProject!.project.maps.find((projectMap) => !mapIdsBeforeDuplicate.has(projectMap.id))!.id;
+    controller.deleteMap({ projectId: "project-alpha", mapId: duplicatedMapId });
+    expectAllActiveProjectMapsToUseStoredFarmOptions();
+
+    controller.openProject("project-beta");
+    controller.moveMap({
+      projectId: "project-alpha",
+      mapId: "map-standard",
+      targetProjectId: "project-beta",
+    });
+    const activeBetaProject = controller.getState().activeProject;
+    expect(activeBetaProject?.id).toBe("project-beta");
+    for (const projectMap of activeBetaProject!.project.maps) {
+      expect(projectMap.state.mapRenderOptions).toMatchObject({
+        farm: { spouseId: "Penny", caveChoice: "bats" },
+      });
+    }
   });
 
   it("reconciles the active target project and preserves its active map after copying another project map", () => {
@@ -764,6 +1145,207 @@ describe("reference project workspace controller", () => {
 
     controller.deleteMap({ projectId: "project-alpha", mapId: duplicatedMapId });
     expect(controller.getState().activeSession?.mapId).not.toBe(duplicatedMapId);
+  });
+
+  it("restores and shares farm spouse and cave settings across maps within one project", () => {
+    const projectDocument = createAdapterSupportedDocument();
+    const alphaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-alpha",
+    )!;
+    const existingFarmCave = alphaProject.project.maps.find(
+      (projectMap) => projectMap.id === "map-island",
+    )!;
+    existingFarmCave.mapFile = "FarmCave.tmx";
+    existingFarmCave.label = "Existing Farm Cave";
+    const existingFarmCaveItems = [
+      {
+        instanceId: "farm-cave-chair",
+        itemId: "furniture_1123",
+        x: -2,
+        y: 11,
+        layer: "item",
+        rotation: 0,
+        footprint: { w: 1, h: 2 },
+        variant: 0,
+        tintColor: "#ffffff",
+        locked: false,
+        isRug: false,
+        isGrass: false,
+        isTable: true,
+        isLongTable: false,
+        flipped: false,
+        bedType: null,
+      },
+    ];
+    existingFarmCave.state = {
+      ...existingFarmCave.state,
+      items: existingFarmCaveItems,
+      nextItemId: 2,
+      mapRenderOptions: {
+        gingerIslandOverlayIds: ["bin"],
+        farmhouse2: {
+          marriageMapEnabled: true,
+          renovationIds: [],
+          spouseId: null,
+        },
+        farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+      },
+      preservedFarmCaveState: { marker: "keep" },
+    };
+    existingFarmCave.decor = {
+      wallpapers: { "farm-cave-wall": "12" },
+      floors: { "farm-cave-floor": "4" },
+    };
+    existingFarmCave.renovations = [{ id: "farm-cave-extension", enabled: true }];
+
+    const betaProject = projectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-beta",
+    )!;
+    betaProject.project.maps[0]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: [],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    };
+
+    const recordingWorkspace = createRecordingWorkspaceRepository(projectDocument);
+    const repository = recordingWorkspace.repository;
+    const controller = createController(repository);
+    const selectedFarmOptions = setFarmCaveChoice(
+      setFarmSpouseId(createInitialMapRenderOptions(), "Abigail"),
+      "mushrooms",
+    );
+
+    controller.openProject("project-alpha");
+    expect(
+      controller.getState().activeSession?.sourceMap.state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+    expect(recordingWorkspace.getWriteCount()).toBe(0);
+    expect(
+      JSON.parse(recordingWorkspace.getSerializedProjectDocument())
+        .projects[0].project.maps[0].state,
+    ).not.toHaveProperty("mapRenderOptions");
+    controller.saveOpenMap({ mapRenderOptions: selectedFarmOptions });
+
+    const savedAlphaProject = repository.openProject("project-alpha");
+    const savedExistingFarmCave = savedAlphaProject.project.maps.find(
+      (projectMap) => projectMap.id === "map-island",
+    )!;
+    expect(savedExistingFarmCave.state.mapRenderOptions).toMatchObject({
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+    expect(savedExistingFarmCave.state.preservedFarmCaveState).toEqual({
+      marker: "keep",
+    });
+    expect(savedExistingFarmCave.state.items).toEqual(existingFarmCaveItems);
+    expect(savedExistingFarmCave.decor).toEqual({
+      wallpapers: { "farm-cave-wall": "12" },
+      floors: { "farm-cave-floor": "4" },
+    });
+    expect(savedExistingFarmCave.renovations).toEqual([
+      { id: "farm-cave-extension", enabled: true },
+    ]);
+
+    controller.openProject("project-alpha");
+    controller.activateMap("map-island");
+    expect(
+      controller.getState().activeSession?.sourceMap.state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+    expect(
+      controller.getState().activeSession?.sourceMap.state.items,
+    ).toEqual(existingFarmCaveItems);
+    expect(
+      controller.getState().activeSession?.sourceMap.decor,
+    ).toEqual({
+      wallpapers: { "farm-cave-wall": "12" },
+      floors: { "farm-cave-floor": "4" },
+    });
+    expect(
+      controller.getState().activeSession?.sourceMap.renovations,
+    ).toEqual([{ id: "farm-cave-extension", enabled: true }]);
+    expect(
+      controller.getState().activeSession?.sourceMap.state.preservedFarmCaveState,
+    ).toEqual({ marker: "keep" });
+
+    controller.createMap({
+      projectId: "project-alpha",
+      mapFile: "FarmCave.tmx",
+      label: "New Farm Cave",
+      season: "spring",
+    });
+    const newAlphaFarmCaveId = repository
+      .openProject("project-alpha")
+      .project.maps.find((projectMap) => projectMap.label === "New Farm Cave")!.id;
+    const createdAlphaFarmCave = repository
+      .openProject("project-alpha")
+      .project.maps.find((projectMap) => projectMap.id === newAlphaFarmCaveId)!;
+    expect(createdAlphaFarmCave.state.mapRenderOptions).toMatchObject({
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+
+    controller.activateMap(newAlphaFarmCaveId);
+    expect(
+      controller.getState().activeSession?.sourceMap.state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    });
+
+    const resetFarmOptions = setFarmCaveChoice(
+      setFarmSpouseId(createInitialMapRenderOptions(), null),
+      "none",
+    );
+    controller.saveOpenMap({ mapRenderOptions: resetFarmOptions });
+    const resetAlphaProject = repository.openProject("project-alpha");
+    expect(
+      resetAlphaProject.project.maps.map((projectMap) =>
+        (projectMap.state.mapRenderOptions as { farm: unknown }).farm,
+      ),
+    ).toEqual([
+      { spouseId: null, caveChoice: "none" },
+      { spouseId: null, caveChoice: "none" },
+      { spouseId: null, caveChoice: "none" },
+    ]);
+    controller.openProject("project-alpha");
+    expect(
+      controller.getState().activeSession?.sourceMap.state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: null, caveChoice: "none" },
+    });
+
+    controller.openProject("project-beta");
+    controller.createMap({
+      projectId: "project-beta",
+      mapFile: "FarmCave.tmx",
+      label: "Beta Farm Cave",
+      season: "winter",
+    });
+    const createdBetaFarmCave = repository
+      .openProject("project-beta")
+      .project.maps.find((projectMap) => projectMap.label === "Beta Farm Cave")!;
+    expect(createdBetaFarmCave.state.mapRenderOptions).toMatchObject({
+      farm: { spouseId: "Penny", caveChoice: "bats" },
+    });
+    expect(
+      repository
+        .openProject("project-alpha")
+        .project.maps.find((projectMap) => projectMap.id === newAlphaFarmCaveId)!
+        .state.mapRenderOptions,
+    ).toMatchObject({
+      farm: { spouseId: null, caveChoice: "none" },
+    });
   });
 
   it("exports a project without changing controller state", () => {

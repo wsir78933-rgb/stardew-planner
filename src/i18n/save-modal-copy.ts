@@ -35,17 +35,22 @@ export type LocalProjectsCopy = Readonly<{
   importedProject: (filename: string) => string;
   importJson: string;
   localProjects: string;
+  mapPreviewAlt: (projectName: string) => string;
+  noMapPreview: string;
+  noSearchResults: string;
   newProject: string;
   newProjectName: string;
   none: string;
   open: string;
   openedProject: (projectName: string) => string;
   openingBrowserStorage: string;
+  projectMapCount: (count: number) => string;
   rename: string;
   renamedProject: string;
   saveToDevice: string;
   savedLocalProjects: string;
   savedToBrowser: string;
+  searchProjects: string;
   storedInBrowser: string;
 }>;
 
@@ -181,17 +186,23 @@ const saveModalCopyByLocale = {
       importedProject: (filename: string) => `Imported ${filename}.`,
       importJson: "Import JSON",
       localProjects: "Local projects",
+      mapPreviewAlt: (projectName: string) => `Map preview for ${projectName}`,
+      noMapPreview: "No saved map preview",
+      noSearchResults: "No local projects match your search.",
       newProject: "New project",
       newProjectName: "New project name",
       none: "None",
       open: "Open",
       openedProject: (projectName: string) => `Opened ${projectName}.`,
       openingBrowserStorage: "Opening browser storage…",
+      projectMapCount: (count: number) =>
+        `${String(count)} ${count === 1 ? "map" : "maps"}`,
       rename: "Rename",
       renamedProject: "Renamed the local project.",
       saveToDevice: "Save to this device",
       savedLocalProjects: "Saved local projects",
       savedToBrowser: "Saved to this browser.",
+      searchProjects: "Search local projects",
       storedInBrowser: "Stored in this browser.",
     },
     deleteProject: {
@@ -287,17 +298,22 @@ const saveModalCopyByLocale = {
       importedProject: (filename: string) => `已导入“${filename}”。`,
       importJson: "导入 JSON",
       localProjects: "本地项目",
+      mapPreviewAlt: (projectName: string) => `“${projectName}”的地图预览`,
+      noMapPreview: "暂无已保存的地图预览",
+      noSearchResults: "没有匹配的本地项目。",
       newProject: "新建项目",
       newProjectName: "新项目名称",
       none: "无",
       open: "打开",
       openedProject: (projectName: string) => `已打开“${projectName}”。`,
       openingBrowserStorage: "正在打开浏览器存储…",
+      projectMapCount: (count: number) => `${String(count)} 张地图`,
       rename: "重命名",
       renamedProject: "已重命名本地项目。",
       saveToDevice: "保存到此设备",
       savedLocalProjects: "已保存的本地项目",
       savedToBrowser: "已保存到此浏览器。",
+      searchProjects: "搜索本地项目",
       storedInBrowser: "保存在此浏览器中。",
     },
     deleteProject: {

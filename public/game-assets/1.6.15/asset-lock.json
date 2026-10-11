@@ -2021,6 +2021,84 @@
       "outputPath": "tilesheets/wizard_furniture.png",
       "mediaType": "image/png",
       "sha256": "f5c16ed8fa9f85dd1bef5d2fddce4edb4a430dc5fb371fbbea181a261c4e5d28"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/spousePatios.tmx",
+      "outputPath": "maps/spousePatios.tmx",
+      "mediaType": "application/xml",
+      "sha256": "af8a8319e1c4cec3eaeffff195fe1e63886d7bea454364980f1fc5b5a598d11a"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Abigail.png",
+      "outputPath": "sprites/Abigail.png",
+      "mediaType": "image/png",
+      "sha256": "48de36711555f6532938f50d0fab66fe3bdebbc9d7ef612adb3bbd8a26a31cd0"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Alex.png",
+      "outputPath": "sprites/Alex.png",
+      "mediaType": "image/png",
+      "sha256": "b407c7fc5a293114151dda9af326ff8ecb9446327f807bef220b8b3dd7e7927e"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Elliott.png",
+      "outputPath": "sprites/Elliott.png",
+      "mediaType": "image/png",
+      "sha256": "149dfa7a6e1a6aa5f12657eb52ca306d9280781f69d40b084f0262bc2b1eded0"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Emily.png",
+      "outputPath": "sprites/Emily.png",
+      "mediaType": "image/png",
+      "sha256": "42045e3397e37495fbc6effcfd81559d746cfae4a3d715140042e2d045038d07"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Haley.png",
+      "outputPath": "sprites/Haley.png",
+      "mediaType": "image/png",
+      "sha256": "7234babedbc5d5c64c8da64306c63da1842910c07b6e351bc88e18fc2f6825da"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Harvey.png",
+      "outputPath": "sprites/Harvey.png",
+      "mediaType": "image/png",
+      "sha256": "229200eac40dea226b69f22a235cd53502b7c2962741e685bb61952a5b4558b1"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Leah.png",
+      "outputPath": "sprites/Leah.png",
+      "mediaType": "image/png",
+      "sha256": "c6bcd29e9f9af911173c18fcd984fca3a0823f6ed1bedbae84b5031a2f94bd1a"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Maru.png",
+      "outputPath": "sprites/Maru.png",
+      "mediaType": "image/png",
+      "sha256": "3514a0dd1fa125b6616a35f30864873829b9e6637405dc1ab35ec55e06fefe05"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Penny.png",
+      "outputPath": "sprites/Penny.png",
+      "mediaType": "image/png",
+      "sha256": "2d2d733fbbb06fe568e4c2c3fcffb68d2a4b83e4e430c9f118aa51d15a1d0081"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Sam.png",
+      "outputPath": "sprites/Sam.png",
+      "mediaType": "image/png",
+      "sha256": "df903e06fab2e4c38806b155dfc91de3356c3d23981f5111700b93fae4301499"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Sebastian.png",
+      "outputPath": "sprites/Sebastian.png",
+      "mediaType": "image/png",
+      "sha256": "71a9fb96382711902e7a9b5b640671e7936724c6af89505ade406914a88943a6"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Shane.png",
+      "outputPath": "sprites/Shane.png",
+      "mediaType": "image/png",
+      "sha256": "ccebbbf612ccced5563efa4dbc0f47ecb85551294221cd0b69d7a3fdf839f467"
     }
   ]
 }

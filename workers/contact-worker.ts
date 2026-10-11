@@ -1,10 +1,17 @@
-import { validateContactRequest } from "../src/contact/contact-request-validation";
+import {
+  validateContactRequest,
+  type ContactRequest,
+} from "../src/contact/contact-request-validation";
+import {
+  validatePlannerFeedbackRequest,
+  type PlannerFeedbackRequest,
+} from "../src/contact/planner-feedback-request-validation";
 
 type ContactEmailMessage = Readonly<{
   from: string;
   to: string;
   subject: string;
-  replyTo: string;
+  replyTo?: string;
   text: string;
 }>;
 
@@ -32,6 +39,10 @@ export type ContactWorkerEnvironment = Readonly<{
 }>;
 
 const maximumRequestBytes = 16_384;
+
+type EmailRequestValidationResult<RequestValue> =
+  | Readonly<{ valid: true; value: RequestValue }>
+  | Readonly<{ valid: false; message?: string }>;
 
 type RequestTextReadResult =
   | Readonly<{ kind: "success"; text: string }>
@@ -171,11 +182,7 @@ function getClientIp(request: Request): string | undefined {
 }
 
 function createContactEmailMessage(
-  contactRequest: Readonly<{
-    name: string;
-    email: string;
-    message: string;
-  }>,
+  contactRequest: ContactRequest,
   environment: ContactWorkerEnvironment,
 ): ContactEmailMessage {
   return {
@@ -187,6 +194,54 @@ function createContactEmailMessage(
   };
 }
 
+function createPlannerFeedbackEmailMessage(
+  feedbackRequest: PlannerFeedbackRequest,
+  environment: ContactWorkerEnvironment,
+): ContactEmailMessage {
+  return {
+    from: environment.CONTACT_FROM_EMAIL,
+    to: environment.CONTACT_RECIPIENT_EMAIL,
+    subject: `[Planner feedback: ${feedbackRequest.type}] ${feedbackRequest.subject}`,
+    text: [
+      `Type: ${feedbackRequest.type}`,
+      `Subject: ${feedbackRequest.subject}`,
+      "",
+      feedbackRequest.description,
+    ].join("\n"),
+  };
+}
+
+function describePlannerFeedbackValidationFailure(
+  issues: readonly Readonly<{
+    field: string;
+    code: string;
+    actualValue?: string;
+  }>[],
+): string {
+  const issueDetails = issues.map((issue) => {
+    const receivedValue = issue.actualValue
+      ? `, received ${issue.actualValue}`
+      : "";
+    return `${issue.field}: ${issue.code}${receivedValue}`;
+  });
+
+  return `Planner feedback request is invalid (${issueDetails.join("; ")}).`;
+}
+
+function validatePlannerFeedbackForWorker(
+  requestValue: unknown,
+): EmailRequestValidationResult<PlannerFeedbackRequest> {
+  const validationResult = validatePlannerFeedbackRequest(requestValue);
+  if (validationResult.valid) {
+    return validationResult;
+  }
+
+  return {
+    valid: false,
+    message: describePlannerFeedbackValidationFailure(validationResult.issues),
+  };
+}
+
 function parseRequestJson(requestText: string): unknown {
   try {
     return JSON.parse(requestText);
@@ -195,9 +250,22 @@ function parseRequestJson(requestText: string): unknown {
   }
 }
 
-export async function handleContactRequest(
+async function handleEmailRequest<
+  RequestValue extends Readonly<{ turnstileToken: string }>,
+>(
   request: Request,
   environment: ContactWorkerEnvironment,
+  validateRequest: (
+    requestValue: unknown,
+  ) => EmailRequestValidationResult<RequestValue>,
+  createEmailMessage: (
+    requestValue: RequestValue,
+    workerEnvironment: ContactWorkerEnvironment,
+  ) => ContactEmailMessage,
+  invalidRequestMessage: string,
+  configurationFailureMessage: string,
+  deliveryFailureMessage: string,
+  acceptedMessage: string,
 ): Promise<Response> {
   if (request.method !== "POST") {
     return createJsonResponse(405, "Method not allowed.");
@@ -216,7 +284,7 @@ export async function handleContactRequest(
   }
 
   if (!hasRequiredConfiguration(environment)) {
-    return createJsonResponse(500, "Contact delivery is not configured.");
+    return createJsonResponse(500, configurationFailureMessage);
   }
 
   const requestTextReadResult = await readRequestText(request);
@@ -224,13 +292,13 @@ export async function handleContactRequest(
     return createJsonResponse(413, "Request body is too large.");
   }
 
-  const validationResult = validateContactRequest(
+  const validationResult = validateRequest(
     requestTextReadResult.kind === "success"
       ? parseRequestJson(requestTextReadResult.text)
       : undefined,
   );
   if (!validationResult.valid) {
-    return createJsonResponse(400, "Contact request is invalid.");
+    return createJsonResponse(400, validationResult.message ?? invalidRequestMessage);
   }
 
   const isTurnstileValid = await verifyTurnstile(
@@ -244,17 +312,53 @@ export async function handleContactRequest(
 
   try {
     await environment.CONTACT_EMAIL.send(
-      createContactEmailMessage(validationResult.value, environment),
+      createEmailMessage(validationResult.value, environment),
     );
   } catch {
-    return createJsonResponse(502, "Contact delivery failed.");
+    return createJsonResponse(502, deliveryFailureMessage);
   }
 
-  return createJsonResponse(202, "Contact message accepted.");
+  return createJsonResponse(202, acceptedMessage);
+}
+
+export function handleContactRequest(
+  request: Request,
+  environment: ContactWorkerEnvironment,
+): Promise<Response> {
+  return handleEmailRequest(
+    request,
+    environment,
+    validateContactRequest,
+    createContactEmailMessage,
+    "Contact request is invalid.",
+    "Contact delivery is not configured.",
+    "Contact delivery failed.",
+    "Contact message accepted.",
+  );
+}
+
+export function handlePlannerFeedbackRequest(
+  request: Request,
+  environment: ContactWorkerEnvironment,
+): Promise<Response> {
+  return handleEmailRequest(
+    request,
+    environment,
+    validatePlannerFeedbackForWorker,
+    createPlannerFeedbackEmailMessage,
+    "Planner feedback request is invalid.",
+    "Planner feedback delivery is not configured.",
+    "Planner feedback delivery failed.",
+    "Planner feedback accepted.",
+  );
 }
 
 function isContactApiRequest(request: Request): boolean {
   return new URL(request.url).pathname === "/api/contact";
+}
+
+function isPlannerFeedbackApiRequest(request: Request): boolean {
+  return new URL(request.url).pathname === "/api/feedback";
 }
 
 function serveStaticAsset(
@@ -276,6 +380,10 @@ function handleWorkerRequest(
 ): Promise<Response> {
   if (isContactApiRequest(request)) {
     return handleContactRequest(request, environment);
+  }
+
+  if (isPlannerFeedbackApiRequest(request)) {
+    return handlePlannerFeedbackRequest(request, environment);
   }
 
   return serveStaticAsset(request, environment);

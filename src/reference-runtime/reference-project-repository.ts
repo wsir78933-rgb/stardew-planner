@@ -12,6 +12,11 @@ import {
   serializeReferenceProjectDocument,
   validateReferenceProjectDocument,
 } from "./local-project-api";
+import {
+  createInitialMapRenderOptions,
+  restoreMapRenderOptions,
+  type MapRenderOptions,
+} from "../maps/map-render-options";
 
 export const referenceProjectStorageKey =
   "stardewplan-reference-local-projects-v1";
@@ -23,7 +28,29 @@ export type ReferenceProjectStorage = Readonly<{
 
 export type ReferenceProjectSummary = Readonly<
   Pick<ReferenceStoredProject, "id" | "title" | "created_at" | "updated_at">
+  & Readonly<{
+    mapCount?: number;
+    activeMapThumbnailDataUrl?: string | null;
+  }>
 >;
+
+export function createReferenceProjectSummary(
+  storedProject: ReferenceStoredProject,
+): ReferenceProjectSummary {
+  const activeMapId = storedProject.project.activeMapId;
+
+  return {
+    id: storedProject.id,
+    title: storedProject.title,
+    created_at: storedProject.created_at,
+    updated_at: storedProject.updated_at,
+    mapCount: storedProject.project.maps.length,
+    activeMapThumbnailDataUrl:
+      activeMapId === null
+        ? null
+        : storedProject.thumbnailsByMapId?.[activeMapId] ?? null,
+  };
+}
 
 export type ReferenceProjectCreationInput = Readonly<{
   projectName: string;
@@ -484,6 +511,181 @@ function replaceProjectUpdatedTimestamp(
   });
 }
 
+type RestoredStoredMapRenderOptions = Readonly<{
+  mapRenderOptions: MapRenderOptions;
+  hasStoredFarmOptions: boolean;
+}>;
+
+function restoreStoredMapRenderOptions(
+  rawMapRenderOptions: ReferenceJsonValue | undefined,
+): RestoredStoredMapRenderOptions {
+  const mapRenderOptions = restoreMapRenderOptions(rawMapRenderOptions);
+  const hasStoredFarmOptions =
+    rawMapRenderOptions !== undefined
+    && rawMapRenderOptions !== null
+    && typeof rawMapRenderOptions === "object"
+    && !Array.isArray(rawMapRenderOptions)
+    && Object.hasOwn(rawMapRenderOptions, "farm");
+
+  return { mapRenderOptions, hasStoredFarmOptions };
+}
+
+function requireStoredFarmOptions(
+  mapRenderOptions: MapRenderOptions,
+  projectId: string,
+  mapId: string,
+): NonNullable<MapRenderOptions["farm"]> {
+  if (mapRenderOptions.farm === undefined) {
+    throw new Error(
+      `Reference project ${JSON.stringify(projectId)} map ${JSON.stringify(mapId)} stored farm options were expected; received ${JSON.stringify(mapRenderOptions.farm)}.`,
+    );
+  }
+
+  return mapRenderOptions.farm;
+}
+
+function serializeMapRenderOptions(
+  mapRenderOptions: MapRenderOptions,
+): Record<string, ReferenceJsonValue> {
+  const serializedMapRenderOptions: Record<string, ReferenceJsonValue> = {
+    gingerIslandOverlayIds: [...mapRenderOptions.gingerIslandOverlayIds],
+    farmhouse2: {
+      marriageMapEnabled: mapRenderOptions.farmhouse2.marriageMapEnabled,
+      renovationIds: [...mapRenderOptions.farmhouse2.renovationIds],
+      spouseId: mapRenderOptions.farmhouse2.spouseId,
+    },
+  };
+
+  if (mapRenderOptions.farm !== undefined) {
+    serializedMapRenderOptions.farm = {
+      spouseId: mapRenderOptions.farm.spouseId,
+      caveChoice: mapRenderOptions.farm.caveChoice,
+    };
+  }
+
+  return serializedMapRenderOptions;
+}
+
+function findStoredProjectFarmOptions(
+  storedProject: ReferenceStoredProject,
+): NonNullable<MapRenderOptions["farm"]> | undefined {
+  const restoredMapOptions = storedProject.project.maps.map((projectMap) => ({
+    projectMap,
+    ...restoreStoredMapRenderOptions(projectMap.state.mapRenderOptions),
+  }));
+  const activeMapOptions = restoredMapOptions.find(
+    ({ projectMap }) => projectMap.id === storedProject.project.activeMapId,
+  );
+  const firstMapWithFarmOptions =
+    activeMapOptions?.hasStoredFarmOptions === true
+      ? activeMapOptions
+      : restoredMapOptions.find(({ hasStoredFarmOptions }) => hasStoredFarmOptions);
+
+  if (firstMapWithFarmOptions === undefined) {
+    return undefined;
+  }
+
+  return requireStoredFarmOptions(
+    firstMapWithFarmOptions.mapRenderOptions,
+    storedProject.id,
+    firstMapWithFarmOptions.projectMap.id,
+  );
+}
+
+export function restoreMissingProjectFarmOptions(
+  storedProject: ReferenceStoredProject,
+): ReferenceStoredProject {
+  const inheritedFarmOptions = findStoredProjectFarmOptions(storedProject);
+  if (inheritedFarmOptions === undefined) {
+    return storedProject;
+  }
+
+  return {
+    ...storedProject,
+    project: {
+      ...storedProject.project,
+      maps: storedProject.project.maps.map((projectMap) => {
+        const { mapRenderOptions, hasStoredFarmOptions } =
+          restoreStoredMapRenderOptions(projectMap.state.mapRenderOptions);
+        if (hasStoredFarmOptions) {
+          return projectMap;
+        }
+
+        return {
+          ...projectMap,
+          state: {
+            ...projectMap.state,
+            mapRenderOptions: serializeMapRenderOptions({
+              ...mapRenderOptions,
+              farm: inheritedFarmOptions,
+            }),
+          },
+        };
+      }),
+    },
+  };
+}
+
+function inheritFarmOptionsOnMap(
+  projectMap: ReferenceProjectMap,
+  farmOptions: NonNullable<MapRenderOptions["farm"]>,
+): ReferenceProjectMap {
+  return setFarmOptionsOnMap(projectMap, farmOptions);
+}
+
+function setFarmOptionsOnMap(
+  projectMap: ReferenceProjectMap,
+  farmOptions: NonNullable<MapRenderOptions["farm"]>,
+): ReferenceProjectMap {
+  const { mapRenderOptions } = restoreStoredMapRenderOptions(
+    projectMap.state.mapRenderOptions,
+  );
+
+  return {
+    ...projectMap,
+    state: {
+      ...projectMap.state,
+      mapRenderOptions: serializeMapRenderOptions({
+        ...mapRenderOptions,
+        farm: farmOptions,
+      }),
+    },
+  };
+}
+
+function synchronizeProjectFarmOptions(
+  storedProject: ReferenceStoredProject,
+  sourceMapId: string,
+  farmOptions: NonNullable<MapRenderOptions["farm"]>,
+): ReferenceStoredProject {
+  return {
+    ...storedProject,
+    project: {
+      ...storedProject.project,
+      maps: storedProject.project.maps.map((projectMap) => {
+        if (projectMap.id === sourceMapId) {
+          return projectMap;
+        }
+
+        const { mapRenderOptions } = restoreStoredMapRenderOptions(
+          projectMap.state.mapRenderOptions,
+        );
+
+        return {
+          ...projectMap,
+          state: {
+            ...projectMap.state,
+            mapRenderOptions: serializeMapRenderOptions({
+              ...mapRenderOptions,
+              farm: farmOptions,
+            }),
+          },
+        };
+      }),
+    },
+  };
+}
+
 function remapStoredProjectMapIdentity(
   storedProject: ReferenceStoredProject,
   sourceMapId: string,
@@ -689,7 +891,9 @@ export function createReferenceProjectRepository(
 
   function openStoredProject(projectId: string): ReferenceStoredProject {
     const projectDocument = readReferenceProjectDocument();
-    return requireStoredProject(projectDocument, projectId);
+    return restoreMissingProjectFarmOptions(
+      requireStoredProject(projectDocument, projectId),
+    );
   }
 
   function executeReferenceProjectTransaction<Result>(
@@ -719,12 +923,14 @@ export function createReferenceProjectRepository(
   ):
     | ReferenceStoredProject
     | ReferencePreparedProjectMutation<PreparedActiveSession> {
+    const restoredCandidateProject =
+      restoreMissingProjectFarmOptions(candidateProject);
     if (prepareActiveSession === undefined) {
-      return candidateProject;
+      return restoredCandidateProject;
     }
     return {
-      project: candidateProject,
-      preparedActiveSession: prepareActiveSession(candidateProject),
+      project: restoredCandidateProject,
+      preparedActiveSession: prepareActiveSession(restoredCandidateProject),
     };
   }
 
@@ -939,6 +1145,7 @@ export function createReferenceProjectRepository(
         currentProjectDocument,
         input.projectId,
       );
+      const inheritedFarmOptions = findStoredProjectFarmOptions(currentProject);
       const nextProjectUpdatedAt = createNextProjectUpdatedAt(
         currentProject,
         now(),
@@ -972,11 +1179,24 @@ export function createReferenceProjectRepository(
         handlerMapId,
         createdMapId,
       );
+      const projectWithInheritedFarmOptions = inheritedFarmOptions === undefined
+        ? remappedProject
+        : {
+            ...remappedProject,
+            project: {
+              ...remappedProject.project,
+              maps: remappedProject.project.maps.map((projectMap) =>
+                projectMap.id === createdMapId
+                  ? inheritFarmOptionsOnMap(projectMap, inheritedFarmOptions)
+                  : projectMap,
+              ),
+            },
+          };
       const projectDocument = replaceStoredProject(
         mutationResponse.projectDocument,
         input.projectId,
         {
-          ...remappedProject,
+          ...projectWithInheritedFarmOptions,
           updated_at: nextProjectUpdatedAt,
         },
       );
@@ -990,23 +1210,68 @@ export function createReferenceProjectRepository(
   }
 
   function updateMap(input: ReferenceMapUpdateInput): ReferenceStoredProject {
-    return executeSingleProjectMutation(
-      {
-        method: "PUT",
-        pathname: createReferenceMapPath(input.projectId, input.mapId),
-        jsonBody: {
-          mapFile: input.mapFile,
-          label: input.label,
-          season: input.season,
-          state: input.state,
-          decor: input.decor,
-          renovations: input.renovations,
-          setActive: input.setActive,
+    return executeReferenceProjectTransaction((currentProjectDocument) => {
+      assertExpectedProjectRevision(
+        currentProjectDocument,
+        input.projectId,
+        input.expectedProjectRevision,
+      );
+      const currentProject = requireStoredProject(
+        currentProjectDocument,
+        input.projectId,
+      );
+      const { mapRenderOptions, hasStoredFarmOptions } =
+        restoreStoredMapRenderOptions(input.state.mapRenderOptions);
+      const farmOptionsToSynchronize = hasStoredFarmOptions
+        ? requireStoredFarmOptions(mapRenderOptions, input.projectId, input.mapId)
+        : undefined;
+      const nextProjectUpdatedAt = createNextProjectUpdatedAt(
+        currentProject,
+        now(),
+      );
+      const mutationResponse = invokeMutationHandler(
+        {
+          method: "PUT",
+          pathname: createReferenceMapPath(input.projectId, input.mapId),
+          jsonBody: {
+            mapFile: input.mapFile,
+            label: input.label,
+            season: input.season,
+            state: input.state,
+            decor: input.decor,
+            renovations: input.renovations,
+            setActive: input.setActive,
+          },
         },
-      },
-      input.projectId,
-      input.expectedProjectRevision,
-    );
+        currentProjectDocument,
+        "empty",
+      );
+      const updatedProject = requireStoredProject(
+        mutationResponse.projectDocument,
+        input.projectId,
+      );
+      const projectWithSynchronizedFarmOptions = farmOptionsToSynchronize === undefined
+        ? updatedProject
+        : synchronizeProjectFarmOptions(
+            updatedProject,
+            input.mapId,
+            farmOptionsToSynchronize,
+          );
+      const projectDocument = replaceStoredProject(
+        mutationResponse.projectDocument,
+        input.projectId,
+        {
+          ...projectWithSynchronizedFarmOptions,
+          updated_at: nextProjectUpdatedAt,
+        },
+      );
+
+      return {
+        projectDocument,
+        selectResult: (validatedProjectDocument) =>
+          requireStoredProject(validatedProjectDocument, input.projectId),
+      };
+    });
   }
 
   function renameMap(input: ReferenceMapRenameInput): ReferenceStoredProject {
@@ -1238,6 +1503,83 @@ export function createReferenceProjectRepository(
     );
   }
 
+  function findTransferredMapId(
+    input: ReferenceMapTransferInput,
+    transferAction: "copy" | "move",
+    currentProjectDocument: ReferenceLocalProjectDocument,
+    targetProject: ReferenceStoredProject,
+  ): string {
+    if (transferAction === "move") {
+      const movedMapExists = targetProject.project.maps.some(
+        (projectMap) => projectMap.id === input.mapId,
+      );
+      if (!movedMapExists) {
+        throw new Error(
+          `Reference project repository move target ${JSON.stringify(targetProject.id)} did not contain transferred map ${JSON.stringify(input.mapId)}.`,
+        );
+      }
+      return input.mapId;
+    }
+
+    if (input.targetProjectId === undefined) {
+      const copiedMapId = targetProject.project.activeMapId;
+      if (
+        copiedMapId === null
+        || !targetProject.project.maps.some(
+          (projectMap) => projectMap.id === copiedMapId,
+        )
+      ) {
+        throw new Error(
+          `Reference project repository copy target ${JSON.stringify(targetProject.id)} must have an active transferred map; received ${JSON.stringify(copiedMapId)}.`,
+        );
+      }
+      return copiedMapId;
+    }
+
+    return findSingleAddedMapId(
+      requireStoredProject(currentProjectDocument, input.targetProjectId),
+      targetProject,
+    );
+  }
+
+  function synchronizeTransferredProjectFarmOptions(
+    projectDocument: ReferenceLocalProjectDocument,
+    targetProjectId: string,
+    transferredMapId: string,
+    farmOptions: NonNullable<MapRenderOptions["farm"]>,
+  ): ReferenceLocalProjectDocument {
+    const targetProject = requireStoredProject(projectDocument, targetProjectId);
+    const targetProjectWithTransferredFarmOptions = {
+      ...targetProject,
+      project: {
+        ...targetProject.project,
+        maps: targetProject.project.maps.map((projectMap) =>
+          projectMap.id === transferredMapId
+            ? setFarmOptionsOnMap(projectMap, farmOptions)
+            : projectMap,
+        ),
+      },
+    };
+    const transferredMapExists = targetProject.project.maps.some(
+      (projectMap) => projectMap.id === transferredMapId,
+    );
+    if (!transferredMapExists) {
+      throw new Error(
+        `Reference project repository target ${JSON.stringify(targetProjectId)} did not contain transferred map ${JSON.stringify(transferredMapId)}.`,
+      );
+    }
+
+    return replaceStoredProject(
+      projectDocument,
+      targetProjectId,
+      synchronizeProjectFarmOptions(
+        targetProjectWithTransferredFarmOptions,
+        transferredMapId,
+        farmOptions,
+      ),
+    );
+  }
+
   function applyMapTransferTimestamps(
     projectDocument: ReferenceLocalProjectDocument,
     sourceProjectId: string,
@@ -1266,15 +1608,17 @@ export function createReferenceProjectRepository(
     sourceProjectId: string,
     targetProjectId: string,
   ): ReferenceMapMoveResult {
+    const sourceProject = requireStoredProject(
+      validatedProjectDocument,
+      sourceProjectId,
+    );
+    const targetProject = requireStoredProject(
+      validatedProjectDocument,
+      targetProjectId,
+    );
     return {
-      sourceProject: requireStoredProject(
-        validatedProjectDocument,
-        sourceProjectId,
-      ),
-      targetProject: requireStoredProject(
-        validatedProjectDocument,
-        targetProjectId,
-      ),
+      sourceProject: restoreMissingProjectFarmOptions(sourceProject),
+      targetProject: restoreMissingProjectFarmOptions(targetProject),
     };
   }
 
@@ -1288,6 +1632,13 @@ export function createReferenceProjectRepository(
         currentProjectDocument,
         input.projectId,
       );
+      const sourceFarmOptions = findStoredProjectFarmOptions(sourceProject);
+      const currentTargetProject = input.targetProjectId === undefined
+        ? undefined
+        : requireStoredProject(currentProjectDocument, input.targetProjectId);
+      const currentTargetFarmOptions = currentTargetProject === undefined
+        ? undefined
+        : findStoredProjectFarmOptions(currentTargetProject);
       const sourceProjectUpdatedAt = createNextProjectUpdatedAt(
         sourceProject,
         requestedMutationTimestamp,
@@ -1333,8 +1684,27 @@ export function createReferenceProjectRepository(
         resolvedTarget,
         requestedMutationTimestamp,
       );
+      const targetFarmOptions = currentTargetFarmOptions ?? sourceFarmOptions;
+      const projectDocumentWithFarmOptions =
+        normalizedTarget.targetProjectId === input.projectId
+        || targetFarmOptions === undefined
+          ? normalizedTarget.projectDocument
+          : synchronizeTransferredProjectFarmOptions(
+              normalizedTarget.projectDocument,
+              normalizedTarget.targetProjectId,
+              findTransferredMapId(
+                input,
+                transferAction,
+                currentProjectDocument,
+                requireStoredProject(
+                  normalizedTarget.projectDocument,
+                  normalizedTarget.targetProjectId,
+                ),
+              ),
+              targetFarmOptions,
+            );
       const projectDocument = applyMapTransferTimestamps(
-        normalizedTarget.projectDocument,
+        projectDocumentWithFarmOptions,
         input.projectId,
         normalizedTarget.targetProjectId,
         sourceProjectUpdatedAt,
@@ -1439,12 +1809,7 @@ export function createReferenceProjectRepository(
 
   return {
     listProjects: () =>
-      readReferenceProjectDocument().projects.map((storedProject) => ({
-        id: storedProject.id,
-        title: storedProject.title,
-        created_at: storedProject.created_at,
-        updated_at: storedProject.updated_at,
-      })),
+      readReferenceProjectDocument().projects.map(createReferenceProjectSummary),
     openProject: openStoredProject,
     createProject,
     duplicateProject,

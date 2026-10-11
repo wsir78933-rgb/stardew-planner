@@ -5,13 +5,11 @@ import {
   type EditorTool,
 } from "../editor/editor-view-state";
 import {
-  Eraser,
-  MousePointer2,
-  PaintBucket,
-  Redo2,
-  SquareDashedMousePointer,
-  Undo2,
-} from "lucide-react";
+  PlannerReferenceIcon,
+  type PlannerReferenceIconName,
+} from "./planner-reference-icon";
+
+type EditorToolbarLocale = "en" | "zh";
 
 type EditorToolbarProperties = Readonly<{
   tool: EditorTool | null;
@@ -20,7 +18,45 @@ type EditorToolbarProperties = Readonly<{
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  includeZoom?: boolean;
+  locale?: EditorToolbarLocale;
 }>;
+
+type EditorToolbarControl = Readonly<{
+  icon: PlannerReferenceIconName;
+  key: "select" | "multi" | "fill" | "erase";
+  tool: Extract<EditorTool, "cursor" | "multi-select" | "fill" | "erase">;
+}>;
+
+const editorToolbarControls = [
+  { tool: "cursor", key: "select", icon: "Select" },
+  { tool: "multi-select", key: "multi", icon: "Multi" },
+  { tool: "fill", key: "fill", icon: "Fill" },
+  { tool: "erase", key: "erase", icon: "Erase" },
+] as const satisfies readonly EditorToolbarControl[];
+
+const editorToolbarCopyByLocale = {
+  en: {
+    toolbar: "Editor tools",
+    select: "Select",
+    multi: "Multi",
+    fill: "Fill",
+    erase: "Erase",
+    zoom: "Zoom",
+    undo: "Undo",
+    redo: "Redo",
+  },
+  zh: {
+    toolbar: "编辑工具",
+    select: "选择",
+    multi: "多选",
+    fill: "填充",
+    erase: "擦除",
+    zoom: "缩放",
+    undo: "撤销",
+    redo: "重做",
+  },
+} as const;
 
 export function getEditorToolbarToolSelectionAfterClick(
   currentTool: EditorTool | null,
@@ -29,21 +65,6 @@ export function getEditorToolbarToolSelectionAfterClick(
   return currentTool === requestedTool ? null : requestedTool;
 }
 
-const editorToolControls: readonly Readonly<{
-  tool: EditorTool;
-  label: string;
-  icon: typeof MousePointer2;
-}>[] = [
-  { tool: "cursor", label: "Cursor tool", icon: MousePointer2 },
-  {
-    tool: "multi-select",
-    label: "Multi-select tool",
-    icon: SquareDashedMousePointer,
-  },
-  { tool: "fill", label: "Fill tool", icon: PaintBucket },
-  { tool: "erase", label: "Erase tool", icon: Eraser },
-];
-
 export function EditorToolbar({
   tool,
   onToolChange,
@@ -51,39 +72,34 @@ export function EditorToolbar({
   onRedo,
   canUndo,
   canRedo,
+  includeZoom = true,
+  locale = "en",
 }: EditorToolbarProperties) {
+  const editorToolbarCopy = editorToolbarCopyByLocale[locale];
   const isZoomSelected = tool === "zoom";
-  const renderToolButton = (editorToolControl: (typeof editorToolControls)[number]) => {
-    const isSelected = tool === editorToolControl.tool;
-    const isAvailable = editorToolAvailability[editorToolControl.tool];
-    const ToolIcon = editorToolControl.icon;
+  const renderToolButton = (editorToolbarControl: EditorToolbarControl) => {
+    const isSelected = tool === editorToolbarControl.tool;
+    const isAvailable = editorToolAvailability[editorToolbarControl.tool];
+    const controlLabel = editorToolbarCopy[editorToolbarControl.key];
 
     return (
       <button
-        aria-label={editorToolControl.label}
+        aria-label={controlLabel}
         aria-pressed={isSelected}
-        className={`tool-btn editor-toolbar__button${
-          editorToolControl.tool === "multi-select" ? " multi-select" : ""
-        }${
-          editorToolControl.tool === "erase"
-            ? ` erase-hover${isSelected ? " erase" : ""}`
-            : ""
-        }${editorToolControl.tool === "fill" ? " fill" : ""}${
-          editorToolControl.tool === "cursor" ? " cursor" : ""
-        }${
-          isSelected ? " active" : ""
-        }`}
+        className={getEditorToolbarButtonClassName(editorToolbarControl, isSelected)}
+        data-editor-tool={editorToolbarControl.tool}
         disabled={!isAvailable}
-        key={editorToolControl.tool}
+        key={editorToolbarControl.tool}
         onClick={() =>
           onToolChange(
-            getEditorToolbarToolSelectionAfterClick(tool, editorToolControl.tool),
+            getEditorToolbarToolSelectionAfterClick(tool, editorToolbarControl.tool),
           )
         }
-        title={editorToolControl.label}
+        title={controlLabel}
         type="button"
       >
-        <ToolIcon aria-hidden="true" size={18} strokeWidth={2} />
+        <PlannerReferenceIcon name={editorToolbarControl.icon} size={20} />
+        <span className="editor-toolbar__label">{controlLabel}</span>
       </button>
     );
   };
@@ -91,67 +107,113 @@ export function EditorToolbar({
   return (
     <div className="toolbar-wrapper planner-editor-toolbar" data-planner-toolbar>
       <div
-        aria-label="Editor tools"
+        aria-label={editorToolbarCopy.toolbar}
         className="toolbar editor-toolbar"
         role="toolbar"
       >
-        <div className="tool-group">
-          {editorToolControls
-            .filter((editorToolControl) =>
-              editorToolControl.tool === "cursor" ||
-              editorToolControl.tool === "multi-select" ||
-              editorToolControl.tool === "fill",
-            )
-            .map(renderToolButton)}
+        <div className="tool-group editor-toolbar__tool-group">
+          {editorToolbarControls.map(renderToolButton)}
         </div>
-        <span aria-hidden="true" className="separator editor-toolbar__divider" />
-        <div className="tool-group">
-          {renderToolButton(editorToolControls[3])}
-        </div>
-        <span aria-hidden="true" className="separator editor-toolbar__divider" />
-        <div
-          aria-label="Wheel zoom"
-          className="tool-group editor-wheel-zoom-group"
-          role="group"
-        >
+        {includeZoom ? (
+          <>
+            <span aria-hidden="true" className="separator editor-toolbar__divider" />
+            <div
+              aria-label={editorToolbarCopy.zoom}
+              className="tool-group editor-wheel-zoom-group"
+              role="group"
+            >
+              <button
+                aria-label={isZoomSelected ? getZoomDisableLabel(locale) : getZoomEnableLabel(locale)}
+                aria-pressed={isZoomSelected}
+                className="tool-btn editor-toolbar__button editor-wheel-zoom-button"
+                data-editor-tool="zoom"
+                data-editor-wheel-zoom-button="true"
+                onClick={() =>
+                  onToolChange(getEditorToolbarToolSelectionAfterClick(tool, "zoom"))
+                }
+                title={isZoomSelected ? getZoomDisableLabel(locale) : getZoomEnableLabel(locale)}
+                type="button"
+              >
+                <span className="editor-toolbar__label">{editorToolbarCopy.zoom}</span>
+              </button>
+            </div>
+            <span aria-hidden="true" className="separator editor-toolbar__divider" />
+          </>
+        ) : (
+          <span aria-hidden="true" className="separator editor-toolbar__divider" />
+        )}
+        <div aria-label="History" className="tool-group editor-toolbar__history-group" role="group">
           <button
-            aria-label={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
-            aria-pressed={isZoomSelected}
-            className="tool-btn editor-toolbar__button editor-wheel-zoom-button"
-            data-editor-wheel-zoom-button="true"
-            onClick={() =>
-              onToolChange(getEditorToolbarToolSelectionAfterClick(tool, "zoom"))
-            }
-            title={isZoomSelected ? "Disable wheel zoom" : "Enable wheel zoom"}
-            type="button"
-          >
-            Zoom
-          </button>
-        </div>
-        <span aria-hidden="true" className="separator editor-toolbar__divider" />
-        <div className="tool-group">
-          <button
-            aria-label="Undo"
-            className="tool-btn editor-toolbar__button"
+            aria-label={editorToolbarCopy.undo}
+            className="tool-btn editor-toolbar__button editor-toolbar__history-button"
+            data-editor-history-action="undo"
             disabled={!canUndo}
             onClick={onUndo}
-            title="Undo (Ctrl+Z)"
+            title={getHistoryTitle(locale, "undo")}
             type="button"
           >
-            <Undo2 aria-hidden="true" size={18} strokeWidth={2} />
+            <PlannerReferenceIcon name="Undo" size={20} />
           </button>
           <button
-            aria-label="Redo"
-            className="tool-btn editor-toolbar__button"
+            aria-label={editorToolbarCopy.redo}
+            className="tool-btn editor-toolbar__button editor-toolbar__history-button"
+            data-editor-history-action="redo"
             disabled={!canRedo}
             onClick={onRedo}
-            title="Redo (Ctrl+Y)"
+            title={getHistoryTitle(locale, "redo")}
             type="button"
           >
-            <Redo2 aria-hidden="true" size={18} strokeWidth={2} />
+            <PlannerReferenceIcon name="Redo" size={20} />
           </button>
         </div>
       </div>
     </div>
   );
+}
+
+function getEditorToolbarButtonClassName(
+  editorToolbarControl: EditorToolbarControl,
+  isSelected: boolean,
+): string {
+  let className = "tool-btn editor-toolbar__button";
+
+  if (editorToolbarControl.tool === "multi-select") {
+    className += " multi-select";
+  }
+
+  if (editorToolbarControl.tool === "erase") {
+    className += " erase-hover";
+    if (isSelected) {
+      className += " erase";
+    }
+  }
+
+  if (editorToolbarControl.tool === "fill") {
+    className += " fill";
+  }
+
+  if (editorToolbarControl.tool === "cursor") {
+    className += " cursor";
+  }
+
+  return className + (isSelected ? " active" : "");
+}
+
+function getZoomEnableLabel(locale: EditorToolbarLocale): string {
+  return locale === "zh" ? "启用滚轮缩放" : "Enable wheel zoom";
+}
+
+function getZoomDisableLabel(locale: EditorToolbarLocale): string {
+  return locale === "zh" ? "关闭滚轮缩放" : "Disable wheel zoom";
+}
+
+function getHistoryTitle(
+  locale: EditorToolbarLocale,
+  action: "undo" | "redo",
+): string {
+  if (locale === "zh") {
+    return action === "undo" ? "撤销（Ctrl+Z）" : "重做（Ctrl+Y）";
+  }
+
+  return action === "undo" ? "Undo (Ctrl+Z)" : "Redo (Ctrl+Y)";
 }

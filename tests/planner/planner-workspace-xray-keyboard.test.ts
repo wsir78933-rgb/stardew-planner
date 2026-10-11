@@ -10,8 +10,13 @@ function createKeyboardEvent(
     altKey?: boolean;
     ctrlKey?: boolean;
     metaKey?: boolean;
+    repeat?: boolean;
     shiftKey?: boolean;
-    target?: EventTarget | Readonly<{ isContentEditable?: boolean; tagName?: string }>;
+    target?: EventTarget | Readonly<{
+      closest?: (selector: string) => unknown;
+      isContentEditable?: boolean;
+      tagName?: string;
+    }>;
   }> = {},
 ): KeyboardEvent {
   let wasDefaultPrevented = false;
@@ -26,6 +31,7 @@ function createKeyboardEvent(
     preventDefault: () => {
       wasDefaultPrevented = true;
     },
+    repeat: options.repeat ?? false,
     shiftKey: options.shiftKey ?? false,
     target: options.target ?? new EventTarget(),
   } as KeyboardEvent;
@@ -80,6 +86,77 @@ describe("planner workspace X-ray keyboard", () => {
     expect(modifiedKeyupEvent.defaultPrevented).toBe(true);
   });
 
+  it("activates for held Meta or Control, ignores repeated and combined keys, and releases safely", () => {
+    const receivedStates: boolean[] = [];
+    const handleKeyboardEvent = createPlannerWorkspaceXRayKeyboardHandler({
+      onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive),
+    });
+    const metaKeyDown = createKeyboardEvent("Meta", { metaKey: true });
+    const repeatedMetaKeyDown = createKeyboardEvent("Meta", {
+      metaKey: true,
+      repeat: true,
+    });
+    const combinedMetaKeyDown = createKeyboardEvent("Control", {
+      ctrlKey: true,
+      metaKey: true,
+    });
+    const metaKeyUpAfterFocusChange = createKeyboardEvent("Meta", {
+      target: { closest: (selector: string) => selector.includes('[role="dialog"]') ? {} : null },
+    });
+    const controlKeyDown = createKeyboardEvent("Control", { ctrlKey: true });
+
+    handleKeyboardEvent.keydown(metaKeyDown);
+    handleKeyboardEvent.keydown(repeatedMetaKeyDown);
+    handleKeyboardEvent.keydown(combinedMetaKeyDown);
+    handleKeyboardEvent.keyup(createKeyboardEvent("Control", { ctrlKey: true, metaKey: true }));
+    handleKeyboardEvent.keyup(metaKeyUpAfterFocusChange);
+    handleKeyboardEvent.keydown(controlKeyDown);
+    handleKeyboardEvent.blur();
+
+    expect(receivedStates).toEqual([true, false, true, false]);
+    expect(metaKeyDown.defaultPrevented).toBe(true);
+    expect(repeatedMetaKeyDown.defaultPrevented).toBe(true);
+    expect(combinedMetaKeyDown.defaultPrevented).toBe(false);
+  });
+
+  it("does not start X-ray from editable targets, dialog content, or a disabled workspace", () => {
+    const receivedStates: boolean[] = [];
+    const disabledHandler = createPlannerWorkspaceXRayKeyboardHandler(
+      { onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive) },
+      { isEnabled: () => false },
+    );
+    const enabledHandler = createPlannerWorkspaceXRayKeyboardHandler({
+      onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive),
+    });
+    const dialogTarget = {
+      closest: (selector: string) =>
+        selector.includes('[role="dialog"]') ? {} : null,
+    };
+    const editableSpaceEvent = createKeyboardEvent(" ", {
+      target: { tagName: "INPUT" },
+    });
+    const dialogMetaEvent = createKeyboardEvent("Meta", {
+      metaKey: true,
+      target: dialogTarget,
+    });
+    const disabledControlEvent = createKeyboardEvent("Control", { ctrlKey: true });
+    const combinedControlEvent = createKeyboardEvent("Control", {
+      ctrlKey: true,
+      metaKey: true,
+    });
+
+    enabledHandler.keydown(editableSpaceEvent);
+    enabledHandler.keydown(dialogMetaEvent);
+    enabledHandler.keydown(combinedControlEvent);
+    disabledHandler.keydown(disabledControlEvent);
+
+    expect(receivedStates).toEqual([]);
+    expect(editableSpaceEvent.defaultPrevented).toBe(false);
+    expect(dialogMetaEvent.defaultPrevented).toBe(false);
+    expect(combinedControlEvent.defaultPrevented).toBe(false);
+    expect(disabledControlEvent.defaultPrevented).toBe(false);
+  });
+
   it("registers and detaches keydown, keyup, and blur listeners exactly once", () => {
     const listenersByEventName = new Map<string, EventListener>();
     const removedEventNames: string[] = [];
@@ -103,6 +180,37 @@ describe("planner workspace X-ray keyboard", () => {
     detachXRayKeyboardListener();
 
     expect(removedEventNames).toEqual(["keydown", "keyup", "blur"]);
+    expect(listenersByEventName.size).toBe(0);
+  });
+
+  it("releases held X-ray when the listener detaches before keyup", () => {
+    const activeStates: boolean[] = [];
+    const listenersByEventName = new Map<string, EventListener>();
+    const detachXRayKeyboardListener = attachPlannerWorkspaceXRayKeyboardListener(
+      {
+        addEventListener: (eventName, eventListener) => {
+          listenersByEventName.set(eventName, eventListener);
+        },
+        removeEventListener: (eventName, eventListener) => {
+          expect(listenersByEventName.get(eventName)).toBe(eventListener);
+          listenersByEventName.delete(eventName);
+        },
+      },
+      createPlannerWorkspaceXRayKeyboardHandler({
+        onXRayActiveChange: (isXRayActive) => activeStates.push(isXRayActive),
+      }),
+    );
+    const heldMetaKeyEvent = createKeyboardEvent("Meta", { metaKey: true });
+    const keydownListener = listenersByEventName.get("keydown");
+    if (keydownListener === undefined) {
+      throw new Error('Expected the X-ray "keydown" listener to be registered.');
+    }
+
+    keydownListener(heldMetaKeyEvent);
+    detachXRayKeyboardListener();
+    detachXRayKeyboardListener();
+
+    expect(activeStates).toEqual([true, false]);
     expect(listenersByEventName.size).toBe(0);
   });
 

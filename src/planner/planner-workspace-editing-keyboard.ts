@@ -1,4 +1,14 @@
 import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
+import type { EditorTool } from "../editor/editor-view-state";
+
+export type PlannerWorkspaceKeyboardOptions = Readonly<{
+  isEnabled?: () => boolean;
+}>;
+
+export type PlannerWorkspaceKeyboardTool = Extract<
+  EditorTool,
+  "cursor" | "multi-select" | "fill" | "erase"
+>;
 
 export type PlannerWorkspaceEditingKeyboardListenerPort = Readonly<{
   addEventListener: (eventName: "keydown", eventListener: EventListener) => void;
@@ -15,16 +25,20 @@ export type PlannerWorkspaceEditingKeyboardActions = Readonly<{
   onDismiss: () => void;
   onPendingChoiceCycle: () => boolean;
   onCycleSelectedAppearance: () => void;
+  onToolChange: (tool: PlannerWorkspaceKeyboardTool) => void;
 }>;
 
 export function createPlannerWorkspaceEditingKeyboardHandler(
   keyboardActions: PlannerWorkspaceEditingKeyboardActions,
+  options: PlannerWorkspaceKeyboardOptions = {},
 ): (keyboardEvent: KeyboardEvent) => void {
   assertEditingKeyboardActions(keyboardActions);
+  assertPlannerWorkspaceKeyboardOptions(options);
 
   return (keyboardEvent) => {
     if (
-      isEditableKeyboardTarget(keyboardEvent.target) ||
+      !isPlannerWorkspaceKeyboardEnabled(options) ||
+      isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target) ||
       keyboardEvent.altKey ||
       keyboardEvent.ctrlKey ||
       keyboardEvent.metaKey
@@ -41,6 +55,12 @@ export function createPlannerWorkspaceEditingKeyboardHandler(
       return;
     }
     const normalizedKey = keyboardEvent.key.toLowerCase();
+    const requestedTool = getPlannerWorkspaceKeyboardTool(normalizedKey);
+    if (requestedTool !== null) {
+      keyboardEvent.preventDefault();
+      keyboardActions.onToolChange(requestedTool);
+      return;
+    }
     if (!keyboardActions.hasSelection()) {
       if (normalizedKey === "q" && keyboardActions.hasPendingCatalogItem()) {
         keyboardEvent.preventDefault();
@@ -68,6 +88,92 @@ export function createPlannerWorkspaceEditingKeyboardHandler(
       return;
     }
   };
+}
+
+export function isPlannerWorkspaceKeyboardTargetProtected(
+  eventTarget: EventTarget | null,
+): boolean {
+  if (typeof eventTarget !== "object" || eventTarget === null) {
+    return false;
+  }
+
+  const keyboardTarget = eventTarget as Readonly<{
+    closest?: (selector: string) => unknown;
+    isContentEditable?: unknown;
+    tagName?: unknown;
+  }>;
+
+  if (
+    keyboardTarget.isContentEditable === true ||
+    (typeof keyboardTarget.tagName === "string" &&
+      ["INPUT", "SELECT", "TEXTAREA"].includes(keyboardTarget.tagName.toUpperCase()))
+  ) {
+    return true;
+  }
+
+  if (typeof keyboardTarget.closest !== "function") {
+    return false;
+  }
+
+  const dialogTarget = keyboardTarget.closest(
+    '[role="dialog"], [role="alertdialog"], [aria-modal="true"]',
+  );
+  return dialogTarget !== null && dialogTarget !== undefined;
+}
+
+export function isPlannerWorkspaceKeyboardEnabled(
+  options: PlannerWorkspaceKeyboardOptions,
+): boolean {
+  if (typeof options !== "object" || options === null) {
+    throw new TypeError(
+      `Planner workspace keyboard options must be an object; received ${describeValue(options)}.`,
+    );
+  }
+
+  const isEnabledCallback = options.isEnabled;
+  if (isEnabledCallback === undefined) {
+    return true;
+  }
+  if (typeof isEnabledCallback !== "function") {
+    throw new TypeError(
+      `Planner workspace keyboard isEnabled must be a function; received ${describeValue(isEnabledCallback)}.`,
+    );
+  }
+
+  const isEnabled = isEnabledCallback();
+  if (typeof isEnabled !== "boolean") {
+    throw new TypeError(
+      `Planner workspace keyboard isEnabled callback must return a boolean; received ${describeValue(isEnabled)}.`,
+    );
+  }
+
+  return isEnabled;
+}
+
+function getPlannerWorkspaceKeyboardTool(
+  normalizedKey: string,
+): PlannerWorkspaceKeyboardTool | null {
+  if (normalizedKey === "v") return "cursor";
+  if (normalizedKey === "m") return "multi-select";
+  if (normalizedKey === "f") return "fill";
+  if (normalizedKey === "e") return "erase";
+  return null;
+}
+
+export function assertPlannerWorkspaceKeyboardOptions(
+  options: unknown,
+): asserts options is PlannerWorkspaceKeyboardOptions {
+  if (typeof options !== "object" || options === null) {
+    throw new TypeError(
+      `Planner workspace keyboard options must be an object; received ${describeValue(options)}.`,
+    );
+  }
+  const isEnabled = (options as PlannerWorkspaceKeyboardOptions).isEnabled;
+  if (isEnabled !== undefined && typeof isEnabled !== "function") {
+    throw new TypeError(
+      `Planner workspace keyboard isEnabled must be a function; received ${describeValue(isEnabled)}.`,
+    );
+  }
 }
 
 export function attachPlannerWorkspaceEditingKeyboardListener(
@@ -108,23 +214,6 @@ export function attachPlannerWorkspaceEditingKeyboardListener(
   };
 }
 
-function isEditableKeyboardTarget(eventTarget: EventTarget | null): boolean {
-  if (typeof eventTarget !== "object" || eventTarget === null) {
-    return false;
-  }
-  const editableTarget = eventTarget as Readonly<{
-    isContentEditable?: unknown;
-    tagName?: unknown;
-  }>;
-  if (editableTarget.isContentEditable === true) {
-    return true;
-  }
-  return (
-    typeof editableTarget.tagName === "string" &&
-    ["INPUT", "TEXTAREA", "SELECT"].includes(editableTarget.tagName.toUpperCase())
-  );
-}
-
 function assertEditingKeyboardActions(
   keyboardActions: PlannerWorkspaceEditingKeyboardActions,
 ): void {
@@ -143,6 +232,7 @@ function assertEditingKeyboardActions(
     "onDismiss",
     "onPendingChoiceCycle",
     "onCycleSelectedAppearance",
+    "onToolChange",
   ] as const) {
     if (typeof keyboardActions[actionName] !== "function") {
       throw new TypeError(

@@ -37,6 +37,10 @@ it("publishes the static export while retaining the Contact Worker contract", ()
       custom_domain: false,
       pattern: "stardewvalleyplanner.art/api/contact*",
     },
+    {
+      custom_domain: false,
+      pattern: "stardewvalleyplanner.art/api/feedback*",
+    },
   ]);
   expect(workerConfiguration.assets).toEqual({
     binding: "STATIC_ASSETS",

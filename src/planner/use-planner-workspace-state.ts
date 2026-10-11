@@ -4,6 +4,12 @@ import type { PlacementHistory } from "../placement/placement-history";
 import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
 import {
+  assertPlannerWorkspaceKeyboardOptions,
+  isPlannerWorkspaceKeyboardEnabled,
+  isPlannerWorkspaceKeyboardTargetProtected,
+  type PlannerWorkspaceKeyboardOptions,
+} from "./planner-workspace-editing-keyboard";
+import {
   createInitialPlannerWorkspaceState,
   reducePlannerWorkspaceState,
   type PlannerWorkspaceAction,
@@ -82,8 +88,12 @@ export function usePlannerWorkspaceState(
     return attachPlannerWorkspaceHistoryKeyboardListener(
       keyboardListenerPort,
       dispatchPlannerWorkspaceAction,
+      { isEnabled: () => plannerWorkspaceState.modalId === null },
     );
-  }, [usePlannerWorkspaceStateInput.keyboardListenerPort]);
+  }, [
+    plannerWorkspaceState.modalId,
+    usePlannerWorkspaceStateInput.keyboardListenerPort,
+  ]);
 
   useEffect(() => {
     const browserResizeListenerPort =
@@ -158,11 +168,13 @@ export function resolvePlannerWorkspaceKeyboardListenerPort(
 export function attachPlannerWorkspaceHistoryKeyboardListener(
   keyboardListenerPort: PlannerWorkspaceKeyboardListenerPort,
   dispatchPlannerWorkspaceAction: Dispatch<PlannerWorkspaceAction>,
+  options: PlannerWorkspaceKeyboardOptions = {},
 ): () => void {
   assertKeyboardListenerPort(keyboardListenerPort);
   assertPlannerWorkspaceActionDispatch(dispatchPlannerWorkspaceAction);
   const handleKeyboardEvent = createPlannerWorkspaceHistoryKeyboardHandler(
     dispatchPlannerWorkspaceAction,
+    options,
   );
   const eventListener: EventListener = (event) => {
     handleKeyboardEvent(event as KeyboardEvent);
@@ -234,11 +246,16 @@ export function attachPlannerWorkspacePanelPositionResizeListener(
 
 export function createPlannerWorkspaceHistoryKeyboardHandler(
   dispatchPlannerWorkspaceAction: Dispatch<PlannerWorkspaceAction>,
+  options: PlannerWorkspaceKeyboardOptions = {},
 ): (keyboardEvent: KeyboardEvent) => void {
   assertPlannerWorkspaceActionDispatch(dispatchPlannerWorkspaceAction);
+  assertPlannerWorkspaceKeyboardOptions(options);
 
   return (keyboardEvent) => {
-    if (isEditableKeyboardTarget(keyboardEvent.target)) {
+    if (
+      !isPlannerWorkspaceKeyboardEnabled(options) ||
+      isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target)
+    ) {
       return;
     }
 
@@ -256,26 +273,6 @@ export function createPlannerWorkspaceHistoryKeyboardHandler(
           : "redo-placement-history",
     });
   };
-}
-
-function isEditableKeyboardTarget(eventTarget: EventTarget | null): boolean {
-  if (typeof eventTarget !== "object" || eventTarget === null) {
-    return false;
-  }
-
-  const editableTarget = eventTarget as Readonly<{
-    isContentEditable?: unknown;
-    tagName?: unknown;
-  }>;
-
-  if (editableTarget.isContentEditable === true) {
-    return true;
-  }
-
-  return typeof editableTarget.tagName === "string" &&
-    ["INPUT", "TEXTAREA", "SELECT"].includes(
-      editableTarget.tagName.toUpperCase(),
-    );
 }
 
 function assertKeyboardListenerPort(

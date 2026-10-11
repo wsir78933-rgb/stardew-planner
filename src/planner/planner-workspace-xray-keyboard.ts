@@ -1,3 +1,12 @@
+import {
+  assertPlannerWorkspaceKeyboardOptions,
+  isPlannerWorkspaceKeyboardEnabled,
+  isPlannerWorkspaceKeyboardTargetProtected,
+  type PlannerWorkspaceKeyboardOptions,
+} from "./planner-workspace-editing-keyboard";
+
+type PlannerWorkspaceXRayTrigger = "control" | "meta" | "space";
+
 export type PlannerWorkspaceXRayKeyboardListenerPort = Readonly<{
   addEventListener: (
     eventName: "blur" | "keydown" | "keyup",
@@ -17,6 +26,7 @@ export type PlannerWorkspaceXRayKeyboardHandler = Readonly<{
 
 export function createPlannerWorkspaceXRayKeyboardHandler(
   actions: Readonly<{ onXRayActiveChange: (isXRayActive: boolean) => void }>,
+  options: PlannerWorkspaceKeyboardOptions = {},
 ): PlannerWorkspaceXRayKeyboardHandler {
   if (typeof actions !== "object" || actions === null) {
     throw new TypeError(
@@ -28,51 +38,70 @@ export function createPlannerWorkspaceXRayKeyboardHandler(
       `Planner workspace X-ray active-change action must be a function; received ${describeValue(actions.onXRayActiveChange)}.`,
     );
   }
+  assertPlannerWorkspaceKeyboardOptions(options);
 
-  let isXRayActive = false;
+  let activeXRayTrigger: PlannerWorkspaceXRayTrigger | null = null;
 
-  function activateXRay(keyboardEvent: KeyboardEvent): void {
+  function handleXRayKeyDown(keyboardEvent: KeyboardEvent): void {
+    const requestedTrigger = getPlannerWorkspaceXRayTrigger(keyboardEvent.key);
+    if (requestedTrigger === null) {
+      return;
+    }
+
+    if (keyboardEvent.repeat) {
+      if (
+        activeXRayTrigger === requestedTrigger &&
+        isPlannerWorkspaceKeyboardEnabled(options) &&
+        !isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target) &&
+        isValidPlannerWorkspaceXRayTrigger(keyboardEvent, requestedTrigger)
+      ) {
+        keyboardEvent.preventDefault();
+      }
+      return;
+    }
+
     if (
-      !isSpaceKeyboardEvent(keyboardEvent) ||
-      isEditableKeyboardTarget(keyboardEvent.target) ||
-      keyboardEvent.altKey ||
-      keyboardEvent.ctrlKey ||
-      keyboardEvent.metaKey ||
-      keyboardEvent.shiftKey
+      activeXRayTrigger !== null ||
+      !isPlannerWorkspaceKeyboardEnabled(options) ||
+      isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target) ||
+      !isValidPlannerWorkspaceXRayTrigger(keyboardEvent, requestedTrigger)
     ) {
       return;
     }
+
     keyboardEvent.preventDefault();
-    if (isXRayActive) {
-      return;
-    }
-    isXRayActive = true;
     actions.onXRayActiveChange(true);
+    activeXRayTrigger = requestedTrigger;
   }
 
-  function deactivateXRay(keyboardEvent: KeyboardEvent): void {
-    if (!isSpaceKeyboardEvent(keyboardEvent) || !isXRayActive) {
+  function handleXRayKeyUp(keyboardEvent: KeyboardEvent): void {
+    const releasedTrigger = getPlannerWorkspaceXRayTrigger(keyboardEvent.key);
+    if (releasedTrigger === null || releasedTrigger !== activeXRayTrigger) {
       return;
     }
-    if (!isEditableKeyboardTarget(keyboardEvent.target)) {
+
+    if (
+      releasedTrigger === "space" &&
+      !isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target)
+    ) {
       keyboardEvent.preventDefault();
     }
-    isXRayActive = false;
+    activeXRayTrigger = null;
     actions.onXRayActiveChange(false);
   }
 
   function resetXRay(): void {
-    if (!isXRayActive) {
+    if (activeXRayTrigger === null) {
       return;
     }
-    isXRayActive = false;
+    activeXRayTrigger = null;
     actions.onXRayActiveChange(false);
   }
 
   return {
     blur: resetXRay,
-    keydown: activateXRay,
-    keyup: deactivateXRay,
+    keydown: handleXRayKeyDown,
+    keyup: handleXRayKeyUp,
   };
 }
 
@@ -114,6 +143,7 @@ export function attachPlannerWorkspaceXRayKeyboardListener(
     if (!isListenerAttached) {
       return;
     }
+    keyboardHandler.blur();
     for (const eventName of ["keydown", "keyup", "blur"] as const) {
       keyboardListenerPort.removeEventListener(eventName, eventListeners[eventName]);
     }
@@ -137,21 +167,36 @@ function removeRegisteredEventListeners(
   return rollbackErrors;
 }
 
-function isSpaceKeyboardEvent(keyboardEvent: KeyboardEvent): boolean {
-  return keyboardEvent.key === " " || keyboardEvent.key === "Spacebar";
+function getPlannerWorkspaceXRayTrigger(
+  key: string,
+): PlannerWorkspaceXRayTrigger | null {
+  if (isSpaceKey(key)) return "space";
+  if (key === "Control") return "control";
+  if (key === "Meta") return "meta";
+  return null;
 }
 
-function isEditableKeyboardTarget(eventTarget: EventTarget | null): boolean {
-  if (typeof eventTarget !== "object" || eventTarget === null) {
+function isValidPlannerWorkspaceXRayTrigger(
+  keyboardEvent: KeyboardEvent,
+  trigger: PlannerWorkspaceXRayTrigger,
+): boolean {
+  if (keyboardEvent.altKey || keyboardEvent.shiftKey) {
     return false;
   }
-  const editableTarget = eventTarget as Readonly<{
-    isContentEditable?: unknown;
-    tagName?: unknown;
-  }>;
-  return editableTarget.isContentEditable === true ||
-    (typeof editableTarget.tagName === "string" &&
-      ["INPUT", "SELECT", "TEXTAREA"].includes(editableTarget.tagName.toUpperCase()));
+
+  if (trigger === "space") {
+    return !keyboardEvent.ctrlKey && !keyboardEvent.metaKey;
+  }
+
+  if (trigger === "control") {
+    return keyboardEvent.ctrlKey && !keyboardEvent.metaKey;
+  }
+
+  return keyboardEvent.metaKey && !keyboardEvent.ctrlKey;
+}
+
+function isSpaceKey(key: string): boolean {
+  return key === " " || key === "Spacebar";
 }
 
 function assertKeyboardListenerPort(

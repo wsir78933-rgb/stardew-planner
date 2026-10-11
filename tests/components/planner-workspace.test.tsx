@@ -198,7 +198,7 @@ describe("planner workspace static boundary", () => {
     });
 
     expect(preparedMarkup).toContain('data-planner-workspace-state="prepared"');
-    expect(preparedMarkup).toContain('aria-label="Editor menu"');
+    expect(preparedMarkup).toContain('aria-label="Editor navigation"');
     expect(preparedMarkup).toContain('aria-label="Editor tools"');
     expect(preparedMarkup).toContain('aria-label="Item catalog"');
     expect(preparedMarkup).toContain("Loading placed item catalog…");

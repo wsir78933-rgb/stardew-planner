@@ -8,6 +8,7 @@ import type {
 } from "../catalog";
 import { evaluateEditorCursorPlacementPreview } from "../editor/editor-placement-controller";
 import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
+import type { PlannerAmbienceOptions } from "../editor/planner-ambience-options";
 import {
   PlannerJoystick,
   type PlannerJoystickDirection,
@@ -90,9 +91,16 @@ import type { TmxMap } from "../tmx/tmx-types";
 import type { EditorPerformanceMarker } from "../performance/editor-performance-marks";
 import type { PreparedDefaultMap } from "../resources/default-map-resource";
 import {
+  createFarmMapDecorationRenderer,
+  type FarmMapDecorationRenderer,
+} from "../maps/farm-map-decoration-rendering";
+import type { FarmMapDecorationPlan } from "../maps/farm-map-rendering";
+import {
   captureMapScreenshotCanvas,
   createMapImageCaptureMethods,
 } from "./planner-canvas-screenshot-exporter";
+import { PlannerAtmosphereLayer } from "./planner-atmosphere-layer";
+import atmosphereStyles from "./planner-atmosphere-layer.module.css";
 
 const localGameAssetRoot = "/game-assets/1.6.15/";
 const validPlacementPreviewTint = 0x00ff00;
@@ -219,6 +227,9 @@ export type PlannerCanvasProperties = Readonly<{
     mapId: string,
     placementSelectionKeys: readonly PlacementSelectionKey[],
   ) => void;
+  ambienceOptions?: PlannerAmbienceOptions;
+  gameCursors?: boolean;
+  onCancelEditingInteraction?: () => boolean | undefined;
   activeInteriorDecorPattern?: InteriorDecorCatalogPattern | null;
   onInteriorDecorApply?: (
     mapId: string,
@@ -236,9 +247,26 @@ export function handlePlannerCanvasContextMenuEvent(
   contextMenuEvent: MouseEvent,
   pixiCanvas: HTMLCanvasElement,
   onOpen: (point: CanvasContextMenuPoint) => void,
+  onCancelEditingInteraction?: () => boolean | undefined,
 ): void {
   if (contextMenuEvent.target !== pixiCanvas) {
     return;
+  }
+
+  if (onCancelEditingInteraction !== undefined) {
+    const didCancelEditingInteraction = onCancelEditingInteraction();
+    if (
+      didCancelEditingInteraction !== undefined &&
+      typeof didCancelEditingInteraction !== "boolean"
+    ) {
+      throw new TypeError(
+        `Planner canvas interaction-cancel callback must return a boolean; received ${describeValue(didCancelEditingInteraction)}.`,
+      );
+    }
+    if (didCancelEditingInteraction) {
+      contextMenuEvent.preventDefault();
+      return;
+    }
   }
 
   contextMenuEvent.preventDefault();
@@ -266,6 +294,7 @@ export async function handlePlannerCanvasContextMenuCopyAction(
 
 export function attachPlannerCanvasContextMenuListener(
   input: Readonly<{
+    onCancelEditingInteraction?: () => boolean | undefined;
     onOpen: (point: CanvasContextMenuPoint) => void;
     pixiCanvas: HTMLCanvasElement;
   }>,
@@ -276,6 +305,7 @@ export function attachPlannerCanvasContextMenuListener(
       contextMenuEvent,
       input.pixiCanvas,
       input.onOpen,
+      input.onCancelEditingInteraction,
     );
   };
 
@@ -559,6 +589,7 @@ type PlacementDragTarget = Readonly<{
 
 export type PlacementAnimationController = Readonly<{
   dispose(): void;
+  setEnabled(enabled: boolean): void;
   replaceAnimations(animations: readonly PlacementSpriteAnimation[]): void;
 }>;
 
@@ -566,22 +597,54 @@ const placementAnimationIntervalMilliseconds = 100;
 
 export function createPlacementAnimationController(
   renderAnimatedPlacements: () => void,
+  initialAnimationsEnabled = true,
 ): PlacementAnimationController {
   if (typeof renderAnimatedPlacements !== "function") {
     throw new TypeError(
       `Placement animation render callback must be a function; received ${describeValue(renderAnimatedPlacements)}.`,
     );
   }
+  if (typeof initialAnimationsEnabled !== "boolean") {
+    throw new TypeError(
+      `Placement animation enabled value must be a boolean; received ${describeValue(initialAnimationsEnabled)}.`,
+    );
+  }
 
   let animationInterval: ReturnType<typeof setInterval> | null = null;
   let currentAnimations: readonly PlacementSpriteAnimation[] = [];
   let hasDisposed = false;
+  let animationsEnabled = initialAnimationsEnabled;
 
   const stopAnimationInterval = (): void => {
     if (animationInterval !== null) {
       clearInterval(animationInterval);
       animationInterval = null;
     }
+  };
+
+  const startAnimationInterval = (): void => {
+    if (
+      hasDisposed ||
+      !animationsEnabled ||
+      animationInterval !== null ||
+      currentAnimations.length === 0
+    ) {
+      return;
+    }
+
+    animationInterval = setInterval(() => {
+      const currentTimeMilliseconds = performance.now();
+      let didChangeVisualState = false;
+
+      for (const animation of currentAnimations) {
+        didChangeVisualState =
+          animation.update(currentTimeMilliseconds) || didChangeVisualState;
+      }
+
+      if (didChangeVisualState) {
+        renderAnimatedPlacements();
+      }
+    }, placementAnimationIntervalMilliseconds);
   };
 
   return {
@@ -594,6 +657,28 @@ export function createPlacementAnimationController(
       currentAnimations = [];
       stopAnimationInterval();
     },
+    setEnabled(enabled): void {
+      if (typeof enabled !== "boolean") {
+        throw new TypeError(
+          `Placement animation enabled value must be a boolean; received ${describeValue(enabled)}.`,
+        );
+      }
+      if (hasDisposed) {
+        throw new Error(
+          "Placement animation controller cannot change its enabled state after disposal.",
+        );
+      }
+      if (animationsEnabled === enabled) {
+        return;
+      }
+
+      animationsEnabled = enabled;
+      if (animationsEnabled) {
+        startAnimationInterval();
+      } else {
+        stopAnimationInterval();
+      }
+    },
     replaceAnimations(animations): void {
       if (hasDisposed) {
         throw new Error(
@@ -603,24 +688,7 @@ export function createPlacementAnimationController(
       assertPlacementSpriteAnimations(animations);
       stopAnimationInterval();
       currentAnimations = animations;
-
-      if (currentAnimations.length === 0) {
-        return;
-      }
-
-      animationInterval = setInterval(() => {
-        const currentTimeMilliseconds = performance.now();
-        let didChangeVisualState = false;
-
-        for (const animation of currentAnimations) {
-          didChangeVisualState =
-            animation.update(currentTimeMilliseconds) || didChangeVisualState;
-        }
-
-        if (didChangeVisualState) {
-          renderAnimatedPlacements();
-        }
-      }, placementAnimationIntervalMilliseconds);
+      startAnimationInterval();
     },
   };
 }
@@ -949,6 +1017,7 @@ export type PlannerCanvasCleanupOperations = Readonly<{
   disposeMapDisplayOverlay(): void;
   disposePlacementOverlay(): void;
   disposePlacementPreview?(): void;
+  disposeFarmMapDecorationRenderer?(): void;
   clearJoystickCameraPan(): void;
   clearMapImageExporter(): void;
   destroyResourceClumpFrameTextures(): void;
@@ -970,6 +1039,7 @@ export function createPlannerCanvasCleanup(
     cleanupOperations.disposeMapDisplayOverlay();
     cleanupOperations.disposePlacementOverlay();
     cleanupOperations.disposePlacementPreview?.();
+    cleanupOperations.disposeFarmMapDecorationRenderer?.();
     cleanupOperations.clearJoystickCameraPan();
     cleanupOperations.clearMapImageExporter();
     cleanupOperations.destroyResourceClumpFrameTextures();
@@ -1048,6 +1118,9 @@ export function PlannerCanvas({
   onMapTileClick,
   onMapTileRectangle,
   onPlacementSelectionClick,
+  ambienceOptions,
+  gameCursors,
+  onCancelEditingInteraction,
 }: PlannerCanvasProperties) {
   const canvasHostElementReference = useRef<HTMLDivElement>(null);
   const onMapPlacementGridReadyReference = useRef(onMapPlacementGridReady);
@@ -1055,6 +1128,8 @@ export function PlannerCanvas({
   const onMapTileClickReference = useRef(onMapTileClick);
   const onMapTileRectangleReference = useRef(onMapTileRectangle);
   const onPlacementSelectionClickReference = useRef(onPlacementSelectionClick);
+  const onCancelEditingInteractionReference = useRef(onCancelEditingInteraction);
+  const ambienceOptionsReference = useRef(ambienceOptions);
   const activeInteriorDecorPatternReference = useRef(activeInteriorDecorPattern);
   const onInteriorDecorApplyReference = useRef(onInteriorDecorApply);
   const onInteriorDecorRejectedReference = useRef(onInteriorDecorRejected);
@@ -1088,6 +1163,12 @@ export function PlannerCanvas({
   const xRayRendererReference = useRef<XRayRenderer | null>(null);
   const mapDisplayOverlayRendererReference =
     useRef<MapDisplayOverlayRenderer | null>(null);
+  const placementAnimationControllerReference =
+    useRef<PlacementAnimationController | null>(null);
+  const placementPreviewAnimationControllerReference =
+    useRef<PlacementAnimationController | null>(null);
+  const farmMapDecorationAnimationControllerReference =
+    useRef<PlacementAnimationController | null>(null);
   const placementSnapshotReference = useRef(placementSnapshot);
   const placementPreviewReference = useRef(placementPreview);
   const selectedPlacementKeysReference = useRef(selectedPlacementKeys);
@@ -1122,6 +1203,8 @@ export function PlannerCanvas({
   onMapTileClickReference.current = onMapTileClick;
   onMapTileRectangleReference.current = onMapTileRectangle;
   onPlacementSelectionClickReference.current = onPlacementSelectionClick;
+  onCancelEditingInteractionReference.current = onCancelEditingInteraction;
+  ambienceOptionsReference.current = ambienceOptions;
   activeInteriorDecorPatternReference.current = activeInteriorDecorPattern;
   onInteriorDecorApplyReference.current = onInteriorDecorApply;
   onInteriorDecorRejectedReference.current = onInteriorDecorRejected;
@@ -1142,6 +1225,18 @@ export function PlannerCanvas({
   wheelZoomEnabledReference.current = wheelZoomEnabled;
   showResourceClumpSpawnLocationsReference.current =
     showResourceClumpSpawnLocations;
+
+  const animationsEnabled = ambienceOptions?.animationsEnabled ?? true;
+
+  useEffect(() => {
+    placementAnimationControllerReference.current?.setEnabled(animationsEnabled);
+    placementPreviewAnimationControllerReference.current?.setEnabled(
+      animationsEnabled,
+    );
+    farmMapDecorationAnimationControllerReference.current?.setEnabled(
+      animationsEnabled,
+    );
+  }, [animationsEnabled]);
 
   useEffect(() => {
     placementOverlayRendererReference.current?.();
@@ -1192,6 +1287,9 @@ export function PlannerCanvas({
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
     let disposePlacementPreview: (() => void) | null = null;
+    let farmMapDecorationRenderer: FarmMapDecorationRenderer | null = null;
+    let farmMapDecorationAnimationController: PlacementAnimationController | null =
+      null;
     let removeCanvasContextMenuListener: (() => void) | null = null;
     let joystickCameraPan: ((direction: PlannerJoystickDirection) => void) | null =
       null;
@@ -1212,6 +1310,18 @@ export function PlannerCanvas({
       disposeMapDisplayOverlay: () => disposeMapDisplayOverlay?.(),
       disposePlacementOverlay: () => disposePlacementOverlay?.(),
       disposePlacementPreview: () => disposePlacementPreview?.(),
+      disposeFarmMapDecorationRenderer: () => {
+        farmMapDecorationAnimationController?.dispose();
+        if (
+          farmMapDecorationAnimationControllerReference.current ===
+          farmMapDecorationAnimationController
+        ) {
+          farmMapDecorationAnimationControllerReference.current = null;
+        }
+        farmMapDecorationRenderer?.destroy();
+        farmMapDecorationRenderer = null;
+        farmMapDecorationAnimationController = null;
+      },
       clearJoystickCameraPan: () => {
         if (joystickCameraPanReference.current === joystickCameraPan) {
           joystickCameraPanReference.current = null;
@@ -1312,6 +1422,8 @@ export function PlannerCanvas({
           });
         removeCanvasContextMenuListener = attachPlannerCanvasContextMenuListener({
           pixiCanvas,
+          onCancelEditingInteraction: () =>
+            onCancelEditingInteractionReference.current?.(),
           onOpen: (point) => {
             canvasContextMenuFocusRestoreReference.current = pixiCanvas;
             setCanvasContextMenuPoint(point);
@@ -1341,6 +1453,25 @@ export function PlannerCanvas({
             resolvedInitialPlacementTextureEntries,
             placementTexturePromisesByResolvedUrl,
           );
+        const farmMapDecorationPlan =
+          preparedCanvasResources.preparedMap.farmMapDecorationPlan ?? {
+            spouse: null,
+            caveObjects: [],
+          };
+        const farmMapDecorationTexturesByAssetPath = new Map(
+          await Promise.all(
+            getFarmMapDecorationAssetPaths(farmMapDecorationPlan).map(
+              async (assetPath) => [
+                assetPath,
+                await loadPlannerTextureWithResolvedUrlCache(
+                  pixi,
+                  resolveInitialPlannerTextureAssetPath(assetPath),
+                  placementTexturePromisesByResolvedUrl,
+                ),
+              ] as const,
+            ),
+          ),
+        );
 
         if (!isMapLifecycleCurrent()) {
           cleanUpPlannerCanvas();
@@ -1366,6 +1497,30 @@ export function PlannerCanvas({
         pixiApplication.stage.eventMode = "none";
         mapContainerCreationResult.mapContainer.eventMode = "none";
         pixiApplication.stage.addChild(mapContainerCreationResult.mapContainer);
+        if (
+          farmMapDecorationPlan.spouse !== null ||
+          farmMapDecorationPlan.caveObjects.length > 0
+        ) {
+          farmMapDecorationRenderer = createFarmMapDecorationRenderer({
+            farmMapDecorationPlan,
+            pixi,
+            texturesByAssetPath: farmMapDecorationTexturesByAssetPath,
+            tileHeight: renderingContract.tileHeight,
+            tileWidth: renderingContract.tileWidth,
+          });
+          mapContainerCreationResult.mapContainer.addChild(
+            farmMapDecorationRenderer.container,
+          );
+          farmMapDecorationAnimationController =
+            createPlacementAnimationController(() => {
+              pixiApplication.renderer.render(pixiApplication.stage);
+            }, ambienceOptionsReference.current?.animationsEnabled ?? true);
+          farmMapDecorationAnimationControllerReference.current =
+            farmMapDecorationAnimationController;
+          farmMapDecorationAnimationController.replaceAnimations(
+            farmMapDecorationRenderer.animations,
+          );
+        }
         const mapDisplayOverlayContainer = new pixi.Container();
         mapDisplayOverlayContainer.label = "mapDisplayOverlays";
         mapContainerCreationResult.mapContainer.addChild(mapDisplayOverlayContainer);
@@ -1435,7 +1590,9 @@ export function PlannerCanvas({
         const placementAnimationController =
           createPlacementAnimationController(() => {
             pixiApplication.renderer.render(pixiApplication.stage);
-          });
+          }, ambienceOptionsReference.current?.animationsEnabled ?? true);
+        placementAnimationControllerReference.current =
+          placementAnimationController;
 
         const renderXRay = (): void => {
           placementContainer.alpha = getPlacementContainerAlpha(
@@ -1537,6 +1694,12 @@ export function PlannerCanvas({
         disposePlacementOverlay = (): void => {
           placementRenderVersion += 1;
           placementAnimationController.dispose();
+          if (
+            placementAnimationControllerReference.current ===
+            placementAnimationController
+          ) {
+            placementAnimationControllerReference.current = null;
+          }
           destroyPlacementSprites(renderedPlacementSprites);
           renderedPlacementSprites = [];
           placementContainer.removeChildren();
@@ -1563,7 +1726,9 @@ export function PlannerCanvas({
         const placementPreviewAnimationController =
           createPlacementAnimationController(() => {
             pixiApplication.renderer.render(pixiApplication.stage);
-          });
+          }, ambienceOptionsReference.current?.animationsEnabled ?? true);
+        placementPreviewAnimationControllerReference.current =
+          placementPreviewAnimationController;
         const placementPreviewRenderer =
           createPlannerCanvasPlacementPreviewRenderer({
             container: placementPreviewContainer,
@@ -1637,6 +1802,12 @@ export function PlannerCanvas({
 
         disposePlacementPreview = (): void => {
           placementPreviewRenderer.dispose();
+          if (
+            placementPreviewAnimationControllerReference.current ===
+            placementPreviewAnimationController
+          ) {
+            placementPreviewAnimationControllerReference.current = null;
+          }
 
           if (
             placementPreviewOverlayRendererReference.current ===
@@ -2025,9 +2196,12 @@ export function PlannerCanvas({
       aria-label={`Farm map canvas for ${mapId}`}
       className={`planner-canvas canvas-container ${
         pointerInteractionMode === "navigate" ? "cursor-mode" : "placement-active"
-      }`}
+      } ${gameCursors === false ? atmosphereStyles.systemCursor : ""}`}
     >
       <div className="planner-canvas__viewport" ref={canvasHostElementReference} />
+      {ambienceOptions === undefined ? null : (
+        <PlannerAtmosphereLayer options={ambienceOptions} season={season} />
+      )}
       {canvasContextMenuPoint !== null ? (
         <PlannerCanvasContextMenu
           canvasHostElement={canvasHostElementReference.current}
@@ -2314,6 +2488,21 @@ export async function loadPlannerCanvasInitialTextures(
   ]);
 
   return { resourceClumpTilesheetTexture, tilesheetTextures };
+}
+
+function getFarmMapDecorationAssetPaths(
+  farmMapDecorationPlan: FarmMapDecorationPlan,
+): readonly string[] {
+  const assetPaths = new Set<string>();
+  if (farmMapDecorationPlan.spouse !== null) {
+    assetPaths.add(
+      `${localGameAssetRoot}${farmMapDecorationPlan.spouse.spriteAssetPath}`,
+    );
+  }
+  if (farmMapDecorationPlan.caveObjects.length > 0) {
+    assetPaths.add(`${localGameAssetRoot}tilesheets/craftables.png`);
+  }
+  return [...assetPaths];
 }
 
 async function loadTilesheetTextures(

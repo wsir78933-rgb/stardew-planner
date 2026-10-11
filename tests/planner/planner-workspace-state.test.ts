@@ -110,6 +110,7 @@ describe("planner workspace state", () => {
       {
         activeMapId: "map-instance-8",
         activeProjectId: "project-3",
+        mapRenderOptions: createInitialMapRenderOptions(),
         placementSnapshot: createEmptyPlacementSnapshot(),
         plannerMapId: "standard",
         season: "summer",
@@ -465,15 +466,32 @@ describe("planner workspace state", () => {
   });
 
   it("rejects invalid map render options through the render-options boundary", () => {
+    const invalidMapRenderOptions = {
+      ...createInitialMapRenderOptions(),
+      gingerIslandOverlayIds: ["not-an-overlay"],
+    } as unknown as ReturnType<typeof createInitialMapRenderOptions>;
+
     expect(() =>
       reducePlannerWorkspaceState(createInitialPlannerWorkspaceState(), {
         type: "set-map-render-options",
-        mapRenderOptions: {
-          ...createInitialMapRenderOptions(),
-          gingerIslandOverlayIds: ["not-an-overlay"],
-        } as unknown as ReturnType<typeof createInitialMapRenderOptions>,
+        mapRenderOptions: invalidMapRenderOptions,
       }),
     ).toThrow(
+      'Map render options.gingerIslandOverlayIds must be one of restored, bin, cave, obelisk; received "not-an-overlay".',
+    );
+
+    expect(() => reducePlannerWorkspaceState(
+      createInitialPlannerWorkspaceState(),
+      {
+        type: "open-canonical-map",
+        activeMapId: "map-instance-invalid-options",
+        activeProjectId: "project-invalid-options",
+        mapRenderOptions: invalidMapRenderOptions,
+        placementSnapshot: createEmptyPlacementSnapshot(),
+        plannerMapId: "standard",
+        season: "spring",
+      },
+    )).toThrow(
       'Map render options.gingerIslandOverlayIds must be one of restored, bin, cave, obelisk; received "not-an-overlay".',
     );
   });
@@ -494,6 +512,14 @@ describe("planner workspace state", () => {
       ),
       selectedPlacementKeys: ["crop:2:3"],
     };
+    const savedMapRenderOptions = {
+      ...createInitialMapRenderOptions(),
+      gingerIslandOverlayIds: ["cave"] as const,
+      farm: {
+        spouseId: "Abigail" as const,
+        caveChoice: "bats" as const,
+      },
+    };
 
     const openedWorkspaceState = reducePlannerWorkspaceState(
       workspaceState,
@@ -501,6 +527,7 @@ describe("planner workspace state", () => {
         type: "open-canonical-map",
         activeMapId: "map-instance-8",
         activeProjectId: "project-3",
+        mapRenderOptions: savedMapRenderOptions,
         placementSnapshot,
         plannerMapId: "forest",
         season: "summer",
@@ -511,6 +538,7 @@ describe("planner workspace state", () => {
       activeMapId: "map-instance-8",
       activeProjectId: "project-3",
       season: "summer",
+      mapRenderOptions: savedMapRenderOptions,
       modalId: null,
       selectedPlacementKeys: [],
       selectedPlannerMapId: "forest",
@@ -526,6 +554,7 @@ describe("planner workspace state", () => {
     const canonicalSynchronizationAction = {
       activeMapId: "map-instance-8",
       activeProjectId: "project-3",
+      mapRenderOptions: createInitialMapRenderOptions(),
       placementSnapshot: createEmptyPlacementSnapshot(),
       plannerMapId: "forest",
       season: "summer",
@@ -611,6 +640,7 @@ describe("planner workspace state", () => {
           type: "open-canonical-map",
           activeMapId: "",
           activeProjectId: "project-3",
+        mapRenderOptions: createInitialMapRenderOptions(),
           placementSnapshot: createEmptyPlacementSnapshot(),
           plannerMapId: "forest",
           season: "summer",
@@ -626,6 +656,7 @@ describe("planner workspace state", () => {
         type: "open-canonical-map",
         activeMapId: "map-1",
         activeProjectId: "project-1",
+        mapRenderOptions: createInitialMapRenderOptions(),
         placementSnapshot: createEmptyPlacementSnapshot(),
         plannerMapId: "forest",
         season: "summer",
@@ -890,6 +921,7 @@ describe("planner workspace state", () => {
         type: "open-canonical-map",
         activeMapId: "map-instance-8",
         activeProjectId: "project-3",
+        mapRenderOptions: createInitialMapRenderOptions(),
         placementSnapshot: canonicalOpenSnapshot,
         plannerMapId: "forest",
         season: "summer",

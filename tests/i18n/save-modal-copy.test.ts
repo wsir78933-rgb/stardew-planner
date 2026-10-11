@@ -64,6 +64,8 @@ describe("save modal copy", () => {
     expect(copy.localProjects.duplicate).toBe("Duplicate");
     expect(copy.localProjects.delete).toBe("Delete");
     expect(copy.localProjects.dateTimeLocale).toBe("en");
+    expect(copy.localProjects.projectMapCount(1)).toBe("1 map");
+    expect(copy.localProjects.projectMapCount(2)).toBe("2 maps");
     expect(copy.localProjects.currentMapCount(1)).toBe("1 maps");
     expect(copy.localProjects.currentMapCount(2)).toBe("2 maps");
     expect(copy.localProjects.openedProject("River Farm")).toBe("Opened River Farm.");

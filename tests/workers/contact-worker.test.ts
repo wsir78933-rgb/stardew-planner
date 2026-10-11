@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   default as contactWorker,
   handleContactRequest,
+  handlePlannerFeedbackRequest,
   type ContactWorkerEnvironment,
 } from "../../workers/contact-worker";
 
@@ -38,6 +39,27 @@ function createContactRequest(
   const requestMethod = options.method ?? "POST";
 
   return new Request(`${allowedOrigin}/api/contact`, {
+    method: requestMethod,
+    headers: {
+      "content-type": options.contentType ?? "application/json",
+      "cf-connecting-ip": "198.51.100.10",
+      origin: options.origin ?? allowedOrigin,
+    },
+    body: requestMethod === "GET" ? undefined : JSON.stringify(requestBody),
+  });
+}
+
+function createPlannerFeedbackRequest(
+  requestBody: Record<string, string>,
+  options: Readonly<{
+    contentType?: string;
+    method?: string;
+    origin?: string;
+  }> = {},
+): Request {
+  const requestMethod = options.method ?? "POST";
+
+  return new Request(`${allowedOrigin}/api/feedback`, {
     method: requestMethod,
     headers: {
       "content-type": options.contentType ?? "application/json",
@@ -87,6 +109,13 @@ const validRequestBody = {
   turnstileToken: "turnstile-token",
 };
 
+const validPlannerFeedbackBody = {
+  type: "feature",
+  subject: "Add a greenhouse filter",
+  description: "Please add a filter.\nScreenshot: https://example.com/farm.png",
+  turnstileToken: "turnstile-token",
+};
+
 describe("handleContactRequest", () => {
   beforeEach(() => {
     sendEmail.mockReset();
@@ -126,6 +155,78 @@ describe("handleContactRequest", () => {
       replyTo: "jane@example.com",
       text: "Name: Jane Farmer\nEmail: jane@example.com\n\nPlease add a feature.",
     });
+  });
+
+  it("sends anonymous planner feedback to the configured inbox without a reply address", async () => {
+    const response = await handlePlannerFeedbackRequest(
+      createPlannerFeedbackRequest(validPlannerFeedbackBody),
+      createWorkerEnvironment(),
+    );
+
+    expect(response.status).toBe(202);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(sendEmail).toHaveBeenCalledWith({
+      from: "contact@stardewvalleyplanner.art",
+      to: "inbox@example.com",
+      subject: "[Planner feedback: feature] Add a greenhouse filter",
+      text: [
+        "Type: feature",
+        "Subject: Add a greenhouse filter",
+        "",
+        "Please add a filter.\nScreenshot: https://example.com/farm.png",
+      ].join("\n"),
+    });
+    expect(sendEmail.mock.calls[0]?.[0]).not.toHaveProperty("replyTo");
+  });
+
+  it.each([
+    [
+      "visitor email field",
+      { ...validPlannerFeedbackBody, email: "visitor@example.com" },
+    ],
+    ["unsupported type", { ...validPlannerFeedbackBody, type: "support" }],
+    ["blank subject", { ...validPlannerFeedbackBody, subject: "  " }],
+    [
+      "multiline subject",
+      { ...validPlannerFeedbackBody, subject: "First line\nSecond line" },
+    ],
+    [
+      "blank description",
+      { ...validPlannerFeedbackBody, description: "  " },
+    ],
+  ])("rejects anonymous feedback with an invalid %s before Turnstile", async (_label, requestBody) => {
+    const response = await handlePlannerFeedbackRequest(
+      createPlannerFeedbackRequest(requestBody),
+      createWorkerEnvironment(),
+    );
+
+    expect(response.status).toBe(400);
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
+  });
+
+  it("does not send planner feedback when Turnstile rejects the token", async () => {
+    fetchMock.mockResolvedValue(Response.json({ success: false }));
+
+    const response = await handlePlannerFeedbackRequest(
+      createPlannerFeedbackRequest(validPlannerFeedbackBody),
+      createWorkerEnvironment(),
+    );
+
+    expect(response.status).toBe(403);
+    expect(sendEmail).not.toHaveBeenCalled();
+  });
+
+  it("dispatches the feedback path through the Worker to the configured inbox", async () => {
+    const response = await contactWorker.fetch(
+      createPlannerFeedbackRequest(validPlannerFeedbackBody),
+      createWorkerEnvironment(),
+    );
+
+    expect(response.status).toBe(202);
+    expect(sendEmail).toHaveBeenCalledOnce();
+    expect(sendEmail.mock.calls[0]?.[0].to).toBe("inbox@example.com");
+    expect(sendEmail.mock.calls[0]?.[0]).not.toHaveProperty("replyTo");
   });
 
   it("rejects a chunked request body over the actual byte limit before verification", async () => {

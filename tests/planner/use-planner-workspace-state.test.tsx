@@ -105,6 +105,43 @@ describe("planner workspace keyboard history handling", () => {
     expect(wasDefaultPrevented).toBe(false);
   });
 
+  it("ignores history shortcuts while the workspace modal is open or a dialog owns focus", () => {
+    const receivedActions: PlannerWorkspaceAction[] = [];
+    const disabledHandler = createPlannerWorkspaceHistoryKeyboardHandler(
+      (plannerWorkspaceAction) => receivedActions.push(plannerWorkspaceAction),
+      { isEnabled: () => false },
+    );
+    const enabledHandler = createPlannerWorkspaceHistoryKeyboardHandler(
+      (plannerWorkspaceAction) => receivedActions.push(plannerWorkspaceAction),
+    );
+    const disabledModalEvent = createKeyboardEvent("z", { ctrlKey: true });
+    const dialogKeyboardEvent = createKeyboardEvent("y", {
+      ctrlKey: true,
+      target: {
+        closest: (selector: string) =>
+          selector.includes('[role="dialog"]') ? {} : null,
+      },
+    });
+
+    disabledHandler(disabledModalEvent);
+    enabledHandler(dialogKeyboardEvent);
+
+    expect(receivedActions).toEqual([]);
+    expect(disabledModalEvent.defaultPrevented).toBe(false);
+    expect(dialogKeyboardEvent.defaultPrevented).toBe(false);
+  });
+
+  it("fails fast when the keyboard-enabled callback returns a non-boolean value", () => {
+    const handleKeyboardEvent = createPlannerWorkspaceHistoryKeyboardHandler(
+      () => undefined,
+      { isEnabled: () => "enabled" as unknown as boolean },
+    );
+
+    expect(() =>
+      handleKeyboardEvent(createKeyboardEvent("z", { ctrlKey: true })),
+    ).toThrow("isEnabled callback must return a boolean; received \"enabled\".");
+  });
+
   it("cleans up a registered keyboard listener at most once", () => {
     let removeCallCount = 0;
     const keyboardListenerPort: PlannerWorkspaceKeyboardListenerPort = {
@@ -232,16 +269,30 @@ describe("planner workspace panel position resize handling", () => {
 
 function createKeyboardEvent(
   key: string,
-  keyboardModifiers: Readonly<{ ctrlKey: boolean }>,
+  keyboardModifiers: Readonly<{
+    ctrlKey: boolean;
+    metaKey?: boolean;
+    shiftKey?: boolean;
+    target?: EventTarget | Readonly<{
+      closest?: (selector: string) => unknown;
+      isContentEditable?: boolean;
+      tagName?: string;
+    }>;
+  }>,
 ): KeyboardEvent {
   const keyboardEvent = new Event("keydown", { cancelable: true });
   Object.defineProperties(keyboardEvent, {
     altKey: { value: false },
     ctrlKey: { value: keyboardModifiers.ctrlKey },
     key: { value: key },
-    metaKey: { value: false },
-    shiftKey: { value: false },
+    metaKey: { value: keyboardModifiers.metaKey ?? false },
+    shiftKey: { value: keyboardModifiers.shiftKey ?? false },
   });
+  if (keyboardModifiers.target !== undefined) {
+    Object.defineProperty(keyboardEvent, "target", {
+      value: keyboardModifiers.target,
+    });
+  }
   return keyboardEvent as KeyboardEvent;
 }
 

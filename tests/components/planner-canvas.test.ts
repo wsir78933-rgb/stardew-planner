@@ -614,6 +614,49 @@ describe("PlannerCanvas context-menu event", () => {
     expect(onOpen).toHaveBeenCalledOnce();
   });
 
+  it("cancels an active editing interaction without opening the clean-map menu", () => {
+    const pixiCanvas = {} as HTMLCanvasElement;
+    const onOpen = vi.fn();
+    const onCancelEditingInteraction = vi.fn(() => true);
+    const contextMenuEvent = createContextMenuEvent(pixiCanvas, 120, 80);
+
+    handlePlannerCanvasContextMenuEvent(
+      contextMenuEvent,
+      pixiCanvas,
+      onOpen,
+      onCancelEditingInteraction,
+    );
+
+    expect(onCancelEditingInteraction).toHaveBeenCalledOnce();
+    expect(contextMenuEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(onOpen).not.toHaveBeenCalled();
+  });
+
+  it("keeps the clean-map menu for false or undefined cancellation results", () => {
+    const pixiCanvas = {} as HTMLCanvasElement;
+    const onOpen = vi.fn();
+    const falseResultEvent = createContextMenuEvent(pixiCanvas, 18, 24);
+    const undefinedResultEvent = createContextMenuEvent(pixiCanvas, 32, 40);
+
+    handlePlannerCanvasContextMenuEvent(
+      falseResultEvent,
+      pixiCanvas,
+      onOpen,
+      () => false,
+    );
+    handlePlannerCanvasContextMenuEvent(
+      undefinedResultEvent,
+      pixiCanvas,
+      onOpen,
+      () => undefined,
+    );
+
+    expect(falseResultEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(undefinedResultEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(onOpen).toHaveBeenNthCalledWith(1, { x: 18, y: 24 });
+    expect(onOpen).toHaveBeenNthCalledWith(2, { x: 32, y: 40 });
+  });
+
   it("reports a rejected clean-copy action with its original message", async () => {
     const rejectionMessage = "The clean map image is unavailable for clipboard copy.";
     const reportedCopyErrors: string[] = [];

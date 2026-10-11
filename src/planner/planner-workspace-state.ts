@@ -95,6 +95,7 @@ export type PlannerWorkspaceAction =
   | Readonly<{
       activeMapId: string;
       activeProjectId: string;
+      mapRenderOptions?: MapRenderOptions;
       placementSnapshot: PlacementSnapshot;
       plannerMapId: string;
       season: TilesheetSeason;
@@ -103,6 +104,7 @@ export type PlannerWorkspaceAction =
   | Readonly<{
       activeMapId: string;
       activeProjectId: string;
+      mapRenderOptions?: MapRenderOptions;
       placementSnapshot: PlacementSnapshot;
       plannerMapId: string;
       season: TilesheetSeason;
@@ -405,6 +407,7 @@ function openCanonicalMap(
     ...applyEditorViewState(plannerWorkspaceState, selectedSeasonState),
     activeMapId: action.activeMapId,
     activeProjectId: action.activeProjectId,
+    mapRenderOptions: restoreMapRenderOptions(action.mapRenderOptions),
     modalId:
       action.type === "synchronize-smart-save-canonical-map"
       && plannerWorkspaceState.modalId === "save-panel"

@@ -20,6 +20,14 @@ describe("editor reference information dialogs", () => {
     expect(editorModalIds).not.toContain("season-picker");
   });
 
+  it("registers the menu panels used by the top navigation", () => {
+    expect(editorModalIds).toContain("ambience-panel");
+    expect(editorModalIds).toContain("map-options");
+    expect(editorModalIds).toContain("feedback");
+    expect(editorModalIds).toContain("map-picker");
+    expect(editorModalIds).toContain("save-panel");
+  });
+
   it("renders local-only help without feedback or support actions", () => {
     const helpDialogMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
@@ -40,7 +48,7 @@ describe("editor reference information dialogs", () => {
     expect(helpDialogMarkup).not.toContain("Support");
   });
 
-  it("describes Q as cycling the selected item appearance", () => {
+  it("documents Q as rotating or cycling the selected or placed item variant", () => {
     const keyboardShortcutsMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy: getEditorModalCopy("en"),
@@ -54,20 +62,21 @@ describe("editor reference information dialogs", () => {
     );
 
     expect(keyboardShortcutsMarkup).toContain(
-      "<dt>Q</dt><dd>Cycle the selected item appearance</dd>",
+      "<dt><kbd>Q</kbd></dt><dd>Rotate or cycle variant on selected/placed item</dd>",
     );
-    expect(keyboardShortcutsMarkup).not.toContain(
-      "Rotate the selected item",
+    expect(keyboardShortcutsMarkup).toContain(
+      "<dt><kbd>Ctrl / ⌘</kbd></dt><dd>X-ray: hold to see behind overlapping sprites</dd>",
     );
   });
 });
 
 describe("editor modal localized View and Settings content", () => {
-  it("renders Chinese headings, controls, tooltips, state labels, and Save dialog copy", () => {
+  it("renders localized View and Settings groups with pressed states and Save dialog copy", () => {
     const copy = getEditorModalCopy("zh-CN");
     const viewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy,
+        locale: "zh",
         modalId: "view-panel",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -79,6 +88,7 @@ describe("editor modal localized View and Settings content", () => {
     const settingsMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy,
+        locale: "zh",
         modalId: "settings-panel",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -90,6 +100,7 @@ describe("editor modal localized View and Settings content", () => {
     const saveMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy,
+        locale: "zh",
         modalId: "save-panel",
         onClose: () => undefined,
         onMapChange: () => undefined,
@@ -113,25 +124,33 @@ describe("editor modal localized View and Settings content", () => {
     );
 
     expect(viewMarkup).toContain("视图");
-    expect(viewMarkup).toContain("覆盖层");
-    expect(viewMarkup).toContain("洒水器范围");
-    expect(viewMarkup).toContain('title="在地图上显示地块网格线"');
-    expect(viewMarkup).toContain('data-state-label="开"');
-    expect(viewMarkup).toContain('data-state-label="关"');
+    expect(viewMarkup).toContain("覆盖范围");
+    expect(viewMarkup).toContain('<span class="editor-config-switch__label">洒水器</span>');
+    expect(viewMarkup).toContain('<span class="editor-config-switch__label">资源巨块</span>');
+    expect(viewMarkup).toContain('aria-pressed="false"');
+    expect(viewMarkup).toContain('aria-pressed="true"');
+    expect(viewMarkup).toContain(
+      `class="editor-config-switch__state">${copy.stateLabel(false)}</span>`,
+    );
+    expect(viewMarkup).toContain(
+      `class="editor-config-switch__state">${copy.stateLabel(true)}</span>`,
+    );
     expect(viewMarkup).toContain("关闭对话框");
     expect(settingsMarkup).toContain("设置");
-    expect(settingsMarkup).toContain("移动端");
+    expect(settingsMarkup).toContain("触屏");
+    expect(settingsMarkup).toContain("显示摇杆");
+    expect(settingsMarkup).toContain("左手模式");
     expect(settingsMarkup).toContain("自由放置");
-    expect(settingsMarkup).toContain('title="在触控设备上显示方向键，便于精确放置物品"');
+    expect(settingsMarkup).toContain('title="禁用放置规则，可在地图任意位置放置物品"');
     expect(settingsMarkup).toContain('href="/zh/privacy"');
     expect(settingsMarkup).toContain('href="/zh/terms"');
-    expect(saveMarkup).toMatch(/<h2[^>]*>保存<\/h2>/);
+    expect(saveMarkup).toMatch(/<h2[^>]*>本地项目<\/h2>/);
     expect(saveMarkup).toMatch(
-      /<header class="editor-modal__header"><h2[^>]*>保存<\/h2><button aria-label="关闭对话框" type="button">×<\/button><\/header>/,
+      /<header class="editor-modal__header"><h2[^>]*>本地项目<\/h2><button aria-label="关闭对话框" type="button">×<\/button><\/header>/,
     );
-    expect(englishSaveMarkup).toMatch(/<h2[^>]*>Save<\/h2>/);
+    expect(englishSaveMarkup).toMatch(/<h2[^>]*>Library<\/h2>/);
     expect(englishSaveMarkup).toMatch(
-      /<header class="editor-modal__header"><h2[^>]*>Save<\/h2><button aria-label="Close dialog" type="button">×<\/button><\/header>/,
+      /<header class="editor-modal__header"><h2[^>]*>Library<\/h2><button aria-label="Close dialog" type="button">×<\/button><\/header>/,
     );
   });
 });
@@ -245,6 +264,9 @@ describe("editor modal visual variants", () => {
         selectedMapId: "standard",
       }),
     );
+    const ambienceModalMarkup = renderEditorModalMarkup("ambience-panel");
+    const mapOptionsModalMarkup = renderEditorModalMarkup("map-options");
+    const feedbackModalMarkup = renderEditorModalMarkup("feedback");
     const helpModalMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy: getEditorModalCopy("en"),
@@ -286,30 +308,43 @@ describe("editor modal visual variants", () => {
       'class="editor-modal editor-modal--map-picker"',
     );
     expect(viewModalMarkup).toContain(
-      'class="editor-modal editor-modal--view-panel"',
+      'class="editor-modal editor-modal--view-panel editor-modal--popover"',
     );
     expect(settingsModalMarkup).toContain(
-      'class="editor-modal editor-modal--settings-panel"',
+      'class="editor-modal editor-modal--settings-panel editor-modal--popover"',
+    );
+    expect(ambienceModalMarkup).toContain(
+      'class="editor-modal editor-modal--ambience-panel editor-modal--popover"',
+    );
+    expect(mapOptionsModalMarkup).toContain(
+      'class="editor-modal editor-modal--map-options editor-modal--popover"',
+    );
+    expect(feedbackModalMarkup).toContain(
+      'class="editor-modal editor-modal--feedback"',
     );
     expect(helpModalMarkup).toContain(
       'class="editor-modal editor-modal--help-info"',
     );
-    expect(keyboardModalMarkup).toContain('class="editor-modal"');
+    expect(keyboardModalMarkup).toContain(
+      'class="editor-modal editor-modal--shortcuts"',
+    );
     expect(whatsNewModalMarkup).toContain('class="editor-modal"');
-    expect(keyboardModalMarkup).not.toContain("editor-modal--keyboard-shortcuts");
     expect(whatsNewModalMarkup).not.toContain("editor-modal--whats-new");
   });
 
-  it("fixes only Save, View, Settings, and Help backdrops to the viewport", () => {
+  it("fixes full-screen modal backdrops and keeps menu popovers anchored to the editor", () => {
     const viewportFixedModalIds = [
       "save-panel",
       "view-panel",
       "settings-panel",
       "help-info",
+      "feedback",
+      "keyboard-shortcuts",
     ] as const satisfies readonly EditorModalId[];
     const editorShellPositionedModalIds = [
+      "ambience-panel",
+      "map-options",
       "map-picker",
-      "keyboard-shortcuts",
       "whats-new",
     ] as const satisfies readonly EditorModalId[];
 

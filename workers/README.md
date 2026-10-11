@@ -1,8 +1,10 @@
 # Static Site and Contact Worker configuration
 
 This Worker serves the static Next.js export from `out/` on
-`stardewvalleyplanner.art`. It reserves only `POST /api/contact` for the
-contact delivery logic; all other requests resolve through the static asset
+`stardewvalleyplanner.art`. It reserves `POST /api/contact` for the public
+contact form and `POST /api/feedback` for anonymous planner feedback. Both
+messages use the configured contact inbox; planner feedback does not include a
+visitor reply address. All other requests resolve through the static asset
 binding.
 
 Keep the existing root custom-domain binding for `stardewvalleyplanner.art`.
@@ -19,4 +21,6 @@ Keep the `CONTACT_EMAIL` Email Sending binding. You must restrict the binding's 
 
 The static site must be built with `NEXT_PUBLIC_TURNSTILE_SITE_KEY` set in its Cloudflare build environment. It is the public Turnstile site key and must not be replaced by the secret key.
 
-After the Worker is deployed, add a Cloudflare WAF or rate-limiting rule for `POST /api/contact` (for example, 5 requests per IP per 10 minutes).
+After the Worker is deployed, add a Cloudflare WAF or rate-limiting rule for
+both `POST /api/contact` and `POST /api/feedback` (for example, 5 requests per
+IP per 10 minutes).

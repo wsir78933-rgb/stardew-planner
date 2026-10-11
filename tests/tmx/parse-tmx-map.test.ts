@@ -367,14 +367,23 @@ describe("parseTmxMap", () => {
     );
   });
 
-  it("parses all 64 locked TMX maps", async () => {
+  it("parses the spouse patio map used by the farm spouse overlay", async () => {
+    const spousePatioMap = await parseTmxMap(await readTmxFile("maps/spousePatios.tmx"));
+
+    expect(spousePatioMap.width).toBe(20);
+    expect(spousePatioMap.height).toBe(12);
+    expect(spousePatioMap.tileWidth).toBe(16);
+    expect(spousePatioMap.tileHeight).toBe(16);
+  });
+
+  it("parses all 65 locked TMX maps", async () => {
     const tmxFilePaths = await listTmxFiles(gameAssetsRootDirectory);
     const parsedMaps = await Promise.all(
       tmxFilePaths.map(async (tmxFilePath) => parseTmxMap(await readFile(tmxFilePath, "utf8"))),
     );
 
-    expect(tmxFilePaths).toHaveLength(64);
-    expect(parsedMaps).toHaveLength(64);
+    expect(tmxFilePaths).toHaveLength(65);
+    expect(parsedMaps).toHaveLength(65);
     expect(parsedMaps.every((parsedMap) => parsedMap.tileWidth === 16)).toBe(true);
     expect(parsedMaps.every((parsedMap) => parsedMap.tileHeight === 16)).toBe(true);
   });

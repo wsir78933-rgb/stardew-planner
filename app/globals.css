@@ -4987,3 +4987,169 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
     padding-right: 0;
   }
 }
+
+/* Approved planner wireframe: one header and a bottom editing toolbar.
+ * Colours and pressed shadows remain those of the existing editor. */
+.planner-editor-shell {
+  --planner-topbar-height: 38px;
+  --planner-editing-toolbar-width: 477.375px;
+}
+.planner-editor-shell .editor-menu-bar {
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  border: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+  gap: 0;
+  height: var(--planner-topbar-height);
+  inset: 0 0 auto;
+  padding: 0 10px 0 0;
+  width: 100%;
+  z-index: 30;
+}
+.planner-editor-shell .editor-menu-bar.left-hand { left: 0; right: 0; }
+.planner-editor-shell .editor-menu-bar__brand-region { align-items: center; display: flex; flex: 0 0 340px; gap: 8px; justify-content: space-between; padding: 0 38px 0 14px; }
+.planner-editor-shell .editor-menu-bar__brand { font-size: 13.5px; font-weight: 700; white-space: nowrap; }
+.planner-editor-shell .editor-menu-bar__utility-controls { display: flex; gap: 4px; }
+.planner-editor-shell .editor-menu-bar .menu-btn { background: var(--bg-raised); box-shadow: var(--planner-neo-raised-shadow); color: var(--text-dim); font-size: 13px; font-weight: 600; gap: 6px; height: 26px; min-height: 0; white-space: nowrap; width: auto; }
+.planner-editor-shell .editor-menu-bar .menu-btn[aria-expanded="true"] { background: var(--accent-muted); box-shadow: var(--planner-neo-inset-shadow); color: var(--text); }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__utility-button { height: 26px; width: 26px; }
+.planner-editor-shell .editor-menu-bar__brand-divider { align-self: stretch; background: var(--border-subtle); flex: 0 0 1px; }
+.planner-editor-shell .editor-menu-bar__project-context { align-items: center; display: flex; gap: 10px; min-width: 0; padding-left: 12px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__library-button { flex: 0 0 81.078125px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__map-name { background: transparent; box-shadow: none; justify-content: flex-start; overflow: hidden; padding: 0; text-overflow: ellipsis; width: 220px; }
+.planner-editor-shell .editor-menu-bar__map-name span { overflow: hidden; text-overflow: ellipsis; }
+.planner-editor-shell .editor-menu-bar__breadcrumb-separator { color: var(--text-dim); font-size: 20px; }
+.planner-editor-shell .editor-menu-bar__controls { align-items: center; display: flex; flex-direction: row; gap: 6px; margin-left: auto; padding-left: 12px; }
+.planner-editor-shell .editor-menu-bar__toggle { display: none; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__button { padding: 0 8px; width: 85.5859375px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="ambience-panel"] { width: 117.6953125px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="map-options"] { width: 81.9453125px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="settings-panel"] { width: 26px; padding: 0; }
+.planner-editor-shell .editor-menu-bar__button[data-editor-modal-id="settings-panel"] > span { display: none; }
+.planner-editor-shell .editor-menu-bar__chevron { font-size: 14px; transition: transform 120ms; }
+.planner-editor-shell .menu-btn[aria-expanded="true"] .editor-menu-bar__chevron { transform: rotate(180deg); }
+.planner-editor-shell .item-catalog-panel .item-catalog-panel__branding { display: none; }
+.planner-editor-shell .bottom-wrapper.item-catalog-panel--left,
+.planner-editor-shell:has(.menu-bar.left-hand) .item-catalog-panel--left { bottom: 0; height: auto; top: var(--planner-topbar-height); }
+.planner-editor-shell .planner-canvas { top: var(--planner-topbar-height); }
+.planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { bottom: 18px; left: 50%; max-width: calc(100% - 24px); top: auto; }
+.planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: calc(50% + 170px); max-width: calc(100% - 364px); }
+.planner-editor-shell .editor-toolbar { box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
+.planner-editor-shell .editor-toolbar__tool-group,
+.planner-editor-shell .editor-toolbar__history-group,
+.planner-editor-shell .editor-wheel-zoom-group { display: contents; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button { display: flex; flex: 0 0 99.546875px; font-size: 14px; font-weight: 500; gap: 8px; height: 40px; width: 99.546875px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"] { flex-basis: 89.9765625px; width: 89.9765625px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"] { flex-basis: 76.7109375px; width: 76.7109375px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"] { flex-basis: 94.140625px; width: 94.140625px; }
+.planner-editor-shell .editor-toolbar .editor-wheel-zoom-button { flex-basis: 72px; width: 72px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__history-button { flex-basis: 40px; width: 40px; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__divider { flex: 0 0 1px; height: 22px; margin: 0 3px; }
+.planner-editor-shell .selection-inspector,
+.planner-editor-shell .catalog-placement-controls { bottom: 80px; }
+.planner-editor-shell .planner-workspace__toast { top: calc(var(--planner-topbar-height) + 12px); }
+.planner-editor-shell:has(.item-catalog-panel--bottom) .planner-canvas { margin-top: var(--planner-topbar-height); top: auto; }
+.planner-editor-shell:has(.item-catalog-panel--bottom) .toolbar-wrapper.planner-editor-toolbar { bottom: calc(clamp(270px, 35vh, 340px) + 18px); }
+.planner-editor-shell:has(.item-catalog-panel--bottom) .catalog-placement-controls,
+.planner-editor-shell:has(.item-catalog-panel--bottom) .selection-inspector { bottom: calc(clamp(270px, 35vh, 340px) + 80px); }
+.planner-editor-shell .editor-modal--popover { display: flex; flex-direction: column; max-height: calc(100% - var(--planner-topbar-height) - 16px); overflow: auto; position: absolute; right: 18px; top: calc(var(--planner-topbar-height) + 8px); width: min(328px, calc(100% - 16px)); }
+.planner-editor-shell .editor-modal--ambience-panel { right: 221.53125px; }
+.planner-editor-shell .editor-modal--map-options { right: 133.5859375px; }
+.planner-editor-shell .editor-modal--view-panel { right: 42px; }
+.planner-editor-shell .editor-modal--popover .editor-modal__header { background: var(--bg-raised); padding: 8px 14px; }
+.planner-editor-shell .editor-modal--popover .editor-modal__header h2 { font-size: 13px; }
+.planner-editor-shell:has(.editor-modal--popover) .editor-modal__backdrop { background: transparent; inset: 0; position: absolute; z-index: 40; }
+.planner-editor-shell:has(.editor-modal--popover) .editor-menu-bar { z-index: 61; }
+.planner-editor-shell .editor-config-panels { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; }
+.planner-editor-shell .editor-config-section { background: var(--bg-raised); border-radius: 10px; padding: 10px; position: relative; }
+.planner-editor-shell .editor-config-section h3 { color: var(--text-dim); font-size: 12px; font-weight: 600; letter-spacing: .08em; margin: 0 0 10px; text-transform: uppercase; }
+.planner-editor-shell .editor-config-switch { align-items: center; background: transparent; border: 0; box-shadow: none; display: flex; font-size: 12.5px; font-weight: 500; gap: 8px; min-height: 42px; padding: 5px 0; text-align: left; width: 100%; }
+.planner-editor-shell .editor-config-switch__label { flex: 1; }
+.planner-editor-shell .editor-config-switch__state { color: var(--text-dim); font-size: 12px; }
+.planner-editor-shell .editor-config-switch__track { background: var(--bg-deep); border: 1px solid var(--border-subtle); border-radius: 99px; box-shadow: var(--planner-neo-inset-shadow); flex: 0 0 34px; height: 20px; padding: 1px; }
+.planner-editor-shell .editor-config-switch__track > span { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 50%; display: block; height: 16px; width: 16px; }
+.planner-editor-shell .editor-config-switch[aria-pressed="true"] .editor-config-switch__track { background: var(--accent); }
+.planner-editor-shell .editor-config-switch[aria-pressed="true"] .editor-config-switch__track > span { transform: translateX(13px); }
+.planner-editor-shell .editor-config-switch:disabled { opacity: .5; }
+.planner-editor-shell .editor-config-dot { border-radius: 50%; flex: 0 0 7px; height: 7px; }
+.planner-editor-shell .editor-config-current-season { color: var(--text-dim); font-size: 12px; margin: 0; position: absolute; right: 10px; top: 10px; }
+.planner-editor-shell .editor-config-seasons { display: flex; gap: 10px; }
+.planner-editor-shell .editor-config-seasons button { align-items: center; border-radius: 50%; display: flex; height: 36px; justify-content: center; padding: 0; width: 36px; }
+.planner-editor-shell .editor-config-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.planner-editor-shell .editor-config-chips button { font-size: 12px; min-height: 24px; padding: 5px 10px; }
+.planner-editor-shell .editor-config-segmented { background: var(--bg-raised); border-radius: 7px; display: flex; gap: 3px; padding: 3px; }
+.planner-editor-shell .editor-config-segmented button { border: 0; flex: 1; font-size: 12px; min-width: 0; padding: 8px 3px; white-space: nowrap; }
+.planner-editor-shell .editor-config-weather button { flex-basis: auto; min-width: max-content; }
+.planner-editor-shell .editor-config-chips button[aria-pressed="true"],
+.planner-editor-shell .editor-config-segmented button[aria-pressed="true"],
+.planner-editor-shell .editor-config-seasons button[aria-pressed="true"] { background: var(--accent-muted); box-shadow: var(--planner-neo-inset-shadow); color: var(--text); }
+.planner-editor-shell .editor-config-label { font-size: 12.5px; margin: 0 0 8px; }
+.planner-editor-shell .editor-config-legal { color: var(--text-dim); font-size: 12px; padding: 0 10px; }
+.planner-editor-shell .editor-config-legal a { display: inline-flex; min-height: 26px; align-items: center; }
+.planner-editor-shell .editor-modal--save-panel { width: min(1220px, calc(100% - 40px)); }
+.planner-editor-shell .editor-modal--save-panel .editor-modal__header h2 { font-size: 17px; }
+.planner-editor-shell .editor-modal--feedback { width: min(600px, calc(100% - 32px)); }
+.planner-editor-shell .planner-save-modal-content { grid-template-columns: minmax(0, 1fr); }
+.planner-editor-shell .planner-save-modal-content__exports { border-top: 1px solid var(--border-subtle); padding-top: 12px; }
+.planner-editor-shell .editor-modal--feedback .editor-modal__header h2 { font-size: 14px; }
+.planner-editor-shell .editor-modal--shortcuts { width: min(560px, calc(100% - 24px)); }
+.planner-editor-shell .editor-reference-info--shortcuts { font-size: 13px; padding: 14px 16px; }
+.planner-editor-shell .editor-reference-info--shortcuts h3 { color: var(--text-dim); font-size: 12px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; }
+.planner-editor-shell .editor-reference-info--shortcuts dl { display: grid; gap: 8px; margin: 8px 0 16px; }
+.planner-editor-shell .editor-reference-info--shortcuts dl > div { align-items: center; display: flex; gap: 6px; }
+.planner-editor-shell .editor-reference-info--shortcuts dt { flex: 0 0 auto; min-width: 36px; }
+.planner-editor-shell .editor-reference-info--shortcuts dd { margin: 0; }
+.planner-editor-shell .editor-reference-info--shortcuts kbd { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: 4px; display: block; font-family: inherit; font-size: 12px; min-width: 36px; padding: 4px 6px; text-align: center; }
+.planner-editor-shell .editor-shortcuts-hint { color: var(--text-dim); font-size: 12px; font-style: italic; }
+@media (max-width: 1100px) {
+  .planner-editor-shell .editor-menu-bar__brand-region { flex-basis: 210px; }
+  .planner-editor-shell .editor-menu-bar__brand { display: none; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__library-button { flex-basis: 96px; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__map-name { width: 150px; }
+}
+@media (max-width: 700px) {
+  .planner-editor-shell { --planner-topbar-height: 56px; }
+  .planner-editor-shell .editor-menu-bar { padding-right: 8px; }
+  .planner-editor-shell .editor-menu-bar__brand-region { flex-basis: auto; padding: 0 6px; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__utility-button { height: 44px; width: 44px; }
+  .planner-editor-shell .editor-menu-bar__project-context { flex: 1; gap: 4px; padding-left: 6px; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__library-button { flex: 0 0 44px; min-height: 44px; padding: 0 6px; }
+  .planner-editor-shell .editor-menu-bar__library-button > span { display: none; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__map-name { box-shadow: none; flex: 1; height: 44px; min-width: 0; padding: 0 4px; width: auto; }
+  .planner-editor-shell .editor-menu-bar__breadcrumb-separator { display: none; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__toggle { display: flex; flex: 0 0 44px; height: 44px; width: 44px; }
+  .planner-editor-shell .editor-menu-bar__controls { background: var(--bg-raised); border-radius: 8px; display: none; margin: 0; padding: 8px; position: absolute; right: 8px; top: calc(var(--planner-topbar-height) + 4px); }
+  .planner-editor-shell .editor-menu-bar__controls[data-expanded="true"] { display: flex; flex-direction: column; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__button { height: 44px; justify-content: flex-start; width: 140px; }
+  .planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id] { width: 140px; }
+  .planner-editor-shell .editor-menu-bar__button[data-editor-modal-id="settings-panel"] > span { display: inline; }
+  .planner-editor-shell .editor-modal--popover { left: 8px; right: 8px; width: auto; }
+  .planner-editor-shell .editor-modal--save-panel { max-width: calc(100vw - 24px); width: calc(100vw - 24px); }
+  .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { max-width: calc(100% - 16px); }
+  .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: 50%; max-width: calc(100% - 16px); }
+  .planner-editor-shell .editor-toolbar { height: 54px; padding: 4px; width: min(var(--planner-editing-toolbar-width), calc(100vw - 20px)); }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { flex: 1 1 0; font-size: 12px; gap: 2px; height: 44px; min-width: 44px; width: auto; }
+  .planner-editor-shell .editor-toolbar__label { display: none; }
+  .planner-editor-shell .editor-wheel-zoom-button .editor-toolbar__label { display: inline; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__history-button { flex: 0 0 44px; width: 44px; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__divider { margin: 0 2px; }
+  .planner-editor-shell:has(.item-catalog-panel--bottom) .toolbar-wrapper.planner-editor-toolbar { bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 12px); }
+  .planner-editor-shell:has(.item-catalog-panel--bottom[data-expanded="true"]) .toolbar-wrapper.planner-editor-toolbar { bottom: calc(min(65dvh, 720px) + env(safe-area-inset-bottom, 0px) + 12px); }
+  .planner-editor-shell:has(.item-catalog-panel--bottom) .catalog-placement-controls,
+  .planner-editor-shell:has(.item-catalog-panel--bottom) .selection-inspector { bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 72px); }
+  .planner-editor-shell:has(.item-catalog-panel--bottom[data-expanded="true"]) .catalog-placement-controls,
+  .planner-editor-shell:has(.item-catalog-panel--bottom[data-expanded="true"]) .selection-inspector { bottom: calc(min(65dvh, 720px) + env(safe-area-inset-bottom, 0px) + 72px); }
+  .planner-editor-shell .editor-config-switch,
+  .planner-editor-shell .editor-config-chips button,
+  .planner-editor-shell .editor-config-seasons button,
+  .planner-editor-shell .editor-config-segmented button { min-height: 44px; }
+  .planner-editor-shell .editor-config-weather { flex-wrap: wrap; }
+  .planner-editor-shell .editor-config-weather button { flex-basis: 28%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .planner-editor-shell .editor-menu-bar__chevron { transition: none; }
+}

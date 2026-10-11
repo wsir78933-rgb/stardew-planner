@@ -11,11 +11,15 @@ import {
 
 function renderToolbar(
   tool: Parameters<typeof EditorToolbar>[0]["tool"],
+  includeZoom = true,
+  locale: "en" | "zh" = "en",
 ): string {
   return renderToStaticMarkup(
     createElement(EditorToolbar, {
       canRedo: false,
       canUndo: false,
+      includeZoom,
+      locale,
       onRedo: () => undefined,
       onToolChange: () => undefined,
       onUndo: () => undefined,
@@ -40,14 +44,76 @@ describe("editor controls", () => {
     expect(markup).toContain('aria-expanded="false"');
     expect(markup).toContain('title="Menu"');
     expect(markup).toContain("editor-menu-bar__controls");
+    expect(markup).toContain('aria-label="Library"');
+    expect(markup).toContain('aria-label="Current map: Standard Farm"');
+    expect(markup).toContain('data-editor-modal-id="feedback"');
+    expect(markup).toContain("C12.3143 21.5809");
+    expect(markup).toContain('data-editor-modal-id="ambience-panel"');
+    expect(markup).toContain('data-editor-modal-id="map-options"');
+    expect(markup).toContain('data-editor-modal-id="view-panel"');
+    expect(markup).toContain('data-editor-modal-id="settings-panel"');
+  });
+
+  it("localizes the header controls and keeps every action mapped to its modal", () => {
+    const markup = renderToStaticMarkup(
+      createElement(EditorMenuBar, {
+        activeModalId: null,
+        locale: "zh",
+        mapDisplayName: "标准农场",
+        onCycleSeason: () => undefined,
+        onOpenModal: () => undefined,
+        season: "spring",
+      }),
+    );
+
+    expect(markup).toContain('aria-label="帮助"');
+    expect(markup).toContain('aria-label="快捷键"');
+    expect(markup).toContain('aria-label="反馈"');
+    expect(markup).toContain('aria-label="本地项目"');
+    expect(markup).toContain('aria-label="当前地图: 标准农场"');
+    expect(markup).toContain('aria-label="氛围"');
+    expect(markup).toContain('aria-label="地图"');
+    expect(markup).toContain('aria-label="视图"');
+    expect(markup).toContain('aria-label="设置"');
+    expect(markup).toContain('data-editor-modal-id="help-info"');
+    expect(markup).toContain('data-editor-modal-id="keyboard-shortcuts"');
+    expect(markup).toContain('data-editor-modal-id="feedback"');
+    expect(markup).toContain('data-editor-modal-id="save-panel"');
+    expect(markup).toContain('data-editor-modal-id="map-picker"');
+  });
+
+  it("renders source icons as static SVG and renders the selected toolbar actions", () => {
+    const toolbarMarkup = renderToolbar("cursor");
+
+    expect(toolbarMarkup).toContain('viewBox="0 0 24 24"');
+    expect(toolbarMarkup).toContain('data-editor-tool="cursor"');
+    expect(toolbarMarkup).toContain('data-editor-tool="multi-select"');
+    expect(toolbarMarkup).toContain('data-editor-tool="fill"');
+    expect(toolbarMarkup).toContain('data-editor-tool="erase"');
+    expect(toolbarMarkup).toContain('data-editor-history-action="undo"');
+    expect(toolbarMarkup).toContain('data-editor-history-action="redo"');
+    expect(toolbarMarkup).toContain('data-editor-wheel-zoom-button="true"');
+    expect(toolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(2);
+    expect(toolbarMarkup).toContain("Select");
+    expect(toolbarMarkup).toContain("Multi");
+    expect(toolbarMarkup).toContain("Fill");
+    expect(toolbarMarkup).toContain("Erase");
+
+    const compactToolbarMarkup = renderToolbar("cursor", false, "zh");
+    expect(compactToolbarMarkup).not.toContain('data-editor-tool="zoom"');
+    expect(compactToolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(1);
+    expect(compactToolbarMarkup.match(/class="tool-group editor-toolbar__tool-group"/g)).toHaveLength(1);
+    expect(compactToolbarMarkup).toContain('aria-label="选择"');
+    expect(compactToolbarMarkup).toContain('aria-label="撤销"');
+    expect(compactToolbarMarkup).toContain('aria-label="重做"');
   });
 
   it("renders exactly one visible selected tool or no selection", () => {
     const cases = [
       { expectedPressedLabels: [], tool: null },
-      { expectedPressedLabels: ["Cursor tool"], tool: "cursor" },
-      { expectedPressedLabels: ["Multi-select tool"], tool: "multi-select" },
-      { expectedPressedLabels: ["Erase tool"], tool: "erase" },
+      { expectedPressedLabels: ["Select"], tool: "cursor" },
+      { expectedPressedLabels: ["Multi"], tool: "multi-select" },
+      { expectedPressedLabels: ["Erase"], tool: "erase" },
       { expectedPressedLabels: ["Disable wheel zoom"], tool: "zoom" },
     ] as const;
 
@@ -130,10 +196,10 @@ describe("editor controls", () => {
       }),
     );
     const inactiveEraseClassName = inactiveMarkup.match(
-      /<button aria-label="Erase tool" aria-pressed="false" class="([^"]+)"/,
+      /<button aria-label="Erase" aria-pressed="false" class="([^"]+)"/,
     )?.[1];
     const activeEraseClassName = activeMarkup.match(
-      /<button aria-label="Erase tool" aria-pressed="true" class="([^"]+)"/,
+      /<button aria-label="Erase" aria-pressed="true" class="([^"]+)"/,
     )?.[1];
 
     expect(new Set(inactiveEraseClassName?.split(" "))).toEqual(
@@ -172,13 +238,13 @@ describe("editor controls", () => {
       }),
     );
     const inactiveMultiSelectClassName = inactiveToolbarMarkup.match(
-      /<button aria-label="Multi-select tool" aria-pressed="false" class="([^"]+)"/,
+      /<button aria-label="Multi" aria-pressed="false" class="([^"]+)"/,
     )?.[1];
     const selectedMultiSelectClassName = selectedToolbarMarkup.match(
-      /<button aria-label="Multi-select tool" aria-pressed="true" class="([^"]+)"/,
+      /<button aria-label="Multi" aria-pressed="true" class="([^"]+)"/,
     )?.[1];
     const selectedCursorClassName = selectedToolbarMarkup.match(
-      /<button aria-label="Cursor tool" aria-pressed="false" class="([^"]+)"/,
+      /<button aria-label="Select" aria-pressed="false" class="([^"]+)"/,
     )?.[1];
 
     expect(new Set(inactiveMultiSelectClassName?.split(" "))).toEqual(

@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  filterLocalProjectSummaries,
   formatLocalProjectUpdatedAt,
   LocalProjectPanel,
 } from "../../src/components/local-project-panel";
@@ -18,6 +19,16 @@ const localProjectSummaries: readonly ReferenceProjectSummary[] = [
     title: "Forest Farm",
     created_at: "2026-07-26T00:00:00.000Z",
     updated_at: "2026-07-26T01:00:00.000Z",
+    mapCount: 2,
+    activeMapThumbnailDataUrl: "data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA==",
+  },
+  {
+    id: "project-beach",
+    title: "Beach Cabin",
+    created_at: "2026-07-25T00:00:00.000Z",
+    updated_at: "2026-07-25T01:00:00.000Z",
+    mapCount: 1,
+    activeMapThumbnailDataUrl: null,
   },
 ];
 
@@ -56,17 +67,41 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain("Export JSON");
     expect(panelMarkup).toContain("Import JSON");
     expect(panelMarkup).toContain("Forest Farm");
+    expect(panelMarkup).toContain("Beach Cabin");
     expect(panelMarkup).toContain("Winter Layout");
     expect(panelMarkup).toContain("2 maps");
     expect(panelMarkup).toContain("Stored in this browser.");
+    expect(panelMarkup).toContain('aria-label="Search local projects"');
+    expect(panelMarkup).toContain('data-project-id="project-forest"');
+    expect(panelMarkup).toContain('data-project-id="project-beach"');
+    expect(panelMarkup).toContain('data-current-project="true"');
+    expect(panelMarkup).toContain('src="data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA=="');
+    expect(panelMarkup).toContain("No saved map preview");
+    expectTextInOrder(panelMarkup, [
+      'data-local-project-layout="columns"',
+      'data-local-project-region="sidebar"',
+      "Local projects",
+      "Save to this device",
+      "New project",
+      "Import JSON",
+      'data-local-project-region="main"',
+      'aria-label="Search local projects"',
+      'data-project-id="project-forest"',
+    ]);
+    const forestProjectCard = getProjectCardMarkup(panelMarkup, "project-forest");
+    expect(forestProjectCard).toContain('data-project-action="open"');
+    expect(forestProjectCard).toContain('data-project-action="rename"');
+    expect(forestProjectCard).toContain('data-project-action="duplicate"');
+    expect(forestProjectCard).toContain('data-project-action="export"');
+    expect(forestProjectCard).toContain('data-project-action="delete"');
     expect(panelMarkup).toContain(
       formatLocalProjectUpdatedAt("2026-07-26T01:00:00.000Z", "en"),
     );
     expect(panelMarkup).not.toContain("2026-07-26T01:00:00.000Z");
-    expect(panelMarkup).not.toMatch(/\baccount\b/i);
+    expect(panelMarkup).not.toMatch(/cloud|account|folder|shared|mods|upload|login|member|premium|sync|share|feedback/i);
     expect(panelMarkup).toContain('type="file"');
     expect(panelMarkup).toContain('accept="application/json,.json"');
-    expect(panelMarkup).not.toMatch(/support|login|member|premium|sync|share|feedback/i);
+    expect(panelMarkup).not.toMatch(/cloud|support|login|member|premium|sync|share|feedback/i);
     expectTextInOrder(panelMarkup, [
       "Save to this device",
       "New project",
@@ -81,11 +116,17 @@ describe("local project panel", () => {
       "local-project-panel__status",
       "local-project-panel__primary-actions",
       "local-project-panel__import",
-      "local-project-panel__list",
-      "local-project-panel__project",
-      "local-project-panel__project-summary",
-      "local-project-panel__project-actions",
     ]);
+  });
+
+  it("filters local projects by title without matching case and reports no matches", () => {
+    expect(filterLocalProjectSummaries(localProjectSummaries, " fOrEsT ")).toEqual([
+      localProjectSummaries[0],
+    ]);
+    expect(filterLocalProjectSummaries(localProjectSummaries, "unknown")).toEqual([]);
+    expect(filterLocalProjectSummaries(localProjectSummaries, "  ")).toEqual(
+      localProjectSummaries,
+    );
   });
 
   it("keeps the disabled import input and disabled label class while storage opens", () => {
@@ -205,6 +246,20 @@ function getFunctionSource(
   }
 
   return source.slice(functionStartIndex, functionEndIndex);
+}
+
+function getProjectCardMarkup(markup: string, projectId: string): string {
+  const projectIdIndex = markup.indexOf(`data-project-id="${projectId}"`);
+  const cardStartIndex = markup.lastIndexOf("<li ", projectIdIndex);
+  const cardEndIndex = markup.indexOf("</li>", projectIdIndex);
+
+  if (projectIdIndex < 0 || cardStartIndex < 0 || cardEndIndex < 0) {
+    throw new Error(
+      `Cannot find rendered local project card ${JSON.stringify(projectId)}.`,
+    );
+  }
+
+  return markup.slice(cardStartIndex, cardEndIndex + "</li>".length);
 }
 
 function expectRequiredClassNames(

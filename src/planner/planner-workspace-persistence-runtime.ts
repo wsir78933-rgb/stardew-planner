@@ -285,6 +285,7 @@ export function saveCurrentPlannerWorkspaceMap({
     );
   }
   workspaceController.saveOpenMap({
+    mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
     placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
     season: plannerWorkspaceState.season,
   });
@@ -363,6 +364,7 @@ function createAndSaveCurrentPlannerWorkspaceMap({
   );
   onCreatedCanonicalSession(createdCanonicalSession);
   workspaceController.saveOpenMap({
+    mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
     placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
     season: plannerWorkspaceState.season,
   });
@@ -439,6 +441,7 @@ function savePendingSmartSaveCanonicalSession({
     workspaceState: currentWorkspaceState,
   });
   workspaceController.saveOpenMap({
+    mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
     placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
     season: plannerWorkspaceState.season,
   });

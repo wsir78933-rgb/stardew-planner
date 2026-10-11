@@ -197,14 +197,39 @@ describe("reference project repository canonical persistence", () => {
         title: "Alpha Farm",
         created_at: "2026-08-02T00:00:00.000Z",
         updated_at: "2026-08-02T01:00:00.000Z",
+        mapCount: 2,
+        activeMapThumbnailDataUrl:
+          "data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA==",
       },
       {
         id: "project-beta",
         title: "Beta Cabin",
         created_at: "2026-08-02T02:00:00.000Z",
         updated_at: "2026-08-02T03:00:00.000Z",
+        mapCount: 1,
+        activeMapThumbnailDataUrl:
+          "data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA==",
       },
     ]);
+    expect(recordingStorage.getWriteCount()).toBe(0);
+  });
+
+  it("returns no preview for a project without an active saved thumbnail", () => {
+    const projectDocument = cloneFixtureProjectDocument();
+    projectDocument.projects[0]!.project = {
+      ...projectDocument.projects[0]!.project,
+      activeMapId: null,
+      maps: [],
+    };
+    delete projectDocument.projects[0]!.thumbnailsByMapId;
+    const recordingStorage = createRecordingStorage(JSON.stringify(projectDocument));
+    const repository = createRepositoryWithStorage(recordingStorage);
+
+    expect(repository.listProjects()[0]).toMatchObject({
+      id: "project-alpha",
+      mapCount: 0,
+      activeMapThumbnailDataUrl: null,
+    });
     expect(recordingStorage.getWriteCount()).toBe(0);
   });
 
@@ -764,6 +789,38 @@ describe("reference project repository map mutations", () => {
     );
   });
 
+  it("validates persisted farm options before creating another project map", () => {
+    const projectDocument = cloneFixtureProjectDocument();
+    projectDocument.projects[0]!.project.maps[0]!.state.mapRenderOptions = {
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: false,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "not-a-farm-spouse", caveChoice: "mushrooms" },
+    };
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(projectDocument),
+    );
+    const recordedRequests: ReferenceApiRequest[] = [];
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      requestHandler: createRecordingRequestHandler(recordedRequests),
+      createIdentifier: () => "map-created",
+    });
+
+    expect(() =>
+      repository.createMap({
+        projectId: "project-alpha",
+        mapFile: "FarmCave.tmx",
+        label: "Farm cave",
+        season: "spring",
+      }),
+    ).toThrow(/Farm spouse ID.*not-a-farm-spouse/);
+    expect(recordedRequests).toEqual([]);
+    expect(recordingStorage.getWriteCount()).toBe(0);
+  });
+
   it("updates one complete map through PUT and only changes the affected project timestamp", () => {
     const recordingStorage = createRecordingStorage(
       JSON.stringify(referenceProjectDocumentFixture),
@@ -829,6 +886,44 @@ describe("reference project repository map mutations", () => {
     expect(writtenProjectDocument.projects[1]).toEqual(
       referenceProjectDocumentFixture.projects[1],
     );
+  });
+
+  it("rejects an invalid farm option from an update before calling the API or writing", () => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const recordedRequests: ReferenceApiRequest[] = [];
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      requestHandler: createRecordingRequestHandler(recordedRequests),
+    });
+    const existingMap = referenceProjectDocumentFixture.projects[0]!.project.maps[1]!;
+
+    expect(() =>
+      repository.updateMap({
+        projectId: "project-alpha",
+        mapId: existingMap.id,
+        mapFile: existingMap.mapFile,
+        label: existingMap.label,
+        season: existingMap.season,
+        state: {
+          ...existingMap.state,
+          mapRenderOptions: {
+            gingerIslandOverlayIds: ["bin"],
+            farmhouse2: {
+              marriageMapEnabled: false,
+              renovationIds: [],
+              spouseId: null,
+            },
+            farm: { spouseId: null, caveChoice: "unknown-cave" },
+          },
+        },
+        decor: existingMap.decor,
+        renovations: existingMap.renovations,
+        setActive: true,
+      }),
+    ).toThrow(/Farm cave choice.*unknown-cave/);
+    expect(recordedRequests).toEqual([]);
+    expect(recordingStorage.getWriteCount()).toBe(0);
   });
 
   it("rejects an update with a stale expected project revision before mutation or persistence", () => {
@@ -1020,8 +1115,21 @@ describe("reference project repository map transfer and thumbnail mutations", ()
   });
 
   it("copies a map into a new target project and remaps both generated IDs", () => {
+    const projectDocument = structuredClone(referenceProjectDocumentFixture);
+    const copiedSourceMap = projectDocument.projects[0]!.project.maps.find(
+      (projectMap) => projectMap.id === "map-island",
+    )!;
+    copiedSourceMap.state.mapRenderOptions = {
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
+    };
     const recordingStorage = createRecordingStorage(
-      JSON.stringify(referenceProjectDocumentFixture),
+      JSON.stringify(projectDocument),
     );
     const recordedRequests: ReferenceApiRequest[] = [];
     const repository = createRepositoryWithStorage(recordingStorage, {
@@ -1061,6 +1169,15 @@ describe("reference project repository map transfer and thumbnail mutations", ()
           },
         ],
       },
+    });
+    expect(targetProject.project.maps[0]?.state.mapRenderOptions).toMatchObject({
+      gingerIslandOverlayIds: ["bin"],
+      farmhouse2: {
+        marriageMapEnabled: true,
+        renovationIds: [],
+        spouseId: null,
+      },
+      farm: { spouseId: "Abigail", caveChoice: "mushrooms" },
     });
     expect(targetProject.thumbnailsByMapId?.["map-copy-target"]).toBe(
       referenceProjectDocumentFixture.projects[0].thumbnailsByMapId?.[

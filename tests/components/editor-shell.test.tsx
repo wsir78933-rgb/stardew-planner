@@ -7,6 +7,8 @@ import {
   getModalFocusTarget,
 } from "../../src/components/editor-modal";
 import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
+import { createInitialEditorDisplayOptions } from "../../src/editor/editor-display-options";
+import { createInitialPlannerAmbienceOptions } from "../../src/editor/planner-ambience-options";
 import { EditorToolbar } from "../../src/components/editor-toolbar";
 import { SelectionInspector } from "../../src/components/selection-inspector";
 import {
@@ -48,12 +50,12 @@ describe("editor shell", () => {
     );
 
     expect(toolbarMarkup.match(/<button/g)).toHaveLength(7);
-    expect(toolbarMarkup).toContain('aria-label="Cursor tool"');
-    expect(toolbarMarkup).toContain('aria-label="Multi-select tool"');
-    expect(toolbarMarkup).toContain('aria-label="Fill tool"');
-    expect(toolbarMarkup).toContain('aria-label="Erase tool"');
+    expect(toolbarMarkup).toContain('aria-label="Select"');
+    expect(toolbarMarkup).toContain('aria-label="Multi"');
+    expect(toolbarMarkup).toContain('aria-label="Fill"');
+    expect(toolbarMarkup).toContain('aria-label="Erase"');
     expect(toolbarMarkup).toContain('aria-pressed="true"');
-    expect(toolbarMarkup).not.toMatch(/aria-label="Erase tool"[^>]*disabled=""/);
+    expect(toolbarMarkup).not.toMatch(/aria-label="Erase"[^>]*disabled=""/);
     expect(toolbarMarkup).toMatch(/aria-label="Undo"[^>]*disabled=""/);
     expect(toolbarMarkup).toMatch(/aria-label="Redo"[^>]*disabled=""/);
   });
@@ -88,7 +90,7 @@ describe("editor shell", () => {
     expect(inspectorMarkup).toContain('aria-label="Delete selected placement"');
   });
 
-  it("renders the original direct-action icon bar without a custom menu layer", () => {
+  it("renders the unified header actions without account or cloud controls", () => {
     const menuMarkup = renderToStaticMarkup(
       createElement(EditorMenuBar, {
         activeModalId: null,
@@ -98,28 +100,24 @@ describe("editor shell", () => {
         onOpenModal: ignoreEditorAction,
       }),
     );
-    expect(menuMarkup.match(/<button/g)).toHaveLength(6);
+    expect(menuMarkup.match(/<button/g)).toHaveLength(10);
     expect(menuMarkup).toContain('class="menu-bar editor-menu-bar"');
     expect(menuMarkup).toContain('aria-label="Menu"');
     expect(menuMarkup).toContain("editor-menu-bar__controls");
     expect(menuMarkup).not.toContain('editor-menu-actions');
-    expect(menuMarkup).toContain('aria-label="Season: spring"');
-    const seasonButtonMarkup = menuMarkup.match(
-      /<button(?=[^>]*aria-label="Season: spring")[^>]*>/,
-    )?.[0];
-    if (seasonButtonMarkup === undefined) {
-      throw new Error("Expected the season menu button to be rendered.");
-    }
-    expect(seasonButtonMarkup).not.toContain('aria-haspopup="dialog"');
-    expect(seasonButtonMarkup).not.toContain("aria-expanded=");
-    expect(menuMarkup).toContain(
-      'aria-label="Map: Standard Farm"',
-    );
+    expect(menuMarkup).toContain('aria-label="Help"');
+    expect(menuMarkup).toContain('aria-label="Keyboard shortcuts"');
+    expect(menuMarkup).toContain('aria-label="Feedback"');
+    expect(menuMarkup).toContain('aria-label="Library"');
+    expect(menuMarkup).toContain('aria-label="Current map: Standard Farm"');
+    expect(menuMarkup).toContain('data-editor-modal-id="ambience-panel"');
+    expect(menuMarkup).toContain('data-editor-modal-id="map-options"');
+    expect(menuMarkup).toContain('data-editor-modal-id="map-picker"');
+    expect(menuMarkup).toContain('data-editor-modal-id="feedback"');
     expect(menuMarkup).toContain('aria-label="View"');
-    expect(menuMarkup).toContain('aria-label="Save"');
     expect(menuMarkup).toContain('aria-label="Settings"');
     expect(menuMarkup).not.toMatch(
-      /support|login|member|premium|sync|share|feedback/i,
+      /support|login|member|premium|sync|share|mods|cloud/i,
     );
   });
 
@@ -227,7 +225,7 @@ describe("editor shell", () => {
     );
   });
 
-  it("shows the NPC Paths control only for the Bus Stop source map", () => {
+  it("shows NPC paths disabled on unsupported maps and enabled on Bus Stop", () => {
     const standardViewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy: getEditorModalCopy("en"),
@@ -251,8 +249,13 @@ describe("editor shell", () => {
       }),
     );
 
-    expect(standardViewMarkup).not.toContain("NPC Paths");
-    expect(busStopViewMarkup).toContain("NPC Paths");
+    expect(standardViewMarkup).toMatch(
+      /aria-pressed="false" disabled="" title="NPC paths are unavailable on this map"><span class="editor-config-switch__label">NPC paths<\/span>/,
+    );
+    expect(busStopViewMarkup).toMatch(
+      /aria-pressed="false" title="Show tiles NPCs walk through"><span class="editor-config-switch__label">NPC paths<\/span>/,
+    );
+    expect(busStopViewMarkup).not.toContain('disabled="" title="NPC paths are unavailable on this map"');
   });
 
   it("groups View controls clearly while preserving pressed and disabled semantics", () => {
@@ -268,24 +271,25 @@ describe("editor shell", () => {
       }),
     );
 
+    expect(viewMarkup).toContain("Ranges");
+    expect(viewMarkup).toContain("Sprinkler");
+    expect(viewMarkup).toContain("Scarecrow");
+    expect(viewMarkup).toContain("Bee house");
+    expect(viewMarkup).toContain("Junimo hut");
+    expect(viewMarkup).toContain("Guides");
     expect(viewMarkup).toContain("Grid");
-    expect(viewMarkup).toContain("Sprinkler Radius");
-    expect(viewMarkup).toContain("Blocked (Buildings)");
-    expect(viewMarkup).toContain("Night Mode");
-    expect(viewMarkup).toContain("Appearance");
-    expect(viewMarkup).toContain("Map Objects");
-    expect(viewMarkup).toContain("Show resource clumps");
-    expect(viewMarkup).toContain("Unavailable");
+    expect(viewMarkup).toContain("Resource clumps");
+    expect(viewMarkup).toContain("Blocked tiles");
+    expect(viewMarkup).toContain("Buildings");
+    expect(viewMarkup).toContain("Catalog position");
+    expect(viewMarkup).not.toContain("Night mode");
+    expect(viewMarkup).not.toContain("Weather");
     expect(viewMarkup.match(/<h3>Display<\/h3>/g)).toBeNull();
     expect(viewMarkup).not.toMatch(/<button[^>]*>Resource Clumps<\/button>/);
     expect(viewMarkup.match(/aria-pressed=/g)).toHaveLength(12);
-    expect(viewMarkup).toMatch(/disabled=""[^>]*>Weather/);
-    expect(viewMarkup).toMatch(
-      /disabled=""[^>]*>Weather<span class="editor-modal__option-status">Unavailable<\/span><\/button>/,
-    );
   });
 
-  it("renders local Settings with preserved toggles, unavailable status, and legal links", () => {
+  it("renders local Settings with grouped toggles and legal links", () => {
     const settingsMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy: getEditorModalCopy("en"),
@@ -298,19 +302,18 @@ describe("editor shell", () => {
       }),
     );
 
-    expect(settingsMarkup).toContain("Joystick");
+    expect(settingsMarkup).toContain("Interface");
+    expect(settingsMarkup).toContain("Cursor");
+    expect(settingsMarkup).toContain("System");
+    expect(settingsMarkup).toContain("Game");
+    expect(settingsMarkup).toContain("Toast notifications");
     expect(settingsMarkup).toContain("Free Placement");
-    expect(settingsMarkup).toContain("Toast Notifications");
-    expect(settingsMarkup).toContain("Game-Styled Cursors");
-    expect(settingsMarkup).toContain("Legal");
-    expect(settingsMarkup.match(/aria-pressed=/g)).toHaveLength(5);
-    expect(settingsMarkup).toMatch(/disabled=""[^>]*>Manage Mods/);
-    expect(settingsMarkup).toMatch(
-      /disabled=""[^>]*>Manage Mods<span class="editor-modal__option-status">Unavailable<\/span><\/button>/,
-    );
-    expect(settingsMarkup).toContain(
-      'class="editor-modal__view-options editor-modal__legal-links"',
-    );
+    expect(settingsMarkup).toContain("Touch controls");
+    expect(settingsMarkup).toContain("Show joystick");
+    expect(settingsMarkup).toContain("Left-hand mode");
+    expect(settingsMarkup).not.toContain("Manage Mods");
+    expect(settingsMarkup.match(/aria-pressed=/g)).toHaveLength(6);
+    expect(settingsMarkup).toContain('class="editor-config-legal"');
     expect(settingsMarkup).toContain(
       '<a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>',
     );
@@ -318,6 +321,40 @@ describe("editor shell", () => {
       '<a href="/terms" target="_blank" rel="noreferrer">Terms of Service</a>',
     );
     expect(settingsMarkup).not.toMatch(/sign in|account|member|premium|sync|share|feedback/i);
+  });
+
+  it("renders Night mode and weather selection inside Ambience", () => {
+    const ambienceMarkup = renderToStaticMarkup(
+      createElement(EditorModal, {
+        copy: getEditorModalCopy("en"),
+        modalId: "ambience-panel",
+        selectedMapId: "standard",
+        panelPosition: "bottom",
+        season: "summer",
+        ambienceOptions: createInitialPlannerAmbienceOptions(),
+        displayOptions: {
+          ...createInitialEditorDisplayOptions(),
+          showNightMode: true,
+        },
+        onClose: ignoreEditorAction,
+        onMapChange: ignoreEditorAction,
+        onPanelPositionChange: ignoreEditorAction,
+        onSeasonChange: ignoreEditorAction,
+        onAmbienceChange: ignoreEditorAction,
+        onDisplayOptionToggle: ignoreEditorAction,
+      }),
+    );
+
+    expect(ambienceMarkup).toContain("Season");
+    expect(ambienceMarkup).toContain("Summer");
+    expect(ambienceMarkup).toMatch(/aria-label="Summer" aria-pressed="true"/);
+    expect(ambienceMarkup).toContain("Night mode");
+    expect(ambienceMarkup).toContain("Atmosphere");
+    expect(ambienceMarkup).toContain("Summer clouds");
+    expect(ambienceMarkup).toContain("Butterflies &amp; debris");
+    expect(ambienceMarkup).toContain("Animations");
+    expect(ambienceMarkup).toContain("Weather");
+    expect(ambienceMarkup).toMatch(/aria-pressed="true">Clear<\/button>/);
   });
 
   it("renders the localized Free Placement warning actions", () => {

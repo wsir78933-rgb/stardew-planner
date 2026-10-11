@@ -873,6 +873,7 @@ describe("planner workspace project composition", () => {
 
     expect(saveOpenMap).toHaveBeenCalledTimes(1);
     expect(saveOpenMap).toHaveBeenCalledWith({
+      mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
       placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
       season: "spring",
     });
@@ -1081,7 +1082,7 @@ function createCanonicalSession(): ReferenceOpenMapSession {
     mapId: "map-standard",
     placementSnapshot: createEmptyPlacementSnapshot(),
     season: "spring",
-    sourceMap: { mapFile: "Farm.tmx" },
+    sourceMap: { mapFile: "Farm.tmx", state: {} },
   } as ReferenceOpenMapSession;
 }
 

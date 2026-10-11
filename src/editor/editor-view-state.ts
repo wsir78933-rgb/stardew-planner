@@ -20,6 +20,9 @@ export const editorCatalogCategories = catalogSidebarCategories;
 export const editorPanelPositions = ["bottom", "left"] as const;
 
 export const editorModalIds = [
+  "ambience-panel",
+  "map-options",
+  "feedback",
   "map-picker",
   "view-panel",
   "save-panel",

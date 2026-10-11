@@ -1,5 +1,6 @@
 import type { PlannerWorkspaceAction } from "./planner-workspace-state";
 import type { ReferenceOpenMapSession } from "../reference-runtime/reference-project-editor-adapter";
+import { restoreMapRenderOptions } from "../maps/map-render-options";
 
 export type CanonicalMapIdentity = Readonly<{
   projectId: string;
@@ -49,6 +50,9 @@ export function createCanonicalSessionTransition(
   const plannerMapId = canonicalSessionMapLookup.getPlannerMapIdForMapFile(
     activeSession.sourceMap.mapFile,
   );
+  const mapRenderOptions = restoreMapRenderOptions(
+    activeSession.sourceMap.state.mapRenderOptions,
+  );
   canonicalMapIdentityReference.current = nextCanonicalMapIdentity;
   return {
     type: "open-canonical-map",
@@ -57,6 +61,7 @@ export function createCanonicalSessionTransition(
     plannerMapId,
     season: activeSession.season,
     placementSnapshot: activeSession.placementSnapshot,
+    mapRenderOptions,
   };
 }
 

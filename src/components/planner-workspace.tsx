@@ -11,7 +11,6 @@ import {
 import {
   loadCatalogCategory,
   loadBuildingPlacementMetadata,
-  isAutoVisibleResourceClumpCatalogItemId,
   type BuildingPlacementMetadataById,
   type CatalogItem,
   type CatalogPresentationChoice,
@@ -122,6 +121,7 @@ import {
 } from "../reference-runtime/use-reference-project-workspace";
 import { EditorMenuBar } from "./editor-menu-bar";
 import { EditorModal } from "./editor-modal";
+import { usePlannerAmbienceOptions } from "../editor/use-planner-ambience-options";
 import {
   isPlannerModalLayerOpen,
   lockPlannerModalPageScroll,
@@ -745,12 +745,14 @@ function PreparedPlannerWorkspaceContent({
   runtimeStatus,
   saveModalCopy,
 }: PreparedPlannerWorkspaceContentProperties) {
+  const editorLocale = locale === "zh-CN" ? "zh" : "en";
   const {
     applyPlacementEditResult,
     dispatchPlannerWorkspaceAction,
     plannerWorkspaceState,
     setSelectedPlacementKeys,
   } = plannerWorkspaceStateController;
+  const { plannerAmbienceOptions, setPlannerAmbienceOptions } = usePlannerAmbienceOptions();
   const preferencePersistence = useMemo(
     () => createPlannerWorkspacePreferencePersistence({
       initialPreferences: preparedWorkspace.preferences,
@@ -879,9 +881,9 @@ function PreparedPlannerWorkspaceContent({
       window,
       createPlannerWorkspaceXRayKeyboardHandler({
         onXRayActiveChange: setIsXRayActive,
-      }),
+      }, { isEnabled: () => plannerWorkspaceState.modalId === null }),
     );
-  }, []);
+  }, [plannerWorkspaceState.modalId]);
   const workspaceEditingControls = useWorkspaceEditingControls({
     activeInteriorDecorPattern,
     advanceSelectedCatalogPlacementAttempt,
@@ -896,6 +898,7 @@ function PreparedPlannerWorkspaceContent({
     setSelectedPlacementKeys,
     onPendingCatalogChoiceCycle: cyclePendingCatalogChoice,
     onDismissInteriorDecor: handleCancelInteriorDecor,
+    onToolChange: (tool) => handleOrdinaryToolChange(tool),
   });
   const placementPreview = createWorkspaceCatalogPlacementPreviewInput({
     buildingMetadataById,
@@ -1043,6 +1046,7 @@ function PreparedPlannerWorkspaceContent({
   return (
     <>
       <EditorMenuBar
+        locale={editorLocale}
         activeModalId={plannerWorkspaceState.modalId}
         leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
         mapDisplayName={getPlannerMapById(plannerWorkspaceState.selectedPlannerMapId).displayName}
@@ -1051,15 +1055,14 @@ function PreparedPlannerWorkspaceContent({
             type: "cycle-season",
           })
         }
-        onOpenModal={(modalId) =>
-          plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
-            modalId,
-            type: "open-modal",
-          })
-        }
+        onOpenModal={(modalId) => dispatchPlannerWorkspaceAction(
+          plannerWorkspaceState.modalId === modalId ? { type: "close-modal" } : { modalId, type: "open-modal" },
+        )}
         season={plannerWorkspaceState.season}
       />
       <EditorToolbar
+        locale={editorLocale}
+        includeZoom={false}
         canRedo={plannerWorkspaceState.placementHistory.redoStates.length > 0}
         canUndo={plannerWorkspaceState.placementHistory.undoStates.length > 0}
         onRedo={() =>
@@ -1109,6 +1112,9 @@ function PreparedPlannerWorkspaceContent({
       )}
       <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
         <PlannerCanvas
+          ambienceOptions={plannerAmbienceOptions}
+          gameCursors={plannerWorkspaceState.behaviorOptions.gameCursors}
+          onCancelEditingInteraction={workspaceEditingControls.cancelEditingInteraction}
           activeInteriorDecorPattern={activeInteriorDecorPattern}
           cameraStateRetention={cameraStateRetention}
           catalogItems={readyCatalogItems}
@@ -1144,10 +1150,7 @@ function PreparedPlannerWorkspaceContent({
           selectedPlacementKeys={plannerWorkspaceState.selectedPlacementKeys}
           showJoystick={plannerWorkspaceState.behaviorOptions.showJoystick}
           showResourceClumpSpawnLocations={
-            plannerWorkspaceState.behaviorOptions.autoShowResourceClumps &&
-            isAutoVisibleResourceClumpCatalogItemId(
-              plannerWorkspaceState.selectedCatalogItemId,
-            )
+            plannerWorkspaceState.behaviorOptions.autoShowResourceClumps
           }
         />
         {plannerWorkspaceState.selectedPlacementKeys.length > 0 ? (
@@ -1162,6 +1165,17 @@ function PreparedPlannerWorkspaceContent({
         )}
       </PlannerRequiredCatalogGate>
       <EditorModal
+        locale={editorLocale}
+        season={plannerWorkspaceState.season}
+        ambienceOptions={plannerAmbienceOptions}
+        onAmbienceChange={setPlannerAmbienceOptions}
+        onSeasonChange={(season) => {
+          dispatchPlannerWorkspaceAction({ type: "select-season", season });
+          dispatchPlannerWorkspaceAction({ type: "open-modal", modalId: "ambience-panel" });
+        }}
+        toolIsZoom={plannerWorkspaceState.tool === "zoom"}
+        showZoomOption
+        onZoomToggle={() => handleOrdinaryToolChange(plannerWorkspaceState.tool === "zoom" ? null : "zoom")}
         behaviorOptions={plannerWorkspaceState.behaviorOptions}
         copy={editorModalCopy}
         displayOptions={plannerWorkspaceState.displayOptions}
@@ -1581,6 +1595,7 @@ function useWorkspaceEditingControls({
   setSelectedPlacementKeys,
   onPendingCatalogChoiceCycle,
   onDismissInteriorDecor,
+  onToolChange,
 }: Readonly<{
   activeInteriorDecorPattern: InteriorDecorCatalogPattern | null;
   advanceSelectedCatalogPlacementAttempt: () => void;
@@ -1595,6 +1610,7 @@ function useWorkspaceEditingControls({
   setSelectedPlacementKeys: PlannerWorkspaceStateController["setSelectedPlacementKeys"];
   onPendingCatalogChoiceCycle: () => boolean;
   onDismissInteriorDecor: () => void;
+  onToolChange: (tool: NonNullable<Parameters<typeof EditorToolbar>[0]["tool"]>) => void;
 }>) {
   const [pendingDuplicateSelectionKey, setPendingDuplicateSelectionKey] =
     useState<PlacementSelectionKey | null>(null);
@@ -1916,7 +1932,8 @@ function useWorkspaceEditingControls({
       onDismiss: handleDismissEditingInteraction,
       onPendingChoiceCycle: onPendingCatalogChoiceCycle,
       onCycleSelectedAppearance: handleCycleSelectedAppearance,
-    });
+      onToolChange,
+    }, { isEnabled: () => plannerWorkspaceState.modalId === null });
     return attachPlannerWorkspaceEditingKeyboardListener(
       window,
       handleKeyboardEvent,
@@ -1930,6 +1947,8 @@ function useWorkspaceEditingControls({
     plannerWorkspaceState.selectedPlacementKeys,
     pendingDuplicateSelectionKey,
     onPendingCatalogChoiceCycle,
+    onToolChange,
+    plannerWorkspaceState.modalId,
     selectedCatalogItem,
   ]);
 
@@ -1950,6 +1969,11 @@ function useWorkspaceEditingControls({
     : null;
 
   return {
+    cancelEditingInteraction: () => {
+      const hasInteraction = plannerWorkspaceState.selectedPlacementKeys.length > 0 || selectedCatalogItem !== null || pendingDuplicateSelectionKey !== null || activeInteriorDecorPattern !== null;
+      if (hasInteraction) handleDismissEditingInteraction();
+      return hasInteraction;
+    },
     cancelPendingDuplicateSelection: () => setPendingDuplicateSelectionKey(null),
     handleMapTileClick,
     handleMapTileRectangle,

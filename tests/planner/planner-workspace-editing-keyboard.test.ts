@@ -10,7 +10,11 @@ function createKeyboardEvent(
     altKey?: boolean;
     ctrlKey?: boolean;
     metaKey?: boolean;
-    target?: EventTarget | Readonly<{ isContentEditable?: boolean; tagName?: string }>;
+    target?: EventTarget | Readonly<{
+      closest?: (selector: string) => unknown;
+      isContentEditable?: boolean;
+      tagName?: string;
+    }>;
   }> = {},
 ): KeyboardEvent {
   let wasDefaultPrevented = false;
@@ -36,6 +40,7 @@ function createEditingKeyboardHandler(
   hasDismissableInteraction = selectedPlacementKeys.length > 0,
   pendingChoiceChanged = false,
   hasPendingCatalogItem = false,
+  keyboardOptions: Readonly<{ isEnabled?: () => boolean }> = {},
 ) {
   return createPlannerWorkspaceEditingKeyboardHandler({
     getSelectedPlacementKey: () =>
@@ -53,7 +58,8 @@ function createEditingKeyboardHandler(
     },
     onCycleSelectedAppearance: () =>
       receivedCommands.push("cycle-selected-appearance"),
-  });
+    onToolChange: (tool) => receivedCommands.push(`tool:${tool}`),
+  }, keyboardOptions);
 }
 
 describe("planner workspace editing keyboard", () => {
@@ -98,6 +104,69 @@ describe("planner workspace editing keyboard", () => {
     expect(keyboardEvents.every((keyboardEvent) => keyboardEvent.defaultPrevented)).toBe(
       true,
     );
+  });
+
+  it("selects cursor, multi-select, erase, and fill through the shared tool callback", () => {
+    const receivedCommands: string[] = [];
+    const handleKeyboardEvent = createEditingKeyboardHandler([], receivedCommands);
+    const toolKeyboardEvents = [
+      createKeyboardEvent("v"),
+      createKeyboardEvent("M"),
+      createKeyboardEvent("e"),
+      createKeyboardEvent("F"),
+    ];
+
+    for (const keyboardEvent of toolKeyboardEvents) {
+      handleKeyboardEvent(keyboardEvent);
+    }
+
+    expect(receivedCommands).toEqual([
+      "tool:cursor",
+      "tool:multi-select",
+      "tool:erase",
+      "tool:fill",
+    ]);
+    expect(toolKeyboardEvents.every((keyboardEvent) => keyboardEvent.defaultPrevented)).toBe(
+      true,
+    );
+  });
+
+  it("does not run editor shortcuts while a modal is open or a dialog owns focus", () => {
+    const receivedCommands: string[] = [];
+    const disabledHandler = createEditingKeyboardHandler(
+      ["item:7"],
+      receivedCommands,
+      true,
+      false,
+      false,
+      { isEnabled: () => false },
+    );
+    const enabledHandler = createEditingKeyboardHandler(
+      ["item:7"],
+      receivedCommands,
+    );
+    const dialogTarget = {
+      closest: (selector: string) =>
+        selector.includes('[role="dialog"]') ? {} : null,
+    };
+    const modalKeyboardEvents = [
+      createKeyboardEvent("v"),
+      createKeyboardEvent("c"),
+      createKeyboardEvent("Delete"),
+      createKeyboardEvent("Escape"),
+    ];
+
+    for (const keyboardEvent of modalKeyboardEvents) {
+      disabledHandler(keyboardEvent);
+    }
+    const dialogKeyboardEvent = createKeyboardEvent("q", { target: dialogTarget });
+    enabledHandler(dialogKeyboardEvent);
+
+    expect(receivedCommands).toEqual([]);
+    expect(modalKeyboardEvents.every((keyboardEvent) => !keyboardEvent.defaultPrevented)).toBe(
+      true,
+    );
+    expect(dialogKeyboardEvent.defaultPrevented).toBe(false);
   });
 
   it("handles Backspace as a planner delete command for the current selection", () => {

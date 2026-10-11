@@ -6,6 +6,12 @@ import {
   type GingerIslandOverlay,
   type SpouseRoomLayout,
 } from "./map-catalog";
+import {
+  readFarmCaveChoice,
+  readFarmSpouseId,
+  type FarmCaveChoice,
+  type FarmSpouseId,
+} from "./farm-map-rendering";
 
 export type MapRenderOptions = Readonly<{
   gingerIslandOverlayIds: readonly GingerIslandOverlay["id"][];
@@ -13,6 +19,10 @@ export type MapRenderOptions = Readonly<{
     marriageMapEnabled: boolean;
     renovationIds: readonly FarmhouseRenovationId[];
     spouseId: SpouseRoomLayout["spouseId"] | null;
+  }>;
+  farm?: Readonly<{
+    spouseId: FarmSpouseId | null;
+    caveChoice: FarmCaveChoice;
   }>;
 }>;
 
@@ -30,6 +40,10 @@ export function createInitialMapRenderOptions(): MapRenderOptions {
       renovationIds: [],
       spouseId: null,
     },
+    farm: {
+      spouseId: null,
+      caveChoice: "none",
+    },
   };
 }
 
@@ -42,9 +56,13 @@ export function restoreMapRenderOptions(rawMapRenderOptions: unknown): MapRender
     rawMapRenderOptions,
     "Map render options",
   );
+  const baseMapRenderOptionKeys = ["gingerIslandOverlayIds", "farmhouse2"];
+  const farmOptionsWereStored = Object.hasOwn(mapRenderOptionsRecord, "farm");
   assertExactKeys(
     mapRenderOptionsRecord,
-    ["gingerIslandOverlayIds", "farmhouse2"],
+    farmOptionsWereStored
+      ? [...baseMapRenderOptionKeys, "farm"]
+      : baseMapRenderOptionKeys,
     "Map render options",
   );
   const farmhouse2Record = assertPlainRecord(
@@ -56,6 +74,16 @@ export function restoreMapRenderOptions(rawMapRenderOptions: unknown): MapRender
     ["marriageMapEnabled", "renovationIds", "spouseId"],
     "Map render options.farmhouse2",
   );
+  const farmOptionsRecord = farmOptionsWereStored
+    ? assertPlainRecord(mapRenderOptionsRecord.farm, "Map render options.farm")
+    : null;
+  if (farmOptionsRecord !== null) {
+    assertExactKeys(
+      farmOptionsRecord,
+      ["spouseId", "caveChoice"],
+      "Map render options.farm",
+    );
+  }
 
   const mapRenderOptions: MapRenderOptions = {
     gingerIslandOverlayIds: readUniqueAllowedIds(
@@ -79,6 +107,12 @@ export function restoreMapRenderOptions(rawMapRenderOptions: unknown): MapRender
         "Map render options.farmhouse2.spouseId",
       ),
     },
+    farm: farmOptionsRecord === null
+      ? createInitialMapRenderOptions().farm
+      : {
+          spouseId: readNullableFarmSpouseId(farmOptionsRecord.spouseId),
+          caveChoice: readFarmCaveChoice(farmOptionsRecord.caveChoice),
+        },
   };
 
   assertFarmhouse2OptionDependencies(mapRenderOptions);
@@ -211,6 +245,37 @@ export function setFarmhouse2RenovationEnabled(
   };
 }
 
+export function setFarmSpouseId(
+  currentMapRenderOptions: MapRenderOptions,
+  spouseId: FarmSpouseId | null,
+): MapRenderOptions {
+  const restoredMapRenderOptions = restoreMapRenderOptions(currentMapRenderOptions);
+  const restoredSpouseId = readNullableFarmSpouseId(spouseId);
+
+  return {
+    ...restoredMapRenderOptions,
+    farm: {
+      spouseId: restoredSpouseId,
+      caveChoice: restoredMapRenderOptions.farm?.caveChoice ?? "none",
+    },
+  };
+}
+
+export function setFarmCaveChoice(
+  currentMapRenderOptions: MapRenderOptions,
+  caveChoice: FarmCaveChoice,
+): MapRenderOptions {
+  const restoredMapRenderOptions = restoreMapRenderOptions(currentMapRenderOptions);
+
+  return {
+    ...restoredMapRenderOptions,
+    farm: {
+      spouseId: restoredMapRenderOptions.farm?.spouseId ?? null,
+      caveChoice: readFarmCaveChoice(caveChoice),
+    },
+  };
+}
+
 function assertFarmhouse2OptionDependencies(
   mapRenderOptions: MapRenderOptions,
 ): void {
@@ -318,6 +383,10 @@ function readNullableAllowedId<AllowedId extends string>(
 
   assertAllowedId(rawValue, allowedIds, location);
   return rawValue;
+}
+
+function readNullableFarmSpouseId(rawValue: unknown): FarmSpouseId | null {
+  return rawValue === null ? null : readFarmSpouseId(rawValue);
 }
 
 function assertAllowedId<AllowedId extends string>(

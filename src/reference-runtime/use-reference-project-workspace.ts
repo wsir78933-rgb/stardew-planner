@@ -6,16 +6,18 @@ import {
   type ReferenceOpenMapSession,
 } from "./reference-project-editor-adapter";
 import type { ReferenceStoredProject } from "./local-project-api";
-import type {
-  ReferenceMapCreationInput,
-  ReferenceMapIdentityInput,
-  ReferenceMapRenameInput,
-  ReferenceMapTransferInput,
-  ReferenceMapUpdateInput,
-  ReferenceProjectCreationInput,
-  ReferenceProjectRepository,
-  ReferenceProjectSummary,
-  ReferenceThumbnailSaveInput,
+import {
+  createReferenceProjectSummary,
+  restoreMissingProjectFarmOptions,
+  type ReferenceMapCreationInput,
+  type ReferenceMapIdentityInput,
+  type ReferenceMapRenameInput,
+  type ReferenceMapTransferInput,
+  type ReferenceMapUpdateInput,
+  type ReferenceProjectCreationInput,
+  type ReferenceProjectRepository,
+  type ReferenceProjectSummary,
+  type ReferenceThumbnailSaveInput,
 } from "./reference-project-repository";
 import { plannerMaps, type PlannerMap } from "../maps/map-catalog";
 
@@ -526,7 +528,7 @@ function replaceProjectSummary(
   projectSummaries: readonly ReferenceProjectSummary[],
   project: ReferenceStoredProject,
 ): readonly ReferenceProjectSummary[] {
-  const projectSummary = toProjectSummary(project);
+  const projectSummary = createReferenceProjectSummary(project);
   const matchingSummaryIndex = projectSummaries.findIndex(
     (candidateSummary) => candidateSummary.id === project.id,
   );
@@ -534,15 +536,6 @@ function replaceProjectSummary(
   return projectSummaries.map((candidateSummary) =>
     candidateSummary.id === project.id ? projectSummary : candidateSummary,
   );
-}
-
-function toProjectSummary(project: ReferenceStoredProject): ReferenceProjectSummary {
-  return {
-    id: project.id,
-    title: project.title,
-    created_at: project.created_at,
-    updated_at: project.updated_at,
-  };
 }
 
 function replaceProjectInWorkspaceState(
@@ -701,12 +694,31 @@ function cloneProjectSummaries(
         );
       }
     }
+    if (
+      projectSummary.mapCount !== undefined
+      && (!Number.isSafeInteger(projectSummary.mapCount) || projectSummary.mapCount < 0)
+    ) {
+      throw new TypeError(
+        `Reference project workspace ${sourceName}[${String(projectSummaryIndex)}].mapCount must be a non-negative safe integer; ` +
+          `received ${JSON.stringify(projectSummary.mapCount)}.`,
+      );
+    }
+    if (
+      projectSummary.activeMapThumbnailDataUrl !== undefined
+      && projectSummary.activeMapThumbnailDataUrl !== null
+      && typeof projectSummary.activeMapThumbnailDataUrl !== "string"
+    ) {
+      throw new TypeError(
+        `Reference project workspace ${sourceName}[${String(projectSummaryIndex)}].activeMapThumbnailDataUrl must be a string or null; ` +
+          `received ${JSON.stringify(projectSummary.activeMapThumbnailDataUrl)}.`,
+      );
+    }
     return { ...projectSummary };
   });
 }
 
 function cloneStoredProject(project: ReferenceStoredProject): ReferenceStoredProject {
-  return structuredClone(project);
+  return structuredClone(restoreMissingProjectFarmOptions(project));
 }
 
 export function cloneReferenceProjectWorkspaceState(

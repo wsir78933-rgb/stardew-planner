@@ -12,6 +12,10 @@
     {
       "pattern": "stardewvalleyplanner.art/api/contact*",
       "custom_domain": false
+    },
+    {
+      "pattern": "stardewvalleyplanner.art/api/feedback*",
+      "custom_domain": false
     }
   ],
   "send_email": [
