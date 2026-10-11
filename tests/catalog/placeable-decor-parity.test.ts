@@ -8,14 +8,12 @@ import {
   createDecorCatalogFromDataset,
   createFurnitureCatalogItems,
   createPlaceableCatalogFromDatasets,
+  selectCatalogSidebarPlaceableItems,
   type CatalogItem,
   type CatalogSeason,
   type CatalogSourceRect,
 } from "../../src/catalog";
-import {
-  getCatalogItemsForPanel,
-  getCatalogItemThumbnailStyle,
-} from "../../src/components/item-catalog-panel";
+import { getCatalogItemThumbnailStyle } from "../../src/components/item-catalog-panel";
 
 const seasons = ["spring", "summer", "fall", "winter"] as const;
 const lockedPlaceableManifestHash =
@@ -65,7 +63,7 @@ async function createLockedRuntimeCatalogs() {
 
   return {
     decorItems: decorCatalog.items,
-    placeableItems: getCatalogItemsForPanel(placeableCatalog, "placeables", ""),
+    placeableItems: selectCatalogSidebarPlaceableItems(placeableCatalog.items),
   };
 }
 
@@ -154,7 +152,7 @@ describe("frozen Placeables and Decor catalog parity", () => {
     expect(getSeasonalFrameSelector()).toBeTypeOf("function");
   });
 
-  it("locks all 149 visible Placeables across ID, asset, base frame, season, rotation, and footprint", async () => {
+  it("locks all 149 original placeable IDs across asset, base frame, season, rotation, and footprint", async () => {
     const getSeasonalPlaceableFrame = getSeasonalFrameSelector();
     expect(getSeasonalPlaceableFrame).toBeTypeOf("function");
     if (getSeasonalPlaceableFrame === undefined) return;

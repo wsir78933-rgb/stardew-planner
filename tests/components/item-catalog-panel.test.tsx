@@ -13,16 +13,20 @@ import {
   getNextCatalogItemControlChoice,
   getNextCatalogCategory,
   ItemCatalogPanel,
+  loadFullCatalogPanelState,
   loadCatalogPanelState,
   materializeBuildingThumbnailFrame,
   normalizeBuildingThumbnailSourceFrame,
   resolveBuildingThumbnailLayers,
+  shouldExpandCatalogPanelBeforeSearchFocus,
+  shouldFocusCatalogSearchForShortcut,
 } from "../../src/components/item-catalog-panel";
 import { createBuildingThumbnailImageLoader } from "../../src/components/building-thumbnail-visibility";
 import {
   catalogDatasetUrls,
   createBuildingCatalogFromDataset,
   createSeasonalPlaceableCatalogProperties,
+  getCatalogSidebarFilters,
 } from "../../src/catalog";
 import { resolvePlannerTextureFrame } from "../../src/rendering/planner-texture-frame-resolution";
 import type {
@@ -294,7 +298,7 @@ describe("item catalog panel", () => {
       }),
     );
 
-    expect(catalogPanelMarkup).toContain('placeholder="Search..."');
+    expect(catalogPanelMarkup).toContain('placeholder="Search all items"');
   });
 
   it("preserves catalog roles, tab relations, visual classes, and controlled search value", () => {
@@ -315,11 +319,16 @@ describe("item catalog panel", () => {
     expect(catalogPanelMarkup).toContain(
       'class="bottom-wrapper item-catalog-panel item-catalog-panel--left left-mode"',
     );
+    expect(catalogPanelMarkup).toContain('data-expanded="false"');
+    expect(catalogPanelMarkup).toContain("item-catalog-panel__branding");
+    expect(catalogPanelMarkup).toContain("item-catalog-panel__mobile-toggle");
+    expect(catalogPanelMarkup).toContain("item-catalog-panel__search-row");
     expect(catalogPanelMarkup).toContain(
       'class="panel-tabs item-catalog-panel__categories" role="tablist"',
     );
-    expect(catalogPanelMarkup.match(/role="tab"/g)).toHaveLength(4);
+    expect(catalogPanelMarkup.match(/role="tab"/g)).toHaveLength(8);
     expect(catalogPanelMarkup).toContain('aria-selected="true"');
+    expect(catalogPanelMarkup).toContain('aria-label="Crops"');
     expect(catalogPanelMarkup).toContain('aria-controls=');
     expect(catalogPanelMarkup).toContain(
       'class="panel-content item-catalog-panel__content"',
@@ -331,48 +340,54 @@ describe("item catalog panel", () => {
     );
     expect(catalogPanelMarkup).toContain('type="search"');
     expect(catalogPanelMarkup).toContain('value="parsnip"');
+    expect(catalogPanelMarkup.indexOf("Search all items")).toBeLessThan(
+      catalogPanelMarkup.indexOf('role="tablist"'),
+    );
   });
 
-  it("preserves Home, End, ArrowLeft, and ArrowRight category navigation", () => {
-    expect(getNextCatalogCategory("placeables", "Home")).toBe("buildings");
-    expect(getNextCatalogCategory("crops", "End")).toBe("decor");
-    expect(getNextCatalogCategory("buildings", "ArrowLeft")).toBe("decor");
-    expect(getNextCatalogCategory("decor", "ArrowRight")).toBe("buildings");
+  it("navigates the eight category tabs in a four-column grid", () => {
+    expect(getNextCatalogCategory("lighting", "Home")).toBe("buildings");
+    expect(getNextCatalogCategory("buildings", "End")).toBe("decor");
+    expect(getNextCatalogCategory("buildings", "ArrowLeft")).toBe("equipment");
+    expect(getNextCatalogCategory("equipment", "ArrowRight")).toBe("buildings");
+    expect(getNextCatalogCategory("crops", "ArrowDown")).toBe("lighting");
+    expect(getNextCatalogCategory("lighting", "ArrowUp")).toBe("crops");
     expect(getNextCatalogCategory("crops", "Enter")).toBeNull();
   });
 
   it("loads only the active category through a fake local category loader", async () => {
     const requestedUrls: string[] = [];
-    const fakeLocalCategoryLoader = async (category: string): Promise<Catalog> => {
-      requestedUrls.push(`/game-assets/1.6.15/data/${category}.json`);
+    const fakeLocalCategoryLoader = async (): Promise<Catalog> => {
+      requestedUrls.push("/game-assets/1.6.15/data/crops.json");
       return catalog;
     };
 
     await expect(loadCatalogPanelState("crops", fakeLocalCategoryLoader)).resolves.toEqual({
       kind: "ready",
+      scope: "category",
       category: "crops",
       catalog,
     });
     expect(requestedUrls).toEqual(["/game-assets/1.6.15/data/crops.json"]);
   });
 
-  it("exposes every already loaded category item for the workspace Canvas without another request", () => {
+  it("exposes the complete loaded catalog for the workspace Canvas", () => {
     expect(
-      getReadyCatalogItems({ kind: "ready", category: "placeables", catalog }),
+      getReadyCatalogItems({ kind: "ready", scope: "all", catalog }),
     ).toEqual(catalogItems);
     expect(
-      getReadyCatalogItems({ kind: "loading", category: "placeables" }),
+      getReadyCatalogItems({ kind: "loading", scope: "all" }),
     ).toBeNull();
   });
 
-  it("filters only verified items for each panel category", () => {
+  it("searches all catalog categories regardless of the selected category", () => {
     expect(getCatalogItemsForPanel(catalog, "buildings", "coop")).toEqual([
       catalogItems[0],
     ]);
     expect(getCatalogItemsForPanel(catalog, "crops", "par")).toEqual([
       catalogItems[1],
     ]);
-    expect(getCatalogItemsForPanel(catalog, "placeables", "stone")).toEqual([
+    expect(getCatalogItemsForPanel(catalog, "equipment", "stone")).toEqual([
       catalogItems[2],
       catalogItems[3],
     ]);
@@ -381,16 +396,40 @@ describe("item catalog panel", () => {
     ]);
   });
 
+  it("classifies placeable machines as Equipment and keeps search global", () => {
+    const keg: CatalogItem = {
+      ...catalogItems[2],
+      id: "big-craftable:12",
+      name: "Keg",
+    };
+    const catalogWithKeg: Catalog = { items: [...catalogItems, keg] };
+
+    expect(getCatalogSidebarFilters(catalogWithKeg.items, "equipment")).toContainEqual({
+      id: "machines",
+      label: "Machines",
+      count: 1,
+    });
+    expect(
+      getCatalogItemsForPanel(catalogWithKeg, "equipment", "", "machines"),
+    ).toEqual([keg]);
+    expect(
+      getCatalogItemsForPanel(catalogWithKeg, "buildings", "keg", "animal"),
+    ).toEqual([keg]);
+  });
+
   it("renders verified resource-clump decor items in the Decor panel", () => {
     const decorPanelMarkup = renderToStaticMarkup(
       createElement(CatalogPanelContent, {
         catalogPresentationChoicesByItemId: new Map(),
         category: "decor",
-        catalogPanelLoadState: { kind: "ready", category: "decor", catalog },
+        catalogItems: [catalogItems[5]],
+        catalogPanelLoadState: { kind: "ready", scope: "category", category: "decor", catalog },
+        onRetry: () => undefined,
         onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
-        searchQuery: "",
         selectedCatalogItemId: null,
+        viewMode: "grid",
+        locale: "en",
       }),
     );
 
@@ -403,19 +442,23 @@ describe("item catalog panel", () => {
       createElement(CatalogPanelContent, {
         catalogPresentationChoicesByItemId: new Map(),
         category: "crops",
+        catalogItems: null,
         catalogPanelLoadState: {
           kind: "ready",
+          scope: "category",
           category: "buildings",
           catalog,
         },
+        onRetry: () => undefined,
         onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
-        searchQuery: "",
         selectedCatalogItemId: null,
+        viewMode: "grid",
+        locale: "en",
       }),
     );
 
-    expect(staleReadyMarkup).toContain("Loading local catalog…");
+    expect(staleReadyMarkup).toContain("Loading items…");
     expect(staleReadyMarkup).not.toContain("Coop");
   });
 
@@ -423,20 +466,24 @@ describe("item catalog panel", () => {
     const staleErrorMarkup = renderToStaticMarkup(
       createElement(CatalogPanelContent, {
         catalogPresentationChoicesByItemId: new Map(),
-        category: "placeables",
+        category: "equipment",
+        catalogItems: null,
         catalogPanelLoadState: {
           kind: "error",
+          scope: "category",
           category: "crops",
           message: "Prior crops request failed.",
         },
+        onRetry: () => undefined,
         onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
-        searchQuery: "",
         selectedCatalogItemId: null,
+        viewMode: "grid",
+        locale: "en",
       }),
     );
 
-    expect(staleErrorMarkup).toContain("Loading local catalog…");
+    expect(staleErrorMarkup).toContain("Loading items…");
     expect(staleErrorMarkup).not.toContain("Prior crops request failed.");
   });
 
@@ -451,6 +498,7 @@ describe("item catalog panel", () => {
       }),
     ).resolves.toEqual({
       kind: "error",
+      scope: "category",
       category: "crops",
       message:
         'Unable to load the local item catalog: Catalog dataset /game-assets/1.6.15/data/Crops.json record "Parsnip" has invalid SpriteIndex -1.',
@@ -472,10 +520,99 @@ describe("item catalog panel", () => {
       }),
     ).resolves.toEqual({
       kind: "error",
+      scope: "category",
       category: "crops",
       message:
         'Unable to load the local item catalog: Catalog category "crops" failed while loading dataset URL "/game-assets/1.6.15/data/Crops.json". Cause: Catalog dataset URL "/game-assets/1.6.15/data/Crops.json" must contain 50 records; received 0 record IDs [].',
     });
+  });
+
+  it("loads the complete catalog through the full-catalog loader", async () => {
+    const requestedUrls: string[] = [];
+    const fullCatalog = await loadFullCatalogPanelState(async () => {
+      requestedUrls.push("/game-assets/1.6.15/data/all.json");
+      return catalog;
+    });
+
+    expect(fullCatalog).toEqual({ kind: "ready", scope: "all", catalog });
+    expect(getReadyCatalogItems(fullCatalog)).toEqual(catalogItems);
+    expect(requestedUrls).toEqual(["/game-assets/1.6.15/data/all.json"]);
+  });
+
+  it("renders a concrete load error with a retry action", () => {
+    const failedCatalogMarkup = renderToStaticMarkup(
+      createElement(CatalogPanelContent, {
+        catalogPresentationChoicesByItemId: new Map(),
+        category: "equipment",
+        catalogItems: null,
+        catalogPanelLoadState: {
+          kind: "error",
+          scope: "category",
+          category: "equipment",
+          message: "Catalog category equipment failed at /data/Equipment.json.",
+        },
+        onRetry: () => undefined,
+        onCatalogItemPresentationChoiceChange: () => undefined,
+        onCatalogItemSelect: () => undefined,
+        selectedCatalogItemId: null,
+        viewMode: "grid",
+        locale: "en",
+      }),
+    );
+
+    expect(failedCatalogMarkup).toContain(
+      "Catalog category equipment failed at /data/Equipment.json.",
+    );
+    expect(failedCatalogMarkup).toContain(">Retry</button>");
+  });
+
+  it("prevents slash-search from stealing text entry, modal, or modified shortcuts", () => {
+    const buttonTarget = { tagName: "BUTTON" } as unknown as EventTarget;
+    const inputTarget = { tagName: "INPUT" } as unknown as EventTarget;
+    const editableTarget = { isContentEditable: true } as unknown as EventTarget;
+
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", buttonTarget, buttonTarget, false),
+    ).toBe(true);
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", inputTarget, inputTarget, false),
+    ).toBe(false);
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", editableTarget, editableTarget, false),
+    ).toBe(false);
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", buttonTarget, buttonTarget, true),
+    ).toBe(false);
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", buttonTarget, buttonTarget, false, {
+        ctrlKey: true,
+      }),
+    ).toBe(false);
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", buttonTarget, buttonTarget, false, {
+        metaKey: true,
+      }),
+    ).toBe(false);
+    expect(
+      shouldFocusCatalogSearchForShortcut("/", buttonTarget, buttonTarget, false, {
+        altKey: true,
+      }),
+    ).toBe(false);
+  });
+
+  it("expands only a collapsed mobile bottom drawer before slash-search focus", () => {
+    expect(
+      shouldExpandCatalogPanelBeforeSearchFocus("bottom", false, true),
+    ).toBe(true);
+    expect(
+      shouldExpandCatalogPanelBeforeSearchFocus("bottom", true, true),
+    ).toBe(false);
+    expect(
+      shouldExpandCatalogPanelBeforeSearchFocus("bottom", false, false),
+    ).toBe(false);
+    expect(
+      shouldExpandCatalogPanelBeforeSearchFocus("left", false, true),
+    ).toBe(false);
   });
 
   it("renders local texture thumbnails and marks the selected item", () => {
@@ -494,6 +631,23 @@ describe("item catalog panel", () => {
     expect(catalogGridMarkup).toContain("6 × 3");
     expect(catalogGridMarkup).toContain("building-catalog-panel__thumbnail");
     expect(catalogGridMarkup).not.toContain("background-image");
+  });
+
+  it("switches only the catalog item grid to list presentation", () => {
+    const listMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: [catalogItems[0]],
+        catalogPresentationChoicesByItemId: new Map(),
+        selectedCatalogItemId: null,
+        onCatalogItemPresentationChoiceChange: () => undefined,
+        onCatalogItemSelect: () => undefined,
+        viewMode: "list",
+      }),
+    );
+
+    expect(listMarkup).toContain("item-catalog-panel__grid--list");
+    expect(listMarkup).toContain("item-catalog-panel__item-name");
+    expect(listMarkup).toContain('aria-label="Select Coop, 6 by 3 tiles"');
   });
 
   it("renders building cards with the reference 80 by 80 canvas thumbnail", () => {
@@ -924,11 +1078,21 @@ describe("item catalog panel", () => {
       }),
     );
 
-    expect(catalogGridMarkup).toContain(">Rotate</button>");
-    expect(catalogGridMarkup).toContain(">Enricher</button>");
+    expect(catalogGridMarkup).toContain('aria-label="Rotate"');
+    expect(catalogGridMarkup).toContain('title="Rotate"');
+    expect(catalogGridMarkup).toContain(
+      'class="rotate-btn item-catalog-panel__rotation-control item-catalog-panel__presentation-control"',
+    );
+    expect(catalogGridMarkup).toContain(">Enricher</span>");
     expect(catalogGridMarkup).toContain('aria-label="Cycle Sprinkler variant, current Enricher"');
+    expect(catalogGridMarkup).toContain('title="Cycle Sprinkler variant, current Enricher"');
     expect(catalogGridMarkup).toMatch(
-      /aria-pressed="true"[^>]*>Unflip<\/button>/,
+      /aria-label="Unflip" aria-pressed="true"[^>]*title="Unflip"/,
+    );
+    expect(catalogGridMarkup).toMatch(/<svg[^>]*aria-hidden="true"/);
+    expect(catalogGridMarkup.match(/<div class="item-catalog-panel__item-controls">/g)).toHaveLength(3);
+    expect(catalogGridMarkup).toContain(
+      "</button><div class=\"item-catalog-panel__item-controls\">",
     );
     expect(catalogGridMarkup).not.toMatch(
       /<button[^>]*>(?:(?!<\/button>).)*<button/s,
@@ -936,6 +1100,32 @@ describe("item catalog panel", () => {
     expect(catalogGridMarkup.match(/aria-label="Select /g)).toHaveLength(4);
     expect(catalogGridMarkup).toContain("background-position:-32px 0px");
     expect(catalogGridMarkup).toContain("transform:scaleX(-1)");
+  });
+
+  it("localizes known tree variants while keeping variant text in the grouped controls", () => {
+    const cherrySapling = createControlledCatalogItems()[2];
+    if (cherrySapling === undefined) {
+      throw new Error("Expected the Cherry Sapling catalog fixture.");
+    }
+
+    const catalogGridMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: [cherrySapling],
+        catalogPresentationChoicesByItemId: new Map(),
+        selectedCatalogItemId: null,
+        onCatalogItemPresentationChoiceChange: () => undefined,
+        onCatalogItemSelect: () => undefined,
+        locale: "zh-CN",
+      }),
+    );
+
+    expect(catalogGridMarkup).toContain(">无果</span>");
+    expect(catalogGridMarkup).toContain('aria-label="切换Cherry Sapling外观，当前为无果"');
+    expect(catalogGridMarkup).toContain('title="切换Cherry Sapling外观，当前为无果"');
+    expect(catalogGridMarkup).toContain(
+      'class="item-catalog-panel__variant-control item-catalog-panel__presentation-control"',
+    );
+    expect(catalogGridMarkup).toMatch(/<svg[^>]*aria-hidden="true"/);
   });
 
   it("calculates catalog control callbacks without selecting another item", () => {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { catalogSidebarCategories } from "../../src/catalog";
 import {
   collapseEditorMenuForModalOpen,
   createInitialEditorViewState,
@@ -146,6 +147,31 @@ describe("editor view state", () => {
       catalogCategory: "crops",
       panelPosition: "left",
     });
+  });
+
+  it("accepts every catalog category without changing other view state", () => {
+    const initialEditorViewState = createInitialEditorViewState();
+
+    for (const catalogCategory of catalogSidebarCategories) {
+      expect(
+        selectCatalogCategory(initialEditorViewState, catalogCategory),
+      ).toMatchObject({
+        catalogCategory,
+        mapId: initialEditorViewState.mapId,
+        season: initialEditorViewState.season,
+        tool: initialEditorViewState.tool,
+        panelPosition: initialEditorViewState.panelPosition,
+      });
+    }
+  });
+
+  it("rejects catalog category values outside the catalog taxonomy", () => {
+    expect(() =>
+      selectCatalogCategory(
+        createInitialEditorViewState(),
+        "placeables" as never,
+      ),
+    ).toThrow('placeables');
   });
 
   it("uses compact layout at 1400px and for coarse pointers", () => {

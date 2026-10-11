@@ -1,4 +1,8 @@
 import { getPlannerMapById } from "../maps/map-catalog";
+import {
+  catalogSidebarCategories,
+  type CatalogSidebarCategory,
+} from "../catalog";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 
 export const editorSeasons = ["spring", "summer", "fall", "winter"] as const;
@@ -11,12 +15,7 @@ export const editorTools = [
   "zoom",
 ] as const;
 
-export const editorCatalogCategories = [
-  "buildings",
-  "crops",
-  "placeables",
-  "decor",
-] as const;
+export const editorCatalogCategories = catalogSidebarCategories;
 
 export const editorPanelPositions = ["bottom", "left"] as const;
 
@@ -31,7 +30,7 @@ export const editorModalIds = [
 ] as const;
 
 export type EditorTool = (typeof editorTools)[number];
-export type EditorCatalogCategory = (typeof editorCatalogCategories)[number];
+export type EditorCatalogCategory = CatalogSidebarCategory;
 export type EditorPanelPosition = (typeof editorPanelPositions)[number];
 export type EditorModalId = (typeof editorModalIds)[number];
 export type EditorMenuVisibility = "collapsed" | "expanded";

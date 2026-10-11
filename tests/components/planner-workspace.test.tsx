@@ -203,7 +203,8 @@ describe("planner workspace static boundary", () => {
     expect(preparedMarkup).toContain('aria-label="Item catalog"');
     expect(preparedMarkup).toContain("Loading placed item catalog…");
     expect(preparedMarkup).not.toContain('class="planner-canvas__viewport"');
-    expect(preparedMarkup).toContain('placeholder="Search..."');
+    expect(preparedMarkup).toContain('aria-label="Search all items"');
+    expect(preparedMarkup).toContain('placeholder="Search all items"');
   });
 
   it("does not render a separate interior decor panel on supported interior maps", () => {

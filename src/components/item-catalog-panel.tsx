@@ -1,6 +1,26 @@
 "use client";
 
 import {
+  Armchair,
+  Building2,
+  ChevronDown,
+  ChevronUp,
+  CircleHelp,
+  Cog,
+  FlipHorizontal2,
+  Keyboard,
+  Lamp,
+  LayoutGrid,
+  List,
+  Route,
+  RotateCw,
+  Search,
+  Sparkles,
+  TreeDeciduous,
+  Wheat,
+  X,
+} from "lucide-react";
+import {
   useEffect,
   useId,
   useRef,
@@ -13,11 +33,14 @@ import {
 import {
   createDefaultCatalogItemPresentationChoice,
   getBuildingThumbnailCompositionLayers,
+  getCatalogSidebarFilters,
+  getCatalogSidebarItems,
   getCropRenderingMetadata,
   getSeasonalPlaceableFrame,
   getNextPendingCatalogPresentationChoice,
   getNextSelectedCatalogPresentationChoice,
-  loadCatalogCategory,
+  loadSidebarCatalog,
+  loadSidebarCatalogCategory,
   validateCatalogItemPresentationChoice,
   type Catalog,
   type CatalogBuildingMultilayerLayer,
@@ -30,12 +53,12 @@ import {
   type EditorModalId,
   type EditorPanelPosition,
 } from "../editor/editor-view-state";
-import { referencePlaceableCatalogNames } from "../catalog/reference-placeable-order";
 import {
   resolvePlannerTextureFrame,
   type PlannerTextureFrame,
 } from "../rendering/planner-texture-frame-resolution";
-import { Filter, Info, Search } from "lucide-react";
+import type { HomepageLocale } from "../homepage/homepage-locale";
+import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
 import {
   loadBuildingThumbnailImages,
   useBuildingThumbnailLoadEligibility,
@@ -48,6 +71,7 @@ type ItemCatalogPanelProperties = Readonly<{
   >;
   category: EditorCatalogCategory;
   leftHandMode?: boolean;
+  locale?: HomepageLocale;
   panelPosition: EditorPanelPosition;
   searchQuery: string;
   selectedCatalogItemId: string | null;
@@ -67,19 +91,36 @@ type ItemCatalogPanelProperties = Readonly<{
 }>;
 
 type CatalogPanelLoadState =
-  | Readonly<{ kind: "loading"; category: EditorCatalogCategory }>
+  | Readonly<{
+      kind: "loading";
+      scope: "category";
+      category: EditorCatalogCategory;
+    }>
   | Readonly<{
       kind: "ready";
+      scope: "category";
       category: EditorCatalogCategory;
       catalog: Catalog;
     }>
   | Readonly<{
       kind: "error";
+      scope: "category";
       category: EditorCatalogCategory;
       message: string;
     }>;
 
-type CatalogPanelLoader = (category: EditorCatalogCategory) => Promise<Catalog>;
+type FullCatalogLoadState =
+  | Readonly<{ kind: "loading"; scope: "all" }>
+  | Readonly<{ kind: "ready"; scope: "all"; catalog: Catalog }>
+  | Readonly<{ kind: "error"; scope: "all"; message: string }>;
+
+type ActiveCatalogPanelLoadState =
+  | CatalogPanelLoadState
+  | FullCatalogLoadState;
+
+type CatalogPanelLoader = () => Promise<Catalog>;
+
+type CatalogItemViewMode = "grid" | "list";
 
 type CatalogItemGridProperties = Readonly<{
   catalogItems: readonly CatalogItem[];
@@ -97,30 +138,17 @@ type CatalogItemGridProperties = Readonly<{
     presentationChoice: CatalogPresentationChoice,
   ) => void;
   shouldLoadThumbnails?: boolean;
+  viewMode?: CatalogItemViewMode;
+  locale?: HomepageLocale;
 }>;
 
 export type CatalogItemControl = "flip" | "rotation" | "variant";
-
-const catalogCategoryLabels: Readonly<Record<EditorCatalogCategory, string>> = {
-  buildings: "Buildings",
-  crops: "Crops",
-  placeables: "Placeables",
-  decor: "Decor",
-};
-
-const catalogItemCategoriesByPanelCategory: Readonly<
-  Record<EditorCatalogCategory, readonly CatalogItem["category"][]>
-> = {
-  buildings: ["building"],
-  crops: ["crop"],
-  placeables: ["placeable", "floor", "fence"],
-  decor: ["decor"],
-};
 
 export function ItemCatalogPanel({
   catalogPresentationChoicesByItemId,
   category,
   leftHandMode = false,
+  locale = "en",
   panelPosition,
   searchQuery,
   selectedCatalogItemId,
@@ -132,38 +160,186 @@ export function ItemCatalogPanel({
   onSearchQueryChange,
   shouldLoadThumbnails = true,
 }: ItemCatalogPanelProperties) {
+  const copy = getCatalogPanelCopy(locale);
   const [catalogPanelLoadState, setCatalogPanelLoadState] =
-    useState<CatalogPanelLoadState>({ kind: "loading", category });
+    useState<CatalogPanelLoadState>({
+      kind: "loading",
+      scope: "category",
+      category,
+    });
+  const [fullCatalogLoadState, setFullCatalogLoadState] =
+    useState<FullCatalogLoadState>({ kind: "loading", scope: "all" });
+  const [categoryLoadAttempt, setCategoryLoadAttempt] = useState(0);
+  const [fullCatalogLoadAttempt, setFullCatalogLoadAttempt] = useState(0);
+  const [selectedFilterId, setSelectedFilterId] = useState("all");
+  const [viewMode, setViewMode] = useState<CatalogItemViewMode>("grid");
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const catalogId = useId();
   const catalogPanelId = `${catalogId}-panel`;
+  const catalogSearchInputReference = useRef<HTMLInputElement>(null);
+  const focusCatalogSearchAfterExpansionReference = useRef(false);
   const catalogTabElementReferences = useRef<
-    Record<EditorCatalogCategory, HTMLButtonElement | null>
-  >({
-    buildings: null,
-    crops: null,
-    placeables: null,
-    decor: null,
-  });
+    Partial<Record<EditorCatalogCategory, HTMLButtonElement | null>>
+  >({});
+  const previousCategoryReference = useRef(category);
+  const hasLoadedFullCatalogReference = useRef(false);
+  const hasSearchQuery = searchQuery.trim().length > 0;
+  const shouldLoadFullCatalog = shouldLoadThumbnails || hasSearchQuery;
 
   useEffect(() => {
     let hasUnmounted = false;
 
-    setCatalogPanelLoadState({ kind: "loading", category });
+    setCatalogPanelLoadState({
+      kind: "loading",
+      scope: "category",
+      category,
+    });
 
     void loadCatalogPanelState(category).then((nextCatalogPanelLoadState) => {
-      if (!hasUnmounted) {
-        setCatalogPanelLoadState(nextCatalogPanelLoadState);
-        const readyCatalogItems = getReadyCatalogItems(nextCatalogPanelLoadState);
-        if (readyCatalogItems !== null) {
-          onReadyCatalogItems?.(readyCatalogItems);
-        }
+      if (hasUnmounted) {
+        return;
+      }
+
+      setCatalogPanelLoadState(nextCatalogPanelLoadState);
+      if (nextCatalogPanelLoadState.kind === "ready") {
+        onReadyCatalogItems?.(nextCatalogPanelLoadState.catalog.items);
       }
     });
 
     return () => {
       hasUnmounted = true;
     };
-  }, [category, onReadyCatalogItems]);
+  }, [category, categoryLoadAttempt, onReadyCatalogItems]);
+
+  useEffect(() => {
+    if (!shouldLoadFullCatalog || hasLoadedFullCatalogReference.current) {
+      return;
+    }
+
+    let hasUnmounted = false;
+
+    setFullCatalogLoadState({ kind: "loading", scope: "all" });
+
+    void loadFullCatalogPanelState().then((nextFullCatalogLoadState) => {
+      if (hasUnmounted) {
+        return;
+      }
+
+      setFullCatalogLoadState(nextFullCatalogLoadState);
+      const readyCatalogItems = getReadyCatalogItems(nextFullCatalogLoadState);
+      if (readyCatalogItems !== null) {
+        hasLoadedFullCatalogReference.current = true;
+        onReadyCatalogItems?.(readyCatalogItems);
+      }
+    });
+
+    return () => {
+      hasUnmounted = true;
+    };
+  }, [fullCatalogLoadAttempt, onReadyCatalogItems, shouldLoadFullCatalog]);
+
+  useEffect(() => {
+    if (previousCategoryReference.current === category) {
+      return;
+    }
+
+    previousCategoryReference.current = category;
+    setSelectedFilterId("all");
+    onSearchQueryChange("");
+  }, [category, onSearchQueryChange]);
+
+  useEffect(() => {
+    if (!isMobileExpanded || !focusCatalogSearchAfterExpansionReference.current) {
+      return;
+    }
+
+    focusCatalogSearchAfterExpansionReference.current = false;
+    const catalogSearchInput = catalogSearchInputReference.current;
+    if (catalogSearchInput === null) {
+      throw new Error(
+        "Catalog search input is unavailable after expanding the mobile item panel.",
+      );
+    }
+
+    catalogSearchInput.focus();
+  }, [isMobileExpanded]);
+
+  useEffect(() => {
+    function handleGlobalCatalogShortcut(
+      keyboardEvent: globalThis.KeyboardEvent,
+    ): void {
+      const hasOpenModal =
+        document.querySelector('[aria-modal="true"], dialog[open]') !== null;
+      if (!shouldFocusCatalogSearchForShortcut(
+        keyboardEvent.key,
+        keyboardEvent.target,
+        document.activeElement,
+        hasOpenModal,
+        keyboardEvent,
+      )) {
+        return;
+      }
+
+      keyboardEvent.preventDefault();
+      if (
+        shouldExpandCatalogPanelBeforeSearchFocus(
+          panelPosition,
+          isMobileExpanded,
+          window.matchMedia("(max-width: 640px)").matches,
+        )
+      ) {
+        focusCatalogSearchAfterExpansionReference.current = true;
+        setIsMobileExpanded(true);
+        return;
+      }
+
+      catalogSearchInputReference.current?.focus();
+    }
+
+    window.addEventListener("keydown", handleGlobalCatalogShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleGlobalCatalogShortcut);
+    };
+  }, [isMobileExpanded, panelPosition]);
+
+  const activeCatalogPanelLoadState = getActiveCatalogPanelLoadState(
+    catalogPanelLoadState,
+    fullCatalogLoadState,
+    category,
+    hasSearchQuery,
+  );
+  const activeCatalog = activeCatalogPanelLoadState.kind === "ready"
+    ? activeCatalogPanelLoadState.catalog
+    : null;
+  const categoryFilters = activeCatalog === null
+    ? []
+    : getCatalogSidebarFilters(activeCatalog.items, category);
+  const activeFilterId = categoryFilters.some(
+    (catalogFilter) => catalogFilter.id === selectedFilterId,
+  )
+    ? selectedFilterId
+    : "all";
+  const visibleCatalogItems = activeCatalog === null
+    ? null
+    : getCatalogSidebarItems(
+        activeCatalog.items,
+        category,
+        searchQuery,
+        activeFilterId,
+      );
+  const visibleCatalogItemCount = visibleCatalogItems?.length ?? null;
+
+  function selectCatalogCategory(nextCategory: EditorCatalogCategory): void {
+    if (!editorCatalogCategories.includes(nextCategory)) {
+      throw new TypeError(
+        `Item catalog received unknown category ${JSON.stringify(nextCategory)}.`,
+      );
+    }
+
+    setSelectedFilterId("all");
+    onSearchQueryChange("");
+    onCategoryChange(nextCategory);
+  }
 
   function handleCategoryKeyDown(
     keyboardEvent: KeyboardEvent<HTMLButtonElement>,
@@ -179,12 +355,12 @@ export function ItemCatalogPanel({
     }
 
     keyboardEvent.preventDefault();
-    onCategoryChange(nextCategory);
+    selectCatalogCategory(nextCategory);
 
     const nextCategoryTabElement =
       catalogTabElementReferences.current[nextCategory];
 
-    if (nextCategoryTabElement === null) {
+    if (nextCategoryTabElement === null || nextCategoryTabElement === undefined) {
       throw new Error(
         `Catalog tab element is unavailable for category ${JSON.stringify(nextCategory)}.`,
       );
@@ -193,38 +369,140 @@ export function ItemCatalogPanel({
     nextCategoryTabElement.focus();
   }
 
+  function handleSearchInputKeyDown(
+    keyboardEvent: KeyboardEvent<HTMLInputElement>,
+  ): void {
+    if (keyboardEvent.key !== "Escape" || searchQuery.length === 0) {
+      return;
+    }
+
+    keyboardEvent.preventDefault();
+    onSearchQueryChange("");
+  }
+
+  function handleCatalogFilterChange(
+    changeEvent: ChangeEvent<HTMLSelectElement>,
+  ): void {
+    const nextFilterId = changeEvent.target.value;
+    if (!categoryFilters.some((catalogFilter) => catalogFilter.id === nextFilterId)) {
+      throw new Error(
+        `Item catalog received unavailable filter ${JSON.stringify(nextFilterId)} for category ${JSON.stringify(category)}.`,
+      );
+    }
+
+    setSelectedFilterId(nextFilterId);
+  }
+
+  function handleCatalogLoadRetry(): void {
+    if (activeCatalogPanelLoadState.scope === "all") {
+      setFullCatalogLoadAttempt((attempt) => attempt + 1);
+      return;
+    }
+
+    setCategoryLoadAttempt((attempt) => attempt + 1);
+  }
+
   return (
     <aside
-      aria-label="Item catalog"
+      aria-label={copy.catalogLabel}
       className={`bottom-wrapper item-catalog-panel item-catalog-panel--${panelPosition}${
         panelPosition === "left" ? " left-mode" : ""
       }${leftHandMode ? " left-hand" : ""}`}
+      data-expanded={isMobileExpanded}
     >
       <div className="bottom-panel">
-        <div className="panel-branding">
+        <div className="panel-branding item-catalog-panel__branding">
+          <span className="item-catalog-panel__brand">{copy.brand}</span>
           <div className="branding-actions">
             {onOpenModal !== undefined ? (
+              <>
+                <button
+                  aria-label={copy.help}
+                  className="branding-btn item-catalog-panel__action"
+                  onClick={() => onOpenModal("help-info")}
+                  title={copy.help}
+                  type="button"
+                >
+                  <CircleHelp aria-hidden="true" size={18} />
+                  <span>{copy.help}</span>
+                </button>
+                <button
+                  aria-label={copy.keyboardShortcuts}
+                  className="branding-btn item-catalog-panel__action"
+                  onClick={() => onOpenModal("keyboard-shortcuts")}
+                  title={copy.keyboardShortcuts}
+                  type="button"
+                >
+                  <Keyboard aria-hidden="true" size={18} />
+                  <span>{copy.keyboardShortcuts}</span>
+                </button>
+              </>
+            ) : null}
+          </div>
+        </div>
+        <button
+          aria-controls={catalogPanelId}
+          aria-expanded={isMobileExpanded}
+          className="item-catalog-panel__mobile-toggle"
+          onClick={() => setIsMobileExpanded((isExpanded) => !isExpanded)}
+          type="button"
+        >
+          {isMobileExpanded ? (
+            <ChevronUp aria-hidden="true" size={18} />
+          ) : (
+            <ChevronDown aria-hidden="true" size={18} />
+          )}
+          {isMobileExpanded ? copy.collapseItems : copy.browseItems}
+        </button>
+        <div className="sidebar-search item-catalog-panel__search-row">
+          <div className="search-container">
+            <Search aria-hidden="true" size={18} />
+            <input
+              aria-label={copy.searchAllItems}
+              className="search-input item-catalog-panel__search"
+              id={`${catalogId}-search`}
+              onChange={(changeEvent: ChangeEvent<HTMLInputElement>) =>
+                onSearchQueryChange(changeEvent.target.value)
+              }
+              onKeyDown={handleSearchInputKeyDown}
+              placeholder={copy.searchAllItems}
+              ref={catalogSearchInputReference}
+              type="search"
+              value={searchQuery}
+            />
+            {searchQuery.length > 0 ? (
               <button
-                className="branding-btn"
-                onClick={() => onOpenModal("help-info")}
+                aria-label={copy.clearSearch}
+                className="search-toggle item-catalog-panel__clear-search"
+                onClick={() => {
+                  onSearchQueryChange("");
+                  catalogSearchInputReference.current?.focus();
+                }}
+                title={copy.clearSearch}
                 type="button"
               >
-                Help
+                <X aria-hidden="true" size={18} />
               </button>
             ) : null}
           </div>
         </div>
-        <div className="panel-tabs item-catalog-panel__categories" role="tablist">
+        <div
+          aria-label={copy.catalogLabel}
+          className="panel-tabs item-catalog-panel__categories"
+          role="tablist"
+        >
           {editorCatalogCategories.map((catalogCategory) => (
             <button
               aria-controls={catalogPanelId}
+              aria-label={copy.categories[catalogCategory]}
               aria-selected={category === catalogCategory}
               className={`tab-icon item-catalog-panel__category${
                 category === catalogCategory ? " active" : ""
               }`}
+              data-category={catalogCategory}
               id={`${catalogId}-tab-${catalogCategory}`}
               key={catalogCategory}
-              onClick={() => onCategoryChange(catalogCategory)}
+              onClick={() => selectCatalogCategory(catalogCategory)}
               onKeyDown={(keyboardEvent) =>
                 handleCategoryKeyDown(keyboardEvent, catalogCategory)
               }
@@ -234,53 +512,61 @@ export function ItemCatalogPanel({
               }}
               role="tab"
               tabIndex={category === catalogCategory ? 0 : -1}
+              title={copy.categories[catalogCategory]}
               type="button"
             >
               <CatalogCategoryIcon category={catalogCategory} />
-              <span className="tab-label">{catalogCategoryLabels[catalogCategory]}</span>
+              <span className="tab-label">{copy.categories[catalogCategory]}</span>
             </button>
           ))}
         </div>
         <div className="panel-content item-catalog-panel__content">
-          <div className="sidebar-search">
-            <div className="search-container item-catalog-panel__search-label">
-              <span className="sr-only">Search catalog</span>
-              <button
-                aria-label="Search catalog"
-                className="search-toggle"
-                title="Search"
-                type="button"
-              >
-                <Search aria-hidden="true" size={20} strokeWidth={2} />
-              </button>
-              <span className="search-wrapper">
-                <input
-                  className="search-input item-catalog-panel__search"
-                  onChange={(changeEvent: ChangeEvent<HTMLInputElement>) =>
-                    onSearchQueryChange(changeEvent.target.value)
-                  }
-                  placeholder="Search..."
-                  type="search"
-                  value={searchQuery}
-                />
-              </span>
-              <button
-                aria-label="Filter catalog"
-                className="filter-btn"
-                title="Filter"
-                type="button"
-              >
-                <Filter aria-hidden="true" size={20} strokeWidth={2} />
-              </button>
-              <div className="help-bubble-wrapper">
+          <div className="item-catalog-panel__heading">
+            <div className="item-catalog-panel__title-group">
+              <h2 className="item-catalog-panel__title">
+                {hasSearchQuery ? copy.searchResults : copy.categories[category]}
+              </h2>
+              {visibleCatalogItemCount === null ? null : (
+                <span aria-label={String(visibleCatalogItemCount)} className="item-catalog-panel__count">
+                  {visibleCatalogItemCount}
+                </span>
+              )}
+            </div>
+            <div className="item-catalog-panel__heading-controls">
+              {!hasSearchQuery && categoryFilters.length > 1 ? (
+                <label className="item-catalog-panel__filter">
+                  <span className="sr-only">{copy.categories[category]}</span>
+                  <select onChange={handleCatalogFilterChange} value={activeFilterId}>
+                    {categoryFilters.map((catalogFilter) => (
+                      <option key={catalogFilter.id} value={catalogFilter.id}>
+                        {catalogFilter.id === "all"
+                          ? copy.all
+                          : `${copy.filterLabels[catalogFilter.id] ?? catalogFilter.label} (${catalogFilter.count})`}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              <div className="item-catalog-panel__views" role="group">
                 <button
-                  aria-label="Help & Info"
-                  className="filter-btn"
-                  onClick={() => onOpenModal?.("help-info")}
-                  title="Help & Info"
+                  aria-label={copy.gridView}
+                  aria-pressed={viewMode === "grid"}
+                  className={`item-catalog-panel__view${viewMode === "grid" ? " active" : ""}`}
+                  onClick={() => setViewMode("grid")}
+                  title={copy.gridView}
                   type="button"
                 >
-                  <Info aria-hidden="true" size={20} strokeWidth={2} />
+                  <LayoutGrid aria-hidden="true" size={18} />
+                </button>
+                <button
+                  aria-label={copy.listView}
+                  aria-pressed={viewMode === "list"}
+                  className={`item-catalog-panel__view${viewMode === "list" ? " active" : ""}`}
+                  onClick={() => setViewMode("list")}
+                  title={copy.listView}
+                  type="button"
+                >
+                  <List aria-hidden="true" size={18} />
                 </button>
               </div>
             </div>
@@ -293,59 +579,20 @@ export function ItemCatalogPanel({
             <CatalogPanelContent
               catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
               category={category}
-              catalogPanelLoadState={catalogPanelLoadState}
+              catalogPanelLoadState={activeCatalogPanelLoadState}
+              catalogItems={visibleCatalogItems}
+              onRetry={handleCatalogLoadRetry}
               onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
               onCatalogItemSelect={onCatalogItemSelect}
-              searchQuery={searchQuery}
               selectedCatalogItemId={selectedCatalogItemId}
+              viewMode={viewMode}
+              locale={locale}
               shouldLoadThumbnails={shouldLoadThumbnails}
             />
           </div>
-          <KeybindFooter onOpenModal={onOpenModal} />
         </div>
       </div>
     </aside>
-  );
-}
-
-function KeybindFooter({
-  onOpenModal,
-}: Readonly<{ onOpenModal?: (modalId: EditorModalId) => void }>) {
-  const keybinds = [
-    ["V", "cursor"],
-    ["E", "erase"],
-    ["F", "fill"],
-    ["Q", "rotate"],
-    ["Del", "delete"],
-    ["⌘Z", "undo"],
-    ["⌘Y", "redo"],
-    ["WASD", "pan"],
-    ["R", "T", "zoom"],
-    ["⌘", "x-ray"],
-    ["RMB", "deselect"],
-  ] as const;
-
-  return (
-    <div className="keybind-footer">
-      <span className="keybind-title">
-        Keybinds
-        <button
-          className="keybind-more"
-          onClick={() => onOpenModal?.("keyboard-shortcuts")}
-          type="button"
-        >
-          (Learn More)
-        </button>
-      </span>
-      {keybinds.map((keybind) => (
-        <span className="keybind" key={keybind.join("-")}>
-          {keybind.slice(0, -1).map((key) => (
-            <kbd key={key}>{key}</kbd>
-          ))}
-          {keybind.at(-1)}
-        </span>
-      ))}
-    </div>
   );
 }
 
@@ -354,25 +601,17 @@ function CatalogCategoryIcon({
 }: Readonly<{
   category: EditorCatalogCategory;
 }>) {
-  if (category === "crops") {
-    return <span aria-hidden="true" className="tab-sprite crops-sprite" />;
-  }
+  if (category === "buildings") return <Building2 aria-hidden="true" size={22} />;
+  if (category === "crops") return <Wheat aria-hidden="true" size={22} />;
+  if (category === "trees") return <TreeDeciduous aria-hidden="true" size={22} />;
+  if (category === "equipment") return <Cog aria-hidden="true" size={22} />;
+  if (category === "paths") return <Route aria-hidden="true" size={22} />;
+  if (category === "lighting") return <Lamp aria-hidden="true" size={22} />;
+  if (category === "furniture") return <Armchair aria-hidden="true" size={22} />;
+  if (category === "decor") return <Sparkles aria-hidden="true" size={22} />;
 
-  const assetPathByCategory: Readonly<
-    Record<Exclude<EditorCatalogCategory, "crops">, string>
-  > = {
-    buildings: "/assets/ui/tabs/buildings.png",
-    placeables: "/assets/ui/tabs/package.png",
-    decor: "/assets/ui/tabs/couch_and_lamp.png",
-  };
-
-  return (
-    <img
-      alt=""
-      aria-hidden="true"
-      className="tab-img"
-      src={assetPathByCategory[category]}
-    />
+  throw new TypeError(
+    `Item catalog does not define an icon for category ${JSON.stringify(category)}.`,
   );
 }
 
@@ -382,9 +621,10 @@ type CatalogPanelContentProperties = Readonly<{
     CatalogPresentationChoice
   >;
   category: EditorCatalogCategory;
-  catalogPanelLoadState: CatalogPanelLoadState;
-  searchQuery: string;
+  catalogItems: readonly CatalogItem[] | null;
+  catalogPanelLoadState: ActiveCatalogPanelLoadState;
   selectedCatalogItemId: string | null;
+  onRetry: () => void;
   onCatalogItemPresentationChoiceChange: (
     catalogItem: CatalogItem,
     presentationChoice: CatalogPresentationChoice,
@@ -394,61 +634,74 @@ type CatalogPanelContentProperties = Readonly<{
     presentationChoice: CatalogPresentationChoice,
   ) => void;
   shouldLoadThumbnails?: boolean;
+  viewMode: CatalogItemViewMode;
+  locale: HomepageLocale;
 }>;
 
 export function CatalogPanelContent({
   catalogPresentationChoicesByItemId,
   category,
+  catalogItems,
   catalogPanelLoadState,
-  searchQuery,
   selectedCatalogItemId,
+  onRetry,
   onCatalogItemPresentationChoiceChange,
   onCatalogItemSelect,
   shouldLoadThumbnails = true,
+  viewMode,
+  locale,
 }: CatalogPanelContentProperties) {
+  const copy = getCatalogPanelCopy(locale);
+
   if (
     catalogPanelLoadState.kind === "loading" ||
-    catalogPanelLoadState.category !== category
+    (catalogPanelLoadState.scope === "category" &&
+      catalogPanelLoadState.category !== category)
   ) {
     return (
       <p aria-live="polite" className="item-catalog-panel__state" role="status">
-        Loading local catalog…
+        {copy.loading}
       </p>
     );
   }
 
   if (catalogPanelLoadState.kind === "error") {
     return (
-      <p className="item-catalog-panel__error" role="alert">
-        {catalogPanelLoadState.message}
-      </p>
+      <div className="item-catalog-panel__error" role="alert">
+        <p>
+          {copy.loadFailed} {catalogPanelLoadState.message}
+        </p>
+        <button onClick={onRetry} type="button">
+          {copy.retry}
+        </button>
+      </div>
     );
   }
 
-  const visibleCatalogItems = getCatalogItemsForPanel(
-    catalogPanelLoadState.catalog,
-    category,
-    searchQuery,
-  );
+  if (catalogItems === null) {
+    throw new Error(
+      `Ready catalog panel state for scope ${JSON.stringify(catalogPanelLoadState.scope)} has no filtered catalog items.`,
+    );
+  }
 
-  if (visibleCatalogItems.length === 0) {
+  if (catalogItems.length === 0) {
     return (
-      <p className="item-catalog-panel__state">
-        No verified {catalogCategoryLabels[category].toLowerCase()} items match
-        {" "}
-        {JSON.stringify(searchQuery)}.
+      <p aria-live="polite" className="item-catalog-panel__state" role="status">
+        {copy.noResults}
       </p>
     );
   }
 
   return (
     <CatalogItemGrid
-      catalogItems={visibleCatalogItems}
+      catalogItems={catalogItems}
       catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
       onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
       onCatalogItemSelect={onCatalogItemSelect}
       selectedCatalogItemId={selectedCatalogItemId}
       shouldLoadThumbnails={shouldLoadThumbnails}
+      viewMode={viewMode}
+      locale={locale}
     />
   );
 }
@@ -460,13 +713,19 @@ export function CatalogItemGrid({
   onCatalogItemPresentationChoiceChange,
   onCatalogItemSelect,
   shouldLoadThumbnails = true,
+  viewMode = "grid",
+  locale = "en",
 }: CatalogItemGridProperties) {
   const itemGridScrollRootReference = useRef<HTMLDivElement>(null);
+  const copy = getCatalogPanelCopy(locale);
 
   return (
     <div
-      aria-label="Verified catalog items"
-      className="item-grid item-catalog-panel__grid"
+      aria-label={copy.catalogLabel}
+      className={`item-grid item-catalog-panel__grid item-catalog-panel__items${
+        viewMode === "list" ? " item-catalog-panel__grid--list" : ""
+      }`}
+      role="list"
       ref={itemGridScrollRootReference}
     >
       {catalogItems.map((catalogItem, catalogItemIndex) => {
@@ -488,11 +747,25 @@ export function CatalogItemGrid({
           (presentationCapabilities?.visibleVariants.length ?? 0) > 1
             ? getVisibleVariantLabel(catalogItem, presentationChoice)
             : null;
+        const localizedVariantLabel = visibleVariantLabel === null
+          ? null
+          : copy.variantLabels[visibleVariantLabel] ?? visibleVariantLabel;
+        const showsFlipControl = presentationCapabilities?.canFlip === true;
+        const showsItemControls =
+          showsRotationControl || localizedVariantLabel !== null || showsFlipControl;
 
         return (
-          <div className="item-catalog-panel__item-container" key={catalogItem.id}>
+          <div
+            className="item-catalog-panel__item-container"
+            key={catalogItem.id}
+            role="listitem"
+          >
             <button
-              aria-label={`Select ${displayName}, ${String(catalogItem.tileSize.width)} by ${String(catalogItem.tileSize.height)} tiles`}
+              aria-label={copy.selectItem(
+                displayName,
+                catalogItem.tileSize.width,
+                catalogItem.tileSize.height,
+              )}
               aria-pressed={isSelectedCatalogItem}
               className={`icon-cell item-catalog-panel__item${
                 isSelectedCatalogItem ? " selected" : ""
@@ -529,38 +802,45 @@ export function CatalogItemGrid({
                   )}
                 />
               )}
+              <span aria-hidden="true" className="item-catalog-panel__item-name">
+                {displayName}
+              </span>
               <span className="sr-only">
                 {displayName}, {catalogItem.tileSize.width} × {catalogItem.tileSize.height}
               </span>
             </button>
-            {showsRotationControl ? (
-              <CatalogItemChoiceButton
-                catalogItem={catalogItem}
-                control="rotation"
-                label="Rotate"
-                onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
-                presentationChoice={presentationChoice}
-              />
-            ) : null}
-            {visibleVariantLabel !== null ? (
-              <CatalogItemChoiceButton
-                ariaLabel={`Cycle ${displayName} variant, current ${visibleVariantLabel}`}
-                catalogItem={catalogItem}
-                control="variant"
-                label={visibleVariantLabel}
-                onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
-                presentationChoice={presentationChoice}
-              />
-            ) : null}
-            {presentationCapabilities?.canFlip === true ? (
-              <CatalogItemChoiceButton
-                ariaPressed={presentationChoice.flipped}
-                catalogItem={catalogItem}
-                control="flip"
-                label={presentationChoice.flipped ? "Unflip" : "Flip"}
-                onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
-                presentationChoice={presentationChoice}
-              />
+            {showsItemControls ? (
+              <div className="item-catalog-panel__item-controls">
+                {showsRotationControl ? (
+                  <CatalogItemChoiceButton
+                    catalogItem={catalogItem}
+                    control="rotation"
+                    label={copy.rotate}
+                    onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
+                    presentationChoice={presentationChoice}
+                  />
+                ) : null}
+                {localizedVariantLabel !== null ? (
+                  <CatalogItemChoiceButton
+                    ariaLabel={copy.cycleVariant(catalogItem.name, localizedVariantLabel)}
+                    catalogItem={catalogItem}
+                    control="variant"
+                    label={localizedVariantLabel}
+                    onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
+                    presentationChoice={presentationChoice}
+                  />
+                ) : null}
+                {showsFlipControl ? (
+                  <CatalogItemChoiceButton
+                    ariaPressed={presentationChoice.flipped}
+                    catalogItem={catalogItem}
+                    control="flip"
+                    label={presentationChoice.flipped ? copy.unflip : copy.flip}
+                    onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
+                    presentationChoice={presentationChoice}
+                  />
+                ) : null}
+              </div>
             ) : null}
           </div>
         );
@@ -1155,15 +1435,21 @@ function CatalogItemChoiceButton({
   ) => void;
   presentationChoice: CatalogPresentationChoice;
 }>) {
+  const accessibleName = ariaLabel ?? label;
+  let controlClassName = "item-catalog-panel__variant-control";
+  if (control === "rotation") {
+    controlClassName = "rotate-btn item-catalog-panel__rotation-control";
+  } else if (control === "flip") {
+    controlClassName = `flip-btn item-catalog-panel__flip-control${
+      presentationChoice.flipped ? " flipped" : ""
+    }`;
+  }
+
   return (
     <button
-      aria-label={ariaLabel}
+      aria-label={accessibleName}
       aria-pressed={ariaPressed}
-      className={`${
-        control === "flip" ? "flip-btn" : "rotate-btn"
-      } item-catalog-panel__presentation-control${
-        control === "flip" && presentationChoice.flipped ? " flipped" : ""
-      }`}
+      className={`${controlClassName} item-catalog-panel__presentation-control`}
       onClick={() => onCatalogItemPresentationChoiceChange(
         catalogItem,
         getNextCatalogItemControlChoice(
@@ -1172,9 +1458,16 @@ function CatalogItemChoiceButton({
           control,
         ),
       )}
+      title={accessibleName}
       type="button"
     >
-      {label}
+      {control === "rotation" ? (
+        <RotateCw aria-hidden="true" size={15} />
+      ) : control === "flip" ? (
+        <FlipHorizontal2 aria-hidden="true" size={15} />
+      ) : (
+        <span className="item-catalog-panel__variant-label">{label}</span>
+      )}
     </button>
   );
 }
@@ -1258,28 +1551,79 @@ function throwUnsupportedCatalogItemControl(
 
 export async function loadCatalogPanelState(
   category: EditorCatalogCategory,
-  catalogPanelLoader: CatalogPanelLoader = loadCatalogCategory,
+  catalogPanelLoader: CatalogPanelLoader = () =>
+    loadSidebarCatalogCategory(category),
 ): Promise<CatalogPanelLoadState> {
+  validateCatalogPanelCategory(category);
+
   try {
     return {
       kind: "ready",
+      scope: "category",
       category,
-      catalog: await catalogPanelLoader(category),
+      catalog: await catalogPanelLoader(),
     };
   } catch (caughtError) {
     return {
       kind: "error",
+      scope: "category",
       category,
       message: formatCatalogLoadError(caughtError),
     };
   }
 }
 
+function getActiveCatalogPanelLoadState(
+  categoryCatalogLoadState: CatalogPanelLoadState,
+  fullCatalogLoadState: FullCatalogLoadState,
+  category: EditorCatalogCategory,
+  hasSearchQuery: boolean,
+): ActiveCatalogPanelLoadState {
+  if (hasSearchQuery) {
+    return fullCatalogLoadState;
+  }
+
+  if (
+    categoryCatalogLoadState.kind === "ready" &&
+    categoryCatalogLoadState.category === category
+  ) {
+    return categoryCatalogLoadState;
+  }
+
+  if (fullCatalogLoadState.kind === "ready") {
+    return fullCatalogLoadState;
+  }
+
+  if (categoryCatalogLoadState.category === category) {
+    return categoryCatalogLoadState;
+  }
+
+  return { kind: "loading", scope: "category", category };
+}
+
+export async function loadFullCatalogPanelState(
+  catalogPanelLoader: CatalogPanelLoader = loadSidebarCatalog,
+): Promise<FullCatalogLoadState> {
+  try {
+    return {
+      kind: "ready",
+      scope: "all",
+      catalog: await catalogPanelLoader(),
+    };
+  } catch (caughtError) {
+    return {
+      kind: "error",
+      scope: "all",
+      message: formatCatalogLoadError(caughtError),
+    };
+  }
+}
+
 export function getReadyCatalogItems(
-  catalogPanelLoadState: CatalogPanelLoadState,
+  fullCatalogLoadState: FullCatalogLoadState,
 ): readonly CatalogItem[] | null {
-  return catalogPanelLoadState.kind === "ready"
-    ? catalogPanelLoadState.catalog.items
+  return fullCatalogLoadState.kind === "ready"
+    ? fullCatalogLoadState.catalog.items
     : null;
 }
 
@@ -1287,9 +1631,11 @@ export function getCatalogItemsForPanel(
   catalog: Catalog,
   category: EditorCatalogCategory,
   searchQuery: string,
+  filterId = "all",
 ): readonly CatalogItem[] {
   validateCatalogPanelCategory(category);
   validateCatalogSearchQuery(searchQuery);
+  validateCatalogFilterId(filterId);
 
   if (!Array.isArray(catalog.items)) {
     throw new TypeError(
@@ -1297,104 +1643,7 @@ export function getCatalogItemsForPanel(
     );
   }
 
-  const lowerCaseSearchQuery = searchQuery.trim().toLowerCase();
-  if (category === "placeables" && isReferencePlaceableCatalog(catalog)) {
-    return selectReferencePlaceableCatalogItems(catalog.items).filter((catalogItem) =>
-      matchesCatalogSearchQuery(catalogItem, lowerCaseSearchQuery),
-    );
-  }
-  const allowedCatalogItemCategories =
-    catalogItemCategoriesByPanelCategory[category];
-
-  return catalog.items.filter((catalogItem) => {
-    const isFurnitureItem = catalogItem.renderingMetadata?.kind === "furniture";
-    const isDecorBigCraftableItem =
-      catalogItem.category === "placeable" &&
-      catalogItem.id.startsWith("big-craftable:");
-    const belongsToPanel = category === "decor"
-      ? catalogItem.category === "decor" || isFurnitureItem || isDecorBigCraftableItem
-      : allowedCatalogItemCategories.includes(catalogItem.category) &&
-        !(category === "placeables" && isFurnitureItem);
-
-    return belongsToPanel && matchesCatalogSearchQuery(catalogItem, lowerCaseSearchQuery);
-  });
-}
-
-function isReferencePlaceableCatalog(catalog: Catalog): boolean {
-  return catalog.items.some((catalogItem) => catalogItem.id === "object:599") &&
-    catalog.items.some((catalogItem) => catalogItem.id === "grass_7");
-}
-
-function selectReferencePlaceableCatalogItems(
-  catalogItems: readonly CatalogItem[],
-): readonly CatalogItem[] {
-  const candidates = catalogItems.filter((catalogItem) =>
-    catalogItem.renderingMetadata?.kind !== "furniture" &&
-    (catalogItem.category === "placeable" ||
-      catalogItem.category === "floor" ||
-      catalogItem.category === "fence" ||
-      catalogItem.id.startsWith("clump_")),
-  );
-  const selectedCatalogItems: CatalogItem[] = [];
-  const consumedCatalogItemIds = new Set<string>();
-
-  for (const referenceName of referencePlaceableCatalogNames) {
-    const baseName = normalizeReferencePlaceableName(referenceName);
-    const familyName = getReferencePlaceableFamilyName(referenceName);
-    const matchingItems = candidates.filter((catalogItem) =>
-      !consumedCatalogItemIds.has(catalogItem.id) &&
-      matchesReferencePlaceableName(catalogItem, referenceName, baseName, familyName),
-    );
-    const selectedCatalogItem = matchingItems[0];
-
-    if (selectedCatalogItem === undefined) {
-      throw new Error(
-        `Reference placeables require catalog item ${JSON.stringify(referenceName)}; no unused local item matched it.`,
-      );
-    }
-
-    consumedCatalogItemIds.add(selectedCatalogItem.id);
-    selectedCatalogItems.push(selectedCatalogItem);
-  }
-
-  return selectedCatalogItems;
-}
-
-function matchesReferencePlaceableName(
-  catalogItem: CatalogItem,
-  referenceName: string,
-  baseName: string,
-  familyName: string | undefined,
-): boolean {
-  if (referenceName === "Tilled Dirt (Dry)") {
-    return catalogItem.id === "hoedirt";
-  }
-  if (referenceName === "Grass Starter" || referenceName === "Blue Grass Starter") {
-    return catalogItem.id === (referenceName === "Grass Starter" ? "grass_1" : "grass_7");
-  }
-  if (isReferenceFloorName(referenceName)) {
-    return catalogItem.category === "floor" && catalogItem.name === baseName;
-  }
-  if (isReferenceFenceName(referenceName)) {
-    return referenceName === "Gate"
-      ? catalogItem.id === "object:325"
-      : catalogItem.category === "fence" && catalogItem.name === baseName;
-  }
-  if (familyName !== undefined) {
-    return catalogItem.name === familyName;
-  }
-  if (referenceName.includes("Tree")) {
-    return (catalogItem.id.startsWith("wildtree_") || catalogItem.id.startsWith("fruittree_")) &&
-      catalogItem.name === baseName;
-  }
-  return catalogItem.name === referenceName || catalogItem.name === baseName;
-}
-
-function normalizeReferencePlaceableName(referenceName: string): string {
-  return referenceName
-    .replace(/ \(Lit\)$/, "")
-    .replace(/ \(Normal\)$/, "")
-    .replace(/ \(No Fruit\)$/, "");
+  return getCatalogSidebarItems(catalog.items, category, searchQuery, filterId);
 }
 
 function getReferencePlaceableFamilyName(referenceName: string): string | undefined {
@@ -1408,30 +1657,6 @@ function getReferencePlaceableFamilyName(referenceName: string): string | undefi
     return "Campfire";
   }
   return undefined;
-}
-
-function isReferenceFloorName(referenceName: string): boolean {
-  return [
-    "Wood Floor",
-    "Stone Floor",
-    "Weathered Floor",
-    "Crystal Floor",
-    "Straw Floor",
-    "Gravel Path",
-    "Wood Path",
-    "Crystal Path",
-    "Cobblestone Path",
-    "Stepping Stone Path",
-    "Brick Floor",
-    "Rustic Plank Floor",
-    "Stone Walkway Floor",
-  ].includes(referenceName);
-}
-
-function isReferenceFenceName(referenceName: string): boolean {
-  return ["Gate", "Hardwood Fence", "Wood Fence", "Stone Fence", "Iron Fence"].includes(
-    referenceName,
-  );
 }
 
 export function getCatalogItemThumbnailStyle(
@@ -1661,20 +1886,89 @@ export function getNextCatalogCategory(
     return editorCatalogCategories[editorCatalogCategories.length - 1];
   }
 
+  const columnCount = 4;
+  const rowCount = Math.ceil(editorCatalogCategories.length / columnCount);
+  const currentRow = Math.floor(currentCategoryIndex / columnCount);
+  const currentColumn = currentCategoryIndex % columnCount;
+
   if (keyboardKey === "ArrowLeft") {
-    return editorCatalogCategories[
-      (currentCategoryIndex - 1 + editorCatalogCategories.length) %
-        editorCatalogCategories.length
-    ];
+    const previousColumn = (currentColumn - 1 + columnCount) % columnCount;
+    return editorCatalogCategories[currentRow * columnCount + previousColumn] ?? null;
   }
 
   if (keyboardKey === "ArrowRight") {
-    return editorCatalogCategories[
-      (currentCategoryIndex + 1) % editorCatalogCategories.length
-    ];
+    const nextColumn = (currentColumn + 1) % columnCount;
+    return editorCatalogCategories[currentRow * columnCount + nextColumn] ?? null;
+  }
+
+  if (keyboardKey === "ArrowUp") {
+    const previousRow = (currentRow - 1 + rowCount) % rowCount;
+    return editorCatalogCategories[previousRow * columnCount + currentColumn] ?? null;
+  }
+
+  if (keyboardKey === "ArrowDown") {
+    const nextRow = (currentRow + 1) % rowCount;
+    return editorCatalogCategories[nextRow * columnCount + currentColumn] ?? null;
   }
 
   return null;
+}
+
+export function shouldFocusCatalogSearchForShortcut(
+  keyboardKey: string,
+  eventTarget: EventTarget | null,
+  activeElement: EventTarget | null,
+  hasOpenModal: boolean,
+  modifiers: Readonly<{
+    altKey?: boolean;
+    ctrlKey?: boolean;
+    metaKey?: boolean;
+  }> = {},
+): boolean {
+  if (
+    keyboardKey !== "/" ||
+    hasOpenModal ||
+    modifiers.altKey === true ||
+    modifiers.ctrlKey === true ||
+    modifiers.metaKey === true
+  ) {
+    return false;
+  }
+
+  return !isCatalogTextEntryTarget(eventTarget) &&
+    !isCatalogTextEntryTarget(activeElement);
+}
+
+export function shouldExpandCatalogPanelBeforeSearchFocus(
+  panelPosition: EditorPanelPosition,
+  isMobileExpanded: boolean,
+  isMobileViewport: boolean,
+): boolean {
+  return panelPosition === "bottom" &&
+    isMobileViewport &&
+    !isMobileExpanded;
+}
+
+function isCatalogTextEntryTarget(eventTarget: EventTarget | null): boolean {
+  if (eventTarget === null || typeof eventTarget !== "object") {
+    return false;
+  }
+
+  const target = eventTarget as EventTarget & Readonly<{
+    tagName?: string;
+    isContentEditable?: boolean;
+    closest?: (selector: string) => Element | null;
+  }>;
+  const tagName = target.tagName?.toUpperCase();
+  if (tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT") {
+    return true;
+  }
+
+  if (target.isContentEditable === true) {
+    return true;
+  }
+
+  return target.closest?.('[contenteditable]:not([contenteditable="false"])') != null;
 }
 
 function getCatalogSpriteCoordinates(
@@ -1709,15 +2003,6 @@ function getCatalogSpriteSize(
   }
 
   return { height: 16, width: 16 };
-}
-
-function matchesCatalogSearchQuery(
-  catalogItem: CatalogItem,
-  lowerCaseSearchQuery: string,
-): boolean {
-  return lowerCaseSearchQuery.length === 0 ||
-    catalogItem.name.toLowerCase().includes(lowerCaseSearchQuery) ||
-    catalogItem.id.toLowerCase().includes(lowerCaseSearchQuery);
 }
 
 function formatCatalogLoadError(caughtError: unknown): string {
@@ -1756,6 +2041,14 @@ function validateCatalogSearchQuery(searchQuery: string): void {
   if (typeof searchQuery !== "string") {
     throw new TypeError(
       `Catalog search query must be a string. Received: ${describeCatalogPanelValue(searchQuery)}.`,
+    );
+  }
+}
+
+function validateCatalogFilterId(filterId: string): void {
+  if (typeof filterId !== "string" || filterId.trim().length === 0) {
+    throw new TypeError(
+      `Catalog filter ID must be a non-empty string. Received: ${describeCatalogPanelValue(filterId)}.`,
     );
   }
 }

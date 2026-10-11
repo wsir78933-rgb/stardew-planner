@@ -13,6 +13,7 @@ import {
   ItemCatalogPanel,
   getNextCatalogCategory,
 } from "../../src/components/item-catalog-panel";
+import { editorCatalogCategories } from "../../src/editor/editor-view-state";
 
 const freePlacementWarningState = vi.hoisted(() => ({ isVisible: false }));
 
@@ -343,7 +344,7 @@ describe("editor shell", () => {
     }
   });
 
-  it("renders the four catalog categories and a search field", () => {
+  it("renders all eight catalog categories and a search field", () => {
     const catalogMarkup = renderToStaticMarkup(
       createElement(ItemCatalogPanel, {
         catalogPresentationChoicesByItemId: new Map(),
@@ -360,8 +361,13 @@ describe("editor shell", () => {
 
     expect(catalogMarkup).toContain("Buildings");
     expect(catalogMarkup).toContain("Crops");
-    expect(catalogMarkup).toContain("Placeables");
+    expect(catalogMarkup).toContain("Trees");
+    expect(catalogMarkup).toContain("Equipment");
+    expect(catalogMarkup).toContain("Fences &amp; Paths");
+    expect(catalogMarkup).toContain("Lighting");
+    expect(catalogMarkup).toContain("Furniture");
     expect(catalogMarkup).toContain("Decor");
+    expect(catalogMarkup.match(/role="tab"/g)).toHaveLength(8);
     expect(catalogMarkup).toContain('type="search"');
   });
 
@@ -397,11 +403,83 @@ describe("editor shell", () => {
     expect(catalogMarkup).toContain('tabindex="0"');
   });
 
-  it("moves catalog tab selection with left, right, home, and end keys", () => {
-    expect(getNextCatalogCategory("crops", "ArrowLeft")).toBe("buildings");
-    expect(getNextCatalogCategory("crops", "ArrowRight")).toBe("placeables");
-    expect(getNextCatalogCategory("decor", "ArrowRight")).toBe("buildings");
-    expect(getNextCatalogCategory("placeables", "Home")).toBe("buildings");
+  it("moves through all eight catalog tabs with arrow, home, and end keys", () => {
+    expect(editorCatalogCategories).toEqual([
+      "buildings",
+      "crops",
+      "trees",
+      "equipment",
+      "paths",
+      "lighting",
+      "furniture",
+      "decor",
+    ]);
+
+    const expectedArrowTargets = {
+      buildings: {
+        ArrowLeft: "equipment",
+        ArrowRight: "crops",
+        ArrowUp: "paths",
+        ArrowDown: "paths",
+      },
+      crops: {
+        ArrowLeft: "buildings",
+        ArrowRight: "trees",
+        ArrowUp: "lighting",
+        ArrowDown: "lighting",
+      },
+      trees: {
+        ArrowLeft: "crops",
+        ArrowRight: "equipment",
+        ArrowUp: "furniture",
+        ArrowDown: "furniture",
+      },
+      equipment: {
+        ArrowLeft: "trees",
+        ArrowRight: "buildings",
+        ArrowUp: "decor",
+        ArrowDown: "decor",
+      },
+      paths: {
+        ArrowLeft: "decor",
+        ArrowRight: "lighting",
+        ArrowUp: "buildings",
+        ArrowDown: "buildings",
+      },
+      lighting: {
+        ArrowLeft: "paths",
+        ArrowRight: "furniture",
+        ArrowUp: "crops",
+        ArrowDown: "crops",
+      },
+      furniture: {
+        ArrowLeft: "lighting",
+        ArrowRight: "decor",
+        ArrowUp: "trees",
+        ArrowDown: "trees",
+      },
+      decor: {
+        ArrowLeft: "furniture",
+        ArrowRight: "paths",
+        ArrowUp: "equipment",
+        ArrowDown: "equipment",
+      },
+    } as const;
+
+    for (const category of editorCatalogCategories) {
+      for (const keyboardKey of [
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowUp",
+        "ArrowDown",
+      ] as const) {
+        expect(getNextCatalogCategory(category, keyboardKey)).toBe(
+          expectedArrowTargets[category][keyboardKey],
+        );
+      }
+    }
+
+    expect(getNextCatalogCategory("paths", "Home")).toBe("buildings");
     expect(getNextCatalogCategory("crops", "End")).toBe("decor");
     expect(getNextCatalogCategory("crops", "Enter")).toBeNull();
   });

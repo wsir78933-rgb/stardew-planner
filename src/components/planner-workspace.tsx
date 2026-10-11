@@ -221,6 +221,7 @@ type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
 type PreparedPlannerWorkspaceContentProperties = Readonly<{
   cameraStateRetention: PlannerCameraStateRetention;
   editorModalCopy: EditorModalCopy;
+  locale: HomepageLocale;
   saveModalCopy: SaveModalCopy;
   newProjectName: string;
   preparedWorkspace: PreparedPlannerWorkspace;
@@ -563,6 +564,7 @@ export function PlannerWorkspace({
     <>
       <PlannerWorkspaceRenderedBoundary
         editorModalCopy={editorModalCopy}
+        locale={locale}
         loadBuildingMetadata={loadBuildingMetadata}
         loadRequiredCatalogCategory={loadRequiredCatalogCategory}
         newProjectName={saveModalCopy.localProjects.defaultProjectName}
@@ -630,6 +632,7 @@ function StaticPreparedPlannerWorkspace({
   return (
     <PlannerWorkspaceRenderedBoundary
       editorModalCopy={getEditorModalCopy("en")}
+      locale="en"
       loadBuildingMetadata={loadBuildingPlacementMetadata}
       loadRequiredCatalogCategory={loadCatalogCategory}
       newProjectName="Untitled Project"
@@ -649,6 +652,7 @@ function StaticPreparedPlannerWorkspace({
 
 function PlannerWorkspaceRenderedBoundary({
   editorModalCopy,
+  locale,
   loadBuildingMetadata,
   loadRequiredCatalogCategory,
   newProjectName,
@@ -660,6 +664,7 @@ function PlannerWorkspaceRenderedBoundary({
   saveModalCopy,
 }: Readonly<{
   editorModalCopy: EditorModalCopy;
+  locale: HomepageLocale;
   loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory: typeof loadCatalogCategory;
   newProjectName: string;
@@ -686,6 +691,7 @@ function PlannerWorkspaceRenderedBoundary({
         <PreparedPlannerWorkspaceContent
           cameraStateRetention={cameraStateRetentionReference.current}
           editorModalCopy={editorModalCopy}
+          locale={locale}
           loadBuildingMetadata={loadBuildingMetadata}
           loadRequiredCatalogCategory={loadRequiredCatalogCategory}
           newProjectName={newProjectName}
@@ -725,6 +731,7 @@ function PlannerWorkspaceGeometry({
 function PreparedPlannerWorkspaceContent({
   cameraStateRetention,
   editorModalCopy,
+  locale,
   newProjectName,
   preparedWorkspace,
   projectWorkspace,
@@ -1057,6 +1064,7 @@ function PreparedPlannerWorkspaceContent({
       <ItemCatalogPanel
         catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
         category={plannerWorkspaceState.catalogCategory}
+        locale={locale}
         leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
         onCatalogItemPresentationChoiceChange={handleCatalogItemPresentationChoiceChange}
         onCatalogItemSelect={handleOrdinaryCatalogItemSelect}

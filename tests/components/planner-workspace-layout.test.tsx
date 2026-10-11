@@ -352,33 +352,63 @@ function renderPreparedWorkspace(
 }
 
 function getMobilePlannerWorkspaceStyles(plannerWorkspaceStyles: string): string {
-  const mobileRuleStart = plannerWorkspaceStyles.lastIndexOf("@media (max-width: 640px)");
+  const mobileMediaQuery = "@media (max-width: 640px)";
+  const mobileRuleBlocks: string[] = [];
+  let searchStart = 0;
 
-  if (mobileRuleStart === -1) {
+  while (true) {
+    const mobileRuleStart = plannerWorkspaceStyles.indexOf(
+      mobileMediaQuery,
+      searchStart,
+    );
+    if (mobileRuleStart === -1) {
+      break;
+    }
+
+    const openingBraceIndex = plannerWorkspaceStyles.indexOf("{", mobileRuleStart);
+    if (openingBraceIndex === -1) {
+      throw new Error(
+        `Mobile planner workspace CSS rule ${JSON.stringify(mobileMediaQuery)} has no opening brace.`,
+      );
+    }
+
+    let braceDepth = 0;
+    let mobileRuleEnd = -1;
+    for (
+      let styleCharacterIndex = openingBraceIndex;
+      styleCharacterIndex < plannerWorkspaceStyles.length;
+      styleCharacterIndex += 1
+    ) {
+      const styleCharacter = plannerWorkspaceStyles[styleCharacterIndex];
+      if (styleCharacter === "{") {
+        braceDepth += 1;
+      }
+      if (styleCharacter === "}") {
+        braceDepth -= 1;
+        if (braceDepth === 0) {
+          mobileRuleEnd = styleCharacterIndex + 1;
+          break;
+        }
+      }
+    }
+
+    if (mobileRuleEnd === -1) {
+      throw new Error(
+        `Mobile planner workspace CSS rule ${JSON.stringify(mobileMediaQuery)} is not closed.`,
+      );
+    }
+
+    mobileRuleBlocks.push(
+      plannerWorkspaceStyles.slice(mobileRuleStart, mobileRuleEnd),
+    );
+    searchStart = mobileRuleEnd;
+  }
+
+  if (mobileRuleBlocks.length === 0) {
     throw new Error("Expected the mobile planner workspace CSS rule.");
   }
 
-  const openingBraceIndex = plannerWorkspaceStyles.indexOf("{", mobileRuleStart);
-  let braceDepth = 0;
-
-  for (
-    let styleCharacterIndex = openingBraceIndex;
-    styleCharacterIndex < plannerWorkspaceStyles.length;
-    styleCharacterIndex += 1
-  ) {
-    const styleCharacter = plannerWorkspaceStyles[styleCharacterIndex];
-    if (styleCharacter === "{") {
-      braceDepth += 1;
-    }
-    if (styleCharacter === "}") {
-      braceDepth -= 1;
-      if (braceDepth === 0) {
-        return plannerWorkspaceStyles.slice(mobileRuleStart, styleCharacterIndex + 1);
-      }
-    }
-  }
-
-  throw new Error("Mobile planner workspace CSS rule is not closed.");
+  return mobileRuleBlocks.join("\n");
 }
 
 describe("planner workspace frozen layout contracts", () => {
@@ -558,7 +588,7 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
-  it("keeps the joystick within its shortened Canvas and mirrors only the mobile bottom search strip", () => {
+  it("keeps the mobile search row inside the drawer and the joystick within the shortened Canvas", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
     const mobilePlannerWorkspaceStyles = getMobilePlannerWorkspaceStyles(
       plannerWorkspaceStyles,
@@ -571,7 +601,7 @@ describe("planner workspace frozen layout contracts", () => {
       /\.planner-editor-shell \.planner-joystick\.joystick-outer\s*\{[^}]*bottom:\s*var\(--lk-xs\);/s,
     );
     expect(mobilePlannerWorkspaceStyles).toMatch(
-      /\.planner-editor-shell \.item-catalog-panel--bottom\.left-hand \.sidebar-search\s*\{[^}]*left:\s*auto;[^}]*right:\s*-49\.43px;/s,
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.sidebar-search\.item-catalog-panel__search-row,\s*\.planner-editor-shell \.item-catalog-panel--bottom\.left-hand \.sidebar-search\.item-catalog-panel__search-row\s*\{[^}]*inset:\s*auto;[^}]*position:\s*static;[^}]*width:\s*100%;/s,
     );
   });
 
@@ -678,11 +708,29 @@ describe("planner workspace frozen layout contracts", () => {
     expect(coarseMobilePointerRule).toMatch(
       /\.planner-editor-shell:has\(\.menu-bar\.left-hand\) \.toolbar-wrapper\s*\{[^}]*left:\s*auto;[^}]*right:\s*var\(--lk-xs\);/s,
     );
-    expect(coarseMobilePointerRule).toMatch(
-      /\.planner-editor-shell \.panel-tabs\s*\{[^}]*flex-basis:\s*52px;[^}]*gap:\s*1px;[^}]*padding:\s*4px;/s,
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel \.item-catalog-panel__categories\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*grid-template-rows:\s*repeat\(2, 36px\);/s,
     );
-    expect(coarseMobilePointerRule).toMatch(
-      /\.planner-editor-shell \.tab-icon\s*\{[^}]*flex:\s*0 0 44px;[^}]*height:\s*44px;[^}]*width:\s*44px;/s,
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel \.item-catalog-panel__category\s*\{[^}]*height:\s*44px;/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel \.item-catalog-panel__categories\s*\{[^}]*grid-template-rows:\s*repeat\(2, 44px\);/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom\.left-hand \.panel-tabs\.item-catalog-panel__categories\s*\{[^}]*height:\s*auto;/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom\.left-hand \.panel-content\.item-catalog-panel__content\s*\{[^}]*padding-left:\s*0;[^}]*padding-right:\s*0;/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom \.item-catalog-panel__items\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel--bottom\[data-expanded="false"\] \.item-catalog-panel__mobile-toggle,\s*\.planner-editor-shell \.item-catalog-panel--bottom\[data-expanded="true"\] \.item-catalog-panel__mobile-toggle\s*\{[^}]*min-height:\s*44px;/s,
+    );
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel \.item-catalog-panel__search\s*\{[^}]*height:\s*44px;/s,
     );
     expect(coarseMobilePointerRule).toMatch(
       /\.planner-editor-shell \.rotate-btn,[\s\S]*?\.planner-editor-shell \.flip-btn\s*\{[^}]*height:\s*44px;[^}]*width:\s*44px;/s,
@@ -690,9 +738,6 @@ describe("planner workspace frozen layout contracts", () => {
     expect(coarseMobilePointerRule).not.toContain(".planner-editor-shell .arrow-btn");
     expect(coarseMobilePointerRule).not.toContain(".planner-joystick");
     expect(compactCoarseMobilePointerRule).toBeDefined();
-    expect(compactCoarseMobilePointerRule).toMatch(
-      /\.planner-editor-shell \.item-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/s,
-    );
     expect(compactCoarseMobilePointerRule).not.toContain(".planner-joystick");
     expect(narrowToolbarPointerRule).toBeDefined();
     expect(narrowToolbarPointerRule).toMatch(

@@ -1,5 +1,14 @@
 export { loadCatalog, catalogDatasetUrls } from "./catalog-loader";
 export {
+  catalogSidebarCategories,
+  getCatalogSidebarCategory,
+  getCatalogSidebarFilters,
+  getCatalogSidebarItems,
+  selectCatalogSidebarPlaceableItems,
+} from "./catalog-sidebar-model";
+export type { CatalogSidebarCategory } from "./catalog-sidebar-model";
+export { loadSidebarCatalog, loadSidebarCatalogCategory } from "./catalog-sidebar-loader";
+export {
   createCatalogCategoryLoader,
   loadBrowserCatalogDataset,
   loadCatalogCategory,
