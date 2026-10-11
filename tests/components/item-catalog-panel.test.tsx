@@ -291,7 +291,6 @@ describe("item catalog panel", () => {
         panelPosition: "bottom",
         searchQuery: "",
         selectedCatalogItemId: null,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         onCategoryChange: () => undefined,
         onSearchQueryChange: () => undefined,
@@ -299,6 +298,78 @@ describe("item catalog panel", () => {
     );
 
     expect(catalogPanelMarkup).toContain('placeholder="Search all items"');
+  });
+
+  it("renders the eight category icons with the live reference SVG paths and stroke", () => {
+    const catalogPanelMarkup = renderToStaticMarkup(
+      createElement(ItemCatalogPanel, {
+        catalogPresentationChoicesByItemId: new Map(),
+        category: "buildings",
+        panelPosition: "bottom",
+        searchQuery: "",
+        selectedCatalogItemId: null,
+        onCatalogItemSelect: () => undefined,
+        onCategoryChange: () => undefined,
+        onSearchQueryChange: () => undefined,
+      }),
+    );
+    const expectedCategoryIcons = [
+      {
+        category: "buildings",
+        path: "M3 21V12L5 7L12 3L19 7L21 12V21ZM8 21V14H16V21M12 9H12.01",
+      },
+      {
+        category: "crops",
+        path: "M12 21V11C12 6.5 15.5 3 21 3C21 8.5 17.5 11 12 11M12 15C12 11 8.5 8 3 8C3 12.5 6.5 15 12 15M5 21H19",
+      },
+      {
+        category: "trees",
+        path: "M12 3L16 8H13.5L18 13H15L21 18H3L9 13H6L10.5 8H8ZM12 18V21",
+      },
+      {
+        category: "equipment",
+        path: "M10.05 5.46L11.46 4.05A1.5 1.5 0 0 1 13.59 4.05L19.95 10.41A1.5 1.5 0 0 1 19.95 12.54L18.54 13.95A1.5 1.5 0 0 1 16.41 13.95L10.05 7.59A1.5 1.5 0 0 1 10.05 5.46ZM13.23 10.77L4 20",
+      },
+      {
+        category: "paths",
+        path: "M3 21V5L5 3L7 5V21ZM17 21V5L19 3L21 5V21ZM7 9H17M7 15H17M7 15L17 9",
+      },
+      {
+        category: "lighting",
+        path: "M12 3C12.9 5.2 15.5 6.2 15.5 8.5A3.5 3.5 0 0 1 8.5 8.5C8.5 7.2 9 6.4 9.8 5.6C10 6.7 10.6 7.2 11.3 7.2C11.5 5.6 11.3 4.4 12 3ZM8.5 16H15.5L13.5 21H10.5ZM3 8.5H4.5M19.5 8.5H21M6 4.5L4.8 3.3M18 4.5L19.2 3.3",
+      },
+      {
+        category: "furniture",
+        path: "M6 10V6A2 2 0 0 1 8 4H16A2 2 0 0 1 18 6V10M3 12A2 2 0 0 1 7 12V14H17V12A2 2 0 0 1 21 12V17A1 1 0 0 1 20 18H4A1 1 0 0 1 3 17ZM6 18V21M18 18V21",
+      },
+      {
+        category: "decor",
+        path: "M8 6L12 3L16 6M5 6H19A2 2 0 0 1 21 8V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V8A2 2 0 0 1 5 6ZM7 17L10.5 12.5L13 15.5L14.5 14L17 17",
+      },
+    ] as const;
+
+    for (const expectedCategoryIcon of expectedCategoryIcons) {
+      const categoryTabStart = catalogPanelMarkup.indexOf(
+        `data-category="${expectedCategoryIcon.category}"`,
+      );
+      expect(categoryTabStart).toBeGreaterThanOrEqual(0);
+
+      const categoryIconStart = catalogPanelMarkup.indexOf("<svg", categoryTabStart);
+      const categoryIconEnd = catalogPanelMarkup.indexOf("</svg>", categoryIconStart);
+      const categoryIconMarkup = catalogPanelMarkup.slice(
+        categoryIconStart,
+        categoryIconEnd + "</svg>".length,
+      );
+
+      expect(categoryIconMarkup).toContain('aria-hidden="true"');
+      expect(categoryIconMarkup).toContain('height="18"');
+      expect(categoryIconMarkup).toContain('width="18"');
+      expect(categoryIconMarkup).toContain('viewBox="0 0 24 24"');
+      expect(categoryIconMarkup).toContain(
+        '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">',
+      );
+      expect(categoryIconMarkup).toContain(`<path d="${expectedCategoryIcon.path}"></path>`);
+    }
   });
 
   it("preserves catalog roles, tab relations, visual classes, and controlled search value", () => {
@@ -309,7 +380,6 @@ describe("item catalog panel", () => {
         panelPosition: "left",
         searchQuery: "parsnip",
         selectedCatalogItemId: null,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         onCategoryChange: () => undefined,
         onSearchQueryChange: () => undefined,
@@ -425,7 +495,6 @@ describe("item catalog panel", () => {
         catalogItems: [catalogItems[5]],
         catalogPanelLoadState: { kind: "ready", scope: "category", category: "decor", catalog },
         onRetry: () => undefined,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         selectedCatalogItemId: null,
         viewMode: "grid",
@@ -450,7 +519,6 @@ describe("item catalog panel", () => {
           catalog,
         },
         onRetry: () => undefined,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         selectedCatalogItemId: null,
         viewMode: "grid",
@@ -475,7 +543,6 @@ describe("item catalog panel", () => {
           message: "Prior crops request failed.",
         },
         onRetry: () => undefined,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         selectedCatalogItemId: null,
         viewMode: "grid",
@@ -552,7 +619,6 @@ describe("item catalog panel", () => {
           message: "Catalog category equipment failed at /data/Equipment.json.",
         },
         onRetry: () => undefined,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         selectedCatalogItemId: null,
         viewMode: "grid",
@@ -621,7 +687,6 @@ describe("item catalog panel", () => {
         catalogItems: [catalogItems[0]],
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: "building:Coop",
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
@@ -639,7 +704,6 @@ describe("item catalog panel", () => {
         catalogItems: [catalogItems[0]],
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         viewMode: "list",
       }),
@@ -656,7 +720,6 @@ describe("item catalog panel", () => {
         catalogItems: [catalogItems[0]],
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
@@ -956,7 +1019,6 @@ describe("item catalog panel", () => {
         catalogItems: [catalogItems[1]],
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
@@ -974,7 +1036,6 @@ describe("item catalog panel", () => {
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
         shouldLoadThumbnails: true,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
@@ -1000,7 +1061,6 @@ describe("item catalog panel", () => {
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
         shouldLoadThumbnails: false,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
@@ -1052,7 +1112,6 @@ describe("item catalog panel", () => {
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
         shouldLoadThumbnails: false,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
@@ -1061,7 +1120,7 @@ describe("item catalog panel", () => {
     expect(catalogGridMarkup).toContain("building-catalog-panel__thumbnail");
   });
 
-  it("renders capability controls as siblings with controlled aria state", () => {
+  it("keeps each catalog card limited to the item selection button", () => {
     const controlledCatalogItems = createControlledCatalogItems();
     const presentationChoicesByItemId = new Map<string, CatalogPresentationChoice>([
       ["furniture_724", { flipped: false, rotation: 1, variant: 0 }],
@@ -1073,36 +1132,22 @@ describe("item catalog panel", () => {
         catalogItems: controlledCatalogItems,
         catalogPresentationChoicesByItemId: presentationChoicesByItemId,
         selectedCatalogItemId: "fruittree_628",
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
       }),
     );
 
-    expect(catalogGridMarkup).toContain('aria-label="Rotate"');
-    expect(catalogGridMarkup).toContain('title="Rotate"');
-    expect(catalogGridMarkup).toContain(
-      'class="rotate-btn item-catalog-panel__rotation-control item-catalog-panel__presentation-control"',
-    );
-    expect(catalogGridMarkup).toContain(">Enricher</span>");
-    expect(catalogGridMarkup).toContain('aria-label="Cycle Sprinkler variant, current Enricher"');
-    expect(catalogGridMarkup).toContain('title="Cycle Sprinkler variant, current Enricher"');
-    expect(catalogGridMarkup).toMatch(
-      /aria-label="Unflip" aria-pressed="true"[^>]*title="Unflip"/,
-    );
-    expect(catalogGridMarkup).toMatch(/<svg[^>]*aria-hidden="true"/);
-    expect(catalogGridMarkup.match(/<div class="item-catalog-panel__item-controls">/g)).toHaveLength(3);
-    expect(catalogGridMarkup).toContain(
-      "</button><div class=\"item-catalog-panel__item-controls\">",
-    );
-    expect(catalogGridMarkup).not.toMatch(
-      /<button[^>]*>(?:(?!<\/button>).)*<button/s,
-    );
+    expect(catalogGridMarkup.match(/<button/g)).toHaveLength(controlledCatalogItems.length);
     expect(catalogGridMarkup.match(/aria-label="Select /g)).toHaveLength(4);
+    expect(catalogGridMarkup).toContain('title="Coffee Table"');
+    expect(catalogGridMarkup).not.toContain("presentation-control");
+    expect(catalogGridMarkup).not.toContain("item-controls");
+    expect(catalogGridMarkup).not.toContain('data-control="rotation"');
+    expect(catalogGridMarkup).not.toContain('data-control="variant"');
     expect(catalogGridMarkup).toContain("background-position:-32px 0px");
     expect(catalogGridMarkup).toContain("transform:scaleX(-1)");
   });
 
-  it("localizes known tree variants while keeping variant text in the grouped controls", () => {
+  it("keeps catalog variant names in English inside Chinese selection cards", () => {
     const cherrySapling = createControlledCatalogItems()[2];
     if (cherrySapling === undefined) {
       throw new Error("Expected the Cherry Sapling catalog fixture.");
@@ -1113,19 +1158,16 @@ describe("item catalog panel", () => {
         catalogItems: [cherrySapling],
         catalogPresentationChoicesByItemId: new Map(),
         selectedCatalogItemId: null,
-        onCatalogItemPresentationChoiceChange: () => undefined,
         onCatalogItemSelect: () => undefined,
         locale: "zh-CN",
       }),
     );
 
-    expect(catalogGridMarkup).toContain(">无果</span>");
-    expect(catalogGridMarkup).toContain('aria-label="切换Cherry Sapling外观，当前为无果"');
-    expect(catalogGridMarkup).toContain('title="切换Cherry Sapling外观，当前为无果"');
-    expect(catalogGridMarkup).toContain(
-      'class="item-catalog-panel__variant-control item-catalog-panel__presentation-control"',
-    );
-    expect(catalogGridMarkup).toMatch(/<svg[^>]*aria-hidden="true"/);
+    expect(catalogGridMarkup).toContain("Cherry Sapling (No Fruit)");
+    expect(catalogGridMarkup).toContain('title="Cherry Sapling (No Fruit)"');
+    expect(catalogGridMarkup).not.toContain("无果");
+    expect(catalogGridMarkup).not.toContain("presentation-control");
+    expect(catalogGridMarkup.match(/<button/g)).toHaveLength(1);
   });
 
   it("calculates catalog control callbacks without selecting another item", () => {

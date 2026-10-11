@@ -123,6 +123,7 @@ import {
 } from "./planner-modal-page-scroll-lock";
 import { EditorToolbar } from "./editor-toolbar";
 import { ItemCatalogPanel } from "./item-catalog-panel";
+import { CatalogPlacementControls } from "./catalog-placement-controls";
 import { PlannerGameSaveImportResultLoader } from "./planner-game-save-import-result-loader";
 import { PlannerSaveModalLoader } from "./planner-save-modal-loader";
 import {
@@ -259,10 +260,6 @@ type WorkspaceCatalogControls = Readonly<{
     CatalogPresentationChoice
   >;
   clearSelectedCatalogItem: () => void;
-  onCatalogItemPresentationChoiceChange: (
-    catalogItem: CatalogItem,
-    presentationChoice: CatalogPresentationChoice,
-  ) => void;
   onCatalogItemSelect: (
     catalogItem: CatalogItem,
     presentationChoice: CatalogPresentationChoice,
@@ -805,7 +802,6 @@ function PreparedPlannerWorkspaceContent({
     advanceSelectedCatalogPlacementAttempt,
     catalogPresentationChoicesByItemId,
     clearSelectedCatalogItem,
-    handleCatalogItemPresentationChoiceChange,
     handleCatalogItemSelect,
     handleReadyCatalogItems,
     handleToolChange,
@@ -1066,7 +1062,6 @@ function PreparedPlannerWorkspaceContent({
         category={plannerWorkspaceState.catalogCategory}
         locale={locale}
         leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
-        onCatalogItemPresentationChoiceChange={handleCatalogItemPresentationChoiceChange}
         onCatalogItemSelect={handleOrdinaryCatalogItemSelect}
         onCategoryChange={(catalogCategory) =>
           plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
@@ -1136,7 +1131,16 @@ function PreparedPlannerWorkspaceContent({
             )
           }
         />
-        {workspaceEditingControls.selectionInspector}
+        {plannerWorkspaceState.selectedPlacementKeys.length > 0 ? (
+          workspaceEditingControls.selectionInspector
+        ) : (
+          <CatalogPlacementControls
+            catalogItem={selectedCatalogItem?.catalogItem ?? null}
+            locale={locale}
+            onCancel={clearSelectedCatalogItem}
+            onCyclePendingChoice={cyclePendingCatalogChoice}
+          />
+        )}
       </PlannerRequiredCatalogGate>
       <EditorModal
         behaviorOptions={plannerWorkspaceState.behaviorOptions}
@@ -1475,21 +1479,6 @@ function useWorkspaceCatalogControls(
     },
     [dispatchPlannerWorkspaceAction],
   );
-  const handleCatalogItemPresentationChoiceChange = useCallback(
-    (
-      catalogItem: CatalogItem,
-      presentationChoice: CatalogPresentationChoice,
-    ) => {
-      setCatalogChoiceState((currentCatalogChoiceState) =>
-        changeWorkspaceCatalogItemChoice(
-          currentCatalogChoiceState,
-          catalogItem,
-          presentationChoice,
-        ),
-      );
-    },
-    [],
-  );
   const clearSelectedCatalogItem = useCallback(() => {
     setCatalogChoiceState(clearWorkspaceCatalogSelection);
     dispatchPlannerWorkspaceAction({
@@ -1541,7 +1530,6 @@ function useWorkspaceCatalogControls(
       catalogChoiceState.presentationChoicesByItemId,
     clearSelectedCatalogItem,
     cyclePendingCatalogChoice,
-    handleCatalogItemPresentationChoiceChange,
     handleCatalogItemSelect,
     handleReadyCatalogItems,
     handleToolChange,

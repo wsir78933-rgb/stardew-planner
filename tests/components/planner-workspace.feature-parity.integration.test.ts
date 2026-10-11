@@ -105,7 +105,7 @@ describe("planner workspace Task5A feature-parity composition", () => {
     }
   });
 
-  it("wires controlled catalog choices through workspace, editing, and placement ports", () => {
+  it("wires pending pill choices through workspace, editing, and placement ports", () => {
     const workspaceSource = readFileSync(workspaceSourcePath, "utf8");
     const itemCatalogPanelSource = readFileSync(itemCatalogPanelSourcePath, "utf8");
     const editorPlacementControllerSource = readFileSync(
@@ -114,12 +114,19 @@ describe("planner workspace Task5A feature-parity composition", () => {
     );
 
     expect(itemCatalogPanelSource).toContain("catalogPresentationChoicesByItemId");
-    expect(itemCatalogPanelSource).toContain("onCatalogItemPresentationChoiceChange");
+    expect(itemCatalogPanelSource).not.toContain("onCatalogItemPresentationChoiceChange");
+    expect(itemCatalogPanelSource).not.toContain("item-catalog-panel__item-controls");
     expect(workspaceSource).toContain(
       "catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}",
     );
     expect(workspaceSource).toContain(
-      "onCatalogItemPresentationChoiceChange={handleCatalogItemPresentationChoiceChange}",
+      "<CatalogPlacementControls",
+    );
+    expect(workspaceSource).toContain(
+      "onCyclePendingChoice={cyclePendingCatalogChoice}",
+    );
+    expect(workspaceSource).toContain(
+      "onCancel={clearSelectedCatalogItem}",
     );
     expect(workspaceSource).toContain("catalogPresentationChoice:");
     expect(editorPlacementControllerSource).toContain(

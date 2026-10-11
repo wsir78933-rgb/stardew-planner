@@ -10,6 +10,7 @@ export type CatalogPanelCopy = Readonly<{
   categories: Readonly<Record<CatalogSidebarCategory, string>>;
   clearSearch: string;
   collapseItems: string;
+  cancelPlacement: string;
   cycleVariant: (name: string, currentLabel: string) => string;
   filterLabels: Readonly<Record<string, string>>;
   flip: string;
@@ -20,12 +21,15 @@ export type CatalogPanelCopy = Readonly<{
   loadFailed: string;
   loading: string;
   noResults: string;
+  placeItemHint: string;
+  placingItem: (name: string) => string;
   retry: string;
   rotate: string;
   searchAllItems: string;
   searchResults: string;
   selectItem: (name: string, width: number, height: number) => string;
   unflip: string;
+  variant: string;
   variantLabels: Readonly<Record<string, string>>;
 }>;
 
@@ -118,6 +122,7 @@ const catalogPanelCopyByLocale = {
     all: "All",
     brand: "Stardew Planner",
     browseItems: "Browse items",
+    cancelPlacement: "Cancel placement (Esc)",
     catalogLabel: "Item catalog",
     categories: {
       buildings: "Buildings",
@@ -142,6 +147,8 @@ const catalogPanelCopyByLocale = {
     loadFailed: "Items could not be loaded.",
     loading: "Loading items…",
     noResults: "No items found.",
+    placeItemHint: "Click to place · Esc to cancel",
+    placingItem: (name: string) => `Placing ${name}`,
     retry: "Retry",
     rotate: "Rotate",
     searchAllItems: "Search all items",
@@ -149,12 +156,14 @@ const catalogPanelCopyByLocale = {
     selectItem: (name: string, width: number, height: number) =>
       `Select ${name}, ${width} by ${height} tiles`,
     unflip: "Unflip",
+    variant: "Variant",
     variantLabels: createVariantLabels("en"),
   },
   "zh-CN": {
     all: "全部",
     brand: "Stardew Planner",
     browseItems: "浏览物品",
+    cancelPlacement: "取消放置（Esc）",
     catalogLabel: "物品目录",
     categories: {
       buildings: "建筑",
@@ -179,6 +188,8 @@ const catalogPanelCopyByLocale = {
     loadFailed: "物品加载失败。",
     loading: "正在加载物品…",
     noResults: "没有找到物品。",
+    placeItemHint: "点击放置 · 按 Esc 取消",
+    placingItem: (name: string) => `正在放置${name}`,
     retry: "重试",
     rotate: "旋转",
     searchAllItems: "搜索全部物品",
@@ -186,6 +197,7 @@ const catalogPanelCopyByLocale = {
     selectItem: (name: string, width: number, height: number) =>
       `选择${name}，占地 ${width} × ${height} 格`,
     unflip: "取消翻转",
+    variant: "变体",
     variantLabels: createVariantLabels("zh-CN"),
   },
 } satisfies Readonly<Record<HomepageLocale, CatalogPanelCopy>>;

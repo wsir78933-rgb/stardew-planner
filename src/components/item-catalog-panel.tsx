@@ -1,23 +1,13 @@
 "use client";
 
 import {
-  Armchair,
-  Building2,
   ChevronDown,
   ChevronUp,
   CircleHelp,
-  Cog,
-  FlipHorizontal2,
   Keyboard,
-  Lamp,
   LayoutGrid,
   List,
-  Route,
-  RotateCw,
   Search,
-  Sparkles,
-  TreeDeciduous,
-  Wheat,
   X,
 } from "lucide-react";
 import {
@@ -75,10 +65,6 @@ type ItemCatalogPanelProperties = Readonly<{
   panelPosition: EditorPanelPosition;
   searchQuery: string;
   selectedCatalogItemId: string | null;
-  onCatalogItemPresentationChoiceChange: (
-    catalogItem: CatalogItem,
-    presentationChoice: CatalogPresentationChoice,
-  ) => void;
   onCatalogItemSelect: (
     catalogItem: CatalogItem,
     presentationChoice: CatalogPresentationChoice,
@@ -129,10 +115,6 @@ type CatalogItemGridProperties = Readonly<{
     CatalogPresentationChoice
   >;
   selectedCatalogItemId: string | null;
-  onCatalogItemPresentationChoiceChange: (
-    catalogItem: CatalogItem,
-    presentationChoice: CatalogPresentationChoice,
-  ) => void;
   onCatalogItemSelect: (
     catalogItem: CatalogItem,
     presentationChoice: CatalogPresentationChoice,
@@ -152,7 +134,6 @@ export function ItemCatalogPanel({
   panelPosition,
   searchQuery,
   selectedCatalogItemId,
-  onCatalogItemPresentationChoiceChange,
   onCatalogItemSelect,
   onCategoryChange,
   onOpenModal,
@@ -582,7 +563,6 @@ export function ItemCatalogPanel({
               catalogPanelLoadState={activeCatalogPanelLoadState}
               catalogItems={visibleCatalogItems}
               onRetry={handleCatalogLoadRetry}
-              onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
               onCatalogItemSelect={onCatalogItemSelect}
               selectedCatalogItemId={selectedCatalogItemId}
               viewMode={viewMode}
@@ -596,22 +576,41 @@ export function ItemCatalogPanel({
   );
 }
 
+const catalogCategoryIconPaths: Readonly<Record<EditorCatalogCategory, string>> = {
+  buildings: "M3 21V12L5 7L12 3L19 7L21 12V21ZM8 21V14H16V21M12 9H12.01",
+  crops: "M12 21V11C12 6.5 15.5 3 21 3C21 8.5 17.5 11 12 11M12 15C12 11 8.5 8 3 8C3 12.5 6.5 15 12 15M5 21H19",
+  trees: "M12 3L16 8H13.5L18 13H15L21 18H3L9 13H6L10.5 8H8ZM12 18V21",
+  equipment: "M10.05 5.46L11.46 4.05A1.5 1.5 0 0 1 13.59 4.05L19.95 10.41A1.5 1.5 0 0 1 19.95 12.54L18.54 13.95A1.5 1.5 0 0 1 16.41 13.95L10.05 7.59A1.5 1.5 0 0 1 10.05 5.46ZM13.23 10.77L4 20",
+  paths: "M3 21V5L5 3L7 5V21ZM17 21V5L19 3L21 5V21ZM7 9H17M7 15H17M7 15L17 9",
+  lighting: "M12 3C12.9 5.2 15.5 6.2 15.5 8.5A3.5 3.5 0 0 1 8.5 8.5C8.5 7.2 9 6.4 9.8 5.6C10 6.7 10.6 7.2 11.3 7.2C11.5 5.6 11.3 4.4 12 3ZM8.5 16H15.5L13.5 21H10.5ZM3 8.5H4.5M19.5 8.5H21M6 4.5L4.8 3.3M18 4.5L19.2 3.3",
+  furniture: "M6 10V6A2 2 0 0 1 8 4H16A2 2 0 0 1 18 6V10M3 12A2 2 0 0 1 7 12V14H17V12A2 2 0 0 1 21 12V17A1 1 0 0 1 20 18H4A1 1 0 0 1 3 17ZM6 18V21M18 18V21",
+  decor: "M8 6L12 3L16 6M5 6H19A2 2 0 0 1 21 8V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V8A2 2 0 0 1 5 6ZM7 17L10.5 12.5L13 15.5L14.5 14L17 17",
+};
+
 function CatalogCategoryIcon({
   category,
 }: Readonly<{
   category: EditorCatalogCategory;
 }>) {
-  if (category === "buildings") return <Building2 aria-hidden="true" size={22} />;
-  if (category === "crops") return <Wheat aria-hidden="true" size={22} />;
-  if (category === "trees") return <TreeDeciduous aria-hidden="true" size={22} />;
-  if (category === "equipment") return <Cog aria-hidden="true" size={22} />;
-  if (category === "paths") return <Route aria-hidden="true" size={22} />;
-  if (category === "lighting") return <Lamp aria-hidden="true" size={22} />;
-  if (category === "furniture") return <Armchair aria-hidden="true" size={22} />;
-  if (category === "decor") return <Sparkles aria-hidden="true" size={22} />;
+  const categoryIconPath = catalogCategoryIconPaths[category];
+  if (categoryIconPath === undefined) {
+    throw new TypeError(
+      `Item catalog does not define an icon for category ${JSON.stringify(category)}.`,
+    );
+  }
 
-  throw new TypeError(
-    `Item catalog does not define an icon for category ${JSON.stringify(category)}.`,
+  return (
+    <svg aria-hidden="true" height={18} viewBox="0 0 24 24" width={18}>
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d={categoryIconPath} />
+      </g>
+    </svg>
   );
 }
 
@@ -625,10 +624,6 @@ type CatalogPanelContentProperties = Readonly<{
   catalogPanelLoadState: ActiveCatalogPanelLoadState;
   selectedCatalogItemId: string | null;
   onRetry: () => void;
-  onCatalogItemPresentationChoiceChange: (
-    catalogItem: CatalogItem,
-    presentationChoice: CatalogPresentationChoice,
-  ) => void;
   onCatalogItemSelect: (
     catalogItem: CatalogItem,
     presentationChoice: CatalogPresentationChoice,
@@ -645,7 +640,6 @@ export function CatalogPanelContent({
   catalogPanelLoadState,
   selectedCatalogItemId,
   onRetry,
-  onCatalogItemPresentationChoiceChange,
   onCatalogItemSelect,
   shouldLoadThumbnails = true,
   viewMode,
@@ -696,7 +690,6 @@ export function CatalogPanelContent({
     <CatalogItemGrid
       catalogItems={catalogItems}
       catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}
-      onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
       onCatalogItemSelect={onCatalogItemSelect}
       selectedCatalogItemId={selectedCatalogItemId}
       shouldLoadThumbnails={shouldLoadThumbnails}
@@ -710,7 +703,6 @@ export function CatalogItemGrid({
   catalogItems,
   catalogPresentationChoicesByItemId,
   selectedCatalogItemId,
-  onCatalogItemPresentationChoiceChange,
   onCatalogItemSelect,
   shouldLoadThumbnails = true,
   viewMode = "grid",
@@ -740,19 +732,6 @@ export function CatalogItemGrid({
           catalogItemIndex,
           presentationChoice,
         );
-        const presentationCapabilities = catalogItem.presentationCapabilities;
-        const showsRotationControl =
-          (presentationCapabilities?.rotation?.count ?? 0) > 1;
-        const visibleVariantLabel =
-          (presentationCapabilities?.visibleVariants.length ?? 0) > 1
-            ? getVisibleVariantLabel(catalogItem, presentationChoice)
-            : null;
-        const localizedVariantLabel = visibleVariantLabel === null
-          ? null
-          : copy.variantLabels[visibleVariantLabel] ?? visibleVariantLabel;
-        const showsFlipControl = presentationCapabilities?.canFlip === true;
-        const showsItemControls =
-          showsRotationControl || localizedVariantLabel !== null || showsFlipControl;
 
         return (
           <div
@@ -772,6 +751,7 @@ export function CatalogItemGrid({
               }`}
               data-selected={isSelectedCatalogItem}
               onClick={() => onCatalogItemSelect(catalogItem, presentationChoice)}
+              title={displayName}
               type="button"
             >
               {catalogItem.category === "building" ? (
@@ -809,39 +789,6 @@ export function CatalogItemGrid({
                 {displayName}, {catalogItem.tileSize.width} × {catalogItem.tileSize.height}
               </span>
             </button>
-            {showsItemControls ? (
-              <div className="item-catalog-panel__item-controls">
-                {showsRotationControl ? (
-                  <CatalogItemChoiceButton
-                    catalogItem={catalogItem}
-                    control="rotation"
-                    label={copy.rotate}
-                    onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
-                    presentationChoice={presentationChoice}
-                  />
-                ) : null}
-                {localizedVariantLabel !== null ? (
-                  <CatalogItemChoiceButton
-                    ariaLabel={copy.cycleVariant(catalogItem.name, localizedVariantLabel)}
-                    catalogItem={catalogItem}
-                    control="variant"
-                    label={localizedVariantLabel}
-                    onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
-                    presentationChoice={presentationChoice}
-                  />
-                ) : null}
-                {showsFlipControl ? (
-                  <CatalogItemChoiceButton
-                    ariaPressed={presentationChoice.flipped}
-                    catalogItem={catalogItem}
-                    control="flip"
-                    label={presentationChoice.flipped ? copy.unflip : copy.flip}
-                    onCatalogItemPresentationChoiceChange={onCatalogItemPresentationChoiceChange}
-                    presentationChoice={presentationChoice}
-                  />
-                ) : null}
-              </div>
-            ) : null}
           </div>
         );
       })}
@@ -1415,63 +1362,6 @@ function drawBuildingThumbnailLayer(
   context.globalAlpha = 1;
 }
 
-function CatalogItemChoiceButton({
-  ariaLabel,
-  ariaPressed,
-  catalogItem,
-  control,
-  label,
-  onCatalogItemPresentationChoiceChange,
-  presentationChoice,
-}: Readonly<{
-  ariaLabel?: string;
-  ariaPressed?: boolean;
-  catalogItem: CatalogItem;
-  control: CatalogItemControl;
-  label: string;
-  onCatalogItemPresentationChoiceChange: (
-    catalogItem: CatalogItem,
-    presentationChoice: CatalogPresentationChoice,
-  ) => void;
-  presentationChoice: CatalogPresentationChoice;
-}>) {
-  const accessibleName = ariaLabel ?? label;
-  let controlClassName = "item-catalog-panel__variant-control";
-  if (control === "rotation") {
-    controlClassName = "rotate-btn item-catalog-panel__rotation-control";
-  } else if (control === "flip") {
-    controlClassName = `flip-btn item-catalog-panel__flip-control${
-      presentationChoice.flipped ? " flipped" : ""
-    }`;
-  }
-
-  return (
-    <button
-      aria-label={accessibleName}
-      aria-pressed={ariaPressed}
-      className={`${controlClassName} item-catalog-panel__presentation-control`}
-      onClick={() => onCatalogItemPresentationChoiceChange(
-        catalogItem,
-        getNextCatalogItemControlChoice(
-          catalogItem,
-          presentationChoice,
-          control,
-        ),
-      )}
-      title={accessibleName}
-      type="button"
-    >
-      {control === "rotation" ? (
-        <RotateCw aria-hidden="true" size={15} />
-      ) : control === "flip" ? (
-        <FlipHorizontal2 aria-hidden="true" size={15} />
-      ) : (
-        <span className="item-catalog-panel__variant-label">{label}</span>
-      )}
-    </button>
-  );
-}
-
 export function getNextCatalogItemControlChoice(
   catalogItem: CatalogItem,
   presentationChoice: CatalogPresentationChoice,
@@ -1523,21 +1413,6 @@ function getControlledCatalogItemChoice(
   return controlledChoice === undefined
     ? createDefaultCatalogItemPresentationChoice(catalogItem)
     : validateCatalogItemPresentationChoice(catalogItem, controlledChoice);
-}
-
-function getVisibleVariantLabel(
-  catalogItem: CatalogItem,
-  presentationChoice: CatalogPresentationChoice,
-): string {
-  const visibleVariant = catalogItem.presentationCapabilities?.visibleVariants.find(
-    (candidateVariant) => candidateVariant.value === presentationChoice.variant,
-  );
-  if (visibleVariant === undefined) {
-    throw new Error(
-      `Catalog item ${JSON.stringify(catalogItem.id)} has no visible label for variant ${describeCatalogPanelValue(presentationChoice.variant)}.`,
-    );
-  }
-  return visibleVariant.label;
 }
 
 function throwUnsupportedCatalogItemControl(

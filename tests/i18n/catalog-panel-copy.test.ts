@@ -70,6 +70,11 @@ describe("catalog panel copy", () => {
 
     expect(englishCopy.catalogLabel).toBe("Item catalog");
     expect(englishCopy.searchAllItems).toBe("Search all items");
+    expect(englishCopy.placingItem("Oak Chair")).toBe("Placing Oak Chair");
+    expect(englishCopy.placeItemHint).toBe("Click to place · Esc to cancel");
+    expect(englishCopy.rotate).toBe("Rotate");
+    expect(englishCopy.variant).toBe("Variant");
+    expect(englishCopy.cancelPlacement).toBe("Cancel placement (Esc)");
     expect(englishCopy.categories).toEqual({
       buildings: "Buildings",
       crops: "Crops",
@@ -124,6 +129,11 @@ describe("catalog panel copy", () => {
 
     expect(chineseCopy.brand).toBe("Stardew Planner");
     expect(chineseCopy.all).toBe("全部");
+    expect(chineseCopy.placingItem("Oak Chair")).toBe("正在放置Oak Chair");
+    expect(chineseCopy.placeItemHint).toBe("点击放置 · 按 Esc 取消");
+    expect(chineseCopy.rotate).toBe("旋转");
+    expect(chineseCopy.variant).toBe("变体");
+    expect(chineseCopy.cancelPlacement).toBe("取消放置（Esc）");
     expect(chineseCopy.gridView).toBe("网格视图");
     expect(chineseCopy.listView).toBe("列表视图");
     expect(chineseCopy.categories.paths).toBe("围栏与道路");

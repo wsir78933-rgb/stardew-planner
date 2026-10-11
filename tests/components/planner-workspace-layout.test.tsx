@@ -605,6 +605,17 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
+  it("marks the active catalog view with the selected border", () => {
+    const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
+
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel__view\s*\{[^}]*background:\s*transparent;[^}]*border:\s*1px solid transparent;/s,
+    );
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.item-catalog-panel__view\[aria-pressed="true"\]\s*\{[^}]*background:\s*var\(--catalog-panel-selected\);[^}]*border-color:\s*var\(--catalog-panel-border\);/s,
+    );
+  });
+
   it("hides the joystick for fine pointers and reveals an eligible joystick for coarse pointers", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
     const coarsePointerRule = plannerWorkspaceStyles.match(
@@ -656,7 +667,7 @@ describe("planner workspace frozen layout contracts", () => {
     );
   });
 
-  it("uses the frozen coarse-pointer catalog controls", () => {
+  it("uses pending-placement controls without persistent card controls", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
     const coarsePointerRule = plannerWorkspaceStyles.match(
       /@media \(pointer: coarse\)\s*\{([\s\S]*?)\n\}/,
@@ -669,12 +680,15 @@ describe("planner workspace frozen layout contracts", () => {
     expect(coarsePointerRule).toMatch(
       /\.planner-editor-shell \.help-bubble-wrapper\s*\{[^}]*display:\s*flex;/s,
     );
-    expect(coarsePointerRule).toMatch(
-      /\.planner-editor-shell \.rotate-btn\s*\{[^}]*height:\s*24px;[^}]*width:\s*24px;/s,
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.catalog-placement-controls\s*\{[^}]*pointer-events:\s*auto;/s,
     );
-    expect(coarsePointerRule).toMatch(
-      /\.planner-editor-shell \.flip-btn\s*\{[^}]*height:\s*24px;[^}]*width:\s*24px;/s,
+    expect(plannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.catalog-placement-controls__action\s*\{[^}]*height:\s*40px;[^}]*min-height:\s*40px;[^}]*min-width:\s*40px;/s,
     );
+    expect(plannerWorkspaceStyles).not.toContain(".item-catalog-panel__item-controls");
+    expect(plannerWorkspaceStyles).not.toContain(".rotate-btn");
+    expect(plannerWorkspaceStyles).not.toContain(".flip-btn");
   });
 
   it("uses stable mobile canvas flow and 44px coarse-pointer targets without resizing the joystick", () => {
@@ -732,8 +746,8 @@ describe("planner workspace frozen layout contracts", () => {
     expect(mobilePlannerWorkspaceStyles).toMatch(
       /\.planner-editor-shell \.item-catalog-panel \.item-catalog-panel__search\s*\{[^}]*height:\s*44px;/s,
     );
-    expect(coarseMobilePointerRule).toMatch(
-      /\.planner-editor-shell \.rotate-btn,[\s\S]*?\.planner-editor-shell \.flip-btn\s*\{[^}]*height:\s*44px;[^}]*width:\s*44px;/s,
+    expect(mobilePlannerWorkspaceStyles).toMatch(
+      /\.planner-editor-shell \.catalog-placement-controls__action\s*\{[^}]*height:\s*44px;[^}]*min-height:\s*44px;[^}]*min-width:\s*44px;/s,
     );
     expect(coarseMobilePointerRule).not.toContain(".planner-editor-shell .arrow-btn");
     expect(coarseMobilePointerRule).not.toContain(".planner-joystick");

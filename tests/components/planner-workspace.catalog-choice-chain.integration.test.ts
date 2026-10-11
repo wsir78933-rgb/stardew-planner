@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { Children, isValidElement, type MouseEvent, type ReactElement, type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 import {
   createCatalogFromDatasets,
@@ -12,6 +13,8 @@ import {
   getNextCatalogItemControlChoice,
   type CatalogItemControl,
 } from "../../src/components/item-catalog-panel";
+import { CatalogPlacementControls } from "../../src/components/catalog-placement-controls";
+import { createWorkspaceCatalogPlacementPreviewInput } from "../../src/components/planner-workspace";
 import { applyEditorFill } from "../../src/editor/editor-fill-controller";
 import { applyEditorCursorPlacement } from "../../src/editor/editor-placement-controller";
 import {
@@ -31,11 +34,13 @@ import {
 } from "../../src/placement/placement-snapshot";
 import {
   changeWorkspaceCatalogItemChoice,
+  clearWorkspaceCatalogSelection,
   createInitialWorkspaceCatalogChoiceState,
   cyclePendingWorkspaceCatalogChoice,
   selectWorkspaceCatalogItem,
   type WorkspaceCatalogChoiceState,
 } from "../../src/planner/planner-workspace-catalog-controls";
+import { createTreePlacementRenderLayers } from "../../src/rendering/tree-placement-rendering";
 
 describe("planner workspace catalog choice integration", () => {
   it("passes real furniture, tree, and generic controls through state, Q, and cursor placement", async () => {
@@ -76,6 +81,160 @@ describe("planner workspace catalog choice integration", () => {
       rotation: 0,
       variant: 2,
     });
+  });
+
+  it("cycles pending pill actions into preview and placement, then cancels without losing the item choice", async () => {
+    const catalogItems = (await createLockedCatalog()).items;
+    const furnitureItem = requireCatalogItem(catalogItems, "furniture_0");
+    const fruitTreeItem = requireCatalogItem(catalogItems, "fruittree_628");
+
+    const furniturePill = createPendingCatalogPillInteraction(furnitureItem);
+    clickPlacementControl(furniturePill.primaryActionButton);
+    const selectedFurniture = furniturePill.getChoiceState().selectedCatalogItem;
+    if (selectedFurniture === null) {
+      throw new Error("Expected the pending furniture item after its rotation action.");
+    }
+    expect(selectedFurniture.presentationChoice.rotation).toBe(1);
+
+    const furniturePreview = createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: selectedFurniture,
+      tool: "cursor",
+    });
+    if (furniturePreview === null) {
+      throw new Error("Expected the pending furniture item in the canvas preview.");
+    }
+    expect(furniturePreview.catalogPresentationChoice.rotation).toBe(1);
+    expect(getCatalogItemThumbnailStyle(
+      furnitureItem,
+      selectedFurniture.presentationChoice,
+    ).backgroundPosition).not.toBe(
+      getCatalogItemThumbnailStyle(
+        furnitureItem,
+        createDefaultCatalogItemPresentationChoice(furnitureItem),
+      ).backgroundPosition,
+    );
+
+    const furniturePlacement = applyEditorCursorPlacement({
+      buildingMetadataById: {},
+      catalogPresentationChoice: furniturePreview.catalogPresentationChoice,
+      cursorTile: { x: 0, y: 0 },
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid(4, 4),
+      placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+      selectedCatalogItem: furniturePreview.selectedCatalogItem,
+    });
+    expect(furniturePlacement).toMatchObject({ applied: true });
+    expect(furniturePlacement.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        itemId: furnitureItem.id,
+        rotation: 1,
+        footprint: requireRotationFootprint(furnitureItem, 1),
+      }),
+    ]);
+
+    clickPlacementControl(furniturePill.cancelButton);
+    const cancelledFurnitureState = furniturePill.getChoiceState();
+    expect(cancelledFurnitureState.selectedCatalogItem).toBeNull();
+    expect(cancelledFurnitureState.presentationChoicesByItemId.get(furnitureItem.id)).toEqual(
+      selectedFurniture.presentationChoice,
+    );
+    expect(selectWorkspaceCatalogItem(cancelledFurnitureState, furnitureItem)
+      .selectedCatalogItem?.presentationChoice).toEqual(selectedFurniture.presentationChoice);
+
+    const fruitTreePill = createPendingCatalogPillInteraction(fruitTreeItem);
+    clickPlacementControl(fruitTreePill.primaryActionButton);
+    const selectedFruitTree = fruitTreePill.getChoiceState().selectedCatalogItem;
+    if (selectedFruitTree === null) {
+      throw new Error("Expected the pending tree item after its variant action.");
+    }
+    expect(selectedFruitTree.presentationChoice.variant).toBe(1);
+
+    const fruitTreePreview = createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: selectedFruitTree,
+      tool: "cursor",
+    });
+    if (fruitTreePreview === null) {
+      throw new Error("Expected the pending tree item in the canvas preview.");
+    }
+    expect(fruitTreePreview.catalogPresentationChoice.variant).toBe(1);
+
+    const fruitTreePlacement = applyEditorCursorPlacement({
+      buildingMetadataById: {},
+      catalogPresentationChoice: fruitTreePreview.catalogPresentationChoice,
+      cursorTile: { x: 0, y: 0 },
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid(4, 4),
+      placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+      selectedCatalogItem: fruitTreePreview.selectedCatalogItem,
+    });
+    expect(fruitTreePlacement).toMatchObject({ applied: true });
+    expect(fruitTreePlacement.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({ itemId: fruitTreeItem.id, variant: 1 }),
+    ]);
+  });
+
+  it("keeps the hidden wild-tree variant action connected to pending preview and tree rendering", async () => {
+    const wildTreeItem = requireCatalogItem(
+      (await createLockedCatalog()).items,
+      "wildtree_6",
+    );
+    const presentationCapabilities = wildTreeItem.presentationCapabilities;
+    if (presentationCapabilities === undefined) {
+      throw new Error(`Expected presentation capabilities for ${wildTreeItem.id}.`);
+    }
+    expect(presentationCapabilities.variantCycle?.count).toBe(2);
+    expect(presentationCapabilities.visibleVariants).toEqual([]);
+
+    const wildTreePill = createPendingCatalogPillInteraction(wildTreeItem);
+    expect(wildTreePill.primaryActionButton.props["data-control"]).toBe("variant");
+    clickPlacementControl(wildTreePill.primaryActionButton);
+
+    const selectedWildTree = wildTreePill.getChoiceState().selectedCatalogItem;
+    if (selectedWildTree === null) {
+      throw new Error(`Expected the pending tree selection for ${wildTreeItem.id}.`);
+    }
+    expect(selectedWildTree.presentationChoice.variant).toBe(1);
+
+    const wildTreePreview = createWorkspaceCatalogPlacementPreviewInput({
+      buildingMetadataById: {},
+      freePlacement: true,
+      selectedCatalogItem: selectedWildTree,
+      tool: "cursor",
+    });
+    if (wildTreePreview === null) {
+      throw new Error(`Expected a canvas preview for ${wildTreeItem.id}.`);
+    }
+    expect(wildTreePreview.catalogPresentationChoice.variant).toBe(1);
+
+    const wildTreePlacement = applyEditorCursorPlacement({
+      buildingMetadataById: {},
+      catalogPresentationChoice: wildTreePreview.catalogPresentationChoice,
+      cursorTile: { x: 0, y: 0 },
+      freePlacement: true,
+      mapPlacementGrid: createPlacementGrid(4, 4),
+      placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+      selectedCatalogItem: wildTreePreview.selectedCatalogItem,
+    });
+    if (!wildTreePlacement.applied) {
+      throw new Error(`Expected placement for pending tree ${wildTreeItem.id}.`);
+    }
+
+    const placedWildTree = wildTreePlacement.placementHistory.currentState.items[0];
+    if (placedWildTree === undefined) {
+      throw new Error(`Expected ${wildTreeItem.id} in the placement history.`);
+    }
+    expect(placedWildTree.variant).toBe(1);
+    const renderedWildTreeLayers = createTreePlacementRenderLayers({
+      catalogItem: wildTreeItem,
+      mapId: "standard",
+      placementItem: placedWildTree,
+      season: "fall",
+    });
+    expect(renderedWildTreeLayers?.[1]?.frame).toMatchObject({ x: 128, y: 96 });
   });
 
   it("passes a controlled fill fixture through state and pending Q to every tile", () => {
@@ -263,6 +422,99 @@ function createControlledQSelection(
     throw new Error(`Expected pending Q to change choice for ${catalogItem.id}.`);
   }
   return pendingTransition.state;
+}
+
+type PlacementActionButtonProperties = Readonly<{
+  "data-control"?: "rotation" | "variant";
+  onClick?: (mouseEvent: MouseEvent<HTMLButtonElement>) => void;
+}>;
+
+type PendingCatalogPillInteraction = Readonly<{
+  cancelButton: ReactElement<PlacementActionButtonProperties>;
+  getChoiceState: () => WorkspaceCatalogChoiceState;
+  primaryActionButton: ReactElement<PlacementActionButtonProperties>;
+}>;
+
+function createPendingCatalogPillInteraction(
+  catalogItem: CatalogItem,
+): PendingCatalogPillInteraction {
+  let pendingCatalogChoiceState = selectWorkspaceCatalogItem(
+    createInitialWorkspaceCatalogChoiceState(),
+    catalogItem,
+  );
+  const placementControls = CatalogPlacementControls({
+    catalogItem,
+    locale: "en",
+    onCancel: () => {
+      pendingCatalogChoiceState = clearWorkspaceCatalogSelection(
+        pendingCatalogChoiceState,
+      );
+    },
+    onCyclePendingChoice: () => {
+      const choiceTransition = cyclePendingWorkspaceCatalogChoice(
+        pendingCatalogChoiceState,
+      );
+      if (!choiceTransition.changed) {
+        return false;
+      }
+      pendingCatalogChoiceState = choiceTransition.state;
+      return true;
+    },
+  });
+  if (placementControls === null) {
+    throw new Error(`Expected pending pill for catalog item ${JSON.stringify(catalogItem.id)}.`);
+  }
+
+  const actionButtons = getPendingCatalogPillButtons(placementControls);
+  const primaryActionButton = actionButtons.find(
+    (actionButton) => actionButton.props["data-control"] !== undefined,
+  );
+  const cancelButton = actionButtons.find(
+    (actionButton) => actionButton.props["data-control"] === undefined,
+  );
+  if (primaryActionButton === undefined || cancelButton === undefined) {
+    throw new Error(
+      `Expected primary and Cancel controls for catalog item ${JSON.stringify(catalogItem.id)}.`,
+    );
+  }
+
+  return {
+    cancelButton,
+    getChoiceState: () => pendingCatalogChoiceState,
+    primaryActionButton,
+  };
+}
+
+function getPendingCatalogPillButtons(
+  placementControls: ReactElement,
+): readonly ReactElement<PlacementActionButtonProperties>[] {
+  const placementControlsProperties = placementControls.props as Readonly<{
+    children?: ReactNode;
+  }>;
+  const pillChildren = Children.toArray(placementControlsProperties.children);
+  const actionContainer = pillChildren[1];
+  if (!isValidElement<{ children?: ReactNode }>(actionContainer)) {
+    throw new Error("Pending catalog pill has no action container.");
+  }
+
+  const actionButtons = Children.toArray(actionContainer.props.children).filter(
+    (actionButton): actionButton is ReactElement<PlacementActionButtonProperties> =>
+      isValidElement<PlacementActionButtonProperties>(actionButton),
+  );
+  if (actionButtons.length === 0) {
+    throw new Error("Pending catalog pill has no action buttons.");
+  }
+  return actionButtons;
+}
+
+function clickPlacementControl(
+  placementControlButton: ReactElement<PlacementActionButtonProperties>,
+): void {
+  const clickHandler = placementControlButton.props.onClick;
+  if (clickHandler === undefined) {
+    throw new Error("Pending catalog action button has no click handler.");
+  }
+  clickHandler({} as MouseEvent<HTMLButtonElement>);
 }
 
 function expectPlacedChoice(
