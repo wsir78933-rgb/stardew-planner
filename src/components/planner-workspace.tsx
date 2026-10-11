@@ -40,6 +40,8 @@ import {
   applyPlannerWorkspacePlacementSelection,
   deletePlannerWorkspaceSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
+  previewPlannerWorkspaceFillRectangle,
+  previewPlannerWorkspaceSelectionAtTile,
   getPlannerWorkspaceCatalogItemSelectionTool,
   getPlannerWorkspaceToolSelection,
   movePlannerWorkspaceSelection,
@@ -133,6 +135,7 @@ import { PlannerGameSaveImportResultLoader } from "./planner-game-save-import-re
 import { PlannerSaveModalLoader } from "./planner-save-modal-loader";
 import {
   PlannerCanvas,
+  type PlannerCanvasProperties,
   type PlannerCanvasPlacementPreviewInput,
 } from "./planner-canvas";
 import { PlannerRequiredCatalogGate } from "./planner-required-catalog-status";
@@ -279,6 +282,13 @@ type WorkspaceCatalogControls = Readonly<{
 
 type WorkspaceEditingControls = Readonly<{
   cancelPendingDuplicateSelection: () => void;
+  hasPendingPlacementCopy: boolean;
+  getPlacementCopyPreviewAtTile: NonNullable<
+    PlannerCanvasProperties["getPlacementCopyPreviewAtTile"]
+  >;
+  getFillRectanglePreviewAtTiles: NonNullable<
+    PlannerCanvasProperties["getFillRectanglePreviewAtTiles"]
+  >;
   onMapTileClick: (mapId: string, cursorTile: { x: number; y: number }) => void;
   onPlacementSelectionClick: (
     mapId: string,
@@ -328,6 +338,7 @@ export function createWorkspaceCatalogPlacementPreviewInput(
 export function getPlannerCanvasInteractionProperties(
   input: Readonly<{
     hasSelectedPlacements: boolean;
+    hasPendingPlacementCopy?: boolean;
     tool: EditorTool | null;
   }>,
 ): Readonly<{
@@ -340,16 +351,17 @@ export function getPlannerCanvasInteractionProperties(
 }> {
   return {
     pointerInteractionMode:
-      input.tool === null
+      input.hasPendingPlacementCopy === true
         ? "navigate"
-        : input.tool === "multi-select"
-          ? "multi-select"
-          : input.tool === "fill" ||
-            input.tool === "erase"
-          ? "rectangle"
-          : input.hasSelectedPlacements
-            ? "move-selected"
-            : "navigate",
+        : input.tool === null
+          ? "navigate"
+          : input.tool === "multi-select"
+            ? "multi-select"
+            : input.tool === "fill" || input.tool === "erase"
+              ? "rectangle"
+              : input.hasSelectedPlacements
+                ? "move-selected"
+                : "navigate",
     wheelZoomEnabled: true,
   };
 }
@@ -369,7 +381,7 @@ export function processPlannerWorkspaceMapTileClick(
       requestedMapId: string,
     ) => MapPlacementGrid;
     mapId: string;
-    pendingDuplicateSelectionKey: PlacementSelectionKey | null;
+    pendingDuplicateSelectionKeys: readonly PlacementSelectionKey[] | null;
     placementHistory: PlacementHistory<PlacementSnapshot>;
     readyCatalogItems: readonly CatalogItem[];
     selectedCatalogItem: WorkspaceSelectedCatalogItem | null;
@@ -383,48 +395,74 @@ export function processPlannerWorkspaceMapTileClick(
     );
   }
   const mapPlacementGrid = input.getRequiredCurrentMapPlacementGrid(input.mapId);
-  const pendingDuplicateSelectionKey = input.pendingDuplicateSelectionKey;
-  const selectedPlacementKeys =
-    pendingDuplicateSelectionKey === null
-      ? input.selectedPlacementKeys
-      : [pendingDuplicateSelectionKey];
+  const pendingDuplicateSelectionKeys = input.pendingDuplicateSelectionKeys;
   const editingTransition =
-    pendingDuplicateSelectionKey === null
-          ? applyPlannerWorkspaceMapTileClick({
-              buildingMetadataById: input.buildingMetadataById,
-              catalogPresentationChoice:
-                input.selectedCatalogItem?.presentationChoice ?? null,
-              cursorTile: input.cursorTile,
-              freePlacement: input.freePlacement,
-              mapPlacementGrid,
-              placementHistory: input.placementHistory,
-              resolvedCompositeVariant:
-                input.selectedCatalogItem?.resolvedCompositeVariant,
-              selectedCatalogItem: input.selectedCatalogItem?.catalogItem ?? null,
-              selectedPlacementKeys,
-              tool: input.tool,
-            })
-          : duplicatePlannerWorkspaceSelectionAtTile({
-              buildingMetadataById: input.buildingMetadataById,
-              catalogItems: input.readyCatalogItems,
-              cursorTile: input.cursorTile,
-              freePlacement: input.freePlacement,
-              mapPlacementGrid,
-              placementHistory: input.placementHistory,
-              selectedPlacementKeys,
-            });
-  input.clearPendingDuplicateSelection();
+    pendingDuplicateSelectionKeys === null
+      ? applyPlannerWorkspaceMapTileClick({
+          buildingMetadataById: input.buildingMetadataById,
+          catalogPresentationChoice:
+            input.selectedCatalogItem?.presentationChoice ?? null,
+          cursorTile: input.cursorTile,
+          freePlacement: input.freePlacement,
+          mapPlacementGrid,
+          placementHistory: input.placementHistory,
+          resolvedCompositeVariant:
+            input.selectedCatalogItem?.resolvedCompositeVariant,
+          selectedCatalogItem: input.selectedCatalogItem?.catalogItem ?? null,
+          selectedPlacementKeys: input.selectedPlacementKeys,
+          tool: input.tool,
+        })
+      : duplicatePlannerWorkspaceSelectionAtTile({
+          buildingMetadataById: input.buildingMetadataById,
+          catalogItems: input.readyCatalogItems,
+          cursorTile: input.cursorTile,
+          freePlacement: input.freePlacement,
+          mapPlacementGrid,
+          placementHistory: input.placementHistory,
+          selectedPlacementKeys: pendingDuplicateSelectionKeys,
+        });
+  if (
+    pendingDuplicateSelectionKeys === null ||
+    editingTransition.placementHistory !== input.placementHistory
+  ) {
+    input.clearPendingDuplicateSelection();
+  }
   input.applyEditingTransition(
     editingTransition.placementHistory,
     editingTransition.selectedPlacementKeys,
   );
   if (
-    pendingDuplicateSelectionKey === null
-    && input.tool === "cursor"
-    && input.selectedCatalogItem !== null
-    && editingTransition.placementHistory !== input.placementHistory
+    pendingDuplicateSelectionKeys === null &&
+    input.tool === "cursor" &&
+    input.selectedCatalogItem !== null &&
+    editingTransition.placementHistory !== input.placementHistory
   ) {
     input.advanceSelectedCatalogPlacementAttempt();
+  }
+}
+
+export function processPlannerWorkspaceSelectionMove(
+  input: Readonly<{
+    applyEditingTransition: PlannerWorkspaceStateController["applyPlacementEditResult"];
+    editingTransition: ReturnType<typeof movePlannerWorkspaceSelection>;
+    onToolChange: (tool: EditorTool) => void;
+    placementHistory: PlacementHistory<PlacementSnapshot>;
+    tool: EditorTool | null;
+  }>,
+): void {
+  const completedMultiSelectionMove =
+    input.tool === "multi-select" &&
+    input.editingTransition.placementHistory !== input.placementHistory;
+
+  input.applyEditingTransition(
+    input.editingTransition.placementHistory,
+    completedMultiSelectionMove
+      ? []
+      : input.editingTransition.selectedPlacementKeys,
+  );
+
+  if (completedMultiSelectionMove) {
+    input.onToolChange("cursor");
   }
 }
 
@@ -1039,6 +1077,8 @@ function PreparedPlannerWorkspaceContent({
     workspaceController,
   });
   const plannerCanvasInteractionProperties = getPlannerCanvasInteractionProperties({
+    hasPendingPlacementCopy:
+      workspaceEditingControls.hasPendingPlacementCopy,
     hasSelectedPlacements:
       plannerWorkspaceState.selectedPlacementKeys.length > 0,
     tool: plannerWorkspaceState.tool,
@@ -1133,6 +1173,12 @@ function PreparedPlannerWorkspaceContent({
           onMapImageExporterReady={workspacePersistenceControls.handleMapImageExporterReady}
           onMapTileClick={workspaceEditingControls.handleMapTileClick}
           onMapTileRectangle={workspaceEditingControls.handleMapTileRectangle}
+          getPlacementCopyPreviewAtTile={
+            workspaceEditingControls.getPlacementCopyPreviewAtTile
+          }
+          getFillRectanglePreviewAtTiles={
+            workspaceEditingControls.getFillRectanglePreviewAtTiles
+          }
           onPlacementSelectionClick={workspaceEditingControls.onPlacementSelectionClick}
           onMoveSelectedPlacements={workspaceEditingControls.handleMoveSelectedPlacements}
           onNudgeSelectedPlacements={workspaceEditingControls.handleNudgeSelectedPlacements}
@@ -1143,6 +1189,9 @@ function PreparedPlannerWorkspaceContent({
           placementSnapshot={plannerWorkspaceState.placementHistory.currentState}
           pointerInteractionMode={
             plannerCanvasInteractionProperties.pointerInteractionMode
+          }
+          shortRectangleClickBehavior={
+            plannerWorkspaceState.tool === "fill" ? "rectangle" : "single-tile"
           }
           preparedCanvasResources={preparedWorkspace.canvasResources}
           season={plannerWorkspaceState.season}
@@ -1157,6 +1206,7 @@ function PreparedPlannerWorkspaceContent({
         ) : (
           <CatalogPlacementControls
             catalogItem={selectedCatalogItem?.catalogItem ?? null}
+            isFilling={plannerWorkspaceState.tool === "fill"}
             locale={locale}
             onCancel={clearSelectedCatalogItem}
             onCyclePendingChoice={cyclePendingCatalogChoice}
@@ -1608,8 +1658,8 @@ function useWorkspaceEditingControls({
   onDismissInteriorDecor: () => void;
   onToolChange: (tool: NonNullable<Parameters<typeof EditorToolbar>[0]["tool"]>) => void;
 }>) {
-  const [pendingDuplicateSelectionKey, setPendingDuplicateSelectionKey] =
-    useState<PlacementSelectionKey | null>(null);
+  const [pendingDuplicateSelectionKeys, setPendingDuplicateSelectionKeys] =
+    useState<readonly PlacementSelectionKey[] | null>(null);
   const applyEditingTransition = useCallback(
     (
       placementHistory: PlacementHistory<PlacementSnapshot>,
@@ -1626,12 +1676,12 @@ function useWorkspaceEditingControls({
         applyEditingTransition,
         buildingMetadataById,
         clearPendingDuplicateSelection: () =>
-          setPendingDuplicateSelectionKey(null),
+          setPendingDuplicateSelectionKeys(null),
         cursorTile,
         freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
         getRequiredCurrentMapPlacementGrid,
         mapId,
-        pendingDuplicateSelectionKey,
+        pendingDuplicateSelectionKeys,
         placementHistory: plannerWorkspaceState.placementHistory,
         readyCatalogItems,
         selectedCatalogItem,
@@ -1644,7 +1694,7 @@ function useWorkspaceEditingControls({
       advanceSelectedCatalogPlacementAttempt,
       buildingMetadataById,
       getRequiredCurrentMapPlacementGrid,
-      pendingDuplicateSelectionKey,
+      pendingDuplicateSelectionKeys,
       plannerWorkspaceState,
       selectedCatalogItem,
     ],
@@ -1662,6 +1712,8 @@ function useWorkspaceEditingControls({
       const editingTransition = applyPlannerWorkspacePlacementSelection({
         placementHistory: plannerWorkspaceState.placementHistory,
         placementSelectionKeys,
+        selectedPlacementKeys: plannerWorkspaceState.selectedPlacementKeys,
+        toggleSelection: plannerWorkspaceState.tool === "multi-select",
       });
       applyEditingTransition(
         editingTransition.placementHistory,
@@ -1672,6 +1724,8 @@ function useWorkspaceEditingControls({
       applyEditingTransition,
       plannerWorkspaceState.placementHistory,
       plannerWorkspaceState.selectedPlannerMapId,
+      plannerWorkspaceState.selectedPlacementKeys,
+      plannerWorkspaceState.tool,
     ],
   );
   const handleMapTileRectangle = useCallback(
@@ -1705,6 +1759,69 @@ function useWorkspaceEditingControls({
     },
     [
       applyEditingTransition,
+      buildingMetadataById,
+      getRequiredCurrentMapPlacementGrid,
+      plannerWorkspaceState,
+      selectedCatalogItem,
+    ],
+  );
+  const getPlacementCopyPreviewAtTile = useCallback<
+    NonNullable<PlannerCanvasProperties["getPlacementCopyPreviewAtTile"]>
+  >(
+    (cursorTile) => {
+      if (
+        pendingDuplicateSelectionKeys === null ||
+        buildingMetadataById === null
+      ) {
+        return null;
+      }
+      return previewPlannerWorkspaceSelectionAtTile({
+        buildingMetadataById,
+        catalogItems: readyCatalogItems,
+        cursorTile,
+        freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
+        mapPlacementGrid: getRequiredCurrentMapPlacementGrid(
+          plannerWorkspaceState.selectedPlannerMapId,
+        ),
+        placementHistory: plannerWorkspaceState.placementHistory,
+        selectedPlacementKeys: pendingDuplicateSelectionKeys,
+      });
+    },
+    [
+      buildingMetadataById,
+      getRequiredCurrentMapPlacementGrid,
+      pendingDuplicateSelectionKeys,
+      plannerWorkspaceState,
+      readyCatalogItems,
+    ],
+  );
+  const getFillRectanglePreviewAtTiles = useCallback<
+    NonNullable<PlannerCanvasProperties["getFillRectanglePreviewAtTiles"]>
+  >(
+    (firstTile, secondTile) => {
+      if (
+        plannerWorkspaceState.tool !== "fill" ||
+        buildingMetadataById === null ||
+        selectedCatalogItem === null
+      ) {
+        return null;
+      }
+      return previewPlannerWorkspaceFillRectangle({
+        buildingMetadataById,
+        catalogPresentationChoice: selectedCatalogItem.presentationChoice,
+        firstTile,
+        freePlacement: plannerWorkspaceState.behaviorOptions.freePlacement,
+        mapPlacementGrid: getRequiredCurrentMapPlacementGrid(
+          plannerWorkspaceState.selectedPlannerMapId,
+        ),
+        placementHistory: plannerWorkspaceState.placementHistory,
+        secondTile,
+        selectedCatalogItem: selectedCatalogItem.catalogItem,
+        selectedPlacementKeys: plannerWorkspaceState.selectedPlacementKeys,
+        tool: "fill",
+      });
+    },
+    [
       buildingMetadataById,
       getRequiredCurrentMapPlacementGrid,
       plannerWorkspaceState,
@@ -1759,15 +1876,19 @@ function useWorkspaceEditingControls({
         selectedPlacementKeys: plannerWorkspaceState.selectedPlacementKeys,
         tileDelta,
       });
-      applyEditingTransition(
-        editingTransition.placementHistory,
-        editingTransition.selectedPlacementKeys,
-      );
+      processPlannerWorkspaceSelectionMove({
+        applyEditingTransition,
+        editingTransition,
+        onToolChange,
+        placementHistory: plannerWorkspaceState.placementHistory,
+        tool: plannerWorkspaceState.tool,
+      });
     },
     [
       applyEditingTransition,
       buildingMetadataById,
       getRequiredCurrentMapPlacementGrid,
+      onToolChange,
       plannerWorkspaceState,
       readyCatalogItems,
     ],
@@ -1892,17 +2013,23 @@ function useWorkspaceEditingControls({
     readyCatalogItems,
   ]);
   const handleCopySelection = useCallback(
-    (selectedPlacementKey: PlacementSelectionKey) => {
-      setPendingDuplicateSelectionKey(selectedPlacementKey);
+    (selectedPlacementKeys: readonly PlacementSelectionKey[]) => {
+      if (selectedPlacementKeys.length === 0) {
+        throw new Error(
+          "Planner workspace cannot start a placement copy without selected placement keys.",
+        );
+      }
+      setPendingDuplicateSelectionKeys([...selectedPlacementKeys]);
     },
     [],
   );
   const handleDismissSelection = useCallback(() => {
+    setPendingDuplicateSelectionKeys(null);
     setSelectedPlacementKeys([]);
   }, [setSelectedPlacementKeys]);
   const handleDismissEditingInteraction = useCallback(() => {
     onDismissInteriorDecor();
-    setPendingDuplicateSelectionKey(null);
+    setPendingDuplicateSelectionKeys(null);
     setSelectedPlacementKeys([]);
     clearSelectedCatalogItem();
   }, [clearSelectedCatalogItem, onDismissInteriorDecor, setSelectedPlacementKeys]);
@@ -1912,14 +2039,12 @@ function useWorkspaceEditingControls({
       return;
     }
     const handleKeyboardEvent = createPlannerWorkspaceEditingKeyboardHandler({
-      getSelectedPlacementKey: () =>
-        plannerWorkspaceState.selectedPlacementKeys.length === 1
-          ? plannerWorkspaceState.selectedPlacementKeys[0] ?? null
-          : null,
+      getSelectedPlacementKeys: () =>
+        plannerWorkspaceState.selectedPlacementKeys,
       hasDismissableInteraction: () =>
         plannerWorkspaceState.selectedPlacementKeys.length > 0 ||
         selectedCatalogItem !== null ||
-        pendingDuplicateSelectionKey !== null ||
+        pendingDuplicateSelectionKeys !== null ||
         activeInteriorDecorPattern !== null,
       hasSelection: () => plannerWorkspaceState.selectedPlacementKeys.length > 0,
       hasPendingCatalogItem: () => selectedCatalogItem !== null,
@@ -1941,7 +2066,7 @@ function useWorkspaceEditingControls({
     handleDismissEditingInteraction,
     handleCycleSelectedAppearance,
     plannerWorkspaceState.selectedPlacementKeys,
-    pendingDuplicateSelectionKey,
+    pendingDuplicateSelectionKeys,
     onPendingCatalogChoiceCycle,
     onToolChange,
     plannerWorkspaceState.modalId,
@@ -1966,11 +2091,14 @@ function useWorkspaceEditingControls({
 
   return {
     cancelEditingInteraction: () => {
-      const hasInteraction = plannerWorkspaceState.selectedPlacementKeys.length > 0 || selectedCatalogItem !== null || pendingDuplicateSelectionKey !== null || activeInteriorDecorPattern !== null;
+      const hasInteraction = plannerWorkspaceState.selectedPlacementKeys.length > 0 || selectedCatalogItem !== null || pendingDuplicateSelectionKeys !== null || activeInteriorDecorPattern !== null;
       if (hasInteraction) handleDismissEditingInteraction();
       return hasInteraction;
     },
-    cancelPendingDuplicateSelection: () => setPendingDuplicateSelectionKey(null),
+    cancelPendingDuplicateSelection: () => setPendingDuplicateSelectionKeys(null),
+    getPlacementCopyPreviewAtTile,
+    getFillRectanglePreviewAtTiles,
+    hasPendingPlacementCopy: pendingDuplicateSelectionKeys !== null,
     handleMapTileClick,
     handleMapTileRectangle,
     handleMoveSelectedPlacements,
@@ -2058,7 +2186,9 @@ function createSelectionInspector(
   catalogItems: readonly CatalogItem[],
   onDelete: () => void,
   onCycleAppearance: () => void,
-  onCopy: (selectedPlacementKey: PlacementSelectionKey) => void,
+  onCopySelection: (
+    selectedPlacementKeys: readonly PlacementSelectionKey[],
+  ) => void,
   onDismiss: () => void,
   onItemTintChange: (
     selectedPlacementKey: PlacementSelectionKey,
@@ -2084,6 +2214,7 @@ function createSelectionInspector(
     return (
       <SelectionInspector
         kind="multiple"
+        onCopy={() => onCopySelection(selectedPlacementKeys)}
         onDelete={onDelete}
         onDismiss={onDismiss}
         selection={getPlacementSelectionSummary({
@@ -2107,7 +2238,7 @@ function createSelectionInspector(
     catalogItems,
     onDelete,
     onCycleAppearance,
-    onCopy,
+    onCopySelection,
     onDismiss,
     onItemTintChange,
     onNightLightStateChange,
@@ -2121,7 +2252,9 @@ function createSingleSelectionInspector(
   catalogItems: readonly CatalogItem[],
   onDelete: () => void,
   onCycleAppearance: () => void,
-  onCopy: (selectedPlacementKey: PlacementSelectionKey) => void,
+  onCopySelection: (
+    selectedPlacementKeys: readonly PlacementSelectionKey[],
+  ) => void,
   onDismiss: () => void,
   onItemTintChange: (
     selectedPlacementKey: PlacementSelectionKey,
@@ -2154,7 +2287,7 @@ function createSingleSelectionInspector(
               waterColor,
             )
           }
-          onCopy={() => onCopy(selectionDetails.selectedPlacementKey)}
+          onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
           onDelete={onDelete}
           onDismiss={onDismiss}
           onCycleAppearance={onCycleAppearance}
@@ -2182,7 +2315,7 @@ function createSingleSelectionInspector(
           onBuildingPaintChange={(paintColors) =>
             onBuildingPaintChange(selectionDetails.selectedPlacementKey, paintColors)
           }
-          onCopy={() => onCopy(selectionDetails.selectedPlacementKey)}
+          onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
           onDelete={onDelete}
           onDismiss={onDismiss}
           onCycleAppearance={onCycleAppearance}
@@ -2199,7 +2332,7 @@ function createSingleSelectionInspector(
     return (
       <SelectionInspector
         kind="single"
-        onCopy={() => onCopy(selectionDetails.selectedPlacementKey)}
+        onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
         onDelete={onDelete}
         onDismiss={onDismiss}
         onCycleAppearance={onCycleAppearance}
@@ -2216,7 +2349,7 @@ function createSingleSelectionInspector(
     return (
       <SelectionInspector
         kind="single"
-        onCopy={() => onCopy(selectionDetails.selectedPlacementKey)}
+        onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
         onDelete={onDelete}
         onDismiss={onDismiss}
         onCycleAppearance={onCycleAppearance}
@@ -2227,7 +2360,7 @@ function createSingleSelectionInspector(
   return (
     <SelectionInspector
       kind="single"
-      onCopy={() => onCopy(selectionDetails.selectedPlacementKey)}
+      onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
       onDelete={onDelete}
       onDismiss={onDismiss}
       onNightLightStateChange={(nightLightState) =>

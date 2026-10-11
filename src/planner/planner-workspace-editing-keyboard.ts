@@ -16,11 +16,11 @@ export type PlannerWorkspaceEditingKeyboardListenerPort = Readonly<{
 }>;
 
 export type PlannerWorkspaceEditingKeyboardActions = Readonly<{
-  getSelectedPlacementKey: () => PlacementSelectionKey | null;
+  getSelectedPlacementKeys: () => readonly PlacementSelectionKey[];
   hasDismissableInteraction: () => boolean;
   hasPendingCatalogItem: () => boolean;
   hasSelection: () => boolean;
-  onCopy: (selectedPlacementKey: PlacementSelectionKey) => void;
+  onCopy: (selectedPlacementKeys: readonly PlacementSelectionKey[]) => void;
   onDelete: () => void;
   onDismiss: () => void;
   onPendingChoiceCycle: () => boolean;
@@ -69,12 +69,17 @@ export function createPlannerWorkspaceEditingKeyboardHandler(
       return;
     }
     if (normalizedKey === "c") {
-      const selectedPlacementKey = keyboardActions.getSelectedPlacementKey();
-      if (selectedPlacementKey === null) {
+      const selectedPlacementKeys = keyboardActions.getSelectedPlacementKeys();
+      if (!Array.isArray(selectedPlacementKeys)) {
+        throw new TypeError(
+          `Planner workspace selected placement keys callback must return an array; received ${describeValue(selectedPlacementKeys)}.`,
+        );
+      }
+      if (selectedPlacementKeys.length === 0) {
         return;
       }
       keyboardEvent.preventDefault();
-      keyboardActions.onCopy(selectedPlacementKey);
+      keyboardActions.onCopy(selectedPlacementKeys);
       return;
     }
     if (normalizedKey === "q") {
@@ -223,7 +228,7 @@ function assertEditingKeyboardActions(
     );
   }
   for (const actionName of [
-    "getSelectedPlacementKey",
+    "getSelectedPlacementKeys",
     "hasDismissableInteraction",
     "hasPendingCatalogItem",
     "hasSelection",

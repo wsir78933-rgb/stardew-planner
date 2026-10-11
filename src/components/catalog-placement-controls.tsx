@@ -7,6 +7,7 @@ import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
 
 type CatalogPlacementControlsProperties = Readonly<{
   catalogItem: CatalogItem | null;
+  isFilling: boolean;
   locale: HomepageLocale;
   onCancel: () => void;
   onCyclePendingChoice: () => boolean;
@@ -16,6 +17,7 @@ type PendingCatalogControl = "rotation" | "variant" | null;
 
 export function CatalogPlacementControls({
   catalogItem,
+  isFilling,
   locale,
   onCancel,
   onCyclePendingChoice,
@@ -26,17 +28,21 @@ export function CatalogPlacementControls({
 
   const copy = getCatalogPanelCopy(locale);
   const pendingCatalogControl = getPendingCatalogControl(catalogItem);
-  const placingItemLabel = copy.placingItem(getCatalogSidebarDisplayName(catalogItem));
+  const itemName = getCatalogSidebarDisplayName(catalogItem);
+  const placementStatusLabel = isFilling
+    ? copy.fillingItem(itemName)
+    : copy.placingItem(itemName);
+  const placementHint = isFilling ? copy.fillItemHint : copy.placeItemHint;
 
   return (
     <div
-      aria-label={placingItemLabel}
+      aria-label={placementStatusLabel}
       className="catalog-placement-controls selection-pill"
       role="group"
     >
       <div className="catalog-placement-controls__info">
-        <span className="catalog-placement-controls__name">{placingItemLabel}</span>
-        <span className="catalog-placement-controls__hint">{copy.placeItemHint}</span>
+        <span className="catalog-placement-controls__name">{placementStatusLabel}</span>
+        <span className="catalog-placement-controls__hint">{placementHint}</span>
       </div>
       <div className="catalog-placement-controls__actions">
         {pendingCatalogControl === null ? null : (

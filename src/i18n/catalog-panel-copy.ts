@@ -15,6 +15,8 @@ export type CatalogPanelCopy = Readonly<{
   filterLabels: Readonly<Record<string, string>>;
   filterItems: string;
   flip: string;
+  fillItemHint: string;
+  fillingItem: (name: string) => string;
   gridView: string;
   help: string;
   keyboardShortcuts: string;
@@ -200,6 +202,8 @@ const catalogPanelCopyByLocale = {
     filterLabels: createFilterLabels("en"),
     filterItems: "Filter items",
     flip: "Flip",
+    fillItemHint: "Drag to fill · Esc to cancel",
+    fillingItem: (name: string) => `Filling ${name}`,
     gridView: "Grid view",
     help: "Help & Info",
     keyboardShortcuts: "Keyboard shortcuts",
@@ -246,6 +250,8 @@ const catalogPanelCopyByLocale = {
     filterLabels: createFilterLabels("zh-CN"),
     filterItems: "筛选物品",
     flip: "翻转",
+    fillItemHint: "拖动填充 · 按 Esc 取消",
+    fillingItem: (name: string) => `正在填充${name}`,
     gridView: "网格视图",
     help: "帮助与说明",
     keyboardShortcuts: "键盘快捷键",

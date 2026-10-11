@@ -444,6 +444,7 @@ function createPendingCatalogPillInteraction(
   );
   const placementControls = CatalogPlacementControls({
     catalogItem,
+    isFilling: false,
     locale: "en",
     onCancel: () => {
       pendingCatalogChoiceState = clearWorkspaceCatalogSelection(

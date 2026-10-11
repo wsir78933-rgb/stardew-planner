@@ -38,6 +38,7 @@ import {
   createWorkspaceCatalogPlacementPreviewInput,
   getPlannerCanvasInteractionProperties,
   processPlannerWorkspaceMapTileClick,
+  processPlannerWorkspaceSelectionMove,
 } from "../../src/components/planner-workspace";
 import { createPlannerCanvasPlacementPreviewState } from "../../src/components/planner-canvas";
 
@@ -268,6 +269,15 @@ describe("planner canvas interaction properties", () => {
       },
       {
         expectedProperties: {
+          pointerInteractionMode: "navigate",
+          wheelZoomEnabled: true,
+        },
+        hasPendingPlacementCopy: true,
+        hasSelectedPlacements: true,
+        tool: "multi-select",
+      },
+      {
+        expectedProperties: {
           pointerInteractionMode: "rectangle",
           wheelZoomEnabled: true,
         },
@@ -295,6 +305,10 @@ describe("planner canvas interaction properties", () => {
     for (const canvasInteractionCase of cases) {
       expect(
         getPlannerCanvasInteractionProperties({
+          hasPendingPlacementCopy:
+            "hasPendingPlacementCopy" in canvasInteractionCase
+              ? canvasInteractionCase.hasPendingPlacementCopy
+              : false,
           hasSelectedPlacements: canvasInteractionCase.hasSelectedPlacements,
           tool: canvasInteractionCase.tool,
         }),
@@ -404,6 +418,23 @@ function createEditingInput(
     selectedCatalogItem: createFloorCatalogItem(),
     selectedPlacementKeys: [],
   };
+}
+
+function createTwoPlacedFloorItemsHistory() {
+  const editingInput = createEditingInput();
+  const firstPlacementTransition = applyPlannerWorkspaceMapTileClick({
+    ...editingInput,
+    cursorTile: { x: 0, y: 0 },
+    tool: "cursor",
+  });
+  const secondPlacementTransition = applyPlannerWorkspaceMapTileClick({
+    ...editingInput,
+    cursorTile: { x: 1, y: 0 },
+    placementHistory: firstPlacementTransition.placementHistory,
+    tool: "cursor",
+  });
+
+  return secondPlacementTransition.placementHistory;
 }
 
 function createAdapterSupportedStandardFarmDocument() {
@@ -529,7 +560,7 @@ describe("planner workspace basic editing orchestration", () => {
       freePlacement: editingInput.freePlacement,
       getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
       mapId: "standard",
-      pendingDuplicateSelectionKey: null,
+      pendingDuplicateSelectionKeys: null,
       placementHistory: editingInput.placementHistory,
       readyCatalogItems: [editingInput.selectedCatalogItem],
       selectedCatalogItem: {
@@ -576,7 +607,7 @@ describe("planner workspace basic editing orchestration", () => {
       freePlacement: editingInput.freePlacement,
       getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
       mapId: "standard",
-      pendingDuplicateSelectionKey: null,
+      pendingDuplicateSelectionKeys: null,
       placementHistory: editingInput.placementHistory,
       readyCatalogItems: [editingInput.selectedCatalogItem],
       selectedCatalogItem: {
@@ -616,7 +647,7 @@ describe("planner workspace basic editing orchestration", () => {
       freePlacement: editingInput.freePlacement,
       getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
       mapId: "standard",
-      pendingDuplicateSelectionKey: "item:1",
+      pendingDuplicateSelectionKeys: ["item:1"],
       placementHistory: placedHistory,
       readyCatalogItems: [editingInput.selectedCatalogItem],
       selectedCatalogItem: {
@@ -628,6 +659,118 @@ describe("planner workspace basic editing orchestration", () => {
     });
 
     expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(advanceSelectedCatalogPlacementAttempt).not.toHaveBeenCalled();
+    expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps a pending multi-placement copy after an invalid tile and commits it at the next valid tile", () => {
+    const editingInput = createEditingInput();
+    const placementHistory = createPlacementHistory<PlacementSnapshot>({
+      ...createEmptyPlacementSnapshot(),
+      crops: [{ cropId: "crop:24", x: 2, y: 2 }],
+      items: [
+        {
+          bedType: null,
+          flipped: false,
+          footprint: { width: 1, height: 1 },
+          instanceId: 1,
+          isGrass: false,
+          isLongTable: false,
+          isRug: false,
+          isTable: false,
+          itemId: "floor:Stone Floor",
+          layer: "path",
+          locked: false,
+          rotation: 0,
+          tintColor: "#ffffff",
+          variant: 0,
+          x: 0,
+          y: 0,
+        },
+        {
+          bedType: null,
+          flipped: false,
+          footprint: { width: 1, height: 1 },
+          instanceId: 2,
+          isGrass: false,
+          isLongTable: false,
+          isRug: false,
+          isTable: false,
+          itemId: "floor:Stone Floor",
+          layer: "path",
+          locked: false,
+          rotation: 0,
+          tintColor: "#ffffff",
+          variant: 0,
+          x: 1,
+          y: 0,
+        },
+      ],
+      nextItemId: 3,
+    });
+    const applyEditingTransition = vi.fn();
+    const advanceSelectedCatalogPlacementAttempt = vi.fn();
+    const clearPendingDuplicateSelection = vi.fn();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 2, y: 2 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKeys: ["item:1", "item:2"],
+      placementHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: null,
+      selectedPlacementKeys: ["item:1", "item:2"],
+      tool: "multi-select",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(1);
+    expect(applyEditingTransition).toHaveBeenNthCalledWith(
+      1,
+      placementHistory,
+      ["item:1", "item:2"],
+    );
+    expect(clearPendingDuplicateSelection).not.toHaveBeenCalled();
+
+    processPlannerWorkspaceMapTileClick({
+      advanceSelectedCatalogPlacementAttempt,
+      applyEditingTransition,
+      buildingMetadataById: editingInput.buildingMetadataById,
+      clearPendingDuplicateSelection,
+      cursorTile: { x: 0, y: 2 },
+      freePlacement: editingInput.freePlacement,
+      getRequiredCurrentMapPlacementGrid: () => editingInput.mapPlacementGrid,
+      mapId: "standard",
+      pendingDuplicateSelectionKeys: ["item:1", "item:2"],
+      placementHistory,
+      readyCatalogItems: [editingInput.selectedCatalogItem],
+      selectedCatalogItem: null,
+      selectedPlacementKeys: ["item:1", "item:2"],
+      tool: "multi-select",
+    });
+
+    expect(applyEditingTransition).toHaveBeenCalledTimes(2);
+    expect(applyEditingTransition).toHaveBeenNthCalledWith(
+      1,
+      placementHistory,
+      ["item:1", "item:2"],
+    );
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      expect.objectContaining({
+        currentState: expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({ instanceId: 3, x: 0, y: 2 }),
+            expect.objectContaining({ instanceId: 4, x: 1, y: 2 }),
+          ]),
+        }),
+      }),
+      ["item:3", "item:4"],
+    );
     expect(advanceSelectedCatalogPlacementAttempt).not.toHaveBeenCalled();
     expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
   });
@@ -679,7 +822,7 @@ describe("planner workspace basic editing orchestration", () => {
     expect(selectedTransition.selectedPlacementKeys).toEqual(["item:1"]);
   });
 
-  it("selects an existing placement from a Multi-select direct key without changing placement history", () => {
+  it("toggles placement keys in and out of a Multi selection without changing history", () => {
     const placementHistory = createPlacementHistory<PlacementSnapshot>({
       ...createEmptyPlacementSnapshot(),
       items: [{
@@ -699,8 +842,25 @@ describe("planner workspace basic editing orchestration", () => {
         variant: 0,
         x: 1,
         y: 1,
+      }, {
+        bedType: null,
+        flipped: false,
+        footprint: { width: 1, height: 1 },
+        instanceId: 2,
+        isGrass: false,
+        isLongTable: false,
+        isRug: false,
+        isTable: false,
+        itemId: "floor:Stone Floor",
+        layer: "path",
+        locked: false,
+        rotation: 0,
+        tintColor: "#ffffff",
+        variant: 0,
+        x: 2,
+        y: 1,
       }],
-      nextItemId: 2,
+      nextItemId: 3,
     });
 
     const selectedTransition = applyPlannerWorkspacePlacementSelection({
@@ -710,6 +870,34 @@ describe("planner workspace basic editing orchestration", () => {
 
     expect(selectedTransition.placementHistory).toBe(placementHistory);
     expect(selectedTransition.selectedPlacementKeys).toEqual(["item:1"]);
+
+    const addedSelectionTransition = applyPlannerWorkspacePlacementSelection({
+      placementHistory,
+      placementSelectionKeys: ["item:2"],
+      selectedPlacementKeys: selectedTransition.selectedPlacementKeys,
+      toggleSelection: true,
+    });
+    expect(addedSelectionTransition.placementHistory).toBe(placementHistory);
+    expect(addedSelectionTransition.selectedPlacementKeys).toEqual([
+      "item:1",
+      "item:2",
+    ]);
+
+    const removedSelectionTransition = applyPlannerWorkspacePlacementSelection({
+      placementHistory,
+      placementSelectionKeys: ["item:1"],
+      selectedPlacementKeys: addedSelectionTransition.selectedPlacementKeys,
+      toggleSelection: true,
+    });
+    expect(removedSelectionTransition.selectedPlacementKeys).toEqual(["item:2"]);
+
+    const emptyClickTransition = applyPlannerWorkspacePlacementSelection({
+      placementHistory,
+      placementSelectionKeys: [],
+      selectedPlacementKeys: removedSelectionTransition.selectedPlacementKeys,
+      toggleSelection: true,
+    });
+    expect(emptyClickTransition.selectedPlacementKeys).toEqual([]);
   });
 
   it("places with the cursor, selects without a catalog item, and keeps the complete transition at each step", () => {
@@ -1013,6 +1201,106 @@ describe("planner workspace basic editing orchestration", () => {
       placementHistory,
       selectedPlacementKeys: ["item:1"],
     });
+  });
+
+  it("clears a moved Multi group and returns to Select only after a successful move", () => {
+    const placementHistory = createTwoPlacedFloorItemsHistory();
+    const selectedPlacementKeys = ["item:1", "item:2"] as const;
+    const editingTransition = movePlannerWorkspaceSelection({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogItems: [createFloorCatalogItem()],
+      freePlacement: false,
+      mapPlacementGrid: createStandardFarmPlacementGrid(),
+      placementHistory,
+      selectedPlacementKeys,
+      tileDelta: { x: 1, y: 1 },
+    });
+    const applyEditingTransition = vi.fn();
+    const onToolChange = vi.fn();
+
+    processPlannerWorkspaceSelectionMove({
+      applyEditingTransition,
+      editingTransition,
+      onToolChange,
+      placementHistory,
+      tool: "multi-select",
+    });
+
+    expect(editingTransition.placementHistory).not.toBe(placementHistory);
+    expect(editingTransition.placementHistory.currentState.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ instanceId: 1, x: 1, y: 1 }),
+        expect.objectContaining({ instanceId: 2, x: 2, y: 1 }),
+      ]),
+    );
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      editingTransition.placementHistory,
+      [],
+    );
+    expect(onToolChange).toHaveBeenCalledTimes(1);
+    expect(onToolChange).toHaveBeenCalledWith("cursor");
+  });
+
+  it("preserves Multi selection and tool when a group move is invalid", () => {
+    const placementHistory = createTwoPlacedFloorItemsHistory();
+    const selectedPlacementKeys = ["item:1", "item:2"] as const;
+    const editingTransition = movePlannerWorkspaceSelection({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogItems: [createFloorCatalogItem()],
+      freePlacement: false,
+      mapPlacementGrid: createStandardFarmPlacementGrid(),
+      placementHistory,
+      selectedPlacementKeys,
+      tileDelta: { x: 0, y: 0 },
+    });
+    const applyEditingTransition = vi.fn();
+    const onToolChange = vi.fn();
+
+    processPlannerWorkspaceSelectionMove({
+      applyEditingTransition,
+      editingTransition,
+      onToolChange,
+      placementHistory,
+      tool: "multi-select",
+    });
+
+    expect(editingTransition.placementHistory).toBe(placementHistory);
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      placementHistory,
+      selectedPlacementKeys,
+    );
+    expect(onToolChange).not.toHaveBeenCalled();
+  });
+
+  it("preserves the selection and Cursor tool after a successful single-item move", () => {
+    const placementHistory = createTwoPlacedFloorItemsHistory();
+    const selectedPlacementKeys = ["item:1"] as const;
+    const editingTransition = movePlannerWorkspaceSelection({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogItems: [createFloorCatalogItem()],
+      freePlacement: false,
+      mapPlacementGrid: createStandardFarmPlacementGrid(),
+      placementHistory,
+      selectedPlacementKeys,
+      tileDelta: { x: 0, y: 1 },
+    });
+    const applyEditingTransition = vi.fn();
+    const onToolChange = vi.fn();
+
+    processPlannerWorkspaceSelectionMove({
+      applyEditingTransition,
+      editingTransition,
+      onToolChange,
+      placementHistory,
+      tool: "cursor",
+    });
+
+    expect(editingTransition.placementHistory).not.toBe(placementHistory);
+    expect(applyEditingTransition).toHaveBeenCalledWith(
+      editingTransition.placementHistory,
+      selectedPlacementKeys,
+    );
+    expect(onToolChange).not.toHaveBeenCalled();
   });
 
   it("rotates, duplicates at a requested tile, and deletes through selection-controller transitions", () => {

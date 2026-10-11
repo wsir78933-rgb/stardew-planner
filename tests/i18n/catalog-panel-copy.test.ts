@@ -75,6 +75,8 @@ describe("catalog panel copy", () => {
     expect(englishCopy.searchAllItems).toBe("Search all items");
     expect(englishCopy.placingItem("Oak Chair")).toBe("Placing Oak Chair");
     expect(englishCopy.placeItemHint).toBe("Click to place · Esc to cancel");
+    expect(englishCopy.fillingItem("Oak Chair")).toBe("Filling Oak Chair");
+    expect(englishCopy.fillItemHint).toBe("Drag to fill · Esc to cancel");
     expect(englishCopy.sceneAvailabilityReason("indoor-only")).toBe(
       "This item can only be placed indoors.",
     );
@@ -148,6 +150,8 @@ describe("catalog panel copy", () => {
     expect(chineseCopy.all).toBe("全部");
     expect(chineseCopy.placingItem("Oak Chair")).toBe("正在放置Oak Chair");
     expect(chineseCopy.placeItemHint).toBe("点击放置 · 按 Esc 取消");
+    expect(chineseCopy.fillingItem("Oak Chair")).toBe("正在填充Oak Chair");
+    expect(chineseCopy.fillItemHint).toBe("拖动填充 · 按 Esc 取消");
     expect(chineseCopy.sceneAvailabilityReason("indoor-only")).toBe(
       "该物品只能放置在室内。",
     );

@@ -165,7 +165,7 @@ describe("planner workspace Task5A feature-parity composition", () => {
     expect(cancelDuplicateIndex).toBeGreaterThanOrEqual(0);
     expect(applyToolIndex).toBeGreaterThan(cancelDuplicateIndex);
     expect(workspaceSource).toContain(
-      "pendingDuplicateSelectionKey === null\n          ? applyPlannerWorkspaceMapTileClick",
+      "pendingDuplicateSelectionKeys === null\n      ? applyPlannerWorkspaceMapTileClick",
     );
   });
 

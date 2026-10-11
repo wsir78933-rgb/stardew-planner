@@ -14,6 +14,7 @@ describe("catalog placement controls", () => {
   it("renders nothing when there is no pending catalog item", () => {
     expect(CatalogPlacementControls({
       catalogItem: null,
+      isFilling: false,
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
@@ -27,6 +28,7 @@ describe("catalog placement controls", () => {
     };
     const placementControls = CatalogPlacementControls({
       catalogItem,
+      isFilling: false,
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
@@ -46,6 +48,7 @@ describe("catalog placement controls", () => {
     let cancelCallCount = 0;
     const placementControls = CatalogPlacementControls({
       catalogItem,
+      isFilling: false,
       locale: "en",
       onCancel: () => {
         cancelCallCount += 1;
@@ -89,6 +92,7 @@ describe("catalog placement controls", () => {
     });
     const placementControls = CatalogPlacementControls({
       catalogItem,
+      isFilling: false,
       locale: "zh-CN",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
@@ -120,6 +124,7 @@ describe("catalog placement controls", () => {
         rotationCount: 0,
         variantLabels: [],
       }),
+      isFilling: false,
       locale: "en",
       onCancel: () => undefined,
       onCyclePendingChoice: () => true,
@@ -132,6 +137,38 @@ describe("catalog placement controls", () => {
     expect(actionButtons).toHaveLength(1);
     expect(actionButtons[0]?.props["aria-label"]).toBe("Cancel placement (Esc)");
     expect(renderToStaticMarkup(placementControls)).not.toContain("data-control=");
+  });
+
+  it("shows the localized fill action status and drag hint", () => {
+    const englishFillControls = CatalogPlacementControls({
+      catalogItem: createCatalogItem({
+        name: "Oak Chair",
+        rotationCount: 0,
+        variantLabels: [],
+      }),
+      isFilling: true,
+      locale: "en",
+      onCancel: () => undefined,
+      onCyclePendingChoice: () => true,
+    });
+    const chineseFillControls = CatalogPlacementControls({
+      catalogItem: createCatalogItem({
+        name: "Oak Chair",
+        rotationCount: 0,
+        variantLabels: [],
+      }),
+      isFilling: true,
+      locale: "zh-CN",
+      onCancel: () => undefined,
+      onCyclePendingChoice: () => true,
+    });
+
+    expect(renderToStaticMarkup(englishFillControls)).toContain("Filling Oak Chair");
+    expect(renderToStaticMarkup(englishFillControls)).toContain(
+      "Drag to fill · Esc to cancel",
+    );
+    expect(renderToStaticMarkup(chineseFillControls)).toContain("正在填充Oak Chair");
+    expect(renderToStaticMarkup(chineseFillControls)).toContain("拖动填充 · 按 Esc 取消");
   });
 });
 

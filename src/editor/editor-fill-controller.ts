@@ -96,6 +96,10 @@ export function applyEditorFill(
   );
   const addedCrops: PlacementCrop[] = [];
   const addedItems: PlacementItem[] = [];
+  let firstRejectedValidation:
+    | Extract<PlacementValidationResult, { valid: false }>
+    | null = null;
+  let placedTileCount = 0;
 
   for (const fillTile of fillTiles) {
     const placementResult = applyEditorCursorPlacement({
@@ -111,11 +115,8 @@ export function applyEditorFill(
 
     if (!placementResult.applied) {
       if ("validation" in placementResult) {
-        return {
-          applied: false,
-          validation: placementResult.validation,
-          placementHistory,
-        };
+        firstRejectedValidation ??= placementResult.validation;
+        continue;
       }
 
       throw new Error(
@@ -129,6 +130,13 @@ export function applyEditorFill(
       addedCrops,
       addedItems,
     );
+    placedTileCount += 1;
+  }
+
+  if (placedTileCount === 0) {
+    return firstRejectedValidation === null
+      ? { applied: true, placedTileCount: 0, placementHistory }
+      : { applied: false, validation: firstRejectedValidation, placementHistory };
   }
 
   const nextPlacementSnapshot = createFillPlacementSnapshot(
@@ -139,7 +147,7 @@ export function applyEditorFill(
 
   return {
     applied: true,
-    placedTileCount: fillTiles.length,
+    placedTileCount,
     placementHistory: commitPlacementHistory(
       placementHistory,
       nextPlacementSnapshot,

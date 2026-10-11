@@ -33,6 +33,7 @@ const {
   createPixiApplicationLifetime,
   createNightModeOverlayContainer,
   createPlannerCanvasCleanup,
+  createPlannerCanvasPreviewRenderEntries,
   handlePlannerCanvasContextMenuCopyAction,
   handlePlannerCanvasContextMenuEvent,
   bindPlannerCanvasInteractions,
@@ -44,7 +45,9 @@ const {
   getPlacementContainerAlpha,
   getInteriorDecorStateRevision,
   getLoadableTilesheets,
+  getPlannerCanvasMapProjection,
   getPlannerCanvasRenderingContract,
+  getPlannerCanvasVisibleMapViewportBounds,
   getPlannerCanvasInitializationDependencies,
   loadPlacementTextures,
   replacePlacementSprites,
@@ -244,6 +247,194 @@ describe("PlannerCanvas placement preview visual state", () => {
     expect(createPlacementPreviewVisualDescriptor(false)).toEqual({
       alpha: 0.4,
       tint: 0xff0000,
+    });
+  });
+
+  it("previews a copied table before its held item without requiring a committed parent", () => {
+    const tableCatalogItem: CatalogItem = {
+      allowedTools: ["cursor", "multi-select"],
+      category: "placeable",
+      id: "furniture:test-table",
+      name: "Test table",
+      renderingMetadata: {
+        bedType: null,
+        compositeSprite: null,
+        furnitureType: "table",
+        indoors: true,
+        isLongTable: false,
+        isRug: false,
+        isTable: true,
+        kind: "furniture",
+        outdoors: true,
+        rotationSprites: undefined,
+        rotationTileSizes: undefined,
+        wallMounted: false,
+      },
+      sprite: { kind: "source-rect", height: 32, width: 32, x: 0, y: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/test-table.png",
+      tileSize: { height: 2, width: 2 },
+    };
+    const heldItemCatalogItem: CatalogItem = {
+      allowedTools: ["cursor", "multi-select"],
+      category: "placeable",
+      id: "furniture:test-held-item",
+      name: "Test held item",
+      renderingMetadata: {
+        bedType: null,
+        compositeSprite: null,
+        furnitureType: "ornament",
+        indoors: true,
+        isLongTable: false,
+        isRug: false,
+        isTable: false,
+        kind: "furniture",
+        outdoors: true,
+        rotationSprites: undefined,
+        rotationTileSizes: undefined,
+        wallMounted: false,
+      },
+      sprite: { kind: "source-rect", height: 16, width: 16, x: 0, y: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/test-held-item.png",
+      tileSize: { height: 1, width: 1 },
+    };
+    const mapPlacementGrid: MapPlacementGrid = {
+      capabilitiesByTile: [{
+        buildable: true,
+        crabPot: false,
+        diggable: true,
+        passable: true,
+        treePlantable: false,
+        treePlantableOnDirt: false,
+        wall: false,
+      }],
+      height: 1,
+      width: 1,
+    };
+
+    const previewRenderEntries = createPlannerCanvasPreviewRenderEntries({
+      catalogItems: [tableCatalogItem, heldItemCatalogItem],
+      isNightMode: false,
+      mapId: "standard",
+      mapPlacementGrid,
+      placementSnapshot: createEmptyPlacementSnapshot(),
+      previewActions: [
+        {
+          type: "add-item",
+          item: {
+            bedType: null,
+            flipped: false,
+            footprint: { height: 2, width: 2 },
+            isGrass: false,
+            isLongTable: false,
+            isRug: false,
+            isTable: true,
+            itemId: tableCatalogItem.id,
+            layer: "item",
+            locked: false,
+            rotation: 0,
+            tintColor: "#ffffff",
+            variant: 0,
+            x: 2,
+            y: 3,
+          },
+        },
+        {
+          type: "attach-held-item",
+          item: {
+            bedType: null,
+            flipped: false,
+            footprint: { height: 1, width: 1 },
+            isGrass: false,
+            isLongTable: false,
+            isRug: false,
+            isTable: false,
+            itemId: heldItemCatalogItem.id,
+            layer: "item",
+            locked: false,
+            rotation: 0,
+            tintColor: "#ffffff",
+            variant: 0,
+            x: 0,
+            y: 0,
+          },
+          parentInstanceId: 1,
+        },
+      ],
+      previewKind: "placement-copy preview",
+      season: "spring",
+    });
+
+    expect(previewRenderEntries.map((renderEntry) => renderEntry.catalogItem.id))
+      .toEqual([tableCatalogItem.id, heldItemCatalogItem.id]);
+    expect(previewRenderEntries.map((renderEntry) => renderEntry.key)).toEqual([
+      "placement-preview:0:0",
+      "placement-preview:1:0",
+    ]);
+  });
+
+  it("renders a fill replace-item action as a transient replacement ghost", () => {
+    const floorCatalogItem: CatalogItem = {
+      allowedTools: ["cursor", "fill", "erase"],
+      category: "floor",
+      id: "floor:test",
+      name: "Test floor",
+      sprite: { kind: "source-rect", height: 16, width: 16, x: 0, y: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/test-floor.png",
+      tileSize: { height: 1, width: 1 },
+    };
+    const originalFloorPlacement = {
+      bedType: null,
+      flipped: false,
+      footprint: { height: 1, width: 1 },
+      instanceId: 1,
+      isGrass: false,
+      isLongTable: false,
+      isRug: false,
+      isTable: false,
+      itemId: floorCatalogItem.id,
+      layer: "path" as const,
+      locked: false,
+      rotation: 0,
+      tintColor: "#ffffff",
+      variant: 0,
+      x: 0,
+      y: 0,
+    };
+
+    const previewRenderEntries = createPlannerCanvasPreviewRenderEntries({
+      catalogItems: [floorCatalogItem],
+      isNightMode: false,
+      mapId: "standard",
+      mapPlacementGrid: {
+        capabilitiesByTile: [{
+          buildable: true,
+          crabPot: false,
+          diggable: true,
+          passable: true,
+          treePlantable: false,
+          treePlantableOnDirt: false,
+          wall: false,
+        }],
+        height: 1,
+        width: 1,
+      },
+      placementSnapshot: {
+        ...createEmptyPlacementSnapshot(),
+        items: [originalFloorPlacement],
+        nextItemId: 2,
+      },
+      previewActions: [{
+        type: "replace-item",
+        item: { ...originalFloorPlacement, variant: 1 },
+      }],
+      previewKind: "fill rectangle preview",
+      season: "spring",
+    });
+
+    expect(previewRenderEntries).toHaveLength(1);
+    expect(previewRenderEntries[0]).toMatchObject({
+      catalogItem: { id: floorCatalogItem.id },
+      key: "placement-preview:0:0",
     });
   });
 
@@ -942,6 +1133,93 @@ describe("PlannerCanvas Pixi initialization", () => {
   });
 });
 
+describe("PlannerCanvas visible map viewport bounds", () => {
+  it("projects uncut map origins relative to Canvas and scales a 16-pixel sprite to native tile width", () => {
+    const projectionInput = {
+      cameraGeometry: {
+        mapPixelHeight: 256,
+        mapPixelWidth: 320,
+        viewportHeight: 160,
+        viewportWidth: 200,
+      },
+      cameraState: {
+        initialFitZoom: 1,
+        maximumZoom: 4,
+        minimumZoom: 0.25,
+        positionX: 100,
+        positionY: 80,
+        zoom: 2,
+      },
+      canvasBounds: { left: 10, top: 20, right: 310, bottom: 220 },
+      mapFile: "Farm.tmx",
+      mapHeightTiles: 8,
+      mapTileHeight: 32,
+      mapTileWidth: 32,
+      mapWidthTiles: 10,
+      viewportBounds: { left: 20, top: 25, right: 300, bottom: 215 },
+    };
+
+    expect(getPlannerCanvasMapProjection(projectionInput)).toEqual({
+      cameraZoom: 4,
+      mapHeightTiles: 8,
+      mapFile: "Farm.tmx",
+      mapScreenLeft: -210,
+      mapScreenTop: -171,
+      mapWidthTiles: 10,
+    });
+    expect(() => getPlannerCanvasMapProjection({
+      ...projectionInput,
+      mapFile: "",
+    })).toThrow('received ""');
+  });
+
+  it("clips the scaled map to the canvas, viewport, header, and catalog panel", () => {
+    expect(getPlannerCanvasVisibleMapViewportBounds({
+      canvasBounds: { left: 10, top: 20, right: 310, bottom: 220 },
+      viewportBounds: { left: 20, top: 25, right: 300, bottom: 215 },
+      occlusionBounds: [
+        { left: 0, top: 0, right: 60, bottom: 250 },
+        { left: 0, top: 0, right: 400, bottom: 50 },
+      ],
+      cameraGeometry: {
+        mapPixelHeight: 128,
+        mapPixelWidth: 160,
+        viewportHeight: 160,
+        viewportWidth: 200,
+      },
+      cameraState: {
+        initialFitZoom: 1,
+        maximumZoom: 4,
+        minimumZoom: 0.25,
+        positionX: 100,
+        positionY: 80,
+        zoom: 1,
+      },
+    })).toEqual({ left: 50, top: 30, width: 140, height: 119 });
+  });
+
+  it("returns null when camera panning leaves no map pixels inside the viewport", () => {
+    expect(getPlannerCanvasVisibleMapViewportBounds({
+      canvasBounds: { left: 10, top: 20, right: 310, bottom: 220 },
+      viewportBounds: { left: 20, top: 25, right: 300, bottom: 215 },
+      cameraGeometry: {
+        mapPixelHeight: 128,
+        mapPixelWidth: 160,
+        viewportHeight: 160,
+        viewportWidth: 200,
+      },
+      cameraState: {
+        initialFitZoom: 1,
+        maximumZoom: 4,
+        minimumZoom: 0.25,
+        positionX: -500,
+        positionY: -500,
+        zoom: 1,
+      },
+    })).toBeNull();
+  });
+});
+
 describe("PlannerCanvas camera state retention", () => {
   it("re-fits the camera when the same canvas changes from compact to expanded geometry", () => {
     const cameraStateRetention = createPlannerCameraStateRetention();
@@ -1413,6 +1691,7 @@ type PlannerCameraControlsFactory = (plannerCameraControlsProperties: Readonly<{
     | "rectangle"
     | "multi-select"
     | "move-selected";
+  getShortRectangleClickBehavior?: () => "single-tile" | "rectangle";
   getMapTileAtPointer: (pointerCoordinates: Readonly<{ x: number; y: number }>) =>
     | Readonly<{ x: number; y: number }>
     | null;
@@ -1452,6 +1731,25 @@ type TestPlacementDragSprite = Readonly<{
     containsPoint(x: number, y: number): boolean;
   }>;
 }>;
+
+function createTestPlacementDragSprite(): TestPlacementDragSprite {
+  const placementSpritePosition = { x: 32, y: 32 };
+  return {
+    position: {
+      ...placementSpritePosition,
+      set(x: number, y: number): void {
+        placementSpritePosition.x = x;
+        placementSpritePosition.y = y;
+        this.x = x;
+        this.y = y;
+      },
+    },
+    getBounds: () => ({
+      containsPoint: (x: number, y: number) =>
+        x >= 90 && x <= 110 && y >= 70 && y <= 90,
+    }),
+  };
+}
 
 type MapPlacementGridReadyNotifier = (mapPlacementGridReadyProperties: Readonly<{
   isMapLifecycleCurrent: () => boolean;
@@ -1596,6 +1894,8 @@ function createPlacementClickTestControls(
   interactionMode: "navigate" | "rectangle" | "multi-select" | "move-selected" | (() => "navigate" | "rectangle" | "multi-select" | "move-selected") = "navigate",
   wheelZoomEnabled = false,
   placementSelectionKeysAtPointer: readonly string[] = ["item:1"],
+  selectedPlacementDragSprites: readonly TestPlacementDragSprite[] = [],
+  shortRectangleClickBehavior: "single-tile" | "rectangle" = "rectangle",
 ): Readonly<{
   canvasElement: TestCanvasElement;
   cameraControls: Readonly<{
@@ -1675,6 +1975,7 @@ function createPlacementClickTestControls(
     getCameraState: () => currentCameraState,
     getWheelZoomEnabled: () => wheelZoomEnabled,
     getPointerInteractionMode: readInteractionMode,
+    getShortRectangleClickBehavior: () => shortRectangleClickBehavior,
     getMapTileAtPointer: (pointerCoordinates) =>
       getMapTileAtPointer({
         pointerX: pointerCoordinates.x,
@@ -1691,6 +1992,12 @@ function createPlacementClickTestControls(
       clickedMapTiles.push(mapTileCoordinates);
     },
     getPlacementSelectionKeysAtPointer: () => placementSelectionKeysAtPointer,
+    getPlacementDragTarget: () => selectedPlacementDragSprites.length === 0
+      ? null
+      : {
+          sprites: selectedPlacementDragSprites.map((sprite) => ({ sprite })),
+        },
+    getPlacementDragTileSize: () => ({ height: 16, width: 16 }),
     onPlacementSelectionClick: (placementSelectionKeys) => {
       clickedPlacementKeys.push(placementSelectionKeys);
     },
@@ -1755,22 +2062,7 @@ function createPlacementDragTestControls(): Readonly<{
   }
 
   const canvasElement = new TestCanvasElement();
-  const placementSpritePosition = { x: 32, y: 32 };
-  const placementSprite = {
-    position: {
-      ...placementSpritePosition,
-      set(x: number, y: number): void {
-        placementSpritePosition.x = x;
-        placementSpritePosition.y = y;
-        this.x = x;
-        this.y = y;
-      },
-    },
-    getBounds: () => ({
-      containsPoint: (x: number, y: number) =>
-        x >= 90 && x <= 110 && y >= 70 && y <= 90,
-    }),
-  } satisfies TestPlacementDragSprite;
+  const placementSprite = createTestPlacementDragSprite();
   const committedMoves: Array<Readonly<{ x: number; y: number }>> = [];
   let currentCameraState: CameraState = {
     initialFitZoom: 1,
@@ -4449,11 +4741,64 @@ describe("attachPlannerCameraControls map placement clicks", () => {
       createPointerEvent(1, 132, 112),
     );
 
+    expect(placementClickTestControls.mapTileRectanglePreviews).toEqual([
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 5, y: 4 },
+      },
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 7, y: 6 },
+      },
+    ]);
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(1);
     expect(placementClickTestControls.clickedMapTiles).toEqual([]);
     expect(placementClickTestControls.selectedMapRectangles).toEqual([
       {
         start: { x: 5, y: 4 },
         end: { x: 7, y: 6 },
+      },
+    ]);
+  });
+
+  it("routes a short erase click to one tile and keeps a short fill click as a one-tile rectangle", () => {
+    const eraseClickControls = createPlacementClickTestControls(
+      "rectangle",
+      false,
+      ["item:1"],
+      [],
+      "single-tile",
+    );
+    const fillClickControls = createPlacementClickTestControls(
+      "rectangle",
+      false,
+      ["item:1"],
+      [],
+      "rectangle",
+    );
+
+    if (eraseClickControls === null || fillClickControls === null) {
+      return;
+    }
+
+    for (const controls of [eraseClickControls, fillClickControls]) {
+      controls.canvasElement.dispatchPointerEvent(
+        "pointerdown",
+        createPointerEvent(1, 100, 80),
+      );
+      controls.canvasElement.dispatchPointerEvent(
+        "pointerup",
+        createPointerEvent(1, 100, 80),
+      );
+    }
+
+    expect(eraseClickControls.clickedMapTiles).toEqual([{ x: 5, y: 4 }]);
+    expect(eraseClickControls.selectedMapRectangles).toEqual([]);
+    expect(fillClickControls.clickedMapTiles).toEqual([]);
+    expect(fillClickControls.selectedMapRectangles).toEqual([
+      {
+        start: { x: 5, y: 4 },
+        end: { x: 5, y: 4 },
       },
     ]);
   });
@@ -4630,6 +4975,82 @@ describe("attachPlannerCameraControls map placement clicks", () => {
         start: { x: 5, y: 4 },
         end: { x: 7, y: 6 },
       },
+    ]);
+  });
+
+  it("moves an already-selected group on a Multi drag while preserving short-click toggling", () => {
+    const firstSelectedSprite = createTestPlacementDragSprite();
+    const secondSelectedSprite = createTestPlacementDragSprite();
+    const placementClickTestControls = createPlacementClickTestControls(
+      "multi-select",
+      false,
+      ["item:1"],
+      [firstSelectedSprite, secondSelectedSprite],
+    );
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 132, 112),
+    );
+    expect(firstSelectedSprite.position).toMatchObject({ x: 64, y: 64 });
+    expect(secondSelectedSprite.position).toMatchObject({ x: 64, y: 64 });
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 132, 112),
+    );
+
+    expect(placementClickTestControls.committedPlacementMoves).toEqual([
+      { x: 2, y: 2 },
+    ]);
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([]);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
+    expect(firstSelectedSprite.position).toMatchObject({ x: 32, y: 32 });
+    expect(secondSelectedSprite.position).toMatchObject({ x: 32, y: 32 });
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(2, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(2, 100, 80),
+    );
+
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([
+      ["item:1"],
+    ]);
+    expect(placementClickTestControls.committedPlacementMoves).toEqual([
+      { x: 2, y: 2 },
+    ]);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(3, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(3, 104, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(3, 104, 80),
+    );
+
+    expect(placementClickTestControls.clickedPlacementKeys).toEqual([
+      ["item:1"],
+      ["item:1"],
+    ]);
+    expect(placementClickTestControls.committedPlacementMoves).toEqual([
+      { x: 2, y: 2 },
     ]);
   });
 

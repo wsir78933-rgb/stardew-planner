@@ -32,9 +32,10 @@ import {
   getMapTileAtPointer,
   type MapPointerTile,
 } from "../placement/map-pointer-tile";
-import type {
-  PlacementSnapshot,
-  PlacementSnapshotAction,
+import {
+  applyPlacementSnapshotAction,
+  type PlacementSnapshot,
+  type PlacementSnapshotAction,
 } from "../placement/placement-snapshot";
 import { applyBuildingPaintToPixels } from "../paint/building-paint-rendering";
 import {
@@ -132,6 +133,22 @@ type PointerInteractionMode =
 
 type PlacementPreviewOverlayRenderer = () => void;
 
+export type PlannerCanvasMapViewportBounds = Readonly<{
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}>;
+
+export type PlannerCanvasMapProjection = Readonly<{
+  mapFile: string;
+  mapWidthTiles: number;
+  mapHeightTiles: number;
+  mapScreenLeft: number;
+  mapScreenTop: number;
+  cameraZoom: number;
+}>;
+
 export type PlannerCanvasPlacementPreviewInput = Readonly<{
   buildingMetadataById: BuildingPlacementMetadataById;
   catalogPresentationChoice: CatalogPresentationChoice;
@@ -185,6 +202,77 @@ export function createPlannerCanvasPlacementPreviewState(
   };
 }
 
+function assertPlannerCanvasPreviewActions(
+  previewActions: readonly PlacementSnapshotAction[] | null,
+  previewKind: string,
+): void {
+  if (previewActions === null) {
+    return;
+  }
+
+  if (!Array.isArray(previewActions)) {
+    throw new TypeError(
+      `Planner Canvas ${previewKind} actions must be an array or null; received ${describeValue(previewActions)}.`,
+    );
+  }
+
+  for (const previewAction of previewActions) {
+    if (typeof previewAction !== "object" || previewAction === null) {
+      throw new TypeError(
+        `Planner Canvas ${previewKind} action must be an object; received ${describeValue(previewAction)}.`,
+      );
+    }
+
+    if (
+      previewAction.type !== "add-building"
+      && previewAction.type !== "add-crop"
+      && previewAction.type !== "add-item"
+      && previewAction.type !== "replace-item"
+      && previewAction.type !== "attach-held-item"
+    ) {
+      throw new TypeError(
+        `Planner Canvas ${previewKind} action must add a placement; received ${describeValue(previewAction.type)}.`,
+      );
+    }
+  }
+}
+
+export function createPlannerCanvasPreviewRenderEntries(input: Readonly<{
+  catalogItems: readonly CatalogItem[];
+  isNightMode: boolean;
+  mapId: string;
+  mapPlacementGrid: MapPlacementGrid;
+  placementSnapshot: PlacementSnapshot;
+  previewActions: readonly PlacementSnapshotAction[];
+  previewKind: string;
+  season: TilesheetSeason;
+}>): readonly PlacementRenderEntry[] {
+  assertPlannerCanvasPreviewActions(input.previewActions, input.previewKind);
+
+  let previewSnapshot = input.placementSnapshot;
+
+  return input.previewActions.flatMap((previewAction, previewActionIndex) => {
+    const transientPreviewAction = previewAction.type === "replace-item"
+      ? { type: "add-item" as const, item: previewAction.item }
+      : previewAction;
+    const actionRenderEntries = createTransientPlacementRenderEntries(
+      previewSnapshot,
+      transientPreviewAction,
+      input.catalogItems,
+      input.season,
+      input.mapId,
+      input.mapPlacementGrid,
+      input.isNightMode,
+    ).map((renderEntry, renderEntryIndex) => ({
+      ...renderEntry,
+      key: `placement-preview:${String(previewActionIndex)}:${String(renderEntryIndex)}`,
+    }));
+
+    previewSnapshot = applyPlacementSnapshotAction(previewSnapshot, previewAction);
+    return actionRenderEntries;
+  });
+}
+
 export type PlannerCanvasProperties = Readonly<{
   cameraStateRetention: PlannerCameraStateRetention;
   catalogItems?: readonly CatalogItem[];
@@ -194,7 +282,15 @@ export type PlannerCanvasProperties = Readonly<{
   leftHandMode?: boolean;
   mapId: string;
   placementPreview?: PlannerCanvasPlacementPreviewInput | null;
+  getPlacementCopyPreviewAtTile?: (
+    mapTileCoordinates: MapPointerTile,
+  ) => readonly PlacementSnapshotAction[] | null;
+  getFillRectanglePreviewAtTiles?: (
+    firstMapTileCoordinates: MapPointerTile,
+    secondMapTileCoordinates: MapPointerTile,
+  ) => readonly PlacementSnapshotAction[] | null;
   pointerInteractionMode?: PointerInteractionMode;
+  shortRectangleClickBehavior?: "single-tile" | "rectangle";
   placementSnapshot?: PlacementSnapshot;
   selectedPlacementKeys?: readonly string[];
   season: TilesheetSeason;
@@ -443,6 +539,7 @@ type PlannerCameraControlsProperties = Readonly<{
   getCameraState: () => CameraState;
   getWheelZoomEnabled?: () => boolean;
   getPointerInteractionMode?: () => PointerInteractionMode;
+  getShortRectangleClickBehavior?: () => "single-tile" | "rectangle";
   getMapTileAtPointer?: (
     pointerCoordinates: PointerCoordinates,
   ) => MapPointerTile | null;
@@ -482,6 +579,11 @@ type MapTileRectanglePreviewRenderer = Readonly<{
     startMapTileCoordinates: MapPointerTile,
     endMapTileCoordinates: MapPointerTile,
   ): void;
+}>;
+
+type MapTileRectanglePreview = Readonly<{
+  startMapTileCoordinates: MapPointerTile;
+  endMapTileCoordinates: MapPointerTile;
 }>;
 
 export type PlannerCanvasInteractionBindingPorts = Readonly<{
@@ -1095,7 +1197,10 @@ export function PlannerCanvas({
   leftHandMode = false,
   mapId,
   placementPreview = null,
+  getPlacementCopyPreviewAtTile,
+  getFillRectanglePreviewAtTiles,
   pointerInteractionMode = "navigate",
+  shortRectangleClickBehavior = "single-tile",
   placementSnapshot,
   selectedPlacementKeys = [],
   season,
@@ -1122,6 +1227,7 @@ export function PlannerCanvas({
   gameCursors,
   onCancelEditingInteraction,
 }: PlannerCanvasProperties) {
+  const canvasRootElementReference = useRef<HTMLElement>(null);
   const canvasHostElementReference = useRef<HTMLDivElement>(null);
   const onMapPlacementGridReadyReference = useRef(onMapPlacementGridReady);
   const onMapImageExporterReadyReference = useRef(onMapImageExporterReady);
@@ -1150,6 +1256,9 @@ export function PlannerCanvas({
   const onInteractiveReference = useRef(onInteractive);
   const onMoveSelectedPlacementsReference = useRef(onMoveSelectedPlacements);
   const pointerInteractionModeReference = useRef(pointerInteractionMode);
+  const shortRectangleClickBehaviorReference = useRef(
+    shortRectangleClickBehavior,
+  );
   const pointerInteractionModeSynchronizerReference = useRef<
     (() => void) | null
   >(null);
@@ -1171,6 +1280,12 @@ export function PlannerCanvas({
     useRef<PlacementAnimationController | null>(null);
   const placementSnapshotReference = useRef(placementSnapshot);
   const placementPreviewReference = useRef(placementPreview);
+  const getPlacementCopyPreviewAtTileReference = useRef(
+    getPlacementCopyPreviewAtTile,
+  );
+  const getFillRectanglePreviewAtTilesReference = useRef(
+    getFillRectanglePreviewAtTiles,
+  );
   const selectedPlacementKeysReference = useRef(selectedPlacementKeys);
   const displayOptionsReference = useRef(displayOptions);
   const isXRayActiveReference = useRef(isXRayActive);
@@ -1187,6 +1302,10 @@ export function PlannerCanvas({
     useState<readonly string[]>([]);
   const [canvasContextMenuPoint, setCanvasContextMenuPoint] =
     useState<CanvasContextMenuPoint | null>(null);
+  const [mapViewportBounds, setMapViewportBounds] =
+    useState<PlannerCanvasMapViewportBounds | null>(null);
+  const [mapProjection, setMapProjection] =
+    useState<PlannerCanvasMapProjection | null>(null);
   const interiorDecorStateRevision = getInteriorDecorStateRevision(
     placementSnapshot?.interiorDecor,
   );
@@ -1216,9 +1335,14 @@ export function PlannerCanvas({
   onInteractiveReference.current = onInteractive;
   onMoveSelectedPlacementsReference.current = onMoveSelectedPlacements;
   pointerInteractionModeReference.current = pointerInteractionMode;
+  shortRectangleClickBehaviorReference.current = shortRectangleClickBehavior;
   catalogItemsReference.current = catalogItems;
   placementSnapshotReference.current = placementSnapshot;
   placementPreviewReference.current = placementPreview;
+  getPlacementCopyPreviewAtTileReference.current =
+    getPlacementCopyPreviewAtTile;
+  getFillRectanglePreviewAtTilesReference.current =
+    getFillRectanglePreviewAtTiles;
   selectedPlacementKeysReference.current = selectedPlacementKeys;
   displayOptionsReference.current = displayOptions;
   isXRayActiveReference.current = isXRayActive;
@@ -1244,7 +1368,14 @@ export function PlannerCanvas({
 
   useEffect(() => {
     placementPreviewOverlayRendererReference.current?.();
-  }, [catalogItems, displayOptions.showNightMode, placementPreview, placementSnapshot]);
+  }, [
+    catalogItems,
+    displayOptions.showNightMode,
+    getFillRectanglePreviewAtTiles,
+    getPlacementCopyPreviewAtTile,
+    placementPreview,
+    placementSnapshot,
+  ]);
 
   useEffect(() => {
     xRayRendererReference.current?.();
@@ -1723,6 +1854,7 @@ export function PlannerCanvas({
         placementOverlayRendererReference.current = requestPlacementOverlayRender;
 
         let hoveredMapTile: MapPointerTile | null = null;
+        let currentMapTileRectanglePreview: MapTileRectanglePreview | null = null;
         const placementPreviewAnimationController =
           createPlacementAnimationController(() => {
             pixiApplication.renderer.render(pixiApplication.stage);
@@ -1749,19 +1881,86 @@ export function PlannerCanvas({
           });
         const renderPlacementPreviewOverlay = async (): Promise<PlannerCanvasPlacementRenderStatus> => {
           const currentPlacementSnapshot = placementSnapshotReference.current;
-          const placementPreviewState = createPlannerCanvasPlacementPreviewState({
-            hoveredMapTile,
-            mapPlacementGrid,
-            placementPreview: placementPreviewReference.current,
-            placementSnapshot: currentPlacementSnapshot,
-          });
+          let previewActions: readonly PlacementSnapshotAction[] | null = null;
+          let hasInteractionPreview = false;
+          const getCopyPreviewAtTile =
+            getPlacementCopyPreviewAtTileReference.current;
+
+          if (hoveredMapTile !== null && getCopyPreviewAtTile !== undefined) {
+            const copyPreviewActions = getCopyPreviewAtTile(hoveredMapTile);
+            assertPlannerCanvasPreviewActions(
+              copyPreviewActions,
+              "placement-copy preview",
+            );
+            if (copyPreviewActions !== null) {
+              previewActions = copyPreviewActions;
+              hasInteractionPreview = true;
+            }
+          }
+
+          const getFillPreviewForRectangle =
+            getFillRectanglePreviewAtTilesReference.current;
+          if (
+            !hasInteractionPreview
+            && currentMapTileRectanglePreview !== null
+            && getFillPreviewForRectangle !== undefined
+          ) {
+            const fillPreviewActions = getFillPreviewForRectangle(
+              currentMapTileRectanglePreview.startMapTileCoordinates,
+              currentMapTileRectanglePreview.endMapTileCoordinates,
+            );
+            assertPlannerCanvasPreviewActions(
+              fillPreviewActions,
+              "fill rectangle preview",
+            );
+            if (fillPreviewActions !== null) {
+              previewActions = fillPreviewActions;
+              hasInteractionPreview = true;
+            }
+          }
+
+          const placementPreviewState = hasInteractionPreview
+            ? null
+            : createPlannerCanvasPlacementPreviewState({
+                hoveredMapTile,
+                mapPlacementGrid,
+                placementPreview: placementPreviewReference.current,
+                placementSnapshot: currentPlacementSnapshot,
+              });
           const currentCatalogItems = catalogItemsReference.current;
 
           if (
-            placementPreviewState === null
-            || currentCatalogItems === undefined
+            currentCatalogItems === undefined
             || currentPlacementSnapshot === undefined
           ) {
+            placementPreviewRenderer.clear();
+            return "ready";
+          }
+
+          const previewRenderEntries = hasInteractionPreview
+            ? createPlannerCanvasPreviewRenderEntries({
+                catalogItems: currentCatalogItems,
+                isNightMode: displayOptionsReference.current.showNightMode,
+                mapId,
+                mapPlacementGrid,
+                placementSnapshot: currentPlacementSnapshot,
+                previewActions: previewActions ?? [],
+                previewKind: "placement interaction",
+                season,
+              })
+            : placementPreviewState === null
+              ? []
+              : createTransientPlacementRenderEntries(
+                  currentPlacementSnapshot,
+                  placementPreviewState.previewAction,
+                  currentCatalogItems,
+                  season,
+                  mapId,
+                  mapPlacementGrid,
+                  displayOptionsReference.current.showNightMode,
+                );
+
+          if (previewRenderEntries.length === 0) {
             placementPreviewRenderer.clear();
             return "ready";
           }
@@ -1774,22 +1973,15 @@ export function PlannerCanvas({
                 mapId,
                 mapPlacementGrid,
                 isNightMode: displayOptionsReference.current.showNightMode,
-                placementRenderEntries: createTransientPlacementRenderEntries(
-                  currentPlacementSnapshot,
-                  placementPreviewState.previewAction,
-                  currentCatalogItems,
-                  season,
-                  mapId,
-                  mapPlacementGrid,
-                  displayOptionsReference.current.showNightMode,
-                ),
+                placementRenderEntries: previewRenderEntries,
                 season,
                 selectedPlacementKeys: [],
                 tileWidth: renderingContract.tileWidth,
                 tileHeight: renderingContract.tileHeight,
                 placementTexturePromisesByResolvedUrl,
               }),
-            visualDescriptor: placementPreviewState.visualDescriptor,
+            visualDescriptor: placementPreviewState?.visualDescriptor
+              ?? createPlacementPreviewVisualDescriptor(true),
           });
         };
         const requestPlacementPreviewOverlayRender = (): void => {
@@ -1833,6 +2025,37 @@ export function PlannerCanvas({
             mapContainerCreationResult.mapContainer,
             currentCameraGeometry,
             cameraState,
+          );
+          const canvasRootElement = canvasRootElementReference.current;
+          if (canvasRootElement === null) {
+            setMapViewportBounds(null);
+            setMapProjection(null);
+            return;
+          }
+
+          const canvasBounds = canvasRootElement.getBoundingClientRect();
+          const viewportBounds = mountedCanvasHostElement.getBoundingClientRect();
+          setMapViewportBounds(
+            getPlannerCanvasVisibleMapViewportBounds({
+              cameraGeometry: currentCameraGeometry,
+              cameraState,
+              canvasBounds,
+              occlusionBounds: getPlannerCanvasUiOcclusionBounds(canvasRootElement),
+              viewportBounds,
+            }),
+          );
+          setMapProjection(
+            getPlannerCanvasMapProjection({
+              cameraGeometry: currentCameraGeometry,
+              cameraState,
+              canvasBounds,
+              mapFile,
+              mapHeightTiles: renderingContract.mapHeight,
+              mapTileHeight: renderingContract.tileHeight,
+              mapTileWidth: renderingContract.tileWidth,
+              mapWidthTiles: renderingContract.mapWidth,
+              viewportBounds,
+            }),
           );
         };
 
@@ -1926,6 +2149,9 @@ export function PlannerCanvas({
                 },
                 getPointerInteractionMode(): PointerInteractionMode {
                   return pointerInteractionModeReference.current;
+                },
+                getShortRectangleClickBehavior(): "single-tile" | "rectangle" {
+                  return shortRectangleClickBehaviorReference.current;
                 },
                 getMapTileAtPointer(
                   pointerCoordinates: PointerCoordinates,
@@ -2047,17 +2273,24 @@ export function PlannerCanvas({
                     return;
                   }
 
+                  currentMapTileRectanglePreview = {
+                    startMapTileCoordinates,
+                    endMapTileCoordinates,
+                  };
                   mapTileRectanglePreviewRenderer.render(
                     startMapTileCoordinates,
                     endMapTileCoordinates,
                   );
+                  requestPlacementPreviewOverlayRender();
                 },
                 onMapTileRectanglePreviewClear(): void {
                   if (!isMapLifecycleCurrent()) {
                     return;
                   }
 
+                  currentMapTileRectanglePreview = null;
                   mapTileRectanglePreviewRenderer.clear();
+                  requestPlacementPreviewOverlayRender();
                 },
                 onPlacementSelectionClick(
                   placementSelectionKeys: readonly PlacementSelectionKey[],
@@ -2197,10 +2430,16 @@ export function PlannerCanvas({
       className={`planner-canvas canvas-container ${
         pointerInteractionMode === "navigate" ? "cursor-mode" : "placement-active"
       } ${gameCursors === false ? atmosphereStyles.systemCursor : ""}`}
+      ref={canvasRootElementReference}
     >
       <div className="planner-canvas__viewport" ref={canvasHostElementReference} />
       {ambienceOptions === undefined ? null : (
-        <PlannerAtmosphereLayer options={ambienceOptions} season={season} />
+        <PlannerAtmosphereLayer
+          mapProjection={mapProjection}
+          mapViewportBounds={mapViewportBounds}
+          options={ambienceOptions}
+          season={season}
+        />
       )}
       {canvasContextMenuPoint !== null ? (
         <PlannerCanvasContextMenu
@@ -3961,6 +4200,306 @@ function applyCameraState(
   pixiApplication.renderer.render(pixiApplication.stage);
 }
 
+export function getPlannerCanvasMapProjection(input: Readonly<{
+  cameraGeometry: CameraGeometry;
+  cameraState: CameraState;
+  canvasBounds: Pick<DOMRectReadOnly, "left" | "top" | "right" | "bottom">;
+  mapFile: string;
+  mapHeightTiles: number;
+  mapTileHeight: number;
+  mapTileWidth: number;
+  mapWidthTiles: number;
+  viewportBounds: Pick<DOMRectReadOnly, "left" | "top" | "right" | "bottom">;
+}>): PlannerCanvasMapProjection {
+  assertPlannerCanvasRectangleBounds(input.canvasBounds, "canvasBounds");
+  assertPlannerCanvasRectangleBounds(input.viewportBounds, "viewportBounds");
+
+  if (typeof input.mapFile !== "string" || input.mapFile.trim().length === 0) {
+    throw new TypeError(
+      `Planner canvas map filename must be a non-empty string; received ${describeValue(input.mapFile)}.`,
+    );
+  }
+
+  if (
+    !Number.isInteger(input.mapWidthTiles)
+    || input.mapWidthTiles <= 0
+    || !Number.isInteger(input.mapHeightTiles)
+    || input.mapHeightTiles <= 0
+  ) {
+    throw new TypeError(
+      `Planner canvas map tile dimensions must be positive integers; received mapWidthTiles ${String(input.mapWidthTiles)} and mapHeightTiles ${String(input.mapHeightTiles)}.`,
+    );
+  }
+
+  if (
+    !Number.isFinite(input.mapTileWidth)
+    || input.mapTileWidth <= 0
+    || !Number.isFinite(input.mapTileHeight)
+    || input.mapTileHeight <= 0
+  ) {
+    throw new TypeError(
+      `Planner canvas tile pixel dimensions must be finite positive numbers; received mapTileWidth ${String(input.mapTileWidth)} and mapTileHeight ${String(input.mapTileHeight)}.`,
+    );
+  }
+
+  if (input.mapTileWidth !== input.mapTileHeight) {
+    throw new RangeError(
+      `Planner canvas map projection requires square tiles for uniform camera scaling; received width ${String(input.mapTileWidth)} and height ${String(input.mapTileHeight)}.`,
+    );
+  }
+
+  if (
+    input.cameraGeometry.mapPixelWidth !== input.mapWidthTiles * input.mapTileWidth
+    || input.cameraGeometry.mapPixelHeight !== input.mapHeightTiles * input.mapTileHeight
+  ) {
+    throw new RangeError(
+      `Planner canvas camera geometry map pixel dimensions must match tile dimensions; received width ${String(input.cameraGeometry.mapPixelWidth)} and height ${String(input.cameraGeometry.mapPixelHeight)}, expected width ${String(input.mapWidthTiles * input.mapTileWidth)} and height ${String(input.mapHeightTiles * input.mapTileHeight)}.`,
+    );
+  }
+
+  if (
+    !Number.isFinite(input.cameraState.positionX)
+    || !Number.isFinite(input.cameraState.positionY)
+    || !Number.isFinite(input.cameraState.zoom)
+    || input.cameraState.zoom <= 0
+  ) {
+    throw new TypeError(
+      `Planner canvas camera position and zoom must be finite with positive zoom; received positionX ${String(input.cameraState.positionX)}, positionY ${String(input.cameraState.positionY)}, and zoom ${String(input.cameraState.zoom)}.`,
+    );
+  }
+
+  const cameraZoom = input.cameraState.zoom * input.mapTileWidth / 16;
+  const mapScreenLeft =
+    input.viewportBounds.left
+    + input.cameraState.positionX
+    - input.cameraGeometry.mapPixelWidth * input.cameraState.zoom / 2
+    - input.canvasBounds.left;
+  const mapScreenTop =
+    input.viewportBounds.top
+    + input.cameraState.positionY
+    - input.cameraGeometry.mapPixelHeight * input.cameraState.zoom / 2
+    - input.canvasBounds.top;
+
+  if (
+    !Number.isFinite(cameraZoom)
+    || cameraZoom <= 0
+    || !Number.isFinite(mapScreenLeft)
+    || !Number.isFinite(mapScreenTop)
+  ) {
+    throw new RangeError(
+      `Planner canvas map projection must contain finite screen origins and positive camera zoom; received cameraZoom ${String(cameraZoom)}, mapScreenLeft ${String(mapScreenLeft)}, and mapScreenTop ${String(mapScreenTop)}.`,
+    );
+  }
+
+  return {
+    cameraZoom,
+    mapHeightTiles: input.mapHeightTiles,
+    mapFile: input.mapFile,
+    mapScreenLeft,
+    mapScreenTop,
+    mapWidthTiles: input.mapWidthTiles,
+  };
+}
+
+export function getPlannerCanvasVisibleMapViewportBounds(input: Readonly<{
+  canvasBounds: Pick<DOMRectReadOnly, "left" | "top" | "right" | "bottom">;
+  viewportBounds: Pick<DOMRectReadOnly, "left" | "top" | "right" | "bottom">;
+  occlusionBounds?: readonly Pick<
+    DOMRectReadOnly,
+    "left" | "top" | "right" | "bottom"
+  >[];
+  cameraGeometry: CameraGeometry;
+  cameraState: CameraState;
+}>): PlannerCanvasMapViewportBounds | null {
+  assertPlannerCanvasRectangleBounds(input.canvasBounds, "canvasBounds");
+  assertPlannerCanvasRectangleBounds(input.viewportBounds, "viewportBounds");
+
+  if (
+    !Number.isFinite(input.cameraGeometry.mapPixelWidth)
+    || input.cameraGeometry.mapPixelWidth <= 0
+    || !Number.isFinite(input.cameraGeometry.mapPixelHeight)
+    || input.cameraGeometry.mapPixelHeight <= 0
+  ) {
+    throw new TypeError(
+      `Planner canvas map pixel dimensions must be finite positive numbers; received mapPixelWidth ${String(input.cameraGeometry.mapPixelWidth)} and mapPixelHeight ${String(input.cameraGeometry.mapPixelHeight)}.`,
+    );
+  }
+
+  if (
+    !Number.isFinite(input.cameraState.positionX)
+    || !Number.isFinite(input.cameraState.positionY)
+    || !Number.isFinite(input.cameraState.zoom)
+    || input.cameraState.zoom <= 0
+  ) {
+    throw new TypeError(
+      `Planner canvas camera position and zoom must be finite with positive zoom; received positionX ${String(input.cameraState.positionX)}, positionY ${String(input.cameraState.positionY)}, and zoom ${String(input.cameraState.zoom)}.`,
+    );
+  }
+
+  const mapScreenBounds = {
+    left: input.viewportBounds.left
+      + input.cameraState.positionX
+      - input.cameraGeometry.mapPixelWidth * input.cameraState.zoom / 2,
+    top: input.viewportBounds.top
+      + input.cameraState.positionY
+      - input.cameraGeometry.mapPixelHeight * input.cameraState.zoom / 2,
+    right: input.viewportBounds.left
+      + input.cameraState.positionX
+      + input.cameraGeometry.mapPixelWidth * input.cameraState.zoom / 2,
+    bottom: input.viewportBounds.top
+      + input.cameraState.positionY
+      + input.cameraGeometry.mapPixelHeight * input.cameraState.zoom / 2,
+  };
+  const visibleMapBounds = {
+    left: Math.max(
+      input.canvasBounds.left,
+      input.viewportBounds.left,
+      mapScreenBounds.left,
+    ),
+    top: Math.max(
+      input.canvasBounds.top,
+      input.viewportBounds.top,
+      mapScreenBounds.top,
+    ),
+    right: Math.min(
+      input.canvasBounds.right,
+      input.viewportBounds.right,
+      mapScreenBounds.right,
+    ),
+    bottom: Math.min(
+      input.canvasBounds.bottom,
+      input.viewportBounds.bottom,
+      mapScreenBounds.bottom,
+    ),
+  };
+  for (const occlusionBounds of input.occlusionBounds ?? []) {
+    assertPlannerCanvasRectangleBounds(occlusionBounds, "occlusionBounds");
+    clipVisibleMapBoundsToOcclusion(visibleMapBounds, occlusionBounds);
+  }
+
+  if (
+    visibleMapBounds.right <= visibleMapBounds.left
+    || visibleMapBounds.bottom <= visibleMapBounds.top
+  ) {
+    return null;
+  }
+
+  return {
+    left: visibleMapBounds.left - input.canvasBounds.left,
+    top: visibleMapBounds.top - input.canvasBounds.top,
+    width: visibleMapBounds.right - visibleMapBounds.left,
+    height: visibleMapBounds.bottom - visibleMapBounds.top,
+  };
+}
+
+function clipVisibleMapBoundsToOcclusion(
+  visibleMapBounds: { left: number; top: number; right: number; bottom: number },
+  occlusionBounds: Pick<DOMRectReadOnly, "left" | "top" | "right" | "bottom">,
+): void {
+  const occlusionIntersectsVisibleMap =
+    occlusionBounds.left < visibleMapBounds.right
+    && occlusionBounds.right > visibleMapBounds.left
+    && occlusionBounds.top < visibleMapBounds.bottom
+    && occlusionBounds.bottom > visibleMapBounds.top;
+  if (!occlusionIntersectsVisibleMap) {
+    return;
+  }
+
+  const occlusionCoversVisibleMapHeight =
+    occlusionBounds.top <= visibleMapBounds.top
+    && occlusionBounds.bottom >= visibleMapBounds.bottom;
+  if (occlusionCoversVisibleMapHeight) {
+    if (
+      occlusionBounds.left <= visibleMapBounds.left
+      && occlusionBounds.right > visibleMapBounds.left
+    ) {
+      visibleMapBounds.left = Math.min(
+        visibleMapBounds.right,
+        occlusionBounds.right,
+      );
+    } else if (
+      occlusionBounds.left < visibleMapBounds.right
+      && occlusionBounds.right >= visibleMapBounds.right
+    ) {
+      visibleMapBounds.right = Math.max(
+        visibleMapBounds.left,
+        occlusionBounds.left,
+      );
+    }
+  }
+
+  const occlusionCoversVisibleMapWidth =
+    occlusionBounds.left <= visibleMapBounds.left
+    && occlusionBounds.right >= visibleMapBounds.right;
+  if (occlusionCoversVisibleMapWidth) {
+    if (
+      occlusionBounds.top <= visibleMapBounds.top
+      && occlusionBounds.bottom > visibleMapBounds.top
+    ) {
+      visibleMapBounds.top = Math.min(
+        visibleMapBounds.bottom,
+        occlusionBounds.bottom,
+      );
+    } else if (
+      occlusionBounds.top < visibleMapBounds.bottom
+      && occlusionBounds.bottom >= visibleMapBounds.bottom
+    ) {
+      visibleMapBounds.bottom = Math.max(
+        visibleMapBounds.top,
+        occlusionBounds.top,
+      );
+    }
+  }
+}
+
+function assertPlannerCanvasRectangleBounds(
+  rectangleBounds: Pick<DOMRectReadOnly, "left" | "top" | "right" | "bottom">,
+  propertyName: string,
+): void {
+  if (
+    !Number.isFinite(rectangleBounds.left)
+    || !Number.isFinite(rectangleBounds.top)
+    || !Number.isFinite(rectangleBounds.right)
+    || !Number.isFinite(rectangleBounds.bottom)
+  ) {
+    throw new TypeError(
+      `Planner canvas ${propertyName} edges must be finite numbers; received left ${String(rectangleBounds.left)}, top ${String(rectangleBounds.top)}, right ${String(rectangleBounds.right)}, and bottom ${String(rectangleBounds.bottom)}.`,
+    );
+  }
+
+  if (
+    rectangleBounds.right < rectangleBounds.left
+    || rectangleBounds.bottom < rectangleBounds.top
+  ) {
+    throw new RangeError(
+      `Planner canvas ${propertyName} right/bottom edges must not precede left/top; received ${JSON.stringify(rectangleBounds)}.`,
+    );
+  }
+}
+
+function getPlannerCanvasUiOcclusionBounds(
+  canvasRootElement: HTMLElement,
+): readonly Pick<
+  DOMRectReadOnly,
+  "left" | "top" | "right" | "bottom"
+>[] {
+  const plannerEditorShell = canvasRootElement.closest(".planner-editor-shell");
+  if (plannerEditorShell === null) {
+    return [];
+  }
+
+  return Array.from(
+    plannerEditorShell.querySelectorAll<HTMLElement>(
+      ".menu-bar, .item-catalog-panel",
+    ),
+  )
+    .map((occlusionElement) => occlusionElement.getBoundingClientRect())
+    .filter(
+      (occlusionBounds) =>
+        occlusionBounds.width > 0 && occlusionBounds.height > 0,
+    );
+}
+
 export function attachPlannerCameraControls(
   plannerCameraControlsProperties: PlannerCameraControlsProperties,
 ): PlannerCameraControls {
@@ -3969,6 +4508,7 @@ export function attachPlannerCameraControls(
     getCameraGeometry,
     getCameraState,
     getPointerInteractionMode = () => "navigate",
+    getShortRectangleClickBehavior = () => "rectangle",
     getWheelZoomEnabled = () => false,
     getMapTileAtPointer,
     getPlacementDragTarget,
@@ -4070,8 +4610,13 @@ export function attachPlannerCameraControls(
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
     const hadActivePointer = activePointerCoordinates.size > 0;
     activePointerCoordinates.set(pointerEvent.pointerId, pointerCoordinates);
+    const pointerInteractionMode = getPointerInteractionMode();
     const placementDragTarget =
-      !hadActivePointer && getPointerInteractionMode() === "move-selected"
+      !hadActivePointer
+      && (
+        pointerInteractionMode === "move-selected"
+        || isMultiSelectPointerInteractionMode(pointerInteractionMode)
+      )
         ? getPlacementDragTarget?.(pointerCoordinates) ?? null
         : null;
 
@@ -4098,7 +4643,7 @@ export function attachPlannerCameraControls(
     synchronizePointerGesture(startMapTileCoordinates);
 
     if (
-      isMultiSelectPointerInteractionMode(getPointerInteractionMode())
+      isMapRectanglePointerInteractionMode(pointerInteractionMode)
       && activePointerCoordinates.size === 1
       && startMapTileCoordinates !== null
     ) {
@@ -4135,11 +4680,12 @@ export function attachPlannerCameraControls(
 
     const pointerInteractionMode = getPointerInteractionMode();
 
-    if (!isMultiSelectPointerInteractionMode(pointerInteractionMode)) {
+    if (!isMapRectanglePointerInteractionMode(pointerInteractionMode)) {
       clearMapTileRectanglePreview();
     }
 
     if (isRectanglePointerInteractionMode(pointerInteractionMode)) {
+      reportMapTileRectanglePreview(pointerEvent.pointerId, pointerCoordinates);
       return;
     }
 
@@ -4186,6 +4732,14 @@ export function attachPlannerCameraControls(
   function handlePointerUp(pointerEvent: PointerEvent): void {
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
 
+    if (
+      placementDragState !== null
+      && placementDragState.pointerId === pointerEvent.pointerId
+    ) {
+      finishPlacementDrag(pointerEvent, pointerCoordinates);
+      return;
+    }
+
     if (isMultiSelectPointerInteractionMode(getPointerInteractionMode())) {
       if (placementClickSuppressedPointerIds.has(pointerEvent.pointerId)) {
         handlePointerEnd(pointerEvent);
@@ -4224,27 +4778,41 @@ export function attachPlannerCameraControls(
       return;
     }
 
-    if (
-      placementDragState !== null
-      && placementDragState.pointerId === pointerEvent.pointerId
-    ) {
-      finishPlacementDrag(pointerEvent, pointerCoordinates);
-      return;
-    }
-
     if (isRectanglePointerInteractionMode(getPointerInteractionMode())) {
       const mapTileRectangle =
         pointerEvent.button !== 0
           ? null
           : getMapTileRectangle(pointerEvent.pointerId, pointerCoordinates);
+      const isShortRectangleClick =
+        !hasExceededPointerPanThreshold(
+          pointerEvent.pointerId,
+          pointerCoordinates,
+        );
+      const shortRectangleClickBehavior = getShortRectangleClickBehavior();
+
+      if (
+        shortRectangleClickBehavior !== "single-tile"
+        && shortRectangleClickBehavior !== "rectangle"
+      ) {
+        throw new TypeError(
+          `Planner Canvas short rectangle click behavior must be single-tile or rectangle; received ${describeValue(shortRectangleClickBehavior)}.`,
+        );
+      }
 
       handlePointerEnd(pointerEvent);
 
       if (mapTileRectangle !== null) {
-        onMapTileRectangle?.(
-          mapTileRectangle.startMapTileCoordinates,
-          mapTileRectangle.endMapTileCoordinates,
-        );
+        if (
+          isShortRectangleClick
+          && shortRectangleClickBehavior === "single-tile"
+        ) {
+          onMapTileClick?.(mapTileRectangle.endMapTileCoordinates);
+        } else {
+          onMapTileRectangle?.(
+            mapTileRectangle.startMapTileCoordinates,
+            mapTileRectangle.endMapTileCoordinates,
+          );
+        }
       }
       return;
     }
@@ -4520,9 +5088,27 @@ export function attachPlannerCameraControls(
       return;
     }
 
+    const pointerInteractionMode = getPointerInteractionMode();
+    const shouldToggleMultiSelection =
+      pointerEvent.button === 0
+      && isMultiSelectPointerInteractionMode(pointerInteractionMode)
+      && !currentPlacementDragState.hasExceededPlacementThreshold;
+    const clickedPlacementKeys = shouldToggleMultiSelection
+      ? getPlacementSelectionKeysAtPointer?.(pointerCoordinates) ?? []
+      : null;
+
     cancelPlacementDrag(pointerEvent.pointerId);
     handlePointerEnd(pointerEvent);
-    if (pointerEvent.button === 0) {
+
+    if (clickedPlacementKeys !== null) {
+      onPlacementSelectionClick?.(clickedPlacementKeys);
+      return;
+    }
+
+    if (
+      pointerEvent.button === 0
+      && !isMultiSelectPointerInteractionMode(pointerInteractionMode)
+    ) {
       const mapTileCoordinates = getMapTileAtPointer?.(pointerCoordinates) ?? null;
       if (mapTileCoordinates !== null) {
         onMapTileClick?.(mapTileCoordinates);
@@ -4676,8 +5262,16 @@ export function attachPlannerCameraControls(
 
   return {
     synchronizePointerInteractionMode(): void {
-      if (!isMultiSelectPointerInteractionMode(getPointerInteractionMode())) {
+      const pointerInteractionMode = getPointerInteractionMode();
+      if (!isMapRectanglePointerInteractionMode(pointerInteractionMode)) {
         clearMapTileRectanglePreview();
+      }
+      if (
+        placementDragState !== null
+        && pointerInteractionMode !== "move-selected"
+        && !isMultiSelectPointerInteractionMode(pointerInteractionMode)
+      ) {
+        cancelPlacementDrag(placementDragState.pointerId);
       }
     },
     dispose(): void {

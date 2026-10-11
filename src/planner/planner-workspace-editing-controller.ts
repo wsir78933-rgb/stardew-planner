@@ -13,6 +13,7 @@ import { applyEditorCursorPlacement } from "../editor/editor-placement-controlle
 import {
   deleteSelectedPlacements,
   duplicateSelectedPlacementAtTile,
+  previewDuplicateSelectedPlacementsAtTile,
   moveSelectedPlacements,
   cycleSelectedPlacementAppearance,
   selectFirstSelectablePlacementKey,
@@ -29,8 +30,8 @@ import type {
   MapTileCoordinates,
 } from "../placement/map-placement-grids";
 import type { BuildingPaintColors } from "../paint/building-paint";
-import type { PlacementHistory } from "../placement/placement-history";
-import type { PlacementSnapshot } from "../placement/placement-snapshot";
+import { commitPlacementHistory, type PlacementHistory } from "../placement/placement-history";
+import type { PlacementSnapshot, PlacementSnapshotAction } from "../placement/placement-snapshot";
 
 export type PlannerWorkspaceEditingTransition = Readonly<{
   placementHistory: PlacementHistory<PlacementSnapshot>;
@@ -63,6 +64,8 @@ export type PlannerWorkspaceMapTileClickInput =
 export type PlannerWorkspacePlacementSelectionInput = Readonly<{
   placementHistory: PlacementHistory<PlacementSnapshot>;
   placementSelectionKeys: readonly PlacementSelectionKey[];
+  selectedPlacementKeys?: readonly PlacementSelectionKey[];
+  toggleSelection?: boolean;
 }>;
 
 export type PlannerWorkspaceMapTileRectangleInput =
@@ -162,6 +165,16 @@ export function applyPlannerWorkspacePlacementSelection(
     placementSelectionKeys:
       plannerWorkspacePlacementSelectionInput.placementSelectionKeys,
   });
+
+  if (plannerWorkspacePlacementSelectionInput.toggleSelection && selectedPlacementKey !== null) {
+    const currentSelectedKeys = plannerWorkspacePlacementSelectionInput.selectedPlacementKeys ?? [];
+    return {
+      placementHistory: plannerWorkspacePlacementSelectionInput.placementHistory,
+      selectedPlacementKeys: currentSelectedKeys.includes(selectedPlacementKey)
+        ? currentSelectedKeys.filter((selectionKey) => selectionKey !== selectedPlacementKey)
+        : [...currentSelectedKeys, selectedPlacementKey],
+    };
+  }
 
   return {
     placementHistory: plannerWorkspacePlacementSelectionInput.placementHistory,
@@ -280,6 +293,15 @@ export function duplicatePlannerWorkspaceSelectionAtTile(
   assertPlannerWorkspaceDuplicateSelectionInput(
     plannerWorkspaceDuplicateSelectionInput,
   );
+  if (plannerWorkspaceDuplicateSelectionInput.selectedPlacementKeys.length > 1) {
+    const copyPreview = previewDuplicateSelectedPlacementsAtTile(plannerWorkspaceDuplicateSelectionInput);
+    return copyPreview.applied
+      ? {
+          placementHistory: commitPlacementHistory(plannerWorkspaceDuplicateSelectionInput.placementHistory, copyPreview.placementSnapshot),
+          selectedPlacementKeys: copyPreview.selectedPlacementKeys,
+        }
+      : createUnchangedTransition(plannerWorkspaceDuplicateSelectionInput);
+  }
   const selectedPlacementKey = getSingleSelectedPlacementKey(
     plannerWorkspaceDuplicateSelectionInput.selectedPlacementKeys,
   );
@@ -305,6 +327,53 @@ export function duplicatePlannerWorkspaceSelectionAtTile(
       ? [duplicateResult.selectedPlacementKey]
       : plannerWorkspaceDuplicateSelectionInput.selectedPlacementKeys,
   };
+}
+
+export function previewPlannerWorkspaceSelectionAtTile(
+  copyInput: PlannerWorkspaceDuplicateSelectionInput,
+): readonly PlacementSnapshotAction[] | null {
+  assertPlannerWorkspaceDuplicateSelectionInput(copyInput);
+  if (copyInput.selectedPlacementKeys.length > 1) {
+    const copyPreview = previewDuplicateSelectedPlacementsAtTile(copyInput);
+    return copyPreview.applied ? copyPreview.actions : null;
+  }
+  const selectedPlacementKey = getSingleSelectedPlacementKey(copyInput.selectedPlacementKeys);
+  if (selectedPlacementKey === null) return null;
+  const copyResult = duplicateSelectedPlacementAtTile({ ...copyInput, selectedPlacementKey });
+  return copyResult.applied
+    ? createAddedPlacementActions(copyInput.placementHistory.currentState, copyResult.placementHistory.currentState)
+    : null;
+}
+
+export function previewPlannerWorkspaceFillRectangle(
+  fillInput: PlannerWorkspaceMapTileRectangleInput,
+): readonly PlacementSnapshotAction[] | null {
+  assertPlannerWorkspaceMapTileRectangleInput(fillInput);
+  if (fillInput.tool !== "fill") return null;
+  const fillResult = applyEditorFill({ ...fillInput, randomFractionSource: () => 0 });
+  return fillResult.applied
+    ? createAddedPlacementActions(fillInput.placementHistory.currentState, fillResult.placementHistory.currentState)
+    : null;
+}
+
+function createAddedPlacementActions(
+  sourceSnapshot: PlacementSnapshot,
+  nextSnapshot: PlacementSnapshot,
+): readonly PlacementSnapshotAction[] {
+  return [
+    ...nextSnapshot.buildings.filter((building) => building.instanceId >= sourceSnapshot.nextBuildingId)
+      .map((building): PlacementSnapshotAction => {
+        const { instanceId: omittedInstanceId, ...buildingFields } = building;
+        return { type: "add-building", building: buildingFields };
+      }),
+    ...nextSnapshot.crops.filter((crop) => !sourceSnapshot.crops.some((sourceCrop) => sourceCrop.x === crop.x && sourceCrop.y === crop.y))
+      .map((crop): PlacementSnapshotAction => ({ type: "add-crop", crop })),
+    ...nextSnapshot.items.filter((item) => item.instanceId >= sourceSnapshot.nextItemId)
+      .map((item): PlacementSnapshotAction => {
+        const { instanceId: omittedInstanceId, ...itemFields } = item;
+        return { type: "add-item", item: itemFields };
+      }),
+  ];
 }
 
 export function deletePlannerWorkspaceSelection(
@@ -527,7 +596,7 @@ function applyFillRectangle(
   return {
     placementHistory: fillResult.placementHistory,
     selectedPlacementKeys:
-      fillResult.applied
+      fillResult.applied && fillResult.placedTileCount > 0
         ? []
         : plannerWorkspaceMapTileRectangleInput.selectedPlacementKeys,
   };
@@ -595,6 +664,19 @@ function assertPlannerWorkspacePlacementSelectionInput(
     throw new TypeError(
       `Planner workspace placement selection placementHistory must be an object; received ${describeValue(plannerWorkspacePlacementSelectionInput.placementHistory)}.`,
     );
+  }
+  const { selectedPlacementKeys, toggleSelection } = plannerWorkspacePlacementSelectionInput;
+  if (selectedPlacementKeys !== undefined) {
+    assertPlannerWorkspaceTransitionInput({
+      placementHistory: plannerWorkspacePlacementSelectionInput.placementHistory,
+      selectedPlacementKeys,
+    });
+    if (new Set(selectedPlacementKeys).size !== selectedPlacementKeys.length) {
+      throw new TypeError(`Planner workspace selectedPlacementKeys must be unique; received ${describeValue(selectedPlacementKeys)}.`);
+    }
+  }
+  if (toggleSelection !== undefined && typeof toggleSelection !== "boolean") {
+    throw new TypeError(`Planner workspace toggleSelection must be a boolean; received ${describeValue(toggleSelection)}.`);
   }
 }
 

@@ -350,14 +350,15 @@ describe("applyEditorFill", () => {
     });
 
     expect(fillResult).toMatchObject({
-      applied: false,
-      placementHistory,
-      validation: { valid: false, reason: "not-passable", tile: { x: 1, y: 0 } },
+      applied: true,
+      placedTileCount: 1,
     });
+    expect(fillResult.placementHistory.currentState.items).toHaveLength(1);
+    expect(fillResult.placementHistory.undoStates).toEqual([placementHistory.currentState]);
     expect(sampledFractionCount).toBe(3);
   });
 
-  it("fills only a fence perimeter and keeps the source history unchanged when any tile is invalid", () => {
+  it("fills only a fence perimeter and skips invalid tiles in an ordinary rectangle", () => {
     const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
     const fenceResult = applyEditorFill({
       selectedCatalogItem: createCatalogItem({ id: "fence:322", category: "fence" }),
@@ -385,10 +386,11 @@ describe("applyEditorFill", () => {
     });
 
     expect(invalidFillResult).toMatchObject({
-      applied: false,
-      placementHistory,
-      validation: { valid: false, reason: "outside-map", tile: { x: 3, y: 0 } },
+      applied: true,
+      placedTileCount: 3,
     });
+    expect(invalidFillResult.placementHistory.currentState.items.map((item) => item.x)).toEqual([0, 1, 2]);
+    expect(invalidFillResult.placementHistory.undoStates).toEqual([placementHistory.currentState]);
   });
 
   it("fills a complete standard farm-sized rectangle instead of rejecting a valid 5,200-tile gesture", () => {

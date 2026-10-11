@@ -86,6 +86,7 @@ type SingleSelectionInspectorProperties =
 
 type MultipleSelectionInspectorProperties = Readonly<{
   kind: "multiple";
+  onCopy: () => void;
   onDelete: () => void;
   onDismiss: () => void;
   selection: Readonly<{
@@ -274,7 +275,7 @@ export function SelectionInspector(
     );
   }
 
-  const { onDelete, onDismiss, selection } = selectionInspectorProperties;
+  const { onCopy, onDelete, onDismiss, selection } = selectionInspectorProperties;
   const selectionLabel = `${String(selection.count)} selected placements`;
 
   return (
@@ -292,6 +293,15 @@ export function SelectionInspector(
       </button>
       <span className="pill-name selection-inspector__name">{selectionLabel}</span>
       <div className="selection-inspector__actions">
+        <button
+          aria-label="Copy selected placements"
+          className="pill-copy"
+          onClick={onCopy}
+          title="Copy selected placements (C)"
+          type="button"
+        >
+          <Copy aria-hidden="true" size={15} strokeWidth={2} />
+        </button>
         <button
           aria-label="Delete selected placements"
           className="pill-delete"

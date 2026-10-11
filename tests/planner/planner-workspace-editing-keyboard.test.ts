@@ -43,13 +43,12 @@ function createEditingKeyboardHandler(
   keyboardOptions: Readonly<{ isEnabled?: () => boolean }> = {},
 ) {
   return createPlannerWorkspaceEditingKeyboardHandler({
-    getSelectedPlacementKey: () =>
-      selectedPlacementKeys.length === 1 ? selectedPlacementKeys[0] ?? null : null,
+    getSelectedPlacementKeys: () => selectedPlacementKeys,
     hasSelection: () => selectedPlacementKeys.length > 0,
     hasPendingCatalogItem: () => hasPendingCatalogItem,
     hasDismissableInteraction: () => hasDismissableInteraction,
-    onCopy: (selectedPlacementKey) =>
-      receivedCommands.push(`copy:${selectedPlacementKey}`),
+    onCopy: (copiedPlacementKeys) =>
+      receivedCommands.push(`copy:${copiedPlacementKeys.join(",")}`),
     onDelete: () => receivedCommands.push("delete"),
     onDismiss: () => receivedCommands.push("dismiss"),
     onPendingChoiceCycle: () => {
@@ -104,6 +103,20 @@ describe("planner workspace editing keyboard", () => {
     expect(keyboardEvents.every((keyboardEvent) => keyboardEvent.defaultPrevented)).toBe(
       true,
     );
+  });
+
+  it("copies every placement in a multi-selection with C", () => {
+    const receivedCommands: string[] = [];
+    const handleKeyboardEvent = createEditingKeyboardHandler(
+      ["building:4", "item:7"],
+      receivedCommands,
+    );
+    const copyKeyboardEvent = createKeyboardEvent("c");
+
+    handleKeyboardEvent(copyKeyboardEvent);
+
+    expect(receivedCommands).toEqual(["copy:building:4,item:7"]);
+    expect(copyKeyboardEvent.defaultPrevented).toBe(true);
   });
 
   it("selects cursor, multi-select, erase, and fill through the shared tool callback", () => {

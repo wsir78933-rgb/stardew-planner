@@ -131,6 +131,7 @@ describe("selection inspector", () => {
     const multipleMarkup = renderToStaticMarkup(
       createElement(SelectionInspector, {
         kind: "multiple",
+        onCopy: () => undefined,
         onDelete: () => undefined,
         onDismiss: () => undefined,
         selection: { count: 3 },
@@ -283,10 +284,11 @@ describe("selection inspector", () => {
     expect(offLightMarkup).toContain(">Light</button>");
   });
 
-  it("renders a group count with only dismiss and delete actions", () => {
+  it("renders a group count with copy, dismiss, and delete actions", () => {
     const markup = renderToStaticMarkup(
       createElement(SelectionInspector, {
         kind: "multiple",
+        onCopy: () => undefined,
         onDelete: () => undefined,
         onDismiss: () => undefined,
         selection: { count: 3 },
@@ -295,8 +297,10 @@ describe("selection inspector", () => {
 
     expect(markup).toContain("3 selected placements");
     expect(markup).toContain('aria-label="Dismiss selection"');
+    expect(markup).toContain('aria-label="Copy selected placements"');
+    expect(markup).toContain('title="Copy selected placements (C)"');
     expect(markup).toContain('aria-label="Delete selected placements"');
     expect(markup).not.toContain("Cycle selected item appearance");
-    expect(markup).not.toContain("Copy selected placement");
+    expect(markup).not.toContain('aria-label="Copy selected placement"');
   });
 });

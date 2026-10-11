@@ -185,6 +185,26 @@ export type DuplicateSelectedPlacementAtTileInput = Readonly<{
   selectedPlacementKey: PlacementSelectionKey;
 }>;
 
+export type DuplicateSelectedPlacementsAtTileInput =
+  Omit<DuplicateSelectedPlacementAtTileInput, "selectedPlacementKey"> &
+  Readonly<{ selectedPlacementKeys: readonly PlacementSelectionKey[] }>;
+
+export type SelectedPlacementsCopyPreview =
+  | Readonly<{
+      applied: true;
+      actions: readonly PlacementSnapshotAction[];
+      placementSnapshot: PlacementSnapshot;
+      selectedPlacementKeys: readonly PlacementSelectionKey[];
+    }>
+  | Readonly<{
+      applied: false;
+      reason: "empty-selection";
+    }>
+  | Readonly<{
+      applied: false;
+      validation: Extract<PlacementValidationResult, { valid: false }>;
+    }>;
+
 export type DeleteSelectedPlacementsResult =
   | Readonly<{
       applied: true;
@@ -1193,6 +1213,147 @@ export function setSelectedPlacementNightLightState(
     placementHistory: commitPlacementHistory(placementHistory, nextPlacementSnapshot),
     selectedPlacementKey,
   };
+}
+
+export function previewDuplicateSelectedPlacementsAtTile(
+  copyInput: DuplicateSelectedPlacementsAtTileInput,
+): SelectedPlacementsCopyPreview {
+  assertGroupCopyInput(copyInput);
+  if (copyInput.selectedPlacementKeys.length === 0) {
+    return { applied: false, reason: "empty-selection" };
+  }
+  const sourceSnapshot = createPersistentPlacementSnapshot(copyInput.placementHistory.currentState);
+  const selectionBounds = getPlacementSelectionBounds({
+    buildingMetadataById: copyInput.buildingMetadataById,
+    placementSnapshot: sourceSnapshot,
+    selectedPlacementKeys: copyInput.selectedPlacementKeys,
+  });
+  if (selectionBounds === null) {
+    throw new Error(`Group copy has no bounds for selection ${describeValue(copyInput.selectedPlacementKeys)}.`);
+  }
+  const actions: PlacementSnapshotAction[] = [];
+  const copiedSelectionKeys: PlacementSelectionKey[] = [];
+  let validationSnapshot = sourceSnapshot;
+  for (const selectionKey of getGroupCopyTargets(sourceSnapshot, copyInput.selectedPlacementKeys)) {
+    const copyResult = previewGroupCopyTarget(copyInput, sourceSnapshot, validationSnapshot, selectionBounds, selectionKey);
+    if (!copyResult.applied) return copyResult;
+    validationSnapshot = copyResult.placementSnapshot;
+    actions.push(...copyResult.actions);
+    copiedSelectionKeys.push(...copyResult.selectedPlacementKeys);
+  }
+  return { applied: true, actions, placementSnapshot: validationSnapshot, selectedPlacementKeys: copiedSelectionKeys };
+}
+
+function assertGroupCopyInput(copyInput: DuplicateSelectedPlacementsAtTileInput): void {
+  assertNonNullObject(copyInput, "group duplicate input");
+  assertNonNullObject(copyInput.buildingMetadataById, "buildingMetadataById");
+  assertNonNullObject(copyInput.mapPlacementGrid, "mapPlacementGrid");
+  assertNonNullObject(copyInput.placementHistory, "placementHistory");
+  createPersistentPlacementSnapshot(copyInput.placementHistory.currentState);
+  if (copyInput.freePlacement !== undefined && typeof copyInput.freePlacement !== "boolean") {
+    throw new TypeError(`Editor selection freePlacement must be a boolean or undefined; received ${describeValue(copyInput.freePlacement)}.`);
+  }
+  assertUniqueSelectionKeys(copyInput.selectedPlacementKeys);
+  assertMapTile(copyInput.cursorTile, "cursorTile");
+  for (const selectedPlacementKey of copyInput.selectedPlacementKeys) {
+    assertDuplicateSelectedPlacementAtTileInput({ ...copyInput, selectedPlacementKey });
+  }
+}
+
+function getGroupCopyTargets(
+  sourceSnapshot: PlacementSnapshot,
+  selectedPlacementKeys: readonly PlacementSelectionKey[],
+): readonly ParsedPlacementSelectionKey[] {
+  const parsedSelectionKeys = selectedPlacementKeys.map(parsePlacementSelectionKey);
+  const parentItemIds = new Set(parsedSelectionKeys.filter(
+    (selectionKey) => selectionKey.kind === "item",
+  ).map((selectionKey) => selectionKey.instanceId));
+  return parsedSelectionKeys.filter((selectionKey) => {
+    if (selectionKey.kind !== "item") return true;
+    const selectedItem = getRequiredPlacementItemOrHeldItem(sourceSnapshot, selectionKey.instanceId);
+    return selectedItem.kind !== "held-item" || !parentItemIds.has(selectedItem.parentInstanceId);
+  });
+}
+
+function previewGroupCopyTarget(
+  copyInput: DuplicateSelectedPlacementsAtTileInput,
+  sourceSnapshot: PlacementSnapshot,
+  validationSnapshot: PlacementSnapshot,
+  selectionBounds: PlacementSelectionBounds,
+  selectionKey: ParsedPlacementSelectionKey,
+): SelectedPlacementsCopyPreview {
+  const actions: PlacementSnapshotAction[] = [];
+  const copiedSelectionKeys: PlacementSelectionKey[] = [];
+  const sourceBounds = createSelectedPlacementRectangle(sourceSnapshot, selectionKey, copyInput.buildingMetadataById);
+  const targetTile = {
+    x: copyInput.cursorTile.x + sourceBounds.minimumX - selectionBounds.minimumX,
+    y: copyInput.cursorTile.y + sourceBounds.minimumY - selectionBounds.minimumY,
+  };
+  const candidate = createGroupCopyCandidate(sourceSnapshot, selectionKey, targetTile, copyInput.catalogItems);
+  const validation = validatePlacement({
+    buildingMetadataById: copyInput.buildingMetadataById,
+    candidate,
+    freePlacement: copyInput.freePlacement,
+    mapPlacementGrid: copyInput.mapPlacementGrid,
+    placementSnapshot: validationSnapshot,
+  });
+  if (!validation.valid) return { applied: false, validation };
+
+  const copiedSelectionKey = createDuplicateSelectionKey(selectionKey, validationSnapshot, targetTile);
+  const copyAction = createPlacementCandidateAction(candidate);
+  const copiedParentInstanceId = validationSnapshot.nextItemId;
+  validationSnapshot = applyPlacementSnapshotAction(validationSnapshot, copyAction);
+  actions.push(copyAction);
+  copiedSelectionKeys.push(copiedSelectionKey);
+
+  const attachmentAction = createGroupCopyAttachmentAction(sourceSnapshot, selectionKey, targetTile, copiedParentInstanceId);
+  if (attachmentAction !== null) {
+    const copiedChildInstanceId = validationSnapshot.nextItemId;
+    validationSnapshot = applyPlacementSnapshotAction(validationSnapshot, attachmentAction);
+    actions.push(attachmentAction);
+    copiedSelectionKeys.push(createItemSelectionKey(copiedChildInstanceId));
+  }
+  return { applied: true, actions, placementSnapshot: validationSnapshot, selectedPlacementKeys: copiedSelectionKeys };
+}
+
+function createGroupCopyAttachmentAction(
+  sourceSnapshot: PlacementSnapshot,
+  selectionKey: ParsedPlacementSelectionKey,
+  targetTile: MapTileCoordinates,
+  copiedParentInstanceId: number,
+): PlacementSnapshotAction | null {
+  if (selectionKey.kind !== "item") return null;
+  const sourceItem = getRequiredPlacementItemOrHeldItem(sourceSnapshot, selectionKey.instanceId);
+  if (sourceItem.kind !== "item" || sourceItem.item.heldItem === undefined) return null;
+  const { instanceId: omittedChildInstanceId, ...heldItemFields } = sourceItem.item.heldItem;
+  return {
+    type: "attach-held-item", parentInstanceId: copiedParentInstanceId,
+    item: {
+      ...heldItemFields,
+      x: heldItemFields.x + targetTile.x - sourceItem.item.x,
+      y: heldItemFields.y + targetTile.y - sourceItem.item.y,
+      locked: false,
+    },
+  };
+}
+
+function createGroupCopyCandidate(
+  sourceSnapshot: PlacementSnapshot,
+  selectionKey: ParsedPlacementSelectionKey,
+  targetTile: MapTileCoordinates,
+  catalogItems: readonly CatalogItem[] | undefined,
+): PlacementValidationCandidate {
+  const candidate = createDuplicatePlacementCandidate(sourceSnapshot, selectionKey, targetTile);
+  if (selectionKey.kind === "item" && candidate.kind === "item") {
+    const sourceItem = getRequiredPlacementItem(sourceSnapshot, selectionKey.instanceId);
+    if (sourceItem.heldItemId !== undefined) {
+      return addCatalogPlacementRequirement({
+        ...candidate,
+        item: { ...candidate.item, heldItemId: sourceItem.heldItemId },
+      }, catalogItems);
+    }
+  }
+  return addCatalogPlacementRequirement(candidate, catalogItems);
 }
 
 export function duplicateSelectedPlacementAtTile(

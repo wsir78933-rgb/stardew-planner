@@ -8,6 +8,7 @@ import type {
 import {
   deleteSelectedPlacements,
   duplicateSelectedPlacementAtTile,
+  previewDuplicateSelectedPlacementsAtTile,
   getPlacementSelectionBounds,
   getPlacementSelectionSummary,
   getPlacementSelectionDetails,
@@ -379,6 +380,42 @@ function createAppearanceCycleInput(
 }
 
 describe("editor selection controller", () => {
+  it("validates required copy inputs even when the selection is empty", () => {
+    expect(() => previewDuplicateSelectedPlacementsAtTile({
+      buildingMetadataById: createBuildingMetadataById(),
+      cursorTile: { x: 0, y: 0 }, mapPlacementGrid: createPlacementGrid(12, 12),
+      placementHistory: null as unknown as PlacementHistory<PlacementSnapshot>,
+      selectedPlacementKeys: [],
+    })).toThrow("placementHistory must be a non-null object; received null");
+  });
+
+  it("previews a copied table group with unique parent-child identities and preserved appearance", () => {
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createTableWithHeldItem()],
+      nextItemId: 8,
+    });
+    const copyPreview = previewDuplicateSelectedPlacementsAtTile({
+      buildingMetadataById: createBuildingMetadataById(),
+      catalogItems: [tableRotationCatalogItem, heldItemRotationCatalogItem],
+      cursorTile: { x: 7, y: 4 },
+      mapPlacementGrid: createPlacementGrid(12, 12),
+      placementHistory,
+      selectedPlacementKeys: ["item:7", "item:1"],
+    });
+    expect(copyPreview.applied).toBe(true);
+    if (!copyPreview.applied) throw new Error("Expected valid table group copy preview.");
+    expect(copyPreview.actions.map((action) => action.type)).toEqual(["add-item", "attach-held-item"]);
+    expect(copyPreview.placementSnapshot.items[1]).toMatchObject({
+      instanceId: 8, x: 7, y: 4,
+      heldItem: { instanceId: 9, x: 8, y: 5, rotation: 1, variant: 2, tintColor: "#123456", flipped: true },
+    });
+    expect(copyPreview.selectedPlacementKeys).toEqual(["item:8", "item:9"]);
+    expect(copyPreview.placementSnapshot.nextItemId).toBe(10);
+    expect(placementHistory.currentState.items).toHaveLength(1);
+    expect(placementHistory.undoStates).toEqual([]);
+  });
+
   it("selects a table child above its parent across the parent footprint with stable item keys", () => {
     const placementSnapshot = {
       ...createEmptyPlacementSnapshot(),
