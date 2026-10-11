@@ -11,14 +11,12 @@ import {
 
 function renderToolbar(
   tool: Parameters<typeof EditorToolbar>[0]["tool"],
-  includeZoom = true,
   locale: "en" | "zh" = "en",
 ): string {
   return renderToStaticMarkup(
     createElement(EditorToolbar, {
       canRedo: false,
       canUndo: false,
-      includeZoom,
       locale,
       onRedo: () => undefined,
       onToolChange: () => undefined,
@@ -82,7 +80,7 @@ describe("editor controls", () => {
     expect(markup).toContain('data-editor-modal-id="map-picker"');
   });
 
-  it("renders source icons as static SVG and renders the selected toolbar actions", () => {
+  it("renders the four tools and history actions without a Zoom control", () => {
     const toolbarMarkup = renderToolbar("cursor");
 
     expect(toolbarMarkup).toContain('viewBox="0 0 24 24"');
@@ -92,20 +90,20 @@ describe("editor controls", () => {
     expect(toolbarMarkup).toContain('data-editor-tool="erase"');
     expect(toolbarMarkup).toContain('data-editor-history-action="undo"');
     expect(toolbarMarkup).toContain('data-editor-history-action="redo"');
-    expect(toolbarMarkup).toContain('data-editor-wheel-zoom-button="true"');
-    expect(toolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(2);
+    expect(toolbarMarkup).not.toContain('data-editor-tool="zoom"');
+    expect(toolbarMarkup).not.toContain("Zoom");
+    expect(toolbarMarkup).not.toContain("滚轮缩放");
+    expect(toolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(1);
     expect(toolbarMarkup).toContain("Select");
     expect(toolbarMarkup).toContain("Multi");
     expect(toolbarMarkup).toContain("Fill");
     expect(toolbarMarkup).toContain("Erase");
 
-    const compactToolbarMarkup = renderToolbar("cursor", false, "zh");
-    expect(compactToolbarMarkup).not.toContain('data-editor-tool="zoom"');
-    expect(compactToolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(1);
-    expect(compactToolbarMarkup.match(/class="tool-group editor-toolbar__tool-group"/g)).toHaveLength(1);
-    expect(compactToolbarMarkup).toContain('aria-label="选择"');
-    expect(compactToolbarMarkup).toContain('aria-label="撤销"');
-    expect(compactToolbarMarkup).toContain('aria-label="重做"');
+    const localizedToolbarMarkup = renderToolbar("cursor", "zh");
+    expect(localizedToolbarMarkup).not.toContain('data-editor-tool="zoom"');
+    expect(localizedToolbarMarkup).toContain('aria-label="选择"');
+    expect(localizedToolbarMarkup).toContain('aria-label="撤销"');
+    expect(localizedToolbarMarkup).toContain('aria-label="重做"');
   });
 
   it("renders exactly one visible selected tool or no selection", () => {
@@ -113,8 +111,8 @@ describe("editor controls", () => {
       { expectedPressedLabels: [], tool: null },
       { expectedPressedLabels: ["Select"], tool: "cursor" },
       { expectedPressedLabels: ["Multi"], tool: "multi-select" },
+      { expectedPressedLabels: ["Fill"], tool: "fill" },
       { expectedPressedLabels: ["Erase"], tool: "erase" },
-      { expectedPressedLabels: ["Disable wheel zoom"], tool: "zoom" },
     ] as const;
 
     for (const toolbarCase of cases) {
@@ -127,50 +125,18 @@ describe("editor controls", () => {
       expect(pressedLabels).toEqual(toolbarCase.expectedPressedLabels);
     }
 
-    const zoomMarkup = renderToolbar("zoom");
-    expect(zoomMarkup).toContain(
-      'class="tool-btn editor-toolbar__button editor-wheel-zoom-button"',
-    );
-    expect(zoomMarkup).toContain(
-      'data-editor-wheel-zoom-button="true"',
-    );
   });
 
-  it("deselects the current tool and otherwise selects the requested visible tool", () => {
-    const cases = [
-      { currentTool: "cursor", expectedTool: null, requestedTool: "cursor" },
-      {
-        currentTool: "multi-select",
-        expectedTool: null,
-        requestedTool: "multi-select",
-      },
-      { currentTool: "erase", expectedTool: null, requestedTool: "erase" },
-      { currentTool: "zoom", expectedTool: null, requestedTool: "zoom" },
-      { currentTool: "zoom", expectedTool: "cursor", requestedTool: "cursor" },
-      {
-        currentTool: "cursor",
-        expectedTool: "multi-select",
-        requestedTool: "multi-select",
-      },
-      { currentTool: "cursor", expectedTool: "erase", requestedTool: "erase" },
-      { currentTool: "cursor", expectedTool: "zoom", requestedTool: "zoom" },
-      { currentTool: null, expectedTool: "cursor", requestedTool: "cursor" },
-      {
-        currentTool: null,
-        expectedTool: "multi-select",
-        requestedTool: "multi-select",
-      },
-      { currentTool: null, expectedTool: "erase", requestedTool: "erase" },
-      { currentTool: null, expectedTool: "zoom", requestedTool: "zoom" },
-    ] as const;
+  it("keeps each toolbar tool selected when clicked repeatedly and switches to another requested tool", () => {
+    const tools = ["cursor", "multi-select", "fill", "erase"] as const;
 
-    for (const toolbarSelectionCase of cases) {
-      expect(
-        getEditorToolbarToolSelectionAfterClick(
-          toolbarSelectionCase.currentTool,
-          toolbarSelectionCase.requestedTool,
-        ),
-      ).toBe(toolbarSelectionCase.expectedTool);
+    for (const requestedTool of tools) {
+      expect(getEditorToolbarToolSelectionAfterClick(requestedTool)).toBe(
+        requestedTool,
+      );
+      expect(getEditorToolbarToolSelectionAfterClick(requestedTool)).toBe(
+        requestedTool,
+      );
     }
   });
 
@@ -298,7 +264,7 @@ describe("editor controls", () => {
     expect(selectedMultiSelectRule).toContain("color: #b13a28;");
   });
 
-  it("locks Cursor and wheel Zoom colors after generic hover without broad or false selectors", () => {
+  it("locks Cursor colors after generic hover without broad or false selectors", () => {
     const stylesheet = readFileSync(
       resolve(process.cwd(), "app/globals.css"),
       "utf8",
@@ -307,34 +273,19 @@ describe("editor controls", () => {
       ".planner-editor-shell .tool-btn:hover:not(:disabled)";
     const selectedCursorSelector =
       '.planner-editor-shell .tool-btn.cursor[aria-pressed="true"]';
-    const selectedWheelZoomSelector =
-      '.planner-editor-shell .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]';
-    const legacySelectedWheelZoomSelector =
-      '.planner-editor-shell .editor-wheel-zoom-button[aria-pressed="true"]';
     const genericToolHoverRuleIndex = stylesheet.indexOf(
       `${genericToolHoverSelector} {`,
     );
     const selectedCursorRuleIndex = stylesheet.indexOf(
       `${selectedCursorSelector} {`,
     );
-    const selectedWheelZoomRuleIndex = stylesheet.indexOf(
-      `${selectedWheelZoomSelector} {`,
-    );
     const selectedCursorRuleEnd = stylesheet.indexOf(
       "}",
       selectedCursorRuleIndex,
     );
-    const selectedWheelZoomRuleEnd = stylesheet.indexOf(
-      "}",
-      selectedWheelZoomRuleIndex,
-    );
     const selectedCursorRule = stylesheet.slice(
       selectedCursorRuleIndex,
       selectedCursorRuleEnd + 1,
-    );
-    const selectedWheelZoomRule = stylesheet.slice(
-      selectedWheelZoomRuleIndex,
-      selectedWheelZoomRuleEnd + 1,
     );
 
     expect(stylesheet).not.toContain(
@@ -346,18 +297,9 @@ describe("editor controls", () => {
     expect(stylesheet).not.toContain(
       '.planner-editor-shell .tool-btn.cursor[aria-pressed="false"]',
     );
-    expect(stylesheet).not.toContain(
-      '.planner-editor-shell .editor-wheel-zoom-button[aria-pressed="false"]',
-    );
-    expect(stylesheet).not.toContain(`${legacySelectedWheelZoomSelector} {`);
     expect(genericToolHoverRuleIndex).toBeGreaterThanOrEqual(0);
     expect(selectedCursorRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
-    expect(selectedWheelZoomRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
     expect(selectedCursorRule).toContain("background: rgb(177 58 40 / 15%);");
     expect(selectedCursorRule).toContain("color: #b13a28;");
-    expect(selectedWheelZoomRule).toContain(
-      "background: rgb(177 58 40 / 15%);",
-    );
-    expect(selectedWheelZoomRule).toContain("color: #b13a28;");
   });
 });

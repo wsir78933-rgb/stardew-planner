@@ -203,7 +203,7 @@ function createCompositeFurnitureCatalogItem(): CatalogItem {
 }
 
 describe("workspace catalog placement preview wiring", () => {
-  it("passes the selected catalog item and its current presentation choice to cursor and Zoom preview", () => {
+  it("passes the selected catalog item and its current presentation choice to Cursor preview", () => {
     const selectedCatalogItem = createRotatableCatalogItem();
     const presentationChoice = { flipped: false, rotation: 2, variant: 0 };
     const expectedPreviewInput = {
@@ -227,16 +227,6 @@ describe("workspace catalog placement preview wiring", () => {
     expect(createWorkspaceCatalogPlacementPreviewInput({
       buildingMetadataById: {},
       freePlacement: true,
-      selectedCatalogItem: {
-        catalogItem: selectedCatalogItem,
-        presentationChoice,
-        resolvedCompositeVariant: 4383,
-      },
-      tool: "zoom",
-    })).toEqual(expectedPreviewInput);
-    expect(createWorkspaceCatalogPlacementPreviewInput({
-      buildingMetadataById: {},
-      freePlacement: true,
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: "fill",
     })).toBeNull();
@@ -250,7 +240,7 @@ describe("workspace catalog placement preview wiring", () => {
 });
 
 describe("planner canvas interaction properties", () => {
-  it("derives wheel zoom and pointer mode from the selected tool and placements", () => {
+  it("keeps wheel zoom enabled while deriving pointer mode from the selected tool and placements", () => {
     const cases = [
       {
         expectedProperties: {
@@ -258,20 +248,12 @@ describe("planner canvas interaction properties", () => {
           wheelZoomEnabled: true,
         },
         hasSelectedPlacements: true,
-        tool: "zoom",
-      },
-      {
-        expectedProperties: {
-          pointerInteractionMode: "navigate",
-          wheelZoomEnabled: false,
-        },
-        hasSelectedPlacements: true,
         tool: null,
       },
       {
         expectedProperties: {
           pointerInteractionMode: "rectangle",
-          wheelZoomEnabled: false,
+          wheelZoomEnabled: true,
         },
         hasSelectedPlacements: true,
         tool: "erase",
@@ -279,7 +261,7 @@ describe("planner canvas interaction properties", () => {
       {
         expectedProperties: {
           pointerInteractionMode: "multi-select",
-          wheelZoomEnabled: false,
+          wheelZoomEnabled: true,
         },
         hasSelectedPlacements: true,
         tool: "multi-select",
@@ -287,7 +269,7 @@ describe("planner canvas interaction properties", () => {
       {
         expectedProperties: {
           pointerInteractionMode: "rectangle",
-          wheelZoomEnabled: false,
+          wheelZoomEnabled: true,
         },
         hasSelectedPlacements: true,
         tool: "fill",
@@ -295,7 +277,7 @@ describe("planner canvas interaction properties", () => {
       {
         expectedProperties: {
           pointerInteractionMode: "move-selected",
-          wheelZoomEnabled: false,
+          wheelZoomEnabled: true,
         },
         hasSelectedPlacements: true,
         tool: "cursor",
@@ -303,7 +285,7 @@ describe("planner canvas interaction properties", () => {
       {
         expectedProperties: {
           pointerInteractionMode: "navigate",
-          wheelZoomEnabled: false,
+          wheelZoomEnabled: true,
         },
         hasSelectedPlacements: false,
         tool: "cursor",
@@ -384,54 +366,6 @@ describe("catalog item selection tools", () => {
       ]);
     },
   );
-
-  it("keeps Zoom selected for catalog placement preview and placement", () => {
-    const catalogItem = createDeluxeCoopCatalogItem();
-    const buildingMetadataById = createBuildableDeluxeCoopMetadataById();
-    const placementGrid = createDeluxeCoopPlacementGrid();
-    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
-    const presentationChoice = { flipped: false, rotation: 0, variant: 0 };
-    const selectedCatalogItem = { catalogItem, presentationChoice };
-    const selectionTool = getPlannerWorkspaceCatalogItemSelectionTool(
-      "zoom",
-      catalogItem,
-    );
-
-    expect(selectionTool).toBe("zoom");
-
-    const placementPreviewInput = createWorkspaceCatalogPlacementPreviewInput({
-      buildingMetadataById,
-      freePlacement: false,
-      selectedCatalogItem,
-      tool: selectionTool,
-    });
-    expect(placementPreviewInput).not.toBeNull();
-    if (placementPreviewInput === null) {
-      throw new Error("Zoom must produce a selected Deluxe Coop preview input.");
-    }
-    expect(createPlannerCanvasPlacementPreviewState({
-      hoveredMapTile: { x: 1, y: 1 },
-      mapPlacementGrid: placementGrid,
-      placementPreview: placementPreviewInput,
-      placementSnapshot: placementHistory.currentState,
-    })).not.toBeNull();
-
-    const placementTransition = applyPlannerWorkspaceMapTileClick({
-      buildingMetadataById,
-      catalogPresentationChoice: presentationChoice,
-      cursorTile: { x: 1, y: 1 },
-      freePlacement: false,
-      mapPlacementGrid: placementGrid,
-      placementHistory,
-      selectedCatalogItem: catalogItem,
-      selectedPlacementKeys: [],
-      tool: selectionTool,
-    });
-
-    expect(placementTransition.placementHistory.currentState.buildings).toEqual([
-      { buildingId: "Deluxe Coop", instanceId: 1, x: 1, y: 1 },
-    ]);
-  });
 
   it.each([
     { category: "floor", catalogItem: createFloorCatalogItem() },
@@ -527,7 +461,7 @@ describe("planner workspace basic editing orchestration", () => {
     }
   });
 
-  it("leaves Zoom clicks unchanged without a selected catalog item", () => {
+  it("leaves map clicks unchanged when no tool is selected", () => {
     const initialEditingInput = createEditingInput();
     const placedTransition = applyPlannerWorkspaceMapTileClick({
       ...initialEditingInput,
@@ -535,23 +469,23 @@ describe("planner workspace basic editing orchestration", () => {
       tool: "cursor",
     });
 
-    const zoomTransition = applyPlannerWorkspaceMapTileClick({
+    const noToolTransition = applyPlannerWorkspaceMapTileClick({
       ...initialEditingInput,
       catalogPresentationChoice: null,
       cursorTile: { x: 1, y: 1 },
       placementHistory: placedTransition.placementHistory,
       selectedCatalogItem: null,
       selectedPlacementKeys: [],
-      tool: "zoom",
+      tool: null,
     });
 
-    expect(zoomTransition.placementHistory).toBe(
+    expect(noToolTransition.placementHistory).toBe(
       placedTransition.placementHistory,
     );
-    expect(zoomTransition.selectedPlacementKeys).toEqual([]);
+    expect(noToolTransition.selectedPlacementKeys).toEqual([]);
   });
 
-  it("leaves a selected catalog item Zoom rectangle unchanged", () => {
+  it("leaves map rectangles unchanged when no tool is selected", () => {
     const initialEditingInput = createEditingInput();
     const placedTransition = applyPlannerWorkspaceMapTileClick({
       ...initialEditingInput,
@@ -560,27 +494,27 @@ describe("planner workspace basic editing orchestration", () => {
     });
     const selectedPlacementKeys = ["item:1"] as const;
 
-    const zoomRectangleTransition = applyPlannerWorkspaceMapTileRectangle({
+    const noToolRectangleTransition = applyPlannerWorkspaceMapTileRectangle({
       ...initialEditingInput,
       firstTile: { x: 0, y: 0 },
       placementHistory: placedTransition.placementHistory,
       secondTile: { x: 1, y: 1 },
       selectedPlacementKeys,
-      tool: "zoom",
+      tool: null,
     });
 
-    expect(zoomRectangleTransition.placementHistory).toBe(
+    expect(noToolRectangleTransition.placementHistory).toBe(
       placedTransition.placementHistory,
     );
-    expect(zoomRectangleTransition.placementHistory.currentState).toBe(
+    expect(noToolRectangleTransition.placementHistory.currentState).toBe(
       placedTransition.placementHistory.currentState,
     );
-    expect(zoomRectangleTransition.selectedPlacementKeys).toBe(
+    expect(noToolRectangleTransition.selectedPlacementKeys).toBe(
       selectedPlacementKeys,
     );
   });
 
-  it("processes a successful selected-item Zoom click and advances exactly once", () => {
+  it("processes a successful selected-item Cursor click and advances exactly once", () => {
     const editingInput = createEditingInput();
     const applyEditingTransition = vi.fn();
     const advanceSelectedCatalogPlacementAttempt = vi.fn();
@@ -603,7 +537,7 @@ describe("planner workspace basic editing orchestration", () => {
         presentationChoice: editingInput.catalogPresentationChoice,
       },
       selectedPlacementKeys: editingInput.selectedPlacementKeys,
-      tool: "zoom",
+      tool: "cursor",
     });
 
     expect(applyEditingTransition).toHaveBeenCalledTimes(1);
@@ -627,7 +561,7 @@ describe("planner workspace basic editing orchestration", () => {
     expect(clearPendingDuplicateSelection).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps an invalid selected-item Zoom click unchanged and does not advance", () => {
+  it("keeps an invalid selected-item Cursor click unchanged and does not advance", () => {
     const editingInput = createEditingInput();
     const applyEditingTransition = vi.fn();
     const advanceSelectedCatalogPlacementAttempt = vi.fn();
@@ -650,7 +584,7 @@ describe("planner workspace basic editing orchestration", () => {
         presentationChoice: editingInput.catalogPresentationChoice,
       },
       selectedPlacementKeys: editingInput.selectedPlacementKeys,
-      tool: "zoom",
+      tool: "cursor",
     });
 
     expect(applyEditingTransition).toHaveBeenCalledTimes(1);
@@ -690,7 +624,7 @@ describe("planner workspace basic editing orchestration", () => {
         presentationChoice: editingInput.catalogPresentationChoice,
       },
       selectedPlacementKeys: ["item:1"],
-      tool: "zoom",
+      tool: "cursor",
     });
 
     expect(applyEditingTransition).toHaveBeenCalledTimes(1);

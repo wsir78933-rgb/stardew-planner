@@ -18,7 +18,6 @@ type EditorToolbarProperties = Readonly<{
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  includeZoom?: boolean;
   locale?: EditorToolbarLocale;
 }>;
 
@@ -42,7 +41,6 @@ const editorToolbarCopyByLocale = {
     multi: "Multi",
     fill: "Fill",
     erase: "Erase",
-    zoom: "Zoom",
     undo: "Undo",
     redo: "Redo",
   },
@@ -52,17 +50,15 @@ const editorToolbarCopyByLocale = {
     multi: "多选",
     fill: "填充",
     erase: "擦除",
-    zoom: "缩放",
     undo: "撤销",
     redo: "重做",
   },
 } as const;
 
 export function getEditorToolbarToolSelectionAfterClick(
-  currentTool: EditorTool | null,
-  requestedTool: EditorTool,
-): EditorTool | null {
-  return currentTool === requestedTool ? null : requestedTool;
+  requestedTool: EditorToolbarControl["tool"],
+): EditorToolbarControl["tool"] {
+  return requestedTool;
 }
 
 export function EditorToolbar({
@@ -72,11 +68,9 @@ export function EditorToolbar({
   onRedo,
   canUndo,
   canRedo,
-  includeZoom = true,
   locale = "en",
 }: EditorToolbarProperties) {
   const editorToolbarCopy = editorToolbarCopyByLocale[locale];
-  const isZoomSelected = tool === "zoom";
   const renderToolButton = (editorToolbarControl: EditorToolbarControl) => {
     const isSelected = tool === editorToolbarControl.tool;
     const isAvailable = editorToolAvailability[editorToolbarControl.tool];
@@ -90,11 +84,7 @@ export function EditorToolbar({
         data-editor-tool={editorToolbarControl.tool}
         disabled={!isAvailable}
         key={editorToolbarControl.tool}
-        onClick={() =>
-          onToolChange(
-            getEditorToolbarToolSelectionAfterClick(tool, editorToolbarControl.tool),
-          )
-        }
+        onClick={() => onToolChange(getEditorToolbarToolSelectionAfterClick(editorToolbarControl.tool))}
         title={controlLabel}
         type="button"
       >
@@ -114,34 +104,7 @@ export function EditorToolbar({
         <div className="tool-group editor-toolbar__tool-group">
           {editorToolbarControls.map(renderToolButton)}
         </div>
-        {includeZoom ? (
-          <>
-            <span aria-hidden="true" className="separator editor-toolbar__divider" />
-            <div
-              aria-label={editorToolbarCopy.zoom}
-              className="tool-group editor-wheel-zoom-group"
-              role="group"
-            >
-              <button
-                aria-label={isZoomSelected ? getZoomDisableLabel(locale) : getZoomEnableLabel(locale)}
-                aria-pressed={isZoomSelected}
-                className="tool-btn editor-toolbar__button editor-wheel-zoom-button"
-                data-editor-tool="zoom"
-                data-editor-wheel-zoom-button="true"
-                onClick={() =>
-                  onToolChange(getEditorToolbarToolSelectionAfterClick(tool, "zoom"))
-                }
-                title={isZoomSelected ? getZoomDisableLabel(locale) : getZoomEnableLabel(locale)}
-                type="button"
-              >
-                <span className="editor-toolbar__label">{editorToolbarCopy.zoom}</span>
-              </button>
-            </div>
-            <span aria-hidden="true" className="separator editor-toolbar__divider" />
-          </>
-        ) : (
-          <span aria-hidden="true" className="separator editor-toolbar__divider" />
-        )}
+        <span aria-hidden="true" className="separator editor-toolbar__divider" />
         <div aria-label="History" className="tool-group editor-toolbar__history-group" role="group">
           <button
             aria-label={editorToolbarCopy.undo}
@@ -197,14 +160,6 @@ function getEditorToolbarButtonClassName(
   }
 
   return className + (isSelected ? " active" : "");
-}
-
-function getZoomEnableLabel(locale: EditorToolbarLocale): string {
-  return locale === "zh" ? "启用滚轮缩放" : "Enable wheel zoom";
-}
-
-function getZoomDisableLabel(locale: EditorToolbarLocale): string {
-  return locale === "zh" ? "关闭滚轮缩放" : "Disable wheel zoom";
 }
 
 function getHistoryTitle(

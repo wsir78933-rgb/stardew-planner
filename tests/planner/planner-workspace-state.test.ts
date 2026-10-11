@@ -432,12 +432,12 @@ describe("planner workspace state", () => {
 
   it("keeps nullable tool selection outside Undo and Redo history", () => {
     const initialWorkspaceState = createInitialPlannerWorkspaceState();
-    const zoomWorkspaceState = reducePlannerWorkspaceState(
+    const multiSelectWorkspaceState = reducePlannerWorkspaceState(
       initialWorkspaceState,
-      { tool: "zoom", type: "select-tool" },
+      { tool: "multi-select", type: "select-tool" },
     );
     const noToolWorkspaceState = reducePlannerWorkspaceState(
-      zoomWorkspaceState,
+      multiSelectWorkspaceState,
       { tool: null, type: "select-tool" },
     );
     const undoneWorkspaceState = reducePlannerWorkspaceState(
@@ -450,7 +450,7 @@ describe("planner workspace state", () => {
     );
 
     expect(initialWorkspaceState.tool).toBe("cursor");
-    expect(zoomWorkspaceState.tool).toBe("zoom");
+    expect(multiSelectWorkspaceState.tool).toBe("multi-select");
     expect(noToolWorkspaceState.tool).toBeNull();
     expect(undoneWorkspaceState.tool).toBeNull();
     expect(redoneWorkspaceState.tool).toBeNull();

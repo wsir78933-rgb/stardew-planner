@@ -304,7 +304,7 @@ export function createWorkspaceCatalogPlacementPreviewInput(
   }>,
 ): PlannerCanvasPlacementPreviewInput | null {
   if (
-    (input.tool !== "cursor" && input.tool !== "zoom") ||
+    input.tool !== "cursor" ||
     input.buildingMetadataById === null ||
     input.selectedCatalogItem === null
   ) {
@@ -340,7 +340,7 @@ export function getPlannerCanvasInteractionProperties(
 }> {
   return {
     pointerInteractionMode:
-      input.tool === null || input.tool === "zoom"
+      input.tool === null
         ? "navigate"
         : input.tool === "multi-select"
           ? "multi-select"
@@ -350,7 +350,7 @@ export function getPlannerCanvasInteractionProperties(
           : input.hasSelectedPlacements
             ? "move-selected"
             : "navigate",
-    wheelZoomEnabled: input.tool === "zoom",
+    wheelZoomEnabled: true,
   };
 }
 
@@ -420,7 +420,7 @@ export function processPlannerWorkspaceMapTileClick(
   );
   if (
     pendingDuplicateSelectionKey === null
-    && (input.tool === "cursor" || input.tool === "zoom")
+    && input.tool === "cursor"
     && input.selectedCatalogItem !== null
     && editingTransition.placementHistory !== input.placementHistory
   ) {
@@ -1062,7 +1062,6 @@ function PreparedPlannerWorkspaceContent({
       />
       <EditorToolbar
         locale={editorLocale}
-        includeZoom={false}
         canRedo={plannerWorkspaceState.placementHistory.redoStates.length > 0}
         canUndo={plannerWorkspaceState.placementHistory.undoStates.length > 0}
         onRedo={() =>
@@ -1173,9 +1172,6 @@ function PreparedPlannerWorkspaceContent({
           dispatchPlannerWorkspaceAction({ type: "select-season", season });
           dispatchPlannerWorkspaceAction({ type: "open-modal", modalId: "ambience-panel" });
         }}
-        toolIsZoom={plannerWorkspaceState.tool === "zoom"}
-        showZoomOption
-        onZoomToggle={() => handleOrdinaryToolChange(plannerWorkspaceState.tool === "zoom" ? null : "zoom")}
         behaviorOptions={plannerWorkspaceState.behaviorOptions}
         copy={editorModalCopy}
         displayOptions={plannerWorkspaceState.displayOptions}

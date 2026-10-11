@@ -221,14 +221,13 @@ it("toggles range and resource-clump options and disables NPC paths on unsupport
       displayOptions,
       selectedMapId: "standard",
       panelPosition: "left",
-      toolIsZoom: false,
-      showZoomOption: false,
       onBehaviorChange,
       onDisplayToggle,
       onPanelPositionChange: vi.fn(),
-      onZoomToggle: vi.fn(),
     }),
   );
+
+  expect(textContent(viewPanel)).not.toContain("Wheel zoom");
 
   clickButton(requireButton(viewPanel, "Sprinkler"));
   expect(onDisplayToggle).toHaveBeenCalledExactlyOnceWith("showSprinklerRadius");
@@ -254,14 +253,13 @@ it("toggles range and resource-clump options and disables NPC paths on unsupport
       displayOptions,
       selectedMapId: "bus-stop",
       panelPosition: "left",
-      toolIsZoom: false,
-      showZoomOption: false,
       onBehaviorChange: vi.fn(),
       onDisplayToggle: supportedNpcPathChange,
       onPanelPositionChange: vi.fn(),
-      onZoomToggle: vi.fn(),
     }),
   );
+
+  expect(textContent(busStopPanel)).not.toContain("Wheel zoom");
   const supportedNpcPathButton = requireButton(busStopPanel, "NPC paths");
   expect(supportedNpcPathButton.props.disabled).toBe(false);
   clickButton(supportedNpcPathButton);

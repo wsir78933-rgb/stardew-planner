@@ -41,9 +41,6 @@ type EditorModalProperties = Readonly<{
   ambienceOptions?: PlannerAmbienceOptions;
   onSeasonChange?: (season: TilesheetSeason) => void;
   onAmbienceChange?: (options: PlannerAmbienceOptions) => void;
-  toolIsZoom?: boolean;
-  showZoomOption?: boolean;
-  onZoomToggle?: () => void;
   copy: EditorModalCopy;
   modalId: EditorModalId | null;
   selectedMapId: string;
@@ -85,9 +82,6 @@ export function EditorModal({
   ambienceOptions = createInitialPlannerAmbienceOptions(),
   onSeasonChange = missingSceneControl,
   onAmbienceChange = missingSceneControl,
-  toolIsZoom = false,
-  showZoomOption = false,
-  onZoomToggle = missingSceneControl,
   copy,
   modalId,
   selectedMapId,
@@ -249,9 +243,6 @@ export function EditorModal({
             onPanelPositionChange={onPanelPositionChange}
             panelPosition={panelPosition}
             selectedMapId={selectedMapId}
-            toolIsZoom={toolIsZoom}
-            showZoomOption={showZoomOption}
-            onZoomToggle={onZoomToggle}
           />
         ) : null}
         {modalId === "save-panel" ? savePanelContent : null}

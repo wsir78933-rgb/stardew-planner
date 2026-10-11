@@ -12,7 +12,6 @@ export const editorTools = [
   "multi-select",
   "fill",
   "erase",
-  "zoom",
 ] as const;
 
 export const editorCatalogCategories = catalogSidebarCategories;
@@ -61,7 +60,6 @@ export const editorToolAvailability: Readonly<Record<EditorTool, boolean>> = {
   "multi-select": true,
   fill: true,
   erase: true,
-  zoom: true,
 };
 
 const compactLayoutMaximumWidth = 1400;

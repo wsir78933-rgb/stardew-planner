@@ -105,9 +105,9 @@ export function FarmMapConfigPanel({ locale, selectedMapId, mapRenderOptions, on
   );
 }
 
-export function ViewConfigPanel({ locale, behaviorOptions, displayOptions, selectedMapId, panelPosition, toolIsZoom, onBehaviorChange, onDisplayToggle, onPanelPositionChange, onZoomToggle, showZoomOption }: Readonly<{
-  locale: Locale; behaviorOptions: EditorBehaviorOptions; displayOptions: EditorDisplayOptions; selectedMapId: string; panelPosition: EditorPanelPosition; toolIsZoom: boolean; showZoomOption: boolean;
-  onBehaviorChange: BehaviorChange; onDisplayToggle: (option: EditorDisplayOptionKey) => void; onPanelPositionChange: (position: EditorPanelPosition) => void; onZoomToggle: () => void;
+export function ViewConfigPanel({ locale, behaviorOptions, displayOptions, selectedMapId, panelPosition, onBehaviorChange, onDisplayToggle, onPanelPositionChange }: Readonly<{
+  locale: Locale; behaviorOptions: EditorBehaviorOptions; displayOptions: EditorDisplayOptions; selectedMapId: string; panelPosition: EditorPanelPosition;
+  onBehaviorChange: BehaviorChange; onDisplayToggle: (option: EditorDisplayOptionKey) => void; onPanelPositionChange: (position: EditorPanelPosition) => void;
 }>) {
   const isChinese = locale === "zh";
   const viewCopy = getEditorModalCopy(isChinese ? "zh-CN" : "en").view;
@@ -126,7 +126,6 @@ export function ViewConfigPanel({ locale, behaviorOptions, displayOptions, selec
     </ConfigSection>
     <ConfigSection title={isChinese ? "禁放格" : "Blocked tiles"}>{blockedKeys.map((key, index) => <OptionSwitch locale={locale} key={key} color="#dc1818" title={viewCopy.optionGroups[1].options[index].title} label={blockedLabels[index]} enabled={displayOptions[key]} onToggle={() => onDisplayToggle(key)} />)}</ConfigSection>
     <ConfigSection title={isChinese ? "目录位置" : "Catalog position"}><div className="editor-config-segmented">{(["left", "bottom"] as const).map((position) => <button type="button" key={position} aria-pressed={panelPosition === position} onClick={() => onPanelPositionChange(position)}>{position === "left" ? isChinese ? "左侧" : "Left" : isChinese ? "底部" : "Bottom"}</button>)}</div></ConfigSection>
-    {showZoomOption ? <ConfigSection title={isChinese ? "画布" : "Canvas"}><OptionSwitch locale={locale} label={isChinese ? "滚轮缩放" : "Wheel zoom"} enabled={toolIsZoom} onToggle={onZoomToggle} /></ConfigSection> : null}
   </div>;
 }
 

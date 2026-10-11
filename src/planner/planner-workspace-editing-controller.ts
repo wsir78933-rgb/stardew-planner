@@ -139,11 +139,7 @@ export function applyPlannerWorkspaceMapTileClick(
 ): PlannerWorkspaceEditingTransition {
   assertPlannerWorkspaceMapTileClickInput(plannerWorkspaceMapTileClickInput);
 
-  if (
-    plannerWorkspaceMapTileClickInput.tool === "cursor" ||
-    (plannerWorkspaceMapTileClickInput.tool === "zoom" &&
-      plannerWorkspaceMapTileClickInput.selectedCatalogItem !== null)
-  ) {
+  if (plannerWorkspaceMapTileClickInput.tool === "cursor") {
     return applyCursorTileClick(plannerWorkspaceMapTileClickInput);
   }
 
@@ -195,10 +191,6 @@ export function getPlannerWorkspaceCatalogItemSelectionTool(
   currentTool: EditorTool | null,
   catalogItem: CatalogItem,
 ): EditorTool {
-  if (currentTool === "zoom") {
-    return "zoom";
-  }
-
   if (currentTool === "fill" && catalogItem.allowedTools.includes("fill")) {
     return "fill";
   }

@@ -119,16 +119,16 @@ describe("editor view state", () => {
     expect(selectEditorTool(initialEditorViewState, "fill").tool).toBe("fill");
   });
 
-  it("keeps Cursor initial while accepting Zoom and no selected tool", () => {
+  it("keeps Cursor initial while accepting Erase and no selected tool", () => {
     const initialEditorViewState = createInitialEditorViewState();
-    const zoomEditorViewState = selectEditorTool(
+    const eraseEditorViewState = selectEditorTool(
       initialEditorViewState,
-      "zoom",
+      "erase",
     );
-    const noToolEditorViewState = selectEditorTool(zoomEditorViewState, null);
+    const noToolEditorViewState = selectEditorTool(eraseEditorViewState, null);
 
     expect(initialEditorViewState.tool).toBe("cursor");
-    expect(zoomEditorViewState.tool).toBe("zoom");
+    expect(eraseEditorViewState.tool).toBe("erase");
     expect(noToolEditorViewState.tool).toBeNull();
   });
 
