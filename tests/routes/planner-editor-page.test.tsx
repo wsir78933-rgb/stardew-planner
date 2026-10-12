@@ -20,24 +20,6 @@ const expectedPlannerFarmMapIds = [
   "meadowlands",
 ] as const;
 
-const whyChooseImageSources = [
-  "/homepage/why-choose/beach-decorative-machooo.webp",
-  "/homepage/why-choose/beach-geometric-jennameeps.webp",
-  "/homepage/why-choose/beach-organized-justkuwl.webp",
-  "/homepage/why-choose/beach-processing-shady-kegyard.webp",
-  "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
-  "/homepage/why-choose/fourcorners-balanced-emerald.webp",
-  "/homepage/why-choose/fourcorners-coop-hallofax.webp",
-] as const;
-
-const featuresGalleryImageSources = [
-  "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
-  "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
-  "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
-  "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
-  "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
-] as const;
-
 function readHomepageHeaderMarkup(pageMarkup: string): string {
   const homepageHeaderAttributePosition = pageMarkup.indexOf(
     "data-homepage-header",
@@ -92,31 +74,22 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain("data-homepage-hero-emphasis");
     expect(plannerPageMarkup).toContain("data-homepage-workspace");
     expect(plannerPageMarkup).toContain("data-homepage-product-stage");
-    expect(plannerPageMarkup).toContain('data-homepage-features="true"');
-    expect(plannerPageMarkup).toContain('data-homepage-why-choose="true"');
+    expect(plannerPageMarkup).not.toContain('data-homepage-features="true"');
+    expect(plannerPageMarkup).not.toContain('data-homepage-why-choose="true"');
     expect(plannerPageMarkup).toContain('data-homepage-how-to="true"');
     expect(plannerPageMarkup).toContain('data-homepage-closing-cta="true"');
     expect(plannerPageMarkup).toContain("What is Stardew Valley Planner?");
-    expect(plannerPageMarkup).toContain("Meadowlands Farm Layout Examples");
-    expect(plannerPageMarkup).toContain("Beach &amp; Four Corners Farm Layout Examples");
+    expect(plannerPageMarkup).not.toContain("Meadowlands Farm Layout Examples");
+    expect(plannerPageMarkup).not.toContain("Beach &amp; Four Corners Farm Layout Examples");
     expect(plannerPageMarkup).not.toContain("Why use this planner");
-    expect(plannerPageMarkup).toContain(
+    expect(plannerPageMarkup).not.toContain(
       'id="homepage-why-choose-heading"',
     );
     expect(plannerPageMarkup).toContain("Lay out the farm in three passes");
     expect(plannerPageMarkup).toContain(
       "Finish the layout on this page, then build in-game.",
     );
-    for (const featuresGalleryImageSource of featuresGalleryImageSources) {
-      expect(plannerPageMarkup).toContain(`src="${featuresGalleryImageSource}"`);
-    }
-    expect(plannerPageMarkup).toContain("data-homepage-why-choose");
-    expect(plannerPageMarkup).toContain("data-homepage-animated-testimonials");
-    expect(plannerPageMarkup).toContain("data-circular-testimonials");
     expect(plannerPageMarkup).not.toContain("data-homepage-features-gallery");
-    for (const whyChooseImageSource of whyChooseImageSources) {
-      expect(plannerPageMarkup).toContain(`src="${whyChooseImageSource}"`);
-    }
     expect(plannerPageMarkup).not.toContain(
       'src="/homepage/how-to-pixel-farm.webp"',
     );
@@ -128,8 +101,10 @@ describe("planner editor page", () => {
     const homepageSectionMarkers = [
       'data-homepage-workspace="true"',
       'id="what-is"',
+      ...homepageCopyByLocale.en.caseStudies.map(
+        (caseStudyGroup) => `id="${caseStudyGroup.id}"`,
+      ),
       'id="capabilities"',
-      'id="why-choose"',
       'id="how-to"',
       'data-homepage-closing-cta="true"',
       'id="faq"',
@@ -245,8 +220,10 @@ describe("planner editor page", () => {
       const homepageSectionMarkers = [
         "data-test-planner-workspace",
         'id="what-is"',
+        ...homepageCopy.caseStudies.map(
+          (caseStudyGroup) => `id="${caseStudyGroup.id}"`,
+        ),
         'id="capabilities"',
-        'id="why-choose"',
         'id="how-to"',
         'data-homepage-closing-cta="true"',
         'id="faq"',
@@ -271,24 +248,232 @@ describe("planner editor page", () => {
       for (const introductionItem of homepageCopy.whatIs.items) {
         expect(homepageMarkup).toContain(introductionItem.description);
       }
+      expect(homepageCopy.caseStudies).toHaveLength(3);
+      expect(
+        homepageCopy.caseStudies.map(
+          (caseStudyGroup) => caseStudyGroup.imagePosition,
+        ),
+      ).toEqual(["left", "right", "left"]);
+      let renderedCaseStudyImageCount = 0;
+      for (
+        const [groupIndex, caseStudyGroup] of homepageCopy.caseStudies.entries()
+      ) {
+        const caseStudySectionStartMarker =
+          `data-homepage-case-study-group="${caseStudyGroup.id}"`;
+        const caseStudySectionMarkerIndex = homepageMarkup.indexOf(
+          caseStudySectionStartMarker,
+        );
+        if (caseStudySectionMarkerIndex < 0) {
+          throw new Error(
+            `Missing case study section marker ${JSON.stringify(caseStudySectionStartMarker)}`,
+          );
+        }
+        const caseStudySectionStart = homepageMarkup.lastIndexOf(
+          "<section",
+          caseStudySectionMarkerIndex,
+        );
+        if (caseStudySectionStart < 0) {
+          throw new Error(
+            `Missing <section> before case study marker ${JSON.stringify(caseStudySectionStartMarker)}`,
+          );
+        }
+        const caseStudySectionClosingTag = "</section>";
+        const caseStudySectionClosingTagIndex = homepageMarkup.indexOf(
+          caseStudySectionClosingTag,
+          caseStudySectionStart,
+        );
+        if (caseStudySectionClosingTagIndex < 0) {
+          throw new Error(
+            `Missing ${JSON.stringify(caseStudySectionClosingTag)} after case study marker ${JSON.stringify(caseStudySectionStartMarker)}`,
+          );
+        }
+        const caseStudySectionEnd =
+          caseStudySectionClosingTagIndex + caseStudySectionClosingTag.length;
+        const caseStudySectionMarkup = homepageMarkup.slice(
+          caseStudySectionStart,
+          caseStudySectionEnd,
+        );
+        expect(caseStudySectionMarkup).toContain(
+          "data-homepage-content-section",
+        );
+        expect(caseStudySectionMarkup).toContain(`id="${caseStudyGroup.id}"`);
+        expect(caseStudySectionMarkup).toContain(
+          `data-image-position="${caseStudyGroup.imagePosition}"`,
+        );
+        if (groupIndex === 0) {
+          expect(caseStudySectionMarkup).toContain(
+            'aria-labelledby="farm-cases-heading"',
+          );
+          expect(caseStudySectionMarkup).toContain(
+            'aria-describedby="farm-cases-description"',
+          );
+          expect(caseStudySectionMarkup).toContain(
+            `<h2 id="farm-cases-heading">${homepageCopy.caseStudiesHeading}</h2>`,
+          );
+          expect(caseStudySectionMarkup).toMatch(
+            /<header\b(?=[^>]*data-homepage-case-study-header="true")[^>]*>/,
+          );
+          expect(caseStudySectionMarkup).toMatch(
+            /<p\b(?=[^>]*id="farm-cases-description")(?=[^>]*data-homepage-case-study-description="true")[^>]*>/,
+          );
+          expect(caseStudySectionMarkup).toContain(
+            homepageCopy.caseStudiesDescription,
+          );
+        } else {
+          expect(caseStudySectionMarkup).toContain(
+            `aria-label="${caseStudyGroup.heading}"`,
+          );
+          expect(caseStudySectionMarkup).not.toContain("<h2");
+          expect(caseStudySectionMarkup).not.toContain(
+            "data-homepage-case-study-header",
+          );
+          expect(caseStudySectionMarkup).not.toContain(
+            "data-homepage-case-study-description",
+          );
+          expect(caseStudySectionMarkup).not.toContain(
+            homepageCopy.caseStudiesDescription,
+          );
+        }
+        expect(caseStudyGroup.testimonials).toHaveLength(4);
+        expect(
+          caseStudySectionMarkup.match(/data-circular-testimonials-image/g),
+        ).toHaveLength(4);
+        renderedCaseStudyImageCount += caseStudyGroup.testimonials.length;
+        for (const caseStudy of caseStudyGroup.testimonials) {
+          expect(caseStudySectionMarkup).toContain(`src="${caseStudy.src}"`);
+          expect(caseStudySectionMarkup).toContain(`alt="${caseStudy.alt}"`);
+        }
+      }
+      expect(
+        homepageMarkup.match(/<h2 id="farm-cases-heading">/g),
+      ).toHaveLength(1);
+      expect(
+        homepageMarkup.match(/data-homepage-case-study-header/g),
+      ).toHaveLength(1);
+      expect(
+        homepageMarkup.match(/data-homepage-case-study-description/g),
+      ).toHaveLength(1);
+      expect(
+        homepageMarkup.match(/aria-describedby="farm-cases-description"/g),
+      ).toHaveLength(1);
+      expect(renderedCaseStudyImageCount).toBe(12);
+      const whatIsSectionStart = homepageMarkup.indexOf(
+        'data-homepage-what-is="true"',
+      );
+      const firstCaseStudySectionStart = homepageMarkup.indexOf(
+        `data-homepage-case-study-group="${homepageCopy.caseStudies[0].id}"`,
+      );
+      expect(whatIsSectionStart).toBeGreaterThanOrEqual(0);
+      expect(firstCaseStudySectionStart).toBeGreaterThan(whatIsSectionStart);
       const whatIsSectionMarkup = homepageMarkup.slice(
-        homepageMarkup.indexOf('data-homepage-what-is="true"'),
-        homepageMarkup.indexOf('id="capabilities"'),
+        whatIsSectionStart,
+        firstCaseStudySectionStart,
       );
       expect(whatIsSectionMarkup).toContain('src="/homepage/what-is/farm-layout-overview.png"');
       expect(whatIsSectionMarkup).toContain(`alt="${homepageCopy.whatIs.imageAlt}"`);
 
-      expect(homepageMarkup).toContain('data-homepage-features="true"');
-      expect(homepageMarkup).toContain(homepageCopy.features.heading);
-      expect(homepageMarkup).toContain("data-circular-testimonials");
-      expect(homepageMarkup).not.toContain("data-homepage-features-gallery");
-      for (const featureSlide of homepageCopy.features.testimonials) {
-        expect(homepageMarkup).toContain(featureSlide.name);
-        expect(homepageMarkup).toContain(featureSlide.quote);
-        expect(homepageMarkup).toContain(featureSlide.imageAlt);
-        expect(homepageMarkup).toContain(`src="${featureSlide.src}"`);
+      const featureIntroductionSectionMarker = 'id="capabilities"';
+      const featureIntroductionSectionMarkerIndex = homepageMarkup.indexOf(
+        featureIntroductionSectionMarker,
+      );
+      if (featureIntroductionSectionMarkerIndex < 0) {
+        throw new Error(
+          `Missing feature introduction section marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+        );
+      }
+      const featureIntroductionSectionStart = homepageMarkup.lastIndexOf(
+        "<section",
+        featureIntroductionSectionMarkerIndex,
+      );
+      if (featureIntroductionSectionStart < 0) {
+        throw new Error(
+          `Missing <section> before feature introduction marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+        );
+      }
+      const featureIntroductionSectionClosingTag = "</section>";
+      const featureIntroductionSectionClosingTagIndex = homepageMarkup.indexOf(
+        featureIntroductionSectionClosingTag,
+        featureIntroductionSectionStart,
+      );
+      if (featureIntroductionSectionClosingTagIndex < 0) {
+        throw new Error(
+          `Missing ${JSON.stringify(featureIntroductionSectionClosingTag)} after feature introduction marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+        );
+      }
+      const featureIntroductionSectionEnd =
+        featureIntroductionSectionClosingTagIndex +
+        featureIntroductionSectionClosingTag.length;
+      const homepageHowToMarker = 'data-homepage-how-to="true"';
+      const homepageHowToMarkerIndex = homepageMarkup.indexOf(
+        homepageHowToMarker,
+        featureIntroductionSectionEnd,
+      );
+      if (homepageHowToMarkerIndex < 0) {
+        throw new Error(
+          `Missing ${JSON.stringify(homepageHowToMarker)} after feature introduction marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+        );
+      }
+      expect(homepageHowToMarkerIndex).toBeGreaterThan(
+        featureIntroductionSectionEnd,
+      );
+      const featureIntroductionSectionMarkup = homepageMarkup.slice(
+        featureIntroductionSectionStart,
+        featureIntroductionSectionEnd,
+      );
+      expect(featureIntroductionSectionMarkup).toContain(
+        'data-homepage-feature-introduction="true"',
+      );
+      expect(featureIntroductionSectionMarkup).not.toContain(
+        "data-circular-testimonials",
+      );
+      const expectedFeatureIntroductionHeading =
+        homepageCopy.featureIntroduction.heading;
+      expect(featureIntroductionSectionMarkup).toContain(
+        `<h2 id="homepage-feature-introduction-heading">${expectedFeatureIntroductionHeading}</h2>`,
+      );
+      expect(featureIntroductionSectionMarkup).toContain(
+        'data-homepage-feature-introduction-header="true"',
+      );
+      expect(featureIntroductionSectionMarkup).toContain(
+        `<p data-homepage-feature-introduction-overview="true">${homepageCopy.featureIntroduction.description}</p>`,
+      );
+      expect(featureIntroductionSectionMarkup).toMatch(
+        /<ul\b(?=[^>]*data-homepage-feature-introduction-list="true")(?=[^>]*role="list")[^>]*>/,
+      );
+      expect(homepageCopy.featureIntroduction.items).toHaveLength(6);
+      expect(
+        featureIntroductionSectionMarkup.match(
+          /data-homepage-feature-introduction-item="true"/g,
+        ),
+      ).toHaveLength(6);
+      expect(
+        featureIntroductionSectionMarkup.match(
+          /<article data-homepage-feature-introduction-card="true">/g,
+        ),
+      ).toHaveLength(6);
+      const featureIntroductionIcons =
+        featureIntroductionSectionMarkup.match(/<svg\b[^>]*>/g) ?? [];
+      expect(featureIntroductionIcons).toHaveLength(6);
+      for (const featureIntroductionIcon of featureIntroductionIcons) {
+        expect(featureIntroductionIcon).toContain('aria-hidden="true"');
+        expect(featureIntroductionIcon).toContain('focusable="false"');
+      }
+      expect(featureIntroductionSectionMarkup).not.toMatch(/<(?:a|button)\b/i);
+      for (const featureIntroductionItem of homepageCopy.featureIntroduction.items) {
+        expect(featureIntroductionSectionMarkup).toContain(
+          `<h3 data-homepage-feature-introduction-title="true">${featureIntroductionItem.title.replaceAll("'", "&#x27;")}</h3>`,
+        );
+        expect(featureIntroductionSectionMarkup).toContain(
+          `<p data-homepage-feature-introduction-description="true">${featureIntroductionItem.description.replaceAll("'", "&#x27;")}</p>`,
+        );
       }
 
+      expect(homepageMarkup).not.toContain('data-homepage-features="true"');
+      expect(homepageMarkup).not.toContain(homepageCopy.features.heading);
+      expect(homepageMarkup).not.toContain('data-homepage-why-choose="true"');
+      expect(homepageMarkup).not.toContain(
+        homepageCopy.whyChoose.heading.replaceAll("&", "&amp;"),
+      );
       expect(homepageMarkup).toContain('data-homepage-how-to="true"');
       expect(homepageMarkup).toContain('id="how-to"');
       expect(homepageMarkup).toContain('id="homepage-how-to-heading"');
@@ -306,21 +491,6 @@ describe("planner editor page", () => {
             howToBenefit.replaceAll("'", "&#x27;"),
           );
         }
-      }
-
-      expect(homepageMarkup).toContain('data-homepage-why-choose="true"');
-      expect(homepageMarkup).toContain(homepageCopy.whyChoose.heading.replaceAll("&", "&amp;"));
-      expect(homepageMarkup).toContain("data-homepage-animated-testimonials");
-      expect(homepageMarkup).toContain(homepageCopy.whyChoose.previousLabel);
-      expect(homepageMarkup).toContain(homepageCopy.whyChoose.nextLabel);
-      const firstFarmLayoutSlide = homepageCopy.whyChoose.testimonials[0];
-      expect(homepageMarkup).toContain(firstFarmLayoutSlide.quote);
-      expect(homepageMarkup).toContain(firstFarmLayoutSlide.name);
-      expect(homepageMarkup).toContain(firstFarmLayoutSlide.designation);
-      expect(homepageMarkup).toContain(firstFarmLayoutSlide.imageAlt);
-      for (const farmLayoutSlide of homepageCopy.whyChoose.testimonials) {
-        expect(homepageMarkup).toContain(`src="${farmLayoutSlide.src}"`);
-        expect(homepageMarkup).toContain(farmLayoutSlide.imageAlt);
       }
 
       expect(homepageMarkup).toContain(homepageCopy.closingCta.heading);

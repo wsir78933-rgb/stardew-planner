@@ -21,6 +21,10 @@ test("ships every approved locale with the same top-level homepage sections", ()
     "hero",
     "plannerPreview",
     "whatIs",
+    "caseStudiesHeading",
+    "caseStudiesDescription",
+    "caseStudies",
+    "featureIntroduction",
     "features",
     "whyChoose",
     "howTo",
@@ -53,6 +57,72 @@ test("provides the replacement sections with exact bilingual headings and item c
             title: "Who can use it",
             description:
               "New players planning their first farm, experienced players expanding or reorganizing, and anyone who enjoys designing paths, gardens, and farm scenery.",
+          },
+        ],
+      },
+      caseStudiesHeading: "Stardew Valley Planner Examples",
+      caseStudiesDescription:
+        "Explore 12 farm layouts across different maps. Get ideas for arranging fields, buildings, fish ponds, and paths when starting a farm, reorganizing its zones, or designing a garden.",
+      caseStudies: [
+        {
+          id: "farm-cases",
+          heading: "Standard Farm Layouts",
+          imagePosition: "left",
+          testimonialCount: 4,
+        },
+        {
+          id: "farm-cases-2",
+          heading: "Garden Zones Across Farm Maps",
+          imagePosition: "right",
+          testimonialCount: 4,
+        },
+        {
+          id: "farm-cases-3",
+          heading: "Layouts Shaped by Terrain",
+          imagePosition: "left",
+          testimonialCount: 4,
+        },
+      ],
+      featureIntroduction: {
+        heading: "Plan Your Farm Layout",
+        description:
+          "Try out your farm layout on the overhead map before building in-game. Compare seasonal views and coverage, then save a project or export an image to guide future changes.",
+        items: [
+          {
+            icon: "map",
+            title: "Choose a farm map",
+            description:
+              "Choose among eight farm maps—Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, or Meadowlands—or choose Ginger Island. Match the map to your game and shape the layout around its terrain.",
+          },
+          {
+            icon: "layout",
+            title: "Place and edit your layout",
+            description:
+              "Place buildings, crops, trees, paths, and decorations, then move selected items as plans change. Fill rectangular areas with supported items, erase an area, or undo and redo edits to refine each zone.",
+          },
+          {
+            icon: "coverage",
+            title: "Check coverage ranges",
+            description:
+              "Show sprinkler, scarecrow, Bee House, and Junimo Hut ranges on the map. Check how crop areas line up with nearby facilities as you plan where fields and farm areas should go.",
+          },
+          {
+            icon: "seasons",
+            title: "Preview four seasons",
+            description:
+              "Switch between spring, summer, fall, and winter to preview the map in each season. See the seasonal landscape while arranging paths, trees, and garden areas.",
+          },
+          {
+            icon: "projects",
+            title: "Save and transfer projects",
+            description:
+              "Projects are saved in this browser, so you can reopen a plan later. Export JSON to keep a separate project file, or import an existing JSON project to continue from it.",
+          },
+          {
+            icon: "export",
+            title: "Export layout screenshots",
+            description:
+              "Export the current layout as a PNG at 1× or 2× resolution. Keep the image with your design notes or use it as a visual reference while building in-game.",
           },
         ],
       },
@@ -163,6 +233,72 @@ test("provides the replacement sections with exact bilingual headings and item c
           },
         ],
       },
+      caseStudiesHeading: "星露谷物语农场规划案例",
+      caseStudiesDescription:
+        "浏览 12 个不同地图的农场布局，参考田地、建筑、鱼塘与道路的分区方式，为新农场规划、现有布局调整和庭院设计寻找灵感。",
+      caseStudies: [
+        {
+          id: "farm-cases",
+          heading: "标准农场布局",
+          imagePosition: "left",
+          testimonialCount: 4,
+        },
+        {
+          id: "farm-cases-2",
+          heading: "不同农场地图的庭院分区",
+          imagePosition: "right",
+          testimonialCount: 4,
+        },
+        {
+          id: "farm-cases-3",
+          heading: "顺应地形的农场布局",
+          imagePosition: "left",
+          testimonialCount: 4,
+        },
+      ],
+      featureIntroduction: {
+        heading: "规划你的农场布局",
+        description:
+          "进游戏建造前，先在俯视地图上试排整体布局。对比四季外观和设施覆盖，再保存项目或导出图片，方便后续调整。",
+        items: [
+          {
+            icon: "map",
+            title: "选择农场地图",
+            description:
+              "可从标准、河流、森林、山顶、荒野、四角、海滩和草原八种农场地图中选择，也可规划姜岛。选定正在游玩的地图后，可按地形安排各个区域。",
+          },
+          {
+            icon: "layout",
+            title: "摆放和调整布局",
+            description:
+              "在地图上摆放建筑、作物、树木、道路和装饰，选中后即可移动位置。支持填充的物品可以在矩形区域批量铺放，还可擦除区域、撤销或重做修改，逐步调整农场分区。",
+          },
+          {
+            icon: "coverage",
+            title: "查看覆盖范围",
+            description:
+              "可在地图上显示洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。布置田地与设施时，查看作物区域是否落在对应范围内，再据此调整位置。",
+          },
+          {
+            icon: "seasons",
+            title: "预览四季外观",
+            description:
+              "切换春、夏、秋、冬，预览地图在不同季节的外观。规划道路、树木和庭院时，可先查看季节变化下的场景，再决定布局是否合适。",
+          },
+          {
+            icon: "projects",
+            title: "保存和导入导出项目",
+            description:
+              "项目保存在当前浏览器，之后可以重新打开继续规划。需要留存或转移文件时，可导出 JSON；也可导入已有 JSON 项目，接着调整布局。",
+          },
+          {
+            icon: "export",
+            title: "导出布局截图",
+            description:
+              "可将当前布局导出为 PNG 图片，选择 1 倍或 2 倍分辨率。保存截图作为规划记录，也可在游戏内建造时对照布局。",
+          },
+        ],
+      },
       features: {
         heading: "草原农场布局案例",
         previousLabel: "上一个案例",
@@ -256,6 +392,28 @@ test("provides the replacement sections with exact bilingual headings and item c
     expect(homepageCopy).not.toHaveProperty("capabilities");
     expect(homepageCopy.whatIs).toEqual(expected.whatIs);
     expect(homepageCopy.whatIs.items).toHaveLength(3);
+    expect(homepageCopy.caseStudiesHeading).toBe(expected.caseStudiesHeading);
+    expect(homepageCopy.caseStudiesDescription).toBe(
+      expected.caseStudiesDescription,
+    );
+    expect(
+      homepageCopy.caseStudies.map((caseStudyGroup) => ({
+        id: caseStudyGroup.id,
+        heading: caseStudyGroup.heading,
+        imagePosition: caseStudyGroup.imagePosition,
+        testimonialCount: caseStudyGroup.testimonials.length,
+      })),
+    ).toEqual(expected.caseStudies);
+    expect(homepageCopy.caseStudies).toHaveLength(3);
+    expect(
+      homepageCopy.caseStudies.flatMap((caseStudyGroup) =>
+        caseStudyGroup.testimonials.map((testimonial) => testimonial.src),
+      ),
+    ).toHaveLength(12);
+    expect(homepageCopy.featureIntroduction).toEqual(
+      expected.featureIntroduction,
+    );
+    expect(homepageCopy.featureIntroduction.items).toHaveLength(6);
     expect(homepageCopy.features).toMatchObject({
       heading: expected.features.heading,
       previousLabel: expected.features.previousLabel,

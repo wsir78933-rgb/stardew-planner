@@ -2,10 +2,7 @@ import type {
   MapImageExporter,
   ScreenshotResolution,
 } from "../projects/map-image-export";
-import {
-  createMapScreenshotDimensions,
-  getMapScreenshotFooterHeight,
-} from "../rendering/map-screenshot";
+import { createMapScreenshotDimensions } from "../rendering/map-screenshot";
 
 type ScreenshotTransformPointPort = Readonly<{
   x: number;
@@ -47,11 +44,7 @@ export function createMapImageCaptureMethods(
       return createPngBlob(await input.captureMapScreenshotCanvas(resolution));
     },
     async captureScreenshot(resolution): Promise<Blob> {
-      const mapScreenshotCanvas = await input.captureMapScreenshotCanvas(resolution);
-      return createPngBlob(createWatermarkedScreenshotCanvas({
-        createCanvasElement: input.createCanvasElement,
-        mapScreenshotCanvas,
-      }));
+      return createPngBlob(await input.captureMapScreenshotCanvas(resolution));
     },
   };
 }
@@ -185,43 +178,6 @@ function assertHtmlCanvasElement(
   }
 
   return extractedCanvas;
-}
-
-function createWatermarkedScreenshotCanvas(
-  input: Readonly<{
-    createCanvasElement: () => HTMLCanvasElement;
-    mapScreenshotCanvas: HTMLCanvasElement;
-  }>,
-): HTMLCanvasElement {
-  const footerHeight = getMapScreenshotFooterHeight(input.mapScreenshotCanvas.height);
-  const watermarkedScreenshotCanvas = input.createCanvasElement();
-  watermarkedScreenshotCanvas.width = input.mapScreenshotCanvas.width;
-  watermarkedScreenshotCanvas.height = input.mapScreenshotCanvas.height + footerHeight;
-  const canvasContext = watermarkedScreenshotCanvas.getContext("2d");
-
-  if (canvasContext === null) {
-    throw new Error("Map screenshot export could not create a 2D canvas context.");
-  }
-
-  canvasContext.drawImage(input.mapScreenshotCanvas, 0, 0);
-  canvasContext.fillStyle = "#03311C";
-  canvasContext.fillRect(
-    0,
-    input.mapScreenshotCanvas.height,
-    watermarkedScreenshotCanvas.width,
-    footerHeight,
-  );
-  const watermarkFontSize = Math.max(12, Math.round(footerHeight * 0.55));
-  canvasContext.font = `600 ${String(watermarkFontSize)}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-  canvasContext.fillStyle = "#eaf5ee";
-  canvasContext.textBaseline = "middle";
-  canvasContext.fillText(
-    "StardewPlan.com",
-    Math.round(footerHeight * 0.5),
-    input.mapScreenshotCanvas.height + footerHeight / 2,
-  );
-
-  return watermarkedScreenshotCanvas;
 }
 
 function createPngBlob(screenshotCanvas: HTMLCanvasElement): Promise<Blob> {

@@ -6,6 +6,7 @@ import {
   type Element as XmlElement,
 } from "@xmldom/xmldom";
 import { describe, expect, it } from "vitest";
+import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
 
 const expectedSocialImageUrl =
   "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
@@ -50,10 +51,16 @@ type StaticHomepageExpectation = Readonly<{
   heroTrustedBy: string;
   whatIsHeading: string;
   whatIsDescriptions: readonly string[];
-  featuresHeading: string;
-  featuresDescriptions: readonly string[];
-  whyChooseHeading: string;
-  whyChooseDescriptions: readonly string[];
+  caseStudiesHeading: string;
+  caseStudiesDescription: string;
+  featureIntroductionHeading: string;
+  featureIntroductionDescription: string;
+  featureIntroductionItems: readonly Readonly<{
+    icon: "map" | "layout" | "coverage" | "seasons" | "projects" | "export";
+    title: string;
+    description: string;
+  }>[];
+  removedSectionHeadings: readonly string[];
   howToHeading: string;
   howToDescriptions: readonly string[];
   closingCtaHeading: string;
@@ -1707,23 +1714,53 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Before starting a farm, decide where fields, barns, and paths will go. When expanding or rearranging, try positions for the greenhouse, coops, and processing areas while leaving routes between buildings. For a redesign, experiment with paths, trees, and garden spaces.",
       "New players planning their first farm, experienced players expanding or reorganizing, and anyone who enjoys designing paths, gardens, and farm scenery.",
     ],
-    featuresHeading: "Meadowlands Farm Layout Examples",
-    featuresDescriptions: [
-      "Autumn colors run through a dense mix of crop rows, paths, ponds, and farm buildings.",
-      "Spring trees and decorations surround crop plots, ponds, paths, and farm buildings.",
-      "Fields, trees, ponds, and farm buildings share the map in a bright summer palette.",
-      "A forested map brings paths, crop plots, ponds, buildings, and decorative areas together.",
-      "This vanilla Year 7 layout places crop plots, buildings, paths, and ponds across Meadowlands.",
+    caseStudiesHeading: "Stardew Valley Planner Examples",
+    caseStudiesDescription:
+      "Explore 12 farm layouts across different maps. Get ideas for arranging fields, buildings, fish ponds, and paths when starting a farm, reorganizing its zones, or designing a garden.",
+    featureIntroductionHeading: "Plan Your Farm Layout",
+    featureIntroductionDescription:
+      "Try out your farm layout on the overhead map before building in-game. Compare seasonal views and coverage, then save a project or export an image to guide future changes.",
+    featureIntroductionItems: [
+      {
+        icon: "map",
+        title: "Choose a farm map",
+        description:
+          "Choose among eight farm maps—Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, or Meadowlands—or choose Ginger Island. Match the map to your game and shape the layout around its terrain.",
+      },
+      {
+        icon: "layout",
+        title: "Place and edit your layout",
+        description:
+          "Place buildings, crops, trees, paths, and decorations, then move selected items as plans change. Fill rectangular areas with supported items, erase an area, or undo and redo edits to refine each zone.",
+      },
+      {
+        icon: "coverage",
+        title: "Check coverage ranges",
+        description:
+          "Show sprinkler, scarecrow, Bee House, and Junimo Hut ranges on the map. Check how crop areas line up with nearby facilities as you plan where fields and farm areas should go.",
+      },
+      {
+        icon: "seasons",
+        title: "Preview four seasons",
+        description:
+          "Switch between spring, summer, fall, and winter to preview the map in each season. See the seasonal landscape while arranging paths, trees, and garden areas.",
+      },
+      {
+        icon: "projects",
+        title: "Save and transfer projects",
+        description:
+          "Projects are saved in this browser, so you can reopen a plan later. Export JSON to keep a separate project file, or import an existing JSON project to continue from it.",
+      },
+      {
+        icon: "export",
+        title: "Export layout screenshots",
+        description:
+          "Export the current layout as a PNG at 1× or 2× resolution. Keep the image with your design notes or use it as a visual reference while building in-game.",
+      },
     ],
-    whyChooseHeading: "Beach & Four Corners Farm Layout Examples",
-    whyChooseDescriptions: [
-      "Flowering trees, small garden plots, and paths give this coastal layout a garden-like feel.",
-      "Paths and crop plots form a diamond pattern around the farm buildings.",
-      "Stone paths connect the fields and buildings while tracing the coastal map.",
-      "Rows of processing machines sit among paths, crop plots, and farm buildings.",
-      "Paths, crop plots, trees, and buildings occupy separate areas across the map.",
-      "Crop plots, farm buildings, paths, and water share this map in a balanced layout.",
-      "Rows of coops and crop fields fill the map alongside paths and work areas.",
+    removedSectionHeadings: [
+      "Meadowlands Farm Layout Examples",
+      "Beach &amp; Four Corners Farm Layout Examples",
     ],
     howToHeading: "Lay out the farm in three passes",
     howToDescriptions: [
@@ -1739,18 +1776,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
-      "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
-      "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
-      "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
-      "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
-      "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
-      "/homepage/why-choose/beach-decorative-machooo.webp",
-      "/homepage/why-choose/beach-geometric-jennameeps.webp",
-      "/homepage/why-choose/beach-organized-justkuwl.webp",
-      "/homepage/why-choose/beach-processing-shady-kegyard.webp",
-      "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
-      "/homepage/why-choose/fourcorners-balanced-emerald.webp",
-      "/homepage/why-choose/fourcorners-coop-hallofax.webp",
     ],
     faqHeading: "Frequently Asked Questions",
     faqAnswers: [
@@ -1785,24 +1810,51 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "开新农场时，先决定农田、畜棚和道路的位置；扩建或重排现有农场时，试摆温室、鸡舍和加工区，给建筑之间的通路留出空间；准备重新装饰时，先尝试道路、树木和庭院的不同组合。",
       "适合第一次规划农场的新手、准备扩建或重新分区的老玩家，以及喜欢设计道路、庭院和农场景观的玩家。",
     ],
-    featuresHeading: "草原农场布局案例",
-    featuresDescriptions: [
-      "秋色铺满草原农场，田地、道路、水塘和建筑分布在各处。",
-      "春色树木和装饰围绕着田地、水塘、道路与农场建筑。",
-      "田地、树木、水塘和农场建筑铺在明亮的夏日配色中。",
-      "这张林木茂密的地图里，田地、水塘、建筑、道路和装饰区交错分布。",
-      "这张原版第 7 年农场把田地、建筑、道路和水塘分布在草原农场各处。",
+    caseStudiesHeading: "星露谷物语农场规划案例",
+    caseStudiesDescription:
+      "浏览 12 个不同地图的农场布局，参考田地、建筑、鱼塘与道路的分区方式，为新农场规划、现有布局调整和庭院设计寻找灵感。",
+    featureIntroductionHeading: "规划你的农场布局",
+    featureIntroductionDescription:
+      "进游戏建造前，先在俯视地图上试排整体布局。对比四季外观和设施覆盖，再保存项目或导出图片，方便后续调整。",
+    featureIntroductionItems: [
+      {
+        icon: "map",
+        title: "选择农场地图",
+        description:
+          "可从标准、河流、森林、山顶、荒野、四角、海滩和草原八种农场地图中选择，也可规划姜岛。选定正在游玩的地图后，可按地形安排各个区域。",
+      },
+      {
+        icon: "layout",
+        title: "摆放和调整布局",
+        description:
+          "在地图上摆放建筑、作物、树木、道路和装饰，选中后即可移动位置。支持填充的物品可以在矩形区域批量铺放，还可擦除区域、撤销或重做修改，逐步调整农场分区。",
+      },
+      {
+        icon: "coverage",
+        title: "查看覆盖范围",
+        description:
+          "可在地图上显示洒水器、稻草人、蜂房和祝尼魔小屋的覆盖范围。布置田地与设施时，查看作物区域是否落在对应范围内，再据此调整位置。",
+      },
+      {
+        icon: "seasons",
+        title: "预览四季外观",
+        description:
+          "切换春、夏、秋、冬，预览地图在不同季节的外观。规划道路、树木和庭院时，可先查看季节变化下的场景，再决定布局是否合适。",
+      },
+      {
+        icon: "projects",
+        title: "保存和导入导出项目",
+        description:
+          "项目保存在当前浏览器，之后可以重新打开继续规划。需要留存或转移文件时，可导出 JSON；也可导入已有 JSON 项目，接着调整布局。",
+      },
+      {
+        icon: "export",
+        title: "导出布局截图",
+        description:
+          "可将当前布局导出为 PNG 图片，选择 1 倍或 2 倍分辨率。保存截图作为规划记录，也可在游戏内建造时对照布局。",
+      },
     ],
-    whyChooseHeading: "海滩与四角农场布局案例",
-    whyChooseDescriptions: [
-      "开花树木、小块花园和道路让这张海岸布局显得像一座花园。",
-      "道路和田地围绕农场建筑排成菱形图案。",
-      "石路把田地和建筑连在一起，并沿着海岸地图延伸。",
-      "成排的加工设备位于农场中央，周围分布道路、田地和建筑。",
-      "道路、田地、树木和建筑分布在地图的不同区域。",
-      "田地、农场建筑、道路和水塘构成一张分布均衡的农场布局。",
-      "多排鸡舍与作物田分布在地图各处，并由道路和工作区连接。",
-    ],
+    removedSectionHeadings: ["草原农场布局案例", "海滩与四角农场布局案例"],
     howToHeading: "分三步排出农场",
     howToDescriptions: [
       "先标不会动的地，再分区放大件，最后按一天的活走一遍。堵住了就改这张图，别等进游戏再建。",
@@ -1817,18 +1869,6 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
-      "/homepage/features/meadowlands-aesthetic-01-prismatic-fall.jpg",
-      "/homepage/features/meadowlands-aesthetic-01-prismatic-spring.jpg",
-      "/homepage/features/meadowlands-aesthetic-01-prismatic-summer.jpg",
-      "/homepage/features/meadowlands-aesthetic-03-modded-overview.jpg",
-      "/homepage/features/meadowlands-aesthetic-05-vanilla-year7.png",
-      "/homepage/why-choose/beach-decorative-machooo.webp",
-      "/homepage/why-choose/beach-geometric-jennameeps.webp",
-      "/homepage/why-choose/beach-organized-justkuwl.webp",
-      "/homepage/why-choose/beach-processing-shady-kegyard.webp",
-      "/homepage/why-choose/fourcorners-balanced-rp2-phobos.webp",
-      "/homepage/why-choose/fourcorners-balanced-emerald.webp",
-      "/homepage/why-choose/fourcorners-coop-hallofax.webp",
     ],
     faqHeading: "常见问题",
     faqAnswers: [
@@ -1994,13 +2034,204 @@ function expectStaticHomepageContent(
   for (const whatIsDescription of expectedHomepage.whatIsDescriptions) {
     expect(staticPageHtml).toContain(whatIsDescription);
   }
-  expect(staticPageHtml).toContain(`>${expectedHomepage.featuresHeading}</h2>`);
-  for (const featuresDescription of expectedHomepage.featuresDescriptions) {
-    expect(staticPageHtml).toContain(featuresDescription);
+  const homepageCaseStudyGroups =
+    homepageCopyByLocale[expectedHomepage.jsonLdLocale].caseStudies;
+  expect(homepageCaseStudyGroups).toHaveLength(3);
+  expect(
+    homepageCaseStudyGroups.map(
+      (caseStudyGroup) => caseStudyGroup.imagePosition,
+    ),
+  ).toEqual(["left", "right", "left"]);
+  expect(
+    staticPageHtml.match(/<h2 id="farm-cases-heading">/g),
+  ).toHaveLength(1);
+  expect(staticPageHtml).toContain(
+    `<h2 id="farm-cases-heading">${expectedHomepage.caseStudiesHeading}</h2>`,
+  );
+  let renderedCaseStudyImageCount = 0;
+  for (
+    const [groupIndex, caseStudyGroup] of homepageCaseStudyGroups.entries()
+  ) {
+    const caseStudySectionStartMarker =
+      `data-homepage-case-study-group="${caseStudyGroup.id}"`;
+    const caseStudySectionMarkerIndex = staticPageHtml.indexOf(
+      caseStudySectionStartMarker,
+    );
+    if (caseStudySectionMarkerIndex < 0) {
+      throw new Error(
+        `Missing case study section marker ${JSON.stringify(caseStudySectionStartMarker)}`,
+      );
+    }
+    const caseStudySectionStart = staticPageHtml.lastIndexOf(
+      "<section",
+      caseStudySectionMarkerIndex,
+    );
+    if (caseStudySectionStart < 0) {
+      throw new Error(
+        `Missing <section> before case study marker ${JSON.stringify(caseStudySectionStartMarker)}`,
+      );
+    }
+    const caseStudySectionClosingTag = "</section>";
+    const caseStudySectionClosingTagIndex = staticPageHtml.indexOf(
+      caseStudySectionClosingTag,
+      caseStudySectionStart,
+    );
+    if (caseStudySectionClosingTagIndex < 0) {
+      throw new Error(
+        `Missing ${JSON.stringify(caseStudySectionClosingTag)} after case study marker ${JSON.stringify(caseStudySectionStartMarker)}`,
+      );
+    }
+    const caseStudySectionEnd =
+      caseStudySectionClosingTagIndex + caseStudySectionClosingTag.length;
+    const caseStudySectionMarkup = staticPageHtml.slice(
+      caseStudySectionStart,
+      caseStudySectionEnd,
+    );
+    expect(caseStudySectionMarkup).toContain("data-homepage-content-section");
+    expect(caseStudySectionMarkup).toContain(`id="${caseStudyGroup.id}"`);
+    expect(caseStudySectionMarkup).toContain(
+      `data-image-position="${caseStudyGroup.imagePosition}"`,
+    );
+    if (groupIndex === 0) {
+      expect(caseStudySectionMarkup).toContain(
+        'aria-labelledby="farm-cases-heading"',
+      );
+      expect(caseStudySectionMarkup).toContain(
+        'aria-describedby="farm-cases-description"',
+      );
+      expect(caseStudySectionMarkup).toContain(
+        `<h2 id="farm-cases-heading">${expectedHomepage.caseStudiesHeading}</h2>`,
+      );
+      expect(caseStudySectionMarkup).toMatch(
+        /<header\b(?=[^>]*data-homepage-case-study-header="true")[^>]*>/,
+      );
+      expect(caseStudySectionMarkup).toMatch(
+        /<p\b(?=[^>]*id="farm-cases-description")(?=[^>]*data-homepage-case-study-description="true")[^>]*>/,
+      );
+      expect(caseStudySectionMarkup).toContain(
+        expectedHomepage.caseStudiesDescription,
+      );
+    } else {
+      expect(caseStudySectionMarkup).toContain(
+        `aria-label="${escapeHtmlAttributeValue(caseStudyGroup.heading)}"`,
+      );
+      expect(caseStudySectionMarkup).not.toContain("<h2");
+      expect(caseStudySectionMarkup).not.toContain(
+        "data-homepage-case-study-header",
+      );
+      expect(caseStudySectionMarkup).not.toContain(
+        "data-homepage-case-study-description",
+      );
+      expect(caseStudySectionMarkup).not.toContain(
+        expectedHomepage.caseStudiesDescription,
+      );
+    }
+    expect(caseStudyGroup.testimonials).toHaveLength(4);
+    expect(
+      caseStudySectionMarkup.match(/data-circular-testimonials-image/g),
+    ).toHaveLength(4);
+    renderedCaseStudyImageCount += caseStudyGroup.testimonials.length;
+    for (const caseStudy of caseStudyGroup.testimonials) {
+      expect(caseStudySectionMarkup).toContain(`src="${caseStudy.src}"`);
+      expect(caseStudySectionMarkup).toContain(`alt="${caseStudy.alt}"`);
+    }
   }
-  expect(staticPageHtml).toContain(`>${expectedHomepage.whyChooseHeading.replaceAll("&", "&amp;")}</h2>`);
-  for (const whyChooseDescription of expectedHomepage.whyChooseDescriptions) {
-    expect(staticPageHtml).toContain(whyChooseDescription);
+  expect(
+    staticPageHtml.match(
+      /<header\b(?=[^>]*data-homepage-case-study-header="true")[^>]*>/g,
+    ),
+  ).toHaveLength(1);
+  expect(
+    staticPageHtml.match(
+      /<p\b(?=[^>]*data-homepage-case-study-description="true")[^>]*>/g,
+    ),
+  ).toHaveLength(1);
+  expect(
+    staticPageHtml.match(/aria-describedby="farm-cases-description"/g),
+  ).toHaveLength(1);
+  expect(renderedCaseStudyImageCount).toBe(12);
+  const featureIntroductionSectionMarker = 'id="capabilities"';
+  const featureIntroductionSectionMarkerIndex = staticPageHtml.indexOf(
+    featureIntroductionSectionMarker,
+  );
+  if (featureIntroductionSectionMarkerIndex < 0) {
+    throw new Error(
+      `Missing feature introduction section marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+    );
+  }
+  const featureIntroductionStart = staticPageHtml.lastIndexOf(
+    "<section",
+    featureIntroductionSectionMarkerIndex,
+  );
+  if (featureIntroductionStart < 0) {
+    throw new Error(
+      `Missing <section> before feature introduction marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+    );
+  }
+  const featureIntroductionClosingTag = "</section>";
+  const featureIntroductionClosingTagIndex = staticPageHtml.indexOf(
+    featureIntroductionClosingTag,
+    featureIntroductionStart,
+  );
+  if (featureIntroductionClosingTagIndex < 0) {
+    throw new Error(
+      `Missing ${JSON.stringify(featureIntroductionClosingTag)} after feature introduction marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+    );
+  }
+  const featureIntroductionEnd =
+    featureIntroductionClosingTagIndex + featureIntroductionClosingTag.length;
+  const homepageHowToMarker = 'data-homepage-how-to="true"';
+  const homepageHowToMarkerIndex = staticPageHtml.indexOf(
+    homepageHowToMarker,
+    featureIntroductionEnd,
+  );
+  if (homepageHowToMarkerIndex < 0) {
+    throw new Error(
+      `Missing ${JSON.stringify(homepageHowToMarker)} after feature introduction marker ${JSON.stringify(featureIntroductionSectionMarker)}`,
+    );
+  }
+  expect(homepageHowToMarkerIndex).toBeGreaterThan(featureIntroductionEnd);
+  const featureIntroductionMarkup = staticPageHtml.slice(
+    featureIntroductionStart,
+    featureIntroductionEnd,
+  );
+  expect(featureIntroductionMarkup).toContain(
+    'data-homepage-feature-introduction="true"',
+  );
+  expect(featureIntroductionMarkup).not.toContain("data-circular-testimonials");
+  expect(featureIntroductionMarkup).toContain(
+    `<h2 id="homepage-feature-introduction-heading">${expectedHomepage.featureIntroductionHeading}</h2>`,
+  );
+  expect(featureIntroductionMarkup).toContain(
+    `<p data-homepage-feature-introduction-overview="true">${expectedHomepage.featureIntroductionDescription}</p>`,
+  );
+  expect(featureIntroductionMarkup).toMatch(
+    /<ul\b(?=[^>]*data-homepage-feature-introduction-list="true")(?=[^>]*role="list")[^>]*>/,
+  );
+  expect(
+    featureIntroductionMarkup.match(
+      /data-homepage-feature-introduction-item="true"/g,
+    ),
+  ).toHaveLength(6);
+  expect(
+    featureIntroductionMarkup.match(
+      /<article data-homepage-feature-introduction-card="true">/g,
+    ),
+  ).toHaveLength(6);
+  for (const featureIntroductionItem of expectedHomepage.featureIntroductionItems) {
+    expect(featureIntroductionMarkup).toContain(
+      `<h3 data-homepage-feature-introduction-title="true">${featureIntroductionItem.title}</h3>`,
+    );
+    expect(featureIntroductionMarkup).toContain(
+      `<p data-homepage-feature-introduction-description="true">${featureIntroductionItem.description}</p>`,
+    );
+  }
+  expect(staticPageHtml).not.toContain('data-homepage-features="true"');
+  expect(staticPageHtml).not.toContain('data-homepage-why-choose="true"');
+  expect(staticPageHtml).not.toContain('id="homepage-features-heading"');
+  expect(staticPageHtml).not.toContain('id="homepage-why-choose-heading"');
+  for (const removedSectionHeading of expectedHomepage.removedSectionHeadings) {
+    expect(staticPageHtml).not.toContain(`>${removedSectionHeading}</h2>`);
   }
   expect(staticPageHtml).toContain(`>${expectedHomepage.howToHeading}</h2>`);
   for (const howToDescription of expectedHomepage.howToDescriptions) {
@@ -2050,8 +2281,10 @@ function expectStaticHomepageContent(
   const homepageSectionMarkers = [
     'data-homepage-workspace="true"',
     'id="what-is"',
+    ...homepageCaseStudyGroups.map(
+      (caseStudyGroup) => `id="${caseStudyGroup.id}"`,
+    ),
     'id="capabilities"',
-    'id="why-choose"',
     'id="how-to"',
     'data-homepage-closing-cta="true"',
     'id="faq"',
