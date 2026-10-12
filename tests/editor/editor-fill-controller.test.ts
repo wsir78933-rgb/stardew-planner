@@ -3,6 +3,8 @@ import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
   catalogDatasetUrls,
+  createBuildingCatalogFromDataset,
+  createBuildingPlacementMetadata,
   createPlaceableCatalogFromDatasets,
   type BuildingPlacementMetadataById,
   type CatalogItem,
@@ -221,6 +223,30 @@ function createBuildingMetadataById(): BuildingPlacementMetadataById {
   return {};
 }
 
+function createLockedBuildingFillContext(
+  buildingId: string,
+): Readonly<{
+  catalogItem: CatalogItem;
+  buildingMetadataById: BuildingPlacementMetadataById;
+}> {
+  const lockedBuildings = readLockedCatalogDataset("Buildings.json");
+  const catalogItem = createBuildingCatalogFromDataset(
+    lockedBuildings,
+    catalogDatasetUrls.buildings,
+  ).items.find((item) => item.id === `building:${buildingId}`);
+
+  if (catalogItem === undefined) {
+    throw new Error(
+      `Locked building catalog did not contain building ID ${JSON.stringify(buildingId)}.`,
+    );
+  }
+
+  return {
+    catalogItem,
+    buildingMetadataById: createBuildingPlacementMetadata(lockedBuildings),
+  };
+}
+
 describe("applyEditorFill", () => {
   it("fills Blue Grass Starter on valid single tiles, previews the same placements, and supports undo and redo", () => {
     const blueGrassCatalogItem = createBlueGrassCatalogItemFromLockedDatasets();
@@ -317,6 +343,285 @@ describe("applyEditorFill", () => {
       expect.objectContaining({ itemId: "floor:1", layer: "path", x: 1, y: 0 }),
       expect.objectContaining({ itemId: "floor:1", layer: "path", x: 0, y: 1 }),
       expect.objectContaining({ itemId: "floor:1", layer: "path", x: 1, y: 1 }),
+    ]);
+  });
+
+  it("fills Beach Cabin footprints across a 21 by 13 rectangle with matching preview, one history entry, and stable reversed bounds", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Beach Cabin");
+    const sourceSnapshot = createEmptyPlacementSnapshot();
+    const placementHistory = createPlacementHistory(sourceSnapshot);
+    const sourceHistoryBeforeFill = structuredClone(placementHistory);
+    const fillInput = {
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 20, y: 12 },
+      mapPlacementGrid: createPlacementGrid(21, 13),
+      buildingMetadataById,
+      placementHistory,
+    } as const;
+    const previewActions = previewPlannerWorkspaceFillRectangle({
+      ...fillInput,
+      freePlacement: false,
+      selectedPlacementKeys: [],
+      tool: "fill",
+    });
+    const fillResult = applyEditorFill(fillInput);
+    const reversedFillResult = applyEditorFill({
+      ...fillInput,
+      firstTile: { x: 20, y: 12 },
+      secondTile: { x: 0, y: 0 },
+    });
+
+    if (!fillResult.applied) {
+      throw new Error("Beach Cabin Fill did not produce a placement history.");
+    }
+    if (previewActions === null) {
+      throw new Error("Beach Cabin Fill preview did not produce placement actions.");
+    }
+    if (!reversedFillResult.applied) {
+      throw new Error("Reversed Beach Cabin Fill did not produce a placement history.");
+    }
+
+    const filledBuildings = fillResult.placementHistory.currentState.buildings;
+    const expectedOrigins = [
+      { x: 0, y: 0 }, { x: 5, y: 0 }, { x: 10, y: 0 }, { x: 15, y: 0 },
+      { x: 0, y: 3 }, { x: 5, y: 3 }, { x: 10, y: 3 }, { x: 15, y: 3 },
+      { x: 0, y: 6 }, { x: 5, y: 6 }, { x: 10, y: 6 }, { x: 15, y: 6 },
+      { x: 0, y: 9 }, { x: 5, y: 9 }, { x: 10, y: 9 }, { x: 15, y: 9 },
+    ];
+    const occupiedTileKeys = filledBuildings.flatMap((building) =>
+      Array.from({ length: 3 }, (_, offsetY) =>
+        Array.from({ length: 5 }, (_, offsetX) =>
+          `${building.x + offsetX},${building.y + offsetY}`
+        )
+      ).flat()
+    );
+    const expectedPreviewActions = filledBuildings.map((building) => {
+      const { instanceId: omittedInstanceId, ...previewBuilding } = building;
+      return { type: "add-building" as const, building: previewBuilding };
+    });
+
+    expect(catalogItem).toMatchObject({
+      id: "building:Beach Cabin",
+      tileSize: { width: 5, height: 3 },
+    });
+    expect(buildingMetadataById["Beach Cabin"]?.size).toEqual({
+      width: 5,
+      height: 3,
+    });
+    expect(fillResult.placedTileCount).toBe(16);
+    expect(filledBuildings.map(({ x, y }) => ({ x, y }))).toEqual(expectedOrigins);
+    expect(new Set(occupiedTileKeys).size).toBe(16 * 5 * 3);
+    expect(previewActions).toEqual(expectedPreviewActions);
+    expect(reversedFillResult.placementHistory.currentState.buildings).toEqual(
+      filledBuildings,
+    );
+    expect(placementHistory).toEqual(sourceHistoryBeforeFill);
+    expect(placementHistory.currentState).toBe(sourceSnapshot);
+    expect(fillResult.placementHistory.undoStates).toEqual([sourceSnapshot]);
+    expect(fillResult.placementHistory.redoStates).toEqual([]);
+
+    const undonePlacementHistory = undoPlacementHistory(fillResult.placementHistory);
+    expect(undonePlacementHistory.currentState).toBe(sourceSnapshot);
+    expect(undonePlacementHistory.undoStates).toEqual([]);
+    expect(undonePlacementHistory.redoStates).toEqual([
+      fillResult.placementHistory.currentState,
+    ]);
+
+    const redonePlacementHistory = redoPlacementHistory(undonePlacementHistory);
+    expect(redonePlacementHistory.currentState).toEqual(
+      fillResult.placementHistory.currentState,
+    );
+    expect(redonePlacementHistory.undoStates).toEqual([sourceSnapshot]);
+    expect(redonePlacementHistory.redoStates).toEqual([]);
+  });
+
+  it("skips a blocked Beach Cabin footprint while committing the other candidates", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Beach Cabin");
+    const sourceSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{ buildingId: "Cabin", instanceId: 1, x: 0, y: 0 }],
+      nextBuildingId: 2,
+    };
+    const placementHistory = createPlacementHistory(sourceSnapshot);
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 20, y: 12 },
+      mapPlacementGrid: createPlacementGrid(21, 13),
+      buildingMetadataById,
+      placementHistory,
+    });
+
+    if (!fillResult.applied) {
+      throw new Error("Beach Cabin Fill did not commit its unblocked candidates.");
+    }
+
+    const newBuildings = fillResult.placementHistory.currentState.buildings.filter(
+      (building) => building.buildingId === "Beach Cabin",
+    );
+
+    expect(fillResult.placedTileCount).toBe(15);
+    expect(fillResult.placementHistory.currentState.buildings).toHaveLength(16);
+    expect(newBuildings).toHaveLength(15);
+    expect(newBuildings.some(({ x, y }) => x === 0 && y === 0)).toBe(false);
+    expect(fillResult.placementHistory.undoStates).toEqual([sourceSnapshot]);
+    expect(placementHistory.currentState).toBe(sourceSnapshot);
+  });
+
+  it("keeps accepted Farmhouse additional placement tiles occupied for later Fill candidates", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Farmhouse");
+    const sourceSnapshot = createEmptyPlacementSnapshot();
+    const placementHistory = createPlacementHistory(sourceSnapshot);
+    const fillInput = {
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 8, y: 14 },
+      mapPlacementGrid: createPlacementGrid(10, 16),
+      buildingMetadataById,
+      placementHistory,
+    } as const;
+    const previewActions = previewPlannerWorkspaceFillRectangle({
+      ...fillInput,
+      freePlacement: false,
+      selectedPlacementKeys: [],
+      tool: "fill",
+    });
+    const fillResult = applyEditorFill(fillInput);
+
+    if (!fillResult.applied) {
+      throw new Error("Farmhouse Fill did not produce its unblocked placements.");
+    }
+    if (previewActions === null) {
+      throw new Error("Farmhouse Fill preview did not produce placement actions.");
+    }
+
+    const farmhouseMetadata = buildingMetadataById.Farmhouse;
+    if (farmhouseMetadata === undefined) {
+      throw new Error('Locked building metadata did not contain "Farmhouse".');
+    }
+    const filledBuildings = fillResult.placementHistory.currentState.buildings;
+
+    expect(catalogItem).toMatchObject({
+      id: "building:Farmhouse",
+      tileSize: { width: 9, height: 5 },
+    });
+    expect(farmhouseMetadata).toMatchObject({
+      size: { width: 9, height: 5 },
+      additionalPlacementTiles: expect.arrayContaining([
+        {
+          x: 5,
+          y: 5,
+          width: 1,
+          height: 1,
+          onlyNeedsToBePassable: true,
+        },
+      ]),
+    });
+    expect(fillResult.placedTileCount).toBe(2);
+    expect(filledBuildings).toEqual([
+      { buildingId: "Farmhouse", instanceId: 1, x: 0, y: 0 },
+      { buildingId: "Farmhouse", instanceId: 2, x: 0, y: 10 },
+    ]);
+    expect(previewActions).toEqual([
+      { type: "add-building", building: { buildingId: "Farmhouse", x: 0, y: 0 } },
+      { type: "add-building", building: { buildingId: "Farmhouse", x: 0, y: 10 } },
+    ]);
+    expect(placementHistory.currentState).toBe(sourceSnapshot);
+    expect(fillResult.placementHistory.undoStates).toEqual([sourceSnapshot]);
+    expect(fillResult.placementHistory.redoStates).toEqual([]);
+  });
+
+  it("returns the first real occupancy validation and preserves history when every building candidate is blocked", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Beach Cabin");
+    const sourceSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{ buildingId: "Cabin", instanceId: 1, x: 0, y: 0 }],
+      nextBuildingId: 2,
+    };
+    const placementHistory = createPlacementHistory(sourceSnapshot);
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 4, y: 2 },
+      mapPlacementGrid: createPlacementGrid(5, 3),
+      buildingMetadataById,
+      placementHistory,
+    });
+
+    expect(fillResult).toEqual({
+      applied: false,
+      placementHistory,
+      validation: {
+        valid: false,
+        reason: "occupied-by-building",
+        tile: { x: 0, y: 0 },
+      },
+    });
+    expect(placementHistory.currentState).toBe(sourceSnapshot);
+    expect(placementHistory.undoStates).toEqual([]);
+    expect(placementHistory.redoStates).toEqual([]);
+  });
+
+  it("treats a rectangle smaller than the Beach Cabin footprint as a no-op", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Beach Cabin");
+    const sourceSnapshot = createEmptyPlacementSnapshot();
+    const placementHistory = createPlacementHistory(sourceSnapshot);
+    const fillInput = {
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 3, y: 2 },
+      mapPlacementGrid: createPlacementGrid(5, 3),
+      buildingMetadataById,
+      placementHistory,
+    } as const;
+    const previewActions = previewPlannerWorkspaceFillRectangle({
+      ...fillInput,
+      freePlacement: false,
+      selectedPlacementKeys: [],
+      tool: "fill",
+    });
+    const fillResult = applyEditorFill(fillInput);
+
+    expect(fillResult).toEqual({
+      applied: true,
+      placedTileCount: 0,
+      placementHistory,
+    });
+    expect(previewActions).toEqual([]);
+    expect(placementHistory.currentState).toBe(sourceSnapshot);
+    expect(placementHistory.undoStates).toEqual([]);
+    expect(placementHistory.redoStates).toEqual([]);
+  });
+
+  it("preserves a selected Fish Pond variant through Fill", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Fish Pond");
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 2 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 4, y: 4 },
+      mapPlacementGrid: createPlacementGrid(5, 5),
+      buildingMetadataById,
+      placementHistory,
+    });
+
+    expect(catalogItem.id).toBe("building:Fish Pond");
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(fillResult.placementHistory.currentState.buildings).toEqual([
+      { buildingId: "Fish Pond", instanceId: 1, variant: 2, x: 0, y: 0 },
     ]);
   });
 

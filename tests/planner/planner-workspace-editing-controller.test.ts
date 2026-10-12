@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  applyPlannerWorkspaceMapTileClick,
   applyPlannerWorkspaceMapTileRectangle,
   applyPlannerWorkspacePlacementSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
   previewPlannerWorkspaceSelectionAtTile,
   previewPlannerWorkspaceFillRectangle,
+  previewPlannerWorkspaceEraseAtTile,
+  previewPlannerWorkspaceEraseRectangle,
 } from "../../src/planner/planner-workspace-editing-controller";
 import type { CatalogItem } from "../../src/catalog";
 import { createPlacementHistory, undoPlacementHistory } from "../../src/placement/placement-history";
@@ -76,6 +79,94 @@ describe("planner workspace editing parity", () => {
     });
     expect(fillTransition.placementHistory).toBe(copyInput.placementHistory);
     expect(fillTransition.selectedPlacementKeys).toEqual(copyInput.selectedPlacementKeys);
+  });
+
+  it("previews eraser hover and rectangle targets without changing selection or history", () => {
+    const copyInput = createCopyInput();
+    const selectedPlacementKeys = copyInput.selectedPlacementKeys;
+    const eraseContext = {
+      buildingMetadataById: copyInput.buildingMetadataById,
+      placementHistory: copyInput.placementHistory,
+      tool: "erase" as const,
+    };
+
+    const hoverPreview = previewPlannerWorkspaceEraseAtTile({
+      ...eraseContext,
+      cursorTile: { x: 1, y: 1 },
+    });
+    expect(hoverPreview).toEqual(["item:1"]);
+    expect(previewPlannerWorkspaceEraseAtTile({
+      ...eraseContext,
+      cursorTile: { x: 9, y: 9 },
+    })).toEqual([]);
+    const rectanglePreview = previewPlannerWorkspaceEraseRectangle({
+      ...eraseContext,
+      firstTile: { x: 1, y: 1 },
+      secondTile: { x: 3, y: 2 },
+    });
+    expect(rectanglePreview).toEqual(["item:1", "item:2"]);
+
+    expect(copyInput.placementHistory.currentState.items).toHaveLength(2);
+    expect(copyInput.placementHistory.undoStates).toEqual([]);
+    expect(copyInput.selectedPlacementKeys).toBe(selectedPlacementKeys);
+    expect(copyInput.selectedPlacementKeys).toEqual(["item:1", "item:2"]);
+
+    const hoverEraseTransition = applyPlannerWorkspaceMapTileClick({
+      ...copyInput,
+      catalogPresentationChoice: null,
+      cursorTile: { x: 1, y: 1 },
+      freePlacement: false,
+      selectedCatalogItem: null,
+      tool: "erase",
+    });
+    expect(hoverPreview).toEqual(["item:1"]);
+    expect(hoverEraseTransition.placementHistory.currentState.items).toEqual([
+      createFloor(2, 3, 2),
+    ]);
+
+    const rectangleEraseTransition = applyPlannerWorkspaceMapTileRectangle({
+      ...copyInput,
+      catalogPresentationChoice: null,
+      firstTile: { x: 1, y: 1 },
+      freePlacement: false,
+      secondTile: { x: 3, y: 2 },
+      selectedCatalogItem: null,
+      tool: "erase",
+    });
+    expect(rectanglePreview).toEqual(["item:1", "item:2"]);
+    expect(rectangleEraseTransition.placementHistory.currentState.items).toEqual([]);
+    expect(rectangleEraseTransition.placementHistory.undoStates).toEqual([
+      copyInput.placementHistory.currentState,
+    ]);
+  });
+
+  it("returns null for non-erase tools and rejects invalid erase-preview coordinates", () => {
+    const copyInput = createCopyInput();
+    const erasePreviewContext = {
+      buildingMetadataById: copyInput.buildingMetadataById,
+      cursorTile: { x: 1, y: 1 },
+      placementHistory: copyInput.placementHistory,
+    };
+    const eraseRectanglePreviewContext = {
+      buildingMetadataById: copyInput.buildingMetadataById,
+      firstTile: { x: 1, y: 1 },
+      placementHistory: copyInput.placementHistory,
+      secondTile: { x: 2, y: 2 },
+    };
+
+    expect(previewPlannerWorkspaceEraseAtTile({
+      ...erasePreviewContext,
+      tool: "cursor",
+    })).toBeNull();
+    expect(previewPlannerWorkspaceEraseRectangle({
+      ...eraseRectanglePreviewContext,
+      tool: "fill",
+    })).toBeNull();
+    expect(() => previewPlannerWorkspaceEraseAtTile({
+      ...erasePreviewContext,
+      cursorTile: { x: -1, y: 1 },
+      tool: "erase",
+    })).toThrow("Planner workspace editing cursorTile.x must be a non-negative safe integer; received -1.");
   });
 
   it("accumulates and toggles Multi clicks, and clears on empty space without history", () => {

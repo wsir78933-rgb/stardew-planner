@@ -12,6 +12,7 @@ import {
 } from "../placement/placement-snapshot";
 import { getPlacementItemZIndex } from "../placement/placement-item-z-order";
 import { isGardenPotAtTile } from "../placement/garden-pot-placement";
+import type { PlacementSelectionKey } from "./editor-selection-controller";
 
 export type EditorEraseInput = Readonly<{
   cursorTile: MapTileCoordinates;
@@ -51,6 +52,51 @@ export type EditorEraseRectangleResult =
       reason: "no-placement-in-rectangle";
       placementHistory: PlacementHistory<PlacementSnapshot>;
     }>;
+
+export function previewEditorErase(
+  editorEraseInput: EditorEraseInput,
+): readonly PlacementSelectionKey[] {
+  assertEditorEraseInput(editorEraseInput);
+  const eraseAction = findEraseAction(
+    editorEraseInput.placementHistory.currentState,
+    editorEraseInput.cursorTile,
+    editorEraseInput.buildingMetadataById,
+  );
+
+  if (eraseAction === null) {
+    return [];
+  }
+
+  return [createEraseSelectionKey(eraseAction)];
+}
+
+export function previewEditorEraseRectangle(
+  editorEraseRectangleInput: EditorEraseRectangleInput,
+): readonly PlacementSelectionKey[] {
+  assertEditorEraseRectangleInput(editorEraseRectangleInput);
+  const eraseRectangle = createEraseRectangle(
+    editorEraseRectangleInput.firstTile,
+    editorEraseRectangleInput.secondTile,
+  );
+  const rectangleEraseTargets = findRectangleEraseTargets(
+    editorEraseRectangleInput.placementHistory.currentState,
+    eraseRectangle,
+    editorEraseRectangleInput.buildingMetadataById,
+  );
+
+  return [
+    ...rectangleEraseTargets.buildingInstanceIds.map(
+      (buildingInstanceId) => `building:${String(buildingInstanceId)}`,
+    ),
+    ...rectangleEraseTargets.itemInstanceIds.map(
+      (itemInstanceId) => `item:${String(itemInstanceId)}`,
+    ),
+    ...rectangleEraseTargets.cropCoordinates.map(
+      (cropCoordinate) =>
+        `crop:${String(cropCoordinate.x)},${String(cropCoordinate.y)}`,
+    ),
+  ];
+}
 
 export function applyEditorErase(
   editorEraseInput: EditorEraseInput,
@@ -154,6 +200,20 @@ type EraseAction = Readonly<{
     | Readonly<{ type: "delete-crop"; coordinate: MapTileCoordinates }>
     | Readonly<{ type: "delete-item"; instanceId: number }>;
 }>;
+
+function createEraseSelectionKey(
+  eraseAction: EraseAction,
+): PlacementSelectionKey {
+  if (eraseAction.action.type === "delete-building") {
+    return `building:${String(eraseAction.action.instanceId)}`;
+  }
+
+  if (eraseAction.action.type === "delete-crop") {
+    return `crop:${String(eraseAction.action.coordinate.x)},${String(eraseAction.action.coordinate.y)}`;
+  }
+
+  return `item:${String(eraseAction.action.instanceId)}`;
+}
 
 function findEraseAction(
   placementSnapshot: PlacementSnapshot,

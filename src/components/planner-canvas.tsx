@@ -290,6 +290,13 @@ export type PlannerCanvasProperties = Readonly<{
     firstMapTileCoordinates: MapPointerTile,
     secondMapTileCoordinates: MapPointerTile,
   ) => readonly PlacementSnapshotAction[] | null;
+  getErasePreviewAtTile?: (
+    mapTileCoordinates: MapPointerTile,
+  ) => readonly PlacementSelectionKey[] | null;
+  getEraseRectanglePreviewAtTiles?: (
+    firstMapTileCoordinates: MapPointerTile,
+    secondMapTileCoordinates: MapPointerTile,
+  ) => readonly PlacementSelectionKey[] | null;
   pointerInteractionMode?: PointerInteractionMode;
   shortRectangleClickBehavior?: "single-tile" | "rectangle";
   placementSnapshot?: PlacementSnapshot;
@@ -702,6 +709,92 @@ export type PlacementSprite = Readonly<{
   frameTexture: PixiTexture | null;
   paintedTexture: PixiTexture | null;
 }>;
+
+type PlacementSpriteOriginalVisual = Readonly<{
+  blendMode: PlacementSprite["sprite"]["blendMode"];
+  tint: number;
+}>;
+
+export function createPlacementErasePreviewVisualUpdater(): Readonly<{
+  clear(): void;
+  update(input: Readonly<{
+    erasePreviewPlacementKeys: readonly PlacementSelectionKey[] | null;
+    renderedPlacementSprites: readonly PlacementSprite[];
+  }>): void;
+}> {
+  const originalVisualBySprite = new Map<
+    PlacementSprite["sprite"],
+    PlacementSpriteOriginalVisual
+  >();
+  let renderedPlacementSprites: readonly PlacementSprite[] = [];
+
+  const restorePlacementSpriteVisual = (
+    placementSprite: PlacementSprite,
+  ): void => {
+    const originalVisual = originalVisualBySprite.get(placementSprite.sprite);
+    if (originalVisual === undefined) {
+      return;
+    }
+
+    placementSprite.sprite.tint = originalVisual.tint;
+    placementSprite.sprite.blendMode = originalVisual.blendMode;
+    originalVisualBySprite.delete(placementSprite.sprite);
+  };
+
+  const clear = (): void => {
+    for (const placementSprite of renderedPlacementSprites) {
+      restorePlacementSpriteVisual(placementSprite);
+    }
+    renderedPlacementSprites = [];
+  };
+
+  return {
+    clear,
+    update(input): void {
+      assertPlacementSelectionKeyList(
+        input.erasePreviewPlacementKeys,
+        "erase preview placement keys",
+        true,
+      );
+
+      const nextSpriteSet = new Set(
+        input.renderedPlacementSprites.map(
+          (placementSprite) => placementSprite.sprite,
+        ),
+      );
+      for (const previousPlacementSprite of renderedPlacementSprites) {
+        if (!nextSpriteSet.has(previousPlacementSprite.sprite)) {
+          restorePlacementSpriteVisual(previousPlacementSprite);
+        }
+      }
+
+      const erasePreviewPlacementKeySet =
+        input.erasePreviewPlacementKeys === null
+          ? null
+          : new Set(input.erasePreviewPlacementKeys);
+      for (const placementSprite of input.renderedPlacementSprites) {
+        const isErasePreviewTarget =
+          erasePreviewPlacementKeySet?.has(placementSprite.placementKey) === true;
+
+        if (!isErasePreviewTarget) {
+          restorePlacementSpriteVisual(placementSprite);
+          continue;
+        }
+
+        if (!originalVisualBySprite.has(placementSprite.sprite)) {
+          originalVisualBySprite.set(placementSprite.sprite, {
+            blendMode: placementSprite.sprite.blendMode,
+            tint: placementSprite.sprite.tint,
+          });
+        }
+        placementSprite.sprite.tint = invalidPlacementPreviewTint;
+        placementSprite.sprite.blendMode = "normal";
+      }
+
+      renderedPlacementSprites = input.renderedPlacementSprites;
+    },
+  };
+}
 
 type PlacementDragTarget = Readonly<{
   sprites: readonly PlacementSprite[];
@@ -1217,6 +1310,8 @@ export function PlannerCanvas({
   placementPreview = null,
   getPlacementCopyPreviewAtTile,
   getFillRectanglePreviewAtTiles,
+  getErasePreviewAtTile,
+  getEraseRectanglePreviewAtTiles,
   pointerInteractionMode = "navigate",
   shortRectangleClickBehavior = "single-tile",
   placementSnapshot,
@@ -1304,7 +1399,14 @@ export function PlannerCanvas({
   const getFillRectanglePreviewAtTilesReference = useRef(
     getFillRectanglePreviewAtTiles,
   );
+  const getErasePreviewAtTileReference = useRef(getErasePreviewAtTile);
+  const getEraseRectanglePreviewAtTilesReference = useRef(
+    getEraseRectanglePreviewAtTiles,
+  );
   const selectedPlacementKeysReference = useRef(selectedPlacementKeys);
+  const erasePreviewVisualSynchronizerReference = useRef<(() => void) | null>(
+    null,
+  );
   const displayOptionsReference = useRef(displayOptions);
   const isXRayActiveReference = useRef(isXRayActive);
   const wheelZoomEnabledReference = useRef(wheelZoomEnabled);
@@ -1361,6 +1463,9 @@ export function PlannerCanvas({
     getPlacementCopyPreviewAtTile;
   getFillRectanglePreviewAtTilesReference.current =
     getFillRectanglePreviewAtTiles;
+  getErasePreviewAtTileReference.current = getErasePreviewAtTile;
+  getEraseRectanglePreviewAtTilesReference.current =
+    getEraseRectanglePreviewAtTiles;
   selectedPlacementKeysReference.current = selectedPlacementKeys;
   displayOptionsReference.current = displayOptions;
   isXRayActiveReference.current = isXRayActive;
@@ -1405,7 +1510,12 @@ export function PlannerCanvas({
 
   useEffect(() => {
     pointerInteractionModeSynchronizerReference.current?.();
-  }, [pointerInteractionMode]);
+    erasePreviewVisualSynchronizerReference.current?.();
+  }, [
+    getErasePreviewAtTile,
+    getEraseRectanglePreviewAtTiles,
+    pointerInteractionMode,
+  ]);
 
   useEffect(() => {
     assertPreparedCanvasResourcesMatchRequestedMap(
@@ -1752,6 +1862,8 @@ export function PlannerCanvas({
         };
         let placementRenderVersion = 0;
         let renderedPlacementSprites: readonly PlacementSprite[] = [];
+        const placementErasePreviewVisualUpdater =
+          createPlacementErasePreviewVisualUpdater();
         const placementAnimationController =
           createPlacementAnimationController(() => {
             pixiApplication.renderer.render(pixiApplication.stage);
@@ -1780,6 +1892,7 @@ export function PlannerCanvas({
           });
         };
         const renderPlacementOverlay = async (): Promise<PlannerCanvasPlacementRenderStatus> => {
+          placementErasePreviewVisualUpdater.clear();
           placementRenderVersion += 1;
           const requestedPlacementRenderVersion = placementRenderVersion;
           const currentCatalogItems = catalogItemsReference.current;
@@ -1841,6 +1954,7 @@ export function PlannerCanvas({
               placementAnimationController.replaceAnimations(
                 getPlacementSpriteAnimations(placementSprites),
               );
+              erasePreviewVisualSynchronizerReference.current?.();
               claimPlacementSpriteOwnership();
               pixiApplication.renderer.render(pixiApplication.stage);
               setPlannerCanvasStatus({ kind: "ready" });
@@ -1858,6 +1972,8 @@ export function PlannerCanvas({
 
         disposePlacementOverlay = (): void => {
           placementRenderVersion += 1;
+          placementErasePreviewVisualUpdater.clear();
+          erasePreviewVisualSynchronizerReference.current = null;
           placementAnimationController.dispose();
           if (
             placementAnimationControllerReference.current ===
@@ -1899,6 +2015,57 @@ export function PlannerCanvas({
             tileHeight: renderingContract.tileHeight,
             tileWidth: renderingContract.tileWidth,
           });
+        const getErasePreviewPlacementKeys = (): readonly PlacementSelectionKey[] | null => {
+          if (currentMapTileRectanglePreview !== null) {
+            const getRectangleErasePreview =
+              getEraseRectanglePreviewAtTilesReference.current;
+            if (getRectangleErasePreview === undefined) {
+              return null;
+            }
+
+            const rectangleErasePreviewKeys = getRectangleErasePreview(
+              currentMapTileRectanglePreview.startMapTileCoordinates,
+              currentMapTileRectanglePreview.endMapTileCoordinates,
+            );
+            assertPlacementSelectionKeyList(
+              rectangleErasePreviewKeys,
+              "erase rectangle preview placement keys",
+              true,
+            );
+            return rectangleErasePreviewKeys;
+          }
+
+          if (hoveredMapTile === null) {
+            return null;
+          }
+
+          const getTileErasePreview = getErasePreviewAtTileReference.current;
+          if (getTileErasePreview === undefined) {
+            return null;
+          }
+
+          const tileErasePreviewKeys = getTileErasePreview(hoveredMapTile);
+          assertPlacementSelectionKeyList(
+            tileErasePreviewKeys,
+            "erase preview placement keys",
+            true,
+          );
+          return tileErasePreviewKeys;
+        };
+        const synchronizeErasePreviewVisuals = (): void => {
+          if (!isMapLifecycleCurrent()) {
+            placementErasePreviewVisualUpdater.clear();
+            return;
+          }
+
+          placementErasePreviewVisualUpdater.update({
+            erasePreviewPlacementKeys: getErasePreviewPlacementKeys(),
+            renderedPlacementSprites,
+          });
+          pixiApplication.renderer.render(pixiApplication.stage);
+        };
+        erasePreviewVisualSynchronizerReference.current =
+          synchronizeErasePreviewVisuals;
         const placementPreviewAnimationController =
           createPlacementAnimationController(() => {
             pixiApplication.renderer.render(pixiApplication.stage);
@@ -2265,6 +2432,14 @@ export function PlannerCanvas({
                   }
 
                   hoveredMapTile = mapTileCoordinates;
+                  if (
+                    mapTileCoordinates === null
+                    && currentMapTileRectanglePreview !== null
+                  ) {
+                    currentMapTileRectanglePreview = null;
+                    mapTileRectanglePreviewRenderer.clear();
+                  }
+                  synchronizeErasePreviewVisuals();
                   requestPlacementPreviewOverlayRender();
                 },
                 onMapTileClick(mapTileCoordinates: MapPointerTile): void {
@@ -2320,6 +2495,7 @@ export function PlannerCanvas({
                     startMapTileCoordinates,
                     endMapTileCoordinates,
                   };
+                  synchronizeErasePreviewVisuals();
                   mapTileRectanglePreviewRenderer.render(
                     startMapTileCoordinates,
                     endMapTileCoordinates,
@@ -2334,6 +2510,7 @@ export function PlannerCanvas({
 
                   currentMapTileRectanglePreview = null;
                   mapTileRectanglePreviewRenderer.clear();
+                  placementErasePreviewVisualUpdater.clear();
                   requestPlacementPreviewOverlayRender();
                 },
                 onPlacementSelectionClick(
@@ -2561,6 +2738,30 @@ function describeValue(value: unknown): string {
   }
 
   return JSON.stringify(value);
+}
+
+function assertPlacementSelectionKeyList(
+  value: unknown,
+  valueName: string,
+  allowNull: boolean,
+): void {
+  if (allowNull && value === null) {
+    return;
+  }
+  if (!Array.isArray(value)) {
+    throw new TypeError(
+      `Planner Canvas ${valueName} must be an array${allowNull ? " or null" : ""}; received ${describeValue(value)}.`,
+    );
+  }
+
+  for (let placementKeyIndex = 0; placementKeyIndex < value.length; placementKeyIndex += 1) {
+    const placementKey = value[placementKeyIndex];
+    if (typeof placementKey !== "string") {
+      throw new TypeError(
+        `Planner Canvas ${valueName} at index ${String(placementKeyIndex)} must be a string; received ${describeValue(placementKey)}.`,
+      );
+    }
+  }
 }
 
 export function notifyMapPlacementGridReady(
@@ -4648,6 +4849,7 @@ export function attachPlannerCameraControls(
   let placementDragState: PlacementDragState | null = null;
   let pinchGestureState: PinchGestureState | null = null;
   let mapTileRectanglePreviewPointerId: number | null = null;
+  const cancelledMapTileRectanglePointerIds = new Set<number>();
   let lastReportedMapTileHover: MapPointerTile | null | undefined;
 
   canvasElement.tabIndex = 0;
@@ -4682,6 +4884,17 @@ export function attachPlannerCameraControls(
       keyboardEvent.ctrlKey ||
       keyboardEvent.metaKey
     ) {
+      return;
+    }
+
+    if (keyboardEvent.key === "Escape") {
+      if (mapTileRectanglePreviewPointerId !== null) {
+        cancelledMapTileRectanglePointerIds.add(
+          mapTileRectanglePreviewPointerId,
+        );
+      }
+      clearMapTileRectanglePreview(true);
+      reportMapTileHoverIfChanged(null);
       return;
     }
 
@@ -4721,6 +4934,7 @@ export function attachPlannerCameraControls(
       return;
     }
 
+    cancelledMapTileRectanglePointerIds.delete(pointerEvent.pointerId);
     pointerEvent.preventDefault();
     clearMapTileHover(pointerEvent);
     canvasElement.focus({ preventScroll: true });
@@ -4783,6 +4997,10 @@ export function attachPlannerCameraControls(
     pointerEvent.preventDefault();
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
     activePointerCoordinates.set(pointerEvent.pointerId, pointerCoordinates);
+
+    if (cancelledMapTileRectanglePointerIds.has(pointerEvent.pointerId)) {
+      return;
+    }
 
     if (activePointerCoordinates.size >= 2) {
       updateCameraForPinch();
@@ -4850,6 +5068,11 @@ export function attachPlannerCameraControls(
 
   function handlePointerUp(pointerEvent: PointerEvent): void {
     const pointerCoordinates = getPointerCoordinates(pointerEvent, canvasElement);
+
+    if (cancelledMapTileRectanglePointerIds.delete(pointerEvent.pointerId)) {
+      handlePointerEnd(pointerEvent);
+      return;
+    }
 
     if (
       placementDragState !== null
@@ -5251,6 +5474,7 @@ export function attachPlannerCameraControls(
   }
 
   function handlePointerCancel(pointerEvent: PointerEvent): void {
+    cancelledMapTileRectanglePointerIds.delete(pointerEvent.pointerId);
     cancelPlacementDrag(pointerEvent.pointerId);
     handlePointerEnd(pointerEvent);
     clearMapTileHover(pointerEvent);
@@ -5258,6 +5482,9 @@ export function attachPlannerCameraControls(
 
   function handlePointerLeave(pointerEvent: PointerEvent): void {
     clearMapTileHover(pointerEvent);
+    if (mapTileRectanglePreviewPointerId !== null) {
+      onMapTileRectanglePreviewClear?.();
+    }
   }
 
   function reportMapTileHover(pointerEvent: PointerEvent): void {
@@ -5404,6 +5631,7 @@ export function attachPlannerCameraControls(
       canvasElement.removeEventListener("wheel", handleWheel);
       activePointerCoordinates.clear();
       placementClickSuppressedPointerIds.clear();
+      cancelledMapTileRectanglePointerIds.clear();
       pinchGestureState = null;
       pointerDragState = null;
       if (placementDragState !== null) {
