@@ -3444,7 +3444,20 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .game-save-import-result,
 .planner-editor-shell .farm-summary-modal { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--lk-sm); color: var(--text); max-height: 80%; max-width: 90vw; padding: 0; width: min(560px, 90vw); }
 .planner-editor-shell .editor-modal--map-picker { display: flex; flex-direction: column; overflow: hidden; width: min(600px, 90vw); }
-.planner-editor-shell .editor-modal--map-picker > .project-map-instance-panel { min-height: 0; overflow-y: auto; }
+.planner-editor-shell .editor-modal--map-picker > .project-map-instance-panel { display: grid; align-content: start; gap: var(--lk-sm); min-height: 0; overflow-x: hidden; overflow-y: auto; padding: var(--lk-sm) var(--lk-md); }
+.planner-editor-shell .project-map-instance-panel > h3 { margin: 0; }
+.planner-editor-shell .project-map-instance-panel__transfer-destination > label { display: grid; gap: var(--lk-3xs); min-width: 0; }
+.planner-editor-shell .project-map-instance-panel__transfer-destination select { box-sizing: border-box; min-width: 0; width: 100%; }
+.planner-editor-shell .project-map-instance-panel__list { display: grid; gap: var(--lk-xs); list-style: none; margin: 0; min-width: 0; padding: 0; }
+.planner-editor-shell .project-map-instance-panel__instance { display: grid; gap: var(--lk-xs); grid-template-columns: minmax(0, 1fr); min-width: 0; padding: var(--lk-xs); }
+.planner-editor-shell .project-map-instance-panel__instance-summary { display: grid; gap: var(--lk-3xs); min-width: 0; overflow-wrap: anywhere; }
+.planner-editor-shell .project-map-instance-panel__instance-summary > :is(strong, span) { min-width: 0; overflow-wrap: anywhere; }
+.planner-editor-shell .project-map-instance-panel__instance-actions { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(3, minmax(0, 1fr)); min-width: 0; }
+.planner-editor-shell .project-map-instance-panel__rename-form { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; }
+.planner-editor-shell .project-map-instance-panel__rename-form label { grid-column: 1 / -1; min-width: 0; }
+.planner-editor-shell .project-map-instance-panel__rename-form input { box-sizing: border-box; min-width: 0; width: 100%; }
+.planner-editor-shell .project-map-instance-panel__instance-actions button,
+.planner-editor-shell .project-map-instance-panel__rename-form button { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
 .planner-editor-shell .editor-modal--save-panel { max-height: min(48rem, calc(100dvh - 2rem)); overflow-y: auto; width: min(680px, 90vw); }
 .planner-editor-shell .planner-save-modal-loader__branches { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(3, minmax(0, 1fr)); padding: var(--lk-sm) var(--lk-md) 0; }
 .planner-editor-shell .planner-save-modal-loader__branches button { min-width: 0; overflow-wrap: anywhere; padding: var(--lk-xs) var(--lk-sm); }
@@ -3550,6 +3563,10 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .editor-modal__map-grid button span { font-size: 14px; line-height: 20px; }
 .planner-editor-shell .editor-modal__map-grid button[aria-pressed="true"] { background: #c9fb45; }
 .planner-editor-shell .editor-modal__map-grid img { aspect-ratio: 1; object-fit: cover; width: 100%; }
+
+@media (max-width: 520px) {
+  .planner-editor-shell .project-map-instance-panel__instance-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 /* Editor modal content redesign: View, Settings, and Help only. */
 .planner-editor-shell .editor-modal--view-panel,
