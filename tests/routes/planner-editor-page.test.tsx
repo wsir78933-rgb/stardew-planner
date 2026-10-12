@@ -106,8 +106,8 @@ describe("planner editor page", () => {
       ),
       'id="capabilities"',
       'id="how-to"',
-      'data-homepage-closing-cta="true"',
       'id="faq"',
+      'data-homepage-closing-cta="true"',
     ] as const;
     let previousHomepageSectionPosition = plannerPageMarkup.indexOf(
       homepageSectionMarkers[0],
@@ -225,8 +225,8 @@ describe("planner editor page", () => {
         ),
         'id="capabilities"',
         'id="how-to"',
-        'data-homepage-closing-cta="true"',
         'id="faq"',
+        'data-homepage-closing-cta="true"',
       ] as const;
       let previousHomepageSectionPosition = homepageMarkup.indexOf(
         homepageSectionMarkers[0],

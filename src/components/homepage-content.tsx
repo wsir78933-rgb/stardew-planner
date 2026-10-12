@@ -57,11 +57,6 @@ export function HomepageContent({
         />
         <HomepageFeatureIntroductionSection copy={copy.featureIntroduction} />
         <HomepageHowToSection copy={copy.howTo} />
-        <HomepageClosingCta
-          copy={copy.closingCta}
-          plannerHref={plannerHref}
-          primaryActionLabel={copy.hero.primaryActionLabel}
-        />
         <section data-homepage-faq id="faq">
           <HomepageFaqList
             description={copy.faq.description}
@@ -70,6 +65,11 @@ export function HomepageContent({
             items={copy.faq.items}
           />
         </section>
+        <HomepageClosingCta
+          copy={copy.closingCta}
+          plannerHref={plannerHref}
+          primaryActionLabel={copy.hero.primaryActionLabel}
+        />
       </main>
       <SiteFooter content={createSiteFooterContent(copy.footer, currentLocale)} />
     </>
