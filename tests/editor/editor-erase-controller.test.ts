@@ -3,6 +3,9 @@ import type { BuildingPlacementMetadataById } from "../../src/catalog";
 import {
   applyEditorErase,
   applyEditorEraseRectangle,
+  previewEditorErase,
+  previewEditorEraseRectangle,
+  type EditorEraseInput,
 } from "../../src/editor/editor-erase-controller";
 import {
   createPlacementHistory,
@@ -336,5 +339,203 @@ describe("applyEditorErase", () => {
         createPlacementItem({ instanceId: 3, x: 7, y: 7, layer: "item" }),
       ],
     });
+  });
+});
+
+describe("previewEditorErase", () => {
+  it("previews the same topmost item, crop, and path that cursor erase removes", () => {
+    const rug = createPlacementItem({
+      footprint: { width: 3, height: 2 },
+      instanceId: 2,
+      isRug: true,
+      itemId: "furniture_1451",
+      x: 0,
+      y: 0,
+    });
+    const ordinaryItem = createPlacementItem({ instanceId: 1, x: 1, y: 1 });
+    const itemPlacementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [ordinaryItem, rug],
+      nextItemId: 3,
+    });
+    const itemInput = {
+      cursorTile: { x: 1, y: 1 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: itemPlacementHistory,
+    };
+    const originalItemSnapshot = structuredClone(itemPlacementHistory.currentState);
+
+    expect(previewEditorErase(itemInput)).toEqual(["item:1"]);
+    expect(itemPlacementHistory.currentState).toEqual(originalItemSnapshot);
+    expect(itemPlacementHistory.undoStates).toEqual([]);
+    const erasedItem = applyEditorErase(itemInput);
+    expect(erasedItem).toMatchObject({ applied: true, erased: "item" });
+    expect(erasedItem.placementHistory.currentState.items).toEqual([rug]);
+
+    const cropPlacementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{ instanceId: 1, buildingId: "Barn", x: 3, y: 4 }],
+      crops: [{ cropId: "crop:24", x: 3, y: 4 }],
+      nextBuildingId: 2,
+    });
+    const cropInput = {
+      cursorTile: { x: 3, y: 4 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: cropPlacementHistory,
+    };
+
+    expect(previewEditorErase(cropInput)).toEqual(["crop:3,4"]);
+    expect(applyEditorErase(cropInput)).toMatchObject({
+      applied: true,
+      erased: "crop",
+    });
+
+    const pathPlacementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlacementItem({ instanceId: 9, layer: "path", x: 2, y: 2 })],
+      nextItemId: 10,
+    });
+    const pathInput = {
+      cursorTile: { x: 2, y: 2 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: pathPlacementHistory,
+    };
+
+    expect(previewEditorErase(pathInput)).toEqual(["item:9"]);
+    expect(applyEditorErase(pathInput)).toMatchObject({
+      applied: true,
+      erased: "path",
+    });
+  });
+
+  it("returns no cursor target for an empty tile or a locked path", () => {
+    const emptyPlacementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const lockedPathHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        createPlacementItem({
+          instanceId: 2,
+          layer: "path",
+          locked: true,
+          x: 5,
+          y: 6,
+        }),
+      ],
+      nextItemId: 3,
+    });
+
+    expect(previewEditorErase({
+      cursorTile: { x: 30, y: 30 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: emptyPlacementHistory,
+    })).toEqual([]);
+    expect(previewEditorErase({
+      cursorTile: { x: 5, y: 6 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: lockedPathHistory,
+    })).toEqual([]);
+  });
+
+  it("previews every unlocked rectangle target and matches the delete result in either drag direction", () => {
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      buildings: [
+        { instanceId: 1, buildingId: "Barn", x: 2, y: 2 },
+        { instanceId: 2, buildingId: "Barn", x: 7, y: 7 },
+      ],
+      crops: [
+        { cropId: "crop:24", x: 3, y: 3 },
+        { cropId: "crop:24", x: 7, y: 7 },
+      ],
+      items: [
+        createPlacementItem({ instanceId: 1, x: 4, y: 4, layer: "item" }),
+        createPlacementItem({ instanceId: 2, x: 4, y: 4, layer: "path", locked: true }),
+        createPlacementItem({
+          footprint: { width: 2, height: 1 },
+          instanceId: 3,
+          layer: "path",
+          x: 1,
+          y: 2,
+        }),
+        createPlacementItem({ instanceId: 4, x: 7, y: 7, layer: "item" }),
+      ],
+      nextBuildingId: 3,
+      nextItemId: 5,
+    });
+    const originalCurrentState = structuredClone(placementHistory.currentState);
+    const forwardRectangleInput = {
+      firstTile: { x: 2, y: 2 },
+      secondTile: { x: 4, y: 4 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    };
+    const reverseRectangleInput = {
+      ...forwardRectangleInput,
+      firstTile: { x: 4, y: 4 },
+      secondTile: { x: 2, y: 2 },
+    };
+    const expectedSelectionKeys = [
+      "building:1",
+      "item:1",
+      "item:3",
+      "crop:3,3",
+    ];
+
+    expect(previewEditorEraseRectangle(forwardRectangleInput)).toEqual(
+      expectedSelectionKeys,
+    );
+    expect(previewEditorEraseRectangle(reverseRectangleInput)).toEqual(
+      expectedSelectionKeys,
+    );
+    expect(placementHistory.currentState).toEqual(originalCurrentState);
+    expect(placementHistory.undoStates).toEqual([]);
+
+    const erasedRectangle = applyEditorEraseRectangle(forwardRectangleInput);
+    expect(erasedRectangle).toMatchObject({
+      applied: true,
+      erasedBuildingCount: 1,
+      erasedCropCount: 1,
+      erasedItemCount: 2,
+    });
+    expect(erasedRectangle.placementHistory.currentState).toMatchObject({
+      buildings: [{ instanceId: 2, buildingId: "Barn", x: 7, y: 7 }],
+      crops: [{ cropId: "crop:24", x: 7, y: 7 }],
+      items: [
+        createPlacementItem({
+          instanceId: 2,
+          x: 4,
+          y: 4,
+          layer: "path",
+          locked: true,
+        }),
+        createPlacementItem({ instanceId: 4, x: 7, y: 7, layer: "item" }),
+      ],
+    });
+  });
+
+  it("fails fast with the invalid tile value and unknown building ID", () => {
+    const emptyPlacementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const invalidCursorInput: EditorEraseInput = {
+      cursorTile: { x: -1, y: 0 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: emptyPlacementHistory,
+    };
+
+    expect(() => previewEditorErase(invalidCursorInput)).toThrow(
+      /cursorTile\.x.*-1/,
+    );
+
+    const unknownBuildingHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{ instanceId: 1, buildingId: "Missing Cabin", x: 2, y: 2 }],
+      nextBuildingId: 2,
+    });
+
+    expect(() => previewEditorEraseRectangle({
+      firstTile: { x: 2, y: 2 },
+      secondTile: { x: 2, y: 2 },
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: unknownBuildingHistory,
+    })).toThrow(/Missing Cabin/);
   });
 });

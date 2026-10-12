@@ -7,6 +7,8 @@ import { editorTools, type EditorTool } from "../editor/editor-view-state";
 import {
   applyEditorErase,
   applyEditorEraseRectangle,
+  previewEditorErase,
+  previewEditorEraseRectangle,
 } from "../editor/editor-erase-controller";
 import { applyEditorFill } from "../editor/editor-fill-controller";
 import { applyEditorCursorPlacement } from "../editor/editor-placement-controller";
@@ -74,6 +76,23 @@ export type PlannerWorkspaceMapTileRectangleInput =
       firstTile: MapTileCoordinates;
       secondTile: MapTileCoordinates;
       tool: EditorTool | null;
+    }>;
+
+type PlannerWorkspaceErasePreviewContext = Readonly<{
+  buildingMetadataById: BuildingPlacementMetadataById;
+  placementHistory: PlacementHistory<PlacementSnapshot>;
+  tool: EditorTool | null;
+}>;
+
+export type PlannerWorkspaceErasePreviewInput =
+  PlannerWorkspaceErasePreviewContext &
+    Readonly<{ cursorTile: MapTileCoordinates }>;
+
+export type PlannerWorkspaceEraseRectanglePreviewInput =
+  PlannerWorkspaceErasePreviewContext &
+    Readonly<{
+      firstTile: MapTileCoordinates;
+      secondTile: MapTileCoordinates;
     }>;
 
 export type PlannerWorkspaceMoveSelectionInput = Readonly<{
@@ -354,6 +373,39 @@ export function previewPlannerWorkspaceFillRectangle(
   return fillResult.applied
     ? createAddedPlacementActions(fillInput.placementHistory.currentState, fillResult.placementHistory.currentState)
     : null;
+}
+
+export function previewPlannerWorkspaceEraseAtTile(
+  erasePreviewInput: PlannerWorkspaceErasePreviewInput,
+): readonly PlacementSelectionKey[] | null {
+  assertPlannerWorkspaceErasePreviewInput(erasePreviewInput);
+  if (erasePreviewInput.tool !== "erase") {
+    return null;
+  }
+
+  return previewEditorErase({
+    buildingMetadataById: erasePreviewInput.buildingMetadataById,
+    cursorTile: erasePreviewInput.cursorTile,
+    placementHistory: erasePreviewInput.placementHistory,
+  });
+}
+
+export function previewPlannerWorkspaceEraseRectangle(
+  eraseRectanglePreviewInput: PlannerWorkspaceEraseRectanglePreviewInput,
+): readonly PlacementSelectionKey[] | null {
+  assertPlannerWorkspaceEraseRectanglePreviewInput(
+    eraseRectanglePreviewInput,
+  );
+  if (eraseRectanglePreviewInput.tool !== "erase") {
+    return null;
+  }
+
+  return previewEditorEraseRectangle({
+    buildingMetadataById: eraseRectanglePreviewInput.buildingMetadataById,
+    firstTile: eraseRectanglePreviewInput.firstTile,
+    placementHistory: eraseRectanglePreviewInput.placementHistory,
+    secondTile: eraseRectanglePreviewInput.secondTile,
+  });
 }
 
 function createAddedPlacementActions(
@@ -696,6 +748,49 @@ function assertPlannerWorkspaceMapTileRectangleInput(
     "secondTile",
   );
   assertEditorToolSelection(plannerWorkspaceMapTileRectangleInput.tool);
+}
+
+function assertPlannerWorkspaceErasePreviewInput(
+  erasePreviewInput: PlannerWorkspaceErasePreviewInput,
+): void {
+  assertPlannerWorkspaceErasePreviewContext(erasePreviewInput);
+  assertMapTileCoordinates(erasePreviewInput.cursorTile, "cursorTile");
+}
+
+function assertPlannerWorkspaceEraseRectanglePreviewInput(
+  eraseRectanglePreviewInput: PlannerWorkspaceEraseRectanglePreviewInput,
+): void {
+  assertPlannerWorkspaceErasePreviewContext(eraseRectanglePreviewInput);
+  assertMapTileCoordinates(eraseRectanglePreviewInput.firstTile, "firstTile");
+  assertMapTileCoordinates(eraseRectanglePreviewInput.secondTile, "secondTile");
+}
+
+function assertPlannerWorkspaceErasePreviewContext(
+  erasePreviewContext: PlannerWorkspaceErasePreviewContext,
+): void {
+  if (
+    typeof erasePreviewContext !== "object" ||
+    erasePreviewContext === null
+  ) {
+    throw new TypeError(
+      `Planner workspace erase preview context must be an object; received ${describeValue(erasePreviewContext)}.`,
+    );
+  }
+  const { buildingMetadataById, placementHistory, tool } = erasePreviewContext;
+  if (
+    typeof buildingMetadataById !== "object" ||
+    buildingMetadataById === null ||
+    Array.isArray(buildingMetadataById)
+  ) {
+    throw new TypeError(
+      `Planner workspace erase preview buildingMetadataById must be an object; received ${describeValue(buildingMetadataById)}.`,
+    );
+  }
+  assertPlannerWorkspaceTransitionInput({
+    placementHistory,
+    selectedPlacementKeys: [],
+  });
+  assertEditorToolSelection(tool);
 }
 
 function assertPlannerWorkspaceCatalogChoicePair(

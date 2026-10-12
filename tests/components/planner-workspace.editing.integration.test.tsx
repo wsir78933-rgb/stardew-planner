@@ -1,7 +1,11 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import type {
-  BuildingPlacementMetadataById,
-  CatalogItem,
+import {
+  catalogDatasetUrls,
+  createBuildingCatalogFromDataset,
+  type BuildingPlacementMetadataById,
+  type CatalogItem,
 } from "../../src/catalog";
 import {
   createInitialWorkspaceCatalogChoiceState,
@@ -35,6 +39,8 @@ import {
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
 import {
+  createWorkspaceErasePreviewAtTileInput,
+  createWorkspaceEraseRectanglePreviewInput,
   createWorkspaceCatalogPlacementPreviewInput,
   getPlannerCanvasInteractionProperties,
   processPlannerWorkspaceMapTileClick,
@@ -84,6 +90,24 @@ function createCropCatalogItem(): CatalogItem {
     textureLocalPath: "/game-assets/1.6.15/objects/Parsnip.png",
     tileSize: { width: 1, height: 1 },
   };
+}
+
+function createBeachCabinCatalogItemFromLockedBuildings(): CatalogItem {
+  const buildingsPath = resolve(
+    process.cwd(),
+    "public/game-assets/1.6.15/data/Buildings.json",
+  );
+  const lockedBuildings = JSON.parse(readFileSync(buildingsPath, "utf8")) as unknown;
+  const beachCabinCatalogItem = createBuildingCatalogFromDataset(
+    lockedBuildings,
+    catalogDatasetUrls.buildings,
+  ).items.find((catalogItem) => catalogItem.id === "building:Beach Cabin");
+
+  if (beachCabinCatalogItem === undefined) {
+    throw new Error('Locked building catalog did not contain "building:Beach Cabin".');
+  }
+
+  return beachCabinCatalogItem;
 }
 
 function createDeluxeCoopCatalogItem(): CatalogItem {
@@ -236,6 +260,68 @@ describe("workspace catalog placement preview wiring", () => {
       freePlacement: true,
       selectedCatalogItem: { catalogItem: selectedCatalogItem, presentationChoice },
       tool: null,
+    })).toBeNull();
+  });
+});
+
+describe("workspace eraser preview wiring", () => {
+  it("passes ready hover and rectangle inputs independently of catalog selection", () => {
+    const placementHistory = createTwoPlacedFloorItemsHistory();
+    const buildingMetadataById = createBuildingMetadataById();
+    const currentMapPlacementGrid = createStandardFarmPlacementGrid();
+
+    const hoverInput = createWorkspaceErasePreviewAtTileInput({
+      buildingMetadataById,
+      currentMapPlacementGrid,
+      cursorTile: { x: 0, y: 0 },
+      placementHistory,
+      tool: "erase",
+    });
+    const rectangleInput = createWorkspaceEraseRectanglePreviewInput({
+      buildingMetadataById,
+      currentMapPlacementGrid,
+      firstTile: { x: 0, y: 0 },
+      placementHistory,
+      secondTile: { x: 1, y: 0 },
+      tool: "erase",
+    });
+
+    expect(hoverInput).toEqual({
+      buildingMetadataById,
+      cursorTile: { x: 0, y: 0 },
+      placementHistory,
+      tool: "erase",
+    });
+    expect(rectangleInput).toEqual({
+      buildingMetadataById,
+      firstTile: { x: 0, y: 0 },
+      placementHistory,
+      secondTile: { x: 1, y: 0 },
+      tool: "erase",
+    });
+    expect(hoverInput?.placementHistory).toBe(placementHistory);
+    expect(rectangleInput?.placementHistory).toBe(placementHistory);
+    expect(createWorkspaceErasePreviewAtTileInput({
+      buildingMetadataById,
+      currentMapPlacementGrid: null,
+      cursorTile: { x: 0, y: 0 },
+      placementHistory,
+      tool: "erase",
+    })).toBeNull();
+    expect(createWorkspaceEraseRectanglePreviewInput({
+      buildingMetadataById: null,
+      currentMapPlacementGrid,
+      firstTile: { x: 0, y: 0 },
+      placementHistory,
+      secondTile: { x: 1, y: 0 },
+      tool: "erase",
+    })).toBeNull();
+    expect(createWorkspaceErasePreviewAtTileInput({
+      buildingMetadataById,
+      currentMapPlacementGrid,
+      cursorTile: { x: 0, y: 0 },
+      placementHistory,
+      tool: "multi-select",
     })).toBeNull();
   });
 });
@@ -403,6 +489,39 @@ describe("catalog item selection tools", () => {
       : fillTransition.placementHistory.currentState.items;
 
     expect(placedRecords).toHaveLength(2);
+  });
+
+  it("keeps the locked Beach Cabin available to Fill when the tool or building is selected first", () => {
+    const beachCabinCatalogItem = createBeachCabinCatalogItemFromLockedBuildings();
+    const fillSelectedBeforeBuilding = getPlannerWorkspaceToolSelection(
+      "fill",
+      null,
+    );
+    const toolAfterBuildingSelection =
+      getPlannerWorkspaceCatalogItemSelectionTool(
+        "fill",
+        beachCabinCatalogItem,
+      );
+    const fillSelectedAfterBuilding = getPlannerWorkspaceToolSelection(
+      "fill",
+      beachCabinCatalogItem,
+    );
+
+    expect(fillSelectedBeforeBuilding).toEqual({
+      selectedCatalogItem: null,
+      selectedCatalogItemId: null,
+    });
+    expect(toolAfterBuildingSelection).toBe("fill");
+    expect(fillSelectedAfterBuilding).toEqual({
+      selectedCatalogItem: beachCabinCatalogItem,
+      selectedCatalogItemId: "building:Beach Cabin",
+    });
+    expect(
+      getPlannerWorkspaceCatalogItemSelectionTool(
+        "fill",
+        fillSelectedAfterBuilding.selectedCatalogItem!,
+      ),
+    ).toBe("fill");
   });
 });
 

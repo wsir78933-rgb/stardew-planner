@@ -16,6 +16,7 @@ import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
 import { interiorWallpaperPatterns } from "../../src/interior-decor/interior-decor-catalog";
 import type { TmxMap } from "../../src/tmx/tmx-types";
 import type { PlacementRenderEntry } from "../../src/rendering/placement-rendering";
+import type { PlacementSprite } from "../../src/components/planner-canvas";
 import { createPlacementRenderEntries } from "../../src/rendering/placement-rendering";
 import {
   resolvePlacementTextureEntries,
@@ -39,6 +40,7 @@ const {
   bindPlannerCanvasInteractions,
   commitPlannerCanvasExporterAndWarnings,
   createPlacementSprite,
+  createPlacementErasePreviewVisualUpdater,
   createPlacementSpriteBatch,
   destroyPlacementSprites,
   formatKnownUnavailableTilesheetWarning,
@@ -1937,6 +1939,12 @@ class TestCanvasElement {
     }
   }
 
+  dispatchKeyboardEvent(keyboardEvent: KeyboardEvent): void {
+    for (const eventListener of this.eventListeners.get("keydown") ?? []) {
+      eventListener(keyboardEvent);
+    }
+  }
+
   focus(): void {}
 
   getBoundingClientRect(): DOMRect {
@@ -1997,6 +2005,16 @@ function createWheelEvent(
     deltaY: -120,
     preventDefault: preventDefaultCallback,
   } as WheelEvent;
+}
+
+function createKeyboardEvent(key: string): KeyboardEvent {
+  return {
+    altKey: false,
+    ctrlKey: false,
+    key,
+    metaKey: false,
+    preventDefault(): void {},
+  } as KeyboardEvent;
 }
 
 function createDestroyablePixiResource(): Readonly<{
@@ -2760,6 +2778,22 @@ describe("layered placement sprite rendering", () => {
     };
   }
 
+  function createErasePreviewTestPlacementSprite(
+    placementKey: string,
+    tint: number,
+    blendMode: PlacementSprite["sprite"]["blendMode"],
+    alpha = 1,
+  ): PlacementSprite {
+    return {
+      animation: null,
+      animationFrameTextures: [],
+      placementKey,
+      sprite: { alpha, tint, blendMode } as unknown as PlacementSprite["sprite"],
+      frameTexture: null,
+      paintedTexture: null,
+    };
+  }
+
   it("applies generic pixel geometry including texture-width mirroring", () => {
     const placementSprite = createPlacementSprite(
       pixi,
@@ -2825,6 +2859,119 @@ describe("layered placement sprite rendering", () => {
     expect(shadowSprite.blendMode).toBe("add");
     expect(treeSprite.blendMode).toBe("add");
     expect(unselectedCustomTintSprite.blendMode).toBe("normal");
+  });
+
+  it("highlights every erase target including selected placements and restores each original visual", () => {
+    const erasePreviewVisualUpdater =
+      createPlacementErasePreviewVisualUpdater();
+    const shadowLayer = createErasePreviewTestPlacementSprite(
+      "item:9",
+      0x123456,
+      "normal",
+      0.65,
+    );
+    const treeLayer = createErasePreviewTestPlacementSprite(
+      "item:9",
+      0x654321,
+      "multiply",
+    );
+    const persistentlySelectedPlacement =
+      createErasePreviewTestPlacementSprite("item:2", 0xffdf4a, "add");
+    const unrelatedPlacement = createErasePreviewTestPlacementSprite(
+      "item:3",
+      0xabcdef,
+      "normal",
+    );
+    const renderedPlacementSprites = [
+      shadowLayer,
+      treeLayer,
+      persistentlySelectedPlacement,
+      unrelatedPlacement,
+    ];
+
+    erasePreviewVisualUpdater.update({
+      erasePreviewPlacementKeys: ["item:9", "item:2"],
+      renderedPlacementSprites,
+    });
+
+    expect(shadowLayer.sprite).toMatchObject({
+      tint: 0xff0000,
+      blendMode: "normal",
+      alpha: 0.65,
+    });
+    expect(treeLayer.sprite).toMatchObject({
+      tint: 0xff0000,
+      blendMode: "normal",
+      alpha: 1,
+    });
+    expect(persistentlySelectedPlacement.sprite).toMatchObject({
+      tint: 0xff0000,
+      blendMode: "normal",
+      alpha: 1,
+    });
+    expect(unrelatedPlacement.sprite).toMatchObject({
+      tint: 0xabcdef,
+      blendMode: "normal",
+    });
+
+    erasePreviewVisualUpdater.update({
+      erasePreviewPlacementKeys: [],
+      renderedPlacementSprites,
+    });
+
+    expect(shadowLayer.sprite).toMatchObject({
+      tint: 0x123456,
+      blendMode: "normal",
+      alpha: 0.65,
+    });
+    expect(treeLayer.sprite).toMatchObject({ tint: 0x654321, blendMode: "multiply" });
+    expect(persistentlySelectedPlacement.sprite).toMatchObject({
+      tint: 0xffdf4a,
+      blendMode: "add",
+    });
+    expect(unrelatedPlacement.sprite).toMatchObject({
+      tint: 0xabcdef,
+      blendMode: "normal",
+    });
+  });
+
+  it("restores erase highlights when the tool exits or the map visual is cleared", () => {
+    const erasePreviewVisualUpdater =
+      createPlacementErasePreviewVisualUpdater();
+    const targetPlacement = createErasePreviewTestPlacementSprite(
+      "building:4",
+      0x224466,
+      "normal",
+    );
+    const renderedPlacementSprites = [targetPlacement];
+
+    erasePreviewVisualUpdater.update({
+      erasePreviewPlacementKeys: ["building:4"],
+      renderedPlacementSprites,
+    });
+    expect(targetPlacement.sprite).toMatchObject({
+      tint: 0xff0000,
+      blendMode: "normal",
+    });
+
+    erasePreviewVisualUpdater.update({
+      erasePreviewPlacementKeys: null,
+      renderedPlacementSprites,
+    });
+    expect(targetPlacement.sprite).toMatchObject({
+      tint: 0x224466,
+      blendMode: "normal",
+    });
+
+    erasePreviewVisualUpdater.update({
+      erasePreviewPlacementKeys: ["building:4"],
+      renderedPlacementSprites,
+    });
+    erasePreviewVisualUpdater.clear();
+    expect(targetPlacement.sprite).toMatchObject({
+      tint: 0x224466,
+      blendMode: "normal",
+    });
   });
 
   it("loads each resolved layer texture once", async () => {
@@ -4737,6 +4884,80 @@ describe("attachPlannerCameraControls map placement clicks", () => {
     expect(placementClickTestControls.clickedMapTiles).toEqual([
       { x: 5, y: 4 },
     ]);
+  });
+
+  it("clears an active rectangle preview on pointer leave and resumes it on re-entry", () => {
+    const placementClickTestControls = createPlacementClickTestControls("rectangle");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 132, 112),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerleave",
+      createPointerEvent(1, 132, 112),
+    );
+
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(1);
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 148, 128),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 148, 128),
+    );
+
+    expect(placementClickTestControls.mapTileRectanglePreviews).toEqual([
+      { start: { x: 5, y: 4 }, end: { x: 5, y: 4 } },
+      { start: { x: 5, y: 4 }, end: { x: 7, y: 6 } },
+      { start: { x: 5, y: 4 }, end: { x: 8, y: 7 } },
+    ]);
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(2);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([
+      { start: { x: 5, y: 4 }, end: { x: 8, y: 7 } },
+    ]);
+  });
+
+  it("cancels an active rectangle preview on Escape without committing on release", () => {
+    const placementClickTestControls = createPlacementClickTestControls("rectangle");
+
+    if (placementClickTestControls === null) {
+      return;
+    }
+
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerdown",
+      createPointerEvent(1, 100, 80),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 132, 112),
+    );
+    placementClickTestControls.canvasElement.dispatchKeyboardEvent(
+      createKeyboardEvent("Escape"),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointermove",
+      createPointerEvent(1, 148, 128),
+    );
+    placementClickTestControls.canvasElement.dispatchPointerEvent(
+      "pointerup",
+      createPointerEvent(1, 148, 128),
+    );
+
+    expect(placementClickTestControls.mapTileRectanglePreviewClearCount()).toBe(1);
+    expect(placementClickTestControls.selectedMapRectangles).toEqual([]);
+    expect(placementClickTestControls.clickedMapTiles).toEqual([]);
   });
 
   it("pans the camera without placing or moving a placement after a real drag", () => {

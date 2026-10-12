@@ -31,7 +31,10 @@ import {
   interiorWallpaperPatterns,
   type InteriorDecorCatalogPattern,
 } from "../interior-decor/interior-decor-catalog";
-import type { MapPlacementGrid } from "../placement/map-placement-grids";
+import type {
+  MapPlacementGrid,
+  MapTileCoordinates,
+} from "../placement/map-placement-grids";
 import type { PlacementHistory } from "../placement/placement-history";
 import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import {
@@ -41,6 +44,8 @@ import {
   deletePlannerWorkspaceSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
   previewPlannerWorkspaceFillRectangle,
+  previewPlannerWorkspaceEraseAtTile,
+  previewPlannerWorkspaceEraseRectangle,
   previewPlannerWorkspaceSelectionAtTile,
   getPlannerWorkspaceCatalogItemSelectionTool,
   getPlannerWorkspaceToolSelection,
@@ -50,6 +55,8 @@ import {
   setPlannerWorkspaceSelectedBuildingWaterColor,
   setPlannerWorkspaceSelectedItemTint,
   setPlannerWorkspaceSelectedNightLightState,
+  type PlannerWorkspaceErasePreviewInput,
+  type PlannerWorkspaceEraseRectanglePreviewInput,
 } from "../planner/planner-workspace-editing-controller";
 import {
   advanceWorkspaceCatalogPlacementAttempt,
@@ -252,6 +259,9 @@ type CurrentMapPlacementGrid = Readonly<{
 
 type PreparedWorkspaceInitialization = Readonly<{
   buildingMetadataById: BuildingPlacementMetadataById | null;
+  getCurrentMapPlacementGrid: (
+    requestedMapId: string,
+  ) => MapPlacementGrid | null;
   getRequiredCurrentMapPlacementGrid: (requestedMapId: string) => MapPlacementGrid;
   onCanvasInteractive: () => void;
   onCanvasReady: () => void;
@@ -288,6 +298,12 @@ type WorkspaceEditingControls = Readonly<{
   >;
   getFillRectanglePreviewAtTiles: NonNullable<
     PlannerCanvasProperties["getFillRectanglePreviewAtTiles"]
+  >;
+  getErasePreviewAtTile: NonNullable<
+    PlannerCanvasProperties["getErasePreviewAtTile"]
+  >;
+  getEraseRectanglePreviewAtTiles: NonNullable<
+    PlannerCanvasProperties["getEraseRectanglePreviewAtTiles"]
   >;
   onMapTileClick: (mapId: string, cursorTile: { x: number; y: number }) => void;
   onPlacementSelectionClick: (
@@ -332,6 +348,58 @@ export function createWorkspaceCatalogPlacementPreviewInput(
             input.selectedCatalogItem.resolvedCompositeVariant,
         }),
     selectedCatalogItem: input.selectedCatalogItem.catalogItem,
+  };
+}
+
+export function createWorkspaceErasePreviewAtTileInput(
+  input: Readonly<{
+    buildingMetadataById: BuildingPlacementMetadataById | null;
+    currentMapPlacementGrid: MapPlacementGrid | null;
+    cursorTile: MapTileCoordinates;
+    placementHistory: PlacementHistory<PlacementSnapshot>;
+    tool: EditorTool | null;
+  }>,
+): PlannerWorkspaceErasePreviewInput | null {
+  if (
+    input.tool !== "erase" ||
+    input.buildingMetadataById === null ||
+    input.currentMapPlacementGrid === null
+  ) {
+    return null;
+  }
+
+  return {
+    buildingMetadataById: input.buildingMetadataById,
+    cursorTile: input.cursorTile,
+    placementHistory: input.placementHistory,
+    tool: input.tool,
+  };
+}
+
+export function createWorkspaceEraseRectanglePreviewInput(
+  input: Readonly<{
+    buildingMetadataById: BuildingPlacementMetadataById | null;
+    currentMapPlacementGrid: MapPlacementGrid | null;
+    firstTile: MapTileCoordinates;
+    placementHistory: PlacementHistory<PlacementSnapshot>;
+    secondTile: MapTileCoordinates;
+    tool: EditorTool | null;
+  }>,
+): PlannerWorkspaceEraseRectanglePreviewInput | null {
+  if (
+    input.tool !== "erase" ||
+    input.buildingMetadataById === null ||
+    input.currentMapPlacementGrid === null
+  ) {
+    return null;
+  }
+
+  return {
+    buildingMetadataById: input.buildingMetadataById,
+    firstTile: input.firstTile,
+    placementHistory: input.placementHistory,
+    secondTile: input.secondTile,
+    tool: input.tool,
   };
 }
 
@@ -825,6 +893,7 @@ function PreparedPlannerWorkspaceContent({
   });
   const {
     buildingMetadataById,
+    getCurrentMapPlacementGrid,
     getRequiredCurrentMapPlacementGrid,
     handleCanvasError,
     handleCanvasInteractive,
@@ -928,6 +997,7 @@ function PreparedPlannerWorkspaceContent({
     applyPlacementEditResult,
     buildingMetadataById,
     clearSelectedCatalogItem,
+    getCurrentMapPlacementGrid,
     getRequiredCurrentMapPlacementGrid,
     isRequiredPlacementCatalogReady,
     plannerWorkspaceState,
@@ -1178,6 +1248,10 @@ function PreparedPlannerWorkspaceContent({
           }
           getFillRectanglePreviewAtTiles={
             workspaceEditingControls.getFillRectanglePreviewAtTiles
+          }
+          getErasePreviewAtTile={workspaceEditingControls.getErasePreviewAtTile}
+          getEraseRectanglePreviewAtTiles={
+            workspaceEditingControls.getEraseRectanglePreviewAtTiles
           }
           onPlacementSelectionClick={workspaceEditingControls.onPlacementSelectionClick}
           onMoveSelectedPlacements={workspaceEditingControls.handleMoveSelectedPlacements}
@@ -1433,20 +1507,31 @@ function usePreparedWorkspaceInitialization({
     preparedWorkspace.resourceGeneration,
   ]);
 
-  const getRequiredCurrentMapPlacementGrid = useCallback(
-    (requestedMapId: string): MapPlacementGrid => {
+  const getCurrentMapPlacementGrid = useCallback(
+    (requestedMapId: string): MapPlacementGrid | null => {
       const currentMapPlacementGrid = mapPlacementGridReference.current;
       if (
         currentMapPlacementGrid === null ||
         currentMapPlacementGrid.mapId !== requestedMapId
       ) {
-        throw new Error(
-          `Planner workspace map placement grid is unavailable for requested map ID ${JSON.stringify(requestedMapId)}.`,
-        );
+        return null;
       }
       return currentMapPlacementGrid.mapPlacementGrid;
     },
     [],
+  );
+  const getRequiredCurrentMapPlacementGrid = useCallback(
+    (requestedMapId: string): MapPlacementGrid => {
+      const currentMapPlacementGrid =
+        getCurrentMapPlacementGrid(requestedMapId);
+      if (currentMapPlacementGrid === null) {
+        throw new Error(
+          `Planner workspace map placement grid is unavailable for requested map ID ${JSON.stringify(requestedMapId)}.`,
+        );
+      }
+      return currentMapPlacementGrid;
+    },
+    [getCurrentMapPlacementGrid],
   );
   const handleCanvasReady = useCallback(() => {
     dispatchPlannerWorkspaceAction({
@@ -1488,6 +1573,7 @@ function usePreparedWorkspaceInitialization({
 
   return {
     buildingMetadataById,
+    getCurrentMapPlacementGrid,
     getRequiredCurrentMapPlacementGrid,
     handleCanvasError,
     handleCanvasInteractive,
@@ -1634,6 +1720,7 @@ function useWorkspaceEditingControls({
   applyPlacementEditResult,
   buildingMetadataById,
   clearSelectedCatalogItem,
+  getCurrentMapPlacementGrid,
   getRequiredCurrentMapPlacementGrid,
   isRequiredPlacementCatalogReady,
   plannerWorkspaceState,
@@ -1649,6 +1736,9 @@ function useWorkspaceEditingControls({
   applyPlacementEditResult: PlannerWorkspaceStateController["applyPlacementEditResult"];
   buildingMetadataById: BuildingPlacementMetadataById | null;
   clearSelectedCatalogItem: () => void;
+  getCurrentMapPlacementGrid: (
+    requestedMapId: string,
+  ) => MapPlacementGrid | null;
   getRequiredCurrentMapPlacementGrid: (requestedMapId: string) => MapPlacementGrid;
   isRequiredPlacementCatalogReady: boolean;
   plannerWorkspaceState: PlannerWorkspaceStateController["plannerWorkspaceState"];
@@ -1827,6 +1917,58 @@ function useWorkspaceEditingControls({
       getRequiredCurrentMapPlacementGrid,
       plannerWorkspaceState,
       selectedCatalogItem,
+    ],
+  );
+  const getErasePreviewAtTile = useCallback<
+    NonNullable<PlannerCanvasProperties["getErasePreviewAtTile"]>
+  >(
+    (cursorTile) => {
+      const erasePreviewInput = createWorkspaceErasePreviewAtTileInput({
+        buildingMetadataById,
+        currentMapPlacementGrid: getCurrentMapPlacementGrid(
+          plannerWorkspaceState.selectedPlannerMapId,
+        ),
+        cursorTile,
+        placementHistory: plannerWorkspaceState.placementHistory,
+        tool: plannerWorkspaceState.tool,
+      });
+      return erasePreviewInput === null
+        ? null
+        : previewPlannerWorkspaceEraseAtTile(erasePreviewInput);
+    },
+    [
+      buildingMetadataById,
+      getCurrentMapPlacementGrid,
+      plannerWorkspaceState.placementHistory,
+      plannerWorkspaceState.selectedPlannerMapId,
+      plannerWorkspaceState.tool,
+    ],
+  );
+  const getEraseRectanglePreviewAtTiles = useCallback<
+    NonNullable<PlannerCanvasProperties["getEraseRectanglePreviewAtTiles"]>
+  >(
+    (firstTile, secondTile) => {
+      const eraseRectanglePreviewInput =
+        createWorkspaceEraseRectanglePreviewInput({
+          buildingMetadataById,
+          currentMapPlacementGrid: getCurrentMapPlacementGrid(
+            plannerWorkspaceState.selectedPlannerMapId,
+          ),
+          firstTile,
+          placementHistory: plannerWorkspaceState.placementHistory,
+          secondTile,
+          tool: plannerWorkspaceState.tool,
+        });
+      return eraseRectanglePreviewInput === null
+        ? null
+        : previewPlannerWorkspaceEraseRectangle(eraseRectanglePreviewInput);
+    },
+    [
+      buildingMetadataById,
+      getCurrentMapPlacementGrid,
+      plannerWorkspaceState.placementHistory,
+      plannerWorkspaceState.selectedPlannerMapId,
+      plannerWorkspaceState.tool,
     ],
   );
   const handleNudgeSelectedPlacements = useCallback(
@@ -2099,6 +2241,8 @@ function useWorkspaceEditingControls({
     cancelPendingDuplicateSelection: () => setPendingDuplicateSelectionKeys(null),
     getPlacementCopyPreviewAtTile,
     getFillRectanglePreviewAtTiles,
+    getErasePreviewAtTile,
+    getEraseRectanglePreviewAtTiles,
     hasPendingPlacementCopy: pendingDuplicateSelectionKeys !== null,
     handleMapTileClick,
     handleMapTileRectangle,

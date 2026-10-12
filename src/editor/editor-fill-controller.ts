@@ -77,8 +77,11 @@ export function applyEditorFill(
     editorFillInput,
   );
 
-  if (isBedFillCatalogItem(selectedCatalogItem)) {
-    return applyEditorBedFill(
+  if (
+    selectedCatalogItem.category === "building"
+    || isBedFillCatalogItem(selectedCatalogItem)
+  ) {
+    return applyEditorValidatedFootprintFill(
       editorFillInput,
       selectedCatalogItem,
       catalogPresentationChoice,
@@ -155,7 +158,7 @@ export function applyEditorFill(
   };
 }
 
-function applyEditorBedFill(
+function applyEditorValidatedFootprintFill(
   editorFillInput: EditorFillInput,
   selectedCatalogItem: CatalogItem,
   catalogPresentationChoice: CatalogPresentationChoice,
@@ -172,7 +175,7 @@ function applyEditorBedFill(
   let firstRejectedValidation:
     | Extract<PlacementValidationResult, { valid: false }>
     | null = null;
-  let placedBedCount = 0;
+  let placedFootprintCount = 0;
 
   for (const fillTile of fillTiles) {
     const placementResult = applyEditorCursorPlacement({
@@ -193,15 +196,15 @@ function applyEditorBedFill(
       }
 
       throw new Error(
-        `Editor bed fill received unexpected unapplied placement result for catalog item ${describeValue(selectedCatalogItem.id)} at tile ${describeValue(fillTile)}.`,
+        `Editor footprint fill received unexpected unapplied placement result for catalog item ${describeValue(selectedCatalogItem.id)} at tile ${describeValue(fillTile)}.`,
       );
     }
 
     validatedPlacementHistory = placementResult.placementHistory;
-    placedBedCount += 1;
+    placedFootprintCount += 1;
   }
 
-  if (placedBedCount === 0) {
+  if (placedFootprintCount === 0) {
     if (firstRejectedValidation === null) {
       return {
         applied: true,
@@ -219,7 +222,7 @@ function applyEditorBedFill(
 
   return {
     applied: true,
-    placedTileCount: placedBedCount,
+    placedTileCount: placedFootprintCount,
     placementHistory: commitPlacementHistory(
       editorFillInput.placementHistory,
       validatedPlacementHistory.currentState,
@@ -312,12 +315,14 @@ function createFillTiles(
     selectedCatalogItem.category === "placeable"
     && renderingMetadata?.kind === "furniture"
     && renderingMetadata.bedType !== null;
+  const isBuilding = selectedCatalogItem.category === "building";
   const isSingleTilePlaceable =
     selectedCatalogItem.category === "placeable"
     && selectedCatalogItem.tileSize.width === 1
     && selectedCatalogItem.tileSize.height === 1;
 
   if (
+    selectedCatalogItem.category !== "building" &&
     selectedCatalogItem.category !== "crop" &&
     selectedCatalogItem.category !== "floor" &&
     selectedCatalogItem.category !== "fence" &&
@@ -334,7 +339,11 @@ function createFillTiles(
     return createFencePerimeterTiles(rectangle);
   }
 
-  if (isBedFurniture || isMultiTileCropCatalogItem(selectedCatalogItem)) {
+  if (
+    isBuilding ||
+    isBedFurniture ||
+    isMultiTileCropCatalogItem(selectedCatalogItem)
+  ) {
     return createFootprintTiledRectangleOrigins(
       rectangle,
       getFillFootprint(selectedCatalogItem, catalogPresentationChoice),

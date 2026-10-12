@@ -876,7 +876,7 @@ function createBuildingCatalogItem(
     category: "building",
     tileSize,
     textureLocalPath,
-    allowedTools: placementTools,
+    allowedTools: fillablePlacementTools,
     ...compositionProperties,
   };
 }

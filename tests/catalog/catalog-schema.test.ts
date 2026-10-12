@@ -109,8 +109,26 @@ describe("catalog schema", () => {
           width: 96,
           height: 112,
         },
-        allowedTools: ["cursor", "multi-select", "erase"],
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
       });
+    for (const buildingId of [
+      "Cabin",
+      "Cabin_1",
+      "Cabin_2",
+      "Beach Cabin",
+      "Beach Cabin_1",
+      "Beach Cabin_2",
+    ]) {
+      expect(catalog.items.find((catalogItem) =>
+        catalogItem.id === `building:${buildingId}`
+      )).toMatchObject({
+        id: `building:${buildingId}`,
+        category: "building",
+        tileSize: { width: 5, height: 3 },
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
+        renderingMetadata: expect.objectContaining({ buildingId }),
+      });
+    }
     expect(catalog.items.find((catalogItem) => catalogItem.id === "building:Coop"))
       .toMatchObject({
         renderingMetadata: {
