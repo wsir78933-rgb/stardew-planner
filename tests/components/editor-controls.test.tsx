@@ -1,13 +1,55 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createElement } from "react";
+import { createElement, isValidElement, type ReactElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
-import { EditorMenuBar } from "../../src/components/editor-menu-bar";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { EditorMenuBar, readEditorMenuModalFocusTarget } from "../../src/components/editor-menu-bar";
+import {
+  closeEditorModal,
+  createInitialEditorViewState,
+  openEditorModal,
+  type EditorModalId,
+} from "../../src/editor/editor-view-state";
 import {
   EditorToolbar,
   getEditorToolbarToolSelectionAfterClick,
 } from "../../src/components/editor-toolbar";
+
+const menuHookState = vi.hoisted(() => ({
+  isEnabled: false,
+  isExpanded: false,
+  toggleReference: { current: null as unknown },
+}));
+
+vi.mock("react", async (importOriginal) => {
+  const actualReact = await importOriginal<typeof import("react")>();
+
+  return {
+    ...actualReact,
+    useId: () => menuHookState.isEnabled ? "menu-test-controls" : actualReact.useId(),
+    useRef: ((initialValue: unknown) => menuHookState.isEnabled
+      ? menuHookState.toggleReference
+      : actualReact.useRef(initialValue)) as typeof actualReact.useRef,
+    useState: ((initialState: unknown) => {
+      if (!menuHookState.isEnabled) return actualReact.useState(initialState);
+
+      return [
+        menuHookState.isExpanded,
+        (nextValue: boolean | ((currentValue: boolean) => boolean)) => {
+          menuHookState.isExpanded = typeof nextValue === "function"
+            ? nextValue(menuHookState.isExpanded)
+            : nextValue;
+        },
+      ];
+    }) as typeof actualReact.useState,
+  };
+});
+
+afterEach(() => {
+  menuHookState.isEnabled = false;
+  menuHookState.isExpanded = false;
+  menuHookState.toggleReference.current = null;
+});
 
 function renderToolbar(
   tool: Parameters<typeof EditorToolbar>[0]["tool"],
@@ -47,7 +89,7 @@ describe("editor controls", () => {
     expect(markup).toContain('data-editor-modal-id="feedback"');
     expect(markup).toContain("C12.3143 21.5809");
     expect(markup).toContain('data-editor-modal-id="ambience-panel"');
-    expect(markup).toContain('data-editor-modal-id="map-options"');
+    expect(markup).toContain('data-editor-modal-id="farm-settings"');
     expect(markup).toContain('data-editor-modal-id="view-panel"');
     expect(markup).toContain('data-editor-modal-id="settings-panel"');
   });
@@ -70,6 +112,7 @@ describe("editor controls", () => {
     expect(markup).toContain('aria-label="本地项目"');
     expect(markup).toContain('aria-label="当前地图: 标准农场"');
     expect(markup).toContain('aria-label="氛围"');
+    expect(markup).toContain('aria-label="农场设置"');
     expect(markup).toContain('aria-label="地图"');
     expect(markup).toContain('aria-label="视图"');
     expect(markup).toContain('aria-label="设置"');
@@ -78,6 +121,154 @@ describe("editor controls", () => {
     expect(markup).toContain('data-editor-modal-id="feedback"');
     expect(markup).toContain('data-editor-modal-id="save-panel"');
     expect(markup).toContain('data-editor-modal-id="map-picker"');
+  });
+
+  it.each([
+    {
+      locale: "en" as const,
+      mapName: "Standard Farm",
+      currentMapLabel: "Current map: Standard Farm",
+      menuLabel: "Menu",
+      controlLabels: ["Ambience", "Farm Settings", "Map", "View", "Settings"],
+    },
+    {
+      locale: "zh" as const,
+      mapName: "标准农场",
+      currentMapLabel: "当前地图: 标准农场",
+      menuLabel: "菜单",
+      controlLabels: ["氛围", "农场设置", "地图", "视图", "设置"],
+    },
+  ])("routes ordered $locale menu actions and both map triggers through the real callbacks", ({
+    locale, mapName, currentMapLabel, menuLabel, controlLabels,
+  }) => {
+    menuHookState.isEnabled = true;
+    let editorViewState = createInitialEditorViewState();
+    const onOpenModal = vi.fn((modalId: EditorModalId) => {
+      editorViewState = openEditorModal(editorViewState, modalId);
+    });
+    const renderMenu = () => EditorMenuBar({
+      activeModalId: editorViewState.modalId,
+      locale,
+      mapDisplayName: mapName,
+      onCycleSeason: () => undefined,
+      onOpenModal,
+      season: "spring",
+    });
+    const initialButtons = getMenuButtons(renderMenu());
+    expect(initialButtons.slice(-5).map((button) => button.props["aria-label"]))
+      .toEqual(controlLabels);
+    const expectedModalIds = [
+      "ambience-panel", "farm-settings", "map-picker", "view-panel", "settings-panel",
+    ];
+
+    for (const [controlIndex, controlLabel] of controlLabels.entries()) {
+      activateMenuButton(renderMenu(), menuLabel);
+      expect(menuHookState.isExpanded).toBe(true);
+      activateMenuButton(renderMenu(), controlLabel);
+      expect(menuHookState.isExpanded).toBe(false);
+      expect(editorViewState.modalId).toBe(expectedModalIds[controlIndex]);
+      expect(onOpenModal).toHaveBeenLastCalledWith(expectedModalIds[controlIndex]);
+      expect(requireMenuButton(renderMenu(), controlLabel).props["aria-expanded"]).toBe(true);
+      editorViewState = closeEditorModal(editorViewState);
+      expect(requireMenuButton(renderMenu(), controlLabel).props["aria-expanded"]).toBe(false);
+    }
+
+    for (const mapTriggerLabel of [currentMapLabel, controlLabels[2]]) {
+      activateMenuButton(renderMenu(), mapTriggerLabel);
+      expect(onOpenModal).toHaveBeenLastCalledWith("map-picker");
+      expect(editorViewState.modalId).toBe("map-picker");
+      expect(requireMenuButton(renderMenu(), currentMapLabel).props["aria-expanded"]).toBe(true);
+      expect(requireMenuButton(renderMenu(), controlLabels[2]).props["aria-expanded"]).toBe(true);
+      expect(requireMenuButton(renderMenu(), controlLabels[1]).props["aria-expanded"]).toBe(false);
+      editorViewState = closeEditorModal(editorViewState);
+      expect(requireMenuButton(renderMenu(), currentMapLabel).props["aria-expanded"]).toBe(false);
+      expect(requireMenuButton(renderMenu(), controlLabels[2]).props["aria-expanded"]).toBe(false);
+    }
+  });
+
+  it.each([
+    { locale: "en" as const, controlLabel: "Farm Settings", modalId: "farm-settings" },
+    { locale: "en" as const, controlLabel: "Map", modalId: "map-picker" },
+    { locale: "zh" as const, controlLabel: "农场设置", modalId: "farm-settings" },
+    { locale: "zh" as const, controlLabel: "地图", modalId: "map-picker" },
+  ])("focuses the visible compact toggle before $locale $controlLabel collapses and opens", ({ locale, controlLabel, modalId }) => {
+    menuHookState.isEnabled = true;
+    menuHookState.isExpanded = true;
+    let activeControl: unknown = null;
+    const compactToggle = {
+      getClientRects: () => [{}],
+      focus: vi.fn(() => {
+        expect(menuHookState.isExpanded).toBe(true);
+        activeControl = compactToggle;
+      }),
+    };
+    const onOpenModal = vi.fn(() => {
+      expect(menuHookState.isExpanded).toBe(false);
+      expect(activeControl).toBe(compactToggle);
+    });
+    const menuTree = renderFocusMenu(locale, onOpenModal);
+    menuHookState.toggleReference.current = compactToggle;
+
+    activateMenuButton(menuTree, controlLabel);
+
+    expect(compactToggle.focus).toHaveBeenCalledOnce();
+    expect(onOpenModal).toHaveBeenCalledExactlyOnceWith(modalId);
+  });
+
+  it.each(["Farm Settings", "Map", "Current map: Standard Farm"])(
+    "preserves the original %s trigger when the compact toggle is hidden",
+    (controlLabel) => {
+      menuHookState.isEnabled = true;
+      const compactToggle = { getClientRects: () => [], focus: vi.fn() };
+      const onOpenModal = vi.fn();
+      const menuTree = renderFocusMenu("en", onOpenModal);
+      menuHookState.toggleReference.current = compactToggle;
+
+      activateMenuButton(menuTree, controlLabel);
+
+      expect(compactToggle.focus).not.toHaveBeenCalled();
+      expect(onOpenModal).toHaveBeenCalledOnce();
+    },
+  );
+
+  it("rejects a missing compact toggle before closing the menu or opening farm settings", () => {
+    menuHookState.isEnabled = true;
+    menuHookState.isExpanded = true;
+    const onOpenModal = vi.fn();
+    const menuTree = renderFocusMenu("en", onOpenModal);
+    const onClick = requireMenuButton(menuTree, "Farm Settings").props.onClick;
+    if (typeof onClick !== "function") throw new Error("Farm Settings click handler is missing.");
+
+    expect(() => onClick({ currentTarget: {} })).toThrow(
+      'Compact menu toggle is unavailable for modal "farm-settings"; received null.',
+    );
+    expect(menuHookState.isExpanded).toBe(true);
+    expect(onOpenModal).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { controlLabel: "Map", selector: '.editor-menu-bar__button[data-editor-modal-id="map-picker"]' },
+    { controlLabel: "Current map: Standard Farm", selector: ".editor-menu-bar__map-name" },
+  ])("keeps the $controlLabel focus return distinct from the other map entrance", ({ controlLabel, selector }) => {
+    menuHookState.isEnabled = true;
+    const mapControl = { getClientRects: () => [{}] };
+    const mapNameControl = { getClientRects: () => [{}] };
+    const editorRoot = {
+      querySelector: (requestedSelector: string) => {
+        if (requestedSelector === '.editor-menu-bar__button[data-editor-modal-id="map-picker"]') return mapControl;
+        if (requestedSelector === ".editor-menu-bar__map-name") return mapNameControl;
+        throw new Error(`Unexpected test focus selector ${JSON.stringify(requestedSelector)}.`);
+      },
+    };
+    const modalElement = { closest: () => editorRoot } as unknown as HTMLElement;
+    const onOpenModal = vi.fn(() => {
+      expect(readEditorMenuModalFocusTarget(modalElement, "map-picker"))
+        .toBe(editorRoot.querySelector(selector));
+    });
+
+    activateMenuButton(renderFocusMenu("en", onOpenModal), controlLabel, editorRoot);
+
+    expect(onOpenModal).toHaveBeenCalledExactlyOnceWith("map-picker");
   });
 
   it("renders the four tools and history actions without a Zoom control", () => {
@@ -346,3 +537,40 @@ describe("editor controls", () => {
     expect(selectedCursorRule).toContain("color: #b13a28;");
   });
 });
+
+type MenuButton = ReactElement<Record<string, unknown>>;
+
+function getMenuButtons(menuNode: ReactNode): MenuButton[] {
+  if (Array.isArray(menuNode)) return menuNode.flatMap(getMenuButtons);
+  if (!isValidElement(menuNode)) return [];
+
+  const menuElement = menuNode as MenuButton;
+  if (menuElement.type === "button") return [menuElement];
+  return getMenuButtons(menuElement.props.children as ReactNode);
+}
+
+function requireMenuButton(menuNode: ReactNode, label: string): MenuButton {
+  const menuButton = getMenuButtons(menuNode).find((button) => button.props["aria-label"] === label);
+  if (!menuButton) throw new Error(`Menu button ${JSON.stringify(label)} is missing.`);
+  return menuButton;
+}
+
+function activateMenuButton(menuNode: ReactNode, label: string, editorRoot: object = {}): void {
+  const onClick = requireMenuButton(menuNode, label).props.onClick;
+  if (typeof onClick !== "function") {
+    throw new Error(`Menu button ${JSON.stringify(label)} has no click handler.`);
+  }
+  menuHookState.toggleReference.current ??= { getClientRects: () => [], focus: vi.fn() };
+  onClick({ currentTarget: { closest: () => editorRoot } });
+}
+
+function renderFocusMenu(locale: "en" | "zh", onOpenModal: (modalId: EditorModalId) => void): ReturnType<typeof EditorMenuBar> {
+  return EditorMenuBar({
+    activeModalId: null,
+    locale,
+    mapDisplayName: "Standard Farm",
+    onCycleSeason: () => undefined,
+    onOpenModal,
+    season: "spring",
+  });
+}

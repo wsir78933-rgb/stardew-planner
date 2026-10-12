@@ -32,7 +32,9 @@ import { PlannerMapPicker } from "./planner-map-picker";
 import { closeModalFromBackdropClick } from "./modal-backdrop-close";
 import type { EditorModalCopy } from "../i18n/editor-modal-copy";
 import { createInitialPlannerAmbienceOptions, type PlannerAmbienceOptions } from "../editor/planner-ambience-options";
-import { AmbienceConfigPanel, FarmMapConfigPanel, ViewConfigPanel, SettingsConfigPanel } from "./editor-config-panels";
+import { AmbienceConfigPanel, ViewConfigPanel, SettingsConfigPanel } from "./editor-config-panels";
+import { FarmSettingsPanel } from "./farm-settings-panel";
+import { forgetEditorMenuModalFocusTarget, readEditorMenuModalFocusTarget } from "./editor-menu-bar";
 import { PlannerFeedbackForm } from "../contact/planner-feedback-form";
 
 type EditorModalProperties = Readonly<{
@@ -109,6 +111,7 @@ export function EditorModal({
     if (modalId === null) {
       if (isModalOpenReference.current) {
         restoreModalTriggerFocus(modalTriggerElementReference.current);
+        forgetEditorMenuModalFocusTarget(modalTriggerElementReference.current);
         modalTriggerElementReference.current = null;
         isModalOpenReference.current = false;
       }
@@ -121,7 +124,8 @@ export function EditorModal({
     }
 
     if (!isModalOpenReference.current) {
-      modalTriggerElementReference.current = getModalActiveElement(modalElement);
+      modalTriggerElementReference.current = readEditorMenuModalFocusTarget(modalElement, modalId)
+        ?? getModalActiveElement(modalElement);
       isModalOpenReference.current = true;
     }
 
@@ -214,7 +218,14 @@ export function EditorModal({
           </button>
         </header>
         {modalId === "ambience-panel" ? <AmbienceConfigPanel locale={locale} season={season} ambienceOptions={ambienceOptions} nightMode={displayOptions.showNightMode} onSeasonChange={onSeasonChange} onAmbienceChange={onAmbienceChange} onNightModeToggle={() => onDisplayOptionToggle("showNightMode")} /> : null}
-        {modalId === "map-options" ? <FarmMapConfigPanel locale={locale} selectedMapId={selectedMapId} mapRenderOptions={mapRenderOptions} onMapRenderOptionsChange={onMapRenderOptionsChange} /> : null}
+        {modalId === "farm-settings" ? (
+          <FarmSettingsPanel
+            locale={locale}
+            selectedMapId={selectedMapId}
+            mapRenderOptions={mapRenderOptions}
+            onMapRenderOptionsChange={onMapRenderOptionsChange}
+          />
+        ) : null}
         {modalId === "feedback" ? <PlannerFeedbackForm locale={locale} /> : null}
         {modalId === "map-picker" ? (
           <>
@@ -439,7 +450,7 @@ function WhatsNewPanel() {
 }
 
 function getEditorModalClassName(modalId: EditorModalId): string {
-  if (["ambience-panel", "map-options", "view-panel", "settings-panel"].includes(modalId)) {
+  if (["ambience-panel", "farm-settings", "view-panel", "settings-panel"].includes(modalId)) {
     return `editor-modal editor-modal--${modalId} editor-modal--popover`;
   }
   if (modalId === "feedback") return "editor-modal editor-modal--feedback";
@@ -484,7 +495,7 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
 
 function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: "en" | "zh"): string {
   if (modalId === "ambience-panel") return locale === "zh" ? "氛围" : "Ambience";
-  if (modalId === "map-options") return locale === "zh" ? "地图" : "Map";
+  if (modalId === "farm-settings") return locale === "zh" ? "农场设置" : "Farm Settings";
   if (modalId === "feedback") return locale === "zh" ? "发送反馈" : "Send feedback";
   if (modalId === "map-picker") {
     return locale === "zh" ? "选择地图" : "Choose map";

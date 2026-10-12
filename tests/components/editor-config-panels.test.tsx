@@ -51,10 +51,10 @@ import type { MapRenderOptions } from "../../src/maps/map-render-options";
 import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
 import {
   AmbienceConfigPanel,
-  FarmMapConfigPanel,
   SettingsConfigPanel,
   ViewConfigPanel,
 } from "../../src/components/editor-config-panels";
+import { FarmSettingsPanel } from "../../src/components/farm-settings-panel";
 
 type RenderedElement = React.ReactElement<Record<string, unknown>>;
 type SettingsPanelProperties = React.ComponentProps<typeof SettingsConfigPanel>;
@@ -273,7 +273,7 @@ it("sends spouse and cave values through public setters only on eligible farm ma
   });
   const renderFarmPanel = (selectedMapId: string) =>
     expandPanelComponents(
-      FarmMapConfigPanel({
+      FarmSettingsPanel({
         locale: "en",
         selectedMapId,
         mapRenderOptions: selectedMapRenderOptions,
@@ -305,6 +305,100 @@ it("sends spouse and cave values through public setters only on eligible farm ma
     textContent(properties.children as ReactNode).trim() === "Bats",
   )).toBeUndefined();
   expect(onMapRenderOptionsChange).toHaveBeenCalledTimes(2);
+});
+
+it("keeps English and Chinese spouse and cave labels with the selected state", () => {
+  const mapRenderOptions = setFarmCaveChoice(
+    setFarmSpouseId(createInitialMapRenderOptions(), "Abigail"),
+    "bats",
+  );
+  const onMapRenderOptionsChange = vi.fn();
+  const englishPanel = expandPanelComponents(
+    FarmSettingsPanel({
+      locale: "en",
+      selectedMapId: "standard",
+      mapRenderOptions,
+      onMapRenderOptionsChange,
+    }),
+  );
+
+  expect(textContent(englishPanel)).toContain("Spouse");
+  expect(textContent(englishPanel)).toContain("Cave");
+  expect(requireButton(englishPanel, "None").props["aria-pressed"]).toBe(false);
+  expect(requireButton(englishPanel, "Abigail").props["aria-pressed"]).toBe(true);
+  expect(requireButton(englishPanel, "Not chosen").props["aria-pressed"]).toBe(false);
+  expect(requireButton(englishPanel, "Bats").props["aria-pressed"]).toBe(true);
+  expect(findElement(englishPanel, "input")).toBeUndefined();
+  expect(findElement(englishPanel, "select")).toBeUndefined();
+
+  const chinesePanel = expandPanelComponents(
+    FarmSettingsPanel({
+      locale: "zh",
+      selectedMapId: "standard",
+      mapRenderOptions,
+      onMapRenderOptionsChange,
+    }),
+  );
+
+  expect(textContent(chinesePanel)).toContain("配偶");
+  expect(textContent(chinesePanel)).toContain("洞穴");
+  expect(requireButton(chinesePanel, "无").props["aria-pressed"]).toBe(false);
+  expect(requireButton(chinesePanel, "Abigail").props["aria-pressed"]).toBe(true);
+  expect(requireButton(chinesePanel, "未选择").props["aria-pressed"]).toBe(false);
+  expect(requireButton(chinesePanel, "蘑菇").props["aria-pressed"]).toBe(false);
+  expect(requireButton(chinesePanel, "蝙蝠").props["aria-pressed"]).toBe(true);
+});
+
+it("explains maps without a spouse patio or farm cave and omits island and renovation controls", () => {
+  const mapRenderOptions = createInitialMapRenderOptions();
+  const onMapRenderOptionsChange = vi.fn();
+  const unsupportedFarmSettingsMessage =
+    "This map has no spouse patio or farm cave. 这张地图没有配偶庭院或农场洞穴。";
+  const renderFarmSettings = (selectedMapId: string, locale: "en" | "zh") =>
+    expandPanelComponents(
+      FarmSettingsPanel({
+        locale,
+        selectedMapId,
+        mapRenderOptions,
+        onMapRenderOptionsChange,
+      }),
+    );
+
+  for (const locale of ["en", "zh"] as const) {
+    const gingerIslandPanel = renderFarmSettings("ginger-island", locale);
+    expect(textContent(gingerIslandPanel)).toBe(unsupportedFarmSettingsMessage);
+    expect(textContent(gingerIslandPanel)).not.toContain("Ginger Island");
+    expect(findElement(gingerIslandPanel, "button")).toBeUndefined();
+    expect(findElement(gingerIslandPanel, "input")).toBeUndefined();
+    expect(findElement(gingerIslandPanel, "select")).toBeUndefined();
+
+    const farmhousePanel = renderFarmSettings("farmhouse-2", locale);
+    expect(textContent(farmhousePanel)).toBe(unsupportedFarmSettingsMessage);
+    expect(textContent(farmhousePanel)).not.toContain("Farmhouse (Upgrade 2)");
+    expect(textContent(farmhousePanel)).not.toContain("Married layout");
+    expect(textContent(farmhousePanel)).not.toContain("Renovations");
+    expect(findElement(farmhousePanel, "input")).toBeUndefined();
+  }
+
+  const farmCavePanel = renderFarmSettings("farm-cave", "en");
+  expect(textContent(farmCavePanel)).not.toContain(unsupportedFarmSettingsMessage);
+  expect(textContent(farmCavePanel)).not.toContain("Spouse");
+  expect(findElement(farmCavePanel, "button", (properties) =>
+    textContent(properties.children as ReactNode).trim() === "Abigail",
+  )).toBeUndefined();
+  expect(requireButton(farmCavePanel, "Bats").props["aria-pressed"]).toBe(false);
+  expect(onMapRenderOptionsChange).not.toHaveBeenCalled();
+});
+
+it("rejects a farm settings locale outside en and zh", () => {
+  expect(() =>
+    FarmSettingsPanel({
+      locale: "zh-CN" as "en",
+      selectedMapId: "standard",
+      mapRenderOptions: createInitialMapRenderOptions(),
+      onMapRenderOptionsChange: vi.fn(),
+    }),
+  ).toThrow('Farm settings locale must be "en" or "zh"; received "zh-CN".');
 });
 
 it("dispatches free placement only after confirmation and supports cancellation", () => {

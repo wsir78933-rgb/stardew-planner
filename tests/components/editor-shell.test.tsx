@@ -100,7 +100,7 @@ describe("editor shell", () => {
         onOpenModal: ignoreEditorAction,
       }),
     );
-    expect(menuMarkup.match(/<button/g)).toHaveLength(10);
+    expect(menuMarkup.match(/<button/g)).toHaveLength(11);
     expect(menuMarkup).toContain('class="menu-bar editor-menu-bar"');
     expect(menuMarkup).toContain('aria-label="Menu"');
     expect(menuMarkup).toContain("editor-menu-bar__controls");
@@ -111,9 +111,11 @@ describe("editor shell", () => {
     expect(menuMarkup).toContain('aria-label="Library"');
     expect(menuMarkup).toContain('aria-label="Current map: Standard Farm"');
     expect(menuMarkup).toContain('data-editor-modal-id="ambience-panel"');
-    expect(menuMarkup).toContain('data-editor-modal-id="map-options"');
+    expect(menuMarkup).toContain('data-editor-modal-id="farm-settings"');
     expect(menuMarkup).toContain('data-editor-modal-id="map-picker"');
     expect(menuMarkup).toContain('data-editor-modal-id="feedback"');
+    expect(menuMarkup).toContain('aria-label="Farm Settings"');
+    expect(menuMarkup.match(/data-editor-modal-id="map-picker"/g)).toHaveLength(2);
     expect(menuMarkup).toContain('aria-label="View"');
     expect(menuMarkup).toContain('aria-label="Settings"');
     expect(menuMarkup).not.toMatch(

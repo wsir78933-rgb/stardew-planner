@@ -20,7 +20,7 @@ export const editorPanelPositions = ["bottom", "left"] as const;
 
 export const editorModalIds = [
   "ambience-panel",
-  "map-options",
+  "farm-settings",
   "feedback",
   "map-picker",
   "view-panel",

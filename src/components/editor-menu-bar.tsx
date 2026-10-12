@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import type { EditorModalId } from "../editor/editor-view-state";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import {
@@ -21,13 +21,76 @@ type EditorMenuBarProperties = Readonly<{
   season: TilesheetSeason;
 }>;
 
-type EditorMenuControlKey = "ambience" | "map" | "view" | "settings";
+type EditorMenuControlKey = "ambience" | "farmSettings" | "map" | "view" | "settings";
 
 type EditorMenuControl = Readonly<{
   icon: PlannerReferenceIconName;
   key: EditorMenuControlKey;
-  modalId: Extract<EditorModalId, "ambience-panel" | "map-options" | "view-panel" | "settings-panel">;
+  modalId: Extract<EditorModalId, "ambience-panel" | "farm-settings" | "map-picker" | "view-panel" | "settings-panel">;
 }>;
+
+type MenuModalFocusId = Extract<EditorModalId, "farm-settings" | "map-picker">;
+type MenuModalFocusSelector =
+  | ".editor-menu-bar__toggle"
+  | ".editor-menu-bar__map-name"
+  | `.editor-menu-bar__button[data-editor-modal-id="${MenuModalFocusId}"]`;
+
+const menuModalFocusTargets = new WeakMap<HTMLElement, Readonly<{
+  modalId: MenuModalFocusId;
+  selector: MenuModalFocusSelector;
+}>>();
+
+export function rememberEditorMenuModalFocusTarget(
+  triggerElement: HTMLElement,
+  modalId: MenuModalFocusId,
+  selector: MenuModalFocusSelector,
+): void {
+  const editorRoot = triggerElement.closest<HTMLElement>(".planner-editor-shell");
+  if (editorRoot === null) {
+    throw new Error(`Editor root is unavailable for menu modal ${JSON.stringify(modalId)} and trigger ${JSON.stringify(selector)}; received null.`);
+  }
+  menuModalFocusTargets.set(editorRoot, { modalId, selector });
+}
+
+export function readEditorMenuModalFocusTarget(
+  modalElement: HTMLElement,
+  modalId: EditorModalId,
+): HTMLElement | null {
+  if (modalId !== "farm-settings" && modalId !== "map-picker") return null;
+  const editorRoot = modalElement.closest<HTMLElement>(".planner-editor-shell");
+  if (editorRoot === null) return null;
+  const focusTarget = menuModalFocusTargets.get(editorRoot);
+  if (focusTarget === undefined || focusTarget.modalId !== modalId) return null;
+  const triggerElement = editorRoot.querySelector<HTMLElement>(focusTarget.selector);
+  if (triggerElement === null) {
+    throw new Error(`Menu modal ${JSON.stringify(modalId)} focus target ${JSON.stringify(focusTarget.selector)} is unavailable; received null.`);
+  }
+  if (triggerElement.getClientRects().length === 0) {
+    throw new Error(`Menu modal ${JSON.stringify(modalId)} focus target ${JSON.stringify(focusTarget.selector)} is hidden; received 0 client rects.`);
+  }
+  return triggerElement;
+}
+
+export function forgetEditorMenuModalFocusTarget(triggerElement: HTMLElement | null): void {
+  const editorRoot = triggerElement?.closest<HTMLElement>(".planner-editor-shell");
+  if (editorRoot !== null && editorRoot !== undefined) menuModalFocusTargets.delete(editorRoot);
+}
+
+function rememberMenuControlFocusTarget(
+  triggerElement: HTMLElement,
+  compactMenuToggle: HTMLButtonElement | null,
+  modalId: MenuModalFocusId,
+): void {
+  if (compactMenuToggle === null) {
+    throw new Error(`Compact menu toggle is unavailable for modal ${JSON.stringify(modalId)}; received null.`);
+  }
+  if (compactMenuToggle.getClientRects().length > 0) {
+    compactMenuToggle.focus();
+    rememberEditorMenuModalFocusTarget(triggerElement, modalId, ".editor-menu-bar__toggle");
+  } else {
+    rememberEditorMenuModalFocusTarget(triggerElement, modalId, `.editor-menu-bar__button[data-editor-modal-id="${modalId}"]`);
+  }
+}
 
 const editorHeaderUtilityControls = [
   { icon: "Help", key: "help", modalId: "help-info" },
@@ -41,7 +104,8 @@ const editorHeaderUtilityControls = [
 
 const editorHeaderMenuControls = [
   { icon: "Ambience", key: "ambience", modalId: "ambience-panel" },
-  { icon: "Map", key: "map", modalId: "map-options" },
+  { icon: "Settings", key: "farmSettings", modalId: "farm-settings" },
+  { icon: "Map", key: "map", modalId: "map-picker" },
   { icon: "View", key: "view", modalId: "view-panel" },
   { icon: "Settings", key: "settings", modalId: "settings-panel" },
 ] as const satisfies readonly EditorMenuControl[];
@@ -59,6 +123,7 @@ const editorMenuCopyByLocale = {
     features: "Editor options",
     menu: "Menu",
     ambience: "Ambience",
+    farmSettings: "Farm Settings",
     map: "Map",
     view: "View",
     settings: "Settings",
@@ -75,6 +140,7 @@ const editorMenuCopyByLocale = {
     features: "编辑器选项",
     menu: "菜单",
     ambience: "氛围",
+    farmSettings: "农场设置",
     map: "地图",
     view: "视图",
     settings: "设置",
@@ -89,6 +155,7 @@ export function EditorMenuBar({
   onOpenModal,
 }: EditorMenuBarProperties) {
   const [isCompactMenuExpanded, setIsCompactMenuExpanded] = useState(false);
+  const compactMenuToggleReference = useRef<HTMLButtonElement>(null);
   const menuControlsId = useId();
   const editorMenuCopy = editorMenuCopyByLocale[locale];
 
@@ -159,7 +226,10 @@ export function EditorMenuBar({
             activeModalId === "map-picker",
           )}
           data-editor-modal-id="map-picker"
-          onClick={() => onOpenModal("map-picker")}
+          onClick={(mouseEvent) => {
+            rememberEditorMenuModalFocusTarget(mouseEvent.currentTarget, "map-picker", ".editor-menu-bar__map-name");
+            onOpenModal("map-picker");
+          }}
           title={editorMenuCopy.currentMap + ": " + mapDisplayName}
           type="button"
         >
@@ -173,6 +243,7 @@ export function EditorMenuBar({
         aria-label={editorMenuCopy.menu}
         className="menu-btn editor-menu-bar__toggle"
         onClick={() => setIsCompactMenuExpanded((isExpanded) => !isExpanded)}
+        ref={compactMenuToggleReference}
         title={editorMenuCopy.menu}
         type="button"
       >
@@ -203,9 +274,13 @@ export function EditorMenuBar({
               )}
               data-editor-modal-id={editorHeaderMenuControl.modalId}
               key={editorHeaderMenuControl.modalId}
-              onClick={() => {
+              onClick={(mouseEvent) => {
+                const modalId = editorHeaderMenuControl.modalId;
+                if (modalId === "farm-settings" || modalId === "map-picker") {
+                  rememberMenuControlFocusTarget(mouseEvent.currentTarget, compactMenuToggleReference.current, modalId);
+                }
                 setIsCompactMenuExpanded(false);
-                onOpenModal(editorHeaderMenuControl.modalId);
+                onOpenModal(modalId);
               }}
               title={menuLabel}
               type="button"

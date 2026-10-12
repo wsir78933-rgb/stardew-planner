@@ -14,15 +14,8 @@ import {
   type PlannerAmbienceWeather,
 } from "../editor/planner-ambience-options";
 import { getPlannerMapById } from "../maps/map-catalog";
-import { farmSpouseDefinitions, supportsFarmCaveChoice, supportsFarmSpousePatio } from "../maps/farm-map-rendering";
-import {
-  setFarmCaveChoice,
-  setFarmSpouseId,
-  type MapRenderOptions,
-} from "../maps/map-render-options";
 import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
 import { getEditorModalCopy, type EditorModalCopy } from "../i18n/editor-modal-copy";
-import { MapConfigurationPanel } from "./map-configuration-panel";
 import { PlannerReferenceIcon } from "./planner-reference-icon";
 
 type Locale = "en" | "zh";
@@ -77,30 +70,6 @@ export function AmbienceConfigPanel({ locale, season, ambienceOptions, nightMode
           {weatherChoices.map((choice, index) => <button type="button" key={choice} aria-pressed={ambienceOptions.weather === choice} onClick={() => onAmbienceChange(setPlannerAmbienceWeather(ambienceOptions, choice))}>{weatherLabels[index]}</button>)}
         </div>
       </ConfigSection>
-    </div>
-  );
-}
-
-export function FarmMapConfigPanel({ locale, selectedMapId, mapRenderOptions, onMapRenderOptionsChange }: Readonly<{
-  locale: Locale; selectedMapId: string; mapRenderOptions: MapRenderOptions; onMapRenderOptionsChange: (options: MapRenderOptions) => void;
-}>) {
-  const isChinese = locale === "zh";
-  const caveChoices = ["none", "mushrooms", "bats"] as const;
-  const caveLabels = isChinese ? ["未选择", "蘑菇", "蝙蝠"] : ["Not chosen", "Mushrooms", "Bats"];
-  return (
-    <div className="editor-config-panels">
-      {supportsFarmSpousePatio(selectedMapId) ? <ConfigSection title={isChinese ? "配偶" : "Spouse"}>
-        <div className="editor-config-chips">
-          <button type="button" aria-pressed={!mapRenderOptions.farm?.spouseId} onClick={() => onMapRenderOptionsChange(setFarmSpouseId(mapRenderOptions, null))}>{isChinese ? "无" : "None"}</button>
-          {farmSpouseDefinitions.map(({ id: spouseId, label }) => <button type="button" key={spouseId} aria-pressed={mapRenderOptions.farm?.spouseId === spouseId} onClick={() => onMapRenderOptionsChange(setFarmSpouseId(mapRenderOptions, spouseId))}>{label}</button>)}
-        </div>
-      </ConfigSection> : null}
-      {supportsFarmCaveChoice(selectedMapId) ? <ConfigSection title={isChinese ? "洞穴" : "Cave"}>
-        <div className="editor-config-chips">
-          {caveChoices.map((choice, index) => <button type="button" key={choice} aria-pressed={(mapRenderOptions.farm?.caveChoice ?? "none") === choice} onClick={() => onMapRenderOptionsChange(setFarmCaveChoice(mapRenderOptions, choice))}>{caveLabels[index]}</button>)}
-        </div>
-      </ConfigSection> : null}
-      <MapConfigurationPanel selectedMapId={selectedMapId} mapRenderOptions={mapRenderOptions} onMapRenderOptionsChange={onMapRenderOptionsChange} />
     </div>
   );
 }
