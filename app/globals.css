@@ -5221,7 +5221,8 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-menu-bar__toggle { display: none; }
 .planner-editor-shell .editor-menu-bar .editor-menu-bar__button { padding: 0 8px; width: 85.5859375px; }
 .planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="ambience-panel"] { width: 117.6953125px; }
-.planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="map-options"] { width: 81.9453125px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="farm-settings"] { flex-shrink: 0; width: 140px; }
+.planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="map-picker"] { width: 81.9453125px; }
 .planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id="settings-panel"] { width: 26px; padding: 0; }
 .planner-editor-shell .editor-menu-bar__button[data-editor-modal-id="settings-panel"] > span { display: none; }
 .planner-editor-shell .editor-menu-bar__chevron { font-size: 14px; transition: transform 120ms; }
@@ -5265,8 +5266,8 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell:has(.item-catalog-panel--bottom) .catalog-placement-controls,
 .planner-editor-shell:has(.item-catalog-panel--bottom) .selection-inspector { bottom: calc(clamp(270px, 35vh, 340px) + 80px); }
 .planner-editor-shell .editor-modal--popover { display: flex; flex-direction: column; max-height: calc(100% - var(--planner-topbar-height) - 16px); overflow: auto; position: absolute; right: 18px; top: calc(var(--planner-topbar-height) + 8px); width: min(328px, calc(100% - 16px)); }
-.planner-editor-shell .editor-modal--ambience-panel { right: 221.53125px; }
-.planner-editor-shell .editor-modal--map-options { right: 133.5859375px; }
+.planner-editor-shell .editor-modal--ambience-panel { right: 367.53125px; }
+.planner-editor-shell .editor-modal--farm-settings { right: 221.53125px; }
 .planner-editor-shell .editor-modal--view-panel { right: 42px; }
 .planner-editor-shell .editor-modal--popover .editor-modal__header { background: var(--bg-raised); padding: 8px 14px; }
 .planner-editor-shell .editor-modal--popover .editor-modal__header h2 { font-size: 13px; }
@@ -5331,6 +5332,8 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   .planner-editor-shell .editor-menu-bar__breadcrumb-separator { display: none; }
   .planner-editor-shell .editor-menu-bar .editor-menu-bar__toggle { display: flex; flex: 0 0 44px; height: 44px; width: 44px; }
   .planner-editor-shell .editor-menu-bar__controls { background: var(--bg-raised); border-radius: 8px; display: none; margin: 0; padding: 8px; position: absolute; right: 8px; top: calc(var(--planner-topbar-height) + 4px); }
+  .planner-editor-shell .editor-menu-bar__controls:has(> .editor-menu-bar__button[data-editor-modal-id="farm-settings"]) { max-height: calc(100dvh - var(--planner-topbar-height) - 20px); max-width: calc(100vw - 16px); overflow-y: auto; }
+  .planner-editor-shell .editor-menu-bar__controls:has(> .editor-menu-bar__button[data-editor-modal-id="farm-settings"]) > .editor-menu-bar__button { flex-shrink: 0; }
   .planner-editor-shell .editor-menu-bar__controls[data-expanded="true"] { display: flex; flex-direction: column; }
   .planner-editor-shell .editor-menu-bar .editor-menu-bar__button { height: 44px; justify-content: flex-start; width: 140px; }
   .planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id] { width: 140px; }

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { catalogSidebarCategories } from "../../src/catalog";
 import {
   collapseEditorMenuForModalOpen,
+  closeEditorModal,
   createInitialEditorViewState,
   editorModalIds,
   getEditorLayout,
@@ -83,6 +84,20 @@ describe("editor view state", () => {
       season: "spring",
       tool: "cursor",
     });
+  });
+
+  it("opens and closes farm settings independently from map selection", () => {
+    const initialEditorViewState = createInitialEditorViewState();
+    const farmSettingsState = openEditorModal(initialEditorViewState, "farm-settings");
+    const mapPickerState = openEditorModal(farmSettingsState, "map-picker");
+
+    expect(farmSettingsState).toEqual({ ...initialEditorViewState, modalId: "farm-settings" });
+    expect(mapPickerState).toEqual({ ...initialEditorViewState, modalId: "map-picker" });
+    expect(closeEditorModal(farmSettingsState)).toEqual(initialEditorViewState);
+    expect(closeEditorModal(mapPickerState)).toEqual(initialEditorViewState);
+    expect(editorModalIds).not.toContain("map-options");
+    expect(() => openEditorModal(initialEditorViewState, "map-options" as never))
+      .toThrow("map-options");
   });
 
   it("changes season and closes an active modal", () => {
