@@ -126,34 +126,54 @@ describe("planner canvas screenshot exporter", () => {
     });
   });
 
-  it("encodes clean maps without a footer and screenshots with the existing watermark footer", async () => {
-    const createdWatermarkCanvases: TestPngCanvas[] = [];
-    const mapScreenshotCanvas = new TestPngCanvas(160, 100);
+  it("exports clean maps and screenshots without a footer at 1x and 2x", async () => {
+    const createdCanvasElements: TestPngCanvas[] = [];
+    const screenshotCanvasByResolution = {
+      1: new TestPngCanvas(160, 100),
+      2: new TestPngCanvas(320, 200),
+    };
     const capturedResolutions: number[] = [];
     const mapImageCaptureMethods = createMapImageCaptureMethods({
       captureMapScreenshotCanvas: async (resolution) => {
         capturedResolutions.push(resolution);
-        return mapScreenshotCanvas as unknown as HTMLCanvasElement;
+        return screenshotCanvasByResolution[
+          resolution
+        ] as unknown as HTMLCanvasElement;
       },
       createCanvasElement: () => {
-        const watermarkCanvas = new TestPngCanvas(0, 0);
-        createdWatermarkCanvases.push(watermarkCanvas);
-        return watermarkCanvas as unknown as HTMLCanvasElement;
+        const canvasElement = new TestPngCanvas(0, 0);
+        createdCanvasElements.push(canvasElement);
+        return canvasElement as unknown as HTMLCanvasElement;
       },
     });
 
-    const cleanMapImageBlob = await mapImageCaptureMethods.captureCleanMapImage(1);
+    const cleanMapImageBlob =
+      await mapImageCaptureMethods.captureCleanMapImage(1);
     expect(await cleanMapImageBlob.text()).toBe("160x100");
-    expect(createdWatermarkCanvases).toEqual([]);
+    expect(cleanMapImageBlob.type).toBe("image/png");
 
-    const watermarkedScreenshotBlob = await mapImageCaptureMethods.captureScreenshot(1);
-    expect(await watermarkedScreenshotBlob.text()).toBe("160x124");
-    expect(capturedResolutions).toEqual([1, 1]);
-    expect(createdWatermarkCanvases).toHaveLength(1);
-    expect(createdWatermarkCanvases[0]).toMatchObject({
-      height: 124,
-      width: 160,
+    const standardScreenshotBlob = await mapImageCaptureMethods.captureScreenshot(1);
+    const highResolutionScreenshotBlob =
+      await mapImageCaptureMethods.captureScreenshot(2);
+    expect(await standardScreenshotBlob.text()).toBe("160x100");
+    expect(await highResolutionScreenshotBlob.text()).toBe("320x200");
+    expect(standardScreenshotBlob.type).toBe("image/png");
+    expect(highResolutionScreenshotBlob.type).toBe("image/png");
+    expect(capturedResolutions).toEqual([1, 1, 2]);
+    expect(createdCanvasElements).toEqual([]);
+  });
+
+  it("rejects screenshot export when PNG encoding returns a null blob", async () => {
+    const mapImageCaptureMethods = createMapImageCaptureMethods({
+      captureMapScreenshotCanvas: async () =>
+        new TestPngCanvas(160, 100, true) as unknown as HTMLCanvasElement,
+      createCanvasElement: () =>
+        new TestPngCanvas(0, 0) as unknown as HTMLCanvasElement,
     });
+
+    await expect(mapImageCaptureMethods.captureScreenshot(1)).rejects.toThrow(
+      "Map screenshot export could not encode the PNG image.",
+    );
   });
 });
 
@@ -205,32 +225,20 @@ function getScreenshotTransformValues(transform: ScreenshotTransform): Readonly<
 class TestPngCanvas {
   height: number;
   width: number;
+  private readonly shouldReturnNullBlob: boolean;
 
-  constructor(width: number, height: number) {
+  constructor(width: number, height: number, shouldReturnNullBlob = false) {
     this.height = height;
     this.width = width;
-  }
-
-  getContext(contextId: string): {
-    drawImage: () => void;
-    fillRect: () => void;
-    fillText: () => void;
-    fillStyle: string;
-    font: string;
-    textBaseline: CanvasTextBaseline;
-  } | null {
-    if (contextId !== "2d") return null;
-    return {
-      drawImage: () => {},
-      fillRect: () => {},
-      fillStyle: "",
-      fillText: () => {},
-      font: "",
-      textBaseline: "alphabetic",
-    };
+    this.shouldReturnNullBlob = shouldReturnNullBlob;
   }
 
   toBlob(callback: (blob: Blob | null) => void): void {
+    if (this.shouldReturnNullBlob) {
+      callback(null);
+      return;
+    }
+
     callback(new Blob([`${String(this.width)}x${String(this.height)}`], {
       type: "image/png",
     }));

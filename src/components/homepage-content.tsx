@@ -4,13 +4,13 @@ import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
+import { HomepageCaseStudySections } from "./homepage-case-study-sections";
 import { HomepageClosingCta } from "./homepage-closing-cta";
-import { HomepageFeaturesSection } from "./homepage-features-section";
+import { HomepageFeatureIntroductionSection } from "./homepage-feature-introduction-section";
 import { HomepageHeroSection } from "./homepage-hero-section";
 import { HomepageHowToSection } from "./homepage-how-to-section";
 import { HomepageNavigationDock } from "./homepage-navigation-dock";
 import { HomepageWhatIsSection } from "./homepage-what-is-section";
-import { HomepageWhyChooseSection } from "./homepage-why-choose-section";
 import { SiteFooter } from "./site-footer";
 
 type HomepageContentProps = {
@@ -50,8 +50,12 @@ export function HomepageContent({
         />
         {plannerWorkspace}
         <HomepageWhatIsSection copy={copy.whatIs} />
-        <HomepageFeaturesSection copy={copy.features} />
-        <HomepageWhyChooseSection copy={copy.whyChoose} />
+        <HomepageCaseStudySections
+          description={copy.caseStudiesDescription}
+          groups={copy.caseStudies}
+          heading={copy.caseStudiesHeading}
+        />
+        <HomepageFeatureIntroductionSection copy={copy.featureIntroduction} />
         <HomepageHowToSection copy={copy.howTo} />
         <HomepageClosingCta
           copy={copy.closingCta}

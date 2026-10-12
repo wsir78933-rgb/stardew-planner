@@ -578,10 +578,20 @@ export function CircularTestimonials({
       }
 
       const target = event.target;
+      const testimonialsRoot = testimonialsRootRef.current;
+
+      if (
+        testimonialsRoot === null ||
+        !(target instanceof Node) ||
+        !testimonialsRoot.contains(target)
+      ) {
+        return;
+      }
+
       if (target instanceof HTMLElement) {
         if (
           target.isContentEditable ||
-          ["BUTTON", "INPUT", "SELECT", "TEXTAREA"].includes(target.tagName) ||
+          ["INPUT", "SELECT", "TEXTAREA"].includes(target.tagName) ||
           target.closest("[data-homepage-workspace]")
         ) {
           return;

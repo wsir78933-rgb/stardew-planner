@@ -7,6 +7,7 @@ import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
 
 it("renders /zh as the Chinese homepage with the shared planner workspace", () => {
   const markup = renderToStaticMarkup(<ChinesePlannerPage />);
+  const chineseHomepageCopy = homepageCopyByLocale["zh-CN"];
 
   expect(markup).toContain("星露谷物语");
   expect(markup).toContain(
@@ -24,7 +25,58 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   );
   expect(markup).toContain(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt);
   expect(markup).not.toContain("Loading planner…");
-  expect(markup).toContain(homepageCopyByLocale["zh-CN"].features.heading);
+  expect(markup).not.toContain('data-homepage-features="true"');
+  expect(markup).not.toContain('data-homepage-why-choose="true"');
+  expect(markup).not.toContain(chineseHomepageCopy.features.heading);
+  expect(markup).not.toContain(chineseHomepageCopy.whyChoose.heading);
+  expect(markup.match(/data-homepage-case-study-group=/g)).toHaveLength(3);
+  expect(chineseHomepageCopy.caseStudies).toHaveLength(3);
+  expect(
+    chineseHomepageCopy.caseStudies.map(
+      (caseStudyGroup) => caseStudyGroup.imagePosition,
+    ),
+  ).toEqual(["left", "right", "left"]);
+  const homepageSectionMarkers = [
+    'id="what-is"',
+    ...chineseHomepageCopy.caseStudies.map(
+      (caseStudyGroup) => `id="${caseStudyGroup.id}"`,
+    ),
+    'id="capabilities"',
+    'id="how-to"',
+  ] as const;
+  let previousHomepageSectionPosition = markup.indexOf(
+    homepageSectionMarkers[0],
+  );
+  expect(previousHomepageSectionPosition).toBeGreaterThanOrEqual(0);
+  for (const homepageSectionMarker of homepageSectionMarkers.slice(1)) {
+    const homepageSectionPosition = markup.indexOf(homepageSectionMarker);
+    expect(homepageSectionPosition).toBeGreaterThan(
+      previousHomepageSectionPosition,
+    );
+    previousHomepageSectionPosition = homepageSectionPosition;
+  }
+  for (const caseStudyGroup of chineseHomepageCopy.caseStudies) {
+    expect(markup).toContain(
+      `data-homepage-case-study-group="${caseStudyGroup.id}"`,
+    );
+    expect(markup).toContain(
+      `data-image-position="${caseStudyGroup.imagePosition}"`,
+    );
+    if (caseStudyGroup.id === "farm-cases") {
+      expect(markup).toContain(
+        `<h2 id="farm-cases-heading">${chineseHomepageCopy.caseStudiesHeading}</h2>`,
+      );
+    } else {
+      expect(markup).not.toContain(
+        `<h2 id="${caseStudyGroup.id}-heading">${caseStudyGroup.heading}</h2>`,
+      );
+    }
+    expect(caseStudyGroup.testimonials).toHaveLength(4);
+    for (const caseStudy of caseStudyGroup.testimonials) {
+      expect(markup).toContain(`src="${caseStudy.src}"`);
+      expect(markup).toContain(`alt="${caseStudy.alt}"`);
+    }
+  }
   expect(markup.match(/href="#planner"/g)).toHaveLength(3);
   expect(markup).toContain('href="/zh"');
   expect(markup).toContain('href="/"');

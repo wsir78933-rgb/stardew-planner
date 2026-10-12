@@ -508,6 +508,120 @@ body:has(> [data-homepage-shell]) [data-homepage-what-is-media] img {
   width: 100%;
 }
 
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id][data-homepage-feature-introduction] {
+  max-width: 64rem;
+  padding: 7rem 2rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-header] {
+  margin: 0 auto 3rem;
+  max-width: 42rem;
+  text-align: center;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-header] > h2 {
+  font-size: clamp(1.85rem, 4vw, 2.75rem);
+  line-height: 1.25;
+  margin: 0;
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-overview] {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 1rem 0 0;
+  text-wrap: pretty;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] > ul[data-homepage-feature-introduction-list] {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-card] {
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--border) 16%, var(--card));
+  border-radius: 1.125rem;
+  color: var(--foreground);
+  height: 100%;
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-icon] {
+  align-items: center;
+  background: color-mix(in srgb, var(--primary) 22%, var(--card));
+  border-radius: 0.75rem;
+  color: var(--foreground);
+  display: flex;
+  height: 2.75rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  width: 2.75rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-icon] svg {
+  height: 1.25rem;
+  stroke-width: 2;
+  width: 1.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-title] {
+  color: var(--foreground);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.375;
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-description] {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.625;
+  margin: 0.5rem 0 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+@media (max-width: 1023px) {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id][data-homepage-feature-introduction] {
+    padding-block: 6rem;
+    padding-inline: 1.25rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] > ul[data-homepage-feature-introduction-list] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id][data-homepage-feature-introduction] {
+    padding-block: 5rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-header] {
+    margin-bottom: 2.5rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] [data-homepage-feature-introduction-overview] {
+    font-size: 0.875rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-feature-introduction] > ul[data-homepage-feature-introduction-list] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 body:has(> [data-homepage-shell]) [data-homepage-content-section] [data-homepage-section-layout] {
   align-items: start;
   column-gap: clamp(2rem, 5vw, 5rem);
@@ -5267,4 +5381,258 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .catalog-placement-controls {
   transform: translateX(-50%) scale(0.5);
   transform-origin: bottom center;
+}
+
+/* Farm case study carousels stay isolated from the existing homepage showcases. */
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id][data-homepage-case-study-group] {
+  min-width: 0;
+  padding-block: 1.5rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#farm-cases[data-homepage-case-study-group] {
+  padding-top: 3rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#farm-cases-3[data-homepage-case-study-group] {
+  padding-bottom: 3rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-homepage-case-study-header] {
+  margin: 0 auto 3rem;
+  max-width: 48rem;
+  text-align: center;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-homepage-case-study-header] > h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-homepage-case-study-header] > [data-homepage-case-study-description] {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  line-height: 1.75rem;
+  margin: 1rem 0 0;
+  text-wrap: pretty;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-circular-testimonials] {
+  align-items: center;
+  column-gap: clamp(2rem, 5vw, 5rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-inline: auto;
+  max-width: 70rem;
+  min-width: 0;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-media] {
+  aspect-ratio: 16 / 10;
+  background: transparent;
+  height: auto;
+  justify-self: center;
+  max-width: min(31rem, 100%);
+  min-width: 0;
+  overflow: visible;
+  position: relative;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-stage] {
+  height: 100%;
+  inset: 0;
+  perspective: 1000px;
+  position: absolute;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-image] {
+  aspect-ratio: 4 / 3;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  left: 50%;
+  max-width: min(28rem, 76%);
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 76%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-image] img {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  padding: 0;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy] {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy-body],
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonial-active] {
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-hidden-copy] {
+  display: none;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonial-name] {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.2;
+  margin: 0 0 0.55rem;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonial-designation] {
+  color: var(--muted-foreground);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonial-quote] {
+  color: var(--muted-foreground);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 1.5rem 0 0;
+  max-width: 38rem;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] .circular-testimonial-word {
+  display: inline-block;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] button {
+  align-items: center;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 44px;
+  height: 44px;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0;
+  transition: transform 180ms ease, background-color 180ms ease;
+  width: 44px;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] button:hover {
+  transform: translateY(-0.1rem);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 0.25rem;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] svg {
+  height: 1.5rem;
+  pointer-events: none;
+  width: 1.5rem;
+}
+
+@media (min-width: 701px) {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-circular-testimonials] > [data-circular-testimonials-media],
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-circular-testimonials] > [data-circular-testimonials-copy] {
+    grid-row: 1;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group][data-image-position="left"] > [data-circular-testimonials] > [data-circular-testimonials-media] {
+    grid-column: 1;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group][data-image-position="left"] > [data-circular-testimonials] > [data-circular-testimonials-copy] {
+    grid-column: 2;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group][data-image-position="right"] > [data-circular-testimonials] > [data-circular-testimonials-media] {
+    grid-column: 2;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group][data-image-position="right"] > [data-circular-testimonials] > [data-circular-testimonials-copy] {
+    grid-column: 1;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#farm-cases-2[data-homepage-case-study-group] [data-circular-testimonials-controls] {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 700px) {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id][data-homepage-case-study-group] {
+    max-width: 100%;
+    overflow-x: clip;
+    padding-block: 1.5rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-homepage-case-study-header] {
+    margin-bottom: 2.5rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-homepage-case-study-header] > [data-homepage-case-study-description] {
+    font-size: 0.875rem;
+    line-height: 1.75rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] > [data-circular-testimonials] {
+    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-media],
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy] {
+    grid-column: 1;
+    min-width: 0;
+    width: 100%;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-media] {
+    grid-row: 1;
+    max-width: min(28rem, 100%);
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy] {
+    grid-row: 2;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-image] {
+    max-width: 78%;
+    width: 78%;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] {
+    padding-top: 0.25rem;
+  }
 }
