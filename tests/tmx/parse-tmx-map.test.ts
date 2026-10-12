@@ -376,14 +376,15 @@ describe("parseTmxMap", () => {
     expect(spousePatioMap.tileHeight).toBe(16);
   });
 
-  it("parses all 65 locked TMX maps", async () => {
+  it("parses all 78 locked TMX maps", async () => {
     const tmxFilePaths = await listTmxFiles(gameAssetsRootDirectory);
     const parsedMaps = await Promise.all(
       tmxFilePaths.map(async (tmxFilePath) => parseTmxMap(await readFile(tmxFilePath, "utf8"))),
     );
 
-    expect(tmxFilePaths).toHaveLength(65);
-    expect(parsedMaps).toHaveLength(65);
+    expect(tmxFilePaths).toHaveLength(78);
+    expect(new Set(tmxFilePaths).size).toBe(78);
+    expect(parsedMaps).toHaveLength(78);
     expect(parsedMaps.every((parsedMap) => parsedMap.tileWidth === 16)).toBe(true);
     expect(parsedMaps.every((parsedMap) => parsedMap.tileHeight === 16)).toBe(true);
   });

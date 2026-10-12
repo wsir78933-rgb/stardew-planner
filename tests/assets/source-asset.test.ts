@@ -207,25 +207,30 @@ async function getSynchronizationFailureMessage(
 
 describe("source asset contract", () => {
   it("preserves the locked map and crop prefix before adding static rendering assets", async () => {
-    expect(sourceAssets).toHaveLength(337);
-
     const { mapSourceAssets } = await import(
       "../../src/assets/map-source-manifest"
     );
+    const renderingSourceAssetStartIndex = 1 + mapSourceAssets.length;
     const expectedMapOutputPaths = createExpectedMapOutputPaths();
     const sourceAssetOutputPaths = sourceAssets.map(
       (sourceAsset) => sourceAsset.outputPath,
     );
 
-    expect(mapSourceAssets).toHaveLength(112);
+    expect(sourceAssets).toHaveLength(
+      renderingSourceAssetStartIndex + renderingSourceAssets.length,
+    );
     expect(sourceAssets[0]).toEqual({
       sourceUrl:
         "https://assets.stardewplan.com/assets/1.6.15/data/Crops.json",
       outputPath: "data/Crops.json",
       mediaType: "application/json",
     });
-    expect(sourceAssets.slice(1, 113)).toEqual(mapSourceAssets);
-    expect(sourceAssets.slice(113)).toEqual(renderingSourceAssets);
+    expect(sourceAssets.slice(1, renderingSourceAssetStartIndex)).toEqual(
+      mapSourceAssets,
+    );
+    expect(sourceAssets.slice(renderingSourceAssetStartIndex)).toEqual(
+      renderingSourceAssets,
+    );
     expect(sourceAssetOutputPaths).toEqual([
       "data/Crops.json",
       ...expectedMapOutputPaths,
@@ -233,7 +238,7 @@ describe("source asset contract", () => {
         (sourceAsset) => sourceAsset.outputPath,
       ),
     ]);
-    expect(new Set(sourceAssetOutputPaths).size).toBe(337);
+    expect(new Set(sourceAssetOutputPaths).size).toBe(sourceAssets.length);
 
     expect(findSourceAssetByOutputPath(sourceAssets, "maps/Farm.tmx")).toEqual({
       sourceUrl:

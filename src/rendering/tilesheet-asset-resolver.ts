@@ -13,6 +13,7 @@ const officialSeasonalTilesheetBasenames = new Set<string>([
   "Shadows",
   "beach",
   "island_tilesheet_1",
+  "monsterGraveTiles",
 ]);
 
 const officialNonSeasonalTilesheetBasenames = new Set<string>([
@@ -26,6 +27,12 @@ const officialNonSeasonalTilesheetBasenames = new Set<string>([
   "SewerTiles",
   "mine",
   "Farm Obelisk",
+]);
+
+const officialMapNonSeasonalTilesheetBasenames = new Set<string>([
+  "island_tilesheet_2",
+  "DesertTiles",
+  "DesertTiles_Extended",
 ]);
 
 const daisyextrasSpringFallbackModIds = new Set<string>([
@@ -179,7 +186,11 @@ function resolveTilesheetOutputPath(
     return "tilesheets/island_tilesheet_1.png";
   }
 
-  if (officialNonSeasonalTilesheetBasenames.has(tilesheetBasename)) {
+  if (
+    officialNonSeasonalTilesheetBasenames.has(tilesheetBasename) ||
+    (modId === null &&
+      officialMapNonSeasonalTilesheetBasenames.has(tilesheetBasename))
+  ) {
     return `tilesheets/${tilesheetFilename}`;
   }
 

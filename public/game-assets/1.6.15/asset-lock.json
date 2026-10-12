@@ -2099,6 +2099,204 @@
       "outputPath": "sprites/Shane.png",
       "mediaType": "image/png",
       "sha256": "ccebbbf612ccced5563efa4dbc0f47ecb85551294221cd0b69d7a3fdf839f467"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Island_N.tmx",
+      "outputPath": "maps/Island_N.tmx",
+      "mediaType": "application/xml",
+      "sha256": "4fd8f8613c8b400890cb7be82fb9689e8cf5090960466f697dd74ec850c21a4f"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Island_N.png",
+      "outputPath": "maps/previews/Island_N.png",
+      "mediaType": "image/png",
+      "sha256": "54628d14873287e091bce80d821ac0ed6647de0975a2ebd8642cefe359f05b8f"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Island_S.tmx",
+      "outputPath": "maps/Island_S.tmx",
+      "mediaType": "application/xml",
+      "sha256": "d9f88397d718cdd9d19416c5d457455d7fcdfd56d68cf72c7bb288948667e404"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Island_S.png",
+      "outputPath": "maps/previews/Island_S.png",
+      "mediaType": "image/png",
+      "sha256": "f5777581b7889f00b57aaa888d46f928fb563d5524290e8e592ce87115422ea2"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Island_SE.tmx",
+      "outputPath": "maps/Island_SE.tmx",
+      "mediaType": "application/xml",
+      "sha256": "1a60eabc3375b97b1d9da93f318dd6632dea5bdba97a58de56e5fae32d22118d"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Island_SE.png",
+      "outputPath": "maps/previews/Island_SE.png",
+      "mediaType": "image/png",
+      "sha256": "2e825b57aa84a7f7496dbf5d5369c53e9b35ebf988bb18e4630edca363ac6936"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Island_E.tmx",
+      "outputPath": "maps/Island_E.tmx",
+      "mediaType": "application/xml",
+      "sha256": "5f804a2bb7b5b64fc90fc26e186e2dc49914b48464f5f4ed7088f583c56a71f9"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Island_E.png",
+      "outputPath": "maps/previews/Island_E.png",
+      "mediaType": "image/png",
+      "sha256": "0eab5cc8d166bd5d205027d40e35465e83bf9f1b071eea2725f540ed8ce362d0"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Railroad.tmx",
+      "outputPath": "maps/Railroad.tmx",
+      "mediaType": "application/xml",
+      "sha256": "1f05ba7e848f60738e6c642c37b33ea21ac91d7dfc78af7088b2faade547bb06"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Railroad.png",
+      "outputPath": "maps/previews/Railroad.png",
+      "mediaType": "image/png",
+      "sha256": "181003ef151c2107ccb8074263beabc1b44f2569e48d784cf0807c1328b2bdd5"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Backwoods.tmx",
+      "outputPath": "maps/Backwoods.tmx",
+      "mediaType": "application/xml",
+      "sha256": "810507283223ce9bc1244cc5de92d2769106a183326f7e70774ee36b8bdfe73c"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Backwoods.png",
+      "outputPath": "maps/previews/Backwoods.png",
+      "mediaType": "image/png",
+      "sha256": "3593435af5cae64a05f8180532d794914a05a66484aec9e894a917d11f785eac"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Woods.tmx",
+      "outputPath": "maps/Woods.tmx",
+      "mediaType": "application/xml",
+      "sha256": "fda59a2c8355fd59269c5f5d343520a118f482e0870f88f408e1a9a197fe6d87"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Woods.png",
+      "outputPath": "maps/previews/Woods.png",
+      "mediaType": "image/png",
+      "sha256": "7807747f0725b975ab4cc2747bd9cba1bdbd1508cd577256c2ce69eeb19d6468"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Summit.tmx",
+      "outputPath": "maps/Summit.tmx",
+      "mediaType": "application/xml",
+      "sha256": "b630956760eea50f66a4e5de8ae49e59136bc3b38429664c3e53a28e1cbd0292"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Summit.png",
+      "outputPath": "maps/previews/Summit.png",
+      "mediaType": "image/png",
+      "sha256": "d58f93becee2bc1cdd6399af8439f02b01107509c3e3baaf5f56e34c9176851b"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Town.tmx",
+      "outputPath": "maps/Town.tmx",
+      "mediaType": "application/xml",
+      "sha256": "3dec286f638e8b763f51800f07cf726c5f5c8988a4439fc86fd9870566fc8b9f"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Town.png",
+      "outputPath": "maps/previews/Town.png",
+      "mediaType": "image/png",
+      "sha256": "97641e62bbe68a5b67354f3b38367acaa3c5c973d2c8e7f1a160a5db56832dfb"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Forest.tmx",
+      "outputPath": "maps/Forest.tmx",
+      "mediaType": "application/xml",
+      "sha256": "6d97c0c031dc4c77a6661b4bf2e7d2ef1472ee1eeaf14caae2289000c43d4239"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Forest.png",
+      "outputPath": "maps/previews/Forest.png",
+      "mediaType": "image/png",
+      "sha256": "90ccb9d796f5850211340bd225d7dca4862e94225e8f9eec56bd36bdfdf7584c"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Mountain.tmx",
+      "outputPath": "maps/Mountain.tmx",
+      "mediaType": "application/xml",
+      "sha256": "429b80897d3dadd559974bb9d683717d13747d6ed76372fd2aa724d6554ecfcd"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Mountain.png",
+      "outputPath": "maps/previews/Mountain.png",
+      "mediaType": "image/png",
+      "sha256": "4fc1500456b8149b1b4eabe558b5db4aa1ac83b825469b9d945280aaa514fe64"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Beach.tmx",
+      "outputPath": "maps/Beach.tmx",
+      "mediaType": "application/xml",
+      "sha256": "d69559056c4a7f203b1c1d6b78dbb387d442b571949f14a4401aef3b676a6f40"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Beach.png",
+      "outputPath": "maps/previews/Beach.png",
+      "mediaType": "image/png",
+      "sha256": "6d5645c0d013fd138b0c2474986deec838c1c7af0a80b4b9b965bd1de408c091"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/Desert.tmx",
+      "outputPath": "maps/Desert.tmx",
+      "mediaType": "application/xml",
+      "sha256": "7a2a5fd6d2811c34575a48413af558ef58304f26685d6d0de9cea3fb561a0930"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/maps/previews/Desert.png",
+      "outputPath": "maps/previews/Desert.png",
+      "mediaType": "image/png",
+      "sha256": "7c59cf1ab23d8baa45ce7d1efb78d40c01eb3eb4e9fb1da81f3c9937a175088b"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/island_tilesheet_2.png",
+      "outputPath": "tilesheets/island_tilesheet_2.png",
+      "mediaType": "image/png",
+      "sha256": "3111afa10de0e201d1861dc79768a0c577d377e6b20af8e5263cf473e6b111b5"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/DesertTiles.png",
+      "outputPath": "tilesheets/DesertTiles.png",
+      "mediaType": "image/png",
+      "sha256": "3bb1f03c36805217c7c26d2adce244615d85217d503bb182bb74b50b29e16d56"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/DesertTiles_Extended.png",
+      "outputPath": "tilesheets/DesertTiles_Extended.png",
+      "mediaType": "image/png",
+      "sha256": "a8528fa4b7b0ede50a6d5675ac8c3bc14f4623aed12d4b2fbaa08a77faa72d83"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/spring_monsterGraveTiles.png",
+      "outputPath": "tilesheets/spring_monsterGraveTiles.png",
+      "mediaType": "image/png",
+      "sha256": "9f559f6e74a884c1e72b5c54dbb7a6e5c64e93ed6dd90f0272ef7d2d179189e0"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/summer_monsterGraveTiles.png",
+      "outputPath": "tilesheets/summer_monsterGraveTiles.png",
+      "mediaType": "image/png",
+      "sha256": "ae18290d2024fa0892434f2a5643c1653a8fd5a0d5b01da7207a45e876e60915"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/fall_monsterGraveTiles.png",
+      "outputPath": "tilesheets/fall_monsterGraveTiles.png",
+      "mediaType": "image/png",
+      "sha256": "2afad26345278165c87fc253089b6f4bce292adb934496a0ee364b856c5478f7"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/winter_monsterGraveTiles.png",
+      "outputPath": "tilesheets/winter_monsterGraveTiles.png",
+      "mediaType": "image/png",
+      "sha256": "aed1507cb2866f38ac2f45edef5f8241fbb19b19394a73e1e1911f310378cef2"
     }
   ]
 }

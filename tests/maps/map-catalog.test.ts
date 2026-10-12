@@ -36,6 +36,19 @@ describe("planner map catalog", () => {
       { id: "greenhouse", displayName: "Greenhouse", category: "interior", mapFile: "Greenhouse.tmx", previewOutputPath: "maps/previews/Greenhouse.png" },
       { id: "farm-cave", displayName: "Farm Cave", category: "interior", mapFile: "FarmCave.tmx", previewOutputPath: "maps/previews/FarmCave.png" },
       { id: "island-farmhouse", displayName: "Island Farmhouse", category: "interior", mapFile: "IslandFarmHouse.tmx", previewOutputPath: "maps/previews/IslandFarmHouse.png" },
+      { id: "ginger-island-north", displayName: "Ginger Island North", category: "exterior", mapFile: "Island_N.tmx", previewOutputPath: "maps/previews/Island_N.png" },
+      { id: "ginger-island-south", displayName: "Ginger Island South", category: "exterior", mapFile: "Island_S.tmx", previewOutputPath: "maps/previews/Island_S.png" },
+      { id: "ginger-island-south-east", displayName: "Ginger Island South-East", category: "exterior", mapFile: "Island_SE.tmx", previewOutputPath: "maps/previews/Island_SE.png" },
+      { id: "ginger-island-east", displayName: "Ginger Island East", category: "exterior", mapFile: "Island_E.tmx", previewOutputPath: "maps/previews/Island_E.png" },
+      { id: "railroad", displayName: "Railroad", category: "exterior", mapFile: "Railroad.tmx", previewOutputPath: "maps/previews/Railroad.png" },
+      { id: "backwoods", displayName: "Backwoods", category: "exterior", mapFile: "Backwoods.tmx", previewOutputPath: "maps/previews/Backwoods.png" },
+      { id: "secret-woods", displayName: "Secret Woods", category: "exterior", mapFile: "Woods.tmx", previewOutputPath: "maps/previews/Woods.png" },
+      { id: "summit", displayName: "Summit", category: "exterior", mapFile: "Summit.tmx", previewOutputPath: "maps/previews/Summit.png" },
+      { id: "pelican-town", displayName: "Pelican Town", category: "exterior", mapFile: "Town.tmx", previewOutputPath: "maps/previews/Town.png" },
+      { id: "cindersap-forest", displayName: "Cindersap Forest", category: "exterior", mapFile: "Forest.tmx", previewOutputPath: "maps/previews/Forest.png" },
+      { id: "mountain", displayName: "Mountain", category: "exterior", mapFile: "Mountain.tmx", previewOutputPath: "maps/previews/Mountain.png" },
+      { id: "pelican-beach", displayName: "Pelican Beach", category: "exterior", mapFile: "Beach.tmx", previewOutputPath: "maps/previews/Beach.png" },
+      { id: "calico-desert", displayName: "Calico Desert", category: "exterior", mapFile: "Desert.tmx", previewOutputPath: "maps/previews/Desert.png" },
       { id: "bus-stop", displayName: "Bus Stop", category: "exterior", mapFile: "BusStop.tmx", previewOutputPath: "maps/previews/BusStop.png" },
       { id: "quarry", displayName: "Quarry", category: "exterior", mapFile: "Quarry.tmx", previewOutputPath: "maps/previews/Quarry.png" },
       { id: "if2r", displayName: "Immersive Farm 2", category: "community-farm", mapFile: "IF2R.tmx", modId: "flashshifter.immersivefarm2remastered", previewOutputPath: "mods/flashshifter.immersivefarm2remastered/preview.png" },
@@ -60,6 +73,27 @@ describe("planner map catalog", () => {
       { id: "sve-grandpas-shed-1", displayName: "Grandpa's Shed Floor 1 (SVE)", category: "community-interior", mapFile: "grandpas-shed-1.tmx", modId: "flashshifter.sve", previewOutputPath: "maps/previews/grandpas-shed-1.png" },
       { id: "sve-grandpas-shed-2", displayName: "Grandpa's Shed Floor 2 (SVE)", category: "community-interior", mapFile: "grandpas-shed-2.tmx", modId: "flashshifter.sve", previewOutputPath: "maps/previews/grandpas-shed-2.png" },
     ]);
+  });
+
+  it("keeps all official and community map counts and map identifiers unique", () => {
+    const categoryCounts = {
+      farm: plannerMaps.filter((plannerMap) => plannerMap.category === "farm").length,
+      interior: plannerMaps.filter((plannerMap) => plannerMap.category === "interior").length,
+      exterior: plannerMaps.filter((plannerMap) => plannerMap.category === "exterior").length,
+      communityFarm: plannerMaps.filter((plannerMap) => plannerMap.category === "community-farm").length,
+      communityInterior: plannerMaps.filter((plannerMap) => plannerMap.category === "community-interior").length,
+    };
+
+    expect(plannerMaps).toHaveLength(61);
+    expect(categoryCounts).toEqual({
+      farm: 9,
+      interior: 16,
+      exterior: 15,
+      communityFarm: 18,
+      communityInterior: 3,
+    });
+    expect(new Set(plannerMaps.map((plannerMap) => plannerMap.id)).size).toBe(61);
+    expect(new Set(plannerMaps.map((plannerMap) => plannerMap.mapFile)).size).toBe(61);
   });
 
   it("records the source crop and target for each Ginger Island overlay", () => {

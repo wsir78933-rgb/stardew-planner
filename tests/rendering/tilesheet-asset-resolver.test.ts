@@ -43,6 +43,42 @@ describe("resolveTilesheetAsset", () => {
     });
   });
 
+  it("resolves the verified fixed Island and Desert tilesheets", () => {
+    const verifiedTilesheets = [
+      "island_tilesheet_2",
+      "DesertTiles",
+      "DesertTiles_Extended",
+    ] as const;
+
+    for (const tilesheetSource of verifiedTilesheets) {
+      expect(
+        resolveTilesheetAsset({
+          tilesetSource: tilesheetSource,
+          season: "winter",
+          modId: null,
+        }),
+      ).toEqual({
+        localPath: `${localAssetRoot}tilesheets/${tilesheetSource}.png`,
+        usedSpringFallback: false,
+      });
+    }
+  });
+
+  it("resolves official monster grave tilesheets for all verified seasons", () => {
+    for (const season of ["spring", "summer", "fall", "winter"] as const) {
+      expect(
+        resolveTilesheetAsset({
+          tilesetSource: "spring_monsterGraveTiles",
+          season,
+          modId: null,
+        }),
+      ).toEqual({
+        localPath: `${localAssetRoot}tilesheets/${season}_monsterGraveTiles.png`,
+        usedSpringFallback: false,
+      });
+    }
+  });
+
   it("resolves the official wallpapers tilesheet without a mod identifier", () => {
     expect(
       resolveTilesheetAsset({
