@@ -9,6 +9,7 @@ const officialSeasonalTilesheetBasenames = [
   "Shadows",
   "beach",
   "island_tilesheet_1",
+  "monsterGraveTiles",
 ] as const;
 
 const springDaisyextrasModIds = [
@@ -47,6 +48,9 @@ export const officialTilesheetOutputPaths = [
   "tilesheets/SewerTiles.png",
   "tilesheets/mine.png",
   "tilesheets/island_tilesheet_1.png",
+  "tilesheets/island_tilesheet_2.png",
+  "tilesheets/DesertTiles.png",
+  "tilesheets/DesertTiles_Extended.png",
   "tilesheets/Farm Obelisk.png",
   ...createSeasonalTilesheetOutputPaths(
     "tilesheets",

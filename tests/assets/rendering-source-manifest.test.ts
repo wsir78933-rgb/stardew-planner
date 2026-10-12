@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { sourceAssets } from "../../src/assets/source-manifest";
+import { mapSourceAssets } from "../../src/assets/map-source-manifest";
 import {
   additionalFurnitureTilesheetSourceAssets,
   buildingPaintMaskSourceAssets,
@@ -25,6 +26,9 @@ const expectedOfficialTilesheetOutputPaths = [
   "tilesheets/SewerTiles.png",
   "tilesheets/mine.png",
   "tilesheets/island_tilesheet_1.png",
+  "tilesheets/island_tilesheet_2.png",
+  "tilesheets/DesertTiles.png",
+  "tilesheets/DesertTiles_Extended.png",
   "tilesheets/Farm Obelisk.png",
   "tilesheets/spring_outdoorsTileSheet.png",
   "tilesheets/summer_outdoorsTileSheet.png",
@@ -58,6 +62,39 @@ const expectedOfficialTilesheetOutputPaths = [
   "tilesheets/summer_island_tilesheet_1.png",
   "tilesheets/fall_island_tilesheet_1.png",
   "tilesheets/winter_island_tilesheet_1.png",
+  "tilesheets/spring_monsterGraveTiles.png",
+  "tilesheets/summer_monsterGraveTiles.png",
+  "tilesheets/fall_monsterGraveTiles.png",
+  "tilesheets/winter_monsterGraveTiles.png",
+] as const;
+
+const expectedNewPlannerMapOutputPaths = [
+  "maps/Island_N.tmx",
+  "maps/previews/Island_N.png",
+  "maps/Island_S.tmx",
+  "maps/previews/Island_S.png",
+  "maps/Island_SE.tmx",
+  "maps/previews/Island_SE.png",
+  "maps/Island_E.tmx",
+  "maps/previews/Island_E.png",
+  "maps/Railroad.tmx",
+  "maps/previews/Railroad.png",
+  "maps/Backwoods.tmx",
+  "maps/previews/Backwoods.png",
+  "maps/Woods.tmx",
+  "maps/previews/Woods.png",
+  "maps/Summit.tmx",
+  "maps/previews/Summit.png",
+  "maps/Town.tmx",
+  "maps/previews/Town.png",
+  "maps/Forest.tmx",
+  "maps/previews/Forest.png",
+  "maps/Mountain.tmx",
+  "maps/previews/Mountain.png",
+  "maps/Beach.tmx",
+  "maps/previews/Beach.png",
+  "maps/Desert.tmx",
+  "maps/previews/Desert.png",
 ] as const;
 
 const expectedModNonSeasonalTilesheetOutputPaths = [
@@ -184,7 +221,7 @@ const expectedUnavailableTilesheetOutputPaths = [
 
 describe("rendering source manifest", () => {
   it("locks the exact verified tilesheet and static rendering resource categories", () => {
-    expect(officialTilesheetSourceAssets).toHaveLength(42);
+    expect(officialTilesheetSourceAssets).toHaveLength(49);
     expect(modNonSeasonalTilesheetSourceAssets).toHaveLength(23);
     expect(modSeasonalTilesheetSourceAssets).toHaveLength(43);
     expect(renderingDataSourceAssets).toHaveLength(9);
@@ -194,7 +231,7 @@ describe("rendering source manifest", () => {
     expect(terrainSourceAssets).toHaveLength(35);
     expect(regularTilesheetSourceAssets).toHaveLength(15);
     expect(additionalFurnitureTilesheetSourceAssets).toHaveLength(7);
-    expect(renderingSourceAssets).toHaveLength(224);
+    expect(renderingSourceAssets).toHaveLength(231);
 
     expect(
       officialTilesheetSourceAssets.map(
@@ -225,15 +262,32 @@ describe("rendering source manifest", () => {
     ).not.toContain("data/Crops.json");
   });
 
-  it("keeps every original locked source asset ordered before the rendering expansion", () => {
-    expect(sourceAssets).toHaveLength(337);
-    expect(sourceAssets.slice(0, 113)).toHaveLength(113);
-    expect(sourceAssets.slice(113)).toEqual(renderingSourceAssets);
+  it("includes the new map files and previews in the public source list", () => {
+    const mapSourceOutputPaths = new Set(
+      mapSourceAssets.map((sourceAsset) => sourceAsset.outputPath),
+    );
+
+    expect(mapSourceAssets).toHaveLength(138);
+    for (const expectedOutputPath of expectedNewPlannerMapOutputPaths) {
+      expect(mapSourceOutputPaths).toContain(expectedOutputPath);
+    }
+  });
+
+  it("keeps map and crop assets ordered before the rendering expansion", () => {
+    const renderingSourceAssetStartIndex = 1 + mapSourceAssets.length;
+
+    expect(sourceAssets).toHaveLength(370);
+    expect(sourceAssets.slice(1, renderingSourceAssetStartIndex)).toEqual(
+      mapSourceAssets,
+    );
+    expect(sourceAssets.slice(renderingSourceAssetStartIndex)).toEqual(
+      renderingSourceAssets,
+    );
 
     const sourceAssetOutputPaths = sourceAssets.map(
       (sourceAsset) => sourceAsset.outputPath,
     );
-    expect(new Set(sourceAssetOutputPaths)).toHaveLength(337);
+    expect(new Set(sourceAssetOutputPaths)).toHaveLength(370);
   });
 
   it("locks the exact output path sequence for every verified tilesheet category", () => {

@@ -69,6 +69,35 @@ describe("planner map picker", () => {
     expect(pickerMarkup).not.toContain('data-picker-map-id="farmhouse-2"');
   });
 
+  it("renders all 15 exterior maps and marks a selected Ginger Island map", () => {
+    const selectedMapId = "ginger-island-north";
+    const exteriorMaps = plannerMaps.filter(
+      (plannerMap) => plannerMap.category === "exterior",
+    );
+    const pickerMarkup = renderMapPicker(selectedMapId, "data-picker-map-id");
+    const exteriorsTabMarkup = getButtonMarkupByText(pickerMarkup, "Exteriors");
+    const renderedMapIds = Array.from(
+      pickerMarkup.matchAll(/data-picker-map-id="([^"]+)"/g),
+      ([, mapId]) => mapId,
+    );
+
+    expect(exteriorMaps).toHaveLength(15);
+    expect(exteriorsTabMarkup).toContain('aria-selected="true"');
+    expect(renderedMapIds).toEqual(exteriorMaps.map(({ id }) => id));
+
+    for (const plannerMap of exteriorMaps) {
+      const mapCardMarkup = getButtonMarkupByAttribute(
+        pickerMarkup,
+        `data-picker-map-id="${plannerMap.id}"`,
+      );
+
+      expect(mapCardMarkup).toContain(plannerMap.displayName);
+      expect(mapCardMarkup).toContain(
+        `aria-pressed="${plannerMap.id === selectedMapId}"`,
+      );
+    }
+  });
+
   it("renders the selected Community/Farms cards and both community tabs", () => {
     const pickerMarkup = renderMapPicker("if2r", "data-picker-map-id");
     const communityTablistMarkup = getCommunityTablistMarkup(pickerMarkup);
