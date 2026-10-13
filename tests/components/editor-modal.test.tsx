@@ -7,6 +7,7 @@ import {
 } from "../../src/components/editor-modal";
 import { closeModalFromBackdropClick } from "../../src/components/modal-backdrop-close";
 import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
+import { createInitialEditorDisplayOptions } from "../../src/editor/editor-display-options";
 import {
   editorModalIds,
   type EditorModalId,
@@ -373,9 +374,14 @@ describe("editor modal trigger focus and close behavior", () => {
 describe("editor modal localized View and Settings content", () => {
   it("renders localized View and Settings groups with pressed states and Save dialog copy", () => {
     const copy = getEditorModalCopy("zh-CN");
+    const viewDisplayOptions = {
+      ...createInitialEditorDisplayOptions(),
+      showSprinklerRadius: true,
+    };
     const viewMarkup = renderToStaticMarkup(
       createElement(EditorModal, {
         copy,
+        displayOptions: viewDisplayOptions,
         locale: "zh",
         modalId: "view-panel",
         onClose: () => undefined,
@@ -434,6 +440,9 @@ describe("editor modal localized View and Settings content", () => {
     );
     expect(viewMarkup).toContain(
       `class="editor-config-switch__state">${copy.stateLabel(true)}</span>`,
+    );
+    expect(viewMarkup).toMatch(
+      /<button class="editor-config-switch" type="button" aria-pressed="true"[^>]*>.*?<span class="editor-config-switch__label">洒水器<\/span>.*?<span aria-hidden="true" class="editor-config-switch__state">开<\/span>/,
     );
     expect(viewMarkup).toContain("关闭对话框");
     expect(settingsMarkup).toContain("设置");
