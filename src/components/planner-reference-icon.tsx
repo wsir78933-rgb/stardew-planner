@@ -13,6 +13,7 @@ export const plannerReferenceIconNames = [
   "Multi",
   "Fill",
   "Erase",
+  "Zoom",
   "Undo",
   "Redo",
   "SeasonSpring",
@@ -106,6 +107,13 @@ function getPlannerReferenceIconShapes(name: PlannerReferenceIconName): ReactNod
       return <path d="M5 3H8A2 2 0 0 1 10 5V8A2 2 0 0 1 8 10H5A2 2 0 0 1 3 8V5A2 2 0 0 1 5 3ZM16 3H19A2 2 0 0 1 21 5V8A2 2 0 0 1 19 10H16A2 2 0 0 1 14 8V5A2 2 0 0 1 16 3ZM16 14H19A2 2 0 0 1 21 16V19A2 2 0 0 1 19 21H16A2 2 0 0 1 14 19V16A2 2 0 0 1 16 14ZM5 14H8A2 2 0 0 1 10 16V19A2 2 0 0 1 8 21H5A2 2 0 0 1 3 19V16A2 2 0 0 1 5 14Z" />;
     case "Erase":
       return <path d="M3.59 13.91L13.91 3.59A2 2 0 0 1 16.74 3.59L20.41 7.26A2 2 0 0 1 20.41 10.09L10.09 20.41A2 2 0 0 1 7.26 20.41L3.59 16.74A2 2 0 0 1 3.59 13.91ZM6.63 10.87L13.13 17.37M8.68 21H21" />;
+    case "Zoom":
+      return (
+        <>
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m15.5 15.5 4.5 4.5M8 10.5h5M10.5 8v5" />
+        </>
+      );
     case "Undo":
       return <path d="M3 9H16A5 5 0 0 1 16 19H11M7 5L3 9L7 13" />;
     case "Redo":

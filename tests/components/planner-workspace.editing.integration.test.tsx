@@ -327,78 +327,64 @@ describe("workspace eraser preview wiring", () => {
 });
 
 describe("planner canvas interaction properties", () => {
-  it("keeps wheel zoom enabled while deriving pointer mode from the selected tool and placements", () => {
+  it("keeps pointer mode independent from wheel zoom while deriving it from tools and placements", () => {
     const cases = [
       {
-        expectedProperties: {
-          pointerInteractionMode: "navigate",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "navigate",
         hasSelectedPlacements: true,
         tool: null,
       },
       {
-        expectedProperties: {
-          pointerInteractionMode: "rectangle",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "rectangle",
         hasSelectedPlacements: true,
         tool: "erase",
       },
       {
-        expectedProperties: {
-          pointerInteractionMode: "multi-select",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "multi-select",
         hasSelectedPlacements: true,
         tool: "multi-select",
       },
       {
-        expectedProperties: {
-          pointerInteractionMode: "navigate",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "navigate",
         hasPendingPlacementCopy: true,
         hasSelectedPlacements: true,
         tool: "multi-select",
       },
       {
-        expectedProperties: {
-          pointerInteractionMode: "rectangle",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "rectangle",
         hasSelectedPlacements: true,
         tool: "fill",
       },
       {
-        expectedProperties: {
-          pointerInteractionMode: "move-selected",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "move-selected",
         hasSelectedPlacements: true,
         tool: "cursor",
       },
       {
-        expectedProperties: {
-          pointerInteractionMode: "navigate",
-          wheelZoomEnabled: true,
-        },
+        expectedPointerInteractionMode: "navigate",
         hasSelectedPlacements: false,
         tool: "cursor",
       },
     ] as const;
 
     for (const canvasInteractionCase of cases) {
-      expect(
-        getPlannerCanvasInteractionProperties({
-          hasPendingPlacementCopy:
-            "hasPendingPlacementCopy" in canvasInteractionCase
-              ? canvasInteractionCase.hasPendingPlacementCopy
-              : false,
-          hasSelectedPlacements: canvasInteractionCase.hasSelectedPlacements,
-          tool: canvasInteractionCase.tool,
-        }),
-      ).toEqual(canvasInteractionCase.expectedProperties);
+      for (const wheelZoomEnabled of [false, true]) {
+        expect(
+          getPlannerCanvasInteractionProperties({
+            hasPendingPlacementCopy:
+              "hasPendingPlacementCopy" in canvasInteractionCase
+                ? canvasInteractionCase.hasPendingPlacementCopy
+                : false,
+            hasSelectedPlacements: canvasInteractionCase.hasSelectedPlacements,
+            tool: canvasInteractionCase.tool,
+            wheelZoomEnabled,
+          }),
+        ).toEqual({
+          pointerInteractionMode:
+            canvasInteractionCase.expectedPointerInteractionMode,
+          wheelZoomEnabled,
+        });
+      }
     }
   });
 });

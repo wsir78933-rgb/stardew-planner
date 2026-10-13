@@ -408,6 +408,7 @@ export function getPlannerCanvasInteractionProperties(
     hasSelectedPlacements: boolean;
     hasPendingPlacementCopy?: boolean;
     tool: EditorTool | null;
+    wheelZoomEnabled: boolean;
   }>,
 ): Readonly<{
   pointerInteractionMode:
@@ -430,7 +431,7 @@ export function getPlannerCanvasInteractionProperties(
               : input.hasSelectedPlacements
                 ? "move-selected"
                 : "navigate",
-    wheelZoomEnabled: true,
+    wheelZoomEnabled: input.wheelZoomEnabled,
   };
 }
 
@@ -950,7 +951,11 @@ function PreparedPlannerWorkspaceContent({
     useState<InteriorDecorCatalogPattern | null>(null);
   const [interiorDecorRejectionNotification, setInteriorDecorRejectionNotification] =
     useState<InteriorDecorRejectionNotification | null>(null);
+  const [wheelZoomEnabled, setWheelZoomEnabled] = useState(false);
   const [isXRayActive, setIsXRayActive] = useState(false);
+  const handleWheelZoomToggle = useCallback(() => {
+    setWheelZoomEnabled((currentlyEnabled) => !currentlyEnabled);
+  }, []);
   const handleCancelInteriorDecor = useCallback(() => {
     setActiveInteriorDecorPattern(null);
     setInteriorDecorRejectionNotification(null);
@@ -1152,6 +1157,7 @@ function PreparedPlannerWorkspaceContent({
     hasSelectedPlacements:
       plannerWorkspaceState.selectedPlacementKeys.length > 0,
     tool: plannerWorkspaceState.tool,
+    wheelZoomEnabled,
   });
   return (
     <>
@@ -1174,6 +1180,7 @@ function PreparedPlannerWorkspaceContent({
         locale={editorLocale}
         canRedo={plannerWorkspaceState.placementHistory.redoStates.length > 0}
         canUndo={plannerWorkspaceState.placementHistory.undoStates.length > 0}
+        onWheelZoomToggle={handleWheelZoomToggle}
         onRedo={() =>
           plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
             type: "redo-placement-history",
@@ -1186,6 +1193,7 @@ function PreparedPlannerWorkspaceContent({
           })
         }
         tool={plannerWorkspaceState.tool}
+        wheelZoomEnabled={wheelZoomEnabled}
       />
       <ItemCatalogPanel
         catalogPresentationChoicesByItemId={catalogPresentationChoicesByItemId}

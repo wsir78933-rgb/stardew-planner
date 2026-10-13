@@ -5187,7 +5187,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
  * Colours and pressed shadows remain those of the existing editor. */
 .planner-editor-shell {
   --planner-topbar-height: 38px;
-  --planner-editing-toolbar-width: 281px;
+  --planner-editing-toolbar-width: 324px;
 }
 .planner-editor-shell .editor-menu-bar {
   align-items: center;
@@ -5239,17 +5239,18 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-toolbar__history-group,
 .planner-editor-shell .editor-wheel-zoom-group { display: contents; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__button { display: flex; flex: 0 0 40px; font-size: 14px; font-weight: 500; gap: 0; height: 40px; width: 40px; }
-.planner-editor-shell .editor-toolbar .editor-wheel-zoom-button { flex-basis: 72px; width: 72px; }
+.planner-editor-shell .editor-toolbar .editor-wheel-zoom-button { flex-basis: 40px; width: 40px; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__history-button { flex-basis: 40px; width: 40px; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__divider { flex: 0 0 1px; height: 22px; margin: 0 3px; }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { position: relative; }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]::after { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 6px 16px rgb(0 0 0 / 30%); color: var(--text); content: attr(data-tooltip); font-size: 12px; font-weight: 500; left: 50%; line-height: 1.3; max-width: calc(100vw - 20px); opacity: 0; padding: 8px 10px; pointer-events: none; position: absolute; text-align: center; bottom: calc(100% + 8px); transform: translate(-50%, 3px); transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease; visibility: hidden; white-space: nowrap; width: max-content; z-index: 80; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip] { position: relative; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip]::after { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 6px 16px rgb(0 0 0 / 30%); box-sizing: border-box; color: var(--text); content: attr(data-tooltip); font-size: 12px; font-weight: 500; left: 50%; line-height: 1.3; max-width: calc(100vw - 20px); opacity: 0; padding: 8px 10px; pointer-events: none; position: absolute; text-align: center; bottom: calc(100% + 8px); transform: translate(-50%, 3px); transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease; visibility: hidden; white-space: normal; width: max-content; z-index: 80; }
+.planner-editor-shell .editor-toolbar .editor-wheel-zoom-button[data-tooltip]::after { width: min(280px, calc(100vw - 20px)); }
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]::after,
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]::after,
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]::after { left: 0; text-align: left; transform: translateY(3px); }
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]::after { left: auto; right: 0; text-align: right; transform: translateY(3px); }
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]:hover::after,
-.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); visibility: visible; }
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip]:hover::after,
+.planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); visibility: visible; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:hover::after,
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:focus-visible::after,
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:hover::after,
@@ -5340,28 +5341,17 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   .planner-editor-shell .editor-menu-bar__button[data-editor-modal-id="settings-panel"] > span { display: inline; }
   .planner-editor-shell .editor-modal--popover { left: 8px; right: 8px; width: auto; }
   .planner-editor-shell .editor-modal--save-panel { max-width: calc(100vw - 24px); width: calc(100vw - 24px); }
-  .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { max-width: calc(100% - 16px); }
-  .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: 50%; max-width: calc(100% - 16px); }
+  .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { max-width: calc(100% - 16px); transform: translateX(-50%); }
+  .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: 50%; max-width: calc(100% - 16px); transform: translateX(-50%); }
   .planner-editor-shell .catalog-placement-controls { left: 50%; transform: translateX(-50%); }
   .planner-editor-shell:has(.item-catalog-panel--left) .catalog-placement-controls { left: 50%; }
   .planner-editor-shell .editor-toolbar { height: 54px; padding: 4px; width: min(var(--planner-editing-toolbar-width), calc(100vw - 20px)); }
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { flex: 1 1 0; font-size: 12px; gap: 0; height: 44px; min-width: 40px; width: auto; }
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool] { position: static; }
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]::after { box-sizing: border-box; left: 50%; max-width: calc(100vw - 20px); right: auto; text-align: center; transform: translate(-50%, 3px); white-space: normal; }
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:hover::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="cursor"]:focus-visible::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:hover::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="multi-select"]:focus-visible::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:hover::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:focus-visible::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:hover::after,
-  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:focus-visible::after { transform: translate(-50%, 0); }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button { flex: 1 1 0; font-size: 12px; gap: 0; height: 44px; min-width: 0; width: auto; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip] { position: static; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip]::after { box-sizing: border-box; left: 50%; max-width: calc(100vw - 20px); right: auto; text-align: center; transform: translate(-50%, 3px); white-space: normal; }
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip][data-editor-tool]:hover::after,
+  .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip][data-editor-tool]:focus-visible::after { transform: translate(-50%, 0); }
   .planner-editor-shell .editor-toolbar__label { display: none; }
-  .planner-editor-shell .editor-wheel-zoom-button .editor-toolbar__label { display: inline; }
   .planner-editor-shell .editor-toolbar .editor-toolbar__history-button { flex: 0 0 44px; width: 44px; }
   .planner-editor-shell .editor-toolbar .editor-toolbar__divider { margin: 0 2px; }
   .planner-editor-shell:has(.item-catalog-panel--bottom) .toolbar-wrapper.planner-editor-toolbar { bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 12px); }

@@ -16,6 +16,8 @@ type EditorToolbarProperties = Readonly<{
   onToolChange: (tool: EditorTool | null) => void;
   onUndo: () => void;
   onRedo: () => void;
+  wheelZoomEnabled: boolean;
+  onWheelZoomToggle: () => void;
   canUndo: boolean;
   canRedo: boolean;
   locale?: EditorToolbarLocale;
@@ -65,6 +67,8 @@ const editorToolbarCopyByLocale = {
     multiTooltip: "Click or drag to select multiple items (M)",
     fillTooltip: "Drag a rectangle to fill items (F)",
     eraseTooltip: "Click or drag a rectangle to erase items (E)",
+    zoom: "Zoom",
+    zoomTooltip: "Toggle scroll wheel zoom: scroll up to zoom in, down to zoom out",
     undo: "Undo",
     redo: "Redo",
   },
@@ -78,6 +82,8 @@ const editorToolbarCopyByLocale = {
     multiTooltip: "点击或拖框多选物品（M）",
     fillTooltip: "拖动矩形批量填充（F）",
     eraseTooltip: "点击或拖框擦除物品（E）",
+    zoom: "缩放",
+    zoomTooltip: "点击开启/关闭滚轮缩放：上滚放大，下滚缩小",
     undo: "撤销",
     redo: "重做",
   },
@@ -94,6 +100,8 @@ export function EditorToolbar({
   onToolChange,
   onUndo,
   onRedo,
+  wheelZoomEnabled,
+  onWheelZoomToggle,
   canUndo,
   canRedo,
   locale = "en",
@@ -134,6 +142,22 @@ export function EditorToolbar({
       >
         <div className="tool-group editor-toolbar__tool-group">
           {editorToolbarControls.map(renderToolButton)}
+          <button
+            aria-label={editorToolbarCopy.zoom}
+            aria-pressed={wheelZoomEnabled}
+            className={`tool-btn editor-toolbar__button editor-wheel-zoom-button${wheelZoomEnabled ? " active" : ""}`}
+            data-wheel-zoom-toggle=""
+            data-tooltip={editorToolbarCopy.zoomTooltip}
+            onKeyDown={(keyboardEvent) => {
+              if (keyboardEvent.key === " " || keyboardEvent.key === "Spacebar") {
+                keyboardEvent.stopPropagation();
+              }
+            }}
+            onClick={onWheelZoomToggle}
+            type="button"
+          >
+            <PlannerReferenceIcon name="Zoom" size={20} />
+          </button>
         </div>
         <span aria-hidden="true" className="separator editor-toolbar__divider" />
         <div aria-label="History" className="tool-group editor-toolbar__history-group" role="group">

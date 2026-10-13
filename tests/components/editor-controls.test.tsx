@@ -54,6 +54,7 @@ afterEach(() => {
 function renderToolbar(
   tool: Parameters<typeof EditorToolbar>[0]["tool"],
   locale: "en" | "zh" = "en",
+  wheelZoomEnabled = false,
 ): string {
   return renderToStaticMarkup(
     createElement(EditorToolbar, {
@@ -63,7 +64,9 @@ function renderToolbar(
       onRedo: () => undefined,
       onToolChange: () => undefined,
       onUndo: () => undefined,
+      onWheelZoomToggle: () => undefined,
       tool,
+      wheelZoomEnabled,
     }),
   );
 }
@@ -271,7 +274,7 @@ describe("editor controls", () => {
     expect(onOpenModal).toHaveBeenCalledExactlyOnceWith("map-picker");
   });
 
-  it("renders the four tools and history actions without a Zoom control", () => {
+  it("renders the four tools, independent wheel-zoom toggle, and history actions", () => {
     const toolbarMarkup = renderToolbar("cursor");
 
     expect(toolbarMarkup).toContain('viewBox="0 0 24 24"');
@@ -282,8 +285,9 @@ describe("editor controls", () => {
     expect(toolbarMarkup).toContain('data-editor-history-action="undo"');
     expect(toolbarMarkup).toContain('data-editor-history-action="redo"');
     expect(toolbarMarkup).not.toContain('data-editor-tool="zoom"');
-    expect(toolbarMarkup).not.toContain("Zoom");
-    expect(toolbarMarkup).not.toContain("滚轮缩放");
+    expect(toolbarMarkup).toContain('aria-label="Zoom" aria-pressed="false"');
+    expect(toolbarMarkup).toContain('data-wheel-zoom-toggle=""');
+    expect(toolbarMarkup).toContain('data-tooltip="Toggle scroll wheel zoom: scroll up to zoom in, down to zoom out"');
     expect(toolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(1);
     expect(toolbarMarkup).not.toContain('class="editor-toolbar__label"');
     expect(toolbarMarkup).toContain('aria-label="Select"');
@@ -306,6 +310,8 @@ describe("editor controls", () => {
 
     const localizedToolbarMarkup = renderToolbar("cursor", "zh");
     expect(localizedToolbarMarkup).not.toContain('data-editor-tool="zoom"');
+    expect(localizedToolbarMarkup).toContain('aria-label="缩放" aria-pressed="false"');
+    expect(localizedToolbarMarkup).toContain('data-tooltip="点击开启/关闭滚轮缩放：上滚放大，下滚缩小"');
     expect(localizedToolbarMarkup).toContain('aria-label="选择"');
     expect(localizedToolbarMarkup).toContain('aria-label="多选"');
     expect(localizedToolbarMarkup).toContain('aria-label="填充"');
@@ -324,13 +330,27 @@ describe("editor controls", () => {
     expect(localizedToolbarMarkup).toContain('aria-label="重做"');
   });
 
-  it("shows each tool usage tooltip on hover and keyboard focus", () => {
+  it.each([
+    { locale: "en" as const, label: "Zoom" },
+    { locale: "zh" as const, label: "缩放" },
+  ])("exposes the $locale wheel-zoom toggle's pressed state", ({ locale, label }) => {
+    const inactiveMarkup = renderToolbar("fill", locale, false);
+    const activeMarkup = renderToolbar("fill", locale, true);
+
+    expect(inactiveMarkup).toContain(`aria-label="${label}" aria-pressed="false"`);
+    expect(activeMarkup).toContain(`aria-label="${label}" aria-pressed="true"`);
+    expect(activeMarkup).toMatch(
+      new RegExp(`<button aria-label="${label}" aria-pressed="true" class="[^"]* active"`),
+    );
+  });
+
+  it("shows tool and wheel-zoom usage tooltips on hover and keyboard focus", () => {
     const stylesheet = readFileSync(
       resolve(process.cwd(), "app/globals.css"),
       "utf8",
     );
     const editorToolTooltipSelector =
-      ".planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool]";
+      ".planner-editor-shell .editor-toolbar .editor-toolbar__button[data-tooltip]";
 
     expect(stylesheet).toContain(`${editorToolTooltipSelector}::after`);
     expect(stylesheet).toContain("content: attr(data-tooltip);");
@@ -374,6 +394,87 @@ describe("editor controls", () => {
     }
   });
 
+  it("toggles wheel zoom without changing the selected editing tool", () => {
+    let wheelZoomEnabled = false;
+    const onToolChange = vi.fn();
+    const onWheelZoomToggle = vi.fn(() => {
+      wheelZoomEnabled = !wheelZoomEnabled;
+    });
+    const renderInteractiveToolbar = () => EditorToolbar({
+      canRedo: false,
+      canUndo: false,
+      onRedo: () => undefined,
+      onToolChange,
+      onUndo: () => undefined,
+      onWheelZoomToggle,
+      tool: "fill",
+      wheelZoomEnabled,
+    });
+    const activateWheelZoomToggle = () => {
+      const wheelZoomButton = requireToolbarButton(renderInteractiveToolbar(), "Zoom");
+      const onClick = wheelZoomButton.props.onClick;
+      if (typeof onClick !== "function") {
+        throw new Error("Wheel zoom toggle is missing its click handler.");
+      }
+
+      onClick();
+    };
+
+    expect(requireToolbarButton(renderInteractiveToolbar(), "Zoom").props["aria-pressed"]).toBe(false);
+    expect(requireToolbarButton(renderInteractiveToolbar(), "Fill").props["aria-pressed"]).toBe(true);
+
+    activateWheelZoomToggle();
+    expect(onWheelZoomToggle).toHaveBeenCalledOnce();
+    expect(wheelZoomEnabled).toBe(true);
+    expect(requireToolbarButton(renderInteractiveToolbar(), "Zoom").props["aria-pressed"]).toBe(true);
+    expect(requireToolbarButton(renderInteractiveToolbar(), "Fill").props["aria-pressed"]).toBe(true);
+    expect(onToolChange).not.toHaveBeenCalled();
+
+    activateWheelZoomToggle();
+    expect(onWheelZoomToggle).toHaveBeenCalledTimes(2);
+    expect(wheelZoomEnabled).toBe(false);
+    expect(requireToolbarButton(renderInteractiveToolbar(), "Zoom").props["aria-pressed"]).toBe(false);
+    expect(requireToolbarButton(renderInteractiveToolbar(), "Fill").props["aria-pressed"]).toBe(true);
+    expect(onToolChange).not.toHaveBeenCalled();
+  });
+
+  it("stops only Space propagation on the Zoom button without cancelling native key behavior", () => {
+    const toolbarTree = EditorToolbar({
+      canRedo: false,
+      canUndo: false,
+      onRedo: () => undefined,
+      onToolChange: () => undefined,
+      onUndo: () => undefined,
+      onWheelZoomToggle: () => undefined,
+      tool: "fill",
+      wheelZoomEnabled: false,
+    });
+    const zoomButton = requireToolbarButton(toolbarTree, "Zoom");
+    const onZoomKeyDown = zoomButton.props.onKeyDown;
+    if (typeof onZoomKeyDown !== "function") {
+      throw new Error("Zoom button is missing its keyboard event handler.");
+    }
+    const spaceKeyEvent = {
+      key: " ",
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+    };
+    const enterKeyEvent = {
+      key: "Enter",
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+    };
+
+    onZoomKeyDown(spaceKeyEvent);
+    expect(spaceKeyEvent.stopPropagation).toHaveBeenCalledOnce();
+    expect(spaceKeyEvent.preventDefault).not.toHaveBeenCalled();
+
+    onZoomKeyDown(enterKeyEvent);
+    expect(enterKeyEvent.stopPropagation).not.toHaveBeenCalled();
+    expect(enterKeyEvent.preventDefault).not.toHaveBeenCalled();
+    expect(requireToolbarButton(toolbarTree, "Fill").props.onKeyDown).toBeUndefined();
+  });
+
   it("matches the frozen inactive and active erase button classes", () => {
     const inactiveMarkup = renderToStaticMarkup(
       createElement(EditorToolbar, {
@@ -382,7 +483,9 @@ describe("editor controls", () => {
         onRedo: () => undefined,
         onToolChange: () => undefined,
         onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
         tool: "cursor",
+        wheelZoomEnabled: false,
       }),
     );
     const activeMarkup = renderToStaticMarkup(
@@ -392,7 +495,9 @@ describe("editor controls", () => {
         onRedo: () => undefined,
         onToolChange: () => undefined,
         onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
         tool: "erase",
+        wheelZoomEnabled: false,
       }),
     );
     const inactiveEraseClassName = inactiveMarkup.match(
@@ -424,7 +529,9 @@ describe("editor controls", () => {
         onRedo: () => undefined,
         onToolChange: () => undefined,
         onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
         tool: "cursor",
+        wheelZoomEnabled: false,
       }),
     );
     const selectedToolbarMarkup = renderToStaticMarkup(
@@ -434,7 +541,9 @@ describe("editor controls", () => {
         onRedo: () => undefined,
         onToolChange: () => undefined,
         onUndo: () => undefined,
+        onWheelZoomToggle: () => undefined,
         tool: "multi-select",
+        wheelZoomEnabled: false,
       }),
     );
     const inactiveMultiSelectClassName = inactiveToolbarMarkup.match(
@@ -538,7 +647,27 @@ describe("editor controls", () => {
   });
 });
 
+type ToolbarButton = ReactElement<Record<string, unknown>>;
 type MenuButton = ReactElement<Record<string, unknown>>;
+
+function getToolbarButtons(toolbarNode: ReactNode): ToolbarButton[] {
+  if (Array.isArray(toolbarNode)) return toolbarNode.flatMap(getToolbarButtons);
+  if (!isValidElement(toolbarNode)) return [];
+
+  const toolbarElement = toolbarNode as ToolbarButton;
+  if (toolbarElement.type === "button") return [toolbarElement];
+  return getToolbarButtons(toolbarElement.props.children as ReactNode);
+}
+
+function requireToolbarButton(toolbarNode: ReactNode, label: string): ToolbarButton {
+  const toolbarButton = getToolbarButtons(toolbarNode).find(
+    (button) => button.props["aria-label"] === label,
+  );
+  if (!toolbarButton) {
+    throw new Error(`Toolbar button ${JSON.stringify(label)} is missing.`);
+  }
+  return toolbarButton;
+}
 
 function getMenuButtons(menuNode: ReactNode): MenuButton[] {
   if (Array.isArray(menuNode)) return menuNode.flatMap(getMenuButtons);

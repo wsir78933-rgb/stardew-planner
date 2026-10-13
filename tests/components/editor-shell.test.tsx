@@ -37,15 +37,17 @@ vi.mock("react", async (importOriginal) => {
 function ignoreEditorAction(): void {}
 
 describe("editor shell", () => {
-  it("renders every original editing tool, including Fill", () => {
+  it("renders every editing tool, the wheel-zoom toggle, and history actions", () => {
     const toolbarMarkup = renderToStaticMarkup(
       createElement(EditorToolbar, {
         tool: "cursor",
         onToolChange: ignoreEditorAction,
         onUndo: ignoreEditorAction,
         onRedo: ignoreEditorAction,
+        onWheelZoomToggle: ignoreEditorAction,
         canUndo: false,
         canRedo: false,
+        wheelZoomEnabled: false,
       }),
     );
 
@@ -54,6 +56,9 @@ describe("editor shell", () => {
     expect(toolbarMarkup).toContain('aria-label="Multi"');
     expect(toolbarMarkup).toContain('aria-label="Fill"');
     expect(toolbarMarkup).toContain('aria-label="Erase"');
+    expect(toolbarMarkup).toContain('aria-label="Zoom"');
+    expect(toolbarMarkup).toContain('data-wheel-zoom-toggle=""');
+    expect(toolbarMarkup).toContain('aria-label="Zoom" aria-pressed="false"');
     expect(toolbarMarkup).toContain('aria-pressed="true"');
     expect(toolbarMarkup).not.toMatch(/aria-label="Erase"[^>]*disabled=""/);
     expect(toolbarMarkup).toMatch(/aria-label="Undo"[^>]*disabled=""/);

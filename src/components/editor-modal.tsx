@@ -420,7 +420,7 @@ function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: "en" | "zh" }>) {
   ];
   return (
     <div className="editor-reference-info editor-reference-info--shortcuts">
-      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{isChinese ? "滚轮或双指捏合缩放" : "Scroll wheel or pinch to zoom"}</p> : null}</section>)}
+      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{isChinese ? "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放" : "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works."}</p> : null}</section>)}
     </div>
   );
 }
