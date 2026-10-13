@@ -106,8 +106,10 @@ describe("planner editor page", () => {
       ),
       'id="capabilities"',
       'id="how-to"',
+      'id="tool-comparison"',
       'id="faq"',
       'data-homepage-closing-cta="true"',
+      'data-site-footer="true"',
     ] as const;
     let previousHomepageSectionPosition = plannerPageMarkup.indexOf(
       homepageSectionMarkers[0],
@@ -132,6 +134,7 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).toContain('src="/homepage/hero/spring-crops.webp"');
     expect(plannerPageMarkup).toContain('src="/homepage/hero/beach-farm.webp"');
     expect(plannerPageMarkup).toContain('src="/homepage/hero/forest-farm.webp"');
+    expect(plannerPageMarkup.match(/data-homepage-tool-comparison="true"/g)).toHaveLength(1);
     expect(plannerPageMarkup.match(/href="#planner"/g)).toHaveLength(3);
     expect(plannerPageMarkup).toMatch(/<a[^>]*href="\/blog"[^>]*>Blog<\/a>/);
     expect(plannerPageMarkup).not.toMatch(/<a[^>]*href="#planner"[^>]*>Planner<\/a>/);
@@ -225,8 +228,10 @@ describe("planner editor page", () => {
         ),
         'id="capabilities"',
         'id="how-to"',
+        'id="tool-comparison"',
         'id="faq"',
         'data-homepage-closing-cta="true"',
+        'data-site-footer="true"',
       ] as const;
       let previousHomepageSectionPosition = homepageMarkup.indexOf(
         homepageSectionMarkers[0],

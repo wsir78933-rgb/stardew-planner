@@ -89,6 +89,22 @@ test("contains the hero value proposition and frames the product stage within th
   expect(mobileProductStageRule).toContain("border-radius: 0;");
 });
 
+test("keeps the homepage comparison scoped and horizontally scrollable", () => {
+  const homepageStyles = readProjectFile("app/globals.css");
+  const comparisonScrollRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#tool-comparison\[data-homepage-tool-comparison\] \[data-homepage-comparison-scroll\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+  const comparisonTableRule = homepageStyles.match(
+    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-shell\] > main > section#tool-comparison\[data-homepage-tool-comparison\] \[data-homepage-comparison-table\]\s*\{([\s\S]*?)\n\}/,
+  )?.[1];
+
+  expect(comparisonScrollRule).toBeDefined();
+  expect(comparisonScrollRule).toContain("max-width: 100%;");
+  expect(comparisonScrollRule).toContain("overflow-x: auto;");
+  expect(comparisonTableRule).toBeDefined();
+  expect(comparisonTableRule).toContain("min-width: 1024px;");
+});
+
 const whyChooseImageSources = [
   "/homepage/why-choose/beach-decorative-machooo.webp",
   "/homepage/why-choose/beach-geometric-jennameeps.webp",

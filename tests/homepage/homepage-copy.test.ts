@@ -12,6 +12,42 @@ const whyChooseImageSources = [
   "/homepage/why-choose/fourcorners-coop-hallofax.webp",
 ] as const;
 
+const expectedComparisonDimensionsByLocale = {
+  en: [
+    "Pricing",
+    "Ease of use",
+    "Saving multiple plans",
+    "English and Chinese interface",
+    "Project file backup",
+    "PNG export",
+  ],
+  "zh-CN": ["使用费用", "上手与操作", "多方案保存", "中英文操作", "方案文件备份", "PNG 导出"],
+} as const;
+
+const expectedComparisonHeadingByLocale = {
+  en: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
+  "zh-CN": "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
+} as const;
+
+const expectedPlannerBenefitPatternsByLocale = {
+  en: [
+    [/all free/i, /no paid membership/i],
+    [/Clear labels/i, /grouped controls/i, /browse or search/i, /one save window/i],
+    [/multiple plans/i, /without fixed slots/i, /set plan limit/i, /browser storage/i],
+    [/English/i, /Chinese/i],
+    [/one project/i, /JSON/i, /all its maps/i],
+    [/PNG/i, /1×/, /2×/],
+  ],
+  "zh-CN": [
+    [/全部免费/, /无付费会员/],
+    [/操作标签/, /分组/, /分类或搜索/, /同一保存窗口/],
+    [/多个方案/, /不设固定槽位/, /数量配额/, /浏览器存储/],
+    [/中英文/],
+    [/单个项目/, /JSON/, /全部地图/],
+    [/PNG/, /1×/, /2×/],
+  ],
+} as const;
+
 test("ships every approved locale with the same top-level homepage sections", () => {
   expect(Object.keys(homepageCopyByLocale)).toEqual([...HOMEPAGE_LOCALES]);
   expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale["zh-CN"]));
@@ -28,10 +64,57 @@ test("ships every approved locale with the same top-level homepage sections", ()
     "features",
     "whyChoose",
     "howTo",
+    "toolComparison",
     "closingCta",
     "faq",
     "footer",
   ]);
+});
+
+test("provides a complete bilingual comparison for the same three planner sites", () => {
+  const expectedPlannerSiteUrls = [
+    "#planner",
+    "https://stardewplan.com/",
+    "https://v3.stardew.info/planner/",
+  ] as const;
+
+  for (const homepageLocale of HOMEPAGE_LOCALES) {
+    const comparisonCopy = homepageCopyByLocale[homepageLocale].toolComparison;
+
+    expect(comparisonCopy.heading).toBe(
+      expectedComparisonHeadingByLocale[homepageLocale],
+    );
+    expect(comparisonCopy.description.trim()).not.toHaveLength(0);
+    expect(comparisonCopy.tableLabel.trim()).not.toHaveLength(0);
+    expect(comparisonCopy.dimensionHeading.trim()).not.toHaveLength(0);
+    expect(comparisonCopy.columns).toHaveLength(3);
+    expect(
+      comparisonCopy.columns.map((plannerColumn) => plannerColumn.href),
+    ).toEqual([...expectedPlannerSiteUrls]);
+    expect(comparisonCopy.columns.every((plannerColumn) =>
+      plannerColumn.name.trim().length > 0,
+    )).toBe(true);
+    expect(comparisonCopy.rows).toHaveLength(6);
+    expect(
+      comparisonCopy.rows.map((comparisonRow) => comparisonRow.dimension),
+    ).toEqual([...expectedComparisonDimensionsByLocale[homepageLocale]]);
+
+    for (const [comparisonRowIndex, comparisonRow] of comparisonCopy.rows.entries()) {
+      expect(comparisonRow.dimension.trim()).not.toHaveLength(0);
+      expect(comparisonRow.cells).toHaveLength(3);
+      expect(comparisonRow.cells.every((cellDescription) =>
+        cellDescription.trim().length > 0,
+      )).toBe(true);
+
+      const plannerBenefitCell = comparisonRow.cells[0];
+
+      for (const expectedBenefitPattern of expectedPlannerBenefitPatternsByLocale[
+        homepageLocale
+      ][comparisonRowIndex]) {
+        expect(plannerBenefitCell).toMatch(expectedBenefitPattern);
+      }
+    }
+  }
 });
 
 test("provides the replacement sections with exact bilingual headings and item counts", () => {
