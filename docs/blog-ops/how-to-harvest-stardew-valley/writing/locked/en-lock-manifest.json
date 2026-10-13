@@ -1,0 +1,12 @@
+{
+  "locale": "en",
+  "bodyFile": "en-body.md",
+  "bodySha256": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+  "figureSvgPath": "writing/en-figure.svg",
+  "figureSvgSha256": "a6e017cda7dd1f5d5e3cbc4f07e29cac5d2c11855a5be120a077cc4a1e662661",
+  "mediaJsonSha256": "1d4cd52f3d7cc7b180e60183c8f18ca61bd58b1889243c02e44a1422c38451c3",
+  "figureCandidatePngSha256": "c9618ffac6cda4a0d3e3bc6ed2e68e3ed186a593d79398caebf1c2b1d1b25117",
+  "coverCandidatePngSha256": "bed8e9781d2f4034b7036d727e29fe2ab3511e6c9612239cc3827edf015f1ce3",
+  "bytesIdenticalToApprovedBody": true,
+  "freezePublicBlogHandoff": false
+}

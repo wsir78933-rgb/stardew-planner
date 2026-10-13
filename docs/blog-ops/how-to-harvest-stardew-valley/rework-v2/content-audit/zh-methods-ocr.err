@@ -1,0 +1,5 @@
+Error opening data file /opt/homebrew/share/tessdata/chi_sim.traineddata
+Please make sure the TESSDATA_PREFIX environment variable is set to your "tessdata" directory.
+Failed loading language 'chi_sim'
+Estimating resolution as 667
+Detected 6 diacritics

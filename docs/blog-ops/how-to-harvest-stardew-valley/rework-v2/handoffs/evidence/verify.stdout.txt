@@ -1,0 +1,9 @@
+CHECK 1 PASS: Top-level schema matches exact 8 fields.
+CHECK 2 PASS: Body hashes match locked approval hashes.
+CHECK 3 PASS: 21 public references verified in both bodies.
+CHECK 4 PASS: 6 staged media assets verified (hashes and 1672x941).
+CHECK 5 PASS: Canonical integrity digests and ZH sourceEnglishBodyHash verified.
+CHECK 6 PASS: Zero forbidden tokens found.
+CHECK 7 PASS: ConcernedApe credits preserved in all cover and figure records.
+
+ALL 7 VERIFICATION CHECKS PASSED.

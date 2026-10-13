@@ -1,0 +1,22 @@
+ M public/llms.txt
+ M src/blog/blog-copy.ts
+ M src/blog/blog-post-identities.ts
+ M src/blog/blog-post-registry.tsx
+ M tests/blog/blog-components.test.tsx
+ M tests/blog/blog-home-state.test.ts
+ M tests/blog/blog-planner-cta.test.tsx
+ M tests/blog/blog-post-registry.test.ts
+ M tests/i18n/public-route-registry.test.ts
+ M tests/routes/blog-routes.test.tsx
+ M tests/routes/removed-public-pages.test.ts
+ M tests/seo/canonical-public-routes.test.ts
+?? docs/blog-ops/how-to-harvest-stardew-valley/
+?? node_modules
+?? public/blog/how-to-harvest-stardew-valley-cover.avif
+?? public/blog/how-to-harvest-stardew-valley-cover.webp
+?? public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif
+?? public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp
+?? public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif
+?? public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp
+?? src/blog/articles/how-to-harvest-stardew-valley.en.tsx
+?? src/blog/articles/how-to-harvest-stardew-valley.zh.tsx

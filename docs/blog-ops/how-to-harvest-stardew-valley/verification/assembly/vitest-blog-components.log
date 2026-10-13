@@ -1,0 +1,11 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ✓ tests/blog/blog-components.test.tsx (20 tests) 98ms
+
+ Test Files  1 passed (1)
+      Tests  20 passed (20)
+   Start at  02:26:59
+   Duration  1.61s (transform 691ms, setup 0ms, collect 1.13s, tests 98ms, environment 0ms, prepare 61ms)
+
+VITEST_COMPONENTS_EXIT:0

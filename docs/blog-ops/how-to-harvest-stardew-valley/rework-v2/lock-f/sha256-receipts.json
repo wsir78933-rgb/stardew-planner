@@ -1,0 +1,52 @@
+{
+  "body_nfc_lf_sha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "caption_excluded_nfc_lf_sha256": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+  "locked_body_sha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "locked_media_sha256": "87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885",
+  "locked_references_sha256": "24d5c227dd11e5e4cd96bab3d937a7e4547cde72af84e4816b5838e009f9db96",
+  "locked_seo_sha256": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9",
+  "staged_assets": {
+    "how-to-harvest-stardew-valley-cover.webp": {
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp",
+      "size": 479250,
+      "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+      "width": 1672,
+      "height": 941
+    },
+    "how-to-harvest-stardew-valley-cover.avif": {
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif",
+      "size": 237604,
+      "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57",
+      "width": 1672,
+      "height": 941
+    },
+    "how-to-harvest-stardew-valley-mature-crops.webp": {
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp",
+      "size": 267644,
+      "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+      "width": 1672,
+      "height": 941
+    },
+    "how-to-harvest-stardew-valley-mature-crops.avif": {
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif",
+      "size": 143638,
+      "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1",
+      "width": 1672,
+      "height": 941
+    },
+    "how-to-harvest-stardew-valley-trellis-paths.webp": {
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "size": 223784,
+      "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+      "width": 1672,
+      "height": 941
+    },
+    "how-to-harvest-stardew-valley-trellis-paths.avif": {
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "size": 113557,
+      "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a",
+      "width": 1672,
+      "height": 941
+    }
+  }
+}

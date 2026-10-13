@@ -1,0 +1,47 @@
+{
+  "version": "v1",
+  "locale": "zh-CN",
+  "role": "T",
+  "slug": "how-to-harvest-stardew-valley",
+  "figure": {
+    "insertion": "第 2 节铱镰刀对比之后，“如何判断农作物何时可以收获”标题之前。",
+    "sourceSvg": "docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg",
+    "alt": "星露谷物语收获操作图解：防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米和纤维使用左键或 C 键配镰刀，巨大作物使用斧头，加上棚架与换季规则。",
+    "caption": "示意图：星露谷物语农作物收获方式，包括防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米与纤维使用镰刀挥击，以及巨大作物使用斧头、阻挡通行的棚架与第 28 天换季规则。",
+    "visibleText": [
+      "农作物收获方式",
+      "徒手采摘",
+      "防风草",
+      "检查 / 执行操作",
+      "右键或 X",
+      "按住收获脚下格",
+      "镰刀挥击",
+      "羽衣甘蓝、小麦、苋菜",
+      "未碾米、纤维",
+      "左键或 C",
+      "1.6 铱镰刀：耕地收获",
+      "巨大作物",
+      "斧头砍 3 下",
+      "掉落 15–21 个，换季不枯",
+      "棚架",
+      "青豆、啤酒花",
+      "葡萄",
+      "通道被阻挡",
+      "第 28 天",
+      "过季即枯萎",
+      "温室",
+      "全年可种"
+    ],
+    "delivery": {
+      "webp": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+      "width": 1672,
+      "height": 941,
+      "component": "PublicPicture",
+      "decoding": "async",
+      "loading": "lazy",
+      "figureClass": "blog-article-media"
+    },
+    "creationBasis": "本文章原创矢量图中文版。仅将 approved 英文 SVG 中的 22 处文字、title 与 desc 替换为简体中文，几何结构、尺寸与颜色完全保持一致。"
+  }
+}

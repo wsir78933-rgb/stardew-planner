@@ -1,0 +1,39 @@
+{
+  "role": "M",
+  "phase": "candidate",
+  "slug": "how-to-harvest-stardew-valley",
+  "pairedEnglishBody": {
+    "path": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-body.md",
+    "sha256": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101"
+  },
+  "assets": [
+    {
+      "id": "en-figure-candidate",
+      "inputPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg",
+      "inputSha256": "a6e017cda7dd1f5d5e3cbc4f07e29cac5d2c11855a5be120a077cc4a1e662661",
+      "outputPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/en-figure-candidate.png",
+      "outputSha256": "c9618ffac6cda4a0d3e3bc6ed2e68e3ed186a593d79398caebf1c2b1d1b25117",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "byteSize": 162377,
+      "command": "'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1672,941 --no-first-run --no-default-browser-check --disable-extensions --user-data-dir=/tmp/harvest-media-m-36434/profile-figure '--screenshot=/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/en-figure-candidate.png' http://127.0.0.1:8773/en-figure-render.html",
+      "exitCode": 0,
+      "sourceAttribution": "Raster of role C writing/en-figure.svg at its own 1672x941 size. Visible text, geometry, and facts were not rewritten. Not a game screenshot and not an external image."
+    },
+    {
+      "id": "cover-candidate",
+      "inputPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/cover-source.svg",
+      "inputSha256": "03dec0791a44acf2da23097d114cbf84b6f4d12efb90056a64552232bba08608",
+      "outputPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/cover-candidate.png",
+      "outputSha256": "bed8e9781d2f4034b7036d727e29fe2ab3511e6c9612239cc3827edf015f1ce3",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "byteSize": 99173,
+      "command": "'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1672,941 --no-first-run --no-default-browser-check --disable-extensions --user-data-dir=/tmp/harvest-media-m-36434/profile-cover '--screenshot=/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/cover-candidate.png' http://127.0.0.1:8773/cover-render.html",
+      "exitCode": 0,
+      "sourceAttribution": "Original illustrative harvest scene drawn for this article. No external image, no game screenshot, and no text."
+    }
+  ]
+}

@@ -1,0 +1,1005 @@
+import type { ReactNode } from "react";
+import { publicLocales, type PublicLocale } from "../i18n/public-locale";
+import { CarpenterStardewEnglishArticle } from "./articles/carpenter-stardew.en";
+import { CarpenterStardewChineseArticle } from "./articles/carpenter-stardew.zh";
+import { WhereIsRobinEnglishArticle } from "./articles/where-is-robin-stardew-valley.en";
+import { WhereIsRobinChineseArticle } from "./articles/where-is-robin-stardew-valley.zh";
+import { StardewValleyNpcEnglishArticle } from "./articles/stardew-valley-npc.en";
+import { StardewValleyNpcChineseArticle } from "./articles/stardew-valley-npc.zh";
+import { StardewValleyTownMapEnglishArticle } from "./articles/stardew-valley-town-map.en";
+import { StardewValleyTownMapChineseArticle } from "./articles/stardew-valley-town-map.zh";
+import { WhereIsStardewValleyLocatedEnglishArticle } from "./articles/where-is-stardew-valley-located.en";
+import { WhereIsStardewValleyLocatedChineseArticle } from "./articles/where-is-stardew-valley-located.zh";
+import { StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle } from "./articles/stardew-valley-expanded-bachelors-and-bachelorettes.en";
+import { StardewValleyExpandedBachelorsAndBachelorettesChineseArticle } from "./articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh";
+import { SprinklerStardewEnglishArticle } from "./articles/sprinkler-stardew.en";
+import { SprinklerStardewChineseArticle } from "./articles/sprinkler-stardew.zh";
+import { GlasshouseStardewValleyEnglishArticle } from "./articles/glasshouse-stardew-valley.en";
+import { GlasshouseStardewValleyChineseArticle } from "./articles/glasshouse-stardew-valley.zh";
+import { OakTreeStardewEnglishArticle } from "./articles/oak-tree-stardew.en";
+import { OakTreeStardewChineseArticle } from "./articles/oak-tree-stardew.zh";
+import { StardewValleyTreesEnglishArticle } from "./articles/stardew-valley-trees.en";
+import { StardewValleyTreesChineseArticle } from "./articles/stardew-valley-trees.zh";
+import { MapleTreeStardewEnglishArticle } from "./articles/maple-tree-stardew.en";
+import { MapleTreeStardewChineseArticle } from "./articles/maple-tree-stardew.zh";
+import { BestSpringCropStardewEnglishArticle } from "./articles/best-spring-crop-stardew.en";
+import { BestSpringCropStardewChineseArticle } from "./articles/best-spring-crop-stardew.zh";
+import { HowToEarnMoneyStardewEnglishArticle } from "./articles/how-to-earn-money-stardew.en";
+import { HowToEarnMoneyStardewChineseArticle } from "./articles/how-to-earn-money-stardew.zh";
+import { RancherOrTillerStardewEnglishArticle } from "./articles/rancher-or-tiller-stardew.en";
+import { RancherOrTillerStardewChineseArticle } from "./articles/rancher-or-tiller-stardew.zh";
+import { SummerCropsStardewEnglishArticle } from "./articles/summer-crops-stardew.en";
+import { SummerCropsStardewChineseArticle } from "./articles/summer-crops-stardew.zh";
+import { FallCropsStardewEnglishArticle } from "./articles/fall-crops-stardew.en";
+import { FallCropsStardewChineseArticle } from "./articles/fall-crops-stardew.zh";
+import { DoYouHaveToWaterTreesStardewEnglishArticle } from "./articles/do-you-have-to-water-trees-stardew.en";
+import { DoYouHaveToWaterTreesStardewChineseArticle } from "./articles/do-you-have-to-water-trees-stardew.zh";
+import { HowToLevelUpFarmingStardewEnglishArticle } from "./articles/how-to-level-up-farming-stardew.en";
+import { HowToLevelUpFarmingStardewChineseArticle } from "./articles/how-to-level-up-farming-stardew.zh";
+import { LastDayToPlantStardewEnglishArticle } from "./articles/last-day-to-plant-stardew.en";
+import { LastDayToPlantStardewChineseArticle } from "./articles/last-day-to-plant-stardew.zh";
+import { PineTreeStardewEnglishArticle } from "./articles/pine-tree-stardew.en";
+import { PineTreeStardewChineseArticle } from "./articles/pine-tree-stardew.zh";
+import { ProfitMarginStardewEnglishArticle } from "./articles/profit-margin-stardew.en";
+import { ProfitMarginStardewChineseArticle } from "./articles/profit-margin-stardew.zh";
+import { WhatToGrowInGreenhouseStardewEnglishArticle } from "./articles/what-to-grow-in-greenhouse-stardew.en";
+import { WhatToGrowInGreenhouseStardewChineseArticle } from "./articles/what-to-grow-in-greenhouse-stardew.zh";
+import { StardewFruitEnglishArticle } from "./articles/stardew-fruit.en";
+import { StardewFruitChineseArticle } from "./articles/stardew-fruit.zh";
+import { OakTreeVsMapleStardewEnglishArticle } from "./articles/oak-tree-vs-maple-stardew.en";
+import { OakTreeVsMapleStardewChineseArticle } from "./articles/oak-tree-vs-maple-stardew.zh";
+import { HowToHarvestStardewValleyEnglishArticle } from "./articles/how-to-harvest-stardew-valley.en";
+import { HowToHarvestStardewValleyChineseArticle } from "./articles/how-to-harvest-stardew-valley.zh";
+import {
+  blogPostCanonicalPaths,
+  blogPostSlugs,
+  isBlogPostSlug,
+  type BlogPostSlug,
+} from "./blog-post-identities";
+
+export {
+  blogPostCanonicalPaths,
+  blogPostSlugs,
+  isBlogPostSlug,
+  type BlogPostSlug,
+};
+
+export type BlogPostMeta = Readonly<{
+  slug: BlogPostSlug;
+  title: string;
+  description: string;
+  topic: string;
+  author: string;
+  readTimeMinutes: number;
+  coverImage: Readonly<{
+    src: string;
+    alt: string;
+  }>;
+  featured: boolean;
+}>;
+
+export type LocalizedBlogPost = BlogPostMeta &
+  Readonly<{
+    Content: () => ReactNode;
+  }>;
+
+type LocalizedBlogPostRegistry = Readonly<
+  Record<PublicLocale, readonly LocalizedBlogPost[]>
+>;
+
+const blogPostsByLocale: LocalizedBlogPostRegistry = {
+  en: [
+    {
+      slug: "carpenter-stardew",
+      title: "Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades",
+      description:
+        "Use Robin's Carpenter's Shop for farm buildings, farmhouse upgrades, moves, demolition, and shop supplies, with a placement plan before you order.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 8,
+      coverImage: {
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "Illustration of Robin's mountain workshop with a farm-building plan",
+      },
+      featured: true,
+      Content: CarpenterStardewEnglishArticle,
+    },
+    {
+      slug: "where-is-robin-stardew-valley",
+      title: "Where Is Robin in Stardew Valley? Hours, Schedule, and Exceptions",
+      description:
+        "Find Robin at 24 Mountain Road, check Tuesday, Friday, rain, festival, clinic, and construction closures, and plan your Carpenter's Shop trip.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 8,
+      coverImage: {
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "Mountain path leading toward Robin's carpenter workshop",
+      },
+      featured: true,
+      Content: WhereIsRobinEnglishArticle,
+    },
+    {
+      slug: "stardew-valley-npc",
+      title: "Stardew Valley NPC List: Villagers, Marriage Candidates, and Services",
+      description:
+        "Sort the current Stardew Valley NPC list by marriage, giftable, and non-giftable roles, then plan gifts, schedules, and farm services.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
+      },
+      featured: true,
+      Content: StardewValleyNpcEnglishArticle,
+    },
+    {
+      slug: "stardew-valley-town-map",
+      title: "Stardew Valley Town Map: Pelican Town Landmarks & Routes",
+      description:
+        "Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
+      },
+      featured: true,
+      Content: StardewValleyTownMapEnglishArticle,
+    },
+    {
+      slug: "where-is-stardew-valley-located",
+      title: "Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory",
+      description:
+        "Find Stardew Valley on the in-game map: separate Pelican Town, the Farm, and the Ferngill Republic, then test what Harvey's coordinates and Pacific Northwest influences do—and do not—prove.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
+      },
+      featured: true,
+      Content: WhereIsStardewValleyLocatedEnglishArticle,
+    },
+    {
+      slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+      title: "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes",
+      description:
+        "Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
+      },
+      featured: true,
+      Content: StardewValleyExpandedBachelorsAndBachelorettesEnglishArticle,
+    },
+    {
+      slug: "sprinkler-stardew",
+      title: "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
+      description:
+        "Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
+      },
+      featured: true,
+      Content: SprinklerStardewEnglishArticle,
+    },
+    {
+      slug: "glasshouse-stardew-valley",
+      title: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
+      description:
+        "Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
+      },
+      featured: true,
+      Content: GlasshouseStardewValleyEnglishArticle,
+    },
+    {
+      slug: "oak-tree-stardew",
+      title: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
+      description:
+        "Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
+      },
+      featured: true,
+      Content: OakTreeStardewEnglishArticle,
+    },
+    {
+      slug: "stardew-valley-trees",
+      title: "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
+      description:
+        "Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/stardew-valley-trees-cover.webp",
+        alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
+      },
+      featured: true,
+      Content: StardewValleyTreesEnglishArticle,
+    },
+    {
+      slug: "maple-tree-stardew",
+      title: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
+      description:
+        "Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
+      },
+      featured: true,
+      Content: MapleTreeStardewEnglishArticle,
+    },
+    {
+      slug: "best-spring-crop-stardew",
+      title: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
+      description:
+        "There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
+      },
+      featured: true,
+      Content: BestSpringCropStardewEnglishArticle,
+    },
+    {
+      slug: "how-to-earn-money-stardew",
+      title: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
+      description:
+        "Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
+      },
+      featured: true,
+      Content: HowToEarnMoneyStardewEnglishArticle,
+    },
+    {
+      slug: "rancher-or-tiller-stardew",
+      title: "Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair",
+      description:
+        "Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
+      },
+      featured: true,
+      Content: RancherOrTillerStardewEnglishArticle,
+    },
+    {
+      slug: "summer-crops-stardew",
+      title: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
+      description:
+        "Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
+      },
+      featured: true,
+      Content: SummerCropsStardewEnglishArticle,
+    },
+    {
+      slug: "fall-crops-stardew",
+      title: "Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed",
+      description:
+        "Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 19,
+      coverImage: {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
+      },
+      featured: true,
+      Content: FallCropsStardewEnglishArticle,
+    },
+    {
+      slug: "do-you-have-to-water-trees-stardew",
+      title:
+        "Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3",
+      description:
+        "Common trees and fruit-tree saplings do not need watering. If a common sapling is stuck at stage 4, check its eight adjacent tiles for a mature tree; for a fruit sapling, check its 3×3 for blocking objects. Crops follow a separate watering rule.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/do-you-have-to-water-trees-stardew-cover.webp",
+        alt: "Farm planning illustration separating a common tree, a fruit-tree sapling, tilled crop soil, and a sprinkler.",
+      },
+      featured: true,
+      Content: DoYouHaveToWaterTreesStardewEnglishArticle,
+    },
+    {
+      slug: "how-to-level-up-farming-stardew",
+      title:
+        "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
+      description:
+        "Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
+      },
+      featured: true,
+      Content: HowToLevelUpFarmingStardewEnglishArticle,
+    },
+    {
+      slug: "last-day-to-plant-stardew",
+      title: "Last Day to Plant in Stardew Valley: Parsnips by Spring 24",
+      description:
+        "Plant parsnips by Spring 24 if you want them ready on Spring 28. Water that day. For other outdoor crops, subtract grow time from 28. Tables cover spring through winter.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 15,
+      coverImage: {
+        src: "/blog/last-day-to-plant-stardew-cover.webp",
+        alt: "Watercolor of an outdoor vegetable patch with cabbages and leafy rows, a metal watering can on the dirt, a farmhouse and windmill at sunset, and a wooden Spring board numbered 1 through 28 with day 28 marked.",
+      },
+      featured: true,
+      Content: LastDayToPlantStardewEnglishArticle,
+    },
+    {
+      slug: "pine-tree-stardew",
+      title: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
+      description:
+        "Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground.",
+      },
+      featured: true,
+      Content: PineTreeStardewEnglishArticle,
+    },
+    {
+      slug: "profit-margin-stardew",
+      title: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+      description:
+        "Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/profit-margin-stardew-cover.webp",
+        alt: "Pixel-art farm scene with a crop-filled shipping crate, a coin pouch, and gold coins.",
+      },
+      featured: true,
+      Content: ProfitMarginStardewEnglishArticle,
+    },
+    {
+      slug: "what-to-grow-in-greenhouse-stardew",
+      title: "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting",
+      description:
+        "Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+        alt: "Watercolor greenhouse interior with a central tilled crop bed, recognizable vegetables, two fruit trees on untiled side soil, and a watering can",
+      },
+      featured: true,
+      Content: WhatToGrowInGreenhouseStardewEnglishArticle,
+    },
+    {
+      slug: "stardew-fruit",
+      title: "Stardew Fruit: Find Its Source Before Buying Seeds",
+      description:
+        "Find Stardew Valley fruit by crop, tree, or forage source. Check seasons, seed and sapling access, and the inputs needed for Jelly, Wine, or drying.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/stardew-fruit-cover.webp",
+        alt: "Original illustration of strawberries, apples, and blackberries in a basket beside strawberry plants, an apple tree, and a wild bramble.",
+      },
+      featured: false,
+      Content: StardewFruitEnglishArticle,
+    },
+    {
+      slug: "oak-tree-vs-maple-stardew",
+      title:
+        "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
+      description:
+        "Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 26,
+      coverImage: {
+        src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+        alt: "Watercolor of a mature oak with a wooden bucket and acorns beside a mature maple with a wooden bucket and maple seeds, along a farm road.",
+      },
+      featured: true,
+      Content: OakTreeVsMapleStardewEnglishArticle,
+    },
+    {
+      slug: "how-to-harvest-stardew-valley",
+      title: "How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe",
+      description:
+        "Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 7,
+      coverImage: {
+        src: "/blog/how-to-harvest-stardew-valley-cover.webp",
+        alt: "Illustration of a farm: leafy crops in tilled soil beside a crate of orange roots, three pumpkins and a hoe, rows of yellow stalks with a scythe and a vine trellis, and a brown-roofed building with plants in its windows.",
+      },
+      featured: false,
+      Content: HowToHarvestStardewValleyEnglishArticle,
+    },
+  ],
+  "zh-CN": [
+    {
+      slug: "carpenter-stardew",
+      title: "星露谷物语木匠商店：罗宾位置、营业时间、建筑与升级",
+      description: "了解罗宾木匠商店的营业时间、农场建筑、农舍升级、移动和拆除，并在下单前先规划放置位置。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 8,
+      coverImage: {
+        src: "/blog/carpenter-stardew-cover.webp",
+        alt: "罗宾山间木匠工坊与农场建筑规划示意插画",
+      },
+      featured: true,
+      Content: CarpenterStardewChineseArticle,
+    },
+    {
+      slug: "where-is-robin-stardew-valley",
+      title: "罗宾在星露谷物语哪里？木匠商店位置、营业时间与行程",
+      description:
+        "查找罗宾的 24 Mountain Road 木匠商店，核对周二、周五、雨天、节日、诊所和农场施工例外。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 8,
+      coverImage: {
+        src: "/blog/where-is-robin-stardew-valley-cover.webp",
+        alt: "通往罗宾山间木匠工坊的暖色山路插画",
+      },
+      featured: true,
+      Content: WhereIsRobinChineseArticle,
+    },
+    {
+      slug: "stardew-valley-npc",
+      title: "星露谷 NPC 名单：可结婚角色、可送礼村民与服务",
+      description:
+        "按可结婚、可送礼和不可送礼分类整理星露谷 NPC，并核对送礼、好感度、商店服务与农场规划关系。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/stardew-valley-npc-cover.webp",
+        alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
+      },
+      featured: true,
+      Content: StardewValleyNpcChineseArticle,
+    },
+    {
+      slug: "stardew-valley-town-map",
+      title: "星露谷物语小镇地图：鹈鹕镇地点与路线",
+      description:
+        "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/stardew-valley-town-map-cover.webp",
+        alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
+      },
+      featured: true,
+      Content: StardewValleyTownMapChineseArticle,
+    },
+    {
+      slug: "where-is-stardew-valley-located",
+      title: "星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点",
+      description:
+        "理清星露谷、鹈鹕镇、农场和芬吉尔共和国的关系，再看哈维坐标与太平洋西北地区影响能否证明现实地点。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/where-is-stardew-valley-located-cover.webp",
+        alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
+      },
+      featured: true,
+      Content: WhereIsStardewValleyLocatedChineseArticle,
+    },
+    {
+      slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+      title: "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物",
+      description:
+        "整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
+        alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
+      },
+      featured: true,
+      Content: StardewValleyExpandedBachelorsAndBachelorettesChineseArticle,
+    },
+    {
+      slug: "sprinkler-stardew",
+      title: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
+      description:
+        "说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/sprinkler-stardew-cover.webp",
+        alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
+      },
+      featured: true,
+      Content: SprinklerStardewChineseArticle,
+    },
+    {
+      slug: "glasshouse-stardew-valley",
+      title: "星露谷物语温室布局：120格耕地与洒水器摆放指南",
+      description:
+        "了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 11,
+      coverImage: {
+        src: "/blog/glasshouse-stardew-valley-cover.webp",
+        alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
+      },
+      featured: true,
+      Content: GlasshouseStardewValleyChineseArticle,
+    },
+    {
+      slug: "oak-tree-stardew",
+      title: "星露谷物语橡树：橡子种植、间距与树脂采集",
+      description:
+        "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 12,
+      coverImage: {
+        src: "/blog/oak-tree-stardew-cover.webp",
+        alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
+      },
+      featured: true,
+      Content: OakTreeStardewChineseArticle,
+    },
+    {
+      slug: "stardew-valley-trees",
+      title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
+      description:
+        "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/stardew-valley-trees-cover.webp",
+        alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
+      },
+      featured: true,
+      Content: StardewValleyTreesChineseArticle,
+    },
+    {
+      slug: "maple-tree-stardew",
+      title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
+      description:
+        "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/maple-tree-stardew-cover.webp",
+        alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
+      },
+      featured: true,
+      Content: MapleTreeStardewChineseArticle,
+    },
+    {
+      slug: "best-spring-crop-stardew",
+      title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
+      description:
+        "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/best-spring-crop-stardew-cover.webp",
+        alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
+      },
+      featured: true,
+      Content: BestSpringCropStardewChineseArticle,
+    },
+    {
+      slug: "how-to-earn-money-stardew",
+      title: "星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶",
+      description:
+        "12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/how-to-earn-money-stardew-cover.webp",
+        alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
+      },
+      featured: true,
+      Content: HowToEarnMoneyStardewChineseArticle,
+    },
+    {
+      slug: "rancher-or-tiller-stardew",
+      title: "星露谷农耕人还是畜牧人：20%和10%加的不是一类货",
+      description:
+        "过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 9,
+      coverImage: {
+        src: "/blog/rancher-or-tiller-stardew-cover.webp",
+        alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
+      },
+      featured: true,
+      Content: RancherOrTillerStardewChineseArticle,
+    },
+    {
+      slug: "summer-crops-stardew",
+      title: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
+      description:
+        "夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/summer-crops-stardew-cover.webp",
+        alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
+      },
+      featured: true,
+      Content: SummerCropsStardewChineseArticle,
+    },
+    {
+      slug: "fall-crops-stardew",
+      title: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
+      description:
+        "现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 19,
+      coverImage: {
+        src: "/blog/fall-crops-stardew-cover.webp",
+        alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
+      },
+      featured: true,
+      Content: FallCropsStardewChineseArticle,
+    },
+    {
+      slug: "do-you-have-to-water-trees-stardew",
+      title: "星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3",
+      description:
+        "普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 17,
+      coverImage: {
+        src: "/blog/do-you-have-to-water-trees-stardew-cover-zh.webp",
+        alt: "农场规划示意图，将普通树、果树苗、耕地作物和洒水器分成不同判断对象。",
+      },
+      featured: true,
+      Content: DoYouHaveToWaterTreesStardewChineseArticle,
+    },
+    {
+      slug: "how-to-level-up-farming-stardew",
+      title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
+      description:
+        "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 14,
+      coverImage: {
+        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
+        alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
+      },
+      featured: true,
+      Content: HowToLevelUpFarmingStardewChineseArticle,
+    },
+    {
+      slug: "last-day-to-plant-stardew",
+      title: "星露谷最晚播种日：春天防风草最晚在第 24 天种下",
+      description:
+        "春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 16,
+      coverImage: {
+        src: "/blog/last-day-to-plant-stardew-cover.webp",
+        alt: "水彩插画：室外菜畦里种着卷心菜和绿叶作物，土路上放着喷壶，远处农舍和风车映着日落，右侧木牌写着 Spring，格子从 1 到 28，第 28 格标了出来。",
+      },
+      featured: true,
+      Content: LastDayToPlantStardewChineseArticle,
+    },
+    {
+      slug: "pine-tree-stardew",
+      title: "星露谷松树种植先看格子，不浇水也不能随便种",
+      description:
+        "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/pine-tree-stardew-cover.webp",
+        alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
+      },
+      featured: true,
+      Content: PineTreeStardewChineseArticle,
+    },
+    {
+      slug: "profit-margin-stardew",
+      title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+      description:
+        "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/profit-margin-stardew-cover.webp",
+        alt: "像素风农场封面：装满作物的出货箱旁摆着钱袋和金币。",
+      },
+      featured: true,
+      Content: ProfitMarginStardewChineseArticle,
+    },
+    {
+      slug: "what-to-grow-in-greenhouse-stardew",
+      title: "星露谷温室种什么？按手头种源、等待时间与收获节奏选择",
+      description:
+        "星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 10,
+      coverImage: {
+        src: "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+        alt: "水彩温室内景：中央翻过的耕地里长着可辨认的蔬菜，左右未翻土边缘各有一棵果树，前景放着喷壶。",
+      },
+      featured: true,
+      Content: WhatToGrowInGreenhouseStardewChineseArticle,
+    },
+    {
+      slug: "stardew-fruit",
+      title: "星露谷物语水果清单：辣椒也在列，按来源查找",
+      description:
+        "按原版 1.6 系列的 27 项水果清单，查作物、果树与采集来源、季节和取得条件；对照普通品质基础售价及果酱、果酒、果干路线，并辨清葡萄干、齐瓜任务与烘干投料限制。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 13,
+      coverImage: {
+        src: "/blog/stardew-fruit-cover.webp",
+        alt: "水果来源插画：篮中装着草莓、苹果和黑莓，后方分别是草莓田、苹果树和黑莓灌木。",
+      },
+      featured: true,
+      Content: StardewFruitChineseArticle,
+    },
+    {
+      slug: "oak-tree-vs-maple-stardew",
+      title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
+      description:
+        "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 18,
+      coverImage: {
+        src: "/blog/oak-tree-vs-maple-stardew-cover.webp",
+        alt: "水彩：橡树挂着木桶，树下是橡子；枫树挂着木桶，树下是枫树种子。土路通向远处的农舍。",
+      },
+      featured: true,
+      Content: OakTreeVsMapleStardewChineseArticle,
+    },
+    {
+      slug: "how-to-harvest-stardew-valley",
+      title: "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
+      description:
+        "站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 7,
+      coverImage: {
+        src: "/blog/how-to-harvest-stardew-valley-cover.webp",
+        alt: "农场插画：耕地中的带叶作物旁放着一箱橙色块根，三个南瓜与一把锄头，成排的黄色秸秆旁配有镰刀与藤蔓棚架，以及一座窗台摆着植物的棕顶建筑。",
+      },
+      featured: false,
+      Content: HowToHarvestStardewValleyChineseArticle,
+    },
+  ],
+};
+
+function describeReceivedValue(value: unknown): string {
+  return JSON.stringify(value) ?? String(value);
+}
+
+function assertNonEmptyString(
+  slug: string,
+  fieldName: string,
+  value: unknown,
+): asserts value is string {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(
+      `Invalid ${fieldName} for blog post ${slug}. Received: ${describeReceivedValue(value)}.`,
+    );
+  }
+}
+
+function assertMeaningfulCoverAlt(slug: string, value: unknown): asserts value is string {
+  assertNonEmptyString(slug, "coverImage.alt", value);
+
+  if (value.trim().length < 8) {
+    throw new Error(
+      `Invalid coverImage.alt for blog post ${slug}. Received: ${describeReceivedValue(value)}.`,
+    );
+  }
+}
+
+function assertValidLocalizedBlogPost(post: unknown, locale: PublicLocale): void {
+  if (typeof post !== "object" || post === null || Array.isArray(post)) {
+    throw new Error(
+      `Invalid blog post for locale ${locale}. Received: ${describeReceivedValue(post)}.`,
+    );
+  }
+
+  const candidatePost = post as Record<string, unknown>;
+  const slug = candidatePost.slug;
+
+  if (!isBlogPostSlug(slug)) {
+    throw new Error(`Invalid blog post slug. Received: ${describeReceivedValue(slug)}.`);
+  }
+
+  assertNonEmptyString(slug, "title", candidatePost.title);
+  assertNonEmptyString(slug, "description", candidatePost.description);
+  assertNonEmptyString(slug, "topic", candidatePost.topic);
+  assertNonEmptyString(slug, "author", candidatePost.author);
+
+  if (
+    typeof candidatePost.readTimeMinutes !== "number" ||
+    !Number.isInteger(candidatePost.readTimeMinutes) ||
+    candidatePost.readTimeMinutes <= 0
+  ) {
+    throw new Error(
+      `Invalid readTimeMinutes for blog post ${slug}. Received: ${describeReceivedValue(candidatePost.readTimeMinutes)}.`,
+    );
+  }
+
+  if (
+    typeof candidatePost.coverImage !== "object" ||
+    candidatePost.coverImage === null ||
+    Array.isArray(candidatePost.coverImage)
+  ) {
+    throw new Error(
+      `Invalid coverImage for blog post ${slug}. Received: ${describeReceivedValue(candidatePost.coverImage)}.`,
+    );
+  }
+
+  const coverImage = candidatePost.coverImage as Record<string, unknown>;
+  assertNonEmptyString(slug, "coverImage.src", coverImage.src);
+  assertMeaningfulCoverAlt(slug, coverImage.alt);
+
+  if (typeof candidatePost.featured !== "boolean") {
+    throw new Error(
+      `Invalid featured for blog post ${slug}. Received: ${describeReceivedValue(candidatePost.featured)}.`,
+    );
+  }
+
+  if (typeof candidatePost.Content !== "function") {
+    throw new Error(
+      `Invalid Content for blog post ${slug}. Received: ${describeReceivedValue(candidatePost.Content)}.`,
+    );
+  }
+}
+
+export function validateBlogPostRegistry(posts: unknown): void {
+  if (typeof posts !== "object" || posts === null || Array.isArray(posts)) {
+    throw new Error(`Invalid blog post registry. Received: ${describeReceivedValue(posts)}.`);
+  }
+
+  const registryCandidate = posts as Record<string, unknown>;
+
+  for (const locale of Object.keys(registryCandidate)) {
+    if (!publicLocales.includes(locale as PublicLocale)) {
+      throw new Error(`Unsupported blog post locale. Received: ${describeReceivedValue(locale)}.`);
+    }
+  }
+
+  for (const locale of publicLocales) {
+    const localizedPosts = registryCandidate[locale];
+
+    if (!Array.isArray(localizedPosts)) {
+      throw new Error(
+        `Missing localized blog posts for ${locale}. Received: ${describeReceivedValue(localizedPosts)}.`,
+      );
+    }
+
+    const seenSlugs = new Set<BlogPostSlug>();
+    for (const [index, post] of localizedPosts.entries()) {
+      assertValidLocalizedBlogPost(post, locale);
+      const slug = (post as BlogPostMeta).slug;
+      const expectedSlug = blogPostSlugs[index];
+
+      if (slug !== expectedSlug) {
+        throw new Error(
+          `Invalid blog post order for ${locale}. Expected: ${expectedSlug}. Received: ${slug}.`,
+        );
+      }
+
+      if (seenSlugs.has(slug)) {
+        throw new Error(`Duplicate blog post slug for ${locale}. Received: ${slug}.`);
+      }
+
+      seenSlugs.add(slug);
+    }
+
+    for (const slug of blogPostSlugs) {
+      if (!seenSlugs.has(slug)) {
+        throw new Error(`Missing blog post for ${locale}. Received: ${slug}.`);
+      }
+    }
+  }
+}
+
+function assertPublicLocale(locale: PublicLocale): void {
+  if (!publicLocales.includes(locale)) {
+    throw new Error(`Unsupported public locale. Received: ${describeReceivedValue(locale)}.`);
+  }
+}
+
+validateBlogPostRegistry(blogPostsByLocale);
+
+export function getAllBlogPosts(locale: PublicLocale): readonly LocalizedBlogPost[] {
+  assertPublicLocale(locale);
+  return blogPostsByLocale[locale];
+}
+
+export function getAllBlogPostMeta(locale: PublicLocale): readonly BlogPostMeta[] {
+  return getAllBlogPosts(locale).map(({ Content: _content, coverImage, ...postMeta }) => ({
+    ...postMeta,
+    coverImage: { ...coverImage },
+  }));
+}
+
+export function getBlogPostBySlug(
+  locale: PublicLocale,
+  slug: BlogPostSlug,
+): LocalizedBlogPost | undefined {
+  return getAllBlogPosts(locale).find((post) => post.slug === slug);
+}

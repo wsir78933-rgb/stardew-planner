@@ -1,0 +1,58 @@
+{
+  "kind": "footer-v1 supplemental public content",
+  "status": "user-confirmed append",
+  "confirmation": "User selected A and said 开始执行. This footer is public content added after the frozen body. It does not replace or edit the frozen handoff.",
+  "doesNotChangeBodyHash": true,
+  "handoffFilesUntouched": true,
+  "englishBodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "chineseBodyHash": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+  "schemaType": "Article",
+  "faqPageAdded": false,
+  "qaPageAdded": false,
+  "locales": {
+    "en": {
+      "faqHeading": "How to Harvest Stardew Valley FAQ",
+      "sourcesHeading": "Sources",
+      "plannerHref": "/#planner",
+      "ctaRenderedBy": "BlogSources calls BlogPlannerCta from the existing public entry"
+    },
+    "zh-CN": {
+      "faqHeading": "星露谷物语收作物常见问题",
+      "sourcesHeading": "来源",
+      "plannerHref": "/zh#planner",
+      "ctaRenderedBy": "BlogSources calls BlogPlannerCta from the existing public entry"
+    }
+  },
+  "publicSources": [
+    {
+      "id": "crops",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "enLabel": "Crops on the Stardew Valley Wiki",
+      "zhLabel": "星露谷物语维基：作物"
+    },
+    {
+      "id": "controls",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "enLabel": "Controls on the Stardew Valley Wiki",
+      "zhLabel": "星露谷物语维基：操作"
+    },
+    {
+      "id": "scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "enLabel": "Scythe on the Stardew Valley Wiki",
+      "zhLabel": "星露谷物语维基：镰刀"
+    },
+    {
+      "id": "iridium-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "enLabel": "Iridium Scythe on the Stardew Valley Wiki",
+      "zhLabel": "星露谷物语维基：铱镰刀"
+    }
+  ],
+  "coordinatorNarrowing": "msg_471ddb3e58de: public sources are the four locked pages Crops, Controls, Scythe, and Iridium Scythe. Fiber Seeds remains a body citation in the private report and is not a fifth public source row.",
+  "notDone": [
+    "Cover caption remains unauthorized and was not added.",
+    "Frozen handoff seo.faq stays null.",
+    "Pine Tree checkedLabel mismatch in tests/blog/blog-sources.test.tsx is pre-existing on HEAD and was not edited."
+  ]
+}

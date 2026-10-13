@@ -1,0 +1,30 @@
+{
+  "body": {
+    "file_path": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.md",
+    "file_size_bytes": 10036,
+    "sha256_raw": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "sha256_nfc_lf": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "nfc_lf_matches_raw": true
+  },
+  "body_caption_excluded": {
+    "file_path": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/r2/en-body.caption-excluded.md",
+    "file_size_bytes": 9023,
+    "sha256_raw": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+    "sha256_nfc_lf": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+    "nfc_lf_matches_raw": true
+  },
+  "media_json": {
+    "file_path": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-media.json",
+    "file_size_bytes": 4115,
+    "sha256_raw": "1f004b1788988aac4b95c8bf4659254881712ebc0704f4266bea7e54dbe30757",
+    "sha256_nfc_lf": "1f004b1788988aac4b95c8bf4659254881712ebc0704f4266bea7e54dbe30757",
+    "nfc_lf_matches_raw": true
+  },
+  "references_json": {
+    "file_path": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-public-references.json",
+    "file_size_bytes": 10184,
+    "sha256_raw": "2d01287cbcd0cfaa15d4f457d9b1d8187d9bcf631433cd53a3a4e2855138e0ef",
+    "sha256_nfc_lf": "2d01287cbcd0cfaa15d4f457d9b1d8187d9bcf631433cd53a3a4e2855138e0ef",
+    "nfc_lf_matches_raw": true
+  }
+}

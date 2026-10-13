@@ -1,0 +1,3 @@
+OCR_EMPTY
+
+--- stderr ---

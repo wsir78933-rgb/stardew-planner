@@ -1,0 +1,545 @@
+[
+  {
+    "file": "originals/press-farm-evening.png",
+    "bytes": 565489,
+    "sha256": "7f10276f5cb0ebbbc36a5133b4fa217c24fa89f61b21c1e15d082cbbac523496",
+    "mode_before_convert": "RGB",
+    "width": 1920,
+    "height": 1080,
+    "grid_samples": [
+      {
+        "x": 384,
+        "y": 216,
+        "r": 197,
+        "g": 115,
+        "b": 74,
+        "a": 255
+      },
+      {
+        "x": 864,
+        "y": 378,
+        "r": 171,
+        "g": 90,
+        "b": 32,
+        "a": 255
+      },
+      {
+        "x": 1190,
+        "y": 302,
+        "r": 37,
+        "g": 60,
+        "b": 7,
+        "a": 255
+      },
+      {
+        "x": 1497,
+        "y": 486,
+        "r": 172,
+        "g": 98,
+        "b": 67,
+        "a": 255
+      },
+      {
+        "x": 960,
+        "y": 756,
+        "r": 110,
+        "g": 4,
+        "b": 62,
+        "a": 255
+      }
+    ],
+    "first_orange_like": {
+      "x": 852,
+      "y": 0,
+      "r": 185,
+      "g": 94,
+      "b": 40,
+      "a": 255
+    },
+    "first_vine_green_like": {
+      "x": 993,
+      "y": 225,
+      "r": 80,
+      "g": 216,
+      "b": 38,
+      "a": 255
+    },
+    "region_samples": {
+      "pumpkin_orange": [
+        {
+          "x": 842,
+          "y": 140,
+          "r": 191,
+          "g": 116,
+          "b": 59,
+          "a": 255
+        },
+        {
+          "x": 848,
+          "y": 140,
+          "r": 204,
+          "g": 145,
+          "b": 54,
+          "a": 255
+        },
+        {
+          "x": 850,
+          "y": 140,
+          "r": 204,
+          "g": 145,
+          "b": 54,
+          "a": 255
+        }
+      ],
+      "trellis_green": [
+        {
+          "x": 1104,
+          "y": 228,
+          "r": 43,
+          "g": 151,
+          "b": 46,
+          "a": 255
+        },
+        {
+          "x": 1106,
+          "y": 228,
+          "r": 43,
+          "g": 151,
+          "b": 46,
+          "a": 255
+        },
+        {
+          "x": 1104,
+          "y": 230,
+          "r": 43,
+          "g": 151,
+          "b": 46,
+          "a": 255
+        }
+      ],
+      "path_soil": [
+        {
+          "x": 1000,
+          "y": 420,
+          "r": 183,
+          "g": 104,
+          "b": 29,
+          "a": 255
+        },
+        {
+          "x": 1002,
+          "y": 420,
+          "r": 183,
+          "g": 105,
+          "b": 29,
+          "a": 255
+        },
+        {
+          "x": 1000,
+          "y": 422,
+          "r": 183,
+          "g": 104,
+          "b": 29,
+          "a": 255
+        }
+      ]
+    },
+    "sample_boxes": {
+      "pumpkin_box": [
+        700,
+        140,
+        1080,
+        420
+      ],
+      "trellis_box": [
+        1080,
+        140,
+        1500,
+        520
+      ],
+      "path_box": [
+        900,
+        420,
+        1100,
+        620
+      ]
+    },
+    "loose_color_scan_note": "first_orange_like and first_vine_green_like are full-frame scans and are not crop identification",
+    "ego_canvas": {
+      "page_url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png",
+      "natural": [
+        1920,
+        1080
+      ],
+      "samples": [
+        {
+          "x": 852,
+          "y": 220,
+          "r": 195,
+          "g": 119,
+          "b": 59,
+          "a": 255,
+          "note": "orange inside the pumpkin patch"
+        },
+        {
+          "x": 993,
+          "y": 225,
+          "r": 80,
+          "g": 216,
+          "b": 38,
+          "a": 255,
+          "note": "green on the vine trellis beside the pumpkins"
+        },
+        {
+          "x": 1000,
+          "y": 500,
+          "r": 179,
+          "g": 92,
+          "b": 4,
+          "a": 255,
+          "note": "brown path/soil inside the garden"
+        }
+      ]
+    }
+  },
+  {
+    "file": "originals/press-multiplayer-2.png",
+    "bytes": 533277,
+    "sha256": "b34cd47bb2e8fde6cb886154ad4027a63e222f0e29d17bd4d2fbf68d8caf9ab7",
+    "mode_before_convert": "RGB",
+    "width": 1920,
+    "height": 1080,
+    "grid_samples": [
+      {
+        "x": 384,
+        "y": 216,
+        "r": 150,
+        "g": 52,
+        "b": 33,
+        "a": 255
+      },
+      {
+        "x": 864,
+        "y": 378,
+        "r": 163,
+        "g": 209,
+        "b": 8,
+        "a": 255
+      },
+      {
+        "x": 1190,
+        "y": 302,
+        "r": 185,
+        "g": 114,
+        "b": 54,
+        "a": 255
+      },
+      {
+        "x": 1497,
+        "y": 486,
+        "r": 191,
+        "g": 162,
+        "b": 138,
+        "a": 255
+      },
+      {
+        "x": 960,
+        "y": 756,
+        "r": 73,
+        "g": 150,
+        "b": 4,
+        "a": 255
+      }
+    ],
+    "first_orange_like": {
+      "x": 0,
+      "y": 0,
+      "r": 204,
+      "g": 138,
+      "b": 63,
+      "a": 255
+    },
+    "first_vine_green_like": {
+      "x": 1320,
+      "y": 210,
+      "r": 10,
+      "g": 177,
+      "b": 19,
+      "a": 255
+    },
+    "region_samples": {
+      "pumpkin_orange": [
+        {
+          "x": 1196,
+          "y": 290,
+          "r": 194,
+          "g": 110,
+          "b": 51,
+          "a": 255
+        },
+        {
+          "x": 1196,
+          "y": 292,
+          "r": 194,
+          "g": 110,
+          "b": 51,
+          "a": 255
+        },
+        {
+          "x": 1168,
+          "y": 310,
+          "r": 195,
+          "g": 143,
+          "b": 55,
+          "a": 255
+        }
+      ],
+      "trellis_green": [
+        {
+          "x": 1276,
+          "y": 154,
+          "r": 59,
+          "g": 125,
+          "b": 3,
+          "a": 255
+        },
+        {
+          "x": 1284,
+          "y": 154,
+          "r": 59,
+          "g": 125,
+          "b": 3,
+          "a": 255
+        },
+        {
+          "x": 1276,
+          "y": 156,
+          "r": 59,
+          "g": 125,
+          "b": 3,
+          "a": 255
+        }
+      ],
+      "path_soil": [
+        {
+          "x": 912,
+          "y": 300,
+          "r": 173,
+          "g": 107,
+          "b": 42,
+          "a": 255
+        },
+        {
+          "x": 914,
+          "y": 300,
+          "r": 173,
+          "g": 107,
+          "b": 42,
+          "a": 255
+        },
+        {
+          "x": 916,
+          "y": 300,
+          "r": 173,
+          "g": 107,
+          "b": 42,
+          "a": 255
+        }
+      ]
+    },
+    "sample_boxes": {
+      "pumpkin_box": [
+        980,
+        280,
+        1280,
+        620
+      ],
+      "trellis_box": [
+        1180,
+        80,
+        1600,
+        360
+      ],
+      "path_box": [
+        900,
+        300,
+        1100,
+        500
+      ]
+    },
+    "loose_color_scan_note": "first_orange_like and first_vine_green_like are full-frame scans and are not crop identification",
+    "ego_canvas": {
+      "page_url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "natural": [
+        1920,
+        1080
+      ],
+      "samples": [
+        {
+          "x": 1100,
+          "y": 420,
+          "r": 173,
+          "g": 141,
+          "b": 81,
+          "a": 255,
+          "note": "not on a pumpkin; soil/path tone"
+        },
+        {
+          "x": 1400,
+          "y": 180,
+          "r": 124,
+          "g": 100,
+          "b": 84,
+          "a": 255,
+          "note": "not on a vine; wall or ground tone"
+        },
+        {
+          "x": 1000,
+          "y": 400,
+          "r": 169,
+          "g": 123,
+          "b": 71,
+          "a": 255,
+          "note": "soil beside the pumpkin patch"
+        }
+      ],
+      "note": "Ego canvas points above were not on the pumpkin or vine. Pumpkin and trellis pixels for this file are the PIL region_samples."
+    }
+  },
+  {
+    "file": "originals/press-farm-day.png",
+    "bytes": 251544,
+    "sha256": "66462484a9f2a721872e187e100bec54e92c5ca74ddb69a499114ec54aa218ec",
+    "mode_before_convert": "RGB",
+    "width": 1920,
+    "height": 1080,
+    "grid_samples": [
+      {
+        "x": 384,
+        "y": 216,
+        "r": 235,
+        "g": 171,
+        "b": 34,
+        "a": 255
+      },
+      {
+        "x": 864,
+        "y": 378,
+        "r": 193,
+        "g": 107,
+        "b": 27,
+        "a": 255
+      },
+      {
+        "x": 1190,
+        "y": 302,
+        "r": 51,
+        "g": 37,
+        "b": 27,
+        "a": 255
+      },
+      {
+        "x": 1497,
+        "y": 486,
+        "r": 91,
+        "g": 23,
+        "b": 15,
+        "a": 255
+      },
+      {
+        "x": 960,
+        "y": 756,
+        "r": 187,
+        "g": 119,
+        "b": 42,
+        "a": 255
+      }
+    ],
+    "first_orange_like": {
+      "x": 264,
+      "y": 0,
+      "r": 182,
+      "g": 122,
+      "b": 41,
+      "a": 255
+    },
+    "first_vine_green_like": {
+      "x": 135,
+      "y": 0,
+      "r": 41,
+      "g": 161,
+      "b": 87,
+      "a": 255
+    },
+    "region_samples": null,
+    "loose_color_scan_note": "loose full-frame orange/green scan can hit sky, UI, or trees; do not treat it as crop proof"
+  },
+  {
+    "file": "originals/press-iphone-08.png",
+    "bytes": 3624628,
+    "sha256": "dd74bb516c88d7a8214f07bf65542f694b093e39e57fd69f8117e6cf83244a37",
+    "mode_before_convert": "RGBA",
+    "width": 2208,
+    "height": 1242,
+    "grid_samples": [
+      {
+        "x": 441,
+        "y": 248,
+        "r": 236,
+        "g": 170,
+        "b": 34,
+        "a": 255
+      },
+      {
+        "x": 993,
+        "y": 434,
+        "r": 119,
+        "g": 48,
+        "b": 16,
+        "a": 255
+      },
+      {
+        "x": 1368,
+        "y": 347,
+        "r": 251,
+        "g": 163,
+        "b": 73,
+        "a": 255
+      },
+      {
+        "x": 1722,
+        "y": 558,
+        "r": 191,
+        "g": 129,
+        "b": 72,
+        "a": 255
+      },
+      {
+        "x": 1104,
+        "y": 869,
+        "r": 185,
+        "g": 147,
+        "b": 62,
+        "a": 255
+      }
+    ],
+    "first_orange_like": {
+      "x": 120,
+      "y": 0,
+      "r": 223,
+      "g": 123,
+      "b": 12,
+      "a": 255
+    },
+    "first_vine_green_like": {
+      "x": 171,
+      "y": 0,
+      "r": 81,
+      "g": 160,
+      "b": 6,
+      "a": 255
+    },
+    "region_samples": null,
+    "loose_color_scan_note": "loose full-frame orange/green scan can hit sky, UI, or trees; do not treat it as crop proof"
+  }
+]

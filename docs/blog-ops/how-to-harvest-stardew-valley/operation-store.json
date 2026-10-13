@@ -1,0 +1,16 @@
+{
+  "role": "G",
+  "taskId": "task_0b42aed478f4",
+  "dispatchId": "ctx_89fa946fb720",
+  "keyword": "how to harvest stardew valley",
+  "locale": "en",
+  "country": "US",
+  "mode": "project-write",
+  "canary": "orch-canary-aab1b1baa25b6fe89864bdd44426f469",
+  "canarySha256": "04c05bd3e19f94b06d4a7e17f28ac22c1c89845dd944241e1d837524ffc8a5f5",
+  "canaryEncoding": "utf-8-no-trailing-newline",
+  "readBackCanaryMatches": true,
+  "readBackSha256": "04c05bd3e19f94b06d4a7e17f28ac22c1c89845dd944241e1d837524ffc8a5f5",
+  "isolation": "logical-only",
+  "osPermissionIsolationVerified": false
+}

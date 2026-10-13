@@ -1,0 +1,290 @@
+[p1 "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe" | space "harvest page r2 acceptance"(151): 1 managed, 0 untracked — p1* "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"]
+root
+  container
+    container
+      container "Stardew Valley Farm Planner"
+        anchor [ref=143, url=http://127.0.0.1:3004/]
+          image
+        container
+          anchor "Blog" [ref=144, loc=css:a[aria-label="Blog"], url=http://127.0.0.1:3004/blog]
+            text "Blog"
+          button "Language" [ref=145, loc=css:button[aria-label="Language"]]
+            text "Language"
+            text "▾"
+          anchor "Open planner" [ref=146, loc=css:a[aria-label="Open planner"], url=http://127.0.0.1:3004/#planner]
+            text "Open planner"
+      container
+        container
+          paragraph
+            text "Stardew Valley Guides"
+          heading
+            text "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"
+          paragraph
+            text "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."
+          paragraph
+            text "By"
+            text "Stardew Valley Planner Team"
+            text "·"
+            text "6 min read"
+          image
+        container
+          container "On this page"
+            paragraph
+              text "On this page"
+            ordered_list
+              list_item
+                anchor [ref=147, loc=href:/how-to-harvest-stardew-valley#how-to-tell-when-crops-are-ready-to-harvest, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#how-to-tell-when-crops-are-ready-to-harvest]
+                  text "How to Tell When Crops Are Ready to Harvest"
+              list_item
+                anchor [ref=151, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#visual-signs-identifying-the-final-harvest-stage-sprite]
+                  text "Visual Signs: Identifying the Final Harvest Stage Sprite"
+              list_item
+                anchor [ref=152, loc=href:/how-to-harvest-stardew-valley#calculating-harvest-days-and-unwatered-delays, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#calculating-harvest-days-and-unwatered-delays]
+                  text "Calculating Harvest Days and Unwatered Delays"
+              list_item
+                anchor [ref=153, loc=href:/how-to-harvest-stardew-valley#how-to-harvest-standard-crops-by-hand, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#how-to-harvest-standard-crops-by-hand]
+                  text "How to Harvest Standard Crops by Hand"
+              list_item
+                anchor [ref=154, loc=href:/how-to-harvest-stardew-valley#single-crop-harvesting-on-pc, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#single-crop-harvesting-on-pc]
+                  text "Single-Crop Harvesting on PC"
+              list_item
+                anchor [ref=155, loc=href:/how-to-harvest-stardew-valley#rapid-harvesting-the-hold-and-walk-technique, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#rapid-harvesting-the-hold-and-walk-technique]
+                  text "Rapid Harvesting: The Hold-and-Walk Technique"
+              list_item
+                anchor [ref=156, loc=href:/how-to-harvest-stardew-valley#how-to-harvest-designated-crops-with-a-scythe, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#how-to-harvest-designated-crops-with-a-scythe]
+                  text "How to Harvest Designated Crops with a Scythe"
+              list_item
+                anchor [ref=157, loc=href:/how-to-harvest-stardew-valley#crops-that-require-a-scythe-to-harvest, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#crops-that-require-a-scythe-to-harvest]
+                  text "Crops That Require a Scythe to Harvest"
+              list_item
+                anchor [ref=158, loc=href:/how-to-harvest-stardew-valley#the-1-6-iridium-scythe-on-tilled-soil, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#the-1-6-iridium-scythe-on-tilled-soil]
+                  text "The 1.6 Iridium Scythe on Tilled Soil"
+              list_item
+                anchor [ref=159, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#harvesting-special-crops-giant-crops-and-trellises]
+                  text "Harvesting Special Crops: Giant Crops and Trellises"
+              list_item
+                anchor [ref=160, loc=href:/how-to-harvest-stardew-valley#harvesting-giant-crops-with-an-axe, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#harvesting-giant-crops-with-an-axe]
+                  text "Harvesting Giant Crops with an Axe"
+              list_item
+                anchor [ref=161, loc=href:/how-to-harvest-stardew-valley#maintaining-reachable-paths-around-trellis-crops, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#maintaining-reachable-paths-around-trellis-crops]
+                  text "Maintaining Reachable Paths Around Trellis Crops"
+              list_item
+                anchor [ref=162, loc=href:/how-to-harvest-stardew-valley#troubleshooting-harvest-issues, url=http://127.0.0.1:3004/how-to-harvest-stardew-valley#troubleshooting-harvest-issues]
+                  text "Troubleshooting Harvest Issues"
+          container
+            paragraph
+              text "Harvest regular crops by hand in Stardew Valley: stand beside a mature plant and"
+              anchor [ref=163, url=https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411]
+                text "right-click it"
+              text ", or hold the action key to gather continuously across your fields. A parsnip does not need a scythe. Certain crops require a scythe to harvest, including amaranth, kale, wheat, unmilled rice, and fib..."
+            heading
+              text "How to Tell When Crops Are Ready to Harvest"
+            heading
+              text "Visual Signs: Identifying the Final Harvest Stage Sprite"
+            paragraph
+              text "Every crop progresses through distinct visual growth stages. In the field, a crop is ready when that plant shows its final harvest sprite."
+            paragraph
+              text "A"
+              anchor [ref=164, loc=href:https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123, url=https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123]
+                text "parsnip"
+              text "takes 4 days of watered growth to reach its harvest sprite. Once gathered, the single-harvest root is pulled from the ground, leaving behind an empty tilled tile. A"
+              anchor [ref=165, loc=href:https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726, url=https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726]
+                text "pumpkin"
+              text "takes 13 days of watered growth to reach its harvest sprite, visible as a large, rounded orange fruit resting on the tilled dirt."
+            paragraph
+              text "For multi-harvest crops like the"
+              anchor [ref=166, loc=href:https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090, url=https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090]
+                text "blueberry"
+              text ", plants take 13 days to reach maturity. After picking, the bush remains standing in an after-harvest stage, producing fresh berries every 4 days without replanting."
+            container
+              image
+              text "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe,"
+              anchor [ref=167, url=https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png]
+                text "Stardew Valley press screenshot"
+              text "."
+            paragraph
+              text "In the field screenshot above, mature pumpkins show their full orange shape on the tilled soil beside the dirt path."
+            heading
+              text "Calculating Harvest Days and Unwatered Delays"
+            paragraph
+              text "Calculating growth days helps predict the exact morning of harvest. In Stardew Valley, growth calculations exclude the day seeds are planted; the listed total represents the number of watered nights r..."
+            paragraph
+              text "As stated in the general crop rules,"
+              anchor [ref=168, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979]
+                text "crops must be watered every day for maximum growth"
+              text ". If unwatered for a day, a crop will not grow, though unwatered crops do not die. Sowing into dry soil and skipping watering that day prevents growth that night; growth begins the following night onc..."
+            paragraph
+              text "Under standard daily watering, a 4-day crop like a parsnip planted on Spring 1 matures on Spring 5 morning (1 + 4 = 5). Missing one watering day pauses growth, postponing harvest to Spring 6. Similarl..."
+            heading
+              text "How to Harvest Standard Crops by Hand"
+            heading
+              text "Single-Crop Harvesting on PC"
+            paragraph
+              text "Single crops are harvested by hand using the universal Check/Do Action control. Stand next to the ripe crop and"
+              anchor [ref=169, url=https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411]
+                text "right-click it"
+              text ". Keyboard"
+              anchor [ref=170, url=https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481]
+                text "X is mapped to the same Check/Do Action"
+              text "as right-click, allowing you to harvest individual plants by pressing X."
+            paragraph
+              anchor [ref=171, url=https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481]
+                text "left-click and C"
+              text "are bound to using tools or placing items. A hand harvest does not need a tool swing."
+            paragraph
+              text "Once harvested, single-harvest crops leave bare tilled soil. According to the"
+              anchor [ref=172, loc=href:https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875, url=https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875]
+                text "crop growth calendars"
+              text ", keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest."
+            heading
+              text "Rapid Harvesting: The Hold-and-Walk Technique"
+            paragraph
+              text "For large vegetable plots on PC,"
+              anchor [ref=173, url=https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699]
+                text "hold right-click with the mouse not near your character"
+              text ". Keeping right-click held down with the cursor away from your character harvests the crop on each tile you step over as you walk through the field."
+              anchor [ref=174, url=https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699]
+                text "X is mapped to right-click"
+              text "and performs the same action."
+            paragraph
+              text "With a stack of seeds selected, holding right-click while walking over ripe single-harvest crops harvests the mature plant on the tile you are standing on, and you can sow the new seed on that open so..."
+            heading
+              text "How to Harvest Designated Crops with a Scythe"
+            heading
+              text "Crops That Require a Scythe to Harvest"
+            paragraph
+              text "A standard"
+              anchor [ref=175, loc=href:https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696, url=https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696]
+                text "scythe"
+              text "is required for certain other crops, such as amaranth, kale, and wheat. Right-clicking or pressing X does not harvest them."
+              anchor [ref=176, loc=href:https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520, url=https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520]
+                text "Kale is harvested with a scythe or better"
+              text ","
+              anchor [ref=177, loc=href:https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130, url=https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130]
+                text "unmilled rice is harvested with a scythe"
+              text ", and"
+              anchor [ref=178, loc=href:https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587, url=https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587]
+                text "fiber seeds are harvested with the scythe"
+              text ". Fiber seeds are a distinct exception: they do not require daily watering to grow, yet still require a scythe when fully grown."
+            paragraph
+              text "To harvest these crops, place the scythe in your active toolbar, face the crop, and press your tool button (left-click or C on PC). On mobile devices,"
+              anchor [ref=179, loc=href:https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843, url=https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843]
+                text "select the scythe before you use it"
+              text "."
+            heading
+              text "The 1.6 Iridium Scythe on Tilled Soil"
+            paragraph
+              text "The"
+              anchor [ref=180, loc=href:https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836, url=https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836]
+                text "iridium scythe"
+              text "is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops."
+            heading
+              text "Harvesting Special Crops: Giant Crops and Trellises"
+            heading
+              text "Harvesting Giant Crops with an Axe"
+            paragraph
+              text "Harvest a giant crop with any axe. It takes three hits and drops"
+              anchor [ref=181, loc=href:https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops]
+                text "15 to 21 normal-quality items"
+              text ". A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it. Face the giant crop and strike it three times using your tool button (left-click or C on..."
+            heading
+              text "Maintaining Reachable Paths Around Trellis Crops"
+            paragraph
+              text "Trellis crops introduce unique movement constraints to farm design."
+              anchor [ref=182, loc=href:https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops]
+                text "Green bean, hops, and grape"
+              text "grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile."
+            paragraph
+              text "Because living trellises block movement entirely, every plant must have an accessible standing tile beside it. Planting trellises in solid blocks leaves interior plants unreachable for watering and ha..."
+            container
+              image
+              container
+                text "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe,"
+                anchor [ref=183, url=https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png]
+                  text "Stardew Valley press screenshot"
+                text "."
+            paragraph
+              text "In the screenshot above, an open dirt path separates two wooden trellis rows, providing clear foot access to harvest purple grapes on each side. When designing field layouts with trellis crops, planni..."
+              anchor [ref=184, url=http://127.0.0.1:3004/]
+                text "farm planner"
+              text "before planting ensures every vine remains reachable throughout the season."
+            heading
+              text "Troubleshooting Harvest Issues"
+            paragraph
+              text "If crops are not harvesting as expected, check the symptom against your tools, calendar, and layout:"
+            unordered_list
+              list_item
+                text "Harvest sprite has not appeared on the expected date"
+                text ": Check for missed watering days. Unwatered days pause growth without killing the plant, delaying maturity by one morning per dry day. Water the field and maintain daily watering until the harvest spr..."
+              list_item
+                text "Interacting by hand produces no harvest"
+                text ": Determine whether the crop requires a tool. Scythe crops (amaranth, kale, wheat, unmilled rice, fiber seeds) and 3x3 giant crops cannot be picked by hand. Equip a scythe and swing it across the crop..."
+              list_item
+                text "Character cannot reach ripe crops inside a field"
+                text ": Living trellis crops (green beans, hops, grapes) block movement. Harvest reachable vines from outer perimeter tiles, and arrange future trellis plantings with open walkways between double rows."
+              list_item
+                text "Crops withered overnight on the 1st"
+                text ": Seasonal turnover kills out-of-season plantings. On the 1st of each season,"
+                anchor [ref=185, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979]
+                  text "crops that are no longer in season wither on the 1st"
+                text "and leave dead stalks, while multi-season crops continue growing. Clear dead crops with a scythe to retain tilled soil. Plan future plantings using the"
+                anchor [ref=186, loc=href:/last-day-to-plant-stardew, url=http://127.0.0.1:3004/last-day-to-plant-stardew]
+                  text "last day to plant"
+                text "timeline, or grow recurring crops indoors following"
+                anchor [ref=187, loc=href:/what-to-grow-in-greenhouse-stardew, url=http://127.0.0.1:3004/what-to-grow-in-greenhouse-stardew]
+                  text "what to grow in the greenhouse"
+                text "."
+      container
+        text "Stardew Valley Farm Planner"
+        paragraph
+          text "A browser-local fan-made tool for planning Stardew Valley farm layouts."
+        svg_root
+        svg_root
+        anchor "Follow @wsir1139 on X (Twitter)" [ref=188, loc=css:a[aria-label="Follow @wsir1139 on X (Twitter)"], url=https://x.com/wsir1139]
+          svg_root
+        anchor "Join the Stardew Valley Planner Discord" [ref=189, loc=css:a[aria-label="Join the Stardew Valley Planner Discord"], url=https://discord.gg/GGfUJZsMN]
+          svg_root
+        svg_root
+        container
+          heading
+            text "Planner"
+          unordered_list
+            list_item
+              anchor [ref=190, url=http://127.0.0.1:3004/]
+                text "Planner"
+        container
+          heading
+            text "Explore"
+          unordered_list
+            list_item
+              anchor [ref=191, url=http://127.0.0.1:3004/blog]
+                text "Blog"
+            list_item
+              anchor [ref=192, loc=href:/#capabilities, url=http://127.0.0.1:3004/#capabilities]
+                text "How it works"
+            list_item
+              anchor [ref=193, loc=href:/#faq, url=http://127.0.0.1:3004/#faq]
+                text "FAQ"
+        container
+          heading
+            text "Legal"
+          unordered_list
+            list_item
+              anchor [ref=194, loc=href:/privacy, url=http://127.0.0.1:3004/privacy]
+                text "Privacy Policy"
+            list_item
+              anchor [ref=195, loc=href:/terms, url=http://127.0.0.1:3004/terms]
+                text "Terms of Service"
+            list_item
+              anchor [ref=196, loc=href:/contact, url=http://127.0.0.1:3004/contact]
+                text "Contact us"
+        paragraph
+          text "© Stardew Valley Farm Planner"
+    button "Open Next.js Dev Tools" [ref=197]
+      container
+        text "Compiling"
+        container
+          text "."
+          text "."
+          text "."
+    alert

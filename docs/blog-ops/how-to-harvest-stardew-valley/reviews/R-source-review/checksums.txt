@@ -1,0 +1,17 @@
+dacc4d0361dbd894eec29a6f67b554ce8ee5033d78de6aba1fa87b9b48218daf  src/blog/articles/how-to-harvest-stardew-valley.en.tsx
+98f2835aea750c56e931b933dd4b7ef158c679095c26fb0f5ea1f965827663ae  src/blog/articles/how-to-harvest-stardew-valley.zh.tsx
+886b1f6081692fb7c4565b2e6c21ac2144c2aa372ba6fd95804ad4aa430cab3d  src/blog/blog-post-identities.ts
+ea146ecfe3e8553ee2355abf259bba7bb7982bad326ca5203faa28f09696fa2b  src/blog/blog-post-registry.tsx
+bde4900d8c5cda4dabeb0021e0c76c84128e3138fbe0975aa1f739b14eaf8869  src/blog/blog-copy.ts
+71c1d1f8185fbefacf7ba349bc628e0c735fd4e3bde4db1764eee418dc4c9341  public/llms.txt
+8ed90bfab4dbdd4158ae2b0fe38e5f380f3922d2d1922b3ae5142017c51ee2c9  docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-en.json
+3debdcefc4bb9e7217bd43e1fdb3484d1b7ef5e3418b073d6ec308e4ef7034de  docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-zh.json
+46052a8fb71df1670982203c612238e16333bde5eecdf5a6ecc12443019bbace  docs/blog-ops/how-to-harvest-stardew-valley/media/final-manifest.json
+fa67a68695edba6eeed908ff04dedd7b9bcb48387bbdf72061d7a5a558624458  docs/blog-ops/how-to-harvest-stardew-valley/reviews/E-translation-review.md
+a2057665a3b7702453a600ded48dbd046ac82f1b2aa7264ff50b64a8a0f86cec  docs/blog-ops/how-to-harvest-stardew-valley/reviews/F-media-freeze-v2.md
+8558f5b08e0c3e890ceddfcffb7104ed0a0fb0380dedec4108beed46220b81d8  public/blog/how-to-harvest-stardew-valley-cover.webp
+ccd28749dfd7047666d8bcbf8410aa929a060e660cc882d3814ef74d6dec19cd  public/blog/how-to-harvest-stardew-valley-cover.avif
+c5d987fdd4c2d1799358baf987ee31a5b7a9d90b5933c7e3fc1eb43c4a1883a5  public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp
+92476d4c389afbf12d2b40e1a0773139a33c6fd0e24df71be97918a05ba4d861  public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif
+450f78bb5aefcc6dda6826cb9fcda8a2af45f9778e077b49012596dbb38394f2  public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp
+d918433c39793cf8f455281b4ba4606749eff17d68d7c6d682183f07f5e33d6a  public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif

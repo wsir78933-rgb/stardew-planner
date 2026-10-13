@@ -1,0 +1,427 @@
+{
+  "body": {
+    "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-body.locked.md",
+    "byteSize": 10036,
+    "rawSha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "nfcLfSha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "rawEqualsNfcLf": true
+  },
+  "seo": {
+    "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-seo.json",
+    "byteSize": 3201,
+    "rawSha256": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9",
+    "nfcLfSha256": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9",
+    "rawEqualsNfcLf": true
+  },
+  "media": {
+    "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-media.locked.json",
+    "byteSize": 4229,
+    "rawSha256": "87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885",
+    "nfcLfSha256": "87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885",
+    "rawEqualsNfcLf": true
+  },
+  "references": {
+    "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-public-references.locked.json",
+    "byteSize": 10294,
+    "rawSha256": "52a355abdce750e153057d103a342ff4c68c9e829c8d1f32129f1c7b92da606e",
+    "nfcLfSha256": "52a355abdce750e153057d103a342ff4c68c9e829c8d1f32129f1c7b92da606e",
+    "rawEqualsNfcLf": true
+  },
+  "lockCopiesMatchRoot": {
+    "en-body.locked.md": {
+      "sha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+      "sameBytes": true
+    },
+    "en-seo.json": {
+      "sha256": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9",
+      "sameBytes": true
+    },
+    "en-media.locked.json": {
+      "sha256": "87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885",
+      "sameBytes": true
+    },
+    "en-public-references.locked.json": {
+      "rootSha256": "52a355abdce750e153057d103a342ff4c68c9e829c8d1f32129f1c7b92da606e",
+      "lockFSha256": "24d5c227dd11e5e4cd96bab3d937a7e4547cde72af84e4816b5838e009f9db96",
+      "sameBytes": false,
+      "onlyDifference": {
+        "field": "bodyFile",
+        "root": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-body.locked.md",
+        "lockF": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/lock-f/en-body.locked.md"
+      }
+    }
+  },
+  "writingBody": {
+    "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.md",
+    "byteSize": 10036,
+    "rawSha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "nfcLfSha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "rawEqualsNfcLf": true
+  },
+  "referenceRows": [
+    {
+      "id": "en-steam-parsnip-right-click",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 1,
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411"
+    },
+    {
+      "id": "en-wiki-parsnip-stages",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 9,
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123"
+    },
+    {
+      "id": "en-wiki-pumpkin-stages",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 9,
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726"
+    },
+    {
+      "id": "en-wiki-blueberry-regrowth",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 11,
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090"
+    },
+    {
+      "id": "en-wiki-crops-watering",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 24,
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979"
+    },
+    {
+      "id": "en-wiki-controls-action",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 32,
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481"
+    },
+    {
+      "id": "en-wiki-controls-tool",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 34,
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481"
+    },
+    {
+      "id": "en-wiki-calendar-replant",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 36,
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875"
+    },
+    {
+      "id": "en-forum-hold-right-click",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 40,
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699"
+    },
+    {
+      "id": "en-forum-x-mapped",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 40,
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699"
+    },
+    {
+      "id": "en-wiki-scythe-examples",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 48,
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696"
+    },
+    {
+      "id": "en-wiki-kale",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 48,
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520"
+    },
+    {
+      "id": "en-wiki-fiber-seeds",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 48,
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587"
+    },
+    {
+      "id": "en-wiki-unmilled-rice",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 48,
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130"
+    },
+    {
+      "id": "en-wiki-mobile-scythe",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 50,
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843"
+    },
+    {
+      "id": "en-wiki-iridium-scythe",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 54,
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+    },
+    {
+      "id": "en-wiki-giant-crops",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 60,
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops"
+    },
+    {
+      "id": "en-wiki-trellis",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 64,
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops"
+    },
+    {
+      "id": "en-wiki-season-wither",
+      "occurrence": 1,
+      "quoteCount": 1,
+      "line": 82,
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979"
+    },
+    {
+      "id": "en-press-multiplayer-2-mature",
+      "occurrence": 1,
+      "quoteCount": 2,
+      "line": 15,
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    },
+    {
+      "id": "en-press-multiplayer-2-trellis",
+      "occurrence": 2,
+      "quoteCount": 2,
+      "line": 15,
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    }
+  ],
+  "visibleCopy": {
+    "ids": [
+      "media-cover",
+      "media-mature-crops",
+      "media-trellis-paths"
+    ],
+    "captionDeltas": [
+      {
+        "id": "media-mature-crops",
+        "writingCaption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, Stardew Valley press screenshot.",
+        "lockedCaption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>."
+      },
+      {
+        "id": "media-trellis-paths",
+        "writingCaption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, Stardew Valley press screenshot.",
+        "lockedCaption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>."
+      }
+    ]
+  },
+  "identity": {
+    "recentEnglishTitles": [
+      {
+        "slug": "what-to-grow-in-greenhouse-stardew",
+        "title": "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting"
+      },
+      {
+        "slug": "stardew-fruit",
+        "title": "Stardew Fruit: Find Its Source Before Buying Seeds"
+      },
+      {
+        "slug": "oak-tree-vs-maple-stardew",
+        "title": "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree"
+      }
+    ],
+    "derivedHreflang": {
+      "en": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+      "zh-CN": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+      "x-default": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+    },
+    "titleCharacters": 59,
+    "descriptionCharacters": 142,
+    "coverAltCharacters": 127,
+    "guaranteeHits": [],
+    "routineHits": []
+  },
+  "claimLines": {
+    "parsnipNoScythe": 1,
+    "pumpkinSprite": 9,
+    "keyboardX": 32,
+    "kaleScythe": 48,
+    "wheatScythe": 48,
+    "anyAxe": 60,
+    "threeHits": 60,
+    "threeStrikes": 60,
+    "pcSection": 30,
+    "mobileScytheOnly": 50
+  },
+  "mediaRows": [
+    {
+      "id": "media-cover",
+      "publicWebpUrl": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "publicAvifUrl": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "stagedWebp": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 479250,
+        "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+        "sipsExit": 0
+      },
+      "stagedAvif": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 237604,
+        "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57",
+        "sipsExit": 0
+      },
+      "alt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png"
+    },
+    {
+      "id": "media-mature-crops",
+      "publicWebpUrl": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+      "publicAvifUrl": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+      "stagedWebp": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 267644,
+        "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+        "sipsExit": 0
+      },
+      "stagedAvif": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 143638,
+        "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1",
+        "sipsExit": 0
+      },
+      "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    },
+    {
+      "id": "media-trellis-paths",
+      "publicWebpUrl": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "publicAvifUrl": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "stagedWebp": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 223784,
+        "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+        "sipsExit": 0
+      },
+      "stagedAvif": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 113557,
+        "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a",
+        "sipsExit": 0
+      },
+      "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    }
+  ],
+  "fullCount": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-body.locked.md",
+    "locale": "en",
+    "mechanical_units": 1148,
+    "required_floor": 1000,
+    "meets_mechanical_floor": true,
+    "long_form_target": 2000,
+    "meets_long_form_target": false,
+    "length_class": "short",
+    "semantic_qualification": "requires_independent_review",
+    "excluded_heading_sections": [],
+    "omitted_line_counts": {
+      "headings": 13,
+      "code": 0,
+      "excluded_sections": 0,
+      "non_body": 36,
+      "frontmatter": 0
+    },
+    "sha256_raw": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "sha256_nfc_lf": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67"
+  },
+  "eligibleCount": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/seo-r2/en-body.caption-excluded.md",
+    "locale": "en",
+    "mechanical_units": 1107,
+    "required_floor": 1000,
+    "meets_mechanical_floor": true,
+    "long_form_target": 2000,
+    "meets_long_form_target": false,
+    "length_class": "short",
+    "semantic_qualification": "requires_independent_review",
+    "excluded_heading_sections": [],
+    "omitted_line_counts": {
+      "headings": 13,
+      "code": 0,
+      "excluded_sections": 0,
+      "non_body": 36,
+      "frontmatter": 0
+    },
+    "sha256_raw": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+    "sha256_nfc_lf": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069"
+  },
+  "readTimeMinutes": {
+    "wordsPerMinute": 200,
+    "eligibleWords": 1107,
+    "eligibleCeiling": 6,
+    "rawWords": 1148,
+    "rawCeiling": 6,
+    "field": 6
+  },
+  "decodedWebpPng": [
+    {
+      "path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-cover.webp.png",
+      "sha256": "9589a5baf67842a5237ffc9629b219e84dc17002ba0b5b2b1f91fac1da3094f1",
+      "byteSize": 2300837
+    },
+    {
+      "path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-mature-crops.webp.png",
+      "sha256": "448604d280a8e5b57c9f2336f3b2618a939e5fb15f5e6197516566fe0154a9db",
+      "byteSize": 1751099
+    },
+    {
+      "path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-trellis-paths.webp.png",
+      "sha256": "41bc6b0912f620730708347e05c8102d0a16e0d7053603ae3d96675f2b62db89",
+      "byteSize": 1564212
+    }
+  ],
+  "publicBaselineStillPresent": [
+    {
+      "path": "public/blog/how-to-harvest-stardew-valley-cover.webp",
+      "byteSize": 38974,
+      "sha256": "8558f5b08e0c3e890ceddfcffb7104ed0a0fb0380dedec4108beed46220b81d8"
+    },
+    {
+      "path": "public/blog/how-to-harvest-stardew-valley-cover.avif",
+      "byteSize": 17525,
+      "sha256": "ccd28749dfd7047666d8bcbf8410aa929a060e660cc882d3814ef74d6dec19cd"
+    },
+    {
+      "path": "public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp",
+      "byteSize": 99024,
+      "sha256": "c5d987fdd4c2d1799358baf987ee31a5b7a9d90b5933c7e3fc1eb43c4a1883a5"
+    },
+    {
+      "path": "public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+      "byteSize": 39279,
+      "sha256": "92476d4c389afbf12d2b40e1a0773139a33c6fd0e24df71be97918a05ba4d861"
+    }
+  ]
+}

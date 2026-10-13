@@ -1,0 +1,213 @@
+{
+  "version": "v1.0",
+  "task_id": "task_a0faa151c5fa",
+  "dispatch_id": "ctx_6758050ec57a",
+  "workspace_root": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+  "files_count": 24,
+  "files": [
+    {
+      "source_relative_path": "src/blog/articles/how-to-harvest-stardew-valley.en.tsx",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/articles/how-to-harvest-stardew-valley.en.tsx",
+      "byte_size": 11874,
+      "source_sha256": "dacc4d0361dbd894eec29a6f67b554ce8ee5033d78de6aba1fa87b9b48218daf",
+      "backup_sha256": "dacc4d0361dbd894eec29a6f67b554ce8ee5033d78de6aba1fa87b9b48218daf",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "src/blog/articles/how-to-harvest-stardew-valley.zh.tsx",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/articles/how-to-harvest-stardew-valley.zh.tsx",
+      "byte_size": 11887,
+      "source_sha256": "98f2835aea750c56e931b933dd4b7ef158c679095c26fb0f5ea1f965827663ae",
+      "backup_sha256": "98f2835aea750c56e931b933dd4b7ef158c679095c26fb0f5ea1f965827663ae",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "src/blog/blog-post-registry.tsx",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx",
+      "byte_size": 47995,
+      "source_sha256": "ea146ecfe3e8553ee2355abf259bba7bb7982bad326ca5203faa28f09696fa2b",
+      "backup_sha256": "ea146ecfe3e8553ee2355abf259bba7bb7982bad326ca5203faa28f09696fa2b",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "src/blog/blog-post-identities.ts",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-identities.ts",
+      "byte_size": 1245,
+      "source_sha256": "886b1f6081692fb7c4565b2e6c21ac2144c2aa372ba6fd95804ad4aa430cab3d",
+      "backup_sha256": "886b1f6081692fb7c4565b2e6c21ac2144c2aa372ba6fd95804ad4aa430cab3d",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "src/blog/blog-copy.ts",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-copy.ts",
+      "byte_size": 8661,
+      "source_sha256": "bde4900d8c5cda4dabeb0021e0c76c84128e3138fbe0975aa1f739b14eaf8869",
+      "backup_sha256": "bde4900d8c5cda4dabeb0021e0c76c84128e3138fbe0975aa1f739b14eaf8869",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/llms.txt",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/llms.txt",
+      "byte_size": 16856,
+      "source_sha256": "71c1d1f8185fbefacf7ba349bc628e0c735fd4e3bde4db1764eee418dc4c9341",
+      "backup_sha256": "71c1d1f8185fbefacf7ba349bc628e0c735fd4e3bde4db1764eee418dc4c9341",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/blog/how-to-harvest-stardew-valley-cover.webp",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/blog/how-to-harvest-stardew-valley-cover.webp",
+      "byte_size": 38974,
+      "source_sha256": "8558f5b08e0c3e890ceddfcffb7104ed0a0fb0380dedec4108beed46220b81d8",
+      "backup_sha256": "8558f5b08e0c3e890ceddfcffb7104ed0a0fb0380dedec4108beed46220b81d8",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/blog/how-to-harvest-stardew-valley-cover.avif",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/blog/how-to-harvest-stardew-valley-cover.avif",
+      "byte_size": 17525,
+      "source_sha256": "ccd28749dfd7047666d8bcbf8410aa929a060e660cc882d3814ef74d6dec19cd",
+      "backup_sha256": "ccd28749dfd7047666d8bcbf8410aa929a060e660cc882d3814ef74d6dec19cd",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp",
+      "byte_size": 99024,
+      "source_sha256": "c5d987fdd4c2d1799358baf987ee31a5b7a9d90b5933c7e3fc1eb43c4a1883a5",
+      "backup_sha256": "c5d987fdd4c2d1799358baf987ee31a5b7a9d90b5933c7e3fc1eb43c4a1883a5",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+      "byte_size": 39279,
+      "source_sha256": "92476d4c389afbf12d2b40e1a0773139a33c6fd0e24df71be97918a05ba4d861",
+      "backup_sha256": "92476d4c389afbf12d2b40e1a0773139a33c6fd0e24df71be97918a05ba4d861",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+      "byte_size": 105016,
+      "source_sha256": "450f78bb5aefcc6dda6826cb9fcda8a2af45f9778e077b49012596dbb38394f2",
+      "backup_sha256": "450f78bb5aefcc6dda6826cb9fcda8a2af45f9778e077b49012596dbb38394f2",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+      "byte_size": 40187,
+      "source_sha256": "d918433c39793cf8f455281b4ba4606749eff17d68d7c6d682183f07f5e33d6a",
+      "backup_sha256": "d918433c39793cf8f455281b4ba4606749eff17d68d7c6d682183f07f5e33d6a",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-en.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-en.json",
+      "byte_size": 29884,
+      "source_sha256": "8ed90bfab4dbdd4158ae2b0fe38e5f380f3922d2d1922b3ae5142017c51ee2c9",
+      "backup_sha256": "8ed90bfab4dbdd4158ae2b0fe38e5f380f3922d2d1922b3ae5142017c51ee2c9",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-zh.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-zh.json",
+      "byte_size": 29970,
+      "source_sha256": "3debdcefc4bb9e7217bd43e1fdb3484d1b7ef5e3418b073d6ec308e4ef7034de",
+      "backup_sha256": "3debdcefc4bb9e7217bd43e1fdb3484d1b7ef5e3418b073d6ec308e4ef7034de",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/writing/en-body.md",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-body.md",
+      "byte_size": 10093,
+      "source_sha256": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+      "backup_sha256": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/writing/locked/en-body.md",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/writing/locked/en-body.md",
+      "byte_size": 10093,
+      "source_sha256": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+      "backup_sha256": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/writing/en-media.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-media.json",
+      "byte_size": 2245,
+      "source_sha256": "1d4cd52f3d7cc7b180e60183c8f18ca61bd58b1889243c02e44a1422c38451c3",
+      "backup_sha256": "1d4cd52f3d7cc7b180e60183c8f18ca61bd58b1889243c02e44a1422c38451c3",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg",
+      "byte_size": 5643,
+      "source_sha256": "a6e017cda7dd1f5d5e3cbc4f07e29cac5d2c11855a5be120a077cc4a1e662661",
+      "backup_sha256": "a6e017cda7dd1f5d5e3cbc4f07e29cac5d2c11855a5be120a077cc4a1e662661",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/seo/en-seo.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/seo/en-seo.json",
+      "byte_size": 2639,
+      "source_sha256": "30ec27dd831c395b441964e3ef4b55e84c29329d24bfbbbff85f4e7066f15e08",
+      "backup_sha256": "30ec27dd831c395b441964e3ef4b55e84c29329d24bfbbbff85f4e7066f15e08",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/seo/en-public-references.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/seo/en-public-references.json",
+      "byte_size": 10447,
+      "source_sha256": "2a1739dad9e9e51943e9b0dde64a886eb80cbbdfca97fe5927ec055ddd2f678e",
+      "backup_sha256": "2a1739dad9e9e51943e9b0dde64a886eb80cbbdfca97fe5927ec055ddd2f678e",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-body.md",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-body.md",
+      "byte_size": 10106,
+      "source_sha256": "ec8b60fc7e99ac1c18b566bdd3594edc29f524d5cc6d3470625ef506f772c024",
+      "backup_sha256": "ec8b60fc7e99ac1c18b566bdd3594edc29f524d5cc6d3470625ef506f772c024",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-seo.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-seo.json",
+      "byte_size": 2766,
+      "source_sha256": "44fda49e69a3e9e6d6984b50075bfaa1eed0cd72ccdf87d4425ba2d55e97aab5",
+      "backup_sha256": "44fda49e69a3e9e6d6984b50075bfaa1eed0cd72ccdf87d4425ba2d55e97aab5",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-media.json",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-media.json",
+      "byte_size": 1963,
+      "source_sha256": "7aae7773171719b1db6df94599a2e861d915bbd0c99d073b408f2e0f80ebc7f2",
+      "backup_sha256": "7aae7773171719b1db6df94599a2e861d915bbd0c99d073b408f2e0f80ebc7f2",
+      "hashes_match": true
+    },
+    {
+      "source_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg",
+      "backup_relative_path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg",
+      "byte_size": 5692,
+      "source_sha256": "50cd8f2c06a05e258f1adb083012a471e76ab92554d997d36244d53fa41c4f13",
+      "backup_sha256": "50cd8f2c06a05e258f1adb083012a471e76ab92554d997d36244d53fa41c4f13",
+      "hashes_match": true
+    }
+  ],
+  "git_snapshot": {
+    "git_head_commit": "64a3b21b19444892654f98bc8042db4a95cbd1a8",
+    "git_status_lines_count": 22,
+    "git_diffstat_summary": " 12 files changed, 197 insertions(+), 45 deletions(-)"
+  },
+  "service_snapshot": {
+    "port": 3004,
+    "active": true,
+    "pid": "44772",
+    "process_description": "44772 44766 R+     1:36.92 next-server (v16.3.0)",
+    "inspection_policy": "read_only_no_curl_no_kill"
+  }
+}

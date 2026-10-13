@@ -35,6 +35,7 @@ const expectedSlugs = [
   "what-to-grow-in-greenhouse-stardew",
   "stardew-fruit",
   "oak-tree-vs-maple-stardew",
+  "how-to-harvest-stardew-valley",
 ] as const;
 
 function createLocalizedPost(
@@ -69,7 +70,7 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twenty-four canonical blog identities in publishing order", () => {
+it("keeps the twenty-five canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
@@ -79,7 +80,7 @@ it("keeps the twenty-four canonical blog identities in publishing order", () => 
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the forty-eight localized root-level canonical article paths", () => {
+it("publishes only the fifty localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -105,6 +106,7 @@ it("publishes only the forty-eight localized root-level canonical article paths"
     "/what-to-grow-in-greenhouse-stardew/",
     "/stardew-fruit/",
     "/oak-tree-vs-maple-stardew/",
+    "/how-to-harvest-stardew-valley/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -129,6 +131,7 @@ it("publishes only the forty-eight localized root-level canonical article paths"
     "/zh/what-to-grow-in-greenhouse-stardew/",
     "/zh/stardew-fruit/",
     "/zh/oak-tree-vs-maple-stardew/",
+    "/zh/how-to-harvest-stardew-valley/",
   ]);
 });
 
@@ -167,8 +170,12 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     true,
     false,
     true,
+    false,
   ]);
-  expect(chinesePosts.every((post) => post.featured)).toBe(true);
+  expect(chinesePosts.map((post) => post.featured)).toEqual([
+    ...expectedSlugs.slice(0, -1).map(() => true),
+    false,
+  ]);
   expect(getBlogPostBySlug("en", "carpenter-stardew")?.slug).toBe(
     "carpenter-stardew",
   );
@@ -654,6 +661,7 @@ it("binds every localized post to its own original blog cover", () => {
       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
       "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
+      "how-to-harvest-stardew-valley": "/blog/how-to-harvest-stardew-valley-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -684,6 +692,7 @@ it("binds every localized post to its own original blog cover", () => {
       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
       "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
+      "how-to-harvest-stardew-valley": "/blog/how-to-harvest-stardew-valley-cover.webp",
     },
   } as const;
 
@@ -693,6 +702,37 @@ it("binds every localized post to its own original blog cover", () => {
       expect(post.coverImage.src).not.toBe("/social-images/stardew-valley-farm-planner.png");
     }
   }
+});
+
+it("registers the harvest article metadata from the frozen public handoff", () => {
+  expect(getBlogPostBySlug("en", "how-to-harvest-stardew-valley")).toMatchObject({
+    slug: "how-to-harvest-stardew-valley",
+    title: "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+    description:
+      "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+    topic: "Stardew Valley Guides",
+    author: "Stardew Valley Planner Team",
+    readTimeMinutes: 6,
+    featured: false,
+    coverImage: {
+      src: "/blog/how-to-harvest-stardew-valley-cover.webp",
+      alt: "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+    },
+  });
+  expect(getBlogPostBySlug("zh-CN", "how-to-harvest-stardew-valley")).toMatchObject({
+    slug: "how-to-harvest-stardew-valley",
+    title: "星露谷物语怎么收作物：徒手、镰刀或斧头",
+    description:
+      "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+    topic: "星露谷物语指南",
+    author: "星露谷规划器团队",
+    readTimeMinutes: 6,
+    featured: false,
+    coverImage: {
+      src: "/blog/how-to-harvest-stardew-valley-cover.webp",
+      alt: "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+    },
+  });
 });
 
 it("projects fresh client-safe metadata without article Content functions", () => {
@@ -783,7 +823,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: oak-tree-vs-maple-stardew.",
+    "Expected: carpenter-stardew. Received: how-to-harvest-stardew-valley.",
   );
 });
 

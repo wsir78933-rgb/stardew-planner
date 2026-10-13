@@ -1,0 +1,21 @@
+=== VERIFYING STAGED MEDIA ASSETS ===
+
+Asset: how-to-harvest-stardew-valley-cover
+  [WEBP] status=PASS size=479250 (exp=479250) dim=1672x941 (exp=1672x941) sha_match=True decoded_png_exists=True
+         sha256=0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574
+  [AVIF] status=PASS size=237604 (exp=237604) dim=1672x941 (exp=1672x941) sha_match=True decoded_png_exists=True
+         sha256=8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57
+
+Asset: how-to-harvest-stardew-valley-mature-crops
+  [WEBP] status=PASS size=267644 (exp=267644) dim=1672x941 (exp=1672x941) sha_match=True decoded_png_exists=True
+         sha256=d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd
+  [AVIF] status=PASS size=143638 (exp=143638) dim=1672x941 (exp=1672x941) sha_match=True decoded_png_exists=True
+         sha256=cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1
+
+Asset: how-to-harvest-stardew-valley-trellis-paths
+  [WEBP] status=PASS size=223784 (exp=223784) dim=1672x941 (exp=1672x941) sha_match=True decoded_png_exists=True
+         sha256=027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4
+  [AVIF] status=PASS size=113557 (exp=113557) dim=1672x941 (exp=1672x941) sha_match=True decoded_png_exists=True
+         sha256=7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a
+
+ALL STAGED MEDIA ASSETS VERIFIED: True

@@ -1,0 +1,57 @@
+{
+  "id": "5872a679-b2e8-424a-b2be-94e0246805bf",
+  "ok": true,
+  "result": {
+    "runId": "run_2434613566b2",
+    "gates": [
+      {
+        "id": "gate_ce635b2993a3",
+        "run_id": "run_2434613566b2",
+        "task_id": "task_2429b66bee01",
+        "question": "D对当前英文候选同一实际hash的三门是否全部通过？",
+        "options": "[\"已读取真实批准证据，放行\",\"等待证据或返修\"]",
+        "status": "pending",
+        "resolution": null,
+        "created_at": "2026-10-12 14:23:03",
+        "resolved_at": null
+      },
+      {
+        "id": "gate_4855c5687bb4",
+        "run_id": "run_2434613566b2",
+        "task_id": "task_c23688973c81",
+        "question": "D与E正文审核是否批准同一实际hash且材料可锁定？",
+        "options": "[\"已读取真实批准证据，放行\",\"等待证据或返修\"]",
+        "status": "resolved",
+        "resolution": "已读取真实批准证据，放行",
+        "created_at": "2026-10-12 14:23:03",
+        "resolved_at": "2026-10-12 16:31:59"
+      },
+      {
+        "id": "gate_3dbe8fbbf8a7",
+        "run_id": "run_2434613566b2",
+        "task_id": "task_e1d2ec5d1861",
+        "question": "F英文锁定及最终Title/H1/Description是否经E题文审核通过？",
+        "options": "[\"已读取真实批准证据，放行\",\"等待证据或返修\"]",
+        "status": "resolved",
+        "resolution": "已读取真实批准证据，放行",
+        "created_at": "2026-10-12 14:23:03",
+        "resolved_at": "2026-10-12 16:52:47"
+      },
+      {
+        "id": "gate_da09bfceca70",
+        "run_id": "run_2434613566b2",
+        "task_id": "task_a0a8d2e776f7",
+        "question": "B修订layout已回读且C使用对应最新writer-brief版本/hash吗？",
+        "options": "[\"实际对应，放行\",\"等待新版布局或重交接\"]",
+        "status": "resolved",
+        "resolution": "已回读C revision-note与实际brief SHA256；当前正文v1使用Round2 brief 57c65db0c8e89e407bba950658e5b37027051a3d83a93ee2c62a18eee60523da，放行D独立三门，不代表正文质量通过",
+        "created_at": "2026-10-12 15:20:07",
+        "resolved_at": "2026-10-12 15:56:41"
+      }
+    ],
+    "count": 4
+  },
+  "_meta": {
+    "runtimeId": "f779182b-26b3-4e77-a1d7-9f9e5babe394"
+  }
+}

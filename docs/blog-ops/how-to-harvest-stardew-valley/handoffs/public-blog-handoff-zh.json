@@ -1,0 +1,338 @@
+{
+  "locale": "zh-CN",
+  "country": "US",
+  "body": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。\n\n## 如何徒手收获常规作物\n\n### PC 默认键位：右键与“检查 / 执行操作”\n\n在 PC 上，站在成熟防风草旁的格子上按下鼠标右键。点击一下即可收获。[X 键映射为相同的点击操作](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/)，因此按 X 键也能收获。\n\n默认 [PC 控制键位](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)将右键或 X 键绑定为“检查 / 执行操作”（Check / Do Action），将左键或 C 键绑定为“使用工具或放置物品”（Use tool or place item）。你可以在“选项”菜单中重新绑定每个快捷键。这里的名称皆为默认值。\n\n左键可将[种子与肥料](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)放到已耕地块上。点击一下覆盖一格。想要处理多个地块时，按住右键或左键移动即可。播种和施肥不需要工具，也不消耗体力。采摘成熟的防风草始终使用右键或 X 键。\n\n手柄在世界地图中的按键对这两个指令使用其他名称：\n\n- Xbox（Xbox One 或 Xbox 360 手柄）：A 键为“检查 / 执行操作 / 使用光标”，X 键为“使用工具”。手柄按键无法在游戏内重新绑定。\n- PlayStation：叉号键（Cross）为“检查 / 执行操作 / 使用光标”，方块键（Square）为“使用工具”。\n- Switch：A 键为“检查 / 执行操作 / 使用光标”，Y 键为“使用工具”。\n\n### 连续收获：按住并走动的方法\n\n要收获多株作物，按住右键或 X 键，并将鼠标光标移离角色。按住时会对你所站立的地块播种和收获。如果手中拿着种子，按住时会在收获的同时对该地块播种。接着在作物地块上走动即可。按住操作会持续作用于你脚下的地块。\n\n按住按键从多个酿造桶、腌酱桶或复制晶石机中收集物品是 1.4 版本为这些机器加入的快捷操作。对于农作物，请让鼠标远离角色，这样按住操作就会始终作用于脚下的地块。\n\n## 需要镰刀收割的农作物\n\n### 星露谷物语中的镰刀收割作物\n\n开局时你拥有一把[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)。挥动镰刀不消耗体力。它能割草、杂草、小树苗和苔藓，还可以当作轻微伤害的武器挥击。铁匠无法升级它。从 1.6 版本开始，力竭倒下（死亡）不再会从物品栏中失去初始镰刀或金镰刀。\n\n在 PC 上，将镰刀拿在手中，使用“使用工具”（左键或 C 键）挥动。在移动端上，挥动前先手动选中镰刀。\n\n苋菜、羽衣甘蓝和小麦需要用镰刀或更好的镰刀收割。未碾米和纤维种子同样通过挥动镰刀收割。\n\n- 羽衣甘蓝在春季生长，耗时 6 天。\n- 苋菜是秋季作物，耗时 7 天。\n- 小麦在夏季或秋季生长，耗时 4 天。用任何镰刀收割还有 40% 的几率掉落干草。\n- 未碾米在春季由米苗生长而成，用镰刀收割。大多数地块需要 8 天。距离水体约 3 格以内的米苗属于灌溉状态，6 天即可成熟，且不需要浇水。想要更短等待时间时，将米苗种在靠近水体处。\n- 纤维种子用镰刀收割。它们不是农作物。它们需要 7 天，可以在包括冬季在内的任何季节生长，且不需要每天浇水。它们仍然需要耕地。每株掉落 4 到 7 个纤维，并有 10% 的几率额外掉落一个混合种子。\n\n### 镰刀对比：初始镰刀、金镰刀与铱镰刀\n\n[金镰刀](https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051)取自采石场矿洞中的雕像。它在 1.4 版本中引入。相比初始镰刀，它的作用范围更大，割掉该范围内所有草的几率更高，每次割草有 75% 的几率获得干草，且伤害为 13 点而非 1 到 3 点。\n\n[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)在 1.6 版本中引入。领取耕种精通后即可获得。它可以用来收获任何作物。挥动一次即可收集其范围内耕地上生长的物品，包括普通农作物、室内花盆中的作物、大葱以及野生种子长成的采集物。其范围比金镰刀更大。每次割草获得干草的几率为 100%，伤害为 20 点而非 13 点。\n\n在 [1.6.9](https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/) 中，使用铱镰刀时也能触发“采集者”（Gatherer）双倍收获采集物的几率。室内花盆里的采集作物不再总是出低品质且不给经验。用铱镰刀收割采集作物会提供经验，并享受采集等级带来的品质提升。\n\n<figure class=\"blog-article-media\">\n  <img alt=\"星露谷物语收获操作图解：防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米和纤维使用左键或 C 键配镰刀，巨大作物使用斧头，加上棚架与换季规则。\" decoding=\"async\" height=\"941\" loading=\"lazy\" src=\"/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp\" width=\"1672\">\n  <figcaption>示意图：星露谷物语农作物收获方式，包括防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米与纤维使用镰刀挥击，以及巨大作物使用斧头、阻挡通行的棚架与第 28 天换季规则。</figcaption>\n</figure>\n\n## 如何判断农作物何时可以收获\n\n### 计算生长天数与浇水要求\n\n生长天数不计算播种当天。第 1 天播种的 5 天作物在第 6 天可以收获。[防风草](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123)需要 4 天。春季第 1 天种下一株并每天浇水：它在春季第 5 天成熟。当天点击右键即可收获。\n\n未浇水的日子不会推进生长进度。缺水一天，成熟日就会顺延一天。如果春季第 3 天漏浇了水而其他日子正常浇水，那株防风草就会在春季第 6 天成熟。\n\n对镰刀收割的作物采用同样的计算方法。春季第 1 天种植并浇水的羽衣甘蓝在春季第 7 天成熟。秋季第 1 天种植的苋菜在秋季第 8 天成熟。夏季第 1 天种植的小麦在夏季第 5 天成熟。春季第 1 天种植的未碾米在普通耕地上于春季第 9 天成熟，而当米苗位于水体约 3 格以内时在春季第 7 天成熟。第 1 天种植的纤维种子在第 8 天成熟。\n\n### 单次收获与多次再生作物\n\n有少数作物在首次采摘后会继续产出。\n\n- 青豆需要棚架，成熟后会继续产出。再生周期为 3 天，因此你在同一植株上采摘，而不需要在该处重新播种。\n- 草莓每 4 天结出 1 个草莓。\n- 咖啡成熟后会继续产出。\n\n防风草只能收获一次。采摘后它不会像青豆或草莓那样再次产出。\n\n## 农作物成熟后不收获会怎样？\n\n### 当季内未收获的农作物\n\n只要仍处于生长季节内，成熟的作物留在地里过夜不会受损。在当季内将成熟的防风草留到第二天，它依然留在地里等待采摘。第 28 天之后，不再属于当季的农作物就会枯萎死亡。即使作物已经完全长成，一旦下一季节不在其生长季节内，它依然会死亡。\n\n如果第一次收获必须在换季前完成，可以在[星露谷最晚播种日](/zh/last-day-to-plant-stardew)中计算最晚安全播种日。\n\n### 换季过渡：室外农作物何时枯萎\n\n在每月 1 日，不再属于当季的农作物会变成枯株，而耕地仍保持耕作状态。用镰刀清理这些枯株即可。如果你想获得收成，请在当季内收割存活的镰刀作物。\n\n仍属于当季的作物会继续生长。跨季节作物包括远古水果、咖啡豆、玉米、向日葵和小麦。夏 28 处于任何生长阶段的小麦在秋 1 都会继续保留，其下方的肥料也会留存。如果你想让肥料和耕地保留到秋季，可以把完全成熟的小麦留到秋 1。如果你想在秋季前获得小麦产物以及 40% 的干草掉落几率，就在夏季收获它。\n\n[温室](https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164)修好后，那里的作物可以在一年中的任何时间种植、生长和收获。它们仍然需要浇水，包括在雨天。可再生的作物在换季时不会死亡。多次收获作物和肥料会一直保留，直到你将其移除。巨大作物无法在温室中生长。关于在该房间种植什么的挑选方法，请参阅[星露谷温室种什么](/zh/what-to-grow-in-greenhouse-stardew)。\n\n## 特殊收获规则：巨大作物与棚架\n\n### 用斧头收获 3×3 巨大作物\n\n处于 3×3 范围内的花椰菜、甜瓜、南瓜、霜花瓜和齐瓜可以形成巨大作物。当左上角的作物完全成熟且浇过水时，就有可能形成。使用任意斧头收获。砍击三次即可收获，掉落 15 到 21 个普通品质物品。巨大作物在换季时不会死亡，因此那三下砍击可以随时进行。巨大作物无法在温室、室内花盆或姜岛上生长。\n\n### 在无法通行的棚架作物间走动\n\n青豆、啤酒花和葡萄需要棚架。在作物枯萎前你无法穿过该地块，因此请在每株植物旁留出一格供你站立采摘。青豆在首次收获后每 3 天需要再次使用该站立地块。只要植株存活，啤酒花和葡萄同样会阻挡通行。\n\n在[星露谷农场规划器](https://stardewvalleyplanner.art)上规划作物行，并在每个棚架旁保留站立地块。该规划器可以布置农作物并检查覆盖范围。\n",
+  "bodyHash": "ec8b60fc7e99ac1c18b566bdd3594edc29f524d5cc6d3470625ef506f772c024",
+  "seo": {
+    "title": "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
+    "h1": "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
+    "description": "站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。",
+    "slug": "how-to-harvest-stardew-valley",
+    "faq": null,
+    "schemaType": "Article",
+    "author": "星露谷规划器团队",
+    "topic": "星露谷物语指南",
+    "readTimeMinutes": 7,
+    "featured": false,
+    "datePublished": null,
+    "publicPath": "/zh/how-to-harvest-stardew-valley",
+    "canonicalUrl": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+    "cover": {
+      "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "alt": "农场插画：耕地中的带叶作物旁放着一箱橙色块根，三个南瓜与一把锄头，成排的黄色秸秆旁配有镰刀与藤蔓棚架，以及一座窗台摆着植物的棕顶建筑。",
+      "width": 1672,
+      "height": 941,
+      "textInImage": false
+    },
+    "figure": {
+      "alt": "星露谷物语收获操作图解：防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米和纤维使用左键或 C 键配镰刀，巨大作物使用斧头，加上棚架与换季规则。",
+      "caption": "示意图：星露谷物语农作物收获方式，包括防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米与纤维使用镰刀挥击，以及巨大作物使用斧头、阻挡通行的棚架与第 28 天换季规则。",
+      "visibleText": [
+        "农作物收获方式",
+        "徒手采摘",
+        "防风草",
+        "检查 / 执行操作",
+        "右键或 X",
+        "按住收获脚下格",
+        "镰刀挥击",
+        "羽衣甘蓝、小麦、苋菜",
+        "未碾米、纤维",
+        "左键或 C",
+        "1.6 铱镰刀：耕地收获",
+        "巨大作物",
+        "斧头砍 3 下",
+        "掉落 15–21 个，换季不枯",
+        "棚架",
+        "青豆、啤酒花",
+        "葡萄",
+        "通道被阻挡",
+        "第 28 天",
+        "过季即枯萎",
+        "温室",
+        "全年可种"
+      ],
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+      "width": 1672,
+      "height": 941
+    }
+  },
+  "publicReferences": [
+    {
+      "id": "zh-steam-parsnip-right-click",
+      "label": "Steam 社区讨论：防风草怎么采摘",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
+      "appliesTo": {
+        "quote": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-wiki-kale",
+      "label": "星露谷物语维基：羽衣甘蓝",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "appliesTo": {
+        "quote": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-amaranth",
+      "label": "星露谷物语维基：苋菜",
+      "url": "https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043",
+      "appliesTo": {
+        "quote": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-wheat",
+      "label": "星露谷物语维基：小麦",
+      "url": "https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731",
+      "appliesTo": {
+        "quote": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-unmilled-rice",
+      "label": "星露谷物语维基：未碾米",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "appliesTo": {
+        "quote": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-fiber-seeds",
+      "label": "星露谷物语维基：纤维种子",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "appliesTo": {
+        "quote": "站在成熟的防风草旁[点击右键](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/)。防风草不需要镰刀。[羽衣甘蓝](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)、[苋菜](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043)、[小麦](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731)、[未碾米](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)和[纤维种子](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)则需要用镰刀收割。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-forum-x-click",
+      "label": "星露谷物语论坛：PC 键位与手机",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/",
+      "appliesTo": {
+        "quote": "在 PC 上，站在成熟防风草旁的格子上按下鼠标右键。点击一下即可收获。[X 键映射为相同的点击操作](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/)，因此按 X 键也能收获。",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-wiki-controls",
+      "label": "星露谷物语维基：控制",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "默认 [PC 控制键位](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)将右键或 X 键绑定为“检查 / 执行操作”（Check / Do Action），将左键或 C 键绑定为“使用工具或放置物品”（Use tool or place item）。你可以在“选项”菜单中重新绑定每个快捷键。这里的名称皆为默认值。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-crops-seeds",
+      "label": "星露谷物语维基：农作物",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "左键可将[种子与肥料](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)放到已耕地块上。点击一下覆盖一格。想要处理多个地块时，按住右键或左键移动即可。播种和施肥不需要工具，也不消耗体力。采摘成熟的防风草始终使用右键或 X 键。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL. This citation supports planting and fertilizing, not the harvest button."
+    },
+    {
+      "id": "zh-wiki-scythe",
+      "label": "星露谷物语维基：镰刀",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "appliesTo": {
+        "quote": "开局时你拥有一把[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)。挥动镰刀不消耗体力。它能割草、杂草、小树苗和苔藓，还可以当作轻微伤害的武器挥击。铁匠无法升级它。从 1.6 版本开始，力竭倒下（死亡）不再会从物品栏中失去初始镰刀或金镰刀。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-golden-scythe",
+      "label": "星露谷物语维基：金镰刀",
+      "url": "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051",
+      "appliesTo": {
+        "quote": "[金镰刀](https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051)取自采石场矿洞中的雕像。它在 1.4 版本中引入。相比初始镰刀，它的作用范围更大，割掉该范围内所有草的几率更高，每次割草有 75% 的几率获得干草，且伤害为 13 点而非 1 到 3 点。",
+        "occurrence": 1
+      },
+      "versionNote": "Body states this scythe was introduced in 1.4. Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-wiki-iridium-scythe",
+      "label": "星露谷物语维基：铱镰刀",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "appliesTo": {
+        "quote": "[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)在 1.6 版本中引入。领取耕种精通后即可获得。它可以用来收获任何作物。挥动一次即可收集其范围内耕地上生长的物品，包括普通农作物、室内花盆中的作物、大葱以及野生种子长成的采集物。其范围比金镰刀更大。每次割草获得干草的几率为 100%，伤害为 20 点而非 13 点。",
+        "occurrence": 1
+      },
+      "versionNote": "Body states this scythe was introduced in 1.6. Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-changelog-1-6-9",
+      "label": "星露谷物语 1.6.9 更新说明",
+      "url": "https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/",
+      "appliesTo": {
+        "quote": "在 [1.6.9](https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/) 中，使用铱镰刀时也能触发“采集者”（Gatherer）双倍收获采集物的几率。室内花盆里的采集作物不再总是出低品质且不给经验。用铱镰刀收割采集作物会提供经验，并享受采集等级带来的品质提升。",
+        "occurrence": 1
+      },
+      "versionNote": "Official 1.6.9 changelog."
+    },
+    {
+      "id": "zh-wiki-parsnip",
+      "label": "星露谷物语维基：防风草",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "appliesTo": {
+        "quote": "生长天数不计算播种当天。第 1 天播种的 5 天作物在第 6 天可以收获。[防风草](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123)需要 4 天。春季第 1 天种下一株并每天浇水：它在春季第 5 天成熟。当天点击右键即可收获。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-site-last-day-to-plant",
+      "label": "星露谷最晚播种日",
+      "url": "/zh/last-day-to-plant-stardew",
+      "appliesTo": {
+        "quote": "如果第一次收获必须在换季前完成，可以在[星露谷最晚播种日](/zh/last-day-to-plant-stardew)中计算最晚安全播种日。",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-wiki-greenhouse",
+      "label": "星露谷物语维基：温室",
+      "url": "https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164",
+      "appliesTo": {
+        "quote": "[温室](https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164)修好后，那里的作物可以在一年中的任何时间种植、生长和收获。它们仍然需要浇水，包括在雨天。可再生的作物在换季时不会死亡。多次收获作物和肥料会一直保留，直到你将其移除。巨大作物无法在温室中生长。关于在该房间种植什么的挑选方法，请参阅[星露谷温室种什么](/zh/what-to-grow-in-greenhouse-stardew)。",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "zh-site-greenhouse-crops",
+      "label": "星露谷温室种什么",
+      "url": "/zh/what-to-grow-in-greenhouse-stardew",
+      "appliesTo": {
+        "quote": "[温室](https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164)修好后，那里的作物可以在一年中的任何时间种植、生长和收获。它们仍然需要浇水，包括在雨天。可再生的作物在换季时不会死亡。多次收获作物和肥料会一直保留，直到你将其移除。巨大作物无法在温室中生长。关于在该房间种植什么的挑选方法，请参阅[星露谷温室种什么](/zh/what-to-grow-in-greenhouse-stardew)。",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-site-planner",
+      "label": "星露谷规划器",
+      "url": "https://stardewvalleyplanner.art",
+      "appliesTo": {
+        "quote": "在[星露谷农场规划器](https://stardewvalleyplanner.art)上规划作物行，并在每个棚架旁保留站立地块。该规划器可以布置农作物并检查覆盖范围。",
+        "occurrence": 1
+      }
+    }
+  ],
+  "publicRequirements": {
+    "route": {
+      "locale": "zh-CN",
+      "publicPath": "/zh/how-to-harvest-stardew-valley",
+      "canonicalUrl": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"
+    },
+    "registry": {
+      "author": "星露谷规划器团队",
+      "topic": "星露谷物语指南",
+      "readTimeMinutes": 7,
+      "featured": false,
+      "datePublished": null
+    },
+    "schema": {
+      "type": "Article",
+      "faqPage": false
+    },
+    "faq": null,
+    "cta": {
+      "existingBodyLinks": [
+        {
+          "href": "/zh/last-day-to-plant-stardew",
+          "label": "星露谷最晚播种日"
+        },
+        {
+          "href": "/zh/what-to-grow-in-greenhouse-stardew",
+          "label": "星露谷温室种什么"
+        },
+        {
+          "href": "https://stardewvalleyplanner.art",
+          "label": "星露谷农场规划器"
+        }
+      ]
+    },
+    "cover": {
+      "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "alt": "农场插画：耕地中的带叶作物旁放着一箱橙色块根，三个南瓜与一把锄头，成排的黄色秸秆旁配有镰刀与藤蔓棚架，以及一座窗台摆着植物的棕顶建筑。",
+      "width": 1672,
+      "height": 941,
+      "format": "webp",
+      "sha256": "8558f5b08e0c3e890ceddfcffb7104ed0a0fb0380dedec4108beed46220b81d8",
+      "avifSha256": "ccd28749dfd7047666d8bcbf8410aa929a060e660cc882d3814ef74d6dec19cd"
+    },
+    "figures": [
+      {
+        "id": "harvest-methods",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+        "avif": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+        "alt": "星露谷物语收获操作图解：防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米和纤维使用左键或 C 键配镰刀，巨大作物使用斧头，加上棚架与换季规则。",
+        "caption": "示意图：星露谷物语农作物收获方式，包括防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米与纤维使用镰刀挥击，以及巨大作物使用斧头、阻挡通行的棚架与第 28 天换季规则。",
+        "visibleText": [
+          "农作物收获方式",
+          "徒手采摘",
+          "防风草",
+          "检查 / 执行操作",
+          "右键或 X",
+          "按住收获脚下格",
+          "镰刀挥击",
+          "羽衣甘蓝、小麦、苋菜",
+          "未碾米、纤维",
+          "左键或 C",
+          "1.6 铱镰刀：耕地收获",
+          "巨大作物",
+          "斧头砍 3 下",
+          "掉落 15–21 个，换季不枯",
+          "棚架",
+          "青豆、啤酒花",
+          "葡萄",
+          "通道被阻挡",
+          "第 28 天",
+          "过季即枯萎",
+          "温室",
+          "全年可种"
+        ],
+        "width": 1672,
+        "height": 941,
+        "loading": "lazy",
+        "format": "webp",
+        "sha256": "450f78bb5aefcc6dda6826cb9fcda8a2af45f9778e077b49012596dbb38394f2",
+        "avifSha256": "d918433c39793cf8f455281b4ba4606749eff17d68d7c6d682183f07f5e33d6a"
+      }
+    ]
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "UTF-8 JSON of locale, country, body, bodyHash, seo, publicReferences, publicRequirements with sort_keys and separators (',', ':')",
+    "digest": "cf037ddc15bd0c601c9b5209226fd530c9745cc319ea8d2655874aca9393ad76",
+    "sourceEnglishBodyHash": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+    "status": "title_passed",
+    "frozen": true,
+    "freezePublicBlogHandoff": true,
+    "eBodyReview": "PASS",
+    "eTitleReview": "PASS",
+    "eTranslationReview": "PASS",
+    "eTranslationSeoSha256": "44fda49e69a3e9e6d6984b50075bfaa1eed0cd72ccdf87d4425ba2d55e97aab5",
+    "mediaVerified": true,
+    "userReview": "not_started",
+    "pageAssembly": "not_started"
+  }
+}

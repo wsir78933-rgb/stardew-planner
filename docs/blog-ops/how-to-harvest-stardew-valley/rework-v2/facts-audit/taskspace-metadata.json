@@ -1,0 +1,96 @@
+{
+  "taskSpaceId": 115,
+  "generatedAt": "2026-10-12T23:55:19.491Z",
+  "userAgent": "ego-browser (Chromium)",
+  "purpose": "Facts audit for how-to-harvest-stardew-valley rework-v2",
+  "revisions": {
+    "Crops": {
+      "pageId": 345,
+      "title": "Crops",
+      "revisions": [
+        {
+          "revid": 193979,
+          "parentid": 193978,
+          "timestamp": "2026-08-13T15:27:11Z"
+        }
+      ]
+    },
+    "Controls": {
+      "pageId": 1391,
+      "title": "Controls",
+      "revisions": [
+        {
+          "revid": 192481,
+          "parentid": 192480,
+          "timestamp": "2026-04-17T19:33:58Z"
+        }
+      ]
+    },
+    "Kale": {
+      "pageId": 1822,
+      "title": "Kale",
+      "revisions": [
+        {
+          "revid": 192520,
+          "parentid": 191759,
+          "timestamp": "2026-04-23T09:56:16Z"
+        }
+      ]
+    },
+    "Scythe": {
+      "pageId": 2706,
+      "title": "Scythe",
+      "revisions": [
+        {
+          "revid": 171696,
+          "parentid": 168518,
+          "timestamp": "2024-05-26T20:28:24Z"
+        }
+      ]
+    },
+    "Golden Scythe": {
+      "pageId": 9557,
+      "title": "Golden Scythe",
+      "revisions": [
+        {
+          "revid": 191051,
+          "parentid": 174459,
+          "timestamp": "2026-02-06T16:18:54Z"
+        }
+      ]
+    },
+    "Unmilled Rice": {
+      "pageId": 9689,
+      "title": "Unmilled Rice",
+      "revisions": [
+        {
+          "revid": 194130,
+          "parentid": 194028,
+          "timestamp": "2026-08-29T22:09:58Z"
+        }
+      ]
+    },
+    "Powdermelon": {
+      "pageId": 15027,
+      "title": "Powdermelon",
+      "revisions": [
+        {
+          "revid": 192034,
+          "parentid": 191740,
+          "timestamp": "2026-04-01T01:39:00Z"
+        }
+      ]
+    },
+    "Iridium Scythe": {
+      "pageId": 15192,
+      "title": "Iridium Scythe",
+      "revisions": [
+        {
+          "revid": 186836,
+          "parentid": 186725,
+          "timestamp": "2025-06-05T17:25:34Z"
+        }
+      ]
+    }
+  }
+}

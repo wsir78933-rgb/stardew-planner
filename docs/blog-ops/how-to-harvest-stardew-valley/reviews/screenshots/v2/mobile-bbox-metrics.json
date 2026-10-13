@@ -1,0 +1,67 @@
+{
+  "taskSpaceId": 109,
+  "deviceMetrics": {
+    "width": 390,
+    "height": 844,
+    "dpr": 3
+  },
+  "initialObservationNote": "Initial first-load viewport capture without explicit scroll/decode rendered unpainted border due to lazy-load staging; after explicit scrollIntoView + img.decode() + paint sync, full 22-label illustration renders completely.",
+  "en": {
+    "url": "http://127.0.0.1:3004/how-to-harvest-stardew-valley",
+    "pathname": "/how-to-harvest-stardew-valley",
+    "docClientWidth": 390,
+    "docScrollWidth": 390,
+    "figRect": {
+      "x": 16,
+      "y": 263.5078125,
+      "width": 358,
+      "height": 316.7734375
+    },
+    "imgRect": {
+      "x": 16,
+      "y": 263.5078125,
+      "width": 358,
+      "height": 201.375
+    },
+    "naturalWidth": 1672,
+    "naturalHeight": 941,
+    "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+    "figcaptionText": "Schematic: Stardew Valley crop harvest methods, with Right-Click or X for a parsnip, a scythe swing for kale, wheat, amaranth, unmilled rice, and fiber, plus an axe for giant crops, blocked trellises, and the day-28 season change.",
+    "screenshot": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/reviews/screenshots/v2/en-mobile-viewport-after-paint.png"
+  },
+  "zh": {
+    "url": "http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley",
+    "pathname": "/zh/how-to-harvest-stardew-valley",
+    "docClientWidth": 390,
+    "docScrollWidth": 390,
+    "figRect": {
+      "x": 16,
+      "y": 274.1484375,
+      "width": 358,
+      "height": 295.7734375
+    },
+    "imgRect": {
+      "x": 16,
+      "y": 274.1484375,
+      "width": 358,
+      "height": 201.375
+    },
+    "naturalWidth": 1672,
+    "naturalHeight": 941,
+    "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+    "figcaptionText": "示意图：星露谷物语农作物收获方式，包括防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米与纤维使用镰刀挥击，以及巨大作物使用斧头、阻挡通行的棚架与第 28 天换季规则。",
+    "screenshot": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/reviews/screenshots/v2/zh-mobile-viewport-after-paint.png"
+  },
+  "navigation": {
+    "enToZh": {
+      "from": "/how-to-harvest-stardew-valley",
+      "to": "/zh/how-to-harvest-stardew-valley",
+      "success": true
+    },
+    "zhToEn": {
+      "from": "/zh/how-to-harvest-stardew-valley",
+      "to": "/how-to-harvest-stardew-valley",
+      "success": true
+    }
+  }
+}

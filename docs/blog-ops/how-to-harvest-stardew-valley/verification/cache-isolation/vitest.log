@@ -1,0 +1,10 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ✓ tests/blog/blog-post-registry.test.ts (19 tests) 5ms
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  23:27:56
+   Duration  1.18s (transform 504ms, setup 0ms, collect 862ms, tests 5ms, environment 0ms, prepare 54ms)
+

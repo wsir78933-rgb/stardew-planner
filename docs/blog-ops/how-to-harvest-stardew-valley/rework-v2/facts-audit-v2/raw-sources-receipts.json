@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "generatedAt": "2026-10-13T00:00:33.503Z",
+    "taskSpaceId": 115,
+    "auditVersion": "v2-corrected",
+    "environment": "Single worktree /Users/wusir/orca/workspaces/stardew planner/博客-2",
+    "principlesEnforced": [
+      "Explicit sourceURL, actual GET/TaskSpace, timestamp, and exact source quote",
+      "Strict supports vs not-supported boundary",
+      "Explicit labeling of inferences vs direct facts",
+      "Retraction of unverified source-code claims and unbacked assertions",
+      "Distinction between Community Wiki recommended terms and uninspected game binaries"
+    ]
+  },
+  "facts": [
+    {
+      "id": "FACT-01",
+      "topic": "PC 普通作物徒手收获（防风草）",
+      "sourceUrl": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "sourceType": "Steam 社区讨论 (Steam Community Discussions)",
+      "retrievedAt": "2026-10-12T22:50:00Z",
+      "exactQuote": "The problem is... You don't NEED the scythe for parsnips. You need the scythe for amaranth or wheat. For ANY other crop, you need to be standing next to it and rightclick it.",
+      "supports": "成熟防风草不需要镰刀；站在旁边右键点击即可收获。",
+      "notSupported": "该贴泛化的'For ANY other crop'（漏提了羽衣甘蓝/甘蓝菜、未碾米等镰刀作物）；未提及左键是否可用；未证明右键是唯一安全键。",
+      "derivation": "结合 Controls 页面（revid 192481）'Right-Click, X: Check/Do Action'，推导确认右键与 X 键属于通用交互键。"
+    },
+    {
+      "id": "FACT-02",
+      "topic": "PC 连续走动采摘机制（长按右键/X）",
+      "sourceUrl": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "sourceType": "Stardew Valley Forums (官方社区论坛)",
+      "retrievedAt": "2026-10-12T22:51:00Z",
+      "exactQuote": "Or the direction button and right click. (X is automatically mapped to right click) If you hold right click with the mouse not near your character, you'll automatically plant seed and harvest on the tile you're standing on, and then you just have to walk around over your crops to plant and harvest your field.",
+      "supports": "在 PC 上按住右键且光标不挨着角色，走过农田会自动采收脚下地块的作物；手中拿着种子时长按会同时播种；X 键映射到右键。",
+      "notSupported": "社区维基未在 Crops 页面记载此连续走动采收技巧（Controls 历史仅记载 1.4 对酿酒桶/腌酱桶长按）；未在来源中证明'X 键完全不受光标干扰'；未在来源中提及'手持食物弹出食用窗口'。",
+      "derivation": "该操作为玩家一手实操经验描述，可作为 PC 端推荐操作技巧写入正文，但不宣称为官方维基条目规则。"
+    },
+    {
+      "id": "FACT-03",
+      "topic": "需要镰刀收割的作物示例",
+      "sourceUrl": "https://stardewvalleywiki.com/Scythe",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 2706,
+      "revisionId": 171696,
+      "retrievedAt": "2026-10-13T07:55:00Z",
+      "exactQuote": "It is also required for harvesting certain crops (i.e., Amaranth, Kale, Wheat).",
+      "supports": "初始镰刀用于收割特定农作物，页面举例为 Amaranth（苋菜）、Kale（甘蓝菜）、Wheat（小麦）。另在各自独立页面核验到 Unmilled Rice（未碾米，revid 194130）与 Fiber Seeds（纤维种子，revid 193587）使用镰刀收获。",
+      "notSupported": "来源未声称这 5 种是全部封闭列表（未穷尽游戏全部数据）；未说明普通镰刀或金镰刀挥过防风草是否造成伤害或破坏。",
+      "derivation": "正文应明确将这些列为'需要镰刀收割的作物'，不宣称已穷尽游戏代码。"
+    },
+    {
+      "id": "FACT-04",
+      "topic": "铱镰刀收割全部作物",
+      "sourceUrl": "https://stardewvalleywiki.com/Iridium_Scythe",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 26038,
+      "revisionId": 186836,
+      "retrievedAt": "2026-10-13T07:53:36Z",
+      "exactQuote": "Can be used to harvest any crops... Can harvest items grown on tilled soil within its swing range, including regular crops, those grown in Garden Pots, Spring Onions, and other forageables grown from Wild Seeds.",
+      "supports": "1.6 引入的铱镰刀（耕种精通获取）可收割其挥舞范围内耕地上的任何作物，包括常规作物、室内花盆作物、大葱与野生种子采集品。",
+      "notSupported": "来源未提及'可隔空跨过棚架远程收割'；未包含战斗伤害对比与草料转化数值对收获教程的核心必要性。",
+      "derivation": "作为后期收割工具升级呈现，剔除无关战斗伤害数据。"
+    },
+    {
+      "id": "FACT-05",
+      "topic": "主机控制器与移动端控制边界",
+      "sourceUrl": "https://stardewvalleywiki.com/Controls",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 1391,
+      "revisionId": 192481,
+      "retrievedAt": "2026-10-13T07:46:20Z",
+      "exactQuote": "Xbox: A Check / Do Action / Use Cursor, X Use Tool. Playstation: Cross Check / Do Action / Use Cursor, Square Use Tool. Switch: A Check / Do Action / Use Cursor, Y Use Tool. Mobile Controls (revid 189843): Tap on items to action them... The one exception with tools is the scythe, which must be selected to use.",
+      "supports": "手柄大地图通用按键映射定义（Check/Do Action 与 Use Tool）；移动端默认点击操作，且镰刀是唯一必须先选中的工具。",
+      "notSupported": "社区维基未为手柄设立专门的'农作物收获指南'；不能声称手柄按键是专门为收获农作物设计的键位。",
+      "derivation": "明确向读者说明手柄收获依托的是各平台的 Check/Do Action 交互键，不捏造专用收获按键。"
+    },
+    {
+      "id": "FACT-06",
+      "topic": "作物成熟视觉识别（生长阶段图表）",
+      "sourceUrl": "https://stardewvalleywiki.com/Parsnip 及 https://stardewvalleywiki.com/Pumpkin",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "retrievedAt": "2026-10-13T07:58:54Z",
+      "exactQuote": "Parsnip 阶段表: Stage 1 (1天), Stage 2 (1天), Stage 3 (1天), Stage 4 (1天), Harvest (总计4天，对应图片 Parsnip_Stage_5.png); Pumpkin 阶段表: Stage 1 (1天), Stage 2 (2天), Stage 3 (3天), Stage 4 (4天), Stage 5 (3天), Harvest (总计13天，对应图片 Pumpkin_Stage_6.png)。",
+      "supports": "作物成熟依据生长日历完成后的最终阶段（Harvest 阶段）外观精灵图判定。",
+      "notSupported": "来源文本未提及是否存在'绿色加号'光标；来源未用文字描述果实颜色细节。",
+      "derivation": "撤回'游戏绝对没有绿色加号'的断言；建议 C 引导读者依据植株生长达到最终 Harvest 阶段精灵图（或尝试交互）来确认成熟。"
+    },
+    {
+      "id": "FACT-07",
+      "topic": "生长天数计算与缺水顺延",
+      "sourceUrl": "https://stardewvalleywiki.com/Crops",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 345,
+      "revisionId": 193979,
+      "retrievedAt": "2026-10-13T07:50:15Z",
+      "exactQuote": "Crops must be watered every day for maximum growth. If unwatered for a day, a crop will not grow. Unwatered crops do not die, but they will not grow either. If a seed is planted into unwatered soil and not watered the same day, it will not grow that night.",
+      "supports": "作物每天需浇水以推进生长；缺水不死亡但生长顺延一天；播种当天不浇水当夜不生长。",
+      "notSupported": "该段未断言'成熟单次作物停止浇水后永久保留不会死'（仅说明未浇水作物不生长也不死亡）。",
+      "derivation": "严格按原文说明缺水导致生长停滞的机制，不外推未记载的成熟后无限期存活规则。"
+    },
+    {
+      "id": "FACT-08",
+      "topic": "巨大作物生成与采伐规则",
+      "sourceUrl": "https://stardewvalleywiki.com/Crops#Giant_Crops",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 345,
+      "revisionId": 193979,
+      "retrievedAt": "2026-10-13T07:48:19Z",
+      "exactQuote": "Cauliflowers, Melons, Pumpkins, Powdermelons and Qi Fruits planted in a 3x3 pattern can randomly combine into a giant crop. Giant crops drop 15–21 normal-quality items when harvested with any axe, taking three hits. At the start of each day, every possible 3x3 grid of crops (including overlaps) has a 1% chance to grow into a giant crop as long as the top left crop is fully-grown and watered, and all constituent crops are of the same type... Giant crops don't die at change of season like other crops...",
+      "supports": "5 种作物可形成巨大作物（花椰菜、甜瓜、南瓜、霜瓜、齐瓜）；必须为 3x3 且全部为同一种作物；1.6 判定条件为左上角作物完全成熟且浇过水；每日早晨有 1% 概率形成；必须使用任意斧头砍击 3 下采收；掉落 15-21 个普通品质产物；换季不枯萎；不能在温室、室内花盆或姜岛生长。",
+      "notSupported": "未提及祝尼魔是否能收割（Crops#Giant_Crops 文本中未包含祝尼魔）。",
+      "derivation": "1% 概率为生成机制事实；采收指南重点应放在斧头砍 3 下、15-21 产物及同种 3x3 布局上，生长概率细节可由布局 B 决定精简与否。"
+    },
+    {
+      "id": "FACT-09",
+      "topic": "棚架作物不可通行与通道留空",
+      "sourceUrl": "https://stardewvalleywiki.com/Crops#Trellis_Crops",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 345,
+      "revisionId": 193979,
+      "retrievedAt": "2026-10-13T07:47:10Z",
+      "exactQuote": "Some crops require a trellis, which cannot be walked through, so they require an appropriate crop layout to be reachable. Trellis crops can be walked through once they are dead. The available trellis crops are Green Bean, Hops, and Grape.",
+      "supports": "棚架作物（青豆、啤酒花、葡萄）在枯死前无法通行，需要合理的作物布局以便能够采摘到；枯死后可穿过。",
+      "notSupported": "本段未提及祝尼魔可以穿过棚架；未提及铱镰刀可以远距离隔空收割。",
+      "derivation": "撤回将祝尼魔穿棚架和铱镰刀远收作为该段已证实事实的说法；正文聚焦于保留站立通道（如双行留路）。"
+    },
+    {
+      "id": "FACT-10",
+      "topic": "换季枯萎与跨季作物",
+      "sourceUrl": "https://stardewvalleywiki.com/Crops",
+      "sourceType": "Stardew Valley Wiki (社区维基)",
+      "pageId": 345,
+      "revisionId": 193979,
+      "retrievedAt": "2026-10-13T07:50:15Z",
+      "exactQuote": "On the 1st of each season, all crops that are no longer in season will wither and die, leaving behind a dead crop. When a dead crop is left behind at the start of a season it will keep the soil it was planted on tilled, which can reduce the amount of manual tilling and watering that needs to be done at the start of a season. Dead crops can be removed with a scythe. Multi-season crops that are still in season (i.e., corn planted in summer when transitioning into fall) will not wither and will simply continue to grow.",
+      "supports": "换季第 1 天不再当季的作物枯死为枯株；枯株可用镰刀清除；枯株能保留下方的已耕土壤；仍处于当季的跨季作物不会枯萎继续生长。",
+      "notSupported": "该段未包含'枯株能完整保留肥料'的文字说明（该文字可能在肥料部分，不在本段）。",
+      "derivation": "严格按原文强调换季及时收获成熟作物，以及可用镰刀清理枯株保留已耕地。"
+    },
+    {
+      "id": "FACT-11",
+      "topic": "中文社区维基条目标题与推荐译名边界",
+      "sourceUrl": "https://zh.stardewvalleywiki.com/mediawiki/api.php",
+      "sourceType": "Stardew Valley Wiki 中文站 (社区维基 MediaWiki API)",
+      "retrievedAt": "2026-10-13T07:54:47Z",
+      "exactQuote": "API 返回有效条目: 甘蓝菜 (ID 791), 霜瓜 (ID 2666), 稻苗 (ID 1367), 上古水果 (ID 393), 小桶 (ID 982), 罐头瓶 (ID 439), 宝石复制机 (ID 1010), 金色的镰刀 (ID 1066), 采石场矿井 (ID 1118)。'羽衣甘蓝'、'霜花瓜'、'米苗'、'远古水果'、'酿造桶'、'腌酱桶'、'复制晶石机'均为 missing (ID < 0)。",
+      "supports": "中文维基社区条目正名与跨语言链接确凿指向'甘蓝菜'、'霜瓜'、'稻苗'、'上古水果'、'小桶'、'罐头瓶'、'宝石复制机'、'金色的镰刀'、'采石场矿井'。文章采用这些译名能最大程度契合中文玩家和维基检索习惯。",
+      "notSupported": "未解包核对游戏原版二进制本地化文件（XNB / JSON strings），不得断言'官方游戏字符串已核验'；不能断言游戏内绝对不存在未收录条目的其他翻译版本。",
+      "derivation": "明确定义为'社区中文维基条目正名/推荐译名'，供中文翻译角色 T 修正，避免断言解包官方字符串。"
+    }
+  ]
+}

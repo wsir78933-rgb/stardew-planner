@@ -1,0 +1,60 @@
+command: pnpm build --webpack
+cwd: /Users/wusir/orca/workspaces/stardew planner/博客-2
+started_at: 2026-10-12T18:38:44Z
+next_env_sha_before: 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc  next-env.d.ts
+
+> @ build /Users/wusir/orca/workspaces/stardew planner/博客-2
+> next build --webpack
+
+▲ Next.js 16.3.0 (webpack)
+✓ Running next.config.ts took 13ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.2s
+  Running TypeScript ...
+  Finished TypeScript in 6.9s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/66) ...
+  Generating static pages using 11 workers (16/66) 
+  Generating static pages using 11 workers (32/66) 
+  Generating static pages using 11 workers (49/66) 
+✓ Generating static pages using 11 workers (66/66) in 308ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├   /[slug]
+│ ├ ● /carpenter-stardew
+│ ├ ● /where-is-robin-stardew-valley
+│ ├ ● /stardew-valley-npc
+│ └ ● [+22 more paths]
+├ ○ /blog
+├ ○ /blog/archive
+├ ○ /contact
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+├ ○ /terms
+├ ○ /zh
+├   /zh/[slug]
+│ ├ ● /zh/carpenter-stardew
+│ ├ ● /zh/where-is-robin-stardew-valley
+│ ├ ● /zh/stardew-valley-npc
+│ └ ● [+22 more paths]
+├ ○ /zh/blog
+├ ○ /zh/blog/archive
+├ ○ /zh/contact
+├ ○ /zh/privacy
+└ ○ /zh/terms
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+WEBPACK_BUILD_EXIT:0
+finished_at: 2026-10-12T18:39:00Z
+next_env_sha_after: 1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b  next-env.d.ts

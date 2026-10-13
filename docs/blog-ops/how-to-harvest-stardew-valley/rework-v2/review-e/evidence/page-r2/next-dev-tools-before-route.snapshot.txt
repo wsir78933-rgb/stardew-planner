@@ -1,0 +1,48 @@
+[p1 "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe" | space "harvest page r2 acceptance"(151): 1 managed, 0 untracked — p1* "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"]
+root
+  container
+    container
+      container "Stardew Valley Farm Planner"
+        anchor [ref=238, url=http://127.0.0.1:3004/]
+          image
+          text "Stardew Valley Farm Planner"
+        container
+          anchor "Blog" [ref=239, loc=css:a[aria-label="Blog"], url=http://127.0.0.1:3004/blog]
+            text "Blog"
+          container
+            button "Language" [ref=240, loc=css:button[aria-label="Language"]]
+              text "Language"
+              text "▾"
+            anchor "Open planner" [ref=241, loc=css:a[aria-label="Open planner"], url=http://127.0.0.1:3004/#planner]
+              text "Open planner"
+      container
+        paragraph
+          text "Stardew Valley Guides"
+        heading
+          text "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"
+        paragraph
+          text "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."
+        paragraph
+          text "By"
+          text "Stardew Valley Planner Team"
+          text "·"
+          text "6 min read"
+        image
+    container
+      menu "Next.js Dev Tools Items" [ref=243, loc=role:menu[name="Next.js Dev Tools Items"]]
+        container
+          menuitem [ref=244]
+            text "Route"
+            text "Static"
+          container [ref=245]
+            text "Bundler"
+            anchor [ref=246, loc=href:https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack, url=https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack]
+              text "Webpack"
+          menuitem [ref=247]
+            text "Route Info"
+            svg_root
+        menuitem [ref=248]
+          text "Preferences"
+          svg_root
+      button "Close Next.js Dev Tools" [ref=242, loc=css:button[aria-label="Close Next.js Dev Tools"]]
+        svg_root

@@ -1,0 +1,13 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ❯ tests/blog/blog-sources.test.tsx (2 tests | 1 failed) 276ms
+   ✓ renders source links in a grouped Item list with an optional checked label 14ms
+   × preserves each localized article's source links, labels, notes, and order 262ms
+     → expected '<section class="blog-sources"><div da…' to contain '<p class="blog-sources__checked">The …'
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  22:18:33
+   Duration  2.17s (transform 689ms, setup 0ms, collect 1.37s, tests 276ms, environment 0ms, prepare 76ms)
+

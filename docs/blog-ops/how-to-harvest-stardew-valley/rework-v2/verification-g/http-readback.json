@@ -1,0 +1,92 @@
+[
+  {
+    "path": "/how-to-harvest-stardew-valley",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "byteSize": 65419,
+    "sha256": "0ebc0083e5ca0c823c77cec109f19794ff635106acce181029119997fc6d5f89",
+    "newEnglishTitle": true,
+    "oldEnglishTitle": false,
+    "newChineseTitle": false,
+    "oldChineseTitle": false,
+    "matureCrops": true,
+    "trellisPaths": true,
+    "enMethods": false,
+    "zhMethods": false,
+    "concernedApe": true,
+    "lazy": true,
+    "cover": true,
+    "lastDayEn": true,
+    "lastDayZh": false,
+    "greenhouseEn": true,
+    "greenhouseZh": false,
+    "plannerEn": true,
+    "plannerZh": false
+  },
+  {
+    "path": "/zh/how-to-harvest-stardew-valley",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "byteSize": 61996,
+    "sha256": "faf7f856a545dc0fb98da40432a3ae73b2a1f69182b8fbf97b0330cba96823a1",
+    "newEnglishTitle": false,
+    "oldEnglishTitle": false,
+    "newChineseTitle": true,
+    "oldChineseTitle": false,
+    "matureCrops": true,
+    "trellisPaths": true,
+    "enMethods": false,
+    "zhMethods": false,
+    "concernedApe": true,
+    "lazy": true,
+    "cover": true,
+    "lastDayEn": false,
+    "lastDayZh": true,
+    "greenhouseEn": false,
+    "greenhouseZh": true,
+    "plannerEn": false,
+    "plannerZh": true
+  },
+  {
+    "path": "/blog/how-to-harvest-stardew-valley-cover.webp",
+    "status": 200,
+    "contentType": "image/webp",
+    "byteSize": 479250,
+    "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574"
+  },
+  {
+    "path": "/blog/how-to-harvest-stardew-valley-cover.avif",
+    "status": 200,
+    "contentType": "image/avif",
+    "byteSize": 237604,
+    "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+    "status": 200,
+    "contentType": "image/webp",
+    "byteSize": 267644,
+    "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+    "status": 200,
+    "contentType": "image/avif",
+    "byteSize": 143638,
+    "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+    "status": 200,
+    "contentType": "image/webp",
+    "byteSize": 223784,
+    "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+    "status": 200,
+    "contentType": "image/avif",
+    "byteSize": 113557,
+    "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a"
+  }
+]

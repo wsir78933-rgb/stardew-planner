@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "locale": "en",
+  "country": "US",
+  "slug": "how-to-harvest-stardew-valley",
+  "title": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+  "h1": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+  "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+  "titleEqualsH1": true,
+  "topic": "Stardew Valley Guides",
+  "author": "Stardew Valley Planner Team",
+  "readTimeMinutes": 6,
+  "featured": false,
+  "datePublished": null,
+  "publicPath": "/how-to-harvest-stardew-valley",
+  "canonicalUrl": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+  "bodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "rawMechanicalWords": 1148,
+  "eligibleWords": 1107,
+  "lengthClass": "short",
+  "schemaType": "Article",
+  "faq": null,
+  "status": "pending_title_review",
+  "freezePublicBlogHandoff": false,
+  "cover": {
+    "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+    "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+    "width": 1672,
+    "height": 941,
+    "alt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+    "caption": "Evening on a farm: orange pumpkins fill a tilled bed along the dirt paths, with wooden trellis rows beside that bed. ConcernedApe, Stardew Valley press screenshot.",
+    "creditName": "ConcernedApe",
+    "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png"
+  },
+  "figures": [
+    {
+      "id": "media-mature-crops",
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+      "caption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    },
+    {
+      "id": "media-trellis-paths",
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+      "caption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    }
+  ]
+}

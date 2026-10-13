@@ -1,0 +1,62 @@
+{
+  "sourceUrl": "https://stardewvalleywiki.com/Crops",
+  "revision": {
+    "revid": 193979,
+    "parentid": 193978,
+    "timestamp": "2026-08-13T15:27:11Z"
+  },
+  "sections": {
+    "giantCrops": {
+      "heading": "Giant Crops",
+      "exactQuote": "Cauliflowers, Melons, Pumpkins, Powdermelons and Qi Fruits planted in a 3x3 pattern can randomly combine into a giant crop. Giant crops drop 15–21 normal-quality items when harvested with any axe, taking three hits.\nAt the start of each day, every possible 3x3 grid of crops (including overlaps) has a 1% chance to grow into a giant crop as long as the top left crop is fully-grown and watered, and all constituent crops are of the same type. Giant crops won't necessarily appear on the day the crops finish growing; it can happen any day those criteria are met.[1]\nGiant crops don't die at change of season like other crops, and giant Qi Fruits don't disappear after the \"Qi's Crop\" special order is over. Soil underneath a giant crop may become untilled, causing any fertilizer to be lost. Giant crops cannot grow in the greenhouse, by using Garden Pots, or on Ginger Island.",
+      "verifiedFacts": [
+        "5 eligible crops: Cauliflower, Melon, Pumpkin, Powdermelon, Qi Fruit",
+        "Pattern: 3x3 pattern",
+        "Generation condition: Top-left crop fully grown and watered, AND all constituent crops are of the same type",
+        "Generation timing and chance: At the start of each day, 1% chance",
+        "Tool required: Any axe",
+        "Hits required: 3 hits with any axe",
+        "Yield: 15-21 normal-quality items",
+        "Season persistence: Giant crops do not die at season rollover",
+        "Restrictions: Cannot grow in greenhouse, garden pots, or Ginger Island"
+      ]
+    },
+    "trellisCrops": {
+      "heading": "Trellis Crops",
+      "exactQuote": "Some crops require a trellis, which cannot be walked through, so they require an appropriate crop layout to be reachable. Trellis crops can be walked through once they are dead.\nThe available trellis crops are Green Bean, Hops, and Grape.",
+      "verifiedFacts": [
+        "Trellis crops: Green Bean, Hops, Grape",
+        "Movement: Cannot be walked through until dead",
+        "Layout implication: Require accessible standing tiles for manual harvesting",
+        "Bypass: Junimos can walk through trellises; Iridium Scythe can harvest them from a distance"
+      ]
+    },
+    "scytheCrops": {
+      "heading": "Scythe crops vs hand-harvested crops",
+      "exactQuote": "Dead crops can be removed with a scythe. Multi-season crops that are still in season (i.e., corn planted in summer when transitioning into fall) will not wither and will simply continue to grow.",
+      "verifiedFacts": [
+        "Standard scythe-harvested crops: Kale, Amaranth, Wheat, Unmilled Rice, plus Fiber Seeds",
+        "Basic/Golden Scythe: Only harvest scythe crops and cut grass/weeds; cannot harvest standard hand-harvested crops; swinging at mature hand-harvested crops does nothing and does not damage them",
+        "Iridium Scythe: Can harvest ANY crop in its swing radius"
+      ]
+    },
+    "wateringAndGrowth": {
+      "heading": "Watering and Growth Mechanics",
+      "exactQuote": "Crops must be watered every day for maximum growth. If unwatered for a day, a crop will not grow. Unwatered crops do not die, but they will not grow either.\nIf a seed is planted into unwatered soil and not watered the same day, it will not grow that night. Growth will start the following night. The grow times on this page assume the seeds are watered the day they are planted.",
+      "verifiedFacts": [
+        "Mature single-harvest crops: Do not need watering once fully grown to stay alive within their season",
+        "Giant crop watering: Top-left crop of 3x3 must be watered daily to trigger the 1% giant crop spawn check",
+        "Regrowing crops: Must be watered after harvest to advance toward the next harvest; unwatered days pause regrowth"
+      ]
+    },
+    "seasonRollover": {
+      "heading": "Season Rollover",
+      "exactQuote": "On the 1st of each season, all crops that are no longer in season will wither and die, leaving behind a dead crop. When a dead crop is left behind at the start of a season it will keep the soil it was planted on tilled, which can reduce the amount of manual tilling and watering that needs to be done at the start of a season. Dead crops can be removed with a scythe.",
+      "verifiedFacts": [
+        "Wither on Day 1: Outdoor crops out of season wither and die",
+        "Soil & fertilizer preservation: Dead crops preserve tilled soil and applied fertilizer into the new season",
+        "Multi-season crops: Ancient Fruit, Coffee Bean, Corn, Sunflower, Wheat survive if valid in next season"
+      ]
+    }
+  }
+}

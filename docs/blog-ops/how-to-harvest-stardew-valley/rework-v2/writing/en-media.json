@@ -1,0 +1,62 @@
+{
+  "version": "rework-v2",
+  "locale": "en",
+  "slug": "how-to-harvest-stardew-valley",
+  "bodySha256NfcLf": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "publicUrlStatus": "suggested until F binds the public files and recomputes the hash",
+  "images": [
+    {
+      "id": "media-cover",
+      "role": "cover",
+      "inBody": false,
+      "sourceOriginalPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media-sources/originals/press-farm-evening.png",
+      "sourceUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png",
+      "sourceSha256": "7f10276f5cb0ebbbc36a5133b4fa217c24fa89f61b21c1e15d082cbbac523496",
+      "decodedViewPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-cover.webp.png",
+      "suggestedPublicUrl": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "suggestedPublicAvif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+      "caption": "Evening on a farm: orange pumpkins fill a tilled bed along the dirt paths, with wooden trellis rows beside that bed. ConcernedApe, Stardew Valley press screenshot.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png"
+    },
+    {
+      "id": "media-mature-crops",
+      "role": "body-figure",
+      "inBody": true,
+      "bodyAnchor": "How to Tell When Crops Are Ready to Harvest",
+      "sourceOriginalPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media-sources/originals/press-multiplayer-2.png",
+      "sourceUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "sourceSha256": "b34cd47bb2e8fde6cb886154ad4027a63e222f0e29d17bd4d2fbf68d8caf9ab7",
+      "decodedViewPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-mature-crops.webp.png",
+      "suggestedPublicUrl": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+      "suggestedPublicAvif": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+      "caption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, Stardew Valley press screenshot.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    },
+    {
+      "id": "media-trellis-paths",
+      "role": "body-figure",
+      "inBody": true,
+      "bodyAnchor": "Maintaining Reachable Paths Around Trellis Crops",
+      "sourceOriginalPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media-sources/originals/press-multiplayer-2.png",
+      "sourceUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "sourceSha256": "b34cd47bb2e8fde6cb886154ad4027a63e222f0e29d17bd4d2fbf68d8caf9ab7",
+      "decodedViewPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-trellis-paths.webp.png",
+      "suggestedPublicUrl": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "suggestedPublicAvif": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+      "caption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, Stardew Valley press screenshot.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    }
+  ]
+}

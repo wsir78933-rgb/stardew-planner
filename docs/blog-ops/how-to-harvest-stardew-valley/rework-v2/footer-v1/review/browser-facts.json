@@ -1,0 +1,1275 @@
+{
+  "taskSpace": {
+    "spaceId": 151,
+    "name": "harvest page r2 acceptance",
+    "ownership": "agent",
+    "page": "p1",
+    "finished": false
+  },
+  "locales": [
+    {
+      "locale": "en",
+      "viewports": {
+        "desktop": {
+          "initialShot": "screenshots/en-1440-faq-initial.png",
+          "openShot": "screenshots/en-1440-faq-open.png",
+          "reclosedShot": "screenshots/en-1440-faq-reclosed.png",
+          "initialClosed": true,
+          "answers": [
+            {
+              "index": 0,
+              "state": "open",
+              "question": "How do you harvest a regular mature crop by hand on PC?",
+              "answerText": "Stand beside the ripe crop and right-click it, or press X. X is mapped to the same Check/Do Action as right-click. A hand harvest does not need a tool swing.",
+              "answerHeight": 71,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 1,
+              "state": "open",
+              "question": "Which crops need a regular scythe, and how is the 1.6 iridium scythe different?",
+              "answerText": "Amaranth, kale, wheat, unmilled rice, and fiber seeds need a scythe. Right-click or X does not harvest them. The iridium scythe is the 1.6 Farming Mastery scythe, and within its swing it harvests crops grown on tilled soil, including regular crops.",
+              "answerHeight": 80,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 2,
+              "state": "open",
+              "question": "How do you harvest a giant crop?",
+              "answerText": "Use any axe. Face the giant crop and strike it three times with the tool button (left-click or C on PC).",
+              "answerHeight": 46,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 3,
+              "state": "open",
+              "question": "Does a missed watering day delay the harvest?",
+              "answerText": "An unwatered day pauses growth and does not kill the crop, so maturity is one morning later for each dry day. Fiber seeds do not need daily watering to grow, but they still need a scythe when fully grown.",
+              "answerHeight": 98,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 4,
+              "state": "open",
+              "question": "Why do trellis crops need a neighboring standing tile?",
+              "answerText": "You cannot walk through a living trellis, so green bean, hops, and grape each need a neighboring tile you can stand on. A solid block leaves the interior plants unreachable.",
+              "answerHeight": 71,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            }
+          ],
+          "sourcesShot": "screenshots/en-1440-sources.png"
+        },
+        "mobile": {
+          "initialShot": "screenshots/en-375-faq-initial.png",
+          "openShot": "screenshots/en-375-faq-open.png",
+          "reclosedShot": "screenshots/en-375-faq-reclosed.png",
+          "initialClosed": true,
+          "answers": [
+            {
+              "index": 0,
+              "state": "open",
+              "question": "How do you harvest a regular mature crop by hand on PC?",
+              "answerText": "Stand beside the ripe crop and right-click it, or press X. X is mapped to the same Check/Do Action as right-click. A hand harvest does not need a tool swing.",
+              "answerHeight": 124,
+              "triggerWidth": 343,
+              "triggerHeight": 80
+            },
+            {
+              "index": 1,
+              "state": "open",
+              "question": "Which crops need a regular scythe, and how is the 1.6 iridium scythe different?",
+              "answerText": "Amaranth, kale, wheat, unmilled rice, and fiber seeds need a scythe. Right-click or X does not harvest them. The iridium scythe is the 1.6 Farming Mastery scythe, and within its swing it harvests crops grown on tilled soil, including regular crops.",
+              "answerHeight": 177,
+              "triggerWidth": 343,
+              "triggerHeight": 80
+            },
+            {
+              "index": 2,
+              "state": "open",
+              "question": "How do you harvest a giant crop?",
+              "answerText": "Use any axe. Face the giant crop and strike it three times with the tool button (left-click or C on PC).",
+              "answerHeight": 98,
+              "triggerWidth": 343,
+              "triggerHeight": 58
+            },
+            {
+              "index": 3,
+              "state": "open",
+              "question": "Does a missed watering day delay the harvest?",
+              "answerText": "An unwatered day pauses growth and does not kill the crop, so maturity is one morning later for each dry day. Fiber seeds do not need daily watering to grow, but they still need a scythe when fully grown.",
+              "answerHeight": 150,
+              "triggerWidth": 343,
+              "triggerHeight": 80
+            },
+            {
+              "index": 4,
+              "state": "open",
+              "question": "Why do trellis crops need a neighboring standing tile?",
+              "answerText": "You cannot walk through a living trellis, so green bean, hops, and grape each need a neighboring tile you can stand on. A solid block leaves the interior plants unreachable.",
+              "answerHeight": 124,
+              "triggerWidth": 343,
+              "triggerHeight": 80
+            }
+          ],
+          "sourcesShot": "screenshots/en-375-sources.png"
+        }
+      },
+      "head": {
+        "url": "http://127.0.0.1:3004/how-to-harvest-stardew-valley",
+        "htmlLang": "en",
+        "title": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+        "h1Count": 1,
+        "h1": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+        "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+        "metaDescription": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+        "canonical": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+        "alternates": [
+          {
+            "hreflang": "en",
+            "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+          },
+          {
+            "hreflang": "zh-CN",
+            "href": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"
+          },
+          {
+            "hreflang": "x-default",
+            "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+          }
+        ],
+        "robots": "index, follow",
+        "openGraph": {
+          "title": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+          "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+          "url": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+          "type": "article",
+          "image": "https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp",
+          "locale": null
+        },
+        "twitter": {
+          "card": "summary",
+          "title": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+          "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+          "image": "https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"
+        },
+        "jsonLd": [
+          {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+            "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+            "url": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+            "inLanguage": "en",
+            "isPartOf": {
+              "@id": "https://stardewvalleyplanner.art/#website"
+            }
+          }
+        ],
+        "images": [
+          {
+            "alt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+            "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+            "naturalWidth": 1672,
+            "naturalHeight": 941,
+            "caption": null
+          },
+          {
+            "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+            "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+            "naturalWidth": 1672,
+            "naturalHeight": 941,
+            "caption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, Stardew Valley press screenshot."
+          },
+          {
+            "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+            "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+            "naturalWidth": 1672,
+            "naturalHeight": 941,
+            "caption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, Stardew Valley press screenshot."
+          }
+        ],
+        "emptyAltImages": [
+          "/favicon.png"
+        ]
+      },
+      "headGrade": {
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "hreflang": true,
+        "robots": true,
+        "htmlLang": true,
+        "openGraphPresent": true,
+        "twitterPresent": true,
+        "articleType": true,
+        "headline": true,
+        "jsonUrl": true,
+        "inLanguage": true,
+        "imageMissing": true,
+        "authorMissing": true,
+        "dateMissing": true,
+        "noFaqPage": true,
+        "coverAlt": true,
+        "bodyAlts": true,
+        "coverCaptionAbsent": true
+      },
+      "cta": {
+        "url": "http://127.0.0.1:3004/#planner",
+        "hash": "#planner",
+        "plannerPresent": true,
+        "plannerVisible": true,
+        "plannerWidth": 1434,
+        "plannerHeight": 900,
+        "screenshot": "screenshots/en-1440-planner.png"
+      },
+      "sourceClick": {
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979&__cf_chl_rt_tk=REDACTEDsZwpw6SMj4Yide07Q6s-1791902429-1.0.1.1-N0vDYvkYIJ0cOM5wKXpsv8jLk3ntxrMA_8GZhgUQc8I",
+        "title": "Just a moment...",
+        "bodyStart": "",
+        "screenshot": "screenshots/en-1440-source-destination.png",
+        "requestedHref": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "externalContentClaimed": false
+      },
+      "overlay": {
+        "portalCount": 1,
+        "texts": []
+      },
+      "imageDecode": [
+        {
+          "selector": "img[src='/blog/how-to-harvest-stardew-valley-cover.webp']",
+          "ok": true
+        },
+        {
+          "selector": "img[src='/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp']",
+          "ok": true
+        },
+        {
+          "selector": "img[src='/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp']",
+          "ok": true
+        }
+      ],
+      "footerDesktop": {
+        "order": [
+          {
+            "name": "faq",
+            "present": true,
+            "top": 5686
+          },
+          {
+            "name": "cta",
+            "present": true,
+            "top": 6024
+          },
+          {
+            "name": "sources",
+            "present": true,
+            "top": 6174
+          }
+        ],
+        "monotonicallyDown": true,
+        "counts": {
+          "h1": 1,
+          "faqList": 1,
+          "faqTrigger": 5,
+          "cta": 1,
+          "sourceLinks": 4,
+          "articlePlannerHrefs": 1
+        },
+        "faqHeading": "How to Harvest Stardew Valley FAQ",
+        "sourcesHeading": "Sources",
+        "ctaHref": "/#planner",
+        "ctaText": "Open planner",
+        "sourceHrefs": [
+          "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+          "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+          "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+          "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+        ],
+        "sourceLabels": [
+          "Crops on the Stardew Valley Wiki",
+          "Controls on the Stardew Valley Wiki",
+          "Scythe on the Stardew Valley Wiki",
+          "Iridium Scythe on the Stardew Valley Wiki"
+        ],
+        "touch": {
+          "triggers": [
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            }
+          ],
+          "cta": {
+            "width": 107,
+            "height": 44,
+            "pass44": true
+          },
+          "sources": [
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            }
+          ]
+        },
+        "contrast": [
+          {
+            "name": "faq trigger",
+            "ratio": 16.24,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "faq answer",
+            "ratio": 6.63,
+            "color": "rgb(82, 96, 78)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "cta heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "24px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "cta action",
+            "ratio": 13.54,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(201 251 69)",
+            "fontSize": "14px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "sources heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "32px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "source label",
+            "ratio": 16.37,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "source icon decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "source chevron decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          }
+        ],
+        "visual": {
+          "cardBackground": "rgb(241, 247, 231)",
+          "cardRadius": "5px",
+          "itemBackground": "rgb(255, 255, 255)",
+          "itemRadius": "5px",
+          "hasLinkIcon": true,
+          "hasChevron": true,
+          "ctaBackground": "rgb(241, 247, 231)",
+          "ctaRadius": "5px",
+          "actionBackground": "rgb(201, 251, 69)",
+          "actionColor": "rgb(28, 33, 27)"
+        },
+        "overflow": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "documentScrollWidth": 1434,
+          "documentClientWidth": 1434,
+          "offenders": []
+        },
+        "leak": {
+          "canaryPresent": false,
+          "docsBlogOpsPresent": false,
+          "operationStorePresent": false,
+          "bodyHashPresent": false
+        }
+      },
+      "footerMobile": {
+        "order": [
+          {
+            "name": "faq",
+            "present": true,
+            "top": 8214
+          },
+          {
+            "name": "cta",
+            "present": true,
+            "top": 8638
+          },
+          {
+            "name": "sources",
+            "present": true,
+            "top": 8834
+          }
+        ],
+        "monotonicallyDown": true,
+        "counts": {
+          "h1": 1,
+          "faqList": 1,
+          "faqTrigger": 5,
+          "cta": 1,
+          "sourceLinks": 4,
+          "articlePlannerHrefs": 1
+        },
+        "faqHeading": "How to Harvest Stardew Valley FAQ",
+        "sourcesHeading": "Sources",
+        "ctaHref": "/#planner",
+        "ctaText": "Open planner",
+        "sourceHrefs": [
+          "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+          "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+          "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+          "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+        ],
+        "sourceLabels": [
+          "Crops on the Stardew Valley Wiki",
+          "Controls on the Stardew Valley Wiki",
+          "Scythe on the Stardew Valley Wiki",
+          "Iridium Scythe on the Stardew Valley Wiki"
+        ],
+        "touch": {
+          "triggers": [
+            {
+              "width": 343,
+              "height": 80,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 80,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 80,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 80,
+              "pass44": true
+            }
+          ],
+          "cta": {
+            "width": 107,
+            "height": 44,
+            "pass44": true
+          },
+          "sources": [
+            {
+              "width": 309,
+              "height": 68,
+              "pass44": true
+            },
+            {
+              "width": 309,
+              "height": 68,
+              "pass44": true
+            },
+            {
+              "width": 309,
+              "height": 68,
+              "pass44": true
+            },
+            {
+              "width": 309,
+              "height": 68,
+              "pass44": true
+            }
+          ]
+        },
+        "contrast": [
+          {
+            "name": "faq trigger",
+            "ratio": 16.24,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "faq answer",
+            "ratio": 6.63,
+            "color": "rgb(82, 96, 78)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "cta heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "18.4px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "cta action",
+            "ratio": 13.54,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(201 251 69)",
+            "fontSize": "14px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "sources heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "24.8px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "source label",
+            "ratio": 16.37,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "source icon decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "source chevron decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          }
+        ],
+        "visual": {
+          "cardBackground": "rgb(241, 247, 231)",
+          "cardRadius": "5px",
+          "itemBackground": "rgb(255, 255, 255)",
+          "itemRadius": "5px",
+          "hasLinkIcon": true,
+          "hasChevron": true,
+          "ctaBackground": "rgb(241, 247, 231)",
+          "ctaRadius": "5px",
+          "actionBackground": "rgb(201, 251, 69)",
+          "actionColor": "rgb(28, 33, 27)"
+        },
+        "overflow": {
+          "innerWidth": 375,
+          "innerHeight": 812,
+          "documentScrollWidth": 375,
+          "documentClientWidth": 375,
+          "offenders": []
+        },
+        "leak": {
+          "canaryPresent": false,
+          "docsBlogOpsPresent": false,
+          "operationStorePresent": false,
+          "bodyHashPresent": false
+        }
+      }
+    },
+    {
+      "locale": "zh",
+      "viewports": {
+        "desktop": {
+          "initialShot": "screenshots/zh-1440-faq-initial.png",
+          "openShot": "screenshots/zh-1440-faq-open.png",
+          "reclosedShot": "screenshots/zh-1440-faq-reclosed.png",
+          "initialClosed": true,
+          "answers": [
+            {
+              "index": 0,
+              "state": "open",
+              "question": "在 PC 上，普通成熟作物怎么徒手收？",
+              "answerText": "站在成熟作物旁边，右键点它，或者按 X。X 和右键映射成同一个 Check/Do Action。用手收，不需要挥工具。",
+              "answerHeight": 71,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 1,
+              "state": "open",
+              "question": "哪些作物要用普通镰刀，1.6 的铱镰刀有什么不同？",
+              "answerText": "苋菜、甘蓝菜、小麦、未碾米和纤维种子必须用镰刀收。右键或按 X 都收不下来。铱镰刀是 1.6 耕种精通给的那把镰刀，挥过的范围内能收耕地上长出来的作物，普通作物也包括在内。",
+              "answerHeight": 13,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 2,
+              "state": "open",
+              "question": "巨大作物怎么收？",
+              "answerText": "用任意一把斧头。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。",
+              "answerHeight": 13,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 3,
+              "state": "open",
+              "question": "漏浇水会推迟成熟吗？",
+              "answerText": "有一天没浇，这一天就不长，但没浇水的作物不会死；每干一天，成熟就晚一个早晨。纤维种子生长不需要每天浇水，但完全长成以后仍然要用镰刀收。",
+              "answerHeight": 71,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            },
+            {
+              "index": 4,
+              "state": "open",
+              "question": "棚架作物为什么必须留邻近站位？",
+              "answerText": "活着的棚架走不穿，所以青豆、啤酒花和葡萄每株都要有一格能站在旁边。棚架如果种成实心一块，里面的植株就浇不到，也收不到。",
+              "answerHeight": 71,
+              "triggerWidth": 704,
+              "triggerHeight": 58
+            }
+          ],
+          "sourcesShot": "screenshots/zh-1440-sources.png"
+        },
+        "mobile": {
+          "initialShot": "screenshots/zh-375-faq-initial.png",
+          "openShot": "screenshots/zh-375-faq-open.png",
+          "reclosedShot": "screenshots/zh-375-faq-reclosed.png",
+          "initialClosed": true,
+          "answers": [
+            {
+              "index": 0,
+              "state": "open",
+              "question": "在 PC 上，普通成熟作物怎么徒手收？",
+              "answerText": "站在成熟作物旁边，右键点它，或者按 X。X 和右键映射成同一个 Check/Do Action。用手收，不需要挥工具。",
+              "answerHeight": 98,
+              "triggerWidth": 343,
+              "triggerHeight": 58
+            },
+            {
+              "index": 1,
+              "state": "open",
+              "question": "哪些作物要用普通镰刀，1.6 的铱镰刀有什么不同？",
+              "answerText": "苋菜、甘蓝菜、小麦、未碾米和纤维种子必须用镰刀收。右键或按 X 都收不下来。铱镰刀是 1.6 耕种精通给的那把镰刀，挥过的范围内能收耕地上长出来的作物，普通作物也包括在内。",
+              "answerHeight": 23,
+              "triggerWidth": 343,
+              "triggerHeight": 80
+            },
+            {
+              "index": 2,
+              "state": "open",
+              "question": "巨大作物怎么收？",
+              "answerText": "用任意一把斧头。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。",
+              "answerHeight": 25,
+              "triggerWidth": 343,
+              "triggerHeight": 58
+            },
+            {
+              "index": 3,
+              "state": "open",
+              "question": "漏浇水会推迟成熟吗？",
+              "answerText": "有一天没浇，这一天就不长，但没浇水的作物不会死；每干一天，成熟就晚一个早晨。纤维种子生长不需要每天浇水，但完全长成以后仍然要用镰刀收。",
+              "answerHeight": 124,
+              "triggerWidth": 343,
+              "triggerHeight": 58
+            },
+            {
+              "index": 4,
+              "state": "open",
+              "question": "棚架作物为什么必须留邻近站位？",
+              "answerText": "活着的棚架走不穿，所以青豆、啤酒花和葡萄每株都要有一格能站在旁边。棚架如果种成实心一块，里面的植株就浇不到，也收不到。",
+              "answerHeight": 98,
+              "triggerWidth": 343,
+              "triggerHeight": 58
+            }
+          ],
+          "sourcesShot": "screenshots/zh-375-sources.png"
+        }
+      },
+      "head": {
+        "url": "http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley",
+        "htmlLang": "zh-CN",
+        "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+        "h1Count": 1,
+        "h1": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+        "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+        "metaDescription": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+        "canonical": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+        "alternates": [
+          {
+            "hreflang": "en",
+            "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+          },
+          {
+            "hreflang": "zh-CN",
+            "href": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"
+          },
+          {
+            "hreflang": "x-default",
+            "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+          }
+        ],
+        "robots": "index, follow",
+        "openGraph": {
+          "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+          "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+          "url": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+          "type": "article",
+          "image": "https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp",
+          "locale": null
+        },
+        "twitter": {
+          "card": "summary",
+          "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+          "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+          "image": "https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"
+        },
+        "jsonLd": [
+          {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+            "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+            "url": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+            "inLanguage": "zh-CN",
+            "isPartOf": {
+              "@id": "https://stardewvalleyplanner.art/#website"
+            }
+          }
+        ],
+        "images": [
+          {
+            "alt": "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+            "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+            "naturalWidth": 1672,
+            "naturalHeight": 941,
+            "caption": null
+          },
+          {
+            "alt": "土路旁的耕地上长着饱满的橙色南瓜。",
+            "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+            "naturalWidth": 1672,
+            "naturalHeight": 941,
+            "caption": "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，星露谷物语新闻素材截图。"
+          },
+          {
+            "alt": "两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。",
+            "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+            "naturalWidth": 1672,
+            "naturalHeight": 941,
+            "caption": "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，星露谷物语新闻素材截图。"
+          }
+        ],
+        "emptyAltImages": [
+          "/favicon.png"
+        ]
+      },
+      "headGrade": {
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "hreflang": true,
+        "robots": true,
+        "htmlLang": true,
+        "openGraphPresent": true,
+        "twitterPresent": true,
+        "articleType": true,
+        "headline": true,
+        "jsonUrl": true,
+        "inLanguage": true,
+        "imageMissing": true,
+        "authorMissing": true,
+        "dateMissing": true,
+        "noFaqPage": true,
+        "coverAlt": true,
+        "bodyAlts": true,
+        "coverCaptionAbsent": true
+      },
+      "cta": {
+        "url": "http://127.0.0.1:3004/zh#planner",
+        "hash": "#planner",
+        "plannerPresent": true,
+        "plannerVisible": true,
+        "plannerWidth": 1409,
+        "plannerHeight": 266,
+        "screenshot": "screenshots/zh-1440-planner.png"
+      },
+      "sourceClick": {
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979&__cf_chl_rt_tk=REDACTEDsn5KQRjzL8WCEyNkIm1IuOAWGgbL5M",
+        "title": "Just a moment...",
+        "bodyStart": "",
+        "screenshot": "screenshots/zh-1440-source-destination.png",
+        "requestedHref": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "externalContentClaimed": false
+      },
+      "overlay": {
+        "portalCount": 1,
+        "texts": []
+      },
+      "imageDecode": [
+        {
+          "selector": "img[src='/blog/how-to-harvest-stardew-valley-cover.webp']",
+          "ok": true
+        },
+        {
+          "selector": "img[src='/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp']",
+          "ok": true
+        },
+        {
+          "selector": "img[src='/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp']",
+          "ok": true
+        }
+      ],
+      "footerDesktop": {
+        "order": [
+          {
+            "name": "faq",
+            "present": true,
+            "top": 4956
+          },
+          {
+            "name": "cta",
+            "present": true,
+            "top": 5294
+          },
+          {
+            "name": "sources",
+            "present": true,
+            "top": 5428
+          }
+        ],
+        "monotonicallyDown": true,
+        "counts": {
+          "h1": 1,
+          "faqList": 1,
+          "faqTrigger": 5,
+          "cta": 1,
+          "sourceLinks": 4,
+          "articlePlannerHrefs": 1
+        },
+        "faqHeading": "星露谷物语收作物常见问题",
+        "sourcesHeading": "来源",
+        "ctaHref": "/zh#planner",
+        "ctaText": "打开规划器",
+        "sourceHrefs": [
+          "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+          "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+          "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+          "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+        ],
+        "sourceLabels": [
+          "星露谷物语维基：作物",
+          "星露谷物语维基：操作",
+          "星露谷物语维基：镰刀",
+          "星露谷物语维基：铱镰刀"
+        ],
+        "touch": {
+          "triggers": [
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 704,
+              "height": 58,
+              "pass44": true
+            }
+          ],
+          "cta": {
+            "width": 92,
+            "height": 44,
+            "pass44": true
+          },
+          "sources": [
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 670,
+              "height": 56,
+              "pass44": true
+            }
+          ]
+        },
+        "contrast": [
+          {
+            "name": "faq trigger",
+            "ratio": 16.24,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "faq answer",
+            "ratio": 6.63,
+            "color": "rgb(82, 96, 78)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "cta heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "24px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "cta action",
+            "ratio": 13.54,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(201 251 69)",
+            "fontSize": "14px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "sources heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "32px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "source label",
+            "ratio": 16.37,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "source icon decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "source chevron decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          }
+        ],
+        "visual": {
+          "cardBackground": "rgb(241, 247, 231)",
+          "cardRadius": "5px",
+          "itemBackground": "rgb(255, 255, 255)",
+          "itemRadius": "5px",
+          "hasLinkIcon": true,
+          "hasChevron": true,
+          "ctaBackground": "rgb(241, 247, 231)",
+          "ctaRadius": "5px",
+          "actionBackground": "rgb(201, 251, 69)",
+          "actionColor": "rgb(28, 33, 27)"
+        },
+        "overflow": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "documentScrollWidth": 1434,
+          "documentClientWidth": 1434,
+          "offenders": []
+        },
+        "leak": {
+          "canaryPresent": false,
+          "docsBlogOpsPresent": false,
+          "operationStorePresent": false,
+          "bodyHashPresent": false
+        }
+      },
+      "footerMobile": {
+        "order": [
+          {
+            "name": "faq",
+            "present": true,
+            "top": 6286
+          },
+          {
+            "name": "cta",
+            "present": true,
+            "top": 6646
+          },
+          {
+            "name": "sources",
+            "present": true,
+            "top": 6819
+          }
+        ],
+        "monotonicallyDown": true,
+        "counts": {
+          "h1": 1,
+          "faqList": 1,
+          "faqTrigger": 5,
+          "cta": 1,
+          "sourceLinks": 4,
+          "articlePlannerHrefs": 1
+        },
+        "faqHeading": "星露谷物语收作物常见问题",
+        "sourcesHeading": "来源",
+        "ctaHref": "/zh#planner",
+        "ctaText": "打开规划器",
+        "sourceHrefs": [
+          "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+          "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+          "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+          "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+        ],
+        "sourceLabels": [
+          "星露谷物语维基：作物",
+          "星露谷物语维基：操作",
+          "星露谷物语维基：镰刀",
+          "星露谷物语维基：铱镰刀"
+        ],
+        "touch": {
+          "triggers": [
+            {
+              "width": 343,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 80,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 58,
+              "pass44": true
+            },
+            {
+              "width": 343,
+              "height": 58,
+              "pass44": true
+            }
+          ],
+          "cta": {
+            "width": 92,
+            "height": 44,
+            "pass44": true
+          },
+          "sources": [
+            {
+              "width": 309,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 309,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 309,
+              "height": 56,
+              "pass44": true
+            },
+            {
+              "width": 309,
+              "height": 56,
+              "pass44": true
+            }
+          ]
+        },
+        "contrast": [
+          {
+            "name": "faq trigger",
+            "ratio": 16.24,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "faq answer",
+            "ratio": 6.63,
+            "color": "rgb(82, 96, 78)",
+            "background": "rgb(253 255 248)",
+            "fontSize": "16px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "cta heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "18.4px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "cta action",
+            "ratio": 13.54,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(201 251 69)",
+            "fontSize": "14px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "sources heading",
+            "ratio": 14.97,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(241 247 231)",
+            "fontSize": "24.8px",
+            "fontWeight": "500"
+          },
+          {
+            "name": "source label",
+            "ratio": 16.37,
+            "color": "rgb(28, 33, 27)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "16px",
+            "fontWeight": "700"
+          },
+          {
+            "name": "source icon decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          },
+          {
+            "name": "source chevron decorative",
+            "ratio": 4.84,
+            "color": "rgb(95, 123, 29)",
+            "background": "rgb(255 255 255)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          }
+        ],
+        "visual": {
+          "cardBackground": "rgb(241, 247, 231)",
+          "cardRadius": "5px",
+          "itemBackground": "rgb(255, 255, 255)",
+          "itemRadius": "5px",
+          "hasLinkIcon": true,
+          "hasChevron": true,
+          "ctaBackground": "rgb(241, 247, 231)",
+          "ctaRadius": "5px",
+          "actionBackground": "rgb(201, 251, 69)",
+          "actionColor": "rgb(28, 33, 27)"
+        },
+        "overflow": {
+          "innerWidth": 375,
+          "innerHeight": 812,
+          "documentScrollWidth": 375,
+          "documentClientWidth": 375,
+          "offenders": []
+        },
+        "leak": {
+          "canaryPresent": false,
+          "docsBlogOpsPresent": false,
+          "operationStorePresent": false,
+          "bodyHashPresent": false
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "leftOn": {
+    "url": "http://127.0.0.1:3004/how-to-harvest-stardew-valley",
+    "viewport": "1440x900",
+    "taskSpaceFinished": false
+  }
+}
