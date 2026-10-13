@@ -1,0 +1,131 @@
+{
+  "query": "how to harvest stardew valley",
+  "localeRequested": "en",
+  "countryRequested": "US",
+  "observedAt": "2026-10-12T14:08:07Z",
+  "engine": "Google Search",
+  "access": "ego-browser task space 47, page p1",
+  "requestUrl": "https://www.google.com/search?q=how+to+harvest+stardew+valley&hl=en&gl=us&pws=0&num=10",
+  "finalUrl": "https://www.google.com/search?q=how+to+harvest+stardew+valley&hl=en&gl=us&pws=0&num=10",
+  "pageTitle": "how to harvest stardew valley - Google Search",
+  "captcha": false,
+  "consentWall": false,
+  "geoEvidence": {
+    "queryParameters": ["hl=en", "gl=us", "pws=0"],
+    "parameterIsNotFieldSerp": true,
+    "googleFooterText": "Results are not personalized. United States - From your IP address",
+    "interpretation": "This one sample was labeled by Google as United States from the browser IP, with personalization off. It is not a multi-city US field audit, and hl/gl alone would not have proved the location."
+  },
+  "browserNoise": "The result DOM also contained an AITDK extension link. Result titles below were taken from Google result blocks, not from that extension.",
+  "aiOverview": {
+    "present": true,
+    "useAsFact": false,
+    "reason": "Google's AI Overview is a generated summary. It is recorded only as a SERP feature. It claimed a left-click, A or X, or tap, and grouped rice with wheat and amaranth. Rice requiring a scythe matches the wiki pages opened later. The button claim does not.",
+    "snippetSeen": "To harvest crops in Stardew Valley, walk up to a mature crop and interact with it by left-clicking (PC), pressing A or X (consoles), or tapping (mobile)."
+  },
+  "webResultBlocksInOrder": [
+    {
+      "position": 1,
+      "type": "forum",
+      "title": "[Guide] Crop Farming for Beginners : r/StardewValley",
+      "url": "https://www.reddit.com/r/StardewValley/comments/48hf90/guide_crop_farming_for_beginners/",
+      "opened": "old.reddit.com page loaded. Title matched. The page said the post was archived and submitted 10 years ago. The post body was not extracted before the browser space closed, and a later JSON fetch returned HTTP 403.",
+      "questionItAddresses": "A beginner crop-farming guide, including when a plant can be harvested.",
+      "googleSnippetNotPageQuote": "When you put your mouse cursor over a plant and it has a green Plus symbol, you can harvest it.",
+      "limit": "About ten years old. Not a 1.6.15 control source. The plus-symbol sentence was seen in the Google snippet, not re-read from the post body."
+    },
+    {
+      "position": 2,
+      "type": "reference",
+      "title": "Crops",
+      "url": "https://stardewvalleywiki.com/Crops",
+      "opened": true,
+      "googleSnippetDate": "Aug 13, 2026",
+      "questionItAddresses": "How crops grow, when a season ends them, and how giant crops are harvested.",
+      "limit": "The page does not name the mouse or controller button that picks an ordinary crop."
+    },
+    {
+      "position": 3,
+      "type": "forum",
+      "title": "How to harvest and manage inventory in Stardew Valley?",
+      "url": "https://www.facebook.com/groups/svplayersandroid/posts/1177284207718844/",
+      "opened": false,
+      "cite": "Facebook · Stardew Valley Mobile Community · 10+ comments · 9 months ago",
+      "questionItAddresses": "A new mobile player asking how to harvest and manage inventory. Body not opened.",
+      "limit": "Group post. Not used as a game-rule source."
+    },
+    {
+      "position": 4,
+      "type": "video",
+      "title": "Stardew Valley Tutorial Farming",
+      "url": "https://www.youtube.com/watch?v=Qacv3Syq18E",
+      "opened": false,
+      "cite": "YouTube · Cherms McTerbin · 81.7K+ views · 10 years ago · 8:22",
+      "questionItAddresses": "A basic farming tutorial that the snippet says covers tilling, planting, watering, and harvesting.",
+      "limit": "Video not transcribed. Ten years old. Not used as a 1.6.15 control source."
+    },
+    {
+      "position": 5,
+      "type": "forum",
+      "title": "You don't have to harvest your crops right away right?",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/3113644379487657369/",
+      "opened": true,
+      "pageDate": "2021-01-19",
+      "googleSnippetDate": "Jan 12, 2024",
+      "dateConflict": "The Google snippet date does not match the page's posted date of January 19, 2021.",
+      "questionItAddresses": "Whether a ready crop dies if it is left until the next day, versus dying at a season change.",
+      "limit": "Player replies from 2021. One reply quotes an older giant-crop yield and a center-crop condition that do not match the Crops page read on 2026-10-12. Not used as current numbers."
+    },
+    {
+      "position": 6,
+      "type": "forum-suggestion",
+      "title": "New ways to harvest [Probably game breaking]",
+      "url": "http://forums.stardewvalley.net/threads/new-ways-to-harvest-probably-game-breaking.9526/",
+      "opened": false,
+      "cite": "Stardew Valley Forums · Game Suggestions · Nov 1, 2021",
+      "questionItAddresses": "A suggestion for new harvest tools, not instructions for the current game.",
+      "limit": "Snippet only. Not a how-to and not a current rule."
+    },
+    {
+      "position": 7,
+      "type": "forum",
+      "title": "Stardew Valley quick planting and harvesting tips?",
+      "url": "https://www.facebook.com/groups/svplayersandroid/posts/1208107541303177/",
+      "opened": false,
+      "cite": "Facebook · Stardew Valley Mobile Community · 2 comments · 5 months ago",
+      "questionItAddresses": "A mobile tip whose snippet is about cheap crops leaving tilled soil after a season change.",
+      "limit": "Body not opened. Not used as a game-rule source."
+    }
+  ],
+  "videosBesideTheWebResults": [
+    {
+      "title": "Stardew How To: Harvest Crops",
+      "url": "https://www.youtube.com/watch?v=M3XClOsPiIo",
+      "cite": "YouTube · Astral Bear Hug · Jan 21, 2025 · 3:10",
+      "snippetNotTranscript": "Harvesting crops is easy! Hover your cursor over a ready crop until it turns into a plus sign, then click."
+    },
+    {
+      "title": "The Better Way to Harvest Crops in Stardew Valley",
+      "url": "https://www.youtube.com/shorts/ncg9SKnp7jg",
+      "cite": "YouTube · Captain Canadia · Apr 5, 2023 · 0:31",
+      "snippetNotTranscript": "Holding the plant button while harvesting one at a time."
+    }
+  ],
+  "peopleAlsoAsk": [
+    "What happens at 2:00 am in Stardew Valley?",
+    "What happens if you don't harvest crops in Stardew Valley?",
+    "How do I know when my plants are ready to harvest in Stardew Valley?",
+    "Is there a faster way to harvest in Stardew Valley?"
+  ],
+  "relatedSearchesVisibleInFooter": [
+    "partially cut off in the extract: …st crops in stardew Valley mobile",
+    "How to harvest crops stardew valley switch",
+    "How to harvest stardew valley xbox",
+    "How to harvest stardew valley reddit",
+    "How to harvest stardew valley ps4",
+    "How to plant seeds in Stardew Valley mobile",
+    "How to harvest crops faster in stardew valley",
+    "How to harvest Stardew Valley ps5"
+  ],
+  "notClaimed": "This file is one Google sample. It is not labeled as the stable top five for every US searcher. Rank is not authority."
+}

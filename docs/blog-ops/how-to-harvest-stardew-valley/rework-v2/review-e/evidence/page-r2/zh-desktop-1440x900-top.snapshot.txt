@@ -1,0 +1,29 @@
+[p1 "星露谷物语怎么收作物：徒手、镰刀或斧头" | space "harvest page r2 acceptance"(151): 1 managed, 0 untracked — p1* "星露谷物语怎么收作物：徒手、镰刀或斧头"]
+root
+  container
+    container "星露谷物语农场规划器"
+      anchor [ref=58, url=http://127.0.0.1:3004/zh]
+        image
+        text "星露谷物语农场规划器"
+      container
+        anchor "博客" [ref=59, loc=css:a[aria-label="博客"], url=http://127.0.0.1:3004/zh/blog]
+          text "博客"
+        container
+          button "语言" [ref=60, loc=css:button[aria-label="语言"]]
+            text "语言"
+            text "▾"
+          anchor "打开规划器" [ref=61, loc=css:a[aria-label="打开规划器"], url=http://127.0.0.1:3004/zh#planner]
+            text "打开规划器"
+    container
+      paragraph
+        text "星露谷物语指南"
+      heading
+        text "星露谷物语怎么收作物：徒手、镰刀或斧头"
+      paragraph
+        text "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"
+      paragraph
+        text "作者："
+        text "星露谷规划器团队"
+        text "·"
+        text "阅读约 6 分钟"
+      image

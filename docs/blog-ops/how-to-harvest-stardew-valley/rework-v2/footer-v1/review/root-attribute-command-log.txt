@@ -1,0 +1,16 @@
+task task_ccaa5b98f77f
+dispatch ctx_1b169ff42ccc
+full HTML was not saved
+
+lsof -nP -iTCP:3004 -sTCP:LISTEN and lsof -a -p 44772 -d cwd
+exit 0
+listener node PID 44772
+cwd /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+node GET http://127.0.0.1:3004/zh, opening html/body attributes only
+exit 0
+stdout {"status":200,"contentType":"text/html; charset=utf-8","html":{"lang":"zh-CN"},"body":{"class":"__variable_8eaea4"}}
+
+ego-browser nodejs, resume TaskSpace 151 p1, goto http://127.0.0.1:3004/zh#planner, read documentElement and body attributes, return to http://127.0.0.1:3004/how-to-harvest-stardew-valley at 1440x900, task.finish not called
+exit 0
+stdout {"blocked":false,"space":{"spaceId":151,"name":"harvest page r2 acceptance","ownership":"agent"},"read":{"url":"http://127.0.0.1:3004/zh#planner","html":{"lang":"zh-CN"},"body":{"class":"__variable_8eaea4","monica-id":"ofpnmcalabcbjgholdjcjblkibolbppb","monica-version":"9.0.23"}},"readError":null,"leftOn":"http://127.0.0.1:3004/how-to-harvest-stardew-valley","restoreError":null,"taskSpaceFinished":false}

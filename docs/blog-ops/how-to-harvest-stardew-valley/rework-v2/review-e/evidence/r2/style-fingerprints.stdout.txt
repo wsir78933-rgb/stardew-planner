@@ -1,0 +1,21 @@
+=== SIX STYLE FINGERPRINTS & EDITORIAL PHRASES ===
+em_dash_and_en_dash_count: 0
+bold_occurrences_count: 4
+emoji_unicode_count: 0
+assistant_residue_detected: False
+generic_positive_ending_detected: False
+--- Editorial Phrase Counts ---
+documented: 0
+source-backed: 0
+without source support: 0
+class source: 0
+readback: 0
+verify the: 0
+verify your: 0
+this guide covers: 0
+as an ai: 0
+in this article: 0
+this is a planning scenario: 0
+not a universal ranking: 0
+this original character illustration: 0
+does not represent in-game: 0

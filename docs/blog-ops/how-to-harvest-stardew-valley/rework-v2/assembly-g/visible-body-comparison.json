@@ -1,0 +1,322 @@
+{
+  "english": {
+    "locale": "en",
+    "visibleBlockCount": 40,
+    "hrefs": [
+      "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "/",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "/last-day-to-plant-stardew",
+      "/what-to-grow-in-greenhouse-stardew"
+    ],
+    "lazyImageCount": 2,
+    "references": [
+      {
+        "id": "en-steam-parsnip-right-click",
+        "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-parsnip-stages",
+        "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-pumpkin-stages",
+        "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-blueberry-regrowth",
+        "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-crops-watering",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-controls-action",
+        "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-controls-tool",
+        "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-calendar-replant",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-forum-hold-right-click",
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-forum-x-mapped",
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-scythe-examples",
+        "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-kale",
+        "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-fiber-seeds",
+        "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-unmilled-rice",
+        "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-mobile-scythe",
+        "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-iridium-scythe",
+        "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-giant-crops",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-trellis",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-wiki-season-wither",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "en-press-multiplayer-2-mature",
+        "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "occurrence": 1,
+        "visibleQuoteCount": 2
+      },
+      {
+        "id": "en-press-multiplayer-2-trellis",
+        "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "occurrence": 2,
+        "visibleQuoteCount": 2
+      }
+    ]
+  },
+  "chinese": {
+    "locale": "zh-CN",
+    "visibleBlockCount": 40,
+    "hrefs": [
+      "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "/zh",
+      "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "/zh/last-day-to-plant-stardew",
+      "/zh/what-to-grow-in-greenhouse-stardew"
+    ],
+    "lazyImageCount": 2,
+    "references": [
+      {
+        "id": "zh-steam-parsnip-right-click",
+        "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-parsnip-stages",
+        "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-pumpkin-stages",
+        "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-blueberry-regrowth",
+        "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-crops-watering",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-controls-action",
+        "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-controls-tool",
+        "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-calendar-replant",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-forum-hold-right-click",
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-forum-x-mapped",
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-scythe-examples",
+        "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-kale",
+        "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-fiber-seeds",
+        "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-unmilled-rice",
+        "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-mobile-scythe",
+        "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-iridium-scythe",
+        "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-giant-crops",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-trellis",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-wiki-season-wither",
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "occurrence": 1,
+        "visibleQuoteCount": 1
+      },
+      {
+        "id": "zh-press-multiplayer-2-mature",
+        "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "occurrence": 1,
+        "visibleQuoteCount": 2
+      },
+      {
+        "id": "zh-press-multiplayer-2-trellis",
+        "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "occurrence": 2,
+        "visibleQuoteCount": 2
+      }
+    ]
+  }
+}

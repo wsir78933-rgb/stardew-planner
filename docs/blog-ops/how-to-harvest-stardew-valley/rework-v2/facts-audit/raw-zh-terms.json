@@ -1,0 +1,197 @@
+{
+  "retrievedAt": "2026-10-12T23:54:47.129Z",
+  "apiEndpoint": "https://zh.stardewvalleywiki.com/mediawiki/api.php",
+  "totalTermsChecked": 38,
+  "terms": {
+    "上古水果": {
+      "pageId": 393,
+      "title": "上古水果",
+      "exists": true
+    },
+    "罐头瓶": {
+      "pageId": 439,
+      "title": "罐头瓶",
+      "exists": true
+    },
+    "草莓": {
+      "pageId": 532,
+      "title": "草莓",
+      "exists": true
+    },
+    "啤酒花": {
+      "pageId": 533,
+      "title": "啤酒花",
+      "exists": true
+    },
+    "向日葵": {
+      "pageId": 605,
+      "title": "向日葵",
+      "exists": true
+    },
+    "大葱": {
+      "pageId": 621,
+      "title": "大葱",
+      "exists": true
+    },
+    "花椰菜": {
+      "pageId": 718,
+      "title": "花椰菜",
+      "exists": true
+    },
+    "镰刀": {
+      "pageId": 749,
+      "title": "镰刀",
+      "exists": true
+    },
+    "咖啡豆": {
+      "pageId": 765,
+      "title": "咖啡豆",
+      "exists": true
+    },
+    "防风草": {
+      "pageId": 780,
+      "title": "防风草",
+      "exists": true
+    },
+    "甘蓝菜": {
+      "pageId": 791,
+      "title": "甘蓝菜",
+      "exists": true
+    },
+    "小麦": {
+      "pageId": 824,
+      "title": "小麦",
+      "exists": true
+    },
+    "玉米": {
+      "pageId": 826,
+      "title": "玉米",
+      "exists": true
+    },
+    "甜瓜": {
+      "pageId": 834,
+      "title": "甜瓜",
+      "exists": true
+    },
+    "葡萄": {
+      "pageId": 838,
+      "title": "葡萄",
+      "exists": true
+    },
+    "苋菜": {
+      "pageId": 841,
+      "title": "苋菜",
+      "exists": true
+    },
+    "南瓜": {
+      "pageId": 845,
+      "title": "南瓜",
+      "exists": true
+    },
+    "小桶": {
+      "pageId": 982,
+      "title": "小桶",
+      "exists": true
+    },
+    "宝石复制机": {
+      "pageId": 1010,
+      "title": "宝石复制机",
+      "exists": true
+    },
+    "未碾米": {
+      "pageId": 1062,
+      "title": "未碾米",
+      "exists": true
+    },
+    "金色的镰刀": {
+      "pageId": 1066,
+      "title": "金色的镰刀",
+      "exists": true
+    },
+    "采石场矿井": {
+      "pageId": 1118,
+      "title": "采石场矿井",
+      "exists": true
+    },
+    "稻苗": {
+      "pageId": 1367,
+      "title": "稻苗",
+      "exists": true
+    },
+    "齐瓜": {
+      "pageId": 1445,
+      "title": "齐瓜",
+      "exists": true
+    },
+    "纤维种子": {
+      "pageId": 1533,
+      "title": "纤维种子",
+      "exists": true
+    },
+    "青豆": {
+      "pageId": 1724,
+      "title": "青豆",
+      "exists": true
+    },
+    "霜瓜": {
+      "pageId": 2666,
+      "title": "霜瓜",
+      "exists": true
+    },
+    "铱镰刀": {
+      "pageId": 2737,
+      "title": "铱镰刀",
+      "exists": true
+    },
+    "羽衣甘蓝": {
+      "pageId": -1,
+      "title": "羽衣甘蓝",
+      "exists": false
+    },
+    "霜花瓜": {
+      "pageId": -2,
+      "title": "霜花瓜",
+      "exists": false
+    },
+    "米苗": {
+      "pageId": -3,
+      "title": "米苗",
+      "exists": false
+    },
+    "远古水果": {
+      "pageId": -4,
+      "title": "远古水果",
+      "exists": false
+    },
+    "酿造桶": {
+      "pageId": -5,
+      "title": "酿造桶",
+      "exists": false
+    },
+    "腌酱桶": {
+      "pageId": -6,
+      "title": "腌酱桶",
+      "exists": false
+    },
+    "复制晶石机": {
+      "pageId": -7,
+      "title": "复制晶石机",
+      "exists": false
+    },
+    "金镰刀": {
+      "pageId": -8,
+      "title": "金镰刀",
+      "exists": false
+    },
+    "采石场矿洞": {
+      "pageId": -9,
+      "title": "采石场矿洞",
+      "exists": false
+    },
+    "齐果": {
+      "pageId": -10,
+      "title": "齐果",
+      "exists": false
+    }
+  }
+}

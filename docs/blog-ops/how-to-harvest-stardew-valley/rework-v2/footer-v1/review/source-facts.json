@@ -1,0 +1,686 @@
+{
+  "generatedBy": "collect-source-facts.mjs",
+  "taskId": "task_2c42f9a0d7b3",
+  "dispatchId": "ctx_5880fb1f8d85",
+  "note": "Reads implementation logs and current source. Does not rebuild.",
+  "checks": [
+    {
+      "id": "en-body-unchanged-after-footer-removal",
+      "pass": true,
+      "detail": "stripped source sha256 40743d572fb3a56fb32da4789e4b3b16a61e54cd6ad6072f95763a50c6b2a0c6"
+    },
+    {
+      "id": "en-before-has-no-footer-components",
+      "pass": true,
+      "detail": "before snapshot has neither BlogFaqList nor BlogSources"
+    },
+    {
+      "id": "en-order-faq-then-sources-component",
+      "pass": true,
+      "detail": "heading 12199, faq 12248, sources 14005, direct BlogPlannerCta count 0"
+    },
+    {
+      "id": "en-public-sources-exact",
+      "pass": true,
+      "detail": "[{\"href\":\"https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979\",\"label\":\"Crops on the Stardew Valley Wiki\"},{\"href\":\"https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481\",\"label\":\"Controls on the Stardew Valley Wiki\"},{\"href\":\"https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696\",\"label\":\"Scythe on the Stardew Valley Wiki\"},{\"href\":\"https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836\",\"label\":\"Iridium Scythe on the Stardew Valley Wiki\"}]"
+    },
+    {
+      "id": "en-hand-stand-present-in-locked-body",
+      "pass": true,
+      "detail": "stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)"
+    },
+    {
+      "id": "en-hand-x-present-in-locked-body",
+      "pass": true,
+      "detail": "Stand next to the ripe crop and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411). Keyboard [X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click"
+    },
+    {
+      "id": "en-scythe-list-present-in-locked-body",
+      "pass": true,
+      "detail": "A standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat. Right-clicking or pressing X does not harvest them."
+    },
+    {
+      "id": "en-kale-present-in-locked-body",
+      "pass": true,
+      "detail": "[Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)"
+    },
+    {
+      "id": "en-rice-present-in-locked-body",
+      "pass": true,
+      "detail": "[unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)"
+    },
+    {
+      "id": "en-fiber-present-in-locked-body",
+      "pass": true,
+      "detail": "[fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587). Fiber seeds are a distinct exception: they do not require daily watering to grow, yet still require a scythe when fully grown."
+    },
+    {
+      "id": "en-iridium-present-in-locked-body",
+      "pass": true,
+      "detail": "The [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops."
+    },
+    {
+      "id": "en-giant-present-in-locked-body",
+      "pass": true,
+      "detail": "Harvest a giant crop with any axe. It takes three hits and drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops)."
+    },
+    {
+      "id": "en-giant-button-present-in-locked-body",
+      "pass": true,
+      "detail": "Face the giant crop and strike it three times using your tool button (left-click or C on PC)."
+    },
+    {
+      "id": "en-water-present-in-locked-body",
+      "pass": true,
+      "detail": "[crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979). If unwatered for a day, a crop will not grow, though unwatered crops do not die."
+    },
+    {
+      "id": "en-water-delay-present-in-locked-body",
+      "pass": true,
+      "detail": "Unwatered days pause growth without killing the plant, delaying maturity by one morning per dry day."
+    },
+    {
+      "id": "en-trellis-present-in-locked-body",
+      "pass": true,
+      "detail": "[Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile."
+    },
+    {
+      "id": "en-trellis-block-present-in-locked-body",
+      "pass": true,
+      "detail": "Planting trellises in solid blocks leaves interior plants unreachable for watering and harvesting."
+    },
+    {
+      "id": "en-source-hrefs-subset-of-frozen-handoff",
+      "pass": true,
+      "detail": "4 public rows; handoff unique URL count 17"
+    },
+    {
+      "id": "zh-CN-body-unchanged-after-footer-removal",
+      "pass": true,
+      "detail": "stripped source sha256 3e5eda8192c4f850e9023427180c802acda5eb78eeb2d8efd23686f238be5ee0"
+    },
+    {
+      "id": "zh-CN-before-has-no-footer-components",
+      "pass": true,
+      "detail": "before snapshot has neither BlogFaqList nor BlogSources"
+    },
+    {
+      "id": "zh-CN-order-faq-then-sources-component",
+      "pass": true,
+      "detail": "heading 6967, faq 6995, sources 7987, direct BlogPlannerCta count 0"
+    },
+    {
+      "id": "zh-CN-public-sources-exact",
+      "pass": true,
+      "detail": "[{\"href\":\"https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979\",\"label\":\"星露谷物语维基：作物\"},{\"href\":\"https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481\",\"label\":\"星露谷物语维基：操作\"},{\"href\":\"https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696\",\"label\":\"星露谷物语维基：镰刀\"},{\"href\":\"https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836\",\"label\":\"星露谷物语维基：铱镰刀\"}]"
+    },
+    {
+      "id": "zh-hand-present-in-locked-body",
+      "pass": true,
+      "detail": "站在成熟植株旁边[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)"
+    },
+    {
+      "id": "zh-hand-x-present-in-locked-body",
+      "pass": true,
+      "detail": "站在成熟作物旁边，[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)。键盘上[X 和右键映射成同一个 Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)"
+    },
+    {
+      "id": "zh-scythe-present-in-locked-body",
+      "pass": true,
+      "detail": "另外一些作物必须用普通[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)来收，例如苋菜、甘蓝菜和小麦。"
+    },
+    {
+      "id": "zh-iridium-present-in-locked-body",
+      "pass": true,
+      "detail": "[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。"
+    },
+    {
+      "id": "zh-giant-present-in-locked-body",
+      "pass": true,
+      "detail": "要用任意一把斧头砍三下"
+    },
+    {
+      "id": "zh-tool-button-present-in-locked-body",
+      "pass": true,
+      "detail": "面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）"
+    },
+    {
+      "id": "zh-water-present-in-locked-body",
+      "pass": true,
+      "detail": "[作物必须每天浇水，才能按最快速度生长](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)"
+    },
+    {
+      "id": "zh-water-delay-present-in-locked-body",
+      "pass": true,
+      "detail": "没浇水的日子会暂停生长，但不会把植株弄死；每干一天，成熟就晚一个早晨。"
+    },
+    {
+      "id": "zh-fiber-present-in-locked-body",
+      "pass": true,
+      "detail": "纤维种子是单独的例外：生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+    },
+    {
+      "id": "zh-trellis-present-in-locked-body",
+      "pass": true,
+      "detail": "[青豆、啤酒花和葡萄](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops)（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。"
+    },
+    {
+      "id": "zh-trellis-block-present-in-locked-body",
+      "pass": true,
+      "detail": "棚架如果种成实心一块，里面的植株就浇不到，也收不到。"
+    },
+    {
+      "id": "zh-CN-source-hrefs-subset-of-frozen-handoff",
+      "pass": true,
+      "detail": "4 public rows; handoff unique URL count 17"
+    },
+    {
+      "id": "blog-sources-renders-one-cta-before-sources",
+      "pass": true,
+      "detail": "cta index 818, sources section index 878"
+    },
+    {
+      "id": "cover-caption-still-absent",
+      "pass": true,
+      "detail": "BlogArticleContent renders cover alt and no figcaption"
+    },
+    {
+      "id": "jsonld-call-omits-image-author-date",
+      "pass": true,
+      "detail": "both article pages call createArticleStructuredData without imagePathname"
+    },
+    {
+      "id": "registry-hash-matches-seo-baseline-snapshot",
+      "pass": true,
+      "detail": "d038157140b517bd2e694909d55ec1eaa6809e1ed1db292c9ce7408aa87a8608"
+    },
+    {
+      "id": "next-env-restored-hash",
+      "pass": true,
+      "detail": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+    },
+    {
+      "id": "pine-checked-label-mismatch-is-outside-harvest",
+      "pass": true,
+      "detail": "English pine test expectation and article label differ; harvest expectations have no checked label."
+    },
+    {
+      "id": "harvest-source-expectation-has-no-checked-label",
+      "pass": true,
+      "detail": "[{\"name\":\"English how-to-harvest-stardew-valley article\",\"checkedLabel\":null},{\"name\":\"Chinese how-to-harvest-stardew-valley article\",\"checkedLabel\":null}]"
+    },
+    {
+      "id": "blog-sources-test-diff-is-additions-only",
+      "pass": true,
+      "detail": "numstat 48\t0\ttests/blog/blog-sources.test.tsx removed lines 0"
+    },
+    {
+      "id": "local-sitemap-has-both-urls",
+      "pass": true,
+      "detail": "out/sitemap.xml contains both localized locs"
+    },
+    {
+      "id": "/how-to-harvest-stardew-valley-dev-http-200",
+      "pass": true,
+      "detail": "status 200"
+    },
+    {
+      "id": "/zh/how-to-harvest-stardew-valley-dev-http-200",
+      "pass": true,
+      "detail": "status 200"
+    }
+  ],
+  "passCount": 45,
+  "failCount": 0,
+  "localeFacts": [
+    {
+      "locale": "en",
+      "currentSha256": "cd190d416ffdbfdd3f430f9f03fd011a298237629cd3bdadb99641723fc2e5d7",
+      "beforeSha256": "40743d572fb3a56fb32da4789e4b3b16a61e54cd6ad6072f95763a50c6b2a0c6",
+      "strippedEqualsBefore": true,
+      "faqItems": [
+        {
+          "question": "How do you harvest a regular mature crop by hand on PC?",
+          "answer": "Stand beside the ripe crop and right-click it, or press X. X is mapped to the same Check/Do Action as right-click. A hand harvest does not need a tool swing."
+        },
+        {
+          "question": "Which crops need a regular scythe, and how is the 1.6 iridium scythe different?",
+          "answer": "Amaranth, kale, wheat, unmilled rice, and fiber seeds need a scythe. Right-click or X does not harvest them. The iridium scythe is the 1.6 Farming Mastery scythe, and within its swing it harvests crops grown on tilled soil, including regular crops."
+        },
+        {
+          "question": "How do you harvest a giant crop?",
+          "answer": "Use any axe. Face the giant crop and strike it three times with the tool button (left-click or C on PC)."
+        },
+        {
+          "question": "Does a missed watering day delay the harvest?",
+          "answer": "An unwatered day pauses growth and does not kill the crop, so maturity is one morning later for each dry day. Fiber seeds do not need daily watering to grow, but they still need a scythe when fully grown."
+        },
+        {
+          "question": "Why do trellis crops need a neighboring standing tile?",
+          "answer": "You cannot walk through a living trellis, so green bean, hops, and grape each need a neighboring tile you can stand on. A solid block leaves the interior plants unreachable."
+        }
+      ],
+      "sourceRows": [
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+          "label": "Crops on the Stardew Valley Wiki"
+        },
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+          "label": "Controls on the Stardew Valley Wiki"
+        },
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+          "label": "Scythe on the Stardew Valley Wiki"
+        },
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+          "label": "Iridium Scythe on the Stardew Valley Wiki"
+        }
+      ],
+      "handoffBodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+      "handoffFile": {
+        "path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/handoffs/public-blog-handoff-en.json",
+        "sha256": "8ca4288debffa704154f48db2a58b68a2fadbd68fa2628040b49d37a7f56485f",
+        "bytes": 27689,
+        "mtimeMs": 1791895622197.165
+      },
+      "uniqueHandoffUrlCount": 17,
+      "quoteResults": [
+        {
+          "id": "en-hand-stand",
+          "present": true,
+          "quote": "stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)"
+        },
+        {
+          "id": "en-hand-x",
+          "present": true,
+          "quote": "Stand next to the ripe crop and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411). Keyboard [X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click"
+        },
+        {
+          "id": "en-scythe-list",
+          "present": true,
+          "quote": "A standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat. Right-clicking or pressing X does not harvest them."
+        },
+        {
+          "id": "en-kale",
+          "present": true,
+          "quote": "[Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)"
+        },
+        {
+          "id": "en-rice",
+          "present": true,
+          "quote": "[unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)"
+        },
+        {
+          "id": "en-fiber",
+          "present": true,
+          "quote": "[fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587). Fiber seeds are a distinct exception: they do not require daily watering to grow, yet still require a scythe when fully grown."
+        },
+        {
+          "id": "en-iridium",
+          "present": true,
+          "quote": "The [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops."
+        },
+        {
+          "id": "en-giant",
+          "present": true,
+          "quote": "Harvest a giant crop with any axe. It takes three hits and drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops)."
+        },
+        {
+          "id": "en-giant-button",
+          "present": true,
+          "quote": "Face the giant crop and strike it three times using your tool button (left-click or C on PC)."
+        },
+        {
+          "id": "en-water",
+          "present": true,
+          "quote": "[crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979). If unwatered for a day, a crop will not grow, though unwatered crops do not die."
+        },
+        {
+          "id": "en-water-delay",
+          "present": true,
+          "quote": "Unwatered days pause growth without killing the plant, delaying maturity by one morning per dry day."
+        },
+        {
+          "id": "en-trellis",
+          "present": true,
+          "quote": "[Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile."
+        },
+        {
+          "id": "en-trellis-block",
+          "present": true,
+          "quote": "Planting trellises in solid blocks leaves interior plants unreachable for watering and harvesting."
+        }
+      ],
+      "footerHasDropCount": false,
+      "footerHasPlannerCtaComponent": false
+    },
+    {
+      "locale": "zh-CN",
+      "currentSha256": "5b311ed05f8356219c634287cdc3f480625717278ab488a70665e865f1f088b9",
+      "beforeSha256": "3e5eda8192c4f850e9023427180c802acda5eb78eeb2d8efd23686f238be5ee0",
+      "strippedEqualsBefore": true,
+      "faqItems": [
+        {
+          "question": "在 PC 上，普通成熟作物怎么徒手收？",
+          "answer": "站在成熟作物旁边，右键点它，或者按 X。X 和右键映射成同一个 Check/Do Action。用手收，不需要挥工具。"
+        },
+        {
+          "question": "哪些作物要用普通镰刀，1.6 的铱镰刀有什么不同？",
+          "answer": "苋菜、甘蓝菜、小麦、未碾米和纤维种子必须用镰刀收。右键或按 X 都收不下来。铱镰刀是 1.6 耕种精通给的那把镰刀，挥过的范围内能收耕地上长出来的作物，普通作物也包括在内。"
+        },
+        {
+          "question": "巨大作物怎么收？",
+          "answer": "用任意一把斧头。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。"
+        },
+        {
+          "question": "漏浇水会推迟成熟吗？",
+          "answer": "有一天没浇，这一天就不长，但没浇水的作物不会死；每干一天，成熟就晚一个早晨。纤维种子生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+        },
+        {
+          "question": "棚架作物为什么必须留邻近站位？",
+          "answer": "活着的棚架走不穿，所以青豆、啤酒花和葡萄每株都要有一格能站在旁边。棚架如果种成实心一块，里面的植株就浇不到，也收不到。"
+        }
+      ],
+      "sourceRows": [
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+          "label": "星露谷物语维基：作物"
+        },
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+          "label": "星露谷物语维基：操作"
+        },
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+          "label": "星露谷物语维基：镰刀"
+        },
+        {
+          "href": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+          "label": "星露谷物语维基：铱镰刀"
+        }
+      ],
+      "handoffBodyHash": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+      "handoffFile": {
+        "path": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/handoffs/public-blog-handoff-zh.json",
+        "sha256": "896976369ee8abc18fbcc5983f2f5472fa5b0dcd216244f2046eeca6a390d7eb",
+        "bytes": 26608,
+        "mtimeMs": 1791895622197.4058
+      },
+      "uniqueHandoffUrlCount": 17,
+      "quoteResults": [
+        {
+          "id": "zh-hand",
+          "present": true,
+          "quote": "站在成熟植株旁边[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)"
+        },
+        {
+          "id": "zh-hand-x",
+          "present": true,
+          "quote": "站在成熟作物旁边，[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)。键盘上[X 和右键映射成同一个 Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)"
+        },
+        {
+          "id": "zh-scythe",
+          "present": true,
+          "quote": "另外一些作物必须用普通[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)来收，例如苋菜、甘蓝菜和小麦。"
+        },
+        {
+          "id": "zh-iridium",
+          "present": true,
+          "quote": "[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。"
+        },
+        {
+          "id": "zh-giant",
+          "present": true,
+          "quote": "要用任意一把斧头砍三下"
+        },
+        {
+          "id": "zh-tool-button",
+          "present": true,
+          "quote": "面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）"
+        },
+        {
+          "id": "zh-water",
+          "present": true,
+          "quote": "[作物必须每天浇水，才能按最快速度生长](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)"
+        },
+        {
+          "id": "zh-water-delay",
+          "present": true,
+          "quote": "没浇水的日子会暂停生长，但不会把植株弄死；每干一天，成熟就晚一个早晨。"
+        },
+        {
+          "id": "zh-fiber",
+          "present": true,
+          "quote": "纤维种子是单独的例外：生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+        },
+        {
+          "id": "zh-trellis",
+          "present": true,
+          "quote": "[青豆、啤酒花和葡萄](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops)（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。"
+        },
+        {
+          "id": "zh-trellis-block",
+          "present": true,
+          "quote": "棚架如果种成实心一块，里面的植株就浇不到，也收不到。"
+        }
+      ],
+      "footerHasDropCount": false,
+      "footerHasPlannerCtaComponent": false
+    }
+  ],
+  "files": {
+    "registry": {
+      "path": "src/blog/blog-post-registry.tsx",
+      "sha256": "d038157140b517bd2e694909d55ec1eaa6809e1ed1db292c9ce7408aa87a8608",
+      "bytes": 47602,
+      "mtimeMs": 1791896167295.9688
+    },
+    "seoBaselineRegistryHash": "d038157140b517bd2e694909d55ec1eaa6809e1ed1db292c9ce7408aa87a8608",
+    "nextEnv": {
+      "path": "next-env.d.ts",
+      "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "bytes": 296,
+      "mtimeMs": 1791901038675.015
+    },
+    "englishPage": {
+      "path": "app/(en)/[slug]/page.tsx",
+      "sha256": "908f306a46273af550d7cea9bcb64e5fe77515be3ae82830aabbcd695ba479be",
+      "bytes": 2290,
+      "mtimeMs": 1791813886979.2012
+    },
+    "chinesePage": {
+      "path": "app/zh/[slug]/page.tsx",
+      "sha256": "60e01dcc06ea170b15b4faf2dff1143db0ff7eb3602b76c8a947a0b83db40a12",
+      "bytes": 2391,
+      "mtimeMs": 1791813886982.0056
+    },
+    "blogSources": {
+      "path": "src/components/blog/blog-sources.tsx",
+      "sha256": "d8b44a52695444c5dec8d5647f6a0529e40d3fd2032fce1f9993f1702f5fb708",
+      "bytes": 2729,
+      "mtimeMs": 1791813887746.0566
+    },
+    "blogFaqList": {
+      "path": "src/components/blog/blog-faq-list.tsx",
+      "sha256": "6f2f1006e99c69579c31bca7a8ca274f362c0027fc63e8710c9bca22c983ed55",
+      "bytes": 2865,
+      "mtimeMs": 1791813887745.4236
+    },
+    "blogPlannerCta": {
+      "path": "src/components/blog/blog-planner-cta.tsx",
+      "sha256": "8b9e8f327877d8b6cbfe6185151311dc8fd8ec086fe8c2780b5a67f39d02a150",
+      "bytes": 2372,
+      "mtimeMs": 1791813887745.9893
+    },
+    "blogArticleContent": {
+      "path": "src/components/blog/blog-article-content.tsx",
+      "sha256": "f8ede42d678068ea46eb8648040a3418ce595e5c796fad6e8284919af08ae2cb",
+      "bytes": 1328,
+      "mtimeMs": 1791813887745.2224
+    },
+    "pageMetadata": {
+      "path": "src/seo/page-metadata.ts",
+      "sha256": "ed717ed7941551768b74d761d3f2e390d38b330cae9f8523742003835e1796af",
+      "bytes": 1682,
+      "mtimeMs": 1791813887803.048
+    },
+    "pageStructuredData": {
+      "path": "src/seo/page-structured-data.ts",
+      "sha256": "77af31146771f4b7161965d47508fa6efb7fcb606d9b3991eddb1c3e25e249e2",
+      "bytes": 3271,
+      "mtimeMs": 1791813887803.1025
+    }
+  },
+  "gitStatusProduct": [
+    "M public/llms.txt",
+    " M src/blog/blog-copy.ts",
+    " M src/blog/blog-post-identities.ts",
+    " M src/blog/blog-post-registry.tsx",
+    " M tests/blog/blog-components.test.tsx",
+    " M tests/blog/blog-home-state.test.ts",
+    " M tests/blog/blog-planner-cta.test.tsx",
+    " M tests/blog/blog-post-registry.test.ts",
+    " M tests/blog/blog-sources.test.tsx",
+    " M tests/i18n/public-route-registry.test.ts",
+    " M tests/routes/blog-routes.test.tsx",
+    " M tests/routes/removed-public-pages.test.ts",
+    " M tests/seo/canonical-public-routes.test.ts",
+    "?? src/blog/articles/how-to-harvest-stardew-valley.en.tsx",
+    "?? src/blog/articles/how-to-harvest-stardew-valley.zh.tsx"
+  ],
+  "blogSourcesTestDiff": {
+    "numstat": "48\t0\ttests/blog/blog-sources.test.tsx",
+    "removedLineCount": 0,
+    "additionIsHarvestExpectationOnly": true
+  },
+  "pineCheckedLabel": {
+    "expectedByTest": "The following public pages support the specific Pine identity, planting, growth, Tapper, map-limit, and use claims in this draft. The current Pine references disagree on an unfertilized growth median, so this draft preserves that conflict instead of selecting one number.",
+    "renderedByArticle": "The public pages below cover Pine identity, planting, growth, Tapper, map limits, and uses. The Pine Tree, Pine Cone, and Trees pages disagree on the unfertilized growth median, so no single number should be treated as a universal Pine growth time."
+  },
+  "implementationCommands": [
+    {
+      "name": "typecheck",
+      "exitCode": 0,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/typecheck.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/typecheck.stderr.txt",
+      "stdoutSha256": "6d8837000472e46b9d3a31fd0d76b283502afadce4caeaf94d016c9071d0af44",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrEmpty": true,
+      "stdoutExcerpt": "> @ typecheck /Users/wusir/orca/workspaces/stardew planner/博客-2\n> tsc --noEmit",
+      "stdoutTail": "> @ typecheck /Users/wusir/orca/workspaces/stardew planner/博客-2\n> tsc --noEmit"
+    },
+    {
+      "name": "typecheck-r2",
+      "exitCode": 0,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/typecheck-r2.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/typecheck-r2.stderr.txt",
+      "stdoutSha256": "6d8837000472e46b9d3a31fd0d76b283502afadce4caeaf94d016c9071d0af44",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrEmpty": true,
+      "stdoutExcerpt": "> @ typecheck /Users/wusir/orca/workspaces/stardew planner/博客-2\n> tsc --noEmit",
+      "stdoutTail": "> @ typecheck /Users/wusir/orca/workspaces/stardew planner/博客-2\n> tsc --noEmit"
+    },
+    {
+      "name": "build-webpack",
+      "exitCode": 0,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/build-webpack.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/build-webpack.stderr.txt",
+      "stdoutSha256": "6dd84ea63eae67e92d5a43a85131e5909b62dc11fe96839588a1b08fdf46284c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrEmpty": true,
+      "stdoutExcerpt": "▲ Next.js 16.3.0 (webpack)\n✓ Running next.config.ts took 308ms\n- Experiments (use with caution):\n  ✓ globalNotFound\n\n  Creating an optimized production build ...\n✓ Compiled successfully in 15.4s\n  Running TypeScript ...",
+      "stdoutTail": "├ ○ /zh/blog/archive\n├ ○ /zh/contact\n├ ○ /zh/privacy\n└ ○ /zh/terms\n\n\n○  (Static)  prerendered as static content\n●  (SSG)     prerendered as static HTML (uses generateStaticParams)"
+    },
+    {
+      "name": "vitest-related",
+      "exitCode": 1,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-related.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-related.stderr.txt",
+      "stdoutSha256": "38350de3914b49cc6b402c06e4acd24323f4d4090fdfc983c4f109409104bd48",
+      "stderrSha256": "7df5f449f81f9eb75b2e5f75bad8c1e9ec58e8990bef7956f7c44889cc3515bc",
+      "stderrEmpty": false,
+      "stdoutExcerpt": "RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2\n\n ✓ tests/seo/canonical-public-routes.test.ts (1 test) 6ms\n ✓ tests/i18n/public-route-registry.test.ts (4 tests) 6ms\n ✓ tests/blog/blog-faq-list.test.tsx (6 tests) 29ms\n ✓ tests/routes/removed-public-pages.test.ts (3 tests) 906ms\n   ✓ removed public guide pages > does not export or advertise any removed English or Chinese page  785ms\n ✓ tests/blog/blog-home-state.test.ts (18 tests) 5ms",
+      "stdoutTail": "   × preserves each localized article's source links, labels, notes, and order 241ms\n     → expected '<section class=\"blog-sources\"><div da…' to contain '<p class=\"blog-sources__checked\">The …'\n ✓ tests/routes/blog-routes.test.tsx (19 tests) 211ms\n\n Test Files  1 failed | 9 passed (10)\n      Tests  1 failed | 100 passed (101)\n   Start at  22:17:42\n   Duration  3.83s (transform 2.73s, setup 0ms, collect 15.40s, tests 1.78s, environment 1ms, prepare 1.95s)"
+    },
+    {
+      "name": "vitest-sources-r2",
+      "exitCode": 1,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-sources-r2.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-sources-r2.stderr.txt",
+      "stdoutSha256": "eee6572df73627042065b6b2c167585be2227263d9ed3d4bd837c701e2231149",
+      "stderrSha256": "7df5f449f81f9eb75b2e5f75bad8c1e9ec58e8990bef7956f7c44889cc3515bc",
+      "stderrEmpty": false,
+      "stdoutExcerpt": "RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2\n\n ❯ tests/blog/blog-sources.test.tsx (2 tests | 1 failed) 276ms\n   ✓ renders source links in a grouped Item list with an optional checked label 14ms\n   × preserves each localized article's source links, labels, notes, and order 262ms\n     → expected '<section class=\"blog-sources\"><div da…' to contain '<p class=\"blog-sources__checked\">The …'\n\n Test Files  1 failed (1)",
+      "stdoutTail": "   ✓ renders source links in a grouped Item list with an optional checked label 14ms\n   × preserves each localized article's source links, labels, notes, and order 262ms\n     → expected '<section class=\"blog-sources\"><div da…' to contain '<p class=\"blog-sources__checked\">The …'\n\n Test Files  1 failed (1)\n      Tests  1 failed | 1 passed (2)\n   Start at  22:18:33\n   Duration  2.17s (transform 689ms, setup 0ms, collect 1.37s, tests 276ms, environment 0ms, prepare 76ms)"
+    },
+    {
+      "name": "vitest-cta",
+      "exitCode": 0,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-cta.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-cta.stderr.txt",
+      "stdoutSha256": "57500200885007476db660c7d71389ed5003891717b0b888a6aceed91699968d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrEmpty": true,
+      "stdoutExcerpt": "RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2\n\n ✓ tests/blog/blog-planner-cta.test.tsx (8 tests) 214ms\n\n Test Files  1 passed (1)\n      Tests  8 passed (8)\n   Start at  22:14:22\n   Duration  2.86s (transform 1.18s, setup 0ms, collect 1.88s, tests 214ms, environment 0ms, prepare 116ms)",
+      "stdoutTail": "RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2\n\n ✓ tests/blog/blog-planner-cta.test.tsx (8 tests) 214ms\n\n Test Files  1 passed (1)\n      Tests  8 passed (8)\n   Start at  22:14:22\n   Duration  2.86s (transform 1.18s, setup 0ms, collect 1.88s, tests 214ms, environment 0ms, prepare 116ms)"
+    },
+    {
+      "name": "vitest-footer",
+      "exitCode": 1,
+      "stdoutPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-footer.stdout.txt",
+      "stderrPath": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/footer-v1/implementation/vitest-footer.stderr.txt",
+      "stdoutSha256": "eaaa17442a14678f4b6eec98154202930c025185ec9ecd756d12e4edaeb0b169",
+      "stderrSha256": "27f8dca1c7f8b229633b6ca8c0a02151d9d82c6901674a88714564c9327d0c7b",
+      "stderrEmpty": false,
+      "stdoutExcerpt": "RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2\n\n ✓ tests/blog/blog-faq-list.test.tsx (6 tests) 14ms\n ✓ tests/blog/blog-planner-cta.test.tsx (8 tests) 244ms\n ❯ tests/blog/blog-sources.test.tsx (2 tests | 1 failed) 263ms\n   ✓ renders source links in a grouped Item list with an optional checked label 10ms\n   × preserves each localized article's source links, labels, notes, and order 253ms\n     → expected '<section class=\"blog-sources\"><div da…' to contain '<p class=\"blog-sources__checked\">The …'",
+      "stdoutTail": "   ✓ renders source links in a grouped Item list with an optional checked label 10ms\n   × preserves each localized article's source links, labels, notes, and order 253ms\n     → expected '<section class=\"blog-sources\"><div da…' to contain '<p class=\"blog-sources__checked\">The …'\n\n Test Files  1 failed | 2 passed (3)\n      Tests  1 failed | 15 passed (16)\n   Start at  22:13:08\n   Duration  1.74s (transform 734ms, setup 0ms, collect 2.61s, tests 522ms, environment 0ms, prepare 174ms)"
+    }
+  ],
+  "staticExport": {
+    "en": {
+      "path": "out/how-to-harvest-stardew-valley.html",
+      "sha256": "b590b417a78f1ada9146753913612b610c1cc0cf001ac9d6b86c0aab34606ab2",
+      "bytes": 87127,
+      "mtimeMs": 1791901022158.376,
+      "faqHeadingCount": 2,
+      "faqTriggerCount": 5,
+      "ctaCount": 1,
+      "faqPageCount": 0,
+      "qaPageCount": 0,
+      "articleCount": 1
+    },
+    "zh": {
+      "path": "out/zh/how-to-harvest-stardew-valley.html",
+      "sha256": "f907ee60ff3ad10c10a602dee1885e6449fb07b681e8d8682d326889ed8d53c3",
+      "bytes": 83902,
+      "mtimeMs": 1791901022162.7166,
+      "faqHeadingCount": 2,
+      "faqTriggerCount": 5,
+      "ctaCount": 1,
+      "faqPageCount": 0,
+      "qaPageCount": 0,
+      "articleCount": 1
+    },
+    "sitemap": {
+      "path": "out/sitemap.xml",
+      "sha256": "33154132d65a4ce802230113e09b37ff1755e726e4f6f2c0dec44849decb5dc1",
+      "bytes": 4946,
+      "mtimeMs": 1791901022156.9912
+    }
+  },
+  "liveDevStatuses": [
+    {
+      "route": "/how-to-harvest-stardew-valley",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "route": "/zh/how-to-harvest-stardew-valley",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8"
+    }
+  ],
+  "handoffDirectory": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/handoffs"
+}

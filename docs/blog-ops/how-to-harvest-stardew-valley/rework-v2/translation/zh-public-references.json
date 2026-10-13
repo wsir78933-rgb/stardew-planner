@@ -1,0 +1,216 @@
+{
+  "version": "rework-v2",
+  "locale": "zh-CN",
+  "slug": "how-to-harvest-stardew-valley",
+  "bodyHash": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+  "sourceEnglishBodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "bodyFile": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation/zh-body.md",
+  "referenceCount": 21,
+  "references": [
+    {
+      "id": "zh-steam-parsnip-right-click",
+      "label": "Steam 社区讨论：怎么收防风草",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "appliesTo": {
+        "quote": "站在成熟植株旁边[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-wiki-parsnip-stages",
+      "label": "星露谷物语维基：防风草",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "appliesTo": {
+        "quote": "一株[防风草](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123)浇水长 4 天，才会出现可以收获的图像。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-pumpkin-stages",
+      "label": "星露谷物语维基：南瓜",
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "appliesTo": {
+        "quote": "一株[南瓜](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726)浇水长 13 天，才会出现可以收获的图像",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-blueberry-regrowth",
+      "label": "星露谷物语维基：蓝莓",
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "appliesTo": {
+        "quote": "像[蓝莓](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090)（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-crops-watering",
+      "label": "星露谷物语维基：作物",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "[作物必须每天浇水，才能按最快速度生长](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-controls-action",
+      "label": "星露谷物语维基：操作",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "[X 和右键映射成同一个 Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-controls-tool",
+      "label": "星露谷物语维基：操作",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "[左键和 C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)绑定的是使用工具或放置物品。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-calendar-replant",
+      "label": "星露谷物语维基：作物生长日历",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "appliesTo": {
+        "quote": "[作物生长日历](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875)，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-forum-hold-right-click",
+      "label": "星露谷官方论坛：PC 操作与移动端",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "appliesTo": {
+        "quote": "[按住右键，并且鼠标不要靠近角色](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-forum-x-mapped",
+      "label": "星露谷官方论坛：PC 操作与移动端",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "appliesTo": {
+        "quote": "[X 映射成右键](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-wiki-scythe-examples",
+      "label": "星露谷物语维基：镰刀",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "appliesTo": {
+        "quote": "另外一些作物必须用普通[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)来收，例如苋菜、甘蓝菜和小麦。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-kale",
+      "label": "星露谷物语维基：甘蓝菜",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "appliesTo": {
+        "quote": "[甘蓝菜要用镰刀或更好的镰刀来收](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-fiber-seeds",
+      "label": "星露谷物语维基：纤维种子",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "appliesTo": {
+        "quote": "[纤维种子要用镰刀来收](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-unmilled-rice",
+      "label": "星露谷物语维基：未碾米",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "appliesTo": {
+        "quote": "[未碾米要用镰刀来收](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-mobile-scythe",
+      "label": "星露谷物语维基：移动端操作",
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "appliesTo": {
+        "quote": "[先选中镰刀，再使用它](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-iridium-scythe",
+      "label": "星露谷物语维基：铱镰刀",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "appliesTo": {
+        "quote": "[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-giant-crops",
+      "label": "星露谷物语维基：巨大作物",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "appliesTo": {
+        "quote": "会掉落[15 到 21 个普通品质的物品](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops)。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-trellis",
+      "label": "星露谷物语维基：棚架作物",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "appliesTo": {
+        "quote": "[青豆、啤酒花和葡萄](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops)（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-wiki-season-wither",
+      "label": "星露谷物语维基：作物",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "[不再当季的作物会在第 1 天枯萎](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)，并留下枯株",
+        "occurrence": 1
+      },
+      "versionNote": "维基修订号就是 URL 里的 oldid。"
+    },
+    {
+      "id": "zh-press-multiplayer-2-mature",
+      "label": "ConcernedApe 的星露谷物语新闻素材截图",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "appliesTo": {
+        "quote": "ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "zh-press-multiplayer-2-trellis",
+      "label": "ConcernedApe 的星露谷物语新闻素材截图",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "appliesTo": {
+        "quote": "ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+        "occurrence": 2
+      }
+    }
+  ]
+}

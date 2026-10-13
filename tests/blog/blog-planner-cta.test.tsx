@@ -54,34 +54,115 @@ describe("getBlogPlannerCtaLocaleFromSourcesHeading", () => {
   });
 });
 
-describe("blog article planner CTA placement", () => {
-  it("places one planner CTA after FAQ when present and before Sources on every article", () => {
-    for (const locale of publicLocales) {
-      const expectedHeading =
-        locale === "en"
-          ? "Finish the layout in the planner, then build in-game."
-          : "先在规划器里摆完，再进游戏建。";
-      const expectedAction = locale === "en" ? "Open planner" : "打开规划器";
-      const expectedHref = locale === "en" ? "/#planner" : "/zh#planner";
+function expectSourcedArticlePlannerCta(
+  locale: (typeof publicLocales)[number],
+  slug: string,
+  markup: string,
+): void {
+  const expectedHeading =
+    locale === "en"
+      ? "Finish the layout in the planner, then build in-game."
+      : "先在规划器里摆完，再进游戏建。";
+  const expectedAction = locale === "en" ? "Open planner" : "打开规划器";
+  const expectedHref = locale === "en" ? "/#planner" : "/zh#planner";
+  const ctaMatches = markup.match(/data-blog-planner-cta="true"/g) ?? [];
+  const faqIndex = markup.indexOf('class="blog-faq-list"');
+  const ctaIndex = markup.indexOf("data-blog-planner-cta");
+  const sourcesIndex = markup.indexOf('class="blog-sources"');
 
+  expect(ctaMatches, `${locale} ${slug} CTA count`).toHaveLength(1);
+  expect(ctaIndex, `${locale} ${slug} missing CTA`).toBeGreaterThan(-1);
+  expect(sourcesIndex, `${locale} ${slug} missing Sources`).toBeGreaterThan(ctaIndex);
+  expect(markup).toContain(expectedHeading);
+  expect(markup).toContain(expectedAction);
+  expect(markup).toContain(`href="${expectedHref}"`);
+
+  if (faqIndex !== -1) {
+    expect(ctaIndex, `${locale} ${slug} CTA should follow FAQ`).toBeGreaterThan(faqIndex);
+  }
+}
+
+function expectHarvestArticleHasOneFooterCta(
+  locale: (typeof publicLocales)[number],
+  markup: string,
+): void {
+  expectSourcedArticlePlannerCta(locale, "how-to-harvest-stardew-valley", markup);
+
+  const faqLists = markup.match(/class="blog-faq-list"/g) ?? [];
+  const faqTriggers = markup.match(/class="blog-faq-trigger"/g) ?? [];
+  const hrefCount = markup.match(/href="/g)?.length ?? 0;
+  const questions =
+    locale === "en"
+      ? [
+          "How do you harvest a regular mature crop by hand on PC?",
+          "Which crops need a regular scythe, and how is the 1.6 iridium scythe different?",
+          "How do you harvest a giant crop?",
+          "Does a missed watering day delay the harvest?",
+          "Why do trellis crops need a neighboring standing tile?",
+        ]
+      : locale === "zh-CN"
+        ? [
+            "在 PC 上，普通成熟作物怎么徒手收？",
+            "哪些作物要用普通镰刀，1.6 的铱镰刀有什么不同？",
+            "巨大作物怎么收？",
+            "漏浇水会推迟成熟吗？",
+            "棚架作物为什么必须留邻近站位？",
+          ]
+        : null;
+
+  if (questions === null) {
+    throw new Error(
+      `Harvest planner CTA locale is not en or zh-CN. Received: ${JSON.stringify(locale)}.`,
+    );
+  }
+
+  expect(faqLists, `${locale} how-to-harvest-stardew-valley FAQ list count`).toHaveLength(1);
+  expect(faqTriggers, `${locale} how-to-harvest-stardew-valley FAQ count`).toHaveLength(5);
+  expect(hrefCount, `${locale} how-to-harvest-stardew-valley href count`).toBe(30);
+  expect(markup).not.toContain("FAQPage");
+  expect(markup).not.toContain("QAPage");
+  expect(markup).toContain(
+    "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+  );
+  expect(markup).toContain(
+    "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+  );
+  expect(markup).toContain("ConcernedApe");
+  expect(markup).toContain('src="/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp"');
+  expect(markup).toContain('src="/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp"');
+  expect(markup).toContain('loading="lazy"');
+  expect(markup).not.toContain("https://stardewvalleyplanner.art");
+  expect(markup).not.toContain("how-to-harvest-stardew-valley-en-methods.webp");
+  expect(markup).not.toContain("how-to-harvest-stardew-valley-zh-methods.webp");
+
+  for (const question of questions) {
+    expect(markup, `${locale} harvest FAQ question`).toContain(question);
+  }
+
+  if (locale === "en") {
+    expect(markup).toContain("<h2>How to Harvest Stardew Valley FAQ</h2>");
+    expect(markup).toContain('class="blog-planner-link" href="/"');
+    expect(markup).toContain('href="/last-day-to-plant-stardew"');
+    expect(markup).toContain('href="/what-to-grow-in-greenhouse-stardew"');
+    return;
+  }
+
+  expect(markup).toContain("<h2>星露谷物语收作物常见问题</h2>");
+  expect(markup).toContain('class="blog-planner-link" href="/zh"');
+  expect(markup).toContain('href="/zh/last-day-to-plant-stardew"');
+  expect(markup).toContain('href="/zh/what-to-grow-in-greenhouse-stardew"');
+}
+
+describe("blog article planner CTA placement", () => {
+  it("places one planner CTA after FAQ and before Sources, including the harvest article", () => {
+    for (const locale of publicLocales) {
       for (const post of getAllBlogPosts(locale)) {
         const markup = renderToStaticMarkup(createElement(post.Content));
-        const ctaMatches = markup.match(/data-blog-planner-cta="true"/g) ?? [];
-        const faqIndex = markup.indexOf('class="blog-faq-list"');
-        const ctaIndex = markup.indexOf("data-blog-planner-cta");
-        const sourcesIndex = markup.indexOf('class="blog-sources"');
 
-        expect(ctaMatches, `${locale} ${post.slug} CTA count`).toHaveLength(1);
-        expect(ctaIndex, `${locale} ${post.slug} missing CTA`).toBeGreaterThan(-1);
-        expect(sourcesIndex, `${locale} ${post.slug} missing Sources`).toBeGreaterThan(ctaIndex);
-        expect(markup).toContain(expectedHeading);
-        expect(markup).toContain(expectedAction);
-        expect(markup).toContain(`href="${expectedHref}"`);
-
-        if (faqIndex !== -1) {
-          expect(ctaIndex, `${locale} ${post.slug} CTA should follow FAQ`).toBeGreaterThan(
-            faqIndex,
-          );
+        if (post.slug === "how-to-harvest-stardew-valley") {
+          expectHarvestArticleHasOneFooterCta(locale, markup);
+        } else {
+          expectSourcedArticlePlannerCta(locale, post.slug, markup);
         }
       }
     }

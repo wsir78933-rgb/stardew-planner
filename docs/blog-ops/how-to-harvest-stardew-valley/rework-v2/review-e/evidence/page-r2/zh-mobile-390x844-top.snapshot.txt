@@ -1,0 +1,34 @@
+[p1 "星露谷物语怎么收作物：徒手、镰刀或斧头" | space "harvest page r2 acceptance"(151): 1 managed, 0 untracked — p1* "星露谷物语怎么收作物：徒手、镰刀或斧头"]
+root
+  container
+    container "星露谷物语农场规划器"
+      anchor [ref=200, url=http://127.0.0.1:3004/zh]
+        image
+      container
+        anchor "博客" [ref=201, loc=css:a[aria-label="博客"], url=http://127.0.0.1:3004/zh/blog]
+          text "博客"
+        container
+          button "语言" [ref=202, loc=css:button[aria-label="语言"]]
+            text "语言"
+            text "▾"
+          anchor "打开规划器" [ref=203, loc=css:a[aria-label="打开规划器"], url=http://127.0.0.1:3004/zh#planner]
+            text "打开规划器"
+    container
+      container
+        paragraph
+          text "星露谷物语指南"
+        heading
+          text "星露谷物语怎么收作物：徒手、镰刀或斧头"
+        paragraph
+          text "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"
+        paragraph
+          text "作者："
+          text "星露谷规划器团队"
+          text "·"
+          text "阅读约 6 分钟"
+        image
+      paragraph
+        text "在星露谷物语里，普通作物用手收：站在成熟植株旁边"
+        anchor [ref=204, url=https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411]
+          text "右键点它"
+        text "，或者按住动作键，走过田里连续收。防风草（Parsnip）不用镰刀。有些作物必须用镰刀收，包括苋菜（Amaranth）、甘蓝菜（Kale）、小麦、未碾米（Unmille..."

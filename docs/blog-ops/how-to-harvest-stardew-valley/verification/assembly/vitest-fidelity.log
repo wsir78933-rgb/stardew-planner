@@ -1,0 +1,11 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ✓ docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx (2 tests) 9ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  02:18:25
+   Duration  433ms (transform 38ms, setup 0ms, collect 66ms, tests 9ms, environment 0ms, prepare 49ms)
+
+VITEST_FIDELITY_EXIT:0

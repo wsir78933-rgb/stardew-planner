@@ -1,0 +1,863 @@
+{
+  "file_hashes": {
+    "en_body_locked": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "en_seo": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9",
+    "en_media_locked": "87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885",
+    "en_public_references_locked": "52a355abdce750e153057d103a342ff4c68c9e829c8d1f32129f1c7b92da606e",
+    "zh_body": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+    "zh_seo": "49dffecf14f8fb5ddf549334bc6c1f14408cb0ed5f8b58e4bac5826898b8910f",
+    "zh_media": "c6abd143616de6f03bc868121b41f9ae8a50f317b70dfbea37c67f3e282e95a7",
+    "zh_public_references": "7ca77bb04069808b5635e186985b936f15a25059f6de197ba0c229569b731c63"
+  },
+  "zh_quote_records": [
+    {
+      "id": "zh-steam-parsnip-right-click",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "quote": "站在成熟植株旁边[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-parsnip-stages",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "quote": "一株[防风草](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123)浇水长 4 天，才会出现可以收获的图像。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-pumpkin-stages",
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "quote": "一株[南瓜](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726)浇水长 13 天，才会出现可以收获的图像",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-blueberry-regrowth",
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "quote": "像[蓝莓](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090)（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-crops-watering",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "quote": "[作物必须每天浇水，才能按最快速度生长](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-controls-action",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "quote": "[X 和右键映射成同一个 Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-controls-tool",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "quote": "[左键和 C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)绑定的是使用工具或放置物品。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-calendar-replant",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "quote": "[作物生长日历](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875)，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-forum-hold-right-click",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "quote": "[按住右键，并且鼠标不要靠近角色](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-forum-x-mapped",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "quote": "[X 映射成右键](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-scythe-examples",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "quote": "另外一些作物必须用普通[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)来收，例如苋菜、甘蓝菜和小麦。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-kale",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "quote": "[甘蓝菜要用镰刀或更好的镰刀来收](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-fiber-seeds",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "quote": "[纤维种子要用镰刀来收](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-unmilled-rice",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "quote": "[未碾米要用镰刀来收](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-mobile-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "quote": "[先选中镰刀，再使用它](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-iridium-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "quote": "[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-giant-crops",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "quote": "会掉落[15 到 21 个普通品质的物品](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops)。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-trellis",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "quote": "[青豆、啤酒花和葡萄](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops)（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-wiki-season-wither",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "quote": "[不再当季的作物会在第 1 天枯萎](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)，并留下枯株",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-press-multiplayer-2-mature",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "quote": "ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+      "expected_occurrence": 1,
+      "actual_occurrences": 2,
+      "status": "PASS"
+    },
+    {
+      "id": "zh-press-multiplayer-2-trellis",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "quote": "ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+      "expected_occurrence": 2,
+      "actual_occurrences": 2,
+      "status": "PASS"
+    }
+  ],
+  "en_quote_records": [
+    {
+      "id": "en-steam-parsnip-right-click",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "quote": "stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-parsnip-stages",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "quote": "A [parsnip](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123) takes 4 days of watered growth to reach its harvest sprite.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-pumpkin-stages",
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "quote": "A [pumpkin](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726) takes 13 days of watered growth to reach its harvest sprite",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-blueberry-regrowth",
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "quote": "For multi-harvest crops like the [blueberry](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090), plants take 13 days to reach maturity.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-crops-watering",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "quote": "[crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-controls-action",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "quote": "[X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-controls-tool",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "quote": "[left-click and C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) are bound to using tools or placing items.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-calendar-replant",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "quote": "[crop growth calendars](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875), keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-forum-hold-right-click",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "quote": "[hold right-click with the mouse not near your character](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-forum-x-mapped",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "quote": "[X is mapped to right-click](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-scythe-examples",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "quote": "A standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-kale",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "quote": "[Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-fiber-seeds",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "quote": "[fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-unmilled-rice",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "quote": "[unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-mobile-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "quote": "[select the scythe before you use it](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-iridium-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "quote": "The [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-giant-crops",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "quote": "drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops). A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-trellis",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "quote": "[Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-wiki-season-wither",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "quote": "[crops that are no longer in season wither on the 1st](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979) and leave dead stalks",
+      "expected_occurrence": 1,
+      "actual_occurrences": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "en-press-multiplayer-2-mature",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+      "expected_occurrence": 1,
+      "actual_occurrences": 2,
+      "status": "PASS"
+    },
+    {
+      "id": "en-press-multiplayer-2-trellis",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+      "expected_occurrence": 2,
+      "actual_occurrences": 2,
+      "status": "PASS"
+    }
+  ],
+  "quote_correspondence": [
+    {
+      "en_id": "en-steam-parsnip-right-click",
+      "zh_id": "zh-steam-parsnip-right-click",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "en_quote": "stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+      "zh_quote": "站在成熟植株旁边[右键点它](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-parsnip-stages",
+      "zh_id": "zh-wiki-parsnip-stages",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "en_quote": "A [parsnip](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123) takes 4 days of watered growth to reach its harvest sprite.",
+      "zh_quote": "一株[防风草](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123)浇水长 4 天，才会出现可以收获的图像。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-pumpkin-stages",
+      "zh_id": "zh-wiki-pumpkin-stages",
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "en_quote": "A [pumpkin](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726) takes 13 days of watered growth to reach its harvest sprite",
+      "zh_quote": "一株[南瓜](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726)浇水长 13 天，才会出现可以收获的图像",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-blueberry-regrowth",
+      "zh_id": "zh-wiki-blueberry-regrowth",
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "en_quote": "For multi-harvest crops like the [blueberry](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090), plants take 13 days to reach maturity.",
+      "zh_quote": "像[蓝莓](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090)（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-crops-watering",
+      "zh_id": "zh-wiki-crops-watering",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "en_quote": "[crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+      "zh_quote": "[作物必须每天浇水，才能按最快速度生长](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-controls-action",
+      "zh_id": "zh-wiki-controls-action",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "en_quote": "[X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click",
+      "zh_quote": "[X 和右键映射成同一个 Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-controls-tool",
+      "zh_id": "zh-wiki-controls-tool",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "en_quote": "[left-click and C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) are bound to using tools or placing items.",
+      "zh_quote": "[左键和 C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481)绑定的是使用工具或放置物品。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-calendar-replant",
+      "zh_id": "zh-wiki-calendar-replant",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "en_quote": "[crop growth calendars](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875), keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest.",
+      "zh_quote": "[作物生长日历](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875)，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-forum-hold-right-click",
+      "zh_id": "zh-forum-hold-right-click",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "en_quote": "[hold right-click with the mouse not near your character](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "zh_quote": "[按住右键，并且鼠标不要靠近角色](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-forum-x-mapped",
+      "zh_id": "zh-forum-x-mapped",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "en_quote": "[X is mapped to right-click](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "zh_quote": "[X 映射成右键](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-scythe-examples",
+      "zh_id": "zh-wiki-scythe-examples",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "en_quote": "A standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat.",
+      "zh_quote": "另外一些作物必须用普通[镰刀](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696)来收，例如苋菜、甘蓝菜和小麦。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-kale",
+      "zh_id": "zh-wiki-kale",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "en_quote": "[Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+      "zh_quote": "[甘蓝菜要用镰刀或更好的镰刀来收](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-fiber-seeds",
+      "zh_id": "zh-wiki-fiber-seeds",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "en_quote": "[fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+      "zh_quote": "[纤维种子要用镰刀来收](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-unmilled-rice",
+      "zh_id": "zh-wiki-unmilled-rice",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "en_quote": "[unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+      "zh_quote": "[未碾米要用镰刀来收](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-mobile-scythe",
+      "zh_id": "zh-wiki-mobile-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "en_quote": "[select the scythe before you use it](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+      "zh_quote": "[先选中镰刀，再使用它](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-iridium-scythe",
+      "zh_id": "zh-wiki-iridium-scythe",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "en_quote": "The [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops.",
+      "zh_quote": "[铱镰刀](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836)是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-giant-crops",
+      "zh_id": "zh-wiki-giant-crops",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "en_quote": "drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops). A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it.",
+      "zh_quote": "会掉落[15 到 21 个普通品质的物品](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops)。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-trellis",
+      "zh_id": "zh-wiki-trellis",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "en_quote": "[Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile.",
+      "zh_quote": "[青豆、啤酒花和葡萄](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops)（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-wiki-season-wither",
+      "zh_id": "zh-wiki-season-wither",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "en_quote": "[crops that are no longer in season wither on the 1st](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979) and leave dead stalks",
+      "zh_quote": "[不再当季的作物会在第 1 天枯萎](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)，并留下枯株",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-press-multiplayer-2-mature",
+      "zh_id": "zh-press-multiplayer-2-mature",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "en_quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+      "zh_quote": "ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+      "occurrence": 1,
+      "matched": true
+    },
+    {
+      "en_id": "en-press-multiplayer-2-trellis",
+      "zh_id": "zh-press-multiplayer-2-trellis",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "en_quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+      "zh_quote": "ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+      "occurrence": 2,
+      "matched": true
+    }
+  ],
+  "link_comparison": {
+    "total_link_count": 27,
+    "url_multiset_identical": true,
+    "paired_links": [
+      {
+        "position": 1,
+        "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "right-click it",
+        "zh_anchor": "右键点它"
+      },
+      {
+        "position": 2,
+        "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "parsnip",
+        "zh_anchor": "防风草"
+      },
+      {
+        "position": 3,
+        "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "pumpkin",
+        "zh_anchor": "南瓜"
+      },
+      {
+        "position": 4,
+        "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "blueberry",
+        "zh_anchor": "蓝莓"
+      },
+      {
+        "position": 5,
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "crops must be watered every day for maximum growth",
+        "zh_anchor": "作物必须每天浇水，才能按最快速度生长"
+      },
+      {
+        "position": 6,
+        "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "right-click it",
+        "zh_anchor": "右键点它"
+      },
+      {
+        "position": 7,
+        "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "X is mapped to the same Check/Do Action",
+        "zh_anchor": "X 和右键映射成同一个 Check/Do Action"
+      },
+      {
+        "position": 8,
+        "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "left-click and C",
+        "zh_anchor": "左键和 C"
+      },
+      {
+        "position": 9,
+        "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "crop growth calendars",
+        "zh_anchor": "作物生长日历"
+      },
+      {
+        "position": 10,
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "hold right-click with the mouse not near your character",
+        "zh_anchor": "按住右键，并且鼠标不要靠近角色"
+      },
+      {
+        "position": 11,
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "X is mapped to right-click",
+        "zh_anchor": "X 映射成右键"
+      },
+      {
+        "position": 12,
+        "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "scythe",
+        "zh_anchor": "镰刀"
+      },
+      {
+        "position": 13,
+        "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "Kale is harvested with a scythe or better",
+        "zh_anchor": "甘蓝菜要用镰刀或更好的镰刀来收"
+      },
+      {
+        "position": 14,
+        "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "unmilled rice is harvested with a scythe",
+        "zh_anchor": "未碾米要用镰刀来收"
+      },
+      {
+        "position": 15,
+        "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "fiber seeds are harvested with the scythe",
+        "zh_anchor": "纤维种子要用镰刀来收"
+      },
+      {
+        "position": 16,
+        "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "select the scythe before you use it",
+        "zh_anchor": "先选中镰刀，再使用它"
+      },
+      {
+        "position": 17,
+        "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "iridium scythe",
+        "zh_anchor": "铱镰刀"
+      },
+      {
+        "position": 18,
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "15 to 21 normal-quality items",
+        "zh_anchor": "15 到 21 个普通品质的物品"
+      },
+      {
+        "position": 19,
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "Green bean, hops, and grape",
+        "zh_anchor": "青豆、啤酒花和葡萄"
+      },
+      {
+        "position": 20,
+        "url": "/",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "farm planner",
+        "zh_anchor": "农场规划器"
+      },
+      {
+        "position": 21,
+        "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "crops that are no longer in season wither on the 1st",
+        "zh_anchor": "不再当季的作物会在第 1 天枯萎"
+      },
+      {
+        "position": 22,
+        "url": "/last-day-to-plant-stardew",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "last day to plant",
+        "zh_anchor": "最晚播种日"
+      },
+      {
+        "position": 23,
+        "url": "/what-to-grow-in-greenhouse-stardew",
+        "en_type": "markdown",
+        "zh_type": "markdown",
+        "en_anchor": "what to grow in the greenhouse",
+        "zh_anchor": "温室里种什么"
+      },
+      {
+        "position": 24,
+        "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "en_type": "html",
+        "zh_type": "html",
+        "en_anchor": "Stardew Valley press screenshot",
+        "zh_anchor": "星露谷物语新闻素材截图"
+      },
+      {
+        "position": 25,
+        "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "en_type": "html",
+        "zh_type": "html",
+        "en_anchor": "Stardew Valley press screenshot",
+        "zh_anchor": "星露谷物语新闻素材截图"
+      },
+      {
+        "position": 26,
+        "url": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "en_type": "image_src",
+        "zh_type": "image_src",
+        "en_anchor": "<img>",
+        "zh_anchor": "<img>"
+      },
+      {
+        "position": 27,
+        "url": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "en_type": "image_src",
+        "zh_type": "image_src",
+        "en_anchor": "<img>",
+        "zh_anchor": "<img>"
+      }
+    ]
+  },
+  "media_records": {
+    "figures": [
+      {
+        "figure_id": "media-mature-crops",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "width": 1672,
+        "height": 941,
+        "en_alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+        "zh_alt": "土路旁的耕地上长着饱满的橙色南瓜。",
+        "en_caption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "zh_caption": "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。"
+      },
+      {
+        "figure_id": "media-trellis-paths",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "width": 1672,
+        "height": 941,
+        "en_alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+        "zh_alt": "两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。",
+        "en_caption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "zh_caption": "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。"
+      }
+    ],
+    "cover": {
+      "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+      "caption": "农场的傍晚：橙色南瓜铺满土路旁的耕地，这块地旁边是木棚架。ConcernedApe，星露谷物语新闻素材截图。",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png"
+    }
+  },
+  "audit_records": {
+    "editorial_issues": [],
+    "terminology_audit": [
+      {
+        "term": "Kale",
+        "required": "甘蓝菜",
+        "forbidden": "羽衣甘蓝",
+        "status": "PASS"
+      },
+      {
+        "term": "Parsnip",
+        "expected_phrase": "防风草（Parsnip）",
+        "found": true
+      },
+      {
+        "term": "Amaranth",
+        "expected_phrase": "苋菜（Amaranth）",
+        "found": true
+      },
+      {
+        "term": "Kale",
+        "expected_phrase": "甘蓝菜（Kale）",
+        "found": true
+      },
+      {
+        "term": "Unmilled Rice",
+        "expected_phrase": "未碾米（Unmilled Rice）",
+        "found": true
+      },
+      {
+        "term": "Fiber Seeds",
+        "expected_phrase": "纤维种子（Fiber Seeds）",
+        "found": true
+      },
+      {
+        "term": "Giant Crop",
+        "expected_phrase": "巨大作物（Giant Crop）",
+        "found": true
+      },
+      {
+        "term": "Blueberry",
+        "expected_phrase": "蓝莓（Blueberry）",
+        "found": true
+      },
+      {
+        "term": "Trellis",
+        "expected_phrase": "棚架（Trellis）",
+        "found": true
+      },
+      {
+        "term": "Green Bean / Hops / Grape",
+        "expected_phrase": "青豆、啤酒花和葡萄（Green Bean、Hops、Grape）",
+        "found": true
+      },
+      {
+        "term": "Farming Mastery",
+        "expected_phrase": "耕种精通（Farming Mastery）",
+        "found": true
+      }
+    ],
+    "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+    "h1": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+    "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"
+  }
+}

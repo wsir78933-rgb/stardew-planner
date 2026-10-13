@@ -1,0 +1,13 @@
+command: tesseract /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/en-figure-candidate.png stdout -l eng --psm 6
+exit_code: 0
+CROP HARVEST METHODS
+HAND HARVEST SCYTHE SWING
+Parsnip Kale, Wheat, Amaranth
+Check / Do Action Unmilled Rice, Fiber
+Hold on your tile Iridium 1.6: tilled soil
+GIANT CROP TRELLIS DAY 28
+Axe, 3 hits Green Bean, Hops Off-season wilts
+7 . Grape Greenhouse
+18-21, no wilt Path is blocked all year
+
+--- stderr ---

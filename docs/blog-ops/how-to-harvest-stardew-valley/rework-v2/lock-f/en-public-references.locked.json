@@ -1,0 +1,215 @@
+{
+  "version": "rework-v2",
+  "locale": "en",
+  "slug": "how-to-harvest-stardew-valley",
+  "bodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "bodyFile": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/lock-f/en-body.locked.md",
+  "referenceCount": 21,
+  "references": [
+    {
+      "id": "en-steam-parsnip-right-click",
+      "label": "Steam Community discussion on harvesting a parsnip",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "appliesTo": {
+        "quote": "stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-parsnip-stages",
+      "label": "Parsnip on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "appliesTo": {
+        "quote": "A [parsnip](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123) takes 4 days of watered growth to reach its harvest sprite.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-pumpkin-stages",
+      "label": "Pumpkin on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "appliesTo": {
+        "quote": "A [pumpkin](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726) takes 13 days of watered growth to reach its harvest sprite",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-blueberry-regrowth",
+      "label": "Blueberry on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "appliesTo": {
+        "quote": "For multi-harvest crops like the [blueberry](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090), plants take 13 days to reach maturity.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-crops-watering",
+      "label": "Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "[crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-controls-action",
+      "label": "Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "[X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-controls-tool",
+      "label": "Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "[left-click and C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) are bound to using tools or placing items.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-calendar-replant",
+      "label": "Crop Growth Calendars on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "appliesTo": {
+        "quote": "[crop growth calendars](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875), keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-forum-hold-right-click",
+      "label": "Stardew Valley Forums post on PC controls versus mobile",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "appliesTo": {
+        "quote": "[hold right-click with the mouse not near your character](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-forum-x-mapped",
+      "label": "Stardew Valley Forums post on PC controls versus mobile",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "appliesTo": {
+        "quote": "[X is mapped to right-click](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-scythe-examples",
+      "label": "Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "appliesTo": {
+        "quote": "A standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-kale",
+      "label": "Kale on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "appliesTo": {
+        "quote": "[Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-fiber-seeds",
+      "label": "Fiber Seeds on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "appliesTo": {
+        "quote": "[fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-unmilled-rice",
+      "label": "Unmilled Rice on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "appliesTo": {
+        "quote": "[unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-mobile-scythe",
+      "label": "Mobile Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "appliesTo": {
+        "quote": "[select the scythe before you use it](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-iridium-scythe",
+      "label": "Iridium Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "appliesTo": {
+        "quote": "The [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-giant-crops",
+      "label": "Giant Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "appliesTo": {
+        "quote": "drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops). A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-trellis",
+      "label": "Trellis Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "appliesTo": {
+        "quote": "[Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-season-wither",
+      "label": "Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "[crops that are no longer in season wither on the 1st](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979) and leave dead stalks",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-press-multiplayer-2-mature",
+      "label": "ConcernedApe Stardew Valley press screenshot",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "appliesTo": {
+        "quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-press-multiplayer-2-trellis",
+      "label": "ConcernedApe Stardew Valley press screenshot",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "appliesTo": {
+        "quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "occurrence": 2
+      }
+    }
+  ]
+}

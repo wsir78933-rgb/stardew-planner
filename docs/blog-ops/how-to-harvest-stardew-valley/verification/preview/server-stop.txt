@@ -1,0 +1,6 @@
+stopped_at 2026-10-12T18:38:13Z
+reason webpack build shares .next with next dev
+target_pgid 79340
+target_pids 79340 79343 79399
+terminal term_7dfa2286-b04b-4b91-816a-73a4545cf236
+left_alone 3002=86353 3003=81615 3005=71596 3013=97774

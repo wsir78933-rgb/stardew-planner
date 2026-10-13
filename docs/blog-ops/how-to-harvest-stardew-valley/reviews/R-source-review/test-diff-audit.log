@@ -1,0 +1,29 @@
+=== STARTING TEST DIFF AUDIT ===
+
+--- Analyzing tests/blog/blog-home-state.test.ts ---
+Lines deleted: 6, Lines added: 8
+  [OK] No genuine test blocks deleted.
+
+--- Analyzing tests/blog/blog-post-registry.test.ts ---
+Lines deleted: 4, Lines added: 44
+  [OK] No genuine test blocks deleted.
+
+--- Analyzing tests/i18n/public-route-registry.test.ts ---
+Lines deleted: 3, Lines added: 12
+  [OK] No genuine test blocks deleted.
+
+--- Analyzing tests/routes/blog-routes.test.tsx ---
+Lines deleted: 2, Lines added: 2
+  [OK] No genuine test blocks deleted.
+
+--- Analyzing tests/routes/removed-public-pages.test.ts ---
+Lines deleted: 4, Lines added: 4
+  [OK] No genuine test blocks deleted.
+
+--- Analyzing tests/seo/canonical-public-routes.test.ts ---
+Lines deleted: 1, Lines added: 2
+  [OK] No genuine test blocks deleted.
+
+=== TEST DIFF AUDIT SUMMARY ===
+Total deleted test blocks across all test files: 0
+PASS: All test diffs only update counts, latest-6 window, and new route mappings. No tests deleted.

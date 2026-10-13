@@ -1,0 +1,412 @@
+{
+  "enDesktop": {
+    "meta": {
+      "title": "How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe",
+      "desc": "Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.",
+      "canonical": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+      "hreflangs": [
+        {
+          "hreflang": "en",
+          "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+        },
+        {
+          "hreflang": "zh-CN",
+          "href": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"
+        },
+        {
+          "hreflang": "x-default",
+          "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+        }
+      ],
+      "h1Count": 1,
+      "h1Text": "How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe",
+      "schema": {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe",
+        "description": "Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.",
+        "url": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+        "inLanguage": "en",
+        "isPartOf": {
+          "@id": "https://stardewvalleyplanner.art/#website"
+        }
+      },
+      "langSwitch": "/zh/how-to-harvest-stardew-valley",
+      "docScrollWidth": 1274,
+      "docClientWidth": 1274,
+      "bodyScrollWidth": 1274,
+      "bodyClientWidth": 1274,
+      "hasHorizontalOverflow": false,
+      "linksCount": 33,
+      "links": [
+        {
+          "text": "How to Harvest Standard Crops by Hand",
+          "href": "#how-to-harvest-standard-crops-by-hand"
+        },
+        {
+          "text": "Default PC Controls: Right-Click and the Check/Do Action",
+          "href": "#default-pc-controls-right-click-and-the-check-do-action"
+        },
+        {
+          "text": "Continuous Harvesting: The Hold-and-Walk Method",
+          "href": "#continuous-harvesting-the-hold-and-walk-method"
+        },
+        {
+          "text": "Crops That Require a Scythe to Harvest",
+          "href": "#crops-that-require-a-scythe-to-harvest"
+        },
+        {
+          "text": "The Scythe-Harvested Crops in Stardew Valley",
+          "href": "#the-scythe-harvested-crops-in-stardew-valley"
+        },
+        {
+          "text": "Comparing Scythes: Starter Scythe, Golden Scythe, and the Iridium Scythe",
+          "href": "#comparing-scythes-starter-scythe-golden-scythe-and-the-iridium-scythe"
+        },
+        {
+          "text": "How to Tell When Your Crops Are Ready to Harvest",
+          "href": "#how-to-tell-when-your-crops-are-ready-to-harvest"
+        },
+        {
+          "text": "Calculating Growth Days and the Watering Requirement",
+          "href": "#calculating-growth-days-and-the-watering-requirement"
+        },
+        {
+          "text": "Single-Harvest vs. Regrowing Crops",
+          "href": "#single-harvest-vs-regrowing-crops"
+        },
+        {
+          "text": "What Happens If You Leave Crops Unharvested?",
+          "href": "#what-happens-if-you-leave-crops-unharvested"
+        },
+        {
+          "text": "Unharvested Crops Within the Active Season",
+          "href": "#unharvested-crops-within-the-active-season"
+        },
+        {
+          "text": "Season Rollover: When Outdoor Crops Wilt",
+          "href": "#season-rollover-when-outdoor-crops-wilt"
+        },
+        {
+          "text": "Special Harvesting Rules: Giant Crops and Trellises",
+          "href": "#special-harvesting-rules-giant-crops-and-trellises"
+        },
+        {
+          "text": "Harvesting 3×3 Giant Crops with an Axe",
+          "href": "#harvesting-3-3-giant-crops-with-an-axe"
+        },
+        {
+          "text": "Navigating Impassable Trellis Crops",
+          "href": "#navigating-impassable-trellis-crops"
+        },
+        {
+          "text": "right-click it",
+          "href": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/"
+        },
+        {
+          "text": "Kale",
+          "href": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520"
+        },
+        {
+          "text": "amaranth",
+          "href": "https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043"
+        },
+        {
+          "text": "wheat",
+          "href": "https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731"
+        },
+        {
+          "text": "unmilled rice",
+          "href": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130"
+        },
+        {
+          "text": "fiber seeds",
+          "href": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587"
+        },
+        {
+          "text": "X is mapped to the same click",
+          "href": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/"
+        },
+        {
+          "text": "PC controls",
+          "href": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481"
+        },
+        {
+          "text": "seeds and fertilizer",
+          "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979"
+        },
+        {
+          "text": "Scythe",
+          "href": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696"
+        },
+        {
+          "text": "Golden Scythe",
+          "href": "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051"
+        },
+        {
+          "text": "Iridium Scythe",
+          "href": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+        },
+        {
+          "text": "1.6.9",
+          "href": "https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/"
+        },
+        {
+          "text": "parsnip",
+          "href": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123"
+        },
+        {
+          "text": "Last Day to Plant in Stardew Valley",
+          "href": "/last-day-to-plant-stardew"
+        },
+        {
+          "text": "Greenhouse",
+          "href": "https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164"
+        },
+        {
+          "text": "What to Grow in Greenhouse Stardew",
+          "href": "/what-to-grow-in-greenhouse-stardew"
+        },
+        {
+          "text": "Stardew Valley Farm Planner",
+          "href": "https://stardewvalleyplanner.art"
+        }
+      ],
+      "pictures": [
+        {
+          "tagName": "IMG",
+          "currentSrc": "http://127.0.0.1:3004/favicon.png",
+          "alt": ""
+        },
+        {
+          "tagName": "PICTURE",
+          "currentSrc": null,
+          "alt": null
+        },
+        {
+          "tagName": "IMG",
+          "currentSrc": "http://127.0.0.1:3004/blog/how-to-harvest-stardew-valley-cover.avif",
+          "alt": "Illustration of a farm: leafy crops in tilled soil beside a crate of orange roots, three pumpkins and a hoe, rows of yellow stalks with a scythe and a vine trellis, and a brown-roofed building with plants in its windows."
+        },
+        {
+          "tagName": "PICTURE",
+          "currentSrc": null,
+          "alt": null
+        },
+        {
+          "tagName": "IMG",
+          "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+          "alt": "Diagram of Stardew Valley harvest controls: Right-Click or X for a parsnip, Left-Click or C with a scythe for kale, wheat, amaranth, unmilled rice, and fiber, an axe for a giant crop, plus trellis and season-change rules."
+        }
+      ],
+      "figcaptions": [
+        "Schematic: Stardew Valley crop harvest methods, with Right-Click or X for a parsnip, a scythe swing for kale, wheat, amaranth, unmilled rice, and fiber, plus an axe for giant crops, blocked trellises, and the day-28 season change."
+      ],
+      "bodyTextLength": 9465,
+      "hasExtraBlogSources": false
+    },
+    "screenshot": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/reviews/screenshots/en-desktop.png"
+  },
+  "enMobile": {
+    "meta": {
+      "docScrollWidth": 390,
+      "docClientWidth": 390,
+      "bodyScrollWidth": 390,
+      "bodyClientWidth": 390,
+      "hasHorizontalOverflow": false,
+      "overflowingElements": []
+    },
+    "screenshot": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/reviews/screenshots/en-mobile-390x844.png"
+  },
+  "zhDesktop": {
+    "meta": {
+      "title": "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
+      "desc": "站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。",
+      "canonical": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+      "hreflangs": [
+        {
+          "hreflang": "en",
+          "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+        },
+        {
+          "hreflang": "zh-CN",
+          "href": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"
+        },
+        {
+          "hreflang": "x-default",
+          "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+        }
+      ],
+      "h1Count": 1,
+      "h1Text": "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
+      "schema": {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
+        "description": "站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。",
+        "url": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+        "inLanguage": "zh-CN",
+        "isPartOf": {
+          "@id": "https://stardewvalleyplanner.art/#website"
+        }
+      },
+      "langSwitch": "/how-to-harvest-stardew-valley",
+      "docScrollWidth": 1274,
+      "docClientWidth": 1274,
+      "bodyScrollWidth": 1274,
+      "bodyClientWidth": 1274,
+      "hasHorizontalOverflow": false,
+      "linksCount": 33,
+      "links": [
+        {
+          "text": "如何徒手收获常规作物",
+          "href": "#如何徒手收获常规作物"
+        },
+        {
+          "text": "PC 默认键位：右键与“检查 / 执行操作”",
+          "href": "#pc-默认键位-右键与-检查-执行操作"
+        },
+        {
+          "text": "连续收获：按住并走动的方法",
+          "href": "#连续收获-按住并走动的方法"
+        },
+        {
+          "text": "需要镰刀收割的农作物",
+          "href": "#需要镰刀收割的农作物"
+        },
+        {
+          "text": "星露谷物语中的镰刀收割作物",
+          "href": "#星露谷物语中的镰刀收割作物"
+        },
+        {
+          "text": "镰刀对比：初始镰刀、金镰刀与铱镰刀",
+          "href": "#镰刀对比-初始镰刀-金镰刀与铱镰刀"
+        },
+        {
+          "text": "如何判断农作物何时可以收获",
+          "href": "#如何判断农作物何时可以收获"
+        },
+        {
+          "text": "计算生长天数与浇水要求",
+          "href": "#计算生长天数与浇水要求"
+        },
+        {
+          "text": "单次收获与多次再生作物",
+          "href": "#单次收获与多次再生作物"
+        },
+        {
+          "text": "农作物成熟后不收获会怎样？",
+          "href": "#农作物成熟后不收获会怎样"
+        },
+        {
+          "text": "当季内未收获的农作物",
+          "href": "#当季内未收获的农作物"
+        },
+        {
+          "text": "换季过渡：室外农作物何时枯萎",
+          "href": "#换季过渡-室外农作物何时枯萎"
+        },
+        {
+          "text": "特殊收获规则：巨大作物与棚架",
+          "href": "#特殊收获规则-巨大作物与棚架"
+        },
+        {
+          "text": "用斧头收获 3×3 巨大作物",
+          "href": "#用斧头收获-3-3-巨大作物"
+        },
+        {
+          "text": "在无法通行的棚架作物间走动",
+          "href": "#在无法通行的棚架作物间走动"
+        },
+        {
+          "text": "点击右键",
+          "href": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/"
+        },
+        {
+          "text": "羽衣甘蓝",
+          "href": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520"
+        },
+        {
+          "text": "苋菜",
+          "href": "https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043"
+        },
+        {
+          "text": "小麦",
+          "href": "https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731"
+        },
+        {
+          "text": "未碾米",
+          "href": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130"
+        },
+        {
+          "text": "纤维种子",
+          "href": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587"
+        },
+        {
+          "text": "X 键映射为相同的点击操作",
+          "href": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/"
+        },
+        {
+          "text": "PC 控制键位",
+          "href": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481"
+        },
+        {
+          "text": "种子与肥料",
+          "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979"
+        },
+        {
+          "text": "镰刀",
+          "href": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696"
+        },
+        {
+          "text": "金镰刀",
+          "href": "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051"
+        },
+        {
+          "text": "铱镰刀",
+          "href": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+        },
+        {
+          "text": "1.6.9",
+          "href": "https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/"
+        },
+        {
+          "text": "防风草",
+          "href": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123"
+        },
+        {
+          "text": "星露谷最晚播种日",
+          "href": "/zh/last-day-to-plant-stardew"
+        },
+        {
+          "text": "温室",
+          "href": "https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164"
+        },
+        {
+          "text": "星露谷温室种什么",
+          "href": "/zh/what-to-grow-in-greenhouse-stardew"
+        },
+        {
+          "text": "星露谷农场规划器",
+          "href": "https://stardewvalleyplanner.art"
+        }
+      ],
+      "figcaptions": [
+        "示意图：星露谷物语农作物收获方式，包括防风草使用右键或 X 键，羽衣甘蓝、小麦、苋菜、未碾米与纤维使用镰刀挥击，以及巨大作物使用斧头、阻挡通行的棚架与第 28 天换季规则。"
+      ],
+      "bodyTextLength": 3466,
+      "hasExtraBlogSources": false
+    },
+    "screenshot": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/reviews/screenshots/zh-desktop.png"
+  },
+  "zhMobile": {
+    "meta": {
+      "docScrollWidth": 390,
+      "docClientWidth": 390,
+      "bodyScrollWidth": 390,
+      "bodyClientWidth": 390,
+      "hasHorizontalOverflow": false
+    },
+    "screenshot": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/reviews/screenshots/zh-mobile-390x844.png"
+  }
+}

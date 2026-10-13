@@ -1,0 +1,554 @@
+{
+  "englishBodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "chineseBodyHash": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+  "english": {
+    "visibleBlocks": [
+      {
+        "kind": "paragraph",
+        "text": [
+          "Harvest regular crops by hand in Stardew Valley: stand beside a mature plant and right-click it, or hold the action key to gather continuously across your fields. A parsnip does not need a scythe. Certain crops require a scythe to harvest, including amaranth, kale, wheat, unmilled rice, and fiber seeds. Giant crops that combine across 3x3 plots require any axe struck three times. A crop is ready when its final harvest sprite appears on the tilled tile, signaling that growth is complete."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "How to Tell When Crops Are Ready to Harvest"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Visual Signs: Identifying the Final Harvest Stage Sprite"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Every crop progresses through distinct visual growth stages. In the field, a crop is ready when that plant shows its final harvest sprite."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "A parsnip takes 4 days of watered growth to reach its harvest sprite. Once gathered, the single-harvest root is pulled from the ground, leaving behind an empty tilled tile. A pumpkin takes 13 days of watered growth to reach its harvest sprite, visible as a large, rounded orange fruit resting on the tilled dirt."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "For multi-harvest crops like the blueberry, plants take 13 days to reach maturity. After picking, the bush remains standing in an after-harvest stage, producing fresh berries every 4 days without replanting."
+        ]
+      },
+      {
+        "kind": "figcaption",
+        "id": "media-mature-crops",
+        "text": [
+          "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, Stardew Valley press screenshot."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "In the field screenshot above, mature pumpkins show their full orange shape on the tilled soil beside the dirt path."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Calculating Harvest Days and Unwatered Delays"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Calculating growth days helps predict the exact morning of harvest. In Stardew Valley, growth calculations exclude the day seeds are planted; the listed total represents the number of watered nights required to mature."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "As stated in the general crop rules, crops must be watered every day for maximum growth. If unwatered for a day, a crop will not grow, though unwatered crops do not die. Sowing into dry soil and skipping watering that day prevents growth that night; growth begins the following night once watered."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Under standard daily watering, a 4-day crop like a parsnip planted on Spring 1 matures on Spring 5 morning (1 + 4 = 5). Missing one watering day pauses growth, postponing harvest to Spring 6. Similarly, a 13-day pumpkin planted on Fall 1 with daily watering matures on Fall 14. For regrowing crops like blueberries, daily watering is likewise required to advance subsequent yields: after the initial 13 days, continuing to water the bush daily advances its 4-day regrowth cycle on schedule."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "How to Harvest Standard Crops by Hand"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Single-Crop Harvesting on PC"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Single crops are harvested by hand using the universal Check/Do Action control. Stand next to the ripe crop and right-click it. Keyboard X is mapped to the same Check/Do Action as right-click, allowing you to harvest individual plants by pressing X."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "left-click and C are bound to using tools or placing items. A hand harvest does not need a tool swing."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Once harvested, single-harvest crops leave bare tilled soil. According to the crop growth calendars, keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Rapid Harvesting: The Hold-and-Walk Technique"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "For large vegetable plots on PC, hold right-click with the mouse not near your character. Keeping right-click held down with the cursor away from your character harvests the crop on each tile you step over as you walk through the field. X is mapped to right-click and performs the same action."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "With a stack of seeds selected, holding right-click while walking over ripe single-harvest crops harvests the mature plant on the tile you are standing on, and you can sow the new seed on that open soil. A blueberry bush stays after you pick it and keeps producing fruit, so that plant does not need another seed."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "How to Harvest Designated Crops with a Scythe"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Crops That Require a Scythe to Harvest"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "A standard scythe is required for certain other crops, such as amaranth, kale, and wheat. Right-clicking or pressing X does not harvest them. Kale is harvested with a scythe or better, unmilled rice is harvested with a scythe, and fiber seeds are harvested with the scythe. Fiber seeds are a distinct exception: they do not require daily watering to grow, yet still require a scythe when fully grown."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "To harvest these crops, place the scythe in your active toolbar, face the crop, and press your tool button (left-click or C on PC). On mobile devices, select the scythe before you use it."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "The 1.6 Iridium Scythe on Tilled Soil"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "The iridium scythe is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Harvesting Special Crops: Giant Crops and Trellises"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Harvesting Giant Crops with an Axe"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Harvest a giant crop with any axe. It takes three hits and drops 15 to 21 normal-quality items. A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it. Face the giant crop and strike it three times using your tool button (left-click or C on PC)."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Maintaining Reachable Paths Around Trellis Crops"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Trellis crops introduce unique movement constraints to farm design. Green bean, hops, and grape grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "Because living trellises block movement entirely, every plant must have an accessible standing tile beside it. Planting trellises in solid blocks leaves interior plants unreachable for watering and harvesting. A reliable farm layout arranges trellises in double rows separated by an open walking aisle, giving farmers access to vines on either side."
+        ]
+      },
+      {
+        "kind": "figcaption",
+        "id": "media-trellis-paths",
+        "text": [
+          "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, Stardew Valley press screenshot."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "In the screenshot above, an open dirt path separates two wooden trellis rows, providing clear foot access to harvest purple grapes on each side. When designing field layouts with trellis crops, planning open walkways on the farm planner before planting ensures every vine remains reachable throughout the season."
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "Troubleshooting Harvest Issues"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "If crops are not harvesting as expected, check the symptom against your tools, calendar, and layout:"
+        ]
+      },
+      {
+        "kind": "list",
+        "text": [
+          "Harvest sprite has not appeared on the expected date: Check for missed watering days. Unwatered days pause growth without killing the plant, delaying maturity by one morning per dry day. Water the field and maintain daily watering until the harvest sprite appears.",
+          "Interacting by hand produces no harvest: Determine whether the crop requires a tool. Scythe crops (amaranth, kale, wheat, unmilled rice, fiber seeds) and 3x3 giant crops cannot be picked by hand. Equip a scythe and swing it across the crop, or strike a giant crop three times with an axe.",
+          "Character cannot reach ripe crops inside a field: Living trellis crops (green beans, hops, grapes) block movement. Harvest reachable vines from outer perimeter tiles, and arrange future trellis plantings with open walkways between double rows.",
+          "Crops withered overnight on the 1st: Seasonal turnover kills out-of-season plantings. On the 1st of each season, crops that are no longer in season wither on the 1st and leave dead stalks, while multi-season crops continue growing. Clear dead crops with a scythe to retain tilled soil. Plan future plantings using the last day to plant timeline, or grow recurring crops indoors following what to grow in the greenhouse."
+        ]
+      }
+    ],
+    "figures": [
+      {
+        "id": "media-mature-crops",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+        "captionVisible": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, Stardew Valley press screenshot.",
+        "componentName": "HowToHarvestStardewValleyEnglishMatureCropsFigure"
+      },
+      {
+        "id": "media-trellis-paths",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+        "captionVisible": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, Stardew Valley press screenshot.",
+        "componentName": "HowToHarvestStardewValleyEnglishTrellisPathsFigure"
+      }
+    ]
+  },
+  "chinese": {
+    "visibleBlocks": [
+      {
+        "kind": "paragraph",
+        "text": [
+          "在星露谷物语里，普通作物用手收：站在成熟植株旁边右键点它，或者按住动作键，走过田里连续收。防风草（Parsnip）不用镰刀。有些作物必须用镰刀收，包括苋菜（Amaranth）、甘蓝菜（Kale）、小麦、未碾米（Unmilled Rice）和纤维种子（Fiber Seeds）。连成 3×3 的巨大作物（Giant Crop），要用任意一把斧头砍三下。耕地上那一格出现这种作物最后一阶段、可以收获的图像，就说明已经长成。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "怎么看出作物可以收"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "看图像：最后一阶段可以收获的样子"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "每种作物都会依次换成不同的生长阶段图像。在田里，这株作物显示出最后一阶段、可以收获的图像，就可以收了。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "一株防风草浇水长 4 天，才会出现可以收获的图像。这种只收一次的根，收走时会从地里拔出来，留下一块空的耕地。一株南瓜浇水长 13 天，才会出现可以收获的图像，看上去是一大颗圆圆的橙色果实，搁在耕过的土上。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "像蓝莓（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。摘过以后，灌木还立在地里，进入收获之后的阶段，之后每 4 天结出新浆果，不用重新播种。"
+        ]
+      },
+      {
+        "kind": "figcaption",
+        "id": "media-mature-crops",
+        "text": [
+          "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，星露谷物语新闻素材截图。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "上面这张田间截图里，成熟的南瓜在土路旁边的耕地上，是完整的橙色外形。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "算收获日，以及漏浇水会顺延"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "把生长天数算清楚，才能知道具体哪一个早晨能收。在星露谷物语里，生长天数不算播种当天；标出的总天数，是成熟前需要浇水度过的夜晚数。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "按作物的一般规则，作物必须每天浇水，才能按最快速度生长。有一天没浇，这一天就不长，但没浇水的作物不会死。种子播进干土、当天又不浇，那天夜里不会生长；浇上水之后，从下一个夜晚开始长。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "每天都浇水的话，春季第 1 天种下的 4 天作物，例如防风草，在春季第 5 天早晨成熟（1 + 4 = 5）。漏浇一天，生长就暂停，收获推迟到春季第 6 天。同样，秋季第 1 天种下、每天浇水的 13 天南瓜，在秋季第 14 天成熟。会再生的作物，例如蓝莓，后面每一茬也同样要每天浇水才会推进：头一个 13 天过去以后，继续每天给这丛灌木浇水，4 天一轮的再生就会按日子往前走。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "普通作物怎么用手收"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "在 PC 上收单株"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "单株作物用手收，用的是通用的 Check/Do Action。站在成熟作物旁边，右键点它。键盘上X 和右键映射成同一个 Check/Do Action，按 X 就能一株一株地收。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "左键和 C绑定的是使用工具或放置物品。用手收，不需要挥工具。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "收完以后，只收一次的作物留下光秃的耕地。按照作物生长日历，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "快速收：按住并在田里走"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "PC 上的大片菜地，可以按住右键，并且鼠标不要靠近角色。右键一直按着、光标离开角色，你走过田里时，脚下踩过的每一格上的作物都会被收掉。X 映射成右键，做的是同一个动作。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "选中一叠种子时，按住右键走过已经成熟的单次作物，会收掉你所站那一格上的成熟植株，也可以把新种子播进这块空地。蓝莓丛摘过以后还在，并且继续结果，所以这株不用再播一颗种子。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "指定作物怎么用镰刀收"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "必须用镰刀收的作物"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "另外一些作物必须用普通镰刀来收，例如苋菜、甘蓝菜和小麦。右键点它，或者按 X，都收不下来。甘蓝菜要用镰刀或更好的镰刀来收，未碾米要用镰刀来收，纤维种子要用镰刀来收。纤维种子是单独的例外：生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "收这些作物时，把镰刀放进当前工具栏，面向作物，按下使用工具的键（PC 上是左键或 C）。在移动设备上，先选中镰刀，再使用它。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "1.6 的铱镰刀，用在耕地上"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "铱镰刀是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "收特殊作物：巨大作物和棚架"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "用斧头收巨大作物"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "巨大作物用任意斧头来收。要砍三下，会掉落15 到 21 个普通品质的物品。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "棚架作物旁边留出走得到的路"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "棚架（Trellis）作物会限制人怎么走。青豆、啤酒花和葡萄（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "活着的棚架把路完全挡住，所以每株旁边都必须有一格站得到。棚架如果种成实心一块，里面的植株就浇不到，也收不到。稳妥的摆法是把棚架排成双行，中间留一条能走的空道，两边的藤都够得着。"
+        ]
+      },
+      {
+        "kind": "figcaption",
+        "id": "media-trellis-paths",
+        "text": [
+          "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，星露谷物语新闻素材截图。"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "上面这张截图里，一条空着的土路隔开两排木棚架，人可以走过去，收两边的紫葡萄。设计带棚架的田时，种之前先在农场规划器上把走道留出来，这一季每条藤都够得着。"
+        ]
+      },
+      {
+        "kind": "heading",
+        "text": [
+          "收成对不上时先看症状"
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": [
+          "作物没有按预期收下来时，用工具、日历和田的摆法对一下症状："
+        ]
+      },
+      {
+        "kind": "list",
+        "text": [
+          "到了预计的日子，还没有可以收获的图像：查有没有漏浇的日子。没浇水的日子会暂停生长，但不会把植株弄死；每干一天，成熟就晚一个早晨。把田浇上，并且坚持每天浇，直到出现可以收获的图像。",
+          "用手去点，没有收获：先看这种作物要不要工具。镰刀作物（苋菜、甘蓝菜、小麦、未碾米、纤维种子）和 3×3 的巨大作物都不能用手摘。装备镰刀，挥过这些作物；巨大作物则用斧头砍三下。",
+          "人走不到田里面已经成熟的作物：活着的棚架作物（青豆、啤酒花、葡萄）会挡路。先从外圈站得到的格子收藤；以后种棚架时，在双行中间留出走道。",
+          "第 1 天过夜以后，作物枯了：一换季，不当季的种植就会死。每个季节的第 1 天，不再当季的作物会在第 1 天枯萎，并留下枯株；跨季作物则继续长。用镰刀清掉枯株，下面的耕地还留着。以后播种按最晚播种日来排日子，或者按温室里种什么，在室内种会反复结的作物。"
+        ]
+      }
+    ],
+    "figures": [
+      {
+        "id": "media-mature-crops",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "alt": "土路旁的耕地上长着饱满的橙色南瓜。",
+        "captionVisible": "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，星露谷物语新闻素材截图。",
+        "componentName": "HowToHarvestStardewValleyChineseMatureCropsFigure"
+      },
+      {
+        "id": "media-trellis-paths",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "alt": "两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。",
+        "captionVisible": "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，星露谷物语新闻素材截图。",
+        "componentName": "HowToHarvestStardewValleyChineseTrellisPathsFigure"
+      }
+    ]
+  },
+  "englishSeo": {
+    "title": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+    "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+    "coverAlt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+    "coverCaption": "Evening on a farm: orange pumpkins fill a tilled bed along the dirt paths, with wooden trellis rows beside that bed. ConcernedApe, Stardew Valley press screenshot."
+  },
+  "chineseSeo": {
+    "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+    "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+    "coverAlt": "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+    "coverCaption": "农场的傍晚：橙色南瓜铺满土路旁的耕地，这块地旁边是木棚架。ConcernedApe，星露谷物语新闻素材截图。"
+  },
+  "installedAssets": [
+    {
+      "fileName": "how-to-harvest-stardew-valley-cover.webp",
+      "publicPath": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+      "byteSize": 479250
+    },
+    {
+      "fileName": "how-to-harvest-stardew-valley-cover.avif",
+      "publicPath": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57",
+      "byteSize": 237604
+    },
+    {
+      "fileName": "how-to-harvest-stardew-valley-mature-crops.webp",
+      "publicPath": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+      "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+      "byteSize": 267644
+    },
+    {
+      "fileName": "how-to-harvest-stardew-valley-mature-crops.avif",
+      "publicPath": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+      "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1",
+      "byteSize": 143638
+    },
+    {
+      "fileName": "how-to-harvest-stardew-valley-trellis-paths.webp",
+      "publicPath": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+      "byteSize": 223784
+    },
+    {
+      "fileName": "how-to-harvest-stardew-valley-trellis-paths.avif",
+      "publicPath": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a",
+      "byteSize": 113557
+    }
+  ],
+  "preservedMethodAssets": [
+    "how-to-harvest-stardew-valley-en-methods.webp",
+    "how-to-harvest-stardew-valley-en-methods.avif",
+    "how-to-harvest-stardew-valley-zh-methods.webp",
+    "how-to-harvest-stardew-valley-zh-methods.avif"
+  ]
+}

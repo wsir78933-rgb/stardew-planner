@@ -1,0 +1,37 @@
+=== PID 44772 PROCESS INFO ===
+  PID  PPID USER   %CPU %MEM STAT STARTED      TIME COMMAND
+44772 44766 wusir   0.0  2.7 S+    2:41AM   3:32.19 next-server (v16.3.0) 
+=== PID 44772 CWD ===
+COMMAND   PID  USER   FD   TYPE DEVICE SIZE/OFF      NODE NAME
+node    44772 wusir  cwd    DIR   1,16      992 142539833 /Users/wusir/orca/workspaces/stardew planner/博客-2
+=== PID 44772 OPEN FILES / FD ===
+COMMAND   PID  USER   FD      TYPE             DEVICE SIZE/OFF                NODE NAME
+node    44772 wusir  cwd       DIR               1,16      992           142539833 /Users/wusir/orca/workspaces/stardew planner/博客-2
+node    44772 wusir  txt       REG               1,16    50672            66112895 /opt/homebrew/Cellar/node@24/24.18.0/bin/node
+node    44772 wusir  txt       REG               1,16    87728             2658175 /opt/homebrew/Cellar/brotli/1.2.0/lib/libbrotlidec.1.2.0.dylib
+node    44772 wusir  txt       REG               1,16   206320            15236902 /opt/homebrew/Cellar/libuv/1.52.1/lib/libuv.1.0.0.dylib
+node    44772 wusir  txt       REG               1,16    95296            66106613 /opt/homebrew/Cellar/simdjson/4.6.4/lib/libsimdjson.33.0.0.dylib
+node    44772 wusir  txt       REG               1,16    75600            15230070 /opt/homebrew/Cellar/hdrhistogram_c/0.11.9/lib/libhdr_histogram.6.2.3.dylib
+node    44772 wusir  txt       REG               1,16    83232             2673653 /opt/homebrew/Cellar/uvwasi/0.0.23/lib/libuvwasi.dylib
+node    44772 wusir  txt       REG               1,16   243456            15229881 /opt/homebrew/Cellar/c-ares/1.34.6/lib/libcares.2.19.5.dylib
+node    44772 wusir  txt       REG               1,16    73028           139473752 /Library/Preferences/Logging/.plist-cache.KSJtyxS0
+node    44772 wusir  txt       REG               1,16   653328             2658176 /opt/homebrew/Cellar/brotli/1.2.0/lib/libbrotlienc.1.2.0.dylib
+node    44772 wusir  txt       REG               1,16  2562000 1152921500312573253 /usr/lib/dyld
+node    44772 wusir  txt       REG               1,16   184240            66105033 /opt/homebrew/Cellar/libnghttp2/1.69.0/lib/libnghttp2.14.dylib
+node    44772 wusir  txt       REG               1,16   183904            66105004 /opt/homebrew/Cellar/libnghttp3/1.17.0/lib/libnghttp3.9.8.0.dylib
+node    44772 wusir  txt       REG               1,16   167264             2658174 /opt/homebrew/Cellar/brotli/1.2.0/lib/libbrotlicommon.1.2.0.dylib
+node    44772 wusir  txt       REG               1,16   350016            66109518 /opt/homebrew/Cellar/libngtcp2/1.24.0/lib/libngtcp2.16.dylib
+node    44772 wusir  txt       REG               1,16  1276320            66105073 /opt/homebrew/Cellar/sqlite/3.53.4/lib/libsqlite3.3.53.4.dylib
+node    44772 wusir  txt       REG               1,16   649648            15237004 /opt/homebrew/Cellar/zstd/1.5.7_1/lib/libzstd.1.5.7.dylib
+node    44772 wusir  txt       REG               1,16   884560            23251277 /opt/homebrew/Cellar/openssl@3/3.6.2/lib/libssl.3.dylib
+node    44772 wusir  txt       REG               1,16   236480           134903456 /private/var/db/timezone/tz/2026d.1.0/icutz/icutz44l.dat
+node    44772 wusir  txt       REG               1,16  1866592            23251054 /opt/homebrew/Cellar/icu4c@78/78.3/lib/libicuuc.78.3.dylib
+node    44772 wusir  txt       REG               1,16  4845712            23251273 /opt/homebrew/Cellar/openssl@3/3.6.2/lib/libcrypto.3.dylib
+node    44772 wusir  txt       REG               1,16  3168272            23251046 /opt/homebrew/Cellar/icu4c@78/78.3/lib/libicui18n.78.3.dylib
+node    44772 wusir  txt       REG               1,16  2926752            70716449 /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.pnpm/@tailwindcss+oxide-darwin-arm64@4.3.3/node_modules/@tailwindcss/oxide-darwin-arm64/tailwindcss-oxide.darwin-arm64.node
+node    44772 wusir  txt       REG               1,16  8516384            70716035 /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.pnpm/lightningcss-darwin-arm64@1.32.0/node_modules/lightningcss-darwin-arm64/lightningcss.darwin-arm64.node
+node    44772 wusir  txt       REG               1,16 60532864            66113012 /opt/homebrew/Cellar/node@24/24.18.0/lib/libnode.137.dylib
+node    44772 wusir  txt       REG               1,16 33195120            23251042 /opt/homebrew/Cellar/icu4c@78/78.3/lib/libicudata.78.3.dylib
+node    44772 wusir  txt       REG               1,16 35444880 1152921500312583754 /usr/share/icu/icudt78l.dat
+node    44772 wusir  txt       REG               1,16 88847528            76249405 /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.pnpm/@next+swc-darwin-arm64@16.3.0/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node
+node    44772 wusir    0u      CHR              16,23      0t0                4263 /dev/ttys023

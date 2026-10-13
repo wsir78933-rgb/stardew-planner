@@ -1,0 +1,24 @@
+CROP HARVEST METHODS
+HAND HARVEST
+Parsnip
+Check / Do Action
+Right-Click or X
+Hold on your tile
+SCYTHE SWING
+Kale, Wheat, Amaranth
+Unmilled Rice, Fiber
+Left-Click or C
+Iridium 1.6: tilled soil
+GIANT CROP
+Axe, 3 hits
+15-21, no wilt
+TRELLIS
+Green Bean, Hops
+Grape
+Path is blocked
+DAY 28
+Off-season wilts
+Greenhouse
+all year
+
+--- stderr ---

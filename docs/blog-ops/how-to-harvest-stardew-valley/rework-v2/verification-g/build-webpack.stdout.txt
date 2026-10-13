@@ -1,0 +1,60 @@
+▲ Next.js 16.3.0 (webpack)
+✓ Running next.config.ts took 30ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.1s
+  Running TypeScript ...
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/articles/how-to-harvest-stardew-valley.en.tsx(1,31): error TS2307: Cannot find module '../../components/public-picture' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/articles/how-to-harvest-stardew-valley.zh.tsx(1,31): error TS2307: Cannot find module '../../components/public-picture' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-copy.ts(2,35): error TS2307: Cannot find module '../i18n/public-locale' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(2,50): error TS2307: Cannot find module '../i18n/public-locale' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(3,48): error TS2307: Cannot find module './articles/carpenter-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(4,48): error TS2307: Cannot find module './articles/carpenter-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(5,44): error TS2307: Cannot find module './articles/where-is-robin-stardew-valley.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(6,44): error TS2307: Cannot find module './articles/where-is-robin-stardew-valley.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(7,48): error TS2307: Cannot find module './articles/stardew-valley-npc.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(8,48): error TS2307: Cannot find module './articles/stardew-valley-npc.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(9,52): error TS2307: Cannot find module './articles/stardew-valley-town-map.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(10,52): error TS2307: Cannot find module './articles/stardew-valley-town-map.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(11,59): error TS2307: Cannot find module './articles/where-is-stardew-valley-located.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(12,59): error TS2307: Cannot find module './articles/where-is-stardew-valley-located.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(13,78): error TS2307: Cannot find module './articles/stardew-valley-expanded-bachelors-and-bachelorettes.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(14,78): error TS2307: Cannot find module './articles/stardew-valley-expanded-bachelors-and-bachelorettes.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(15,48): error TS2307: Cannot find module './articles/sprinkler-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(16,48): error TS2307: Cannot find module './articles/sprinkler-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(17,55): error TS2307: Cannot find module './articles/glasshouse-stardew-valley.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(18,55): error TS2307: Cannot find module './articles/glasshouse-stardew-valley.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(19,46): error TS2307: Cannot find module './articles/oak-tree-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(20,46): error TS2307: Cannot find module './articles/oak-tree-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(21,50): error TS2307: Cannot find module './articles/stardew-valley-trees.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(22,50): error TS2307: Cannot find module './articles/stardew-valley-trees.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(23,48): error TS2307: Cannot find module './articles/maple-tree-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(24,48): error TS2307: Cannot find module './articles/maple-tree-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(25,53): error TS2307: Cannot find module './articles/best-spring-crop-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(26,53): error TS2307: Cannot find module './articles/best-spring-crop-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(27,53): error TS2307: Cannot find module './articles/how-to-earn-money-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(28,53): error TS2307: Cannot find module './articles/how-to-earn-money-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(29,54): error TS2307: Cannot find module './articles/rancher-or-tiller-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(30,54): error TS2307: Cannot find module './articles/rancher-or-tiller-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(31,50): error TS2307: Cannot find module './articles/summer-crops-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(32,50): error TS2307: Cannot find module './articles/summer-crops-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(33,48): error TS2307: Cannot find module './articles/fall-crops-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(34,48): error TS2307: Cannot find module './articles/fall-crops-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(35,60): error TS2307: Cannot find module './articles/do-you-have-to-water-trees-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(36,60): error TS2307: Cannot find module './articles/do-you-have-to-water-trees-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(37,58): error TS2307: Cannot find module './articles/how-to-level-up-farming-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(38,58): error TS2307: Cannot find module './articles/how-to-level-up-farming-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(39,53): error TS2307: Cannot find module './articles/last-day-to-plant-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(40,53): error TS2307: Cannot find module './articles/last-day-to-plant-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(41,47): error TS2307: Cannot find module './articles/pine-tree-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(42,47): error TS2307: Cannot find module './articles/pine-tree-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(43,51): error TS2307: Cannot find module './articles/profit-margin-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(44,51): error TS2307: Cannot find module './articles/profit-margin-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(45,61): error TS2307: Cannot find module './articles/what-to-grow-in-greenhouse-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(46,61): error TS2307: Cannot find module './articles/what-to-grow-in-greenhouse-stardew.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(47,44): error TS2307: Cannot find module './articles/stardew-fruit.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(48,44): error TS2307: Cannot find module './articles/stardew-fruit.zh' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(49,53): error TS2307: Cannot find module './articles/oak-tree-vs-maple-stardew.en' or its corresponding type declarations.
+docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files/src/blog/blog-post-registry.tsx(50,53): error TS2307: Cannot find module './articles/oak-tree-vs-maple-stardew.zh' or its corresponding type declarations.

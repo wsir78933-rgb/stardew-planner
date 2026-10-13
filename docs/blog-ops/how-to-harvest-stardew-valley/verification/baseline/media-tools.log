@@ -1,0 +1,27 @@
+=== MEDIA CONVERSION TOOLS AUDIT ===
+Timestamp: 2026-10-12T14:39:51Z
+
+1. ffmpeg:
+/opt/homebrew/bin/ffmpeg
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+WebP & AVIF encoders in ffmpeg:
+ V....D libaom-av1           libaom AV1 (codec av1)
+ V..... libsvtav1            SVT-AV1(Scalable Video Technology for AV1) encoder (codec av1)
+ V....D libwebp_anim         libwebp WebP image (codec webp)
+ V....D libwebp              libwebp WebP image (codec webp)
+
+2. sips:
+/usr/bin/sips
+org.webmproject.webp         webp  
+public.avif                  avif  Writable
+
+3. cwebp:
+/opt/homebrew/bin/cwebp
+1.6.0
+libsharpyuv: 0.4.2
+
+4. sharp (node_modules check):
+sharp: Cannot find module 'sharp'
+Require stack:
+- /Users/wusir/orca/workspaces/stardew planner/博客-2/[eval]

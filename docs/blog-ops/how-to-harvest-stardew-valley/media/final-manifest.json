@@ -1,0 +1,147 @@
+{
+  "role": "M",
+  "phase": "final",
+  "slug": "how-to-harvest-stardew-valley",
+  "renderExitCodes": {
+    "en": 0,
+    "zh": 0,
+    "cover": 0
+  },
+  "assets": [
+    {
+      "id": "cover-webp",
+      "publicUrl": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/how-to-harvest-stardew-valley-cover.webp",
+      "format": "WEBP",
+      "width": 1672,
+      "height": 941,
+      "byteSize": 38974,
+      "sha256": "8558f5b08e0c3e890ceddfcffb7104ed0a0fb0380dedec4108beed46220b81d8",
+      "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/cover-source.svg",
+      "sourceSha256": "03dec0791a44acf2da23097d114cbf84b6f4d12efb90056a64552232bba08608",
+      "rasterPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/cover.png",
+      "rasterSha256": "bed8e9781d2f4034b7036d727e29fe2ab3511e6c9612239cc3827edf015f1ce3",
+      "command": "cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/cover.png' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/how-to-harvest-stardew-valley-cover.webp'",
+      "exitCode": 0,
+      "sourceAttribution": "Original illustrative harvest scene drawn for this article. No external image, no game screenshot, and no text."
+    },
+    {
+      "id": "cover-avif",
+      "publicUrl": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/how-to-harvest-stardew-valley-cover.avif",
+      "format": "AVIF",
+      "width": 1672,
+      "height": 941,
+      "byteSize": 17525,
+      "sha256": "ccd28749dfd7047666d8bcbf8410aa929a060e660cc882d3814ef74d6dec19cd",
+      "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/cover-source.svg",
+      "sourceSha256": "03dec0791a44acf2da23097d114cbf84b6f4d12efb90056a64552232bba08608",
+      "rasterPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/cover.png",
+      "rasterSha256": "bed8e9781d2f4034b7036d727e29fe2ab3511e6c9612239cc3827edf015f1ce3",
+      "command": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/cover.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/how-to-harvest-stardew-valley-cover.avif'",
+      "exitCode": 0,
+      "sourceAttribution": "Original illustrative harvest scene drawn for this article. No external image, no game screenshot, and no text."
+    },
+    {
+      "id": "en-webp",
+      "publicUrl": "/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp",
+      "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp",
+      "format": "WEBP",
+      "width": 1672,
+      "height": 941,
+      "byteSize": 99024,
+      "sha256": "c5d987fdd4c2d1799358baf987ee31a5b7a9d90b5933c7e3fc1eb43c4a1883a5",
+      "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg",
+      "sourceSha256": "a6e017cda7dd1f5d5e3cbc4f07e29cac5d2c11855a5be120a077cc4a1e662661",
+      "rasterPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/en.png",
+      "rasterSha256": "c9618ffac6cda4a0d3e3bc6ed2e68e3ed186a593d79398caebf1c2b1d1b25117",
+      "command": "cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/en.png' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp'",
+      "exitCode": 0,
+      "sourceAttribution": "Lossy derivative of the Chrome raster of writing/en-figure.svg. Visible text, geometry, and facts were not rewritten. Not a game screenshot and not an external image."
+    },
+    {
+      "id": "en-avif",
+      "publicUrl": "/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+      "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+      "format": "AVIF",
+      "width": 1672,
+      "height": 941,
+      "byteSize": 39279,
+      "sha256": "92476d4c389afbf12d2b40e1a0773139a33c6fd0e24df71be97918a05ba4d861",
+      "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg",
+      "sourceSha256": "a6e017cda7dd1f5d5e3cbc4f07e29cac5d2c11855a5be120a077cc4a1e662661",
+      "rasterPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/en.png",
+      "rasterSha256": "c9618ffac6cda4a0d3e3bc6ed2e68e3ed186a593d79398caebf1c2b1d1b25117",
+      "command": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/en.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif'",
+      "exitCode": 0,
+      "sourceAttribution": "Lossy derivative of the Chrome raster of writing/en-figure.svg. Visible text, geometry, and facts were not rewritten. Not a game screenshot and not an external image."
+    },
+    {
+      "id": "zh-webp",
+      "publicUrl": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+      "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp",
+      "format": "WEBP",
+      "width": 1672,
+      "height": 941,
+      "byteSize": 105016,
+      "sha256": "450f78bb5aefcc6dda6826cb9fcda8a2af45f9778e077b49012596dbb38394f2",
+      "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg",
+      "sourceSha256": "50cd8f2c06a05e258f1adb083012a471e76ab92554d997d36244d53fa41c4f13",
+      "rasterPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png",
+      "rasterSha256": "d0767c9065a899f9be7217af50371e1fb2430de54557c15ded7923805aa60803",
+      "command": "cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp'",
+      "exitCode": 0,
+      "sourceAttribution": "Lossy derivative of the Chrome raster of translation/zh-figure.svg. Visible text, geometry, and facts were not rewritten. Not a game screenshot and not an external image.",
+      "derivedPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/derived/zh-figure-render.svg",
+      "derivedSha256": "e658a04213b8ed3a16b32ca92e836edc98fc5dbce115f8882e452012b94d0812"
+    },
+    {
+      "id": "zh-avif",
+      "publicUrl": "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+      "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif",
+      "format": "AVIF",
+      "width": 1672,
+      "height": 941,
+      "byteSize": 40187,
+      "sha256": "d918433c39793cf8f455281b4ba4606749eff17d68d7c6d682183f07f5e33d6a",
+      "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg",
+      "sourceSha256": "50cd8f2c06a05e258f1adb083012a471e76ab92554d997d36244d53fa41c4f13",
+      "rasterPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png",
+      "rasterSha256": "d0767c9065a899f9be7217af50371e1fb2430de54557c15ded7923805aa60803",
+      "command": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif'",
+      "exitCode": 0,
+      "sourceAttribution": "Lossy derivative of the Chrome raster of translation/zh-figure.svg. Visible text, geometry, and facts were not rewritten. Not a game screenshot and not an external image.",
+      "derivedPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/derived/zh-figure-render.svg",
+      "derivedSha256": "e658a04213b8ed3a16b32ca92e836edc98fc5dbce115f8882e452012b94d0812"
+    }
+  ],
+  "renderAdaptation": {
+    "sourcePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg",
+    "sourceSha256": "50cd8f2c06a05e258f1adb083012a471e76ab92554d997d36244d53fa41c4f13",
+    "derivedPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/media/derived/zh-figure-render.svg",
+    "derivedSha256": "e658a04213b8ed3a16b32ca92e836edc98fc5dbce115f8882e452012b94d0812",
+    "changedPixelCount": 10692,
+    "nodes": [
+      {
+        "text": "\u6389\u843d 15\u201321 \u4e2a\uff0c\u6362\u5b63\u4e0d\u67af",
+        "changes": [
+          {
+            "attribute": "font-size",
+            "before": "48",
+            "after": "48"
+          },
+          {
+            "attribute": "textLength",
+            "before": null,
+            "after": "500"
+          },
+          {
+            "attribute": "lengthAdjust",
+            "before": null,
+            "after": "spacingAndGlyphs"
+          }
+        ]
+      }
+    ]
+  }
+}

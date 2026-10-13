@@ -1,0 +1,244 @@
+{
+  "task": "A2 controls research supplement v2",
+  "keyword": "how to harvest stardew valley",
+  "retrievedOn": "2026-10-12",
+  "scope": "Positive evidence for PC mature crop harvest controls, revision verification, access log and boundary audit",
+  "environment": "Single blog worktree (branch 博客-2), logical directory isolation",
+  "coreSourcePositive": {
+    "action": "Check / Do Action",
+    "pcDefaultMapping": {
+      "mouse": "Right-Click",
+      "keyboard": "X"
+    },
+    "continuousHarvestMethod": "Hold Right-Click (or hold keyboard X) while moving past mature crops",
+    "applicability": "Ordinary mature crops that do not require tools (such as Parsnip)",
+    "status": "Verified by community player observations, game input mappings, and code-level Hand-harvest mechanism"
+  },
+  "revisionsVerified": [
+    {
+      "pageTitle": "Getting Started",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Getting_Started",
+      "pageId": 1387,
+      "revid": 195315,
+      "timestamp": "2026-10-09T17:06:55Z",
+      "verifiedVia": "MediaWiki API prop=revisions"
+    },
+    {
+      "pageTitle": "Controls",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Controls",
+      "pageId": 1391,
+      "revid": 192481,
+      "timestamp": "2026-04-17T19:33:58Z",
+      "verifiedVia": "MediaWiki API prop=revisions"
+    },
+    {
+      "pageTitle": "Options",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Options",
+      "pageId": 2169,
+      "revid": 191778,
+      "timestamp": "2026-03-16T18:11:24Z",
+      "verifiedVia": "MediaWiki API prop=revisions"
+    },
+    {
+      "pageTitle": "Crops",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Crops",
+      "pageId": 345,
+      "revid": 193979,
+      "timestamp": "2026-08-13T15:27:11Z",
+      "verifiedVia": "MediaWiki API prop=revisions"
+    },
+    {
+      "pageTitle": "Golden Walnut",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Golden_Walnut",
+      "pageId": 11536,
+      "revid": 195364,
+      "timestamp": "2026-10-11T23:38:23Z",
+      "verifiedVia": "MediaWiki API prop=revisions",
+      "correctionNote": "Corrected from v1 misattribution 191051 (which was Golden Scythe)"
+    },
+    {
+      "pageTitle": "Modding:Crop data",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Modding:Crop_data",
+      "pageId": 7477,
+      "revid": 186411,
+      "timestamp": "2025-05-13T20:25:00Z",
+      "verifiedVia": "MediaWiki API prop=revisions",
+      "correctionNote": "Corrected from v1 misattribution 194164 (which was Greenhouse)"
+    },
+    {
+      "pageTitle": "FAQ",
+      "wikiName": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/FAQ",
+      "pageId": 0,
+      "revid": 0,
+      "timestamp": null,
+      "verifiedVia": "HTTP GET",
+      "status": "Empty page, no content"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EVID-01",
+      "sourceCategory": "community-wiki-gameplay",
+      "publisher": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Getting_Started",
+      "revid": 195315,
+      "exactExcerpt": "Continue watering your crops every day until they grow in to harvestable crops. Your parsnips will be ready to harvest in 4 days.",
+      "controlsExcerpt": "Left-Click, C: Use tool or place item | Right-Click, X: Check/Do Action",
+      "context": "Walkthrough for the first 4 days of farming; lists standard control bindings in table",
+      "finding": "Confirms parsnips mature in 4 days and that Right-Click/X is Check/Do Action, but leaves the crop harvest action implicit.",
+      "strength": "Subject-matter reference; textual omission on harvest button"
+    },
+    {
+      "id": "EVID-02",
+      "sourceCategory": "community-wiki-gameplay",
+      "publisher": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Controls",
+      "revid": 192481,
+      "exactExcerpt": "Right-Click, X: Check/Do Action",
+      "historyExcerpt": "1.4: Removed \"new\" input from button press until the button is released. This makes harvesting large numbers of kegs/preserves jars/crystalariums, etc. easier by holding the button without releasing it.",
+      "context": "PC and console control mappings table and version history notes",
+      "finding": "Confirms Right-Click and keyboard X default to Check/Do Action. Version 1.4 note confirms holding button harvests machines.",
+      "strength": "Direct input mapping reference"
+    },
+    {
+      "id": "EVID-03",
+      "sourceCategory": "community-wiki-gameplay",
+      "publisher": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Options",
+      "revid": 191778,
+      "exactExcerpt": "Check/Do Action — Set the keybind for checking or doing some action such as: interacting with NPCs, Calendar, Help Wanted, doors, ladders and elevators; picking up an item from the bag slot; picking up forage and loot. Default Right-Click, X",
+      "context": "Description of in-game Options menu keybind configuration",
+      "finding": "Shows default PC keybind for Check/Do Action is Right-Click / X. Lists example actions without explicitly mentioning field crops.",
+      "strength": "Direct menu keybind specification"
+    },
+    {
+      "id": "EVID-04",
+      "sourceCategory": "community-wiki-gameplay",
+      "publisher": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Crops",
+      "revid": 193979,
+      "exactExcerpt": "Seeds and fertilizer are placed on a tilled tile individually by using the left-click control, or on multiple tiles by continuously holding on to the right-click or left-click control and moving the cursor and/or player.",
+      "context": "Fertilizing and Planting subsection under Basics",
+      "finding": "Records Left-Click for individual seed/fertilizer placement and hold-right/left for continuous placement. No harvest button stated.",
+      "strength": "Direct planting control specification"
+    },
+    {
+      "id": "EVID-05",
+      "sourceCategory": "community-wiki-code-reference",
+      "publisher": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Modding:Crop_data",
+      "revid": 186411,
+      "exactExcerpt": "HarvestMethod: (Optional) How the crop can be harvested. This can be Grab (crop is harvested by hand) or Scythe (harvested with a scythe). Default Grab.",
+      "context": "Technical crop data schema documentation for modding",
+      "finding": "Confirms default harvest method in game data is Grab (hand-harvest), distinct from Scythe.",
+      "strength": "Game data architecture reference (does not directly document UI player controls)"
+    },
+    {
+      "id": "EVID-06",
+      "sourceCategory": "community-wiki-code-reference",
+      "publisher": "Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/Golden_Walnut",
+      "revid": 195364,
+      "exactExcerpt": "See TerrainFeatures.HoeDirt::performUseAction in the game code. The Scythe is assigned harvesting method \"1\" and harvesting by hand is harvesting method \"0\".",
+      "context": "Footnote 2 explaining Golden Walnut drop mechanics during crop harvesting",
+      "finding": "Identifies that hand-harvesting crops invokes TerrainFeatures.HoeDirt::performUseAction (harvest method 0).",
+      "strength": "Game code interaction reference"
+    },
+    {
+      "id": "EVID-07",
+      "sourceCategory": "community-player-observation",
+      "publisher": "Stardew Valley Forums",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "author": "Elenna101",
+      "timestamp": "2021-09-27T07:03:26-0700",
+      "exactExcerpt": "Or the direction button and right click. (X is automatically mapped to right click) If you hold right click with the mouse not near your character, you'll automatically plant seed and harvest on the tile you're standing on, and then you just have to walk around over your crops to plant and harvest your field.",
+      "context": "Community thread discussing differences between PC and mobile controls; reply explaining how PC players harvest large fields",
+      "finding": "Player testimony confirming Right-Click and X are mapped to the same action, and that holding Right-Click while walking harvests crops.",
+      "strength": "First-hand player operational description on community forum"
+    },
+    {
+      "id": "EVID-08",
+      "sourceCategory": "community-player-observation",
+      "publisher": "Steam Community",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "author": "Automaton Spy",
+      "exactExcerpt": "The problem is... You don't NEED the scythe for parsnips. You need the scythe for amaranth or wheat. For ANY other crop, you need to be standing next to it and rightclick it.",
+      "context": "Troubleshooting thread where a new player thought parsnips required a scythe; reply clarifying ordinary crop harvesting",
+      "finding": "Player confirms that parsnip harvesting on PC is done by standing next to the crop and right-clicking.",
+      "boundaryNote": "The poster's broad claim 'For ANY other crop' is an informal player generalization and must NOT be extrapolated (it omits Kale, Unmilled Rice, Fiber Seeds, etc.). Only the parsnip / hand-harvest observation is accepted.",
+      "strength": "Player troubleshooting observation on Steam general discussion"
+    },
+    {
+      "id": "EVID-09",
+      "sourceCategory": "community-player-observation",
+      "publisher": "Reddit (r/StardewValley)",
+      "url": "https://www.reddit.com/r/StardewValley/comments/4bl3ih/psa_press_and_hold_the_x_key_on_your_keyboard_to/",
+      "author": "NovanHero",
+      "exactExcerpt": "Simply hold down the 'x' key (or whatever key is bounded to right click), walk, and your character will harvest and replant instantly as you walk by.",
+      "context": "Community PSA tip explaining keyboard harvesting shortcut on PC",
+      "finding": "Player tip confirming that keyboard key X (mapped to Right-Click) allows holding and walking to harvest mature crops.",
+      "accessNote": "Retrieved via ego-browser DOM evaluation. Direct curl to reddit returned HTTP 403.",
+      "strength": "First-hand player tip on community subreddit"
+    }
+  ],
+  "accessLog": {
+    "successful": [
+      {
+        "url": "https://stardewvalleywiki.com/mediawiki/api.php",
+        "method": "MediaWiki API (curl)",
+        "httpStatus": 200,
+        "detail": "Verified exact page IDs and revision numbers for Controls (192481), Crops (193979), Getting Started (195315), Golden Walnut (195364), Options (191778), Modding:Crop data (186411)"
+      },
+      {
+        "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/",
+        "method": "HTTP GET (urllib/curl)",
+        "httpStatus": 200,
+        "detail": "Successfully fetched thread and verified post by Elenna101 (post-53699, timestamp 2021-09-27T07:03:26-0700)"
+      },
+      {
+        "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
+        "method": "HTTP GET (urllib/curl)",
+        "httpStatus": 200,
+        "detail": "Successfully fetched thread and parsed comment 1849197902669410411 by Automaton Spy"
+      },
+      {
+        "url": "https://www.reddit.com/r/StardewValley/comments/4bl3ih/psa_press_and_hold_the_x_key_on_your_keyboard_to/",
+        "method": "ego-browser (Chromium DOM)",
+        "httpStatus": 200,
+        "detail": "Successfully rendered page and extracted author NovanHero, title, and body text"
+      }
+    ],
+    "unobservedOrRestricted": [
+      {
+        "target": "YouTube Shorts (https://www.youtube.com/shorts/ncg9SKnp7jg)",
+        "status": "unobserved",
+        "detail": "Only page title ('The Better Way to Harvest Crops in Stardew Valley') and channel metadata ('Captain Canadia') were retrieved. The video frame stream was not played or observed. Marked as unobserved video stream."
+      },
+      {
+        "target": "Stardew Valley Wiki FAQ (https://stardewvalleywiki.com/FAQ)",
+        "status": "empty",
+        "detail": "Page exists as an uncreated/empty title (revid: 0, text: 'There is currently no text in this page.'). Confirmed absence of content."
+      },
+      {
+        "target": "Reddit direct CLI request",
+        "status": "blocked",
+        "detail": "Direct CLI curl requests to reddit.com return HTTP 403 network block. Access required ego-browser Chromium session."
+      }
+    ]
+  },
+  "correctionsFromV1": [
+    "Golden Walnut revision ID corrected from 191051 (which was Golden Scythe) to 195364.",
+    "Modding:Crop data revision ID corrected from 194164 (which was Greenhouse) to 186411.",
+    "Removed negative assertions regarding Left-Click ('LeftClick/C绝非普通采收', '会破坏耕地/consumes energy'). Replaced with neutral observation that Left-Click is documented for planting and tool use.",
+    "Downgraded YouTube video from 'practically fully confirmed' to 'unobserved video stream (metadata only)'.",
+    "Restricted Steam player's broad statement 'For ANY other crop' to avoid conflicting with current scythe crop lists.",
+    "Uniformly used 'Stardew Valley Wiki' and explicitly distinguished player forum observations from official game rules."
+  ]
+}

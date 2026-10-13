@@ -1,0 +1,81 @@
+# Stardew Valley Planner
+
+> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese planning articles and browser-local projects.
+
+## English
+
+Stardew Valley Planner helps you plan farm layouts in your browser. Projects stay in your browser and the site does not require an account or cloud sync.
+
+### Planner and reference
+
+- [Stardew Valley Planner](https://stardewvalleyplanner.art): Plan a Stardew Valley farm layout in your browser.
+- [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn how browser-local projects and site data are handled.
+- [Terms of service](https://stardewvalleyplanner.art/terms): Read the browser-local terms, including optional JSON import and export and the fan-made status.
+
+### Planning guides
+
+- [Stardew Valley Planning Guides](https://stardewvalleyplanner.art/blog): Browse practical guides for planning a clearer, more flexible farm.
+- [Planning guide archive](https://stardewvalleyplanner.art/blog/archive): Browse every Stardew Valley planning guide.
+- [Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades](https://stardewvalleyplanner.art/carpenter-stardew): Use Robin's Carpenter's Shop for farm buildings, farmhouse upgrades, moves, demolition, and shop supplies, with a placement plan before you order.
+- [Where Is Robin in Stardew Valley? Hours, Schedule, and Exceptions](https://stardewvalleyplanner.art/where-is-robin-stardew-valley): Find Robin at 24 Mountain Road, check Tuesday, Friday, rain, festival, clinic, and construction closures, and plan your Carpenter's Shop trip.
+- [Stardew Valley NPC List: Villagers, Marriage Candidates, and Services](https://stardewvalleyplanner.art/stardew-valley-npc): Sort the current Stardew Valley NPC list by marriage, giftable, and non-giftable roles, then plan gifts, schedules, and farm services.
+- [Stardew Valley Town Map: Pelican Town Landmarks & Routes](https://stardewvalleyplanner.art/stardew-valley-town-map): Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.
+- [Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory](https://stardewvalleyplanner.art/where-is-stardew-valley-located): Find Stardew Valley on the in-game map: separate Pelican Town, the Farm, and the Ferngill Republic, then test what Harvey's coordinates and Pacific Northwest influences do—and do not—prove.
+- [Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes](https://stardewvalleyplanner.art/stardew-valley-expanded-bachelors-and-bachelorettes): Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.
+- [Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails](https://stardewvalleyplanner.art/sprinkler-stardew): Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.
+- [Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers](https://stardewvalleyplanner.art/glasshouse-stardew-valley): Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.
+- [Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin](https://stardewvalleyplanner.art/oak-tree-stardew): Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.
+- [Mark keep, orchard, and clear tiles before you chop Stardew Valley trees](https://stardewvalleyplanner.art/stardew-valley-trees): Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.
+- [Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup](https://stardewvalleyplanner.art/maple-tree-stardew): Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.
+- [Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1](https://stardewvalleyplanner.art/best-spring-crop-stardew): There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.
+- [How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning](https://stardewvalleyplanner.art/how-to-earn-money-stardew): Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.
+- [Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair](https://stardewvalleyplanner.art/rancher-or-tiller-stardew): Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.
+- [Summer Crops in Stardew: Rank by the Shop You Can Open This Morning](https://stardewvalleyplanner.art/summer-crops-stardew): Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.
+- [Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed](https://stardewvalleyplanner.art/fall-crops-stardew): Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.
+- [Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3](https://stardewvalleyplanner.art/do-you-have-to-water-trees-stardew): Common trees and fruit-tree saplings do not need watering. If a common sapling is stuck at stage 4, check its eight adjacent tiles for a mature tree; for a fruit sapling, check its 3×3 for blocking objects. Crops follow a separate watering rule.
+- [How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150](https://stardewvalleyplanner.art/how-to-level-up-farming-stardew): Harvests, 5-XP animal actions, and a 250-XP Almanac or Book Of Stars grant Farming XP. A blueberry pull is 10 XP, not 10 times the berry count. Quality stars add none. Level 10 is 15,000 total; XP posts now, the popup waits for sleep.
+- [Last Day to Plant in Stardew Valley: Parsnips by Spring 24](https://stardewvalleyplanner.art/last-day-to-plant-stardew): Plant parsnips by Spring 24 if you want them ready on Spring 28. Water that day. For other outdoor crops, subtract grow time from 28. Tables cover spring through winter.
+- [Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar](https://stardewvalleyplanner.art/pine-tree-stardew): Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.
+- [Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change](https://stardewvalleyplanner.art/profit-margin-stardew): Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.
+- [What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting](https://stardewvalleyplanner.art/what-to-grow-in-greenhouse-stardew): Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.
+- [Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree](https://stardewvalleyplanner.art/oak-tree-vs-maple-stardew): Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.
+- [How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe](https://stardewvalleyplanner.art/how-to-harvest-stardew-valley): Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.
+
+## 简体中文
+
+星露谷农场规划器可帮助你在浏览器中规划农场布局。项目保留在浏览器本地，不需要账户或云端同步。
+
+### 规划器与参考内容
+
+- [星露谷农场规划器](https://stardewvalleyplanner.art/zh): 在浏览器中规划《星露谷物语》农场布局。
+- [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解浏览器本地项目和站点数据的处理方式。
+- [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读浏览器本地服务条款，包括可选 JSON 导入导出和同人创作说明。
+
+### 农场规划指南
+
+- [星露谷农场规划指南](https://stardewvalleyplanner.art/zh/blog): 浏览帮助你更清晰、更灵活规划农场的实用指南。
+- [规划指南归档](https://stardewvalleyplanner.art/zh/blog/archive): 浏览全部星露谷农场规划指南。
+- [星露谷物语木匠商店：罗宾位置、营业时间、建筑与升级](https://stardewvalleyplanner.art/zh/carpenter-stardew): 了解罗宾木匠商店的营业时间、农场建筑、农舍升级、移动和拆除，并在下单前先规划放置位置。
+- [罗宾在星露谷物语哪里？木匠商店位置、营业时间与行程](https://stardewvalleyplanner.art/zh/where-is-robin-stardew-valley): 查找罗宾的 24 Mountain Road 木匠商店，核对周二、周五、雨天、节日、诊所和农场施工例外。
+- [星露谷 NPC 名单：可结婚角色、可送礼村民与服务](https://stardewvalleyplanner.art/zh/stardew-valley-npc): 按可结婚、可送礼和不可送礼分类整理星露谷 NPC，并核对送礼、好感度、商店服务与农场规划关系。
+- [星露谷物语小镇地图：鹈鹕镇地点与路线](https://stardewvalleyplanner.art/zh/stardew-valley-town-map): 用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。
+- [星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点](https://stardewvalleyplanner.art/zh/where-is-stardew-valley-located): 理清星露谷、鹈鹕镇、农场和芬吉尔共和国的关系，再看哈维坐标与太平洋西北地区影响能否证明现实地点。
+- [星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物](https://stardewvalleyplanner.art/zh/stardew-valley-expanded-bachelors-and-bachelorettes): 整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。
+- [星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地](https://stardewvalleyplanner.art/zh/sprinkler-stardew): 说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。
+- [星露谷物语温室布局：120格耕地与洒水器摆放指南](https://stardewvalleyplanner.art/zh/glasshouse-stardew-valley): 了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。
+- [星露谷物语橡树：橡子种植、间距与树脂采集](https://stardewvalleyplanner.art/zh/oak-tree-stardew): 认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。
+- [星露谷种树：先分普通树和果树，再在农场图上留间隔](https://stardewvalleyplanner.art/zh/stardew-valley-trees): 温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。
+- [星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆](https://stardewvalleyplanner.art/zh/maple-tree-stardew): 先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。
+- [星露谷物语春天种什么：第一年草莓种子春13才卖](https://stardewvalleyplanner.art/zh/best-spring-crop-stardew): 春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。
+- [星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶](https://stardewvalleyplanner.art/zh/how-to-earn-money-stardew): 12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。
+- [星露谷农耕人还是畜牧人：20%和10%加的不是一类货](https://stardewvalleyplanner.art/zh/rancher-or-tiller-stardew): 过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。
+- [星露谷夏天种什么：按买得到的种子和浇得完的格子选](https://stardewvalleyplanner.art/zh/summer-crops-stardew): 夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。
+- [星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊](https://stardewvalleyplanner.art/zh/fall-crops-stardew): 现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。
+- [星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3](https://stardewvalleyplanner.art/zh/do-you-have-to-water-trees-stardew): 普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。
+- [星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150](https://stardewvalleyplanner.art/zh/how-to-level-up-farming-stardew): 收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。
+- [星露谷最晚播种日：春天防风草最晚在第 24 天种下](https://stardewvalleyplanner.art/zh/last-day-to-plant-stardew): 春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。
+- [星露谷松树种植先看格子，不浇水也不能随便种](https://stardewvalleyplanner.art/zh/pine-tree-stardew): 松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。
+- [Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选](https://stardewvalleyplanner.art/zh/profit-margin-stardew): Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。
+- [星露谷温室种什么？按手头种源、等待时间与收获节奏选择](https://stardewvalleyplanner.art/zh/what-to-grow-in-greenhouse-stardew): 星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。
+- [星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。
+- [星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。

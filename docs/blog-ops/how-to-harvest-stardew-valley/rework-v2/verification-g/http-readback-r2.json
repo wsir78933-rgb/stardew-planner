@@ -1,0 +1,97 @@
+[
+  {
+    "path": "/how-to-harvest-stardew-valley",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "byteSize": 65419,
+    "sha256": "65d5535da91fbd20e8ede2a64d8c1c5d5f1bd69b76e551a551f8c6e41413dc6f",
+    "savedHtml": "http-en-r2.html",
+    "lazyCount": 2,
+    "markers": {
+      "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe": true,
+      "Right-Click a Parsnip": false,
+      "星露谷物语怎么收作物：徒手、镰刀或斧头": false,
+      "羽衣甘蓝需要镰刀": false,
+      "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp": true,
+      "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp": true,
+      "/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp": false,
+      "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp": false,
+      "ConcernedApe": true,
+      "/blog/how-to-harvest-stardew-valley-cover.webp": true,
+      "href=\"/last-day-to-plant-stardew\"": true,
+      "href=\"/zh/last-day-to-plant-stardew\"": false,
+      "href=\"/what-to-grow-in-greenhouse-stardew\"": true,
+      "href=\"/zh/what-to-grow-in-greenhouse-stardew\"": false,
+      "farm_evening_1920x1080.png": false
+    }
+  },
+  {
+    "path": "/zh/how-to-harvest-stardew-valley",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "byteSize": 61996,
+    "sha256": "256d07b14853d96f195f085207715917523c44575f8c442dc725245df7c78fa8",
+    "savedHtml": "http-zh-r2.html",
+    "lazyCount": 2,
+    "markers": {
+      "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe": false,
+      "Right-Click a Parsnip": false,
+      "星露谷物语怎么收作物：徒手、镰刀或斧头": true,
+      "羽衣甘蓝需要镰刀": false,
+      "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp": true,
+      "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp": true,
+      "/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp": false,
+      "/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp": false,
+      "ConcernedApe": true,
+      "/blog/how-to-harvest-stardew-valley-cover.webp": true,
+      "href=\"/zh/last-day-to-plant-stardew\"": true,
+      "href=\"/last-day-to-plant-stardew\"": false,
+      "href=\"/zh/what-to-grow-in-greenhouse-stardew\"": true,
+      "href=\"/what-to-grow-in-greenhouse-stardew\"": false,
+      "href=\"/zh\"": true,
+      "farm_evening_1920x1080.png": false
+    }
+  },
+  {
+    "path": "/blog/how-to-harvest-stardew-valley-cover.webp",
+    "status": 200,
+    "contentType": "image/webp",
+    "byteSize": 479250,
+    "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574"
+  },
+  {
+    "path": "/blog/how-to-harvest-stardew-valley-cover.avif",
+    "status": 200,
+    "contentType": "image/avif",
+    "byteSize": 237604,
+    "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+    "status": 200,
+    "contentType": "image/webp",
+    "byteSize": 267644,
+    "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+    "status": 200,
+    "contentType": "image/avif",
+    "byteSize": 143638,
+    "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+    "status": 200,
+    "contentType": "image/webp",
+    "byteSize": 223784,
+    "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4"
+  },
+  {
+    "path": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+    "status": 200,
+    "contentType": "image/avif",
+    "byteSize": 113557,
+    "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a"
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "sourceUrl": "https://stardewvalleywiki.com/Controls",
+  "revision": {
+    "revid": 192481,
+    "parentid": 192480,
+    "timestamp": "2026-04-17T19:33:58Z"
+  },
+  "sections": {
+    "pcControls": {
+      "tableQuote": "Left-Click, C: Use tool or place item\nRight-Click, X: Check/Do Action",
+      "verifiedFacts": [
+        "Check/Do Action (Right-Click, X): Safely hand-harvests mature crops with 0 energy",
+        "Use tool or place item (Left-Click, C): Uses equipped tool; swinging tool can destroy crops (axe/pickaxe) or waste energy; swings scythe if scythe is equipped",
+        "Continuous harvesting: Holding Right-Click or X and walking over crops continuously harvests; replants simultaneously if seeds are held; pitfall: holding edible food triggers eating prompt"
+      ]
+    },
+    "consoleControls": {
+      "tableQuote": "Xbox: A (Check / Do Action / Use Cursor), X (Use Tool)\nPlayStation: Cross (Check / Do Action / Use Cursor), Square (Use Tool)\nSwitch: A (Check / Do Action / Use Cursor), Y (Use Tool)",
+      "verifiedFacts": [
+        "Game does not define separate crop harvest buttons for controllers",
+        "Harvesting hand crops uses the general Check/Do Action button (A on Xbox, Cross on PS, A on Switch)",
+        "Tool use (Scythe) uses the general Use Tool button (X on Xbox, Square on PS, Y on Switch)"
+      ]
+    },
+    "mobileControls": {
+      "sourceUrl": "https://stardewvalleywiki.com/Mobile_Controls",
+      "exactQuote": "Tap on items to action them. Tapping on stones, wood, stumps, boulders, rocks etc will auto-select the correct tool for the job. The one exception with tools is the scythe, which must be selected to use.",
+      "verifiedFacts": [
+        "Default scheme: Tap-to-move & Auto-Attack",
+        "Hand crops: Tapping ripe crops actions/harvests them",
+        "Scythe crops: Scythe must be manually selected before tapping/swinging"
+      ]
+    }
+  }
+}

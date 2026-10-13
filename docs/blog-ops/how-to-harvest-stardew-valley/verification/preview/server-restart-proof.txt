@@ -1,0 +1,40 @@
+$ ps -o pid,ppid,pgid,command -p 44772,44766,44758,79325
+  PID  PPID  PGID COMMAND
+44758 79325 44758 node /opt/homebrew/opt/node@24/bin/pnpm exec next dev --webpack --hostname 127.0.0.1 --port 3004
+44766 44758 44758 node ./node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --hostname 127.0.0.1 --port 3004
+44772 44766 44758 next-server (v16.3.0) 
+79325 79299 79325 -/bin/zsh -l
+$ lsof -nP -iTCP:3004 -sTCP:LISTEN
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    44772 wusir   17u  IPv4 0x7743a32bc17f3884      0t0  TCP 127.0.0.1:3004 (LISTEN)
+$ lsof -a -p 44772 -d cwd
+COMMAND   PID  USER   FD   TYPE DEVICE SIZE/OFF      NODE NAME
+node    44772 wusir  cwd    DIR   1,16      992 142539833 /Users/wusir/orca/workspaces/stardew planner/博客-2
+$ curl -sS -D - -o /dev/null --max-time 15 http://127.0.0.1:3004/how-to-harvest-stardew-valley
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+Link: </_next/static/media/22a5144ee8d83bca-s.p.woff2?v=1791830895778>; rel=preload; as="font"; crossorigin=""; type="font/woff2", </favicon.png>; rel=preload; as="image"
+Cache-Control: no-cache, must-revalidate
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+X-Powered-By: Next.js
+Content-Type: text/html; charset=utf-8
+Date: Mon, 12 Oct 2026 18:48:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+$ curl -sS -D - -o /dev/null --max-time 15 http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+Link: </_next/static/media/22a5144ee8d83bca-s.p.woff2?v=1791830895819>; rel=preload; as="font"; crossorigin=""; type="font/woff2", </favicon.png>; rel=preload; as="image"
+Cache-Control: no-cache, must-revalidate
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+X-Powered-By: Next.js
+Content-Type: text/html; charset=utf-8
+Date: Mon, 12 Oct 2026 18:48:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+

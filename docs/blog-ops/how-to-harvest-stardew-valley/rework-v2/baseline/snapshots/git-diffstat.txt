@@ -1,0 +1,13 @@
+ public/llms.txt                           |  2 +
+ src/blog/blog-copy.ts                     |  2 +
+ src/blog/blog-post-identities.ts          |  1 +
+ src/blog/blog-post-registry.tsx           | 32 ++++++++++
+ tests/blog/blog-components.test.tsx       | 15 ++++-
+ tests/blog/blog-home-state.test.ts        | 14 +++--
+ tests/blog/blog-planner-cta.test.tsx      | 98 +++++++++++++++++++++++--------
+ tests/blog/blog-post-registry.test.ts     | 48 +++++++++++++--
+ tests/i18n/public-route-registry.test.ts  | 15 ++++-
+ tests/routes/blog-routes.test.tsx         |  4 +-
+ tests/routes/removed-public-pages.test.ts |  8 +--
+ tests/seo/canonical-public-routes.test.ts |  3 +-
+ 12 files changed, 197 insertions(+), 45 deletions(-)

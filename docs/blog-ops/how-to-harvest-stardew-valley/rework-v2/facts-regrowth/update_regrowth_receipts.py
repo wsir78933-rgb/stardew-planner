@@ -1,0 +1,174 @@
+#!/usr/bin/env python3
+"""
+Update and synchronize raw-sources-receipts.json to remove unsupported claims.
+Strict adherence to: High Cohesion, Low Coupling, Single Responsibility, Fail Fast, KISS, Precise Naming.
+"""
+
+import json
+import os
+
+RECEIPTS_FILE_PATH = "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/facts-regrowth/raw-sources-receipts.json"
+
+
+def read_json_file(file_path: str) -> dict:
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Receipts file not found at path: {file_path}")
+    with open(file_path, "r", encoding="utf-8") as file_handle:
+        return json.load(file_handle)
+
+
+def build_corrected_receipts_payload(existing_payload: dict) -> dict:
+    retrieval_timestamp = "2026-10-13T08:46:30+08:00"
+
+    corrected_payload = {
+        "metadata": {
+            "audit_role": "Facts Auditor A (Research Leaf)",
+            "audit_scope": "Crop Regrowth, Growth Days Calculation, Watering Requirement, Fiber Counterexample, Re-sowing Boundaries (Corrected)",
+            "retrieved_at": retrieval_timestamp,
+            "api_endpoint": "https://stardewvalleywiki.com/mediawiki/api.php",
+            "browser_verification": "ego-browser (TaskSpace 127)",
+            "allowed_new_files": [
+                "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/facts-regrowth.md",
+                "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/facts-regrowth/*"
+            ]
+        },
+        "sources": {
+            "Crops": {
+                "page_title": "Crops",
+                "page_id": 345,
+                "public_url": "https://stardewvalleywiki.com/Crops",
+                "permanent_url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+                "revision_id": 193979,
+                "wiki_timestamp": "2026-08-13T15:27:11Z",
+                "retrieved_at": retrieval_timestamp,
+                "exact_excerpts": {
+                    "grow_times_exclusion_and_watering": "The grow times shown on this page (and in the game) ''exclude'' the day the seeds were planted. If planting on the first of a season, a 5-day crop will be ready for harvest on day 6, not day 5. In this case, the number may be thought of as the number of ''nights'' required to grow the crop.\n\n[[Fertilizer]] and [[Farming#Farming Skill|the Agriculturist Profession]] are ''not'' taken into account on this page, but the effects can be viewed on individual crop pages.\n\nCrops must be watered every day for maximum growth. If unwatered for a day, a crop will not grow. Unwatered crops do not die, but they will not grow either.\n\nIf a seed is planted into unwatered soil and not watered the same day, it will not grow that night. Growth will start the following night. The grow times on this page assume the seeds are watered the day they are planted.",
+                    "blueberry_table_summary": "Keeps producing after maturity. Each plant produces 3 blueberries at harvest, with a 2% chance for more blueberries.\nStages: Stage 1 (1 day), Stage 2 (3 days), Stage 3 (3 days), Stage 4 (4 days), Stage 5 (2 days), Total: 13 days (Blueberry Stage 6.png), Regrowth: 4 days (Blueberry Stage 7.png).",
+                    "parsnip_table_summary": "Stages: Stage 1 (1 day), Stage 2 (1 day), Stage 3 (1 day), Stage 4 (1 day), Total: 4 days (Parsnip Stage 5.png). No regrowth stage.",
+                    "gold_per_day_formula": "Growing Days = Days to Maturity + ((Max Harvests − 1) × Days to Regrow)\nDays to Maturity and Days to Regrow are listed in each table. Max Harvests is normally 1, but for crops that continue to produce, it is the actual number of harvests that can be obtained in the growing season(s)."
+                },
+                "supports": [
+                    "Growing days calculation excludes the day seeds were planted (a 5-day crop planted on day 1 matures on day 6).",
+                    "Crops must be watered every day for maximum growth; unwatered crops do not die but advance 0 growth.",
+                    "Seeds planted in unwatered soil and not watered that same day do not grow that night.",
+                    "Single-harvest crops (e.g. Parsnip) have stages ending in Harvest with no After-Harvest stage.",
+                    "Multi-harvest crops (e.g. Blueberry) have both Days to Maturity (13 days) and Days to Regrow (4 days), continuing to produce after maturity."
+                ],
+                "not_supported": [
+                    "Does not contain a standalone sentence explicitly stating watering rules for regrowth specifically; application of daily watering to regrowth is a synthesis from the universal daily watering rule and regrowth day counts.",
+                    "Does not support claiming that all crops without exception need daily watering (see Fiber Seeds counterexample)."
+                ],
+                "derivation_notes": "Distinguishes initial growth (Days to Maturity) from subsequent cycle (Days to Regrow). Planting day is day 0 in calculation."
+            },
+            "Blueberry": {
+                "page_title": "Blueberry",
+                "page_id": 1853,
+                "public_url": "https://stardewvalleywiki.com/Blueberry",
+                "permanent_url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+                "revision_id": 192090,
+                "wiki_timestamp": "2026-04-01T23:24:34Z",
+                "retrieved_at": retrieval_timestamp,
+                "exact_excerpts": {
+                    "intro": "The '''Blueberry''' is a [[Vegetables|fruit]] [[Crops|crop]] that grows from [[Blueberry Seeds]] after 13 days and continues to produce every 4 days after maturity.",
+                    "stages_table": "Stage 1 (1 Day), Stage 2 (3 Days), Stage 3 (3 Days), Stage 4 (4 Days), Stage 5 (2 Days), Harvest (Total: 13 Days, File:Blueberry Stage 6.png), After-Harvest (Regrowth: 4 Days, File:Blueberry Stage 7.png).",
+                    "fertilizer_section": "That makes [[Speed-Gro]] an optimal fertilizer for this crop, as it gives one extra harvest before the Fall (assuming planting on day 1 of the summer)... [[Deluxe Speed-Gro]] yields the same number of harvests as regular [[Speed-Gro]], usually at a higher cost."
+                },
+                "supports": [
+                    "Blueberry takes 13 days to reach initial maturity and then produces every 4 days.",
+                    "After harvest, Blueberry transitions to Stage 7 (After-Harvest sprite in stages table), where a persistent living bush remains on the tile.",
+                    "Speed-Gro grants an extra harvest in Summer by shortening the initial 13-day growth to first harvest, not by changing the 4-day regrowth cycle."
+                ],
+                "not_supported": [
+                    "Does not contain an explicit direct quote saying 'unwatered regrowth bushes pause regrowth'; that is synthesized with Crops generic watering rule.",
+                    "Does not contain explicit quotes regarding whether tools destroy bushes or prohibiting tool usage.",
+                    "Does not support that Speed-Gro or Deluxe Speed-Gro speeds up reharvest intervals."
+                ],
+                "derivation_notes": "Blueberry serves as the benchmark example for regrowth crops in summer. Sprite Stage 6 depicts ripe berries, Stage 7 depicts post-harvest bush."
+            },
+            "Fiber_Seeds": {
+                "page_title": "Fiber Seeds",
+                "page_id": 11625,
+                "public_url": "https://stardewvalleywiki.com/Fiber_Seeds",
+                "permanent_url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+                "revision_id": 193587,
+                "wiki_timestamp": "2026-06-15T20:23:44Z",
+                "retrieved_at": retrieval_timestamp,
+                "exact_excerpts": {
+                    "intro_watering": "'''Fiber Seeds''' are a type of [[Crafting#Seeds|crafted]] seed. They do not require daily watering and can even grow in [[Winter]], but they must still be planted on tilled soil. They can also be eaten by [[Animals#Crows|Crows]] if not protected by a [[Scarecrow]].",
+                    "harvest_scythe": "Each fully-grown plant drops between 4 and 7 [[Fiber]] when harvested with a [[Scythe]]. There is also a 10% chance to drop 1 [[Mixed Seeds]]."
+                },
+                "supports": [
+                    "Fiber Seeds do not require daily watering to grow.",
+                    "Fiber Seeds can grow in Winter.",
+                    "Must still be planted on tilled soil.",
+                    "Harvested with a Scythe (yielding 4–7 Fiber)."
+                ],
+                "not_supported": [
+                    "Does not support general claim that crops do not need water; Fiber Seeds is an explicit craftable exception.",
+                    "Financial margins and profit evaluations are excluded from this harvest scope."
+                ],
+                "derivation_notes": "Counterexample evidence to avoid incorrect generalization that 'every single crop must be watered daily to grow'."
+            },
+            "Fertilizer": {
+                "page_title": "Fertilizer",
+                "page_id": 885,
+                "public_url": "https://stardewvalleywiki.com/Fertilizer",
+                "permanent_url": "https://stardewvalleywiki.com/index.php?title=Fertilizer&oldid=194274",
+                "revision_id": 194274,
+                "wiki_timestamp": "2026-09-11T19:45:13Z",
+                "retrieved_at": retrieval_timestamp,
+                "exact_excerpts": {
+                    "speed_gro_rule": "Speed-Gro affects only the growth and first harvest of a multi-harvest crop.",
+                    "table_notes": "Note: Does not reduce time between harvests for multi-harvest crops. (Identical note on Speed-Gro, Deluxe Speed-Gro, and Hyper Speed-Gro)"
+                },
+                "supports": [
+                    "Speed-Gro, Deluxe Speed-Gro, and Hyper Speed-Gro affect ONLY the initial growth and first harvest of a multi-harvest crop.",
+                    "Speed-Gro fertilizers DO NOT reduce the time between subsequent harvests (regrowth interval) for multi-harvest crops."
+                ],
+                "not_supported": [
+                    "Does not support claiming Speed-Gro accelerates regrowth cycles after initial maturity.",
+                    "Does not include direct quotes for Agriculturist profession; claims regarding Agriculturist are omitted as unsupported by direct quote in this receipt."
+                ],
+                "derivation_notes": "Essential constraint: Speed-Gro only affects initial growth to first harvest, not regrowth interval."
+            },
+            "Crop_Growth_Calendars": {
+                "page_title": "Crop Growth Calendars",
+                "page_id": 7481,
+                "public_url": "https://stardewvalleywiki.com/Crop_Growth_Calendars",
+                "permanent_url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+                "revision_id": 189875,
+                "wiki_timestamp": "2025-12-17T20:51:11Z",
+                "retrieved_at": retrieval_timestamp,
+                "exact_excerpts": {
+                    "replanting_assumption": "With the exception of multi-harvest crops, the tables assume that seeds are replanted and watered on the day of harvest."
+                },
+                "supports": [
+                    "Multi-harvest crops do not require replanting after harvest; single-harvest crops are assumed replanted on harvest day."
+                ],
+                "not_supported": [
+                    "Does not prove soil moisture or fertilizer retention on harvest day.",
+                    "Does not prove instant same-frame re-sowing mechanics for all held items."
+                ],
+                "derivation_notes": "Corroborates that multi-harvest crops stay in place while single-harvest crops leave the tile needing replanting."
+            }
+        }
+    }
+
+    return corrected_payload
+
+
+def write_corrected_json(payload: dict, file_path: str) -> None:
+    serialized_json = json.dumps(payload, indent=2, ensure_ascii=False)
+    with open(file_path, "w", encoding="utf-8") as file_handle:
+        file_handle.write(serialized_json)
+
+
+def main() -> None:
+    existing_data = read_json_file(RECEIPTS_FILE_PATH)
+    corrected_data = build_corrected_receipts_payload(existing_data)
+    write_corrected_json(corrected_data, RECEIPTS_FILE_PATH)
+    print(f"Successfully updated and synchronized {RECEIPTS_FILE_PATH}")
+
+
+if __name__ == "__main__":
+    main()

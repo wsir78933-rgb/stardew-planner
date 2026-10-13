@@ -1,0 +1,581 @@
+{
+  "locale": "zh",
+  "viewportName": "desktop-1440x900",
+  "url": "http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley",
+  "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+  "h1": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+  "beforeImages": [
+    {
+      "figureId": null,
+      "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "currentSrc": "http://127.0.0.1:3004/blog/how-to-harvest-stardew-valley-cover.avif",
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "loading": null,
+      "complete": true
+    },
+    {
+      "figureId": "media-mature-crops",
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+      "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "loading": "lazy",
+      "complete": true
+    },
+    {
+      "figureId": "media-trellis-paths",
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "loading": "lazy",
+      "complete": true
+    }
+  ],
+  "screenshots": {
+    "top": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-top.png",
+    "cover": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-cover.png",
+    "mature": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-mature.png",
+    "trellis": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-trellis.png",
+    "bottom": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-bottom.png"
+  },
+  "snapshots": {
+    "top": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-top.snapshot.txt",
+    "full": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/page-r2/zh-desktop-1440x900-full.snapshot.txt"
+  },
+  "facts": {
+    "error": null,
+    "expectedLocale": "zh",
+    "expectedViewport": "desktop-1440x900",
+    "url": "http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley",
+    "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+    "h1": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+    "visibleDescription": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+    "metaDescription": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+    "canonical": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+    "alternates": [
+      {
+        "hreflang": "en",
+        "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+      },
+      {
+        "hreflang": "zh-CN",
+        "href": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"
+      },
+      {
+        "hreflang": "x-default",
+        "href": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+      }
+    ],
+    "openGraph": {
+      "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+      "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+      "url": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+      "type": "article",
+      "image": "https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"
+    },
+    "twitter": {
+      "card": "summary",
+      "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+      "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+      "image": "https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"
+    },
+    "robots": "index, follow",
+    "jsonLd": [
+      "{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"星露谷物语怎么收作物：徒手、镰刀或斧头\",\"description\":\"防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。\",\"url\":\"https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley\",\"inLanguage\":\"zh-CN\",\"isPartOf\":{\"@id\":\"https://stardewvalleyplanner.art/#website\"}}"
+    ],
+    "blocks": [
+      {
+        "tag": "p",
+        "id": null,
+        "text": "在星露谷物语里，普通作物用手收：站在成熟植株旁边右键点它，或者按住动作键，走过田里连续收。防风草（Parsnip）不用镰刀。有些作物必须用镰刀收，包括苋菜（Amaranth）、甘蓝菜（Kale）、小麦、未碾米（Unmilled Rice）和纤维种子（Fiber Seeds）。连成 3×3 的巨大作物（Giant Crop），要用任意一把斧头砍三下。耕地上那一格出现这种作物最后一阶段、可以收获的图像，就说明已经长成。"
+      },
+      {
+        "tag": "h2",
+        "id": "怎么看出作物可以收",
+        "text": "怎么看出作物可以收"
+      },
+      {
+        "tag": "h3",
+        "id": "看图像-最后一阶段可以收获的样子",
+        "text": "看图像：最后一阶段可以收获的样子"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "每种作物都会依次换成不同的生长阶段图像。在田里，这株作物显示出最后一阶段、可以收获的图像，就可以收了。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "一株防风草浇水长 4 天，才会出现可以收获的图像。这种只收一次的根，收走时会从地里拔出来，留下一块空的耕地。一株南瓜浇水长 13 天，才会出现可以收获的图像，看上去是一大颗圆圆的橙色果实，搁在耕过的土上。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "像蓝莓（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。摘过以后，灌木还立在地里，进入收获之后的阶段，之后每 4 天结出新浆果，不用重新播种。"
+      },
+      {
+        "tag": "figcaption",
+        "id": null,
+        "text": "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，星露谷物语新闻素材截图。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "上面这张田间截图里，成熟的南瓜在土路旁边的耕地上，是完整的橙色外形。"
+      },
+      {
+        "tag": "h3",
+        "id": "算收获日-以及漏浇水会顺延",
+        "text": "算收获日，以及漏浇水会顺延"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "把生长天数算清楚，才能知道具体哪一个早晨能收。在星露谷物语里，生长天数不算播种当天；标出的总天数，是成熟前需要浇水度过的夜晚数。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "按作物的一般规则，作物必须每天浇水，才能按最快速度生长。有一天没浇，这一天就不长，但没浇水的作物不会死。种子播进干土、当天又不浇，那天夜里不会生长；浇上水之后，从下一个夜晚开始长。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "每天都浇水的话，春季第 1 天种下的 4 天作物，例如防风草，在春季第 5 天早晨成熟（1 + 4 = 5）。漏浇一天，生长就暂停，收获推迟到春季第 6 天。同样，秋季第 1 天种下、每天浇水的 13 天南瓜，在秋季第 14 天成熟。会再生的作物，例如蓝莓，后面每一茬也同样要每天浇水才会推进：头一个 13 天过去以后，继续每天给这丛灌木浇水，4 天一轮的再生就会按日子往前走。"
+      },
+      {
+        "tag": "h2",
+        "id": "普通作物怎么用手收",
+        "text": "普通作物怎么用手收"
+      },
+      {
+        "tag": "h3",
+        "id": "在-pc-上收单株",
+        "text": "在 PC 上收单株"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "单株作物用手收，用的是通用的 Check/Do Action。站在成熟作物旁边，右键点它。键盘上X 和右键映射成同一个 Check/Do Action，按 X 就能一株一株地收。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "左键和 C绑定的是使用工具或放置物品。用手收，不需要挥工具。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "收完以后，只收一次的作物留下光秃的耕地。按照作物生长日历，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。"
+      },
+      {
+        "tag": "h3",
+        "id": "快速收-按住并在田里走",
+        "text": "快速收：按住并在田里走"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "PC 上的大片菜地，可以按住右键，并且鼠标不要靠近角色。右键一直按着、光标离开角色，你走过田里时，脚下踩过的每一格上的作物都会被收掉。X 映射成右键，做的是同一个动作。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "选中一叠种子时，按住右键走过已经成熟的单次作物，会收掉你所站那一格上的成熟植株，也可以把新种子播进这块空地。蓝莓丛摘过以后还在，并且继续结果，所以这株不用再播一颗种子。"
+      },
+      {
+        "tag": "h2",
+        "id": "指定作物怎么用镰刀收",
+        "text": "指定作物怎么用镰刀收"
+      },
+      {
+        "tag": "h3",
+        "id": "必须用镰刀收的作物",
+        "text": "必须用镰刀收的作物"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "另外一些作物必须用普通镰刀来收，例如苋菜、甘蓝菜和小麦。右键点它，或者按 X，都收不下来。甘蓝菜要用镰刀或更好的镰刀来收，未碾米要用镰刀来收，纤维种子要用镰刀来收。纤维种子是单独的例外：生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "收这些作物时，把镰刀放进当前工具栏，面向作物，按下使用工具的键（PC 上是左键或 C）。在移动设备上，先选中镰刀，再使用它。"
+      },
+      {
+        "tag": "h3",
+        "id": "1-6-的铱镰刀-用在耕地上",
+        "text": "1.6 的铱镰刀，用在耕地上"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "铱镰刀是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。"
+      },
+      {
+        "tag": "h2",
+        "id": "收特殊作物-巨大作物和棚架",
+        "text": "收特殊作物：巨大作物和棚架"
+      },
+      {
+        "tag": "h3",
+        "id": "用斧头收巨大作物",
+        "text": "用斧头收巨大作物"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "巨大作物用任意斧头来收。要砍三下，会掉落15 到 21 个普通品质的物品。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。"
+      },
+      {
+        "tag": "h3",
+        "id": "棚架作物旁边留出走得到的路",
+        "text": "棚架作物旁边留出走得到的路"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "棚架（Trellis）作物会限制人怎么走。青豆、啤酒花和葡萄（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "活着的棚架把路完全挡住，所以每株旁边都必须有一格站得到。棚架如果种成实心一块，里面的植株就浇不到，也收不到。稳妥的摆法是把棚架排成双行，中间留一条能走的空道，两边的藤都够得着。"
+      },
+      {
+        "tag": "figcaption",
+        "id": null,
+        "text": "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，星露谷物语新闻素材截图。"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "上面这张截图里，一条空着的土路隔开两排木棚架，人可以走过去，收两边的紫葡萄。设计带棚架的田时，种之前先在农场规划器上把走道留出来，这一季每条藤都够得着。"
+      },
+      {
+        "tag": "h2",
+        "id": "收成对不上时先看症状",
+        "text": "收成对不上时先看症状"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "text": "作物没有按预期收下来时，用工具、日历和田的摆法对一下症状："
+      },
+      {
+        "tag": "li",
+        "id": null,
+        "text": "到了预计的日子，还没有可以收获的图像：查有没有漏浇的日子。没浇水的日子会暂停生长，但不会把植株弄死；每干一天，成熟就晚一个早晨。把田浇上，并且坚持每天浇，直到出现可以收获的图像。"
+      },
+      {
+        "tag": "li",
+        "id": null,
+        "text": "用手去点，没有收获：先看这种作物要不要工具。镰刀作物（苋菜、甘蓝菜、小麦、未碾米、纤维种子）和 3×3 的巨大作物都不能用手摘。装备镰刀，挥过这些作物；巨大作物则用斧头砍三下。"
+      },
+      {
+        "tag": "li",
+        "id": null,
+        "text": "人走不到田里面已经成熟的作物：活着的棚架作物（青豆、啤酒花、葡萄）会挡路。先从外圈站得到的格子收藤；以后种棚架时，在双行中间留出走道。"
+      },
+      {
+        "tag": "li",
+        "id": null,
+        "text": "第 1 天过夜以后，作物枯了：一换季，不当季的种植就会死。每个季节的第 1 天，不再当季的作物会在第 1 天枯萎，并留下枯株；跨季作物则继续长。用镰刀清掉枯株，下面的耕地还留着。以后播种按最晚播种日来排日子，或者按温室里种什么，在室内种会反复结的作物。"
+      }
+    ],
+    "images": [
+      {
+        "alt": "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+        "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+        "currentSrc": "http://127.0.0.1:3004/blog/how-to-harvest-stardew-valley-cover.avif",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "loading": null,
+        "widthAttr": "1672",
+        "heightAttr": "941",
+        "figureId": null,
+        "caption": null,
+        "avifSrcSet": "/blog/how-to-harvest-stardew-valley-cover.avif",
+        "objectFit": "cover",
+        "objectPosition": "50% 50%",
+        "renderedWidth": 1088,
+        "renderedHeight": 612,
+        "rectLeft": 173,
+        "rectRight": 1261
+      },
+      {
+        "alt": "土路旁的耕地上长着饱满的橙色南瓜。",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "loading": "lazy",
+        "widthAttr": "1672",
+        "heightAttr": "941",
+        "figureId": "media-mature-crops",
+        "caption": "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，星露谷物语新闻素材截图。",
+        "avifSrcSet": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+        "objectFit": "cover",
+        "objectPosition": "50% 50%",
+        "renderedWidth": 704,
+        "renderedHeight": 396,
+        "rectLeft": 555,
+        "rectRight": 1259
+      },
+      {
+        "alt": "两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "currentSrc": "http://127.0.0.1:3004/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "loading": "lazy",
+        "widthAttr": "1672",
+        "heightAttr": "941",
+        "figureId": "media-trellis-paths",
+        "caption": "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，星露谷物语新闻素材截图。",
+        "avifSrcSet": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+        "objectFit": "cover",
+        "objectPosition": "50% 50%",
+        "renderedWidth": 704,
+        "renderedHeight": 396,
+        "rectLeft": 555,
+        "rectRight": 1259
+      }
+    ],
+    "articleLinks": [
+      {
+        "text": "右键点它",
+        "href": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+        "absoluteHref": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411"
+      },
+      {
+        "text": "防风草",
+        "href": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123"
+      },
+      {
+        "text": "南瓜",
+        "href": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726"
+      },
+      {
+        "text": "蓝莓",
+        "href": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090"
+      },
+      {
+        "text": "星露谷物语新闻素材截图",
+        "href": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "absoluteHref": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+      },
+      {
+        "text": "作物必须每天浇水，才能按最快速度生长",
+        "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979"
+      },
+      {
+        "text": "右键点它",
+        "href": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+        "absoluteHref": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411"
+      },
+      {
+        "text": "X 和右键映射成同一个 Check/Do Action",
+        "href": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481"
+      },
+      {
+        "text": "左键和 C",
+        "href": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481"
+      },
+      {
+        "text": "作物生长日历",
+        "href": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875"
+      },
+      {
+        "text": "按住右键，并且鼠标不要靠近角色",
+        "href": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "absoluteHref": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699"
+      },
+      {
+        "text": "X 映射成右键",
+        "href": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+        "absoluteHref": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699"
+      },
+      {
+        "text": "镰刀",
+        "href": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696"
+      },
+      {
+        "text": "甘蓝菜要用镰刀或更好的镰刀来收",
+        "href": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520"
+      },
+      {
+        "text": "未碾米要用镰刀来收",
+        "href": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130"
+      },
+      {
+        "text": "纤维种子要用镰刀来收",
+        "href": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587"
+      },
+      {
+        "text": "先选中镰刀，再使用它",
+        "href": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843"
+      },
+      {
+        "text": "铱镰刀",
+        "href": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836"
+      },
+      {
+        "text": "15 到 21 个普通品质的物品",
+        "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops"
+      },
+      {
+        "text": "青豆、啤酒花和葡萄",
+        "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops"
+      },
+      {
+        "text": "星露谷物语新闻素材截图",
+        "href": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "absoluteHref": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+      },
+      {
+        "text": "农场规划器",
+        "href": "/zh",
+        "absoluteHref": "http://127.0.0.1:3004/zh"
+      },
+      {
+        "text": "不再当季的作物会在第 1 天枯萎",
+        "href": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+        "absoluteHref": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979"
+      },
+      {
+        "text": "最晚播种日",
+        "href": "/zh/last-day-to-plant-stardew",
+        "absoluteHref": "http://127.0.0.1:3004/zh/last-day-to-plant-stardew"
+      },
+      {
+        "text": "温室里种什么",
+        "href": "/zh/what-to-grow-in-greenhouse-stardew",
+        "absoluteHref": "http://127.0.0.1:3004/zh/what-to-grow-in-greenhouse-stardew"
+      }
+    ],
+    "navigationLinks": [
+      {
+        "text": "星露谷物语农场规划器",
+        "href": "/zh",
+        "hidden": false
+      },
+      {
+        "text": "博客",
+        "href": "/zh/blog",
+        "hidden": false
+      },
+      {
+        "text": "English",
+        "href": "/how-to-harvest-stardew-valley",
+        "hidden": true
+      },
+      {
+        "text": "中文",
+        "href": "/zh/how-to-harvest-stardew-valley",
+        "hidden": true
+      },
+      {
+        "text": "打开规划器",
+        "href": "/zh#planner",
+        "hidden": false
+      },
+      {
+        "text": "怎么看出作物可以收",
+        "href": "#怎么看出作物可以收",
+        "hidden": false
+      },
+      {
+        "text": "看图像：最后一阶段可以收获的样子",
+        "href": "#看图像-最后一阶段可以收获的样子",
+        "hidden": false
+      },
+      {
+        "text": "算收获日，以及漏浇水会顺延",
+        "href": "#算收获日-以及漏浇水会顺延",
+        "hidden": false
+      },
+      {
+        "text": "普通作物怎么用手收",
+        "href": "#普通作物怎么用手收",
+        "hidden": false
+      },
+      {
+        "text": "在 PC 上收单株",
+        "href": "#在-pc-上收单株",
+        "hidden": false
+      },
+      {
+        "text": "快速收：按住并在田里走",
+        "href": "#快速收-按住并在田里走",
+        "hidden": false
+      },
+      {
+        "text": "指定作物怎么用镰刀收",
+        "href": "#指定作物怎么用镰刀收",
+        "hidden": false
+      },
+      {
+        "text": "必须用镰刀收的作物",
+        "href": "#必须用镰刀收的作物",
+        "hidden": false
+      },
+      {
+        "text": "1.6 的铱镰刀，用在耕地上",
+        "href": "#1-6-的铱镰刀-用在耕地上",
+        "hidden": false
+      },
+      {
+        "text": "收特殊作物：巨大作物和棚架",
+        "href": "#收特殊作物-巨大作物和棚架",
+        "hidden": false
+      },
+      {
+        "text": "用斧头收巨大作物",
+        "href": "#用斧头收巨大作物",
+        "hidden": false
+      },
+      {
+        "text": "棚架作物旁边留出走得到的路",
+        "href": "#棚架作物旁边留出走得到的路",
+        "hidden": false
+      },
+      {
+        "text": "收成对不上时先看症状",
+        "href": "#收成对不上时先看症状",
+        "hidden": false
+      }
+    ],
+    "overflow": {
+      "innerWidth": 1440,
+      "documentScrollWidth": 1434,
+      "documentClientWidth": 1434,
+      "bodyScrollWidth": 1434,
+      "offenders": []
+    },
+    "bodyText": "在星露谷物语里，普通作物用手收：站在成熟植株旁边右键点它，或者按住动作键，走过田里连续收。防风草（Parsnip）不用镰刀。有些作物必须用镰刀收，包括苋菜（Amaranth）、甘蓝菜（Kale）、小麦、未碾米（Unmilled Rice）和纤维种子（Fiber Seeds）。连成 3×3 的巨大作物（Giant Crop），要用任意一把斧头砍三下。耕地上那一格出现这种作物最后一阶段、可以收获的图像，就说明已经长成。\n\n怎么看出作物可以收\n看图像：最后一阶段可以收获的样子\n\n每种作物都会依次换成不同的生长阶段图像。在田里，这株作物显示出最后一阶段、可以收获的图像，就可以收了。\n\n一株防风草浇水长 4 天，才会出现可以收获的图像。这种只收一次的根，收走时会从地里拔出来，留下一块空的耕地。一株南瓜浇水长 13 天，才会出现可以收获的图像，看上去是一大颗圆圆的橙色果实，搁在耕过的土上。\n\n像蓝莓（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。摘过以后，灌木还立在地里，进入收获之后的阶段，之后每 4 天结出新浆果，不用重新播种。\n\n饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，星露谷物语新闻素材截图。\n\n上面这张田间截图里，成熟的南瓜在土路旁边的耕地上，是完整的橙色外形。\n\n算收获日，以及漏浇水会顺延\n\n把生长天数算清楚，才能知道具体哪一个早晨能收。在星露谷物语里，生长天数不算播种当天；标出的总天数，是成熟前需要浇水度过的夜晚数。\n\n按作物的一般规则，作物必须每天浇水，才能按最快速度生长。有一天没浇，这一天就不长，但没浇水的作物不会死。种子播进干土、当天又不浇，那天夜里不会生长；浇上水之后，从下一个夜晚开始长。\n\n每天都浇水的话，春季第 1 天种下的 4 天作物，例如防风草，在春季第 5 天早晨成熟（1 + 4 = 5）。漏浇一天，生长就暂停，收获推迟到春季第 6 天。同样，秋季第 1 天种下、每天浇水的 13 天南瓜，在秋季第 14 天成熟。会再生的作物，例如蓝莓，后面每一茬也同样要每天浇水才会推进：头一个 13 天过去以后，继续每天给这丛灌木浇水，4 天一轮的再生就会按日子往前走。\n\n普通作物怎么用手收\n在 PC 上收单株\n\n单株作物用手收，用的是通用的 Check/Do Action。站在成熟作物旁边，右键点它。键盘上X 和右键映射成同一个 Check/Do Action，按 X 就能一株一株地收。\n\n左键和 C绑定的是使用工具或放置物品。用手收，不需要挥工具。\n\n收完以后，只收一次的作物留下光秃的耕地。按照作物生长日历，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。\n\n快速收：按住并在田里走\n\nPC 上的大片菜地，可以按住右键，并且鼠标不要靠近角色。右键一直按着、光标离开角色，你走过田里时，脚下踩过的每一格上的作物都会被收掉。X 映射成右键，做的是同一个动作。\n\n选中一叠种子时，按住右键走过已经成熟的单次作物，会收掉你所站那一格上的成熟植株，也可以把新种子播进这块空地。蓝莓丛摘过以后还在，并且继续结果，所以这株不用再播一颗种子。\n\n指定作物怎么用镰刀收\n必须用镰刀收的作物\n\n另外一些作物必须用普通镰刀来收，例如苋菜、甘蓝菜和小麦。右键点它，或者按 X，都收不下来。甘蓝菜要用镰刀或更好的镰刀来收，未碾米要用镰刀来收，纤维种子要用镰刀来收。纤维种子是单独的例外：生长不需要每天浇水，但完全长成以后仍然要用镰刀收。\n\n收这些作物时，把镰刀放进当前工具栏，面向作物，按下使用工具的键（PC 上是左键或 C）。在移动设备上，先选中镰刀，再使用它。\n\n1.6 的铱镰刀，用在耕地上\n\n铱镰刀是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。\n\n收特殊作物：巨大作物和棚架\n用斧头收巨大作物\n\n巨大作物用任意斧头来收。要砍三下，会掉落15 到 21 个普通品质的物品。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。\n\n棚架作物旁边留出走得到的路\n\n棚架（Trellis）作物会限制人怎么走。青豆、啤酒花和葡萄（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。\n\n活着的棚架把路完全挡住，所以每株旁边都必须有一格站得到。棚架如果种成实心一块，里面的植株就浇不到，也收不到。稳妥的摆法是把棚架排成双行，中间留一条能走的空道，两边的藤都够得着。\n\n两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，星露谷物语新闻素材截图。\n\n上面这张截图里，一条空着的土路隔开两排木棚架，人可以走过去，收两边的紫葡萄。设计带棚架的田时，种之前先在农场规划器上把走道留出来，这一季每条藤都够得着。\n\n收成对不上时先看症状\n\n作物没有按预期收下来时，用工具、日历和田的摆法对一下症状：\n\n到了预计的日子，还没有可以收获的图像：查有没有漏浇的日子。没浇水的日子会暂停生长，但不会把植株弄死；每干一天，成熟就晚一个早晨。把田浇上，并且坚持每天浇，直到出现可以收获的图像。\n用手去点，没有收获：先看这种作物要不要工具。镰刀作物（苋菜、甘蓝菜、小麦、未碾米、纤维种子）和 3×3 的巨大作物都不能用手摘。装备镰刀，挥过这些作物；巨大作物则用斧头砍三下。\n人走不到田里面已经成熟的作物：活着的棚架作物（青豆、啤酒花、葡萄）会挡路。先从外圈站得到的格子收藤；以后种棚架时，在双行中间留出走道。\n第 1 天过夜以后，作物枯了：一换季，不当季的种植就会死。每个季节的第 1 天，不再当季的作物会在第 1 天枯萎，并留下枯株；跨季作物则继续长。用镰刀清掉枯株，下面的耕地还留着。以后播种按最晚播种日来排日子，或者按温室里种什么，在室内种会反复结的作物。",
+    "headerText": "星露谷物语指南\n\n星露谷物语怎么收作物：徒手、镰刀或斧头\n\n防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。\n\n作者： 星露谷规划器团队 · 阅读约 6 分钟"
+  }
+}

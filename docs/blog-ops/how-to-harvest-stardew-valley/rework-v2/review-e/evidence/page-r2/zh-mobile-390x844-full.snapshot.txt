@@ -1,0 +1,236 @@
+[p1 "星露谷物语怎么收作物：徒手、镰刀或斧头" | space "harvest page r2 acceptance"(151): 1 managed, 0 untracked — p1* "星露谷物语怎么收作物：徒手、镰刀或斧头"]
+root
+  container
+    container "星露谷物语农场规划器"
+      anchor [ref=200, url=http://127.0.0.1:3004/zh]
+        image
+      container
+        anchor "博客" [ref=201, loc=css:a[aria-label="博客"], url=http://127.0.0.1:3004/zh/blog]
+          text "博客"
+        button "语言" [ref=202, loc=css:button[aria-label="语言"]]
+          text "语言"
+          text "▾"
+        anchor "打开规划器" [ref=203, loc=css:a[aria-label="打开规划器"], url=http://127.0.0.1:3004/zh#planner]
+          text "打开规划器"
+    container
+      container
+        paragraph
+          text "星露谷物语指南"
+        heading
+          text "星露谷物语怎么收作物：徒手、镰刀或斧头"
+        paragraph
+          text "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"
+        paragraph
+          text "作者："
+          text "星露谷规划器团队"
+          text "·"
+          text "阅读约 6 分钟"
+        image
+      container
+        paragraph
+          text "在星露谷物语里，普通作物用手收：站在成熟植株旁边"
+          anchor [ref=204, url=https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411]
+            text "右键点它"
+          text "，或者按住动作键，走过田里连续收。防风草（Parsnip）不用镰刀。有些作物必须用镰刀收，包括苋菜（Amaranth）、甘蓝菜（Kale）、小麦、未碾米（Unmille..."
+        heading
+          text "怎么看出作物可以收"
+        heading
+          text "看图像：最后一阶段可以收获的样子"
+        paragraph
+          text "每种作物都会依次换成不同的生长阶段图像。在田里，这株作物显示出最后一阶段、可以收获的图像，就可以收了。"
+        paragraph
+          text "一株"
+          anchor [ref=205, loc=href:https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123, url=https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123]
+            text "防风草"
+          text "浇水长 4 天，才会出现可以收获的图像。这种只收一次的根，收走时会从地里拔出来，留下一块空的耕地。一株"
+          anchor [ref=206, loc=href:https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726, url=https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726]
+            text "南瓜"
+          text "浇水长 13 天，才会出现可以收获的图像，看上去是一大颗圆圆的橙色果实，搁在耕过的土上。"
+        paragraph
+          text "像"
+          anchor [ref=207, loc=href:https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090, url=https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090]
+            text "蓝莓"
+          text "（Blueberry）这种会多次收获的作物，要 13 天才第一次成熟。摘过以后，灌木还立在地里，进入收获之后的阶段，之后每 4 天结出新浆果，不用重新播种�..."
+        container
+          image
+          text "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，"
+          anchor [ref=208, url=https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png]
+            text "星露谷物语新闻素材截图"
+          text "。"
+        paragraph
+          text "上面这张田间截图里，成熟的南瓜在土路旁边的耕地上，是完整的橙色外形。"
+        heading
+          text "算收获日，以及漏浇水会顺延"
+        paragraph
+          text "把生长天数算清楚，才能知道具体哪一个早晨能收。在星露谷物语里，生长天数不算播种当天；标出的总天数，是成熟前需要浇水度过的夜晚数。"
+        paragraph
+          text "按作物的一般规则，"
+          anchor [ref=209, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979]
+            text "作物必须每天浇水，才能按最快速度生长"
+          text "。有一天没浇，这一天就不长，但没浇水的作物不会死。种子播进干土、当天又不浇，那天夜里不会生长；浇上水之后，从下一个夜晚开始长。"
+        paragraph
+          text "每天都浇水的话，春季第 1 天种下的 4 天作物，例如防风草，在春季第 5 天早晨成熟（1 + 4 = 5）。漏浇一天，生长就暂停，收获推迟到春季第 6 天。同�..."
+        heading
+          text "普通作物怎么用手收"
+        heading
+          text "在 PC 上收单株"
+        paragraph
+          text "单株作物用手收，用的是通用的 Check/Do Action。站在成熟作物旁边，"
+          anchor [ref=210, url=https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411]
+            text "右键点它"
+          text "。键盘上"
+          anchor [ref=211, url=https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481]
+            text "X 和右键映射成同一个 Check/Do Action"
+          text "，按 X 就能一株一株地收。"
+        paragraph
+          anchor [ref=212, url=https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481]
+            text "左键和 C"
+          text "绑定的是使用工具或放置物品。用手收，不需要挥工具。"
+        paragraph
+          text "收完以后，只收一次的作物留下光秃的耕地。按照"
+          anchor [ref=213, loc=href:https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875, url=https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875]
+            text "作物生长日历"
+          text "，只收一次的地块要整个季节都有产出，是按收获当天重新播种并浇水来算的。"
+        heading
+          text "快速收：按住并在田里走"
+        paragraph
+          text "PC 上的大片菜地，可以"
+          anchor [ref=214, url=https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699]
+            text "按住右键，并且鼠标不要靠近角色"
+          text "。右键一直按着、光标离开角色，你走过田里时，脚下踩过的每一格上的作物都会被收掉。"
+          anchor [ref=215, url=https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699]
+            text "X 映射成右键"
+          text "，做的是同一个动作。"
+        paragraph
+          text "选中一叠种子时，按住右键走过已经成熟的单次作物，会收掉你所站那一格上的成熟植株，也可以把新种子播进这块空地。蓝莓丛摘过以后还在，并且�..."
+        heading
+          text "指定作物怎么用镰刀收"
+        heading
+          text "必须用镰刀收的作物"
+        paragraph
+          text "另外一些作物必须用普通"
+          anchor [ref=216, loc=href:https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696, url=https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696]
+            text "镰刀"
+          text "来收，例如苋菜、甘蓝菜和小麦。右键点它，或者按 X，都收不下来。"
+          anchor [ref=217, loc=href:https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520, url=https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520]
+            text "甘蓝菜要用镰刀或更好的镰刀来收"
+          text "，"
+          anchor [ref=218, loc=href:https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130, url=https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130]
+            text "未碾米要用镰刀来收"
+          text "，"
+          anchor [ref=219, loc=href:https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587, url=https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587]
+            text "纤维种子要用镰刀来收"
+          text "。纤维种子是单独的例外：生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+        paragraph
+          text "收这些作物时，把镰刀放进当前工具栏，面向作物，按下使用工具的键（PC 上是左键或 C）。在移动设备上，"
+          anchor [ref=220, loc=href:https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843, url=https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843]
+            text "先选中镰刀，再使用它"
+          text "。"
+        heading
+          text "1.6 的铱镰刀，用在耕地上"
+        paragraph
+          anchor [ref=221, loc=href:https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836, url=https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836]
+            text "铱镰刀"
+          text "是 1.6 耕种精通（Farming Mastery）给的那把镰刀。挥过的范围内，能收耕地上长出来的作物，普通作物也包括在内。"
+        heading
+          text "收特殊作物：巨大作物和棚架"
+        heading
+          text "用斧头收巨大作物"
+        paragraph
+          text "巨大作物用任意斧头来收。要砍三下，会掉落"
+          anchor [ref=222, loc=href:https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops]
+            text "15 到 21 个普通品质的物品"
+          text "。巨大作物换季不会死，所以可以留在田里，等到你准备砍的时候再砍。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。"
+        heading
+          text "棚架作物旁边留出走得到的路"
+        paragraph
+          text "棚架（Trellis）作物会限制人怎么走。"
+          anchor [ref=223, loc=href:https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops]
+            text "青豆、啤酒花和葡萄"
+          text "（Green Bean、Hops、Grape）长在棚架上。活着的棚架走不穿，所以每株都要有一格能站在旁边。植株死了以后，那一格就可以走过去。"
+        paragraph
+          text "活着的棚架把路完全挡住，所以每株旁边都必须有一格站得到。棚架如果种成实心一块，里面的植株就浇不到，也收不到。稳妥的摆法是把棚架排成双�..."
+        container
+          image
+          container
+            text "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，"
+            anchor [ref=224, url=https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png]
+              text "星露谷物语新闻素材截图"
+            text "。"
+        paragraph
+          text "上面这张截图里，一条空着的土路隔开两排木棚架，人可以走过去，收两边的紫葡萄。设计带棚架的田时，种之前先在"
+          anchor [ref=225, url=http://127.0.0.1:3004/zh]
+            text "农场规划器"
+          text "上把走道留出来，这一季每条藤都够得着。"
+        heading
+          text "收成对不上时先看症状"
+        paragraph
+          text "作物没有按预期收下来时，用工具、日历和田的摆法对一下症状："
+        unordered_list
+          list_item
+            text "到了预计的日子，还没有可以收获的图像"
+            text "：查有没有漏浇的日子。没浇水的日子会暂停生长，但不会把植株弄死；每干一天，成熟就晚一个早晨。把田浇上，并且坚持每天浇，直到出现可以收�..."
+          list_item
+            text "用手去点，没有收获"
+            text "：先看这种作物要不要工具。镰刀作物（苋菜、甘蓝菜、小麦、未碾米、纤维种子）和 3×3 的巨大作物都不能用手摘。装备镰刀，挥过这些作物；巨大�..."
+          list_item
+            text "人走不到田里面已经成熟的作物"
+            text "：活着的棚架作物（青豆、啤酒花、葡萄）会挡路。先从外圈站得到的格子收藤；以后种棚架时，在双行中间留出走道。"
+          list_item
+            text "第 1 天过夜以后，作物枯了"
+            text "：一换季，不当季的种植就会死。每个季节的第 1 天，"
+            anchor [ref=226, url=https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979]
+              text "不再当季的作物会在第 1 天枯萎"
+            text "，并留下枯株；跨季作物则继续长。用镰刀清掉枯株，下面的耕地还留着。以后播种按"
+            anchor [ref=227, loc=href:/zh/last-day-to-plant-stardew, url=http://127.0.0.1:3004/zh/last-day-to-plant-stardew]
+              text "最晚播种日"
+            text "来排日子，或者按"
+            anchor [ref=228, loc=href:/zh/what-to-grow-in-greenhouse-stardew, url=http://127.0.0.1:3004/zh/what-to-grow-in-greenhouse-stardew]
+              text "温室里种什么"
+            text "，在室内种会反复结的作物。"
+    container
+      text "星露谷物语农场规划器"
+      paragraph
+        text "在浏览器中本地规划《星露谷物语》农场布局的玩家工具。"
+      svg_root
+      svg_root
+      anchor "Follow @wsir1139 on X (Twitter)" [ref=229, loc=css:a[aria-label="Follow @wsir1139 on X (Twitter)"], url=https://x.com/wsir1139]
+        svg_root
+      anchor "Join the Stardew Valley Planner Discord" [ref=230, loc=css:a[aria-label="Join the Stardew Valley Planner Discord"], url=https://discord.gg/GGfUJZsMN]
+        svg_root
+      svg_root
+      container
+        heading
+          text "规划器"
+        unordered_list
+          list_item
+            anchor [ref=231, url=http://127.0.0.1:3004/zh]
+              text "规划器"
+      container
+        heading
+          text "探索"
+        unordered_list
+          list_item
+            anchor [ref=232, url=http://127.0.0.1:3004/zh/blog]
+              text "博客"
+          list_item
+            anchor [ref=233, loc=href:/zh#capabilities, url=http://127.0.0.1:3004/zh#capabilities]
+              text "使用方式"
+          list_item
+            anchor [ref=234, loc=href:/zh#faq, url=http://127.0.0.1:3004/zh#faq]
+              text "常见问题"
+      container
+        heading
+          text "法律"
+        unordered_list
+          list_item
+            anchor [ref=235, loc=href:/zh/privacy, url=http://127.0.0.1:3004/zh/privacy]
+              text "隐私政策"
+          list_item
+            anchor [ref=236, loc=href:/zh/terms, url=http://127.0.0.1:3004/zh/terms]
+              text "服务条款"
+          list_item
+            anchor [ref=237, loc=href:/zh/contact, url=http://127.0.0.1:3004/zh/contact]
+              text "联系我们"
+      paragraph
+        text "© 星露谷物语农场规划器"

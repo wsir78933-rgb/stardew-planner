@@ -1,0 +1,99 @@
+================================================================================
+PICKUP-Q COMMANDS EXECUTION AND EXIT CODE LOG
+Task ID: task_96f1b342e8aa
+Dispatch ID: ctx_ec7ccff88c80
+Working Directory: /Users/wusir/orca/workspaces/stardew planner/博客-2
+Timestamp: 2026-10-13T19:10:00+08:00
+================================================================================
+
+[CMD 01] orca orchestration check --terminal term_4ec275dd-ee29-4113-aaa5-ff9b2b8da8e3 --json
+Exit Code: 0
+Result: ok=true, count=0 messages
+
+[CMD 02] orca orchestration send --from term_4ec275dd-ee29-4113-aaa5-ff9b2b8da8e3 --type heartbeat --subject "alive" --task-id task_96f1b342e8aa --dispatch-id ctx_ec7ccff88c80 --phase "investigating"
+Exit Code: 0
+Result: Sent msg_57547affbcdd
+
+[CMD 03] mkdir -p docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q
+Exit Code: 0
+Result: Directory created
+
+[CMD 04] git status & git rev-parse HEAD & git branch -vv & ls -ld node_modules
+Exit Code: 0
+Output File: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/git-env.txt
+Summary:
+  HEAD: 64a3b21b19444892654f98bc8042db4a95cbd1a8
+  Branch: 博客-2
+  node_modules: symlink -> /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+  Dirty files: 12 unstaged modifications, 4 untracked dirs/files (existing working state preserved)
+
+[CMD 05] lsof -iTCP:3000-3010 -sTCP:LISTEN -P -n & ps aux | grep -E "(node|next)"
+Exit Code: 0
+Output File: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/process-and-port.txt
+Summary:
+  Port 3004: node PID 44772 (LISTEN, 127.0.0.1:3004)
+  Port 3003: node PID 23303 (LISTEN, *:3003, main worktree next-dev, PROTECTED)
+  Port 3002: node PID 84947 (LISTEN, [::1]:3002, Vite AI image editor, PROTECTED)
+  Port 3005: node PID 71596 (LISTEN, [::1]:3005, PROTECTED)
+
+[CMD 06] ps -p 44772 ... & lsof -a -p 44772 -d cwd & lsof -p 44772
+Exit Code: 0
+Output File: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/pid-44772.txt
+Summary:
+  PID 44772: next-server (v16.3.0)
+  PPID 44766 -> PGID 44758 (node /opt/homebrew/opt/node@24/bin/pnpm exec next dev --webpack --hostname 127.0.0.1 --port 3004)
+  Parent Shell: PID 79325 (-/bin/zsh -l) under login session 79299 (ttys023)
+  CWD: /Users/wusir/orca/workspaces/stardew planner/博客-2
+  Status: Active, no drift detected
+
+[CMD 07] curl HTTP preview endpoints
+Exit Code: 0
+Output File: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/http-check.txt
+Summary:
+  GET http://127.0.0.1:3004/ -> 200 OK
+  GET http://127.0.0.1:3004/en/blog/how-to-harvest-stardew-valley -> 404 (Route group (en) maps directly to /how-to-harvest-stardew-valley)
+  GET http://127.0.0.1:3004/how-to-harvest-stardew-valley -> 200 OK (Title: How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe)
+  GET http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley -> 200 OK (Title: 星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀)
+
+[CMD 08] curl full rendered HTML and inspect content
+Exit Code: 0
+Output Files:
+  docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/en-rendered.html (65,991 bytes)
+  docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/zh-rendered.html (64,494 bytes)
+Summary:
+  Rendered HTML contains:
+    - Cover: /blog/how-to-harvest-stardew-valley-cover.webp (old baseline hash 8558f5b08e0c...)
+    - Illustration: /blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp / zh-methods.webp (old baseline illustration)
+  Conclusion: HTTP 200 is unambiguously OLD DRAFT. New staged media and new copy are not assembled.
+
+[CMD 09] Baseline 24-file hash verification (Python hashlib SHA-256)
+Exit Code: 0
+Output File: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/baseline-check.txt
+Summary:
+  24 of 24 files matched baseline manifest (100% MATCH).
+  Zero modification or contamination to baseline workspace state.
+
+[CMD 10] Staged 6-media verification (Python hashlib + sips dimensions)
+Exit Code: 0
+Output File: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/pickup-q/media-check.txt
+Summary:
+  All 6 staged assets in docs/blog-ops/.../rework-v2/media/staged/ verified:
+    - how-to-harvest-stardew-valley-cover.webp (1672x941, 479,250 B, SHA256: 0f35cee8... PASS)
+    - how-to-harvest-stardew-valley-cover.avif (1672x941, 237,604 B, SHA256: 8c23cae6... PASS)
+    - how-to-harvest-stardew-valley-mature-crops.webp (1672x941, 267,644 B, SHA256: d24578e3... PASS)
+    - how-to-harvest-stardew-valley-mature-crops.avif (1672x941, 143,638 B, SHA256: cab14677... PASS)
+    - how-to-harvest-stardew-valley-trellis-paths.webp (1672x941, 223,784 B, SHA256: 027e085c... PASS)
+    - how-to-harvest-stardew-valley-trellis-paths.avif (1672x941, 113,557 B, SHA256: 7991d66a... PASS)
+  All 6 decoded PNG files exist in media/decoded/ with 0 encode/decode exit codes.
+
+[CMD 11] view_file multimodal visual verification of 3 staged WebP images
+Exit Code: 0 (view_file tool execution)
+Summary:
+  - cover.webp: Verified autumn evening scene, pumpkin patch, chickens, kegs, pond.
+  - mature-crops.webp: Verified daytime pumpkin patch close-up, 17 ripe pumpkins (top row 2, lower rows 3x5, NOT 4x5 grid), player in blue overalls raising green vegetable, scarecrow, zero HUD.
+  - trellis-paths.webp: Verified left 2 rows wooden grape trellises with stone path, right 4 rows yellow tall-stalk crops with red-shirt character standing INSIDE yellow crop patch (NOT in grape trellis path).
+
+[CMD 12] orca orchestration check --terminal term_4ec275dd-ee29-4113-aaa5-ff9b2b8da8e3 --json
+Exit Code: 0
+Result: ok=true, count=0 messages
+================================================================================

@@ -1,0 +1,23 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ✓ tests/seo/canonical-public-routes.test.ts (1 test) 6ms
+ ✓ tests/i18n/public-route-registry.test.ts (4 tests) 6ms
+ ✓ tests/blog/blog-faq-list.test.tsx (6 tests) 29ms
+ ✓ tests/routes/removed-public-pages.test.ts (3 tests) 906ms
+   ✓ removed public guide pages > does not export or advertise any removed English or Chinese page  785ms
+ ✓ tests/blog/blog-home-state.test.ts (18 tests) 5ms
+ ✓ tests/blog/blog-post-registry.test.ts (20 tests) 6ms
+ ✓ tests/blog/blog-components.test.tsx (20 tests) 123ms
+ ✓ tests/blog/blog-planner-cta.test.tsx (8 tests) 236ms
+ ❯ tests/blog/blog-sources.test.tsx (2 tests | 1 failed) 255ms
+   ✓ renders source links in a grouped Item list with an optional checked label 13ms
+   × preserves each localized article's source links, labels, notes, and order 241ms
+     → expected '<section class="blog-sources"><div da…' to contain '<p class="blog-sources__checked">The …'
+ ✓ tests/routes/blog-routes.test.tsx (19 tests) 211ms
+
+ Test Files  1 failed | 9 passed (10)
+      Tests  1 failed | 100 passed (101)
+   Start at  22:17:42
+   Duration  3.83s (transform 2.73s, setup 0ms, collect 15.40s, tests 1.78s, environment 1ms, prepare 1.95s)
+

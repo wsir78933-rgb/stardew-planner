@@ -1,0 +1,29 @@
+{
+  "beforeClick": {
+    "found": true,
+    "shadow": true,
+    "text": "",
+    "textLength": 0
+  },
+  "click": {
+    "clicked": true,
+    "x": 38,
+    "y": 862,
+    "buttonCount": 1
+  },
+  "afterClick": {
+    "found": true,
+    "shadow": true,
+    "text": "Route Static Bundler Webpack Route Info Preferences",
+    "textLength": 51
+  },
+  "afterReload": {
+    "found": true,
+    "shadow": true,
+    "text": "1/ 1 Next.js 16.3.0 (stale) Webpack Console Error A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used: - A server/client branch `if (typeof window !== 'undefined')`. - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called. - Date formatting in a user's locale which doesn't match the server. - External changing data without sending a snapshot of it along with the HTML. - Invalid HTML tag nesting. It can also happen if the client has a browser extension installed which messes with the HTML before React loaded. See more info here: https://nextjs.org/docs/messages/react-hydration-error + Client - Server ... &lt;RenderFromTemplateContext&gt; &lt;ScrollAndMaybeFocusHandler cacheNode={{rsc:{...}, ...}}&gt; &lt;InnerScrollHandlerNew focusAndScrollRef={{scrollRef:null, ...}} cacheNode={{rsc:{...}, ...}}&gt; &lt;ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}&gt; &lt;LoadingBoundary name=\"/\" loading={null}&gt; &lt;HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}&gt; &lt;HTTPAccessFallbackErrorBoundary pathname=\"/zh\" notFound={{...}} forbidden={undefined} ...&gt; &lt;RedirectBoundary&gt; &lt;RedirectErrorBoundary router={{...}}&gt; &lt;InnerLayoutRouter url=\"/zh#planner\" tree={[...]} params={{}} cacheNode={{rsc:{...}, ...}} ...&gt; &lt;SegmentViewNode type=\"layout\" pagePath=\"zh/layout.tsx\"&gt; &lt;SegmentTrieNode&gt; &lt;link&gt; &lt;RootLayout&gt; &lt;html lang=\"zh-CN\" - data-immersive-translate-page-theme=\"dark\" &gt; &lt;body className=\"__variable_8eaea4\" - monica-id=\"ofpnmcalabcbjgholdjcjblkibolbppb\" - monica-version=\"9.0.23\" &gt; ... ... app/zh/layout.tsx (25:7) @ RootLayout 23 | return ( 24 | &lt;html lang= \"zh-CN\" &gt; &gt; 25 | &lt;body className={catalogGeist.variable}&gt; | ^ 26 | {children} 27 | &lt; PublicSiteAnalytics /&gt; 28 | &lt;/body&gt; Call Stack 18 Show 16 ignore-listed frame(s) body &lt;anonymous&gt; RootLayout app/zh/layout.tsx (25:7) Was this helpful? 0 1 Issue",
+    "textLength": 2150
+  },
+  "screenshot": "screenshots/zh-1440-dev-issue-open.png",
+  "leftOn": "http://127.0.0.1:3004/how-to-harvest-stardew-valley",
+  "taskSpaceFinished": false
+}

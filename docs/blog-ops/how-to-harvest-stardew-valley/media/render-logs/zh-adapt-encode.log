@@ -1,0 +1,102 @@
+# zh line adaptation encode
+
+command: cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png' -o '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp'
+exit_code: 0
+
+--- stderr ---
+Saving file '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp'
+File:      /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png
+Dimension: 1672 x 941
+Output:    105016 bytes Y-U-V-All-PSNR 51.07 50.85 51.46   51.10 dB
+           (0.53 bpp)
+block count:  intra4:       1599  (25.81%)
+              intra16:      4596  (74.19%)
+              skipped:      3899  (62.94%)
+bytes used:  header:            642  (0.6%)
+             mode-partition:   9987  (9.5%)
+ Residuals bytes  |segment 1|segment 2|segment 3|segment 4|  total
+    macroblocks:  |       2%|       7%|      33%|      58%|    6195
+      quantizer:  |      12 |      12 |      10 |       7 |
+   filter level:  |       4 |       3 |       2 |       0 |
+
+
+command: dwebp '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp' -o '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp.png'
+exit_code: 0
+
+--- stderr ---
+Decoded /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp. Dimensions: 1672 x 941 . Format: lossy. Now saving...
+Saved file /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.webp.png
+
+
+command: ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif'
+exit_code: 0
+
+--- stderr ---
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60.  8.100 / 60.  8.100
+  libavcodec     62. 11.100 / 62. 11.100
+  libavformat    62.  3.100 / 62.  3.100
+  libavdevice    62.  1.100 / 62.  1.100
+  libavfilter    11.  4.100 / 11.  4.100
+  libswscale      9.  1.100 /  9.  1.100
+  libswresample   6.  1.100 /  6.  1.100
+Input #0, png_pipe, from '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-500.png':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1672x941, 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> av1 (libaom-av1))
+Press [q] to stop, [?] for help
+[libaom-av1 @ 0xb86c48a80] 3.13.1
+Output #0, avif, to '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif':
+  Metadata:
+    encoder         : Lavf62.3.100
+  Stream #0:0: Video: av1 (av01 / 0x31307661), yuv444p(tv, progressive), 1672x941, q=2-31, 25 fps, 12800 tbn (default)
+    Metadata:
+      encoder         : Lavc62.11.100 libaom-av1
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[out#0/avif @ 0xb8707c240] video:39KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.719298%
+frame=    1 fps=0.0 q=0.0 Lsize=      39KiB time=00:00:00.04 bitrate=8037.4kbits/s speed=0.0971x elapsed=0:00:00.41    
+
+
+command: ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif' -update 1 -frames:v 1 '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif.png'
+exit_code: 0
+
+--- stderr ---
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60.  8.100 / 60.  8.100
+  libavcodec     62. 11.100 / 62. 11.100
+  libavformat    62.  3.100 / 62.  3.100
+  libavdevice    62.  1.100 / 62.  1.100
+  libavfilter    11.  4.100 / 11.  4.100
+  libswscale      9.  1.100 /  9.  1.100
+  libswresample   6.  1.100 /  6.  1.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif':
+  Metadata:
+    major_brand     : avif
+    minor_version   : 0
+    compatible_brands: avifmif1miafMA1A
+  Duration: N/A, start: 0.000000, bitrate: N/A
+  Stream #0:0[0x1]: Video: av1 (libdav1d) (High) (av01 / 0x31307661), yuv444p(tv), 1672x941 [SAR 1:1 DAR 1672:941], 1 fps, 1 tbr, 1 tbn (default)
+    Metadata:
+      title           : Color
+Stream mapping:
+  Stream #0:0 -> #0:0 (av1 (libdav1d) -> png (native))
+Press [q] to stop, [?] for help
+Output #0, image2, to '/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-staging/how-to-harvest-stardew-valley-zh-methods.avif.png':
+  Metadata:
+    major_brand     : avif
+    minor_version   : 0
+    compatible_brands: avifmif1miafMA1A
+    encoder         : Lavf62.3.100
+  Stream #0:0: Video: png, rgb24(pc, gbr/unknown/unknown, progressive), 1672x941 [SAR 1:1 DAR 1672:941], q=2-31, 200 kb/s, 1 fps, 1 tbn (default)
+    Metadata:
+      encoder         : Lavc62.11.100 png
+      title           : Color
+[out#0/image2 @ 0xa33034180] video:237KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=    1 fps=0.0 q=-0.0 Lsize=N/A time=00:00:01.00 bitrate=N/A speed=22.6x elapsed=0:00:00.04    
+

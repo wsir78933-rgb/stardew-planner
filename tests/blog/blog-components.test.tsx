@@ -431,7 +431,20 @@ it("links the previous topic page from page two", () => {
   );
 
   expect(markup).toContain('href="/blog#topic-carousel">Previous</a>');
-  expect(markup).toContain(">Next</span>");
+  expect(markup).toContain('href="/blog?page=3#topic-carousel">Next</a>');
   expect(markup).toContain('href="/blog#topic-carousel">1</a>');
   expect(markup).toContain('aria-current="page" href="/blog?page=2#topic-carousel">2</a>');
+
+  const lastPageMarkup = renderToStaticMarkup(
+    <BlogIndexContent
+      copy={getBlogCopy("en")}
+      homeState={getBlogHomeState(posts, { page: "3" })}
+      locale="en"
+      posts={posts}
+    />,
+  );
+
+  expect(lastPageMarkup).toContain('href="/blog?page=2#topic-carousel">Previous</a>');
+  expect(lastPageMarkup).toContain(">Next</span>");
+  expect(lastPageMarkup).toContain('aria-current="page" href="/blog?page=3#topic-carousel">3</a>');
 });

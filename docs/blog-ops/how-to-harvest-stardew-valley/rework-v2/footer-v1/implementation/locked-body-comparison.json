@@ -1,0 +1,27 @@
+{
+  "historicalAssemblyComparisonSha256": "4e1edeae7b28ad2798c03c47ad9fee6084851877fde9afb41490f8ed23f0e665",
+  "results": [
+    {
+      "locale": "en",
+      "sourceUnchangedAfterFooterRemoval": true,
+      "ssrUnchangedAfterFooterRemoval": true,
+      "strippedVisibleBlockCount": 40,
+      "strippedHrefCount": 25,
+      "strippedLazyImageCount": 2,
+      "currentHrefCount": 30,
+      "beforeSourceSha256": "40743d572fb3a56fb32da4789e4b3b16a61e54cd6ad6072f95763a50c6b2a0c6",
+      "strippedSourceSha256": "40743d572fb3a56fb32da4789e4b3b16a61e54cd6ad6072f95763a50c6b2a0c6"
+    },
+    {
+      "locale": "zh-CN",
+      "sourceUnchangedAfterFooterRemoval": true,
+      "ssrUnchangedAfterFooterRemoval": true,
+      "strippedVisibleBlockCount": 40,
+      "strippedHrefCount": 25,
+      "strippedLazyImageCount": 2,
+      "currentHrefCount": 30,
+      "beforeSourceSha256": "3e5eda8192c4f850e9023427180c802acda5eb78eeb2d8efd23686f238be5ee0",
+      "strippedSourceSha256": "3e5eda8192c4f850e9023427180c802acda5eb78eeb2d8efd23686f238be5ee0"
+    }
+  ]
+}

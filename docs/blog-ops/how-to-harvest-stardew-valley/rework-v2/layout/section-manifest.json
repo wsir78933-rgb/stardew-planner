@@ -1,0 +1,169 @@
+{
+  "article": {
+    "keyword": "how to harvest stardew valley",
+    "slug": "how-to-harvest-stardew-valley",
+    "locale": "en",
+    "target_length": {
+      "min": 1000,
+      "max": 1400,
+      "tier": "short",
+      "metric": "mechanical_units_en"
+    },
+    "core_task": "Guide the reader to identify ripe crops, harvest standard crops by hand with platform controls (PC primary focus, holding right-click with cursor away to harvest underfoot), use a scythe on designated crop examples, harvest giant crops with an axe, ensure trellis crops are reachable, and troubleshoot harvest blockers."
+  },
+  "sections": [
+    {
+      "id": "sec-intro",
+      "h2": null,
+      "h3": null,
+      "title": "Introduction & Immediate Answer",
+      "target_words": 100,
+      "purpose": "Provide the immediate, direct answer within the first three sentences: standard crops are harvested by hand (PC Right-Click / X), specific crops require a scythe (Left-Click / tool button), and giant crops require an axe.",
+      "fact_bindings": ["FACT-01", "FACT-03", "FACT-08"],
+      "media_id": null
+    },
+    {
+      "id": "sec-1",
+      "h2": "How to Tell When Crops Are Ready to Harvest",
+      "h3": null,
+      "title": "Recognizing Crop Readiness",
+      "target_words": 250,
+      "purpose": "Instruct reader on identifying the final harvest stage sprite and calculating growth calendar days with watering rules.",
+      "fact_bindings": ["FACT-06", "FACT-07"],
+      "media_id": "media-mature-crops",
+      "subsections": [
+        {
+          "id": "sec-1-1",
+          "h3": "Visual Signs: Identifying the Final Harvest Stage Sprite",
+          "action": "Check whether the crop has reached its final harvest stage sprite (as illustrated by mature Parsnip and Pumpkin stages). Fully grown crops display their mature sprite above the soil."
+        },
+        {
+          "id": "sec-1-2",
+          "h3": "Calculating Harvest Day and Unwatered Delays",
+          "action": "Count growth days starting the day AFTER planting; daily watering is required for growth. If unwatered for a day, the crop does not die but halts growth, delaying harvest by one day."
+        }
+      ]
+    },
+    {
+      "id": "sec-2",
+      "h2": "How to Harvest Standard Crops by Hand",
+      "h3": null,
+      "title": "Hand Harvesting Controls (PC Focus & Continuous Movement)",
+      "target_words": 300,
+      "purpose": "Explain precise PC controls for single picking and the forum-tested hold-and-walk technique, noting general controller and mobile mappings.",
+      "fact_bindings": ["FACT-01", "FACT-02", "FACT-05"],
+      "media_id": null,
+      "subsections": [
+        {
+          "id": "sec-2-1",
+          "h3": "Single-Crop Harvesting by Platform",
+          "action": "Stand adjacent to a ripe crop. PC: Press Right-Click or X (Check/Do Action); Left-Click and C are for using tools or placing items. Controllers map to Check/Do Action (Xbox A, PS Cross, Switch A). Mobile uses generic tap to action."
+        },
+        {
+          "id": "sec-2-2",
+          "h3": "Rapid Harvesting: The Hold-and-Walk Technique",
+          "action": "On PC, holding Right-Click with the mouse cursor kept away from the character harvests the tile underfoot while walking through fields; holding seeds allows simultaneous planting and harvesting."
+        }
+      ]
+    },
+    {
+      "id": "sec-3",
+      "h2": "How to Harvest Designated Crops with a Scythe",
+      "h3": null,
+      "title": "Scythe Harvesting Mechanics",
+      "target_words": 250,
+      "purpose": "List verified scythe crop examples, describe tool use controls, and explain the 1.6 Iridium Scythe capability on tilled soil.",
+      "fact_bindings": ["FACT-03", "FACT-04", "FACT-05"],
+      "media_id": null,
+      "subsections": [
+        {
+          "id": "sec-3-1",
+          "h3": "Crops That Require a Scythe to Harvest",
+          "action": "Equip a scythe and press the tool button (PC Left-Click/C, controller tool button, mobile select scythe then tap). Examples include Kale, Amaranth, Wheat, Unmilled Rice, and Fiber Seeds."
+        },
+        {
+          "id": "sec-3-2",
+          "h3": "The 1.6 Iridium Scythe Advantage on Tilled Soil",
+          "action": "Obtained via 1.6 Farming Mastery, the Iridium Scythe can harvest any mature crops grown on tilled soil within its swing range, allowing wide-area scythe harvesting of standard crops."
+        }
+      ]
+    },
+    {
+      "id": "sec-4",
+      "h2": "Harvesting Special Crops: Giant Crops and Trellises",
+      "h3": null,
+      "title": "Physical Crop Constraints: Giant Merges & Trellis Reachability",
+      "target_words": 250,
+      "purpose": "Detail the 3-hit axe rule for harvesting giant crops and spatial planning to keep trellis crops reachable.",
+      "fact_bindings": ["FACT-08", "FACT-09"],
+      "media_id": "media-trellis-paths",
+      "subsections": [
+        {
+          "id": "sec-4-1",
+          "h3": "Harvesting Giant Crops with an Axe",
+          "action": "When 3x3 crops merge into a giant crop, harvest it using any axe. It takes three hits and yields 15–21 normal-quality crops. Giant crops do not wither at season change."
+        },
+        {
+          "id": "sec-4-2",
+          "h3": "Maintaining Reachable Paths Around Trellis Crops",
+          "action": "Living trellis crops (Green Bean, Hops, Grape) cannot be walked through. Plan layouts so every trellis plant is reachable from an adjacent open tile; double-row planting with open walking aisles is a practical layout recommendation."
+        }
+      ]
+    },
+    {
+      "id": "sec-5",
+      "h2": "Troubleshooting Harvest Issues",
+      "h3": null,
+      "title": "Diagnosing Common Harvest Blockers",
+      "target_words": 200,
+      "purpose": "Help reader quickly resolve specific obstacles preventing harvest without repeating the full guide.",
+      "fact_bindings": ["FACT-01", "FACT-03", "FACT-07", "FACT-09", "FACT-10"],
+      "media_id": null,
+      "subsections": []
+    }
+  ],
+  "media_allocations": [
+    {
+      "media_id": "media-cover",
+      "role": "Article Cover / Hero",
+      "source_file": "press-farm-evening.png",
+      "source_origin": "ConcernedApe Official Press Kit (stardewvalley.net/press)",
+      "recommended_staging_assets": [
+        "public/blog/how-to-harvest-stardew-valley-cover.webp",
+        "public/blog/how-to-harvest-stardew-valley-cover.avif"
+      ],
+      "aspect_ratio": "16:9 (1672x941)",
+      "target_section": "header",
+      "alt_semantic_intent": "Describe the evening farm scene with ripe pumpkin patches, paths, and trellis rows.",
+      "caption_semantic_intent": "Highlight that crops mature in distinct patches along open farm pathways for accessible harvesting."
+    },
+    {
+      "media_id": "media-mature-crops",
+      "role": "In-body Figure: Crop Maturity Visual Recognition",
+      "source_file": "press-farm-evening.png (cropped detail of ripe pumpkin patch)",
+      "source_origin": "ConcernedApe Official Press Kit",
+      "recommended_staging_assets": [
+        "public/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "public/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif"
+      ],
+      "aspect_ratio": "16:9 (1672x941)",
+      "target_section": "sec-1",
+      "alt_semantic_intent": "Describe the patch of mature pumpkins on tilled soil ready for harvest.",
+      "caption_semantic_intent": "Point out that fully grown crops reach a distinct harvest stage sprite above tilled soil before picking."
+    },
+    {
+      "media_id": "media-trellis-paths",
+      "role": "In-body Figure: Trellis Aisles & Field Accessibility",
+      "source_file": "press-multiplayer-2.png (detail of trellis rows and walking path)",
+      "source_origin": "ConcernedApe Official Press Kit",
+      "recommended_staging_assets": [
+        "public/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "public/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif"
+      ],
+      "aspect_ratio": "16:9 (1672x941)",
+      "target_section": "sec-4",
+      "alt_semantic_intent": "Describe the farm walking path running between wooden trellis rows and open vegetable beds.",
+      "caption_semantic_intent": "Explain that because living trellis crops cannot be walked through, open walking aisles allow access to every plant."
+    }
+  ]
+}

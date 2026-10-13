@@ -1,0 +1,224 @@
+{
+  "devIssue": {
+    "beforeClick": [],
+    "snapshotIssueLines": [],
+    "clickResult": {
+      "found": false,
+      "method": "text-1-issue",
+      "error": "page.click timed out after 3000ms: Locator text=1 Issue matched 0 elements"
+    },
+    "domClickResult": {
+      "found": false
+    },
+    "afterClick": [],
+    "afterClickSnapshotLines": [],
+    "issueShot": "screenshots/en-1440-dev-issue.png",
+    "afterReload": []
+  },
+  "answerRecheck": [
+    {
+      "locale": "en",
+      "viewport": "1440",
+      "rows": [
+        {
+          "index": 0,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "Stand beside the ripe crop and right-click it, or press X. X is mapped to the same Check/Do Action as right-click. A hand harvest does not need a tool swing."
+        },
+        {
+          "index": 1,
+          "state": "open",
+          "height": 98,
+          "scrollHeight": 98,
+          "clientHeight": 98,
+          "text": "Amaranth, kale, wheat, unmilled rice, and fiber seeds need a scythe. Right-click or X does not harvest them. The iridium scythe is the 1.6 Farming Mastery scythe, and within its swing it harvests crops grown on tilled soil, including regular crops."
+        },
+        {
+          "index": 2,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "Use any axe. Face the giant crop and strike it three times with the tool button (left-click or C on PC)."
+        },
+        {
+          "index": 3,
+          "state": "open",
+          "height": 98,
+          "scrollHeight": 98,
+          "clientHeight": 98,
+          "text": "An unwatered day pauses growth and does not kill the crop, so maturity is one morning later for each dry day. Fiber seeds do not need daily watering to grow, but they still need a scythe when fully grown."
+        },
+        {
+          "index": 4,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "You cannot walk through a living trellis, so green bean, hops, and grape each need a neighboring tile you can stand on. A solid block leaves the interior plants unreachable."
+        }
+      ],
+      "shot": null
+    },
+    {
+      "locale": "en",
+      "viewport": "375",
+      "rows": [
+        {
+          "index": 0,
+          "state": "open",
+          "height": 124,
+          "scrollHeight": 124,
+          "clientHeight": 124,
+          "text": "Stand beside the ripe crop and right-click it, or press X. X is mapped to the same Check/Do Action as right-click. A hand harvest does not need a tool swing."
+        },
+        {
+          "index": 1,
+          "state": "open",
+          "height": 177,
+          "scrollHeight": 177,
+          "clientHeight": 177,
+          "text": "Amaranth, kale, wheat, unmilled rice, and fiber seeds need a scythe. Right-click or X does not harvest them. The iridium scythe is the 1.6 Farming Mastery scythe, and within its swing it harvests crops grown on tilled soil, including regular crops."
+        },
+        {
+          "index": 2,
+          "state": "open",
+          "height": 98,
+          "scrollHeight": 98,
+          "clientHeight": 98,
+          "text": "Use any axe. Face the giant crop and strike it three times with the tool button (left-click or C on PC)."
+        },
+        {
+          "index": 3,
+          "state": "open",
+          "height": 150,
+          "scrollHeight": 150,
+          "clientHeight": 150,
+          "text": "An unwatered day pauses growth and does not kill the crop, so maturity is one morning later for each dry day. Fiber seeds do not need daily watering to grow, but they still need a scythe when fully grown."
+        },
+        {
+          "index": 4,
+          "state": "open",
+          "height": 124,
+          "scrollHeight": 124,
+          "clientHeight": 124,
+          "text": "You cannot walk through a living trellis, so green bean, hops, and grape each need a neighboring tile you can stand on. A solid block leaves the interior plants unreachable."
+        }
+      ],
+      "shot": null
+    },
+    {
+      "locale": "zh",
+      "viewport": "1440",
+      "rows": [
+        {
+          "index": 0,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "站在成熟作物旁边，右键点它，或者按 X。X 和右键映射成同一个 Check/Do Action。用手收，不需要挥工具。"
+        },
+        {
+          "index": 1,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "苋菜、甘蓝菜、小麦、未碾米和纤维种子必须用镰刀收。右键或按 X 都收不下来。铱镰刀是 1.6 耕种精通给的那把镰刀，挥过的范围内能收耕地上长出来的作物，普通作物也包括在内。"
+        },
+        {
+          "index": 2,
+          "state": "open",
+          "height": 45,
+          "scrollHeight": 45,
+          "clientHeight": 45,
+          "text": "用任意一把斧头。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。"
+        },
+        {
+          "index": 3,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "有一天没浇，这一天就不长，但没浇水的作物不会死；每干一天，成熟就晚一个早晨。纤维种子生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+        },
+        {
+          "index": 4,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "活着的棚架走不穿，所以青豆、啤酒花和葡萄每株都要有一格能站在旁边。棚架如果种成实心一块，里面的植株就浇不到，也收不到。"
+        }
+      ],
+      "shot": "screenshots/zh-1440-faq-item-2-open.png"
+    },
+    {
+      "locale": "zh",
+      "viewport": "375",
+      "rows": [
+        {
+          "index": 0,
+          "state": "open",
+          "height": 98,
+          "scrollHeight": 98,
+          "clientHeight": 98,
+          "text": "站在成熟作物旁边，右键点它，或者按 X。X 和右键映射成同一个 Check/Do Action。用手收，不需要挥工具。"
+        },
+        {
+          "index": 1,
+          "state": "open",
+          "height": 124,
+          "scrollHeight": 124,
+          "clientHeight": 124,
+          "text": "苋菜、甘蓝菜、小麦、未碾米和纤维种子必须用镰刀收。右键或按 X 都收不下来。铱镰刀是 1.6 耕种精通给的那把镰刀，挥过的范围内能收耕地上长出来的作物，普通作物也包括在内。"
+        },
+        {
+          "index": 2,
+          "state": "open",
+          "height": 71,
+          "scrollHeight": 71,
+          "clientHeight": 71,
+          "text": "用任意一把斧头。面向巨大作物，用使用工具的键砍三下（PC 上是左键或 C）。"
+        },
+        {
+          "index": 3,
+          "state": "open",
+          "height": 124,
+          "scrollHeight": 124,
+          "clientHeight": 124,
+          "text": "有一天没浇，这一天就不长，但没浇水的作物不会死；每干一天，成熟就晚一个早晨。纤维种子生长不需要每天浇水，但完全长成以后仍然要用镰刀收。"
+        },
+        {
+          "index": 4,
+          "state": "open",
+          "height": 98,
+          "scrollHeight": 98,
+          "clientHeight": 98,
+          "text": "活着的棚架走不穿，所以青豆、啤酒花和葡萄每株都要有一格能站在旁边。棚架如果种成实心一块，里面的植株就浇不到，也收不到。"
+        }
+      ],
+      "shot": null
+    }
+  ],
+  "zhPlanner": {
+    "url": "http://127.0.0.1:3004/zh#planner",
+    "hash": "#planner",
+    "plannerVisible": true,
+    "plannerBox": {
+      "width": 1434,
+      "height": 900
+    },
+    "plannerPaint": "image-or-canvas-ready",
+    "screenshot": "screenshots/zh-1440-planner-r2.png"
+  },
+  "leftOn": {
+    "url": "http://127.0.0.1:3004/how-to-harvest-stardew-valley",
+    "viewport": "1440x900"
+  },
+  "taskSpaceFinished": false
+}

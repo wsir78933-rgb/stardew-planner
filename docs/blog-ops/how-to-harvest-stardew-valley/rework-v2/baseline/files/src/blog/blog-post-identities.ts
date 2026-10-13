@@ -1,0 +1,41 @@
+export const blogPostSlugs = [
+  "carpenter-stardew",
+  "where-is-robin-stardew-valley",
+  "stardew-valley-npc",
+  "stardew-valley-town-map",
+  "where-is-stardew-valley-located",
+  "stardew-valley-expanded-bachelors-and-bachelorettes",
+  "sprinkler-stardew",
+  "glasshouse-stardew-valley",
+  "oak-tree-stardew",
+  "stardew-valley-trees",
+  "maple-tree-stardew",
+  "best-spring-crop-stardew",
+  "how-to-earn-money-stardew",
+  "rancher-or-tiller-stardew",
+  "summer-crops-stardew",
+  "fall-crops-stardew",
+  "do-you-have-to-water-trees-stardew",
+  "how-to-level-up-farming-stardew",
+  "last-day-to-plant-stardew",
+  "pine-tree-stardew",
+  "profit-margin-stardew",
+  "what-to-grow-in-greenhouse-stardew",
+  "stardew-fruit",
+  "oak-tree-vs-maple-stardew",
+  "how-to-harvest-stardew-valley",
+] as const;
+
+export type BlogPostSlug = (typeof blogPostSlugs)[number];
+
+export const blogPostCanonicalPaths: readonly (
+  | `/${BlogPostSlug}/`
+  | `/zh/${BlogPostSlug}/`
+)[] = [
+  ...blogPostSlugs.map((slug) => `/${slug}/` as const),
+  ...blogPostSlugs.map((slug) => `/zh/${slug}/` as const),
+];
+
+export function isBlogPostSlug(value: unknown): value is BlogPostSlug {
+  return typeof value === "string" && blogPostSlugs.includes(value as BlogPostSlug);
+}

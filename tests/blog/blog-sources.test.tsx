@@ -45,6 +45,8 @@ import { WhatToGrowInGreenhouseStardewEnglishArticle } from "../../src/blog/arti
 import { WhatToGrowInGreenhouseStardewChineseArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.zh";
 import { OakTreeVsMapleStardewEnglishArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.en";
 import { OakTreeVsMapleStardewChineseArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.zh";
+import { HowToHarvestStardewValleyEnglishArticle } from "../../src/blog/articles/how-to-harvest-stardew-valley.en";
+import { HowToHarvestStardewValleyChineseArticle } from "../../src/blog/articles/how-to-harvest-stardew-valley.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -62,6 +64,52 @@ type ArticleSourceExpectation = Readonly<{
 }>;
 
 const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
+  {
+    Article: HowToHarvestStardewValleyEnglishArticle,
+    heading: "Sources",
+    name: "English how-to-harvest-stardew-valley article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Crops&amp;oldid=193979",
+        label: "Crops on the Stardew Valley Wiki",
+      },
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Controls&amp;oldid=192481",
+        label: "Controls on the Stardew Valley Wiki",
+      },
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Scythe&amp;oldid=171696",
+        label: "Scythe on the Stardew Valley Wiki",
+      },
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&amp;oldid=186836",
+        label: "Iridium Scythe on the Stardew Valley Wiki",
+      },
+    ],
+  },
+  {
+    Article: HowToHarvestStardewValleyChineseArticle,
+    heading: "来源",
+    name: "Chinese how-to-harvest-stardew-valley article",
+    sources: [
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Crops&amp;oldid=193979",
+        label: "星露谷物语维基：作物",
+      },
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Controls&amp;oldid=192481",
+        label: "星露谷物语维基：操作",
+      },
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Scythe&amp;oldid=171696",
+        label: "星露谷物语维基：镰刀",
+      },
+      {
+        href: "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&amp;oldid=186836",
+        label: "星露谷物语维基：铱镰刀",
+      },
+    ],
+  },
   {
     Article: CarpenterStardewEnglishArticle,
     heading: "Sources",

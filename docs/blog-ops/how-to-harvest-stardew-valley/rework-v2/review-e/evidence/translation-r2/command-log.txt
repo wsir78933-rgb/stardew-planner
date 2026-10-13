@@ -1,0 +1,33 @@
+================================================================================
+Command Execution Log: Role E Translation Review Round 2
+Directory: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/translation-r2
+Timestamp: 2026-10-13T20:16:07+08:00
+================================================================================
+
+[Command 1]
+CommandLine: python3 "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/translation-r2/verify_translation_evidence.py"
+ExitCode: 0
+StandardOutput:
+Step 1: Verifying SHA-256 hashes...
+  EN locked body hash: d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67
+  ZH body hash:        30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd
+Step 2: Verifying 21 quote occurrences...
+  Verified 21 Chinese quotes and 21 English quotes.
+Step 3: Comparing link multisets (27 URLs)...
+  Total links: 27, all matching.
+Step 4: Verifying figure tags and staged media assets...
+  Figures and staged media verified.
+Step 5: Auditing editorial voice and terminology...
+  No editorial voice violations detected. Terminology verified.
+Evidence receipts written to: /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/translation-r2/sha256-receipts.json
+
+[Command 2]
+CommandLine: python3 "/Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py" docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation/zh-body.md --locale zh-CN
+ExitCode: 0
+StandardOutput saved to: docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/translation-r2/count-zh.stdout.json
+Summary: mechanical_units=1769, length_class=reference_only, meets_mechanical_floor=null, sha256_nfc_lf=30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd
+
+[Command 3]
+CommandLine: git diff --check -- docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation
+ExitCode: 0
+StandardOutput: <empty>

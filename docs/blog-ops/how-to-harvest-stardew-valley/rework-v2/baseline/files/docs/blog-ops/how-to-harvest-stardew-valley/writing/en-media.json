@@ -1,0 +1,47 @@
+{
+  "version": "v1",
+  "locale": "en-US",
+  "role": "C",
+  "slug": "how-to-harvest-stardew-valley",
+  "figure": {
+    "insertion": "After the Iridium Scythe comparison in section 2, before the heading How to Tell When Your Crops Are Ready to Harvest.",
+    "sourceSvg": "docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg",
+    "alt": "Diagram of Stardew Valley harvest controls: Right-Click or X for a parsnip, Left-Click or C with a scythe for kale, wheat, amaranth, unmilled rice, and fiber, an axe for a giant crop, plus trellis and season-change rules.",
+    "caption": "Schematic: Stardew Valley crop harvest methods, with Right-Click or X for a parsnip, a scythe swing for kale, wheat, amaranth, unmilled rice, and fiber, plus an axe for giant crops, blocked trellises, and the day-28 season change.",
+    "visibleText": [
+      "CROP HARVEST METHODS",
+      "HAND HARVEST",
+      "Parsnip",
+      "Check / Do Action",
+      "Right-Click or X",
+      "Hold on your tile",
+      "SCYTHE SWING",
+      "Kale, Wheat, Amaranth",
+      "Unmilled Rice, Fiber",
+      "Left-Click or C",
+      "Iridium 1.6: tilled soil",
+      "GIANT CROP",
+      "Axe, 3 hits",
+      "15-21, no wilt",
+      "TRELLIS",
+      "Green Bean, Hops",
+      "Grape",
+      "Path is blocked",
+      "DAY 28",
+      "Off-season wilts",
+      "Greenhouse",
+      "all year"
+    ],
+    "delivery": {
+      "webp": "/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif",
+      "width": 1672,
+      "height": 941,
+      "component": "PublicPicture",
+      "decoding": "async",
+      "loading": "lazy",
+      "figureClass": "blog-article-media"
+    },
+    "creationBasis": "Original vector diagram for this article. Labels use role A harvest facts: PC parsnip right-click and the hold on the tile you stand on, scythe crops, Iridium Scythe on tilled soil from 1.6, axe harvest for a giant crop, blocked trellis crops, and the day-28 season change with a year-round greenhouse. Geometric cards and key chips are original. Not a game screenshot and not a wiki image. WebP and AVIF files are not created in this pass; Role G rasterizes the SVG at 1672 by 941."
+  }
+}

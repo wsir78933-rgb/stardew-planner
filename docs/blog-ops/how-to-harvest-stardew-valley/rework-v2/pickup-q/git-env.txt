@@ -1,0 +1,45 @@
+=== GIT STATUS ===
+On branch 博客-2
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   public/llms.txt
+	modified:   src/blog/blog-copy.ts
+	modified:   src/blog/blog-post-identities.ts
+	modified:   src/blog/blog-post-registry.tsx
+	modified:   tests/blog/blog-components.test.tsx
+	modified:   tests/blog/blog-home-state.test.ts
+	modified:   tests/blog/blog-planner-cta.test.tsx
+	modified:   tests/blog/blog-post-registry.test.ts
+	modified:   tests/i18n/public-route-registry.test.ts
+	modified:   tests/routes/blog-routes.test.tsx
+	modified:   tests/routes/removed-public-pages.test.ts
+	modified:   tests/seo/canonical-public-routes.test.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	docs/blog-ops/how-to-harvest-stardew-valley/
+	node_modules
+	public/blog/how-to-harvest-stardew-valley-cover.avif
+	public/blog/how-to-harvest-stardew-valley-cover.webp
+	public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif
+	public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp
+	public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif
+	public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp
+	src/blog/articles/how-to-harvest-stardew-valley.en.tsx
+	src/blog/articles/how-to-harvest-stardew-valley.zh.tsx
+
+no changes added to commit (use "git add" and/or "git commit -a")
+=== GIT HEAD ===
+64a3b21b19444892654f98bc8042db4a95cbd1a8
+  en-editor-review        8caba5b merge: add bilingual profit margin stardew guide
+  en-reader-voice-cleanup 8caba5b merge: add bilingual profit margin stardew guide
++ main                    8684e18 (/Users/wusir/Desktop/开发项目集合/stardew planner) [origin/main] Merge branch 'map'
+  zh-editor-cleanup       d097e93 content: clean bilingual profit margin reader copy
+  博客                    143d1b5 feat(blog): add bilingual profit margin stardew guide
+* 博客-2                  64a3b21 Merge 对齐竞品: batch building fill and eraser previews
+  对齐竞品                4e39f58 Add missing Valley maps and locked assets
++ 文案                    7592f87 (/Users/wusir/Desktop/开发项目集合/文案) Add bilingual farm planner comparison with free and usability benefits
+=== NODE_MODULES CHECK ===
+lrwxr-xr-x@ 1 wusir  staff  68 Oct 12 22:13 node_modules -> /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+-rwxr-xr-x@ 1 wusir  staff  2478 Sep  7 22:18 node_modules/.bin/next
