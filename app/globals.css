@@ -5639,3 +5639,128 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-ho
     padding-top: 0.25rem;
   }
 }
+
+/* Homepage tool comparison: keep the four-column comparison readable on narrow screens. */
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] {
+  min-width: 0;
+  padding-block: clamp(4rem, 7.8vw, 7rem);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-header] {
+  margin: 0 auto 2.25rem;
+  max-width: 48rem;
+  text-align: center;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-header] > h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-header] > p {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  line-height: 1.75rem;
+  margin: 1rem auto 0;
+  max-width: 48rem;
+  text-wrap: pretty;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-scroll] {
+  border-block: 1px solid color-mix(in srgb, var(--border) 22%, var(--background));
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-scroll]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] {
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: var(--foreground);
+  min-width: 1024px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] :is(th, td) {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 18%, var(--background));
+  padding: 1rem;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] thead th {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] tbody th {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] tbody td {
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] tr > :first-child {
+  width: 18%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] tr > :nth-child(2) {
+  width: 30%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] tr > :nth-child(n + 3) {
+  width: 26%;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] tr > [data-homepage-comparison-featured] {
+  background: color-mix(in srgb, var(--primary) 18%, var(--background));
+  border-inline: 1px solid color-mix(in srgb, var(--border) 22%, var(--background));
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] thead [data-homepage-comparison-featured] {
+  color: var(--foreground);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] [data-homepage-comparison-tool] {
+  align-items: flex-start;
+  color: var(--foreground);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 44px;
+}
+
+@media (max-width: 700px) {
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] {
+    padding-block: 5rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-header] {
+    margin-bottom: 2rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-header] > p {
+    font-size: 0.875rem;
+    line-height: 1.65rem;
+  }
+
+  body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] :is(th, td) {
+    padding: 0.875rem;
+  }
+}

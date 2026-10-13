@@ -10,6 +10,7 @@ import { HomepageFeatureIntroductionSection } from "./homepage-feature-introduct
 import { HomepageHeroSection } from "./homepage-hero-section";
 import { HomepageHowToSection } from "./homepage-how-to-section";
 import { HomepageNavigationDock } from "./homepage-navigation-dock";
+import { HomepageToolComparisonSection } from "./homepage-tool-comparison-section";
 import { HomepageWhatIsSection } from "./homepage-what-is-section";
 import { SiteFooter } from "./site-footer";
 
@@ -57,6 +58,7 @@ export function HomepageContent({
         />
         <HomepageFeatureIntroductionSection copy={copy.featureIntroduction} />
         <HomepageHowToSection copy={copy.howTo} />
+        <HomepageToolComparisonSection copy={copy.toolComparison} />
         <section data-homepage-faq id="faq">
           <HomepageFaqList
             description={copy.faq.description}

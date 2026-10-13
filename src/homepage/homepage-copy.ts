@@ -133,6 +133,21 @@ export type HomepageCopy = Readonly<{
     description: string;
     steps: readonly [HomepageHowToStep, HomepageHowToStep, HomepageHowToStep];
   }>;
+  toolComparison: Readonly<{
+    heading: string;
+    description: string;
+    tableLabel: string;
+    dimensionHeading: string;
+    columns: readonly [
+      Readonly<{ name: string; href: string }>,
+      Readonly<{ name: string; href: string }>,
+      Readonly<{ name: string; href: string }>,
+    ];
+    rows: readonly Readonly<{
+      dimension: string;
+      cells: readonly [string, string, string];
+    }>[];
+  }>;
   closingCta: Readonly<{
     heading: string;
     supportLine: string;
@@ -528,6 +543,77 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
           benefits: [
             "Farmhouse → fields → animals → chests → shipping bin.",
             "A blocked tile is cheaper to move here than in-game.",
+          ],
+        },
+      ],
+    },
+    toolComparison: {
+      heading: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
+      description:
+        "Plan your farm for free with an interface that is easy to use. Clear controls bring project management, JSON backup and 1× / 2× PNG export together, with English and Chinese support.",
+      tableLabel: "Tool comparison",
+      dimensionHeading: "Feature",
+      columns: [
+        {
+          name: "Stardew Valley Planner",
+          href: "#planner",
+        },
+        {
+          name: "StardewPlan",
+          href: "https://stardewplan.com/",
+        },
+        {
+          name: "Stardew Planner V3",
+          href: "https://v3.stardew.info/planner/",
+        },
+      ],
+      rows: [
+        {
+          dimension: "Pricing",
+          cells: [
+            "Planning, local saves, JSON backups and 1× / 2× PNG export are all free, with no paid membership tier.",
+            "All planner features are free; unlimited account syncing is a supporter benefit.",
+            "Basic planning is free; Patreon membership offers ad removal.",
+          ],
+        },
+        {
+          dimension: "Ease of use",
+          cells: [
+            "Clear labels and grouped controls: browse or search items; project management, JSON backups and PNG export share one save window.",
+            "A toolbar and categorized item list; Library manages plans, while the plan menu provides sharing and screenshots.",
+            "Top category menus and icon tools, with additional controls in the options and right-click menus.",
+          ],
+        },
+        {
+          dimension: "Saving multiple plans",
+          cells: [
+            "Save multiple plans without fixed slots or a set plan limit; capacity depends on browser storage.",
+            "Use without an account and save on-device; free accounts can sync 5 plans, and supporters can sync unlimited plans.",
+            "Each save gets a unique URL; plan history is listed as a Patreon supporter benefit.",
+          ],
+        },
+        {
+          dimension: "English and Chinese interface",
+          cells: [
+            "Switch planning and saving screens between English and Chinese.",
+            "English interface; Chinese support has not been confirmed.",
+            "Supports English and Simplified Chinese among its interface languages.",
+          ],
+        },
+        {
+          dimension: "Project file backup",
+          cells: [
+            "Export or import one project as JSON, including all its maps, for backup or migration.",
+            "Export a plan as farm-plan.json.",
+            "Save and share a plan with its unique URL.",
+          ],
+        },
+        {
+          dimension: "PNG export",
+          cells: [
+            "Download 1× standard or 2× high-quality PNG screenshots for sharing or in-game building reference.",
+            "Download a PNG screenshot using Screenshot.",
+            "Export a farm plan as a PNG image.",
           ],
         },
       ],
@@ -961,6 +1047,77 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
           benefits: [
             "农舍 → 田地 → 动物 → 箱子 → 出货箱。",
             "格子上挪一块，比进游戏拆重建便宜。",
+          ],
+        },
+      ],
+    },
+    toolComparison: {
+      heading: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
+      description:
+        "免费使用，轻松上手。清晰的操作标签与分组面板，让方案管理、JSON 备份和 1× / 2× PNG 导出更直观；支持中英文操作。",
+      tableLabel: "工具对比",
+      dimensionHeading: "对比项目",
+      columns: [
+        {
+          name: "Stardew Valley Planner",
+          href: "#planner",
+        },
+        {
+          name: "StardewPlan",
+          href: "https://stardewplan.com/",
+        },
+        {
+          name: "Stardew Planner V3",
+          href: "https://v3.stardew.info/planner/",
+        },
+      ],
+      rows: [
+        {
+          dimension: "使用费用",
+          cells: [
+            "规划、本地保存、JSON 备份和 1× / 2× PNG 导出全部免费，无付费会员档位。",
+            "规划功能免费；无限方案同步为支持者权益。",
+            "基础规划免费；Patreon 会员可去除广告。",
+          ],
+        },
+        {
+          dimension: "上手与操作",
+          cells: [
+            "操作标签清晰、功能分组直观：按分类或搜索找物品，方案管理、JSON 备份与 PNG 导出在同一保存窗口中分区展示。",
+            "工具栏配合分类物品栏；Library 管理方案，方案菜单提供分享和截图。",
+            "顶部分类菜单与图标工具，更多操作通过选项菜单和右键菜单进入。",
+          ],
+        },
+        {
+          dimension: "多方案保存",
+          cells: [
+            "本地保存多个方案，不设固定槽位或数量配额；容量受浏览器存储空间限制。",
+            "可无账户使用并保存在设备；免费账户可同步 5 个方案，支持者可无限同步。",
+            "每次保存生成独立链接；方案历史标注为 Patreon 支持者权益。",
+          ],
+        },
+        {
+          dimension: "中英文操作",
+          cells: [
+            "规划与保存界面均可切换中英文，可用熟悉的语言操作。",
+            "英文界面；中文支持尚未核实。",
+            "支持英语、简体中文等界面语言。",
+          ],
+        },
+        {
+          dimension: "方案文件备份",
+          cells: [
+            "单个项目（含其全部地图）可导入或导出 JSON，方便备份、继续编辑或手动迁移。",
+            "可将方案导出为 farm-plan.json 文件。",
+            "通过独立链接保存与分享方案。",
+          ],
+        },
+        {
+          dimension: "PNG 导出",
+          cells: [
+            "可下载标准 1× 或高清 2× PNG 截图，用于分享或进游戏建造参考。",
+            "可通过 Screenshot 下载 PNG 截图。",
+            "可将农场方案导出为 PNG 图片。",
           ],
         },
       ],
