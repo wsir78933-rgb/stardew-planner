@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   CLOUD_PROJECT_DOCUMENT_MAX_BYTES,
+  CLOUD_PROJECT_LIST_PAGE_SIZE,
   parseCloudProjectDocument,
   parseCloudProjectList,
   parseCloudProjectRecord,
@@ -150,7 +151,7 @@ describe("cloud project record and summary parsers", () => {
     ).toThrow("summary mapCount must match project document maps");
   });
 
-  it("parses summaries and rejects duplicate ids in the list envelope", () => {
+  it("parses bounded ascending list pages and validates their cursor", () => {
     const summary = {
       id: "cloud-share-id",
       title: "Alpha Farm",
@@ -160,12 +161,34 @@ describe("cloud project record and summary parsers", () => {
     };
 
     expect(parseCloudProjectSummary(summary)).toEqual(summary);
-    expect(parseCloudProjectList({ projects: [summary] })).toEqual({
+    expect(parseCloudProjectList({ projects: [summary], nextCursor: null })).toEqual({
       projects: [summary],
+      nextCursor: null,
     });
-    expect(() => parseCloudProjectList({ projects: [summary, summary] })).toThrow(
-      "duplicate cloud project ID",
+    expect(() =>
+      parseCloudProjectList({ projects: [summary, summary], nextCursor: null }),
+    ).toThrow("ascending order without duplicates");
+
+    const fullPage = Array.from(
+      { length: CLOUD_PROJECT_LIST_PAGE_SIZE },
+      (_, projectIndex) => ({
+        ...summary,
+        id: `cloud-${String(projectIndex).padStart(3, "0")}`,
+      }),
     );
+    const lastProjectId = fullPage.at(-1)?.id;
+    expect(
+      parseCloudProjectList({ projects: fullPage, nextCursor: lastProjectId }),
+    ).toEqual({ projects: fullPage, nextCursor: lastProjectId });
+    expect(() =>
+      parseCloudProjectList({ projects: fullPage, nextCursor: "different-id" }),
+    ).toThrow("nextCursor must match the last summary id");
+    expect(() =>
+      parseCloudProjectList({
+        projects: [...fullPage, { ...summary, id: "cloud-100" }],
+        nextCursor: null,
+      }),
+    ).toThrow("maximum page size is 100");
     expect(() => parseCloudProjectSummary({ ...summary, revision: 0 })).toThrow(
       "revision must be a positive safe integer. Received: 0",
     );

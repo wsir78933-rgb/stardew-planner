@@ -145,7 +145,11 @@ function requireIdentifier(rawValue: unknown, valueName: string): string {
 }
 
 function requireRevision(rawValue: unknown, valueName: string): number {
-  if (!Number.isSafeInteger(rawValue) || typeof rawValue !== "number" || rawValue < 1) {
+  if (
+    typeof rawValue !== "number" ||
+    !Number.isSafeInteger(rawValue) ||
+    rawValue < 1
+  ) {
     throw new CloudProjectLinkStoreError(
       `${valueName} must be a positive safe integer. Received: ${describeValue(rawValue)}.`,
     );

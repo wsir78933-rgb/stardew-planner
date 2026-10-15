@@ -41,8 +41,6 @@ type PlannerAuthSettingsResult =
   | Readonly<{ kind: "ready"; settings: PlannerAuthSettings }>
   | Readonly<{ kind: "invalid"; message: string }>;
 
-type PlannerAuthContext = ReturnType<typeof betterAuth>;
-
 const authBasePath = "/api/auth";
 const minimumSecretLength = 32;
 
@@ -135,54 +133,70 @@ function parseAllowedOrigins(
 function validatePlannerAuthSettings(
   environment: PlannerAuthEnvironment,
 ): PlannerAuthSettingsResult {
+  const configuredValues = {
+    database: environment.DB,
+    secret: environment.BETTER_AUTH_SECRET,
+    googleClientId: environment.GOOGLE_CLIENT_ID,
+    googleClientSecret: environment.GOOGLE_CLIENT_SECRET,
+    baseURL: environment.BETTER_AUTH_URL,
+    allowedOrigins: environment.AUTH_ALLOWED_ORIGINS,
+  };
   const missingSettings: string[] = [];
-  if (!isD1Binding(environment.DB)) missingSettings.push("DB");
-  if (!isNonEmptyString(environment.BETTER_AUTH_SECRET)) {
+  if (!isD1Binding(configuredValues.database)) missingSettings.push("DB");
+  if (!isNonEmptyString(configuredValues.secret)) {
     missingSettings.push("BETTER_AUTH_SECRET");
   }
-  if (!isNonEmptyString(environment.GOOGLE_CLIENT_ID)) {
+  if (!isNonEmptyString(configuredValues.googleClientId)) {
     missingSettings.push("GOOGLE_CLIENT_ID");
   }
-  if (!isNonEmptyString(environment.GOOGLE_CLIENT_SECRET)) {
+  if (!isNonEmptyString(configuredValues.googleClientSecret)) {
     missingSettings.push("GOOGLE_CLIENT_SECRET");
   }
-  if (!isNonEmptyString(environment.BETTER_AUTH_URL)) {
+  if (!isNonEmptyString(configuredValues.baseURL)) {
     missingSettings.push("BETTER_AUTH_URL");
   }
-  if (!isNonEmptyString(environment.AUTH_ALLOWED_ORIGINS)) {
+  if (!isNonEmptyString(configuredValues.allowedOrigins)) {
     missingSettings.push("AUTH_ALLOWED_ORIGINS");
   }
 
-  if (missingSettings.length > 0) {
+  if (
+    missingSettings.length > 0 ||
+    !isD1Binding(configuredValues.database) ||
+    !isNonEmptyString(configuredValues.secret) ||
+    !isNonEmptyString(configuredValues.googleClientId) ||
+    !isNonEmptyString(configuredValues.googleClientSecret) ||
+    !isNonEmptyString(configuredValues.baseURL) ||
+    !isNonEmptyString(configuredValues.allowedOrigins)
+  ) {
     return {
       kind: "invalid",
       message: `Cloud authentication is not configured. Missing or invalid settings: ${missingSettings.join(", ")}.`,
     };
   }
 
-  if (environment.BETTER_AUTH_SECRET.length < minimumSecretLength) {
+  if (configuredValues.secret.length < minimumSecretLength) {
     return {
       kind: "invalid",
-      message: `BETTER_AUTH_SECRET has length ${environment.BETTER_AUTH_SECRET.length}; provide at least ${minimumSecretLength} characters.`,
+      message: `BETTER_AUTH_SECRET has length ${configuredValues.secret.length}; provide at least ${minimumSecretLength} characters.`,
     };
   }
 
   const parsedBaseURL = parseExactOrigin(
-    environment.BETTER_AUTH_URL,
+    configuredValues.baseURL,
     "BETTER_AUTH_URL",
   );
   if (parsedBaseURL.kind === "invalid") {
     return parsedBaseURL;
   }
 
-  const parsedOrigins = parseAllowedOrigins(environment.AUTH_ALLOWED_ORIGINS);
+  const parsedOrigins = parseAllowedOrigins(configuredValues.allowedOrigins);
   if (parsedOrigins.kind === "invalid") {
     return parsedOrigins;
   }
   if (!parsedOrigins.origins.includes(parsedBaseURL.origin)) {
     return {
       kind: "invalid",
-      message: `BETTER_AUTH_URL origin ${JSON.stringify(parsedBaseURL.origin)} is not listed in AUTH_ALLOWED_ORIGINS value ${JSON.stringify(environment.AUTH_ALLOWED_ORIGINS)}.`,
+      message: `BETTER_AUTH_URL origin ${JSON.stringify(parsedBaseURL.origin)} is not listed in AUTH_ALLOWED_ORIGINS value ${JSON.stringify(configuredValues.allowedOrigins)}.`,
     };
   }
 
@@ -191,16 +205,16 @@ function validatePlannerAuthSettings(
     settings: {
       allowedOrigins: parsedOrigins.origins,
       baseURL: parsedBaseURL.origin,
-      database: environment.DB,
-      googleClientId: environment.GOOGLE_CLIENT_ID,
-      googleClientSecret: environment.GOOGLE_CLIENT_SECRET,
-      secret: environment.BETTER_AUTH_SECRET,
+      database: configuredValues.database,
+      googleClientId: configuredValues.googleClientId,
+      googleClientSecret: configuredValues.googleClientSecret,
+      secret: configuredValues.secret,
       secureCookies: parsedBaseURL.origin.startsWith("https://"),
     },
   };
 }
 
-function createPlannerAuth(settings: PlannerAuthSettings): PlannerAuthContext {
+function createPlannerAuth(settings: PlannerAuthSettings) {
   return betterAuth({
     baseURL: settings.baseURL,
     basePath: authBasePath,
@@ -223,6 +237,8 @@ function createPlannerAuth(settings: PlannerAuthSettings): PlannerAuthContext {
     },
   });
 }
+
+type PlannerAuthContext = ReturnType<typeof createPlannerAuth>;
 
 function getPlannerAuthContext(
   environment: PlannerAuthEnvironment,

@@ -13,6 +13,8 @@ export type PlannerWorkerEnvironment = Env &
   ContactWorkerEnvironment &
   PlannerAuthEnvironment;
 
+const expectedAccountHeaderName = "X-Expected-Account-Id";
+
 function isPlannerAuthRequest(request: Request): boolean {
   return new URL(request.url).pathname.startsWith("/api/auth/");
 }
@@ -28,11 +30,53 @@ function isCloudProjectRequest(request: Request): boolean {
 function createUnauthorizedResponse(): Response {
   return Response.json(
     { message: "Sign in to sync planner projects." },
-    {
-      status: 401,
-      headers: { "cache-control": "no-store" },
-    },
+    { status: 401 },
   );
+}
+
+function createCloudProjectErrorResponse(
+  status: number,
+  code: string,
+  message: string,
+): Response {
+  return Response.json(
+    { error: { code, message } },
+    { status, headers: { "cache-control": "no-store" } },
+  );
+}
+
+function createNoStoreResponse(response: Response): Response {
+  const responseHeaders = new Headers(response.headers);
+  responseHeaders.set("cache-control", "no-store");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: responseHeaders,
+  });
+}
+
+function validateExpectedAccountId(
+  request: Request,
+  authenticatedUserId: string,
+): Response | null {
+  const expectedAccountId = request.headers.get(expectedAccountHeaderName);
+  if (expectedAccountId === null || expectedAccountId.trim().length === 0) {
+    return createCloudProjectErrorResponse(
+      400,
+      "EXPECTED_ACCOUNT_REQUIRED",
+      `${expectedAccountHeaderName} value ${JSON.stringify(expectedAccountId)} must identify the active account.`,
+    );
+  }
+
+  if (expectedAccountId !== authenticatedUserId) {
+    return createCloudProjectErrorResponse(
+      409,
+      "ACCOUNT_CHANGED",
+      `${expectedAccountHeaderName} value ${JSON.stringify(expectedAccountId)} does not match the authenticated account.`,
+    );
+  }
+
+  return null;
 }
 
 async function handleAuthenticatedCloudProjectRequest(
@@ -45,23 +89,32 @@ async function handleAuthenticatedCloudProjectRequest(
       environment,
     );
     if (originFailureResponse !== null) {
-      return originFailureResponse;
+      return createNoStoreResponse(originFailureResponse);
     }
   }
 
   const sessionLookup = await getPlannerSession(request, environment);
   if (sessionLookup.kind === "unavailable") {
-    return sessionLookup.response;
+    return createNoStoreResponse(sessionLookup.response);
   }
   if (sessionLookup.userId === null) {
-    return createUnauthorizedResponse();
+    return createNoStoreResponse(createUnauthorizedResponse());
   }
 
-  return handleCloudProjectRequest(
+  const accountMismatchResponse = validateExpectedAccountId(
+    request,
+    sessionLookup.userId,
+  );
+  if (accountMismatchResponse !== null) {
+    return createNoStoreResponse(accountMismatchResponse);
+  }
+
+  const cloudProjectResponse = await handleCloudProjectRequest(
     request,
     environment.DB,
     sessionLookup.userId,
   );
+  return createNoStoreResponse(cloudProjectResponse);
 }
 
 async function handlePlannerWorkerRequest(

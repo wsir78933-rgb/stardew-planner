@@ -1,18 +1,22 @@
 "use client";
 
-import { useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import * as AlertDialog from "radix-ui/alert-dialog";
-import type { CloudProjectSummary } from "@/cloud-sync/cloud-project-contract";
+import type { CloudProjectSummary } from "@/src/cloud-sync/cloud-project-contract";
+import {
+  getConfiguredLocalSaveRetirementAt,
+  getLocalSaveRetirementState,
+} from "@/src/cloud-sync/local-save-retirement";
 import {
   CloudAuthError,
   CloudProjectRequestError,
   type CloudProjectSyncView,
-} from "@/cloud-sync/use-cloud-project-sync";
-import type { ReferenceProjectSummary } from "@/reference-runtime/reference-project-repository";
+} from "@/src/cloud-sync/use-cloud-project-sync";
+import type { ReferenceProjectSummary } from "@/src/reference-runtime/reference-project-repository";
 import type {
   CloudProjectDeleteCopy,
   CloudProjectsCopy,
-} from "@/i18n/save-modal-copy";
+} from "@/src/i18n/save-modal-copy";
 import styles from "./cloud-project-panel.module.css";
 
 type CloudProjectPanelProperties = Readonly<{
@@ -42,6 +46,9 @@ export function CloudProjectPanel({
   localProjects,
 }: CloudProjectPanelProperties) {
   const cloudProjectPanelHeadingId = useId();
+  const localSaveRetirementNoticeId = useId();
+  const [currentEpochMilliseconds, setCurrentEpochMilliseconds] =
+    useState<number | null>(null);
   const [pendingActionId, setPendingActionId] = useState<string | null>(null);
   const pendingCloudActionIdRef = useRef<string | null>(null);
   const [cloudProjectPendingDeletionId, setCloudProjectPendingDeletionId] =
@@ -53,6 +60,32 @@ export function CloudProjectPanel({
   );
   const isCloudSyncReady = cloudProjectSync.status === "ready";
   const signedInAccountName = getSignedInAccountName(cloudProjectSync);
+  const localSaveRetirementAt = getConfiguredLocalSaveRetirementAt();
+  const localSaveRetirementState =
+    localSaveRetirementAt === null
+      ? { kind: "not-configured" as const }
+      : currentEpochMilliseconds === null
+        ? null
+        : getLocalSaveRetirementState(
+            localSaveRetirementAt,
+            currentEpochMilliseconds,
+          );
+
+  useEffect(() => {
+    if (localSaveRetirementAt === null) return;
+
+    function refreshCurrentEpochMilliseconds(): void {
+      setCurrentEpochMilliseconds(Date.now());
+    }
+
+    refreshCurrentEpochMilliseconds();
+    const retirementCountdownIntervalId = window.setInterval(
+      refreshCurrentEpochMilliseconds,
+      1_000,
+    );
+
+    return () => window.clearInterval(retirementCountdownIntervalId);
+  }, [localSaveRetirementAt]);
 
   async function runCloudProjectAction(
     actionId: string,
@@ -150,6 +183,24 @@ export function CloudProjectPanel({
           </>
         )}
       </div>
+      <p
+        aria-live="polite"
+        className={styles.retirementNotice}
+        id={localSaveRetirementNoticeId}
+        role="status"
+      >
+        {localSaveRetirementState === null
+          ? copy.localSaveRetirementLoading
+          : localSaveRetirementState.kind === "not-configured"
+            ? copy.localSaveRetirementNotConfigured
+            : localSaveRetirementState.kind === "ended"
+              ? copy.localSaveRetirementEnded
+              : copy.localSaveRetirementCountdown(
+                  localSaveRetirementState.daysRemaining,
+                  localSaveRetirementState.hoursRemaining,
+                  localSaveRetirementState.minutesRemaining,
+                )}
+      </p>
       {cloudProjectSync.errorMessage !== null ? (
         <p className={styles.error} role="alert">
           {copy.cloudStatusError(cloudProjectSync.errorMessage)}
@@ -169,6 +220,16 @@ export function CloudProjectPanel({
                   ] ?? { status: "none" as const };
                   const localSyncStatus = localSyncState.status;
                   const localProjectIsCurrent = localProject.id === currentProjectId;
+                  const localProjectCanManuallySync =
+                    localSyncStatus === "none" || localSyncStatus === "synced";
+                  const localProjectManualSyncActionId =
+                    `manual-sync-local-project:${localProject.id}`;
+                  const localProjectRetrySyncActionId =
+                    `retry-local-project:${localProject.id}`;
+                  const manuallySyncLocalProject =
+                    localSyncStatus === "none"
+                      ? () => cloudProjectSync.uploadLocalProject(localProject.id)
+                      : () => cloudProjectSync.retrySync(localProject.id);
 
                   return (
                     <li className={styles.syncListItem} key={localProject.id}>
@@ -228,36 +289,54 @@ export function CloudProjectPanel({
                           </div>
                         </>
                       ) : null}
-                      {localSyncStatus === "none" ? (
-                        <button
-                          aria-label={`${copy.syncThisProject}: ${localProject.title}`}
-                          disabled={!isCloudSyncReady || isCloudActionPending}
-                          onClick={() =>
-                            void runCloudProjectAction(
-                              `upload-local-project:${localProject.id}`,
-                              () => cloudProjectSync.uploadLocalProject(localProject.id),
-                            )
-                          }
-                          type="button"
-                        >
-                          {pendingActionId === `upload-local-project:${localProject.id}`
-                            ? copy.syncButtonBusy
-                            : copy.syncThisProject}
-                        </button>
+                      {localProjectCanManuallySync ? (
+                        <div className={styles.syncProjectAction}>
+                          <button
+                            aria-label={`${copy.syncThisProject}: ${localProject.title}`}
+                            aria-describedby={localSaveRetirementNoticeId}
+                            aria-busy={pendingActionId === localProjectManualSyncActionId}
+                            disabled={!isCloudSyncReady || isCloudActionPending}
+                            onClick={() =>
+                              void runCloudProjectAction(
+                                localProjectManualSyncActionId,
+                                manuallySyncLocalProject,
+                              )
+                            }
+                            type="button"
+                          >
+                            {pendingActionId === localProjectManualSyncActionId
+                              ? copy.syncButtonBusy
+                              : copy.syncThisProject}
+                          </button>
+                          {localSaveRetirementState?.kind === "countdown" ? (
+                            <span className={styles.retirementCountdown}>
+                              {copy.localSaveRetirementShortCountdown(
+                                localSaveRetirementState.daysRemaining,
+                                localSaveRetirementState.hoursRemaining,
+                                localSaveRetirementState.minutesRemaining,
+                              )}
+                            </span>
+                          ) : null}
+                        </div>
                       ) : null}
                       {localSyncStatus === "pending" || localSyncStatus === "error" ? (
                         <button
                           aria-label={`${copy.retrySync}: ${localProject.title}`}
+                          aria-busy={
+                            pendingActionId === localProjectManualSyncActionId
+                            || pendingActionId === localProjectRetrySyncActionId
+                          }
                           disabled={!isCloudSyncReady || isCloudActionPending}
                           onClick={() =>
                             void runCloudProjectAction(
-                              `retry-local-project:${localProject.id}`,
+                                localProjectRetrySyncActionId,
                               () => cloudProjectSync.retrySync(localProject.id),
                             )
                           }
                           type="button"
                         >
-                          {pendingActionId === `retry-local-project:${localProject.id}`
+                          {pendingActionId === localProjectManualSyncActionId
+                            || pendingActionId === localProjectRetrySyncActionId
                             ? copy.syncButtonBusy
                             : copy.retrySync}
                         </button>
@@ -292,9 +371,8 @@ export function CloudProjectPanel({
             {cloudProjectSync.status === "loading" ? (
               <p role="status">{copy.cloudProjectsLoading}</p>
             ) : cloudProjectSync.cloudProjects.length === 0
-            && cloudProjectSync.status === "ready" ? (
+              && cloudProjectSync.status === "ready" ? (
               <p>{copy.cloudProjectsEmpty}</p>
-            ) : cloudProjectSync.cloudProjects.length === 0 ? null : (
             ) : (
               <ul className={styles.cloudList}>
                 {cloudProjectSync.cloudProjects.map((cloudProject) => (

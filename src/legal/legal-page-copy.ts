@@ -31,7 +31,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Farm data",
           paragraphs: [
-            "Projects stay in this browser unless you choose to sync them. Selected layout data is stored in this site's Cloudflare D1 database; map preview images stay on this device.",
+            "Projects are saved in this browser by default. After you sign in, saving the current project syncs its layout to this site's Cloudflare D1 database. Existing local projects stay in this browser until you choose to sync each one. Cloud copies remain until you delete them; map preview images stay on this device.",
           ],
         },
         {
@@ -61,7 +61,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Data deletion",
           paragraphs: [
-            "Delete a cloud copy from the cloud project list. Delete local data by deleting local projects or clearing this site's data in your browser; deleting one copy does not delete the other.",
+            "Cloud copies remain until you delete them from the cloud project list. Delete local data by deleting local projects or clearing this site's data in your browser; deleting one copy does not delete the other.",
           ],
         },
         {
@@ -139,7 +139,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "农场数据",
           paragraphs: [
-            "项目保留在此浏览器中，除非你主动选择同步。所选项目的布局数据会存储在本站 Cloudflare D1 数据库中；地图预览图片仍保留在此设备上。",
+            "项目默认保存在此浏览器中。登录后点击保存会自动将当前项目布局同步到本站 Cloudflare D1 数据库。已有本地项目仍保存在本地，只有你逐项选择同步后才会上传。云端副本会一直保留到你主动删除；地图预览图片仍保留在此设备上。",
           ],
         },
         {
@@ -163,7 +163,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "数据删除",
           paragraphs: [
-            "你可以从云端项目列表删除云端副本。删除本地项目或清除此网站数据可移除本地数据；删除一份副本不会删除另一份。",
+            "云端副本会保留到你从云端项目列表主动删除为止。删除本地项目或清除此网站数据可移除本地数据；删除一份副本不会删除另一份。",
           ],
         },
         {

@@ -41,6 +41,7 @@ export interface CircularTestimonialsProps {
   previousLabel: string;
   nextLabel: string;
   autoplay?: boolean;
+  reserveCopyHeight?: boolean;
   colors?: CircularTestimonialsColors;
   fontSizes?: CircularTestimonialsFontSizes;
   className?: string;
@@ -151,7 +152,13 @@ export function assertCircularTestimonialsInput(
     );
   }
 
-  const { testimonials, previousLabel, nextLabel, autoplay } = props;
+  const {
+    testimonials,
+    previousLabel,
+    nextLabel,
+    autoplay,
+    reserveCopyHeight,
+  } = props;
   const testimonialCount = Array.isArray(testimonials) ? testimonials.length : 0;
 
   if (!Array.isArray(testimonials) || testimonialCount === 0) {
@@ -166,6 +173,15 @@ export function assertCircularTestimonialsInput(
   if (autoplay !== undefined && typeof autoplay !== "boolean") {
     throw new TypeError(
       `CircularTestimonials: autoplay must be a boolean when provided, received: ${describeValue(autoplay)}`,
+    );
+  }
+
+  if (
+    reserveCopyHeight !== undefined &&
+    typeof reserveCopyHeight !== "boolean"
+  ) {
+    throw new TypeError(
+      `CircularTestimonials: reserveCopyHeight must be a boolean when provided, received: ${describeValue(reserveCopyHeight)}`,
     );
   }
 
@@ -405,17 +421,66 @@ function CircularTestimonialCopy({
 }
 
 function CircularTestimonialHiddenCopy({
+  canAnimateQuoteWords,
+  colors,
+  fontSizes,
+  prefersReducedMotion,
+  reserveCopyHeight,
   testimonial,
-}: Readonly<{ testimonial: CircularTestimonial }>) {
+}: Readonly<{
+  canAnimateQuoteWords: boolean;
+  colors: Readonly<{
+    name: string;
+    designation: string;
+    testimony: string;
+  }>;
+  fontSizes: Readonly<{
+    name: string;
+    designation: string;
+    quote: string;
+  }>;
+  prefersReducedMotion: boolean;
+  reserveCopyHeight: boolean;
+  testimonial: CircularTestimonial;
+}>) {
+  const quoteUnits = splitCircularTestimonialQuote(testimonial.quote);
+  const shouldRenderQuoteWords =
+    canAnimateQuoteWords && !prefersReducedMotion;
+
   return (
     <div
       aria-hidden="true"
       data-circular-testimonial-hidden-item
-      hidden
+      hidden={!reserveCopyHeight}
     >
-      <h3>{testimonial.name}</h3>
-      <p>{testimonial.designation}</p>
-      <p>{testimonial.quote}</p>
+      <h3
+        data-circular-testimonial-name
+        data-homepage-testimonial-name
+        style={{ color: colors.name, fontSize: fontSizes.name }}
+      >
+        {testimonial.name}
+      </h3>
+      <p
+        data-circular-testimonial-designation
+        data-homepage-testimonial-designation
+        style={{ color: colors.designation, fontSize: fontSizes.designation }}
+      >
+        {testimonial.designation}
+      </p>
+      <p
+        data-circular-testimonial-quote
+        data-homepage-testimonial-quote
+        style={{ color: colors.testimony, fontSize: fontSizes.quote }}
+      >
+        {shouldRenderQuoteWords
+          ? quoteUnits.map((word, wordIndex) => (
+              <Fragment key={`${testimonial.src}-${String(wordIndex)}`}>
+                <span className="circular-testimonial-word">{word}</span>
+                {wordIndex < quoteUnits.length - 1 ? " " : null}
+              </Fragment>
+            ))
+          : testimonial.quote}
+      </p>
     </div>
   );
 }
@@ -427,6 +492,7 @@ export function CircularTestimonials({
   fontSizes = {},
   nextLabel,
   previousLabel,
+  reserveCopyHeight = false,
   testimonials,
 }: CircularTestimonialsProps) {
   assertCircularTestimonialsInput({
@@ -435,6 +501,7 @@ export function CircularTestimonials({
     fontSizes,
     nextLabel,
     previousLabel,
+    reserveCopyHeight,
     testimonials,
   });
 
@@ -658,7 +725,12 @@ export function CircularTestimonials({
         </div>
       </div>
       <div data-circular-testimonials-copy data-homepage-testimonial-copy>
-        <div data-circular-testimonials-copy-body>
+        <div
+          data-circular-testimonials-copy-body
+          data-circular-testimonials-reserve-copy-height={
+            reserveCopyHeight ? "" : undefined
+          }
+        >
           <AnimatePresence initial={false} mode="wait">
             <CircularTestimonialCopy
               canAnimateQuoteWords={canAnimateQuoteWords}
@@ -670,14 +742,23 @@ export function CircularTestimonials({
             />
           </AnimatePresence>
           <div data-circular-testimonials-hidden-copy>
-            {testimonials.map((testimonial, testimonialIndex) =>
-              testimonialIndex === safeActiveIndex ? null : (
+            {testimonials.map((testimonial, testimonialIndex) => {
+              if (!reserveCopyHeight && testimonialIndex === safeActiveIndex) {
+                return null;
+              }
+
+              return (
                 <CircularTestimonialHiddenCopy
+                  canAnimateQuoteWords={canAnimateQuoteWords}
+                  colors={resolvedColors}
+                  fontSizes={resolvedFontSizes}
                   key={`${testimonial.src}-${String(testimonialIndex)}`}
+                  prefersReducedMotion={prefersReducedMotion}
+                  reserveCopyHeight={reserveCopyHeight}
                   testimonial={testimonial}
                 />
-              ),
-            )}
+              );
+            })}
           </div>
         </div>
         <div data-circular-testimonials-controls>

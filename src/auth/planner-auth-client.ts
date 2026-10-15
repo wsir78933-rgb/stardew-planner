@@ -2,6 +2,8 @@
 
 import { createAuthClient } from "better-auth/react";
 
+const PLANNER_SESSION_RESPONSE_MAX_BYTES = 16_384;
+
 export type PlannerAccount = Readonly<{
   id: string;
   name: string;
@@ -23,7 +25,10 @@ export class CloudAuthError extends Error {
   }
 }
 
-const plannerAuthClient = createAuthClient({ baseURL: "/api/auth" });
+const plannerAuthClient = createAuthClient({
+  baseURL: typeof window === "undefined" ? undefined : window.location.origin,
+  basePath: "/api/auth",
+});
 
 export async function getPlannerSession(
   signal?: AbortSignal,
@@ -46,7 +51,7 @@ export async function getPlannerSession(
     throw error;
   }
 
-  const responseText = await response.text();
+  const responseText = await readSessionResponseText(response);
   const responseBody = parseSessionResponseBody(responseText, response.status);
 
   if (!response.ok) {
@@ -59,6 +64,55 @@ export async function getPlannerSession(
   }
 
   return parsePlannerSession(responseBody);
+}
+
+async function readSessionResponseText(response: Response): Promise<string> {
+  if (response.body === null) {
+    return "";
+  }
+
+  const responseReader = response.body.getReader();
+  const responseChunks: Uint8Array[] = [];
+  let receivedByteLength = 0;
+  try {
+    while (true) {
+      const readResult = await responseReader.read();
+      if (readResult.done) {
+        break;
+      }
+      receivedByteLength += readResult.value.byteLength;
+      if (receivedByteLength > PLANNER_SESSION_RESPONSE_MAX_BYTES) {
+        const responseSizeError = new CloudAuthError(
+          "AUTH_RESPONSE_TOO_LARGE",
+          `Planner session response exceeded ${String(PLANNER_SESSION_RESPONSE_MAX_BYTES)} bytes; received at least ${String(receivedByteLength)} bytes.`,
+        );
+        await responseReader.cancel(responseSizeError);
+        throw responseSizeError;
+      }
+      responseChunks.push(readResult.value);
+    }
+  } finally {
+    responseReader.releaseLock();
+  }
+
+  const responseBytes = new Uint8Array(receivedByteLength);
+  let responseOffset = 0;
+  for (const responseChunk of responseChunks) {
+    responseBytes.set(responseChunk, responseOffset);
+    responseOffset += responseChunk.byteLength;
+  }
+
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(responseBytes);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new CloudAuthError(
+        "AUTH_INVALID_ENCODING",
+        `Planner session response contains invalid UTF-8 after ${String(receivedByteLength)} bytes: ${error.message}.`,
+      );
+    }
+    throw error;
+  }
 }
 
 export async function signInWithGoogle(): Promise<void> {

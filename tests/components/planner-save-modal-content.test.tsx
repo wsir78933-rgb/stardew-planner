@@ -32,6 +32,12 @@ vi.mock("@/cloud-sync/use-cloud-project-sync", () => ({
   useCloudProjectSync: cloudProjectSyncHookMock.useCloudProjectSync,
 }));
 
+vi.mock("@/src/cloud-sync/use-cloud-project-sync", () => ({
+  CloudAuthError: class CloudAuthError extends Error {},
+  CloudProjectRequestError: class CloudProjectRequestError extends Error {},
+  useCloudProjectSync: cloudProjectSyncHookMock.useCloudProjectSync,
+}));
+
 import {
   formatPlannerThumbnailSaveError,
   getActiveProjectIdAfterLocalSave,

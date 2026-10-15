@@ -9,7 +9,7 @@ import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
-import { useCloudProjectSync } from "@/cloud-sync/use-cloud-project-sync";
+import { useCloudProjectSync } from "@/src/cloud-sync/use-cloud-project-sync";
 import { CloudProjectPanel } from "./cloud-project-panel";
 
 type PlannerSaveModalContentProperties = Readonly<{

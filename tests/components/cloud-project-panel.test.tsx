@@ -1,13 +1,19 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it, vi } from "vitest";
-import type { CloudProjectSyncView } from "@/cloud-sync/use-cloud-project-sync";
-import type { ReferenceProjectSummary } from "@/reference-runtime/reference-project-repository";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/src/cloud-sync/use-cloud-project-sync", () => ({
+  CloudAuthError: class CloudAuthError extends Error {},
+  CloudProjectRequestError: class CloudProjectRequestError extends Error {},
+}));
+
+import type { CloudProjectSyncView } from "@/src/cloud-sync/use-cloud-project-sync";
+import type { ReferenceProjectSummary } from "@/src/reference-runtime/reference-project-repository";
 import {
   CloudProjectPanel,
   formatCloudProjectUpdatedAt,
-} from "@/components/cloud-project-panel";
-import { getSaveModalCopy } from "@/i18n/save-modal-copy";
+} from "@/src/components/cloud-project-panel";
+import { getSaveModalCopy } from "@/src/i18n/save-modal-copy";
 
 const localProjectSummaries: readonly ReferenceProjectSummary[] = [
   {
@@ -21,6 +27,12 @@ const localProjectSummaries: readonly ReferenceProjectSummary[] = [
     title: "Beach Farm",
     created_at: "2026-08-09T00:00:00.000Z",
     updated_at: "2026-08-09T01:00:00.000Z",
+  },
+  {
+    id: "local-synced",
+    title: "Hilltop Farm",
+    created_at: "2026-08-08T00:00:00.000Z",
+    updated_at: "2026-08-08T01:00:00.000Z",
   },
 ];
 
@@ -52,7 +64,13 @@ function createCloudProjectSyncView(
 }
 
 describe("cloud project panel", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it("keeps local saving usable and explains optional Google sync while signed out", () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_SAVE_RETIREMENT_AT", "");
+
     const panelMarkup = renderToStaticMarkup(
       createElement(CloudProjectPanel, {
         cloudProjectSync: createCloudProjectSyncView(),
@@ -63,13 +81,19 @@ describe("cloud project panel", () => {
     );
 
     expect(panelMarkup).toContain("Continue with Google");
-    expect(panelMarkup).toContain("Sign in to sync selected projects across devices.");
-    expect(panelMarkup).toContain("Only layout data syncs. Map preview images stay on this device.");
-    expect(panelMarkup).not.toContain('aria-label="Sync this project: Forest Farm"');
+    expect(panelMarkup).toContain("After signing in, saving the current project syncs it automatically.");
+    expect(panelMarkup).toContain("Sync existing local projects one at a time.");
+    expect(panelMarkup).toContain("Only layout data syncs. Map preview images stay on this device. Cloud copies stay until you delete them.");
+    expect(panelMarkup).toContain(
+      "Local saving will be phased out. The 7-day migration period and cutoff date will be confirmed before launch.",
+    );
+    expect(panelMarkup).not.toContain('aria-label="Sync to cloud: Forest Farm"');
     expect(panelMarkup).not.toContain("Forest Farm");
   });
 
   it("shows explicit per-project upload, conflict choices, and a separated cloud-copy list", () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_SAVE_RETIREMENT_AT", "");
+
     const cloudProjectSync = createCloudProjectSyncView({
       authStatus: "signed-in",
       account: {
@@ -90,6 +114,7 @@ describe("cloud project panel", () => {
       hasMoreCloudProjects: true,
       localProjectSyncById: {
         "local-conflict": { status: "conflict", revision: 4 },
+        "local-synced": { status: "synced", revision: 5 },
       },
     });
     const panelMarkup = renderToStaticMarkup(
@@ -102,8 +127,12 @@ describe("cloud project panel", () => {
     );
 
     expect(panelMarkup).toContain("当前登录账户：Farm Planner。");
-    expect(panelMarkup).toContain('aria-label="同步此项目: Forest Farm"');
+    expect(panelMarkup).toContain('aria-label="同步到云端: Forest Farm"');
+    expect(panelMarkup).toContain('aria-label="同步到云端: Hilltop Farm"');
+    expect(panelMarkup).toContain("本地保存即将下线，7 天迁移期和截止日期将在正式上线前确定。");
+    expect(panelMarkup).toContain("云端副本会一直保留，直到你主动删除。");
     expect(panelMarkup).toContain("仅保存在此设备");
+    expect(panelMarkup).toContain("已同步");
     expect(panelMarkup).toContain("需要选择版本");
     expect(panelMarkup).toContain("保留本地版本");
     expect(panelMarkup).toContain("将云端版本另存为新的本地项目");

@@ -5,14 +5,14 @@
   },
   "scripts": {
     "dev": "sh scripts/dev.sh",
-    "dev:cloud": "pnpm build && wrangler dev --local --ip 127.0.0.1 --port 8787 --var BETTER_AUTH_URL:http://localhost:8787 --var AUTH_ALLOWED_ORIGINS:http://localhost:8787",
+    "dev:cloud": "pnpm build && wrangler dev --local --ip 127.0.0.1 --port 8787 --compatibility-date 2026-06-10 --compatibility-flag nodejs_compat --var BETTER_AUTH_URL:http://localhost:8787 --var AUTH_ALLOWED_ORIGINS:http://localhost:8787",
     "db:migrate:local": "wrangler d1 migrations apply stardew-planner-local --local",
     "wrangler:types": "wrangler types worker-configuration.d.ts",
     "build": "next build",
     "start": "serve out",
     "pretest": "NEXT_TELEMETRY_DISABLED=1 pnpm build",
     "test": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --incremental false && tsc --project tsconfig.workers.json --noEmit --incremental false",
     "performance:editor": "node scripts/measure-editor-performance.mjs",
     "assets:sync": "tsx src/assets/sync-assets.ts",
     "seo:smoke": "node scripts/production-seo-smoke.mjs --origin https://stardewvalleyplanner.art"

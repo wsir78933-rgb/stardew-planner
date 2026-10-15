@@ -22,6 +22,23 @@ type PreparedQueryRecord = {
   values: unknown[];
 };
 
+function readRawRows<Row = unknown[]>(
+  options?: { columnNames?: false },
+): Promise<Row[]>;
+function readRawRows<Row = unknown[]>(
+  options: { columnNames: true },
+): Promise<[string[], ...Row[]]>;
+async function readRawRows<Row = unknown[]>(
+  options?: { columnNames?: boolean },
+): Promise<Row[] | [string[], ...Row[]]> {
+  if (options?.columnNames === true) {
+    const columnNames: string[] = [];
+    const rawRows: Row[] = [];
+    return [columnNames, ...rawRows];
+  }
+  return [];
+}
+
 function createRecordingD1Database(): Readonly<{
   database: D1Database;
   rows: Map<string, CloudProjectDbRow>;
@@ -35,8 +52,8 @@ function createRecordingD1Database(): Readonly<{
       const queryRecord: PreparedQueryRecord = { query, values: boundValues };
       preparedQueries.push(queryRecord);
 
-      const statement = {
-        bind(...values: unknown[]) {
+      const statement: D1PreparedStatement = {
+        bind(...values: unknown[]): D1PreparedStatement {
           boundValues = values;
           queryRecord.values = values;
           return statement;
@@ -45,7 +62,7 @@ function createRecordingD1Database(): Readonly<{
           const row = executeFirstQuery(query, boundValues, rows);
           return row === null ? null : (row as Row);
         },
-        async all<Row = Record<string, unknown>>() {
+        async all<Row = Record<string, unknown>>(): Promise<D1Result<Row>> {
           const queryResultRows = executeAllQuery(query, boundValues, rows);
           return {
             success: true as const,
@@ -76,12 +93,10 @@ function createRecordingD1Database(): Readonly<{
             },
           };
         },
-        async raw<Row = unknown[]>() {
-          return [] as Row[];
-        },
+        raw: readRawRows,
       };
 
-      return statement as D1PreparedStatement;
+      return statement;
     },
   };
 
@@ -97,16 +112,26 @@ function executeAllQuery(
   values: unknown[],
   rows: Map<string, CloudProjectDbRow>,
 ): CloudProjectDbRow[] {
-  if (!query.includes("FROM cloud_projects") || !query.includes("WHERE user_id = ?")) {
+  if (
+    !query.includes("FROM cloud_projects") ||
+    !query.includes("WHERE user_id = ?") ||
+    !query.includes("ORDER BY id ASC") ||
+    !query.includes("LIMIT 101")
+  ) {
     throw new Error(`Unexpected D1 all query: ${query}`);
   }
   const userId = assertStringValue(values[0], "list user_id");
+  const afterCloudProjectId = query.includes("AND id > ?")
+    ? assertStringValue(values[1], "list after id")
+    : null;
   return [...rows.values()]
-    .filter((row) => row.user_id === userId)
-    .sort((firstRow, secondRow) =>
-      secondRow.updated_at.localeCompare(firstRow.updated_at) ||
-      firstRow.id.localeCompare(secondRow.id),
-    );
+    .filter(
+      (row) =>
+        row.user_id === userId &&
+        (afterCloudProjectId === null || row.id > afterCloudProjectId),
+    )
+    .sort((firstRow, secondRow) => firstRow.id.localeCompare(secondRow.id))
+    .slice(0, 101);
 }
 
 function executeFirstQuery(
@@ -290,10 +315,97 @@ describe("cloud project API", () => {
           mapCount: 2,
         },
       ],
+      nextCursor: null,
     });
     expect(testDatabase.preparedQueries[0]?.query).toContain("WHERE user_id = ?");
     expect(testDatabase.preparedQueries[0]?.values).toEqual(["user-a"]);
     expect(testDatabase.preparedQueries[0]?.query).not.toContain("project_document_json");
+  });
+
+  it("bounds cloud project lists to 100 and reads the next page after the last id", async () => {
+    const testDatabase = createRecordingD1Database();
+    for (let projectIndex = 0; projectIndex < 103; projectIndex += 1) {
+      const projectId = `cloud-${String(projectIndex).padStart(3, "0")}`;
+      testDatabase.rows.set(createCloudProjectRowKey("user-a", projectId), {
+        id: projectId,
+        title: `Farm ${String(projectIndex).padStart(3, "0")}`,
+        revision: 1,
+        updated_at: "2026-08-02T04:00:00.000Z",
+        map_count: 1,
+        project_document_json: "unused by summary list",
+        user_id: "user-a",
+      });
+    }
+    testDatabase.rows.set(createCloudProjectRowKey("user-b", "cloud-000"), {
+      id: "cloud-000",
+      title: "Other Account Farm",
+      revision: 1,
+      updated_at: "2026-08-02T04:00:00.000Z",
+      map_count: 1,
+      project_document_json: "unused by summary list",
+      user_id: "user-b",
+    });
+
+    const firstPageResponse = await handleCloudProjectRequest(
+      new Request("https://planner.test/api/cloud-projects"),
+      testDatabase.database,
+      "user-a",
+    );
+    const firstPageBody = (await parseResponseBody(firstPageResponse)) as {
+      projects: Array<{ id: string }>;
+      nextCursor: string | null;
+    };
+    const secondPageResponse = await handleCloudProjectRequest(
+      new Request("https://planner.test/api/cloud-projects?after=cloud-099"),
+      testDatabase.database,
+      "user-a",
+    );
+    const secondPageBody = (await parseResponseBody(secondPageResponse)) as {
+      projects: Array<{ id: string }>;
+      nextCursor: string | null;
+    };
+
+    expect(firstPageResponse.status).toBe(200);
+    expect(firstPageBody.projects).toHaveLength(100);
+    expect(firstPageBody.projects[0]?.id).toBe("cloud-000");
+    expect(firstPageBody.projects.at(-1)?.id).toBe("cloud-099");
+    expect(firstPageBody.nextCursor).toBe("cloud-099");
+    expect(secondPageResponse.status).toBe(200);
+    expect(secondPageBody.projects.map((project) => project.id)).toEqual([
+      "cloud-100",
+      "cloud-101",
+      "cloud-102",
+    ]);
+    expect(secondPageBody.nextCursor).toBeNull();
+    expect(testDatabase.preparedQueries[0]?.values).toEqual(["user-a"]);
+    expect(testDatabase.preparedQueries[1]?.values).toEqual(["user-a", "cloud-099"]);
+  });
+
+  it("rejects malformed and unexpected cloud list cursors", async () => {
+    const testDatabase = createRecordingD1Database();
+    const malformedCursorResponse = await handleCloudProjectRequest(
+      new Request("https://planner.test/api/cloud-projects?after=bad%20cursor"),
+      testDatabase.database,
+      "user-a",
+    );
+    const unexpectedQueryResponse = await handleCloudProjectRequest(
+      new Request("https://planner.test/api/cloud-projects?after=cloud-id&other=value"),
+      testDatabase.database,
+      "user-a",
+    );
+    const malformedCursorBody = (await parseResponseBody(malformedCursorResponse)) as {
+      error: { code: string; message: string };
+    };
+    const unexpectedQueryBody = (await parseResponseBody(unexpectedQueryResponse)) as {
+      error: { code: string; message: string };
+    };
+
+    expect(malformedCursorResponse.status).toBe(400);
+    expect(malformedCursorBody.error.code).toBe("INVALID_CURSOR");
+    expect(malformedCursorBody.error.message).toContain("bad cursor");
+    expect(unexpectedQueryResponse.status).toBe(400);
+    expect(unexpectedQueryBody.error.code).toBe("INVALID_CURSOR");
+    expect(testDatabase.preparedQueries).toHaveLength(0);
   });
 
   it("creates image-free projects and permits a cloud id different from the local id", async () => {
@@ -420,6 +532,56 @@ describe("cloud project API", () => {
     expect(deleteResponse.status).toBe(200);
     expect(await parseResponseBody(deleteResponse)).toEqual({ deleted: true });
     expect(testDatabase.rows.has(createCloudProjectRowKey("user-a", "cloud-delete"))).toBe(false);
+  });
+
+  it("accepts zero-byte DELETE streams and rejects streams with request bytes", async () => {
+    const testDatabase = createRecordingD1Database();
+    await handleCloudProjectRequest(
+      createPutRequest("cloud-empty-stream", 0),
+      testDatabase.database,
+      "user-a",
+    );
+    await handleCloudProjectRequest(
+      createPutRequest("cloud-non-empty-stream", 0),
+      testDatabase.database,
+      "user-a",
+    );
+
+    const emptyRequestBody = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.close();
+      },
+    });
+    const emptyStreamDeleteResponse = await handleCloudProjectRequest(
+      new Request(
+        "https://planner.test/api/cloud-projects/cloud-empty-stream?revision=1",
+        {
+          method: "DELETE",
+          body: emptyRequestBody,
+          duplex: "half",
+        } as RequestInit & { duplex: "half" },
+      ),
+      testDatabase.database,
+      "user-a",
+    );
+    const nonEmptyStreamDeleteResponse = await handleCloudProjectRequest(
+      new Request(
+        "https://planner.test/api/cloud-projects/cloud-non-empty-stream?revision=1",
+        { method: "DELETE", body: "non-empty" },
+      ),
+      testDatabase.database,
+      "user-a",
+    );
+    const nonEmptyStreamBody = (await parseResponseBody(nonEmptyStreamDeleteResponse)) as {
+      error: { code: string; message: string };
+    };
+
+    expect(emptyStreamDeleteResponse.status).toBe(200);
+    expect(testDatabase.rows.has(createCloudProjectRowKey("user-a", "cloud-empty-stream"))).toBe(false);
+    expect(nonEmptyStreamDeleteResponse.status).toBe(400);
+    expect(nonEmptyStreamBody.error.code).toBe("UNEXPECTED_REQUEST_BODY");
+    expect(nonEmptyStreamBody.error.message).toContain("Received at least 9 bytes");
+    expect(testDatabase.rows.has(createCloudProjectRowKey("user-a", "cloud-non-empty-stream"))).toBe(true);
   });
 
   it("returns the same error envelope for invalid and over-limit request bodies", async () => {

@@ -3,6 +3,7 @@
   "account_id": "c75d13cb32903c8f0ec7948f6c91c9ed",
   "main": "workers/planner-worker.ts",
   "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./out",
     "binding": "STATIC_ASSETS",

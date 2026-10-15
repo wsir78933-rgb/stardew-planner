@@ -70,10 +70,16 @@ describe("getLegalPageCopy", () => {
 
     expect(englishPrivacyText).toContain("Google sign-in");
     expect(englishPrivacyText).toContain("Cloudflare D1");
+    expect(englishPrivacyText).toContain("saving the current project syncs its layout");
+    expect(englishPrivacyText).toContain("Existing local projects stay in this browser");
+    expect(englishPrivacyText).toContain("Cloud copies remain until you delete them");
     expect(englishPrivacyText).toContain("map preview images stay on this device");
     expect(englishPrivacyText).toContain("deleting one copy does not delete the other");
     expect(chinesePrivacyText).toContain("Google 登录");
     expect(chinesePrivacyText).toContain("Cloudflare D1");
+    expect(chinesePrivacyText).toContain("登录后点击保存会自动将当前项目布局同步");
+    expect(chinesePrivacyText).toContain("已有本地项目仍保存在本地");
+    expect(chinesePrivacyText).toContain("云端副本会一直保留到你主动删除");
     expect(chinesePrivacyText).toContain("地图预览图片仍保留在此设备上");
     expect(chinesePrivacyText).toContain("删除一份副本不会删除另一份");
     expect(englishTermsText).toContain("Google sign-in is optional");

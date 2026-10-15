@@ -38,6 +38,9 @@
   ],
   "exclude": [
     "node_modules",
+    "worker-configuration.d.ts",
+    "workers/**/*.ts",
+    "tests/workers/**/*.ts",
     "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files"
   ]
 }

@@ -12,6 +12,7 @@ import {
 } from "./cloud-project-repository";
 
 const maximumCloudProjectRequestBytes = CLOUD_PROJECT_DOCUMENT_MAX_BYTES + 16_384;
+const maximumEmptyRequestBodyReadCount = 16;
 const supportedCloudProjectMethods = new Set(["GET", "PUT", "DELETE"]);
 
 type CloudProjectApiError = Error &
@@ -105,7 +106,7 @@ async function listCloudProjects(
   database: D1Database,
   userId: string,
 ): Promise<Response> {
-  assertEmptyRequestBody(request);
+  await assertEmptyRequestBody(request);
   const afterCloudProjectId = parseCloudProjectAfter(requestUrl);
   const projectPage = await runCloudProjectDatabaseOperation(() =>
     listCloudProjectSummaries(database, userId, afterCloudProjectId),
@@ -119,7 +120,7 @@ async function readCloudProject(
   userId: string,
   cloudProjectId: string,
 ): Promise<Response> {
-  assertEmptyRequestBody(request);
+  await assertEmptyRequestBody(request);
   const cloudProject = await runCloudProjectDatabaseOperation(() =>
     getCloudProjectRecord(database, userId, cloudProjectId),
   );
@@ -173,7 +174,7 @@ async function removeCloudProject(
   userId: string,
   cloudProjectId: string,
 ): Promise<Response> {
-  assertEmptyRequestBody(request);
+  await assertEmptyRequestBody(request);
   const expectedRevision = parseDeleteRevision(requestUrl);
   const wasDeleted = await runCloudProjectDatabaseOperation(() =>
     deleteCloudProjectRecord(database, userId, cloudProjectId, expectedRevision),
@@ -381,7 +382,7 @@ async function readBoundedJsonRequestBody(request: Request): Promise<string> {
   }
 
   try {
-    return new TextDecoder("utf-8", { fatal: true }).decode(requestBodyBytes);
+    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: false }).decode(requestBodyBytes);
   } catch (error) {
     if (!(error instanceof TypeError)) {
       throw error;
@@ -489,13 +490,42 @@ function parseDeleteRevision(requestUrl: URL): number {
   return expectedRevision;
 }
 
-function assertEmptyRequestBody(request: Request): void {
-  if (request.body !== null) {
+async function assertEmptyRequestBody(request: Request): Promise<void> {
+  if (request.body === null) {
+    return;
+  }
+
+  const requestBodyReader = request.body.getReader();
+  try {
+    for (
+      let readCount = 0;
+      readCount < maximumEmptyRequestBodyReadCount;
+      readCount += 1
+    ) {
+      const readResult = await requestBodyReader.read();
+      if (readResult.done) {
+        return;
+      }
+      if (readResult.value.byteLength === 0) {
+        continue;
+      }
+
+      await requestBodyReader.cancel();
+      throw createCloudProjectApiError(
+        400,
+        "UNEXPECTED_REQUEST_BODY",
+        `Cloud project ${request.method} request must not include a body. Received at least ${String(readResult.value.byteLength)} bytes in a request stream chunk.`,
+      );
+    }
+
+    await requestBodyReader.cancel();
     throw createCloudProjectApiError(
       400,
       "UNEXPECTED_REQUEST_BODY",
-      `Cloud project ${request.method} request must not include a body. Received a request stream.`,
+      `Cloud project ${request.method} request body could not be confirmed empty after ${String(maximumEmptyRequestBodyReadCount)} zero-byte stream chunks. Received 0 bytes.`,
     );
+  } finally {
+    requestBodyReader.releaseLock();
   }
 }
 

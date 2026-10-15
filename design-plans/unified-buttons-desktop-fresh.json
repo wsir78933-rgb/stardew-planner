@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "evidenceType": "fresh static-build desktop browser QA",
+  "capturedAt": "2026-10-15",
+  "browser": {
+    "taskSpaceId": 123,
+    "page": "p1",
+    "url": "http://127.0.0.1:3007/#planner",
+    "source": "static out preview on port 3007 after ARROWS_BUILT; no development server and no injected QA stylesheet",
+    "viewportCssPixels": { "width": 1440, "height": 1000 },
+    "deviceScaleFactor": 1,
+    "mobile": false,
+    "temporaryQaStyleCount": 0,
+    "stylesheetHrefs": [
+      "http://127.0.0.1:3007/_next/static/chunks/0g8jm8a216-3y.css",
+      "http://127.0.0.1:3007/_next/static/chunks/2eszy9qtj0nfz.css",
+      "http://127.0.0.1:3007/_next/static/chunks/3c-4zm-h_-t_9.css",
+      "http://127.0.0.1:3007/_next/static/chunks/32nt-jpkc89a-.css"
+    ],
+    "cssom": {
+      "unifiedButtonFamilyPresent": true,
+      "selectorsObserved": [
+        ".planner-save-modal-loader__branches button, .editor-config-chips button, .editor-config-segmented button, .editor-config-seasons button, .farm-summary-panel > button",
+        ".planner-save-modal-loader__branches button[aria-pressed=\"true\"]:not(:disabled), .editor-config-chips button[aria-pressed=\"true\"]:not(:disabled), .editor-config-segmented button[aria-pressed=\"true\"]:not(:disabled), .editor-config-seasons button[aria-pressed=\"true\"]:not(:disabled)",
+        ".planner-save-modal-loader__branches button:active:not(:disabled), .editor-config-chips button:active:not(:disabled), .editor-config-segmented button:active:not(:disabled), .editor-config-seasons button:active:not(:disabled), .farm-summary-panel > button:active:not(:disabled)"
+      ],
+      "ruleObservedIn": "http://127.0.0.1:3007/_next/static/chunks/2eszy9qtj0nfz.css"
+    }
+  },
+  "sharedVisualResult": {
+    "selected": {
+      "background": "rgb(237, 245, 227)",
+      "border": "rgb(117, 157, 28)",
+      "boxShadow": "none"
+    },
+    "inactive": {
+      "background": "rgb(255, 255, 255)",
+      "border": "rgb(36, 42, 34)",
+      "boxShadow": "none"
+    },
+    "selectedHover": {
+      "background": "rgb(237, 245, 227)",
+      "border": "rgb(117, 157, 28)",
+      "boxShadow": "none",
+      "transform": "none"
+    },
+    "selectedControlHeightPx": 36
+  },
+  "surfaces": {
+    "library": {
+      "branchesTested": [
+        { "name": "Local projects", "selected": true, "background": "rgb(237, 245, 227)", "border": "rgb(117, 157, 28)", "boxShadow": "none" },
+        { "name": "Import Game Save", "selected": true, "background": "rgb(237, 245, 227)", "border": "rgb(117, 157, 28)", "boxShadow": "none" },
+        { "name": "Farm Summary", "selected": true, "background": "rgb(237, 245, 227)", "border": "rgb(117, 157, 28)", "boxShadow": "none" }
+      ],
+      "farmSummaryDetailOpenedAndClosed": true,
+      "initialBranchRestored": "Local projects",
+      "actualImportOrAuthenticationPerformed": false,
+      "cloudSyncObservation": "Library displayed HTTP 404 for planner session while loaded; no sign-in or sync action was performed."
+    },
+    "farmSettings": {
+      "callbacks": [
+        { "field": "Spouse", "from": "None", "to": "Abigail", "restored": "None" },
+        { "field": "Cave", "from": "Not chosen", "to": "Mushrooms", "restored": "Not chosen" }
+      ],
+      "selectedStyle": "soft green background, green border, no box shadow",
+      "initialSelectionsRestored": true
+    },
+    "ambience": {
+      "callbacks": [
+        { "field": "Season", "from": "Spring", "to": "Summer", "restored": "Spring" },
+        { "field": "Weather", "from": "Clear", "to": "Rain", "restored": "Clear" },
+        { "field": "Night mode", "from": "Off", "to": "On", "restored": "Off" }
+      ],
+      "toggleRowsBoxShadow": "none",
+      "initialSelectionsRestored": true
+    },
+    "view": {
+      "callbacks": [
+        { "field": "Catalog position", "from": "Left", "to": "Bottom", "restored": "Left" },
+        { "field": "Grid", "from": "Off", "to": "On", "restored": "Off" }
+      ],
+      "allToggleRowsBoxShadow": "none",
+      "initialSelectionsRestored": true
+    },
+    "settings": {
+      "callbacks": [
+        { "field": "Cursor", "from": "System", "to": "Game", "restored": "System" }
+      ],
+      "selectedStyle": "soft green background, green border, no box shadow",
+      "allToggleRowsBoxShadow": "none",
+      "initialSelectionsRestored": true
+    }
+  },
+  "screenshots": [
+    { "path": "design-plans/unified-buttons-desktop-fresh-library.png", "pixelSize": "1440x1000", "visuallyInspected": true },
+    { "path": "design-plans/unified-buttons-desktop-fresh-summary.png", "pixelSize": "1440x1000", "visuallyInspected": true },
+    { "path": "design-plans/unified-buttons-desktop-fresh-farm-settings.png", "pixelSize": "1440x1000", "visuallyInspected": true },
+    { "path": "design-plans/unified-buttons-desktop-fresh-ambience.png", "pixelSize": "1440x1000", "visuallyInspected": true },
+    { "path": "design-plans/unified-buttons-desktop-fresh-view.png", "pixelSize": "1440x1000", "visuallyInspected": true },
+    { "path": "design-plans/unified-buttons-desktop-fresh-settings.png", "pixelSize": "1440x1000", "visuallyInspected": true }
+  ],
+  "scopeNotes": [
+    "The pre-existing toggle switches were exercised and remained flat; this evidence does not claim every control has a 44x44 hit target.",
+    "All tested choices were restored to their original state and all dialogs were closed."
+  ]
+}

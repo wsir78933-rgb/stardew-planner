@@ -23,6 +23,8 @@ it("publishes the static export while retaining the Contact Worker contract", ()
   ) as Readonly<{
     account_id: string;
     main: string;
+    compatibility_date: string;
+    compatibility_flags: readonly string[];
     assets: Readonly<{
       binding: string;
       directory: string;
@@ -64,6 +66,8 @@ it("publishes the static export while retaining the Contact Worker contract", ()
   ]);
   expect(workerConfiguration.account_id).toBe("c75d13cb32903c8f0ec7948f6c91c9ed");
   expect(workerConfiguration.main).toBe("workers/planner-worker.ts");
+  expect(workerConfiguration.compatibility_date).toBe("2026-08-08");
+  expect(workerConfiguration.compatibility_flags).toContain("nodejs_compat");
   expect(workerConfiguration.d1_databases).toEqual([
     {
       binding: "DB",

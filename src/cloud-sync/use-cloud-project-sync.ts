@@ -9,9 +9,8 @@ import {
   type PlannerAccount,
 } from "../auth/planner-auth-client";
 import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
-import type { ReferenceLocalProjectDocument } from "../reference-runtime/local-project-api";
 import {
-  prepareCloudProjectDocument,
+  isCloudProjectContractError,
   type CloudProjectRecord,
   type CloudProjectSummary,
 } from "./cloud-project-contract";
@@ -28,6 +27,14 @@ import {
   writeCloudProjectLinks,
   type CloudProjectLink,
 } from "./cloud-project-link-store";
+import {
+  createCloudProjectId,
+  createCloudProjectSnapshotFingerprint,
+  importCloudProjectAndRebindMissingLocalLink,
+  importCloudProjectAsLocalCopy,
+  prepareLocalProjectForCloudSync,
+  synchronizeLinkedCloudProject,
+} from "./cloud-project-sync";
 
 export { CloudAuthError, CloudProjectRequestError };
 
@@ -162,7 +169,7 @@ export function useCloudProjectSync(
       }
       updateViewState((currentState) => ({
         ...currentState,
-        status: "error",
+        status: currentState.status === "loading" ? "error" : currentState.status,
         errorMessage,
       }));
     },
@@ -248,6 +255,7 @@ export function useCloudProjectSync(
       assertAccountRequestContext(context);
 
       const cloudProjectPage = await getCloudProjects(
+        context.userId,
         context.abortController.signal,
       );
       assertAccountRequestContext(context);
@@ -283,8 +291,8 @@ export function useCloudProjectSync(
           authStatus: nextAccount === null ? "signed-out" : "signed-in",
           account: nextAccount,
           cloudProjects: [],
-        nextCloudProjectCursor: null,
-        isLoadingMoreCloudProjects: false,
+          nextCloudProjectCursor: null,
+          isLoadingMoreCloudProjects: false,
           localProjectSyncById: {},
           errorMessage: null,
         }));
@@ -339,14 +347,24 @@ export function useCloudProjectSync(
   const initializePlannerSession = useCallback(async () => {
     const abortController = new AbortController();
     initialSessionAbortControllerRef.current = abortController;
+    let initializedAccountId: string | null | undefined;
     try {
       const session = await getPlannerSession(abortController.signal);
       if (!mountedRef.current) {
         return;
       }
+      initializedAccountId = session.user?.id ?? null;
       await applyPlannerSession(session.user);
     } catch (error) {
-      if (isAbortError(error) && !mountedRef.current) {
+      if (isAbortError(error) && abortController.signal.aborted) {
+        return;
+      }
+      if (
+        isKnownCloudError(error) &&
+        (error instanceof CloudOperationCancelledError ||
+          (initializedAccountId !== undefined &&
+            accountRef.current?.id !== initializedAccountId))
+      ) {
         return;
       }
       if (!isKnownCloudError(error)) {
@@ -389,34 +407,96 @@ export function useCloudProjectSync(
       operationName: string,
       operation: (context: AccountRequestContext) => Promise<TResult>,
       localProjectId?: string,
+      accountChangedFallback?: () => TResult,
     ): Promise<TResult> => {
-      await ensurePlannerSessionLoaded();
-      const context = createAccountRequestContext();
+      let context: AccountRequestContext | undefined;
+      let accountIdAtActionStart: string | null | undefined;
+      let sessionRequestController: AbortController | undefined;
       try {
+        await ensurePlannerSessionLoaded();
+        if (authTransitionRef.current) {
+          throw new CloudAuthError(
+            "AUTH_TRANSITION_IN_PROGRESS",
+            "Cloud sync is paused while the account is changing.",
+          );
+        }
+
+        sessionRequestController = new AbortController();
+        accountRequestControllersRef.current.add(sessionRequestController);
+        accountIdAtActionStart = accountRef.current?.id ?? null;
+        const session = await getPlannerSession(sessionRequestController.signal);
+        if (sessionRequestController.signal.aborted) {
+          throw new CloudOperationCancelledError(
+            `Cloud action ${JSON.stringify(operationName)} was cancelled while refreshing the active account.`,
+          );
+        }
+        const freshAccountId = session.user?.id ?? null;
+        if (freshAccountId !== accountIdAtActionStart) {
+          await applyPlannerSession(session.user);
+          if (accountIdAtActionStart === null && session.user !== null) {
+            // The initial signed-out state has no previous account whose local project could leak.
+          } else if (accountChangedFallback !== undefined) {
+            return accountChangedFallback();
+          } else {
+            throw new CloudProjectRequestError(
+              "ACCOUNT_CHANGED",
+              409,
+              `Cloud action ${JSON.stringify(operationName)} was cancelled because the active account changed from ${JSON.stringify(accountIdAtActionStart)} to ${JSON.stringify(freshAccountId)}. Review the current account and retry explicitly.`,
+            );
+          }
+        } else if (session.user !== null) {
+          accountRef.current = session.user;
+          updateViewState((currentState) => ({
+            ...currentState,
+            status: currentState.status === "error" ? "ready" : currentState.status,
+            authStatus: "signed-in",
+            account: session.user,
+            errorMessage: null,
+          }));
+        }
+
+        context = createAccountRequestContext();
         return await operation(context);
       } catch (error) {
-        const normalizedError = normalizeAccountRequestError(error, context, operationName);
+        const normalizedError = context === undefined
+          ? sessionRequestController === undefined
+            ? error
+            : normalizeSessionCheckError(error, sessionRequestController, operationName)
+          : normalizeAccountRequestError(error, context, operationName);
         if (isKnownCloudError(normalizedError)) {
-          if (localProjectId !== undefined) {
+          if (
+            localProjectId !== undefined &&
+            (context !== undefined ||
+              accountRef.current?.id === accountIdAtActionStart)
+          ) {
             setLocalProjectState(
               localProjectId,
               createLocalProjectFailureState(localProjectId, normalizedError, accountLinksRef.current),
               context,
             );
           }
-          setGlobalError(normalizedError.message, context);
+          if (!(normalizedError instanceof CloudOperationCancelledError)) {
+            setGlobalError(normalizedError.message, context);
+          }
         }
         throw normalizedError;
       } finally {
-        releaseAccountRequestContext(context);
+        if (context !== undefined) {
+          releaseAccountRequestContext(context);
+        }
+        if (sessionRequestController !== undefined) {
+          accountRequestControllersRef.current.delete(sessionRequestController);
+        }
       }
     },
     [
+      applyPlannerSession,
       createAccountRequestContext,
       ensurePlannerSessionLoaded,
       releaseAccountRequestContext,
       setGlobalError,
       setLocalProjectState,
+      updateViewState,
     ],
   );
 
@@ -431,6 +511,7 @@ export function useCloudProjectSync(
         errorMessage: null,
       }));
       const cloudProjectPage = await getCloudProjects(
+        context.userId,
         context.abortController.signal,
       );
       assertAccountRequestContext(context);
@@ -441,7 +522,7 @@ export function useCloudProjectSync(
         nextCloudProjectCursor: cloudProjectPage.nextCursor,
         errorMessage: null,
       }));
-    });
+    }, undefined, () => undefined);
   }, [assertAccountRequestContext, updateViewState, withAccountRequest]);
 
   const loadMoreCloudProjects = useCallback(async () => {
@@ -471,6 +552,7 @@ export function useCloudProjectSync(
     try {
       await withAccountRequest("load more cloud projects", async (context) => {
         const cloudProjectPage = await getCloudProjects(
+          context.userId,
           context.abortController.signal,
           afterCloudProjectId,
         );
@@ -497,7 +579,7 @@ export function useCloudProjectSync(
             errorMessage: null,
           };
         });
-      });
+      }, undefined, () => undefined);
     } finally {
       if (loadingMoreUserIdRef.current === activeAccount.id) {
         loadingMoreCloudProjectsRef.current = false;
@@ -574,99 +656,101 @@ export function useCloudProjectSync(
     }
   }, [applyPlannerSession, cancelAccountRequests, updateViewState]);
 
-  const uploadLocalProject = useCallback(
-    async (localProjectId: string) => {
-      assertLocalProjectId(localProjectId);
-      setLocalProjectState(localProjectId, { status: "pending" });
-      await withAccountRequest(
-        "upload local project",
-        async (context) => {
-          if (findLinkByLocalProjectId(accountLinksRef.current, localProjectId)) {
-            throw new CloudProjectRequestError(
-              "LOCAL_PROJECT_ALREADY_LINKED",
-              409,
-              `Local project ${JSON.stringify(localProjectId)} is already linked to a cloud project.`,
-            );
-          }
+  const uploadLocalProjectWithContext = useCallback(
+    async (localProjectId: string, context: AccountRequestContext) => {
+      if (findLinkByLocalProjectId(accountLinksRef.current, localProjectId)) {
+        throw new CloudProjectRequestError(
+          "LOCAL_PROJECT_ALREADY_LINKED",
+          409,
+          `Local project ${JSON.stringify(localProjectId)} is already linked to a cloud project.`,
+        );
+      }
 
-          const preparedProject = exportPreparedLocalProject(
-            workspaceControllerRef.current,
-            localProjectId,
-          );
-          const localSnapshotFingerprint = await createCloudProjectSnapshotFingerprint(
-            preparedProject,
-          );
-          assertAccountRequestContext(context);
-
-          const cloudProjectId =
-            pendingUploadCloudIdByLocalIdRef.current.get(localProjectId) ??
-            createCloudProjectId();
-          pendingUploadCloudIdByLocalIdRef.current.set(
-            localProjectId,
-            cloudProjectId,
-          );
-
-          let cloudRecord: CloudProjectRecord;
-          try {
-            cloudRecord = await putCloudProject(
-              cloudProjectId,
-              { expectedRevision: 0, projectDocument: preparedProject },
-              context.abortController.signal,
-            );
-          } catch (error) {
-            if (
-              !(error instanceof CloudProjectRequestError) ||
-              error.code !== "REVISION_CONFLICT"
-            ) {
-              throw error;
-            }
-            const existingCloudRecord = await getCloudProject(
-              cloudProjectId,
-              context.abortController.signal,
-            );
-            const existingFingerprint = await createCloudProjectSnapshotFingerprint(
-              existingCloudRecord.projectDocument,
-            );
-            if (existingFingerprint !== localSnapshotFingerprint) {
-              throw new CloudProjectRequestError(
-                "REVISION_CONFLICT",
-                409,
-                `Cloud project ${JSON.stringify(cloudProjectId)} already exists with a different snapshot; the local project was not overwritten.`,
-              );
-            }
-            cloudRecord = existingCloudRecord;
-          }
-
-          assertAccountRequestContext(context);
-          const syncedSnapshot = await createCloudProjectSnapshotFingerprint(
-            cloudRecord.projectDocument,
-          );
-          const nextLink: CloudProjectLink = {
-            localProjectId,
-            cloudProjectId: cloudRecord.id,
-            revision: cloudRecord.revision,
-            lastSyncedSnapshot: syncedSnapshot,
-          };
-          const nextLinks = [...accountLinksRef.current, nextLink];
-          persistAccountLinks(context, nextLinks);
-          pendingUploadCloudIdByLocalIdRef.current.delete(localProjectId);
-          setLocalProjectState(
-            localProjectId,
-            { status: "synced", revision: cloudRecord.revision },
-            context,
-          );
-          replaceCloudProjectSummary(cloudRecord, context, updateViewState);
-        },
+      setLocalProjectState(localProjectId, { status: "pending" }, context);
+      const preparedProject = prepareLocalProjectForCloudSync(
+        workspaceControllerRef.current,
         localProjectId,
       );
+      const localSnapshotFingerprint = await createCloudProjectSnapshotFingerprint(
+        preparedProject,
+      );
+      assertAccountRequestContext(context);
+
+      const cloudProjectId =
+        pendingUploadCloudIdByLocalIdRef.current.get(localProjectId) ??
+        createCloudProjectId();
+      pendingUploadCloudIdByLocalIdRef.current.set(localProjectId, cloudProjectId);
+
+      let cloudRecord: CloudProjectRecord;
+      try {
+        cloudRecord = await putCloudProject(
+          context.userId,
+          cloudProjectId,
+          { expectedRevision: 0, projectDocument: preparedProject },
+          context.abortController.signal,
+        );
+      } catch (error) {
+        if (
+          !(error instanceof CloudProjectRequestError) ||
+          error.code !== "REVISION_CONFLICT"
+        ) {
+          throw error;
+        }
+        const existingCloudRecord = await getCloudProject(
+          context.userId,
+          cloudProjectId,
+          context.abortController.signal,
+        );
+        const existingFingerprint = await createCloudProjectSnapshotFingerprint(
+          existingCloudRecord.projectDocument,
+        );
+        if (existingFingerprint !== localSnapshotFingerprint) {
+          throw new CloudProjectRequestError(
+            "REVISION_CONFLICT",
+            409,
+            `Cloud project ${JSON.stringify(cloudProjectId)} already exists with a different snapshot; the local project was not overwritten.`,
+          );
+        }
+        cloudRecord = existingCloudRecord;
+      }
+
+      assertAccountRequestContext(context);
+      const syncedSnapshot = await createCloudProjectSnapshotFingerprint(
+        cloudRecord.projectDocument,
+      );
+      const nextLink: CloudProjectLink = {
+        localProjectId,
+        cloudProjectId: cloudRecord.id,
+        revision: cloudRecord.revision,
+        lastSyncedSnapshot: syncedSnapshot,
+      };
+      persistAccountLinks(context, [...accountLinksRef.current, nextLink]);
+      pendingUploadCloudIdByLocalIdRef.current.delete(localProjectId);
+      setLocalProjectState(
+        localProjectId,
+        { status: "synced", revision: cloudRecord.revision },
+        context,
+      );
+      replaceCloudProjectSummary(cloudRecord, context, updateViewState);
     },
     [
       assertAccountRequestContext,
       persistAccountLinks,
       setLocalProjectState,
       updateViewState,
-      withAccountRequest,
     ],
+  );
+
+  const uploadLocalProject = useCallback(
+    async (localProjectId: string) => {
+      assertLocalProjectId(localProjectId);
+      await withAccountRequest(
+        "upload local project",
+        (context) => uploadLocalProjectWithContext(localProjectId, context),
+        localProjectId,
+      );
+    },
+    [uploadLocalProjectWithContext, withAccountRequest],
   );
 
   const syncLinkedLocalProject = useCallback(
@@ -680,15 +764,19 @@ export function useCloudProjectSync(
         return;
       }
 
-      const preparedProject = exportPreparedLocalProject(
-        workspaceControllerRef.current,
+      setLocalProjectState(
         localProjectId,
+        { status: "pending", revision: cloudProjectLink.revision },
+        context,
       );
-      const localSnapshotFingerprint = await createCloudProjectSnapshotFingerprint(
-        preparedProject,
-      );
+      const syncResult = await synchronizeLinkedCloudProject({
+        workspaceController: workspaceControllerRef.current,
+        cloudProjectLink,
+        expectedAccountId: context.userId,
+        signal: context.abortController.signal,
+      });
       assertAccountRequestContext(context);
-      if (localSnapshotFingerprint === cloudProjectLink.lastSyncedSnapshot) {
+      if (!syncResult.changed) {
         setLocalProjectState(
           localProjectId,
           { status: "synced", revision: cloudProjectLink.revision },
@@ -696,31 +784,15 @@ export function useCloudProjectSync(
         );
         return;
       }
-
-      setLocalProjectState(
-        localProjectId,
-        { status: "pending", revision: cloudProjectLink.revision },
-        context,
-      );
-      const cloudRecord = await putCloudProject(
-        cloudProjectLink.cloudProjectId,
-        {
-          expectedRevision: cloudProjectLink.revision,
-          projectDocument: preparedProject,
-        },
-        context.abortController.signal,
-      );
-      assertAccountRequestContext(context);
-      const syncedSnapshot = await createCloudProjectSnapshotFingerprint(
-        cloudRecord.projectDocument,
-      );
+      const cloudRecord = syncResult.cloudRecord;
+      if (cloudRecord === null) {
+        throw new Error(
+          `Cloud sync for local project ${JSON.stringify(localProjectId)} reported a changed snapshot without a cloud record.`,
+        );
+      }
       const nextLinks = accountLinksRef.current.map((currentLink) =>
         currentLink.localProjectId === localProjectId
-          ? {
-              ...currentLink,
-              revision: cloudRecord.revision,
-              lastSyncedSnapshot: syncedSnapshot,
-            }
+          ? syncResult.cloudProjectLink
           : currentLink,
       );
       persistAccountLinks(context, nextLinks);
@@ -739,31 +811,96 @@ export function useCloudProjectSync(
     ],
   );
 
+  const syncCurrentSavedProject = useCallback(
+    async (localProjectId: string, context: AccountRequestContext) => {
+      if (findLinkByLocalProjectId(accountLinksRef.current, localProjectId) === undefined) {
+        await uploadLocalProjectWithContext(localProjectId, context);
+        return;
+      }
+      await syncLinkedLocalProject(localProjectId, context);
+    },
+    [syncLinkedLocalProject, uploadLocalProjectWithContext],
+  );
+
+  const retrySync = useCallback(
+    async (localProjectId: string) => {
+      assertLocalProjectId(localProjectId);
+      await withAccountRequest(
+        "retry local project sync",
+        (context) => syncCurrentSavedProject(localProjectId, context),
+        localProjectId,
+      );
+    },
+    [syncCurrentSavedProject, withAccountRequest],
+  );
+
+  const prepareSavedProjectAccount = useCallback(
+    async (localProjectId: string): Promise<boolean> => {
+      await ensurePlannerSessionLoaded();
+      if (authTransitionRef.current) {
+        return false;
+      }
+      if (accountRef.current !== null) {
+        return true;
+      }
+
+      const sessionRequestController = new AbortController();
+      accountRequestControllersRef.current.add(sessionRequestController);
+      try {
+        const session = await getPlannerSession(sessionRequestController.signal);
+        if (sessionRequestController.signal.aborted || authTransitionRef.current) {
+          return false;
+        }
+        if (session.user === null) {
+          return false;
+        }
+        await applyPlannerSession(session.user);
+        return true;
+      } catch (error) {
+        const normalizedError = normalizeSessionCheckError(
+          error,
+          sessionRequestController,
+          "sync saved local project",
+        );
+        if (normalizedError instanceof CloudOperationCancelledError) {
+          return false;
+        }
+        if (!isKnownCloudError(normalizedError)) {
+          throw normalizedError;
+        }
+        setLocalProjectState(
+          localProjectId,
+          createLocalProjectFailureState(
+            localProjectId,
+            normalizedError,
+            accountLinksRef.current,
+          ),
+        );
+        setGlobalError(normalizedError.message);
+        return false;
+      } finally {
+        accountRequestControllersRef.current.delete(sessionRequestController);
+      }
+    },
+    [
+      applyPlannerSession,
+      ensurePlannerSessionLoaded,
+      setGlobalError,
+      setLocalProjectState,
+    ],
+  );
+
   const onLocalProjectSaved = useCallback(
     async (localProjectId: string) => {
       assertLocalProjectId(localProjectId);
-      try {
-        await ensurePlannerSessionLoaded();
-      } catch (error) {
-        if (!isKnownCloudError(error)) {
-          throw error;
-        }
-        setLocalProjectState(localProjectId, {
-          status: "error",
-          errorMessage: error.message,
-        });
-        setGlobalError(error.message);
+      const hasActiveAccount = await prepareSavedProjectAccount(localProjectId);
+      if (!hasActiveAccount) {
         return;
       }
-
-      if (accountRef.current === null || authTransitionRef.current) {
-        return;
-      }
-
       try {
         await withAccountRequest(
           "sync saved local project",
-          async (context) => syncLinkedLocalProject(localProjectId, context),
+          (context) => syncCurrentSavedProject(localProjectId, context),
           localProjectId,
         );
       } catch (error) {
@@ -773,26 +910,10 @@ export function useCloudProjectSync(
       }
     },
     [
-      ensurePlannerSessionLoaded,
-      setGlobalError,
-      setLocalProjectState,
-      syncLinkedLocalProject,
+      prepareSavedProjectAccount,
+      syncCurrentSavedProject,
       withAccountRequest,
     ],
-  );
-
-  const retrySync = useCallback(
-    async (localProjectId: string) => {
-      assertLocalProjectId(localProjectId);
-      await withAccountRequest(
-        "retry local project sync",
-        async (context) => {
-          await syncLinkedLocalProject(localProjectId, context);
-        },
-        localProjectId,
-      );
-    },
-    [syncLinkedLocalProject, withAccountRequest],
   );
 
   const keepLocalVersion = useCallback(
@@ -843,6 +964,7 @@ export function useCloudProjectSync(
           }
 
           const cloudRecord = await getCloudProject(
+            context.userId,
             existingLink.cloudProjectId,
             context.abortController.signal,
           );
@@ -896,6 +1018,7 @@ export function useCloudProjectSync(
       assertCloudProjectId(cloudProjectId);
       return withAccountRequest("open cloud project", async (context) => {
         const cloudRecord = await getCloudProject(
+          context.userId,
           cloudProjectId,
           context.abortController.signal,
         );
@@ -912,7 +1035,7 @@ export function useCloudProjectSync(
               (summary) => summary.id === existingLink.localProjectId,
             );
           if (localProjectExists) {
-            const localProject = exportPreparedLocalProject(
+            const localProject = prepareLocalProjectForCloudSync(
               workspaceControllerRef.current,
               existingLink.localProjectId,
             );
@@ -942,6 +1065,23 @@ export function useCloudProjectSync(
               },
               context,
             );
+          } else {
+            const reboundCloudProject =
+              await importCloudProjectAndRebindMissingLocalLink({
+                workspaceController: workspaceControllerRef.current,
+                cloudProjectLinks: accountLinksRef.current,
+                missingLocalProjectLink: existingLink,
+                latestCloudRecord: cloudRecord,
+              });
+            assertAccountRequestContext(context);
+            persistAccountLinks(context, reboundCloudProject.cloudProjectLinks);
+            setLocalProjectState(
+              reboundCloudProject.importedLocalProjectId,
+              { status: "synced", revision: cloudRecord.revision },
+              context,
+            );
+            replaceCloudProjectSummary(cloudRecord, context, updateViewState);
+            return { localProjectId: reboundCloudProject.importedLocalProjectId };
           }
         }
 
@@ -1004,7 +1144,7 @@ export function useCloudProjectSync(
             `Cloud project ${JSON.stringify(cloudProjectId)} is not in the loaded project list or linked locally.`,
           );
         }
-        const revision = linkedProject?.revision ?? cloudSummary?.revision;
+        const revision = cloudSummary?.revision ?? linkedProject?.revision;
         if (revision === undefined) {
           throw new CloudProjectRequestError(
             "CLOUD_PROJECT_REVISION_MISSING",
@@ -1014,6 +1154,7 @@ export function useCloudProjectSync(
         }
 
         await deleteCloudProject(
+          context.userId,
           cloudProjectId,
           revision,
           context.abortController.signal,
@@ -1081,60 +1222,6 @@ export function useCloudProjectSync(
     keepLocalVersion,
     useCloudVersion,
   };
-}
-
-export async function createCloudProjectSnapshotFingerprint(
-  projectDocument: ReferenceLocalProjectDocument,
-): Promise<string> {
-  const serializedProjectDocument = JSON.stringify(projectDocument);
-  if (typeof serializedProjectDocument !== "string") {
-    throw new Error(
-      `Cloud project snapshot could not be serialized. Received: ${describeValue(projectDocument)}.`,
-    );
-  }
-  if (typeof crypto === "undefined" || !crypto.subtle) {
-    throw new Error(
-      "Web Crypto SHA-256 is unavailable; cloud project sync requires a secure browser context.",
-    );
-  }
-
-  const snapshotBytes = new TextEncoder().encode(serializedProjectDocument);
-  const snapshotDigest = await crypto.subtle.digest("SHA-256", snapshotBytes);
-  const fingerprintHex = Array.from(new Uint8Array(snapshotDigest))
-    .map((digestByte) => digestByte.toString(16).padStart(2, "0"))
-    .join("");
-  return `sha256:${fingerprintHex}`;
-}
-
-function exportPreparedLocalProject(
-  workspaceController: ReferenceProjectWorkspaceController,
-  localProjectId: string,
-) {
-  assertLocalProjectId(localProjectId);
-  return prepareCloudProjectDocument(
-    workspaceController.exportProject(localProjectId),
-  );
-}
-
-function importCloudProjectAsLocalCopy(
-  workspaceController: ReferenceProjectWorkspaceController,
-  cloudRecord: CloudProjectRecord,
-  protectedLocalProjectId?: string,
-): string {
-  workspaceController.importProject(JSON.stringify(cloudRecord.projectDocument));
-  const importedLocalProjectId =
-    workspaceController.getState().activeProject?.id;
-  if (typeof importedLocalProjectId !== "string" || importedLocalProjectId.length === 0) {
-    throw new Error(
-      `Cloud project ${JSON.stringify(cloudRecord.id)} import completed without an active local project ID.`,
-    );
-  }
-  if (protectedLocalProjectId === importedLocalProjectId) {
-    throw new Error(
-      `Cloud project ${JSON.stringify(cloudRecord.id)} import reused protected local project ID ${JSON.stringify(protectedLocalProjectId)} instead of creating a copy.`,
-    );
-  }
-  return importedLocalProjectId;
 }
 
 function findLinkByLocalProjectId(
@@ -1225,7 +1312,7 @@ async function hydrateLocalProjectStatuses(
     if (!localProjectIds.has(cloudProjectLink.localProjectId)) {
       continue;
     }
-    const localProjectDocument = exportPreparedLocalProject(
+    const localProjectDocument = prepareLocalProjectForCloudSync(
       workspaceController,
       cloudProjectLink.localProjectId,
     );
@@ -1281,6 +1368,19 @@ function normalizeAccountRequestError(
   return error;
 }
 
+function normalizeSessionCheckError(
+  error: unknown,
+  sessionRequestController: AbortController,
+  operationName: string,
+): unknown {
+  if (sessionRequestController.signal.aborted && isAbortError(error)) {
+    return new CloudOperationCancelledError(
+      `Cloud action ${JSON.stringify(operationName)} was cancelled while refreshing the active account.`,
+    );
+  }
+  return error;
+}
+
 function isAccountContextCurrent(
   context: AccountRequestContext,
   accountRef: { current: PlannerAccount | null },
@@ -1304,7 +1404,8 @@ function isKnownCloudError(error: unknown): error is Error {
     error instanceof CloudAuthError ||
     error instanceof CloudProjectRequestError ||
     error instanceof CloudProjectLinkStoreError ||
-    error instanceof CloudOperationCancelledError
+    error instanceof CloudOperationCancelledError ||
+    isCloudProjectContractError(error)
   );
 }
 
@@ -1352,17 +1453,6 @@ function assertCloudProjectId(cloudProjectId: string): void {
       `Cloud project ID must be a non-empty string. Received: ${describeValue(cloudProjectId)}.`,
     );
   }
-}
-
-function createCloudProjectId(): string {
-  if (typeof crypto === "undefined" || typeof crypto.randomUUID !== "function") {
-    throw new CloudProjectRequestError(
-      "UUID_UNAVAILABLE",
-      0,
-      "Browser crypto.randomUUID is unavailable; cloud project IDs cannot be generated.",
-    );
-  }
-  return crypto.randomUUID();
 }
 
 function describeValue(rawValue: unknown): string {
