@@ -224,6 +224,7 @@ export function persistPlannerWorkspacePreferences({
 export type PlannerWorkspaceProperties = Readonly<{
   locale: HomepageLocale;
   startup: PlannerWorkspaceStartup;
+  onAlignPlanner?: () => void;
   loadBuildingMetadata?: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory?: typeof loadCatalogCategory;
   performanceMarker?: EditorPerformanceMarker;
@@ -248,6 +249,7 @@ type PreparedPlannerWorkspaceContentProperties = Readonly<{
   loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
   loadRequiredCatalogCategory: typeof loadCatalogCategory;
   onImportedGameSaveResult: (importedGameSaveState: ImportedGameSaveState) => void;
+  onAlignPlanner?: () => void;
   performanceMarker?: EditorPerformanceMarker;
   runtimeStatus: "loading" | "ready" | "interactive";
 }>;
@@ -547,6 +549,7 @@ function ignoreImportedGameSave(_importedGameSaveState: ImportedGameSaveState): 
 export function PlannerWorkspace({
   locale,
   startup,
+  onAlignPlanner,
   loadBuildingMetadata = loadBuildingPlacementMetadata,
   loadRequiredCatalogCategory = loadCatalogCategory,
   performanceMarker,
@@ -678,6 +681,7 @@ export function PlannerWorkspace({
         loadRequiredCatalogCategory={loadRequiredCatalogCategory}
         newProjectName={saveModalCopy.localProjects.defaultProjectName}
         onImportedGameSaveResult={setImportedGameSaveResult}
+        onAlignPlanner={onAlignPlanner}
         performanceMarker={performanceMarker}
         plannerWorkspaceRenderState={plannerWorkspaceRenderState}
         plannerWorkspaceStateController={plannerWorkspaceStateController}
@@ -766,6 +770,7 @@ function PlannerWorkspaceRenderedBoundary({
   loadRequiredCatalogCategory,
   newProjectName,
   onImportedGameSaveResult,
+  onAlignPlanner,
   performanceMarker,
   plannerWorkspaceRenderState,
   plannerWorkspaceStateController,
@@ -778,6 +783,7 @@ function PlannerWorkspaceRenderedBoundary({
   loadRequiredCatalogCategory: typeof loadCatalogCategory;
   newProjectName: string;
   onImportedGameSaveResult: (importedGameSaveState: ImportedGameSaveState) => void;
+  onAlignPlanner?: () => void;
   performanceMarker?: EditorPerformanceMarker;
   plannerWorkspaceRenderState: PlannerWorkspaceRenderState;
   plannerWorkspaceStateController: PlannerWorkspaceStateController;
@@ -808,6 +814,7 @@ function PlannerWorkspaceRenderedBoundary({
           preparedWorkspace={plannerWorkspaceRenderState.preparedWorkspace}
           projectWorkspace={projectWorkspace}
           onImportedGameSaveResult={onImportedGameSaveResult}
+          onAlignPlanner={onAlignPlanner}
           performanceMarker={performanceMarker}
           runtimeStatus={plannerWorkspaceRenderState.runtimeStatus}
           saveModalCopy={saveModalCopy}
@@ -848,6 +855,7 @@ function PreparedPlannerWorkspaceContent({
   loadBuildingMetadata,
   loadRequiredCatalogCategory,
   onImportedGameSaveResult,
+  onAlignPlanner,
   performanceMarker,
   runtimeStatus,
   saveModalCopy,
@@ -953,9 +961,10 @@ function PreparedPlannerWorkspaceContent({
     useState<InteriorDecorRejectionNotification | null>(null);
   const [wheelZoomEnabled, setWheelZoomEnabled] = useState(false);
   const [isXRayActive, setIsXRayActive] = useState(false);
-  const handleWheelZoomToggle = useCallback(() => {
+  const handleZoomControlClick = useCallback(() => {
     setWheelZoomEnabled((currentlyEnabled) => !currentlyEnabled);
-  }, []);
+    onAlignPlanner?.();
+  }, [onAlignPlanner]);
   const handleCancelInteriorDecor = useCallback(() => {
     setActiveInteriorDecorPattern(null);
     setInteriorDecorRejectionNotification(null);
@@ -1180,7 +1189,7 @@ function PreparedPlannerWorkspaceContent({
         locale={editorLocale}
         canRedo={plannerWorkspaceState.placementHistory.redoStates.length > 0}
         canUndo={plannerWorkspaceState.placementHistory.undoStates.length > 0}
-        onWheelZoomToggle={handleWheelZoomToggle}
+        onWheelZoomToggle={handleZoomControlClick}
         onRedo={() =>
           plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
             type: "redo-placement-history",

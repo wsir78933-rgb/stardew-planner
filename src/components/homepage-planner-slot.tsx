@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPublicPreviewSource } from "../assets/public-preview-source";
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { subscribeToEditorInteractivePerformanceMark } from "../performance/subscribe-to-editor-interactive-performance-mark";
@@ -40,6 +40,22 @@ export function HomepagePlannerSlot({
 }: HomepagePlannerSlotProps) {
   const [shouldLoadPlannerHost, setShouldLoadPlannerHost] = useState(false);
   const [isEditorInteractive, setIsEditorInteractive] = useState(false);
+  const homepagePlannerSectionReference = useRef<HTMLElement | null>(null);
+  const handleAlignPlanner = useCallback(() => {
+    const plannerSection = homepagePlannerSectionReference.current;
+
+    if (plannerSection === null) {
+      throw new Error(
+        "HomepagePlannerSlot cannot align the planner section because its ref is null.",
+      );
+    }
+
+    plannerSection.scrollIntoView({
+      behavior: "auto",
+      block: "start",
+      inline: "nearest",
+    });
+  }, []);
 
   useEffect(() => {
     setShouldLoadPlannerHost(true);
@@ -59,9 +75,17 @@ export function HomepagePlannerSlot({
   assertHomepagePlannerSlotNonEmptyString("previewImageAlt", previewImageAlt);
 
   return (
-    <section data-homepage-product-stage data-homepage-workspace id="planner">
+    <section
+      data-homepage-product-stage
+      data-homepage-workspace
+      id="planner"
+      ref={homepagePlannerSectionReference}
+    >
       {shouldLoadPlannerHost ? (
-        <HomepagePlannerReactHost locale={locale} />
+        <HomepagePlannerReactHost
+          locale={locale}
+          onAlignPlanner={handleAlignPlanner}
+        />
       ) : null}
       {isEditorInteractive ? null : (
         <img

@@ -287,7 +287,9 @@ describe("editor controls", () => {
     expect(toolbarMarkup).not.toContain('data-editor-tool="zoom"');
     expect(toolbarMarkup).toContain('aria-label="Zoom" aria-pressed="false"');
     expect(toolbarMarkup).toContain('data-wheel-zoom-toggle=""');
-    expect(toolbarMarkup).toContain('data-tooltip="Toggle scroll wheel zoom: scroll up to zoom in, down to zoom out"');
+    expect(toolbarMarkup).toContain(
+      'data-tooltip="Toggle scroll wheel zoom and align the planner in view: scroll up to zoom in, down to zoom out"',
+    );
     expect(toolbarMarkup.match(/class="separator editor-toolbar__divider"/g)).toHaveLength(1);
     expect(toolbarMarkup).not.toContain('class="editor-toolbar__label"');
     expect(toolbarMarkup).toContain('aria-label="Select"');
@@ -311,7 +313,9 @@ describe("editor controls", () => {
     const localizedToolbarMarkup = renderToolbar("cursor", "zh");
     expect(localizedToolbarMarkup).not.toContain('data-editor-tool="zoom"');
     expect(localizedToolbarMarkup).toContain('aria-label="缩放" aria-pressed="false"');
-    expect(localizedToolbarMarkup).toContain('data-tooltip="点击开启/关闭滚轮缩放：上滚放大，下滚缩小"');
+    expect(localizedToolbarMarkup).toContain(
+      'data-tooltip="点击开启/关闭滚轮缩放，并将规划器对齐到窗口：上滚放大，下滚缩小"',
+    );
     expect(localizedToolbarMarkup).toContain('aria-label="选择"');
     expect(localizedToolbarMarkup).toContain('aria-label="多选"');
     expect(localizedToolbarMarkup).toContain('aria-label="填充"');
