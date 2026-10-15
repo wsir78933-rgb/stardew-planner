@@ -45,6 +45,8 @@ import { WhatToGrowInGreenhouseStardewEnglishArticle } from "../../src/blog/arti
 import { WhatToGrowInGreenhouseStardewChineseArticle } from "../../src/blog/articles/what-to-grow-in-greenhouse-stardew.zh";
 import { OakTreeVsMapleStardewEnglishArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.en";
 import { OakTreeVsMapleStardewChineseArticle } from "../../src/blog/articles/oak-tree-vs-maple-stardew.zh";
+import { HowToGetGoldStarCropsStardewValleyEnglishArticle } from "../../src/blog/articles/how-to-get-gold-star-crops-stardew-valley.en";
+import { HowToGetGoldStarCropsStardewValleyChineseArticle } from "../../src/blog/articles/how-to-get-gold-star-crops-stardew-valley.zh";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
 type ExpectedSource = Readonly<{
@@ -2287,6 +2289,60 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
       { href: "https://stardewvalleywiki.com/Acorn", label: "Stardew Valley Wiki: Acorn" },
       { href: "https://stardewvalleywiki.com/Maple_Seed", label: "Stardew Valley Wiki: Maple Seed" },
       { href: "https://stardewvalleywiki.com/Maple_Tree", label: "Stardew Valley Wiki: Maple Tree" },
+    ],
+  },
+  {
+    Article: HowToGetGoldStarCropsStardewValleyEnglishArticle,
+    heading: "Sources",
+    name: "English gold-star crops article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Farming", label: "Farming" },
+      { href: "https://stardewvalleywiki.com/Crops", label: "Crops" },
+      { href: "https://stardewvalleywiki.com/Foraging", label: "Foraging" },
+      { href: "https://stardewvalleywiki.com/Fiber", label: "Fiber" },
+      { href: "https://stardewvalleywiki.com/Fertilizer", label: "Fertilizer" },
+      { href: "https://stardewvalleywiki.com/Deluxe_Fertilizer", label: "Deluxe Fertilizer" },
+      { href: "https://stardewvalleywiki.com/Basic_Fertilizer", label: "Basic Fertilizer" },
+      { href: "https://stardewvalleywiki.com/Quality_Fertilizer", label: "Quality Fertilizer" },
+      { href: "https://stardewvalleywiki.com/Pierre%27s_General_Store", label: "Pierre’s General Store" },
+      { href: "https://stardewvalleywiki.com/Farmer%27s_Lunch", label: "Farmer’s Lunch" },
+      { href: "https://stardewvalleywiki.com/Cooking", label: "Cooking" },
+      { href: "https://stardewvalleywiki.com/Bundles", label: "Bundles" },
+      {
+        href: "https://github.com/Dannode36/StardewValleyDecompiled/blob/main/Stardew%20Valley/StardewValley/Crop.cs#L552-L567",
+        label: "Crop.harvest code",
+      },
+      {
+        href: "https://learn.microsoft.com/en-us/dotnet/api/system.random.nextdouble?view=netframework-4.8.1",
+        label: "Random.NextDouble",
+      },
+    ],
+  },
+  {
+    Article: HowToGetGoldStarCropsStardewValleyChineseArticle,
+    heading: "来源",
+    name: "Chinese gold-star crops article",
+    sources: [
+      { href: "https://stardewvalleywiki.com/Farming", label: "耕种" },
+      { href: "https://stardewvalleywiki.com/Crops", label: "农作物" },
+      { href: "https://stardewvalleywiki.com/Foraging", label: "采集" },
+      { href: "https://stardewvalleywiki.com/Fiber", label: "纤维" },
+      { href: "https://stardewvalleywiki.com/Fertilizer", label: "肥料" },
+      { href: "https://stardewvalleywiki.com/Deluxe_Fertilizer", label: "顶级肥料" },
+      { href: "https://stardewvalleywiki.com/Basic_Fertilizer", label: "初级肥料" },
+      { href: "https://stardewvalleywiki.com/Quality_Fertilizer", label: "高级肥料" },
+      { href: "https://stardewvalleywiki.com/Pierre%27s_General_Store", label: "皮埃尔的杂货店" },
+      { href: "https://stardewvalleywiki.com/Farmer%27s_Lunch", label: "农夫午餐" },
+      { href: "https://stardewvalleywiki.com/Cooking", label: "烹饪" },
+      { href: "https://stardewvalleywiki.com/Bundles", label: "收集包" },
+      {
+        href: "https://github.com/Dannode36/StardewValleyDecompiled/blob/main/Stardew%20Valley/StardewValley/Crop.cs#L552-L567",
+        label: "作物收获代码",
+      },
+      {
+        href: "https://learn.microsoft.com/en-us/dotnet/api/system.random.nextdouble?view=netframework-4.8.1",
+        label: "Random.NextDouble 随机数方法文档",
+      },
     ],
   },
 ];

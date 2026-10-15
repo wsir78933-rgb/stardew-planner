@@ -2519,6 +2519,38 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
     display: none;
   }
 
+  [data-public-page-shell] [data-public-page-header] > nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  [data-public-page-shell] [data-public-page-brand] {
+    flex: 0 0 max-content;
+    max-width: none;
+    overflow: visible;
+  }
+
+  [data-public-page-shell] [data-public-page-brand] > img {
+    flex: 0 0 1.75rem;
+  }
+
+  [data-public-page-shell] [data-public-page-header] > nav > [data-slot="dock"] {
+    flex: 1 1 max-content;
+    min-width: 0;
+  }
+
+  [data-public-page-shell] [data-public-page-header] > nav > [data-slot="dock"] > div {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  [data-public-page-shell] [data-public-page-navigation-links],
+  [data-public-page-shell] [data-public-page-header-actions] {
+    flex: 0 0 auto;
+  }
+
   [data-public-page-shell] > [data-site-footer] {
     gap: 1.75rem;
     grid-template-columns: minmax(0, 1fr);

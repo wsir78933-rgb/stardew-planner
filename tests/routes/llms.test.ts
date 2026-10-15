@@ -141,6 +141,12 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toContain(
     "[星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
   );
+  expect(llmsText).toContain(
+    "[how to get gold star crops stardew valley](https://stardewvalleyplanner.art/how-to-get-gold-star-crops-stardew-valley): Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.",
+  );
+  expect(llmsText).toContain(
+    "[星露谷物语如何种出金星作物](https://stardewvalleyplanner.art/zh/how-to-get-gold-star-crops-stardew-valley): 选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。",
+  );
 
   for (const { pathname } of getLocalizedIndexablePublicRouteEntries()) {
     const publicUrl = createCanonicalUrl(pathname);

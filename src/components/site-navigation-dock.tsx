@@ -119,6 +119,7 @@ export function SiteNavigationDock({
     <nav aria-label={resolvedBrandLabel}>
       <a
         className="inline-flex items-center gap-2 rounded-2xl border border-border bg-background/90 px-3 py-2 text-sm font-bold shadow-sm backdrop-blur-lg"
+        aria-label={isHomepageSurface ? undefined : resolvedBrandLabel}
         data-homepage-brand={isHomepageSurface ? true : undefined}
         data-public-page-brand={isHomepageSurface ? undefined : true}
         href={resolvedBrandHref}

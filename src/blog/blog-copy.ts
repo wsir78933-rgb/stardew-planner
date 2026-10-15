@@ -123,6 +123,8 @@ const localizedBlogPostPaths: Readonly<
     "what-to-grow-in-greenhouse-stardew": "/what-to-grow-in-greenhouse-stardew",
     "stardew-fruit": "/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/oak-tree-vs-maple-stardew",
+    "how-to-get-gold-star-crops-stardew-valley":
+      "/how-to-get-gold-star-crops-stardew-valley",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -150,6 +152,8 @@ const localizedBlogPostPaths: Readonly<
     "what-to-grow-in-greenhouse-stardew": "/zh/what-to-grow-in-greenhouse-stardew",
     "stardew-fruit": "/zh/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/zh/oak-tree-vs-maple-stardew",
+    "how-to-get-gold-star-crops-stardew-valley":
+      "/zh/how-to-get-gold-star-crops-stardew-valley",
   },
 };
 
