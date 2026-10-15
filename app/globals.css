@@ -5285,10 +5285,15 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 }
 
 /* Approved planner wireframe: one header and a bottom editing toolbar.
- * Colours and pressed shadows remain those of the existing editor. */
+ * State colours remain those of the existing editor. */
 .planner-editor-shell {
   --planner-topbar-height: 38px;
   --planner-editing-toolbar-width: 324px;
+}
+.planner-editor-shell .editor-menu-bar,
+.planner-editor-shell .editor-toolbar {
+  --planner-neo-raised-shadow: none;
+  --planner-neo-inset-shadow: none;
 }
 .planner-editor-shell .editor-menu-bar {
   align-items: center;
@@ -5335,7 +5340,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { bottom: 18px; left: 50%; max-width: calc(100% - 24px); top: auto; }
 .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: calc(50% + 170px); max-width: calc(100% - 364px); }
 .planner-editor-shell:has(.item-catalog-panel--left) .catalog-placement-controls { left: calc(50% + 170px); }
-.planner-editor-shell .editor-toolbar { box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
+.planner-editor-shell .editor-toolbar { border-color: var(--border-subtle); box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
 .planner-editor-shell .editor-toolbar__tool-group,
 .planner-editor-shell .editor-toolbar__history-group,
 .planner-editor-shell .editor-wheel-zoom-group { display: contents; }

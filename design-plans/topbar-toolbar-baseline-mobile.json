@@ -1,0 +1,608 @@
+{
+  "phase": "baseline",
+  "artifact": "existing static out served on 127.0.0.1:3007; not FINAL_BUILT",
+  "screenshot": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/topbar-toolbar-baseline-mobile.png",
+  "browser": {
+    "url": "http://127.0.0.1:3007/#planner",
+    "title": "Stardew Valley Planner – Free Online Farm Layout Tool",
+    "fonts": "loaded",
+    "viewport": {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "devicePixelRatio": 1,
+      "scrollX": 0,
+      "scrollY": 800.5
+    },
+    "document": {
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflowX": false
+    },
+    "stylesheetLinks": [
+      "http://127.0.0.1:3007/_next/static/chunks/0g8jm8a216-3y.css",
+      "http://127.0.0.1:3007/_next/static/chunks/2eszy9qtj0nfz.css",
+      "http://127.0.0.1:3007/_next/static/chunks/3c-4zm-h_-t_9.css"
+    ],
+    "inlineStyles": [
+      {
+        "id": "monica-reading-highlight-style",
+        "dataAttributes": []
+      }
+    ],
+    "activeDialogs": 0,
+    "controls": [
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar",
+        "found": true,
+        "ariaLabel": "Editor navigation",
+        "rect": {
+          "x": 2.5,
+          "y": 12.03125,
+          "width": 385,
+          "height": 56
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgb(36, 42, 34)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"help-info\"]",
+        "found": true,
+        "ariaLabel": "Help",
+        "rect": {
+          "x": 8.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"keyboard-shortcuts\"]",
+        "found": true,
+        "ariaLabel": "Keyboard shortcuts",
+        "rect": {
+          "x": 56.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"feedback\"]",
+        "found": true,
+        "ariaLabel": "Feedback",
+        "rect": {
+          "x": 104.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__library-button",
+        "found": true,
+        "ariaLabel": "Library",
+        "rect": {
+          "x": 161.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__map-name",
+        "found": true,
+        "ariaLabel": "Current map: Standard Farm",
+        "rect": {
+          "x": 209.5,
+          "y": 17.53125,
+          "width": 126,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "hidden"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__toggle",
+        "found": true,
+        "ariaLabel": "Menu",
+        "rect": {
+          "x": 335.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__controls",
+        "found": true,
+        "ariaLabel": "Editor options",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": "false",
+          "disabled": false
+        },
+        "computed": {
+          "display": "none",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(28, 33, 27)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "auto"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+        "found": true,
+        "ariaLabel": "Ambience",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+        "found": true,
+        "ariaLabel": "Farm Settings",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+        "found": true,
+        "ariaLabel": "Map",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+        "found": true,
+        "ariaLabel": "View",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+        "found": true,
+        "ariaLabel": "Settings",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-planner-toolbar]",
+        "found": true,
+        "ariaLabel": null,
+        "rect": {
+          "x": 33,
+          "y": 601.03125,
+          "width": 324,
+          "height": 54
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(28, 33, 27)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [role=\"toolbar\"]",
+        "found": true,
+        "ariaLabel": "Editor tools",
+        "rect": {
+          "x": 33,
+          "y": 601.03125,
+          "width": 324,
+          "height": 54
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgba(0, 0, 0, 0)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"cursor\"]",
+        "found": true,
+        "ariaLabel": "Select",
+        "rect": {
+          "x": 38,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "true",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(177, 58, 40, 0.15)",
+          "borderColor": "rgb(177, 58, 40)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"multi-select\"]",
+        "found": true,
+        "ariaLabel": "Multi",
+        "rect": {
+          "x": 81,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"fill\"]",
+        "found": true,
+        "ariaLabel": "Fill",
+        "rect": {
+          "x": 124,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"erase\"]",
+        "found": true,
+        "ariaLabel": "Erase",
+        "rect": {
+          "x": 167,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-wheel-zoom-toggle]",
+        "found": true,
+        "ariaLabel": "Zoom",
+        "rect": {
+          "x": 210,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-history-action=\"undo\"]",
+        "found": true,
+        "ariaLabel": "Undo",
+        "rect": {
+          "x": 261,
+          "y": 606.03125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": true
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-history-action=\"redo\"]",
+        "found": true,
+        "ariaLabel": "Redo",
+        "rect": {
+          "x": 308,
+          "y": 606.03125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": true
+        },
+        "computed": {
+          "display": "flex",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "overflowX": "visible"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "phase": "source-backed baseline checklist",
+  "sources": [
+    "src/components/editor-menu-bar.tsx",
+    "src/components/editor-toolbar.tsx",
+    "app/globals.css"
+  ],
+  "topbar": [
+    { "label": "Help", "selector": ".editor-menu-bar__utility-button[data-editor-modal-id=\"help-info\"]", "safe_check": "open and close help dialog" },
+    { "label": "Keyboard shortcuts", "selector": ".editor-menu-bar__utility-button[data-editor-modal-id=\"keyboard-shortcuts\"]", "safe_check": "open and close shortcuts dialog" },
+    { "label": "Feedback", "selector": ".editor-menu-bar__utility-button[data-editor-modal-id=\"feedback\"]", "safe_check": "open and close only; do not submit" },
+    { "label": "Library", "selector": ".editor-menu-bar__library-button[data-editor-modal-id=\"save-panel\"]", "safe_check": "open and close only; do not import, sync, authenticate, or write" },
+    { "label": "Current map name", "selector": ".editor-menu-bar__map-name[data-editor-modal-id=\"map-picker\"]", "safe_check": "open and close map picker without selecting a map" },
+    { "label": "Mobile Menu", "selector": ".editor-menu-bar__toggle[aria-controls][aria-expanded]", "safe_check": "inspect actual aria-expanded before opening or closing" },
+    { "label": "Ambience", "selector": ".editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]", "safe_check": "open and close panel; restore changed values" },
+    { "label": "Farm Settings", "selector": ".editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]", "safe_check": "open and close panel; restore changed values" },
+    { "label": "Map", "selector": ".editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]", "safe_check": "open and close map picker without selecting a map" },
+    { "label": "View", "selector": ".editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]", "safe_check": "open and close panel; restore changed values" },
+    { "label": "Settings", "selector": ".editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]", "safe_check": "open and close panel; do not change account or external settings" }
+  ],
+  "toolbar": [
+    { "label": "Toolbar outer shell", "selector": ".toolbar-wrapper.planner-editor-toolbar[data-planner-toolbar]" },
+    { "label": "Accessible toolbar surface", "selector": "[data-planner-toolbar] [role=\"toolbar\"][aria-label=\"Editor tools\"]" },
+    { "label": "Select", "selector": "[data-editor-tool=\"cursor\"]", "safe_check": "select and restore original tool" },
+    { "label": "Multi", "selector": "[data-editor-tool=\"multi-select\"]", "safe_check": "select and restore original tool; do not interact with canvas" },
+    { "label": "Fill", "selector": "[data-editor-tool=\"fill\"]", "safe_check": "select and restore original tool; do not interact with canvas" },
+    { "label": "Erase", "selector": "[data-editor-tool=\"erase\"]", "safe_check": "select and restore original tool; do not interact with canvas" },
+    { "label": "Zoom", "selector": "[data-wheel-zoom-toggle]", "safe_check": "toggle and restore original wheel-zoom state" },
+    { "label": "Undo", "selector": "[data-editor-history-action=\"undo\"]", "safe_check": "inspect disabled state; do not invoke when disabled" },
+    { "label": "Redo", "selector": "[data-editor-history-action=\"redo\"]", "safe_check": "inspect disabled state; do not invoke when disabled" }
+  ],
+  "baseline": {
+    "artifact": "existing static out from 127.0.0.1:3007; not FINAL_BUILT",
+    "desktop_evidence": "design-plans/topbar-toolbar-baseline-desktop.json",
+    "mobile_evidence": "design-plans/topbar-toolbar-baseline-mobile.json",
+    "desktop_viewport": "1440x1000",
+    "mobile_viewport": "390x844"
+  },
+  "final_acceptance": [
+    "open and close each topbar entry without external writes",
+    "restore editor tool and zoom states after interaction",
+    "verify disabled undo and redo remain disabled",
+    "verify focus-visible, pointer-active, and tooltip rendering",
+    "measure computed box-shadow, control geometry, and horizontal overflow at both viewports",
+    "close any open dialog before changing panels; on mobile, inspect aria-expanded before toggling Menu"
+  ]
+}

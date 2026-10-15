@@ -29,9 +29,9 @@ To refresh generated Cloudflare platform types after changing Wrangler bindings,
 
 ## D1 and deployment boundary
 
-Wrangler uses `.wrangler/state` for the local D1 database. `pnpm db:migrate:local` always passes `--local`; it does not access a remote database. The checked-in `database_id` of all zeroes is a local-only placeholder. Replace it with the real D1 ID before any deployment. No production D1 database has been created or migrated by this change.
+Wrangler uses `.wrangler/state` for the local D1 database. `pnpm db:migrate:local` always passes `--local`; it does not access a remote database. The checked-in `database_id` of all zeroes is a local-only placeholder. It is not the database created for the new account and must not be used for a deployment.
 
-The Wrangler account ID targets the verified “Stardew Valley Planner” Cloudflare account. This change does not deploy a Worker, create a remote database, configure OAuth credentials, or change the public domain. The config keeps the current root custom domain and contact/feedback API routes so the Worker can serve the static site and same-origin APIs after the domain is available in the target account. The target account does not currently have the domain zone active; do not deploy this route configuration until that is resolved. The Google callback URL for the current public origin is `https://stardewvalleyplanner.art/api/auth/callback/google`; verify the domain and account migration plan before using it in production.
+The Wrangler account ID targets the verified “Stardew Valley Planner” Cloudflare account. The current config keeps the existing root custom domain and contact/feedback API routes, but those routes do not transfer the domain or make the target account authoritative. The target account does not currently have the domain zone active; do not deploy this route configuration until that is resolved. The Google callback URL for the current public origin is `https://stardewvalleyplanner.art/api/auth/callback/google`; verify the domain and account migration plan before using it in production.
 
 The `stardewvalleyplanner.art` zone is still in the previous Cloudflare account. Before routing production traffic through this Worker, migrate or attach the zone and preserve its existing DNS records, Cloudflare Email Routing records, and Turnstile configuration. The current Wrangler route declarations are project configuration only; they do not move the domain or make the new account authoritative for it.
 
@@ -61,3 +61,13 @@ An isolated local workerd and D1 database passed 16 API checks, including owner 
 The full repository test run did not pass: 10 assertions fail in pre-existing asset/catalog/blog/static-route content, and one resource smoke test exceeded its five-second limit during the full parallel run. That resource suite passed all three tests when run separately. The content failures were compared against the pre-cloud-sync Git revision; they are outside this implementation's scope.
 
 Real Google OAuth, the production compatibility date, remote D1, production email/Turnstile, deployment, and DNS migration have not been accepted. Local tests do not establish those external states.
+
+## Target-account preparation status on 2026-10-16
+
+Using Ego in the “Stardew Valley Planner” Cloudflare account (`c75d13cb32903c8f0ec7948f6c91c9ed`), a D1 database named `stardew-planner` was created with ID `6cf9f831-c7b6-4349-b1ff-8c6c0f1ff9a5`. The existing `0001_auth.sql` and `0002_cloud_projects.sql` statements were applied in the D1 Console. This was a manual Console operation; no Wrangler migration command was run, so do not assume a Wrangler migration ledger records these statements.
+
+The Console readback confirmed the `user`, `session`, `account`, `verification`, and `cloud_projects` tables contain zero rows. All three expected indexes are present. `cloud_projects.user_id` references `user.id` with `ON DELETE CASCADE`; its stored schema retains the 1 MiB payload limit, composite primary key, and `WITHOUT ROWID`, with no expiry column or automatic deletion. No local QA users or project data were imported, and no secret was created or copied.
+
+No Worker has been created or deployed in the target account. The production domain, DNS, old Worker, and old Builds connection remain unchanged. The user replied “好了” in the GitHub authorization flow; its resulting authorization and repository connection are still unverified pending Root's Ego readback. The remote `main` is at `9287a02`; local `HEAD` is `d5b6874`, and no branch has been pushed. `pnpm typecheck` and `pnpm build` both exited 0 in this workspace; these are repository checks, not a Wrangler build or deployment proof.
+
+The next deployment-preparation gate is for Root to read back the GitHub authorization in Ego, then verify the target-account Worker's repository, branch, build root, build command, output directory, and deploy command. The user has authorized a test deployment on the account's `workers.dev` hostname. Keep the old production service and domain untouched; no production domain routing or DNS/zone change has been made.
