@@ -7,7 +7,7 @@ import {
 import type { PublicLocale } from "../i18n/public-locale";
 import { createCanonicalUrl, publicSiteUrl } from "./public-site-url";
 
-const sharedSocialImagePath = "/social-images/stardew-valley-farm-planner.png";
+const sharedSocialImagePath = "/social-images/stardew-valley-farm-planner.webp";
 
 export type PublicPageMetadataInput = Readonly<{
   locale: PublicLocale;
@@ -47,7 +47,7 @@ export function createPublicPageMetadata(
       images: [socialImageUrl],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: input.title,
       description: input.description,
       images: [socialImageUrl],

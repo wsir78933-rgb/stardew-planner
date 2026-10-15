@@ -9,7 +9,7 @@ import { describe, expect, it } from "vitest";
 import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
 
 const expectedSocialImageUrl =
-  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
+  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.webp";
 
 function escapeRegularExpression(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -2523,6 +2523,35 @@ describe("static public pages", () => {
     }
   });
 
+  it("exports large-image cards with the shared WebP or each article's own cover", () => {
+    const socialImageExpectations = [
+      ...staticPublicPageExpectations.map(([, staticPageFile]) => ({
+        staticPageFile,
+        socialImageUrl: expectedSocialImageUrl,
+      })),
+      ...staticBlogPageExpectations.map(({ staticPageFile, schemaType, coverImages }) => ({
+        staticPageFile,
+        socialImageUrl: schemaType === "Article"
+          ? `https://stardewvalleyplanner.art${coverImages[0].src}`
+          : expectedSocialImageUrl,
+      })),
+    ];
+
+    for (const { staticPageFile, socialImageUrl } of socialImageExpectations) {
+      const staticPageHtml = readStaticPageHtml(staticPageFile);
+
+      expect(staticPageHtml).toContain(
+        `<meta property="og:image" content="${socialImageUrl}"/>`,
+      );
+      expect(staticPageHtml).toContain(
+        `<meta name="twitter:image" content="${socialImageUrl}"/>`,
+      );
+      expect(staticPageHtml).toContain(
+        '<meta name="twitter:card" content="summary_large_image"/>',
+      );
+    }
+  });
+
   it("exports all bilingual public pages with static metadata and paired language alternates", () => {
     for (const [
       pathname,
@@ -2637,7 +2666,7 @@ describe("static public pages", () => {
           process.cwd(),
           "out",
           "social-images",
-          "stardew-valley-farm-planner.png",
+          "stardew-valley-farm-planner.webp",
         ),
       ),
     ).toBe(true);

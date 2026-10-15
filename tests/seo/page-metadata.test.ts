@@ -8,7 +8,7 @@ import {
 } from "../../src/seo/page-metadata";
 
 const expectedSocialImageUrl =
-  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
+  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.webp";
 
 it("requires an explicit locale and canonical public identity at the type boundary", () => {
   expectTypeOf<PublicPageMetadataInput>().toEqualTypeOf<
@@ -51,7 +51,7 @@ it("creates absolute canonical metadata with a route description", () => {
     images: [expectedSocialImageUrl],
   });
   expect(metadata.twitter).toMatchObject({
-    card: "summary",
+    card: "summary_large_image",
     title: "Privacy Policy",
     description: "Learn how browser-local projects and site data are handled.",
     images: [expectedSocialImageUrl],
