@@ -1,31 +1,127 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { getBlogCopy } from "../../src/blog/blog-copy";
 import { getAllBlogPosts } from "../../src/blog/blog-post-registry";
-import { publicLocales } from "../../src/i18n/public-locale";
+import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
+import { publicLocales, type PublicLocale } from "../../src/i18n/public-locale";
 import { BlogPlannerCta, getBlogPlannerCtaLocaleFromSourcesHeading } from "../../src/components/blog/blog-planner-cta";
 import { BlogSources } from "../../src/components/blog/blog-sources";
 
+const plannerHrefByLocale = {
+  en: "/#planner",
+  "zh-CN": "/zh#planner",
+} as const;
+
+function readBlogPlannerCtaSection(markup: string, locale: PublicLocale): string {
+  const section = markup.match(
+    /<section\b(?=[^>]*class="blog-planner-cta")(?=[^>]*data-blog-planner-cta="true")[^>]*>[\s\S]*?<\/section>/,
+  )?.[0];
+
+  if (section === undefined) {
+    throw new Error(`Missing blog planner CTA section for locale ${JSON.stringify(locale)}.`);
+  }
+
+  return section;
+}
+
+function readBlogPlannerCtaHeadingLines(copyMarkup: string, locale: PublicLocale): string[] {
+  const heading = copyMarkup.match(
+    /<p\b(?=[^>]*class="blog-planner-cta__heading")[^>]*>([\s\S]*?)<\/p>/,
+  )?.[1];
+
+  if (heading === undefined) {
+    throw new Error(`Missing blog planner CTA heading for locale ${JSON.stringify(locale)}.`);
+  }
+
+  return Array.from(
+    heading.matchAll(
+      /<span\b(?=[^>]*class="blog-planner-cta__heading-line")[^>]*>([\s\S]*?)<\/span>/g,
+    ),
+    (match) => match[1] ?? "",
+  );
+}
+
+function stripBlogPlannerCtaHeadingLineMarkup(markup: string): string {
+  return markup.replace(/<[^>]*>/g, "");
+}
+
 describe("BlogPlannerCta", () => {
-  it("renders the English heading, button, and planner hash without an h2", () => {
-    const markup = renderToStaticMarkup(createElement(BlogPlannerCta, { locale: "en" }));
+  it.each(publicLocales)(
+    "matches the %s homepage hero and localized CTA copy",
+    (locale) => {
+      const markup = renderToStaticMarkup(createElement(BlogPlannerCta, { locale }));
+      const section = readBlogPlannerCtaSection(markup, locale);
+      const heroCopy = homepageCopyByLocale[locale].hero;
+      const blogCopy = getBlogCopy(locale);
+      const copyMarkup = section.match(
+        /<div class="blog-planner-cta__copy">([\s\S]*?)<\/div><picture\b/,
+      )?.[1];
+      const headingLines = copyMarkup
+        ? readBlogPlannerCtaHeadingLines(copyMarkup, locale)
+        : [];
+      const sectionStart = section.match(/^<section\b[^>]*>/)?.[0];
+      const headingStart = copyMarkup?.match(
+        /<p\b(?=[^>]*class="blog-planner-cta__heading")[^>]*>/,
+      )?.[0];
+      const imageTag = section.match(/<img\b[^>]*>/)?.[0];
+      const actionAnchor = copyMarkup?.match(
+        /<a\b(?=[^>]*data-blog-planner-cta-action="true")[^>]*>[\s\S]*?<\/a>/,
+      )?.[0];
 
-    expect(markup).toContain('data-blog-planner-cta="true"');
-    expect(markup).toContain("Finish the layout in the planner, then build in-game.");
-    expect(markup).toContain("Open planner");
-    expect(markup).toContain('href="/#planner"');
-    expect(markup).toContain("<p");
-    expect(markup).not.toContain("<h2");
-  });
+      if (
+        copyMarkup === undefined ||
+        sectionStart === undefined ||
+        headingStart === undefined ||
+        imageTag === undefined
+      ) {
+        throw new Error(`Incomplete blog planner CTA markup for locale ${JSON.stringify(locale)}.`);
+      }
+      if (actionAnchor === undefined) {
+        throw new Error(`Missing blog planner CTA action for locale ${JSON.stringify(locale)}.`);
+      }
 
-  it("renders the Chinese heading, button, and planner hash without an h2", () => {
-    const markup = renderToStaticMarkup(createElement(BlogPlannerCta, { locale: "zh-CN" }));
+      expect(markup.match(/data-blog-planner-cta="true"/g) ?? []).toHaveLength(1);
+      expect(section).toMatch(
+        /<div class="blog-planner-cta__content"><div class="blog-planner-cta__copy">/,
+      );
+      expect(section).toContain('<picture class="public-picture" data-public-picture="true">');
+      expect(sectionStart).toContain('aria-labelledby="blog-planner-cta-heading"');
+      expect(headingStart).toContain('id="blog-planner-cta-heading"');
+      expect(section).not.toMatch(/<h[23]\b/);
+      expect(headingLines).toHaveLength(2);
+      expect(stripBlogPlannerCtaHeadingLineMarkup(headingLines[0] ?? "")).toBe(
+        `${heroCopy.headlineBefore}${heroCopy.headlineEmphasis}`,
+      );
+      expect(headingLines[0]).toContain(`<em>${heroCopy.headlineEmphasis}</em>`);
+      expect(stripBlogPlannerCtaHeadingLineMarkup(headingLines[1] ?? "")).toBe(
+        heroCopy.headlineAfter,
+      );
+      expect(copyMarkup).toContain('class="blog-planner-cta__description"');
+      expect(copyMarkup).toContain(heroCopy.supportingCopy);
+      expect(actionAnchor).toContain(`href="${plannerHrefByLocale[locale]}"`);
+      expect(actionAnchor).toContain(blogCopy.plannerCtaActionLabel);
+      expect(actionAnchor).toContain('data-blog-planner-cta-action="true"');
+      expect(actionAnchor).not.toContain("<button");
+      expect(copyMarkup).toContain('class="blog-planner-cta__note"');
+      expect(copyMarkup).toContain(blogCopy.plannerCtaNote);
+      expect(imageTag).toContain('class="blog-planner-cta__image"');
+      expect(imageTag).toContain('data-blog-planner-cta-image="true"');
+      expect(imageTag).toContain('src="/homepage/cases/farm-case-01.webp"');
+      expect(imageTag).toContain(`alt="${blogCopy.plannerCtaImageAlt}"`);
+      expect(imageTag).toContain('width="1280"');
+      expect(imageTag).toContain('height="1040"');
+      expect(imageTag).toContain('loading="lazy"');
+      expect(imageTag).toContain('decoding="async"');
+      expect(section).toContain(
+        '<source srcSet="/homepage/cases/farm-case-01.avif" type="image/avif"/>',
+      );
 
-    expect(markup).toContain("先在规划器里摆完，再进游戏建。");
-    expect(markup).toContain("打开规划器");
-    expect(markup).toContain('href="/zh#planner"');
-    expect(markup).not.toContain("<h2");
-  });
+      const imageWidth = Number(imageTag.match(/\bwidth="(\d+)"/)?.[1]);
+      const imageHeight = Number(imageTag.match(/\bheight="(\d+)"/)?.[1]);
+      expect(imageWidth / imageHeight).toBeCloseTo(1280 / 1040);
+    },
+  );
 
   it("rejects an unsupported locale", () => {
     expect(() =>
@@ -55,16 +151,13 @@ describe("getBlogPlannerCtaLocaleFromSourcesHeading", () => {
 });
 
 function expectSourcedArticlePlannerCta(
-  locale: (typeof publicLocales)[number],
+  locale: PublicLocale,
   slug: string,
   markup: string,
 ): void {
-  const expectedHeading =
-    locale === "en"
-      ? "Finish the layout in the planner, then build in-game."
-      : "先在规划器里摆完，再进游戏建。";
-  const expectedAction = locale === "en" ? "Open planner" : "打开规划器";
-  const expectedHref = locale === "en" ? "/#planner" : "/zh#planner";
+  const heroCopy = homepageCopyByLocale[locale].hero;
+  const blogCopy = getBlogCopy(locale);
+  const ctaSection = readBlogPlannerCtaSection(markup, locale);
   const ctaMatches = markup.match(/data-blog-planner-cta="true"/g) ?? [];
   const faqIndex = markup.indexOf('class="blog-faq-list"');
   const ctaIndex = markup.indexOf("data-blog-planner-cta");
@@ -73,9 +166,13 @@ function expectSourcedArticlePlannerCta(
   expect(ctaMatches, `${locale} ${slug} CTA count`).toHaveLength(1);
   expect(ctaIndex, `${locale} ${slug} missing CTA`).toBeGreaterThan(-1);
   expect(sourcesIndex, `${locale} ${slug} missing Sources`).toBeGreaterThan(ctaIndex);
-  expect(markup).toContain(expectedHeading);
-  expect(markup).toContain(expectedAction);
-  expect(markup).toContain(`href="${expectedHref}"`);
+  expect(ctaSection).toContain(heroCopy.headlineBefore.trimEnd());
+  expect(ctaSection).toContain(`<em>${heroCopy.headlineEmphasis}</em>`);
+  expect(ctaSection).toContain(heroCopy.headlineAfter);
+  expect(ctaSection).toContain(heroCopy.supportingCopy);
+  expect(ctaSection).toContain(blogCopy.plannerCtaActionLabel);
+  expect(ctaSection).toContain(`href="${plannerHrefByLocale[locale]}"`);
+  expect(ctaSection).not.toMatch(/<h[23]\b/);
 
   if (faqIndex !== -1) {
     expect(ctaIndex, `${locale} ${slug} CTA should follow FAQ`).toBeGreaterThan(faqIndex);

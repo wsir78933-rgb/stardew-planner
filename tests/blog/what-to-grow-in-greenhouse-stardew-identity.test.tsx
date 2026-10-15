@@ -49,8 +49,23 @@ it("renders localized choice figures, scrollable tables, and source sections", (
   expect(chineseMarkup).toContain("重复收获");
   expect(chineseMarkup).toContain("一次收获");
   expect(chineseMarkup).toContain("果树");
-  expect(englishMarkup.match(/<img /g) ?? []).toHaveLength(1);
-  expect(chineseMarkup.match(/<img /g) ?? []).toHaveLength(1);
+
+  for (const markup of [englishMarkup, chineseMarkup]) {
+    const ctaStart = markup.indexOf('data-blog-planner-cta="true"');
+    const sourcesStart = markup.indexOf('<section class="blog-sources">');
+
+    expect(ctaStart, "Missing greenhouse planner CTA").toBeGreaterThanOrEqual(0);
+    expect(sourcesStart, "Missing greenhouse source section").toBeGreaterThan(ctaStart);
+
+    const readerMarkup = markup.slice(0, ctaStart);
+    const ctaMarkup = markup.slice(ctaStart, sourcesStart);
+
+    expect(readerMarkup.match(/<img /g) ?? []).toHaveLength(1);
+    expect(ctaMarkup.match(/<img /g) ?? []).toHaveLength(1);
+    expect(ctaMarkup.match(/data-blog-planner-cta-image="true"/g) ?? []).toHaveLength(1);
+    expect(ctaMarkup).toContain('src="/homepage/cases/farm-case-01.webp"');
+  }
+
   expect(englishMarkup.match(/blog-table-scroll/g) ?? []).toHaveLength(3);
     expect(chineseMarkup.match(/blog-table-scroll/g) ?? []).toHaveLength(4);
   expect(englishMarkup).toContain("<h2>Sources</h2>");

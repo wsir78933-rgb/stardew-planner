@@ -259,3 +259,43 @@ it("keeps every blog class selector inside a blog scope without planner or foote
   expect(scopedBlogCssBlock).not.toMatch(/(?:^|,)\s*(?:nav|footer)\b/m);
 });
 
+it("keeps the article planner CTA responsive, at least 48px high, and uncropped", () => {
+  const scopedBlogCssBlock = readScopedBlogCssBlock(readBlogStylesheet());
+  const ctaContentRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-planner-cta__content",
+  );
+  const ctaActionRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout .blog-planner-cta [data-blog-planner-cta-action]",
+  );
+  const ctaPictureWrapperRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-planner-cta__content > .public-picture",
+  );
+  const ctaImageRule = readScopedRuleBody(
+    scopedBlogCssBlock,
+    "[data-blog-article] .blog-article-layout .blog-planner-cta__image",
+  );
+
+  expect(ctaContentRule).toContain("display: grid;");
+  expect(ctaContentRule).toContain("grid-template-columns: minmax(0, 1fr) 240px;");
+  expect(ctaActionRule).toContain("height: 48px;");
+  expect(ctaActionRule).toContain("min-height: 48px;");
+  expect(ctaActionRule).toContain("font-size: 16px;");
+  expect(ctaActionRule).toContain("line-height: 1.5;");
+  expect(ctaActionRule).toContain("border-radius: 5px;");
+  expect(ctaPictureWrapperRule).toContain("display: block;");
+  expect(ctaPictureWrapperRule).toContain("min-width: 0;");
+  expect(ctaImageRule).toContain("height: auto;");
+  expect(ctaImageRule).toContain("max-width: 100%;");
+  expect(ctaImageRule).toContain("width: 240px;");
+  expect(ctaImageRule).not.toContain("object-fit: cover;");
+  expect(scopedBlogCssBlock).toMatch(
+    /@media \(max-width:\s*767\.98px\)[\s\S]*\[data-blog-article\][^{]*\.blog-planner-cta__content[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\)/,
+  );
+  expect(scopedBlogCssBlock).toMatch(
+    /@media \(max-width:\s*767\.98px\)[\s\S]*\[data-blog-article\][^{]*\.blog-planner-cta__image[\s\S]*width:\s*100%;/,
+  );
+});
+

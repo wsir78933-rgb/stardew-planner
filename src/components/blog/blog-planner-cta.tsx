@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
+import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
+import { ArrowRightIcon } from "lucide-react";
 import { getBlogCopy } from "../../blog/blog-copy";
-import { getPublicPageCopy } from "../../i18n/public-page-content";
 import { publicLocales, type PublicLocale } from "../../i18n/public-locale";
 import { getLocalizedPublicPath } from "../../i18n/public-route-registry";
+import { PublicPicture } from "../public-picture";
+
+const BLOG_PLANNER_CTA_IMAGE_SOURCE = "/homepage/cases/farm-case-01.webp";
+const BLOG_PLANNER_CTA_IMAGE_WIDTH = 1280;
+const BLOG_PLANNER_CTA_IMAGE_HEIGHT = 1040;
 
 type BlogPlannerCtaProperties = Readonly<{
   locale: PublicLocale;
@@ -41,12 +47,17 @@ export function BlogPlannerCta({ locale }: BlogPlannerCtaProperties) {
     throw new Error(`Unsupported blog planner CTA locale. Received: ${JSON.stringify(locale)}.`);
   }
 
-  const heading = getBlogCopy(locale).plannerCtaHeading;
-  const actionLabel = getPublicPageCopy(locale).navigation.plannerActionLabel;
+  const blogCopy = getBlogCopy(locale);
+  const heroCopy = homepageCopyByLocale[locale].hero;
   const plannerHref = `${getLocalizedPublicPath(locale, "/")}#planner`;
 
-  requireNonEmptyBlogPlannerCtaString(heading, "heading");
-  requireNonEmptyBlogPlannerCtaString(actionLabel, "action label");
+  requireNonEmptyBlogPlannerCtaString(heroCopy.headlineBefore, "headline before");
+  requireNonEmptyBlogPlannerCtaString(heroCopy.headlineEmphasis, "headline emphasis");
+  requireNonEmptyBlogPlannerCtaString(heroCopy.headlineAfter, "headline after");
+  requireNonEmptyBlogPlannerCtaString(heroCopy.supportingCopy, "supporting copy");
+  requireNonEmptyBlogPlannerCtaString(blogCopy.plannerCtaActionLabel, "action label");
+  requireNonEmptyBlogPlannerCtaString(blogCopy.plannerCtaNote, "note");
+  requireNonEmptyBlogPlannerCtaString(blogCopy.plannerCtaImageAlt, "image alt");
   requireNonEmptyBlogPlannerCtaString(plannerHref, "planner href");
 
   return (
@@ -56,12 +67,35 @@ export function BlogPlannerCta({ locale }: BlogPlannerCtaProperties) {
       data-blog-planner-cta="true"
     >
       <div className="blog-planner-cta__content">
-        <p className="blog-planner-cta__heading" id="blog-planner-cta-heading">
-          {heading}
-        </p>
-        <Button asChild data-blog-planner-cta-action="true" size="lg">
-          <a href={plannerHref}>{actionLabel}</a>
-        </Button>
+        <div className="blog-planner-cta__copy">
+          <p className="blog-planner-cta__heading" id="blog-planner-cta-heading">
+            <span className="blog-planner-cta__heading-line">
+              {heroCopy.headlineBefore}
+              <em>{heroCopy.headlineEmphasis}</em>
+            </span>
+            <span className="blog-planner-cta__heading-line">
+              {heroCopy.headlineAfter}
+            </span>
+          </p>
+          <p className="blog-planner-cta__description">{heroCopy.supportingCopy}</p>
+          <Button asChild data-blog-planner-cta-action="true" size="lg">
+            <a href={plannerHref}>
+              {blogCopy.plannerCtaActionLabel}
+              <ArrowRightIcon aria-hidden="true" data-icon="inline-end" />
+            </a>
+          </Button>
+          <p className="blog-planner-cta__note">{blogCopy.plannerCtaNote}</p>
+        </div>
+        <PublicPicture
+          alt={blogCopy.plannerCtaImageAlt}
+          className="blog-planner-cta__image"
+          data-blog-planner-cta-image="true"
+          decoding="async"
+          height={BLOG_PLANNER_CTA_IMAGE_HEIGHT}
+          loading="lazy"
+          src={BLOG_PLANNER_CTA_IMAGE_SOURCE}
+          width={BLOG_PLANNER_CTA_IMAGE_WIDTH}
+        />
       </div>
     </section>
   );
