@@ -21,12 +21,20 @@ it("publishes the static export while retaining the Contact Worker contract", ()
   const workerConfiguration = JSON.parse(
     readFileSync(join(process.cwd(), "wrangler.jsonc"), "utf8"),
   ) as Readonly<{
+    account_id: string;
+    main: string;
     assets: Readonly<{
       binding: string;
       directory: string;
       html_handling: string;
       not_found_handling: string;
     }>;
+    d1_databases: readonly Readonly<{
+      binding: string;
+      database_id: string;
+      database_name: string;
+      migrations_dir: string;
+    }>[];
     routes: readonly Readonly<{ custom_domain: boolean; pattern: string }>[];
     send_email: readonly Readonly<{ name: string }>[];
     vars: Readonly<Record<string, string>>;
@@ -41,6 +49,28 @@ it("publishes the static export while retaining the Contact Worker contract", ()
       custom_domain: false,
       pattern: "stardewvalleyplanner.art/api/feedback*",
     },
+    {
+      custom_domain: false,
+      pattern: "stardewvalleyplanner.art/api/auth*",
+    },
+    {
+      custom_domain: false,
+      pattern: "stardewvalleyplanner.art/api/cloud-projects*",
+    },
+    {
+      custom_domain: true,
+      pattern: "stardewvalleyplanner.art",
+    },
+  ]);
+  expect(workerConfiguration.account_id).toBe("c75d13cb32903c8f0ec7948f6c91c9ed");
+  expect(workerConfiguration.main).toBe("workers/planner-worker.ts");
+  expect(workerConfiguration.d1_databases).toEqual([
+    {
+      binding: "DB",
+      database_name: "stardew-planner-local",
+      database_id: "00000000-0000-0000-0000-000000000000",
+      migrations_dir: "./migrations",
+    },
   ]);
   expect(workerConfiguration.assets).toEqual({
     binding: "STATIC_ASSETS",
@@ -53,5 +83,7 @@ it("publishes the static export while retaining the Contact Worker contract", ()
     CONTACT_ALLOWED_ORIGIN: "https://stardewvalleyplanner.art",
     CONTACT_EXPECTED_TURNSTILE_HOSTNAME: "stardewvalleyplanner.art",
     CONTACT_TURNSTILE_ACTION: "turnstile-spin-v2",
+    BETTER_AUTH_URL: "https://stardewvalleyplanner.art",
+    AUTH_ALLOWED_ORIGINS: "https://stardewvalleyplanner.art",
   });
 });

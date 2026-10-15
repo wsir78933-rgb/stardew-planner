@@ -10,8 +10,10 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toMatch(/^# Stardew Valley Planner\n/m);
   expect(llmsText).toContain("## English");
   expect(llmsText).toContain("## 简体中文");
-  expect(llmsText).toContain("browser-local projects");
-  expect(llmsText).toContain("浏览器本地项目");
+  expect(llmsText).toContain("local projects, and optional cloud sync for selected layouts");
+  expect(llmsText).toContain("Projects are saved locally unless you choose to sign in with Google");
+  expect(llmsText).toContain("项目默认保存在本地；使用 Google 登录后，可选择同步布局数据");
+  expect(llmsText).toContain("Map preview images stay on your device");
   expect(llmsText).toContain(
     "[Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades](https://stardewvalleyplanner.art/carpenter-stardew)",
   );

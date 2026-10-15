@@ -1391,6 +1391,7 @@ function PreparedPlannerWorkspaceContent({
             selectedPlannerMapId={plannerWorkspaceState.selectedPlannerMapId}
             storageErrorMessage={null}
             storageStatus="ready"
+            workspaceController={workspaceController}
             {...localProjectActions}
           />
         }

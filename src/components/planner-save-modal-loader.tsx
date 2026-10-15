@@ -11,6 +11,7 @@ import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import type { ScreenshotResolution } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type {
   GameSaveCopy,
   SaveModalCopy,
@@ -46,6 +47,7 @@ type PlannerSaveModalLoaderProperties = Readonly<{
   onSaveCurrentMap: () => Promise<void>;
   onSaveThumbnail: () => Promise<void>;
   placementSnapshot: PlacementSnapshot;
+  workspaceController: ReferenceProjectWorkspaceController;
   projects: readonly ReferenceProjectSummary[];
   season: TilesheetSeason;
   selectedPlannerMapId: string;
@@ -64,7 +66,7 @@ type PlannerSaveModalContentProperties = Omit<
 > & Readonly<{
   copy: Pick<
     SaveModalCopy,
-    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+    "cloudProjects" | "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
   >;
 }>;
 
@@ -259,6 +261,7 @@ export function PlannerSaveModalLoader(
             imageExport: plannerSaveModalLoaderProperties.copy.imageExport,
             localProjects: plannerSaveModalLoaderProperties.copy.localProjects,
             thumbnail: plannerSaveModalLoaderProperties.copy.thumbnail,
+            cloudProjects: plannerSaveModalLoaderProperties.copy.cloudProjects,
           }}
           currentProjectId={plannerSaveModalLoaderProperties.currentProjectId}
           currentProjectMapInstanceCount={
@@ -283,6 +286,7 @@ export function PlannerSaveModalLoader(
           season={plannerSaveModalLoaderProperties.season}
           storageErrorMessage={plannerSaveModalLoaderProperties.storageErrorMessage}
           storageStatus={plannerSaveModalLoaderProperties.storageStatus}
+          workspaceController={plannerSaveModalLoaderProperties.workspaceController}
         />
       ) : null}
       {selectedPlannerSaveModalBranch === "game-save"

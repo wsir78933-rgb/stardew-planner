@@ -1,0 +1,4 @@
+# Copy this file to .dev.vars and replace every placeholder before testing Google login.
+BETTER_AUTH_SECRET=replace-with-a-random-secret-at-least-32-characters-long
+GOOGLE_CLIENT_ID=replace-with-your-google-oauth-client-id
+GOOGLE_CLIENT_SECRET=replace-with-your-google-oauth-client-secret

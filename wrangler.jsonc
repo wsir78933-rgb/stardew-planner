@@ -1,6 +1,7 @@
 {
   "name": "stardew-planner",
-  "main": "workers/contact-worker.ts",
+  "account_id": "c75d13cb32903c8f0ec7948f6c91c9ed",
+  "main": "workers/planner-worker.ts",
   "compatibility_date": "2026-08-08",
   "assets": {
     "directory": "./out",
@@ -16,6 +17,26 @@
     {
       "pattern": "stardewvalleyplanner.art/api/feedback*",
       "custom_domain": false
+    },
+    {
+      "pattern": "stardewvalleyplanner.art/api/auth*",
+      "custom_domain": false
+    },
+    {
+      "pattern": "stardewvalleyplanner.art/api/cloud-projects*",
+      "custom_domain": false
+    },
+    {
+      "pattern": "stardewvalleyplanner.art",
+      "custom_domain": true
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "stardew-planner-local",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "./migrations"
     }
   ],
   "send_email": [
@@ -26,6 +47,8 @@
   "vars": {
     "CONTACT_ALLOWED_ORIGIN": "https://stardewvalleyplanner.art",
     "CONTACT_EXPECTED_TURNSTILE_HOSTNAME": "stardewvalleyplanner.art",
-    "CONTACT_TURNSTILE_ACTION": "turnstile-spin-v2"
+    "CONTACT_TURNSTILE_ACTION": "turnstile-spin-v2",
+    "BETTER_AUTH_URL": "https://stardewvalleyplanner.art",
+    "AUTH_ALLOWED_ORIGINS": "https://stardewvalleyplanner.art"
   }
 }

@@ -32,6 +32,12 @@ describe("save modal copy", () => {
     expect(copy.localProjects.exportedProject("River / 夏季")).toBe('已导出“River / 夏季”。');
     expect(copy.localProjects.importedProject("farm.JSON")).toBe('已导入“farm.JSON”。');
     expect(copy.localProjects.actionFailure("disk full")).toBe("本地项目操作失败：disk full");
+    expect(copy.cloudProjects.signInGoogle).toBe("使用 Google 继续");
+    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("已同步");
+    expect(copy.cloudProjects.localProjectStatus("conflict")).toBe("需要选择版本");
+    expect(copy.cloudProjects.mapCount(2)).toBe("2 张地图");
+    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe("当前登录账户：Farm Planner。");
+    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain("本地项目会保留");
     expect(copy.saveTools.retryBranch("projects")).toBe("重试加载本地项目");
     expect(copy.deleteProject.descriptionPrefix).toBe("要从此浏览器删除“");
     expect(copy.deleteProject.descriptionSuffix).toBe("”吗？此操作无法撤销。");
@@ -72,6 +78,14 @@ describe("save modal copy", () => {
     expect(copy.localProjects.exportedProject("River Farm")).toBe("Exported River Farm.");
     expect(copy.localProjects.importedProject("farm.JSON")).toBe("Imported farm.JSON.");
     expect(copy.localProjects.actionFailure("disk full")).toBe("Local project action failed: disk full");
+    expect(copy.cloudProjects.signInGoogle).toBe("Continue with Google");
+    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("Synced");
+    expect(copy.cloudProjects.localProjectStatus("pending")).toBe("Waiting to sync");
+    expect(copy.cloudProjects.mapCount(2)).toBe("2 maps");
+    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe("Signed in as Farm Planner.");
+    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain(
+      "local project will stay on this device",
+    );
     expect(copy.saveTools.loadingBranch("projects")).toBe("Loading Local projects…");
     expect(copy.saveTools.retryBranch("projects")).toBe("Retry Local projects");
     expect(copy.saveTools.branchLoadFailure("projects", "import failed")).toBe(

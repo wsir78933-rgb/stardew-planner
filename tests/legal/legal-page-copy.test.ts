@@ -54,6 +54,32 @@ describe("getLegalPageCopy", () => {
     expect(chineseContactSection?.paragraphs.join(" ")).toContain("最长保留 90 天");
   });
 
+  it("explains optional cloud sync, Google sign-in, local previews, and independent deletion in both locales", () => {
+    const englishPrivacyText = getLegalPageCopy("en", "privacy").sections
+      .flatMap((section) => section.paragraphs)
+      .join(" ");
+    const chinesePrivacyText = getLegalPageCopy("zh-CN", "privacy").sections
+      .flatMap((section) => section.paragraphs)
+      .join(" ");
+    const englishTermsText = getLegalPageCopy("en", "terms").sections
+      .flatMap((section) => section.paragraphs)
+      .join(" ");
+    const chineseTermsText = getLegalPageCopy("zh-CN", "terms").sections
+      .flatMap((section) => section.paragraphs)
+      .join(" ");
+
+    expect(englishPrivacyText).toContain("Google sign-in");
+    expect(englishPrivacyText).toContain("Cloudflare D1");
+    expect(englishPrivacyText).toContain("map preview images stay on this device");
+    expect(englishPrivacyText).toContain("deleting one copy does not delete the other");
+    expect(chinesePrivacyText).toContain("Google 登录");
+    expect(chinesePrivacyText).toContain("Cloudflare D1");
+    expect(chinesePrivacyText).toContain("地图预览图片仍保留在此设备上");
+    expect(chinesePrivacyText).toContain("删除一份副本不会删除另一份");
+    expect(englishTermsText).toContain("Google sign-in is optional");
+    expect(chineseTermsText).toContain("Google 登录为可选功能");
+  });
+
   it("rejects an unsupported locale with the rejected value", () => {
     expect(() => getLegalPageCopy("fr" as never, "privacy")).toThrow('"fr"');
   });

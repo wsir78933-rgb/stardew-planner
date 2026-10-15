@@ -5,6 +5,9 @@
   },
   "scripts": {
     "dev": "sh scripts/dev.sh",
+    "dev:cloud": "pnpm build && wrangler dev --local --ip 127.0.0.1 --port 8787 --var BETTER_AUTH_URL:http://localhost:8787 --var AUTH_ALLOWED_ORIGINS:http://localhost:8787",
+    "db:migrate:local": "wrangler d1 migrations apply stardew-planner-local --local",
+    "wrangler:types": "wrangler types worker-configuration.d.ts",
     "build": "next build",
     "start": "serve out",
     "pretest": "NEXT_TELEMETRY_DISABLED=1 pnpm build",
@@ -18,6 +21,7 @@
     "@radix-ui/react-accordion": "^1.2.20",
     "@radix-ui/react-icons": "^1.3.2",
     "@tabler/icons-react": "^3.46.0",
+    "better-auth": "1.6.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",
@@ -43,7 +47,8 @@
     "tsx": "4.20.6",
     "tw-animate-css": "^1.4.0",
     "typescript": "5.9.3",
-    "vitest": "3.2.4"
+    "vitest": "3.2.4",
+    "wrangler": "4.98.0"
   },
   "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
 }

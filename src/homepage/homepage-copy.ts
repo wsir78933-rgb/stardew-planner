@@ -184,7 +184,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportingCopy:
         "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
       primaryActionLabel: "Start planning",
-      trustedBy: "Free fan-made planner. Projects stay in this browser.",
+      trustedBy: "Free fan-made planner. Save locally or sync selected projects.",
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
@@ -620,7 +620,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     closingCta: {
       heading: "Finish the layout on this page, then build in-game.",
-      supportLine: "No sign-up. Projects stay in this browser.",
+      supportLine: "Plan without an account; sign in to sync projects you choose.",
     },
     faq: {
       eyebrow: "FAQ",
@@ -631,7 +631,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
         {
           question: "Will I lose my work?",
           answer:
-            "Projects stay in this browser. No account, no cloud sync. A different device or a data wipe will lose them.",
+            "Projects stay in this browser unless you choose to sync them. Sign in to access synced layout data on another device; map preview images stay on this device.",
         },
         {
           question: "Is my farm type here?",
@@ -656,7 +656,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     footer: {
       brandName: "Stardew Valley Farm Planner",
       description:
-        "A browser-local fan-made tool for planning Stardew Valley farm layouts.",
+        "A browser-based fan-made farm planner with local projects and optional cloud sync for selected layouts.",
       copyright: "© Stardew Valley Farm Planner",
       planner: {
         title: "Planner",
@@ -692,7 +692,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       supportingCopy:
         "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
       primaryActionLabel: "开始规划",
-      trustedBy: "免费玩家规划器。项目保存在当前浏览器。",
+      trustedBy: "免费玩家规划器。可本地保存，也可同步所选项目。",
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
@@ -1124,7 +1124,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     closingCta: {
       heading: "先在这页摆完，再进游戏建。",
-      supportLine: "不用注册。方案留在这台浏览器。",
+      supportLine: "不用登录也能规划；登录后可同步你选择的项目。",
     },
     faq: {
       eyebrow: "FAQ",
@@ -1134,7 +1134,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
         {
           question: "会丢吗？",
           answer:
-            "只存在你正在用的浏览器。没有账号，也没有云同步。换设备或清数据会丢。",
+            "项目默认保存在当前浏览器；你可以登录后选择同步项目，在其他设备访问布局数据。地图预览图片仍保留在此设备上。",
         },
         {
           question: "我玩的农场有吗？",
@@ -1157,7 +1157,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
     },
     footer: {
       brandName: "星露谷物语农场规划器",
-      description: "在浏览器中本地规划《星露谷物语》农场布局的玩家工具。",
+      description: "用于规划《星露谷物语》农场布局的浏览器玩家工具，支持本地项目和可选的所选布局云端同步。",
       copyright: "© 星露谷物语农场规划器",
       planner: {
         title: "规划器",

@@ -91,7 +91,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "/privacy",
     "privacy.html",
     "Privacy Policy",
-    "Learn how Stardew Valley Planner keeps projects in your browser without accounts, cloud sync, or tracking.",
+    "Learn how Stardew Valley Planner stores projects locally unless you choose Google sign-in and sync selected layouts.",
     "Privacy Policy",
     "en",
     [
@@ -110,7 +110,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "/terms",
     "terms.html",
     "Terms of Service",
-    "Read the browser-local terms for Stardew Valley Planner, including local projects, optional JSON import and export, and fan-made status.",
+    "Read the Stardew Valley Planner terms for local projects, optional Google sign-in and cloud sync, JSON import and export, and fan-made status.",
     "Terms of Service",
     "en",
     [
@@ -136,7 +136,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "/zh/privacy",
     "zh/privacy.html",
     "隐私政策",
-    "了解星露谷农场规划器如何将项目保留在此浏览器中，不提供账户、云端同步或跟踪服务。",
+    "了解星露谷农场规划器如何默认在本地保存项目，以及你主动选择 Google 登录和同步布局时的数据处理方式。",
     "隐私政策",
     "zh-CN",
     [
@@ -155,7 +155,7 @@ const staticPublicPageExpectations: readonly StaticPublicPageExpectation[] = [
     "/zh/terms",
     "zh/terms.html",
     "服务条款",
-    "阅读星露谷农场规划器的浏览器本地服务条款，包括本地项目、由你选择的 JSON 导入和导出，以及同人创作说明。",
+    "阅读星露谷农场规划器关于本地项目、可选 Google 登录和云端同步、JSON 导入导出及同人创作的服务条款。",
     "服务条款",
     "zh-CN",
     [
@@ -1706,7 +1706,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     heroTitleAfter: "Free Online Farm Layout Tool",
     heroSupportingCopy:
       "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
-    heroTrustedBy: "Free fan-made planner. Projects stay in this browser.",
+    heroTrustedBy: "Free fan-made planner. Save locally or sync selected projects.",
     whatIsHeading: "What is Stardew Valley Planner?",
     whatIsDescriptions: [
       "Stardew Valley Planner is a free online farm layout tool. Preview and adjust your layout on a map before building in-game, so you can decide how to use the space and work from a clear plan.",
@@ -1770,7 +1770,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "Start at the farmhouse, then fields, animals, chests, and the shipping bin. If a path is blocked, change the plan here instead of rebuilding in-game.",
     ],
     closingCtaHeading: "Finish the layout on this page, then build in-game.",
-    closingCtaSupportLine: "No sign-up. Projects stay in this browser.",
+    closingCtaSupportLine: "Plan without an account; sign in to sync projects you choose.",
     sectionImageSources: [
       "/homepage/what-is/farm-layout-overview.png",
       "/homepage/hero/spring-crops.webp",
@@ -1779,7 +1779,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     ],
     faqHeading: "Frequently Asked Questions",
     faqAnswers: [
-      "Projects stay in this browser. No account, no cloud sync. A different device or a data wipe will lose them.",
+      "Projects stay in this browser unless you choose to sync them. Sign in to access synced layout data on another device; map preview images stay on this device.",
       "Standard, Riverland, Forest, Hill-top, Wilderness, Four Corners, Beach, Meadowlands, plus Ginger Island.",
       "Spring, summer, fall, and winter. Sprinkler, scarecrow, Bee House, and Junimo Hut coverage can be turned on.",
       "Yes, but it is experimental. Modded items may not map.",
@@ -1802,7 +1802,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     heroTitleAfter: "免费在线农场布局工具",
     heroSupportingCopy:
       "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
-    heroTrustedBy: "免费玩家规划器。项目保存在当前浏览器。",
+    heroTrustedBy: "免费玩家规划器。可本地保存，也可同步所选项目。",
     whatIsHeading: "什么是星露谷物语农场规划器？",
     whatIsDescriptions: [
       "星露谷物语农场规划器是一款免费的在线布局设计工具，帮助你在游戏内动工前确定农场方案。通过俯视地图预览整体布局，调整各个区域的位置，让后续建造有清晰的参考。",
@@ -1863,7 +1863,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
       "从农舍出发，再到田地、动物区、箱子、出货箱。哪条路堵住了，就改这张图，别等游戏里拆。",
     ],
     closingCtaHeading: "先在这页摆完，再进游戏建。",
-    closingCtaSupportLine: "不用注册。方案留在这台浏览器。",
+    closingCtaSupportLine: "不用登录也能规划；登录后可同步你选择的项目。",
     sectionImageSources: [
       "/homepage/what-is/farm-layout-overview.png",
       "/homepage/hero/spring-crops.webp",
@@ -1872,7 +1872,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     ],
     faqHeading: "常见问题",
     faqAnswers: [
-      "只存在你正在用的浏览器。没有账号，也没有云同步。换设备或清数据会丢。",
+      "项目默认保存在当前浏览器；你可以登录后选择同步项目，在其他设备访问布局数据。地图预览图片仍保留在此设备上。",
       "标准、河流、森林、山顶、荒野、四角、海滩、草原，加上姜岛。",
       "春夏秋冬都能切。洒水器、稻草人、蜂房、祝尼魔小屋的覆盖可以打开。",
       "能，但是实验功能。模组物品可能对不上。",
