@@ -37,6 +37,7 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/baseline/files"
   ]
 }

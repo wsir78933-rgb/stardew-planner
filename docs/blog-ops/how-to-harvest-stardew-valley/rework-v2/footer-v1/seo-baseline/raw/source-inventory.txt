@@ -1,0 +1,94 @@
+PRESENT	public/llms.txt	size=16646	mtime=1791896167.295977	sha256=3adfce0c1fecc043a9e31f7948eb43a6cd2df1d851838c96dc01998aa4d83abb
+MISSING	public/sitemap.xml
+MISSING	public/robots.txt
+PRESENT	out/llms.txt	size=16646	mtime=1791896960.4947946	sha256=3adfce0c1fecc043a9e31f7948eb43a6cd2df1d851838c96dc01998aa4d83abb
+PRESENT	out/sitemap.xml	size=4946	mtime=1791896960.813312	sha256=33154132d65a4ce802230113e09b37ff1755e726e4f6f2c0dec44849decb5dc1
+PRESENT	out/robots.txt	size=78	mtime=1791896960.8133116	sha256=99a0db718d89f47c2f3ba955170fd3a31ab880c25fe81fa37feb15bad3013d0b
+PRESENT	public/blog/how-to-harvest-stardew-valley-cover.webp	size=479250	mtime=1791896148.012265	sha256=0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574
+PRESENT	public/blog/how-to-harvest-stardew-valley-cover.avif	size=237604	mtime=1791896148.0133166	sha256=8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57
+PRESENT	public/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp	size=267644	mtime=1791896148.0142698	sha256=d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd
+PRESENT	public/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif	size=143638	mtime=1791896148.015141	sha256=cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1
+PRESENT	public/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp	size=223784	mtime=1791896148.0159302	sha256=027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4
+PRESENT	public/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif	size=113557	mtime=1791896148.0166085	sha256=7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a
+PRESENT	src/blog/blog-post-registry.tsx	size=47602	mtime=1791896167.2959688	sha256=d038157140b517bd2e694909d55ec1eaa6809e1ed1db292c9ce7408aa87a8608
+PRESENT	src/blog/articles/how-to-harvest-stardew-valley.en.tsx	size=12082	mtime=1791896148.0109556	sha256=40743d572fb3a56fb32da4789e4b3b16a61e54cd6ad6072f95763a50c6b2a0c6
+PRESENT	src/blog/articles/how-to-harvest-stardew-valley.zh.tsx	size=11228	mtime=1791896148.0111651	sha256=3e5eda8192c4f850e9023427180c802acda5eb78eeb2d8efd23686f238be5ee0
+PRESENT	src/seo/page-metadata.ts	size=1682	mtime=1791813887.8030481	sha256=ed717ed7941551768b74d761d3f2e390d38b330cae9f8523742003835e1796af
+PRESENT	src/seo/page-structured-data.ts	size=3271	mtime=1791813887.8031025	sha256=77af31146771f4b7161965d47508fa6efb7fcb606d9b3991eddb1c3e25e249e2
+PRESENT	app/(en)/[slug]/page.tsx	size=2290	mtime=1791813886.9792013	sha256=908f306a46273af550d7cea9bcb64e5fe77515be3ae82830aabbcd695ba479be
+PRESENT	app/zh/[slug]/page.tsx	size=2391	mtime=1791813886.9820056	sha256=60e01dcc06ea170b15b4faf2dff1143db0ff7eb3602b76c8a947a0b83db40a12
+PRESENT	app/sitemap.ts	size=425	mtime=1791813886.981823	sha256=4892113438b8a1bf657f86a048125d16c810bda04289fd1b2c5fe3b7e2caf193
+PRESENT	app/robots.ts	size=333	mtime=1791813886.9817605	sha256=3287d14a5f1087f5a815b03c84d039b5ace0a0766f7e07591e16da822da22b01
+PRESENT	src/components/blog/blog-article-content.tsx	size=1328	mtime=1791813887.7452223	sha256=f8ede42d678068ea46eb8648040a3418ce595e5c796fad6e8284919af08ae2cb
+
+## search public/llms.txt
+count 1	https://stardewvalleyplanner.art/how-to-harvest-stardew-valley
+count 1	https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley
+count 2	/how-to-harvest-stardew-valley
+count 1	/zh/how-to-harvest-stardew-valley
+
+## search out/llms.txt
+count 1	https://stardewvalleyplanner.art/how-to-harvest-stardew-valley
+count 1	https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley
+count 2	/how-to-harvest-stardew-valley
+count 1	/zh/how-to-harvest-stardew-valley
+
+## search out/sitemap.xml
+count 1	https://stardewvalleyplanner.art/how-to-harvest-stardew-valley
+count 1	https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley
+count 2	/how-to-harvest-stardew-valley
+count 1	/zh/how-to-harvest-stardew-valley
+
+## search public/sitemap.xml
+file absent
+
+## search out/robots.txt
+count 0	https://stardewvalleyplanner.art/how-to-harvest-stardew-valley
+count 0	https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley
+count 0	/how-to-harvest-stardew-valley
+count 0	/zh/how-to-harvest-stardew-valley
+
+## search public/robots.txt
+file absent
+
+## extract src/blog/articles/how-to-harvest-stardew-valley.en.tsx
+7:alt={"Full orange pumpkins on tilled soil beside a dirt path."}
+14:<figcaption>
+16:</figcaption>
+25:alt={"Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path."}
+32:<figcaption>
+34:</figcaption>
+45:<h2>How to Tell When Crops Are Ready to Harvest</h2>
+46:<h3>Visual Signs: Identifying the Final Harvest Stage Sprite</h3>
+60:<h3>Calculating Harvest Days and Unwatered Delays</h3>
+70:<h2>How to Harvest Standard Crops by Hand</h2>
+71:<h3>Single-Crop Harvesting on PC</h3>
+81:<h3>Rapid Harvesting: The Hold-and-Walk Technique</h3>
+88:<h2>How to Harvest Designated Crops with a Scythe</h2>
+89:<h3>Crops That Require a Scythe to Harvest</h3>
+96:<h3>The 1.6 Iridium Scythe on Tilled Soil</h3>
+100:<h2>Harvesting Special Crops: Giant Crops and Trellises</h2>
+101:<h3>Harvesting Giant Crops with an Axe</h3>
+105:<h3>Maintaining Reachable Paths Around Trellis Crops</h3>
+116:<h2>Troubleshooting Harvest Issues</h2>
+
+## extract src/blog/articles/how-to-harvest-stardew-valley.zh.tsx
+7:alt={"土路旁的耕地上长着饱满的橙色南瓜。"}
+14:<figcaption>
+16:</figcaption>
+25:alt={"两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。"}
+32:<figcaption>
+34:</figcaption>
+45:<h2>怎么看出作物可以收</h2>
+46:<h3>看图像：最后一阶段可以收获的样子</h3>
+60:<h3>算收获日，以及漏浇水会顺延</h3>
+70:<h2>普通作物怎么用手收</h2>
+71:<h3>在 PC 上收单株</h3>
+81:<h3>快速收：按住并在田里走</h3>
+88:<h2>指定作物怎么用镰刀收</h2>
+89:<h3>必须用镰刀收的作物</h3>
+96:<h3>1.6 的铱镰刀，用在耕地上</h3>
+100:<h2>收特殊作物：巨大作物和棚架</h2>
+101:<h3>用斧头收巨大作物</h3>
+105:<h3>棚架作物旁边留出走得到的路</h3>
+116:<h2>收成对不上时先看症状</h2>

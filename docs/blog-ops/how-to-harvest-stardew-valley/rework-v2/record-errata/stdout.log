@@ -1,0 +1,30 @@
+=== Phase 1: Snapshot initial staged asset SHA-256 hashes ===
+  INITIAL how-to-harvest-stardew-valley-cover.avif: 8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57
+  INITIAL how-to-harvest-stardew-valley-cover.webp: 0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574
+  INITIAL how-to-harvest-stardew-valley-mature-crops.avif: cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1
+  INITIAL how-to-harvest-stardew-valley-mature-crops.webp: d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd
+  INITIAL how-to-harvest-stardew-valley-trellis-paths.avif: 7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a
+  INITIAL how-to-harvest-stardew-valley-trellis-paths.webp: 027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4
+
+=== Phase 2: Apply mechanical FailFast corrections ===
+PASS: Replaced target text in manifest.json
+PASS: Replaced target text in manifest.json
+PASS: Manifest JSON parsed successfully and validated.
+PASS: Replaced target text in build_media.py
+PASS: Replaced target text in build_media.py
+PASS: build_media.py updated successfully.
+PASS: Replaced target text in media.md
+PASS: Replaced target text in media.md
+PASS: Replaced target text in media.md
+PASS: Replaced target text in media.md
+PASS: media.md documentation updated successfully.
+
+=== Phase 3: Verify asset byte immutability (Before vs After) ===
+PASS [SHA256 Match]: how-to-harvest-stardew-valley-cover.avif -> 8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57
+PASS [SHA256 Match]: how-to-harvest-stardew-valley-cover.webp -> 0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574
+PASS [SHA256 Match]: how-to-harvest-stardew-valley-mature-crops.avif -> cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1
+PASS [SHA256 Match]: how-to-harvest-stardew-valley-mature-crops.webp -> d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd
+PASS [SHA256 Match]: how-to-harvest-stardew-valley-trellis-paths.avif -> 7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a
+PASS [SHA256 Match]: how-to-harvest-stardew-valley-trellis-paths.webp -> 027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4
+
+=== SUCCESS: All mechanical corrections completed with zero image byte drift. ===

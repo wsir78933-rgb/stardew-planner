@@ -48,6 +48,8 @@ import { StardewFruitEnglishArticle } from "./articles/stardew-fruit.en";
 import { StardewFruitChineseArticle } from "./articles/stardew-fruit.zh";
 import { OakTreeVsMapleStardewEnglishArticle } from "./articles/oak-tree-vs-maple-stardew.en";
 import { OakTreeVsMapleStardewChineseArticle } from "./articles/oak-tree-vs-maple-stardew.zh";
+import { HowToHarvestStardewValleyEnglishArticle } from "./articles/how-to-harvest-stardew-valley.en";
+import { HowToHarvestStardewValleyChineseArticle } from "./articles/how-to-harvest-stardew-valley.zh";
 import { HowToGetGoldStarCropsStardewValleyEnglishArticle } from "./articles/how-to-get-gold-star-crops-stardew-valley.en";
 import { HowToGetGoldStarCropsStardewValleyChineseArticle } from "./articles/how-to-get-gold-star-crops-stardew-valley.zh";
 import {
@@ -453,6 +455,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       Content: OakTreeVsMapleStardewEnglishArticle,
     },
     {
+      slug: "how-to-harvest-stardew-valley",
+      title: "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+      description:
+        "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/how-to-harvest-stardew-valley-cover.webp",
+        alt: "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+      },
+      featured: false,
+      Content: HowToHarvestStardewValleyEnglishArticle,
+    },
+    {
       slug: "how-to-get-gold-star-crops-stardew-valley",
       title: "how to get gold star crops stardew valley",
       description:
@@ -827,6 +844,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: true,
       Content: OakTreeVsMapleStardewChineseArticle,
+    },
+    {
+      slug: "how-to-harvest-stardew-valley",
+      title: "星露谷物语怎么收作物：徒手、镰刀或斧头",
+      description:
+        "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/how-to-harvest-stardew-valley-cover.webp",
+        alt: "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+      },
+      featured: false,
+      Content: HowToHarvestStardewValleyChineseArticle,
     },
     {
       slug: "how-to-get-gold-star-crops-stardew-valley",

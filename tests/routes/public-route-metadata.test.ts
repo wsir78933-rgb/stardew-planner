@@ -21,7 +21,7 @@ import { getBlogCopy } from "../../src/blog/blog-copy";
 import { blogPostSlugs, getBlogPostBySlug } from "../../src/blog/blog-post-registry";
 
 const expectedSocialImageUrl =
-  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.png";
+  "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.webp";
 
 function createExpectedLanguageAlternates(pathname: string) {
   const englishUrl = `https://stardewvalleyplanner.art${pathname === "/" ? "" : pathname}`;
@@ -45,6 +45,7 @@ describe("public route metadata", () => {
         images: [expectedSocialImageUrl],
       },
       twitter: {
+        card: "summary_large_image",
         title: "Stardew Valley Planner – Free Online Farm Layout Tool",
         images: [expectedSocialImageUrl],
       },
@@ -72,6 +73,7 @@ describe("public route metadata", () => {
         images: [expectedSocialImageUrl],
       });
       expect(pageMetadata.twitter).toMatchObject({
+        card: "summary_large_image",
         images: [expectedSocialImageUrl],
       });
     }
@@ -94,6 +96,10 @@ describe("public route metadata", () => {
     ]) {
       expect(pageMetadata).toMatchObject({
         robots: { index: true, follow: true },
+        twitter: {
+          card: "summary_large_image",
+          images: [expectedSocialImageUrl],
+        },
       });
     }
   });
@@ -143,6 +149,12 @@ describe("public route metadata", () => {
           ],
         },
         robots: { index: true, follow: true },
+        twitter: {
+          card: "summary_large_image",
+          images: [
+            `https://stardewvalleyplanner.art${englishPost.coverImage.src}`,
+          ],
+        },
       });
 
       await expect(
@@ -160,6 +172,12 @@ describe("public route metadata", () => {
           ],
         },
         robots: { index: true, follow: true },
+        twitter: {
+          card: "summary_large_image",
+          images: [
+            `https://stardewvalleyplanner.art${chinesePost.coverImage.src}`,
+          ],
+        },
       });
     }
   });

@@ -1,0 +1,11 @@
+## historic http-en-r2.html img tags
+1: <img alt="" class="size-7 rounded-md" height="28" src="/favicon.png" width="28"/>
+2: <img alt="An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins." height="941" width="1672" src="/blog/how-to-harvest-stardew-valley-cover.webp"/>
+3: <img alt="Full orange pumpkins on tilled soil beside a dirt path." decoding="async" height="941" loading="lazy" width="1672" src="/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp"/>
+4: <img alt="Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path." decoding="async" height="941" loading="lazy" width="1672" src="/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp"/>
+
+## src attributes
+7: /favicon.png
+8: /blog/how-to-harvest-stardew-valley-cover.webp
+9: /blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp
+10: /blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp

@@ -1,0 +1,26 @@
+captured_at: 2026-10-13
+command: pnpm exec next dev --webpack --hostname 127.0.0.1 --port 3004
+terminal_handle: term_7dfa2286-b04b-4b91-816a-73a4545cf236
+title: harvest-preview
+worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+listener: node PID 79399 next-server (v16.3.0) 127.0.0.1:3004
+parent: PID 79343 next dev --webpack --hostname 127.0.0.1 --port 3004
+parent: PID 79340 pnpm exec next dev --webpack --hostname 127.0.0.1 --port 3004
+process_cwd: /Users/wusir/orca/workspaces/stardew planner/博客-2
+ready_preview: Local http://127.0.0.1:3004 Ready in 530ms Next.js 16.3.0 (webpack)
+http_en: 200 bytes 65991 http://127.0.0.1:3004/how-to-harvest-stardew-valley
+http_zh: 200 bytes 64494 http://127.0.0.1:3004/zh/how-to-harvest-stardew-valley
+http_blog: 200 http://127.0.0.1:3004/blog
+git_head: 64a3b21b19444892654f98bc8042db4a95cbd1a8
+en_handoff_sha256: 8ed90bfab4dbdd4158ae2b0fe38e5f380f3922d2d1922b3ae5142017c51ee2c9
+zh_handoff_sha256: 3debdcefc4bb9e7217bd43e1fdb3484d1b7ef5e3418b073d6ec308e4ef7034de
+manifest_sha256: 46052a8fb71df1670982203c612238e16333bde5eecdf5a6ecc12443019bbace
+served_en_title: How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe
+served_zh_title: 星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀
+served_canonical_en: https://stardewvalleyplanner.art/how-to-harvest-stardew-valley
+served_alternates: hrefLang en, zh-CN, x-default (same attribute spelling as the existing oak article)
+sources_footer_in_html: absent
+planner_cta_marker_in_html: absent
+private_audit_path_in_html: absent
+user_final_review: not_started
+deploy: not_started

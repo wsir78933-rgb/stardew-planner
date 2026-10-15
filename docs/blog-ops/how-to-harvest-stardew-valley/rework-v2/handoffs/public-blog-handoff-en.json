@@ -1,0 +1,356 @@
+{
+  "locale": "en",
+  "country": "US",
+  "body": "Harvest regular crops by hand in Stardew Valley: stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411), or hold the action key to gather continuously across your fields. A parsnip does not need a scythe. Certain crops require a scythe to harvest, including amaranth, kale, wheat, unmilled rice, and fiber seeds. Giant crops that combine across 3x3 plots require any axe struck three times. A crop is ready when its final harvest sprite appears on the tilled tile, signaling that growth is complete.\n\n## How to Tell When Crops Are Ready to Harvest\n\n### Visual Signs: Identifying the Final Harvest Stage Sprite\n\nEvery crop progresses through distinct visual growth stages. In the field, a crop is ready when that plant shows its final harvest sprite.\n\nA [parsnip](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123) takes 4 days of watered growth to reach its harvest sprite. Once gathered, the single-harvest root is pulled from the ground, leaving behind an empty tilled tile. A [pumpkin](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726) takes 13 days of watered growth to reach its harvest sprite, visible as a large, rounded orange fruit resting on the tilled dirt.\n\nFor multi-harvest crops like the [blueberry](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090), plants take 13 days to reach maturity. After picking, the bush remains standing in an after-harvest stage, producing fresh berries every 4 days without replanting.\n\n<figure id=\"media-mature-crops\">\n<img src=\"/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp\" alt=\"Full orange pumpkins on tilled soil beside a dirt path.\" width=\"1672\" height=\"941\" />\n<figcaption>Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.</figcaption>\n</figure>\n\nIn the field screenshot above, mature pumpkins show their full orange shape on the tilled soil beside the dirt path.\n\n### Calculating Harvest Days and Unwatered Delays\n\nCalculating growth days helps predict the exact morning of harvest. In Stardew Valley, growth calculations exclude the day seeds are planted; the listed total represents the number of watered nights required to mature.\n\nAs stated in the general crop rules, [crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979). If unwatered for a day, a crop will not grow, though unwatered crops do not die. Sowing into dry soil and skipping watering that day prevents growth that night; growth begins the following night once watered.\n\nUnder standard daily watering, a 4-day crop like a parsnip planted on Spring 1 matures on Spring 5 morning (1 + 4 = 5). Missing one watering day pauses growth, postponing harvest to Spring 6. Similarly, a 13-day pumpkin planted on Fall 1 with daily watering matures on Fall 14. For regrowing crops like blueberries, daily watering is likewise required to advance subsequent yields: after the initial 13 days, continuing to water the bush daily advances its 4-day regrowth cycle on schedule.\n\n## How to Harvest Standard Crops by Hand\n\n### Single-Crop Harvesting on PC\n\nSingle crops are harvested by hand using the universal Check/Do Action control. Stand next to the ripe crop and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411). Keyboard [X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click, allowing you to harvest individual plants by pressing X.\n\n[left-click and C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) are bound to using tools or placing items. A hand harvest does not need a tool swing.\n\nOnce harvested, single-harvest crops leave bare tilled soil. According to the [crop growth calendars](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875), keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest.\n\n### Rapid Harvesting: The Hold-and-Walk Technique\n\nFor large vegetable plots on PC, [hold right-click with the mouse not near your character](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699). Keeping right-click held down with the cursor away from your character harvests the crop on each tile you step over as you walk through the field. [X is mapped to right-click](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699) and performs the same action.\n\nWith a stack of seeds selected, holding right-click while walking over ripe single-harvest crops harvests the mature plant on the tile you are standing on, and you can sow the new seed on that open soil. A blueberry bush stays after you pick it and keeps producing fruit, so that plant does not need another seed.\n\n## How to Harvest Designated Crops with a Scythe\n\n### Crops That Require a Scythe to Harvest\n\nA standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat. Right-clicking or pressing X does not harvest them. [Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520), [unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130), and [fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587). Fiber seeds are a distinct exception: they do not require daily watering to grow, yet still require a scythe when fully grown.\n\nTo harvest these crops, place the scythe in your active toolbar, face the crop, and press your tool button (left-click or C on PC). On mobile devices, [select the scythe before you use it](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843).\n\n### The 1.6 Iridium Scythe on Tilled Soil\n\nThe [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops.\n\n## Harvesting Special Crops: Giant Crops and Trellises\n\n### Harvesting Giant Crops with an Axe\n\nHarvest a giant crop with any axe. It takes three hits and drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops). A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it. Face the giant crop and strike it three times using your tool button (left-click or C on PC).\n\n### Maintaining Reachable Paths Around Trellis Crops\n\nTrellis crops introduce unique movement constraints to farm design. [Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile.\n\nBecause living trellises block movement entirely, every plant must have an accessible standing tile beside it. Planting trellises in solid blocks leaves interior plants unreachable for watering and harvesting. A reliable farm layout arranges trellises in double rows separated by an open walking aisle, giving farmers access to vines on either side.\n\n<figure id=\"media-trellis-paths\">\n<img src=\"/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp\" alt=\"Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.\" width=\"1672\" height=\"941\" />\n<figcaption>Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.</figcaption>\n</figure>\n\nIn the screenshot above, an open dirt path separates two wooden trellis rows, providing clear foot access to harvest purple grapes on each side. When designing field layouts with trellis crops, planning open walkways on the [farm planner](/) before planting ensures every vine remains reachable throughout the season.\n\n## Troubleshooting Harvest Issues\n\nIf crops are not harvesting as expected, check the symptom against your tools, calendar, and layout:\n\n- **Harvest sprite has not appeared on the expected date**: Check for missed watering days. Unwatered days pause growth without killing the plant, delaying maturity by one morning per dry day. Water the field and maintain daily watering until the harvest sprite appears.\n- **Interacting by hand produces no harvest**: Determine whether the crop requires a tool. Scythe crops (amaranth, kale, wheat, unmilled rice, fiber seeds) and 3x3 giant crops cannot be picked by hand. Equip a scythe and swing it across the crop, or strike a giant crop three times with an axe.\n- **Character cannot reach ripe crops inside a field**: Living trellis crops (green beans, hops, grapes) block movement. Harvest reachable vines from outer perimeter tiles, and arrange future trellis plantings with open walkways between double rows.\n- **Crops withered overnight on the 1st**: Seasonal turnover kills out-of-season plantings. On the 1st of each season, [crops that are no longer in season wither on the 1st](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979) and leave dead stalks, while multi-season crops continue growing. Clear dead crops with a scythe to retain tilled soil. Plan future plantings using the [last day to plant](/last-day-to-plant-stardew) timeline, or grow recurring crops indoors following [what to grow in the greenhouse](/what-to-grow-in-greenhouse-stardew).\n",
+  "bodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "seo": {
+    "title": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+    "h1": "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
+    "description": "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
+    "slug": "how-to-harvest-stardew-valley",
+    "faq": null,
+    "schemaType": "Article",
+    "author": "Stardew Valley Planner Team",
+    "topic": "Stardew Valley Guides",
+    "readTimeMinutes": 6,
+    "featured": false,
+    "datePublished": null,
+    "publicPath": "/how-to-harvest-stardew-valley",
+    "canonicalUrl": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley",
+    "cover": {
+      "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+      "caption": "Evening on a farm: orange pumpkins fill a tilled bed along the dirt paths, with wooden trellis rows beside that bed. ConcernedApe, Stardew Valley press screenshot.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png"
+    },
+    "figures": [
+      {
+        "id": "media-mature-crops",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "avif": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+        "width": 1672,
+        "height": 941,
+        "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+        "caption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "creditName": "ConcernedApe",
+        "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+      },
+      {
+        "id": "media-trellis-paths",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "avif": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+        "width": 1672,
+        "height": 941,
+        "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+        "caption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "creditName": "ConcernedApe",
+        "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+      }
+    ]
+  },
+  "publicReferences": [
+    {
+      "id": "en-steam-parsnip-right-click",
+      "label": "Steam Community discussion on harvesting a parsnip",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411",
+      "appliesTo": {
+        "quote": "stand beside a mature plant and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/#c1849197902669410411)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-parsnip-stages",
+      "label": "Parsnip on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "appliesTo": {
+        "quote": "A [parsnip](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123) takes 4 days of watered growth to reach its harvest sprite.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-pumpkin-stages",
+      "label": "Pumpkin on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726",
+      "appliesTo": {
+        "quote": "A [pumpkin](https://stardewvalleywiki.com/index.php?title=Pumpkin&oldid=194726) takes 13 days of watered growth to reach its harvest sprite",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-blueberry-regrowth",
+      "label": "Blueberry on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090",
+      "appliesTo": {
+        "quote": "For multi-harvest crops like the [blueberry](https://stardewvalleywiki.com/index.php?title=Blueberry&oldid=192090), plants take 13 days to reach maturity.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-crops-watering",
+      "label": "Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "[crops must be watered every day for maximum growth](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-controls-action",
+      "label": "Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "[X is mapped to the same Check/Do Action](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) as right-click",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-controls-tool",
+      "label": "Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "[left-click and C](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) are bound to using tools or placing items.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-calendar-replant",
+      "label": "Crop Growth Calendars on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875",
+      "appliesTo": {
+        "quote": "[crop growth calendars](https://stardewvalleywiki.com/index.php?title=Crop_Growth_Calendars&oldid=189875), keeping single-harvest plots productive throughout the season assumes seeds are replanted and watered on the day of harvest.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-forum-hold-right-click",
+      "label": "Stardew Valley Forums post on PC controls versus mobile",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "appliesTo": {
+        "quote": "[hold right-click with the mouse not near your character](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-forum-x-mapped",
+      "label": "Stardew Valley Forums post on PC controls versus mobile",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699",
+      "appliesTo": {
+        "quote": "[X is mapped to right-click](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/post-53699)",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-scythe-examples",
+      "label": "Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "appliesTo": {
+        "quote": "A standard [scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696) is required for certain other crops, such as amaranth, kale, and wheat.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-kale",
+      "label": "Kale on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "appliesTo": {
+        "quote": "[Kale is harvested with a scythe or better](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-fiber-seeds",
+      "label": "Fiber Seeds on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "appliesTo": {
+        "quote": "[fiber seeds are harvested with the scythe](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-unmilled-rice",
+      "label": "Unmilled Rice on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "appliesTo": {
+        "quote": "[unmilled rice is harvested with a scythe](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-mobile-scythe",
+      "label": "Mobile Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843",
+      "appliesTo": {
+        "quote": "[select the scythe before you use it](https://stardewvalleywiki.com/index.php?title=Mobile_Controls&oldid=189843)",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-iridium-scythe",
+      "label": "Iridium Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "appliesTo": {
+        "quote": "The [iridium scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) is the 1.6 Farming Mastery scythe. Within its swing it harvests crops grown on tilled soil, including regular crops.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-giant-crops",
+      "label": "Giant Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops",
+      "appliesTo": {
+        "quote": "drops [15 to 21 normal-quality items](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Giant_Crops). A giant crop does not die when the season changes, so it can stay in the field until you are ready to cut it.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-trellis",
+      "label": "Trellis Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops",
+      "appliesTo": {
+        "quote": "[Green bean, hops, and grape](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979#Trellis_Crops) grow on a trellis. You cannot walk through a living trellis, so each plant needs a layout that lets you stand on a neighboring tile. After the plant is dead, you can walk through that tile.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-season-wither",
+      "label": "Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "[crops that are no longer in season wither on the 1st](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979) and leave dead stalks",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-press-multiplayer-2-mature",
+      "label": "ConcernedApe Stardew Valley press screenshot",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "appliesTo": {
+        "quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-press-multiplayer-2-trellis",
+      "label": "ConcernedApe Stardew Valley press screenshot",
+      "url": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "appliesTo": {
+        "quote": "ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "occurrence": 2
+      }
+    }
+  ],
+  "publicRequirements": {
+    "route": {
+      "locale": "en",
+      "publicPath": "/how-to-harvest-stardew-valley",
+      "canonicalUrl": "https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"
+    },
+    "registry": {
+      "author": "Stardew Valley Planner Team",
+      "topic": "Stardew Valley Guides",
+      "readTimeMinutes": 6,
+      "featured": false,
+      "datePublished": null
+    },
+    "schema": {
+      "type": "Article",
+      "faqPage": false
+    },
+    "faq": null,
+    "cta": {
+      "existingBodyLinks": [
+        {
+          "href": "/last-day-to-plant-stardew",
+          "label": "last day to plant"
+        },
+        {
+          "href": "/what-to-grow-in-greenhouse-stardew",
+          "label": "what to grow in the greenhouse"
+        },
+        {
+          "href": "/",
+          "label": "farm planner"
+        }
+      ]
+    },
+    "cover": {
+      "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+      "alt": "An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.",
+      "caption": "Evening on a farm: orange pumpkins fill a tilled bed along the dirt paths, with wooden trellis rows beside that bed. ConcernedApe, Stardew Valley press screenshot.",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png",
+      "width": 1672,
+      "height": 941,
+      "format": "webp",
+      "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+      "avifSha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57"
+    },
+    "figures": [
+      {
+        "id": "media-mature-crops",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+        "avif": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+        "alt": "Full orange pumpkins on tilled soil beside a dirt path.",
+        "caption": "Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "creditName": "ConcernedApe",
+        "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "width": 1672,
+        "height": 941,
+        "loading": "lazy",
+        "format": "webp",
+        "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+        "avifSha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1"
+      },
+      {
+        "id": "media-trellis-paths",
+        "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "avif": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+        "alt": "Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.",
+        "caption": "Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">Stardew Valley press screenshot</a>.",
+        "creditName": "ConcernedApe",
+        "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+        "width": 1672,
+        "height": 941,
+        "loading": "lazy",
+        "format": "webp",
+        "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+        "avifSha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a"
+      }
+    ]
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "UTF-8 JSON of locale, country, body, bodyHash, seo, publicReferences, publicRequirements with sort_keys and separators (',', ':')",
+    "digest": "1f6ce71800a74662a4176e3a271091b5721c897cf3e8741f6b7d4d9982c679fb",
+    "status": "title_passed",
+    "frozen": true,
+    "freezePublicBlogHandoff": true,
+    "eBodyReview": "PASS",
+    "eTitleReview": "PASS",
+    "eTitleSeoSha256": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9",
+    "mediaVerified": true,
+    "userReview": "not_started",
+    "pageAssembly": "not_started"
+  }
+}

@@ -1,0 +1,526 @@
+diff --git a/public/llms.txt b/public/llms.txt
+index 3a317ef..b6ba275 100644
+--- a/public/llms.txt
++++ b/public/llms.txt
+@@ -39,6 +39,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
+ - [Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change](https://stardewvalleyplanner.art/profit-margin-stardew): Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.
+ - [What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting](https://stardewvalleyplanner.art/what-to-grow-in-greenhouse-stardew): Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.
+ - [Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree](https://stardewvalleyplanner.art/oak-tree-vs-maple-stardew): Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.
++- [How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe](https://stardewvalleyplanner.art/how-to-harvest-stardew-valley): Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.
+ 
+ ## 简体中文
+ 
+@@ -77,3 +78,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
+ - [Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选](https://stardewvalleyplanner.art/zh/profit-margin-stardew): Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。
+ - [星露谷温室种什么？按手头种源、等待时间与收获节奏选择](https://stardewvalleyplanner.art/zh/what-to-grow-in-greenhouse-stardew): 星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。
+ - [星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。
++- [星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。
+diff --git a/src/blog/blog-copy.ts b/src/blog/blog-copy.ts
+index 764a9a7..2c21b92 100644
+--- a/src/blog/blog-copy.ts
++++ b/src/blog/blog-copy.ts
+@@ -123,6 +123,7 @@ const localizedBlogPostPaths: Readonly<
+     "what-to-grow-in-greenhouse-stardew": "/what-to-grow-in-greenhouse-stardew",
+     "stardew-fruit": "/stardew-fruit",
+     "oak-tree-vs-maple-stardew": "/oak-tree-vs-maple-stardew",
++    "how-to-harvest-stardew-valley": "/how-to-harvest-stardew-valley",
+   },
+   "zh-CN": {
+     "carpenter-stardew": "/zh/carpenter-stardew",
+@@ -150,6 +151,7 @@ const localizedBlogPostPaths: Readonly<
+     "what-to-grow-in-greenhouse-stardew": "/zh/what-to-grow-in-greenhouse-stardew",
+     "stardew-fruit": "/zh/stardew-fruit",
+     "oak-tree-vs-maple-stardew": "/zh/oak-tree-vs-maple-stardew",
++    "how-to-harvest-stardew-valley": "/zh/how-to-harvest-stardew-valley",
+   },
+ };
+ 
+diff --git a/src/blog/blog-post-identities.ts b/src/blog/blog-post-identities.ts
+index 0436955..249c704 100644
+--- a/src/blog/blog-post-identities.ts
++++ b/src/blog/blog-post-identities.ts
+@@ -23,6 +23,7 @@ export const blogPostSlugs = [
+   "what-to-grow-in-greenhouse-stardew",
+   "stardew-fruit",
+   "oak-tree-vs-maple-stardew",
++  "how-to-harvest-stardew-valley",
+ ] as const;
+ 
+ export type BlogPostSlug = (typeof blogPostSlugs)[number];
+diff --git a/src/blog/blog-post-registry.tsx b/src/blog/blog-post-registry.tsx
+index 373d8c1..e832219 100644
+--- a/src/blog/blog-post-registry.tsx
++++ b/src/blog/blog-post-registry.tsx
+@@ -48,6 +48,8 @@ import { StardewFruitEnglishArticle } from "./articles/stardew-fruit.en";
+ import { StardewFruitChineseArticle } from "./articles/stardew-fruit.zh";
+ import { OakTreeVsMapleStardewEnglishArticle } from "./articles/oak-tree-vs-maple-stardew.en";
+ import { OakTreeVsMapleStardewChineseArticle } from "./articles/oak-tree-vs-maple-stardew.zh";
++import { HowToHarvestStardewValleyEnglishArticle } from "./articles/how-to-harvest-stardew-valley.en";
++import { HowToHarvestStardewValleyChineseArticle } from "./articles/how-to-harvest-stardew-valley.zh";
+ import {
+   blogPostCanonicalPaths,
+   blogPostSlugs,
+@@ -450,6 +452,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
+       featured: true,
+       Content: OakTreeVsMapleStardewEnglishArticle,
+     },
++    {
++      slug: "how-to-harvest-stardew-valley",
++      title: "How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe",
++      description:
++        "Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.",
++      topic: "Stardew Valley Guides",
++      author: "Stardew Valley Planner Team",
++      readTimeMinutes: 7,
++      coverImage: {
++        src: "/blog/how-to-harvest-stardew-valley-cover.webp",
++        alt: "Illustration of a farm: leafy crops in tilled soil beside a crate of orange roots, three pumpkins and a hoe, rows of yellow stalks with a scythe and a vine trellis, and a brown-roofed building with plants in its windows.",
++      },
++      featured: false,
++      Content: HowToHarvestStardewValleyEnglishArticle,
++    },
+   ],
+   "zh-CN": [
+     {
+@@ -811,6 +828,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
+       featured: true,
+       Content: OakTreeVsMapleStardewChineseArticle,
+     },
++    {
++      slug: "how-to-harvest-stardew-valley",
++      title: "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
++      description:
++        "站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。",
++      topic: "星露谷物语指南",
++      author: "星露谷规划器团队",
++      readTimeMinutes: 7,
++      coverImage: {
++        src: "/blog/how-to-harvest-stardew-valley-cover.webp",
++        alt: "农场插画：耕地中的带叶作物旁放着一箱橙色块根，三个南瓜与一把锄头，成排的黄色秸秆旁配有镰刀与藤蔓棚架，以及一座窗台摆着植物的棕顶建筑。",
++      },
++      featured: false,
++      Content: HowToHarvestStardewValleyChineseArticle,
++    },
+   ],
+ };
+ 
+diff --git a/tests/blog/blog-components.test.tsx b/tests/blog/blog-components.test.tsx
+index 54495ca..8dd062b 100644
+--- a/tests/blog/blog-components.test.tsx
++++ b/tests/blog/blog-components.test.tsx
+@@ -431,7 +431,20 @@ it("links the previous topic page from page two", () => {
+   );
+ 
+   expect(markup).toContain('href="/blog#topic-carousel">Previous</a>');
+-  expect(markup).toContain(">Next</span>");
++  expect(markup).toContain('href="/blog?page=3#topic-carousel">Next</a>');
+   expect(markup).toContain('href="/blog#topic-carousel">1</a>');
+   expect(markup).toContain('aria-current="page" href="/blog?page=2#topic-carousel">2</a>');
++
++  const lastPageMarkup = renderToStaticMarkup(
++    <BlogIndexContent
++      copy={getBlogCopy("en")}
++      homeState={getBlogHomeState(posts, { page: "3" })}
++      locale="en"
++      posts={posts}
++    />,
++  );
++
++  expect(lastPageMarkup).toContain('href="/blog?page=2#topic-carousel">Previous</a>');
++  expect(lastPageMarkup).toContain(">Next</span>");
++  expect(lastPageMarkup).toContain('aria-current="page" href="/blog?page=3#topic-carousel">3</a>');
+ });
+diff --git a/tests/blog/blog-home-state.test.ts b/tests/blog/blog-home-state.test.ts
+index 09e81a7..e10dab4 100644
+--- a/tests/blog/blog-home-state.test.ts
++++ b/tests/blog/blog-home-state.test.ts
+@@ -50,16 +50,16 @@ it("shows the newest real post first while keeping the topic carousel in canonic
+   const homeState = getBlogHomeState(posts, {});
+ 
+   expect(homeState.posts.map((post) => post.slug)).toEqual([
++    "how-to-harvest-stardew-valley",
+     "oak-tree-vs-maple-stardew",
+     "stardew-fruit",
+     "what-to-grow-in-greenhouse-stardew",
+     "profit-margin-stardew",
+     "pine-tree-stardew",
+-    "last-day-to-plant-stardew",
+   ]);
+-  expect(homeState.totalPostCount).toBe(24);
++  expect(homeState.totalPostCount).toBe(25);
+   expect(homeState.topicArticlesPage).toBe(1);
+-  expect(homeState.topicArticlesPageCount).toBe(2);
++  expect(homeState.topicArticlesPageCount).toBe(3);
+   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
+     "carpenter-stardew",
+     "where-is-robin-stardew-valley",
+@@ -80,7 +80,7 @@ it("shows the remaining topic articles on page two", () => {
+   const homeState = getBlogHomeState(getAllBlogPosts("en"), { page: "2" });
+ 
+   expect(homeState.topicArticlesPage).toBe(2);
+-  expect(homeState.topicArticlesPageCount).toBe(2);
++  expect(homeState.topicArticlesPageCount).toBe(3);
+   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
+     "how-to-earn-money-stardew",
+     "rancher-or-tiller-stardew",
+@@ -100,8 +100,10 @@ it("shows the remaining topic articles on page two", () => {
+ it("clamps an oversized topic articles page to the last page", () => {
+   const homeState = getBlogHomeState(getAllBlogPosts("en"), { page: "99" });
+ 
+-  expect(homeState.topicArticlesPage).toBe(2);
+-  expect(homeState.topicCarouselPosts).toHaveLength(12);
++  expect(homeState.topicArticlesPage).toBe(3);
++  expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
++    "how-to-harvest-stardew-valley",
++  ]);
+ });
+ 
+ it("treats every array-valued home parameter as an invalid non-string value", () => {
+diff --git a/tests/blog/blog-planner-cta.test.tsx b/tests/blog/blog-planner-cta.test.tsx
+index f472572..136ed20 100644
+--- a/tests/blog/blog-planner-cta.test.tsx
++++ b/tests/blog/blog-planner-cta.test.tsx
+@@ -54,34 +54,84 @@ describe("getBlogPlannerCtaLocaleFromSourcesHeading", () => {
+   });
+ });
+ 
++function expectSourcedArticlePlannerCta(
++  locale: (typeof publicLocales)[number],
++  slug: string,
++  markup: string,
++): void {
++  const expectedHeading =
++    locale === "en"
++      ? "Finish the layout in the planner, then build in-game."
++      : "先在规划器里摆完，再进游戏建。";
++  const expectedAction = locale === "en" ? "Open planner" : "打开规划器";
++  const expectedHref = locale === "en" ? "/#planner" : "/zh#planner";
++  const ctaMatches = markup.match(/data-blog-planner-cta="true"/g) ?? [];
++  const faqIndex = markup.indexOf('class="blog-faq-list"');
++  const ctaIndex = markup.indexOf("data-blog-planner-cta");
++  const sourcesIndex = markup.indexOf('class="blog-sources"');
++
++  expect(ctaMatches, `${locale} ${slug} CTA count`).toHaveLength(1);
++  expect(ctaIndex, `${locale} ${slug} missing CTA`).toBeGreaterThan(-1);
++  expect(sourcesIndex, `${locale} ${slug} missing Sources`).toBeGreaterThan(ctaIndex);
++  expect(markup).toContain(expectedHeading);
++  expect(markup).toContain(expectedAction);
++  expect(markup).toContain(`href="${expectedHref}"`);
++
++  if (faqIndex !== -1) {
++    expect(ctaIndex, `${locale} ${slug} CTA should follow FAQ`).toBeGreaterThan(faqIndex);
++  }
++}
++
++function expectHarvestArticleKeepsInlinePlannerLink(
++  locale: (typeof publicLocales)[number],
++  markup: string,
++): void {
++  const ctaMatches = markup.match(/data-blog-planner-cta="true"/g) ?? [];
++  const hrefCount = markup.match(/href="/g)?.length ?? 0;
++
++  expect(ctaMatches, `${locale} how-to-harvest-stardew-valley CTA count`).toHaveLength(0);
++  expect(
++    markup.indexOf('class="blog-sources"'),
++    `${locale} how-to-harvest-stardew-valley Sources`,
++  ).toBe(-1);
++  expect(hrefCount, `${locale} how-to-harvest-stardew-valley href count`).toBe(18);
++  expect(markup).toContain('href="https://stardewvalleyplanner.art"');
++  expect(markup).toContain(
++    "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
++  );
++  expect(markup).toContain(
++    "https://stardewvalleywiki.com/index.php?title=Greenhouse&amp;oldid=194164",
++  );
++
++  if (locale === "en") {
++    expect(markup).toContain('href="/last-day-to-plant-stardew"');
++    expect(markup).toContain('href="/what-to-grow-in-greenhouse-stardew"');
++    expect(markup).not.toContain('href="/#planner"');
++    return;
++  }
++
++  if (locale === "zh-CN") {
++    expect(markup).toContain('href="/zh/last-day-to-plant-stardew"');
++    expect(markup).toContain('href="/zh/what-to-grow-in-greenhouse-stardew"');
++    expect(markup).not.toContain('href="/zh#planner"');
++    return;
++  }
++
++  throw new Error(
++    `Harvest planner CTA locale is not en or zh-CN. Received: ${JSON.stringify(locale)}.`,
++  );
++}
++
+ describe("blog article planner CTA placement", () => {
+-  it("places one planner CTA after FAQ when present and before Sources on every article", () => {
++  it("places one planner CTA before Sources on sourced articles, and keeps the harvest article on its inline planner link", () => {
+     for (const locale of publicLocales) {
+-      const expectedHeading =
+-        locale === "en"
+-          ? "Finish the layout in the planner, then build in-game."
+-          : "先在规划器里摆完，再进游戏建。";
+-      const expectedAction = locale === "en" ? "Open planner" : "打开规划器";
+-      const expectedHref = locale === "en" ? "/#planner" : "/zh#planner";
+-
+       for (const post of getAllBlogPosts(locale)) {
+         const markup = renderToStaticMarkup(createElement(post.Content));
+-        const ctaMatches = markup.match(/data-blog-planner-cta="true"/g) ?? [];
+-        const faqIndex = markup.indexOf('class="blog-faq-list"');
+-        const ctaIndex = markup.indexOf("data-blog-planner-cta");
+-        const sourcesIndex = markup.indexOf('class="blog-sources"');
+-
+-        expect(ctaMatches, `${locale} ${post.slug} CTA count`).toHaveLength(1);
+-        expect(ctaIndex, `${locale} ${post.slug} missing CTA`).toBeGreaterThan(-1);
+-        expect(sourcesIndex, `${locale} ${post.slug} missing Sources`).toBeGreaterThan(ctaIndex);
+-        expect(markup).toContain(expectedHeading);
+-        expect(markup).toContain(expectedAction);
+-        expect(markup).toContain(`href="${expectedHref}"`);
+-
+-        if (faqIndex !== -1) {
+-          expect(ctaIndex, `${locale} ${post.slug} CTA should follow FAQ`).toBeGreaterThan(
+-            faqIndex,
+-          );
++
++        if (post.slug === "how-to-harvest-stardew-valley") {
++          expectHarvestArticleKeepsInlinePlannerLink(locale, markup);
++        } else {
++          expectSourcedArticlePlannerCta(locale, post.slug, markup);
+         }
+       }
+     }
+diff --git a/tests/blog/blog-post-registry.test.ts b/tests/blog/blog-post-registry.test.ts
+index 971d4a6..14ccff5 100644
+--- a/tests/blog/blog-post-registry.test.ts
++++ b/tests/blog/blog-post-registry.test.ts
+@@ -35,6 +35,7 @@ const expectedSlugs = [
+   "what-to-grow-in-greenhouse-stardew",
+   "stardew-fruit",
+   "oak-tree-vs-maple-stardew",
++  "how-to-harvest-stardew-valley",
+ ] as const;
+ 
+ function createLocalizedPost(
+@@ -69,7 +70,7 @@ function createCompleteRegistry(): Readonly<
+   };
+ }
+ 
+-it("keeps the twenty-four canonical blog identities in publishing order", () => {
++it("keeps the twenty-five canonical blog identities in publishing order", () => {
+   expect(blogPostSlugs).toEqual(expectedSlugs);
+   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
+   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
+@@ -79,7 +80,7 @@ it("keeps the twenty-four canonical blog identities in publishing order", () =>
+   expect(isBlogPostSlug("missing-post")).toBe(false);
+ });
+ 
+-it("publishes only the forty-eight localized root-level canonical article paths", () => {
++it("publishes only the fifty localized root-level canonical article paths", () => {
+   expect(blogPostCanonicalPaths).toEqual([
+     "/carpenter-stardew/",
+     "/where-is-robin-stardew-valley/",
+@@ -105,6 +106,7 @@ it("publishes only the forty-eight localized root-level canonical article paths"
+     "/what-to-grow-in-greenhouse-stardew/",
+     "/stardew-fruit/",
+     "/oak-tree-vs-maple-stardew/",
++    "/how-to-harvest-stardew-valley/",
+     "/zh/carpenter-stardew/",
+     "/zh/where-is-robin-stardew-valley/",
+     "/zh/stardew-valley-npc/",
+@@ -129,6 +131,7 @@ it("publishes only the forty-eight localized root-level canonical article paths"
+     "/zh/what-to-grow-in-greenhouse-stardew/",
+     "/zh/stardew-fruit/",
+     "/zh/oak-tree-vs-maple-stardew/",
++    "/zh/how-to-harvest-stardew-valley/",
+   ]);
+ });
+ 
+@@ -167,8 +170,12 @@ it("returns paired English and Chinese post metadata in canonical order", () =>
+     true,
+     false,
+     true,
++    false,
++  ]);
++  expect(chinesePosts.map((post) => post.featured)).toEqual([
++    ...expectedSlugs.slice(0, -1).map(() => true),
++    false,
+   ]);
+-  expect(chinesePosts.every((post) => post.featured)).toBe(true);
+   expect(getBlogPostBySlug("en", "carpenter-stardew")?.slug).toBe(
+     "carpenter-stardew",
+   );
+@@ -654,6 +661,7 @@ it("binds every localized post to its own original blog cover", () => {
+       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
+       "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
++      "how-to-harvest-stardew-valley": "/blog/how-to-harvest-stardew-valley-cover.webp",
+     },
+     "zh-CN": {
+       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
+@@ -684,6 +692,7 @@ it("binds every localized post to its own original blog cover", () => {
+       "what-to-grow-in-greenhouse-stardew": "/blog/what-to-grow-in-greenhouse-stardew-cover.webp",
+       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
+       "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
++      "how-to-harvest-stardew-valley": "/blog/how-to-harvest-stardew-valley-cover.webp",
+     },
+   } as const;
+ 
+@@ -695,6 +704,37 @@ it("binds every localized post to its own original blog cover", () => {
+   }
+ });
+ 
++it("registers the harvest article metadata from the frozen public handoff", () => {
++  expect(getBlogPostBySlug("en", "how-to-harvest-stardew-valley")).toMatchObject({
++    slug: "how-to-harvest-stardew-valley",
++    title: "How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe",
++    description:
++      "Stand beside a ripe parsnip and right-click or press X. Kale, amaranth, wheat, unmilled rice, and fiber seeds come off with a scythe swing. Count growth from the day after planting, and a dry day moves the ready day back.",
++    topic: "Stardew Valley Guides",
++    author: "Stardew Valley Planner Team",
++    readTimeMinutes: 7,
++    featured: false,
++    coverImage: {
++      src: "/blog/how-to-harvest-stardew-valley-cover.webp",
++      alt: "Illustration of a farm: leafy crops in tilled soil beside a crate of orange roots, three pumpkins and a hoe, rows of yellow stalks with a scythe and a vine trellis, and a brown-roofed building with plants in its windows.",
++    },
++  });
++  expect(getBlogPostBySlug("zh-CN", "how-to-harvest-stardew-valley")).toMatchObject({
++    slug: "how-to-harvest-stardew-valley",
++    title: "星露谷物语怎么收获：防风草右键采摘，羽衣甘蓝需要镰刀",
++    description:
++      "站在成熟的防风草旁点击右键或按 X 键。羽衣甘蓝、苋菜、小麦、未碾米和纤维种子挥动镰刀即可收割。生长天数从播种次日算起，漏浇一天成熟日顺延一天。",
++    topic: "星露谷物语指南",
++    author: "星露谷规划器团队",
++    readTimeMinutes: 7,
++    featured: false,
++    coverImage: {
++      src: "/blog/how-to-harvest-stardew-valley-cover.webp",
++      alt: "农场插画：耕地中的带叶作物旁放着一箱橙色块根，三个南瓜与一把锄头，成排的黄色秸秆旁配有镰刀与藤蔓棚架，以及一座窗台摆着植物的棕顶建筑。",
++    },
++  });
++});
++
+ it("projects fresh client-safe metadata without article Content functions", () => {
+   const firstProjection = getAllBlogPostMeta("en");
+   const secondProjection = getAllBlogPostMeta("en");
+@@ -783,7 +823,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
+   expect(() =>
+     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
+   ).toThrow(
+-    "Expected: carpenter-stardew. Received: oak-tree-vs-maple-stardew.",
++    "Expected: carpenter-stardew. Received: how-to-harvest-stardew-valley.",
+   );
+ });
+ 
+diff --git a/tests/i18n/public-route-registry.test.ts b/tests/i18n/public-route-registry.test.ts
+index 9448bc9..83394ed 100644
+--- a/tests/i18n/public-route-registry.test.ts
++++ b/tests/i18n/public-route-registry.test.ts
+@@ -8,7 +8,7 @@ import {
+ } from "../../src/i18n/public-route-registry";
+ 
+ it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
+-  expect(canonicalPublicPaths).toHaveLength(30);
++  expect(canonicalPublicPaths).toHaveLength(31);
+   expect(canonicalPublicPaths).toContain("/privacy");
+   expect(canonicalPublicPaths).toContain("/terms");
+   expect(canonicalPublicPaths).toContain("/contact");
+@@ -160,8 +160,14 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
+   expect(getLocalizedPublicPath("zh-CN", "/oak-tree-vs-maple-stardew")).toBe(
+     "/zh/oak-tree-vs-maple-stardew",
+   );
+-  expect(getLocalizedPublicRouteEntries()).toHaveLength(60);
+-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(58);
++  expect(getLocalizedPublicPath("en", "/how-to-harvest-stardew-valley")).toBe(
++    "/how-to-harvest-stardew-valley",
++  );
++  expect(getLocalizedPublicPath("zh-CN", "/how-to-harvest-stardew-valley")).toBe(
++    "/zh/how-to-harvest-stardew-valley",
++  );
++  expect(getLocalizedPublicRouteEntries()).toHaveLength(62);
++  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(60);
+   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
+     ({ pathname }) => pathname,
+   );
+@@ -217,6 +223,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
+   expect(indexablePathnames).toContain("/zh/stardew-fruit");
+   expect(indexablePathnames).toContain("/oak-tree-vs-maple-stardew");
+   expect(indexablePathnames).toContain("/zh/oak-tree-vs-maple-stardew");
++  expect(indexablePathnames).toContain("/how-to-harvest-stardew-valley");
++  expect(indexablePathnames).toContain("/zh/how-to-harvest-stardew-valley");
+ });
+ 
+ it("registers the direct-entry blog routes", () => {
+@@ -247,6 +255,7 @@ it("registers the direct-entry blog routes", () => {
+       "/profit-margin-stardew",
+       "/stardew-fruit",
+       "/oak-tree-vs-maple-stardew",
++      "/how-to-harvest-stardew-valley",
+     ]),
+   );
+ });
+diff --git a/tests/routes/blog-routes.test.tsx b/tests/routes/blog-routes.test.tsx
+index a22b9e9..b150990 100644
+--- a/tests/routes/blog-routes.test.tsx
++++ b/tests/routes/blog-routes.test.tsx
+@@ -51,7 +51,7 @@ it("renders English blog pages with direct root article URLs and one page-level
+   expect(indexMarkup).toContain('href="/maple-tree-stardew"');
+   expect(indexMarkup).toContain('href="/best-spring-crop-stardew"');
+   expect(indexMarkup).toContain('href="/oak-tree-vs-maple-stardew"');
+-  expect(indexMarkup).toContain('href="/last-day-to-plant-stardew"');
++  expect(indexMarkup).toContain('href="/how-to-harvest-stardew-valley"');
+   expect(indexMarkup).toContain('href="/pine-tree-stardew"');
+   expect(indexMarkup).toContain('href="/profit-margin-stardew"');
+   expect(indexMarkup).toContain('data-blog-location-state="index"');
+@@ -88,7 +88,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
+   expect(indexMarkup).toContain('href="/zh/maple-tree-stardew"');
+   expect(indexMarkup).toContain('href="/zh/best-spring-crop-stardew"');
+   expect(indexMarkup).toContain('href="/zh/oak-tree-vs-maple-stardew"');
+-  expect(indexMarkup).toContain('href="/zh/last-day-to-plant-stardew"');
++  expect(indexMarkup).toContain('href="/zh/how-to-harvest-stardew-valley"');
+   expect(indexMarkup).toContain('href="/zh/pine-tree-stardew"');
+   expect(indexMarkup).toContain('href="/zh/profit-margin-stardew"');
+   expect(indexMarkup).toContain('data-blog-location-state="index"');
+diff --git a/tests/routes/removed-public-pages.test.ts b/tests/routes/removed-public-pages.test.ts
+index 6f2a7ad..f8c047b 100644
+--- a/tests/routes/removed-public-pages.test.ts
++++ b/tests/routes/removed-public-pages.test.ts
+@@ -74,9 +74,9 @@ describe("removed public guide pages", () => {
+       .map(({ id }) => id);
+ 
+     expect(plannerFarmMapIds).toEqual(expectedPlannerFarmMapIds);
+-    expect(canonicalPublicPaths).toHaveLength(26);
+-    expect(getLocalizedPublicRouteEntries()).toHaveLength(52);
+-    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(50);
++    expect(canonicalPublicPaths).toHaveLength(31);
++    expect(getLocalizedPublicRouteEntries()).toHaveLength(62);
++    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(60);
+ 
+     for (const removedCanonicalPath of removedCanonicalPaths) {
+       expect(canonicalPublicPaths).not.toContain(removedCanonicalPath);
+@@ -89,7 +89,7 @@ describe("removed public guide pages", () => {
+     const llmsText = readFileSync(join(outputDirectory, "llms.txt"), "utf8");
+     const exportedHtmlFiles = listHtmlFiles(outputDirectory);
+ 
+-    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(50);
++    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(60);
+ 
+     for (const removedLocalizedPath of removedLocalizedPaths) {
+       const removedStaticPagePath = join(
+diff --git a/tests/seo/canonical-public-routes.test.ts b/tests/seo/canonical-public-routes.test.ts
+index 3b3cebd..cc7315b 100644
+--- a/tests/seo/canonical-public-routes.test.ts
++++ b/tests/seo/canonical-public-routes.test.ts
+@@ -26,10 +26,11 @@ const expectedBlogCanonicalPaths = [
+   "/pine-tree-stardew",
+   "/profit-margin-stardew",
+   "/oak-tree-vs-maple-stardew",
++  "/how-to-harvest-stardew-valley",
+ ] as const;
+ 
+ it("derives the remaining content and legal paths without planner query URLs", () => {
+-  expect(canonicalPublicPaths).toHaveLength(30);
++  expect(canonicalPublicPaths).toHaveLength(31);
+   expect(canonicalPublicPaths).toEqual(
+     expect.arrayContaining([...expectedBlogCanonicalPaths]),
+   );

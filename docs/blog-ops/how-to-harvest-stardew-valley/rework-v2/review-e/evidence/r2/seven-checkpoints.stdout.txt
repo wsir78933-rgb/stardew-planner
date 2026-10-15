@@ -1,0 +1,8 @@
+=== SEVEN CHECKPOINTS VERIFICATION (OVERALL: PASS) ===
+checkpoint_1_crop_morphology_not_overbroad: PASS - Specific examples given for parsnip/pumpkin/blueberry; no over-broad 'replaces immature foliage' generalization.
+checkpoint_2_single_click_vs_hold_walk_conditions: PASS - Single pick stands next to crop; hold-and-walk harvests on tile stepped over with cursor away from character; 'walk onto' count is 0.
+checkpoint_3_no_generic_platform_inferences: PASS - Mobile only references selecting scythe before use; no controller action buttons misattributed as crop-specific harvest keys.
+checkpoint_4_no_unsupported_soil_destruction: PASS - Zero occurrences of 'damage the soil'; tool functions described purely based on Controls and Scythe pages.
+checkpoint_5_no_immediate_or_replant_bans: PASS - Zero occurrences of 'immediately'; blueberry described as remaining in field without needing another seed.
+checkpoint_6_iridium_scythe_scope_limited: PASS - Iridium scythe is scoped strictly to 1.6 Farming Mastery and crops grown on tilled soil; no scope sprawl.
+checkpoint_7_giant_crops_axe_only: PASS - Giant crops harvested with any axe struck three times, drops 15 to 21 normal-quality items, survives season change, no 1% probability sprawl.

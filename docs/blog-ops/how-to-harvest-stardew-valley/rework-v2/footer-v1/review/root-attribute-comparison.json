@@ -1,0 +1,52 @@
+{
+  "taskId": "task_ccaa5b98f77f",
+  "dispatchId": "ctx_1b169ff42ccc",
+  "server": {
+    "method": "GET",
+    "url": "http://127.0.0.1:3004/zh",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "html": {
+      "lang": "zh-CN"
+    },
+    "body": {
+      "class": "__variable_8eaea4"
+    }
+  },
+  "browser": {
+    "taskSpaceId": 151,
+    "ownership": "agent",
+    "page": "p1",
+    "url": "http://127.0.0.1:3004/zh#planner",
+    "html": {
+      "lang": "zh-CN"
+    },
+    "body": {
+      "class": "__variable_8eaea4",
+      "monica-id": "ofpnmcalabcbjgholdjcjblkibolbppb",
+      "monica-version": "9.0.23"
+    },
+    "leftOn": "http://127.0.0.1:3004/how-to-harvest-stardew-valley",
+    "taskSpaceFinished": false
+  },
+  "namedAlarmAttributes": {
+    "data-immersive-translate-page-theme": {
+      "serverHtml": false,
+      "serverBody": false,
+      "browserHtml": false,
+      "browserBody": false
+    },
+    "monica-id": {
+      "serverHtml": false,
+      "serverBody": false,
+      "browserHtml": false,
+      "browserBody": true
+    },
+    "monica-version": {
+      "serverHtml": false,
+      "serverBody": false,
+      "browserHtml": false,
+      "browserBody": true
+    }
+  }
+}

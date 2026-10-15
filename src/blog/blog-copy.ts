@@ -27,7 +27,9 @@ export type BlogCopy = Readonly<{
   searchSubmitLabel: string;
   topicLabel: string;
   tableOfContentsLabel: string;
-  plannerCtaHeading: string;
+  plannerCtaActionLabel: string;
+  plannerCtaNote: string;
+  plannerCtaImageAlt: string;
 }>;
 
 const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
@@ -60,7 +62,10 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     searchSubmitLabel: "Search",
     topicLabel: "Topic",
     tableOfContentsLabel: "On this page",
-    plannerCtaHeading: "Finish the layout in the planner, then build in-game.",
+    plannerCtaActionLabel: "Start planning my farm",
+    plannerCtaNote: "Free to use · No sign-up required",
+    plannerCtaImageAlt:
+      "Stardew Valley farm layout with buildings, crops, paths, and ponds",
   },
   "zh-CN": {
     archiveDescription:
@@ -90,7 +95,9 @@ const blogCopyByLocale: Readonly<Record<PublicLocale, BlogCopy>> = {
     searchSubmitLabel: "搜索",
     topicLabel: "专题",
     tableOfContentsLabel: "本页目录",
-    plannerCtaHeading: "先在规划器里摆完，再进游戏建。",
+    plannerCtaActionLabel: "开始规划我的农场",
+    plannerCtaNote: "免费使用 · 无需注册",
+    plannerCtaImageAlt: "包含建筑、作物、道路和池塘的星露谷农场布局",
   },
 };
 
@@ -123,6 +130,7 @@ const localizedBlogPostPaths: Readonly<
     "what-to-grow-in-greenhouse-stardew": "/what-to-grow-in-greenhouse-stardew",
     "stardew-fruit": "/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/oak-tree-vs-maple-stardew",
+    "how-to-harvest-stardew-valley": "/how-to-harvest-stardew-valley",
     "how-to-get-gold-star-crops-stardew-valley":
       "/how-to-get-gold-star-crops-stardew-valley",
   },
@@ -152,6 +160,7 @@ const localizedBlogPostPaths: Readonly<
     "what-to-grow-in-greenhouse-stardew": "/zh/what-to-grow-in-greenhouse-stardew",
     "stardew-fruit": "/zh/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/zh/oak-tree-vs-maple-stardew",
+    "how-to-harvest-stardew-valley": "/zh/how-to-harvest-stardew-valley",
     "how-to-get-gold-star-crops-stardew-valley":
       "/zh/how-to-get-gold-star-crops-stardew-valley",
   },

@@ -1,0 +1,180 @@
+{
+  "bodyHash": "dd686bfd49f4e53dc377b702af558820a39ed5a27444a3af9afe22b0432d9101",
+  "references": [
+    {
+      "id": "en-steam-parsnip-right-click",
+      "label": "Steam Community discussion on harvesting a parsnip",
+      "url": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
+      "appliesTo": {
+        "quote": "Stand next to a ripe parsnip and [right-click it](https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/). A parsnip does not need a scythe.",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-kale",
+      "label": "Kale on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+      "appliesTo": {
+        "quote": "[Kale](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520), [amaranth](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043), [wheat](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731), [unmilled rice](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130), and [fiber seeds](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587) are cut with a scythe.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-amaranth",
+      "label": "Amaranth on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043",
+      "appliesTo": {
+        "quote": "[Kale](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520), [amaranth](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043), [wheat](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731), [unmilled rice](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130), and [fiber seeds](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587) are cut with a scythe.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-wheat",
+      "label": "Wheat on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731",
+      "appliesTo": {
+        "quote": "[Kale](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520), [amaranth](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043), [wheat](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731), [unmilled rice](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130), and [fiber seeds](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587) are cut with a scythe.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-unmilled-rice",
+      "label": "Unmilled Rice on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+      "appliesTo": {
+        "quote": "[Kale](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520), [amaranth](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043), [wheat](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731), [unmilled rice](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130), and [fiber seeds](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587) are cut with a scythe.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-fiber-seeds",
+      "label": "Fiber Seeds on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
+      "appliesTo": {
+        "quote": "[Kale](https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520), [amaranth](https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043), [wheat](https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731), [unmilled rice](https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130), and [fiber seeds](https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587) are cut with a scythe.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-forum-x-click",
+      "label": "Stardew Valley Forums thread on PC controls versus mobile",
+      "url": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/",
+      "appliesTo": {
+        "quote": "On PC, stand on a tile beside the ripe parsnip and press Right-Click. One click harvests it. [X is mapped to the same click](https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/), so X harvests it too.",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-controls",
+      "label": "Controls on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+      "appliesTo": {
+        "quote": "The default [PC controls](https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481) bind Right-Click or X to Check / Do Action, and Left-Click or C to Use tool or place item.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-crops-seeds",
+      "label": "Crops on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+      "appliesTo": {
+        "quote": "Left-Click puts [seeds and fertilizer](https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979) on a tilled tile. One click covers one tile. Hold Right-Click or Left-Click and move when you want several tiles. Planting and fertilizing need no tool and spend no energy.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL. This citation supports planting and fertilizing, not the harvest button."
+    },
+    {
+      "id": "en-wiki-scythe",
+      "label": "Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+      "appliesTo": {
+        "quote": "You start with one [Scythe](https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696). A swing spends no energy.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-golden-scythe",
+      "label": "Golden Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051",
+      "appliesTo": {
+        "quote": "The [Golden Scythe](https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051) comes from the statue in the Quarry Mine. It was introduced in 1.4. Next to the starter scythe, it has a larger radius, a higher chance to cut all the grass in that radius, a 75 percent chance per swipe to harvest hay from grass, and 13 damage instead of 1 to 3.",
+        "occurrence": 1
+      },
+      "versionNote": "Body states this scythe was introduced in 1.4. Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-wiki-iridium-scythe",
+      "label": "Iridium Scythe on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
+      "appliesTo": {
+        "quote": "The [Iridium Scythe](https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836) was introduced in 1.6. You receive it after claiming Farming Mastery. It can be used to harvest any crops. The swing collects items grown on tilled soil within its range, including regular crops, crops in garden pots, spring onions, and forageables grown from wild seeds.",
+        "occurrence": 1
+      },
+      "versionNote": "Body states this scythe was introduced in 1.6. Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-changelog-1-6-9",
+      "label": "Stardew Valley 1.6.9 changelog",
+      "url": "https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/",
+      "appliesTo": {
+        "quote": "In [1.6.9](https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/), the Gatherer chance to double harvested forage also applies when you use an iridium scythe.",
+        "occurrence": 1
+      },
+      "versionNote": "Official 1.6.9 changelog."
+    },
+    {
+      "id": "en-wiki-parsnip",
+      "label": "Parsnip on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
+      "appliesTo": {
+        "quote": "A [parsnip](https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123) takes 4 days. Plant one on Spring 1 and water it every day: it is ready on Spring 5.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-site-last-day-to-plant",
+      "label": "Last Day to Plant in Stardew Valley",
+      "url": "/last-day-to-plant-stardew",
+      "appliesTo": {
+        "quote": "If the first harvest has to happen before the season changes, count the last safe planting day in [Last Day to Plant in Stardew Valley](/last-day-to-plant-stardew).",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-wiki-greenhouse",
+      "label": "Greenhouse on the Stardew Valley Wiki",
+      "url": "https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164",
+      "appliesTo": {
+        "quote": "After the [Greenhouse](https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164) is repaired, crops there can be planted, grown, and harvested at any time of year.",
+        "occurrence": 1
+      },
+      "versionNote": "Wiki revision is the oldid in the URL."
+    },
+    {
+      "id": "en-site-greenhouse-crops",
+      "label": "What to Grow in Greenhouse Stardew",
+      "url": "/what-to-grow-in-greenhouse-stardew",
+      "appliesTo": {
+        "quote": "Choosing what to plant in that room is covered in [What to Grow in Greenhouse Stardew](/what-to-grow-in-greenhouse-stardew).",
+        "occurrence": 1
+      }
+    },
+    {
+      "id": "en-site-planner",
+      "label": "Stardew Valley Farm Planner",
+      "url": "https://stardewvalleyplanner.art",
+      "appliesTo": {
+        "quote": "Place the rows on the [Stardew Valley Farm Planner](https://stardewvalleyplanner.art) and keep a standing tile beside each trellis.",
+        "occurrence": 1
+      }
+    }
+  ]
+}

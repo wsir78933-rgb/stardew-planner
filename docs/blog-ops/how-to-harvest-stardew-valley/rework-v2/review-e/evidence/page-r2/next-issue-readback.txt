@@ -1,0 +1,12 @@
+spaceId 151, page p1, url http://127.0.0.1:3004/how-to-harvest-stardew-valley
+Opened button "Open Next.js Dev Tools".
+Menu text: Route Static, Bundler Webpack, Route Info, Preferences.
+No Issue item in that menu.
+Route Info text: /how-to-harvest-stardew-valley, layout.tsx, page.tsx.
+After closing the panel and reloading, no button containing "Issue" appeared within 8 seconds.
+Page h1 remained "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe".
+Body did not contain "Unexpected end of JSON input".
+Earlier screenshots showed a red "1 Issue" badge during capture, sometimes next to "Compiling".
+That badge was not open at the time, so its message was not captured.
+One earlier mobile navigation showed a full-page Runtime SyntaxError: Unexpected end of JSON input. Reload cleared it. The later mobile pass did not reproduce it.
+These are separate observations. The settled dev menu does not show an article error.

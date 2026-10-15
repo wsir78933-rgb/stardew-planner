@@ -1,0 +1,18 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ✓ tests/seo/canonical-public-routes.test.ts (1 test) 2ms
+ ✓ tests/i18n/public-route-registry.test.ts (4 tests) 4ms
+ ✓ tests/routes/removed-public-pages.test.ts (3 tests) 421ms
+   ✓ removed public guide pages > does not export or advertise any removed English or Chinese page  368ms
+ ✓ tests/blog/blog-home-state.test.ts (18 tests) 3ms
+ ✓ tests/blog/blog-post-registry.test.ts (20 tests) 9ms
+ ✓ tests/blog/blog-components.test.tsx (20 tests) 106ms
+ ✓ tests/blog/blog-planner-cta.test.tsx (8 tests) 201ms
+ ✓ tests/routes/blog-routes.test.tsx (19 tests) 191ms
+
+ Test Files  8 passed (8)
+      Tests  93 passed (93)
+   Start at  21:09:34
+   Duration  1.51s (transform 761ms, setup 0ms, collect 4.71s, tests 937ms, environment 1ms, prepare 525ms)
+

@@ -1,0 +1,67 @@
+## historic http-en-r2.html
+figcaption_elements 2
+1: Full orange pumpkins stand on tilled soil beside a dirt path. ConcernedApe, <a href="https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png">Stardew Valley press screenshot</a>.
+2: Two wooden trellises have an open dirt path between them, with purple grape clusters on the trellis beside that path. ConcernedApe, <a href="https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png">Stardew Valley press screenshot</a>.
+img_alt_count 4
+alt 1: 
+alt 2: An evening farm with orange pumpkins in a tilled bed, dirt paths around the plots, and wooden trellis rows beside the pumpkins.
+alt 3: Full orange pumpkins on tilled soil beside a dirt path.
+alt 4: Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path.
+cover_index 2044
+cover_window:
+dew Valley Crops by Hand, Scythe, or Axe"/><meta property="og:description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/><meta property="og:url" content="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/><meta property="og:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/><meta property="og:type" content="article"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"/><meta name="twitter:description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/><meta name="twitter:image" content="https://stardewvalleyplanner.art/blog/how-to-ha
+## historic http-zh-r2.html
+figcaption_elements 2
+1: 饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，<a href="https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png">星露谷物语新闻素材截图</a>。
+2: 两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，<a href="https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png">星露谷物语新闻素材截图</a>。
+img_alt_count 4
+alt 1: 
+alt 2: 傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。
+alt 3: 土路旁的耕地上长着饱满的橙色南瓜。
+alt 4: 两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。
+cover_index 1761
+cover_window:
+="x-default" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/><meta property="og:title" content="星露谷物语怎么收作物：徒手、镰刀或斧头"/><meta property="og:description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/><meta property="og:url" content="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/><meta property="og:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/><meta property="og:type" content="article"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="星露谷物语怎么收作物：徒手、镰刀或斧头"/><meta name="twitter:description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/><meta name="twitter:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/><link rel="icon" href="/favicon.ico"/><meta name="next-size-adjust" content=""/><script src="/_next/static/
+
+## current source cover block has no figcaption
+import { formatBlogReadTime, type BlogCopy } from "../../blog/blog-copy";
+import type { LocalizedBlogPost } from "../../blog/blog-post-registry";
+import type { PublicLocale } from "../../i18n/public-locale";
+import { PublicPicture } from "../public-picture";
+import { TableOfContents } from "./table-of-contents";
+
+type BlogArticleContentProperties = Readonly<{
+  copy: BlogCopy;
+  locale: PublicLocale;
+  post: LocalizedBlogPost;
+}>;
+
+export function BlogArticleContent({ copy, locale, post }: BlogArticleContentProperties) {
+  const articleId = `blog-article-${post.slug}`;
+  const ArticleBody = post.Content;
+
+  return (
+    <article data-blog-article="true">
+      <header>
+        <p>{post.topic}</p>
+        <h1>{post.title}</h1>
+        <p className="blog-article-description">{post.description}</p>
+        <p>
+          {copy.authorLabel} {post.author} · {formatBlogReadTime(copy, post.readTimeMinutes)}
+        </p>
+        <PublicPicture
+          alt={post.coverImage.alt}
+          height={941}
+          src={post.coverImage.src}
+          width={1672}
+        />
+      </header>
+      <div className="blog-article-layout">
+        <TableOfContents articleId={articleId} label={copy.tableOfContentsLabel} />
+        <div id={articleId}>
+          <ArticleBody />
+        </div>
+      </div>
+    </article>
+  );
+}

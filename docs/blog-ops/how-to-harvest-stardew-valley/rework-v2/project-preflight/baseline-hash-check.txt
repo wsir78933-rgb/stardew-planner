@@ -1,0 +1,30 @@
+Loaded 24 files from baseline manifest.
+================================================================================
+Relative Path                                                     | Status   | Match
+================================================================================
+src/blog/articles/how-to-harvest-stardew-valley.en.tsx            | MATCH    | dacc4d0361dbd894 vs dacc4d0361dbd894
+src/blog/articles/how-to-harvest-stardew-valley.zh.tsx            | MATCH    | 98f2835aea750c56 vs 98f2835aea750c56
+src/blog/blog-post-registry.tsx                                   | MATCH    | ea146ecfe3e8553e vs ea146ecfe3e8553e
+src/blog/blog-post-identities.ts                                  | MATCH    | 886b1f6081692fb7 vs 886b1f6081692fb7
+src/blog/blog-copy.ts                                             | MATCH    | bde4900d8c5cda4d vs bde4900d8c5cda4d
+public/llms.txt                                                   | MATCH    | 71c1d1f8185fbefa vs 71c1d1f8185fbefa
+public/blog/how-to-harvest-stardew-valley-cover.webp              | MATCH    | 8558f5b08e0c3e89 vs 8558f5b08e0c3e89
+public/blog/how-to-harvest-stardew-valley-cover.avif              | MATCH    | ccd28749dfd70476 vs ccd28749dfd70476
+public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp | MATCH    | c5d987fdd4c2d179 vs c5d987fdd4c2d179
+public/blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif | MATCH    | 92476d4c389afbf1 vs 92476d4c389afbf1
+public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp | MATCH    | 450f78bb5aefcc6d vs 450f78bb5aefcc6d
+public/blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif | MATCH    | d918433c39793cf8 vs d918433c39793cf8
+docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-en.json | MATCH    | 8ed90bfab4dbdd41 vs 8ed90bfab4dbdd41
+docs/blog-ops/how-to-harvest-stardew-valley/handoffs/public-blog-handoff-zh.json | MATCH    | 3debdcefc4bb9e72 vs 3debdcefc4bb9e72
+docs/blog-ops/how-to-harvest-stardew-valley/writing/en-body.md    | MATCH    | dd686bfd49f4e53d vs dd686bfd49f4e53d
+docs/blog-ops/how-to-harvest-stardew-valley/writing/locked/en-body.md | MATCH    | dd686bfd49f4e53d vs dd686bfd49f4e53d
+docs/blog-ops/how-to-harvest-stardew-valley/writing/en-media.json | MATCH    | 1d4cd52f3d7cc7b1 vs 1d4cd52f3d7cc7b1
+docs/blog-ops/how-to-harvest-stardew-valley/writing/en-figure.svg | MATCH    | a6e017cda7dd1f5d vs a6e017cda7dd1f5d
+docs/blog-ops/how-to-harvest-stardew-valley/seo/en-seo.json       | MATCH    | 30ec27dd831c395b vs 30ec27dd831c395b
+docs/blog-ops/how-to-harvest-stardew-valley/seo/en-public-references.json | MATCH    | 2a1739dad9e9e519 vs 2a1739dad9e9e519
+docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-body.md | MATCH    | ec8b60fc7e99ac1c vs ec8b60fc7e99ac1c
+docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-seo.json | MATCH    | 44fda49e69a3e9e6 vs 44fda49e69a3e9e6
+docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-media.json | MATCH    | 7aae7773171719b1 vs 7aae7773171719b1
+docs/blog-ops/how-to-harvest-stardew-valley/translation/zh-figure.svg | MATCH    | 50cd8f2c06a05e25 vs 50cd8f2c06a05e25
+================================================================================
+Overall Match: 100% PASS (All 24 files match baseline)

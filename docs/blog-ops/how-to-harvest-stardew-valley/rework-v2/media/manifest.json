@@ -1,0 +1,150 @@
+{
+  "role": "M",
+  "phase": "rework-v2",
+  "slug": "how-to-harvest-stardew-valley",
+  "stagedCount": 6,
+  "assets": [
+    {
+      "basename": "how-to-harvest-stardew-valley-cover",
+      "sourceFile": "press-farm-evening.png",
+      "sourceSha256": "7f10276f5cb0ebbbc36a5133b4fa217c24fa89f61b21c1e15d082cbbac523496",
+      "sourceUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png",
+      "sourceAttribution": "ConcernedApe Stardew Valley Press Kit (https://www.stardewvalley.net/press/). Unverified commercial license; public press screenshot context.",
+      "cropBox": null,
+      "cropDescription": "No crop; isomorphic Lanczos resize of full 1920x1080 frame to 1672x941 (16:9)",
+      "expectedPublicLocation": "/blog/how-to-harvest-stardew-valley-cover",
+      "description": "Autumn evening farm with pumpkin patch, chicken coop, silo, trellis rows, kegs, and pond",
+      "master": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-cover.png",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 1863324,
+        "sha256": "bf3a23c64bb2753ea6a08a4cd114e97a7765e49d58bb46cccae7b6bfc24aba50"
+      },
+      "webp": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp",
+        "format": "WEBP",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 479250,
+        "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+        "encodeCommand": "cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-cover.png' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp'",
+        "encodeExitCode": 0,
+        "decodedPngPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-cover.webp.png",
+        "decodeCommand": "dwebp '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-cover.webp.png'",
+        "decodeExitCode": 0
+      },
+      "avif": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif",
+        "format": "AVIF",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 237604,
+        "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57",
+        "encodeCommand": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-cover.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif'",
+        "encodeExitCode": 0,
+        "decodedPngPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-cover.avif.png",
+        "decodeCommand": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif' -update 1 -frames:v 1 '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-cover.avif.png'",
+        "decodeExitCode": 0
+      }
+    },
+    {
+      "basename": "how-to-harvest-stardew-valley-mature-crops",
+      "sourceFile": "press-multiplayer-2.png",
+      "sourceSha256": "b34cd47bb2e8fde6cb886154ad4027a63e222f0e29d17bd4d2fbf68d8caf9ab7",
+      "sourceUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "sourceAttribution": "ConcernedApe Stardew Valley Press Kit (https://www.stardewvalley.net/press/). Unverified commercial license; public press screenshot context.",
+      "cropBox": [
+        740,
+        320,
+        1700,
+        860
+      ],
+      "cropDescription": "Crop box (740, 320, 1700, 860) [w=960, h=540], Lanczos resized to 1672x941 (16:9)",
+      "expectedPublicLocation": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops",
+      "description": "MultiplayerScreenshot2 daytime pumpkin patch close-up on tilled soil (top row has only two ripe pumpkins, not a full 4x5 grid), player in blue overalls raising green vegetable, player in green shirt, and scarecrow",
+      "master": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-mature-crops.png",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 1479722,
+        "sha256": "b64043a29e1dd6bdee9d93765ecb867d2968aa755337867fec8be6e830bcb9bb"
+      },
+      "webp": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp",
+        "format": "WEBP",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 267644,
+        "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+        "encodeCommand": "cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-mature-crops.png' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp'",
+        "encodeExitCode": 0,
+        "decodedPngPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-mature-crops.webp.png",
+        "decodeCommand": "dwebp '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-mature-crops.webp.png'",
+        "decodeExitCode": 0
+      },
+      "avif": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif",
+        "format": "AVIF",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 143638,
+        "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1",
+        "encodeCommand": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-mature-crops.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif'",
+        "encodeExitCode": 0,
+        "decodedPngPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-mature-crops.avif.png",
+        "decodeCommand": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif' -update 1 -frames:v 1 '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-mature-crops.avif.png'",
+        "decodeExitCode": 0
+      }
+    },
+    {
+      "basename": "how-to-harvest-stardew-valley-trellis-paths",
+      "sourceFile": "press-multiplayer-2.png",
+      "sourceSha256": "b34cd47bb2e8fde6cb886154ad4027a63e222f0e29d17bd4d2fbf68d8caf9ab7",
+      "sourceUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png",
+      "sourceAttribution": "ConcernedApe Stardew Valley Press Kit (https://www.stardewvalley.net/press/). Unverified commercial license; public press screenshot context.",
+      "cropBox": [
+        990,
+        40,
+        1790,
+        490
+      ],
+      "cropDescription": "Crop box (990, 40, 1790, 490) [w=800, h=450], Lanczos resized to 1672x941 (16:9)",
+      "expectedPublicLocation": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths",
+      "description": "Garden scene with two columns of wooden post purple grape trellises on the left and visible dirt path; right side shows yellow tall-stalk crops (not wooden grape trellises) with player in red shirt standing inside the yellow crop patch",
+      "master": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-trellis-paths.png",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 1345317,
+        "sha256": "fe91594812988054a254bf95b3fc52d5f3777b931a8efff7f981eff836f32d94"
+      },
+      "webp": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp",
+        "format": "WEBP",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 223784,
+        "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+        "encodeCommand": "cwebp -q 90 -metadata none '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-trellis-paths.png' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp'",
+        "encodeExitCode": 0,
+        "decodedPngPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-trellis-paths.webp.png",
+        "decodeCommand": "dwebp '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp' -o '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-trellis-paths.webp.png'",
+        "decodeExitCode": 0
+      },
+      "avif": {
+        "filePath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif",
+        "format": "AVIF",
+        "width": 1672,
+        "height": 941,
+        "byteSize": 113557,
+        "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a",
+        "encodeCommand": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/masters/how-to-harvest-stardew-valley-trellis-paths.png' -c:v libaom-av1 -still-picture 1 -cpu-used 6 -crf 28 -pix_fmt yuv444p '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif'",
+        "encodeExitCode": 0,
+        "decodedPngPath": "/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-trellis-paths.avif.png",
+        "decodeCommand": "ffmpeg -y -i '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif' -update 1 -frames:v 1 '/Users/wusir/orca/workspaces/stardew planner/\u535a\u5ba2-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/decoded/how-to-harvest-stardew-valley-trellis-paths.avif.png'",
+        "decodeExitCode": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "englishBodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "chineseBodyHash": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+  "zhSeoSha256": "49dffecf14f8fb5ddf549334bc6c1f14408cb0ed5f8b58e4bac5826898b8910f",
+  "zhMediaSha256": "c6abd143616de6f03bc868121b41f9ae8a50f317b70dfbea37c67f3e282e95a7",
+  "zhPublicReferencesSha256": "7ca77bb04069808b5635e186985b936f15a25059f6de197ba0c229569b731c63",
+  "linkTargetCount": 27,
+  "referencePlacementFailures": 0,
+  "referenceCount": 21,
+  "titleChars": 19,
+  "descriptionChars": 41,
+  "images": [
+    {
+      "file": "how-to-harvest-stardew-valley-cover.webp",
+      "bytes": 479250,
+      "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+      "sips": "1672x941"
+    },
+    {
+      "file": "how-to-harvest-stardew-valley-cover.avif",
+      "bytes": 237604,
+      "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57",
+      "sips": "1672x941"
+    },
+    {
+      "file": "how-to-harvest-stardew-valley-mature-crops.webp",
+      "bytes": 267644,
+      "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+      "sips": "1672x941"
+    },
+    {
+      "file": "how-to-harvest-stardew-valley-mature-crops.avif",
+      "bytes": 143638,
+      "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1",
+      "sips": "1672x941"
+    },
+    {
+      "file": "how-to-harvest-stardew-valley-trellis-paths.webp",
+      "bytes": 223784,
+      "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+      "sips": "1672x941"
+    },
+    {
+      "file": "how-to-harvest-stardew-valley-trellis-paths.avif",
+      "bytes": 113557,
+      "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a",
+      "sips": "1672x941"
+    }
+  ],
+  "qualityPassSigned": false
+}

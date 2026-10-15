@@ -1,0 +1,6 @@
+=== git diff --check ===
+exit git-diff-check 0
+=== no-index en ===
+exit en 1
+=== no-index zh ===
+exit zh 1

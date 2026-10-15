@@ -1,0 +1,79 @@
+{
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.md": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.md",
+    "size_bytes": 11457,
+    "is_binary": false,
+    "sha256_raw": "a91783b9525f64c63d75a98561be978a9f92cb6cde734d3687575403aea544dc",
+    "sha256_nfc_lf": "a91783b9525f64c63d75a98561be978a9f92cb6cde734d3687575403aea544dc"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.caption-excluded.md": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.caption-excluded.md",
+    "size_bytes": 10442,
+    "is_binary": false,
+    "sha256_raw": "8481948f910b80954118075c19664a1f88e7f5f5118e90c1e3b787b048421dd9",
+    "sha256_nfc_lf": "8481948f910b80954118075c19664a1f88e7f5f5118e90c1e3b787b048421dd9"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-public-references.json": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-public-references.json",
+    "size_bytes": 10184,
+    "is_binary": false,
+    "sha256_raw": "0227ee034205ab00e9d38566377e9271b2581d24ab3fb02509259aa09ca3a97d",
+    "sha256_nfc_lf": "0227ee034205ab00e9d38566377e9271b2581d24ab3fb02509259aa09ca3a97d"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-media.json": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-media.json",
+    "size_bytes": 4115,
+    "is_binary": false,
+    "sha256_raw": "a377976a2213a80218c2c77da4950f71450bf94550cc0b0cd745653236480b67",
+    "sha256_nfc_lf": "a377976a2213a80218c2c77da4950f71450bf94550cc0b0cd745653236480b67"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/manifest.json": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/manifest.json",
+    "size_bytes": 13213,
+    "is_binary": false,
+    "sha256_raw": "9225ec257f161af7a60b4ea569a29f341a3a540b2e0f2ed852be606dbfc4c706",
+    "sha256_nfc_lf": "9225ec257f161af7a60b4ea569a29f341a3a540b2e0f2ed852be606dbfc4c706"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp",
+    "size_bytes": 479250,
+    "is_binary": true,
+    "sha256_raw": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574",
+    "sha256_nfc_lf": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif",
+    "size_bytes": 237604,
+    "is_binary": true,
+    "sha256_raw": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57",
+    "sha256_nfc_lf": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp",
+    "size_bytes": 267644,
+    "is_binary": true,
+    "sha256_raw": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd",
+    "sha256_nfc_lf": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif",
+    "size_bytes": 143638,
+    "is_binary": true,
+    "sha256_raw": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1",
+    "sha256_nfc_lf": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp",
+    "size_bytes": 223784,
+    "is_binary": true,
+    "sha256_raw": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4",
+    "sha256_nfc_lf": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4"
+  },
+  "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif": {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif",
+    "size_bytes": 113557,
+    "is_binary": true,
+    "sha256_raw": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a",
+    "sha256_nfc_lf": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a"
+  }
+}

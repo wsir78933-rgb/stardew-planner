@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(31);
+  expect(canonicalPublicPaths).toHaveLength(32);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -160,14 +160,20 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/oak-tree-vs-maple-stardew")).toBe(
     "/zh/oak-tree-vs-maple-stardew",
   );
+  expect(getLocalizedPublicPath("en", "/how-to-harvest-stardew-valley")).toBe(
+    "/how-to-harvest-stardew-valley",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/how-to-harvest-stardew-valley")).toBe(
+    "/zh/how-to-harvest-stardew-valley",
+  );
   expect(
     getLocalizedPublicPath("en", "/how-to-get-gold-star-crops-stardew-valley"),
   ).toBe("/how-to-get-gold-star-crops-stardew-valley");
   expect(
     getLocalizedPublicPath("zh-CN", "/how-to-get-gold-star-crops-stardew-valley"),
   ).toBe("/zh/how-to-get-gold-star-crops-stardew-valley");
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(62);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(60);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(64);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(62);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -223,6 +229,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/stardew-fruit");
   expect(indexablePathnames).toContain("/oak-tree-vs-maple-stardew");
   expect(indexablePathnames).toContain("/zh/oak-tree-vs-maple-stardew");
+  expect(indexablePathnames).toContain("/how-to-harvest-stardew-valley");
+  expect(indexablePathnames).toContain("/zh/how-to-harvest-stardew-valley");
   expect(indexablePathnames).toContain("/how-to-get-gold-star-crops-stardew-valley");
   expect(indexablePathnames).toContain(
     "/zh/how-to-get-gold-star-crops-stardew-valley",
@@ -257,6 +265,7 @@ it("registers the direct-entry blog routes", () => {
       "/profit-margin-stardew",
       "/stardew-fruit",
       "/oak-tree-vs-maple-stardew",
+      "/how-to-harvest-stardew-valley",
       "/how-to-get-gold-star-crops-stardew-valley",
     ]),
   );

@@ -1,0 +1,124 @@
+=== package.json scripts ===
+  "scripts": {
+    "dev": "sh scripts/dev.sh",
+    "build": "next build",
+    "start": "serve out",
+    "pretest": "NEXT_TELEMETRY_DISABLED=1 pnpm build",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "performance:editor": "node scripts/measure-editor-performance.mjs",
+    "assets:sync": "tsx src/assets/sync-assets.ts",
+    "seo:smoke": "node scripts/production-seo-smoke.mjs --origin https://stardewvalleyplanner.art"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.20",
+
+=== scripts/dev.sh ===
+#!/bin/sh
+set -eu
+
+DEV_PORT=3003
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+sh "$script_dir/free-listen-port.sh" "$DEV_PORT"
+exec next dev --webpack --port "$DEV_PORT"
+
+=== next.config.ts ===
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  output: "export",
+  images: { unoptimized: true },
+  reactStrictMode: true,
+  allowedDevOrigins: ["127.0.0.1"],
+  experimental: {
+    globalNotFound: true,
+  },
+};
+
+export default nextConfig;
+
+=== vitest.config.ts (root) ===
+import { fileURLToPath, URL } from "node:url";
+import { configDefaults, defineConfig } from "vitest/config";
+
+export default defineConfig({
+  resolve: {
+    alias: { "@": fileURLToPath(new URL("./", import.meta.url)) },
+  },
+  test: {
+    environment: "node",
+    exclude: [...configDefaults.exclude, "**/.superpowers/**"],
+  },
+});
+
+=== isolated vitest config ===
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vitest/config";
+import rootVitestConfig from "../../../../../vitest.config.ts";
+
+const configDirectoryUrl = new URL(".", import.meta.url);
+
+function resolveWorkspaceRoot() {
+  return path.resolve(fileURLToPath(new URL("../../../../../", configDirectoryUrl)));
+}
+
+function resolveVerificationViteCacheDir(workspaceRoot) {
+  const verificationViteCacheDir = path.join(
+    workspaceRoot,
+    ".next",
+    "verification-cache",
+    "vite",
+  );
+  if (!path.isAbsolute(verificationViteCacheDir)) {
+    throw new Error(
+      `verification Vite cacheDir is not absolute: ${verificationViteCacheDir}`,
+    );
+  }
+  const expectedRootPrefix = `${workspaceRoot}${path.sep}`;
+  if (!verificationViteCacheDir.startsWith(expectedRootPrefix)) {
+    throw new Error(
+      `verification Vite cacheDir escaped the workspace: ${verificationViteCacheDir}`,
+    );
+  }
+  return verificationViteCacheDir;
+}
+
+function requireRootVitestConfig(configValue) {
+  if (
+    configValue === null ||
+    typeof configValue !== "object" ||
+    Array.isArray(configValue)
+  ) {
+    throw new Error(
+      `root vitest config must be a plain object, received ${Object.prototype.toString.call(configValue)}`,
+    );
+  }
+  if (!Object.hasOwn(configValue, "test")) {
+    throw new Error("root vitest config is missing test");
+  }
+  if (
+    Object.hasOwn(configValue, "cacheDir") &&
+    configValue.cacheDir !== undefined
+  ) {
+    throw new Error(
+      `root vitest config cacheDir must stay unset, received ${String(configValue.cacheDir)}`,
+    );
+  }
+  return configValue;
+}
+
+function createCacheIsolatedVitestConfig() {
+  const rootConfig = requireRootVitestConfig(rootVitestConfig);
+  const workspaceRoot = resolveWorkspaceRoot();
+  const verificationViteCacheDir = resolveVerificationViteCacheDir(workspaceRoot);
+  return defineConfig({
+    ...rootConfig,
+    root: workspaceRoot,
+    cacheDir: verificationViteCacheDir,
+  });
+}
+
+export default createCacheIsolatedVitestConfig();

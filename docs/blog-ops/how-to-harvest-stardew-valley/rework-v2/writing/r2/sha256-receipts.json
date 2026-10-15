@@ -1,0 +1,203 @@
+{
+  "body": {
+    "file": "blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.md",
+    "sha256_raw": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "sha256_nfc_lf": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+    "nfc_equals_decoded": true
+  },
+  "media": {
+    "file": "blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-media.json",
+    "sha256_raw": "1f004b1788988aac4b95c8bf4659254881712ebc0704f4266bea7e54dbe30757",
+    "sha256_nfc_lf": "1f004b1788988aac4b95c8bf4659254881712ebc0704f4266bea7e54dbe30757",
+    "nfc_equals_decoded": true
+  },
+  "references": {
+    "file": "blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-public-references.json",
+    "sha256_raw": "2d01287cbcd0cfaa15d4f457d9b1d8187d9bcf631433cd53a3a4e2855138e0ef",
+    "sha256_nfc_lf": "2d01287cbcd0cfaa15d4f457d9b1d8187d9bcf631433cd53a3a4e2855138e0ef",
+    "nfc_equals_decoded": true
+  },
+  "eligible": {
+    "file": "blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/r2/en-body.caption-excluded.md",
+    "sha256_raw": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+    "sha256_nfc_lf": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+    "nfc_equals_decoded": true
+  },
+  "referenceLocations": [
+    {
+      "id": "en-steam-parsnip-right-click",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        1
+      ]
+    },
+    {
+      "id": "en-wiki-parsnip-stages",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        9
+      ]
+    },
+    {
+      "id": "en-wiki-pumpkin-stages",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        9
+      ]
+    },
+    {
+      "id": "en-wiki-blueberry-regrowth",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        11
+      ]
+    },
+    {
+      "id": "en-wiki-crops-watering",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        24
+      ]
+    },
+    {
+      "id": "en-wiki-controls-action",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        32
+      ]
+    },
+    {
+      "id": "en-wiki-controls-tool",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        34
+      ]
+    },
+    {
+      "id": "en-wiki-calendar-replant",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        36
+      ]
+    },
+    {
+      "id": "en-forum-hold-right-click",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        40
+      ]
+    },
+    {
+      "id": "en-forum-x-mapped",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        40
+      ]
+    },
+    {
+      "id": "en-wiki-scythe-examples",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        48
+      ]
+    },
+    {
+      "id": "en-wiki-kale",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        48
+      ]
+    },
+    {
+      "id": "en-wiki-fiber-seeds",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        48
+      ]
+    },
+    {
+      "id": "en-wiki-unmilled-rice",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        48
+      ]
+    },
+    {
+      "id": "en-wiki-mobile-scythe",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        50
+      ]
+    },
+    {
+      "id": "en-wiki-iridium-scythe",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        54
+      ]
+    },
+    {
+      "id": "en-wiki-giant-crops",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        60
+      ]
+    },
+    {
+      "id": "en-wiki-trellis",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        64
+      ]
+    },
+    {
+      "id": "en-wiki-season-wither",
+      "count": 1,
+      "occurrence": 1,
+      "lines": [
+        82
+      ]
+    },
+    {
+      "id": "en-press-multiplayer-2-mature",
+      "count": 2,
+      "occurrence": 1,
+      "lines": [
+        15,
+        70
+      ]
+    },
+    {
+      "id": "en-press-multiplayer-2-trellis",
+      "count": 2,
+      "occurrence": 2,
+      "lines": [
+        15,
+        70
+      ]
+    }
+  ],
+  "revisionNote": {
+    "file": "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/revision-note.md",
+    "sha256_raw": "11eec991a1409a3077ee8d0e3422b83b45b66dcdf158aad035e9010a3fe542a0",
+    "sha256_nfc_lf": "11eec991a1409a3077ee8d0e3422b83b45b66dcdf158aad035e9010a3fe542a0"
+  }
+}

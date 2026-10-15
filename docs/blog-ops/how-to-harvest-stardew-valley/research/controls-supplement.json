@@ -1,0 +1,127 @@
+{
+  "task": "A2 controls research supplement",
+  "keyword": "how to harvest stardew valley",
+  "retrievedOn": "2026-10-12",
+  "scope": "Ordinary mature crop harvest action and default PC key/mouse mappings",
+  "environment": "Single blog worktree (branch 博客-2), logical directory isolation",
+  "executiveSummary": {
+    "actionType": "Check / Do Action (game code TerrainFeatures.HoeDirt::performUseAction, HarvestMethod: Grab / method 0)",
+    "pcDefaultMapping": {
+      "mouse": "Right-Click",
+      "keyboard": "X"
+    },
+    "continuousHarvestMethod": "Hold Right-Click (or hold keyboard X) while walking past mature crops",
+    "criticalDistinction": "Left-Click (keyboard C) is 'Use tool or place item'. Left-Click is documented for planting seeds and placing fertilizer, but using Left-Click while holding a tool near mature crops will swing/use the tool instead of harvesting, consuming energy and risking crop destruction.",
+    "wikiDocumentationStatus": "Textual omission on primary gameplay wiki pages (Getting Started, Controls, Crops, Farming, Options). Technical confirmation exists under Modding:Crop data and Golden Walnut code notes. Practical mapping is confirmed across official forums, Steam discussions, Reddit guides, and YouTube video demonstrations."
+  },
+  "evidence": [
+    {
+      "id": "SUP-01",
+      "category": "wiki-gameplay-absence",
+      "claim": "Wiki Getting Started documents parsnip maturity in 4 days and generic Controls table, but omits the crop harvest button.",
+      "sourceUrl": "https://stardewvalleywiki.com/Getting_Started",
+      "oldid": "195315",
+      "exactExcerpt": "Continue watering your crops every day until they grow in to harvestable crops. Your parsnips will be ready to harvest in 4 days.",
+      "controlsExcerpt": "Left-Click, C: Use tool or place item | Right-Click, X: Check/Do Action",
+      "platformVersion": "PC / v1.6+",
+      "finding": "Confirms parsnip growth period but does not state which button picks the ripe crop."
+    },
+    {
+      "id": "SUP-02",
+      "category": "wiki-gameplay-absence",
+      "claim": "Wiki Controls defines Left-Click/C as 'Use tool or place item' and Right-Click/X as 'Check/Do Action', and mentions holding button to harvest kegs/preserves jars in 1.4, but does not state crop harvest button.",
+      "sourceUrl": "https://stardewvalleywiki.com/Controls",
+      "oldid": "192481",
+      "exactExcerpt": "Removed \"new\" input from button press until the button is released. This makes harvesting large numbers of kegs/preserves jars/crystalariums, etc. easier by holding the button without releasing it.",
+      "platformVersion": "PC / v1.4+",
+      "finding": "Controls page defines the action categories but never explicitly maps crop harvesting to Check/Do Action."
+    },
+    {
+      "id": "SUP-03",
+      "category": "wiki-gameplay-absence",
+      "claim": "Wiki Options defines Check/Do Action with explicit interactive examples, but does not list harvesting crops.",
+      "sourceUrl": "https://stardewvalleywiki.com/Options",
+      "oldid": "191778",
+      "exactExcerpt": "Check/Do Action — Set the keybind for checking or doing some action such as: interacting with NPCs, Calendar, Help Wanted, doors, ladders and elevators; picking up an item from the bag slot; picking up forage and loot. Default Right-Click, X",
+      "platformVersion": "PC / v1.6+",
+      "finding": "Official Options page description omits crop harvesting from Check/Do Action examples despite it being handled by this exact action."
+    },
+    {
+      "id": "SUP-04",
+      "category": "wiki-planting-warning",
+      "claim": "Wiki Crops documents Left-Click and holding Right-Click/Left-Click specifically for planting and fertilizing, not harvesting.",
+      "sourceUrl": "https://stardewvalleywiki.com/Crops",
+      "oldid": "193979",
+      "exactExcerpt": "Seeds and fertilizer are placed on a tilled tile individually by using the left-click control, or on multiple tiles by continuously holding on to the right-click or left-click control and moving the cursor and/or player.",
+      "platformVersion": "PC / v1.6+",
+      "finding": "Crucial distinction: Left-Click is explicitly for planting and fertilizing. Mistaking Left-Click for harvesting leads to swinging tools or placing items."
+    },
+    {
+      "id": "SUP-05",
+      "category": "wiki-code-mechanism",
+      "claim": "Wiki Modding:Crop data defines the default crop harvest method as 'Grab' (harvested by hand).",
+      "sourceUrl": "https://stardewvalleywiki.com/Modding:Crop_data",
+      "oldid": "194164",
+      "exactExcerpt": "HarvestMethod: (Optional) How the crop can be harvested. This can be Grab (crop is harvested by hand) or Scythe (harvested with a scythe). Default Grab.",
+      "platformVersion": "Game Code / v1.6+",
+      "finding": "Establishes technical differentiation: standard crops are harvested by hand (Grab), distinct from Scythe crops."
+    },
+    {
+      "id": "SUP-06",
+      "category": "wiki-code-mechanism",
+      "claim": "Wiki Golden Walnut footnote confirms hand harvesting invokes TerrainFeatures.HoeDirt::performUseAction (method 0).",
+      "sourceUrl": "https://stardewvalleywiki.com/Golden_Walnut",
+      "oldid": "191051",
+      "exactExcerpt": "See TerrainFeatures.HoeDirt::performUseAction in the game code. The Scythe is assigned harvesting method \"1\" and harvesting by hand is harvesting method \"0\".",
+      "platformVersion": "Game Code / v1.5-1.6+",
+      "finding": "Direct code evidence that hand-harvesting triggers HoeDirt::performUseAction, which is invoked by the game's Check/Do Action."
+    },
+    {
+      "id": "SUP-07",
+      "category": "forum-player-verification",
+      "claim": "Official Stardew Valley forum thread confirms PC harvest uses Right-Click or X, and holding Right-Click enables continuous harvesting.",
+      "sourceUrl": "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/",
+      "threadTitle": "PC controls vs mobile",
+      "exactExcerpt": "Or the direction button and right click. (X is automatically mapped to right click) If you hold right click with the mouse not near your character, you'll automatically plant seed and harvest on the tile you're standing on, and then you just have to walk around over your crops to plant and harvest your field.",
+      "platformVersion": "PC / v1.5+",
+      "finding": "Confirms exact PC controls (Right-Click, X) and hold-and-walk continuous harvesting technique."
+    },
+    {
+      "id": "SUP-08",
+      "category": "steam-player-verification",
+      "claim": "Steam Community discussion confirms ordinary crops require standing next to the crop and Right-Clicking.",
+      "sourceUrl": "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
+      "threadTitle": "Harvest Parsnip with Scythe??",
+      "exactExcerpt": "The problem is... You don't NEED the scythe for parsnips. You need the scythe for amaranth or wheat. For ANY other crop, you need to be standing next to it and rightclick it.",
+      "platformVersion": "PC / Steam",
+      "finding": "Player troubleshooting confirms Parsnip and regular crops are gathered via Right-Click, contrasting with Scythe crops."
+    },
+    {
+      "id": "SUP-09",
+      "category": "reddit-player-verification",
+      "claim": "Reddit StardewValley guide post confirms holding 'x' key (mapped to right click) allows rapid harvesting and replanting while walking.",
+      "sourceUrl": "https://www.reddit.com/r/StardewValley/comments/4bl3ih/psa_press_and_hold_the_x_key_on_your_keyboard_to/",
+      "threadTitle": "PSA: Press and hold the 'x' key on your keyboard to quickly harvest and/or replant seeds.",
+      "exactExcerpt": "Simply hold down the 'x' key (or whatever key is bounded to right click), walk, and your character will harvest and replant instantly as you walk by.",
+      "platformVersion": "PC",
+      "finding": "Confirms secondary PC keyboard mapping 'X' operates identically to Right-Click for harvesting."
+    },
+    {
+      "id": "SUP-10",
+      "category": "video-demonstration",
+      "claim": "YouTube video tutorial demonstrates continuous right-click crop harvesting and simultaneous replanting.",
+      "sourceUrl": "https://www.youtube.com/shorts/ncg9SKnp7jg",
+      "creator": "Captain Canadia",
+      "exactExcerpt": "The Better Way to Harvest Crops in Stardew Valley",
+      "platformVersion": "PC / Public demonstration",
+      "finding": "First-hand visual demonstration showing player holding action button to harvest mature crops while moving."
+    }
+  ],
+  "gapAnalysisAndConclusion": {
+    "isTextualGapOnWiki": true,
+    "gapDetails": "Wiki's player-facing guides (Getting Started, Crops, Controls, Farming, Options) define controls abstractly and omit the direct statement that ordinary crops are harvested via Right-Click / X / Check/Do Action.",
+    "isOperationalConsensusClear": true,
+    "operationalConclusion": "Ordinary mature crops (Parsnip, Cauliflower, etc.) are harvested by hand using Check/Do Action (default PC: Right-Click or keyboard X). Holding Right-Click or X while walking allows continuous harvesting.",
+    "actionBoundaryWarning": "Do NOT confuse with Left-Click / C, which is 'Use tool or place item' (used for planting/fertilizing or tool swinging)."
+  }
+}

@@ -1,0 +1,50 @@
+## src/blog/articles/how-to-harvest-stardew-valley.en.tsx
+sha256 cd190d416ffdbfdd3f430f9f03fd011a298237629cd3bdadb99641723fc2e5d7
+1:import { BlogFaqList } from "../../components/blog/blog-faq-list";
+2:import { BlogSources } from "../../components/blog/blog-sources";
+9:alt={"Full orange pumpkins on tilled soil beside a dirt path."}
+16:<figcaption>
+27:alt={"Two wooden trellises with an open dirt path between them and purple grapes on the trellis beside the path."}
+34:<figcaption>
+47:<h2>How to Tell When Crops Are Ready to Harvest</h2>
+48:<h3>Visual Signs: Identifying the Final Harvest Stage Sprite</h3>
+62:<h3>Calculating Harvest Days and Unwatered Delays</h3>
+72:<h2>How to Harvest Standard Crops by Hand</h2>
+73:<h3>Single-Crop Harvesting on PC</h3>
+83:<h3>Rapid Harvesting: The Hold-and-Walk Technique</h3>
+90:<h2>How to Harvest Designated Crops with a Scythe</h2>
+91:<h3>Crops That Require a Scythe to Harvest</h3>
+98:<h3>The 1.6 Iridium Scythe on Tilled Soil</h3>
+102:<h2>Harvesting Special Crops: Giant Crops and Trellises</h2>
+103:<h3>Harvesting Giant Crops with an Axe</h3>
+107:<h3>Maintaining Reachable Paths Around Trellis Crops</h3>
+118:<h2>Troubleshooting Harvest Issues</h2>
+128:<h2>How to Harvest Stardew Valley FAQ</h2>
+129:<BlogFaqList
+163:<BlogSources
+
+## src/blog/articles/how-to-harvest-stardew-valley.zh.tsx
+sha256 5b311ed05f8356219c634287cdc3f480625717278ab488a70665e865f1f088b9
+1:import { BlogFaqList } from "../../components/blog/blog-faq-list";
+2:import { BlogSources } from "../../components/blog/blog-sources";
+9:alt={"土路旁的耕地上长着饱满的橙色南瓜。"}
+16:<figcaption>
+27:alt={"两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。"}
+34:<figcaption>
+47:<h2>怎么看出作物可以收</h2>
+48:<h3>看图像：最后一阶段可以收获的样子</h3>
+62:<h3>算收获日，以及漏浇水会顺延</h3>
+72:<h2>普通作物怎么用手收</h2>
+73:<h3>在 PC 上收单株</h3>
+83:<h3>快速收：按住并在田里走</h3>
+90:<h2>指定作物怎么用镰刀收</h2>
+91:<h3>必须用镰刀收的作物</h3>
+98:<h3>1.6 的铱镰刀，用在耕地上</h3>
+102:<h2>收特殊作物：巨大作物和棚架</h2>
+103:<h3>用斧头收巨大作物</h3>
+107:<h3>棚架作物旁边留出走得到的路</h3>
+118:<h2>收成对不上时先看症状</h2>
+128:<h2>星露谷物语收作物常见问题</h2>
+129:<BlogFaqList
+163:<BlogSources
+

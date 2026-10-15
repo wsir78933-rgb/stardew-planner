@@ -42,11 +42,23 @@ it("renders independent reader bodies with no page-level H1 or figure token plac
   );
 
   for (const markup of [englishMarkup, chineseMarkup]) {
+    const ctaStart = markup.indexOf('data-blog-planner-cta="true"');
+    const sourcesStart = markup.indexOf('<section class="blog-sources">');
+
+    expect(ctaStart, "Missing profit margin planner CTA").toBeGreaterThanOrEqual(0);
+    expect(sourcesStart, "Missing profit margin source section").toBeGreaterThan(ctaStart);
+
+    const readerMarkup = markup.slice(0, ctaStart);
+    const ctaMarkup = markup.slice(ctaStart, sourcesStart);
+
     expect(markup).not.toContain("<h1");
     expect(markup).not.toContain("fig-01-price-boundary");
     expect(markup).not.toContain("fig-02-advanced-options-path");
-    expect(markup.match(/<img /g) ?? []).toHaveLength(2);
-    expect(markup.match(/loading="lazy"/g) ?? []).toHaveLength(2);
+    expect(readerMarkup.match(/<img /g) ?? []).toHaveLength(2);
+    expect(readerMarkup.match(/loading="lazy"/g) ?? []).toHaveLength(2);
+    expect(ctaMarkup.match(/<img /g) ?? []).toHaveLength(1);
+    expect(ctaMarkup.match(/data-blog-planner-cta-image="true"/g) ?? []).toHaveLength(1);
+    expect(ctaMarkup).toContain('src="/homepage/cases/farm-case-01.webp"');
     expect(markup).toContain("<h2");
   }
 

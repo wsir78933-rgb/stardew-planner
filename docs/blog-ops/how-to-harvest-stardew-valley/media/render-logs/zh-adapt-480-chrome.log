@@ -1,0 +1,20 @@
+command:
+'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1672,941 --no-first-run --no-default-browser-check --disable-extensions '--user-data-dir=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/chrome-profile-adapt' '--screenshot=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-480.png' http://127.0.0.1:53472/zh-adapt-render.html
+exit_code: 0
+stable_png_before_stop: True
+
+
+--- stderr ---
+[15252:14914824:1013/014035.299540:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[15252:14914824:1013/014035.299848:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[15252:14914824:1013/014035.299914:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[15252:14914824:1013/014035.300005:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[15252:14914824:1013/014035.300057:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[15252:14914824:1013/014035.300100:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[15252:14914824:1013/014035.300150:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+Trying to load the allocator multiple times. This is *not* supported.
+167830 bytes written to file /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/media/render-logs/final-rasters/zh-adapt-480.png
+[15248:14914783:1013/014035.438599:ERROR:base/process/process_mac.cc:53] task_policy_set TASK_CATEGORY_POLICY: (os/kern) invalid argument (4)
+[15248:14914783:1013/014035.438612:ERROR:base/process/process_mac.cc:98] task_policy_set TASK_SUPPRESSION_POLICY: (os/kern) invalid argument (4)
+[15248:14914783:1013/014035.440396:ERROR:base/process/process_mac.cc:53] task_policy_set TASK_CATEGORY_POLICY: (os/kern) invalid argument (4)
+[15248:14914783:1013/014035.440406:ERROR:base/process/process_mac.cc:98] task_policy_set TASK_SUPPRESSION_POLICY: (os/kern) invalid argument (4)

@@ -50,16 +50,16 @@ it("shows the newest real post first while keeping the topic carousel in canonic
   const homeState = getBlogHomeState(posts, {});
 
   expect(homeState.posts.map((post) => post.slug)).toEqual([
+    "how-to-get-gold-star-crops-stardew-valley",
+    "how-to-harvest-stardew-valley",
     "oak-tree-vs-maple-stardew",
     "stardew-fruit",
     "what-to-grow-in-greenhouse-stardew",
     "profit-margin-stardew",
-    "pine-tree-stardew",
-    "last-day-to-plant-stardew",
   ]);
-  expect(homeState.totalPostCount).toBe(24);
+  expect(homeState.totalPostCount).toBe(26);
   expect(homeState.topicArticlesPage).toBe(1);
-  expect(homeState.topicArticlesPageCount).toBe(2);
+  expect(homeState.topicArticlesPageCount).toBe(3);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "carpenter-stardew",
     "where-is-robin-stardew-valley",
@@ -80,7 +80,7 @@ it("shows the remaining topic articles on page two", () => {
   const homeState = getBlogHomeState(getAllBlogPosts("en"), { page: "2" });
 
   expect(homeState.topicArticlesPage).toBe(2);
-  expect(homeState.topicArticlesPageCount).toBe(2);
+  expect(homeState.topicArticlesPageCount).toBe(3);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "how-to-earn-money-stardew",
     "rancher-or-tiller-stardew",
@@ -100,8 +100,11 @@ it("shows the remaining topic articles on page two", () => {
 it("clamps an oversized topic articles page to the last page", () => {
   const homeState = getBlogHomeState(getAllBlogPosts("en"), { page: "99" });
 
-  expect(homeState.topicArticlesPage).toBe(2);
-  expect(homeState.topicCarouselPosts).toHaveLength(12);
+  expect(homeState.topicArticlesPage).toBe(3);
+  expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
+    "how-to-harvest-stardew-valley",
+    "how-to-get-gold-star-crops-stardew-valley",
+  ]);
 });
 
 it("treats every array-valued home parameter as an invalid non-string value", () => {

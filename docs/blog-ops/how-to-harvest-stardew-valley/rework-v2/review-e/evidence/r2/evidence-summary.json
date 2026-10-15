@@ -1,0 +1,17 @@
+{
+  "body_sha256_raw": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "body_sha256_nfc_lf": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "caption_excluded_sha256_raw": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+  "caption_excluded_sha256_nfc_lf": "31d70053f672023c210eadaf8d95af943ffb30721095fca3e36e809d978d9069",
+  "media_json_sha256": "1f004b1788988aac4b95c8bf4659254881712ebc0704f4266bea7e54dbe30757",
+  "references_json_sha256": "2d01287cbcd0cfaa15d4f457d9b1d8187d9bcf631433cd53a3a4e2855138e0ef",
+  "full_mechanical_words": 1148,
+  "eligible_mechanical_words": 1107,
+  "length_class": "short",
+  "meets_mechanical_floor": true,
+  "semantic_qualification": "requires_independent_review",
+  "reference_quote_failures": 0,
+  "seven_checkpoints_all_passed": true,
+  "style_fingerprints_editorial_free": true,
+  "all_media_ok": true
+}

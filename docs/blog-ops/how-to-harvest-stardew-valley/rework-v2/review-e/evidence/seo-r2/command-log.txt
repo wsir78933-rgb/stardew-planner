@@ -1,0 +1,22 @@
+# collect_seo_evidence.py
+# command: python3 docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/seo-r2/collect_seo_evidence.py
+# exit: 0
+receipt /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/review-e/evidence/seo-r2/sha256-receipts.json
+body d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67
+seo 659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9
+media 87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885
+references 52a355abdce750e153057d103a342ff4c68c9e829c8d1f32129f1c7b92da606e
+words full=1148 eligible=1107 readTime=6
+references_checked 21
+title_chars 59 description_chars 142
+
+# word counter exits
+# count-full.stdout.exit.txt: 0
+# count-eligible.stdout.exit.txt: 0
+# both stderr files empty
+
+# dwebp staged webp -> evidence/seo-r2/decoded, compared with media/decoded
+# each dwebp exit 0; dimensions printed 1672 x 941; sha256 match True for all 3
+# cover 9589a5baf67842a5237ffc9629b219e84dc17002ba0b5b2b1f91fac1da3094f1
+# mature-crops 448604d280a8e5b57c9f2336f3b2618a939e5fb15f5e6197516566fe0154a9db
+# trellis-paths 41bc6b0912f620730708347e05c8102d0a16e0d7053603ae3d96675f2b62db89

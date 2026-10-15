@@ -1,0 +1,66 @@
+{
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-body.locked.md": {
+    "bytes": 10036,
+    "sha256": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-seo.json": {
+    "bytes": 3201,
+    "sha256": "659da8405744937f9f77c6d95afaf92ea7d7e800768ae81fe37403ceb6aed1c9"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-media.locked.json": {
+    "bytes": 4229,
+    "sha256": "87e739923f404ca86a5464655ba239a5a14995cabceea0a686a49eaed15cf885"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/en-public-references.locked.json": {
+    "bytes": 10294,
+    "sha256": "52a355abdce750e153057d103a342ff4c68c9e829c8d1f32129f1c7b92da606e"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation/zh-body.md": {
+    "bytes": 9174,
+    "sha256": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation/zh-seo.json": {
+    "bytes": 3099,
+    "sha256": "49dffecf14f8fb5ddf549334bc6c1f14408cb0ed5f8b58e4bac5826898b8910f"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation/zh-media.json": {
+    "bytes": 4203,
+    "sha256": "c6abd143616de6f03bc868121b41f9ae8a50f317b70dfbea37c67f3e282e95a7"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/translation/zh-public-references.json": {
+    "bytes": 10267,
+    "sha256": "7ca77bb04069808b5635e186985b936f15a25059f6de197ba0c229569b731c63"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.webp": {
+    "bytes": 479250,
+    "sha256": "0f35cee83ceb6360e182f3b1e0522cb3f013f899872cb86be7b4cf47923ec574"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-cover.avif": {
+    "bytes": 237604,
+    "sha256": "8c23cae6ef5b80dc03170718f206d90aa830839023f1ddf045b1c114779f9b57"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.webp": {
+    "bytes": 267644,
+    "sha256": "d24578e3860ac37eaaa75f04bad130ec65a0f52b6015a8b3314dc9cbed9c51cd"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-mature-crops.avif": {
+    "bytes": 143638,
+    "sha256": "cab14677146baef85fb6c9772da898a55cad9f67c54942e20966eac317a095c1"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.webp": {
+    "bytes": 223784,
+    "sha256": "027e085cd18da335a16ec9e8096796c086c9e40138b687fd3776c3f84e7d1ad4"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/media/staged/how-to-harvest-stardew-valley-trellis-paths.avif": {
+    "bytes": 113557,
+    "sha256": "7991d66a038a9cc05c31927f64c295708651a5a6c019bb72095ec5b7ef09968a"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/handoffs/public-blog-handoff-en.json": {
+    "bytes": 27689,
+    "sha256": "8ca4288debffa704154f48db2a58b68a2fadbd68fa2628040b49d37a7f56485f"
+  },
+  "docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/handoffs/public-blog-handoff-zh.json": {
+    "bytes": 26608,
+    "sha256": "896976369ee8abc18fbcc5983f2f5472fa5b0dcd216244f2046eeca6a390d7eb"
+  }
+}

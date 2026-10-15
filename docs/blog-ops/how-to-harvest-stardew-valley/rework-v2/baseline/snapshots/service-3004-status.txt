@@ -1,0 +1,14 @@
+=== Port 3004 Service Read-Only Snapshot ===
+LSOF Output:
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    44772 wusir   17u  IPv4 0x7743a32bc17f3884      0t0  TCP localhost:csoftragent (LISTEN)
+
+Process Info:
+PID  PPID STAT      TIME COMMAND
+44772 44766 R+     1:36.92 next-server (v16.3.0)
+
+Inspection Policy:
+- Read-only inspection only.
+- Process NOT stopped, NOT killed.
+- No curl / HTTP traffic initiated.
+- Recorded as active background process, not claimed as UI-verified.

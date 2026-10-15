@@ -1,0 +1,21 @@
+{
+  "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/how-to-harvest-stardew-valley/rework-v2/writing/en-body.md",
+  "locale": "en",
+  "mechanical_units": 1358,
+  "required_floor": 1000,
+  "meets_mechanical_floor": true,
+  "long_form_target": 2000,
+  "meets_long_form_target": false,
+  "length_class": "short",
+  "semantic_qualification": "requires_independent_review",
+  "excluded_heading_sections": [],
+  "omitted_line_counts": {
+    "headings": 13,
+    "code": 0,
+    "excluded_sections": 0,
+    "non_body": 39,
+    "frontmatter": 0
+  },
+  "sha256_raw": "a91783b9525f64c63d75a98561be978a9f92cb6cde734d3687575403aea544dc",
+  "sha256_nfc_lf": "a91783b9525f64c63d75a98561be978a9f92cb6cde734d3687575403aea544dc"
+}

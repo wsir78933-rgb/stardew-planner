@@ -1,0 +1,75 @@
+command: node_modules/.bin/vitest run tests/routes/removed-public-pages.test.ts tests/routes/static-public-pages.test.ts tests/routes/sitemap-robots.test.ts --config docs/blog-ops/how-to-harvest-stardew-valley/verification/cache-isolation/vitest.config.mjs --configLoader runner
+cwd: /Users/wusir/orca/workspaces/stardew planner/博客-2
+started_at: 2026-10-12T18:40:18Z
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ✓ tests/routes/sitemap-robots.test.ts (2 tests) 3ms
+ ❯ tests/routes/static-public-pages.test.ts (7 tests | 3 failed) 17ms
+   ✓ static public pages > requires a whitespace-delimited lang attribute on the first document html tag 1ms
+   ✓ static public pages > reads real JSON-LD script elements while ignoring commented markup 2ms
+   ✓ static public pages > exports crawler-discovery files alongside the public pages 0ms
+   × static public pages > exports all bilingual blog pages with article discovery metadata and original covers 10ms
+     → Expected /blog to contain a cover image with src=/blog/how-to-earn-money-stardew-cover.webp and alt=Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store.: expected [] to not have a length of +0
+   × static public pages > exports all bilingual public pages with static metadata and paired language alternates 3ms
+     → expected 43266 to be greater than 48274
+   ✓ static public pages > exports all English and Chinese legal artifacts 0ms
+   × static public pages > exports global 404 artifacts with the English root document shell 0ms
+     → expected '<!DOCTYPE html><html lang="en"><head>…' to match /<link rel="stylesheet" href="\/…/_next\
+ ✓ tests/routes/removed-public-pages.test.ts (3 tests) 355ms
+   ✓ removed public guide pages > does not export or advertise any removed English or Chinese page  329ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports all bilingual blog pages with article discovery metadata and original covers
+AssertionError: Expected /blog to contain a cover image with src=/blog/how-to-earn-money-stardew-cover.webp and alt=Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store.: expected [] to not have a length of +0
+ ❯ tests/routes/static-public-pages.test.ts:2506:15
+    2504|           matchingCoverImageElements,
+    2505|           `Expected ${pathname} to contain a cover image with src=${co…
+    2506|         ).not.toHaveLength(0);
+       |               ^
+    2507| 
+    2508|         for (const matchingCoverImageElement of matchingCoverImageElem…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports all bilingual public pages with static metadata and paired language alternates
+AssertionError: expected 43266 to be greater than 48274
+ ❯ expectStaticHomepageContent tests/routes/static-public-pages.test.ts:2300:37
+    2298|       homepageSectionMarker,
+    2299|     );
+    2300|     expect(homepageSectionPosition).toBeGreaterThan(
+       |                                     ^
+    2301|       previousHomepageSectionPosition,
+    2302|     );
+ ❯ tests/routes/static-public-pages.test.ts:2595:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports global 404 artifacts with the English root document shell
+AssertionError: expected '<!DOCTYPE html><html lang="en"><head>…' to match /<link rel="stylesheet" href="\/…/_next\
+
+- Expected: 
+/<link rel="stylesheet" href="\/_next\/static\/chunks\/[^"/]+\.css"/
+
++ Received: 
+"<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/6794355d84869980.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-7759d1782b23f024.js\"/><script src=\"/_next/static/chunks/f4d1e71e-1826b51444184a57.js\" async=\"\"></script><script src=\"/_next/static/chunks/4966-b17539651932a9fd.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-3f0261699d433ec1.js\" async=\"\"></script><meta name=\"robots\" content=\"noindex\"/><title>404: This page could not be found.</title><link rel=\"icon\" href=\"/favicon.ico\"/><meta name=\"next-size-adjust\" content=\"\"/><script src=\"/_next/static/chunks/polyfills-42372ed130431b0a.js\" noModule=\"\"></script></head><body><div hidden=\"\"><!--$--><!--/$--></div><main style=\"align-items:center;display:flex;flex-direction:column;justify-content:center;min-height:100vh;text-align:center\"><h1>404</h1><p>This page could not be found.</p></main><script src=\"/_next/static/chunks/webpack-7759d1782b23f024.js\" id=\"_R_\" async=\"\"></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,\"1:\\\"$Sreact.fragment\\\"\\n2:I[74565,[],\\\"\\\"]\\n3:I[30369,[],\\\"\\\"]\\n4:I[80728,[],\\\"OutletBoundary\\\"]\\n5:\\\"$Sreact.suspense\\\"\\n8:I[80728,[],\\\"ViewportBoundary\\\"]\\na:I[80728,[],\\\"MetadataBoundary\\\"]\\nc:I[28647,[],\\\"default\\\",1]\\n:HL[\\\"/_next/static/css/6794355d84869980.css\\\",\\\"style\\\"]\\n7:X\\n0:{\\\"P\\\":null,\\\"c\\\":[\\\"\\\",\\\"_not-found\\\"],\\\"q\\\":\\\"\\\",\\\"i\\\":false,\\\"f\\\":[[[\\\"\\\",{\\\"children\\\":[\\\"/_not-found\\\",{\\\"children\\\":[\\\"__PAGE__\\\",{},\\\"$undefined\\\",\\\"$undefined\\\",4608]},\\\"$undefined\\\",\\\"$undefined\\\",4608]},\\\"$undefined\\\",\\\"$undefined\\\",4624],[[\\\"$\\\",\\\"$1\\\",\\\"c\\\",{\\\"children\\\":[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/css/6794355d84869980.css\\\",\\\"precedence\\\":\\\"next\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"}]],[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"main\\\",null,{\\\"style\\\":{\\\"alignItems\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"justifyContent\\\":\\\"center\\\",\\\"minHeight\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\"},\\\"children\\\":[[\\\"$\\\",\\\"h1\\\",null,{\\\"children\\\":\\\"404\\\"}],[\\\"$\\\",\\\"p\\\",null,{\\\"children\\\":\\\"This page could not be found.\\\"}]]}]}]}]]}],{\\\"children\\\":[[\\\"$\\\",\\\"$1\\\",\\\"c\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$L2\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L3\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\"}]]}],{\\\"children\\\":[[\\\"$\\\",\\\"$1\\\",\\\"c\\\",{\\\"children\\\":[[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"main\\\",null,{\\\"style\\\":{\\\"alignItems\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"justifyContent\\\":\\\"center\\\",\\\"minHeight\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\"},\\\"children\\\":[[\\\"$\\\",\\\"h1\\\",null,{\\\"children\\\":\\\"404\\\"}],[\\\"$\\\",\\\"p\\\",null,{\\\"children\\\":\\\"This page could not be found.\\\"}]]}]}]}],null,[\\\"$\\\",\\\"$L4\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$5\\\",null,{\\\"name\\\":\\\"Next.MetadataOutlet\\\",\\\"children\\\":\\\"$@6\\\"}]}]]}],{},null,false,null]},null,false,\\\"$7\\\"]},null,false,null],[\\\"$\\\",\\\"$1\\\",\\\"h\\\",{\\\"children\\\":[[\\\"$\\\",\\\"meta\\\",null,{\\\"name\\\":\\\"robots\\\",\\\"content\\\":\\\"noindex\\\"}],[\\\"$\\\",\\\"$L8\\\",null,{\\\"children\\\":\\\"$L9\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"hidden\\\":true,\\\"children\\\":[\\\"$\\\",\\\"$La\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$5\\\",null,{\\\"name\\\":\\\"Next.Metadata\\\",\\\"children\\\":\\\"$Lb\\\"}]}]}],[\\\"$\\\",\\\"meta\\\",null,{\\\"name\\\":\\\"next-size-adjust\\\",\\\"content\\\":\\\"\\\"}]]}],false]],\\\"m\\\":\\\"$undefined\\\",\\\"G\\\":[\\\"$c\\\",[]],\\\"S\\\":true,\\\"h\\\":null,\\\"r\\\":\\\"$undefined\\\",\\\"s\\\":\\\"$undefined\\\",\\\"a\\\":\\\"$undefined\\\",\\\"l\\\":\\\"$undefined\\\",\\\"p\\\":\\\"$undefined\\\",\\\"d\\\":\\\"$undefined\\\",\\\"b\\\":\\\"WKBUoV7vlckntFuEXlf8H\\\"}\\n7:C\\n9:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"}]]\\nd:I[9665,[],\\\"IconMark\\\"]\\n6:null\\nb:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"404: This page could not be found.\\\"}],[\\\"$\\\",\\\"link\\\",\\\"1\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico\\\"}],[\\\"$\\\",\\\"$Ld\\\",\\\"2\\\",{}]]\\n\"])</script></body></html>"
+
+ ❯ tests/routes/static-public-pages.test.ts:2668:30
+    2666|         ),
+    2667|       ).toBe("en");
+    2668|       expect(staticPageHtml).toMatch(
+       |                              ^
+    2669|         /<link rel="stylesheet" href="\/_next\/static\/chunks\/[^"/]+\…
+    2670|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  3 failed | 9 passed (12)
+   Start at  02:40:18
+   Duration  696ms (transform 65ms, setup 0ms, collect 141ms, tests 375ms, environment 0ms, prepare 128ms)
+
+VITEST_EXPORT_EXIT:1
+finished_at: 2026-10-12T18:40:19Z

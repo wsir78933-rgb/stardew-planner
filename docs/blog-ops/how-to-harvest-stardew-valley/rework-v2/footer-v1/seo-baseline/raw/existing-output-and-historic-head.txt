@@ -1,0 +1,224 @@
+## out/robots.txt existing export, not regenerated this task
+mtime 2026-10-13T21:09:20+08:00
+User-Agent: *
+Allow: /
+
+Sitemap: https://stardewvalleyplanner.art/sitemap.xml
+
+## out/sitemap.xml existing export mtime 2026-10-13T21:09:20+08:00
+bytes 4946 lastmod_count 0 xhtml_count 0
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+<loc>https://stardewvalleyplanner.art/how-to-harvest-stardew-valley</loc>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+</url>
+<url>
+<loc>https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley</loc>
+</url>
+</urlset>
+
+## public/llms.txt lines mtime 2026-10-13T20:56:07+08:00
+42:- [How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe](https://stardewvalleyplanner.art/how-to-harvest-stardew-valley): Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.
+81:- [星露谷物语怎么收作物：徒手、镰刀或斧头](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。
+out/llms.txt identical_to_public True mtime 2026-10-13T21:09:20+08:00
+
+## historic verification-g HTML head tags
+
+### http-en-r2.html mtime 2026-10-13T21:08:46+08:00 bytes 65419
+<title>How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe</title>
+<meta name="description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="en" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="zh-CN" href="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="x-default" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<meta property="og:title" content="How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"/>
+<meta property="og:description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/>
+<meta property="og:url" content="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<meta property="og:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+<meta property="og:type" content="article"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"/>
+<meta name="twitter:description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/>
+<meta name="twitter:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+jsonld_count 1
+{"@context":"https://schema.org","@type":"Article","headline":"How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe","description":"Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.","url":"https://stardewvalleyplanner.art/how-to-harvest-stardew-valley","inLanguage":"en","isPartOf":{"@id":"https://stardewvalleyplanner.art/#website"}}
+FAQPage 0 QAPage 0 figcaption 6 h1 1
+
+### http-zh-r2.html mtime 2026-10-13T21:08:47+08:00 bytes 61996
+<title>星露谷物语怎么收作物：徒手、镰刀或斧头</title>
+<meta name="description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="en" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="zh-CN" href="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="x-default" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<meta property="og:title" content="星露谷物语怎么收作物：徒手、镰刀或斧头"/>
+<meta property="og:description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/>
+<meta property="og:url" content="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<meta property="og:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+<meta property="og:type" content="article"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="星露谷物语怎么收作物：徒手、镰刀或斧头"/>
+<meta name="twitter:description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/>
+<meta name="twitter:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+jsonld_count 1
+{"@context":"https://schema.org","@type":"Article","headline":"星露谷物语怎么收作物：徒手、镰刀或斧头","description":"防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。","url":"https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley","inLanguage":"zh-CN","isPartOf":{"@id":"https://stardewvalleyplanner.art/#website"}}
+FAQPage 0 QAPage 0 figcaption 6 h1 1
+
+### http-en.html mtime 2026-10-13T21:01:39+08:00 bytes 65419
+<title>How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe</title>
+<meta name="description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="en" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="zh-CN" href="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="x-default" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<meta property="og:title" content="How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"/>
+<meta property="og:description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/>
+<meta property="og:url" content="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<meta property="og:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+<meta property="og:type" content="article"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe"/>
+<meta name="twitter:description" content="Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe."/>
+<meta name="twitter:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+jsonld_count 1
+{"@context":"https://schema.org","@type":"Article","headline":"How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe","description":"Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.","url":"https://stardewvalleyplanner.art/how-to-harvest-stardew-valley","inLanguage":"en","isPartOf":{"@id":"https://stardewvalleyplanner.art/#website"}}
+FAQPage 0 QAPage 0 figcaption 6 h1 1
+
+### http-zh.html mtime 2026-10-13T21:01:39+08:00 bytes 61996
+<title>星露谷物语怎么收作物：徒手、镰刀或斧头</title>
+<meta name="description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="en" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="zh-CN" href="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<link rel="alternate" hrefLang="x-default" href="https://stardewvalleyplanner.art/how-to-harvest-stardew-valley"/>
+<meta property="og:title" content="星露谷物语怎么收作物：徒手、镰刀或斧头"/>
+<meta property="og:description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/>
+<meta property="og:url" content="https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley"/>
+<meta property="og:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+<meta property="og:type" content="article"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="星露谷物语怎么收作物：徒手、镰刀或斧头"/>
+<meta name="twitter:description" content="防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。"/>
+<meta name="twitter:image" content="https://stardewvalleyplanner.art/blog/how-to-harvest-stardew-valley-cover.webp"/>
+jsonld_count 1
+{"@context":"https://schema.org","@type":"Article","headline":"星露谷物语怎么收作物：徒手、镰刀或斧头","description":"防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。","url":"https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley","inLanguage":"zh-CN","isPartOf":{"@id":"https://stardewvalleyplanner.art/#website"}}
+FAQPage 0 QAPage 0 figcaption 6 h1 1

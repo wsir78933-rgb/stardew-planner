@@ -1,0 +1,5 @@
+=== MEDIA STAGED ASSETS & CAPTIONS AUDIT ===
+Image media-cover: dim_ok=True, credit_ok=True, no_fake_cc=True, status=PASS
+Image media-mature-crops: dim_ok=True, credit_ok=True, no_fake_cc=True, status=PASS
+Image media-trellis-paths: dim_ok=True, credit_ok=True, no_fake_cc=True, status=PASS
+OVERALL_MEDIA_STATUS=PASS

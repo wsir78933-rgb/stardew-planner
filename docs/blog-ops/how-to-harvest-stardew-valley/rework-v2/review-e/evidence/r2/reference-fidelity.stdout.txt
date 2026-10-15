@@ -1,0 +1,22 @@
+ID=en-steam-parsnip-right-click | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-parsnip-stages | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-pumpkin-stages | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-blueberry-regrowth | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-crops-watering | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-controls-action | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-controls-tool | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-calendar-replant | EXP=1 | OBS=1 | MATCH=True
+ID=en-forum-hold-right-click | EXP=1 | OBS=1 | MATCH=True
+ID=en-forum-x-mapped | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-scythe-examples | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-kale | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-fiber-seeds | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-unmilled-rice | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-mobile-scythe | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-iridium-scythe | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-giant-crops | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-trellis | EXP=1 | OBS=1 | MATCH=True
+ID=en-wiki-season-wither | EXP=1 | OBS=1 | MATCH=True
+ID=en-press-multiplayer-2-mature | EXP=1 | OBS=2 | MATCH=True
+ID=en-press-multiplayer-2-trellis | EXP=2 | OBS=2 | MATCH=True
+TOTAL_REFERENCES=21 | FAILS=0

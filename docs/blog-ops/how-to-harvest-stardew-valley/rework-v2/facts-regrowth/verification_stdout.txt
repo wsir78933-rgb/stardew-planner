@@ -1,0 +1,5 @@
+Receipts JSON valid: 5 sources verified.
+Facts markdown verified: All 5 unsupported positive phrases absent.
+facts-regrowth.md sha256: b4106e8cbedb1326e61457efa5db5a779a69a239deda08f695bc75ffc4772904
+raw-sources-receipts.json sha256: 3e449f4ca9c5ce73810901829603e85320d75e159d055794ef17cea692cd3e24
+Verification completed successfully with exit code 0.

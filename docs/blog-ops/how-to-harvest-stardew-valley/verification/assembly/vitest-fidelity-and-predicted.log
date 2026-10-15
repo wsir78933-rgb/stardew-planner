@@ -1,0 +1,185 @@
+
+ RUN  v3.2.4 /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+ ❯ docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx (2 tests | 2 failed) 12ms
+   × renders the English harvest article as the frozen reader text 9ms
+     → expected [ …(18) ] to deeply equal [ …(18) ]
+   × renders the Chinese harvest article as the frozen reader text 3ms
+     → expected [ …(18) ] to deeply equal [ …(18) ]
+ ❯ tests/blog/blog-components.test.tsx (20 tests | 1 failed) 98ms
+   ✓ renders a localized discovery form and latest articles with semantic detail links 9ms
+   ✓ renders the latest articles as a named focusable region with localized native controls 5ms
+   ✓ keeps a single latest result focusable without rendering carousel controls 1ms
+   ✓ renders only jump targets whose latest and topic sections are present 1ms
+   ✓ localizes the default Chinese jump-to-latest link 3ms
+   ✓ renders the index client boundary with a static-export-safe metadata projection 3ms
+   ✓ renders the archive client boundary with a static-export-safe metadata projection 2ms
+   ✓ keeps the page-level heading singular across hero, discovery, archive, and article content 17ms
+   ✓ renders the selected bilingual SVE bachelors title and description in the article header 18ms
+   ✓ renders the selected bilingual NPC title and description in the article header 12ms
+   ✓ marks the current archive page and preserves localized archive links 1ms
+   ✓ does not render controls for an empty topic carousel 0ms
+   ✓ uses the localized archive route interface instead of building archive URLs in the component 0ms
+   ✓ renders an archive intro and uses h2 card titles after the page heading 1ms
+   ✓ renders hero spotlight cards as h2 titles under the page heading 0ms
+   ✓ keeps article cards under named index sections as h3 titles 3ms
+   ✓ renders caller-provided localized copy through all blog presentation layers 8ms
+   ✓ renders caller-provided Chinese carousel controls 0ms
+   ✓ paginates the Chinese topic articles with previous, next, and page numbers 3ms
+   × links the previous topic page from page two 9ms
+     → expected '<div data-blog-page="true"><header cl…' to contain '>Next</span>'
+ ❯ tests/blog/blog-planner-cta.test.tsx (8 tests | 1 failed) 152ms
+   ✓ BlogPlannerCta > renders the English heading, button, and planner hash without an h2 8ms
+   ✓ BlogPlannerCta > renders the Chinese heading, button, and planner hash without an h2 0ms
+   ✓ BlogPlannerCta > rejects an unsupported locale 0ms
+   ✓ getBlogPlannerCtaLocaleFromSourcesHeading > maps known source headings to locales 0ms
+   ✓ getBlogPlannerCtaLocaleFromSourcesHeading > rejects an unknown sources heading 0ms
+   ✓ getBlogPlannerCtaLocaleFromSourcesHeading > rejects a blank sources heading 0ms
+   × blog article planner CTA placement > places one planner CTA after FAQ when present and before Sources on every article 142ms
+     → en how-to-harvest-stardew-valley CTA count: expected [] to have a length of 1 but got +0
+   ✓ blog article planner CTA placement > keeps the planner CTA outside the Sources section 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/blog/blog-components.test.tsx > links the previous topic page from page two
+AssertionError: expected '<div data-blog-page="true"><header cl…' to contain '>Next</span>'
+
+Expected: ">Next</span>"
+Received: "<div data-blog-page="true"><header class="blog-landing-hero"><div><h1>Stardew Valley Planning Guides</h1><p>Practical Stardew Valley guides for planning a clearer, more flexible farm.</p><nav aria-label="Jump to" class="blog-landing-hero__jump-links"><span>Jump to</span><a href="#latest-articles">Latest articles</a><a href="#topic-carousel">Stardew Valley Guides</a></nav></div><section aria-label="Latest articles"><div class="blog-article-grid"><article class="blog-article-card"><a class="blog-article-card__image-link" href="/carpenter-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/carpenter-stardew-cover.avif" type="image/avif"/><img alt="Illustration of Robin&#x27;s mountain workshop with a farm-building plan" height="941" loading="lazy" width="1672" src="/blog/carpenter-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h2><a href="/carpenter-stardew">Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades</a></h2><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 8 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/where-is-robin-stardew-valley"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/where-is-robin-stardew-valley-cover.avif" type="image/avif"/><img alt="Mountain path leading toward Robin&#x27;s carpenter workshop" height="941" loading="lazy" width="1672" src="/blog/where-is-robin-stardew-valley-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h2><a href="/where-is-robin-stardew-valley">Where Is Robin in Stardew Valley? Hours, Schedule, and Exceptions</a></h2><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 8 min read</p></div></article></div></section></header><section aria-labelledby="blog-discovery-heading" class="blog-discovery-controls"><h2 id="blog-discovery-heading">Topic</h2><nav aria-label="Topic"><a aria-current="page" href="/blog">All</a><a href="/blog?topic=Stardew+Valley+Guides">Stardew Valley Guides</a></nav><form action="/blog" method="get"><label for="blog-title-search">Search article titles</label><input id="blog-title-search" placeholder="Search guides" type="search" name="q" value=""/><button type="submit">Search</button></form></section><section aria-labelledby="latest-articles-heading" id="latest-articles"><div class="blog-latest-articles-heading"><h2 id="latest-articles-heading">Latest articles</h2><div aria-label="Latest articles" class="blog-latest-articles-controls" role="group"><button aria-controls="blog-latest-articles-track" aria-label="Previous set of articles" disabled="" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button><button aria-controls="blog-latest-articles-track" aria-label="Next set of articles" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button></div></div><div aria-label="Latest articles" class="blog-latest-articles-track" id="blog-latest-articles-track" role="region" tabindex="0"><div class="blog-article-grid"><article class="blog-article-card"><a class="blog-article-card__image-link" href="/how-to-harvest-stardew-valley"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/how-to-harvest-stardew-valley-cover.avif" type="image/avif"/><img alt="Illustration of a farm: leafy crops in tilled soil beside a crate of orange roots, three pumpkins and a hoe, rows of yellow stalks with a scythe and a vine trellis, and a brown-roofed building with plants in its windows." height="941" loading="lazy" width="1672" src="/blog/how-to-harvest-stardew-valley-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/how-to-harvest-stardew-valley">How to Harvest in Stardew Valley: Right-Click a Parsnip; Kale Needs a Scythe</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 7 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/oak-tree-vs-maple-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/oak-tree-vs-maple-stardew-cover.avif" type="image/avif"/><img alt="Watercolor of a mature oak with a wooden bucket and acorns beside a mature maple with a wooden bucket and maple seeds, along a farm road." height="941" loading="lazy" width="1672" src="/blog/oak-tree-vs-maple-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/oak-tree-vs-maple-stardew">Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 26 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/stardew-fruit"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/stardew-fruit-cover.avif" type="image/avif"/><img alt="Original illustration of strawberries, apples, and blackberries in a basket beside strawberry plants, an apple tree, and a wild bramble." height="941" loading="lazy" width="1672" src="/blog/stardew-fruit-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/stardew-fruit">Stardew Fruit: Find Its Source Before Buying Seeds</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 14 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/what-to-grow-in-greenhouse-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/what-to-grow-in-greenhouse-stardew-cover.avif" type="image/avif"/><img alt="Watercolor greenhouse interior with a central tilled crop bed, recognizable vegetables, two fruit trees on untiled side soil, and a watering can" height="941" loading="lazy" width="1672" src="/blog/what-to-grow-in-greenhouse-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/what-to-grow-in-greenhouse-stardew">What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 10 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/profit-margin-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/profit-margin-stardew-cover.avif" type="image/avif"/><img alt="Pixel-art farm scene with a crop-filled shipping crate, a coin pouch, and gold coins." height="941" loading="lazy" width="1672" src="/blog/profit-margin-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/profit-margin-stardew">Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 10 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/pine-tree-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/pine-tree-stardew-cover.avif" type="image/avif"/><img alt="Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground." height="941" loading="lazy" width="1672" src="/blog/pine-tree-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/pine-tree-stardew">Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 12 min read</p></div></article></div></div></section><section aria-labelledby="topic-carousel-heading" class="blog-topic-articles" id="topic-carousel"><h2 id="topic-carousel-heading">Stardew Valley Guides</h2><div class="blog-article-grid"><article class="blog-article-card"><a class="blog-article-card__image-link" href="/how-to-earn-money-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/how-to-earn-money-stardew-cover.avif" type="image/avif"/><img alt="Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store" height="941" loading="lazy" width="1672" src="/blog/how-to-earn-money-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/how-to-earn-money-stardew">How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 16 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/rancher-or-tiller-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/rancher-or-tiller-stardew-cover.avif" type="image/avif"/><img alt="Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right." height="941" loading="lazy" width="1672" src="/blog/rancher-or-tiller-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/rancher-or-tiller-stardew">Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 11 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/summer-crops-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/summer-crops-stardew-cover.avif" type="image/avif"/><img alt="Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt." height="941" loading="lazy" width="1672" src="/blog/summer-crops-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/summer-crops-stardew">Summer Crops in Stardew: Rank by the Shop You Can Open This Morning</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 16 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/fall-crops-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/fall-crops-stardew-cover.avif" type="image/avif"/><img alt="Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky." height="941" loading="lazy" width="1672" src="/blog/fall-crops-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/fall-crops-stardew">Fall Crops in Stardew: 18.89g at Pierre&#x27;s, 83.33g Needs a Rare Seed</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 19 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/do-you-have-to-water-trees-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/do-you-have-to-water-trees-stardew-cover.avif" type="image/avif"/><img alt="Farm planning illustration separating a common tree, a fruit-tree sapling, tilled crop soil, and a sprinkler." height="941" loading="lazy" width="1672" src="/blog/do-you-have-to-water-trees-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/do-you-have-to-water-trees-stardew">Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 14 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/how-to-level-up-farming-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/how-to-level-up-farming-stardew-cover.avif" type="image/avif"/><img alt="Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance." height="941" loading="lazy" width="1672" src="/blog/how-to-level-up-farming-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/how-to-level-up-farming-stardew">How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 16 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/last-day-to-plant-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/last-day-to-plant-stardew-cover.avif" type="image/avif"/><img alt="Watercolor of an outdoor vegetable patch with cabbages and leafy rows, a metal watering can on the dirt, a farmhouse and windmill at sunset, and a wooden Spring board numbered 1 through 28 with day 28 marked." height="941" loading="lazy" width="1672" src="/blog/last-day-to-plant-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/last-day-to-plant-stardew">Last Day to Plant in Stardew Valley: Parsnips by Spring 24</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 15 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/pine-tree-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/pine-tree-stardew-cover.avif" type="image/avif"/><img alt="Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground." height="941" loading="lazy" width="1672" src="/blog/pine-tree-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/pine-tree-stardew">Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 12 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/profit-margin-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/profit-margin-stardew-cover.avif" type="image/avif"/><img alt="Pixel-art farm scene with a crop-filled shipping crate, a coin pouch, and gold coins." height="941" loading="lazy" width="1672" src="/blog/profit-margin-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/profit-margin-stardew">Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 10 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/what-to-grow-in-greenhouse-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/what-to-grow-in-greenhouse-stardew-cover.avif" type="image/avif"/><img alt="Watercolor greenhouse interior with a central tilled crop bed, recognizable vegetables, two fruit trees on untiled side soil, and a watering can" height="941" loading="lazy" width="1672" src="/blog/what-to-grow-in-greenhouse-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/what-to-grow-in-greenhouse-stardew">What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 10 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/stardew-fruit"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/stardew-fruit-cover.avif" type="image/avif"/><img alt="Original illustration of strawberries, apples, and blackberries in a basket beside strawberry plants, an apple tree, and a wild bramble." height="941" loading="lazy" width="1672" src="/blog/stardew-fruit-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/stardew-fruit">Stardew Fruit: Find Its Source Before Buying Seeds</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 14 min read</p></div></article><article class="blog-article-card"><a class="blog-article-card__image-link" href="/oak-tree-vs-maple-stardew"><picture class="public-picture" data-public-picture="true"><source srcSet="/blog/oak-tree-vs-maple-stardew-cover.avif" type="image/avif"/><img alt="Watercolor of a mature oak with a wooden bucket and acorns beside a mature maple with a wooden bucket and maple seeds, along a farm road." height="941" loading="lazy" width="1672" src="/blog/oak-tree-vs-maple-stardew-cover.webp"/></picture></a><div class="blog-article-card__body"><p class="blog-article-card__topic">Stardew Valley Guides</p><h3><a href="/oak-tree-vs-maple-stardew">Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree</a></h3><p class="blog-article-card__metadata">By Stardew Valley Planner Team · 26 min read</p></div></article></div><nav aria-label="Stardew Valley Guides" class="blog-topic-articles-pagination"><a href="/blog#topic-carousel">Previous</a><a href="/blog#topic-carousel">1</a><a aria-current="page" href="/blog?page=2#topic-carousel">2</a><a href="/blog?page=3#topic-carousel">3</a><a href="/blog?page=3#topic-carousel">Next</a></nav></section></div>"
+
+ ❯ tests/blog/blog-components.test.tsx:434:18
+    432| 
+    433|   expect(markup).toContain('href="/blog#topic-carousel">Previous</a>');
+    434|   expect(markup).toContain(">Next</span>");
+       |                  ^
+    435|   expect(markup).toContain('href="/blog#topic-carousel">1</a>');
+    436|   expect(markup).toContain('aria-current="page" href="/blog?page=2#top…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/blog/blog-planner-cta.test.tsx > blog article planner CTA placement > places one planner CTA after FAQ when present and before Sources on every article
+AssertionError: en how-to-harvest-stardew-valley CTA count: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/blog/blog-planner-cta.test.tsx:74:64
+     72|         const sourcesIndex = markup.indexOf('class="blog-sources"');
+     73| 
+     74|         expect(ctaMatches, `${locale} ${post.slug} CTA count`).toHaveL…
+       |                                                                ^
+     75|         expect(ctaIndex, `${locale} ${post.slug} missing CTA`).toBeGre…
+     76|         expect(sourcesIndex, `${locale} ${post.slug} missing Sources`)…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx > renders the English harvest article as the frozen reader text
+AssertionError: expected [ …(18) ] to deeply equal [ …(18) ]
+
+- Expected
++ Received
+
+  [
+    "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
+-   "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+-   "https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043",
+-   "https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731",
+-   "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+-   "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
++   "https://stardewvalleywiki.com/index.php?title=Kale&amp;oldid=192520",
++   "https://stardewvalleywiki.com/index.php?title=Amaranth&amp;oldid=192043",
++   "https://stardewvalleywiki.com/index.php?title=Wheat&amp;oldid=192731",
++   "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&amp;oldid=194130",
++   "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&amp;oldid=193587",
+    "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/",
+-   "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+-   "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+-   "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+-   "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051",
+-   "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
++   "https://stardewvalleywiki.com/index.php?title=Controls&amp;oldid=192481",
++   "https://stardewvalleywiki.com/index.php?title=Crops&amp;oldid=193979",
++   "https://stardewvalleywiki.com/index.php?title=Scythe&amp;oldid=171696",
++   "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&amp;oldid=191051",
++   "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&amp;oldid=186836",
+    "https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/",
+-   "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
++   "https://stardewvalleywiki.com/index.php?title=Parsnip&amp;oldid=191123",
+    "/last-day-to-plant-stardew",
+-   "https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164",
++   "https://stardewvalleywiki.com/index.php?title=Greenhouse&amp;oldid=194164",
+    "/what-to-grow-in-greenhouse-stardew",
+    "https://stardewvalleyplanner.art",
+  ]
+
+ ❯ expectFaithfulArticle docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx:86:33
+     84| 
+     85|   expect(renderedReaderText(markup)).toBe(approvedReaderText(handoff.b…
+     86|   expect(renderedHrefs(markup)).toEqual(handoff.publicReferences.map((…
+       |                                 ^
+     87|   expect(markup).toContain(`alt="${figure.alt}"`);
+     88|   expect(markup).toContain(`src="${figure.src}"`);
+ ❯ docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx:102:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx > renders the Chinese harvest article as the frozen reader text
+AssertionError: expected [ …(18) ] to deeply equal [ …(18) ]
+
+- Expected
++ Received
+
+  [
+    "https://steamcommunity.com/app/413150/discussions/0/1849197902668085831/",
+-   "https://stardewvalleywiki.com/index.php?title=Kale&oldid=192520",
+-   "https://stardewvalleywiki.com/index.php?title=Amaranth&oldid=192043",
+-   "https://stardewvalleywiki.com/index.php?title=Wheat&oldid=192731",
+-   "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&oldid=194130",
+-   "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&oldid=193587",
++   "https://stardewvalleywiki.com/index.php?title=Kale&amp;oldid=192520",
++   "https://stardewvalleywiki.com/index.php?title=Amaranth&amp;oldid=192043",
++   "https://stardewvalleywiki.com/index.php?title=Wheat&amp;oldid=192731",
++   "https://stardewvalleywiki.com/index.php?title=Unmilled_Rice&amp;oldid=194130",
++   "https://stardewvalleywiki.com/index.php?title=Fiber_Seeds&amp;oldid=193587",
+    "https://forums.stardewvalley.net/threads/pc-controls-vs-mobile.8990/",
+-   "https://stardewvalleywiki.com/index.php?title=Controls&oldid=192481",
+-   "https://stardewvalleywiki.com/index.php?title=Crops&oldid=193979",
+-   "https://stardewvalleywiki.com/index.php?title=Scythe&oldid=171696",
+-   "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&oldid=191051",
+-   "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&oldid=186836",
++   "https://stardewvalleywiki.com/index.php?title=Controls&amp;oldid=192481",
++   "https://stardewvalleywiki.com/index.php?title=Crops&amp;oldid=193979",
++   "https://stardewvalleywiki.com/index.php?title=Scythe&amp;oldid=171696",
++   "https://stardewvalleywiki.com/index.php?title=Golden_Scythe&amp;oldid=191051",
++   "https://stardewvalleywiki.com/index.php?title=Iridium_Scythe&amp;oldid=186836",
+    "https://www.stardewvalley.net/stardew-valley-1-6-9-changelog/",
+-   "https://stardewvalleywiki.com/index.php?title=Parsnip&oldid=191123",
++   "https://stardewvalleywiki.com/index.php?title=Parsnip&amp;oldid=191123",
+    "/zh/last-day-to-plant-stardew",
+-   "https://stardewvalleywiki.com/index.php?title=Greenhouse&oldid=194164",
++   "https://stardewvalleywiki.com/index.php?title=Greenhouse&amp;oldid=194164",
+    "/zh/what-to-grow-in-greenhouse-stardew",
+    "https://stardewvalleyplanner.art",
+  ]
+
+ ❯ expectFaithfulArticle docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx:86:33
+     84| 
+     85|   expect(renderedReaderText(markup)).toBe(approvedReaderText(handoff.b…
+     86|   expect(renderedHrefs(markup)).toEqual(handoff.publicReferences.map((…
+       |                                 ^
+     87|   expect(markup).toContain(`alt="${figure.alt}"`);
+     88|   expect(markup).toContain(`src="${figure.src}"`);
+ ❯ docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx:106:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  4 failed | 26 passed (30)
+   Start at  02:15:59
+   Duration  1.22s (transform 537ms, setup 0ms, collect 1.72s, tests 262ms, environment 0ms, prepare 142ms)
+
+VITEST_PREDICTED_EXIT:1

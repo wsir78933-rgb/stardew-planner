@@ -1,0 +1,18 @@
+=== STARTING FULL SOURCE FIDELITY AUDIT ===
+EN TSX SHA-256: dacc4d0361dbd894eec29a6f67b554ce8ee5033d78de6aba1fa87b9b48218daf
+ZH TSX SHA-256: 98f2835aea750c56e931b933dd4b7ef158c679095c26fb0f5ea1f965827663ae
+EN links count: md=18, tsx=18
+ZH links count: md=18, tsx=18
+EN text blocks count: md=53, tsx=53
+ZH text blocks count: md=53, tsx=53
+Checking media assets against final manifest...
+  [OK] /blog/how-to-harvest-stardew-valley-cover.webp (38974 bytes, SHA: 8558f5b08e0c...)
+  [OK] /blog/how-to-harvest-stardew-valley-cover.avif (17525 bytes, SHA: ccd28749dfd7...)
+  [OK] /blog/illustrations/how-to-harvest-stardew-valley-en-methods.webp (99024 bytes, SHA: c5d987fdd4c2...)
+  [OK] /blog/illustrations/how-to-harvest-stardew-valley-en-methods.avif (39279 bytes, SHA: 92476d4c389a...)
+  [OK] /blog/illustrations/how-to-harvest-stardew-valley-zh-methods.webp (105016 bytes, SHA: 450f78bb5aef...)
+  [OK] /blog/illustrations/how-to-harvest-stardew-valley-zh-methods.avif (40187 bytes, SHA: d918433c3979...)
+
+=== AUDIT SUMMARY ===
+Total issues found: 0
+ALL AUDIT CHECKS PASSED PERFECTLY.

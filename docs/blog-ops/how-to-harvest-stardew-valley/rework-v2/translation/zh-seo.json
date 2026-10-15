@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "locale": "zh-CN",
+  "country": "US",
+  "slug": "how-to-harvest-stardew-valley",
+  "title": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+  "h1": "星露谷物语怎么收作物：徒手、镰刀或斧头",
+  "description": "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
+  "titleEqualsH1": true,
+  "topic": "星露谷物语指南",
+  "author": "星露谷规划器团队",
+  "readTimeMinutes": 6,
+  "featured": false,
+  "datePublished": null,
+  "publicPath": "/zh/how-to-harvest-stardew-valley",
+  "canonicalUrl": "https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley",
+  "bodyHash": "30dae640ace62e848f745b07534f1bf693fe9e931f0f77284319795d5ca1f4cd",
+  "sourceEnglishBodyHash": "d2908d597164081ac054c2e2d251a6fa2dc11831baec41af9d75dd2d95565a67",
+  "schemaType": "Article",
+  "faq": null,
+  "status": "pending_translation_review",
+  "freezePublicBlogHandoff": false,
+  "cover": {
+    "src": "/blog/how-to-harvest-stardew-valley-cover.webp",
+    "avif": "/blog/how-to-harvest-stardew-valley-cover.avif",
+    "width": 1672,
+    "height": 941,
+    "alt": "傍晚的农场：一块耕地里是橙色南瓜，田块周围是土路，南瓜旁边是一排排木棚架。",
+    "caption": "农场的傍晚：橙色南瓜铺满土路旁的耕地，这块地旁边是木棚架。ConcernedApe，星露谷物语新闻素材截图。",
+    "creditName": "ConcernedApe",
+    "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/farm_evening_1920x1080.png"
+  },
+  "figures": [
+    {
+      "id": "media-mature-crops",
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-mature-crops.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "土路旁的耕地上长着饱满的橙色南瓜。",
+      "caption": "饱满的橙色南瓜立在土路旁边的耕地上。ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    },
+    {
+      "id": "media-trellis-paths",
+      "src": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.webp",
+      "avif": "/blog/illustrations/how-to-harvest-stardew-valley-trellis-paths.avif",
+      "width": 1672,
+      "height": 941,
+      "alt": "两排木棚架中间有一条空土路，路旁的棚架上有紫色葡萄。",
+      "caption": "两排木棚架中间隔着一条空土路，路旁的棚架上是一串串紫色葡萄。ConcernedApe，<a href=\"https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png\">星露谷物语新闻素材截图</a>。",
+      "creditName": "ConcernedApe",
+      "creditUrl": "https://www.stardewvalley.net/presskit/Stardew%20Valley/images/Multiplayer_Screenshot2.png"
+    }
+  ]
+}
