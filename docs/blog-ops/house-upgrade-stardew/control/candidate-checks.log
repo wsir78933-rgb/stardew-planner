@@ -1,0 +1,107 @@
+=== S3 Candidate Preservation & Evidence Verification Log ===
+Timestamp: 2026-10-15T23:25:25.696048+08:00
+Role: S3 (Scheduling / Candidate Preservation Records)
+TaskId: task_b305a2bcdd85
+DispatchId: ctx_8ac36da5b10c
+RunId: run_8253831e93d6
+Terminal: term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979
+Coordinator: term_661abce7-55fd-4570-8bf5-970c0451dd23
+
+[1. Worktree & Isolation Evidence]
+  Command: git worktree list (exit: 0)
+    /Users/wusir/Desktop/开发项目集合/stardew planner                         b861eaf [main]
+    /Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客          bb513c4 [codex/blog-gold-star-crops-20261013]
+    /Users/wusir/orca/workspaces/stardew planner/博客-2                       bf91a14 [博客-2]
+  Command: git status -s (exit: 0)
+    ?? docs/blog-ops/house-upgrade-stardew/
+    ?? node_modules
+  Command: git diff --stat (exit: 0)
+    stdout: (clean/no tracked diff)
+  Command: ls -ld node_modules (exit: 0)
+    lrwxr-xr-x@ 1 wusir  staff  68 Oct 15 21:53 node_modules -> /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+    Note: node_modules symlink is G authorized runtime dependency; preserved, no packages installed.
+  Path (worktree_blog2): /Users/wusir/orca/workspaces/stardew planner/博客-2
+    inode: 145851019, device: 16777232, uid: 501, gid: 20
+  Path (main_project): /Users/wusir/Desktop/开发项目集合/stardew planner
+    inode: 65977012, device: 16777232, uid: 501, gid: 20
+  Path (existing_blog_worktree): /Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客
+    inode: 144267400, device: 16777232, uid: 501, gid: 20
+  Isolation Finding: Same UID (501) and distinct inodes prove logical isolation only. Underlying OS permissions unverified.
+  Historical Inference Boundary: Only reporting facts supported by current evidence; no inference that past status remained invariant.
+
+[2. Private Canary Exact Detection Scan]
+  Canary ID: canary_house_upgrade_c93c91c4f505
+  Canary SHA256: 401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1
+  Canary Plaintext Rule: DO NOT PRINT PLAINTEXT CANARY TOKEN.
+  Target: content/en/draft-v2.md -> Total Hits: 0 (secret_token_hits: 0, id_hits: 0)
+  Target: content/en/media-text.en.json -> Total Hits: 0 (secret_token_hits: 0, id_hits: 0)
+  Target: content/en/public-references.en.json -> Total Hits: 0 (secret_token_hits: 0, id_hits: 0)
+  Target: media-production/en/cover-payments.svg -> Total Hits: 0 (secret_token_hits: 0, id_hits: 0)
+  Target: media-production/en/tier-rooms.svg -> Total Hits: 0 (secret_token_hits: 0, id_hits: 0)
+  Target: media-production/en/upgrade-or-renovation.svg -> Total Hits: 0 (secret_token_hits: 0, id_hits: 0)
+  Canary Interpretation Limit: Exact 0 hits does NOT imply semantic check PASS or OS isolation PASS.
+  Unexecuted Verification Modules: SEO / Chinese translation / Page assembly are marked NOT-RUN (not scan pass).
+
+[3. Content, Media & Version Comparisons]
+  draft-v2 SHA256: 09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f (Matches expected 09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f: True)
+  media-text.en.json SHA256: 55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c (Matches expected 55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c: True)
+  archived draft-v1 media-text.en.json SHA256: 95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415 (Matches expected 95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415: True)
+  writer-submission.json SHA256: ac05e298a12927997d5bda1aa4b9ec7271080177912632597609cf008fd06d4f
+  public-references.en.json SHA256: 035eafb54c23eca693b3899ddf82c055fd091722e12f5f8c3902673ca172706a
+  revision-round-1.md SHA256: 24560c1d97500a74734d4f3ba0a9580ce27ca2142761eebf9310f7c8b3e12a62
+  Figures Array Verbatim Semantics Identical: True
+  M3 Media Production Input Binding:
+    bound bodyDraftSha256: cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628 (draft-v1, not draft-v2)
+    bound mediaTextEnSha256: 95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415 (draft-v1 media, not draft-v2)
+    M3 Candidate Assets Note: Produced and reviewed candidates bound only to v1 text + v1 media. Without final text/image & page acceptance, cannot write final release asset PASS.
+
+[4. Length Status & Coverage Diagnosis]
+  Mechanical Units (Author Preview): 970
+  Excluding Caption Paragraphs (lines 15 & 49): 917
+  Required Mechanical Floor: 1000
+  Length Class: below_floor
+  Formal Length Gate Pass: false (No formal F length settlement)
+  Role B Coverage Diagnosis:
+    verdict: 没有可据实补入的必要内容；材料不足，停止正式交付
+    mainTaskAnswered: true
+    fillableNecessaryGap: false
+  Shared Revision Budget:
+    totalMax: 3
+    used: 1 (C Round 1 formal repair on draft-v1)
+    remaining: 2
+    budgetReset: false (Cannot be reset by new Task/Dispatch)
+
+[5. D Audit Readback, Gate States & User Constraint Decision]
+  D2 Task (task_dca8de3c3153, dispatch ctx_550db8b749c7):
+    Task Lifecycle: succeeded (settled & released)
+    Semantic Audit (three-gates-report.json): claimed PASS
+    Conflict: Coordinator noted conflict between B2 diagnosis and D2 report on line 19 price repetition.
+    Resolution in progress: D3 task_ab0f949dd682 (dispatch ctx_efb0d7481e76) dispatched for repetition reconciliation.
+    Lifecycle vs Semantics Separation: Lifecycle succeeded != Content PASS.
+  Gate E (gate_ac67dcb7fc37): pending
+  Downstream Roles (F / T / G / E-page / User Review / Production): pending / not-run.
+  Overall Status: Overall PASS CANNOT be issued.
+  User Length Constraint Decision:
+    Options Sent: A (allow actual length to continue) / B (retain V7 length gate and stop)
+    Current User Reply Status: 尚未收到答复，不能将预选A或时间经过视为授权。
+    Chain Execution Status: 等待用户选择长度约束，后续链未启动
+
+[6. Baseline Preservation]
+  typecheck: 0
+  Turbopack build: 1 (due to external symlink outside worktree)
+  webpack build: 0
+  tests: 237 pass / 8 fail
+  Note: Pre-content baseline check only; not final acceptance; product tests and builds not rerun.
+[8. Pre-Completion Coordinator Check & Directives]
+  Checked terminal: term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979 at 2026-10-15T23:29:25+08:00
+  Message Received: msg_df86cdc9dc27
+  Directive: D2 report PASS and coordinator reconciliation separated; D3 task_ab0f949dd682 active dispatched; E gate pending; user length single choice has no reply (等待用户选择长度约束，后续链未启动).
+[7. Control Records & Final State Hashes]
+  operation-store.json: 8acb7f115e83d6355819d891771fb1a2eaaa2adab0fd4fbadf761211937e4d22
+  authorization-isolation.md: 2202257aa5f83a90afcbaf6bf7a830961abbbed40538bd84930e56c62de1d30b
+  raw-phase-3-orca-state.json: ac97d0ba66e946a6aee08b33e352d09e6f0aa57dbe45d610dce65c4e40606e4c
+  canary-identity.json: d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23
+  verification-report.json: a828f431fa7f4cacf77079c490fba7c494f30551c7af94722db791abdc3ba990
+  phase-2-records.json: dbb490aee07285a26b75cda5da54904fb0174d206a210ebf1a61cd7cc1852ce2
+  raw-orca-state.json: fd0972aa1c2331f3f3ebc351dfdd48be398424a6b8b642d1e5abbc7836bcba5e
+  phase-3-records.json: 399079a6b85cafd1090b30b0e0a11967261446d127b9bf302a4d07123687b84e

@@ -36,6 +36,7 @@ const expectedSlugs = [
   "stardew-fruit",
   "oak-tree-vs-maple-stardew",
   "how-to-harvest-stardew-valley",
+  "house-upgrade-stardew",
 ] as const;
 
 function createLocalizedPost(
@@ -70,7 +71,7 @@ function createCompleteRegistry(): Readonly<
   };
 }
 
-it("keeps the twenty-five canonical blog identities in publishing order", () => {
+it("keeps the twenty-six canonical blog identities in publishing order", () => {
   expect(blogPostSlugs).toEqual(expectedSlugs);
   expect(isBlogPostSlug("carpenter-stardew")).toBe(true);
   expect(isBlogPostSlug("where-is-robin-stardew-valley")).toBe(true);
@@ -80,7 +81,7 @@ it("keeps the twenty-five canonical blog identities in publishing order", () => 
   expect(isBlogPostSlug("missing-post")).toBe(false);
 });
 
-it("publishes only the fifty localized root-level canonical article paths", () => {
+it("publishes only the fifty-two localized root-level canonical article paths", () => {
   expect(blogPostCanonicalPaths).toEqual([
     "/carpenter-stardew/",
     "/where-is-robin-stardew-valley/",
@@ -107,6 +108,7 @@ it("publishes only the fifty localized root-level canonical article paths", () =
     "/stardew-fruit/",
     "/oak-tree-vs-maple-stardew/",
     "/how-to-harvest-stardew-valley/",
+    "/house-upgrade-stardew/",
     "/zh/carpenter-stardew/",
     "/zh/where-is-robin-stardew-valley/",
     "/zh/stardew-valley-npc/",
@@ -132,6 +134,7 @@ it("publishes only the fifty localized root-level canonical article paths", () =
     "/zh/stardew-fruit/",
     "/zh/oak-tree-vs-maple-stardew/",
     "/zh/how-to-harvest-stardew-valley/",
+    "/zh/house-upgrade-stardew/",
   ]);
 });
 
@@ -171,9 +174,11 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
     false,
     true,
     false,
+    false,
   ]);
   expect(chinesePosts.map((post) => post.featured)).toEqual([
-    ...expectedSlugs.slice(0, -1).map(() => true),
+    ...expectedSlugs.slice(0, -2).map(() => true),
+    false,
     false,
   ]);
   expect(getBlogPostBySlug("en", "carpenter-stardew")?.slug).toBe(
@@ -662,6 +667,7 @@ it("binds every localized post to its own original blog cover", () => {
       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
       "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
       "how-to-harvest-stardew-valley": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "house-upgrade-stardew": "/blog/house-upgrade-stardew-cover.webp",
     },
     "zh-CN": {
       "carpenter-stardew": "/blog/carpenter-stardew-cover.webp",
@@ -693,6 +699,7 @@ it("binds every localized post to its own original blog cover", () => {
       "stardew-fruit": "/blog/stardew-fruit-cover.webp",
       "oak-tree-vs-maple-stardew": "/blog/oak-tree-vs-maple-stardew-cover.webp",
       "how-to-harvest-stardew-valley": "/blog/how-to-harvest-stardew-valley-cover.webp",
+      "house-upgrade-stardew": "/blog/house-upgrade-stardew-cover-zh.webp",
     },
   } as const;
 
@@ -823,7 +830,7 @@ it("rejects localized posts that reverse canonical publishing order", () => {
   expect(() =>
     validateBlogPostRegistry({ ...registry, en: [...registry.en].reverse() }),
   ).toThrow(
-    "Expected: carpenter-stardew. Received: how-to-harvest-stardew-valley.",
+    "Expected: carpenter-stardew. Received: house-upgrade-stardew.",
   );
 });
 

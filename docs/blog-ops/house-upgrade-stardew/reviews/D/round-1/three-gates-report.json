@@ -1,0 +1,88 @@
+{
+  "auditMetadata": {
+    "role": "D",
+    "roleDescription": "Independent English Post-Writing Reviewer",
+    "taskId": "task_dca8de3c3153",
+    "dispatchId": "ctx_550db8b749c7",
+    "terminalHandle": "term_11c655b7-18ca-4879-8731-533de96db588",
+    "coordinatorHandle": "term_661abce7-55fd-4570-8bf5-970c0451dd23",
+    "auditDate": "2026-10-15",
+    "standardsDocument": "/Users/wusir/Desktop/博客-V7修订版/02-内容生产与质量门.md (Section 5: Three Gates - ResearchTrace, ReaderValue, Repetition)",
+    "workflowDocument": "/Users/wusir/Desktop/博客-V7修订版/01-统一工作流.md",
+    "reviewRound": "round-1",
+    "auditedDraftVersion": "draft-v2"
+  },
+  "candidateFiles": {
+    "draftMarkdown": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md",
+      "sha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+      "byteCount": 8720,
+      "lineCount": 55,
+      "encoding": "UTF-8",
+      "isNfc": true,
+      "hasCrlf": false,
+      "endsWithNewline": true
+    },
+    "mediaTextJson": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json",
+      "sha256": "55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c",
+      "byteCount": 4443,
+      "lineCount": 129,
+      "boundBodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+      "encoding": "UTF-8",
+      "isNfc": true,
+      "hasCrlf": false,
+      "endsWithNewline": true
+    }
+  },
+  "threeGatesResults": {
+    "ResearchTrace": {
+      "result": "PASS",
+      "blockingIssueCount": 0,
+      "issues": [],
+      "verificationSummary": "Cleared research logs, assistant residues, internal paths, writing instructions, and all five categories of editorial tone. Previous round issues RT-1 (wiki notes calculation narration), RT-2 (table row self-reference), RT-3 (table row self-reference), and RT-4 (external write-up narration) were completely resolved. Legitimate descriptive source links (Farmhouse, Version History, Carpenter's Shop, Marriage, Mermaid's Pendant, Cabin) and operational conditions are preserved without editorial commentary."
+    },
+    "ReaderValue": {
+      "result": "PASS",
+      "blockingIssueCount": 0,
+      "issues": [],
+      "verificationSummary": "Aligned with user keyword 'house upgrade stardew' and task card. Tested all four core reader scenarios: 1) Purchasing next tier across tiers 1, 2, and 3; 2) Ordering during normal operating hours (9:00am-5:00pm, Tue closed, Fri 4:00pm close, 9:00am-8:00pm door vs counter distinction) and 3-day clock contrast; 3) Purchasing 450 wood from Robin in Year 1 (14,500g total) vs Year 2+ (32,500g total) with sell-price non-increase; 4) Instant refundable renovations vs 3-day Tier 3 upgrade with Remove Crib (free) and Add Dining Room (150,000g, 9x10+4x5 unoccupied refund condition). Figure roles (tier-rooms for spatial stage progression, upgrade-or-renovation for decision branching) cleanly separated from prose and table data. Single task completed without multi-intent encyclopedia drift."
+    },
+    "Repetition": {
+      "result": "PASS",
+      "blockingIssueCount": 0,
+      "issues": [],
+      "verificationSummary": "Full-text comparative review across all paragraphs, tables, and media captions. Previous round issues RP-1 (redundant wood cost summary paragraph), RP-2 (redundant exterior statement in renovation section), and RP-3 (redundant list of unlocked rooms in construction wait paragraph) were cleanly eliminated. Each paragraph, table row, and caption serves a distinct non-duplicative communicative role. No duplicate FAQ or wrap-up modules."
+    }
+  },
+  "overallEvaluation": {
+    "threeGatesStatus": "PASS",
+    "totalBlockingIssues": 0,
+    "sharedRevisionBudget": {
+      "totalAllowed": 3,
+      "used": 1,
+      "remaining": 2,
+      "consumedInThisReview": 0,
+      "note": "Round 1 revision was performed by Role C on draft-v1. This review by Role D validates draft-v2 and does not consume or reset the shared revision budget."
+    },
+    "authorPreviewLength": {
+      "mechanicalUnitsRaw": 970,
+      "mechanicalUnitsWithoutCaptions": 917,
+      "requiredFloor": 1000,
+      "meetsFloor": false,
+      "lengthClass": "below_floor",
+      "note": "Author preview length only; D evaluates semantic quality gates objectively without omitting checks due to sub-floor word count. Length gate is formally evaluated by Role F in tempering stage. Semantic PASS does not imply Length PASS."
+    },
+    "downstreamHandover": {
+      "nextRole": "E",
+      "roleDescription": "Independent Content Reviewer (8-Layer Content Appraisal and Fact-Checking)",
+      "restrictions": "Role D cannot sign off on Role E content review, Length gate, or Page Assembly."
+    }
+  },
+  "verificationCommandSummary": {
+    "verificationScript": "docs/blog-ops/house-upgrade-stardew/reviews/D/round-1/verify.py",
+    "command": "python3 docs/blog-ops/house-upgrade-stardew/reviews/D/round-1/verify.py",
+    "exitCode": 0,
+    "logPath": "docs/blog-ops/house-upgrade-stardew/reviews/D/round-1/verification-commands.log"
+  }
+}

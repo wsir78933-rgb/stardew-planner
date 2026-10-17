@@ -1,0 +1,210 @@
+environment and frozen-hash check
+date exit=0 2026-10-16T23:05:10+0800
+git rev-parse exit=0
+/Users/wusir/orca/workspaces/stardew planner/博客-2
+bf91a14829067ed1c9c2a206a97985e17dbebdda
+git status --short --branch exit=0
+## 博客-2
+ M public/llms.txt
+ M src/blog/blog-copy.ts
+ M src/blog/blog-post-identities.ts
+ M src/blog/blog-post-registry.tsx
+ M tests/blog/blog-home-state.test.ts
+ M tests/blog/blog-post-registry.test.ts
+ M tests/i18n/public-route-registry.test.ts
+ M tests/routes/blog-routes.test.tsx
+ M tests/routes/removed-public-pages.test.ts
+ M tests/seo/canonical-public-routes.test.ts
+?? docs/blog-ops/house-upgrade-stardew/
+?? node_modules
+?? public/blog/house-upgrade-stardew-cover-zh.avif
+?? public/blog/house-upgrade-stardew-cover-zh.webp
+?? public/blog/house-upgrade-stardew-cover.avif
+?? public/blog/house-upgrade-stardew-cover.webp
+?? public/blog/illustrations/house-upgrade-stardew/
+?? src/blog/articles/house-upgrade-stardew.en.tsx
+?? src/blog/articles/house-upgrade-stardew.zh.tsx
+HEAD=bf91a14829067ed1c9c2a206a97985e17dbebdda exit=0
+node -v exit=0 stdout=v24.18.0 stderr=
+pnpm -v exit=0 stdout=10.22.0 stderr=
+node_modules is_symlink=True exists=True
+node_modules readlink=/Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+node_modules resolve=/Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+package.json engines.node=>=20.9.0
+package.json packageManager=pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c
+package.json next=16.3.0
+package.json serve=14.2.6
+package.json scripts={"assets:sync": "tsx src/assets/sync-assets.ts", "build": "next build", "dev": "sh scripts/dev.sh", "performance:editor": "node scripts/measure-editor-performance.mjs", "pretest": "NEXT_TELEMETRY_DISABLED=1 pnpm build", "seo:smoke": "node scripts/production-seo-smoke.mjs --origin https://stardewvalleyplanner.art", "start": "serve out", "test": "vitest", "typecheck": "tsc --noEmit"}
+installed next=16.3.0 path=/Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/next/package.json
+installed react=19.2.8 path=/Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/react/package.json
+installed react-dom=19.2.8 path=/Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/react-dom/package.json
+installed typescript=5.9.3 path=/Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/typescript/package.json
+installed vitest=3.2.4 path=/Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/vitest/package.json
+installed serve=14.2.6 path=/Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/serve/package.json
+serve bin exists=True executable=True
+pnpm exec serve --help exit=0
+serve help contains -l=True
+serve help contains --listen=True
+serve help contains --no-port-switching=True
+serve help contains --no-clipboard=True
+pnpm-lock.yaml worktree=d5e8dbaea64c21aca0db72a3b7363cc1468396667a166727dcefbd704d8be1b2
+pnpm-lock.yaml main=276168efcc2af231ca59063b31417a5bfd1d4da175fac2e0f8cf148fd7b5c12f
+pnpm-lock.yaml equal=False
+package.json worktree=f10064b03d1e90ba7055b31d838cc68ab0009986e59486cc1d00f59a4cefd3f0
+package.json main=97424c230527db08835de4151107132ae0d6d8c5d74d750dcf4772361fb7f63f
+package.json equal=False
+docs/blog-ops/house-upgrade-stardew/handoff/public/en.json cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3 match=True bytes=27784
+docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json 0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c match=True bytes=27432
+docs/blog-ops/house-upgrade-stardew/lock/en/body.md f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f match=True bytes=10046
+docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f match=True bytes=10046
+docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md 0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6 match=True bytes=9797
+docs/blog-ops/house-upgrade-stardew/assembly/en-bindings.md 74ff910adb236f3656a033d0de3c5128f20555d949b2f499ca76ba1370df4b0d match=True bytes=8936
+src/blog/articles/house-upgrade-stardew.en.tsx cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5 match=True bytes=15846
+docs/blog-ops/house-upgrade-stardew/assembly/zh-bindings.md 636d3257952604cd27885dbe6969400b75b47f4952fcc0b400f35fc23bc8f385 match=True bytes=10057
+src/blog/articles/house-upgrade-stardew.zh.tsx 2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba match=True bytes=14218
+docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json 6ce4e84ffbcc1252f2cebd443e4ccceac5a60d29c2ceb41dd74eaabd68fc6834 match=True bytes=20147
+docs/blog-ops/house-upgrade-stardew/assembly/integration-report.md b98ef599604b3ed35ebc88ed0642960db2f897d5d9135bb204ab5e95bb781483 match=True bytes=7476
+manifest articles.en.outputSha256=None
+manifest articles.zh-CN.outputSha256=None
+owned src/blog/blog-post-identities.ts 8609af337bdf4d80b870b033a35c78e8481c8042290877a2601cab176906171f match=True
+owned src/blog/blog-post-registry.tsx e2696eb7e2473ea74a19dd9c552db732115e2da26be458bcd9af3c971317ac15 match=True
+owned src/blog/blog-copy.ts 57b6b0a2a8872a5f872b953bd5f2a915a3381367be8eb8b854f7273220e7072b match=True
+owned public/llms.txt 7ce14311a6b79198d2afb2e7f470b1199779fb774381baa88395bfe71d110468 match=True
+owned tests/blog/blog-post-registry.test.ts 5240e61d291cdf52ffabd9d8054480c4c44770aba3c9cfe187f33255450d79d4 match=True
+owned tests/blog/blog-home-state.test.ts d113b4319e716ea8580b487eeeaed73dbd089f0744d333b2283550714ecb950a match=True
+owned tests/i18n/public-route-registry.test.ts b38413abee2fcd457981e2a060bf0f8350dd86099fa8859d02c2b99afd39401d match=True
+owned tests/seo/canonical-public-routes.test.ts b2f04b95e375d6fdbbe856d2e9ec4c7edb0c2cfac377ff8276bfa78ef58f62ec match=True
+owned tests/routes/removed-public-pages.test.ts b1cde73e3cec67cc447c390f3450cb30250644f87ffe40d27f449cbe584886cd match=True
+owned tests/routes/blog-routes.test.tsx 058a6fe60014a8703678f5cde9ed7d20103401d139fbb64feb35e75e322dd88d match=True
+owned public/blog/house-upgrade-stardew-cover.webp c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342 match=True
+owned public/blog/house-upgrade-stardew-cover.avif f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113 match=True
+owned public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209 match=True
+owned public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif 8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b match=True
+owned public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp 040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b match=True
+owned public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif 1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426 match=True
+owned public/blog/house-upgrade-stardew-cover-zh.webp bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87 match=True
+owned public/blog/house-upgrade-stardew-cover-zh.avif 7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926 match=True
+owned public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c match=True
+owned public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad match=True
+owned public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp 6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88 match=True
+owned public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84 match=True
+en keys=['body', 'bodyHash', 'country', 'integrity', 'locale', 'publicReferences', 'publicRequirements', 'seo'] bodyHashField=f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f computedBody=f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f fields=c3c2c5f3b06206e13403e6fefb9573713502f32b5c172402e21fcc1dc1437042
+en title=None
+en h1=None
+en descriptionLength=0
+en headingCount=8
+  ## What each upgrade costs
+  ## Prepare the Wood and the Hardwood
+  ## Price the wood you still need, then add through a tier
+  ### 200 Wood already on hand
+  ### From the starter house through a named tier
+  ## What the kitchen, nursery, and cellar are for
+  ## Order the upgrade at 24 Mountain Road
+  ## A renovation is not the next upgrade
+zh-CN keys=['body', 'bodyHash', 'country', 'englishBodyHash', 'integrity', 'locale', 'publicReferences', 'publicRequirements', 'seo'] bodyHashField=0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6 computedBody=0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6 fields=d535eaacd441c15006e1e3189e6aac6d7c25162f02bbd68984befe9d35329d94
+zh-CN title=None
+zh-CN h1=None
+zh-CN descriptionLength=0
+zh-CN headingCount=8
+  ## 每一档升级要花多少
+  ## 准备木材和硬木
+  ## 先给还缺的木材计价，再累加到某一档
+  ### 手头已经有200木材
+  ### 从初始农舍累加到你点名的那一档
+  ## 厨房、育儿室和地窖是做什么的
+  ## 在山路24号下升级订单
+  ## 装修不是下一次升级
+zh integrity.englishBodyHash=f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+identity tsx exists=False ts exists=False
+media public/blog/house-upgrade-stardew-cover.webp sha=c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342 bytes=72418 sourceMatch=True
+sips exit=0 public/blog/house-upgrade-stardew-cover.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+media public/blog/house-upgrade-stardew-cover.avif sha=f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113 bytes=39621 sourceMatch=True
+sips exit=0 public/blog/house-upgrade-stardew-cover.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+media public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp sha=c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209 bytes=70092 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+media public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif sha=8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b bytes=38764 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+media public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp sha=040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b bytes=68194 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+media public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif sha=1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426 bytes=36133 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+media public/blog/house-upgrade-stardew-cover-zh.webp sha=bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87 bytes=63012 sourceMatch=True
+sips exit=0 public/blog/house-upgrade-stardew-cover-zh.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover-zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+media public/blog/house-upgrade-stardew-cover-zh.avif sha=7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926 bytes=34529 sourceMatch=True
+sips exit=0 public/blog/house-upgrade-stardew-cover-zh.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover-zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+media public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp sha=d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c bytes=58666 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+media public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif sha=aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad bytes=31242 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+media public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp sha=6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88 bytes=60854 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+media public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif sha=d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84 bytes=32235 sourceMatch=True
+sips exit=0 public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+webp blog=81 homepage=27 total=108
+avif blog=81 homepage=27 total=108
+pgrep next|vitest|tsc exit=0
+1868 node /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --port 3003
+15020 node /Users/wusir/Desktop/开发项目集合/token-maker-app/.next/dev/build/chunks/pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2v._.js 52388
+24487 node /Users/wusir/Desktop/开发项目集合/token-maker-app/.next/dev/build/chunks/pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2v._.js 57327
+29091 node /Users/wusir/Desktop/开发项目集合/token-maker-app/.next/dev/build/chunks/pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2v._.js 64231
+36321 /opt/homebrew/Cellar/node@24/24.18.0/bin/node /Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/typescript/lib/tsserver.js --serverMode partialSemantic --useInferredProjectPerProjectRoot --disableAutomaticTypingAcquisition --cancellationPipeName /private/var/folders/52/j_dv3mh12r71qvz2qv17q2kc0000gn/T/0f8980eecd515a983e21eb66befad606/tscancellation* --locale en --validateDefaultNpmLocation --useNodeIpc
+36322 /opt/homebrew/Cellar/node@24/24.18.0/bin/node /Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules/typescript/lib/tsserver.js --useInferredProjectPerProjectRoot --cancellationPipeName /private/var/folders/52/j_dv3mh12r71qvz2qv17q2kc0000gn/T/dd2766ec4aca491eb8c20ba6019d7b61/tscancellation* --locale en --validateDefaultNpmLocation --useNodeIpc
+42130 node /Users/wusir/Desktop/开发项目集合/token-maker-app/.next/dev/build/chunks/pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2v._.js 63061
+54499 node /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --port 3003
+56444 node /Users/wusir/Desktop/开发项目集合/token-maker-app/.next/dev/build/chunks/pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2v._.js 51027
+64323 node /Users/wusir/Desktop/开发项目集合/token-maker-app/.next/dev/build/chunks/pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2v._.js 59788
+66704 node node_modules/.bin/../next/dist/bin/next dev --webpack --hostname 127.0.0.1 --port 40021
+66721 next-server (v16.3.8) ORCA_AGENT_PANE=9784ac1f-c442-4413-b267-e7cf9d0ec6b2:c3f6599d-5b3f-49d2-88d8-b4991b18382b
+81571 node /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --port 3003
+88435 node /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@opentelemetry+api@1.9.1_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --port 3003
+88483 next-server (v16.3.0) COREPACK_ROOT=/opt/homebrew/Cellar/node@24/24.18.0/lib/node_modules/corepack
+95419 node /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --port 3003
+98335 node /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules/.bin/../.pnpm/next@16.3.0_@babel+core@7.29.7_@types+node@22.17.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next/dist/bin/next dev --webpack --port 3003

@@ -1,0 +1,28 @@
+On branch 博客-2
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   public/llms.txt
+	modified:   src/blog/blog-copy.ts
+	modified:   src/blog/blog-post-identities.ts
+	modified:   src/blog/blog-post-registry.tsx
+	modified:   tests/blog/blog-home-state.test.ts
+	modified:   tests/blog/blog-post-registry.test.ts
+	modified:   tests/i18n/public-route-registry.test.ts
+	modified:   tests/routes/blog-routes.test.tsx
+	modified:   tests/routes/removed-public-pages.test.ts
+	modified:   tests/seo/canonical-public-routes.test.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	docs/blog-ops/house-upgrade-stardew/
+	node_modules
+	public/blog/house-upgrade-stardew-cover-zh.avif
+	public/blog/house-upgrade-stardew-cover-zh.webp
+	public/blog/house-upgrade-stardew-cover.avif
+	public/blog/house-upgrade-stardew-cover.webp
+	public/blog/illustrations/house-upgrade-stardew/
+	src/blog/articles/house-upgrade-stardew.en.tsx
+	src/blog/articles/house-upgrade-stardew.zh.tsx
+
+no changes added to commit (use "git add" and/or "git commit -a")

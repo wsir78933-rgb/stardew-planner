@@ -1,0 +1,625 @@
+{
+  "taskSpaceId": 185,
+  "taskSpaceName": "zh house-upgrade pixel-v2 review",
+  "targetArticleUrl": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+  "startedAt": "2026-10-17T01:27:44.020Z",
+  "completedAt": "2026-10-17T01:27:55.658Z",
+  "manifestSha256": "07fa31ccca98a8ea421075797861724315583138490d4f99870cc5be95ad22fd",
+  "viewports": [
+    {
+      "viewportIdentifier": "zh-1280x800",
+      "width": 1280,
+      "height": 800,
+      "identityInspection": {
+        "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+        "ogTitle": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "htmlLang": "zh-CN",
+        "navigationStatus": 200,
+        "navigationUrl": "http://127.0.0.1:3010/zh/house-upgrade-stardew"
+      },
+      "identityMatches": {
+        "titleMatches": true,
+        "h1Matches": true,
+        "descriptionMatches": true
+      },
+      "capturedImages": [
+        {
+          "role": "cover",
+          "mediaId": "cover-payments",
+          "screenshotPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/screenshots/zh-1280x800-cover.png",
+          "screenshotFileName": "zh-1280x800-cover.png",
+          "src": "/blog/house-upgrade-stardew-cover-zh.webp",
+          "currentSrc": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover-zh.avif",
+          "alt": "原创像素场景：一栋农舍。不是官方截图，也不是精确的游戏布局。",
+          "caption": "",
+          "complete": true,
+          "naturalWidth": 1672,
+          "naturalHeight": 941,
+          "clientWidth": 1086,
+          "clientHeight": 610,
+          "boundingRectangle": {
+            "x": 93,
+            "y": 94.2109375,
+            "width": 1088,
+            "height": 612
+          },
+          "visibleFraction": 1,
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "decodeOutcome": {
+            "ok": true,
+            "errorMessage": ""
+          },
+          "sourceElements": [
+            {
+              "srcset": "/blog/house-upgrade-stardew-cover-zh.avif",
+              "type": "image/avif"
+            }
+          ],
+          "uniformScalingPreserved": true,
+          "dimensionsMatchExpected": true,
+          "altMatch": true,
+          "captionMatch": true
+        },
+        {
+          "role": "interior",
+          "mediaId": "tier-rooms",
+          "screenshotPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/screenshots/zh-1280x800-interior.png",
+          "screenshotFileName": "zh-1280x800-interior.png",
+          "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+          "currentSrc": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+          "alt": "原创像素场景：一套农舍室内，有厨房、一张双人床，以及有婴儿床和两张单人床的育儿室。",
+          "caption": "插画。一套室内，有厨房、卧室，以及有婴儿床和两张单人床的育儿室。不是官方截图，也不是精确的游戏户型。",
+          "complete": true,
+          "naturalWidth": 1672,
+          "naturalHeight": 941,
+          "clientWidth": 702,
+          "clientHeight": 394,
+          "boundingRectangle": {
+            "x": 474.7890625,
+            "y": 201.84375,
+            "width": 704,
+            "height": 396
+          },
+          "visibleFraction": 1,
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "decodeOutcome": {
+            "ok": true,
+            "errorMessage": ""
+          },
+          "sourceElements": [
+            {
+              "srcset": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+              "type": "image/avif"
+            }
+          ],
+          "uniformScalingPreserved": true,
+          "dimensionsMatchExpected": true,
+          "altMatch": true,
+          "captionMatch": true
+        },
+        {
+          "role": "construction",
+          "mediaId": "upgrade-or-renovation",
+          "screenshotPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/screenshots/zh-1280x800-construction.png",
+          "screenshotFileName": "zh-1280x800-construction.png",
+          "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+          "currentSrc": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+          "alt": "原创像素场景：木匠在农舍旁的木架上举锤。",
+          "caption": "插画。木匠在未封的木架上举锤。不是官方截图。",
+          "complete": true,
+          "naturalWidth": 1672,
+          "naturalHeight": 941,
+          "clientWidth": 702,
+          "clientHeight": 394,
+          "boundingRectangle": {
+            "x": 474.7890625,
+            "y": 202.1171875,
+            "width": 704,
+            "height": 396
+          },
+          "visibleFraction": 1,
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "decodeOutcome": {
+            "ok": true,
+            "errorMessage": ""
+          },
+          "sourceElements": [
+            {
+              "srcset": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+              "type": "image/avif"
+            }
+          ],
+          "uniformScalingPreserved": true,
+          "dimensionsMatchExpected": true,
+          "altMatch": true,
+          "captionMatch": true
+        }
+      ],
+      "layoutEvaluation": {
+        "documentClientWidth": 1274,
+        "documentScrollWidth": 1274,
+        "bodyScrollWidth": 1274,
+        "hasHorizontalOverflow": false,
+        "overflowingElements": [],
+        "tableScrollResult": {
+          "containerFound": true,
+          "scrollLeftInitial": 0,
+          "scrollLeftAfterAttempt": 0,
+          "maximumScrollLeft": 0,
+          "scrollWidth": 702,
+          "clientWidth": 702,
+          "computedOverflowX": "auto",
+          "successfullyScrolled": false,
+          "tableElementFound": true
+        },
+        "externalInjectedButtons": [
+          {
+            "tagName": "BUTTON",
+            "text": "导出外链",
+            "isInsideArticle": false
+          }
+        ]
+      },
+      "cdpEventSummary": {
+        "totalEventCount": 399,
+        "methodFrequencyMap": {
+          "Network.responseReceived": 52,
+          "Network.dataReceived": 154,
+          "Network.loadingFinished": 64,
+          "Network.requestWillBeSent": 51,
+          "Page.frameStartedNavigating": 1,
+          "Page.frameStartedLoading": 2,
+          "Network.requestWillBeSentExtraInfo": 27,
+          "Network.responseReceivedExtraInfo": 27,
+          "Runtime.executionContextsCleared": 2,
+          "Page.frameNavigated": 1,
+          "Network.policyUpdated": 1,
+          "Runtime.executionContextCreated": 6,
+          "Page.domContentEventFired": 1,
+          "Runtime.consoleAPICalled": 5,
+          "Page.loadEventFired": 1,
+          "Page.frameStoppedLoading": 2,
+          "Page.navigatedWithinDocument": 1,
+          "Log.entryAdded": 1
+        },
+        "cancelledAnalyticsCount": 0,
+        "cancelledAnalyticsRequests": [],
+        "genuineFailedRequestCount": 0,
+        "genuineFailedRequests": [],
+        "uncaughtExceptionCount": 0,
+        "uncaughtExceptions": [],
+        "consoleMessageCount": 0,
+        "consoleMessages": [],
+        "mediaResponseCount": 3,
+        "mediaResponses": [
+          {
+            "url": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover-zh.avif",
+            "status": 200,
+            "mimeType": "application/octet-stream",
+            "fromCache": false
+          },
+          {
+            "url": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+            "status": 200,
+            "mimeType": "application/octet-stream",
+            "fromCache": false
+          },
+          {
+            "url": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+            "status": 200,
+            "mimeType": "application/octet-stream",
+            "fromCache": false
+          }
+        ]
+      }
+    },
+    {
+      "viewportIdentifier": "zh-390x844",
+      "width": 390,
+      "height": 844,
+      "identityInspection": {
+        "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+        "ogTitle": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "htmlLang": "zh-CN",
+        "navigationStatus": 200,
+        "navigationUrl": "http://127.0.0.1:3010/zh/house-upgrade-stardew"
+      },
+      "identityMatches": {
+        "titleMatches": true,
+        "h1Matches": true,
+        "descriptionMatches": true
+      },
+      "capturedImages": [
+        {
+          "role": "cover",
+          "mediaId": "cover-payments",
+          "screenshotPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/screenshots/zh-390x844-cover.png",
+          "screenshotFileName": "zh-390x844-cover.png",
+          "src": "/blog/house-upgrade-stardew-cover-zh.webp",
+          "currentSrc": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover-zh.avif",
+          "alt": "原创像素场景：一栋农舍。不是官方截图，也不是精确的游戏布局。",
+          "caption": "",
+          "complete": true,
+          "naturalWidth": 1672,
+          "naturalHeight": 941,
+          "clientWidth": 356,
+          "clientHeight": 199,
+          "boundingRectangle": {
+            "x": 16,
+            "y": 321.171875,
+            "width": 358,
+            "height": 201.375
+          },
+          "visibleFraction": 1,
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "decodeOutcome": {
+            "ok": true,
+            "errorMessage": ""
+          },
+          "sourceElements": [
+            {
+              "srcset": "/blog/house-upgrade-stardew-cover-zh.avif",
+              "type": "image/avif"
+            }
+          ],
+          "uniformScalingPreserved": true,
+          "dimensionsMatchExpected": true,
+          "altMatch": true,
+          "captionMatch": true
+        },
+        {
+          "role": "interior",
+          "mediaId": "tier-rooms",
+          "screenshotPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/screenshots/zh-390x844-interior.png",
+          "screenshotFileName": "zh-390x844-interior.png",
+          "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+          "currentSrc": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+          "alt": "原创像素场景：一套农舍室内，有厨房、一张双人床，以及有婴儿床和两张单人床的育儿室。",
+          "caption": "插画。一套室内，有厨房、卧室，以及有婴儿床和两张单人床的育儿室。不是官方截图，也不是精确的游戏户型。",
+          "complete": true,
+          "naturalWidth": 1672,
+          "naturalHeight": 941,
+          "clientWidth": 356,
+          "clientHeight": 199,
+          "boundingRectangle": {
+            "x": 16,
+            "y": 321.3828125,
+            "width": 358,
+            "height": 201.375
+          },
+          "visibleFraction": 1,
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "decodeOutcome": {
+            "ok": true,
+            "errorMessage": ""
+          },
+          "sourceElements": [
+            {
+              "srcset": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+              "type": "image/avif"
+            }
+          ],
+          "uniformScalingPreserved": true,
+          "dimensionsMatchExpected": true,
+          "altMatch": true,
+          "captionMatch": true
+        },
+        {
+          "role": "construction",
+          "mediaId": "upgrade-or-renovation",
+          "screenshotPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/screenshots/zh-390x844-construction.png",
+          "screenshotFileName": "zh-390x844-construction.png",
+          "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+          "currentSrc": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+          "alt": "原创像素场景：木匠在农舍旁的木架上举锤。",
+          "caption": "插画。木匠在未封的木架上举锤。不是官方截图。",
+          "complete": true,
+          "naturalWidth": 1672,
+          "naturalHeight": 941,
+          "clientWidth": 356,
+          "clientHeight": 199,
+          "boundingRectangle": {
+            "x": 16,
+            "y": 321.171875,
+            "width": 358,
+            "height": 201.375
+          },
+          "visibleFraction": 1,
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "decodeOutcome": {
+            "ok": true,
+            "errorMessage": ""
+          },
+          "sourceElements": [
+            {
+              "srcset": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+              "type": "image/avif"
+            }
+          ],
+          "uniformScalingPreserved": true,
+          "dimensionsMatchExpected": true,
+          "altMatch": true,
+          "captionMatch": true
+        }
+      ],
+      "layoutEvaluation": {
+        "documentClientWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "hasHorizontalOverflow": false,
+        "overflowingElements": [
+          {
+            "tagName": "TABLE",
+            "id": "",
+            "className": "blog-data-table",
+            "left": 17,
+            "right": 625,
+            "width": 608
+          },
+          {
+            "tagName": "THEAD",
+            "id": "",
+            "className": "",
+            "left": 17,
+            "right": 625,
+            "width": 608
+          },
+          {
+            "tagName": "TR",
+            "id": "",
+            "className": "",
+            "left": 17,
+            "right": 625,
+            "width": 608
+          },
+          {
+            "tagName": "TH",
+            "id": "",
+            "className": "",
+            "left": 257,
+            "right": 467,
+            "width": 210
+          },
+          {
+            "tagName": "TH",
+            "id": "",
+            "className": "",
+            "left": 467,
+            "right": 625,
+            "width": 158
+          },
+          {
+            "tagName": "TBODY",
+            "id": "",
+            "className": "",
+            "left": 17,
+            "right": 625,
+            "width": 608
+          },
+          {
+            "tagName": "TR",
+            "id": "",
+            "className": "",
+            "left": 17,
+            "right": 625,
+            "width": 608
+          },
+          {
+            "tagName": "TD",
+            "id": "",
+            "className": "",
+            "left": 257,
+            "right": 467,
+            "width": 210
+          },
+          {
+            "tagName": "A",
+            "id": "",
+            "className": "",
+            "left": 342,
+            "right": 418,
+            "width": 76
+          },
+          {
+            "tagName": "TD",
+            "id": "",
+            "className": "",
+            "left": 467,
+            "right": 625,
+            "width": 158
+          }
+        ],
+        "tableScrollResult": {
+          "containerFound": true,
+          "scrollLeftInitial": 0,
+          "scrollLeftAfterAttempt": 252,
+          "maximumScrollLeft": 252,
+          "scrollWidth": 608,
+          "clientWidth": 356,
+          "computedOverflowX": "auto",
+          "successfullyScrolled": true,
+          "tableElementFound": true
+        },
+        "externalInjectedButtons": [
+          {
+            "tagName": "BUTTON",
+            "text": "导出外链",
+            "isInsideArticle": false
+          }
+        ]
+      },
+      "cdpEventSummary": {
+        "totalEventCount": 293,
+        "methodFrequencyMap": {
+          "Page.frameStartedNavigating": 1,
+          "Page.frameStartedLoading": 1,
+          "Network.requestWillBeSent": 31,
+          "Network.requestWillBeSentExtraInfo": 26,
+          "Network.responseReceivedExtraInfo": 26,
+          "Network.responseReceived": 31,
+          "Runtime.executionContextsCleared": 2,
+          "Page.frameNavigated": 1,
+          "Network.policyUpdated": 1,
+          "Network.dataReceived": 124,
+          "Runtime.executionContextCreated": 6,
+          "Network.loadingFinished": 31,
+          "Network.resourceChangedPriority": 2,
+          "Page.domContentEventFired": 1,
+          "Page.navigatedWithinDocument": 1,
+          "Runtime.consoleAPICalled": 5,
+          "Page.loadEventFired": 1,
+          "Page.frameStoppedLoading": 1,
+          "Log.entryAdded": 1
+        },
+        "cancelledAnalyticsCount": 0,
+        "cancelledAnalyticsRequests": [],
+        "genuineFailedRequestCount": 0,
+        "genuineFailedRequests": [],
+        "uncaughtExceptionCount": 0,
+        "uncaughtExceptions": [],
+        "consoleMessageCount": 0,
+        "consoleMessages": [],
+        "mediaResponseCount": 3,
+        "mediaResponses": [
+          {
+            "url": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover-zh.avif",
+            "status": 200,
+            "mimeType": "application/octet-stream",
+            "fromCache": false
+          },
+          {
+            "url": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+            "status": 200,
+            "mimeType": "application/octet-stream",
+            "fromCache": false
+          },
+          {
+            "url": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+            "status": 200,
+            "mimeType": "application/octet-stream",
+            "fromCache": false
+          }
+        ]
+      }
+    }
+  ],
+  "spotChecks": {
+    "languageLinkInspection": {
+      "enLinkExists": true,
+      "enLinkHref": "/house-upgrade-stardew",
+      "enLinkText": "English",
+      "zhLinkExists": true,
+      "zhLinkHref": "/zh/house-upgrade-stardew",
+      "zhLinkText": "中文"
+    },
+    "catalogPageInspection": {
+      "url": "http://127.0.0.1:3010/zh/blog",
+      "title": "星露谷农场规划指南",
+      "h1": "星露谷农场规划指南",
+      "navigationStatus": 200
+    }
+  },
+  "assetVerificationResults": [
+    {
+      "publicPath": "/blog/house-upgrade-stardew-cover-zh.webp",
+      "mediaId": "cover-payments",
+      "format": "webp",
+      "role": "cover",
+      "requestUrl": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover-zh.webp",
+      "httpStatus": 200,
+      "contentType": "image/webp",
+      "actualByteLength": 2550052,
+      "expectedByteLength": 2550052,
+      "actualSha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "expectedSha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "shaMatchesManifest": true,
+      "byteLengthMatchesManifest": true
+    },
+    {
+      "publicPath": "/blog/house-upgrade-stardew-cover-zh.avif",
+      "mediaId": "cover-payments",
+      "format": "avif",
+      "role": "cover-sibling",
+      "requestUrl": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover-zh.avif",
+      "httpStatus": 200,
+      "contentType": "",
+      "actualByteLength": 653604,
+      "expectedByteLength": 653604,
+      "actualSha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "expectedSha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "shaMatchesManifest": true,
+      "byteLengthMatchesManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "mediaId": "tier-rooms",
+      "format": "webp",
+      "role": "body",
+      "requestUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "httpStatus": 200,
+      "contentType": "image/webp",
+      "actualByteLength": 1984240,
+      "expectedByteLength": 1984240,
+      "actualSha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "expectedSha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "shaMatchesManifest": true,
+      "byteLengthMatchesManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "mediaId": "tier-rooms",
+      "format": "avif",
+      "role": "body-sibling",
+      "requestUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "httpStatus": 200,
+      "contentType": "",
+      "actualByteLength": 446411,
+      "expectedByteLength": 446411,
+      "actualSha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "expectedSha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "shaMatchesManifest": true,
+      "byteLengthMatchesManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "mediaId": "upgrade-or-renovation",
+      "format": "webp",
+      "role": "body",
+      "requestUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "httpStatus": 200,
+      "contentType": "image/webp",
+      "actualByteLength": 2453712,
+      "expectedByteLength": 2453712,
+      "actualSha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "expectedSha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "shaMatchesManifest": true,
+      "byteLengthMatchesManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "mediaId": "upgrade-or-renovation",
+      "format": "avif",
+      "role": "body-sibling",
+      "requestUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "httpStatus": 200,
+      "contentType": "",
+      "actualByteLength": 617005,
+      "expectedByteLength": 617005,
+      "actualSha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "expectedSha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "shaMatchesManifest": true,
+      "byteLengthMatchesManifest": true
+    }
+  ],
+  "externalButtonsRecorded": true
+}

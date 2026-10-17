@@ -1,0 +1,139 @@
+{
+  "role": "B",
+  "articleSlug": "house-upgrade-stardew",
+  "diagnosedFile": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md",
+  "draftSha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+  "worktree": {
+    "displayName": "博客 2",
+    "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+    "inode": 145851019
+  },
+  "qualityGatePassIssued": false,
+  "lockAuthorized": false,
+  "assemblyAuthorized": false,
+  "briefOrTaskCardChanged": false,
+  "newOutlineAuthorized": false,
+  "verdict": "没有可据实补入的必要内容；材料不足，停止正式交付",
+  "mainTaskAnswered": true,
+  "fillableNecessaryGap": false,
+  "readerTask": "Buy the next vanilla farmhouse upgrade from Robin: current gold and materials for that tier, a three-day wait, the rooms that upgrade adds, and the difference between that order and a renovation after upgrade 2.",
+  "subQuestions": [
+    {
+      "id": "next-tier-cost-rooms",
+      "question": "下一档要付多少金币、什么材料，三天后多出什么房间。",
+      "status": "answered",
+      "draftLocations": ["content/en/draft-v2.md:1", "content/en/draft-v2.md:5-9", "content/en/draft-v2.md:13"],
+      "readerAction": "Match rooms already in the house to the previous table row and figure stage, then read the next row's gold, materials, three days, and added rooms.",
+      "factIds": ["T-upgrade-1", "T-upgrade-2", "T-upgrade-3", "T-days", "T-footprint"],
+      "whyNotOmissible": "Without the row for the reader's current tier, they cannot bring the right payment or recognize the finished rooms.",
+      "duplicatesExistingParagraph": "The table and tier-rooms figure already do this. Line 25 repeats the three payments and is not a missing step."
+    },
+    {
+      "id": "upgrade-2-1-6-price",
+      "question": "第二档为什么不是 50,000g 和 150 Hardwood。",
+      "status": "answered",
+      "draftLocations": ["content/en/draft-v2.md:17-19"],
+      "readerAction": "Pay 65,000g and 100 Hardwood, not the pre-1.6 pair.",
+      "factIds": ["T-cost-1.6"],
+      "whyNotOmissible": "Opened older guides still print the pre-1.6 pair, so the current payment has to be distinguished.",
+      "duplicatesExistingParagraph": "Line 17 states the change. Line 19 repeats the same old and new pairs."
+    },
+    {
+      "id": "where-when-three-days",
+      "question": "到哪里、普通哪天能下单；三天不要写成第 N 天早晨完成。",
+      "status": "answered",
+      "draftLocations": ["content/en/draft-v2.md:1", "content/en/draft-v2.md:23-33"],
+      "readerAction": "Order a farmhouse upgrade at 24 Mountain Road while the counter is open: not Tuesday, before 4:00pm Friday, otherwise 9:00am–5:00pm. Do not schedule the house on the two-day, morning-of-the-second-day clock used for most other construction.",
+      "factIds": ["T-menu", "T-days"],
+      "whyNotOmissible": "The reader cannot place or time this order from the cost table alone.",
+      "duplicatesExistingParagraph": "Place and hours are in this section once. The three payments on line 25 repeat the table."
+    },
+    {
+      "id": "wood-gold-by-year",
+      "question": "自己没有 450 木材时，第一年和第二年起向罗宾买齐，连工费差多少。",
+      "status": "answered",
+      "draftLocations": ["content/en/draft-v2.md:37-43"],
+      "readerAction": "If the 450 Wood is already owned, bring 10,000g and that Wood. If Robin sells all 450 and nothing else is added, bring 14,500g in year 1 or 32,500g in year 2 or later.",
+      "factIds": ["T-wood-price"],
+      "whyNotOmissible": "The first upgrade's gold at the counter changes with the year only when the Wood is bought from Robin.",
+      "duplicatesExistingParagraph": "The 10,000g fee and 450 Wood are already in the table. This section adds only the bought-wood totals."
+    },
+    {
+      "id": "renovation-not-next-upgrade",
+      "question": "第二档之后的装修为什么不是下一档升级。",
+      "status": "answered",
+      "draftLocations": ["content/en/draft-v2.md:45-55", "content/en/draft-v2.md:47"],
+      "readerAction": "Pay 100,000g and wait three days for the cellar. Use Remove Crib or Add Dining Room only as instant, refundable renovations after upgrade 2.",
+      "factIds": ["T-renovation-rule", "T-renovation-prices", "T-upgrade-3", "T-days"],
+      "whyNotOmissible": "Upgrade 2 unlocks a different order. Without the contrast, a reader can treat an instant refundable room as another three-day upgrade.",
+      "duplicatesExistingParagraph": "Line 33 already says a renovation is a separate immediate order. Lines 51-55 are the required examples, not a second price list."
+    },
+    {
+      "id": "whose-house-multiplayer",
+      "question": "多人时这组费用用在谁的房子上。",
+      "status": "answered",
+      "draftLocations": ["content/en/draft-v2.md:35"],
+      "readerAction": "A farmhand pays the same three costs, waits three days, and upgrades only their own cabin.",
+      "factIds": ["T-cabin-boundary"],
+      "whyNotOmissible": "The related search multiplayer asks whose house these payments change.",
+      "duplicatesExistingParagraph": "One sentence. Cabin gold, footprint, and platform counts are not in the draft and are not a gap."
+    }
+  ],
+  "menuLabels": {
+    "status": "not_fillable_from_public_facts",
+    "briefAsksForLabels": "layout/writer-brief.md:50",
+    "publicFact": "T-menu states the address, the farmhouse-upgrade service, farm-building construction, and ordinary hours. It does not name Shop, Upgrade House, Construct Farm Buildings, or Leave.",
+    "nonPublicObservation": "OBS-menu-image",
+    "nonPublicObservationPublicAllowed": false,
+    "draftAlreadySays": "content/en/draft-v2.md:23 asks Robin to upgrade the farmhouse and already separates that service from constructing farm buildings.",
+    "newSubQuestionProposal": false,
+    "returnToAOnlyIfCoordinatorRequiresVerbatimLabels": true
+  },
+  "rejectedPads": [
+    "marriage process, friendship, wedding, divorce, roommate",
+    "child events beyond the nursery result already in the table",
+    "cask count, capacity, seasons, profit",
+    "full renovation price list, decoration, furniture catalogue",
+    "paint, move, achievements, gifts, new shop stock",
+    "planner rooms or outdoor placement",
+    "community upgrade and whether the counter stays open during the three upgrade days",
+    "disclaimer, checklist, or another restatement of the three costs and three days"
+  ],
+  "newSubQuestionOutsideBrief": null,
+  "length": {
+    "command": "python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md",
+    "exitCode": 0,
+    "mechanicalUnits": 970,
+    "requiredFloor": 1000,
+    "meetsMechanicalFloor": false,
+    "lengthClass": "below_floor",
+    "semanticQualification": "requires_independent_review",
+    "captionParagraphsExcluded": ["content/en/draft-v2.md:15", "content/en/draft-v2.md:49"],
+    "unitsAfterRemovingThoseCaptionParagraphs": 917,
+    "captionParagraphUnits": 53,
+    "captionRecountIsNotCliMechanicalUnits": true,
+    "taskCardExpectedRangeIsNotEvidence": "1000-1999"
+  },
+  "revisionBudget": {
+    "used": 1,
+    "remaining": 2,
+    "max": 3,
+    "thisDiagnosisConsumesARound": false,
+    "resetByNewTaskOrLayoutOrResearch": false,
+    "source": "docs/blog-ops/house-upgrade-stardew/control/operation-store.json revisionBudget"
+  },
+  "pending": [
+    "D has not run the three gates on draft-v2",
+    "E has not reviewed draft-v2",
+    "F has not locked draft-v2",
+    "Community-upgrade word fully is undefined",
+    "Counter open or closed during the three house-upgrade days is unsupported",
+    "Captured Steam 1.6.15 post has no visible publish date",
+    "The United States SERP receipt has no city",
+    "Menu label strings remain publicAllowed false"
+  ],
+  "notAdopted": [
+    "reviews/D/three-gates-report.md judges draft-v1 only",
+    "content/en/revision-round-1.md is C's own repair note"
+  ]
+}

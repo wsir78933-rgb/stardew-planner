@@ -1,0 +1,68 @@
+en_file=out/house-upgrade-stardew.html bytes=122284
+en_faq_items=6
+en_faq_h2=2
+en_faqpage=0
+en_article_type=1
+en_structure=FAIL
+en_contains=True Farmhouse Upgrade FAQ
+en_contains=True What does each farmhouse upgrade cost?
+en_contains=True How long does each house upgrade take?
+en_contains=True How do you get the Hardwood for the second upgrade, and does Robin sell it?
+en_contains=True Which upgrade unlocks the cellar?
+en_contains=True Does a house upgrade increase the outdoor footprint?
+en_contains=True How is a renovation different from an upgrade?
+en_contains=True 10,000g and 450 Wood
+en_contains=True 65,000g and 100 Hardwood, the 1.6 price
+en_contains=True The third is 100,000g.
+en_contains=True Each upgrade takes three days.
+en_contains=True does not sell Hardwood
+en_contains=True Six Large Stumps in the Secret Woods regrow daily
+en_contains=True A Steel Axe clears the log at the entrance.
+en_contains=True The third upgrade adds a cellar under the house.
+en_contains=True The cellar starts with 33 casks.
+en_contains=True The outdoor footprint stays 9×5
+en_contains=True a renovation finishes immediately
+en_contains=True Remove Crib and Add Dining Room are examples.
+en_contains=True /blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+en_contains=True /blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+en_contains=True Robin charges 10,000g and 450 Wood
+en_contains=True Sources
+zh_file=out/zh/house-upgrade-stardew.html bytes=120200
+zh_faq_items=6
+zh_faq_h2=2
+zh_faqpage=0
+zh_article_type=1
+zh_structure=FAIL
+zh_contains=True 星露谷房屋升级常见问题
+zh_contains=True 每一档农舍升级要多少金币和材料？
+zh_contains=True 每次升级要多久？
+zh_contains=True 第二次升级的硬木怎么获得？罗宾出售硬木吗？
+zh_contains=True 哪一档升级解锁地窖？
+zh_contains=True 升级会增加室外占地吗？
+zh_contains=True 装修和升级有什么区别？
+zh_contains=True 第一次升级是10,000金和450木材。
+zh_contains=True 第二次是65,000金和100硬木，这是1.6的价格。
+zh_contains=True 第三次是100,000金。
+zh_contains=True 每次升级都要三天。
+zh_contains=True 罗宾的普通存货不出售硬木。
+zh_contains=True 秘密森林里六棵大树桩每天重新长出。
+zh_contains=True 入口那根圆木要用钢斧头清除。
+zh_contains=True 第三次升级在房子下面加上地窖。
+zh_contains=True 地窖一开始有33个木桶。
+zh_contains=True 室外占地保持9×5
+zh_contains=True 第二次升级之后可以做装修，而且马上完成。
+zh_contains=True 例如移除婴儿床，或增加餐厅这间房间。
+zh_contains=True /blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+zh_contains=True /blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+zh_contains=True 罗宾对第一次农舍升级收取10,000金和450木材
+sha256 b63c882c487c038249659c14b30fffea7ed5bebf6145d3d4d97412fd1dcefb94  src/blog/articles/house-upgrade-stardew.en.tsx  bytes=17725
+sha256 1d3217ac64cbcbfe1dba7a5c878accb6f36a1b42b4fa4889bded3382ad0544dd  src/blog/articles/house-upgrade-stardew.zh.tsx  bytes=15867
+sha256 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc  next-env.d.ts  bytes=296
+ssr_failed_checks=2
+
+recount_note=string count of the heading was 2 because the static HTML also repeats it in the RSC payload. Real h2 tags:
+en_h2_tag=<h2>Farmhouse Upgrade FAQ</h2> count=1
+zh_h2_tag=<h2>星露谷房屋升级常见问题</h2> count=1
+en_faq_list=1 en_faq_item=6
+zh_faq_list=1 zh_faq_item=6
+structure_tag_level=PASS

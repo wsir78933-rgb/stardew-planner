@@ -1,0 +1,176 @@
+{
+  "spaceId": 181,
+  "enStart": {
+    "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+    "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+    "h1": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+    "status": 200
+  },
+  "languageRoundtrip": {
+    "zh": {
+      "url": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+      "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "status": 200
+    },
+    "en": {
+      "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "h1": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "status": 200
+    }
+  },
+  "catalog": {
+    "url": "http://127.0.0.1:3010/blog",
+    "title": "Stardew Valley Planning Guides",
+    "h1": "Stardew Valley Planning Guides",
+    "status": 200
+  },
+  "failed": [],
+  "consoleMessages": [
+    {
+      "type": "log",
+      "text": "[AutoComment] initOnPageReady 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext: Object"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] 独立导出外链浮窗按钮已注入"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] 初始检查 hasCommentBox:  hasNotifiedCommentBox: "
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] initOnPageReady 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext: Object"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] 独立导出外链浮窗按钮已注入"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] initOnPageReady 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext: Object"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] 独立导出外链浮窗按钮已注入"
+    },
+    {
+      "type": "info",
+      "text": "This page uses Chrome's Built-In AI features (LanguageDetector)! We're always improving our models; please submit your feedback here: https://issues.chromium.org/issues/new?component=1583316"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] 初始检查 hasCommentBox:  hasNotifiedCommentBox: "
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] initOnPageReady 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext 开始"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] restoreBatchContext: Object"
+    },
+    {
+      "type": "log",
+      "text": "[AutoComment] 独立导出外链浮窗按钮已注入"
+    }
+  ],
+  "enAssetFetches": [
+    {
+      "publicPath": "/blog/house-upgrade-stardew-cover.webp",
+      "responseUrl": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover.webp",
+      "status": 200,
+      "byteLength": 2550052,
+      "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "expectedSha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "expectedBytes": 2550052,
+      "shaMatchesManifest": true,
+      "bytesMatchManifest": true
+    },
+    {
+      "publicPath": "/blog/house-upgrade-stardew-cover.avif",
+      "responseUrl": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover.avif",
+      "status": 200,
+      "byteLength": 653604,
+      "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "expectedSha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "expectedBytes": 653604,
+      "shaMatchesManifest": true,
+      "bytesMatchManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "responseUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "status": 200,
+      "byteLength": 1984240,
+      "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "expectedSha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "expectedBytes": 1984240,
+      "shaMatchesManifest": true,
+      "bytesMatchManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "responseUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "status": 200,
+      "byteLength": 446411,
+      "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "expectedSha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "expectedBytes": 446411,
+      "shaMatchesManifest": true,
+      "bytesMatchManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "responseUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "status": 200,
+      "byteLength": 2453712,
+      "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "expectedSha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "expectedBytes": 2453712,
+      "shaMatchesManifest": true,
+      "bytesMatchManifest": true
+    },
+    {
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "responseUrl": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "status": 200,
+      "byteLength": 617005,
+      "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "expectedSha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "expectedBytes": 617005,
+      "shaMatchesManifest": true,
+      "bytesMatchManifest": true
+    }
+  ]
+}

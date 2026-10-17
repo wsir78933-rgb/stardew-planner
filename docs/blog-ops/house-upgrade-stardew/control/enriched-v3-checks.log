@@ -1,0 +1,118 @@
+=== S Enriched v3 Checkpoint & Canary Contamination Verification Log ===
+Timestamp: 2026-10-16T08:22:14.899076+08:00
+Role: S (Scheduling / Version Records / Contamination Scan Checkpoint)
+TaskId: task_81b387615052
+DispatchId: ctx_281221259e4b
+RunId: run_8253831e93d6
+Terminal: term_ec99eb4c-f8d2-4ea9-a75c-9a07b95adc90
+Coordinator: term_661abce7-55fd-4570-8bf5-970c0451dd23 (Generation 3)
+Context: Parallel Checkpoint with Role D (NOT Final Acceptance)
+
+[1. Worktree & Permission / Isolation Evidence]
+  Command: git worktree list (exit: 0)
+    /Users/wusir/Desktop/开发项目集合/stardew planner                         bbc7ebc [main]
+    /Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客          bb513c4 [codex/blog-gold-star-crops-20261013]
+    /Users/wusir/orca/workspaces/stardew planner/博客-2                       bf91a14 [博客-2]
+  Command: git status -s (exit: 0)
+    ?? docs/blog-ops/house-upgrade-stardew/
+    ?? node_modules
+  Worktree Path: /Users/wusir/orca/workspaces/stardew planner/博客-2
+    inode: 145851019, device: 16777232, uid: 501, gid: 20
+  Main Project: /Users/wusir/Desktop/开发项目集合/stardew planner
+    inode: 65977012, device: 16777232, uid: 501, gid: 20
+  Existing Blog Worktree: /Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客
+    inode: 144267400, device: 16777232, uid: 501, gid: 20
+  Private Canary File: docs/blog-ops/house-upgrade-stardew/control/canary-identity.json
+    mode: -rw------- (0o100600), uid: 501, gid: 20
+    command test -r docs/blog-ops/house-upgrade-stardew/control/canary-identity.json exitCode: 0
+    Isolation Finding: Same UID (501) across local workers establishes logical boundary only; underlying OS/container permissions unverified.
+    Permission Policy: Recording real permission condition without modifying file mode or system access.
+
+[2. S4 Three Calibration Corrections & Evidence]
+  Correction 1: upgrade-planning initial performer
+    Recorded by S4: cursor
+    Verified Actual: antigravity (Task task_c013cf04e3af, Dispatch ctx_6120796fb86d, Terminal term_55c9a0fd-dd26-4aa2-9482-d1bbdc30e8bb)
+    Terminal process command verified: agy --conversation=bb8a34c0-cf7e-44d5-91eb-d4cdcbc5c02f
+    Action: Corrected in operation-store.json and recorded in resume-2026-10-16.md.
+  Correction 2: Canary marker hash vs private identity file hash
+    Private identity file SHA256: d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23
+    Canary secret token SHA256: 401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1
+    Finding: S4 confused secret token hash (401cad...) with file hash (d8022e...). Both hashes independently re-read and verified.
+  Correction 3: v3 generation status & zero leak claim
+    Intermediate draft at S4 timestamp: 417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46 (already existed)
+    Final enriched candidate v3: 8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154 (now completed)
+    Finding: S4 did not perform a fresh Canary scan on v3; S4 zero leak claim was unverified. Fresh scan executed below.
+
+[3. Historical Canonical Writer Snapshot & Intermediate Draft]
+  G2 Preflight Snapshot (interface/resume-preflight/report.md): 7c9cd2414e3b7d70d789ee37f5c066dfac1e544c2aad8bc25954996d5305deec
+  C Intermediate Archive Snapshot (versions/draft-v3-intermediate/writer-submission.json): dbe2ef5543b0ba8b14fe0504bee28a3e1a647eb78af131b537a3dc1bbb806abd
+  C Final Candidate Snapshot (content/en/writer-submission.json): c619f9f69b7c2e738424b242433cd91db866ade28278c218309c978b00c826d6
+  Intermediate draft-v3.md SHA256: 417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46 (preserved intact in versions/draft-v3-intermediate/)
+  Historical Integrity Principle: Each stage's hash recorded from real files; distinct stages not equated; historical content unrewritten.
+
+[4. Private Canary Exact Contamination Scan]
+  Canary ID: canary_house_upgrade_c93c91c4f505
+  Canary Secret Token SHA256: 401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1
+  Canary Identity File SHA256: d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23
+  Canary Plaintext Rule: STRICTLY FORBIDDEN TO OUTPUT PLAINTEXT CANARY TOKEN.
+  Target: content/en/draft-v3.md                        -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: content/en/public-references.en.json          -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: content/en/media-text.en.json                 -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: content/en/writer-submission.json             -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/cover-payments.svg        -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/tier-rooms.svg            -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/upgrade-or-renovation.svg -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/house-upgrade-stardew-cover.webp -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/house-upgrade-stardew-cover.avif -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/tier-rooms.en.webp        -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/tier-rooms.en.avif        -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/upgrade-or-renovation.en.webp -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Target: media-production/en/upgrade-or-renovation.en.avif -> Total Hits: 0 (id_hits: 0, secret_token_hits: 0)
+  Deep Field Scan: public-references.en.json (80 fields scanned: label, url, appliesTo quote) -> Total Hits: 0
+  Deep Field Scan: media-text.en.json (54 fields scanned: alt, caption, inImageText, labels, urls) -> Total Hits: 0
+  Binary Raster Images Scan: VP8 / ISOBMFF metadata chunks & visible text sources inspected -> 0 hits. Note: Binary inspection does not substitute semantic review.
+  Canary Scan Qualified Verdict: PASS (Zero exact contamination hits across all 13 target paths and 134 structured fields).
+  Interpretation Boundary: Zero string match proves absence of canary markers only; semantic review pending D/E; OS isolation unverified.
+  Unexecuted Modules: SEO metadata / Chinese translation / Page assembly marked PENDING / NOT-RUN.
+
+[5. Content Length & Mechanical Preview Verification]
+  Command: python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en docs/blog-ops/house-upgrade-stardew/content/en/draft-v3.md
+  Exit Code: 0
+  Mechanical Units (Total): 1166
+  Mechanical Units (Excluding Schematic. Captions): 1113
+  Required Floor: 1000
+  Meets Mechanical Floor: True
+  Length Class: short
+  Length Status: Author preview only; explicitly NOT formal Role F Length gate pass.
+
+[6. Canonical Hashes Summary]
+  content/en/draft-v3.md: 8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154
+  content/en/public-references.en.json: 4f0e5a4800252baf5879996171e261878dd6bbb46e83d7a4f5828faea7ea7d0a
+  content/en/media-text.en.json: 8a6e1ce5ad8c74440e6bc4854c3740079520420c784457cd26ea98e0d9621f7b
+  content/en/writer-submission.json: c619f9f69b7c2e738424b242433cd91db866ade28278c218309c978b00c826d6
+  versions/draft-v3-intermediate/draft-v3.md: 417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46
+  versions/draft-v3-intermediate/writer-submission.json: dbe2ef5543b0ba8b14fe0504bee28a3e1a647eb78af131b537a3dc1bbb806abd
+
+[7. Revision Budget & Task Lifecycle Accounting]
+  Revision Budget Policy: V7 01 Entry: Shared maximum 3 rounds across en/zh (including translation rework). No reset.
+  Used Rounds: 2 (Round 1 draft-v2 completed; Round 2 draft-v3 completed)
+  Remaining Rounds: 1 (shared across remaining en fixes and translation rework)
+  B Layout Task: task_007b2e700262 (ctx_99239250469e, cursor, term_4484138a-1bad-4e81-b758-dfa376734c59) -> completed / succeeded, released
+  C Writer Task: task_598d00d7df0c (ctx_2702c6b4c058, cursor, term_e531b03d-11b7-4473-851d-e7d6d49574d7) -> completed / succeeded, released
+  D Review Task: task_4e791741e19a (ctx_700b8209e3d4, antigravity, term_2a5ef0fc-67a4-4dca-800e-519667527c13) -> completed / succeeded, released (D三门全量PASS: 0阻塞问题; report SHA: e244e3bbe50aa742d695c90d40931aabdcd55579420906453868bb8b008c16d8, checks SHA: 68e67c64327ab04d832c4b8f70d367cbe2e0f4c608d40a953745138b32ae2ab2)
+  E Review Task: task_d6f805015ae3 (ctx_d49b80437cfc, cursor, term_6e60a146-8128-410d-a0d3-3ce7de341a58) -> dispatched / active (in progress; E/F not yet PASS)
+  F Lock Task: task_bcf55e52ef19 -> pending (not dispatched)
+  Terminal Accounting: active=2, retained=1, released=23, total=26
+
+[8. Downstream Deliverables Status Matrix]
+  English Draft: UNLOCKED (draft-v3 candidate submitted)
+  Three-Gate Audit (Role D): COMPLETED / PASS (0 blocking issues)
+  Fact & Trace Review (Role E): DISPATCHED / IN PROGRESS (task_d6f805015ae3)
+  Formal Length Lock (Role F): PENDING
+  SEO Metadata: PENDING / NOT-RUN
+  Chinese Translation: PENDING / NOT-RUN
+  Page Assembly: PENDING / NOT-RUN
+  User Final Review: PENDING
+  Production Deployment: STRICTLY PROHIBITED / PENDING
+
+=== End of Verification Log ===

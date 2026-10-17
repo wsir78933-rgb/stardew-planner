@@ -1,0 +1,272 @@
+================================================================================
+COMMAND: orca orchestration check --terminal term_2bccceb6-bc2d-4cc4-a2ed-91403ef1e0cb --json
+{
+  "id": "4f182b6b-3f29-47c3-a91f-d770642359c6",
+  "ok": true,
+  "result": {
+    "runId": "run_8253831e93d6",
+    "dispatchId": "ctx_647ed7ad8cdd",
+    "deliveryId": null,
+    "messages": [],
+    "count": 0,
+    "replayed": false,
+    "acknowledged": null,
+    "timedOut": false,
+    "cancelled": false,
+    "connectionLost": false,
+    "mutation": {
+      "requestId": "4910b558-3d12-47e6-a4b6-27f94ddf610b",
+      "replayed": false
+    }
+  },
+  "_meta": {
+    "runtimeId": "97517e0c-ae32-460c-b64a-8651b041df0d"
+  }
+}
+EXIT: 0
+================================================================================
+COMMAND: shasum -a 256 next-env.d.ts
+1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b  next-env.d.ts
+EXIT: 0
+EXPECTED_DIRTY_SHA=1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b
+ACTUAL_DIRTY_SHA=1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b
+================================================================================
+COMMAND: git rev-parse HEAD
+bf91a14829067ed1c9c2a206a97985e17dbebdda
+EXIT: 0
+================================================================================
+COMMAND: git rev-parse HEAD:next-env.d.ts
+a419cbe4e3a5e8d4b481b851dbf4ac767de069e6
+EXIT: 0
+================================================================================
+COMMAND: git hash-object next-env.d.ts
+ce4e94a6b10f160ee021fe18939af160d2927dcf
+EXIT: 0
+================================================================================
+COMMAND: git diff --name-only HEAD
+next-env.d.ts
+public/llms.txt
+src/blog/blog-copy.ts
+src/blog/blog-post-identities.ts
+src/blog/blog-post-registry.tsx
+tests/blog/blog-home-state.test.ts
+tests/blog/blog-post-registry.test.ts
+tests/i18n/public-route-registry.test.ts
+tests/routes/blog-routes.test.tsx
+tests/routes/removed-public-pages.test.ts
+tests/seo/canonical-public-routes.test.ts
+EXIT: 0
+================================================================================
+COMMAND: git diff -- next-env.d.ts
+diff --git a/next-env.d.ts b/next-env.d.ts
+index a419cbe..ce4e94a 100644
+--- a/next-env.d.ts
++++ b/next-env.d.ts
+@@ -1,7 +1,7 @@
+ /// <reference types="next" />
+ /// <reference types="next/image-types/global" />
+-import "./.next/dev/types/routes.d.ts";
+-import "./.next/dev/types/root-params.d.ts";
++import "./.next/types/routes.d.ts";
++import "./.next/types/root-params.d.ts";
+ 
+ // NOTE: This file should not be edited
+ // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+EXIT: 0
+================================================================================
+COMMAND: git show HEAD:next-env.d.ts | shasum -a 256
+0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc  -
+PIPESTATUS:  
+================================================================================
+COMMAND: git restore --source=HEAD --worktree --staged -- next-env.d.ts
+EXIT: 0
+================================================================================
+COMMAND: git show HEAD:next-env.d.ts | cmp - next-env.d.ts
+PIPESTATUS:  
+================================================================================
+COMMAND: shasum -a 256 next-env.d.ts
+0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc  next-env.d.ts
+EXIT: 0
+================================================================================
+COMMAND: git hash-object next-env.d.ts
+a419cbe4e3a5e8d4b481b851dbf4ac767de069e6
+EXIT: 0
+================================================================================
+COMMAND: git diff --exit-code -- next-env.d.ts
+EXIT: 0
+================================================================================
+COMMAND: git status --short -- next-env.d.ts
+EXIT: 0
+================================================================================
+COMMAND: git diff --name-only HEAD
+public/llms.txt
+src/blog/blog-copy.ts
+src/blog/blog-post-identities.ts
+src/blog/blog-post-registry.tsx
+tests/blog/blog-home-state.test.ts
+tests/blog/blog-post-registry.test.ts
+tests/i18n/public-route-registry.test.ts
+tests/routes/blog-routes.test.tsx
+tests/routes/removed-public-pages.test.ts
+tests/seo/canonical-public-routes.test.ts
+EXIT: 0
+================================================================================
+COMMAND: shasum -a 256 src/blog/articles/house-upgrade-stardew.en.tsx src/blog/articles/house-upgrade-stardew.zh.tsx out/house-upgrade-stardew.html out/zh/house-upgrade-stardew.html
+cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5  src/blog/articles/house-upgrade-stardew.en.tsx
+2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba  src/blog/articles/house-upgrade-stardew.zh.tsx
+3ca9995c83780becbaca28e891f2d067aabcd9d3052707afc53826a7096c6430  out/house-upgrade-stardew.html
+ce02bd73e681374e7d8b3a2cbd03429252009aefa084c1f695ccaa3e067df77f  out/zh/house-upgrade-stardew.html
+EXIT: 0
+================================================================================
+COMMAND: wc -c src/blog/articles/house-upgrade-stardew.zh.tsx
+   14218 src/blog/articles/house-upgrade-stardew.zh.tsx
+EXIT: 0
+================================================================================
+COMMAND: python3 hashlib.sha256 compare after restore
+next-env.d.ts 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc match=True
+src/blog/articles/house-upgrade-stardew.en.tsx cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5 match=True
+src/blog/articles/house-upgrade-stardew.zh.tsx 2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba match=True
+out/house-upgrade-stardew.html 3ca9995c83780becbaca28e891f2d067aabcd9d3052707afc53826a7096c6430 match=True
+out/zh/house-upgrade-stardew.html ce02bd73e681374e7d8b3a2cbd03429252009aefa084c1f695ccaa3e067df77f match=True
+zh_bytes=14218
+TRACKED:
+public/llms.txt
+src/blog/blog-copy.ts
+src/blog/blog-post-identities.ts
+src/blog/blog-post-registry.tsx
+tests/blog/blog-home-state.test.ts
+tests/blog/blog-post-registry.test.ts
+tests/i18n/public-route-registry.test.ts
+tests/routes/blog-routes.test.tsx
+tests/routes/removed-public-pages.test.ts
+tests/seo/canonical-public-routes.test.ts
+TRACKED_COUNT=10 match=True
+NEXT_ENV_BLOB=a419cbe4e3a5e8d4b481b851dbf4ac767de069e6
+HEAD_BLOB=a419cbe4e3a5e8d4b481b851dbf4ac767de069e6
+BLOB_MATCH=True
+EXIT: 0
+================================================================================
+COMMAND: PYTHONDONTWRITEBYTECODE=1 python3 extract vitest summaries
+FILE docs/blog-ops/house-upgrade-stardew/assembly/validation/vitest-interface.txt
+91: FAIL  tests/assets/public-avif-assets.test.ts > public AVIF derivatives > provides AVIF derivatives for every opaque public WebP image
+92:AssertionError: expected [ …(108) ] to have a length of 81 but got 108
+110: FAIL  tests/blog/blog-article-content.test.tsx > renders sourced English and Chinese Pine Tree guides with the locked growth boundaries
+111:AssertionError: expected '<article><p>松果是松树的种子入口，松树属于普通树，不按果树的 …' to contain '本文不发布阶段数字'
+130: FAIL  tests/blog/blog-sources.test.tsx > preserves each localized article's source links, labels, notes, and order
+131:AssertionError: expected '<section class="blog-sources"><div da…' to contain '<p class="blog-sources__checked">The …'
+146: FAIL  tests/blog/pine-tree-stardew-identity.test.ts > exposes the locked Pine Cone, stage-four, and Pine Tar angle in both bodies
+147:AssertionError: expected '<article><p>松果是松树的种子入口，松树属于普通树，不按果树的 …' to contain '本文不发布阶段数字'
+165: FAIL  tests/routes/llms.test.ts > exports a bilingual LLM site guide with every indexable public route
+166:AssertionError: expected '# Stardew Valley Planner\n\n> A brows…' to contain '](https://stardewvalleyplanner.art/st…'
+267: FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports all bilingual blog pages with article discovery metadata and original covers
+268:AssertionError: Expected /blog to contain a cover image with src=/blog/how-to-earn-money-stardew-cover.webp and alt=Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store...<truncated>
+279: FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports all bilingual public pages with static metadata and paired language alternates
+280:AssertionError: expected 46622 to be greater than 51630
+292: FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports global 404 artifacts with the English root document shell
+293:AssertionError: expected '<!DOCTYPE html><html lang="en"><head>…' to match /<link rel="stylesheet" href="\/…/_next\
+312: Test Files  6 failed | 45 passed (51)
+313:      Tests  8 failed | 237 passed (245)
+317:VITEST_INTERFACE_EXIT=1
+FILE docs/blog-ops/house-upgrade-stardew/assembly/validation/vitest-full.txt
+321: FAIL  tests/assets/public-avif-assets.test.ts > public AVIF derivatives > provides AVIF derivatives for every opaque public WebP image
+322:AssertionError: expected [ …(108) ] to have a length of 81 but got 108
+340: FAIL  tests/catalog/catalog-loader.test.ts > catalog loader > creates precise item contracts for every verified rendering category
+341:AssertionError: expected { id: 'building:Building 0', …(7) } to match object { id: 'building:Building 0', …(7) }
+368: FAIL  tests/blog/blog-article-content.test.tsx > renders sourced English and Chinese Pine Tree guides with the locked growth boundaries
+369:AssertionError: expected '<article><p>松果是松树的种子入口，松树属于普通树，不按果树的 …' to contain '本文不发布阶段数字'
+388: FAIL  tests/blog/blog-sources.test.tsx > preserves each localized article's source links, labels, notes, and order
+389:AssertionError: expected '<section class="blog-sources"><div da…' to contain '<p class="blog-sources__checked">The …'
+404: FAIL  tests/blog/pine-tree-stardew-identity.test.ts > exposes the locked Pine Cone, stage-four, and Pine Tar angle in both bodies
+405:AssertionError: expected '<article><p>松果是松树的种子入口，松树属于普通树，不按果树的 …' to contain '本文不发布阶段数字'
+423: FAIL  tests/resources/local-planner-resource-smoke.test.ts > local planner resource smoke matrix > loads every planner map for spring, summer, fall, and winter from local resources
+424:Error: Test timed out in 5000ms.
+436: FAIL  tests/routes/llms.test.ts > exports a bilingual LLM site guide with every indexable public route
+437:AssertionError: expected '# Stardew Valley Planner\n\n> A brows…' to contain '](https://stardewvalleyplanner.art/st…'
+538: FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports all bilingual blog pages with article discovery metadata and original covers
+539:AssertionError: Expected /blog to contain a cover image with src=/blog/how-to-earn-money-stardew-cover.webp and alt=Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store...<truncated>
+550: FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports all bilingual public pages with static metadata and paired language alternates
+551:AssertionError: expected 46622 to be greater than 51630
+563: FAIL  tests/routes/static-public-pages.test.ts > static public pages > exports global 404 artifacts with the English root document shell
+564:AssertionError: expected '<!DOCTYPE html><html lang="en"><head>…' to match /<link rel="stylesheet" href="\/…/_next\
+582: FAIL  docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx > renders the English harvest article as the frozen reader text
+583:AssertionError: expected 'Harvest regular crops by hand in Star…' to be 'Stand next to a ripe parsnip and righ…' // Object.is equality
+599: FAIL  docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx > renders the Chinese harvest article as the frozen reader text
+600:AssertionError: expected '在星露谷物语里，普通作物用手收：站在成熟植株旁边右键点它，或者按住动作键，…' to be '站在成熟的防风草旁点击右键。防风草不需要镰刀。羽衣甘蓝、苋菜、小麦、未碾米…' // Object.is equality
+617: Test Files  9 failed | 250 passed (259)
+618:      Tests  12 failed | 2478 passed (2490)
+622:VITEST_FULL_EXIT=1
+EXIT: 0
+================================================================================
+COMMAND: PYTHONDONTWRITEBYTECODE=1 python3 print cited source lines
+FILE docs/blog-ops/house-upgrade-stardew/reviews/R/report.md
+9:  - **本次文章装配与技术实现**: **PASS**（0 缺陷，完全符合 12 代码/测试路径 + 12 媒体资产与冻结交接契约）
+10:  - **全量测试套件基线状态**: **FAIL**（保留仓库固有 12 项历史失败限制，0 项属于本次引入）
+127:     - 8 项失败**全部与 2026-10-15 历史基线失败完全同名同因**（AVIF 衍生图测试期待 81 收到 108，增量 6 项完全符合新增 6 个 WebP 资产预期；Pine 树相关指南中文断言失败；llms 缺失 fruit 路由；static-public-pages 缺失封面/部分排序/404 CSS 路径差异）。
+128:     - 本次修改覆盖的 6 个测试文件（`blog-post-registry` 20 项、`blog-home-state` 18 项、`public-route-registry` 4 项、`canonical-public-routes` 1 项、`removed-public-pages` 3 项、`blog-routes` 19 项）及 `blog-planner-cta` 8 项**全部绿灯通过**。
+129:     - 本次新增未引入任何新失败断言，亦未修改断言掩盖旧失败。
+130:4. **全量测试套件 (`vitest-full.txt`)**:
+131:   - 执行退出码: `1`（12 项失败，2478 项通过，共 2490 项测试）。
+132:   - 审计结论:
+133:     - 包含上述 8 项历史失败，另含 4 项与本次完全无关的仓库级历史失败（`catalog-loader`、`local-planner-resource-smoke`、`how-to-harvest` 英文/中文旧 reader text 校验）。
+134:     - 没有任何一项失败指向或涉及 `house-upgrade-stardew`。
+135:     - 全量套件退出码为 1 属于仓库既有环境约束，已如实记录为基线限制。
+183:- **中文绑定报告字长记录**: `docs/blog-ops/house-upgrade-stardew/assembly/zh-bindings.md` 第 36 行记录 `src/blog/articles/house-upgrade-stardew.zh.tsx` 大小为 9658 字节。经审查磁盘文件，实际大小为 14218 字节，文件实际 SHA-256（`2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba`）与预期完全一致。此项属于记录笔误，已在 G 验证报告中更正说明，不影响代码正确性与正文哈希。
+198:本次 `house-upgrade-stardew` 关键词的双语博客页面技术装配在代码边界、哈希校验、结构绑定、SEO 导出、静态生成以及架构设计规范方面**完全合格，判定为 PASS**。仓库全量测试套件仍保留 12 项历史基线限制，按规则如实记录。
+FILE docs/blog-ops/house-upgrade-stardew/reviews/R/checks.log
+28:    * Vitest full suite has 12 failures (exit 1, including 4 unrelated repository tests), full suite remains FAIL as historical baseline limitation.
+61:- Auto-generated: next-env.d.ts (updated by next build to reference .next/types instead of .next/dev/types).
+214:  * Result: 12 failed, 2478 passed (2490 tests).
+215:  * Breakdown: 8 historical interface failures + 4 repository-level failures (catalog-loader allowedTools fill, local-planner-resource-smoke timeout, and 2 how-to-harvest reader text tests).
+216:  * None of the 12 failures are related to or caused by house-upgrade-stardew.
+217:  * Full suite remains FAIL due to pre-existing baseline failures; recorded truthfully as an expected environment constraint.
+FILE docs/blog-ops/house-upgrade-stardew/assembly/validation/baseline-comparison.md
+5:The 8-item list is the 2026-10-15 interface Vitest log at `interface/baseline/vitest-blog.txt` and `interface/baseline/classification.md`. A failure is called the same historical failure only when the test name and the assertion text match that log. The WebP received count is the one predicted numeric change.
+14:| Interface Vitest set | 8 failed, 237 passed, 245 tests; 6 failed files, 45 passed, 51 files | 8 failed, 237 passed, 245 tests; 6 failed files, 45 passed, 51 files | 1 |
+15:| Full `pnpm exec vitest run` | not in that baseline | 12 failed, 2478 passed, 2490 tests; 9 failed files, 250 passed, 259 files | 1 |
+34:## Full-suite failures outside the 8
+35:
+36:These four are not in the 2026-10-15 interface log. They are not classified as that baseline, and they were not fixed.
+40:| `tests/catalog/catalog-loader.test.ts` | `building:Building 0` received an extra `allowedTools` value `fill` |
+41:| `tests/resources/local-planner-resource-smoke.test.ts` | timed out in 5000ms |
+42:| `docs/blog-ops/how-to-harvest-stardew-valley/verification/assembly/render-reader-text.test.tsx` English | rendered reader text is not the approved harvest handoff text |
+43:| Same file, Chinese | rendered reader text is not the approved harvest handoff text |
+45:None of those assertions name `house-upgrade-stardew`. This task did not edit those files.
+FILE docs/blog-ops/house-upgrade-stardew/assembly/zh-bindings.md
+36:| `src/blog/articles/house-upgrade-stardew.zh.tsx` | `HouseUpgradeStardewChineseArticle()` | 9658 | `2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba` |
+150:（注：`AssemblyManifest.json` 为装配主线/协调者创建，本 Worker 仅新增自己的两个互斥目标文件，未修改其他任何既有文件或注册表）。
+FILE docs/blog-ops/house-upgrade-stardew/assembly/validation/report.md
+17:Coordinator hashes match the files on disk, including both public handoffs, both body hashes, both article modules, both binding reports, `AssemblyManifest.json`, and `integration-report.md`. `articles.en.outputSha256` and `articles.zh-CN.outputSha256` are null. The module hashes live in the binding reports and match the files: English `cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5`, Chinese `2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba`. The manifest was not edited.
+19:The Chinese binding report says the module is 9658 bytes. The file with that hash is 14218 bytes. The hash is the identity that matched.
+FILE docs/blog-ops/house-upgrade-stardew/assembly/integration-report.md
+3:G integration owner only. This record binds the frozen public handoff to the existing blog registry, hrefs, llms bullets, and 12 copied media files. It does not claim a page PASS, a user final review, or a production deploy.
+5:Recorded after `AssemblyManifest.json` was written. Manifest SHA-256: `6ce4e84ffbcc1252f2cebd443e4ccceac5a60d29c2ceb41dd74eaabd68fc6834`. This report does not include its own hash. Owned source, test, llms, and media hashes are the `ownedOutputSha256` object in the manifest.
+93:New untracked files are the 12 public media files, this report, and `AssemblyManifest.json`.
+105:| Python write of `AssemblyManifest.json` | 0 |
+FILE node_modules/next/dist/docs/01-app/03-api-reference/05-config/02-typescript.md
+112:## `next-env.d.ts`
+114:Next.js generates a `next-env.d.ts` file in your project root. This file references Next.js type definitions, allowing TypeScript to recognize non-code imports (images, stylesheets, etc.) and Next.js-specific types.
+116:Running `next dev`, `next build`, or [`next typegen`](/docs/app/api-reference/cli/next#next-typegen-options) regenerates this file.
+120:> - `next-env.d.ts` is managed by Next.js. Its contents are an implementation detail and may change over time. Add it to `.gitignore`. If your project already tracks the file, remove it from Git. Do not edit this file manually.
+FILE node_modules/next/dist/docs/01-app/03-api-reference/06-cli/next.md
+198:Output files are written to `<distDir>/types` (typically: `.next/dev/types` in development or `.next/types` in production):
+206:Additionally, `next typegen` generates a `next-env.d.ts` file. We recommend adding `next-env.d.ts` to your `.gitignore` file.
+210:To ensure `next-env.d.ts` is present before type-checking run `next typegen`. The commands `next dev` and `next build` also generate the `next-env.d.ts` file, but it is often undesirable to run these just to type-check, for example in CI/CD environments.
+EXIT: 0
+================================================================================
+COMMAND: git show HEAD:next-env.d.ts | cmp - next-env.d.ts
+cmp_exit=0
+pipestatus=0
+================================================================================
+COMMAND: PYTHONDONTWRITEBYTECODE=1 python3 print vitest-full.txt lines 346-354
+346:@@ -1,9 +1,10 @@
+347:  {
+348:    "allowedTools": [
+349:      "cursor",
+350:      "multi-select",
+351:+     "fill",
+352:      "erase",
+353:    ],
+354:    "category": "building",
+EXIT: 0
+================================================================================
+NOTE: The shell is zsh. Bash PIPESTATUS is unset here, so the earlier PIPESTATUS lines are blank. cmp_exit=0 above is the exit of cmp, captured with $? immediately after `git show HEAD:next-env.d.ts | cmp - next-env.d.ts`. The following pipestatus=0 is the status of that echo, not a second pipeline member.

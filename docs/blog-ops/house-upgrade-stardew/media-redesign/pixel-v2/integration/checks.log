@@ -1,0 +1,20 @@
+# pixel-v2 integration checks
+# apply command: PYTHONDONTWRITEBYTECODE=1 python3 docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/integration/apply_pixel_v2.py
+# first_apply_exit=1
+# first_error=KeyError: 'blog/house-upgrade-stardew-cover.webp' in build_handoff
+# second_apply_exit=1
+# second_error=KeyError: 'blog/house-upgrade-stardew-cover.webp' in build_manifest
+# third_apply_exit=0
+# third_apply_stdout={"ok": true, "qualifiedEn": 1084, "pureHan": 1645}
+
+## independent public cmp and handoff integrity
+public_ok=12 cmp_exit=0
+historical_unchanged docs/blog-ops/house-upgrade-stardew/handoff/public/en.json
+historical_unchanged docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json
+historical_unchanged docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json
+historical_unchanged docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+historical_unchanged docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+en.json integrity_ok bodyHash 151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8 publicFieldsSha256 fa3cb7a8df969b3f91ffa3ab9fb3aaad4748e132a3e9deaf8d348287d584f597
+zh-CN.json integrity_ok bodyHash 00a612b48022fa7256f89b7fc5eb0386b34d17b6f272f079da9f62eb40998bc4 publicFieldsSha256 75b3d2a26d14cad3b49df9eeb20c2e1bbffd0e776c463d3317f6c13248592d15
+zh_englishBodyHash 151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8
+independent_exit=0

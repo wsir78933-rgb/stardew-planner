@@ -1,0 +1,92 @@
+[
+  {
+    "id": "01-wiki-farmhouse",
+    "ok": true,
+    "href": "https://stardewvalleywiki.com/Farmhouse",
+    "title": "Farmhouse - Stardew Valley Wiki",
+    "lang": "en",
+    "headingCount": 20,
+    "textLength": 6272,
+    "headings": [
+      "Farmhouse",
+      "Contents",
+      "Interior",
+      "Upgrades",
+      "Renovations",
+      "Spouse/Roommate Rooms",
+      "Achievements",
+      "Notes",
+      "History",
+      "Navigation menu",
+      "Personal tools",
+      "Namespaces"
+    ]
+  },
+  {
+    "id": "02-steam-guide",
+    "ok": true,
+    "href": "https://steamcommunity.com/sharedfiles/filedetails/?l=german&id=3118664526",
+    "title": "Steam-Community :: Guide :: Every House Upgrade And Renovation",
+    "lang": "de",
+    "headingCount": 5,
+    "textLength": 8159,
+    "headings": [
+      "Stardew Valley",
+      "STEAM",
+      "VALVE",
+      "RECHTLICHES",
+      "MEHR"
+    ]
+  },
+  {
+    "id": "03-ign",
+    "ok": false,
+    "requestedUrl": "https://www.ign.com/wikis/stardew-valley/Farmhouse_Upgrades",
+    "error": "PageNavigationTimeoutError: page.goto timed out after 45000ms waiting for load; navigation committed at \"https://www.ign.com/wikis/stardew-valley/Farmhouse_Upgrades\" with document.readyState=\"interactive\". Continue on this Page; call page.waitForLoadState(\"load\") if that lifecycle state is still required.\n    at navigationTimeout (file:////[eval1]:16489:12)\n    at navigateInPage (file:////[eval1]:16368:19)\n    at async file:////[eval1]:18263:13\n    at async file:////[eval1]:18968:29\n    at async file:////[eval1]:16691:28"
+  },
+  {
+    "id": "04-reddit",
+    "ok": true,
+    "href": "https://www.reddit.com/r/StardewValley/comments/17lxixq/upgrade_house_worth_it/",
+    "title": "Upgrade house worth it? : r/StardewValley",
+    "lang": "en-US",
+    "headingCount": 35,
+    "textLength": 5691,
+    "headings": [
+      "Upgrade house worth it?",
+      "Comments Section",
+      "USER FLAIR",
+      "COMMUNITY BOOKMARKS",
+      "BANNER CREDIT",
+      "CONTENT FILTER",
+      "ANNOUNCEMENTS",
+      "R/STARDEWVALLEY RULES",
+      "Be respectful.",
+      "No sensitive, political, or controversial topics",
+      "Posts must be relevant, have a descriptive title, and not duplicate a recent post.",
+      "Posts must not be a removed topic."
+    ]
+  },
+  {
+    "id": "05-digitaltrends",
+    "ok": true,
+    "href": "https://www.digitaltrends.com/gaming/stardew-valley-house-upgrade/",
+    "title": "Stardew Valley house upgrade guide: all upgrade costs and more - Digital Trends",
+    "lang": "en-us",
+    "headingCount": 11,
+    "textLength": 7254,
+    "headings": [
+      "Stardew Valley house upgrade guide: all upgrade costs and more",
+      "All farmhouse upgrades in Stardew Valley",
+      "Upgrade 1",
+      "Upgrade 2",
+      "Upgrade 3",
+      "MORE GAMING",
+      "Shopping for Back-to-school? These are the gaming laptops I’d recommend",
+      "All Stellaris cheats and console commands",
+      "Is Rust cross-platform?",
+      "Is Overcooked 2 cross-platform?",
+      "Is Minecraft cross-platform? Bedrock, Java, and console cross-play explained"
+    ]
+  }
+]

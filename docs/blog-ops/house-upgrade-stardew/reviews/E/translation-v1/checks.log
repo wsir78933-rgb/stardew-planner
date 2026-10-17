@@ -1,0 +1,116 @@
+E translation-v1 checks
+role E; task task_a618eac49e95; dispatch ctx_71fb79319a68
+coordinator inputs: msg_c80d48ecf842, msg_0ec6f131aac6, msg_3770db75eecb
+worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+1. shasum -a 256 of the bound files
+command exit 0
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  lock/en/body.md
+MATCH coordinator EN body
+b6e2b7e20f4942945af2258c3eb28455680e952feaf2d04a9c7d424a75f55b58  seo/en/seo-candidate.json
+MATCH coordinator selected EN SEO
+9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843  content/zh/draft-zh-v1.md
+MATCH
+1a5c3bf69155c66cf6a2e5d3ce1f0a44d2b18d69a67cdb9dcbf665eacc0748ec  content/zh/seo.zh.json
+MATCH
+8dc7366349f48ed2258c070638cb9edce04a4d886a052e6c2b8aea12fd8566f9  content/zh/public-references.zh.json
+MATCH
+0410d2b318c1295f2696ec4af61e29715d5aa69df033991ef5bf9922d77738d3  content/zh/media-text.zh.json
+MATCH
+37d7815f9dd1eadb3a3b60bde56465bfd85a6b2f60552936e6c1df2ecf3e8b1f  content/zh/translation-submission.json
+MATCH
+13e6506201f7ecb1535e2f40077d71b7b6ac0ee35f4485810cba1db515dab735  media-production/zh/cover-payments.svg
+99337ac2b5dcacb7792968289ea17f16e87cbbd69bf07c436665922196aed5c0  media-production/zh/tier-rooms.svg
+1fd0e8e620c28067f0fdfc2d05b6bd80ff243ec82b4d5d8226f3e6e460d5c5c9  media-production/zh/upgrade-or-renovation.svg
+bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87  media-production/zh/house-upgrade-stardew-cover-zh.webp
+MATCH coordinator
+7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926  media-production/zh/house-upgrade-stardew-cover-zh.avif
+MATCH coordinator
+d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c  media-production/zh/tier-rooms.zh.webp
+MATCH coordinator
+aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad  media-production/zh/tier-rooms.zh.avif
+MATCH coordinator
+6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88  media-production/zh/upgrade-or-renovation.zh.webp
+MATCH coordinator
+d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84  media-production/zh/upgrade-or-renovation.zh.avif
+MATCH coordinator
+
+2. PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale zh-CN content/zh/draft-zh-v1.md
+exit 0
+mechanical_units 1740
+required_floor null
+meets_mechanical_floor null
+length_class reference_only
+omitted headings 8, code 0, excluded_sections 0, non_body 34, frontmatter 0
+sha256_raw = sha256_nfc_lf = 9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843
+independent han: full file 1908; two 示意图 caption lines 90; heading han 85; image-alt han 83
+1740 - 90 = 1650 han after also dropping the two body captions
+1908 is not added to the locked English length
+English counter was not re-run. lock/en/body.md hash still matches the locked file whose prior qualified count is 1085
+
+3. structure / quotes / urls, python exit 0, files limited to lock/en/body.md, content/zh, handoff publicReferences, content/en/media-text.en.json
+headings 8 = 8
+https URL multiset equal: 50 occurrences, 12 unique URLs
+image urls: tier-rooms.en.webp -> tier-rooms.zh.webp; upgrade-or-renovation.en.webp -> upgrade-or-renovation.zh.webp; cover.webp -> cover-zh.webp
+quotes 55; occurrence mismatches 0; English quote strings pasted into Chinese appliesTo 0
+reference id + url + appliesTo count aligned with the clean English publicReferences
+public-references.zh.json contains factIds/reviewerNote/CALC-/Users/prompt/canary: all false
+bodyPath present: docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md
+ZH versionNote wiki-version-history includes the extra sentence 旧的这一对只出现在那一句里
+clean EN versionNote does not include that sentence
+ZH site-carpenter versionNote is present; clean EN publicReferences has no site-carpenter versionNote
+title = h1 = ogTitle
+body alts for the two in-body figures equal media-text alt
+cover src is header-only, same placement class as English
+
+4. SVG text and geometry
+ZH visible text matches media-text inImageText on all 3 figures
+skeleton diff after removing text nodes and font-size overrides: only font-family Arial -> PingFang SC / Hiragino Sans GB
+upgrade-or-renovation.svg adds style font-size 72px on 装修 and 64px on 升级2之后 / 即时 / 退还金币
+rect coordinates, colors, and numbers are otherwise unchanged
+
+5. rasters
+Pillow: all 6 files are 1672x941
+webp vs avif max channel diff: cover 17, tier 20, renovation 19
+pixels with channel diff > 12: cover 64, tier 62, renovation 52
+bright pixels in a 6px ring outside the three overflow:true rects: 0, 0, 0
+bright pixels on the outer 2px of each webp: 0
+render.log 2026-10-16 09:38:09-11 is the only run in that file
+overflow true there: text-renovation-unlock 升级2之后, text-renovation-speed 即时, text-renovation-refund 退还金币
+those three textWidth/textHeight values are smaller than their rects
+reject_overflow in render-recipe.py checks width/height only and ignores the overflow boolean
+no earlier exit 1 remains in this render.log
+decoded views written in this review directory; Read of the webp files failed with webp codec not registered, so the PNGs are the pixels actually viewed
+
+6. saved Chinese wiki HTML, no ops-root scan
+/tmp/zh-page.html bytes 587822, unicode chars 569289
+title: 采集 - Stardew Valley Wiki
+canonical: https://zh.stardewvalleywiki.com/%E9%87%87%E9%9B%86
+护林人 appears beside Forester.png; 煤矿森林, 秘密森林, 大树桩, 大圆木 appear as page terms
+/tmp/zh-house.html bytes 75441, unicode chars 69220
+title: 农舍 - 星露谷物语官方中文维基
+og:url: https://zh.stardewvalleywiki.com/%E5%86%9C%E8%88%8D
+cellar sentence uses 木桶 and 初始地窖里有33个木桶
+renovation table rows:
+移除婴儿床 | 免费
+开放卧室 | 10,000
+添加南侧房间 | 30,000
+添加角落房间 | 20,000
+扩建角落房间 | 100,000
+阁楼 | 60,000
+凹间 | 10,000
+餐厅 | 150,000
+打通餐厅 | 10,000
+修建餐厅 count on this file: 0
+小桶 count on both saved files: 0
+GET https://zh.stardewvalleywiki.com/%E5%B0%8F%E6%A1%B6 HTTP 403
+GET https://zh.stardewvalleywiki.com/%E6%9C%A8%E6%A1%B6 HTTP 403
+python process exit 0 because those HTTP errors were caught; the requests were not retried
+
+7. search-scope fact
+commands that did not exclude control/:
+- workspace search for 翻译|译文 returned excerpts from control/resume-2026-10-16.md, control/operation-store.json, control/v4-proof-checkpoint.md, control/enriched-v3-checkpoint.md, control/phase-3-records.json, control/authorization-isolation.md
+- search of docs/blog-ops/house-upgrade-stardew for exit_code/overflow/font-size with glob *.{log,md,json,py} returned only media-production/zh/render.log
+returned control excerpts were process-status lines
+canary-identity.json was not in any returned path, and no secret string was in the returned text
+canary file was not opened again

@@ -1,0 +1,75 @@
+{
+  "locale": "zh-CN",
+  "articleSlug": "house-upgrade-stardew",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
+  "figures": [
+    {
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "placement": "article-header",
+      "src": "/blog/house-upgrade-stardew-cover-zh.webp",
+      "siblingAvif": "/blog/house-upgrade-stardew-cover-zh.avif",
+      "alt": "三档付款：升级1是10,000金、450木材和3天；升级2是65,000金、100硬木和3天；升级3是100,000金和3天。",
+      "caption": "示意图：升级1显示10,000金、450木材和3天。升级2显示65,000金、100硬木和3天。升级3显示100,000金和3天。",
+      "inImageText": [
+        "升级1",
+        "10,000金",
+        "450木材",
+        "3天",
+        "升级2",
+        "65,000金",
+        "100硬木",
+        "3天",
+        "升级3",
+        "100,000金",
+        "3天"
+      ]
+    },
+    {
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "placement": "在 H2「厨房、育儿室和地窖是做什么的」里，紧接说明育儿室就是有婴儿床的那间房的句子之后。",
+      "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "siblingAvif": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "alt": "三档标注：升级1是厨房和卧室，升级2是空房间和育儿室，升级3是地窖和外观相同，共用一行写着9×5室外。",
+      "caption": "示意图：升级1标着厨房和卧室。升级2标着空房间和育儿室。升级3标着地窖和外观相同。共用一行写着9×5室外。",
+      "inImageText": [
+        "升级1",
+        "厨房",
+        "卧室",
+        "升级2",
+        "空房间",
+        "育儿室",
+        "升级3",
+        "地窖",
+        "外观相同",
+        "9×5室外"
+      ]
+    },
+    {
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "placement": "H2「装修不是下一次升级」的开头。",
+      "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "siblingAvif": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "alt": "两条路径和两个例子：升级写着3天；装修写着升级2之后、即时和退还金币；移除婴儿床写着免费；餐厅写着150,000金。",
+      "caption": "示意图：升级那一路写着升级和3天。装修那一路写着装修、升级2之后、即时和退还金币。移除婴儿床写着免费。餐厅写着150,000金。",
+      "inImageText": [
+        "升级",
+        "3天",
+        "装修",
+        "升级2之后",
+        "即时",
+        "退还金币",
+        "移除婴儿床",
+        "免费",
+        "餐厅",
+        "150,000金"
+      ]
+    }
+  ]
+}

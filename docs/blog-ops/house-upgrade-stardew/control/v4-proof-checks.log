@@ -1,0 +1,1163 @@
+=== v4 proof checks ===
+internalDbNote: one read-only sqlite SELECT of messages happened before msg_5f7e33be453d; it found msg_a968dbfe2966 at 2026-10-16 00:23:00. No later internal database query was run.
+=== evidence commands ===
+===== COMMAND: date =====
+2026-10-16T08:55:02+0800
+exitCode=0
+===== COMMAND: id -u; id -g =====
+501
+uid_exit=0
+20
+gid_exit=0
+===== COMMAND: test -r identity =====
+exitCode=0
+===== COMMAND: stat -f identity/worktree =====
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/canary-identity.json mode=0600 uid=501 gid=20 inode=145884500 device=16777232
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2 mode=0755 uid=501 gid=20 inode=145851019 device=16777232
+path=/Users/wusir/Desktop/开发项目集合/stardew planner mode=0755 uid=501 gid=20 inode=65977012 device=16777232
+path=/Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客 mode=0755 uid=501 gid=20 inode=144267400 device=16777232
+exitCode=0
+===== COMMAND: stat -f s5 files and intermediate =====
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checkpoint.md birth=2026-10-16T08:18:07+0800 mtime=2026-10-16T08:23:34+0800 ctime=2026-10-16T08:23:34+0800
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checks.log birth=2026-10-16T08:17:15+0800 mtime=2026-10-16T08:23:40+0800 ctime=2026-10-16T08:23:40+0800
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/operation-store.json birth=2026-10-15T21:52:46+0800 mtime=2026-10-16T08:23:23+0800 ctime=2026-10-16T08:23:23+0800
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/resume-2026-10-16.md birth=2026-10-16T07:22:43+0800 mtime=2026-10-16T08:23:45+0800 ctime=2026-10-16T08:23:45+0800
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/versions/draft-v3-intermediate birth=2026-10-16T07:24:28+0800 mtime=2026-10-16T07:24:28+0800 ctime=2026-10-16T07:24:28+0800
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/versions/draft-v3-intermediate/draft-v3.md birth=2026-10-16T07:20:25+0800 mtime=2026-10-16T07:20:25+0800 ctime=2026-10-16T07:24:28+0800
+exitCode=0
+===== COMMAND: shasum -a 256 =====
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md
+1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json
+75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json
+1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json
+168792507d046a073c84a30fce4e4d08bd5313ec3a9c2b25b098f5f5a73f1586  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/revision-round-2.md
+7f99e45f7f8003ef64bbcbdfddd4106b8d69ef4e0da7c0c10779ba96a6a9d684  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/revision-round-3.md
+417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/versions/draft-v3-intermediate/draft-v3.md
+2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/reviews/E/enriched-v3/report.md
+ae5c87028bcfbd6f5c751aa2024f7d2a5f6514fa11a1c7cb64f447f756f9058d  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v4/report.md
+15127b43800be03b681c25835a9ffd652cac2c1fc67c9efaff499d24266b3e36  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v4/checks.log
+e244e3bbe50aa742d695c90d40931aabdcd55579420906453868bb8b008c16d8  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v3/report.md
+68e67c64327ab04d832c4b8f70d367cbe2e0f4c608d40a953745138b32ae2ab2  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v3/checks.log
+d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/canary-identity.json
+exitCode=0
+===== COMMAND: orca orchestration task-list =====
+exitCode=0
+===== COMMAND: orca orchestration worker-list =====
+exitCode=0
+===== COMMAND: python filter task/worker =====
+task task_4e791741e19a status=completed completed_at=2026-10-16T00:16:11.855Z title=D 丰富稿 v3 三门独立写后检查 result_subject=D三门全量PASS: draft-v3 0阻塞问题
+task task_d6f805015ae3 status=completed completed_at=2026-10-16T00:28:20.348Z title=E 丰富稿 v3 独立 22 条审核 result_subject=E review FAIL, 6 problems
+task task_bcf55e52ef19 status=failed completed_at=2026-10-16T00:29:25.343Z title=F 丰富稿英文计数锁稿及标题 result_subject=superseded_before_dispatch_by_E_FAIL_and_round3_draft_v4
+task task_81b387615052 status=completed completed_at=2026-10-16T00:24:07.258Z title=S 丰富稿 v3 真实状态与污染检查点 result_subject=S enriched v3 checkpoint complete
+task task_a549826087fd status=completed completed_at=2026-10-16T00:40:10.279Z title=C 第3轮合并修正 E 六处问题 draft-v4 result_subject=draft-v4 已合并 E 的 6 处
+task task_adcb9ed3b0a8 status=completed completed_at=2026-10-16T00:50:10.787Z title=D draft-v4 全量三门复验 result_subject=D draft-v4 全量三门复验 PASS
+task task_67ffe96219bd status=dispatched completed_at=None title=E draft-v4 六项修正及最终候选复核 result_subject=None
+task task_ead4c451ba94 status=pending completed_at=None title=F draft-v4 正式计数锁稿与10标题候选 result_subject=None
+task task_32f6fed221c9 status=dispatched completed_at=None title=S v4 当前状态与精确扫描原始证据校正 result_subject=None
+counts {"active": 2, "retained": 1, "released": 27}
+page {"limit": 100, "total": 30, "hasMore": false, "nextCursor": null}
+scope {"run": "run_8253831e93d6", "source": "flag"}
+worker ctx_626147c43cbb task_67ffe96219bd terminalState=active workerState=ready dispatchStatus=dispatched handle=term_2e6fa9eb-9f7d-4e1e-a79f-1a545d3f4c3f provider=antigravity outcome=in_progress liveness={"verdict": "live", "observedAt": 1792112102390, "source": "agent_status"} resource={"state": "owned"}
+worker ctx_67ac1ef39575 task_32f6fed221c9 terminalState=active workerState=ready dispatchStatus=dispatched handle=term_adfbb71f-35ad-499c-a6ee-704522b7bd01 provider=cursor outcome=in_progress liveness={"verdict": "live", "observedAt": 1792112102066, "source": "agent_status"} resource={"state": "owned"}
+worker ctx_d8a5c8eae7b1 task_adcb9ed3b0a8 terminalState=released workerState=succeeded dispatchStatus=completed handle=term_a0466fcc-d9a9-442b-9c03-817e8a40f180 provider=None outcome=succeeded liveness={"verdict": "exited", "source": "resource_release"} resource={"state": "released"}
+worker ctx_5a48cc7f0977 task_a549826087fd terminalState=released workerState=succeeded dispatchStatus=completed handle=term_3b0c0852-5fd1-4cde-917e-5b76438ce9cb provider=None outcome=succeeded liveness={"verdict": "exited", "source": "resource_release"} resource={"state": "released"}
+worker ctx_d49b80437cfc task_d6f805015ae3 terminalState=released workerState=succeeded dispatchStatus=completed handle=term_6e60a146-8128-410d-a0d3-3ce7de341a58 provider=None outcome=succeeded liveness={"verdict": "exited", "source": "resource_release"} resource={"state": "released"}
+worker ctx_487c9c051d1a task_556598a2fdd0 terminalState=released workerState=succeeded dispatchStatus=completed handle=term_c1c69ab5-3716-48a2-9f7c-c637d5e47972 provider=None outcome=succeeded liveness={"verdict": "exited", "source": "resource_release"} resource={"state": "released"}
+worker ctx_1b67a6215356 task_2ad2b7de35cb terminalState=retained workerState=succeeded dispatchStatus=completed handle=term_c1c69ab5-3716-48a2-9f7c-c637d5e47972 provider=None outcome=succeeded liveness={"verdict": "unverifiable", "reason": "missing_status"} resource={"state": "absent", "reason": "not_materialized"}
+exitCode=0
+===== COMMAND: scan =====
+exitCode=0
+===== COMMAND: date after scan =====
+2026-10-16T08:55:02+0800
+exitCode=0
+
+=== /tmp/v4-proof-scan.py ===
+#!/usr/bin/env python3
+"""Exact marker scan and file evidence for the current English v4 candidate.
+
+The marker is read from the private identity file and is never printed.
+"""
+
+import hashlib
+import io
+import json
+import os
+import struct
+import subprocess
+import sys
+import xml.etree.ElementTree as ElementTree
+from collections import Counter
+from datetime import datetime, timezone
+
+
+ROOT = "/Users/wusir/orca/workspaces/stardew planner/博客-2"
+OPS = os.path.join(ROOT, "docs/blog-ops/house-upgrade-stardew")
+COUNTER = "/Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py"
+CAPTION_COPY = "/tmp/v4-proof-draft-v4-no-caption.md"
+
+EXPECTED_TOKEN_SHA256 = (
+    "401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1"
+)
+EXPECTED_IDENTITY_SHA256 = (
+    "d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23"
+)
+EXPECTED_FILE_SHA256 = {
+    "content/en/draft-v4.md": (
+        "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f"
+    ),
+    "content/en/public-references.en.json": (
+        "1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27"
+    ),
+    "content/en/media-text.en.json": (
+        "75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400"
+    ),
+    "content/en/writer-submission.json": (
+        "1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415"
+    ),
+    "content/en/revision-round-2.md": (
+        "168792507d046a073c84a30fce4e4d08bd5313ec3a9c2b25b098f5f5a73f1586"
+    ),
+    "reviews/E/enriched-v3/report.md": (
+        "2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07"
+    ),
+    "content/en/versions/draft-v3-intermediate/draft-v3.md": (
+        "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46"
+    ),
+}
+
+TEXT_SCAN_PATH = "content/en/draft-v4.md"
+JSON_SCAN_PATHS = (
+    "content/en/public-references.en.json",
+    "content/en/media-text.en.json",
+    "content/en/writer-submission.json",
+)
+SVG_SCAN_PATHS = (
+    "media-production/en/cover-payments.svg",
+    "media-production/en/tier-rooms.svg",
+    "media-production/en/upgrade-or-renovation.svg",
+)
+RASTER_SCAN_PATHS = (
+    "media-production/en/house-upgrade-stardew-cover.webp",
+    "media-production/en/house-upgrade-stardew-cover.avif",
+    "media-production/en/tier-rooms.en.webp",
+    "media-production/en/tier-rooms.en.avif",
+    "media-production/en/upgrade-or-renovation.en.webp",
+    "media-production/en/upgrade-or-renovation.en.avif",
+)
+NOT_SCANNED = (
+    "SEO metadata files",
+    "Chinese translation files",
+    "local page files",
+)
+LOSSY_VP8 = b"VP8 "
+LOSSLESS_VP8L = b"VP8L"
+VP8X = b"VP8X"
+ALPH = b"ALPH"
+BITMAP_CHUNK_IDS = {LOSSY_VP8, LOSSLESS_VP8L, ALPH}
+BOX_CONTAINERS = {
+    b"meta",
+    b"iprp",
+    b"ipco",
+    b"moov",
+    b"trak",
+    b"mdia",
+    b"minf",
+    b"dinf",
+    b"stbl",
+}
+
+
+def require_file(relative_path):
+    absolute = os.path.join(OPS, relative_path)
+    if not os.path.isfile(absolute):
+        raise FileNotFoundError(f"required file missing: {absolute}")
+    return absolute
+
+
+def require_directory(absolute):
+    if not os.path.isdir(absolute):
+        raise FileNotFoundError(f"required directory missing: {absolute}")
+    return absolute
+
+
+def sha256_bytes(payload):
+    return hashlib.sha256(payload).hexdigest()
+
+
+def sha256_file(absolute):
+    return sha256_bytes(open(absolute, "rb").read())
+
+
+def clock_now():
+    return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def stat_iso(timestamp):
+    return datetime.fromtimestamp(timestamp).astimezone().isoformat(timespec="milliseconds")
+
+
+def load_identity():
+    relative = "control/canary-identity.json"
+    absolute = require_file(relative)
+    document = json.load(open(absolute, encoding="utf-8"))
+    if not isinstance(document, dict):
+        raise TypeError(f"{relative} top-level type is {type(document).__name__}")
+    for field in ("canaryId", "canarySecretToken"):
+        if field not in document:
+            raise KeyError(f"{relative} missing field: {field}")
+        if not isinstance(document[field], str) or document[field] == "":
+            raise ValueError(f"{relative} field {field} is empty or not a string")
+    return absolute, document
+
+
+def walk_strings(value, prefix):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            child_prefix = f"{prefix}.{key}" if prefix else str(key)
+            yield from walk_strings(child, child_prefix)
+        return
+    if isinstance(value, list):
+        for index, child in enumerate(value):
+            yield from walk_strings(child, f"{prefix}[{index}]")
+        return
+    if isinstance(value, str):
+        yield prefix, value
+
+
+def public_reference_fields(document):
+    yield "occurrenceRule", require_string(document, "occurrenceRule")
+    yield "reviewerNote", require_string(document, "reviewerNote")
+    references = require_list(document, "references")
+    for index, reference in enumerate(references):
+        base = f"references[{index}]"
+        yield f"{base}.label", require_string(reference, "label", base)
+        yield f"{base}.url", require_string(reference, "url", base)
+        for fact_index, fact_id in enumerate(require_list(reference, "factIds", base)):
+            if not isinstance(fact_id, str):
+                raise TypeError(f"{base}.factIds[{fact_index}] is {type(fact_id).__name__}")
+            yield f"{base}.factIds[{fact_index}]", fact_id
+        for apply_index, apply in enumerate(require_list(reference, "appliesTo", base)):
+            quote_base = f"{base}.appliesTo[{apply_index}]"
+            yield f"{quote_base}.quote", require_string(apply, "quote", quote_base)
+
+
+def media_text_fields(document):
+    yield "note", require_string(document, "note")
+    figures = require_list(document, "figures")
+    for index, figure in enumerate(figures):
+        base = f"figures[{index}]"
+        yield f"{base}.alt", require_string(figure, "alt", base)
+        yield f"{base}.caption", require_string(figure, "caption", base)
+        for text_index, text in enumerate(require_list(figure, "inImageText", base)):
+            if not isinstance(text, str):
+                raise TypeError(f"{base}.inImageText[{text_index}] is {type(text).__name__}")
+            yield f"{base}.inImageText[{text_index}]", text
+        for source_index, source in enumerate(require_list(figure, "factSources", base)):
+            source_base = f"{base}.factSources[{source_index}]"
+            yield f"{source_base}.label", require_string(source, "label", source_base)
+            yield f"{source_base}.url", require_string(source, "url", source_base)
+
+
+def writer_submission_fields(document):
+    yield "qualityGateNote", require_string(document, "qualityGateNote")
+    length = require_dict(document, "length")
+    yield "length.lengthStatement", require_string(length, "lengthStatement", "length")
+    yield "length.counterStdoutRaw", require_string(length, "counterStdoutRaw", "length")
+    yield "length.captionExcludedStdoutRaw", require_string(
+        length, "captionExcludedStdoutRaw", "length"
+    )
+    for index, issue in enumerate(require_list(document, "issueDispositions")):
+        base = f"issueDispositions[{index}]"
+        yield f"{base}.action", require_string(issue, "action", base)
+    media = require_dict(document, "mediaBinding")
+    yield "mediaBinding.tierRoomsPlacement", require_string(
+        media, "tierRoomsPlacement", "mediaBinding"
+    )
+    yield "mediaBinding.note", require_string(media, "note", "mediaBinding")
+    yield "mediaBinding.labelTextUnchanged", require_string(
+        media, "labelTextUnchanged", "mediaBinding"
+    )
+    decision = require_dict(document, "coordinatorDecision")
+    yield "coordinatorDecision.question", require_string(
+        decision, "question", "coordinatorDecision"
+    )
+    yield "coordinatorDecision.effect", require_string(
+        decision, "effect", "coordinatorDecision"
+    )
+    for index, claim in enumerate(require_list(document, "unusedClaims")):
+        if not isinstance(claim, str):
+            raise TypeError(f"unusedClaims[{index}] is {type(claim).__name__}")
+        yield f"unusedClaims[{index}]", claim
+    for index, item in enumerate(require_list(document, "unresolvedNotUsed")):
+        if not isinstance(item, str):
+            raise TypeError(f"unresolvedNotUsed[{index}] is {type(item).__name__}")
+        yield f"unresolvedNotUsed[{index}]", item
+    yield "coreFactGap", require_string(document, "coreFactGap")
+
+
+def require_string(value, key, prefix=""):
+    if not isinstance(value, dict) or key not in value:
+        location = f"{prefix}.{key}" if prefix else key
+        raise KeyError(f"missing string field: {location}")
+    found = value[key]
+    if not isinstance(found, str):
+        location = f"{prefix}.{key}" if prefix else key
+        raise TypeError(f"{location} is {type(found).__name__}")
+    return found
+
+
+def require_list(value, key, prefix=""):
+    if not isinstance(value, dict) or key not in value:
+        location = f"{prefix}.{key}" if prefix else key
+        raise KeyError(f"missing list field: {location}")
+    found = value[key]
+    if not isinstance(found, list):
+        location = f"{prefix}.{key}" if prefix else key
+        raise TypeError(f"{location} is {type(found).__name__}")
+    return found
+
+
+def require_dict(value, key):
+    if not isinstance(value, dict) or key not in value or not isinstance(value[key], dict):
+        found = value.get(key) if isinstance(value, dict) else None
+        raise TypeError(f"{key} is {type(found).__name__}")
+    return value[key]
+
+
+def count_exact(haystack, needle):
+    if needle == "":
+        raise ValueError("marker needle is empty")
+    return haystack.count(needle)
+
+
+def local_name(tag):
+    if tag.startswith("{"):
+        return tag.split("}", 1)[1]
+    return tag
+
+
+def svg_visible_text(absolute):
+    try:
+        root = ElementTree.parse(absolute).getroot()
+    except ElementTree.ParseError as error:
+        raise RuntimeError(f"SVG parse failed: {absolute}: {error}") from error
+    visible = []
+    for element in root.iter():
+        if local_name(element.tag) != "text":
+            continue
+        visible.append("".join(element.itertext()))
+    return visible
+
+
+def parse_webp(absolute):
+    data = open(absolute, "rb").read()
+    if data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+        raise RuntimeError(f"not a RIFF WEBP file: {absolute}")
+    chunks = []
+    position = 12
+    while position + 8 <= len(data):
+        chunk_id = data[position : position + 4]
+        chunk_size = struct.unpack_from("<I", data, position + 4)[0]
+        payload_start = position + 8
+        payload_end = payload_start + chunk_size
+        if payload_end > len(data):
+            raise RuntimeError(
+                f"WEBP chunk overruns file: {absolute} id={chunk_id!r} size={chunk_size}"
+            )
+        chunks.append((chunk_id, data[payload_start:payload_end]))
+        position = payload_end + (chunk_size & 1)
+    if position != len(data):
+        raise RuntimeError(f"WEBP trailing bytes: {absolute} remainder={len(data) - position}")
+    dimensions = None
+    for chunk_id, payload in chunks:
+        if chunk_id == LOSSY_VP8:
+            dimensions = vp8_lossy_dimensions(payload, absolute)
+    fourccs = [chunk_id.decode("ascii") for chunk_id, _payload in chunks]
+    return {
+        "container": "RIFF/WEBP",
+        "byteLength": len(data),
+        "fourccs": fourccs,
+        "vp8LossyPresent": any(chunk_id == LOSSY_VP8 for chunk_id, _payload in chunks),
+        "vp8lLosslessPresent": any(chunk_id == LOSSLESS_VP8L for chunk_id, _payload in chunks),
+        "vp8xPresent": any(chunk_id == VP8X for chunk_id, _payload in chunks),
+        "dimensions": dimensions,
+        "chunks": chunks,
+        "data": data,
+    }
+
+
+def vp8_lossy_dimensions(payload, absolute):
+    if len(payload) < 10:
+        raise RuntimeError(f"VP8 payload shorter than 10 bytes: {absolute} length={len(payload)}")
+    if payload[0] & 1 != 0:
+        raise RuntimeError(f"VP8 frame is not a keyframe: {absolute} first_byte={payload[0]}")
+    if payload[3:6] != b"\x9d\x01\x2a":
+        raise RuntimeError(f"VP8 start code mismatch: {absolute} start={payload[3:6].hex()}")
+    width = struct.unpack_from("<H", payload, 6)[0] & 0x3FFF
+    height = struct.unpack_from("<H", payload, 8)[0] & 0x3FFF
+    return {"width": width, "height": height, "source": "VP8 keyframe header"}
+
+
+def parse_avif(absolute):
+    data = open(absolute, "rb").read()
+    boxes = []
+    walk_boxes(data, 0, len(data), 0, boxes, absolute)
+    dimensions = None
+    major_brand = None
+    for box in boxes:
+        if box["type"] == b"ftyp":
+            payload = data[box["payloadStart"] : box["payloadEnd"]]
+            if len(payload) < 4:
+                raise RuntimeError(f"ftyp shorter than 4 bytes: {absolute}")
+            major_brand = payload[:4].decode("ascii", "replace")
+        if box["type"] == b"ispe" and dimensions is None:
+            dimensions = ispe_dimensions(data, box, absolute)
+    if dimensions is None:
+        raise RuntimeError(f"ispe box missing: {absolute}")
+    return {
+        "container": "ISOBMFF/AVIF",
+        "byteLength": len(data),
+        "majorBrand": major_brand,
+        "boxes": [
+            {"depth": box["depth"], "type": box["type"].decode("ascii", "replace"), "size": box["size"]}
+            for box in boxes
+            if box["depth"] <= 2
+        ],
+        "dimensions": dimensions,
+        "data": data,
+        "boxIndex": boxes,
+    }
+
+
+def walk_boxes(data, start, end, depth, boxes, absolute):
+    position = start
+    while position + 8 <= end:
+        size = struct.unpack_from(">I", data, position)[0]
+        box_type = data[position + 4 : position + 8]
+        header = 8
+        if size == 1:
+            if position + 16 > end:
+                raise RuntimeError(f"extended box header overruns: {absolute} at={position}")
+            size = struct.unpack_from(">Q", data, position + 8)[0]
+            header = 16
+        elif size == 0:
+            size = end - position
+        if size < header or position + size > end:
+            raise RuntimeError(
+                f"bad box: {absolute} type={box_type!r} size={size} at={position}"
+            )
+        payload_start = position + header
+        boxes.append(
+            {
+                "depth": depth,
+                "type": box_type,
+                "size": size,
+                "start": position,
+                "end": position + size,
+                "payloadStart": payload_start,
+                "payloadEnd": position + size,
+            }
+        )
+        if box_type in BOX_CONTAINERS and depth < 8:
+            child_start = payload_start + (4 if box_type == b"meta" else 0)
+            walk_boxes(data, child_start, position + size, depth + 1, boxes, absolute)
+        position += size
+    if position != end:
+        raise RuntimeError(f"box walk remainder: {absolute} start={start} end={end} at={position}")
+
+
+def ispe_dimensions(data, box, absolute):
+    payload = data[box["payloadStart"] : box["payloadEnd"]]
+    if len(payload) < 12:
+        raise RuntimeError(f"ispe payload shorter than 12 bytes: {absolute} length={len(payload)}")
+    width, height = struct.unpack_from(">II", payload, 4)
+    return {"width": width, "height": height, "source": "ispe"}
+
+
+def byte_hits(data, needle):
+    return data.count(needle)
+
+
+def scan_field_group(fields, token, canary_id):
+    token_hits = 0
+    id_hits = 0
+    for path, text in fields:
+        token_hits += count_exact(text, token)
+        id_hits += count_exact(text, canary_id)
+    return {"fieldCount": len(fields), "tokenHits": token_hits, "idHits": id_hits}
+
+
+def quote_occurrence_histogram(document):
+    occurrences = []
+    for reference in require_list(document, "references"):
+        for apply in require_list(reference, "appliesTo"):
+            if "occurrence" not in apply:
+                raise KeyError("appliesTo item missing occurrence")
+            occurrences.append(apply["occurrence"])
+    return {"quoteCount": len(occurrences), "histogram": dict(Counter(occurrences))}
+
+
+def run_counter(absolute):
+    if not os.path.isfile(COUNTER):
+        raise FileNotFoundError(f"required file missing: {COUNTER}")
+    environment = os.environ.copy()
+    environment["PYTHONDONTWRITEBYTECODE"] = "1"
+    completed = subprocess.run(
+        [sys.executable, COUNTER, "--locale", "en", absolute],
+        check=False,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
+    return {
+        "command": f"PYTHONDONTWRITEBYTECODE=1 python3 {COUNTER} --locale en {absolute}",
+        "exitCode": completed.returncode,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+    }
+
+
+def write_caption_excluded_copy(source_absolute):
+    kept = []
+    removed = 0
+    for line in open(source_absolute, encoding="utf-8"):
+        if line.lstrip().startswith("Schematic."):
+            removed += 1
+            continue
+        kept.append(line)
+    open(CAPTION_COPY, "w", encoding="utf-8").write("".join(kept))
+    return removed
+
+
+def file_stat_record(absolute):
+    info = os.stat(absolute)
+    return {
+        "path": absolute,
+        "mode": oct(info.st_mode),
+        "uid": info.st_uid,
+        "gid": info.st_gid,
+        "inode": info.st_ino,
+        "device": info.st_dev,
+        "readable": os.access(absolute, os.R_OK),
+        "birthObserved": stat_iso(info.st_birthtime),
+        "ctimeObserved": stat_iso(info.st_ctime),
+        "mtimeObserved": stat_iso(info.st_mtime),
+        "statLimit": "birth/ctime/mtime are filesystem observations, not an authoring timestamp",
+    }
+
+
+def print_hash_comparisons():
+    print("[hash comparisons]")
+    for relative, expected in EXPECTED_FILE_SHA256.items():
+        observed = sha256_file(require_file(relative))
+        print(f"path={relative}")
+        print(f"observed={observed}")
+        print(f"expected={expected}")
+        print(f"match={str(observed == expected).lower()}")
+
+
+def print_permission_observations():
+    print("[permission observations]")
+    paths = {
+        "worktree": ROOT,
+        "mainProject": "/Users/wusir/Desktop/开发项目集合/stardew planner",
+        "existingBlogWorktree": "/Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客",
+        "identity": os.path.join(OPS, "control/canary-identity.json"),
+    }
+    for name, absolute in paths.items():
+        if name == "identity":
+            require_file("control/canary-identity.json")
+        else:
+            require_directory(absolute)
+        record = file_stat_record(absolute)
+        print(
+            f"{name} inode={record['inode']} device={record['device']} "
+            f"uid={record['uid']} gid={record['gid']} mode={record['mode']} "
+            f"readable={str(record['readable']).lower()}"
+        )
+    print("isolation=logical-only")
+    print("osIsolationGuaranteed=false")
+    print("permissionChange=none")
+
+
+def print_archive_stat():
+    directory = os.path.join(OPS, "content/en/versions/draft-v3-intermediate")
+    draft = os.path.join(directory, "draft-v3.md")
+    require_directory(directory)
+    require_file("content/en/versions/draft-v3-intermediate/draft-v3.md")
+    print("[intermediate archive stat observations]")
+    for record in (file_stat_record(directory), file_stat_record(draft)):
+        print(
+            f"path={record['path']} birth={record['birthObserved']} "
+            f"ctime={record['ctimeObserved']} mtime={record['mtimeObserved']}"
+        )
+    print(record_limit())
+
+
+def record_limit():
+    return "statLimit=filesystem observation only; not asserted as the authoring instant"
+
+
+def scan_json_documents(token, canary_id):
+    collectors = {
+        "content/en/public-references.en.json": public_reference_fields,
+        "content/en/media-text.en.json": media_text_fields,
+        "content/en/writer-submission.json": writer_submission_fields,
+    }
+    results = []
+    for relative, collector in collectors.items():
+        document = json.load(open(require_file(relative), encoding="utf-8"))
+        public_fields = list(collector(document))
+        public_paths = {path for path, _text in public_fields}
+        all_fields = list(walk_strings(document, ""))
+        missing = sorted(public_paths.difference(path for path, _text in all_fields))
+        if missing:
+            raise RuntimeError(f"{relative} public paths absent from walker: {missing}")
+        other_fields = [(path, text) for path, text in all_fields if path not in public_paths]
+        public_result = scan_field_group(public_fields, token, canary_id)
+        other_result = scan_field_group(other_fields, token, canary_id)
+        item = {
+            "path": relative,
+            "publicText": public_result,
+            "otherStrings": other_result,
+        }
+        if relative == "content/en/public-references.en.json":
+            item["quotes"] = quote_occurrence_histogram(document)
+        results.append(item)
+    return results
+
+
+def scan_svgs(token, canary_id):
+    results = []
+    for relative in SVG_SCAN_PATHS:
+        absolute = require_file(relative)
+        source = open(absolute, encoding="utf-8").read()
+        visible = svg_visible_text(absolute)
+        if not visible:
+            raise RuntimeError(f"SVG visible text elements absent: {absolute}")
+        visible_text = "\n".join(visible)
+        results.append(
+            {
+                "path": relative,
+                "visibleTextElementCount": len(visible),
+                "visibleTokenHits": count_exact(visible_text, token),
+                "visibleIdHits": count_exact(visible_text, canary_id),
+                "sourceTokenHits": count_exact(source, token),
+                "sourceIdHits": count_exact(source, canary_id),
+            }
+        )
+    return results
+
+
+def scan_rasters(token, canary_id):
+    token_bytes = token.encode("utf-8")
+    id_bytes = canary_id.encode("utf-8")
+    results = []
+    for relative in RASTER_SCAN_PATHS:
+        absolute = require_file(relative)
+        if relative.endswith(".webp"):
+            parsed = parse_webp(absolute)
+            metadata = b""
+            bitmap = b""
+            for chunk_id, payload in parsed["chunks"]:
+                if chunk_id in BITMAP_CHUNK_IDS:
+                    bitmap += payload
+                else:
+                    metadata += payload
+            item = {
+                "path": relative,
+                "container": parsed["container"],
+                "byteLength": parsed["byteLength"],
+                "sha256": sha256_bytes(parsed["data"]),
+                "fourccs": parsed["fourccs"],
+                "vp8LossyPresent": parsed["vp8LossyPresent"],
+                "vp8lLosslessPresent": parsed["vp8lLosslessPresent"],
+                "vp8xPresent": parsed["vp8xPresent"],
+                "dimensions": parsed["dimensions"],
+                "wholeFileTokenHits": byte_hits(parsed["data"], token_bytes),
+                "wholeFileIdHits": byte_hits(parsed["data"], id_bytes),
+                "nonBitmapChunkTokenHits": byte_hits(metadata, token_bytes),
+                "nonBitmapChunkIdHits": byte_hits(metadata, id_bytes),
+                "bitmapChunkTokenHits": byte_hits(bitmap, token_bytes),
+                "bitmapChunkIdHits": byte_hits(bitmap, id_bytes),
+                "check": "byte-layer exact search; fourcc VP8 is lossy VP8, not VP8L; not pixel OCR",
+            }
+        elif relative.endswith(".avif"):
+            parsed = parse_avif(absolute)
+            metadata = b""
+            mdat = b""
+            for box in parsed["boxIndex"]:
+                if box["depth"] != 0:
+                    continue
+                payload = parsed["data"][box["payloadStart"] : box["payloadEnd"]]
+                if box["type"] == b"mdat":
+                    mdat += payload
+                else:
+                    metadata += payload
+            item = {
+                "path": relative,
+                "container": parsed["container"],
+                "byteLength": parsed["byteLength"],
+                "sha256": sha256_bytes(parsed["data"]),
+                "majorBrand": parsed["majorBrand"],
+                "topBoxes": [box["type"] for box in parsed["boxes"] if box["depth"] == 0],
+                "dimensions": parsed["dimensions"],
+                "wholeFileTokenHits": byte_hits(parsed["data"], token_bytes),
+                "wholeFileIdHits": byte_hits(parsed["data"], id_bytes),
+                "nonMdatTokenHits": byte_hits(metadata, token_bytes),
+                "nonMdatIdHits": byte_hits(metadata, id_bytes),
+                "mdatTokenHits": byte_hits(mdat, token_bytes),
+                "mdatIdHits": byte_hits(mdat, id_bytes),
+                "check": "byte-layer exact search of ftyp/meta versus mdat; not pixel OCR",
+            }
+        else:
+            raise RuntimeError(f"unsupported raster suffix: {absolute}")
+        results.append(item)
+    return results
+
+
+def scan_draft(token, canary_id):
+    absolute = require_file(TEXT_SCAN_PATH)
+    text = open(absolute, encoding="utf-8").read()
+    return {
+        "path": TEXT_SCAN_PATH,
+        "characters": len(text),
+        "tokenHits": count_exact(text, token),
+        "idHits": count_exact(text, canary_id),
+    }
+
+
+def assert_report_has_no_secret(report, token):
+    if token in report:
+        raise RuntimeError("scan report contained the secret marker and was suppressed")
+
+
+def main():
+    buffer = io.StringIO()
+    real_stdout = sys.stdout
+    sys.stdout = buffer
+    try:
+        run_scan()
+    finally:
+        sys.stdout = real_stdout
+    report = buffer.getvalue()
+    identity = json.load(
+        open(os.path.join(OPS, "control/canary-identity.json"), encoding="utf-8")
+    )
+    assert_report_has_no_secret(report, identity["canarySecretToken"])
+    sys.stdout.write(report)
+
+
+def run_scan():
+    started = clock_now()
+    print(f"scanAsOf={started}")
+    identity_path, identity = load_identity()
+    token = identity["canarySecretToken"]
+    canary_id = identity["canaryId"]
+    identity_hash = sha256_file(identity_path)
+    token_hash = sha256_bytes(token.encode("utf-8"))
+    stored_hash = identity.get("sha256")
+    print("[identity]")
+    print(f"path=control/canary-identity.json")
+    print(f"fields={sorted(identity)}")
+    print(f"canaryId={canary_id}")
+    print(f"tokenLength={len(token)}")
+    print(f"tokenSha256={token_hash}")
+    print(f"tokenSha256Match={str(token_hash == EXPECTED_TOKEN_SHA256).lower()}")
+    print(f"identitySha256={identity_hash}")
+    print(f"identitySha256Match={str(identity_hash == EXPECTED_IDENTITY_SHA256).lower()}")
+    print(f"storedSha256FieldMatch={str(stored_hash == token_hash).lower()}")
+    print_hash_comparisons()
+    print_permission_observations()
+    print_archive_stat()
+    draft_result = scan_draft(token, canary_id)
+    json_results = scan_json_documents(token, canary_id)
+    svg_results = scan_svgs(token, canary_id)
+    raster_results = scan_rasters(token, canary_id)
+    counter_result = run_counter(require_file(TEXT_SCAN_PATH))
+    removed_captions = write_caption_excluded_copy(require_file(TEXT_SCAN_PATH))
+    caption_result = run_counter(CAPTION_COPY)
+    print("[draft text scan]")
+    print(json.dumps(draft_result, ensure_ascii=False))
+    print("[json field scan]")
+    print(json.dumps(json_results, ensure_ascii=False, indent=2))
+    print("[svg scan]")
+    print(json.dumps(svg_results, ensure_ascii=False, indent=2))
+    print("[raster byte-layer scan]")
+    printable_rasters = []
+    for item in raster_results:
+        printable = dict(item)
+        printable_rasters.append(printable)
+    print(json.dumps(printable_rasters, ensure_ascii=False, indent=2))
+    print("[length counter]")
+    print(f"removedSchematicLines={removed_captions}")
+    print("FULL " + json.dumps(counter_result, ensure_ascii=False))
+    print("CAPTION_EXCLUDED " + json.dumps(caption_result, ensure_ascii=False))
+    print("[not scanned]")
+    for item in NOT_SCANNED:
+        print(item)
+    print(f"scanFinishedAt={clock_now()}")
+    print("zeroMatchMeaning=exact string absence in the listed fields only")
+    print("qualityGateSigned=false")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        message = str(error)
+        identity_path = os.path.join(OPS, "control/canary-identity.json")
+        if os.path.isfile(identity_path):
+            secret = json.load(open(identity_path, encoding="utf-8")).get("canarySecretToken", "")
+            if secret and secret in message:
+                message = "exception contained the secret marker and was suppressed"
+        print(f"SCAN_FAILED {type(error).__name__}: {message}", file=sys.stderr)
+        raise SystemExit(1) from None
+
+=== scan stdout ===
+scanAsOf=2026-10-16T08:55:02+08:00
+[identity]
+path=control/canary-identity.json
+fields=['canaryId', 'canarySecretToken', 'classification', 'createdAt', 'instructions', 'sha256']
+canaryId=canary_house_upgrade_c93c91c4f505
+tokenLength=64
+tokenSha256=401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1
+tokenSha256Match=true
+identitySha256=d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23
+identitySha256Match=true
+storedSha256FieldMatch=true
+[hash comparisons]
+path=content/en/draft-v4.md
+observed=f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+expected=f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+match=true
+path=content/en/public-references.en.json
+observed=1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27
+expected=1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27
+match=true
+path=content/en/media-text.en.json
+observed=75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400
+expected=75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400
+match=true
+path=content/en/writer-submission.json
+observed=1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415
+expected=1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415
+match=true
+path=content/en/revision-round-2.md
+observed=168792507d046a073c84a30fce4e4d08bd5313ec3a9c2b25b098f5f5a73f1586
+expected=168792507d046a073c84a30fce4e4d08bd5313ec3a9c2b25b098f5f5a73f1586
+match=true
+path=reviews/E/enriched-v3/report.md
+observed=2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07
+expected=2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07
+match=true
+path=content/en/versions/draft-v3-intermediate/draft-v3.md
+observed=417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46
+expected=417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46
+match=true
+[permission observations]
+worktree inode=145851019 device=16777232 uid=501 gid=20 mode=0o40755 readable=true
+mainProject inode=65977012 device=16777232 uid=501 gid=20 mode=0o40755 readable=true
+existingBlogWorktree inode=144267400 device=16777232 uid=501 gid=20 mode=0o40755 readable=true
+identity inode=145884500 device=16777232 uid=501 gid=20 mode=0o100600 readable=true
+isolation=logical-only
+osIsolationGuaranteed=false
+permissionChange=none
+[intermediate archive stat observations]
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/versions/draft-v3-intermediate birth=2026-10-16T07:24:28.356+08:00 ctime=2026-10-16T07:24:28.357+08:00 mtime=2026-10-16T07:24:28.357+08:00
+path=/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/versions/draft-v3-intermediate/draft-v3.md birth=2026-10-16T07:20:25.500+08:00 ctime=2026-10-16T07:24:28.356+08:00 mtime=2026-10-16T07:20:25.500+08:00
+statLimit=filesystem observation only; not asserted as the authoring instant
+[draft text scan]
+{"path": "content/en/draft-v4.md", "characters": 10034, "tokenHits": 0, "idHits": 0}
+[json field scan]
+[
+  {
+    "path": "content/en/public-references.en.json",
+    "publicText": {
+      "fieldCount": 125,
+      "tokenHits": 0,
+      "idHits": 0
+    },
+    "otherStrings": {
+      "fieldCount": 23,
+      "tokenHits": 0,
+      "idHits": 0
+    },
+    "quotes": {
+      "quoteCount": 55,
+      "histogram": {
+        "1": 55
+      }
+    }
+  },
+  {
+    "path": "content/en/media-text.en.json",
+    "publicText": {
+      "fieldCount": 52,
+      "tokenHits": 0,
+      "idHits": 0
+    },
+    "otherStrings": {
+      "fieldCount": 35,
+      "tokenHits": 0,
+      "idHits": 0
+    }
+  },
+  {
+    "path": "content/en/writer-submission.json",
+    "publicText": {
+      "fieldCount": 25,
+      "tokenHits": 0,
+      "idHits": 0
+    },
+    "otherStrings": {
+      "fieldCount": 54,
+      "tokenHits": 0,
+      "idHits": 0
+    }
+  }
+]
+[svg scan]
+[
+  {
+    "path": "media-production/en/cover-payments.svg",
+    "visibleTextElementCount": 11,
+    "visibleTokenHits": 0,
+    "visibleIdHits": 0,
+    "sourceTokenHits": 0,
+    "sourceIdHits": 0
+  },
+  {
+    "path": "media-production/en/tier-rooms.svg",
+    "visibleTextElementCount": 10,
+    "visibleTokenHits": 0,
+    "visibleIdHits": 0,
+    "sourceTokenHits": 0,
+    "sourceIdHits": 0
+  },
+  {
+    "path": "media-production/en/upgrade-or-renovation.svg",
+    "visibleTextElementCount": 10,
+    "visibleTokenHits": 0,
+    "visibleIdHits": 0,
+    "sourceTokenHits": 0,
+    "sourceIdHits": 0
+  }
+]
+[raster byte-layer scan]
+[
+  {
+    "path": "media-production/en/house-upgrade-stardew-cover.webp",
+    "container": "RIFF/WEBP",
+    "byteLength": 72418,
+    "sha256": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+    "fourccs": [
+      "VP8 "
+    ],
+    "vp8LossyPresent": true,
+    "vp8lLosslessPresent": false,
+    "vp8xPresent": false,
+    "dimensions": {
+      "width": 1672,
+      "height": 941,
+      "source": "VP8 keyframe header"
+    },
+    "wholeFileTokenHits": 0,
+    "wholeFileIdHits": 0,
+    "nonBitmapChunkTokenHits": 0,
+    "nonBitmapChunkIdHits": 0,
+    "bitmapChunkTokenHits": 0,
+    "bitmapChunkIdHits": 0,
+    "check": "byte-layer exact search; fourcc VP8 is lossy VP8, not VP8L; not pixel OCR"
+  },
+  {
+    "path": "media-production/en/house-upgrade-stardew-cover.avif",
+    "container": "ISOBMFF/AVIF",
+    "byteLength": 39621,
+    "sha256": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+    "majorBrand": "avif",
+    "topBoxes": [
+      "ftyp",
+      "meta",
+      "mdat"
+    ],
+    "dimensions": {
+      "width": 1672,
+      "height": 941,
+      "source": "ispe"
+    },
+    "wholeFileTokenHits": 0,
+    "wholeFileIdHits": 0,
+    "nonMdatTokenHits": 0,
+    "nonMdatIdHits": 0,
+    "mdatTokenHits": 0,
+    "mdatIdHits": 0,
+    "check": "byte-layer exact search of ftyp/meta versus mdat; not pixel OCR"
+  },
+  {
+    "path": "media-production/en/tier-rooms.en.webp",
+    "container": "RIFF/WEBP",
+    "byteLength": 70092,
+    "sha256": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+    "fourccs": [
+      "VP8 "
+    ],
+    "vp8LossyPresent": true,
+    "vp8lLosslessPresent": false,
+    "vp8xPresent": false,
+    "dimensions": {
+      "width": 1672,
+      "height": 941,
+      "source": "VP8 keyframe header"
+    },
+    "wholeFileTokenHits": 0,
+    "wholeFileIdHits": 0,
+    "nonBitmapChunkTokenHits": 0,
+    "nonBitmapChunkIdHits": 0,
+    "bitmapChunkTokenHits": 0,
+    "bitmapChunkIdHits": 0,
+    "check": "byte-layer exact search; fourcc VP8 is lossy VP8, not VP8L; not pixel OCR"
+  },
+  {
+    "path": "media-production/en/tier-rooms.en.avif",
+    "container": "ISOBMFF/AVIF",
+    "byteLength": 38764,
+    "sha256": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+    "majorBrand": "avif",
+    "topBoxes": [
+      "ftyp",
+      "meta",
+      "mdat"
+    ],
+    "dimensions": {
+      "width": 1672,
+      "height": 941,
+      "source": "ispe"
+    },
+    "wholeFileTokenHits": 0,
+    "wholeFileIdHits": 0,
+    "nonMdatTokenHits": 0,
+    "nonMdatIdHits": 0,
+    "mdatTokenHits": 0,
+    "mdatIdHits": 0,
+    "check": "byte-layer exact search of ftyp/meta versus mdat; not pixel OCR"
+  },
+  {
+    "path": "media-production/en/upgrade-or-renovation.en.webp",
+    "container": "RIFF/WEBP",
+    "byteLength": 68194,
+    "sha256": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+    "fourccs": [
+      "VP8 "
+    ],
+    "vp8LossyPresent": true,
+    "vp8lLosslessPresent": false,
+    "vp8xPresent": false,
+    "dimensions": {
+      "width": 1672,
+      "height": 941,
+      "source": "VP8 keyframe header"
+    },
+    "wholeFileTokenHits": 0,
+    "wholeFileIdHits": 0,
+    "nonBitmapChunkTokenHits": 0,
+    "nonBitmapChunkIdHits": 0,
+    "bitmapChunkTokenHits": 0,
+    "bitmapChunkIdHits": 0,
+    "check": "byte-layer exact search; fourcc VP8 is lossy VP8, not VP8L; not pixel OCR"
+  },
+  {
+    "path": "media-production/en/upgrade-or-renovation.en.avif",
+    "container": "ISOBMFF/AVIF",
+    "byteLength": 36133,
+    "sha256": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+    "majorBrand": "avif",
+    "topBoxes": [
+      "ftyp",
+      "meta",
+      "mdat"
+    ],
+    "dimensions": {
+      "width": 1672,
+      "height": 941,
+      "source": "ispe"
+    },
+    "wholeFileTokenHits": 0,
+    "wholeFileIdHits": 0,
+    "nonMdatTokenHits": 0,
+    "nonMdatIdHits": 0,
+    "mdatTokenHits": 0,
+    "mdatIdHits": 0,
+    "check": "byte-layer exact search of ftyp/meta versus mdat; not pixel OCR"
+  }
+]
+[length counter]
+removedSchematicLines=2
+FULL {"command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md", "exitCode": 0, "stdout": "{\n  \"file\": \"/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md\",\n  \"locale\": \"en\",\n  \"mechanical_units\": 1138,\n  \"required_floor\": 1000,\n  \"meets_mechanical_floor\": true,\n  \"long_form_target\": 2000,\n  \"meets_long_form_target\": false,\n  \"length_class\": \"short\",\n  \"semantic_qualification\": \"requires_independent_review\",\n  \"excluded_heading_sections\": [],\n  \"omitted_line_counts\": {\n    \"headings\": 8,\n    \"code\": 0,\n    \"excluded_sections\": 0,\n    \"non_body\": 34,\n    \"frontmatter\": 0\n  },\n  \"sha256_raw\": \"f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f\",\n  \"sha256_nfc_lf\": \"f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f\"\n}\n", "stderr": ""}
+CAPTION_EXCLUDED {"command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en /tmp/v4-proof-draft-v4-no-caption.md", "exitCode": 0, "stdout": "{\n  \"file\": \"/private/tmp/v4-proof-draft-v4-no-caption.md\",\n  \"locale\": \"en\",\n  \"mechanical_units\": 1085,\n  \"required_floor\": 1000,\n  \"meets_mechanical_floor\": true,\n  \"long_form_target\": 2000,\n  \"meets_long_form_target\": false,\n  \"length_class\": \"short\",\n  \"semantic_qualification\": \"requires_independent_review\",\n  \"excluded_heading_sections\": [],\n  \"omitted_line_counts\": {\n    \"headings\": 8,\n    \"code\": 0,\n    \"excluded_sections\": 0,\n    \"non_body\": 34,\n    \"frontmatter\": 0\n  },\n  \"sha256_raw\": \"a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6\",\n  \"sha256_nfc_lf\": \"a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6\"\n}\n", "stderr": ""}
+[not scanned]
+SEO metadata files
+Chinese translation files
+local page files
+scanFinishedAt=2026-10-16T08:55:02+08:00
+zeroMatchMeaning=exact string absence in the listed fields only
+qualityGateSigned=false
+
+scanExitCode=0
+=== write-time orca requery ===
+{
+  "asOf": "2026-10-16T08:58:17+08:00",
+  "taskExit": 0,
+  "workerExit": 0,
+  "counts": {
+    "active": 2,
+    "retained": 1,
+    "released": 27
+  },
+  "page": {
+    "limit": 100,
+    "total": 30,
+    "hasMore": false,
+    "nextCursor": null
+  },
+  "tasks": {
+    "task_a549826087fd": {
+      "status": "completed",
+      "completed_at": "2026-10-16T00:40:10.279Z",
+      "subject": "draft-v4 已合并 E 的 6 处"
+    },
+    "task_adcb9ed3b0a8": {
+      "status": "completed",
+      "completed_at": "2026-10-16T00:50:10.787Z",
+      "subject": "D draft-v4 全量三门复验 PASS"
+    },
+    "task_67ffe96219bd": {
+      "status": "dispatched",
+      "completed_at": null,
+      "subject": null
+    },
+    "task_ead4c451ba94": {
+      "status": "pending",
+      "completed_at": null,
+      "subject": null
+    },
+    "task_d6f805015ae3": {
+      "status": "completed",
+      "completed_at": "2026-10-16T00:28:20.348Z",
+      "subject": "E review FAIL, 6 problems"
+    },
+    "task_bcf55e52ef19": {
+      "status": "failed",
+      "completed_at": "2026-10-16T00:29:25.343Z",
+      "subject": "superseded_before_dispatch_by_E_FAIL_and_round3_draft_v4"
+    },
+    "task_32f6fed221c9": {
+      "status": "dispatched",
+      "completed_at": null,
+      "subject": null
+    }
+  }
+}
+finishedAt=2026-10-16T08:58:17+08:00
+
+wordingClarifiedAt=2026-10-16T08:58:57+0800

@@ -1,0 +1,403 @@
+F freeze checks. Commands below are the captured process output.
+
+$ shasum -a 256 docs/blog-ops/house-upgrade-stardew/lock/en/body.md docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md docs/blog-ops/house-upgrade-stardew/lock/en/length-report.md docs/blog-ops/house-upgrade-stardew/lock/en/lock-record.json docs/blog-ops/house-upgrade-stardew/handoff/pending-en/public-blog-handoff.en.json docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json docs/blog-ops/house-upgrade-stardew/seo/en/seo-candidate.json docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v4/report.md docs/blog-ops/house-upgrade-stardew/reviews/E/enriched-v4/report.md docs/blog-ops/house-upgrade-stardew/reviews/E/title-v4/report.md docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/draft-zh-v1.md docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/public-references.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/seo.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/media-text.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/translation-submission.json docs/blog-ops/house-upgrade-stardew/reviews/E/translation-v2/report.md docs/blog-ops/house-upgrade-stardew/reviews/E/translation-v2/checks.log docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif docs/blog-ops/house-upgrade-stardew/media-production/zh/cover-payments.svg docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.svg docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.svg docs/blog-ops/house-upgrade-stardew/media-production/en/cover-payments.svg docs/blog-ops/house-upgrade-stardew/lock/en/media-rebind.json docs/blog-ops/house-upgrade-stardew/seo/en/title-candidates.md docs/blog-ops/house-upgrade-stardew/seo/en/creation-completion.md docs/blog-ops/house-upgrade-stardew/reviews/E/title-process-addendum.md docs/blog-ops/house-upgrade-stardew/reviews/E/translation-v1/report.md docs/blog-ops/house-upgrade-stardew/content/zh/translation-round4.md docs/blog-ops/house-upgrade-stardew/media-production/en/provenance.json docs/blog-ops/house-upgrade-stardew/media-production/zh/provenance.json docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.svg docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.svg
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6  docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md
+e2b0a69287bddd541fcf6370a4ea0757015a815d5fc67f6e96a38ea1ede18793  docs/blog-ops/house-upgrade-stardew/lock/en/length-report.md
+b5bb88478dd133b02d8e68733e24fefb2a179b3ed200042d1e7e94cb2bf5edb3  docs/blog-ops/house-upgrade-stardew/lock/en/lock-record.json
+ae2b45c95090433c3538f8f6eec617dc1b03739ea3782c643ce3c3ab05afaf36  docs/blog-ops/house-upgrade-stardew/handoff/pending-en/public-blog-handoff.en.json
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md
+1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27  docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json
+75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400  docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json
+b6e2b7e20f4942945af2258c3eb28455680e952feaf2d04a9c7d424a75f55b58  docs/blog-ops/house-upgrade-stardew/seo/en/seo-candidate.json
+ae5c87028bcfbd6f5c751aa2024f7d2a5f6514fa11a1c7cb64f447f756f9058d  docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v4/report.md
+9db00d9995472ebe2d316b712e04cf97571e814a98cef793c8b43b11669b7b85  docs/blog-ops/house-upgrade-stardew/reviews/E/enriched-v4/report.md
+75596b5d6bbf527aafe3e8abee75f9e715f55d9cde4e75cc2c6e2f909a866028  docs/blog-ops/house-upgrade-stardew/reviews/E/title-v4/report.md
+0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6  docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843  docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md
+b2e0781d81b60a10ba6586ca8c0ea7032ce9e2f24df05fb80587dba8733f9127  docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json
+f744f783cf4b04d1cf0d66a2029cafaedaaf5eb04754e7b1e13612e48c29be16  docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json
+43c6138438d5a29bb13ab0daf0ccd9b5c6498284191a79680c53e84ade7298aa  docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json
+4d8b4fa7f9c0835f7c8e33f151830767ea9491d164af7f20e7e90a9e62fa4671  docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json
+9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843  docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/draft-zh-v1.md
+8dc7366349f48ed2258c070638cb9edce04a4d886a052e6c2b8aea12fd8566f9  docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/public-references.zh.json
+1a5c3bf69155c66cf6a2e5d3ce1f0a44d2b18d69a67cdb9dcbf665eacc0748ec  docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/seo.zh.json
+0410d2b318c1295f2696ec4af61e29715d5aa69df033991ef5bf9922d77738d3  docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/media-text.zh.json
+37d7815f9dd1eadb3a3b60bde56465bfd85a6b2f60552936e6c1df2ecf3e8b1f  docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/translation-submission.json
+ab443f03e8bbcc923a274d6897cb5bee060973d2108537301b48ae52956caed0  docs/blog-ops/house-upgrade-stardew/reviews/E/translation-v2/report.md
+e8758484ef4f7ce2429a6a51188b4232fea3ff64212c71ad6650742691eee254  docs/blog-ops/house-upgrade-stardew/reviews/E/translation-v2/checks.log
+c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342  docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp
+f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113  docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif
+c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209  docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp
+8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b  docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif
+040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b  docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp
+1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426  docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif
+bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87  docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp
+7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926  docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif
+d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c  docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp
+aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad  docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif
+6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88  docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp
+d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84  docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif
+13e6506201f7ecb1535e2f40077d71b7b6ac0ee35f4485810cba1db515dab735  docs/blog-ops/house-upgrade-stardew/media-production/zh/cover-payments.svg
+99337ac2b5dcacb7792968289ea17f16e87cbbd69bf07c436665922196aed5c0  docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.svg
+1fd0e8e620c28067f0fdfc2d05b6bd80ff243ec82b4d5d8226f3e6e460d5c5c9  docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.svg
+4f0103d7aaed81a3a617b945dced399cfee526eec04f59faf643fadc18713785  docs/blog-ops/house-upgrade-stardew/media-production/en/cover-payments.svg
+0e55eef155b24438037302bba3442a80ff8d2e73cb78984c7ed1d35bf1f6af2e  docs/blog-ops/house-upgrade-stardew/lock/en/media-rebind.json
+f2ab571ed4fd873e4d166158e5f11eaa2641a1f2ae0e1eb2d760f9bf998fde94  docs/blog-ops/house-upgrade-stardew/seo/en/title-candidates.md
+a7ac2e6b71c91c95e3efaa3150d2394ba6e43cbd01515281b10d055260174c66  docs/blog-ops/house-upgrade-stardew/seo/en/creation-completion.md
+99a3d711e02bd0f42ce9930614ed630ef3b51c035fb2360de0132da2eaa27e64  docs/blog-ops/house-upgrade-stardew/reviews/E/title-process-addendum.md
+779800ee6c3289d0af1d6c51664147e0f185cbf87bd7e009699112ea2b9ce2b4  docs/blog-ops/house-upgrade-stardew/reviews/E/translation-v1/report.md
+8c65d7e0127f229503fddd382cac4623ad1e6c149f4f6acefc6c15ab18b886d6  docs/blog-ops/house-upgrade-stardew/content/zh/translation-round4.md
+4849463e179846c47da8136c4356fdb8327975841f965ce90ba801a753b8a9f5  docs/blog-ops/house-upgrade-stardew/media-production/en/provenance.json
+c1f199441528a0adb046ad289258db45f36990dbce450fec8e220d539ed95710  docs/blog-ops/house-upgrade-stardew/media-production/zh/provenance.json
+0f68fefc86cf2f959bab09411c6000069d0ed78172aa2f1263bf82ef46d07af2  docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.svg
+71c935969c7952967207ed70006b65da614909d92689f0ba260f36e7e7c335ad  docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.svg
+EXIT 0
+
+$ python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+{
+  "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+  "locale": "en",
+  "mechanical_units": 1138,
+  "required_floor": 1000,
+  "meets_mechanical_floor": true,
+  "long_form_target": 2000,
+  "meets_long_form_target": false,
+  "length_class": "short",
+  "semantic_qualification": "requires_independent_review",
+  "excluded_heading_sections": [],
+  "omitted_line_counts": {
+    "headings": 8,
+    "code": 0,
+    "excluded_sections": 0,
+    "non_body": 34,
+    "frontmatter": 0
+  },
+  "sha256_raw": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "sha256_nfc_lf": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f"
+}
+EXIT 0
+
+$ python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md
+{
+  "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md",
+  "locale": "en",
+  "mechanical_units": 1085,
+  "required_floor": 1000,
+  "meets_mechanical_floor": true,
+  "long_form_target": 2000,
+  "meets_long_form_target": false,
+  "length_class": "short",
+  "semantic_qualification": "requires_independent_review",
+  "excluded_heading_sections": [],
+  "omitted_line_counts": {
+    "headings": 8,
+    "code": 0,
+    "excluded_sections": 0,
+    "non_body": 34,
+    "frontmatter": 0
+  },
+  "sha256_raw": "a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6",
+  "sha256_nfc_lf": "a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6"
+}
+EXIT 0
+
+$ python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale zh-CN docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+{
+  "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md",
+  "locale": "zh-CN",
+  "mechanical_units": 1737,
+  "required_floor": null,
+  "meets_mechanical_floor": null,
+  "long_form_target": null,
+  "meets_long_form_target": null,
+  "length_class": "reference_only",
+  "semantic_qualification": "requires_independent_review",
+  "excluded_heading_sections": [],
+  "omitted_line_counts": {
+    "headings": 8,
+    "code": 0,
+    "excluded_sections": 0,
+    "non_body": 34,
+    "frontmatter": 0
+  },
+  "sha256_raw": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+  "sha256_nfc_lf": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6"
+}
+EXIT 0
+
+$ diff -u docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+--- docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md	2026-10-16 09:32:30
++++ docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md	2026-10-16 22:24:49
+@@ -12,7 +12,7 @@
+ 
+ ## 准备木材和硬木
+ 
+-你一开始有一把能砍倒完全长成的树的斧头，之后的等级到铁匠铺升级（[斧头](https://stardewvalleywiki.com/Axes)）。砍树取得木材，或者从罗宾的普通存货购买木材（[木材](https://stardewvalleywiki.com/Wood)）。
++你一开始有一把能砍倒完全长成的树的斧头，后续斧头等级在铁匠铺升级（[斧头](https://stardewvalleywiki.com/Axes)）。砍树取得木材，或者从罗宾的普通存货购买木材（[木材](https://stardewvalleywiki.com/Wood)）。
+ 
+ 硬木是另一种物品（[硬木](https://stardewvalleywiki.com/Hardwood)）。大树桩（Large Stump）是枯死已久的树留下的残骸。铜斧头（Copper Axe）或更好的斧头能清除大树桩，并得到2硬木（[大树桩](https://stardewvalleywiki.com/Large_Stump)）。它不是你砍活树取木材后留下的那个树桩（[木材](https://stardewvalleywiki.com/Wood)）。铜斧头是2,000金和5个铜锭（[斧头](https://stardewvalleywiki.com/Axes)）。钢斧头（Steel Axe）能清除大圆木（Large Log）。钢斧头是5,000金和5个铁锭，也是清除秘密森林入口那根圆木的斧头（[斧头](https://stardewvalleywiki.com/Axes)、[大圆木](https://stardewvalleywiki.com/Large_Log)）。
+ 
+@@ -66,6 +66,6 @@
+ 
+ 第二次农舍升级之后，罗宾提供房屋装修。你下一单，马上完成。要撤销，先把新区域清空。然后罗宾退还金币，退款立刻到账（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)、[农舍](https://stardewvalleywiki.com/Farmhouse)）。
+ 
+-移除婴儿床免费，而且马上完成（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。修建餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成。要把这150,000金拿回来，那片9×10再加4×5的区域必须是空的（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。
++移除婴儿床免费，而且马上完成（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成。要把这150,000金拿回来，那片9×10再加4×5的区域必须是空的（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。
+ 
+-想要地窖，就选第三次升级那一行。想要这些改动，就选移除婴儿床或修建餐厅。
++想要地窖，就选第三次升级那一行。想要这些改动，就选移除婴儿床或餐厅。
+EXIT 1
+
+$ diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/public-references.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/public-references.zh.json	2026-10-16 22:24:42
++++ docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json	2026-10-16 22:25:13
+@@ -2,10 +2,9 @@
+   "locale": "zh-CN",
+   "country": "US",
+   "articleSlug": "house-upgrade-stardew",
+-  "bodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md",
+-  "bodyVersion": "draft-zh-v1",
++  "bodyVersion": "draft-zh-v2",
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+   "normalization": "NFC",
+   "newline": "LF",
+   "encoding": "UTF-8",
+@@ -164,7 +163,7 @@
+           "occurrence": 1
+         },
+         {
+-          "quote": "修建餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成",
++          "quote": "餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成",
+           "occurrence": 1
+         }
+       ]
+@@ -183,7 +182,7 @@
+           "occurrence": 1
+         }
+       ],
+-      "versionNote": "1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。旧的这一对只出现在那一句里。"
++      "versionNote": "1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。"
+     },
+     {
+       "id": "wiki-axes",
+@@ -191,7 +190,7 @@
+       "url": "https://stardewvalleywiki.com/Axes",
+       "appliesTo": [
+         {
+-          "quote": "你一开始有一把能砍倒完全长成的树的斧头，之后的等级到铁匠铺升级",
++          "quote": "你一开始有一把能砍倒完全长成的树的斧头，后续斧头等级在铁匠铺升级",
+           "occurrence": 1
+         },
+         {
+@@ -314,8 +313,7 @@
+           "quote": "下雨、节日、夏季18日去诊所，以及她走过柜台的那些时候，看[罗宾的商店和室外建筑](https://stardewvalleyplanner.art/carpenter-stardew)。",
+           "occurrence": 1
+         }
+-      ],
+-      "versionNote": "一条内链，用于下雨、节日、夏季18日去诊所，以及她走过柜台的时候。不是升级金币或材料的来源。"
++      ]
+     }
+   ]
+ }
+EXIT 1
+
+$ diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/seo.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/seo.zh.json	2026-10-16 22:24:42
++++ docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json	2026-10-16 22:25:10
+@@ -10,7 +10,7 @@
+   "author": "Stardew Valley Planner Team",
+   "publishedAt": null,
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+   "normalization": "NFC",
+   "newline": "LF",
+   "encoding": "UTF-8"
+EXIT 1
+
+$ diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/media-text.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/media-text.zh.json	2026-10-16 22:24:42
++++ docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json	2026-10-16 22:25:11
+@@ -5,7 +5,7 @@
+   "newline": "LF",
+   "encoding": "UTF-8",
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+   "figures": [
+     {
+       "mediaId": "cover-payments",
+EXIT 1
+
+$ diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/translation-submission.json docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/translation-submission.json	2026-10-16 22:24:42
++++ docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json	2026-10-16 22:25:34
+@@ -10,16 +10,16 @@
+   "encoding": "UTF-8",
+   "englishBodyPath": "docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
+-  "hanCharacterCount": 1908,
++  "translatedBodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
++  "hanCharacterCount": 1905,
+   "hanCountNote": "供核对中文篇幅。正式 Length 门只计已锁英文，不把这个汉字数加进英文门槛。",
+   "seoPath": "docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json",
+-  "seoSha256": "1a5c3bf69155c66cf6a2e5d3ce1f0a44d2b18d69a67cdb9dcbf665eacc0748ec",
++  "seoSha256": "f744f783cf4b04d1cf0d66a2029cafaedaaf5eb04754e7b1e13612e48c29be16",
+   "publicReferencesPath": "docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json",
+-  "publicReferencesSha256": "8dc7366349f48ed2258c070638cb9edce04a4d886a052e6c2b8aea12fd8566f9",
++  "publicReferencesSha256": "b2e0781d81b60a10ba6586ca8c0ea7032ce9e2f24df05fb80587dba8733f9127",
+   "mediaTextPath": "docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json",
+-  "mediaTextSha256": "0410d2b318c1295f2696ec4af61e29715d5aa69df033991ef5bf9922d77738d3",
++  "mediaTextSha256": "43c6138438d5a29bb13ab0daf0ccd9b5c6498284191a79680c53e84ade7298aa",
+   "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+   "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+   "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+@@ -87,9 +87,11 @@
+     }
+   ],
+   "revisionBudget": {
+-    "articleRoundsUsed": 3,
++    "articleRoundsUsed": 4,
++    "preservedPriorRounds": 3,
++    "explicitExceptionRounds": 1,
+     "futureRoundsRemaining": 0,
+-    "thisDelivery": "首次直接翻译，不是额外译文返修"
++    "thisDelivery": "第4轮授权例外：用户回复「继续」，协调者于2026-10-16 14:19:46 UTC确认。只修E已核实的5处。原三轮保留，不重置成0/3，不另开预算。"
+   },
+   "status": {
+     "translationReview": "pending-independent-E",
+EXIT 1
+
+$ diff -u docs/blog-ops/house-upgrade-stardew/lock/en/body.md docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md
+--- docs/blog-ops/house-upgrade-stardew/lock/en/body.md	2026-10-16 09:08:17
++++ docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md	2026-10-16 09:08:17
+@@ -44,7 +44,6 @@
+ 
+ ![Three labeled stages: Upgrade 1 with Kitchen and Bedroom, Upgrade 2 with Empty room and Nursery, Upgrade 3 with Cellar and Same exterior, and a shared line reading 9×5 outdoors.](/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp)
+ 
+-Schematic. Upgrade 1 is labeled Kitchen and Bedroom. Upgrade 2 is labeled Empty room and Nursery. Upgrade 3 is labeled Cellar and Same exterior. A shared line reads 9×5 outdoors.
+ 
+ The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks. Those casks age cheese and wine, and also Goat Cheese, Beer, Mead, and Pale Ale, and that aging raises their quality and value. The cask recipe from this upgrade is 20 Wood and 1 Hardwood. You can set a cask somewhere else, but it accepts goods only while it is in the cellar. The outside of the house stays the same as the previous upgrade ([Farmhouse](https://stardewvalleywiki.com/Farmhouse), [Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop), [Cask](https://stardewvalleywiki.com/Cask)).
+ 
+@@ -62,7 +61,6 @@
+ 
+ ![Two paths and two examples: Upgrade with 3 days; Renovation with After upgrade 2, Instant, and Refunds gold; Remove crib with Free; Dining room with 150,000g.](/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp)
+ 
+-Schematic. The upgrade path reads Upgrade and 3 days. The renovation path reads Renovation, After upgrade 2, Instant, and Refunds gold. Remove crib reads Free. Dining room reads 150,000g.
+ 
+ After the second farmhouse upgrade, Robin offers house renovations. You order one and it finishes immediately. To undo it, empty the new area first. Robin then returns the gold, and the refund arrives at once ([Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop), [Farmhouse](https://stardewvalleywiki.com/Farmhouse)).
+ 
+EXIT 1
+
+HAN full=1905 caption=90 pure_body=1647
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+$ sips -g pixelWidth -g pixelHeight docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+EXIT 0
+
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/cover-payments.svg 4f0103d7aaed81a3a617b945dced399cfee526eec04f59faf643fadc18713785
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.svg 0f68fefc86cf2f959bab09411c6000069d0ed78172aa2f1263bf82ef46d07af2
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif 8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.svg 71c935969c7952967207ed70006b65da614909d92689f0ba260f36e7e7c335ad
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp 040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif 1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426
+PROVENANCE_SKIP /tmp/house-upgrade-zh-cover-payments.png
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif 7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926
+PROVENANCE_SKIP /tmp/house-upgrade-zh-tier-rooms.png
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad
+PROVENANCE_SKIP /tmp/house-upgrade-zh-upgrade-or-renovation.png
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp 6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88
+PROVENANCE_MATCH docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84
+$ shasum -a 256 docs/blog-ops/house-upgrade-stardew/handoff/public/en.json docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json docs/blog-ops/house-upgrade-stardew/handoff/freeze-report.md
+cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3  docs/blog-ops/house-upgrade-stardew/handoff/public/en.json
+0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c  docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json
+dd9daf7299b339c7527f6870a3a74162344e409e37dac8710ca65bd524b1ee32  docs/blog-ops/house-upgrade-stardew/handoff/freeze-report.md
+EXIT 0
+
+$ git diff --name-only
+EXIT 0
+
+$ git diff --cached --name-only
+EXIT 0
+
+COMMAND_COUNT 25
+ERROR_COUNT 0

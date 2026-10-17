@@ -1,0 +1,36 @@
+{
+  "recordKind": "internal-generation-provenance",
+  "publishToPublicPage": false,
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "requestedCalls": 3,
+  "actualCalls": 3,
+  "successes": 3,
+  "retries": 0,
+  "remainingAuthorizedCalls": 0,
+  "transparentBackground": false,
+  "selectedMethod": "system imagegen with native image_gen tool",
+  "assets": [
+    {
+      "key": "cover",
+      "path": "/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished full-bleed landscape illustration for a bilingual Stardew Valley farmhouse-upgrade blog. Canvas: widescreen 16:9, target 2048x1152. Visual language: authentic cozy 16-bit farming RPG pixel art, like a lovingly crafted in-game environment; crisp square pixel clusters on a consistent pixel grid, deliberately stepped outlines, restrained dithering and a limited harmonious palette. Flat 2D top-down three-quarter game view, readable tile geometry, warm honey timber, terracotta roof, cream walls, lush sage and forest greens, warm late-afternoon light and soft purple pixel shadows. Rich handcrafted environmental details with a clear focal point and uncluttered composition. Keep all important subjects away from extreme edges. Render a complete scene, not a poster, diagram, triptych or collage. Absolutely no visible text, letters, digits, labels, UI, HUD, menus, price cards, arrows, panels, logos, signatures, watermarks or pseudo-writing. Avoid blurry antialiased edges, gradients, painterly brushwork, photorealism, glossy 3D and modern vector illustration. Opaque background.\nScene: a beautifully expanded wooden farmhouse centered in a small lush farm clearing, welcoming front porch, flower pots, chimney, shutters and warm windows. A winding earth path leads to the front door. Small neat crop beds and a low wooden fence frame the foreground; leafy trees frame the background. A tidy stack of pale construction planks and a few darker hardwood logs rest beside the house, suggesting an upgrade just completed. The farmhouse is the large unmistakable hero, filling most of the composition. Quiet, inviting, warm and lived-in. No character is needed. This is an atmospheric original editorial illustration, not an exact screenshot or a canonical floor plan."
+    },
+    {
+      "key": "interior",
+      "path": "/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished full-bleed landscape illustration for a bilingual Stardew Valley farmhouse-upgrade blog. Canvas: widescreen 16:9, target 2048x1152. Visual language: authentic cozy 16-bit farming RPG pixel art, like a lovingly crafted in-game environment; crisp square pixel clusters on a consistent pixel grid, deliberately stepped outlines, restrained dithering and a limited harmonious palette. Flat 2D top-down three-quarter game view, readable tile geometry, warm honey timber, terracotta roof, cream walls, lush sage and forest greens, warm late-afternoon light and soft purple pixel shadows. Rich handcrafted environmental details with a clear focal point and uncluttered composition. Keep all important subjects away from extreme edges. Render a complete scene, not a poster, diagram, triptych or collage. Absolutely no visible text, letters, digits, labels, UI, HUD, menus, price cards, arrows, panels, logos, signatures, watermarks or pseudo-writing. Avoid blurry antialiased edges, gradients, painterly brushwork, photorealism, glossy 3D and modern vector illustration. Opaque background.\nScene: one cohesive cozy farmhouse interior viewed from above with the front walls cut away, as an immersive playable room scene. A furnished kitchen with wooden counters, stove, fridge and a little dining table connects through a visible doorway to a warm bedroom and nursery nook. Include a clearly recognizable wooden baby crib, two small children's beds and a rug in the nursery area; a double bed and a lamp in the bedroom. Timber floor tiles, cream plaster walls, potted plants, windows and a few homely furnishings. Clear doorways and walking space, consistent object scale. Emphasize the pleasant sense of extra living space after a farmhouse upgrade. ONE continuous house interior, no multiple stages, comparison panels or exploded architectural diagram. Original illustrative room arrangement, not a claim to an exact game map."
+    },
+    {
+      "key": "construction",
+      "path": "/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished full-bleed landscape illustration for a bilingual Stardew Valley farmhouse-upgrade blog. Canvas: widescreen 16:9, target 2048x1152. Visual language: authentic cozy 16-bit farming RPG pixel art, like a lovingly crafted in-game environment; crisp square pixel clusters on a consistent pixel grid, deliberately stepped outlines, restrained dithering and a limited harmonious palette. Flat 2D top-down three-quarter game view, readable tile geometry, warm honey timber, terracotta roof, cream walls, lush sage and forest greens, warm late-afternoon light and soft purple pixel shadows. Rich handcrafted environmental details with a clear focal point and uncluttered composition. Keep all important subjects away from extreme edges. Render a complete scene, not a poster, diagram, triptych or collage. Absolutely no visible text, letters, digits, labels, UI, HUD, menus, price cards, arrows, panels, logos, signatures, watermarks or pseudo-writing. Avoid blurry antialiased edges, gradients, painterly brushwork, photorealism, glossy 3D and modern vector illustration. Opaque background.\nScene: one wooden farmhouse being expanded on a green farm, with a small carpenter working beside a porch extension. The carpenter is a tiny clearly drawn farming-game sprite with auburn hair, work shirt and tool belt, raising a small hammer toward a solid timber beam. A second small farmer sprite stands nearby watching. Simple timber scaffolding along one side of the farmhouse, a neat stack of planks and logs, a toolbox, fence and dirt path make the task legible. The finished main part of the house remains cozy and welcoming, with windows and flowers, while the side extension is visibly under construction. Coherent wooden joinery and clean readable silhouettes. ONE continuous outdoor game scene, no before/after split and no coins or payment graphics. Original editorial illustration, not an official game screenshot."
+    }
+  ],
+  "correctionsApplied": [
+    "Used measured PNG dimensions instead of calling the canvas exact 16:9.",
+    "Captions describe one farmhouse, two single beds, and a generic carpenter.",
+    "Did not copy review-plan alt text that named Robin, seasons, stages, or bunk beds.",
+    "Did not reuse the historical handoff hashes."
+  ]
+}

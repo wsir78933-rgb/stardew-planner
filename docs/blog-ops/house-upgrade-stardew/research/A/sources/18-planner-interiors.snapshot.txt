@@ -1,0 +1,66 @@
+[p1 "Stardew Valley Planner – Free Online Farm Layout Tool" | space "house upgrade stardew research"(91): 1 managed, 0 untracked — p1* "Stardew Valley Planner – Free Online Farm Layout Tool"]
+dialog "Choose map" [ref=99, loc=role:dialog[name="Choose map"]]
+  container
+    heading
+      text "Choose map"
+    button "Close dialog" [ref=100, loc=css:button[aria-label="Close dialog"]]
+      text "×"
+  container
+    tablist "Map categories"
+      tab [ref=101, loc=unstable]
+        text "Farm"
+      tab [ref=102, loc=unstable]
+        text "Interiors"
+      tab [ref=103, loc=unstable]
+        text "Exteriors"
+      tab [ref=104, loc=unstable]
+        text "Community"
+    tabpanel "Interiors" [ref=105, loc=role:tabpanel[name="Interiors"]]
+      button [ref=112, loc=unstable]
+        image
+        text "Farmhouse"
+      button [ref=113, loc=unstable]
+        image
+        text "Farmhouse (Upgrade 1)"
+      button [ref=114, loc=unstable]
+        image
+        text "Farmhouse (Upgrade 2)"
+      button [ref=115, loc=unstable]
+        image
+        text "Cellar"
+      button [ref=116, loc=unstable]
+        image
+        text "Shed"
+      button [ref=117, loc=unstable]
+        image
+        text "Big Shed"
+      button [ref=118, loc=unstable]
+        image
+        text "Barn"
+      button [ref=119, loc=unstable]
+        image
+        text "Big Barn"
+      button [ref=120, loc=unstable]
+        image
+        text "Deluxe Barn"
+      button [ref=121, loc=unstable]
+        image
+        text "Coop"
+      button [ref=122, loc=unstable]
+        image
+        text "Big Coop"
+      button [ref=123, loc=unstable]
+        image
+        text "Deluxe Coop"
+      button [ref=124, loc=unstable]
+        image
+        text "Slime Hutch"
+      button [ref=125, loc=unstable]
+        image
+        text "Greenhouse"
+      button [ref=126, loc=unstable]
+        image
+        text "Farm Cave"
+      button [ref=127, loc=unstable]
+        image
+        text "Island Farmhouse"

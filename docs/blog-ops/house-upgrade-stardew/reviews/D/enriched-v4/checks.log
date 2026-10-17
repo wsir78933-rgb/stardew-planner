@@ -1,0 +1,166 @@
+=== Role D Independent Verification Execution (Round 3: enriched draft-v4) ===
+Execution Time: 2026-10-16 08:48:00 CST
+Workspace: /Users/wusir/orca/workspaces/stardew planner/博客-2
+Task ID: task_adcb9ed3b0a8 | Dispatch ID: ctx_d8a5c8eae7b1
+Coordinator Handle: term_661abce7-55fd-4570-8bf5-970c0451dd23
+Role D Terminal Handle: term_a0466fcc-d9a9-442b-9c03-817e8a40f180
+Coordinator Authorization Message: msg_02f45037a94a (draft-v4最终四输入已实读)
+
+--- Step 1: File Checksums & Format Checks ---
+[draft_v4] docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md:
+  SHA256: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+  Bytes: 10046 | Lines: 71
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[public_references] docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json:
+  SHA256: 1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27
+  Bytes: 12355 | Lines: 388
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[media_text] docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json:
+  SHA256: 75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400
+  Bytes: 4458 | Lines: 129
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[writer_submission] docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json:
+  SHA256: 1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415
+  Bytes: 9003 | Lines: 136
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[revision_round_3] docs/blog-ops/house-upgrade-stardew/content/en/revision-round-3.md:
+  SHA256: 7f99e45f7f8003ef64bbcbdfddd4106b8d69ef4e0da7c0c10779ba96a6a9d684
+  Bytes: 5240 | Lines: 63
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[task_card] docs/blog-ops/house-upgrade-stardew/layout/enriched/task-card.md:
+  SHA256: 5d37bdadb1fb20b30d1fbe605b67cd9c169acaa810667b0548dc88fd74950668
+  Bytes: 4622 | Lines: 65
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[writer_brief] docs/blog-ops/house-upgrade-stardew/layout/enriched/writer-brief.md:
+  SHA256: 0f98e5ecde45fb90532d0d210796ee727184054a1645f136a4bf69f534caabfc
+  Bytes: 16894 | Lines: 162
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[media_plan] docs/blog-ops/house-upgrade-stardew/layout/enriched/media-plan.json:
+  SHA256: 6359d95163dfec0ac889c61583a472fe61b53b7ee151eeb4a27bb02768d74a13
+  Bytes: 9733 | Lines: 207
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[facts_a] docs/blog-ops/house-upgrade-stardew/research/A/facts.json:
+  SHA256: 618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e
+  Bytes: 34063 | Lines: 460
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[facts_mp] docs/blog-ops/house-upgrade-stardew/research/material-preparation/facts.json:
+  SHA256: c180f0bf8b5eaf74de21a3999a646e19191064a01fe6d498c098ab56465d601d
+  Bytes: 38855 | Lines: 535
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[facts_up] docs/blog-ops/house-upgrade-stardew/research/upgrade-planning/facts.json:
+  SHA256: 397cc320f596d97e858809e688ba8f90d9db477236416f8cdd57fa1ed548026e
+  Bytes: 33849 | Lines: 467
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+[report_e_v3] docs/blog-ops/house-upgrade-stardew/reviews/E/enriched-v3/report.md:
+  SHA256: 2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07
+  Bytes: 20429 | Lines: 243
+  Format: UTF-8, NFC=True, CRLF=False, EndsNewline=True
+
+--- Step 2: Whitespace Check (git diff --check) ---
+Command: git diff --check --no-index -- /dev/null docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md
+Exit Code: 1
+Stdout: <empty>
+Stderr: <empty>
+Whitespace Clean: True
+
+--- Step 3: Word Count Verification (正文计数.py) ---
+Command: PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md
+Exit Code: 0
+Stdout:
+  {
+    "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md",
+    "locale": "en",
+    "mechanical_units": 1138,
+    "required_floor": 1000,
+    "meets_mechanical_floor": true,
+    "long_form_target": 2000,
+    "meets_long_form_target": false,
+    "length_class": "short",
+    "semantic_qualification": "requires_independent_review",
+    "excluded_heading_sections": [],
+    "omitted_line_counts": {
+      "headings": 8,
+      "code": 0,
+      "excluded_sections": 0,
+      "non_body": 34,
+      "frontmatter": 0
+    },
+    "sha256_raw": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+    "sha256_nfc_lf": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f"
+  }
+Mechanical Units (all): 1138
+Mechanical Units (excluding Schematic. captions): 1085
+Required Floor: 1000 | Meets Floor: True
+Length Class: short (1000-1999)
+Note: Role D preview only. Length gate formal certification belongs to Role F.
+
+--- Step 4: Media Alignment Verification ---
+media-text.en.json bound bodySha256: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+Matches draft-v4.md SHA256: True
+Figure "cover-payments" (role=cover): src_in_draft=False, alt_in_draft=False, caption_in_draft=False (handled by page header template)
+Figure "tier-rooms" (role=body): src_in_draft=True, alt_in_draft=True, caption_in_draft=True (lines 45-47)
+Figure "upgrade-or-renovation" (role=body): src_in_draft=True, alt_in_draft=True, caption_in_draft=True (lines 63-65)
+
+--- Step 5: Public References Verification ---
+public-references.en.json bound bodySha256: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+Matches draft-v4.md SHA256: True
+Total appliesTo quotes checked: 55
+Quote occurrences in draft-v4.md: exactly 1 for all 55 quotes
+Missing / Mismatched quotes: 0
+
+--- Step 6: Internal Facts Isolation Verification ---
+Total publicAllowed=false facts across A, MP, UP facts.json: 19
+Leaked fact IDs in draft-v4.md: 0 (clean isolation)
+
+--- Step 7: Gate 1 - ResearchTrace Scan ---
+Five categories of editorial tone scanned:
+  1. 来源核查旁白 (documented, source-backed, without source support, etc.): 0 hits
+  2. 示例/实测免责 (planning scenario, measured pacing, not a universal ranking, etc.): 0 hits
+  3. 图片自我说明 (original character illustration, not a game screenshot, etc.): 0 hits
+  4. 文章自指与范围声明 (this guide covers, this article, the following table, etc.): 0 hits
+  5. 验收词汇 (readback, verify, pass or revise, etc.): 0 hits
+Unverified UI Labels (Shop, Upgrade House, Construct Farm Buildings, Leave): 0 hits
+Assistant residue (TODO, FIXME, TBD, etc.): 0 hits
+Preserved: descriptive anchor text, operational conditions.
+ResearchTrace Gate: PASS (0 blocking issues).
+
+--- Step 8: Gate 2 - ReaderValue Scenario Trace & E's 6 Issues ---
+Core Scenarios:
+  [PASS] Scenario 1: Upgrade costs, materials, and 3-day duration for Tiers 1-3 (table & 1.6 history)
+  [PASS] Scenario 2: Material sourcing for Wood and Hardwood (Secret Woods route, axes, 9 harvests)
+  [PASS] Scenario 3: Wood deficit budget arithmetic (200 on hand + 250 bought = 12,500g in Y1 vs 14.5k/32.5k)
+  [PASS] Scenario 4: Cumulative budgeting from starter house (75k Tier 2, 175k Tier 3; order row by row)
+  [PASS] Scenario 5: Space unlocks and functionality (kitchen stove/fridge/sink/bed, nursery 2 kids, cellar casks)
+  [PASS] Scenario 6: Carpenter shop ordering (24 Mountain Rd, hours, Tuesday/Friday, instant renovations)
+
+Resolution of E's 6 issues from reviews/E/enriched-v3/report.md:
+  [PASS] Issue 1 (draft-v3 line 29 -> draft-v4 line 29): 14,500g and 32,500g correctly defined as fee plus wood subtotal (4,500g and 22,500g). Wood price 50g sets the 22,500g wood subtotal. Comparison with 12,500g maintains the exact same fee-plus-wood basis.
+  [PASS] Issue 2 (draft-v3 line 57 -> draft-v4 line 57): House accessible daily 9:00am to 8:00pm, even when the shop is closed. Preserved both "every day" and "even when the shop is closed".
+  [PASS] Issue 3 (draft-v3 line 57 -> draft-v4 line 57): Ordinary schedule states Tuesday is closed and Friday closes at 4:00pm without absolute deductions (cannot place order / has to order before 4pm). Exceptions link preserved for rain/counter passing.
+  [PASS] Issue 4 (draft-v3 line 61 -> deleted): Removed unverified payment-start and payment-day unfinished status claims. No generic building rules added. 3-day duration kept in opening sentence and cost table without redundant paragraph.
+  [PASS] Issue 5 (draft-v3 line 17 -> draft-v4 line 17): Large Stump identity / Copper Axe / 2 Hardwood preserved. Living tree stump contrast cited to Wood URL without invented drop rules.
+  [PASS] Issue 6 (draft-v3 line 55 -> draft-v4 line 55): Comma splice repaired into two grammatical sentences. Sells items, upgrades farmhouse, constructs farm buildings all preserved.
+ReaderValue Gate: PASS (0 blocking issues).
+
+--- Step 9: Gate 3 - Repetition & Historical Issues Check ---
+Full text sentence-by-sentence analysis:
+  Total non-header sentences: 95
+  Duplicate sentences: 0
+Historical 6 repetition issues (RP-R1 to RP-R6):
+  [PASS] RP-R1 (Old 50k/150 hardwood price in 1.6 single sentence at line 11)
+  [PASS] RP-R2 (No sentence tells reader to bring 65k and 100 hardwood again in S1)
+  [PASS] RP-R3 (No redundant carry sentences for T1-T3 rows)
+  [PASS] RP-R4 (Ordinary hours 9-5 and enterable door stated once, no repetition)
+  [PASS] RP-R5 (3-day duration timing defined once, redundant paragraph removed)
+  [PASS] RP-R6 (No Mermaid Pendant timing sentence)
+Functional Distinction:
+  - Cost table (lookup) vs 200-wood deficit calculation (scenario arithmetic) vs Cumulative totals (macro budget). Distinct functions preserved.
+Repetition Gate: PASS (0 blocking issues).
+
+--- Step 10: Summary of Quality Gates ---
+  ResearchTrace: PASS (0 blocking issues)
+  ReaderValue:   PASS (0 blocking issues)
+  Repetition:    PASS (0 blocking issues)
+  Total Blocking Issues: 0
+  Shared Revision Budget: 3/3 used, 0 remaining (including translation rework)
+  Next Step: Hand off to Role E for Eight-Layer Appraisal & fact verification

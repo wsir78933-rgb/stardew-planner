@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-labelledby="tierTitle tierDesc">
+  <title id="tierTitle">Three farmhouse upgrade stages and outdoor footprint</title>
+  <desc id="tierDesc">Three labeled stages: Upgrade 1 with Kitchen and Bedroom, Upgrade 2 with Empty room and Nursery, Upgrade 3 with Cellar and Same exterior, and a shared line reading 9×5 outdoors.</desc>
+  <style>
+    .label-title { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 88px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+    .label-room { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+    .label-footprint { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #fde68a; text-anchor: middle; dominant-baseline: middle; }
+  </style>
+  <rect width="1672" height="941" fill="#0b1329"/>
+  <rect x="24" y="24" width="1624" height="893" rx="28" fill="none" stroke="#1e293b" stroke-width="3"/>
+
+  <!-- Stage 1 -->
+  <g id="stage-tier-1">
+    <rect x="56" y="60" width="480" height="620" rx="24" fill="#0f172a" stroke="#10b981" stroke-width="4"/>
+    <rect x="76" y="85" width="440" height="120" rx="16" fill="#064e3b" stroke="#34d399" stroke-width="3"/>
+    <text id="text-tier1-title" class="label-title" x="296" y="145" fill="#34d399">Upgrade 1</text>
+    <rect x="76" y="240" width="440" height="160" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-tier1-room1" class="label-room" x="296" y="320">Kitchen</text>
+    <rect x="76" y="440" width="440" height="160" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-tier1-room2" class="label-room" x="296" y="520">Bedroom</text>
+  </g>
+
+  <!-- Stage 2 -->
+  <g id="stage-tier-2">
+    <rect x="576" y="60" width="480" height="620" rx="24" fill="#0f172a" stroke="#3b82f6" stroke-width="4"/>
+    <rect x="596" y="85" width="440" height="120" rx="16" fill="#1e3a5f" stroke="#60a5fa" stroke-width="3"/>
+    <text id="text-tier2-title" class="label-title" x="816" y="145" fill="#60a5fa">Upgrade 2</text>
+    <rect x="596" y="240" width="440" height="160" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-tier2-room1" class="label-room" x="816" y="320">Empty room</text>
+    <rect x="596" y="440" width="440" height="160" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-tier2-room2" class="label-room" x="816" y="520">Nursery</text>
+  </g>
+
+  <!-- Stage 3 -->
+  <g id="stage-tier-3">
+    <rect x="1096" y="60" width="520" height="620" rx="24" fill="#0f172a" stroke="#a855f7" stroke-width="4"/>
+    <rect x="1116" y="85" width="480" height="120" rx="16" fill="#3b1d54" stroke="#c084fc" stroke-width="3"/>
+    <text id="text-tier3-title" class="label-title" x="1356" y="145" fill="#c084fc">Upgrade 3</text>
+    <rect x="1116" y="240" width="480" height="160" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-tier3-room1" class="label-room" x="1356" y="320">Cellar</text>
+    <rect x="1116" y="440" width="480" height="160" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-tier3-room2" class="label-room" x="1356" y="520">Same exterior</text>
+  </g>
+
+  <!-- Shared footprint line -->
+  <g id="stage-shared-footprint">
+    <rect x="56" y="710" width="1560" height="160" rx="24" fill="#1e1b4b" stroke="#818cf8" stroke-width="4"/>
+    <text id="text-shared-footprint" class="label-footprint" x="836" y="790">9×5 outdoors</text>
+  </g>
+</svg>

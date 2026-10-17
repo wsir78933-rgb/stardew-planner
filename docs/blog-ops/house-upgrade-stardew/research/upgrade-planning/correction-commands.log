@@ -1,0 +1,32 @@
+# upgrade-planning correction commands
+# 2026-10-16
+# worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+## orca orchestration check (start)
+exit 0
+messages: []
+
+## backup
+mkdir -p docs/blog-ops/house-upgrade-stardew/research/upgrade-planning/versions/submission-v1
+cp -p facts.json versions/submission-v1/facts.json
+cp -p research.md versions/submission-v1/research.md
+exit 0
+facts.json src 3750538244bc2e81b310530d480f5bf1ee6ad0b8563d1d6e4d8d380ba8c47399 bytes 25469
+backup     3750538244bc2e81b310530d480f5bf1ee6ad0b8563d1d6e4d8d380ba8c47399 bytes 25469 identical True
+research.md src 6b6669c7afa544a7fdcaad6f2c871c4e802574be69ac9a13c3a626a5c9938699 bytes 12299
+backup      6b6669c7afa544a7fdcaad6f2c871c4e802574be69ac9a13c3a626a5c9938699 bytes 12299 identical True
+
+## python3 json parse, quote check, arithmetic
+exit 0
+quote_missing []
+arith 250 2500 12500 75000 175000
+json_facts 22
+backup_facts 3750538244bc2e81b310530d480f5bf1ee6ad0b8563d1d6e4d8d380ba8c47399 25469
+backup_research 6b6669c7afa544a7fdcaad6f2c871c4e802574be69ac9a13c3a626a5c9938699 12299
+facts 397cc320f596d97e858809e688ba8f90d9db477236416f8cdd57fa1ed548026e 33849
+research d989bf0a5f7f6eea2b917b24bcc20e36b710d6c37db9051269378a7c6c656bd6 5515
+
+## not run
+no new test script
+no repo typecheck, lint, or build
+sources/*.json and verification.log not written

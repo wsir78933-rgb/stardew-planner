@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-labelledby="renovTitle renovDesc">
+  <title id="renovTitle">Farmhouse upgrade vs renovation path contrast</title>
+  <desc id="renovDesc">Two paths and two examples: Upgrade with 3 days; Renovation with After upgrade 2, Instant, and Refunds gold; Remove crib with Free; Dining room with 150,000g.</desc>
+  <style>
+    .label-title { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 88px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+    .label-days { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #93c5fd; text-anchor: middle; dominant-baseline: middle; }
+    .label-info { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+    .label-room { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #f8fafc; text-anchor: middle; dominant-baseline: middle; }
+    .label-free { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #34d399; text-anchor: middle; dominant-baseline: middle; }
+    .label-gold { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 84px; font-weight: 700; fill: #fbbf24; text-anchor: middle; dominant-baseline: middle; }
+  </style>
+  <rect width="1672" height="941" fill="#0b1329"/>
+  <rect x="24" y="24" width="1624" height="893" rx="28" fill="none" stroke="#1e293b" stroke-width="3"/>
+
+  <!-- Path 1: Upgrade -->
+  <g id="path-upgrade">
+    <rect x="56" y="60" width="500" height="821" rx="24" fill="#0f172a" stroke="#3b82f6" stroke-width="4"/>
+    <rect x="76" y="85" width="460" height="120" rx="16" fill="#1e3a5f" stroke="#60a5fa" stroke-width="3"/>
+    <text id="text-upgrade-title" class="label-title" x="306" y="145" fill="#60a5fa">Upgrade</text>
+    <rect x="76" y="360" width="460" height="240" rx="20" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-upgrade-days" class="label-days" x="306" y="480">3 days</text>
+  </g>
+
+  <!-- Path 2: Renovation -->
+  <g id="path-renovation">
+    <rect x="586" y="60" width="1030" height="470" rx="24" fill="#0f172a" stroke="#10b981" stroke-width="4"/>
+    <rect x="606" y="85" width="990" height="110" rx="16" fill="#064e3b" stroke="#34d399" stroke-width="3"/>
+    <text id="text-renovation-title" class="label-title" x="1101" y="140" fill="#34d399">Renovation</text>
+    <rect x="606" y="210" width="990" height="85" rx="14" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-renovation-unlock" class="label-info" x="1101" y="252">After upgrade 2</text>
+    <rect x="606" y="310" width="990" height="85" rx="14" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-renovation-speed" class="label-info" x="1101" y="352">Instant</text>
+    <rect x="606" y="410" width="990" height="85" rx="14" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <text id="text-renovation-refund" class="label-info" x="1101" y="452">Refunds gold</text>
+  </g>
+
+  <!-- Examples -->
+  <g id="renovation-examples">
+    <!-- Example 1: Remove crib -->
+    <g id="example-remove-crib">
+      <rect x="586" y="555" width="500" height="326" rx="24" fill="#0f172a" stroke="#64748b" stroke-width="4"/>
+      <rect x="606" y="580" width="460" height="120" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+      <text id="text-example-1-name" class="label-room" x="836" y="640">Remove crib</text>
+      <rect x="606" y="725" width="460" height="120" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+      <text id="text-example-1-cost" class="label-free" x="836" y="785">Free</text>
+    </g>
+
+    <!-- Example 2: Dining room -->
+    <g id="example-dining-room">
+      <rect x="1116" y="555" width="500" height="326" rx="24" fill="#0f172a" stroke="#64748b" stroke-width="4"/>
+      <rect x="1136" y="580" width="460" height="120" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+      <text id="text-example-2-name" class="label-room" x="1366" y="640">Dining room</text>
+      <rect x="1136" y="725" width="460" height="120" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+      <text id="text-example-2-cost" class="label-gold" x="1366" y="785">150,000g</text>
+    </g>
+  </g>
+</svg>

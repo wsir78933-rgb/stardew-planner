@@ -1,0 +1,27 @@
+=== VERIFICATION LOG: house-upgrade-stardew (upgrade-planning) ===
+Date: 2026-10-16
+Role: Role A Supplementary Research (upgrade-planning)
+Worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+--- STEP 1: EGO-BROWSER PAGE SNAPSHOT VERIFICATION ---
+PASS: 01-wiki-farmhouse.json | URL: https://stardewvalleywiki.com/Farmhouse | Title: Farmhouse - Stardew Valley Wiki | Length: 5507 chars | Revision: This page was last edited on 15 January 2026, at 18:15.
+PASS: 02-wiki-carpenters-shop.json | URL: https://stardewvalleywiki.com/Carpenter%27s_Shop | Title: Carpenter's Shop - Stardew Valley Wiki | Length: 20263 chars | Revision: This page was last edited on 27 September 2026, at 07:06.
+PASS: 03-wiki-cask.json | URL: https://stardewvalleywiki.com/Cask | Title: Cask - Stardew Valley Wiki | Length: 5207 chars | Revision: This page was last edited on 27 October 2024, at 13:47.
+PASS: 04-wiki-cooking.json | URL: https://stardewvalleywiki.com/Cooking | Title: Cooking - Stardew Valley Wiki | Length: 33099 chars | Revision: This page was last edited on 12 July 2026, at 21:41.
+PASS: 05-wiki-robin.json | URL: https://stardewvalleywiki.com/Robin | Title: Robin - Stardew Valley Wiki | Length: 8812 chars | Revision: This page was last edited on 1 October 2026, at 16:15.
+PASS: 06-wiki-version-history.json | URL: https://stardewvalleywiki.com/Version_History | Title: Version History - Stardew Valley Wiki | Length: 239098 chars | Revision: This page was last edited on 9 May 2026, at 22:46.
+
+--- STEP 2: MATHEMATICAL FORMULA VERIFICATION ---
+PASS: Cumulative Tier 1 = 10000g, 450 Wood, 0 Hardwood
+PASS: Cumulative Tier 2 = 75000g, 450 Wood, 100 Hardwood
+PASS: Cumulative Tier 3 = 175000g, 450 Wood, 100 Hardwood
+PASS: Wood deficit = 250 wood; cost = 2500g; total cash outlay = 12500g
+
+--- STEP 3: FACTS.JSON SCHEMA INTEGRITY ---
+Loaded facts.json: total facts = 21
+PASS: All facts adhere to the complete V7 fact schema.
+
+--- STEP 4: RESEARCH.MD EXISTENCE & SIZE ---
+PASS: research.md exists (12299 bytes).
+
+=== ALL VERIFICATION CHECKS PASSED (EXIT CODE 0) ===

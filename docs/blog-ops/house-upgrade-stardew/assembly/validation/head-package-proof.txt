@@ -1,0 +1,17 @@
+HEAD package and lock proof
+Recorded: 2026-10-16T23:10:43+0800
+HEAD: bf91a14829067ed1c9c2a206a97985e17dbebdda
+git diff --exit-code -- package.json pnpm-lock.yaml
+DIFF_EXIT=0
+git status --short -- package.json pnpm-lock.yaml
+(empty)
+
+Worktree SHA-256 equals git show HEAD:
+package.json f10064b03d1e90ba7055b31d838cc68ab0009986e59486cc1d00f59a4cefd3f0
+pnpm-lock.yaml d5e8dbaea64c21aca0db72a3b7363cc1468396667a166727dcefbd704d8be1b2
+
+Those two digests also equal interface/baseline/environment.txt.
+Installed versions through the symlink match resume-preflight/report.md and this tree's package.json:
+node v24.18.0, pnpm 10.22.0, next 16.3.0, react 19.2.8, react-dom 19.2.8, typescript 5.9.3, vitest 3.2.4, serve 14.2.6.
+
+The earlier environment log also printed that the current main checkout's package.json and pnpm-lock.yaml differ from this worktree. That difference is not a failure of this HEAD. This check did not modify main, the lockfile, or node_modules.

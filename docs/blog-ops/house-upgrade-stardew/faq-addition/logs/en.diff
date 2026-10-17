@@ -1,0 +1,80 @@
+--- /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/baseline/house-upgrade-stardew.en.tsx.txt	2026-10-17 08:41:04
++++ /Users/wusir/orca/workspaces/stardew planner/博客-2/src/blog/articles/house-upgrade-stardew.en.tsx	2026-10-17 09:52:02
+@@ -1,3 +1,4 @@
++import { BlogFaqList } from "../../components/blog/blog-faq-list";
+ import { BlogSources } from "../../components/blog/blog-sources";
+ import { PublicPicture } from "../../components/public-picture";
+ 
+@@ -196,6 +197,64 @@
+       <p>
+         Choose the third upgrade's row when you want the cellar. Choose Remove Crib or Add Dining Room when you want those changes.
+       </p>
++    </>
++  );
++}
++
++function HouseUpgradeStardewEnglishFaqSection() {
++  return (
++    <>
++      <h2>Farmhouse Upgrade FAQ</h2>
++      <BlogFaqList
++        items={[
++          {
++            question: "What does each farmhouse upgrade cost?",
++            answer: (
++              <p>
++                The first upgrade is 10,000g and 450 Wood. The second is 65,000g and 100 Hardwood, the 1.6 price. The third is 100,000g.
++              </p>
++            ),
++          },
++          {
++            question: "How long does each house upgrade take?",
++            answer: (
++              <p>Each upgrade takes three days.</p>
++            ),
++          },
++          {
++            question: "How do you get the Hardwood for the second upgrade, and does Robin sell it?",
++            answer: (
++              <p>
++                Robin&apos;s ordinary stock does not sell Hardwood. Six Large Stumps in the Secret Woods regrow daily. A Steel Axe clears the log at the entrance.
++              </p>
++            ),
++          },
++          {
++            question: "Which upgrade unlocks the cellar?",
++            answer: (
++              <p>
++                The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks.
++              </p>
++            ),
++          },
++          {
++            question: "Does a house upgrade increase the outdoor footprint?",
++            answer: (
++              <p>
++                The outdoor footprint stays 9×5, so the tiles beside the house stay as they are. After the third upgrade, the outside of the house stays the same as the previous upgrade.
++              </p>
++            ),
++          },
++          {
++            question: "How is a renovation different from an upgrade?",
++            answer: (
++              <p>
++                Each upgrade takes three days. After the second upgrade, a renovation finishes immediately. Remove Crib and Add Dining Room are examples.
++              </p>
++            ),
++          },
++        ]}
++      />
+     </>
+   );
+ }
+@@ -269,6 +328,7 @@
+       <HouseUpgradeStardewEnglishRoomUseSection />
+       <HouseUpgradeStardewEnglishOrderSection />
+       <HouseUpgradeStardewEnglishRenovationSection />
++      <HouseUpgradeStardewEnglishFaqSection />
+       <HouseUpgradeStardewEnglishSources />
+     </article>
+   );

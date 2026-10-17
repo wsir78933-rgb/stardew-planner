@@ -1,0 +1,535 @@
+{
+  "role": "A-supplement",
+  "keyword": "house upgrade stardew",
+  "locale": "en",
+  "country": "US",
+  "verifiedOn": "2026-10-16",
+  "worktree": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+  "parentFacts": "docs/blog-ops/house-upgrade-stardew/research/A/facts.json",
+  "parentFactsModified": false,
+  "scope": "Vanilla Wood and Hardwood needed for the current farmhouse upgrade costs of 450 Wood and 100 Hardwood: item difference, ordinary acquisition, minimum axe grade, and repeatable quantities with their conditions.",
+  "notDone": [
+    "No article prose, layout, table title, or media caption.",
+    "No D or E signature.",
+    "No full foraging map, skill walkthrough, or mod check.",
+    "Console Version History and Mobile Version History were not opened."
+  ],
+  "coordinatorRedirect": {
+    "messageId": "msg_eaebd58c0c7b",
+    "readBeforeWorkerDone": true,
+    "instruction": "Use one vanilla hardwood path that is not tied to a farm map, plus the axe condition and the difference between buying and chopping Wood. Do not turn every farm, drop, or planting guide into the pack B should choose from."
+  },
+  "focusPack": {
+    "hardwoodPath": "After a Steel Axe removes the log at the Secret Woods entrance, the six Large Stumps there regrow daily and the Secret Woods page states 12 Hardwood each day.",
+    "woodChoice": "Chop already grown trees with the starter axe, or buy Wood from Robin's ordinary stock at 10g in year 1 and 50g in year 2 or later.",
+    "factIds": [
+      "MP-wood-item",
+      "MP-hardwood-item",
+      "MP-R-upgrade-materials",
+      "MP-robin-regular-stock",
+      "MP-tree-wood-range",
+      "MP-tree-stump-wood",
+      "MP-immature-tree-wood",
+      "MP-wood-water-loss",
+      "MP-axe-grades",
+      "MP-axe-enchant-exception",
+      "MP-large-stump",
+      "MP-large-log",
+      "MP-secret-woods",
+      "MP-chipper-direction"
+    ],
+    "calculationIds": [
+      "CALC-shop-450",
+      "CALC-tree-bounds",
+      "CALC-secret-woods-visits",
+      "CALC-no-swap-observed"
+    ],
+    "outsideFocusIds": [
+      "MP-letter-wording",
+      "MP-farm-daily-hardwood",
+      "MP-mahogany-growth",
+      "MP-mahogany-yield-conflict",
+      "MP-occasional-amounts",
+      "MP-lumberjack",
+      "MP-other-hardwood-costs",
+      "MP-1.6.9-language-fix",
+      "MP-hit-counts",
+      "MP-mahogany-seed-chances",
+      "CALC-map-daily-sums"
+    ],
+    "outsideFocusReason": "These were read before the redirect. They stay as evidence. They are not the one universal preparation path."
+  },
+  "facts": [
+    {
+      "id": "MP-wood-item",
+      "type": "theme",
+      "statement": "The Wood page calls Wood a basic resource obtained by felling trees and branches with an axe or bought from Robin at the Carpenter's Shop. Its infobox sell price is 2g.",
+      "sourceTitle": "Wood",
+      "sourceUrl": "https://stardewvalleywiki.com/Wood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext lead and infobox sellprice=2. Rendered lead saved in sources/wood-rendered-lead.txt. Revision revid 192694, 2026-04-28T19:53:57Z. Footer: 28 April 2026, at 19:53.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "English wiki Wood page at that revision. Vanilla.",
+      "limitation": "The lead does not give a piece count for branches. The 2g figure is the sell price, not Robin's shop price. The rendered blurb 'A sturdy, yet flexible plant material with a wide variety of uses.' was visible on the page and is not literal text in the saved wikitext.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-hardwood-item",
+      "type": "theme",
+      "statement": "The Hardwood page calls Hardwood a resource obtained by chopping a Mahogany Tree or a Mystic Tree with any axe, a Large Stump with a Copper Axe or better, or a Large Log with a Steel Axe or better. Its infobox sell price is 15g. The rendered page also shows the line 'A special kind of wood with superior strength and beauty.'",
+      "sourceTitle": "Hardwood",
+      "sourceUrl": "https://stardewvalleywiki.com/Hardwood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext lead and infobox sellprice=15. Rendered excerpt sources/hardwood-rendered.txt. Revision revid 192340, 2026-04-14T15:33:32Z. Footer: 14 April 2026, at 15:33.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "English wiki Hardwood page at that revision. Vanilla.",
+      "limitation": "This lead gives the tool for each object and does not give piece counts. It does not say that the Wood item pays a Hardwood cost. The rendered blurb is not literal text in the saved wikitext. Mystic Tree's piece count was not on this sentence, and the Mystic Tree page was not opened.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-R-upgrade-materials",
+      "type": "theme",
+      "statement": "The current Farmhouse upgrades table still prices upgrade 1 at 10,000g and 450 Wood, and upgrade 2 at 65,000g and 100 Hardwood. The Carpenter's Shop House Upgrade rows use the same gold and the same item names and amounts. Farmhouse history 1.6 and Carpenter's Shop history 1.6 still say the second upgrade changed from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse Upgrades rows and History 1.6. Carpenter's Shop House Upgrade 1 and 2 cost cells and History 1.6. Farmhouse revid 190738, 2026-01-15T18:15:54Z. Carpenter's Shop revid 195197, 2026-09-27T07:06:30Z.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Same English wiki revisions already cited by T-upgrade-1, T-upgrade-2, and T-cost-1.6.",
+      "limitation": "This is a re-read of those revisions, not a new price. No sentence on these rows says Wood may be paid in place of Hardwood.",
+      "publicAllowed": true,
+      "repeatOf": ["T-upgrade-1", "T-upgrade-2", "T-cost-1.6"]
+    },
+    {
+      "id": "MP-robin-regular-stock",
+      "type": "theme",
+      "statement": "The Carpenter's Shop page says Robin sells wood, stone, and furniture. Permanent Stock lists Wood at Year 1: 10g and Year 2+: 50g. That Permanent Stock section contains no Hardwood row. The same intro says she will buy building-related resources, namely Battery Pack, Clay, Fiber, Hardwood, Stone, and Wood.",
+      "sourceTitle": "Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Intro sentence 'Robin sells wood, stone, and furniture' and the following buy-list sentence, visible in sources/carpenter-shop-rendered.txt. Permanent Stock wood row in carpenter-shop-wikitext.json. A search of that Permanent Stock section found zero occurrences of Hardwood. The whole page's five Hardwood strings are the buy list, the Stable cost, the Pet Bowl cost, House Upgrade 2, and the 1.6 history line. Revision revid 195197, 2026-09-27T07:06:30Z.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Robin's ordinary Carpenter's Shop inventory on this English page. Not the Desert Festival.",
+      "limitation": "The page does not state a per-day cap on ordinary Wood purchases. Robin's Desert Festival inventory was not opened as its own page. The Wood page separately says Robin sells up to 500 Wood there for 1 Calico Egg each. The Hardwood page attributes festival Hardwood to Leah's shop, not to this permanent stock.",
+      "publicAllowed": true,
+      "repeatOf": ["T-wood-price"]
+    },
+    {
+      "id": "MP-letter-wording",
+      "type": "theme",
+      "statement": "Both the Wood page and the Carpenter's Shop Permanent Stock note say the wood shop price changes from 10g to 50g in Year 2 and that gold from selling wood does not change with that increase. The Wood page quotes the Spring 1 Year 2 letter as 'Notice: The price of raw materials at Robin's shop and Clint's shop has increased.' The Carpenter's Shop note quotes that letter without the leading word Notice.",
+      "sourceTitle": "Wood; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Wood",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wood wikitext section Purchase Price. Carpenter's Shop wikitext section Permanent Stock, the note before the table.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "The two English pages at the revisions above.",
+      "limitation": "The price change matches T-wood-price. The letter wording does not match across the two pages, so neither quotation is settled here as the only letter text.",
+      "publicAllowed": false,
+      "repeatOf": ["T-wood-price"]
+    },
+    {
+      "id": "MP-tree-wood-range",
+      "type": "theme",
+      "statement": "The Wood page says felling a fully grown tree yields between 12 and 16 Wood, and the amount depends on Luck and Foraging level. The Trees page says a mature tree (stage 5), except Mahogany, drops 12-16 Wood, with 4 possible bonus pieces added from Luck and Foraging. With the Forester profession those amounts are 25% larger (15-20). If the player has read Woody's Secret, there is a 5% chance to double the amount (24-32, or 30-40 with Forester).",
+      "sourceTitle": "Wood; Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Wood",
+      "alsoUrl": "https://stardewvalleywiki.com/Trees",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wood wikitext paragraph beginning 'Felling a fully grown tree'. Trees wikitext section Common Trees / Harvesting, first product bullet. Trees revision revid 193892, 2026-07-24T22:45:34Z. The Trees page cites Tree::extraWoodCalculator and Tree::tickUpdate.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Fully grown trees on the Wood page, and mature non-Mahogany trees on the Trees page. The profession and book modifiers are stated on the Trees page.",
+      "limitation": "The Wood page states the 12-16 range and names Forester and Woody's Secret as increases, but the 15-20 and 5% figures are on the Trees page. Mahogany is excluded from this wood range by the Trees page. This is not a count of trees needed for 450 Wood.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-tree-stump-wood",
+      "type": "theme",
+      "statement": "The Wood page says the stump left after felling a fully grown tree yields between 5 and 9 Wood. The Trees page says removing that stump yields 4-9 Wood: in single-player the minimum is 5 plus up to 4 bonus pieces from Luck and Foraging, and Foresters get 6-11; in multiplayer the amount is fixed at 4 Wood (5 for Foresters). The stump also yields 1 Sap.",
+      "sourceTitle": "Wood; Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Trees",
+      "alsoUrl": "https://stardewvalleywiki.com/Wood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wood wikitext sentence 'After felling the tree, the stump can be destroyed'. Trees wikitext Harvesting paragraph beginning 'A stump is left behind'. It cites Tree::extraWoodCalculator and Tree::performTreeFall.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "The stump of a felled mature tree, not a Large Stump.",
+      "limitation": "The Wood page's 5-9 matches the Trees page's single-player range and does not state the multiplayer fixed 4. Neither page states a combined tree-plus-stump total.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-immature-tree-wood",
+      "type": "theme",
+      "statement": "On the Trees page, a stage 4 seedling chopped with an axe yields 4 Wood (5 for Foresters). Stages 2 and 3 drop no product unless an axe is used, and an axe may drop 1 Wood; the chance is ten times the player's Foraging level, including buffs. A stage 1 seed, removed at Foraging level 1 or higher, returns the seed only.",
+      "sourceTitle": "Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Trees",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext Harvesting paragraphs for stage 4, stages 2 and 3, and stage 1. Stage 4 cites Tree::performBushDestroy. Stages 2 and 3 cite Tree::performSproutDestroy.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Common-tree seedlings on the Trees page. Not the 12-16 mature-tree range.",
+      "limitation": "Not a schedule for growing those seedlings to stage 5.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-wood-water-loss",
+      "type": "theme",
+      "statement": "The Wood page says felling trees near water can lose some or all of the Wood, and the tree falls away from the player. The Trees page says products drop in the direction of the fall and may disappear if the tree falls into or near water.",
+      "sourceTitle": "Wood; Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Wood",
+      "alsoUrl": "https://stardewvalleywiki.com/Trees",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wood wikitext sentence beginning 'Felling trees near water'. Trees wikitext Harvesting sentences on fall direction and water.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Chopped trees whose drops reach water.",
+      "limitation": "No count of lost pieces is stated.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-axe-grades",
+      "type": "theme",
+      "statement": "The basic Axe is obtained at the beginning of the game and is upgraded at the Blacksmith. The grades table lists the Axe as a starter tool that chops a fully-grown tree; the Copper Axe at 2,000g and 5 Copper Bars, which can chop Large Stumps; and the Steel Axe at 5,000g and 5 Iron Bars, which can chop Large Logs. The page says the Steel Axe is required to remove the large log that blocks the Secret Woods.",
+      "sourceTitle": "Axes",
+      "sourceUrl": "https://stardewvalleywiki.com/Axes",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext lead and Grades of Axe table. Rendered page read 2026-10-16, footer 9 September 2026, at 14:08. Revision revid 194232, 2026-09-09T14:08:33Z. The title Axe redirects to Axes.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Vanilla axe upgrades listed on this page. Gold and iridium rows exist on the same table and are not required for the first Large Stump or Large Log capability.",
+      "limitation": "The grades table does not state a mining or foraging level. How Copper Bars and Iron Bars are made was not opened. Hit counts in the Improvements column are swings, not Wood or Hardwood piece counts.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-axe-enchant-exception",
+      "type": "theme",
+      "statement": "The Axes page notes that an axe with the Powerful enchantment from the Forge can remove Large Stumps and Large Logs regardless of its upgrade level.",
+      "sourceTitle": "Axes",
+      "sourceUrl": "https://stardewvalleywiki.com/Axes",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext Notes section.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "An axe that already has that enchantment.",
+      "limitation": "The Secret Woods, Large Stump, and Large Log pages state the Copper and Steel requirements and do not mention this enchantment. The Forge was not opened. This is not the starter-axe path.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-large-stump",
+      "type": "theme",
+      "statement": "A Copper Axe or better removes a Large Stump and yields 2 Hardwood and 25 Foraging experience. The Forester profession gives a 50% chance of one extra piece of hardwood. Stumps also have a 10% chance of dropping Mahogany Seeds. Six Large Stumps in the Secret Woods respawn daily. Eight on the west side of the Forest Farm respawn, and one in the top left quadrant of the Four Corners Farm respawns. All other large stumps on the farm disappear permanently after being removed.",
+      "sourceTitle": "Large Stump",
+      "sourceUrl": "https://stardewvalleywiki.com/Large_Stump",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext lead and the daily-respawn list. Rendered excerpt sources/large-stump-rendered.txt. Revision revid 184860, 2025-02-14T06:34:33Z. Footer: 14 February 2025, at 06:34.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Large Stumps, not the stump left by a normal tree. Daily counts apply only to the stumps the page lists as respawning.",
+      "limitation": "The focused path is the Secret Woods six stumps and this 2 Hardwood yield. The Forest Farm and Four Corners counts in this statement are outside focusPack. The page does not state how many non-respawning stumps each farm map starts with, or the clock hour of the daily respawn. Mines floors 41-69 have no piece total here.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-farm-daily-hardwood",
+      "type": "theme",
+      "statement": "The Hardwood page says six Large Stumps respawn daily in the Secret Woods, making it possible to obtain 12 Hardwood per day. It then says eight Large Stumps respawn daily on the left side of the Forest Farm Map and one respawns daily in the top left corner of the Four Corners Farm Map, and that these yield an additional 16 and 2 Hardwood per day, respectively.",
+      "sourceTitle": "Hardwood",
+      "sourceUrl": "https://stardewvalleywiki.com/Hardwood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext second paragraph. Same sentences are in sources/hardwood-rendered.txt.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those respawning stumps. The 16 applies to the Forest Farm count, and the 2 applies to the Four Corners count, as the page's 'respectively'.",
+      "limitation": "The 12, 16, and 2 match 6, 8, and 1 stumps at 2 Hardwood each from the Large Stump page, without the Forester extra piece. The word additional is the page's word; this fact does not add the 16 on top of the 2-per-stump yield a second time. A player who is not on that farm map does not get that map's daily stumps.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-large-log",
+      "type": "theme",
+      "statement": "A Steel Axe or better removes a Large Log and yields 8 Hardwood (10 with the Forester profession) and 25 Foraging experience. Large Logs never reappear once removed. One in Cindersap Forest blocks the Secret Woods. Another blocks a secret passage east between the Blacksmith and JojaMart. The page's 1.6 history line says that secret passage was introduced.",
+      "sourceTitle": "Large Log",
+      "sourceUrl": "https://stardewvalleywiki.com/Large_Log",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext lead and History 1.6. Rendered excerpt sources/large-log-rendered.txt. Revision revid 175659, 2024-08-09T23:11:38Z. Footer: 9 August 2024, at 23:11.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Large Logs. Not a daily respawn.",
+      "limitation": "The focused path uses the one log that blocks the Secret Woods, its 8 Hardwood, and the fact that it does not respawn. The alleyway log and the Dangerous Mines mention are not that path. No starting log count per farm is stated.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-secret-woods",
+      "type": "theme",
+      "statement": "The Secret Woods are entered from the northwest corner of Cindersap Forest. The entrance is initially blocked by a large log that can be cleared after upgrading to at least a Steel Axe. The woods contain 6 Large Stumps that regrow daily and can be harvested for a total of 12 Hardwood each day.",
+      "sourceTitle": "Secret Woods",
+      "sourceUrl": "https://stardewvalleywiki.com/Secret_Woods",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext lead, including the sentence with the 6 stumps and 12 Hardwood. Rendered excerpt sources/secret-woods-rendered.txt. Revision revid 192765, 2026-04-28T20:30:13Z. Footer: 28 April 2026, at 20:30. The Axes page states the same Steel Axe requirement for that log.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Vanilla Secret Woods after the blocking log is removed. The 12 is the page's daily total for those six stumps.",
+      "limitation": "The 12 does not include the one-time 8 Hardwood from the blocking log, and it does not include the Large Stump page's Forester extra piece. The page also describes two covered passages to the lower stumps; that walking description is not a separate supply quantity. The respawn hour is not stated. History on this page does not change the 12 Hardwood sentence.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-mahogany-growth",
+      "type": "theme",
+      "statement": "A Mahogany Tree grows from a Mahogany Seed and can be chopped with an axe. The Mahogany Tree page says fertilized seeds have a 60% chance of growing to the next stage each night, including winter, and unfertilized seeds have a 15% chance. It says unfertilized mahogany trees usually grow in 26±12 days, and fertilized ones usually grow in 7±2 days. The Trees page says a fertilized non-Mahogany seed takes five days to maturity and that fertilized Mahogany trees usually take longer.",
+      "sourceTitle": "Mahogany Tree; Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Mahogany_Tree",
+      "alsoUrl": "https://stardewvalleywiki.com/Trees",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Mahogany Tree wikitext lead. Trees wikitext Growth Cycle. Mahogany Tree revision revid 190228, 2026-01-12T17:58:20Z. History: introduced in 1.5.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Mahogany seeds under the fertilizer condition the page names. The Hardwood page says any axe can chop a Mahogany Tree.",
+      "limitation": "The day ranges are the pages' 'usually' summaries of a nightly chance. They were not turned into a date for having 100 Hardwood. Piece count per tree is a separate unresolved conflict.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-mahogany-yield-conflict",
+      "type": "theme",
+      "statement": "The Mahogany Tree page says chopping a Mahogany Tree produces 8-13 Hardwood and cites Tree::tickUpdate. The Trees harvesting section says Mahogany trees drop 10 Hardwood, and that Foresters get 25% larger amounts (12 or 13).",
+      "sourceTitle": "Mahogany Tree; Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Mahogany_Tree",
+      "alsoUrl": "https://stardewvalleywiki.com/Trees",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Mahogany Tree wikitext sentence ending 'producing 8-13 Hardwood', reference numHardwood. Trees wikitext Harvesting bullet '{{Name|Hardwood|10}} for Mahogany trees'.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Current English text of both pages. The two counts were both present on 2026-10-16.",
+      "limitation": "The pages do not state the same count. Neither number is a settled per-tree supply. No calculation in this file uses 8-13 or 10 as the number of Hardwood per Mahogany Tree.",
+      "publicAllowed": false,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-chipper-direction",
+      "type": "theme",
+      "statement": "The Hardwood notes say a Wood Chipper can convert Hardwood into Wood, Maple Syrup, Oak Resin, or Pine Tar. Version History 1.4 says the wood chipper breaks hardwood and driftwood into wood. The Wood page lists chipped Hardwood as a way to obtain Wood.",
+      "sourceTitle": "Hardwood; Version History; Wood",
+      "sourceUrl": "https://stardewvalleywiki.com/Hardwood",
+      "alsoUrl": "https://stardewvalleywiki.com/Version_History",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Hardwood wikitext Notes. Version History wikitext 1.4 bullet containing 'wood chipper'. Wood wikitext sentence 'obtained from chipped Hardwood'.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "The Wood Chipper as described on these pages.",
+      "limitation": "The Wood Chipper page was not opened, so output counts are not in this fact. No opened sentence says the chipper turns Wood into Hardwood.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-occasional-amounts",
+      "type": "theme",
+      "statement": "Opened pages state these amounts with their own conditions: Robin may gift 25 Hardwood, and can gift 99 Wood, at the Feast of the Winter Star. A Woodskip fish pond produces 1 to 10 Wood depending on population, and may produce 5 Hardwood when the population reaches 6. Up to 100 Hardwood can be purchased from Leah's Desert Festival shop for 3 Calico Eggs each. Robin sells up to 500 Wood at the Desert Festival for 1 Calico Egg each. Ten Hardwood may be received from a Mystery Box. The Bookseller trades 100 Wood for 1 Woodcutter's Weekly, and trades 20 Hardwood for 1 Woody's Secret if the player has already obtained that book's power.",
+      "sourceTitle": "Wood; Hardwood",
+      "sourceUrl": "https://stardewvalleywiki.com/Wood",
+      "alsoUrl": "https://stardewvalleywiki.com/Hardwood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wood wikitext lead. Hardwood wikitext lead, the paragraph beginning 'Hardwood can also be received as loot'.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "The event, pond population, box, or trade named in each sentence.",
+      "limitation": "Gift sentences say can or may. They are not a daily respawn and were not used as a calendar. The Bookseller sentences are payments of Wood or Hardwood. The Wood and Hardwood infoboxes still list Bookseller under Source. Desert Festival seller pages were not opened beyond these sentences. Fishing treasure chests are named on the Wood page without a piece count.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-lumberjack",
+      "type": "theme",
+      "statement": "The Hardwood page says all trees have a chance of dropping Hardwood with the Lumberjack profession, with any axe or any bombs. The Trees page states that chance as 50% for 0 pieces, 25% for 1, 12.5% for 2, 6.25% for 3, 3.125% for 4, and so on, without any fixed maximum number. The Trees bullet names the item Hardwood and then says the amount of wood is random.",
+      "sourceTitle": "Hardwood; Trees",
+      "sourceUrl": "https://stardewvalleywiki.com/Trees",
+      "alsoUrl": "https://stardewvalleywiki.com/Hardwood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Hardwood wikitext sentence beginning 'All trees have a chance'. Trees wikitext Harvesting bullet for the Lumberjack profession.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Players with the Lumberjack profession. Not the base drop from a Large Stump or Large Log.",
+      "limitation": "This is the page's stated chance table, not a foraging-skill walkthrough. It was not added into the visit-count calculation.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-other-hardwood-costs",
+      "type": "theme",
+      "statement": "Other current wiki lines also name Hardwood in amounts that are not the farmhouse upgrade: the Stable costs 10,000g, 100 Hardwood, and 5 Iron Bars; the Pet Bowl costs 5,000g and 25 Hardwood; the Giant Stump quest needs 100 Hardwood; Robin's Request asks for 10 Hardwood by mail on Winter 21; Robin's Project asks for 80 Hardwood.",
+      "sourceTitle": "Carpenter's Shop; Hardwood",
+      "sourceUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "alsoUrl": "https://stardewvalleywiki.com/Hardwood",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Carpenter's Shop Farm Buildings rows for Stable and Pet Bowl. Hardwood wikitext Quests and the Notes bullet '100 Hardwood is needed to repair the Giant Stump'.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those buildings and quests. Not House Upgrade 2.",
+      "limitation": "Quest steps, rewards, and the raccoon shop were not opened. These lines only keep the same numbers from being treated as the house upgrade.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-1.6.9-language-fix",
+      "type": "theme",
+      "statement": "Version History 1.6.9 says: Fixed Robin showing the wrong number of hardwood required for a house upgrade in some languages.",
+      "sourceTitle": "Version History",
+      "sourceUrl": "https://stardewvalleywiki.com/Version_History",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Wikitext heading 1.6.9, the bullet containing 'wrong number of hardwood'. Page revision revid 192874, 2026-05-09T22:46:47Z. The first heading on the page is still 1.6.15.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "The wiki's 1.6.9 bullet. English Farmhouse and Carpenter's Shop rows still show 100 Hardwood.",
+      "limitation": "The bullet does not say which number was wrong or which languages. Non-English pages were not opened. This was not treated as a change to the English 100 Hardwood cost.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-hit-counts",
+      "type": "theme",
+      "statement": "The Large Stump page lists hits to destroy one: 7 with a Copper Axe, 5 with a Steel Axe, 4 with a Gold Axe, 3 with an Iridium Axe, and 2 with a Powerful Iridium Axe. The Large Log page lists 9 with a Steel Axe, 7 with a Gold Axe, 6 with an Iridium Axe, 5 with a Powerful Gold Axe, and 3 with a Powerful Iridium Axe.",
+      "sourceTitle": "Large Stump; Large Log",
+      "sourceUrl": "https://stardewvalleywiki.com/Large_Stump",
+      "alsoUrl": "https://stardewvalleywiki.com/Large_Log",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Both pages' Trivia sections. Rendered excerpts include the same hit lists.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Swings to destroy one Large Stump or one Large Log.",
+      "limitation": "These are hit counts. They are not Hardwood yields. The Axes page's hit counts are for ordinary trees and small stumps, not for these objects.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "MP-mahogany-seed-chances",
+      "type": "theme",
+      "statement": "Large Stumps have a 10% chance of dropping Mahogany Seeds. Secret Woods history 1.5 says any monster in the Secret Woods has a 10% chance of dropping Mahogany Seeds. Version History 1.6.6 says a coal to mahogany seed trade was added at the raccoon wife's shop.",
+      "sourceTitle": "Large Stump; Secret Woods; Version History",
+      "sourceUrl": "https://stardewvalleywiki.com/Large_Stump",
+      "alsoUrl": "https://stardewvalleywiki.com/Secret_Woods",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Large Stump lead. Secret Woods History 1.5. Version History heading 1.6.6, the coal to mahogany seed bullet.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those stated chances, and the existence of the 1.6.6 trade bullet.",
+      "limitation": "The raccoon shop page was not opened. The 1.6.6 bullet does not give the coal or seed count. Seed chances were not turned into a planting schedule.",
+      "publicAllowed": true,
+      "repeatOf": []
+    }
+  ],
+  "calculations": [
+    {
+      "id": "CALC-shop-450",
+      "type": "analysis",
+      "statement": "450 times 10g is 4,500g, and 4,500g plus the 10,000g upgrade is 14,500g. 450 times 50g is 22,500g, and 22,500g plus 10,000g is 32,500g.",
+      "basis": ["MP-robin-regular-stock", "MP-R-upgrade-materials"],
+      "conditions": [
+        "Every one of the 450 Wood is bought at the ordinary Carpenter's Shop unit price.",
+        "Year 1 uses 10g. Year 2 or later uses 50g.",
+        "No other gold spend is included in the total.",
+        "The Farmhouse Notes section already states these four products: 4,500g, 22,500g, 14,500g, and 32,500g."
+      ],
+      "notClaimed": "This is not a new price measurement and not a count of days.",
+      "publicAllowed": true,
+      "repeatOf": ["T-wood-price"]
+    },
+    {
+      "id": "CALC-tree-bounds",
+      "type": "analysis",
+      "statement": "If one fully grown tree's wood is inside 12-16 and its own stump's wood is inside 5-9, the two drops together are inside 17-25. At 25 per tree, 18 trees are 450. At 17 per tree, 26 trees are 442, so 450 requires a 27th tree. In the multiplayer stump case, 12-16 plus a fixed 4 is 16-20; 20 times 23 is 460, and 16 times 28 is 448, so the matching visit counts are 23 at the high end and 29 at the low end.",
+      "basis": ["MP-tree-wood-range", "MP-tree-stump-wood"],
+      "conditions": [
+        "Single-player bounds use 5-9 stump wood. Multiplayer bounds use the fixed 4 and are separate.",
+        "Forester is not taken. Woody's Secret is not taken.",
+        "No wood is lost to water.",
+        "Both the fallen-tree wood and the stump wood are collected.",
+        "The trees are already fully grown. Growth days are not included.",
+        "Starting wood is 0. No shop wood is included."
+      ],
+      "notClaimed": "No wiki page states 17-25, 18 trees, or 27 trees. The sum stays inside 17-25 only while each drop stays inside the range cited above. The pages do not say how often the endpoints occur. This is not a calendar.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "CALC-secret-woods-visits",
+      "type": "analysis",
+      "statement": "With a base of 12 Hardwood from the six Secret Woods stumps and no other Hardwood, 8 such harvests are 96 and leave 4, which is 2 stumps, so the 100th piece is on the 9th harvest. If the blocking log's 8 Hardwood is also taken on the first visit and the six stumps are chopped that same visit, that visit is 20; six later visits of 12 reach 92, and 8 more Hardwood is 4 stumps on the next visit, which is 8 visits.",
+      "basis": ["MP-secret-woods", "MP-large-stump", "MP-large-log"],
+      "conditions": [
+        "Starting Hardwood is 0.",
+        "Forester's extra piece is not included.",
+        "Forest Farm and Four Corners daily stumps are not included.",
+        "No quest, stable, pet bowl, chipper, or other spend removes Hardwood.",
+        "The first variant assumes the blocking log was already removed before the count starts.",
+        "The second variant assumes the log and the six inside stumps are both chopped on the entry visit. The pages say the stumps are inside and the log blocks the entrance; they do not use the words same day."
+      ],
+      "notClaimed": "These are harvest counts under those conditions, not a date, a season, or a claim that the player can reach the woods on consecutive calendar days.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "CALC-map-daily-sums",
+      "type": "analysis",
+      "statement": "Adding the Secret Woods 12 to the Forest Farm 16 is 28 Hardwood on a harvest that takes both. Three such harvests are 84, so the 100th piece needs another 16. Adding the Secret Woods 12 to the Four Corners 2 is 14. Seven such harvests are 98, so the 100th piece needs 2 more.",
+      "basis": ["MP-farm-daily-hardwood", "MP-secret-woods"],
+      "conditions": [
+        "The 28 figure applies only to a Forest Farm save that also harvests the Secret Woods stumps.",
+        "The 14 figure applies only to a Four Corners save that also harvests the Secret Woods stumps.",
+        "The blocking log's 8 is not included.",
+        "Forester is not included.",
+        "Starting Hardwood is 0, and no other source or spend is included."
+      ],
+      "notClaimed": "The wiki does not state 28 or 14 as a daily total. This addition is not a calendar and does not apply to a farm map that lacks those respawning stumps.",
+      "publicAllowed": true,
+      "repeatOf": []
+    },
+    {
+      "id": "CALC-no-swap-observed",
+      "type": "analysis",
+      "statement": "House Upgrade 1 names Wood. House Upgrade 2 names Hardwood. Ordinary Permanent Stock sells Wood and has no Hardwood row. The Wood Chipper line that was opened turns Hardwood into Wood. No opened sentence says the Hardwood cost can be paid with Wood.",
+      "basis": ["MP-R-upgrade-materials", "MP-robin-regular-stock", "MP-chipper-direction", "MP-wood-item", "MP-hardwood-item"],
+      "conditions": [
+        "This uses only the opened English wiki sentences.",
+        "The game's shop menu was not clicked, so a refusal message was not observed."
+      ],
+      "notClaimed": "This is not a recorded test of the purchase button. Do not write that a refusal popup was seen.",
+      "publicAllowed": false,
+      "repeatOf": []
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "OPEN-mahogany-count",
+      "reason": "Mahogany Tree says 8-13 Hardwood. Trees says 10, or 12 or 13 with Forester. No single count was adopted."
+    },
+    {
+      "id": "OPEN-mystic-count",
+      "reason": "The Hardwood and Trees sentences say a Mystic Tree yields Hardwood when chopped and do not give a number. The Mystic Tree page was not opened."
+    },
+    {
+      "id": "OPEN-branch-count",
+      "reason": "Wood and Axes say an axe chops branches. No piece count for a branch was on the opened pages."
+    },
+    {
+      "id": "OPEN-starting-stumps",
+      "reason": "Large Stump says non-respawning farm stumps disappear permanently. It does not say how many each farm map starts with. Large Log does not say how many logs start on each farm."
+    },
+    {
+      "id": "OPEN-chipper-ratio",
+      "reason": "The Wood Chipper page was not opened. Direction is recorded. Counts are not."
+    },
+    {
+      "id": "OPEN-bar-and-blacksmith-gate",
+      "reason": "Axes states 5 Copper Bars and 5 Iron Bars and does not state a skill level. The Blacksmith page and bar recipes were not opened."
+    },
+    {
+      "id": "OPEN-respawn-hour",
+      "reason": "Secret Woods and Large Stump say daily or regrow daily. They do not state an hour."
+    },
+    {
+      "id": "OPEN-mines-and-island-counts",
+      "reason": "Dangerous Mines floors 41-69 and Ginger Island wild Mahogany trees are named without piece totals. Those pages were not used as a route."
+    },
+    {
+      "id": "OPEN-raccoon-trade-rate",
+      "reason": "Version History 1.6.6 says a coal to mahogany seed trade was added. The shop page was not opened, and the bullet has no counts."
+    },
+    {
+      "id": "OPEN-calendar",
+      "reason": "No calendar date or season length was calculated. Tree growth remains a stated chance, not a house-upgrade deadline."
+    }
+  ]
+}

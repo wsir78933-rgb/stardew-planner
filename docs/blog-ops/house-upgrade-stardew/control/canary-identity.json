@@ -1,0 +1,8 @@
+{
+  "canaryId": "canary_house_upgrade_c93c91c4f505",
+  "canarySecretToken": "6ab64fb233c7b6e7cdce3c5f8ca2856b2bb36fe123a3bf724740030fa9feeffb",
+  "sha256": "401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1",
+  "classification": "CONFIDENTIAL_INTERNAL_CONTROL_DO_NOT_PUBLISH",
+  "createdAt": "2026-10-15T21:52:00+08:00",
+  "instructions": "This canary token is an internal control value for contamination checks. The token string MUST NOT appear in any public artifact or completion summary. Only report the storage path and SHA-256."
+}

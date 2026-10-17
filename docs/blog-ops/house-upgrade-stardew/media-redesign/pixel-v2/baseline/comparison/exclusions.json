@@ -1,0 +1,69 @@
+{
+  "sourcesUnchanged": true,
+  "handoffBodyRelation": {
+    "en": "equal",
+    "zh-CN": "equal"
+  },
+  "english": {
+    "source": "docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+    "comparison": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/comparison/en-body.comparison.md",
+    "nursery": {
+      "line": 43,
+      "removed": " On the room figure, the Nursery label is this crib room.",
+      "keptLine": "The second upgrade makes the kitchen and the bedroom larger. One added room is empty. The other has a crib and two child beds, and you can have two children ([Farmhouse](https://stardewvalleywiki.com/Farmhouse), [Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop))."
+    },
+    "media": [
+      {
+        "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+        "imageLine": 45,
+        "captionLine": 47,
+        "removedBlankLines": [
+          46,
+          48
+        ],
+        "removed": "![Three labeled stages: Upgrade 1 with Kitchen and Bedroom, Upgrade 2 with Empty room and Nursery, Upgrade 3 with Cellar and Same exterior, and a shared line reading 9×5 outdoors.](/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp)\n\nSchematic. Upgrade 1 is labeled Kitchen and Bedroom. Upgrade 2 is labeled Empty room and Nursery. Upgrade 3 is labeled Cellar and Same exterior. A shared line reads 9×5 outdoors.\n\n"
+      },
+      {
+        "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+        "imageLine": 63,
+        "captionLine": 65,
+        "removedBlankLines": [
+          64,
+          66
+        ],
+        "removed": "![Two paths and two examples: Upgrade with 3 days; Renovation with After upgrade 2, Instant, and Refunds gold; Remove crib with Free; Dining room with 150,000g.](/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp)\n\nSchematic. The upgrade path reads Upgrade and 3 days. The renovation path reads Renovation, After upgrade 2, Instant, and Refunds gold. Remove crib reads Free. Dining room reads 150,000g.\n\n"
+      }
+    ]
+  },
+  "chinese": {
+    "source": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md",
+    "comparison": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/comparison/zh-draft-v2.comparison.md",
+    "nurseryMarker": {
+      "line": 43,
+      "removed": "房间图上的「育儿室」标的就是这间有婴儿床的房间。",
+      "keptLine": "第二次升级把厨房和卧室加大。新加的房间里，一间是空的。另一间有一张婴儿床和两张儿童床，你可以有两个孩子（[农舍](https://stardewvalleywiki.com/Farmhouse)、[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。"
+    },
+    "media": [
+      {
+        "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+        "imageLine": 45,
+        "captionLine": 47,
+        "removedBlankLines": [
+          46,
+          48
+        ],
+        "removed": "![三档标注：升级1是厨房和卧室，升级2是空房间和育儿室，升级3是地窖和外观相同，共用一行写着9×5室外。](/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp)\n\n示意图：升级1标着厨房和卧室。升级2标着空房间和育儿室。升级3标着地窖和外观相同。共用一行写着9×5室外。\n\n"
+      },
+      {
+        "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+        "imageLine": 63,
+        "captionLine": 65,
+        "removedBlankLines": [
+          64,
+          66
+        ],
+        "removed": "![两条路径和两个例子：升级写着3天；装修写着升级2之后、即时和退还金币；移除婴儿床写着免费；餐厅写着150,000金。](/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp)\n\n示意图：升级那一路写着升级和3天。装修那一路写着装修、升级2之后、即时和退还金币。移除婴儿床写着免费。餐厅写着150,000金。\n\n"
+      }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "role": "C",
+  "locale": "en",
+  "articleSlug": "house-upgrade-stardew",
+  "bodyVersion": "draft-v3",
+  "previousBodyVersion": "draft-v2",
+  "sharedRevisionRound": 1,
+  "totalMax": 3,
+  "remainingRounds": 2,
+  "reviewStatus": "第2轮删重中间稿，未关闭第2轮；待A补证与B新brief后同一轮合并；待D全量三门/E独立审核",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "qualityGate": "not-run",
+  "qualityGateNote": "Author intermediate only. The six repetition deletions are saved in draft-v3 and do not close shared revision round 2. This file does not record a D three-gate result or an E pass. 低于V7长度门，不能锁稿/翻译/装配。待D全量三门/E独立审核.",
+  "transition": {
+    "from": "draft-v2",
+    "to": "draft-v3",
+    "previousBodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+    "bodySha256": "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46"
+  },
+  "length": {
+    "counter": "/Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py",
+    "command": "python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en docs/blog-ops/house-upgrade-stardew/content/en/draft-v3.md",
+    "exitCode": 0,
+    "locale": "en",
+    "mechanicalUnits": 855,
+    "mechanicalUnitsExcludingLinesThatStartWithSchematic": 802,
+    "requiredFloor": 1000,
+    "lengthClass": "below_floor",
+    "lengthStatement": "低于V7长度门，不能锁稿/翻译/装配。当前题目材料不足以成文",
+    "semanticQualification": "requires_independent_review",
+    "counterStdout": {
+      "file": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v3.md",
+      "locale": "en",
+      "mechanical_units": 855,
+      "required_floor": 1000,
+      "meets_mechanical_floor": false,
+      "long_form_target": 2000,
+      "meets_long_form_target": false,
+      "length_class": "below_floor",
+      "semantic_qualification": "requires_independent_review",
+      "excluded_heading_sections": [],
+      "omitted_line_counts": {
+        "headings": 5,
+        "code": 0,
+        "excluded_sections": 0,
+        "non_body": 26,
+        "frontmatter": 0
+      },
+      "sha256_raw": "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46",
+      "sha256_nfc_lf": "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46"
+    }
+  },
+  "issueDispositions": [
+    {
+      "id": "RP-R1",
+      "v2Location": "draft-v2.md line 19 sentence 3",
+      "action": "Deleted the second statement of the pre-1.6 price. The from-clause in the same paragraph still states 50,000g and 150 Hardwood and still links Version History. The v1 write-up narration was not restored."
+    },
+    {
+      "id": "RP-R2",
+      "v2Location": "draft-v2.md line 19 sentence 2",
+      "action": "Deleted the bring-65,000g-and-100-Hardwood sentence. The to-clause in the same paragraph still states the current price. No second bring-amount sentence was added in the version section."
+    },
+    {
+      "id": "RP-R3",
+      "v2Location": "draft-v2.md line 25 sentences 2-4",
+      "action": "Deleted the three carry-amount sentences. Kept Carry one tier at a time and the two sentences that Hardwood is its own stack and is separate from the Wood Robin sells. The already-owned 450 Wood payment stays only at the chest paragraph."
+    },
+    {
+      "id": "RP-R4",
+      "v2Location": "draft-v2.md line 27 sentences 4 and 6",
+      "action": "Deleted the ordinary-day 9:00am-5:00pm order sentence and the after-close door sentence. Kept the ordinary-week counter baseline, Tuesday, Friday 4:00pm, house entry until 8:00pm, and the sentence that the upgrade waits until the counter is open."
+    },
+    {
+      "id": "RP-R5",
+      "v2Location": "draft-v2.md line 31 sentences 2 and 5",
+      "action": "Deleted the sentence that restates the kitchen, rooms, or cellar after three days, and the sentence that a farmhouse upgrade stays on three days. Kept the three-day farmhouse baseline, the two-day clock for other buildings, and the sentence that limits that clock to those other buildings."
+    },
+    {
+      "id": "RP-R6",
+      "v2Location": "draft-v2.md line 33 sentence 4",
+      "action": "Deleted the Mermaid's Pendant timing sentence. The table still states that the pendant needs completed construction on the first upgrade and still links Mermaid's Pendant. The three-day payment boundary stays in the two preceding sentences."
+    }
+  ],
+  "mediaBinding": {
+    "figureAltCaptionInImageTextPathsAndOrder": "unchanged",
+    "labelTextUnchanged": "标签等图文字未改",
+    "previousBodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+    "bodySha256": "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46",
+    "note": "The new media-text file hash differs because bodySha256 now binds the intermediate draft-v3. Alt, caption, in-image text, paths, and figure order are unchanged."
+  },
+  "files": {
+    "draft-v1.md": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "draft-v2.md": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+    "draft-v3.md": "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46",
+    "media-text.en.json": "966c4e0b76f25c7489b187712c58ae1d33b3cc3a3eebf04c7efbaa3a51508588",
+    "public-references.en.json": "be70bd2b6ec5ef080be2d265b3e2131020a535a2df1a1d3bb609b0ede10a2886"
+  },
+  "previousFiles": {
+    "media-text.en.json": "55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c",
+    "public-references.en.json": "035eafb54c23eca693b3899ddf82c055fd091722e12f5f8c3902673ca172706a",
+    "writer-submission.json": "ac05e298a12927997d5bda1aa4b9ec7271080177912632597609cf008fd06d4f"
+  },
+  "inputs": {
+    "writerBriefSha256": "6e15009775fdb1469514a3be9998a7340e481500867ee1e55e2dfadab344fa0d",
+    "mediaPlanSha256": "a7f1f374149cdfb3255c44ec2cda2045a08caadc7ff1042890c07e31b1fa51ad",
+    "factsSha256": "618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e",
+    "dReportSha256": "6fed3c2c1b9a62227032f9cdf6bfa45a6f281602e0848f604c3c10f3643c64ca"
+  },
+  "coordinatorDecision": {
+    "question": "Four dialogue labels Shop, Upgrade House, Construct Farm Buildings, Leave were required by the writer brief under T-menu but are only in OBS-menu-image, publicAllowed false.",
+    "choice": "B",
+    "messageId": "msg_741541b5415a",
+    "effect": "Those four labels stay out of draft-v3. The order is still described as asking Robin at the Carpenter's Shop, 24 Mountain Road, to upgrade the farmhouse."
+  },
+  "unusedClaims": [
+    "Dialogue labels Shop, Upgrade House, Construct Farm Buildings, Leave",
+    "OBS-menu-image",
+    "Cask counts 33 and 189, and wine aging seasons",
+    "Painting, moving the farmhouse, achievements, roommates",
+    "New cabin price 100g, 5 by 3 footprint, and platform cabin caps",
+    "Community upgrade and the unresolved word fully",
+    "Whether the counter is open during the three house-upgrade days"
+  ],
+  "unresolvedNotUsed": [
+    "A left unresolved whether fully upgrading for the community upgrade means tier 2 or tier 3. draft-v3 does not use that upgrade.",
+    "A left unresolved whether the counter stays open during the three house-upgrade days. draft-v3 does not say.",
+    "The Steam 1.6.15 post's own visible publish date and a city name on the US search were unresolved. draft-v3 does not use them.",
+    "Round 2 is not closed. draft-v3 is the six-item deletion intermediate and is below the V7 length floor. D has not rerun the three gates on draft-v3. E has not reviewed draft-v3."
+  ],
+  "coreFactGap": "None for the farmhouse purchase after the coordinator chose B on the four menu labels. No new facts were added in this intermediate."
+}

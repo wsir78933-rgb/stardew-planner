@@ -1,0 +1,102 @@
+{
+  "role": "T",
+  "locale": "zh-CN",
+  "country": "US",
+  "articleSlug": "house-upgrade-stardew",
+  "author": "Stardew Valley Planner Team",
+  "publishedAt": null,
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "englishBodyPath": "docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+  "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "translatedBodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md",
+  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+  "hanCharacterCount": 1905,
+  "hanCountNote": "供核对中文篇幅。正式 Length 门只计已锁英文，不把这个汉字数加进英文门槛。",
+  "seoPath": "docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json",
+  "seoSha256": "f744f783cf4b04d1cf0d66a2029cafaedaaf5eb04754e7b1e13612e48c29be16",
+  "publicReferencesPath": "docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json",
+  "publicReferencesSha256": "b2e0781d81b60a10ba6586ca8c0ea7032ce9e2f24df05fb80587dba8733f9127",
+  "mediaTextPath": "docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json",
+  "mediaTextSha256": "43c6138438d5a29bb13ab0daf0ccd9b5c6498284191a79680c53e84ade7298aa",
+  "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+  "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+  "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+  "slug": "house-upgrade-stardew",
+  "assets": [
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/cover-payments.svg",
+      "bytes": 3857,
+      "sha256": "13e6506201f7ecb1535e2f40077d71b7b6ac0ee35f4485810cba1db515dab735"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.svg",
+      "bytes": 3713,
+      "sha256": "99337ac2b5dcacb7792968289ea17f16e87cbbd69bf07c436665922196aed5c0"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.svg",
+      "bytes": 4661,
+      "sha256": "1fd0e8e620c28067f0fdfc2d05b6bd80ff243ec82b4d5d8226f3e6e460d5c5c9"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp",
+      "bytes": 63012,
+      "sha256": "bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif",
+      "bytes": 34529,
+      "sha256": "7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp",
+      "bytes": 58666,
+      "sha256": "d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif",
+      "bytes": 31242,
+      "sha256": "aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp",
+      "bytes": 60854,
+      "sha256": "6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif",
+      "bytes": 32235,
+      "sha256": "d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/provenance.json",
+      "bytes": 15606,
+      "sha256": "c1f199441528a0adb046ad289258db45f36990dbce450fec8e220d539ed95710"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/render.log",
+      "bytes": 8425,
+      "sha256": "fbab606999d42c3e8cceb579254233c2c1231e5f48f6e1f379965d5616e1173b"
+    },
+    {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-production/zh/render-recipe.py",
+      "bytes": 13598,
+      "sha256": "699cc78bf7f9f0f654c630912efb3f338e01ca0587fb5bbf7b305e51c17eead6"
+    }
+  ],
+  "revisionBudget": {
+    "articleRoundsUsed": 4,
+    "preservedPriorRounds": 3,
+    "explicitExceptionRounds": 1,
+    "futureRoundsRemaining": 0,
+    "thisDelivery": "第4轮授权例外：用户回复「继续」，协调者于2026-10-16 14:19:46 UTC确认。只修E已核实的5处。原三轮保留，不重置成0/3，不另开预算。"
+  },
+  "status": {
+    "translationReview": "pending-independent-E",
+    "userFinalReview": "pending",
+    "deployed": false,
+    "pageAssembly": "not-started"
+  }
+}

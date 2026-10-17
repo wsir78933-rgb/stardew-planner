@@ -1,0 +1,239 @@
+{
+  "locale": "en",
+  "articleSlug": "house-upgrade-stardew",
+  "bodyPath": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md",
+  "bodyVersion": "draft-v2",
+  "bodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "occurrenceRule": "occurrence is the 1-based count of the exact quote in the NFC/LF draft. Each quote below occurs once, so occurrence is 1.",
+  "reviewerNote": "factIds map these public references to research/A/facts.json for D and E. Do not render factIds in the article.",
+  "references": [
+    {
+      "id": "wiki-farmhouse",
+      "label": "Farmhouse",
+      "url": "https://stardewvalleywiki.com/Farmhouse",
+      "factIds": [
+        "T-upgrade-1",
+        "T-upgrade-2",
+        "T-upgrade-3",
+        "T-days",
+        "T-footprint",
+        "T-wood-price",
+        "T-renovation-rule"
+      ],
+      "appliesTo": [
+        {
+          "quote": "the [Farmhouse](https://stardewvalleywiki.com/Farmhouse) upgrades currently cost 10,000g and 450 Wood, 65,000g and 100 Hardwood, and 100,000g",
+          "occurrence": 1
+        },
+        {
+          "quote": "Cooking can use ingredients stored in that fridge even when those ingredients are not in your inventory",
+          "occurrence": 1
+        },
+        {
+          "quote": "The bed changes from a single bed to a double bed.",
+          "occurrence": 1
+        },
+        {
+          "quote": "The kitchen and the bedroom become larger",
+          "occurrence": 1
+        },
+        {
+          "quote": "A cellar reached from the kitchen.",
+          "occurrence": 1
+        },
+        {
+          "quote": "The outdoor footprint stays 9×5, and upgrading the farmhouse leaves that rectangle where it already stands",
+          "occurrence": 1
+        },
+        {
+          "quote": "With no upgrades yet, the interior is 10×7",
+          "occurrence": 1
+        },
+        {
+          "quote": "the expanded area has to be unoccupied",
+          "occurrence": 1
+        },
+        {
+          "quote": "adds the cellar under the kitchen",
+          "occurrence": 1
+        },
+        {
+          "quote": "In year 1, 450 Wood at 10g comes to 4,500g. Add the 10,000g fee and you bring 14,500g ([Farmhouse](https://stardewvalleywiki.com/Farmhouse)).",
+          "occurrence": 1
+        },
+        {
+          "quote": "In year 2 or later, 450 Wood at 50g comes to 22,500g. Add the same 10,000g fee and you bring 32,500g ([Farmhouse](https://stardewvalleywiki.com/Farmhouse)).",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-carpenters-shop",
+      "label": "Carpenter's Shop",
+      "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "factIds": [
+        "T-upgrade-1",
+        "T-upgrade-2",
+        "T-upgrade-3",
+        "T-days",
+        "T-footprint",
+        "T-menu",
+        "T-wood-price",
+        "T-renovation-rule",
+        "T-renovation-prices"
+      ],
+      "appliesTo": [
+        {
+          "quote": "Each of the three takes three days",
+          "occurrence": 1
+        },
+        {
+          "quote": "24 Mountain Road. She sells wood, stone, and furniture, she upgrades the farmhouse, and she constructs farm buildings",
+          "occurrence": 1
+        },
+        {
+          "quote": "On an ordinary week the counter runs from 9:00am to 5:00pm. Tuesday is closed",
+          "occurrence": 1
+        },
+        {
+          "quote": "Friday closes at 4:00pm",
+          "occurrence": 1
+        },
+        {
+          "quote": "entered from 9:00am to 8:00pm even while the shop is closed",
+          "occurrence": 1
+        },
+        {
+          "quote": "it allows two children",
+          "occurrence": 1
+        },
+        {
+          "quote": "The exterior stays the same as the previous upgrade",
+          "occurrence": 1
+        },
+        {
+          "quote": "Most of her other construction finishes in two days, at the start of the second day after the order",
+          "occurrence": 1
+        },
+        {
+          "quote": "Robin sells Wood for 10g in year 1 and for 50g in year 2 or later",
+          "occurrence": 1
+        },
+        {
+          "quote": "The gold you receive for selling Wood does not rise with her year-2 shop price",
+          "occurrence": 1
+        },
+        {
+          "quote": "House renovations unlock after the second farmhouse upgrade",
+          "occurrence": 1
+        },
+        {
+          "quote": "The refund arrives at once, and the expanded area has to be unoccupied",
+          "occurrence": 1
+        },
+        {
+          "quote": "Remove Crib is free and finishes at once",
+          "occurrence": 1
+        },
+        {
+          "quote": "Add Dining Room costs 150,000g, adds a room with a footprint of 9×10 plus 4×5, and finishes at once",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-version-history",
+      "label": "Version History",
+      "url": "https://stardewvalleywiki.com/Version_History",
+      "factIds": [
+        "T-cost-1.6"
+      ],
+      "appliesTo": [
+        {
+          "quote": "the second of those costs is the 1.6 price",
+          "occurrence": 1
+        },
+        {
+          "quote": "In 1.6 the second house upgrade moved from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood",
+          "occurrence": 1
+        },
+        {
+          "quote": "Before 1.6, that upgrade cost 50,000g and 150 Hardwood ([Version History](https://stardewvalleywiki.com/Version_History)).",
+          "occurrence": 1
+        }
+      ],
+      "versionNote": "1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood. The opened 1.6.15 notes are not used in the draft."
+    },
+    {
+      "id": "wiki-marriage",
+      "label": "Marriage",
+      "url": "https://stardewvalleywiki.com/Marriage",
+      "factIds": [
+        "T-upgrade-1"
+      ],
+      "appliesTo": [
+        {
+          "quote": "Marriage needs at least this upgrade",
+          "occurrence": 1
+        },
+        {
+          "quote": "Marriage can use the first upgrade once the upgrade is in place",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-mermaids-pendant",
+      "label": "Mermaid's Pendant",
+      "url": "https://stardewvalleywiki.com/Mermaid%27s_Pendant",
+      "factIds": [
+        "T-upgrade-1"
+      ],
+      "appliesTo": [
+        {
+          "quote": "The Mermaid's Pendant needs completed construction on this upgrade",
+          "occurrence": 1
+        },
+        {
+          "quote": "The Mermaid's Pendant needs the first upgrade's construction finished, so the pendant comes after that three-day build",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-cabin",
+      "label": "Cabin",
+      "url": "https://stardewvalleywiki.com/Cabin",
+      "factIds": [
+        "T-cabin-boundary"
+      ],
+      "appliesTo": [
+        {
+          "quote": "a farmhand pays the same three costs, waits the same three days, and can upgrade only their own cabin",
+          "occurrence": 1
+        },
+        {
+          "quote": "A farmhand cannot upgrade the main farmhouse for another player.",
+          "occurrence": 1
+        }
+      ],
+      "versionNote": "Only the farmhand's own cabin, the same three costs, and the same three days. Cabin price, footprint, and platform caps are unused."
+    },
+    {
+      "id": "site-carpenter",
+      "label": "Robin's shop and outdoor buildings",
+      "url": "https://stardewvalleyplanner.art/carpenter-stardew",
+      "factIds": [],
+      "appliesTo": [
+        {
+          "quote": "For rain, a festival, the Summer 18 clinic visit, and the times she walks past the counter, use [Robin's shop and outdoor buildings](https://stardewvalleyplanner.art/carpenter-stardew).",
+          "occurrence": 1
+        }
+      ],
+      "versionNote": "One internal link for rain, festivals, the Summer 18 clinic visit, and walking past the counter. Not a source for upgrade gold or materials."
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(31);
+  expect(canonicalPublicPaths).toHaveLength(32);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -166,8 +166,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/how-to-harvest-stardew-valley")).toBe(
     "/zh/how-to-harvest-stardew-valley",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(62);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(60);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(64);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(62);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );

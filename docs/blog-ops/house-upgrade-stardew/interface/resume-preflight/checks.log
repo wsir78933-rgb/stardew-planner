@@ -1,0 +1,149 @@
+# Resume preflight command log
+# Worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+# Recorded: 2026-10-16 07:35:53 +0800
+# No typecheck, lint, test, build, install, server start, or kill was run.
+
+## git rev-parse HEAD
+bf91a14829067ed1c9c2a206a97985e17dbebdda
+exit: 0
+
+## git status --short --branch
+## 博客-2
+?? docs/blog-ops/house-upgrade-stardew/
+?? node_modules
+exit: 0
+
+## ls -ld node_modules && readlink node_modules
+lrwxr-xr-x@ 1 wusir  staff  68 Oct 15 21:53 node_modules -> /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+/Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+exit: 0
+
+## ls -ld of symlink target
+drwxr-xr-x  34 wusir  staff  1088 Oct 15 22:49 /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+target_ls_exit: 0
+
+## node -v && pnpm -v
+v24.18.0
+node_exit: 0
+10.22.0
+pnpm_exit: 0
+
+## installed package versions via node -p require
+{"react":"19.2.8","reactDom":"19.2.8","typescript":"5.9.3","vitest":"3.2.4","next":"16.3.0","serve":"14.2.6"}
+versions_exit: 0
+
+## test -x node_modules/.bin/serve
+serve_bin_exit: 0
+
+## pnpm exec serve --help
+exit: 0
+Default listen: 0.0.0.0:3000
+Flags confirmed: -l/--listen, -p, --no-port-switching, --no-clipboard
+Example from help: serve -l tcp://hostname:1234
+
+## public and source absence
+ABSENT public/blog/house-upgrade-stardew-cover.webp
+ABSENT public/blog/house-upgrade-stardew-cover.avif
+ABSENT public/blog/house-upgrade-stardew-cover-zh.webp
+ABSENT public/blog/house-upgrade-stardew-cover-zh.avif
+ABSENT public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+ABSENT public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+EXISTS public/llms.txt
+ABSENT src/blog/articles/house-upgrade-stardew.en.tsx
+ABSENT src/blog/articles/house-upgrade-stardew.zh.tsx
+
+rg house-upgrade-stardew in src, public, and tests: no matches.
+
+## find webp/avif counts
+blog_webp 75
+homepage_webp 27
+blog_plus_homepage_webp 102
+blog_avif 75
+homepage_avif 27
+
+## media-production rasters
+docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif
+docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp
+docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif
+docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp
+docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif
+docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp
+No zh webp/avif/png under media-production.
+
+## sips -g pixelWidth -g pixelHeight -g format
+house-upgrade-stardew-cover.webp  pixelWidth 1672  pixelHeight 941  format webp  bytes 72418  sips_exit 0
+house-upgrade-stardew-cover.avif  pixelWidth 1672  pixelHeight 941  format avif  bytes 39621  sips_exit 0
+tier-rooms.en.webp                 pixelWidth 1672  pixelHeight 941  format webp  bytes 70092  sips_exit 0
+tier-rooms.en.avif                 pixelWidth 1672  pixelHeight 941  format avif  bytes 38764  sips_exit 0
+upgrade-or-renovation.en.webp      pixelWidth 1672  pixelHeight 941  format webp  bytes 68194  sips_exit 0
+upgrade-or-renovation.en.avif      pixelWidth 1672  pixelHeight 941  format avif  bytes 36133  sips_exit 0
+
+## shasum -a 256
+417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46  docs/blog-ops/house-upgrade-stardew/content/en/draft-v3.md
+966c4e0b76f25c7489b187712c58ae1d33b3cc3a3eebf04c7efbaa3a51508588  docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json
+7c9cd2414e3b7d70d789ee37f5c066dfac1e544c2aad8bc25954996d5305deec  docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json
+4849463e179846c47da8136c4356fdb8327975841f965ce90ba801a753b8a9f5  docs/blog-ops/house-upgrade-stardew/media-production/en/provenance.json
+shasum_exit: 0
+
+Provenance inputs.bodyDraftSha256 is cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628.
+Provenance inputs.mediaTextEnSha256 is 95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415.
+Neither matches the current draft or media-text file.
+Current draft hash matches writer-submission.json transition.bodySha256 and media-text.en.json bodySha256.
+
+## existing out/ point read, not a new build
+stat -f "%Sm %N" -t "%Y-%m-%d %H:%M:%S" out/llms.txt out/sitemap.xml out/house-upgrade-stardew.html
+2026-10-15 21:55:49 out/llms.txt
+2026-10-15 21:55:50 out/sitemap.xml
+stat: out/house-upgrade-stardew.html: stat: No such file or directory
+stat_exit: 1
+The exit 1 is the missing HTML path. The two existing files printed their mtimes.
+
+grep -c stardew-fruit out/llms.txt printed 0
+grep -c house-upgrade-stardew out/llms.txt printed 0
+public/llms.txt rg for both strings: no matches
+
+## listeners
+lsof -nP -iTCP -sTCP:LISTEN
+lsof_exit: 0
+
+Relevant rows, then cwd:
+PID 88483 node next-server (v16.3.0) TCP *:3003 LISTEN
+  cwd /Users/wusir/Desktop/开发项目集合/stardew planner
+PID 15566 serve out --listen tcp://127.0.0.1:3007 --no-port-switching --no-clipboard
+  cwd /Users/wusir/Desktop/开发项目集合/stardew planner
+  TCP 127.0.0.1:3007 LISTEN
+PID 71348 vite dev --port 3000
+  cwd /Users/wusir/Desktop/完成项目集合/模块组件合集网站
+  TCP [::1]:3000 LISTEN
+PID 51436 command line says vite dev --port 3000
+  cwd /Users/wusir/Desktop/完成项目集合/模块组件合集网站
+  TCP [::1]:3001 LISTEN
+PID 96353 vite dev --port 3002
+  cwd /Users/wusir/Desktop/开发项目集合/AI image editor
+  TCP [::1]:3002 LISTEN
+PID 64536 command line says vite dev --port 3000
+  cwd /Users/wusir/Desktop/完成项目集合/模块组件合集网站
+  TCP [::1]:3004 LISTEN
+PID 44997 vite dev --port 3005 --strictPort
+  cwd /Users/wusir/Desktop/开发项目集合/drake ai video
+  TCP [::1]:3005 LISTEN
+PID 45522 node .output/server/index.mjs
+  cwd /Users/wusir/Desktop/开发项目集合/drake ai video-worktrees/文案
+  TCP 127.0.0.1:3006 LISTEN
+
+No process was signaled. scripts/dev.sh was not run.
+scripts/dev.sh sets DEV_PORT=3003 and execs scripts/free-listen-port.sh, which sends CONT, then TERM, then KILL.
+
+## ego-browser skill files
+EXISTS /Users/wusir/.claude/skills/ego-browser/SKILL.md
+EXISTS /Users/wusir/.mirasim/skills/ego-browser/SKILL.md
+Browser was not opened.
+
+## not run
+pnpm typecheck
+pnpm build
+pnpm exec next build --webpack
+pnpm test
+pnpm exec vitest
+pnpm dev
+scripts/dev.sh

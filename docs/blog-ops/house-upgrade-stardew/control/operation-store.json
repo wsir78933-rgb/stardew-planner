@@ -1,0 +1,1768 @@
+{
+  "schemaVersion": "v7-operation-store-2026",
+  "slug": "house-upgrade-stardew",
+  "originalKeyword": "house upgrade stardew",
+  "runId": "run_8253831e93d6",
+  "v7Directory": "/Users/wusir/Desktop/博客-V7修订版",
+  "userAuthorizations": {
+    "executionMode": "project-write",
+    "worktreePolicy": {
+      "displayName": "博客 2",
+      "branch": "博客-2",
+      "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+      "headCommit": "bf91a14829067ed1c9c2a206a97985e17dbebdda",
+      "baseRef": "refs/remotes/origin/main",
+      "isolationConstraint": "唯一本轮新工作树，所有制作只在该工作树内，主工作区和已有“博客”工作树均禁止写入",
+      "evidence": {
+        "cwdInode": 145851019,
+        "mainProjectInode": 65977012,
+        "existingWorktreeInode": 144267400,
+        "distinctInodesVerified": true,
+        "s2Reobservation": {
+          "observedAt": "2026-10-15T22:52:44+08:00",
+          "uid": 501,
+          "gid": 20,
+          "paths": {
+            "worktree": {
+              "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+              "inode": 145851019,
+              "device": 16777232
+            },
+            "mainProject": {
+              "path": "/Users/wusir/Desktop/开发项目集合/stardew planner",
+              "inode": 65977012,
+              "device": 16777232
+            },
+            "existingBlogWorktree": {
+              "path": "/Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客",
+              "inode": 144267400,
+              "device": 16777232
+            }
+          },
+          "limit": "同UID与不同inode只证明本次观测到的身份和目录节点。不能据此断言所有Agent或所有目录的底层权限完全相同，也不能据此断言已经隔离。"
+        }
+      }
+    },
+    "toolConstraints": {
+      "permittedTools": [
+        "Cursor",
+        "Antigravity"
+      ],
+      "subagentPolicy": "禁止再派任何子 worker/内置子代理",
+      "maxConcurrentRoles": 5
+    },
+    "safetyConstraints": {
+      "commitAllowed": false,
+      "mergeAllowed": false,
+      "pushAllowed": false,
+      "deployAllowed": false,
+      "installDependenciesAllowed": false,
+      "databaseWritesAllowed": false,
+      "externalServiceWritesAllowed": false,
+      "modifyHermesAllowed": false,
+      "modifyUserRulesAllowed": false,
+      "readOnlyInternetResearchAllowed": true
+    },
+    "executionSelection": {
+      "userPhrase": "A开始执行",
+      "means": "选项A/project-write",
+      "doesNotMean": "不是仅授权研究角色A",
+      "historicalDecisionB": "用户曾在长度决策单选选择B（保持1000门槛停止交付），该历史永久保留",
+      "continuationInstructions": [
+        {
+          "generation": 2,
+          "userInstruction": "继续",
+          "authorizedScope": "允许接续修复既有候选，未豁免1000英文门槛，未授权改变主意图"
+        },
+        {
+          "generation": 3,
+          "userInstruction": "继续开始",
+          "authorizedScope": "恢复双语project-write，严格保持合格英文正文>=1000（门槛未豁免），补查材料准备/工具条件、逐级及总预算、房间用途后完善同词brief，由C在同轮合并写作"
+        }
+      ]
+    }
+  },
+  "roles": {
+    "coordinator": {
+      "terminalHandle": "term_661abce7-55fd-4570-8bf5-970c0451dd23",
+      "description": "Orchestration Coordinator (run-use bound, consumer_generation=3)",
+      "consumerGeneration": 3,
+      "previousCoordinatorHandle": "term_b7299c68-5b7f-4d73-80de-4f57c4bafdf0",
+      "initialCoordinatorHandle": "term_661abce7-55fd-4570-8bf5-970c0451dd23",
+      "runId": "run_8253831e93d6"
+    },
+    "entries": [
+      {
+        "role": "A",
+        "taskTitle": "A｜农舍升级研究与搜索证据",
+        "taskId": "task_9ee9836cf39f",
+        "status": "completed",
+        "dependsOn": [],
+        "createdAt": "2026-10-15 13:47:35",
+        "completedAt": "2026-10-15T14:09:44.583Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_a580ebc0d246",
+          "completedAt": "2026-10-15T14:09:44.582Z",
+          "reportedBy": "term_82d58d3a-f95e-4c19-a590-118df3d97216"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_01802221fb7b",
+            "taskId": "task_9ee9836cf39f",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_82d58d3a-f95e-4c19-a590-118df3d97216",
+            "createdAt": "2026-10-15 13:48:01",
+            "dispatchedAt": "2026-10-15 13:48:01",
+            "completedAt": "2026-10-15T14:09:44.583Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:10:01",
+            "releaseCompletedAt": "2026-10-15 14:10:03",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_01802221fb7b",
+        "agent": "cursor",
+        "terminalHandle": "term_82d58d3a-f95e-4c19-a590-118df3d97216",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "G",
+        "taskTitle": "G｜网站接口、隔离与验证基线",
+        "taskId": "task_aab2039ba9ff",
+        "status": "completed",
+        "dependsOn": [],
+        "createdAt": "2026-10-15 13:47:36",
+        "completedAt": "2026-10-15T14:00:40.962Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_d10c6626c19d",
+          "completedAt": "2026-10-15T14:00:40.961Z",
+          "reportedBy": "term_20959df8-6e87-46d5-8535-2f47ebe6972c"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_a79d4234407a",
+            "taskId": "task_aab2039ba9ff",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_20959df8-6e87-46d5-8535-2f47ebe6972c",
+            "createdAt": "2026-10-15 13:47:43",
+            "dispatchedAt": "2026-10-15 13:47:43",
+            "completedAt": "2026-10-15T14:00:40.961Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:01:49",
+            "releaseCompletedAt": "2026-10-15 14:01:51",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_a79d4234407a",
+        "agent": "cursor",
+        "terminalHandle": "term_20959df8-6e87-46d5-8535-2f47ebe6972c",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "M",
+        "taskTitle": "M｜农舍视觉素材与授权核验",
+        "taskId": "task_3a79aaae4149",
+        "status": "completed",
+        "dependsOn": [],
+        "createdAt": "2026-10-15 13:47:36",
+        "completedAt": "2026-10-15T14:03:52.989Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_0321a056e1e0",
+          "completedAt": "2026-10-15T14:03:52.989Z",
+          "reportedBy": "term_eeedce69-a29d-4918-8800-c3c22e538417"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_2d2fa1bb6b61",
+            "taskId": "task_3a79aaae4149",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_eeedce69-a29d-4918-8800-c3c22e538417",
+            "createdAt": "2026-10-15 13:48:10",
+            "dispatchedAt": "2026-10-15 13:48:10",
+            "completedAt": "2026-10-15T14:03:52.989Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:04:47",
+            "releaseCompletedAt": "2026-10-15 14:04:49",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_2d2fa1bb6b61",
+        "agent": "antigravity",
+        "terminalHandle": "term_eeedce69-a29d-4918-8800-c3c22e538417",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "S",
+        "taskTitle": "S｜V7 调度与污染隔离记录",
+        "taskId": "task_d0e8389f037f",
+        "status": "completed",
+        "dependsOn": [],
+        "createdAt": "2026-10-15 13:47:36",
+        "completedAt": "2026-10-15T13:53:41.290Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_708f8d16c7dd",
+          "completedAt": "2026-10-15T13:53:41.289Z",
+          "reportedBy": "term_540f4ad4-6a25-4782-9104-57e3f3778374"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_72a70c9fac6f",
+            "taskId": "task_d0e8389f037f",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_540f4ad4-6a25-4782-9104-57e3f3778374",
+            "createdAt": "2026-10-15 13:48:33",
+            "dispatchedAt": "2026-10-15 13:48:33",
+            "completedAt": "2026-10-15T13:53:41.290Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 13:53:58",
+            "releaseCompletedAt": "2026-10-15 13:54:01",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_72a70c9fac6f",
+        "agent": "antigravity",
+        "terminalHandle": "term_540f4ad4-6a25-4782-9104-57e3f3778374",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "B",
+        "taskTitle": "B｜唯一主意图与图文布局",
+        "taskId": "task_6104f4016cd1",
+        "status": "completed",
+        "dependsOn": [
+          "task_9ee9836cf39f",
+          "task_3a79aaae4149",
+          "task_aab2039ba9ff"
+        ],
+        "createdAt": "2026-10-15 13:49:46",
+        "completedAt": "2026-10-15T14:26:31.604Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_a8d5977d5720",
+          "completedAt": "2026-10-15T14:26:31.603Z",
+          "reportedBy": "term_656ec1a7-67a3-487b-8845-3c9b8f3c55ed"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_a941085c84e5",
+            "taskId": "task_6104f4016cd1",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_656ec1a7-67a3-487b-8845-3c9b8f3c55ed",
+            "createdAt": "2026-10-15 14:12:56",
+            "dispatchedAt": "2026-10-15 14:12:56",
+            "completedAt": "2026-10-15T14:26:31.603Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:27:22",
+            "releaseCompletedAt": "2026-10-15 14:27:25",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_a941085c84e5",
+        "agent": "cursor",
+        "terminalHandle": "term_656ec1a7-67a3-487b-8845-3c9b8f3c55ed",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "C",
+        "taskTitle": "C｜英文图文正文写作",
+        "taskId": "task_fc17d883efc8",
+        "status": "completed",
+        "dependsOn": [
+          "task_6104f4016cd1"
+        ],
+        "createdAt": "2026-10-15 14:01:00",
+        "completedAt": "2026-10-15T14:42:28.738Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_7489bfa3702d",
+          "completedAt": "2026-10-15T14:42:28.738Z",
+          "reportedBy": "term_8991e7da-dd73-4e7e-b41c-b03340ece350"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_fe298bb5ff1a",
+            "taskId": "task_fc17d883efc8",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_8991e7da-dd73-4e7e-b41c-b03340ece350",
+            "createdAt": "2026-10-15 14:27:25",
+            "dispatchedAt": "2026-10-15 14:27:25",
+            "completedAt": "2026-10-15T14:42:28.738Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:44:03",
+            "releaseCompletedAt": "2026-10-15 14:44:05",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_fe298bb5ff1a",
+        "agent": "cursor",
+        "terminalHandle": "term_8991e7da-dd73-4e7e-b41c-b03340ece350",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "M2",
+        "taskTitle": "M2｜纠正媒体证据断言",
+        "taskId": "task_c14add3a3526",
+        "status": "completed",
+        "dependsOn": [
+          "task_3a79aaae4149"
+        ],
+        "createdAt": "2026-10-15 14:04:47",
+        "completedAt": "2026-10-15T14:12:22.149Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_a90bf23da02a",
+          "completedAt": "2026-10-15T14:12:22.148Z",
+          "reportedBy": "term_e4f87345-3742-4410-9591-b44b00898559"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_f31d7667c169",
+            "taskId": "task_c14add3a3526",
+            "status": "failed",
+            "agent": "cursor",
+            "terminalHandle": "term_8ca58ef3-e31c-4045-889b-321c18bdc8cf",
+            "createdAt": "2026-10-15 14:04:50",
+            "dispatchedAt": "2026-10-15 14:04:50",
+            "completedAt": "2026-10-15T14:04:52.182Z",
+            "retryOfDispatchId": null,
+            "lastFailure": "agent_not_in_foreground",
+            "workerState": "failed",
+            "lastError": "agent_not_in_foreground",
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:05:03",
+            "releaseCompletedAt": "2026-10-15 14:05:05",
+            "liveness": "exited",
+            "outcome": "failed",
+            "attention": {
+              "categories": [
+                "failure"
+              ],
+              "requiresAction": true
+            }
+          },
+          {
+            "dispatchId": "ctx_e8d08a993bdb",
+            "taskId": "task_c14add3a3526",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_e4f87345-3742-4410-9591-b44b00898559",
+            "createdAt": "2026-10-15 14:05:19",
+            "dispatchedAt": "2026-10-15 14:05:19",
+            "completedAt": "2026-10-15T14:12:22.149Z",
+            "retryOfDispatchId": "ctx_f31d7667c169",
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": "2026-10-15 14:12:53",
+            "releaseCompletedAt": "2026-10-15 14:12:55",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [
+                "root_completion"
+              ],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_e8d08a993bdb",
+        "agent": "cursor",
+        "terminalHandle": "term_e4f87345-3742-4410-9591-b44b00898559",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "D",
+        "taskTitle": "D｜英文写后三门独立检查",
+        "taskId": "task_e07302bdea43",
+        "status": "completed",
+        "dependsOn": [
+          "task_fc17d883efc8"
+        ],
+        "createdAt": "2026-10-15 14:07:12",
+        "completedAt": "2026-10-15T14:52:40.810Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "subject": "D three-gate inspection completed: FAIL (RT: FAIL, RV: PASS, RP: FAIL)",
+          "completedAt": "2026-10-15T14:52:40.810Z",
+          "contentPass": false
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_1fa278b7ca02",
+            "taskId": "task_e07302bdea43",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_e0751eb6-fe65-40a6-af6d-4b14acefa5cd",
+            "createdAt": "2026-10-15 14:44:06",
+            "dispatchedAt": "2026-10-15 14:44:06",
+            "completedAt": "2026-10-15T14:52:40.810Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "active",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": null,
+            "releaseCompletedAt": "2026-10-15 14:55:46",
+            "liveness": "exited",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_1fa278b7ca02",
+        "agent": "antigravity",
+        "terminalHandle": "term_e0751eb6-fe65-40a6-af6d-4b14acefa5cd",
+        "terminalRelease": "released",
+        "lifecycleOutcome": "succeeded",
+        "contentOutcome": "FAIL",
+        "contentOutcomeMeansTaskPass": false
+      },
+      {
+        "role": "E",
+        "taskTitle": "E｜英文鉴文与事实引用独立审核",
+        "taskId": "task_1287ac59ca63",
+        "status": "failed",
+        "dependsOn": [
+          "task_e07302bdea43"
+        ],
+        "createdAt": "2026-10-15 14:11:49",
+        "completedAt": "2026-10-15T15:35:05.674Z",
+        "settlement": null,
+        "dispatches": [],
+        "authoritativeDispatchId": null,
+        "agent": null,
+        "terminalHandle": null,
+        "terminalRelease": "not_dispatched",
+        "blockingGateId": "gate_ac67dcb7fc37",
+        "blockingGateStatus": "pending",
+        "blockingGateSource": "orca orchestration gate-list --run run_8253831e93d6",
+        "result": "cancelled"
+      },
+      {
+        "role": "M3",
+        "taskTitle": "M3｜英文封面与正文自绘图解",
+        "taskId": "task_6ad859edf119",
+        "status": "completed",
+        "dependsOn": [
+          "task_fc17d883efc8"
+        ],
+        "createdAt": "2026-10-15 14:25:33",
+        "completedAt": "2026-10-15T14:56:15.075Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "subject": "M3 English Media Production Completed",
+          "completedAt": "2026-10-15T14:56:15.075Z",
+          "contentPass": false
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_58ccd56dab47",
+            "taskId": "task_6ad859edf119",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_5a5eb331-703b-46a6-b4c4-c89b8ad70ecd",
+            "createdAt": "2026-10-15 14:44:22",
+            "dispatchedAt": "2026-10-15 14:44:22",
+            "completedAt": "2026-10-15T14:56:15.074Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "releaseRequestedAt": null,
+            "releaseCompletedAt": "2026-10-15 14:58:26",
+            "liveness": "live",
+            "outcome": "succeeded",
+            "attention": {
+              "categories": [],
+              "requiresAction": false
+            },
+            "earlierTerminalState": "reclaimable"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_58ccd56dab47",
+        "agent": "antigravity",
+        "terminalHandle": "term_5a5eb331-703b-46a6-b4c4-c89b8ad70ecd",
+        "terminalRelease": "released",
+        "terminalAccounting": "released",
+        "lifecycleOutcome": "succeeded",
+        "pageOrContentPass": false,
+        "releaseCompletedAt": "2026-10-15 14:58:26",
+        "candidateAssetsOnly": true,
+        "contentOrPagePass": false
+      },
+      {
+        "role": "F",
+        "taskTitle": "F｜英文计数锁稿与七罪标题候选",
+        "taskId": "task_7f60bf2cf348",
+        "status": "failed",
+        "dependsOn": [
+          "task_1287ac59ca63"
+        ],
+        "createdAt": "2026-10-15 14:29:26",
+        "completedAt": "2026-10-15T15:34:35.817Z",
+        "settlement": null,
+        "dispatches": [],
+        "authoritativeDispatchId": null,
+        "agent": null,
+        "terminalHandle": null,
+        "terminalRelease": "not_dispatched",
+        "result": "cancelled"
+      },
+      {
+        "role": "S2",
+        "taskTitle": "S2｜候选版本与调度证据同步",
+        "taskId": "task_791711df127d",
+        "status": "completed",
+        "dependsOn": [
+          "task_d0e8389f037f",
+          "task_fc17d883efc8"
+        ],
+        "createdAt": "2026-10-15 14:46:10",
+        "completedAt": "2026-10-15T15:00:15.238Z",
+        "settlement": null,
+        "dispatches": [
+          {
+            "dispatchId": "ctx_226e8208bfeb",
+            "taskId": "task_791711df127d",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_acae2fb6-8876-40c9-9455-aa7f455b22dd",
+            "createdAt": "2026-10-15 14:46:10",
+            "dispatchedAt": "2026-10-15 14:46:10",
+            "completedAt": "2026-10-15T15:00:15.238Z",
+            "retryOfDispatchId": null,
+            "lastFailure": null,
+            "workerState": "succeeded",
+            "lastError": null,
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "released",
+            "releaseRequestedAt": null,
+            "releaseCompletedAt": null,
+            "liveness": "live",
+            "outcome": "in_progress",
+            "attention": {
+              "categories": [],
+              "requiresAction": false
+            }
+          }
+        ],
+        "authoritativeDispatchId": "ctx_226e8208bfeb",
+        "agent": "cursor",
+        "terminalHandle": "term_acae2fb6-8876-40c9-9455-aa7f455b22dd",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "C",
+        "taskTitle": "C｜第1轮英文返修",
+        "taskId": "task_836071267139",
+        "status": "completed",
+        "dependsOn": [
+          "task_fc17d883efc8",
+          "task_e07302bdea43"
+        ],
+        "createdAt": null,
+        "completedAt": "2026-10-15T15:05:29.791Z",
+        "settlement": null,
+        "dispatches": [
+          {
+            "dispatchId": "ctx_2532ccdb6e55",
+            "taskId": "task_836071267139",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_09895b76-9443-4bca-a1c4-5c78c6304670",
+            "releaseState": "released",
+            "ownershipState": "owned",
+            "terminalState": "released",
+            "outcome": "in_progress",
+            "workerState": "succeeded",
+            "completedAt": "2026-10-15T15:05:29.791Z"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_2532ccdb6e55",
+        "agent": "cursor",
+        "terminalHandle": "term_09895b76-9443-4bca-a1c4-5c78c6304670",
+        "terminalRelease": "released",
+        "formalRepairRound": 1,
+        "existedAtCoordinatorMessage": false,
+        "coordinatorMessageAt": "2026-10-15T14:55:43Z",
+        "idSource": "later task-list --run run_8253831e93d6, not invented at message time"
+      },
+      {
+        "role": "D",
+        "taskTitle": "D｜第1轮稿全量三门复验",
+        "taskId": "task_dca8de3c3153",
+        "status": "completed",
+        "dependsOn": [
+          "task_836071267139"
+        ],
+        "createdAt": "2026-10-15 15:07:38",
+        "completedAt": "2026-10-15T15:17:35.286Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "subject": "D Round 1 Full Verification Completed",
+          "completedAt": "2026-10-15T15:17:35.286Z",
+          "reportedBy": "term_11c655b7-18ca-4879-8731-533de96db588"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_550db8b749c7",
+            "taskId": "task_dca8de3c3153",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_11c655b7-18ca-4879-8731-533de96db588",
+            "dispatchedAt": "2026-10-15 15:07:38",
+            "completedAt": "2026-10-15T15:17:35.286Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_550db8b749c7",
+        "agent": "antigravity",
+        "terminalHandle": "term_11c655b7-18ca-4879-8731-533de96db588",
+        "terminalRelease": "released",
+        "lifecycleOutcome": "succeeded",
+        "reportClaimedStatus": "PASS",
+        "contentOutcome": "conflicted_with_B2_under_reconciliation",
+        "contentOutcomeMeansTaskPass": false,
+        "conflictDetail": "D2报告声称三门PASS，但协调者回读发现第19行三句新旧价格等与B2诊断存在重复判定冲突，故D2口头/报告PASS不代表最终内容通过。"
+      },
+      {
+        "role": "B",
+        "taskTitle": "B｜篇幅不足的任务覆盖核对",
+        "taskId": "task_15c45f4f2bee",
+        "status": "completed",
+        "dependsOn": [
+          "task_836071267139"
+        ],
+        "createdAt": "2026-10-15 15:07:39",
+        "completedAt": "2026-10-15T15:13:41.708Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "subject": "B Task Coverage Review Completed",
+          "completedAt": "2026-10-15T15:13:41.708Z",
+          "reportedBy": "term_15aa6dd6-7b61-4cd1-96f7-6b1207a4d861"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_55c175d624a3",
+            "taskId": "task_15c45f4f2bee",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_15aa6dd6-7b61-4cd1-96f7-6b1207a4d861",
+            "dispatchedAt": "2026-10-15 15:07:39",
+            "completedAt": "2026-10-15T15:13:41.708Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_55c175d624a3",
+        "agent": "cursor",
+        "terminalHandle": "term_15aa6dd6-7b61-4cd1-96f7-6b1207a4d861",
+        "terminalRelease": "released",
+        "verdict": "没有可据实补入的必要内容；材料不足，停止正式交付"
+      },
+      {
+        "role": "S3",
+        "taskTitle": "S3｜长度阻塞与候选保全记录",
+        "taskId": "task_b305a2bcdd85",
+        "status": "completed",
+        "dependsOn": [
+          "task_dca8de3c3153",
+          "task_15c45f4f2bee"
+        ],
+        "createdAt": "2026-10-15 15:17:41",
+        "completedAt": "2026-10-15T15:30:54.059Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_ac211969e029",
+          "reportedBy": "term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979",
+          "completedAt": "2026-10-15T15:30:54.059Z"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_8ac36da5b10c",
+            "taskId": "task_b305a2bcdd85",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979",
+            "dispatchedAt": "2026-10-15 15:19:16",
+            "completedAt": "2026-10-15T15:30:54.059Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_8ac36da5b10c",
+        "agent": "antigravity",
+        "terminalHandle": "term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "D",
+        "taskTitle": "D｜重复判断冲突的独立复核",
+        "taskId": "task_ab0f949dd682",
+        "status": "completed",
+        "dependsOn": [
+          "task_dca8de3c3153",
+          "task_15c45f4f2bee"
+        ],
+        "createdAt": "2026-10-15 15:19:14",
+        "completedAt": "2026-10-15T15:30:12.377Z",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_0839beb0a992",
+          "reportedBy": "term_1ba3e93d-9d07-4782-b086-579219ed4366",
+          "completedAt": "2026-10-15T15:30:12.376Z"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_efb0d7481e76",
+            "taskId": "task_ab0f949dd682",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_1ba3e93d-9d07-4782-b086-579219ed4366",
+            "dispatchedAt": "2026-10-15 15:19:14",
+            "completedAt": "2026-10-15T15:30:12.376Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_efb0d7481e76",
+        "agent": "cursor",
+        "terminalHandle": "term_1ba3e93d-9d07-4782-b086-579219ed4366",
+        "terminalRelease": "released",
+        "repetitionVerdict": "FAIL (6 blocking issues, 10 redundant sentences)"
+      },
+      {
+        "role": "C",
+        "taskTitle": "C｜第2轮删除已确认重复并保留实际篇幅",
+        "taskId": "task_598d00d7df0c",
+        "status": "completed",
+        "dependsOn": [],
+        "authoritativeDispatchId": "ctx_2702c6b4c058",
+        "agent": "cursor",
+        "terminalHandle": "term_e531b03d-11b7-4473-851d-e7d6d49574d7",
+        "terminalRelease": "released",
+        "formalRepairRound": 2,
+        "dispatches": [
+          {
+            "dispatchId": "ctx_2702c6b4c058",
+            "taskId": "task_598d00d7df0c",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_e531b03d-11b7-4473-851d-e7d6d49574d7",
+            "dispatchedAt": "2026-10-15 23:15:36",
+            "completedAt": "2026-10-16T00:07:11.495Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "not_requested",
+            "outcome": "succeeded"
+          }
+        ],
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_879864578ab9",
+          "reportedBy": "term_e531b03d-11b7-4473-851d-e7d6d49574d7",
+          "completedAt": "2026-10-16T00:07:11.495Z"
+        }
+      },
+      {
+        "role": "S4",
+        "taskTitle": "S4｜接续权限、版本与修订预算记录",
+        "taskId": "task_5af2958f52d2",
+        "status": "completed",
+        "dependsOn": [],
+        "authoritativeDispatchId": "ctx_5c15a714d4cc",
+        "agent": "antigravity",
+        "terminalHandle": "term_dc833483-6a1e-47e4-a039-30b6ef436bec",
+        "terminalRelease": "released",
+        "dispatches": [
+          {
+            "dispatchId": "ctx_5c15a714d4cc",
+            "taskId": "task_5af2958f52d2",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_dc833483-6a1e-47e4-a039-30b6ef436bec",
+            "dispatchedAt": "2026-10-15 23:15:36",
+            "completedAt": null,
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "not_requested",
+            "outcome": "succeeded"
+          }
+        ]
+      },
+      {
+        "role": "D",
+        "taskTitle": "D｜第2轮稿全量三门独立复验",
+        "taskId": "task_09b5d2ee2f40",
+        "status": "failed",
+        "result": "superseded_by_user_authorized_enrichment_before_full_review",
+        "completedAt": "2026-10-15T23:19:50.559Z",
+        "dependsOn": [
+          "task_598d00d7df0c"
+        ],
+        "settlement": null,
+        "dispatches": []
+      },
+      {
+        "role": "A",
+        "taskTitle": "A｜补查升级材料与工具条件",
+        "taskId": "task_2ad2b7de35cb",
+        "status": "completed",
+        "dependsOn": [
+          "task_9ee9836cf39f"
+        ],
+        "authoritativeDispatchId": "ctx_1b67a6215356",
+        "agent": "cursor",
+        "terminalHandle": "term_c1c69ab5-3716-48a2-9f7c-c637d5e47972",
+        "terminalRelease": "retained",
+        "dispatches": [
+          {
+            "dispatchId": "ctx_1b67a6215356",
+            "taskId": "task_2ad2b7de35cb",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_c1c69ab5-3716-48a2-9f7c-c637d5e47972",
+            "dispatchedAt": "2026-10-15 23:18:48",
+            "completedAt": null,
+            "workerState": "succeeded",
+            "terminalState": "retained",
+            "ownershipState": "owned",
+            "releaseState": "not_requested",
+            "outcome": "succeeded"
+          }
+        ],
+        "currentResourceObservation": {
+          "terminalStateAccounting": "retained",
+          "resourceState": "absent",
+          "resourceReason": "not_materialized",
+          "liveness": "unverifiable",
+          "livenessReason": "missing_status",
+          "liveTerminal": false,
+          "transferredToDispatchId": "ctx_487c9c051d1a",
+          "transferredDispatchReleaseState": "released",
+          "note": "The retained accounting label is historical. It is not a live terminal."
+        }
+      },
+      {
+        "role": "A",
+        "taskTitle": "A｜补查逐级预算与升级用途",
+        "taskId": "task_c013cf04e3af",
+        "status": "completed",
+        "dependsOn": [
+          "task_9ee9836cf39f"
+        ],
+        "authoritativeDispatchId": "ctx_6120796fb86d",
+        "agent": "antigravity",
+        "terminalHandle": "term_55c9a0fd-dd26-4aa2-9482-d1bbdc30e8bb",
+        "terminalRelease": "released",
+        "dispatches": [
+          {
+            "dispatchId": "ctx_6120796fb86d",
+            "taskId": "task_c013cf04e3af",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_55c9a0fd-dd26-4aa2-9482-d1bbdc30e8bb",
+            "dispatchedAt": "2026-10-15 23:19:03",
+            "completedAt": "2026-10-15T23:26:51.921Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "not_requested",
+            "outcome": "succeeded"
+          }
+        ],
+        "correctionNote": "S4 mislabeled agent as cursor; actual agent is antigravity (term_55c9a0fd-dd26-4aa2-9482-d1bbdc30e8bb agy)."
+      },
+      {
+        "role": "B",
+        "taskTitle": "B｜补研后完善同关键词大纲",
+        "taskId": "task_007b2e700262",
+        "status": "completed",
+        "dependsOn": [
+          "task_2ad2b7de35cb",
+          "task_c013cf04e3af"
+        ],
+        "createdAt": "2026-10-15 23:19:50",
+        "completedAt": null,
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_82031555e6c6",
+          "reportedBy": "term_4484138a-1bad-4e81-b758-dfa376734c59",
+          "completedAt": "2026-10-15T23:56:46.404Z"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_99239250469e",
+            "taskId": "task_007b2e700262",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_4484138a-1bad-4e81-b758-dfa376734c59",
+            "dispatchedAt": "2026-10-15 23:40:00",
+            "completedAt": "2026-10-15T23:56:46.404Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ],
+        "authoritativeDispatchId": "ctx_99239250469e",
+        "agent": "cursor",
+        "terminalHandle": "term_4484138a-1bad-4e81-b758-dfa376734c59",
+        "terminalRelease": "released"
+      },
+      {
+        "role": "G",
+        "taskTitle": "G｜并行复核本地装配接口",
+        "taskId": "task_2a4fcbca4239",
+        "status": "completed",
+        "dependsOn": [],
+        "authoritativeDispatchId": "ctx_50920b6f042d",
+        "agent": "cursor",
+        "terminalHandle": "term_1993c151-6580-40a3-af18-58a30f037041",
+        "terminalRelease": "released",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_fa0651f73c01",
+          "reportedBy": "term_1993c151-6580-40a3-af18-58a30f037041",
+          "completedAt": "2026-10-15T23:37:56.215Z"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_50920b6f042d",
+            "taskId": "task_2a4fcbca4239",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_1993c151-6580-40a3-af18-58a30f037041",
+            "dispatchedAt": "2026-10-15 23:20:00",
+            "completedAt": "2026-10-15T23:37:56.215Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ]
+      },
+      {
+        "role": "A",
+        "taskTitle": "A｜收紧补研中超出证据的主张",
+        "taskId": "task_556598a2fdd0",
+        "status": "completed",
+        "dependsOn": [
+          "task_c013cf04e3af"
+        ],
+        "authoritativeDispatchId": "ctx_487c9c051d1a",
+        "agent": "cursor",
+        "terminalHandle": "term_c1c69ab5-3716-48a2-9f7c-c637d5e47972",
+        "terminalRelease": "released",
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_b837e17a81d9",
+          "reportedBy": "term_c1c69ab5-3716-48a2-9f7c-c637d5e47972",
+          "completedAt": "2026-10-15T23:39:45.105Z"
+        },
+        "dispatches": [
+          {
+            "dispatchId": "ctx_487c9c051d1a",
+            "taskId": "task_556598a2fdd0",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_c1c69ab5-3716-48a2-9f7c-c637d5e47972",
+            "dispatchedAt": "2026-10-15 23:27:00",
+            "completedAt": "2026-10-15T23:39:45.105Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "released",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ]
+      },
+      {
+        "role": "D",
+        "taskTitle": "D 丰富稿 v3 三门独立写后检查",
+        "taskId": "task_4e791741e19a",
+        "status": "completed",
+        "dependsOn": [
+          "task_598d00d7df0c",
+          "task_007b2e700262"
+        ],
+        "authoritativeDispatchId": "ctx_700b8209e3d4",
+        "agent": "antigravity",
+        "terminalHandle": "term_2a5ef0fc-67a4-4dca-800e-519667527c13",
+        "terminalRelease": "released",
+        "dispatches": [
+          {
+            "dispatchId": "ctx_700b8209e3d4",
+            "taskId": "task_4e791741e19a",
+            "status": "completed",
+            "agent": "antigravity",
+            "terminalHandle": "term_2a5ef0fc-67a4-4dca-800e-519667527c13",
+            "dispatchedAt": "2026-10-16 00:08:45",
+            "completedAt": "2026-10-16T00:16:11.855Z",
+            "workerState": "succeeded",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "released",
+            "outcome": "succeeded"
+          }
+        ],
+        "settlement": {
+          "outcome": "succeeded",
+          "messageId": "msg_c166a19d2655",
+          "reportedBy": "term_2a5ef0fc-67a4-4dca-800e-519667527c13",
+          "completedAt": "2026-10-16T00:16:11.855Z",
+          "reportPath": "docs/blog-ops/house-upgrade-stardew/reviews/D/enriched-v3/report.md",
+          "reportSha256": "e244e3bbe50aa742d695c90d40931aabdcd55579420906453868bb8b008c16d8",
+          "checksSha256": "68e67c64327ab04d832c4b8f70d367cbe2e0f4c608d40a953745138b32ae2ab2"
+        },
+        "threeGatesVerdict": "PASS (0 blocking issues across ResearchTrace, ReaderValue, Repetition)"
+      },
+      {
+        "role": "E",
+        "taskTitle": "E 丰富稿 v3 独立 22 条审核",
+        "taskId": "task_d6f805015ae3",
+        "status": "completed",
+        "dependsOn": [
+          "task_4e791741e19a"
+        ],
+        "authoritativeDispatchId": "ctx_d49b80437cfc",
+        "agent": "cursor",
+        "terminalHandle": "term_6e60a146-8128-410d-a0d3-3ce7de341a58",
+        "terminalRelease": "released",
+        "dispatches": [
+          {
+            "dispatchId": "ctx_d49b80437cfc",
+            "taskId": "task_d6f805015ae3",
+            "status": "completed",
+            "agent": "cursor",
+            "terminalHandle": "term_6e60a146-8128-410d-a0d3-3ce7de341a58",
+            "dispatchedAt": "2026-10-16 00:16:57",
+            "completedAt": "2026-10-16T00:28:20.348Z",
+            "workerState": "ready",
+            "terminalState": "released",
+            "ownershipState": "owned",
+            "releaseState": "not_requested",
+            "outcome": "succeeded",
+            "previousStatus": "dispatched"
+          }
+        ],
+        "statusBeforeV4Proof": "dispatched",
+        "v4ProofStatusNote": "lifecycle completed and terminal released; content gate FAIL with 6 problems; v3 D PASS does not cover v4",
+        "contentOutcome": "FAIL",
+        "contentIssueCount": 6,
+        "reportSha256": "2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07"
+      },
+      {
+        "role": "F",
+        "taskTitle": "F 丰富稿英文计数锁稿及标题",
+        "taskId": "task_bcf55e52ef19",
+        "status": "failed",
+        "dependsOn": [
+          "task_d6f805015ae3"
+        ],
+        "authoritativeDispatchId": null,
+        "agent": null,
+        "terminalHandle": null,
+        "terminalRelease": "not_dispatched",
+        "dispatches": [],
+        "statusBeforeV4Proof": "pending",
+        "v4ProofStatusNote": "superseded before dispatch; not a completed length lock",
+        "result": "superseded_before_dispatch_by_E_FAIL_and_round3_draft_v4"
+      },
+      {
+        "role": "S",
+        "taskTitle": "S 丰富稿 v3 真实状态与污染检查点",
+        "taskId": "task_81b387615052",
+        "status": "completed",
+        "dependsOn": [
+          "task_598d00d7df0c",
+          "task_007b2e700262"
+        ],
+        "authoritativeDispatchId": "ctx_281221259e4b",
+        "agent": "antigravity",
+        "terminalHandle": "term_ec99eb4c-f8d2-4ea9-a75c-9a07b95adc90",
+        "terminalRelease": "released",
+        "dispatches": [
+          {
+            "dispatchId": "ctx_281221259e4b",
+            "taskId": "task_81b387615052",
+            "status": "dispatched",
+            "agent": "antigravity",
+            "terminalHandle": "term_ec99eb4c-f8d2-4ea9-a75c-9a07b95adc90",
+            "dispatchedAt": "2026-10-16 00:08:47",
+            "completedAt": null,
+            "workerState": "ready",
+            "terminalState": "active",
+            "ownershipState": "owned",
+            "releaseState": "not_requested",
+            "outcome": "in_progress"
+          }
+        ],
+        "statusBeforeV4Proof": "dispatched",
+        "v4ProofStatusNote": "S5 checkpoint header 08:18 was not the later write clock; corrected in the v4 append"
+      },
+      {
+        "role": "C",
+        "taskTitle": "C 第3轮合并修正 E 六处问题 draft-v4",
+        "taskId": "task_a549826087fd",
+        "status": "completed",
+        "resultSubject": "draft-v4 已合并 E 的 6 处",
+        "completedAt": "2026-10-16T00:40:10.279Z",
+        "authoritativeDispatchId": "ctx_5a48cc7f0977",
+        "agent": "cursor",
+        "terminalHandle": "term_3b0c0852-5fd1-4cde-917e-5b76438ce9cb",
+        "terminalRelease": "released",
+        "workerState": "succeeded",
+        "outcome": "succeeded"
+      },
+      {
+        "role": "D",
+        "taskTitle": "D draft-v4 全量三门复验",
+        "taskId": "task_adcb9ed3b0a8",
+        "status": "completed",
+        "resultSubject": "D draft-v4 全量三门复验 PASS",
+        "completedAt": "2026-10-16T00:50:10.787Z",
+        "authoritativeDispatchId": "ctx_d8a5c8eae7b1",
+        "agent": "antigravity",
+        "terminalHandle": "term_a0466fcc-d9a9-442b-9c03-817e8a40f180",
+        "terminalRelease": "released",
+        "workerState": "succeeded",
+        "outcome": "succeeded"
+      },
+      {
+        "role": "E",
+        "taskTitle": "E draft-v4 六项修正及最终候选复核",
+        "taskId": "task_67ffe96219bd",
+        "status": "dispatched",
+        "contentPass": false,
+        "authoritativeDispatchId": "ctx_626147c43cbb",
+        "agent": "antigravity",
+        "terminalHandle": "term_2e6fa9eb-9f7d-4e1e-a79f-1a545d3f4c3f",
+        "terminalRelease": "active",
+        "outcome": "in_progress",
+        "note": "In progress is not a content PASS."
+      },
+      {
+        "role": "F",
+        "taskTitle": "F draft-v4 正式计数锁稿与10标题候选",
+        "taskId": "task_ead4c451ba94",
+        "status": "pending",
+        "authoritativeDispatchId": null,
+        "agent": null,
+        "terminalHandle": null,
+        "terminalRelease": "not_dispatched",
+        "contentPass": false
+      },
+      {
+        "role": "S",
+        "taskTitle": "S v4 当前状态与精确扫描原始证据校正",
+        "taskId": "task_32f6fed221c9",
+        "status": "recording",
+        "authoritativeDispatchId": "ctx_67ac1ef39575",
+        "agent": "cursor",
+        "terminalHandle": "term_adfbb71f-35ad-499c-a6ee-704522b7bd01",
+        "terminalRelease": "not_requested",
+        "note": "This record is written before worker_done. The task is not settled inside the store."
+      }
+    ]
+  },
+  "revisionBudget": {
+    "totalMaxRounds": 3,
+    "currentFormalManuscriptRepairRound": 3,
+    "budgetChanged": false,
+    "budgetReset": false,
+    "scope": "第1至第3轮均已提交完成，计已用 3/3、未来余 0（含译文返修），不能换 Task、阶段或 Agent 重置。",
+    "ruleCitation": "V7 01/执行入口: 修订预算按整篇文章算（含译文返修），共用最多三轮，初始0",
+    "prepCorrectionsAreNotGatePasses": true,
+    "laterRepairsMustRemainVisible": true,
+    "interpretationBoundary": "若未来某事件是否消耗这3轮仍不确定，维持这一原文边界，交协调者处理。本记录不颁布新规则。",
+    "remainingFormalRounds": 0,
+    "v1ContentPass": false,
+    "roundChange": {
+      "earlierS2Readback": 0,
+      "afterDReport": 1,
+      "round2Launch": 2,
+      "round2Completed": 2,
+      "sources": [
+        "reviews/D/three-gates-report.json budget.currentRoundUsed=1",
+        "task_598d00d7df0c / ctx_2702c6b4c058 completed for Round 2 repair",
+        "content/en/revision-round-2.md",
+        "task_a549826087fd / ctx_5a48cc7f0977 submitted draft-v4",
+        "content/en/revision-round-3.md"
+      ],
+      "round3Submitted": 3
+    },
+    "usedFormalRounds": 3,
+    "settledFormalRounds": 3,
+    "inProgressFormalRounds": 0
+  },
+  "deliveryGates": {
+    "english": {
+      "status": "pending",
+      "meaning": "draft-v4 已提交且未锁。v3 的 D PASS 不覆盖 v4。D4 worker 已报告三门 PASS 0，协调者验收仍按 msg_5f7e33be453d 记为待验收。E4 与 F4 都未形成内容通过。"
+    },
+    "chinese": {
+      "status": "pending",
+      "meaning": "未启动。中文翻译由独立 T 制作、E 复核，不是 C-zh。"
+    },
+    "localPage": {
+      "status": "pending",
+      "meaning": "未启动；G 仅完成接口预检。"
+    },
+    "userReview": {
+      "status": "pending"
+    },
+    "production": {
+      "status": "pending",
+      "meaning": "当前不发布。"
+    },
+    "freeze": {
+      "status": "pending"
+    }
+  },
+  "canaryGovernance": {
+    "canaryId": "canary_house_upgrade_c93c91c4f505",
+    "canaryTokenSha256": "401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1",
+    "canarySha256": "401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1",
+    "identityFileSha256": "d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23",
+    "canaryStoragePath": "docs/blog-ops/house-upgrade-stardew/control/canary-identity.json",
+    "readbackVerified": true,
+    "s4HashConfusionCorrected": true,
+    "correctionNote": "澄清 canary token sha256 (401cad...) 与 canary-identity.json 文件 sha256 (d8022e...) 之区别，S4 误将标记哈希称作文件哈希。",
+    "privacyNotice": "Canary secret token is preserved only in the private control file and excluded from public outputs and completion summaries.",
+    "latestScanCheckpoint": {
+      "checkpointFile": "docs/blog-ops/house-upgrade-stardew/control/v4-proof-checkpoint.md",
+      "checksLog": "docs/blog-ops/house-upgrade-stardew/control/v4-proof-checks.log",
+      "scanAsOf": "2026-10-16T08:55:02+08:00",
+      "scanFinishedAt": "2026-10-16T08:55:02+08:00",
+      "stateAsOf": "2026-10-16T08:58:17+08:00",
+      "totalMarkerHits": 0,
+      "verdict": "exact string absence in the listed v4 text fields, SVG visible text, and raster byte layer; not a pixel, semantic, or OS-isolation pass"
+    },
+    "scanHistory": [
+      {
+        "checkpointFile": "docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checkpoint.md",
+        "checksLog": "docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checks.log",
+        "scanTimestamp": "2026-10-16T08:18:00+08:00",
+        "totalTargetsScanned": 13,
+        "totalHits": 0,
+        "verdict": "PASS (strictly limited to exact canary zero contamination across scanned candidate files; does not imply semantic or OS isolation pass)"
+      }
+    ]
+  },
+  "isolationAndPermissions": {
+    "readPermissionsAssessment": "逻辑隔离，未验证底层权限",
+    "observedAt": "2026-10-15T22:52:44+08:00",
+    "observedUid": 501,
+    "observedGid": 20,
+    "observedPaths": {
+      "worktree": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+        "inode": 145851019,
+        "device": 16777232
+      },
+      "mainProject": {
+        "path": "/Users/wusir/Desktop/开发项目集合/stardew planner",
+        "inode": 65977012,
+        "device": 16777232
+      },
+      "existingBlogWorktree": {
+        "path": "/Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客",
+        "inode": 144267400,
+        "device": 16777232
+      }
+    },
+    "evidenceLimit": "同UID与不同inode只证明已观测事实。不能据此断言所有Agent或所有目录的底层权限完全相同，也不能据此断言已经隔离。",
+    "permissionOrContainerConfiguration": "未做",
+    "officialContentPack": "无 (旧官方内容包未提供记无，不扫描用户电脑寻找)"
+  },
+  "recordRevision": "s-v4-proof-checkpoint",
+  "updatedAt": "2026-10-16T08:58:17+08:00",
+  "updatedBy": {
+    "role": "S",
+    "taskId": "task_32f6fed221c9",
+    "dispatchId": "ctx_67ac1ef39575",
+    "terminalHandle": "term_adfbb71f-35ad-499c-a6ee-704522b7bd01",
+    "agent": "cursor"
+  },
+  "candidateSubmission": {
+    "bodyVersion": "draft-v4",
+    "locale": "en",
+    "isCandidateOnly": true,
+    "englishLocked": false,
+    "formalLengthPass": false,
+    "v3DPassCoversV4": false,
+    "dWorkerReportedThreeGatePass": true,
+    "dCoordinatorAcceptance": "pending_as_of_msg_5f7e33be453d",
+    "ePassed": false,
+    "fLocked": false,
+    "bodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+    "publicReferencesSha256": "1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27",
+    "mediaSha256": "75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400",
+    "writerSubmissionSha256": "1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415",
+    "revisionRound3Sha256": "7f99e45f7f8003ef64bbcbdfddd4106b8d69ef4e0da7c0c10779ba96a6a9d684",
+    "mechanicalPreview": {
+      "counterExitCode": 0,
+      "mechanicalUnits": 1138,
+      "excludingLinesThatStartWithSchematic": 1085,
+      "schematicLinesRemoved": 2,
+      "quoteCount": 55,
+      "quoteOccurrenceHistogram": {
+        "1": 55
+      },
+      "signsFormalLengthPass": false,
+      "note": "C 预览与本次重跑均为 1138 / 1085 / 55 条 occurrence 1。这不是 F 的 Length 通过。"
+    },
+    "downstreamStatus": {
+      "dReview": "worker_done reported PASS 0; coordinator acceptance still pending at msg_5f7e33be453d",
+      "eReview": "dispatched; not a content PASS",
+      "fLength": "pending",
+      "englishLock": "unlocked",
+      "seoMetadata": "pending; creation F, review E",
+      "chineseTranslation": "pending; independent T, review E",
+      "pageAssembly": "pending",
+      "userFinalReview": "pending",
+      "deployment": "pending / prohibited"
+    }
+  },
+  "prepCorrections": [
+    {
+      "at": "2026-10-15T14:03:41Z",
+      "kind": "media-evidence-boundary",
+      "evidence": "msg_72e4e28d60fe",
+      "beforeFirstCandidateSubmission": true,
+      "manuscriptGatePass": false,
+      "consumesFormalRepairBudget": "未计入；是否将来消耗预算维持原文边界，不确定处交协调者"
+    },
+    {
+      "at": "2026-10-15T14:04:52.182Z",
+      "kind": "dispatch-failure",
+      "dispatchId": "ctx_f31d7667c169",
+      "reason": "agent_not_in_foreground",
+      "taskDelivered": false,
+      "releasedAt": "2026-10-15 14:05:05",
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:12:22.149Z",
+      "kind": "media-evidence-correction",
+      "dispatchId": "ctx_e8d08a993bdb",
+      "retryOfDispatchId": "ctx_f31d7667c169",
+      "beforeFirstCandidateSubmission": true,
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:20:41Z",
+      "kind": "layout-scope-correction-before-writing",
+      "evidence": "msg_200b6b90fc1a",
+      "settledBy": "ctx_a941085c84e5",
+      "settledAt": "2026-10-15T14:26:31.603Z",
+      "beforeFirstCandidateSubmission": true,
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:32:21Z",
+      "kind": "unproven-four-label-menu-requirement-removed",
+      "questionId": "msg_2e82b125c389",
+      "decisionId": "msg_741541b5415a",
+      "choice": "B",
+      "effect": "删去四行菜单标签要求；选择B不是研究角色B的另一次任务。",
+      "appliedInFirstCandidate": true,
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:42:28.738Z",
+      "kind": "first-candidate-submission",
+      "dispatchId": "ctx_fe298bb5ff1a",
+      "bodyVersion": "draft-v1",
+      "formalManuscriptRepairRoundAfter": 0
+    }
+  ],
+  "s1InitializationSnapshot": {
+    "verificationReportPath": "docs/blog-ops/house-upgrade-stardew/control/verification-report.json",
+    "verificationReportSha256": "a828f431fa7f4cacf77079c490fba7c494f30551c7af94722db791abdc3ba990",
+    "operationStoreSha256AtInitialization": "617a61cc16a2c7ac7a87de61fff131bfe1c2b26a637082e334bddc6fbde35014",
+    "authorizationDocSha256AtInitialization": "99704bb7ae2137f7ac506a7e71b058de5fd34c6b45fde33123669dfa8935a027",
+    "filePreserved": true,
+    "staleAfterThisUpdate": "本次S2写入后，初始化快照里的operation-store与authorization-isolation哈希不再代表这两个文件的当前字节。verification-report.json保持原文件。"
+  },
+  "phase2RecordPath": "docs/blog-ops/house-upgrade-stardew/control/phase-2-records.json",
+  "rawOrcaStatePath": "docs/blog-ops/house-upgrade-stardew/control/raw-orca-state.json",
+  "identitySource": "当前工作树路径、未改动的 S1 verification-report，以及 run_8253831e93d6 的 task-list/worker-list/worker-show。不采用其他 Run 的 displayName 或路径。",
+  "sourceConflicts": [
+    {
+      "topic": "authorization",
+      "s1": "initialized operation-store had authorizedRoleA=true; authorization doc said the user authorized role A to start",
+      "current": "本 S2 任务写明“A开始执行”指选项 A/project-write，不是仅授权研究角色 A",
+      "kept": "两处来源都保留。当前记录采用选项 A/project-write。"
+    },
+    {
+      "topic": "role-status",
+      "s1": "A, G, M, S were recorded active; B through T had no task id",
+      "current": "本次 task-list：A/G/M/M2/B/C/S completed 且终端 released；D ctx_1fa278b7ca02 与 M3 ctx_58ccd56dab47 dispatched；E 与 F pending；T 无任务",
+      "kept": "状态以本次带 --run 的回读为准。S1 初始化字节仍由未改动的 verification-report.json 代表。"
+    },
+    {
+      "topic": "isolation-inference",
+      "s1": "same UID was written as identical underlying permissions, and distinct inodes were written as proof of isolation",
+      "current": "重测 inode 仍是 145851019、65977012、144267400，UID 501，设备 16777232，与 S1 数字一致",
+      "kept": "数字没有冲突。推论只保留已观测事实，结论仍是逻辑隔离，未验证底层权限。"
+    },
+    {
+      "topic": "status-after-msg_f2385df5a74d",
+      "messageAt": "2026-10-15T14:55:43Z",
+      "messageSaid": "C revision task not yet created; E/F pending; do not invent a future id",
+      "laterTaskList": "E status=blocked with no dispatch; F status=pending; C repair task_836071267139 / ctx_2532ccdb6e55 is dispatched; M3 completed but terminal reclaimable and not released",
+      "kept": "消息时点不编造当时还不存在的 ID。本段 ID 来自其后的 task-list，并标明消息当时尚未创建。"
+    },
+    {
+      "topic": "session-continuation-and-coordinator-transition",
+      "historical": "用户曾选 B 停止，E/F 取消，协调者为 term_661abce7... (gen 1) / term_b7299c68... (gen 2)",
+      "current": "用户先后给出“继续”与“继续开始”明确指示；协调者通过 run-use 绑定 term_661abce7-55fd-4570-8bf5-970c0451dd23 generation 3；已派发 A 补研与 C 第 2 轮；B 停止历史作为前序阶段保留，新指令作为当前授权记录。",
+      "kept": "两阶段事实与指令序列均完整保留，旧门与取消任务不被篡改为通过。"
+    }
+  ],
+  "coordinatorFollowUp": {
+    "historicalFollowUps": [
+      {
+        "messageId": "msg_df86cdc9dc27",
+        "appliedAt": "2026-10-15T23:29:25+08:00",
+        "subject": "D2报告待冲突复核，不写整体认可",
+        "effect": "记录D2报告者PASS与协调者待复核接受分开，D3按实际dispatched状态；E gate仍pending，不能放行；用户长度例外单选仍无回复，写“等待用户选择长度约束，后续链未启动”。"
+      }
+    ],
+    "currentFollowUp": {
+      "messageId": "msg_0aa12b413361",
+      "receivedAt": "2026-10-15T23:18:32Z",
+      "appliedAt": "2026-10-16T07:25:00+08:00",
+      "fromHandle": "term_661abce7-55fd-4570-8bf5-970c0451dd23",
+      "subject": "用户新确认恢复丰富，协调者与范围更新",
+      "effect": "记录用户新确认恢复丰富及继续开始，Run 绑定至 term_661abce7-55fd-4570-8bf5-970c0451dd23 generation 3；B 停止历史保留；C ctx_2702c6b4c058 为第 2 轮唯一作者，同轮待补研合并；A 补查任务 task_2ad2b7de35cb 与 task_c013cf04e3af 已派发，B 新大纲 task_007b2e700262 pending；旧 D2 复验 task_09b5d2ee2f40 标为 superseded；预算记录第 2 轮执行中已用 2 余 1；v3 哈希保持 pending 不虚构。"
+    }
+  },
+  "dGateReadback": {
+    "reportPath": "docs/blog-ops/house-upgrade-stardew/reviews/D/three-gates-report.json",
+    "reportSha256": "1a239fce4832c524cb4d758da6540cb4fa3377b8baa94f424f2bc3212350f360",
+    "draftSha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "overallOutcome": "FAIL",
+    "ResearchTrace": {
+      "outcome": "FAIL",
+      "issuesCount": 4
+    },
+    "ReaderValue": {
+      "outcome": "PASS",
+      "issuesCount": 0
+    },
+    "Repetition": {
+      "outcome": "FAIL",
+      "issuesCount": 3
+    },
+    "taskLifecycle": "succeeded",
+    "contentPass": false
+  },
+  "latestRunReadbackAt": "2026-10-16T08:58:17+08:00",
+  "m3Binding": {
+    "provenancePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/provenance.json",
+    "status": "candidate_assets_bound_to_writer_submission_v1",
+    "bodyDraftSha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "mediaTextEnSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+    "figureCount": 3,
+    "currentDraftV2BodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+    "currentMediaTextEnSha256": "55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c",
+    "figuresArrayVerbatimIdentical": true,
+    "contentOrPagePass": false,
+    "note": "M3英语3图是已产出且主Agent看过的候选，只绑定v1正文+原media；未经过最终图文与页面认可，不能写最终发布资产PASS。"
+  },
+  "uninventedIds": "所有 Task ID、Dispatch ID 与 Terminal Handle 均来自 Orca task-list 与 worker-list 真实查询，无编造 ID。当前活跃 Worker 4 个（S4, C2, A1, A2），已释放 16 个，待派发 1 个（B大纲）。",
+  "phase3RecordPath": "docs/blog-ops/house-upgrade-stardew/control/phase-3-records.json",
+  "rawPhase3OrcaStatePath": "docs/blog-ops/house-upgrade-stardew/control/raw-phase-3-orca-state.json",
+  "candidateChecksLogPath": "docs/blog-ops/house-upgrade-stardew/control/candidate-checks.log",
+  "userLengthConstraint": {
+    "historicalDecision": {
+      "choice": "B",
+      "meaning": "保留 V7 1000 长度门停止正式交付",
+      "recordedAt": "2026-10-15T15:34:36Z",
+      "consequence": "gate_ac67dcb7fc37 决议停止；E 与 F 历史任务置为 failed/cancelled"
+    },
+    "sessionContinuation": {
+      "status": "用户新确认恢复丰富并接续开始",
+      "userInstructions": [
+        "获知当前状态后明确说“继续” (generation 2)",
+        "在 Stardew Planner 会话明确“继续开始”，恢复双语 project-write 并保持 >=1000 合格英文 (generation 3)"
+      ],
+      "qualificationFloorExempted": false,
+      "qualificationFloorRequirement": ">=1000 qualified English units",
+      "authorizedScope": "在原关键词 house upgrade stardew 内补查材料准备/工具条件、逐级及总预算、房间用途后完善 brief，接续修复既有候选，主意图不变",
+      "prohibitions": "未豁免1000门槛，不得改变主意图，旧门状态不可改成通过，不得commit/merge/push/deploy"
+    }
+  },
+  "resumeRecordPath": "docs/blog-ops/house-upgrade-stardew/control/resume-2026-10-16.md",
+  "enrichedCheckpointPath": "docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checkpoint.md",
+  "enrichedChecksLogPath": "docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checks.log",
+  "recordHistory": [
+    {
+      "appendedBy": "task_32f6fed221c9",
+      "preservedBecause": "S5 current fields before the v4 proof correction",
+      "recordRevision": "s-enriched-v3-checkpoint",
+      "updatedAt": "2026-10-16T08:18:00+08:00",
+      "updatedBy": {
+        "role": "S",
+        "taskId": "task_81b387615052",
+        "dispatchId": "ctx_281221259e4b",
+        "terminalHandle": "term_ec99eb4c-f8d2-4ea9-a75c-9a07b95adc90",
+        "agent": "antigravity"
+      },
+      "latestRunReadbackAt": "2026-10-15T22:59:50+08:00",
+      "revisionBudget": {
+        "totalMaxRounds": 3,
+        "currentFormalManuscriptRepairRound": 2,
+        "budgetChanged": false,
+        "budgetReset": false,
+        "scope": "第1轮（draft-v2）和第2轮（draft-v3）返修已提交完成，计已用 2/3、余 1（含译文返修），不能换Task/阶段/Agent重置。正文/编辑痕迹/事实审查由独立角色承担，不伪造PASS。",
+        "ruleCitation": "V7 01/执行入口: 修订预算按整篇文章算（含译文返修），共用最多三轮，初始0",
+        "prepCorrectionsAreNotGatePasses": true,
+        "laterRepairsMustRemainVisible": true,
+        "interpretationBoundary": "若未来某事件是否消耗这3轮仍不确定，维持这一原文边界，交协调者处理。本记录不颁布新规则。",
+        "remainingFormalRounds": 1,
+        "v1ContentPass": false,
+        "roundChange": {
+          "earlierS2Readback": 0,
+          "afterDReport": 1,
+          "round2Launch": 2,
+          "round2Completed": 2,
+          "sources": [
+            "reviews/D/three-gates-report.json budget.currentRoundUsed=1",
+            "task_598d00d7df0c / ctx_2702c6b4c058 completed for Round 2 repair",
+            "content/en/revision-round-2.md"
+          ]
+        },
+        "usedFormalRounds": 2,
+        "settledFormalRounds": 2,
+        "inProgressFormalRounds": 0
+      },
+      "candidateSubmission": {
+        "bodyVersion": "draft-v3",
+        "locale": "en",
+        "isCandidateOnly": true,
+        "dPassed": true,
+        "ePassed": false,
+        "fLocked": false,
+        "formalLengthPass": false,
+        "bodySha256": "8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154",
+        "mediaSha256": "8a6e1ce5ad8c74440e6bc4854c3740079520420c784457cd26ea98e0d9621f7b",
+        "publicReferencesSha256": "4f0e5a4800252baf5879996171e261878dd6bbb46e83d7a4f5828faea7ea7d0a",
+        "writerSubmissionSha256": "c619f9f69b7c2e738424b242433cd91db866ade28278c218309c978b00c826d6",
+        "intermediateDraft": {
+          "bodyVersion": "draft-v3-intermediate",
+          "bodySha256": "417e1f72a0fcb7a3a30190936fe2a04f6dfb921a405b8bf98bccec7cd3c75d46",
+          "writerSubmissionSha256": "dbe2ef5543b0ba8b14fe0504bee28a3e1a647eb78af131b537a3dc1bbb806abd",
+          "mediaSha256": "966c4e0b76f25c7489b187712c58ae1d33b3cc3a3eebf04c7efbaa3a51508588",
+          "publicReferencesSha256": "be70bd2b6ec5ef080be2d265b3e2131020a535a2df1a1d3bb609b0ede10a2886"
+        },
+        "historicalWriterSnapshots": {
+          "g2PreflightWriterSha256": "7c9cd2414e3b7d70d789ee37f5c066dfac1e544c2aad8bc25954996d5305deec",
+          "cArchivedIntermediateWriterSha256": "dbe2ef5543b0ba8b14fe0504bee28a3e1a647eb78af131b537a3dc1bbb806abd",
+          "cCandidateV3WriterSha256": "c619f9f69b7c2e738424b242433cd91db866ade28278c218309c978b00c826d6",
+          "note": "各阶段据真实文件记录独立哈希，不把不同阶段标成相等，不猜测原因，不改写历史内容。"
+        },
+        "mechanicalPreview": {
+          "source": "writer-submission.json",
+          "includingCaptionParagraphs": 1166,
+          "excludingLinesThatStartWithSchematic": 1113,
+          "requiredFloor": 1000,
+          "lengthClass": "short",
+          "signsFormalLengthPass": false,
+          "note": "C预览1166机械/1113剔图注，非F正式Length通过"
+        },
+        "qualityGate": "d_passed_e_in_progress",
+        "dTaskLifecycle": "completed (task_4e791741e19a succeeded)",
+        "dContentOutcome": "PASS (D三门全量PASS: draft-v3 0阻塞问题, reviews/D/enriched-v3/report.md)",
+        "downstreamStatus": {
+          "dReview": "completed (PASS)",
+          "eReview": "dispatched (in progress, task_d6f805015ae3)",
+          "fLength": "pending",
+          "englishLock": "unlocked",
+          "seoMetadata": "pending",
+          "chineseTranslation": "pending",
+          "pageAssembly": "pending",
+          "userFinalReview": "pending",
+          "deployment": "pending / prohibited"
+        }
+      },
+      "deliveryGates": {
+        "english": {
+          "status": "pending",
+          "meaning": "E/F 历史任务已 failed/cancelled，旧门 gate_ac67dcb7fc37 决议为停止；当前用户确认继续开始接续，但 1000 英文门槛未豁免，旧门状态不可改成通过；C 第 2 轮返修与 A 补研进行中，v3 待产生，交付门保持 pending。"
+        },
+        "chinese": {
+          "status": "pending",
+          "meaning": "未启动。"
+        },
+        "localPage": {
+          "status": "pending",
+          "meaning": "未启动；G 仅完成接口预检。"
+        },
+        "userReview": {
+          "status": "pending"
+        },
+        "production": {
+          "status": "pending",
+          "meaning": "当前不发布。"
+        },
+        "freeze": {
+          "status": "pending"
+        }
+      },
+      "latestScanCheckpoint": {
+        "checkpointFile": "docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checkpoint.md",
+        "checksLog": "docs/blog-ops/house-upgrade-stardew/control/enriched-v3-checks.log",
+        "scanTimestamp": "2026-10-16T08:18:00+08:00",
+        "totalTargetsScanned": 13,
+        "totalHits": 0,
+        "verdict": "PASS (strictly limited to exact canary zero contamination across scanned candidate files; does not imply semantic or OS isolation pass)"
+      }
+    }
+  ],
+  "currentPermissionObservation": {
+    "observedAt": "2026-10-16T08:58:17+08:00",
+    "uid": 501,
+    "gid": 20,
+    "identityMode": "0600",
+    "identityReadableExitCode": 0,
+    "worktreeInode": 145851019,
+    "mainProjectInode": 65977012,
+    "existingBlogWorktreeInode": 144267400,
+    "conclusion": "逻辑隔离。同 UID 的 test -r 只证明这次进程读得到该文件。没有 OS 隔离保证，也没有改权限。"
+  },
+  "currentWorkerAccounting": {
+    "asOf": "2026-10-16T08:58:17+08:00",
+    "counts": {
+      "active": 2,
+      "retained": 1,
+      "released": 27
+    },
+    "pageTotal": 30,
+    "activeMeans": "S ctx_67ac1ef39575 and E4 if still active at asOf",
+    "retainedMeans": "ctx_1b67a6215356 accounting row only; resource absent; not a live terminal"
+  },
+  "v4ProofCheckpointPath": "docs/blog-ops/house-upgrade-stardew/control/v4-proof-checkpoint.md",
+  "v4ProofChecksLogPath": "docs/blog-ops/house-upgrade-stardew/control/v4-proof-checks.log"
+}

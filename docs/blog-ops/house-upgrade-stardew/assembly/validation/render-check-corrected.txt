@@ -1,0 +1,30 @@
+corrected sources field check
+initial file preserved at render-check-initial.txt
+initial exit was 1 because the checker concatenated label + space + note
+en sourceCount=12 referenceCount=12
+match 0 wiki-farmhouse label note href
+match 1 wiki-carpenters-shop label note href
+match 2 wiki-version-history label note href
+match 3 wiki-axes label note href
+match 4 wiki-wood label note href
+match 5 wiki-hardwood label note href
+match 6 wiki-large-stump label note href
+match 7 wiki-large-log label note href
+match 8 wiki-secret-woods label note href
+match 9 wiki-cooking label note href
+match 10 wiki-cask label note href
+match 11 site-carpenter label note href
+zh-CN sourceCount=12 referenceCount=12
+match 0 wiki-farmhouse label note href
+match 1 wiki-carpenters-shop label note href
+match 2 wiki-version-history label note href
+match 3 wiki-axes label note href
+match 4 wiki-wood label note href
+match 5 wiki-hardwood label note href
+match 6 wiki-large-stump label note href
+match 7 wiki-large-log label note href
+match 8 wiki-secret-woods label note href
+match 9 wiki-cooking label note href
+match 10 wiki-cask label note href
+match 11 site-carpenter label note href
+CORRECTED_ERROR_COUNT=0

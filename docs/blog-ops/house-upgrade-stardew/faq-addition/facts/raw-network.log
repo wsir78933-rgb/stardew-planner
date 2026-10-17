@@ -1,0 +1,277 @@
+# Network Verification Raw Log
+Timestamp: 2026-10-17T09:51:30.602093
+Environment: curl --max-time 15
+
+==================================================
+Page: Farmhouse
+URL: https://stardewvalleywiki.com/Farmhouse
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 7229
+--------------------------------------------------
+[Excerpt: Lead Footprint]
+|name=Farmhouse
+The '''Farmhouse''' is the player's permanent residence in Stardew Valley. Initially, it has only one small room that contains a single bed, a fireplace, an old TV (either a [[Budget TV]] or [[Floor TV]]), various [[Furniture|decorations]] depending on what farm style was chosen, and a [[Furniture#Rugs|floor mat]] of varying design, which can all be changed and expanded later on. The outer footprint of the farmhouse is a 9&times;5 rectangle. The inner footprint of the farmhouse without upgrades is a 10&times;7 rectangle. The fireplace can be moved by left-clicking or turned on by right-clicking on it.
+
+[Excerpt: Upgrades section]
+==Upgrades==
+[[Robin]] requires three days to complete each farmhouse upgrade. 
+
+{|class="wikitable"
+!Upgrade
+!Outdoor Image
+!Indoor Image
+!Cost
+!style="min-width: 200px;"|Changes
+|-
+|1
+|[[File:House (tier 2).png]]
+|[[File:House indoors (tier 2).png|240px]]
+|data-sort-value="10000"|{{Price|10000}}
+{{Name|Wood|450}}
+|Adds a kitchen, with a kitchen counter that allows [[cooking]], and a fridge that functions as a chest. Items in the fridge can be used when cooking even though they are not in the player's inventory. Adds a bedroom. Upgrades bed from single to double. Allows [[marriage]].
+|-
+|2
+|[[File:House (tier 3).png]]
+|[[File:House indoors (tier 3).png|240px]]
+|data-sort-value="65000"|{{Price|65000}}<!--Do not change this value, read the "History" section first!-->
+{{Name|Hardwood|100}}<!--Do not change this value, read the "History" section first!-->
+|Adds two new rooms, one empty, and one with a crib and two [[Child Bed|child beds]], thus allowing the player to have [[children]]. Kitchen and bedroom are larger. Unlocks renovations and the ability to paint the house. 
+|-
+|3
+|[[File:House (tier 3).png]]
+|[[File:Cellar Inside.png|240px]]
+|data-sort-value="100000"|{{Price|100000}}
+|Adds a cellar under the house, allowing access via the kitchen. The cellar houses [[cask]]s which can age products such as [[cheese]] and [[wine]] to increase quality and value.  The cellar comes with 33 casks, though it may house as many as 189 casks.
+|}
+
+==Renovations==
+After upgrading the farmhou
+
+
+==================================================
+Page: Carpenter's Shop
+URL: https://stardewvalleywiki.com/Carpenter%27s_Shop
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 47585
+--------------------------------------------------
+[Excerpt: House Upgrades section]
+==House Upgrades==
+When upgrading the [[Farmhouse]], the footprint of the building does not change, so no adjacent tiles are impacted. House upgrades add space inside the house as well as accessibility to the kitchen for [[cooking]].
+
+Farmhouse upgrades require three days to complete.
+{|class="wikitable roundedborder"
+!Image
+!Name
+!Description
+!Cost
+|-
+|[[File:House (tier 2).png|72px|center]]
+|House Upgrade 1
+|Increase house interior size and adds a Kitchen.
+|{{Price|10000}}{{Name|Wood|450}}
+|-
+|[[File:House (tier 3).png|72px|center]]
+|House Upgrade 2
+|Adds two new rooms, one empty, and one with a crib and two [[Child Bed]]s. This allows you to have two children. Both the kitchen and the bedroom are larger. Unlocks [[#House Renovations|renovations]] and building/trim [[Carpenter's Shop#Painting|painting]].
+|<!--Do not change these values, read the "History" section first!-->{{Price|65000}}{{Name|Hardwood|100}}
+|-
+|[[File:House (tier 3).png|72px|center]]
+|House Upgrade 3
+|Adds a cellar under the house, allowing access via the kitchen.<p>The cellar allows the player to craft and house [[Cask]]s which can age specific products (''i.e.,'' [[Cheese]], [[Goat Cheese]], [[Beer]], [[Mead]], [[Pale Ale]], and [[Wine]]) to increase their quality and value.</p><p>The exterior appearance of the house remains identical.</p>
+|{{Price|100000}}
+|}
+
+==House Renovations==
+House renovations allow
+
+[Excerpt: House Renovations section]
+==House Renovations==
+House renovations allow the player to add or remove certain features from their house. All the renovation options are done instantly and can be reversed, which refunds the money spent on it. House renovations are unlocked after the second farmhouse upgrade.
+
+{|class="wikitable"
+!Name
+!Image
+!In-game Description
+!Details
+!Cost
+|-
+|Remove Crib
+|[[File:Cribless Nursery.png|250px]]
+|Remove the crib from your home.
+|Gets rid of the crib required to have new children.
+|Free
+|-
+|Open Bedroom
+|[[File:Divider.png|250px]]
+|Removes the wall separating your bedroom and the entrance r
+
+[Excerpt: Permanent Stock section]
+==Permanent Stock===
+Note that the prices of [[wood]] and [[stone]] increase in Year 2. The player will receive a letter in the mail on Spring 1 of Year 2 saying "The price of raw materials at Robin's shop and [[Blacksmith|Clint's shop]] has increased." The gold obtained by selling wood or stone to Robin or through the [[Shipping|Shipping Bin]] remains unchanged in Year 2+.
+{|class="wikitable sortable roundedborder"
+!class="unsortable"|Image
+!Name
+!Description
+!Price
+|-
+|[[File:Wood.png|32px|center]]
+|[[Wood]]
+|{{Description|Wood}}
+|data-sort-value="000010" class="no-wrap"|Year 1: {{Price|10}}
+
+
+==================================================
+Page: Secret Woods
+URL: https://stardewvalleywiki.com/Secret_Woods
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 10592
+--------------------------------------------------
+[Excerpt: Secret Woods Lead]
+{{Infobox location
+|mapx      = 40
+|mapy      = 100
+|building  = SecretWoods.png
+|closed    = Never
+|address   = 
+|occupants = [[File:Old Master Cannoli Anim.gif|20px]] [[Old Master Cannoli]]
+}}
+
+The '''Secret Woods''' is an outdoor area that can be entered from the northwest corner of [[Cindersap Forest]]. The entrance is initially blocked by a [[Large Log|large log]] that can be cleared after upgrading to at least a [[Axes|Steel Axe]].  
+
+The Secret Woods contain seasonal [[Foraging|forageables]] and [[Slimes]] that will attack the player. Slimes here have a chance of dropping [[Mahogany Seed]]s when slain.
+
+The Secret Woods contain 6 [[Large Stump]]s that regrow daily and can be harvested for a total of 12 [[Hardwood]] each day. Four stumps are in the upper part of the woods, and two ar
+
+
+==================================================
+Page: Hardwood
+URL: https://stardewvalleywiki.com/Hardwood
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 11037
+--------------------------------------------------
+[Excerpt: Hardwood Lead]
+{{Infobox
+|eng         = Hardwood
+|source      = [[Large Stump]] • [[Large Log]] • [[Mahogany Tree]] • [[Mystic Tree]] • [[Mystery Box]] • [[Woodskip]] [[Fish Pond]] • [[Bookseller]]
+|sellprice   = 15
+|quality     = false
+}}
+'''Hardwood''' is a [[:Category:Resources|resource]]. It is obtained by chopping down a [[Mahogany Tree]] or a [[Mystic Tree]] with any [[Axes|axe]], a [[Large Stump]] with a [[Axes|Copper Axe]] or better, or a [[Large Log]] with a [[Axes|Steel Axe]] or better.
+
+Six [[Large Stump]]s respawn daily in the [[Secret Woods]], making it possible to obtain 12 Hardwood per day. Eight Large Stumps respawn daily on the left side of the [[Farm Maps#Forest|Forest Farm Map]], and one Large Stump respawns daily in the top left corner of the [[Farm Maps#Four Corners|Four Corners Farm Map]]. These yield an additional 16 and 2 Hardwood per day, respectively. 
+
+On [[Ginger Island]], t
+
+
+==================================================
+Page: Axes
+URL: https://stardewvalleywiki.com/Axes
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 2768
+--------------------------------------------------
+[Excerpt: Grades of Axe Table]
+==Grades of Axe==
+<!--Note: This section is transcluded on the Tools page-->
+<section begin="axe" />
+{|class="wikitable"
+!Image
+!Name
+!Cost
+!Ingredients
+!Improvements
+|-
+|[[File:Axe.png]]
+|Axe
+|Starter Tool
+|N/A
+|10 hits to chop a fully-grown tree, and 5 hits for a small stump.
+|-
+|[[File:Copper Axe.png]]
+|Copper Axe
+|{{Price|2000}}
+|{{Name|Copper Bar|5}}
+|Can chop [[Large Stump]]s. 8 hits to chop a fully-grown tree, and 4 hits for a small stump.
+|-
+|[[File:Steel Axe.png]]
+|Steel Axe
+|{{Price|5000}}
+|{{Name|Iron Bar|5}}
+|Can chop [[Large Log]]s. 6 hits to chop a fully-grown tree, and 3 hits for a small stump. 3 hits for a stage 4 tree, and 2 hits for a stage 3 tree and below.
+|-
+|[[File:Gold Axe.png]]
+|Gold Axe
+|{{Price|10000}}
+|{{Name|Gold Bar|5}}
+|4 hits to chop a fully-grown tree, and 2 hits for a small stump. 2 hits for a stage 4 tree, and one hit for a stage 3 tree and below. 
+|-
+|[[File:Iridium Axe.png]]
+|Iridium Axe
+|{{Price|25000}}
+|{{Name|Iridium Bar|5}}
+|2 hits to chop a full
+
+
+==================================================
+Page: Large Stump
+URL: https://stardewvalleywiki.com/Large_Stump
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 1736
+--------------------------------------------------
+[Excerpt: Large Stump Lead]
+{{Infobox
+|eng         = Large Stump
+|source      = [[The Farm]] • [[Secret Woods]] • [[The Mines#Shrine of Challenge|The Mines (Shrine ON)]]
+|season      = All
+}}
+'''Large Stumps''' are the remains of long-dead trees that are found on [[the Farm]], the [[Secret Woods]] and [[the Mines]]. A [[Axes|Copper Axe]] (or better quality) is required to remove a large stump, yielding 2 [[Hardwood]] and 25 [[Foraging]] Experience points. Players with the [[Skills#Foraging|Forester]] profession have a 50% chance of receiving one extra piece of hardwood. Stumps also have a 10% chance of dropping [[Mahogany Seed]]s.
+
+Certain large stumps will respawn daily, providing a renewable source for hardwood:
+* Al
+
+
+==================================================
+Page: Large Log
+URL: https://stardewvalleywiki.com/Large_Log
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 1494
+--------------------------------------------------
+[Excerpt: Large Log Lead]
+{{Infobox
+|eng         = Large Log
+|source      = [[The Farm]] • Entrance to [[Secret Woods]] • [[The Mines#Shrine of Challenge|The Dangerous Mines]]
+|season      = All
+}}
+'''Large Logs''' are fallen trees found on [[the Farm]]. A single large log is found in [[Cindersap Forest]] (blocking the entrance to the [[Secret Woods]]). Another large log is found blocking a [[The Alleyway Buffet|secret passage]] to the east between the [[Blacksmith]] and [[JojaMart]]. Large Logs can also be found on floors 41-69 of [[The Mines#Shrine of Challenge|the Dangerous Mines]]. A [[Axes|Steel Axe]] (or better quality) is required to remove a large log, yielding 8 [[Hardwood]] (10 with the [[Skills#Foraging|Fo
+
+
+==================================================
+Page: Cask
+URL: https://stardewvalleywiki.com/Cask
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 6304
+--------------------------------------------------
+[Excerpt: Cask Infobox and Lead]
+{{Infobox
+|eng         = Cask
+|source      = [[Crafting]]
+|ingredients = {{Name|Wood|20}}{{Name|Hardwood|1}}
+|sellprice   = Cannot be sold
+|recipe      = Final [[Farmhouse]] upgrade
+}}
+{{For|a detailed analysis of profit using the Cask|Cask Productivity}}
+The '''Cask''' is a type of [[Crafting#Artisan Equipment|Artisan Equipment]] used to age [[Artisan Goods]]. It takes [[Beer]], [[Cheese]], [[Goat Cheese]], [[Mead]], [[Pale Ale]], and [[Wine]], and ages them to increase their quality and value.
+
+Normal, silver, and gold quality items can be prematurely removed from a cask at any time by striking the cask with an [[Axes|Axe]], [[Hoes|Hoe]], or [[Pickaxes|Pickaxe]]. A star will appear on the front of the cask denoting the quality of the item inside. 
+
+Casks are able to produce items with "i
+
+
+==================================================
+Page: Version History
+URL: https://stardewvalleywiki.com/Version_History
+HTTP Status: HTTP/2 200 (exit code 0)
+API Exit: 0, Wikitext Bytes: 303279
+--------------------------------------------------
+[Excerpt: 1.6 second house upgrade]
+:** Raised price of second house upgrade (50,000g → 65,000g), but reduced number of hardwood needed (150 → 100).
+

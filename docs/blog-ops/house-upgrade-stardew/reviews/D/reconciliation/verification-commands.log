@@ -1,0 +1,59 @@
+command=pwd
+/Users/wusir/orca/workspaces/stardew planner/博客-2
+exit=0
+command=stat -f %i worktree
+145851019
+exit=0
+command=shasum -a 256 draft-v2.md media-text.en.json
+09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md
+55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c  /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json
+exit=0
+command=python3 reconciliation checks
+draft_sha256=09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f
+draft_sha_match=True
+draft_bytes=8720
+draft_endswith_lf=True
+draft_crlf=False
+media_sha256=55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c
+media_sha_match=True
+media_bytes=4443
+media_endswith_lf=True
+media_bodySha256=09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f
+media_body_matches_draft=True
+draft_line_count=55
+caption_match tier-rooms caption=True
+caption_match tier-rooms alt=True
+caption_match renovation caption=True
+caption_match renovation alt=True
+old_price_lines=[19]
+dining_150000_lines=[47, 49, 53]
+v1_has=True v2_has=False phrase=A write-up that still lists
+v1_has=True v2_has=False phrase=The exterior after that upgrade stays the same
+v1_has=True v2_has=False phrase=The empty room, the crib, the two child beds
+v1_has=True v2_has=False phrase=If you sell Wood to gather gold
+issue_count=6
+declared_blocking=6
+declared_sentences=10
+result=FAIL
+voids_d2=True
+article_pass=False
+issue_ids=RP-R1,RP-R2,RP-R3,RP-R4,RP-R5,RP-R6
+md_has RP-R1=True
+md_has RP-R2=True
+md_has RP-R3=True
+md_has RP-R4=True
+md_has RP-R5=True
+md_has RP-R6=True
+md_has Repetition：FAIL=True
+md_has 阻塞问题 6 个=True
+md_has 10 句=True
+checks=pass
+python_exit=0
+command=git status --short -- candidate and reconciliation paths
+?? docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md
+?? docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json
+?? docs/blog-ops/house-upgrade-stardew/reviews/D/reconciliation/
+?? docs/blog-ops/house-upgrade-stardew/reviews/D/round-1/
+git_status_exit=0
+6fed3c2c1b9a62227032f9cdf6bfa45a6f281602e0848f604c3c10f3643c64ca  docs/blog-ops/house-upgrade-stardew/reviews/D/reconciliation/repetition-addendum.md
+2a20d42870e5660a892ad1a7b132576afd5d219cf18df3ff49856c86adaae238  docs/blog-ops/house-upgrade-stardew/reviews/D/reconciliation/repetition-addendum.json

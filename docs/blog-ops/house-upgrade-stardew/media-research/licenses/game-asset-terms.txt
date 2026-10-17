@@ -1,0 +1,15 @@
+# Stardew Valley Wiki Game Asset License Notice
+
+Source: Stardew Valley Wiki File Namespace Licensing Boilerplate
+Example URL: https://stardewvalleywiki.com/File:House_indoors_(tier_2).png
+Retrieved: 2026-10-15 via ego-browser
+
+---
+This file (or parts of it) is copyright © ConcernedApe 2016
+This screenshot, texture, audio, song, or other Stardew Valley asset, or derivative of Stardew Valley assets, does not fall under the Stardew Valley Wiki's Terms of Service but is freely usable on this wiki.
+---
+
+Applicability & Editorial Restrictions:
+1. Ownership: Game screenshots, sprites, textures, and interiors are proprietary assets created by ConcernedApe.
+2. Wiki Status: The wiki notes they do NOT fall under the standard CC BY-NC-SA 3.0 wiki license, but are permitted for wiki use under fair dealing / game editorial documentation.
+3. External Web Use: Commercial licensing is unverified; standard editorial/informational fair use applies. Any public attribution must credit ConcernedApe as developer/creator and cite the original source page.

@@ -1,0 +1,85 @@
+House-upgrade Stardew interface baseline environment
+Recorded: 2026-10-15 Asia/Shanghai
+Role: G pre-assembly verification only
+Worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+Branch: 博客-2
+HEAD: bf91a14829067ed1c9c2a206a97985e17dbebdda
+
+No second worktree was created. This directory already existed.
+
+Inodes, same device 16777232:
+- this worktree: 145851019
+- main: 65977012 at /Users/wusir/Desktop/开发项目集合/stardew planner
+- existing 博客 worktree: 144267400 at /Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客
+
+Node: v24.18.0
+pnpm: 10.22.0
+packageManager field: pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c
+Next package resolved through the symlink: 16.3.0
+
+Lock and package identity, sha256, worktree equals main:
+- pnpm-lock.yaml d5e8dbaea64c21aca0db72a3b7363cc1468396667a166727dcefbd704d8be1b2
+- package.json f10064b03d1e90ba7055b31d838cc68ab0009986e59486cc1d00f59a4cefd3f0
+
+node_modules:
+- absent in this worktree before this task
+- one symlink created:
+  /Users/wusir/orca/workspaces/stardew planner/博客-2/node_modules
+  -> /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+- no install and no lockfile change
+- git status shows the symlink as untracked because .gitignore uses node_modules/ and Git does not match that directory pattern to this symlink
+- .gitignore was not edited
+
+scripts/dev.sh:
+- DEV_PORT=3003
+- calls scripts/free-listen-port.sh 3003 before exec next dev --webpack --port 3003
+- free-listen-port.sh sends CONT, then TERM, then KILL to current listeners
+- pnpm dev and scripts/dev.sh were not run
+- no process was killed
+
+Listeners observed, not modified:
+- PID 34931 next-server v16.3.0 cwd /Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客 TCP *:3003
+- PID 71348 vite cwd /Users/wusir/Desktop/完成项目集合/模块组件合集网站 TCP [::1]:3000
+- PID 51436 vite cwd /Users/wusir/Desktop/完成项目集合/模块组件合集网站 command text says --port 3000; lsof shows TCP [::1]:3001
+- PID 96353 vite cwd /Users/wusir/Desktop/开发项目集合/AI image editor TCP [::1]:3002
+- PID 64536 vite cwd /Users/wusir/Desktop/完成项目集合/模块组件合集网站 command text says --port 3000; lsof shows TCP [::1]:3004
+- PID 44997 vite cwd /Users/wusir/Desktop/开发项目集合/drake ai video TCP [::1]:3005
+- PID 15544 node .output/server/index.mjs cwd /Users/wusir/Desktop/开发项目集合/drake ai video-worktrees/文案 TCP 127.0.0.1:3006
+
+Main worktree dirty files, read twice, same set, not written by this task:
+- src/components/editor-toolbar.tsx
+- src/components/homepage-planner-slot.tsx
+- src/components/planner-workspace.tsx
+- src/components/react-planner-host.tsx
+- tests/components/editor-controls.test.tsx
+- tests/components/homepage-planner-slot.test.tsx
+- tests/components/react-planner-host.test.tsx
+
+Existing 博客 worktree dirty files, read twice, same set, not written by this task:
+- app/globals.css
+- public/llms.txt
+- src/blog/blog-copy.ts
+- src/blog/blog-post-identities.ts
+- src/blog/blog-post-registry.tsx
+- src/components/site-navigation-dock.tsx
+- tests/assets/blog-cover-images.test.ts
+- tests/blog/blog-post-registry.test.ts
+- tests/blog/blog-sources.test.tsx
+- tests/i18n/public-route-registry.test.ts
+- tests/routes/blog-routes.test.tsx
+- tests/routes/llms.test.ts
+- tests/seo/canonical-public-routes.test.ts
+- untracked docs/blog-ops/how-to-get-gold-star-crops-stardew-valley/
+- untracked node_modules
+- untracked gold-star cover and illustration webp/avif
+- untracked src/blog/articles/how-to-get-gold-star-crops-stardew-valley.en.tsx
+- untracked src/blog/articles/how-to-get-gold-star-crops-stardew-valley.zh.tsx
+That worktree HEAD is f30f31d57486ac8b44d85363bcdcfba66e4122f4 on codex/blog-gold-star-crops-20261013.
+
+This worktree after verification, tracked diff empty:
+- untracked docs/blog-ops/house-upgrade-stardew/ including prior A research and S control files plus this interface directory
+- untracked node_modules symlink
+- next-env.d.ts was rewritten by webpack build from .next/dev/types to .next/types, then restored with git checkout -- next-env.d.ts
+- out/ and .next/ are gitignored build products
+
+house-upgrade-stardew is absent from src, app, and public/llms.txt in this worktree.

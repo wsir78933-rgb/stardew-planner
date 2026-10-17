@@ -1,0 +1,448 @@
+{
+  "role": "T",
+  "locale": "zh-CN",
+  "articleSlug": "house-upgrade-stardew",
+  "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
+  "fontStack": "'Arial Narrow', 'PingFang SC', 'Hiragino Sans GB', sans-serif",
+  "canvas": {
+    "width": 1672,
+    "height": 941
+  },
+  "toolchain": {
+    "renderingEngine": "ego-browser (Chromium) nodejs CDP Emulation (width: 1672, height: 941, deviceScaleFactor: 1)",
+    "converter": "Pillow 12.2.0 (libwebp quality 95 method 6, libavif quality 90)",
+    "cjkFontsChecked": [
+      "PingFang SC",
+      "Hiragino Sans GB"
+    ]
+  },
+  "englishAssetsUnchanged": true,
+  "cjkFit": "upgrade-or-renovation.svg keeps every rect, color, and number. Four labels use a smaller font-size so the full Chinese glyphs sit inside the existing boxes: 装修 72px, 升级2之后/即时/退还金币 64px. Other labels stay at 84px or 88px.",
+  "figures": [
+    {
+      "figure_id": "cover-payments",
+      "role": "cover",
+      "publicWebp": "/blog/house-upgrade-stardew-cover-zh.webp",
+      "publicAvif": "/blog/house-upgrade-stardew-cover-zh.avif",
+      "svg": {
+        "filename": "cover-payments.svg",
+        "sha256": "13e6506201f7ecb1535e2f40077d71b7b6ac0ee35f4485810cba1db515dab735",
+        "byte_size": 3857
+      },
+      "png": {
+        "path": "/tmp/house-upgrade-zh-cover-payments.png",
+        "format": "PNG",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 80622,
+        "sha256": "6d1b2e535b07ded4e362b265b4cbeb5ccf67692ff246b029519a3e160b2ac11b"
+      },
+      "webp": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp",
+        "format": "WEBP",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 63012,
+        "sha256": "bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87"
+      },
+      "avif": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif",
+        "format": "AVIF",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 34529,
+        "sha256": "7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926"
+      },
+      "render_exit_code": 0,
+      "textMeasurements": [
+        {
+          "id": "text-upgrade-1-title",
+          "text": "升级1",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 216.1328125,
+          "textHeight": 101.0078125,
+          "rectWidth": 440,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-upgrade-1-gold",
+          "text": "10,000金",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 294.703125,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 130
+        },
+        {
+          "id": "text-upgrade-1-wood",
+          "text": "450木材",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 282.9296875,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 130
+        },
+        {
+          "id": "text-upgrade-1-days",
+          "text": "3天",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 122.3125,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 130
+        },
+        {
+          "id": "text-upgrade-2-title",
+          "text": "升级2",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 216.1328125,
+          "textHeight": 101.0078125,
+          "rectWidth": 480,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-upgrade-2-gold",
+          "text": "65,000金",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 294.703125,
+          "textHeight": 96.5,
+          "rectWidth": 480,
+          "rectHeight": 130
+        },
+        {
+          "id": "text-upgrade-2-hardwood",
+          "text": "100硬木",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 282.9296875,
+          "textHeight": 96.5,
+          "rectWidth": 480,
+          "rectHeight": 130
+        },
+        {
+          "id": "text-upgrade-2-days",
+          "text": "3天",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 122.3125,
+          "textHeight": 96.5,
+          "rectWidth": 480,
+          "rectHeight": 130
+        },
+        {
+          "id": "text-upgrade-3-title",
+          "text": "升级3",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 216.1328125,
+          "textHeight": 101.0078125,
+          "rectWidth": 440,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-upgrade-3-gold",
+          "text": "100,000金",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 333.0078125,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 150
+        },
+        {
+          "id": "text-upgrade-3-days",
+          "text": "3天",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 122.3125,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 150
+        }
+      ]
+    },
+    {
+      "figure_id": "tier-rooms",
+      "role": "body",
+      "publicWebp": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "publicAvif": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "svg": {
+        "filename": "tier-rooms.svg",
+        "sha256": "99337ac2b5dcacb7792968289ea17f16e87cbbd69bf07c436665922196aed5c0",
+        "byte_size": 3713
+      },
+      "png": {
+        "path": "/tmp/house-upgrade-zh-tier-rooms.png",
+        "format": "PNG",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 73467,
+        "sha256": "59b56b7493c1f7ff6501d66762be61d61efd1c8350b31ebffaf3ee394374824f"
+      },
+      "webp": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp",
+        "format": "WEBP",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 58666,
+        "sha256": "d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c"
+      },
+      "avif": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif",
+        "format": "AVIF",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 31242,
+        "sha256": "aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad"
+      },
+      "render_exit_code": 0,
+      "textMeasurements": [
+        {
+          "id": "text-tier1-title",
+          "text": "升级1",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 216.1328125,
+          "textHeight": 101.0078125,
+          "rectWidth": 440,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-tier1-room1",
+          "text": "厨房",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 168,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 160
+        },
+        {
+          "id": "text-tier1-room2",
+          "text": "卧室",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 168,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 160
+        },
+        {
+          "id": "text-tier2-title",
+          "text": "升级2",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 216.1328125,
+          "textHeight": 101.0078125,
+          "rectWidth": 440,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-tier2-room1",
+          "text": "空房间",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 252,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 160
+        },
+        {
+          "id": "text-tier2-room2",
+          "text": "育儿室",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 252,
+          "textHeight": 96.5,
+          "rectWidth": 440,
+          "rectHeight": 160
+        },
+        {
+          "id": "text-tier3-title",
+          "text": "升级3",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 216.1328125,
+          "textHeight": 101.0078125,
+          "rectWidth": 480,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-tier3-room1",
+          "text": "地窖",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 168,
+          "textHeight": 96.5,
+          "rectWidth": 480,
+          "rectHeight": 160
+        },
+        {
+          "id": "text-tier3-room2",
+          "text": "外观相同",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 336,
+          "textHeight": 96.5,
+          "rectWidth": 480,
+          "rectHeight": 160
+        },
+        {
+          "id": "text-shared-footprint",
+          "text": "9×5室外",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 284.859375,
+          "textHeight": 96.5,
+          "rectWidth": 1560,
+          "rectHeight": 160
+        }
+      ]
+    },
+    {
+      "figure_id": "upgrade-or-renovation",
+      "role": "body",
+      "publicWebp": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "publicAvif": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "svg": {
+        "filename": "upgrade-or-renovation.svg",
+        "sha256": "1fd0e8e620c28067f0fdfc2d05b6bd80ff243ec82b4d5d8226f3e6e460d5c5c9",
+        "byte_size": 4661
+      },
+      "png": {
+        "path": "/tmp/house-upgrade-zh-upgrade-or-renovation.png",
+        "format": "PNG",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 85156,
+        "sha256": "83783efa7bef94665ecc4cb3006d7989579b114b1bf81c0fee7ff1515fc74e0e"
+      },
+      "webp": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp",
+        "format": "WEBP",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 60854,
+        "sha256": "6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88"
+      },
+      "avif": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif",
+        "format": "AVIF",
+        "width": 1672,
+        "height": 941,
+        "byte_size": 32235,
+        "sha256": "d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84"
+      },
+      "render_exit_code": 0,
+      "textMeasurements": [
+        {
+          "id": "text-upgrade-title",
+          "text": "升级",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 176,
+          "textHeight": 101.0078125,
+          "rectWidth": 460,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-upgrade-days",
+          "text": "3天",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 122.3125,
+          "textHeight": 96.5,
+          "rectWidth": 460,
+          "rectHeight": 240
+        },
+        {
+          "id": "text-renovation-title",
+          "text": "装修",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 144,
+          "textHeight": 83.0078125,
+          "rectWidth": 990,
+          "rectHeight": 110
+        },
+        {
+          "id": "text-renovation-unlock",
+          "text": "升级2之后",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": true,
+          "textWidth": 285.1875,
+          "textHeight": 73.5,
+          "rectWidth": 990,
+          "rectHeight": 85
+        },
+        {
+          "id": "text-renovation-speed",
+          "text": "即时",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": true,
+          "textWidth": 128,
+          "textHeight": 73.5,
+          "rectWidth": 990,
+          "rectHeight": 85
+        },
+        {
+          "id": "text-renovation-refund",
+          "text": "退还金币",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": true,
+          "textWidth": 256,
+          "textHeight": 73.5,
+          "rectWidth": 990,
+          "rectHeight": 85
+        },
+        {
+          "id": "text-example-1-name",
+          "text": "移除婴儿床",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 420,
+          "textHeight": 96.5,
+          "rectWidth": 460,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-example-1-cost",
+          "text": "免费",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 168,
+          "textHeight": 96.5,
+          "rectWidth": 460,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-example-2-name",
+          "text": "餐厅",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 168,
+          "textHeight": 96.5,
+          "rectWidth": 460,
+          "rectHeight": 120
+        },
+        {
+          "id": "text-example-2-cost",
+          "text": "150,000金",
+          "font": "\"Arial Narrow\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+          "overflow": false,
+          "textWidth": 333.0078125,
+          "textHeight": 96.5,
+          "rectWidth": 460,
+          "rectHeight": 120
+        }
+      ]
+    }
+  ]
+}

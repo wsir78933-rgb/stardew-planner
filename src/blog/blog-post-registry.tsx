@@ -50,6 +50,8 @@ import { OakTreeVsMapleStardewEnglishArticle } from "./articles/oak-tree-vs-mapl
 import { OakTreeVsMapleStardewChineseArticle } from "./articles/oak-tree-vs-maple-stardew.zh";
 import { HowToHarvestStardewValleyEnglishArticle } from "./articles/how-to-harvest-stardew-valley.en";
 import { HowToHarvestStardewValleyChineseArticle } from "./articles/how-to-harvest-stardew-valley.zh";
+import { HouseUpgradeStardewEnglishArticle } from "./articles/house-upgrade-stardew.en";
+import { HouseUpgradeStardewChineseArticle } from "./articles/house-upgrade-stardew.zh";
 import {
   blogPostCanonicalPaths,
   blogPostSlugs,
@@ -467,6 +469,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       featured: false,
       Content: HowToHarvestStardewValleyEnglishArticle,
     },
+    {
+      slug: "house-upgrade-stardew",
+      title: "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      description:
+        "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/house-upgrade-stardew-cover.webp",
+        alt: "Original pixel scene of one farmhouse. Not an official screenshot or an exact game layout.",
+      },
+      featured: false,
+      Content: HouseUpgradeStardewEnglishArticle,
+    },
   ],
   "zh-CN": [
     {
@@ -842,6 +859,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: false,
       Content: HowToHarvestStardewValleyChineseArticle,
+    },
+    {
+      slug: "house-upgrade-stardew",
+      title: "星露谷房屋升级：第二档是65,000金和100硬木",
+      description:
+        "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/house-upgrade-stardew-cover-zh.webp",
+        alt: "原创像素场景：一栋农舍。不是官方截图，也不是精确的游戏布局。",
+      },
+      featured: false,
+      Content: HouseUpgradeStardewChineseArticle,
     },
   ],
 };

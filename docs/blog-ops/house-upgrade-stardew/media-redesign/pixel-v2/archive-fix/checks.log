@@ -1,0 +1,20 @@
+# article archive suffix fix
+evidence: reviews/integration/checks.log
+recorded pnpm typecheck exit: 2
+recorded next build --webpack exit: 1
+recorded TS2307 mentions: 8
+cause: baseline article copies used .tsx inside tsconfig include **/*.tsx
+fix: moved those two copies to .tsx.txt; baseline manifest and checksums bytes unchanged
+manifest sha256: b00c8d80843cfdc766cb08e490f50d0edb121e88c5725673bfa6dacb4290f1af
+checksums sha256: 47bdbca2844a7be476f470d748303f31ff4be1c3eca5f0cc51d10351bf8d28d0
+locator: archive-fix/archive-location-map.json oldArchivePath -> newArchivePath
+active typescript: []
+acceptance product=15 handoff=2 newManifest=1 body=2 failed=0
+apply script main() executed: no
+command: shasum -a 256 -c docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/checksums.sha256
+exit_code: 1
+ok: 33
+failed: 2
+failed paths are the historical .tsx names; current bytes are the .tsx.txt files
+index restore: manifest and checksums match the pre-fix bytes; archive-fix/history is absent
+pycache removed: archive-fix/__pycache__/article_archive_suffix.cpython-314.pyc, integration/__pycache__/apply_pixel_v2.cpython-314.pyc

@@ -1,0 +1,543 @@
+{
+  "en-desktop": {
+    "info": {
+      "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "w": 1280,
+      "h": 800,
+      "sx": 0,
+      "sy": 0,
+      "pw": 1274,
+      "ph": 7230
+    },
+    "toc": [
+      {
+        "text": "What each upgrade costs",
+        "href": "#what-each-upgrade-costs",
+        "hash": "#what-each-upgrade-costs",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Prepare the Wood and the Hardwood",
+        "href": "#prepare-the-wood-and-the-hardwood",
+        "hash": "#prepare-the-wood-and-the-hardwood",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Price the wood you still need, then add through a tier",
+        "href": "#price-the-wood-you-still-need-then-add-through-a-tier",
+        "hash": "#price-the-wood-you-still-need-then-add-through-a-tier",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "200 Wood already on hand",
+        "href": "#200-wood-already-on-hand",
+        "hash": "#200-wood-already-on-hand",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "From the starter house through a named tier",
+        "href": "#from-the-starter-house-through-a-named-tier",
+        "hash": "#from-the-starter-house-through-a-named-tier",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "What the kitchen, nursery, and cellar are for",
+        "href": "#what-the-kitchen-nursery-and-cellar-are-for",
+        "hash": "#what-the-kitchen-nursery-and-cellar-are-for",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Order the upgrade at 24 Mountain Road",
+        "href": "#order-the-upgrade-at-24-mountain-road",
+        "hash": "#order-the-upgrade-at-24-mountain-road",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "A renovation is not the next upgrade",
+        "href": "#a-renovation-is-not-the-next-upgrade",
+        "hash": "#a-renovation-is-not-the-next-upgrade",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Sources",
+        "href": "#sources",
+        "hash": "#sources",
+        "found": true,
+        "top": 24,
+        "inView": true
+      }
+    ],
+    "notes": null,
+    "events": {
+      "eventCount": 302,
+      "methods": {
+        "Page.frameResized": 1,
+        "Page.frameStartedNavigating": 1,
+        "Page.frameStartedLoading": 10,
+        "Network.requestWillBeSent": 35,
+        "Network.requestWillBeSentExtraInfo": 28,
+        "Network.responseReceivedExtraInfo": 28,
+        "Network.responseReceived": 35,
+        "Page.frameNavigated": 1,
+        "Network.policyUpdated": 1,
+        "Network.dataReceived": 87,
+        "Network.loadingFinished": 34,
+        "Page.domContentEventFired": 1,
+        "Page.navigatedWithinDocument": 10,
+        "Page.loadEventFired": 1,
+        "Page.frameStoppedLoading": 10,
+        "Page.frameScheduledNavigation": 9,
+        "Page.frameClearedScheduledNavigation": 9,
+        "Network.loadingFailed": 1
+      },
+      "failed": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-SEKQT6DTT1&gtm=45je6ae1v9260183290za208zd9260183290xf1&_p=1792164444719&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&cid=562799803.1785937133&frm=0&ngs=1&pscdl=noapi&rcb=10&sr=1280x800&uaa=arm&uab=64&uafvl=Not%253FA_Brand%3B24.0.0.0%7CChromium%3B152.0.7977.54&uam=&uamb=0&uap=macOS&uapv=26.6.1&uaw=0&ul=en&_s=1&tag_exp=115616985~115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121246026~121246034~121284208&sid=1792163956&sct=83&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fhouse-upgrade-stardew&dt=House%20Upgrade%20Stardew%3A%2065%2C000g%20and%20100%20Hardwood%20for%20the%20Second%20Tier&en=page_view&_ee=1&tfd=5182",
+          "errorText": "net::ERR_ABORTED",
+          "type": "Fetch",
+          "canceled": true
+        }
+      ],
+      "badStatus": [],
+      "consoleCalls": []
+    }
+  },
+  "zh-desktop": {
+    "info": {
+      "url": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+      "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "w": 1280,
+      "h": 800,
+      "sx": 0,
+      "sy": 0,
+      "pw": 1274,
+      "ph": 6676
+    },
+    "toc": [
+      {
+        "text": "每一档升级要花多少",
+        "href": "#每一档升级要花多少",
+        "hash": "#%E6%AF%8F%E4%B8%80%E6%A1%A3%E5%8D%87%E7%BA%A7%E8%A6%81%E8%8A%B1%E5%A4%9A%E5%B0%91",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "准备木材和硬木",
+        "href": "#准备木材和硬木",
+        "hash": "#%E5%87%86%E5%A4%87%E6%9C%A8%E6%9D%90%E5%92%8C%E7%A1%AC%E6%9C%A8",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "先给还缺的木材计价，再累加到某一档",
+        "href": "#先给还缺的木材计价-再累加到某一档",
+        "hash": "#%E5%85%88%E7%BB%99%E8%BF%98%E7%BC%BA%E7%9A%84%E6%9C%A8%E6%9D%90%E8%AE%A1%E4%BB%B7-%E5%86%8D%E7%B4%AF%E5%8A%A0%E5%88%B0%E6%9F%90%E4%B8%80%E6%A1%A3",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "手头已经有200木材",
+        "href": "#手头已经有200木材",
+        "hash": "#%E6%89%8B%E5%A4%B4%E5%B7%B2%E7%BB%8F%E6%9C%89200%E6%9C%A8%E6%9D%90",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "从初始农舍累加到你点名的那一档",
+        "href": "#从初始农舍累加到你点名的那一档",
+        "hash": "#%E4%BB%8E%E5%88%9D%E5%A7%8B%E5%86%9C%E8%88%8D%E7%B4%AF%E5%8A%A0%E5%88%B0%E4%BD%A0%E7%82%B9%E5%90%8D%E7%9A%84%E9%82%A3%E4%B8%80%E6%A1%A3",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "厨房、育儿室和地窖是做什么的",
+        "href": "#厨房-育儿室和地窖是做什么的",
+        "hash": "#%E5%8E%A8%E6%88%BF-%E8%82%B2%E5%84%BF%E5%AE%A4%E5%92%8C%E5%9C%B0%E7%AA%96%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "在山路24号下升级订单",
+        "href": "#在山路24号下升级订单",
+        "hash": "#%E5%9C%A8%E5%B1%B1%E8%B7%AF24%E5%8F%B7%E4%B8%8B%E5%8D%87%E7%BA%A7%E8%AE%A2%E5%8D%95",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "装修不是下一次升级",
+        "href": "#装修不是下一次升级",
+        "hash": "#%E8%A3%85%E4%BF%AE%E4%B8%8D%E6%98%AF%E4%B8%8B%E4%B8%80%E6%AC%A1%E5%8D%87%E7%BA%A7",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "来源",
+        "href": "#来源",
+        "hash": "#%E6%9D%A5%E6%BA%90",
+        "found": true,
+        "top": 24,
+        "inView": true
+      }
+    ],
+    "notes": null,
+    "events": {
+      "eventCount": 288,
+      "methods": {
+        "Page.frameStartedNavigating": 1,
+        "Page.frameStartedLoading": 10,
+        "Network.requestWillBeSent": 35,
+        "Network.requestWillBeSentExtraInfo": 28,
+        "Network.responseReceivedExtraInfo": 28,
+        "Network.responseReceived": 35,
+        "Page.frameNavigated": 1,
+        "Network.policyUpdated": 1,
+        "Network.dataReceived": 71,
+        "Network.requestServedFromCache": 2,
+        "Network.loadingFinished": 34,
+        "Network.resourceChangedPriority": 1,
+        "Page.domContentEventFired": 1,
+        "Page.navigatedWithinDocument": 10,
+        "Page.loadEventFired": 1,
+        "Page.frameStoppedLoading": 10,
+        "Page.frameScheduledNavigation": 9,
+        "Page.frameClearedScheduledNavigation": 9,
+        "Network.loadingFailed": 1
+      },
+      "failed": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-SEKQT6DTT1&gtm=45je6ae1v9260183290za208zd9260183290xf1&_p=1792164455649&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&cid=562799803.1785937133&frm=0&ngs=1&pscdl=noapi&rcb=7&sr=1280x800&uaa=arm&uab=64&uafvl=Not%253FA_Brand%3B24.0.0.0%7CChromium%3B152.0.7977.54&uam=&uamb=0&uap=macOS&uapv=26.6.1&uaw=0&ul=en&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121246026~121246034~121284208&sid=1792163956&sct=83&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fzh%2Fhouse-upgrade-stardew&dt=%E6%98%9F%E9%9C%B2%E8%B0%B7%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%EF%BC%9A%E7%AC%AC%E4%BA%8C%E6%A1%A3%E6%98%AF65%2C000%E9%87%91%E5%92%8C100%E7%A1%AC%E6%9C%A8&en=page_view&_ee=1&tfd=5150",
+          "errorText": "net::ERR_ABORTED",
+          "type": "Fetch",
+          "canceled": true
+        }
+      ],
+      "badStatus": [],
+      "consoleCalls": []
+    }
+  },
+  "desktop-language": {
+    "forward": {
+      "options": [
+        {
+          "text": "English",
+          "href": "/house-upgrade-stardew"
+        },
+        {
+          "text": "中文",
+          "href": "/zh/house-upgrade-stardew"
+        }
+      ],
+      "landed": "http://127.0.0.1:3010/zh/house-upgrade-stardew"
+    },
+    "back": {
+      "options": [
+        {
+          "text": "English",
+          "href": "/house-upgrade-stardew"
+        },
+        {
+          "text": "中文",
+          "href": "/zh/house-upgrade-stardew"
+        }
+      ],
+      "landed": "http://127.0.0.1:3010/house-upgrade-stardew"
+    }
+  },
+  "en-mobile": {
+    "info": {
+      "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "w": 390,
+      "h": 844,
+      "sx": 0,
+      "sy": 0,
+      "pw": 390,
+      "ph": 9465
+    },
+    "toc": [
+      {
+        "text": "What each upgrade costs",
+        "href": "#what-each-upgrade-costs",
+        "hash": "#what-each-upgrade-costs",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Prepare the Wood and the Hardwood",
+        "href": "#prepare-the-wood-and-the-hardwood",
+        "hash": "#prepare-the-wood-and-the-hardwood",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Price the wood you still need, then add through a tier",
+        "href": "#price-the-wood-you-still-need-then-add-through-a-tier",
+        "hash": "#price-the-wood-you-still-need-then-add-through-a-tier",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "200 Wood already on hand",
+        "href": "#200-wood-already-on-hand",
+        "hash": "#200-wood-already-on-hand",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "From the starter house through a named tier",
+        "href": "#from-the-starter-house-through-a-named-tier",
+        "hash": "#from-the-starter-house-through-a-named-tier",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "What the kitchen, nursery, and cellar are for",
+        "href": "#what-the-kitchen-nursery-and-cellar-are-for",
+        "hash": "#what-the-kitchen-nursery-and-cellar-are-for",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Order the upgrade at 24 Mountain Road",
+        "href": "#order-the-upgrade-at-24-mountain-road",
+        "hash": "#order-the-upgrade-at-24-mountain-road",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "A renovation is not the next upgrade",
+        "href": "#a-renovation-is-not-the-next-upgrade",
+        "hash": "#a-renovation-is-not-the-next-upgrade",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "Sources",
+        "href": "#sources",
+        "hash": "#sources",
+        "found": true,
+        "top": 24,
+        "inView": true
+      }
+    ],
+    "notes": null,
+    "events": {
+      "eventCount": 935,
+      "methods": {
+        "Page.frameStartedNavigating": 4,
+        "Page.frameStartedLoading": 13,
+        "Network.requestWillBeSent": 125,
+        "Network.requestWillBeSentExtraInfo": 97,
+        "Network.responseReceivedExtraInfo": 94,
+        "Network.responseReceived": 121,
+        "Page.frameNavigated": 4,
+        "Network.policyUpdated": 4,
+        "Network.dataReceived": 284,
+        "Network.requestServedFromCache": 8,
+        "Network.loadingFinished": 120,
+        "Page.domContentEventFired": 4,
+        "Network.resourceChangedPriority": 1,
+        "Page.navigatedWithinDocument": 13,
+        "Page.loadEventFired": 4,
+        "Page.frameStoppedLoading": 13,
+        "Page.frameScheduledNavigation": 11,
+        "Page.frameRequestedNavigation": 2,
+        "Page.frameClearedScheduledNavigation": 11,
+        "Page.frameResized": 1,
+        "Network.loadingFailed": 1
+      },
+      "failed": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-SEKQT6DTT1&gtm=45je6ae1v9260183290za208zd9260183290xf1&_p=1792164468084&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&cid=562799803.1785937133&frm=0&ngs=1&pscdl=noapi&rcb=15&sr=390x844&uaa=arm&uab=64&uafvl=Not%253FA_Brand%3B24.0.0.0%7CChromium%3B152.0.7977.54&uam=&uamb=0&uap=macOS&uapv=26.6.1&uaw=0&ul=en&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121246026~121246034~121284208&sid=1792163956&sct=83&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fhouse-upgrade-stardew&dt=House%20Upgrade%20Stardew%3A%2065%2C000g%20and%20100%20Hardwood%20for%20the%20Second%20Tier&en=page_view&_ee=1&tfd=5147",
+          "errorText": "net::ERR_ABORTED",
+          "type": "Fetch",
+          "canceled": true
+        }
+      ],
+      "badStatus": [],
+      "consoleCalls": []
+    }
+  },
+  "zh-mobile": {
+    "info": {
+      "url": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+      "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "w": 390,
+      "h": 844,
+      "sx": 0,
+      "sy": 0,
+      "pw": 390,
+      "ph": 8023
+    },
+    "toc": [
+      {
+        "text": "每一档升级要花多少",
+        "href": "#每一档升级要花多少",
+        "hash": "#%E6%AF%8F%E4%B8%80%E6%A1%A3%E5%8D%87%E7%BA%A7%E8%A6%81%E8%8A%B1%E5%A4%9A%E5%B0%91",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "准备木材和硬木",
+        "href": "#准备木材和硬木",
+        "hash": "#%E5%87%86%E5%A4%87%E6%9C%A8%E6%9D%90%E5%92%8C%E7%A1%AC%E6%9C%A8",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "先给还缺的木材计价，再累加到某一档",
+        "href": "#先给还缺的木材计价-再累加到某一档",
+        "hash": "#%E5%85%88%E7%BB%99%E8%BF%98%E7%BC%BA%E7%9A%84%E6%9C%A8%E6%9D%90%E8%AE%A1%E4%BB%B7-%E5%86%8D%E7%B4%AF%E5%8A%A0%E5%88%B0%E6%9F%90%E4%B8%80%E6%A1%A3",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "手头已经有200木材",
+        "href": "#手头已经有200木材",
+        "hash": "#%E6%89%8B%E5%A4%B4%E5%B7%B2%E7%BB%8F%E6%9C%89200%E6%9C%A8%E6%9D%90",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "从初始农舍累加到你点名的那一档",
+        "href": "#从初始农舍累加到你点名的那一档",
+        "hash": "#%E4%BB%8E%E5%88%9D%E5%A7%8B%E5%86%9C%E8%88%8D%E7%B4%AF%E5%8A%A0%E5%88%B0%E4%BD%A0%E7%82%B9%E5%90%8D%E7%9A%84%E9%82%A3%E4%B8%80%E6%A1%A3",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "厨房、育儿室和地窖是做什么的",
+        "href": "#厨房-育儿室和地窖是做什么的",
+        "hash": "#%E5%8E%A8%E6%88%BF-%E8%82%B2%E5%84%BF%E5%AE%A4%E5%92%8C%E5%9C%B0%E7%AA%96%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "在山路24号下升级订单",
+        "href": "#在山路24号下升级订单",
+        "hash": "#%E5%9C%A8%E5%B1%B1%E8%B7%AF24%E5%8F%B7%E4%B8%8B%E5%8D%87%E7%BA%A7%E8%AE%A2%E5%8D%95",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "装修不是下一次升级",
+        "href": "#装修不是下一次升级",
+        "hash": "#%E8%A3%85%E4%BF%AE%E4%B8%8D%E6%98%AF%E4%B8%8B%E4%B8%80%E6%AC%A1%E5%8D%87%E7%BA%A7",
+        "found": true,
+        "top": 24,
+        "inView": true
+      },
+      {
+        "text": "来源",
+        "href": "#来源",
+        "hash": "#%E6%9D%A5%E6%BA%90",
+        "found": true,
+        "top": 24,
+        "inView": true
+      }
+    ],
+    "notes": null,
+    "events": {
+      "eventCount": 284,
+      "methods": {
+        "Page.frameStartedNavigating": 1,
+        "Page.frameStartedLoading": 10,
+        "Network.requestWillBeSent": 34,
+        "Network.requestWillBeSentExtraInfo": 27,
+        "Network.responseReceived": 34,
+        "Network.responseReceivedExtraInfo": 27,
+        "Page.frameNavigated": 1,
+        "Network.policyUpdated": 1,
+        "Network.dataReceived": 72,
+        "Network.requestServedFromCache": 2,
+        "Network.loadingFinished": 33,
+        "Page.domContentEventFired": 1,
+        "Network.resourceChangedPriority": 1,
+        "Page.navigatedWithinDocument": 10,
+        "Page.loadEventFired": 1,
+        "Page.frameStoppedLoading": 10,
+        "Page.frameScheduledNavigation": 9,
+        "Page.frameClearedScheduledNavigation": 9,
+        "Network.loadingFailed": 1
+      },
+      "failed": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-SEKQT6DTT1&gtm=45je6ae1v9260183290za208zd9260183290xf1&_p=1792164476213&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&cid=562799803.1785937133&frm=0&ngs=1&pscdl=noapi&rcb=14&sr=390x844&uaa=arm&uab=64&uafvl=Not%253FA_Brand%3B24.0.0.0%7CChromium%3B152.0.7977.54&uam=&uamb=0&uap=macOS&uapv=26.6.1&uaw=0&ul=en&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385422~120469145~120469153~121246026~121246034~121284208&sid=1792163956&sct=83&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fzh%2Fhouse-upgrade-stardew&dt=%E6%98%9F%E9%9C%B2%E8%B0%B7%E6%88%BF%E5%B1%8B%E5%8D%87%E7%BA%A7%EF%BC%9A%E7%AC%AC%E4%BA%8C%E6%A1%A3%E6%98%AF65%2C000%E9%87%91%E5%92%8C100%E7%A1%AC%E6%9C%A8&en=page_view&_ee=1&tfd=5150",
+          "errorText": "net::ERR_ABORTED",
+          "type": "Fetch",
+          "canceled": true
+        }
+      ],
+      "badStatus": [],
+      "consoleCalls": []
+    }
+  },
+  "mobile-language": {
+    "forward": {
+      "options": [
+        {
+          "text": "English",
+          "href": "/house-upgrade-stardew"
+        },
+        {
+          "text": "中文",
+          "href": "/zh/house-upgrade-stardew"
+        }
+      ],
+      "landed": "http://127.0.0.1:3010/zh/house-upgrade-stardew"
+    },
+    "back": {
+      "options": [
+        {
+          "text": "English",
+          "href": "/house-upgrade-stardew"
+        },
+        {
+          "text": "中文",
+          "href": "/zh/house-upgrade-stardew"
+        }
+      ],
+      "landed": "http://127.0.0.1:3010/house-upgrade-stardew"
+    }
+  }
+}

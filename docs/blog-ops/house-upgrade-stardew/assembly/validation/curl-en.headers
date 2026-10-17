@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Content-Length: 113755
+Content-Disposition: inline; filename="house-upgrade-stardew.html"
+Accept-Ranges: bytes
+ETag: "f110ee1c9411d38384f6cd4a0e76cd643fa5cec2"
+Content-Type: text/html; charset=utf-8
+Vary: Accept-Encoding
+Date: Fri, 16 Oct 2026 15:12:30 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+en_http=200 time=0.019226

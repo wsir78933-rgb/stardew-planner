@@ -1,0 +1,67 @@
+{
+  "recordType": "internal-media-rebind",
+  "publicHandoff": false,
+  "provenanceFileEdited": false,
+  "originalProvenanceSha256": "4849463e179846c47da8136c4356fdb8327975841f965ce90ba801a753b8a9f5",
+  "originalBoundBodySha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+  "originalBoundMediaTextSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+  "reboundLockedBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "meaning": "alt, caption, and inImageText match the v1 media-text file that provenance was built from. inImageText also matches provenance. The six raster hashes match that provenance. Those unchanged assets are rebound here to the locked v4 body. Provenance itself still names the v1 body hash.",
+  "placementDifference": "tier-rooms placement text changed from the v1 sentence about H2 The three farmhouse upgrades to the current sentence about the kitchen, nursery, and cellar section. alt, caption, inImageText, and the rasters did not change.",
+  "assets": [
+    {
+      "mediaId": "cover-payments",
+      "filename": "house-upgrade-stardew-cover.webp",
+      "publicUrl": "/blog/house-upgrade-stardew-cover.webp",
+      "sha256": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+      "byteSize": 72418,
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "mediaId": "cover-payments",
+      "filename": "house-upgrade-stardew-cover.avif",
+      "publicUrl": "/blog/house-upgrade-stardew-cover.avif",
+      "sha256": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+      "byteSize": 39621,
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "mediaId": "tier-rooms",
+      "filename": "tier-rooms.en.webp",
+      "publicUrl": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "sha256": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+      "byteSize": 70092,
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "mediaId": "tier-rooms",
+      "filename": "tier-rooms.en.avif",
+      "publicUrl": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "sha256": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+      "byteSize": 38764,
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "mediaId": "upgrade-or-renovation",
+      "filename": "upgrade-or-renovation.en.webp",
+      "publicUrl": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "sha256": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+      "byteSize": 68194,
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "mediaId": "upgrade-or-renovation",
+      "filename": "upgrade-or-renovation.en.avif",
+      "publicUrl": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "sha256": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+      "byteSize": 36133,
+      "width": 1672,
+      "height": 941
+    }
+  ]
+}

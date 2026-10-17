@@ -1,0 +1,129 @@
+{
+  "locale": "en",
+  "articleSlug": "house-upgrade-stardew",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "bodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "note": "factIds are for reviewers and are not part of the reader draft. G binds files from these alt, caption, and inImageText strings.",
+  "figures": [
+    {
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "placement": "article-header",
+      "src": "/blog/house-upgrade-stardew-cover.webp",
+      "siblingAvif": "/blog/house-upgrade-stardew-cover.avif",
+      "alt": "Three payment stages: Upgrade 1 with 10,000g, 450 Wood, and 3 days; Upgrade 2 with 65,000g, 100 Hardwood, and 3 days; Upgrade 3 with 100,000g and 3 days.",
+      "caption": "Schematic. Upgrade 1 shows 10,000g, 450 Wood, and 3 days. Upgrade 2 shows 65,000g, 100 Hardwood, and 3 days. Upgrade 3 shows 100,000g and 3 days.",
+      "inImageText": [
+        "Upgrade 1",
+        "10,000g",
+        "450 Wood",
+        "3 days",
+        "Upgrade 2",
+        "65,000g",
+        "100 Hardwood",
+        "3 days",
+        "Upgrade 3",
+        "100,000g",
+        "3 days"
+      ],
+      "factIds": [
+        "T-upgrade-1",
+        "T-upgrade-2",
+        "T-upgrade-3",
+        "T-days",
+        "T-cost-1.6"
+      ],
+      "factSources": [
+        {
+          "label": "Farmhouse",
+          "url": "https://stardewvalleywiki.com/Farmhouse"
+        },
+        {
+          "label": "Carpenter's Shop",
+          "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+        },
+        {
+          "label": "Version History",
+          "url": "https://stardewvalleywiki.com/Version_History"
+        }
+      ]
+    },
+    {
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "placement": "Inside H2 What the kitchen, nursery, and cellar are for, after the Nursery sentence.",
+      "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "siblingAvif": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "alt": "Three labeled stages: Upgrade 1 with Kitchen and Bedroom, Upgrade 2 with Empty room and Nursery, Upgrade 3 with Cellar and Same exterior, and a shared line reading 9×5 outdoors.",
+      "caption": "Schematic. Upgrade 1 is labeled Kitchen and Bedroom. Upgrade 2 is labeled Empty room and Nursery. Upgrade 3 is labeled Cellar and Same exterior. A shared line reads 9×5 outdoors.",
+      "inImageText": [
+        "Upgrade 1",
+        "Kitchen",
+        "Bedroom",
+        "Upgrade 2",
+        "Empty room",
+        "Nursery",
+        "Upgrade 3",
+        "Cellar",
+        "Same exterior",
+        "9×5 outdoors"
+      ],
+      "factIds": [
+        "T-upgrade-1",
+        "T-upgrade-2",
+        "T-upgrade-3",
+        "T-footprint",
+        "T-days"
+      ],
+      "factSources": [
+        {
+          "label": "Farmhouse",
+          "url": "https://stardewvalleywiki.com/Farmhouse"
+        },
+        {
+          "label": "Carpenter's Shop",
+          "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+        }
+      ]
+    },
+    {
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "placement": "At the start of H2 A renovation is not the next upgrade.",
+      "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "siblingAvif": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "alt": "Two paths and two examples: Upgrade with 3 days; Renovation with After upgrade 2, Instant, and Refunds gold; Remove crib with Free; Dining room with 150,000g.",
+      "caption": "Schematic. The upgrade path reads Upgrade and 3 days. The renovation path reads Renovation, After upgrade 2, Instant, and Refunds gold. Remove crib reads Free. Dining room reads 150,000g.",
+      "inImageText": [
+        "Upgrade",
+        "3 days",
+        "Renovation",
+        "After upgrade 2",
+        "Instant",
+        "Refunds gold",
+        "Remove crib",
+        "Free",
+        "Dining room",
+        "150,000g"
+      ],
+      "factIds": [
+        "T-renovation-rule",
+        "T-renovation-prices",
+        "T-upgrade-3",
+        "T-days"
+      ],
+      "factSources": [
+        {
+          "label": "Carpenter's Shop",
+          "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+        },
+        {
+          "label": "Farmhouse",
+          "url": "https://stardewvalleywiki.com/Farmhouse"
+        }
+      ]
+    }
+  ]
+}

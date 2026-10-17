@@ -1,0 +1,474 @@
+{
+  "kind": "AssemblyManifest",
+  "slug": "house-upgrade-stardew",
+  "recordedAt": "2026-10-16T14:59:35Z",
+  "assemblyStatus": "local-registry-and-media-bound",
+  "userFinalReview": "pending",
+  "productionDeployed": false,
+  "pageBrowserPassClaimed": false,
+  "textRewritten": false,
+  "buildTypecheckAndTestsRunByThisOwner": false,
+  "routes": {
+    "en": {
+      "identityPath": "/house-upgrade-stardew/",
+      "canonicalPath": "/house-upgrade-stardew",
+      "canonicalUrl": "https://stardewvalleyplanner.art/house-upgrade-stardew",
+      "locale": "en"
+    },
+    "zh-CN": {
+      "identityPath": "/zh/house-upgrade-stardew/",
+      "canonicalPath": "/zh/house-upgrade-stardew",
+      "canonicalUrl": "https://stardewvalleyplanner.art/zh/house-upgrade-stardew",
+      "locale": "zh-CN",
+      "pathPrefix": "/zh"
+    }
+  },
+  "countsAfterAppend": {
+    "blogPostSlugs": 26,
+    "canonicalPublicPaths": 32,
+    "localizedRouteEntries": 64,
+    "indexableRouteEntries": 62,
+    "sitemapLocExpectedAfterWebpackExport": 62,
+    "latestVisiblePosts": [
+      "house-upgrade-stardew",
+      "how-to-harvest-stardew-valley",
+      "oak-tree-vs-maple-stardew",
+      "stardew-fruit",
+      "what-to-grow-in-greenhouse-stardew",
+      "profit-margin-stardew"
+    ]
+  },
+  "handoffs": {
+    "en": {
+      "path": "docs/blog-ops/house-upgrade-stardew/handoff/public/en.json",
+      "fileSha256": "cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3",
+      "bodyHash": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+      "publicFieldsSha256": "c3c2c5f3b06206e13403e6fefb9573713502f32b5c172402e21fcc1dc1437042"
+    },
+    "zh-CN": {
+      "path": "docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json",
+      "fileSha256": "0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c",
+      "bodyHash": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+      "englishBodyHash": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+      "publicFieldsSha256": "d535eaacd441c15006e1e3189e6aac6d7c25162f02bbd68984befe9d35329d94"
+    }
+  },
+  "articles": {
+    "en": {
+      "module": "src/blog/articles/house-upgrade-stardew.en.tsx",
+      "publicExport": "HouseUpgradeStardewEnglishArticle",
+      "presentAtIntegrationClose": true,
+      "handoffFileSha256": "cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3",
+      "bodyHash": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+      "outputSha256": null,
+      "outputSha256Owner": "English article binding report. Integration did not hash this module."
+    },
+    "zh-CN": {
+      "module": "src/blog/articles/house-upgrade-stardew.zh.tsx",
+      "publicExport": "HouseUpgradeStardewChineseArticle",
+      "presentAtIntegrationClose": true,
+      "handoffFileSha256": "0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c",
+      "bodyHash": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+      "outputSha256": null,
+      "outputSha256Owner": "Chinese article binding report. Integration did not hash this module."
+    }
+  },
+  "registryBinding": {
+    "en": {
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "description": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+      "coverAlt": "Three payment stages: Upgrade 1 with 10,000g, 450 Wood, and 3 days; Upgrade 2 with 65,000g, 100 Hardwood, and 3 days; Upgrade 3 with 100,000g and 3 days.",
+      "coverSrc": "/blog/house-upgrade-stardew-cover.webp",
+      "author": "Stardew Valley Planner Team",
+      "topic": "Stardew Valley Guides",
+      "featured": false,
+      "readTimeMinutes": 6,
+      "contentExport": "HouseUpgradeStardewEnglishArticle"
+    },
+    "zh-CN": {
+      "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+      "coverAlt": "三档付款：升级1是10,000金、450木材和3天；升级2是65,000金、100硬木和3天；升级3是100,000金和3天。",
+      "coverSrc": "/blog/house-upgrade-stardew-cover-zh.webp",
+      "author": "星露谷规划器团队",
+      "topic": "星露谷物语指南",
+      "featured": false,
+      "readTimeMinutes": 6,
+      "contentExport": "HouseUpgradeStardewChineseArticle"
+    },
+    "stringsEqualFrozenHandoff": true
+  },
+  "publicReferences": {
+    "en": {
+      "count": 12,
+      "quoteCount": 55,
+      "canonicalSha256": "8fb60e27bb241fbd5d0ffdc2190447ff683dfd4a2e1d904e7349c2f8976882e5",
+      "items": [
+        {
+          "id": "wiki-farmhouse",
+          "label": "Farmhouse",
+          "url": "https://stardewvalleywiki.com/Farmhouse",
+          "quoteCount": 21
+        },
+        {
+          "id": "wiki-carpenters-shop",
+          "label": "Carpenter's Shop",
+          "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+          "quoteCount": 15
+        },
+        {
+          "id": "wiki-version-history",
+          "label": "Version History",
+          "url": "https://stardewvalleywiki.com/Version_History",
+          "quoteCount": 2,
+          "versionNote": "1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood."
+        },
+        {
+          "id": "wiki-axes",
+          "label": "Axes",
+          "url": "https://stardewvalleywiki.com/Axes",
+          "quoteCount": 3
+        },
+        {
+          "id": "wiki-wood",
+          "label": "Wood",
+          "url": "https://stardewvalleywiki.com/Wood",
+          "quoteCount": 2
+        },
+        {
+          "id": "wiki-hardwood",
+          "label": "Hardwood",
+          "url": "https://stardewvalleywiki.com/Hardwood",
+          "quoteCount": 1
+        },
+        {
+          "id": "wiki-large-stump",
+          "label": "Large Stump",
+          "url": "https://stardewvalleywiki.com/Large_Stump",
+          "quoteCount": 3
+        },
+        {
+          "id": "wiki-large-log",
+          "label": "Large Log",
+          "url": "https://stardewvalleywiki.com/Large_Log",
+          "quoteCount": 2
+        },
+        {
+          "id": "wiki-secret-woods",
+          "label": "Secret Woods",
+          "url": "https://stardewvalleywiki.com/Secret_Woods",
+          "quoteCount": 3
+        },
+        {
+          "id": "wiki-cooking",
+          "label": "Cooking",
+          "url": "https://stardewvalleywiki.com/Cooking",
+          "quoteCount": 1
+        },
+        {
+          "id": "wiki-cask",
+          "label": "Cask",
+          "url": "https://stardewvalleywiki.com/Cask",
+          "quoteCount": 1
+        },
+        {
+          "id": "site-carpenter",
+          "label": "Robin's shop and outdoor buildings",
+          "url": "https://stardewvalleyplanner.art/carpenter-stardew",
+          "quoteCount": 1
+        }
+      ]
+    },
+    "zh-CN": {
+      "count": 12,
+      "quoteCount": 55,
+      "canonicalSha256": "40ca6b43368e468cde7537b12a470303f078611a6a6e72dca918b4ecdceaeb7c",
+      "items": [
+        {
+          "id": "wiki-farmhouse",
+          "label": "农舍",
+          "url": "https://stardewvalleywiki.com/Farmhouse",
+          "quoteCount": 21
+        },
+        {
+          "id": "wiki-carpenters-shop",
+          "label": "木匠的商店",
+          "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+          "quoteCount": 15
+        },
+        {
+          "id": "wiki-version-history",
+          "label": "版本历史",
+          "url": "https://stardewvalleywiki.com/Version_History",
+          "quoteCount": 2,
+          "versionNote": "1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。"
+        },
+        {
+          "id": "wiki-axes",
+          "label": "斧头",
+          "url": "https://stardewvalleywiki.com/Axes",
+          "quoteCount": 3
+        },
+        {
+          "id": "wiki-wood",
+          "label": "木材",
+          "url": "https://stardewvalleywiki.com/Wood",
+          "quoteCount": 2
+        },
+        {
+          "id": "wiki-hardwood",
+          "label": "硬木",
+          "url": "https://stardewvalleywiki.com/Hardwood",
+          "quoteCount": 1
+        },
+        {
+          "id": "wiki-large-stump",
+          "label": "大树桩",
+          "url": "https://stardewvalleywiki.com/Large_Stump",
+          "quoteCount": 3
+        },
+        {
+          "id": "wiki-large-log",
+          "label": "大圆木",
+          "url": "https://stardewvalleywiki.com/Large_Log",
+          "quoteCount": 2
+        },
+        {
+          "id": "wiki-secret-woods",
+          "label": "秘密森林",
+          "url": "https://stardewvalleywiki.com/Secret_Woods",
+          "quoteCount": 3
+        },
+        {
+          "id": "wiki-cooking",
+          "label": "烹饪",
+          "url": "https://stardewvalleywiki.com/Cooking",
+          "quoteCount": 1
+        },
+        {
+          "id": "wiki-cask",
+          "label": "木桶",
+          "url": "https://stardewvalleywiki.com/Cask",
+          "quoteCount": 1
+        },
+        {
+          "id": "site-carpenter",
+          "label": "罗宾的商店和室外建筑",
+          "url": "https://stardewvalleyplanner.art/carpenter-stardew",
+          "quoteCount": 1
+        }
+      ]
+    },
+    "renderedBy": "article public export via the existing BlogSources contract; integration did not rewrite quotes or URLs"
+  },
+  "interfaceAdaptation": {
+    "sharedRouteMetadataCssEdited": false,
+    "englishPage": "app/(en)/[slug]/page.tsx unchanged",
+    "chinesePage": "app/zh/[slug]/page.tsx unchanged",
+    "identityPathTrailingSlash": true,
+    "canonicalPathTrailingSlash": false,
+    "coverComponent": "existing BlogArticleContent PublicPicture",
+    "coverWidth": 1672,
+    "coverHeight": 941,
+    "fieldsAddedBeyondBlogPostMeta": [],
+    "publishedAtFromHandoff": null,
+    "publishedAtMounted": false,
+    "readTimeMinutes": 6,
+    "readTimeMeaning": "Existing integer display field for the 1085-word English length. Not a publish date and not a new factual claim.",
+    "llmsFruitLinesAdded": false
+  },
+  "media": [
+    {
+      "locale": "en",
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "publicPath": "/blog/house-upgrade-stardew-cover.webp",
+      "productPath": "public/blog/house-upgrade-stardew-cover.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp",
+      "format": "webp",
+      "sha256": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+      "bytes": 72418,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "en",
+      "mediaId": "cover-payments",
+      "role": "cover-sibling",
+      "publicPath": "/blog/house-upgrade-stardew-cover.avif",
+      "productPath": "public/blog/house-upgrade-stardew-cover.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif",
+      "format": "avif",
+      "sha256": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+      "bytes": 39621,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "en",
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp",
+      "format": "webp",
+      "sha256": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+      "bytes": 70092,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "en",
+      "mediaId": "tier-rooms",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif",
+      "format": "avif",
+      "sha256": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+      "bytes": 38764,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "en",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp",
+      "format": "webp",
+      "sha256": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+      "bytes": 68194,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "en",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif",
+      "format": "avif",
+      "sha256": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+      "bytes": 36133,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "publicPath": "/blog/house-upgrade-stardew-cover-zh.webp",
+      "productPath": "public/blog/house-upgrade-stardew-cover-zh.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp",
+      "format": "webp",
+      "sha256": "bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87",
+      "bytes": 63012,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "cover-payments",
+      "role": "cover-sibling",
+      "publicPath": "/blog/house-upgrade-stardew-cover-zh.avif",
+      "productPath": "public/blog/house-upgrade-stardew-cover-zh.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif",
+      "format": "avif",
+      "sha256": "7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926",
+      "bytes": 34529,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp",
+      "format": "webp",
+      "sha256": "d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c",
+      "bytes": 58666,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "tier-rooms",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif",
+      "format": "avif",
+      "sha256": "aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad",
+      "bytes": 31242,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp",
+      "format": "webp",
+      "sha256": "6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88",
+      "bytes": 60854,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif",
+      "format": "avif",
+      "sha256": "d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84",
+      "bytes": 32235,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0
+    }
+  ],
+  "ownedOutputSha256": {
+    "src/blog/blog-post-identities.ts": "8609af337bdf4d80b870b033a35c78e8481c8042290877a2601cab176906171f",
+    "src/blog/blog-post-registry.tsx": "e2696eb7e2473ea74a19dd9c552db732115e2da26be458bcd9af3c971317ac15",
+    "src/blog/blog-copy.ts": "57b6b0a2a8872a5f872b953bd5f2a915a3381367be8eb8b854f7273220e7072b",
+    "public/llms.txt": "7ce14311a6b79198d2afb2e7f470b1199779fb774381baa88395bfe71d110468",
+    "tests/blog/blog-post-registry.test.ts": "5240e61d291cdf52ffabd9d8054480c4c44770aba3c9cfe187f33255450d79d4",
+    "tests/blog/blog-home-state.test.ts": "d113b4319e716ea8580b487eeeaed73dbd089f0744d333b2283550714ecb950a",
+    "tests/i18n/public-route-registry.test.ts": "b38413abee2fcd457981e2a060bf0f8350dd86099fa8859d02c2b99afd39401d",
+    "tests/seo/canonical-public-routes.test.ts": "b2f04b95e375d6fdbbe856d2e9ec4c7edb0c2cfac377ff8276bfa78ef58f62ec",
+    "tests/routes/removed-public-pages.test.ts": "b1cde73e3cec67cc447c390f3450cb30250644f87ffe40d27f449cbe584886cd",
+    "tests/routes/blog-routes.test.tsx": "058a6fe60014a8703678f5cde9ed7d20103401d139fbb64feb35e75e322dd88d",
+    "public/blog/house-upgrade-stardew-cover.webp": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+    "public/blog/house-upgrade-stardew-cover.avif": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+    "public/blog/house-upgrade-stardew-cover-zh.webp": "bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87",
+    "public/blog/house-upgrade-stardew-cover-zh.avif": "7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926",
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp": "d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c",
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif": "aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad",
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp": "6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88",
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif": "d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84"
+  }
+}

@@ -1,0 +1,296 @@
+BEGIN verification-commands.log
+recorded_at_utc 2026-10-15T14:09:51Z
+date_exit 0
+workdir /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals
+png_mtime_before
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/carpenters-shop-interior.png 1792072791 178598
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/cellar-inside.png 1792072791 640720
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-indoors-tier-2.png 1792072753 27846
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-indoors-tier-3.png 1792072786 95334
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-1-starter.png 1792072791 6615
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-2-exterior.png 1792072791 4028
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-3-exterior.png 1792072791 3848
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/robin-building.png 1792072791 1750
+stat_exit 0
+FILE_COUNT 8
+---
+NAME house-indoors-tier-2.png
+BYTES 27846
+SHA256 75e3edaeb82ae5d79f8b787a0a28adf212aa1aabc73c2ba04b92af59ce91ca59
+CHUNKS IHDR:13 gAMA:4 PLTE:768 tRNS:256 IDAT:26725 IEND:0
+WIDTH 1398
+HEIGHT 576
+BIT_DEPTH 8
+COLOR_TYPE 3 indexed-color
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 805824
+EXPECTED_FILTERED_BYTES 805824
+DECODE_SIZE_MATCH True
+---
+NAME house-indoors-tier-3.png
+BYTES 95334
+SHA256 d37b3e02ff974cedb7127917450704a4d1761640ad04952341c58b49e0448789
+CHUNKS IHDR:13 gAMA:4 PLTE:768 tRNS:256 IDAT:94213 IEND:0
+WIDTH 1639
+HEIGHT 1088
+BIT_DEPTH 8
+COLOR_TYPE 3 indexed-color
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 1784320
+EXPECTED_FILTERED_BYTES 1784320
+DECODE_SIZE_MATCH True
+---
+NAME cellar-inside.png
+BYTES 640720
+SHA256 42cc21bfed4b91690ef13985f9a287a626b7d040c8cc71f472ae2e9728f474e3
+CHUNKS IHDR:13 IDAT:640663 IEND:0
+WIDTH 918
+HEIGHT 750
+BIT_DEPTH 8
+COLOR_TYPE 6 truecolor-alpha
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 2754750
+EXPECTED_FILTERED_BYTES 2754750
+DECODE_SIZE_MATCH True
+---
+NAME carpenters-shop-interior.png
+BYTES 178598
+SHA256 1e1ca78149950b1da78d529919130d10e2fda26434a5c209e81c0874d3f40d45
+CHUNKS IHDR:13 sRGB:1 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:8192 IDAT:6244 IEND:0
+WIDTH 498
+HEIGHT 394
+BIT_DEPTH 8
+COLOR_TYPE 6 truecolor-alpha
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 785242
+EXPECTED_FILTERED_BYTES 785242
+DECODE_SIZE_MATCH True
+---
+NAME house-tier-1-starter.png
+BYTES 6615
+SHA256 8bff180943bd50f528fa8083b8705520131f1e2e0d4de9fa6f650478d5d425ee
+CHUNKS IHDR:13 gAMA:4 cHRM:32 PLTE:129 tRNS:2 IDAT:6343 IEND:0
+WIDTH 432
+HEIGHT 432
+BIT_DEPTH 8
+COLOR_TYPE 3 indexed-color
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 187056
+EXPECTED_FILTERED_BYTES 187056
+DECODE_SIZE_MATCH True
+---
+NAME house-tier-2-exterior.png
+BYTES 4028
+SHA256 76055598ad71cc8bddd7b23c22cff67ac7da1b7b3c54b597b1a71b5535d7fea1
+CHUNKS IHDR:13 gAMA:4 PLTE:210 tRNS:2 IDAT:3719 IEND:0
+WIDTH 144
+HEIGHT 144
+BIT_DEPTH 8
+COLOR_TYPE 3 indexed-color
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 20880
+EXPECTED_FILTERED_BYTES 20880
+DECODE_SIZE_MATCH True
+---
+NAME house-tier-3-exterior.png
+BYTES 3848
+SHA256 dd9ae705cea51f0c11a9aa80418af0ca9cca97b62dd38de884ef3919834dcc8c
+CHUNKS IHDR:13 gAMA:4 PLTE:144 tRNS:3 IDAT:3604 IEND:0
+WIDTH 145
+HEIGHT 144
+BIT_DEPTH 8
+COLOR_TYPE 3 indexed-color
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 21024
+EXPECTED_FILTERED_BYTES 21024
+DECODE_SIZE_MATCH True
+---
+NAME robin-building.png
+BYTES 1750
+SHA256 e141ef57ab7c8a7904da58904264c4df247794d13c6bb49fba0d9be9810f3e7e
+CHUNKS IHDR:13 gAMA:4 tEXt:25 IDAT:1640 IEND:0
+WIDTH 90
+HEIGHT 131
+BIT_DEPTH 8
+COLOR_TYPE 6 truecolor-alpha
+COMPRESSION 0
+FILTER 0
+INTERLACE 0
+IHDR_CRC_OK True
+IDAT_INFLATED 47291
+EXPECTED_FILTERED_BYTES 47291
+DECODE_SIZE_MATCH True
+---
+DECODE_MATCH_COUNT 8/8
+python_exit 0
+===== file/sips/wc/shasum =====
+===== house-indoors-tier-2.png =====
+PNG image data, 1398 x 576, 8-bit colormap, non-interlaced
+file_exit 0
+sips_exit 1
+27846
+wc_exit 0
+75e3edaeb82ae5d79f8b787a0a28adf212aa1aabc73c2ba04b92af59ce91ca59  house-indoors-tier-2.png
+shasum_exit 0
+===== house-indoors-tier-3.png =====
+PNG image data, 1639 x 1088, 8-bit colormap, non-interlaced
+file_exit 0
+sips_exit 1
+95334
+wc_exit 0
+d37b3e02ff974cedb7127917450704a4d1761640ad04952341c58b49e0448789  house-indoors-tier-3.png
+shasum_exit 0
+===== cellar-inside.png =====
+PNG image data, 918 x 750, 8-bit/color RGBA, non-interlaced
+file_exit 0
+sips_exit 1
+640720
+wc_exit 0
+42cc21bfed4b91690ef13985f9a287a626b7d040c8cc71f472ae2e9728f474e3  cellar-inside.png
+shasum_exit 0
+===== carpenters-shop-interior.png =====
+PNG image data, 498 x 394, 8-bit/color RGBA, non-interlaced
+file_exit 0
+sips_exit 1
+178598
+wc_exit 0
+1e1ca78149950b1da78d529919130d10e2fda26434a5c209e81c0874d3f40d45  carpenters-shop-interior.png
+shasum_exit 0
+===== house-tier-1-starter.png =====
+PNG image data, 432 x 432, 8-bit colormap, non-interlaced
+file_exit 0
+sips_exit 1
+6615
+wc_exit 0
+8bff180943bd50f528fa8083b8705520131f1e2e0d4de9fa6f650478d5d425ee  house-tier-1-starter.png
+shasum_exit 0
+===== house-tier-2-exterior.png =====
+PNG image data, 144 x 144, 8-bit colormap, non-interlaced
+file_exit 0
+sips_exit 1
+4028
+wc_exit 0
+76055598ad71cc8bddd7b23c22cff67ac7da1b7b3c54b597b1a71b5535d7fea1  house-tier-2-exterior.png
+shasum_exit 0
+===== house-tier-3-exterior.png =====
+PNG image data, 145 x 144, 8-bit colormap, non-interlaced
+file_exit 0
+sips_exit 1
+3848
+wc_exit 0
+dd9ae705cea51f0c11a9aa80418af0ca9cca97b62dd38de884ef3919834dcc8c  house-tier-3-exterior.png
+shasum_exit 0
+===== robin-building.png =====
+PNG image data, 90 x 131, 8-bit/color RGBA, non-interlaced
+file_exit 0
+sips_exit 1
+1750
+wc_exit 0
+e141ef57ab7c8a7904da58904264c4df247794d13c6bb49fba0d9be9810f3e7e  robin-building.png
+shasum_exit 0
+FILE_EXIT0_COUNT 8/8
+SIPS_EXIT0_COUNT 0/8
+WC_EXIT0_COUNT 8/8
+SHASUM_EXIT0_COUNT 8/8
+END verification-commands.log
+===== sips rerun: no double-dash; prior sips_exit 1 was the -- argument =====
+sips_rerun_utc 2026-10-15T14:10:09Z
+date_exit 0
+===== house-indoors-tier-2.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-indoors-tier-2.png
+  format: png
+  formatOptions: default
+  pixelWidth: 1398
+  pixelHeight: 576
+  hasAlpha: yes
+sips_exit 0
+===== house-indoors-tier-3.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-indoors-tier-3.png
+  format: png
+  formatOptions: default
+  pixelWidth: 1639
+  pixelHeight: 1088
+  hasAlpha: yes
+sips_exit 0
+===== cellar-inside.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/cellar-inside.png
+  format: png
+  formatOptions: default
+  pixelWidth: 918
+  pixelHeight: 750
+  hasAlpha: yes
+sips_exit 0
+===== carpenters-shop-interior.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/carpenters-shop-interior.png
+  format: png
+  formatOptions: default
+  pixelWidth: 498
+  pixelHeight: 394
+  hasAlpha: yes
+sips_exit 0
+===== house-tier-1-starter.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-1-starter.png
+  format: png
+  formatOptions: default
+  pixelWidth: 432
+  pixelHeight: 432
+  hasAlpha: yes
+sips_exit 0
+===== house-tier-2-exterior.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-2-exterior.png
+  format: png
+  formatOptions: default
+  pixelWidth: 144
+  pixelHeight: 144
+  hasAlpha: yes
+sips_exit 0
+===== house-tier-3-exterior.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-3-exterior.png
+  format: png
+  formatOptions: default
+  pixelWidth: 145
+  pixelHeight: 144
+  hasAlpha: yes
+sips_exit 0
+===== robin-building.png =====
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/robin-building.png
+  format: png
+  formatOptions: default
+  pixelWidth: 90
+  pixelHeight: 131
+  hasAlpha: yes
+sips_exit 0
+SIPS_RERUN_EXIT0_COUNT 8/8
+===== png_mtime_after_doc_edits =====
+png_after_utc 2026-10-15T14:11:51Z
+date_exit 0
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/carpenters-shop-interior.png 1792072791 178598
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/cellar-inside.png 1792072791 640720
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-indoors-tier-2.png 1792072753 27846
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-indoors-tier-3.png 1792072786 95334
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-1-starter.png 1792072791 6615
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-2-exterior.png 1792072791 4028
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/house-tier-3-exterior.png 1792072791 3848
+/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-research/originals/robin-building.png 1792072791 1750
+stat_after_exit 0

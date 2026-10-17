@@ -1,0 +1,51 @@
+▲ Next.js 16.3.0 (webpack)
+✓ Running next.config.ts took 20ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 12.7s
+  Running TypeScript ...
+  Finished TypeScript in 7.3s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/66) ...
+  Generating static pages using 11 workers (16/66) 
+  Generating static pages using 11 workers (32/66) 
+  Generating static pages using 11 workers (49/66) 
+✓ Generating static pages using 11 workers (66/66) in 513ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├   /[slug]
+│ ├ ● /carpenter-stardew
+│ ├ ● /where-is-robin-stardew-valley
+│ ├ ● /stardew-valley-npc
+│ └ ● [+22 more paths]
+├ ○ /blog
+├ ○ /blog/archive
+├ ○ /contact
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+├ ○ /terms
+├ ○ /zh
+├   /zh/[slug]
+│ ├ ● /zh/carpenter-stardew
+│ ├ ● /zh/where-is-robin-stardew-valley
+│ ├ ● /zh/stardew-valley-npc
+│ └ ● [+22 more paths]
+├ ○ /zh/blog
+├ ○ /zh/blog/archive
+├ ○ /zh/contact
+├ ○ /zh/privacy
+└ ○ /zh/terms
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+
+EXIT_CODE=0

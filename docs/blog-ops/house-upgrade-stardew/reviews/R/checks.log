@@ -1,0 +1,266 @@
+# Checks log: house-upgrade-stardew technical review (Reviewer R)
+
+Date: 2026-10-16 (Asia/Shanghai)
+Worker: Reviewer R (independent technical reviewer)
+Worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+HEAD: bf91a14829067ed1c9c2a206a97985e17dbebdda
+Dispatch ID: ctx_ca532d4cb3a6
+Task ID: task_76678cebd162
+Coordinator Handle: term_661abce7-55fd-4570-8bf5-970c0451dd23
+
+================================================================================
+1. Orchestration mailbox check
+================================================================================
+Command:
+  orca orchestration check --terminal term_879c6884-a3ea-4050-882d-54460fc973b3 --json
+Exit code: 0
+Result:
+  Received coordinator directive msg_0c0f08831e7e:
+  - Scope: Technical review of assembly outputs only; E browser review in parallel on 127.0.0.1:3010.
+  - Prohibition: Strictly no build, test, typecheck, or modifications to public/out/product files.
+  - Allowed files to create: reviews/R/report.md, reviews/R/checks.log.
+  - Clarifications:
+    * 12 code/test paths (10 tracked + 2 new articles) + 12 media files.
+    * tests/blog/house-upgrade-stardew-identity.test.ts was intentionally omitted (coverage already provided by registry and route tests).
+    * zh-bindings.md byte count recorded 9658 (clerical typo), actual size is 14218 bytes (SHA-256 matched exactly).
+    * AssemblyManifest article output hashes are null by integration ownership design; binding reports + validation reports verify true module hashes.
+    * Vitest interface suite has 8 historical failures (exit 1), 6 updated tests all pass.
+    * Vitest full suite has 12 failures (exit 1, including 4 unrelated repository tests), full suite remains FAIL as historical baseline limitation.
+
+================================================================================
+2. Git status and scope of modifications
+================================================================================
+Command:
+  git status --short
+Exit code: 0
+Output:
+   M next-env.d.ts
+   M public/llms.txt
+   M src/blog/blog-copy.ts
+   M src/blog/blog-post-identities.ts
+   M src/blog/blog-post-registry.tsx
+   M tests/blog/blog-home-state.test.ts
+   M tests/blog/blog-post-registry.test.ts
+   M tests/i18n/public-route-registry.test.ts
+   M tests/routes/blog-routes.test.tsx
+   M tests/routes/removed-public-pages.test.ts
+   M tests/seo/canonical-public-routes.test.ts
+  ?? docs/blog-ops/house-upgrade-stardew/
+  ?? node_modules
+  ?? public/blog/house-upgrade-stardew-cover-zh.avif
+  ?? public/blog/house-upgrade-stardew-cover-zh.webp
+  ?? public/blog/house-upgrade-stardew-cover.avif
+  ?? public/blog/house-upgrade-stardew-cover.webp
+  ?? public/blog/illustrations/house-upgrade-stardew/
+  ?? src/blog/articles/house-upgrade-stardew.en.tsx
+  ?? src/blog/articles/house-upgrade-stardew.zh.tsx
+
+Scope analysis:
+- Code & test paths: Exactly 12 files (10 tracked edits + 2 new untracked article files).
+- Media files: Exactly 12 new files (4 cover variants in public/blog/, 8 illustration variants in public/blog/illustrations/house-upgrade-stardew/).
+- Auto-generated: next-env.d.ts (updated by next build to reference .next/types instead of .next/dev/types).
+- Shared CSS: NOT modified (app/globals.css untouched).
+- Shared routes: NOT modified (app/(en)/[slug]/page.tsx, app/zh/[slug]/page.tsx, app/sitemap.ts, app/robots.ts untouched).
+- Dependencies & configs: NOT modified (package.json, pnpm-lock.yaml, next.config.ts, tsconfig.json untouched; git diff --exit-code exited 0).
+- Rules & governance: NOT modified (AGENTS.md, CLAUDE.md untouched).
+- Old articles: NOT modified (all pre-existing articles in src/blog/articles/ untouched).
+
+================================================================================
+3. Cryptographic hash verification (SHA-256)
+================================================================================
+Command:
+  shasum -a 256 <paths>
+Exit code: 0
+
+Key file digests:
+- docs/blog-ops/house-upgrade-stardew/handoff/public/en.json:
+  cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3 [MATCH]
+- docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json:
+  0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c [MATCH]
+- docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json:
+  6ce4e84ffbcc1252f2cebd443e4ccceac5a60d29c2ceb41dd74eaabd68fc6834 [MATCH]
+- src/blog/articles/house-upgrade-stardew.en.tsx:
+  cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5 [MATCH]
+- src/blog/articles/house-upgrade-stardew.zh.tsx:
+  2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba [MATCH]
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/report.md:
+  76503d1cc1008b3fd073e6a976c5f124be56739da22dceb083c373f72d0582d6 [MATCH]
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/commands.log:
+  bfd1b169b5e4156e3272502c3cb4df08b3eba7ef37752775c7f4a3aaa63ab26d [MATCH]
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/baseline-comparison.md:
+  5f1d279ecd0a93d2aad5c4177ea09dec8c5246efbf0bbcfb25f744d11ec86b38 [MATCH]
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/preview.json:
+  fc0e91e377bdfed1ec183d38144caaa12698cf364046cf5cfa58f3f57da77e3b [MATCH]
+
+Handoff integrity verification:
+- English body UTF-8 SHA-256: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f [MATCH]
+- English publicFieldsSha256: c3c2c5f3b06206e13403e6fefb9573713502f32b5c172402e21fcc1dc1437042 [MATCH]
+- Chinese body UTF-8 SHA-256: 0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6 [MATCH]
+- Chinese publicFieldsSha256: d535eaacd441c15006e1e3189e6aac6d7c25162f02bbd68984befe9d35329d94 [MATCH]
+- Chinese integrity.englishBodyHash: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f [MATCH]
+
+Manifest owned outputs (22 items):
+  All 22 paths rehashed on disk and confirmed identical to AssemblyManifest.json ownedOutputSha256.
+
+================================================================================
+4. Media assets verification
+================================================================================
+Command:
+  sips -g pixelWidth -g pixelHeight -g format <12 files>
+Exit code: 0
+Results:
+1. public/blog/house-upgrade-stardew-cover.webp: 1672x941, webp
+2. public/blog/house-upgrade-stardew-cover.avif: 1672x941, avif
+3. public/blog/house-upgrade-stardew-cover-zh.webp: 1672x941, webp
+4. public/blog/house-upgrade-stardew-cover-zh.avif: 1672x941, avif
+5. public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp: 1672x941, webp
+6. public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif: 1672x941, avif
+7. public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp: 1672x941, webp
+8. public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif: 1672x941, avif
+9. public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp: 1672x941, webp
+10. public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif: 1672x941, avif
+11. public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp: 1672x941, webp
+12. public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif: 1672x941, avif
+Confirmation: All 12 media files are exactly 1672x941 with valid WebP and AVIF formats.
+
+================================================================================
+5. Article structural and mechanical binding checks
+================================================================================
+Python verification script output:
+- No body <h1>: 0 found in EN, 0 found in ZH.
+- No FAQ mentions: 0 found in EN, 0 found in ZH.
+- No private ops/control imports: Imports strictly restricted to:
+  * ../../components/blog/blog-sources
+  * ../../components/public-picture
+- Body PublicPicture: Exactly 2 in EN, 2 in ZH.
+  * All specify width={1672}, height={941}, loading="lazy", decoding="async".
+- BlogSources: Exactly 1 in EN (heading="Sources"), 1 in ZH (heading="来源").
+  * 12 items passed in identical order matching handoff publicReferences.
+  * Version note passed cleanly without stray ASCII space injection.
+  * Exactly 1 planner CTA rendered internally by BlogSources; no duplicate CTA in article body.
+- Headings:
+  * EN: 6 <h2> and 2 <h3> matching frozen handoff body headings in sequence.
+  * ZH: 6 <h2> and 2 <h3> matching frozen handoff body headings in sequence.
+- On-site link:
+  * https://stardewvalleyplanner.art/carpenter-stardew present in both locales (ZH intentionally uses approved EN production URL as required).
+
+================================================================================
+6. Registry, route, and llms metadata bindings
+================================================================================
+- src/blog/blog-post-identities.ts:
+  * Appended "house-upgrade-stardew" at index 25 (total 26 slugs).
+- src/blog/blog-post-registry.tsx:
+  * Imported HouseUpgradeStardewEnglishArticle and HouseUpgradeStardewChineseArticle.
+  * Registered at index 25 for both locales with:
+    - featured: false
+    - readTimeMinutes: 6
+    - coverImage: /blog/house-upgrade-stardew-cover.webp (EN), /blog/house-upgrade-stardew-cover-zh.webp (ZH)
+    - alt: matches frozen handoff cover alt exactly.
+    - author & topic: Stardew Valley Planner Team / Stardew Valley Guides (EN), 星露谷规划器团队 / 星露谷物语指南 (ZH).
+- src/blog/blog-copy.ts:
+  * Added "house-upgrade-stardew": "/house-upgrade-stardew" (EN)
+  * Added "house-upgrade-stardew": "/zh/house-upgrade-stardew" (ZH)
+- public/llms.txt:
+  * Appended 1 EN bullet and 1 ZH bullet with frozen title, description, and canonical URL.
+  * No stardew-fruit changes made (existing baseline failure preserved).
+
+================================================================================
+7. Rendered HTML, SEO, and static export checks
+================================================================================
+Verified against out/house-upgrade-stardew.html and out/zh/house-upgrade-stardew.html:
+- Document title: Matches frozen handoff title exactly.
+- Meta description: Matches frozen handoff description exactly.
+- Single <h1>: Exactly 1 per page, matching title.
+- Canonical link:
+  * EN: https://stardewvalleyplanner.art/house-upgrade-stardew
+  * ZH: https://stardewvalleyplanner.art/zh/house-upgrade-stardew
+- hreflang alternates:
+  * en: https://stardewvalleyplanner.art/house-upgrade-stardew
+  * zh-CN: https://stardewvalleyplanner.art/zh/house-upgrade-stardew
+  * x-default: https://stardewvalleyplanner.art/house-upgrade-stardew
+- OpenGraph & Twitter tags:
+  * og:title, og:description, og:url, og:image, og:type ("article"), twitter:card ("summary_large_image") all correct.
+- out/sitemap.xml:
+  * Total <loc> count: 62 (previously 60; +2 for bilingual house-upgrade routes).
+  * Both https://stardewvalleyplanner.art/house-upgrade-stardew and https://stardewvalleyplanner.art/zh/house-upgrade-stardew present.
+- out/llms.txt:
+  * Exact match with public/llms.txt.
+
+================================================================================
+8. Raw validation logs audit
+================================================================================
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/typecheck.txt:
+  * Command: tsc --noEmit
+  * Exit: 0 (TYPECHECK_EXIT=0)
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/build-webpack.txt:
+  * Command: NEXT_TELEMETRY_DISABLED=1 pnpm exec next build --webpack
+  * Exit: 0 (BUILD_EXIT=0)
+  * Output: 68 static pages generated (66 HTML files).
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/vitest-interface.txt:
+  * Exit: 1 (VITEST_INTERFACE_EXIT=1)
+  * Result: 8 failed, 237 passed (245 tests).
+  * Breakdown: The 8 failures are identical to the 2026-10-15 historical baseline (AVIF derivative test expected 81, received 108 due to 6 new WebP files; Pine tree guide markup assertions; llms missing fruit URL; static public pages missing covers/order/CSS path).
+  * All 6 updated tests covering house-upgrade-stardew passed completely:
+    - tests/blog/blog-post-registry.test.ts (20 passed)
+    - tests/blog/blog-home-state.test.ts (18 passed)
+    - tests/i18n/public-route-registry.test.ts (4 passed)
+    - tests/seo/canonical-public-routes.test.ts (1 passed)
+    - tests/routes/removed-public-pages.test.ts (3 passed)
+    - tests/routes/blog-routes.test.tsx (19 passed)
+    - tests/blog/blog-planner-cta.test.tsx (8 passed)
+  * Zero new regressions introduced in interface test set.
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/vitest-full.txt:
+  * Exit: 1 (VITEST_FULL_EXIT=1)
+  * Result: 12 failed, 2478 passed (2490 tests).
+  * Breakdown: 8 historical interface failures + 4 repository-level failures (catalog-loader allowedTools fill, local-planner-resource-smoke timeout, and 2 how-to-harvest reader text tests).
+  * None of the 12 failures are related to or caused by house-upgrade-stardew.
+  * Full suite remains FAIL due to pre-existing baseline failures; recorded truthfully as an expected environment constraint.
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/render-check-corrected.txt:
+  * Command: HTML static DOM sources comparison
+  * Exit: 0 (CORRECTED_ERROR_COUNT=0 across 12 references in both locales).
+
+================================================================================
+9. Preview server status
+================================================================================
+- docs/blog-ops/house-upgrade-stardew/assembly/validation/preview.json:
+  * Process: pnpm exec serve out -l tcp://127.0.0.1:3010
+  * PID: 21887
+  * Active listener: 127.0.0.1:3010
+  * curl-en.headers: HTTP 200 OK (Content-Length: 113755)
+  * curl-zh.headers: HTTP 200 OK (Content-Length: 111805)
+  * Served body hashes match out/house-upgrade-stardew.html and out/zh/house-upgrade-stardew.html.
+
+================================================================================
+10. Architectural and engineering principles evaluation
+================================================================================
+1. High cohesion & low coupling:
+   - Article components encapsulate content cleanly.
+   - Public imports only (PublicPicture, BlogSources). No private ops imports.
+   - Registry and identities cleanly decoupled.
+2. Single responsibility principle (SRP):
+   - English module uses focused sub-renderers orchestrated by HouseUpgradeStardewEnglishArticle.
+   - Chinese module directly renders article elements cleanly.
+3. Public interface communication:
+   - Exported functions: HouseUpgradeStardewEnglishArticle, HouseUpgradeStardewChineseArticle.
+   - Registry imports public exports only.
+4. KISS:
+   - Direct JSX elements, simple semantic structure. No redundant abstractions or complexity.
+5. Fail fast & data integrity:
+   - Registry validation verifies order, slug uniqueness, and covers on startup.
+   - Missing slugs trigger notFound().
+6. YAGNI:
+   - No premature generalizations or unused CMS fields.
+7. Precise naming:
+   - Explicit, unambiguous component, asset, and route identifiers. No generic "data"/"temp" names.
+
+================================================================================
+11. Commands not executed by Reviewer R and rationale
+================================================================================
+Commands NOT run:
+- pnpm typecheck
+- pnpm build / next build
+- pnpm test / vitest run
+- Service restart / kill commands
+Rationale:
+- Strict mandate in task instructions: "禁止修复、build/test/typecheck或改静态预览产物（E浏览器同批正在验收）".
+- Reviewer R is strictly an independent technical reviewer verifying existing raw evidence, logs, hashes, and code diffs without disrupting the running preview server or parallel browser reviews.

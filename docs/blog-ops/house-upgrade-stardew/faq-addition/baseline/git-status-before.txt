@@ -1,0 +1,19 @@
+ M public/llms.txt
+ M src/blog/blog-copy.ts
+ M src/blog/blog-post-identities.ts
+ M src/blog/blog-post-registry.tsx
+ M tests/blog/blog-home-state.test.ts
+ M tests/blog/blog-post-registry.test.ts
+ M tests/i18n/public-route-registry.test.ts
+ M tests/routes/blog-routes.test.tsx
+ M tests/routes/removed-public-pages.test.ts
+ M tests/seo/canonical-public-routes.test.ts
+?? docs/blog-ops/house-upgrade-stardew/
+?? node_modules
+?? public/blog/house-upgrade-stardew-cover-zh.avif
+?? public/blog/house-upgrade-stardew-cover-zh.webp
+?? public/blog/house-upgrade-stardew-cover.avif
+?? public/blog/house-upgrade-stardew-cover.webp
+?? public/blog/illustrations/house-upgrade-stardew/
+?? src/blog/articles/house-upgrade-stardew.en.tsx
+?? src/blog/articles/house-upgrade-stardew.zh.tsx

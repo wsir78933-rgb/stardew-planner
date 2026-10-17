@@ -1,0 +1,70 @@
+{
+  "taskId": "task_5f86ad3df7c9",
+  "dispatchId": "ctx_6cd2324b9e16",
+  "userAestheticAcceptance": false,
+  "imageVerdict": "no-blocker",
+  "betterThanPrevious": "not-compared",
+  "originals": {
+    "cover": {
+      "path": "/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "7c84c7df12916d48c255b18dfa4a1ee38e2cee1c96bba9a4aa985468d18997ae",
+      "verdict": "pass",
+      "sees": "one farmhouse centered, roof and porch intact"
+    },
+    "interior": {
+      "path": "/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "342a247c8d198c86a06129276a310a6d7444eb86c2a46d6b0422b31edcf26f99",
+      "verdict": "pass",
+      "sees": "kitchen, double-bed bedroom, crib room with two single beds"
+    },
+    "construction": {
+      "path": "/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "1cc6bf81b2339c4daf90526d11112c21fb5e68b1fe08ec1ba02ba3f6874aa401",
+      "verdict": "pass",
+      "sees": "open timber frame and a raised hammer"
+    }
+  },
+  "defects": [],
+  "notes": [
+    {
+      "severity": "info",
+      "item": "caption",
+      "detail": "Original illustration of one farmhouse, one interior, and an unnamed carpenter. Not an official screenshot or exact game floor plan. Do not call the single beds bunk beds."
+    },
+    {
+      "severity": "info",
+      "item": "pixel-scale",
+      "detail": "Outlined pixel shapes with fine per-pixel shading, not large uniform texels."
+    }
+  ],
+  "textCheck": {
+    "tesseractExit": 0,
+    "language": "eng",
+    "psm": 11,
+    "visibleTextFound": false,
+    "openedFalsePositives": ["window glow", "bricks", "door panes", "overalls", "leaves", "curtains", "book color blocks"]
+  },
+  "exportsViewed": {
+    "avifFull": ["cover", "interior", "construction"],
+    "webpFull": ["cover", "interior", "construction"],
+    "detailCrops": ["cover roof", "construction hammer", "interior books"],
+    "blurOrFringe": false,
+    "directWebpRead": "failed: webp codec not registered",
+    "viewMethod": "Pillow decode to PNG in reviews/art/export-preview, then Read"
+  },
+  "uncovered": [
+    "no comparison to previous images",
+    "no browser page check",
+    "no Chinese OCR language pack",
+    "OCR boxes below confidence 40 not each opened"
+  ]
+}

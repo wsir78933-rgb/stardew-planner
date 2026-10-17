@@ -1,0 +1,176 @@
+[p1 "Stardew Valley Planner – Free Online Farm Layout Tool" | space "house upgrade stardew research"(91): 1 managed, 0 untracked — p1* "Stardew Valley Planner – Free Online Farm Layout Tool"]
+root
+  container
+    container
+      status
+        text "Loading local planner resources…"
+      container
+        container "Editor navigation"
+          container
+            text "Stardew Planner"
+            group "Help and feedback"
+              button "Help" [ref=128, loc=css:button[aria-label="Help"]]
+                svg_root
+              button "Keyboard shortcuts" [ref=129]
+                svg_root
+              button "Feedback" [ref=130, loc=css:button[aria-label="Feedback"]]
+                svg_root
+          container "Library"
+            button "Library" [ref=131, loc=css:button[aria-label="Library"]]
+              svg_root
+              text "Library"
+            text "›"
+            button "Current map: Farmhouse (Upgrade 2)" [ref=132, loc=css:button[aria-label="Current map: Farmhouse (Upgrade 2)"]]
+              text "Farmhouse (Upgrade 2)"
+          group "Editor options"
+            button "Ambience" [ref=133, loc=css:button[aria-label="Ambience"]]
+              svg_root
+              text "Ambience"
+              text "⌄"
+            button "Farm Settings" [ref=134, loc=css:button[aria-label="Farm Settings"]]
+              svg_root
+              text "Farm Settings"
+              text "⌄"
+            button "Map" [ref=135, loc=css:button[aria-label="Map"]]
+              svg_root
+              text "Map"
+              text "⌄"
+            button "View" [ref=136, loc=css:button[aria-label="View"]]
+              svg_root
+              text "View"
+              text "⌄"
+            button "Settings" [ref=137, loc=css:button[aria-label="Settings"]]
+              svg_root
+        toolbar "Editor tools"
+          button "Select" [ref=138, loc=css:button[aria-label="Select"]]
+            svg_root
+          button "Multi" [ref=139, loc=css:button[aria-label="Multi"]]
+            svg_root
+          button "Fill" [ref=140, loc=css:button[aria-label="Fill"]]
+            svg_root
+          button "Erase" [ref=141, loc=css:button[aria-label="Erase"]]
+            svg_root
+          button "Zoom" [ref=142, loc=css:button[aria-label="Zoom"]]
+            svg_root
+          button "Undo" [ref=143, loc=css:button[aria-label="Undo"]]
+            svg_root
+          button "Redo" [ref=144, loc=css:button[aria-label="Redo"]]
+            svg_root
+        container "Item catalog"
+          container
+            svg_root
+            searchbox "Search all items" [ref=145, loc=css:input[placeholder="Search all items"]]
+              text "Search all items"
+          tablist "Item catalog"
+            tab "Buildings" [ref=146, loc=css:button[aria-label="Buildings"]]
+              svg_root
+            tab "Crops" [ref=147, loc=css:button[aria-label="Crops"]]
+              svg_root
+            tab "Trees" [ref=148, loc=css:button[aria-label="Trees"]]
+              svg_root
+            tab "Equipment" [ref=149, loc=css:button[aria-label="Equipment"]]
+              svg_root
+            tab "Fences & Paths" [ref=150, loc=css:button[aria-label="Fences & Paths"]]
+              svg_root
+            tab "Lighting" [ref=151, loc=css:button[aria-label="Lighting"]]
+              svg_root
+            tab "Furniture" [ref=152, loc=css:button[aria-label="Furniture"]]
+              svg_root
+            tab "Decor" [ref=153, loc=css:button[aria-label="Decor"]]
+              svg_root
+          container
+            container
+              container
+                heading
+                  text "Buildings"
+                container "49"
+                  text "49"
+              group
+                button "Grid view" [ref=154, loc=css:button[aria-label="Grid view"]]
+                  svg_root
+                button "List view" [ref=155, loc=css:button[aria-label="List view"]]
+                  svg_root
+            tabpanel "Buildings"
+              list "Item catalog" [ref=156, loc=role:list[name="Item catalog"]]
+                heading
+                  text "49 ITEMS CAN'T BE PLACED HERE"
+                listitem
+                  button "Select Coop, 6 by 3 tiles. This item can only be placed outdoors." [ref=157, loc=css:button[aria-label="Select Coop, 6 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Big Coop, 6 by 3 tiles. This item can only be placed outdoors." [ref=158, loc=css:button[aria-label="Select Big Coop, 6 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Deluxe Coop, 6 by 3 tiles. This item can only be placed outdoors." [ref=159, loc=css:button[aria-label="Select Deluxe Coop, 6 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Barn, 7 by 4 tiles. This item can only be placed outdoors." [ref=160, loc=css:button[aria-label="Select Barn, 7 by 4 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Big Barn, 7 by 4 tiles. This item can only be placed outdoors." [ref=161, loc=css:button[aria-label="Select Big Barn, 7 by 4 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Deluxe Barn, 7 by 4 tiles. This item can only be placed outdoors." [ref=162, loc=css:button[aria-label="Select Deluxe Barn, 7 by 4 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Slime Hutch, 7 by 4 tiles. This item can only be placed outdoors." [ref=163, loc=css:button[aria-label="Select Slime Hutch, 7 by 4 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Mill, 4 by 2 tiles. This item can only be placed outdoors." [ref=164, loc=css:button[aria-label="Select Mill, 4 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Fish Pond, 5 by 5 tiles. This item can only be placed outdoors." [ref=165, loc=css:button[aria-label="Select Fish Pond, 5 by 5 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Shed, 7 by 3 tiles. This item can only be placed outdoors." [ref=166, loc=css:button[aria-label="Select Shed, 7 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Big Shed, 7 by 3 tiles. This item can only be placed outdoors." [ref=167, loc=css:button[aria-label="Select Big Shed, 7 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Silo, 3 by 3 tiles. This item can only be placed outdoors." [ref=168, loc=css:button[aria-label="Select Silo, 3 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Well, 3 by 3 tiles. This item can only be placed outdoors." [ref=169, loc=css:button[aria-label="Select Well, 3 by 3 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Stable, 4 by 2 tiles. This item can only be placed outdoors." [ref=170, loc=css:button[aria-label="Select Stable, 4 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Shipping Bin, 2 by 1 tiles. This item can only be placed outdoors." [ref=171, loc=css:button[aria-label="Select Shipping Bin, 2 by 1 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Junimo Hut, 3 by 2 tiles. This item can only be placed outdoors." [ref=172, loc=css:button[aria-label="Select Junimo Hut, 3 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Pet Bowl, 2 by 2 tiles. This item can only be placed outdoors." [ref=173, loc=css:button[aria-label="Select Pet Bowl, 2 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Stone Pet Bowl, 2 by 2 tiles. This item can only be placed outdoors." [ref=174, loc=css:button[aria-label="Select Stone Pet Bowl, 2 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Hay Pet Bowl, 2 by 2 tiles. This item can only be placed outdoors." [ref=175, loc=css:button[aria-label="Select Hay Pet Bowl, 2 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Earth Obelisk, 3 by 2 tiles. This item can only be placed outdoors." [ref=176, loc=css:button[aria-label="Select Earth Obelisk, 3 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Water Obelisk, 3 by 2 tiles. This item can only be placed outdoors." [ref=177, loc=css:button[aria-label="Select Water Obelisk, 3 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Desert Obelisk, 3 by 2 tiles. This item can only be placed outdoors." [ref=178, loc=css:button[aria-label="Select Desert Obelisk, 3 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Island Obelisk, 3 by 2 tiles. This item can only be placed outdoors." [ref=179, loc=css:button[aria-label="Select Island Obelisk, 3 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+                listitem
+                  button "Select Gold Clock, 3 by 2 tiles. This item can only be placed outdoors." [ref=180, loc=css:button[aria-label="Select Gold Clock, 3 by 2 tiles. This item can only be placed outdoors."]]
+                    canvas
+        container "Farm map canvas for farmhouse-2"
+          canvas
+          status
+            text "Loading local map"
+            text "farmhouse-2"
+            text "…"
+    button [ref=98]
+      text "导出外链"

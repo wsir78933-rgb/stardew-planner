@@ -1,0 +1,218 @@
+[p1 "Stardew Valley Planner – Free Online Farm Layout Tool" | space "house upgrade stardew research"(91): 1 managed, 0 untracked — p1* "Stardew Valley Planner – Free Online Farm Layout Tool"]
+root
+  container
+    container
+      container "Editor navigation"
+        container
+          text "Stardew Planner"
+          group "Help and feedback"
+            button "Help" [ref=39, loc=css:button[aria-label="Help"]]
+              svg_root
+            button "Keyboard shortcuts" [ref=40]
+              svg_root
+            button "Feedback" [ref=41, loc=css:button[aria-label="Feedback"]]
+              svg_root
+        container "Library"
+          button "Library" [ref=42, loc=css:button[aria-label="Library"]]
+            svg_root
+            text "Library"
+          text "›"
+          button "Current map: Standard Farm" [ref=43, loc=css:button[aria-label="Current map: Standard Farm"]]
+            text "Standard Farm"
+        group "Editor options"
+          button "Ambience" [ref=44, loc=css:button[aria-label="Ambience"]]
+            svg_root
+            text "Ambience"
+            text "⌄"
+          button "Farm Settings" [ref=45, loc=css:button[aria-label="Farm Settings"]]
+            svg_root
+            text "Farm Settings"
+            text "⌄"
+          button "Map" [ref=46, loc=css:button[aria-label="Map"]]
+            svg_root
+            text "Map"
+            text "⌄"
+          button "View" [ref=47, loc=css:button[aria-label="View"]]
+            svg_root
+            text "View"
+            text "⌄"
+          button "Settings" [ref=48, loc=css:button[aria-label="Settings"]]
+            svg_root
+      toolbar "Editor tools"
+        button "Select" [ref=49, loc=css:button[aria-label="Select"]]
+          svg_root
+        button "Multi" [ref=50, loc=css:button[aria-label="Multi"]]
+          svg_root
+        button "Fill" [ref=51, loc=css:button[aria-label="Fill"]]
+          svg_root
+        button "Erase" [ref=52, loc=css:button[aria-label="Erase"]]
+          svg_root
+        button "Zoom" [ref=53, loc=css:button[aria-label="Zoom"]]
+          svg_root
+        button "Undo" [ref=54, loc=css:button[aria-label="Undo"]]
+          svg_root
+        button "Redo" [ref=55, loc=css:button[aria-label="Redo"]]
+          svg_root
+      container "Item catalog"
+        container
+          svg_root
+          searchbox "Search all items" [ref=56, loc=css:input[placeholder="Search all items"]]
+            text "Search all items"
+        tablist "Item catalog"
+          tab "Buildings" [ref=57, loc=css:button[aria-label="Buildings"]]
+            svg_root
+          tab "Crops" [ref=58, loc=css:button[aria-label="Crops"]]
+            svg_root
+          tab "Trees" [ref=59, loc=css:button[aria-label="Trees"]]
+            svg_root
+          tab "Equipment" [ref=60, loc=css:button[aria-label="Equipment"]]
+            svg_root
+          tab "Fences & Paths" [ref=61, loc=css:button[aria-label="Fences & Paths"]]
+            svg_root
+          tab "Lighting" [ref=62, loc=css:button[aria-label="Lighting"]]
+            svg_root
+          tab "Furniture" [ref=63, loc=css:button[aria-label="Furniture"]]
+            svg_root
+          tab "Decor" [ref=64, loc=css:button[aria-label="Decor"]]
+            svg_root
+        container
+          container
+            container
+              heading
+                text "Buildings"
+              container "49"
+                text "49"
+            container
+              comboboxgrouping "Filter items" [ref=65, loc=css:button[aria-label="Filter items"]]
+                text "All (49)"
+                svg_root
+              group
+                button "Grid view" [ref=66, loc=css:button[aria-label="Grid view"]]
+                  svg_root
+                button "List view" [ref=67, loc=css:button[aria-label="List view"]]
+                  svg_root
+          tabpanel "Buildings"
+            list "Item catalog" [ref=68, loc=role:list[name="Item catalog"]]
+              listitem
+                button "Select Coop, 6 by 3 tiles" [ref=69, loc=css:button[aria-label="Select Coop, 6 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Big Coop, 6 by 3 tiles" [ref=70, loc=css:button[aria-label="Select Big Coop, 6 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Deluxe Coop, 6 by 3 tiles" [ref=71, loc=css:button[aria-label="Select Deluxe Coop, 6 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Barn, 7 by 4 tiles" [ref=72, loc=css:button[aria-label="Select Barn, 7 by 4 tiles"]]
+                  canvas
+              listitem
+                button "Select Big Barn, 7 by 4 tiles" [ref=73, loc=css:button[aria-label="Select Big Barn, 7 by 4 tiles"]]
+                  canvas
+              listitem
+                button "Select Deluxe Barn, 7 by 4 tiles" [ref=74, loc=css:button[aria-label="Select Deluxe Barn, 7 by 4 tiles"]]
+                  canvas
+              listitem
+                button "Select Slime Hutch, 7 by 4 tiles" [ref=75, loc=css:button[aria-label="Select Slime Hutch, 7 by 4 tiles"]]
+                  canvas
+              listitem
+                button "Select Mill, 4 by 2 tiles" [ref=76, loc=css:button[aria-label="Select Mill, 4 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Fish Pond, 5 by 5 tiles" [ref=77, loc=css:button[aria-label="Select Fish Pond, 5 by 5 tiles"]]
+                  canvas
+              listitem
+                button "Select Shed, 7 by 3 tiles" [ref=78, loc=css:button[aria-label="Select Shed, 7 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Big Shed, 7 by 3 tiles" [ref=79, loc=css:button[aria-label="Select Big Shed, 7 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Silo, 3 by 3 tiles" [ref=80, loc=css:button[aria-label="Select Silo, 3 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Well, 3 by 3 tiles" [ref=81, loc=css:button[aria-label="Select Well, 3 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Stable, 4 by 2 tiles" [ref=82, loc=css:button[aria-label="Select Stable, 4 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Shipping Bin, 2 by 1 tiles" [ref=83, loc=css:button[aria-label="Select Shipping Bin, 2 by 1 tiles"]]
+                  canvas
+              listitem
+                button "Select Junimo Hut, 3 by 2 tiles" [ref=84, loc=css:button[aria-label="Select Junimo Hut, 3 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Pet Bowl, 2 by 2 tiles" [ref=85, loc=css:button[aria-label="Select Pet Bowl, 2 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Stone Pet Bowl, 2 by 2 tiles" [ref=86, loc=css:button[aria-label="Select Stone Pet Bowl, 2 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Hay Pet Bowl, 2 by 2 tiles" [ref=87, loc=css:button[aria-label="Select Hay Pet Bowl, 2 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Earth Obelisk, 3 by 2 tiles" [ref=88, loc=css:button[aria-label="Select Earth Obelisk, 3 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Water Obelisk, 3 by 2 tiles" [ref=89, loc=css:button[aria-label="Select Water Obelisk, 3 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Desert Obelisk, 3 by 2 tiles" [ref=90, loc=css:button[aria-label="Select Desert Obelisk, 3 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Island Obelisk, 3 by 2 tiles" [ref=91, loc=css:button[aria-label="Select Island Obelisk, 3 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Gold Clock, 3 by 2 tiles" [ref=92, loc=css:button[aria-label="Select Gold Clock, 3 by 2 tiles"]]
+                  canvas
+              listitem
+                button "Select Cabin, 5 by 3 tiles" [ref=93, loc=css:button[aria-label="Select Cabin, 5 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Cabin (Upgrade 1), 5 by 3 tiles" [ref=94, loc=css:button[aria-label="Select Cabin (Upgrade 1), 5 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Cabin (Upgrade 2), 5 by 3 tiles" [ref=95, loc=css:button[aria-label="Select Cabin (Upgrade 2), 5 by 3 tiles"]]
+                  canvas
+              listitem
+                button "Select Plank Cabin, 5 by 3 tiles" [ref=96, loc=css:button[aria-label="Select Plank Cabin, 5 by 3 tiles"]]
+                  canvas
+      container "Farm map canvas for standard"
+        canvas "Interactive farm map camera" [ref=97]
+      dialog "Choose map" [ref=99, loc=role:dialog[name="Choose map"]]
+        container
+          heading
+            text "Choose map"
+          button "Close dialog" [ref=100, loc=css:button[aria-label="Close dialog"]]
+            text "×"
+        container
+          tablist "Map categories"
+            tab [ref=101]
+              text "Farm"
+            tab [ref=102]
+              text "Interiors"
+            tab [ref=103]
+              text "Exteriors"
+            tab [ref=104]
+              text "Community"
+          tabpanel "Farm" [ref=105, loc=role:tabpanel[name="Farm"]]
+            button [ref=106]
+              image
+              text "Standard Farm"
+            button [ref=107]
+              image
+              text "Riverland Farm"
+            button [ref=108]
+              image
+              text "Forest Farm"
+            button [ref=109]
+              image
+              text "Hill-top Farm"
+            button [ref=110]
+              image
+              text "Wilderness Farm"
+            button [ref=111]
+              image
+              text "Four Corners Farm"
+    button [ref=98]
+      text "导出外链"

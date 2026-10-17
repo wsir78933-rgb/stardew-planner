@@ -1,0 +1,75 @@
+E enriched-v3 checks
+task task_d6f805015ae3
+dispatch ctx_d49b80437cfc
+terminal term_6e60a146-8128-410d-a0d3-3ce7de341a58
+role E
+gate FAIL
+problem_count 6
+
+1. orca orchestration check --terminal term_6e60a146-8128-410d-a0d3-3ce7de341a58 --json
+exit 0
+message msg_4ee78d1801f1 status from coordinator
+D three-gate PASS stated for the same body hash
+E did not open D reports
+
+2. shasum -a 256 of the four inputs, writer brief, task card, media plan, layout verification, three facts.json
+exit 0
+content/en/draft-v3.md 8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154 MATCH
+content/en/public-references.en.json 4f0e5a4800252baf5879996171e261878dd6bbb46e83d7a4f5828faea7ea7d0a MATCH
+content/en/media-text.en.json 8a6e1ce5ad8c74440e6bc4854c3740079520420c784457cd26ea98e0d9621f7b MATCH
+content/en/writer-submission.json c619f9f69b7c2e738424b242433cd91db866ade28278c218309c978b00c826d6 MATCH
+layout/enriched/writer-brief.md 0f98e5ecde45fb90532d0d210796ee727184054a1645f136a4bf69f534caabfc MATCH
+research/A/facts.json 618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e MATCH
+research/material-preparation/facts.json c180f0bf8b5eaf74de21a3999a646e19191064a01fe6d498c098ab56465d601d MATCH
+research/upgrade-planning/facts.json 397cc320f596d97e858809e688ba8f90d9db477236416f8cdd57fa1ed548026e MATCH
+
+3. python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py content/en/draft-v3.md --locale en
+exit 0
+mechanical_units 1166
+meets_mechanical_floor true
+meets_long_form_target false
+length_class short
+semantic_qualification requires_independent_review
+sha256_raw 8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154
+sha256_nfc_lf 8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154
+omitted headings 8 code 0 excluded_sections 0 non_body 35 frontmatter 0
+
+4. quote occurrence check against public-references.en.json
+exit 0
+QUOTE_MISMATCH 0
+QUOTE_NOT_ONCE 0
+
+5. fingerprint scan of draft-v3.md
+exit 0
+emdash 0 endash 0 bold 0
+image markdown bangs 2
+filler hits 0
+50,000g as its own old price: line 11 only
+150 Hardwood: line 11 only
+
+6. source reads, all exit 0
+research/upgrade-planning/sources/01-wiki-farmhouse.json
+research/upgrade-planning/sources/02-wiki-carpenters-shop.json
+research/upgrade-planning/sources/03-wiki-cask.json
+research/upgrade-planning/sources/06-wiki-version-history.json
+research/material-preparation/sources/secret-woods-rendered.txt
+research/material-preparation/sources/large-stump-rendered.txt
+research/material-preparation/sources/large-log-rendered.txt
+research/material-preparation/sources/axes-wikitext.json
+research/material-preparation/sources/wood-wikitext.json
+research/material-preparation/sources/wood-rendered-lead.txt
+research/A/sources/serp-google-house-upgrade-stardew.txt lines 217-225 and 249-250
+no live web fetch
+
+7. mailbox recheck before report
+exit 0
+same message msg_4ee78d1801f1 replayed
+no new redirect
+
+8. problem-quote line check
+exit 0
+L17 L29 L55 L57 L61 ALL True
+
+9. report sha256 before this append
+2ec35b8c9800e2faf68a23bdc33e5c7de978fba062ecc6f8e127dfadaa264d07 report.md
+quote check did not change report.md

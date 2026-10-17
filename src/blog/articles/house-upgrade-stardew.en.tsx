@@ -1,0 +1,335 @@
+import { BlogFaqList } from "../../components/blog/blog-faq-list";
+import { BlogSources } from "../../components/blog/blog-sources";
+import { PublicPicture } from "../../components/public-picture";
+
+function HouseUpgradeStardewEnglishTierRoomsFigure() {
+  return (
+    <figure className="blog-article-media">
+      <PublicPicture
+        alt={"Original pixel scene of one farmhouse interior: a kitchen, a double bed, and a nursery with a crib and two single beds."}
+        decoding="async"
+        height={941}
+        loading="lazy"
+        src={"/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp"}
+        width={1672}
+      />
+      <figcaption>
+        Illustration. One interior with a kitchen, a bedroom, and a nursery with a crib and two single beds. Not an official screenshot or the exact game floor plan.
+      </figcaption>
+    </figure>
+  );
+}
+
+function HouseUpgradeStardewEnglishRenovationFigure() {
+  return (
+    <figure className="blog-article-media">
+      <PublicPicture
+        alt={"Original pixel scene of a carpenter raising a hammer on an open timber frame beside a farmhouse."}
+        decoding="async"
+        height={941}
+        loading="lazy"
+        src={"/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp"}
+        width={1672}
+      />
+      <figcaption>
+        Illustration. A carpenter raises a hammer on an unfinished timber frame. Not an official screenshot.
+      </figcaption>
+    </figure>
+  );
+}
+
+function HouseUpgradeStardewEnglishUpgradeCostTable() {
+  return (
+    <div
+      aria-label="What each upgrade costs"
+      className="blog-table-scroll"
+      role="region"
+      tabIndex={0}
+    >
+      <table className="blog-data-table">
+        <thead>
+          <tr>
+            <th scope="col">Upgrade</th>
+            <th scope="col">Gold</th>
+            <th scope="col">Materials</th>
+            <th scope="col">Days</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>10,000g (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>)</td>
+            <td>450 Wood (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>)</td>
+            <td>3 (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>)</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>65,000g (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>)</td>
+            <td>100 Hardwood (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>)</td>
+            <td>3 (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>)</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>100,000g (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>)</td>
+            <td></td>
+            <td>3 (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function HouseUpgradeStardewEnglishOpening() {
+  return (
+    <p>
+      Robin charges 10,000g and 450 Wood for the first farmhouse upgrade, 65,000g and 100 Hardwood for the second, and 100,000g for the third (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>). The second payment is the 1.6 price (<a href={"https://stardewvalleywiki.com/Version_History"}>Version History</a>). Each upgrade takes three days (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>). Place the order with Robin at the Carpenter's Shop.
+    </p>
+  );
+}
+
+function HouseUpgradeStardewEnglishUpgradeCostSection() {
+  return (
+    <>
+      <h2>What each upgrade costs</h2>
+      <HouseUpgradeStardewEnglishUpgradeCostTable />
+      <p>
+        In 1.6 the second house upgrade moved from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood (<a href={"https://stardewvalleywiki.com/Version_History"}>Version History</a>).
+      </p>
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishWoodAndHardwoodSection() {
+  return (
+    <>
+      <h2>Prepare the Wood and the Hardwood</h2>
+      <p>
+        You start with an axe that chops a fully grown tree, and you upgrade later grades at the Blacksmith (<a href={"https://stardewvalleywiki.com/Axes"}>Axes</a>). Chop trees for Wood, or buy Wood from Robin's ordinary stock (<a href={"https://stardewvalleywiki.com/Wood"}>Wood</a>).
+      </p>
+      <p>
+        Hardwood is a separate item (<a href={"https://stardewvalleywiki.com/Hardwood"}>Hardwood</a>). A Large Stump is the remains of a long-dead tree. A Copper Axe or better removes a Large Stump and yields 2 Hardwood (<a href={"https://stardewvalleywiki.com/Large_Stump"}>Large Stump</a>). It is not the stump left when you chop a living tree for Wood (<a href={"https://stardewvalleywiki.com/Wood"}>Wood</a>). The Copper Axe is 2,000g and 5 Copper Bars (<a href={"https://stardewvalleywiki.com/Axes"}>Axes</a>). A Steel Axe removes a Large Log. The Steel Axe is 5,000g and 5 Iron Bars, and it is the axe that clears the log at the Secret Woods entrance (<a href={"https://stardewvalleywiki.com/Axes"}>Axes</a>, <a href={"https://stardewvalleywiki.com/Large_Log"}>Large Log</a>).
+      </p>
+      <p>
+        The Secret Woods open from the northwest corner of Cindersap Forest once that log is gone (<a href={"https://stardewvalleywiki.com/Secret_Woods"}>Secret Woods</a>). The log itself is 8 Hardwood once and does not grow back (<a href={"https://stardewvalleywiki.com/Large_Log"}>Large Log</a>). Six Large Stumps inside regrow daily, and one day of them is 12 Hardwood. Four are in the upper part of the woods. The other two are in a smaller lower area, reached through one of two covered passages. One passage goes straight through the trees just southeast of the upper three stumps. The other starts south of the entrance, about 2-3 tiles to the right of a bush, and you walk south, then west, then south again (<a href={"https://stardewvalleywiki.com/Secret_Woods"}>Secret Woods</a>, <a href={"https://stardewvalleywiki.com/Large_Stump"}>Large Stump</a>).
+      </p>
+      <p>
+        For 100 Hardwood from these stumps alone, start at 0 with the entrance log already gone, without the Forester extra piece and without any other hardwood source or spend. Eight harvests of 12 are 96 and leave 4 short of 100. Those 4 are 2 stumps, so the 100th piece comes on the 9th harvest (<a href={"https://stardewvalleywiki.com/Secret_Woods"}>Secret Woods</a>, <a href={"https://stardewvalleywiki.com/Large_Stump"}>Large Stump</a>, <a href={"https://stardewvalleywiki.com/Large_Log"}>Large Log</a>). That figure is a count of harvests, not a calendar date. The Steel Axe is the entrance tool for this Secret Woods route. The second upgrade is still paid with that row's gold and Hardwood, and this axe is not required for every way of bringing that Hardwood.
+      </p>
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishWoodPriceSection() {
+  return (
+    <>
+      <h2>Price the wood you still need, then add through a tier</h2>
+      <h3>200 Wood already on hand</h3>
+      <p>
+        Use this bill for the first upgrade in year 1 when 200 of the 450 Wood are already on hand. Those 200 are wood you already have, not a pile Robin sets aside. The upgrade is 10,000g and 450 Wood, and Robin's year-1 Wood is 10g (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>, <a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>). 450 − 200 = 250. Carry the 200 Wood with you, and buy the other 250 on that trip. 250 × 10g = 2,500g. Add the 10,000g fee and you bring 12,500g. That 12,500g includes only the fee and this wood purchase.
+      </p>
+      <p>
+        In year 1, 450 × 10g = 4,500g for the wood, and 4,500g plus the 10,000g fee is 14,500g. The 200 already on hand is what changes that 14,500g total to 12,500g. In year 2 or later, Wood is 50g. 450 × 50g = 22,500g for the wood, and 22,500g plus the same 10,000g fee is 32,500g (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>, <a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>). The 12,500g bill does not use that 50g price.
+      </p>
+      <p>
+        Robin's ordinary stock sells Wood and does not sell Hardwood (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>).
+      </p>
+      <h3>From the starter house through a named tier</h3>
+      <p>
+        These three sums start at the starter house and add the rows through the tier you name. None of them is the gold for one order (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>).
+      </p>
+      <p>
+        Through upgrade 1, the rows add to 10,000g and 450 Wood. Through upgrade 2, 10,000g + 65,000g = 75,000g, with 450 Wood and 100 Hardwood. Through upgrade 3, 10,000g + 65,000g + 100,000g = 175,000g, with 450 Wood and 100 Hardwood. These sums add only the farmhouse upgrade rows. Wood you still buy, and the Copper Axe or Steel Axe, are separate costs. Hand over one order's gold from the cost table. Do not pay 75,000g or 175,000g in one visit.
+      </p>
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishRoomUseSection() {
+  return (
+    <>
+      <h2>What the kitchen, nursery, and cellar are for</h2>
+      <p>
+        The first upgrade adds the kitchen in the house. Cook at its stove. The refrigerator holds 36 slots and works as a chest. A recipe can use ingredients in your inventory, in that refrigerator, or in a Mini-Fridge (<a href={"https://stardewvalleywiki.com/Cooking"}>Cooking</a>). Refill a watering can at the kitchen sink (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>). The same upgrade adds a bedroom and changes the bed from a single bed to a double bed (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>).
+      </p>
+      <p>
+        The second upgrade makes the kitchen and the bedroom larger. One added room is empty. The other has a crib and two child beds, and you can have two children (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>, <a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>). In the interior illustration, the nursery is this crib room.
+      </p>
+      <HouseUpgradeStardewEnglishTierRoomsFigure />
+      <p>
+        The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks. Those casks age cheese and wine, and also Goat Cheese, Beer, Mead, and Pale Ale, and that aging raises their quality and value. The cask recipe from this upgrade is 20 Wood and 1 Hardwood. You can set a cask somewhere else, but it accepts goods only while it is in the cellar. The outside of the house stays the same as the previous upgrade (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>, <a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>, <a href={"https://stardewvalleywiki.com/Cask"}>Cask</a>).
+      </p>
+      <p>
+        The outdoor footprint stays 9×5, so the tiles beside the house stay as they are (<a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>, <a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>).
+      </p>
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishOrderSection() {
+  return (
+    <>
+      <h2>Order the upgrade at 24 Mountain Road</h2>
+      <p>
+        Robin is at the Carpenter's Shop, 24 Mountain Road. She sells wood, stone, and furniture. She upgrades the farmhouse and constructs farm buildings (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>). Go there while the counter is open, ask her to upgrade the farmhouse, and pay the gold and materials for your next tier.
+      </p>
+      <p>
+        On an ordinary week the counter is open from 9:00am to 5:00pm. Tuesday is closed. Friday closes at 4:00pm. The house can be entered every day from 9:00am to 8:00pm, even when the shop is closed. Entering the house does not place the order (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>).
+      </p>
+      <p>
+        For rain, a festival, the Summer 18 clinic visit, and the times she walks past the counter, use <a className="blog-planner-link" href={"https://stardewvalleyplanner.art/carpenter-stardew"}>Robin's shop and outdoor buildings</a>.
+      </p>
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishRenovationSection() {
+  return (
+    <>
+      <h2>A renovation is not the next upgrade</h2>
+      <HouseUpgradeStardewEnglishRenovationFigure />
+      <p>
+        After the second farmhouse upgrade, Robin offers house renovations. You order one and it finishes immediately. To undo it, empty the new area first. Robin then returns the gold, and the refund arrives at once (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>, <a href={"https://stardewvalleywiki.com/Farmhouse"}>Farmhouse</a>).
+      </p>
+      <p>
+        Remove Crib is free and finishes at once (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>). Add Dining Room costs 150,000g, adds a room with a footprint of 9×10 plus 4×5, and finishes at once. To get that 150,000g back, that 9×10 plus 4×5 area has to be empty (<a href={"https://stardewvalleywiki.com/Carpenter%27s_Shop"}>Carpenter's Shop</a>).
+      </p>
+      <p>
+        Choose the third upgrade's row when you want the cellar. Choose Remove Crib or Add Dining Room when you want those changes.
+      </p>
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishFaqSection() {
+  return (
+    <>
+      <h2>Farmhouse Upgrade FAQ</h2>
+      <BlogFaqList
+        items={[
+          {
+            question: "What does each farmhouse upgrade cost?",
+            answer: (
+              <p>
+                The first upgrade is 10,000g and 450 Wood. The second is 65,000g and 100 Hardwood, the 1.6 price. The third is 100,000g.
+              </p>
+            ),
+          },
+          {
+            question: "How long does each house upgrade take?",
+            answer: (
+              <p>Each upgrade takes three days.</p>
+            ),
+          },
+          {
+            question: "How do you get the Hardwood for the second upgrade, and does Robin sell it?",
+            answer: (
+              <p>
+                Robin&apos;s ordinary stock does not sell Hardwood. Six Large Stumps in the Secret Woods regrow daily. A Steel Axe clears the log at the entrance.
+              </p>
+            ),
+          },
+          {
+            question: "Which upgrade unlocks the cellar?",
+            answer: (
+              <p>
+                The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks.
+              </p>
+            ),
+          },
+          {
+            question: "Does a house upgrade increase the outdoor footprint?",
+            answer: (
+              <p>
+                The outdoor footprint stays 9×5, so the tiles beside the house stay as they are. After the third upgrade, the outside of the house stays the same as the previous upgrade.
+              </p>
+            ),
+          },
+          {
+            question: "How is a renovation different from an upgrade?",
+            answer: (
+              <p>
+                Each upgrade takes three days. After the second upgrade, a renovation finishes immediately. Remove Crib and Add Dining Room are examples.
+              </p>
+            ),
+          },
+        ]}
+      />
+    </>
+  );
+}
+
+function HouseUpgradeStardewEnglishSources() {
+  return (
+    <BlogSources
+      heading="Sources"
+      items={[
+        {
+          href: "https://stardewvalleywiki.com/Farmhouse",
+          label: "Farmhouse",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+          label: "Carpenter's Shop",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Version_History",
+          label: "Version History",
+          note: "1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Axes",
+          label: "Axes",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Wood",
+          label: "Wood",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Hardwood",
+          label: "Hardwood",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Large_Stump",
+          label: "Large Stump",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Large_Log",
+          label: "Large Log",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Secret_Woods",
+          label: "Secret Woods",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Cooking",
+          label: "Cooking",
+        },
+        {
+          href: "https://stardewvalleywiki.com/Cask",
+          label: "Cask",
+        },
+        {
+          href: "https://stardewvalleyplanner.art/carpenter-stardew",
+          label: "Robin's shop and outdoor buildings",
+        },
+      ]}
+    />
+  );
+}
+
+export function HouseUpgradeStardewEnglishArticle() {
+  return (
+    <article>
+      <HouseUpgradeStardewEnglishOpening />
+      <HouseUpgradeStardewEnglishUpgradeCostSection />
+      <HouseUpgradeStardewEnglishWoodAndHardwoodSection />
+      <HouseUpgradeStardewEnglishWoodPriceSection />
+      <HouseUpgradeStardewEnglishRoomUseSection />
+      <HouseUpgradeStardewEnglishOrderSection />
+      <HouseUpgradeStardewEnglishRenovationSection />
+      <HouseUpgradeStardewEnglishFaqSection />
+      <HouseUpgradeStardewEnglishSources />
+    </article>
+  );
+}

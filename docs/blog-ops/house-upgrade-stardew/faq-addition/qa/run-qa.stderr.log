@@ -1,0 +1,18 @@
+[ego-browser:notice] Ego Lite update is available (current 0.5.1.13). Finish the current browser task, then ask the user before running `ego-browser upgrade`; re-read the ego-browser Skill afterward.
+
+=== Running View: Desktop English (1280x800) ===
+✓ Desktop English PASSED all assertions. Screenshot: /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-desktop-en.png (41051 bytes)
+
+=== Running View: Desktop Chinese (1280x800) ===
+✓ Desktop Chinese PASSED all assertions. Screenshot: /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-desktop-zh.png (41800 bytes)
+
+=== Running View: Mobile English (390x844) ===
+✓ Mobile English PASSED all assertions. Screenshot: /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-mobile-en.png (38569 bytes)
+
+=== Running View: Mobile Chinese (390x844) ===
+✓ Mobile Chinese PASSED all assertions. Screenshot: /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-mobile-zh.png (38220 bytes)
+
+Browser evaluation JSON saved to: /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/browser-eval.json
+Total assertions passed: 294
+Total assertions failed: 0
+

@@ -1,0 +1,127 @@
+# Review Plan Checks Log: house-upgrade-stardew (pixel-v2)
+# Role: Independent Read-Only Review Worker
+# Working Tree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+# Task ID: task_64cae584cec3
+# Dispatch ID: ctx_e37a426c74c3
+# Coordinator Terminal: term_661abce7-55fd-4570-8bf5-970c0451dd23
+# Worker Terminal: term_8f5c1309-7589-4451-89e5-92ebb090821e
+# Date: 2026-10-17
+
+## 1. Orca Orchestration Inbox Check
+command: orca orchestration check --terminal term_8f5c1309-7589-4451-89e5-92ebb090821e --json
+exitCode: 0
+stdout:
+{
+  "id": "e1a6cbc1-8073-4b24-8fcf-de491ef95844",
+  "ok": true,
+  "result": {
+    "runId": "run_8253831e93d6",
+    "dispatchId": "ctx_e37a426c74c3",
+    "deliveryId": null,
+    "messages": [],
+    "count": 0,
+    "replayed": false,
+    "acknowledged": null,
+    "timedOut": false,
+    "cancelled": false,
+    "connectionLost": false,
+    "mutation": {
+      "requestId": "4cc90891-2679-4a32-9cbe-fe815381a012",
+      "replayed": false
+    }
+  },
+  "_meta": {
+    "runtimeId": "97517e0c-ae32-460c-b64a-8651b041df0d"
+  }
+}
+
+## 2. Heartbeat Signal
+command: orca orchestration send --from term_8f5c1309-7589-4451-89e5-92ebb090821e --type heartbeat --subject "alive" --task-id task_64cae584cec3 --dispatch-id ctx_e37a426c74c3 --phase "investigating"
+exitCode: 0
+stdout: Sent msg_6f8e8bd26584
+
+## 3. Package.json Scripts Inspection (Read-Only, No Test / Build Run)
+command: cat package.json (read scripts block)
+exitCode: 0
+scripts:
+  dev: "sh scripts/dev.sh"
+  build: "next build"
+  start: "serve out"
+  pretest: "NEXT_TELEMETRY_DISABLED=1 pnpm build"
+  test: "vitest"
+  typecheck: "tsc --noEmit"
+  performance:editor: "node scripts/measure-editor-performance.mjs"
+  assets:sync: "tsx src/assets/sync-assets.ts"
+  seo:smoke: "node scripts/production-seo-smoke.mjs --origin https://stardewvalleyplanner.art"
+note: In compliance with instructions, tests and builds were NOT run during this review plan phase.
+
+## 4. System imagegen Source Existence Spot-Check
+command: test -f /Users/wusir/.codex/skills/.system/imagegen/SKILL.md && echo "EXISTS"
+exitCode: 0
+stdout: EXISTS
+metadata:
+  name: "imagegen"
+  description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts..."
+  fileLength: 316 lines (19201 bytes)
+  secretsChecked: none (no secrets/keys inspected)
+
+## 5. Article Line and Surface Counts
+command: wc -l src/blog/articles/house-upgrade-stardew.*.tsx
+exitCode: 0
+stdout:
+     276 src/blog/articles/house-upgrade-stardew.en.tsx
+     206 src/blog/articles/house-upgrade-stardew.zh.tsx
+     482 total
+
+## 6. Registry House Upgrade Entries
+command: grep -n -C 5 "house-upgrade-stardew" src/blog/blog-post-registry.tsx
+exitCode: 0
+stdout:
+English entry at lines 473-486:
+  slug: "house-upgrade-stardew",
+  coverImage: { src: "/blog/house-upgrade-stardew-cover.webp", alt: "Three payment stages: Upgrade 1 with 10,000g, 450 Wood, and 3 days; Upgrade 2 with 65,000g, 100 Hardwood, and 3 days; Upgrade 3 with 100,000g and 3 days." }
+Chinese entry at lines 864-877:
+  slug: "house-upgrade-stardew",
+  coverImage: { src: "/blog/house-upgrade-stardew-cover-zh.webp", alt: "三档付款：升级1是10,000金、450木材和3天；升级2是65,000金、100硬木和3天；升级3是100,000金和3天。" }
+
+## 7. PublicPicture Component Verification
+command: cat src/components/public-picture.tsx (inspection of exported functions and contracts)
+exitCode: 0
+contract:
+  exports: PublicPicture, createPublicAvifSource
+  formatContract: WebP source ending in .webp, automatic pairing with .avif
+  failFast: throws TypeError if source does not end with .webp or lacks filename before suffix
+
+## 8. Cryptographic Hashes and Integrity Verification
+command: python3 (verify bodyHash, englishBodyHash, publicFieldsSha256)
+exitCode: 0
+stdout:
+EN body words: 1369
+EN stored bodyHash: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+EN computed bodyHash: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+EN bodyHash match: True
+ZH body chars: 5377
+ZH stored bodyHash: 0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6
+ZH computed bodyHash: 0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6
+ZH bodyHash match: True
+ZH englishBodyHash match: True
+en stored publicFieldsSha256: c3c2c5f3b06206e13403e6fefb9573713502f32b5c172402e21fcc1dc1437042
+en computed publicFieldsSha256: c3c2c5f3b06206e13403e6fefb9573713502f32b5c172402e21fcc1dc1437042
+en publicFieldsSha256 match: True
+zh-CN stored publicFieldsSha256: d535eaacd441c15006e1e3189e6aac6d7c25162f02bbd68984befe9d35329d94
+zh-CN computed publicFieldsSha256: d535eaacd441c15006e1e3189e6aac6d7c25162f02bbd68984befe9d35329d94
+zh-CN publicFieldsSha256 match: True
+
+## 9. Baseline File Checksums
+command: shasum -a 256 docs/blog-ops/house-upgrade-stardew/handoff/public/en.json docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json
+exitCode: 0
+stdout:
+cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3  docs/blog-ops/house-upgrade-stardew/handoff/public/en.json
+0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c  docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json
+6ce4e84ffbcc1252f2cebd443e4ccceac5a60d29c2ceb41dd74eaabd68fc6834  docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json
+
+## 10. Summary of Plan Checks
+checksTotal: 9
+checksPassed: 9
+checksFailed: 0
+status: PLAN_VERIFIED

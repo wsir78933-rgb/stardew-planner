@@ -40,6 +40,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting](https://stardewvalleyplanner.art/what-to-grow-in-greenhouse-stardew): Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.
 - [Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree](https://stardewvalleyplanner.art/oak-tree-vs-maple-stardew): Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.
 - [How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe](https://stardewvalleyplanner.art/how-to-harvest-stardew-valley): Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.
+- [House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier](https://stardewvalleyplanner.art/house-upgrade-stardew): The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.
 
 ## 简体中文
 
@@ -79,3 +80,4 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷温室种什么？按手头种源、等待时间与收获节奏选择](https://stardewvalleyplanner.art/zh/what-to-grow-in-greenhouse-stardew): 星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。
 - [星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。
 - [星露谷物语怎么收作物：徒手、镰刀或斧头](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。
+- [星露谷房屋升级：第二档是65,000金和100硬木](https://stardewvalleyplanner.art/zh/house-upgrade-stardew): 第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。

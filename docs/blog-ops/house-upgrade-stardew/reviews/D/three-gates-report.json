@@ -1,0 +1,154 @@
+{
+  "role": "D",
+  "articleSlug": "house-upgrade-stardew",
+  "candidateVersion": "draft-v1",
+  "reviewDate": "2026-10-15",
+  "auditedFiles": {
+    "draft": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md",
+      "bytes": 9206,
+      "lines": 57,
+      "sha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+      "nfc": true,
+      "crlf": false,
+      "endsNewline": true
+    },
+    "mediaText": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json",
+      "bytes": 4443,
+      "lines": 129,
+      "sha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+      "nfc": true,
+      "crlf": false,
+      "endsNewline": true
+    },
+    "writerSubmission": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json",
+      "bytes": 4037,
+      "lines": 66,
+      "sha256": "5db55ed0942f2114a01d4332c1bbb8fc6d480b9db974b8b3b615400a7d179f9e",
+      "nfc": true,
+      "crlf": false,
+      "endsNewline": true
+    },
+    "taskCard": {
+      "path": "docs/blog-ops/house-upgrade-stardew/layout/task-card.md",
+      "bytes": 8089,
+      "lines": 112,
+      "sha256": "1edb806157ef10adae0bf88151bcd43f106f9e47dae82841119ecb94f32fa8c9",
+      "nfc": true,
+      "crlf": false,
+      "endsNewline": true
+    },
+    "facts": {
+      "path": "docs/blog-ops/house-upgrade-stardew/research/A/facts.json",
+      "bytes": 34063,
+      "lines": 460,
+      "sha256": "618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e",
+      "nfc": true,
+      "crlf": false,
+      "endsNewline": true
+    }
+  },
+  "overallOutcome": "FAIL",
+  "gates": {
+    "ResearchTrace": {
+      "outcome": "FAIL",
+      "issuesCount": 4,
+      "issues": [
+        {
+          "id": "RT-1",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 41",
+          "originalQuote": "The [Farmhouse](https://stardewvalleywiki.com/Farmhouse) notes state both totals as 450 times her shop price plus the upgrade fee.",
+          "issueType": "来源核查旁白（Category 1 编辑腔 / 研究痕迹）",
+          "revisionRequirement": "表达退 C。删除正文中叙述“维基注释如何计算并列出总数”的旁白；来源链接应当用于支撑前面的费用数字与计算事实，或融入描述性锚文本，不向读者交代维基注记的行文方式。不得直接提供替换句，由 C 用自己的话修改。"
+        },
+        {
+          "id": "RT-2",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 23",
+          "originalQuote": "Go there while the counter is open, ask her to upgrade the farmhouse, and pay the row for the tier you are on.",
+          "focusSnippet": "pay the row for the tier you are on",
+          "issueType": "文章自指（Category 4 编辑腔）",
+          "revisionRequirement": "表达退 C。去除对文章表格“行 (row)”的自指，改为直接指代游戏内该档升级的费用与材料（如支付对应档位的费用）。不得直接提供替换句，由 C 用自己的话修改。"
+        },
+        {
+          "id": "RT-3",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 33",
+          "originalQuote": "The three days are the wait between the payment and the rooms in that row.",
+          "focusSnippet": "rooms in that row",
+          "issueType": "文章自指（Category 4 编辑腔）",
+          "revisionRequirement": "表达退 C。去除对表格“行 (row)”的自指，改为直接说明工期是付款与该档位解锁房间完工之间的等待时间。不得直接提供替换句，由 C 用自己的话修改。"
+        },
+        {
+          "id": "RT-4",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 19",
+          "originalQuote": "A write-up that still lists 50,000g and 150 Hardwood uses the earlier price.",
+          "issueType": "来源核查旁白 / 外部资料旁白",
+          "revisionRequirement": "表达退 C。改写掉对第三方 write-up 的外部旁白，从读者游戏版本或旧版数据的视角说明该差异（例如指明该数字为 1.6 之前的旧版数据，避免使用 write-up 等编辑性术语）。不得直接提供替换句，由 C 用自己的话修改。"
+        }
+      ]
+    },
+    "ReaderValue": {
+      "outcome": "PASS",
+      "issuesCount": 0,
+      "details": {
+        "intentScopeAlignment": "PASS: Main intent matches user query and SERP evidence; no tool CTA forced; no multi-intent bloat.",
+        "operationalExampleVerified": "PASS: Year 1 wood purchase example walked through with 14,500g total (450 wood * 10g + 10,000g fee), ordered during regular counter hours, 3-day build verified.",
+        "failureBranchesVerified": "PASS: Regular shop closure (Tuesday closed, Friday 4pm close), Year 2 price surge (32,500g), non-empty renovation refunds, multiplayer cabin boundary, and 3-day unfinished construction boundary all actionable.",
+        "imageSlotsServingIntent": "PASS: In-text figures tier-rooms and upgrade-or-renovation directly serve room identification and renovation vs upgrade branching; cover and table do not disguise missing body figures."
+      }
+    },
+    "Repetition": {
+      "outcome": "FAIL",
+      "issuesCount": 3,
+      "issues": [
+        {
+          "id": "RP-1",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 45",
+          "comparedLocations": [
+            "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 39",
+            "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 41"
+          ],
+          "originalQuote": "Year 2 costs more only because you are buying the Wood from her. The upgrade fee stays 10,000g. If you sell Wood to gather gold for the year-2 purchase, the selling price still has not risen with her shop, so you still need the later total of 32,500g. The year-1 purchase still needs 14,500g.",
+          "issueType": "重复（Repetition：整段机械复述前文已交代的前提与结论）",
+          "uniqueValidInformation": "Line 39 已给出木材单价规则及卖出不涨价的前提，Line 41 已完整列出算式与 14,500g 及 32,500g 的总额。Line 45 无任何增量信息。",
+          "revisionRequirement": "表达退 C。整段删除或压缩，消除对工费 10,000g、卖出不涨价、14,500g 与 32,500g 总数的第三次机械重复。不得直接提供替换句，由 C 用自己的话修改。"
+        },
+        {
+          "id": "RP-2",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 57",
+          "comparedLocations": [
+            "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 9 (Table row 3)",
+            "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 15 (Figure 1 caption)"
+          ],
+          "originalQuote": "The exterior after that upgrade stays the same as the previous upgrade ([Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop)).",
+          "issueType": "重复（Repetition：正文句子逐字重复表格与图注结论）",
+          "uniqueValidInformation": "表格与图 1 已经建立起第三档升级地下地窖且外观不变的事实。",
+          "revisionRequirement": "表达退 C。在第 57 行中删除对外观不变的逐字复述，聚焦于第三档升级（地窖）与装修在决策机制上的本质差异。不得直接提供替换句，由 C 用自己的话修改。"
+        },
+        {
+          "id": "RP-3",
+          "location": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 33",
+          "comparedLocations": [
+            "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 7 (Table row 1)",
+            "docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md line 8 (Table row 2)"
+          ],
+          "originalQuote": "Marriage can use the first upgrade once the upgrade is in place ([Marriage](https://stardewvalleywiki.com/Marriage)). The Mermaid's Pendant needs the first upgrade's construction finished, so the pendant comes after that three-day build ([Mermaid's Pendant](https://stardewvalleywiki.com/Mermaid%27s_Pendant)). The empty room, the crib, the two child beds, and the chance to have two children arrive after the second upgrade's own three days.",
+          "issueType": "重复（Repetition：正文段落重复列举表格已详尽列出的房间与家具清单）",
+          "uniqueValidInformation": "保留 3 天工期在操作时序上的核心事实（即施工未完成前吊坠不可买、新房间不可用）。",
+          "revisionRequirement": "表达退 C。保留工期时序规则，删除对表格房间与家具描述的冗余列举。不得直接提供替换句，由 C 用自己的话修改。"
+        }
+      ]
+    }
+  },
+  "feedbackRouting": {
+    "factResearchGapsToA": 0,
+    "layoutGapsToB": 0,
+    "expressionGapsToC": 7
+  },
+  "budget": {
+    "totalAllowedRounds": 3,
+    "currentRoundUsed": 1,
+    "remainingRounds": 2
+  }
+}

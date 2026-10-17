@@ -1,0 +1,467 @@
+{
+  "keyword": "house upgrade stardew",
+  "site": "https://stardewvalleyplanner.art",
+  "locale": "en",
+  "country": "US",
+  "verifiedOn": "2026-10-16",
+  "correctedOn": "2026-10-16",
+  "role": "A-supplementary (upgrade-planning) correction",
+  "priorSubmission": "docs/blog-ops/house-upgrade-stardew/research/upgrade-planning/versions/submission-v1/",
+  "worktree": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+  "coreBlocker": false,
+  "sourceSiteNote": "Stardew Valley Wiki names the wiki site in the saved page titles. This file does not call that wiki the game publisher's official site.",
+  "pageScope": "English wiki innerText saved in upgrade-planning/sources. Farmhouse last edited 15 January 2026. Carpenter's Shop last edited 27 September 2026. Cask last edited 27 October 2024. Cooking last edited 12 July 2026. Robin last edited 1 October 2026. Version History last edited 9 May 2026, with 1.6.15 as the first section heading in that saved text. Not a claim about every version, platform, or save.",
+  "supportedTask": "Corrected supplementary facts for house upgrade stardew: sourced tier costs, direct room and use sentences, labeled cumulative and wood-deficit calculations, and three days for each farmhouse upgrade. Order-skipping, a nine-day calendar, and counter status during construction are not public claims.",
+  "doNotOverwrite": "https://stardewvalleyplanner.art/carpenter-stardew",
+  "facts": [
+    {
+      "id": "UP-order-prerequisites",
+      "type": "boundary",
+      "statement": "The saved Farmhouse and Carpenter's Shop tables list house upgrade 1, house upgrade 2, and house upgrade 3 as separate rows. Those rows do not say the player cannot skip a tier, cannot order the next upgrade while one is under construction, or that either rule holds in every version.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText Upgrades table rows 1, 2, and 3. Carpenter's Shop innerText House Upgrade 1, House Upgrade 2, and House Upgrade 3. No sentence in the six saved sources states a skip ban or a ban on ordering the next farmhouse upgrade during construction.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "The six saved English wiki snapshots listed in pageScope.",
+      "limitation": "Internal gap. Not a public claim and not a disclaimer for the article. Cumulative gold figures remain separate calculations that add the listed row costs from the starter house through a named tier.",
+      "publicAllowed": false,
+      "removedFromPublicStatement": [
+        "must be purchased in strict sequential order",
+        "Players cannot skip an upgrade tier",
+        "nor can they order a subsequent upgrade while Robin is currently constructing an upgrade",
+        "All versions of Stardew Valley"
+      ]
+    },
+    {
+      "id": "UP-upgrade-1-cost-materials",
+      "type": "theme",
+      "statement": "The Farmhouse upgrades table lists upgrade 1 at 10,000g and Wood (450). The Carpenter's Shop house upgrade 1 row lists 10,000g and Wood (450). The Farmhouse page says Robin requires three days to complete each farmhouse upgrade. The Carpenter's Shop page says farmhouse upgrades require three days to complete.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 1 cost and the sentence 'Robin requires three days to complete each farmhouse upgrade.' Carpenter's Shop innerText House Upgrade 1 cost and the sentence 'Farmhouse upgrades require three days to complete.'",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those two saved English pages. Farmhouse last edited 15 January 2026. Carpenter's Shop last edited 27 September 2026.",
+      "limitation": "The cost lines name Wood. They do not contain a sentence that hardwood cannot be used instead. That substitution sentence was removed from this fact.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "Only regular wood qualifies for the material requirement; hardwood cannot substitute."
+      ]
+    },
+    {
+      "id": "UP-upgrade-1-direct-unlocks",
+      "type": "theme",
+      "statement": "The Farmhouse upgrade 1 changes line says: Adds a kitchen, with a kitchen counter that allows cooking, and a fridge that functions as a chest. Items in the fridge can be used when cooking even though they are not in the player's inventory. Adds a bedroom. Upgrades bed from single to double. Allows marriage.",
+      "sourceTitle": "Farmhouse",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 1 Changes. The Cooking page separately says the upgrade adds a stove and a refrigerator; that wording is in UP-kitchen-fridge-direct-use.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Saved Farmhouse page, last edited 15 January 2026.",
+      "limitation": "The row says 'Adds a bedroom.' It does not say the bedroom is expanded. Krobus and roommate move-in are not in this row. The Farmhouse introduction mentions Krobus moving in as a separate extra room and does not give a one-upgrade condition. The Marriage page was not in the six saved sources.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "expands the bedroom",
+        "directly allowing marriage or Krobus to move in as a roommate"
+      ]
+    },
+    {
+      "id": "UP-kitchen-fridge-direct-use",
+      "type": "theme",
+      "statement": "The Cooking page says: Cooking is a game mechanic that becomes available after upgrading the farmhouse for the first time. The house upgrade adds a kitchen, which includes a stove and a refrigerator. The stove is the cooking interface, while the refrigerator provides 36 slots of storage space, similar to a chest. The refrigerator is unique in that it is directly linked with the cooking interface, as if it were an extension of the player's inventory. Only ingredients in the player's inventory, refrigerator or Mini-Fridge are seen as usable items for a recipe. The Farmhouse notes say the kitchen sink can be used to refill the player's watering can.",
+      "sourceTitle": "Cooking; Farmhouse",
+      "sourceUrl": "https://stardewvalleywiki.com/Cooking",
+      "alsoUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Cooking innerText opening paragraph through the Mini-Fridge sentence. Farmhouse innerText Notes: 'The kitchen sink can be used to refill the player's watering can.'",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Saved Cooking page, last edited 12 July 2026, and the saved Farmhouse notes.",
+      "limitation": "The sink sentence is on the Farmhouse page, not the Cooking page. The Cooking page names the Mini-Fridge in the ingredient sentence; this fact does not add a Mini-Fridge shop price or a Cookout Kit guide.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "primary cooking interface",
+        "automatically accessible when cooking without manual transfer"
+      ]
+    },
+    {
+      "id": "UP-upgrade-2-cost-materials",
+      "type": "theme",
+      "statement": "The Farmhouse upgrades table lists upgrade 2 at 65,000g and Hardwood (100). The Carpenter's Shop house upgrade 2 row lists 65,000g and Hardwood (100). The saved Version History 1.6 section says: Raised price of second house upgrade (50,000g → 65,000g), but reduced number of hardwood needed (150 → 100). The saved Farmhouse history 1.6 line states the same change from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop; Version History",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Version_History",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 2 and History 1.6. Carpenter's Shop innerText House Upgrade 2 cost. Version History innerText under the 1.6 heading: 'Raised price of second house upgrade (50,000g → 65,000g), but reduced number of hardwood needed (150 → 100).'",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those saved English pages. The 1.6 bullet is inside the saved Version History text whose first section heading is 1.6.15. This does not by itself name the newest build on every platform.",
+      "limitation": "No saved sentence says upgrade 2 can be bought only after upgrade 1 is finished. That completion rule was removed from this fact.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "Requires Tier 1 to be fully completed first."
+      ]
+    },
+    {
+      "id": "UP-upgrade-2-direct-unlocks",
+      "type": "theme",
+      "statement": "The Farmhouse upgrade 2 changes line says it adds two new rooms, one empty, and one with a crib and two child beds, thus allowing the player to have children, and that the kitchen and bedroom are larger. The Carpenter's Shop house upgrade 2 description says this allows you to have two children, and that both the kitchen and the bedroom are larger.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 2 Changes. Carpenter's Shop innerText House Upgrade 2 description.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those two saved English pages.",
+      "limitation": "'Two children' is the Carpenter's Shop sentence. The Farmhouse sentence says 'have children' and names two child beds. Neither sentence describes pregnancy, aging, or a spouse asking for a child.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "directly enabling the player to have up to two children",
+        "spouse asking for a child"
+      ]
+    },
+    {
+      "id": "UP-upgrade-2-renovations-painting",
+      "type": "theme",
+      "statement": "The Farmhouse upgrade 2 line says it unlocks renovations and the ability to paint the house. The Farmhouse renovations section says: After upgrading the farmhouse for the 2nd time, Robin offers house renovations. Renovations are completed instantly. All renovations can be refunded in full amount at any time, provided that the expanded area isn't occupied. Refunds also complete instantly. The Carpenter's Shop says house renovations are unlocked after the second farmhouse upgrade, all the renovation options are done instantly and can be reversed, which refunds the money spent on it, and house upgrade 2 unlocks renovations and building/trim painting. The Painting section says this action applies instantly and is free, requiring no construction time, gold, or resources, and that the farmhouse can only have its roof painted until the exterior is fully upgraded.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 2 and Renovations introduction. Carpenter's Shop innerText House Upgrade 2, House Renovations introduction, and Painting section through the roof sentence.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those two saved English pages.",
+      "limitation": "The saved painting sentence does not define which upgrade makes the exterior fully upgraded. Individual renovation prices are in the saved tables and are not repeated in this public statement.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "House Renovations catalog",
+        "a definition of which tier makes the exterior fully upgraded"
+      ]
+    },
+    {
+      "id": "UP-upgrade-3-cost-materials",
+      "type": "theme",
+      "statement": "The Farmhouse upgrades table lists upgrade 3 at 100,000g and does not list wood or hardwood on that row. The Carpenter's Shop house upgrade 3 row lists 100,000g and does not list wood or hardwood. Each-upgrade sentences on both pages say farmhouse upgrades take three days.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 3 cost cell, which shows 100,000g and no material line. Carpenter's Shop innerText House Upgrade 3 cost, which shows 100,000g and no Wood or Hardwood line. Day sentences are the same ones cited by UP-construction-days-per-tier.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those two saved English pages.",
+      "limitation": "Absence of a material line is what the saved rows show. It is not a recorded test that the shop refuses wood or hardwood. No saved sentence says upgrade 3 can be bought only after upgrade 2 is finished.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "Requires Tier 2 to be fully completed first.",
+        "Build Time column labeled 3 Days"
+      ]
+    },
+    {
+      "id": "UP-upgrade-3-cellar-casks-direct-use",
+      "type": "theme",
+      "statement": "The Farmhouse upgrade 3 line says it adds a cellar under the house, allowing access via the kitchen. It says the cellar houses casks which can age products such as cheese and wine to increase quality and value, and that the cellar comes with 33 casks. The Carpenter's Shop upgrade 3 text says the cellar allows the player to craft and house casks which can age Cheese, Goat Cheese, Beer, Mead, Pale Ale, and Wine to increase their quality and value, and that the exterior appearance of the house remains identical. The Cask page says the recipe source is the final farmhouse upgrade and the ingredients are Wood (20) and Hardwood (1). It says casks can be placed anywhere, but they will only accept goods to refine if they are actually in the cellar.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop; Cask",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Cask",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 3, using the sentences through 'comes with 33 casks' and not the 189 clause. Carpenter's Shop innerText House Upgrade 3. Cask innerText recipe block and the sentence 'Casks can be placed anywhere; however, they will only accept goods to refine if they are actually in the cellar.'",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those saved English pages. Cask last edited 27 October 2024.",
+      "limitation": "The 189 capacity sentence and the iridium value-doubling sentence are in the saved pages. They are recorded in B-cellar-details-outside-approved-function and are not part of this public claim.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "though it may house as many as 189 casks",
+        "Iridium star is the highest level of quality, which doubles the value of an item",
+        "striking the cask with an Axe, Hoe, or Pickaxe",
+        "greenhouse or outdoors named as non-working places"
+      ]
+    },
+    {
+      "id": "B-cellar-details-outside-approved-function",
+      "type": "boundary",
+      "statement": "Internal record only. The saved Farmhouse upgrade 3 line also says the cellar may house as many as 189 casks. The saved Cask page says iridium star quality doubles the value of an item, and its placement section says filling the cellar completely requires 189 casks. Those sentences are not public claims for this article's approved cellar function.",
+      "sourceTitle": "Farmhouse; Cask",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Cask",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText upgrade row 3 clause 'though it may house as many as 189 casks.' Cask innerText: 'Iridium star is the highest level of quality, which doubles the value of an item.' and 'This requires 189 casks'.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those saved sentences. Not an article disclaimer.",
+      "limitation": "publicAllowed false means do not give this record to C as copy or as a disclaimer.",
+      "publicAllowed": false
+    },
+    {
+      "id": "UP-footprint-invariance",
+      "type": "theme",
+      "statement": "The Farmhouse page says the outer footprint of the farmhouse is a 9×5 rectangle. The Carpenter's Shop page says: When upgrading the Farmhouse, the footprint of the building does not change, so no adjacent tiles are impacted.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText: 'The outer footprint of the farmhouse is a 9×5 rectangle.' Carpenter's Shop innerText House Upgrades: 'When upgrading the Farmhouse, the footprint of the building does not change, so no adjacent tiles are impacted.'",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those two saved English pages. The 9×5 figures later in the Carpenter's Shop renovation table are room footprints, not this farmhouse measurement.",
+      "limitation": "The saved sentences do not say the player never needs to clear outdoor items. The unupgraded inner footprint of 10×7 is a different sentence and is not this claim.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "without changing outdoor farm placement or requiring outdoor clearing around the house",
+        "Carpenter's Shop Farm Buildings table lists the farmhouse as 9x5"
+      ]
+    },
+    {
+      "id": "CALC-cumulative-tier-1",
+      "type": "calculation",
+      "statement": "Adding only the saved upgrade 1 cost, from the starter house through upgrade 1, is 10,000g, 450 Wood, and 0 Hardwood.",
+      "formula": "10,000g; Wood 450; Hardwood 0",
+      "inputs": {
+        "upgrade1Gold": 10000,
+        "upgrade1Wood": 450,
+        "upgrade1Hardwood": 0
+      },
+      "calculationType": "arithmetic_sum",
+      "sourceTitle": "Calculation from the saved Farmhouse upgrade 1 cost",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Derived calculation",
+      "evidenceLocation": "Inputs are the upgrade 1 cost in UP-upgrade-1-cost-materials. Hardwood 0 is the absence of hardwood on that row, not a separate wiki total.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "This addition scenario. Not a wiki sentence and not a proof that a tier cannot be skipped.",
+      "limitation": "Arithmetic. The wiki tables do not print this cumulative line.",
+      "publicAllowed": true
+    },
+    {
+      "id": "CALC-cumulative-tier-2",
+      "type": "calculation",
+      "statement": "Adding the saved upgrade 1 and upgrade 2 costs, from the starter house through upgrade 2, is 75,000g, 450 Wood, and 100 Hardwood.",
+      "formula": "10,000 + 65,000 = 75,000 gold; Wood 450 + 0 = 450; Hardwood 0 + 100 = 100",
+      "inputs": {
+        "upgrade1Gold": 10000,
+        "upgrade2Gold": 65000,
+        "upgrade1Wood": 450,
+        "upgrade2Wood": 0,
+        "upgrade1Hardwood": 0,
+        "upgrade2Hardwood": 100
+      },
+      "calculationType": "arithmetic_sum",
+      "sourceTitle": "Calculation from the saved Farmhouse upgrade 1 and upgrade 2 costs",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Derived calculation",
+      "evidenceLocation": "Gold and materials are the two saved cost rows. Upgrade 2 lists hardwood and does not list wood.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "This addition scenario. Not a wiki sentence and not a proof that a tier cannot be skipped.",
+      "limitation": "Arithmetic. 75,000g is not printed as a total on the saved pages.",
+      "publicAllowed": true
+    },
+    {
+      "id": "CALC-cumulative-tier-3",
+      "type": "calculation",
+      "statement": "Adding the saved upgrade 1, upgrade 2, and upgrade 3 costs, from the starter house through upgrade 3, is 175,000g, 450 Wood, and 100 Hardwood.",
+      "formula": "10,000 + 65,000 + 100,000 = 175,000 gold; Wood 450 + 0 + 0 = 450; Hardwood 0 + 100 + 0 = 100",
+      "inputs": {
+        "upgrade1Gold": 10000,
+        "upgrade2Gold": 65000,
+        "upgrade3Gold": 100000,
+        "wood": 450,
+        "hardwood": 100
+      },
+      "calculationType": "arithmetic_sum",
+      "sourceTitle": "Calculation from the saved Farmhouse upgrade 1, 2, and 3 costs",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Derived calculation",
+      "evidenceLocation": "The three saved cost rows. Upgrade 3 lists 100,000g and does not list wood or hardwood.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "This addition scenario. Not a wiki sentence and not a proof that a tier cannot be skipped.",
+      "limitation": "Arithmetic. 175,000g is not printed as a total on the saved pages.",
+      "publicAllowed": true
+    },
+    {
+      "id": "CALC-wood-deficit-example",
+      "type": "calculation",
+      "statement": "Year 1 scenario, not a wiki sentence. Upgrade 1 costs 10,000g and 450 Wood. The saved Carpenter's Shop permanent stock lists Wood at 10g in Year 1. If 200 Wood is already on hand, the wood still to buy is 250. At 10g each, that wood is 2,500g. The upgrade gold plus that wood purchase is 12,500g. The 12,500g figure includes only those two amounts and no other preparation spending.",
+      "formula": "450 - 200 = 250 wood; 250 × 10 = 2,500 gold; 10,000 + 2,500 = 12,500 gold",
+      "inputs": {
+        "woodRequired": 450,
+        "woodOnHand": 200,
+        "year1WoodPrice": 10,
+        "upgradeGold": 10000
+      },
+      "calculationType": "scenario_deficit_budget",
+      "sourceTitle": "Calculation from the saved upgrade 1 cost and Year 1 wood price",
+      "sourceUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "alsoUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Derived calculation",
+      "evidenceLocation": "Carpenter's Shop innerText Permanent Stock: 'Wood' 'Year 1: 10g'. Farmhouse innerText upgrade 1: '10,000g' and 'Wood (450)'. The 200 Wood on hand is the scenario condition, not a wiki inventory.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "This Year 1 scenario only. The same stock row lists Year 2+ wood at 50g, which is not used in the 12,500g total.",
+      "limitation": "No axe price, bar count, food cost, or hardwood-gathering cost is an input. Those figures were removed from this calculation.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "Copper Axe upgrade fees (2,000g + 5 Copper Bars)",
+        "Steel Axe 5,000g + 5 Iron Bars",
+        "food/energy consumption",
+        "hardwood preparation costs for Tier 2",
+        "钢斧砍大树桩"
+      ]
+    },
+    {
+      "id": "UP-construction-days-per-tier",
+      "type": "theme",
+      "statement": "The Farmhouse page says Robin requires three days to complete each farmhouse upgrade. The Carpenter's Shop page says farmhouse upgrades require three days to complete.",
+      "sourceTitle": "Farmhouse; Carpenter's Shop",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "alsoUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Farmhouse innerText: 'Robin requires three days to complete each farmhouse upgrade.' Carpenter's Shop innerText: 'Farmhouse upgrades require three days to complete.' The saved house-upgrade table does not show a separate Build Time cell.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Those two saved sentences.",
+      "limitation": "Three days for each upgrade is the saved wording. A total of 9 days, 'full work days,' and a calendar completion date are not in these sentences.",
+      "publicAllowed": true,
+      "removedFromPublicStatement": [
+        "three full days of construction work",
+        "total construction labor time is 9 work days"
+      ]
+    },
+    {
+      "id": "B-calendar-scheduling-constraints",
+      "type": "boundary",
+      "statement": "Internal boundary. The Carpenter's Shop introduction says she will begin construction the day after buildings are purchased, she does not work on festival days, and most construction projects are finished in 2 days. The saved text does not locate those sentences onto the separate farmhouse three-day lines. They are not used here as a farmhouse calendar, a next-morning start, or a one-day festival delay for a farmhouse upgrade.",
+      "sourceTitle": "Carpenter's Shop; Farmhouse",
+      "sourceUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "alsoUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Carpenter's Shop innerText introduction: 'She will begin construction the day after buildings are purchased, but she does not work on festival days. Most construction projects are finished in 2 days (by the start of the second day after placing an order).' Farmhouse and Carpenter's Shop three-day sentences are cited by UP-construction-days-per-tier and are not restated here as a date.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "Gap between the general building sentences and the farmhouse three-day sentences in the saved pages.",
+      "limitation": "publicAllowed false. Do not give this to C as an article disclaimer or as a schedule. Shop Tuesday and Friday hours are in the saved Shop Closure section and are not turned into a farmhouse order date here.",
+      "publicAllowed": false,
+      "removedFromPublicStatement": [
+        "cannot be interpreted as a guaranteed 9 consecutive calendar days",
+        "Tier 2 cannot be purchased until Tier 1 is fully finished",
+        "Robin begins construction the day after a purchase is made",
+        "festival days delay construction by 1 day",
+        "Tuesday and Friday restrict the days a player can place the next farmhouse order",
+        "players require in-game time to accumulate 100 Hardwood"
+      ]
+    },
+    {
+      "id": "B-shop-counter-operation-unverified",
+      "type": "boundary",
+      "statement": "Internal boundary. An open sales counter and a closed sales counter during the three farmhouse-upgrade days are both absent from the public claims. The saved pages do not settle that counter question for those days.",
+      "sourceTitle": "Carpenter's Shop; Robin",
+      "sourceUrl": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "alsoUrl": "https://stardewvalleywiki.com/Robin",
+      "publisher": "Stardew Valley Wiki",
+      "evidenceLocation": "Seen and not promoted: Carpenter's Shop 'The shop is closed all day any day that she is working on a job on the Farm.' Robin 'Her shop will be closed for the days that she is on the Farm completing the construction.' Robin 'She is available during Farmhouse, Coop, and Barn upgrades' is in the gifting note, not a counter-status sentence.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "This article's public claims. Not a statement that the counter was observed open or closed.",
+      "limitation": "publicAllowed false. Do not write either counter status into the article, and do not print this boundary as a disclaimer.",
+      "publicAllowed": false,
+      "removedFromPublicStatement": [
+        "the counter remains open",
+        "the counter is closed during farmhouse upgrades",
+        "Robin stands outside the player's farmhouse"
+      ]
+    },
+    {
+      "id": "B-scope-marriage-childcare-fence",
+      "type": "boundary",
+      "statement": "Internal scope fence. The public upgrade 1 claim stops at the Farmhouse words 'Allows marriage' and the bed and bedroom sentences. It does not include Krobus, roommate conditions, gift lists, heart events, pregnancy, or child aging.",
+      "sourceTitle": "Correction scope for this article",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Role A correction record",
+      "evidenceLocation": "The public sentence is the Farmhouse upgrade 1 line. No Marriage page snapshot is in upgrade-planning/sources.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "What this fact pack allows into the article.",
+      "limitation": "Not an article disclaimer.",
+      "publicAllowed": false
+    },
+    {
+      "id": "B-scope-renovations-catalog-fence",
+      "type": "boundary",
+      "statement": "Internal scope fence. The public renovation claim is the instant completion and refund wording plus the painting sentences in UP-upgrade-2-renovations-painting. The saved renovation table's individual prices and room sizes are not public claims in this pack.",
+      "sourceTitle": "Correction scope for this article",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Role A correction record",
+      "evidenceLocation": "Individual prices remain in the saved Farmhouse and Carpenter's Shop renovation tables and were not copied into a public fact.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "What this fact pack allows into the article.",
+      "limitation": "Not an article disclaimer.",
+      "publicAllowed": false
+    },
+    {
+      "id": "B-scope-cask-profit-layout-fence",
+      "type": "boundary",
+      "statement": "Internal scope fence. The public cellar claim is UP-upgrade-3-cellar-casks-direct-use. The 189 count, iridium value doubling, aging durations, and packing layouts are not public claims, even where the saved Cask or Farmhouse text contains them.",
+      "sourceTitle": "Correction scope for this article",
+      "sourceUrl": "https://stardewvalleywiki.com/Cask",
+      "publisher": "Role A correction record",
+      "evidenceLocation": "See B-cellar-details-outside-approved-function for the saved 189 and doubling sentences.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "What this fact pack allows into the article.",
+      "limitation": "Not an article disclaimer.",
+      "publicAllowed": false
+    },
+    {
+      "id": "B-scope-tools-community-fence",
+      "type": "boundary",
+      "statement": "Internal scope fence. This pack does not include axe upgrade prices, axe bar counts, or community-upgrade prices. The wood-deficit calculation does not use them.",
+      "sourceTitle": "Correction scope for this article",
+      "sourceUrl": "https://stardewvalleywiki.com/Farmhouse",
+      "publisher": "Role A correction record",
+      "evidenceLocation": "CALC-wood-deficit-example inputs. Axe grades are not in the six saved sources for this folder. material-preparation states a Copper Axe for a Large Stump and a Steel Axe for a Large Log; that distinction was not copied in as new numbers.",
+      "verifiedOn": "2026-10-16",
+      "appliesTo": "What this fact pack allows into the article.",
+      "limitation": "Not an article disclaimer. The removed phrase '钢斧砍大树桩' is not replaced with another tool price.",
+      "publicAllowed": false
+    }
+  ],
+  "serpTop5": [
+    {
+      "rank": 1,
+      "type": "wiki guide",
+      "url": "https://stardewvalleywiki.com/Farmhouse",
+      "title": "Farmhouse - Stardew Valley Wiki",
+      "opened": true,
+      "dateSeen": "Page says last edited 15 January 2026, at 18:15. article:modified_time 2026-01-15T18:15:54Z.",
+      "usedForCosts": true
+    },
+    {
+      "rank": 2,
+      "type": "Steam guide",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?l=german&id=3118664526",
+      "title": "Every House Upgrade And Renovation",
+      "opened": true,
+      "dateSeen": "Published and updated 21 Dec 2023. UI language de because the SERP URL contains l=german. Guide body English.",
+      "usedForCosts": false
+    },
+    {
+      "rank": 3,
+      "type": "guide",
+      "url": "https://www.ign.com/wikis/stardew-valley/Farmhouse_Upgrades",
+      "title": "Farmhouse Upgrades - Stardew Valley Guide - IGN",
+      "opened": true,
+      "dateSeen": "Visible line UPDATED: NOV 14, 2024 5:37AM GMT+8. First goto timed out after commit; body text was then read from that page.",
+      "usedForCosts": false,
+      "note": "Visible costs match the current wiki: 10,000g and 450 wood; 65,000g and 100 hardwood; 100,000g. Wiki remains the cost source."
+    },
+    {
+      "rank": 4,
+      "type": "forum",
+      "url": "https://www.reddit.com/r/StardewValley/comments/17lxixq/upgrade_house_worth_it/",
+      "title": "Upgrade house worth it?",
+      "opened": true,
+      "dateSeen": "Opened page showed 3y ago and Archived on 2026-10-15. SERP chrome said 2 years ago.",
+      "usedForCosts": false
+    },
+    {
+      "rank": 5,
+      "type": "guide",
+      "url": "https://www.digitaltrends.com/gaming/stardew-valley-house-upgrade/",
+      "title": "Stardew Valley house upgrade guide: all upgrade costs and more",
+      "opened": true,
+      "dateSeen": "article:published_time 2025-01-08T15:15:06-08:00. Author Jesse Lennox. og:locale en_US.",
+      "usedForCosts": false,
+      "note": "Costs and renovation prices match the wiki. Intro says Robin works for a few days, then the renovation section says renovations are instant."
+    }
+  ]
+}

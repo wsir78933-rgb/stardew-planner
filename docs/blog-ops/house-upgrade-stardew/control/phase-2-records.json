@@ -1,0 +1,409 @@
+{
+  "schemaVersion": "s2-phase-2-records",
+  "recordedAt": "2026-10-15T22:52:44+08:00",
+  "role": "S2",
+  "taskId": "task_791711df127d",
+  "dispatchId": "ctx_226e8208bfeb",
+  "runId": "run_8253831e93d6",
+  "currentFileSha256": {
+    "operation-store.json": "4dbd4a124ef6ec24625307f259d171bccbaacaae3b016b0b3af6ce3e2a7660fc",
+    "authorization-isolation.md": "3568318aac6e93358e262198164209d97425b52cc7a7dc1b5225f88ede460ec4",
+    "raw-orca-state.json": "fd0972aa1c2331f3f3ebc351dfdd48be398424a6b8b642d1e5abbc7836bcba5e",
+    "verification-report.json": "a828f431fa7f4cacf77079c490fba7c494f30551c7af94722db791abdc3ba990"
+  },
+  "initializationHashesNoLongerCurrent": {
+    "operation-store.json": "617a61cc16a2c7ac7a87de61fff131bfe1c2b26a637082e334bddc6fbde35014",
+    "authorization-isolation.md": "99704bb7ae2137f7ac506a7e71b058de5fd34c6b45fde33123669dfa8935a027"
+  },
+  "note": "verification-report.json 的哈希仍是初始化快照。operation-store 与 authorization-isolation 的初始化哈希在本次写入后不再代表当前字节。",
+  "candidate": {
+    "bodyVersion": "draft-v1",
+    "locale": "en",
+    "isCandidateOnly": true,
+    "dPassed": false,
+    "ePassed": false,
+    "fLocked": false,
+    "formalLengthPass": false,
+    "bodySha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "mediaSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+    "publicReferencesSha256": "f15c00643e6eabc93c26d3007a073f9be080040cc0e12d4727e1beab03c77ae4",
+    "writerSubmissionSha256": "5db55ed0942f2114a01d4332c1bbb8fc6d480b9db974b8b3b615400a7d179f9e",
+    "inputSha256": {
+      "writerBriefSha256": "6e15009775fdb1469514a3be9998a7340e481500867ee1e55e2dfadab344fa0d",
+      "mediaPlanSha256": "a7f1f374149cdfb3255c44ec2cda2045a08caadc7ff1042890c07e31b1fa51ad",
+      "factsSha256": "618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e"
+    },
+    "mechanicalPreview": {
+      "source": "writer-submission.json",
+      "reexecutedByS2": false,
+      "includingCaptionParagraphs": 1070,
+      "excludingLinesThatStartWithSchematic": 1017,
+      "signsFormalLengthPass": false
+    },
+    "qualityGate": "not-run"
+  },
+  "gates": {
+    "english": {
+      "status": "pending",
+      "meaning": "draft-v1 三门 overall FAIL。D 任务 lifecycle succeeded 不是内容通过。第 1 轮返修已派发，尚未再提交。"
+    },
+    "chinese": {
+      "status": "pending",
+      "meaning": "本轮task-list没有中文翻译任务。"
+    },
+    "localPage": {
+      "status": "pending",
+      "meaning": "G已结算的是接口预检，不是组页。"
+    },
+    "userReview": {
+      "status": "pending"
+    },
+    "production": {
+      "status": "pending",
+      "meaning": "当前不发布。"
+    },
+    "freeze": {
+      "status": "pending"
+    }
+  },
+  "revisionBudget": {
+    "totalMaxRounds": 3,
+    "currentFormalManuscriptRepairRound": 1,
+    "budgetChanged": false,
+    "budgetReset": false,
+    "scope": "英文与中文返修共用最多三轮。D 对 draft-v1 的三门结果是 FAIL 后，正式返修记为第 1 轮，已用 1，剩余 2。准备期纠正仍单独保留，不藏进这一轮，也不算文稿通过。",
+    "ruleCitation": "V7 01/执行入口: 修订预算按整篇文章算（含译文返修），共用最多三轮，初始0",
+    "prepCorrectionsAreNotGatePasses": true,
+    "laterRepairsMustRemainVisible": true,
+    "interpretationBoundary": "若未来某事件是否消耗这3轮仍不确定，维持这一原文边界，交协调者处理。本记录不颁布新规则。",
+    "remainingFormalRounds": 2,
+    "v1ContentPass": false,
+    "roundChange": {
+      "earlierS2Readback": 0,
+      "afterDReport": 1,
+      "sources": [
+        "reviews/D/three-gates-report.json budget.currentRoundUsed=1",
+        "msg_f2385df5a74d"
+      ]
+    }
+  },
+  "prepCorrections": [
+    {
+      "at": "2026-10-15T14:03:41Z",
+      "kind": "media-evidence-boundary",
+      "evidence": "msg_72e4e28d60fe",
+      "beforeFirstCandidateSubmission": true,
+      "manuscriptGatePass": false,
+      "consumesFormalRepairBudget": "未计入；是否将来消耗预算维持原文边界，不确定处交协调者"
+    },
+    {
+      "at": "2026-10-15T14:04:52.182Z",
+      "kind": "dispatch-failure",
+      "dispatchId": "ctx_f31d7667c169",
+      "reason": "agent_not_in_foreground",
+      "taskDelivered": false,
+      "releasedAt": "2026-10-15 14:05:05",
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:12:22.149Z",
+      "kind": "media-evidence-correction",
+      "dispatchId": "ctx_e8d08a993bdb",
+      "retryOfDispatchId": "ctx_f31d7667c169",
+      "beforeFirstCandidateSubmission": true,
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:20:41Z",
+      "kind": "layout-scope-correction-before-writing",
+      "evidence": "msg_200b6b90fc1a",
+      "settledBy": "ctx_a941085c84e5",
+      "settledAt": "2026-10-15T14:26:31.603Z",
+      "beforeFirstCandidateSubmission": true,
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:32:21Z",
+      "kind": "unproven-four-label-menu-requirement-removed",
+      "questionId": "msg_2e82b125c389",
+      "decisionId": "msg_741541b5415a",
+      "choice": "B",
+      "effect": "删去四行菜单标签要求；选择B不是研究角色B的另一次任务。",
+      "appliedInFirstCandidate": true,
+      "manuscriptGatePass": false
+    },
+    {
+      "at": "2026-10-15T14:42:28.738Z",
+      "kind": "first-candidate-submission",
+      "dispatchId": "ctx_fe298bb5ff1a",
+      "bodyVersion": "draft-v1",
+      "formalManuscriptRepairRoundAfter": 0
+    }
+  ],
+  "roles": [
+    {
+      "role": "A",
+      "taskTitle": "A｜农舍升级研究与搜索证据",
+      "taskId": "task_9ee9836cf39f",
+      "status": "completed",
+      "dependsOn": [],
+      "authoritativeDispatchId": "ctx_01802221fb7b",
+      "agent": "cursor",
+      "terminalHandle": "term_82d58d3a-f95e-4c19-a590-118df3d97216",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "G",
+      "taskTitle": "G｜网站接口、隔离与验证基线",
+      "taskId": "task_aab2039ba9ff",
+      "status": "completed",
+      "dependsOn": [],
+      "authoritativeDispatchId": "ctx_a79d4234407a",
+      "agent": "cursor",
+      "terminalHandle": "term_20959df8-6e87-46d5-8535-2f47ebe6972c",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "M",
+      "taskTitle": "M｜农舍视觉素材与授权核验",
+      "taskId": "task_3a79aaae4149",
+      "status": "completed",
+      "dependsOn": [],
+      "authoritativeDispatchId": "ctx_2d2fa1bb6b61",
+      "agent": "antigravity",
+      "terminalHandle": "term_eeedce69-a29d-4918-8800-c3c22e538417",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "S",
+      "taskTitle": "S｜V7 调度与污染隔离记录",
+      "taskId": "task_d0e8389f037f",
+      "status": "completed",
+      "dependsOn": [],
+      "authoritativeDispatchId": "ctx_72a70c9fac6f",
+      "agent": "antigravity",
+      "terminalHandle": "term_540f4ad4-6a25-4782-9104-57e3f3778374",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "B",
+      "taskTitle": "B｜唯一主意图与图文布局",
+      "taskId": "task_6104f4016cd1",
+      "status": "completed",
+      "dependsOn": [
+        "task_9ee9836cf39f",
+        "task_3a79aaae4149",
+        "task_aab2039ba9ff"
+      ],
+      "authoritativeDispatchId": "ctx_a941085c84e5",
+      "agent": "cursor",
+      "terminalHandle": "term_656ec1a7-67a3-487b-8845-3c9b8f3c55ed",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "C",
+      "taskTitle": "C｜英文图文正文写作",
+      "taskId": "task_fc17d883efc8",
+      "status": "completed",
+      "dependsOn": [
+        "task_6104f4016cd1"
+      ],
+      "authoritativeDispatchId": "ctx_fe298bb5ff1a",
+      "agent": "cursor",
+      "terminalHandle": "term_8991e7da-dd73-4e7e-b41c-b03340ece350",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "M2",
+      "taskTitle": "M2｜纠正媒体证据断言",
+      "taskId": "task_c14add3a3526",
+      "status": "completed",
+      "dependsOn": [
+        "task_3a79aaae4149"
+      ],
+      "authoritativeDispatchId": "ctx_e8d08a993bdb",
+      "agent": "cursor",
+      "terminalHandle": "term_e4f87345-3742-4410-9591-b44b00898559",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "D",
+      "taskTitle": "D｜英文写后三门独立检查",
+      "taskId": "task_e07302bdea43",
+      "status": "completed",
+      "dependsOn": [
+        "task_fc17d883efc8"
+      ],
+      "authoritativeDispatchId": "ctx_1fa278b7ca02",
+      "agent": "antigravity",
+      "terminalHandle": "term_e0751eb6-fe65-40a6-af6d-4b14acefa5cd",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "E",
+      "taskTitle": "E｜英文鉴文与事实引用独立审核",
+      "taskId": "task_1287ac59ca63",
+      "status": "blocked",
+      "dependsOn": [
+        "task_e07302bdea43"
+      ],
+      "authoritativeDispatchId": null,
+      "agent": null,
+      "terminalHandle": null,
+      "terminalRelease": "not_dispatched",
+      "blockingGateId": "gate_ac67dcb7fc37"
+    },
+    {
+      "role": "M3",
+      "taskTitle": "M3｜英文封面与正文自绘图解",
+      "taskId": "task_6ad859edf119",
+      "status": "completed",
+      "dependsOn": [
+        "task_fc17d883efc8"
+      ],
+      "authoritativeDispatchId": "ctx_58ccd56dab47",
+      "agent": "antigravity",
+      "terminalHandle": "term_5a5eb331-703b-46a6-b4c4-c89b8ad70ecd",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "F",
+      "taskTitle": "F｜英文计数锁稿与七罪标题候选",
+      "taskId": "task_7f60bf2cf348",
+      "status": "pending",
+      "dependsOn": [
+        "task_1287ac59ca63"
+      ],
+      "authoritativeDispatchId": null,
+      "agent": null,
+      "terminalHandle": null,
+      "terminalRelease": "not_dispatched"
+    },
+    {
+      "role": "S2",
+      "taskTitle": "S2｜候选版本与调度证据同步",
+      "taskId": "task_791711df127d",
+      "status": "dispatched",
+      "dependsOn": [
+        "task_d0e8389f037f",
+        "task_fc17d883efc8"
+      ],
+      "authoritativeDispatchId": "ctx_226e8208bfeb",
+      "agent": "cursor",
+      "terminalHandle": "term_acae2fb6-8876-40c9-9455-aa7f455b22dd",
+      "terminalRelease": "not_requested"
+    },
+    {
+      "role": "C",
+      "taskTitle": "C｜第1轮英文返修",
+      "taskId": "task_836071267139",
+      "status": "dispatched",
+      "dependsOn": [
+        "task_fc17d883efc8",
+        "task_e07302bdea43"
+      ],
+      "authoritativeDispatchId": "ctx_2532ccdb6e55",
+      "agent": "cursor",
+      "terminalHandle": "term_09895b76-9443-4bca-a1c4-5c78c6304670",
+      "terminalRelease": "not_requested"
+    }
+  ],
+  "commands": {
+    "task-list": 0,
+    "worker-list": 0,
+    "worker-show": {
+      "ctx_01802221fb7b": 0,
+      "ctx_1fa278b7ca02": 0,
+      "ctx_226e8208bfeb": 0,
+      "ctx_2d2fa1bb6b61": 0,
+      "ctx_58ccd56dab47": 0,
+      "ctx_72a70c9fac6f": 0,
+      "ctx_a79d4234407a": 0,
+      "ctx_a941085c84e5": 0,
+      "ctx_e8d08a993bdb": 0,
+      "ctx_f31d7667c169": 0,
+      "ctx_fe298bb5ff1a": 0
+    },
+    "inbox": 0,
+    "productChecksRun": false,
+    "lengthCounterRerun": false,
+    "task-list-later": 0,
+    "worker-list-later": 0,
+    "worker-show-later": {
+      "ctx_2532ccdb6e55": 0,
+      "ctx_1fa278b7ca02": 0,
+      "ctx_58ccd56dab47": 0
+    }
+  },
+  "unverified": [
+    "正式 Length PASS",
+    "D、E、F 内容通过",
+    "中文稿",
+    "本地页面验收",
+    "底层操作系统权限是否相同或是否隔离"
+  ],
+  "coordinatorFollowUp": {
+    "messageId": "msg_9b719ceadb79",
+    "appliedAt": "2026-10-15T22:56:35+08:00",
+    "effect": "raw-orca-state 删除全局 inbox 摘录；工作树身份不改用其他 Run。"
+  },
+  "sourceConflicts": [
+    {
+      "topic": "authorization",
+      "s1": "initialized operation-store had authorizedRoleA=true; authorization doc said the user authorized role A to start",
+      "current": "本 S2 任务写明“A开始执行”指选项 A/project-write，不是仅授权研究角色 A",
+      "kept": "两处来源都保留。当前记录采用选项 A/project-write。"
+    },
+    {
+      "topic": "role-status",
+      "s1": "A, G, M, S were recorded active; B through T had no task id",
+      "current": "本次 task-list：A/G/M/M2/B/C/S completed 且终端 released；D ctx_1fa278b7ca02 与 M3 ctx_58ccd56dab47 dispatched；E 与 F pending；T 无任务",
+      "kept": "状态以本次带 --run 的回读为准。S1 初始化字节仍由未改动的 verification-report.json 代表。"
+    },
+    {
+      "topic": "isolation-inference",
+      "s1": "same UID was written as identical underlying permissions, and distinct inodes were written as proof of isolation",
+      "current": "重测 inode 仍是 145851019、65977012、144267400，UID 501，设备 16777232，与 S1 数字一致",
+      "kept": "数字没有冲突。推论只保留已观测事实，结论仍是逻辑隔离，未验证底层权限。"
+    },
+    {
+      "topic": "status-after-msg_f2385df5a74d",
+      "messageAt": "2026-10-15T14:55:43Z",
+      "messageSaid": "C revision task not yet created; E/F pending; do not invent a future id",
+      "laterTaskList": "E status=blocked with no dispatch; F status=pending; C repair task_836071267139 / ctx_2532ccdb6e55 is dispatched; M3 completed but terminal reclaimable and not released",
+      "kept": "消息时点不编造当时还不存在的 ID。本段 ID 来自其后的 task-list，并标明消息当时尚未创建。"
+    }
+  ],
+  "identitySource": "当前工作树路径、未改动的 S1 verification-report，以及 run_8253831e93d6 的 task-list/worker-list/worker-show。不采用其他 Run 的 displayName 或路径。",
+  "recordedAtLater": "2026-10-15T22:58:39+08:00",
+  "dGateReadback": {
+    "reportPath": "docs/blog-ops/house-upgrade-stardew/reviews/D/three-gates-report.json",
+    "reportSha256": "1a239fce4832c524cb4d758da6540cb4fa3377b8baa94f424f2bc3212350f360",
+    "draftSha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "overallOutcome": "FAIL",
+    "ResearchTrace": {
+      "outcome": "FAIL",
+      "issuesCount": 4
+    },
+    "ReaderValue": {
+      "outcome": "PASS",
+      "issuesCount": 0
+    },
+    "Repetition": {
+      "outcome": "FAIL",
+      "issuesCount": 3
+    },
+    "taskLifecycle": "succeeded",
+    "contentPass": false
+  },
+  "m3Binding": {
+    "provenancePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/provenance.json",
+    "status": "candidate_asset_bound_to_writer_submission",
+    "bodyDraftSha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "mediaTextEnSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+    "figureCount": 3,
+    "contentOrPagePass": false,
+    "rebindRule": "若后续 C 只改 body 绑定而图中文字不变，必须另记重新绑定依据，不能把旧 bodyDraftSha256 继续当成当前正文哈希。"
+  },
+  "latestRunReadbackAt": "2026-10-15T22:59:50+08:00"
+}

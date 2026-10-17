@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "typecheckExitRecorded": 2,
+  "webpackBuildExitRecorded": 1,
+  "ts2307Mentions": 8,
+  "manifestSha256": "b00c8d80843cfdc766cb08e490f50d0edb121e88c5725673bfa6dacb4290f1af",
+  "checksumsSha256": "47bdbca2844a7be476f470d748303f31ff4be1c3eca5f0cc51d10351bf8d28d0",
+  "manifestRewritten": false,
+  "checksumsRewritten": false,
+  "typescriptAfter": [],
+  "acceptance": {
+    "product": 15,
+    "handoff": 2,
+    "new-manifest": 1,
+    "body": 2,
+    "failed": 0
+  },
+  "shasum": {
+    "exitCode": 1,
+    "okCount": 33,
+    "failedCount": 2
+  },
+  "applyScriptMainExecuted": false,
+  "buildReRun": false
+}

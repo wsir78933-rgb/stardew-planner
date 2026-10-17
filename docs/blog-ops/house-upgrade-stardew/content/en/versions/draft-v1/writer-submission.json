@@ -1,0 +1,66 @@
+{
+  "role": "C",
+  "locale": "en",
+  "articleSlug": "house-upgrade-stardew",
+  "bodyVersion": "draft-v1",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "qualityGate": "not-run",
+  "qualityGateNote": "Author submission only. This file does not record a D three-gate result or an E pass.",
+  "length": {
+    "counter": "/Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py",
+    "locale": "en",
+    "mechanicalUnitsIncludingCaptionParagraphs": 1070,
+    "mechanicalUnitsExcludingLinesThatStartWithSchematic": 1017,
+    "lengthClassOnExcludingSchematicLines": "short",
+    "shortFormReason": "The main task is written: three current vanilla costs and materials, the three-day wait, the rooms each tier adds, where to order, the wood-buying example, and the renovation contrast. No further topic was added to reach 2000.",
+    "semanticQualification": "requires_independent_review"
+  },
+  "files": {
+    "draft-v1.md": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "public-references.en.json": "f15c00643e6eabc93c26d3007a073f9be080040cc0e12d4727e1beab03c77ae4",
+    "media-text.en.json": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415"
+  },
+  "inputs": {
+    "writerBriefSha256": "6e15009775fdb1469514a3be9998a7340e481500867ee1e55e2dfadab344fa0d",
+    "mediaPlanSha256": "a7f1f374149cdfb3255c44ec2cda2045a08caadc7ff1042890c07e31b1fa51ad",
+    "factsSha256": "618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e"
+  },
+  "sourcesRead": [
+    "docs/blog-ops/house-upgrade-stardew/layout/writer-brief.md",
+    "docs/blog-ops/house-upgrade-stardew/layout/media-plan.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/facts.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/01-wiki-farmhouse.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/wiki-api-carpenter-s-shop.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/wiki-api-version-history.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/wiki-api-marriage.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/wiki-api-mermaid-s-pendant.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/wiki-api-cabin.json",
+    "docs/blog-ops/house-upgrade-stardew/research/A/sources/10-site-carpenter.json",
+    "/Users/wusir/Desktop/博客-V7修订版/02-内容生产与质量门.md",
+    "/Users/wusir/Desktop/博客-V7修订版/01-统一工作流.md",
+    "/Users/wusir/Desktop/博客-V7修订版/参考规则/事实核验与公开引用.md",
+    "/Users/wusir/Desktop/博客-V7修订版/04-公开交接与页面装配.md"
+  ],
+  "coordinatorDecision": {
+    "question": "Four dialogue labels Shop, Upgrade House, Construct Farm Buildings, Leave were required by the writer brief under T-menu but are only in OBS-menu-image, publicAllowed false.",
+    "choice": "B",
+    "effect": "Those four labels are not in the reader draft. The order is described from T-menu: Robin at the Carpenter's Shop, 24 Mountain Road, upgrades the farmhouse."
+  },
+  "unusedClaims": [
+    "Dialogue labels Shop, Upgrade House, Construct Farm Buildings, Leave",
+    "OBS-menu-image",
+    "Cask counts 33 and 189, and wine aging seasons",
+    "Painting, moving the farmhouse, achievements, roommates",
+    "New cabin price 100g, 5 by 3 footprint, and platform cabin caps",
+    "Community upgrade and the unresolved word fully",
+    "Whether the counter is open during the three house-upgrade days"
+  ],
+  "unresolvedNotUsed": [
+    "A left unresolved whether fully upgrading for the community upgrade means tier 2 or tier 3. The draft does not use that upgrade.",
+    "A left unresolved whether the counter stays open during the three house-upgrade days. The draft does not say.",
+    "The Steam 1.6.15 post's own visible publish date and a city name on the US search were unresolved. The draft does not use them."
+  ],
+  "coreFactGap": "None for the farmhouse purchase after the coordinator chose B on the four menu labels."
+}

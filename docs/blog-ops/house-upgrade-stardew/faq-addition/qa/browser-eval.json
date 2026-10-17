@@ -1,0 +1,693 @@
+{
+  "timestamp": "2026-10-17T02:02:01.761Z",
+  "taskSpaceId": 205,
+  "pages": [
+    {
+      "label": "p1",
+      "spaceId": 205
+    }
+  ],
+  "views": {
+    "desktop_en": {
+      "viewName": "Desktop English",
+      "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "h2": "Farmhouse Upgrade FAQ",
+      "initialItemsCount": 6,
+      "initialTriggersCount": 6,
+      "initialAnswersCount": 6,
+      "items": [
+        {
+          "index": 0,
+          "question": "What does each farmhouse upgrade cost?",
+          "answer": "The first upgrade is 10,000g and 450 Wood. The second is 65,000g and 100 Hardwood, the 1.6 price. The third is 100,000g."
+        },
+        {
+          "index": 1,
+          "question": "How long does each house upgrade take?",
+          "answer": "Each upgrade takes three days."
+        },
+        {
+          "index": 2,
+          "question": "How do you get the Hardwood for the second upgrade, and does Robin sell it?",
+          "answer": "Robin's ordinary stock does not sell Hardwood. Six Large Stumps in the Secret Woods regrow daily. A Steel Axe clears the log at the entrance."
+        },
+        {
+          "index": 3,
+          "question": "Which upgrade unlocks the cellar?",
+          "answer": "The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks."
+        },
+        {
+          "index": 4,
+          "question": "Does a house upgrade increase the outdoor footprint?",
+          "answer": "The outdoor footprint stays 9×5, so the tiles beside the house stay as they are. After the third upgrade, the outside of the house stays the same as the previous upgrade."
+        },
+        {
+          "index": 5,
+          "question": "How is a renovation different from an upgrade?",
+          "answer": "Each upgrade takes three days. After the second upgrade, a renovation finishes immediately. Remove Crib and Add Dining Room are examples."
+        }
+      ],
+      "clickInteractions": [
+        {
+          "itemIndex": 0,
+          "question": "What does each farmhouse upgrade cost?",
+          "answerExcerpt": "The first upgrade is 10,000g and 450 Woo...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 1,
+          "question": "How long does each house upgrade take?",
+          "answerExcerpt": "Each upgrade takes three days....",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 44.796875,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 2,
+          "question": "How do you get the Hardwood for the second upgrade, and does Robin sell it?",
+          "answerExcerpt": "Robin's ordinary stock does not sell Har...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 3,
+          "question": "Which upgrade unlocks the cellar?",
+          "answerExcerpt": "The third upgrade adds a cellar under th...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 4,
+          "question": "Does a house upgrade increase the outdoor footprint?",
+          "answerExcerpt": "The outdoor footprint stays 9×5, so the ...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 5,
+          "question": "How is a renovation different from an upgrade?",
+          "answerExcerpt": "Each upgrade takes three days. After the...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        }
+      ],
+      "keyboardInteractions": {
+        "enterOpen": true,
+        "enterCollapse": true,
+        "spaceOpen": true,
+        "spaceCollapse": true
+      },
+      "horizontalOverflow": false,
+      "externalButtons": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "导出外链"
+        }
+      ],
+      "screenshot": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-desktop-en.png",
+        "bytes": 41051,
+        "clip": {
+          "x": 464,
+          "y": 5449,
+          "width": 724,
+          "height": 429
+        }
+      },
+      "status": "PASS"
+    },
+    "desktop_zh": {
+      "viewName": "Desktop Chinese",
+      "url": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+      "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "h2": "星露谷房屋升级常见问题",
+      "initialItemsCount": 6,
+      "initialTriggersCount": 6,
+      "initialAnswersCount": 6,
+      "items": [
+        {
+          "index": 0,
+          "question": "每一档农舍升级要多少金币和材料？",
+          "answer": "第一次升级是10,000金和450木材。第二次是65,000金和100硬木，这是1.6的价格。第三次是100,000金。"
+        },
+        {
+          "index": 1,
+          "question": "每次升级要多久？",
+          "answer": "每次升级都要三天。"
+        },
+        {
+          "index": 2,
+          "question": "第二次升级的硬木怎么获得？罗宾出售硬木吗？",
+          "answer": "罗宾的普通存货不出售硬木。秘密森林里六棵大树桩每天重新长出。入口那根圆木要用钢斧头清除。"
+        },
+        {
+          "index": 3,
+          "question": "哪一档升级解锁地窖？",
+          "answer": "第三次升级在房子下面加上地窖。从厨房进去。地窖一开始有33个木桶。"
+        },
+        {
+          "index": 4,
+          "question": "升级会增加室外占地吗？",
+          "answer": "室外占地保持9×5，所以房子旁边的地块还是原来那样。第三次升级后，房子外面和上一次升级时一样。"
+        },
+        {
+          "index": 5,
+          "question": "装修和升级有什么区别？",
+          "answer": "每次升级都要三天。第二次升级之后可以做装修，而且马上完成。例如移除婴儿床，或增加餐厅这间房间。"
+        }
+      ],
+      "clickInteractions": [
+        {
+          "itemIndex": 0,
+          "question": "每一档农舍升级要多少金币和材料？",
+          "answerExcerpt": "第一次升级是10,000金和450木材。第二次是65,000金和100硬木，这是...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 1,
+          "question": "每次升级要多久？",
+          "answerExcerpt": "每次升级都要三天。...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 44.796875,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 2,
+          "question": "第二次升级的硬木怎么获得？罗宾出售硬木吗？",
+          "answerExcerpt": "罗宾的普通存货不出售硬木。秘密森林里六棵大树桩每天重新长出。入口那根圆木要用钢斧...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 44.796875,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 3,
+          "question": "哪一档升级解锁地窖？",
+          "answerExcerpt": "第三次升级在房子下面加上地窖。从厨房进去。地窖一开始有33个木桶。...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 44.796875,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 4,
+          "question": "升级会增加室外占地吗？",
+          "answerExcerpt": "室外占地保持9×5，所以房子旁边的地块还是原来那样。第三次升级后，房子外面和上一...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        },
+        {
+          "itemIndex": 5,
+          "question": "装修和升级有什么区别？",
+          "answerExcerpt": "每次升级都要三天。第二次升级之后可以做装修，而且马上完成。例如移除婴儿床，或增加...",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 71.1953125,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0,
+          "singleExpandVerified": true
+        }
+      ],
+      "keyboardInteractions": null,
+      "horizontalOverflow": false,
+      "externalButtons": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "导出外链"
+        }
+      ],
+      "screenshot": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-desktop-zh.png",
+        "bytes": 41800,
+        "clip": {
+          "x": 464,
+          "y": 4886,
+          "width": 724,
+          "height": 429
+        }
+      },
+      "status": "PASS"
+    },
+    "mobile_en": {
+      "viewName": "Mobile English",
+      "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 3,
+        "mobile": true
+      },
+      "h2": "Farmhouse Upgrade FAQ",
+      "initialItemsCount": 6,
+      "initialTriggersCount": 6,
+      "initialAnswersCount": 6,
+      "items": [
+        {
+          "index": 0,
+          "question": "What does each farmhouse upgrade cost?",
+          "answer": "The first upgrade is 10,000g and 450 Wood. The second is 65,000g and 100 Hardwood, the 1.6 price. The third is 100,000g."
+        },
+        {
+          "index": 1,
+          "question": "How long does each house upgrade take?",
+          "answer": "Each upgrade takes three days."
+        },
+        {
+          "index": 2,
+          "question": "How do you get the Hardwood for the second upgrade, and does Robin sell it?",
+          "answer": "Robin's ordinary stock does not sell Hardwood. Six Large Stumps in the Secret Woods regrow daily. A Steel Axe clears the log at the entrance."
+        },
+        {
+          "index": 3,
+          "question": "Which upgrade unlocks the cellar?",
+          "answer": "The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks."
+        },
+        {
+          "index": 4,
+          "question": "Does a house upgrade increase the outdoor footprint?",
+          "answer": "The outdoor footprint stays 9×5, so the tiles beside the house stay as they are. After the third upgrade, the outside of the house stays the same as the previous upgrade."
+        },
+        {
+          "index": 5,
+          "question": "How is a renovation different from an upgrade?",
+          "answer": "Each upgrade takes three days. After the second upgrade, a renovation finishes immediately. Remove Crib and Add Dining Room are examples."
+        }
+      ],
+      "clickInteractions": [
+        {
+          "itemIndex": 0,
+          "question": "What does each farmhouse upgrade cost?",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 97.59375,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0
+        }
+      ],
+      "keyboardInteractions": null,
+      "horizontalOverflow": false,
+      "externalButtons": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "导出外链"
+        }
+      ],
+      "screenshot": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-mobile-en.png",
+        "bytes": 38569,
+        "clip": {
+          "x": 6,
+          "y": 7441,
+          "width": 378,
+          "height": 486
+        }
+      },
+      "status": "PASS"
+    },
+    "mobile_zh": {
+      "viewName": "Mobile Chinese",
+      "url": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+      "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 3,
+        "mobile": true
+      },
+      "h2": "星露谷房屋升级常见问题",
+      "initialItemsCount": 6,
+      "initialTriggersCount": 6,
+      "initialAnswersCount": 6,
+      "items": [
+        {
+          "index": 0,
+          "question": "每一档农舍升级要多少金币和材料？",
+          "answer": "第一次升级是10,000金和450木材。第二次是65,000金和100硬木，这是1.6的价格。第三次是100,000金。"
+        },
+        {
+          "index": 1,
+          "question": "每次升级要多久？",
+          "answer": "每次升级都要三天。"
+        },
+        {
+          "index": 2,
+          "question": "第二次升级的硬木怎么获得？罗宾出售硬木吗？",
+          "answer": "罗宾的普通存货不出售硬木。秘密森林里六棵大树桩每天重新长出。入口那根圆木要用钢斧头清除。"
+        },
+        {
+          "index": 3,
+          "question": "哪一档升级解锁地窖？",
+          "answer": "第三次升级在房子下面加上地窖。从厨房进去。地窖一开始有33个木桶。"
+        },
+        {
+          "index": 4,
+          "question": "升级会增加室外占地吗？",
+          "answer": "室外占地保持9×5，所以房子旁边的地块还是原来那样。第三次升级后，房子外面和上一次升级时一样。"
+        },
+        {
+          "index": 5,
+          "question": "装修和升级有什么区别？",
+          "answer": "每次升级都要三天。第二次升级之后可以做装修，而且马上完成。例如移除婴儿床，或增加餐厅这间房间。"
+        }
+      ],
+      "clickInteractions": [
+        {
+          "itemIndex": 0,
+          "question": "每一档农舍升级要多少金币和材料？",
+          "afterOpenExpanded": "true",
+          "afterOpenHeight": 97.59375,
+          "afterCollapseExpanded": "false",
+          "afterCollapseHeight": 0
+        }
+      ],
+      "keyboardInteractions": null,
+      "horizontalOverflow": false,
+      "externalButtons": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "导出外链"
+        }
+      ],
+      "screenshot": {
+        "path": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/faq-addition/qa/faq-mobile-zh.png",
+        "bytes": 38220,
+        "clip": {
+          "x": 6,
+          "y": 6028,
+          "width": 378,
+          "height": 443
+        }
+      },
+      "status": "PASS"
+    }
+  },
+  "assertionsPassed": 294,
+  "assertionsFailed": 0,
+  "consoleEvents": [
+    {
+      "viewId": "desktop_en",
+      "events": [
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext: [object Object]",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 初始检查 hasCommentBox: false hasNotifiedCommentBox: false",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 初始检查 hasCommentBox:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext: [object Object]",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        }
+      ]
+    },
+    {
+      "viewId": "desktop_zh",
+      "events": [
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 初始检查 hasCommentBox: false hasNotifiedCommentBox: false",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 初始检查 hasCommentBox:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext: [object Object]",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        }
+      ]
+    },
+    {
+      "viewId": "mobile_en",
+      "events": [
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 初始检查 hasCommentBox: false hasNotifiedCommentBox: false",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 初始检查 hasCommentBox:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext: [object Object]",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        }
+      ]
+    },
+    {
+      "viewId": "mobile_zh",
+      "events": [
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 初始检查 hasCommentBox: false hasNotifiedCommentBox: false",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 初始检查 hasCommentBox:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] initOnPageReady 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext 开始",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] restoreBatchContext: [object Object]",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] restoreBatchContext:",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Console.messageAdded",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        },
+        {
+          "method": "Runtime.consoleAPICalled",
+          "text": "[AutoComment] 独立导出外链浮窗按钮已注入",
+          "url": "chrome-extension://kkeeajobecgijigkobdlokelmolheokc/content.js"
+        }
+      ]
+    }
+  ]
+}

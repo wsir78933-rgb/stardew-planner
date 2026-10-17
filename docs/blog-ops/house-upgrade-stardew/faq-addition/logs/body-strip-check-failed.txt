@@ -1,0 +1,7 @@
+command: python strip of inserted FAQ function, then compare to baseline bytes
+first_result: EN body after stripping FAQ does not match baseline
+second_result: EN mismatch lens 15611 15610
+mismatch_context_stripped: 's.\n      </p>\n    </>\n  );\n}\n\n\nfunction HouseUpgradeStardewE'
+mismatch_context_baseline: 's.\n      </p>\n    </>\n  );\n}\n\nfunction HouseUpgradeStardewEn'
+cause: stripper left one extra newline at the FAQ function insertion boundary
+source_action: no source rewrite; final diff below is the content evidence

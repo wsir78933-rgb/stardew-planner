@@ -1,0 +1,392 @@
+{
+  "locale": "en",
+  "articleSlug": "house-upgrade-stardew",
+  "bodyPath": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v3.md",
+  "bodyVersion": "draft-v3",
+  "bodySha256": "8ee52bfaabcbbde7c9de246f6b6560535af227b360b3c8c8c895ecf632f90154",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8",
+  "occurrenceRule": "occurrence is the 1-based count of the exact quote in the NFC/LF draft. Each quote below occurs once, so occurrence is 1.",
+  "reviewerNote": "factIds map these public references to the allowed facts for D and E. Do not render factIds in the article.",
+  "references": [
+    {
+      "id": "wiki-farmhouse",
+      "label": "Farmhouse",
+      "url": "https://stardewvalleywiki.com/Farmhouse",
+      "factIds": [
+        "UP-upgrade-1-cost-materials",
+        "UP-upgrade-2-cost-materials",
+        "UP-upgrade-3-cost-materials",
+        "UP-construction-days-per-tier",
+        "CALC-cumulative-tier-1",
+        "CALC-cumulative-tier-2",
+        "CALC-cumulative-tier-3",
+        "CALC-wood-deficit-example",
+        "T-wood-price",
+        "UP-upgrade-1-direct-unlocks",
+        "UP-kitchen-fridge-direct-use",
+        "UP-upgrade-2-direct-unlocks",
+        "UP-upgrade-3-cellar-casks-direct-use",
+        "UP-footprint-invariance",
+        "T-days",
+        "T-renovation-rule"
+      ],
+      "appliesTo": [
+        {
+          "quote": "Robin charges 10,000g and 450 Wood for the first farmhouse upgrade, 65,000g and 100 Hardwood for the second, and 100,000g for the third",
+          "occurrence": 1
+        },
+        {
+          "quote": "| 1 | 10,000g ([Farmhouse](https://stardewvalleywiki.com/Farmhouse))",
+          "occurrence": 1
+        },
+        {
+          "quote": "| 2 | 65,000g ([Farmhouse](https://stardewvalleywiki.com/Farmhouse))",
+          "occurrence": 1
+        },
+        {
+          "quote": "| 3 | 100,000g ([Farmhouse](https://stardewvalleywiki.com/Farmhouse))",
+          "occurrence": 1
+        },
+        {
+          "quote": "| 3 ([Farmhouse](https://stardewvalleywiki.com/Farmhouse)) |",
+          "occurrence": 1
+        },
+        {
+          "quote": "The upgrade is 10,000g and 450 Wood, and Robin's year-1 Wood is 10g",
+          "occurrence": 1
+        },
+        {
+          "quote": "Add the 10,000g fee and you bring 12,500g",
+          "occurrence": 1
+        },
+        {
+          "quote": "Buying all 450 Wood in year 1 is 14,500g",
+          "occurrence": 1
+        },
+        {
+          "quote": "Buying all 450 in year 2 or later is 32,500g",
+          "occurrence": 1
+        },
+        {
+          "quote": "None of them is the gold for one order",
+          "occurrence": 1
+        },
+        {
+          "quote": "10,000g + 65,000g = 75,000g, with 450 Wood and 100 Hardwood",
+          "occurrence": 1
+        },
+        {
+          "quote": "10,000g + 65,000g + 100,000g = 175,000g, with 450 Wood and 100 Hardwood",
+          "occurrence": 1
+        },
+        {
+          "quote": "Refill a watering can at the kitchen sink",
+          "occurrence": 1
+        },
+        {
+          "quote": "changes the bed from a single bed to a double bed",
+          "occurrence": 1
+        },
+        {
+          "quote": "makes the kitchen and the bedroom larger",
+          "occurrence": 1
+        },
+        {
+          "quote": "a crib and two child beds, and you can have two children",
+          "occurrence": 1
+        },
+        {
+          "quote": "adds a cellar under the house",
+          "occurrence": 1
+        },
+        {
+          "quote": "The cellar starts with 33 casks",
+          "occurrence": 1
+        },
+        {
+          "quote": "The outside of the house stays the same as the previous upgrade",
+          "occurrence": 1
+        },
+        {
+          "quote": "The outdoor footprint stays 9×5, so the tiles beside the house stay as they are",
+          "occurrence": 1
+        },
+        {
+          "quote": "Those three days run from the payment until that upgrade's rooms are finished",
+          "occurrence": 1
+        },
+        {
+          "quote": "On the day you pay, those rooms are still unfinished",
+          "occurrence": 1
+        },
+        {
+          "quote": "the refund arrives at once",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-carpenters-shop",
+      "label": "Carpenter's Shop",
+      "url": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+      "factIds": [
+        "UP-upgrade-1-cost-materials",
+        "UP-upgrade-2-cost-materials",
+        "UP-upgrade-3-cost-materials",
+        "UP-construction-days-per-tier",
+        "T-wood-price",
+        "MP-robin-regular-stock",
+        "CALC-wood-deficit-example",
+        "T-menu",
+        "T-days",
+        "UP-upgrade-2-direct-unlocks",
+        "UP-upgrade-3-cellar-casks-direct-use",
+        "UP-footprint-invariance",
+        "T-renovation-rule",
+        "UP-upgrade-2-renovations-painting",
+        "T-renovation-prices"
+      ],
+      "appliesTo": [
+        {
+          "quote": "Each upgrade takes three days",
+          "occurrence": 1
+        },
+        {
+          "quote": "450 Wood ([Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop))",
+          "occurrence": 1
+        },
+        {
+          "quote": "100 Hardwood ([Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop)) | 3 ([Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop))",
+          "occurrence": 1
+        },
+        {
+          "quote": "| | 3 ([Carpenter's Shop](https://stardewvalleywiki.com/Carpenter%27s_Shop)) |",
+          "occurrence": 1
+        },
+        {
+          "quote": "Robin's year-1 Wood is 10g",
+          "occurrence": 1
+        },
+        {
+          "quote": "her Wood price is then 50g",
+          "occurrence": 1
+        },
+        {
+          "quote": "Robin's ordinary stock sells Wood and does not sell Hardwood",
+          "occurrence": 1
+        },
+        {
+          "quote": "24 Mountain Road. She sells wood, stone, and furniture, she upgrades the farmhouse, and she constructs farm buildings",
+          "occurrence": 1
+        },
+        {
+          "quote": "On an ordinary week the counter is open from 9:00am to 5:00pm. Tuesday is closed",
+          "occurrence": 1
+        },
+        {
+          "quote": "Friday closes at 4:00pm",
+          "occurrence": 1
+        },
+        {
+          "quote": "entered from 9:00am to 8:00pm while the shop is closed",
+          "occurrence": 1
+        },
+        {
+          "quote": "you can have two children",
+          "occurrence": 1
+        },
+        {
+          "quote": "Robin offers house renovations",
+          "occurrence": 1
+        },
+        {
+          "quote": "Remove Crib is free and finishes at once",
+          "occurrence": 1
+        },
+        {
+          "quote": "Add Dining Room costs 150,000g, adds a room with a footprint of 9×10 plus 4×5, and finishes at once",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-version-history",
+      "label": "Version History",
+      "url": "https://stardewvalleywiki.com/Version_History",
+      "factIds": [
+        "T-cost-1.6",
+        "UP-upgrade-2-cost-materials"
+      ],
+      "appliesTo": [
+        {
+          "quote": "The second payment is the 1.6 price",
+          "occurrence": 1
+        },
+        {
+          "quote": "In 1.6 the second house upgrade moved from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood",
+          "occurrence": 1
+        }
+      ],
+      "versionNote": "1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood. The old pair appears only in that sentence."
+    },
+    {
+      "id": "wiki-axes",
+      "label": "Axes",
+      "url": "https://stardewvalleywiki.com/Axes",
+      "factIds": [
+        "MP-axe-grades"
+      ],
+      "appliesTo": [
+        {
+          "quote": "an axe that chops a fully grown tree, and you upgrade later grades at the Blacksmith",
+          "occurrence": 1
+        },
+        {
+          "quote": "The Copper Axe is 2,000g and 5 Copper Bars",
+          "occurrence": 1
+        },
+        {
+          "quote": "The Steel Axe is 5,000g and 5 Iron Bars, and it is the axe that clears the log at the Secret Woods entrance",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-wood",
+      "label": "Wood",
+      "url": "https://stardewvalleywiki.com/Wood",
+      "factIds": [
+        "MP-wood-item"
+      ],
+      "appliesTo": [
+        {
+          "quote": "Chop trees for Wood, or buy Wood from Robin's ordinary stock",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-hardwood",
+      "label": "Hardwood",
+      "url": "https://stardewvalleywiki.com/Hardwood",
+      "factIds": [
+        "MP-hardwood-item"
+      ],
+      "appliesTo": [
+        {
+          "quote": "Hardwood is a separate item",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-large-stump",
+      "label": "Large Stump",
+      "url": "https://stardewvalleywiki.com/Large_Stump",
+      "factIds": [
+        "MP-large-stump",
+        "CALC-secret-woods-visits"
+      ],
+      "appliesTo": [
+        {
+          "quote": "A Large Stump is the remains of a long-dead tree, not the stump left when you chop a living tree for Wood. A Copper Axe or better removes a Large Stump and yields 2 Hardwood",
+          "occurrence": 1
+        },
+        {
+          "quote": "one day of them is 12 Hardwood",
+          "occurrence": 1
+        },
+        {
+          "quote": "the 100th piece comes on the 9th harvest",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-large-log",
+      "label": "Large Log",
+      "url": "https://stardewvalleywiki.com/Large_Log",
+      "factIds": [
+        "MP-large-log",
+        "CALC-secret-woods-visits"
+      ],
+      "appliesTo": [
+        {
+          "quote": "The log itself is 8 Hardwood once and does not grow back",
+          "occurrence": 1
+        },
+        {
+          "quote": "the 100th piece comes on the 9th harvest",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-secret-woods",
+      "label": "Secret Woods",
+      "url": "https://stardewvalleywiki.com/Secret_Woods",
+      "factIds": [
+        "MP-secret-woods",
+        "CALC-secret-woods-visits"
+      ],
+      "appliesTo": [
+        {
+          "quote": "The Secret Woods open from the northwest corner of Cindersap Forest once that log is gone",
+          "occurrence": 1
+        },
+        {
+          "quote": "Six Large Stumps inside regrow daily, and one day of them is 12 Hardwood. Four are in the upper part of the woods. The other two are in a smaller lower area",
+          "occurrence": 1
+        },
+        {
+          "quote": "the 100th piece comes on the 9th harvest",
+          "occurrence": 1
+        }
+      ],
+      "versionNote": "The 9th-harvest count is CALC-secret-woods-visits. That calculation has no sourceUrl. The sentence links Secret Woods, Large Stump, and Large Log."
+    },
+    {
+      "id": "wiki-cooking",
+      "label": "Cooking",
+      "url": "https://stardewvalleywiki.com/Cooking",
+      "factIds": [
+        "UP-kitchen-fridge-direct-use"
+      ],
+      "appliesTo": [
+        {
+          "quote": "The refrigerator holds 36 slots and works as a chest. A recipe can use ingredients in your inventory, in that refrigerator, or in a Mini-Fridge",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "wiki-cask",
+      "label": "Cask",
+      "url": "https://stardewvalleywiki.com/Cask",
+      "factIds": [
+        "UP-upgrade-3-cellar-casks-direct-use"
+      ],
+      "appliesTo": [
+        {
+          "quote": "The cask recipe from this upgrade is 20 Wood and 1 Hardwood. You can set a cask somewhere else, but it accepts goods only while it is in the cellar",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "site-carpenter",
+      "label": "Robin's shop and outdoor buildings",
+      "url": "https://stardewvalleyplanner.art/carpenter-stardew",
+      "factIds": [],
+      "appliesTo": [
+        {
+          "quote": "For rain, a festival, the Summer 18 clinic visit, and the times she walks past the counter, use [Robin's shop and outdoor buildings](https://stardewvalleyplanner.art/carpenter-stardew).",
+          "occurrence": 1
+        }
+      ],
+      "versionNote": "One internal link for rain, festivals, the Summer 18 clinic visit, and walking past the counter. Not a source for upgrade gold or materials."
+    }
+  ]
+}

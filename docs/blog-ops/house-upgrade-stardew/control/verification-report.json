@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "worktreeEvidence": {
+    "actualCwd": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+    "actualBranch": "博客-2",
+    "actualHeadSha": "bf91a14829067ed1c9c2a206a97985e17dbebdda",
+    "currentWorktreeInode": 145851019,
+    "currentWorktreeDevice": 16777232,
+    "mainProjectInode": 65977012,
+    "mainProjectDevice": 16777232,
+    "existingWorktreeInode": 144267400,
+    "existingWorktreeDevice": 16777232,
+    "mainProjectPath": "/Users/wusir/Desktop/开发项目集合/stardew planner",
+    "existingWorktreePath": "/Users/wusir/Desktop/开发项目集合/stardew planner-worktrees/博客",
+    "uid": 501,
+    "gid": 20
+  },
+  "canaryStorage": {
+    "canaryId": "canary_house_upgrade_c93c91c4f505",
+    "canarySha256": "401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1",
+    "canaryRelativePath": "docs/blog-ops/house-upgrade-stardew/control/canary-identity.json",
+    "readbackVerified": true
+  },
+  "operationStore": {
+    "operationStorePath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/operation-store.json",
+    "operationStoreRelativePath": "docs/blog-ops/house-upgrade-stardew/control/operation-store.json",
+    "sha256": "617a61cc16a2c7ac7a87de61fff131bfe1c2b26a637082e334bddc6fbde35014",
+    "fileSizeBytes": 6029,
+    "readbackVerified": true
+  },
+  "authorizationDoc": {
+    "docPath": "/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/control/authorization-isolation.md",
+    "docRelativePath": "docs/blog-ops/house-upgrade-stardew/control/authorization-isolation.md",
+    "sha256": "99704bb7ae2137f7ac506a7e71b058de5fd34c6b45fde33123669dfa8935a027",
+    "fileSizeBytes": 6451,
+    "readbackVerified": true
+  }
+}

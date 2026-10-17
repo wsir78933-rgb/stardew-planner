@@ -1,0 +1,22 @@
+Captured 2026-10-16 from ego-browser task space 132, page p1, evaluate of #mw-content-text on https://stardewvalleywiki.com/Wood.
+Title: Wood - Stardew Valley Wiki
+documentElement.lang: en
+Footer: This page was last edited on 28 April 2026, at 19:53.
+API revision stored in wood-revision.json: revid 192694, timestamp 2026-04-28T19:53:57Z.
+
+Wood
+
+A sturdy, yet flexible plant material with a wide variety of uses.
+Information
+Source	Trees • Carpenter's Shop • Bookseller • Fishing Treasure Chest • Woodskip Fish Pond • Wood Chipper
+Sell Price	2g
+
+Wood is a basic resource that can be obtained by felling Trees and branches with an axe or bought from Robin at the Carpenter's Shop. The Bookseller trades 100 Wood for 1 Woodcutter's Weekly. Robin sells up to 500 Wood in her shop at the Desert Festival for  1 Calico Egg each.
+
+Wood can also be found in Fishing Treasure Chests. Ninety-nine Wood can be received as a gift from Robin at the Feast of the Winter Star. One to 10 Wood can be produced in a Woodskip Fish Pond, depending on the population of the pond. Wood can additionally be obtained from chipped Hardwood and from recycled or chipped Driftwood.
+
+Felling a fully grown tree will yield between 12 and 16 Wood. After felling the tree, the stump can be destroyed to yield between 5 and 9 Wood. The amount of Wood dropped will depend on Luck and the player's Foraging level. Additionally, the Forester profession will increase yields from both trees and stumps, while reading Woody's Secret will only increase yields from trees. Felling trees near water can result in the loss of some or all of the Wood. To prevent this, players can destroy the tree while standing on the side where they do not want the tree to fall to, as it will always fall away from them.
+
+Purchase Price
+
+The price of wood at the Carpenter's Shop increases from 10g to 50g starting in Year 2. The player will receive a letter in the mail on Spring 1 of Year 2 saying "Notice: The price of raw materials at Robin's shop and Clint's shop has increased." The gold obtained by selling wood to Robin or through the Shipping Bin is unchanged.

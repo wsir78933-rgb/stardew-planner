@@ -1,0 +1,205 @@
+[p1 "house upgrade stardew - Google Search" | space "house upgrade stardew research"(91): 1 managed, 0 untracked — p1* "house upgrade stardew - Google Search"]
+root
+  container
+    search
+      anchor "Go to Google Home" [ref=1, loc=css:a[aria-label="Go to Google Home"], url=https://www.google.com/webhp?hl=en&sa=X&ved=2ahUKEwilqeuOlbyXAxXIEkQIHWWYBf4QPHoECAYQBA]
+        svg_root
+      container
+        comboboxgrouping "Search" [ref=2, loc=css:textarea[name="q"]]
+          text "house upgrade stardew"
+        container
+          button "Clear" [ref=3]
+            svg_root
+          container
+            button "Search by voice" [ref=4, loc=role:button[name="Search by voice"]]
+              svg_root
+            button "Search by image" [ref=5, loc=role:button[name="Search by image"]]
+              svg_root
+    container
+      button "Share" [ref=6]
+        svg_root
+      container
+        button "Google apps" [ref=7, loc=css:a[aria-label="Google apps"], url=https://www.google.com/intl/en/about/products?tab=wh]
+          svg_root
+        button "Google Account: sir 吴 (wsir78933@gmail.com)" [ref=8, loc=css:a[aria-label="Google Account: sir 吴
+(wsir78933@gmail.com)"], url=https://accounts.google.com/SignOutOptions?hl=en&continue=https://www.google.com/search%3Fq%3Dhouse%2Bupgrade%2Bstardew%26hl%3Den%26gl%3Dus%26pws%3D0%26num%3D10&ec=futura_srp_og_si_72236_p]
+  image
+  container
+    navigation [ref=9]
+      list
+        listitem
+          anchor [ref=10, url=https://www.google.com/search?q=house+upgrade+stardew&sca_esv=a5849753dad976a5&hl=en&gl=us&pws=0&sxsrf=APpeQnvAoYuRIAL-wQItrVw46VKby12fdg:1792072182591&udm=50&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8c4u0nXx4bEIpwm1lnNH832cSpkWkfSwsmpNIrD_OQ-UcbyNc1IAMReVybHU31OS8M5qeXFW8IBZ126ecPotulaq0AZwVhlWTQoE_uQ-EZUBE0ylfQe5fVUYCmUWNGKwNwYhzEhL_RnIw13VXxrr1pKH76JjQrd0XZKyadp4TxNY5KVAeNGacgdFWjBHQ8bDtHZ3aKxQ&vsint=&aep=1&ntc=1&cs=0&sa=X&ved=2ahUKEwilqeuOlbyXAxXIEkQIHWWYBf4Q2J8OegQIExAD]
+            text "AI Mode"
+        listitem
+          link [ref=11]
+            text "All"
+        listitem
+          anchor [ref=12, url=https://www.google.com/search?sca_esv=a5849753dad976a5&hl=en&gl=us&pws=0&sxsrf=APpeQnvAoYuRIAL-wQItrVw46VKby12fdg:1792072182591&udm=2&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8c4u0nXx4bEIpwm1lnNH832cSpkWkfSwsmpNIrD_OQ-UcbyNc1IAMReVybHU31OS8M5qeXFW8IBZ126ecPotulaq0AZwVhlWTQoE_uQ-EZUBE0ylfQe5fVUYCmUWNGKwNwYhzEhL_RnIw13VXxrr1pKH76JjQrd0XZKyadp4TxNY5KVAeNGacgdFWjBHQ8bDtHZ3aKxQ&q=house+upgrade+stardew&sa=X&ved=2ahUKEwilqeuOlbyXAxXIEkQIHWWYBf4QtKgLegQIGRAB]
+            text "Images"
+        listitem
+          anchor [ref=13, url=https://www.google.com/search?sca_esv=a5849753dad976a5&hl=en&gl=us&pws=0&sxsrf=APpeQnvAoYuRIAL-wQItrVw46VKby12fdg:1792072182591&udm=vids&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8c4u0nXx4bEIpwm1lnNH832cSpkWkfSwsmpNIrD_OQ-UcbyNc1IAMReVybHU31OS8M5qeXFW8IBZ126ecPotulaq0AZwVhlWTQoE_uQ-EZUBE0ylfQe5fVUYCmUWNGKwNwYhzEhL_RnIw13VXxrr1pKH76JjQrd0XZKyadp4TxNY5KVAeNGacgdFWjBHQ8bDtHZ3aKxQ&q=house+upgrade+stardew&sa=X&ved=2ahUKEwilqeuOlbyXAxXIEkQIHWWYBf4QtKgLegQIFxAB]
+            text "Videos"
+        listitem
+          anchor [ref=14, url=https://www.google.com/search?sca_esv=a5849753dad976a5&hl=en&gl=us&pws=0&sxsrf=APpeQnvAoYuRIAL-wQItrVw46VKby12fdg:1792072182591&udm=39&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8c4u0nXx4bEIpwm1lnNH832cSpkWkfSwsmpNIrD_OQ-UcbyNc1IAMReVybHU31OS8M5qeXFW8IBZ126ecPotulaq0AZwVhlWTQoE_uQ-EZUBE0ylfQe5fVUYCmUWNGKwNwYhzEhL_RnIw13VXxrr1pKH76JjQrd0XZKyadp4TxNY5KVAeNGacgdFWjBHQ8bDtHZ3aKxQ&q=house+upgrade+stardew&sa=X&ved=2ahUKEwilqeuOlbyXAxXIEkQIHWWYBf4Qs6gLegQIGBAB]
+            text "Short videos"
+        listitem
+          anchor [ref=15, url=https://www.google.com/search?sca_esv=a5849753dad976a5&hl=en&gl=us&pws=0&sxsrf=APpeQnvAoYuRIAL-wQItrVw46VKby12fdg:1792072182591&udm=28&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8c4u0nXx4bEIpwm1lnNH832cSpkWkfSwsmpNIrD_OQ-UcbyNc1IAMReVybHU31OS8M5qeXFW8IBZ126ecPotulaq0AZwVhlWTQoE_uQ-EZUBE0ylfQe5fVUYCmUWNGKwNwYhzEhL_RnIw13VXxrr1pKH76JjQrd0XZKyadp4TxNY5KVAeNGacgdFWjBHQ8bDtHZ3aKxQ&q=house+upgrade+stardew&ved=1t:220175&ictx=111]
+            text "Shopping"
+        listitem
+          anchor [ref=16, url=https://www.google.com/search?sca_esv=a5849753dad976a5&hl=en&gl=us&pws=0&sxsrf=APpeQnvAoYuRIAL-wQItrVw46VKby12fdg:1792072182591&udm=forums&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8c4u0nXx4bEIpwm1lnNH832cSpkWkfSwsmpNIrD_OQ-UcbyNc1IAMReVybHU31OS8M5qeXFW8IBZ126ecPotulaq0AZwVhlWTQoE_uQ-EZUBE0ylfQe5fVUYCmUWNGKwNwYhzEhL_RnIw13VXxrr1pKH76JjQrd0XZKyadp4TxNY5KVAeNGacgdFWjBHQ8bDtHZ3aKxQ&q=house+upgrade+stardew&sa=X&ved=2ahUKEwilqeuOlbyXAxXIEkQIHWWYBf4Qs6gLegQIFRAB]
+            text "Forums"
+        listitem
+          button [ref=17]
+            container "More filters"
+              text "More"
+              svg_root
+      button [ref=18]
+        text "Tools"
+        svg_root
+    container
+      status
+        anchor [ref=19, loc=href:https://aitdk.com/extension?utm_source=serp&utm_content=result-count, url=https://aitdk.com/extension?utm_source=serp&utm_content=result-count]
+          text "AITDK"
+        container
+          text "About"
+          text "17,000,000"
+          text "results"
+      container
+        container
+          container
+            svg_root
+            heading
+              text "AI Overview"
+          container
+            container
+              container
+                button [ref=20]
+                  image
+                text "In"
+                button [ref=21]
+                  text "Stardew Valley"
+                text ","
+                container
+                  text "you can upgrade your farmhouse three times by visiting"
+                  anchor [ref=22, url=https://stardewvalleywiki.com/Carpenter%27s_Shop]
+                    text "Robin at the Carpenter's Shop"
+                text ". Each upgrade takes 3 days to build."
+                container
+                  anchor "Stardew Valley Wiki" [ref=23, url=https://stardewvalleywiki.com/Farmhouse]
+                  button "Stardew Valley Wiki (+1) - Related results" [ref=24]
+                    container
+                      image
+                      container
+                        text "Stardew Valley Wiki"
+                        text " +1"
+                    svg_root
+              heading
+                text "First Upgrade"
+              unordered_list
+                list_item
+                  text "Cost:"
+                  text "10,000g + 450 Wood"
+                list_item
+                  container
+                    text "Features:"
+                    text "Adds a kitchen with a working counter and fridge, expands the bedroom, upgrades the bed from single to double, and unlocks the ability to get married or invite Krobus to be a roommate."
+                  container
+                    anchor "Stardew Valley Wiki" [ref=25, url=https://stardewvalleywiki.com/Farmhouse]
+                    button "Stardew Valley Wiki - Related results" [ref=26]
+                      container
+                        image
+                        text "Stardew Valley Wiki"
+                      svg_root
+              heading
+                text "Second Upgrade"
+              unordered_list
+                list_item
+                  text "Cost:"
+                  text "65,000g + 100 Hardwood"
+            unordered_list
+              list_item
+                container
+                  anchor "Farmhouse - Stardew Valley Wiki. Opens in new tab." [ref=27, loc=css:a[aria-label="Farmhouse - Stardew Valley Wiki. Opens in new tab."], url=https://stardewvalleywiki.com/Farmhouse]
+                  container
+                    container
+                      image
+                      text "Stardew Valley Wiki"
+                      button "About this result" [ref=28]
+                        svg_root
+                    container
+                      container
+                        text "Farmhouse - Stardew Valley Wiki"
+                        text "Farmhouse. ... The Farmhouse is the player's permanent residence in Stardew Valley. Initially, it has only one small room that con..."
+                      image
+              list_item
+                container
+                  anchor "Steam-Community :: Guide :: Every House Upgrade And Renovation. Opens in new tab." [ref=29, url=https://steamcommunity.com/sharedfiles/filedetails/?l=german&id=3118664526]
+                  container
+                    container
+                      image
+                      text "Steam Community"
+                      button "About this result" [ref=30]
+                        svg_root
+                    container
+                      container
+                        text "Steam-Community :: Guide :: Every House Upgrade And Renovation"
+                        text "* Upgrades via Robin at Carpenter Shop; permanent, non-removable. * U1 (Kitchen): 10k Gold + 450 Wood. Adds kitchen/double bed/sep..."
+                      image
+              list_item
+                anchor "Farmhouse Upgrades - Stardew Valley Guide - IGN. Opens in new tab." [ref=31, loc=css:a[aria-label="Farmhouse Upgrades - Stardew Valley Guide - IGN. Opens in new tab."], url=https://www.ign.com/wikis/stardew-valley/Farmhouse_Upgrades]
+                container
+                  container
+                    image
+                    text "IGN"
+                    button "About this result" [ref=32]
+                      svg_root
+                  container
+                    container
+                      text "Farmhouse Upgrades - Stardew Valley Guide - IGN"
+                      text "Upgrade Costs. Once your farm is established and you have a chunk of change saved, you can talk with Robin to upgrade your home. G..."
+                    image
+        button "Show more AI Overview" [ref=33, loc=role:button[name="Show more AI Overview"]]
+          text "Show more"
+          svg_root
+      main
+        container
+          container
+            anchor [ref=34, url=https://stardewvalleywiki.com/Farmhouse]
+              heading
+                text "Farmhouse"
+              container
+                image
+                container
+                  text "Stardew Valley Wiki"
+                  container
+                    text "https://stardewvalleywiki.com"
+                    text "› Farmhouse"
+            button "About this result" [ref=35]
+              svg_root
+          container
+            container
+              text "Jan 15, 2026"
+              text "—"
+            container
+              text "Upgrades can be purchased at the Carpenter's Shop"
+              text ". Each new room added when upgrading can have its own flooring and wallpaper patterns. You can ..."
+            anchor [ref=36, url=https://stardewvalleywiki.com/Farmhouse#:~:text=Upgrades%20can%20be%20purchased%20at,exterior%20at%20the%20Carpenter's%20Shop.]
+              text "Read more"
+          anchor [ref=37, url=https://stardewvalleywiki.com/Farmhouse]
+            image
+      container
+        container
+          container
+            image
+            text "Monica"
+          container
+            svg_root
+            container
+              image
+              text "Instant"
+              svg_root
+        container
+          svg_root
+          text "询问 Monica"
+  button [ref=38]
+    text "导出外链"

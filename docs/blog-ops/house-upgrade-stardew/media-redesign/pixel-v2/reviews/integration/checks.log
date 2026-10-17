@@ -1,0 +1,179 @@
+[2026-10-17T08:44:02+08:00] task_c2797478ef96 / ctx_1f37a2e48e86
+worker_handle: term_7a51f680-891d-4511-9e21-187b7107c5ef
+coordinator_handle: term_661abce7-55fd-4570-8bf5-970c0451dd23
+repo_root: /Users/wusir/orca/workspaces/stardew planner/博客-2
+
+=== 1. ORCA ORCHESTRATION CHECK ===
+command: orca orchestration check --terminal term_7a51f680-891d-4511-9e21-187b7107c5ef --json
+exit_code: 0
+received_message: msg_581fdef0c24a (from term_661abce7-55fd-4570-8bf5-970c0451dd23)
+content: "实际接入输出位置：integration/v1/body/{en,zh-CN}.md、integration/v1/handoff/{en,zh-CN}.json、integration/v1/AssemblyManifest.json，generation-record.json在integration根。集成检查 qualifiedEn=1084/pureHan=1645；请独立回读验证，不能只引用这些自报。原生尺寸1672x941约16:9（取整差），所有12公共文件已更新；保留旧稿和旧manifest作为历史。review-plan部分建议已被纠正：单栋单场景、普通木匠不点NPC、两张单人床、不跑默认pnpm build。具体以真实图和当前handoff为准。可顺带只读审查integration/apply_pixel_v2.py是否存在静默失败/越界，发现具体问题报告、不修；不要重跑该写入脚本，先前2次路径key错误已回滚，第3次成功。最后运行指定4文件Vitest、typecheck和webpack build即可，不扩全套。"
+
+=== 2. PORT 3010 AND PROCESS CHECK ===
+command: ps -fp 21887; lsof -nP -iTCP:3010 -sTCP:LISTEN; lsof -a -p 21887 -d cwd
+exit_code: 0
+pid: 21887
+cmd: node ./node_modules/.bin/../.pnpm/serve@14.2.6/node_modules/serve/build/main.js out -l tcp://127.0.0.1:3010 --no-port-switching --no-clipboard
+cwd: /Users/wusir/orca/workspaces/stardew planner/博客-2
+status: LISTEN, HTTP 200 OK (ports 3000-3007 untouched)
+
+=== 3. BASELINE FILE INTEGRITY VERIFICATION (BYTE-FOR-BYTE) ===
+docs/blog-ops/house-upgrade-stardew/handoff/public/en.json:
+  sha256: cec56b5e5420996636aada50776866bd7f4da8d1f3018b88c8a0c119b06dd7d3
+  bytes: 27784
+  cmp_baseline_exit: 0
+docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json:
+  sha256: 0e6456c0a554e32f5157b791b50249449ce887acf5187b27f524aecf5c9add1c
+  bytes: 27432
+  cmp_baseline_exit: 0
+docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json:
+  sha256: 6ce4e84ffbcc1252f2cebd443e4ccceac5a60d29c2ceb41dd74eaabd68fc6834
+  bytes: 20147
+  cmp_baseline_exit: 0
+docs/blog-ops/house-upgrade-stardew/lock/en/body.md:
+  sha256: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+  bytes: 10046
+  cmp_baseline_exit: 0
+docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md:
+  sha256: 0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6
+  bytes: 9797
+  cmp_baseline_exit: 0
+
+=== 4. 12 PUBLIC IMAGE ASSETS VERIFICATION ===
+- public/blog/house-upgrade-stardew-cover.webp
+  sha256: d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8
+  bytes: 2550052
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/house-upgrade-stardew-cover-zh.webp
+  sha256: d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8
+  bytes: 2550052
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/house-upgrade-stardew-cover.avif
+  sha256: 8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0
+  bytes: 653604
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/house-upgrade-stardew-cover-zh.avif
+  sha256: 8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0
+  bytes: 653604
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+  sha256: 9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671
+  bytes: 1984240
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+  sha256: 9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671
+  bytes: 1984240
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+  sha256: e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221
+  bytes: 446411
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+  sha256: e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221
+  bytes: 446411
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+  sha256: 526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb
+  bytes: 2453712
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+  sha256: 526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb
+  bytes: 2453712
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+  sha256: c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27
+  bytes: 617005
+  dimensions: 1672x941
+  cmp_export_exit: 0
+- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+  sha256: c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27
+  bytes: 617005
+  dimensions: 1672x941
+  cmp_export_exit: 0
+Metadata notes: EXIF empty (0 tags). XMP checked: no secret / credentials embedded. Note: Only format/dimensions/EXIF/XMP checked; no secret scanning PASS claimed.
+
+=== 5. ARTICLE SOURCE DIFF AND INTEGRITY ===
+- src/blog/articles/house-upgrade-stardew.en.tsx
+  sha256: e215ceb1871294757241bdd44a52a7a48667b5e0bb01018d9aafe8d348844acd
+  diff vs baseline: only alt/caption of tier-rooms and upgrade-or-renovation, and sentence "In the interior illustration, the nursery is this crib room."
+- src/blog/articles/house-upgrade-stardew.zh.tsx
+  sha256: 3d601b6e0c4b5eada92fde9cd4875db44c31ef0a5eae857cdaac6b4deff13850
+  diff vs baseline: only alt/caption of tier-rooms and upgrade-or-renovation, and sentence "室内插画里，育儿室就是这间有婴儿床的房间。"
+- src/blog/blog-post-registry.tsx
+  sha256: 5e7687939e0878dcd6e6c74dad4c1cad9beee76bac0078427713932274ab0aa5
+  diff vs baseline fragments: only coverImage.alt updated to pixel-v2 description for both EN and ZH-CN.
+
+=== 6. HANDOFF AND MANIFEST CRYPTOGRAPHIC BINDING ===
+integration/v1/handoff/en.json:
+  fileSha256: e4fa6f1fa65adfbeead8df17eb1902c2d08ff7daa76abb1279dfe1d697c36fd4
+  bodyHash: 151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8
+  publicFieldsSha256: fa3cb7a8df969b3f91ffa3ab9fb3aaad4748e132a3e9deaf8d348287d584f597
+integration/v1/handoff/zh-CN.json:
+  fileSha256: 376c9cffa556f8451b0a999495874950c7efb94c6a42fac3674e2bfa732869e0
+  bodyHash: 00a612b48022fa7256f89b7fc5eb0386b34d17b6f272f079da9f62eb40998bc4
+  englishBodyHash: 151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8
+  publicFieldsSha256: 75b3d2a26d14cad3b49df9eeb20c2e1bbffd0e776c463d3317f6c13248592d15
+integration/v1/AssemblyManifest.json:
+  fileSha256: 0e86b97669d651fa462efcffae65553e1a0b5a1923297a7804ee9eb46d90a992
+inImageText: [] for all 3 figures in EN and ZH-CN.
+
+=== 7. ARTICLE LENGTH VALIDATION ===
+Algorithm: /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py
+EN qualified words (excluding captions): 1084 (requirement >= 1000: PASS)
+ZH pure Han characters (excluding captions): 1645 (requirement >= 1000: PASS)
+
+=== 8. COMMAND EXECUTION RESULTS ===
+
+[CMD-1] pnpm typecheck
+command: pnpm typecheck
+exit_code: 2
+stdout/stderr:
+> @ typecheck /Users/wusir/orca/workspaces/stardew planner/博客-2
+> tsc --noEmit
+
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx:1:29 - error TS2307: Cannot find module '../../components/blog/blog-sources' or its corresponding type declarations.
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx:2:31 - error TS2307: Cannot find module '../../components/public-picture' or its corresponding type declarations.
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx:1:29 - error TS2307: Cannot find module '../../components/blog/blog-sources' or its corresponding type declarations.
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx:2:31 - error TS2307: Cannot find module '../../components/public-picture' or its corresponding type declarations.
+Found 4 errors in 2 files.
+Root cause: Baseline files copied to docs/.../baseline/src/ were not excluded in tsconfig.json. Files in src/ had 0 errors.
+
+[CMD-2] Vitest 4-file focused suite
+command: pnpm exec vitest run tests/blog/blog-post-registry.test.ts tests/routes/blog-routes.test.tsx tests/routes/removed-public-pages.test.ts tests/seo/canonical-public-routes.test.ts
+exit_code: 0
+summary: 4 test files passed (4), 43 tests passed (43), 0 failed
+duration: 1.52s
+
+[CMD-3] next build --webpack
+command: NEXT_TELEMETRY_DISABLED=1 pnpm exec next build --webpack
+exit_code: 1
+stdout/stderr:
+▲ Next.js 16.3.0 (webpack)
+✓ Running next.config.ts took 54ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+  Creating an optimized production build ...
+✓ Compiled successfully in 7.5s
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx(1,29): error TS2307: Cannot find module '../../components/blog/blog-sources' or its corresponding type declarations.
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx(2,31): error TS2307: Cannot find module '../../components/public-picture' or its corresponding type declarations.
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx(1,29): error TS2307: Cannot find module '../../components/blog/blog-sources' or its corresponding type declarations.
+docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx(2,31): error TS2307: Cannot find module '../../components/public-picture' or its corresponding type declarations.
+Failed to type check.
+Root cause: Next.js build compilation succeeded in 7.5s, but internal typecheck encountered the identical 4 baseline TS2307 errors from tsconfig include. Build aborted prior to static HTML export to out/.
+
+=== 9. NEXT-ENV.D.TS REVERSION VERIFICATION ===
+Initial sha256: 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc
+Build modified sha256: 1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b
+Diff verified: only 2 lines changed (.next/dev/types -> .next/types)
+Restored sha256: 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc
+cmp -s exit_code: 0 (byte-for-byte identical to baseline opening state)

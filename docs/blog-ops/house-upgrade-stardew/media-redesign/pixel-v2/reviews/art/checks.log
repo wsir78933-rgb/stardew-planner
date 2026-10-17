@@ -1,0 +1,48 @@
+# art review checks
+# date: 2026-10-17
+
+## file + shasum + sips
+$ file + shasum -a 256 + sips -g pixelWidth -g pixelHeight
+/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png: PNG image data, 1672 x 941, 8-bit/color RGB, non-interlaced
+/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png: PNG image data, 1672 x 941, 8-bit/color RGB, non-interlaced
+/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png: PNG image data, 1672 x 941, 8-bit/color RGB, non-interlaced
+file_exit=0
+7c84c7df12916d48c255b18dfa4a1ee38e2cee1c96bba9a4aa985468d18997ae  /Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png
+342a247c8d198c86a06129276a310a6d7444eb86c2a46d6b0422b31edcf26f99  /Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png
+1cc6bf81b2339c4daf90526d11112c21fb5e68b1fe08ec1ba02ba3f6874aa401  /Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png
+shasum_exit=0
+/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png
+  pixelWidth: 1672
+  pixelHeight: 941
+/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png
+  pixelWidth: 1672
+  pixelHeight: 941
+/Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png
+  pixelWidth: 1672
+  pixelHeight: 941
+sips_exit=0
+
+## tesseract --list-langs
+List of available languages in "/opt/homebrew/share/tessdata/" (3):
+eng
+osd
+snum
+tesseract_list_exit=0
+
+## export hashes
+d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.webp
+8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.avif
+9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.webp
+e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.avif
+526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.webp
+c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.avif
+export_shasum_exit=0
+
+## report files
+5815f3d4603281a60f9a63a38d54a5e21883ec7a25f03e49c66059f8199cc2a7  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/art/report.md
+bc153a8aaa6f0d4dd9840261e8561e6a8d0527ecb63caf52f1943b4636f22b61  docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/art/checks.json
+report_shasum_exit=0
+
+## direct webp Read
+failed: webp codec not registered: registerWebpCodec() must be called by a Node server before decoding/encoding webp
+workaround: Pillow decoded WebP and AVIF to reviews/art/export-preview PNG, then Read opened those PNG files

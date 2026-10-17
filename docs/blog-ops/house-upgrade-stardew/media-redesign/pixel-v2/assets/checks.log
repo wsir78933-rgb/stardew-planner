@@ -1,0 +1,31 @@
+[2026-10-17 08:26:06] START: Pixel V2 Assets Ingestion and Transcode Run
+[2026-10-17 08:26:06] PROCESSING ROLE: cover
+  Source inspected: exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png (1672x941, PNG, 3170624 bytes)
+[2026-10-17 08:26:06] CMD: cmp -s /Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-b4be9f3a-c753-46d2-b5c8-4e40a2f9d408.png /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/originals/cover.png (exit_code=0)
+[2026-10-17 08:26:07] TRANSCODE: cover.png -> cover.webp (WEBP lossless=True method=6)
+[2026-10-17 08:26:07] TRANSCODE: cover.png -> cover.avif (AVIF quality=90)
+[2026-10-17 08:26:07] CMD: sips -g pixelWidth -g pixelHeight -g format /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.webp (exit_code=0)
+[2026-10-17 08:26:07] CMD: sips -g pixelWidth -g pixelHeight -g format /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.avif (exit_code=0)
+[2026-10-17 08:26:07] VERIFY: WebP pixel equivalence vs PNG: identical=True (diff_bbox=None)
+[2026-10-17 08:26:07] METRICS: AVIF quality vs PNG: MSE=27.9440, PSNR=33.67 dB
+[2026-10-17 08:26:07] PROCESSING ROLE: interior
+  Source inspected: exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png (1672x941, PNG, 2492820 bytes)
+[2026-10-17 08:26:07] CMD: cmp -s /Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-9eb5a2c6-1c3f-41b3-b7e2-0d04f70111ae.png /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/originals/interior.png (exit_code=0)
+[2026-10-17 08:26:08] TRANSCODE: interior.png -> interior.webp (WEBP lossless=True method=6)
+[2026-10-17 08:26:08] TRANSCODE: interior.png -> interior.avif (AVIF quality=90)
+[2026-10-17 08:26:08] CMD: sips -g pixelWidth -g pixelHeight -g format /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.webp (exit_code=0)
+[2026-10-17 08:26:08] CMD: sips -g pixelWidth -g pixelHeight -g format /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.avif (exit_code=0)
+[2026-10-17 08:26:08] VERIFY: WebP pixel equivalence vs PNG: identical=True (diff_bbox=None)
+[2026-10-17 08:26:09] METRICS: AVIF quality vs PNG: MSE=13.7814, PSNR=36.74 dB
+[2026-10-17 08:26:09] PROCESSING ROLE: construction
+  Source inspected: exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png (1672x941, PNG, 2979695 bytes)
+[2026-10-17 08:26:09] CMD: cmp -s /Users/wusir/.codex/generated_images/01a13fcd-cfb6-7451-8c4d-c7734a680f71/exec-5a96f6ed-6fd9-4eae-a516-131c31788fb0.png /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/originals/construction.png (exit_code=0)
+[2026-10-17 08:26:09] TRANSCODE: construction.png -> construction.webp (WEBP lossless=True method=6)
+[2026-10-17 08:26:09] TRANSCODE: construction.png -> construction.avif (AVIF quality=90)
+[2026-10-17 08:26:09] CMD: sips -g pixelWidth -g pixelHeight -g format /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.webp (exit_code=0)
+[2026-10-17 08:26:09] CMD: sips -g pixelWidth -g pixelHeight -g format /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.avif (exit_code=0)
+[2026-10-17 08:26:10] VERIFY: WebP pixel equivalence vs PNG: identical=True (diff_bbox=None)
+[2026-10-17 08:26:10] METRICS: AVIF quality vs PNG: MSE=27.8270, PSNR=33.69 dB
+[2026-10-17 08:26:10] WRITING: provenance.json
+[2026-10-17 08:26:10] WRITING: report.md
+[2026-10-17 08:26:10] WRITING: checks.log

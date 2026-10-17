@@ -1,0 +1,15 @@
+{
+      slug: "house-upgrade-stardew",
+      title: "星露谷房屋升级：第二档是65,000金和100硬木",
+      description:
+        "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/house-upgrade-stardew-cover-zh.webp",
+        alt: "三档付款：升级1是10,000金、450木材和3天；升级2是65,000金、100硬木和3天；升级3是100,000金和3天。",
+      },
+      featured: false,
+      Content: HouseUpgradeStardewChineseArticle,
+    },

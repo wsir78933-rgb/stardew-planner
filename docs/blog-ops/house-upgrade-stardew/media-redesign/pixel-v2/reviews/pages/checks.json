@@ -1,0 +1,37 @@
+{
+  "taskId": "task_79b3bd83b99a",
+  "dispatchId": "ctx_351193df8aeb",
+  "egoSpaceId": 181,
+  "egoPage": "p1",
+  "origin": "http://127.0.0.1:3010",
+  "server": {
+    "pid": 21887,
+    "cwd": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+    "command": "serve out -l tcp://127.0.0.1:3010",
+    "started": "2026-10-16T23:12:16",
+    "outHtmlMtime": "2026-10-17T09:14:25",
+    "restartedByThisWorker": false
+  },
+  "rawCapture": "checks.partial.json",
+  "followup": "en-followup.json",
+  "log": "checks.log",
+  "counts": {
+    "viewportsCaptured": 4,
+    "screenshots": 12,
+    "imagesVisibleDecoded": "12/12",
+    "altMatchesHandoff": "12/12",
+    "bodyCaptionMatchesHandoff": "8/8",
+    "coverFigcaptionPresent": "0/4",
+    "pageHorizontalOverflow": "0/4",
+    "mobilePriceTableScrolled": "2/2",
+    "titleH1DescriptionMatch": "4/4",
+    "enReloadHashMatch": "6/6",
+    "zhReloadHashMatch": "not-run-after-scope-split"
+  },
+  "commandExits": [
+    { "step": "four-viewport-capture", "exitCode": 1, "note": "12 screenshots saved; then waitForSelector a[href=/zh/house-upgrade-stardew] timed out because the link rect is 0x0 inside the closed Language menu" },
+    { "step": "direct-zh-click", "exitCode": 1, "note": "matched 1 hidden anchor; none can receive input" },
+    { "step": "language-button-without-goto", "exitCode": 1, "note": "button[aria-label=Language] matched 0; live page was already /zh and the button aria-label was 语言" },
+    { "step": "menu-roundtrip-catalog-en-hash", "exitCode": 0, "note": "Language menu EN->ZH->EN, header Blog, six EN cache:reload hashes" }
+  ]
+}

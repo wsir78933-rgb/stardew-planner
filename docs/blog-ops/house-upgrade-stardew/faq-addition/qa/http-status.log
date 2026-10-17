@@ -1,0 +1,27 @@
+=== URL 1: http://127.0.0.1:3010/house-upgrade-stardew ===
+COMMAND: curl -sSI --max-time 10 http://127.0.0.1:3010/house-upgrade-stardew
+HTTP/1.1 200 OK
+Content-Length: 122284
+Content-Disposition: inline; filename="house-upgrade-stardew.html"
+Accept-Ranges: bytes
+ETag: "4a3fa857f639e2b68ef2da12a2e4031df8e6fbd5"
+Content-Type: text/html; charset=utf-8
+Vary: Accept-Encoding
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+EXIT_CODE: 0
+
+=== URL 2: http://127.0.0.1:3010/zh/house-upgrade-stardew ===
+COMMAND: curl -sSI --max-time 10 http://127.0.0.1:3010/zh/house-upgrade-stardew
+HTTP/1.1 200 OK
+Content-Length: 120200
+Content-Disposition: inline; filename="house-upgrade-stardew.html"
+Accept-Ranges: bytes
+ETag: "6f34550dd18a700c8c3e38174682d31d3860e983"
+Content-Type: text/html; charset=utf-8
+Vary: Accept-Encoding
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+EXIT_CODE: 0

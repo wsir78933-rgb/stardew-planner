@@ -1,0 +1,120 @@
+command: file -b -- public/blog/house-upgrade-stardew-cover.webp
+exit: 0
+stdout: RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover.webp
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+command: file -b -- public/blog/house-upgrade-stardew-cover.avif
+exit: 0
+stdout: ISO Media, AVIF Image
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover.avif
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+command: file -b -- public/blog/house-upgrade-stardew-cover-zh.webp
+exit: 0
+stdout: RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover-zh.webp
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover-zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+command: file -b -- public/blog/house-upgrade-stardew-cover-zh.avif
+exit: 0
+stdout: ISO Media, AVIF Image
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover-zh.avif
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/house-upgrade-stardew-cover-zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+exit: 0
+stdout: RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+exit: 0
+stdout: ISO Media, AVIF Image
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+exit: 0
+stdout: RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+exit: 0
+stdout: ISO Media, AVIF Image
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+exit: 0
+stdout: RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+exit: 0
+stdout: ISO Media, AVIF Image
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+exit: 0
+stdout: RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: webp
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+exit: 0
+stdout: ISO Media, AVIF Image
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+exit: 0
+stdout:
+/Users/wusir/orca/workspaces/stardew planner/博客-2/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+  pixelWidth: 1672
+  pixelHeight: 941
+  format: avif

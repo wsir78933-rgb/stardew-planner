@@ -1,0 +1,239 @@
+E translation-v2 checks
+role E; task task_62c9fec52426; dispatch ctx_9718e89d955d
+coordinator input: msg_c9040b5bdd86
+worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+authorization: user replied "继续" for round 4; coordinator recorded clock 2026-10-16 14:19:46 UTC; budget used 4 (preserved 3, exception 1), remaining 0
+
+1. shasum -a 256 of canonical input and bound files
+command exit 0
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+MATCH coordinator locked EN body
+b6e2b7e20f4942945af2258c3eb28455680e952feaf2d04a9c7d424a75f55b58  docs/blog-ops/house-upgrade-stardew/seo/en/seo-candidate.json
+MATCH coordinator selected EN SEO candidate
+0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6  docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+MATCH coordinator canonical draft-zh-v2
+f744f783cf4b04d1cf0d66a2029cafaedaaf5eb04754e7b1e13612e48c29be16  docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json
+MATCH coordinator canonical seo.zh.json
+b2e0781d81b60a10ba6586ca8c0ea7032ce9e2f24df05fb80587dba8733f9127  docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json
+MATCH coordinator canonical public-references.zh.json
+43c6138438d5a29bb13ab0daf0ccd9b5c6498284191a79680c53e84ade7298aa  docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json
+MATCH coordinator canonical media-text.zh.json
+4d8b4fa7f9c0835f7c8e33f151830767ea9491d164af7f20e7e90a9e62fa4671  docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json
+MATCH coordinator canonical translation-submission.json
+9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843  docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md
+MATCH prior v1 body (also archived in content/zh/versions/translation-v1/draft-zh-v1.md)
+13e6506201f7ecb1535e2f40077d71b7b6ac0ee35f4485810cba1db515dab735  docs/blog-ops/house-upgrade-stardew/media-production/zh/cover-payments.svg
+MATCH v1 (unchanged)
+99337ac2b5dcacb7792968289ea17f16e87cbbd69bf07c436665922196aed5c0  docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.svg
+MATCH v1 (unchanged)
+1fd0e8e620c28067f0fdfc2d05b6bd80ff243ec82b4d5d8226f3e6e460d5c5c9  docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.svg
+MATCH v1 (unchanged)
+bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87  docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.webp
+MATCH v1 (unchanged)
+7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926  docs/blog-ops/house-upgrade-stardew/media-production/zh/house-upgrade-stardew-cover-zh.avif
+MATCH v1 (unchanged)
+d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c  docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.webp
+MATCH v1 (unchanged)
+aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad  docs/blog-ops/house-upgrade-stardew/media-production/zh/tier-rooms.zh.avif
+MATCH v1 (unchanged)
+6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88  docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.webp
+MATCH v1 (unchanged)
+d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84  docs/blog-ops/house-upgrade-stardew/media-production/zh/upgrade-or-renovation.zh.avif
+MATCH v1 (unchanged)
+
+2. PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale zh-CN docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+exit 0
+mechanical_units 1737
+required_floor null
+meets_mechanical_floor null
+length_class reference_only
+omitted headings 8, code 0, excluded_sections 0, non_body 34, frontmatter 0
+sha256_raw = sha256_nfc_lf = 0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6
+independent Han character count: full file 1905; >= 1000 floor satisfied
+English qualified count remains 1085 from locked EN body; English length was not re-run
+
+3. diff -u of body and metadata files
+diff -u docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+exit 1
+--- docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md
++++ docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+@@ -12,7 +12,7 @@
+ 
+ ## 准备木材和硬木
+ 
+-你一开始有一把能砍倒完全长成的树的斧头，之后的等级到铁匠铺升级（[斧头](https://stardewvalleywiki.com/Axes)）。砍树取得木材，或者从罗宾的普通存货购买木材（[木材](https://stardewvalleywiki.com/Wood)）。
++你一开始有一把能砍倒完全长成的树的斧头，后续斧头等级在铁匠铺升级（[斧头](https://stardewvalleywiki.com/Axes)）。砍树取得木材，或者从罗宾的普通存货购买木材（[木材](https://stardewvalleywiki.com/Wood)）。
+ 
+ 硬木是另一种物品（[硬木](https://stardewvalleywiki.com/Hardwood)）。大树桩（Large Stump）是枯死已久的树留下的残骸。铜斧头（Copper Axe）或更好的斧头能清除大树桩，并得到2硬木（[大树桩](https://stardewvalleywiki.com/Large_Stump)）。它不是你砍活树取木材后留下的那个树桩（[木材](https://stardewvalleywiki.com/Wood)）。铜斧头是2,000金和5个铜锭（[斧头](https://stardewvalleywiki.com/Axes)）。钢斧头（Steel Axe）能清除大圆木（Large Log）。钢斧头是5,000金和5个铁锭，也是清除秘密森林入口那根圆木的斧头（[斧头](https://stardewvalleywiki.com/Axes)、[大圆木](https://stardewvalleywiki.com/Large_Log)）。
+ 
+@@ -66,6 +66,6 @@
+ 
+ 第二次农舍升级之后，罗宾提供房屋装修。你下一单，马上完成。要撤销，先把新区域清空。然后罗宾退还金币，退款立刻到账（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)、[农舍](https://stardewvalleywiki.com/Farmhouse)）。
+ 
+-移除婴儿床免费，而且马上完成（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。修建餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成。要把这150,000金拿回来，那片9×10再加4×5的区域必须是空的（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。
++移除婴儿床免费，而且马上完成（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成。要把这150,000金拿回来，那片9×10再加4×5的区域必须是空的（[木匠的商店](https://stardewvalleywiki.com/Carpenter%27s_Shop)）。
+ 
+-想要地窖，就选第三次升级那一行。想要这些改动，就选移除婴儿床或修建餐厅。
++想要地窖，就选第三次升级那一行。想要这些改动，就选移除婴儿床或餐厅。
+
+diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/public-references.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json
+exit 1
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/public-references.zh.json
++++ docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json
+@@ -2,10 +2,9 @@
+   "locale": "zh-CN",
+   "country": "US",
+   "articleSlug": "house-upgrade-stardew",
+-  "bodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md",
+-  "bodyVersion": "draft-zh-v2",
++  "bodyVersion": "draft-zh-v2",
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+   "normalization": "NFC",
+   "newline": "LF",
+   "encoding": "UTF-8",
+@@ -164,7 +163,7 @@
+           "occurrence": 1
+         },
+         {
+-          "quote": "修建餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成",
++          "quote": "餐厅要150,000金，增加一间占地9×10再加4×5的房间，而且马上完成",
+           "occurrence": 1
+         }
+       ]
+@@ -183,7 +182,7 @@
+           "occurrence": 1
+         }
+       ],
+-      "versionNote": "1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。旧的这一对只出现在那一句里。"
++      "versionNote": "1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。"
+     },
+     {
+       "id": "wiki-axes",
+@@ -191,7 +190,7 @@
+       "url": "https://stardewvalleywiki.com/Axes",
+       "appliesTo": [
+         {
+-          "quote": "你一开始有一把能砍倒完全长成的树的斧头，之后的等级到铁匠铺升级",
++          "quote": "你一开始有一把能砍倒完全长成的树的斧头，后续斧头等级在铁匠铺升级",
+           "occurrence": 1
+         },
+         {
+@@ -314,8 +313,7 @@
+           "quote": "下雨、节日、夏季18日去诊所，以及她走过柜台的那些时候，看[罗宾的商店和室外建筑](https://stardewvalleyplanner.art/carpenter-stardew)。",
+           "occurrence": 1
+         }
+-      ],
+-      "versionNote": "一条内链，用于下雨、节日、夏季18日去诊所，以及她走过柜台的时候。不是升级金币或材料的来源。"
++      ]
+     }
+   ]
+ }
+
+diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/seo.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json
+exit 1
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/seo.zh.json
++++ docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json
+@@ -10,7 +10,7 @@
+   "author": "Stardew Valley Planner Team",
+   "publishedAt": null,
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+   "normalization": "NFC",
+   "newline": "LF",
+   "encoding": "UTF-8"
+
+diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/media-text.zh.json docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json
+exit 1
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/media-text.zh.json
++++ docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json
+@@ -5,7 +5,7 @@
+   "newline": "LF",
+   "encoding": "UTF-8",
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+   "figures": [
+     {
+       "mediaId": "cover-payments",
+
+diff -u docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/translation-submission.json docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json
+exit 1
+--- docs/blog-ops/house-upgrade-stardew/content/zh/versions/translation-v1/translation-submission.json
++++ docs/blog-ops/house-upgrade-stardew/content/zh/translation-submission.json
+@@ -10,16 +10,16 @@
+   "encoding": "UTF-8",
+   "englishBodyPath": "docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+   "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+-  "translatedBodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v1.md",
+-  "translatedBodySha256": "9e28797bb3b639dcdf39cc20200257346bfd25dc0c2974ff120f3fb4f140a843",
+-  "hanCharacterCount": 1908,
++  "translatedBodyPath": "docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md",
++  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
++  "hanCharacterCount": 1905,
+   "hanCountNote": "供核对中文篇幅。正式 Length 门只计已锁英文，不把这个汉字数加进英文门槛。",
+   "seoPath": "docs/blog-ops/house-upgrade-stardew/content/zh/seo.zh.json",
+-  "seoSha256": "1a5c3bf69155c66cf6a2e5d3ce1f0a44d2b18d69a67cdb9dcbf665eacc0748ec",
++  "seoSha256": "f744f783cf4b04d1cf0d66a2029cafaedaaf5eb04754e7b1e13612e48c29be16",
+   "publicReferencesPath": "docs/blog-ops/house-upgrade-stardew/content/zh/public-references.zh.json",
+-  "publicReferencesSha256": "8dc7366349f48ed2258c070638cb9edce04a4d886a052e6c2b8aea12fd8566f9",
++  "publicReferencesSha256": "b2e0781d81b60a10ba6586ca8c0ea7032ce9e2f24df05fb80587dba8733f9127",
+   "mediaTextPath": "docs/blog-ops/house-upgrade-stardew/content/zh/media-text.zh.json",
+-  "mediaTextSha256": "0410d2b318c1295f2696ec4af61e29715d5aa69df033991ef5bf9922d77738d3",
++  "mediaTextSha256": "43c6138438d5a29bb13ab0daf0ccd9b5c6498284191a79680c53e84ade7298aa",
+   "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+   "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+   "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+@@ -87,9 +87,11 @@
+     }
+   ],
+   "revisionBudget": {
+-    "articleRoundsUsed": 3,
++    "articleRoundsUsed": 4,
++    "preservedPriorRounds": 3,
++    "explicitExceptionRounds": 1,
+     "futureRoundsRemaining": 0,
+-    "thisDelivery": "首次直接翻译，不是额外译文返修"
++    "thisDelivery": "第4轮授权例外：用户回复「继续」，协调者于2026-10-16 14:19:46 UTC确认。只修E已核实的5处。原三轮保留，不重置成0/3，不另开预算。"
+   },
+   "status": {
+     "translationReview": "pending-independent-E",
+
+4. structure / quotes / urls / numbers check
+headings 8 = 8 (6 H2, 2 H3)
+https URL multiset equal: 50 occurrences, 12 unique URLs
+numbers multiset equal: 158 occurrences in v1 and v2
+quotes 55; occurrence mismatches: 0; quotes with count != 1: 0
+forbidden keys in public-references.zh.json (bodyPath, factIds, reviewerNote, CALC-, /Users/, prompt): 0 found
+image alt texts and markdown image links: identical to v1 and media-text.zh.json
+
+5. assets and media verification
+all 6 raster images and 3 SVG files SHA-256 match v1 exactly
+carried over prior E visual and pixel verification evidence:
+- view-cover.webp-decoded.png, view-tier-rooms.webp-decoded.png, view-upgrade-or-renovation.webp-decoded.png
+- view-renovation-small-labels.png, view-renovation-small-labels.avif-decoded.png
+- 0 bright pixels in 6px ring around overflow:true labels
+- width-height-only automatic detection limitation noted: reject_overflow checks width/height only, does not evaluate position booleans
+no re-render or raster tool rerun executed
+
+6. wiki term verification
+/tmp/zh-house.html (75,441 bytes, title "农舍 - 星露谷物语官方中文维基"):
+- row "餐厅" has data-sort-value="150000" (150,000g)
+- row "打通餐厅" has data-sort-value="10000" (10,000g)
+- "修建餐厅" occurrence: 0
+verified 餐厅 150k != 打通餐厅 10k
+/tmp/zh-page.html (587,822 bytes, title "采集 - Stardew Valley Wiki"):
+- contains 护林人 (Forester.png), 煤矿森林, 秘密森林, 大树桩, 大圆木
+no wiki re-request executed
+
+7. search-scope and audit facts
+prior E search-scope facts preserved:
+- previous workspace search for 翻译|译文 returned excerpts from control/
+- previous search for exit_code/overflow/font-size returned media-production/zh/render.log
+- canary-identity.json was not opened, no secret string leaked
+in this review (v2), commands strictly restricted to specific target files in content/zh, lock/en, seo/en, media-production/zh, and /tmp
+no ripgrep across ops root or control/ executed
+
+summary: FAIL_COUNT 0; ALL_PASS

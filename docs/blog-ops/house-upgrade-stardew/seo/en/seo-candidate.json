@@ -1,0 +1,43 @@
+{
+  "status": "pending-E",
+  "frozen": false,
+  "slug": "house-upgrade-stardew",
+  "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+  "h1": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+  "ogTitle": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+  "description": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+  "titleEqualsH1": true,
+  "template": "app/(en)/[slug]/page.tsx passes title: post.title into createPublicPageMetadata. That function copies the same string to openGraph.title. app/(en)/layout.tsx has a plain title string and no title.template, so no brand suffix is added.",
+  "descriptionPointMap": [
+    {
+      "promise": "The first farmhouse upgrade is 10,000g and 450 Wood",
+      "body": "Robin charges 10,000g and 450 Wood for the first farmhouse upgrade"
+    },
+    {
+      "promise": "the second is 65,000g and 100 Hardwood",
+      "body": "65,000g and 100 Hardwood for the second"
+    },
+    {
+      "promise": "the third is 100,000g",
+      "body": "and 100,000g for the third"
+    },
+    {
+      "promise": "In 1.6 the second payment replaced 50,000g and 150 Hardwood",
+      "body": "In 1.6 the second house upgrade moved from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood"
+    },
+    {
+      "promise": "Each upgrade takes three days",
+      "body": "Each upgrade takes three days"
+    },
+    {
+      "promise": "After the second upgrade, a renovation is a separate order and finishes immediately",
+      "body": "After the second farmhouse upgrade, Robin offers house renovations. You order one and it finishes immediately."
+    }
+  ],
+  "notPromised": [
+    "All three tiers do not finish in one shared three-day wait.",
+    "14,500g and 32,500g are not used as a wood unit price.",
+    "No payment-day start and no payment-day room state.",
+    "No exception-free Tuesday ban."
+  ]
+}

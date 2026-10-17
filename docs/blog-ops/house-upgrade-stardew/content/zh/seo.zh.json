@@ -1,0 +1,17 @@
+{
+  "locale": "zh-CN",
+  "country": "US",
+  "slug": "house-upgrade-stardew",
+  "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+  "h1": "星露谷房屋升级：第二档是65,000金和100硬木",
+  "ogTitle": "星露谷房屋升级：第二档是65,000金和100硬木",
+  "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+  "titleEqualsH1": true,
+  "author": "Stardew Valley Planner Team",
+  "publishedAt": null,
+  "englishBodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "translatedBodySha256": "0190b09fc27df1b32919f65a1e688b484c29f3bbc049021188b5f472e9867bc6",
+  "normalization": "NFC",
+  "newline": "LF",
+  "encoding": "UTF-8"
+}

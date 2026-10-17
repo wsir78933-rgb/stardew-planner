@@ -1,0 +1,67 @@
+=== Role D Independent Verification Execution (Round 1: draft-v2) ===
+[Files Checked]
+  draft_v2 (docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md):
+    SHA256: 09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f
+    Bytes: 8720 | Lines: 55
+    NFC: True | CRLF: False | EndsNewline: True
+  media_text (docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json):
+    SHA256: 55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c
+    Bytes: 4443 | Lines: 129
+    NFC: True | CRLF: False | EndsNewline: True
+  writer_submission (docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json):
+    SHA256: ac05e298a12927997d5bda1aa4b9ec7271080177912632597609cf008fd06d4f
+    Bytes: 7034 | Lines: 138
+    NFC: True | CRLF: False | EndsNewline: True
+  public_references (docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json):
+    SHA256: 035eafb54c23eca693b3899ddf82c055fd091722e12f5f8c3902673ca172706a
+    Bytes: 8057 | Lines: 239
+    NFC: True | CRLF: False | EndsNewline: True
+  task_card (docs/blog-ops/house-upgrade-stardew/layout/task-card.md):
+    SHA256: 1edb806157ef10adae0bf88151bcd43f106f9e47dae82841119ecb94f32fa8c9
+    Bytes: 8089 | Lines: 112
+    NFC: True | CRLF: False | EndsNewline: True
+  writer_brief (docs/blog-ops/house-upgrade-stardew/layout/writer-brief.md):
+    SHA256: 6e15009775fdb1469514a3be9998a7340e481500867ee1e55e2dfadab344fa0d
+    Bytes: 8679 | Lines: 125
+    NFC: True | CRLF: False | EndsNewline: True
+  media_plan (docs/blog-ops/house-upgrade-stardew/layout/media-plan.json):
+    SHA256: a7f1f374149cdfb3255c44ec2cda2045a08caadc7ff1042890c07e31b1fa51ad
+    Bytes: 9646 | Lines: 183
+    NFC: True | CRLF: False | EndsNewline: True
+  facts (docs/blog-ops/house-upgrade-stardew/research/A/facts.json):
+    SHA256: 618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e
+    Bytes: 34063 | Lines: 460
+    NFC: True | CRLF: False | EndsNewline: True
+  revision_record (docs/blog-ops/house-upgrade-stardew/content/en/revision-round-1.md):
+    SHA256: 24560c1d97500a74734d4f3ba0a9580ce27ca2142761eebf9310f7c8b3e12a62
+    Bytes: 4729 | Lines: 68
+    NFC: True | CRLF: False | EndsNewline: True
+
+[Whitespace Check]
+  docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md: clean=True (exit=1)
+  docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json: clean=True (exit=1)
+
+[Media Alignment]
+  Bound bodySha256: 09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f (Matches draft-v2)
+  Total figures: 3
+    Figure 'cover-payments' (cover):
+      src_in_draft: False
+      alt_in_draft: False
+      caption_in_draft: False
+    Figure 'tier-rooms' (body):
+      src_in_draft: True
+      alt_in_draft: True
+      caption_in_draft: True
+    Figure 'upgrade-or-renovation' (body):
+      src_in_draft: True
+      alt_in_draft: True
+      caption_in_draft: True
+
+[Word Count Preview (Author Preview)]
+  Raw mechanical_units: 970
+  Required floor: 1000
+  Meets floor: False
+  Without captions: 917
+  Note: Length gate is independently evaluated by Role F in tempering stage.
+
+=== All Automated Verification Assertions Passed Successfully ===

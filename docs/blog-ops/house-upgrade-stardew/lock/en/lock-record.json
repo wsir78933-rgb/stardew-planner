@@ -1,0 +1,39 @@
+{
+  "role": "F",
+  "kind": "english-technical-lock",
+  "verifiedAt": "2026-10-16T09:08:17+08:00",
+  "bodyPath": "docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+  "bodySha256": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+  "bodyBytes": 10046,
+  "normalization": {
+    "unicode": "NFC",
+    "newline": "LF",
+    "encoding": "UTF-8"
+  },
+  "sourceDraft": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md",
+  "sourceDraftUnchanged": true,
+  "qualifiedUnits": 1085,
+  "mechanicalUnits": 1138,
+  "lengthClass": "short",
+  "mainIntentMaterialComplete": true,
+  "dReportSha256": "ae5c87028bcfbd6f5c751aa2024f7d2a5f6514fa11a1c7cb64f447f756f9058d",
+  "eReportSha256": "9db00d9995472ebe2d316b712e04cf97571e814a98cef793c8b43b11669b7b85",
+  "eV3NotLocked": true,
+  "inputSha256": {
+    "draft-v4.md": "f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f",
+    "public-references.en.json": "1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27",
+    "media-text.en.json": "75bc0c2085e6f86d8fb1a9dbc8393f4fe53e75bc84f4dea9096f7c4b1f4cf400",
+    "writer-submission.json": "1089fd4510d1d1f9785977c9f68b81e8e40de2a988d99d0fbd09f341974fc415"
+  },
+  "seoStatus": "pending-E",
+  "revisionBudget": {
+    "used": 3,
+    "remaining": 0,
+    "includesTranslationRework": true
+  },
+  "authorField": {
+    "value": "Stardew Valley Planner Team",
+    "registry": "src/blog/blog-post-registry.tsx",
+    "interfaceNote": "docs/blog-ops/house-upgrade-stardew/interface/ProjectInterfaceSpec.md records the same observed English author constant. That path stays in this internal lock record."
+  }
+}

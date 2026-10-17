@@ -1,0 +1,28 @@
+[2026-10-17T01:27:44.021Z] Starting ZH page review in TaskSpace 185: zh house-upgrade pixel-v2 review
+[2026-10-17T01:27:44.024Z] Loaded expectations: manifest SHA valid, 6 media items identified.
+[2026-10-17T01:27:44.024Z] Configuring viewport zh-1280x800 (1280x800)
+[2026-10-17T01:27:44.196Z] Navigating to http://127.0.0.1:3010/zh/house-upgrade-stardew for viewport zh-1280x800
+[2026-10-17T01:27:45.948Z] Identity check for zh-1280x800: title=true, h1=true, desc=true
+[2026-10-17T01:27:45.948Z] Capturing image role "cover" in viewport zh-1280x800
+[2026-10-17T01:27:48.130Z] Captured cover: complete=true, decode=true, dimensions=1672x941, altMatch=true, captionMatch=true
+[2026-10-17T01:27:48.130Z] Capturing image role "interior" in viewport zh-1280x800
+[2026-10-17T01:27:49.384Z] Captured interior: complete=true, decode=true, dimensions=1672x941, altMatch=true, captionMatch=true
+[2026-10-17T01:27:49.384Z] Capturing image role "construction" in viewport zh-1280x800
+[2026-10-17T01:27:49.616Z] Captured construction: complete=true, decode=true, dimensions=1672x941, altMatch=true, captionMatch=true
+[2026-10-17T01:27:49.626Z] Layout check for zh-1280x800: horizontalOverflow=false
+[2026-10-17T01:27:49.627Z] Configuring viewport zh-390x844 (390x844)
+[2026-10-17T01:27:49.660Z] Navigating to http://127.0.0.1:3010/zh/house-upgrade-stardew for viewport zh-390x844
+[2026-10-17T01:27:50.685Z] Identity check for zh-390x844: title=true, h1=true, desc=true
+[2026-10-17T01:27:50.685Z] Capturing image role "cover" in viewport zh-390x844
+[2026-10-17T01:27:51.039Z] Captured cover: complete=true, decode=true, dimensions=1672x941, altMatch=true, captionMatch=true
+[2026-10-17T01:27:51.039Z] Capturing image role "interior" in viewport zh-390x844
+[2026-10-17T01:27:52.186Z] Captured interior: complete=true, decode=true, dimensions=1672x941, altMatch=true, captionMatch=true
+[2026-10-17T01:27:52.186Z] Capturing image role "construction" in viewport zh-390x844
+[2026-10-17T01:27:52.368Z] Captured construction: complete=true, decode=true, dimensions=1672x941, altMatch=true, captionMatch=true
+[2026-10-17T01:27:52.374Z] Layout check for zh-390x844: horizontalOverflow=false
+[2026-10-17T01:27:52.374Z] Executing catalog and language spot checks...
+[2026-10-17T01:27:54.852Z] Spot checks completed: catalogStatus=200
+[2026-10-17T01:27:54.853Z] Fetching and verifying 6 media assets directly over HTTP...
+[2026-10-17T01:27:55.658Z] Media asset verification completed: 6/6 passed.
+[2026-10-17T01:27:55.658Z] Wrote checks.json to /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/checks.json
+[2026-10-17T01:27:55.658Z] Wrote report.md to /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/reviews/pages-zh/report.md

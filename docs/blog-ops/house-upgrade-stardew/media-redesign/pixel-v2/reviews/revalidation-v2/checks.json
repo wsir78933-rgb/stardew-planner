@@ -1,0 +1,151 @@
+{
+  "taskId": "task_54a7feaf4fea",
+  "dispatchId": "ctx_cfb0e6854f6a",
+  "outcome": "succeeded",
+  "createdAt": "2026-10-17T09:15:00+08:00",
+  "commands": {
+    "typecheck": {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "passed": true,
+      "logFile": "typecheck.log",
+      "logSha256": "c608703d3b415d959ead39130dae69e300c6a2b0c60d25c604324d96a4f63a16"
+    },
+    "vitest": {
+      "command": "pnpm exec vitest run tests/blog/blog-post-registry.test.ts tests/routes/blog-routes.test.tsx tests/routes/removed-public-pages.test.ts tests/seo/canonical-public-routes.test.ts",
+      "exitCode": 0,
+      "passed": true,
+      "testFilesPassed": 4,
+      "testsPassed": 43,
+      "testsFailed": 0,
+      "logFile": "vitest.log",
+      "logSha256": "77926aba9ff26cdc472f4ddc974142545ce732a3224fbf238a79ab16fd2f1cf3"
+    },
+    "build": {
+      "command": "NEXT_TELEMETRY_DISABLED=1 pnpm exec next build --webpack",
+      "exitCode": 0,
+      "passed": true,
+      "staticPagesGenerated": 68,
+      "logFile": "build.log",
+      "logSha256": "6a73b4acf96e15baea1daef53b0e1220055b2eb9a9e84319758dfa4449cba3a6"
+    }
+  },
+  "archiveFix": {
+    "locatorPath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/archive-fix/archive-location-map.json",
+    "en": {
+      "sourceRelativePath": "src/blog/articles/house-upgrade-stardew.en.tsx",
+      "oldArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx",
+      "oldExists": false,
+      "newArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx.txt",
+      "sha256": "cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5",
+      "byteSize": 15846
+    },
+    "zh": {
+      "sourceRelativePath": "src/blog/articles/house-upgrade-stardew.zh.tsx",
+      "oldArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx",
+      "oldExists": false,
+      "newArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx.txt",
+      "sha256": "2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba",
+      "byteSize": 14218
+    },
+    "baselineManifestSha256": "b00c8d80843cfdc766cb08e490f50d0edb121e88c5725673bfa6dacb4290f1af",
+    "baselineChecksumsSha256": "47bdbca2844a7be476f470d748303f31ff4be1c3eca5f0cc51d10351bf8d28d0"
+  },
+  "acceptanceFiles": {
+    "productFiles": [
+      {
+        "path": "public/blog/house-upgrade-stardew-cover.webp",
+        "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8"
+      },
+      {
+        "path": "public/blog/house-upgrade-stardew-cover-zh.webp",
+        "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8"
+      },
+      {
+        "path": "public/blog/house-upgrade-stardew-cover.avif",
+        "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0"
+      },
+      {
+        "path": "public/blog/house-upgrade-stardew-cover-zh.avif",
+        "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+        "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+        "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+        "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+        "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+        "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+        "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+        "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27"
+      },
+      {
+        "path": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+        "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27"
+      },
+      {
+        "path": "src/blog/articles/house-upgrade-stardew.en.tsx",
+        "sha256": "e215ceb1871294757241bdd44a52a7a48667b5e0bb01018d9aafe8d348844acd"
+      },
+      {
+        "path": "src/blog/articles/house-upgrade-stardew.zh.tsx",
+        "sha256": "3d601b6e0c4b5eada92fde9cd4875db44c31ef0a5eae857cdaac6b4deff13850"
+      },
+      {
+        "path": "src/blog/blog-post-registry.tsx",
+        "sha256": "5e7687939e0878dcd6e6c74dad4c1cad9beee76bac0078427713932274ab0aa5"
+      }
+    ],
+    "handoffFiles": [
+      {
+        "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/integration/v1/handoff/en.json",
+        "sha256": "e4fa6f1fa65adfbeead8df17eb1902c2d08ff7daa76abb1279dfe1d697c36fd4"
+      },
+      {
+        "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/integration/v1/handoff/zh-CN.json",
+        "sha256": "376c9cffa556f8451b0a999495874950c7efb94c6a42fac3674e2bfa732869e0"
+      }
+    ],
+    "assemblyManifest": {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/integration/v1/AssemblyManifest.json",
+      "actualSha256": "07fa31ccca98a8ea421075797861724315583138490d4f99870cc5be95ad22fd",
+      "priorClaimedSha256": "0e86b97669d651fa462efcffae65553e1a0b5a1923297a7804ee9eb46d90a992",
+      "revalidationNote": "Prior reviews/integration report claimed 0e86..., but actual file content was 07fa...; this revalidation confirms real file hash without attributing unknown changes."
+    }
+  },
+  "nextEnv": {
+    "beforeSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "buildModifiedSha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+    "diffConfirmedKnownTypesOnly": true,
+    "restoredSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "matchesOriginal": true
+  },
+  "outStaticExport": {
+    "all12ImagesMatchPublic": true,
+    "pagesGenerated": 68
+  },
+  "port3010": {
+    "pid": 21887,
+    "status": "listening",
+    "httpStatus": 200,
+    "unmolested": true
+  }
+}

@@ -131,6 +131,7 @@ const localizedBlogPostPaths: Readonly<
     "stardew-fruit": "/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/oak-tree-vs-maple-stardew",
     "how-to-harvest-stardew-valley": "/how-to-harvest-stardew-valley",
+    "house-upgrade-stardew": "/house-upgrade-stardew",
   },
   "zh-CN": {
     "carpenter-stardew": "/zh/carpenter-stardew",
@@ -159,6 +160,7 @@ const localizedBlogPostPaths: Readonly<
     "stardew-fruit": "/zh/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/zh/oak-tree-vs-maple-stardew",
     "how-to-harvest-stardew-valley": "/zh/how-to-harvest-stardew-valley",
+    "house-upgrade-stardew": "/zh/house-upgrade-stardew",
   },
 };
 

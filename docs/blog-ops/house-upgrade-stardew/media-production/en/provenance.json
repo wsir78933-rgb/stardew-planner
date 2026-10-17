@@ -1,0 +1,273 @@
+{
+  "role": "M3",
+  "phase": "candidate",
+  "status": "candidate_asset_bound_to_writer_submission",
+  "articleSlug": "house-upgrade-stardew",
+  "locale": "en",
+  "note": "Candidate assets bound to C writer-submission version cb5b0115; not yet frozen public assets. Final G will only consume assets matching F freeze. Files are stored only under docs/blog-ops/house-upgrade-stardew/media-production/en/ and do not write to src/, public/, or tests/.",
+  "inputs": {
+    "writerSubmissionPath": "docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json",
+    "writerSubmissionSha256": "5db55ed0942f2114a01d4332c1bbb8fc6d480b9db974b8b3b615400a7d179f9e",
+    "mediaTextEnPath": "docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json",
+    "mediaTextEnSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+    "mediaPlanPath": "docs/blog-ops/house-upgrade-stardew/layout/media-plan.json",
+    "mediaPlanSha256": "a7f1f374149cdfb3255c44ec2cda2045a08caadc7ff1042890c07e31b1fa51ad",
+    "bodyDraftSha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628"
+  },
+  "constraints": {
+    "canvasWidth": 1672,
+    "canvasHeight": 941,
+    "minFontPx": 84,
+    "fontStack": "'Arial Narrow', Arial, sans-serif",
+    "wrapRule": "One label per line, using the line breaks in inImageText.en. No font shrinking.",
+    "doNot": [
+      "Do not draw Robin's menu or fake game dialogue screenshots.",
+      "Do not copy or trace Wiki/Steam house sprites, maps, or tiles.",
+      "Do not insert internal factId, role, hash, or path in images.",
+      "Do not write to src/, public/, or tests/."
+    ]
+  },
+  "toolchain": {
+    "renderingEngine": "ego-browser (Chromium) nodejs CDP Emulation (width: 1672, height: 941, deviceScaleFactor: 1)",
+    "converter": "Pillow 12.2.0 (libwebp quality 95 method 6, libavif quality 90)",
+    "verificationTools": ["ego-browser getBoundingClientRect", "Pillow Image inspect", "sips"]
+  },
+  "figures": [
+    {
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "placement": "article-header",
+      "semanticDescription": "Header cover diagram displaying the three current vanilla farmhouse payment stages (Upgrade 1, Upgrade 2, and Upgrade 3) with exact gold costs, lumber materials, and 3-day construction wait times.",
+      "publicPathTarget": {
+        "webp": "/blog/house-upgrade-stardew-cover.webp",
+        "avif": "/blog/house-upgrade-stardew-cover.avif"
+      },
+      "inImageText": [
+        "Upgrade 1",
+        "10,000g",
+        "450 Wood",
+        "3 days",
+        "Upgrade 2",
+        "65,000g",
+        "100 Hardwood",
+        "3 days",
+        "Upgrade 3",
+        "100,000g",
+        "3 days"
+      ],
+      "stableElementIds": {
+        "text-upgrade-1-title": "Upgrade 1",
+        "text-upgrade-1-gold": "10,000g",
+        "text-upgrade-1-wood": "450 Wood",
+        "text-upgrade-1-days": "3 days",
+        "text-upgrade-2-title": "Upgrade 2",
+        "text-upgrade-2-gold": "65,000g",
+        "text-upgrade-2-hardwood": "100 Hardwood",
+        "text-upgrade-2-days": "3 days",
+        "text-upgrade-3-title": "Upgrade 3",
+        "text-upgrade-3-gold": "100,000g",
+        "text-upgrade-3-days": "3 days"
+      },
+      "sourceSvg": {
+        "filename": "cover-payments.svg",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/cover-payments.svg",
+        "sha256": "4f0103d7aaed81a3a617b945dced399cfee526eec04f59faf643fadc18713785",
+        "byteSize": 3822
+      },
+      "renderedWebp": {
+        "filename": "house-upgrade-stardew-cover.webp",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.webp",
+        "sha256": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+        "byteSize": 72418,
+        "width": 1672,
+        "height": 941,
+        "format": "WEBP"
+      },
+      "renderedAvif": {
+        "filename": "house-upgrade-stardew-cover.avif",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/house-upgrade-stardew-cover.avif",
+        "sha256": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+        "byteSize": 39621,
+        "width": 1672,
+        "height": 941,
+        "format": "AVIF"
+      },
+      "renderRecipe": {
+        "engine": "ego-browser screenshot",
+        "command": "python3 docs/blog-ops/house-upgrade-stardew/media-production/en/render-recipe.py",
+        "exitCode": 0
+      },
+      "visualObservation": "Direct visual inspection confirmed: clean navy background (#0b1329), 3 distinct cards for Upgrade 1 (emerald), Upgrade 2 (blue), and Upgrade 3 (purple). Titles rendered at 88px bold, all item lines rendered at 84px bold. Zero text overlap, zero clipping, ample bounding box padding (e.g. 100 Hardwood at width 471px inside 480px box with 24.5px side margin). No extra disclaimers or game chrome."
+    },
+    {
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "placement": "Inside H2 The three farmhouse upgrades, after the footprint sentence.",
+      "semanticDescription": "Body schematic illustrating the specific rooms added by each of the three upgrades (Kitchen/Bedroom, Empty room/Nursery, Cellar/Same exterior) and emphasizing that the outdoor 9x5 footprint remains constant across all upgrades.",
+      "publicPathTarget": {
+        "webp": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+        "avif": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif"
+      },
+      "inImageText": [
+        "Upgrade 1",
+        "Kitchen",
+        "Bedroom",
+        "Upgrade 2",
+        "Empty room",
+        "Nursery",
+        "Upgrade 3",
+        "Cellar",
+        "Same exterior",
+        "9×5 outdoors"
+      ],
+      "stableElementIds": {
+        "text-tier1-title": "Upgrade 1",
+        "text-tier1-room1": "Kitchen",
+        "text-tier1-room2": "Bedroom",
+        "text-tier2-title": "Upgrade 2",
+        "text-tier2-room1": "Empty room",
+        "text-tier2-room2": "Nursery",
+        "text-tier3-title": "Upgrade 3",
+        "text-tier3-room1": "Cellar",
+        "text-tier3-room2": "Same exterior",
+        "text-shared-footprint": "9×5 outdoors"
+      },
+      "sourceSvg": {
+        "filename": "tier-rooms.svg",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.svg",
+        "sha256": "0f68fefc86cf2f959bab09411c6000069d0ed78172aa2f1263bf82ef46d07af2",
+        "byteSize": 3695
+      },
+      "renderedWebp": {
+        "filename": "tier-rooms.en.webp",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.webp",
+        "sha256": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+        "byteSize": 70092,
+        "width": 1672,
+        "height": 941,
+        "format": "WEBP"
+      },
+      "renderedAvif": {
+        "filename": "tier-rooms.en.avif",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/tier-rooms.en.avif",
+        "sha256": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+        "byteSize": 38764,
+        "width": 1672,
+        "height": 941,
+        "format": "AVIF"
+      },
+      "renderRecipe": {
+        "engine": "ego-browser screenshot",
+        "command": "python3 docs/blog-ops/house-upgrade-stardew/media-production/en/render-recipe.py",
+        "exitCode": 0
+      },
+      "visualObservation": "Direct visual inspection confirmed: clean layout with three vertical stage columns on top (y=60..680) and a unified horizontal banner along the bottom (y=710..870) for the shared '9×5 outdoors' line. All room labels rendered at 84px bold white; titles at 88px bold colored. Longest string 'Same exterior' (457px) fits comfortably inside 480px box. No map tiles, sprites, or unofficial dimensions."
+    },
+    {
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "placement": "At the start of H2 A renovation is not the next upgrade.",
+      "semanticDescription": "Body schematic contrasting the major upgrade path against the renovation system: Upgrade requires 3 days; Renovation unlocks after upgrade 2, executes instantly, and refunds gold for reversible changes, illustrated with Remove crib (Free) and Dining room (150,000g).",
+      "publicPathTarget": {
+        "webp": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+        "avif": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif"
+      },
+      "inImageText": [
+        "Upgrade",
+        "3 days",
+        "Renovation",
+        "After upgrade 2",
+        "Instant",
+        "Refunds gold",
+        "Remove crib",
+        "Free",
+        "Dining room",
+        "150,000g"
+      ],
+      "stableElementIds": {
+        "text-upgrade-title": "Upgrade",
+        "text-upgrade-days": "3 days",
+        "text-renovation-title": "Renovation",
+        "text-renovation-unlock": "After upgrade 2",
+        "text-renovation-speed": "Instant",
+        "text-renovation-refund": "Refunds gold",
+        "text-example-1-name": "Remove crib",
+        "text-example-1-cost": "Free",
+        "text-example-2-name": "Dining room",
+        "text-example-2-cost": "150,000g"
+      },
+      "sourceSvg": {
+        "filename": "upgrade-or-renovation.svg",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.svg",
+        "sha256": "71c935969c7952967207ed70006b65da614909d92689f0ba260f36e7e7c335ad",
+        "byteSize": 4422
+      },
+      "renderedWebp": {
+        "filename": "upgrade-or-renovation.en.webp",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.webp",
+        "sha256": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+        "byteSize": 68194,
+        "width": 1672,
+        "height": 941,
+        "format": "WEBP"
+      },
+      "renderedAvif": {
+        "filename": "upgrade-or-renovation.en.avif",
+        "relativePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/upgrade-or-renovation.en.avif",
+        "sha256": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+        "byteSize": 36133,
+        "width": 1672,
+        "height": 941,
+        "format": "AVIF"
+      },
+      "renderRecipe": {
+        "engine": "ego-browser screenshot",
+        "command": "python3 docs/blog-ops/house-upgrade-stardew/media-production/en/render-recipe.py",
+        "exitCode": 0
+      },
+      "visualObservation": "Direct visual inspection confirmed: two-column comparison layout. Left column (x=56..556) shows the Upgrade path ('Upgrade', '3 days'). Right side has top card (x=586..1616) showing Renovation path with 4 clear lines ('Renovation', 'After upgrade 2', 'Instant', 'Refunds gold'), and bottom row showing two concrete examples side-by-side: 'Remove crib'/'Free' and 'Dining room'/'150,000g'. All font sizes >= 84px bold. Zero clipping, clean contrast."
+    }
+  ],
+  "handoffForTranslatorT": {
+    "instructions": "Translator T should create Chinese SVGs by copying the 3 source SVGs and replacing text content inside the specified stable element IDs without altering layout structure, coordinates, or viewBox. Font family should include 'PingFang SC', 'Microsoft YaHei', sans-serif alongside Arial.",
+    "figureTranslationsMap": {
+      "cover-payments": [
+        "text-upgrade-1-title",
+        "text-upgrade-1-gold",
+        "text-upgrade-1-wood",
+        "text-upgrade-1-days",
+        "text-upgrade-2-title",
+        "text-upgrade-2-gold",
+        "text-upgrade-2-hardwood",
+        "text-upgrade-2-days",
+        "text-upgrade-3-title",
+        "text-upgrade-3-gold",
+        "text-upgrade-3-days"
+      ],
+      "tier-rooms": [
+        "text-tier1-title",
+        "text-tier1-room1",
+        "text-tier1-room2",
+        "text-tier2-title",
+        "text-tier2-room1",
+        "text-tier2-room2",
+        "text-tier3-title",
+        "text-tier3-room1",
+        "text-tier3-room2",
+        "text-shared-footprint"
+      ],
+      "upgrade-or-renovation": [
+        "text-upgrade-title",
+        "text-upgrade-days",
+        "text-renovation-title",
+        "text-renovation-unlock",
+        "text-renovation-speed",
+        "text-renovation-refund",
+        "text-example-1-name",
+        "text-example-1-cost",
+        "text-example-2-name",
+        "text-example-2-cost"
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+command: readlink node_modules
+exit: 0
+stdout:
+/Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+
+command: ls -ld node_modules
+exit: 0
+stdout:
+lrwxr-xr-x@ 1 wusir  staff  68 Oct 15 21:53 node_modules -> /Users/wusir/Desktop/开发项目集合/stardew planner/node_modules
+
+is_symlink: true
+target_is_directory: true

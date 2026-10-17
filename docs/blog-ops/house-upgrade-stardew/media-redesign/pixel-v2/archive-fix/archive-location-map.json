@@ -1,0 +1,19 @@
+{
+  "kind": "pixel-v2-article-archive-suffix-map",
+  "entries": [
+    {
+      "sourceRelativePath": "src/blog/articles/house-upgrade-stardew.en.tsx",
+      "oldArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx",
+      "newArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx.txt",
+      "sha256": "cefa2bb7b1be00cd8a6d61a5b26765aae4f025e4798a949bb88d66f7c89768f5",
+      "byteSize": 15846
+    },
+    {
+      "sourceRelativePath": "src/blog/articles/house-upgrade-stardew.zh.tsx",
+      "oldArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx",
+      "newArchivePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx.txt",
+      "sha256": "2339f972ae0e3825b19ce0b05822c05e3c69e5a9e39de803dd1998d7861947ba",
+      "byteSize": 14218
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "tool": "sips",
+  "fileTool": "file",
+  "previewConversion": false,
+  "reason": "sips returned pixelWidth, pixelHeight, and format for every webp and avif file",
+  "tmpUsed": false,
+  "filesDeleted": false,
+  "images": [
+    {
+      "relativePath": "public/blog/house-upgrade-stardew-cover.webp",
+      "byteSize": 72418,
+      "sha256": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+      "fileType": "RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "webp",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "c9309a69f763f1368d6315e854a3457fab26de8658bcc6a4783389c27f58a342",
+        "bytes": 72418,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/house-upgrade-stardew-cover.avif",
+      "byteSize": 39621,
+      "sha256": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+      "fileType": "ISO Media, AVIF Image",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "avif",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "f9c086bf54e4de407c2993d19d7f52e2923b76a77a217b3d2a47267922fde113",
+        "bytes": 39621,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/house-upgrade-stardew-cover-zh.webp",
+      "byteSize": 63012,
+      "sha256": "bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87",
+      "fileType": "RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "webp",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "bf601afcc70fe72e5ecf31c9d250a43781db0aa9d02281fd7fc7476b02265e87",
+        "bytes": 63012,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/house-upgrade-stardew-cover-zh.avif",
+      "byteSize": 34529,
+      "sha256": "7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926",
+      "fileType": "ISO Media, AVIF Image",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "avif",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "7e00232440ac66f410e791a9f472f3fdb2b74242cc1a7d0a35e43e8e8d438926",
+        "bytes": 34529,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "byteSize": 70092,
+      "sha256": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+      "fileType": "RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "webp",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "c73b0578f6b08d7b71ea1ad39f3636686c5d230d2db40b663364a2445c58b209",
+        "bytes": 70092,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "byteSize": 38764,
+      "sha256": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+      "fileType": "ISO Media, AVIF Image",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "avif",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "8654ef287c8f45809ef51abcda5e305d306d4e08b58bbbb57074944e13812d9b",
+        "bytes": 38764,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "byteSize": 58666,
+      "sha256": "d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c",
+      "fileType": "RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "webp",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "d9b978635943f7be87f4fb329fba424ceaa86d1991923ba54ac02e9f1af0be9c",
+        "bytes": 58666,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "byteSize": 31242,
+      "sha256": "aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad",
+      "fileType": "ISO Media, AVIF Image",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "avif",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "aabe93337712ce9de18a94faad5b3582cfeba8d62a7cd59b3a6962218e2c0aad",
+        "bytes": 31242,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "byteSize": 68194,
+      "sha256": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+      "fileType": "RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "webp",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "040b07f5701e1a142d803f07ebeb890881a261488a2b060e6d3f80a153d2d19b",
+        "bytes": 68194,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "byteSize": 36133,
+      "sha256": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+      "fileType": "ISO Media, AVIF Image",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "avif",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "1cff7e951ffc73cac5ec9dba522159dcd36202ef2a7196047708b2c818116426",
+        "bytes": 36133,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "byteSize": 60854,
+      "sha256": "6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88",
+      "fileType": "RIFF (little-endian) data, Web/P image, VP8 encoding, 1672x941, Scaling: [none]x[none], YUV color, decoders should clamp",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "webp",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "6bf515177a555a0edf63ad1ce6b121e78f2db7c66fd3e8f6cf733b4ac479fe88",
+        "bytes": 60854,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    },
+    {
+      "relativePath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "byteSize": 32235,
+      "sha256": "d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84",
+      "fileType": "ISO Media, AVIF Image",
+      "fileExitCode": 0,
+      "sipsExitCode": 0,
+      "pixelWidth": 1672,
+      "pixelHeight": 941,
+      "format": "avif",
+      "previewConversion": false,
+      "assemblyRecorded": {
+        "sha256": "d8cde3529f897d5d5fe2b4b734e7182eb2eb000c19d3dc07dccd1ba5159f2b84",
+        "bytes": 32235,
+        "width": 1672,
+        "height": 941,
+        "equalToCurrentBytesAndDimensions": true
+      }
+    }
+  ],
+  "assemblyByteIdentityIsNotAQualityReview": true
+}

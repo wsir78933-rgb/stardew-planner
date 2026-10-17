@@ -1,0 +1,237 @@
+{
+  "kind": "AssemblyManifest",
+  "slug": "house-upgrade-stardew",
+  "version": "pixel-v2",
+  "historicalManifestPath": "docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json",
+  "historicalManifestSha256": "6ce4e84ffbcc1252f2cebd443e4ccceac5a60d29c2ceb41dd74eaabd68fc6834",
+  "historicalManifestUnmodified": true,
+  "userFinalReview": "not-claimed",
+  "productionDeployed": false,
+  "pageBrowserPassClaimed": false,
+  "textRewritten": false,
+  "buildTypecheckAndTestsRunByThisOwner": false,
+  "handoffs": {
+    "en": {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/integration/v1/handoff/en.json",
+      "fileSha256": "e4fa6f1fa65adfbeead8df17eb1902c2d08ff7daa76abb1279dfe1d697c36fd4",
+      "bodyHash": "151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8",
+      "publicFieldsSha256": "fa3cb7a8df969b3f91ffa3ab9fb3aaad4748e132a3e9deaf8d348287d584f597"
+    },
+    "zh-CN": {
+      "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/integration/v1/handoff/zh-CN.json",
+      "fileSha256": "376c9cffa556f8451b0a999495874950c7efb94c6a42fac3674e2bfa732869e0",
+      "bodyHash": "00a612b48022fa7256f89b7fc5eb0386b34d17b6f272f079da9f62eb40998bc4",
+      "englishBodyHash": "151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8",
+      "publicFieldsSha256": "75b3d2a26d14cad3b49df9eeb20c2e1bbffd0e776c463d3317f6c13248592d15"
+    }
+  },
+  "articles": {
+    "en": {
+      "module": "src/blog/articles/house-upgrade-stardew.en.tsx",
+      "sha256": "e215ceb1871294757241bdd44a52a7a48667b5e0bb01018d9aafe8d348844acd",
+      "bodyHash": "151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8"
+    },
+    "zh-CN": {
+      "module": "src/blog/articles/house-upgrade-stardew.zh.tsx",
+      "sha256": "3d601b6e0c4b5eada92fde9cd4875db44c31ef0a5eae857cdaac6b4deff13850",
+      "bodyHash": "00a612b48022fa7256f89b7fc5eb0386b34d17b6f272f079da9f62eb40998bc4"
+    }
+  },
+  "registry": {
+    "module": "src/blog/blog-post-registry.tsx",
+    "sha256": "5e7687939e0878dcd6e6c74dad4c1cad9beee76bac0078427713932274ab0aa5",
+    "coverAlt": {
+      "en": "Original pixel scene of one farmhouse. Not an official screenshot or an exact game layout.",
+      "zh-CN": "原创像素场景：一栋农舍。不是官方截图，也不是精确的游戏布局。"
+    }
+  },
+  "media": [
+    {
+      "locale": "en",
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "publicPath": "/blog/house-upgrade-stardew-cover.webp",
+      "productPath": "public/blog/house-upgrade-stardew-cover.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.webp",
+      "format": "webp",
+      "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "bytes": 2550052,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "en",
+      "mediaId": "cover-payments",
+      "role": "cover-sibling",
+      "publicPath": "/blog/house-upgrade-stardew-cover.avif",
+      "productPath": "public/blog/house-upgrade-stardew-cover.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.avif",
+      "format": "avif",
+      "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "bytes": 653604,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "en",
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.webp",
+      "format": "webp",
+      "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "bytes": 1984240,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "en",
+      "mediaId": "tier-rooms",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.avif",
+      "format": "avif",
+      "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "bytes": 446411,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "en",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.webp",
+      "format": "webp",
+      "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "bytes": 2453712,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "en",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.avif",
+      "format": "avif",
+      "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "bytes": 617005,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "cover-payments",
+      "role": "cover",
+      "publicPath": "/blog/house-upgrade-stardew-cover-zh.webp",
+      "productPath": "public/blog/house-upgrade-stardew-cover-zh.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.webp",
+      "format": "webp",
+      "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "bytes": 2550052,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "cover-payments",
+      "role": "cover-sibling",
+      "publicPath": "/blog/house-upgrade-stardew-cover-zh.avif",
+      "productPath": "public/blog/house-upgrade-stardew-cover-zh.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.avif",
+      "format": "avif",
+      "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "bytes": 653604,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "tier-rooms",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.webp",
+      "format": "webp",
+      "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "bytes": 1984240,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "tier-rooms",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.avif",
+      "format": "avif",
+      "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "bytes": 446411,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.webp",
+      "format": "webp",
+      "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "bytes": 2453712,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    },
+    {
+      "locale": "zh-CN",
+      "mediaId": "upgrade-or-renovation",
+      "role": "body-sibling",
+      "publicPath": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "productPath": "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif",
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.avif",
+      "format": "avif",
+      "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "bytes": 617005,
+      "width": 1672,
+      "height": 941,
+      "cmpExitCode": 0,
+      "sourceAttribute": "original-pixel-illustration"
+    }
+  ],
+  "dimensions": {
+    "width": 1672,
+    "height": 941,
+    "ratio": 1.7768331562167907,
+    "sixteenByNine": 1.7777777777777777,
+    "calledExactSixteenByNine": false
+  }
+}

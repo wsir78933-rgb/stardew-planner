@@ -1,0 +1,169 @@
+started_at: 2026-10-17T00:28:49Z
+created_at: 2026-10-17T00:28:50Z
+baseline_absent_before_write: true
+head: bf91a14829067ed1c9c2a206a97985e17dbebdda
+branch: 博客-2
+copy_count: 19
+cmp_failures: 0
+registry_sha256: e2696eb7e2473ea74a19dd9c552db732115e2da26be458bcd9af3c971317ac15
+registry_bytes: 49531
+next_env_sha256: 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc
+manifest_sha256: b00c8d80843cfdc766cb08e490f50d0edb121e88c5725673bfa6dacb4290f1af
+report_sha256: c506232bc703128e481cf91eede33040b0f7d272c497840a13a6e9d7541d14e8
+checksums_sha256: 47bdbca2844a7be476f470d748303f31ff4be1c3eca5f0cc51d10351bf8d28d0
+assembly_media_byte_and_dimension_match: true
+registry_assembly_hash_equal: true
+preview_conversion: false
+source_rehash_ok: true
+git_status_before_lines: 433
+git_status_mid_added: 36
+git_status_mid_outside: 0
+git_status_mid_removed: 0
+mid_added:
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/checksums.sha256
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/comparison/en-body.comparison.md
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/comparison/exclusions.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/comparison/exclusions.md
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/comparison/zh-draft-v2.comparison.md
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/handoff/public/en.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/environment/git-head.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/environment/git-status-before.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/environment/next-env.d.ts.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/environment/node-modules-link.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/environment/port-3010.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/images/probe.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/images/probe.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/manifest.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover-zh.avif
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover-zh.webp
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover.avif
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover.webp
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/registry/en-entry.fragment.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/registry/entries.json
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/registry/zh-entry.fragment.txt
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/report.md
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx
+?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx
+
+command: git rev-parse --show-toplevel
+exit: 0
+command: git rev-parse HEAD
+exit: 0
+command: git rev-parse --abbrev-ref HEAD
+exit: 0
+command: file -b -- public/blog/house-upgrade-stardew-cover.webp
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover.webp
+exit: 0
+command: file -b -- public/blog/house-upgrade-stardew-cover.avif
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover.avif
+exit: 0
+command: file -b -- public/blog/house-upgrade-stardew-cover-zh.webp
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover-zh.webp
+exit: 0
+command: file -b -- public/blog/house-upgrade-stardew-cover-zh.avif
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/house-upgrade-stardew-cover-zh.avif
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+exit: 0
+command: file -b -- public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+exit: 0
+command: sips -g pixelWidth -g pixelHeight -g format public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+exit: 0
+command: readlink node_modules
+exit: 0
+command: ls -ld node_modules
+exit: 0
+command: lsof -nP -iTCP:3010 -sTCP:LISTEN
+exit: 0
+command: ps -p 21887 -ww -o pid=,args=
+exit: 0
+command: lsof -a -p 21887 -d cwd
+exit: 0
+command: lsof -a -p 21887 -d cwd -Fn
+exit: 0
+command: git status --porcelain=v1 --untracked-files=all
+exit: 0
+command: cmp -s public/blog/house-upgrade-stardew-cover.webp docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover.webp
+exit: 0
+command: cmp -s public/blog/house-upgrade-stardew-cover.avif docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover.avif
+exit: 0
+command: cmp -s public/blog/house-upgrade-stardew-cover-zh.webp docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover-zh.webp
+exit: 0
+command: cmp -s public/blog/house-upgrade-stardew-cover-zh.avif docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/house-upgrade-stardew-cover-zh.avif
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp
+exit: 0
+command: cmp -s public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif
+exit: 0
+command: cmp -s src/blog/articles/house-upgrade-stardew.en.tsx docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.en.tsx
+exit: 0
+command: cmp -s src/blog/articles/house-upgrade-stardew.zh.tsx docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/src/blog/articles/house-upgrade-stardew.zh.tsx
+exit: 0
+command: cmp -s docs/blog-ops/house-upgrade-stardew/handoff/public/en.json docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/handoff/public/en.json
+exit: 0
+command: cmp -s docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/handoff/public/zh-CN.json
+exit: 0
+command: cmp -s docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/assembly/AssemblyManifest.json
+exit: 0
+command: cmp -s docs/blog-ops/house-upgrade-stardew/lock/en/body.md docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+exit: 0
+command: cmp -s docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/docs/blog-ops/house-upgrade-stardew/content/zh/draft-zh-v2.md
+exit: 0
+command: git status --porcelain=v1 --untracked-files=all
+exit: 0
+checks_failed: 0
+final_status_delta_from_mid: ?? docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/checks.log

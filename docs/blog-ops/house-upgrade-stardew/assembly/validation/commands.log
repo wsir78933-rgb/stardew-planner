@@ -1,0 +1,19 @@
+# Command log: house-upgrade-stardew validation
+
+Worktree: /Users/wusir/orca/workspaces/stardew planner/博客-2
+HEAD: bf91a14829067ed1c9c2a206a97985e17dbebdda
+
+| Command | Exit | Log |
+|---|---:|---|
+| environment, symlink, installed versions, frozen hashes, sips | 1 in the first script only because it also compared lockfiles with the current main checkout | environment-and-hashes.txt |
+| `git diff --exit-code -- package.json pnpm-lock.yaml` plus `git show HEAD` SHA-256 | 0; worktree equals HEAD and the 2026-10-15 baseline digests | head-package-proof.txt |
+| `pnpm typecheck` | 0 | typecheck.txt |
+| `NEXT_TELEMETRY_DISABLED=1 pnpm exec next build --webpack` | 0 | build-webpack.txt |
+| `pnpm exec vitest run` on the interface file set | 1; 8 failed, 237 passed, 245 | vitest-interface.txt |
+| `pnpm exec vitest run` full suite | 1; 12 failed, 2478 passed, 2490 | vitest-full.txt |
+| static HTML comparison, first sources expectation | 1; ERROR_COUNT=4 | render-check.txt and render-check-initial.txt |
+| sources label, note, and href recheck | 0; CORRECTED_ERROR_COUNT=0 | render-check-corrected.txt |
+| `lsof -nP -iTCP -sTCP:LISTEN` then plain terminal serve | serve listen confirmed | preview.json |
+| `curl` both article routes | 200 and 200 | curl-en.headers, curl-zh.headers |
+
+Not run: `pnpm test`, `pnpm dev`, `scripts/dev.sh`, `next dev`, dependency install, commit, push, deploy.

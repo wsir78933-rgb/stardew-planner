@@ -1,0 +1,121 @@
+{
+  "generator": "native image_gen",
+  "provider": "native image_gen (Codex)",
+  "authorization": "User A authorized",
+  "callBudget": 3,
+  "callCount": 3,
+  "retryCount": 0,
+  "articleSlug": "house-upgrade-stardew",
+  "scope": "media-redesign/pixel-v2/assets",
+  "visualReviewNotice": "Visual review delegated to independent Cursor Worker. Numeric metrics cannot alone claim visual PASS.",
+  "figures": [
+    {
+      "role": "cover",
+      "originalInputPath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/originals/cover.png",
+      "dimensions": {
+        "width": 1672,
+        "height": 941,
+        "aspectRatio": "1672:941"
+      },
+      "originalBytes": 3170624,
+      "originalSha256": "7c84c7df12916d48c255b18dfa4a1ee38e2cee1c96bba9a4aa985468d18997ae",
+      "cmpExitCode": 0,
+      "exports": {
+        "webp": {
+          "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.webp",
+          "format": "WEBP",
+          "byteSize": 2550052,
+          "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+          "parameters": {
+            "lossless": true,
+            "method": 6
+          },
+          "pixelIdenticalToPng": true
+        },
+        "avif": {
+          "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/cover.avif",
+          "format": "AVIF",
+          "byteSize": 653604,
+          "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+          "parameters": {
+            "quality": 90
+          },
+          "meanSquaredError": 27.944,
+          "peakSignalToNoiseRatioDb": 33.67
+        }
+      }
+    },
+    {
+      "role": "interior",
+      "originalInputPath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/originals/interior.png",
+      "dimensions": {
+        "width": 1672,
+        "height": 941,
+        "aspectRatio": "1672:941"
+      },
+      "originalBytes": 2492820,
+      "originalSha256": "342a247c8d198c86a06129276a310a6d7444eb86c2a46d6b0422b31edcf26f99",
+      "cmpExitCode": 0,
+      "exports": {
+        "webp": {
+          "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.webp",
+          "format": "WEBP",
+          "byteSize": 1984240,
+          "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+          "parameters": {
+            "lossless": true,
+            "method": 6
+          },
+          "pixelIdenticalToPng": true
+        },
+        "avif": {
+          "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/interior.avif",
+          "format": "AVIF",
+          "byteSize": 446411,
+          "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+          "parameters": {
+            "quality": 90
+          },
+          "meanSquaredError": 13.7814,
+          "peakSignalToNoiseRatioDb": 36.74
+        }
+      }
+    },
+    {
+      "role": "construction",
+      "originalInputPath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/originals/construction.png",
+      "dimensions": {
+        "width": 1672,
+        "height": 941,
+        "aspectRatio": "1672:941"
+      },
+      "originalBytes": 2979695,
+      "originalSha256": "1cc6bf81b2339c4daf90526d11112c21fb5e68b1fe08ec1ba02ba3f6874aa401",
+      "cmpExitCode": 0,
+      "exports": {
+        "webp": {
+          "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.webp",
+          "format": "WEBP",
+          "byteSize": 2453712,
+          "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+          "parameters": {
+            "lossless": true,
+            "method": 6
+          },
+          "pixelIdenticalToPng": true
+        },
+        "avif": {
+          "path": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/assets/exports/construction.avif",
+          "format": "AVIF",
+          "byteSize": 617005,
+          "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+          "parameters": {
+            "quality": 90
+          },
+          "meanSquaredError": 27.827,
+          "peakSignalToNoiseRatioDb": 33.69
+        }
+      }
+    }
+  ]
+}

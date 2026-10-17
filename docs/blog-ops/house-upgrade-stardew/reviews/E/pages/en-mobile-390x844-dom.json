@@ -1,0 +1,649 @@
+{
+  "info": {
+    "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+    "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+    "w": 390,
+    "h": 844,
+    "sx": 0,
+    "sy": 0,
+    "pw": 390,
+    "ph": 9465
+  },
+  "mismatches": [],
+  "extracted": {
+    "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+    "lang": "en",
+    "h1": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+    "h1Count": 1,
+    "h1Texts": [
+      "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier"
+    ],
+    "topic": "Stardew Valley Guides",
+    "byline": "By Stardew Valley Planner Team · 6 min read",
+    "headerParagraphs": [
+      "Stardew Valley Guides",
+      "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+      "By Stardew Valley Planner Team · 6 min read"
+    ],
+    "descriptionText": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+        "inSources": false,
+        "inCta": false,
+        "inBody": false
+      },
+      {
+        "tag": "H2",
+        "text": "What each upgrade costs",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "Prepare the Wood and the Hardwood",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "Price the wood you still need, then add through a tier",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H3",
+        "text": "200 Wood already on hand",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H3",
+        "text": "From the starter house through a named tier",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "What the kitchen, nursery, and cellar are for",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "Order the upgrade at 24 Mountain Road",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "A renovation is not the next upgrade",
+        "inSources": false,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "Sources",
+        "inSources": true,
+        "inCta": false,
+        "inBody": true
+      },
+      {
+        "tag": "H2",
+        "text": "Planner",
+        "inSources": false,
+        "inCta": false,
+        "inBody": false
+      },
+      {
+        "tag": "H2",
+        "text": "Explore",
+        "inSources": false,
+        "inCta": false,
+        "inBody": false
+      },
+      {
+        "tag": "H2",
+        "text": "Legal",
+        "inSources": false,
+        "inCta": false,
+        "inBody": false
+      }
+    ],
+    "bodyHeadings": [
+      {
+        "kind": "h2",
+        "text": "What each upgrade costs"
+      },
+      {
+        "kind": "h2",
+        "text": "Prepare the Wood and the Hardwood"
+      },
+      {
+        "kind": "h2",
+        "text": "Price the wood you still need, then add through a tier"
+      },
+      {
+        "kind": "h3",
+        "text": "200 Wood already on hand"
+      },
+      {
+        "kind": "h3",
+        "text": "From the starter house through a named tier"
+      },
+      {
+        "kind": "h2",
+        "text": "What the kitchen, nursery, and cellar are for"
+      },
+      {
+        "kind": "h2",
+        "text": "Order the upgrade at 24 Mountain Road"
+      },
+      {
+        "kind": "h2",
+        "text": "A renovation is not the next upgrade"
+      }
+    ],
+    "paragraphs": [
+      "Robin charges 10,000g and 450 Wood for the first farmhouse upgrade, 65,000g and 100 Hardwood for the second, and 100,000g for the third (Farmhouse). The second payment is the 1.6 price (Version History). Each upgrade takes three days (Carpenter's Shop). Place the order with Robin at the Carpenter's Shop.",
+      "In 1.6 the second house upgrade moved from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood (Version History).",
+      "You start with an axe that chops a fully grown tree, and you upgrade later grades at the Blacksmith (Axes). Chop trees for Wood, or buy Wood from Robin's ordinary stock (Wood).",
+      "Hardwood is a separate item (Hardwood). A Large Stump is the remains of a long-dead tree. A Copper Axe or better removes a Large Stump and yields 2 Hardwood (Large Stump). It is not the stump left when you chop a living tree for Wood (Wood). The Copper Axe is 2,000g and 5 Copper Bars (Axes). A Steel Axe removes a Large Log. The Steel Axe is 5,000g and 5 Iron Bars, and it is the axe that clears the log at the Secret Woods entrance (Axes, Large Log).",
+      "The Secret Woods open from the northwest corner of Cindersap Forest once that log is gone (Secret Woods). The log itself is 8 Hardwood once and does not grow back (Large Log). Six Large Stumps inside regrow daily, and one day of them is 12 Hardwood. Four are in the upper part of the woods. The other two are in a smaller lower area, reached through one of two covered passages. One passage goes straight through the trees just southeast of the upper three stumps. The other starts south of the entrance, about 2-3 tiles to the right of a bush, and you walk south, then west, then south again (Secret Woods, Large Stump).",
+      "For 100 Hardwood from these stumps alone, start at 0 with the entrance log already gone, without the Forester extra piece and without any other hardwood source or spend. Eight harvests of 12 are 96 and leave 4 short of 100. Those 4 are 2 stumps, so the 100th piece comes on the 9th harvest (Secret Woods, Large Stump, Large Log). That figure is a count of harvests, not a calendar date. The Steel Axe is the entrance tool for this Secret Woods route. The second upgrade is still paid with that row's gold and Hardwood, and this axe is not required for every way of bringing that Hardwood.",
+      "Use this bill for the first upgrade in year 1 when 200 of the 450 Wood are already on hand. Those 200 are wood you already have, not a pile Robin sets aside. The upgrade is 10,000g and 450 Wood, and Robin's year-1 Wood is 10g (Farmhouse, Carpenter's Shop). 450 − 200 = 250. Carry the 200 Wood with you, and buy the other 250 on that trip. 250 × 10g = 2,500g. Add the 10,000g fee and you bring 12,500g. That 12,500g includes only the fee and this wood purchase.",
+      "In year 1, 450 × 10g = 4,500g for the wood, and 4,500g plus the 10,000g fee is 14,500g. The 200 already on hand is what changes that 14,500g total to 12,500g. In year 2 or later, Wood is 50g. 450 × 50g = 22,500g for the wood, and 22,500g plus the same 10,000g fee is 32,500g (Carpenter's Shop, Farmhouse). The 12,500g bill does not use that 50g price.",
+      "Robin's ordinary stock sells Wood and does not sell Hardwood (Carpenter's Shop).",
+      "These three sums start at the starter house and add the rows through the tier you name. None of them is the gold for one order (Farmhouse).",
+      "Through upgrade 1, the rows add to 10,000g and 450 Wood. Through upgrade 2, 10,000g + 65,000g = 75,000g, with 450 Wood and 100 Hardwood. Through upgrade 3, 10,000g + 65,000g + 100,000g = 175,000g, with 450 Wood and 100 Hardwood. These sums add only the farmhouse upgrade rows. Wood you still buy, and the Copper Axe or Steel Axe, are separate costs. Hand over one order's gold from the cost table. Do not pay 75,000g or 175,000g in one visit.",
+      "The first upgrade adds the kitchen in the house. Cook at its stove. The refrigerator holds 36 slots and works as a chest. A recipe can use ingredients in your inventory, in that refrigerator, or in a Mini-Fridge (Cooking). Refill a watering can at the kitchen sink (Farmhouse). The same upgrade adds a bedroom and changes the bed from a single bed to a double bed (Farmhouse).",
+      "The second upgrade makes the kitchen and the bedroom larger. One added room is empty. The other has a crib and two child beds, and you can have two children (Farmhouse, Carpenter's Shop). On the room figure, the Nursery label is this crib room.",
+      "The third upgrade adds a cellar under the house. Enter it from the kitchen. The cellar starts with 33 casks. Those casks age cheese and wine, and also Goat Cheese, Beer, Mead, and Pale Ale, and that aging raises their quality and value. The cask recipe from this upgrade is 20 Wood and 1 Hardwood. You can set a cask somewhere else, but it accepts goods only while it is in the cellar. The outside of the house stays the same as the previous upgrade (Farmhouse, Carpenter's Shop, Cask).",
+      "The outdoor footprint stays 9×5, so the tiles beside the house stay as they are (Farmhouse, Carpenter's Shop).",
+      "Robin is at the Carpenter's Shop, 24 Mountain Road. She sells wood, stone, and furniture. She upgrades the farmhouse and constructs farm buildings (Carpenter's Shop). Go there while the counter is open, ask her to upgrade the farmhouse, and pay the gold and materials for your next tier.",
+      "On an ordinary week the counter is open from 9:00am to 5:00pm. Tuesday is closed. Friday closes at 4:00pm. The house can be entered every day from 9:00am to 8:00pm, even when the shop is closed. Entering the house does not place the order (Carpenter's Shop).",
+      "For rain, a festival, the Summer 18 clinic visit, and the times she walks past the counter, use Robin's shop and outdoor buildings.",
+      "After the second farmhouse upgrade, Robin offers house renovations. You order one and it finishes immediately. To undo it, empty the new area first. Robin then returns the gold, and the refund arrives at once (Carpenter's Shop, Farmhouse).",
+      "Remove Crib is free and finishes at once (Carpenter's Shop). Add Dining Room costs 150,000g, adds a room with a footprint of 9×10 plus 4×5, and finishes at once. To get that 150,000g back, that 9×10 plus 4×5 area has to be empty (Carpenter's Shop).",
+      "Choose the third upgrade's row when you want the cellar. Choose Remove Crib or Add Dining Room when you want those changes."
+    ],
+    "captions": [
+      "Schematic. Upgrade 1 is labeled Kitchen and Bedroom. Upgrade 2 is labeled Empty room and Nursery. Upgrade 3 is labeled Cellar and Same exterior. A shared line reads 9×5 outdoors.",
+      "Schematic. The upgrade path reads Upgrade and 3 days. The renovation path reads Renovation, After upgrade 2, Instant, and Refunds gold. Remove crib reads Free. Dining room reads 150,000g."
+    ],
+    "images": [
+      {
+        "alt": "Three labeled stages: Upgrade 1 with Kitchen and Bedroom, Upgrade 2 with Empty room and Nursery, Upgrade 3 with Cellar and Same exterior, and a shared line reading 9×5 outdoors.",
+        "src": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+        "caption": "Schematic. Upgrade 1 is labeled Kitchen and Bedroom. Upgrade 2 is labeled Empty room and Nursery. Upgrade 3 is labeled Cellar and Same exterior. A shared line reads 9×5 outdoors.",
+        "loading": "lazy",
+        "decoding": "async",
+        "width": "1672",
+        "height": "941",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "clientWidth": 356,
+        "clientHeight": 199,
+        "currentSrc": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+        "complete": true,
+        "avifSrcSet": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif",
+        "avifType": "image/avif",
+        "cropX": 0,
+        "cropY": 0.68
+      },
+      {
+        "alt": "Two paths and two examples: Upgrade with 3 days; Renovation with After upgrade 2, Instant, and Refunds gold; Remove crib with Free; Dining room with 150,000g.",
+        "src": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+        "caption": "Schematic. The upgrade path reads Upgrade and 3 days. The renovation path reads Renovation, After upgrade 2, Instant, and Refunds gold. Remove crib reads Free. Dining room reads 150,000g.",
+        "loading": "lazy",
+        "decoding": "async",
+        "width": "1672",
+        "height": "941",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "clientWidth": 356,
+        "clientHeight": 199,
+        "currentSrc": "http://127.0.0.1:3010/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+        "complete": true,
+        "avifSrcSet": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif",
+        "avifType": "image/avif",
+        "cropX": 0,
+        "cropY": 0.68
+      }
+    ],
+    "tables": [
+      [
+        [
+          "Upgrade",
+          "Gold",
+          "Materials",
+          "Days"
+        ],
+        [
+          "1",
+          "10,000g (Farmhouse)",
+          "450 Wood (Carpenter's Shop)",
+          "3 (Farmhouse)"
+        ],
+        [
+          "2",
+          "65,000g (Farmhouse)",
+          "100 Hardwood (Carpenter's Shop)",
+          "3 (Carpenter's Shop)"
+        ],
+        [
+          "3",
+          "100,000g (Farmhouse)",
+          "",
+          "3 (Carpenter's Shop)"
+        ]
+      ]
+    ],
+    "bodyLinks": [
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Version History",
+        "href": "https://stardewvalleywiki.com/Version_History"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Version History",
+        "href": "https://stardewvalleywiki.com/Version_History"
+      },
+      {
+        "label": "Axes",
+        "href": "https://stardewvalleywiki.com/Axes"
+      },
+      {
+        "label": "Wood",
+        "href": "https://stardewvalleywiki.com/Wood"
+      },
+      {
+        "label": "Hardwood",
+        "href": "https://stardewvalleywiki.com/Hardwood"
+      },
+      {
+        "label": "Large Stump",
+        "href": "https://stardewvalleywiki.com/Large_Stump"
+      },
+      {
+        "label": "Wood",
+        "href": "https://stardewvalleywiki.com/Wood"
+      },
+      {
+        "label": "Axes",
+        "href": "https://stardewvalleywiki.com/Axes"
+      },
+      {
+        "label": "Axes",
+        "href": "https://stardewvalleywiki.com/Axes"
+      },
+      {
+        "label": "Large Log",
+        "href": "https://stardewvalleywiki.com/Large_Log"
+      },
+      {
+        "label": "Secret Woods",
+        "href": "https://stardewvalleywiki.com/Secret_Woods"
+      },
+      {
+        "label": "Large Log",
+        "href": "https://stardewvalleywiki.com/Large_Log"
+      },
+      {
+        "label": "Secret Woods",
+        "href": "https://stardewvalleywiki.com/Secret_Woods"
+      },
+      {
+        "label": "Large Stump",
+        "href": "https://stardewvalleywiki.com/Large_Stump"
+      },
+      {
+        "label": "Secret Woods",
+        "href": "https://stardewvalleywiki.com/Secret_Woods"
+      },
+      {
+        "label": "Large Stump",
+        "href": "https://stardewvalleywiki.com/Large_Stump"
+      },
+      {
+        "label": "Large Log",
+        "href": "https://stardewvalleywiki.com/Large_Log"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Cooking",
+        "href": "https://stardewvalleywiki.com/Cooking"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Cask",
+        "href": "https://stardewvalleywiki.com/Cask"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Robin's shop and outdoor buildings",
+        "href": "https://stardewvalleyplanner.art/carpenter-stardew"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop"
+      }
+    ],
+    "sources": [
+      {
+        "label": "Farmhouse",
+        "href": "https://stardewvalleywiki.com/Farmhouse",
+        "note": null,
+        "titleText": "Farmhouse"
+      },
+      {
+        "label": "Carpenter's Shop",
+        "href": "https://stardewvalleywiki.com/Carpenter%27s_Shop",
+        "note": null,
+        "titleText": "Carpenter's Shop"
+      },
+      {
+        "label": "Version History",
+        "href": "https://stardewvalleywiki.com/Version_History",
+        "note": "1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.",
+        "titleText": "Version History1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood."
+      },
+      {
+        "label": "Axes",
+        "href": "https://stardewvalleywiki.com/Axes",
+        "note": null,
+        "titleText": "Axes"
+      },
+      {
+        "label": "Wood",
+        "href": "https://stardewvalleywiki.com/Wood",
+        "note": null,
+        "titleText": "Wood"
+      },
+      {
+        "label": "Hardwood",
+        "href": "https://stardewvalleywiki.com/Hardwood",
+        "note": null,
+        "titleText": "Hardwood"
+      },
+      {
+        "label": "Large Stump",
+        "href": "https://stardewvalleywiki.com/Large_Stump",
+        "note": null,
+        "titleText": "Large Stump"
+      },
+      {
+        "label": "Large Log",
+        "href": "https://stardewvalleywiki.com/Large_Log",
+        "note": null,
+        "titleText": "Large Log"
+      },
+      {
+        "label": "Secret Woods",
+        "href": "https://stardewvalleywiki.com/Secret_Woods",
+        "note": null,
+        "titleText": "Secret Woods"
+      },
+      {
+        "label": "Cooking",
+        "href": "https://stardewvalleywiki.com/Cooking",
+        "note": null,
+        "titleText": "Cooking"
+      },
+      {
+        "label": "Cask",
+        "href": "https://stardewvalleywiki.com/Cask",
+        "note": null,
+        "titleText": "Cask"
+      },
+      {
+        "label": "Robin's shop and outdoor buildings",
+        "href": "https://stardewvalleyplanner.art/carpenter-stardew",
+        "note": null,
+        "titleText": "Robin's shop and outdoor buildings"
+      }
+    ],
+    "cover": {
+      "alt": "Three payment stages: Upgrade 1 with 10,000g, 450 Wood, and 3 days; Upgrade 2 with 65,000g, 100 Hardwood, and 3 days; Upgrade 3 with 100,000g and 3 days.",
+      "src": "/blog/house-upgrade-stardew-cover.webp",
+      "loading": null,
+      "decoding": null,
+      "fetchPriority": null,
+      "width": "1672",
+      "height": "941",
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "clientWidth": 356,
+      "clientHeight": 199,
+      "currentSrc": "http://127.0.0.1:3010/blog/house-upgrade-stardew-cover.avif",
+      "complete": true,
+      "avifSrcSet": "/blog/house-upgrade-stardew-cover.avif",
+      "avifType": "image/avif",
+      "captionCount": 0,
+      "cropX": 0,
+      "cropY": 0.68
+    },
+    "head": {
+      "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "description": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+      "canonical": "https://stardewvalleyplanner.art/house-upgrade-stardew",
+      "robots": "index, follow",
+      "hreflang": [
+        {
+          "hreflang": "en",
+          "href": "https://stardewvalleyplanner.art/house-upgrade-stardew"
+        },
+        {
+          "hreflang": "zh-CN",
+          "href": "https://stardewvalleyplanner.art/zh/house-upgrade-stardew"
+        },
+        {
+          "hreflang": "x-default",
+          "href": "https://stardewvalleyplanner.art/house-upgrade-stardew"
+        }
+      ]
+    },
+    "og": {
+      "og:title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "og:description": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+      "og:url": "https://stardewvalleyplanner.art/house-upgrade-stardew",
+      "og:image": "https://stardewvalleyplanner.art/blog/house-upgrade-stardew-cover.webp",
+      "og:type": "article"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+      "twitter:description": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+      "twitter:image": "https://stardewvalleyplanner.art/blog/house-upgrade-stardew-cover.webp"
+    },
+    "plannerCtaCount": 1,
+    "plannerCtas": [
+      {
+        "heading": "Stardew Valley PlannerFree Online Farm Layout Tool",
+        "action": "Start planning my farm",
+        "href": "/#planner"
+      }
+    ],
+    "toc": [
+      {
+        "text": "What each upgrade costs",
+        "href": "#what-each-upgrade-costs"
+      },
+      {
+        "text": "Prepare the Wood and the Hardwood",
+        "href": "#prepare-the-wood-and-the-hardwood"
+      },
+      {
+        "text": "Price the wood you still need, then add through a tier",
+        "href": "#price-the-wood-you-still-need-then-add-through-a-tier"
+      },
+      {
+        "text": "200 Wood already on hand",
+        "href": "#200-wood-already-on-hand"
+      },
+      {
+        "text": "From the starter house through a named tier",
+        "href": "#from-the-starter-house-through-a-named-tier"
+      },
+      {
+        "text": "What the kitchen, nursery, and cellar are for",
+        "href": "#what-the-kitchen-nursery-and-cellar-are-for"
+      },
+      {
+        "text": "Order the upgrade at 24 Mountain Road",
+        "href": "#order-the-upgrade-at-24-mountain-road"
+      },
+      {
+        "text": "A renovation is not the next upgrade",
+        "href": "#a-renovation-is-not-the-next-upgrade"
+      },
+      {
+        "text": "Sources",
+        "href": "#sources"
+      }
+    ],
+    "overflow": {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "docClientWidth": 390,
+      "docScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "pageOverflow": []
+    },
+    "tableRegion": {
+      "overflowX": "auto",
+      "clientWidth": 356,
+      "scrollWidth": 608,
+      "className": "blog-table-scroll",
+      "role": "region",
+      "ariaLabel": "What each upgrade costs"
+    },
+    "clippedText": [],
+    "browserNotes": {
+      "console": [],
+      "pageerrors": []
+    },
+    "base": null
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "articleSlug": "house-upgrade-stardew",
+  "verifiedOn": "2026-10-15",
+  "role": "B",
+  "intent": "Buy the next vanilla farmhouse upgrade from Robin: current gold and materials, a three-day wait, and the rooms that upgrade adds. A renovation after upgrade 2 is a different order.",
+  "delivery": {
+    "component": "PublicPicture",
+    "srcEndsWith": ".webp",
+    "siblingFormat": "avif",
+    "width": 1672,
+    "height": 941,
+    "coverLoading": "omit loading so the browser default stays eager",
+    "bodyLoading": "lazy",
+    "bodyDecoding": "async",
+    "srcAssets": "do not add blog paths under src/assets",
+    "articleDirectory": "public/blog/illustrations/house-upgrade-stardew/",
+    "coverNote": "G already reserves public/blog/house-upgrade-stardew-cover.webp and .avif. The Chinese cover is a second file because the labels change. Later assembly adds that pair; this plan does not write the files."
+  },
+  "production": {
+    "method": "Controlled vector diagram, then export WebP and AVIF at 1672 by 941.",
+    "label": "C may open a caption with the single word Schematic. Do not hand C a disclaimer sentence. Do not imitate a game menu, dialogue box, or pixel screenshot.",
+    "sourceOfLabels": "research/A/facts.json statements cited on each figure",
+    "rejectedRasters": [
+      "media-research/originals/house-indoors-tier-2.png",
+      "media-research/originals/house-indoors-tier-3.png",
+      "media-research/originals/cellar-inside.png",
+      "media-research/originals/carpenters-shop-interior.png",
+      "media-research/originals/house-tier-1-starter.png",
+      "media-research/originals/house-tier-2-exterior.png",
+      "media-research/originals/house-tier-3-exterior.png",
+      "media-research/originals/robin-building.png",
+      "media-research/inspected/steam-robin-menu.png"
+    ],
+    "rejectionReason": "M2: site-use basis for the Wiki rasters is unknown. licenses/game-asset-terms.txt lines 12-15 are not a quotation and are not permission. The Steam menu image has no price and must not be redrawn as a fake dialogue screenshot."
+  },
+  "license": {
+    "status": "Original diagram drawn for this article from verified facts.",
+    "publicCredit": "None. Do not add a ConcernedApe, Wiki, Fair Use, or Editorial credit for art this article does not publish.",
+    "factCitationsStayInProse": true
+  },
+  "type": {
+    "canvas": { "width": 1672, "height": 941 },
+    "minFontPxOnCanvas": 84,
+    "formula": "ceil(16 * 1672 / 320) = 84. A 320px displayed width is inside a 390px-wide viewport after side space. 84px on the canvas is 16px at 320px wide and about 19px at 390px wide.",
+    "wrap": "One label per line, using the line breaks in inImageText.en. Do not shrink the font to fit a longer sentence. Maximum four lines in one stage or path.",
+    "evidence": "No figure has been drawn or opened in a browser in this pass. This is a production floor for the later drawing step. It is not a reproduced mobile defect. E checks real readability on the assembled page at 390 by 844."
+  },
+  "figures": [
+    {
+      "id": "cover-payments",
+      "role": "cover",
+      "placement": "Article header. LCP. Not a substitute for the body diagram.",
+      "readerDoes": "Sees the three current payments and that each wait is three days before reading the table.",
+      "version": "Upgrade 2 uses the 1.6 price, 65,000g and 100 Hardwood. The opened 1.6.15 notes do not change these payments.",
+      "paths": {
+        "en": {
+          "webp": "/blog/house-upgrade-stardew-cover.webp",
+          "avif": "/blog/house-upgrade-stardew-cover.avif"
+        },
+        "zh": {
+          "webp": "/blog/house-upgrade-stardew-cover-zh.webp",
+          "avif": "/blog/house-upgrade-stardew-cover-zh.avif"
+        }
+      },
+      "factIds": ["T-upgrade-1", "T-upgrade-2", "T-upgrade-3", "T-days", "T-cost-1.6"],
+      "inImageText": {
+        "en": [
+          "Upgrade 1",
+          "10,000g",
+          "450 Wood",
+          "3 days",
+          "Upgrade 2",
+          "65,000g",
+          "100 Hardwood",
+          "3 days",
+          "Upgrade 3",
+          "100,000g",
+          "3 days"
+        ],
+        "zh": "T replaces those labels. Layout, order, and numbers stay the same."
+      },
+      "linesPerStage": 4,
+      "captionAndAlt": "C writes both. A caption may open with the single word Schematic, then name the three payments and the three-day mark that are on the picture. Do not paste a disclaimer.",
+      "draw": "Three payment stages, four short lines each, at least 84px. No character, no dialogue box, no traced sprite.",
+      "doNot": [
+        "Do not draw Robin's menu.",
+        "Do not copy Wiki house sprites.",
+        "Do not mark upgrade 2 as 50,000g or 150 Hardwood.",
+        "Do not add a line about wood being absent from a table."
+      ]
+    },
+    {
+      "id": "tier-rooms",
+      "role": "body",
+      "placement": "Inside H2 The three farmhouse upgrades, with the cost table. The table holds the numbers; this figure shows which rooms appear.",
+      "readerDoes": "Matches the rooms already in the house to a stage, then reads the next stage's rooms. Sees that upgrade 3 adds a cellar from the kitchen and leaves the exterior unchanged, and that the outdoor 9 by 5 footprint stays put.",
+      "version": "Room names and the 9 by 5 outdoor footprint are the current Farmhouse and Carpenter's Shop statements. This is not a measured tile map.",
+      "paths": {
+        "en": {
+          "webp": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp",
+          "avif": "/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif"
+        },
+        "zh": {
+          "webp": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp",
+          "avif": "/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif"
+        }
+      },
+      "factIds": ["T-upgrade-1", "T-upgrade-2", "T-upgrade-3", "T-footprint", "T-days"],
+      "inImageText": {
+        "en": [
+          "Upgrade 1",
+          "Kitchen",
+          "Bedroom",
+          "Upgrade 2",
+          "Empty room",
+          "Nursery",
+          "Upgrade 3",
+          "Cellar",
+          "Same exterior",
+          "9×5 outdoors"
+        ],
+        "zh": "T replaces those labels. Layout, order, and numbers stay the same. Each stage stays at most four lines; 9×5 outdoors is one shared line."
+      },
+      "linesPerStage": 3,
+      "captionAndAlt": "C writes both. A caption may open with the single word Schematic, then name the rooms printed on the picture. Do not paste a disclaimer. Bed, crib, and fridge details stay in the prose table, not in the caption as a second inventory.",
+      "draw": "Three room stages. Cellar sits with upgrade 3. One shared line for the 9 by 5 outdoor footprint. At least 84px. Not a tile map.",
+      "doNot": [
+        "Do not trace the Wiki interior or cellar PNGs.",
+        "Do not draw a 10 by 7 floor plan.",
+        "Do not draw casks or the numbers 33 and 189.",
+        "Do not claim the boxes are game tiles."
+      ]
+    },
+    {
+      "id": "upgrade-or-renovation",
+      "role": "body",
+      "placement": "At the start of H2 A renovation is not the next upgrade. A table of the same contrast does not replace this figure.",
+      "readerDoes": "Sees two orders. If the order finishes at once and can return its gold, it is not the next house upgrade. Compares Remove Crib and Add Dining Room with upgrade 3.",
+      "version": "Current Carpenter's Shop and Farmhouse pages: renovations unlock after the second upgrade. Not the 1.5 wording, and not the 2023 guide that called renovations permanent.",
+      "paths": {
+        "en": {
+          "webp": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp",
+          "avif": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif"
+        },
+        "zh": {
+          "webp": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp",
+          "avif": "/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif"
+        }
+      },
+      "factIds": ["T-renovation-rule", "T-renovation-prices", "T-upgrade-3", "T-days"],
+      "inImageText": {
+        "en": [
+          "Upgrade",
+          "3 days",
+          "Renovation",
+          "After upgrade 2",
+          "Instant",
+          "Refunds gold",
+          "Remove crib",
+          "Free",
+          "Dining room",
+          "150,000g"
+        ],
+        "zh": "T replaces those labels. Layout, order, and numbers stay the same. The upgrade path is two lines. The renovation path is four lines. Each example is two lines."
+      },
+      "linesPerStage": 4,
+      "captionAndAlt": "C writes both. A caption may open with the single word Schematic, then name the two paths and the two example prices printed on the picture. The empty-area condition for a refund stays in the paragraph, not on the image. Do not paste a disclaimer.",
+      "draw": "Two paths. Upgrade is two lines. Renovation is four lines. Two examples, two lines each. At least 84px. Words only, not menu chrome.",
+      "doNot": [
+        "Do not draw a dialogue screenshot.",
+        "Do not write that an upgrade is or is not removable.",
+        "Do not put the empty-area condition or the 9 by 10 room size on the image.",
+        "Do not list the other renovation prices."
+      ]
+    }
+  ],
+  "notUsed": {
+    "toolSlot": "none",
+    "plannerInteriorMaps": "Observed by A. Checkboxes were not toggled. Do not draw them, and do not send the indoor upgrade steps through the planner.",
+    "communityUpgrade": "Unresolved tier. No figure.",
+    "counterDuringUpgrade": "Unsupported. No figure."
+  }
+}

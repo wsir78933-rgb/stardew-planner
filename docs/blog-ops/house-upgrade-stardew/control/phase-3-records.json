@@ -1,0 +1,369 @@
+{
+  "schemaVersion": "s3-phase-3-records",
+  "recordedAt": "2026-10-15T23:26:34.705683+08:00",
+  "role": "S3",
+  "taskId": "task_b305a2bcdd85",
+  "dispatchId": "ctx_8ac36da5b10c",
+  "runId": "run_8253831e93d6",
+  "terminalHandle": "term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979",
+  "coordinatorHandle": "term_661abce7-55fd-4570-8bf5-970c0451dd23",
+  "userLengthConstraint": {
+    "question": "异步单选：A允许本篇按实际篇幅继续，B保留V7长度门停止",
+    "status": "等待用户选择长度约束，后续链未启动",
+    "replyReceived": false,
+    "preselectionOrTimePassageNotAuthorized": true,
+    "note": "尚未收到答复，不能将预选A或时间经过视为授权。开始后若协调者发来真实答复才记新状态；否则写“等待用户选择长度约束，后续链未启动”。"
+  },
+  "candidate": {
+    "bodyVersion": "draft-v2",
+    "locale": "en",
+    "isCandidateOnly": true,
+    "dPassed": false,
+    "ePassed": false,
+    "fLocked": false,
+    "formalLengthPass": false,
+    "bodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+    "mediaSha256": "55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c",
+    "publicReferencesSha256": "035eafb54c23eca693b3899ddf82c055fd091722e12f5f8c3902673ca172706a",
+    "writerSubmissionSha256": "ac05e298a12927997d5bda1aa4b9ec7271080177912632597609cf008fd06d4f",
+    "revisionRound1Sha256": "24560c1d97500a74734d4f3ba0a9580ce27ca2142761eebf9310f7c8b3e12a62",
+    "archivedV1MediaSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+    "archivedV1BodySha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+    "figuresArrayVerbatimIdentical": true,
+    "m3MediaCandidateBinding": {
+      "provenancePath": "docs/blog-ops/house-upgrade-stardew/media-production/en/provenance.json",
+      "boundBodyDraftSha256": "cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628",
+      "boundMediaTextEnSha256": "95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415",
+      "status": "candidate_assets_bound_to_v1_not_final_release_asset_pass",
+      "note": "M3英语3图是已产出且主Agent看过的候选，只绑定v1正文+原media；未经过最终图文与页面认可，不能写最终发布资产PASS。"
+    },
+    "inputSha256": {
+      "writerBriefSha256": "6e15009775fdb1469514a3be9998a7340e481500867ee1e55e2dfadab344fa0d",
+      "mediaPlanSha256": "a7f1f374149cdfb3255c44ec2cda2045a08caadc7ff1042890c07e31b1fa51ad",
+      "factsSha256": "618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e"
+    },
+    "mechanicalPreview": {
+      "source": "writer-submission.json",
+      "includingCaptionParagraphs": 970,
+      "excludingLinesThatStartWithSchematic": 917,
+      "requiredFloor": 1000,
+      "lengthClass": "below_floor",
+      "signsFormalLengthPass": false
+    },
+    "coverageDiagnosisRoleB": {
+      "sourcePath": "docs/blog-ops/house-upgrade-stardew/layout/coverage-review/task-coverage.json",
+      "verdict": "没有可据实补入的必要内容；材料不足，停止正式交付",
+      "mainTaskAnswered": true,
+      "fillableNecessaryGap": false,
+      "captionParagraphsExcluded": [
+        "content/en/draft-v2.md:15",
+        "content/en/draft-v2.md:49"
+      ],
+      "unitsAfterRemovingThoseCaptionParagraphs": 917
+    },
+    "qualityGate": "not-run"
+  },
+  "dGateReviewAndReconciliation": {
+    "d2Evaluation": {
+      "taskId": "task_dca8de3c3153",
+      "dispatchId": "ctx_550db8b749c7",
+      "taskLifecycle": "succeeded",
+      "terminalRelease": "released",
+      "reportPath": "docs/blog-ops/house-upgrade-stardew/reviews/D/round-1/three-gates-report.json",
+      "reportClaimedStatus": "PASS",
+      "lifecycleVsSemanticsSeparation": "D2 task lifecycle succeeded 不等于内容通过。协调者回读发现证据冲突，D2 口头/报告 PASS 不能代替核对。"
+    },
+    "conflictIdentified": "协调者回读发现：v2 第 19 行同段三句新旧价格并列与第 25 行等，B 覆盖诊断判定为重复，而 D2 签出 Repetition PASS 却未解释同段三句独立读者作用。",
+    "d3Reconciliation": {
+      "taskId": "task_ab0f949dd682",
+      "dispatchId": "ctx_efb0d7481e76",
+      "status": "dispatched",
+      "taskTitle": "D｜重复判断冲突的独立复核",
+      "agent": "cursor",
+      "terminalHandle": "term_1ba3e93d-9d07-4782-b086-579219ed4366"
+    }
+  },
+  "gates": {
+    "english": {
+      "status": "pending",
+      "meaning": "E 门 pending；D3 重复判断复核中；无正式 F 长度结算；用户长度约束尚未决断。"
+    },
+    "gate_ac67dcb7fc37": {
+      "status": "pending",
+      "taskId": "task_1287ac59ca63",
+      "question": "draft-v1 的 D 三门综合FAIL；必须等C第1轮修订与独立D对新稿全三门实际PASS，并回读同版hash后才允许E独审。",
+      "source": "orca orchestration gate-list --run run_8253831e93d6"
+    },
+    "chinese": {
+      "status": "pending",
+      "meaning": "未启动。"
+    },
+    "localPage": {
+      "status": "pending",
+      "meaning": "未启动；G 仅完成接口预检。"
+    },
+    "userReview": {
+      "status": "pending"
+    },
+    "production": {
+      "status": "pending",
+      "meaning": "当前不发布。"
+    },
+    "freeze": {
+      "status": "pending"
+    }
+  },
+  "revisionBudget": {
+    "totalMaxRounds": 3,
+    "currentFormalManuscriptRepairRound": 1,
+    "remainingFormalRounds": 2,
+    "budgetChanged": false,
+    "budgetReset": false,
+    "scope": "共享修订已用 1 / 最多 3、余 2，不能因换 Task 重置。D3 复核与 B 诊断不消耗新轮。",
+    "ruleCitation": "V7 01/执行入口: 修订预算按整篇文章算（含译文返修），共用最多三轮，初始0"
+  },
+  "canaryGovernance": {
+    "canaryId": "canary_house_upgrade_c93c91c4f505",
+    "canarySha256": "401cad403b3b56138aee2a8cde4c2099a87c2c780f178ff05cc664816d6efac1",
+    "scanResults": [
+      {
+        "target": "content/en/draft-v2.md",
+        "hits": 0
+      },
+      {
+        "target": "content/en/media-text.en.json",
+        "hits": 0
+      },
+      {
+        "target": "content/en/public-references.en.json",
+        "hits": 0
+      },
+      {
+        "target": "media-production/en/cover-payments.svg",
+        "hits": 0
+      },
+      {
+        "target": "media-production/en/tier-rooms.svg",
+        "hits": 0
+      },
+      {
+        "target": "media-production/en/upgrade-or-renovation.svg",
+        "hits": 0
+      }
+    ],
+    "unexecutedModules": [
+      "SEO",
+      "Chinese translation",
+      "Page assembly"
+    ],
+    "plaintextExcluded": true,
+    "isolationConclusion": "逻辑隔离，未验证底层权限。同 UID (501) 与不同 inode (145851019 vs 65977012 vs 144267400) 仅证明已观测事实。"
+  },
+  "baseline": {
+    "typecheck": 0,
+    "turbopackBuild": 1,
+    "turbopackReason": "外部 symlink 导致 Turbopack 拒绝",
+    "webpackBuild": 0,
+    "vitestBlog": {
+      "passed": 237,
+      "failed": 8
+    },
+    "note": "内容前预检基线，保留早先数据，未重跑产品测试或构建。"
+  },
+  "rolesAccounting": [
+    {
+      "role": "A",
+      "taskTitle": "A｜农舍升级研究与搜索证据",
+      "taskId": "task_9ee9836cf39f",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_01802221fb7b",
+      "agent": "cursor",
+      "terminalHandle": "term_82d58d3a-f95e-4c19-a590-118df3d97216",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "G",
+      "taskTitle": "G｜网站接口、隔离与验证基线",
+      "taskId": "task_aab2039ba9ff",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_a79d4234407a",
+      "agent": "cursor",
+      "terminalHandle": "term_20959df8-6e87-46d5-8535-2f47ebe6972c",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "M",
+      "taskTitle": "M｜农舍视觉素材与授权核验",
+      "taskId": "task_3a79aaae4149",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_2d2fa1bb6b61",
+      "agent": "antigravity",
+      "terminalHandle": "term_eeedce69-a29d-4918-8800-c3c22e538417",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "S",
+      "taskTitle": "S｜V7 调度与污染隔离记录",
+      "taskId": "task_d0e8389f037f",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_72a70c9fac6f",
+      "agent": "antigravity",
+      "terminalHandle": "term_540f4ad4-6a25-4782-9104-57e3f3778374",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "B",
+      "taskTitle": "B｜唯一主意图与图文布局",
+      "taskId": "task_6104f4016cd1",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_a941085c84e5",
+      "agent": "cursor",
+      "terminalHandle": "term_656ec1a7-67a3-487b-8845-3c9b8f3c55ed",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "C",
+      "taskTitle": "C｜英文图文正文写作",
+      "taskId": "task_fc17d883efc8",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_fe298bb5ff1a",
+      "agent": "cursor",
+      "terminalHandle": "term_8991e7da-dd73-4e7e-b41c-b03340ece350",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "M2",
+      "taskTitle": "M2｜纠正媒体证据断言",
+      "taskId": "task_c14add3a3526",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_e8d08a993bdb",
+      "agent": "cursor",
+      "terminalHandle": "term_e4f87345-3742-4410-9591-b44b00898559",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "D",
+      "taskTitle": "D｜英文写后三门独立检查",
+      "taskId": "task_e07302bdea43",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_1fa278b7ca02",
+      "agent": "antigravity",
+      "terminalHandle": "term_e0751eb6-fe65-40a6-af6d-4b14acefa5cd",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "E",
+      "taskTitle": "E｜英文鉴文与事实引用独立审核",
+      "taskId": "task_1287ac59ca63",
+      "status": "blocked",
+      "authoritativeDispatchId": null,
+      "agent": null,
+      "terminalHandle": null,
+      "terminalRelease": "not_dispatched",
+      "blockingGateId": "gate_ac67dcb7fc37"
+    },
+    {
+      "role": "M3",
+      "taskTitle": "M3｜英文封面与正文自绘图解",
+      "taskId": "task_6ad859edf119",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_58ccd56dab47",
+      "agent": "antigravity",
+      "terminalHandle": "term_5a5eb331-703b-46a6-b4c4-c89b8ad70ecd",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "F",
+      "taskTitle": "F｜英文计数锁稿与七罪标题候选",
+      "taskId": "task_7f60bf2cf348",
+      "status": "pending",
+      "authoritativeDispatchId": null,
+      "agent": null,
+      "terminalHandle": null,
+      "terminalRelease": "not_dispatched"
+    },
+    {
+      "role": "S2",
+      "taskTitle": "S2｜候选版本与调度证据同步",
+      "taskId": "task_791711df127d",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_226e8208bfeb",
+      "agent": "cursor",
+      "terminalHandle": "term_acae2fb6-8876-40c9-9455-aa7f455b22dd",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "C2",
+      "taskTitle": "C｜第1轮英文返修",
+      "taskId": "task_836071267139",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_2532ccdb6e55",
+      "agent": "cursor",
+      "terminalHandle": "term_09895b76-9443-4bca-a1c4-5c78c6304670",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "D2",
+      "taskTitle": "D｜第1轮稿全量三门复验",
+      "taskId": "task_dca8de3c3153",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_550db8b749c7",
+      "agent": "antigravity",
+      "terminalHandle": "term_11c655b7-18ca-4879-8731-533de96db588",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "B2",
+      "taskTitle": "B｜篇幅不足的任务覆盖核对",
+      "taskId": "task_15c45f4f2bee",
+      "status": "completed",
+      "authoritativeDispatchId": "ctx_55c175d624a3",
+      "agent": "cursor",
+      "terminalHandle": "term_15aa6dd6-7b61-4cd1-96f7-6b1207a4d861",
+      "terminalRelease": "released"
+    },
+    {
+      "role": "S3",
+      "taskTitle": "S3｜长度阻塞与候选保全记录",
+      "taskId": "task_b305a2bcdd85",
+      "status": "dispatched",
+      "authoritativeDispatchId": "ctx_8ac36da5b10c",
+      "agent": "antigravity",
+      "terminalHandle": "term_0a4f0896-fe8e-4f9e-9428-3c63cab0c979",
+      "terminalRelease": "not_requested"
+    },
+    {
+      "role": "D3",
+      "taskTitle": "D｜重复判断冲突的独立复核",
+      "taskId": "task_ab0f949dd682",
+      "status": "dispatched",
+      "authoritativeDispatchId": "ctx_efb0d7481e76",
+      "agent": "cursor",
+      "terminalHandle": "term_1ba3e93d-9d07-4782-b086-579219ed4366",
+      "terminalRelease": "not_requested"
+    }
+  ],
+  "unverified": [
+    "正式 Length PASS",
+    "D、E、F 内容通过",
+    "中文稿",
+    "本地页面验收与生产发布",
+    "底层操作系统权限是否相同或是否隔离"
+  ],
+  "currentFileSha256": {
+    "operation-store.json": "8acb7f115e83d6355819d891771fb1a2eaaa2adab0fd4fbadf761211937e4d22",
+    "authorization-isolation.md": "2202257aa5f83a90afcbaf6bf7a830961abbbed40538bd84930e56c62de1d30b",
+    "raw-phase-3-orca-state.json": "ac97d0ba66e946a6aee08b33e352d09e6f0aa57dbe45d610dce65c4e40606e4c",
+    "canary-identity.json": "d8022e54453b9c56da89bfbcfd350f0aa3a8c675a1d8976f5b85a1a9e702ed23",
+    "verification-report.json": "a828f431fa7f4cacf77079c490fba7c494f30551c7af94722db791abdc3ba990",
+    "phase-2-records.json": "dbb490aee07285a26b75cda5da54904fb0174d206a210ebf1a61cd7cc1852ce2",
+    "raw-orca-state.json": "fd0972aa1c2331f3f3ebc351dfdd48be398424a6b8b642d1e5abbc7836bcba5e",
+    "candidate-checks.log": "ff93bd12e9011fac86454a358ffd25c6352647d96c35ebda72f9533fe46d7a39"
+  },
+  "coordinatorFollowUp": {
+    "messageId": "msg_df86cdc9dc27",
+    "appliedAt": "2026-10-15T23:29:25+08:00",
+    "subject": "D2报告待冲突复核，不写整体认可",
+    "effect": "记录D2报告者PASS与协调者待复核接受分开，D3按实际dispatched状态；E gate仍pending，不能放行；用户长度例外单选仍无回复，写“等待用户选择长度约束，后续链未启动”。"
+  }
+}

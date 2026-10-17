@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-10-16T23:12:16+0800",
+  "curlCheckedAt": "2026-10-16T23:12:30+0800",
+  "terminalHandle": "term_b00ff36c-e442-4fa4-91bd-8dd22a174071",
+  "terminalTitle": "house-upgrade-static-preview",
+  "reclaimableWorker": false,
+  "pid": 21887,
+  "parentPid": 21810,
+  "command": "cd \"/Users/wusir/orca/workspaces/stardew planner/博客-2\" && exec pnpm exec serve out -l tcp://127.0.0.1:3010 --no-port-switching --no-clipboard",
+  "processCommand": "node ./node_modules/.bin/../.pnpm/serve@14.2.6/node_modules/serve/build/main.js out -l tcp://127.0.0.1:3010 --no-port-switching --no-clipboard",
+  "cwd": "/Users/wusir/orca/workspaces/stardew planner/博客-2",
+  "port": 3010,
+  "listen": "127.0.0.1:3010",
+  "outDirectory": "/Users/wusir/orca/workspaces/stardew planner/博客-2/out",
+  "routes": [
+    {
+      "locale": "en",
+      "url": "http://127.0.0.1:3010/house-upgrade-stardew",
+      "status": 200,
+      "contentLength": 113755,
+      "contentType": "text/html; charset=utf-8",
+      "servedFilename": "house-upgrade-stardew.html",
+      "sha256": "3ca9995c83780becbaca28e891f2d067aabcd9d3052707afc53826a7096c6430",
+      "matchesOutFile": true,
+      "h1": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier"
+    },
+    {
+      "locale": "zh-CN",
+      "url": "http://127.0.0.1:3010/zh/house-upgrade-stardew",
+      "status": 200,
+      "contentLength": 111805,
+      "contentType": "text/html; charset=utf-8",
+      "servedFilename": "house-upgrade-stardew.html",
+      "sha256": "ce02bd73e681374e7d8b3a2cbd03429252009aefa084c1f695ccaa3e067df77f",
+      "matchesOutFile": true,
+      "h1": "星露谷房屋升级：第二档是65,000金和100硬木"
+    }
+  ],
+  "preservedListeners": [
+    {"port": 3000, "pid": 71348, "address": "[::1]:3000"},
+    {"port": 3001, "pid": 51436, "address": "[::1]:3001"},
+    {"port": 3002, "pid": 96353, "address": "[::1]:3002"},
+    {"port": 3003, "pid": 88483, "address": "*:3003"},
+    {"port": 3004, "pid": 64536, "address": "[::1]:3004"},
+    {"port": 3005, "pid": 44997, "address": "[::1]:3005"},
+    {"port": 3006, "pid": 45522, "address": "127.0.0.1:3006"},
+    {"port": 3007, "pid": 15566, "address": "127.0.0.1:3007"}
+  ],
+  "browserPassClaimed": false
+}

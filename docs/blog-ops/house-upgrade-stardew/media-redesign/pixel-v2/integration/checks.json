@@ -1,0 +1,116 @@
+{
+  "passed": true,
+  "width": 1672,
+  "height": 941,
+  "ratioGapFrom16by9": 0.0009446215609869579,
+  "counts": {
+    "oldEn": {
+      "mechanical": 1138,
+      "qualified": 1085
+    },
+    "newEn": {
+      "mechanical": 1127,
+      "qualified": 1084
+    },
+    "oldZh": {
+      "mechanical": 1737,
+      "captionHan": [
+        42,
+        48
+      ],
+      "pureHan": 1647
+    },
+    "newZh": {
+      "mechanical": 1707,
+      "captionHan": [
+        43,
+        19
+      ],
+      "pureHan": 1645
+    }
+  },
+  "bodyHash": {
+    "en": "151c81afa41a5411345c0f33866f08c6819da2c30afdcde610d6135e56774fa8",
+    "zh-CN": "00a612b48022fa7256f89b7fc5eb0386b34d17b6f272f079da9f62eb40998bc4"
+  },
+  "publicFieldsSha256": {
+    "en": "fa3cb7a8df969b3f91ffa3ab9fb3aaad4748e132a3e9deaf8d348287d584f597",
+    "zh-CN": "75b3d2a26d14cad3b49df9eeb20c2e1bbffd0e776c463d3317f6c13248592d15"
+  },
+  "publicFiles": {
+    "public/blog/house-upgrade-stardew-cover.webp": {
+      "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "bytes": 2550052,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/house-upgrade-stardew-cover-zh.webp": {
+      "sha256": "d58aaaf3bbe7b02e04fb0a366b3e0b8c61b257abc993eea6ff02a358782f57c8",
+      "bytes": 2550052,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/house-upgrade-stardew-cover.avif": {
+      "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "bytes": 653604,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/house-upgrade-stardew-cover-zh.avif": {
+      "sha256": "8c0da21da4d59de4d3f4d1bbadc6e38cefe3880ba47d67aaacf8f5ff892662d0",
+      "bytes": 653604,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.webp": {
+      "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "bytes": 1984240,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.webp": {
+      "sha256": "9f806c5cb39ac3bd298415ff3ac80fb056446dcff9fb1a839d9c4afb29946671",
+      "bytes": 1984240,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.en.avif": {
+      "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "bytes": 446411,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/tier-rooms.zh.avif": {
+      "sha256": "e2578074f100a6e185d73d5034f6fe2d79861df3787aac3777137a5854571221",
+      "bytes": 446411,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.webp": {
+      "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "bytes": 2453712,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.webp": {
+      "sha256": "526a5afa8836bba315ffa3b15b64d0483726ee3c07d3284222e47ed935c93bfb",
+      "bytes": 2453712,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.en.avif": {
+      "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "bytes": 617005,
+      "width": 1672,
+      "height": 941
+    },
+    "public/blog/illustrations/house-upgrade-stardew/upgrade-or-renovation.zh.avif": {
+      "sha256": "c5c957be221fa5b140cef500771c1eeb51ae2b143fa645662a5644c43d05cf27",
+      "bytes": 617005,
+      "width": 1672,
+      "height": 941
+    }
+  },
+  "userAestheticAcceptance": false,
+  "productionDeployed": false
+}

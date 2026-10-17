@@ -1,0 +1,20 @@
+=== Media Production Render Execution Started at 2026-10-15 22:53:58 ===
+Processing cover-payments (SVG SHA256: 4f0103d7aaed81a3a617b945dced399cfee526eec04f59faf643fadc18713785)
+[2026-10-15 22:53:58] RUN: ego-browser screenshot cover-payments.svg -> _temp_cover-payments.png
+  exit_code: 0, duration: 1.75s
+[2026-10-15 22:53:59] CONVERT: Pillow _temp_cover-payments.png -> house-upgrade-stardew-cover.webp, house-upgrade-stardew-cover.avif
+  saved webp: 72418 bytes
+  saved avif: 39621 bytes
+Processing tier-rooms (SVG SHA256: 0f68fefc86cf2f959bab09411c6000069d0ed78172aa2f1263bf82ef46d07af2)
+[2026-10-15 22:54:00] RUN: ego-browser screenshot tier-rooms.svg -> _temp_tier-rooms.png
+  exit_code: 0, duration: 1.16s
+[2026-10-15 22:54:01] CONVERT: Pillow _temp_tier-rooms.png -> tier-rooms.en.webp, tier-rooms.en.avif
+  saved webp: 70092 bytes
+  saved avif: 38764 bytes
+Processing upgrade-or-renovation (SVG SHA256: 71c935969c7952967207ed70006b65da614909d92689f0ba260f36e7e7c335ad)
+[2026-10-15 22:54:01] RUN: ego-browser screenshot upgrade-or-renovation.svg -> _temp_upgrade-or-renovation.png
+  exit_code: 0, duration: 0.77s
+[2026-10-15 22:54:02] CONVERT: Pillow _temp_upgrade-or-renovation.png -> upgrade-or-renovation.en.webp, upgrade-or-renovation.en.avif
+  saved webp: 68194 bytes
+  saved avif: 36133 bytes
+=== Successfully completed all 3 figures at 2026-10-15 22:54:02 ===

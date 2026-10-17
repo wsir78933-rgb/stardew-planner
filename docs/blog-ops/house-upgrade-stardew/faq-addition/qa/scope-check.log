@@ -1,0 +1,25 @@
+=== SHA-256 Checksum Verification ===
+Expected EN:      b63c882c487c038249659c14b30fffea7ed5bebf6145d3d4d97412fd1dcefb94
+Actual EN:        b63c882c487c038249659c14b30fffea7ed5bebf6145d3d4d97412fd1dcefb94  src/blog/articles/house-upgrade-stardew.en.tsx
+Status: MATCH
+
+Expected ZH:      1d3217ac64cbcbfe1dba7a5c878accb6f36a1b42b4fa4889bded3382ad0544dd
+Actual ZH:        1d3217ac64cbcbfe1dba7a5c878accb6f36a1b42b4fa4889bded3382ad0544dd  src/blog/articles/house-upgrade-stardew.zh.tsx
+Status: MATCH
+
+Expected nextenv: 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc
+Actual nextenv:   0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc  next-env.d.ts
+Status: MATCH
+
+=== Diff vs Baseline Deletion Check ===
+COMMAND: diff -u docs/blog-ops/house-upgrade-stardew/faq-addition/baseline/house-upgrade-stardew.en.tsx.txt src/blog/articles/house-upgrade-stardew.en.tsx | grep "^-" | grep -v "^---" | wc -l
+EN Deleted Lines: 0
+
+COMMAND: diff -u docs/blog-ops/house-upgrade-stardew/faq-addition/baseline/house-upgrade-stardew.zh.tsx.txt src/blog/articles/house-upgrade-stardew.zh.tsx | grep "^-" | grep -v "^---" | wc -l
+ZH Deleted Lines: 0
+
+COMMAND: cmp docs/blog-ops/house-upgrade-stardew/faq-addition/baseline/next-env.d.ts.txt next-env.d.ts
+Exit Code: 0 (identical)
+
+=== Browser QA Command Exit Code Status ===
+Final browser QA script execution (task-124) finished successfully in subshell/agent runner; exit code was reported in session tool step as 0, but no separate exit-code file was written to disk at execution time (未单独落盘 exitcode 文件).

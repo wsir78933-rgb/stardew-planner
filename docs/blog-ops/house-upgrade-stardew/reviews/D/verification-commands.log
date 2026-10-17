@@ -1,0 +1,34 @@
+=== Role D Independent Verification Execution ===
+[draft] docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md
+  SHA256: cb5b0115f330b6d86a5be82b015ef14dcd33b35ac0ac10d33a98be684a548628
+  Bytes: 9206 | Lines: 57
+  NFC: True | CRLF: False | EndsNewline: True
+[media_text] docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json
+  SHA256: 95f5de88d26bd3a4bb3d666a37c5d8535055ed12aaea39047926840126dd6415
+  Bytes: 4443 | Lines: 129
+  NFC: True | CRLF: False | EndsNewline: True
+[writer_submission] docs/blog-ops/house-upgrade-stardew/content/en/writer-submission.json
+  SHA256: 5db55ed0942f2114a01d4332c1bbb8fc6d480b9db974b8b3b615400a7d179f9e
+  Bytes: 4037 | Lines: 66
+  NFC: True | CRLF: False | EndsNewline: True
+[public_references] docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json
+  SHA256: f15c00643e6eabc93c26d3007a073f9be080040cc0e12d4727e1beab03c77ae4
+  Bytes: 7955 | Lines: 239
+  NFC: True | CRLF: False | EndsNewline: True
+[task_card] docs/blog-ops/house-upgrade-stardew/layout/task-card.md
+  SHA256: 1edb806157ef10adae0bf88151bcd43f106f9e47dae82841119ecb94f32fa8c9
+  Bytes: 8089 | Lines: 112
+  NFC: True | CRLF: False | EndsNewline: True
+[facts] docs/blog-ops/house-upgrade-stardew/research/A/facts.json
+  SHA256: 618d3faed60b2516f4adea26f862c6ba527dd38ac769807a65c727b76790298e
+  Bytes: 34063 | Lines: 460
+  NFC: True | CRLF: False | EndsNewline: True
+✓ Candidate SHA256 matches coordinator assignment exactly.
+[Whitespace Check] docs/blog-ops/house-upgrade-stardew/content/en/draft-v1.md: PASS
+[Whitespace Check] docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json: PASS
+[Media Alignment] Total figures: 3
+  Figure cover-payments (cover): src_in_draft=False, alt_in_draft=False, caption_in_draft=False
+  Figure tier-rooms (body): src_in_draft=True, alt_in_draft=True, caption_in_draft=True
+  Figure upgrade-or-renovation (body): src_in_draft=True, alt_in_draft=True, caption_in_draft=True
+[Mechanical Word Count] Units: 1070, MeetsFloor: True
+=== Verification Execution Finished ===

@@ -1,0 +1,46 @@
+{
+  "registry": "src/blog/blog-post-registry.tsx",
+  "copiedWholeFile": false,
+  "byteSize": 49531,
+  "sha256": "e2696eb7e2473ea74a19dd9c552db732115e2da26be458bcd9af3c971317ac15",
+  "entries": [
+    {
+      "startLine": 472,
+      "endLine": 486,
+      "fragmentPath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/registry/en-entry.fragment.txt",
+      "fragmentSha256": "2bbfe886bd779636346e5f21ca8ad2c5883add35500d5b33d141dd78f1a12536",
+      "fragmentByteSize": 893,
+      "fields": {
+        "slug": "house-upgrade-stardew",
+        "title": "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
+        "description": "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
+        "topic": "Stardew Valley Guides",
+        "author": "Stardew Valley Planner Team",
+        "readTimeMinutes": 6,
+        "coverSrc": "/blog/house-upgrade-stardew-cover.webp",
+        "coverAlt": "Three payment stages: Upgrade 1 with 10,000g, 450 Wood, and 3 days; Upgrade 2 with 65,000g, 100 Hardwood, and 3 days; Upgrade 3 with 100,000g and 3 days.",
+        "featured": false,
+        "Content": "HouseUpgradeStardewEnglishArticle"
+      }
+    },
+    {
+      "startLine": 863,
+      "endLine": 877,
+      "fragmentPath": "docs/blog-ops/house-upgrade-stardew/media-redesign/pixel-v2/baseline/registry/zh-entry.fragment.txt",
+      "fragmentSha256": "59f8871eee79b7adc0d066797f67ea83d44ab1f23e05990df76aba4a3f2d42f7",
+      "fragmentByteSize": 850,
+      "fields": {
+        "slug": "house-upgrade-stardew",
+        "title": "星露谷房屋升级：第二档是65,000金和100硬木",
+        "description": "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
+        "topic": "星露谷物语指南",
+        "author": "星露谷规划器团队",
+        "readTimeMinutes": 6,
+        "coverSrc": "/blog/house-upgrade-stardew-cover-zh.webp",
+        "coverAlt": "三档付款：升级1是10,000金、450木材和3天；升级2是65,000金、100硬木和3天；升级3是100,000金和3天。",
+        "featured": false,
+        "Content": "HouseUpgradeStardewChineseArticle"
+      }
+    }
+  ]
+}

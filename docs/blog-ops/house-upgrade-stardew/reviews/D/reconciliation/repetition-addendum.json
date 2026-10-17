@@ -1,0 +1,168 @@
+{
+  "auditMetadata": {
+    "role": "D",
+    "roleDescription": "Independent repetition reconciliation. Not C, not E, not F.",
+    "taskId": "task_ab0f949dd682",
+    "dispatchId": "ctx_efb0d7481e76",
+    "terminalHandle": "term_1ba3e93d-9d07-4782-b086-579219ed4366",
+    "coordinatorHandle": "term_661abce7-55fd-4570-8bf5-970c0451dd23",
+    "auditDate": "2026-10-15",
+    "standardsDocument": "/Users/wusir/Desktop/博客-V7修订版/02-内容生产与质量门.md",
+    "standardText": "Repetition passes only when paragraphs, tables, and FAQ do not perform the same role. A failure names both locations and the single existing piece of information to keep.",
+    "historicalReport": "docs/blog-ops/house-upgrade-stardew/reviews/D/round-1/three-gates-report.md",
+    "historicalReportEdited": false
+  },
+  "candidateFiles": {
+    "draftMarkdown": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/draft-v2.md",
+      "sha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+      "modifiedByThisAddendum": false
+    },
+    "mediaTextJson": {
+      "path": "docs/blog-ops/house-upgrade-stardew/content/en/media-text.en.json",
+      "sha256": "55c74ccd28178097375e84cbf2dbdb3b307209d84585b52e20a0e757c573b56c",
+      "boundBodySha256": "09a4609e07444e502549b80d4212dda6904b84d5f4dc0386d4320986f06a483f",
+      "modifiedByThisAddendum": false
+    }
+  },
+  "repetitionResult": {
+    "result": "FAIL",
+    "blockingIssueCount": 6,
+    "redundantSentenceCount": 10,
+    "articlePass": false,
+    "threeGatesPass": false,
+    "voidsD2RepetitionPass": true,
+    "voidsD2CombinedThreeGatePassAndEHandoff": true,
+    "historicalD2ReportRetained": true
+  },
+  "notSigned": {
+    "ResearchTrace": "Not re-run. D2 historical finding remains bound to the same two hashes and is not re-signed.",
+    "ReaderValue": "Not re-run and not signed.",
+    "E": "Not signed.",
+    "Length": "Not signed. The length script was not re-run. Prior recorded mechanical values are not new evidence and are not a length pass.",
+    "lengthThresholdException": "Still unanswered. Silence is not authorization."
+  },
+  "revisionBudget": {
+    "totalMaxRounds": 3,
+    "formalRoundsUsed": 1,
+    "formalRoundsRemaining": 2,
+    "consumedByThisAddendum": 0,
+    "resetByThisAddendum": false,
+    "source": "control/operation-store.json revisionBudget, read only"
+  },
+  "agreementWithD2": [
+    "v1 RP-1 summary paragraph is absent from v2; 14500g and 32500g remain only in the line 41 calculation.",
+    "v1 RP-2 exterior prose sentence is absent from v2 line 55. Same exterior remains as the table cell and the figure label.",
+    "v1 RP-3 crib and child-bed list sentence is absent from v2 line 33.",
+    "No FAQ and no closing recap module.",
+    "The old second-tier price string 50,000g and 150 Hardwood occurs only on line 19. Lines 47, 49, and 53 contain the dining-room price 150,000g, which is a different amount. D2's claim that the old price was not generalized to other sections is true and does not prove the three sentences on line 19 have different roles."
+  ],
+  "disagreementWithD2": [
+    "D2 section 6 accepted line 19 as one version note and did not test the three sentences. Sentences 2 and 3 fail.",
+    "D2 section 6 did not compare lines 25, 27, 31, and 33 sentence by sentence. This addendum fails 8 sentences there and keeps the sentences listed under retainedSentences.",
+    "D2 ResearchTrace correctly records that the v1 write-up sentence is gone. The replacement old-price sentence is still a repetition failure."
+  ],
+  "issues": [
+    {
+      "id": "RP-R1",
+      "issueType": "重复：同一段把 1.6 之前的旧价说了两次",
+      "locations": [
+        "draft-v2.md:19 sentence 3: Before 1.6, that upgrade cost 50,000g and 150 Hardwood",
+        "draft-v2.md:19 sentence 1 from-clause: moved from 50,000g and 150 Hardwood"
+      ],
+      "keep": "Line 19 sentence 1 already states the pre-1.6 price as the start of the change. The introduction does not state 50,000g or 150 Hardwood.",
+      "revisionRequirement": "删除第 19 行第 3 句。不要写回 v1 的 write-up 旁白，也不要另写辨认攻略的新句。"
+    },
+    {
+      "id": "RP-R2",
+      "issueType": "重复：版本段把第二档现行价再说成一次带来动作",
+      "locations": [
+        "draft-v2.md:19 sentence 2: When you buy the second upgrade, bring 65,000g and 100 Hardwood.",
+        "draft-v2.md:19 sentence 1 to-clause; draft-v2.md:25 second-upgrade carry sentence; table row 2 gold and materials"
+      ],
+      "keep": "Sentence 1's to-clause is the end point of the 1.6 change. Table row 2 is the lookup. The hardwood stack distinction stays on line 25 and is not this sentence.",
+      "revisionRequirement": "删除第 19 行第 2 句。不要在版本段再写应带金额。"
+    },
+    {
+      "id": "RP-R3",
+      "issueType": "重复：第 25 行三句携带金额与表或第 43 行是同一付款作用",
+      "locations": [
+        "draft-v2.md:25: For the first upgrade, carry 10,000g and 450 Wood when that Wood is already yours.",
+        "draft-v2.md:25: For the second upgrade, carry 65,000g and 100 Hardwood.",
+        "draft-v2.md:25: For the third upgrade, carry 100,000g.",
+        "draft-v2.md:43 already-in-chests payment; table row 2; table row 3"
+      ],
+      "keep": "Carry one tier at a time. The 100 Hardwood is its own stack and is a separate material from the Wood Robin sells. The already-owned wood payment, including both years looking the same and the shop price staying out, stays on line 43.",
+      "revisionRequirement": "删除第 25 行这三句携带金额。留下一次一档，以及 Hardwood 单独成叠。已有木材的 10,000g 付款只留在第 43 行。"
+    },
+    {
+      "id": "RP-R4",
+      "issueType": "重复：同一段把普通日 9:00–17:00 和关门后仍能进门各说了两次",
+      "locations": [
+        "draft-v2.md:27: On the other ordinary days, place it between 9:00am and 5:00pm.",
+        "draft-v2.md:27: After the counter has closed, and until 8:00pm, the door still opens.",
+        "draft-v2.md:27 sentence 1 ordinary 9:00am to 5:00pm; draft-v2.md:27 house entry 9:00am to 8:00pm while the shop is closed"
+      ],
+      "keep": "Ordinary counter baseline, Tuesday closed, Friday 4:00pm, house entry until 8:00pm while the shop is closed, and the upgrade waiting until the counter is open again.",
+      "revisionRequirement": "删除这两句。不要把同一钟点或同一进门窗口再写一遍。"
+    },
+    {
+      "id": "RP-R5",
+      "issueType": "重复：三天段复述表内完工内容，并在对比完成后把三天再说一遍",
+      "locations": [
+        "draft-v2.md:31: The kitchen, the added rooms, or the cellar from that payment is in the house after those three days.",
+        "draft-v2.md:31: A farmhouse upgrade stays on three days.",
+        "table Added column and Days column; draft-v2.md:31 sentence 1 and the sentence assigning the two-day clock to other buildings"
+      ],
+      "keep": "Every farmhouse upgrade takes three days. Most other construction finishes in two days at the start of the second day. That two-day finish is the clock for those other buildings.",
+      "revisionRequirement": "删除第 31 行这两句。不要换词把三天或三样房间再写回来。"
+    },
+    {
+      "id": "RP-R6",
+      "issueType": "重复：吊坠句复述表内施工完成条件和三天等待",
+      "locations": [
+        "draft-v2.md:33: The Mermaid's Pendant needs the first upgrade's construction finished, so the pendant comes after that three-day build.",
+        "table row 1 pendant cell: needs completed construction on this upgrade; line 33 sentences 1 and 2"
+      ],
+      "keep": "The table already separates the pendant from mere payment by requiring completed construction. Line 33's first two sentences keep the payment-to-finished interval and the unfinished payment day.",
+      "revisionRequirement": "删除第 33 行这句吊坠时序。不要在三天段重讲表内吊坠条件。"
+    }
+  ],
+  "retainedSentences": [
+    {
+      "location": "draft-v2.md:19 sentence 1",
+      "uniqueReaderInformation": "1.6 moved the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.",
+      "lostIfDeleted": "The only statement of the old price and of the direction of the change."
+    },
+    {
+      "location": "draft-v2.md:25 Carry one tier at a time.",
+      "uniqueReaderInformation": "Bring only the next tier on this visit.",
+      "lostIfDeleted": "The table does not say to carry one tier at a time."
+    },
+    {
+      "location": "draft-v2.md:25 hardwood stack sentences",
+      "uniqueReaderInformation": "100 Hardwood is a separate stack from the Wood Robin sells.",
+      "lostIfDeleted": "The reader can still see both material names in the table but not the instruction to keep them distinct at the counter."
+    },
+    {
+      "location": "draft-v2.md:27 five kept sentences",
+      "uniqueReaderInformation": "Ordinary counter 9:00am–5:00pm; Tuesday cannot place the order; Friday closes at 4:00pm; the house can be entered until 8:00pm while the shop is closed; the upgrade waits until the counter is open.",
+      "lostIfDeleted": "Each of those five facts has no other sentence."
+    },
+    {
+      "location": "draft-v2.md:31 sentences 1, 3, and 4",
+      "uniqueReaderInformation": "Farmhouse baseline is three days; other construction uses the two-day morning finish; that clock belongs to the other buildings.",
+      "lostIfDeleted": "The paragraph would either lose the farmhouse baseline beside the two-day rule or lose the rule the task card says not to use for the farmhouse."
+    },
+    {
+      "location": "draft-v2.md:33 sentences 1, 2, marriage, and renovation",
+      "uniqueReaderInformation": "The three days run from payment until that upgrade's rooms are finished; payment day is unfinished; marriage uses the first upgrade once it is in place; a renovation is a separate immediate order after the second upgrade.",
+      "lostIfDeleted": "The table does not give the payment-day start, the unfinished payment day, the marriage in-place timing, or the renovation exception beside the three-day clock. Line 51 adds refund timing and occupancy, which this sentence does not."
+    },
+    {
+      "location": "draft-v2.md:55",
+      "uniqueReaderInformation": "At the renovation choice, 100,000g and three days buy the cellar, while Remove Crib and Add Dining Room are the other order.",
+      "lostIfDeleted": "The table's third row does not contain the crib or dining-room choice."
+    }
+  ]
+}

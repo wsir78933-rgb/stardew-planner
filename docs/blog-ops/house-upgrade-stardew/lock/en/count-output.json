@@ -1,0 +1,31 @@
+{
+  "counter": "/Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py",
+  "pythondontwritebytecode": "1",
+  "mechanical": {
+    "meaning": "Official counter on the locked body. Headings, image alt markdown, URLs, and code are already outside the count. The two Schematic caption paragraphs are still inside this number.",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/lock/en/body.md",
+    "exitCode": 0,
+    "stdout": "{\n  \"file\": \"/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/lock/en/body.md\",\n  \"locale\": \"en\",\n  \"mechanical_units\": 1138,\n  \"required_floor\": 1000,\n  \"meets_mechanical_floor\": true,\n  \"long_form_target\": 2000,\n  \"meets_long_form_target\": false,\n  \"length_class\": \"short\",\n  \"semantic_qualification\": \"requires_independent_review\",\n  \"excluded_heading_sections\": [],\n  \"omitted_line_counts\": {\n    \"headings\": 8,\n    \"code\": 0,\n    \"excluded_sections\": 0,\n    \"non_body\": 34,\n    \"frontmatter\": 0\n  },\n  \"sha256_raw\": \"f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f\",\n  \"sha256_nfc_lf\": \"f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f\"\n}\n",
+    "stderr": "",
+    "sameBytesAsDraftCommand": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md",
+    "sameBytesAsDraftExitCode": 0,
+    "sameBytesAsDraftStdout": "{\n  \"file\": \"/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md\",\n  \"locale\": \"en\",\n  \"mechanical_units\": 1138,\n  \"required_floor\": 1000,\n  \"meets_mechanical_floor\": true,\n  \"long_form_target\": 2000,\n  \"meets_long_form_target\": false,\n  \"length_class\": \"short\",\n  \"semantic_qualification\": \"requires_independent_review\",\n  \"excluded_heading_sections\": [],\n  \"omitted_line_counts\": {\n    \"headings\": 8,\n    \"code\": 0,\n    \"excluded_sections\": 0,\n    \"non_body\": 34,\n    \"frontmatter\": 0\n  },\n  \"sha256_raw\": \"f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f\",\n  \"sha256_nfc_lf\": \"f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f\"\n}\n"
+  },
+  "qualified": {
+    "meaning": "Official counter on count-input.md. That file is the locked body with the two Schematic caption lines removed and nothing else added.",
+    "removedCaptionLines": [
+      {
+        "line": 47,
+        "text": "Schematic. Upgrade 1 is labeled Kitchen and Bedroom. Upgrade 2 is labeled Empty room and Nursery. Upgrade 3 is labeled Cellar and Same exterior. A shared line reads 9×5 outdoors."
+      },
+      {
+        "line": 65,
+        "text": "Schematic. The upgrade path reads Upgrade and 3 days. The renovation path reads Renovation, After upgrade 2, Instant, and Refunds gold. Remove crib reads Free. Dining room reads 150,000g."
+      }
+    ],
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en /Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md",
+    "exitCode": 0,
+    "stdout": "{\n  \"file\": \"/Users/wusir/orca/workspaces/stardew planner/博客-2/docs/blog-ops/house-upgrade-stardew/lock/en/count-input.md\",\n  \"locale\": \"en\",\n  \"mechanical_units\": 1085,\n  \"required_floor\": 1000,\n  \"meets_mechanical_floor\": true,\n  \"long_form_target\": 2000,\n  \"meets_long_form_target\": false,\n  \"length_class\": \"short\",\n  \"semantic_qualification\": \"requires_independent_review\",\n  \"excluded_heading_sections\": [],\n  \"omitted_line_counts\": {\n    \"headings\": 8,\n    \"code\": 0,\n    \"excluded_sections\": 0,\n    \"non_body\": 34,\n    \"frontmatter\": 0\n  },\n  \"sha256_raw\": \"a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6\",\n  \"sha256_nfc_lf\": \"a52082ab04695f70191969d71c7dd264c83d424acd3bf371149b14292b58b1b6\"\n}\n",
+    "stderr": ""
+  }
+}

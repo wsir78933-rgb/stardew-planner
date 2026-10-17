@@ -1,0 +1,157 @@
+E title-process addendum checks
+task task_cf7eb06771f8
+dispatch ctx_d3476e206502
+terminal term_a8b7f740-513a-404c-a24b-0d5097edbc0b
+coordinator term_661abce7-55fd-4570-8bf5-970c0451dd23
+role E (independent title-process addendum reviewer)
+gate FAIL
+problem_count 3
+unfixable_process_deviation 1
+problems:
+  creation-completion.md:116 description absolute never / must upgraded axe
+  creation-completion.md:124 description incomplete 9th-harvest conditions
+  creation-completion.md:128 description Tuesday closure without ordinary week
+worktree /Users/wusir/orca/workspaces/stardew planner/博客-2
+wrote only:
+  docs/blog-ops/house-upgrade-stardew/reviews/E/title-process-addendum.md
+  docs/blog-ops/house-upgrade-stardew/reviews/E/title-process-checks.log
+did not edit creation-completion.md or any public surface
+did not import V7 python modules
+PYTHONDONTWRITEBYTECODE=1 was set on local python comparisons
+
+1. orca orchestration check --terminal term_a8b7f740-513a-404c-a24b-0d5097edbc0b --json
+exit 0
+message msg_d2bac67dc7f3 from term_661abce7-55fd-4570-8bf5-970c0451dd23
+subject F补交实际hash与审计边界
+coordinator supplied creation-completion SHA a7ac2e6b71c91c95e3efaa3150d2394ba6e43cbd01515281b10d055260174c66
+same message replayed on the pre-write check, exit 0, no new instruction
+
+2. shasum -a 256 of review inputs
+exit 0
+a7ac2e6b71c91c95e3efaa3150d2394ba6e43cbd01515281b10d055260174c66  docs/blog-ops/house-upgrade-stardew/seo/en/creation-completion.md
+f2ab571ed4fd873e4d166158e5f11eaa2641a1f2ae0e1eb2d760f9bf998fde94  docs/blog-ops/house-upgrade-stardew/seo/en/title-candidates.md
+b6e2b7e20f4942945af2258c3eb28455680e952feaf2d04a9c7d424a75f55b58  docs/blog-ops/house-upgrade-stardew/seo/en/seo-candidate.json
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+75596b5d6bbf527aafe3e8abee75f9e715f55d9cde4e75cc2c6e2f909a866028  docs/blog-ops/house-upgrade-stardew/reviews/E/title-v4/report.md
+daf0f6c616f8f853ceae01de71119ed2368575e44b989192218bcafae387bf27  docs/blog-ops/house-upgrade-stardew/reviews/E/title-v4/checks.log
+
+3. shasum -a 256 of unchanged surface, budget, references, and V7 title rules
+exit 0
+ae2b45c95090433c3538f8f6eec617dc1b03739ea3782c643ce3c3ab05afaf36  docs/blog-ops/house-upgrade-stardew/handoff/pending-en/public-blog-handoff.en.json
+f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f  docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md
+1e2591eb59d7a9df99c43c1d97fc44ce2c856c67d96e840770dd37166878ef27  docs/blog-ops/house-upgrade-stardew/content/en/public-references.en.json
+39044840711a934084434b830e60275e7df2be10d9b1427f663ad19f33ce9884  docs/blog-ops/house-upgrade-stardew/media-research/media-inventory.md
+7f99e45f7f8003ef64bbcbdfddd4106b8d69ef4e0da7c0c10779ba96a6a9d684  docs/blog-ops/house-upgrade-stardew/content/en/revision-round-3.md
+b5bb88478dd133b02d8e68733e24fefb2a179b3ed200042d1e7e94cb2bf5edb3  docs/blog-ops/house-upgrade-stardew/lock/en/lock-record.json
+8bcbefa889e3db9c73ed34b8cb05df0f7ecda33e5ea28ab982607f95d959f99d  /Users/wusir/Desktop/博客-V7修订版/参考规则/标题与描述规则.md
+1960b77ff5232be3fd8fc40c5eabfccfd0dccc1e950001509eeceb30a3f8c3f3  /Users/wusir/Desktop/博客-V7修订版/参考规则/七罪引擎.md
+
+4. stat -f birth/mtime
+exit 0
+creation-completion.md birth=2026-10-16T09:26:12+0800 mtime=2026-10-16T09:26:12+0800 size=19924
+title-v4/report.md birth=2026-10-16T09:21:06+0800 mtime=2026-10-16T09:21:06+0800 size=19773
+title-v4/checks.log birth=2026-10-16T09:20:01+0800 mtime=2026-10-16T09:20:01+0800 size=7265
+title-candidates.md birth=2026-10-16T09:08:17+0800 mtime=2026-10-16T09:08:17+0800 size=5562
+seo-candidate.json birth=2026-10-16T09:08:17+0800 mtime=2026-10-16T09:08:17+0800 size=2153
+lock/en/body.md birth=2026-10-16T09:08:17+0800 mtime=2026-10-16T09:08:17+0800 size=10046
+public-blog-handoff.en.json birth=2026-10-16T09:08:17+0800 mtime=2026-10-16T09:08:55+0800 size=24908
+draft-v4.md birth=2026-10-16T08:35:48+0800 mtime=2026-10-16T08:37:49+0800 size=10046
+revision-round-3.md birth=2026-10-16T08:39:38+0800 mtime=2026-10-16T08:39:38+0800
+lock-record.json birth=2026-10-16T09:08:17+0800 mtime=2026-10-16T09:08:55+0800
+public-references.en.json birth=2026-10-15T22:40:10+0800 mtime=2026-10-16T08:37:49+0800
+media-inventory.md birth=2026-10-15T22:02:17+0800 mtime=2026-10-15T22:11:09+0800
+ordering used: creation-completion birth 09:26:12+0800 is after title-v4 report birth 09:21:06+0800
+
+5. rg -n allTitleRules on title-v4/report.md and title-v4/checks.log
+exit 1
+no matches
+python counts: allTitleRules_in_report 0, allTitleRules_in_checks 0
+
+6. PYTHONDONTWRITEBYTECODE=1 python3
+Two exit-0 runs. The first numbered-list extractor also grabbed the recent-three titles; those mismatch lines are an extractor error and are not findings. Description equality below is from that same first run, whose description parsing did not use the bad title list. Title equality below is from the second run, bounded to the Ten directions section.
+selected_desc_equals_json True
+pair1_equals_json True
+pair1_equals_candidates True
+json_title True
+json_desc_len 296
+description_header_count_in_candidates 1
+candidates_description_header_line 63
+section_title_count 10
+completion_title_count 10
+titles_equal True
+1 equal=True cand_len=67 comp_len=67
+2 equal=True cand_len=85 comp_len=85
+3 equal=True cand_len=77 comp_len=77
+4 equal=True cand_len=66 comp_len=66
+5 equal=True cand_len=80 comp_len=80
+6 equal=True cand_len=82 comp_len=82
+7 equal=True cand_len=68 comp_len=68
+8 equal=True cand_len=65 comp_len=65
+9 equal=True cand_len=66 comp_len=66
+10 equal=True cand_len=82 comp_len=82
+COUNT Kept & Selected 1
+COUNT Kept (Not Selected) 3
+COUNT Cut (Eliminated 6
+
+7. PYTHONDONTWRITEBYTECODE=1 python3 body needles, then a later line-number print
+both exit 0
+BODY 'never sells' lines=[]
+BODY 'upgraded axe' lines=[]
+BODY 'Forester profession' lines=[]
+BODY 'Forester extra piece' lines=[21]
+BODY 'without any other hardwood source or spend' lines=[21]
+BODY 'On an ordinary week' lines=[57]
+BODY 'Tuesday is closed' lines=[57]
+BODY 'Friday closes at 4:00pm' lines=[57]
+BODY 'does not sell Hardwood' lines=[31]
+BODY 'makes the kitchen and the bedroom larger' lines=[43]
+BODY 'One added room is empty' lines=[43]
+BODY 'two children' lines=[43]
+BODY 'Nursery' lines=[43, 45, 47]
+BODY 'Add Dining Room costs 150,000g' lines=[69]
+BODY 'finishes immediately' lines=[67]
+BODY '12,500g' lines=[27, 29]
+BODY '2,500g' lines=[27, 29]
+BODY '14,500g' lines=[29]
+BODY '175,000g' lines=[37]
+BODY 'Do not pay 75,000g or 175,000g in one visit' lines=[37]
+BODY 'cellar under the house' lines=[49]
+BODY '33 casks' lines=[49]
+BODY 'Remove Crib is free' lines=[69]
+BODY '9th harvest' lines=[21]
+BODY 'Six Large Stumps' lines=[19]
+BODY '12 Hardwood' lines=[19]
+BODY '24 Mountain Road' lines=[53, 55]
+BODY '9:00am to 5:00pm' lines=[57]
+BODY 'the 100th piece comes on the 9th harvest' lines=[21]
+BODY 'In year 2 or later, Wood is 50g' lines=[29]
+BODY 'Copper Axe or better' lines=[17]
+BODY 'this axe is not required for every way of bringing that Hardwood' lines=[21]
+description line numbers in creation-completion.md:
+  92 pair 1
+  96 pair 2
+  100 pair 3
+  104 pair 4
+  108 pair 5
+  112 pair 6
+  116 pair 7
+  120 pair 8
+  124 pair 9
+  128 pair 10
+  70 non-promise: Tuesday closed with zero exceptions
+pair10_has_ordinary False
+lock-record.json revisionBudget.used 3 remaining 0
+revision-round-3.md line 4 remainingRounds=0
+test -f app/(en)/house-upgrade-stardew/page.tsx
+exit 1
+page absent
+
+8. shasum -a 256 of this addendum after the report file was closed
+exit 0
+99a3d711e02bd0f42ce9930614ed630ef3b51c035fb2360de0132da2eaa27e64  docs/blog-ops/house-upgrade-stardew/reviews/E/title-process-addendum.md
+
+9. orca orchestration check immediately before worker_done
+exit 0
+same message msg_d2bac67dc7f3 replayed
+no new instruction
+this log file's own SHA-256 is not written back into either file

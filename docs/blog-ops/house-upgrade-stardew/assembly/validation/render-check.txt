@@ -1,0 +1,46 @@
+## en
+lang=en
+title=['House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier']
+descriptionCount=1
+canonical=['https://stardewvalleyplanner.art/house-upgrade-stardew']
+hreflang={'en': 'https://stardewvalleyplanner.art/house-upgrade-stardew', 'zh-CN': 'https://stardewvalleyplanner.art/zh/house-upgrade-stardew', 'x-default': 'https://stardewvalleyplanner.art/house-upgrade-stardew'}
+h1=['House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier']
+cover altEqual=True width=1672 height=941 loading=None
+coverCaptionMounted=False
+cover avif=/blog/house-upgrade-stardew-cover.avif type=image/avif
+languageSwitch=[('English', '/house-upgrade-stardew'), ('中文', '/zh/house-upgrade-stardew')]
+expectedBlocks=32 actualBlocks=32 cta=1
+bodyHeadingCounts expectedH2=6 expectedH3=2
+bodyHeadingCounts actualH2=6 actualH3=2
+sourcesHeading=['Sources'] itemCount=12
+FAIL en sources items actual=[{'label': 'Farmhouse', 'href': 'https://stardewvalleywiki.com/Farmhouse', 'note': None}, {'label': "Carpenter's Shop", 'href': 'https://stardewvalleywiki.com/Carpenter%27s_Shop', 'note': None}, {'label': 'Version History1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.', 'href': 'https://stardewvalleywiki.com/Version_History', 'note': '1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.'}, {'label': 'Axes', 'href': 'https://stardewvalleywiki.com/Axes', 'note': None}, {'label': 'Wood', 'href': 'https://stardewvalleywiki.com/Wood', 'note': None}, {'label': 'Hardwood', 'href': 'https://stardewvalleywiki.com/Hardwood', 'note': None}, {'label': 'Large Stump', 'href': 'https://stardewvalleywiki.com/Large_Stump', 'note': None}, {'label': 'Large Log', 'href': 'https://stardewvalleywiki.com/Large_Log', 'note': None}, {'label': 'Secret Woods', 'href': 'https://stardewvalleywiki.com/Secret_Woods', 'note': None}, {'label': 'Cooking', 'href': 'https://stardewvalleywiki.com/Cooking', 'note': None}, {'label': 'Cask', 'href': 'https://stardewvalleywiki.com/Cask', 'note': None}, {'label': "Robin's shop and outdoor buildings", 'href': 'https://stardewvalleyplanner.art/carpenter-stardew', 'note': None}]
+FAIL en sources items expected=[{'label': 'Farmhouse', 'href': 'https://stardewvalleywiki.com/Farmhouse', 'note': None}, {'label': "Carpenter's Shop", 'href': 'https://stardewvalleywiki.com/Carpenter%27s_Shop', 'note': None}, {'label': 'Version History 1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.', 'href': 'https://stardewvalleywiki.com/Version_History', 'note': '1.6 change of the second upgrade from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood.'}, {'label': 'Axes', 'href': 'https://stardewvalleywiki.com/Axes', 'note': None}, {'label': 'Wood', 'href': 'https://stardewvalleywiki.com/Wood', 'note': None}, {'label': 'Hardwood', 'href': 'https://stardewvalleywiki.com/Hardwood', 'note': None}, {'label': 'Large Stump', 'href': 'https://stardewvalleywiki.com/Large_Stump', 'note': None}, {'label': 'Large Log', 'href': 'https://stardewvalleywiki.com/Large_Log', 'note': None}, {'label': 'Secret Woods', 'href': 'https://stardewvalleywiki.com/Secret_Woods', 'note': None}, {'label': 'Cooking', 'href': 'https://stardewvalleywiki.com/Cooking', 'note': None}, {'label': 'Cask', 'href': 'https://stardewvalleywiki.com/Cask', 'note': None}, {'label': "Robin's shop and outdoor buildings", 'href': 'https://stardewvalleyplanner.art/carpenter-stardew', 'note': None}]
+bodyLinkCount=50 carpenterCount=1
+localeMismatchesAdded=2
+## zh-CN
+lang=zh-CN
+title=['星露谷房屋升级：第二档是65,000金和100硬木']
+descriptionCount=1
+canonical=['https://stardewvalleyplanner.art/zh/house-upgrade-stardew']
+hreflang={'en': 'https://stardewvalleyplanner.art/house-upgrade-stardew', 'zh-CN': 'https://stardewvalleyplanner.art/zh/house-upgrade-stardew', 'x-default': 'https://stardewvalleyplanner.art/house-upgrade-stardew'}
+h1=['星露谷房屋升级：第二档是65,000金和100硬木']
+cover altEqual=True width=1672 height=941 loading=None
+coverCaptionMounted=False
+cover avif=/blog/house-upgrade-stardew-cover-zh.avif type=image/avif
+languageSwitch=[('English', '/house-upgrade-stardew'), ('中文', '/zh/house-upgrade-stardew')]
+expectedBlocks=32 actualBlocks=32 cta=1
+bodyHeadingCounts expectedH2=6 expectedH3=2
+bodyHeadingCounts actualH2=6 actualH3=2
+sourcesHeading=['来源'] itemCount=12
+FAIL zh-CN sources items actual=[{'label': '农舍', 'href': 'https://stardewvalleywiki.com/Farmhouse', 'note': None}, {'label': '木匠的商店', 'href': 'https://stardewvalleywiki.com/Carpenter%27s_Shop', 'note': None}, {'label': '版本历史1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。', 'href': 'https://stardewvalleywiki.com/Version_History', 'note': '1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。'}, {'label': '斧头', 'href': 'https://stardewvalleywiki.com/Axes', 'note': None}, {'label': '木材', 'href': 'https://stardewvalleywiki.com/Wood', 'note': None}, {'label': '硬木', 'href': 'https://stardewvalleywiki.com/Hardwood', 'note': None}, {'label': '大树桩', 'href': 'https://stardewvalleywiki.com/Large_Stump', 'note': None}, {'label': '大圆木', 'href': 'https://stardewvalleywiki.com/Large_Log', 'note': None}, {'label': '秘密森林', 'href': 'https://stardewvalleywiki.com/Secret_Woods', 'note': None}, {'label': '烹饪', 'href': 'https://stardewvalleywiki.com/Cooking', 'note': None}, {'label': '木桶', 'href': 'https://stardewvalleywiki.com/Cask', 'note': None}, {'label': '罗宾的商店和室外建筑', 'href': 'https://stardewvalleyplanner.art/carpenter-stardew', 'note': None}]
+FAIL zh-CN sources items expected=[{'label': '农舍', 'href': 'https://stardewvalleywiki.com/Farmhouse', 'note': None}, {'label': '木匠的商店', 'href': 'https://stardewvalleywiki.com/Carpenter%27s_Shop', 'note': None}, {'label': '版本历史 1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。', 'href': 'https://stardewvalleywiki.com/Version_History', 'note': '1.6把第二次升级从50,000金和150硬木改为65,000金和100硬木。'}, {'label': '斧头', 'href': 'https://stardewvalleywiki.com/Axes', 'note': None}, {'label': '木材', 'href': 'https://stardewvalleywiki.com/Wood', 'note': None}, {'label': '硬木', 'href': 'https://stardewvalleywiki.com/Hardwood', 'note': None}, {'label': '大树桩', 'href': 'https://stardewvalleywiki.com/Large_Stump', 'note': None}, {'label': '大圆木', 'href': 'https://stardewvalleywiki.com/Large_Log', 'note': None}, {'label': '秘密森林', 'href': 'https://stardewvalleywiki.com/Secret_Woods', 'note': None}, {'label': '烹饪', 'href': 'https://stardewvalleywiki.com/Cooking', 'note': None}, {'label': '木桶', 'href': 'https://stardewvalleywiki.com/Cask', 'note': None}, {'label': '罗宾的商店和室外建筑', 'href': 'https://stardewvalleyplanner.art/carpenter-stardew', 'note': None}]
+bodyLinkCount=50 carpenterCount=1
+localeMismatchesAdded=2
+sitemapCount=62
+sitemapContact=[]
+sitemapHouse=['https://stardewvalleyplanner.art/house-upgrade-stardew', 'https://stardewvalleyplanner.art/zh/house-upgrade-stardew']
+llmsEqual=True houseCount=2 fruitCount=0
+en llms bullet present
+zh-CN llms bullet present
+htmlCount=66
+ERROR_COUNT=4

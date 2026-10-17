@@ -1,0 +1,116 @@
+E title-v4 SEOTruth checks
+task task_652d18e6b9fc
+dispatch ctx_34986df99cbf
+terminal term_2fb61edc-2643-47a6-993f-adec12d2f2e7
+coordinator term_661abce7-55fd-4570-8bf5-970c0451dd23
+role E (independent SEO / Title reviewer)
+gate PASS
+problem_count 0
+
+1. orca orchestration check --terminal term_2fb61edc-2643-47a6-993f-adec12d2f2e7 --json
+exit 0
+messages received: msg_c2b398dd294c, msg_7a8448256a28
+coordinator confirmed inputs:
+  lock/en/body.md SHA f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+  seo/en/seo-candidate.json SHA b6e2b7e20f4942945af2258c3eb28455680e952feaf2d04a9c7d424a75f55b58
+  official length 1085 verified
+  delivery acknowledged: delivery_ad2d543bd08e
+E received inputs independently, did not treat F candidate rationale or self-review as conclusion.
+
+2. shasum -a 256 of all relevant input and rule files
+exit 0
+docs/blog-ops/house-upgrade-stardew/lock/en/body.md f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f MATCH
+docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f MATCH
+docs/blog-ops/house-upgrade-stardew/lock/en/lock-record.json b5bb88478dd133b02d8e68733e24fefb2a179b3ed200042d1e7e94cb2bf5edb3 MATCH
+docs/blog-ops/house-upgrade-stardew/lock/en/length-report.md e2b0a69287bddd541fcf6370a4ea0757015a815d5fc67f6e96a38ea1ede18793 MATCH
+docs/blog-ops/house-upgrade-stardew/seo/en/seo-candidate.json b6e2b7e20f4942945af2258c3eb28455680e952feaf2d04a9c7d424a75f55b58 MATCH
+docs/blog-ops/house-upgrade-stardew/seo/en/title-candidates.md f2ab571ed4fd873e4d166158e5f11eaa2641a1f2ae0e1eb2d760f9bf998fde94 MATCH
+docs/blog-ops/house-upgrade-stardew/handoff/pending-en/public-blog-handoff.en.json ae2b45c95090433c3538f8f6eec617dc1b03739ea3782c643ce3c3ab05afaf36 MATCH
+/Users/wusir/Desktop/博客-V7修订版/参考规则/标题与描述规则.md 8bcbefa889e3db9c73ed34b8cb05df0f7ecda33e5ea28ab982607f95d959f99d MATCH
+/Users/wusir/Desktop/博客-V7修订版/参考规则/七罪引擎.md 1960b77ff5232be3fd8fc40c5eabfccfd0dccc1e950001509eeceb30a3f8c3f3 MATCH
+/Users/wusir/Desktop/博客-V7修订版/01-统一工作流.md 193a4287bac554215059af2dd319ee1c895488371cde81bfe758c79c5cd75c17 MATCH
+/Users/wusir/Desktop/博客-V7修订版/02-内容生产与质量门.md ff3145fe73c929b23cafe893f19f5a6f1b370ef2de7be8e1556b22d03c8a992f MATCH
+/Users/wusir/Desktop/博客-V7修订版/04-公开交接与页面装配.md 976de586c2bf9e5a06b3783320c403e8a9eb2bc63467a8e9d884dffcebbe3005 MATCH
+
+3. diff -u docs/blog-ops/house-upgrade-stardew/content/en/draft-v4.md docs/blog-ops/house-upgrade-stardew/lock/en/body.md
+exit 0
+output: empty (0 differences, byte-for-byte identical)
+
+4. PYTHONDONTWRITEBYTECODE=1 python3 /Users/wusir/Desktop/博客-V7修订版/脚本/正文计数.py --locale en
+exit 0
+on lock/en/body.md:
+  mechanical_units: 1138
+  required_floor: 1000
+  meets_mechanical_floor: true
+  long_form_target: 2000
+  meets_long_form_target: false
+  length_class: short
+  sha256_raw: f343aee1192b7b4f8d605b183569c39dc187859c041d6de658019f0ab5734d8f
+  omitted_line_counts: headings 8, code 0, excluded_sections 0, non_body 34, frontmatter 0
+on lock/en/count-input.md:
+  mechanical_units: 1085
+  required_floor: 1000
+  meets_mechanical_floor: true (qualified units 1085 >= 1000 strictly met)
+  length_class: short (1000-1999)
+  mainIntentMaterialComplete: true
+
+5. SEO surface compact sorted JSON and hash verification
+exit 0
+surface compact JSON: {"description":"The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.","h1":"House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier","slug":"house-upgrade-stardew","title":"House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier"}
+surface SHA-256: 7efcec963346a418ced31f5f181e37486a7e20fdbda20c9e379db79ba4505ac1
+field lengths:
+  Title: 67 chars (ASCII)
+  H1: 67 chars (ASCII)
+  OG Title: 67 chars (ASCII)
+  Description: 296 chars (ASCII)
+  Slug: 21 chars (ASCII)
+title == H1: True
+title == ogTitle: True
+
+6. Exact quote verification in lock/en/body.md
+exit 0
+Quote 1: "Robin charges 10,000g and 450 Wood for the first farmhouse upgrade, 65,000g and 100 Hardwood for the second, and 100,000g for the third" -> count=1, line 1
+Quote 2: "In 1.6 the second house upgrade moved from 50,000g and 150 Hardwood to 65,000g and 100 Hardwood" -> count=1, line 11
+Quote 3: "Each upgrade takes three days" -> count=1, line 1 (also reinforced in table lines 7-9)
+Quote 4: "After the second farmhouse upgrade, Robin offers house renovations. You order one and it finishes immediately." -> count=1, line 67
+Quote 5: "65,000g and 100 Hardwood" -> count=2, lines 1, 11 (table line 8)
+Quote 6: "next tier" -> count=1, line 55
+Quote 7: "10,000g and 450 Wood" -> count=3, lines 1, 27, 37 (table line 7)
+Quote 8: "100,000g" -> count=3, lines 1, 37, 49 (table line 9)
+
+7. Prohibited claims and boundary checks
+exit 0
+- all three upgrades take three days / all three tiers finish in three days: NOT FOUND (pass)
+- 14,500g / 32,500g as wood unit price: NOT FOUND (pass)
+- payment day start / payment-day room state: NOT FOUND (pass)
+- exception-free Tuesday closing ban: NOT FOUND (pass)
+- unsourced superlatives (best, fastest, easiest, guaranteed): NOT FOUND (pass)
+- FAQ added without requirement: NONE (faq: null, pass)
+- forced CTA in unnatural tool slot: NONE (articleSpecificCta: null, pass)
+
+8. De-patterning against recent 3 English titles in repository
+exit 0
+Recent English titles from src/blog/blog-post-registry.tsx (homepage reverse order):
+  1. "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe" (method list with "by ... or ...")
+  2. "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree" (comparison X vs Y with naming rule)
+  3. "Stardew Fruit: Find Its Source Before Buying Seeds" (short noun + imperative action before condition)
+Selected title: "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier"
+Structure: [Primary Query]: [Price/Material Anomaly] for [Tier]
+Pattern overlap: 0 (fresh, distinct, no pattern collision)
+
+9. Template & identity verification
+exit 0
+app/(en)/[slug]/page.tsx: passes post.title to metadata and renders <h1>{post.title}</h1>
+app/(en)/layout.tsx: plain metadata.title without title.template, no brand suffix appended
+src/seo/page-metadata.ts: sets openGraph.title and twitter.title to input.title verbatim
+author: "Stardew Valley Planner Team" (repo registry line 461, ProjectInterfaceSpec.md line 115)
+publishedAt: null (unreleased)
+verifiedAt: "2026-10-16T09:08:17+08:00" (technical lock creation clock, not publication date)
+canonical target: "https://stardewvalleyplanner.art/house-upgrade-stardew" (pending assembly and deployment)
+
+10. Revision budget and lifecycle audit
+exit 0
+V7 total revisions: used 3/3, remaining 0 (includes translation rework)
+Budget remaining: 0 (not reset)
+Status: PASS (0 issues)
+Downstream states: Translation (Role T) pending, Page assembly (Role G) pending, User final review pending, Production deployment not-deployed
