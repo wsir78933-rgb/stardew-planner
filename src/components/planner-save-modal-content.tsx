@@ -7,18 +7,22 @@ import type { ScreenshotResolution } from "../projects/map-image-export";
 import { MapImageExportError } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
+import { useCloudProjectSync } from "@/src/cloud-sync/use-cloud-project-sync";
+import { CloudProjectPanel } from "./cloud-project-panel";
 
 type PlannerSaveModalContentProperties = Readonly<{
   copy: Pick<
     SaveModalCopy,
-    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+    "cloudProjects" | "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
   >;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount: number | null;
   currentProjectMapInstanceName: string | null;
   mapFile: string;
+  workspaceController: ReferenceProjectWorkspaceController;
   onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
   onCreateProject: () => void;
   onDeleteProject: (projectId: string) => void;
@@ -42,6 +46,7 @@ export function PlannerSaveModalContent({
   currentProjectMapInstanceCount,
   currentProjectMapInstanceName,
   mapFile,
+  workspaceController,
   onCaptureScreenshot,
   onCreateProject,
   onDeleteProject,
@@ -57,6 +62,7 @@ export function PlannerSaveModalContent({
   storageErrorMessage,
   storageStatus,
 }: PlannerSaveModalContentProperties) {
+  const cloudProjectSync = useCloudProjectSync({ workspaceController });
   const [thumbnailActionState, setThumbnailActionState] = useState<
     Readonly<{ kind: "error" | "success"; message: string }> | null
   >(null);
@@ -76,8 +82,22 @@ export function PlannerSaveModalContent({
     }
   }
 
+  async function handleSaveCurrentMapAndNotifyCloudSync(): Promise<void> {
+    await saveCurrentMapAndNotifyCloudSync({
+      saveCurrentMap: onSaveCurrentMap,
+      workspaceController,
+      onLocalProjectSaved: cloudProjectSync.onLocalProjectSaved,
+    });
+  }
+
   return (
     <div className="planner-save-modal-content">
+      <CloudProjectPanel
+        cloudProjectSync={cloudProjectSync}
+        copy={copy.cloudProjects}
+        currentProjectId={currentProjectId}
+        localProjects={projects}
+      />
       <LocalProjectPanel
         copy={copy.localProjects}
         currentProjectId={currentProjectId}
@@ -92,7 +112,7 @@ export function PlannerSaveModalContent({
         onImportProject={onImportProject}
         onOpenProject={onOpenProject}
         onRenameProject={onRenameProject}
-        onSaveCurrentMap={onSaveCurrentMap}
+        onSaveCurrentMap={handleSaveCurrentMapAndNotifyCloudSync}
         projects={projects}
         storageErrorMessage={storageErrorMessage}
         storageStatus={storageStatus}
@@ -126,6 +146,34 @@ export function PlannerSaveModalContent({
         </section>
       </div>
     </div>
+  );
+}
+
+export function getActiveProjectIdAfterLocalSave(
+  workspaceController: ReferenceProjectWorkspaceController,
+): string {
+  const activeProjectId = workspaceController.getState().activeProject?.id;
+  if (typeof activeProjectId !== "string" || activeProjectId.trim().length === 0) {
+    throw new Error(
+      `Cannot notify cloud sync after local save because the active project ID is ${JSON.stringify(activeProjectId)}.`,
+    );
+  }
+
+  return activeProjectId;
+}
+
+export async function saveCurrentMapAndNotifyCloudSync({
+  onLocalProjectSaved,
+  saveCurrentMap,
+  workspaceController,
+}: Readonly<{
+  onLocalProjectSaved: (localProjectId: string) => Promise<void>;
+  saveCurrentMap: () => Promise<void>;
+  workspaceController: ReferenceProjectWorkspaceController;
+}>): Promise<void> {
+  await saveCurrentMap();
+  await onLocalProjectSaved(
+    getActiveProjectIdAfterLocalSave(workspaceController),
   );
 }
 

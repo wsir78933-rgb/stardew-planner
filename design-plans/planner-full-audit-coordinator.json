@@ -1,0 +1,181 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "initialCount": 4,
+  "single": {
+    "offset": {
+      "x": 897.5,
+      "y": 560.453125
+    },
+    "point": {
+      "x": 900,
+      "y": 600
+    },
+    "after": 5,
+    "afterUndo": 4
+  },
+  "fill": {
+    "pill": "Filling Junimo HutDrag to fill · Esc to cancel",
+    "pressed": "true",
+    "start": {
+      "x": 900,
+      "y": 600
+    },
+    "end": {
+      "x": 972,
+      "y": 648
+    },
+    "after": 8,
+    "undoEnabled": true
+  },
+  "mobileMap": {
+    "aligned": {
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 811
+      },
+      "modalRect": {
+        "x": 19.5,
+        "y": 85.828125,
+        "width": 351,
+        "height": 546.3984375,
+        "bottom": 632.2265625
+      },
+      "modalClass": "editor-modal editor-modal--map-picker",
+      "backdropClass": "editor-modal__backdrop",
+      "backdropPosition": "absolute",
+      "bodyOverflow": "hidden",
+      "htmlOverflow": "visible",
+      "closeShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+      "scrollables": [
+        {
+          "className": "planner-map-picker__tabpanel",
+          "scrollHeight": 499,
+          "clientHeight": 421,
+          "scrollTop": 0,
+          "rectY": 197.328125
+        }
+      ]
+    },
+    "partialBefore": {
+      "scrollY": 418,
+      "header": 394.53125
+    },
+    "partial": {
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 418
+      },
+      "modalRect": {
+        "x": 19.5,
+        "y": 478.828125,
+        "width": 351,
+        "height": 546.3984375,
+        "bottom": 1025.2265625
+      },
+      "modalClass": "editor-modal editor-modal--map-picker",
+      "backdropClass": "editor-modal__backdrop",
+      "backdropPosition": "absolute",
+      "bodyOverflow": "hidden",
+      "htmlOverflow": "visible",
+      "closeShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+      "scrollables": [
+        {
+          "className": "planner-map-picker__tabpanel",
+          "scrollHeight": 499,
+          "clientHeight": 421,
+          "scrollTop": 0,
+          "rectY": 590.328125
+        }
+      ]
+    },
+    "afterInternalWheel": {
+      "scrollY": 418,
+      "panel": {
+        "scrollTop": 77,
+        "scrollHeight": 499,
+        "clientHeight": 421
+      },
+      "lastCards": [
+        {
+          "text": "Beach Farm",
+          "top": 862.2890625,
+          "bottom": 1011.9453125,
+          "fullyInViewport": false
+        },
+        {
+          "text": "Meadowlands Farm",
+          "top": 862.2890625,
+          "bottom": 1011.9453125,
+          "fullyInViewport": false
+        },
+        {
+          "text": "Ginger Island",
+          "top": 862.2890625,
+          "bottom": 1011.9453125,
+          "fullyInViewport": false
+        }
+      ]
+    },
+    "afterBackgroundWheel": {
+      "scrollY": 418,
+      "bodyOverflow": "hidden"
+    }
+  },
+  "reset": {
+    "currentMap": "Standard Farm",
+    "pending": null,
+    "dialogs": 0,
+    "activeTool": [
+      "cursor"
+    ],
+    "undoDisabled": true,
+    "redoDisabled": true,
+    "localStorageKeys": [
+      "stardew-planner:planner-ambience-options"
+    ],
+    "summary": "Map: Standard FarmSeason: Spring4 items placedView detailed summary"
+  },
+  "cleanup": {
+    "local": {
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "devicePixelRatio": 2
+      },
+      "dialogs": 0,
+      "pending": null,
+      "currentMap": "Standard Farm",
+      "activeTool": [
+        "cursor"
+      ],
+      "undoDisabled": true,
+      "redoDisabled": true,
+      "search": "",
+      "localProjectStorageKeyPresent": false
+    },
+    "competitorViewport": {
+      "innerWidth": 1500,
+      "innerHeight": 784,
+      "devicePixelRatio": 2
+    },
+    "deviceMetricsOverrides": "cleared on p1 and p2",
+    "cacheDisabled": false,
+    "keptPages": [],
+    "taskSpaceFinished": true,
+    "finishReceipt": {
+      "spaceId": 134,
+      "closedSpace": true,
+      "keptManagedLabels": [],
+      "closedManagedLabels": [
+        "p1",
+        "p2"
+      ],
+      "preservedUnmanagedCount": 0
+    }
+  }
+}

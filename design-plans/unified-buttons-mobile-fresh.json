@@ -1,0 +1,1071 @@
+{
+  "schema": "unified-buttons-mobile-fresh-3007-v2",
+  "provenance": {
+    "taskSpace": {
+      "id": 123,
+      "pageLabel": "p2"
+    },
+    "source": "http://127.0.0.1:3007/#planner (static out)",
+    "supersedes": "Previous unified-buttons-mobile-fresh.json pointed to localhost:3003 and does not prove the final static build.",
+    "cssInjection": "none by QA"
+  },
+  "capture": {
+    "url": "http://127.0.0.1:3007/#planner",
+    "viewport": {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "documentClientWidth": 390
+    },
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "cssLinks": [
+      "http://127.0.0.1:3007/_next/static/chunks/0g8jm8a216-3y.css",
+      "http://127.0.0.1:3007/_next/static/chunks/2eszy9qtj0nfz.css",
+      "http://127.0.0.1:3007/_next/static/chunks/3c-4zm-h_-t_9.css",
+      "http://127.0.0.1:3007/_next/static/chunks/32nt-jpkc89a-.css"
+    ],
+    "qaStyleInjectionMarkers": 0
+  },
+  "recovery": {
+    "priorDialog": "Library",
+    "priorError": "ElementResolutionError: page.click timed out after 3000ms: Selector button[aria-label=\"Menu\"] matched 1 elements, but none can receive input; dialog \"Library\" intercepts pointer events.",
+    "recovery": "Fresh snapshot confirmed Library; scoped close selector .editor-modal--save-panel button[aria-label=\"Close dialog\"] closed it, followed by a verified empty-dialog state."
+  },
+  "farmSettings": {
+    "spouseSelectionCycle": [
+      "None",
+      "Abigail",
+      "None"
+    ],
+    "caveSelectionCycle": [
+      "Not chosen",
+      "Mushrooms",
+      "Not chosen"
+    ],
+    "spouseSelectedStyle": {
+      "name": "Abigail",
+      "ariaPressed": "true",
+      "backgroundColor": "rgb(237, 245, 227)",
+      "boxShadow": "none"
+    },
+    "spouseRestoredStyles": [
+      {
+        "name": "None",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Abigail",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none"
+      }
+    ],
+    "caveSelectedStyle": {
+      "name": "Mushrooms",
+      "ariaPressed": "true",
+      "backgroundColor": "rgb(237, 245, 227)"
+    },
+    "caveRestoredStyles": [
+      {
+        "name": "Not chosen",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)"
+      },
+      {
+        "name": "Mushrooms",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)"
+      }
+    ],
+    "dialog": {
+      "dialogRect": {
+        "x": 10.5,
+        "y": 66.53125,
+        "width": 351,
+        "height": 361
+      },
+      "spouseOptions": [
+        {
+          "name": "None",
+          "ariaPressed": "true",
+          "disabled": false,
+          "rect": {
+            "x": 35.5,
+            "y": 160.53125,
+            "width": 50.6875,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Abigail",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 92.1875,
+            "y": 160.53125,
+            "width": 58.0234375,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Penny",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 156.2109375,
+            "y": 160.53125,
+            "width": 56.03125,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Leah",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 218.2421875,
+            "y": 160.53125,
+            "width": 48.6953125,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Haley",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 272.9375,
+            "y": 160.53125,
+            "width": 52.6796875,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Maru",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 35.5,
+            "y": 210.53125,
+            "width": 49.34375,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Sebastian",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 90.84375,
+            "y": 210.53125,
+            "width": 75.375,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Alex",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 172.21875,
+            "y": 210.53125,
+            "width": 45.34375,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Harvey",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 223.5625,
+            "y": 210.53125,
+            "width": 60.015625,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Elliott",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 35.5,
+            "y": 260.53125,
+            "width": 51.34375,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Sam",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 92.84375,
+            "y": 260.53125,
+            "width": 46.6796875,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Shane",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 145.5234375,
+            "y": 260.53125,
+            "width": 56.703125,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Emily",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 208.2265625,
+            "y": 260.53125,
+            "width": 51.3359375,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        }
+      ],
+      "caveOptions": [
+        {
+          "name": "Not chosen",
+          "ariaPressed": "true",
+          "disabled": false,
+          "rect": {
+            "x": 35.5,
+            "y": 360.53125,
+            "width": 82.703125,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Mushrooms",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 124.203125,
+            "y": 360.53125,
+            "width": 84.6875,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Bats",
+          "ariaPressed": "false",
+          "disabled": false,
+          "rect": {
+            "x": 214.890625,
+            "y": 360.53125,
+            "width": 46.015625,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        }
+      ],
+      "initialValuesRestored": true
+    },
+    "keyboard": {
+      "focusStart": {
+        "active": "×",
+        "focusVisible": false
+      },
+      "tabSequence": [
+        {
+          "text": "None",
+          "ariaLabel": null,
+          "focusVisible": true,
+          "tag": "BUTTON",
+          "rect": {
+            "x": 35.5,
+            "y": 160.53125,
+            "width": 50.6875,
+            "height": 44
+          }
+        }
+      ],
+      "focusVisibleSample": {
+        "name": "None",
+        "activeElement": true,
+        "focusVisible": true,
+        "outline": "rgb(201, 251, 69) solid 2px",
+        "outlineOffset": "2px",
+        "boxShadow": "none",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "ariaPressed": "true"
+      },
+      "spaceKeyDownActiveSample": {
+        "name": "None",
+        "activeElement": true,
+        "focusVisible": true,
+        "activePseudo": true,
+        "outline": "rgb(201, 251, 69) solid 2px",
+        "boxShadow": "none",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "ariaPressed": "true"
+      },
+      "spaceKeyUpAfterSample": {
+        "name": "None",
+        "ariaPressed": "true",
+        "focusVisible": true,
+        "activePseudo": false
+      },
+      "selectionUnchanged": true
+    },
+    "screenshot": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/unified-buttons-mobile-farm-settings-3007.png"
+  },
+  "ambience": {
+    "viewport": {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "documentClientWidth": 390
+    },
+    "dialogRect": {
+      "x": 10.5,
+      "y": 66.53125,
+      "width": 351,
+      "height": 602
+    },
+    "seasonSelectionCycle": [
+      "Spring",
+      "Summer",
+      "Spring"
+    ],
+    "seasonButtonsBefore": [
+      {
+        "name": "Spring",
+        "ariaPressed": "true",
+        "rect": {
+          "x": 35.5,
+          "y": 160.53125,
+          "width": 36,
+          "height": 44
+        },
+        "backgroundColor": "rgb(237, 245, 227)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Summer",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 81.5,
+          "y": 160.53125,
+          "width": 36,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Fall",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 127.5,
+          "y": 160.53125,
+          "width": 36,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Winter",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 173.5,
+          "y": 160.53125,
+          "width": 36,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      }
+    ],
+    "seasonChanged": {
+      "seasonText": "Summer",
+      "buttons": [
+        {
+          "name": "Spring",
+          "ariaPressed": "false",
+          "backgroundColor": "rgb(255, 255, 255)"
+        },
+        {
+          "name": "Summer",
+          "ariaPressed": "true",
+          "backgroundColor": "rgb(237, 245, 227)"
+        }
+      ]
+    },
+    "weatherSelectionCycle": [
+      "Clear",
+      "Rain",
+      "Clear"
+    ],
+    "weatherButtonsBefore": [
+      {
+        "name": "Clear",
+        "ariaPressed": "true",
+        "rect": {
+          "x": 38.5,
+          "y": 551.53125,
+          "width": 96.328125,
+          "height": 44
+        },
+        "backgroundColor": "rgb(237, 245, 227)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Rain",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 137.828125,
+          "y": 551.53125,
+          "width": 96.3359375,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Storm",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 237.1640625,
+          "y": 551.53125,
+          "width": 96.3359375,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Green rain",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 38.5,
+          "y": 598.53125,
+          "width": 146,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      },
+      {
+        "name": "Snow",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 187.5,
+          "y": 598.53125,
+          "width": 146,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "disabled": false
+      }
+    ],
+    "weatherChanged": [
+      {
+        "name": "Clear",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      {
+        "name": "Rain",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)"
+      }
+    ],
+    "restoredValues": {
+      "season": "Spring",
+      "weather": "Clear"
+    },
+    "flatSwitches": [
+      {
+        "text": "Night mode Off",
+        "ariaLabel": null,
+        "ariaPressed": "false",
+        "disabled": false,
+        "rect": {
+          "x": 35.5,
+          "y": 260.53125,
+          "width": 301,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      },
+      {
+        "text": "Summer clouds Off",
+        "ariaLabel": null,
+        "ariaPressed": "false",
+        "disabled": false,
+        "rect": {
+          "x": 35.5,
+          "y": 360.53125,
+          "width": 301,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      },
+      {
+        "text": "Butterflies & debris On",
+        "ariaLabel": null,
+        "ariaPressed": "true",
+        "disabled": false,
+        "rect": {
+          "x": 35.5,
+          "y": 404.53125,
+          "width": 301,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      },
+      {
+        "text": "Animations On",
+        "ariaLabel": null,
+        "ariaPressed": "true",
+        "disabled": false,
+        "rect": {
+          "x": 35.5,
+          "y": 448.53125,
+          "width": 301,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      }
+    ],
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "screenshot": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/unified-buttons-mobile-ambience-3007.png"
+  },
+  "automationNotes": [
+    "View Grid exact text selector matched zero because the full visible text was Grid Off; no click or state change occurred. A fresh snapshot confirmed all View options remained at their initial state."
+  ],
+  "view": {
+    "capture": {
+      "url": "http://127.0.0.1:3007/#planner",
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "documentClientWidth": 390
+      },
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "visibleDialogs": [
+        "View"
+      ]
+    },
+    "dialogRect": {
+      "x": 10.5,
+      "y": 66.53125,
+      "width": 369,
+      "height": 643
+    },
+    "scrollContainer": [
+      {
+        "className": "editor-modal editor-modal--view-panel editor-modal--popover",
+        "clientWidth": 361,
+        "scrollWidth": 361,
+        "clientHeight": 641,
+        "scrollHeight": 773,
+        "scrollTop": 0,
+        "rect": {
+          "x": 10.5,
+          "y": 66.53125,
+          "width": 369,
+          "height": 643
+        }
+      }
+    ],
+    "catalogScroll": {
+      "scrollables": [
+        {
+          "className": "editor-modal editor-modal--view-panel editor-modal--popover",
+          "scrollTop": 132,
+          "scrollHeight": 773,
+          "clientHeight": 641
+        }
+      ],
+      "options": [
+        {
+          "name": "Left",
+          "ariaPressed": "false",
+          "rect": {
+            "x": 38.5,
+            "y": 639.53125,
+            "width": 152,
+            "height": 44
+          },
+          "backgroundColor": "rgb(255, 255, 255)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Bottom",
+          "ariaPressed": "true",
+          "rect": {
+            "x": 193.5,
+            "y": 639.53125,
+            "width": 152,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        }
+      ]
+    },
+    "initialSelected": "Bottom",
+    "catalogSelectionCycle": [
+      "Bottom",
+      "Left",
+      "Bottom"
+    ],
+    "leftSelected": [
+      {
+        "name": "Left",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)"
+      },
+      {
+        "name": "Bottom",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)"
+      }
+    ],
+    "restoredOptions": [
+      {
+        "name": "Left",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      {
+        "name": "Bottom",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)"
+      }
+    ],
+    "restored": true,
+    "disabledNpcPaths": {
+      "ariaPressed": "false",
+      "disabled": true,
+      "rect": {
+        "x": 35.5,
+        "y": 480.53125,
+        "width": 313,
+        "height": 44
+      },
+      "color": "rgb(28, 33, 27)",
+      "opacity": "0.5",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none"
+    },
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390
+  },
+  "settings": {
+    "capture": {
+      "url": "http://127.0.0.1:3007/#planner",
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "documentClientWidth": 390
+      },
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "visibleDialogs": [
+        "Settings"
+      ]
+    },
+    "dialogRect": {
+      "x": 10.5,
+      "y": 66.53125,
+      "width": 369,
+      "height": 515.75
+    },
+    "initialSelected": "System",
+    "cursorSelectionCycle": [
+      "System",
+      "Game",
+      "System"
+    ],
+    "selectedGame": [
+      {
+        "name": "System",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Game",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "boxShadow": "none"
+      }
+    ],
+    "restoredCursorOptions": [
+      {
+        "name": "System",
+        "ariaPressed": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Game",
+        "ariaPressed": "false",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "boxShadow": "none"
+      }
+    ],
+    "initialSwitches": [
+      {
+        "name": "Toast notifications On",
+        "ariaPressed": "true",
+        "rect": {
+          "x": 35.5,
+          "y": 237.28125,
+          "width": 319,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Free Placement Off",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 35.5,
+          "y": 337.28125,
+          "width": 319,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Show joystick On",
+        "ariaPressed": "true",
+        "rect": {
+          "x": 35.5,
+          "y": 437.28125,
+          "width": 319,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Left-hand mode Off",
+        "ariaPressed": "false",
+        "rect": {
+          "x": 35.5,
+          "y": 481.28125,
+          "width": 319,
+          "height": 44
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none"
+      }
+    ],
+    "finalSwitchStates": [
+      {
+        "name": "Toast notifications On",
+        "ariaPressed": "true",
+        "text": "Toast notifications On",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Free Placement Off",
+        "ariaPressed": "false",
+        "text": "Free Placement Off",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Show joystick On",
+        "ariaPressed": "true",
+        "text": "Show joystick On",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Left-hand mode Off",
+        "ariaPressed": "false",
+        "text": "Left-hand mode Off",
+        "boxShadow": "none"
+      }
+    ],
+    "restored": true,
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390
+  },
+  "finalPageState": {
+    "url": "http://127.0.0.1:3007/#planner",
+    "viewport": {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "documentClientWidth": 390
+    },
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "visibleDialogs": [],
+    "menuExpanded": "false"
+  },
+  "completedPanels": [
+    "Library",
+    "Farm Settings",
+    "Ambience",
+    "View",
+    "Settings"
+  ],
+  "openIssues": [
+    "Ambience season icon touch targets are 36px wide by 44px high at 390px viewport; the evidence does not claim 44x44 for these buttons."
+  ],
+  "librarySupplement": {
+    "sourceFile": "design-plans/unified-buttons-desktop-fresh.json",
+    "sourcePage": "p1",
+    "sourceUrl": "http://127.0.0.1:3007/#planner",
+    "viewportCssPixels": {
+      "width": 1440,
+      "height": 1000
+    },
+    "source": "static out preview on port 3007 after ARROWS_BUILT; no development server and no injected QA stylesheet",
+    "branchResults": [
+      {
+        "name": "Local projects",
+        "selected": true,
+        "background": "rgb(237, 245, 227)",
+        "border": "rgb(117, 157, 28)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Import Game Save",
+        "selected": true,
+        "background": "rgb(237, 245, 227)",
+        "border": "rgb(117, 157, 28)",
+        "boxShadow": "none"
+      },
+      {
+        "name": "Farm Summary",
+        "selected": true,
+        "background": "rgb(237, 245, 227)",
+        "border": "rgb(117, 157, 28)",
+        "boxShadow": "none"
+      }
+    ],
+    "farmSummaryDetailOpenedAndClosed": true,
+    "initialBranchRestored": "Local projects",
+    "actualImportOrAuthenticationPerformed": false,
+    "cloudSyncObservation": "Library displayed HTTP 404 for planner session while loaded; no sign-in or sync action was performed.",
+    "scope": "Reused the fresh 3007 desktop Library branch evidence; did not repeat branch cycling on p2."
+  },
+  "coverageNotes": [
+    "The previous mobile dialog screenshots/evidence taken from localhost:3003 were not carried forward as fresh-build proof.",
+    "Mobile p2 evidence in this file is from the static out preview at 127.0.0.1:3007 with 390x844 metrics re-applied and verified each invocation.",
+    "The Library supplement is desktop evidence from the same static build and is explicitly labeled 1440x1000; it does not claim mobile branch interactions.",
+    "All temporary selection changes in Farm Settings, Ambience, View, and Settings were restored; all dialogs were closed at final readback.",
+    "Ambience season icon targets measured 36x44; this file does not claim they meet a 44x44 minimum.",
+    "The p2 Library supplement in this file is mobile evidence at 390x844. Desktop branch testing is separately linked by source and viewport."
+  ],
+  "library": {
+    "capture": {
+      "url": "http://127.0.0.1:3007/#planner",
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "documentClientWidth": 390
+      },
+      "visibleDialogs": [],
+      "menuExpanded": "false",
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390
+    },
+    "dialogRect": {
+      "x": 16,
+      "y": 8,
+      "width": 352,
+      "height": 828
+    },
+    "initialBranchButtons": [
+      {
+        "name": "Local projects",
+        "ariaPressed": "true",
+        "disabled": false,
+        "rect": {
+          "x": 26.8828125,
+          "y": 89.0390625,
+          "width": 105.5625,
+          "height": 57.546875
+        },
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(117, 157, 28)",
+        "boxShadow": "none",
+        "transform": "none"
+      },
+      {
+        "name": "Import Game Save",
+        "ariaPressed": "false",
+        "disabled": false,
+        "rect": {
+          "x": 136.21875,
+          "y": 89.0390625,
+          "width": 105.5625,
+          "height": 57.546875
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "borderColor": "rgb(36, 42, 34)",
+        "boxShadow": "none",
+        "transform": "none"
+      },
+      {
+        "name": "Farm Summary",
+        "ariaPressed": "false",
+        "disabled": false,
+        "rect": {
+          "x": 245.5546875,
+          "y": 89.0390625,
+          "width": 105.5625,
+          "height": 57.546875
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "borderColor": "rgb(36, 42, 34)",
+        "boxShadow": "none",
+        "transform": "none"
+      }
+    ],
+    "initialSelected": "Local projects",
+    "selectedFarmSummary": {
+      "branch": {
+        "name": "Farm Summary",
+        "ariaPressed": "true",
+        "rect": {
+          "x": 253.5546875,
+          "y": 341.71875,
+          "width": 109.5625,
+          "height": 57.546875
+        },
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(117, 157, 28)",
+        "borderStyle": "solid",
+        "borderWidth": "1px",
+        "boxShadow": "none",
+        "transform": "none"
+      },
+      "actionButton": {
+        "name": "View detailed summary",
+        "ariaPressed": null,
+        "rect": {
+          "x": 40.4609375,
+          "y": 514.8515625,
+          "width": 309.078125,
+          "height": 44
+        },
+        "backgroundColor": "rgb(255, 255, 255)",
+        "borderColor": "rgb(36, 42, 34)",
+        "borderStyle": "solid",
+        "borderWidth": "1px",
+        "boxShadow": "none",
+        "transform": "none"
+      },
+      "summaryText": "Library × Local projects Import Game Save Farm Summary Map: Standard Farm Season: Spring 4 items placed View detailed summary"
+    },
+    "summarySnapshot": "[p2 \"Stardew Valley Planner – Free Online Farm Layout Tool\" | space \"Unified dialog button runtime QA\"(123): 2 managed, 0 untracked — p1 \"Stardew Valley Planner – Free Online Farm Layout Tool\", p2* \"Stardew Valley Planner – Free Online Farm Layout Tool\"]\nroot\n  container\n    container\n      container\n        container \"Editor navigation\"\n          group \"Help and feedback\"\n            button \"Help\" [ref=372, loc=css:button[aria-label=\"Help\"]]\n              svg_root\n            button \"Keyboard shortcuts\" [ref=373]\n              svg_root\n            button \"Feedback\" [ref=374, loc=css:button[aria-label=\"Feedback\"]]\n              svg_root\n          container \"Library\"\n            button \"Library\" [ref=375, loc=css:button[aria-label=\"Library\"]]\n              svg_root\n            button \"Current map: Standard Farm\" [ref=376, loc=css:button[aria-label=\"Current map: Standard Farm\"]]\n              text \"Standard Farm\"\n          button \"Menu\" [ref=377, loc=css:button[aria-label=\"Menu\"]]\n            svg_root\n        toolbar \"Editor tools\"\n          button \"Select\" [ref=378, loc=css:button[aria-label=\"Select\"]]\n            svg_root\n          button \"Multi\" [ref=379, loc=css:button[aria-label=\"Multi\"]]\n            svg_root\n          button \"Fill\" [ref=380, loc=css:button[aria-label=\"Fill\"]]\n            svg_root\n          button \"Erase\" [ref=381, loc=css:button[aria-label=\"Erase\"]]\n            svg_root\n          button \"Zoom\" [ref=382, loc=css:button[aria-label=\"Zoom\"]]\n            svg_root\n          button \"Undo\" [ref=383, loc=css:button[aria-label=\"Undo\"]]\n            svg_root\n          button \"Redo\" [ref=384, loc=css:button[aria-label=\"Redo\"]]\n            svg_root\n        container \"Item catalog\"\n          button [ref=385]\n            svg_root\n            text \"Browse items\"\n        container \"Farm map canvas for standard\"\n          canvas \"Interactive farm map camera\" [ref=386]\n        dialog \"Library\" [ref=431, loc=role:dialog[name=\"Library\"]]\n          container\n            heading\n              text \"Library\"\n            button \"Close dialog\" [ref=432, loc=css:button[aria-label=\"Close dialog\"]]\n              text \"×\"\n          container \"Save tools\"\n            button [ref=433]\n              text \"Local projects\"\n            button [ref=434]\n              text \"Import Game Save\"\n            button [ref=435]\n              text \"Farm Summary\"\n          container \"Farm Summary\"\n            container\n              paragraph\n                text \"Map\"\n                text \":\"\n                text \"Standard Farm\"\n              paragraph\n                text \"Season\"\n                text \":\"\n                text \"Spring\"\n              paragraph\n                text \"4 items placed\"\n            button [ref=436]\n              text \"View detailed summary\"\n      container \"What is Stardew Valley Planner?\"\n    button [ref=283]\n      text \"导出外链\"\n",
+    "restoration": {
+      "branchButtons": [
+        {
+          "name": "Local projects",
+          "ariaPressed": "true",
+          "backgroundColor": "rgb(237, 245, 227)",
+          "borderColor": "rgb(117, 157, 28)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Import Game Save",
+          "ariaPressed": "false",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "borderColor": "rgb(36, 42, 34)",
+          "boxShadow": "none"
+        },
+        {
+          "name": "Farm Summary",
+          "ariaPressed": "false",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "borderColor": "rgb(36, 42, 34)",
+          "boxShadow": "none"
+        }
+      ],
+      "initialBranchRestored": true,
+      "cloudAlerts": [
+        "Cloud sync could not load: Could not load the planner session: HTTP 404 Not Found."
+      ],
+      "branchCycle": [
+        "Local projects",
+        "Farm Summary",
+        "Local projects"
+      ]
+    },
+    "screenshot": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/unified-buttons-mobile-library-3007.png",
+    "finalPageState": {
+      "url": "http://127.0.0.1:3007/#planner",
+      "viewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "documentClientWidth": 390
+      },
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "visibleDialogs": [],
+      "menuExpanded": "false"
+    },
+    "externalActions": {
+      "fileChooserOpened": false,
+      "uploadPerformed": false,
+      "authenticationPerformed": false,
+      "importPerformed": false,
+      "summaryActionClicked": false
+    }
+  }
+}

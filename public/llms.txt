@@ -1,16 +1,16 @@
 # Stardew Valley Planner
 
-> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese planning articles and browser-local projects.
+> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese planning articles, local projects, and optional cloud sync for selected layouts.
 
 ## English
 
-Stardew Valley Planner helps you plan farm layouts in your browser. Projects stay in your browser and the site does not require an account or cloud sync.
+Stardew Valley Planner helps you plan farm layouts in your browser. Projects are saved locally unless you choose to sign in with Google and sync selected layout data. Map preview images stay on your device.
 
 ### Planner and reference
 
 - [Stardew Valley Planner](https://stardewvalleyplanner.art): Plan a Stardew Valley farm layout in your browser.
-- [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn how browser-local projects and site data are handled.
-- [Terms of service](https://stardewvalleyplanner.art/terms): Read the browser-local terms, including optional JSON import and export and the fan-made status.
+- [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn how local projects, selected cloud-synced layout data, and site data are handled.
+- [Terms of service](https://stardewvalleyplanner.art/terms): Read the terms for local projects, optional cloud sync, JSON import and export, and the fan-made status.
 
 ### Planning guides
 
@@ -40,17 +40,18 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting](https://stardewvalleyplanner.art/what-to-grow-in-greenhouse-stardew): Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.
 - [Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree](https://stardewvalleyplanner.art/oak-tree-vs-maple-stardew): Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.
 - [How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe](https://stardewvalleyplanner.art/how-to-harvest-stardew-valley): Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.
+- [how to get gold star crops stardew valley](https://stardewvalleyplanner.art/how-to-get-gold-star-crops-stardew-valley): Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.
 - [House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier](https://stardewvalleyplanner.art/house-upgrade-stardew): The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.
 
 ## 简体中文
 
-星露谷农场规划器可帮助你在浏览器中规划农场布局。项目保留在浏览器本地，不需要账户或云端同步。
+星露谷农场规划器可帮助你在浏览器中规划农场布局。项目默认保存在本地；使用 Google 登录后，可选择同步布局数据。地图预览图片仍保留在你的设备上。
 
 ### 规划器与参考内容
 
 - [星露谷农场规划器](https://stardewvalleyplanner.art/zh): 在浏览器中规划《星露谷物语》农场布局。
-- [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解浏览器本地项目和站点数据的处理方式。
-- [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读浏览器本地服务条款，包括可选 JSON 导入导出和同人创作说明。
+- [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解本地项目、所选云端布局数据和站点数据的处理方式。
+- [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读本地项目、可选云端同步、JSON 导入导出和同人创作相关条款。
 
 ### 农场规划指南
 
@@ -80,4 +81,5 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects sta
 - [星露谷温室种什么？按手头种源、等待时间与收获节奏选择](https://stardewvalleyplanner.art/zh/what-to-grow-in-greenhouse-stardew): 星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。
 - [星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。
 - [星露谷物语怎么收作物：徒手、镰刀或斧头](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。
+- [星露谷物语如何种出金星作物](https://stardewvalleyplanner.art/zh/how-to-get-gold-star-crops-stardew-valley): 选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。
 - [星露谷房屋升级：第二档是65,000金和100硬木](https://stardewvalleyplanner.art/zh/house-upgrade-stardew): 第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。

@@ -1,0 +1,529 @@
+{
+  "phase": "read-only homepage scrollbar and viewport diagnostic",
+  "status": "complete; native viewport restored and before/after metrics saved",
+  "artifact": "FINAL_BUILT production static out served from 127.0.0.1:3007; no stylesheet injection",
+  "stylesheetLinks": [
+    "http://127.0.0.1:3007/_next/static/chunks/0g8jm8a216-3y.css",
+    "http://127.0.0.1:3007/_next/static/chunks/1eqjce81i12qs.css",
+    "http://127.0.0.1:3007/_next/static/chunks/3c-4zm-h_-t_9.css"
+  ],
+  "emulatedViewport": {
+    "width": 1440,
+    "height": 1000,
+    "deviceScaleFactor": 1,
+    "mobile": false
+  },
+  "section": {
+    "selector": "#farm-cases",
+    "initial": {
+      "heading": "Stardew Valley Planner Examples",
+      "documentTop": 3122.28125,
+      "rect": {
+        "x": 77,
+        "y": 3122.28125,
+        "width": 1280,
+        "height": 554.796875
+      }
+    }
+  },
+  "beforeEmulationClear": {
+    "top": {
+      "sample": "desktop viewport at homepage top",
+      "url": "http://127.0.0.1:3007/",
+      "title": "Stardew Valley Planner – Free Online Farm Layout Tool",
+      "innerWidth": 1440,
+      "innerHeight": 1000,
+      "outerWidth": 1512,
+      "outerHeight": 883,
+      "screen": {
+        "width": 1512,
+        "height": 982,
+        "availWidth": 1512,
+        "availHeight": 982
+      },
+      "devicePixelRatio": 1,
+      "visualViewport": {
+        "width": 1434,
+        "height": 1000,
+        "scale": 1,
+        "offsetLeft": 0,
+        "offsetTop": 0
+      },
+      "scrollX": 0,
+      "scrollY": 0,
+      "html": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "left": 0,
+          "top": 0,
+          "right": 1434,
+          "bottom": 8735.4921875,
+          "width": 1434,
+          "height": 8735.4921875
+        },
+        "clientWidth": 1434,
+        "clientHeight": 1000,
+        "scrollWidth": 1434,
+        "scrollHeight": 8735,
+        "right": 1434,
+        "computed": {
+          "width": "1434px",
+          "maxWidth": "none",
+          "overflowX": "visible",
+          "overflowY": "visible"
+        }
+      },
+      "body": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "left": 0,
+          "top": 0,
+          "right": 1434,
+          "bottom": 8735.4921875,
+          "width": 1434,
+          "height": 8735.4921875
+        },
+        "clientWidth": 1434,
+        "clientHeight": 8735,
+        "scrollWidth": 1434,
+        "scrollHeight": 8735,
+        "right": 1434,
+        "computed": {
+          "width": "1434px",
+          "maxWidth": "none",
+          "overflowX": "hidden",
+          "overflowY": "auto"
+        }
+      },
+      "scrollbarComputed": {
+        "html": {
+          "scrollbarWidth": "auto",
+          "scrollbarColor": "auto",
+          "scrollbarGutter": "auto",
+          "overflowY": "visible",
+          "scrollbar": {
+            "width": "6px",
+            "height": "6px",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "track": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "thumb": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgb(9, 115, 67)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          }
+        },
+        "body": {
+          "scrollbarWidth": "auto",
+          "scrollbarColor": "auto",
+          "scrollbarGutter": "auto",
+          "overflowY": "auto",
+          "scrollbar": {
+            "width": "6px",
+            "height": "6px",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "track": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "thumb": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgb(9, 115, 67)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          }
+        }
+      }
+    },
+    "farmCases": {
+      "sample": "desktop viewport at farm-cases section",
+      "url": "http://127.0.0.1:3007/",
+      "title": "Stardew Valley Planner – Free Online Farm Layout Tool",
+      "innerWidth": 1440,
+      "innerHeight": 1000,
+      "outerWidth": 1512,
+      "outerHeight": 883,
+      "screen": {
+        "width": 1512,
+        "height": 982,
+        "availWidth": 1512,
+        "availHeight": 982
+      },
+      "devicePixelRatio": 1,
+      "visualViewport": {
+        "width": 1434,
+        "height": 1000,
+        "scale": 1,
+        "offsetLeft": 0,
+        "offsetTop": 0
+      },
+      "scrollX": 0,
+      "scrollY": 3122.5,
+      "html": {
+        "rect": {
+          "x": 0,
+          "y": -3122.5,
+          "left": 0,
+          "top": -3122.5,
+          "right": 1434,
+          "bottom": 5612.9921875,
+          "width": 1434,
+          "height": 8735.4921875
+        },
+        "clientWidth": 1434,
+        "clientHeight": 1000,
+        "scrollWidth": 1434,
+        "scrollHeight": 8735,
+        "right": 1434,
+        "computed": {
+          "width": "1434px",
+          "maxWidth": "none",
+          "overflowX": "visible",
+          "overflowY": "visible"
+        }
+      },
+      "body": {
+        "rect": {
+          "x": 0,
+          "y": -3122.5,
+          "left": 0,
+          "top": -3122.5,
+          "right": 1434,
+          "bottom": 5612.9921875,
+          "width": 1434,
+          "height": 8735.4921875
+        },
+        "clientWidth": 1434,
+        "clientHeight": 8735,
+        "scrollWidth": 1434,
+        "scrollHeight": 8735,
+        "right": 1434,
+        "computed": {
+          "width": "1434px",
+          "maxWidth": "none",
+          "overflowX": "hidden",
+          "overflowY": "auto"
+        }
+      },
+      "scrollbarComputed": {
+        "html": {
+          "scrollbarWidth": "auto",
+          "scrollbarColor": "auto",
+          "scrollbarGutter": "auto",
+          "overflowY": "visible",
+          "scrollbar": {
+            "width": "6px",
+            "height": "6px",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "track": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "thumb": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgb(9, 115, 67)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          }
+        },
+        "body": {
+          "scrollbarWidth": "auto",
+          "scrollbarColor": "auto",
+          "scrollbarGutter": "auto",
+          "overflowY": "auto",
+          "scrollbar": {
+            "width": "6px",
+            "height": "6px",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "track": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "thumb": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgb(9, 115, 67)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          }
+        }
+      }
+    }
+  },
+  "screenshot": {
+    "path": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/homepage-scrollbar-observation-desktop.png",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "location": "farm-cases section"
+  },
+  "afterEmulationClear": {
+    "state": {
+      "innerWidth": 1512,
+      "innerHeight": 762,
+      "outerWidth": 1512,
+      "outerHeight": 883,
+      "screenWidth": 1512,
+      "screenHeight": 982,
+      "visualViewport": {
+        "width": 1506,
+        "height": 762,
+        "scale": 1
+      },
+      "scrollX": 0,
+      "scrollY": 3122.5,
+      "url": "http://127.0.0.1:3007/"
+    },
+    "farmCases": {
+      "sample": "same farm-cases location after clearing our device metrics override",
+      "url": "http://127.0.0.1:3007/",
+      "title": "Stardew Valley Planner – Free Online Farm Layout Tool",
+      "innerWidth": 1512,
+      "innerHeight": 762,
+      "outerWidth": 1512,
+      "outerHeight": 883,
+      "screen": {
+        "width": 1512,
+        "height": 982,
+        "availWidth": 1512,
+        "availHeight": 883
+      },
+      "devicePixelRatio": 2,
+      "visualViewport": {
+        "width": 1506,
+        "height": 762,
+        "scale": 1,
+        "offsetLeft": 0,
+        "offsetTop": 0
+      },
+      "scrollX": 0,
+      "scrollY": 3122.5,
+      "html": {
+        "rect": {
+          "x": 0,
+          "y": -3122.5,
+          "left": 0,
+          "top": -3122.5,
+          "right": 1506,
+          "bottom": 5411.734375,
+          "width": 1506,
+          "height": 8534.234375
+        },
+        "clientWidth": 1506,
+        "clientHeight": 762,
+        "scrollWidth": 1506,
+        "scrollHeight": 8534,
+        "right": 1506,
+        "computed": {
+          "width": "1506px",
+          "maxWidth": "none",
+          "overflowX": "visible",
+          "overflowY": "visible"
+        }
+      },
+      "body": {
+        "rect": {
+          "x": 0,
+          "y": -3122.5,
+          "left": 0,
+          "top": -3122.5,
+          "right": 1506,
+          "bottom": 5411.734375,
+          "width": 1506,
+          "height": 8534.234375
+        },
+        "clientWidth": 1506,
+        "clientHeight": 8534,
+        "scrollWidth": 1506,
+        "scrollHeight": 8534,
+        "right": 1506,
+        "computed": {
+          "width": "1506px",
+          "maxWidth": "none",
+          "overflowX": "hidden",
+          "overflowY": "auto"
+        }
+      },
+      "scrollbarComputed": {
+        "html": {
+          "scrollbarWidth": "auto",
+          "scrollbarColor": "auto",
+          "scrollbarGutter": "auto",
+          "overflowY": "visible",
+          "scrollbar": {
+            "width": "6px",
+            "height": "6px",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "track": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "thumb": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgb(9, 115, 67)",
+            "borderColor": "rgb(0, 0, 0)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          }
+        },
+        "body": {
+          "scrollbarWidth": "auto",
+          "scrollbarColor": "auto",
+          "scrollbarGutter": "auto",
+          "overflowY": "auto",
+          "scrollbar": {
+            "width": "6px",
+            "height": "6px",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "0px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "track": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          },
+          "thumb": {
+            "width": "auto",
+            "height": "auto",
+            "display": "inline",
+            "visibility": "visible",
+            "opacity": "1",
+            "backgroundColor": "rgb(9, 115, 67)",
+            "borderColor": "rgb(28, 33, 27)",
+            "borderRadius": "10px",
+            "boxShadow": "none",
+            "webkitAppearance": "none"
+          }
+        }
+      }
+    }
+  },
+  "cacheStateRestored": true
+}

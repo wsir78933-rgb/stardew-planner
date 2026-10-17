@@ -131,6 +131,8 @@ const localizedBlogPostPaths: Readonly<
     "stardew-fruit": "/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/oak-tree-vs-maple-stardew",
     "how-to-harvest-stardew-valley": "/how-to-harvest-stardew-valley",
+    "how-to-get-gold-star-crops-stardew-valley":
+      "/how-to-get-gold-star-crops-stardew-valley",
     "house-upgrade-stardew": "/house-upgrade-stardew",
   },
   "zh-CN": {
@@ -160,6 +162,8 @@ const localizedBlogPostPaths: Readonly<
     "stardew-fruit": "/zh/stardew-fruit",
     "oak-tree-vs-maple-stardew": "/zh/oak-tree-vs-maple-stardew",
     "how-to-harvest-stardew-valley": "/zh/how-to-harvest-stardew-valley",
+    "how-to-get-gold-star-crops-stardew-valley":
+      "/zh/how-to-get-gold-star-crops-stardew-valley",
     "house-upgrade-stardew": "/zh/house-upgrade-stardew",
   },
 };

@@ -53,6 +53,7 @@ export function HomepageCaseStudySections({
               }}
               nextLabel={group.nextLabel}
               previousLabel={group.previousLabel}
+              reserveCopyHeight
               testimonials={group.testimonials}
             />
           </section>

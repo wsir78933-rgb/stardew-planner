@@ -1,0 +1,2592 @@
+{
+  "baseline": {
+    "url": "http://127.0.0.1:3007/",
+    "viewport": {
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 0
+    },
+    "stylesheets": [
+      {
+        "href": "http://127.0.0.1:3007/_next/static/chunks/0g8jm8a216-3y.css",
+        "loaded": true
+      },
+      {
+        "href": "http://127.0.0.1:3007/_next/static/chunks/2eszy9qtj0nfz.css",
+        "loaded": true
+      },
+      {
+        "href": "http://127.0.0.1:3007/_next/static/chunks/3c-4zm-h_-t_9.css",
+        "loaded": true
+      }
+    ],
+    "injectedQaStyleMarkers": 0,
+    "groups": [
+      {
+        "id": "farm-cases",
+        "reserveCopyHeight": true,
+        "copyDisplay": "grid",
+        "gridTemplateColumns": "350px",
+        "hiddenMeasurementCount": 4,
+        "initial": "Obelisks & Clock Garden",
+        "availableCases": [
+          "Obelisks & Clock Garden",
+          "Clockside Crop Grid",
+          "Big Sheds & Melon Fields",
+          "Moonfall's Melon Fields"
+        ]
+      },
+      {
+        "id": "farm-cases-2",
+        "reserveCopyHeight": true,
+        "copyDisplay": "grid",
+        "gridTemplateColumns": "350px",
+        "hiddenMeasurementCount": 4,
+        "initial": "Ten-Year Farm & Clock Garden",
+        "availableCases": [
+          "Ten-Year Farm & Clock Garden",
+          "Crossroads on the Forest Farm",
+          "Meadowlands Clock & Barn Row",
+          "Four Corners Clock Garden"
+        ]
+      },
+      {
+        "id": "farm-cases-3",
+        "reserveCopyHeight": true,
+        "copyDisplay": "grid",
+        "gridTemplateColumns": "350px",
+        "hiddenMeasurementCount": 4,
+        "initial": "Four Corners Crop & Pond Zones",
+        "availableCases": [
+          "Four Corners Crop & Pond Zones",
+          "Hilltop Terraces",
+          "Beach Farm Fish-Pond Shore",
+          "Riverland Island Plots"
+        ]
+      }
+    ]
+  },
+  "groups": [
+    {
+      "id": "farm-cases-2",
+      "snapshotActionEvidence": [
+        "            button \"Previous case\" [ref=239]",
+        "            button \"Next case\" [ref=240]"
+      ],
+      "initial": {
+        "scrollY": 3727,
+        "section": {
+          "x": 0,
+          "y": -61.25,
+          "documentY": 3665.75,
+          "width": 390,
+          "height": 629.359375
+        },
+        "carousel": {
+          "x": 20,
+          "y": -37.25,
+          "documentY": 3689.75,
+          "width": 350,
+          "height": 581.359375
+        },
+        "copyBody": {
+          "x": 20,
+          "y": 205.5,
+          "documentY": 3932.5,
+          "width": 350,
+          "height": 266.609375
+        },
+        "active": {
+          "name": "Ten-Year Farm & Clock Garden",
+          "box": {
+            "x": 20,
+            "y": 205.5,
+            "documentY": 3932.5,
+            "width": 350,
+            "height": 266.609375
+          },
+          "quote": {
+            "x": 20,
+            "y": 288.546875,
+            "documentY": 4015.546875,
+            "width": 350,
+            "height": 152.96875
+          },
+          "transform": "none",
+          "opacity": "1"
+        },
+        "controls": {
+          "x": 20,
+          "y": 496.109375,
+          "documentY": 4223.109375,
+          "width": 350,
+          "height": 48
+        },
+        "previous": {
+          "x": 20,
+          "y": 500.109375,
+          "documentY": 4227.109375,
+          "width": 44,
+          "height": 44,
+          "transform": "none",
+          "opacity": "1"
+        },
+        "next": {
+          "x": 76,
+          "y": 500.109375,
+          "documentY": 4227.109375,
+          "width": 44,
+          "height": 44,
+          "transform": "none",
+          "opacity": "1"
+        }
+      },
+      "cycle": [
+        {
+          "step": 1,
+          "afterNext": {
+            "scrollY": 3727,
+            "section": {
+              "x": 0,
+              "y": -61.25,
+              "documentY": 3665.75,
+              "width": 390,
+              "height": 629.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.25,
+              "documentY": 3689.75,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.5,
+              "documentY": 3932.5,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Crossroads on the Forest Farm",
+              "box": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.546875,
+                "documentY": 4015.546875,
+                "width": 350,
+                "height": 183.5625
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 496.109375,
+              "documentY": 4223.109375,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Crossroads on the Forest Farm",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Crossroads on the Forest Farm",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Crossroads on the Forest Farm",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        },
+        {
+          "step": 2,
+          "afterNext": {
+            "scrollY": 3727,
+            "section": {
+              "x": 0,
+              "y": -61.25,
+              "documentY": 3665.75,
+              "width": 390,
+              "height": 629.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.25,
+              "documentY": 3689.75,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.5,
+              "documentY": 3932.5,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Meadowlands Clock & Barn Row",
+              "box": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.546875,
+                "documentY": 4015.546875,
+                "width": 350,
+                "height": 152.96875
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 496.109375,
+              "documentY": 4223.109375,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Meadowlands Clock & Barn Row",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Meadowlands Clock & Barn Row",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Meadowlands Clock & Barn Row",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        },
+        {
+          "step": 3,
+          "afterNext": {
+            "scrollY": 3727,
+            "section": {
+              "x": 0,
+              "y": -61.25,
+              "documentY": 3665.75,
+              "width": 390,
+              "height": 629.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.25,
+              "documentY": 3689.75,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.5,
+              "documentY": 3932.5,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Four Corners Clock Garden",
+              "box": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.546875,
+                "documentY": 4015.546875,
+                "width": 350,
+                "height": 183.5625
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 496.109375,
+              "documentY": 4223.109375,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Four Corners Clock Garden",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Four Corners Clock Garden",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Four Corners Clock Garden",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        },
+        {
+          "step": 4,
+          "afterNext": {
+            "scrollY": 3727,
+            "section": {
+              "x": 0,
+              "y": -61.25,
+              "documentY": 3665.75,
+              "width": 390,
+              "height": 629.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.25,
+              "documentY": 3689.75,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.5,
+              "documentY": 3932.5,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Ten-Year Farm & Clock Garden",
+              "box": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.546875,
+                "documentY": 4015.546875,
+                "width": 350,
+                "height": 152.96875
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 496.109375,
+              "documentY": 4223.109375,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 500.109375,
+              "documentY": 4227.109375,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Ten-Year Farm & Clock Garden",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Ten-Year Farm & Clock Garden",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 3727,
+              "section": {
+                "x": 0,
+                "y": -61.25,
+                "documentY": 3665.75,
+                "width": 390,
+                "height": 629.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.25,
+                "documentY": 3689.75,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.5,
+                "documentY": 3932.5,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Ten-Year Farm & Clock Garden",
+                "box": {
+                  "x": 20,
+                  "y": 205.5,
+                  "documentY": 3932.5,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.546875,
+                  "documentY": 4015.546875,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 496.109375,
+                "documentY": 4223.109375,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 500.109375,
+                "documentY": 4227.109375,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        }
+      ],
+      "afterFourNext": "Ten-Year Farm & Clock Garden",
+      "nextThenPrevious": {
+        "nextCase": "Crossroads on the Forest Farm",
+        "restoredCase": "Ten-Year Farm & Clock Garden",
+        "restoredToInitial": true,
+        "finalGeometry": {
+          "scrollY": 3727,
+          "section": {
+            "x": 0,
+            "y": -61.25,
+            "documentY": 3665.75,
+            "width": 390,
+            "height": 629.359375
+          },
+          "carousel": {
+            "x": 20,
+            "y": -37.25,
+            "documentY": 3689.75,
+            "width": 350,
+            "height": 581.359375
+          },
+          "copyBody": {
+            "x": 20,
+            "y": 205.5,
+            "documentY": 3932.5,
+            "width": 350,
+            "height": 266.609375
+          },
+          "active": {
+            "name": "Ten-Year Farm & Clock Garden",
+            "box": {
+              "x": 20,
+              "y": 205.5,
+              "documentY": 3932.5,
+              "width": 350,
+              "height": 266.609375
+            },
+            "quote": {
+              "x": 20,
+              "y": 288.546875,
+              "documentY": 4015.546875,
+              "width": 350,
+              "height": 152.96875
+            },
+            "transform": "none",
+            "opacity": "1"
+          },
+          "controls": {
+            "x": 20,
+            "y": 496.109375,
+            "documentY": 4223.109375,
+            "width": 350,
+            "height": 48
+          },
+          "previous": {
+            "x": 20,
+            "y": 500.109375,
+            "documentY": 4227.109375,
+            "width": 44,
+            "height": 44,
+            "transform": "none",
+            "opacity": "1"
+          },
+          "next": {
+            "x": 76,
+            "y": 500.109375,
+            "documentY": 4227.109375,
+            "width": 44,
+            "height": 44,
+            "transform": "none",
+            "opacity": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "farm-cases-3",
+      "snapshotActionEvidence": [
+        "            button \"Previous case\" [ref=242]",
+        "            button \"Next case\" [ref=243]"
+      ],
+      "initial": {
+        "scrollY": 4356.5,
+        "section": {
+          "x": 0,
+          "y": -61.390625,
+          "documentY": 4295.109375,
+          "width": 390,
+          "height": 653.359375
+        },
+        "carousel": {
+          "x": 20,
+          "y": -37.390625,
+          "documentY": 4319.109375,
+          "width": 350,
+          "height": 581.359375
+        },
+        "copyBody": {
+          "x": 20,
+          "y": 205.359375,
+          "documentY": 4561.859375,
+          "width": 350,
+          "height": 266.609375
+        },
+        "active": {
+          "name": "Hilltop Terraces",
+          "box": {
+            "x": 20,
+            "y": 205.359375,
+            "documentY": 4561.859375,
+            "width": 350,
+            "height": 266.609375
+          },
+          "quote": {
+            "x": 20,
+            "y": 288.40625,
+            "documentY": 4644.90625,
+            "width": 350,
+            "height": 183.5625
+          },
+          "transform": "none",
+          "opacity": "1"
+        },
+        "controls": {
+          "x": 20,
+          "y": 495.96875,
+          "documentY": 4852.46875,
+          "width": 350,
+          "height": 48
+        },
+        "previous": {
+          "x": 20,
+          "y": 499.96875,
+          "documentY": 4856.46875,
+          "width": 44,
+          "height": 44,
+          "transform": "none",
+          "opacity": "1"
+        },
+        "next": {
+          "x": 76,
+          "y": 499.96875,
+          "documentY": 4856.46875,
+          "width": 44,
+          "height": 44,
+          "transform": "none",
+          "opacity": "1"
+        }
+      },
+      "cycle": [
+        {
+          "step": 1,
+          "afterNext": {
+            "scrollY": 4356.5,
+            "section": {
+              "x": 0,
+              "y": -61.390625,
+              "documentY": 4295.109375,
+              "width": 390,
+              "height": 653.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.390625,
+              "documentY": 4319.109375,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.359375,
+              "documentY": 4561.859375,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Beach Farm Fish-Pond Shore",
+              "box": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.40625,
+                "documentY": 4644.90625,
+                "width": 350,
+                "height": 152.96875
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 495.96875,
+              "documentY": 4852.46875,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Beach Farm Fish-Pond Shore",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Beach Farm Fish-Pond Shore",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Beach Farm Fish-Pond Shore",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        },
+        {
+          "step": 2,
+          "afterNext": {
+            "scrollY": 4356.5,
+            "section": {
+              "x": 0,
+              "y": -61.390625,
+              "documentY": 4295.109375,
+              "width": 390,
+              "height": 653.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.390625,
+              "documentY": 4319.109375,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.359375,
+              "documentY": 4561.859375,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Riverland Island Plots",
+              "box": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.40625,
+                "documentY": 4644.90625,
+                "width": 350,
+                "height": 152.96875
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 495.96875,
+              "documentY": 4852.46875,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Riverland Island Plots",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Riverland Island Plots",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Riverland Island Plots",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 152.96875
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        },
+        {
+          "step": 3,
+          "afterNext": {
+            "scrollY": 4356.5,
+            "section": {
+              "x": 0,
+              "y": -61.390625,
+              "documentY": 4295.109375,
+              "width": 390,
+              "height": 653.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.390625,
+              "documentY": 4319.109375,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.359375,
+              "documentY": 4561.859375,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Four Corners Crop & Pond Zones",
+              "box": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.40625,
+                "documentY": 4644.90625,
+                "width": 350,
+                "height": 183.5625
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 495.96875,
+              "documentY": 4852.46875,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Four Corners Crop & Pond Zones",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Four Corners Crop & Pond Zones",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Four Corners Crop & Pond Zones",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        },
+        {
+          "step": 4,
+          "afterNext": {
+            "scrollY": 4356.5,
+            "section": {
+              "x": 0,
+              "y": -61.390625,
+              "documentY": 4295.109375,
+              "width": 390,
+              "height": 653.359375
+            },
+            "carousel": {
+              "x": 20,
+              "y": -37.390625,
+              "documentY": 4319.109375,
+              "width": 350,
+              "height": 581.359375
+            },
+            "copyBody": {
+              "x": 20,
+              "y": 205.359375,
+              "documentY": 4561.859375,
+              "width": 350,
+              "height": 266.609375
+            },
+            "active": {
+              "name": "Hilltop Terraces",
+              "box": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "quote": {
+                "x": 20,
+                "y": 288.40625,
+                "documentY": 4644.90625,
+                "width": 350,
+                "height": 183.5625
+              },
+              "transform": "none",
+              "opacity": "1"
+            },
+            "controls": {
+              "x": 20,
+              "y": 495.96875,
+              "documentY": 4852.46875,
+              "width": 350,
+              "height": 48
+            },
+            "previous": {
+              "x": 20,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            },
+            "next": {
+              "x": 76,
+              "y": 499.96875,
+              "documentY": 4856.46875,
+              "width": 44,
+              "height": 44,
+              "transform": "none",
+              "opacity": "1"
+            }
+          },
+          "hover": {
+            "before": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Hilltop Terraces",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "hovered": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Hilltop Terraces",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            },
+            "afterPointerLeave": {
+              "scrollY": 4356.5,
+              "section": {
+                "x": 0,
+                "y": -61.390625,
+                "documentY": 4295.109375,
+                "width": 390,
+                "height": 653.359375
+              },
+              "carousel": {
+                "x": 20,
+                "y": -37.390625,
+                "documentY": 4319.109375,
+                "width": 350,
+                "height": 581.359375
+              },
+              "copyBody": {
+                "x": 20,
+                "y": 205.359375,
+                "documentY": 4561.859375,
+                "width": 350,
+                "height": 266.609375
+              },
+              "active": {
+                "name": "Hilltop Terraces",
+                "box": {
+                  "x": 20,
+                  "y": 205.359375,
+                  "documentY": 4561.859375,
+                  "width": 350,
+                  "height": 266.609375
+                },
+                "quote": {
+                  "x": 20,
+                  "y": 288.40625,
+                  "documentY": 4644.90625,
+                  "width": 350,
+                  "height": 183.5625
+                },
+                "transform": "none",
+                "opacity": "1"
+              },
+              "controls": {
+                "x": 20,
+                "y": 495.96875,
+                "documentY": 4852.46875,
+                "width": 350,
+                "height": 48
+              },
+              "previous": {
+                "x": 20,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              },
+              "next": {
+                "x": 76,
+                "y": 499.96875,
+                "documentY": 4856.46875,
+                "width": 44,
+                "height": 44,
+                "transform": "none",
+                "opacity": "1"
+              }
+            }
+          }
+        }
+      ],
+      "afterFourNext": "Hilltop Terraces",
+      "nextThenPrevious": {
+        "nextCase": "Beach Farm Fish-Pond Shore",
+        "restoredCase": "Hilltop Terraces",
+        "restoredToInitial": true,
+        "finalGeometry": {
+          "scrollY": 4356.5,
+          "section": {
+            "x": 0,
+            "y": -61.390625,
+            "documentY": 4295.109375,
+            "width": 390,
+            "height": 653.359375
+          },
+          "carousel": {
+            "x": 20,
+            "y": -37.390625,
+            "documentY": 4319.109375,
+            "width": 350,
+            "height": 581.359375
+          },
+          "copyBody": {
+            "x": 20,
+            "y": 205.359375,
+            "documentY": 4561.859375,
+            "width": 350,
+            "height": 266.609375
+          },
+          "active": {
+            "name": "Hilltop Terraces",
+            "box": {
+              "x": 20,
+              "y": 205.359375,
+              "documentY": 4561.859375,
+              "width": 350,
+              "height": 266.609375
+            },
+            "quote": {
+              "x": 20,
+              "y": 288.40625,
+              "documentY": 4644.90625,
+              "width": 350,
+              "height": 183.5625
+            },
+            "transform": "none",
+            "opacity": "1"
+          },
+          "controls": {
+            "x": 20,
+            "y": 495.96875,
+            "documentY": 4852.46875,
+            "width": 350,
+            "height": 48
+          },
+          "previous": {
+            "x": 20,
+            "y": 499.96875,
+            "documentY": 4856.46875,
+            "width": 44,
+            "height": 44,
+            "transform": "none",
+            "opacity": "1"
+          },
+          "next": {
+            "x": 76,
+            "y": 499.96875,
+            "documentY": 4856.46875,
+            "width": 44,
+            "height": 44,
+            "transform": "none",
+            "opacity": "1"
+          }
+        }
+      }
+    }
+  ],
+  "lastCompletedStage": "farm-cases-3-complete"
+}

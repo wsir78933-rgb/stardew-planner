@@ -32,6 +32,27 @@ describe("save modal copy", () => {
     expect(copy.localProjects.exportedProject("River / 夏季")).toBe('已导出“River / 夏季”。');
     expect(copy.localProjects.importedProject("farm.JSON")).toBe('已导入“farm.JSON”。');
     expect(copy.localProjects.actionFailure("disk full")).toBe("本地项目操作失败：disk full");
+    expect(copy.cloudProjects.signInGoogle).toBe("使用 Google 继续");
+    expect(copy.cloudProjects.signedOut).toBe(
+      "登录后点击保存会自动同步当前项目。已有本地项目需要逐项手动同步。",
+    );
+    expect(copy.cloudProjects.cloudProjectsEmpty).toBe(
+      "保存当前项目时会自动同步。已有本地项目请使用“同步到云端”逐项上传。",
+    );
+    expect(copy.cloudProjects.syncThisProject).toBe("同步到云端");
+    expect(copy.cloudProjects.localSaveRetirementShortCountdown(1, 2, 3)).toBe(
+      "1天 2小时 3分钟",
+    );
+    expect(copy.cloudProjects.localSaveRetirementCountdown(1, 2, 3)).toBe(
+      "本地保存下线倒计时：1天 2小时 3分钟。需要保留的项目请手动同步到云端。",
+    );
+    expect(copy.cloudProjects.localSaveRetirementNotConfigured).toContain("7 天迁移期");
+    expect(copy.cloudProjects.localSaveRetirementEnded).toContain("没有自动删除");
+    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("已同步");
+    expect(copy.cloudProjects.localProjectStatus("conflict")).toBe("需要选择版本");
+    expect(copy.cloudProjects.mapCount(2)).toBe("2 张地图");
+    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe("当前登录账户：Farm Planner。");
+    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain("本地项目会保留");
     expect(copy.saveTools.retryBranch("projects")).toBe("重试加载本地项目");
     expect(copy.deleteProject.descriptionPrefix).toBe("要从此浏览器删除“");
     expect(copy.deleteProject.descriptionSuffix).toBe("”吗？此操作无法撤销。");
@@ -72,6 +93,29 @@ describe("save modal copy", () => {
     expect(copy.localProjects.exportedProject("River Farm")).toBe("Exported River Farm.");
     expect(copy.localProjects.importedProject("farm.JSON")).toBe("Imported farm.JSON.");
     expect(copy.localProjects.actionFailure("disk full")).toBe("Local project action failed: disk full");
+    expect(copy.cloudProjects.signInGoogle).toBe("Continue with Google");
+    expect(copy.cloudProjects.signedOut).toBe(
+      "After signing in, saving the current project syncs it automatically. Sync existing local projects one at a time.",
+    );
+    expect(copy.cloudProjects.cloudProjectsEmpty).toBe(
+      "Your current project syncs when you save it. Use Sync to cloud to upload existing local projects one at a time.",
+    );
+    expect(copy.cloudProjects.syncThisProject).toBe("Sync to cloud");
+    expect(copy.cloudProjects.localSaveRetirementShortCountdown(1, 2, 3)).toBe(
+      "1d 2h 3m",
+    );
+    expect(copy.cloudProjects.localSaveRetirementCountdown(1, 2, 3)).toBe(
+      "Local saving ends in 1d 2h 3m. Sync any project you want to keep.",
+    );
+    expect(copy.cloudProjects.localSaveRetirementNotConfigured).toContain("7-day migration period");
+    expect(copy.cloudProjects.localSaveRetirementEnded).toContain("no data was deleted");
+    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("Synced");
+    expect(copy.cloudProjects.localProjectStatus("pending")).toBe("Waiting to sync");
+    expect(copy.cloudProjects.mapCount(2)).toBe("2 maps");
+    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe("Signed in as Farm Planner.");
+    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain(
+      "local project will stay on this device",
+    );
     expect(copy.saveTools.loadingBranch("projects")).toBe("Loading Local projects…");
     expect(copy.saveTools.retryBranch("projects")).toBe("Retry Local projects");
     expect(copy.saveTools.branchLoadFailure("projects", "import failed")).toBe(

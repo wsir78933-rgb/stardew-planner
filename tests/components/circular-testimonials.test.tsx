@@ -56,6 +56,58 @@ describe("CircularTestimonials", () => {
     }
   });
 
+  it("keeps copy-height reservation disabled by default", () => {
+    const markup = renderToStaticMarkup(
+      createElement(CircularTestimonials, {
+        nextLabel,
+        previousLabel,
+        testimonials,
+      }),
+    );
+
+    expect(markup).not.toContain(
+      "data-circular-testimonials-reserve-copy-height",
+    );
+    expect(
+      markup.match(/data-circular-testimonial-hidden-item="true" hidden=""/g),
+    ).toHaveLength(testimonials.length - 1);
+  });
+
+  it("measures every copy when copy-height reservation is enabled", () => {
+    const markup = renderToStaticMarkup(
+      createElement(CircularTestimonials, {
+        nextLabel,
+        previousLabel,
+        reserveCopyHeight: true,
+        testimonials,
+      }),
+    );
+
+    expect(markup).toContain(
+      'data-circular-testimonials-reserve-copy-height=""',
+    );
+    expect(
+      markup.match(/data-circular-testimonial-hidden-item="true"/g),
+    ).toHaveLength(testimonials.length);
+    expect(
+      markup.match(/data-circular-testimonial-hidden-item="true" hidden=""/g),
+    ).toBeNull();
+    expect(
+      markup.match(
+        /aria-hidden="true" data-circular-testimonial-hidden-item="true"/g,
+      ),
+    ).toHaveLength(testimonials.length);
+    expect(markup).toContain(
+      'data-circular-testimonial-name="true" data-homepage-testimonial-name="true" style="color:#000;font-size:1.5rem"',
+    );
+    expect(markup).toContain(
+      'data-circular-testimonial-designation="true" data-homepage-testimonial-designation="true" style="color:#6b7280;font-size:0.925rem"',
+    );
+    expect(markup).toContain(
+      'data-circular-testimonial-quote="true" data-homepage-testimonial-quote="true" style="color:#4b5563;font-size:1.125rem"',
+    );
+  });
+
   it("fails fast when the testimonial list is empty", () => {
     expect(() =>
       renderToStaticMarkup(

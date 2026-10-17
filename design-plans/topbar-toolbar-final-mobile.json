@@ -1,0 +1,2648 @@
+{
+  "phase": "FINAL_BUILT mobile main acceptance",
+  "status": "completed on fresh final build",
+  "artifact": "fresh production static out served on 127.0.0.1:3007; new CSS link verified in the rendered DOM; no injected stylesheet",
+  "initial": {
+    "viewport": {
+      "url": "http://127.0.0.1:3007/#planner",
+      "title": "Stardew Valley Planner – Free Online Farm Layout Tool",
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "devicePixelRatio": 1,
+      "scrollX": 0,
+      "scrollY": 800.5,
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "documentWidth": 390,
+      "documentClientWidth": 390,
+      "bodyWidth": 390,
+      "bodyClientWidth": 390,
+      "overflowX": false,
+      "fonts": "loaded",
+      "stylesheetLinks": [
+        "http://127.0.0.1:3007/_next/static/chunks/0g8jm8a216-3y.css",
+        "http://127.0.0.1:3007/_next/static/chunks/1eqjce81i12qs.css",
+        "http://127.0.0.1:3007/_next/static/chunks/3c-4zm-h_-t_9.css",
+        "http://127.0.0.1:3007/_next/static/chunks/32nt-jpkc89a-.css"
+      ],
+      "inlineStyles": [
+        {
+          "id": "monica-reading-highlight-style",
+          "dataAttributes": []
+        }
+      ],
+      "activeDialogs": 0
+    },
+    "controls": [
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"help-info\"]",
+        "found": true,
+        "accessibleName": "Help",
+        "role": null,
+        "rect": {
+          "x": 8.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"keyboard-shortcuts\"]",
+        "found": true,
+        "accessibleName": "Keyboard shortcuts",
+        "role": null,
+        "rect": {
+          "x": 56.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"feedback\"]",
+        "found": true,
+        "accessibleName": "Feedback",
+        "role": null,
+        "rect": {
+          "x": 104.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__library-button[data-editor-modal-id=\"save-panel\"]",
+        "found": true,
+        "accessibleName": "Library",
+        "role": null,
+        "rect": {
+          "x": 161.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__map-name[data-editor-modal-id=\"map-picker\"]",
+        "found": true,
+        "accessibleName": "Current map: Standard Farm",
+        "role": null,
+        "rect": {
+          "x": 209.5,
+          "y": 17.53125,
+          "width": 126,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "hidden"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__toggle",
+        "found": true,
+        "accessibleName": "Menu",
+        "role": null,
+        "rect": {
+          "x": 335.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+        "found": true,
+        "accessibleName": "Ambience",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+        "found": true,
+        "accessibleName": "Farm Settings",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+        "found": true,
+        "accessibleName": "Map",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+        "found": true,
+        "accessibleName": "View",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+        "found": true,
+        "accessibleName": "Settings",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .toolbar-wrapper.planner-editor-toolbar[data-planner-toolbar]",
+        "found": true,
+        "accessibleName": null,
+        "role": null,
+        "rect": {
+          "x": 33,
+          "y": 601.03125,
+          "width": 324,
+          "height": 54
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "absolute",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(28, 33, 27)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(28, 33, 27)",
+          "transform": "matrix(1, 0, 0, 1, -162, 0)",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-planner-toolbar] [role=\"toolbar\"][aria-label=\"Editor tools\"]",
+        "found": true,
+        "accessibleName": "Editor tools",
+        "role": "toolbar",
+        "rect": {
+          "x": 33,
+          "y": 601.03125,
+          "width": 324,
+          "height": 54
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(36, 42, 34)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(28, 33, 27)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"cursor\"]",
+        "found": true,
+        "accessibleName": "Select",
+        "role": null,
+        "rect": {
+          "x": 38,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "true",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(177, 58, 40, 0.15)",
+          "borderColor": "rgb(177, 58, 40)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(177, 58, 40)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"multi-select\"]",
+        "found": true,
+        "accessibleName": "Multi",
+        "role": null,
+        "rect": {
+          "x": 81,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"fill\"]",
+        "found": true,
+        "accessibleName": "Fill",
+        "role": null,
+        "rect": {
+          "x": 124,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"erase\"]",
+        "found": true,
+        "accessibleName": "Erase",
+        "role": null,
+        "rect": {
+          "x": 167,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-wheel-zoom-toggle]",
+        "found": true,
+        "accessibleName": "Zoom",
+        "role": null,
+        "rect": {
+          "x": 210,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-history-action=\"undo\"]",
+        "found": true,
+        "accessibleName": "Undo",
+        "role": null,
+        "rect": {
+          "x": 261,
+          "y": 606.03125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": true
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-history-action=\"redo\"]",
+        "found": true,
+        "accessibleName": "Redo",
+        "role": null,
+        "rect": {
+          "x": 308,
+          "y": 606.03125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": true
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      }
+    ],
+    "testStyleCount": 0
+  },
+  "interactions": [
+    {
+      "label": "Help",
+      "route": "direct topbar",
+      "phase": "opened",
+      "heading": "Help & Info",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": null
+    },
+    {
+      "label": "Help",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Help"
+      },
+      "menuExpandedAfterClose": null
+    },
+    {
+      "label": "Keyboard shortcuts",
+      "route": "direct topbar",
+      "phase": "opened",
+      "heading": "Keyboard Shortcuts",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": null
+    },
+    {
+      "label": "Keyboard shortcuts",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Keyboard shortcuts"
+      },
+      "menuExpandedAfterClose": null
+    },
+    {
+      "label": "Feedback (open only)",
+      "route": "direct topbar",
+      "phase": "opened",
+      "heading": "Send feedback",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": null
+    },
+    {
+      "label": "Feedback (open only)",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Feedback"
+      },
+      "menuExpandedAfterClose": null
+    },
+    {
+      "label": "Library (open only)",
+      "route": "direct topbar",
+      "phase": "opened",
+      "heading": "Library",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": null
+    },
+    {
+      "label": "Library (open only)",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Library"
+      },
+      "menuExpandedAfterClose": null
+    },
+    {
+      "label": "Current map name",
+      "route": "direct topbar",
+      "phase": "opened",
+      "heading": "Choose map",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": null
+    },
+    {
+      "label": "Current map name",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Current map: Standard Farm"
+      },
+      "menuExpandedAfterClose": null
+    },
+    {
+      "label": "Ambience",
+      "route": "mobile Menu option",
+      "phase": "opened",
+      "heading": "Ambience",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": "false"
+    },
+    {
+      "label": "Ambience",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BODY",
+        "ariaLabel": null
+      },
+      "menuExpandedAfterClose": "false"
+    },
+    {
+      "label": "Farm Settings",
+      "route": "mobile Menu option",
+      "phase": "opened",
+      "heading": "Farm Settings",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": "false"
+    },
+    {
+      "label": "Farm Settings",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Menu"
+      },
+      "menuExpandedAfterClose": "false"
+    },
+    {
+      "label": "Map",
+      "route": "mobile Menu option",
+      "phase": "opened",
+      "heading": "Choose map",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": "false"
+    },
+    {
+      "label": "Map",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BUTTON",
+        "ariaLabel": "Menu"
+      },
+      "menuExpandedAfterClose": "false"
+    },
+    {
+      "label": "View",
+      "route": "mobile Menu option",
+      "phase": "opened",
+      "heading": "View",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": "false"
+    },
+    {
+      "label": "View",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BODY",
+        "ariaLabel": null
+      },
+      "menuExpandedAfterClose": "false"
+    },
+    {
+      "label": "Settings",
+      "route": "mobile Menu option",
+      "phase": "opened",
+      "heading": "Settings",
+      "visibleDialogCount": 1,
+      "trigger": {
+        "ariaExpanded": "true",
+        "backgroundColor": "rgb(237, 245, 227)",
+        "borderColor": "rgb(28, 33, 27)",
+        "boxShadow": "none"
+      },
+      "menuExpandedAfterOpen": "false"
+    },
+    {
+      "label": "Settings",
+      "phase": "closed",
+      "activeDialogs": 0,
+      "triggerExpanded": "false",
+      "focus": {
+        "tagName": "BODY",
+        "ariaLabel": null
+      },
+      "menuExpandedAfterClose": "false"
+    },
+    {
+      "label": "Select multi-select",
+      "phase": "selected",
+      "selectedTools": [
+        "multi-select"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Restore Select after multi-select",
+      "phase": "restored",
+      "selectedTools": [
+        "cursor"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Select fill",
+      "phase": "selected",
+      "selectedTools": [
+        "fill"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Restore Select after fill",
+      "phase": "restored",
+      "selectedTools": [
+        "cursor"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Select erase",
+      "phase": "selected",
+      "selectedTools": [
+        "erase"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Restore Select after erase",
+      "phase": "restored",
+      "selectedTools": [
+        "cursor"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Toggle Zoom",
+      "phase": "changed",
+      "before": {
+        "pressed": "false",
+        "title": null
+      },
+      "after": {
+        "pressed": "true",
+        "title": null
+      }
+    },
+    {
+      "label": "Restore Zoom",
+      "phase": "restored",
+      "state": {
+        "pressed": "false",
+        "title": null
+      }
+    },
+    {
+      "label": "Pointer-select Multi",
+      "phase": "selected",
+      "selectedTools": [
+        "multi-select"
+      ],
+      "canvasChanged": false
+    },
+    {
+      "label": "Restore Select after pointer sample",
+      "phase": "restored",
+      "selectedTools": [
+        "cursor"
+      ],
+      "canvasChanged": false
+    }
+  ],
+  "menuOpenSamples": [
+    {
+      "beforeSelecting": "Ambience",
+      "state": {
+        "menuExpanded": "true",
+        "menuButton": {
+          "rect": {
+            "x": 305.6171875,
+            "y": 17.53125,
+            "width": 44,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        "options": [
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+            "accessibleName": "Ambience",
+            "rect": {
+              "x": 231.5,
+              "y": 80.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+            "accessibleName": "Farm Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 130.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+            "accessibleName": "Map",
+            "rect": {
+              "x": 231.5,
+              "y": 180.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+            "accessibleName": "View",
+            "rect": {
+              "x": 231.5,
+              "y": 230.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+            "accessibleName": "Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 280.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          }
+        ],
+        "documentWidth": 390,
+        "documentClientWidth": 390,
+        "overflowX": false
+      }
+    },
+    {
+      "beforeSelecting": "Farm Settings",
+      "state": {
+        "menuExpanded": "true",
+        "menuButton": {
+          "rect": {
+            "x": 305.6171875,
+            "y": 17.53125,
+            "width": 44,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        "options": [
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+            "accessibleName": "Ambience",
+            "rect": {
+              "x": 231.5,
+              "y": 80.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+            "accessibleName": "Farm Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 130.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+            "accessibleName": "Map",
+            "rect": {
+              "x": 231.5,
+              "y": 180.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+            "accessibleName": "View",
+            "rect": {
+              "x": 231.5,
+              "y": 230.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+            "accessibleName": "Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 280.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          }
+        ],
+        "documentWidth": 390,
+        "documentClientWidth": 390,
+        "overflowX": false
+      }
+    },
+    {
+      "beforeSelecting": "Map",
+      "state": {
+        "menuExpanded": "true",
+        "menuButton": {
+          "rect": {
+            "x": 305.6171875,
+            "y": 17.53125,
+            "width": 44,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        "options": [
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+            "accessibleName": "Ambience",
+            "rect": {
+              "x": 231.5,
+              "y": 80.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+            "accessibleName": "Farm Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 130.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+            "accessibleName": "Map",
+            "rect": {
+              "x": 231.5,
+              "y": 180.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+            "accessibleName": "View",
+            "rect": {
+              "x": 231.5,
+              "y": 230.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+            "accessibleName": "Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 280.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          }
+        ],
+        "documentWidth": 390,
+        "documentClientWidth": 390,
+        "overflowX": false
+      }
+    },
+    {
+      "beforeSelecting": "View",
+      "state": {
+        "menuExpanded": "true",
+        "menuButton": {
+          "rect": {
+            "x": 305.6171875,
+            "y": 17.53125,
+            "width": 44,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        "options": [
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+            "accessibleName": "Ambience",
+            "rect": {
+              "x": 231.5,
+              "y": 80.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+            "accessibleName": "Farm Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 130.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+            "accessibleName": "Map",
+            "rect": {
+              "x": 231.5,
+              "y": 180.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+            "accessibleName": "View",
+            "rect": {
+              "x": 231.5,
+              "y": 230.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+            "accessibleName": "Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 280.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          }
+        ],
+        "documentWidth": 390,
+        "documentClientWidth": 390,
+        "overflowX": false
+      }
+    },
+    {
+      "beforeSelecting": "Settings",
+      "state": {
+        "menuExpanded": "true",
+        "menuButton": {
+          "rect": {
+            "x": 305.6171875,
+            "y": 17.53125,
+            "width": 44,
+            "height": 44
+          },
+          "backgroundColor": "rgb(237, 245, 227)",
+          "boxShadow": "none"
+        },
+        "options": [
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+            "accessibleName": "Ambience",
+            "rect": {
+              "x": 231.5,
+              "y": 80.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+            "accessibleName": "Farm Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 130.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+            "accessibleName": "Map",
+            "rect": {
+              "x": 231.5,
+              "y": 180.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+            "accessibleName": "View",
+            "rect": {
+              "x": 231.5,
+              "y": 230.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          },
+          {
+            "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+            "accessibleName": "Settings",
+            "rect": {
+              "x": 231.5,
+              "y": 280.03125,
+              "width": 140,
+              "height": 44
+            },
+            "display": "flex",
+            "backgroundColor": "rgb(241, 247, 231)",
+            "boxShadow": "none"
+          }
+        ],
+        "documentWidth": 390,
+        "documentClientWidth": 390,
+        "overflowX": false
+      }
+    }
+  ],
+  "checks": {
+    "history": [
+      {
+        "action": "undo",
+        "disabled": true,
+        "boxShadow": "none"
+      },
+      {
+        "action": "redo",
+        "disabled": true,
+        "boxShadow": "none"
+      }
+    ],
+    "historyDisabled": true,
+    "pointerActive": {
+      "matchesActive": true,
+      "ariaPressed": "false",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "borderColor": "rgb(28, 33, 27)",
+      "boxShadow": "none"
+    },
+    "focusVisible": {
+      "tagName": "BUTTON",
+      "ariaLabel": "Multi",
+      "dataEditorTool": "multi-select",
+      "matchesFocusVisible": true,
+      "outlineStyle": "solid",
+      "outlineWidth": "2px",
+      "outlineColor": "rgb(201, 251, 69)"
+    },
+    "tooltipSettled": {
+      "matchesHover": true,
+      "content": "\"Select and move items (V)\"",
+      "opacity": "1",
+      "visibility": "visible",
+      "boxShadow": "rgba(0, 0, 0, 0.3) 0px 6px 16px 0px"
+    },
+    "stateRestored": true,
+    "noHorizontalOverflow": true,
+    "mobileMenuRestoredCollapsed": true,
+    "finalSelectedTool": "cursor",
+    "finalZoomPressed": "false",
+    "screenshot": {
+      "status": "captured",
+      "path": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/topbar-toolbar-final-mobile.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "transientFocusCleared": true,
+      "restoredState": {
+        "selectedTools": [
+          "cursor"
+        ],
+        "menuExpanded": "false",
+        "activeDialogs": 0
+      }
+    }
+  },
+  "final": {
+    "viewport": {
+      "url": "http://127.0.0.1:3007/#planner",
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "devicePixelRatio": 1,
+      "scrollX": 0,
+      "scrollY": 800.5,
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "documentWidth": 390,
+      "documentClientWidth": 390,
+      "bodyWidth": 390,
+      "bodyClientWidth": 390,
+      "overflowX": false,
+      "fonts": "loaded",
+      "activeDialogs": 0,
+      "menuExpanded": "false",
+      "selectedTools": [
+        "cursor"
+      ],
+      "zoomPressed": "false",
+      "width": 390,
+      "height": 844
+    },
+    "controls": [
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar",
+        "found": true,
+        "ariaLabel": "Editor navigation",
+        "role": null,
+        "rect": {
+          "x": 2.5,
+          "y": 12.03125,
+          "width": 385,
+          "height": 56
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "absolute",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgb(36, 42, 34)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(28, 33, 27)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"help-info\"]",
+        "found": true,
+        "ariaLabel": "Help",
+        "role": null,
+        "rect": {
+          "x": 8.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"keyboard-shortcuts\"]",
+        "found": true,
+        "ariaLabel": "Keyboard shortcuts",
+        "role": null,
+        "rect": {
+          "x": 56.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"feedback\"]",
+        "found": true,
+        "ariaLabel": "Feedback",
+        "role": null,
+        "rect": {
+          "x": 104.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__library-button",
+        "found": true,
+        "ariaLabel": "Library",
+        "role": null,
+        "rect": {
+          "x": 161.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__map-name",
+        "found": true,
+        "ariaLabel": "Current map: Standard Farm",
+        "role": null,
+        "rect": {
+          "x": 209.5,
+          "y": 17.53125,
+          "width": 126,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "hidden"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__toggle",
+        "found": true,
+        "ariaLabel": "Menu",
+        "role": null,
+        "rect": {
+          "x": 335.5,
+          "y": 17.53125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__controls",
+        "found": true,
+        "ariaLabel": "Editor options",
+        "role": "group",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": "false",
+          "disabled": false
+        },
+        "computed": {
+          "display": "none",
+          "position": "absolute",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(28, 33, 27)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(28, 33, 27)",
+          "transform": "none",
+          "overflowX": "auto"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+        "found": true,
+        "ariaLabel": "Ambience",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+        "found": true,
+        "ariaLabel": "Farm Settings",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+        "found": true,
+        "ariaLabel": "Map",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+        "found": true,
+        "ariaLabel": "View",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+        "found": true,
+        "ariaLabel": "Settings",
+        "role": null,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "state": {
+          "pressed": null,
+          "expanded": "false",
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-planner-toolbar]",
+        "found": true,
+        "ariaLabel": null,
+        "role": null,
+        "rect": {
+          "x": 33,
+          "y": 601.03125,
+          "width": 324,
+          "height": 54
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "absolute",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(28, 33, 27)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(28, 33, 27)",
+          "transform": "matrix(1, 0, 0, 1, -162, 0)",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [role=\"toolbar\"]",
+        "found": true,
+        "ariaLabel": "Editor tools",
+        "role": "toolbar",
+        "rect": {
+          "x": 33,
+          "y": 601.03125,
+          "width": 324,
+          "height": 54
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgb(241, 247, 231)",
+          "borderColor": "rgb(36, 42, 34)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(28, 33, 27)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"cursor\"]",
+        "found": true,
+        "ariaLabel": "Select",
+        "role": null,
+        "rect": {
+          "x": 38,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "true",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(177, 58, 40, 0.15)",
+          "borderColor": "rgb(177, 58, 40)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(177, 58, 40)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"multi-select\"]",
+        "found": true,
+        "ariaLabel": "Multi",
+        "role": null,
+        "rect": {
+          "x": 81,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "solid",
+          "outlineWidth": "2px",
+          "outlineColor": "rgb(201, 251, 69)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"fill\"]",
+        "found": true,
+        "ariaLabel": "Fill",
+        "role": null,
+        "rect": {
+          "x": 124,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-tool=\"erase\"]",
+        "found": true,
+        "ariaLabel": "Erase",
+        "role": null,
+        "rect": {
+          "x": 167,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-wheel-zoom-toggle]",
+        "found": true,
+        "ariaLabel": "Zoom",
+        "role": null,
+        "rect": {
+          "x": 210,
+          "y": 606.03125,
+          "width": 40,
+          "height": 44
+        },
+        "state": {
+          "pressed": "false",
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": false
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-history-action=\"undo\"]",
+        "found": true,
+        "ariaLabel": "Undo",
+        "role": null,
+        "rect": {
+          "x": 261,
+          "y": 606.03125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": true
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      },
+      {
+        "selector": ".planner-editor-shell [data-editor-history-action=\"redo\"]",
+        "found": true,
+        "ariaLabel": "Redo",
+        "role": null,
+        "rect": {
+          "x": 308,
+          "y": 606.03125,
+          "width": 44,
+          "height": 44
+        },
+        "state": {
+          "pressed": null,
+          "expanded": null,
+          "dataExpanded": null,
+          "disabled": true
+        },
+        "computed": {
+          "display": "flex",
+          "position": "static",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgb(93, 102, 89)",
+          "boxShadow": "none",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(93, 102, 89)",
+          "transform": "none",
+          "overflowX": "visible"
+        }
+      }
+    ]
+  },
+  "geometryDeltaFromBaseline": [
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar",
+      "baseline": {
+        "x": 2.5,
+        "y": 12.03125,
+        "width": 385,
+        "height": 56
+      },
+      "final": {
+        "x": 2.5,
+        "y": 12.03125,
+        "width": 385,
+        "height": 56
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"help-info\"]",
+      "baseline": {
+        "x": 8.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 8.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"keyboard-shortcuts\"]",
+      "baseline": {
+        "x": 56.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 56.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__utility-button[data-editor-modal-id=\"feedback\"]",
+      "baseline": {
+        "x": 104.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 104.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__library-button",
+      "baseline": {
+        "x": 161.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 161.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__map-name",
+      "baseline": {
+        "x": 209.5,
+        "y": 17.53125,
+        "width": 126,
+        "height": 44
+      },
+      "final": {
+        "x": 209.5,
+        "y": 17.53125,
+        "width": 126,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__toggle",
+      "baseline": {
+        "x": 335.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 335.5,
+        "y": 17.53125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__controls",
+      "baseline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "final": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"ambience-panel\"]",
+      "baseline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "final": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"farm-settings\"]",
+      "baseline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "final": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"map-picker\"]",
+      "baseline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "final": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"view-panel\"]",
+      "baseline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "final": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell .editor-menu-bar__button[data-editor-modal-id=\"settings-panel\"]",
+      "baseline": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "final": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-planner-toolbar]",
+      "baseline": {
+        "x": 33,
+        "y": 601.03125,
+        "width": 324,
+        "height": 54
+      },
+      "final": {
+        "x": 33,
+        "y": 601.03125,
+        "width": 324,
+        "height": 54
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [role=\"toolbar\"]",
+      "baseline": {
+        "x": 33,
+        "y": 601.03125,
+        "width": 324,
+        "height": 54
+      },
+      "final": {
+        "x": 33,
+        "y": 601.03125,
+        "width": 324,
+        "height": 54
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-editor-tool=\"cursor\"]",
+      "baseline": {
+        "x": 38,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "final": {
+        "x": 38,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-editor-tool=\"multi-select\"]",
+      "baseline": {
+        "x": 81,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "final": {
+        "x": 81,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-editor-tool=\"fill\"]",
+      "baseline": {
+        "x": 124,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "final": {
+        "x": 124,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-editor-tool=\"erase\"]",
+      "baseline": {
+        "x": 167,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "final": {
+        "x": 167,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-wheel-zoom-toggle]",
+      "baseline": {
+        "x": 210,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "final": {
+        "x": 210,
+        "y": 606.03125,
+        "width": 40,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-editor-history-action=\"undo\"]",
+      "baseline": {
+        "x": 261,
+        "y": 606.03125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 261,
+        "y": 606.03125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    },
+    {
+      "selector": ".planner-editor-shell [data-editor-history-action=\"redo\"]",
+      "baseline": {
+        "x": 308,
+        "y": 606.03125,
+        "width": 44,
+        "height": 44
+      },
+      "final": {
+        "x": 308,
+        "y": 606.03125,
+        "width": 44,
+        "height": 44
+      },
+      "delta": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "pageScrollAdjustedYDelta": 0
+    }
+  ],
+  "screenshot": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/topbar-toolbar-final-mobile.png"
+}

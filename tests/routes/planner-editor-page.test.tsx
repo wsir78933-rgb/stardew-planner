@@ -566,7 +566,7 @@ describe("planner editor page", () => {
       ["en", {
         groupTitles: ["Planner", "Explore", "Legal"],
         description:
-          "A browser-local fan-made tool for planning Stardew Valley farm layouts.",
+          "A browser-based fan-made farm planner with local projects and optional cloud sync for selected layouts.",
         privacyHref: "/privacy",
         termsHref: "/terms",
         contactHref: "/contact",
@@ -575,7 +575,7 @@ describe("planner editor page", () => {
       }],
       ["zh-CN", {
         groupTitles: ["规划器", "探索", "法律"],
-        description: "在浏览器中本地规划《星露谷物语》农场布局的玩家工具。",
+        description: "用于规划《星露谷物语》农场布局的浏览器玩家工具，支持本地项目和可选的所选布局云端同步。",
         privacyHref: "/zh/privacy",
         termsHref: "/zh/terms",
         contactHref: "/zh/contact",

@@ -1,0 +1,316 @@
+# Editor chrome flat UI verification evidence
+
+Scope: read-only verification of the approved CSS-only editor chrome changes. No product/source files were written by this verifier.
+
+## Baseline
+Command: pwd
+Exit status: 0
+Raw output (exec_command combined stream):
+/Users/wusir/Desktop/开发项目集合/stardew planner
+
+Command: git rev-parse HEAD
+Exit status: 0
+Raw output (exec_command combined stream):
+d5b6874d0d12ad8f53b2217a32bfc9c0f62e488c
+
+Command: git status --short --branch
+Exit status: 0
+Raw output (exec_command combined stream):
+## main...origin/main [ahead 2]
+ M app/globals.css
+?? design-plans/editor-chrome-flat-buttons.md
+?? design-plans/editor-chrome-flat-review.md
+?? design-plans/topbar-toolbar-baseline-desktop.json
+?? design-plans/topbar-toolbar-baseline-desktop.png
+?? design-plans/topbar-toolbar-baseline-mobile.json
+?? design-plans/topbar-toolbar-baseline-mobile.png
+?? design-plans/topbar-toolbar-coverage.json
+
+Command: git diff --name-only
+Exit status: 0
+Raw output (exec_command combined stream):
+app/globals.css
+
+
+## Pre-check scope and hashes
+Command: git diff -- app/globals.css
+Exit status: 0
+Raw output (exec_command combined stream):
+diff --git a/app/globals.css b/app/globals.css
+index cbbcf4c..f700e48 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -5285,11 +5285,16 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
+ }
+ 
+ /* Approved planner wireframe: one header and a bottom editing toolbar.
+- * Colours and pressed shadows remain those of the existing editor. */
++ * State colours remain those of the existing editor. */
+ .planner-editor-shell {
+   --planner-topbar-height: 38px;
+   --planner-editing-toolbar-width: 324px;
+ }
++.planner-editor-shell .editor-menu-bar,
++.planner-editor-shell .editor-toolbar {
++  --planner-neo-raised-shadow: none;
++  --planner-neo-inset-shadow: none;
++}
+ .planner-editor-shell .editor-menu-bar {
+   align-items: center;
+   flex-direction: row;
+@@ -5335,7 +5340,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
+ .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { bottom: 18px; left: 50%; max-width: calc(100% - 24px); top: auto; }
+ .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: calc(50% + 170px); max-width: calc(100% - 364px); }
+ .planner-editor-shell:has(.item-catalog-panel--left) .catalog-placement-controls { left: calc(50% + 170px); }
+-.planner-editor-shell .editor-toolbar { box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
++.planner-editor-shell .editor-toolbar { border-color: var(--border-subtle); box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
+ .planner-editor-shell .editor-toolbar__tool-group,
+ .planner-editor-shell .editor-toolbar__history-group,
+ .planner-editor-shell .editor-wheel-zoom-group { display: contents; }
+
+Command: shasum -a 256 app/globals.css src/components/editor-menu-bar.tsx src/components/editor-toolbar.tsx package.json tsconfig.json tsconfig.workers.json
+Exit status: 0
+Raw output (exec_command combined stream):
+98698d6538f7007cade7badc07fff26df0a1b3ba219cf1571ce551da6ddd620f  app/globals.css
+76bcfe2e593b3ff41928123d9f6ad3019290100dd4d073e1b7c19b314575ab82  src/components/editor-menu-bar.tsx
+654783730a6332c760967e774588091f629fcd08f90ea41af0a1f52db9055c03  src/components/editor-toolbar.tsx
+97424c230527db08835de4151107132ae0d6d8c5d74d750dcf4772361fb7f63f  package.json
+ae4adf495d9d99b9b4e461ca08e1e33a40340136c6af23425608d9dae4433204  tsconfig.json
+739406da1d522aebf44192cdbd5854b20f73a272e4ae267b6d436a5677885cba  tsconfig.workers.json
+
+
+## Validation gates
+Command: pnpm typecheck
+Exit status: 0
+Raw output (exec_command combined stream):
+
+> @ typecheck /Users/wusir/Desktop/开发项目集合/stardew planner
+> tsc --noEmit --incremental false && tsc --project tsconfig.workers.json --noEmit --incremental false
+
+
+Command: pnpm exec vitest run tests/components/editor-controls.test.tsx tests/components/editor-shell.test.tsx tests/components/planner-workspace-layout.test.tsx tests/components/editor-modal-content-style-contract.test.ts tests/components/editor-modal-viewport-style-contract.test.ts tests/components/save-modal-style-contract.test.ts tests/components/circular-testimonials.test.tsx
+Exit status: 0
+Raw output (exec_command combined stream):
+
+ RUN  v3.2.4 /Users/wusir/Desktop/开发项目集合/stardew planner
+
+ ✓ tests/components/save-modal-style-contract.test.ts (5 tests) 3ms
+ ✓ tests/components/editor-modal-viewport-style-contract.test.ts (2 tests) 2ms
+ ✓ tests/components/editor-modal-content-style-contract.test.ts (4 tests) 3ms
+ ✓ tests/components/circular-testimonials.test.tsx (5 tests) 28ms
+ ✓ tests/components/editor-controls.test.tsx (26 tests) 65ms
+ ✓ tests/components/editor-shell.test.tsx (17 tests) 34ms
+ ✓ tests/components/planner-workspace-layout.test.tsx (19 tests) 119ms
+
+ Test Files  7 passed (7)
+      Tests  78 passed (78)
+   Start at  07:13:42
+   Duration  1.89s (transform 1.13s, setup 0ms, collect 3.37s, tests 254ms, environment 1ms, prepare 671ms)
+
+
+Command: pnpm build
+Exit status: 0
+Raw output (exec_command combined stream):
+
+> @ build /Users/wusir/Desktop/开发项目集合/stardew planner
+> next build
+
+▲ Next.js 16.3.0 (Turbopack)
+✓ Running next.config.ts took 15ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1575ms
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/68) ...
+  Generating static pages using 11 workers (17/68) 
+  Generating static pages using 11 workers (34/68) 
+  Generating static pages using 11 workers (51/68) 
+✓ Generating static pages using 11 workers (68/68) in 507ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├   /[slug]
+│ ├ ● /carpenter-stardew
+│ ├ ● /where-is-robin-stardew-valley
+│ ├ ● /stardew-valley-npc
+│ └ ● [+23 more paths]
+├ ○ /blog
+├ ○ /blog/archive
+├ ○ /contact
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+├ ○ /terms
+├ ○ /zh
+├   /zh/[slug]
+│ ├ ● /zh/carpenter-stardew
+│ ├ ● /zh/where-is-robin-stardew-valley
+│ ├ ● /zh/stardew-valley-npc
+│ └ ● [+23 more paths]
+├ ○ /zh/blog
+├ ○ /zh/blog/archive
+├ ○ /zh/contact
+├ ○ /zh/privacy
+└ ○ /zh/terms
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+
+Command: git diff --check
+Exit status: 0
+Raw output (exec_command combined stream):
+[no output]
+
+## Static preview service after build
+Command: ps -p 15566 -o pid=,ppid=,command=
+Exit status: 0
+Raw output (exec_command combined stream):
+15566 15565 node ./node_modules/.bin/../.pnpm/serve@14.2.6/node_modules/serve/build/main.js out --listen tcp://127.0.0.1:3007 --no-port-switching --no-clipboard
+
+Command: lsof -nP -a -p 15566 -d cwd -Fn
+Exit status: 0
+Raw output (exec_command combined stream):
+p15566
+fcwd
+n/Users/wusir/Desktop/开发项目集合/stardew planner
+
+Command: lsof -nP -iTCP:3007 -sTCP:LISTEN
+Exit status: 0
+Raw output (exec_command combined stream):
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    15566 wusir   12u  IPv4 0x8e69f0b4798323b4      0t0  TCP 127.0.0.1:3007 (LISTEN)
+
+Command: curl -fsS -o /dev/null -w 'HTTP %{http_code}\n' http://127.0.0.1:3007/
+Exit status: 0
+Raw output (exec_command combined stream):
+HTTP 200
+
+Command: curl -fsS http://127.0.0.1:3007/ | rg -o 'href="[^"]+\.css[^"]*"'
+Exit status: 0
+Raw output (exec_command combined stream):
+href="/_next/static/chunks/0g8jm8a216-3y.css"
+href="/_next/static/chunks/1eqjce81i12qs.css"
+
+
+## Post-build hashes and repository status
+Command: shasum -a 256 app/globals.css src/components/editor-menu-bar.tsx src/components/editor-toolbar.tsx package.json tsconfig.json tsconfig.workers.json
+Exit status: 0
+Raw output (exec_command combined stream):
+98698d6538f7007cade7badc07fff26df0a1b3ba219cf1571ce551da6ddd620f  app/globals.css
+76bcfe2e593b3ff41928123d9f6ad3019290100dd4d073e1b7c19b314575ab82  src/components/editor-menu-bar.tsx
+654783730a6332c760967e774588091f629fcd08f90ea41af0a1f52db9055c03  src/components/editor-toolbar.tsx
+97424c230527db08835de4151107132ae0d6d8c5d74d750dcf4772361fb7f63f  package.json
+ae4adf495d9d99b9b4e461ca08e1e33a40340136c6af23425608d9dae4433204  tsconfig.json
+739406da1d522aebf44192cdbd5854b20f73a272e4ae267b6d436a5677885cba  tsconfig.workers.json
+
+Command: git status --short --branch
+Exit status: 0
+Raw output (exec_command combined stream):
+## main...origin/main [ahead 2]
+ M app/globals.css
+?? design-plans/editor-chrome-flat-buttons.md
+?? design-plans/editor-chrome-flat-review.md
+?? design-plans/topbar-toolbar-baseline-desktop.json
+?? design-plans/topbar-toolbar-baseline-desktop.png
+?? design-plans/topbar-toolbar-baseline-mobile.json
+?? design-plans/topbar-toolbar-baseline-mobile.png
+?? design-plans/topbar-toolbar-coverage.json
+
+
+## Impeccable detector (single invocation)
+The detector reports eight global warnings at lines 109, 1270, 2255, 3272, 3481, 3512, 3916, and 3917; all are outside this change, whose diff is limited to the planner editor chrome near lines 5285–5340. The detector exit code is 2 and its complete raw output follows.
+Command: node /Users/wusir/.codex/skills/designer-skill/references/external-skills/impeccable/scripts/detect.mjs --json app/globals.css
+Exit status: 2
+Raw output (exec_command combined stream):
+[
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 3481,
+    "snippet": "border-left: 18px solid var(--bg-raised)"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 3512,
+    "snippet": "border-right: 18px solid var(--bg-raised)"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 3916,
+    "snippet": "border-left: 18px solid var(--bg-raised)"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 3917,
+    "snippet": "border-right: 18px solid var(--bg-raised)"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 109,
+    "snippet": "font-family: Arial"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 1270,
+    "snippet": "font-family: Arial"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 2255,
+    "snippet": "font-family: Arial"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/Users/wusir/Desktop/开发项目集合/stardew planner/app/globals.css",
+    "line": 3272,
+    "snippet": "font-family: Arial"
+  }
+]
+
+

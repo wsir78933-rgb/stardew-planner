@@ -1,0 +1,474 @@
+# Unified dialog buttons verification evidence
+
+## Preflight baseline
+
+Command: git rev-parse HEAD
+stdout:
+b861eaf3bf292b926b1ea62348fa798e8f4a32b9
+stderr: (empty)
+exit: 0
+
+Command: git status --short --branch
+stdout:
+## main...origin/main [ahead 1]
+ M src/auth/planner-auth-client.ts
+ M src/cloud-sync/cloud-project-client.ts
+ M src/cloud-sync/use-cloud-project-sync.ts
+ M src/components/cloud-project-panel.tsx
+ M tests/cloud-sync/cloud-project-contract.test.ts
+ M tests/components/cloud-project-panel.test.tsx
+ M tests/components/planner-save-modal-content.test.tsx
+ M tests/workers/cloud-project-api.test.ts
+?? design-plans/unified-dialog-buttons.md
+?? src/cloud-sync/cloud-project-sync.ts
+stderr: (empty)
+exit: 0
+
+Package scripts read from package.json: test=vitest; typecheck=tsc --noEmit; build=next build. Read command exit: 0.
+
+Baseline notes:
+- The existing plan is design-plans/unified-dialog-buttons.md.
+- Concurrent cloud-sync changes are present in the baseline above and must be preserved.
+- No product source changes were present in the baseline; app/globals.css was absent from git status.
+- This file is the only permitted write for this verification task.
+
+## Prepared validation commands (not run; waiting for CSS_READY)
+
+1. pnpm exec vitest run tests/components/editor-modal.test.tsx tests/components/editor-shell.test.tsx tests/components/planner-save-modal-loader.test.tsx tests/components/farm-summary-panel.test.tsx tests/components/save-modal-style-contract.test.ts tests/components/editor-modal-content-style-contract.test.ts tests/components/editor-modal-viewport-style-contract.test.ts
+2. pnpm typecheck
+3. pnpm build (run only after typecheck completes)
+4. git diff --check
+
+No validation command has run yet. Stdout, stderr, exit status, and test totals will be appended for each command after authorization to verify the stable CSS state.
+
+## Generated type-file baseline before build
+
+Command: cat next-env.d.ts
+stdout:
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/dev/types/routes.d.ts";
+import "./.next/dev/types/root-params.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+stderr: (empty)
+exit: 0
+
+Command: git diff -- next-env.d.ts
+stdout: (empty)
+stderr: (empty)
+exit: 0
+
+The browser QA agent owns the desktop/mobile browser checks. After the build, compare next-env.d.ts with this baseline and report any generated type-path changes; do not edit or restore it.
+
+## Validation after CSS_READY
+
+The exec_command tool exposes one combined output field, so stdout and stderr are captured together below and cannot be separated reliably.
+
+Command: pnpm exec vitest run tests/components/editor-modal.test.tsx tests/components/editor-shell.test.tsx tests/components/planner-save-modal-loader.test.tsx tests/components/farm-summary-panel.test.tsx tests/components/save-modal-style-contract.test.ts tests/components/editor-modal-content-style-contract.test.ts tests/components/editor-modal-viewport-style-contract.test.ts
+tool output:
+ RUN  v3.2.4 /Users/wusir/Desktop/开发项目集合/stardew planner
+
+ ✓ tests/components/save-modal-style-contract.test.ts (5 tests) 2ms
+ ✓ tests/components/editor-modal-viewport-style-contract.test.ts (2 tests) 2ms
+ ✓ tests/components/editor-modal-content-style-contract.test.ts (4 tests) 4ms
+ ✓ tests/components/planner-save-modal-loader.test.tsx (5 tests) 12ms
+ ✓ tests/components/farm-summary-panel.test.tsx (5 tests) 8ms
+ ✓ tests/components/editor-modal.test.tsx (22 tests) 43ms
+ ✓ tests/components/editor-shell.test.tsx (17 tests) 28ms
+
+ Test Files  7 passed (7)
+      Tests  60 passed (60)
+   Start at  23:04:15
+   Duration  1.28s (transform 749ms, setup 0ms, collect 1.94s, tests 99ms, environment 1ms, prepare 619ms)
+exit: 0
+Totals: 7 files passed, 60 tests passed, 0 failed.
+
+Command: pnpm typecheck
+tool output:
+> @ typecheck /Users/wusir/Desktop/开发项目集合/stardew planner
+> tsc --noEmit
+
+src/components/farm-summary-modal.tsx(153,24): error TS2345: Argument of type 'HTMLAnchorElement' is not assignable to parameter of type 'string | Response | ReadableStream<any>'.
+  Type 'HTMLAnchorElement' is missing the following properties from type 'Response': headers, ok, redirected, status, and 12 more.
+src/components/planner-save-modal-content.tsx(12,37): error TS2307: Cannot find module '@/cloud-sync/use-cloud-project-sync' or its corresponding type declarations.
+src/contact/contact-form.tsx(179,28): error TS2345: Argument of type 'HTMLScriptElement' is not assignable to parameter of type 'string | Response | ReadableStream<any>'.
+  Type 'HTMLScriptElement' is missing the following properties from type 'Response': headers, ok, redirected, status, and 12 more.
+src/contact/planner-feedback-form.tsx(316,28): error TS2345: Argument of type 'HTMLScriptElement' is not assignable to parameter of type 'string | Response | ReadableStream<any>'.
+  Type 'HTMLScriptElement' is missing the following properties from type 'Response': headers, ok, redirected, status, and 12 more.
+src/game-save/stardew-save-xml.ts(651,3): error TS2322: Type 'ChildNode[]' is not assignable to type 'readonly Element[]'.
+  Type 'ChildNode' is missing the following properties from type 'Element': attributes, classList, className, clientHeight, and 132 more.
+src/game-save/stardew-save-xml.ts(652,31): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'Element' is not assignable to type 'ChildNode'.
+    Types of property 'after' are incompatible.
+      Type '(content: string | Response | ReadableStream<any>, options?: ContentOptions | undefined) => Element' is not assignable to type '(...nodes: (string | Node)[]) => void'.
+        Types of parameters 'content' and 'nodes' are incompatible.
+          Type 'string | Node' is not assignable to type 'string | Response | ReadableStream<any>'.
+            Type 'Node' is not assignable to type 'string | Response | ReadableStream<any>'.
+src/tmx/parse-tmx-map.ts(501,3): error TS2322: Type 'ChildNode[]' is not assignable to type 'Element[]'.
+  Type 'ChildNode' is missing the following properties from type 'Element': attributes, classList, className, clientHeight, and 132 more.
+src/tmx/parse-tmx-map.ts(502,31): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'Element' is not assignable to type 'ChildNode'.
+    Types of property 'after' are incompatible.
+      Type '(content: string | Response | ReadableStream<any>, options?: ContentOptions | undefined) => Element' is not assignable to type '(...nodes: (string | Node)[]) => void'.
+        Types of parameters 'content' and 'nodes' are incompatible.
+          Type 'string | Node' is not assignable to type 'string | Response | ReadableStream<any>'.
+            Type 'Node' is not assignable to type 'string | Response | ReadableStream<any>'.
+tests/auth/planner-auth-client.test.ts(54,61): error TS2558: Expected 0 type arguments, but got 1.
+tests/cloud-sync/cloud-project-client.test.ts(66,7): error TS2558: Expected 0 type arguments, but got 1.
+tests/workers/cloud-project-api.test.ts(84,14): error TS2352: Conversion of type '{ bind(...values: unknown[]): ...; first<Row = Record<string, unknown>>(): Promise<Row | null>; all<Row = Record<string, unknown>>(): Promise<{ success: true; results: Row[]; meta: { duration: number; ... 5 more ...; changes: number; }; }>; run<Row = Record<...>>(): Promise<...>; raw<Row = unknown[]>(): Promise<...>...' to type 'D1PreparedStatement' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  The types returned by 'raw(...)' are incompatible between these types.
+    Type 'Promise<any[]>' is not comparable to type 'Promise<[string[], ...any[]]>'.
+      Type 'any[]' is not comparable to type '[string[], ...any[]]'.
+        Source provides no match for required element at position 0 in target.
+workers/planner-auth.ts(163,7): error TS18048: 'environment.BETTER_AUTH_SECRET' is possibly 'undefined'.
+workers/planner-auth.ts(166,49): error TS18048: 'environment.BETTER_AUTH_SECRET' is possibly 'undefined'.
+workers/planner-auth.ts(171,5): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+workers/planner-auth.ts(178,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+workers/planner-auth.ts(194,7): error TS2322: Type 'D1Database | undefined' is not assignable to type 'D1Database'.
+  Type 'undefined' is not assignable to type 'D1Database'.
+workers/planner-auth.ts(195,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+workers/planner-auth.ts(196,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+workers/planner-auth.ts(197,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+workers/planner-auth.ts(204,3): error TS2322: Type 'Auth<{ baseURL: string; basePath: string; secret: string; database: D1Database; trustedOrigins: string[]; socialProviders: { google: { clientId: string; clientSecret: string; }; }; advanced: { ...; }; }>' is not assignable to type 'Auth<BetterAuthOptions>'.
+  Types of property '$context' are incompatible.
+    Type 'Promise<PluginContext<{ baseURL: string; basePath: string; secret: string; database: D1Database; trustedOrigins: string[]; socialProviders: { clientId: string; clientSecret: string; }; advanced: { ...; }; }> & InfoContext & { ...; }>' is not assignable to type 'Promise<PluginContext<BetterAuthOptions> & InfoContext & { options: BetterAuthOptions; trustedOrigins: string[]; ... 25 more ...; runInBackgroundOrAwait: (promise: void | Promise<...>) => unknown; }>'.
+      Type 'PluginContext<{ baseURL: string; basePath: string; secret: string; database: D1Database; trustedOrigins: string[]; socialProviders: { clientId: string; clientSecret: string; }; advanced: { ...; }; }> & InfoContext & { ...; }' is not assignable to type 'PluginContext<BetterAuthOptions> & InfoContext & { options: BetterAuthOptions; trustedOrigins: string[]; ... 25 more ...; runInBackgroundOrAwait: (promise: void | Promise<...>) => unknown; }'.
+        Type 'PluginContext<{ baseURL: string; basePath: string; secret: string; database: D1Database; trustedOrigins: string[]; socialProviders: { clientId: string; clientSecret: string; }; advanced: { ...; }; }> & InfoContext & { ...; }' is not assignable to type '{ options: BetterAuthOptions; trustedOrigins: string[]; trustedProviders: string[]; isTrustedOrigin: (url: string, settings?: { allowRelativePaths: boolean; } | undefined) => boolean; ... 23 more ...; runInBackgroundOrAwait: (promise: void | Promise<...>) => unknown; }'.
+          Types of property 'adapter' are incompatible.
+            Type 'DBAdapter<{ baseURL: string; basePath: string; secret: string; database: D1Database; trustedOrigins: string[]; socialProviders: { google: { clientId: string; clientSecret: string; }; }; advanced: { ...; } }>' is not assignable to type 'DBAdapter<BetterAuthOptions>'.
+              Type 'BetterAuthOptions' is not assignable to type '{ baseURL: string; basePath: string; secret: string; database: D1Database; trustedOrigins: string[]; socialProviders: { clientId: string; clientSecret: string; }; advanced: { ...; } }'.
+                Types of property 'baseURL' are incompatible.
+                  Type 'BaseURLConfig | undefined' is not assignable to type 'string'.
+                    Type 'undefined' is not assignable to type 'string'.
+ ELIFECYCLE  Command failed with exit code 2.
+exit: 2
+Unrelated/baseline limitations: Several diagnostics are in concurrent auth/cloud-sync files or depend on current type declarations; this run alone does not establish whether they predate the CSS change. No fixes made.
+
+Command: pnpm build
+tool output:
+> @ build /Users/wusir/Desktop/开发项目集合/stardew planner
+> next build
+
+▲ Next.js 16.3.0 (Turbopack)
+✓ Running next.config.ts took 107ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 error:
+./src/components/planner-save-modal-content.tsx:12:1
+Error: Module not found: Can't resolve '@/cloud-sync/use-cloud-project-sync'
+  10 | import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace-controller";
+  11 | import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
+> 12 | import { useCloudProjectSync } from "@/cloud-sync/use-cloud-project-sync";
+     | ^
+  13 | import { CloudProjectPanel } from "./cloud-project-panel";
+  14 |
+  15 | type PlannerSaveModalContentProperties = Readonly<{
+
+Import map: aliased to relative './cloud-sync/use-cloud-project-sync' inside of [project]/
+
+Import trace:
+  Client Component Browser:
+    ./src/components/planner-save-modal-content.tsx [Client Component Browser]
+    ./src/components/planner-save-modal-loader.tsx [Client Component Browser]
+    ./src/components/planner-workspace.tsx [Client Component Browser]
+    ./src/components/react-planner-host.tsx [Client Component Browser]
+    ./src/components/homepage-planner-slot.tsx [Client Component Browser]
+    ./src/components/homepage-planner-slot.tsx [Server Component]
+    ./src/components/planner-homepage.tsx [Server Component]
+    ./app/zh/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./src/components/planner-save-modal-content.tsx:12:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+ ELIFECYCLE  Command failed with exit code 1
+exit: 1
+
+Command: git diff --check
+stdout: (empty)
+stderr: (empty)
+exit: 0
+
+## Build output and generated next-env comparison
+
+Command: cat next-env.d.ts after build
+stdout:
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/dev/types/routes.d.ts";
+import "./.next/dev/types/root-params.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+stderr: (empty)
+exit: 0
+
+Command: git diff -- next-env.d.ts after build
+stdout: (empty)
+stderr: (empty)
+exit: 0
+
+Command: ls -l src/cloud-sync/use-cloud-project-sync.ts after build
+stdout:
+-rw-r--r--@ 1 wusir  staff  43136 Oct 15 23:04 src/cloud-sync/use-cloud-project-sync.ts
+stderr: (empty)
+exit: 0
+
+Command: git status --short --branch after build
+stdout:
+## main...origin/main [ahead 1]
+ M app/globals.css
+ M src/auth/planner-auth-client.ts
+ M src/cloud-sync/cloud-project-client.ts
+ M src/cloud-sync/use-cloud-project-sync.ts
+ M src/components/cloud-project-panel.module.css
+ M src/components/cloud-project-panel.tsx
+ M src/i18n/save-modal-copy.ts
+ M tests/cloud-sync/cloud-project-contract.test.ts
+ M tests/components/cloud-project-panel.test.tsx
+ M tests/components/planner-save-modal-content.test.tsx
+ M tests/i18n/save-modal-copy.test.ts
+ M tests/workers/cloud-project-api.test.ts
+?? design-plans/unified-buttons-checks.log
+?? design-plans/unified-dialog-buttons.md
+?? src/cloud-sync/cloud-project-sync.ts
+?? src/cloud-sync/local-save-retirement.ts
+?? tests/auth/
+?? tests/cloud-sync/cloud-project-client.test.ts
+?? tests/cloud-sync/cloud-project-sync.test.ts
+?? tests/cloud-sync/local-save-retirement.test.ts
+stderr: (empty)
+exit: 0
+
+No validation or source file was rerun or modified after this evidence was written.
+
+## Attempt 2: typecheck and expanded focused tests
+
+Run after both frontend and Worker type-isolation changes were ready. The exec_command tool exposes one combined output field; no separate stderr channel is available.
+
+Command: pnpm typecheck
+tool output:
+
+> @ typecheck /Users/wusir/Desktop/开发项目集合/stardew planner
+> tsc --noEmit --incremental false && tsc --project tsconfig.workers.json --noEmit --incremental false
+exit: 0
+Result: browser TypeScript program and Worker TypeScript program both passed.
+
+Command: pnpm exec vitest run tests/components/editor-modal.test.tsx tests/components/editor-shell.test.tsx tests/components/planner-save-modal-loader.test.tsx tests/components/farm-summary-panel.test.tsx tests/components/save-modal-style-contract.test.ts tests/components/editor-modal-content-style-contract.test.ts tests/components/editor-modal-viewport-style-contract.test.ts tests/auth/planner-auth-client.test.ts tests/cloud-sync/cloud-project-client.test.ts tests/workers/planner-auth.test.ts tests/workers/cloud-project-api.test.ts
+tool output:
+
+ RUN  v3.2.4 /Users/wusir/Desktop/开发项目集合/stardew planner
+
+ ✓ tests/components/editor-modal-content-style-contract.test.ts (4 tests) 4ms
+ ✓ tests/components/save-modal-style-contract.test.ts (5 tests) 2ms
+ ✓ tests/components/editor-modal-viewport-style-contract.test.ts (2 tests) 3ms
+ ✓ tests/auth/planner-auth-client.test.ts (4 tests) 10ms
+ ✓ tests/cloud-sync/cloud-project-client.test.ts (5 tests) 9ms
+ ✓ tests/components/planner-save-modal-loader.test.tsx (5 tests) 7ms
+ ✓ tests/components/farm-summary-panel.test.tsx (5 tests) 11ms
+ ✓ tests/workers/cloud-project-api.test.ts (10 tests) 92ms
+ ✓ tests/workers/planner-auth.test.ts (4 tests) 6ms
+ ✓ tests/components/editor-modal.test.tsx (22 tests) 51ms
+ ✓ tests/components/editor-shell.test.tsx (17 tests) 34ms
+
+ Test Files  11 passed (11)
+      Tests  83 passed (83)
+   Start at  23:16:27
+   Duration  1.47s (transform 1.06s, setup 0ms, collect 3.29s, tests 231ms, environment 1ms, prepare 972ms)
+exit: 0
+Totals: 11 files passed, 83 tests passed, 0 failed.
+
+Command: cat next-env.d.ts before Attempt 2 build
+stdout:
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/types/routes.d.ts";
+import "./.next/types/root-params.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+stderr: (empty)
+exit: 0
+
+Command: git diff -- next-env.d.ts before Attempt 2 build
+stdout:
+diff --git a/next-env.d.ts b/next-env.d.ts
+index a419cbe..ce4e94a 100644
+--- a/next-env.d.ts
++++ b/next-env.d.ts
+@@ -1,7 +1,7 @@
+ /// <reference types="next" />
+ /// <reference types="next/image-types/global" />
+-import "./.next/dev/types/routes.d.ts";
+-import "./.next/dev/types/root-params.d.ts";
++import "./.next/types/routes.d.ts";
++import "./.next/types/root-params.d.ts";
+ 
+ // NOTE: This file should not be edited
+ // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+stderr: (empty)
+exit: 0
+
+Pre-build observation: these generated route-type imports changed between the previous post-build read and Attempt 2; preserve current bytes and re-read after this build.
+
+Command: pnpm build
+tool output:
+
+> @ build /Users/wusir/Desktop/开发项目集合/stardew planner
+> next build
+
+▲ Next.js 16.3.0 (Turbopack)
+✓ Running next.config.ts took 65ms
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1875ms
+  Running TypeScript ...
+  Finished TypeScript in 2.6s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/68) ...
+  Generating static pages using 11 workers (17/68)
+  Generating static pages using 11 workers (34/68)
+  Generating static pages using 11 workers (51/68)
+✓ Generating static pages using 11 workers (68/68) in 549ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├   /[slug]
+│ ├ ● /carpenter-stardew
+│ ├ ● /where-is-robin-stardew-valley
+│ ├ ● /stardew-valley-npc
+│ └ ● [+23 more paths]
+├ ○ /blog
+├ ○ /blog/archive
+├ ○ /contact
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+├ ○ /terms
+├ ○ /zh
+├   /zh/[slug]
+│ ├ ● /zh/carpenter-stardew
+│ ├ ● /where-is-robin-stardew-valley
+│ └ ● [+23 more paths]
+├ ○ /zh/blog
+├ ○ /zh/blog/archive
+├ ○ /zh/contact
+├ ○ /zh/privacy
+├ ○ /zh/terms
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+stderr: no separate stderr channel exposed by exec_command
+exit: 0
+
+Command: git diff --check
+tool output: (empty)
+stderr: no separate stderr channel exposed by exec_command
+exit: 0
+
+Command: cat next-env.d.ts after Attempt 2 build
+tool output:
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/types/routes.d.ts";
+import "./.next/types/root-params.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+stderr: no separate stderr channel exposed by exec_command
+exit: 0
+
+Command: git diff -- next-env.d.ts after Attempt 2 build
+tool output:
+diff --git a/next-env.d.ts b/next-env.d.ts
+index a419cbe..ce4e94a 100644
+--- a/next-env.d.ts
++++ b/next-env.d.ts
+@@ -1,7 +1,7 @@
+ /// <reference types="next" />
+ /// <reference types="next/image-types/global" />
+-import "./.next/dev/types/routes.d.ts";
+-import "./.next/dev/types/root-params.d.ts";
++import "./.next/types/routes.d.ts";
++import "./.next/types/root-params.d.ts";
+ 
+ // NOTE: This file should not be edited
+ // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+stderr: no separate stderr channel exposed by exec_command
+exit: 0
+
+Command: git status --short --branch after Attempt 2
+tool output:
+## main...origin/main [ahead 1]
+ M app/globals.css
+ M docs/cloud-sync.md
+ M next-env.d.ts
+ M package.json
+ M src/auth/planner-auth-client.ts
+ M src/cloud-sync/cloud-project-client.ts
+ M src/cloud-sync/cloud-project-link-store.ts
+ M src/cloud-sync/use-cloud-project-sync.ts
+ M src/components/cloud-project-panel.module.css
+ M src/components/cloud-project-panel.tsx
+ M src/components/planner-save-modal-content.tsx
+ M src/i18n/save-modal-copy.ts
+ M src/legal/legal-page-copy.ts
+ M tests/cloud-sync/cloud-project-contract.test.ts
+ M tests/components/cloud-project-panel.test.tsx
+ M tests/components/planner-save-modal-content.test.tsx
+ M tests/i18n/save-modal-copy.test.ts
+ M tests/legal/legal-page-copy.test.ts
+ M tests/workers/cloud-project-api.test.ts
+ M tests/workers/contact-worker-configuration.test.ts
+ M tsconfig.json
+ M worker-configuration.d.ts
+ M workers/cloud-project-api.ts
+ M workers/planner-auth.ts
+ M wrangler.jsonc
+?? design-plans/homepage-case-study-moonfall.png
+?? design-plans/unified-build-fixes-review.md
+?? design-plans/unified-buttons-checks.log
+?? design-plans/unified-buttons-desktop-ambience.png
+?? design-plans/unified-buttons-desktop-farm-settings.png
+?? design-plans/unified-buttons-desktop-library.png
+?? design-plans/unified-buttons-review.md
+?? design-plans/unified-buttons-worker-types.md
+?? design-plans/unified-dialog-buttons.md
+?? src/cloud-sync/cloud-project-sync.ts
+?? src/cloud-sync/local-save-retirement.ts
+?? tests/auth/
+?? tests/cloud-sync/cloud-project-client.test.ts
+?? tests/cloud-sync/cloud-project-link-store.test.ts
+?? tests/cloud-sync/cloud-project-sync.test.ts
+?? tests/cloud-sync/local-save-retirement.test.ts
+?? tests/cloud-sync/use-cloud-project-sync.test.ts
+?? tsconfig.workers.json
+stderr: no separate stderr channel exposed by exec_command
+exit: 0
+
+Command: git diff --numstat -- app/globals.css
+tool output:
+41	0	app/globals.css
+stderr: no separate stderr channel exposed by exec_command
+exit: 0
+
+Attempt 2 build-after notes:
+- Build succeeded after Next internal TypeScript and all 68 static pages completed.
+- The next-env.d.ts contents and diff were identical to the pre-build state for Attempt 2. Its imports remain .next/types/... and differ from HEAD, but I did not modify or restore the generated file.
+- app/globals.css remains 41 additions and 0 deletions at this check.

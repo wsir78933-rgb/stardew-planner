@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(32);
+  expect(canonicalPublicPaths).toHaveLength(33);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -166,8 +166,20 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/how-to-harvest-stardew-valley")).toBe(
     "/zh/how-to-harvest-stardew-valley",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(64);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(62);
+  expect(
+    getLocalizedPublicPath("en", "/how-to-get-gold-star-crops-stardew-valley"),
+  ).toBe("/how-to-get-gold-star-crops-stardew-valley");
+  expect(
+    getLocalizedPublicPath("zh-CN", "/how-to-get-gold-star-crops-stardew-valley"),
+  ).toBe("/zh/how-to-get-gold-star-crops-stardew-valley");
+  expect(getLocalizedPublicPath("en", "/house-upgrade-stardew")).toBe(
+    "/house-upgrade-stardew",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
+    "/zh/house-upgrade-stardew",
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(66);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(64);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -225,6 +237,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/oak-tree-vs-maple-stardew");
   expect(indexablePathnames).toContain("/how-to-harvest-stardew-valley");
   expect(indexablePathnames).toContain("/zh/how-to-harvest-stardew-valley");
+  expect(indexablePathnames).toContain("/how-to-get-gold-star-crops-stardew-valley");
+  expect(indexablePathnames).toContain(
+    "/zh/how-to-get-gold-star-crops-stardew-valley",
+  );
+  expect(indexablePathnames).toContain("/house-upgrade-stardew");
+  expect(indexablePathnames).toContain("/zh/house-upgrade-stardew");
 });
 
 it("registers the direct-entry blog routes", () => {
@@ -256,6 +274,8 @@ it("registers the direct-entry blog routes", () => {
       "/stardew-fruit",
       "/oak-tree-vs-maple-stardew",
       "/how-to-harvest-stardew-valley",
+      "/how-to-get-gold-star-crops-stardew-valley",
+      "/house-upgrade-stardew",
     ]),
   );
 });

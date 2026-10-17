@@ -93,21 +93,30 @@ export function ReactPlannerHostWorkspace({
   locale,
   performanceMarker,
   plannerHostStartup,
+  onAlignPlanner,
 }: Readonly<{
   locale: HomepageLocale;
   performanceMarker: ReturnType<typeof createEditorPerformanceMarker>;
   plannerHostStartup: PlannerWorkspaceStartup;
+  onAlignPlanner?: () => void;
 }>) {
   return (
     <PlannerWorkspace
       locale={locale}
+      onAlignPlanner={onAlignPlanner}
       performanceMarker={performanceMarker}
       startup={plannerHostStartup}
     />
   );
 }
 
-export function ReactPlannerHost({ locale }: Readonly<{ locale: HomepageLocale }>) {
+export function ReactPlannerHost({
+  locale,
+  onAlignPlanner,
+}: Readonly<{
+  locale: HomepageLocale;
+  onAlignPlanner?: () => void;
+}>) {
   const [performanceMarker] = useState(createEditorPerformanceMarker);
   const [plannerHostStartup, setPlannerHostStartup] =
     useState<PlannerWorkspaceStartup | null>(null);
@@ -135,6 +144,7 @@ export function ReactPlannerHost({ locale }: Readonly<{ locale: HomepageLocale }
 
   return <ReactPlannerHostWorkspace
     locale={locale}
+    onAlignPlanner={onAlignPlanner}
     performanceMarker={performanceMarker}
     plannerHostStartup={plannerHostStartup}
   />;

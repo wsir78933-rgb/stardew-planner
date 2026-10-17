@@ -2588,6 +2588,38 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
     display: none;
   }
 
+  [data-public-page-shell] [data-public-page-header] > nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  [data-public-page-shell] [data-public-page-brand] {
+    flex: 0 0 max-content;
+    max-width: none;
+    overflow: visible;
+  }
+
+  [data-public-page-shell] [data-public-page-brand] > img {
+    flex: 0 0 1.75rem;
+  }
+
+  [data-public-page-shell] [data-public-page-header] > nav > [data-slot="dock"] {
+    flex: 1 1 max-content;
+    min-width: 0;
+  }
+
+  [data-public-page-shell] [data-public-page-header] > nav > [data-slot="dock"] > div {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  [data-public-page-shell] [data-public-page-navigation-links],
+  [data-public-page-shell] [data-public-page-header-actions] {
+    flex: 0 0 auto;
+  }
+
   [data-public-page-shell] > [data-site-footer] {
     gap: 1.75rem;
     grid-template-columns: minmax(0, 1fr);
@@ -5253,10 +5285,15 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 }
 
 /* Approved planner wireframe: one header and a bottom editing toolbar.
- * Colours and pressed shadows remain those of the existing editor. */
+ * State colours remain those of the existing editor. */
 .planner-editor-shell {
   --planner-topbar-height: 38px;
   --planner-editing-toolbar-width: 324px;
+}
+.planner-editor-shell .editor-menu-bar,
+.planner-editor-shell .editor-toolbar {
+  --planner-neo-raised-shadow: none;
+  --planner-neo-inset-shadow: none;
 }
 .planner-editor-shell .editor-menu-bar {
   align-items: center;
@@ -5303,7 +5340,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { bottom: 18px; left: 50%; max-width: calc(100% - 24px); top: auto; }
 .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: calc(50% + 170px); max-width: calc(100% - 364px); }
 .planner-editor-shell:has(.item-catalog-panel--left) .catalog-placement-controls { left: calc(50% + 170px); }
-.planner-editor-shell .editor-toolbar { box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
+.planner-editor-shell .editor-toolbar { border-color: var(--border-subtle); box-sizing: border-box; gap: 3px; height: 52px; justify-content: space-between; max-width: 100%; padding: 5px; width: var(--planner-editing-toolbar-width); }
 .planner-editor-shell .editor-toolbar__tool-group,
 .planner-editor-shell .editor-toolbar__history-group,
 .planner-editor-shell .editor-wheel-zoom-group { display: contents; }
@@ -5347,6 +5384,11 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-config-section { background: var(--bg-raised); border-radius: 10px; padding: 10px; position: relative; }
 .planner-editor-shell .editor-config-section h3 { color: var(--text-dim); font-size: 12px; font-weight: 600; letter-spacing: .08em; margin: 0 0 10px; text-transform: uppercase; }
 .planner-editor-shell .editor-config-switch { align-items: center; background: transparent; border: 0; box-shadow: none; display: flex; font-size: 12.5px; font-weight: 500; gap: 8px; min-height: 42px; padding: 5px 0; text-align: left; width: 100%; }
+.planner-editor-shell .editor-modal button.editor-config-switch { background: transparent; border: 0; box-shadow: none; }
+.planner-editor-shell .editor-modal button.editor-config-switch:hover:not(:disabled) { background: var(--accent-muted); }
+.planner-editor-shell .editor-modal button.editor-config-switch:active:not(:disabled),
+.planner-editor-shell .editor-modal button.editor-config-switch[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .editor-modal button.editor-config-switch:disabled { box-shadow: none; }
 .planner-editor-shell .editor-config-switch__label { flex: 1; }
 .planner-editor-shell .editor-config-switch__state { color: var(--text-dim); font-size: 12px; }
 .planner-editor-shell .editor-config-switch__track { background: var(--bg-deep); border: 1px solid var(--border-subtle); border-radius: 99px; box-shadow: var(--planner-neo-inset-shadow); flex: 0 0 34px; height: 20px; padding: 1px; }
@@ -5366,6 +5408,47 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-config-chips button[aria-pressed="true"],
 .planner-editor-shell .editor-config-segmented button[aria-pressed="true"],
 .planner-editor-shell .editor-config-seasons button[aria-pressed="true"] { background: var(--accent-muted); box-shadow: var(--planner-neo-inset-shadow); color: var(--text); }
+.planner-editor-shell .planner-save-modal-loader__branches button,
+.planner-editor-shell .editor-config-chips button,
+.planner-editor-shell .editor-config-segmented button,
+.planner-editor-shell .editor-config-seasons button,
+.planner-editor-shell .farm-summary-panel > button {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: none;
+}
+.planner-editor-shell .planner-save-modal-loader__branches button:hover:not(:disabled),
+.planner-editor-shell .editor-config-chips button:hover:not(:disabled),
+.planner-editor-shell .editor-config-segmented button:hover:not(:disabled),
+.planner-editor-shell .editor-config-seasons button:hover:not(:disabled),
+.planner-editor-shell .farm-summary-panel > button:hover:not(:disabled) {
+  background: var(--bg-raised);
+  border-color: var(--border-subtle);
+}
+.planner-editor-shell .planner-save-modal-loader__branches button[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .editor-config-chips button[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .editor-config-segmented button[aria-pressed="true"]:not(:disabled),
+.planner-editor-shell .editor-config-seasons button[aria-pressed="true"]:not(:disabled) {
+  background: var(--accent-muted);
+  border-color: var(--accent);
+  box-shadow: none;
+}
+.planner-editor-shell .planner-save-modal-loader__branches button:active:not(:disabled),
+.planner-editor-shell .editor-config-chips button:active:not(:disabled),
+.planner-editor-shell .editor-config-segmented button:active:not(:disabled),
+.planner-editor-shell .editor-config-seasons button:active:not(:disabled),
+.planner-editor-shell .farm-summary-panel > button:active:not(:disabled) {
+  box-shadow: none;
+}
+.planner-editor-shell .planner-save-modal-loader__branches button:disabled,
+.planner-editor-shell .editor-config-chips button:disabled,
+.planner-editor-shell .editor-config-segmented button:disabled,
+.planner-editor-shell .editor-config-seasons button:disabled,
+.planner-editor-shell .farm-summary-panel > button:disabled {
+  background: var(--bg-surface);
+  border-color: var(--border-subtle);
+  box-shadow: none;
+}
 .planner-editor-shell .editor-config-label { font-size: 12.5px; margin: 0 0 8px; }
 .planner-editor-shell .editor-config-legal { color: var(--text-dim); font-size: 12px; padding: 0 10px; }
 .planner-editor-shell .editor-config-legal a { display: inline-flex; min-height: 26px; align-items: center; }
@@ -5556,6 +5639,28 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-ho
   display: none;
 }
 
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy-body][data-circular-testimonials-reserve-copy-height] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy-body][data-circular-testimonials-reserve-copy-height] > [data-circular-testimonial-active],
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy-body][data-circular-testimonials-reserve-copy-height] > [data-circular-testimonials-hidden-copy] {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy-body][data-circular-testimonials-reserve-copy-height] > [data-circular-testimonials-hidden-copy] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  visibility: hidden;
+}
+
+body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-copy-body][data-circular-testimonials-reserve-copy-height] [data-circular-testimonial-hidden-item] {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonial-name] {
   font-size: clamp(1.15rem, 2vw, 1.5rem);
   line-height: 1.2;
@@ -5605,12 +5710,8 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-ho
   min-height: 44px;
   min-width: 44px;
   padding: 0;
-  transition: transform 180ms ease, background-color 180ms ease;
+  transition: background-color 180ms ease;
   width: 44px;
-}
-
-body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] button:hover {
-  transform: translateY(-0.1rem);
 }
 
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[data-homepage-case-study-group] [data-circular-testimonials-controls] button:focus-visible {

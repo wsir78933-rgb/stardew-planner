@@ -52,6 +52,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('href="/oak-tree-vs-maple-stardew"');
   expect(indexMarkup).toContain('href="/how-to-harvest-stardew-valley"');
+  expect(indexMarkup).toContain('href="/how-to-get-gold-star-crops-stardew-valley"');
   expect(indexMarkup).toContain('href="/house-upgrade-stardew"');
   expect(indexMarkup).toContain('href="/profit-margin-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
@@ -89,6 +90,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/best-spring-crop-stardew"');
   expect(indexMarkup).toContain('href="/zh/oak-tree-vs-maple-stardew"');
   expect(indexMarkup).toContain('href="/zh/how-to-harvest-stardew-valley"');
+  expect(indexMarkup).toContain('href="/zh/how-to-get-gold-star-crops-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/house-upgrade-stardew"');
   expect(indexMarkup).toContain('href="/zh/profit-margin-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
@@ -636,6 +638,78 @@ it("renders the paired oak and maple article routes with locked metadata and one
     title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
     description:
       "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
+  });
+});
+
+it("renders the paired gold-star crops routes with frozen metadata, canonical paths, and one page-level heading", async () => {
+  const slug = "how-to-get-gold-star-crops-stardew-valley";
+  const englishParameters = { params: Promise.resolve({ slug }) };
+  const chineseParameters = { params: Promise.resolve({ slug }) };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain(
+    "how to get gold star crops stardew valley",
+  );
+  expect(chineseMarkup).toContain(
+    "星露谷物语如何种出金星作物",
+  );
+  expect(englishMarkup).toContain(
+    "<h2>Gold Star Crops in Stardew Valley: FAQ</h2>",
+  );
+  expect(chineseMarkup).toContain(
+    "<h2>星露谷物语金星作物常见问题</h2>",
+  );
+  expect(englishMarkup.match(/class="blog-faq-item"/g) ?? []).toHaveLength(5);
+  expect(chineseMarkup.match(/class="blog-faq-item"/g) ?? []).toHaveLength(5);
+  expect(englishMarkup.match(/data-blog-planner-cta="true"/g) ?? []).toHaveLength(1);
+  expect(chineseMarkup.match(/data-blog-planner-cta="true"/g) ?? []).toHaveLength(1);
+  expect(englishMarkup).toContain("<h2>Sources</h2>");
+  expect(chineseMarkup).toContain("<h2>来源</h2>");
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect(englishMarkup).toContain(
+    'src="/blog/illustrations/how-to-get-gold-star-crops-stardew-valley-quality-odds-en.webp"',
+  );
+  expect(chineseMarkup).toContain(
+    'src="/blog/illustrations/how-to-get-gold-star-crops-stardew-valley-quality-odds-zh-CN.webp"',
+  );
+  expect(englishMarkup).toContain(
+    'alt="Horizontal bar chart comparing exact-Gold chances: at Farming 5, no fertilizer is 11.0%, Basic Fertilizer is 22.7%, Quality Fertilizer is 34.3%, and Deluxe Fertilizer is 35.4%. A separate Quality Fertilizer result at Farming 8 with Farmer’s Lunch active at harvest is 50.3%."',
+  );
+  expect(chineseMarkup).toContain(
+    'alt="横向条形图比较恰好金星（不含铱星）的概率，横轴范围为0–60%。耕种5级时，不施肥为11.0%，初级肥料为22.7%，高级肥料为34.3%，顶级肥料为35.4%。图中另列一条高级肥料数据：农夫午餐在收获时生效、耕种等级达到8时，概率为50.3%。"',
+  );
+  expect((englishMarkup.match(/<figure class="blog-article-media"/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<figure class="blog-article-media"/g) ?? [])).toHaveLength(1);
+  expect(englishMarkup).toContain('width="1100"');
+  expect(englishMarkup).toContain('height="1100"');
+  expect(chineseMarkup).toContain('width="1100"');
+  expect(chineseMarkup).toContain('height="1100"');
+  expect(englishMarkup).toContain('<figcaption class="whitespace-pre-line">');
+  expect(chineseMarkup).toContain('<figcaption class="whitespace-pre-line">');
+
+  await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
+    title: "how to get gold star crops stardew valley",
+    description:
+      "Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.",
+    alternates: {
+      canonical:
+        "https://stardewvalleyplanner.art/how-to-get-gold-star-crops-stardew-valley",
+    },
+  });
+  await expect(generateChineseBlogPostMetadata(chineseParameters)).resolves.toMatchObject({
+    title: "星露谷物语如何种出金星作物",
+    description:
+      "选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。",
+    alternates: {
+      canonical:
+        "https://stardewvalleyplanner.art/zh/how-to-get-gold-star-crops-stardew-valley",
+    },
   });
 });
 

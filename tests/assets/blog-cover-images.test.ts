@@ -54,6 +54,20 @@ const year1GoldArticleMediaExpectations = [
     expectedDimensions: { height: 941, width: 1672 },
   },
 ] as const;
+const goldStarCropsArticleMediaExpectations = [
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath:
+      "blog/illustrations/how-to-get-gold-star-crops-stardew-valley-quality-odds-en.webp",
+    expectedDimensions: { height: 1100, width: 1100 },
+  },
+  {
+    maximumByteCount: 400 * 1024,
+    relativeImagePath:
+      "blog/illustrations/how-to-get-gold-star-crops-stardew-valley-quality-odds-zh-CN.webp",
+    expectedDimensions: { height: 1100, width: 1100 },
+  },
+] as const;
 const rancherOrTillerArticleMediaExpectations = [
   {
     maximumByteCount: 400 * 1024,
@@ -444,7 +458,7 @@ function readFirstImageMarkup(markup: string): string {
   return imageMarkup;
 }
 
-it("ships budget-compliant WebP covers for all twenty-two blog identities", () => {
+it("ships budget-compliant WebP covers for all twenty-three blog identities", () => {
   const carpenterImage = readWebpDimensions("blog/carpenter-stardew-cover.webp");
   const robinImage = readWebpDimensions("blog/where-is-robin-stardew-valley-cover.webp");
   const npcImage = readWebpDimensions("blog/stardew-valley-npc-cover.webp");
@@ -483,6 +497,9 @@ it("ships budget-compliant WebP covers for all twenty-two blog identities", () =
   const whatToGrowInGreenhouseImage = readWebpDimensions(
     "blog/what-to-grow-in-greenhouse-stardew-cover.webp",
   );
+  const goldStarCropsCoverImage = readWebpDimensions(
+    "blog/how-to-get-gold-star-crops-stardew-valley-cover.webp",
+  );
 
   expect(carpenterImage).toMatchObject(expectedCoverDimensions);
   expect(robinImage).toMatchObject(expectedCoverDimensions);
@@ -506,6 +523,7 @@ it("ships budget-compliant WebP covers for all twenty-two blog identities", () =
   expect(pineTreeImage).toMatchObject(expectedCoverDimensions);
   expect(profitMarginImage).toMatchObject(expectedCoverDimensions);
   expect(whatToGrowInGreenhouseImage).toMatchObject(expectedCoverDimensions);
+  expect(goldStarCropsCoverImage).toMatchObject(expectedCoverDimensions);
   expect(carpenterImage.width / carpenterImage.height).toBeCloseTo(16 / 9, 2);
   expect(npcImage.width / npcImage.height).toBeCloseTo(16 / 9, 2);
   expect(townMapImage.width / townMapImage.height).toBeCloseTo(16 / 9, 2);
@@ -527,6 +545,10 @@ it("ships budget-compliant WebP covers for all twenty-two blog identities", () =
   expect(pineTreeImage.width / pineTreeImage.height).toBeCloseTo(16 / 9, 2);
   expect(profitMarginImage.width / profitMarginImage.height).toBeCloseTo(16 / 9, 2);
   expect(whatToGrowInGreenhouseImage.width / whatToGrowInGreenhouseImage.height).toBeCloseTo(16 / 9, 2);
+  expect(goldStarCropsCoverImage.width / goldStarCropsCoverImage.height).toBeCloseTo(
+    16 / 9,
+    2,
+  );
   expect(carpenterImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(robinImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(npcImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
@@ -549,6 +571,7 @@ it("ships budget-compliant WebP covers for all twenty-two blog identities", () =
   expect(pineTreeImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(profitMarginImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
   expect(whatToGrowInGreenhouseImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
+  expect(goldStarCropsCoverImage.byteCount).toBeLessThanOrEqual(maximumCoverByteCount);
 });
 
 it("rejects a VP8 WebP whose declared frame payload is only a header", () => {
@@ -596,6 +619,24 @@ it("ships budget-compliant WebP media for the year 1 gold guide", () => {
     expect(image).toMatchObject(mediaExpectation.expectedDimensions);
     expect(image.width / image.height).toBeCloseTo(16 / 9, 2);
     expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+});
+
+it("ships budget-compliant WebP media for the gold-star crops guide", () => {
+  for (const mediaExpectation of goldStarCropsArticleMediaExpectations) {
+    const image = readWebpDimensions(mediaExpectation.relativeImagePath);
+
+    expect(image).toMatchObject(mediaExpectation.expectedDimensions);
+    expect(image.width / image.height).toBeCloseTo(1, 2);
+    expect(image.byteCount).toBeLessThanOrEqual(mediaExpectation.maximumByteCount);
+  }
+
+  for (const relativeImagePath of [
+    "blog/how-to-get-gold-star-crops-stardew-valley-cover.avif",
+    "blog/illustrations/how-to-get-gold-star-crops-stardew-valley-quality-odds-en.avif",
+    "blog/illustrations/how-to-get-gold-star-crops-stardew-valley-quality-odds-zh-CN.avif",
+  ]) {
+    expect(existsSync(join(projectRoot, "public", relativeImagePath))).toBe(true);
   }
 });
 

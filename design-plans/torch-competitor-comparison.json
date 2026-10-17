@@ -1,0 +1,510 @@
+{
+  "taskSpaceId": 134,
+  "page": "p2",
+  "url": "https://stardewplan.com/",
+  "viewport": {
+    "width": 1440,
+    "height": 1000,
+    "deviceScaleFactor": 1,
+    "mobile": false
+  },
+  "purpose": "Read-only competitor UI comparison for Torch and Fill",
+  "safety": {
+    "existingSavedMapKeysFound": 3,
+    "visibleInitialCanvas": "Standard Farm base map with built-in greenhouse and farmhouse; no added user item visible in initial screenshot",
+    "canvasClickOrDragPerformed": false,
+    "undoOrRedoPerformed": false,
+    "saveLoginImportDeletePerformed": false,
+    "reasonCanvasWasNotEdited": "Competitor localStorage contained three saved-map key-family entries; their values were not read."
+  },
+  "observations": [
+    {
+      "step": "initial-fill-state",
+      "action": "Inspected toolbar before selecting an item",
+      "result": {
+        "observedEarlier": true,
+        "ariaLabel": "Fill works with crops and placeables",
+        "ariaPressed": "false",
+        "disabled": true,
+        "opacity": "0.4"
+      }
+    },
+    {
+      "step": "torch-search-and-selection",
+      "action": "Searched Torch and selected Torch from the public item catalog",
+      "results": [
+        "Torch",
+        "Jungle Torch",
+        "Plain Torch",
+        "Stump Torch"
+      ],
+      "resultCount": 4,
+      "visibleStateAfterSelectingTorch": "Placing Torch / 1 × 1",
+      "fillStateAfterSelectingTorch": {
+        "enabled": true,
+        "title": "Fill (F)"
+      }
+    },
+    {
+      "step": "torch-fill-mode",
+      "action": "Selected Fill tool without interacting with the map canvas",
+      "result": {
+        "pressed": true,
+        "status": "Filling Torch",
+        "instruction": "Drag to fill · Esc to cancel"
+      },
+      "actualFillGesturePerformed": false
+    },
+    {
+      "step": "tilled-dirt-comparison",
+      "action": "Searched Tilled Dirt and selected its only catalog result",
+      "result": {
+        "resultCount": 1,
+        "fillEnabled": true,
+        "fillPressed": true,
+        "status": "Filling Tilled Dirt",
+        "instruction": "Drag to fill · Esc to cancel"
+      },
+      "actualFillGesturePerformed": false
+    },
+    {
+      "step": "item-hover-and-selection-style",
+      "action": "Selected Torch, then hovered unselected Jungle Torch result",
+      "selectedTorchRow": {
+        "tagName": "DIV",
+        "className": "v2-row svelte-h7mui7 sel",
+        "text": "Torch",
+        "title": null,
+        "ariaLabel": null,
+        "ariaPressed": null,
+        "ariaDisabled": null,
+        "disabled": false,
+        "hovered": false,
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(208, 232, 216)",
+        "borderColor": "rgb(208, 232, 216)",
+        "boxShadow": "none",
+        "opacity": "1"
+      },
+      "hoveredJungleTorchRow": {
+        "tagName": "DIV",
+        "className": "v2-row svelte-h7mui7",
+        "text": "Jungle Torch",
+        "title": null,
+        "ariaLabel": null,
+        "ariaPressed": null,
+        "ariaDisabled": null,
+        "disabled": false,
+        "hovered": true,
+        "backgroundColor": "rgba(255, 255, 255, 0.055)",
+        "color": "rgb(208, 232, 216)",
+        "borderColor": "rgb(208, 232, 216)",
+        "boxShadow": "none",
+        "opacity": "1"
+      },
+      "note": "The selected Torch row has class .sel but its row background is transparent when not hovered; with selected Torch hovered its background is rgb(8, 140, 89). The unselected hovered Jungle Torch row uses rgba(255, 255, 255, 0.055). The screenshot was captured while the Torch result was visibly green."
+    },
+    {
+      "step": "fill-guidance",
+      "action": "Read visible status text after selecting Fill with Torch and Tilled Dirt",
+      "result": "Both showed a Filling <item> status and Drag to fill · Esc to cancel; no unsupported/not supported message was visible."
+    }
+  ],
+  "computedDom": {
+    "title": "Stardew Valley Planner: Design your perfect farm",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "statusLines": [
+      "Filling Torch",
+      "Drag to fill · Esc to cancel",
+      "Torch",
+      "Jungle Torch",
+      "Plain Torch",
+      "Stump Torch"
+    ],
+    "noVisibleUnsupportedMessage": true,
+    "toolButtons": [
+      {
+        "tagName": "BUTTON",
+        "className": "tool svelte-ojxdxk",
+        "text": "Select",
+        "title": "Select (V)",
+        "ariaLabel": null,
+        "ariaPressed": "false",
+        "ariaDisabled": "false",
+        "disabled": false,
+        "hovered": false,
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgba(208, 232, 216, 0.55)",
+        "borderColor": "rgba(208, 232, 216, 0.55)",
+        "boxShadow": "none",
+        "opacity": "1"
+      },
+      {
+        "tagName": "BUTTON",
+        "className": "tool svelte-ojxdxk",
+        "text": "Multi",
+        "title": "Multi-select (M)",
+        "ariaLabel": null,
+        "ariaPressed": "false",
+        "ariaDisabled": "false",
+        "disabled": false,
+        "hovered": false,
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgba(208, 232, 216, 0.55)",
+        "borderColor": "rgba(208, 232, 216, 0.55)",
+        "boxShadow": "none",
+        "opacity": "1"
+      },
+      {
+        "tagName": "BUTTON",
+        "className": "tool svelte-ojxdxk on",
+        "text": "Fill",
+        "title": "Fill (F)",
+        "ariaLabel": null,
+        "ariaPressed": "true",
+        "ariaDisabled": "false",
+        "disabled": false,
+        "hovered": false,
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(234, 245, 238)",
+        "borderColor": "rgb(234, 245, 238)",
+        "boxShadow": "none",
+        "opacity": "1"
+      },
+      {
+        "tagName": "BUTTON",
+        "className": "tool svelte-ojxdxk",
+        "text": "Erase",
+        "title": "Erase (E)",
+        "ariaLabel": null,
+        "ariaPressed": "false",
+        "ariaDisabled": "false",
+        "disabled": false,
+        "hovered": false,
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgba(208, 232, 216, 0.55)",
+        "borderColor": "rgba(208, 232, 216, 0.55)",
+        "boxShadow": "none",
+        "opacity": "1"
+      }
+    ],
+    "itemRows": [
+      {
+        "name": "Torch",
+        "button": {
+          "tagName": "BUTTON",
+          "className": "v2-row-main svelte-h7mui7",
+          "text": "Torch",
+          "title": "Torch",
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": false,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "boxShadow": "none",
+          "opacity": "1"
+        },
+        "row": {
+          "tagName": "DIV",
+          "className": "v2-row svelte-h7mui7 sel",
+          "text": "Torch",
+          "title": null,
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": false,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(208, 232, 216)",
+          "borderColor": "rgb(208, 232, 216)",
+          "boxShadow": "none",
+          "opacity": "1"
+        }
+      },
+      {
+        "name": "Jungle Torch",
+        "button": {
+          "tagName": "BUTTON",
+          "className": "v2-row-main svelte-h7mui7",
+          "text": "Jungle Torch",
+          "title": "Jungle Torch",
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": true,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "boxShadow": "none",
+          "opacity": "1"
+        },
+        "row": {
+          "tagName": "DIV",
+          "className": "v2-row svelte-h7mui7",
+          "text": "Jungle Torch",
+          "title": null,
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": true,
+          "backgroundColor": "rgba(255, 255, 255, 0.055)",
+          "color": "rgb(208, 232, 216)",
+          "borderColor": "rgb(208, 232, 216)",
+          "boxShadow": "none",
+          "opacity": "1"
+        }
+      },
+      {
+        "name": "Plain Torch",
+        "button": {
+          "tagName": "BUTTON",
+          "className": "v2-row-main svelte-h7mui7",
+          "text": "Plain Torch",
+          "title": "Plain Torch",
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": false,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "boxShadow": "none",
+          "opacity": "1"
+        },
+        "row": {
+          "tagName": "DIV",
+          "className": "v2-row svelte-h7mui7",
+          "text": "Plain Torch",
+          "title": null,
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": false,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(208, 232, 216)",
+          "borderColor": "rgb(208, 232, 216)",
+          "boxShadow": "none",
+          "opacity": "1"
+        }
+      },
+      {
+        "name": "Stump Torch",
+        "button": {
+          "tagName": "BUTTON",
+          "className": "v2-row-main svelte-h7mui7",
+          "text": "Stump Torch",
+          "title": "Stump Torch",
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": false,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "borderColor": "rgb(0, 0, 0)",
+          "boxShadow": "none",
+          "opacity": "1"
+        },
+        "row": {
+          "tagName": "DIV",
+          "className": "v2-row svelte-h7mui7",
+          "text": "Stump Torch",
+          "title": null,
+          "ariaLabel": null,
+          "ariaPressed": null,
+          "ariaDisabled": null,
+          "disabled": false,
+          "hovered": false,
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(208, 232, 216)",
+          "borderColor": "rgb(208, 232, 216)",
+          "boxShadow": "none",
+          "opacity": "1"
+        }
+      }
+    ],
+    "initialFillBeforeItemSelected": {
+      "observedEarlier": true,
+      "ariaLabel": "Fill works with crops and placeables",
+      "ariaPressed": "false",
+      "disabled": true,
+      "opacity": "0.4"
+    },
+    "storage": {
+      "localStorageKeyCount": 7,
+      "savedMapKeyFamilyCount": 3,
+      "savedMapKeyFamily": "sp.owner.save_*:map_*",
+      "valuesRead": false,
+      "sessionStorageKeyCount": 4,
+      "sessionStorageValuesRead": false
+    },
+    "scriptSrc": [
+      "https://stardewplan.com/",
+      "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+    ],
+    "javascriptResourceUrls": [
+      "https://stardewplan.com/_app/immutable/entry/start.ajcFbXSK.js",
+      "https://stardewplan.com/_app/immutable/entry/app.DTtS3VDU.js",
+      "https://stardewplan.com/_app/immutable/chunks/Sw6eg_pr.js",
+      "https://stardewplan.com/_app/immutable/chunks/CWiKN5o2.js",
+      "https://stardewplan.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js",
+      "https://stardewplan.com/_app/immutable/chunks/DXAP1Auv.js",
+      "https://stardewplan.com/_app/immutable/chunks/g-8iPKHY.js",
+      "https://stardewplan.com/_app/immutable/chunks/PPVm8Dsz.js",
+      "https://stardewplan.com/_app/immutable/chunks/Jy0sVAFe.js",
+      "https://stardewplan.com/_app/immutable/chunks/6IGm04yA.js",
+      "https://stardewplan.com/_app/immutable/chunks/f3zs_WuO.js",
+      "https://stardewplan.com/_app/immutable/chunks/BaDdN5is.js",
+      "https://stardewplan.com/_app/immutable/chunks/B246_SN0.js",
+      "https://stardewplan.com/_app/immutable/chunks/DsnmJJEf.js",
+      "https://stardewplan.com/_app/immutable/chunks/CUnu_TUC.js",
+      "https://stardewplan.com/_app/immutable/chunks/C60osmfa.js",
+      "https://stardewplan.com/_app/immutable/chunks/Dqvy8KBM.js",
+      "https://stardewplan.com/_app/immutable/chunks/DXae7i4B.js",
+      "https://stardewplan.com/_app/immutable/chunks/B0XwC4Ot.js",
+      "https://stardewplan.com/_app/immutable/chunks/-UyI9lYi.js",
+      "https://stardewplan.com/_app/immutable/nodes/0.D8XqNIP_.js",
+      "https://stardewplan.com/_app/immutable/chunks/CwdkBmNY.js",
+      "https://stardewplan.com/_app/immutable/chunks/CtjiuhCU.js",
+      "https://stardewplan.com/_app/immutable/chunks/CY-GBE-I.js",
+      "https://stardewplan.com/_app/immutable/chunks/Cjl_Bntd.js",
+      "https://stardewplan.com/_app/immutable/chunks/CM22uFlV.js",
+      "https://stardewplan.com/_app/immutable/nodes/1.D2VtJ_Rg.js",
+      "https://stardewplan.com/_app/immutable/nodes/3.a6jYvV8q.js",
+      "https://stardewplan.com/_app/immutable/chunks/GKBa8ARq.js",
+      "https://stardewplan.com/_app/immutable/chunks/BLEQvawV.js",
+      "https://stardewplan.com/_app/immutable/chunks/ChFEq_dL.js",
+      "https://stardewplan.com/_app/immutable/chunks/Do34Rp5W.js",
+      "https://stardewplan.com/_app/immutable/chunks/CQnGQ_PB.js",
+      "https://stardewplan.com/_app/immutable/chunks/CDrr-0XX.js",
+      "https://stardewplan.com/_app/immutable/chunks/CjxIVK0R.js",
+      "https://stardewplan.com/_app/immutable/chunks/4_D6heGQ.js",
+      "https://stardewplan.com/_app/immutable/chunks/CIcPJ3x6.js",
+      "https://stardewplan.com/_app/immutable/chunks/BYWaSNn2.js",
+      "https://stardewplan.com/_app/immutable/chunks/r4zTyjpC.js",
+      "https://stardewplan.com/_app/immutable/chunks/DpCVVVd9.js",
+      "https://stardewplan.com/_app/immutable/chunks/kAO8Gh2k.js",
+      "https://stardewplan.com/_app/immutable/chunks/Y5zWk33f.js",
+      "https://stardewplan.com/_app/immutable/chunks/C3oXB1wU.js",
+      "https://stardewplan.com/_app/immutable/chunks/BUviWlmB.js",
+      "https://stardewplan.com/_app/immutable/chunks/BnmxD0eu.js"
+    ],
+    "canvasCount": 2,
+    "itemHoverComparison": {
+      "selectedTorchNotHovered": {
+        "rowClass": "v2-row svelte-h7mui7 sel",
+        "hovered": false,
+        "backgroundColor": "rgba(0, 0, 0, 0)"
+      },
+      "selectedTorchHovered": {
+        "rowClass": "v2-row svelte-h7mui7 sel",
+        "hovered": true,
+        "backgroundColor": "rgb(8, 140, 89)",
+        "color": "rgb(208, 232, 216)",
+        "boxShadow": "none"
+      },
+      "unselectedJungleTorchHovered": {
+        "rowClass": "v2-row svelte-h7mui7",
+        "hovered": true,
+        "backgroundColor": "rgba(255, 255, 255, 0.055)",
+        "color": "rgb(208, 232, 216)",
+        "boxShadow": "none"
+      },
+      "note": "These are computed styles from separate pointer positions; the screenshot is the visual evidence for the selected Torch fill state."
+    }
+  },
+  "accessibilitySnapshotAtCapture": "[p2 \"Stardew Valley Planner: Design your perfect farm\" | space \"Stardew Planner complete planner UI audit\"(134): 2 managed, 0 untracked — p1 \"Stardew Valley Planner – Free Online Farm Layout Tool\", p2* \"Stardew Valley Planner: Design your perfect farm\"]\nroot\n  container\n    container\n      application\n        canvas\n      container\n        container\n          button [ref=2]\n            image\n            text \"StardewPlan\"\n          container\n            button [ref=3]\n              svg_root\n            button [ref=4]\n              svg_root\n            button [ref=5]\n              svg_root\n            button \"Tools I like\" [ref=6, loc=css:button[aria-label=\"Tools I like\"]]\n              image\n        container\n          button [ref=7]\n            svg_root\n            text \"Library\"\n          svg_root\n          text \"Standard Farm\"\n          button \"Plan options · Saved on this device\" [ref=8, loc=css:button[aria-label=\"Plan options · Saved on this device\"]]\n            image\n              svg_root\n            svg_root\n        button \"Ambience\" [ref=9, loc=css:button[aria-label=\"Ambience\"]]\n          svg_root\n          text \"Ambience\"\n          svg_root\n        button \"Map settings\" [ref=10, loc=css:button[aria-label=\"Map settings\"]]\n          svg_root\n          text \"Map settings\"\n          svg_root\n        button \"View\" [ref=11, loc=css:button[aria-label=\"View\"]]\n          svg_root\n          text \"View\"\n          svg_root\n        button [ref=12]\n          svg_root\n        button [ref=13]\n          svg_root\n          text \"Sign in\"\n      container\n        button [ref=14]\n          svg_root\n          text \"Select\"\n        button [ref=15]\n          svg_root\n          text \"Multi\"\n        button [ref=16]\n          svg_root\n          text \"Fill\"\n        button [ref=17]\n          svg_root\n          text \"Erase\"\n        button [ref=18]\n          svg_root\n        button [ref=19]\n          svg_root\n      container\n        container\n          canvas\n          container\n            text \"Filling Torch\"\n            text \"Drag to fill · Esc to cancel\"\n        button [ref=57]\n          svg_root\n      container\n        container\n          svg_root\n          textbox \"Search all items\" [ref=20, loc=css:input[placeholder=\"Search all items\"]]\n            text \"Torch\"\n          button \"Clear search\" [ref=52, loc=css:button[aria-label=\"Clear search\"]]\n            svg_root\n        container\n          container\n            svg_root\n            button [ref=21]\n              svg_root\n            button [ref=22]\n              svg_root\n            button [ref=23]\n              svg_root\n            button [ref=24]\n              svg_root\n          container\n            button [ref=25]\n              svg_root\n            button [ref=26]\n              svg_root\n            button [ref=27]\n              svg_root\n            button [ref=28]\n              svg_root\n        container\n          container\n            text \"Search\"\n            text \"4\"\n          container\n            button [ref=30]\n              svg_root\n            button [ref=31]\n              svg_root\n        container\n          button [ref=60]\n            text \"Torch\"\n          button [ref=61]\n            text \"Jungle Torch\"\n          button [ref=62]\n            text \"Plain Torch\"\n          button [ref=63]\n            text \"Stump Torch\"\n        container\n          text \"esc\"\n          text \"clear\"\n    button [ref=1]\n      text \"导出外链\"\n",
+  "screenshot": {
+    "path": "/Users/wusir/Desktop/开发项目集合/stardew planner/design-plans/torch-competitor-comparison.png",
+    "bytes": 1374352,
+    "capturedWhile": "Torch selected; Fill selected; status pill says Filling Torch / Drag to fill · Esc to cancel"
+  },
+  "publicJavaScriptAssets": {
+    "source": "document.scripts and performance.getEntriesByType('resource') on p2; URLs only, query/hash removed",
+    "scriptSrc": [
+      "https://stardewplan.com/",
+      "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+    ],
+    "javascriptResourceUrls": [
+      "https://stardewplan.com/_app/immutable/entry/start.ajcFbXSK.js",
+      "https://stardewplan.com/_app/immutable/entry/app.DTtS3VDU.js",
+      "https://stardewplan.com/_app/immutable/chunks/Sw6eg_pr.js",
+      "https://stardewplan.com/_app/immutable/chunks/CWiKN5o2.js",
+      "https://stardewplan.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js",
+      "https://stardewplan.com/_app/immutable/chunks/DXAP1Auv.js",
+      "https://stardewplan.com/_app/immutable/chunks/g-8iPKHY.js",
+      "https://stardewplan.com/_app/immutable/chunks/PPVm8Dsz.js",
+      "https://stardewplan.com/_app/immutable/chunks/Jy0sVAFe.js",
+      "https://stardewplan.com/_app/immutable/chunks/6IGm04yA.js",
+      "https://stardewplan.com/_app/immutable/chunks/f3zs_WuO.js",
+      "https://stardewplan.com/_app/immutable/chunks/BaDdN5is.js",
+      "https://stardewplan.com/_app/immutable/chunks/B246_SN0.js",
+      "https://stardewplan.com/_app/immutable/chunks/DsnmJJEf.js",
+      "https://stardewplan.com/_app/immutable/chunks/CUnu_TUC.js",
+      "https://stardewplan.com/_app/immutable/chunks/C60osmfa.js",
+      "https://stardewplan.com/_app/immutable/chunks/Dqvy8KBM.js",
+      "https://stardewplan.com/_app/immutable/chunks/DXae7i4B.js",
+      "https://stardewplan.com/_app/immutable/chunks/B0XwC4Ot.js",
+      "https://stardewplan.com/_app/immutable/chunks/-UyI9lYi.js",
+      "https://stardewplan.com/_app/immutable/nodes/0.D8XqNIP_.js",
+      "https://stardewplan.com/_app/immutable/chunks/CwdkBmNY.js",
+      "https://stardewplan.com/_app/immutable/chunks/CtjiuhCU.js",
+      "https://stardewplan.com/_app/immutable/chunks/CY-GBE-I.js",
+      "https://stardewplan.com/_app/immutable/chunks/Cjl_Bntd.js",
+      "https://stardewplan.com/_app/immutable/chunks/CM22uFlV.js",
+      "https://stardewplan.com/_app/immutable/nodes/1.D2VtJ_Rg.js",
+      "https://stardewplan.com/_app/immutable/nodes/3.a6jYvV8q.js",
+      "https://stardewplan.com/_app/immutable/chunks/GKBa8ARq.js",
+      "https://stardewplan.com/_app/immutable/chunks/BLEQvawV.js",
+      "https://stardewplan.com/_app/immutable/chunks/ChFEq_dL.js",
+      "https://stardewplan.com/_app/immutable/chunks/Do34Rp5W.js",
+      "https://stardewplan.com/_app/immutable/chunks/CQnGQ_PB.js",
+      "https://stardewplan.com/_app/immutable/chunks/CDrr-0XX.js",
+      "https://stardewplan.com/_app/immutable/chunks/CjxIVK0R.js",
+      "https://stardewplan.com/_app/immutable/chunks/4_D6heGQ.js",
+      "https://stardewplan.com/_app/immutable/chunks/CIcPJ3x6.js",
+      "https://stardewplan.com/_app/immutable/chunks/BYWaSNn2.js",
+      "https://stardewplan.com/_app/immutable/chunks/r4zTyjpC.js",
+      "https://stardewplan.com/_app/immutable/chunks/DpCVVVd9.js",
+      "https://stardewplan.com/_app/immutable/chunks/kAO8Gh2k.js",
+      "https://stardewplan.com/_app/immutable/chunks/Y5zWk33f.js",
+      "https://stardewplan.com/_app/immutable/chunks/C3oXB1wU.js",
+      "https://stardewplan.com/_app/immutable/chunks/BUviWlmB.js",
+      "https://stardewplan.com/_app/immutable/chunks/BnmxD0eu.js"
+    ],
+    "javascriptResourceCount": 45
+  },
+  "limitations": [
+    "The competitor map was not altered, so actual placement/fill output for Torch was not tested.",
+    "The Fill tool becoming selectable and showing a Torch-specific fill pill proves UI acceptance and guidance only, not successful placement."
+  ],
+  "cleanup": {
+    "pageLabel": "p2",
+    "searchRestoredEmpty": true,
+    "selectToolPressed": true,
+    "noPlacementStatus": true,
+    "catalogRestored": "Decor — 423 items (verified in final accessibility snapshot)",
+    "storageAfterInteractions": {
+      "localStorageKeyCount": 7,
+      "savedMapKeyFamilyCount": 3,
+      "valuesRead": false
+    },
+    "canvasInputActionsPerformed": 0,
+    "undoOrRedoPerformed": false,
+    "cacheDisabledSetFalse": true,
+    "deviceMetricsOverrideCleared": true,
+    "pageLeftOpenForRoot": true,
+    "otherPageInputPerformed": false,
+    "finalSnapshot": "[p2 \"Stardew Valley Planner: Design your perfect farm\" | space \"Stardew Planner complete planner UI audit\"(134): 2 managed, 0 untracked — p1 \"Stardew Valley Planner – Free Online Farm Layout Tool\", p2* \"Stardew Valley Planner: Design your perfect farm\"]\nroot\n  container\n    container\n      application\n        canvas\n      container\n        container\n          button [ref=2]\n            image\n            text \"StardewPlan\"\n          container\n            button [ref=3]\n              svg_root\n            button [ref=4]\n              svg_root\n            button [ref=5]\n              svg_root\n            button \"Tools I like\" [ref=6, loc=css:button[aria-label=\"Tools I like\"]]\n              image\n        container\n          button [ref=7]\n            svg_root\n            text \"Library\"\n          svg_root\n          text \"Standard Farm\"\n          button \"Plan options · Saved on this device\" [ref=8, loc=css:button[aria-label=\"Plan options · Saved on this device\"]]\n            image\n              svg_root\n            svg_root\n        button \"Ambience\" [ref=9, loc=css:button[aria-label=\"Ambience\"]]\n          svg_root\n          text \"Ambience\"\n          svg_root\n        button \"Map settings\" [ref=10, loc=css:button[aria-label=\"Map settings\"]]\n          svg_root\n          text \"Map settings\"\n          svg_root\n        button \"View\" [ref=11, loc=css:button[aria-label=\"View\"]]\n          svg_root\n          text \"View\"\n          svg_root\n        button [ref=12]\n          svg_root\n        button [ref=13]\n          svg_root\n          text \"Sign in\"\n      container\n        button [ref=14]\n          svg_root\n          text \"Select\"\n        button [ref=15]\n          svg_root\n          text \"Multi\"\n        button \"Fill works with crops and placeables\" [ref=16, loc=css:button[aria-label=\"Fill works with crops and placeables\"]]\n          svg_root\n          text \"Fill\"\n        button [ref=17]\n          svg_root\n          text \"Erase\"\n        button [ref=18]\n          svg_root\n        button [ref=19]\n          svg_root\n      container\n        container\n          svg_root\n          textbox \"Search all items\" [ref=20, loc=css:input[placeholder=\"Search all items\"]]\n            text \"Search all items\"\n          text \"/\"\n        container\n          container\n            button [ref=21]\n              svg_root\n            button [ref=22]\n              svg_root\n            button [ref=23]\n              svg_root\n            button [ref=24]\n              svg_root\n          container\n            button [ref=25]\n              svg_root\n            button [ref=26]\n              svg_root\n            button [ref=27]\n              svg_root\n            button [ref=28]\n              svg_root\n        container\n          container\n            text \"Decor\"\n            text \"423\"\n          button [ref=64]\n            text \"All\"\n            svg_root\n          container\n            button [ref=30]\n              svg_root\n            button [ref=31]\n              svg_root\n        container [ref=65]\n          button [ref=66]\n            text \"Tub o' Flowers\"\n          button [ref=67]\n            text \"Mannequin (Male)\"\n          button [ref=68]\n            text \"Mannequin (Female)\"\n          button [ref=69]\n            text \"Cursed Mannequin (Male)\"\n          button [ref=70]\n            text \"Cursed Mannequin (Female)\"\n          button [ref=71]\n            text \"Statue Of Endless Fortune\"\n          button [ref=72]\n            text \"Statue Of Perfection\"\n          button [ref=73]\n            text \"Statue Of True Perfection\"\n          button [ref=74]\n            text \"Statue Of Blessings\"\n          button [ref=75]\n            text \"Statue Of The Dwarf King\"\n          button [ref=76]\n            text \"Soda Machine\"\n          button [ref=77]\n            text \"Mini-Jukebox\"\n          button [ref=78]\n            text \"Telephone\"\n          button [ref=79]\n            text \"Drum Block\"\n          button [ref=80]\n            text \"Flute Block\"\n          button [ref=81]\n            text \"Large Stump\"\n          button [ref=82]\n            text \"Large Log\"\n          button [ref=83]\n            text \"Large Boulder\"\n          button [ref=84]\n            text \"Meteorite\"\n    button [ref=1]\n      text \"导出外链\"\n"
+  }
+}

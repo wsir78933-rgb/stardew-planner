@@ -1,0 +1,150 @@
+{
+  "artifact": "read-only homepage case-study arrow measurement",
+  "taskSpace": {
+    "id": 123,
+    "page": "p1"
+  },
+  "buildContext": {
+    "stage": "after coordinator message FRESH_BUILD_READY",
+    "buildResult": "Coordinator reported successful fresh build; this agent measured the served local page only.",
+    "url": "http://localhost:3003/",
+    "temporaryQaStyles": 0,
+    "temporaryQaStylesCheck": "document.querySelectorAll('style[data-unified-buttons-qa]').length === 0 during fresh hover measurement"
+  },
+  "target": {
+    "group": "first homepage case-study group",
+    "selector": "#farm-cases",
+    "previousSelector": "#farm-cases [data-circular-testimonials-previous]",
+    "nextSelector": "#farm-cases [data-circular-testimonials-next]"
+  },
+  "nextClick": {
+    "action": "One actual Next click; waited until active case name changed, then 450 ms before stable read.",
+    "viewport": "Not captured during this click read; a later read on the same Page observed 1500x784.",
+    "before": {
+      "activeName": "Moonfall's Melon Fields",
+      "designation": "Standard Farm · Summer",
+      "quoteLength": 191,
+      "scrollY": 3122.5,
+      "documentHeight": 8704,
+      "section": {
+        "top": -0.219,
+        "height": 554.797
+      },
+      "copyBody": {
+        "top": 248.164,
+        "height": 174.828
+      },
+      "controls": {
+        "top": 446.992,
+        "height": 56
+      },
+      "previous": {
+        "top": 457.392,
+        "height": 44,
+        "transform": "matrix(1, 0, 0, 1, 0, -1.6)"
+      },
+      "next": {
+        "top": 458.992,
+        "height": 44,
+        "transform": "none"
+      }
+    },
+    "afterSettled": {
+      "activeName": "Obelisks & Clock Garden",
+      "designation": "Standard Farm",
+      "quoteLength": 200,
+      "scrollY": 3122.5,
+      "documentHeight": 8704,
+      "section": {
+        "top": -0.219,
+        "height": 554.797
+      },
+      "copyBody": {
+        "top": 232.867,
+        "height": 205.422
+      },
+      "controls": {
+        "top": 462.289,
+        "height": 56
+      },
+      "previous": {
+        "top": 472.689,
+        "height": 44,
+        "transform": "matrix(1, 0, 0, 1, 0, -1.6)"
+      },
+      "next": {
+        "top": 474.289,
+        "height": 44,
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    "deltaPx": {
+      "copyBodyTop": -15.297,
+      "copyBodyHeight": 30.594,
+      "controlsTop": 15.297,
+      "previousTop": 15.297,
+      "nextTop": 15.297,
+      "scrollY": 0,
+      "sectionTop": 0,
+      "sectionHeight": 0
+    },
+    "animationSampling": "Only pre-click and settled post-click geometry were captured; no intermediate animation frame is claimed."
+  },
+  "hover": {
+    "viewport": {
+      "width": 1500,
+      "height": 784
+    },
+    "activeName": "Obelisks & Clock Garden",
+    "scrollY": 3122.5,
+    "before": {
+      "temporaryQaStyles": 0,
+      "copyBody": {
+        "top": 33.078,
+        "height": 205.422
+      },
+      "controls": {
+        "top": 262.5,
+        "height": 56
+      },
+      "previous": {
+        "top": 274.5,
+        "height": 44,
+        "transform": "none"
+      },
+      "next": {
+        "top": 274.5,
+        "height": 44,
+        "transform": "none"
+      }
+    },
+    "during": {
+      "nextHovered": true,
+      "copyBody": {
+        "top": 33.078,
+        "height": 205.422
+      },
+      "controls": {
+        "top": 262.5,
+        "height": 56
+      },
+      "previous": {
+        "top": 274.5,
+        "height": 44,
+        "transform": "none"
+      },
+      "next": {
+        "top": 272.9,
+        "height": 44,
+        "transform": "matrix(1, 0, 0, 1, 0, -1.6)"
+      }
+    },
+    "afterPointerCleared": {
+      "nextTransform": "none",
+      "copyBodyHeight": 205.421875,
+      "controlsTop": 262.5,
+      "scrollY": 3122.5
+    }
+  },
+  "reading": "With scrollY and section geometry unchanged, the active copy-body grows 30.594 px and the controls plus both arrows move down 15.297 px between these adjacent cases. Hover alone moves only the hovered Next button up 1.6 px; body, controls, Previous, and scrollY stay fixed."
+}

@@ -51,13 +51,13 @@ it("shows the newest real post first while keeping the topic carousel in canonic
 
   expect(homeState.posts.map((post) => post.slug)).toEqual([
     "house-upgrade-stardew",
+    "how-to-get-gold-star-crops-stardew-valley",
     "how-to-harvest-stardew-valley",
     "oak-tree-vs-maple-stardew",
     "stardew-fruit",
     "what-to-grow-in-greenhouse-stardew",
-    "profit-margin-stardew",
   ]);
-  expect(homeState.totalPostCount).toBe(26);
+  expect(homeState.totalPostCount).toBe(27);
   expect(homeState.topicArticlesPage).toBe(1);
   expect(homeState.topicArticlesPageCount).toBe(3);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
@@ -103,6 +103,7 @@ it("clamps an oversized topic articles page to the last page", () => {
   expect(homeState.topicArticlesPage).toBe(3);
   expect(homeState.topicCarouselPosts.map((post) => post.slug)).toEqual([
     "how-to-harvest-stardew-valley",
+    "how-to-get-gold-star-crops-stardew-valley",
     "house-upgrade-stardew",
   ]);
 });

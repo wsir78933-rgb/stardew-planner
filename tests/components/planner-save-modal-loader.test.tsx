@@ -77,6 +77,7 @@ describe("planner save-modal loader", () => {
         selectedPlannerMapId: "standard",
         storageErrorMessage: null,
         storageStatus: "ready",
+        workspaceController: { getState: () => ({ activeProject: null }) } as never,
       }),
     );
 

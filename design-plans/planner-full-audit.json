@@ -1,0 +1,3454 @@
+{
+  "taskSpaceId": 134,
+  "page": "p1",
+  "status": "completed",
+  "origin": "http://localhost:3007/#planner",
+  "build": "Current static out on dedicated localhost:3007 server; source CSS 1eqjce81i12qs.css was observed loaded; no build claim made by this evidence.",
+  "baseline": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "innerWidth": 1440,
+      "innerHeight": 1000,
+      "visualViewportWidth": 1434,
+      "scale": 1
+    },
+    "localStorageKeys": [
+      "stardew-planner:planner-ambience-options"
+    ],
+    "localProjectStorageKey": "stardew-planner.local-projects.v1",
+    "localProjectStorageKeyPresent": false,
+    "indexedDbNames": [],
+    "sourceInitialState": {
+      "activeProjectId": null,
+      "activeMapId": null,
+      "mapId": "standard",
+      "placementSnapshotFrom": "createInitialMapPlacementSnapshot(\"standard\")"
+    },
+    "initialStandardMapBuildings": [
+      {
+        "buildingId": "Farmhouse",
+        "x": 59,
+        "y": 12
+      },
+      {
+        "buildingId": "Greenhouse",
+        "x": 25,
+        "y": 10
+      },
+      {
+        "buildingId": "Shipping Bin",
+        "x": 71,
+        "y": 14
+      },
+      {
+        "buildingId": "Pet Bowl",
+        "x": 53,
+        "y": 7
+      }
+    ],
+    "initialCrops": 0,
+    "initialItems": 0,
+    "loadingTextPresent": false,
+    "roleAlertCount": 0,
+    "screenshot": "design-plans/planner-full-audit-desktop-baseline.png",
+    "note": "Origin has no user project. Standard Farm renders its four source-defined starter buildings; audit changes will use vacant terrain and be undone back to this exact baseline. The ambience-options localStorage key is the app preference store, not a saved project."
+  },
+  "excluded": [
+    {
+      "surface": "Feedback submission",
+      "reason": "The feedback dialog and fields were inspected. Submission was not clicked because it sends an external write."
+    },
+    {
+      "surface": "Sign-in, cloud upload/sync, and cloud deletion",
+      "reason": "Authentication and remote writes were outside the authorized audit. No sign-in, sync, upload, or cloud deletion action was clicked."
+    },
+    {
+      "surface": "Selecting and importing a real save file",
+      "reason": "The Import Game Save branch and empty file input were inspected; no file was selected and no import was started."
+    },
+    {
+      "surface": "Library export actions",
+      "reason": "Export CSV and other file-writing/download actions were not clicked."
+    },
+    {
+      "surface": "Map chooser internal list scroll-to-bottom on mobile",
+      "reason": "A scrollbar was visible in the screenshot, but a touch scroll through the list to its end was not recorded."
+    },
+    {
+      "surface": "Map chooser background scroll-lock state",
+      "reason": "The page scroll position was recorded at 418 during the mobile chooser sample, but body overflow/scroll-lock state was not measured."
+    }
+  ],
+  "coverage": {
+    "desktop": "Completed: desktop panels, Library branches, toolbar, catalog, map branches/configuration, pending-placement copy, and canvas samples; explicit Fill limitation remains recorded below.",
+    "mobile": "Completed responsive samples: mobile menu and prior panel coverage; this final pass checked Library close/recovery, all 4 map categories and 2 Community subtabs, catalog Browse/Collapse and category/search restoration, Select/Multi, Zoom on/off, disabled Undo/Redo, and final cleanup. Repeated every desktop option on mobile was not in scope.",
+    "canvas": "partial and reset: placement, move, Multi selection, Erase, Undo, and Redo observed; Torch is confirmed unsupported by Fill despite misleading UI; one Tilled Dirt drag with Fill shown had no visible effect, but tested-tile eligibility remains unverified; reload restored the 4-building fixture",
+    "panels": "completed on desktop: Ambience, View, Farm Settings, Settings, Help, Keyboard Shortcuts, Feedback, and all Library branches",
+    "catalogCategories": "completed on desktop: all 8 categories; one item selection and Escape clear per category; search clear, Grid/List, and dynamic filter options verified; mobile responsive sample also checked Crops and restored Buildings, search blank, and Browse collapsed.",
+    "mapChooserBranches": "Desktop: all branches and representative cards tested, Standard Farm restored. Mobile: Farm, Interiors, Exteriors, Community/Farms, and Community/Interiors tabs visited; no mobile card was selected; Standard Farm remained current."
+  },
+  "toolbarState": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "selectedToolState": [
+      {
+        "name": "Select",
+        "pressed": true,
+        "hover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        },
+        "noHover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        }
+      },
+      {
+        "name": "Multi",
+        "pressed": true,
+        "hover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        },
+        "noHover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        }
+      },
+      {
+        "name": "Fill",
+        "pressed": true,
+        "hover": {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(28, 33, 27)"
+        },
+        "noHover": {
+          "background": "rgb(237, 245, 227)",
+          "color": "rgb(28, 33, 27)"
+        }
+      },
+      {
+        "name": "Erase",
+        "pressed": true,
+        "hover": {
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(28, 33, 27)"
+        },
+        "noHover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        }
+      },
+      {
+        "name": "Zoom",
+        "pressed": true,
+        "hover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        },
+        "noHover": {
+          "background": "rgba(177, 58, 40, 0.15)",
+          "color": "rgb(177, 58, 40)"
+        }
+      }
+    ],
+    "allToolbarControlShadows": "none",
+    "restored": {
+      "selectedTool": "Select",
+      "zoomPressed": false,
+      "undoDisabled": true,
+      "redoDisabled": true
+    }
+  },
+  "dialogCoverage": {
+    "Help": {
+      "opened": true,
+      "closed": true,
+      "heading": "Help & Info",
+      "controls": 1
+    },
+    "Keyboard shortcuts": {
+      "opened": true,
+      "closed": true,
+      "heading": "Keyboard Shortcuts",
+      "controls": 1
+    },
+    "Feedback": {
+      "opened": true,
+      "closed": true,
+      "heading": "Send feedback",
+      "fieldsInspected": [
+        "SELECT",
+        "INPUT[type=text]",
+        "TEXTAREA"
+      ],
+      "submitDisabled": true,
+      "submitClicked": false,
+      "previewMessage": "Feedback is temporarily unavailable."
+    },
+    "Library": {
+      "opened": true,
+      "closed": true,
+      "branches": {
+        "Local projects": {
+          "activeOnOpen": true,
+          "localProjectCount": 0,
+          "searchedOrChanged": true,
+          "saveNewImportExportDeleteClicked": false,
+          "rawOpenState": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "heading": "Library",
+            "branchButtons": [
+              {
+                "text": "×",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              },
+              {
+                "text": "Local projects",
+                "selected": null,
+                "pressed": "true",
+                "disabled": false
+              },
+              {
+                "text": "Import Game Save",
+                "selected": null,
+                "pressed": "false",
+                "disabled": false
+              },
+              {
+                "text": "Farm Summary",
+                "selected": null,
+                "pressed": "false",
+                "disabled": false
+              },
+              {
+                "text": "Continue with Google",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              },
+              {
+                "text": "Save to this device",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              },
+              {
+                "text": "New project",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              },
+              {
+                "text": "Screenshot",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              },
+              {
+                "text": "Screenshot (HQ)",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              },
+              {
+                "text": "Save thumbnail",
+                "selected": null,
+                "pressed": null,
+                "disabled": false
+              }
+            ],
+            "inputs": [
+              {
+                "type": "file",
+                "placeholder": "",
+                "ariaLabel": null,
+                "disabled": false,
+                "value": ""
+              },
+              {
+                "type": "search",
+                "placeholder": "Search local projects",
+                "ariaLabel": "Search local projects",
+                "disabled": false,
+                "value": ""
+              }
+            ],
+            "projectStoragePresent": false,
+            "dialogText": "Library\n×\nLocal projects\nImport Game Save\nFarm Summary\nCloud sync\n\nOnly layout data syncs. Map preview images stay on this device. Cloud copies stay until you delete them.\n\nAccount\n\nAfter signing in, saving the current project syncs it automatically. Sync existing local projects one at a time.\n\nContinue with Google\n\nLocal saving will be phased out. The 7-day migration period and cutoff date will be confirmed before launch.\n\nCloud sync could not load: Could not load the planner session: HTTP 404 Not Found.\n\nLocal projects\n\nCurrent project: None\n\nStored in this browser.\n\nSave to this device\nNew project\nImport JSON\n\nNo local projects yet. Saving creates an Untitled Project and saves the current map.\n\nExport\nScreenshot\nScreenshot (HQ)\nThumbnail\nSave thumbnail"
+          },
+          "search": {
+            "initial": {
+              "viewport": {
+                "innerWidth": 1440,
+                "innerHeight": 1000
+              },
+              "heading": "Library",
+              "query": "",
+              "localProjectCount": 0,
+              "noProjectsMessage": true
+            },
+            "searched": {
+              "query": "audit-search-no-match",
+              "projectCards": 0,
+              "noProjectsMessage": true,
+              "projectStoragePresent": false
+            },
+            "cleared": {
+              "query": "",
+              "projectCards": 0,
+              "noProjectsMessage": true,
+              "projectStoragePresent": false
+            }
+          }
+        },
+        "Import Game Save": {
+          "opened": true,
+          "fileInputObserved": true,
+          "fileSelected": false
+        },
+        "Farm Summary": {
+          "opened": true,
+          "map": "Standard Farm",
+          "season": "Spring",
+          "placements": 4,
+          "detailedSummaryOpened": true,
+          "listedBuildings": [
+            "Farmhouse",
+            "Greenhouse",
+            "Shipping Bin",
+            "Pet Bowl"
+          ]
+        }
+      },
+      "cloudSessionRead": {
+        "requestTriggeredByOpeningDefaultProjectsBranch": true,
+        "previewResult": "HTTP 404 Not Found from /api/auth/get-session",
+        "signInClicked": false,
+        "syncOrUploadClicked": false,
+        "cloudWrite": false
+      },
+      "closedAfterSearch": true
+    }
+  },
+  "panelCoverage": {
+    "Ambience": {
+      "seasons": {
+        "initial": "Spring",
+        "changed": [
+          "Summer",
+          "Fall",
+          "Winter"
+        ],
+        "restored": "Spring"
+      },
+      "switches": [
+        {
+          "label": "Night mode",
+          "before": false,
+          "toggled": true,
+          "restored": false
+        },
+        {
+          "label": "Summer clouds",
+          "before": false,
+          "toggled": true,
+          "restored": false
+        },
+        {
+          "label": "Butterflies & debris",
+          "before": true,
+          "toggled": false,
+          "restored": true
+        },
+        {
+          "label": "Animations",
+          "before": true,
+          "toggled": false,
+          "restored": true
+        }
+      ],
+      "weather": {
+        "initial": "Clear",
+        "changed": [
+          "Rain",
+          "Storm",
+          "Green rain",
+          "Snow"
+        ],
+        "restored": "Clear"
+      },
+      "preferenceStorageRestoredExactly": true
+    },
+    "View": {
+      "switchesToggledAndRestored": [
+        "Sprinkler",
+        "Scarecrow",
+        "Bee house",
+        "Junimo hut",
+        "Grid",
+        "Resource clumps",
+        "Buildings",
+        "Crops",
+        "Trees"
+      ],
+      "unsupportedDisabled": [
+        {
+          "label": "NPC paths",
+          "title": "NPC paths are unavailable on this map"
+        }
+      ],
+      "catalogPosition": {
+        "initial": "Left",
+        "visited": [
+          "Bottom"
+        ],
+        "restored": "Left"
+      }
+    },
+    "Farm Settings": {
+      "spouseOptionsSampled": 13,
+      "spouseChoicesSelectedAndRestored": [
+        "Abigail",
+        "Penny",
+        "Leah",
+        "Haley",
+        "Maru",
+        "Sebastian",
+        "Alex",
+        "Harvey",
+        "Elliott",
+        "Sam",
+        "Shane",
+        "Emily"
+      ],
+      "spouseInitialRestored": "None",
+      "caveOptionsSampled": 3,
+      "caveChoicesSelectedAndRestored": [
+        "Mushrooms",
+        "Bats"
+      ],
+      "caveInitialRestored": "Not chosen"
+    },
+    "Settings": {
+      "cursor": {
+        "initial": "Game",
+        "changed": "System",
+        "restored": "Game"
+      },
+      "togglesChangedAndRestored": {
+        "Toast notifications": true,
+        "Show joystick": true,
+        "Left-hand mode": false
+      },
+      "freePlacementWarningOpened": true,
+      "cancelClicked": true,
+      "confirmClicked": false,
+      "freePlacementRestoredOff": true
+    }
+  },
+  "workflowNotes": [
+    "No project or IndexedDB data exists on localhost:3007; app preference key stardew-planner:planner-ambience-options exists and was restored byte-for-byte after option testing.",
+    "Standard Farm starts with four source-defined starter buildings; no user-added canvas placements existed. Canvas edits, if tested, must restore to this four-building baseline, not empty placements.",
+    "Floating third-party-style “导出外链” control is visible outside the planner root and was not clicked.",
+    "First free-placement locator used lowercase “Free placement” and matched no control; DOM showed exact accessible label “Free Placement”. The script stopped before that action, then exact label was used and Cancel verified.",
+    "The previous checkpoint contained summarized catalog findings but no persisted raw page.evaluate return batch. catalogCoverage records the observed values verbatim from the browser run; it is not represented as a raw protocol dump.",
+    "Canvas audit was reset by reloading the isolated no-project Standard Farm after Undo/Redo; Farm Summary returned to 4 items, selection/pending UI was absent, Select was active, Zoom was off, Undo/Redo were disabled, and the local project key remained absent.",
+    "Supported-item Fill check: selected Tilled Dirt, verified Fill pressed plus the Filling Tilled Dirt pill, then dragged one 36px rectangle; Farm Summary remained at 4, Undo stayed disabled, and no alert appeared. Tile eligibility was not independently validated, so this single no-op is not classified as a product defect; no coordinate retry was made.",
+    "Fill/Torch source classification: object:93 Torch is mapped from Lighting and lacks fill in allowedTools; the UI still selected Fill and displayed a Filling Torch pill. Preserve as a confirmed unsupported-item UI mismatch, not a generic Fill failure.",
+    "Earlier automation mistakes were inspected: a Map wait used the wrong title and swallowed a timeout, while a separate Node-side document reference threw before any click. These are test-script issues, not application failures; no app state was changed by the latter.",
+    "Mobile continuation completed after the competitor comparison pause: p1 map tabs, responsive catalog Browse/Collapse, toolbar state, and cleanup were recorded in mobileCoverage; root later resumed the page for a separate follow-up.",
+    "The mobile chooser screenshot at scrollY=418 records a lower-page positioning context, not a direct-reload layout. The first action that produced scrollY=418 was not retained; body scroll-lock and touch-scroll-to-list-end were not measured.",
+    "Before handing p1 back, device metrics were cleared, Network.setCacheDisabled was set to false, the audit-created editor-preferences key was removed only after its value matched the restored default exactly, and the baseline ambience key was preserved."
+  ],
+  "catalogCoverage": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "categorySamples": [
+      {
+        "category": "Buildings",
+        "count": 49,
+        "sample": "Coop",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Crops",
+        "count": 67,
+        "sample": "Unmilled Rice",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Trees",
+        "count": 22,
+        "sample": "Oak Tree",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Equipment",
+        "count": 71,
+        "sample": "Sprinkler",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Fences & Paths",
+        "count": 21,
+        "sample": "Tilled Dirt",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Lighting",
+        "count": 39,
+        "sample": "Torch",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Furniture",
+        "count": 257,
+        "sample": "Oak Chair",
+        "selectedThenCleared": true
+      },
+      {
+        "category": "Decor",
+        "count": 423,
+        "sample": "Tub o’ Flowers",
+        "selectedThenCleared": true
+      }
+    ],
+    "eachSelectionClearedWith": "Escape",
+    "selectToolRestoredAfterEachCategory": true,
+    "search": {
+      "query": "Coop",
+      "resultCount": 3,
+      "cleared": true,
+      "categoryRestoredCount": 49
+    },
+    "presentation": {
+      "initial": "Grid",
+      "changedTo": "List",
+      "gridRestored": true
+    },
+    "filter": {
+      "initial": "All (49)",
+      "observedOptions": [
+        "All (49)",
+        "Animals (7)",
+        "Production (2)",
+        "Storage (3)",
+        "Utility (7)",
+        "Luxury (5)",
+        "Cabins (21)",
+        "Structures (4)"
+      ],
+      "selectedSample": "Animals (7)",
+      "resultCount": 7,
+      "restored": "All (49)"
+    },
+    "currentStateRestored": {
+      "category": "Buildings",
+      "query": "",
+      "filter": "All",
+      "presentation": "Grid",
+      "selectedItem": null
+    }
+  },
+  "mapChooserCoverage": {
+    "viewport": {
+      "innerWidth": 1440,
+      "innerHeight": 1000
+    },
+    "branchesVisited": [
+      {
+        "branch": "Farm",
+        "cardCount": 9,
+        "cards": [
+          {
+            "id": "standard",
+            "text": "Standard Farm",
+            "pressed": "true"
+          },
+          {
+            "id": "riverland",
+            "text": "Riverland Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "forest",
+            "text": "Forest Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "hilltop",
+            "text": "Hill-top Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "wilderness",
+            "text": "Wilderness Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "four-corners",
+            "text": "Four Corners Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "beach",
+            "text": "Beach Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "meadowlands",
+            "text": "Meadowlands Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "ginger-island",
+            "text": "Ginger Island",
+            "pressed": "false"
+          }
+        ]
+      },
+      {
+        "branch": "Exteriors",
+        "cardCount": 15,
+        "cards": [
+          {
+            "id": "ginger-island-north",
+            "text": "Ginger Island North",
+            "pressed": "false"
+          },
+          {
+            "id": "ginger-island-south",
+            "text": "Ginger Island South",
+            "pressed": "false"
+          },
+          {
+            "id": "ginger-island-south-east",
+            "text": "Ginger Island South-East",
+            "pressed": "false"
+          },
+          {
+            "id": "ginger-island-east",
+            "text": "Ginger Island East",
+            "pressed": "false"
+          },
+          {
+            "id": "railroad",
+            "text": "Railroad",
+            "pressed": "false"
+          },
+          {
+            "id": "backwoods",
+            "text": "Backwoods",
+            "pressed": "false"
+          },
+          {
+            "id": "secret-woods",
+            "text": "Secret Woods",
+            "pressed": "false"
+          },
+          {
+            "id": "summit",
+            "text": "Summit",
+            "pressed": "false"
+          },
+          {
+            "id": "pelican-town",
+            "text": "Pelican Town",
+            "pressed": "false"
+          },
+          {
+            "id": "cindersap-forest",
+            "text": "Cindersap Forest",
+            "pressed": "false"
+          },
+          {
+            "id": "mountain",
+            "text": "Mountain",
+            "pressed": "false"
+          },
+          {
+            "id": "pelican-beach",
+            "text": "Pelican Beach",
+            "pressed": "false"
+          },
+          {
+            "id": "calico-desert",
+            "text": "Calico Desert",
+            "pressed": "false"
+          },
+          {
+            "id": "bus-stop",
+            "text": "Bus Stop",
+            "pressed": "false"
+          },
+          {
+            "id": "quarry",
+            "text": "Quarry",
+            "pressed": "false"
+          }
+        ]
+      },
+      {
+        "branch": "Community / Farms",
+        "cardCount": 18,
+        "cards": [
+          {
+            "id": "if2r",
+            "text": "Immersive Farm 2",
+            "pressed": "false"
+          },
+          {
+            "id": "frontier",
+            "text": "Frontier Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "grandpas",
+            "text": "Grandpa's Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "capitalist-dream",
+            "text": "Capitalist Dream Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "capitalist-dream-2",
+            "text": "Capitalist Dream Farm 2",
+            "pressed": "false"
+          },
+          {
+            "id": "overgrown-garden",
+            "text": "Overgrown Garden Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "yet-another",
+            "text": "Yet Another Farm Map",
+            "pressed": "false"
+          },
+          {
+            "id": "solo-four-corners",
+            "text": "Solo Four Corners Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "strawberry-fields",
+            "text": "Strawberry Fields Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "blackberry-fields",
+            "text": "Blackberry Fields Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "zenith",
+            "text": "Zenith Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "everfarm",
+            "text": "Everfarm",
+            "pressed": "false"
+          },
+          {
+            "id": "sea-breeze-island",
+            "text": "Sea Breeze Island Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "aimon-s-small-hilltop",
+            "text": "Aimon's Small Hilltop Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "aimon-s-small-forest",
+            "text": "Aimon's Small Forest Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "more-lively-meadowlands",
+            "text": "More Lively Meadowlands Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "modest-maps-standard",
+            "text": "Modest Maps Standard Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "waterfall-forest",
+            "text": "Waterfall Forest Farm (WaFF)",
+            "pressed": "false"
+          }
+        ]
+      },
+      {
+        "branch": "Community / Interiors",
+        "cardCount": 3,
+        "cards": [
+          {
+            "id": "sve-winery",
+            "text": "Winery (SVE)",
+            "pressed": "false"
+          },
+          {
+            "id": "sve-grandpas-shed-1",
+            "text": "Grandpa's Shed Floor 1 (SVE)",
+            "pressed": "false"
+          },
+          {
+            "id": "sve-grandpas-shed-2",
+            "text": "Grandpa's Shed Floor 2 (SVE)",
+            "pressed": "false"
+          }
+        ]
+      },
+      {
+        "branch": "Interiors",
+        "cardCount": 16,
+        "cards": [
+          {
+            "id": "farmhouse-0",
+            "text": "Farmhouse",
+            "pressed": "false"
+          },
+          {
+            "id": "farmhouse-1",
+            "text": "Farmhouse (Upgrade 1)",
+            "pressed": "false"
+          },
+          {
+            "id": "farmhouse-2",
+            "text": "Farmhouse (Upgrade 2)",
+            "pressed": "false"
+          },
+          {
+            "id": "farmhouse-cellar",
+            "text": "Cellar",
+            "pressed": "false"
+          },
+          {
+            "id": "shed",
+            "text": "Shed",
+            "pressed": "false"
+          },
+          {
+            "id": "big-shed",
+            "text": "Big Shed",
+            "pressed": "false"
+          },
+          {
+            "id": "barn",
+            "text": "Barn",
+            "pressed": "false"
+          },
+          {
+            "id": "big-barn",
+            "text": "Big Barn",
+            "pressed": "false"
+          },
+          {
+            "id": "deluxe-barn",
+            "text": "Deluxe Barn",
+            "pressed": "false"
+          },
+          {
+            "id": "coop",
+            "text": "Coop",
+            "pressed": "false"
+          },
+          {
+            "id": "big-coop",
+            "text": "Big Coop",
+            "pressed": "false"
+          },
+          {
+            "id": "deluxe-coop",
+            "text": "Deluxe Coop",
+            "pressed": "false"
+          },
+          {
+            "id": "slime-hutch",
+            "text": "Slime Hutch",
+            "pressed": "false"
+          },
+          {
+            "id": "greenhouse",
+            "text": "Greenhouse",
+            "pressed": "false"
+          },
+          {
+            "id": "farm-cave",
+            "text": "Farm Cave",
+            "pressed": "false"
+          },
+          {
+            "id": "island-farmhouse",
+            "text": "Island Farmhouse",
+            "pressed": "false"
+          }
+        ]
+      },
+      {
+        "branch": "Farm restored",
+        "cardCount": 9,
+        "cards": [
+          {
+            "id": "standard",
+            "text": "Standard Farm",
+            "pressed": "true"
+          },
+          {
+            "id": "riverland",
+            "text": "Riverland Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "forest",
+            "text": "Forest Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "hilltop",
+            "text": "Hill-top Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "wilderness",
+            "text": "Wilderness Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "four-corners",
+            "text": "Four Corners Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "beach",
+            "text": "Beach Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "meadowlands",
+            "text": "Meadowlands Farm",
+            "pressed": "false"
+          },
+          {
+            "id": "ginger-island",
+            "text": "Ginger Island",
+            "pressed": "false"
+          }
+        ]
+      }
+    ],
+    "rawBranches": [
+      {
+        "branch": "Farm",
+        "topLevelTabs": [
+          {
+            "text": "Farm",
+            "selected": "true",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Exteriors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Community",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          }
+        ],
+        "communityTabs": [],
+        "activePanel": {
+          "labelledBy": "_r_ef_-tab-farm",
+          "cards": [
+            {
+              "id": "standard",
+              "text": "Standard Farm",
+              "pressed": "true",
+              "background": "rgb(201, 251, 69)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "riverland",
+              "text": "Riverland Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "forest",
+              "text": "Forest Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "hilltop",
+              "text": "Hill-top Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "wilderness",
+              "text": "Wilderness Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "four-corners",
+              "text": "Four Corners Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "beach",
+              "text": "Beach Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "meadowlands",
+              "text": "Meadowlands Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "ginger-island",
+              "text": "Ginger Island",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            }
+          ]
+        },
+        "selectedMapTrigger": [
+          "Current map: Standard Farm"
+        ]
+      },
+      {
+        "branch": "Exteriors",
+        "topLevelTabs": [
+          {
+            "text": "Farm",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Exteriors",
+            "selected": "true",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Community",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          }
+        ],
+        "communityTabs": [],
+        "activePanel": {
+          "labelledBy": "_r_ef_-tab-exteriors",
+          "cards": [
+            {
+              "id": "ginger-island-north",
+              "text": "Ginger Island North",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "ginger-island-south",
+              "text": "Ginger Island South",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "ginger-island-south-east",
+              "text": "Ginger Island South-East",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "ginger-island-east",
+              "text": "Ginger Island East",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "railroad",
+              "text": "Railroad",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "backwoods",
+              "text": "Backwoods",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "secret-woods",
+              "text": "Secret Woods",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "summit",
+              "text": "Summit",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "pelican-town",
+              "text": "Pelican Town",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "cindersap-forest",
+              "text": "Cindersap Forest",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "mountain",
+              "text": "Mountain",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "pelican-beach",
+              "text": "Pelican Beach",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "calico-desert",
+              "text": "Calico Desert",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "bus-stop",
+              "text": "Bus Stop",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "quarry",
+              "text": "Quarry",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            }
+          ]
+        },
+        "selectedMapTrigger": [
+          "Current map: Standard Farm"
+        ]
+      },
+      {
+        "branch": "Community / Farms",
+        "topLevelTabs": [
+          {
+            "text": "Farm",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Exteriors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Community",
+            "selected": "true",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "communityTabs": [
+          {
+            "text": "Farms",
+            "selected": "true",
+            "background": "rgb(201, 251, 69)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "activePanel": {
+          "labelledBy": "_r_ef_-tab-community _r_ef_-community-tab-farms",
+          "cards": [
+            {
+              "id": "if2r",
+              "text": "Immersive Farm 2",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "frontier",
+              "text": "Frontier Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "grandpas",
+              "text": "Grandpa's Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "capitalist-dream",
+              "text": "Capitalist Dream Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "capitalist-dream-2",
+              "text": "Capitalist Dream Farm 2",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "overgrown-garden",
+              "text": "Overgrown Garden Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "yet-another",
+              "text": "Yet Another Farm Map",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "solo-four-corners",
+              "text": "Solo Four Corners Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "strawberry-fields",
+              "text": "Strawberry Fields Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "blackberry-fields",
+              "text": "Blackberry Fields Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "zenith",
+              "text": "Zenith Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "everfarm",
+              "text": "Everfarm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "sea-breeze-island",
+              "text": "Sea Breeze Island Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 232.65625
+            },
+            {
+              "id": "aimon-s-small-hilltop",
+              "text": "Aimon's Small Hilltop Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 232.65625
+            },
+            {
+              "id": "aimon-s-small-forest",
+              "text": "Aimon's Small Forest Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 232.65625
+            },
+            {
+              "id": "more-lively-meadowlands",
+              "text": "More Lively Meadowlands Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 232.65625
+            },
+            {
+              "id": "modest-maps-standard",
+              "text": "Modest Maps Standard Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 232.65625
+            },
+            {
+              "id": "waterfall-forest",
+              "text": "Waterfall Forest Farm (WaFF)",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 232.65625
+            }
+          ]
+        },
+        "selectedMapTrigger": [
+          "Current map: Standard Farm"
+        ]
+      },
+      {
+        "branch": "Community / Interiors",
+        "topLevelTabs": [
+          {
+            "text": "Farm",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Exteriors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Community",
+            "selected": "true",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "communityTabs": [
+          {
+            "text": "Farms",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "true",
+            "background": "rgb(201, 251, 69)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "activePanel": {
+          "labelledBy": "_r_ef_-tab-community _r_ef_-community-tab-interiors",
+          "cards": [
+            {
+              "id": "sve-winery",
+              "text": "Winery (SVE)",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 182.078125,
+              "height": 234.65625
+            },
+            {
+              "id": "sve-grandpas-shed-1",
+              "text": "Grandpa's Shed Floor 1 (SVE)",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 182.078125,
+              "height": 234.65625
+            },
+            {
+              "id": "sve-grandpas-shed-2",
+              "text": "Grandpa's Shed Floor 2 (SVE)",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 182.078125,
+              "height": 234.65625
+            }
+          ]
+        },
+        "selectedMapTrigger": [
+          "Current map: Standard Farm"
+        ]
+      },
+      {
+        "branch": "Interiors",
+        "topLevelTabs": [
+          {
+            "text": "Farm",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "true",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Exteriors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Community",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          }
+        ],
+        "communityTabs": [],
+        "activePanel": {
+          "labelledBy": "_r_ef_-tab-interiors",
+          "cards": [
+            {
+              "id": "farmhouse-0",
+              "text": "Farmhouse",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "farmhouse-1",
+              "text": "Farmhouse (Upgrade 1)",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "farmhouse-2",
+              "text": "Farmhouse (Upgrade 2)",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "farmhouse-cellar",
+              "text": "Cellar",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "shed",
+              "text": "Shed",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "big-shed",
+              "text": "Big Shed",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "barn",
+              "text": "Barn",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "big-barn",
+              "text": "Big Barn",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "deluxe-barn",
+              "text": "Deluxe Barn",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "coop",
+              "text": "Coop",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "big-coop",
+              "text": "Big Coop",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "deluxe-coop",
+              "text": "Deluxe Coop",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "slime-hutch",
+              "text": "Slime Hutch",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "greenhouse",
+              "text": "Greenhouse",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "farm-cave",
+              "text": "Farm Cave",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "island-farmhouse",
+              "text": "Island Farmhouse",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            }
+          ]
+        },
+        "selectedMapTrigger": [
+          "Current map: Standard Farm"
+        ]
+      },
+      {
+        "branch": "Farm restored",
+        "topLevelTabs": [
+          {
+            "text": "Farm",
+            "selected": "true",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+            "borderColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Interiors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Exteriors",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          },
+          {
+            "text": "Community",
+            "selected": "false",
+            "background": "rgb(241, 247, 231)",
+            "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+            "borderColor": "rgb(28, 33, 27) rgb(28, 33, 27) rgba(0, 0, 0, 0)"
+          }
+        ],
+        "communityTabs": [],
+        "activePanel": {
+          "labelledBy": "_r_ef_-tab-farm",
+          "cards": [
+            {
+              "id": "standard",
+              "text": "Standard Farm",
+              "pressed": "true",
+              "background": "rgb(201, 251, 69)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.24px 2.56px 5.12px 0px inset, rgba(255, 255, 255, 0.82) -1.92px -2.24px 4.48px 0px inset",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "riverland",
+              "text": "Riverland Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "forest",
+              "text": "Forest Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "hilltop",
+              "text": "Hill-top Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "wilderness",
+              "text": "Wilderness Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "four-corners",
+              "text": "Four Corners Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "beach",
+              "text": "Beach Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "meadowlands",
+              "text": "Meadowlands Farm",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            },
+            {
+              "id": "ginger-island",
+              "text": "Ginger Island",
+              "pressed": "false",
+              "background": "rgb(241, 247, 231)",
+              "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+              "borderColor": "rgba(0, 0, 0, 0)",
+              "width": 180.078125,
+              "height": 212.65625
+            }
+          ]
+        },
+        "selectedMapTrigger": [
+          "Current map: Standard Farm"
+        ]
+      }
+    ],
+    "screenshot": "design-plans/planner-full-audit-map-exteriors.png",
+    "representativeMapSelection": {
+      "status": "completed",
+      "previousSequence": {
+        "confirmedSelectionOrder": [
+          "Exteriors / ginger-island-north",
+          "Community / Farms / if2r"
+        ],
+        "currentMapAfterSequence": "Current map: Immersive Farm 2",
+        "pickerRetainedForCommunitySubtab": true
+      },
+      "communityInterior": {
+        "before": {
+          "viewport": {
+            "innerWidth": 1440,
+            "innerHeight": 1000
+          },
+          "map": "Current map: Immersive Farm 2",
+          "picker": true,
+          "activeTopTab": "Community",
+          "activeCommunityTab": "Farms",
+          "projectStoragePresent": false
+        },
+        "card": {
+          "id": "sve-winery",
+          "text": "Winery (SVE)",
+          "pressed": "false",
+          "background": "rgb(241, 247, 231)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "borderColor": "rgba(0, 0, 0, 0)"
+        },
+        "selection": {
+          "map": "Current map: Winery (SVE)",
+          "chooserClosed": true,
+          "projectStoragePresent": false
+        }
+      },
+      "restoredStandardFarm": {
+        "card": {
+          "id": "standard",
+          "text": "Standard Farm",
+          "pressed": "false",
+          "background": "rgb(241, 247, 231)",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "borderColor": "rgba(0, 0, 0, 0)"
+        },
+        "state": {
+          "viewport": {
+            "innerWidth": 1440,
+            "innerHeight": 1000
+          },
+          "map": "Current map: Standard Farm",
+          "chooserClosed": true,
+          "projectStoragePresent": false,
+          "storageKeys": [
+            "stardew-planner.editor-preferences.v2",
+            "stardew-planner:planner-ambience-options"
+          ],
+          "preferenceValue": "{\"behaviorOptions\":{\"autoShowResourceClumps\":false,\"freePlacement\":false,\"gameCursors\":true,\"leftHandMode\":false,\"showJoystick\":true,\"showToasts\":true},\"displayOptions\":{\"showBeeHouseRadius\":false,\"showBuildableTiles\":false,\"showCropTiles\":false,\"showGrid\":false,\"showJunimoHutRadius\":false,\"showNightMode\":false,\"showNpcPaths\":false,\"showScarecrowRadius\":false,\"showSprinklerRadius\":false,\"showTreeTiles\":false}}",
+          "tool": [
+            "Select"
+          ],
+          "disabledHistory": []
+        }
+      },
+      "localProjectStorageStillAbsent": true
+    },
+    "configuration": {
+      "gingerIsland": {
+        "observedInitialCheckboxes": [
+          {
+            "label": "Restored",
+            "checked": true
+          },
+          {
+            "label": "Bin",
+            "checked": true
+          },
+          {
+            "label": "Cave",
+            "checked": true
+          },
+          {
+            "label": "Obelisk",
+            "checked": true
+          }
+        ],
+        "firstOverlayToggleObservedOff": {
+          "label": "Restored",
+          "checked": false
+        },
+        "restored": [
+          {
+            "label": "Restored",
+            "checked": true
+          },
+          {
+            "label": "Bin",
+            "checked": true
+          },
+          {
+            "label": "Cave",
+            "checked": true
+          },
+          {
+            "label": "Obelisk",
+            "checked": true
+          }
+        ],
+        "restoredExactly": true
+      },
+      "farmhouseUpgrade2": {
+        "viewport": {
+          "innerWidth": 1440,
+          "innerHeight": 1000
+        },
+        "map": "Current map: Farmhouse (Upgrade 2)",
+        "chooserVisible": true,
+        "section": {
+          "heading": "Farmhouse (Upgrade 2)",
+          "options": [
+            {
+              "label": "Married layout",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Spouse room",
+              "value": "",
+              "selectDisabled": true,
+              "options": [
+                "None",
+                "Abigail",
+                "Penny",
+                "Leah",
+                "Haley",
+                "Maru",
+                "Sebastian",
+                "Alex",
+                "Harvey",
+                "Elliott",
+                "Sam",
+                "Shane",
+                "Emily",
+                "Krobus"
+              ]
+            },
+            {
+              "label": "Open Bedroom",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Southern Room",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Corner Room",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Extended Corner Room",
+              "checked": false,
+              "disabled": true
+            },
+            {
+              "label": "Dining Room",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Dining Room Wall",
+              "checked": false,
+              "disabled": true
+            },
+            {
+              "label": "Cubby",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Far Upper Room",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Crib",
+              "checked": false,
+              "disabled": false
+            },
+            {
+              "label": "Cellar",
+              "checked": false,
+              "disabled": false
+            }
+          ]
+        },
+        "activeCard": {
+          "id": "farmhouse-2",
+          "text": "Farmhouse (Upgrade 2)"
+        },
+        "interaction": {
+          "initial": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": false,
+            "spouse": {
+              "value": "",
+              "selectedLabel": "None",
+              "disabled": true
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "marriageEnabled": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": true,
+            "spouse": {
+              "value": "",
+              "selectedLabel": "None",
+              "disabled": false
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "spouseSelected": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": true,
+            "spouse": {
+              "value": "abigail",
+              "selectedLabel": "Abigail",
+              "disabled": false
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "marriageRestored": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": false,
+            "spouse": {
+              "value": "",
+              "selectedLabel": "None",
+              "disabled": true
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "cornerRoomEnabled": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": false,
+            "spouse": {
+              "value": "",
+              "selectedLabel": "None",
+              "disabled": true
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": true,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "extendedRoomEnabledAndSelected": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": false,
+            "spouse": {
+              "value": "",
+              "selectedLabel": "None",
+              "disabled": true
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": true,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": true,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "finalConfiguration": {
+            "viewport": {
+              "innerWidth": 1440,
+              "innerHeight": 1000
+            },
+            "map": "Current map: Farmhouse (Upgrade 2)",
+            "marriageChecked": false,
+            "spouse": {
+              "value": "",
+              "selectedLabel": "None",
+              "disabled": true
+            },
+            "renovations": [
+              {
+                "label": "Open Bedroom",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Southern Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Corner Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Extended Corner Room",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Dining Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Dining Room Wall",
+                "checked": false,
+                "disabled": true
+              },
+              {
+                "label": "Cubby",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Far Upper Room",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Crib",
+                "checked": false,
+                "disabled": false
+              },
+              {
+                "label": "Cellar",
+                "checked": false,
+                "disabled": false
+              }
+            ]
+          },
+          "restored": true
+        }
+      }
+    },
+    "chooserClose": "Completed: chooser closed after tab inspection; Standard Farm remained selected.",
+    "mobileResponsiveSample": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollY": 418,
+      "menu": {
+        "before": "aria-expanded=false",
+        "opened": "aria-expanded=true",
+        "action": "selected Map"
+      },
+      "visitedBranches": [
+        {
+          "branch": "Farm",
+          "cardCount": 9,
+          "firstCards": [
+            "Standard Farm",
+            "Riverland Farm",
+            "Forest Farm"
+          ]
+        },
+        {
+          "branch": "Interiors",
+          "cardCount": 16,
+          "firstCards": [
+            "Farmhouse",
+            "Farmhouse (Upgrade 1)",
+            "Farmhouse (Upgrade 2)"
+          ]
+        },
+        {
+          "branch": "Exteriors",
+          "cardCount": 15,
+          "firstCards": [
+            "Ginger Island North",
+            "Ginger Island South",
+            "Ginger Island South-East"
+          ]
+        },
+        {
+          "branch": "Community / Farms",
+          "cardCount": 18,
+          "firstCards": [
+            "Immersive Farm 2",
+            "Frontier Farm",
+            "Grandpa's Farm"
+          ]
+        },
+        {
+          "branch": "Community / Interiors",
+          "cardCount": 3,
+          "firstCards": [
+            "Winery (SVE)",
+            "Grandpa's Shed Floor 1 (SVE)",
+            "Grandpa's Shed Floor 2 (SVE)"
+          ]
+        }
+      ],
+      "selectedMapCardClicked": false,
+      "finalCurrentMap": "Standard Farm",
+      "horizontalOverflow": false,
+      "dialogRect": {
+        "x": 19.5,
+        "y": 478.83,
+        "width": 351,
+        "height": 546.4,
+        "bottom": 1025.23
+      },
+      "viewportBottom": 844,
+      "bottomPastViewport": 181.23,
+      "outerDialogOverflowY": "hidden",
+      "innerListScrollbar": "visible in screenshot; reaching the list end by touch was not tested",
+      "backgroundScrollLock": "not measured",
+      "classification": "Measured lower-page dialog geometry in the scrollY=418 context; not classified as a product defect."
+    }
+  },
+  "findings": [
+    {
+      "id": "toolbar-tool-and-pending-placement-copy",
+      "status": "confirmed UI copy mismatch; placement behavior not judged by this step",
+      "reproduction": [
+        "Select Junimo Hut from Buildings",
+        "click Multi",
+        "click empty map canvas",
+        "click Erase"
+      ],
+      "startingState": {
+        "viewport": {
+          "innerWidth": 1440,
+          "innerHeight": 1000
+        },
+        "map": "Current map: Standard Farm",
+        "modalOpen": false,
+        "search": "",
+        "pendingPill": null,
+        "activeTool": [
+          "Select"
+        ],
+        "item": {
+          "ariaLabel": "Select Junimo Hut, 3 by 2 tiles",
+          "pressed": "false",
+          "rect": {
+            "x": 252.640625,
+            "y": 475.8046875,
+            "width": 73.9765625,
+            "height": 73.9765625,
+            "top": 475.8046875,
+            "right": 326.6171875,
+            "bottom": 549.78125,
+            "left": 252.640625
+          }
+        }
+      },
+      "pendingState": {
+        "activeTool": [
+          "Select"
+        ],
+        "item": {
+          "ariaLabel": "Select Junimo Hut, 3 by 2 tiles",
+          "pressed": "true"
+        },
+        "pill": {
+          "role": "group",
+          "ariaLabel": "Placing Junimo Hut",
+          "name": "Placing Junimo Hut",
+          "hint": "Click to place · Esc to cancel"
+        },
+        "selectedPlacementUi": null,
+        "canvasRect": {
+          "x": 2.5,
+          "y": 40.546875,
+          "width": 1429,
+          "height": 957,
+          "top": 40.546875,
+          "right": 1431.5,
+          "bottom": 997.546875,
+          "left": 2.5
+        }
+      },
+      "multiState": {
+        "toolButtons": [
+          {
+            "label": "Select",
+            "tool": "cursor",
+            "pressed": "false"
+          },
+          {
+            "label": "Multi",
+            "tool": "multi-select",
+            "pressed": "true"
+          },
+          {
+            "label": "Fill",
+            "tool": "fill",
+            "pressed": "false"
+          },
+          {
+            "label": "Erase",
+            "tool": "erase",
+            "pressed": "false"
+          }
+        ],
+        "pill": {
+          "ariaLabel": "Placing Junimo Hut",
+          "name": "Placing Junimo Hut",
+          "hint": "Click to place · Esc to cancel"
+        },
+        "selectedPlacementUi": null,
+        "selectedPlacementCountDom": 0
+      },
+      "afterBlankClick": {
+        "viewport": {
+          "innerWidth": 1440,
+          "innerHeight": 1000
+        },
+        "activeTool": [
+          "Multi"
+        ],
+        "pill": {
+          "ariaLabel": "Placing Junimo Hut",
+          "name": "Placing Junimo Hut",
+          "hint": "Click to place · Esc to cancel"
+        },
+        "selectionInspector": null,
+        "canvasRect": {
+          "x": 2.5,
+          "y": 40.546875,
+          "width": 1429,
+          "height": 957,
+          "top": 40.546875,
+          "right": 1431.5,
+          "bottom": 997.546875,
+          "left": 2.5
+        }
+      },
+      "eraseState": {
+        "toolButtons": [
+          {
+            "label": "Select",
+            "tool": "cursor",
+            "pressed": "false"
+          },
+          {
+            "label": "Multi",
+            "tool": "multi-select",
+            "pressed": "false"
+          },
+          {
+            "label": "Fill",
+            "tool": "fill",
+            "pressed": "false"
+          },
+          {
+            "label": "Erase",
+            "tool": "erase",
+            "pressed": "true"
+          }
+        ],
+        "pill": {
+          "ariaLabel": "Placing Junimo Hut",
+          "name": "Placing Junimo Hut",
+          "hint": "Click to place · Esc to cancel"
+        }
+      },
+      "cleanup": {
+        "restored": {
+          "map": "Current map: Standard Farm",
+          "activeTool": [
+            "Select"
+          ],
+          "pendingPill": null,
+          "search": "",
+          "projectStoragePresent": false,
+          "storageKeys": [
+            "stardew-planner.editor-preferences.v2",
+            "stardew-planner:planner-ambience-options"
+          ]
+        },
+        "action": "Select then Escape",
+        "screenshot": "design-plans/planner-full-audit-multi-placing-pill.png"
+      },
+      "note": "The pill says Placing Junimo Hut / Click to place while Multi and Erase are active. This is a tool-specific copy mismatch; this observation does not establish that Multi or Erase places the pending item.",
+      "blankCanvasCountCheck": {
+        "before": {
+          "source": "Farm Summary before Multi click",
+          "placements": 4,
+          "map": "Standard Farm"
+        },
+        "after": {
+          "viewport": {
+            "innerWidth": 1440,
+            "innerHeight": 1000
+          },
+          "map": "Current map: Standard Farm",
+          "summary": "Library\n×\nLocal projects\nImport Game Save\nFarm Summary\n\nMap: Standard Farm\n\nSeason: Spring\n\n4 items placed\n\nView detailed summary",
+          "projectStoragePresent": false
+        },
+        "countUnchanged": true,
+        "localProjectStorageStillAbsent": true
+      }
+    },
+    {
+      "id": "selected-placement-inspector-raised-buttons",
+      "status": "confirmed computed shadow on mounted selection inspector buttons",
+      "reproduction": [
+        "Place a Torch on vacant Standard Farm terrain",
+        "Escape placement mode",
+        "Click the Torch to open Selected placement"
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "selectedPlacement": "Torch",
+      "inspectorButtons": [
+        {
+          "ariaLabel": "Dismiss selection",
+          "className": "pill-dismiss selection-inspector__dismiss",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "rect": {
+            "x": 588.27734375,
+            "y": 882.203125,
+            "width": 26.3984375,
+            "height": 28.796875
+          }
+        },
+        {
+          "ariaLabel": "Extinguish selected light",
+          "className": "",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "rect": {
+            "x": 668.13671875,
+            "y": 882.203125,
+            "width": 88.6171875,
+            "height": 28.796875
+          }
+        },
+        {
+          "ariaLabel": "Cycle selected item appearance",
+          "className": "pill-more",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "rect": {
+            "x": 760.52734375,
+            "y": 882.203125,
+            "width": 25.8828125,
+            "height": 28.796875
+          }
+        },
+        {
+          "ariaLabel": "Copy selected placement",
+          "className": "pill-copy",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "rect": {
+            "x": 790.18359375,
+            "y": 882.203125,
+            "width": 25.8828125,
+            "height": 28.796875
+          }
+        },
+        {
+          "ariaLabel": "Delete selected placement",
+          "className": "pill-delete",
+          "boxShadow": "rgba(36, 42, 34, 0.18) 2.56px 3.2px 6.72px 0px, rgba(255, 255, 255, 0.82) -2.24px -2.56px 5.76px 0px",
+          "rect": {
+            "x": 819.83984375,
+            "y": 882.203125,
+            "width": 25.8828125,
+            "height": 28.796875
+          }
+        }
+      ],
+      "screenshot": "design-plans/planner-full-audit-canvas-selected-torch.png",
+      "note": "This is an additional real interactive-control instance sharing the legacy raised shadow token; this audit does not modify CSS."
+    },
+    {
+      "id": "fill-tool-single-rectangle-sample",
+      "status": "Torch is a confirmed unsupported-item UI mismatch; the separate supported Tilled Dirt attempt had no visible result but its tile precondition was not independently validated.",
+      "reproduction": [
+        "Select Torch from Lighting results",
+        "Select Fill and verify Filling Torch / Drag to fill",
+        "Drag from (1000,650) to (1036,686)"
+      ],
+      "farmSummary": {
+        "before": "5 items placed",
+        "after": "5 items placed"
+      },
+      "screenshot": "design-plans/planner-full-audit-canvas-fill-check.png",
+      "classification": "The UI permits selecting Fill and advertises Torch as the fill target although the item does not support Fill; the no-op is expected from the controller restriction, and no explanatory UI was observed.",
+      "sourceFacts": [
+        "catalog-sidebar-reference.ts:266 maps Lighting/Torch to object:93",
+        "catalog-schema.ts:177 defines placementTools without fill; object:93 uses placementTools",
+        "editor-fill-controller.ts:70-76 rejects a selected item without fill support"
+      ],
+      "supportedItemAttempt": {
+        "item": "Tilled Dirt, 1 by 1",
+        "sourceAllowedTools": [
+          "cursor",
+          "multi-select",
+          "fill",
+          "erase"
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "canvasRect": {
+          "x": 2.5,
+          "y": 41.046875,
+          "width": 1429,
+          "height": 957
+        },
+        "preconditions": {
+          "fillToolAriaPressed": true,
+          "selectedCatalogItemAriaPressed": true,
+          "pill": "Filling Tilled Dirt / Drag to fill · Esc to cancel"
+        },
+        "pointerRectangle": {
+          "from": {
+            "x": 1000,
+            "y": 650
+          },
+          "to": {
+            "x": 1036,
+            "y": 686
+          },
+          "steps": 6
+        },
+        "farmSummaryBefore": "4 items placed",
+        "farmSummaryAfter": "4 items placed",
+        "undoDisabledAfter": true,
+        "visibleAlert": false,
+        "pillAfter": "Filling Tilled Dirt / Drag to fill · Esc to cancel",
+        "classification": "One supported-item attempt showed no visible change. The tested tile requirement/location was not independently validated, so this does not establish a Fill defect; no second coordinate attempt was made."
+      }
+    }
+  ],
+  "canvasCoverage": {
+    "pendingItemCopy": "completed: Junimo Hut selected; Multi and Erase pressed; pill remained Placing Junimo Hut / Click to place; one center-canvas click in Multi left Farm Summary at 4 items; Select + Escape cleared pending item",
+    "placementMoveMultiFillEraseUndoRedo": {
+      "status": "partial and reset: real UI placement, movement, Multi selection, Erase, Undo and Redo observed; one Fill rectangle with verified preconditions did not increase count; page reload restored the no-project four-building baseline and disabled history",
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollY": 1135.5
+      },
+      "fixture": {
+        "map": "Standard Farm",
+        "userProjectPresent": false,
+        "baselinePlacedItems": 4,
+        "baselineHistory": {
+          "undoDisabled": true,
+          "redoDisabled": true
+        }
+      },
+      "placement": {
+        "item": "Torch, 1 by 1",
+        "pointer": {
+          "x": 900,
+          "y": 600
+        },
+        "publicUiBefore": {
+          "selectedTool": "Select",
+          "placingPill": "Placing Torch / Click to place · Esc to cancel"
+        },
+        "farmSummaryBefore": "4 items placed",
+        "farmSummaryAfter": "5 items placed",
+        "note": "The placement pill remained after placement; Undo became enabled. This is normal repeat-placement state in the observed page, not a failed click.",
+        "screenshots": [
+          "design-plans/planner-full-audit-canvas-after-click-attempt.png"
+        ]
+      },
+      "movement": {
+        "pointerDrag": {
+          "from": {
+            "x": 900,
+            "y": 600
+          },
+          "to": {
+            "x": 940,
+            "y": 600
+          },
+          "steps": 8
+        },
+        "publicUiAfter": "Selected placement: Torch",
+        "laterSelectableAt": {
+          "x": 945,
+          "y": 590
+        },
+        "visualScreenshots": [
+          "design-plans/planner-full-audit-canvas-selected-torch.png",
+          "design-plans/planner-full-audit-canvas-after-move.png"
+        ],
+        "note": "Screenshot inspection shows the torch moved right from its original spot; clicking the new location reopened the Torch selection inspector."
+      },
+      "multiSelect": {
+        "previousSelectionDismissedAndVerified": true,
+        "tool": "Multi",
+        "ariaPressed": true,
+        "pointerRectangle": {
+          "from": {
+            "x": 920,
+            "y": 560
+          },
+          "to": {
+            "x": 980,
+            "y": 630
+          },
+          "steps": 6
+        },
+        "observedAfter": "Selected placement: Torch",
+        "screenshot": "design-plans/planner-full-audit-canvas-multi-selected.png"
+      },
+      "fill": {
+        "preconditions": {
+          "selectedCatalogItem": "Torch, 1 by 1",
+          "pill": "Filling Torch / Drag to fill · Esc to cancel",
+          "fillToolAriaPressed": true
+        },
+        "pointerRectangle": {
+          "from": {
+            "x": 1000,
+            "y": 650
+          },
+          "to": {
+            "x": 1036,
+            "y": 686
+          },
+          "steps": 6
+        },
+        "farmSummaryBefore": "5 items placed",
+        "farmSummaryAfter": "5 items placed",
+        "pillAfter": "Filling Torch / Drag to fill · Esc to cancel",
+        "screenshot": "design-plans/planner-full-audit-canvas-fill-check.png",
+        "result": "This single attempt did not increase the count. No second coordinate attempt was made; leave Fill classified as unresolved from this audit sample.",
+        "torchUnsupportedItem": {
+          "status": "UI mismatch confirmed; this is not a generic Fill failure",
+          "observed": {
+            "selectedCatalogItem": "Torch, 1 by 1",
+            "fillToolAriaPressed": true,
+            "pill": "Filling Torch / Drag to fill · Esc to cancel",
+            "farmSummaryBefore": "5 items placed",
+            "farmSummaryAfter": "5 items placed",
+            "visibleError": false
+          },
+          "sourceFacts": [
+            "catalog-sidebar-reference.ts:266 maps Lighting/Torch to object:93",
+            "catalog-schema.ts:177 defines placementTools without fill; object:93 uses placementTools",
+            "editor-fill-controller.ts:70-76 rejects a selected item without fill support"
+          ],
+          "classification": "The UI permits selecting Fill and advertises Torch as the fill target although the item does not support Fill; the no-op is expected from the controller restriction, and no explanatory UI was observed."
+        },
+        "supportedItemAttempt": {
+          "item": "Tilled Dirt, 1 by 1",
+          "sourceAllowedTools": [
+            "cursor",
+            "multi-select",
+            "fill",
+            "erase"
+          ],
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "canvasRect": {
+            "x": 2.5,
+            "y": 41.046875,
+            "width": 1429,
+            "height": 957
+          },
+          "preconditions": {
+            "fillToolAriaPressed": true,
+            "selectedCatalogItemAriaPressed": true,
+            "pill": "Filling Tilled Dirt / Drag to fill · Esc to cancel"
+          },
+          "pointerRectangle": {
+            "from": {
+              "x": 1000,
+              "y": 650
+            },
+            "to": {
+              "x": 1036,
+              "y": 686
+            },
+            "steps": 6
+          },
+          "farmSummaryBefore": "4 items placed",
+          "farmSummaryAfter": "4 items placed",
+          "undoDisabledAfter": true,
+          "visibleAlert": false,
+          "pillAfter": "Filling Tilled Dirt / Drag to fill · Esc to cancel",
+          "classification": "One supported-item attempt showed no visible change. The tested tile requirement/location was not independently validated, so this does not establish a Fill defect; no second coordinate attempt was made."
+        }
+      },
+      "erase": {
+        "tool": "Erase",
+        "ariaPressed": true,
+        "pointer": {
+          "x": 945,
+          "y": 590
+        },
+        "farmSummaryBefore": "5 items placed",
+        "farmSummaryAfter": "4 items placed",
+        "selectedPlacementInspectorClosed": true
+      },
+      "history": {
+        "undoErase": {
+          "before": "4 items placed",
+          "after": "5 items placed"
+        },
+        "redoErase": {
+          "before": "5 items placed",
+          "after": "4 items placed"
+        },
+        "observedButtonsAfterRedo": {
+          "undoDisabled": false,
+          "redoDisabled": true
+        },
+        "note": "Redo restored the four-item count after the erased test Torch was removed again."
+      },
+      "reset": {
+        "status": "verified by reload of the isolated unsaved fixture",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "map": "Current map: Standard Farm",
+        "farmSummary": "4 items placed",
+        "toolState": {
+          "cursorPressed": true,
+          "multiPressed": false,
+          "fillPressed": false,
+          "erasePressed": false,
+          "zoomPressed": false
+        },
+        "history": {
+          "undoDisabled": true,
+          "redoDisabled": true
+        },
+        "selection": null,
+        "pendingPlacement": null,
+        "localProjectStorageKeyPresent": false
+      }
+    }
+  },
+  "mobileCoverage": {
+    "status": "completed_with_explicit_limits",
+    "taskSpaceId": 134,
+    "page": "p1",
+    "origin": "http://localhost:3007/#planner",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "completed": {
+      "mobileMenu": "Opened from aria-expanded=false, verified expanded=true, selected Map, and returned with the menu closed.",
+      "earlierMobilePanels": [
+        "Ambience: representative season/weather selections changed and restored.",
+        "Farm Settings: spouse and cave values changed and restored.",
+        "View: Grid and catalog position changed and restored; internal section scroll exercised; disabled NPC paths observed.",
+        "Settings: cursor/joystick-related options restored; free-placement warning dismissed with Cancel.",
+        "Help and Keyboard Shortcuts opened/closed; shortcut content internal scroll observed.",
+        "Feedback dialog opened and inspected; submit remained disabled and was not clicked.",
+        "Library: Local projects search cleared, Import Game Save opened with empty file input, Farm Summary and nested detailed summary opened and closed; four starter items listed."
+      ],
+      "mapChooser": "All four main tabs and both Community subtabs visited; representative card counts and labels recorded; no mobile map card clicked; Standard Farm retained.",
+      "catalog": {
+        "browseBefore": {
+          "label": "Browse items",
+          "ariaExpanded": "false",
+          "rect": {
+            "x": 16.5,
+            "y": 1057.53,
+            "width": 357,
+            "height": 44
+          },
+          "scrollY": 418
+        },
+        "expanded": {
+          "label": "Collapse item browser",
+          "ariaExpanded": "true",
+          "scrollY": 1075.5,
+          "toggleButtonY": -88.56
+        },
+        "categorySample": {
+          "selectedCategory": "Crops",
+          "ariaSelected": "true",
+          "resultButtons": 67
+        },
+        "restored": {
+          "category": "Buildings",
+          "search": "",
+          "browseLabel": "Browse items",
+          "ariaExpanded": "false",
+          "horizontalOverflow": false,
+          "scrollY": 587
+        },
+        "note": "The catalog scroll position moved to keep the expanded browser in view. Tilled Dirt was the prior diagnostic search and was cleared before this sample; no catalog item was placed."
+      },
+      "toolbar": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "beforeZoom": {
+          "scrollY": 587,
+          "rect": {
+            "x": 33,
+            "y": 814.53,
+            "width": 324,
+            "height": 54,
+            "bottom": 868.53
+          },
+          "bottomPastViewport": 24.53
+        },
+        "toolButtons": {
+          "width": 40,
+          "height": 44
+        },
+        "historyButtons": {
+          "width": 44,
+          "height": 44
+        },
+        "start": {
+          "selectPressed": true,
+          "multiPressed": false,
+          "fillPressed": false,
+          "erasePressed": false,
+          "zoomPressed": false,
+          "undoDisabled": true,
+          "redoDisabled": true
+        },
+        "actions": [
+          "Multi selected then Select restored.",
+          "Zoom toggled on then off."
+        ],
+        "afterZoom": {
+          "scrollY": 810,
+          "rect": {
+            "x": 33,
+            "y": 591.53,
+            "width": 324,
+            "height": 54,
+            "bottom": 645.53
+          }
+        },
+        "final": {
+          "selectPressed": true,
+          "multiPressed": false,
+          "fillPressed": false,
+          "erasePressed": false,
+          "zoomPressed": false,
+          "undoDisabled": true,
+          "redoDisabled": true,
+          "allToolbarButtonShadows": "none"
+        },
+        "classification": "The toolbar was 24.53px below the viewport before the Zoom action; the browser page scrolled to bring it fully into view. No horizontal overflow was observed; this was recorded as page scroll behavior, not a toolbar defect."
+      }
+    },
+    "positionObservations": {
+      "directMobileReload": {
+        "screenshot": "design-plans/planner-full-audit-mobile-direct-reload.png",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "visualObservation": "No dialog; full Standard Farm map is centered and visible in the editor canvas, with toolbar and collapsed Browse items visible.",
+        "screenshotInspected": true,
+        "scrollY": "not recorded; do not infer a numeric value from the screenshot"
+      },
+      "scrolledMapChooser": {
+        "screenshot": "design-plans/planner-full-audit-mobile-community.png",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "observedScrollY": 418,
+        "knownPath": "At the beginning of the resumed mobile pass, p1 already showed Library plus nested Farm Summary detail at scrollY=418. Those dialogs were closed. With Menu observed closed, it was opened and Map selected without an intentional page-scroll action; the chooser was measured at scrollY=418.",
+        "firstActionThatMovedPageTo418": "not retained in the browser checkpoint; do not attribute the position to the chooser itself",
+        "backgroundScrollLock": "not measured; page scrollY was observed at 418 in the chooser context",
+        "dialogRect": {
+          "x": 19.5,
+          "y": 478.83,
+          "width": 351,
+          "height": 546.4,
+          "bottom": 1025.23
+        },
+        "viewportBottom": 844,
+        "bottomPastViewport": 181.23,
+        "outerDialogOverflowY": "hidden",
+        "innerListScrollToBottom": "not tested by touch; scrollbar is visible in the inspected screenshot",
+        "horizontalOverflow": false,
+        "classification": "The dialog extends below the viewport in this page-scroll context. The direct-reload screenshot is a separate positioning mode. No defect conclusion was drawn from this geometry."
+      }
+    },
+    "screenshots": [
+      "design-plans/planner-full-audit-mobile-menu.png",
+      "design-plans/planner-full-audit-mobile-direct-reload.png",
+      "design-plans/planner-full-audit-mobile-community.png"
+    ],
+    "screenshotsVisuallyInspected": [
+      "design-plans/planner-full-audit-mobile-menu.png",
+      "design-plans/planner-full-audit-mobile-direct-reload.png",
+      "design-plans/planner-full-audit-mobile-community.png"
+    ],
+    "untested": [
+      "Selecting an actual save file and executing import.",
+      "Library export/download actions and feedback submission.",
+      "Mobile map chooser inner list scroll all the way to its final item.",
+      "Mobile body scroll-lock behavior while the map chooser is open.",
+      "Repeating every desktop-only option and every spouse choice on mobile."
+    ]
+  },
+  "auditDisposition": "Covered browser branches completed with explicit untested and unresolved limits; no product files changed.",
+  "environmentLimitations": [
+    {
+      "surface": "Library cloud session status",
+      "observation": "Opening the default Local projects branch triggered the same-origin GET /api/auth/get-session; the static localhost preview returned HTTP 404 Not Found.",
+      "classification": "Preview backend limitation; no sign-in or cloud action was clicked."
+    }
+  ],
+  "cleanup": {
+    "status": "completed_before_root_followup",
+    "page": "TaskSpace 134 / p1",
+    "projectStorageKey": "stardew-planner.local-projects.v1",
+    "projectStoragePresentAfterCleanup": false,
+    "indexedDbNamesAfterCleanup": [],
+    "baselineAmbienceStorageKey": "stardew-planner:planner-ambience-options",
+    "baselineAmbienceStorageValuePreserved": true,
+    "preferenceKey": "stardew-planner.editor-preferences.v2",
+    "preferenceKeyBaselinePresent": false,
+    "preferenceValueBeforeConditionalRemoval": {
+      "behaviorOptions": {
+        "autoShowResourceClumps": false,
+        "freePlacement": false,
+        "gameCursors": true,
+        "leftHandMode": false,
+        "showJoystick": true,
+        "showToasts": true
+      },
+      "displayOptions": {
+        "showBeeHouseRadius": false,
+        "showBuildableTiles": false,
+        "showCropTiles": false,
+        "showGrid": false,
+        "showJunimoHutRadius": false,
+        "showNightMode": false,
+        "showNpcPaths": false,
+        "showScarecrowRadius": false,
+        "showSprinklerRadius": false,
+        "showTreeTiles": false
+      }
+    },
+    "preferenceValueMatchedRestoredDefaultBeforeRemoval": true,
+    "preferenceKeyRemovedAfterExactValueMatch": true,
+    "preferenceKeyPresentAfterCleanup": false,
+    "localStorageKeysAfterCleanup": [
+      "stardew-planner:planner-ambience-options"
+    ],
+    "noOtherStorageDeleted": true,
+    "cacheDisabledAfterCleanup": false,
+    "deviceMetricsOverrideAfterCleanup": "cleared with Emulation.clearDeviceMetricsOverride",
+    "nativeViewportAfterClear": {
+      "innerWidth": 1512,
+      "innerHeight": 762,
+      "outerWidth": 1512,
+      "outerHeight": 883,
+      "screenWidth": 1512,
+      "screenHeight": 982,
+      "visualViewportWidth": 1506,
+      "visualViewportHeight": 762,
+      "visualViewportScale": 1,
+      "devicePixelRatio": 2,
+      "scrollY": 810
+    },
+    "stateAfterMyCleanup": {
+      "url": "http://localhost:3007/#planner",
+      "dialogs": [],
+      "menuExpanded": false,
+      "currentMap": "Standard Farm",
+      "activeTool": "Select",
+      "zoomPressed": false,
+      "undoDisabled": true,
+      "redoDisabled": true,
+      "catalogBrowseExpanded": false,
+      "catalogSearch": "",
+      "pendingPlacement": null
+    },
+    "note": "These are readbacks immediately after this agent’s mobile cleanup; root subsequently resumed the same page for separate follow-up checks. No metrics override or cache-disabled state was left active by this pass."
+  }
+}

@@ -32,7 +32,7 @@ it("renders a shared static navigation frame around route content", () => {
   expect(markup).toContain("Example route");
   expect(markup).toContain('data-site-footer="true"');
   expect(markup).toContain(
-    "A browser-local fan-made tool for planning Stardew Valley farm layouts.",
+    "A browser-based fan-made farm planner with local projects and optional cloud sync for selected layouts.",
   );
   expect(markup).toContain("<h2>Planner</h2>");
   expect(markup).toContain("<h2>Explore</h2>");
@@ -69,7 +69,7 @@ it("keeps every Chinese public homepage link on /zh", () => {
   expect(markup).not.toContain('href="/zh/farm-comparison"');
   expect(markup).not.toContain('href="/zh/mods"');
   expect(markup).toContain('data-site-footer="true"');
-  expect(markup).toContain("在浏览器中本地规划《星露谷物语》农场布局的玩家工具。");
+  expect(markup).toContain("用于规划《星露谷物语》农场布局的浏览器玩家工具，支持本地项目和可选的所选布局云端同步。");
   expect(markup).toContain("<h2>规划器</h2>");
   expect(markup).toContain("<h2>探索</h2>");
   expect(markup).toContain("<h2>法律</h2>");

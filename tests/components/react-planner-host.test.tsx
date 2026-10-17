@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   createPlannerWorkspaceModuleLoader,
   createPlannerWorkspaceModuleReadyBoundary,
@@ -21,6 +21,7 @@ function createWorkspaceBootstrap(): PlannerWorkspaceBootstrap {
 
 function createWorkspaceProperties(
   locationSearch: string,
+  onAlignPlanner?: () => void,
 ): PlannerWorkspaceProperties {
   const plannerHostStartup = createReactPlannerHostStartup({
     bootstrapWorkspace: createWorkspaceBootstrap(),
@@ -31,6 +32,7 @@ function createWorkspaceProperties(
   performanceMarker.mark("editor:island-mounted");
   const plannerWorkspaceElement = ReactPlannerHostWorkspace({
     locale: "zh-CN",
+    onAlignPlanner,
     performanceMarker,
     plannerHostStartup,
   });
@@ -39,6 +41,9 @@ function createWorkspaceProperties(
 
   expect(plannerWorkspaceProperties.startup).toBe(plannerHostStartup);
   expect(plannerWorkspaceProperties.locale).toBe("zh-CN");
+  if (onAlignPlanner !== undefined) {
+    expect(plannerWorkspaceProperties.onAlignPlanner).toBe(onAlignPlanner);
+  }
 
   return plannerWorkspaceProperties;
 }
@@ -94,12 +99,18 @@ describe("React planner host", () => {
       locationSearch: "",
       viewportWidth: 1024,
     });
+    const onAlignPlanner = vi.fn();
+    let receivedAlignmentCallback: (() => void) | undefined;
     const WorkspaceModuleReadyBoundary = createPlannerWorkspaceModuleReadyBoundary(
-      () => createElement("output", null, "workspace"),
+      ({ onAlignPlanner: receivedCallback }) => {
+        receivedAlignmentCallback = receivedCallback;
+        return createElement("output", null, "workspace");
+      },
     );
 
     expect(renderToStaticMarkup(createElement(WorkspaceModuleReadyBoundary, {
       locale: "en",
+      onAlignPlanner,
       performanceMarker,
       startup: plannerHostStartup,
     }))).toBe("<output>workspace</output>");
@@ -107,6 +118,7 @@ describe("React planner host", () => {
       "editor:island-mounted",
       "editor:workspace-module-ready",
     ]);
+    expect(receivedAlignmentCallback).toBe(onAlignPlanner);
   });
 
   it("renders an accessible loading status without the workspace or Pixi runtime", () => {
@@ -138,6 +150,14 @@ describe("React planner host", () => {
     expect(plannerWorkspaceProperties.startup.initialMapRequest).toMatchObject({
       mapId: expectedMapId,
     });
+  });
+
+  it("passes the homepage alignment callback into PlannerWorkspace", () => {
+    const onAlignPlanner = vi.fn();
+
+    expect(createWorkspaceProperties("", onAlignPlanner).onAlignPlanner).toBe(
+      onAlignPlanner,
+    );
   });
 });
 

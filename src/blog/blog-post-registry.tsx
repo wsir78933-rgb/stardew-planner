@@ -50,6 +50,8 @@ import { OakTreeVsMapleStardewEnglishArticle } from "./articles/oak-tree-vs-mapl
 import { OakTreeVsMapleStardewChineseArticle } from "./articles/oak-tree-vs-maple-stardew.zh";
 import { HowToHarvestStardewValleyEnglishArticle } from "./articles/how-to-harvest-stardew-valley.en";
 import { HowToHarvestStardewValleyChineseArticle } from "./articles/how-to-harvest-stardew-valley.zh";
+import { HowToGetGoldStarCropsStardewValleyEnglishArticle } from "./articles/how-to-get-gold-star-crops-stardew-valley.en";
+import { HowToGetGoldStarCropsStardewValleyChineseArticle } from "./articles/how-to-get-gold-star-crops-stardew-valley.zh";
 import { HouseUpgradeStardewEnglishArticle } from "./articles/house-upgrade-stardew.en";
 import { HouseUpgradeStardewChineseArticle } from "./articles/house-upgrade-stardew.zh";
 import {
@@ -470,6 +472,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       Content: HowToHarvestStardewValleyEnglishArticle,
     },
     {
+      slug: "how-to-get-gold-star-crops-stardew-valley",
+      title: "how to get gold star crops stardew valley",
+      description:
+        "Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.",
+      topic: "Stardew Valley Guides",
+      author: "Stardew Valley Planner Team",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/how-to-get-gold-star-crops-stardew-valley-cover.webp",
+        alt: "Crop rows in warm sunlight.",
+      },
+      featured: false,
+      Content: HowToGetGoldStarCropsStardewValleyEnglishArticle,
+    },
+    {
       slug: "house-upgrade-stardew",
       title: "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
       description:
@@ -859,6 +876,21 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
       },
       featured: false,
       Content: HowToHarvestStardewValleyChineseArticle,
+    },
+    {
+      slug: "how-to-get-gold-star-crops-stardew-valley",
+      title: "星露谷物语如何种出金星作物",
+      description:
+        "选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。",
+      topic: "星露谷物语指南",
+      author: "星露谷规划器团队",
+      readTimeMinutes: 6,
+      coverImage: {
+        src: "/blog/how-to-get-gold-star-crops-stardew-valley-cover.webp",
+        alt: "暖阳下成排生长的作物。",
+      },
+      featured: false,
+      Content: HowToGetGoldStarCropsStardewValleyChineseArticle,
     },
     {
       slug: "house-upgrade-stardew",

@@ -54,6 +54,66 @@ export type LocalProjectsCopy = Readonly<{
   storedInBrowser: string;
 }>;
 
+export type CloudProjectSyncStatus = "none" | "pending" | "synced" | "conflict" | "error";
+
+export type CloudProjectDeleteCopy = Readonly<{
+  confirm: string;
+  descriptionPrefix: string;
+  descriptionSuffix: string;
+  dismiss: string;
+  title: string;
+}>;
+
+export type CloudProjectsCopy = Readonly<{
+  account: string;
+  accountLoading: string;
+  title: string;
+  cloudProjects: string;
+  cloudProjectsEmpty: string;
+  cloudProjectsLoading: string;
+  cloudStatusError: (rawError: string) => string;
+  conflictDescription: string;
+  currentProject: string;
+  dateTimeLocale: HomepageLocale;
+  deleteCloudCopy: string;
+  deletingCloudCopy: string;
+  deleteProject: CloudProjectDeleteCopy;
+  imagesStayLocal: string;
+  keepLocalVersion: string;
+  loadMoreCloudProjects: string;
+  loadingMoreCloudProjects: string;
+  localProjects: string;
+  localProjectStatus: (status: CloudProjectSyncStatus) => string;
+  localSaveRetirementShortCountdown: (
+    daysRemaining: number,
+    hoursRemaining: number,
+    minutesRemaining: number,
+  ) => string;
+  localSaveRetirementCountdown: (
+    daysRemaining: number,
+    hoursRemaining: number,
+    minutesRemaining: number,
+  ) => string;
+  localSaveRetirementEnded: string;
+  localSaveRetirementLoading: string;
+  localSaveRetirementNotConfigured: string;
+  mapCount: (count: number) => string;
+  noLocalProjects: string;
+  openCloudCopy: string;
+  refreshCloudProjects: string;
+  refreshingCloudProjects: string;
+  retrySync: string;
+  signInBusy: string;
+  signInGoogle: string;
+  signOut: string;
+  signOutBusy: string;
+  signedInAs: (accountName: string) => string;
+  signedOut: string;
+  syncButtonBusy: string;
+  syncThisProject: string;
+  useCloudVersion: string;
+}>;
+
 export type LocalProjectDeleteCopy = Readonly<{
   confirm: string;
   descriptionPrefix: string;
@@ -123,6 +183,7 @@ export type FarmSummaryDetailCopy = Readonly<{
 
 export type SaveModalCopy = Readonly<{
   deleteProject: LocalProjectDeleteCopy;
+  cloudProjects: CloudProjectsCopy;
   farmSummaryDetail: FarmSummaryDetailCopy;
   farmSummaryPreview: FarmSummaryPreviewCopy;
   gameSave: GameSaveCopy;
@@ -204,6 +265,61 @@ const saveModalCopyByLocale = {
       savedToBrowser: "Saved to this browser.",
       searchProjects: "Search local projects",
       storedInBrowser: "Stored in this browser.",
+    },
+    cloudProjects: {
+      account: "Account",
+      accountLoading: "Checking account…",
+      cloudProjects: "Cloud projects",
+      cloudProjectsEmpty: "Your current project syncs when you save it. Use Sync to cloud to upload existing local projects one at a time.",
+      cloudProjectsLoading: "Loading cloud projects…",
+      cloudStatusError: (rawError: string) => `Cloud sync could not load: ${rawError}`,
+      conflictDescription: "A newer cloud copy exists. Keep the local version or create a new local project from the cloud version.",
+      currentProject: "Current",
+      dateTimeLocale: "en",
+      deleteCloudCopy: "Delete cloud copy",
+      deletingCloudCopy: "Deleting cloud copy…",
+      deleteProject: {
+        confirm: "Delete cloud copy",
+        descriptionPrefix: "Delete ",
+        descriptionSuffix: " from your cloud account? The local project will stay on this device.",
+        dismiss: "Keep cloud copy",
+        title: "Delete cloud copy?",
+      },
+      imagesStayLocal: "Only layout data syncs. Map preview images stay on this device. Cloud copies stay until you delete them.",
+      keepLocalVersion: "Keep local version",
+      loadMoreCloudProjects: "Load more cloud projects",
+      loadingMoreCloudProjects: "Loading more cloud projects…",
+      localProjects: "Local project sync status",
+      localProjectStatus: (status: CloudProjectSyncStatus) => ({
+        none: "Only on this device",
+        pending: "Waiting to sync",
+        synced: "Synced",
+        conflict: "Needs your choice",
+        error: "Sync failed",
+      })[status],
+      localSaveRetirementShortCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
+        `${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m`,
+      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
+        `Local saving ends in ${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m. Sync any project you want to keep.`,
+      localSaveRetirementEnded: "The local-save transition period has ended. Your local projects remain available; no data was deleted.",
+      localSaveRetirementLoading: "Checking the local-save transition deadline…",
+      localSaveRetirementNotConfigured: "Local saving will be phased out. The 7-day migration period and cutoff date will be confirmed before launch.",
+      mapCount: (count: number) => `${String(count)} ${count === 1 ? "map" : "maps"}`,
+      noLocalProjects: "Save a project on this device before syncing it.",
+      openCloudCopy: "Open cloud copy",
+      refreshCloudProjects: "Refresh cloud projects",
+      refreshingCloudProjects: "Refreshing cloud projects…",
+      retrySync: "Retry sync",
+      signInBusy: "Connecting to Google…",
+      signInGoogle: "Continue with Google",
+      signOut: "Sign out",
+      signOutBusy: "Signing out…",
+      signedInAs: (accountName: string) => `Signed in as ${accountName}.`,
+      signedOut: "After signing in, saving the current project syncs it automatically. Sync existing local projects one at a time.",
+      syncButtonBusy: "Syncing project…",
+      syncThisProject: "Sync to cloud",
+      title: "Cloud sync",
+      useCloudVersion: "Use cloud version as a new local project",
     },
     deleteProject: {
       confirm: "Delete project",
@@ -315,6 +431,61 @@ const saveModalCopyByLocale = {
       savedToBrowser: "已保存到此浏览器。",
       searchProjects: "搜索本地项目",
       storedInBrowser: "保存在此浏览器中。",
+    },
+    cloudProjects: {
+      account: "账户",
+      accountLoading: "正在检查账户…",
+      cloudProjects: "云端项目",
+      cloudProjectsEmpty: "保存当前项目时会自动同步。已有本地项目请使用“同步到云端”逐项上传。",
+      cloudProjectsLoading: "正在加载云端项目…",
+      cloudStatusError: (rawError: string) => `无法加载云端同步：${rawError}`,
+      conflictDescription: "云端存在更新版本。你可以保留本地版本，或将云端版本另存为新的本地项目。",
+      currentProject: "当前",
+      dateTimeLocale: "zh-CN",
+      deleteCloudCopy: "删除云端副本",
+      deletingCloudCopy: "正在删除云端副本…",
+      deleteProject: {
+        confirm: "删除云端副本",
+        descriptionPrefix: "要从你的云端账户删除“",
+        descriptionSuffix: "”吗？本地项目会保留在此设备上。",
+        dismiss: "保留云端副本",
+        title: "删除云端副本？",
+      },
+      imagesStayLocal: "仅同步布局数据。地图预览图片保留在此设备上。云端副本会一直保留，直到你主动删除。",
+      keepLocalVersion: "保留本地版本",
+      loadMoreCloudProjects: "加载更多云端项目",
+      loadingMoreCloudProjects: "正在加载更多云端项目…",
+      localProjects: "本地项目同步状态",
+      localProjectStatus: (status: CloudProjectSyncStatus) => ({
+        none: "仅保存在此设备",
+        pending: "等待同步",
+        synced: "已同步",
+        conflict: "需要选择版本",
+        error: "同步失败",
+      })[status],
+      localSaveRetirementShortCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
+        `${daysRemaining}天 ${hoursRemaining}小时 ${minutesRemaining}分钟`,
+      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
+        `本地保存下线倒计时：${daysRemaining}天 ${hoursRemaining}小时 ${minutesRemaining}分钟。需要保留的项目请手动同步到云端。`,
+      localSaveRetirementEnded: "本地保存过渡期已结束。现有本地项目仍保留，没有自动删除任何数据。",
+      localSaveRetirementLoading: "正在检查本地保存过渡安排…",
+      localSaveRetirementNotConfigured: "本地保存即将下线，7 天迁移期和截止日期将在正式上线前确定。",
+      mapCount: (count: number) => `${String(count)} 张地图`,
+      noLocalProjects: "请先在此设备上保存项目，再进行同步。",
+      openCloudCopy: "打开云端副本",
+      refreshCloudProjects: "刷新云端项目",
+      refreshingCloudProjects: "正在刷新云端项目…",
+      retrySync: "重试同步",
+      signInBusy: "正在连接 Google…",
+      signInGoogle: "使用 Google 继续",
+      signOut: "退出登录",
+      signOutBusy: "正在退出登录…",
+      signedInAs: (accountName: string) => `当前登录账户：${accountName}。`,
+      signedOut: "登录后点击保存会自动同步当前项目。已有本地项目需要逐项手动同步。",
+      syncButtonBusy: "正在同步项目…",
+      syncThisProject: "同步到云端",
+      title: "云端同步",
+      useCloudVersion: "将云端版本另存为新的本地项目",
     },
     deleteProject: {
       confirm: "删除项目",
