@@ -82,14 +82,20 @@ describe("local project panel", () => {
     expectTextInOrder(panelMarkup, [
       'data-local-project-layout="columns"',
       'data-local-project-region="sidebar"',
-      "Local projects",
-      "Save to this device",
       "New project",
+      "Device tools",
+      "Save to this device",
       "Import JSON",
       'data-local-project-region="main"',
       'aria-label="Search local projects"',
       'data-project-id="project-forest"',
     ]);
+    const deviceToolsTag = panelMarkup.slice(
+      panelMarkup.indexOf("<details"),
+      panelMarkup.indexOf(">", panelMarkup.indexOf("<details")) + 1,
+    );
+    expect(deviceToolsTag).toContain("<details");
+    expect(deviceToolsTag).not.toMatch(/\sopen(?:=|\s|>)/);
     const forestProjectCard = getProjectCardMarkup(panelMarkup, "project-forest");
     expect(forestProjectCard).toContain('data-project-action="open"');
     expect(forestProjectCard).toContain('data-project-action="rename"');
@@ -105,8 +111,8 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain('accept="application/json,.json"');
     expect(panelMarkup).not.toMatch(/cloud|support|login|member|premium|sync|share|feedback/i);
     expectTextInOrder(panelMarkup, [
-      "Save to this device",
       "New project",
+      "Save to this device",
       "Open",
       "Rename",
       "More actions",

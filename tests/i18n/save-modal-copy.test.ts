@@ -34,8 +34,10 @@ describe("save modal copy", () => {
     expect(copy.localProjects.actionFailure("disk full")).toBe("本地项目操作失败：disk full");
     expect(copy.cloudProjects.extras).toBe("更多功能");
     expect(copy.cloudProjects.signInGoogle).toBe("使用 Google 继续");
+    expect(copy.localProjects.deviceTools).toBe("设备工具");
+    expect(copy.cloudProjects.cloudStatusErrorSummary).toBe("云同步暂不可用。");
     expect(copy.cloudProjects.signedOut).toBe(
-      "登录后，保存当前项目时会自动同步。其他本地项目会保留在此设备上，直到你选择同步。",
+      "尚未登录。本地项目仍保留在此设备上。",
     );
     expect(copy.cloudProjects.cloudProjectsEmpty).toBe(
       "还没有云端副本。保存当前项目时会自动同步。",
@@ -106,8 +108,11 @@ describe("save modal copy", () => {
     expect(copy.localProjects.actionFailure("disk full")).toBe("Local project action failed: disk full");
     expect(copy.cloudProjects.extras).toBe("Extras");
     expect(copy.cloudProjects.signInGoogle).toBe("Continue with Google");
+    expect(copy.localProjects.deviceTools).toBe("Device tools");
+    expect(copy.cloudProjects.cloudStatusErrorSummary).toBe("Cloud sync is unavailable.");
+    expect(copy.cloudProjects.cloudStatusError("HTTP 404")).toBe("Cloud sync error: HTTP 404");
     expect(copy.cloudProjects.signedOut).toBe(
-      "Sign in to sync this project automatically when you save it. Existing local projects stay on this device until you sync them.",
+      "Not signed in. Local projects stay on this device.",
     );
     expect(copy.cloudProjects.cloudProjectsEmpty).toBe(
       "No cloud copies yet. Saving the current project syncs it automatically.",

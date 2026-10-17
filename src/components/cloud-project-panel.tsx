@@ -9,6 +9,7 @@ import {
 } from "@/src/cloud-sync/local-save-retirement";
 import {
   CloudAuthError,
+  CloudOperationCancelledError,
   CloudProjectRequestError,
   type CloudProjectBatchSyncProgress,
   type CloudProjectSyncView,
@@ -56,6 +57,8 @@ export function CloudProjectSidebar({
     useState<number | null>(null);
   const [pendingActionId, setPendingActionId] = useState<string | null>(null);
   const pendingSidebarActionIdRef = useRef<string | null>(null);
+  const [isSignOutPending, setIsSignOutPending] = useState(false);
+  const signOutPendingRef = useRef(false);
   const localSaveRetirementAt = getConfiguredLocalSaveRetirementAt();
   const localSaveRetirementState = localSaveRetirementAt === null
     ? { kind: "not-configured" as const }
@@ -70,6 +73,7 @@ export function CloudProjectSidebar({
   const isSidebarActionPending = pendingActionId !== null;
   const isSyncAllDisabled =
     isSidebarActionPending
+    || isSignOutPending
     || isBatchSyncRunning
     || cloudProjectSync.authStatus === "loading"
     || cloudProjectSync.authStatus === "error"
@@ -98,7 +102,7 @@ export function CloudProjectSidebar({
     actionId: string,
     cloudAction: () => Promise<unknown>,
   ): Promise<void> {
-    if (pendingSidebarActionIdRef.current !== null) return;
+    if (pendingSidebarActionIdRef.current !== null || signOutPendingRef.current) return;
     pendingSidebarActionIdRef.current = actionId;
     setPendingActionId(actionId);
 
@@ -110,15 +114,28 @@ export function CloudProjectSidebar({
     }
   }
 
-  function handleSyncAllLocalProjects(): void {
+  async function handleSignOut(): Promise<void> {
+    if (signOutPendingRef.current) return;
+    signOutPendingRef.current = true;
+    setIsSignOutPending(true);
+
+    try {
+      await runCloudActionWithKnownErrorHandling(cloudProjectSync.signOut);
+    } finally {
+      signOutPendingRef.current = false;
+      setIsSignOutPending(false);
+    }
+  }
+
+  async function handleSyncAllLocalProjects(): Promise<void> {
     if (cloudProjectSync.authStatus === "signed-out") {
-      void runSidebarAction("sync-all-sign-in", cloudProjectSync.signInWithGoogle);
+      await runSidebarAction("sync-all-sign-in", cloudProjectSync.signInWithGoogle);
       return;
     }
     if (cloudProjectSync.authStatus !== "signed-in") return;
 
     const localProjectIds = localProjects.map((localProject) => localProject.id);
-    void runSidebarAction(
+    await runSidebarAction(
       "sync-all-local-projects",
       () => cloudProjectSync.syncAllLocalProjects(localProjectIds),
     );
@@ -157,6 +174,9 @@ export function CloudProjectSidebar({
     || batchSyncProgress?.currentProjectId === undefined
     ? null
     : getLocalProjectLabel(localProjects, batchSyncProgress.currentProjectId);
+  const cloudSyncFailureMessage = hasCloudSyncFailure(cloudProjectSync)
+    ? requireCloudErrorMessage(cloudProjectSync)
+    : null;
   const failedProjectNames = batchSyncProgress === null
     ? []
     : batchSyncProgress.failedProjectIds.map((localProjectId) =>
@@ -165,7 +185,12 @@ export function CloudProjectSidebar({
 
   return (
     <section
-      aria-busy={cloudProjectSync.status === "loading" || isSidebarActionPending || isBatchSyncRunning}
+      aria-busy={
+        cloudProjectSync.status === "loading"
+        || isSidebarActionPending
+        || isSignOutPending
+        || isBatchSyncRunning
+      }
       aria-labelledby={extrasHeadingId}
       className={styles.sidebar}
     >
@@ -174,26 +199,28 @@ export function CloudProjectSidebar({
         <h3 className={styles.sectionTitle}>{copy.account}</h3>
         {cloudProjectSync.authStatus === "loading" ? (
           <p role="status">{copy.accountLoading}</p>
-        ) : cloudProjectSync.authStatus === "signed-in" ? (
+        ) : null}
+        {cloudProjectSync.authStatus === "signed-in" ? (
           <>
             <p role="status">{copy.signedInAs(getSignedInAccountName(cloudProjectSync))}</p>
             <button
               className={styles.sidebarButton}
-              disabled={isSidebarActionPending}
-              onClick={() =>
-                void runSidebarAction("sign-out", cloudProjectSync.signOut)
-              }
+              disabled={isSignOutPending}
+              onClick={handleSignOut}
               type="button"
             >
-              {pendingActionId === "sign-out" ? copy.signOutBusy : copy.signOut}
+              {isSignOutPending ? copy.signOutBusy : copy.signOut}
             </button>
           </>
-        ) : cloudProjectSync.authStatus === "signed-out" ? (
+        ) : null}
+        {shouldOfferGoogleSignIn(cloudProjectSync.authStatus) ? (
           <>
-            <p>{copy.signedOut}</p>
+            {cloudProjectSync.authStatus === "signed-out" ? (
+              <p>{copy.signedOut}</p>
+            ) : null}
             <button
               className={styles.sidebarButton}
-              disabled={isSidebarActionPending}
+              disabled={isSidebarActionPending || isSignOutPending}
               onClick={() =>
                 void runSidebarAction("sign-in", cloudProjectSync.signInWithGoogle)
               }
@@ -202,25 +229,24 @@ export function CloudProjectSidebar({
               {pendingActionId === "sign-in" ? copy.signInBusy : copy.signInGoogle}
             </button>
           </>
-        ) : (
-          <p className={styles.error} role="alert">
-            {copy.cloudStatusError(requireCloudErrorMessage(cloudProjectSync))}
-          </p>
-        )}
+        ) : null}
       </section>
-      <p
-        aria-live="polite"
-        className={cloudProjectSync.status === "error" ? styles.error : styles.status}
-        role={cloudProjectSync.status === "error" ? "alert" : "status"}
-      >
-        {cloudProjectSync.status === "loading"
-          ? copy.cloudStatusLoading
-          : cloudProjectSync.status === "ready"
-            ? copy.cloudStatusReady
-            : copy.cloudStatusError(requireCloudErrorMessage(cloudProjectSync))}
-      </p>
+      {cloudProjectSync.status === "loading" ? (
+        <p aria-live="polite" className={styles.status} role="status">
+          {copy.cloudStatusLoading}
+        </p>
+      ) : null}
+      {cloudProjectSync.status === "ready" ? (
+        <p aria-live="polite" className={styles.status} role="status">
+          {copy.cloudStatusReady}
+        </p>
+      ) : null}
+      {cloudSyncFailureMessage !== null
+        ? createCloudSyncErrorNotice(copy, cloudSyncFailureMessage)
+        : null}
       {cloudProjectSync.status === "ready"
         && cloudProjectSync.errorMessage !== null
+        && cloudSyncFailureMessage === null
         && batchSyncProgress?.status !== "failed" ? (
         <p className={styles.error} role="alert">{cloudProjectSync.errorMessage}</p>
       ) : null}
@@ -650,6 +676,7 @@ async function runCloudActionWithKnownErrorHandling(
     if (
       caughtError instanceof CloudAuthError
       || caughtError instanceof CloudProjectRequestError
+      || caughtError instanceof CloudOperationCancelledError
     ) {
       return;
     }
@@ -739,6 +766,30 @@ function requireCloudErrorMessage(
   }
 
   return cloudProjectSync.errorMessage;
+}
+
+function shouldOfferGoogleSignIn(
+  authStatus: CloudProjectSyncView["authStatus"],
+): boolean {
+  return authStatus === "signed-out" || authStatus === "error";
+}
+
+function hasCloudSyncFailure(cloudProjectSync: CloudProjectSyncView): boolean {
+  return cloudProjectSync.authStatus === "error" || cloudProjectSync.status === "error";
+}
+
+function createCloudSyncErrorNotice(
+  copy: CloudProjectsCopy,
+  rawError: string,
+) {
+  return (
+    <div className={styles.error} role="alert">
+      <details className={styles.errorDetails}>
+        <summary>{copy.cloudStatusErrorSummary}</summary>
+        <p>{copy.cloudStatusError(rawError)}</p>
+      </details>
+    </div>
+  );
 }
 
 function getSignedInAccountName(

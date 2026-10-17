@@ -46,6 +46,21 @@ describe("Save modal style contract", () => {
     expect(saveModalContentRule).toContain("background: var(--bg-deep)");
   });
 
+  it("gives the Library close control a 44 by 44 touch target without restyling other modals", () => {
+    const libraryCloseButtonRule = globalStyles.match(
+      /\.planner-editor-shell \.editor-modal--save-panel > \.editor-modal__header > button\s*\{[^}]*\}/,
+    )?.[0];
+
+    expect(libraryCloseButtonRule).toContain("width: 44px");
+    expect(libraryCloseButtonRule).toContain("height: 44px");
+    expect(libraryCloseButtonRule).toContain("min-width: 44px");
+    expect(libraryCloseButtonRule).toContain("min-height: 44px");
+    expect(libraryCloseButtonRule).toContain(".editor-modal--save-panel");
+    expect(globalStyles).toContain(
+      ".planner-editor-shell .editor-modal--save-panel summary { box-sizing: border-box; min-height: 44px; min-width: 44px; }",
+    );
+  });
+
   it("keeps the Library navigation vertical and hides inactive mounted panels", () => {
     const libraryNavigationRule = globalStyles.match(
       /\.planner-editor-shell \.planner-save-modal-loader__branches\s*\{[^}]*\}/,

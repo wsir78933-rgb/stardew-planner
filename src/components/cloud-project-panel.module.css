@@ -20,7 +20,7 @@
 }
 
 .sidebar {
-  gap: 12px;
+  gap: 8px;
 }
 
 .sidebarTitle {
@@ -32,7 +32,8 @@
 
 .sidebarSection {
   border-top: 1px solid var(--border-subtle);
-  padding-top: 10px;
+  gap: 6px;
+  padding-top: 8px;
 }
 
 .status {
@@ -89,10 +90,24 @@
   font: inherit;
   font-size: 12px;
   line-height: 1.25;
-  min-height: 40px;
-  min-width: 0;
+  min-height: 44px;
+  min-width: 44px;
   overflow-wrap: anywhere;
   padding: 8px 10px;
+}
+
+.errorDetails {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.errorDetails summary {
+  color: #9b3b2d;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  overflow-wrap: anywhere;
 }
 
 .sidebarButton:hover:not(:disabled),

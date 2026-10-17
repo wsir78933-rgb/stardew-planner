@@ -155,16 +155,18 @@ export function PlannerSaveModalContent({
         sidebarContent={
           <>
             {sidebarNavigation}
-            <CloudProjectSidebar
-              cloudProjectSync={cloudProjectSync}
-              copy={copy.cloudProjects}
-              localProjects={projects}
-            />
             <details className={styles.imageExportDetails}>
               <summary>{copy.imageExport.exportLabel}</summary>
               {imageExportTools}
             </details>
           </>
+        }
+        sidebarFooterContent={
+          <CloudProjectSidebar
+            cloudProjectSync={cloudProjectSync}
+            copy={copy.cloudProjects}
+            localProjects={projects}
+          />
         }
         mainContent={
           <>

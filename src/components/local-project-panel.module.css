@@ -15,23 +15,35 @@
 .main {
   align-content: start;
   display: grid;
-  gap: 12px;
   min-width: 0;
 }
 
 .sidebar {
   font-size: 13px;
+  gap: 8px;
+}
+
+.main {
+  gap: 12px;
+}
+
+.deviceTools,
+.deviceToolsBody {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.deviceTools summary {
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  overflow-wrap: anywhere;
+  padding: 8px 10px;
 }
 
 .layout .sidebar :global(.local-project-panel__status) {
   overflow-wrap: anywhere;
-}
-
-.sidebarTitle {
-  color: var(--text);
-  font-size: 17px;
-  line-height: 1.25;
-  margin: 0;
 }
 
 .layout .sidebar .sidebarActions {

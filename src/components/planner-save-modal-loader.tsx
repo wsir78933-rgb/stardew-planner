@@ -215,17 +215,6 @@ export function PlannerSaveModalLoader(
       className={`planner-save-modal-loader__branches ${styles.sidebarNavigation}`}
     >
       <button
-        aria-pressed={selectedPlannerSaveModalBranch === "projects"}
-        onClick={() =>
-          setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-            selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
-          )
-        }
-        type="button"
-      >
-        {plannerSaveModalLoaderProperties.copy.saveTools.localProjects}
-      </button>
-      <button
         aria-pressed={selectedPlannerSaveModalBranch === "game-save"}
         onClick={() =>
           setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
@@ -235,6 +224,17 @@ export function PlannerSaveModalLoader(
         type="button"
       >
         {plannerSaveModalLoaderProperties.copy.saveTools.gameSave}
+      </button>
+      <button
+        aria-pressed={selectedPlannerSaveModalBranch === "projects"}
+        onClick={() =>
+          setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+            selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
+          )
+        }
+        type="button"
+      >
+        {plannerSaveModalLoaderProperties.copy.saveTools.localProjects}
       </button>
       <details className={styles.sidebarToolsGroup}>
         <summary>{plannerSaveModalLoaderProperties.copy.saveTools.label}</summary>

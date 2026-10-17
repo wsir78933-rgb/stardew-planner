@@ -29,6 +29,7 @@ type LocalProjectPanelProperties = Readonly<{
   storageStatus: LocalProjectStorageStatus;
   storageErrorMessage: string | null;
   sidebarContent?: ReactNode;
+  sidebarFooterContent?: ReactNode;
   mainContent?: ReactNode;
   isProjectListActive?: boolean;
   onCreateProject: () => void;
@@ -52,6 +53,7 @@ export function LocalProjectPanel({
   storageStatus,
   storageErrorMessage,
   sidebarContent = null,
+  sidebarFooterContent = null,
   mainContent = null,
   isProjectListActive = true,
   onCreateProject,
@@ -235,21 +237,16 @@ export function LocalProjectPanel({
           className={styles.sidebar}
           data-local-project-region="sidebar"
         >
-          <h2 className={styles.sidebarTitle}>{copy.localProjects}</h2>
-          <div className="local-project-panel__status">
-            <p>
-              {copy.currentProject}: <strong>{currentProjectName ?? copy.none}</strong>
-            </p>
-            {currentProjectMapInstanceName !== null ? (
-              <p>
-                {copy.currentMap}: <strong>{currentProjectMapInstanceName}</strong>
-                {currentProjectMapInstanceCount !== null
-                  ? ` (${copy.currentMapCount(currentProjectMapInstanceCount)})`
-                  : null}
-              </p>
-            ) : null}
-            <p>{copy.storedInBrowser}</p>
+          <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
+            <button
+              disabled={!isStorageReady}
+              onClick={handleCreateProject}
+              type="button"
+            >
+              {copy.newProject}
+            </button>
           </div>
+          {sidebarContent}
           {storageStatus === "loading" ? (
             <p className="local-project-panel__message" role="status">
               {copy.openingBrowserStorage}
@@ -270,37 +267,49 @@ export function LocalProjectPanel({
               {projectActionNotice}
             </p>
           ) : null}
-          <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
-            <button
-              aria-busy={isSavingCurrentMap}
-              disabled={!isStorageReady || isSavingCurrentMap}
-              onClick={() => void handleSaveCurrentMap()}
-              type="button"
-            >
-              {copy.saveToDevice}
-            </button>
-            <button
-              disabled={!isStorageReady}
-              onClick={handleCreateProject}
-              type="button"
-            >
-              {copy.newProject}
-            </button>
-            <label
-              className={`local-project-panel__import${
-                isStorageReady ? "" : " local-project-panel__import--disabled"
-              }`}
-            >
-              <span>{copy.importJson}</span>
-              <input
-                accept="application/json,.json"
-                disabled={!isStorageReady}
-                onChange={handleImportFileChange}
-                type="file"
-              />
-            </label>
-          </div>
-          {sidebarContent}
+          <details className={styles.deviceTools}>
+            <summary>{copy.deviceTools}</summary>
+            <div className={styles.deviceToolsBody}>
+              <div className="local-project-panel__status">
+                <p>
+                  {copy.currentProject}: <strong>{currentProjectName ?? copy.none}</strong>
+                </p>
+                {currentProjectMapInstanceName !== null ? (
+                  <p>
+                    {copy.currentMap}: <strong>{currentProjectMapInstanceName}</strong>
+                    {currentProjectMapInstanceCount !== null
+                      ? ` (${copy.currentMapCount(currentProjectMapInstanceCount)})`
+                      : null}
+                  </p>
+                ) : null}
+                <p>{copy.storedInBrowser}</p>
+              </div>
+              <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
+                <button
+                  aria-busy={isSavingCurrentMap}
+                  disabled={!isStorageReady || isSavingCurrentMap}
+                  onClick={() => void handleSaveCurrentMap()}
+                  type="button"
+                >
+                  {copy.saveToDevice}
+                </button>
+                <label
+                  className={`local-project-panel__import${
+                    isStorageReady ? "" : " local-project-panel__import--disabled"
+                  }`}
+                >
+                  <span>{copy.importJson}</span>
+                  <input
+                    accept="application/json,.json"
+                    disabled={!isStorageReady}
+                    onChange={handleImportFileChange}
+                    type="file"
+                  />
+                </label>
+              </div>
+            </div>
+          </details>
+          {sidebarFooterContent}
         </aside>
         <div className={styles.main} data-local-project-region="main">
           <div hidden={!isProjectListActive}>

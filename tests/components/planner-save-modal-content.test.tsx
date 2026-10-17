@@ -113,6 +113,16 @@ describe("planner save modal content", () => {
 
     expect(markup).toContain("保存到此设备");
     expect(markup).toContain("使用 Google 继续");
+    expect(markup).toContain("设备工具");
+    expectTextInOrder(markup, [
+      "新建项目",
+      "截图",
+      "设备工具",
+      "保存到此设备",
+      "使用 Google 继续",
+      "同步全部本地项目",
+    ]);
+    expect(markup).not.toMatch(/<details[^>]*\sopen(?:=|\s|>)[^>]*>\s*<summary>设备工具<\/summary>/);
     expect(markup).toContain("仅同步布局数据。地图预览图片保留在此设备上。");
     expect(markup).toContain('aria-label="保存工具"');
     expect(markup).toContain("Lazy branch content");
@@ -157,6 +167,16 @@ describe("planner save modal content", () => {
       "project-created-after-save",
     );
   });
+
+function expectTextInOrder(markup: string, expectedTexts: readonly string[]): void {
+  let previousTextIndex = -1;
+
+  for (const expectedText of expectedTexts) {
+    const currentTextIndex = markup.indexOf(expectedText, previousTextIndex + 1);
+    expect(currentTextIndex, expectedText).toBeGreaterThan(previousTextIndex);
+    previousTextIndex = currentTextIndex;
+  }
+}
 
   it("does not notify cloud sync when local save fails and rejects a missing active project ID", async () => {
     const notifyCloudProjectSaved = vi.fn(async () => undefined);

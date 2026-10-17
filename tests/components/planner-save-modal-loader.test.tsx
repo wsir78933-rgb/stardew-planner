@@ -85,6 +85,26 @@ describe("planner save-modal loader", () => {
     expect(markup).toContain("正在加载本地项目…");
   });
 
+  it("orders Import Game Save before local projects and keeps tools collapsed", () => {
+    const loaderSource = readFileSync(
+      resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),
+      "utf8",
+    );
+    const navigationSource = loaderSource.slice(
+      loaderSource.indexOf("const sidebarNavigation"),
+      loaderSource.indexOf("const mainBranchContent"),
+    );
+    const gameSaveLabelIndex = navigationSource.indexOf("copy.saveTools.gameSave");
+    const localProjectsLabelIndex = navigationSource.indexOf("copy.saveTools.localProjects");
+    const toolsSummaryIndex = navigationSource.indexOf("<summary>");
+
+    expect(gameSaveLabelIndex).toBeGreaterThan(-1);
+    expect(localProjectsLabelIndex).toBeGreaterThan(gameSaveLabelIndex);
+    expect(toolsSummaryIndex).toBeGreaterThan(localProjectsLabelIndex);
+    expect(navigationSource).toContain("<details");
+    expect(navigationSource).not.toContain("<details open");
+  });
+
   it("keeps one common shell mounted and hides inactive lazy branches", () => {
     const loaderSource = readFileSync(
       resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),

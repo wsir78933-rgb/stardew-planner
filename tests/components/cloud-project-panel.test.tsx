@@ -61,11 +61,20 @@ vi.mock("react", async (importOriginal) => {
 
 vi.mock("@/src/cloud-sync/use-cloud-project-sync", () => ({
   CloudAuthError: class CloudAuthError extends Error {},
+  CloudOperationCancelledError: class CloudOperationCancelledError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = "CloudOperationCancelledError";
+    }
+  },
   CloudProjectRequestError: class CloudProjectRequestError extends Error {},
 }));
 
 import * as React from "react";
-import type { CloudProjectSyncView } from "@/src/cloud-sync/use-cloud-project-sync";
+import {
+  CloudOperationCancelledError,
+  type CloudProjectSyncView,
+} from "@/src/cloud-sync/use-cloud-project-sync";
 import type { ReferenceProjectSummary } from "@/src/reference-runtime/reference-project-repository";
 import {
   CloudProjectPanel,
@@ -144,12 +153,13 @@ function renderCloudProjectPanel(
 function renderCloudProjectSidebar(
   cloudProjectSync: CloudProjectSyncView,
   locale: "en" | "zh-CN",
+  localProjects: readonly ReferenceProjectSummary[] = localProjectSummaries,
 ): CloudProjectSidebarTree {
   reactHookHarness.reset();
   return CloudProjectSidebar({
     cloudProjectSync,
     copy: getSaveModalCopy(locale).cloudProjects,
-    localProjects: localProjectSummaries,
+    localProjects,
   });
 }
 
@@ -239,6 +249,53 @@ describe("cloud project panel", () => {
     expect(panelText).not.toContain("7-day local-save transition");
   });
 
+  it("keeps Google sign-in available with no local projects and shows one raw cloud error", () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_SAVE_RETIREMENT_AT", "");
+    const rawCloudError = "Planner session response for HTTP 404 is not valid JSON: Unexpected token '<'";
+    const sidebarTree = renderCloudProjectSidebar(
+      createCloudProjectSyncView({
+        authStatus: "error",
+        status: "error",
+        errorMessage: rawCloudError,
+      }),
+      "en",
+      [],
+    );
+    const copy = getSaveModalCopy("en").cloudProjects;
+    const sidebarText = textContent(sidebarTree);
+    const googleSignInButton = requireElement(
+      sidebarTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.signInGoogle,
+    );
+
+    const syncAllButton = requireElement(
+      sidebarTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.syncAllSignedOut,
+    );
+
+    expect(googleSignInButton.props.disabled).toBe(false);
+    expect(syncAllButton.props.disabled).toBe(true);
+    expect(sidebarText).toContain(copy.cloudStatusErrorSummary);
+    expect(sidebarText.split(rawCloudError).length - 1).toBe(1);
+    expect(sidebarText).toContain(copy.cloudStatusError(rawCloudError));
+    expect(sidebarText).toContain(copy.localSaveRetirementNotConfigured);
+
+    const signedOutTree = renderCloudProjectSidebar(
+      createCloudProjectSyncView(),
+      "en",
+      [],
+    );
+    const signedOutGoogleButton = requireElement(
+      signedOutTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.signInGoogle,
+    );
+
+    expect(signedOutGoogleButton.props.disabled).toBe(false);
+  });
+
   it("guides signed-out users to Google without starting a batch upload", async () => {
     vi.stubEnv("NEXT_PUBLIC_LOCAL_SAVE_RETIREMENT_AT", "");
     const cloudProjectSync = createCloudProjectSyncView();
@@ -293,6 +350,116 @@ describe("cloud project panel", () => {
       "local-synced",
     ]);
     expect(textContent(sidebarTree)).toContain("更多功能");
+  });
+
+  it("keeps sign out available during a hanging batch and treats cancellation as expected", async () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_SAVE_RETIREMENT_AT", "");
+    let rejectBatchSync: (caughtError: Error) => void = () => {
+      throw new Error("The hanging batch sync did not expose its reject function.");
+    };
+    const signedInAccount = {
+      id: "account-1",
+      name: "Farm Planner",
+      email: "planner@example.com",
+      image: null,
+    };
+    const cloudProjectSync = createCloudProjectSyncView({
+      authStatus: "signed-in",
+      account: signedInAccount,
+      syncAllLocalProjects: vi.fn(
+        () => new Promise<void>((_resolveBatchSync, reject) => {
+          rejectBatchSync = reject;
+        }),
+      ),
+    });
+    const copy = getSaveModalCopy("en").cloudProjects;
+
+    function renderSidebar(): CloudProjectSidebarTree {
+      reactHookHarness.beginRender();
+      return CloudProjectSidebar({
+        cloudProjectSync,
+        copy,
+        localProjects: localProjectSummaries,
+      });
+    }
+
+    reactHookHarness.reset();
+    let sidebarTree = renderSidebar();
+    const syncAllButton = requireElement(
+      sidebarTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.syncAllLocalProjects,
+    );
+    const batchSync = requireClickHandler(syncAllButton)() as unknown as Promise<void>;
+
+    sidebarTree = renderSidebar();
+    const signOutButton = requireElement(
+      sidebarTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.signOut,
+    );
+    expect(signOutButton.props.disabled).not.toBe(true);
+
+    const signOutClick = requireClickHandler(signOutButton);
+    const firstSignOut = signOutClick() as unknown as Promise<void>;
+    signOutClick();
+    expect(cloudProjectSync.signOut).toHaveBeenCalledOnce();
+
+    sidebarTree = renderSidebar();
+    const busySignOutButton = requireElement(
+      sidebarTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.signOutBusy,
+    );
+    expect(busySignOutButton.props.disabled).toBe(true);
+    requireClickHandler(busySignOutButton)();
+    expect(cloudProjectSync.signOut).toHaveBeenCalledOnce();
+
+    const cancellationError = new CloudOperationCancelledError(
+      'Cloud batch sync for account "account-1" was cancelled.',
+    );
+    rejectBatchSync(cancellationError);
+    await expect(batchSync).resolves.toBeUndefined();
+    await firstSignOut;
+
+    sidebarTree = renderSidebar();
+    const settledText = textContent(sidebarTree);
+    expect(settledText).not.toContain(copy.syncAllCompleted(localProjectSummaries.length));
+    expect(settledText).not.toContain(cancellationError.message);
+    expect(cloudProjectSync.syncAllLocalProjects).toHaveBeenCalledOnce();
+  });
+
+  it("rejects an unknown batch failure instead of treating it as success", async () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_SAVE_RETIREMENT_AT", "");
+    const unknownBatchError = new Error(
+      'Cloud batch sync failed for local project ID "local-unsynced": disk full.',
+    );
+    const cloudProjectSync = createCloudProjectSyncView({
+      authStatus: "signed-in",
+      account: {
+        id: "account-1",
+        name: "Farm Planner",
+        email: "planner@example.com",
+        image: null,
+      },
+      syncAllLocalProjects: vi.fn(async () => {
+        throw unknownBatchError;
+      }),
+    });
+    const copy = getSaveModalCopy("en").cloudProjects;
+    const sidebarTree = renderCloudProjectSidebar(cloudProjectSync, "en");
+    const syncAllButton = requireElement(
+      sidebarTree,
+      "button",
+      (properties) => textContent(properties.children as ReactNode) === copy.syncAllLocalProjects,
+    );
+
+    await expect(
+      requireClickHandler(syncAllButton)() as unknown as Promise<void>,
+    ).rejects.toBe(unknownBatchError);
+    expect(textContent(sidebarTree)).not.toContain(
+      copy.syncAllCompleted(localProjectSummaries.length),
+    );
   });
 
   it("shows bounded progress and disables repeated batch sync clicks", () => {

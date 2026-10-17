@@ -26,6 +26,7 @@ export type LocalProjectsCopy = Readonly<{
   dateTimeLocale: HomepageLocale;
   defaultProjectName: string;
   delete: string;
+  deviceTools: string;
   deletedProject: string;
   duplicate: string;
   duplicatedProject: string;
@@ -76,6 +77,7 @@ export type CloudProjectsCopy = Readonly<{
   cloudProjectsLoading: string;
   cloudProjectsSignInRequired: string;
   cloudStatusError: (rawError: string) => string;
+  cloudStatusErrorSummary: string;
   conflictDescription: string;
   currentProject: string;
   dateTimeLocale: HomepageLocale;
@@ -253,6 +255,7 @@ const saveModalCopyByLocale = {
       dateTimeLocale: "en",
       defaultProjectName: "Untitled Project",
       delete: "Delete",
+      deviceTools: "Device tools",
       deletedProject: "Deleted the local project.",
       duplicate: "Duplicate",
       duplicatedProject: "Duplicated the local project.",
@@ -292,6 +295,7 @@ const saveModalCopyByLocale = {
       cloudProjectsLoading: "Loading cloud projects…",
       cloudProjectsSignInRequired: "Sign in with Google in the sidebar to view cloud copies and project sync actions.",
       cloudStatusError: (rawError: string) => `Cloud sync error: ${rawError}`,
+      cloudStatusErrorSummary: "Cloud sync is unavailable.",
       conflictDescription: "A newer cloud copy exists. Keep the local version or create a new local project from the cloud version.",
       currentProject: "Current",
       dateTimeLocale: "en",
@@ -332,7 +336,7 @@ const saveModalCopyByLocale = {
       signOut: "Sign out",
       signOutBusy: "Signing out…",
       signedInAs: (accountName: string) => `Signed in as ${accountName}.`,
-      signedOut: "Sign in to sync this project automatically when you save it. Existing local projects stay on this device until you sync them.",
+      signedOut: "Not signed in. Local projects stay on this device.",
       syncAllSignInDescription: "Signing in will not upload projects. Return here and press Sync all local projects to start.",
       syncAllLocalProjects: "Sync all local projects",
       syncAllSignedOut: "Sign in to sync all local projects",
@@ -437,6 +441,7 @@ const saveModalCopyByLocale = {
       dateTimeLocale: "zh-CN",
       defaultProjectName: "未命名项目",
       delete: "删除",
+      deviceTools: "设备工具",
       deletedProject: "已删除本地项目。",
       duplicate: "创建副本",
       duplicatedProject: "已复制本地项目。",
@@ -475,6 +480,7 @@ const saveModalCopyByLocale = {
       cloudProjectsLoading: "正在加载云端项目…",
       cloudProjectsSignInRequired: "请先在侧栏使用 Google 登录，再查看云端副本和逐项目同步操作。",
       cloudStatusError: (rawError: string) => `云同步错误：${rawError}`,
+      cloudStatusErrorSummary: "云同步暂不可用。",
       conflictDescription: "云端存在更新版本。你可以保留本地版本，或将云端版本另存为新的本地项目。",
       currentProject: "当前",
       dateTimeLocale: "zh-CN",
@@ -515,7 +521,7 @@ const saveModalCopyByLocale = {
       signOut: "退出登录",
       signOutBusy: "正在退出登录…",
       signedInAs: (accountName: string) => `当前登录账户：${accountName}。`,
-      signedOut: "登录后，保存当前项目时会自动同步。其他本地项目会保留在此设备上，直到你选择同步。",
+      signedOut: "尚未登录。本地项目仍保留在此设备上。",
       syncAllSignInDescription: "登录不会自动上传项目。返回此处后再点击“同步全部本地项目”即可开始。",
       syncAllLocalProjects: "同步全部本地项目",
       syncAllSignedOut: "登录后同步全部本地项目",
