@@ -69,7 +69,7 @@ describe("Save modal style contract", () => {
     expect(libraryNavigationRule).toContain(
       "grid-template-columns: minmax(0, 1fr)",
     );
-    expect(libraryLayoutStyles).toContain(".cloudProjectsDetails[hidden]");
+    expect(libraryLayoutStyles).not.toContain(".cloudProjectsDetails");
     expect(libraryLayoutStyles).toContain(".lazyBranchRegion[hidden]");
     expect(libraryLayoutStyles).toContain(".branchFeedback[hidden]");
     expect(libraryLayoutStyles).toContain(".branchContent[hidden]");

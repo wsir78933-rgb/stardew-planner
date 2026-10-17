@@ -12,7 +12,6 @@ import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import type { ScreenshotResolution } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
-import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type {
   GameSaveCopy,
   SaveModalCopy,
@@ -49,7 +48,6 @@ type PlannerSaveModalLoaderProperties = Readonly<{
   onSaveCurrentMap: () => Promise<void>;
   onSaveThumbnail: () => Promise<void>;
   placementSnapshot: PlacementSnapshot;
-  workspaceController: ReferenceProjectWorkspaceController;
   projects: readonly ReferenceProjectSummary[];
   season: TilesheetSeason;
   selectedPlannerMapId: string;
@@ -68,7 +66,6 @@ type PlannerSaveModalContentProperties = Omit<
 > & Readonly<{
   copy: Pick<
     SaveModalCopy,
-    | "cloudProjects"
     | "deleteProject"
     | "imageExport"
     | "localProjects"
@@ -80,6 +77,7 @@ type PlannerSaveModalContentProperties = Omit<
   libraryToolsEntry: ReactNode;
   mainBranchContent: ReactNode;
   onOpenFarmSummary: () => void;
+  onActivateProjectList: () => void;
   sidebarNavigation: ReactNode;
 }>;
 
@@ -228,26 +226,6 @@ export function PlannerSaveModalLoader(
       >
         {plannerSaveModalLoaderProperties.copy.saveTools.gameSave}
       </button>
-      <section className={styles.planGroup}>
-        <p className={styles.planGroupLabel}>
-          {plannerSaveModalLoaderProperties.copy.saveTools.planGroupLabel}
-        </p>
-        <button
-          aria-pressed={selectedPlannerSaveModalBranch === "projects"}
-          className={styles.planButton}
-          onClick={() =>
-            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
-            )
-          }
-          type="button"
-        >
-          <span>{plannerSaveModalLoaderProperties.copy.saveTools.myPlans}</span>
-          <span className={styles.planCount}>
-            {plannerSaveModalLoaderProperties.projects.length}
-          </span>
-        </button>
-      </section>
     </nav>
   );
 
@@ -350,7 +328,6 @@ export function PlannerSaveModalLoader(
             localProjects: plannerSaveModalLoaderProperties.copy.localProjects,
             saveTools: plannerSaveModalLoaderProperties.copy.saveTools,
             thumbnail: plannerSaveModalLoaderProperties.copy.thumbnail,
-            cloudProjects: plannerSaveModalLoaderProperties.copy.cloudProjects,
           }}
           isProjectsBranchActive={selectedPlannerSaveModalBranch === "projects"}
           isToolsViewActive={selectedPlannerSaveModalBranch === "tools"}
@@ -359,6 +336,11 @@ export function PlannerSaveModalLoader(
           onOpenFarmSummary={() =>
             setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
               selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
+            )
+          }
+          onActivateProjectList={() =>
+            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
             )
           }
           sidebarNavigation={sidebarNavigation}
@@ -385,7 +367,6 @@ export function PlannerSaveModalLoader(
           season={plannerSaveModalLoaderProperties.season}
           storageErrorMessage={plannerSaveModalLoaderProperties.storageErrorMessage}
           storageStatus={plannerSaveModalLoaderProperties.storageStatus}
-          workspaceController={plannerSaveModalLoaderProperties.workspaceController}
         />
       ) : null}
       {PlannerSaveModalContent === null && currentBranchLoadError !== null ? (

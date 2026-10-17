@@ -22,7 +22,9 @@ describe("save modal copy", () => {
     const copy = getSaveModalCopy("zh-CN");
 
     expect(copy.localProjects.defaultProjectName).toBe("未命名项目");
-    expect(copy.localProjects.newProjectName).toBe("新项目名称");
+    expect(copy.localProjects.myPlansFolder).toBe("我的方案");
+    expect(copy.localProjects.newFolder).toBe("+ 新建文件夹");
+    expect(copy.localProjects.newProjectName).toBe("新方案名称");
     expect(copy.localProjects.open).toBe("打开");
     expect(copy.localProjects.duplicate).toBe("创建副本");
     expect(copy.localProjects.delete).toBe("删除");
@@ -93,7 +95,9 @@ describe("save modal copy", () => {
     const copy = getSaveModalCopy("en");
 
     expect(copy.localProjects.defaultProjectName).toBe("Untitled Project");
-    expect(copy.localProjects.newProjectName).toBe("New project name");
+    expect(copy.localProjects.myPlansFolder).toBe("My Plans");
+    expect(copy.localProjects.newFolder).toBe("+ New folder");
+    expect(copy.localProjects.newProjectName).toBe("New plan name");
     expect(copy.localProjects.open).toBe("Open");
     expect(copy.localProjects.duplicate).toBe("Duplicate");
     expect(copy.localProjects.delete).toBe("Delete");

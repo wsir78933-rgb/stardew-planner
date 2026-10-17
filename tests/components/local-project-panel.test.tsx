@@ -35,7 +35,7 @@ const localProjectSummaries: readonly ReferenceProjectSummary[] = [
 async function ignoreLocalProjectAction(): Promise<void> {}
 
 describe("local project panel", () => {
-  it("renders the complete account-free local project action set", () => {
+  it("renders local folders, project actions, and device tools without account features", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(LocalProjectPanel, {
         copy: getSaveModalCopy("en").localProjects,
@@ -47,6 +47,11 @@ describe("local project panel", () => {
         projects: localProjectSummaries,
         storageStatus: "ready",
         storageErrorMessage: null,
+        sidebarContent: createElement(
+          "nav",
+          { "aria-label": "Save tools" },
+          "Import Game Save",
+        ),
         onCreateProject: ignoreLocalProjectAction,
         onDeleteProject: ignoreLocalProjectAction,
         onExportProject: () => '{"formatVersion":1}',
@@ -54,14 +59,19 @@ describe("local project panel", () => {
         onOpenProject: ignoreLocalProjectAction,
         onRenameProject: ignoreLocalProjectAction,
         onSaveCurrentMap: ignoreLocalProjectAction,
+        onActivateProjectList: () => undefined,
         onDuplicateProject: ignoreLocalProjectAction,
       }),
     );
 
     expect(panelMarkup).toContain("Save to this device");
-    expect(panelMarkup).toContain("New project");
+    expect(panelMarkup).toContain("New plan");
+    expect(panelMarkup).toContain("Folders");
+    expect(panelMarkup).toContain("My Plans");
+    expect(panelMarkup).toContain("+ New folder");
     expect(panelMarkup).toContain("Open");
     expect(panelMarkup).toContain("Rename");
+    expect(panelMarkup).toContain("Move to folder");
     expect(panelMarkup).toContain("Duplicate");
     expect(panelMarkup).toContain("Delete");
     expect(panelMarkup).toContain("Export JSON");
@@ -73,7 +83,8 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain("Winter Layout");
     expect(panelMarkup).toContain("2 maps");
     expect(panelMarkup).toContain("Stored in this browser.");
-    expect(panelMarkup).toContain('aria-label="Search local projects"');
+    expect(panelMarkup).toContain('aria-label="Search plans"');
+    expect(panelMarkup).toContain('aria-pressed="true"');
     expect(panelMarkup).toContain('data-project-id="project-forest"');
     expect(panelMarkup).toContain('data-project-id="project-beach"');
     expect(panelMarkup).toContain('data-current-project="true"');
@@ -83,9 +94,13 @@ describe("local project panel", () => {
     expectTextInOrder(panelMarkup, [
       'data-local-project-layout="columns"',
       'data-local-project-region="sidebar"',
-      "New project",
+      "New plan",
+      "Import Game Save",
+      "Folders",
+      "My Plans",
+      "+ New folder",
       'data-local-project-region="main"',
-      'aria-label="Search local projects"',
+      'aria-label="Search plans"',
       'data-project-id="project-forest"',
       'data-library-view="tools"',
       "Save to this device",
@@ -100,6 +115,7 @@ describe("local project panel", () => {
     const forestProjectCard = getProjectCardMarkup(panelMarkup, "project-forest");
     expect(forestProjectCard).toContain('data-project-action="open"');
     expect(forestProjectCard).toContain('data-project-action="rename"');
+    expect(forestProjectCard).toContain('data-project-action="move-folder"');
     expect(forestProjectCard).toContain('data-project-action="duplicate"');
     expect(forestProjectCard).toContain('data-project-action="export"');
     expect(forestProjectCard).toContain('data-project-action="delete"');
@@ -107,14 +123,18 @@ describe("local project panel", () => {
       formatLocalProjectUpdatedAt("2026-07-26T01:00:00.000Z", "en"),
     );
     expect(panelMarkup).not.toContain("2026-07-26T01:00:00.000Z");
-    expect(panelMarkup).not.toMatch(/cloud|account|folder|shared|mods|upload|login|member|premium|sync|share|feedback/i);
+    expect(panelMarkup).not.toMatch(/cloud|account|shared|mods|upload|login|member|premium|sync|share|feedback/i);
     expect(panelMarkup).toContain('type="file"');
     expect(panelMarkup).toContain('accept="application/json,.json"');
-    expect(panelMarkup).not.toMatch(/cloud|support|login|member|premium|sync|share|feedback/i);
+    expect(panelMarkup).not.toMatch(/Google|cloud|support|login|member|premium|sync|share|feedback/i);
     expectTextInOrder(panelMarkup, [
-      "New project",
+      "New plan",
+      "Folders",
+      "My Plans",
+      "+ New folder",
       "Open",
       "Rename",
+      "Move to folder",
       "More actions",
       "Duplicate",
       "Export JSON",
@@ -158,6 +178,7 @@ describe("local project panel", () => {
         onOpenProject: ignoreLocalProjectAction,
         onRenameProject: ignoreLocalProjectAction,
         onSaveCurrentMap: ignoreLocalProjectAction,
+        onActivateProjectList: () => undefined,
       }),
     );
 
@@ -165,13 +186,13 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain('data-shared-main-slot="branch"');
     expect(panelMarkup).toContain('hidden=""');
     expect(panelMarkup).toContain('data-project-id="project-forest"');
-    expect(panelMarkup).toContain('aria-label="搜索本地项目"');
+    expect(panelMarkup).toContain('aria-label="搜索方案"');
     expect(panelMarkup).toContain("更多操作");
     expectTextInOrder(panelMarkup, [
       'data-local-project-region="sidebar"',
       'data-shared-sidebar-slot="navigation"',
       'data-local-project-region="main"',
-      'aria-label="搜索本地项目"',
+      'aria-label="搜索方案"',
       'data-project-id="project-forest"',
       'data-shared-main-slot="branch"',
     ]);
@@ -205,6 +226,7 @@ describe("local project panel", () => {
         onOpenProject: ignoreLocalProjectAction,
         onRenameProject: ignoreLocalProjectAction,
         onSaveCurrentMap: ignoreLocalProjectAction,
+        onActivateProjectList: () => undefined,
       }),
     );
 
@@ -234,6 +256,7 @@ describe("local project panel", () => {
         onOpenProject: ignoreLocalProjectAction,
         onRenameProject: ignoreLocalProjectAction,
         onSaveCurrentMap: ignoreLocalProjectAction,
+        onActivateProjectList: () => undefined,
       }),
     );
 

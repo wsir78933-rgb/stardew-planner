@@ -23,6 +23,7 @@ vi.mock("react", async (importOriginal) => {
 
   return {
     ...reactExports,
+    useEffect: () => undefined,
     useRef: <ReferenceValue,>(initialValue: ReferenceValue) => {
       const referenceIndex = reactHookHarness.referenceCursor++;
       if (!reactHookHarness.referenceSlots[referenceIndex]) {
@@ -59,6 +60,7 @@ vi.mock("react", async (importOriginal) => {
 import * as React from "react";
 import { LocalProjectPanel } from "../../src/components/local-project-panel";
 import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
+import { myPlansFolderId } from "../../src/projects/local-project-folder-store";
 import type { ReferenceProjectSummary } from "../../src/reference-runtime/reference-project-repository";
 
 type RenderedElement = React.ReactElement<Record<string, unknown>>;
@@ -112,7 +114,11 @@ function textContent(node: ReactNode): string {
   return "";
 }
 
-function mountLocalProjectPanel(onSaveCurrentMap: () => Promise<void>) {
+function mountLocalProjectPanel(
+  onSaveCurrentMap: () => Promise<void>,
+  onActivateProjectList: () => void = () => undefined,
+  onCreateProject: () => void = () => undefined,
+) {
   const localProjectsCopy = getSaveModalCopy("en").localProjects;
 
   function render(): LocalProjectPanelTree {
@@ -125,7 +131,7 @@ function mountLocalProjectPanel(onSaveCurrentMap: () => Promise<void>) {
       projects: [],
       storageStatus: "ready",
       storageErrorMessage: null,
-      onCreateProject: () => undefined,
+      onCreateProject,
       onDeleteProject: () => undefined,
       onDuplicateProject: () => undefined,
       onExportProject: () => "{}",
@@ -133,6 +139,7 @@ function mountLocalProjectPanel(onSaveCurrentMap: () => Promise<void>) {
       onOpenProject: () => undefined,
       onRenameProject: () => undefined,
       onSaveCurrentMap,
+      onActivateProjectList,
     });
   }
 
@@ -226,6 +233,64 @@ it("shows the concrete save error without success and unlocks after rejection", 
   ).toBeUndefined();
 });
 
+it("returns to the plan list from Tools when New plan or a folder is selected", () => {
+  const activateProjectList = vi.fn();
+  const createProject = vi.fn();
+  const { copy, render } = mountLocalProjectPanel(
+    async () => undefined,
+    activateProjectList,
+    createProject,
+  );
+  const tree = render();
+  const newPlanButton = requireElement(
+    tree,
+    "button",
+    (properties) => textContent(properties.children as ReactNode) === copy.newProject,
+  );
+  const newPlanOnClick = newPlanButton.props.onClick;
+
+  if (typeof newPlanOnClick !== "function") {
+    throw new Error("The New plan button has no click handler.");
+  }
+
+  newPlanOnClick();
+  expect(createProject).toHaveBeenCalledOnce();
+  expect(activateProjectList).toHaveBeenCalledOnce();
+
+  reactHookHarness.beginRender();
+  const updatedTree = LocalProjectPanel({
+    copy,
+    currentProjectId: null,
+    currentProjectName: null,
+    deleteCopy: getSaveModalCopy("en").deleteProject,
+    projects: [],
+    storageStatus: "ready",
+    storageErrorMessage: null,
+    onCreateProject: createProject,
+    onDeleteProject: () => undefined,
+    onDuplicateProject: () => undefined,
+    onExportProject: () => "{}",
+    onImportProject: () => undefined,
+    onOpenProject: () => undefined,
+    onRenameProject: () => undefined,
+    onSaveCurrentMap: async () => undefined,
+    onActivateProjectList: activateProjectList,
+  });
+  const myPlansButton = requireElement(
+    updatedTree,
+    "button",
+    (properties) => properties["data-local-project-folder-id"] === myPlansFolderId,
+  );
+  const folderOnClick = myPlansButton.props.onClick;
+
+  if (typeof folderOnClick !== "function") {
+    throw new Error("The My Plans folder button has no click handler.");
+  }
+
+  folderOnClick();
+  expect(activateProjectList).toHaveBeenCalledTimes(2);
+});
+
 it("keeps the duplicate action callable inside the More actions disclosure", () => {
   const duplicateProject = vi.fn();
   const savedProject: ReferenceProjectSummary = {
@@ -255,6 +320,7 @@ it("keeps the duplicate action callable inside the More actions disclosure", () 
     onOpenProject: () => undefined,
     onRenameProject: () => undefined,
     onSaveCurrentMap: async () => undefined,
+    onActivateProjectList: () => undefined,
   });
   const duplicateButton = requireElement(
     tree,

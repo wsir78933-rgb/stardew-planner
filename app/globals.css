@@ -5454,8 +5454,8 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-config-label { font-size: 12.5px; margin: 0 0 8px; }
 .planner-editor-shell .editor-config-legal { color: var(--text-dim); font-size: 12px; padding: 0 10px; }
 .planner-editor-shell .editor-config-legal a { display: inline-flex; min-height: 26px; align-items: center; }
-.planner-editor-shell .editor-modal--save-panel { min-height: min(48rem, calc(100dvh - 2rem)); width: min(1220px, calc(100% - 40px)); }
-.planner-editor-shell .editor-modal--save-panel .editor-modal__header h2 { font-size: 17px; }
+.planner-editor-shell .editor-modal--save-panel { max-height: calc(100dvh - 16px); max-width: calc(100vw - 16px); min-height: calc(100dvh - 16px); width: min(1880px, calc(100vw - 16px)); }
+.planner-editor-shell .editor-modal--save-panel .editor-modal__header h2 { font-size: 23px; }
 .planner-editor-shell .editor-modal--feedback { width: min(600px, calc(100% - 32px)); }
 .planner-editor-shell .planner-save-modal-content { grid-template-columns: minmax(0, 1fr); }
 .planner-editor-shell .planner-save-modal-content__exports { border-top: 1px solid var(--border-subtle); padding-top: 12px; }
@@ -5494,7 +5494,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
   .planner-editor-shell .editor-menu-bar .editor-menu-bar__button[data-editor-modal-id] { width: 140px; }
   .planner-editor-shell .editor-menu-bar__button[data-editor-modal-id="settings-panel"] > span { display: inline; }
   .planner-editor-shell .editor-modal--popover { left: 8px; right: 8px; width: auto; }
-  .planner-editor-shell .editor-modal--save-panel { max-width: calc(100vw - 24px); width: calc(100vw - 24px); }
+  .planner-editor-shell .editor-modal--save-panel { max-width: calc(100vw - 16px); min-height: calc(100dvh - 16px); width: calc(100vw - 16px); }
   .planner-editor-shell .toolbar-wrapper.planner-editor-toolbar { max-width: calc(100% - 16px); transform: translateX(-50%); }
   .planner-editor-shell:has(.item-catalog-panel--left) .toolbar-wrapper.planner-editor-toolbar { left: 50%; max-width: calc(100% - 16px); transform: translateX(-50%); }
   .planner-editor-shell .catalog-placement-controls { left: 50%; transform: translateX(-50%); }

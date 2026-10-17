@@ -1,13 +1,22 @@
 "use client";
 
 import {
+  useEffect,
   useRef,
   useState,
   type ChangeEvent,
+  type FormEvent,
+  type MouseEvent,
   type ReactNode,
 } from "react";
 import { downloadBrowserFile } from "../projects/browser-file-download";
 import { createReferenceProjectExportFile } from "../projects/reference-project-export-file";
+import {
+  createLocalProjectFolderStore,
+  getLocalProjectFolderId,
+  myPlansFolderId,
+  type LocalProjectFolderState,
+} from "../projects/local-project-folder-store";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 import type {
   LocalProjectDeleteCopy,
@@ -42,6 +51,7 @@ type LocalProjectPanelProperties = Readonly<{
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
   onSaveCurrentMap: () => Promise<void>;
+  onActivateProjectList: () => void;
 }>;
 
 export function LocalProjectPanel({
@@ -68,6 +78,7 @@ export function LocalProjectPanel({
   onOpenProject,
   onRenameProject,
   onSaveCurrentMap,
+  onActivateProjectList,
 }: LocalProjectPanelProperties) {
   const [projectActionErrorMessage, setProjectActionErrorMessage] = useState<
     string | null
@@ -81,19 +92,64 @@ export function LocalProjectPanel({
   const [projectIdPendingDeletion, setProjectIdPendingDeletion] = useState<
     string | null
   >(null);
+  const [folderState, setFolderState] = useState<LocalProjectFolderState>({
+    folders: [],
+    folderIdByProjectId: {},
+  });
+  const [folderStorageErrorMessage, setFolderStorageErrorMessage] = useState<
+    string | null
+  >(null);
+  const [isFolderStorageReady, setIsFolderStorageReady] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState(myPlansFolderId);
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
+  const [requestedFolderName, setRequestedFolderName] = useState("");
   const [isSavingCurrentMap, setIsSavingCurrentMap] = useState(false);
   const isSavingCurrentMapReference = useRef(false);
   const deleteButtonPendingDeletionRef = useRef<HTMLButtonElement | null>(null);
   const isStorageReady = storageStatus === "ready";
+  const localProjectFolders = [
+    { id: myPlansFolderId, name: copy.myPlansFolder },
+    ...folderState.folders,
+  ];
+  const projectCountByFolderId = new Map<string, number>(
+    localProjectFolders.map((folder) => [folder.id, 0]),
+  );
+  for (const projectSummary of projects) {
+    const folderId = getLocalProjectFolderId(folderState, projectSummary.id);
+    projectCountByFolderId.set(
+      folderId,
+      (projectCountByFolderId.get(folderId) ?? 0) + 1,
+    );
+  }
+  const projectsInSelectedFolder = projects.filter(
+    (projectSummary) =>
+      getLocalProjectFolderId(folderState, projectSummary.id) === selectedFolderId,
+  );
   const projectPendingDeletion = projects.find(
     (projectSummary) => projectSummary.id === projectIdPendingDeletion,
   );
   const filteredProjectSummaries = filterLocalProjectSummaries(
-    projects,
+    projectsInSelectedFolder,
     searchQuery,
   );
+  const canManageFolders =
+    isStorageReady
+    && isFolderStorageReady
+    && folderStorageErrorMessage === null;
   const moreActionsLabel =
     copy.dateTimeLocale === "zh-CN" ? "更多操作" : "More actions";
+
+  useEffect(() => {
+    try {
+      const localProjectFolderStore = createLocalProjectFolderStore();
+      setFolderState(localProjectFolderStore.load());
+      setFolderStorageErrorMessage(null);
+    } catch (caughtError) {
+      setFolderStorageErrorMessage(formatProjectActionError(caughtError, copy));
+    } finally {
+      setIsFolderStorageReady(true);
+    }
+  }, []);
 
   function runProjectAction(action: () => void, successMessage: string): void {
     try {
@@ -124,7 +180,10 @@ export function LocalProjectPanel({
   }
 
   function handleCreateProject(): void {
-    runProjectAction(onCreateProject, copy.createdProject);
+    runProjectAction(() => {
+      onCreateProject();
+      onActivateProjectList();
+    }, copy.createdProject);
   }
 
   function handleOpenProject(projectId: string, projectName: string): void {
@@ -150,6 +209,55 @@ export function LocalProjectPanel({
       () => onDuplicateProject(projectId),
       copy.duplicatedProject,
     );
+  }
+
+  function handleCreateFolder(): void {
+    runProjectAction(() => {
+      const nextFolderState = createLocalProjectFolderStore().createFolder(
+        requestedFolderName,
+      );
+      const createdFolder = nextFolderState.folders.at(-1);
+      if (createdFolder === undefined) {
+        throw new Error(
+          "Cannot select the newly created local project folder because the folder list is empty.",
+        );
+      }
+
+      setFolderState(nextFolderState);
+      setSelectedFolderId(createdFolder.id);
+      setRequestedFolderName("");
+      setIsCreatingFolder(false);
+      onActivateProjectList();
+    }, copy.folderCreated);
+  }
+
+  function handleMoveProjectToFolder(
+    projectId: string,
+    folderId: string,
+    folderName: string,
+    clickEvent: MouseEvent<HTMLButtonElement>,
+  ): void {
+    runProjectAction(() => {
+      setFolderState(
+        createLocalProjectFolderStore().moveProject(projectId, folderId),
+      );
+    }, copy.folderMoved(folderName));
+    clickEvent.currentTarget.closest("details")?.removeAttribute("open");
+  }
+
+  function handleSelectFolder(folderId: string): void {
+    setSelectedFolderId(folderId);
+    setSearchQuery("");
+    setProjectActionErrorMessage(null);
+    setProjectActionNotice(null);
+    onActivateProjectList();
+  }
+
+  function handleCreateFolderFormSubmit(
+    submitEvent: FormEvent<HTMLFormElement>,
+  ): void {
+    submitEvent.preventDefault();
+    handleCreateFolder();
   }
 
   function handleRequestProjectDeletion(
@@ -250,7 +358,87 @@ export function LocalProjectPanel({
               {copy.newProject}
             </button>
           </div>
-          {sidebarContent}
+          {sidebarContent !== null ? (
+            <div className={styles.sidebarNavigationSlot}>{sidebarContent}</div>
+          ) : null}
+          <section aria-label={copy.folderGroupLabel} className={styles.folderSection}>
+            <p className={styles.folderGroupLabel}>{copy.folderGroupLabel}</p>
+            <nav aria-label={copy.folderGroupLabel}>
+              <ul className={styles.folderList}>
+                {localProjectFolders.map((folder) => (
+                  <li key={folder.id}>
+                    <button
+                      aria-pressed={selectedFolderId === folder.id}
+                      className={styles.folderButton}
+                      data-local-project-folder-id={folder.id}
+                      disabled={!canManageFolders}
+                      onClick={() => handleSelectFolder(folder.id)}
+                      type="button"
+                    >
+                      <span>{folder.name}</span>
+                      <span className={styles.folderCount}>
+                        {projectCountByFolderId.get(folder.id) ?? 0}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            {isCreatingFolder ? (
+              <form
+                className={styles.createFolderForm}
+                onSubmit={handleCreateFolderFormSubmit}
+              >
+                <label htmlFor="local-project-new-folder">
+                  {copy.newFolderName}
+                </label>
+                <input
+                  autoComplete="off"
+                  autoFocus
+                  id="local-project-new-folder"
+                  maxLength={40}
+                  onChange={(changeEvent) =>
+                    setRequestedFolderName(changeEvent.currentTarget.value)
+                  }
+                  required
+                  type="text"
+                  value={requestedFolderName}
+                />
+                <div className={styles.createFolderActions}>
+                  <button disabled={!canManageFolders} type="submit">
+                    {copy.createFolder}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsCreatingFolder(false);
+                      setRequestedFolderName("");
+                    }}
+                    type="button"
+                  >
+                    {copy.cancelCreateFolder}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <button
+                className={styles.newFolderButton}
+                disabled={!canManageFolders}
+                onClick={() => {
+                  setProjectActionErrorMessage(null);
+                  setProjectActionNotice(null);
+                  setIsCreatingFolder(true);
+                }}
+                type="button"
+              >
+                {copy.newFolder}
+              </button>
+            )}
+          </section>
+          {folderStorageErrorMessage !== null ? (
+            <p className="local-project-panel__error" role="alert">
+              {folderStorageErrorMessage}
+            </p>
+          ) : null}
           {storageStatus === "loading" ? (
             <p className="local-project-panel__message" role="status">
               {copy.openingBrowserStorage}
@@ -271,7 +459,9 @@ export function LocalProjectPanel({
               {projectActionNotice}
             </p>
           ) : null}
-          {sidebarFooterContent}
+          {sidebarFooterContent !== null ? (
+            <div className={styles.sidebarFooterSlot}>{sidebarFooterContent}</div>
+          ) : null}
         </aside>
         <div className={styles.main} data-local-project-region="main">
           <div hidden={!isProjectListActive}>
@@ -376,7 +566,7 @@ export function LocalProjectPanel({
                             <button
                               className={styles.openProjectButton}
                               data-project-action="open"
-                              disabled={!isStorageReady}
+                              disabled={!isStorageReady || isCurrentProject}
                               onClick={() =>
                                 handleOpenProject(projectSummary.id, projectSummary.title)
                               }
@@ -397,6 +587,56 @@ export function LocalProjectPanel({
                                 <path d="m13 7 4 4" stroke="currentColor" strokeWidth="1.8" />
                               </svg>
                             </button>
+                            <details className={styles.folderActions}>
+                              <summary
+                                aria-label={`${copy.moveToFolder}: ${projectSummary.title}`}
+                                className={styles.iconAction}
+                              >
+                                <svg aria-hidden="true" fill="none" viewBox="0 0 24 24">
+                                  <path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-10Z" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.8" />
+                                  <path d="M3.8 10h16.4" stroke="currentColor" strokeWidth="1.8" />
+                                </svg>
+                              </summary>
+                              <div
+                                aria-label={copy.moveToFolder}
+                                className={styles.folderActionsPanel}
+                                role="group"
+                              >
+                                {localProjectFolders.map((folder) => (
+                                  <button
+                                    aria-current={
+                                      getLocalProjectFolderId(
+                                        folderState,
+                                        projectSummary.id,
+                                      ) === folder.id
+                                        ? "true"
+                                        : undefined
+                                    }
+                                    data-project-action="move-folder"
+                                    data-target-folder-id={folder.id}
+                                    disabled={
+                                      !canManageFolders
+                                      || getLocalProjectFolderId(
+                                        folderState,
+                                        projectSummary.id,
+                                      ) === folder.id
+                                    }
+                                    key={folder.id}
+                                    onClick={(clickEvent) =>
+                                      handleMoveProjectToFolder(
+                                        projectSummary.id,
+                                        folder.id,
+                                        folder.name,
+                                        clickEvent,
+                                      )
+                                    }
+                                    type="button"
+                                  >
+                                    {folder.name}
+                                  </button>
+                                ))}
+                              </div>
+                            </details>
                             <details className={styles.moreActions}>
                               <summary
                                 aria-label={`${moreActionsLabel}: ${projectSummary.title}`}
@@ -447,14 +687,20 @@ export function LocalProjectPanel({
                   );
                 })}
               </ul>
-            ) : projects.length > 0 && searchQuery.trim().length > 0 ? (
+            ) : searchQuery.trim().length > 0 ? (
               <p className="local-project-panel__message" role="status">
                 {copy.noSearchResults}
               </p>
-            ) : null}
-            {projects.length === 0 ? (
+            ) : projects.length === 0 ? (
               <p className="local-project-panel__message">
                 {copy.emptyState}
+              </p>
+            ) : null}
+            {projects.length > 0
+            && projectsInSelectedFolder.length === 0
+            && searchQuery.trim().length === 0 ? (
+              <p className="local-project-panel__message">
+                {copy.emptyFolder}
               </p>
             ) : null}
           </div>

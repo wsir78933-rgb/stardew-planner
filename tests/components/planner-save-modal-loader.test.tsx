@@ -77,7 +77,6 @@ describe("planner save-modal loader", () => {
         selectedPlannerMapId: "standard",
         storageErrorMessage: null,
         storageStatus: "ready",
-        workspaceController: { getState: () => ({ activeProject: null }) } as never,
       }),
     );
 
@@ -85,7 +84,7 @@ describe("planner save-modal loader", () => {
     expect(markup).toContain("正在加载本地项目…");
   });
 
-  it("orders Import Game Save before My Plans and keeps tools off the sidebar disclosure", () => {
+  it("keeps Import Game Save in the sidebar and leaves tools as a separate action", () => {
     const loaderSource = readFileSync(
       resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),
       "utf8",
@@ -95,11 +94,10 @@ describe("planner save-modal loader", () => {
       loaderSource.indexOf("const libraryToolsEntry"),
     );
     const gameSaveLabelIndex = navigationSource.indexOf("copy.saveTools.gameSave");
-    const myPlansLabelIndex = navigationSource.indexOf("copy.saveTools.myPlans");
 
     expect(gameSaveLabelIndex).toBeGreaterThan(-1);
-    expect(myPlansLabelIndex).toBeGreaterThan(gameSaveLabelIndex);
-    expect(navigationSource).toContain("copy.saveTools.planGroupLabel");
+    expect(navigationSource).not.toContain("copy.saveTools.myPlans");
+    expect(navigationSource).not.toContain("copy.saveTools.planGroupLabel");
     expect(navigationSource).not.toContain("<details");
     expect(navigationSource).not.toContain("copy.saveTools.farmSummary");
     expect(loaderSource).toContain("copy.saveTools.tools");

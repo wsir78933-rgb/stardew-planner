@@ -34,16 +34,27 @@ export type LocalProjectsCopy = Readonly<{
   duplicate: string;
   duplicatedProject: string;
   emptyState: string;
+  emptyFolder: string;
   exportedProject: (projectName: string) => string;
   exportJson: string;
+  folderCreated: string;
+  folderGroupLabel: string;
+  folderMoved: (folderName: string) => string;
+  folderName: string;
   importedProject: (filename: string) => string;
   importJson: string;
   localProjects: string;
+  myPlansFolder: string;
   mapPreviewAlt: (projectName: string) => string;
   noMapPreview: string;
   noSearchResults: string;
   newProject: string;
   newProjectName: string;
+  newFolder: string;
+  newFolderName: string;
+  createFolder: string;
+  cancelCreateFolder: string;
+  moveToFolder: string;
   none: string;
   open: string;
   openedProject: (projectName: string) => string;
@@ -266,16 +277,27 @@ const saveModalCopyByLocale = {
       duplicate: "Duplicate",
       duplicatedProject: "Duplicated the local project.",
       emptyState: "No local projects yet. Saving creates an Untitled Project and saves the current map.",
+      emptyFolder: "This folder is empty.",
       exportedProject: (projectName: string) => `Exported ${projectName}.`,
       exportJson: "Export JSON",
+      folderCreated: "Created a folder.",
+      folderGroupLabel: "Folders",
+      folderMoved: (folderName: string) => `Moved the plan to ${folderName}.`,
+      folderName: "Folder name",
       importedProject: (filename: string) => `Imported ${filename}.`,
       importJson: "Import JSON",
       localProjects: "Local projects",
+      myPlansFolder: "My Plans",
       mapPreviewAlt: (projectName: string) => `Map preview for ${projectName}`,
       noMapPreview: "No saved map preview",
       noSearchResults: "No local projects match your search.",
-      newProject: "New project",
-      newProjectName: "New project name",
+      newProject: "New plan",
+      newProjectName: "New plan name",
+      newFolder: "+ New folder",
+      newFolderName: "New folder name",
+      createFolder: "Create folder",
+      cancelCreateFolder: "Cancel",
+      moveToFolder: "Move to folder",
       none: "None",
       open: "Open",
       openedProject: (projectName: string) => `Opened ${projectName}.`,
@@ -287,7 +309,7 @@ const saveModalCopyByLocale = {
       saveToDevice: "Save to this device",
       savedLocalProjects: "Saved local projects",
       savedToBrowser: "Saved to this browser.",
-      searchProjects: "Search local projects",
+      searchProjects: "Search plans",
       storedInBrowser: "Stored in this browser.",
     },
     cloudProjects: {
@@ -455,16 +477,27 @@ const saveModalCopyByLocale = {
       duplicate: "创建副本",
       duplicatedProject: "已复制本地项目。",
       emptyState: "还没有本地项目。保存时会创建“未命名项目”，并保存当前地图。",
+      emptyFolder: "此文件夹中还没有方案。",
       exportedProject: (projectName: string) => `已导出“${projectName}”。`,
       exportJson: "导出 JSON",
+      folderCreated: "已创建文件夹。",
+      folderGroupLabel: "文件夹",
+      folderMoved: (folderName: string) => `已将方案移至“${folderName}”。`,
+      folderName: "文件夹名称",
       importedProject: (filename: string) => `已导入“${filename}”。`,
       importJson: "导入 JSON",
       localProjects: "本地项目",
+      myPlansFolder: "我的方案",
       mapPreviewAlt: (projectName: string) => `“${projectName}”的地图预览`,
       noMapPreview: "暂无已保存的地图预览",
       noSearchResults: "没有匹配的本地项目。",
-      newProject: "新建项目",
-      newProjectName: "新项目名称",
+      newProject: "新建方案",
+      newProjectName: "新方案名称",
+      newFolder: "+ 新建文件夹",
+      newFolderName: "新文件夹名称",
+      createFolder: "创建文件夹",
+      cancelCreateFolder: "取消",
+      moveToFolder: "移动到文件夹",
       none: "无",
       open: "打开",
       openedProject: (projectName: string) => `已打开“${projectName}”。`,
@@ -475,7 +508,7 @@ const saveModalCopyByLocale = {
       saveToDevice: "保存到此设备",
       savedLocalProjects: "已保存的本地项目",
       savedToBrowser: "已保存到此浏览器。",
-      searchProjects: "搜索本地项目",
+      searchProjects: "搜索方案",
       storedInBrowser: "保存在此浏览器中。",
     },
     cloudProjects: {

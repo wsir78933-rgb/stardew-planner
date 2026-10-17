@@ -1,50 +1,11 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it, vi } from "vitest";
-
-const cloudProjectSyncHookMock = vi.hoisted(() => ({
-  useCloudProjectSync: vi.fn(() => ({
-    status: "ready" as const,
-    hasMoreCloudProjects: false,
-    isLoadingMoreCloudProjects: false,
-    batchSyncProgress: null,
-    authStatus: "signed-out" as const,
-    account: null,
-    cloudProjects: [],
-    localProjectSyncById: {},
-    errorMessage: null,
-    signInWithGoogle: vi.fn(async () => undefined),
-    signOut: vi.fn(async () => undefined),
-    refreshCloudProjects: vi.fn(async () => undefined),
-    loadMoreCloudProjects: vi.fn(async () => undefined),
-    uploadLocalProject: vi.fn(async () => undefined),
-    onLocalProjectSaved: vi.fn(async () => undefined),
-    syncAllLocalProjects: vi.fn(async () => undefined),
-    openCloudProject: vi.fn(async () => ({ localProjectId: "local-copy" })),
-    deleteCloudCopy: vi.fn(async () => undefined),
-    retrySync: vi.fn(async () => undefined),
-    keepLocalVersion: vi.fn(async () => undefined),
-    useCloudVersion: vi.fn(async () => "local-copy"),
-  })),
-}));
-
-vi.mock("@/cloud-sync/use-cloud-project-sync", () => ({
-  CloudAuthError: class CloudAuthError extends Error {},
-  CloudProjectRequestError: class CloudProjectRequestError extends Error {},
-  useCloudProjectSync: cloudProjectSyncHookMock.useCloudProjectSync,
-}));
-
-vi.mock("@/src/cloud-sync/use-cloud-project-sync", () => ({
-  CloudAuthError: class CloudAuthError extends Error {},
-  CloudProjectRequestError: class CloudProjectRequestError extends Error {},
-  useCloudProjectSync: cloudProjectSyncHookMock.useCloudProjectSync,
-}));
-
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { describe, expect, it } from "vitest";
 import {
   formatPlannerThumbnailSaveError,
-  getActiveProjectIdAfterLocalSave,
   PlannerSaveModalContent,
-  saveCurrentMapAndNotifyCloudSync,
 } from "../../src/components/planner-save-modal-content";
 import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
 import { MapImageExportError } from "../../src/projects/map-image-export";
@@ -67,13 +28,15 @@ describe("planner save modal content", () => {
         getSaveModalCopy("zh-CN").thumbnail,
       ),
     ).toBe("缩略图保存失败：Current map image exporter is unavailable.");
-    expect(() => formatPlannerThumbnailSaveError(new Error("Unexpected Pixi fault."), getSaveModalCopy("en").thumbnail)).toThrow(
-      "Unexpected Pixi fault.",
-    );
+    expect(() =>
+      formatPlannerThumbnailSaveError(
+        new Error("Unexpected Pixi fault."),
+        getSaveModalCopy("en").thumbnail,
+      ),
+    ).toThrow("Unexpected Pixi fault.");
   });
 
-  it("renders local persistence, screenshot, and thumbnail controls together", () => {
-    cloudProjectSyncHookMock.useCloudProjectSync.mockClear();
+  it("renders local project and tool controls without account or cloud sync UI", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerSaveModalContent, {
         copy: getSaveModalCopy("zh-CN"),
@@ -86,7 +49,7 @@ describe("planner save modal content", () => {
         sidebarNavigation: createElement(
           "nav",
           { "aria-label": "保存工具" },
-          createElement("button", { type: "button" }, "本地项目"),
+          createElement("button", { type: "button" }, "导入游戏存档"),
         ),
         currentProjectId: "project-forest",
         currentProjectMapInstanceCount: 1,
@@ -102,100 +65,44 @@ describe("planner save modal content", () => {
         onOpenProject: () => undefined,
         onRenameProject: () => undefined,
         onSaveCurrentMap: async () => undefined,
+        onActivateProjectList: () => undefined,
         onSaveThumbnail: async () => undefined,
         projects: projectSummaries,
         season: "spring",
         storageErrorMessage: null,
         storageStatus: "ready",
-        workspaceController: { getState: () => ({ activeProject: null }) } as never,
       }),
     );
 
     expect(markup).toContain("保存到此设备");
-    expect(markup).toContain("使用 Google 继续");
-    expect(markup).not.toContain("设备工具");
-    expect(markup).not.toContain("<summary>导出</summary>");
-    expect(markup).not.toContain("<summary>保存工具</summary>");
-    expect(markup).not.toContain("<summary>本地项目同步状态</summary>");
-    expectTextInOrder(markup, [
-      "新建项目",
-      "使用 Google 继续",
-      "同步全部本地项目",
-      "保存到此设备",
-      "截图",
-      "保存缩略图",
-    ]);
-    expect(markup).toContain("仅同步布局数据。地图预览图片保留在此设备上。");
+    expect(markup).toContain("新建方案");
+    expect(markup).toContain("我的方案");
+    expect(markup).toContain("+ 新建文件夹");
+    expect(markup).toContain("导入游戏存档");
+    expect(markup).not.toMatch(/Google|云端|云同步|同步全部/);
     expect(markup).toContain('aria-label="保存工具"');
     expect(markup).toContain("Lazy branch content");
     expect(markup).toContain("截图");
     expect(markup).toContain("保存缩略图");
     expect(markup).toContain("Forest Farm");
     expect(markup).toContain("Forest Layout");
-    expect(markup.startsWith('<div class="planner-save-modal-content">')).toBe(
-      true,
-    );
+    expect(markup.startsWith('<div class="planner-save-modal-content">')).toBe(true);
     expect(
       markup.match(/class="planner-save-modal-content__exports [^"]+"/g),
     ).toHaveLength(1);
     expect(markup).toContain('aria-label="导出"');
     expect(markup).toContain('aria-label="缩略图"');
-    expect(cloudProjectSyncHookMock.useCloudProjectSync).toHaveBeenCalledTimes(1);
   });
 
-  it("notifies cloud sync only after a local save and reads the resulting active project ID", async () => {
-    const eventOrder: string[] = [];
-    let activeProjectId: string | null = null;
-    const workspaceController = {
-      getState: () => ({ activeProject: activeProjectId === null ? null : { id: activeProjectId } }),
-    } as never;
-
-    await saveCurrentMapAndNotifyCloudSync({
-      saveCurrentMap: async () => {
-        eventOrder.push("local-save");
-        activeProjectId = "project-created-after-save";
-      },
-      onLocalProjectSaved: async (localProjectId) => {
-        eventOrder.push(`cloud-sync:${localProjectId}`);
-      },
-      workspaceController,
-    });
-
-    expect(eventOrder).toEqual([
-      "local-save",
-      "cloud-sync:project-created-after-save",
-    ]);
-    expect(getActiveProjectIdAfterLocalSave(workspaceController)).toBe(
-      "project-created-after-save",
+  it("passes local map saving directly to the Library without a cloud callback", () => {
+    const contentSource = readFileSync(
+      resolve(process.cwd(), "src/components/planner-save-modal-content.tsx"),
+      "utf8",
     );
-  });
 
-function expectTextInOrder(markup: string, expectedTexts: readonly string[]): void {
-  let previousTextIndex = -1;
-
-  for (const expectedText of expectedTexts) {
-    const currentTextIndex = markup.indexOf(expectedText, previousTextIndex + 1);
-    expect(currentTextIndex, expectedText).toBeGreaterThan(previousTextIndex);
-    previousTextIndex = currentTextIndex;
-  }
-}
-
-  it("does not notify cloud sync when local save fails and rejects a missing active project ID", async () => {
-    const notifyCloudProjectSaved = vi.fn(async () => undefined);
-    const workspaceController = {
-      getState: () => ({ activeProject: null }),
-    } as never;
-
-    await expect(saveCurrentMapAndNotifyCloudSync({
-      saveCurrentMap: async () => {
-        throw new Error("local storage is unavailable");
-      },
-      onLocalProjectSaved: notifyCloudProjectSaved,
-      workspaceController,
-    })).rejects.toThrow("local storage is unavailable");
-    expect(notifyCloudProjectSaved).not.toHaveBeenCalled();
-    expect(() => getActiveProjectIdAfterLocalSave(workspaceController)).toThrow(
-      "active project ID is undefined",
-    );
+    expect(contentSource).toContain("onSaveCurrentMap={onSaveCurrentMap}");
+    expect(contentSource).not.toContain("useCloudProjectSync");
+    expect(contentSource).not.toContain("CloudProjectPanel");
+    expect(contentSource).not.toContain("onLocalProjectSaved");
   });
 });
