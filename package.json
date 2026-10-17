@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "sh scripts/dev.sh",
     "dev:cloud": "pnpm build && wrangler dev --local --ip 127.0.0.1 --port 8787 --compatibility-date 2026-06-10 --compatibility-flag nodejs_compat --var BETTER_AUTH_URL:http://localhost:8787 --var AUTH_ALLOWED_ORIGINS:http://localhost:8787",
-    "db:migrate:local": "wrangler d1 migrations apply stardew-planner-local --local",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "wrangler:types": "wrangler types worker-configuration.d.ts",
     "build": "next build",
     "start": "serve out",
