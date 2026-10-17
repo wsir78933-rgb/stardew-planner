@@ -17,7 +17,12 @@ type BushDefinition = Readonly<{
 
 const localAssetRoot = "/game-assets/1.6.15";
 const bushesTextureLocalPath = `${localAssetRoot}/tilesheets/bushes.png`;
-const bushPlacementTools = ["cursor", "multi-select", "erase"] as const;
+const bushPlacementTools = [
+  "cursor",
+  "multi-select",
+  "fill",
+  "erase",
+] as const;
 const bushSeasons = ["spring", "summer", "fall", "winter"] as const;
 
 const bushDefinitions = [

@@ -3580,25 +3580,11 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .editor-wheel-zoom-button:hover { background: var(--bg-surface); color: var(--text); }
 .planner-editor-shell .menu-btn:hover,
 .planner-editor-shell .tool-btn:hover:not(:disabled) { background: var(--bg-surface); color: var(--text); }
-.planner-editor-shell .tool-btn.cursor[aria-pressed="true"] {
-  background: rgb(177 58 40 / 15%);
-  color: #b13a28;
-}
-.planner-editor-shell .tool-btn.editor-wheel-zoom-button[aria-pressed="true"] {
-  background: rgb(177 58 40 / 15%);
-  color: #b13a28;
-}
-.planner-editor-shell .tool-btn.erase-hover:hover:not(:disabled):not(.active) { background: rgb(177 58 40 / 10%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__toggle,
 .planner-editor-shell .editor-menu-bar__separator { display: none; }
 .planner-editor-shell .editor-menu-bar__controls { display: contents; }
 .planner-editor-shell .menu-btn.active,
 .planner-editor-shell .tool-btn.active { background: var(--accent-muted); color: var(--text-bright); }
-.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"] {
-  background: rgb(177 58 40 / 15%);
-  color: #b13a28;
-}
-.planner-editor-shell .tool-btn.erase { background: rgb(177 58 40 / 15%); color: #b13a28; }
 .planner-editor-shell .editor-menu-bar__actions { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); display: flex; max-height: 70vh; min-width: 200px; overflow-y: auto; padding: var(--lk-2xs) 0; position: absolute; right: 0; top: calc(var(--lk-xl) + var(--lk-sm)); }
 .planner-editor-shell [data-planner-canvas-context-menu] { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%); min-width: 12rem; padding: var(--lk-2xs); }
 .planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"] { align-items: center; background: transparent; border: 0; border-radius: var(--lk-xs); color: var(--text); cursor: pointer; display: flex; font: inherit; justify-content: flex-start; min-height: 44px; padding: 0 var(--lk-sm); text-align: left; width: 100%; }
@@ -3991,11 +3977,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .search-toggle,
 .planner-editor-shell .filter-btn,
 .planner-editor-shell .branding-btn,
-.planner-editor-shell .pill-dismiss,
-.planner-editor-shell .pill-copy,
-.planner-editor-shell .pill-delete,
-.planner-editor-shell .pill-more,
-.planner-editor-shell .selection-inspector button,
 .planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"],
 .planner-editor-shell .arrow-btn,
 .planner-editor-shell .editor-modal button,
@@ -4013,9 +3994,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .local-project-panel__project,
 .planner-editor-shell .project-map-instance-panel__instance,
 .planner-editor-shell .editor-modal__legal-links a,
-.planner-editor-shell .planner-map-picker__tab,
-.planner-editor-shell .planner-map-picker__community-tab,
-.planner-editor-shell .editor-modal__map-grid button,
 .planner-editor-shell .planner-startup-status,
 .planner-editor-shell .planner-canvas__status,
 .planner-editor-shell .planner-canvas__warning,
@@ -4091,10 +4069,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .menu-btn[aria-expanded="true"],
 .planner-editor-shell .tool-btn:active:not(:disabled),
 .planner-editor-shell .tool-btn.active,
-.planner-editor-shell .tool-btn.erase,
-.planner-editor-shell .tool-btn.cursor[aria-pressed="true"]:not(:disabled),
-.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"]:not(:disabled),
-.planner-editor-shell .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]:not(:disabled),
 .planner-editor-shell .tab-icon:active:not(:disabled),
 .planner-editor-shell .tab-icon.active,
 .planner-editor-shell .tab-icon[aria-selected="true"],
@@ -4109,11 +4083,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .search-toggle:active:not(:disabled),
 .planner-editor-shell .filter-btn:active:not(:disabled),
 .planner-editor-shell .branding-btn:active:not(:disabled),
-.planner-editor-shell .pill-dismiss:active:not(:disabled),
-.planner-editor-shell .pill-copy:active:not(:disabled),
-.planner-editor-shell .pill-delete:active:not(:disabled),
-.planner-editor-shell .pill-more:active:not(:disabled),
-.planner-editor-shell .selection-inspector button:active:not(:disabled),
 .planner-editor-shell [data-planner-canvas-context-menu] [role="menuitem"]:active:not(:disabled),
 .planner-editor-shell .arrow-btn:active:not(:disabled),
 .planner-editor-shell .editor-modal button:active:not(:disabled),
@@ -4131,12 +4100,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .local-project-panel__project[data-current-project="true"],
 .planner-editor-shell .project-map-instance-panel__instance[data-current-map-instance="true"],
 .planner-editor-shell .editor-modal__legal-links a:active,
-.planner-editor-shell .planner-map-picker__tab:active:not(:disabled),
-.planner-editor-shell .planner-map-picker__tab[aria-selected="true"],
-.planner-editor-shell .planner-map-picker__community-tab:active:not(:disabled),
-.planner-editor-shell .planner-map-picker__community-tab[aria-selected="true"],
-.planner-editor-shell .editor-modal__map-grid button:active:not(:disabled),
-.planner-editor-shell .editor-modal__map-grid button[aria-pressed="true"]:not(:disabled),
 .planner-editor-shell .planner-save-modal-loader__branches button[aria-pressed="true"]:not(:disabled) {
   box-shadow: var(--planner-neo-inset-shadow);
 }
@@ -4214,13 +4177,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .selection-inspector select:disabled,
 .planner-editor-shell .selection-inspector input[type="color"]:disabled {
   box-shadow: var(--planner-neo-raised-shadow);
-}
-
-.planner-editor-shell .planner-map-picker__tab[aria-selected="true"],
-.planner-editor-shell .planner-map-picker__community-tab[aria-selected="true"] {
-  border-color: transparent !important;
-  border-bottom-color: transparent !important;
-  box-shadow: var(--planner-neo-inset-shadow);
 }
 
 .planner-editor-shell .planner-startup-status[role="alert"],
@@ -5365,6 +5321,48 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="fill"]:focus-visible::after { transform: translateY(0); }
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:hover::after,
 .planner-editor-shell .editor-toolbar .editor-toolbar__button[data-editor-tool="erase"]:focus-visible::after { transform: translateY(0); }
+/* Selected tools keep one flat state across hover, focus, and press.
+   These declarations set only background, color, and shadow, so the existing hit box does not move.
+   Select, multi-select, fill, and wheel zoom share the same danger tint selected style as Erase. */
+.planner-editor-shell .editor-toolbar .tool-btn.cursor[aria-pressed="true"],
+.planner-editor-shell .editor-toolbar .tool-btn.multi-select[aria-pressed="true"],
+.planner-editor-shell .editor-toolbar .tool-btn.fill[aria-pressed="true"],
+.planner-editor-shell .editor-toolbar .tool-btn.editor-wheel-zoom-button[aria-pressed="true"],
+.planner-editor-shell .editor-toolbar .tool-btn.cursor[aria-pressed="true"]:hover,
+.planner-editor-shell .editor-toolbar .tool-btn.multi-select[aria-pressed="true"]:hover,
+.planner-editor-shell .editor-toolbar .tool-btn.fill[aria-pressed="true"]:hover,
+.planner-editor-shell .editor-toolbar .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]:hover,
+.planner-editor-shell .editor-toolbar .tool-btn.cursor[aria-pressed="true"]:focus-visible,
+.planner-editor-shell .editor-toolbar .tool-btn.multi-select[aria-pressed="true"]:focus-visible,
+.planner-editor-shell .editor-toolbar .tool-btn.fill[aria-pressed="true"]:focus-visible,
+.planner-editor-shell .editor-toolbar .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]:focus-visible,
+.planner-editor-shell .editor-toolbar .tool-btn.cursor[aria-pressed="true"]:active,
+.planner-editor-shell .editor-toolbar .tool-btn.multi-select[aria-pressed="true"]:active,
+.planner-editor-shell .editor-toolbar .tool-btn.fill[aria-pressed="true"]:active,
+.planner-editor-shell .editor-toolbar .tool-btn.editor-wheel-zoom-button[aria-pressed="true"]:active {
+  background: rgb(177 58 40 / 15%);
+  box-shadow: none;
+  color: #b13a28;
+}
+.planner-editor-shell .editor-toolbar .tool-btn.erase[aria-pressed="true"],
+.planner-editor-shell .editor-toolbar .tool-btn.erase[aria-pressed="true"]:hover,
+.planner-editor-shell .editor-toolbar .tool-btn.erase[aria-pressed="true"]:focus-visible,
+.planner-editor-shell .editor-toolbar .tool-btn.erase[aria-pressed="true"]:active {
+  background: rgb(177 58 40 / 15%);
+  box-shadow: none;
+  color: #b13a28;
+}
+.planner-editor-shell .editor-toolbar .tool-btn.erase-hover:hover:not(:disabled):not([aria-pressed="true"]),
+.planner-editor-shell .editor-toolbar .tool-btn.erase-hover:focus-visible:not(:disabled):not([aria-pressed="true"]) {
+  background: rgb(177 58 40 / 10%);
+  box-shadow: none;
+  color: #b13a28;
+}
+.planner-editor-shell .editor-toolbar .tool-btn:focus-visible:not(:disabled):not([aria-pressed="true"]):not(.erase-hover) {
+  background: var(--bg-surface);
+  box-shadow: none;
+  color: var(--text);
+}
 .planner-editor-shell .selection-inspector,
 .planner-editor-shell .catalog-placement-controls { bottom: 80px; }
 .planner-editor-shell .planner-workspace__toast { top: calc(var(--planner-topbar-height) + 12px); }
@@ -5521,6 +5519,93 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .planner-editor-shell .editor-menu-bar__chevron { transition: none; }
+}
+
+/* Flat states for map tabs, map cards, dialog close, and Selection Inspector buttons.
+   The .editor-modal and .selection-inspector shells keep their own shadows. */
+.planner-editor-shell .editor-modal button.planner-map-picker__tab,
+.planner-editor-shell .editor-modal button.planner-map-picker__tab:hover:not(:disabled),
+.planner-editor-shell .editor-modal button.planner-map-picker__tab:focus-visible,
+.planner-editor-shell .editor-modal button.planner-map-picker__tab:active:not(:disabled),
+.planner-editor-shell .editor-modal button.planner-map-picker__tab:disabled,
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab,
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab:hover:not(:disabled),
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab:focus-visible,
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab:active:not(:disabled),
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab:disabled,
+.planner-editor-shell .editor-modal .editor-modal__map-grid button,
+.planner-editor-shell .editor-modal .editor-modal__map-grid button:hover:not(:disabled),
+.planner-editor-shell .editor-modal .editor-modal__map-grid button:focus-visible,
+.planner-editor-shell .editor-modal .editor-modal__map-grid button:active:not(:disabled),
+.planner-editor-shell .editor-modal .editor-modal__map-grid button:disabled,
+.planner-editor-shell .editor-modal .editor-modal__header > button,
+.planner-editor-shell .editor-modal .editor-modal__header > button:hover:not(:disabled),
+.planner-editor-shell .editor-modal .editor-modal__header > button:focus-visible,
+.planner-editor-shell .editor-modal .editor-modal__header > button:active:not(:disabled),
+.planner-editor-shell .editor-modal .editor-modal__header > button:disabled,
+.planner-editor-shell .selection-inspector button,
+.planner-editor-shell .selection-inspector button:hover:not(:disabled),
+.planner-editor-shell .selection-inspector button:focus-visible,
+.planner-editor-shell .selection-inspector button:active:not(:disabled),
+.planner-editor-shell .selection-inspector button:disabled {
+  box-shadow: none;
+}
+.planner-editor-shell .editor-modal button.planner-map-picker__tab:hover:not(:disabled):not([aria-selected="true"]),
+.planner-editor-shell .editor-modal button.planner-map-picker__tab:focus-visible:not([aria-selected="true"]) {
+  background: var(--bg-surface);
+  box-shadow: none;
+}
+.planner-editor-shell .editor-modal button.planner-map-picker__tab[aria-selected="true"],
+.planner-editor-shell .editor-modal button.planner-map-picker__tab[aria-selected="true"]:hover,
+.planner-editor-shell .editor-modal button.planner-map-picker__tab[aria-selected="true"]:focus-visible,
+.planner-editor-shell .editor-modal button.planner-map-picker__tab[aria-selected="true"]:active {
+  background: var(--bg-raised);
+  border-bottom-color: #c9fb45 !important;
+  box-shadow: none;
+  color: var(--text-bright);
+}
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab:hover:not(:disabled):not([aria-selected="true"]),
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab:focus-visible:not([aria-selected="true"]) {
+  background: var(--bg-surface);
+  box-shadow: none;
+}
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab[aria-selected="true"],
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab[aria-selected="true"]:hover,
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab[aria-selected="true"]:focus-visible,
+.planner-editor-shell .editor-modal button.planner-map-picker__community-tab[aria-selected="true"]:active {
+  background: #c9fb45;
+  border-color: #c9fb45 !important;
+  box-shadow: none;
+  color: var(--text-bright);
+}
+.planner-editor-shell .editor-modal .editor-modal__map-grid button:hover:not(:disabled):not([aria-pressed="true"]),
+.planner-editor-shell .editor-modal .editor-modal__map-grid button:focus-visible:not([aria-pressed="true"]) {
+  background: var(--bg-surface);
+  box-shadow: none;
+}
+.planner-editor-shell .editor-modal .editor-modal__map-grid button[aria-pressed="true"],
+.planner-editor-shell .editor-modal .editor-modal__map-grid button[aria-pressed="true"]:hover,
+.planner-editor-shell .editor-modal .editor-modal__map-grid button[aria-pressed="true"]:focus-visible,
+.planner-editor-shell .editor-modal .editor-modal__map-grid button[aria-pressed="true"]:active {
+  background: #c9fb45;
+  box-shadow: none;
+}
+.planner-editor-shell .editor-modal .editor-modal__header > button:hover:not(:disabled),
+.planner-editor-shell .editor-modal .editor-modal__header > button:focus-visible {
+  background: var(--bg-surface);
+  box-shadow: none;
+}
+.planner-editor-shell .selection-inspector__actions > button:not(.pill-more):not(.pill-copy):not(.pill-delete) {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: none;
+  color: var(--text);
+}
+.planner-editor-shell .selection-inspector__actions > button:not(.pill-more):not(.pill-copy):not(.pill-delete):hover:not(:disabled),
+.planner-editor-shell .selection-inspector__actions > button:not(.pill-more):not(.pill-copy):not(.pill-delete):focus-visible {
+  background: var(--bg-raised);
+  box-shadow: none;
+  color: var(--text);
 }
 
 .planner-editor-shell .catalog-placement-controls {

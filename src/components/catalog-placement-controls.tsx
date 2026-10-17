@@ -5,31 +5,62 @@ import type {
   CatalogPresentationChoice,
 } from "../catalog";
 import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
+import type { EditorTool } from "../editor/editor-view-state";
 import type { HomepageLocale } from "../homepage/homepage-locale";
-import { getCatalogPanelCopy } from "../i18n/catalog-panel-copy";
+import {
+  getCatalogPanelCopy,
+  type CatalogPanelCopy,
+} from "../i18n/catalog-panel-copy";
+import { CatalogLitThumbnail } from "./catalog-lit-thumbnail";
 import { getCatalogItemThumbnailStyle } from "./item-catalog-panel";
 
 const catalogPlacementThumbnailSize = 44;
 
+export type CatalogPlacementMode = "place" | "fill" | null;
+
 type CatalogPlacementControlsProperties = Readonly<{
   catalogItem: CatalogItem | null;
-  isFilling: boolean;
   locale: HomepageLocale;
   onCancel: () => void;
   onCyclePendingChoice: () => boolean;
+  placementMode: CatalogPlacementMode;
   presentationChoice: CatalogPresentationChoice | null;
 }>;
+
+type CatalogPlacementStatus = Readonly<{
+  hint: string | null;
+  label: string;
+}>;
+
+export function getCatalogPlacementMode(
+  tool: EditorTool | null,
+): CatalogPlacementMode {
+  if (tool === "cursor") {
+    return "place";
+  }
+  if (tool === "fill") {
+    return "fill";
+  }
+  if (tool === "multi-select" || tool === "erase" || tool === null) {
+    return null;
+  }
+
+  throw new TypeError(
+    `Catalog placement mode cannot be derived from tool ${JSON.stringify(tool)}.`,
+  );
+}
 
 type PendingCatalogControl = "rotation" | "variant" | null;
 
 export function CatalogPlacementControls({
   catalogItem,
-  isFilling,
   locale,
   onCancel,
   onCyclePendingChoice,
+  placementMode,
   presentationChoice,
 }: CatalogPlacementControlsProperties) {
+  assertCatalogPlacementMode(placementMode);
   if (catalogItem === null) {
     return null;
   }
@@ -42,10 +73,11 @@ export function CatalogPlacementControls({
   const copy = getCatalogPanelCopy(locale);
   const pendingCatalogControl = getPendingCatalogControl(catalogItem);
   const itemName = getCatalogSidebarDisplayName(catalogItem);
-  const placementStatusLabel = isFilling
-    ? copy.fillingItem(itemName)
-    : copy.placingItem(itemName);
-  const placementHint = isFilling ? copy.fillItemHint : copy.placeItemHint;
+  const placementStatus = getCatalogPlacementStatus(
+    copy,
+    itemName,
+    placementMode,
+  );
   const thumbnailStyle = getCatalogItemThumbnailStyle(
     catalogItem,
     presentationChoice,
@@ -67,7 +99,7 @@ export function CatalogPlacementControls({
 
   return (
     <div
-      aria-label={placementStatusLabel}
+      aria-label={placementStatus.label}
       className="catalog-placement-controls selection-pill"
       role="group"
     >
@@ -79,19 +111,35 @@ export function CatalogPlacementControls({
           className="catalog-placement-controls__thumbnail-scale"
           style={{ transform: `scale(${String(thumbnailScale)})` }}
         >
-          <span
-            className="catalog-placement-controls__thumbnail"
-            style={{
-              ...thumbnailStyle,
-              height: thumbnailHeight,
-              width: thumbnailWidth,
-            }}
-          />
+          {catalogItem.renderingMetadata?.kind === "lit-big-craftable" ? (
+            <CatalogLitThumbnail
+              bodyStyle={{
+                ...thumbnailStyle,
+                height: thumbnailHeight,
+                width: thumbnailWidth,
+              }}
+              catalogItem={catalogItem}
+              presentationChoice={presentationChoice}
+              shouldLoadThumbnail
+              thumbnailClassName="catalog-placement-controls__thumbnail"
+            />
+          ) : (
+            <span
+              className="catalog-placement-controls__thumbnail"
+              style={{
+                ...thumbnailStyle,
+                height: thumbnailHeight,
+                width: thumbnailWidth,
+              }}
+            />
+          )}
         </span>
       </span>
       <div className="catalog-placement-controls__info">
-        <span className="catalog-placement-controls__name">{placementStatusLabel}</span>
-        <span className="catalog-placement-controls__hint">{placementHint}</span>
+        <span className="catalog-placement-controls__name">{placementStatus.label}</span>
+        {placementStatus.hint === null ? null : (
+          <span className="catalog-placement-controls__hint">{placementStatus.hint}</span>
+        )}
       </div>
       <div className="catalog-placement-controls__actions">
         {pendingCatalogControl === null ? null : (
@@ -154,6 +202,51 @@ export function CatalogPlacementControls({
         </button>
       </div>
     </div>
+  );
+}
+
+function assertCatalogPlacementMode(
+  placementMode: CatalogPlacementMode,
+): void {
+  if (
+    placementMode === "place"
+    || placementMode === "fill"
+    || placementMode === null
+  ) {
+    return;
+  }
+
+  throw new TypeError(
+    `Catalog placement mode must be "place", "fill", or null; received ${JSON.stringify(placementMode)}.`,
+  );
+}
+
+function getCatalogPlacementStatus(
+  copy: CatalogPanelCopy,
+  itemName: string,
+  placementMode: CatalogPlacementMode,
+): CatalogPlacementStatus {
+  if (placementMode === "place") {
+    return {
+      hint: copy.placeItemHint,
+      label: copy.placingItem(itemName),
+    };
+  }
+  if (placementMode === "fill") {
+    return {
+      hint: copy.fillItemHint,
+      label: copy.fillingItem(itemName),
+    };
+  }
+  if (placementMode === null) {
+    return {
+      hint: null,
+      label: itemName,
+    };
+  }
+
+  throw new TypeError(
+    `Catalog placement mode must be "place", "fill", or null; received ${JSON.stringify(placementMode)}.`,
   );
 }
 

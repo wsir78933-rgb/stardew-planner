@@ -1,11 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
   applyPlacementSnapshotAction,
+  applyWorkingPlacementSnapshotAction,
+  commitWorkingPlacementSnapshot,
   createEmptyPlacementSnapshot,
   createPersistentPlacementSnapshot,
   createPlacementState,
+  createWorkingPlacementSnapshot,
   replacePlacementSnapshotInteriorDecor,
   restorePlacementSnapshot,
+  type PlacementItem,
+  type PlacementSnapshotAction,
 } from "../../src/placement/placement-snapshot";
 
 function createStoredSnapshot() {
@@ -808,4 +813,255 @@ describe("placement snapshot", () => {
     ]);
     expect(updatedSnapshot.nextItemId).toBe(8);
   });
+
+  it("keeps later actions on the same working snapshot until one persistent commit", () => {
+    const sourceSnapshot = createEmptyPlacementSnapshot();
+    const workingSnapshot = createWorkingPlacementSnapshot(sourceSnapshot);
+    const workingItems = workingSnapshot.items;
+    const firstAction: PlacementSnapshotAction = {
+      type: "add-item",
+      item: createNewItem(),
+    };
+    const secondAction: PlacementSnapshotAction = {
+      type: "add-item",
+      item: { ...createNewItem(), x: 4, y: 6 },
+    };
+
+    expect(applyWorkingPlacementSnapshotAction(workingSnapshot, firstAction)).toBe(
+      workingSnapshot,
+    );
+    expect(createPersistentPlacementSnapshot(workingSnapshot)).toBe(workingSnapshot);
+    expect(workingSnapshot.items).toBe(workingItems);
+    expect(workingSnapshot.items.map((item) => item.instanceId)).toEqual([1]);
+    expect(workingSnapshot.nextItemId).toBe(2);
+
+    applyWorkingPlacementSnapshotAction(workingSnapshot, secondAction);
+
+    const committedSnapshot = commitWorkingPlacementSnapshot(workingSnapshot);
+    const committedItem = committedSnapshot.items[0];
+    const workingItem = workingSnapshot.items[0];
+
+    expect(workingSnapshot.items.map((item) => item.instanceId)).toEqual([1, 2]);
+    expect(workingSnapshot.nextItemId).toBe(3);
+    expect(committedSnapshot).not.toBe(workingSnapshot);
+    expect(committedSnapshot.items).not.toBe(workingSnapshot.items);
+    expect(committedSnapshot).toEqual({
+      buildings: [],
+      crops: [],
+      items: [
+        { instanceId: 1, ...createNewItem() },
+        { instanceId: 2, ...createNewItem(), x: 4, y: 6 },
+      ],
+      nextBuildingId: 1,
+      nextItemId: 3,
+    });
+    expect(committedItem).not.toBe(workingItem);
+    if (workingItem === undefined || committedItem === undefined) {
+      throw new Error("Working snapshot commit did not retain both item copies.");
+    }
+    (workingItem as { x: number }).x = 50;
+    (workingSnapshot.items as PlacementItem[]).push({ ...workingItem, instanceId: 9, x: 8 });
+    expect(committedItem.x).toBe(-3);
+    expect(committedSnapshot.items).toHaveLength(2);
+    expect(sourceSnapshot.items).toEqual([]);
+    expect(sourceSnapshot.nextItemId).toBe(1);
+    expect(() => commitWorkingPlacementSnapshot(workingSnapshot)).toThrow(
+      /must be created by createWorkingPlacementSnapshot/,
+    );
+  });
+
+  it("keeps two working snapshots independent from the source snapshot and from each other", () => {
+    const sourceSnapshot = restorePlacementSnapshot(createStoredSnapshot());
+    const sourceItem = sourceSnapshot.items[0];
+    const firstWorkingSnapshot = createWorkingPlacementSnapshot(sourceSnapshot);
+    const secondWorkingSnapshot = createWorkingPlacementSnapshot(sourceSnapshot);
+    const firstItem = firstWorkingSnapshot.items[0];
+    const secondItem = secondWorkingSnapshot.items[0];
+
+    if (sourceItem === undefined || firstItem === undefined || secondItem === undefined) {
+      throw new Error("Stored snapshot did not contain the expected item.");
+    }
+
+    expect(firstWorkingSnapshot).not.toBe(sourceSnapshot);
+    expect(secondWorkingSnapshot).not.toBe(sourceSnapshot);
+    expect(firstWorkingSnapshot).not.toBe(secondWorkingSnapshot);
+    expect(firstWorkingSnapshot.items).not.toBe(sourceSnapshot.items);
+    expect(secondWorkingSnapshot.items).not.toBe(sourceSnapshot.items);
+    expect(firstWorkingSnapshot.items).not.toBe(secondWorkingSnapshot.items);
+    expect(firstItem).not.toBe(sourceItem);
+    expect(secondItem).not.toBe(sourceItem);
+    expect(firstItem).not.toBe(secondItem);
+
+    (firstItem as { x: number }).x = 99;
+    applyWorkingPlacementSnapshotAction(firstWorkingSnapshot, {
+      type: "add-item",
+      item: createNewItem(),
+    });
+
+    expect(sourceItem.x).toBe(3);
+    expect(secondItem.x).toBe(3);
+    expect(sourceSnapshot.items).toHaveLength(1);
+    expect(sourceSnapshot.nextItemId).toBe(8);
+    expect(secondWorkingSnapshot.items).toHaveLength(1);
+    expect(secondWorkingSnapshot.nextItemId).toBe(8);
+    expect(firstWorkingSnapshot.items).toHaveLength(2);
+    expect(firstWorkingSnapshot.nextItemId).toBe(9);
+  });
+
+  it("still copies a normal snapshot and rejects an illegal working snapshot without blocking the next one", () => {
+    const sourceSnapshot = restorePlacementSnapshot(createStoredSnapshot());
+    const firstPersistentSnapshot = createPersistentPlacementSnapshot(sourceSnapshot);
+    const secondPersistentSnapshot = createPersistentPlacementSnapshot(firstPersistentSnapshot);
+    const firstPersistentItem = firstPersistentSnapshot.items[0];
+    const secondPersistentItem = secondPersistentSnapshot.items[0];
+
+    expect(secondPersistentSnapshot).not.toBe(firstPersistentSnapshot);
+    expect(secondPersistentSnapshot.items).not.toBe(firstPersistentSnapshot.items);
+    expect(secondPersistentItem).not.toBe(firstPersistentItem);
+    expect(secondPersistentSnapshot).toEqual(firstPersistentSnapshot);
+
+    const illegalSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      nextItemId: 0,
+    };
+    expect(() => createPersistentPlacementSnapshot(illegalSnapshot)).toThrow(
+      /nextItemId/,
+    );
+
+    const corruptWorkingSnapshot = createWorkingPlacementSnapshot(
+      createEmptyPlacementSnapshot(),
+    );
+    applyWorkingPlacementSnapshotAction(corruptWorkingSnapshot, {
+      type: "add-item",
+      item: createNewItem(),
+    });
+    (corruptWorkingSnapshot as { nextItemId: number }).nextItemId = 1;
+
+    expect(() => commitWorkingPlacementSnapshot(corruptWorkingSnapshot)).toThrow(
+      /field "nextItemId" must be greater than every items instanceId; received 1 with highest instanceId 1/,
+    );
+    expect(() => createPersistentPlacementSnapshot(corruptWorkingSnapshot)).toThrow(
+      /field "nextItemId" must be greater than every items instanceId; received 1 with highest instanceId 1/,
+    );
+
+    const laterWorkingSnapshot = createWorkingPlacementSnapshot(
+      createEmptyPlacementSnapshot(),
+    );
+    applyWorkingPlacementSnapshotAction(laterWorkingSnapshot, {
+      type: "add-item",
+      item: createNewItem(),
+    });
+
+    expect(commitWorkingPlacementSnapshot(laterWorkingSnapshot)).toEqual({
+      buildings: [],
+      crops: [],
+      items: [{ instanceId: 1, ...createNewItem() }],
+      nextBuildingId: 1,
+      nextItemId: 2,
+    });
+  });
+
+  it("matches one persistent action sequence for buildings, crops, items, and held items", () => {
+    const sourceSnapshot = restorePlacementSnapshot(createStoredSnapshot());
+    const actions: readonly PlacementSnapshotAction[] = [
+      {
+        type: "add-building",
+        building: { buildingId: "building:Coop", x: 1, y: 2 },
+      },
+      {
+        type: "add-crop",
+        crop: { cropId: "crop:26", x: 3, y: 4 },
+      },
+      { type: "add-item", item: createTableItem() },
+      {
+        type: "attach-held-item",
+        parentInstanceId: 8,
+        item: createHeldItem(),
+      },
+    ];
+    const sequentialSnapshot = actions.reduce(
+      (placementSnapshot, placementAction) =>
+        applyPlacementSnapshotAction(placementSnapshot, placementAction),
+      sourceSnapshot,
+    );
+    const workingSnapshot = createWorkingPlacementSnapshot(sourceSnapshot);
+
+    for (const placementAction of actions) {
+      applyWorkingPlacementSnapshotAction(workingSnapshot, placementAction);
+    }
+
+    expect(commitWorkingPlacementSnapshot(workingSnapshot)).toEqual(sequentialSnapshot);
+    expect(sourceSnapshot.items).toHaveLength(1);
+    expect(sourceSnapshot.nextItemId).toBe(8);
+    expect(sourceSnapshot.nextBuildingId).toBe(4);
+  });
+
+  it("rejects a non-working snapshot and an action the working snapshot cannot apply", () => {
+    const sourceSnapshot = createEmptyPlacementSnapshot();
+    const workingSnapshot = createWorkingPlacementSnapshot(sourceSnapshot);
+    const deleteAction: PlacementSnapshotAction = {
+      type: "delete-item",
+      instanceId: 1,
+    };
+
+    expect(() => applyWorkingPlacementSnapshotAction(sourceSnapshot, {
+      type: "add-item",
+      item: createNewItem(),
+    })).toThrow(/must be created by createWorkingPlacementSnapshot/);
+    expect(() => applyWorkingPlacementSnapshotAction(workingSnapshot, deleteAction)).toThrow(
+      /cannot apply action type "delete-item"/,
+    );
+    expect(() => createWorkingPlacementSnapshot(workingSnapshot)).toThrow(
+      /cannot be created from an existing working snapshot/,
+    );
+    expect(workingSnapshot.items).toEqual([]);
+    expect(sourceSnapshot.items).toEqual([]);
+
+    applyWorkingPlacementSnapshotAction(workingSnapshot, {
+      type: "add-crop",
+      crop: { cropId: "crop:24", x: 2, y: 4 },
+    });
+    expect(() => applyWorkingPlacementSnapshotAction(workingSnapshot, {
+      type: "add-crop",
+      crop: { cropId: "crop:26", x: 2, y: 4 },
+    })).toThrow(/must not contain more than one crop at coordinate/);
+    expect(workingSnapshot.crops).toEqual([
+      { cropId: "crop:24", x: 2, y: 4 },
+    ]);
+  });
 });
+
+function createTableItem() {
+  return {
+    ...createNewItem(),
+    itemId: "furniture_table",
+    x: 0,
+    y: 0,
+    layer: "item" as const,
+    rotation: 0,
+    variant: 0,
+    tintColor: "#ffffff",
+    locked: false,
+    isTable: true,
+    isLongTable: false,
+    flipped: false,
+    bedType: null,
+  };
+}
+
+function createHeldItem() {
+  return {
+    ...createNewItem(),
+    itemId: "object:93",
+    x: 0,
+    y: 0,
+    layer: "item" as const,
+    rotation: 1,
+    variant: 2,
+    tintColor: "#112233",
+    locked: false,
+    isTable: false,
+    flipped: true,
+    bedType: null,
+  };
+}

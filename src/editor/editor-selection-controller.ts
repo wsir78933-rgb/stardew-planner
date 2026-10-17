@@ -1,4 +1,5 @@
 import {
+  getLockedLitBigCraftableRenderingMetadata,
   validateCatalogPresentationCapabilities,
   type BuildingPlacementMetadataById,
   type CatalogItem,
@@ -169,7 +170,10 @@ export type SetSelectedPlacementBuildingWaterColorInput = Readonly<{
 }>;
 
 export type SetSelectedPlacementNightLightStateInput = Readonly<{
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight" | "furnitureFire">[];
+  catalogItems: readonly Pick<
+    CatalogItem,
+    "id" | "nightLight" | "furnitureFire" | "renderingMetadata"
+  >[];
   nightLightState: "off" | undefined;
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKey: PlacementSelectionKey;
@@ -693,6 +697,11 @@ function getInspectorNightLightState(
     return placementItem.variant === 1 ? "off" : undefined;
   }
 
+  if (isLitBigCraftableNightLight(catalogItem)) {
+    assertLitBigCraftablePlacementLightFields(placementItem);
+    return isLitBigCraftableFullyLit(placementItem) ? undefined : "off";
+  }
+
   return placementItem.nightLightState;
 }
 
@@ -838,8 +847,10 @@ export function cycleSelectedPlacementAppearance(
     cycleSelectedPlacementAppearanceInput.catalogItems,
     placementItem.itemId,
   );
-  const currentPresentationChoice = createPlacementItemPresentationChoice(
+  const currentPresentationChoice = createLegacyUnlitLitBigCraftablePresentationChoice(
+    catalogItem,
     placementItem,
+    createPlacementItemPresentationChoice(placementItem),
   );
   const nextPresentationChoice = getNextPlacementItemPresentationChoice(
     catalogItem,
@@ -1189,7 +1200,11 @@ export function setSelectedPlacementNightLightState(
 
   if (
     catalogItem.furnitureFire === undefined
-    && placementItem.nightLightState === nightLightState
+    && isPlacementNightLightAlreadyInRequestedState(
+      placementItem,
+      catalogItem,
+      nightLightState,
+    )
   ) {
     return {
       applied: false,
@@ -1204,7 +1219,7 @@ export function setSelectedPlacementNightLightState(
     createPlacementItemWithNightLightState(
       placementItem,
       nightLightState,
-      catalogItem.furnitureFire !== undefined,
+      catalogItem,
     ),
   );
 
@@ -1515,6 +1530,25 @@ function createPlacementItemPresentationChoice(
   };
 }
 
+function createLegacyUnlitLitBigCraftablePresentationChoice(
+  catalogItem: Pick<CatalogItem, "id" | "renderingMetadata">,
+  placementItem: PlacementItem,
+  presentationChoice: CatalogPresentationChoice,
+): CatalogPresentationChoice {
+  if (
+    placementItem.variant !== 0
+    || placementItem.nightLightState !== "off"
+    || !isLitBigCraftableNightLight(catalogItem)
+  ) {
+    return presentationChoice;
+  }
+
+  return {
+    ...presentationChoice,
+    variant: 1,
+  };
+}
+
 function getNextPlacementItemPresentationChoice(
   catalogItem: CatalogItem,
   presentationChoice: CatalogPresentationChoice,
@@ -1583,7 +1617,11 @@ function canCyclePlacementItemAppearance(
   placementItem: PlacementItem,
   requiresOneByOneFootprint: boolean,
 ): boolean {
-  const currentChoice = createPlacementItemPresentationChoice(placementItem);
+  const currentChoice = createLegacyUnlitLitBigCraftablePresentationChoice(
+    catalogItem,
+    placementItem,
+    createPlacementItemPresentationChoice(placementItem),
+  );
   const nextChoice = getNextPlacementItemPresentationChoice(
     catalogItem,
     currentChoice,
@@ -1616,11 +1654,11 @@ function createPlacementItemWithPresentationChoice(
   presentationChoice: CatalogPresentationChoice,
 ): PlacementItem {
   if (presentationChoice.rotation === placementItem.rotation) {
-    return {
+    return omitLitBigCraftableLegacyNightLightState(catalogItem, {
       ...placementItem,
       flipped: presentationChoice.flipped,
       variant: presentationChoice.variant,
-    };
+    });
   }
 
   const rotationFootprint =
@@ -1633,13 +1671,29 @@ function createPlacementItemWithPresentationChoice(
     );
   }
 
-  return {
+  return omitLitBigCraftableLegacyNightLightState(catalogItem, {
     ...placementItem,
     flipped: presentationChoice.flipped,
     footprint: rotationFootprint,
     rotation: presentationChoice.rotation,
     variant: presentationChoice.variant,
-  };
+  });
+}
+
+function omitLitBigCraftableLegacyNightLightState(
+  catalogItem: Pick<CatalogItem, "id" | "renderingMetadata">,
+  placementItem: PlacementItem,
+): PlacementItem {
+  if (
+    !isLitBigCraftableNightLight(catalogItem)
+    || !Object.hasOwn(placementItem, "nightLightState")
+  ) {
+    return placementItem;
+  }
+
+  const { nightLightState: ignoredNightLightState, ...placementItemWithoutLegacyState } =
+    placementItem;
+  return placementItemWithoutLegacyState;
 }
 
 function getRequiredExactCatalogItem(
@@ -2600,7 +2654,10 @@ function assertSetSelectedPlacementNightLightStateInput(
 }
 
 function assertNightLightCatalogItems(
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight" | "furnitureFire">[],
+  catalogItems: readonly Pick<
+    CatalogItem,
+    "id" | "nightLight" | "furnitureFire" | "renderingMetadata"
+  >[],
 ): void {
   if (!Array.isArray(catalogItems)) {
     throw new TypeError(
@@ -2673,9 +2730,15 @@ function assertCatalogItemNightLight(
 }
 
 function assertCatalogItemIsNightLight(
-  catalogItems: readonly Pick<CatalogItem, "id" | "nightLight" | "furnitureFire">[],
+  catalogItems: readonly Pick<
+    CatalogItem,
+    "id" | "nightLight" | "furnitureFire" | "renderingMetadata"
+  >[],
   catalogItemId: string,
-): Pick<CatalogItem, "id" | "nightLight" | "furnitureFire"> {
+): Pick<
+  CatalogItem,
+  "id" | "nightLight" | "furnitureFire" | "renderingMetadata"
+> {
   const catalogItem = catalogItems.find(
     (candidateCatalogItem) => candidateCatalogItem.id === catalogItemId,
   );
@@ -2692,14 +2755,22 @@ function assertCatalogItemIsNightLight(
 function createPlacementItemWithNightLightState(
   placementItem: PlacementItem,
   nightLightState: "off" | undefined,
-  isFurnitureFire: boolean,
+  catalogItem: Pick<CatalogItem, "id" | "furnitureFire" | "renderingMetadata">,
 ): PlacementItem {
-  if (isFurnitureFire) {
+  if (catalogItem.furnitureFire !== undefined) {
     const { nightLightState: ignoredNightLightState, ...placementItemWithoutLegacyState } = placementItem;
     return {
       ...placementItemWithoutLegacyState,
       variant: nightLightState === "off" ? 1 : 0,
     };
+  }
+
+  if (isLitBigCraftableNightLight(catalogItem)) {
+    assertLitBigCraftablePlacementLightFields(placementItem);
+    return createLitBigCraftablePlacementItemWithNightLightState(
+      placementItem,
+      nightLightState,
+    );
   }
 
   if (nightLightState === "off") {
@@ -2710,6 +2781,119 @@ function createPlacementItemWithNightLightState(
     placementItem;
 
   return litPlacementItem;
+}
+
+function createLitBigCraftablePlacementItemWithNightLightState(
+  placementItem: PlacementItem,
+  nightLightState: "off" | undefined,
+): PlacementItem {
+  const { nightLightState: ignoredNightLightState, ...placementItemWithoutLegacyState } =
+    placementItem;
+
+  return {
+    ...placementItemWithoutLegacyState,
+    variant: nightLightState === "off" ? 1 : 0,
+  };
+}
+
+function isPlacementNightLightAlreadyInRequestedState(
+  placementItem: PlacementItem,
+  catalogItem: Pick<CatalogItem, "id" | "renderingMetadata">,
+  nightLightState: "off" | undefined,
+): boolean {
+  if (!isLitBigCraftableNightLight(catalogItem)) {
+    return placementItem.nightLightState === nightLightState;
+  }
+
+  assertLitBigCraftablePlacementLightFields(placementItem);
+  if (nightLightState === "off") {
+    return placementItem.variant === 1;
+  }
+
+  return isLitBigCraftableFullyLit(placementItem);
+}
+
+function isLitBigCraftableFullyLit(
+  placementItem: PlacementItem | PlacementHeldItem,
+): boolean {
+  return placementItem.variant === 0 && placementItem.nightLightState !== "off";
+}
+
+function isLitBigCraftableNightLight(
+  catalogItem: Pick<CatalogItem, "id" | "renderingMetadata">,
+): boolean {
+  const recordId = readBigCraftableRecordId(catalogItem.id);
+  const lockedRenderingMetadata = recordId === null
+    ? undefined
+    : getLockedLitBigCraftableRenderingMetadata(recordId);
+  const renderingKind = readRenderingMetadataKind(catalogItem.renderingMetadata);
+
+  if (lockedRenderingMetadata === undefined) {
+    if (renderingKind === "lit-big-craftable") {
+      throw new Error(
+        `Lit BigCraftable catalog item ${describeValue(catalogItem.id)} is not in the locked rendering ID set; received ${describeCatalogRenderingMetadata(catalogItem.renderingMetadata)}.`,
+      );
+    }
+
+    return false;
+  }
+
+  if (renderingKind !== "lit-big-craftable") {
+    throw new Error(
+      `Lit BigCraftable catalog item ${describeValue(catalogItem.id)} requires locked rendering metadata; received ${describeCatalogRenderingMetadata(catalogItem.renderingMetadata)}.`,
+    );
+  }
+
+  return true;
+}
+
+function readBigCraftableRecordId(catalogItemId: string): string | null {
+  const bigCraftableIdPrefix = "big-craftable:";
+  if (!catalogItemId.startsWith(bigCraftableIdPrefix)) {
+    return null;
+  }
+
+  const recordId = catalogItemId.slice(bigCraftableIdPrefix.length);
+  return recordId.length === 0 ? null : recordId;
+}
+
+function readRenderingMetadataKind(
+  renderingMetadata: CatalogItem["renderingMetadata"],
+): string | undefined {
+  if (typeof renderingMetadata !== "object" || renderingMetadata === null) {
+    return undefined;
+  }
+
+  return renderingMetadata.kind;
+}
+
+function describeCatalogRenderingMetadata(
+  renderingMetadata: CatalogItem["renderingMetadata"],
+): string {
+  if (renderingMetadata === undefined) {
+    return "undefined";
+  }
+
+  return JSON.stringify(renderingMetadata);
+}
+
+function assertLitBigCraftablePlacementLightFields(
+  placementItem: PlacementItem | PlacementHeldItem,
+): void {
+  if (placementItem.variant !== 0 && placementItem.variant !== 1) {
+    throw new TypeError(
+      `Lit BigCraftable placement item ${describeValue(placementItem.itemId)} variant must equal 0 or 1; received ${describeValue(placementItem.variant)}.`,
+    );
+  }
+
+  if (
+    placementItem.nightLightState !== undefined
+    && placementItem.nightLightState !== "off"
+  ) {
+    throw new TypeError(
+      `Lit BigCraftable placement item ${describeValue(placementItem.itemId)} nightLightState must be "off" or undefined; received ${describeValue(placementItem.nightLightState)}.`,
+    );
+  }
 }
 
 function assertNoConflictingFurnitureFireNightLightState(

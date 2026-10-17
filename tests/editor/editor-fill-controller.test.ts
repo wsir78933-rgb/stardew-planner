@@ -5,13 +5,16 @@ import {
   catalogDatasetUrls,
   createBuildingCatalogFromDataset,
   createBuildingPlacementMetadata,
+  createDecorCatalogFromDataset,
   createPlaceableCatalogFromDatasets,
   type BuildingPlacementMetadataById,
   type CatalogItem,
+  type CatalogTileSize,
 } from "../../src/catalog";
 import {
   applyEditorFill,
 } from "../../src/editor/editor-fill-controller";
+import { applyEditorCursorPlacement } from "../../src/editor/editor-placement-controller";
 import { previewPlannerWorkspaceFillRectangle } from "../../src/planner/planner-workspace-editing-controller";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
 import {
@@ -32,6 +35,36 @@ function createCatalogItem(
     allowedTools: ["cursor", "fill"],
     ...catalogItem,
   };
+}
+
+let lockedPlaceableCatalogItems: readonly CatalogItem[] | undefined;
+
+function readLockedPlaceableCatalogItems(): readonly CatalogItem[] {
+  if (lockedPlaceableCatalogItems === undefined) {
+    lockedPlaceableCatalogItems = createPlaceableCatalogFromDatasets(
+      readLockedCatalogDataset("BigCraftables.json"),
+      readLockedCatalogDataset("Objects.json"),
+      readLockedCatalogDataset("Fences.json"),
+      readLockedCatalogDataset("FloorsAndPaths.json"),
+      readLockedCatalogDataset("Furniture.json"),
+      readLockedCatalogDataset("FruitTrees.json"),
+      catalogDatasetUrls,
+    ).items;
+  }
+
+  return lockedPlaceableCatalogItems;
+}
+
+function requireLockedPlaceableCatalogItem(catalogItemId: string): CatalogItem {
+  const catalogItem = readLockedPlaceableCatalogItems().find(
+    (candidateCatalogItem) => candidateCatalogItem.id === catalogItemId,
+  );
+  if (catalogItem === undefined) {
+    throw new Error(
+      `Locked placeable catalog did not contain item ${JSON.stringify(catalogItemId)}.`,
+    );
+  }
+  return catalogItem;
 }
 
 function createBlueGrassCatalogItemFromLockedDatasets(): CatalogItem {
@@ -79,6 +112,95 @@ function createPlacementGrid(width: number, height: number): MapPlacementGrid {
       crabPot: false,
     })),
   };
+}
+
+function createWallPlacementGrid(width: number, height: number): MapPlacementGrid {
+  return {
+    width,
+    height,
+    capabilitiesByTile: Array.from({ length: width * height }, () => ({
+      buildable: false,
+      diggable: false,
+      // A wall item is rejected as not-passable unless the wall tile is also passable.
+      passable: true,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      wall: true,
+      crabPot: false,
+    })),
+  };
+}
+
+function withTileCapability(
+  mapPlacementGrid: MapPlacementGrid,
+  x: number,
+  y: number,
+  capabilityName: "buildable" | "diggable" | "passable" | "wall",
+  enabled: boolean,
+): MapPlacementGrid {
+  const tileIndex = y * mapPlacementGrid.width + x;
+
+  return {
+    ...mapPlacementGrid,
+    capabilitiesByTile: mapPlacementGrid.capabilitiesByTile.map(
+      (tileCapabilities, index) => index === tileIndex
+        ? { ...tileCapabilities, [capabilityName]: enabled }
+        : tileCapabilities,
+    ),
+  };
+}
+
+function withFillTool(catalogItem: CatalogItem): CatalogItem {
+  if (catalogItem.allowedTools.includes("fill")) {
+    return catalogItem;
+  }
+
+  return {
+    ...catalogItem,
+    allowedTools: [...catalogItem.allowedTools, "fill"],
+  };
+}
+
+function createPlainPlacementItem(input: Readonly<{
+  footprint?: CatalogTileSize;
+  instanceId: number;
+  itemId: string;
+  x: number;
+  y: number;
+}>) {
+  return {
+    instanceId: input.instanceId,
+    itemId: input.itemId,
+    x: input.x,
+    y: input.y,
+    layer: "item" as const,
+    rotation: 0,
+    footprint: input.footprint ?? { width: 1, height: 1 },
+    variant: 0,
+    tintColor: "#ffffff",
+    locked: false,
+    isRug: false,
+    isGrass: false,
+    isTable: false,
+    isLongTable: false,
+    flipped: false,
+    bedType: null,
+  };
+}
+
+function requireLockedWallpaper(): CatalogItem {
+  const wallpaper = createDecorCatalogFromDataset(
+    readLockedCatalogDataset("Furniture.json"),
+    catalogDatasetUrls.furniture,
+    readLockedCatalogDataset("BigCraftables.json"),
+    catalogDatasetUrls.bigCraftables,
+  ).items.find((catalogItem) => catalogItem.id === "wp_0");
+
+  if (wallpaper === undefined) {
+    throw new Error('Locked decor catalog did not contain item "wp_0".');
+  }
+
+  return wallpaper;
 }
 
 function createBlockedPlacementGrid(width: number, height: number): MapPlacementGrid {
@@ -536,6 +658,22 @@ describe("applyEditorFill", () => {
     expect(placementHistory.currentState).toBe(sourceSnapshot);
     expect(fillResult.placementHistory.undoStates).toEqual([sourceSnapshot]);
     expect(fillResult.placementHistory.redoStates).toEqual([]);
+
+    const undonePlacementHistory = undoPlacementHistory(fillResult.placementHistory);
+    expect(undonePlacementHistory.currentState).toBe(sourceSnapshot);
+    expect(undonePlacementHistory.currentState.buildings).toEqual([]);
+    expect(undonePlacementHistory.undoStates).toEqual([]);
+    expect(undonePlacementHistory.redoStates).toEqual([
+      fillResult.placementHistory.currentState,
+    ]);
+
+    const redonePlacementHistory = redoPlacementHistory(undonePlacementHistory);
+    expect(redonePlacementHistory.currentState).toEqual(
+      fillResult.placementHistory.currentState,
+    );
+    expect(redonePlacementHistory.currentState.buildings).toHaveLength(2);
+    expect(redonePlacementHistory.undoStates).toEqual([sourceSnapshot]);
+    expect(redonePlacementHistory.redoStates).toEqual([]);
   });
 
   it("returns the first real occupancy validation and preserves history when every building candidate is blocked", () => {
@@ -1100,6 +1238,1107 @@ describe("applyEditorFill", () => {
       placementHistory.currentState,
     );
     expect(fillResult.placementHistory.undoStates).toEqual([]);
+  });
+
+  it("fills Torch object:93 on legal tiles and supports undo and redo", () => {
+    const torchCatalogItem = requireLockedPlaceableCatalogItem("object:93");
+    const presentationChoice = { flipped: false, rotation: 0, variant: 0 } as const;
+    expect(torchCatalogItem.name).toBe("Torch");
+    expect(torchCatalogItem.allowedTools).toEqual([
+      "cursor",
+      "multi-select",
+      "fill",
+      "erase",
+    ]);
+
+    const openPlacementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const openFillResult = applyEditorFill({
+      selectedCatalogItem: torchCatalogItem,
+      catalogPresentationChoice: presentationChoice,
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: createPlacementGrid(2, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: openPlacementHistory,
+    });
+    if (!openFillResult.applied) {
+      throw new Error(
+        `Torch Fill did not apply on an open rectangle; received ${JSON.stringify(openFillResult)}.`,
+      );
+    }
+
+    expect(openFillResult.placedTileCount).toBe(4);
+    expect(openFillResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({ itemId: "object:93", x: 0, y: 0 }),
+      expect.objectContaining({ itemId: "object:93", x: 1, y: 0 }),
+      expect.objectContaining({ itemId: "object:93", x: 0, y: 1 }),
+      expect.objectContaining({ itemId: "object:93", x: 1, y: 1 }),
+    ]);
+    expect(openFillResult.placementHistory.undoStates).toEqual([
+      openPlacementHistory.currentState,
+    ]);
+    expect(openFillResult.placementHistory.redoStates).toEqual([]);
+
+    const undoneOpenPlacementHistory = undoPlacementHistory(
+      openFillResult.placementHistory,
+    );
+    expect(undoneOpenPlacementHistory.currentState.items).toEqual([]);
+    expect(undoneOpenPlacementHistory.redoStates).toEqual([
+      openFillResult.placementHistory.currentState,
+    ]);
+    const redoneOpenPlacementHistory = redoPlacementHistory(
+      undoneOpenPlacementHistory,
+    );
+    expect(redoneOpenPlacementHistory.currentState).toEqual(
+      openFillResult.placementHistory.currentState,
+    );
+    expect(redoneOpenPlacementHistory.undoStates).toEqual([
+      openPlacementHistory.currentState,
+    ]);
+    expect(redoneOpenPlacementHistory.redoStates).toEqual([]);
+
+    const openPlacementGrid = createPlacementGrid(2, 2);
+    const constrainedPlacementGrid: MapPlacementGrid = {
+      ...openPlacementGrid,
+      capabilitiesByTile: openPlacementGrid.capabilitiesByTile.map(
+        (tileCapabilities, tileIndex) => tileIndex === 2
+          ? { ...tileCapabilities, passable: false }
+          : tileCapabilities,
+      ),
+    };
+    const occupiedPlacementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        {
+          instanceId: 1,
+          itemId: "object:blocker",
+          x: 1,
+          y: 0,
+          layer: "item" as const,
+          rotation: 0,
+          footprint: { width: 1, height: 1 },
+          variant: 0,
+          tintColor: "#ffffff",
+          locked: false,
+          isRug: false,
+          isGrass: false,
+          isTable: false,
+          isLongTable: false,
+          flipped: false,
+          bedType: null,
+        },
+      ],
+      nextItemId: 2,
+    };
+    const constrainedPlacementHistory = createPlacementHistory(
+      occupiedPlacementSnapshot,
+    );
+    const constrainedFillResult = applyEditorFill({
+      selectedCatalogItem: torchCatalogItem,
+      catalogPresentationChoice: presentationChoice,
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: constrainedPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: constrainedPlacementHistory,
+    });
+    if (!constrainedFillResult.applied) {
+      throw new Error(
+        `Torch Fill did not apply around blocked tiles; received ${JSON.stringify(constrainedFillResult)}.`,
+      );
+    }
+
+    expect(constrainedFillResult.placedTileCount).toBe(2);
+    expect(constrainedFillResult.placementHistory.currentState.items).toEqual([
+      occupiedPlacementSnapshot.items[0],
+      expect.objectContaining({ itemId: "object:93", x: 0, y: 0 }),
+      expect.objectContaining({ itemId: "object:93", x: 1, y: 1 }),
+    ]);
+    const undoneConstrainedPlacementHistory = undoPlacementHistory(
+      constrainedFillResult.placementHistory,
+    );
+    expect(undoneConstrainedPlacementHistory.currentState).toBe(
+      occupiedPlacementSnapshot,
+    );
+    expect(undoneConstrainedPlacementHistory.currentState.items).toHaveLength(1);
+    const redoneConstrainedPlacementHistory = redoPlacementHistory(
+      undoneConstrainedPlacementHistory,
+    );
+    expect(redoneConstrainedPlacementHistory.currentState.items).toHaveLength(3);
+  });
+
+  it("leaves history unchanged when no catalog item is selected", () => {
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: null,
+      catalogPresentationChoice: null,
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: createPlacementGrid(2, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(fillResult).toEqual({
+      applied: false,
+      reason: "no-selected-catalog-item",
+      placementHistory,
+    });
+    expect(placementHistory.currentState.items).toEqual([]);
+    expect(placementHistory.undoStates).toEqual([]);
+    expect(placementHistory.redoStates).toEqual([]);
+  });
+
+  it("rejects an explicit catalog item that does not list the fill tool", () => {
+    const unsupportedCatalogItem = createCatalogItem({
+      id: "object:fill-guard",
+      category: "placeable",
+      allowedTools: ["cursor", "multi-select", "erase"],
+    });
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: unsupportedCatalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: createPlacementGrid(2, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(unsupportedCatalogItem.allowedTools).not.toContain("fill");
+    expect(fillResult).toEqual({
+      applied: false,
+      reason: "unsupported-catalog-category",
+      placementHistory,
+    });
+    expect(placementHistory.currentState.items).toEqual([]);
+    expect(placementHistory.undoStates).toEqual([]);
+    expect(placementHistory.redoStates).toEqual([]);
+  });
+
+  it("rejects an illegal tile or footprint before changing history", () => {
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const floorCatalogItem = createCatalogItem({
+      id: "floor:zero",
+      category: "floor",
+      tileSize: { width: 0, height: 1 },
+    });
+
+    expect(() => applyEditorFill({
+      selectedCatalogItem: null,
+      catalogPresentationChoice: null,
+      firstTile: { x: -1, y: 0 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid: createPlacementGrid(1, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    })).toThrow(/firstTile\.x[\s\S]*-1/);
+    expect(() => applyEditorFill({
+      selectedCatalogItem: floorCatalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      mapPlacementGrid: createPlacementGrid(2, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    })).toThrow(/footprint width for catalog item "floor:zero"[\s\S]*received 0/);
+    expect(() => applyEditorFill({
+      selectedCatalogItem: {
+        ...createCatalogItem({
+          id: "decor:bad-kind",
+          category: "decor",
+        }),
+        interiorDecorKind: "ceiling" as "wallpaper",
+      },
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid: createPlacementGrid(1, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    })).toThrow(/decor:bad-kind[\s\S]*ceiling/);
+    expect(placementHistory.currentState.items).toEqual([]);
+    expect(placementHistory.undoStates).toEqual([]);
+    expect(placementHistory.redoStates).toEqual([]);
+  });
+
+  it("does not stamp wallpaper or indoor flooring, even when fill is listed", () => {
+    const lockedWallpaper = requireLockedWallpaper();
+    const fillableWallpaper = createCatalogItem({
+      id: "wp_fillable",
+      category: "decor",
+      interiorDecorKind: "wallpaper",
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
+    });
+    const fillableFlooring = createCatalogItem({
+      id: "fl_fillable",
+      category: "decor",
+      interiorDecorKind: "flooring",
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
+    });
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+
+    for (const selectedCatalogItem of [
+      lockedWallpaper,
+      fillableWallpaper,
+      fillableFlooring,
+    ]) {
+      const fillResult = applyEditorFill({
+        selectedCatalogItem,
+        catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+        firstTile: { x: 0, y: 0 },
+        secondTile: { x: 2, y: 2 },
+        mapPlacementGrid: createPlacementGrid(3, 3),
+        buildingMetadataById: createBuildingMetadataById(),
+        placementHistory,
+      });
+
+      expect(fillResult).toEqual({
+        applied: false,
+        reason: "unsupported-catalog-category",
+        placementHistory,
+      });
+    }
+
+    expect(lockedWallpaper.interiorDecorKind).toBe("wallpaper");
+    expect(placementHistory.currentState.items).toEqual([]);
+    expect(placementHistory.undoStates).toEqual([]);
+  });
+
+  it("stamps Stone and a Keg around blocked tiles as one undo", () => {
+    const stone = withFillTool(requireLockedPlaceableCatalogItem("object:390"));
+    const keg = withFillTool(requireLockedPlaceableCatalogItem("big-craftable:12"));
+    const stoneHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const stoneResult = applyEditorFill({
+      selectedCatalogItem: stone,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: withTileCapability(
+        createPlacementGrid(2, 2),
+        1,
+        0,
+        "passable",
+        false,
+      ),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: stoneHistory,
+    });
+    const kegHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const kegResult = applyEditorFill({
+      selectedCatalogItem: keg,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 1, y: 0 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid: createPlacementGrid(2, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: kegHistory,
+    });
+
+    expect(stone.name).toBe("Stone");
+    expect(stone.id).not.toBe("object:93");
+    expect(stoneResult).toMatchObject({ applied: true, placedTileCount: 3 });
+    expect(stoneResult.placementHistory.currentState.items.map(({ x, y }) => ({ x, y }))).toEqual([
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ]);
+    expect(stoneResult.placementHistory.undoStates).toEqual([stoneHistory.currentState]);
+    expect(undoPlacementHistory(stoneResult.placementHistory).currentState.items).toEqual([]);
+    expect(redoPlacementHistory(undoPlacementHistory(stoneResult.placementHistory)).currentState)
+      .toEqual(stoneResult.placementHistory.currentState);
+    expect(keg.name).toBe("Keg");
+    expect(keg.tileSize).toEqual({ width: 1, height: 1 });
+    expect(kegResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(kegResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({ itemId: "big-craftable:12", x: 0, y: 0 }),
+      expect.objectContaining({ itemId: "big-craftable:12", x: 1, y: 0 }),
+    ]);
+    expect(kegResult.placementHistory.undoStates).toEqual([kegHistory.currentState]);
+    expect(kegResult.placementHistory.redoStates).toEqual([]);
+  });
+
+  it("keeps a wild tree flip and variant on every filled origin", () => {
+    const wildTree = withFillTool(requireLockedPlaceableCatalogItem("wildtree_1"));
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: wildTree,
+      catalogPresentationChoice: { flipped: true, rotation: 0, variant: 1 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      mapPlacementGrid: createPlacementGrid(2, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(wildTree.presentationCapabilities?.canFlip).toBe(true);
+    expect(wildTree.presentationCapabilities?.variantCycle?.count).toBe(2);
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(fillResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        flipped: true,
+        footprint: { width: 1, height: 1 },
+        itemId: "wildtree_1",
+        rotation: 0,
+        variant: 1,
+        x: 0,
+      }),
+      expect.objectContaining({
+        flipped: true,
+        itemId: "wildtree_1",
+        variant: 1,
+        x: 1,
+      }),
+    ]);
+    expect(fillResult.placementHistory.undoStates).toEqual([placementHistory.currentState]);
+  });
+
+  it("tiles resource clumps inside the selection and skips an occupied origin", () => {
+    const stump = withFillTool(requireLockedPlaceableCatalogItem("clump_600"));
+    const openHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const openResult = applyEditorFill({
+      selectedCatalogItem: stump,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 4, y: 1 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid: createPlacementGrid(5, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: openHistory,
+    });
+    const blocker = createPlainPlacementItem({
+      instanceId: 1,
+      itemId: "object:blocker",
+      x: 2,
+      y: 0,
+    });
+    const occupiedSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [blocker],
+      nextItemId: 2,
+    };
+    const occupiedHistory = createPlacementHistory(occupiedSnapshot);
+    const occupiedResult = applyEditorFill({
+      selectedCatalogItem: stump,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 4, y: 1 },
+      mapPlacementGrid: createPlacementGrid(5, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: occupiedHistory,
+    });
+
+    expect(stump.category).toBe("decor");
+    expect(stump.interiorDecorKind).toBeUndefined();
+    expect(stump.tileSize).toEqual({ width: 2, height: 2 });
+    expect(openResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(openResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 2, height: 2 },
+        itemId: "clump_600",
+        x: 0,
+        y: 0,
+      }),
+      expect.objectContaining({
+        footprint: { width: 2, height: 2 },
+        itemId: "clump_600",
+        x: 2,
+        y: 0,
+      }),
+    ]);
+    expect(openResult.placementHistory.undoStates).toEqual([openHistory.currentState]);
+    expect(occupiedResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(occupiedResult.placementHistory.currentState.items).toEqual([
+      blocker,
+      expect.objectContaining({ itemId: "clump_600", x: 0, y: 0 }),
+    ]);
+    expect(occupiedResult.placementHistory.undoStates).toEqual([occupiedSnapshot]);
+    expect(occupiedHistory.currentState).toBe(occupiedSnapshot);
+  });
+
+  it("rejects a decorative door off a wall and tiles complete wall footprints", () => {
+    const door = withFillTool(
+      requireLockedPlaceableCatalogItem("furniture_DecorativeDoor1"),
+    );
+    const rejectedHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const rejectedResult = applyEditorFill({
+      selectedCatalogItem: door,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 2 },
+      mapPlacementGrid: createPlacementGrid(4, 3),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: rejectedHistory,
+    });
+    const wallHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const wallResult = applyEditorFill({
+      selectedCatalogItem: door,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 3, y: 2 },
+      mapPlacementGrid: withTileCapability(
+        createWallPlacementGrid(4, 3),
+        3,
+        0,
+        "wall",
+        false,
+      ),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: wallHistory,
+    });
+
+    expect(door.tileSize).toEqual({ width: 2, height: 3 });
+    expect(door.renderingMetadata).toMatchObject({
+      bedType: null,
+      kind: "furniture",
+      wallMounted: true,
+    });
+    expect(rejectedResult).toEqual({
+      applied: false,
+      placementHistory: rejectedHistory,
+      validation: {
+        reason: "not-wall",
+        tile: { x: 0, y: 0 },
+        valid: false,
+      },
+    });
+    expect(rejectedHistory.undoStates).toEqual([]);
+    expect(wallResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(wallResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 2, height: 3 },
+        itemId: "furniture_DecorativeDoor1",
+        x: 0,
+        y: 0,
+      }),
+    ]);
+    expect(wallResult.placementHistory.undoStates).toEqual([wallHistory.currentState]);
+  });
+
+  it("uses the rotated bench footprint and stays inside the selection", () => {
+    const bench = withFillTool(requireLockedPlaceableCatalogItem("furniture_192"));
+    const wideHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const wideResult = applyEditorFill({
+      selectedCatalogItem: bench,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 3, y: 0 },
+      mapPlacementGrid: createPlacementGrid(4, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: wideHistory,
+    });
+    const tooShortHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const tooShortResult = applyEditorFill({
+      selectedCatalogItem: bench,
+      catalogPresentationChoice: { flipped: false, rotation: 1, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 3, y: 0 },
+      mapPlacementGrid: createPlacementGrid(4, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tooShortHistory,
+    });
+    const tallHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const tallResult = applyEditorFill({
+      selectedCatalogItem: bench,
+      catalogPresentationChoice: { flipped: false, rotation: 1, variant: 0 },
+      firstTile: { x: 1, y: 3 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid: createPlacementGrid(2, 4),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tallHistory,
+    });
+
+    expect(bench.name).toBe("Oak Bench");
+    expect(bench.presentationCapabilities?.rotation?.footprints).toEqual([
+      { width: 2, height: 1 },
+      { width: 1, height: 2 },
+      { width: 2, height: 1 },
+      { width: 1, height: 2 },
+    ]);
+    expect(wideResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(wideResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 2, height: 1 },
+        rotation: 0,
+        x: 0,
+        y: 0,
+      }),
+      expect.objectContaining({
+        footprint: { width: 2, height: 1 },
+        rotation: 0,
+        x: 2,
+        y: 0,
+      }),
+    ]);
+    expect(tooShortResult).toEqual({
+      applied: true,
+      placedTileCount: 0,
+      placementHistory: tooShortHistory,
+    });
+    expect(tooShortHistory.undoStates).toEqual([]);
+    expect(tallResult).toMatchObject({ applied: true, placedTileCount: 4 });
+    expect(tallResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({ footprint: { width: 1, height: 2 }, rotation: 1, x: 0, y: 0 }),
+      expect.objectContaining({ footprint: { width: 1, height: 2 }, rotation: 1, x: 1, y: 0 }),
+      expect.objectContaining({ footprint: { width: 1, height: 2 }, rotation: 1, x: 0, y: 2 }),
+      expect.objectContaining({ footprint: { width: 1, height: 2 }, rotation: 1, x: 1, y: 2 }),
+    ]);
+    expect(tallResult.placementHistory.undoStates).toEqual([tallHistory.currentState]);
+    expect(undoPlacementHistory(tallResult.placementHistory).currentState.items).toEqual([]);
+  });
+
+  it("tiles a large bush by its 3 by 1 footprint", () => {
+    const bush = withFillTool(requireLockedPlaceableCatalogItem("bush:large"));
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: bush,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 5, y: 0 },
+      mapPlacementGrid: createPlacementGrid(6, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(bush.category).toBe("placeable");
+    expect(bush.tileSize).toEqual({ width: 3, height: 1 });
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(fillResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 3, height: 1 },
+        itemId: "bush:large",
+        x: 0,
+        y: 0,
+      }),
+      expect.objectContaining({
+        footprint: { width: 3, height: 1 },
+        itemId: "bush:large",
+        x: 3,
+        y: 0,
+      }),
+    ]);
+    expect(fillResult.placementHistory.undoStates).toEqual([placementHistory.currentState]);
+  });
+
+  it("tiles small and medium bushes by footprint and keeps the medium variant", () => {
+    const smallBush = withFillTool(requireLockedPlaceableCatalogItem("bush:small"));
+    const mediumBush = withFillTool(requireLockedPlaceableCatalogItem("bush:medium"));
+    const smallHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const mediumHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const narrowHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const smallResult = applyEditorFill({
+      selectedCatalogItem: smallBush,
+      catalogPresentationChoice: { flipped: true, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: createPlacementGrid(2, 2),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: smallHistory,
+    });
+    const mediumResult = applyEditorFill({
+      selectedCatalogItem: mediumBush,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 1 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 3, y: 0 },
+      mapPlacementGrid: createPlacementGrid(4, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: mediumHistory,
+    });
+    const narrowResult = applyEditorFill({
+      selectedCatalogItem: mediumBush,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 1 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 2, y: 0 },
+      mapPlacementGrid: createPlacementGrid(3, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: narrowHistory,
+    });
+
+    expect(smallBush.tileSize).toEqual({ width: 1, height: 1 });
+    expect(mediumBush.tileSize).toEqual({ width: 2, height: 1 });
+    expect(smallResult).toMatchObject({ applied: true, placedTileCount: 4 });
+    expect(smallResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({ flipped: true, itemId: "bush:small", x: 0, y: 0 }),
+      expect.objectContaining({ flipped: true, itemId: "bush:small", x: 1, y: 0 }),
+      expect.objectContaining({ flipped: true, itemId: "bush:small", x: 0, y: 1 }),
+      expect.objectContaining({ flipped: true, itemId: "bush:small", x: 1, y: 1 }),
+    ]);
+    expect(smallResult.placementHistory.undoStates).toEqual([smallHistory.currentState]);
+    expect(undoPlacementHistory(smallResult.placementHistory).currentState.items).toEqual([]);
+    expect(mediumResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(mediumResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 2, height: 1 },
+        itemId: "bush:medium",
+        variant: 1,
+        x: 0,
+        y: 0,
+      }),
+      expect.objectContaining({
+        footprint: { width: 2, height: 1 },
+        itemId: "bush:medium",
+        variant: 1,
+        x: 2,
+        y: 0,
+      }),
+    ]);
+    expect(mediumResult.placementHistory.undoStates).toHaveLength(1);
+    expect(narrowResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(narrowResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 2, height: 1 },
+        itemId: "bush:medium",
+        variant: 1,
+        x: 0,
+        y: 0,
+      }),
+    ]);
+  });
+
+  it("leaves history unchanged when a bush footprint cannot fit or the map rejects every origin", () => {
+    const largeBush = withFillTool(requireLockedPlaceableCatalogItem("bush:large"));
+    const tooNarrowHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const tooNarrowResult = applyEditorFill({
+      selectedCatalogItem: largeBush,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      mapPlacementGrid: createPlacementGrid(2, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tooNarrowHistory,
+    });
+    const blockedHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const blockedResult = applyEditorFill({
+      selectedCatalogItem: largeBush,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 5, y: 0 },
+      mapPlacementGrid: createBlockedPlacementGrid(6, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: blockedHistory,
+    });
+    const occupiedHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlainPlacementItem({ instanceId: 1, itemId: "object:390", x: 0, y: 0 })],
+      nextItemId: 2,
+    });
+    const occupiedResult = applyEditorFill({
+      selectedCatalogItem: largeBush,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 5, y: 0 },
+      mapPlacementGrid: createPlacementGrid(6, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: occupiedHistory,
+    });
+
+    expect(tooNarrowResult).toEqual({
+      applied: true,
+      placedTileCount: 0,
+      placementHistory: tooNarrowHistory,
+    });
+    expect(tooNarrowHistory.undoStates).toEqual([]);
+    expect(blockedResult).toEqual({
+      applied: false,
+      placementHistory: blockedHistory,
+      validation: {
+        reason: "not-passable",
+        tile: { x: 0, y: 0 },
+        valid: false,
+      },
+    });
+    expect(blockedHistory.currentState.items).toEqual([]);
+    expect(occupiedResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(occupiedResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({ instanceId: 1, itemId: "object:390", x: 0, y: 0 }),
+      expect.objectContaining({
+        footprint: { width: 3, height: 1 },
+        instanceId: 2,
+        itemId: "bush:large",
+        x: 3,
+        y: 0,
+      }),
+    ]);
+    expect(occupiedResult.placementHistory.undoStates).toEqual([
+      occupiedHistory.currentState,
+    ]);
+    expect(occupiedResult.placementHistory.currentState.nextItemId).toBe(3);
+  });
+
+  it("records ordinary crops separately and skips a tile that is not diggable", () => {
+    const crop = createCatalogItem({ id: "crop:24", category: "crop" });
+    const partialHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const partialResult = applyEditorFill({
+      selectedCatalogItem: crop,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 1 },
+      mapPlacementGrid: withTileCapability(
+        createPlacementGrid(2, 2),
+        1,
+        0,
+        "diggable",
+        false,
+      ),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: partialHistory,
+    });
+    const blockedHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const blockedResult = applyEditorFill({
+      selectedCatalogItem: crop,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      mapPlacementGrid: createNonDiggablePassableGrid(2, 1),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: blockedHistory,
+    });
+
+    expect(partialResult).toMatchObject({ applied: true, placedTileCount: 3 });
+    expect(partialResult.placementHistory.currentState).toMatchObject({
+      crops: [
+        { cropId: "crop:24", x: 0, y: 0 },
+        { cropId: "crop:24", x: 0, y: 1 },
+        { cropId: "crop:24", x: 1, y: 1 },
+      ],
+      items: [],
+      nextItemId: 1,
+    });
+    expect(partialResult.placementHistory.undoStates).toEqual([
+      partialHistory.currentState,
+    ]);
+    expect(blockedResult).toEqual({
+      applied: false,
+      placementHistory: blockedHistory,
+      validation: {
+        reason: "not-diggable",
+        tile: { x: 0, y: 0 },
+        valid: false,
+      },
+    });
+    expect(blockedHistory.currentState.crops).toEqual([]);
+    expect(blockedHistory.undoStates).toEqual([]);
+  });
+
+  it("preserves existing snapshot fields while filling one floor tile", () => {
+    const sourceSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{
+        buildingId: "Fish Pond",
+        instanceId: 1,
+        variant: 2,
+        waterColor: 0x224466,
+        x: 5,
+        y: 5,
+      }],
+      crops: [{ cropId: "crop:24", x: 4, y: 4 }],
+      interiorDecor: {
+        floors: { kitchen: "4" },
+        wallpapers: { bedroom: "12" },
+      },
+      items: [{
+        ...createPlainPlacementItem({
+          instanceId: 1,
+          itemId: "object:93",
+          x: 0,
+          y: 0,
+        }),
+        flipped: true,
+        growthStage: 3,
+        locked: true,
+        nightLightState: "off" as const,
+        rotation: 2,
+        tintColor: "#112233",
+        variant: 1,
+      }],
+      nextBuildingId: 2,
+      nextItemId: 2,
+    };
+    const placementHistory = createPlacementHistory(sourceSnapshot);
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: createCatalogItem({ id: "floor:1", category: "floor" }),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 2, y: 0 },
+      secondTile: { x: 2, y: 0 },
+      mapPlacementGrid: createPlacementGrid(6, 6),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory,
+    });
+
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(fillResult.placementHistory.currentState).toMatchObject({
+      buildings: sourceSnapshot.buildings,
+      crops: sourceSnapshot.crops,
+      interiorDecor: sourceSnapshot.interiorDecor,
+      nextBuildingId: 2,
+      nextItemId: 3,
+    });
+    expect(fillResult.placementHistory.currentState.items).toEqual([
+      sourceSnapshot.items[0],
+      expect.objectContaining({ itemId: "floor:1", layer: "path", x: 2, y: 0 }),
+    ]);
+    expect(fillResult.placementHistory.undoStates).toEqual([sourceSnapshot]);
+    expect(placementHistory.currentState).toBe(sourceSnapshot);
+  });
+
+  it("skips long-table held targets and still adds one undo for a legal neighbor", () => {
+    const longTable = readLockedPlaceableCatalogItems().find((catalogItem) =>
+      catalogItem.renderingMetadata?.kind === "furniture"
+      && catalogItem.renderingMetadata.isLongTable
+      && !catalogItem.renderingMetadata.wallMounted
+    );
+    const chair = requireLockedPlaceableCatalogItem("furniture_0");
+    if (longTable === undefined) {
+      throw new Error("Locked placeable catalog did not contain a floor long table.");
+    }
+    const longTableFootprint = longTable.presentationCapabilities?.rotation?.footprints[0]
+      ?? longTable.tileSize;
+    const mapPlacementGrid = createPlacementGrid(
+      longTableFootprint.width + 1,
+      longTableFootprint.height,
+    );
+    const tablePlacement = applyEditorCursorPlacement({
+      selectedCatalogItem: longTable,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 0, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+    });
+    if (!tablePlacement.applied) {
+      throw new Error(
+        `Long table ${JSON.stringify(longTable.id)} did not place; received ${JSON.stringify(tablePlacement)}.`,
+      );
+    }
+
+    const tableHistory = tablePlacement.placementHistory;
+    const rejectedFillResult = applyEditorFill({
+      selectedCatalogItem: withFillTool(chair),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tableHistory,
+    });
+    expect(rejectedFillResult).toEqual({
+      applied: false,
+      reason: "invalid-held-item-target",
+      targetReason: "long-table",
+      placementHistory: tableHistory,
+    });
+    expect(rejectedFillResult.placementHistory).toBe(tableHistory);
+    expect(rejectedFillResult.placementHistory.currentState).toBe(tableHistory.currentState);
+    expect(rejectedFillResult.placementHistory.undoStates).toBe(tableHistory.undoStates);
+    expect(rejectedFillResult.placementHistory.redoStates).toBe(tableHistory.redoStates);
+    expect(tableHistory.currentState.items).toHaveLength(1);
+    expect(tableHistory.currentState.items[0]?.heldItem).toBeUndefined();
+
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: withFillTool(chair),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: longTableFootprint.width, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tableHistory,
+    });
+
+    expect(longTable.renderingMetadata).toMatchObject({
+      isLongTable: true,
+      wallMounted: false,
+    });
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(fillResult.placementHistory.currentState.items).toHaveLength(2);
+    expect(fillResult.placementHistory.currentState.items[0]).toMatchObject({
+      itemId: longTable.id,
+      x: 0,
+      y: 0,
+    });
+    expect(fillResult.placementHistory.currentState.items[0]?.heldItem).toBeUndefined();
+    expect(fillResult.placementHistory.currentState.items[1]).toMatchObject({
+      itemId: "furniture_0",
+      x: longTableFootprint.width,
+      y: 0,
+    });
+    expect(fillResult.placementHistory.undoStates).toEqual([
+      ...tableHistory.undoStates,
+      tableHistory.currentState,
+    ]);
+    expect(fillResult.placementHistory.redoStates).toEqual([]);
+    expect(undoPlacementHistory(fillResult.placementHistory).currentState).toBe(
+      tableHistory.currentState,
+    );
+  });
+
+  it("keeps one undo when a fill attaches to an empty table and places the next tile", () => {
+    const endTable = requireLockedPlaceableCatalogItem("furniture_1391");
+    const chair = requireLockedPlaceableCatalogItem("furniture_0");
+    const mapPlacementGrid = createPlacementGrid(2, 1);
+    const tablePlacement = applyEditorCursorPlacement({
+      selectedCatalogItem: endTable,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 0, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+    });
+    if (!tablePlacement.applied) {
+      throw new Error(
+        `End table did not place; received ${JSON.stringify(tablePlacement)}.`,
+      );
+    }
+
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: withFillTool(chair),
+      catalogPresentationChoice: { flipped: false, rotation: 2, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tablePlacement.placementHistory,
+    });
+
+    expect(chair.presentationCapabilities?.rotation?.count).toBe(4);
+    expect(endTable.renderingMetadata).toMatchObject({
+      isLongTable: false,
+      isTable: true,
+    });
+    expect(fillResult).toMatchObject({ applied: true, placedTileCount: 2 });
+    expect(fillResult.placementHistory.currentState.items).toHaveLength(2);
+    expect(fillResult.placementHistory.currentState.items[0]).toMatchObject({
+      instanceId: 1,
+      itemId: "furniture_1391",
+    });
+    expect(fillResult.placementHistory.currentState.items[0]?.heldItem).toMatchObject({
+      footprint: { width: 1, height: 1 },
+      instanceId: 2,
+      itemId: "furniture_0",
+      rotation: 2,
+    });
+    expect(fillResult.placementHistory.currentState.items[1]).toMatchObject({
+      footprint: { width: 1, height: 1 },
+      instanceId: 3,
+      itemId: "furniture_0",
+      rotation: 2,
+      x: 1,
+      y: 0,
+    });
+    expect(fillResult.placementHistory.currentState.nextItemId).toBe(4);
+    expect(fillResult.placementHistory.undoStates).toEqual([
+      ...tablePlacement.placementHistory.undoStates,
+      tablePlacement.placementHistory.currentState,
+    ]);
+    expect(fillResult.placementHistory.redoStates).toEqual([]);
+  });
+
+  it("rejects an all-occupied-table fill gesture and skips occupied tables when placing adjacent legal tiles", () => {
+    const endTable = requireLockedPlaceableCatalogItem("furniture_1391");
+    const chair = requireLockedPlaceableCatalogItem("furniture_0");
+    const mapPlacementGrid = createPlacementGrid(2, 1);
+    const tablePlacement = applyEditorCursorPlacement({
+      selectedCatalogItem: endTable,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 0, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: createPlacementHistory(createEmptyPlacementSnapshot()),
+    });
+    if (!tablePlacement.applied) {
+      throw new Error(
+        `End table did not place; received ${JSON.stringify(tablePlacement)}.`,
+      );
+    }
+
+    const occupiedPlacement = applyEditorCursorPlacement({
+      selectedCatalogItem: chair,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 0, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: tablePlacement.placementHistory,
+    });
+    if (!occupiedPlacement.applied) {
+      throw new Error(
+        `Chair on table did not place; received ${JSON.stringify(occupiedPlacement)}.`,
+      );
+    }
+
+    const occupiedHistory = occupiedPlacement.placementHistory;
+    expect(occupiedHistory.currentState.items[0]?.heldItem).toBeDefined();
+
+    const rejectedFillResult = applyEditorFill({
+      selectedCatalogItem: withFillTool(chair),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 0, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: occupiedHistory,
+    });
+    expect(rejectedFillResult).toEqual({
+      applied: false,
+      reason: "invalid-held-item-target",
+      targetReason: "occupied-table",
+      placementHistory: occupiedHistory,
+    });
+    expect(rejectedFillResult.placementHistory).toBe(occupiedHistory);
+    expect(rejectedFillResult.placementHistory.currentState).toBe(occupiedHistory.currentState);
+    expect(rejectedFillResult.placementHistory.undoStates).toBe(occupiedHistory.undoStates);
+    expect(rejectedFillResult.placementHistory.redoStates).toBe(occupiedHistory.redoStates);
+
+    const partialFillResult = applyEditorFill({
+      selectedCatalogItem: withFillTool(chair),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 1, y: 0 },
+      mapPlacementGrid,
+      buildingMetadataById: createBuildingMetadataById(),
+      placementHistory: occupiedHistory,
+    });
+
+    expect(partialFillResult).toMatchObject({ applied: true, placedTileCount: 1 });
+    expect(partialFillResult.placementHistory.currentState.items).toHaveLength(2);
+    expect(partialFillResult.placementHistory.currentState.items[0]?.heldItem?.instanceId).toBe(
+      occupiedHistory.currentState.items[0]?.heldItem?.instanceId,
+    );
+    expect(partialFillResult.placementHistory.currentState.items[1]).toMatchObject({
+      itemId: "furniture_0",
+      x: 1,
+      y: 0,
+    });
+    expect(partialFillResult.placementHistory.undoStates).toEqual([
+      ...occupiedHistory.undoStates,
+      occupiedHistory.currentState,
+    ]);
+    expect(partialFillResult.placementHistory.redoStates).toEqual([]);
+    expect(undoPlacementHistory(partialFillResult.placementHistory).currentState).toBe(
+      occupiedHistory.currentState,
+    );
+  });
+
+  it("does not place a building on a map that is not buildable", () => {
+    const { catalogItem, buildingMetadataById } =
+      createLockedBuildingFillContext("Beach Cabin");
+    const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const fillResult = applyEditorFill({
+      selectedCatalogItem: catalogItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      firstTile: { x: 0, y: 0 },
+      secondTile: { x: 4, y: 2 },
+      mapPlacementGrid: createBlockedPlacementGrid(5, 3),
+      buildingMetadataById,
+      placementHistory,
+    });
+
+    expect(fillResult).toMatchObject({
+      applied: false,
+      placementHistory,
+      validation: { reason: "not-buildable", valid: false },
+    });
+    expect(fillResult.placementHistory).toBe(placementHistory);
+    expect(placementHistory.currentState.buildings).toEqual([]);
+    expect(placementHistory.undoStates).toEqual([]);
   });
 });
 

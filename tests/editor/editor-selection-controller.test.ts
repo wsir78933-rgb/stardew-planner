@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
-import * as editorSelectionControllerModule from "../../src/editor/editor-selection-controller";
-import type {
-  BuildingPlacementMetadataById,
-  CatalogItem,
-  CatalogPresentationCapabilities,
+import { resolveLocalGameAssetPath } from "../../src/assets/local-game-asset-path";
+import {
+  getLockedLitBigCraftableRenderingMetadata,
+  type BuildingPlacementMetadataById,
+  type CatalogItem,
+  type CatalogPresentationCapabilities,
 } from "../../src/catalog";
+import * as editorSelectionControllerModule from "../../src/editor/editor-selection-controller";
+import { createNightLightRenderDescriptors } from "../../src/night-lights/night-light-rendering";
+import { createLitBigCraftablePlacementRenderLayers } from "../../src/rendering/lit-big-craftable-placement-rendering";
 import {
   deleteSelectedPlacements,
   duplicateSelectedPlacementAtTile,
@@ -12,6 +16,7 @@ import {
   getPlacementSelectionBounds,
   getPlacementSelectionSummary,
   getPlacementSelectionDetails,
+  type PlacementSelectionDetails,
   moveSelectedPlacements,
   cycleSelectedPlacementAppearance,
   setSelectedPlacementBuildingPaint,
@@ -178,6 +183,160 @@ const fireplaceNightLightCatalogItems: readonly CatalogItem[] = [
     tileSize: { width: 2, height: 1 },
   },
 ];
+
+const lockedLitBigCraftableRecordIds = [
+  "143",
+  "144",
+  "145",
+  "146",
+  "147",
+  "148",
+  "149",
+  "150",
+  "151",
+  "278",
+] as const;
+
+const litBigCraftablePresentationCapabilities = {
+  canFlip: false,
+  rotation: null,
+  variantCycle: { count: 2, family: "generic" },
+  visibleVariants: [
+    {
+      label: "Lit",
+      renderDescriptor: { kind: "variant-index", variant: 0 },
+      value: 0,
+    },
+    {
+      label: "Unlit",
+      renderDescriptor: { kind: "variant-index", variant: 1 },
+      value: 1,
+    },
+  ],
+} as const satisfies CatalogPresentationCapabilities;
+
+function createOrdinaryNightLightCatalogItem(itemId: string): CatalogItem {
+  return {
+    allowedTools: ["cursor"],
+    category: "placeable",
+    id: itemId,
+    name: itemId,
+    nightLight: { radiusInTiles: 4, color: 0xffe3a0 },
+    sprite: { kind: "sprite-index", index: 0 },
+    textureLocalPath: "/game-assets/test.png",
+    tileSize: { width: 1, height: 1 },
+  };
+}
+
+function createLockedLitBigCraftableCatalogItem(recordId: string): CatalogItem {
+  const renderingMetadata = getLockedLitBigCraftableRenderingMetadata(recordId);
+  if (renderingMetadata === undefined) {
+    throw new Error(
+      `Locked lit BigCraftable record ${recordId} has no rendering metadata.`,
+    );
+  }
+
+  const recordNumber = Number(recordId);
+  if (!Number.isInteger(recordNumber)) {
+    throw new Error(
+      `Locked lit BigCraftable record ${recordId} is not an integer.`,
+    );
+  }
+
+  return {
+    allowedTools: ["cursor"],
+    category: "placeable",
+    id: `big-craftable:${recordId}`,
+    name: `Lit ${recordId}`,
+    nightLight: { radiusInTiles: 4, color: 0xffe3a0 },
+    renderingMetadata,
+    sprite: { kind: "sprite-index", index: recordNumber },
+    textureLocalPath: resolveLocalGameAssetPath("tilesheets/craftables.png"),
+    tileSize: { width: 1, height: 2 },
+  };
+}
+
+function requirePlacementItem(
+  placementSnapshot: PlacementSnapshot,
+  instanceId: number,
+): PlacementItem {
+  const placementItem = placementSnapshot.items.find(
+    (candidateItem) => candidateItem.instanceId === instanceId,
+  );
+  if (placementItem === undefined) {
+    throw new Error(
+      `Placement snapshot is missing item instance ${String(instanceId)}.`,
+    );
+  }
+
+  return placementItem;
+}
+
+function readSelectedItemNightLightState(
+  placementSelectionDetails: PlacementSelectionDetails,
+): "off" | undefined {
+  if (placementSelectionDetails.kind !== "item") {
+    throw new Error(
+      `Placement selection kind is ${placementSelectionDetails.kind}; expected "item" to read nightLightState.`,
+    );
+  }
+
+  return placementSelectionDetails.nightLightState;
+}
+
+function expectLitBigCraftableAppearance(
+  catalogItem: CatalogItem,
+  placementItem: PlacementItem,
+  appearance: "lit" | "unlit",
+): void {
+  if (catalogItem.renderingMetadata?.kind !== "lit-big-craftable") {
+    throw new Error(
+      `Lit BigCraftable ${catalogItem.id} is missing locked rendering metadata.`,
+    );
+  }
+
+  const layers = createLitBigCraftablePlacementRenderLayers(
+    catalogItem,
+    placementItem,
+    { x: 0, y: 0, width: 16, height: 32 },
+  );
+  if (layers === null) {
+    throw new Error(
+      `Lit BigCraftable ${catalogItem.id} did not create placement layers.`,
+    );
+  }
+
+  const nightLights = createNightLightRenderDescriptors({
+    catalogItems: [catalogItem],
+    isNightMode: true,
+    placementSnapshot: {
+      ...createEmptyPlacementSnapshot(),
+      items: [placementItem],
+      nextItemId: placementItem.instanceId + 1,
+    },
+    tileHeight: 16,
+    tileWidth: 16,
+  });
+  const flameLayerCount = catalogItem.renderingMetadata.flameLayers.length;
+
+  if (appearance === "unlit") {
+    expect(layers, catalogItem.id).toHaveLength(1);
+    expect(nightLights, catalogItem.id).toEqual([]);
+    return;
+  }
+
+  expect(layers, catalogItem.id).toHaveLength(flameLayerCount + 2);
+  expect(
+    layers.slice(1, -1).every((layer) =>
+      layer.textureLocalPath?.endsWith("Cursors.png")
+    ),
+    catalogItem.id,
+  ).toBe(true);
+  expect(layers.at(-1)?.animation?.kind, catalogItem.id).toBe("scale-pulse");
+  expect(nightLights, catalogItem.id).toEqual([
+    expect.objectContaining({ color: catalogItem.nightLight?.color }),
+  ]);
+}
 
 function createCatalogItem(
   itemId: string,
@@ -2237,7 +2396,7 @@ describe("editor selection controller", () => {
       placementHistory.currentState,
     ]);
     expect(extinguishResult.placementHistory.currentState.items[0]).toEqual(
-      expect.objectContaining({ nightLightState: "off" }),
+      expect.objectContaining({ nightLightState: "off", variant: 0 }),
     );
 
     const lightResult = setSelectedPlacementNightLightState({
@@ -2250,6 +2409,7 @@ describe("editor selection controller", () => {
     expect(lightResult.placementHistory.undoStates).toHaveLength(2);
     expect(lightResult.placementHistory.currentState.items[0]?.nightLightState)
       .toBeUndefined();
+    expect(lightResult.placementHistory.currentState.items[0]?.variant).toBe(0);
     expect(
       Object.hasOwn(
         lightResult.placementHistory.currentState.items[0] ?? {},
@@ -2520,5 +2680,660 @@ describe("editor selection controller", () => {
       selectedPlacementKey: "item:1",
       validation: { valid: false, reason: "outside-map", tile: { x: 5, y: 4 } },
     });
+  });
+
+  it("extinguishes and lights each locked lit BigCraftable without changing other placed lights", () => {
+    const ordinaryTorch = createOrdinaryNightLightCatalogItem("object:93");
+
+    for (const recordId of lockedLitBigCraftableRecordIds) {
+      const catalogItem = createLockedLitBigCraftableCatalogItem(recordId);
+      const selectedItem = createPlacementItem({
+        instanceId: 1,
+        itemId: catalogItem.id,
+        variant: 0,
+        x: 1,
+        y: 1,
+      });
+      const sameKindNeighbor = createPlacementItem({
+        instanceId: 2,
+        itemId: catalogItem.id,
+        variant: 0,
+        x: 4,
+        y: 4,
+      });
+      const extinguishedTorch = createPlacementItem({
+        instanceId: 3,
+        itemId: ordinaryTorch.id,
+        nightLightState: "off",
+        variant: 0,
+        x: 6,
+        y: 6,
+      });
+      const placementHistory = createPlacementHistory({
+        ...createEmptyPlacementSnapshot(),
+        items: [selectedItem, sameKindNeighbor, extinguishedTorch],
+        nextItemId: 4,
+      });
+      const catalogItems = [catalogItem, ordinaryTorch];
+
+      const extinguishResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: "off",
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const extinguishedItem = requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        1,
+      );
+
+      expect(extinguishResult, recordId).toMatchObject({ applied: true });
+      expect(extinguishResult.placementHistory.undoStates, recordId).toEqual([
+        placementHistory.currentState,
+      ]);
+      expect(extinguishedItem.variant, recordId).toBe(1);
+      expect(Object.hasOwn(extinguishedItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, extinguishedItem, "unlit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: extinguishResult.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBe("off");
+      expect(requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        2,
+      ), recordId).toEqual(sameKindNeighbor);
+      expect(requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        3,
+      ), recordId).toEqual(extinguishedTorch);
+
+      const repeatedExtinguish = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: "off",
+        placementHistory: extinguishResult.placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      expect(repeatedExtinguish, recordId).toMatchObject({
+        applied: false,
+        reason: "already-in-requested-state",
+      });
+      expect(repeatedExtinguish.placementHistory, recordId).toBe(
+        extinguishResult.placementHistory,
+      );
+
+      const lightResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: undefined,
+        placementHistory: extinguishResult.placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const litItem = requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        1,
+      );
+
+      expect(lightResult, recordId).toMatchObject({ applied: true });
+      expect(lightResult.placementHistory.undoStates, recordId).toHaveLength(2);
+      expect(litItem.variant, recordId).toBe(0);
+      expect(Object.hasOwn(litItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, litItem, "lit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: lightResult.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBeUndefined();
+      expect(requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        2,
+      ), recordId).toEqual(sameKindNeighbor);
+      expect(requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        3,
+      ), recordId).toEqual(extinguishedTorch);
+
+      const repeatedLight = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: undefined,
+        placementHistory: lightResult.placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      expect(repeatedLight, recordId).toMatchObject({
+        applied: false,
+        reason: "already-in-requested-state",
+      });
+      expect(repeatedLight.placementHistory, recordId).toBe(
+        lightResult.placementHistory,
+      );
+
+      const undoneExtinguished = undoPlacementHistory(lightResult.placementHistory);
+      expect(requirePlacementItem(undoneExtinguished.currentState, 1), recordId)
+        .toEqual(extinguishedItem);
+      const undoneOriginal = undoPlacementHistory(undoneExtinguished);
+      expect(undoneOriginal.currentState, recordId).toEqual(
+        placementHistory.currentState,
+      );
+      const redoneExtinguished = redoPlacementHistory(undoneOriginal);
+      expect(requirePlacementItem(redoneExtinguished.currentState, 1), recordId)
+        .toEqual(extinguishedItem);
+      const redoneLit = redoPlacementHistory(redoneExtinguished);
+      expect(requirePlacementItem(redoneLit.currentState, 1), recordId)
+        .toEqual(litItem);
+    }
+  });
+
+  it("reads legacy nightLightState and rewrites only the selected lit BigCraftable into an agreeing variant", () => {
+    for (const recordId of lockedLitBigCraftableRecordIds) {
+      const catalogItem = createLockedLitBigCraftableCatalogItem(recordId);
+      const selectedItem = createPlacementItem({
+        instanceId: 1,
+        itemId: catalogItem.id,
+        nightLightState: "off",
+        variant: 0,
+        x: 1,
+        y: 1,
+      });
+      const legacyNeighbor = createPlacementItem({
+        instanceId: 2,
+        itemId: catalogItem.id,
+        nightLightState: "off",
+        variant: 0,
+        x: 4,
+        y: 4,
+      });
+      const placementHistory = createPlacementHistory({
+        ...createEmptyPlacementSnapshot(),
+        items: [selectedItem, legacyNeighbor],
+        nextItemId: 3,
+      });
+      const catalogItems = [catalogItem];
+
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBe("off");
+      expectLitBigCraftableAppearance(catalogItem, selectedItem, "unlit");
+      expect(createNightLightRenderDescriptors({
+        catalogItems,
+        isNightMode: true,
+        placementSnapshot: placementHistory.currentState,
+        tileHeight: 16,
+        tileWidth: 16,
+      }), recordId).toEqual([]);
+
+      const lightResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: undefined,
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const litItem = requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        1,
+      );
+      expect(litItem.variant, recordId).toBe(0);
+      expect(Object.hasOwn(litItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, litItem, "lit");
+      expect(requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        2,
+      ), recordId).toEqual(legacyNeighbor);
+      expect(undoPlacementHistory(lightResult.placementHistory).currentState, recordId)
+        .toEqual(placementHistory.currentState);
+
+      const extinguishResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: "off",
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const extinguishedItem = requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        1,
+      );
+      expect(extinguishedItem.variant, recordId).toBe(1);
+      expect(Object.hasOwn(extinguishedItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, extinguishedItem, "unlit");
+      expect(requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        2,
+      ), recordId).toEqual(legacyNeighbor);
+    }
+  });
+
+  it("keeps a placed Unlit lit BigCraftable off without history until Light is requested", () => {
+    for (const recordId of lockedLitBigCraftableRecordIds) {
+      const catalogItem = createLockedLitBigCraftableCatalogItem(recordId);
+      const selectedItem = createPlacementItem({
+        instanceId: 1,
+        itemId: catalogItem.id,
+        variant: 1,
+        x: 1,
+        y: 1,
+      });
+      const unlitNeighbor = createPlacementItem({
+        instanceId: 2,
+        itemId: catalogItem.id,
+        variant: 1,
+        x: 4,
+        y: 4,
+      });
+      const placementHistory = createPlacementHistory({
+        ...createEmptyPlacementSnapshot(),
+        items: [selectedItem, unlitNeighbor],
+        nextItemId: 3,
+      });
+      const catalogItems = [catalogItem];
+
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBe("off");
+      expectLitBigCraftableAppearance(catalogItem, selectedItem, "unlit");
+
+      const extinguishResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: "off",
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      expect(extinguishResult, recordId).toMatchObject({
+        applied: false,
+        reason: "already-in-requested-state",
+      });
+      expect(extinguishResult.placementHistory, recordId).toBe(placementHistory);
+      expect(Object.hasOwn(
+        requirePlacementItem(placementHistory.currentState, 1),
+        "nightLightState",
+      ), recordId).toBe(false);
+
+      const lightResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: undefined,
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const litItem = requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        1,
+      );
+      expect(litItem.variant, recordId).toBe(0);
+      expect(Object.hasOwn(litItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, litItem, "lit");
+      expect(requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        2,
+      ), recordId).toEqual(unlitNeighbor);
+
+      const repeatedLight = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: undefined,
+        placementHistory: lightResult.placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      expect(repeatedLight.placementHistory, recordId).toBe(
+        lightResult.placementHistory,
+      );
+    }
+
+    const campfire = createLockedLitBigCraftableCatalogItem("146");
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlacementItem({
+        instanceId: 1,
+        itemId: campfire.id,
+        nightLightState: "off",
+        variant: 1,
+      })],
+      nextItemId: 2,
+    });
+    const extinguishResult = setSelectedPlacementNightLightState({
+      catalogItems: [campfire],
+      nightLightState: "off",
+      placementHistory,
+      selectedPlacementKey: "item:1",
+    });
+
+    expect(extinguishResult).toMatchObject({
+      applied: false,
+      reason: "already-in-requested-state",
+    });
+    expect(extinguishResult.placementHistory).toBe(placementHistory);
+    expect(placementHistory.currentState.items[0]).toMatchObject({
+      nightLightState: "off",
+      variant: 1,
+    });
+  });
+
+  it("keeps an ordinary lamp and jack-o-lantern on nightLightState without a flame variant", () => {
+    for (const itemId of ["big-craftable:152", "object:746"] as const) {
+      const catalogItem = createOrdinaryNightLightCatalogItem(itemId);
+      const placementHistory = createPlacementHistory({
+        ...createEmptyPlacementSnapshot(),
+        items: [createPlacementItem({
+          instanceId: 1,
+          itemId,
+          variant: 0,
+        })],
+        nextItemId: 2,
+      });
+
+      const extinguishResult = setSelectedPlacementNightLightState({
+        catalogItems: [catalogItem],
+        nightLightState: "off",
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const extinguishedItem = requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        1,
+      );
+
+      expect(extinguishedItem, itemId).toMatchObject({
+        nightLightState: "off",
+        variant: 0,
+      });
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems: [catalogItem],
+        placementSnapshot: extinguishResult.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), itemId).toBe("off");
+      expect(createLitBigCraftablePlacementRenderLayers(
+        catalogItem,
+        extinguishedItem,
+        { x: 0, y: 0, width: 16, height: 32 },
+      ), itemId).toBeNull();
+      expect(createNightLightRenderDescriptors({
+        catalogItems: [catalogItem],
+        isNightMode: true,
+        placementSnapshot: extinguishResult.placementHistory.currentState,
+        tileHeight: 16,
+        tileWidth: 16,
+      }), itemId).toEqual([]);
+
+      const repeatedExtinguish = setSelectedPlacementNightLightState({
+        catalogItems: [catalogItem],
+        nightLightState: "off",
+        placementHistory: extinguishResult.placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      expect(repeatedExtinguish.placementHistory, itemId).toBe(
+        extinguishResult.placementHistory,
+      );
+
+      const lightResult = setSelectedPlacementNightLightState({
+        catalogItems: [catalogItem],
+        nightLightState: undefined,
+        placementHistory: extinguishResult.placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const litItem = requirePlacementItem(
+        lightResult.placementHistory.currentState,
+        1,
+      );
+      expect(litItem.variant, itemId).toBe(0);
+      expect(Object.hasOwn(litItem, "nightLightState"), itemId).toBe(false);
+      expect(createNightLightRenderDescriptors({
+        catalogItems: [catalogItem],
+        isNightMode: true,
+        placementSnapshot: lightResult.placementHistory.currentState,
+        tileHeight: 16,
+        tileWidth: 16,
+      }), itemId).toHaveLength(1);
+      expect(undoPlacementHistory(lightResult.placementHistory).currentState.items[0], itemId)
+        .toMatchObject({ nightLightState: "off", variant: 0 });
+    }
+  });
+
+  it("rejects a lit BigCraftable light change when the variant or catalog metadata is invalid", () => {
+    const campfire = createLockedLitBigCraftableCatalogItem("146");
+    const invalidVariantHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlacementItem({
+        instanceId: 1,
+        itemId: campfire.id,
+        variant: 2,
+      })],
+      nextItemId: 2,
+    });
+    const invalidVariantMessage =
+      'Lit BigCraftable placement item "big-craftable:146" variant must equal 0 or 1; received 2.';
+
+    expect(() => getPlacementSelectionDetails({
+      catalogItems: [campfire],
+      placementSnapshot: invalidVariantHistory.currentState,
+      selectedPlacementKey: "item:1",
+    })).toThrow(invalidVariantMessage);
+    expect(() => setSelectedPlacementNightLightState({
+      catalogItems: [campfire],
+      nightLightState: "off",
+      placementHistory: invalidVariantHistory,
+      selectedPlacementKey: "item:1",
+    })).toThrow(invalidVariantMessage);
+    expect(invalidVariantHistory.undoStates).toEqual([]);
+    expect(invalidVariantHistory.currentState.items[0]?.variant).toBe(2);
+
+    const missingMetadataHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlacementItem({
+        instanceId: 1,
+        itemId: campfire.id,
+        variant: 0,
+      })],
+      nextItemId: 2,
+    });
+    const campfireWithoutMetadata = {
+      ...campfire,
+      renderingMetadata: undefined,
+    };
+
+    expect(() => setSelectedPlacementNightLightState({
+      catalogItems: [campfireWithoutMetadata],
+      nightLightState: "off",
+      placementHistory: missingMetadataHistory,
+      selectedPlacementKey: "item:1",
+    })).toThrow(
+      'Lit BigCraftable catalog item "big-craftable:146" requires locked rendering metadata; received undefined.',
+    );
+    expect(missingMetadataHistory.undoStates).toEqual([]);
+    expect(missingMetadataHistory.currentState.items[0]?.nightLightState)
+      .toBeUndefined();
+    expect(missingMetadataHistory.currentState.items[0]?.variant).toBe(0);
+
+    const invalidRenderingMetadata = {
+      kind: "lit-big-craftable" as const,
+      flameLayers: [],
+    };
+    const lampPost = {
+      ...createOrdinaryNightLightCatalogItem("big-craftable:152"),
+      renderingMetadata: invalidRenderingMetadata,
+    };
+    const lampPostHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createPlacementItem({
+        instanceId: 1,
+        itemId: lampPost.id,
+        variant: 0,
+      })],
+      nextItemId: 2,
+    });
+
+    expect(() => setSelectedPlacementNightLightState({
+      catalogItems: [lampPost],
+      nightLightState: "off",
+      placementHistory: lampPostHistory,
+      selectedPlacementKey: "item:1",
+    })).toThrow(
+      `Lit BigCraftable catalog item "big-craftable:152" is not in the locked rendering ID set; received ${JSON.stringify(invalidRenderingMetadata)}.`,
+    );
+    expect(lampPostHistory.undoStates).toEqual([]);
+    expect(lampPostHistory.currentState.items[0]?.nightLightState).toBeUndefined();
+    expect(lampPostHistory.currentState.items[0]?.variant).toBe(0);
+  });
+
+  it("keeps flame, night light, and the light button together across extinguish and appearance cycle", () => {
+    for (const recordId of lockedLitBigCraftableRecordIds) {
+      const catalogItem = {
+        ...createLockedLitBigCraftableCatalogItem(recordId),
+        presentationCapabilities: litBigCraftablePresentationCapabilities,
+      };
+      const neighbor = createPlacementItem({
+        instanceId: 2,
+        itemId: catalogItem.id,
+        variant: 0,
+        x: 4,
+        y: 4,
+      });
+      const placementHistory = createPlacementHistory({
+        ...createEmptyPlacementSnapshot(),
+        items: [
+          createPlacementItem({
+            instanceId: 1,
+            itemId: catalogItem.id,
+            variant: 0,
+            x: 1,
+            y: 1,
+          }),
+          neighbor,
+        ],
+        nextItemId: 3,
+      });
+      const catalogItems = [catalogItem];
+      const cycleInput = {
+        buildingMetadataById: createBuildingMetadataById(),
+        catalogItems,
+        mapPlacementGrid: createPlacementGrid(8, 8),
+        selectedPlacementKey: "item:1" as const,
+      };
+
+      const extinguishResult = setSelectedPlacementNightLightState({
+        catalogItems,
+        nightLightState: "off",
+        placementHistory,
+        selectedPlacementKey: "item:1",
+      });
+      const extinguishedItem = requirePlacementItem(
+        extinguishResult.placementHistory.currentState,
+        1,
+      );
+      expect(extinguishedItem.variant, recordId).toBe(1);
+      expect(Object.hasOwn(extinguishedItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, extinguishedItem, "unlit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: extinguishResult.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBe("off");
+
+      const cycledLit = cycleSelectedPlacementAppearance({
+        ...cycleInput,
+        placementHistory: extinguishResult.placementHistory,
+      });
+      const litByCycle = requirePlacementItem(cycledLit.placementHistory.currentState, 1);
+      expect(cycledLit, recordId).toMatchObject({ applied: true });
+      expect(litByCycle.variant, recordId).toBe(0);
+      expect(Object.hasOwn(litByCycle, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, litByCycle, "lit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: cycledLit.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBeUndefined();
+      expect(requirePlacementItem(cycledLit.placementHistory.currentState, 2), recordId)
+        .toEqual(neighbor);
+
+      const cycledUnlit = cycleSelectedPlacementAppearance({
+        ...cycleInput,
+        placementHistory: cycledLit.placementHistory,
+      });
+      const unlitByCycle = requirePlacementItem(
+        cycledUnlit.placementHistory.currentState,
+        1,
+      );
+      expect(unlitByCycle.variant, recordId).toBe(1);
+      expect(Object.hasOwn(unlitByCycle, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, unlitByCycle, "unlit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: cycledUnlit.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBe("off");
+      expect(undoPlacementHistory(cycledUnlit.placementHistory).currentState, recordId)
+        .toEqual(cycledLit.placementHistory.currentState);
+
+      const legacyNeighbor = createPlacementItem({
+        instanceId: 2,
+        itemId: catalogItem.id,
+        nightLightState: "off",
+        variant: 0,
+        x: 4,
+        y: 4,
+      });
+      const legacyHistory = createPlacementHistory({
+        ...createEmptyPlacementSnapshot(),
+        items: [
+          createPlacementItem({
+            instanceId: 1,
+            itemId: catalogItem.id,
+            nightLightState: "off",
+            variant: 0,
+            x: 1,
+            y: 1,
+          }),
+          legacyNeighbor,
+        ],
+        nextItemId: 3,
+      });
+      const legacyCycle = cycleSelectedPlacementAppearance({
+        ...cycleInput,
+        placementHistory: legacyHistory,
+      });
+      const cycledLegacyItem = requirePlacementItem(
+        legacyCycle.placementHistory.currentState,
+        1,
+      );
+      expect(legacyCycle, recordId).toMatchObject({ applied: true });
+      expect(cycledLegacyItem.variant, recordId).toBe(0);
+      expect(Object.hasOwn(cycledLegacyItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, cycledLegacyItem, "lit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: legacyCycle.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBeUndefined();
+      expect(requirePlacementItem(legacyCycle.placementHistory.currentState, 2), recordId)
+        .toEqual(legacyNeighbor);
+      const undoneLegacyHistory = undoPlacementHistory(legacyCycle.placementHistory);
+      expect(undoneLegacyHistory.currentState, recordId)
+        .toEqual(legacyHistory.currentState);
+      const redoneLegacyHistory = redoPlacementHistory(undoneLegacyHistory);
+      const redoneLegacyItem = requirePlacementItem(redoneLegacyHistory.currentState, 1);
+      expect(redoneLegacyItem.variant, recordId).toBe(0);
+      expect(Object.hasOwn(redoneLegacyItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, redoneLegacyItem, "lit");
+      expect(requirePlacementItem(redoneLegacyHistory.currentState, 2), recordId)
+        .toEqual(legacyNeighbor);
+      const secondLegacyCycle = cycleSelectedPlacementAppearance({
+        ...cycleInput,
+        placementHistory: redoneLegacyHistory,
+      });
+      const secondLegacyItem = requirePlacementItem(
+        secondLegacyCycle.placementHistory.currentState,
+        1,
+      );
+      expect(secondLegacyCycle, recordId).toMatchObject({ applied: true });
+      expect(secondLegacyItem.variant, recordId).toBe(1);
+      expect(Object.hasOwn(secondLegacyItem, "nightLightState"), recordId).toBe(false);
+      expectLitBigCraftableAppearance(catalogItem, secondLegacyItem, "unlit");
+      expect(readSelectedItemNightLightState(getPlacementSelectionDetails({
+        catalogItems,
+        placementSnapshot: secondLegacyCycle.placementHistory.currentState,
+        selectedPlacementKey: "item:1",
+      })), recordId).toBe("off");
+      expect(requirePlacementItem(secondLegacyCycle.placementHistory.currentState, 2), recordId)
+        .toEqual(legacyNeighbor);
+    }
   });
 });

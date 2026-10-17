@@ -27,7 +27,12 @@ type TreeRecordLocation = Readonly<{
 }>;
 
 const localAssetRoot = "/game-assets/1.6.15";
-const treePlacementTools = ["cursor", "multi-select", "erase"] as const;
+const treePlacementTools = [
+  "cursor",
+  "multi-select",
+  "fill",
+  "erase",
+] as const;
 const fruitTreeTextureLocalPath = `${localAssetRoot}/tilesheets/fruitTrees.png`;
 const fruitTreeTextureWidth = 432;
 const fruitTreeTextureHeight = 720;

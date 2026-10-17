@@ -33,7 +33,12 @@ const lockedWindowFurnitureRecordIds = new Set([
   "1749",
   "TriangleWindow",
 ]);
-const furniturePlacementTools = ["cursor", "multi-select", "erase"] as const;
+const furniturePlacementTools = [
+  "cursor",
+  "multi-select",
+  "fill",
+  "erase",
+] as const;
 const bedFurniturePlacementTools = [
   "cursor",
   "multi-select",

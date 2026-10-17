@@ -485,7 +485,8 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
     modalId === "settings-panel" ||
     modalId === "help-info" ||
     modalId === "feedback" ||
-    modalId === "keyboard-shortcuts"
+    modalId === "keyboard-shortcuts" ||
+    modalId === "map-picker"
   ) {
     return "editor-modal__backdrop editor-modal__backdrop--viewport-fixed";
   }

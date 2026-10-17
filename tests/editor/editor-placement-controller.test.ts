@@ -7,6 +7,7 @@ import {
 } from "../../src/catalog";
 import {
   applyEditorCursorPlacement,
+  evaluateEditorCursorPlacement,
   evaluateEditorCursorPlacementPreview,
 } from "../../src/editor/editor-placement-controller";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
@@ -19,6 +20,7 @@ import {
   createEmptyPlacementSnapshot,
   type PlacementItem,
 } from "../../src/placement/placement-snapshot";
+import { createBushCatalogItems } from "../../src/catalog/bushes";
 import { createGrassPlacementRenderLayers } from "../../src/rendering/grass-placement-rendering";
 
 function createCatalogItem(
@@ -32,6 +34,22 @@ function createCatalogItem(
     allowedTools: ["cursor"],
     ...catalogItem,
   };
+}
+
+function requireBushCatalogItem(
+  bushId: "bush:small" | "bush:medium" | "bush:large",
+): CatalogItem {
+  const bushCatalogItem = createBushCatalogItems().find(
+    (catalogItem) => catalogItem.id === bushId,
+  );
+
+  if (bushCatalogItem === undefined) {
+    throw new Error(
+      `Bush catalog did not contain item ${JSON.stringify(bushId)}.`,
+    );
+  }
+
+  return bushCatalogItem;
 }
 
 function createGrassStarterCatalogItem(
@@ -1772,6 +1790,198 @@ describe("applyEditorCursorPlacement", () => {
     expect(placementResult.placementHistory).toBe(placementHistory);
     expect(placementHistory.currentState.items[0]?.heldItem).toBeUndefined();
     expect(placementHistory.currentState.nextItemId).toBe(nextItemId);
+  });
+
+  it("places real small, medium, and large bushes through the public cursor path", () => {
+    const smallBush = requireBushCatalogItem("bush:small");
+    const mediumBush = requireBushCatalogItem("bush:medium");
+    const largeBush = requireBushCatalogItem("bush:large");
+    const smallHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const mediumHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const largeHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const smallResult = applyEditorCursorPlacement(
+      createPlacementInput(smallBush, {
+        catalogPresentationChoice: { flipped: true, rotation: 0, variant: 0 },
+        placementHistory: smallHistory,
+      }),
+    );
+    const mediumResult = applyEditorCursorPlacement(
+      createPlacementInput(mediumBush, {
+        catalogPresentationChoice: { flipped: false, rotation: 0, variant: 1 },
+        mapPlacementGrid: createPlacementGrid(undefined, 2, 1),
+        placementHistory: mediumHistory,
+      }),
+    );
+    const largeResult = applyEditorCursorPlacement(
+      createPlacementInput(largeBush, {
+        catalogPresentationChoice: { flipped: true, rotation: 0, variant: 0 },
+        mapPlacementGrid: createPlacementGrid(undefined, 3, 1),
+        placementHistory: largeHistory,
+      }),
+    );
+
+    expect(smallBush.tileSize).toEqual({ width: 1, height: 1 });
+    expect(mediumBush.tileSize).toEqual({ width: 2, height: 1 });
+    expect(largeBush.tileSize).toEqual({ width: 3, height: 1 });
+    expect(smallResult).toMatchObject({
+      applied: true,
+      placementHistory: {
+        currentState: {
+          items: [
+            expect.objectContaining({
+              flipped: true,
+              footprint: { width: 1, height: 1 },
+              itemId: "bush:small",
+              variant: 0,
+              x: 0,
+              y: 0,
+            }),
+          ],
+        },
+      },
+    });
+    expect(smallResult.placementHistory.undoStates).toEqual([
+      smallHistory.currentState,
+    ]);
+    expect(mediumResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        footprint: { width: 2, height: 1 },
+        itemId: "bush:medium",
+        variant: 1,
+        x: 0,
+        y: 0,
+      }),
+    ]);
+    expect(mediumResult.placementHistory.undoStates).toHaveLength(1);
+    expect(largeResult.placementHistory.currentState.items).toEqual([
+      expect.objectContaining({
+        flipped: true,
+        footprint: { width: 3, height: 1 },
+        itemId: "bush:large",
+        x: 0,
+        y: 0,
+      }),
+    ]);
+    expect(
+      undoPlacementHistory(largeResult.placementHistory).currentState.items,
+    ).toEqual([]);
+  });
+
+  it.each([
+    ["bush:", /approved object[\s\S]*received "bush:"/],
+    [
+      "bush:unknown",
+      /"bush:small"[\s\S]*"bush:medium"[\s\S]*"bush:large"[\s\S]*received "bush:unknown"/,
+    ],
+    ["shrub:large", /approved object[\s\S]*received "shrub:large"/],
+  ])(
+    "rejects illegal placeable identifier %s and leaves history unchanged",
+    (catalogItemId, messagePattern) => {
+      const placementHistory = createPlacementHistory(
+        createEmptyPlacementSnapshot(),
+      );
+      const placeIllegalItem = () => applyEditorCursorPlacement(
+        createPlacementInput(
+          createCatalogItem({ id: catalogItemId, category: "placeable" }),
+          { placementHistory },
+        ),
+      );
+
+      expect(placeIllegalItem).toThrow(TypeError);
+      expect(placeIllegalItem).toThrow(messagePattern);
+      expect(placementHistory.currentState.items).toEqual([]);
+      expect(placementHistory.undoStates).toEqual([]);
+    },
+  );
+
+  it("keeps map, passable, and occupancy rejection for a real bush", () => {
+    const outsideHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const outsideResult = applyEditorCursorPlacement(
+      createPlacementInput(requireBushCatalogItem("bush:large"), {
+        mapPlacementGrid: createPlacementGrid(undefined, 2, 1),
+        placementHistory: outsideHistory,
+      }),
+    );
+    const blockedHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const blockedResult = applyEditorCursorPlacement(
+      createPlacementInput(requireBushCatalogItem("bush:small"), {
+        mapPlacementGrid: createPlacementGrid({
+          buildable: true,
+          diggable: true,
+          passable: false,
+        }),
+        placementHistory: blockedHistory,
+      }),
+    );
+    const occupiedHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createExistingPlacementItem({ instanceId: 1, itemId: "object:390" })],
+      nextItemId: 2,
+    });
+    const occupiedResult = applyEditorCursorPlacement(
+      createPlacementInput(requireBushCatalogItem("bush:small"), {
+        placementHistory: occupiedHistory,
+      }),
+    );
+
+    expect(outsideResult).toEqual({
+      applied: false,
+      placementHistory: outsideHistory,
+      validation: {
+        reason: "outside-map",
+        tile: { x: 2, y: 0 },
+        valid: false,
+      },
+    });
+    expect(outsideHistory.undoStates).toEqual([]);
+    expect(blockedResult).toEqual({
+      applied: false,
+      placementHistory: blockedHistory,
+      validation: {
+        reason: "not-passable",
+        tile: { x: 0, y: 0 },
+        valid: false,
+      },
+    });
+    expect(occupiedResult).toEqual({
+      applied: false,
+      placementHistory: occupiedHistory,
+      validation: {
+        reason: "occupied-by-item",
+        tile: { x: 0, y: 0 },
+        valid: false,
+      },
+    });
+    expect(occupiedHistory.currentState.items).toHaveLength(1);
+    expect(occupiedHistory.currentState.nextItemId).toBe(2);
+  });
+
+  it("resolves a cursor placement action without committing history", () => {
+    const placementSnapshot = createEmptyPlacementSnapshot();
+    const placementEvaluation = evaluateEditorCursorPlacement({
+      selectedCatalogItem: createCatalogItem({ id: "floor:1", category: "floor" }),
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      cursorTile: { x: 0, y: 0 },
+      mapPlacementGrid: createPlacementGrid(),
+      buildingMetadataById: createBuildingMetadataById(),
+      placementSnapshot,
+    });
+
+    expect(placementEvaluation).toMatchObject({
+      accepted: true,
+      validation: { valid: true },
+      action: {
+        type: "add-item",
+        item: expect.objectContaining({
+          itemId: "floor:1",
+          layer: "path",
+          x: 0,
+          y: 0,
+        }),
+      },
+    });
+    expect(placementSnapshot.items).toEqual([]);
+    expect(placementSnapshot.nextItemId).toBe(1);
   });
 });
 

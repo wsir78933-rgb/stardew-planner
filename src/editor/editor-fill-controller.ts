@@ -2,26 +2,28 @@ import type {
   BuildingPlacementMetadataById,
   CatalogItem,
   CatalogPresentationChoice,
+  CatalogTileSize,
 } from "../catalog";
 import { validateCatalogItemPresentationChoice } from "../catalog";
-import { isMultiTileCropCatalogItem } from "../placement/catalog-item-placement-requirement";
 import type {
   MapPlacementGrid,
   MapTileCoordinates,
 } from "../placement/map-placement-grids";
 import {
   commitPlacementHistory,
-  createPlacementHistory,
   type PlacementHistory,
 } from "../placement/placement-history";
 import {
-  createPersistentPlacementSnapshot,
-  type PlacementCrop,
-  type PlacementItem,
+  applyWorkingPlacementSnapshotAction,
+  commitWorkingPlacementSnapshot,
+  createWorkingPlacementSnapshot,
   type PlacementSnapshot,
 } from "../placement/placement-snapshot";
 import type { PlacementValidationResult } from "../placement/placement-validation";
-import { applyEditorCursorPlacement } from "./editor-placement-controller";
+import {
+  evaluateEditorCursorPlacement,
+  type EditorCursorPlacementEvaluation,
+} from "./editor-placement-controller";
 
 export type EditorFillInput = Readonly<{
   catalogPresentationChoice: CatalogPresentationChoice | null;
@@ -48,9 +50,20 @@ export type EditorFillResult =
     }>
   | Readonly<{
       applied: false;
+      reason: "invalid-held-item-target";
+      targetReason: "long-table" | "occupied-table";
+      placementHistory: PlacementHistory<PlacementSnapshot>;
+    }>
+  | Readonly<{
+      applied: false;
       validation: Extract<PlacementValidationResult, { valid: false }>;
       placementHistory: PlacementHistory<PlacementSnapshot>;
     }>;
+
+type InvalidHeldFillTarget = Readonly<{
+  targetReason: "long-table" | "occupied-table";
+  tile: MapTileCoordinates;
+}>;
 
 export function applyEditorFill(
   editorFillInput: EditorFillInput,
@@ -73,92 +86,24 @@ export function applyEditorFill(
       placementHistory,
     };
   }
-  const catalogPresentationChoice = requireCatalogPresentationChoice(
-    editorFillInput,
-  );
 
-  if (
-    selectedCatalogItem.category === "building"
-    || isBedFillCatalogItem(selectedCatalogItem)
-  ) {
-    return applyEditorValidatedFootprintFill(
-      editorFillInput,
-      selectedCatalogItem,
-      catalogPresentationChoice,
-    );
-  }
-
-  const fillTiles = createFillTiles(
-    selectedCatalogItem,
-    catalogPresentationChoice,
-    editorFillInput.firstTile,
-    editorFillInput.secondTile,
-  );
-  const validatedPlacementHistory = createPlacementHistory(
-    placementHistory.currentState,
-  );
-  const addedCrops: PlacementCrop[] = [];
-  const addedItems: PlacementItem[] = [];
-  let firstRejectedValidation:
-    | Extract<PlacementValidationResult, { valid: false }>
-    | null = null;
-  let placedTileCount = 0;
-
-  for (const fillTile of fillTiles) {
-    const placementResult = applyEditorCursorPlacement({
-      selectedCatalogItem,
-      catalogPresentationChoice,
-      cursorTile: fillTile,
-      mapPlacementGrid: editorFillInput.mapPlacementGrid,
-      buildingMetadataById: editorFillInput.buildingMetadataById,
-      freePlacement: editorFillInput.freePlacement,
-      placementHistory: validatedPlacementHistory,
-      randomFractionSource: editorFillInput.randomFractionSource,
-    });
-
-    if (!placementResult.applied) {
-      if ("validation" in placementResult) {
-        firstRejectedValidation ??= placementResult.validation;
-        continue;
-      }
-
-      throw new Error(
-        `Editor fill received unexpected unapplied placement result for catalog item ${describeValue(selectedCatalogItem.id)} at tile ${describeValue(fillTile)}.`,
-      );
-    }
-
-    appendFillPlacementRecord(
-      selectedCatalogItem,
-      placementResult.placementHistory.currentState,
-      addedCrops,
-      addedItems,
-    );
-    placedTileCount += 1;
-  }
-
-  if (placedTileCount === 0) {
-    return firstRejectedValidation === null
-      ? { applied: true, placedTileCount: 0, placementHistory }
-      : { applied: false, validation: firstRejectedValidation, placementHistory };
-  }
-
-  const nextPlacementSnapshot = createFillPlacementSnapshot(
-    placementHistory.currentState,
-    addedCrops,
-    addedItems,
-  );
-
-  return {
-    applied: true,
-    placedTileCount,
-    placementHistory: commitPlacementHistory(
+  // Wallpaper and indoor flooring stay application decor. They are not grid stamps.
+  if (readInteriorDecorApplicationKind(selectedCatalogItem) !== null) {
+    return {
+      applied: false,
+      reason: "unsupported-catalog-category",
       placementHistory,
-      nextPlacementSnapshot,
-    ),
-  };
+    };
+  }
+
+  return applyValidatedGridStampFill(
+    editorFillInput,
+    selectedCatalogItem,
+    requireCatalogPresentationChoice(editorFillInput),
+  );
 }
 
-function applyEditorValidatedFootprintFill(
+function applyValidatedGridStampFill(
   editorFillInput: EditorFillInput,
   selectedCatalogItem: CatalogItem,
   catalogPresentationChoice: CatalogPresentationChoice,
@@ -169,135 +114,115 @@ function applyEditorValidatedFootprintFill(
     editorFillInput.firstTile,
     editorFillInput.secondTile,
   );
-  let validatedPlacementHistory = createPlacementHistory(
+  let workingSnapshot = createWorkingPlacementSnapshot(
     editorFillInput.placementHistory.currentState,
   );
   let firstRejectedValidation:
     | Extract<PlacementValidationResult, { valid: false }>
     | null = null;
-  let placedFootprintCount = 0;
+  let firstInvalidHeldTarget: InvalidHeldFillTarget | null = null;
+  let placedOriginCount = 0;
 
   for (const fillTile of fillTiles) {
-    const placementResult = applyEditorCursorPlacement({
+    const placementEvaluation = evaluateEditorCursorPlacement({
       selectedCatalogItem,
       catalogPresentationChoice,
       cursorTile: fillTile,
       mapPlacementGrid: editorFillInput.mapPlacementGrid,
       buildingMetadataById: editorFillInput.buildingMetadataById,
       freePlacement: editorFillInput.freePlacement,
-      placementHistory: validatedPlacementHistory,
+      placementSnapshot: workingSnapshot,
       randomFractionSource: editorFillInput.randomFractionSource,
     });
 
-    if (!placementResult.applied) {
-      if ("validation" in placementResult) {
-        firstRejectedValidation ??= placementResult.validation;
+    if (!placementEvaluation.accepted) {
+      const rejection = readUnacceptedFillEvaluation(
+        placementEvaluation,
+        selectedCatalogItem,
+        fillTile,
+      );
+
+      if (rejection.kind === "validation") {
+        firstRejectedValidation ??= rejection.validation;
         continue;
       }
 
-      throw new Error(
-        `Editor footprint fill received unexpected unapplied placement result for catalog item ${describeValue(selectedCatalogItem.id)} at tile ${describeValue(fillTile)}.`,
-      );
+      firstInvalidHeldTarget ??= {
+        targetReason: rejection.targetReason,
+        tile: fillTile,
+      };
+      continue;
     }
 
-    validatedPlacementHistory = placementResult.placementHistory;
-    placedFootprintCount += 1;
+    workingSnapshot = applyWorkingPlacementSnapshotAction(
+      workingSnapshot,
+      placementEvaluation.action,
+    );
+    placedOriginCount += 1;
   }
 
-  if (placedFootprintCount === 0) {
-    if (firstRejectedValidation === null) {
+  if (placedOriginCount === 0) {
+    if (firstRejectedValidation !== null) {
       return {
-        applied: true,
-        placedTileCount: 0,
+        applied: false,
+        validation: firstRejectedValidation,
+        placementHistory: editorFillInput.placementHistory,
+      };
+    }
+
+    if (firstInvalidHeldTarget !== null) {
+      return {
+        applied: false,
+        reason: "invalid-held-item-target",
+        targetReason: firstInvalidHeldTarget.targetReason,
         placementHistory: editorFillInput.placementHistory,
       };
     }
 
     return {
-      applied: false,
-      validation: firstRejectedValidation,
+      applied: true,
+      placedTileCount: 0,
       placementHistory: editorFillInput.placementHistory,
     };
   }
 
   return {
     applied: true,
-    placedTileCount: placedFootprintCount,
+    placedTileCount: placedOriginCount,
     placementHistory: commitPlacementHistory(
       editorFillInput.placementHistory,
-      validatedPlacementHistory.currentState,
+      commitWorkingPlacementSnapshot(workingSnapshot),
     ),
   };
 }
 
-function appendFillPlacementRecord(
-  catalogItem: CatalogItem,
-  placementSnapshot: PlacementSnapshot,
-  addedCrops: PlacementCrop[],
-  addedItems: PlacementItem[],
-): void {
-  if (
-    catalogItem.category === "crop"
-    && !isMultiTileCropCatalogItem(catalogItem)
-  ) {
-    const addedCrop = placementSnapshot.crops.at(-1);
-
-    if (addedCrop === undefined) {
-      throw new Error(
-        `Editor fill expected a crop placement record for category ${describeValue(catalogItem.category)} but none was added.`,
-      );
-    }
-
-    addedCrops.push(addedCrop);
-    return;
+function readUnacceptedFillEvaluation(
+  placementEvaluation: Extract<EditorCursorPlacementEvaluation, { accepted: false }>,
+  selectedCatalogItem: CatalogItem,
+  fillTile: MapTileCoordinates,
+):
+  | Readonly<{
+      kind: "validation";
+      validation: Extract<PlacementValidationResult, { valid: false }>;
+    }>
+  | Readonly<{
+      kind: "invalid-held-item-target";
+      targetReason: "long-table" | "occupied-table";
+    }> {
+  if ("validation" in placementEvaluation) {
+    return { kind: "validation", validation: placementEvaluation.validation };
   }
 
-  const addedItem = placementSnapshot.items.at(-1);
-
-  if (addedItem === undefined) {
-    throw new Error(
-      `Editor fill expected an item placement record for catalog item ${describeValue(catalogItem.id)} but none was added.`,
-    );
+  if (placementEvaluation.reason === "invalid-held-item-target") {
+    return {
+      kind: "invalid-held-item-target",
+      targetReason: placementEvaluation.targetReason,
+    };
   }
 
-  addedItems.push({
-    ...addedItem,
-    instanceId: incrementPlacementItemIdentifier(
-      addedItem.instanceId,
-      addedItems.length,
-    ),
-  });
-}
-
-function createFillPlacementSnapshot(
-  placementSnapshot: PlacementSnapshot,
-  addedCrops: readonly PlacementCrop[],
-  addedItems: readonly PlacementItem[],
-): PlacementSnapshot {
-  return createPersistentPlacementSnapshot({
-    ...placementSnapshot,
-    crops: [...placementSnapshot.crops, ...addedCrops],
-    items: [...placementSnapshot.items, ...addedItems],
-    nextItemId: incrementPlacementItemIdentifier(
-      placementSnapshot.nextItemId,
-      addedItems.length,
-    ),
-  });
-}
-
-function incrementPlacementItemIdentifier(
-  startingIdentifier: number,
-  addedItemCount: number,
-): number {
-  const nextFilledItemId = startingIdentifier + addedItemCount;
-
-  if (!Number.isSafeInteger(nextFilledItemId)) {
-    throw new RangeError(
-      `Editor fill item identifier must remain a safe integer; received startingIdentifier ${describeValue(startingIdentifier)} and addedItemCount ${describeValue(addedItemCount)}.`,
-    );
-  }
-
-  return nextFilledItemId;
+  throw new Error(
+    `Editor fill received unexpected unapplied placement result for catalog item ${describeValue(selectedCatalogItem.id)} at tile ${describeTile(fillTile)}; received reason ${describeValue(placementEvaluation.reason)}.`,
+  );
 }
 
 function createFillTiles(
@@ -306,81 +231,89 @@ function createFillTiles(
   firstTile: MapTileCoordinates,
   secondTile: MapTileCoordinates,
 ): readonly MapTileCoordinates[] {
-  const renderingMetadata = selectedCatalogItem.renderingMetadata;
-  const isCompositeFurniture =
-    selectedCatalogItem.category === "placeable"
-    && renderingMetadata?.kind === "furniture"
-    && renderingMetadata.compositeSprite !== null;
-  const isBedFurniture =
-    selectedCatalogItem.category === "placeable"
-    && renderingMetadata?.kind === "furniture"
-    && renderingMetadata.bedType !== null;
-  const isBuilding = selectedCatalogItem.category === "building";
-  const isSingleTilePlaceable =
-    selectedCatalogItem.category === "placeable"
-    && selectedCatalogItem.tileSize.width === 1
-    && selectedCatalogItem.tileSize.height === 1;
-
-  if (
-    selectedCatalogItem.category !== "building" &&
-    selectedCatalogItem.category !== "crop" &&
-    selectedCatalogItem.category !== "floor" &&
-    selectedCatalogItem.category !== "fence" &&
-    !isCompositeFurniture && !isBedFurniture && !isSingleTilePlaceable
-  ) {
-    throw new Error(
-      `Editor fill does not support catalog category ${describeValue(selectedCatalogItem.category)} for item ${describeValue(selectedCatalogItem.id)}.`,
-    );
-  }
-
   const rectangle = createFillRectangle(firstTile, secondTile);
 
+  // Fences keep the perimeter gesture. Every other stamp steps by its real footprint.
   if (selectedCatalogItem.category === "fence") {
     return createFencePerimeterTiles(rectangle);
   }
 
-  if (
-    isBuilding ||
-    isBedFurniture ||
-    isMultiTileCropCatalogItem(selectedCatalogItem)
-  ) {
-    return createFootprintTiledRectangleOrigins(
-      rectangle,
-      getFillFootprint(selectedCatalogItem, catalogPresentationChoice),
-    );
-  }
-
-  return createRectangleTiles(rectangle);
+  return createFootprintTiledRectangleOrigins(
+    rectangle,
+    getFillFootprint(selectedCatalogItem, catalogPresentationChoice),
+  );
 }
 
-function isBedFillCatalogItem(catalogItem: CatalogItem): boolean {
-  return catalogItem.category === "placeable"
-    && catalogItem.renderingMetadata?.kind === "furniture"
-    && catalogItem.renderingMetadata.bedType !== null;
+function readInteriorDecorApplicationKind(
+  catalogItem: CatalogItem,
+): "wallpaper" | "flooring" | null {
+  const interiorDecorKind = catalogItem.interiorDecorKind;
+
+  if (interiorDecorKind === undefined) {
+    return null;
+  }
+
+  if (interiorDecorKind === "wallpaper" || interiorDecorKind === "flooring") {
+    return interiorDecorKind;
+  }
+
+  throw new TypeError(
+    `Editor fill interiorDecorKind for catalog item ${describeValue(catalogItem.id)} must be "wallpaper", "flooring", or undefined; received ${describeValue(interiorDecorKind)}.`,
+  );
 }
 
 function getFillFootprint(
   catalogItem: CatalogItem,
   catalogPresentationChoice: CatalogPresentationChoice,
-): CatalogItem["tileSize"] {
-  const rotationFootprints =
-    catalogItem.presentationCapabilities?.rotation?.footprints;
-  const fillFootprint = rotationFootprints === undefined
+): CatalogTileSize {
+  const rotationCapability = catalogItem.presentationCapabilities?.rotation;
+  const fillFootprint = rotationCapability === null || rotationCapability === undefined
     ? catalogItem.tileSize
-    : rotationFootprints[catalogPresentationChoice.rotation];
+    : rotationCapability.footprints[catalogPresentationChoice.rotation];
 
   if (fillFootprint === undefined) {
     throw new RangeError(
-      `Editor fill catalog item ${describeValue(catalogItem.id)} has no footprint for rotation ${describeValue(catalogPresentationChoice.rotation)}; received ${describeValue(rotationFootprints)}.`,
+      `Editor fill catalog item ${describeValue(catalogItem.id)} has no footprint for rotation ${describeValue(catalogPresentationChoice.rotation)}; received ${describeValue(rotationCapability?.footprints)}.`,
     );
   }
 
+  assertPositiveFillFootprint(
+    catalogItem.id,
+    catalogPresentationChoice.rotation,
+    fillFootprint,
+  );
   return fillFootprint;
+}
+
+function assertPositiveFillFootprint(
+  catalogItemId: string,
+  rotation: number,
+  footprint: CatalogTileSize,
+): void {
+  if (typeof footprint !== "object" || footprint === null) {
+    throw new TypeError(
+      `Editor fill footprint for catalog item ${describeValue(catalogItemId)} rotation ${describeValue(rotation)} must be a non-null object; received ${describeValue(footprint)}.`,
+    );
+  }
+
+  for (const dimensionName of ["width", "height"] as const) {
+    const dimension = footprint[dimensionName];
+
+    if (
+      typeof dimension !== "number"
+      || !Number.isSafeInteger(dimension)
+      || dimension < 1
+    ) {
+      throw new RangeError(
+        `Editor fill footprint ${dimensionName} for catalog item ${describeValue(catalogItemId)} rotation ${describeValue(rotation)} must be a positive safe integer; received ${describeValue(dimension)}.`,
+      );
+    }
+  }
 }
 
 function createFootprintTiledRectangleOrigins(
   fillRectangle: FillRectangle,
-  footprint: CatalogItem["tileSize"],
+  footprint: CatalogTileSize,
 ): readonly MapTileCoordinates[] {
   const fillTiles: MapTileCoordinates[] = [];
   const lastOriginX = fillRectangle.maximumX - footprint.width + 1;
@@ -414,13 +347,12 @@ function createFillRectangle(
   firstTile: MapTileCoordinates,
   secondTile: MapTileCoordinates,
 ): FillRectangle {
-  const rectangle = {
+  return {
     minimumX: Math.min(firstTile.x, secondTile.x),
     minimumY: Math.min(firstTile.y, secondTile.y),
     maximumX: Math.max(firstTile.x, secondTile.x),
     maximumY: Math.max(firstTile.y, secondTile.y),
   };
-  return rectangle;
 }
 
 function createRectangleTiles(
@@ -521,6 +453,10 @@ function assertNonNullObject(value: unknown, fieldName: string): void {
       `Editor fill ${fieldName} must be a non-null object; received ${describeValue(value)}.`,
     );
   }
+}
+
+function describeTile(tile: MapTileCoordinates): string {
+  return `{ x: ${String(tile.x)}, y: ${String(tile.y)} }`;
 }
 
 function describeValue(value: unknown): string {

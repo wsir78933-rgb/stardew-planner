@@ -21,6 +21,7 @@ type EditorToolbarProperties = Readonly<{
   canUndo: boolean;
   canRedo: boolean;
   locale?: EditorToolbarLocale;
+  isToolDisabled?: (tool: EditorTool) => boolean;
 }>;
 
 type EditorToolbarControl = Readonly<{
@@ -105,11 +106,14 @@ export function EditorToolbar({
   canUndo,
   canRedo,
   locale = "en",
+  isToolDisabled,
 }: EditorToolbarProperties) {
   const editorToolbarCopy = editorToolbarCopyByLocale[locale];
   const renderToolButton = (editorToolbarControl: EditorToolbarControl) => {
     const isSelected = tool === editorToolbarControl.tool;
-    const isAvailable = editorToolAvailability[editorToolbarControl.tool];
+    const isAvailable =
+      editorToolAvailability[editorToolbarControl.tool] &&
+      !isToolDisabled?.(editorToolbarControl.tool);
     const controlLabel = editorToolbarCopy[editorToolbarControl.key];
 
     return (

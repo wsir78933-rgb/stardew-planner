@@ -178,7 +178,7 @@ describe("catalog loader", () => {
         width: 96,
         height: 112,
       },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       renderingMetadata: {
         buildingId: "Building 0",
         kind: "building-multilayer",
@@ -210,7 +210,7 @@ describe("catalog loader", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/tilesheets/craftables.png",
       sprite: { kind: "sprite-index", index: 0 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
     });
     expect(catalog.items).toContainEqual({
       id: "object:0",
@@ -219,7 +219,7 @@ describe("catalog loader", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
       sprite: { kind: "sprite-index", index: 0 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
     });
     expect(catalog.items).toContainEqual({
       id: "floor:0",
