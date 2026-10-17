@@ -100,6 +100,32 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect((articleMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
 });
 
+it("keeps the profit-margin article on its direct route after it leaves the blog index", async () => {
+  const englishParameters = {
+    params: Promise.resolve({ slug: "profit-margin-stardew" }),
+  };
+  const chineseParameters = {
+    params: Promise.resolve({ slug: "profit-margin-stardew" }),
+  };
+  const englishMarkup = renderToStaticMarkup(
+    await EnglishBlogPostPage(englishParameters),
+  );
+  const chineseMarkup = renderToStaticMarkup(
+    await ChineseBlogPostPage(chineseParameters),
+  );
+
+  expect(englishMarkup).toContain('href="/profit-margin-stardew"');
+  expect(englishMarkup).toContain(
+    "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
+  );
+  expect(chineseMarkup).toContain('href="/zh/profit-margin-stardew"');
+  expect(chineseMarkup).toContain(
+    "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
+  );
+  expect((englishMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+  expect((chineseMarkup.match(/<h1/g) ?? [])).toHaveLength(1);
+});
+
 it("renders the new paired article routes with locked metadata and one page-level heading", async () => {
   const englishParameters = {
     params: Promise.resolve({
