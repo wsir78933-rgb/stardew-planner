@@ -141,7 +141,7 @@ describe("expanded catalog items", () => {
     expect(
       furnitureItems.find((catalogItem) => catalogItem.id === "furniture_0")
         ?.allowedTools,
-    ).toEqual(["cursor", "multi-select", "erase"]);
+    ).toEqual(["cursor", "multi-select", "fill", "erase"]);
   });
 
   it("maps verified furniture source rectangles, footprints, and rotation metadata", () => {
@@ -169,7 +169,7 @@ describe("expanded catalog items", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/tilesheets/furniture.png",
       sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 32 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       presentationCapabilities: expect.objectContaining({
         canFlip: false,
         rotation: expect.objectContaining({ count: 4 }),
@@ -201,7 +201,7 @@ describe("expanded catalog items", () => {
       expect.objectContaining({
         id: "furniture_1451",
         tileSize: { width: 3, height: 2 },
-        allowedTools: ["cursor", "multi-select", "erase"],
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
         presentationCapabilities: expect.objectContaining({
           canFlip: false,
           rotation: {
@@ -229,7 +229,7 @@ describe("expanded catalog items", () => {
       tileSize: { width: 2, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/tilesheets/furniture.png",
       sprite: { kind: "source-rect", x: 320, y: 352, width: 32, height: 32 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       presentationCapabilities: expect.objectContaining({
         canFlip: false,
         rotation: expect.objectContaining({ count: 2 }),
@@ -348,7 +348,7 @@ describe("expanded catalog items", () => {
         tileSize: { width: 1, height: 1 },
         textureLocalPath: "/game-assets/1.6.15/tilesheets/fruitTrees.png",
         sprite: { kind: "source-rect", x: 192, y: 0, width: 48, height: 64 },
-        allowedTools: ["cursor", "multi-select", "erase"],
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
         presentationCapabilities: expect.objectContaining({
           canFlip: true,
           variantCycle: { count: 2, family: "tree" },
@@ -366,7 +366,7 @@ describe("expanded catalog items", () => {
         tileSize: { width: 1, height: 1 },
         textureLocalPath: "/game-assets/1.6.15/tilesheets/fruitTrees.png",
         sprite: { kind: "source-rect", x: 192, y: 640, width: 48, height: 64 },
-        allowedTools: ["cursor", "multi-select", "erase"],
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
         presentationCapabilities: expect.objectContaining({
           canFlip: true,
           variantCycle: { count: 2, family: "tree" },
@@ -391,7 +391,7 @@ describe("expanded catalog items", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/terrain/tree1_spring.png",
       sprite: { kind: "source-rect", x: 0, y: 0, width: 48, height: 96 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       presentationCapabilities: expect.objectContaining({
         canFlip: true,
         variantCycle: { count: 2, family: "tree" },

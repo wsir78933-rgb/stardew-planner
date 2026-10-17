@@ -63,7 +63,7 @@ export function createLitBigCraftablePlacementRenderLayers(
 
   const baseLayer = createBaseLayer(placementItem, baseFrame);
 
-  if (placementItem.variant === 1) {
+  if (placementItem.variant === 1 || placementItem.nightLightState === "off") {
     return [baseLayer];
   }
 

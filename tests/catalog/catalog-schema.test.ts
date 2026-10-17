@@ -73,7 +73,7 @@ describe("catalog schema", () => {
       });
     expect(placeableCatalog.items.find((catalogItem) => catalogItem.id === "grass_1"))
       .toMatchObject({
-        allowedTools: ["cursor", "multi-select", "erase"],
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
       });
     expect(catalog.items).toEqual(expect.arrayContaining([
       expect.objectContaining({
@@ -231,7 +231,7 @@ describe("catalog schema", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/tilesheets/furniture.png",
       sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 32 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       presentationCapabilities: expect.objectContaining({
         rotation: expect.objectContaining({ count: 4 }),
       }),
@@ -244,7 +244,7 @@ describe("catalog schema", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/tilesheets/fruitTrees.png",
       sprite: { kind: "source-rect", x: 192, y: 0, width: 48, height: 64 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       presentationCapabilities: expect.objectContaining({
         canFlip: true,
         variantCycle: { count: 2, family: "tree" },
@@ -258,7 +258,7 @@ describe("catalog schema", () => {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: "/game-assets/1.6.15/terrain/tree1_spring.png",
       sprite: { kind: "source-rect", x: 0, y: 0, width: 48, height: 96 },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
       presentationCapabilities: expect.objectContaining({
         canFlip: true,
         variantCycle: { count: 2, family: "tree" },
@@ -414,7 +414,7 @@ describe("catalog schema", () => {
         category: "fence",
         tileSize: { width: 1, height: 1 },
         textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
-        allowedTools: ["cursor", "multi-select", "erase"],
+        allowedTools: ["cursor", "multi-select", "fill", "erase"],
       }));
     expect(
       catalog.items.filter((catalogItem) => catalogItem.placementShadow !== undefined)
@@ -539,7 +539,7 @@ describe("catalog schema", () => {
         width: 32,
         height: 32,
       },
-      allowedTools: ["cursor", "multi-select", "erase"],
+      allowedTools: ["cursor", "multi-select", "fill", "erase"],
     });
     expect(catalog.items.some((item) => item.id === "object:342")).toBe(false);
     expect(catalog.items.some((item) => item.textureLocalPath.includes("Objects_2"))).toBe(false);

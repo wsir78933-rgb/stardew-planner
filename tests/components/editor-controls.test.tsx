@@ -55,11 +55,13 @@ function renderToolbar(
   tool: Parameters<typeof EditorToolbar>[0]["tool"],
   locale: "en" | "zh" = "en",
   wheelZoomEnabled = false,
+  isToolDisabled?: Parameters<typeof EditorToolbar>[0]["isToolDisabled"],
 ): string {
   return renderToStaticMarkup(
     createElement(EditorToolbar, {
       canRedo: false,
       canUndo: false,
+      isToolDisabled,
       locale,
       onRedo: () => undefined,
       onToolChange: () => undefined,
@@ -584,16 +586,16 @@ describe("editor controls", () => {
     const genericToolHoverSelector =
       ".planner-editor-shell .tool-btn:hover:not(:disabled)";
     const selectedMultiSelectSelector =
-      '.planner-editor-shell .tool-btn.multi-select[aria-pressed="true"]';
+      '.planner-editor-shell .editor-toolbar .tool-btn.multi-select[aria-pressed="true"]';
     const genericToolHoverRuleIndex = stylesheet.indexOf(
       `${genericToolHoverSelector} {`,
     );
     const selectedMultiSelectRuleIndex = stylesheet.indexOf(
-      `${selectedMultiSelectSelector} {`,
+      selectedMultiSelectSelector,
     );
     const selectedMultiSelectRuleEnd = stylesheet.indexOf(
       "}",
-      selectedMultiSelectRuleIndex,
+      stylesheet.indexOf("{", selectedMultiSelectRuleIndex),
     );
     const selectedMultiSelectRule = stylesheet.slice(
       selectedMultiSelectRuleIndex,
@@ -605,6 +607,9 @@ describe("editor controls", () => {
     );
     expect(genericToolHoverRuleIndex).toBeGreaterThanOrEqual(0);
     expect(selectedMultiSelectRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
+    expect(selectedMultiSelectRule).toContain(
+      `${selectedMultiSelectSelector}:hover`,
+    );
     expect(selectedMultiSelectRule).toContain(
       "background: rgb(177 58 40 / 15%);",
     );
@@ -619,16 +624,14 @@ describe("editor controls", () => {
     const genericToolHoverSelector =
       ".planner-editor-shell .tool-btn:hover:not(:disabled)";
     const selectedCursorSelector =
-      '.planner-editor-shell .tool-btn.cursor[aria-pressed="true"]';
+      '.planner-editor-shell .editor-toolbar .tool-btn.cursor[aria-pressed="true"]';
     const genericToolHoverRuleIndex = stylesheet.indexOf(
       `${genericToolHoverSelector} {`,
     );
-    const selectedCursorRuleIndex = stylesheet.indexOf(
-      `${selectedCursorSelector} {`,
-    );
+    const selectedCursorRuleIndex = stylesheet.indexOf(selectedCursorSelector);
     const selectedCursorRuleEnd = stylesheet.indexOf(
       "}",
-      selectedCursorRuleIndex,
+      stylesheet.indexOf("{", selectedCursorRuleIndex),
     );
     const selectedCursorRule = stylesheet.slice(
       selectedCursorRuleIndex,
@@ -646,8 +649,46 @@ describe("editor controls", () => {
     );
     expect(genericToolHoverRuleIndex).toBeGreaterThanOrEqual(0);
     expect(selectedCursorRuleIndex).toBeGreaterThan(genericToolHoverRuleIndex);
+    expect(selectedCursorRule).toContain(`${selectedCursorSelector}:hover`);
     expect(selectedCursorRule).toContain("background: rgb(177 58 40 / 15%);");
     expect(selectedCursorRule).toContain("color: #b13a28;");
+  });
+
+  it("disables only requested tools when isToolDisabled is provided and preserves default availability", () => {
+    const defaultToolbarTree = EditorToolbar({
+      canRedo: false,
+      canUndo: false,
+      onRedo: () => undefined,
+      onToolChange: () => undefined,
+      onUndo: () => undefined,
+      onWheelZoomToggle: () => undefined,
+      tool: "cursor",
+      wheelZoomEnabled: false,
+    });
+    expect(requireToolbarButton(defaultToolbarTree, "Select").props.disabled).toBe(false);
+    expect(requireToolbarButton(defaultToolbarTree, "Multi").props.disabled).toBe(false);
+    expect(requireToolbarButton(defaultToolbarTree, "Fill").props.disabled).toBe(false);
+    expect(requireToolbarButton(defaultToolbarTree, "Erase").props.disabled).toBe(false);
+
+    const disabledFillToolbarTree = EditorToolbar({
+      canRedo: false,
+      canUndo: false,
+      isToolDisabled: (tool) => tool === "fill",
+      onRedo: () => undefined,
+      onToolChange: () => undefined,
+      onUndo: () => undefined,
+      onWheelZoomToggle: () => undefined,
+      tool: "cursor",
+      wheelZoomEnabled: false,
+    });
+    expect(requireToolbarButton(disabledFillToolbarTree, "Select").props.disabled).toBe(false);
+    expect(requireToolbarButton(disabledFillToolbarTree, "Multi").props.disabled).toBe(false);
+    expect(requireToolbarButton(disabledFillToolbarTree, "Fill").props.disabled).toBe(true);
+    expect(requireToolbarButton(disabledFillToolbarTree, "Erase").props.disabled).toBe(false);
+
+    const markupWithDisabledFill = renderToolbar("cursor", "en", false, (tool) => tool === "fill");
+    expect(markupWithDisabledFill).toMatch(/<button[^>]*data-editor-tool="fill"[^>]*disabled/);
+    expect(markupWithDisabledFill).not.toMatch(/<button[^>]*data-editor-tool="cursor"[^>]*disabled/);
   });
 });
 

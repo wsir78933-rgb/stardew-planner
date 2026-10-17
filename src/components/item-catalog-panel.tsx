@@ -64,6 +64,7 @@ import {
   loadBuildingThumbnailImages,
   useBuildingThumbnailLoadEligibility,
 } from "./building-thumbnail-visibility";
+import { CatalogLitThumbnail } from "./catalog-lit-thumbnail";
 
 type ItemCatalogPanelProperties = Readonly<{
   catalogPresentationChoicesByItemId: ReadonlyMap<
@@ -818,7 +819,7 @@ export function CatalogItemGrid({
     const unavailableReason = availability === "available"
       ? null
       : copy.sceneAvailabilityReason(availability);
-    const accessibleSelectionLabel = unavailableReason === null
+    const selectionLabel = unavailableReason === null
       ? copy.selectItem(
           displayName,
           catalogItem.tileSize.width,
@@ -829,9 +830,19 @@ export function CatalogItemGrid({
           catalogItem.tileSize.width,
           catalogItem.tileSize.height,
         )}. ${unavailableReason}`;
-    const itemTitle = unavailableReason === null
+    const itemNameTitle = unavailableReason === null
       ? displayName
       : `${displayName}. ${unavailableReason}`;
+    const litVariantLabel = readLitBigCraftableVariantLabel(
+      catalogItem,
+      presentationChoice,
+      copy,
+    );
+    const accessibleSelectionLabel = appendLitVariantLabel(
+      selectionLabel,
+      litVariantLabel,
+    );
+    const itemTitle = appendLitVariantLabel(itemNameTitle, litVariantLabel);
 
     return (
       <div
@@ -847,7 +858,16 @@ export function CatalogItemGrid({
           }`}
           data-scene-availability={availability}
           data-selected={isSelectedCatalogItem}
-          onClick={() => onCatalogItemSelect(catalogItem, presentationChoice)}
+          onClick={() =>
+            onCatalogItemSelect(
+              catalogItem,
+              resolveCatalogItemCardSelectionChoice(
+                catalogItem,
+                presentationChoice,
+                isSelectedCatalogItem,
+              ),
+            )
+          }
           title={itemTitle}
           type="button"
         >
@@ -868,6 +888,19 @@ export function CatalogItemGrid({
               <InteriorDecorCatalogThumbnail
                 catalogItem={catalogItem}
                 shouldLoadThumbnail={shouldLoadThumbnails}
+              />
+            ) : catalogItem.renderingMetadata?.kind === "lit-big-craftable" ? (
+              <CatalogLitThumbnail
+                bodyStyle={getCatalogItemThumbnailStyle(
+                  catalogItem,
+                  presentationChoice,
+                  shouldLoadThumbnails,
+                  viewMode,
+                )}
+                catalogItem={catalogItem}
+                presentationChoice={presentationChoice}
+                shouldLoadThumbnail={shouldLoadThumbnails}
+                thumbnailClassName="item-catalog-panel__thumbnail"
               />
             ) : (
               <span
@@ -1474,6 +1507,89 @@ function drawBuildingThumbnailLayer(
   context.globalAlpha = layer.opacity ?? 1;
   context.drawImage(tintedLayerCanvas, drawCommand.destinationX, drawCommand.destinationY);
   context.globalAlpha = 1;
+}
+
+export function resolveCatalogItemCardSelectionChoice(
+  catalogItem: CatalogItem,
+  presentationChoice: CatalogPresentationChoice,
+  isSelectedCatalogItem: boolean,
+): CatalogPresentationChoice {
+  const validatedChoice = validateCatalogItemPresentationChoice(
+    catalogItem,
+    presentationChoice,
+  );
+  if (typeof isSelectedCatalogItem !== "boolean") {
+    throw new TypeError(
+      `Catalog item card selection flag for ${JSON.stringify(catalogItem.id)} must be a boolean; received ${JSON.stringify(isSelectedCatalogItem)}.`,
+    );
+  }
+  if (!isSelectedCatalogItem || !isLitBigCraftableCatalogItem(catalogItem)) {
+    return validatedChoice;
+  }
+
+  const presentationCapabilities = catalogItem.presentationCapabilities;
+  if (
+    presentationCapabilities === undefined
+    || presentationCapabilities.variantCycle?.count !== 2
+  ) {
+    throw new Error(
+      `Lit BigCraftable catalog item ${JSON.stringify(catalogItem.id)} requires a 2-step variant cycle; received ${JSON.stringify(presentationCapabilities)}.`,
+    );
+  }
+
+  return getNextSelectedCatalogPresentationChoice(
+    catalogItem.id,
+    presentationCapabilities,
+    validatedChoice,
+  );
+}
+
+function readLitBigCraftableVariantLabel(
+  catalogItem: CatalogItem,
+  presentationChoice: CatalogPresentationChoice,
+  copy: CatalogPanelCopy,
+): string | null {
+  if (!isLitBigCraftableCatalogItem(catalogItem)) {
+    return null;
+  }
+
+  const presentationCapabilities = catalogItem.presentationCapabilities;
+  if (
+    presentationCapabilities === undefined
+    || presentationCapabilities.variantCycle?.count !== 2
+  ) {
+    throw new Error(
+      `Lit BigCraftable catalog item ${JSON.stringify(catalogItem.id)} requires a 2-step variant cycle; received ${JSON.stringify(presentationCapabilities)}.`,
+    );
+  }
+
+  const visibleVariant = presentationCapabilities.visibleVariants.find(
+    (variant) => variant.value === presentationChoice.variant,
+  );
+  if (visibleVariant === undefined) {
+    throw new Error(
+      `Lit BigCraftable catalog item ${JSON.stringify(catalogItem.id)} has no visible variant ${String(presentationChoice.variant)}; received ${JSON.stringify(presentationCapabilities.visibleVariants)}.`,
+    );
+  }
+
+  const localizedLabel = copy.variantLabels[visibleVariant.label];
+  if (localizedLabel === undefined) {
+    throw new Error(
+      `Lit BigCraftable catalog item ${JSON.stringify(catalogItem.id)} variant label ${JSON.stringify(visibleVariant.label)} has no catalog copy.`,
+    );
+  }
+  return localizedLabel;
+}
+
+function appendLitVariantLabel(
+  label: string,
+  litVariantLabel: string | null,
+): string {
+  return litVariantLabel === null ? label : `${label}, ${litVariantLabel}`;
+}
+
+function isLitBigCraftableCatalogItem(catalogItem: CatalogItem): boolean {
+  return catalogItem.renderingMetadata?.kind === "lit-big-craftable";
 }
 
 export function getNextCatalogItemControlChoice(

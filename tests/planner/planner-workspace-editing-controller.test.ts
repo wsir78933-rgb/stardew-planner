@@ -4,6 +4,10 @@ import {
   applyPlannerWorkspaceMapTileRectangle,
   applyPlannerWorkspacePlacementSelection,
   duplicatePlannerWorkspaceSelectionAtTile,
+  getPlannerWorkspaceCatalogItemSelectionTool,
+  getPlannerWorkspaceToolSelection,
+  isPlannerWorkspaceToolAvailable,
+  isPlannerWorkspaceToolDisabled,
   previewPlannerWorkspaceSelectionAtTile,
   previewPlannerWorkspaceFillRectangle,
   previewPlannerWorkspaceEraseAtTile,
@@ -19,6 +23,30 @@ function createFloor(instanceId: number, x: number, y: number): PlacementItem {
     footprint: { width: 1, height: 1 }, variant: 0, tintColor: "#ffffff",
     locked: false, isRug: false, isGrass: false, isTable: false,
     isLongTable: false, flipped: false, bedType: null,
+  };
+}
+
+function createLongTable(instanceId: number, x: number, y: number): PlacementItem {
+  return {
+    instanceId, x, y, itemId: "furniture_200", layer: "item", rotation: 0,
+    footprint: { width: 2, height: 1 }, variant: 0, tintColor: "#ffffff",
+    locked: false, isRug: false, isGrass: false, isTable: true,
+    isLongTable: true, flipped: false, bedType: null,
+  };
+}
+
+function createOccupiedTable(instanceId: number, x: number, y: number): PlacementItem {
+  return {
+    instanceId, x, y, itemId: "furniture_1391", layer: "item", rotation: 0,
+    footprint: { width: 1, height: 1 }, variant: 0, tintColor: "#ffffff",
+    locked: false, isRug: false, isGrass: false, isTable: true,
+    isLongTable: false, flipped: false, bedType: null,
+    heldItem: {
+      instanceId: instanceId + 1, x, y, itemId: "furniture_0", layer: "item", rotation: 0,
+      footprint: { width: 1, height: 1 }, variant: 0, tintColor: "#ffffff",
+      locked: false, isRug: false, isGrass: false, isTable: false,
+      isLongTable: false, flipped: false, bedType: null,
+    },
   };
 }
 
@@ -79,6 +107,81 @@ describe("planner workspace editing parity", () => {
     });
     expect(fillTransition.placementHistory).toBe(copyInput.placementHistory);
     expect(fillTransition.selectedPlacementKeys).toEqual(copyInput.selectedPlacementKeys);
+  });
+
+  it("previews null and preserves history, selection, and fill tool when filling over invalid held-item table targets", () => {
+    const copyInput = createCopyInput();
+    const tableHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createLongTable(10, 1, 1), createOccupiedTable(20, 4, 4)],
+      nextItemId: 30,
+    });
+    const selectedChairItem: CatalogItem = {
+      allowedTools: ["cursor", "fill"],
+      category: "placeable",
+      id: "furniture_0",
+      name: "Oak Chair",
+      sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 32 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/furniture.png",
+      tileSize: { width: 1, height: 1 },
+      renderingMetadata: {
+        kind: "furniture",
+        furnitureType: "chair",
+        indoors: true,
+        outdoors: true,
+        rotationSprites: undefined,
+        rotationTileSizes: undefined,
+        wallMounted: false,
+        isRug: false,
+        isTable: false,
+        isLongTable: false,
+        bedType: null,
+        compositeSprite: null,
+      },
+    };
+
+    const longTableFillInput = {
+      ...copyInput,
+      placementHistory: tableHistory,
+      selectedCatalogItem: selectedChairItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      tool: "fill" as const,
+      firstTile: { x: 1, y: 1 },
+      secondTile: { x: 2, y: 1 },
+    };
+
+    expect(previewPlannerWorkspaceFillRectangle(longTableFillInput)).toBeNull();
+
+    const longTableTransition = applyPlannerWorkspaceMapTileRectangle(longTableFillInput);
+    expect(longTableTransition.placementHistory).toBe(tableHistory);
+    expect(longTableTransition.placementHistory.currentState).toBe(tableHistory.currentState);
+    expect(longTableTransition.placementHistory.undoStates).toEqual([]);
+    expect(longTableTransition.selectedPlacementKeys).toEqual(copyInput.selectedPlacementKeys);
+
+    expect(isPlannerWorkspaceToolDisabled("fill", selectedChairItem)).toBe(false);
+    expect(isPlannerWorkspaceToolAvailable("fill", selectedChairItem)).toBe(true);
+    expect(getPlannerWorkspaceToolSelection("fill", selectedChairItem)).toEqual({
+      selectedCatalogItem: selectedChairItem,
+      selectedCatalogItemId: "furniture_0",
+    });
+
+    const occupiedTableFillInput = {
+      ...copyInput,
+      placementHistory: tableHistory,
+      selectedCatalogItem: selectedChairItem,
+      catalogPresentationChoice: { flipped: false, rotation: 0, variant: 0 },
+      tool: "fill" as const,
+      firstTile: { x: 4, y: 4 },
+      secondTile: { x: 4, y: 4 },
+    };
+
+    expect(previewPlannerWorkspaceFillRectangle(occupiedTableFillInput)).toBeNull();
+
+    const occupiedTableTransition = applyPlannerWorkspaceMapTileRectangle(occupiedTableFillInput);
+    expect(occupiedTableTransition.placementHistory).toBe(tableHistory);
+    expect(occupiedTableTransition.placementHistory.currentState).toBe(tableHistory.currentState);
+    expect(occupiedTableTransition.placementHistory.undoStates).toEqual([]);
+    expect(occupiedTableTransition.selectedPlacementKeys).toEqual(copyInput.selectedPlacementKeys);
   });
 
   it("previews eraser hover and rectangle targets without changing selection or history", () => {
@@ -217,5 +320,131 @@ describe("planner workspace editing parity", () => {
       placementHistory: createCopyInput().placementHistory,
       placementSelectionKeys: [], toggleSelection: "yes" as unknown as boolean,
     })).toThrow('toggleSelection must be a boolean; received "yes"');
+  });
+
+  it("coordinates tool selection and allowedTools filtering between cursor, fill, and empty items", () => {
+    const supportedFloorItem: CatalogItem = {
+      allowedTools: ["cursor", "fill"],
+      category: "floor",
+      id: "floor:1",
+      name: "Wood Floor",
+      sprite: { kind: "sprite-index", index: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/flooring.png",
+      tileSize: { width: 1, height: 1 },
+    };
+    const unsupportedDecorItem: CatalogItem = {
+      allowedTools: ["cursor"],
+      category: "decor",
+      id: "decor:1",
+      name: "Wallpaper",
+      sprite: { kind: "sprite-index", index: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/walls_and_floors.png",
+      tileSize: { width: 1, height: 1 },
+    };
+
+    expect(getPlannerWorkspaceToolSelection("cursor", supportedFloorItem)).toEqual({
+      selectedCatalogItem: null,
+      selectedCatalogItemId: null,
+    });
+    expect(getPlannerWorkspaceToolSelection("cursor", unsupportedDecorItem)).toEqual({
+      selectedCatalogItem: null,
+      selectedCatalogItemId: null,
+    });
+    expect(getPlannerWorkspaceToolSelection("fill", supportedFloorItem)).toEqual({
+      selectedCatalogItem: supportedFloorItem,
+      selectedCatalogItemId: "floor:1",
+    });
+    expect(getPlannerWorkspaceToolSelection("fill", unsupportedDecorItem)).toEqual({
+      selectedCatalogItem: null,
+      selectedCatalogItemId: null,
+    });
+    expect(getPlannerWorkspaceToolSelection("fill", null)).toEqual({
+      selectedCatalogItem: null,
+      selectedCatalogItemId: null,
+    });
+    expect(getPlannerWorkspaceToolSelection("multi-select", supportedFloorItem)).toEqual({
+      selectedCatalogItem: supportedFloorItem,
+      selectedCatalogItemId: "floor:1",
+    });
+    expect(getPlannerWorkspaceToolSelection("erase", supportedFloorItem)).toEqual({
+      selectedCatalogItem: supportedFloorItem,
+      selectedCatalogItemId: "floor:1",
+    });
+
+    expect(() => getPlannerWorkspaceToolSelection("invalid-tool" as never, supportedFloorItem)).toThrow(
+      'Planner workspace editing tool selection must be null or one of cursor, multi-select, fill, erase; received "invalid-tool".',
+    );
+  });
+
+  it("reports tool availability and disabled status for pre-selection, supported items, and unsupported items", () => {
+    const supportedCropItem: CatalogItem = {
+      allowedTools: ["cursor", "fill"],
+      category: "crop",
+      id: "crop:parsnip",
+      name: "Parsnip",
+      sprite: { kind: "sprite-index", index: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/crops.png",
+      tileSize: { width: 1, height: 1 },
+    };
+    const unsupportedItem: CatalogItem = {
+      allowedTools: ["cursor"],
+      category: "decor",
+      id: "decor:pattern",
+      name: "Pattern Decor",
+      sprite: { kind: "sprite-index", index: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/walls_and_floors.png",
+      tileSize: { width: 1, height: 1 },
+    };
+
+    expect(isPlannerWorkspaceToolDisabled("fill", null)).toBe(false);
+    expect(isPlannerWorkspaceToolAvailable("fill", null)).toBe(true);
+
+    expect(isPlannerWorkspaceToolDisabled("fill", supportedCropItem)).toBe(false);
+    expect(isPlannerWorkspaceToolAvailable("fill", supportedCropItem)).toBe(true);
+
+    expect(isPlannerWorkspaceToolDisabled("fill", unsupportedItem)).toBe(true);
+    expect(isPlannerWorkspaceToolAvailable("fill", unsupportedItem)).toBe(false);
+
+    expect(isPlannerWorkspaceToolDisabled("cursor", unsupportedItem)).toBe(false);
+    expect(isPlannerWorkspaceToolAvailable("cursor", unsupportedItem)).toBe(true);
+
+    expect(isPlannerWorkspaceToolDisabled("multi-select", unsupportedItem)).toBe(false);
+    expect(isPlannerWorkspaceToolAvailable("multi-select", unsupportedItem)).toBe(true);
+
+    expect(isPlannerWorkspaceToolDisabled("erase", unsupportedItem)).toBe(false);
+    expect(isPlannerWorkspaceToolAvailable("erase", unsupportedItem)).toBe(true);
+
+    expect(() => isPlannerWorkspaceToolDisabled("bad" as never, unsupportedItem)).toThrow(
+      'Planner workspace editing tool selection must be null or one of cursor, multi-select, fill, erase; received "bad".',
+    );
+  });
+
+  it("resolves catalog item selection tool according to existing tool and item capabilities", () => {
+    const supportedBuildingItem: CatalogItem = {
+      allowedTools: ["cursor", "fill"],
+      category: "building",
+      id: "building:coop",
+      name: "Coop",
+      sprite: { kind: "sprite-index", index: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/buildings.png",
+      tileSize: { width: 6, height: 3 },
+    };
+    const unsupportedDecorItem: CatalogItem = {
+      allowedTools: ["cursor"],
+      category: "decor",
+      id: "decor:rug",
+      name: "Rug Decor",
+      sprite: { kind: "sprite-index", index: 0 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/furniture.png",
+      tileSize: { width: 2, height: 2 },
+    };
+
+    expect(getPlannerWorkspaceCatalogItemSelectionTool("fill", supportedBuildingItem)).toBe("fill");
+    expect(getPlannerWorkspaceCatalogItemSelectionTool("fill", unsupportedDecorItem)).toBe("cursor");
+    expect(getPlannerWorkspaceCatalogItemSelectionTool("cursor", supportedBuildingItem)).toBe("cursor");
+    expect(getPlannerWorkspaceCatalogItemSelectionTool("cursor", unsupportedDecorItem)).toBe("cursor");
+    expect(getPlannerWorkspaceCatalogItemSelectionTool("multi-select", supportedBuildingItem)).toBe("cursor");
+    expect(getPlannerWorkspaceCatalogItemSelectionTool("erase", supportedBuildingItem)).toBe("cursor");
+    expect(getPlannerWorkspaceCatalogItemSelectionTool(null, supportedBuildingItem)).toBe("cursor");
   });
 });

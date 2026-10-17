@@ -9,6 +9,7 @@ import {
   getFloorCatalogPlacementRequirement,
   validateCatalogItemPresentationChoice,
 } from "../catalog";
+import { isBushCatalogItemId } from "../catalog/bushes";
 import { isResourceClumpCatalogItemId } from "../catalog/resource-clumps";
 import {
   getCatalogItemPlacementRequirement,
@@ -91,6 +92,37 @@ export type EditorCursorPlacementPreviewResult =
       category: "placeable";
     }>;
 
+export type EditorCursorPlacementEvaluationInput = EditorCursorPlacementPreviewInput &
+  Readonly<{
+    randomFractionSource?: () => number;
+    resolvedCompositeVariant?: number;
+  }>;
+
+export type EditorCursorPlacementEvaluation =
+  | Readonly<{
+      accepted: true;
+      action: PlacementSnapshotAction;
+      validation: Extract<PlacementValidationResult, { valid: true }>;
+    }>
+  | Readonly<{
+      accepted: false;
+      validation: Extract<PlacementValidationResult, { valid: false }>;
+    }>
+  | Readonly<{
+      accepted: false;
+      reason: "no-selected-catalog-item";
+    }>
+  | Readonly<{
+      accepted: false;
+      reason: "unsupported-catalog-category";
+      category: "placeable";
+    }>
+  | Readonly<{
+      accepted: false;
+      reason: "invalid-held-item-target";
+      targetReason: "long-table" | "occupied-table";
+    }>;
+
 export type EditorCursorPlacementResult =
   | Readonly<{
       applied: true;
@@ -152,10 +184,9 @@ export function applyEditorCursorPlacement(
   const placementResolution = resolveEditorCursorPlacement({
     ...editorCursorPlacementInput,
     placementSnapshot: placementHistory.currentState,
-    randomFractionSource:
-      editorCursorPlacementInput.resolvedCompositeVariant === undefined
-        ? editorCursorPlacementInput.randomFractionSource ?? Math.random
-        : editorCursorPlacementInput.randomFractionSource,
+    randomFractionSource: readCursorPlacementRandomFractionSource(
+      editorCursorPlacementInput,
+    ),
   });
 
   if (placementResolution.kind === "no-selected-catalog-item") {
@@ -199,6 +230,68 @@ export function applyEditorCursorPlacement(
       nextPlacementSnapshot,
     ),
   };
+}
+
+export function evaluateEditorCursorPlacement(
+  editorCursorPlacementEvaluationInput: EditorCursorPlacementEvaluationInput,
+): EditorCursorPlacementEvaluation {
+  assertEditorCursorPlacementEvaluationInput(editorCursorPlacementEvaluationInput);
+
+  return toEditorCursorPlacementEvaluation(
+    resolveEditorCursorPlacement({
+      ...editorCursorPlacementEvaluationInput,
+      randomFractionSource: readCursorPlacementRandomFractionSource(
+        editorCursorPlacementEvaluationInput,
+      ),
+    }),
+  );
+}
+
+function toEditorCursorPlacementEvaluation(
+  placementResolution: EditorCursorPlacementResolution,
+): EditorCursorPlacementEvaluation {
+  switch (placementResolution.kind) {
+    case "no-selected-catalog-item":
+      return { accepted: false, reason: "no-selected-catalog-item" };
+    case "unsupported-catalog-category":
+      return {
+        accepted: false,
+        reason: "unsupported-catalog-category",
+        category: placementResolution.category,
+      };
+    case "invalid-held-item-target":
+      return {
+        accepted: false,
+        reason: "invalid-held-item-target",
+        targetReason: placementResolution.targetReason,
+      };
+    case "resolved":
+      if (!placementResolution.validation.valid) {
+        return {
+          accepted: false,
+          validation: placementResolution.validation,
+        };
+      }
+
+      return {
+        accepted: true,
+        action: placementResolution.action,
+        validation: placementResolution.validation,
+      };
+  }
+}
+
+function readCursorPlacementRandomFractionSource(
+  editorCursorPlacementInput: Readonly<{
+    randomFractionSource?: () => number;
+    resolvedCompositeVariant?: number;
+  }>,
+): (() => number) | undefined {
+  if (editorCursorPlacementInput.resolvedCompositeVariant !== undefined) {
+    return editorCursorPlacementInput.randomFractionSource;
+  }
+
+  return editorCursorPlacementInput.randomFractionSource ?? Math.random;
 }
 
 export function evaluateEditorCursorPlacementPreview(
@@ -694,6 +787,7 @@ function assertPlaceableCatalogItemId(catalogItem: CatalogItem): void {
     "furniture_",
     "fruittree_",
     "wildtree_",
+    "bush:",
   ];
 
   if (
@@ -705,7 +799,13 @@ function assertPlaceableCatalogItemId(catalogItem: CatalogItem): void {
     )
   ) {
     throw new TypeError(
-      `Editor placement placeable catalog ID must match an approved object, big-craftable, furniture_, fruittree_, or wildtree_ identifier; received ${describeValue(catalogItem.id)}.`,
+      `Editor placement placeable catalog ID must match an approved object, big-craftable, furniture_, fruittree_, wildtree_, or bush: identifier; received ${describeValue(catalogItem.id)}.`,
+    );
+  }
+
+  if (catalogItem.id.startsWith("bush:") && !isBushCatalogItemId(catalogItem.id)) {
+    throw new TypeError(
+      `Editor placement bush catalog ID must be one of "bush:small", "bush:medium", or "bush:large"; received ${describeValue(catalogItem.id)}.`,
     );
   }
 }
@@ -803,6 +903,50 @@ function assertEditorCursorPlacementInput(
   } else if (editorCursorPlacementInput.catalogPresentationChoice !== null) {
     throw new TypeError(
       `Editor placement catalogPresentationChoice must be null without a selected catalog item; received ${describeValue(editorCursorPlacementInput.catalogPresentationChoice)}.`,
+    );
+  }
+}
+
+function assertEditorCursorPlacementEvaluationInput(
+  editorCursorPlacementEvaluationInput: EditorCursorPlacementEvaluationInput,
+): void {
+  assertNonNullObject(editorCursorPlacementEvaluationInput, "input");
+  assertMapTileCoordinates(editorCursorPlacementEvaluationInput.cursorTile);
+
+  if (
+    editorCursorPlacementEvaluationInput.freePlacement !== undefined
+    && typeof editorCursorPlacementEvaluationInput.freePlacement !== "boolean"
+  ) {
+    throw new TypeError(
+      `Editor placement freePlacement must be a boolean or undefined; received ${describeValue(editorCursorPlacementEvaluationInput.freePlacement)}.`,
+    );
+  }
+
+  if (
+    editorCursorPlacementEvaluationInput.randomFractionSource !== undefined
+    && typeof editorCursorPlacementEvaluationInput.randomFractionSource !== "function"
+  ) {
+    throw new TypeError(
+      `Editor placement randomFractionSource must be a function or undefined; received ${describeValue(editorCursorPlacementEvaluationInput.randomFractionSource)}.`,
+    );
+  }
+
+  createPersistentPlacementSnapshot(
+    editorCursorPlacementEvaluationInput.placementSnapshot,
+  );
+
+  if (editorCursorPlacementEvaluationInput.selectedCatalogItem !== null) {
+    assertCatalogItem(editorCursorPlacementEvaluationInput.selectedCatalogItem);
+    validateCatalogItemPresentationChoice(
+      editorCursorPlacementEvaluationInput.selectedCatalogItem,
+      requireCatalogPresentationChoice(editorCursorPlacementEvaluationInput),
+    );
+    return;
+  }
+
+  if (editorCursorPlacementEvaluationInput.catalogPresentationChoice !== null) {
+    throw new TypeError(
+      `Editor placement catalogPresentationChoice must be null without a selected catalog item; received ${describeValue(editorCursorPlacementEvaluationInput.catalogPresentationChoice)}.`,
     );
   }
 }

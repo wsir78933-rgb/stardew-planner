@@ -53,6 +53,7 @@ export function createPlannerWorkspaceXRayKeyboardHandler(
         activeXRayTrigger === requestedTrigger &&
         isPlannerWorkspaceKeyboardEnabled(options) &&
         !isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target) &&
+        !(requestedTrigger === "space" && isNativeButtonKeyboardTarget(keyboardEvent.target)) &&
         isValidPlannerWorkspaceXRayTrigger(keyboardEvent, requestedTrigger)
       ) {
         keyboardEvent.preventDefault();
@@ -64,6 +65,7 @@ export function createPlannerWorkspaceXRayKeyboardHandler(
       activeXRayTrigger !== null ||
       !isPlannerWorkspaceKeyboardEnabled(options) ||
       isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target) ||
+      (requestedTrigger === "space" && isNativeButtonKeyboardTarget(keyboardEvent.target)) ||
       !isValidPlannerWorkspaceXRayTrigger(keyboardEvent, requestedTrigger)
     ) {
       return;
@@ -82,7 +84,8 @@ export function createPlannerWorkspaceXRayKeyboardHandler(
 
     if (
       releasedTrigger === "space" &&
-      !isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target)
+      !isPlannerWorkspaceKeyboardTargetProtected(keyboardEvent.target) &&
+      !isNativeButtonKeyboardTarget(keyboardEvent.target)
     ) {
       keyboardEvent.preventDefault();
     }
@@ -197,6 +200,31 @@ function isValidPlannerWorkspaceXRayTrigger(
 
 function isSpaceKey(key: string): boolean {
   return key === " " || key === "Spacebar";
+}
+
+function isNativeButtonKeyboardTarget(eventTarget: EventTarget | null): boolean {
+  if (typeof eventTarget !== "object" || eventTarget === null) {
+    return false;
+  }
+
+  const keyboardTarget = eventTarget as Readonly<{
+    closest?: (selector: string) => unknown;
+    tagName?: unknown;
+  }>;
+
+  if (
+    typeof keyboardTarget.tagName === "string" &&
+    keyboardTarget.tagName.toUpperCase() === "BUTTON"
+  ) {
+    return true;
+  }
+
+  if (typeof keyboardTarget.closest !== "function") {
+    return false;
+  }
+
+  const buttonTarget = keyboardTarget.closest("button");
+  return buttonTarget !== null && buttonTarget !== undefined;
 }
 
 function assertKeyboardListenerPort(

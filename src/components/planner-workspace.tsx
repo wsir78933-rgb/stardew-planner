@@ -49,6 +49,7 @@ import {
   previewPlannerWorkspaceSelectionAtTile,
   getPlannerWorkspaceCatalogItemSelectionTool,
   getPlannerWorkspaceToolSelection,
+  isPlannerWorkspaceToolDisabled,
   movePlannerWorkspaceSelection,
   cyclePlannerWorkspaceSelectedAppearance,
   setPlannerWorkspaceSelectedBuildingPaint,
@@ -137,7 +138,10 @@ import {
 } from "./planner-modal-page-scroll-lock";
 import { EditorToolbar } from "./editor-toolbar";
 import { ItemCatalogPanel } from "./item-catalog-panel";
-import { CatalogPlacementControls } from "./catalog-placement-controls";
+import {
+  CatalogPlacementControls,
+  getCatalogPlacementMode,
+} from "./catalog-placement-controls";
 import { PlannerGameSaveImportResultLoader } from "./planner-game-save-import-result-loader";
 import { PlannerSaveModalLoader } from "./planner-save-modal-loader";
 import {
@@ -1189,6 +1193,12 @@ function PreparedPlannerWorkspaceContent({
         locale={editorLocale}
         canRedo={plannerWorkspaceState.placementHistory.redoStates.length > 0}
         canUndo={plannerWorkspaceState.placementHistory.undoStates.length > 0}
+        isToolDisabled={(tool) =>
+          isPlannerWorkspaceToolDisabled(
+            tool,
+            selectedCatalogItem?.catalogItem ?? null,
+          )
+        }
         onWheelZoomToggle={handleZoomControlClick}
         onRedo={() =>
           plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
@@ -1298,7 +1308,7 @@ function PreparedPlannerWorkspaceContent({
           <CatalogPlacementControls
             catalogItem={selectedCatalogItem?.catalogItem ?? null}
             presentationChoice={selectedCatalogItem?.presentationChoice ?? null}
-            isFilling={plannerWorkspaceState.tool === "fill"}
+            placementMode={getCatalogPlacementMode(plannerWorkspaceState.tool)}
             locale={locale}
             onCancel={clearSelectedCatalogItem}
             onCyclePendingChoice={cyclePendingCatalogChoice}
@@ -1688,9 +1698,17 @@ function useWorkspaceCatalogControls(
   );
   const handleToolChange = useCallback(
     (tool: Parameters<typeof EditorToolbar>[0]["tool"]) => {
+      const currentCatalogItem =
+        catalogChoiceState.selectedCatalogItem?.catalogItem ?? null;
+      if (
+        tool !== null &&
+        isPlannerWorkspaceToolDisabled(tool, currentCatalogItem)
+      ) {
+        return;
+      }
       const toolSelection = getPlannerWorkspaceToolSelection(
         tool,
-        catalogChoiceState.selectedCatalogItem?.catalogItem ?? null,
+        currentCatalogItem,
       );
       if (toolSelection.selectedCatalogItem === null) {
         setCatalogChoiceState(clearWorkspaceCatalogSelection);

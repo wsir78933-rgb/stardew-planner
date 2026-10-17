@@ -11,6 +11,7 @@ import {
   getCatalogItemsForPanel,
   getCatalogItemThumbnailStyle,
   getNextCatalogItemControlChoice,
+  resolveCatalogItemCardSelectionChoice,
   getNextCatalogCategory,
   ItemCatalogPanel,
   loadFullCatalogPanelState,
@@ -27,6 +28,7 @@ import {
   createBuildingCatalogFromDataset,
   createSeasonalPlaceableCatalogProperties,
   getCatalogSidebarFilters,
+  getLockedLitBigCraftableRenderingMetadata,
 } from "../../src/catalog";
 import { createBushCatalogItems } from "../../src/catalog/bushes";
 import { resolvePlannerTextureFrame } from "../../src/rendering/planner-texture-frame-resolution";
@@ -1417,7 +1419,147 @@ describe("item catalog panel", () => {
       "rotation",
     )).toThrow(/object:390.*rotation/s);
   });
+
+  it("selects a lit card before toggling and leaves items without that capability unchanged", () => {
+    const campfire = createLitBigCraftableCard("146");
+    const torch = createPlainCatalogItem("object:93", "Torch");
+    const jungleTorch = createPlainCatalogItem("furniture_2331", "Jungle Torch");
+    const litChoice = { flipped: false, rotation: 0, variant: 0 };
+    const unlitChoice = { flipped: false, rotation: 0, variant: 1 };
+
+    expect(resolveCatalogItemCardSelectionChoice(campfire, litChoice, false)).toEqual(litChoice);
+    expect(resolveCatalogItemCardSelectionChoice(campfire, litChoice, true)).toEqual(unlitChoice);
+    expect(resolveCatalogItemCardSelectionChoice(campfire, unlitChoice, true)).toEqual(litChoice);
+    expect(resolveCatalogItemCardSelectionChoice(campfire, unlitChoice, false)).toEqual(unlitChoice);
+    expect(resolveCatalogItemCardSelectionChoice(torch, litChoice, true)).toEqual(litChoice);
+    expect(resolveCatalogItemCardSelectionChoice(jungleTorch, litChoice, true)).toEqual(litChoice);
+    expect(() => resolveCatalogItemCardSelectionChoice(
+      { ...campfire, presentationCapabilities: undefined },
+      litChoice,
+      true,
+    )).toThrow(/big-craftable:146.*2-step variant cycle/);
+  });
+
+  it("draws the current lit or unlit flame on the card without a visible state badge", () => {
+    const campfire = createLitBigCraftableCard("146");
+    const carvedBrazier = createLitBigCraftableCard("148");
+    const torch = createPlainCatalogItem("object:93", "Torch");
+    const litMarkup = renderCatalogCards([campfire, carvedBrazier, torch], new Map());
+    const unlitMarkup = renderCatalogCards(
+      [campfire],
+      new Map([[campfire.id, { flipped: false, rotation: 0, variant: 1 }]]),
+    );
+    const listMarkup = renderCatalogCards(
+      [campfire],
+      new Map(),
+      "list",
+    );
+    const unloadedMarkup = renderCatalogCards(
+      [campfire],
+      new Map(),
+      "grid",
+      false,
+    );
+    const chineseMarkup = renderToStaticMarkup(
+      createElement(CatalogItemGrid, {
+        catalogItems: [carvedBrazier],
+        catalogPresentationChoicesByItemId: new Map(),
+        locale: "zh-CN",
+        onCatalogItemSelect: () => undefined,
+        selectedCatalogItemId: null,
+      }),
+    );
+
+    expect(countLitFlameLayers(litMarkup)).toBe(4);
+    expect(countLitFlameLayers(unlitMarkup)).toBe(0);
+    expect(unlitMarkup).toContain("catalog-lit-thumbnail__body");
+    expect(litMarkup).toContain('title="Campfire, Lit"');
+    expect(litMarkup).toContain('title="Carved Brazier, Lit"');
+    expect(litMarkup).toContain('title="Torch"');
+    expect(litMarkup).not.toContain("(Lit)");
+    expect(litMarkup).not.toContain('title="Torch, Lit"');
+    expect(chineseMarkup).toContain('title="Carved Brazier, 已点燃"');
+    expect(chineseMarkup).toContain("选择Carved Brazier，占地 1 × 1 格, 已点燃");
+    expect(readFlameScales(litMarkup)).toHaveLength(4);
+    expect(readFlameScales(listMarkup)).toHaveLength(3);
+    expect(readFlameScales(listMarkup)).not.toEqual(readFlameScales(litMarkup).slice(0, 3));
+    expect(unloadedMarkup).not.toContain("Cursors");
+    expect(countLitFlameLayers(unloadedMarkup)).toBe(3);
+  });
 });
+
+function createLitBigCraftableCard(recordId: "146" | "148"): CatalogItem {
+  const renderingMetadata = getLockedLitBigCraftableRenderingMetadata(recordId);
+  if (renderingMetadata === undefined) {
+    throw new Error(`Expected locked lit metadata for big-craftable:${recordId}.`);
+  }
+
+  return {
+    allowedTools: ["cursor"],
+    category: "placeable",
+    id: `big-craftable:${recordId}`,
+    name: recordId === "146" ? "Campfire (Lit)" : "Carved Brazier",
+    presentationCapabilities: {
+      canFlip: false,
+      rotation: null,
+      variantCycle: { count: 2, family: "generic" },
+      visibleVariants: [
+        {
+          label: "Lit",
+          renderDescriptor: { kind: "variant-index", variant: 0 },
+          value: 0,
+        },
+        {
+          label: "Unlit",
+          renderDescriptor: { kind: "variant-index", variant: 1 },
+          value: 1,
+        },
+      ],
+    },
+    renderingMetadata,
+    sprite: { kind: "sprite-index", index: Number(recordId) },
+    textureLocalPath: "/game-assets/1.6.15/tilesheets/craftables.png",
+    tileSize: { height: 1, width: 1 },
+  };
+}
+
+function createPlainCatalogItem(id: string, name: string): CatalogItem {
+  return {
+    allowedTools: ["cursor"],
+    category: "placeable",
+    id,
+    name,
+    sprite: { kind: "sprite-index", index: 0 },
+    textureLocalPath: "/game-assets/test.png",
+    tileSize: { height: 1, width: 1 },
+  };
+}
+
+function renderCatalogCards(
+  catalogItems: readonly CatalogItem[],
+  presentationChoicesByItemId: ReadonlyMap<string, CatalogPresentationChoice>,
+  viewMode: "grid" | "list" = "grid",
+  shouldLoadThumbnails = true,
+): string {
+  return renderToStaticMarkup(
+    createElement(CatalogItemGrid, {
+      catalogItems,
+      catalogPresentationChoicesByItemId: presentationChoicesByItemId,
+      onCatalogItemSelect: () => undefined,
+      selectedCatalogItemId: null,
+      shouldLoadThumbnails,
+      viewMode,
+    }),
+  );
+}
+
+function countLitFlameLayers(markup: string): number {
+  return markup.match(/catalog-lit-thumbnail__flame/g)?.length ?? 0;
+}
+
+function readFlameScales(markup: string): readonly string[] {
+  return [...markup.matchAll(/scale\(([^)]+)\)/g)].map((match) => match[1] ?? "");
+}
 
 function createControlledCatalogItems(): readonly CatalogItem[] {
   const createPlaceableCatalogItem = (

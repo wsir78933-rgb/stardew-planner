@@ -213,6 +213,16 @@ const heldItemFields = [
   "bedType",
 ] as const;
 const optionalHeldItemFields = ["growthStage", "nightLightState"] as const;
+const trustedWorkingPlacementSnapshots = new WeakSet<object>();
+
+type MutableWorkingPlacementSnapshot = {
+  buildings: PlacementBuilding[];
+  crops: PlacementCrop[];
+  items: PlacementItem[];
+  nextBuildingId: number;
+  nextItemId: number;
+  interiorDecor?: InteriorDecorState;
+};
 
 export function createEmptyPlacementSnapshot(): PlacementSnapshot {
   return {
@@ -235,9 +245,138 @@ export function restorePlacementSnapshot(
 export function createPersistentPlacementSnapshot(
   placementSnapshot: PlacementSnapshot,
 ): PlacementSnapshot {
+  if (isTrustedWorkingPlacementSnapshot(placementSnapshot)) {
+    return placementSnapshot;
+  }
+
   const validatedPlacementSnapshot = readPlacementSnapshot(placementSnapshot, false);
 
   return clonePlacementSnapshot(validatedPlacementSnapshot);
+}
+
+export function createWorkingPlacementSnapshot(
+  placementSnapshot: PlacementSnapshot,
+): PlacementSnapshot {
+  if (isTrustedWorkingPlacementSnapshot(placementSnapshot)) {
+    throw new TypeError(
+      `Placement working snapshot cannot be created from an existing working snapshot; received ${describeValue(placementSnapshot)}.`,
+    );
+  }
+
+  const workingSnapshot = createPersistentPlacementSnapshot(placementSnapshot);
+  trustedWorkingPlacementSnapshots.add(workingSnapshot);
+  return workingSnapshot;
+}
+
+export function applyWorkingPlacementSnapshotAction(
+  workingSnapshot: PlacementSnapshot,
+  placementAction: PlacementSnapshotAction,
+): PlacementSnapshot {
+  const mutableWorkingSnapshot = readMutableWorkingPlacementSnapshot(workingSnapshot);
+  assertPlacementSnapshotAction(placementAction);
+  assertAddItemActionDoesNotContainHeldItem(placementAction);
+
+  switch (placementAction.type) {
+    case "add-building":
+      pushWorkingBuilding(mutableWorkingSnapshot, placementAction.building);
+      return workingSnapshot;
+    case "add-crop":
+      pushWorkingCrop(mutableWorkingSnapshot, placementAction.crop);
+      return workingSnapshot;
+    case "add-item":
+      pushWorkingItem(mutableWorkingSnapshot, placementAction.item);
+      return workingSnapshot;
+    case "attach-held-item":
+      adoptWorkingPlacementSnapshot(
+        mutableWorkingSnapshot,
+        attachHeldItem(
+          mutableWorkingSnapshot,
+          placementAction.parentInstanceId,
+          placementAction.item,
+        ),
+      );
+      return workingSnapshot;
+    case "delete-building":
+    case "delete-crop":
+    case "delete-item":
+    case "replace-building":
+    case "replace-crop":
+    case "replace-item":
+      throw new TypeError(
+        `Working placement snapshot cannot apply action type ${describeValue(placementAction.type)}; received ${describeValue(placementAction)}.`,
+      );
+  }
+}
+
+export function commitWorkingPlacementSnapshot(
+  workingSnapshot: PlacementSnapshot,
+): PlacementSnapshot {
+  readMutableWorkingPlacementSnapshot(workingSnapshot);
+  trustedWorkingPlacementSnapshots.delete(workingSnapshot);
+  return createPersistentPlacementSnapshot(workingSnapshot);
+}
+
+function isTrustedWorkingPlacementSnapshot(
+  placementSnapshot: unknown,
+): placementSnapshot is PlacementSnapshot {
+  return typeof placementSnapshot === "object"
+    && placementSnapshot !== null
+    && trustedWorkingPlacementSnapshots.has(placementSnapshot);
+}
+
+function readMutableWorkingPlacementSnapshot(
+  placementSnapshot: PlacementSnapshot,
+): MutableWorkingPlacementSnapshot {
+  if (!isTrustedWorkingPlacementSnapshot(placementSnapshot)) {
+    throw new TypeError(
+      `Placement working snapshot must be created by createWorkingPlacementSnapshot; received ${describeValue(placementSnapshot)}.`,
+    );
+  }
+
+  return placementSnapshot as MutableWorkingPlacementSnapshot;
+}
+
+function pushWorkingBuilding(
+  workingSnapshot: MutableWorkingPlacementSnapshot,
+  newBuilding: NewPlacementBuilding,
+): void {
+  const instanceId = workingSnapshot.nextBuildingId;
+  workingSnapshot.buildings.push({ ...newBuilding, instanceId });
+  workingSnapshot.nextBuildingId = incrementIdentifier(instanceId, "nextBuildingId");
+}
+
+function pushWorkingCrop(
+  workingSnapshot: MutableWorkingPlacementSnapshot,
+  newCrop: PlacementCrop,
+): void {
+  assertCropCoordinateAvailable(workingSnapshot.crops, newCrop, -1);
+  workingSnapshot.crops.push({ ...newCrop });
+}
+
+function pushWorkingItem(
+  workingSnapshot: MutableWorkingPlacementSnapshot,
+  newItem: NewPlacementItem,
+): void {
+  const instanceId = workingSnapshot.nextItemId;
+  workingSnapshot.items.push(clonePlacementItem({ ...newItem, instanceId }));
+  workingSnapshot.nextItemId = incrementIdentifier(instanceId, "nextItemId");
+}
+
+function adoptWorkingPlacementSnapshot(
+  workingSnapshot: MutableWorkingPlacementSnapshot,
+  nextSnapshot: PlacementSnapshot,
+): void {
+  workingSnapshot.buildings = [...nextSnapshot.buildings];
+  workingSnapshot.crops = [...nextSnapshot.crops];
+  workingSnapshot.items = [...nextSnapshot.items];
+  workingSnapshot.nextBuildingId = nextSnapshot.nextBuildingId;
+  workingSnapshot.nextItemId = nextSnapshot.nextItemId;
+
+  if (nextSnapshot.interiorDecor === undefined) {
+    delete workingSnapshot.interiorDecor;
+  } else {
+    workingSnapshot.interiorDecor = nextSnapshot.interiorDecor;
+  }
 }
 
 export function createPlacementState(

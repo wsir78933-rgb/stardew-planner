@@ -291,4 +291,166 @@ describe("planner workspace X-ray keyboard", () => {
       ]);
     }
   });
+
+  it("does not activate X-ray or prevent default for Space on native button or button child targets", () => {
+    const receivedStates: boolean[] = [];
+    const handleKeyboardEvent = createPlannerWorkspaceXRayKeyboardHandler({
+      onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive),
+    });
+
+    const buttonTarget = {
+      tagName: "BUTTON",
+      closest: (selector: string) => (selector === "button" ? buttonTarget : null),
+    };
+    const spanInsideButton = {
+      tagName: "SPAN",
+      closest: (selector: string) => (selector === "button" ? buttonTarget : null),
+    };
+    const svgInsideButton = {
+      tagName: "svg",
+      closest: (selector: string) => (selector === "button" ? buttonTarget : null),
+    };
+
+    const buttonSpaceKeyDown = createKeyboardEvent(" ", { target: buttonTarget });
+    const buttonSpaceRepeat = createKeyboardEvent(" ", { target: buttonTarget, repeat: true });
+    const buttonSpaceKeyUp = createKeyboardEvent(" ", { target: buttonTarget });
+    const spanSpaceKeyDown = createKeyboardEvent(" ", { target: spanInsideButton });
+    const spanSpaceKeyUp = createKeyboardEvent(" ", { target: spanInsideButton });
+    const svgSpaceKeyDown = createKeyboardEvent("Spacebar", { target: svgInsideButton });
+    const svgSpaceKeyUp = createKeyboardEvent("Spacebar", { target: svgInsideButton });
+
+    handleKeyboardEvent.keydown(buttonSpaceKeyDown);
+    handleKeyboardEvent.keydown(buttonSpaceRepeat);
+    handleKeyboardEvent.keyup(buttonSpaceKeyUp);
+
+    handleKeyboardEvent.keydown(spanSpaceKeyDown);
+    handleKeyboardEvent.keyup(spanSpaceKeyUp);
+
+    handleKeyboardEvent.keydown(svgSpaceKeyDown);
+    handleKeyboardEvent.keyup(svgSpaceKeyUp);
+
+    expect(receivedStates).toEqual([]);
+    expect(buttonSpaceKeyDown.defaultPrevented).toBe(false);
+    expect(buttonSpaceRepeat.defaultPrevented).toBe(false);
+    expect(buttonSpaceKeyUp.defaultPrevented).toBe(false);
+    expect(spanSpaceKeyDown.defaultPrevented).toBe(false);
+    expect(spanSpaceKeyUp.defaultPrevented).toBe(false);
+    expect(svgSpaceKeyDown.defaultPrevented).toBe(false);
+    expect(svgSpaceKeyUp.defaultPrevented).toBe(false);
+  });
+
+  it("activates and releases X-ray with prevented default for Space on canvas, body, or generic targets", () => {
+    const receivedStates: boolean[] = [];
+    const handleKeyboardEvent = createPlannerWorkspaceXRayKeyboardHandler({
+      onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive),
+    });
+
+    const canvasTarget = {
+      tagName: "CANVAS",
+      closest: () => null,
+    };
+    const bodyTarget = {
+      tagName: "BODY",
+      closest: () => null,
+    };
+
+    const canvasKeyDown = createKeyboardEvent(" ", { target: canvasTarget });
+    const canvasRepeat = createKeyboardEvent(" ", { target: canvasTarget, repeat: true });
+    const canvasKeyUp = createKeyboardEvent(" ", { target: canvasTarget });
+
+    handleKeyboardEvent.keydown(canvasKeyDown);
+    handleKeyboardEvent.keydown(canvasRepeat);
+    handleKeyboardEvent.keyup(canvasKeyUp);
+
+    const bodyKeyDown = createKeyboardEvent("Spacebar", { target: bodyTarget });
+    const bodyKeyUp = createKeyboardEvent("Spacebar", { target: bodyTarget });
+
+    handleKeyboardEvent.keydown(bodyKeyDown);
+    handleKeyboardEvent.keyup(bodyKeyUp);
+
+    expect(receivedStates).toEqual([true, false, true, false]);
+    expect(canvasKeyDown.defaultPrevented).toBe(true);
+    expect(canvasRepeat.defaultPrevented).toBe(true);
+    expect(canvasKeyUp.defaultPrevented).toBe(true);
+    expect(bodyKeyDown.defaultPrevented).toBe(true);
+    expect(bodyKeyUp.defaultPrevented).toBe(true);
+  });
+
+  it("resets active X-ray state without preventing default when Space started on canvas is released on a button", () => {
+    const receivedStates: boolean[] = [];
+    const handleKeyboardEvent = createPlannerWorkspaceXRayKeyboardHandler({
+      onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive),
+    });
+
+    const canvasTarget = {
+      tagName: "CANVAS",
+      closest: () => null,
+    };
+    const buttonTarget = {
+      tagName: "BUTTON",
+      closest: (selector: string) => (selector === "button" ? buttonTarget : null),
+    };
+    const spanInsideButton = {
+      tagName: "SPAN",
+      closest: (selector: string) => (selector === "button" ? buttonTarget : null),
+    };
+
+    // 1. Activate Space on canvas
+    const canvasKeyDown = createKeyboardEvent(" ", { target: canvasTarget });
+    handleKeyboardEvent.keydown(canvasKeyDown);
+    expect(canvasKeyDown.defaultPrevented).toBe(true);
+    expect(receivedStates).toEqual([true]);
+
+    // 2. Release Space on a button: active state must reset to false, and button keyup must NOT be prevented
+    const buttonKeyUp = createKeyboardEvent(" ", { target: buttonTarget });
+    handleKeyboardEvent.keyup(buttonKeyUp);
+    expect(buttonKeyUp.defaultPrevented).toBe(false);
+    expect(receivedStates).toEqual([true, false]);
+
+    // 3. Verify handler can activate again (proves activeXRayTrigger was reset and not stuck)
+    const nextCanvasKeyDown = createKeyboardEvent(" ", { target: canvasTarget });
+    handleKeyboardEvent.keydown(nextCanvasKeyDown);
+    expect(nextCanvasKeyDown.defaultPrevented).toBe(true);
+    expect(receivedStates).toEqual([true, false, true]);
+
+    // 4. Release on span inside button: active state resets to false, and span keyup must NOT be prevented
+    const spanKeyUp = createKeyboardEvent(" ", { target: spanInsideButton });
+    handleKeyboardEvent.keyup(spanKeyUp);
+    expect(spanKeyUp.defaultPrevented).toBe(false);
+    expect(receivedStates).toEqual([true, false, true, false]);
+  });
+
+  it("preserves Control and Meta X-ray activation and release even when focused on a native button", () => {
+    const receivedStates: boolean[] = [];
+    const handleKeyboardEvent = createPlannerWorkspaceXRayKeyboardHandler({
+      onXRayActiveChange: (isXRayActive) => receivedStates.push(isXRayActive),
+    });
+
+    const buttonTarget = {
+      tagName: "BUTTON",
+      closest: (selector: string) => (selector === "button" ? buttonTarget : null),
+    };
+
+    const metaKeyDown = createKeyboardEvent("Meta", { metaKey: true, target: buttonTarget });
+    const metaRepeat = createKeyboardEvent("Meta", { metaKey: true, repeat: true, target: buttonTarget });
+    const metaKeyUp = createKeyboardEvent("Meta", { target: buttonTarget });
+
+    handleKeyboardEvent.keydown(metaKeyDown);
+    handleKeyboardEvent.keydown(metaRepeat);
+    handleKeyboardEvent.keyup(metaKeyUp);
+
+    const controlKeyDown = createKeyboardEvent("Control", { ctrlKey: true, target: buttonTarget });
+    const controlRepeat = createKeyboardEvent("Control", { ctrlKey: true, repeat: true, target: buttonTarget });
+    const controlKeyUp = createKeyboardEvent("Control", { target: buttonTarget });
+
+    handleKeyboardEvent.keydown(controlKeyDown);
+    handleKeyboardEvent.keydown(controlRepeat);
+    handleKeyboardEvent.keyup(controlKeyUp);
+
+    expect(receivedStates).toEqual([true, false, true, false]);
+    expect(metaKeyDown.defaultPrevented).toBe(true);
+    expect(metaRepeat.defaultPrevented).toBe(true);
+    expect(controlKeyDown.defaultPrevented).toBe(true);
+    expect(controlRepeat.defaultPrevented).toBe(true);
+  });
 });

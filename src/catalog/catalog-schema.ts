@@ -530,7 +530,7 @@ function createReferenceSupplementaryPlaceableItems(): readonly CatalogItem[] {
       tileSize: { width: 1, height: 1 },
       textureLocalPath: grassTextureLocalPath,
       sprite: { kind: "source-rect", x: 0, y: 0, width: 15, height: 20 },
-      allowedTools: placementTools,
+      allowedTools: fillablePlacementTools,
       ...createSeasonalPlaceableCatalogProperties("grass_1"),
     },
     {
@@ -563,7 +563,7 @@ function createReferenceSupplementaryPlaceableItems(): readonly CatalogItem[] {
       width: 16,
       height: 32,
     },
-    allowedTools: placementTools,
+    allowedTools: fillablePlacementTools,
   }));
 
   return [
@@ -1433,7 +1433,7 @@ function createBigCraftableCatalogItems(
           kind: "sprite-index",
           index: spriteIndex,
         },
-        allowedTools: placementTools,
+        allowedTools: fillablePlacementTools,
         ...(paintableChest === undefined ? {} : { paintableChest }),
         ...createAuditedBigCraftablePresentationProperties(recordId),
         ...createCatalogNightLightProperties({
@@ -1488,7 +1488,7 @@ function createObjectCatalogItems(
         tileSize: { width: 1, height: 1 },
         textureLocalPath,
         sprite,
-        allowedTools: placementTools,
+        allowedTools: fillablePlacementTools,
         ...createAuditedObjectPresentationProperties(recordId),
         ...createSeasonalPlaceableCatalogProperties(`object:${recordId}`),
         ...createSprinklerCatalogRenderingProperties(`object:${recordId}`),
@@ -1726,7 +1726,7 @@ function createFenceCatalogItems(
               height: 32,
             }),
       },
-      allowedTools: isGate ? placementTools : fillablePlacementTools,
+      allowedTools: fillablePlacementTools,
       ...(isGate ? { renderingMetadata: gateRenderingMetadata } : {}),
     };
   });

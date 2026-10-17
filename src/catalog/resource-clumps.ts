@@ -1,5 +1,12 @@
 import type { CatalogItem } from "./catalog-types";
 
+const resourceClumpPlacementTools = [
+  "cursor",
+  "multi-select",
+  "fill",
+  "erase",
+] as const;
+
 const resourceClumpCatalogItems: readonly CatalogItem[] = [
   {
     id: "clump_600",
@@ -8,7 +15,7 @@ const resourceClumpCatalogItems: readonly CatalogItem[] = [
     tileSize: { width: 2, height: 2 },
     textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
     sprite: { kind: "source-rect", x: 0, y: 400, width: 32, height: 32 },
-    allowedTools: ["cursor", "multi-select", "erase"],
+    allowedTools: resourceClumpPlacementTools,
   },
   {
     id: "clump_602",
@@ -17,7 +24,7 @@ const resourceClumpCatalogItems: readonly CatalogItem[] = [
     tileSize: { width: 2, height: 2 },
     textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
     sprite: { kind: "source-rect", x: 32, y: 400, width: 32, height: 32 },
-    allowedTools: ["cursor", "multi-select", "erase"],
+    allowedTools: resourceClumpPlacementTools,
   },
   {
     id: "clump_622",
@@ -26,7 +33,7 @@ const resourceClumpCatalogItems: readonly CatalogItem[] = [
     tileSize: { width: 2, height: 2 },
     textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
     sprite: { kind: "source-rect", x: 352, y: 400, width: 32, height: 32 },
-    allowedTools: ["cursor", "multi-select", "erase"],
+    allowedTools: resourceClumpPlacementTools,
   },
   {
     id: "clump_672",
@@ -35,7 +42,7 @@ const resourceClumpCatalogItems: readonly CatalogItem[] = [
     tileSize: { width: 2, height: 2 },
     textureLocalPath: "/game-assets/1.6.15/tilesheets/springobjects.png",
     sprite: { kind: "source-rect", x: 0, y: 448, width: 32, height: 32 },
-    allowedTools: ["cursor", "multi-select", "erase"],
+    allowedTools: resourceClumpPlacementTools,
   },
 ];
 

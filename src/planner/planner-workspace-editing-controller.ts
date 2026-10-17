@@ -3,7 +3,11 @@ import type {
   CatalogItem,
   CatalogPresentationChoice,
 } from "../catalog";
-import { editorTools, type EditorTool } from "../editor/editor-view-state";
+import {
+  editorToolAvailability,
+  editorTools,
+  type EditorTool,
+} from "../editor/editor-view-state";
 import {
   applyEditorErase,
   applyEditorEraseRectangle,
@@ -206,7 +210,20 @@ export function getPlannerWorkspaceToolSelection(
   tool: EditorTool | null,
   selectedCatalogItem: CatalogItem | null,
 ): PlannerWorkspaceToolSelection {
+  assertEditorToolSelection(tool);
+
   if (tool === "cursor") {
+    return {
+      selectedCatalogItem: null,
+      selectedCatalogItemId: null,
+    };
+  }
+
+  if (
+    tool === "fill" &&
+    selectedCatalogItem !== null &&
+    !selectedCatalogItem.allowedTools.includes("fill")
+  ) {
     return {
       selectedCatalogItem: null,
       selectedCatalogItemId: null,
@@ -217,6 +234,34 @@ export function getPlannerWorkspaceToolSelection(
     selectedCatalogItem,
     selectedCatalogItemId: selectedCatalogItem?.id ?? null,
   };
+}
+
+export function isPlannerWorkspaceToolDisabled(
+  tool: EditorTool,
+  selectedCatalogItem: CatalogItem | null,
+): boolean {
+  assertEditorToolSelection(tool);
+
+  if (tool === "fill") {
+    return (
+      selectedCatalogItem !== null &&
+      !selectedCatalogItem.allowedTools.includes("fill")
+    );
+  }
+
+  return false;
+}
+
+export function isPlannerWorkspaceToolAvailable(
+  tool: EditorTool,
+  selectedCatalogItem: CatalogItem | null,
+): boolean {
+  assertEditorToolSelection(tool);
+
+  return (
+    editorToolAvailability[tool] &&
+    !isPlannerWorkspaceToolDisabled(tool, selectedCatalogItem)
+  );
 }
 
 export function getPlannerWorkspaceCatalogItemSelectionTool(

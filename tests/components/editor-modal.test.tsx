@@ -649,11 +649,11 @@ describe("editor modal visual variants", () => {
       "help-info",
       "feedback",
       "keyboard-shortcuts",
+      "map-picker",
     ] as const satisfies readonly EditorModalId[];
     const editorShellPositionedModalIds = [
       "ambience-panel",
       "farm-settings",
-      "map-picker",
       "whats-new",
     ] as const satisfies readonly EditorModalId[];
 

@@ -641,10 +641,10 @@ describe("planner workspace frozen layout contracts", () => {
     const plannerWorkspaceStyles = readPlannerWorkspaceStyles();
 
     expect(plannerWorkspaceStyles).toMatch(
-      /\.planner-editor-shell \.tool-btn\.erase-hover:hover:not\(:disabled\):not\(\.active\)\s*\{[^}]*background:\s*rgb\(177 58 40 \/ 10%\);[^}]*color:\s*#b13a28;/s,
+      /\.planner-editor-shell \.editor-toolbar \.tool-btn\.erase-hover:hover:not\(:disabled\):not\(\[aria-pressed="true"\]\),\s*\.planner-editor-shell \.editor-toolbar \.tool-btn\.erase-hover:focus-visible:not\(:disabled\):not\(\[aria-pressed="true"\]\)\s*\{[^}]*background:\s*rgb\(177 58 40 \/ 10%\);[^}]*box-shadow:\s*none;[^}]*color:\s*#b13a28;/s,
     );
     expect(plannerWorkspaceStyles).toMatch(
-      /\.planner-editor-shell \.tool-btn\.erase\s*\{[^}]*background:\s*rgb\(177 58 40 \/ 15%\);[^}]*color:\s*#b13a28;/s,
+      /\.planner-editor-shell \.editor-toolbar \.tool-btn\.erase\[aria-pressed="true"\](?::(?:hover|focus-visible|active))?[\s\S]*?\{[^}]*background:\s*rgb\(177 58 40 \/ 15%\);[^}]*box-shadow:\s*none;[^}]*color:\s*#b13a28;/s,
     );
     expect(plannerWorkspaceStyles).toMatch(
       /\.planner-editor-shell \.pill-delete\s*\{[^}]*color:\s*#b13a28;/s,
