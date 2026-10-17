@@ -31,7 +31,9 @@ type LocalProjectPanelProperties = Readonly<{
   sidebarContent?: ReactNode;
   sidebarFooterContent?: ReactNode;
   mainContent?: ReactNode;
+  toolsViewContent?: ReactNode;
   isProjectListActive?: boolean;
+  isToolsViewActive?: boolean;
   onCreateProject: () => void;
   onDeleteProject: (projectId: string) => void;
   onDuplicateProject: (projectId: string) => void;
@@ -55,7 +57,9 @@ export function LocalProjectPanel({
   sidebarContent = null,
   sidebarFooterContent = null,
   mainContent = null,
+  toolsViewContent = null,
   isProjectListActive = true,
+  isToolsViewActive = false,
   onCreateProject,
   onDeleteProject,
   onDuplicateProject,
@@ -267,48 +271,6 @@ export function LocalProjectPanel({
               {projectActionNotice}
             </p>
           ) : null}
-          <details className={styles.deviceTools}>
-            <summary>{copy.deviceTools}</summary>
-            <div className={styles.deviceToolsBody}>
-              <div className="local-project-panel__status">
-                <p>
-                  {copy.currentProject}: <strong>{currentProjectName ?? copy.none}</strong>
-                </p>
-                {currentProjectMapInstanceName !== null ? (
-                  <p>
-                    {copy.currentMap}: <strong>{currentProjectMapInstanceName}</strong>
-                    {currentProjectMapInstanceCount !== null
-                      ? ` (${copy.currentMapCount(currentProjectMapInstanceCount)})`
-                      : null}
-                  </p>
-                ) : null}
-                <p>{copy.storedInBrowser}</p>
-              </div>
-              <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
-                <button
-                  aria-busy={isSavingCurrentMap}
-                  disabled={!isStorageReady || isSavingCurrentMap}
-                  onClick={() => void handleSaveCurrentMap()}
-                  type="button"
-                >
-                  {copy.saveToDevice}
-                </button>
-                <label
-                  className={`local-project-panel__import${
-                    isStorageReady ? "" : " local-project-panel__import--disabled"
-                  }`}
-                >
-                  <span>{copy.importJson}</span>
-                  <input
-                    accept="application/json,.json"
-                    disabled={!isStorageReady}
-                    onChange={handleImportFileChange}
-                    type="file"
-                  />
-                </label>
-              </div>
-            </div>
-          </details>
           {sidebarFooterContent}
         </aside>
         <div className={styles.main} data-local-project-region="main">
@@ -366,25 +328,23 @@ export function LocalProjectPanel({
                         )}
                       </div>
                       <div className={styles.projectCardBody}>
-                        <div className={styles.projectCardHeading}>
-                          <div className={styles.projectCardTitleGroup}>
-                            <strong>{projectSummary.title}</strong>
-                            {isCurrentProject ? (
-                              <span className={styles.currentBadge}>{copy.current}</span>
-                            ) : null}
-                          </div>
-                          {projectSummary.mapCount !== undefined ? (
-                            <span className={styles.projectMapCount}>
-                              {copy.projectMapCount(projectSummary.mapCount)}
-                            </span>
+                        <div className={styles.projectCardTitleGroup}>
+                          <strong>{projectSummary.title}</strong>
+                          {isCurrentProject ? (
+                            <span className={styles.currentBadge}>{copy.current}</span>
                           ) : null}
                         </div>
-                        <span className={styles.projectUpdatedAt}>
+                        {projectSummary.mapCount !== undefined ? (
+                          <p className={styles.projectMapCount}>
+                            {copy.projectMapCount(projectSummary.mapCount)}
+                          </p>
+                        ) : null}
+                        <p className={styles.projectUpdatedAt}>
                           {formatLocalProjectUpdatedAt(
                             projectSummary.updated_at,
                             copy.dateTimeLocale,
                           )}
-                        </span>
+                        </p>
                         {isRenamingProject ? (
                           <div className={`local-project-panel__rename-form ${styles.renameForm}`}>
                             <label>
@@ -425,18 +385,28 @@ export function LocalProjectPanel({
                               {copy.open}
                             </button>
                             <button
+                              aria-label={`${copy.rename}: ${projectSummary.title}`}
+                              className={styles.iconAction}
                               data-project-action="rename"
                               disabled={!isStorageReady}
                               onClick={() => handleStartRename(projectSummary)}
                               type="button"
                             >
-                              {copy.rename}
+                              <svg aria-hidden="true" fill="none" viewBox="0 0 24 24">
+                                <path d="M4 20h4L19 9l-4-4L4 16v4Z" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.8" />
+                                <path d="m13 7 4 4" stroke="currentColor" strokeWidth="1.8" />
+                              </svg>
                             </button>
                             <details className={styles.moreActions}>
                               <summary
                                 aria-label={`${moreActionsLabel}: ${projectSummary.title}`}
+                                className={styles.iconAction}
                               >
-                                {moreActionsLabel}
+                                <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                                  <circle cx="6" cy="12" r="1.7" />
+                                  <circle cx="12" cy="12" r="1.7" />
+                                  <circle cx="18" cy="12" r="1.7" />
+                                </svg>
                               </summary>
                               <div className={styles.moreActionsPanel}>
                                 <button
@@ -487,6 +457,50 @@ export function LocalProjectPanel({
                 {copy.emptyState}
               </p>
             ) : null}
+          </div>
+          <div
+            className={styles.toolsView}
+            data-library-view="tools"
+            hidden={!isToolsViewActive}
+          >
+            <div className="local-project-panel__status">
+              <p>
+                {copy.currentProject}: <strong>{currentProjectName ?? copy.none}</strong>
+              </p>
+              {currentProjectMapInstanceName !== null ? (
+                <p>
+                  {copy.currentMap}: <strong>{currentProjectMapInstanceName}</strong>
+                  {currentProjectMapInstanceCount !== null
+                    ? ` (${copy.currentMapCount(currentProjectMapInstanceCount)})`
+                    : null}
+                </p>
+              ) : null}
+              <p>{copy.storedInBrowser}</p>
+            </div>
+            <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
+              <button
+                aria-busy={isSavingCurrentMap}
+                disabled={!isStorageReady || isSavingCurrentMap}
+                onClick={() => void handleSaveCurrentMap()}
+                type="button"
+              >
+                {copy.saveToDevice}
+              </button>
+              <label
+                className={`local-project-panel__import${
+                  isStorageReady ? "" : " local-project-panel__import--disabled"
+                }`}
+              >
+                <span>{copy.importJson}</span>
+                <input
+                  accept="application/json,.json"
+                  disabled={!isStorageReady}
+                  onChange={handleImportFileChange}
+                  type="file"
+                />
+              </label>
+            </div>
+            {toolsViewContent}
           </div>
           {mainContent}
         </div>

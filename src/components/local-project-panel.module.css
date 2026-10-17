@@ -27,19 +27,19 @@
   gap: 12px;
 }
 
-.deviceTools,
-.deviceToolsBody {
+.toolsView {
   display: grid;
-  gap: 8px;
+  gap: 16px;
   min-width: 0;
 }
 
-.deviceTools summary {
-  cursor: pointer;
-  min-height: 44px;
-  min-width: 44px;
-  overflow-wrap: anywhere;
-  padding: 8px 10px;
+.toolsView[hidden] {
+  display: none !important;
+}
+
+.layout .toolsView .sidebarActions {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 24rem;
 }
 
 .layout .sidebar :global(.local-project-panel__status) {
@@ -62,13 +62,13 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
+  box-sizing: border-box;
   color: var(--text-dim);
   display: flex;
   gap: 8px;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 12px;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .searchControl:focus-within {
@@ -103,12 +103,12 @@
   align-content: start;
   box-sizing: border-box;
   display: grid;
-  gap: 12px;
+  gap: 16px;
   grid-auto-rows: max-content;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
   justify-content: start;
   list-style: none;
-  margin: 0;
+  margin: 16px 0 0;
   max-height: 28rem;
   overflow-x: hidden;
   overflow-y: auto;
@@ -134,16 +134,18 @@
 }
 
 .projectPreview {
-  aspect-ratio: 318 / 145;
+  aspect-ratio: 2 / 1;
   background: var(--bg-raised);
   overflow: hidden;
   position: relative;
+  width: 100%;
 }
 
 .projectPreviewImage {
   display: block;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
   width: 100%;
 }
 
@@ -190,17 +192,9 @@
 .projectCardBody {
   align-content: start;
   display: grid;
-  gap: 8px;
+  gap: 4px;
   min-width: 0;
-  padding: 12px;
-}
-
-.projectCardHeading {
-  align-items: center;
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
-  min-width: 0;
+  padding: 12px 14px 14px;
 }
 
 .projectCardTitleGroup {
@@ -211,42 +205,41 @@
   min-width: 0;
 }
 
-.projectCardHeading strong {
+.projectCardTitleGroup strong {
   color: var(--text);
-  flex: 1 1 120px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
+  line-height: 1.3;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
 .projectMapCount {
-  background: var(--bg-raised);
-  border-radius: 999px;
-  color: var(--text-dim);
-  flex: 0 0 auto;
-  font-size: 10px;
-  line-height: 1.2;
-  padding: 4px 6px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.3;
+  margin: 0;
 }
 
 .projectUpdatedAt {
   color: var(--text-dim);
   font-size: 12px;
   line-height: 1.4;
+  margin: 0;
 }
 
 .projectCardActions,
 .renameForm {
   display: grid;
-  gap: 6px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: 8px;
   min-width: 0;
 }
 
 .projectCardActions {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  grid-template-columns: auto auto auto;
+  justify-content: start;
 }
 
 .layout .main .renameForm {
@@ -263,12 +256,31 @@
   color: var(--text);
   cursor: pointer;
   font: inherit;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.25;
   min-height: 44px;
-  min-width: 0;
+  min-width: 44px;
   overflow-wrap: anywhere;
-  padding: 6px 8px;
+  padding: 6px 14px;
+}
+
+.projectCardActions .openProjectButton,
+.projectCardActions .iconAction,
+.moreActions summary.iconAction {
+  padding: 0 14px;
+  width: auto;
+}
+
+.projectCardActions .iconAction,
+.moreActions summary.iconAction {
+  padding: 0;
+  width: 44px;
+}
+
+.iconAction svg {
+  display: block;
+  height: 18px;
+  width: 18px;
 }
 
 .projectCardActions button:hover:not(:disabled),
@@ -303,13 +315,13 @@
 }
 
 .moreActions[open] {
-  grid-column: 1 / -1;
+  display: contents;
 }
 
 .moreActions summary {
   align-items: center;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   list-style: none;
   text-align: center;
@@ -319,15 +331,8 @@
   display: none;
 }
 
-.moreActions summary::after {
-  content: "+";
-  font-size: 16px;
-  font-weight: 700;
-  margin-left: 8px;
-}
-
-.moreActions[open] summary::after {
-  content: "−";
+.moreActions[open] .moreActionsPanel {
+  grid-column: 1 / -1;
 }
 
 .moreActionsPanel {
@@ -365,20 +370,13 @@
   outline-offset: 1px;
 }
 
-@media (max-width: 1100px) {
-  .projectGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 720px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .projectGrid {
-    grid-template-columns: minmax(0, 320px);
-    max-height: 42vh;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .projectCard {

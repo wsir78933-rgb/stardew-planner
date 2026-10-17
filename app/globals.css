@@ -5456,7 +5456,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .editor-config-label { font-size: 12.5px; margin: 0 0 8px; }
 .planner-editor-shell .editor-config-legal { color: var(--text-dim); font-size: 12px; padding: 0 10px; }
 .planner-editor-shell .editor-config-legal a { display: inline-flex; min-height: 26px; align-items: center; }
-.planner-editor-shell .editor-modal--save-panel { width: min(1220px, calc(100% - 40px)); }
+.planner-editor-shell .editor-modal--save-panel { min-height: min(48rem, calc(100dvh - 2rem)); width: min(1220px, calc(100% - 40px)); }
 .planner-editor-shell .editor-modal--save-panel .editor-modal__header h2 { font-size: 17px; }
 .planner-editor-shell .editor-modal--feedback { width: min(600px, calc(100% - 32px)); }
 .planner-editor-shell .planner-save-modal-content { grid-template-columns: minmax(0, 1fr); }

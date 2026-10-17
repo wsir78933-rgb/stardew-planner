@@ -21,7 +21,7 @@ import type {
 import type { LocalProjectStorageStatus } from "./local-project-panel";
 import styles from "./planner-library-layout.module.css";
 
-export type PlannerSaveModalBranch = "farm-summary" | "game-save" | "projects";
+export type PlannerSaveModalBranch = "farm-summary" | "game-save" | "projects" | "tools";
 
 type PlannerSaveModalBranchLoadError = Readonly<{
   branch: PlannerSaveModalBranch;
@@ -76,7 +76,10 @@ type PlannerSaveModalContentProperties = Omit<
     | "thumbnail"
   >;
   isProjectsBranchActive: boolean;
+  isToolsViewActive: boolean;
+  libraryToolsEntry: ReactNode;
   mainBranchContent: ReactNode;
+  onOpenFarmSummary: () => void;
   sidebarNavigation: ReactNode;
 }>;
 
@@ -132,7 +135,7 @@ export function PlannerSaveModalLoader(
           setPlannerSaveModalContent(() => loadedPlannerSaveModalContent);
         }
 
-        if (selectedPlannerSaveModalBranch === "projects") return;
+        if (!isPlannerSaveModalLazyBranch(selectedPlannerSaveModalBranch)) return;
 
         if (selectedPlannerSaveModalBranch === "game-save") {
           if (
@@ -225,38 +228,49 @@ export function PlannerSaveModalLoader(
       >
         {plannerSaveModalLoaderProperties.copy.saveTools.gameSave}
       </button>
-      <button
-        aria-pressed={selectedPlannerSaveModalBranch === "projects"}
-        onClick={() =>
-          setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-            selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
-          )
-        }
-        type="button"
-      >
-        {plannerSaveModalLoaderProperties.copy.saveTools.localProjects}
-      </button>
-      <details className={styles.sidebarToolsGroup}>
-        <summary>{plannerSaveModalLoaderProperties.copy.saveTools.label}</summary>
+      <section className={styles.planGroup}>
+        <p className={styles.planGroupLabel}>
+          {plannerSaveModalLoaderProperties.copy.saveTools.planGroupLabel}
+        </p>
         <button
-          aria-pressed={selectedPlannerSaveModalBranch === "farm-summary"}
+          aria-pressed={selectedPlannerSaveModalBranch === "projects"}
+          className={styles.planButton}
           onClick={() =>
             setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
             )
           }
           type="button"
         >
-          {plannerSaveModalLoaderProperties.copy.saveTools.farmSummary}
+          <span>{plannerSaveModalLoaderProperties.copy.saveTools.myPlans}</span>
+          <span className={styles.planCount}>
+            {plannerSaveModalLoaderProperties.projects.length}
+          </span>
         </button>
-      </details>
+      </section>
     </nav>
+  );
+
+  const libraryToolsEntry = (
+    <div className={`planner-save-modal-loader__branches ${styles.libraryToolsEntry}`}>
+      <button
+        aria-pressed={selectedPlannerSaveModalBranch === "tools"}
+        onClick={() =>
+          setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+            selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "tools"),
+          )
+        }
+        type="button"
+      >
+        {plannerSaveModalLoaderProperties.copy.saveTools.tools}
+      </button>
+    </div>
   );
 
   const mainBranchContent = (
     <div
       className={styles.lazyBranchRegion}
-      hidden={selectedPlannerSaveModalBranch === "projects"}
+      hidden={!isPlannerSaveModalLazyBranch(selectedPlannerSaveModalBranch)}
     >
       <div
         className={styles.branchFeedback}
@@ -339,7 +353,14 @@ export function PlannerSaveModalLoader(
             cloudProjects: plannerSaveModalLoaderProperties.copy.cloudProjects,
           }}
           isProjectsBranchActive={selectedPlannerSaveModalBranch === "projects"}
+          isToolsViewActive={selectedPlannerSaveModalBranch === "tools"}
+          libraryToolsEntry={libraryToolsEntry}
           mainBranchContent={mainBranchContent}
+          onOpenFarmSummary={() =>
+            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
+            )
+          }
           sidebarNavigation={sidebarNavigation}
           currentProjectId={plannerSaveModalLoaderProperties.currentProjectId}
           currentProjectMapInstanceCount={
@@ -443,6 +464,12 @@ export function createNextPlannerSaveModalBranchLoadGeneration(
   return currentPlannerSaveModalBranchLoadGeneration + 1;
 }
 
+function isPlannerSaveModalLazyBranch(
+  plannerSaveModalBranch: PlannerSaveModalBranch,
+): boolean {
+  return plannerSaveModalBranch === "game-save" || plannerSaveModalBranch === "farm-summary";
+}
+
 export function isPlannerSaveModalBranchLoaded(
   plannerSaveModalBranch: PlannerSaveModalBranch,
   plannerSaveModalContent: ComponentType<PlannerSaveModalContentProperties> | null,
@@ -450,7 +477,7 @@ export function isPlannerSaveModalBranchLoaded(
   plannerFarmSummaryModalContent: ComponentType<PlannerFarmSummaryModalContentProperties> | null,
   gameSaveImportCatalogItems: readonly CatalogItem[] | null,
 ): boolean {
-  if (plannerSaveModalBranch === "projects") {
+  if (!isPlannerSaveModalLazyBranch(plannerSaveModalBranch)) {
     return plannerSaveModalContent !== null;
   }
   if (plannerSaveModalBranch === "game-save") {

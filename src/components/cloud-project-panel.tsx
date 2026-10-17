@@ -31,6 +31,7 @@ type CloudProjectPanelProperties = Readonly<{
 type CloudProjectSidebarProperties = Readonly<{
   cloudProjectSync: CloudProjectSyncView;
   copy: CloudProjectsCopy;
+  extrasEntry?: ReactNode;
   localProjects: readonly ReferenceProjectSummary[];
 }>;
 
@@ -50,6 +51,7 @@ type CloudProjectDeleteAlertDialogProperties = Readonly<{
 export function CloudProjectSidebar({
   cloudProjectSync,
   copy,
+  extrasEntry = null,
   localProjects,
 }: CloudProjectSidebarProperties) {
   const extrasHeadingId = useId();
@@ -195,8 +197,9 @@ export function CloudProjectSidebar({
       className={styles.sidebar}
     >
       <h2 className={styles.sidebarTitle} id={extrasHeadingId}>{copy.extras}</h2>
+      {extrasEntry}
+      <div className={styles.compactSync}>
       <section aria-label={copy.account} className={styles.sidebarSection}>
-        <h3 className={styles.sectionTitle}>{copy.account}</h3>
         {cloudProjectSync.authStatus === "loading" ? (
           <p role="status">{copy.accountLoading}</p>
         ) : null}
@@ -251,7 +254,6 @@ export function CloudProjectSidebar({
         <p className={styles.error} role="alert">{cloudProjectSync.errorMessage}</p>
       ) : null}
       <section aria-label={copy.syncAllLocalProjects} className={styles.sidebarSection}>
-        <h3 className={styles.sectionTitle}>{copy.syncAllLocalProjects}</h3>
         {cloudProjectSync.authStatus === "signed-out" ? (
           <p className={styles.description}>{copy.syncAllSignInDescription}</p>
         ) : localProjects.length === 0 ? (
@@ -323,6 +325,7 @@ export function CloudProjectSidebar({
                   localSaveRetirementState.minutesRemaining,
                 )}
       </p>
+      </div>
     </section>
   );
 }

@@ -24,7 +24,10 @@ type PlannerSaveModalContentProperties = Readonly<{
     | "thumbnail"
   >;
   isProjectsBranchActive: boolean;
+  isToolsViewActive?: boolean;
+  libraryToolsEntry?: ReactNode;
   mainBranchContent: ReactNode;
+  onOpenFarmSummary?: () => void;
   sidebarNavigation: ReactNode;
   currentProjectId: string | null;
   currentProjectName: string | null;
@@ -51,7 +54,10 @@ type PlannerSaveModalContentProperties = Readonly<{
 export function PlannerSaveModalContent({
   copy,
   isProjectsBranchActive,
+  isToolsViewActive = false,
+  libraryToolsEntry = null,
   mainBranchContent,
+  onOpenFarmSummary,
   sidebarNavigation,
   currentProjectId,
   currentProjectName,
@@ -152,39 +158,37 @@ export function PlannerSaveModalContent({
         onSaveCurrentMap={handleSaveCurrentMapAndNotifyCloudSync}
         projects={projects}
         isProjectListActive={isProjectsBranchActive}
-        sidebarContent={
-          <>
-            {sidebarNavigation}
-            <details className={styles.imageExportDetails}>
-              <summary>{copy.imageExport.exportLabel}</summary>
-              {imageExportTools}
-            </details>
-          </>
-        }
+        isToolsViewActive={isToolsViewActive}
+        sidebarContent={sidebarNavigation}
         sidebarFooterContent={
           <CloudProjectSidebar
             cloudProjectSync={cloudProjectSync}
             copy={copy.cloudProjects}
+            extrasEntry={libraryToolsEntry}
             localProjects={projects}
           />
         }
-        mainContent={
+        toolsViewContent={
           <>
-            <details
-              className={styles.cloudProjectsDetails}
-              hidden={!isProjectsBranchActive}
-            >
-              <summary>{copy.cloudProjects.localProjects}</summary>
-              <CloudProjectPanel
-                cloudProjectSync={cloudProjectSync}
-                copy={copy.cloudProjects}
-                currentProjectId={currentProjectId}
-                localProjects={projects}
-              />
-            </details>
-            {mainBranchContent}
+            {imageExportTools}
+            {onOpenFarmSummary !== undefined ? (
+              <button
+                className={styles.toolsSectionButton}
+                onClick={onOpenFarmSummary}
+                type="button"
+              >
+                {copy.saveTools.farmSummary}
+              </button>
+            ) : null}
+            <CloudProjectPanel
+              cloudProjectSync={cloudProjectSync}
+              copy={copy.cloudProjects}
+              currentProjectId={currentProjectId}
+              localProjects={projects}
+            />
           </>
         }
+        mainContent={mainBranchContent}
         storageErrorMessage={storageErrorMessage}
         storageStatus={storageStatus}
       />

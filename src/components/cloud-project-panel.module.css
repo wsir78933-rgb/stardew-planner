@@ -23,6 +23,17 @@
   gap: 8px;
 }
 
+.compactSync {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.compactSync .sidebarSection {
+  border-top: 0;
+  padding-top: 0;
+}
+
 .sidebarTitle {
   color: var(--text);
   font-size: 15px;

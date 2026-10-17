@@ -1,7 +1,7 @@
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { isHomepageLocale } from "../homepage/homepage-locale";
 
-export type SaveModalBranch = "farm-summary" | "game-save" | "projects";
+export type SaveModalBranch = "farm-summary" | "game-save" | "projects" | "tools";
 export type FarmSummarySeason = "fall" | "spring" | "summer" | "winter";
 
 export type SaveToolsCopy = Readonly<{
@@ -11,7 +11,10 @@ export type SaveToolsCopy = Readonly<{
   label: string;
   loadingBranch: (branch: SaveModalBranch) => string;
   localProjects: string;
+  myPlans: string;
+  planGroupLabel: string;
   retryBranch: (branch: SaveModalBranch) => string;
+  tools: string;
 }>;
 
 export type LocalProjectsCopy = Readonly<{
@@ -241,7 +244,10 @@ const saveModalCopyByLocale = {
       label: "Save tools",
       loadingBranch: (branch: SaveModalBranch) => `Loading ${getEnglishBranchLabel(branch)}…`,
       localProjects: "Local projects",
+      myPlans: "My Plans",
+      planGroupLabel: "Plans",
       retryBranch: (branch: SaveModalBranch) => `Retry ${getEnglishBranchLabel(branch)}`,
+      tools: "Tools",
     },
     localProjects: {
       actionFailure: (rawError: string) => `Local project action failed: ${rawError}`,
@@ -427,7 +433,10 @@ const saveModalCopyByLocale = {
       label: "保存工具",
       loadingBranch: (branch: SaveModalBranch) => `正在加载${getChineseBranchLabel(branch)}…`,
       localProjects: "本地项目",
+      myPlans: "我的方案",
+      planGroupLabel: "方案",
       retryBranch: (branch: SaveModalBranch) => `重试加载${getChineseBranchLabel(branch)}`,
+      tools: "工具",
     },
     localProjects: {
       actionFailure: (rawError: string) => `本地项目操作失败：${rawError}`,
@@ -616,11 +625,15 @@ export function getSaveModalCopy(locale: HomepageLocale): SaveModalCopy {
 function getEnglishBranchLabel(branch: SaveModalBranch): string {
   if (branch === "projects") return "Local projects";
   if (branch === "game-save") return "Import Game Save";
-  return "Farm Summary";
+  if (branch === "farm-summary") return "Farm Summary";
+  if (branch === "tools") return "Tools";
+  throw new Error(`Unsupported save-modal branch ${JSON.stringify(branch)}.`);
 }
 
 function getChineseBranchLabel(branch: SaveModalBranch): string {
   if (branch === "projects") return "本地项目";
   if (branch === "game-save") return "导入游戏存档";
-  return "农场摘要";
+  if (branch === "farm-summary") return "农场摘要";
+  if (branch === "tools") return "工具";
+  throw new Error(`Unsupported save-modal branch ${JSON.stringify(branch)}.`);
 }

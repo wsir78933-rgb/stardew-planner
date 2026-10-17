@@ -85,24 +85,26 @@ describe("planner save-modal loader", () => {
     expect(markup).toContain("正在加载本地项目…");
   });
 
-  it("orders Import Game Save before local projects and keeps tools collapsed", () => {
+  it("orders Import Game Save before My Plans and keeps tools off the sidebar disclosure", () => {
     const loaderSource = readFileSync(
       resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),
       "utf8",
     );
     const navigationSource = loaderSource.slice(
       loaderSource.indexOf("const sidebarNavigation"),
-      loaderSource.indexOf("const mainBranchContent"),
+      loaderSource.indexOf("const libraryToolsEntry"),
     );
     const gameSaveLabelIndex = navigationSource.indexOf("copy.saveTools.gameSave");
-    const localProjectsLabelIndex = navigationSource.indexOf("copy.saveTools.localProjects");
-    const toolsSummaryIndex = navigationSource.indexOf("<summary>");
+    const myPlansLabelIndex = navigationSource.indexOf("copy.saveTools.myPlans");
 
     expect(gameSaveLabelIndex).toBeGreaterThan(-1);
-    expect(localProjectsLabelIndex).toBeGreaterThan(gameSaveLabelIndex);
-    expect(toolsSummaryIndex).toBeGreaterThan(localProjectsLabelIndex);
-    expect(navigationSource).toContain("<details");
-    expect(navigationSource).not.toContain("<details open");
+    expect(myPlansLabelIndex).toBeGreaterThan(gameSaveLabelIndex);
+    expect(navigationSource).toContain("copy.saveTools.planGroupLabel");
+    expect(navigationSource).not.toContain("<details");
+    expect(navigationSource).not.toContain("copy.saveTools.farmSummary");
+    expect(loaderSource).toContain("copy.saveTools.tools");
+    expect(loaderSource).toContain('selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "tools")');
+    expect(loaderSource).toContain('selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary")');
   });
 
   it("keeps one common shell mounted and hides inactive lazy branches", () => {
@@ -118,9 +120,10 @@ describe("planner save-modal loader", () => {
     expect(loaderSource.slice(persistentShellRenderIndex - 160, persistentShellRenderIndex))
       .not.toContain("selectedPlannerSaveModalBranch ===");
     expect(loaderSource).toContain("sidebarNavigation={sidebarNavigation}");
+    expect(loaderSource).toContain("libraryToolsEntry={libraryToolsEntry}");
     expect(loaderSource).toContain("mainBranchContent={mainBranchContent}");
     expect(loaderSource).toContain(
-      'hidden={selectedPlannerSaveModalBranch === "projects"}',
+      "hidden={!isPlannerSaveModalLazyBranch(selectedPlannerSaveModalBranch)}",
     );
     expect(loaderSource).toContain("className={styles.branchFeedback}");
     expect(loaderSource).toContain(
