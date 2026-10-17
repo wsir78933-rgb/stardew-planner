@@ -10,6 +10,10 @@ const libraryLayoutStyles = readFileSync(
   resolve(process.cwd(), "src/components/planner-library-layout.module.css"),
   "utf8",
 );
+const localProjectPanelStyles = readFileSync(
+  resolve(process.cwd(), "src/components/local-project-panel.module.css"),
+  "utf8",
+);
 
 describe("Save modal style contract", () => {
   it("scopes Save surfaces and controls to the editor shell", () => {
@@ -44,6 +48,16 @@ describe("Save modal style contract", () => {
     )?.[0];
 
     expect(saveModalContentRule).toContain("background: var(--bg-deep)");
+  });
+
+  it("inherits Library colors from the editor shell theme tokens", () => {
+    expect(localProjectPanelStyles).not.toMatch(/#[\da-f]{3,8}\b|rgba?\(/i);
+    expect(localProjectPanelStyles).not.toMatch(
+      /--(?:background|foreground|card|popover|primary|secondary|muted|border|input|ring|destructive|bg-deep|bg-raised|bg-surface|accent|text)(?:-[\w]+)?\s*:/,
+    );
+    expect(globalStyles).toContain(
+      "--bg-deep: var(--background, #fdfff8)",
+    );
   });
 
   it("gives the Library close control a 44 by 44 touch target without restyling other modals", () => {

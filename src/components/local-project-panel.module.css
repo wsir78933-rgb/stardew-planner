@@ -3,45 +3,6 @@
   min-width: 0;
 }
 
-:global(.planner-editor-shell) :global(.editor-modal--save-panel):has(.panel) {
-  --background: #063c2a;
-  --foreground: #dce9e1;
-  --card: #164a35;
-  --card-foreground: #dce9e1;
-  --popover: #0d402c;
-  --popover-foreground: #dce9e1;
-  --primary: #008052;
-  --primary-foreground: #f4fff8;
-  --secondary: #164832;
-  --secondary-foreground: #dce9e1;
-  --muted: #24553e;
-  --muted-foreground: #9db5a6;
-  --border: #245840;
-  --input: #0c3424;
-  --ring: #36b980;
-  --destructive: #ff9f91;
-  --radius: 0.75rem;
-  --bg-deep: #063c2a;
-  --bg-raised: #124c35;
-  --bg-surface: #164a35;
-  --border-subtle: #20543b;
-  --border-hover: #36b980;
-  --accent: #36b980;
-  --accent-muted: #2c5c44;
-  --text: #dce9e1;
-  --text-dim: #9db5a6;
-  --text-bright: #eaf4ee;
-  --planner-neo-light: rgb(220 233 225 / 9%);
-  --planner-neo-dark: rgb(0 0 0 / 24%);
-  --planner-neo-raised-shadow: 0 1px 3px var(--planner-neo-dark),
-    -1px -1px 1px var(--planner-neo-light);
-  --planner-neo-inset-shadow: inset 0 1px 3px var(--planner-neo-dark),
-    inset 0 -1px 1px var(--planner-neo-light);
-  background: var(--bg-deep);
-  border-color: var(--border-subtle);
-  color: var(--text);
-}
-
 .layout {
   align-items: start;
   display: grid;
