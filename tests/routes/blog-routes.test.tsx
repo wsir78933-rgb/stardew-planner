@@ -54,7 +54,7 @@ it("renders English blog pages with direct root article URLs and one page-level 
   expect(indexMarkup).toContain('href="/how-to-harvest-stardew-valley"');
   expect(indexMarkup).toContain('href="/how-to-get-gold-star-crops-stardew-valley"');
   expect(indexMarkup).toContain('href="/house-upgrade-stardew"');
-  expect(indexMarkup).toContain('href="/profit-margin-stardew"');
+  expect(indexMarkup).toContain('href="/what-to-grow-in-greenhouse-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("All articles");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
@@ -92,7 +92,7 @@ it("renders Chinese blog pages with localized paths and one page-level heading",
   expect(indexMarkup).toContain('href="/zh/how-to-harvest-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/how-to-get-gold-star-crops-stardew-valley"');
   expect(indexMarkup).toContain('href="/zh/house-upgrade-stardew"');
-  expect(indexMarkup).toContain('href="/zh/profit-margin-stardew"');
+  expect(indexMarkup).toContain('href="/zh/what-to-grow-in-greenhouse-stardew"');
   expect(indexMarkup).toContain('data-blog-location-state="index"');
   expect(archiveMarkup).toContain("全部文章");
   expect(archiveMarkup).toContain('data-blog-location-state="archive"');
