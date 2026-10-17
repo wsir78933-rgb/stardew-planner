@@ -587,56 +587,6 @@ export function LocalProjectPanel({
                                 <path d="m13 7 4 4" stroke="currentColor" strokeWidth="1.8" />
                               </svg>
                             </button>
-                            <details className={styles.folderActions}>
-                              <summary
-                                aria-label={`${copy.moveToFolder}: ${projectSummary.title}`}
-                                className={styles.iconAction}
-                              >
-                                <svg aria-hidden="true" fill="none" viewBox="0 0 24 24">
-                                  <path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-10Z" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.8" />
-                                  <path d="M3.8 10h16.4" stroke="currentColor" strokeWidth="1.8" />
-                                </svg>
-                              </summary>
-                              <div
-                                aria-label={copy.moveToFolder}
-                                className={styles.folderActionsPanel}
-                                role="group"
-                              >
-                                {localProjectFolders.map((folder) => (
-                                  <button
-                                    aria-current={
-                                      getLocalProjectFolderId(
-                                        folderState,
-                                        projectSummary.id,
-                                      ) === folder.id
-                                        ? "true"
-                                        : undefined
-                                    }
-                                    data-project-action="move-folder"
-                                    data-target-folder-id={folder.id}
-                                    disabled={
-                                      !canManageFolders
-                                      || getLocalProjectFolderId(
-                                        folderState,
-                                        projectSummary.id,
-                                      ) === folder.id
-                                    }
-                                    key={folder.id}
-                                    onClick={(clickEvent) =>
-                                      handleMoveProjectToFolder(
-                                        projectSummary.id,
-                                        folder.id,
-                                        folder.name,
-                                        clickEvent,
-                                      )
-                                    }
-                                    type="button"
-                                  >
-                                    {folder.name}
-                                  </button>
-                                ))}
-                              </div>
-                            </details>
                             <details className={styles.moreActions}>
                               <summary
                                 aria-label={`${moreActionsLabel}: ${projectSummary.title}`}
@@ -649,6 +599,50 @@ export function LocalProjectPanel({
                                 </svg>
                               </summary>
                               <div className={styles.moreActionsPanel}>
+                                <div
+                                  aria-label={copy.moveToFolder}
+                                  className={styles.folderActionsGroup}
+                                  role="group"
+                                >
+                                  <p className={styles.folderActionsLabel}>
+                                    {copy.moveToFolder}
+                                  </p>
+                                  <div className={styles.folderActionsPanel}>
+                                    {localProjectFolders.map((folder) => (
+                                      <button
+                                        aria-current={
+                                          getLocalProjectFolderId(
+                                            folderState,
+                                            projectSummary.id,
+                                          ) === folder.id
+                                            ? "true"
+                                            : undefined
+                                        }
+                                        data-project-action="move-folder"
+                                        data-target-folder-id={folder.id}
+                                        disabled={
+                                          !canManageFolders
+                                          || getLocalProjectFolderId(
+                                            folderState,
+                                            projectSummary.id,
+                                          ) === folder.id
+                                        }
+                                        key={folder.id}
+                                        onClick={(clickEvent) =>
+                                          handleMoveProjectToFolder(
+                                            projectSummary.id,
+                                            folder.id,
+                                            folder.name,
+                                            clickEvent,
+                                          )
+                                        }
+                                        type="button"
+                                      >
+                                        {folder.name}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
                                 <button
                                   data-project-action="duplicate"
                                   disabled={!isStorageReady}

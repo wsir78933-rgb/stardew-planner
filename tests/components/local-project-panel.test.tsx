@@ -115,10 +115,19 @@ describe("local project panel", () => {
     const forestProjectCard = getProjectCardMarkup(panelMarkup, "project-forest");
     expect(forestProjectCard).toContain('data-project-action="open"');
     expect(forestProjectCard).toContain('data-project-action="rename"');
-    expect(forestProjectCard).toContain('data-project-action="move-folder"');
     expect(forestProjectCard).toContain('data-project-action="duplicate"');
     expect(forestProjectCard).toContain('data-project-action="export"');
     expect(forestProjectCard).toContain('data-project-action="delete"');
+    expect(forestProjectCard).not.toContain('aria-label="Move to folder: Forest Farm"');
+    const moreActionsStartIndex = forestProjectCard.indexOf(
+      'aria-label="More actions: Forest Farm"',
+    );
+    const moreActionsEndIndex = forestProjectCard.indexOf("</details>", moreActionsStartIndex);
+    const moreActionsMarkup = forestProjectCard.slice(
+      moreActionsStartIndex,
+      moreActionsEndIndex,
+    );
+    expect(moreActionsMarkup).toContain('data-project-action="move-folder"');
     expect(panelMarkup).toContain(
       formatLocalProjectUpdatedAt("2026-07-26T01:00:00.000Z", "en"),
     );
@@ -134,8 +143,8 @@ describe("local project panel", () => {
       "+ New folder",
       "Open",
       "Rename",
-      "Move to folder",
       "More actions",
+      "Move to folder",
       "Duplicate",
       "Export JSON",
       "Delete",
