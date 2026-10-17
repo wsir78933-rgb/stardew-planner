@@ -49,7 +49,7 @@ describe("planner save-modal loader", () => {
     ).toThrow(`received ${String(Number.MAX_SAFE_INTEGER)}`);
   });
 
-  it("renders Chinese save navigation labels", () => {
+  it("shows a localized loading state before the persistent library shell loads", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerSaveModalLoader, {
         catalogItems: [],
@@ -81,10 +81,34 @@ describe("planner save-modal loader", () => {
       }),
     );
 
-    expect(markup).toContain('aria-label="保存工具"');
-    expect(markup).toContain("本地项目");
-    expect(markup).toContain("导入游戏存档");
-    expect(markup).toContain("农场摘要");
+    expect(markup).toContain('role="status"');
+    expect(markup).toContain("正在加载本地项目…");
+  });
+
+  it("keeps one common shell mounted and hides inactive lazy branches", () => {
+    const loaderSource = readFileSync(
+      resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),
+      "utf8",
+    );
+    const persistentShellRenderIndex = loaderSource.indexOf(
+      "{PlannerSaveModalContent !== null ? (",
+    );
+
+    expect(persistentShellRenderIndex).toBeGreaterThan(-1);
+    expect(loaderSource.slice(persistentShellRenderIndex - 160, persistentShellRenderIndex))
+      .not.toContain("selectedPlannerSaveModalBranch ===");
+    expect(loaderSource).toContain("sidebarNavigation={sidebarNavigation}");
+    expect(loaderSource).toContain("mainBranchContent={mainBranchContent}");
+    expect(loaderSource).toContain(
+      'hidden={selectedPlannerSaveModalBranch === "projects"}',
+    );
+    expect(loaderSource).toContain("className={styles.branchFeedback}");
+    expect(loaderSource).toContain(
+      'hidden={selectedPlannerSaveModalBranch !== "game-save"}',
+    );
+    expect(loaderSource).toContain(
+      'hidden={selectedPlannerSaveModalBranch !== "farm-summary"}',
+    );
   });
 
   it("uses branch-local imports without static modal-content imports or top-level dynamic", () => {

@@ -6,6 +6,10 @@ const globalStyles = readFileSync(
   resolve(process.cwd(), "app/globals.css"),
   "utf8",
 );
+const libraryLayoutStyles = readFileSync(
+  resolve(process.cwd(), "src/components/planner-library-layout.module.css"),
+  "utf8",
+);
 
 describe("Save modal style contract", () => {
   it("scopes Save surfaces and controls to the editor shell", () => {
@@ -40,6 +44,21 @@ describe("Save modal style contract", () => {
     )?.[0];
 
     expect(saveModalContentRule).toContain("background: var(--bg-deep)");
+  });
+
+  it("keeps the Library navigation vertical and hides inactive mounted panels", () => {
+    const libraryNavigationRule = globalStyles.match(
+      /\.planner-editor-shell \.planner-save-modal-loader__branches\s*\{[^}]*\}/,
+    )?.[0] ?? "";
+
+    expect(libraryNavigationRule).toContain(
+      "grid-template-columns: minmax(0, 1fr)",
+    );
+    expect(libraryLayoutStyles).toContain(".cloudProjectsDetails[hidden]");
+    expect(libraryLayoutStyles).toContain(".lazyBranchRegion[hidden]");
+    expect(libraryLayoutStyles).toContain(".branchFeedback[hidden]");
+    expect(libraryLayoutStyles).toContain(".branchContent[hidden]");
+    expect(libraryLayoutStyles).toContain("display: none !important;");
   });
 
   it("scopes the game-save and farm-summary presentation to the editor shell", () => {

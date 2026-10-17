@@ -65,6 +65,8 @@ describe("local project panel", () => {
     expect(panelMarkup).toContain("Duplicate");
     expect(panelMarkup).toContain("Delete");
     expect(panelMarkup).toContain("Export JSON");
+    expect(panelMarkup).toContain("More actions");
+    expect(panelMarkup).toContain('aria-label="More actions: Forest Farm"');
     expect(panelMarkup).toContain("Import JSON");
     expect(panelMarkup).toContain("Forest Farm");
     expect(panelMarkup).toContain("Beach Cabin");
@@ -107,6 +109,7 @@ describe("local project panel", () => {
       "New project",
       "Open",
       "Rename",
+      "More actions",
       "Duplicate",
       "Export JSON",
       "Delete",
@@ -116,6 +119,54 @@ describe("local project panel", () => {
       "local-project-panel__status",
       "local-project-panel__primary-actions",
       "local-project-panel__import",
+    ]);
+  });
+
+  it("keeps the local project list mounted while rendering the shared Library slots", () => {
+    const panelMarkup = renderToStaticMarkup(
+      createElement(LocalProjectPanel, {
+        copy: getSaveModalCopy("zh-CN").localProjects,
+        currentProjectId: "project-forest",
+        currentProjectName: "Forest Farm",
+        deleteCopy: getSaveModalCopy("zh-CN").deleteProject,
+        projects: localProjectSummaries,
+        storageStatus: "ready",
+        storageErrorMessage: null,
+        sidebarContent: createElement(
+          "nav",
+          { "data-shared-sidebar-slot": "navigation" },
+          "Import Game Save",
+        ),
+        mainContent: createElement(
+          "section",
+          { "data-shared-main-slot": "branch" },
+          "Farm Summary",
+        ),
+        isProjectListActive: false,
+        onCreateProject: ignoreLocalProjectAction,
+        onDeleteProject: ignoreLocalProjectAction,
+        onDuplicateProject: ignoreLocalProjectAction,
+        onExportProject: () => "{}",
+        onImportProject: ignoreLocalProjectAction,
+        onOpenProject: ignoreLocalProjectAction,
+        onRenameProject: ignoreLocalProjectAction,
+        onSaveCurrentMap: ignoreLocalProjectAction,
+      }),
+    );
+
+    expect(panelMarkup).toContain('data-shared-sidebar-slot="navigation"');
+    expect(panelMarkup).toContain('data-shared-main-slot="branch"');
+    expect(panelMarkup).toContain('hidden=""');
+    expect(panelMarkup).toContain('data-project-id="project-forest"');
+    expect(panelMarkup).toContain('aria-label="搜索本地项目"');
+    expect(panelMarkup).toContain("更多操作");
+    expectTextInOrder(panelMarkup, [
+      'data-local-project-region="sidebar"',
+      'data-shared-sidebar-slot="navigation"',
+      'data-local-project-region="main"',
+      'aria-label="搜索本地项目"',
+      'data-project-id="project-forest"',
+      'data-shared-main-slot="branch"',
     ]);
   });
 

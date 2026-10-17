@@ -164,17 +164,15 @@
 }
 
 .currentBadge {
-  background: var(--bg-surface);
+  background: var(--accent-muted);
   border: 1px solid var(--border-subtle);
   border-radius: 999px;
   color: var(--text);
-  font-size: 10px;
+  flex: 0 0 auto;
+  font-size: 11px;
   font-weight: 700;
-  left: 8px;
   line-height: 1;
-  padding: 5px 7px;
-  position: absolute;
-  top: 8px;
+  padding: 5px 8px;
 }
 
 .projectCardBody {
@@ -186,15 +184,24 @@
 }
 
 .projectCardHeading {
-  align-items: start;
+  align-items: center;
   display: flex;
   gap: 8px;
   justify-content: space-between;
   min-width: 0;
 }
 
+.projectCardTitleGroup {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
 .projectCardHeading strong {
   color: var(--text);
+  flex: 1 1 120px;
   font-size: 13px;
   font-weight: 700;
   min-width: 0;
@@ -226,12 +233,18 @@
   min-width: 0;
 }
 
+.projectCardActions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .layout .main .renameForm {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .projectCardActions button,
-.renameForm button {
+.renameForm button,
+.moreActions summary,
+.moreActionsPanel button {
   background: var(--bg-raised);
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
@@ -240,25 +253,30 @@
   font: inherit;
   font-size: 12px;
   line-height: 1.25;
-  min-height: 32px;
+  min-height: 44px;
   min-width: 0;
   overflow-wrap: anywhere;
   padding: 6px 8px;
 }
 
 .projectCardActions button:hover:not(:disabled),
-.renameForm button:hover:not(:disabled) {
+.renameForm button:hover:not(:disabled),
+.moreActions summary:hover,
+.moreActionsPanel button:hover:not(:disabled) {
   border-color: var(--accent);
 }
 
 .projectCardActions button:focus-visible,
-.renameForm button:focus-visible {
+.renameForm button:focus-visible,
+.moreActions summary:focus-visible,
+.moreActionsPanel button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 .projectCardActions button:disabled,
-.renameForm button:disabled {
+.renameForm button:disabled,
+.moreActionsPanel button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
@@ -266,10 +284,49 @@
 .projectCardActions .openProjectButton {
   background: var(--accent-muted);
   font-weight: 700;
+}
+
+.moreActions {
+  min-width: 0;
+}
+
+.moreActions[open] {
   grid-column: 1 / -1;
 }
 
-.projectCardActions button:last-child {
+.moreActions summary {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  text-align: center;
+}
+
+.moreActions summary::-webkit-details-marker {
+  display: none;
+}
+
+.moreActions summary::after {
+  content: "+";
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.moreActions[open] summary::after {
+  content: "−";
+}
+
+.moreActionsPanel {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 6px;
+  min-width: 0;
+}
+
+.moreActionsPanel button:last-child {
   color: #9b3b2d;
 }
 
@@ -325,7 +382,9 @@
   }
 
   .layout .main .renameForm :is(input, button),
-  .layout .main .projectCardActions button {
+  .layout .main .projectCardActions button,
+  .layout .main .moreActions summary,
+  .layout .main .moreActionsPanel button {
     min-height: 44px;
   }
 }

@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type ReactNode,
 } from "react";
 import { downloadBrowserFile } from "../projects/browser-file-download";
 import { createReferenceProjectExportFile } from "../projects/reference-project-export-file";
@@ -27,6 +28,9 @@ type LocalProjectPanelProperties = Readonly<{
   projects: readonly ReferenceProjectSummary[];
   storageStatus: LocalProjectStorageStatus;
   storageErrorMessage: string | null;
+  sidebarContent?: ReactNode;
+  mainContent?: ReactNode;
+  isProjectListActive?: boolean;
   onCreateProject: () => void;
   onDeleteProject: (projectId: string) => void;
   onDuplicateProject: (projectId: string) => void;
@@ -47,6 +51,9 @@ export function LocalProjectPanel({
   projects,
   storageStatus,
   storageErrorMessage,
+  sidebarContent = null,
+  mainContent = null,
+  isProjectListActive = true,
   onCreateProject,
   onDeleteProject,
   onDuplicateProject,
@@ -79,6 +86,8 @@ export function LocalProjectPanel({
     projects,
     searchQuery,
   );
+  const moreActionsLabel =
+    copy.dateTimeLocale === "zh-CN" ? "更多操作" : "More actions";
 
   function runProjectAction(action: () => void, successMessage: string): void {
     try {
@@ -291,171 +300,186 @@ export function LocalProjectPanel({
               />
             </label>
           </div>
+          {sidebarContent}
         </aside>
         <div className={styles.main} data-local-project-region="main">
-          <label className={styles.searchControl}>
-            <svg
-              aria-hidden="true"
-              className={styles.searchIcon}
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" strokeWidth="1.8" />
-              <path d="m15.7 15.7 4.1 4.1" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
-            </svg>
-            <input
-              aria-label={copy.searchProjects}
-              autoComplete="off"
-              onChange={(changeEvent) => setSearchQuery(changeEvent.currentTarget.value)}
-              placeholder={copy.searchProjects}
-              type="search"
-              value={searchQuery}
-            />
-          </label>
-          {filteredProjectSummaries.length > 0 ? (
-            <ul aria-label={copy.savedLocalProjects} className={styles.projectGrid}>
-              {filteredProjectSummaries.map((projectSummary) => {
-                const isCurrentProject = projectSummary.id === currentProjectId;
-                const isRenamingProject = projectSummary.id === renamedProjectId;
+          <div hidden={!isProjectListActive}>
+            <label className={styles.searchControl}>
+              <svg
+                aria-hidden="true"
+                className={styles.searchIcon}
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" strokeWidth="1.8" />
+                <path d="m15.7 15.7 4.1 4.1" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+              </svg>
+              <input
+                aria-label={copy.searchProjects}
+                autoComplete="off"
+                onChange={(changeEvent) => setSearchQuery(changeEvent.currentTarget.value)}
+                placeholder={copy.searchProjects}
+                type="search"
+                value={searchQuery}
+              />
+            </label>
+            {filteredProjectSummaries.length > 0 ? (
+              <ul aria-label={copy.savedLocalProjects} className={styles.projectGrid}>
+                {filteredProjectSummaries.map((projectSummary) => {
+                  const isCurrentProject = projectSummary.id === currentProjectId;
+                  const isRenamingProject = projectSummary.id === renamedProjectId;
 
-                return (
-                  <li
-                    className={styles.projectCard}
-                    data-current-project={isCurrentProject}
-                    data-project-id={projectSummary.id}
-                    key={projectSummary.id}
-                  >
-                    <div className={styles.projectPreview}>
-                      {projectSummary.activeMapThumbnailDataUrl ? (
-                        <img
-                          alt={copy.mapPreviewAlt(projectSummary.title)}
-                          className={styles.projectPreviewImage}
-                          src={projectSummary.activeMapThumbnailDataUrl}
-                        />
-                      ) : (
-                        <div className={styles.projectPreviewEmpty}>
-                          <span aria-hidden="true" className={styles.previewMapIcon}>
-                            <svg fill="none" viewBox="0 0 40 40">
-                              <path d="m5 11 10-5 10 5 10-5v23l-10 5-10-5-10 5V11Z" />
-                              <path d="M15 6v23M25 11v23" />
-                              <path d="m8 15 4-2M8 21l4-2M28 14l4-2M28 20l4-2" />
-                            </svg>
-                          </span>
-                          <span>{copy.noMapPreview}</span>
-                        </div>
-                      )}
-                      {isCurrentProject ? (
-                        <span className={styles.currentBadge}>{copy.current}</span>
-                      ) : null}
-                    </div>
-                    <div className={styles.projectCardBody}>
-                      <div className={styles.projectCardHeading}>
-                        <strong>{projectSummary.title}</strong>
-                        {projectSummary.mapCount !== undefined ? (
-                          <span className={styles.projectMapCount}>
-                            {copy.projectMapCount(projectSummary.mapCount)}
-                          </span>
-                        ) : null}
-                      </div>
-                      <span className={styles.projectUpdatedAt}>
-                        {formatLocalProjectUpdatedAt(
-                          projectSummary.updated_at,
-                          copy.dateTimeLocale,
+                  return (
+                    <li
+                      className={styles.projectCard}
+                      data-current-project={isCurrentProject}
+                      data-project-id={projectSummary.id}
+                      key={projectSummary.id}
+                    >
+                      <div className={styles.projectPreview}>
+                        {projectSummary.activeMapThumbnailDataUrl ? (
+                          <img
+                            alt={copy.mapPreviewAlt(projectSummary.title)}
+                            className={styles.projectPreviewImage}
+                            src={projectSummary.activeMapThumbnailDataUrl}
+                          />
+                        ) : (
+                          <div className={styles.projectPreviewEmpty}>
+                            <span aria-hidden="true" className={styles.previewMapIcon}>
+                              <svg fill="none" viewBox="0 0 40 40">
+                                <path d="m5 11 10-5 10 5 10-5v23l-10 5-10-5-10 5V11Z" />
+                                <path d="M15 6v23M25 11v23" />
+                                <path d="m8 15 4-2M8 21l4-2M28 14l4-2M28 20l4-2" />
+                              </svg>
+                            </span>
+                            <span>{copy.noMapPreview}</span>
+                          </div>
                         )}
-                      </span>
-                      {isRenamingProject ? (
-                        <div className={`local-project-panel__rename-form ${styles.renameForm}`}>
-                          <label>
-                            <span className="sr-only">{copy.newProjectName}</span>
-                            <input
-                              onChange={(changeEvent) =>
-                                setRequestedProjectName(changeEvent.currentTarget.value)
+                      </div>
+                      <div className={styles.projectCardBody}>
+                        <div className={styles.projectCardHeading}>
+                          <div className={styles.projectCardTitleGroup}>
+                            <strong>{projectSummary.title}</strong>
+                            {isCurrentProject ? (
+                              <span className={styles.currentBadge}>{copy.current}</span>
+                            ) : null}
+                          </div>
+                          {projectSummary.mapCount !== undefined ? (
+                            <span className={styles.projectMapCount}>
+                              {copy.projectMapCount(projectSummary.mapCount)}
+                            </span>
+                          ) : null}
+                        </div>
+                        <span className={styles.projectUpdatedAt}>
+                          {formatLocalProjectUpdatedAt(
+                            projectSummary.updated_at,
+                            copy.dateTimeLocale,
+                          )}
+                        </span>
+                        {isRenamingProject ? (
+                          <div className={`local-project-panel__rename-form ${styles.renameForm}`}>
+                            <label>
+                              <span className="sr-only">{copy.newProjectName}</span>
+                              <input
+                                onChange={(changeEvent) =>
+                                  setRequestedProjectName(changeEvent.currentTarget.value)
+                                }
+                                type="text"
+                                value={requestedProjectName}
+                              />
+                            </label>
+                            <button
+                              disabled={!isStorageReady}
+                              onClick={() => handleRenameProject(projectSummary.id)}
+                              type="button"
+                            >
+                              {copy.applyName}
+                            </button>
+                            <button
+                              onClick={() => setRenamedProjectId(null)}
+                              type="button"
+                            >
+                              {copy.cancelRename}
+                            </button>
+                          </div>
+                        ) : (
+                          <div className={styles.projectCardActions}>
+                            <button
+                              className={styles.openProjectButton}
+                              data-project-action="open"
+                              disabled={!isStorageReady}
+                              onClick={() =>
+                                handleOpenProject(projectSummary.id, projectSummary.title)
                               }
-                              type="text"
-                              value={requestedProjectName}
-                            />
-                          </label>
-                          <button
-                            disabled={!isStorageReady}
-                            onClick={() => handleRenameProject(projectSummary.id)}
-                            type="button"
-                          >
-                            {copy.applyName}
-                          </button>
-                          <button
-                            onClick={() => setRenamedProjectId(null)}
-                            type="button"
-                          >
-                            {copy.cancelRename}
-                          </button>
-                        </div>
-                      ) : (
-                        <div className={styles.projectCardActions}>
-                          <button
-                            className={styles.openProjectButton}
-                            data-project-action="open"
-                            disabled={!isStorageReady}
-                            onClick={() =>
-                              handleOpenProject(projectSummary.id, projectSummary.title)
-                            }
-                            type="button"
-                          >
-                            {copy.open}
-                          </button>
-                          <button
-                            data-project-action="rename"
-                            disabled={!isStorageReady}
-                            onClick={() => handleStartRename(projectSummary)}
-                            type="button"
-                          >
-                            {copy.rename}
-                          </button>
-                          <button
-                            data-project-action="duplicate"
-                            disabled={!isStorageReady}
-                            onClick={() => handleDuplicateProject(projectSummary.id)}
-                            type="button"
-                          >
-                            {copy.duplicate}
-                          </button>
-                          <button
-                            data-project-action="export"
-                            disabled={!isStorageReady}
-                            onClick={() => handleExportProject(projectSummary)}
-                            type="button"
-                          >
-                            {copy.exportJson}
-                          </button>
-                          <button
-                            data-project-action="delete"
-                            disabled={!isStorageReady}
-                            onClick={(clickEvent) =>
-                              handleRequestProjectDeletion(
-                                projectSummary.id,
-                                clickEvent.currentTarget,
-                              )
-                            }
-                            type="button"
-                          >
-                            {copy.delete}
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : projects.length > 0 && searchQuery.trim().length > 0 ? (
-            <p className="local-project-panel__message" role="status">
-              {copy.noSearchResults}
-            </p>
-          ) : null}
-          {projects.length === 0 ? (
-            <p className="local-project-panel__message">
-              {copy.emptyState}
-            </p>
-          ) : null}
+                              type="button"
+                            >
+                              {copy.open}
+                            </button>
+                            <button
+                              data-project-action="rename"
+                              disabled={!isStorageReady}
+                              onClick={() => handleStartRename(projectSummary)}
+                              type="button"
+                            >
+                              {copy.rename}
+                            </button>
+                            <details className={styles.moreActions}>
+                              <summary
+                                aria-label={`${moreActionsLabel}: ${projectSummary.title}`}
+                              >
+                                {moreActionsLabel}
+                              </summary>
+                              <div className={styles.moreActionsPanel}>
+                                <button
+                                  data-project-action="duplicate"
+                                  disabled={!isStorageReady}
+                                  onClick={() => handleDuplicateProject(projectSummary.id)}
+                                  type="button"
+                                >
+                                  {copy.duplicate}
+                                </button>
+                                <button
+                                  data-project-action="export"
+                                  disabled={!isStorageReady}
+                                  onClick={() => handleExportProject(projectSummary)}
+                                  type="button"
+                                >
+                                  {copy.exportJson}
+                                </button>
+                                <button
+                                  data-project-action="delete"
+                                  disabled={!isStorageReady}
+                                  onClick={(clickEvent) =>
+                                    handleRequestProjectDeletion(
+                                      projectSummary.id,
+                                      clickEvent.currentTarget,
+                                    )
+                                  }
+                                  type="button"
+                                >
+                                  {copy.delete}
+                                </button>
+                              </div>
+                            </details>
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : projects.length > 0 && searchQuery.trim().length > 0 ? (
+              <p className="local-project-panel__message" role="status">
+                {copy.noSearchResults}
+              </p>
+            ) : null}
+            {projects.length === 0 ? (
+              <p className="local-project-panel__message">
+                {copy.emptyState}
+              </p>
+            ) : null}
+          </div>
+          {mainContent}
         </div>
       </div>
       {projectPendingDeletion !== undefined ? (

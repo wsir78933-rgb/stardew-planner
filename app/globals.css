@@ -3674,7 +3674,7 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .project-map-instance-panel__instance-actions button,
 .planner-editor-shell .project-map-instance-panel__rename-form button { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
 .planner-editor-shell .editor-modal--save-panel { max-height: min(48rem, calc(100dvh - 2rem)); overflow-y: auto; width: min(680px, 90vw); }
-.planner-editor-shell .planner-save-modal-loader__branches { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(3, minmax(0, 1fr)); padding: var(--lk-sm) var(--lk-md) 0; }
+.planner-editor-shell .planner-save-modal-loader__branches { display: grid; gap: var(--lk-3xs); grid-template-columns: minmax(0, 1fr); padding: 0; }
 .planner-editor-shell .planner-save-modal-loader__branches button { min-width: 0; overflow-wrap: anywhere; padding: var(--lk-xs) var(--lk-sm); }
 .planner-editor-shell .planner-save-modal-loader__branches button[aria-pressed="true"] { background: #c9fb45; border-color: var(--border-subtle); color: var(--text); }
 .planner-editor-shell .planner-save-modal-content { background: var(--bg-deep); display: grid; gap: var(--lk-sm); padding: var(--lk-sm) var(--lk-md) var(--lk-md); }
@@ -3721,7 +3721,7 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .local-project-panel__rename-form label { grid-column: 1 / -1; }
 .planner-editor-shell .local-project-panel__rename-form input { background: var(--bg-deep); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); color: var(--text); min-height: var(--lk-xl); padding: 0 var(--lk-xs); width: 100%; }
 .planner-editor-shell .local-project-panel__project-actions button:last-child { background: rgb(177 58 40 / 10%); color: #b13a28; }
-.planner-editor-shell .planner-save-modal-content__exports { display: grid; gap: var(--lk-sm); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.planner-editor-shell .planner-save-modal-content__exports { display: grid; gap: var(--lk-sm); grid-template-columns: minmax(0, 1fr); }
 .planner-editor-shell .map-image-export-panel { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--lk-xs); display: grid; gap: var(--lk-xs); min-width: 0; padding: var(--lk-sm); }
 .planner-editor-shell .map-image-export-panel h3 { color: var(--text); font-size: 1rem; margin: 0; }
 .planner-editor-shell .map-image-export-panel__actions { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); }
@@ -3870,7 +3870,7 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 
 @media (max-width: 640px) {
   .planner-editor-shell .editor-modal--save-panel { max-height: calc(100dvh - 1rem); max-width: calc(100vw - 1rem); width: min(680px, calc(100vw - 1rem)); }
-  .planner-editor-shell .planner-save-modal-loader__branches { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: var(--lk-xs) var(--lk-xs) 0; }
+  .planner-editor-shell .planner-save-modal-loader__branches { grid-template-columns: minmax(0, 1fr); padding: 0; }
   .planner-editor-shell .planner-save-modal-loader__branches button { padding: var(--lk-3xs); white-space: normal; }
   .planner-editor-shell .planner-save-modal-content { padding: var(--lk-xs); }
   .planner-editor-shell .editor-modal--save-panel button,

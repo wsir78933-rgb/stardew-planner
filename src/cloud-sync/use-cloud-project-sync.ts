@@ -45,6 +45,13 @@ export type LocalProjectCloudSyncState = Readonly<{
   revision?: number;
   errorMessage?: string;
 }>;
+export type CloudProjectBatchSyncProgress = Readonly<{
+  status: "running" | "completed" | "failed";
+  completed: number;
+  total: number;
+  currentProjectId: string | null;
+  failedProjectIds: readonly string[];
+}>;
 
 export type CloudProjectSyncView = Readonly<{
   status: CloudProjectSyncStatus;
@@ -54,12 +61,14 @@ export type CloudProjectSyncView = Readonly<{
   hasMoreCloudProjects: boolean;
   isLoadingMoreCloudProjects: boolean;
   localProjectSyncById: Readonly<Record<string, LocalProjectCloudSyncState>>;
+  batchSyncProgress: CloudProjectBatchSyncProgress | null;
   errorMessage: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   refreshCloudProjects: () => Promise<void>;
   loadMoreCloudProjects: () => Promise<void>;
   uploadLocalProject: (localProjectId: string) => Promise<void>;
+  syncAllLocalProjects: (localProjectIds: readonly string[]) => Promise<void>;
   onLocalProjectSaved: (localProjectId: string) => Promise<void>;
   openCloudProject: (cloudProjectId: string) => Promise<Readonly<{ localProjectId: string }>>;
   deleteCloudCopy: (cloudProjectId: string) => Promise<void>;
@@ -79,6 +88,7 @@ type CloudProjectSyncViewState = Pick<
   | "account"
   | "cloudProjects"
   | "localProjectSyncById"
+  | "batchSyncProgress"
   | "errorMessage"
 > &
   Readonly<{
@@ -107,6 +117,7 @@ const INITIAL_VIEW_STATE: CloudProjectSyncViewState = {
   nextCloudProjectCursor: null,
   isLoadingMoreCloudProjects: false,
   localProjectSyncById: {},
+  batchSyncProgress: null,
   errorMessage: null,
 };
 
@@ -128,6 +139,9 @@ export function useCloudProjectSync(
   const accountRequestControllersRef = useRef(new Set<AbortController>());
   const accountLinksRef = useRef<readonly CloudProjectLink[]>([]);
   const pendingUploadCloudIdByLocalIdRef = useRef(new Map<string, string>());
+  const activeBatchSyncIdRef = useRef<number | null>(null);
+  const nextBatchSyncIdRef = useRef(1);
+  const cloudMutationQueueRef = useRef<Promise<void>>(Promise.resolve());
   const loadingMoreCloudProjectsRef = useRef(false);
   const loadingMoreUserIdRef = useRef<string | null>(null);
   const authTransitionRef = useRef(false);
@@ -140,6 +154,57 @@ export function useCloudProjectSync(
       setViewState((currentState) => update(currentState));
     },
     [],
+  );
+
+  const runSerializedCloudMutation = useCallback(
+    async <TResult,>(operation: () => Promise<TResult>): Promise<TResult> => {
+      const requestedAccountId = accountRef.current?.id ?? null;
+      const requestedAccountGeneration = accountGenerationRef.current;
+      const previousMutation = cloudMutationQueueRef.current;
+      let releaseCurrentMutation!: () => void;
+      const currentMutation = new Promise<void>((resolve) => {
+        releaseCurrentMutation = resolve;
+      });
+      cloudMutationQueueRef.current = previousMutation.then(() => currentMutation);
+      await previousMutation;
+      try {
+        const activeAccountId = accountRef.current?.id ?? null;
+        if (
+          activeAccountId !== requestedAccountId ||
+          accountGenerationRef.current !== requestedAccountGeneration
+        ) {
+          throw new CloudOperationCancelledError(
+            `Cloud mutation queued for account ${JSON.stringify(requestedAccountId)} was cancelled before execution because the active account changed to ${JSON.stringify(activeAccountId)}.`,
+          );
+        }
+        return await operation();
+      } finally {
+        releaseCurrentMutation();
+      }
+    },
+    [],
+  );
+
+  const updateBatchSyncProgress = useCallback(
+    (
+      batchSyncId: number,
+      expectedAccountId: string | null,
+      expectedAccountGeneration: number,
+      batchSyncProgress: CloudProjectBatchSyncProgress,
+    ) => {
+      if (
+        activeBatchSyncIdRef.current !== batchSyncId ||
+        (accountRef.current?.id ?? null) !== expectedAccountId ||
+        accountGenerationRef.current !== expectedAccountGeneration
+      ) {
+        return;
+      }
+      updateViewState((currentState) => ({
+        ...currentState,
+        batchSyncProgress,
+      }));
+    },
+    [updateViewState],
   );
 
   const setLocalProjectState = useCallback(
@@ -283,6 +348,7 @@ export function useCloudProjectSync(
       const accountChanged = previousAccount?.id !== nextAccount?.id;
       if (accountChanged) {
         cancelAccountRequests();
+        activeBatchSyncIdRef.current = null;
         accountLinksRef.current = [];
         accountRef.current = nextAccount;
         pendingUploadCloudIdByLocalIdRef.current.clear();
@@ -294,6 +360,7 @@ export function useCloudProjectSync(
           nextCloudProjectCursor: null,
           isLoadingMoreCloudProjects: false,
           localProjectSyncById: {},
+          batchSyncProgress: null,
           errorMessage: null,
         }));
         loadingMoreCloudProjectsRef.current = false;
@@ -316,6 +383,7 @@ export function useCloudProjectSync(
           nextCloudProjectCursor: null,
           isLoadingMoreCloudProjects: false,
           localProjectSyncById: {},
+          batchSyncProgress: null,
           errorMessage: null,
         }));
         loadingMoreCloudProjectsRef.current = false;
@@ -630,9 +698,11 @@ export function useCloudProjectSync(
   const signOut = useCallback(async () => {
     authTransitionRef.current = true;
     cancelAccountRequests();
+    activeBatchSyncIdRef.current = null;
     updateViewState((currentState) => ({
       ...currentState,
       authStatus: "loading",
+      batchSyncProgress: null,
       errorMessage: null,
     }));
     try {
@@ -744,13 +814,15 @@ export function useCloudProjectSync(
   const uploadLocalProject = useCallback(
     async (localProjectId: string) => {
       assertLocalProjectId(localProjectId);
-      await withAccountRequest(
-        "upload local project",
-        (context) => uploadLocalProjectWithContext(localProjectId, context),
-        localProjectId,
+      await runSerializedCloudMutation(() =>
+        withAccountRequest(
+          "upload local project",
+          (context) => uploadLocalProjectWithContext(localProjectId, context),
+          localProjectId,
+        )
       );
     },
-    [uploadLocalProjectWithContext, withAccountRequest],
+    [runSerializedCloudMutation, uploadLocalProjectWithContext, withAccountRequest],
   );
 
   const syncLinkedLocalProject = useCallback(
@@ -822,16 +894,204 @@ export function useCloudProjectSync(
     [syncLinkedLocalProject, uploadLocalProjectWithContext],
   );
 
+  const syncAllLocalProjects = useCallback(
+    async (localProjectIds: readonly string[]) => {
+      assertLocalProjectIds(localProjectIds);
+      if (activeBatchSyncIdRef.current !== null) {
+        throw new CloudProjectRequestError(
+          "BATCH_SYNC_IN_PROGRESS",
+          409,
+          `Batch cloud sync ${String(activeBatchSyncIdRef.current)} is already running; a second batch cannot start.`,
+        );
+      }
+
+      const batchSyncId = nextBatchSyncIdRef.current;
+      nextBatchSyncIdRef.current += 1;
+      activeBatchSyncIdRef.current = batchSyncId;
+      let expectedAccountId: string | null = null;
+      let expectedAccountGeneration = accountGenerationRef.current;
+      let completedProjectCount = 0;
+      const failedProjectIds: string[] = [];
+      const failedProjectMessages: string[] = [];
+      let currentProjectId: string | null = null;
+
+      const isCurrentBatch = (): boolean =>
+        activeBatchSyncIdRef.current === batchSyncId &&
+        (accountRef.current?.id ?? null) === expectedAccountId &&
+        accountGenerationRef.current === expectedAccountGeneration;
+      const assertCurrentBatch = (): void => {
+        if (!isCurrentBatch()) {
+          throw new CloudOperationCancelledError(
+            `Batch cloud sync ${String(batchSyncId)} for account ${JSON.stringify(expectedAccountId)} was cancelled after the active account or batch changed.`,
+          );
+        }
+      };
+      const setBatchProgress = (
+        status: CloudProjectBatchSyncProgress["status"],
+      ): void => {
+        updateBatchSyncProgress(batchSyncId, expectedAccountId, expectedAccountGeneration, {
+          status,
+          completed: completedProjectCount,
+          total: localProjectIds.length,
+          currentProjectId,
+          failedProjectIds: [...failedProjectIds],
+        });
+      };
+
+      try {
+        await ensurePlannerSessionLoaded();
+        if (activeBatchSyncIdRef.current !== batchSyncId) {
+          throw new CloudOperationCancelledError(
+            `Batch cloud sync ${String(batchSyncId)} was cancelled before its account session finished loading.`,
+          );
+        }
+        expectedAccountId = accountRef.current?.id ?? null;
+        expectedAccountGeneration = accountGenerationRef.current;
+        setBatchProgress("running");
+
+        if (localProjectIds.length === 0) {
+          setBatchProgress("completed");
+          return;
+        }
+
+        await runSerializedCloudMutation(async () => {
+          assertCurrentBatch();
+          await withAccountRequest(
+            "sync all local projects",
+            async (context) => {
+              if (
+                context.userId !== expectedAccountId ||
+                context.generation !== expectedAccountGeneration
+              ) {
+                throw new CloudOperationCancelledError(
+                  `Batch cloud sync ${String(batchSyncId)} started for account ${JSON.stringify(expectedAccountId)} but received request context for account ${JSON.stringify(context.userId)} at generation ${String(context.generation)}.`,
+                );
+              }
+
+              for (const localProjectId of localProjectIds) {
+                assertCurrentBatch();
+                assertAccountRequestContext(context);
+                currentProjectId = localProjectId;
+                setBatchProgress("running");
+
+                try {
+                  await syncCurrentSavedProject(localProjectId, context);
+                  assertCurrentBatch();
+                  assertAccountRequestContext(context);
+                  completedProjectCount += 1;
+                  currentProjectId = null;
+                  setBatchProgress("running");
+                } catch (error) {
+                  if (
+                    error instanceof CloudOperationCancelledError ||
+                    !isCurrentBatch()
+                  ) {
+                    throw new CloudOperationCancelledError(
+                      `Batch cloud sync ${String(batchSyncId)} stopped while processing local project ${JSON.stringify(localProjectId)} because its account context is no longer active.`,
+                    );
+                  }
+
+                  if (isRecoverableBatchProjectError(error)) {
+                    const projectError = createBatchProjectError(localProjectId, error);
+                    failedProjectIds.push(localProjectId);
+                    failedProjectMessages.push(projectError.message);
+                    setLocalProjectState(
+                      localProjectId,
+                      createLocalProjectFailureState(
+                        localProjectId,
+                        projectError,
+                        accountLinksRef.current,
+                      ),
+                      context,
+                    );
+                    completedProjectCount += 1;
+                    currentProjectId = null;
+                    setBatchProgress("running");
+                    continue;
+                  }
+
+                  const fatalError = createBatchProjectError(localProjectId, error);
+                  setLocalProjectState(
+                    localProjectId,
+                    createLocalProjectFailureState(
+                      localProjectId,
+                      fatalError,
+                      accountLinksRef.current,
+                    ),
+                    context,
+                  );
+                  setGlobalError(fatalError.message, context);
+                  failedProjectIds.push(localProjectId);
+                  failedProjectMessages.push(fatalError.message);
+                  completedProjectCount += 1;
+                  currentProjectId = null;
+                  setBatchProgress("failed");
+                  throw fatalError;
+                }
+              }
+
+              if (failedProjectMessages.length > 0) {
+                throw new CloudProjectRequestError(
+                  "BATCH_SYNC_PARTIAL_FAILURE",
+                  0,
+                  `Batch cloud sync completed ${String(completedProjectCount)} of ${String(localProjectIds.length)} local projects with failures: ${failedProjectMessages.join(" | ")}`,
+                );
+              }
+            },
+            undefined,
+            () => {
+              throw new CloudOperationCancelledError(
+                `Batch cloud sync ${String(batchSyncId)} was cancelled because the active account changed from ${JSON.stringify(expectedAccountId)}.`,
+              );
+            },
+          );
+        });
+
+        assertCurrentBatch();
+        setBatchProgress("completed");
+      } catch (error) {
+        if (isCurrentBatch() && !(error instanceof CloudOperationCancelledError)) {
+          currentProjectId = null;
+          setBatchProgress("failed");
+          if (!isKnownCloudError(error)) {
+            const unexpectedErrorMessage =
+              error instanceof Error
+                ? error.message
+                : `Batch cloud sync ${String(batchSyncId)} failed with an unexpected value: ${describeValue(error)}.`;
+            setGlobalError(unexpectedErrorMessage);
+          }
+        }
+        throw error;
+      } finally {
+        if (activeBatchSyncIdRef.current === batchSyncId) {
+          activeBatchSyncIdRef.current = null;
+        }
+      }
+    },
+    [
+      assertAccountRequestContext,
+      ensurePlannerSessionLoaded,
+      runSerializedCloudMutation,
+      setGlobalError,
+      setLocalProjectState,
+      syncCurrentSavedProject,
+      updateBatchSyncProgress,
+      withAccountRequest,
+    ],
+  );
+
   const retrySync = useCallback(
     async (localProjectId: string) => {
       assertLocalProjectId(localProjectId);
-      await withAccountRequest(
-        "retry local project sync",
-        (context) => syncCurrentSavedProject(localProjectId, context),
-        localProjectId,
+      await runSerializedCloudMutation(() =>
+        withAccountRequest(
+          "retry local project sync",
+          (context) => syncCurrentSavedProject(localProjectId, context),
+          localProjectId,
+        )
       );
     },
-    [syncCurrentSavedProject, withAccountRequest],
+    [runSerializedCloudMutation, syncCurrentSavedProject, withAccountRequest],
   );
 
   const prepareSavedProjectAccount = useCallback(
@@ -893,16 +1153,24 @@ export function useCloudProjectSync(
   const onLocalProjectSaved = useCallback(
     async (localProjectId: string) => {
       assertLocalProjectId(localProjectId);
-      const hasActiveAccount = await prepareSavedProjectAccount(localProjectId);
-      if (!hasActiveAccount) {
-        return;
-      }
       try {
-        await withAccountRequest(
-          "sync saved local project",
-          (context) => syncCurrentSavedProject(localProjectId, context),
-          localProjectId,
-        );
+        await runSerializedCloudMutation(async () => {
+          const hasActiveAccount = await prepareSavedProjectAccount(localProjectId);
+          if (!hasActiveAccount) {
+            return;
+          }
+          try {
+            await withAccountRequest(
+              "sync saved local project",
+              (context) => syncCurrentSavedProject(localProjectId, context),
+              localProjectId,
+            );
+          } catch (error) {
+            if (!isKnownCloudError(error)) {
+              throw error;
+            }
+          }
+        });
       } catch (error) {
         if (!isKnownCloudError(error)) {
           throw error;
@@ -911,6 +1179,7 @@ export function useCloudProjectSync(
     },
     [
       prepareSavedProjectAccount,
+      runSerializedCloudMutation,
       syncCurrentSavedProject,
       withAccountRequest,
     ],
@@ -919,94 +1188,99 @@ export function useCloudProjectSync(
   const keepLocalVersion = useCallback(
     async (localProjectId: string) => {
       assertLocalProjectId(localProjectId);
-      await withAccountRequest(
-        "keep local project version",
-        async (context) => {
-          const currentLink = findLinkByLocalProjectId(
-            accountLinksRef.current,
-            localProjectId,
-          );
-          if (currentLink === undefined) {
-            throw new CloudProjectRequestError(
-              "LOCAL_PROJECT_NOT_LINKED",
-              404,
-              `Local project ${JSON.stringify(localProjectId)} has no cloud link to detach.`,
+      await runSerializedCloudMutation(() =>
+        withAccountRequest(
+          "keep local project version",
+          async (context) => {
+            const currentLink = findLinkByLocalProjectId(
+              accountLinksRef.current,
+              localProjectId,
             );
-          }
-          const nextLinks = accountLinksRef.current.filter(
-            (link) => link.localProjectId !== localProjectId,
-          );
-          persistAccountLinks(context, nextLinks);
-          setLocalProjectState(localProjectId, { status: "none" }, context);
-        },
-        localProjectId,
+            if (currentLink === undefined) {
+              throw new CloudProjectRequestError(
+                "LOCAL_PROJECT_NOT_LINKED",
+                404,
+                `Local project ${JSON.stringify(localProjectId)} has no cloud link to detach.`,
+              );
+            }
+            const nextLinks = accountLinksRef.current.filter(
+              (link) => link.localProjectId !== localProjectId,
+            );
+            persistAccountLinks(context, nextLinks);
+            setLocalProjectState(localProjectId, { status: "none" }, context);
+          },
+          localProjectId,
+        )
       );
     },
-    [persistAccountLinks, setLocalProjectState, withAccountRequest],
+    [persistAccountLinks, runSerializedCloudMutation, setLocalProjectState, withAccountRequest],
   );
 
   const useCloudVersion = useCallback(
     async (localProjectId: string): Promise<string> => {
       assertLocalProjectId(localProjectId);
-      return withAccountRequest(
-        "use cloud project version",
-        async (context) => {
-          const existingLink = findLinkByLocalProjectId(
-            accountLinksRef.current,
-            localProjectId,
-          );
-          if (existingLink === undefined) {
-            throw new CloudProjectRequestError(
-              "LOCAL_PROJECT_NOT_LINKED",
-              404,
-              `Local project ${JSON.stringify(localProjectId)} has no cloud link to resolve.`,
+      return runSerializedCloudMutation(() =>
+        withAccountRequest(
+          "use cloud project version",
+          async (context) => {
+            const existingLink = findLinkByLocalProjectId(
+              accountLinksRef.current,
+              localProjectId,
             );
-          }
+            if (existingLink === undefined) {
+              throw new CloudProjectRequestError(
+                "LOCAL_PROJECT_NOT_LINKED",
+                404,
+                `Local project ${JSON.stringify(localProjectId)} has no cloud link to resolve.`,
+              );
+            }
 
-          const cloudRecord = await getCloudProject(
-            context.userId,
-            existingLink.cloudProjectId,
-            context.abortController.signal,
-          );
-          assertAccountRequestContext(context);
-          const importedLocalProjectId = importCloudProjectAsLocalCopy(
-            workspaceControllerRef.current,
-            cloudRecord,
-            localProjectId,
-          );
-          const syncedSnapshot = await createCloudProjectSnapshotFingerprint(
-            cloudRecord.projectDocument,
-          );
-          assertAccountRequestContext(context);
+            const cloudRecord = await getCloudProject(
+              context.userId,
+              existingLink.cloudProjectId,
+              context.abortController.signal,
+            );
+            assertAccountRequestContext(context);
+            const importedLocalProjectId = importCloudProjectAsLocalCopy(
+              workspaceControllerRef.current,
+              cloudRecord,
+              localProjectId,
+            );
+            const syncedSnapshot = await createCloudProjectSnapshotFingerprint(
+              cloudRecord.projectDocument,
+            );
+            assertAccountRequestContext(context);
 
-          const nextLink: CloudProjectLink = {
-            localProjectId: importedLocalProjectId,
-            cloudProjectId: cloudRecord.id,
-            revision: cloudRecord.revision,
-            lastSyncedSnapshot: syncedSnapshot,
-          };
-          const nextLinks = [
-            ...accountLinksRef.current.filter(
-              (link) => link.cloudProjectId !== cloudRecord.id,
-            ),
-            nextLink,
-          ];
-          persistAccountLinks(context, nextLinks);
-          setLocalProjectState(localProjectId, { status: "none" }, context);
-          setLocalProjectState(
-            importedLocalProjectId,
-            { status: "synced", revision: cloudRecord.revision },
-            context,
-          );
-          replaceCloudProjectSummary(cloudRecord, context, updateViewState);
-          return importedLocalProjectId;
-        },
-        localProjectId,
+            const nextLink: CloudProjectLink = {
+              localProjectId: importedLocalProjectId,
+              cloudProjectId: cloudRecord.id,
+              revision: cloudRecord.revision,
+              lastSyncedSnapshot: syncedSnapshot,
+            };
+            const nextLinks = [
+              ...accountLinksRef.current.filter(
+                (link) => link.cloudProjectId !== cloudRecord.id,
+              ),
+              nextLink,
+            ];
+            persistAccountLinks(context, nextLinks);
+            setLocalProjectState(localProjectId, { status: "none" }, context);
+            setLocalProjectState(
+              importedLocalProjectId,
+              { status: "synced", revision: cloudRecord.revision },
+              context,
+            );
+            replaceCloudProjectSummary(cloudRecord, context, updateViewState);
+            return importedLocalProjectId;
+          },
+          localProjectId,
+        )
       );
     },
     [
       assertAccountRequestContext,
       persistAccountLinks,
+      runSerializedCloudMutation,
       setLocalProjectState,
       updateViewState,
       withAccountRequest,
@@ -1016,7 +1290,8 @@ export function useCloudProjectSync(
   const openCloudProject = useCallback(
     async (cloudProjectId: string) => {
       assertCloudProjectId(cloudProjectId);
-      return withAccountRequest("open cloud project", async (context) => {
+      return runSerializedCloudMutation(() =>
+        withAccountRequest("open cloud project", async (context) => {
         const cloudRecord = await getCloudProject(
           context.userId,
           cloudProjectId,
@@ -1115,11 +1390,13 @@ export function useCloudProjectSync(
         }
         replaceCloudProjectSummary(cloudRecord, context, updateViewState);
         return { localProjectId: importedLocalProjectId };
-      });
+        })
+      );
     },
     [
       assertAccountRequestContext,
       persistAccountLinks,
+      runSerializedCloudMutation,
       setLocalProjectState,
       updateViewState,
       withAccountRequest,
@@ -1129,7 +1406,8 @@ export function useCloudProjectSync(
   const deleteCloudCopy = useCallback(
     async (cloudProjectId: string) => {
       assertCloudProjectId(cloudProjectId);
-      await withAccountRequest("delete cloud project copy", async (context) => {
+      await runSerializedCloudMutation(() =>
+        withAccountRequest("delete cloud project copy", async (context) => {
         const linkedProject = findLinkByCloudProjectId(
           accountLinksRef.current,
           cloudProjectId,
@@ -1181,11 +1459,13 @@ export function useCloudProjectSync(
             errorMessage: null,
           };
         });
-      });
+        })
+      );
     },
     [
       assertAccountRequestContext,
       persistAccountLinks,
+      runSerializedCloudMutation,
       updateViewState,
       viewState.cloudProjects,
       withAccountRequest,
@@ -1215,6 +1495,7 @@ export function useCloudProjectSync(
     refreshCloudProjects,
     loadMoreCloudProjects,
     uploadLocalProject,
+    syncAllLocalProjects,
     onLocalProjectSaved,
     openCloudProject,
     deleteCloudCopy,
@@ -1290,6 +1571,74 @@ function replaceCloudProjectSummary(
 
 function isContextCurrentWithoutRefs(context: AccountRequestContext): boolean {
   return !context.abortController.signal.aborted;
+}
+
+function isRecoverableBatchProjectError(error: unknown): error is Error {
+  if (
+    error instanceof CloudOperationCancelledError ||
+    error instanceof CloudAuthError ||
+    error instanceof CloudProjectLinkStoreError
+  ) {
+    return false;
+  }
+  if (error instanceof CloudProjectRequestError) {
+    return (
+      error.statusCode !== 401 &&
+      error.statusCode !== 403 &&
+      error.code !== "ACCOUNT_CHANGED" &&
+      error.code !== "EXPECTED_ACCOUNT_MISMATCH" &&
+      error.code !== "AUTH_REQUIRED"
+    );
+  }
+  return isCloudProjectContractError(error);
+}
+
+function createBatchProjectError(localProjectId: string, error: unknown): Error {
+  if (error instanceof CloudProjectRequestError) {
+    return new CloudProjectRequestError(
+      error.code,
+      error.statusCode,
+      `Batch cloud sync failed for local project ${JSON.stringify(localProjectId)} with ${error.code} (HTTP ${String(error.statusCode)}): ${error.message}`,
+    );
+  }
+  const errorDetails = error instanceof Error
+    ? `${error.name}: ${error.message}`
+    : describeValue(error);
+  return new Error(
+    `Batch cloud sync failed for local project ${JSON.stringify(localProjectId)}: ${errorDetails}.`,
+    { cause: error },
+  );
+}
+
+function assertLocalProjectIds(localProjectIds: readonly string[]): void {
+  if (!Array.isArray(localProjectIds)) {
+    throw new CloudProjectRequestError(
+      "INVALID_LOCAL_PROJECT_IDS",
+      0,
+      `Batch cloud sync local project IDs must be an array. Received: ${describeValue(localProjectIds)}.`,
+    );
+  }
+
+  const seenProjectIds = new Map<string, number>();
+  for (let projectIndex = 0; projectIndex < localProjectIds.length; projectIndex += 1) {
+    const localProjectId: unknown = localProjectIds[projectIndex];
+    if (typeof localProjectId !== "string" || localProjectId.length === 0) {
+      throw new CloudProjectRequestError(
+        "INVALID_LOCAL_PROJECT_ID",
+        0,
+        `Batch cloud sync local project ID at index ${String(projectIndex)} must be a non-empty string. Received: ${describeValue(localProjectId)}.`,
+      );
+    }
+    const firstProjectIndex = seenProjectIds.get(localProjectId);
+    if (firstProjectIndex !== undefined) {
+      throw new CloudProjectRequestError(
+        "DUPLICATE_LOCAL_PROJECT_ID",
+        0,
+        `Batch cloud sync contains duplicate local project ID ${JSON.stringify(localProjectId)} at indexes ${String(firstProjectIndex)} and ${String(projectIndex)}.`,
+      );
+    }
+    seenProjectIds.set(localProjectId, projectIndex);
+  }
 }
 
 async function hydrateLocalProjectStatuses(

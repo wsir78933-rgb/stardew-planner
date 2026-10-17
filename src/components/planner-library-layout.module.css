@@ -1,0 +1,66 @@
+.sidebarNavigation {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  padding: 0;
+}
+
+.sidebarToolsGroup,
+.imageExportDetails,
+.cloudProjectsDetails {
+  min-width: 0;
+}
+
+.sidebarToolsGroup summary,
+.imageExportDetails summary,
+.cloudProjectsDetails summary {
+  cursor: pointer;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+  padding: var(--lk-xs) var(--lk-sm);
+}
+
+.sidebarToolsGroup > button {
+  margin-top: var(--lk-3xs);
+  width: 100%;
+}
+
+.imageExportDetails {
+  display: grid;
+  gap: var(--lk-xs);
+}
+
+.imageExportTools {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.cloudProjectsDetails {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--lk-xs);
+  display: grid;
+  gap: var(--lk-xs);
+  padding: var(--lk-xs);
+}
+
+.lazyBranchRegion {
+  display: grid;
+  gap: var(--lk-sm);
+  min-width: 0;
+}
+
+.branchFeedback {
+  min-width: 0;
+}
+
+.cloudProjectsDetails[hidden],
+.lazyBranchRegion[hidden],
+.branchFeedback[hidden],
+.branchContent[hidden] {
+  display: none !important;
+}
+
+.branchContent {
+  display: grid;
+  min-width: 0;
+}

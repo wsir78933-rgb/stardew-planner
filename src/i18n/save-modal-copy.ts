@@ -65,12 +65,16 @@ export type CloudProjectDeleteCopy = Readonly<{
 }>;
 
 export type CloudProjectsCopy = Readonly<{
+  extras: string;
   account: string;
   accountLoading: string;
+  cloudStatusLoading: string;
+  cloudStatusReady: string;
   title: string;
   cloudProjects: string;
   cloudProjectsEmpty: string;
   cloudProjectsLoading: string;
+  cloudProjectsSignInRequired: string;
   cloudStatusError: (rawError: string) => string;
   conflictDescription: string;
   currentProject: string;
@@ -84,11 +88,6 @@ export type CloudProjectsCopy = Readonly<{
   loadingMoreCloudProjects: string;
   localProjects: string;
   localProjectStatus: (status: CloudProjectSyncStatus) => string;
-  localSaveRetirementShortCountdown: (
-    daysRemaining: number,
-    hoursRemaining: number,
-    minutesRemaining: number,
-  ) => string;
   localSaveRetirementCountdown: (
     daysRemaining: number,
     hoursRemaining: number,
@@ -109,6 +108,22 @@ export type CloudProjectsCopy = Readonly<{
   signOutBusy: string;
   signedInAs: (accountName: string) => string;
   signedOut: string;
+  syncAllSignInDescription: string;
+  syncAllLocalProjects: string;
+  syncAllSignedOut: string;
+  syncAllProgress: (
+    completed: number,
+    total: number,
+    currentProjectName: string | null,
+  ) => string;
+  syncAllProgressLabel: string;
+  syncAllCompleted: (total: number) => string;
+  syncAllFailed: (
+    completed: number,
+    total: number,
+    failedProjectNames: readonly string[],
+    errorMessage: string,
+  ) => string;
   syncButtonBusy: string;
   syncThisProject: string;
   useCloudVersion: string;
@@ -267,12 +282,16 @@ const saveModalCopyByLocale = {
       storedInBrowser: "Stored in this browser.",
     },
     cloudProjects: {
+      extras: "Extras",
       account: "Account",
       accountLoading: "Checking account…",
+      cloudStatusLoading: "Checking cloud status…",
+      cloudStatusReady: "Cloud sync is ready.",
       cloudProjects: "Cloud projects",
-      cloudProjectsEmpty: "Your current project syncs when you save it. Use Sync to cloud to upload existing local projects one at a time.",
+      cloudProjectsEmpty: "No cloud copies yet. Saving the current project syncs it automatically.",
       cloudProjectsLoading: "Loading cloud projects…",
-      cloudStatusError: (rawError: string) => `Cloud sync could not load: ${rawError}`,
+      cloudProjectsSignInRequired: "Sign in with Google in the sidebar to view cloud copies and project sync actions.",
+      cloudStatusError: (rawError: string) => `Cloud sync error: ${rawError}`,
       conflictDescription: "A newer cloud copy exists. Keep the local version or create a new local project from the cloud version.",
       currentProject: "Current",
       dateTimeLocale: "en",
@@ -297,13 +316,11 @@ const saveModalCopyByLocale = {
         conflict: "Needs your choice",
         error: "Sync failed",
       })[status],
-      localSaveRetirementShortCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m`,
       localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `Local saving ends in ${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m. Sync any project you want to keep.`,
-      localSaveRetirementEnded: "The local-save transition period has ended. Your local projects remain available; no data was deleted.",
+        `Local saving transitions out in ${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m. Sync projects you want to keep in the cloud. Cloud copies remain until you delete them.`,
+      localSaveRetirementEnded: "The local-save transition has ended. Existing local projects remain available; no data was deleted. Cloud copies remain until you delete them.",
       localSaveRetirementLoading: "Checking the local-save transition deadline…",
-      localSaveRetirementNotConfigured: "Local saving will be phased out. The 7-day migration period and cutoff date will be confirmed before launch.",
+      localSaveRetirementNotConfigured: "The 7-day local-save transition has not started. Its cutoff date is pending.",
       mapCount: (count: number) => `${String(count)} ${count === 1 ? "map" : "maps"}`,
       noLocalProjects: "Save a project on this device before syncing it.",
       openCloudCopy: "Open cloud copy",
@@ -315,7 +332,22 @@ const saveModalCopyByLocale = {
       signOut: "Sign out",
       signOutBusy: "Signing out…",
       signedInAs: (accountName: string) => `Signed in as ${accountName}.`,
-      signedOut: "After signing in, saving the current project syncs it automatically. Sync existing local projects one at a time.",
+      signedOut: "Sign in to sync this project automatically when you save it. Existing local projects stay on this device until you sync them.",
+      syncAllSignInDescription: "Signing in will not upload projects. Return here and press Sync all local projects to start.",
+      syncAllLocalProjects: "Sync all local projects",
+      syncAllSignedOut: "Sign in to sync all local projects",
+      syncAllProgress: (completed, total, currentProjectName) =>
+        currentProjectName === null
+          ? `Processed ${completed} of ${total} local projects…`
+          : `Processed ${completed} of ${total} local projects. Syncing ${currentProjectName}…`,
+      syncAllProgressLabel: "Cloud sync progress",
+      syncAllCompleted: (total) => `All ${total} local projects synced.`,
+      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
+        const failedProjects = failedProjectNames.length === 0
+          ? "No individual project failure was recorded."
+          : `${failedProjectNames.length} project(s) need attention: ${failedProjectNames.join(", ")}.`;
+        return `Stopped after processing ${completed} of ${total} local projects. ${failedProjects} ${errorMessage}`;
+      },
       syncButtonBusy: "Syncing project…",
       syncThisProject: "Sync to cloud",
       title: "Cloud sync",
@@ -433,12 +465,16 @@ const saveModalCopyByLocale = {
       storedInBrowser: "保存在此浏览器中。",
     },
     cloudProjects: {
+      extras: "更多功能",
       account: "账户",
       accountLoading: "正在检查账户…",
+      cloudStatusLoading: "正在检查云同步状态…",
+      cloudStatusReady: "云同步已就绪。",
       cloudProjects: "云端项目",
-      cloudProjectsEmpty: "保存当前项目时会自动同步。已有本地项目请使用“同步到云端”逐项上传。",
+      cloudProjectsEmpty: "还没有云端副本。保存当前项目时会自动同步。",
       cloudProjectsLoading: "正在加载云端项目…",
-      cloudStatusError: (rawError: string) => `无法加载云端同步：${rawError}`,
+      cloudProjectsSignInRequired: "请先在侧栏使用 Google 登录，再查看云端副本和逐项目同步操作。",
+      cloudStatusError: (rawError: string) => `云同步错误：${rawError}`,
       conflictDescription: "云端存在更新版本。你可以保留本地版本，或将云端版本另存为新的本地项目。",
       currentProject: "当前",
       dateTimeLocale: "zh-CN",
@@ -463,13 +499,11 @@ const saveModalCopyByLocale = {
         conflict: "需要选择版本",
         error: "同步失败",
       })[status],
-      localSaveRetirementShortCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `${daysRemaining}天 ${hoursRemaining}小时 ${minutesRemaining}分钟`,
       localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `本地保存下线倒计时：${daysRemaining}天 ${hoursRemaining}小时 ${minutesRemaining}分钟。需要保留的项目请手动同步到云端。`,
-      localSaveRetirementEnded: "本地保存过渡期已结束。现有本地项目仍保留，没有自动删除任何数据。",
+        `本地保存将在 ${daysRemaining}天 ${hoursRemaining}小时 ${minutesRemaining}分钟后结束。需要保留到云端的项目请先同步；云端副本会一直保留，直到你主动删除。`,
+      localSaveRetirementEnded: "本地保存过渡期已结束。现有本地项目仍保留，没有自动删除任何数据。云端副本会一直保留，直到你主动删除。",
       localSaveRetirementLoading: "正在检查本地保存过渡安排…",
-      localSaveRetirementNotConfigured: "本地保存即将下线，7 天迁移期和截止日期将在正式上线前确定。",
+      localSaveRetirementNotConfigured: "7 天本地保存过渡期尚未启动，截止日期待定。",
       mapCount: (count: number) => `${String(count)} 张地图`,
       noLocalProjects: "请先在此设备上保存项目，再进行同步。",
       openCloudCopy: "打开云端副本",
@@ -481,7 +515,22 @@ const saveModalCopyByLocale = {
       signOut: "退出登录",
       signOutBusy: "正在退出登录…",
       signedInAs: (accountName: string) => `当前登录账户：${accountName}。`,
-      signedOut: "登录后点击保存会自动同步当前项目。已有本地项目需要逐项手动同步。",
+      signedOut: "登录后，保存当前项目时会自动同步。其他本地项目会保留在此设备上，直到你选择同步。",
+      syncAllSignInDescription: "登录不会自动上传项目。返回此处后再点击“同步全部本地项目”即可开始。",
+      syncAllLocalProjects: "同步全部本地项目",
+      syncAllSignedOut: "登录后同步全部本地项目",
+      syncAllProgress: (completed, total, currentProjectName) =>
+        currentProjectName === null
+          ? `已处理 ${completed}/${total} 个本地项目…`
+          : `已处理 ${completed}/${total} 个本地项目，正在同步“${currentProjectName}”…`,
+      syncAllProgressLabel: "云同步进度",
+      syncAllCompleted: (total) => `已同步全部 ${total} 个本地项目。`,
+      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
+        const failedProjects = failedProjectNames.length === 0
+          ? "没有记录到具体失败项目。"
+          : `${failedProjectNames.length} 个项目需要处理：${failedProjectNames.join("、")}。`;
+        return `已处理 ${completed}/${total} 个本地项目后停止。${failedProjects}${errorMessage}`;
+      },
       syncButtonBusy: "正在同步项目…",
       syncThisProject: "同步到云端",
       title: "云端同步",

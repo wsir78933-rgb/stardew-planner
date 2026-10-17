@@ -7,6 +7,7 @@ const cloudProjectSyncHookMock = vi.hoisted(() => ({
     status: "ready" as const,
     hasMoreCloudProjects: false,
     isLoadingMoreCloudProjects: false,
+    batchSyncProgress: null,
     authStatus: "signed-out" as const,
     account: null,
     cloudProjects: [],
@@ -18,6 +19,7 @@ const cloudProjectSyncHookMock = vi.hoisted(() => ({
     loadMoreCloudProjects: vi.fn(async () => undefined),
     uploadLocalProject: vi.fn(async () => undefined),
     onLocalProjectSaved: vi.fn(async () => undefined),
+    syncAllLocalProjects: vi.fn(async () => undefined),
     openCloudProject: vi.fn(async () => ({ localProjectId: "local-copy" })),
     deleteCloudCopy: vi.fn(async () => undefined),
     retrySync: vi.fn(async () => undefined),
@@ -71,9 +73,21 @@ describe("planner save modal content", () => {
   });
 
   it("renders local persistence, screenshot, and thumbnail controls together", () => {
+    cloudProjectSyncHookMock.useCloudProjectSync.mockClear();
     const markup = renderToStaticMarkup(
       createElement(PlannerSaveModalContent, {
         copy: getSaveModalCopy("zh-CN"),
+        isProjectsBranchActive: true,
+        mainBranchContent: createElement(
+          "div",
+          { hidden: true },
+          "Lazy branch content",
+        ),
+        sidebarNavigation: createElement(
+          "nav",
+          { "aria-label": "保存工具" },
+          createElement("button", { type: "button" }, "本地项目"),
+        ),
         currentProjectId: "project-forest",
         currentProjectMapInstanceCount: 1,
         currentProjectMapInstanceName: "Forest Layout",
@@ -100,6 +114,8 @@ describe("planner save modal content", () => {
     expect(markup).toContain("保存到此设备");
     expect(markup).toContain("使用 Google 继续");
     expect(markup).toContain("仅同步布局数据。地图预览图片保留在此设备上。");
+    expect(markup).toContain('aria-label="保存工具"');
+    expect(markup).toContain("Lazy branch content");
     expect(markup).toContain("截图");
     expect(markup).toContain("保存缩略图");
     expect(markup).toContain("Forest Farm");
@@ -108,15 +124,11 @@ describe("planner save modal content", () => {
       true,
     );
     expect(
-      markup.match(/class="planner-save-modal-content__exports"/g),
+      markup.match(/class="planner-save-modal-content__exports [^"]+"/g),
     ).toHaveLength(1);
-
-    const exportsMarkup = markup.match(
-      /<div class="planner-save-modal-content__exports">([\s\S]+)<\/div><\/div>$/,
-    )?.[1];
-
-    expect(exportsMarkup).toContain('aria-label="导出"');
-    expect(exportsMarkup).toContain('aria-label="缩略图"');
+    expect(markup).toContain('aria-label="导出"');
+    expect(markup).toContain('aria-label="缩略图"');
+    expect(cloudProjectSyncHookMock.useCloudProjectSync).toHaveBeenCalledTimes(1);
   });
 
   it("notifies cloud sync only after a local save and reads the resulting active project ID", async () => {

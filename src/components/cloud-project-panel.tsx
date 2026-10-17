@@ -10,6 +10,7 @@ import {
 import {
   CloudAuthError,
   CloudProjectRequestError,
+  type CloudProjectBatchSyncProgress,
   type CloudProjectSyncView,
 } from "@/src/cloud-sync/use-cloud-project-sync";
 import type { ReferenceProjectSummary } from "@/src/reference-runtime/reference-project-repository";
@@ -26,6 +27,12 @@ type CloudProjectPanelProperties = Readonly<{
   localProjects: readonly ReferenceProjectSummary[];
 }>;
 
+type CloudProjectSidebarProperties = Readonly<{
+  cloudProjectSync: CloudProjectSyncView;
+  copy: CloudProjectsCopy;
+  localProjects: readonly ReferenceProjectSummary[];
+}>;
+
 type CloudProjectDeleteButtonFocusTarget = Readonly<{
   isConnected: boolean;
   focus(): void;
@@ -39,37 +46,37 @@ type CloudProjectDeleteAlertDialogProperties = Readonly<{
   onConfirm: () => boolean;
 }>;
 
-export function CloudProjectPanel({
+export function CloudProjectSidebar({
   cloudProjectSync,
   copy,
-  currentProjectId,
   localProjects,
-}: CloudProjectPanelProperties) {
-  const cloudProjectPanelHeadingId = useId();
-  const localSaveRetirementNoticeId = useId();
+}: CloudProjectSidebarProperties) {
+  const extrasHeadingId = useId();
   const [currentEpochMilliseconds, setCurrentEpochMilliseconds] =
     useState<number | null>(null);
   const [pendingActionId, setPendingActionId] = useState<string | null>(null);
-  const pendingCloudActionIdRef = useRef<string | null>(null);
-  const [cloudProjectPendingDeletionId, setCloudProjectPendingDeletionId] =
-    useState<string | null>(null);
-  const cloudProjectDeleteButtonFocusTargetRef = useRef<HTMLButtonElement | null>(null);
-  const isCloudActionPending = pendingActionId !== null;
-  const cloudProjectPendingDeletion = cloudProjectSync.cloudProjects.find(
-    (cloudProject) => cloudProject.id === cloudProjectPendingDeletionId,
-  );
-  const isCloudSyncReady = cloudProjectSync.status === "ready";
-  const signedInAccountName = getSignedInAccountName(cloudProjectSync);
+  const pendingSidebarActionIdRef = useRef<string | null>(null);
   const localSaveRetirementAt = getConfiguredLocalSaveRetirementAt();
-  const localSaveRetirementState =
-    localSaveRetirementAt === null
-      ? { kind: "not-configured" as const }
-      : currentEpochMilliseconds === null
-        ? null
-        : getLocalSaveRetirementState(
-            localSaveRetirementAt,
-            currentEpochMilliseconds,
-          );
+  const localSaveRetirementState = localSaveRetirementAt === null
+    ? { kind: "not-configured" as const }
+    : currentEpochMilliseconds === null
+      ? null
+      : getLocalSaveRetirementState(
+          localSaveRetirementAt,
+          currentEpochMilliseconds,
+        );
+  const batchSyncProgress = cloudProjectSync.batchSyncProgress;
+  const isBatchSyncRunning = batchSyncProgress?.status === "running";
+  const isSidebarActionPending = pendingActionId !== null;
+  const isSyncAllDisabled =
+    isSidebarActionPending
+    || isBatchSyncRunning
+    || cloudProjectSync.authStatus === "loading"
+    || cloudProjectSync.authStatus === "error"
+    || (
+      cloudProjectSync.authStatus === "signed-in"
+      && (cloudProjectSync.status !== "ready" || localProjects.length === 0)
+    );
 
   useEffect(() => {
     if (localSaveRetirementAt === null) return;
@@ -87,6 +94,234 @@ export function CloudProjectPanel({
     return () => window.clearInterval(retirementCountdownIntervalId);
   }, [localSaveRetirementAt]);
 
+  async function runSidebarAction(
+    actionId: string,
+    cloudAction: () => Promise<unknown>,
+  ): Promise<void> {
+    if (pendingSidebarActionIdRef.current !== null) return;
+    pendingSidebarActionIdRef.current = actionId;
+    setPendingActionId(actionId);
+
+    try {
+      await runCloudActionWithKnownErrorHandling(cloudAction);
+    } finally {
+      pendingSidebarActionIdRef.current = null;
+      setPendingActionId(null);
+    }
+  }
+
+  function handleSyncAllLocalProjects(): void {
+    if (cloudProjectSync.authStatus === "signed-out") {
+      void runSidebarAction("sync-all-sign-in", cloudProjectSync.signInWithGoogle);
+      return;
+    }
+    if (cloudProjectSync.authStatus !== "signed-in") return;
+
+    const localProjectIds = localProjects.map((localProject) => localProject.id);
+    void runSidebarAction(
+      "sync-all-local-projects",
+      () => cloudProjectSync.syncAllLocalProjects(localProjectIds),
+    );
+  }
+
+  if (cloudProjectSync.status === "error" && cloudProjectSync.errorMessage === null) {
+    throw new Error(
+      `Cannot show cloud status error because status ${JSON.stringify(cloudProjectSync.status)} has no error message.`,
+    );
+  }
+  if (cloudProjectSync.authStatus === "error" && cloudProjectSync.errorMessage === null) {
+    throw new Error(
+      `Cannot show authentication error because status ${JSON.stringify(cloudProjectSync.authStatus)} has no error message.`,
+    );
+  }
+  if (batchSyncProgress !== null) {
+    assertCloudProjectBatchSyncProgress(batchSyncProgress);
+  }
+  if (
+    batchSyncProgress?.status === "failed"
+    && cloudProjectSync.errorMessage === null
+  ) {
+    throw new Error(
+      `Cannot show failed batch for project IDs ${JSON.stringify(batchSyncProgress.failedProjectIds)} because no batch error message is available.`,
+    );
+  }
+  if (
+    batchSyncProgress?.status === "completed"
+    && batchSyncProgress.failedProjectIds.length > 0
+  ) {
+    throw new Error(
+      `Cannot show completed batch with failed project IDs ${JSON.stringify(batchSyncProgress.failedProjectIds)}; failed batches must use status "failed".`,
+    );
+  }
+  const currentBatchProjectName = batchSyncProgress?.currentProjectId === null
+    || batchSyncProgress?.currentProjectId === undefined
+    ? null
+    : getLocalProjectLabel(localProjects, batchSyncProgress.currentProjectId);
+  const failedProjectNames = batchSyncProgress === null
+    ? []
+    : batchSyncProgress.failedProjectIds.map((localProjectId) =>
+        getLocalProjectLabel(localProjects, localProjectId),
+      );
+
+  return (
+    <section
+      aria-busy={cloudProjectSync.status === "loading" || isSidebarActionPending || isBatchSyncRunning}
+      aria-labelledby={extrasHeadingId}
+      className={styles.sidebar}
+    >
+      <h2 className={styles.sidebarTitle} id={extrasHeadingId}>{copy.extras}</h2>
+      <section aria-label={copy.account} className={styles.sidebarSection}>
+        <h3 className={styles.sectionTitle}>{copy.account}</h3>
+        {cloudProjectSync.authStatus === "loading" ? (
+          <p role="status">{copy.accountLoading}</p>
+        ) : cloudProjectSync.authStatus === "signed-in" ? (
+          <>
+            <p role="status">{copy.signedInAs(getSignedInAccountName(cloudProjectSync))}</p>
+            <button
+              className={styles.sidebarButton}
+              disabled={isSidebarActionPending}
+              onClick={() =>
+                void runSidebarAction("sign-out", cloudProjectSync.signOut)
+              }
+              type="button"
+            >
+              {pendingActionId === "sign-out" ? copy.signOutBusy : copy.signOut}
+            </button>
+          </>
+        ) : cloudProjectSync.authStatus === "signed-out" ? (
+          <>
+            <p>{copy.signedOut}</p>
+            <button
+              className={styles.sidebarButton}
+              disabled={isSidebarActionPending}
+              onClick={() =>
+                void runSidebarAction("sign-in", cloudProjectSync.signInWithGoogle)
+              }
+              type="button"
+            >
+              {pendingActionId === "sign-in" ? copy.signInBusy : copy.signInGoogle}
+            </button>
+          </>
+        ) : (
+          <p className={styles.error} role="alert">
+            {copy.cloudStatusError(requireCloudErrorMessage(cloudProjectSync))}
+          </p>
+        )}
+      </section>
+      <p
+        aria-live="polite"
+        className={cloudProjectSync.status === "error" ? styles.error : styles.status}
+        role={cloudProjectSync.status === "error" ? "alert" : "status"}
+      >
+        {cloudProjectSync.status === "loading"
+          ? copy.cloudStatusLoading
+          : cloudProjectSync.status === "ready"
+            ? copy.cloudStatusReady
+            : copy.cloudStatusError(requireCloudErrorMessage(cloudProjectSync))}
+      </p>
+      {cloudProjectSync.status === "ready"
+        && cloudProjectSync.errorMessage !== null
+        && batchSyncProgress?.status !== "failed" ? (
+        <p className={styles.error} role="alert">{cloudProjectSync.errorMessage}</p>
+      ) : null}
+      <section aria-label={copy.syncAllLocalProjects} className={styles.sidebarSection}>
+        <h3 className={styles.sectionTitle}>{copy.syncAllLocalProjects}</h3>
+        {cloudProjectSync.authStatus === "signed-out" ? (
+          <p className={styles.description}>{copy.syncAllSignInDescription}</p>
+        ) : localProjects.length === 0 ? (
+          <p className={styles.description}>{copy.noLocalProjects}</p>
+        ) : null}
+        <button
+          aria-busy={isBatchSyncRunning || pendingActionId === "sync-all-local-projects"}
+          className={styles.sidebarButton}
+          disabled={isSyncAllDisabled}
+          onClick={handleSyncAllLocalProjects}
+          type="button"
+        >
+          {pendingActionId === "sync-all-sign-in"
+            ? copy.signInBusy
+            : pendingActionId === "sync-all-local-projects" || isBatchSyncRunning
+              ? copy.syncButtonBusy
+              : cloudProjectSync.authStatus === "signed-in"
+                ? copy.syncAllLocalProjects
+                : copy.syncAllSignedOut}
+        </button>
+        {batchSyncProgress?.status === "running" ? (
+          <div className={styles.batchProgress}>
+            <progress
+              aria-label={copy.syncAllProgressLabel}
+              max={batchSyncProgress.total}
+              value={batchSyncProgress.completed}
+            />
+            <p role="status">
+              {copy.syncAllProgress(
+                batchSyncProgress.completed,
+                batchSyncProgress.total,
+                currentBatchProjectName,
+              )}
+            </p>
+            {failedProjectNames.length > 0 ? (
+              <p className={styles.error} role="alert">
+                {failedProjectNames.join(", ")}
+                {cloudProjectSync.errorMessage === null
+                  ? ""
+                  : ` — ${cloudProjectSync.errorMessage}`}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+        {batchSyncProgress?.status === "completed" ? (
+          <p role="status">{copy.syncAllCompleted(batchSyncProgress.total)}</p>
+        ) : null}
+        {batchSyncProgress?.status === "failed" ? (
+          <p className={styles.error} role="alert">
+            {copy.syncAllFailed(
+              batchSyncProgress.completed,
+              batchSyncProgress.total,
+              failedProjectNames,
+              requireCloudErrorMessage(cloudProjectSync),
+            )}
+          </p>
+        ) : null}
+      </section>
+      <p aria-live="polite" className={styles.retirementNotice} role="status">
+        {localSaveRetirementState === null
+          ? copy.localSaveRetirementLoading
+          : localSaveRetirementState.kind === "not-configured"
+            ? copy.localSaveRetirementNotConfigured
+            : localSaveRetirementState.kind === "ended"
+              ? copy.localSaveRetirementEnded
+              : copy.localSaveRetirementCountdown(
+                  localSaveRetirementState.daysRemaining,
+                  localSaveRetirementState.hoursRemaining,
+                  localSaveRetirementState.minutesRemaining,
+                )}
+      </p>
+    </section>
+  );
+}
+
+export function CloudProjectPanel({
+  cloudProjectSync,
+  copy,
+  currentProjectId,
+  localProjects,
+}: CloudProjectPanelProperties) {
+  const cloudProjectPanelHeadingId = useId();
+  const [pendingActionId, setPendingActionId] = useState<string | null>(null);
+  const pendingCloudActionIdRef = useRef<string | null>(null);
+  const [cloudProjectPendingDeletionId, setCloudProjectPendingDeletionId] =
+    useState<string | null>(null);
+  const cloudProjectDeleteButtonFocusTargetRef = useRef<HTMLButtonElement | null>(null);
+  const isCloudActionPending = pendingActionId !== null;
+  const isBatchSyncRunning = cloudProjectSync.batchSyncProgress?.status === "running";
+  const cloudProjectPendingDeletion = cloudProjectSync.cloudProjects.find(
+    (cloudProject) => cloudProject.id === cloudProjectPendingDeletionId,
+  );
+  const isCloudSyncReady = cloudProjectSync.status === "ready";
+  const isCloudActionDisabled =
+    !isCloudSyncReady || isCloudActionPending || isBatchSyncRunning;
+
   async function runCloudProjectAction(
     actionId: string,
     cloudProjectAction: () => Promise<unknown>,
@@ -96,16 +331,7 @@ export function CloudProjectPanel({
     setPendingActionId(actionId);
 
     try {
-      await cloudProjectAction();
-    } catch (caughtError) {
-      if (
-        caughtError instanceof CloudAuthError
-        || caughtError instanceof CloudProjectRequestError
-      ) {
-        return;
-      }
-
-      throw caughtError;
+      await runCloudActionWithKnownErrorHandling(cloudProjectAction);
     } finally {
       pendingCloudActionIdRef.current = null;
       setPendingActionId(null);
@@ -138,7 +364,7 @@ export function CloudProjectPanel({
 
   return (
     <section
-      aria-busy={cloudProjectSync.status === "loading" || isCloudActionPending}
+      aria-busy={cloudProjectSync.status === "loading" || isCloudActionPending || isBatchSyncRunning}
       aria-labelledby={cloudProjectPanelHeadingId}
       className={styles.panel}
     >
@@ -148,71 +374,11 @@ export function CloudProjectPanel({
         </h2>
         <p className={styles.description}>{copy.imagesStayLocal}</p>
       </header>
-      <div className={styles.account}>
-        <strong>{copy.account}</strong>
-        {cloudProjectSync.authStatus === "loading" ? (
-          <p role="status">{copy.accountLoading}</p>
-        ) : cloudProjectSync.authStatus === "signed-in" ? (
-          <>
-            <p role="status">{copy.signedInAs(signedInAccountName)}</p>
-            <button
-              disabled={isCloudActionPending}
-              onClick={() =>
-                void runCloudProjectAction("sign-out", cloudProjectSync.signOut)
-              }
-              type="button"
-            >
-              {pendingActionId === "sign-out" ? copy.signOutBusy : copy.signOut}
-            </button>
-          </>
-        ) : (
-          <>
-            <p>{copy.signedOut}</p>
-            <button
-              disabled={isCloudActionPending}
-              onClick={() =>
-                void runCloudProjectAction(
-                  "sign-in",
-                  cloudProjectSync.signInWithGoogle,
-                )
-              }
-              type="button"
-            >
-              {pendingActionId === "sign-in" ? copy.signInBusy : copy.signInGoogle}
-            </button>
-          </>
-        )}
-      </div>
-      <p
-        aria-live="polite"
-        className={styles.retirementNotice}
-        id={localSaveRetirementNoticeId}
-        role="status"
-      >
-        {localSaveRetirementState === null
-          ? copy.localSaveRetirementLoading
-          : localSaveRetirementState.kind === "not-configured"
-            ? copy.localSaveRetirementNotConfigured
-            : localSaveRetirementState.kind === "ended"
-              ? copy.localSaveRetirementEnded
-              : copy.localSaveRetirementCountdown(
-                  localSaveRetirementState.daysRemaining,
-                  localSaveRetirementState.hoursRemaining,
-                  localSaveRetirementState.minutesRemaining,
-                )}
-      </p>
-      {cloudProjectSync.errorMessage !== null ? (
-        <p className={styles.error} role="alert">
-          {copy.cloudStatusError(cloudProjectSync.errorMessage)}
-        </p>
-      ) : null}
       {cloudProjectSync.authStatus === "signed-in" ? (
         <>
           <section aria-label={copy.localProjects} className={styles.projectSection}>
             <h3>{copy.localProjects}</h3>
-            {cloudProjectSync.status === "loading" ? (
-              <p role="status">{copy.cloudProjectsLoading}</p>
-            ) : cloudProjectSync.status === "error" ? null : localProjects.length > 0 ? (
+            {localProjects.length > 0 ? (
               <ul className={styles.syncList}>
                 {localProjects.map((localProject) => {
                   const localSyncState = cloudProjectSync.localProjectSyncById[
@@ -260,7 +426,7 @@ export function CloudProjectPanel({
                           <div className={styles.projectActions}>
                             <button
                               aria-label={`${copy.keepLocalVersion}: ${localProject.title}`}
-                              disabled={!isCloudSyncReady || isCloudActionPending}
+                              disabled={isCloudActionDisabled}
                               onClick={() =>
                                 void runCloudProjectAction(
                                   `keep-local:${localProject.id}`,
@@ -274,7 +440,7 @@ export function CloudProjectPanel({
                             </button>
                             <button
                               aria-label={`${copy.useCloudVersion}: ${localProject.title}`}
-                              disabled={!isCloudSyncReady || isCloudActionPending}
+                              disabled={isCloudActionDisabled}
                               onClick={() =>
                                 void runCloudProjectAction(
                                   `use-cloud:${localProject.id}`,
@@ -292,10 +458,9 @@ export function CloudProjectPanel({
                       {localProjectCanManuallySync ? (
                         <div className={styles.syncProjectAction}>
                           <button
-                            aria-label={`${copy.syncThisProject}: ${localProject.title}`}
-                            aria-describedby={localSaveRetirementNoticeId}
                             aria-busy={pendingActionId === localProjectManualSyncActionId}
-                            disabled={!isCloudSyncReady || isCloudActionPending}
+                            aria-label={`${copy.syncThisProject}: ${localProject.title}`}
+                            disabled={isCloudActionDisabled}
                             onClick={() =>
                               void runCloudProjectAction(
                                 localProjectManualSyncActionId,
@@ -308,15 +473,6 @@ export function CloudProjectPanel({
                               ? copy.syncButtonBusy
                               : copy.syncThisProject}
                           </button>
-                          {localSaveRetirementState?.kind === "countdown" ? (
-                            <span className={styles.retirementCountdown}>
-                              {copy.localSaveRetirementShortCountdown(
-                                localSaveRetirementState.daysRemaining,
-                                localSaveRetirementState.hoursRemaining,
-                                localSaveRetirementState.minutesRemaining,
-                              )}
-                            </span>
-                          ) : null}
                         </div>
                       ) : null}
                       {localSyncStatus === "pending" || localSyncStatus === "error" ? (
@@ -326,10 +482,10 @@ export function CloudProjectPanel({
                             pendingActionId === localProjectManualSyncActionId
                             || pendingActionId === localProjectRetrySyncActionId
                           }
-                          disabled={!isCloudSyncReady || isCloudActionPending}
+                          disabled={isCloudActionDisabled}
                           onClick={() =>
                             void runCloudProjectAction(
-                                localProjectRetrySyncActionId,
+                              localProjectRetrySyncActionId,
                               () => cloudProjectSync.retrySync(localProject.id),
                             )
                           }
@@ -350,100 +506,110 @@ export function CloudProjectPanel({
             )}
           </section>
           <section aria-label={copy.cloudProjects} className={styles.projectSection}>
-            <div className={styles.cloudHeading}>
-              <h3>{copy.cloudProjects}</h3>
-              <button
-                aria-label={copy.refreshCloudProjects}
-                disabled={isCloudActionPending || cloudProjectSync.status === "loading"}
-                onClick={() =>
-                  void runCloudProjectAction(
-                    "refresh-cloud-projects",
-                    cloudProjectSync.refreshCloudProjects,
-                  )
-                }
-                type="button"
-              >
-                {pendingActionId === "refresh-cloud-projects"
-                  ? copy.refreshingCloudProjects
-                  : copy.refreshCloudProjects}
-              </button>
-            </div>
-            {cloudProjectSync.status === "loading" ? (
-              <p role="status">{copy.cloudProjectsLoading}</p>
-            ) : cloudProjectSync.cloudProjects.length === 0
-              && cloudProjectSync.status === "ready" ? (
-              <p>{copy.cloudProjectsEmpty}</p>
-            ) : (
-              <ul className={styles.cloudList}>
-                {cloudProjectSync.cloudProjects.map((cloudProject) => (
-                  <li className={styles.cloudListItem} key={cloudProject.id}>
-                    <div className={styles.projectHeading}>
-                      <strong>{cloudProject.title}</strong>
-                      <span>{copy.mapCount(cloudProject.mapCount)}</span>
-                    </div>
-                    <time dateTime={cloudProject.updatedAt}>
-                      {formatCloudProjectUpdatedAt(
-                        cloudProject.updatedAt,
-                        copy.dateTimeLocale,
-                      )}
-                    </time>
-                    <div className={styles.projectActions}>
-                      <button
-                        aria-label={`${copy.openCloudCopy}: ${cloudProject.title}`}
-                        disabled={!isCloudSyncReady || isCloudActionPending}
-                        onClick={() =>
-                          void runCloudProjectAction(
-                            `open-cloud-project:${cloudProject.id}`,
-                            () => cloudProjectSync.openCloudProject(cloudProject.id),
-                          )
-                        }
-                        type="button"
-                      >
-                        {copy.openCloudCopy}
-                      </button>
-                      <button
-                        aria-label={`${copy.deleteCloudCopy}: ${cloudProject.title}`}
-                        disabled={!isCloudSyncReady || isCloudActionPending}
-                        onClick={(clickEvent) =>
-                          handleRequestCloudProjectDeletion(
-                            cloudProject,
-                            clickEvent.currentTarget,
-                          )
-                        }
-                        type="button"
-                      >
-                        {pendingActionId === `delete-cloud-project:${cloudProject.id}`
-                          ? copy.deletingCloudCopy
-                          : copy.deleteCloudCopy}
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {(cloudProjectSync.status === "ready"
-              || cloudProjectSync.status === "error")
-            && cloudProjectSync.hasMoreCloudProjects ? (
-              <button
-                aria-busy={cloudProjectSync.isLoadingMoreCloudProjects}
-                aria-label={copy.loadMoreCloudProjects}
-                disabled={isCloudActionPending || cloudProjectSync.isLoadingMoreCloudProjects}
-                onClick={() =>
-                  void runCloudProjectAction(
-                    "load-more-cloud-projects",
-                    cloudProjectSync.loadMoreCloudProjects,
-                  )
-                }
-                type="button"
-              >
-                {cloudProjectSync.isLoadingMoreCloudProjects
-                  ? copy.loadingMoreCloudProjects
-                  : copy.loadMoreCloudProjects}
-              </button>
-            ) : null}
+            <details className={styles.cloudDetails}>
+              <summary className={styles.cloudDetailsSummary}>
+                <h3>{copy.cloudProjects}</h3>
+              </summary>
+              <div className={styles.cloudDetailsContent}>
+                <div className={styles.cloudHeading}>
+                  <button
+                    aria-label={copy.refreshCloudProjects}
+                    disabled={isCloudActionPending || cloudProjectSync.status === "loading" || isBatchSyncRunning}
+                    onClick={() =>
+                      void runCloudProjectAction(
+                        "refresh-cloud-projects",
+                        cloudProjectSync.refreshCloudProjects,
+                      )
+                    }
+                    type="button"
+                  >
+                    {pendingActionId === "refresh-cloud-projects"
+                      ? copy.refreshingCloudProjects
+                      : copy.refreshCloudProjects}
+                  </button>
+                </div>
+                {cloudProjectSync.status === "loading" ? (
+                  <p role="status">{copy.cloudProjectsLoading}</p>
+                ) : cloudProjectSync.cloudProjects.length === 0
+                  && cloudProjectSync.status === "ready" ? (
+                  <p>{copy.cloudProjectsEmpty}</p>
+                ) : cloudProjectSync.cloudProjects.length > 0 ? (
+                  <ul className={styles.cloudList}>
+                    {cloudProjectSync.cloudProjects.map((cloudProject) => (
+                      <li className={styles.cloudListItem} key={cloudProject.id}>
+                        <div className={styles.projectHeading}>
+                          <strong>{cloudProject.title}</strong>
+                          <span>{copy.mapCount(cloudProject.mapCount)}</span>
+                        </div>
+                        <time dateTime={cloudProject.updatedAt}>
+                          {formatCloudProjectUpdatedAt(
+                            cloudProject.updatedAt,
+                            copy.dateTimeLocale,
+                          )}
+                        </time>
+                        <div className={styles.projectActions}>
+                          <button
+                            aria-label={`${copy.openCloudCopy}: ${cloudProject.title}`}
+                            disabled={isCloudActionDisabled}
+                            onClick={() =>
+                              void runCloudProjectAction(
+                                `open-cloud-project:${cloudProject.id}`,
+                                () => cloudProjectSync.openCloudProject(cloudProject.id),
+                              )
+                            }
+                            type="button"
+                          >
+                            {copy.openCloudCopy}
+                          </button>
+                          <button
+                            aria-label={`${copy.deleteCloudCopy}: ${cloudProject.title}`}
+                            disabled={isCloudActionDisabled}
+                            onClick={(clickEvent) =>
+                              handleRequestCloudProjectDeletion(
+                                cloudProject,
+                                clickEvent.currentTarget,
+                              )
+                            }
+                            type="button"
+                          >
+                            {pendingActionId === `delete-cloud-project:${cloudProject.id}`
+                              ? copy.deletingCloudCopy
+                              : copy.deleteCloudCopy}
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {(cloudProjectSync.status === "ready"
+                  || cloudProjectSync.status === "error")
+                && cloudProjectSync.hasMoreCloudProjects ? (
+                  <button
+                    aria-busy={cloudProjectSync.isLoadingMoreCloudProjects}
+                    aria-label={copy.loadMoreCloudProjects}
+                    disabled={isCloudActionPending || cloudProjectSync.isLoadingMoreCloudProjects || isBatchSyncRunning}
+                    onClick={() =>
+                      void runCloudProjectAction(
+                        "load-more-cloud-projects",
+                        cloudProjectSync.loadMoreCloudProjects,
+                      )
+                    }
+                    type="button"
+                  >
+                    {cloudProjectSync.isLoadingMoreCloudProjects
+                      ? copy.loadingMoreCloudProjects
+                      : copy.loadMoreCloudProjects}
+                  </button>
+                ) : null}
+              </div>
+            </details>
           </section>
         </>
-      ) : null}
+      ) : cloudProjectSync.authStatus === "loading" ? (
+        <p role="status">{copy.cloudProjectsLoading}</p>
+      ) : (
+        <p role="status">{copy.cloudProjectsSignInRequired}</p>
+      )}
       {cloudProjectPendingDeletion !== undefined ? (
         <CloudProjectDeleteAlertDialog
           copy={copy.deleteProject}
@@ -473,6 +639,106 @@ export function formatCloudProjectUpdatedAt(
     dateStyle: "medium",
     timeStyle: "short",
   }).format(parsedUpdatedAt);
+}
+
+async function runCloudActionWithKnownErrorHandling(
+  cloudAction: () => Promise<unknown>,
+): Promise<void> {
+  try {
+    await cloudAction();
+  } catch (caughtError) {
+    if (
+      caughtError instanceof CloudAuthError
+      || caughtError instanceof CloudProjectRequestError
+    ) {
+      return;
+    }
+
+    throw caughtError;
+  }
+}
+
+function assertCloudProjectBatchSyncProgress(
+  batchSyncProgress: CloudProjectBatchSyncProgress,
+): void {
+  if (
+    !Number.isInteger(batchSyncProgress.total)
+    || batchSyncProgress.total < 1
+  ) {
+    throw new Error(
+      `Cannot render cloud batch total ${JSON.stringify(batchSyncProgress.total)}; expected a positive integer.`,
+    );
+  }
+  if (
+    !Number.isInteger(batchSyncProgress.completed)
+    || batchSyncProgress.completed < 0
+    || batchSyncProgress.completed > batchSyncProgress.total
+  ) {
+    throw new Error(
+      `Cannot render cloud batch completed count ${JSON.stringify(batchSyncProgress.completed)} for total ${JSON.stringify(batchSyncProgress.total)}.`,
+    );
+  }
+  if (
+    batchSyncProgress.status !== "running"
+    && batchSyncProgress.status !== "completed"
+    && batchSyncProgress.status !== "failed"
+  ) {
+    throw new Error(
+      `Cannot render cloud batch status ${JSON.stringify(batchSyncProgress.status)}.`,
+    );
+  }
+  if (!Array.isArray(batchSyncProgress.failedProjectIds)) {
+    throw new Error(
+      `Cannot render cloud batch failed project IDs ${JSON.stringify(batchSyncProgress.failedProjectIds)}; expected an array.`,
+    );
+  }
+
+  const seenFailedProjectIds = new Set<string>();
+  for (const failedProjectId of batchSyncProgress.failedProjectIds) {
+    if (typeof failedProjectId !== "string" || failedProjectId.trim().length === 0) {
+      throw new Error(
+        `Cannot render cloud batch failed project ID ${JSON.stringify(failedProjectId)}; expected a non-empty string.`,
+      );
+    }
+    if (seenFailedProjectIds.has(failedProjectId)) {
+      throw new Error(
+        `Cannot render duplicate cloud batch failed project ID ${JSON.stringify(failedProjectId)}.`,
+      );
+    }
+    seenFailedProjectIds.add(failedProjectId);
+  }
+}
+
+function getLocalProjectLabel(
+  localProjects: readonly ReferenceProjectSummary[],
+  localProjectId: string,
+): string {
+  if (localProjectId.trim().length === 0) {
+    throw new Error(
+      `Cannot display cloud batch project ID ${JSON.stringify(localProjectId)} because it is empty.`,
+    );
+  }
+
+  const localProject = localProjects.find(
+    (candidateProject) => candidateProject.id === localProjectId,
+  );
+  if (localProject === undefined || localProject.title.trim().length === 0) {
+    return localProjectId;
+  }
+
+  return localProject.title;
+}
+
+function requireCloudErrorMessage(
+  cloudProjectSync: CloudProjectSyncView,
+): string {
+  if (cloudProjectSync.errorMessage === null) {
+    throw new Error(
+      `Cannot show cloud error for status ${JSON.stringify(cloudProjectSync.status)} and auth status ${JSON.stringify(cloudProjectSync.authStatus)} because the error message is null.`,
+    );
+  }
+
+  return cloudProjectSync.errorMessage;
 }
 
 function getSignedInAccountName(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { LocalProjectPanel, type LocalProjectStorageStatus } from "./local-project-panel";
 import { MapImageExportPanel } from "./map-image-export-panel";
 import type { ScreenshotResolution } from "../projects/map-image-export";
@@ -10,13 +10,22 @@ import type { ReferenceProjectSummary } from "../reference-runtime/reference-pro
 import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
 import { useCloudProjectSync } from "@/src/cloud-sync/use-cloud-project-sync";
-import { CloudProjectPanel } from "./cloud-project-panel";
+import { CloudProjectPanel, CloudProjectSidebar } from "./cloud-project-panel";
+import styles from "./planner-library-layout.module.css";
 
 type PlannerSaveModalContentProperties = Readonly<{
   copy: Pick<
     SaveModalCopy,
-    "cloudProjects" | "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+    | "cloudProjects"
+    | "deleteProject"
+    | "imageExport"
+    | "localProjects"
+    | "saveTools"
+    | "thumbnail"
   >;
+  isProjectsBranchActive: boolean;
+  mainBranchContent: ReactNode;
+  sidebarNavigation: ReactNode;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount: number | null;
@@ -41,6 +50,9 @@ type PlannerSaveModalContentProperties = Readonly<{
 
 export function PlannerSaveModalContent({
   copy,
+  isProjectsBranchActive,
+  mainBranchContent,
+  sidebarNavigation,
   currentProjectId,
   currentProjectName,
   currentProjectMapInstanceCount,
@@ -90,14 +102,39 @@ export function PlannerSaveModalContent({
     });
   }
 
+  const imageExportTools = (
+    <div className={`planner-save-modal-content__exports ${styles.imageExportTools}`}>
+      <MapImageExportPanel
+        copy={copy.imageExport}
+        mapFile={mapFile}
+        onCaptureScreenshot={onCaptureScreenshot}
+        season={season}
+      />
+      <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
+        <h3>{copy.thumbnail.title}</h3>
+        <div className="map-image-export-panel__actions">
+          <button onClick={() => void handleSaveThumbnail()} type="button">
+            {copy.thumbnail.saveLabel}
+          </button>
+        </div>
+        {thumbnailActionState !== null ? (
+          <p
+            className={
+              thumbnailActionState.kind === "error"
+                ? "local-project-panel__error"
+                : "local-project-panel__message"
+            }
+            role={thumbnailActionState.kind === "error" ? "alert" : "status"}
+          >
+            {thumbnailActionState.message}
+          </p>
+        ) : null}
+      </section>
+    </div>
+  );
+
   return (
     <div className="planner-save-modal-content">
-      <CloudProjectPanel
-        cloudProjectSync={cloudProjectSync}
-        copy={copy.cloudProjects}
-        currentProjectId={currentProjectId}
-        localProjects={projects}
-      />
       <LocalProjectPanel
         copy={copy.localProjects}
         currentProjectId={currentProjectId}
@@ -114,37 +151,41 @@ export function PlannerSaveModalContent({
         onRenameProject={onRenameProject}
         onSaveCurrentMap={handleSaveCurrentMapAndNotifyCloudSync}
         projects={projects}
+        isProjectListActive={isProjectsBranchActive}
+        sidebarContent={
+          <>
+            {sidebarNavigation}
+            <CloudProjectSidebar
+              cloudProjectSync={cloudProjectSync}
+              copy={copy.cloudProjects}
+              localProjects={projects}
+            />
+            <details className={styles.imageExportDetails}>
+              <summary>{copy.imageExport.exportLabel}</summary>
+              {imageExportTools}
+            </details>
+          </>
+        }
+        mainContent={
+          <>
+            <details
+              className={styles.cloudProjectsDetails}
+              hidden={!isProjectsBranchActive}
+            >
+              <summary>{copy.cloudProjects.localProjects}</summary>
+              <CloudProjectPanel
+                cloudProjectSync={cloudProjectSync}
+                copy={copy.cloudProjects}
+                currentProjectId={currentProjectId}
+                localProjects={projects}
+              />
+            </details>
+            {mainBranchContent}
+          </>
+        }
         storageErrorMessage={storageErrorMessage}
         storageStatus={storageStatus}
       />
-      <div className="planner-save-modal-content__exports">
-        <MapImageExportPanel
-          copy={copy.imageExport}
-          mapFile={mapFile}
-          onCaptureScreenshot={onCaptureScreenshot}
-          season={season}
-        />
-        <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
-          <h3>{copy.thumbnail.title}</h3>
-          <div className="map-image-export-panel__actions">
-            <button onClick={() => void handleSaveThumbnail()} type="button">
-              {copy.thumbnail.saveLabel}
-            </button>
-          </div>
-          {thumbnailActionState !== null ? (
-            <p
-              className={
-                thumbnailActionState.kind === "error"
-                  ? "local-project-panel__error"
-                  : "local-project-panel__message"
-              }
-              role={thumbnailActionState.kind === "error" ? "alert" : "status"}
-            >
-              {thumbnailActionState.message}
-            </p>
-          ) : null}
-        </section>
-      </div>
     </div>
   );
 }

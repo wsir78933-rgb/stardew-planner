@@ -59,6 +59,7 @@ vi.mock("react", async (importOriginal) => {
 import * as React from "react";
 import { LocalProjectPanel } from "../../src/components/local-project-panel";
 import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
+import type { ReferenceProjectSummary } from "../../src/reference-runtime/reference-project-repository";
 
 type RenderedElement = React.ReactElement<Record<string, unknown>>;
 type LocalProjectPanelTree = ReturnType<typeof LocalProjectPanel>;
@@ -223,4 +224,51 @@ it("shows the concrete save error without success and unlocks after rejection", 
       (properties) => properties.role === "status" && textContent(properties.children as ReactNode).includes(copy.savedToBrowser),
     ),
   ).toBeUndefined();
+});
+
+it("keeps the duplicate action callable inside the More actions disclosure", () => {
+  const duplicateProject = vi.fn();
+  const savedProject: ReferenceProjectSummary = {
+    id: "project-actions",
+    title: "Action Project",
+    created_at: "2026-07-26T00:00:00.000Z",
+    updated_at: "2026-07-26T01:00:00.000Z",
+    mapCount: 1,
+    activeMapThumbnailDataUrl: null,
+  };
+
+  reactHookHarness.reset();
+  reactHookHarness.beginRender();
+  const tree = LocalProjectPanel({
+    copy: getSaveModalCopy("en").localProjects,
+    currentProjectId: null,
+    currentProjectName: null,
+    deleteCopy: getSaveModalCopy("en").deleteProject,
+    projects: [savedProject],
+    storageStatus: "ready",
+    storageErrorMessage: null,
+    onCreateProject: () => undefined,
+    onDeleteProject: () => undefined,
+    onDuplicateProject: duplicateProject,
+    onExportProject: () => "{}",
+    onImportProject: () => undefined,
+    onOpenProject: () => undefined,
+    onRenameProject: () => undefined,
+    onSaveCurrentMap: async () => undefined,
+  });
+  const duplicateButton = requireElement(
+    tree,
+    "button",
+    (properties) => properties["data-project-action"] === "duplicate",
+  );
+  const onClick = duplicateButton.props.onClick;
+
+  if (typeof onClick !== "function") {
+    throw new Error("The duplicate action inside More actions has no click handler.");
+  }
+
+  onClick();
+
+  expect(duplicateProject).toHaveBeenCalledOnce();
+  expect(duplicateProject).toHaveBeenCalledWith("project-actions");
 });

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CloudProjectRecord } from "../../src/cloud-sync/cloud-project-contract";
+import type { CloudProjectSyncView } from "../../src/cloud-sync/use-cloud-project-sync";
 import type { ReferenceProjectWorkspaceController } from "../../src/reference-runtime/use-reference-project-workspace";
 import { referenceProjectDocumentFixture } from "../reference-runtime/fixtures/reference-project-document";
 
@@ -563,7 +564,546 @@ describe("useCloudProjectSync", () => {
     });
     mountedHook.unmount();
   });
+
+  it("batch syncs multiple local projects and re-runs without creating duplicate cloud copies", async () => {
+    const projectDocuments = createLocalProjectDocuments(["local-7", "local-8"]);
+    const { fetchMock, putRequests } = createCloudFetchMock();
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-8"]),
+    ).resolves.toBeUndefined();
+    expect(putRequests.map((request) => request.localProjectId)).toEqual([
+      "local-7",
+      "local-8",
+    ]);
+    expect(harness.render()).toMatchObject({
+      batchSyncProgress: {
+        status: "completed",
+        completed: 2,
+        total: 2,
+        currentProjectId: null,
+        failedProjectIds: [],
+      },
+      localProjectSyncById: {
+        "local-7": { status: "synced", revision: 1 },
+        "local-8": { status: "synced", revision: 1 },
+      },
+      errorMessage: null,
+    });
+
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-8"]),
+    ).resolves.toBeUndefined();
+    expect(putRequests).toHaveLength(2);
+    expect(harness.render().batchSyncProgress).toMatchObject({
+      status: "completed",
+      completed: 2,
+      total: 2,
+      failedProjectIds: [],
+    });
+    harness.unmount();
+  });
+
+  it("continues known per-project failures and reuses the pending cloud ID on retry", async () => {
+    const projectDocuments = createLocalProjectDocuments([
+      "local-7",
+      "local-8",
+      "local-9",
+    ]);
+    let failLocalEight = true;
+    const { fetchMock, putRequests } = createCloudFetchMock((request) => {
+      if (request.localProjectId === "local-8" && failLocalEight) {
+        return Response.json(
+          { error: { code: "PROJECT_INVALID", message: "Layout was rejected." } },
+          { status: 422 },
+        );
+      }
+      return createCloudPutSuccessResponse(request);
+    });
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-8", "local-9"]),
+    ).rejects.toMatchObject({ code: "BATCH_SYNC_PARTIAL_FAILURE" });
+    expect(harness.render()).toMatchObject({
+      batchSyncProgress: {
+        status: "failed",
+        completed: 3,
+        total: 3,
+        currentProjectId: null,
+        failedProjectIds: ["local-8"],
+      },
+      localProjectSyncById: {
+        "local-7": { status: "synced", revision: 1 },
+        "local-8": {
+          status: "error",
+          errorMessage: expect.stringContaining("local-8"),
+        },
+        "local-9": { status: "synced", revision: 1 },
+      },
+      errorMessage: expect.stringContaining("local-8"),
+    });
+
+    const firstLocalEightCloudId = putRequests.find(
+      (request) => request.localProjectId === "local-8",
+    )?.cloudProjectId;
+    failLocalEight = false;
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-8", "local-9"]),
+    ).resolves.toBeUndefined();
+    const localEightRequests = putRequests.filter(
+      (request) => request.localProjectId === "local-8",
+    );
+    expect(localEightRequests).toHaveLength(2);
+    expect(localEightRequests[1]?.cloudProjectId).toBe(firstLocalEightCloudId);
+    expect(localEightRequests.every((request) => request.expectedRevision === 0)).toBe(true);
+    expect(harness.render().batchSyncProgress).toMatchObject({
+      status: "completed",
+      completed: 3,
+      total: 3,
+      failedProjectIds: [],
+    });
+    harness.unmount();
+  });
+
+  it("stops on an unknown project error and reports its local project ID", async () => {
+    const projectDocuments = createLocalProjectDocuments(["local-7", "local-8"]);
+    const { fetchMock, putRequests } = createCloudFetchMock((request) => {
+      if (request.localProjectId === "local-7") {
+        throw new Error("Unexpected storage failure.");
+      }
+      return createCloudPutSuccessResponse(request);
+    });
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-8"]),
+    ).rejects.toThrow('local project "local-7": Error: Unexpected storage failure.');
+    expect(putRequests.map((request) => request.localProjectId)).toEqual(["local-7"]);
+    expect(harness.render()).toMatchObject({
+      localProjectSyncById: {
+        "local-7": {
+          status: "error",
+          errorMessage: expect.stringContaining('local project "local-7"'),
+        },
+      },
+      batchSyncProgress: {
+        status: "failed",
+        completed: 1,
+        total: 2,
+        currentProjectId: null,
+        failedProjectIds: ["local-7"],
+      },
+      errorMessage: expect.stringContaining("Unexpected storage failure."),
+    });
+    harness.unmount();
+  });
+
+  it("records a CAS conflict for its local project and continues without overwriting it", async () => {
+    const projectDocuments = createLocalProjectDocuments([
+      "local-7",
+      "local-8",
+      "local-9",
+    ]);
+    const storage = createMemoryStorage();
+    storage.setItem(
+      "stardew-planner:cloud-project-links:v1:user-9",
+      JSON.stringify([{
+        localProjectId: "local-8",
+        cloudProjectId: "cloud-linked-8",
+        revision: 4,
+        lastSyncedSnapshot: `sha256:${"0".repeat(64)}`,
+      }]),
+    );
+    const { fetchMock, putRequests } = createCloudFetchMock((request) => {
+      if (request.localProjectId === "local-8") {
+        return Response.json(
+          { error: { code: "REVISION_CONFLICT", message: "Cloud revision changed." } },
+          { status: 409 },
+        );
+      }
+      return createCloudPutSuccessResponse(request);
+    });
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock, {
+      storage,
+    });
+
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-8", "local-9"]),
+    ).rejects.toMatchObject({ code: "BATCH_SYNC_PARTIAL_FAILURE" });
+    expect(putRequests.map((request) => request.localProjectId)).toEqual([
+      "local-7",
+      "local-8",
+      "local-9",
+    ]);
+    expect(putRequests.find((request) => request.localProjectId === "local-8"))
+      .toMatchObject({
+        cloudProjectId: "cloud-linked-8",
+        expectedRevision: 4,
+      });
+    expect(harness.render()).toMatchObject({
+      localProjectSyncById: {
+        "local-8": {
+          status: "conflict",
+          revision: 4,
+          errorMessage: expect.stringContaining("local-8"),
+        },
+        "local-9": { status: "synced", revision: 1 },
+      },
+      batchSyncProgress: {
+        status: "failed",
+        completed: 3,
+        failedProjectIds: ["local-8"],
+      },
+      errorMessage: expect.stringContaining("REVISION_CONFLICT"),
+    });
+    harness.unmount();
+  });
+
+  it("rejects empty and duplicate IDs before making cloud writes", async () => {
+    const projectDocuments = createLocalProjectDocuments(["local-7"]);
+    const { fetchMock, putRequests } = createCloudFetchMock();
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", ""]),
+    ).rejects.toMatchObject({
+      code: "INVALID_LOCAL_PROJECT_ID",
+      message: expect.stringContaining('Received: ""'),
+    });
+    await expect(
+      harness.render().syncAllLocalProjects(["local-7", "local-7"]),
+    ).rejects.toMatchObject({
+      code: "DUPLICATE_LOCAL_PROJECT_ID",
+      message: expect.stringContaining('"local-7"'),
+    });
+    expect(putRequests).toHaveLength(0);
+    harness.unmount();
+  });
+
+  it("rejects a second batch and queues existing upload writes until the batch finishes", async () => {
+    const projectDocuments = createLocalProjectDocuments([
+      "local-7",
+      "local-8",
+      "local-9",
+    ]);
+    const firstPutStarted = createDeferred<CloudPutRequest>();
+    const firstPutResponse = createDeferred<Response>();
+    const { fetchMock, putRequests } = createCloudFetchMock((request) => {
+      if (request.localProjectId === "local-7" && putRequests.length === 1) {
+        firstPutStarted.resolve(request);
+        return firstPutResponse.promise;
+      }
+      return createCloudPutSuccessResponse(request);
+    });
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    const batchPromise = harness.render().syncAllLocalProjects(["local-7", "local-8"]);
+    await firstPutStarted.promise;
+    expect(harness.render().batchSyncProgress).toMatchObject({
+      status: "running",
+      completed: 0,
+      total: 2,
+      currentProjectId: "local-7",
+    });
+    await expect(
+      harness.render().syncAllLocalProjects(["local-9"]),
+    ).rejects.toMatchObject({ code: "BATCH_SYNC_IN_PROGRESS" });
+
+    const queuedUpload = harness.render().uploadLocalProject("local-9");
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    expect(putRequests.map((request) => request.localProjectId)).toEqual(["local-7"]);
+
+    firstPutResponse.resolve(createCloudPutSuccessResponse(putRequests[0]!));
+    await expect(batchPromise).resolves.toBeUndefined();
+    await expect(queuedUpload).resolves.toBeUndefined();
+    expect(putRequests.map((request) => request.localProjectId)).toEqual([
+      "local-7",
+      "local-8",
+      "local-9",
+    ]);
+    harness.unmount();
+  });
+
+  it("cancels a running batch on sign-out and clears its progress", async () => {
+    const projectDocuments = createLocalProjectDocuments(["local-7", "local-8"]);
+    const firstPutStarted = createDeferred<CloudPutRequest>();
+    const { fetchMock, putRequests } = createCloudFetchMock((request) => {
+      if (request.localProjectId !== "local-7") {
+        return createCloudPutSuccessResponse(request);
+      }
+      firstPutStarted.resolve(request);
+      return new Promise<Response>((_resolve, reject) => {
+        const abortRequest = (): void => {
+          reject(new DOMException("Request aborted by sign-out.", "AbortError"));
+        };
+        if (request.signal?.aborted) {
+          abortRequest();
+          return;
+        }
+        request.signal?.addEventListener("abort", abortRequest, { once: true });
+      });
+    });
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    const batchPromise = harness.render().syncAllLocalProjects(["local-7", "local-8"]);
+    await firstPutStarted.promise;
+    await expect(harness.render().signOut()).resolves.toBeUndefined();
+    await expect(batchPromise).rejects.toBeInstanceOf(harness.CloudOperationCancelledError);
+    expect(harness.render()).toMatchObject({
+      authStatus: "signed-out",
+      account: null,
+      batchSyncProgress: null,
+      errorMessage: null,
+    });
+    expect(putRequests.map((request) => request.localProjectId)).toEqual(["local-7"]);
+    harness.unmount();
+  });
+
+  it("cancels a running batch after the fresh session changes accounts", async () => {
+    const projectDocuments = createLocalProjectDocuments(["local-7", "local-8"]);
+    const firstPutStarted = createDeferred<CloudPutRequest>();
+    const { fetchMock, putRequests } = createCloudFetchMock((request) => {
+      if (request.localProjectId !== "local-7") {
+        return createCloudPutSuccessResponse(request);
+      }
+      firstPutStarted.resolve(request);
+      return new Promise<Response>((_resolve, reject) => {
+        const abortRequest = (): void => {
+          reject(new DOMException("Request aborted after account switch.", "AbortError"));
+        };
+        if (request.signal?.aborted) {
+          abortRequest();
+          return;
+        }
+        request.signal?.addEventListener("abort", abortRequest, { once: true });
+      });
+    });
+    const harness = await mountSignedInCloudSync(projectDocuments, fetchMock);
+
+    const batchPromise = harness.render().syncAllLocalProjects(["local-7", "local-8"]);
+    await firstPutStarted.promise;
+    harness.setAccount({
+      id: "account-B",
+      name: "Account B",
+      email: "b@example.com",
+      image: null,
+    });
+    await expect(harness.render().refreshCloudProjects()).resolves.toBeUndefined();
+    await expect(batchPromise).rejects.toBeInstanceOf(harness.CloudOperationCancelledError);
+    expect(harness.render()).toMatchObject({
+      account: { id: "account-B" },
+      batchSyncProgress: null,
+    });
+    expect(putRequests.map((request) => request.localProjectId)).toEqual(["local-7"]);
+    expect(putRequests[0]?.expectedAccountId).toBe("user-9");
+    harness.unmount();
+  });
 });
+
+type CloudSyncTestAccount = Readonly<{
+  id: string;
+  name: string;
+  email: string;
+  image: null;
+}>;
+
+type CloudPutRequest = Readonly<{
+  requestUrl: string;
+  cloudProjectId: string;
+  localProjectId: string;
+  expectedAccountId: string | undefined;
+  expectedRevision: number;
+  projectDocument: CloudProjectRecord["projectDocument"];
+  signal?: AbortSignal;
+}>;
+
+type CloudPutResponseFactory = (
+  request: CloudPutRequest,
+) => Response | Promise<Response>;
+
+function createLocalProjectDocuments(
+  localProjectIds: readonly string[],
+): Readonly<Record<string, string>> {
+  const storedProject = referenceProjectDocumentFixture.projects[0];
+  if (storedProject === undefined) {
+    throw new Error("Cloud sync hook fixture is missing project-alpha.");
+  }
+
+  return Object.fromEntries(
+    localProjectIds.map((localProjectId) => {
+      const localProject = {
+        ...storedProject,
+        id: localProjectId,
+        project: {
+          ...storedProject.project,
+          maps: storedProject.project.maps.map((projectMap) => ({
+            ...projectMap,
+            thumbnail: `/api/projects/${localProjectId}/maps/${projectMap.id}/thumbnail`,
+          })),
+        },
+      };
+      return [localProjectId, JSON.stringify({ version: 1, projects: [localProject] })];
+    }),
+  );
+}
+
+function createCloudFetchMock(onPut?: CloudPutResponseFactory): Readonly<{
+  fetchMock: typeof fetch;
+  putRequests: CloudPutRequest[];
+}> {
+  const putRequests: CloudPutRequest[] = [];
+  const fetchMock = vi.fn<typeof fetch>(async (requestUrl, requestInit) => {
+    const serializedRequestUrl = String(requestUrl);
+    if (serializedRequestUrl === "/api/cloud-projects" && requestInit?.method !== "PUT") {
+      return Response.json({ projects: [], nextCursor: null });
+    }
+    if (requestInit?.method !== "PUT") {
+      throw new Error(
+        `Unexpected cloud request ${String(requestInit?.method)} ${serializedRequestUrl}.`,
+      );
+    }
+
+    const requestBody = JSON.parse(String(requestInit.body)) as {
+      expectedRevision: number;
+      projectDocument: CloudProjectRecord["projectDocument"];
+    };
+    const requestHeaders = requestInit.headers as Record<string, string>;
+    const cloudProjectId = serializedRequestUrl.split("/").at(-1);
+    const storedProject = requestBody.projectDocument.projects[0];
+    if (cloudProjectId === undefined || storedProject === undefined) {
+      throw new Error(
+        `Cloud PUT request ${serializedRequestUrl} is missing its cloud project ID or stored project.`,
+      );
+    }
+    const putRequest: CloudPutRequest = {
+      requestUrl: serializedRequestUrl,
+      cloudProjectId,
+      localProjectId: storedProject.id,
+      expectedAccountId: requestHeaders["x-expected-account-id"],
+      expectedRevision: requestBody.expectedRevision,
+      projectDocument: requestBody.projectDocument,
+      ...(requestInit.signal == null ? {} : { signal: requestInit.signal }),
+    };
+    putRequests.push(putRequest);
+    return onPut === undefined
+      ? createCloudPutSuccessResponse(putRequest)
+      : await onPut(putRequest);
+  });
+  return { fetchMock, putRequests };
+}
+
+function createCloudPutSuccessResponse(request: CloudPutRequest): Response {
+  const storedProject = request.projectDocument.projects[0];
+  if (storedProject === undefined) {
+    throw new Error(
+      `Cloud PUT request for local project ${JSON.stringify(request.localProjectId)} has no stored project.`,
+    );
+  }
+  const cloudRecord: CloudProjectRecord = {
+    id: request.cloudProjectId,
+    title: storedProject.title,
+    revision: request.expectedRevision + 1,
+    updatedAt: "2026-10-17T00:00:00.000Z",
+    mapCount: storedProject.project.maps.length,
+    projectDocument: request.projectDocument,
+  };
+  return Response.json(cloudRecord);
+}
+
+async function mountSignedInCloudSync(
+  projectDocuments: Readonly<Record<string, string>>,
+  fetchMock: typeof fetch,
+  options: Readonly<{
+    storage?: Storage;
+    initialAccount?: CloudSyncTestAccount;
+  }> = {},
+): Promise<Readonly<{
+  render: () => CloudProjectSyncView;
+  unmount: () => void;
+  storage: Storage;
+  setAccount: (account: CloudSyncTestAccount | null) => void;
+  CloudProjectRequestError: typeof import("../../src/cloud-sync/cloud-project-client").CloudProjectRequestError;
+  CloudOperationCancelledError: typeof import("../../src/cloud-sync/use-cloud-project-sync").CloudOperationCancelledError;
+}>> {
+  const defaultAccount: CloudSyncTestAccount = options.initialAccount ?? {
+    id: "user-9",
+    name: "Willy",
+    email: "willy@example.com",
+    image: null,
+  };
+  let latestPlannerAccount: CloudSyncTestAccount | null = defaultAccount;
+  const storage = options.storage ?? createMemoryStorage();
+  const hookRuntime = createCloudSyncHookRuntime();
+  vi.stubGlobal("window", {
+    localStorage: storage,
+    location: { href: "http://localhost/planner" },
+  });
+  vi.stubGlobal("fetch", fetchMock);
+  vi.resetModules();
+  vi.doMock("react", () => hookRuntime.reactModule);
+  vi.doMock("../../src/auth/planner-auth-client", () => ({
+    CloudAuthError: class CloudAuthError extends Error {
+      readonly code: string;
+      constructor(code: string, message: string) {
+        super(message);
+        this.code = code;
+      }
+    },
+    getPlannerSession: vi.fn(async () => ({ user: latestPlannerAccount })),
+    signInWithGoogle: vi.fn(async () => undefined),
+    signOutPlannerAccount: vi.fn(async () => undefined),
+  }));
+  const { useCloudProjectSync, CloudProjectRequestError, CloudOperationCancelledError } =
+    await import("../../src/cloud-sync/use-cloud-project-sync");
+  const workspaceController = {
+    getState: () => ({
+      projectSummaries: Object.keys(projectDocuments).map((id) => ({ id })),
+      activeProject: null,
+      activeSession: null,
+    }),
+    exportProject: (localProjectId: string) => {
+      const serializedProject = projectDocuments[localProjectId];
+      if (serializedProject === undefined) {
+        throw new Error(
+          `Test workspace cannot export local project ${JSON.stringify(localProjectId)}.`,
+        );
+      }
+      return serializedProject;
+    },
+    importProject: () => undefined,
+    openProject: () => undefined,
+  } as unknown as ReferenceProjectWorkspaceController;
+  const mountedHook = hookRuntime.mount(() =>
+    useCloudProjectSync({ workspaceController }),
+  );
+  await vi.waitFor(() => {
+    expect(mountedHook.render().status).toBe("ready");
+  });
+
+  return {
+    render: () => mountedHook.render(),
+    unmount: () => mountedHook.unmount(),
+    storage,
+    setAccount: (account) => {
+      latestPlannerAccount = account;
+    },
+    CloudProjectRequestError,
+    CloudOperationCancelledError,
+  };
+}
+
+function createDeferred<Value>(): Readonly<{
+  promise: Promise<Value>;
+  resolve: (value: Value) => void;
+}> {
+  let resolvePromise!: (value: Value) => void;
+  const promise = new Promise<Value>((resolve) => {
+    resolvePromise = resolve;
+  });
+  return { promise, resolve: resolvePromise };
+}
 
 function createCloudSyncHookRuntime() {
   const hookStateSlots: unknown[] = [];
