@@ -1,0 +1,24 @@
+{
+  "previewState": {
+    "url": "http://127.0.0.1:3007/#planner",
+    "innerWidth": 1512,
+    "innerHeight": 762,
+    "outerWidth": 1512,
+    "devicePixelRatio": 2,
+    "documentWidth": 1506,
+    "documentScrollWidth": 1506,
+    "menuPresent": true,
+    "toolbarPresent": true
+  },
+  "cacheDisabled": false,
+  "deviceMetricsOverrideCleared": true,
+  "receipt": {
+    "spaceId": 131,
+    "closedSpace": false,
+    "keptManagedLabels": [
+      "p1"
+    ],
+    "closedManagedLabels": [],
+    "preservedUnmanagedCount": 0
+  }
+}
