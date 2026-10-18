@@ -1772,7 +1772,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "Finish the layout on this page, then build in-game.",
     closingCtaSupportLine: "Plan without an account; sign in to sync projects you choose.",
     sectionImageSources: [
-      "/homepage/what-is/farm-layout-overview.png",
+      "/homepage/what-is/farm-layout-overview.webp",
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
@@ -1865,7 +1865,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "先在这页摆完，再进游戏建。",
     closingCtaSupportLine: "不用登录也能规划；登录后可同步你选择的项目。",
     sectionImageSources: [
-      "/homepage/what-is/farm-layout-overview.png",
+      "/homepage/what-is/farm-layout-overview.webp",
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
@@ -2257,6 +2257,9 @@ function expectStaticHomepageContent(
   for (const sectionImageSource of expectedHomepage.sectionImageSources) {
     expect(staticPageHtml).toContain(`src="${sectionImageSource}"`);
   }
+  expect(staticPageHtml).toContain(
+    '<source srcSet="/homepage/what-is/farm-layout-overview.avif" type="image/avif"/>',
+  );
   expect(staticPageHtml).not.toContain("/homepage/how-to-pixel-farm.webp");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guides");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guide-links");

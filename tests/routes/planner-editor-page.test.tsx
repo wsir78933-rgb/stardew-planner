@@ -374,7 +374,10 @@ describe("planner editor page", () => {
         whatIsSectionStart,
         firstCaseStudySectionStart,
       );
-      expect(whatIsSectionMarkup).toContain('src="/homepage/what-is/farm-layout-overview.png"');
+      expect(whatIsSectionMarkup).toContain('src="/homepage/what-is/farm-layout-overview.webp"');
+      expect(whatIsSectionMarkup).toContain(
+        '<source srcSet="/homepage/what-is/farm-layout-overview.avif" type="image/avif"/>',
+      );
       expect(whatIsSectionMarkup).toContain(`alt="${homepageCopy.whatIs.imageAlt}"`);
 
       const featureIntroductionSectionMarker = 'id="capabilities"';
