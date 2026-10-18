@@ -5,7 +5,11 @@ import {
   type ReferenceOpenMapEdits,
   type ReferenceOpenMapSession,
 } from "./reference-project-editor-adapter";
-import type { ReferenceStoredProject } from "./local-project-api";
+import type {
+  ReferenceProjectFolder,
+  ReferenceProjectMap,
+  ReferenceStoredProject,
+} from "./local-project-api";
 import {
   createReferenceProjectSummary,
   restoreMissingProjectFarmOptions,
@@ -15,6 +19,7 @@ import {
   type ReferenceMapTransferInput,
   type ReferenceMapUpdateInput,
   type ReferenceProjectCreationInput,
+  type ReferenceProjectFirstMapWriteInput,
   type ReferenceProjectRepository,
   type ReferenceProjectSummary,
   type ReferenceThumbnailSaveInput,
@@ -23,6 +28,7 @@ import { plannerMaps, type PlannerMap } from "../maps/map-catalog";
 
 export type ReferenceProjectWorkspaceState = Readonly<{
   projectSummaries: readonly ReferenceProjectSummary[];
+  folders: readonly ReferenceProjectFolder[];
   activeProject: ReferenceStoredProject | null;
   activeSession: ReferenceOpenMapSession | null;
 }>;
@@ -34,6 +40,9 @@ export type ReferenceProjectWorkspaceController = Readonly<{
   refreshProjects: () => void;
   openProject: (projectId: string) => void;
   createProject: (input: ReferenceProjectCreationInput) => void;
+  createProjectWithFirstMap: (
+    input: ReferenceProjectWithFirstMapCreationInput,
+  ) => void;
   renameProject: (projectId: string, requestedName: string) => void;
   deleteProject: (projectId: string) => void;
   exportProject: (projectId: string) => string;
@@ -48,10 +57,24 @@ export type ReferenceProjectWorkspaceController = Readonly<{
   copyMap: (input: ReferenceMapTransferInput) => void;
   moveMap: (input: ReferenceMapTransferInput) => void;
   saveThumbnail: (input: ReferenceThumbnailSaveInput) => void;
+  listFolders: () => readonly ReferenceProjectFolder[];
+  createFolder: (folderName: string) => ReferenceProjectFolder;
+  renameFolder: (folderId: string, folderName: string) => ReferenceProjectFolder;
+  moveProjectToFolder: (projectId: string, folderId: string | null) => void;
+  countMyPlans: () => number;
   getPlannerMapIdForMapFile: (
     mapFile: string,
     candidatePlannerMaps?: readonly PlannerMap[],
   ) => string;
+}>;
+
+export type ReferenceProjectWithFirstMapCreationInput = Readonly<{
+  projectName: string;
+  season: ReferenceProjectMap["season"];
+  mapFile: string;
+  label: string;
+  edits: ReferenceOpenMapEdits;
+  webpBytes: Uint8Array;
 }>;
 
 export type ReferenceProjectWorkspaceInput = Readonly<{
@@ -68,7 +91,10 @@ export function createReferenceProjectWorkspaceController(
   input: ReferenceProjectWorkspaceControllerInput,
 ): ReferenceProjectWorkspaceController {
   assertReferenceProjectWorkspaceInput(input);
-  let workspaceState = createInitialWorkspaceState(input.initialProjectSummaries);
+  let workspaceState = createInitialWorkspaceState(
+    input.initialProjectSummaries,
+    input.repository.listFolders(),
+  );
   const stateSubscribers = new Set<() => void>();
 
   function commitWorkspaceState(nextWorkspaceState: ReferenceProjectWorkspaceState): void {
@@ -98,7 +124,7 @@ export function createReferenceProjectWorkspaceController(
     const openedProject = cloneStoredProject(input.repository.openProject(projectId));
     const openedSession = prepareReferenceProjectActiveSession(openedProject);
     commitWorkspaceState({
-      projectSummaries: workspaceState.projectSummaries,
+      ...workspaceState,
       activeProject: openedProject,
       activeSession: openedSession,
     });
@@ -109,7 +135,7 @@ export function createReferenceProjectWorkspaceController(
       return;
     }
     commitWorkspaceState({
-      projectSummaries: workspaceState.projectSummaries,
+      ...workspaceState,
       activeProject: null,
       activeSession: null,
     });
@@ -120,12 +146,39 @@ export function createReferenceProjectWorkspaceController(
       input.repository.createProject(projectCreationInput),
     );
     commitWorkspaceState({
+      ...workspaceState,
       projectSummaries: replaceProjectSummary(
         workspaceState.projectSummaries,
         createdProject,
       ),
       activeProject: createdProject,
       activeSession: prepareReferenceProjectActiveSession(createdProject),
+    });
+  }
+
+  function createProjectWithFirstMap(
+    projectCreationInput: ReferenceProjectWithFirstMapCreationInput,
+  ): void {
+    const firstMap = createFirstMapFromEdits(projectCreationInput);
+    const createdProject = cloneStoredProject(
+      input.repository.createProjectWithFirstMap(
+        createFirstMapWriteInput(projectCreationInput, firstMap),
+      ),
+    );
+    const activeSession = prepareReferenceProjectActiveSession(createdProject);
+    if (activeSession === null) {
+      throw new Error(
+        `Reference project ${JSON.stringify(createdProject.id)} was stored with its first map but has no active session. Received activeMapId ${JSON.stringify(createdProject.project.activeMapId)} and map count ${String(createdProject.project.maps.length)}.`,
+      );
+    }
+    commitWorkspaceState({
+      ...workspaceState,
+      projectSummaries: replaceProjectSummary(
+        workspaceState.projectSummaries,
+        createdProject,
+      ),
+      activeProject: createdProject,
+      activeSession,
     });
   }
 
@@ -145,6 +198,7 @@ export function createReferenceProjectWorkspaceController(
     );
     if (workspaceState.activeProject?.id === projectId) {
       commitWorkspaceState({
+        ...workspaceState,
         projectSummaries,
         activeProject: null,
         activeSession: null,
@@ -174,6 +228,7 @@ export function createReferenceProjectWorkspaceController(
     );
     const activeSession = createSessionForMap(updatedProject, mapId);
     commitWorkspaceState({
+      ...workspaceState,
       projectSummaries: replaceProjectSummary(workspaceState.projectSummaries, updatedProject),
       activeProject: updatedProject,
       activeSession,
@@ -195,6 +250,7 @@ export function createReferenceProjectWorkspaceController(
     );
     const refreshedSession = createSessionForMap(updatedProject, savedMap.id);
     commitWorkspaceState({
+      ...workspaceState,
       projectSummaries: replaceProjectSummary(workspaceState.projectSummaries, updatedProject),
       activeProject: updatedProject,
       activeSession: refreshedSession,
@@ -244,6 +300,7 @@ export function createReferenceProjectWorkspaceController(
     );
     const duplicatedProject = cloneStoredProject(duplicatedMutation.project);
     commitWorkspaceState({
+      ...workspaceState,
       projectSummaries: replaceProjectSummary(workspaceState.projectSummaries, duplicatedProject),
       activeProject: duplicatedProject,
       activeSession: duplicatedMutation.preparedActiveSession,
@@ -257,6 +314,7 @@ export function createReferenceProjectWorkspaceController(
     );
     const importedProject = cloneStoredProject(importedMutation.project);
     commitWorkspaceState({
+      ...workspaceState,
       projectSummaries: replaceProjectSummary(workspaceState.projectSummaries, importedProject),
       activeProject: importedProject,
       activeSession: importedMutation.preparedActiveSession,
@@ -290,6 +348,50 @@ export function createReferenceProjectWorkspaceController(
     );
   }
 
+  function listFolders(): readonly ReferenceProjectFolder[] {
+    return cloneProjectFolders(workspaceState.folders, "folders");
+  }
+
+  function createFolder(folderName: string): ReferenceProjectFolder {
+    const createdFolder = input.repository.createFolder(folderName);
+    const storedFolder = { id: createdFolder.id, name: createdFolder.name };
+    commitWorkspaceState({
+      ...workspaceState,
+      folders: [...workspaceState.folders, storedFolder],
+    });
+    return storedFolder;
+  }
+
+  function renameFolder(folderId: string, folderName: string): ReferenceProjectFolder {
+    assertUniqueProjectFolderId(workspaceState.folders, folderId);
+    const renamedFolder = input.repository.renameFolder(folderId, folderName);
+    const storedFolder = { id: renamedFolder.id, name: renamedFolder.name };
+    commitWorkspaceState({
+      ...workspaceState,
+      folders: replaceRenamedProjectFolder(workspaceState.folders, storedFolder),
+    });
+    return storedFolder;
+  }
+
+  function moveProjectToFolder(projectId: string, folderId: string | null): void {
+    const movedProject = cloneStoredProject(
+      input.repository.moveProjectToFolder(projectId, folderId),
+    );
+    commitWorkspaceState(
+      replaceProjectInWorkspaceState(workspaceState, movedProject),
+    );
+  }
+
+  function countMyPlans(): number {
+    const myPlansCount = input.repository.countMyPlans();
+    if (!Number.isSafeInteger(myPlansCount) || myPlansCount < 0) {
+      throw new Error(
+        `Reference project My Plans count must be a non-negative safe integer. Received: ${JSON.stringify(myPlansCount)}.`,
+      );
+    }
+    return myPlansCount;
+  }
+
   return {
     getState: () => cloneReferenceProjectWorkspaceState(workspaceState),
     subscribe,
@@ -297,6 +399,7 @@ export function createReferenceProjectWorkspaceController(
     refreshProjects,
     openProject,
     createProject,
+    createProjectWithFirstMap,
     renameProject,
     deleteProject,
     exportProject,
@@ -311,6 +414,11 @@ export function createReferenceProjectWorkspaceController(
     copyMap,
     moveMap,
     saveThumbnail,
+    listFolders,
+    createFolder,
+    renameFolder,
+    moveProjectToFolder,
+    countMyPlans,
     getPlannerMapIdForMapFile,
   };
 }
@@ -441,12 +549,14 @@ export function useReferenceProjectWorkspaceController(
 
 function createInitialWorkspaceState(
   projectSummaries: readonly ReferenceProjectSummary[],
+  projectFolders: readonly ReferenceProjectFolder[],
 ): ReferenceProjectWorkspaceState {
   return {
     projectSummaries: cloneProjectSummaries(
       projectSummaries,
       "initialProjectSummaries",
     ),
+    folders: cloneProjectFolders(projectFolders, "initial folders"),
     activeProject: null,
     activeSession: null,
   };
@@ -458,6 +568,64 @@ export function prepareReferenceProjectActiveSession(
   const activeMapId = project.project.activeMapId;
   if (activeMapId === null) return null;
   return createSessionForMap(project, activeMapId);
+}
+
+function createFirstMapFromEdits(
+  input: ReferenceProjectWithFirstMapCreationInput,
+): ReferenceProjectMap {
+  if (!(input.webpBytes instanceof Uint8Array) || input.webpBytes.byteLength === 0) {
+    throw new TypeError(
+      `Reference project first map thumbnail bytes must be a non-empty Uint8Array. Received: ${describeThumbnailBytes(input.webpBytes)}.`,
+    );
+  }
+  const blankMap: ReferenceProjectMap = {
+    id: "pending-first-map",
+    mapFile: input.mapFile,
+    label: input.label,
+    season: input.season,
+    state: {
+      buildings: [],
+      crops: [],
+      items: [],
+      nextBuildingId: 1,
+      nextItemId: 1,
+    },
+    decor: { wallpapers: {}, floors: {} },
+    renovations: [],
+    thumbnail: "/api/projects/pending-project/maps/pending-first-map/thumbnail",
+  };
+  return applyReferenceOpenMapEdits(
+    createReferenceOpenMapSession("pending-project", blankMap),
+    input.edits,
+  );
+}
+
+function createFirstMapWriteInput(
+  input: ReferenceProjectWithFirstMapCreationInput,
+  firstMap: ReferenceProjectMap,
+): ReferenceProjectFirstMapWriteInput {
+  return {
+    projectName: input.projectName,
+    season: input.season,
+    mapFile: firstMap.mapFile,
+    label: firstMap.label,
+    mapSeason: firstMap.season,
+    state: firstMap.state,
+    decor: firstMap.decor,
+    renovations: firstMap.renovations,
+    webpBytes: input.webpBytes,
+  };
+}
+
+function describeThumbnailBytes(receivedBytes: unknown): string {
+  if (receivedBytes instanceof Uint8Array) {
+    return `Uint8Array(byteLength=${String(receivedBytes.byteLength)})`;
+  }
+  try {
+    return JSON.stringify(receivedBytes);
+  } catch {
+    return `${typeof receivedBytes} value`;
+  }
 }
 
 function createSessionForMap(
@@ -551,6 +719,7 @@ function replaceProjectInWorkspaceState(
   }
   return {
     projectSummaries,
+    folders: cloneProjectFolders(workspaceState.folders, "folders"),
     activeProject: updatedProject,
     activeSession: prepareReferenceProjectActiveSession(updatedProject),
   };
@@ -573,15 +742,26 @@ function createMovedMapWorkspaceState(
   ) {
     return {
       projectSummaries,
+      folders: workspaceState.folders,
       activeProject: targetProject,
       activeSession: createSessionForMap(targetProject, input.mapId),
     };
   }
   if (workspaceState.activeProject?.id === sourceProject.id) {
-    return reconcileActiveProjectWorkspaceState(projectSummaries, sourceProject, activeSession);
+    return reconcileActiveProjectWorkspaceState(
+      projectSummaries,
+      sourceProject,
+      activeSession,
+      workspaceState.folders,
+    );
   }
   if (workspaceState.activeProject?.id === targetProject.id) {
-    return reconcileActiveProjectWorkspaceState(projectSummaries, targetProject, activeSession);
+    return reconcileActiveProjectWorkspaceState(
+      projectSummaries,
+      targetProject,
+      activeSession,
+      workspaceState.folders,
+    );
   }
   return { ...workspaceState, projectSummaries };
 }
@@ -590,12 +770,19 @@ function reconcileActiveProjectWorkspaceState(
   projectSummaries: readonly ReferenceProjectSummary[],
   activeProject: ReferenceStoredProject,
   previousSession: ReferenceOpenMapSession | null,
+  projectFolders: readonly ReferenceProjectFolder[],
 ): ReferenceProjectWorkspaceState {
   if (previousSession === null) {
-    return { projectSummaries, activeProject, activeSession: null };
+    return {
+      projectSummaries,
+      folders: projectFolders,
+      activeProject,
+      activeSession: null,
+    };
   }
   return {
     projectSummaries,
+    folders: projectFolders,
     activeProject,
     activeSession: createSessionForMap(activeProject, previousSession.mapId),
   };
@@ -650,6 +837,7 @@ function assertReferenceProjectWorkspaceRepository(
     "copyMap",
     "moveMap",
     "createProject",
+    "createProjectWithFirstMap",
     "renameProject",
     "deleteProject",
     "exportProject",
@@ -658,6 +846,11 @@ function assertReferenceProjectWorkspaceRepository(
     "duplicateMap",
     "deleteMap",
     "saveThumbnail",
+    "listFolders",
+    "createFolder",
+    "renameFolder",
+    "moveProjectToFolder",
+    "countMyPlans",
   ] as const) {
     if (typeof repository[methodName] !== "function") {
       throw new TypeError(
@@ -713,8 +906,85 @@ function cloneProjectSummaries(
           `received ${JSON.stringify(projectSummary.activeMapThumbnailDataUrl)}.`,
       );
     }
+    if (
+      projectSummary.activeMapThumbnailDataUrl !== undefined
+      && projectSummary.activeMapThumbnailDataUrl !== null
+      && projectSummary.activeMapThumbnailDataUrl.includes("/api/projects")
+    ) {
+      throw new Error(
+        `Reference project workspace ${sourceName}[${String(projectSummaryIndex)}].activeMapThumbnailDataUrl must be a WebP data URL. ` +
+          `Received: ${JSON.stringify(projectSummary.activeMapThumbnailDataUrl)}.`,
+      );
+    }
+    if (
+      projectSummary.folderId !== undefined
+      && (typeof projectSummary.folderId !== "string" || projectSummary.folderId.length === 0)
+    ) {
+      throw new TypeError(
+        `Reference project workspace ${sourceName}[${String(projectSummaryIndex)}].folderId must be a non-empty string; ` +
+          `received ${JSON.stringify(projectSummary.folderId)}.`,
+      );
+    }
     return { ...projectSummary };
   });
+}
+
+function cloneProjectFolders(
+  projectFolders: readonly ReferenceProjectFolder[],
+  sourceName: string,
+): readonly ReferenceProjectFolder[] {
+  if (!Array.isArray(projectFolders)) {
+    throw new TypeError(
+      `Reference project workspace ${sourceName} must be an array; received ${JSON.stringify(projectFolders)}.`,
+    );
+  }
+  return projectFolders.map((projectFolder, folderIndex) => {
+    if (typeof projectFolder !== "object" || projectFolder === null) {
+      throw new TypeError(
+        `Reference project workspace ${sourceName}[${String(folderIndex)}] must be an object; ` +
+          `received ${JSON.stringify(projectFolder)}.`,
+      );
+    }
+    if (typeof projectFolder.id !== "string" || projectFolder.id.length === 0) {
+      throw new TypeError(
+        `Reference project workspace ${sourceName}[${String(folderIndex)}].id must be a non-empty string; ` +
+          `received ${JSON.stringify(projectFolder.id)}.`,
+      );
+    }
+    if (typeof projectFolder.name !== "string" || projectFolder.name.length === 0) {
+      throw new TypeError(
+        `Reference project workspace ${sourceName}[${String(folderIndex)}].name must be a non-empty string; ` +
+          `received ${JSON.stringify(projectFolder.name)}.`,
+      );
+    }
+    return { id: projectFolder.id, name: projectFolder.name };
+  });
+}
+
+function assertUniqueProjectFolderId(
+  projectFolders: readonly ReferenceProjectFolder[],
+  folderId: string,
+): void {
+  const matchingFolderCount = projectFolders.filter(
+    (projectFolder) => projectFolder.id === folderId,
+  ).length;
+  if (matchingFolderCount !== 1) {
+    throw new Error(
+      `Reference project workspace expected exactly one folder ${JSON.stringify(folderId)}. Received match count ${String(matchingFolderCount)} and folder IDs ${JSON.stringify(projectFolders.map((projectFolder) => projectFolder.id))}.`,
+    );
+  }
+}
+
+function replaceRenamedProjectFolder(
+  projectFolders: readonly ReferenceProjectFolder[],
+  renamedFolder: ReferenceProjectFolder,
+): readonly ReferenceProjectFolder[] {
+  assertUniqueProjectFolderId(projectFolders, renamedFolder.id);
+  return projectFolders.map((projectFolder) =>
+    projectFolder.id === renamedFolder.id
+      ? { id: renamedFolder.id, name: renamedFolder.name }
+      : projectFolder,
+  );
 }
 
 function cloneStoredProject(project: ReferenceStoredProject): ReferenceStoredProject {

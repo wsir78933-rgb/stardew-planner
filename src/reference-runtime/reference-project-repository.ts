@@ -3,6 +3,7 @@ import type {
   ReferenceApiResponse,
   ReferenceLocalProjectDocument,
   ReferenceJsonValue,
+  ReferenceProjectFolder,
   ReferenceProjectMap,
   ReferenceStoredProject,
 } from "./local-project-api";
@@ -31,30 +32,66 @@ export type ReferenceProjectSummary = Readonly<
   & Readonly<{
     mapCount?: number;
     activeMapThumbnailDataUrl?: string | null;
+    folderId?: string;
   }>
 >;
 
 export function createReferenceProjectSummary(
   storedProject: ReferenceStoredProject,
 ): ReferenceProjectSummary {
-  const activeMapId = storedProject.project.activeMapId;
-
-  return {
+  const projectSummary: ReferenceProjectSummary = {
     id: storedProject.id,
     title: storedProject.title,
     created_at: storedProject.created_at,
     updated_at: storedProject.updated_at,
     mapCount: storedProject.project.maps.length,
-    activeMapThumbnailDataUrl:
-      activeMapId === null
-        ? null
-        : storedProject.thumbnailsByMapId?.[activeMapId] ?? null,
+    activeMapThumbnailDataUrl: readActiveMapThumbnailDataUrl(storedProject),
   };
+  if (storedProject.folderId !== undefined) {
+    return { ...projectSummary, folderId: storedProject.folderId };
+  }
+  return projectSummary;
+}
+
+function readActiveMapThumbnailDataUrl(
+  storedProject: ReferenceStoredProject,
+): string | null {
+  const activeMapId = storedProject.project.activeMapId;
+  if (activeMapId === null) {
+    return null;
+  }
+
+  const thumbnailDataUrl = storedProject.thumbnailsByMapId?.[activeMapId];
+  if (thumbnailDataUrl === undefined) {
+    return null;
+  }
+  if (
+    !thumbnailDataUrl.startsWith("data:image/webp;base64,") ||
+    thumbnailDataUrl.includes("/api/projects")
+  ) {
+    throw new Error(
+      `Project ${JSON.stringify(storedProject.id)} map ${JSON.stringify(activeMapId)} thumbnail must be a WebP data URL. Received: ${JSON.stringify(thumbnailDataUrl)}.`,
+    );
+  }
+
+  return thumbnailDataUrl;
 }
 
 export type ReferenceProjectCreationInput = Readonly<{
   projectName: string;
   season: ReferenceProjectMap["season"];
+}>;
+
+export type ReferenceProjectFirstMapWriteInput = Readonly<{
+  projectName: string;
+  season: ReferenceProjectMap["season"];
+  mapFile: string;
+  label: string;
+  mapSeason: ReferenceProjectMap["season"];
+  state: ReferenceProjectMap["state"];
+  decor: ReferenceProjectMap["decor"];
+  renovations: ReferenceProjectMap["renovations"];
+  webpBytes: Uint8Array;
 }>;
 
 export type ReferenceMapCreationInput = Readonly<{
@@ -133,6 +170,9 @@ export type ReferenceProjectRepository = Readonly<{
   listProjects(): readonly ReferenceProjectSummary[];
   openProject(projectId: string): ReferenceStoredProject;
   createProject(input: ReferenceProjectCreationInput): ReferenceStoredProject;
+  createProjectWithFirstMap(
+    input: ReferenceProjectFirstMapWriteInput,
+  ): ReferenceStoredProject;
   duplicateProject: ReferenceProjectMutationWithPreflight;
   renameProject(
     projectId: string,
@@ -149,6 +189,14 @@ export type ReferenceProjectRepository = Readonly<{
   copyMap(input: ReferenceMapTransferInput): ReferenceStoredProject;
   moveMap(input: ReferenceMapTransferInput): ReferenceMapMoveResult;
   saveThumbnail(input: ReferenceThumbnailSaveInput): ReferenceStoredProject;
+  listFolders(): readonly ReferenceProjectFolder[];
+  createFolder(folderName: string): ReferenceProjectFolder;
+  renameFolder(folderId: string, folderName: string): ReferenceProjectFolder;
+  moveProjectToFolder(
+    projectId: string,
+    folderId: string | null,
+  ): ReferenceStoredProject;
+  countMyPlans(): number;
 }>;
 
 export type ReferenceProjectRepositoryOptions = Readonly<{
@@ -491,12 +539,65 @@ function replaceStoredProject(
     );
   }
 
-  return {
-    version: 1,
-    projects: projectDocument.projects.map((storedProject, storedProjectIndex) =>
+  return copyReferenceProjectDocument(
+    projectDocument,
+    projectDocument.projects.map((storedProject, storedProjectIndex) =>
       storedProjectIndex === projectIndex ? replacementProject : storedProject,
     ),
+  );
+}
+
+function copyReferenceProjectDocument(
+  sourceDocument: ReferenceLocalProjectDocument,
+  projects: readonly ReferenceStoredProject[],
+): ReferenceLocalProjectDocument {
+  const projectDocument: ReferenceLocalProjectDocument = {
+    version: 1,
+    projects: [...projects],
   };
+  if (sourceDocument.folders !== undefined && sourceDocument.folders.length > 0) {
+    projectDocument.folders = sourceDocument.folders.map((projectFolder) => ({
+      id: projectFolder.id,
+      name: projectFolder.name,
+    }));
+  }
+  return projectDocument;
+}
+
+function placeProjectInMyPlans(
+  storedProject: ReferenceStoredProject,
+): ReferenceStoredProject {
+  if (storedProject.folderId === undefined) {
+    return storedProject;
+  }
+
+  const projectInMyPlans: ReferenceStoredProject = { ...storedProject };
+  delete projectInMyPlans.folderId;
+  return projectInMyPlans;
+}
+
+function assertReferenceFolderId(folderId: string): void {
+  if (typeof folderId !== "string") {
+    throw new TypeError(
+      `Folder ID must be a string. Received: ${JSON.stringify(folderId)}.`,
+    );
+  }
+  if (!/^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(folderId)) {
+    throw new Error(
+      `Folder ID must contain only letters, digits, underscores, and hyphens and be at most 120 characters. Received: ${JSON.stringify(folderId)}.`,
+    );
+  }
+}
+
+function assignProjectFolder(
+  storedProject: ReferenceStoredProject,
+  folderId: string | null,
+): ReferenceStoredProject {
+  if (folderId === null) {
+    return placeProjectInMyPlans(storedProject);
+  }
+
+  return { ...storedProject, folderId };
 }
 
 function replaceProjectUpdatedTimestamp(
@@ -871,6 +972,52 @@ function remapStoredProjectIdentity(
   };
 }
 
+function assertFirstMapWriteInput(
+  input: ReferenceProjectFirstMapWriteInput,
+): void {
+  if (typeof input !== "object" || input === null) {
+    throw new TypeError(
+      `Reference project first map write input must be an object. Received: ${JSON.stringify(input)}.`,
+    );
+  }
+  if (!(input.webpBytes instanceof Uint8Array) || input.webpBytes.byteLength === 0) {
+    throw new TypeError(
+      `Reference project first map thumbnail bytes must be a non-empty Uint8Array. Received: ${describeFirstMapThumbnailBytes(input.webpBytes)}.`,
+    );
+  }
+}
+
+function describeFirstMapThumbnailBytes(receivedBytes: unknown): string {
+  if (receivedBytes instanceof Uint8Array) {
+    return `Uint8Array(byteLength=${String(receivedBytes.byteLength)})`;
+  }
+  try {
+    return JSON.stringify(receivedBytes);
+  } catch {
+    return `${typeof receivedBytes} value`;
+  }
+}
+
+function assertCreatedProjectHasFirstMapPreview(
+  storedProject: ReferenceStoredProject,
+): void {
+  const firstMap = storedProject.project.maps[0];
+  const thumbnailDataUrl = firstMap === undefined
+    ? undefined
+    : storedProject.thumbnailsByMapId?.[firstMap.id];
+  if (
+    storedProject.project.maps.length !== 1
+    || firstMap === undefined
+    || storedProject.project.activeMapId !== firstMap.id
+    || thumbnailDataUrl === undefined
+    || !thumbnailDataUrl.startsWith("data:image/webp;base64,")
+  ) {
+    throw new Error(
+      `Reference project ${JSON.stringify(storedProject.id)} must be stored with one active map and a WebP preview. Received activeMapId ${JSON.stringify(storedProject.project.activeMapId)}, map count ${String(storedProject.project.maps.length)}, and thumbnail ${JSON.stringify(thumbnailDataUrl ?? null)}.`,
+    );
+  }
+}
+
 export function createReferenceProjectRepository(
   options: ReferenceProjectRepositoryOptions = {},
 ): ReferenceProjectRepository {
@@ -1031,6 +1178,131 @@ export function createReferenceProjectRepository(
     });
   }
 
+  function createProjectWithFirstMap(
+    input: ReferenceProjectFirstMapWriteInput,
+  ): ReferenceStoredProject {
+    assertFirstMapWriteInput(input);
+    return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const createdResponse = invokeMutationHandler(
+        {
+          method: "POST",
+          pathname: "/api/projects",
+          jsonBody: {
+            projectName: input.projectName,
+            season: input.season,
+          },
+        },
+        currentProjectDocument,
+        "projectId",
+      );
+      const handlerProjectId = createdResponse.responseBody.projectId;
+      if (typeof handlerProjectId !== "string" || handlerProjectId.length === 0) {
+        throw new Error(
+          `Reference project creation did not return a project ID. Received: ${JSON.stringify(handlerProjectId)}.`,
+        );
+      }
+      const mapResponse = invokeMutationHandler(
+        {
+          method: "POST",
+          pathname: createReferenceMapCollectionPath(handlerProjectId),
+          jsonBody: {
+            mapFile: input.mapFile,
+            label: input.label,
+            season: input.mapSeason,
+          },
+        },
+        createdResponse.projectDocument,
+        "mapId",
+      );
+      const handlerMapId = mapResponse.responseBody.mapId;
+      if (typeof handlerMapId !== "string" || handlerMapId.length === 0) {
+        throw new Error(
+          `Reference project ${JSON.stringify(handlerProjectId)} first map creation did not return a map ID. Received: ${JSON.stringify(handlerMapId)}.`,
+        );
+      }
+      const updateResponse = invokeMutationHandler(
+        {
+          method: "PUT",
+          pathname: createReferenceMapPath(handlerProjectId, handlerMapId),
+          jsonBody: {
+            mapFile: input.mapFile,
+            label: input.label,
+            season: input.mapSeason,
+            state: input.state,
+            decor: input.decor,
+            renovations: input.renovations,
+            setActive: true,
+          },
+        },
+        mapResponse.projectDocument,
+        "empty",
+      );
+      const { mapRenderOptions, hasStoredFarmOptions } =
+        restoreStoredMapRenderOptions(input.state.mapRenderOptions);
+      const projectAfterMapUpdate = requireStoredProject(
+        updateResponse.projectDocument,
+        handlerProjectId,
+      );
+      const projectWithFarmOptions = hasStoredFarmOptions
+        ? synchronizeProjectFarmOptions(
+            projectAfterMapUpdate,
+            handlerMapId,
+            requireStoredFarmOptions(
+              mapRenderOptions,
+              handlerProjectId,
+              handlerMapId,
+            ),
+          )
+        : projectAfterMapUpdate;
+      const projectDocumentAfterMapUpdate = projectWithFarmOptions === projectAfterMapUpdate
+        ? updateResponse.projectDocument
+        : replaceStoredProject(
+            updateResponse.projectDocument,
+            handlerProjectId,
+            projectWithFarmOptions,
+          );
+      const thumbnailResponse = invokeMutationHandler(
+        {
+          method: "POST",
+          pathname: createReferenceMapActionPath(
+            handlerProjectId,
+            handlerMapId,
+            "thumbnail",
+          ),
+          contentType: "image/webp",
+          binaryBody: input.webpBytes,
+        },
+        projectDocumentAfterMapUpdate,
+        "empty",
+      );
+      const createdAt = assertMutationTimestamp(now());
+      const createdProjectId = allocateUniqueReferenceIdentifier(
+        createIdentifier,
+        new Set(
+          currentProjectDocument.projects.map((storedProject) => storedProject.id),
+        ),
+        "create project with first map",
+        "project IDs",
+      );
+      const remappedProject = remapStoredProjectIdentity(
+        requireStoredProject(thumbnailResponse.projectDocument, handlerProjectId),
+        createdProjectId,
+        createIdentifier,
+        { createdAt, updatedAt: createdAt },
+      );
+      assertCreatedProjectHasFirstMapPreview(remappedProject);
+      return {
+        projectDocument: replaceStoredProject(
+          thumbnailResponse.projectDocument,
+          handlerProjectId,
+          remappedProject,
+        ),
+        selectResult: (validatedProjectDocument) =>
+          requireStoredProject(validatedProjectDocument, createdProjectId),
+      };
+    });
+  }
+
   function renameProject(
     projectId: string,
     requestedName: string,
@@ -1126,10 +1398,10 @@ export function createReferenceProjectRepository(
       );
 
       return {
-        projectDocument: {
-          version: 1,
-          projects: [...currentProjectDocument.projects, duplicatedProject],
-        },
+        projectDocument: copyReferenceProjectDocument(currentProjectDocument, [
+          ...currentProjectDocument.projects,
+          duplicatedProject,
+        ]),
         selectResult: (validatedProjectDocument) =>
           selectProjectMutationResult(
             requireStoredProject(validatedProjectDocument, duplicateProjectId),
@@ -1731,6 +2003,134 @@ export function createReferenceProjectRepository(
     return executeMapTransfer(input, "move");
   }
 
+  function listFolders(): readonly ReferenceProjectFolder[] {
+    return readReferenceProjectDocument().folders ?? [];
+  }
+
+  function createFolder(folderName: string): ReferenceProjectFolder {
+    if (typeof folderName !== "string") {
+      throw new TypeError(
+        `Folder name must be a string. Received: ${JSON.stringify(folderName)}.`,
+      );
+    }
+
+    return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const folderId = allocateUniqueReferenceIdentifier(
+        createIdentifier,
+        new Set(
+          (currentProjectDocument.folders ?? []).map(
+            (projectFolder) => projectFolder.id,
+          ),
+        ),
+        "create folder",
+        "folder IDs",
+      );
+      return {
+        projectDocument: {
+          version: 1,
+          projects: currentProjectDocument.projects,
+          folders: [
+            ...(currentProjectDocument.folders ?? []),
+            { id: folderId, name: folderName },
+          ],
+        },
+        selectResult: (validatedProjectDocument) => {
+          const createdFolder = validatedProjectDocument.folders?.find(
+            (projectFolder) => projectFolder.id === folderId,
+          );
+          if (createdFolder === undefined) {
+            throw new Error(
+              `Reference project folder ${JSON.stringify(folderId)} was not stored. Received folders: ${JSON.stringify(validatedProjectDocument.folders ?? [])}.`,
+            );
+          }
+          return createdFolder;
+        },
+      };
+    });
+  }
+
+  function renameFolder(
+    folderId: string,
+    folderName: string,
+  ): ReferenceProjectFolder {
+    assertReferenceFolderId(folderId);
+    if (typeof folderName !== "string") {
+      throw new TypeError(
+        `Folder name must be a string. Received: ${JSON.stringify(folderName)}.`,
+      );
+    }
+
+    return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const projectFolders = currentProjectDocument.folders ?? [];
+      const folderIndex = projectFolders.findIndex(
+        (projectFolder) => projectFolder.id === folderId,
+      );
+      if (folderIndex === -1) {
+        throw new Error(
+          `Folder ID does not exist. Received: ${JSON.stringify(folderId)}. Existing folder IDs: ${JSON.stringify(projectFolders.map((projectFolder) => projectFolder.id))}.`,
+        );
+      }
+
+      return {
+        projectDocument: {
+          version: 1,
+          projects: currentProjectDocument.projects,
+          folders: projectFolders.map((projectFolder, projectFolderIndex) =>
+            projectFolderIndex === folderIndex
+              ? { id: projectFolder.id, name: folderName }
+              : { id: projectFolder.id, name: projectFolder.name },
+          ),
+        },
+        selectResult: (validatedProjectDocument) => {
+          const renamedFolder = validatedProjectDocument.folders?.[folderIndex];
+          if (renamedFolder === undefined || renamedFolder.id !== folderId) {
+            throw new Error(
+              `Reference project folder ${JSON.stringify(folderId)} was not stored at index ${String(folderIndex)}. Received folders: ${JSON.stringify(validatedProjectDocument.folders ?? [])}.`,
+            );
+          }
+          return renamedFolder;
+        },
+      };
+    });
+  }
+
+  function moveProjectToFolder(
+    projectId: string,
+    folderId: string | null,
+  ): ReferenceStoredProject {
+    if (typeof projectId !== "string") {
+      throw new TypeError(
+        `Project ID must be a string. Received: ${JSON.stringify(projectId)}.`,
+      );
+    }
+    if (folderId !== null && typeof folderId !== "string") {
+      throw new TypeError(
+        `Folder ID must be a string or null for My Plans. Received: ${JSON.stringify(folderId)}.`,
+      );
+    }
+
+    return executeReferenceProjectTransaction((currentProjectDocument) => {
+      const storedProject = requireStoredProject(currentProjectDocument, projectId);
+      const movedProject = assignProjectFolder(storedProject, folderId);
+      return {
+        projectDocument: copyReferenceProjectDocument(
+          currentProjectDocument,
+          currentProjectDocument.projects.map((candidateProject) =>
+            candidateProject.id === projectId ? movedProject : candidateProject,
+          ),
+        ),
+        selectResult: (validatedProjectDocument) =>
+          requireStoredProject(validatedProjectDocument, projectId),
+      };
+    });
+  }
+
+  function countMyPlans(): number {
+    return readReferenceProjectDocument().projects.filter(
+      (storedProject) => storedProject.folderId === undefined,
+    ).length;
+  }
+
   function saveThumbnail(
     input: ReferenceThumbnailSaveInput,
   ): ReferenceStoredProject {
@@ -1771,6 +2171,11 @@ export function createReferenceProjectRepository(
     }
 
     const importedProject = importedProjectDocument.projects[0];
+    if (importedProject === undefined) {
+      throw new Error(
+        "Reference project import requires exactly one project. Received project count: 0.",
+      );
+    }
     return executeReferenceProjectTransaction((currentProjectDocument) => {
       const hasProjectIdConflict = currentProjectDocument.projects.some(
         (candidateProject) => candidateProject.id === importedProject.id,
@@ -1794,10 +2199,10 @@ export function createReferenceProjectRepository(
       }
 
       return {
-        projectDocument: {
-          version: 1,
-          projects: [...currentProjectDocument.projects, appendedProject],
-        },
+        projectDocument: copyReferenceProjectDocument(currentProjectDocument, [
+          ...currentProjectDocument.projects,
+          placeProjectInMyPlans(appendedProject),
+        ]),
         selectResult: (validatedProjectDocument) =>
           selectProjectMutationResult(
             requireStoredProject(validatedProjectDocument, appendedProject.id),
@@ -1812,6 +2217,7 @@ export function createReferenceProjectRepository(
       readReferenceProjectDocument().projects.map(createReferenceProjectSummary),
     openProject: openStoredProject,
     createProject,
+    createProjectWithFirstMap,
     duplicateProject,
     renameProject,
     deleteProject,
@@ -1819,7 +2225,7 @@ export function createReferenceProjectRepository(
     exportProject: (projectId: string) =>
       serializeReferenceProjectDocument({
         version: 1,
-        projects: [openStoredProject(projectId)],
+        projects: [placeProjectInMyPlans(openStoredProject(projectId))],
       }),
     updateMap,
     createMap,
@@ -1829,5 +2235,10 @@ export function createReferenceProjectRepository(
     copyMap,
     moveMap,
     saveThumbnail,
+    listFolders,
+    createFolder,
+    renameFolder,
+    moveProjectToFolder,
+    countMyPlans,
   };
 }

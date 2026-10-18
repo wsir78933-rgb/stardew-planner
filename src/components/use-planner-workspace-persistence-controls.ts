@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   MapImageExporter,
   ScreenshotResolution,
 } from "../projects/map-image-export";
 import {
+  createAutomaticMapSaveLayoutKey,
   createPlannerWorkspacePersistenceRuntime,
   type PlannerWorkspacePersistenceRuntime,
 } from "../planner/planner-workspace-persistence-runtime";
@@ -33,14 +34,25 @@ export function usePlannerWorkspacePersistenceControls({
 }: PlannerWorkspacePersistenceControlsInput): Readonly<{
   captureCleanMapImage: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   captureScreenshot: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
-  handleMapChange: (plannerMapId: string) => void;
+  handleMapChange: (plannerMapId: string) => Promise<void>;
   handleMapImageExporterReady: (
     receivedPlannerMapId: string,
     receivedMapImageExporter: MapImageExporter | null,
   ) => void;
+  automaticSaveErrorMessage: string | null;
   saveCurrentMap: () => Promise<void>;
+  createProjectWithCurrentMap: () => Promise<void>;
   saveThumbnail: () => Promise<void>;
 }> {
+  const [automaticSaveErrorMessage, setAutomaticSaveErrorMessage] = useState<string | null>(
+    null,
+  );
+  const settleAutomaticSaveRef = useRef<(caughtError: unknown | null) => void>(
+    () => undefined,
+  );
+  settleAutomaticSaveRef.current = (caughtError) => {
+    setAutomaticSaveErrorMessage(describeAutomaticSaveError(caughtError));
+  };
   const persistenceRuntimeReference = useRef<
     PlannerWorkspacePersistenceRuntime | null
   >(null);
@@ -50,6 +62,9 @@ export function usePlannerWorkspacePersistenceControls({
       initialPlannerWorkspaceState: plannerWorkspaceState,
       initialWorkspaceState: workspaceState,
       newProjectName,
+      onAutomaticSaveSettled: (caughtError) => {
+        settleAutomaticSaveRef.current(caughtError);
+      },
       workspaceController,
     });
   }
@@ -58,10 +73,32 @@ export function usePlannerWorkspacePersistenceControls({
     plannerWorkspaceState,
     workspaceState,
   );
+  const automaticSaveLayoutKey = createAutomaticMapSaveLayoutKey(plannerWorkspaceState);
+  const observedAutomaticSaveLayoutKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     persistenceRuntime.synchronizeCanonicalSession();
   }, [persistenceRuntime, workspaceState.activeSession]);
+
+  useEffect(() => {
+    if (observedAutomaticSaveLayoutKeyRef.current === null) {
+      observedAutomaticSaveLayoutKeyRef.current = automaticSaveLayoutKey;
+      return;
+    }
+    if (observedAutomaticSaveLayoutKeyRef.current === automaticSaveLayoutKey) {
+      return;
+    }
+    observedAutomaticSaveLayoutKeyRef.current = automaticSaveLayoutKey;
+    try {
+      persistenceRuntime.scheduleAutomaticSave();
+    } catch (caughtError: unknown) {
+      settleAutomaticSaveRef.current(caughtError);
+    }
+  }, [automaticSaveLayoutKey, persistenceRuntime]);
+
+  useEffect(() => {
+    return () => persistenceRuntime.cancelPendingAutomaticSave();
+  }, [persistenceRuntime]);
 
   useEffect(() => {
     const plannerMapId = plannerWorkspaceState.selectedPlannerMapId;
@@ -69,11 +106,19 @@ export function usePlannerWorkspacePersistenceControls({
   }, [persistenceRuntime, plannerWorkspaceState.selectedPlannerMapId]);
 
   return {
+    automaticSaveErrorMessage,
     captureCleanMapImage: persistenceRuntime.captureCleanMapImage,
     captureScreenshot: persistenceRuntime.captureScreenshot,
     handleMapChange: persistenceRuntime.handleMapChange,
     handleMapImageExporterReady: persistenceRuntime.handleMapImageExporterReady,
     saveCurrentMap: persistenceRuntime.saveCurrentMapAndRefreshThumbnail,
+    createProjectWithCurrentMap: persistenceRuntime.createProjectWithCurrentMap,
     saveThumbnail: persistenceRuntime.saveThumbnail,
   };
+}
+
+function describeAutomaticSaveError(caughtError: unknown | null): string | null {
+  if (caughtError === null) return null;
+  if (caughtError instanceof Error) return caughtError.message;
+  return `Automatic map save failed: ${JSON.stringify(String(caughtError))}.`;
 }

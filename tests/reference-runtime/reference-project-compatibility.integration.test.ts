@@ -157,6 +157,40 @@ function assertProjectIdentityConsistency(
 }
 
 describe("reference project frozen and React alternating compatibility", () => {
+  it("reads a v1 document without folders as empty My Plans and keeps projects, maps, seasons, and previews", () => {
+    const storage = createMutableReferenceProjectStorage(
+      serializeReferenceProjectDocument(referenceProjectDocumentFixture),
+    );
+    const repository = createReferenceProjectRepository({
+      storage: storage.storage,
+    });
+
+    expect(repository.listFolders()).toEqual([]);
+    expect(repository.countMyPlans()).toBe(referenceProjectDocumentFixture.projects.length);
+    const reparsedProjectDocument = parseReferenceProjectDocument(
+      storage.readSerializedDocument(),
+    );
+    expect(reparsedProjectDocument.folders).toBeUndefined();
+    expect(reparsedProjectDocument.projects).toEqual(
+      referenceProjectDocumentFixture.projects,
+    );
+    expect(
+      reparsedProjectDocument.projects.map((storedProject) => ({
+        id: storedProject.id,
+        season: storedProject.project.season,
+        mapIds: storedProject.project.maps.map((projectMap) => projectMap.id),
+        thumbnails: storedProject.thumbnailsByMapId,
+      })),
+    ).toEqual(
+      referenceProjectDocumentFixture.projects.map((storedProject) => ({
+        id: storedProject.id,
+        season: storedProject.project.season,
+        mapIds: storedProject.project.maps.map((projectMap) => projectMap.id),
+        thumbnails: storedProject.thumbnailsByMapId,
+      })),
+    );
+  });
+
   it("round-trips a frozen fixture through a React open/save and frozen validation", () => {
     const storage = createMutableReferenceProjectStorage(
       serializeReferenceProjectDocument(referenceProjectDocumentFixture),

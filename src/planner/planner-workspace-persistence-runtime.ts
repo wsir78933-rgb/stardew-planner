@@ -25,11 +25,48 @@ import {
 import type { PlannerWorkspaceAction, PlannerWorkspaceState } from "./planner-workspace-state";
 import { getPlannerMapById } from "../maps/map-catalog";
 
+export const automaticMapSaveDelayMilliseconds = 300;
+
+const canonicalMapSaveBeforeAddMapByController = new WeakMap<
+  object,
+  () => Promise<boolean>
+>();
+
+const canonicalMapSaveBeforeProjectSwitchByController = new WeakMap<
+  object,
+  () => Promise<void>
+>();
+
+export function readCanonicalMapSaveBeforeAddMap(
+  workspaceController: object,
+): (() => Promise<boolean>) | null {
+  if (typeof workspaceController !== "object" || workspaceController === null) {
+    throw new TypeError(
+      "Cannot save the current map before adding a map because workspaceController is "
+        + `${workspaceController === null ? "null" : typeof workspaceController}.`,
+    );
+  }
+  return canonicalMapSaveBeforeAddMapByController.get(workspaceController) ?? null;
+}
+
+export function readCanonicalMapSaveBeforeProjectSwitch(
+  workspaceController: object,
+): (() => Promise<void>) | null {
+  if (typeof workspaceController !== "object" || workspaceController === null) {
+    throw new TypeError(
+      "Cannot save the current map before switching projects because workspaceController is "
+        + `${workspaceController === null ? "null" : typeof workspaceController}.`,
+    );
+  }
+  return canonicalMapSaveBeforeProjectSwitchByController.get(workspaceController) ?? null;
+}
+
 type PlannerWorkspacePersistenceController = Pick<
   ReferenceProjectWorkspaceController,
   | "clearActiveProject"
   | "createMap"
   | "createProject"
+  | "createProjectWithFirstMap"
   | "getState"
   | "getPlannerMapIdForMapFile"
   | "saveOpenMap"
@@ -58,6 +95,13 @@ type PlannerWorkspaceMapLayoutSnapshot = Readonly<{
   selectedPlannerMapId: PlannerWorkspaceState["selectedPlannerMapId"];
 }>;
 
+type CanonicalSnapshotSaveIdentity = Readonly<{
+  exporter: MapImageExporter;
+  layoutKey: string;
+  mapId: string;
+  projectId: string;
+}>;
+
 type PlannerWorkspaceMapSaveContext = Readonly<{
   activeProjectId: string | null;
   activeSessionMapId: string | null;
@@ -71,20 +115,24 @@ type PlannerWorkspacePersistenceRuntimeInput = Readonly<{
   initialPlannerWorkspaceState: PlannerWorkspaceState;
   initialWorkspaceState: PlannerWorkspacePersistenceProjectState;
   newProjectName?: string;
+  onAutomaticSaveSettled?: (caughtError: unknown | null) => void;
   workspaceController: PlannerWorkspacePersistenceController;
 }>;
 
 export type PlannerWorkspacePersistenceRuntime = Readonly<{
+  cancelPendingAutomaticSave: () => void;
   captureCleanMapImage: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   captureScreenshot: (screenshotResolution: ScreenshotResolution) => Promise<Blob>;
   clearMapImageExporter: (plannerMapId: string) => void;
-  handleMapChange: (plannerMapId: string) => void;
+  handleMapChange: (plannerMapId: string) => Promise<void>;
   handleMapImageExporterReady: (
     receivedPlannerMapId: string,
     receivedMapImageExporter: MapImageExporter | null,
   ) => void;
   saveCurrentMap: () => void;
+  createProjectWithCurrentMap: () => Promise<void>;
   saveCurrentMapAndRefreshThumbnail: () => Promise<void>;
+  scheduleAutomaticSave: () => void;
   saveThumbnail: () => Promise<void>;
   synchronizeCanonicalSession: () => void;
   updateWorkspaceSnapshot: (
@@ -98,6 +146,7 @@ export function createPlannerWorkspacePersistenceRuntime({
   initialPlannerWorkspaceState,
   initialWorkspaceState,
   newProjectName = "Untitled Project",
+  onAutomaticSaveSettled,
   workspaceController,
 }: PlannerWorkspacePersistenceRuntimeInput): PlannerWorkspacePersistenceRuntime {
   const canonicalMapIdentityReference = createCanonicalMapIdentityReference();
@@ -106,6 +155,14 @@ export function createPlannerWorkspacePersistenceRuntime({
   let currentWorkspaceState = initialWorkspaceState;
   let pendingSmartSaveCanonicalSession: PendingSmartSaveCanonicalSession | null = null;
   let shouldPreserveSavePanelOnCanonicalSynchronization = false;
+  let previewSaveTail: Promise<void> = Promise.resolve();
+  let mapChangeTail: Promise<void> = Promise.resolve();
+  let automaticSaveTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  let hasUnsavedCanonicalEdit = false;
+  let automaticSaveFailure: unknown | null = null;
+  let staleAutomaticSaveError: unknown | null = null;
+  let inFlightAutomaticSave: Promise<void> | null = null;
+  let inFlightPreviewSave: Promise<unknown> | null = null;
 
   function updateWorkspaceSnapshot(
     plannerWorkspaceState: PlannerWorkspaceState,
@@ -130,7 +187,8 @@ export function createPlannerWorkspacePersistenceRuntime({
       canonicalMapIdentityReference,
     );
     if (canonicalSessionAction !== null) {
-      if (shouldPreserveSavePanelOnCanonicalSynchronization) {
+      const libraryIsOpen = currentPlannerWorkspaceState.modalId === "save-panel";
+      if (shouldPreserveSavePanelOnCanonicalSynchronization || libraryIsOpen) {
         shouldPreserveSavePanelOnCanonicalSynchronization = false;
         dispatchPlannerWorkspaceAction({
           ...canonicalSessionAction,
@@ -157,6 +215,18 @@ export function createPlannerWorkspacePersistenceRuntime({
       receivedPlannerMapId,
       receivedMapImageExporter,
     );
+    if (receivedMapImageExporter === null) return;
+    if (receivedPlannerMapId !== currentPlannerWorkspaceState.selectedPlannerMapId) {
+      return;
+    }
+    resumeUnsavedAutomaticSaveWhenExporterReturns();
+  }
+
+  function resumeUnsavedAutomaticSaveWhenExporterReturns(): void {
+    if (!hasUnsavedCanonicalEdit && automaticSaveFailure === null) return;
+    if (automaticSaveTimeoutId !== null || inFlightAutomaticSave !== null) return;
+    if (!canSaveLatestCanonicalSnapshot()) return;
+    scheduleAutomaticSave();
   }
 
   function clearMapImageExporter(plannerMapId: string): void {
@@ -188,7 +258,23 @@ export function createPlannerWorkspacePersistenceRuntime({
     );
   }
 
-  function handleMapChange(plannerMapId: string): void {
+  function handleMapChange(plannerMapId: string): Promise<void> {
+    const queuedMapChange = mapChangeTail.then(
+      () => changeMapAfterAutomaticSave(plannerMapId),
+      () => changeMapAfterAutomaticSave(plannerMapId),
+    );
+    mapChangeTail = queuedMapChange.then(
+      () => undefined,
+      () => undefined,
+    );
+    return queuedMapChange;
+  }
+
+  async function changeMapAfterAutomaticSave(plannerMapId: string): Promise<void> {
+    const didFinishFirstPreviewSave = await waitForFirstPreviewSaveBeforeMapChange();
+    if (!didFinishFirstPreviewSave) return;
+    const didFlushUnsavedCanonicalEdit = await flushUnsavedCanonicalEditBeforeMapChange();
+    if (!didFlushUnsavedCanonicalEdit) return;
     changePlannerWorkspaceMap({
       dispatchPlannerWorkspaceAction,
       plannerMapId,
@@ -222,7 +308,12 @@ export function createPlannerWorkspacePersistenceRuntime({
       saveResult === "created-canonical-session";
   }
 
-  async function saveCurrentMapAndRefreshThumbnail(): Promise<void> {
+  function saveCurrentMapAndRefreshThumbnail(): Promise<void> {
+    cancelPendingAutomaticSave();
+    return enqueuePreviewSave(() => saveCurrentMapAndRefreshThumbnailNow());
+  }
+
+  async function saveCurrentMapAndRefreshThumbnailNow(): Promise<void> {
     const savedPlannerWorkspaceMapLayout = createPlannerWorkspaceMapLayoutSnapshot(
       currentPlannerWorkspaceState,
     );
@@ -288,14 +379,382 @@ export function createPlannerWorkspacePersistenceRuntime({
     });
   }
 
+  function createProjectWithCurrentMap(): Promise<void> {
+    return enqueuePreviewSave(async () => {
+      const savedPlannerWorkspaceMapLayout = createPlannerWorkspaceMapLayoutSnapshot(
+        currentPlannerWorkspaceState,
+      );
+      const capturedMapSaveContext = createPlannerWorkspaceMapSaveContext(
+        currentPlannerWorkspaceState,
+        currentWorkspaceState,
+        currentMapImageExporterSlot.current,
+        workspaceController,
+      );
+      const capturedPlannerMapThumbnail = await capturePlannerMapThumbnail(
+        capturedMapSaveContext.plannerMapId,
+        capturedMapSaveContext.mapImageExporter,
+      );
+      assertPlannerWorkspaceMapSaveContextIsCurrent(
+        capturedMapSaveContext,
+        savedPlannerWorkspaceMapLayout,
+        currentPlannerWorkspaceState,
+        currentWorkspaceState,
+        currentMapImageExporterSlot.current,
+        workspaceController,
+      );
+      const selectedPlannerMap = getPlannerMapById(
+        currentPlannerWorkspaceState.selectedPlannerMapId,
+      );
+      workspaceController.createProjectWithFirstMap({
+        edits: {
+          mapRenderOptions: currentPlannerWorkspaceState.mapRenderOptions,
+          placementSnapshot: currentPlannerWorkspaceState.placementHistory.currentState,
+          season: currentPlannerWorkspaceState.season,
+        },
+        label: selectedPlannerMap.displayName,
+        mapFile: selectedPlannerMap.mapFile,
+        projectName: newProjectName,
+        season: currentPlannerWorkspaceState.season,
+        webpBytes: capturedPlannerMapThumbnail.webpBytes,
+      });
+      currentWorkspaceState = {
+        activeSession: workspaceController.getState().activeSession,
+      };
+      shouldPreserveSavePanelOnCanonicalSynchronization = true;
+    });
+  }
+
+  function saveExistingCanonicalMapAndRefreshThumbnail(): Promise<boolean> {
+    return enqueuePreviewSave(async () => {
+      if (readCurrentCanonicalSession() === null) {
+        assertAutomaticSaveCanSkipMissingCanonicalSession();
+        return false;
+      }
+      await saveCurrentMapAndRefreshThumbnailNow();
+      return true;
+    });
+  }
+
+  function enqueuePreviewSave<SaveResult>(
+    saveOperation: () => Promise<SaveResult>,
+  ): Promise<SaveResult> {
+    const queuedPreviewSave = previewSaveTail.then(saveOperation, saveOperation);
+    previewSaveTail = queuedPreviewSave.then(
+      () => undefined,
+      () => undefined,
+    );
+    trackInFlightPreviewSave(queuedPreviewSave);
+    return queuedPreviewSave;
+  }
+
+  function trackInFlightPreviewSave(queuedPreviewSave: Promise<unknown>): void {
+    inFlightPreviewSave = queuedPreviewSave;
+    queuedPreviewSave.then(
+      () => {
+        if (inFlightPreviewSave === queuedPreviewSave) {
+          inFlightPreviewSave = null;
+        }
+      },
+      () => {
+        if (inFlightPreviewSave === queuedPreviewSave) {
+          inFlightPreviewSave = null;
+        }
+      },
+    );
+  }
+
+  async function waitForFirstPreviewSaveBeforeMapChange(): Promise<boolean> {
+    const previewSaveInFlight = inFlightPreviewSave;
+    if (previewSaveInFlight === null || readCurrentCanonicalSession() !== null) {
+      return true;
+    }
+    try {
+      await previewSaveInFlight;
+    } catch (caughtError: unknown) {
+      reportBlockedAutomaticSave(caughtError);
+      return false;
+    }
+    return true;
+  }
+
+  function cancelPendingAutomaticSave(): void {
+    if (automaticSaveTimeoutId === null) return;
+    clearTimeout(automaticSaveTimeoutId);
+    automaticSaveTimeoutId = null;
+  }
+
+  function scheduleAutomaticSave(): void {
+    if (readCurrentCanonicalSession() === null) {
+      assertAutomaticSaveCanSkipMissingCanonicalSession();
+      return;
+    }
+    cancelPendingAutomaticSave();
+    hasUnsavedCanonicalEdit = true;
+    automaticSaveFailure = null;
+    automaticSaveTimeoutId = setTimeout(() => {
+      automaticSaveTimeoutId = null;
+      void runAutomaticSave();
+    }, automaticMapSaveDelayMilliseconds);
+  }
+
+  function runAutomaticSave(): Promise<void> {
+    if (inFlightAutomaticSave !== null) return inFlightAutomaticSave;
+    const automaticSavePromise = performAutomaticSave().finally(() => {
+      if (inFlightAutomaticSave === automaticSavePromise) {
+        inFlightAutomaticSave = null;
+      }
+    });
+    inFlightAutomaticSave = automaticSavePromise;
+    return automaticSavePromise;
+  }
+
+  async function performAutomaticSave(): Promise<void> {
+    const layoutKeyBeforeSave = createAutomaticMapSaveLayoutKey(
+      currentPlannerWorkspaceState,
+    );
+    if (shouldDeferAutomaticSaveUntilMapImageExporterReturns()) {
+      deferAutomaticSaveUntilMapImageExporterReturns();
+      return;
+    }
+    try {
+      const didSaveCanonicalMap = await saveExistingCanonicalMapAndRefreshThumbnail();
+      if (!didSaveCanonicalMap) return;
+      if (
+        readCurrentCanonicalSession() === null
+        || createAutomaticMapSaveLayoutKey(currentPlannerWorkspaceState) !== layoutKeyBeforeSave
+      ) {
+        if (readCurrentCanonicalSession() !== null) scheduleAutomaticSave();
+        return;
+      }
+      hasUnsavedCanonicalEdit = false;
+      automaticSaveFailure = null;
+      staleAutomaticSaveError = null;
+      settleAutomaticSave(null, onAutomaticSaveSettled);
+    } catch (caughtError: unknown) {
+      handleAutomaticSaveFailure(caughtError);
+    }
+  }
+
+  function handleAutomaticSaveFailure(caughtError: unknown): void {
+    hasUnsavedCanonicalEdit = true;
+    if (
+      isRetryableUnavailableMapImageExporterError(caughtError)
+      && !canSaveLatestCanonicalSnapshot()
+    ) {
+      deferAutomaticSaveUntilMapImageExporterReturns(caughtError);
+      return;
+    }
+    if (
+      isStaleMapPreviewCaptureError(caughtError)
+      && canSaveLatestCanonicalSnapshot()
+    ) {
+      staleAutomaticSaveError = caughtError;
+      scheduleAutomaticSave();
+      return;
+    }
+    staleAutomaticSaveError = null;
+    automaticSaveFailure = caughtError;
+    settleAutomaticSave(caughtError, onAutomaticSaveSettled);
+  }
+
+  function shouldDeferAutomaticSaveUntilMapImageExporterReturns(): boolean {
+    return readCurrentCanonicalSession() !== null
+      && !canSaveLatestCanonicalSnapshot();
+  }
+
+  function deferAutomaticSaveUntilMapImageExporterReturns(
+    caughtError: unknown | null = null,
+  ): void {
+    hasUnsavedCanonicalEdit = true;
+    automaticSaveFailure = null;
+    if (caughtError !== null) {
+      staleAutomaticSaveError = caughtError;
+    }
+  }
+
+  async function flushUnsavedCanonicalEditBeforeMapChange(): Promise<boolean> {
+    // A matching in-flight save clears the unsaved flag and leaves the debounce
+    // that a restored layout change armed. Drop that timer before the map switch.
+    cancelPendingAutomaticSave();
+    if (!hasUnsavedCanonicalEdit && inFlightAutomaticSave === null) return true;
+    automaticSaveFailure = null;
+
+    while (hasUnsavedCanonicalEdit && automaticSaveFailure === null) {
+      const canonicalSaveAttemptId = readLatestCanonicalSaveAttemptId();
+      if (canonicalSaveAttemptId === null) {
+        reportBlockedAutomaticSave(staleAutomaticSaveError ?? createBlockedAutomaticSaveError());
+        return false;
+      }
+      const joinedInFlightAutomaticSave = inFlightAutomaticSave !== null;
+      cancelPendingAutomaticSave();
+      await runAutomaticSave();
+      if (!hasUnsavedCanonicalEdit || automaticSaveFailure !== null) break;
+      if (joinedInFlightAutomaticSave) continue;
+      const canonicalSaveAttemptIdAfterSave = readLatestCanonicalSaveAttemptId();
+      if (
+        canonicalSaveAttemptIdAfterSave !== null
+        && isSameCanonicalSnapshotSaveIdentity(
+          canonicalSaveAttemptId,
+          canonicalSaveAttemptIdAfterSave,
+        )
+      ) {
+        cancelPendingAutomaticSave();
+        reportBlockedAutomaticSave(
+          staleAutomaticSaveError ?? createBlockedAutomaticSaveError(),
+        );
+        return false;
+      }
+    }
+
+    const didSaveCanonicalEditBeforeMapChange =
+      !hasUnsavedCanonicalEdit && automaticSaveFailure === null;
+    if (didSaveCanonicalEditBeforeMapChange) {
+      cancelPendingAutomaticSave();
+    }
+    return didSaveCanonicalEditBeforeMapChange;
+  }
+
+  async function savePendingCanonicalMapBeforeAddMap(): Promise<boolean> {
+    const previewSaveInFlight = inFlightPreviewSave;
+    if (
+      previewSaveInFlight !== null
+      && !hasUnsavedCanonicalEdit
+      && inFlightAutomaticSave === null
+    ) {
+      try {
+        await previewSaveInFlight;
+      } catch (caughtError: unknown) {
+        reportBlockedAutomaticSave(caughtError);
+        return false;
+      }
+    }
+    return flushUnsavedCanonicalEditBeforeMapChange();
+  }
+
+  async function savePendingCanonicalMapBeforeProjectSwitch(): Promise<void> {
+    const didSavePendingCanonicalMap = await savePendingCanonicalMapBeforeAddMap();
+    if (didSavePendingCanonicalMap) return;
+    throw readBlockedProjectSwitchError();
+  }
+
+  function readBlockedProjectSwitchError(): Error {
+    if (automaticSaveFailure instanceof Error) return automaticSaveFailure;
+    if (staleAutomaticSaveError instanceof Error) return staleAutomaticSaveError;
+    const blockedSaveValue = automaticSaveFailure ?? staleAutomaticSaveError;
+    if (blockedSaveValue !== null) {
+      return new Error(
+        "Cannot switch the local project because the current map was not saved: "
+          + `${JSON.stringify(String(blockedSaveValue))}.`,
+      );
+    }
+    return createBlockedAutomaticSaveError();
+  }
+
+  function reportBlockedAutomaticSave(blockedError: unknown): void {
+    hasUnsavedCanonicalEdit = readCurrentCanonicalSession() !== null;
+    automaticSaveFailure = blockedError;
+    settleAutomaticSave(blockedError, onAutomaticSaveSettled);
+  }
+
+  function readCurrentCanonicalSession() {
+    return readExistingCanonicalSession(
+      currentWorkspaceState,
+      currentPlannerWorkspaceState,
+      workspaceController,
+    );
+  }
+
+  function assertAutomaticSaveCanSkipMissingCanonicalSession(): void {
+    const controllerState = workspaceController.getState();
+    const activeProject = controllerState.activeProject;
+    const activeSession = controllerState.activeSession;
+    const activeSessionMapId = activeSession === null ? null : activeSession.mapId;
+    if (activeProject === null || activeProject.project.maps.length === 0) return;
+    if (activeSession !== null) return;
+    const receivedMapIds = activeProject.project.maps.map((projectMap) => projectMap.id);
+    cancelPendingAutomaticSave();
+    throw new Error(
+      "Cannot skip the automatic map save because the active project has maps but no canonical session. "
+        + `Received project ID ${JSON.stringify(activeProject.id)}, `
+        + `active map ID ${JSON.stringify(activeProject.project.activeMapId)}, `
+        + `map IDs ${JSON.stringify(receivedMapIds)}, `
+        + `session map ID ${JSON.stringify(activeSessionMapId)}, `
+        + `workspace session map ID ${JSON.stringify(currentWorkspaceState.activeSession?.mapId ?? null)}, `
+        + `planner project ID ${JSON.stringify(currentPlannerWorkspaceState.activeProjectId)}, `
+        + `planner map ID ${JSON.stringify(currentPlannerWorkspaceState.activeMapId)}, `
+        + `and selected planner map ID ${JSON.stringify(currentPlannerWorkspaceState.selectedPlannerMapId)}.`,
+    );
+  }
+
+  function canSaveLatestCanonicalSnapshot(): boolean {
+    if (readCurrentCanonicalSession() === null) return false;
+    const registeredMapImageExporter = currentMapImageExporterSlot.current;
+    return registeredMapImageExporter !== null
+      && registeredMapImageExporter.plannerMapId
+        === currentPlannerWorkspaceState.selectedPlannerMapId;
+  }
+
+  function readLatestCanonicalSaveAttemptId(): CanonicalSnapshotSaveIdentity | null {
+    if (!canSaveLatestCanonicalSnapshot()) return null;
+    const canonicalSession = readCurrentCanonicalSession();
+    const registeredMapImageExporter = currentMapImageExporterSlot.current;
+    if (canonicalSession === null || registeredMapImageExporter === null) return null;
+    return {
+      exporter: registeredMapImageExporter.mapImageExporter,
+      layoutKey: createAutomaticMapSaveLayoutKey(currentPlannerWorkspaceState),
+      mapId: canonicalSession.mapId,
+      projectId: canonicalSession.projectId,
+    };
+  }
+
+  function createBlockedAutomaticSaveError(): Error {
+    const plannerMapId = currentPlannerWorkspaceState.selectedPlannerMapId;
+    const canonicalSession = readCurrentCanonicalSession();
+    const controllerState = workspaceController.getState();
+    const registeredMapImageExporter = currentMapImageExporterSlot.current;
+    if (canonicalSession === null) {
+      return new Error(
+        "Cannot finish the automatic map save before changing planner maps because the canonical session is missing. "
+          + `Received workspace project ID ${JSON.stringify(currentWorkspaceState.activeSession?.projectId ?? null)}, `
+          + `workspace map ID ${JSON.stringify(currentWorkspaceState.activeSession?.mapId ?? null)}, `
+          + `controller project ID ${JSON.stringify(controllerState.activeSession?.projectId ?? controllerState.activeProject?.id ?? null)}, `
+          + `controller map ID ${JSON.stringify(controllerState.activeSession?.mapId ?? null)}, `
+          + `and planner map ID ${JSON.stringify(plannerMapId)}.`,
+      );
+    }
+    const resolvedPlannerMapId = workspaceController.getPlannerMapIdForMapFile(
+      canonicalSession.sourceMap.mapFile,
+    );
+    return new Error(
+      "Cannot finish the automatic map save before changing planner maps because the latest snapshot cannot be saved. "
+        + `Received project ID ${JSON.stringify(canonicalSession.projectId)}, `
+        + `map ID ${JSON.stringify(canonicalSession.mapId)}, `
+        + `resolved planner map ID ${JSON.stringify(resolvedPlannerMapId)}, `
+        + `current planner map ID ${JSON.stringify(plannerMapId)}, `
+        + `and exporter planner map ID ${JSON.stringify(registeredMapImageExporter?.plannerMapId ?? null)}.`,
+    );
+  }
+
+  canonicalMapSaveBeforeAddMapByController.set(
+    workspaceController,
+    savePendingCanonicalMapBeforeAddMap,
+  );
+  canonicalMapSaveBeforeProjectSwitchByController.set(
+    workspaceController,
+    savePendingCanonicalMapBeforeProjectSwitch,
+  );
+
   return {
+    cancelPendingAutomaticSave,
     captureCleanMapImage,
     captureScreenshot,
     clearMapImageExporter,
     handleMapChange,
     handleMapImageExporterReady,
     saveCurrentMap,
+    createProjectWithCurrentMap,
     saveCurrentMapAndRefreshThumbnail,
+    scheduleAutomaticSave,
     saveThumbnail,
     synchronizeCanonicalSession,
     updateWorkspaceSnapshot,
@@ -705,6 +1164,16 @@ function hasSameCanonicalSessionIdentity(
       && firstSession.mapId === secondSession.mapId;
 }
 
+function isSameCanonicalSnapshotSaveIdentity(
+  firstIdentity: CanonicalSnapshotSaveIdentity,
+  secondIdentity: CanonicalSnapshotSaveIdentity,
+): boolean {
+  return firstIdentity.exporter === secondIdentity.exporter
+    && firstIdentity.layoutKey === secondIdentity.layoutKey
+    && firstIdentity.mapId === secondIdentity.mapId
+    && firstIdentity.projectId === secondIdentity.projectId;
+}
+
 function hasSamePlannerWorkspaceMapSaveContext(
   firstContext: PlannerWorkspaceMapSaveContext,
   secondContext: PlannerWorkspaceMapSaveContext,
@@ -750,6 +1219,72 @@ function requireSavedPlannerWorkspaceMapSession(
     );
   }
   return activeSession;
+}
+
+export function createAutomaticMapSaveLayoutKey(
+  plannerWorkspaceState: PlannerWorkspaceState,
+): string {
+  return JSON.stringify({
+    mapRenderOptions: plannerWorkspaceState.mapRenderOptions,
+    placementSnapshot: createNormalizedPlacementSnapshotForComparison(
+      plannerWorkspaceState.placementHistory.currentState,
+    ),
+    season: plannerWorkspaceState.season,
+  });
+}
+
+function readExistingCanonicalSession(
+  workspaceState: PlannerWorkspacePersistenceProjectState,
+  plannerWorkspaceState: PlannerWorkspaceState,
+  workspaceController: Pick<
+    ReferenceProjectWorkspaceController,
+    "getPlannerMapIdForMapFile" | "getState"
+  >,
+) {
+  const snapshotSession = getCurrentCanonicalSession(
+    workspaceState.activeSession,
+    plannerWorkspaceState,
+    workspaceController,
+  );
+  if (snapshotSession === null) return null;
+  const controllerSession = getCurrentCanonicalSession(
+    workspaceController.getState().activeSession,
+    plannerWorkspaceState,
+    workspaceController,
+  );
+  if (
+    controllerSession === null
+    || controllerSession.projectId !== snapshotSession.projectId
+    || controllerSession.mapId !== snapshotSession.mapId
+  ) {
+    return null;
+  }
+  return controllerSession;
+}
+
+function settleAutomaticSave(
+  caughtError: unknown | null,
+  onAutomaticSaveSettled: ((caughtError: unknown | null) => void) | undefined,
+): void {
+  if (onAutomaticSaveSettled !== undefined) {
+    onAutomaticSaveSettled(caughtError);
+    return;
+  }
+  if (caughtError === null) return;
+  if (caughtError instanceof Error) throw caughtError;
+  throw new Error(
+    `Automatic map save failed: ${JSON.stringify(String(caughtError))}.`,
+  );
+}
+
+function isStaleMapPreviewCaptureError(caughtError: unknown): boolean {
+  return caughtError instanceof MapImageExportError
+    && caughtError.message.includes("during thumbnail capture");
+}
+
+function isRetryableUnavailableMapImageExporterError(caughtError: unknown): boolean {
+  return caughtError instanceof MapImageExportError
+    && caughtError.message.includes("exporter is unavailable");
 }
 
 function createPlannerWorkspaceMapLayoutSnapshot(

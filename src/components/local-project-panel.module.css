@@ -1,4 +1,6 @@
 .panel {
+  background: var(--background, #fdfff8);
+  color: var(--foreground, #1c211b);
   gap: 12px;
   min-width: 0;
 }
@@ -6,7 +8,7 @@
 .layout {
   align-items: start;
   display: grid;
-  gap: 20px;
+  gap: 12px;
   grid-template-columns: 220px minmax(0, 1fr);
   min-width: 0;
 }
@@ -15,7 +17,7 @@
 .main {
   align-content: start;
   display: grid;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
 }
 
@@ -24,33 +26,215 @@
 }
 
 .layout .sidebar :global(.local-project-panel__status) {
+  color: var(--muted-foreground, #5d6659);
   overflow-wrap: anywhere;
-}
-
-.sidebarTitle {
-  color: var(--text);
-  font-size: 17px;
-  line-height: 1.25;
-  margin: 0;
 }
 
 .layout .sidebar .sidebarActions {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.layout .sidebar .sidebarActions > :is(button, label) {
+.layout .sidebar .sidebarActions > :is(button, label),
+.folderList > button,
+.projectGroupsSummary,
+.projectGroupsBody > button,
+.toolsButton {
   font-size: 13px;
   min-height: 44px;
   overflow-wrap: anywhere;
   width: 100%;
 }
 
+.folderList,
+.projectGroups,
+.projectGroupsBody {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.projectGroups {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+.projectGroupsSummary {
+  -webkit-appearance: none;
+  align-items: center;
+  appearance: none;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
+  border-radius: 8px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--foreground, #1c211b);
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  gap: 8px;
+  justify-content: flex-start;
+  list-style: none;
+  margin: 0;
+  min-height: 44px;
+  min-width: 0;
+  padding: 0 12px;
+  text-align: left;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.projectGroupsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.projectGroupsSummary::marker {
+  content: none;
+  display: none;
+}
+
+.projectGroupsSummary::after {
+  border-bottom: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  box-sizing: border-box;
+  content: "";
+  flex: 0 0 auto;
+  height: 6px;
+  margin-left: auto;
+  transform: translateX(-1px) rotate(-45deg);
+  width: 6px;
+}
+
+.projectGroups[open] > .projectGroupsSummary::after {
+  transform: translateY(-1px) rotate(45deg);
+}
+
+.folderButton,
+.folderNameLabel {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  min-width: 0;
+  text-align: left;
+}
+
+.folderButton span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.folderCount {
+  color: var(--muted-foreground, #5d6659);
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.folderNameLabel input,
+.folderRenameField input {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
+  border-radius: 6px;
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
+  font: inherit;
+  min-height: 40px;
+  min-width: 0;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.folderRenameField {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.folderRenameField input {
+  flex: 1 1 0;
+  width: auto;
+}
+
+.folderNameLabel input::placeholder {
+  color: var(--muted-foreground, #5d6659);
+  opacity: 1;
+}
+
+.projectGroupsBody {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+.projectGroupsBody > .folderButton,
+.projectGroupsBody > button,
+.projectGroupsBody > .folderRenameField,
+.projectGroupsBody > .folderNameLabel {
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+}
+
+.projectGroupsBody > .folderButton,
+.projectGroupsBody > button:not(.folderButton) {
+  border-radius: 8px;
+  padding: 0 12px;
+}
+
+.projectGroupsBody > button:not(.folderButton) {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.projectGroupsBody > .folderButton > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.projectGroupsBody > .folderButton .folderCount {
+  margin-left: auto;
+  text-align: right;
+}
+
+.projectGroupsBody > .folderNameLabel {
+  display: block;
+  padding: 0;
+}
+
+.projectGroupsBody > .folderRenameField {
+  padding: 0 12px 0 0;
+}
+
+.projectGroupsBody > .folderNameLabel input,
+.projectGroupsBody > .folderRenameField input {
+  border-radius: 8px;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+.projectGroupsSummary:focus-visible,
+.projectGroupsBody > .folderButton:focus-visible,
+.projectGroupsBody > button:not(.folderButton):focus-visible {
+  outline: 2px solid var(--ring, #759d1c);
+  outline-offset: 2px;
+}
+
 .searchControl {
   align-items: center;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
   border-radius: 8px;
-  color: var(--text-dim);
+  box-shadow: none;
+  color: var(--muted-foreground, #5d6659);
   display: flex;
   gap: 8px;
   min-height: 40px;
@@ -60,15 +244,16 @@
 }
 
 .searchControl:focus-within {
-  border-color: var(--accent);
-  outline: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-color: var(--ring, #759d1c);
+  outline: 2px solid color-mix(in srgb, var(--ring, #759d1c) 35%, transparent);
   outline-offset: 1px;
 }
 
 .searchControl input {
   background: transparent;
   border: 0;
-  color: var(--text);
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
   font: inherit;
   font-size: 13px;
   min-width: 0;
@@ -77,7 +262,7 @@
 }
 
 .searchControl input::placeholder {
-  color: var(--text-dim);
+  color: var(--muted-foreground, #5d6659);
   opacity: 1;
 }
 
@@ -91,39 +276,39 @@
   align-content: start;
   box-sizing: border-box;
   display: grid;
-  gap: 12px;
+  gap: 8px;
   grid-auto-rows: max-content;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: start;
   list-style: none;
   margin: 0;
-  max-height: 28rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 0 4px 2px 0;
+  overflow: visible;
+  padding: 0;
   width: 100%;
 }
 
 .projectCard {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: var(--card, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--ring, #759d1c) 35%, var(--secondary, #f1f7e7));
   box-sizing: border-box;
   border-radius: 10px;
   display: block;
+  justify-self: stretch;
   max-width: 100%;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
 }
 
 .projectCard[data-current-project="true"] {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent);
+  border-color: var(--ring, #759d1c);
+  box-shadow: 0 0 0 1px var(--ring, #759d1c);
 }
 
 .projectPreview {
   aspect-ratio: 318 / 145;
-  background: var(--bg-raised);
+  background: var(--secondary, #f1f7e7);
+  border-radius: 10px 10px 0 0;
   overflow: hidden;
   position: relative;
 }
@@ -137,7 +322,7 @@
 
 .projectPreviewEmpty {
   align-content: center;
-  color: var(--text-dim);
+  color: var(--muted-foreground, #5d6659);
   display: grid;
   font-size: 12px;
   gap: 8px;
@@ -148,7 +333,7 @@
 }
 
 .previewMapIcon {
-  color: var(--text-dim);
+  color: var(--muted-foreground, #5d6659);
   display: block;
   height: 32px;
   width: 32px;
@@ -163,136 +348,192 @@
   width: 100%;
 }
 
-.currentBadge {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 999px;
-  color: var(--text);
-  font-size: 10px;
-  font-weight: 700;
-  left: 8px;
-  line-height: 1;
-  padding: 5px 7px;
-  position: absolute;
-  top: 8px;
-}
-
 .projectCardBody {
   align-content: start;
   display: grid;
   gap: 8px;
   min-width: 0;
-  padding: 12px;
+  padding: 8px;
 }
 
 .projectCardHeading {
-  align-items: start;
+  align-items: center;
   display: flex;
-  gap: 8px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-start;
   min-width: 0;
 }
 
 .projectCardHeading strong {
-  color: var(--text);
+  color: var(--foreground, #1c211b);
   font-size: 13px;
   font-weight: 700;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.projectMapCount {
-  background: var(--bg-raised);
+.currentBadge {
+  background: var(--secondary, #f1f7e7);
+  border: 1px solid var(--ring, #759d1c);
   border-radius: 999px;
-  color: var(--text-dim);
+  color: var(--foreground, #1c211b);
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 7px;
+  position: static;
+}
+
+.projectMapCount {
+  background: var(--secondary, #f1f7e7);
+  border-radius: 999px;
+  color: var(--muted-foreground, #5d6659);
   flex: 0 0 auto;
   font-size: 10px;
   line-height: 1.2;
+  margin-left: auto;
   padding: 4px 6px;
 }
 
 .projectUpdatedAt {
-  color: var(--text-dim);
+  color: var(--muted-foreground, #5d6659);
   font-size: 12px;
   line-height: 1.4;
 }
 
-.projectCardActions,
-.renameForm {
-  display: grid;
-  gap: 6px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.projectCardActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
   margin-top: 4px;
   min-width: 0;
+  position: relative;
 }
 
-.layout .main .renameForm {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.projectCardActions button,
-.renameForm button {
-  background: var(--bg-raised);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  color: var(--text);
-  cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  line-height: 1.25;
-  min-height: 32px;
+.renameForm {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-start;
+  margin-top: 4px;
+  max-width: 100%;
   min-width: 0;
-  overflow-wrap: anywhere;
-  padding: 6px 8px;
+  width: 100%;
 }
 
-.projectCardActions button:hover:not(:disabled),
-.renameForm button:hover:not(:disabled) {
-  border-color: var(--accent);
-}
-
-.projectCardActions button:focus-visible,
-.renameForm button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.projectCardActions button:disabled,
-.renameForm button:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
-.projectCardActions .openProjectButton {
-  background: var(--accent-muted);
+.openProjectButton {
+  flex: 0 0 72px;
   font-weight: 700;
-  grid-column: 1 / -1;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 12px;
+  width: 72px;
 }
 
-.projectCardActions button:last-child {
+.iconActionButton,
+.moreActionsSummary {
+  align-items: center;
+  border-radius: 0.35rem;
+  display: inline-flex;
+  flex: 0 0 36px;
+  height: 36px;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0;
+  width: 36px;
+}
+
+.actionIcon {
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
+.moreActions {
+  display: block;
+  flex: 0 0 36px;
+  position: relative;
+  width: 36px;
+}
+
+.moreActionsSummary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.moreActionsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.moreActionsMenu,
+.moveDestinations {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: grid;
+  gap: 6px;
+  min-width: 148px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.moreActionsMenu {
+  left: 0;
+  position: absolute;
+  top: calc(100% + 4px);
+  z-index: 2;
+}
+
+.dangerAction {
   color: #9b3b2d;
 }
 
 .renameForm label {
-  grid-column: 1 / -1;
+  display: block;
+  flex: 0 0 100%;
+  max-width: 100%;
   min-width: 0;
+  width: 100%;
+}
+
+.renameForm button {
+  font-size: 13px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: normal;
+  padding: 0 10px;
+  white-space: nowrap;
+  width: max-content;
 }
 
 .renameForm input {
-  background: var(--bg-deep);
-  border: 1px solid var(--border-subtle);
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
   border-radius: 6px;
-  color: var(--text);
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--foreground, #1c211b);
+  display: block;
   font: inherit;
   font-size: 13px;
+  max-width: 100%;
   min-height: 36px;
+  min-width: 0;
   padding: 0 8px;
   width: 100%;
 }
 
-.renameForm input:focus-visible {
-  border-color: var(--accent);
-  outline: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
+.renameForm input:focus-visible,
+.folderNameLabel input:focus-visible,
+.folderRenameField input:focus-visible {
+  border-color: var(--ring, #759d1c);
+  outline: 2px solid color-mix(in srgb, var(--ring, #759d1c) 35%, transparent);
   outline-offset: 1px;
 }
 
@@ -309,23 +550,126 @@
 
   .projectGrid {
     grid-template-columns: minmax(0, 320px);
-    max-height: 42vh;
   }
 
   .projectCard {
     width: 100%;
   }
 
-  .searchControl {
-    min-height: 44px;
-  }
-
-  .layout .sidebar .sidebarActions > :is(button, label) {
-    min-height: 44px;
-  }
-
+  .searchControl,
+  .layout .sidebar .sidebarActions > :is(button, label),
+  .folderList > button,
+  .projectGroupsSummary,
+  .projectGroupsBody > button,
+  .toolsButton,
   .layout .main .renameForm :is(input, button),
-  .layout .main .projectCardActions button {
+  .moveDestinations button,
+  .moreActionsMenu button {
     min-height: 44px;
   }
+
+  .openProjectButton {
+    flex-basis: 117px;
+    height: 44px;
+    min-height: 44px;
+    width: 117px;
+  }
+
+  .iconActionButton,
+  .moreActions,
+  .moreActionsSummary {
+    flex-basis: 44px;
+    height: 44px;
+    min-height: 44px;
+    min-width: 44px;
+    width: 44px;
+  }
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :is(button, summary),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :global(.local-project-panel__import) {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :is(button, summary):hover:not(:disabled),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :global(.local-project-panel__import):hover:not(:global(.local-project-panel__import--disabled)) {
+  background: var(--secondary, #f1f7e7);
+  border-color: var(--ring, #759d1c);
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel button[aria-pressed="true"]:not(:disabled),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :is(button, summary):active:not(:disabled),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :global(.local-project-panel__import):active:not(:global(.local-project-panel__import--disabled)) {
+  background: var(--secondary, #f1f7e7);
+  border-color: var(--ring, #759d1c);
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel button:disabled,
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :global(.local-project-panel__import--disabled) {
+  background: var(--card, #ffffff);
+  border-color: var(--ring, #759d1c);
+  box-shadow: none;
+  color: var(--muted-foreground, #5d6659);
+  opacity: 0.55;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring, #759d1c);
+  outline-offset: 2px;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .openProjectButton {
+  background: var(--secondary, #f1f7e7);
+  color: var(--foreground, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .dangerAction {
+  color: #9b3b2d;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .searchControl input[type="search"]:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]) {
+  background: var(--card, #ffffff);
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .renameForm {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-start;
+  max-width: 100%;
+  min-width: 0;
+  width: 100%;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .renameForm button {
+  font-size: 13px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: normal;
+  padding: 0 10px;
+  white-space: nowrap;
+  width: max-content;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .renameForm input[type="text"]:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .renameForm input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .folderNameLabel input[type="text"]:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .folderNameLabel input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .folderRenameField input[type="text"]:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .folderRenameField input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]) {
+  background: var(--card, #ffffff);
+  border: 1px solid var(--ring, #759d1c);
+  box-shadow: none;
+  color: var(--foreground, #1c211b);
 }

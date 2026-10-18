@@ -4,12 +4,14 @@ import {
   useEffect,
   useState,
   type ComponentType,
+  type ReactNode,
 } from "react";
 import type { CatalogItem } from "../catalog";
 import type { ImportedGameSaveState } from "../game-save/game-save-import";
 import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import type { ScreenshotResolution } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { ReferenceProjectFolder } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type {
@@ -44,10 +46,10 @@ type PlannerSaveModalLoaderProperties = Readonly<{
   onImportProject: (serializedProject: string) => void;
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
-  onSaveCurrentMap: () => Promise<void>;
   onSaveThumbnail: () => Promise<void>;
   placementSnapshot: PlacementSnapshot;
   workspaceController: ReferenceProjectWorkspaceController;
+  folders?: readonly ReferenceProjectFolder[];
   projects: readonly ReferenceProjectSummary[];
   season: TilesheetSeason;
   selectedPlannerMapId: string;
@@ -66,8 +68,13 @@ type PlannerSaveModalContentProperties = Omit<
 > & Readonly<{
   copy: Pick<
     SaveModalCopy,
-    "cloudProjects" | "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
   >;
+  farmSummaryContent?: ReactNode;
+  folders?: readonly ReferenceProjectFolder[];
+  gameSaveContent?: ReactNode;
+  onRequestFarmSummary?: () => void;
+  onRequestGameSave?: () => void;
 }>;
 
 type PlannerGameSaveModalContentProperties = Readonly<{
@@ -184,46 +191,35 @@ export function PlannerSaveModalLoader(
       gameSaveImportCatalogItems,
     );
 
+  const projectFolders = plannerSaveModalLoaderProperties.folders ?? [];
+  const gameSaveContent = PlannerGameSaveModalContent !== null
+    && gameSaveImportCatalogItems !== null
+    ? (
+      <PlannerGameSaveModalContent
+        catalogItems={gameSaveImportCatalogItems}
+        copy={plannerSaveModalLoaderProperties.copy.gameSave}
+        onOpenImportedGameSave={plannerSaveModalLoaderProperties.onImportGameSave}
+      />
+    )
+    : null;
+  const farmSummaryContent = PlannerFarmSummaryModalContent !== null
+    ? (
+      <PlannerFarmSummaryModalContent
+        catalogItems={plannerSaveModalLoaderProperties.catalogItems}
+        copy={{
+          farmSummaryDetail: plannerSaveModalLoaderProperties.copy.farmSummaryDetail,
+          farmSummaryPreview: plannerSaveModalLoaderProperties.copy.farmSummaryPreview,
+        }}
+        mapDisplayName={plannerSaveModalLoaderProperties.mapDisplayName}
+        placementSnapshot={plannerSaveModalLoaderProperties.placementSnapshot}
+        selectedPlannerMapId={plannerSaveModalLoaderProperties.selectedPlannerMapId}
+        season={plannerSaveModalLoaderProperties.season}
+      />
+    )
+    : null;
+
   return (
     <>
-      <nav
-        aria-label={plannerSaveModalLoaderProperties.copy.saveTools.label}
-        className="planner-save-modal-loader__branches"
-      >
-        <button
-          aria-pressed={selectedPlannerSaveModalBranch === "projects"}
-          onClick={() =>
-            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
-            )
-          }
-          type="button"
-        >
-          {plannerSaveModalLoaderProperties.copy.saveTools.localProjects}
-        </button>
-        <button
-          aria-pressed={selectedPlannerSaveModalBranch === "game-save"}
-          onClick={() =>
-            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "game-save"),
-            )
-          }
-          type="button"
-        >
-          {plannerSaveModalLoaderProperties.copy.saveTools.gameSave}
-        </button>
-        <button
-          aria-pressed={selectedPlannerSaveModalBranch === "farm-summary"}
-          onClick={() =>
-            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
-            )
-          }
-          type="button"
-        >
-          {plannerSaveModalLoaderProperties.copy.saveTools.farmSummary}
-        </button>
-      </nav>
       {currentBranchLoadError !== null ? (
         <div className="local-project-panel__error" role="alert">
           <p>{currentBranchLoadError.message}</p>
@@ -254,14 +250,13 @@ export function PlannerSaveModalLoader(
           )}
         </p>
       ) : null}
-      {selectedPlannerSaveModalBranch === "projects" && PlannerSaveModalContent !== null ? (
+      {PlannerSaveModalContent !== null ? (
         <PlannerSaveModalContent
           copy={{
             deleteProject: plannerSaveModalLoaderProperties.copy.deleteProject,
             imageExport: plannerSaveModalLoaderProperties.copy.imageExport,
             localProjects: plannerSaveModalLoaderProperties.copy.localProjects,
             thumbnail: plannerSaveModalLoaderProperties.copy.thumbnail,
-            cloudProjects: plannerSaveModalLoaderProperties.copy.cloudProjects,
           }}
           currentProjectId={plannerSaveModalLoaderProperties.currentProjectId}
           currentProjectMapInstanceCount={
@@ -271,6 +266,9 @@ export function PlannerSaveModalLoader(
             plannerSaveModalLoaderProperties.currentProjectMapInstanceName
           }
           currentProjectName={plannerSaveModalLoaderProperties.currentProjectName}
+          farmSummaryContent={farmSummaryContent}
+          folders={projectFolders}
+          gameSaveContent={gameSaveContent}
           mapFile={plannerSaveModalLoaderProperties.mapFile}
           onCaptureScreenshot={plannerSaveModalLoaderProperties.onCaptureScreenshot}
           onCreateProject={plannerSaveModalLoaderProperties.onCreateProject}
@@ -280,36 +278,22 @@ export function PlannerSaveModalLoader(
           onImportProject={plannerSaveModalLoaderProperties.onImportProject}
           onOpenProject={plannerSaveModalLoaderProperties.onOpenProject}
           onRenameProject={plannerSaveModalLoaderProperties.onRenameProject}
-          onSaveCurrentMap={plannerSaveModalLoaderProperties.onSaveCurrentMap}
+          onRequestFarmSummary={() => {
+            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
+            );
+          }}
+          onRequestGameSave={() => {
+            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "game-save"),
+            );
+          }}
           onSaveThumbnail={plannerSaveModalLoaderProperties.onSaveThumbnail}
           projects={plannerSaveModalLoaderProperties.projects}
           season={plannerSaveModalLoaderProperties.season}
           storageErrorMessage={plannerSaveModalLoaderProperties.storageErrorMessage}
           storageStatus={plannerSaveModalLoaderProperties.storageStatus}
           workspaceController={plannerSaveModalLoaderProperties.workspaceController}
-        />
-      ) : null}
-      {selectedPlannerSaveModalBranch === "game-save"
-      && PlannerGameSaveModalContent !== null
-      && gameSaveImportCatalogItems !== null ? (
-        <PlannerGameSaveModalContent
-          catalogItems={gameSaveImportCatalogItems}
-          copy={plannerSaveModalLoaderProperties.copy.gameSave}
-          onOpenImportedGameSave={plannerSaveModalLoaderProperties.onImportGameSave}
-        />
-      ) : null}
-      {selectedPlannerSaveModalBranch === "farm-summary"
-      && PlannerFarmSummaryModalContent !== null ? (
-        <PlannerFarmSummaryModalContent
-          catalogItems={plannerSaveModalLoaderProperties.catalogItems}
-          copy={{
-            farmSummaryDetail: plannerSaveModalLoaderProperties.copy.farmSummaryDetail,
-            farmSummaryPreview: plannerSaveModalLoaderProperties.copy.farmSummaryPreview,
-          }}
-          mapDisplayName={plannerSaveModalLoaderProperties.mapDisplayName}
-          placementSnapshot={plannerSaveModalLoaderProperties.placementSnapshot}
-          selectedPlannerMapId={plannerSaveModalLoaderProperties.selectedPlannerMapId}
-          season={plannerSaveModalLoaderProperties.season}
         />
       ) : null}
     </>

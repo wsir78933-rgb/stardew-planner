@@ -69,7 +69,6 @@ describe("planner save-modal loader", () => {
         onImportProject: () => undefined,
         onOpenProject: () => undefined,
         onRenameProject: () => undefined,
-        onSaveCurrentMap: async () => undefined,
         onSaveThumbnail: async () => undefined,
         placementSnapshot: {} as never,
         projects: [],
@@ -81,10 +80,11 @@ describe("planner save-modal loader", () => {
       }),
     );
 
-    expect(markup).toContain('aria-label="保存工具"');
-    expect(markup).toContain("本地项目");
-    expect(markup).toContain("导入游戏存档");
-    expect(markup).toContain("农场摘要");
+    expect(markup).not.toContain("planner-save-modal-loader__branches");
+    expect(markup).toContain("正在加载本地项目");
+    expect(markup).not.toContain("cloudProjects");
+    expect(markup).not.toContain("使用 Google 继续");
+    expect(markup).not.toContain("云端同步");
   });
 
   it("uses branch-local imports without static modal-content imports or top-level dynamic", () => {
@@ -106,6 +106,8 @@ describe("planner save-modal loader", () => {
     expect(loaderSource).toContain("plannerSaveModalBranchLoadGeneration");
     expect(loaderSource).toContain("loadCompleteGameSaveImportCatalog");
     expect(loaderSource).toContain("setGameSaveImportCatalogItems");
+    expect(loaderSource).not.toContain("planner-save-modal-loader__branches");
+    expect(loaderSource).not.toContain("cloudProjects");
 
     const workspaceSource = readFileSync(
       resolve(process.cwd(), "src/components/planner-workspace.tsx"),

@@ -96,6 +96,11 @@ describe("reference project workspace controller", () => {
     "duplicateMap",
     "deleteMap",
     "saveThumbnail",
+    "listFolders",
+    "createFolder",
+    "renameFolder",
+    "moveProjectToFolder",
+    "countMyPlans",
   ] as const)("rejects a non-function repository.%s", (methodName) => {
     const repository = createRepository() as Record<string, unknown>;
     repository[methodName] = "not-a-function";
@@ -1631,6 +1636,174 @@ describe("reference project workspace controller", () => {
     expect(secondController.getState().activeProject?.id).toBe("project-target");
     expect(secondController.getState().activeSession?.mapId).toBe("map-standard");
   });
+
+  it("keeps created folders and My Plans membership in controller state", () => {
+    const repository = createRepository();
+    const controller = createController(repository);
+    expect(controller.countMyPlans()).toBe(2);
+    expect(controller.listFolders()).toEqual([]);
+
+    const createdFolder = controller.createFolder("  Greenhouse  ");
+    controller.moveProjectToFolder("project-alpha", createdFolder.id);
+
+    expect(createdFolder).toEqual({
+      id: "workspace-id-1",
+      name: "Greenhouse",
+    });
+    expect(controller.listFolders()).toEqual([createdFolder]);
+    expect(controller.getState().folders).toEqual([createdFolder]);
+    expect(
+      controller.getState().projectSummaries.find(
+        (projectSummary) => projectSummary.id === "project-alpha",
+      )?.folderId,
+    ).toBe("workspace-id-1");
+    expect(
+      controller.getState().projectSummaries.find(
+        (projectSummary) => projectSummary.id === "project-beta",
+      )?.folderId,
+    ).toBeUndefined();
+    expect(controller.countMyPlans()).toBe(1);
+
+    controller.moveProjectToFolder("project-alpha", null);
+    expect(controller.countMyPlans()).toBe(2);
+    expect(
+      controller.getState().projectSummaries.find(
+        (projectSummary) => projectSummary.id === "project-alpha",
+      )?.folderId,
+    ).toBeUndefined();
+    expect(controller.getState().folders).toEqual([createdFolder]);
+    const reloadedController = createController(repository);
+    expect(reloadedController.listFolders()).toEqual([createdFolder]);
+    expect(reloadedController.countMyPlans()).toBe(2);
+  });
+
+  it("keeps the folder list after renaming the active project", () => {
+    const controller = createController(createRepository());
+    const createdFolder = controller.createFolder("Greenhouse");
+    controller.openProject("project-alpha");
+
+    controller.renameProject("project-alpha", "Renamed Alpha Farm");
+
+    expect(controller.getState().activeProject?.title).toBe("Renamed Alpha Farm");
+    expect(controller.getState().folders).toEqual([createdFolder]);
+    expect(controller.listFolders()).toEqual([createdFolder]);
+  });
+
+  it("renames a folder in controller state without reloading the open session", () => {
+    const repository = createRepository();
+    const deliveredStates: ReturnType<ReferenceProjectWorkspaceController["getState"]>[] = [];
+    const controller = createReferenceProjectWorkspaceController({
+      repository,
+      initialProjectSummaries: repository.listProjects(),
+      onStateChange: (workspaceState) => deliveredStates.push(workspaceState),
+    });
+    const springFolder = controller.createFolder("Spring");
+    const summerFolder = controller.createFolder("Summer");
+    controller.moveProjectToFolder("project-alpha", springFolder.id);
+    controller.openProject("project-alpha");
+    const openState = controller.getState();
+    repository.renameProject("project-alpha", "Stored Title");
+    const storedProjectBeforeRename = repository.openProject("project-alpha");
+    const openProject = vi.spyOn(repository, "openProject");
+    const listProjects = vi.spyOn(repository, "listProjects");
+    const updateMap = vi.spyOn(repository, "updateMap");
+    const listFolders = vi.spyOn(repository, "listFolders");
+    deliveredStates.length = 0;
+
+    const renamedFolder = controller.renameFolder(springFolder.id, "  Spring Crops  ");
+
+    expect(renamedFolder).toEqual({ id: springFolder.id, name: "Spring Crops" });
+    expect(openProject).not.toHaveBeenCalled();
+    expect(listProjects).not.toHaveBeenCalled();
+    expect(updateMap).not.toHaveBeenCalled();
+    expect(listFolders).not.toHaveBeenCalled();
+    expect(deliveredStates).toHaveLength(1);
+    expect(deliveredStates[0]?.folders).toEqual([
+      { id: springFolder.id, name: "Spring Crops" },
+      summerFolder,
+    ]);
+    expect(deliveredStates[0]?.activeProject).toEqual(openState.activeProject);
+    expect(deliveredStates[0]?.activeSession).toEqual(openState.activeSession);
+    expect(deliveredStates[0]?.projectSummaries).toEqual(openState.projectSummaries);
+    const stateAfterRename = controller.getState();
+    expect(stateAfterRename.activeProject).toEqual(openState.activeProject);
+    expect(stateAfterRename.activeProject?.title).toBe("Alpha Farm");
+    expect(stateAfterRename.activeSession).toEqual(openState.activeSession);
+    expect(stateAfterRename.projectSummaries).toEqual(openState.projectSummaries);
+    expect(stateAfterRename.folders).toEqual([
+      { id: springFolder.id, name: "Spring Crops" },
+      summerFolder,
+    ]);
+    expect(repository.openProject("project-alpha")).toEqual(storedProjectBeforeRename);
+    expect(storedProjectBeforeRename.title).toBe("Stored Title");
+    expect(storedProjectBeforeRename.folderId).toBe(springFolder.id);
+    controller.refreshProjects();
+    expect(controller.getState().folders).toEqual(stateAfterRename.folders);
+    expect(controller.getState().activeProject).toEqual(openState.activeProject);
+    expect(controller.getState().activeSession).toEqual(openState.activeSession);
+    const reloadedController = createController(repository);
+    expect(reloadedController.listFolders()).toEqual([
+      { id: springFolder.id, name: "Spring Crops" },
+      summerFolder,
+    ]);
+    expect(reloadedController.getState().activeProject).toBeNull();
+    expect(reloadedController.getState().activeSession).toBeNull();
+  });
+
+  it("does not notify or change the open session when renameFolder rejects the name or id", () => {
+    const repository = createRepository();
+    const deliveredStates: ReturnType<ReferenceProjectWorkspaceController["getState"]>[] = [];
+    const controller = createReferenceProjectWorkspaceController({
+      repository,
+      initialProjectSummaries: repository.listProjects(),
+      onStateChange: (workspaceState) => deliveredStates.push(workspaceState),
+    });
+    const createdFolder = controller.createFolder("Greenhouse");
+    controller.openProject("project-alpha");
+    const stateBeforeRejection = controller.getState();
+    deliveredStates.length = 0;
+
+    expect(() => controller.renameFolder(createdFolder.id, "   ")).toThrow(
+      'Folder name must contain 1 to 100 characters after trimming. Received: "   ".',
+    );
+    expect(() => controller.renameFolder("bad id", "Crops")).toThrow(
+      `Reference project workspace expected exactly one folder "bad id". Received match count 0 and folder IDs ${JSON.stringify([createdFolder.id])}.`,
+    );
+
+    expect(deliveredStates).toEqual([]);
+    expect(controller.getState()).toStrictEqual(stateBeforeRejection);
+    expect(repository.listFolders()).toEqual([createdFolder]);
+    expect(repository.openProject("project-alpha").title).toBe("Alpha Farm");
+  });
+
+  it("rejects a storage-only folder id before renameFolder writes", () => {
+    const recordingRepository = createRecordingWorkspaceRepository();
+    const controller = createReferenceProjectWorkspaceController({
+      repository: recordingRepository.repository,
+      initialProjectSummaries: recordingRepository.repository.listProjects(),
+    });
+    controller.openProject("project-alpha");
+    const externalFolder = recordingRepository.repository.createFolder("Outside");
+    const stateBeforeRename = controller.getState();
+    const serializedProjectDocument = recordingRepository.getSerializedProjectDocument();
+    const writeCountBeforeRename = recordingRepository.getWriteCount();
+    const renameFolder = vi.spyOn(recordingRepository.repository, "renameFolder");
+
+    expect(() => controller.renameFolder(externalFolder.id, "Renamed Outside")).toThrow(
+      `Reference project workspace expected exactly one folder ${JSON.stringify(externalFolder.id)}. Received match count 0 and folder IDs [].`,
+    );
+
+    expect(renameFolder).not.toHaveBeenCalled();
+    expect(recordingRepository.getWriteCount()).toBe(writeCountBeforeRename);
+    expect(recordingRepository.getSerializedProjectDocument()).toBe(
+      serializedProjectDocument,
+    );
+    expect(controller.getState()).toStrictEqual(stateBeforeRename);
+    expect(controller.getState().folders).toEqual([]);
+    expect(controller.getState().activeProject?.id).toBe("project-alpha");
+    expect(controller.getState().activeSession?.projectId).toBe("project-alpha");
+    expect(recordingRepository.repository.listFolders()).toEqual([externalFolder]);
+  });
 });
 
 describe("useReferenceProjectWorkspace", () => {
@@ -1948,6 +2121,7 @@ function createMissingActiveMapRepository(
       return missingMapProject;
     },
     createProject: unavailableOperation,
+    createProjectWithFirstMap: unavailableOperation,
     duplicateProject: unavailableOperation,
     renameProject: unavailableOperation,
     deleteProject: unavailableOperation,
@@ -1961,5 +2135,10 @@ function createMissingActiveMapRepository(
     copyMap: unavailableOperation,
     moveMap: unavailableOperation,
     saveThumbnail: unavailableOperation,
+    listFolders: () => [],
+    createFolder: unavailableOperation,
+    renameFolder: unavailableOperation,
+    moveProjectToFolder: unavailableOperation,
+    countMyPlans: () => 0,
   } as unknown as ReferenceProjectRepository;
 }

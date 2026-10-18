@@ -27,6 +27,8 @@ export type LocalProjectsCopy = Readonly<{
   defaultProjectName: string;
   delete: string;
   deletedProject: string;
+  downloadedImage: (projectName: string) => string;
+  downloadImage: (projectName?: string) => string;
   duplicate: string;
   duplicatedProject: string;
   emptyState: string;
@@ -36,6 +38,7 @@ export type LocalProjectsCopy = Readonly<{
   importJson: string;
   localProjects: string;
   mapPreviewAlt: (projectName: string) => string;
+  noDownloadablePreview: string;
   noMapPreview: string;
   noSearchResults: string;
   newProject: string;
@@ -239,6 +242,10 @@ const saveModalCopyByLocale = {
       defaultProjectName: "Untitled Project",
       delete: "Delete",
       deletedProject: "Deleted the local project.",
+      downloadedImage: (projectName: string) =>
+        `Downloaded preview image for ${projectName}.`,
+      downloadImage: (projectName?: string) =>
+        projectName ? `Download image: ${projectName}` : "Download image",
       duplicate: "Duplicate",
       duplicatedProject: "Duplicated the local project.",
       emptyState: "No local projects yet. Saving creates an Untitled Project and saves the current map.",
@@ -248,6 +255,7 @@ const saveModalCopyByLocale = {
       importJson: "Import JSON",
       localProjects: "Local projects",
       mapPreviewAlt: (projectName: string) => `Map preview for ${projectName}`,
+      noDownloadablePreview: "No downloadable preview for this project",
       noMapPreview: "No saved map preview",
       noSearchResults: "No local projects match your search.",
       newProject: "New project",
@@ -406,6 +414,10 @@ const saveModalCopyByLocale = {
       defaultProjectName: "未命名项目",
       delete: "删除",
       deletedProject: "已删除本地项目。",
+      downloadedImage: (projectName: string) =>
+        `已下载“${projectName}”的预览图片。`,
+      downloadImage: (projectName?: string) =>
+        projectName ? `下载图片：${projectName}` : "下载图片",
       duplicate: "创建副本",
       duplicatedProject: "已复制本地项目。",
       emptyState: "还没有本地项目。保存时会创建“未命名项目”，并保存当前地图。",
@@ -415,6 +427,7 @@ const saveModalCopyByLocale = {
       importJson: "导入 JSON",
       localProjects: "本地项目",
       mapPreviewAlt: (projectName: string) => `“${projectName}”的地图预览`,
+      noDownloadablePreview: "该项目暂无可下载预览",
       noMapPreview: "暂无已保存的地图预览",
       noSearchResults: "没有匹配的本地项目。",
       newProject: "新建项目",

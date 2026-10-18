@@ -1,28 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { LocalProjectPanel, type LocalProjectStorageStatus } from "./local-project-panel";
+import { useState, type ReactNode } from "react";
+import {
+  LocalProjectPanel,
+  type LocalProjectFolderController,
+  type LocalProjectStorageStatus,
+} from "./local-project-panel";
 import { MapImageExportPanel } from "./map-image-export-panel";
 import type { ScreenshotResolution } from "../projects/map-image-export";
-import { MapImageExportError } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { ReferenceProjectFolder } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
-import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
-import { useCloudProjectSync } from "@/src/cloud-sync/use-cloud-project-sync";
-import { CloudProjectPanel } from "./cloud-project-panel";
 
 type PlannerSaveModalContentProperties = Readonly<{
   copy: Pick<
     SaveModalCopy,
-    "cloudProjects" | "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
+    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
   >;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount: number | null;
   currentProjectMapInstanceName: string | null;
   mapFile: string;
-  workspaceController: ReferenceProjectWorkspaceController;
   onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
   onCreateProject: () => void;
   onDeleteProject: (projectId: string) => void;
@@ -31,12 +31,17 @@ type PlannerSaveModalContentProperties = Readonly<{
   onImportProject: (serializedProject: string) => void;
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
-  onSaveCurrentMap: () => Promise<void>;
+  onRequestFarmSummary?: () => void;
+  onRequestGameSave?: () => void;
   onSaveThumbnail: () => Promise<void>;
   projects: readonly ReferenceProjectSummary[];
   season: TilesheetSeason;
   storageErrorMessage: string | null;
   storageStatus: LocalProjectStorageStatus;
+  farmSummaryContent?: ReactNode;
+  folders?: readonly ReferenceProjectFolder[];
+  gameSaveContent?: ReactNode;
+  workspaceController?: LocalProjectFolderController;
 }>;
 
 export function PlannerSaveModalContent({
@@ -46,7 +51,6 @@ export function PlannerSaveModalContent({
   currentProjectMapInstanceCount,
   currentProjectMapInstanceName,
   mapFile,
-  workspaceController,
   onCaptureScreenshot,
   onCreateProject,
   onDeleteProject,
@@ -55,17 +59,23 @@ export function PlannerSaveModalContent({
   onImportProject,
   onOpenProject,
   onRenameProject,
-  onSaveCurrentMap,
+  onRequestFarmSummary,
+  onRequestGameSave,
   onSaveThumbnail,
   projects,
   season,
   storageErrorMessage,
   storageStatus,
+  farmSummaryContent = null,
+  folders = [],
+  gameSaveContent = null,
+  workspaceController,
 }: PlannerSaveModalContentProperties) {
-  const cloudProjectSync = useCloudProjectSync({ workspaceController });
   const [thumbnailActionState, setThumbnailActionState] = useState<
     Readonly<{ kind: "error" | "success"; message: string }> | null
   >(null);
+  const [isToolsOpen, setIsToolsOpen] = useState(false);
+  const [isGameSaveOpen, setIsGameSaveOpen] = useState(false);
 
   async function handleSaveThumbnail(): Promise<void> {
     try {
@@ -82,22 +92,8 @@ export function PlannerSaveModalContent({
     }
   }
 
-  async function handleSaveCurrentMapAndNotifyCloudSync(): Promise<void> {
-    await saveCurrentMapAndNotifyCloudSync({
-      saveCurrentMap: onSaveCurrentMap,
-      workspaceController,
-      onLocalProjectSaved: cloudProjectSync.onLocalProjectSaved,
-    });
-  }
-
   return (
     <div className="planner-save-modal-content">
-      <CloudProjectPanel
-        cloudProjectSync={cloudProjectSync}
-        copy={copy.cloudProjects}
-        currentProjectId={currentProjectId}
-        localProjects={projects}
-      />
       <LocalProjectPanel
         copy={copy.localProjects}
         currentProjectId={currentProjectId}
@@ -105,75 +101,62 @@ export function PlannerSaveModalContent({
         currentProjectMapInstanceName={currentProjectMapInstanceName}
         currentProjectName={currentProjectName}
         deleteCopy={copy.deleteProject}
+        folders={folders}
+        gameSaveContent={isGameSaveOpen ? gameSaveContent : null}
+        isImportGameSaveOpen={isGameSaveOpen}
+        isToolsOpen={isToolsOpen}
         onCreateProject={onCreateProject}
         onDeleteProject={onDeleteProject}
         onDuplicateProject={onDuplicateProject}
         onExportProject={onExportProject}
         onImportProject={onImportProject}
+        onOpenImportGameSave={() => {
+          setIsGameSaveOpen((gameSaveWasOpen) => !gameSaveWasOpen);
+          onRequestGameSave?.();
+        }}
         onOpenProject={onOpenProject}
+        onOpenTools={() => {
+          setIsToolsOpen((toolsWereOpen) => !toolsWereOpen);
+          onRequestFarmSummary?.();
+        }}
         onRenameProject={onRenameProject}
-        onSaveCurrentMap={handleSaveCurrentMapAndNotifyCloudSync}
         projects={projects}
         storageErrorMessage={storageErrorMessage}
         storageStatus={storageStatus}
-      />
-      <div className="planner-save-modal-content__exports">
-        <MapImageExportPanel
-          copy={copy.imageExport}
-          mapFile={mapFile}
-          onCaptureScreenshot={onCaptureScreenshot}
-          season={season}
-        />
-        <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
-          <h3>{copy.thumbnail.title}</h3>
-          <div className="map-image-export-panel__actions">
-            <button onClick={() => void handleSaveThumbnail()} type="button">
-              {copy.thumbnail.saveLabel}
-            </button>
+        toolsContent={isToolsOpen ? (
+          <div className="planner-save-modal-content__exports">
+            <MapImageExportPanel
+              copy={copy.imageExport}
+              mapFile={mapFile}
+              onCaptureScreenshot={onCaptureScreenshot}
+              season={season}
+            />
+            <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
+              <h3>{copy.thumbnail.title}</h3>
+              <div className="map-image-export-panel__actions">
+                <button onClick={() => void handleSaveThumbnail()} type="button">
+                  {copy.thumbnail.saveLabel}
+                </button>
+              </div>
+              {thumbnailActionState !== null ? (
+                <p
+                  className={
+                    thumbnailActionState.kind === "error"
+                      ? "local-project-panel__error"
+                      : "local-project-panel__message"
+                  }
+                  role={thumbnailActionState.kind === "error" ? "alert" : "status"}
+                >
+                  {thumbnailActionState.message}
+                </p>
+              ) : null}
+            </section>
+            {farmSummaryContent}
           </div>
-          {thumbnailActionState !== null ? (
-            <p
-              className={
-                thumbnailActionState.kind === "error"
-                  ? "local-project-panel__error"
-                  : "local-project-panel__message"
-              }
-              role={thumbnailActionState.kind === "error" ? "alert" : "status"}
-            >
-              {thumbnailActionState.message}
-            </p>
-          ) : null}
-        </section>
-      </div>
+        ) : null}
+        workspaceController={workspaceController}
+      />
     </div>
-  );
-}
-
-export function getActiveProjectIdAfterLocalSave(
-  workspaceController: ReferenceProjectWorkspaceController,
-): string {
-  const activeProjectId = workspaceController.getState().activeProject?.id;
-  if (typeof activeProjectId !== "string" || activeProjectId.trim().length === 0) {
-    throw new Error(
-      `Cannot notify cloud sync after local save because the active project ID is ${JSON.stringify(activeProjectId)}.`,
-    );
-  }
-
-  return activeProjectId;
-}
-
-export async function saveCurrentMapAndNotifyCloudSync({
-  onLocalProjectSaved,
-  saveCurrentMap,
-  workspaceController,
-}: Readonly<{
-  onLocalProjectSaved: (localProjectId: string) => Promise<void>;
-  saveCurrentMap: () => Promise<void>;
-  workspaceController: ReferenceProjectWorkspaceController;
-}>): Promise<void> {
-  await saveCurrentMap();
-  await onLocalProjectSaved(
-    getActiveProjectIdAfterLocalSave(workspaceController),
   );
 }
 
@@ -181,9 +164,11 @@ export function formatPlannerThumbnailSaveError(
   caughtError: unknown,
   thumbnailCopy: ThumbnailCopy,
 ): string {
-  if (caughtError instanceof MapImageExportError) {
+  if (caughtError instanceof Error) {
     return thumbnailCopy.saveFailure(caughtError.message);
   }
 
-  throw caughtError;
+  return thumbnailCopy.saveFailure(
+    `received ${JSON.stringify(caughtError)}`,
+  );
 }

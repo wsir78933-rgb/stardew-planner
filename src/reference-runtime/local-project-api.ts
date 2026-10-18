@@ -34,6 +34,11 @@ export type ReferenceProject = {
   maps: ReferenceProjectMap[];
 };
 
+export type ReferenceProjectFolder = {
+  id: string;
+  name: string;
+};
+
 export type ReferenceStoredProject = {
   id: string;
   title: string;
@@ -41,11 +46,13 @@ export type ReferenceStoredProject = {
   updated_at: string;
   project: ReferenceProject;
   thumbnailsByMapId?: Record<string, string>;
+  folderId?: string;
 };
 
 export type ReferenceLocalProjectDocument = {
   version: 1;
   projects: ReferenceStoredProject[];
+  folders?: ReferenceProjectFolder[];
 };
 
 export type ReferenceApiRequest = {
