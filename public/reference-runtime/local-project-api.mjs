@@ -64,6 +64,8 @@ export function validateReferenceProjectDocument(rawProjectDocument) {
     );
   }
 
+  const folders = validateReferenceProjectFolders(projectDocumentRecord.folders);
+  const folderIds = new Set(folders.map((projectFolder) => projectFolder.id));
   const projectIds = new Set();
   const validatedProjects = projectDocumentRecord.projects.map(
     (rawStoredProject, projectIndex) => {
@@ -79,14 +81,26 @@ export function validateReferenceProjectDocument(rawProjectDocument) {
       }
 
       projectIds.add(validatedStoredProject.id);
+      if (
+        validatedStoredProject.folderId !== undefined &&
+        !folderIds.has(validatedStoredProject.folderId)
+      ) {
+        throw new Error(
+          `Project ${describeReceivedValue(validatedStoredProject.id)} folderId does not exist. Received: ${describeReceivedValue(validatedStoredProject.folderId)}.`,
+        );
+      }
       return validatedStoredProject;
     },
   );
 
-  return {
+  const projectDocument = {
     version: referenceLocalProjectDocumentVersion,
     projects: validatedProjects,
   };
+  if (folders.length > 0) {
+    projectDocument.folders = folders;
+  }
+  return projectDocument;
 }
 
 export function handleReferenceProjectRequest(request, storedProjectDocument) {
@@ -884,6 +898,7 @@ function validateStoredReferenceProject(rawStoredProject, projectIndex) {
     storedProjectRecord.thumbnailsByMapId,
     referenceProject,
   );
+  const folderId = readOptionalProjectFolderId(storedProjectRecord.folderId);
 
   if (Date.parse(createdAt) > Date.parse(updatedAt)) {
     throw new Error(
@@ -891,7 +906,7 @@ function validateStoredReferenceProject(rawStoredProject, projectIndex) {
     );
   }
 
-  return {
+  const storedProject = {
     id: projectId,
     title: projectTitle,
     created_at: createdAt,
@@ -899,6 +914,67 @@ function validateStoredReferenceProject(rawStoredProject, projectIndex) {
     project: referenceProject,
     thumbnailsByMapId,
   };
+  if (folderId !== undefined) {
+    storedProject.folderId = folderId;
+  }
+  return storedProject;
+}
+
+function validateReferenceProjectFolders(rawFolders) {
+  if (rawFolders === undefined) {
+    return [];
+  }
+
+  if (!Array.isArray(rawFolders)) {
+    throw new Error(
+      `Reference local project document folders must be an array. Received: ${describeReceivedValue(rawFolders)}.`,
+    );
+  }
+
+  const folderIds = new Set();
+  return rawFolders.map((rawFolder, folderIndex) => {
+    assertPlainObject(
+      rawFolder,
+      `Reference project folder at index ${String(folderIndex)}`,
+    );
+    const folderId = assertReferenceIdentifier(rawFolder.id, "Folder ID");
+    const folderName = normalizeReferenceFolderName(rawFolder.name);
+    if (folderIds.has(folderId)) {
+      throw new Error(
+        `Reference local project document contains duplicate folder ID ${describeReceivedValue(folderId)} at index ${String(folderIndex)}.`,
+      );
+    }
+    folderIds.add(folderId);
+    return { id: folderId, name: folderName };
+  });
+}
+
+function readOptionalProjectFolderId(rawFolderId) {
+  if (rawFolderId === undefined || rawFolderId === null) {
+    return undefined;
+  }
+
+  return assertReferenceIdentifier(rawFolderId, "Folder ID");
+}
+
+function normalizeReferenceFolderName(rawFolderName) {
+  if (typeof rawFolderName !== "string") {
+    throw new Error(
+      `Folder name must be a string. Received: ${describeReceivedValue(rawFolderName)}.`,
+    );
+  }
+
+  const folderName = rawFolderName.trim();
+  if (
+    folderName.length === 0 ||
+    folderName.length > maximumReferenceProjectTitleLength
+  ) {
+    throw new Error(
+      `Folder name must contain 1 to ${String(maximumReferenceProjectTitleLength)} characters after trimming. Received: ${describeReceivedValue(rawFolderName)}.`,
+    );
+  }
+
+  return folderName;
 }
 
 function validateReferenceProject(rawProject, projectId, projectTitle) {

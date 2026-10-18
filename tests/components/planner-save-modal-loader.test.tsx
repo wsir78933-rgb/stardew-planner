@@ -49,7 +49,7 @@ describe("planner save-modal loader", () => {
     ).toThrow(`received ${String(Number.MAX_SAFE_INTEGER)}`);
   });
 
-  it("shows a localized loading state before the persistent library shell loads", () => {
+  it("renders Chinese save navigation labels", () => {
     const markup = renderToStaticMarkup(
       createElement(PlannerSaveModalLoader, {
         catalogItems: [],
@@ -69,7 +69,6 @@ describe("planner save-modal loader", () => {
         onImportProject: () => undefined,
         onOpenProject: () => undefined,
         onRenameProject: () => undefined,
-        onSaveCurrentMap: async () => undefined,
         onSaveThumbnail: async () => undefined,
         placementSnapshot: {} as never,
         projects: [],
@@ -77,59 +76,15 @@ describe("planner save-modal loader", () => {
         selectedPlannerMapId: "standard",
         storageErrorMessage: null,
         storageStatus: "ready",
+        workspaceController: { getState: () => ({ activeProject: null }) } as never,
       }),
     );
 
-    expect(markup).toContain('role="status"');
-    expect(markup).toContain("正在加载本地项目…");
-  });
-
-  it("keeps Import Game Save in the sidebar and leaves tools as a separate action", () => {
-    const loaderSource = readFileSync(
-      resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),
-      "utf8",
-    );
-    const navigationSource = loaderSource.slice(
-      loaderSource.indexOf("const sidebarNavigation"),
-      loaderSource.indexOf("const libraryToolsEntry"),
-    );
-    const gameSaveLabelIndex = navigationSource.indexOf("copy.saveTools.gameSave");
-
-    expect(gameSaveLabelIndex).toBeGreaterThan(-1);
-    expect(navigationSource).not.toContain("copy.saveTools.myPlans");
-    expect(navigationSource).not.toContain("copy.saveTools.planGroupLabel");
-    expect(navigationSource).not.toContain("<details");
-    expect(navigationSource).not.toContain("copy.saveTools.farmSummary");
-    expect(loaderSource).toContain("copy.saveTools.tools");
-    expect(loaderSource).toContain('selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "tools")');
-    expect(loaderSource).toContain('selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary")');
-  });
-
-  it("keeps one common shell mounted and hides inactive lazy branches", () => {
-    const loaderSource = readFileSync(
-      resolve(process.cwd(), "src/components/planner-save-modal-loader.tsx"),
-      "utf8",
-    );
-    const persistentShellRenderIndex = loaderSource.indexOf(
-      "{PlannerSaveModalContent !== null ? (",
-    );
-
-    expect(persistentShellRenderIndex).toBeGreaterThan(-1);
-    expect(loaderSource.slice(persistentShellRenderIndex - 160, persistentShellRenderIndex))
-      .not.toContain("selectedPlannerSaveModalBranch ===");
-    expect(loaderSource).toContain("sidebarNavigation={sidebarNavigation}");
-    expect(loaderSource).toContain("libraryToolsEntry={libraryToolsEntry}");
-    expect(loaderSource).toContain("mainBranchContent={mainBranchContent}");
-    expect(loaderSource).toContain(
-      "hidden={!isPlannerSaveModalLazyBranch(selectedPlannerSaveModalBranch)}",
-    );
-    expect(loaderSource).toContain("className={styles.branchFeedback}");
-    expect(loaderSource).toContain(
-      'hidden={selectedPlannerSaveModalBranch !== "game-save"}',
-    );
-    expect(loaderSource).toContain(
-      'hidden={selectedPlannerSaveModalBranch !== "farm-summary"}',
-    );
+    expect(markup).not.toContain("planner-save-modal-loader__branches");
+    expect(markup).toContain("正在加载本地项目");
+    expect(markup).not.toContain("cloudProjects");
+    expect(markup).not.toContain("使用 Google 继续");
+    expect(markup).not.toContain("云端同步");
   });
 
   it("uses branch-local imports without static modal-content imports or top-level dynamic", () => {
@@ -151,6 +106,8 @@ describe("planner save-modal loader", () => {
     expect(loaderSource).toContain("plannerSaveModalBranchLoadGeneration");
     expect(loaderSource).toContain("loadCompleteGameSaveImportCatalog");
     expect(loaderSource).toContain("setGameSaveImportCatalogItems");
+    expect(loaderSource).not.toContain("planner-save-modal-loader__branches");
+    expect(loaderSource).not.toContain("cloudProjects");
 
     const workspaceSource = readFileSync(
       resolve(process.cwd(), "src/components/planner-workspace.tsx"),

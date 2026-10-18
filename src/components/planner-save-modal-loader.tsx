@@ -11,16 +11,17 @@ import type { ImportedGameSaveState } from "../game-save/game-save-import";
 import type { PlacementSnapshot } from "../placement/placement-snapshot";
 import type { ScreenshotResolution } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { ReferenceProjectFolder } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
+import type { ReferenceProjectWorkspaceController } from "../reference-runtime/use-reference-project-workspace";
 import type {
   GameSaveCopy,
   SaveModalCopy,
   SaveToolsCopy,
 } from "../i18n/save-modal-copy";
 import type { LocalProjectStorageStatus } from "./local-project-panel";
-import styles from "./planner-library-layout.module.css";
 
-export type PlannerSaveModalBranch = "farm-summary" | "game-save" | "projects" | "tools";
+export type PlannerSaveModalBranch = "farm-summary" | "game-save" | "projects";
 
 type PlannerSaveModalBranchLoadError = Readonly<{
   branch: PlannerSaveModalBranch;
@@ -45,9 +46,10 @@ type PlannerSaveModalLoaderProperties = Readonly<{
   onImportProject: (serializedProject: string) => void;
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
-  onSaveCurrentMap: () => Promise<void>;
   onSaveThumbnail: () => Promise<void>;
   placementSnapshot: PlacementSnapshot;
+  workspaceController: ReferenceProjectWorkspaceController;
+  folders?: readonly ReferenceProjectFolder[];
   projects: readonly ReferenceProjectSummary[];
   season: TilesheetSeason;
   selectedPlannerMapId: string;
@@ -66,19 +68,13 @@ type PlannerSaveModalContentProperties = Omit<
 > & Readonly<{
   copy: Pick<
     SaveModalCopy,
-    | "deleteProject"
-    | "imageExport"
-    | "localProjects"
-    | "saveTools"
-    | "thumbnail"
+    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
   >;
-  isProjectsBranchActive: boolean;
-  isToolsViewActive: boolean;
-  libraryToolsEntry: ReactNode;
-  mainBranchContent: ReactNode;
-  onOpenFarmSummary: () => void;
-  onActivateProjectList: () => void;
-  sidebarNavigation: ReactNode;
+  farmSummaryContent?: ReactNode;
+  folders?: readonly ReferenceProjectFolder[];
+  gameSaveContent?: ReactNode;
+  onRequestFarmSummary?: () => void;
+  onRequestGameSave?: () => void;
 }>;
 
 type PlannerGameSaveModalContentProperties = Readonly<{
@@ -126,14 +122,13 @@ export function PlannerSaveModalLoader(
 
     async function loadSelectedPlannerSaveModalBranch(): Promise<void> {
       try {
-        if (PlannerSaveModalContent === null) {
+        if (selectedPlannerSaveModalBranch === "projects") {
           const { PlannerSaveModalContent: loadedPlannerSaveModalContent } =
             await import("./planner-save-modal-content");
           if (hasDisposed) return;
           setPlannerSaveModalContent(() => loadedPlannerSaveModalContent);
+          return;
         }
-
-        if (!isPlannerSaveModalLazyBranch(selectedPlannerSaveModalBranch)) return;
 
         if (selectedPlannerSaveModalBranch === "game-save") {
           if (
@@ -154,7 +149,6 @@ export function PlannerSaveModalLoader(
           return;
         }
 
-        if (PlannerFarmSummaryModalContent !== null) return;
         const { PlannerFarmSummaryModalContent: loadedPlannerFarmSummaryModalContent } =
           await import("./planner-farm-summary-modal-content");
         if (hasDisposed) return;
@@ -183,136 +177,72 @@ export function PlannerSaveModalLoader(
     selectedPlannerSaveModalBranch,
   ]);
 
-  function retrySelectedPlannerSaveModalBranch(): void {
-    setPlannerSaveModalBranchLoadError(null);
-    setPlannerSaveModalBranchLoadGeneration(
-      (currentPlannerSaveModalBranchLoadGeneration) =>
-        createNextPlannerSaveModalBranchLoadGeneration(
-          currentPlannerSaveModalBranchLoadGeneration,
-        ),
-    );
-  }
-
   const currentBranchLoadError =
     plannerSaveModalBranchLoadError?.branch === selectedPlannerSaveModalBranch
       ? plannerSaveModalBranchLoadError
       : null;
   const isSelectedPlannerSaveModalBranchLoading =
     currentBranchLoadError === null
-    && (
-      PlannerSaveModalContent === null
-      || !isPlannerSaveModalBranchLoaded(
-        selectedPlannerSaveModalBranch,
-        PlannerSaveModalContent,
-        PlannerGameSaveModalContent,
-        PlannerFarmSummaryModalContent,
-        gameSaveImportCatalogItems,
-      )
+    && !isPlannerSaveModalBranchLoaded(
+      selectedPlannerSaveModalBranch,
+      PlannerSaveModalContent,
+      PlannerGameSaveModalContent,
+      PlannerFarmSummaryModalContent,
+      gameSaveImportCatalogItems,
     );
 
-  const sidebarNavigation = (
-    <nav
-      aria-label={plannerSaveModalLoaderProperties.copy.saveTools.label}
-      className={`planner-save-modal-loader__branches ${styles.sidebarNavigation}`}
-    >
-      <button
-        aria-pressed={selectedPlannerSaveModalBranch === "game-save"}
-        onClick={() =>
-          setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-            selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "game-save"),
-          )
-        }
-        type="button"
-      >
-        {plannerSaveModalLoaderProperties.copy.saveTools.gameSave}
-      </button>
-    </nav>
-  );
-
-  const libraryToolsEntry = (
-    <div className={`planner-save-modal-loader__branches ${styles.libraryToolsEntry}`}>
-      <button
-        aria-pressed={selectedPlannerSaveModalBranch === "tools"}
-        onClick={() =>
-          setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-            selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "tools"),
-          )
-        }
-        type="button"
-      >
-        {plannerSaveModalLoaderProperties.copy.saveTools.tools}
-      </button>
-    </div>
-  );
-
-  const mainBranchContent = (
-    <div
-      className={styles.lazyBranchRegion}
-      hidden={!isPlannerSaveModalLazyBranch(selectedPlannerSaveModalBranch)}
-    >
-      <div
-        className={styles.branchFeedback}
-        hidden={currentBranchLoadError === null && !isSelectedPlannerSaveModalBranchLoading}
-      >
-        {currentBranchLoadError !== null ? (
-          <div className="local-project-panel__error" role="alert">
-            <p>{currentBranchLoadError.message}</p>
-            <button
-              onClick={retrySelectedPlannerSaveModalBranch}
-              type="button"
-            >
-              {createPlannerSaveModalBranchRetryLabel(
-                selectedPlannerSaveModalBranch,
-                plannerSaveModalLoaderProperties.copy.saveTools,
-              )}
-            </button>
-          </div>
-        ) : null}
-        {isSelectedPlannerSaveModalBranchLoading ? (
-          <p className="local-project-panel__message" role="status">
-            {createPlannerSaveModalBranchLoadingMessage(
-              selectedPlannerSaveModalBranch,
-              plannerSaveModalLoaderProperties.copy.saveTools,
-            )}
-          </p>
-        ) : null}
-      </div>
-      <div
-        className={styles.branchContent}
-        hidden={selectedPlannerSaveModalBranch !== "game-save"}
-      >
-        {PlannerGameSaveModalContent !== null && gameSaveImportCatalogItems !== null ? (
-          <PlannerGameSaveModalContent
-            catalogItems={gameSaveImportCatalogItems}
-            copy={plannerSaveModalLoaderProperties.copy.gameSave}
-            onOpenImportedGameSave={plannerSaveModalLoaderProperties.onImportGameSave}
-          />
-        ) : null}
-      </div>
-      <div
-        className={styles.branchContent}
-        hidden={selectedPlannerSaveModalBranch !== "farm-summary"}
-      >
-        {PlannerFarmSummaryModalContent !== null ? (
-          <PlannerFarmSummaryModalContent
-            catalogItems={plannerSaveModalLoaderProperties.catalogItems}
-            copy={{
-              farmSummaryDetail: plannerSaveModalLoaderProperties.copy.farmSummaryDetail,
-              farmSummaryPreview: plannerSaveModalLoaderProperties.copy.farmSummaryPreview,
-            }}
-            mapDisplayName={plannerSaveModalLoaderProperties.mapDisplayName}
-            placementSnapshot={plannerSaveModalLoaderProperties.placementSnapshot}
-            selectedPlannerMapId={plannerSaveModalLoaderProperties.selectedPlannerMapId}
-            season={plannerSaveModalLoaderProperties.season}
-          />
-        ) : null}
-      </div>
-    </div>
-  );
+  const projectFolders = plannerSaveModalLoaderProperties.folders ?? [];
+  const gameSaveContent = PlannerGameSaveModalContent !== null
+    && gameSaveImportCatalogItems !== null
+    ? (
+      <PlannerGameSaveModalContent
+        catalogItems={gameSaveImportCatalogItems}
+        copy={plannerSaveModalLoaderProperties.copy.gameSave}
+        onOpenImportedGameSave={plannerSaveModalLoaderProperties.onImportGameSave}
+      />
+    )
+    : null;
+  const farmSummaryContent = PlannerFarmSummaryModalContent !== null
+    ? (
+      <PlannerFarmSummaryModalContent
+        catalogItems={plannerSaveModalLoaderProperties.catalogItems}
+        copy={{
+          farmSummaryDetail: plannerSaveModalLoaderProperties.copy.farmSummaryDetail,
+          farmSummaryPreview: plannerSaveModalLoaderProperties.copy.farmSummaryPreview,
+        }}
+        mapDisplayName={plannerSaveModalLoaderProperties.mapDisplayName}
+        placementSnapshot={plannerSaveModalLoaderProperties.placementSnapshot}
+        selectedPlannerMapId={plannerSaveModalLoaderProperties.selectedPlannerMapId}
+        season={plannerSaveModalLoaderProperties.season}
+      />
+    )
+    : null;
 
   return (
     <>
-      {PlannerSaveModalContent === null && isSelectedPlannerSaveModalBranchLoading ? (
+      {currentBranchLoadError !== null ? (
+        <div className="local-project-panel__error" role="alert">
+          <p>{currentBranchLoadError.message}</p>
+          <button
+            onClick={() => {
+              setPlannerSaveModalBranchLoadError(null);
+              setPlannerSaveModalBranchLoadGeneration(
+                (currentPlannerSaveModalBranchLoadGeneration) =>
+                  createNextPlannerSaveModalBranchLoadGeneration(
+                    currentPlannerSaveModalBranchLoadGeneration,
+                  ),
+              );
+            }}
+            type="button"
+          >
+            {createPlannerSaveModalBranchRetryLabel(
+              selectedPlannerSaveModalBranch,
+              plannerSaveModalLoaderProperties.copy.saveTools,
+            )}
+          </button>
+        </div>
+      ) : null}
+      {isSelectedPlannerSaveModalBranchLoading ? (
         <p className="local-project-panel__message" role="status">
           {createPlannerSaveModalBranchLoadingMessage(
             selectedPlannerSaveModalBranch,
@@ -326,24 +256,8 @@ export function PlannerSaveModalLoader(
             deleteProject: plannerSaveModalLoaderProperties.copy.deleteProject,
             imageExport: plannerSaveModalLoaderProperties.copy.imageExport,
             localProjects: plannerSaveModalLoaderProperties.copy.localProjects,
-            saveTools: plannerSaveModalLoaderProperties.copy.saveTools,
             thumbnail: plannerSaveModalLoaderProperties.copy.thumbnail,
           }}
-          isProjectsBranchActive={selectedPlannerSaveModalBranch === "projects"}
-          isToolsViewActive={selectedPlannerSaveModalBranch === "tools"}
-          libraryToolsEntry={libraryToolsEntry}
-          mainBranchContent={mainBranchContent}
-          onOpenFarmSummary={() =>
-            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
-            )
-          }
-          onActivateProjectList={() =>
-            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
-              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "projects"),
-            )
-          }
-          sidebarNavigation={sidebarNavigation}
           currentProjectId={plannerSaveModalLoaderProperties.currentProjectId}
           currentProjectMapInstanceCount={
             plannerSaveModalLoaderProperties.currentProjectMapInstanceCount
@@ -352,6 +266,9 @@ export function PlannerSaveModalLoader(
             plannerSaveModalLoaderProperties.currentProjectMapInstanceName
           }
           currentProjectName={plannerSaveModalLoaderProperties.currentProjectName}
+          farmSummaryContent={farmSummaryContent}
+          folders={projectFolders}
+          gameSaveContent={gameSaveContent}
           mapFile={plannerSaveModalLoaderProperties.mapFile}
           onCaptureScreenshot={plannerSaveModalLoaderProperties.onCaptureScreenshot}
           onCreateProject={plannerSaveModalLoaderProperties.onCreateProject}
@@ -361,27 +278,23 @@ export function PlannerSaveModalLoader(
           onImportProject={plannerSaveModalLoaderProperties.onImportProject}
           onOpenProject={plannerSaveModalLoaderProperties.onOpenProject}
           onRenameProject={plannerSaveModalLoaderProperties.onRenameProject}
-          onSaveCurrentMap={plannerSaveModalLoaderProperties.onSaveCurrentMap}
+          onRequestFarmSummary={() => {
+            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "farm-summary"),
+            );
+          }}
+          onRequestGameSave={() => {
+            setSelectedPlannerSaveModalBranch((currentPlannerSaveModalBranch) =>
+              selectPlannerSaveModalBranch(currentPlannerSaveModalBranch, "game-save"),
+            );
+          }}
           onSaveThumbnail={plannerSaveModalLoaderProperties.onSaveThumbnail}
           projects={plannerSaveModalLoaderProperties.projects}
           season={plannerSaveModalLoaderProperties.season}
           storageErrorMessage={plannerSaveModalLoaderProperties.storageErrorMessage}
           storageStatus={plannerSaveModalLoaderProperties.storageStatus}
+          workspaceController={plannerSaveModalLoaderProperties.workspaceController}
         />
-      ) : null}
-      {PlannerSaveModalContent === null && currentBranchLoadError !== null ? (
-        <div className="local-project-panel__error" role="alert">
-          <p>{currentBranchLoadError.message}</p>
-          <button
-            onClick={retrySelectedPlannerSaveModalBranch}
-            type="button"
-          >
-            {createPlannerSaveModalBranchRetryLabel(
-              selectedPlannerSaveModalBranch,
-              plannerSaveModalLoaderProperties.copy.saveTools,
-            )}
-          </button>
-        </div>
       ) : null}
     </>
   );
@@ -445,12 +358,6 @@ export function createNextPlannerSaveModalBranchLoadGeneration(
   return currentPlannerSaveModalBranchLoadGeneration + 1;
 }
 
-function isPlannerSaveModalLazyBranch(
-  plannerSaveModalBranch: PlannerSaveModalBranch,
-): boolean {
-  return plannerSaveModalBranch === "game-save" || plannerSaveModalBranch === "farm-summary";
-}
-
 export function isPlannerSaveModalBranchLoaded(
   plannerSaveModalBranch: PlannerSaveModalBranch,
   plannerSaveModalContent: ComponentType<PlannerSaveModalContentProperties> | null,
@@ -458,7 +365,7 @@ export function isPlannerSaveModalBranchLoaded(
   plannerFarmSummaryModalContent: ComponentType<PlannerFarmSummaryModalContentProperties> | null,
   gameSaveImportCatalogItems: readonly CatalogItem[] | null,
 ): boolean {
-  if (!isPlannerSaveModalLazyBranch(plannerSaveModalBranch)) {
+  if (plannerSaveModalBranch === "projects") {
     return plannerSaveModalContent !== null;
   }
   if (plannerSaveModalBranch === "game-save") {

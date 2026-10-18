@@ -82,6 +82,7 @@ import {
   type PlannerCameraStateRetention,
 } from "../planner/planner-camera-state-retention";
 import {
+  createLocalProjectAndSaveCurrentMap,
   createPlannerLocalProjectActions,
   createPlannerProjectMapActions,
 } from "../planner/planner-workspace-project-actions";
@@ -239,6 +240,10 @@ type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
   plannerWorkspaceStateController?: PlannerWorkspaceStateController;
 }>;
 
+type PlannerWorkspacePersistenceControls = ReturnType<
+  typeof usePlannerWorkspacePersistenceControls
+>;
+
 type PreparedPlannerWorkspaceContentProperties = Readonly<{
   cameraStateRetention: PlannerCameraStateRetention;
   editorModalCopy: EditorModalCopy;
@@ -256,6 +261,7 @@ type PreparedPlannerWorkspaceContentProperties = Readonly<{
   onAlignPlanner?: () => void;
   performanceMarker?: EditorPerformanceMarker;
   runtimeStatus: "loading" | "ready" | "interactive";
+  workspacePersistenceControls: PlannerWorkspacePersistenceControls;
 }>;
 
 type CurrentMapPlacementGrid = Readonly<{
@@ -803,28 +809,99 @@ function PlannerWorkspaceRenderedBoundary({
   cameraStateRetentionReference.current.observeSelectedMapId(
     plannerWorkspaceStateController.plannerWorkspaceState.selectedPlannerMapId,
   );
+  const cameraStateRetention = cameraStateRetentionReference.current;
+  if (cameraStateRetention === null) {
+    throw new Error("Planner camera state retention was not created.");
+  }
 
   return (
     <PlannerWorkspaceGeometry plannerWorkspaceRenderState={plannerWorkspaceRenderState}>
-      {plannerWorkspaceRenderState.kind === "prepared" && projectWorkspace !== null ? (
-        <PreparedPlannerWorkspaceContent
-          cameraStateRetention={cameraStateRetentionReference.current}
+      {projectWorkspace === null ? null : (
+        <PlannerWorkspacePersistenceBoundary
+          cameraStateRetention={cameraStateRetention}
           editorModalCopy={editorModalCopy}
           locale={locale}
           loadBuildingMetadata={loadBuildingMetadata}
           loadRequiredCatalogCategory={loadRequiredCatalogCategory}
           newProjectName={newProjectName}
-          plannerWorkspaceStateController={plannerWorkspaceStateController}
-          preparedWorkspace={plannerWorkspaceRenderState.preparedWorkspace}
-          projectWorkspace={projectWorkspace}
-          onImportedGameSaveResult={onImportedGameSaveResult}
           onAlignPlanner={onAlignPlanner}
+          onImportedGameSaveResult={onImportedGameSaveResult}
           performanceMarker={performanceMarker}
-          runtimeStatus={plannerWorkspaceRenderState.runtimeStatus}
+          plannerWorkspaceRenderState={plannerWorkspaceRenderState}
+          plannerWorkspaceStateController={plannerWorkspaceStateController}
+          projectWorkspace={projectWorkspace}
           saveModalCopy={saveModalCopy}
         />
-      ) : null}
+      )}
     </PlannerWorkspaceGeometry>
+  );
+}
+
+function PlannerWorkspacePersistenceBoundary({
+  cameraStateRetention,
+  editorModalCopy,
+  locale,
+  loadBuildingMetadata,
+  loadRequiredCatalogCategory,
+  newProjectName,
+  onAlignPlanner,
+  onImportedGameSaveResult,
+  performanceMarker,
+  plannerWorkspaceRenderState,
+  plannerWorkspaceStateController,
+  projectWorkspace,
+  saveModalCopy,
+}: Readonly<{
+  cameraStateRetention: PlannerCameraStateRetention;
+  editorModalCopy: EditorModalCopy;
+  locale: HomepageLocale;
+  loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
+  loadRequiredCatalogCategory: typeof loadCatalogCategory;
+  newProjectName: string;
+  onAlignPlanner?: () => void;
+  onImportedGameSaveResult: (importedGameSaveState: ImportedGameSaveState) => void;
+  performanceMarker?: EditorPerformanceMarker;
+  plannerWorkspaceRenderState: PlannerWorkspaceRenderState;
+  plannerWorkspaceStateController: PlannerWorkspaceStateController;
+  projectWorkspace: NonNullable<
+    ReturnType<typeof useReferenceProjectWorkspaceController>
+  >;
+  saveModalCopy: SaveModalCopy;
+}>) {
+  const {
+    dispatchPlannerWorkspaceAction,
+    plannerWorkspaceState,
+  } = plannerWorkspaceStateController;
+  const workspacePersistenceControls = usePlannerWorkspacePersistenceControls({
+    dispatchPlannerWorkspaceAction,
+    newProjectName,
+    plannerWorkspaceState,
+    workspaceController: projectWorkspace.workspaceController,
+    workspaceState: projectWorkspace.workspaceState,
+  });
+
+  if (plannerWorkspaceRenderState.kind !== "prepared") {
+    return null;
+  }
+
+  return (
+    <PreparedPlannerWorkspaceContent
+      cameraStateRetention={cameraStateRetention}
+      editorModalCopy={editorModalCopy}
+      locale={locale}
+      loadBuildingMetadata={loadBuildingMetadata}
+      loadRequiredCatalogCategory={loadRequiredCatalogCategory}
+      newProjectName={newProjectName}
+      onAlignPlanner={onAlignPlanner}
+      onImportedGameSaveResult={onImportedGameSaveResult}
+      performanceMarker={performanceMarker}
+      plannerWorkspaceStateController={plannerWorkspaceStateController}
+      preparedWorkspace={plannerWorkspaceRenderState.preparedWorkspace}
+      projectWorkspace={projectWorkspace}
+      runtimeStatus={plannerWorkspaceRenderState.runtimeStatus}
+      saveModalCopy={saveModalCopy}
+      workspacePersistenceControls={workspacePersistenceControls}
+    />
   );
 }
 
@@ -863,6 +940,7 @@ function PreparedPlannerWorkspaceContent({
   performanceMarker,
   runtimeStatus,
   saveModalCopy,
+  workspacePersistenceControls,
 }: PreparedPlannerWorkspaceContentProperties) {
   const editorLocale = locale === "zh-CN" ? "zh" : "en";
   const {
@@ -897,13 +975,6 @@ function PreparedPlannerWorkspaceContent({
     preparedWorkspace.resourceGeneration,
   ]);
   const { workspaceController, workspaceState } = projectWorkspace;
-  const workspacePersistenceControls = usePlannerWorkspacePersistenceControls({
-    dispatchPlannerWorkspaceAction,
-    newProjectName,
-    plannerWorkspaceState,
-    workspaceController,
-    workspaceState,
-  });
   const {
     buildingMetadataById,
     getCurrentMapPlacementGrid,
@@ -1246,6 +1317,13 @@ function PreparedPlannerWorkspaceContent({
           {interiorDecorRejectionNotification.message}
         </p>
       )}
+      {workspacePersistenceControls.automaticSaveErrorMessage === null ? null : (
+        <p aria-live="assertive" role="alert" className="planner-workspace__toast">
+          {saveModalCopy.localProjects.actionFailure(
+            workspacePersistenceControls.automaticSaveErrorMessage,
+          )}
+        </p>
+      )}
       <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
         <PlannerCanvas
           ambienceOptions={plannerAmbienceOptions}
@@ -1393,15 +1471,20 @@ function PreparedPlannerWorkspaceContent({
                 workspaceController,
               })
             }
-            onSaveCurrentMap={workspacePersistenceControls.saveCurrentMap}
             onSaveThumbnail={workspacePersistenceControls.saveThumbnail}
             placementSnapshot={plannerWorkspaceState.placementHistory.currentState}
+            folders={workspaceState.folders}
             projects={workspaceState.projectSummaries}
             season={plannerWorkspaceState.season}
             selectedPlannerMapId={plannerWorkspaceState.selectedPlannerMapId}
             storageErrorMessage={null}
             storageStatus="ready"
+            workspaceController={workspaceController}
             {...localProjectActions}
+            onCreateProject={() => createLocalProjectAndSaveCurrentMap({
+              createProjectWithCurrentMap:
+                workspacePersistenceControls.createProjectWithCurrentMap,
+            })}
           />
         }
         selectedMapId={plannerWorkspaceState.selectedPlannerMapId}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import * as referenceProjectRepositoryModule from "../../src/reference-runtime/reference-project-repository";
 import {
   handleReferenceProjectRequest,
+  parseReferenceProjectDocument,
   type ReferenceApiRequest,
   type ReferenceApiResponse,
   type ReferenceLocalProjectDocument,
@@ -12,6 +13,7 @@ const expectedProjectRepositoryMethodNames = [
   "listProjects",
   "openProject",
   "createProject",
+  "createProjectWithFirstMap",
   "duplicateProject",
   "renameProject",
   "deleteProject",
@@ -25,6 +27,11 @@ const expectedProjectRepositoryMethodNames = [
   "copyMap",
   "moveMap",
   "saveThumbnail",
+  "listFolders",
+  "createFolder",
+  "renameFolder",
+  "moveProjectToFolder",
+  "countMyPlans",
 ] as const;
 
 type FutureRepositoryModule = {
@@ -104,6 +111,59 @@ function createRecordingRequestHandler(
   return (request, projectDocument) => {
     recordedRequests.push(request);
     return handleReferenceProjectRequest(request, projectDocument);
+  };
+}
+
+function createDocumentWithHistoricalEmptyProject(): ReferenceLocalProjectDocument {
+  const projectDocument = structuredClone(referenceProjectDocumentFixture);
+  projectDocument.folders = [{ id: "folder-crops", name: "Crops" }];
+  projectDocument.projects.push({
+    id: "project-empty-history",
+    title: "Empty History",
+    created_at: "2026-07-01T00:00:00.000Z",
+    updated_at: "2026-07-01T00:00:00.000Z",
+    folderId: "folder-crops",
+    project: {
+      version: 4,
+      gameVersion: "1.6.15",
+      projectName: "Empty History",
+      season: "spring",
+      activeMapId: null,
+      maps: [],
+    },
+    thumbnailsByMapId: {},
+  });
+  return projectDocument;
+}
+
+function createStructurallyValidWebpBytes(payloadByte: number): Uint8Array {
+  return new Uint8Array([
+    0x52, 0x49, 0x46, 0x46, 14, 0, 0, 0, 0x57, 0x45, 0x42, 0x50,
+    0x56, 0x50, 0x38, 0x20, 1, 0, 0, 0, payloadByte, 0,
+  ]);
+}
+
+function createWebpDataUrl(webpBytes: Uint8Array): string {
+  return `data:image/webp;base64,${Buffer.from(webpBytes).toString("base64")}`;
+}
+
+function createFirstMapWriteInput(webpBytes: Uint8Array) {
+  return {
+    projectName: "Created Farm",
+    season: "fall" as const,
+    mapFile: "Farm.tmx",
+    label: "Standard Farm",
+    mapSeason: "winter" as const,
+    state: {
+      buildings: [],
+      crops: [],
+      items: [],
+      nextBuildingId: 1,
+      nextItemId: 1,
+    },
+    decor: { wallpapers: {}, floors: {} },
+    renovations: [],
+    webpBytes,
   };
 }
 
@@ -554,6 +614,110 @@ describe("reference project repository project mutations", () => {
       JSON.parse(recordingStorage.getSerializedProjectDocument() ?? "null")
         .projects.slice(0, 2),
     ).toEqual(referenceProjectDocumentFixture.projects);
+  });
+
+  it("writes a new project, its first map, and its WebP preview in one storage write", () => {
+    const initialProjectDocument = createDocumentWithHistoricalEmptyProject();
+    const originalProjects = structuredClone(initialProjectDocument.projects);
+    const originalFolders = structuredClone(initialProjectDocument.folders);
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(initialProjectDocument),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      now: () => "2026-08-04T00:00:00.000Z",
+      createIdentifier: createIdentifierSequence([
+        "project-with-first-map",
+        "map-first",
+      ]),
+    });
+    const firstMapWriteInput = createFirstMapWriteInput(createStructurallyValidWebpBytes(21));
+
+    const createdProject = repository.createProjectWithFirstMap(firstMapWriteInput);
+
+    expect(recordingStorage.getWriteCount()).toBe(1);
+    expect(createdProject).toMatchObject({
+      id: "project-with-first-map",
+      title: "Created Farm",
+      created_at: "2026-08-04T00:00:00.000Z",
+      updated_at: "2026-08-04T00:00:00.000Z",
+      project: {
+        projectName: "Created Farm",
+        season: "fall",
+        activeMapId: "map-first",
+        maps: [
+          {
+            id: "map-first",
+            mapFile: "Farm.tmx",
+            label: "Standard Farm",
+            season: "winter",
+            state: firstMapWriteInput.state,
+            decor: firstMapWriteInput.decor,
+            renovations: firstMapWriteInput.renovations,
+            thumbnail:
+              "/api/projects/project-with-first-map/maps/map-first/thumbnail",
+          },
+        ],
+      },
+    });
+    expect(createdProject.folderId).toBeUndefined();
+    expect(createdProject.thumbnailsByMapId).toEqual({
+      "map-first": createWebpDataUrl(firstMapWriteInput.webpBytes),
+    });
+    const writtenProjectDocument = JSON.parse(
+      recordingStorage.getSerializedProjectDocument() ?? "null",
+    ) as ReferenceLocalProjectDocument;
+    expect(writtenProjectDocument.projects.slice(0, originalProjects.length)).toEqual(
+      originalProjects,
+    );
+    expect(writtenProjectDocument.folders).toEqual(originalFolders);
+    expect(writtenProjectDocument.projects).toHaveLength(originalProjects.length + 1);
+  });
+
+  it("does not replace the stored document when the first-map write fails at setItem", () => {
+    const initialProjectDocument = createDocumentWithHistoricalEmptyProject();
+    const originalSerializedProjectDocument = JSON.stringify(initialProjectDocument);
+    const recordingStorage = createRecordingStorage(
+      originalSerializedProjectDocument,
+      new Error("Storage quota exceeded."),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      now: () => "2026-08-04T01:00:00.000Z",
+      createIdentifier: createIdentifierSequence([
+        "project-quota",
+        "map-quota",
+      ]),
+    });
+
+    expect(() => repository.createProjectWithFirstMap(
+      createFirstMapWriteInput(createStructurallyValidWebpBytes(22)),
+    )).toThrow("Storage quota exceeded.");
+    expect(recordingStorage.getWriteCount()).toBe(1);
+    expect(recordingStorage.getSerializedProjectDocument()).toBe(
+      originalSerializedProjectDocument,
+    );
+  });
+
+  it("does not write when the first-map thumbnail is empty or is not a WebP container", () => {
+    const initialProjectDocument = createDocumentWithHistoricalEmptyProject();
+    const originalSerializedProjectDocument = JSON.stringify(initialProjectDocument);
+    const recordingStorage = createRecordingStorage(originalSerializedProjectDocument);
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      now: () => "2026-08-04T02:00:00.000Z",
+      createIdentifier: createIdentifierSequence(["project-bad-thumbnail", "map-bad-thumbnail"]),
+    });
+
+    expect(() => repository.createProjectWithFirstMap(
+      createFirstMapWriteInput(new Uint8Array()),
+    )).toThrow(
+      "Reference project first map thumbnail bytes must be a non-empty Uint8Array. Received: Uint8Array(byteLength=0).",
+    );
+    expect(() => repository.createProjectWithFirstMap(
+      createFirstMapWriteInput(new Uint8Array([1, 2, 3, 4])),
+    )).toThrow("Project thumbnail bytes must contain a RIFF/WEBP container signature.");
+    expect(recordingStorage.getWriteCount()).toBe(0);
+    expect(recordingStorage.getSerializedProjectDocument()).toBe(
+      originalSerializedProjectDocument,
+    );
   });
 
   it("renames only the requested project through PUT and updates its injected timestamp", () => {
@@ -1321,12 +1485,271 @@ describe("reference project repository map transfer and thumbnail mutations", ()
       savedProject.thumbnailsByMapId?.["farmhouse-custom-map"],
     ).toBe("data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA==");
     expect(recordingStorage.getWriteCount()).toBe(1);
+    const savedThumbnailDataUrl =
+      "data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA==";
     expect(
       repository.openProject("project-beta").thumbnailsByMapId?.[
         "farmhouse-custom-map"
       ],
-    ).toBe("data:image/webp;base64,UklGRg4AAABXRUJQVlA4IAEAAAAAAA==");
+    ).toBe(savedThumbnailDataUrl);
     expect(recordingStorage.getWriteCount()).toBe(1);
+    const reparsedProjectDocument = parseReferenceProjectDocument(
+      recordingStorage.getSerializedProjectDocument(),
+    );
+    const reparsedBetaProject = reparsedProjectDocument.projects.find(
+      (storedProject) => storedProject.id === "project-beta",
+    );
+    expect(reparsedBetaProject?.project.maps[0]?.thumbnail).toBe(
+      "/api/projects/project-beta/maps/farmhouse-custom-map/thumbnail",
+    );
+    expect(
+      reparsedBetaProject?.thumbnailsByMapId?.["farmhouse-custom-map"],
+    ).toBe(savedThumbnailDataUrl);
+    expect(savedThumbnailDataUrl).not.toContain("/api/projects");
+    expect(
+      repository.listProjects().find((projectSummary) => projectSummary.id === "project-beta")
+        ?.activeMapThumbnailDataUrl,
+    ).toBe(savedThumbnailDataUrl);
+  });
+});
+
+describe("reference project local folders", () => {
+  it("keeps an old v1 document in My Plans without inventing folders", () => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage);
+
+    expect(repository.listFolders()).toEqual([]);
+    expect(repository.countMyPlans()).toBe(
+      referenceProjectDocumentFixture.projects.length,
+    );
+    expect(parseReferenceProjectDocument(
+      recordingStorage.getSerializedProjectDocument(),
+    ).projects).toEqual(referenceProjectDocumentFixture.projects);
+    expect(recordingStorage.getWriteCount()).toBe(0);
+  });
+
+  it("writes a folder and project membership into the v1 document and keeps them after parsing", () => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      createIdentifier: () => "folder-spring",
+    });
+    const betaProjectBeforeMove = repository.openProject("project-beta");
+
+    const createdFolder = repository.createFolder("  Spring Plans  ");
+    const movedProject = repository.moveProjectToFolder(
+      "project-alpha",
+      createdFolder.id,
+    );
+
+    expect(createdFolder).toEqual({ id: "folder-spring", name: "Spring Plans" });
+    expect(movedProject.folderId).toBe("folder-spring");
+    expect(movedProject.project).toEqual(
+      referenceProjectDocumentFixture.projects[0]?.project,
+    );
+    expect(repository.countMyPlans()).toBe(1);
+    expect(repository.openProject("project-beta")).toEqual(betaProjectBeforeMove);
+    const reparsedProjectDocument = parseReferenceProjectDocument(
+      recordingStorage.getSerializedProjectDocument(),
+    );
+    expect(reparsedProjectDocument.folders).toEqual([
+      { id: "folder-spring", name: "Spring Plans" },
+    ]);
+    expect(
+      reparsedProjectDocument.projects.find(
+        (storedProject) => storedProject.id === "project-alpha",
+      )?.folderId,
+    ).toBe("folder-spring");
+    expect(
+      reparsedProjectDocument.projects.find(
+        (storedProject) => storedProject.id === "project-beta",
+      )?.folderId,
+    ).toBeUndefined();
+    expect(reparsedProjectDocument.projects.map((storedProject) => storedProject.id)).toEqual([
+      "project-alpha",
+      "project-beta",
+    ]);
+    expect(recordingStorage.getSerializedProjectDocument()).toContain("folder-spring");
+    expect(recordingStorage.storage.getItem("stardewplan-reference-local-projects-v1")).toContain(
+      "folder-spring",
+    );
+  });
+
+  it("moves a project back to My Plans and counts only projects without a folder", () => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      createIdentifier: () => "folder-summer",
+    });
+    const createdFolder = repository.createFolder("Summer");
+    repository.moveProjectToFolder("project-alpha", createdFolder.id);
+    repository.moveProjectToFolder("project-beta", createdFolder.id);
+    expect(repository.countMyPlans()).toBe(0);
+
+    const returnedProject = repository.moveProjectToFolder("project-beta", null);
+
+    expect(returnedProject.folderId).toBeUndefined();
+    expect(repository.countMyPlans()).toBe(1);
+    const reparsedProjectDocument = parseReferenceProjectDocument(
+      recordingStorage.getSerializedProjectDocument(),
+    );
+    expect(
+      reparsedProjectDocument.projects.find(
+        (storedProject) => storedProject.id === "project-beta",
+      )?.folderId,
+    ).toBeUndefined();
+    expect(
+      reparsedProjectDocument.projects.find(
+        (storedProject) => storedProject.id === "project-alpha",
+      )?.folderId,
+    ).toBe("folder-summer");
+    expect(reparsedProjectDocument.folders).toEqual([
+      { id: "folder-summer", name: "Summer" },
+    ]);
+  });
+
+  it.each([
+    ["   ", 'Folder name must contain 1 to 100 characters after trimming. Received: "   ".'],
+    [42, 'Folder name must be a string. Received: 42.'],
+  ])("rejects folder name %j before writing", (folderName, expectedMessage) => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage);
+
+    expect(() => repository.createFolder(folderName as string)).toThrow(expectedMessage);
+    expect(recordingStorage.getWriteCount()).toBe(0);
+  });
+
+  it("rejects a missing folder id and a thumbnail string with the received value", () => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      createIdentifier: () => "folder-fall",
+    });
+    repository.createFolder("Fall");
+
+    expect(() => repository.moveProjectToFolder("project-alpha", "missing-folder")).toThrow(
+      'Project "project-alpha" folderId does not exist. Received: "missing-folder".',
+    );
+    expect(() => repository.moveProjectToFolder("project-alpha", "bad id")).toThrow(
+      'Folder ID must contain only letters, digits, underscores, and hyphens and be at most 120 characters. Received: "bad id".',
+    );
+    const invalidThumbnailDocument = cloneFixtureProjectDocument();
+    invalidThumbnailDocument.projects[0]!.thumbnailsByMapId = {
+      "map-standard": "/api/projects/project-alpha/maps/map-standard/thumbnail",
+    };
+    expect(() =>
+      parseReferenceProjectDocument(JSON.stringify(invalidThumbnailDocument)),
+    ).toThrow(
+      'Project thumbnail storage value must be a WebP data URL. Received: "/api/projects/project-alpha/maps/map-standard/thumbnail".',
+    );
+    expect(recordingStorage.getWriteCount()).toBe(1);
+  });
+
+  it("renames one folder, trims the name, and leaves project documents unchanged", () => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const folderIds = ["folder-spring", "folder-summer"];
+    let folderIdIndex = 0;
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      createIdentifier: () => {
+        const folderId = folderIds[folderIdIndex];
+        folderIdIndex += 1;
+        if (folderId === undefined) {
+          throw new Error(
+            `Rename test identifier sequence was exhausted at call ${String(folderIdIndex)}.`,
+          );
+        }
+        return folderId;
+      },
+    });
+    const springFolder = repository.createFolder("Spring");
+    const summerFolder = repository.createFolder("Summer");
+    repository.moveProjectToFolder("project-alpha", springFolder.id);
+    const documentBeforeRename = parseReferenceProjectDocument(
+      recordingStorage.getSerializedProjectDocument(),
+    );
+    const writeCountBeforeRename = recordingStorage.getWriteCount();
+
+    const renamedFolder = repository.renameFolder(springFolder.id, "  Spring Crops  ");
+
+    expect(renamedFolder).toEqual({ id: "folder-spring", name: "Spring Crops" });
+    expect(summerFolder).toEqual({ id: "folder-summer", name: "Summer" });
+    expect(repository.listFolders()).toEqual([
+      { id: "folder-spring", name: "Spring Crops" },
+      { id: "folder-summer", name: "Summer" },
+    ]);
+    const documentAfterRename = parseReferenceProjectDocument(
+      recordingStorage.getSerializedProjectDocument(),
+    );
+    expect(documentAfterRename.version).toBe(documentBeforeRename.version);
+    expect(documentAfterRename.projects).toEqual(documentBeforeRename.projects);
+    expect(documentAfterRename.folders).toEqual([
+      { id: "folder-spring", name: "Spring Crops" },
+      { id: "folder-summer", name: "Summer" },
+    ]);
+    expect(recordingStorage.getWriteCount()).toBe(writeCountBeforeRename + 1);
+    expect(
+      recordingStorage.storage.getItem("stardewplan-reference-local-projects-v1"),
+    ).toBe(recordingStorage.getSerializedProjectDocument());
+  });
+
+  it.each([
+    [
+      "folder-spring",
+      "   ",
+      'Folder name must contain 1 to 100 characters after trimming. Received: "   ".',
+    ],
+    [
+      "folder-spring",
+      42,
+      "Folder name must be a string. Received: 42.",
+    ],
+    [
+      "bad id",
+      "Crops",
+      'Folder ID must contain only letters, digits, underscores, and hyphens and be at most 120 characters. Received: "bad id".',
+    ],
+    [
+      "",
+      "Crops",
+      'Folder ID must contain only letters, digits, underscores, and hyphens and be at most 120 characters. Received: "".',
+    ],
+    [
+      42,
+      "Crops",
+      "Folder ID must be a string. Received: 42.",
+    ],
+    [
+      "missing-folder",
+      "Crops",
+      'Folder ID does not exist. Received: "missing-folder". Existing folder IDs: ["folder-spring"].',
+    ],
+  ])("rejects renameFolder(%j, %j) before writing", (folderId, folderName, expectedMessage) => {
+    const recordingStorage = createRecordingStorage(
+      JSON.stringify(referenceProjectDocumentFixture),
+    );
+    const repository = createRepositoryWithStorage(recordingStorage, {
+      createIdentifier: () => "folder-spring",
+    });
+    repository.createFolder("Spring");
+    const serializedProjectDocument = recordingStorage.getSerializedProjectDocument();
+    const writeCountAfterCreate = recordingStorage.getWriteCount();
+
+    expect(() =>
+      repository.renameFolder(folderId as string, folderName as string),
+    ).toThrow(expectedMessage);
+    expect(recordingStorage.getWriteCount()).toBe(writeCountAfterCreate);
+    expect(recordingStorage.getSerializedProjectDocument()).toBe(
+      serializedProjectDocument,
+    );
   });
 });
 

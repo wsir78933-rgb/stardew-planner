@@ -1,30 +1,23 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { LocalProjectPanel, type LocalProjectStorageStatus } from "./local-project-panel";
+import {
+  LocalProjectPanel,
+  type LocalProjectFolderController,
+  type LocalProjectStorageStatus,
+} from "./local-project-panel";
 import { MapImageExportPanel } from "./map-image-export-panel";
 import type { ScreenshotResolution } from "../projects/map-image-export";
-import { MapImageExportError } from "../projects/map-image-export";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+import type { ReferenceProjectFolder } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 import type { SaveModalCopy, ThumbnailCopy } from "../i18n/save-modal-copy";
-import styles from "./planner-library-layout.module.css";
 
 type PlannerSaveModalContentProperties = Readonly<{
   copy: Pick<
     SaveModalCopy,
-    | "deleteProject"
-    | "imageExport"
-    | "localProjects"
-    | "saveTools"
-    | "thumbnail"
+    "deleteProject" | "imageExport" | "localProjects" | "thumbnail"
   >;
-  isProjectsBranchActive: boolean;
-  isToolsViewActive?: boolean;
-  libraryToolsEntry?: ReactNode;
-  mainBranchContent: ReactNode;
-  onOpenFarmSummary?: () => void;
-  sidebarNavigation: ReactNode;
   currentProjectId: string | null;
   currentProjectName: string | null;
   currentProjectMapInstanceCount: number | null;
@@ -38,23 +31,21 @@ type PlannerSaveModalContentProperties = Readonly<{
   onImportProject: (serializedProject: string) => void;
   onOpenProject: (projectId: string) => void;
   onRenameProject: (projectId: string, requestedName: string) => void;
-  onSaveCurrentMap: () => Promise<void>;
-  onActivateProjectList: () => void;
+  onRequestFarmSummary?: () => void;
+  onRequestGameSave?: () => void;
   onSaveThumbnail: () => Promise<void>;
   projects: readonly ReferenceProjectSummary[];
   season: TilesheetSeason;
   storageErrorMessage: string | null;
   storageStatus: LocalProjectStorageStatus;
+  farmSummaryContent?: ReactNode;
+  folders?: readonly ReferenceProjectFolder[];
+  gameSaveContent?: ReactNode;
+  workspaceController?: LocalProjectFolderController;
 }>;
 
 export function PlannerSaveModalContent({
   copy,
-  isProjectsBranchActive,
-  isToolsViewActive = false,
-  libraryToolsEntry = null,
-  mainBranchContent,
-  onOpenFarmSummary,
-  sidebarNavigation,
   currentProjectId,
   currentProjectName,
   currentProjectMapInstanceCount,
@@ -68,17 +59,23 @@ export function PlannerSaveModalContent({
   onImportProject,
   onOpenProject,
   onRenameProject,
-  onSaveCurrentMap,
-  onActivateProjectList,
+  onRequestFarmSummary,
+  onRequestGameSave,
   onSaveThumbnail,
   projects,
   season,
   storageErrorMessage,
   storageStatus,
+  farmSummaryContent = null,
+  folders = [],
+  gameSaveContent = null,
+  workspaceController,
 }: PlannerSaveModalContentProperties) {
   const [thumbnailActionState, setThumbnailActionState] = useState<
     Readonly<{ kind: "error" | "success"; message: string }> | null
   >(null);
+  const [isToolsOpen, setIsToolsOpen] = useState(false);
+  const [isGameSaveOpen, setIsGameSaveOpen] = useState(false);
 
   async function handleSaveThumbnail(): Promise<void> {
     try {
@@ -95,37 +92,6 @@ export function PlannerSaveModalContent({
     }
   }
 
-  const imageExportTools = (
-    <div className={`planner-save-modal-content__exports ${styles.imageExportTools}`}>
-      <MapImageExportPanel
-        copy={copy.imageExport}
-        mapFile={mapFile}
-        onCaptureScreenshot={onCaptureScreenshot}
-        season={season}
-      />
-      <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
-        <h3>{copy.thumbnail.title}</h3>
-        <div className="map-image-export-panel__actions">
-          <button onClick={() => void handleSaveThumbnail()} type="button">
-            {copy.thumbnail.saveLabel}
-          </button>
-        </div>
-        {thumbnailActionState !== null ? (
-          <p
-            className={
-              thumbnailActionState.kind === "error"
-                ? "local-project-panel__error"
-                : "local-project-panel__message"
-            }
-            role={thumbnailActionState.kind === "error" ? "alert" : "status"}
-          >
-            {thumbnailActionState.message}
-          </p>
-        ) : null}
-      </section>
-    </div>
-  );
-
   return (
     <div className="planner-save-modal-content">
       <LocalProjectPanel
@@ -135,37 +101,60 @@ export function PlannerSaveModalContent({
         currentProjectMapInstanceName={currentProjectMapInstanceName}
         currentProjectName={currentProjectName}
         deleteCopy={copy.deleteProject}
+        folders={folders}
+        gameSaveContent={isGameSaveOpen ? gameSaveContent : null}
+        isImportGameSaveOpen={isGameSaveOpen}
+        isToolsOpen={isToolsOpen}
         onCreateProject={onCreateProject}
         onDeleteProject={onDeleteProject}
         onDuplicateProject={onDuplicateProject}
         onExportProject={onExportProject}
         onImportProject={onImportProject}
+        onOpenImportGameSave={() => {
+          setIsGameSaveOpen((gameSaveWasOpen) => !gameSaveWasOpen);
+          onRequestGameSave?.();
+        }}
         onOpenProject={onOpenProject}
+        onOpenTools={() => {
+          setIsToolsOpen((toolsWereOpen) => !toolsWereOpen);
+          onRequestFarmSummary?.();
+        }}
         onRenameProject={onRenameProject}
-        onSaveCurrentMap={onSaveCurrentMap}
-        onActivateProjectList={onActivateProjectList}
         projects={projects}
-        isProjectListActive={isProjectsBranchActive}
-        isToolsViewActive={isToolsViewActive}
-        sidebarContent={sidebarNavigation}
-        sidebarFooterContent={libraryToolsEntry}
-        toolsViewContent={
-          <>
-            {imageExportTools}
-            {onOpenFarmSummary !== undefined ? (
-              <button
-                className={styles.toolsSectionButton}
-                onClick={onOpenFarmSummary}
-                type="button"
-              >
-                {copy.saveTools.farmSummary}
-              </button>
-            ) : null}
-          </>
-        }
-        mainContent={mainBranchContent}
         storageErrorMessage={storageErrorMessage}
         storageStatus={storageStatus}
+        toolsContent={isToolsOpen ? (
+          <div className="planner-save-modal-content__exports">
+            <MapImageExportPanel
+              copy={copy.imageExport}
+              mapFile={mapFile}
+              onCaptureScreenshot={onCaptureScreenshot}
+              season={season}
+            />
+            <section aria-label={copy.thumbnail.title} className="map-image-export-panel">
+              <h3>{copy.thumbnail.title}</h3>
+              <div className="map-image-export-panel__actions">
+                <button onClick={() => void handleSaveThumbnail()} type="button">
+                  {copy.thumbnail.saveLabel}
+                </button>
+              </div>
+              {thumbnailActionState !== null ? (
+                <p
+                  className={
+                    thumbnailActionState.kind === "error"
+                      ? "local-project-panel__error"
+                      : "local-project-panel__message"
+                  }
+                  role={thumbnailActionState.kind === "error" ? "alert" : "status"}
+                >
+                  {thumbnailActionState.message}
+                </p>
+              ) : null}
+            </section>
+            {farmSummaryContent}
+          </div>
+        ) : null}
+        workspaceController={workspaceController}
       />
     </div>
   );
@@ -175,9 +164,11 @@ export function formatPlannerThumbnailSaveError(
   caughtError: unknown,
   thumbnailCopy: ThumbnailCopy,
 ): string {
-  if (caughtError instanceof MapImageExportError) {
+  if (caughtError instanceof Error) {
     return thumbnailCopy.saveFailure(caughtError.message);
   }
 
-  throw caughtError;
+  return thumbnailCopy.saveFailure(
+    `received ${JSON.stringify(caughtError)}`,
+  );
 }
