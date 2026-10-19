@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {
   createPublicLanguageAlternates,
+  getHomepageDisplayPath,
   getLocalizedPublicPath,
   type PublicCanonicalPath,
 } from "../i18n/public-route-registry";
@@ -55,6 +56,18 @@ function createSharedPublicMetadata(
   };
 }
 
+function requireHomepageMetadataText(
+  fieldName: "title" | "description",
+  localeName: "Japanese" | "Russian",
+  fieldValue: string,
+): void {
+  if (fieldValue.trim().length === 0) {
+    throw new Error(
+      `${localeName} homepage ${fieldName} must be a non-empty string. Received: ${JSON.stringify(fieldValue)}.`,
+    );
+  }
+}
+
 export function createPublicPageMetadata(
   input: PublicPageMetadataInput,
 ): Metadata {
@@ -79,21 +92,32 @@ export function createJapaneseHomepageMetadata(
     description: string;
   }>,
 ): Metadata {
-  if (input.title.trim().length === 0) {
-    throw new Error(
-      `Japanese homepage title must be a non-empty string. Received: ${JSON.stringify(input.title)}.`,
-    );
-  }
-  if (input.description.trim().length === 0) {
-    throw new Error(
-      `Japanese homepage description must be a non-empty string. Received: ${JSON.stringify(input.description)}.`,
-    );
-  }
+  requireHomepageMetadataText("title", "Japanese", input.title);
+  requireHomepageMetadataText("description", "Japanese", input.description);
 
   return createSharedPublicMetadata({
     title: input.title,
     description: input.description,
-    canonicalUrl: createCanonicalUrl("/ja"),
+    canonicalUrl: createCanonicalUrl(getHomepageDisplayPath("ja")),
+    languages: createPublicLanguageAlternates("/"),
+    openGraphType: "website",
+    socialImageUrl: createSocialImageUrl(sharedSocialImagePath),
+  });
+}
+
+export function createRussianHomepageMetadata(
+  input: Readonly<{
+    title: string;
+    description: string;
+  }>,
+): Metadata {
+  requireHomepageMetadataText("title", "Russian", input.title);
+  requireHomepageMetadataText("description", "Russian", input.description);
+
+  return createSharedPublicMetadata({
+    title: input.title,
+    description: input.description,
+    canonicalUrl: createCanonicalUrl(getHomepageDisplayPath("ru")),
     languages: createPublicLanguageAlternates("/"),
     openGraphType: "website",
     socialImageUrl: createSocialImageUrl(sharedSocialImagePath),

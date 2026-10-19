@@ -138,6 +138,25 @@ function readJoystickCopy(locale: PlannerChromeLocale): Readonly<{
     };
   }
 
+  if (locale === "ru") {
+    return {
+      cameraGroup: "Камера карты",
+      nudge: {
+        ArrowDown: "Сдвинуть выбранное вниз",
+        ArrowLeft: "Сдвинуть выбранное влево",
+        ArrowRight: "Сдвинуть выбранное вправо",
+        ArrowUp: "Сдвинуть выбранное вверх",
+      },
+      pan: {
+        ArrowDown: "Сдвинуть карту вниз",
+        ArrowLeft: "Сдвинуть карту влево",
+        ArrowRight: "Сдвинуть карту вправо",
+        ArrowUp: "Сдвинуть карту вверх",
+      },
+      selectionGroup: "Перемещение выбранного",
+    };
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read joystick labels because locale is ${JSON.stringify(unsupportedLocale)}.`,

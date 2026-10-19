@@ -61,6 +61,10 @@ function readPlacedCatalogLoadingMessage(locale: PlannerChromeLocale): string {
     return "配置済みアイテムのカタログを読み込んでいます…";
   }
 
+  if (locale === "ru") {
+    return "Загрузка каталога размещённых предметов…";
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read placed catalog loading message because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -74,6 +78,10 @@ function readPlacedCatalogRetryLabel(locale: PlannerChromeLocale): string {
 
   if (locale === "ja") {
     return "再試行";
+  }
+
+  if (locale === "ru") {
+    return "Повторить";
   }
 
   const unsupportedLocale: never = locale;

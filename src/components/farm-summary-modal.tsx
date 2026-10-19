@@ -1,23 +1,31 @@
 "use client";
 
 import { useId, useState, type KeyboardEvent } from "react";
+import { getRussianPlannerMapDisplayName } from "../i18n/planner-russian-display-names";
+import { plannerMaps } from "../maps/map-catalog";
 import {
   createFarmSummaryCsvFile,
   type FarmSummary,
+  type FarmSummaryMapContext,
 } from "../projects/farm-summary";
 import type { FarmSummaryDetailCopy } from "../i18n/save-modal-copy";
+
+export type FarmSummaryLocale = "en" | "zh" | "ru";
 
 type FarmSummaryModalProperties = Readonly<{
   copy: FarmSummaryDetailCopy;
   farmSummary: FarmSummary;
+  locale?: FarmSummaryLocale;
   onClose: () => void;
 }>;
 
 export function FarmSummaryModal({
   copy,
   farmSummary,
+  locale,
   onClose,
 }: FarmSummaryModalProperties) {
+  const summaryLocale = readFarmSummaryLocale(locale);
   const [exportErrorMessage, setExportErrorMessage] = useState<string | null>(null);
   const farmSummaryHeadingId = useId();
 
@@ -27,6 +35,7 @@ export function FarmSummaryModal({
       const farmSummaryCsvFile = createFarmSummaryCsvFile(
         farmSummary.rows,
         dateStamp,
+        summaryLocale,
       );
 
       downloadFarmSummaryCsvFile(farmSummaryCsvFile);
@@ -58,7 +67,7 @@ export function FarmSummaryModal({
           <div>
             <h2 id={farmSummaryHeadingId}>{copy.title}</h2>
             <p>
-              {copy.map}: {farmSummary.mapContext.displayName} ({farmSummary.mapContext.baseMapId}) · {copy.seasonLabel}: {copy.season(farmSummary.mapContext.season)}
+              {copy.map}: {readVisibleFarmSummaryMapName(farmSummary.mapContext, summaryLocale)} ({farmSummary.mapContext.baseMapId}) · {copy.seasonLabel}: {copy.season(farmSummary.mapContext.season)}
             </p>
             <p>{copy.itemsPlaced(farmSummary.totalItems)}</p>
           </div>
@@ -85,6 +94,41 @@ export function FarmSummaryModal({
         ) : null}
       </section>
     </div>
+  );
+}
+
+function readPlannerMapCatalogId(mapId: string): (typeof plannerMaps)[number]["id"] {
+  const catalogPlannerMap = plannerMaps.find(
+    (candidatePlannerMap) => candidatePlannerMap.id === mapId,
+  );
+  if (catalogPlannerMap === undefined) {
+    throw new Error(`Unknown planner map id: ${JSON.stringify(mapId)}.`);
+  }
+  return catalogPlannerMap.id;
+}
+
+export function readVisibleFarmSummaryMapName(
+  mapContext: FarmSummaryMapContext,
+  locale: FarmSummaryLocale,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return mapContext.displayName;
+  }
+  if (locale === "ru") {
+    return getRussianPlannerMapDisplayName(readPlannerMapCatalogId(mapContext.baseMapId));
+  }
+  throw new TypeError(
+    `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readFarmSummaryLocale(locale: FarmSummaryLocale | undefined): FarmSummaryLocale {
+  const resolvedLocale = locale ?? "en";
+  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
+    return resolvedLocale;
+  }
+  throw new TypeError(
+    `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
   );
 }
 

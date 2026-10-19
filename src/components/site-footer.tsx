@@ -13,6 +13,11 @@ type SiteFooterProps = Readonly<{
   locale?: HomepageLocale;
 }>;
 
+type SiteFooterSocialLabels = Readonly<{
+  followOnX: string;
+  joinDiscord: string;
+}>;
+
 function SiteFooterLinkGroup({
   title,
   links,
@@ -74,10 +79,7 @@ export function SiteFooter({
   );
 }
 
-function readSiteFooterSocialLabels(locale: HomepageLocale): Readonly<{
-  followOnX: string;
-  joinDiscord: string;
-}> {
+function readSiteFooterSocialLabels(locale: HomepageLocale): SiteFooterSocialLabels {
   if (locale === "en" || locale === "zh-CN") {
     return {
       followOnX: "Follow @wsir1139 on X (Twitter)",
@@ -89,6 +91,13 @@ function readSiteFooterSocialLabels(locale: HomepageLocale): Readonly<{
     return {
       followOnX: "X（Twitter）で @wsir1139 をフォロー",
       joinDiscord: "Stardew Valley Planner の Discord に参加",
+    };
+  }
+
+  if (locale === "ru") {
+    return {
+      followOnX: "Подписаться на @wsir1139 в X (Twitter)",
+      joinDiscord: "Присоединиться к Discord планировщика Stardew Valley",
     };
   }
 

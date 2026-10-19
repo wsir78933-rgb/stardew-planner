@@ -95,3 +95,9 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley tools](https://stardewvalleyplanner.art/zh/tools): 从你当前要做的决定开始。
 - [季节种植收益](https://stardewvalleyplanner.art/zh/tools/crop-profit): 按净收益排列本季作物。已经扣掉种子和肥料，机器路线分开计算。
 - [生长与收获日历](https://stardewvalleyplanner.art/zh/tools/crop-growth): 查看首次成熟、收获次数、最晚安全播种日和 28 天日历。
+
+## Русский
+
+Планировщик фермы Stardew Valley помогает спланировать ферму в браузере. Проекты сохраняются локально, а выбранные планировки можно синхронизировать. Превью карт остаются на устройстве.
+
+- [Планировщик фермы Stardew Valley](https://stardewvalleyplanner.art/ru): Бесплатный онлайн-инструмент для планировки фермы. Сохраняйте проекты локально или синхронизируйте выбранные планировки.

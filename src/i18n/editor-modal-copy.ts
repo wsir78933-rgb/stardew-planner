@@ -1,7 +1,7 @@
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { getLocalizedPublicPath } from "./public-route-registry";
 
-const editorModalLocales = ["en", "zh-CN", "ja"] as const;
+const editorModalLocales = ["en", "zh-CN", "ja", "ru"] as const;
 
 type EditorModalLocale = (typeof editorModalLocales)[number];
 
@@ -382,6 +382,122 @@ const editorModalCopyByLocale = {
       warningActions: { cancel: "キャンセル", confirm: "自由配置を有効にする" },
     },
   },
+  ru: {
+    closeDialogLabel: "Закрыть диалог",
+    modalTitles: {
+      save: "Сохранение",
+      settings: "Настройки",
+      view: "Вид",
+    },
+    stateLabel: (isEnabled: boolean) => isEnabled ? "Вкл" : "Выкл",
+    view: {
+      optionGroups: [
+        {
+          heading: "Наложения",
+          options: [
+            { label: "Сетка", title: "Показывать линии клеток на карте" },
+            { label: "Радиус спринклера", title: "Подсвечивать клетки, которые поливает каждый спринклер" },
+            { label: "Радиус пугала", title: "Подсвечивать клетки, защищённые от ворон" },
+            { label: "Радиус улья", title: "Подсвечивать зону цветов для производства мёда" },
+            { label: "Радиус домика Джунимо", title: "Подсвечивать область сбора домиков Джунимо" },
+          ],
+        },
+        {
+          heading: "Наложения карты",
+          options: [
+            { label: "Нельзя ставить постройки", title: "Показывать, где нельзя ставить постройки" },
+            { label: "Нельзя сажать культуры", title: "Показывать, где нельзя сажать культуры" },
+            { label: "Нельзя растить деревья", title: "Показывать, где деревья не растут" },
+          ],
+        },
+        {
+          heading: "Оформление",
+          options: [
+            { label: "Ночной режим", title: "Посмотреть ферму ночью с источниками света" },
+          ],
+        },
+      ],
+      npcPaths: { label: "Маршруты NPC", title: "Показывать клетки, по которым ходят NPC" },
+      mapObjects: {
+        heading: "Объекты карты",
+        option: {
+          label: "Показывать скопления ресурсов",
+          title: "Показывать места появления, пока выбрано скопление ресурсов",
+        },
+      },
+      unavailableWeather: {
+        heading: "Недоступно",
+        label: "Погода",
+        statusLabel: "Недоступно",
+        title: "Имитировать дождь, снег и другие погодные эффекты",
+      },
+      catalogPosition: {
+        bottomPanel: "Нижняя панель",
+        description: "Выберите, где в этом браузере показывать каталог предметов.",
+        heading: "Положение каталога",
+        leftPanel: "Левая панель",
+      },
+    },
+    settings: {
+      community: {
+        heading: "Сообщество",
+        manageMods: {
+          label: "Управление модами",
+          title: "Добавлять моды Content Patcher и управлять ими",
+        },
+      },
+      optionGroups: [
+        {
+          heading: "Мобильные",
+          options: [
+            {
+              label: "Джойстик",
+              title: "Показывать крестовину для точного размещения предметов на сенсорных устройствах",
+            },
+            {
+              label: "Режим для левой руки",
+              title: "Перенести управление на левую сторону экрана",
+            },
+          ],
+        },
+        {
+          heading: "Уведомления",
+          options: [
+            {
+              label: "Всплывающие уведомления",
+              title: "Показывать короткие уведомления о смене инструмента, отмене, повторе и действиях",
+            },
+          ],
+        },
+        {
+          heading: "Интерфейс",
+          options: [
+            {
+              label: "Курсоры в стиле игры",
+              title: "Использовать пиксельные курсоры игры вместо курсоров системы",
+            },
+          ],
+        },
+      ],
+      freePlacement: {
+        label: "Свободное размещение",
+        title: "Отключить правила размещения и ставить предметы в любом месте карты",
+      },
+      freePlacementWarning: "Свободное размещение отключает правила размещения на карте. Некоторые планировки нельзя повторить в игре.",
+      legalHeading: "Правовая информация",
+      placementHeading: "Размещение",
+      privacyPolicy: {
+        href: getLocalizedPublicPath("en", "/privacy"),
+        label: "Политика конфиденциальности",
+      },
+      termsOfService: {
+        href: getLocalizedPublicPath("en", "/terms"),
+        label: "Условия использования",
+      },
+      warningActions: { cancel: "Отмена", confirm: "Включить свободное размещение" },
+    },
+  },
+
 } as const satisfies Readonly<Record<EditorModalLocale, EditorModalCopy>>;
 
 export function getEditorModalCopy(locale: HomepageLocale): EditorModalCopy {

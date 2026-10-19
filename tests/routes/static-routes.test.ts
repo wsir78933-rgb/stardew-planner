@@ -75,6 +75,7 @@ const expectedStaticPageFiles = [
   "zh/profit-margin-stardew.html",
   "zh/what-to-grow-in-greenhouse-stardew.html",
   "zh/oak-tree-vs-maple-stardew.html",
+  "ru.html",
 ] as const;
 
 const expectedStaticHomepageFiles = [
@@ -87,6 +88,11 @@ const expectedStaticHomepageFiles = [
     staticPageFile: "zh.html",
     plannerHref: "#planner",
     localizedHeadline: "星露谷物语",
+  },
+  {
+    staticPageFile: "ru.html",
+    plannerHref: "#planner",
+    localizedHeadline: "Планировщик фермы",
   },
 ] as const;
 
@@ -145,7 +151,7 @@ describe("static React planner routes", () => {
     },
   );
 
-  it("exports English and Chinese homepage shells with their own planner anchors", () => {
+  it("exports English, Chinese, and Russian homepage shells with their own planner anchors", () => {
     for (const expectedHomepage of expectedStaticHomepageFiles) {
       const staticPageHtml = readStaticPageHtml(expectedHomepage.staticPageFile);
 
@@ -157,6 +163,25 @@ describe("static React planner routes", () => {
       );
 
       expect(plannerAnchorMatches).toHaveLength(3);
+    }
+  });
+
+  it("does not export Russian blog or legal pages", () => {
+    for (const removedRussianPageFile of [
+      "ru/blog.html",
+      "ru/privacy.html",
+      "ru/terms.html",
+      "ru/contact.html",
+    ]) {
+      const removedRussianPagePath = join(
+        process.cwd(),
+        "out",
+        removedRussianPageFile,
+      );
+      expect(
+        existsSync(removedRussianPagePath),
+        `Russian subpage must stay absent. Received path: ${removedRussianPagePath}.`,
+      ).toBe(false);
     }
   });
 });

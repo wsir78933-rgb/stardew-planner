@@ -2,17 +2,23 @@ import { describe, expect, it } from "vitest";
 import { isPlannerEntryPathname } from "../../src/seo/planner-entry-pathname";
 
 describe("isPlannerEntryPathname", () => {
-  it("is true only for English, Chinese, and Japanese planner entry pathnames", () => {
+  it("is true for English, Chinese, Japanese, and Russian planner entry pathnames", () => {
     expect(isPlannerEntryPathname("/")).toBe(true);
     expect(isPlannerEntryPathname("/zh")).toBe(true);
     expect(isPlannerEntryPathname("/zh/")).toBe(true);
     expect(isPlannerEntryPathname("/ja")).toBe(true);
     expect(isPlannerEntryPathname("/ja/")).toBe(true);
+    expect(isPlannerEntryPathname("/ru")).toBe(true);
+    expect(isPlannerEntryPathname("/ru/")).toBe(true);
   });
 
   it("is false for other public pathnames, including blog and contact", () => {
     expect(isPlannerEntryPathname("/blog")).toBe(false);
     expect(isPlannerEntryPathname("/zh/blog")).toBe(false);
+    expect(isPlannerEntryPathname("/ru/blog")).toBe(false);
+    expect(isPlannerEntryPathname("/ru/privacy")).toBe(false);
+    expect(isPlannerEntryPathname("/ru/terms")).toBe(false);
+    expect(isPlannerEntryPathname("/ru/contact")).toBe(false);
     expect(isPlannerEntryPathname("/ja/blog")).toBe(false);
     expect(isPlannerEntryPathname("/JA")).toBe(false);
     expect(isPlannerEntryPathname("/ja?farmType=standard")).toBe(false);

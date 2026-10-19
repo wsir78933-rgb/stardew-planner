@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { getPublicPageCopy } from "../i18n/public-page-content";
 import type { PublicLocale } from "../i18n/public-locale";
 import {
+  getHomepageDisplayPath,
   getLocalizedPublicPath,
   type PublicCanonicalPath,
 } from "../i18n/public-route-registry";
@@ -27,6 +28,7 @@ function createPublicPageHeaderHrefs(
       en: getLocalizedPublicPath("en", canonicalPath),
       ja: "/ja",
       "zh-CN": getLocalizedPublicPath("zh-CN", canonicalPath),
+      ru: getHomepageDisplayPath("ru"),
     },
   };
 }

@@ -23,6 +23,7 @@ describe("homepage navigation URLs", () => {
           en: expectedEnglishHref,
           "zh-CN": expectedChineseHref,
           ja: `/ja?farmType=${farmType}#planner`,
+          ru: expectedEnglishHref.replace(/^\//, "/ru"),
         },
         plannerHref: "#planner",
       });
@@ -46,6 +47,7 @@ describe("homepage navigation URLs", () => {
           en: "/#planner",
           "zh-CN": "/zh#planner",
           ja: "/ja#planner",
+          ru: "/ru#planner",
         },
         plannerHref: "#planner",
       });
@@ -64,6 +66,7 @@ describe("homepage navigation URLs", () => {
         en: "/",
         "zh-CN": "/zh",
         ja: "/ja",
+        ru: "/ru",
       },
       plannerHref: "#planner",
     });
@@ -89,8 +92,55 @@ describe("homepage navigation URLs", () => {
         en: "/?farmType=forest",
         "zh-CN": "/zh?farmType=forest",
         ja: "/ja?farmType=forest",
+        ru: "/ru?farmType=forest",
       },
       plannerHref: "#planner",
     });
+  });
+
+  it("keeps a supported farm type on the Russian homepage path", () => {
+    expect(
+      createHomepageNavigationUrls({
+        currentLocale: "ru",
+        hash: "#planner",
+        search: "?farmType=forest",
+      }),
+    ).toEqual({
+      localeHrefByLocale: {
+        en: "/?farmType=forest#planner",
+        "zh-CN": "/zh?farmType=forest#planner",
+        ja: "/ja?farmType=forest#planner",
+        ru: "/ru?farmType=forest#planner",
+      },
+      plannerHref: "#planner",
+    });
+  });
+
+  it("drops an unknown farm type from the Russian homepage instead of forwarding it", () => {
+    expect(
+      createHomepageNavigationUrls({
+        currentLocale: "ru",
+        hash: "#planner",
+        search: "?farmType=unknown",
+      }),
+    ).toEqual({
+      localeHrefByLocale: {
+        en: "/#planner",
+        "zh-CN": "/zh#planner",
+        ja: "/ja#planner",
+        ru: "/ru#planner",
+      },
+      plannerHref: "#planner",
+    });
+  });
+
+  it("rejects a display locale outside English, Chinese, and Russian", () => {
+    expect(() =>
+      createHomepageNavigationUrls({
+        currentLocale: "fr" as never,
+        hash: "",
+        search: "",
+      }),
+    ).toThrow('Received: "fr"');
   });
 });

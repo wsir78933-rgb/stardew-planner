@@ -2,9 +2,15 @@
 
 import type { ReactNode } from "react";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
-import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import {
+  isHomepageLocale,
+  type HomepageLocale,
+} from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
-import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
+import {
+  getHomepageDisplayPath,
+  getLocalizedPublicPath,
+} from "@/src/i18n/public-route-registry";
 import { SiteNavigationDock } from "./site-navigation-dock";
 
 const HOMEPAGE_NAVIGATION_COPY_FIELD_NAMES = [
@@ -37,6 +43,20 @@ function requireHomepageDockNonEmptyString(
   return fieldValue;
 }
 
+function readHomepageBlogHref(locale: HomepageLocale): string {
+  if (locale === "ja" || locale === "ru") {
+    return getLocalizedPublicPath("en", "/blog");
+  }
+  if (locale === "en" || locale === "zh-CN") {
+    return getLocalizedPublicPath(locale, "/blog");
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new TypeError(
+    `Unsupported homepage navigation locale. Received: ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
 function requireHomepageNavigationCopy(
   navigationCopy: HomepageCopy["navigation"],
 ): HomepageCopy["navigation"] {
@@ -62,6 +82,12 @@ export function HomepageNavigationDock({
   localeSwitcher,
   plannerHref,
 }: HomepageNavigationDockProps) {
+  if (!isHomepageLocale(currentLocale)) {
+    throw new TypeError(
+      `HomepageNavigationDock currentLocale must be a homepage locale. Received: ${JSON.stringify(currentLocale)}.`,
+    );
+  }
+
   const navigationCopy = requireHomepageNavigationCopy(copy.navigation);
   const resolvedPlannerHref = requireHomepageDockNonEmptyString(
     "plannerHref",
@@ -72,7 +98,7 @@ export function HomepageNavigationDock({
     <SiteNavigationDock
       blogHref={readHomepageBlogHref(currentLocale)}
       blogLabel={navigationCopy.blogLabel}
-      brandHref={readHomepageBrandHref(currentLocale)}
+      brandHref={getHomepageDisplayPath(currentLocale)}
       brandLabel={navigationCopy.productName}
       currentLocale={currentLocale}
       languageLabel={navigationCopy.languageLabel}
@@ -82,35 +108,5 @@ export function HomepageNavigationDock({
       plannerLabel={navigationCopy.plannerActionLabel}
       surface="homepage"
     />
-  );
-}
-
-function readHomepageBrandHref(currentLocale: HomepageLocale): string {
-  if (currentLocale === "ja") {
-    return "/ja";
-  }
-
-  if (currentLocale === "en" || currentLocale === "zh-CN") {
-    return getLocalizedPublicPath(currentLocale, "/");
-  }
-
-  const unsupportedLocale: never = currentLocale;
-  throw new Error(
-    `Cannot build homepage brand href because locale is ${JSON.stringify(unsupportedLocale)}.`,
-  );
-}
-
-function readHomepageBlogHref(currentLocale: HomepageLocale): string {
-  if (currentLocale === "ja") {
-    return "/blog";
-  }
-
-  if (currentLocale === "en" || currentLocale === "zh-CN") {
-    return getLocalizedPublicPath(currentLocale, "/blog");
-  }
-
-  const unsupportedLocale: never = currentLocale;
-  throw new Error(
-    `Cannot build homepage blog href because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

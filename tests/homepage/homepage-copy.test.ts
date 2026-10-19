@@ -1,6 +1,10 @@
 import { expect, test } from "vitest";
-import { HOMEPAGE_LOCALES } from "@/src/homepage/homepage-locale";
+import {
+  HOMEPAGE_DISPLAY_LOCALES,
+  HOMEPAGE_LOCALES,
+} from "@/src/homepage/homepage-locale";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
+import { russianHomepageCopy } from "@/src/homepage/homepage-copy.ru";
 
 const whyChooseImageSources = [
   "/homepage/why-choose/beach-decorative-machooo.webp",
@@ -30,12 +34,21 @@ const expectedComparisonDimensionsByLocale = {
     "プロジェクトファイルのバックアップ",
     "PNG書き出し",
   ],
+  ru: [
+    "Стоимость",
+    "Удобство использования",
+    "Сохранение нескольких планов",
+    "Языки интерфейса",
+    "Резервное копирование проектов",
+    "Экспорт в PNG",
+  ],
 } as const;
 
 const expectedComparisonHeadingByLocale = {
   en: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
   "zh-CN": "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
   ja: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
+  ru: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
 } as const;
 
 const expectedPlannerBenefitPatternsByLocale = {
@@ -63,12 +76,31 @@ const expectedPlannerBenefitPatternsByLocale = {
     [/1つのプロジェクト/, /JSON/, /地図/],
     [/PNG/, /1×/, /2×/],
   ],
+  ru: [
+    [/бесплатн/, /платных тарифов/],
+    [/Понятные названия/, /сгруппированные/],
+    [/несколько планов/],
+    [/русским/, /английским/, /китайским/],
+    [/JSON/, /все его карты/],
+    [/PNG/, /1×/, /2×/],
+  ],
 } as const;
 
 test("ships every approved locale with the same top-level homepage sections", () => {
+  expect(
+    Object.keys(homepageCopyByLocale),
+    `Homepage copy locales must match the display locales. Received: ${JSON.stringify(Object.keys(homepageCopyByLocale))}.`,
+  ).toEqual([...HOMEPAGE_DISPLAY_LOCALES]);
+  expect([...HOMEPAGE_LOCALES]).toEqual(["en", "zh-CN", "ja", "ru"]);
   expect(Object.keys(homepageCopyByLocale)).toEqual([...HOMEPAGE_LOCALES]);
-  expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale["zh-CN"]));
+  expect(Object.keys(homepageCopyByLocale.en)).toEqual(
+    Object.keys(homepageCopyByLocale["zh-CN"]),
+  );
   expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale.ja));
+  expect(Object.keys(homepageCopyByLocale.ru)).toEqual(
+    Object.keys(homepageCopyByLocale.en),
+  );
+  expect(homepageCopyByLocale.ru).toBe(russianHomepageCopy);
 
   expect(Object.keys(homepageCopyByLocale.en)).toEqual([
     "navigation",
@@ -96,7 +128,7 @@ test("provides a complete bilingual comparison for the same three planner sites"
     "https://v3.stardew.info/planner/",
   ] as const;
 
-  for (const homepageLocale of HOMEPAGE_LOCALES) {
+  for (const homepageLocale of HOMEPAGE_DISPLAY_LOCALES) {
     const comparisonCopy = homepageCopyByLocale[homepageLocale].toolComparison;
 
     expect(comparisonCopy.heading).toBe(
@@ -488,6 +520,11 @@ test("provides the replacement sections with exact bilingual headings and item c
   for (const homepageLocale of ["en", "zh-CN"] as const) {
     const homepageCopy = homepageCopyByLocale[homepageLocale];
     const expected = expectedSections[homepageLocale];
+    if (expected === undefined) {
+      throw new Error(
+        `Replacement section expectations are missing for ${JSON.stringify(homepageLocale)}.`,
+      );
+    }
 
     expect(homepageCopy).not.toHaveProperty("planningGuide");
     expect(homepageCopy).not.toHaveProperty("capabilities");
@@ -590,7 +627,7 @@ test("provides the replacement sections with exact bilingual headings and item c
 });
 
 test("does not retain retired farm-guide copy", () => {
-  for (const homepageLocale of HOMEPAGE_LOCALES) {
+  for (const homepageLocale of HOMEPAGE_DISPLAY_LOCALES) {
     expect(homepageCopyByLocale[homepageLocale]).not.toHaveProperty("farmGuides");
   }
 });
@@ -605,10 +642,13 @@ test("provides bilingual planner preview image alt text", () => {
   expect(homepageCopyByLocale.ja.plannerPreview.imageAlt).toBe(
     "中央に土の空き地があり、牧場の家、温室、池が2つある、スタンダード牧場のドット絵地図",
   );
+  expect(homepageCopyByLocale.ru.plannerPreview.imageAlt).toBe(
+    "Пиксельная карта Стандартной фермы с центральным участком земли, домом, теплицей и двумя прудами",
+  );
 });
 
 test("provides the Brainfish-style hero fragments and localized language label", () => {
-  for (const homepageLocale of HOMEPAGE_LOCALES) {
+  for (const homepageLocale of HOMEPAGE_DISPLAY_LOCALES) {
     const homepageCopy = homepageCopyByLocale[homepageLocale];
 
     expect(homepageCopy.navigation.languageLabel).not.toHaveLength(0);
@@ -667,6 +707,18 @@ test("provides the approved bilingual planner hero content", () => {
       },
     ],
   });
+  expect(homepageCopyByLocale.ru.navigation.languageLabel).toBe("Язык");
+  expect(homepageCopyByLocale.ru.hero).toMatchObject({
+    headlineBefore: "Планировщик фермы ",
+    headlineEmphasis: "Stardew Valley",
+    headlineAfter: "Бесплатный онлайн-инструмент для планировки фермы",
+    supportingCopy:
+      "Планируйте свою ферму в Stardew Valley до того, как начнете строить в игре. Выбирайте из 8 типов ферм, расставляйте здания и посевы, переключайте сезоны, проверяйте зоны действия и импортируйте сохранения.",
+    primaryActionLabel: "Начать планирование",
+  });
+  expect(
+    `${homepageCopyByLocale.ru.hero.headlineBefore}${homepageCopyByLocale.ru.hero.headlineEmphasis}`,
+  ).toBe("Планировщик фермы Stardew Valley");
 });
 
 test("keeps localized import and screenshot claims synchronized", () => {

@@ -88,7 +88,7 @@ function readHomepageFooterContent(
   copy: HomepageCopy,
   currentLocale: HomepageLocale,
 ): SiteFooterContent {
-  if (currentLocale === "en" || currentLocale === "zh-CN") {
+  if (currentLocale === "en" || currentLocale === "zh-CN" || currentLocale === "ru") {
     return createSiteFooterContent(copy.footer, currentLocale);
   }
 

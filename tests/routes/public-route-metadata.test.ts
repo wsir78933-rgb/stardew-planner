@@ -8,6 +8,7 @@ import { metadata as blogArchiveMetadata } from "../../app/(en)/blog/archive/pag
 import { metadata as blogIndexMetadata } from "../../app/(en)/blog/page";
 import { metadata as contactMetadata } from "../../app/(en)/contact/page";
 import { metadata as plannerMetadata } from "../../app/(en)/page";
+import { metadata as russianPlannerMetadata } from "../../app/ru/page";
 import {
   dynamicParams as chineseBlogDynamicParams,
   generateMetadata as generateChineseBlogMetadata,
@@ -34,6 +35,17 @@ function createExpectedLanguageAlternates(pathname: string) {
   };
 }
 
+const homepageLanguageAlternates = {
+  ...createExpectedLanguageAlternates("/"),
+  ja: "https://stardewvalleyplanner.art/ja",
+  ru: "https://stardewvalleyplanner.art/ru",
+};
+
+const confirmedRussianHomepageTitle =
+  "Планировщик фермы Stardew Valley — бесплатно онлайн";
+const confirmedRussianHomepageDescription =
+  "Планировщик для Stardew Valley: создавайте планировку фермы онлайн. 8 типов ферм, здания и посевы, смена сезонов, зоны действия и импорт сохранений.";
+
 describe("public route metadata", () => {
   it("uses the approved English planner metadata", () => {
     expect(plannerMetadata).toMatchObject({
@@ -52,36 +64,42 @@ describe("public route metadata", () => {
     });
   });
 
-  it("publishes paired language alternates for the remaining fixed routes", () => {
-    for (const [pageMetadata, pathname] of [
-      [plannerMetadata, "/"],
-      [contactMetadata, "/contact"],
-      [chinesePlannerMetadata, "/"],
-      [chineseContactMetadata, "/contact"],
-    ] as const) {
-      const localizedCanonical =
-        pageMetadata === chinesePlannerMetadata ||
-        pageMetadata === chineseContactMetadata
-          ? `https://stardewvalleyplanner.art/zh${pathname === "/" ? "" : pathname}`
-          : `https://stardewvalleyplanner.art${pathname === "/" ? "" : pathname}`;
-
-      expect(pageMetadata.alternates).toMatchObject({
-        canonical: localizedCanonical,
-        languages: pathname === "/"
-          ? {
-              ...createExpectedLanguageAlternates("/"),
-              ja: "https://stardewvalleyplanner.art/ja",
-            }
-          : createExpectedLanguageAlternates(pathname),
-      });
-      if (pathname === "/") {
-        expect(pageMetadata.alternates?.languages).toHaveProperty(
-          "ja",
-          "https://stardewvalleyplanner.art/ja",
-        );
-      } else {
-        expect(pageMetadata.alternates?.languages).not.toHaveProperty("ja");
-      }
+  it("publishes homepage alternates for Japanese and Russian and three alternates for contact", () => {
+    expect(plannerMetadata.alternates).toEqual({
+      canonical: "https://stardewvalleyplanner.art",
+      languages: homepageLanguageAlternates,
+    });
+    expect(chinesePlannerMetadata.alternates).toEqual({
+      canonical: "https://stardewvalleyplanner.art/zh",
+      languages: homepageLanguageAlternates,
+    });
+    expect({
+      title: russianPlannerMetadata.title,
+      description: russianPlannerMetadata.description,
+    }).toEqual({
+      title: confirmedRussianHomepageTitle,
+      description: confirmedRussianHomepageDescription,
+    });
+    expect(russianPlannerMetadata.alternates).toEqual({
+      canonical: "https://stardewvalleyplanner.art/ru",
+      languages: homepageLanguageAlternates,
+    });
+    expect(russianPlannerMetadata).not.toHaveProperty("keywords");
+    expect(contactMetadata.alternates).toEqual({
+      canonical: "https://stardewvalleyplanner.art/contact",
+      languages: createExpectedLanguageAlternates("/contact"),
+    });
+    expect(chineseContactMetadata.alternates).toEqual({
+      canonical: "https://stardewvalleyplanner.art/zh/contact",
+      languages: createExpectedLanguageAlternates("/contact"),
+    });
+    for (const pageMetadata of [
+      plannerMetadata,
+      chinesePlannerMetadata,
+      russianPlannerMetadata,
+      contactMetadata,
+      chineseContactMetadata,
+    ]) {
       expect(pageMetadata.openGraph).toMatchObject({
         images: [expectedSocialImageUrl],
       });
@@ -127,6 +145,18 @@ describe("public route metadata", () => {
     expect(blogArchiveMetadata.description).toBe(englishCopy.archiveDescription);
     expect(chineseBlogIndexMetadata.description).toBe(chineseCopy.blogDescription);
     expect(chineseBlogArchiveMetadata.description).toBe(chineseCopy.archiveDescription);
+    expect(blogIndexMetadata.alternates?.languages).toEqual(
+      createExpectedLanguageAlternates("/blog"),
+    );
+    expect(blogArchiveMetadata.alternates?.languages).toEqual(
+      createExpectedLanguageAlternates("/blog/archive"),
+    );
+    expect(chineseBlogIndexMetadata.alternates?.languages).toEqual(
+      createExpectedLanguageAlternates("/blog"),
+    );
+    expect(chineseBlogArchiveMetadata.alternates?.languages).toEqual(
+      createExpectedLanguageAlternates("/blog/archive"),
+    );
   });
 
   it("generates paired article metadata from each localized blog post cover", async () => {
@@ -147,9 +177,13 @@ describe("public route metadata", () => {
         throw new Error(`Missing localized blog post metadata for ${slug}.`);
       }
 
-      await expect(
-        generateBlogMetadata({ params: Promise.resolve({ slug }) }),
-      ).resolves.toMatchObject({
+      const englishArticleMetadata = await generateBlogMetadata({
+        params: Promise.resolve({ slug }),
+      });
+      expect(englishArticleMetadata.alternates?.languages).toEqual(
+        createExpectedLanguageAlternates(`/${slug}`),
+      );
+      expect(englishArticleMetadata).toMatchObject({
         title: englishPost.title,
         alternates: {
           canonical: `https://stardewvalleyplanner.art/${slug}`,
@@ -174,9 +208,13 @@ describe("public route metadata", () => {
           .alternates?.languages,
       ).not.toHaveProperty("ja");
 
-      await expect(
-        generateChineseBlogMetadata({ params: Promise.resolve({ slug }) }),
-      ).resolves.toMatchObject({
+      const chineseArticleMetadata = await generateChineseBlogMetadata({
+        params: Promise.resolve({ slug }),
+      });
+      expect(chineseArticleMetadata.alternates?.languages).toEqual(
+        createExpectedLanguageAlternates(`/${slug}`),
+      );
+      expect(chineseArticleMetadata).toMatchObject({
         title: chinesePost.title,
         alternates: {
           canonical: `https://stardewvalleyplanner.art/zh/${slug}`,

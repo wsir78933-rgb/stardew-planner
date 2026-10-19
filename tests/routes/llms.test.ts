@@ -10,6 +10,17 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).toMatch(/^# Stardew Valley Planner\n/m);
   expect(llmsText).toContain("## English");
   expect(llmsText).toContain("## 简体中文");
+  expect(llmsText).toContain("## Русский");
+  expect(llmsText).toContain(
+    "[Планировщик фермы Stardew Valley](https://stardewvalleyplanner.art/ru)",
+  );
+  expect(
+    llmsText.match(/https:\/\/stardewvalleyplanner\.art\/ru(?!\/)/g),
+  ).toEqual(["https://stardewvalleyplanner.art/ru"]);
+  expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/blog");
+  expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/privacy");
+  expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/terms");
+  expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/contact");
   expect(llmsText).toContain("local projects, and optional cloud sync for selected layouts");
   expect(llmsText).toContain("Projects are saved locally unless you choose to sign in with Google");
   expect(llmsText).toContain("项目默认保存在本地；使用 Google 登录后，可选择同步布局数据");

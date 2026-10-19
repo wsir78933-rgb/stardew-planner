@@ -73,10 +73,10 @@ export function CatalogPlacementControls({
 
   const copy = getCatalogPanelCopy(locale);
   const pendingCatalogControl = getPendingCatalogControl(catalogItem);
-  const itemName = readLocalizedCatalogItemLabel(
-    locale,
-    getCatalogSidebarDisplayName(catalogItem),
-  );
+  const englishDisplayName = getCatalogSidebarDisplayName(catalogItem, "en");
+  const itemName = locale === "ru"
+    ? getCatalogSidebarDisplayName(catalogItem, "ru")
+    : readLocalizedCatalogItemLabel(locale, englishDisplayName);
   const placementStatus = getCatalogPlacementStatus(
     copy,
     itemName,

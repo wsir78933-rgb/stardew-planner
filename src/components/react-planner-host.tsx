@@ -164,6 +164,10 @@ function readPlannerHostLoadingMessage(locale: HomepageLocale): string {
     return "Loading planner…";
   }
 
+  if (locale === "ru") {
+    return "Загрузка планировщика…";
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read planner host loading message because locale is ${JSON.stringify(unsupportedLocale)}.`,

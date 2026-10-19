@@ -66,33 +66,55 @@ function getLocalizedPathname(locale, canonicalPathname) {
       : `/zh${canonicalPathname}`;
 }
 
-function createPublicHtmlPathContract(locale, canonicalPathname) {
+function createLanguageAlternatePathnames(canonicalPathname) {
   const englishPathname = getLocalizedPathname("en", canonicalPathname);
   const chinesePathname = getLocalizedPathname("zh-CN", canonicalPathname);
+  const languageAlternatePathnames = {
+    en: englishPathname,
+    "zh-CN": chinesePathname,
+    "x-default": englishPathname,
+  };
 
+  if (canonicalPathname === "/") {
+    languageAlternatePathnames.ru = "/ru";
+  }
+
+  return Object.freeze(languageAlternatePathnames);
+}
+
+function createPublicHtmlPathContract(locale, canonicalPathname) {
   return Object.freeze({
     canonicalPathname,
     locale,
     pathname: getLocalizedPathname(locale, canonicalPathname),
-    languageAlternatePathnames: Object.freeze({
-      en: englishPathname,
-      "zh-CN": chinesePathname,
-      "x-default": englishPathname,
-    }),
+    languageAlternatePathnames: createLanguageAlternatePathnames(canonicalPathname),
   });
 }
+
+const russianHomepagePathContract = Object.freeze({
+  canonicalPathname: "/",
+  locale: "ru",
+  pathname: "/ru",
+  languageAlternatePathnames: Object.freeze({
+    en: "/",
+    "zh-CN": "/zh",
+    ru: "/ru",
+    "x-default": "/",
+  }),
+});
 
 assertUniqueInternalPathnames(
   canonicalPublicPathnames,
   "Production SEO smoke canonical pathname",
 );
-export const expectedPublicHtmlPathContracts = Object.freeze(
-  publicLocales.flatMap((locale) =>
+export const expectedPublicHtmlPathContracts = Object.freeze([
+  ...publicLocales.flatMap((locale) =>
     canonicalPublicPathnames.map((canonicalPathname) =>
       createPublicHtmlPathContract(locale, canonicalPathname),
     ),
   ),
-);
+  russianHomepagePathContract,
+]);
 
 export const expectedNoindexContactPathnames = Object.freeze([
   "/contact",
@@ -134,14 +156,14 @@ assertValidInternalPathname(
   "Production SEO smoke missing-page probe pathname",
 );
 
-if (expectedPublicHtmlPathContracts.length !== 32) {
+if (expectedPublicHtmlPathContracts.length !== 33) {
   throw new Error(
-    `Production SEO smoke must declare 32 public HTML path contracts; received ${String(expectedPublicHtmlPathContracts.length)}.`,
+    `Production SEO smoke must declare 33 public HTML path contracts; received ${String(expectedPublicHtmlPathContracts.length)}.`,
   );
 }
 
-if (expectedSitemapPathnames.length !== 30) {
+if (expectedSitemapPathnames.length !== 31) {
   throw new Error(
-    `Production SEO smoke must declare 30 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
+    `Production SEO smoke must declare 31 sitemap pathnames; received ${String(expectedSitemapPathnames.length)}.`,
   );
 }

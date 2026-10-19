@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { getRussianFarmSpouseDisplayName } from "../i18n/planner-russian-display-names";
 import {
   farmSpouseDefinitions,
   supportsFarmCaveChoice,
@@ -31,12 +32,12 @@ const unsupportedFarmSettingsMessage =
   "This map has no spouse patio or farm cave. 这张地图没有配偶庭院或农场洞穴。";
 
 function readFarmSettingsLocale(locale: string): FarmSettingsLocale {
-  if (locale === "en" || locale === "zh" || locale === "ja") {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return locale;
   }
 
   throw new TypeError(
-    `Farm settings locale must be "en", "zh", or "ja"; received ${JSON.stringify(locale)}.`,
+    `Farm settings locale must be "en", "zh", "ja", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -169,6 +170,7 @@ function readSpouseNoneLabel(locale: FarmSettingsLocale): string {
   if (locale === "zh") return "无";
   if (locale === "en") return "None";
   if (locale === "ja") return "なし";
+  if (locale === "ru") return "Нет";
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read spouse none label because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -193,6 +195,18 @@ function readSpouseChoiceLabel(
     return japaneseSpouseLabels[spouseId as keyof typeof japaneseSpouseLabels];
   }
 
+  if (locale === "ru") {
+    const spouseDefinition = farmSpouseDefinitions.find(
+      (definition) => definition.id === spouseId,
+    );
+    if (spouseDefinition === undefined) {
+      throw new Error(
+        `Cannot read Russian spouse label because spouse id is ${JSON.stringify(spouseId)}.`,
+      );
+    }
+    return getRussianFarmSpouseDisplayName(spouseDefinition.id);
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read spouse label because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -203,6 +217,7 @@ function readFarmCaveLabels(locale: FarmSettingsLocale): readonly [string, strin
   if (locale === "zh") return ["未选择", "蘑菇", "蝙蝠"];
   if (locale === "en") return ["Not chosen", "Mushrooms", "Bats"];
   if (locale === "ja") return ["未選択", "キノコ", "コウモリ"];
+  if (locale === "ru") return ["Не выбрано", "Грибы", "Летучие мыши"];
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read farm cave labels because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -216,6 +231,7 @@ function readFarmSettingsSectionTitle(
   if (locale === "zh") return section === "spouse" ? "配偶" : "洞穴";
   if (locale === "en") return section === "spouse" ? "Spouse" : "Cave";
   if (locale === "ja") return section === "spouse" ? "配偶者" : "洞窟";
+  if (locale === "ru") return section === "spouse" ? "Супруг" : "Пещера";
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read farm settings section title because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -229,6 +245,10 @@ function readUnsupportedFarmSettingsMessage(locale: FarmSettingsLocale): string 
 
   if (locale === "ja") {
     return "このマップには配偶者の庭も農場の洞窟もありません。";
+  }
+
+  if (locale === "ru") {
+    return "На этой карте нет дворика супруга и фермерской пещеры.";
   }
 
   const unsupportedLocale: never = locale;

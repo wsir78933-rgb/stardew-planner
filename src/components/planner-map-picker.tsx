@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { getRussianPlannerMapDisplayName } from "../i18n/planner-russian-display-names";
 import {
   getPlannerMapById,
   plannerMaps,
@@ -466,6 +467,16 @@ export function readPlannerMapDisplayLabel(
     );
   }
 
+  if (locale === "ru") {
+    const plannerMap = plannerMaps.find((candidateMap) => candidateMap.id === mapId);
+    if (plannerMap === undefined) {
+      throw new Error(
+        `Cannot read Russian map label because map id is ${JSON.stringify(mapId)}.`,
+      );
+    }
+    return getRussianPlannerMapDisplayName(plannerMap.id);
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read planner map label because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -495,6 +506,16 @@ function readPlannerMapTabLabel(
     throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
   }
 
+  if (locale === "ru") {
+    if (tabId === "farm") return "Ферма";
+    if (tabId === "interiors") return "Интерьеры";
+    if (tabId === "exteriors") return "Экстерьеры";
+    if (tabId === "community") return "Сообщество";
+    if (tabId === "farms") return "Фермы";
+    const unsupportedTab: never = tabId;
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read planner map tab label because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -511,6 +532,10 @@ function readPlannerMapPickerGroupLabel(
 
   if (locale === "ja") {
     return group === "categories" ? "マップの分類" : "コミュニティマップの分類";
+  }
+
+  if (locale === "ru") {
+    return group === "categories" ? "Категории карт" : "Категории карт сообщества";
   }
 
   const unsupportedLocale: never = locale;

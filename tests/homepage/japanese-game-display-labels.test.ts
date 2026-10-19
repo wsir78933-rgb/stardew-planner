@@ -75,10 +75,13 @@ describe("Japanese catalog display labels", () => {
   it("covers every visible catalog display name and leaves English and Chinese unchanged", () => {
     expect(visibleCatalogDisplayNames).toHaveLength(1121);
     expect(visibleCatalogDisplayNames).toEqual([...visibleCatalogDisplayNames].sort());
+    expect(readLocalizedCatalogItemLabel("ru", "Parsnip")).toBe("Parsnip");
+    expect(readSelectionEntityDisplayName("ru", "Parsnip")).toBe("Parsnip");
 
     for (const displayName of visibleCatalogDisplayNames) {
       expect(readLocalizedCatalogItemLabel("en", displayName)).toBe(displayName);
       expect(readLocalizedCatalogItemLabel("zh-CN", displayName)).toBe(displayName);
+      expect(readLocalizedCatalogItemLabel("ru", displayName)).toBe(displayName);
       expect(readLocalizedCatalogItemLabel("ja", displayName).length).toBeGreaterThan(0);
     }
   });

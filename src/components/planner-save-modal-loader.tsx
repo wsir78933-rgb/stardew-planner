@@ -35,6 +35,7 @@ type PlannerSaveModalLoaderProperties = Readonly<{
   currentProjectMapInstanceCount: number | null;
   currentProjectMapInstanceName: string | null;
   currentProjectName: string | null;
+  locale?: "en" | "zh" | "ru";
   mapDisplayName: string;
   mapFile: string;
   onCaptureScreenshot: (resolution: ScreenshotResolution) => Promise<Blob>;
@@ -86,6 +87,7 @@ type PlannerGameSaveModalContentProperties = Readonly<{
 type PlannerFarmSummaryModalContentProperties = Pick<
   PlannerSaveModalLoaderProperties,
   | "catalogItems"
+  | "locale"
   | "mapDisplayName"
   | "placementSnapshot"
   | "selectedPlannerMapId"
@@ -210,6 +212,7 @@ export function PlannerSaveModalLoader(
           farmSummaryDetail: plannerSaveModalLoaderProperties.copy.farmSummaryDetail,
           farmSummaryPreview: plannerSaveModalLoaderProperties.copy.farmSummaryPreview,
         }}
+        locale={plannerSaveModalLoaderProperties.locale}
         mapDisplayName={plannerSaveModalLoaderProperties.mapDisplayName}
         placementSnapshot={plannerSaveModalLoaderProperties.placementSnapshot}
         selectedPlannerMapId={plannerSaveModalLoaderProperties.selectedPlannerMapId}

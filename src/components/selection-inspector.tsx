@@ -369,6 +369,10 @@ function readChestColorLabel(locale: PlannerChromeLocale, englishLabel: string):
     return japaneseChestColorLabels[englishLabel as keyof typeof japaneseChestColorLabels];
   }
 
+  if (locale === "ru") {
+    return englishLabel;
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read chest color label because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -413,6 +417,10 @@ function readFishPondWaterColorLabel(
     throw new Error(
       `Cannot read Japanese fish pond color label because label is ${JSON.stringify(englishLabel)}.`,
     );
+  }
+
+  if (locale === "ru") {
+    return englishLabel;
   }
 
   const unsupportedLocale: never = locale;
@@ -523,6 +531,42 @@ function readSelectionInspectorCopy(locale: PlannerChromeLocale): Readonly<{
     };
   }
 
+
+  if (locale === "ru") {
+    return {
+      building: "Здание",
+      buildingColor: "Цвет здания у выбранной постройки",
+      chestPaintColor: "Цвет покраски выбранного сундука",
+      copyPlacement: "Копировать выбранный объект",
+      copyPlacementShortcut: "Копировать выбранный объект (C)",
+      copyPlacements: "Копировать выбранные объекты",
+      copyPlacementsShortcut: "Копировать выбранные объекты (C)",
+      customOption: "Свой",
+      cycleAppearance: "Сменить вид выбранного предмета",
+      cycleAppearanceShortcut: "Сменить вид выбранного предмета (Q)",
+      defaultOption: "По умолчанию",
+      deletePlacement: "Удалить выбранный объект",
+      deletePlacementShortcut: "Удалить выбранный объект (Delete)",
+      deletePlacements: "Удалить выбранные объекты",
+      deletePlacementsShortcut: "Удалить выбранные объекты (Delete)",
+      dismissSelection: "Закрыть выбор",
+      extinguish: "Погасить",
+      extinguishSelected: "Погасить выбранный светильник",
+      fishPondWaterColor: "Цвет воды выбранного рыбного пруда",
+      light: "Зажечь",
+      lightSelected: "Зажечь выбранный светильник",
+      paint: "Покраска",
+      roof: "Крыша",
+      roofColor: "Цвет крыши у выбранной постройки",
+      selectedPlacement: "Выбранный объект",
+      selectedPlacementCount: readRussianSelectedPlacementCount,
+      selectedPlacements: "Выбранные объекты",
+      trim: "Отделка",
+      trimColor: "Цвет отделки у выбранной постройки",
+      water: "Вода",
+    };
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read selection inspector copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -551,4 +595,25 @@ function isFishPondWaterBuildingInspector(
     selectionInspectorProperties.selection.kind === "building" &&
     selectionInspectorProperties.selection.canSetWaterColor === true
   );
+}
+
+function readRussianSelectedPlacementCount(count: number): string {
+  if (!Number.isInteger(count)) {
+    throw new TypeError(
+      `Selected placement count must be an integer; received ${JSON.stringify(count)}.`,
+    );
+  }
+  const absoluteCount = Math.abs(count);
+  const lastTwoDigits = absoluteCount % 100;
+  const lastDigit = absoluteCount % 10;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return `${String(count)} выбранных объектов`;
+  }
+  if (lastDigit === 1) {
+    return `${String(count)} выбранный объект`;
+  }
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${String(count)} выбранных объекта`;
+  }
+  return `${String(count)} выбранных объектов`;
 }

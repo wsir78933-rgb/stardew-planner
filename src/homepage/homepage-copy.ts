@@ -1,5 +1,6 @@
-import type { HomepageLocale } from "./homepage-locale";
+import type { HomepageDisplayLocale } from "./homepage-locale";
 import type { SiteFooterCopy } from "../site-footer/site-footer-content";
+import { russianHomepageCopy } from "./homepage-copy.ru";
 
 type HomepageFarmLayoutSlide = Readonly<{
   quote: string;
@@ -167,7 +168,7 @@ export type HomepageCopy = Readonly<{
   footer: SiteFooterCopy;
 }>;
 
-export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>> = {
+export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, HomepageCopy>> = {
   en: {
     navigation: {
       productName: "Stardew Valley Farm Planner",
@@ -1675,4 +1676,5 @@ export const homepageCopyByLocale: Readonly<Record<HomepageLocale, HomepageCopy>
       },
     },
   },
+  ru: russianHomepageCopy,
 };

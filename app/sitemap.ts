@@ -5,16 +5,21 @@ import { createCanonicalUrl } from "../src/seo/public-site-url";
 
 export const dynamic = "force-static";
 
+const localizedHomepagePathnames = [japaneseHomepagePathname, "/ru"] as const;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const localizedEntries = getLocalizedIndexablePublicRouteEntries().map(({ pathname }) => ({
     url: createCanonicalUrl(pathname),
   }));
-  const japaneseHomepageUrl = createCanonicalUrl(japaneseHomepagePathname);
-  if (localizedEntries.some((entry) => entry.url === japaneseHomepageUrl)) {
-    throw new Error(
-      `Sitemap already contains the Japanese homepage URL. Received: ${japaneseHomepageUrl}.`,
-    );
-  }
+  const homepageEntries = localizedHomepagePathnames.map((pathname) => {
+    const homepageUrl = createCanonicalUrl(pathname);
+    if (localizedEntries.some((entry) => entry.url === homepageUrl)) {
+      throw new Error(
+        `Sitemap already contains the localized homepage URL. Received: ${homepageUrl}.`,
+      );
+    }
+    return { url: homepageUrl };
+  });
 
-  return [...localizedEntries, { url: japaneseHomepageUrl }];
+  return [...localizedEntries, ...homepageEntries];
 }

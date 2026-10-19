@@ -75,3 +75,44 @@ it("shows the unavailable message in Chinese when the public check is not config
   expect(markup).toContain('role="status"');
   expect(markup).toMatch(/<button[^>]*disabled=""/);
 });
+
+it("renders the Russian feedback fields without an email input", () => {
+  vi.stubEnv("NEXT_PUBLIC_TURNSTILE_SITE_KEY", "public-test-key");
+  const markup = renderToStaticMarkup(<PlannerFeedbackForm locale="ru" />);
+
+  expect(markup).toContain('for="planner-feedback-type">Тип</label>');
+  expect(markup).toContain(
+    '<option value="bug" selected="">Сообщить об ошибке</option>',
+  );
+  expect(markup).toContain('<option value="feature">Предложить функцию</option>');
+  expect(markup).toContain('<option value="other">Другое</option>');
+  expect(markup).toContain('for="planner-feedback-subject">Тема</label>');
+  expect(markup).toContain('for="planner-feedback-description">Описание</label>');
+  expect(markup).toContain(
+    "Есть скриншот или видео? Вставьте ссылку на YouTube или изображение в описание.",
+  );
+  expect(markup).toContain("Отправить отзыв");
+  expect(markup).not.toContain("Submit feedback");
+  expect(markup).not.toContain("提交反馈");
+  expect(markup).not.toMatch(/email|邮箱/i);
+});
+
+it("shows the unavailable message in Russian when the public check is not configured", () => {
+  vi.stubEnv("NEXT_PUBLIC_TURNSTILE_SITE_KEY", "");
+  const markup = renderToStaticMarkup(<PlannerFeedbackForm locale="ru" />);
+
+  expect(markup).toContain("Отзывы временно недоступны.");
+  expect(markup).toContain('aria-live="polite"');
+  expect(markup).toContain('role="status"');
+  expect(markup).toMatch(/<button[^>]*disabled=""/);
+  expect(markup).not.toContain("Feedback is temporarily unavailable.");
+  expect(markup).not.toContain("反馈暂时无法使用。");
+});
+
+it("rejects a feedback locale outside en, zh, and ru and includes the value", () => {
+  vi.stubEnv("NEXT_PUBLIC_TURNSTILE_SITE_KEY", "public-test-key");
+
+  expect(() =>
+    renderToStaticMarkup(<PlannerFeedbackForm locale={"fr" as "en"} />),
+  ).toThrow('Planner feedback locale must be "en", "zh", or "ru"; received "fr".');
+});

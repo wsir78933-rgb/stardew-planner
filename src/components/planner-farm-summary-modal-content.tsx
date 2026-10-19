@@ -15,6 +15,7 @@ type PlannerFarmSummaryModalContentProperties = Readonly<{
     farmSummaryDetail: FarmSummaryDetailCopy;
     farmSummaryPreview: FarmSummaryPreviewCopy;
   }>;
+  locale?: "en" | "zh" | "ru";
   mapDisplayName: string;
   placementSnapshot: PlacementSnapshot;
   selectedPlannerMapId: string;
@@ -24,6 +25,7 @@ type PlannerFarmSummaryModalContentProperties = Readonly<{
 export function PlannerFarmSummaryModalContent({
   catalogItems,
   copy,
+  locale,
   mapDisplayName,
   placementSnapshot,
   selectedPlannerMapId,
@@ -33,6 +35,7 @@ export function PlannerFarmSummaryModalContent({
     <div className="planner-save-modal-content planner-save-modal-content--farm-summary">
       <FarmSummaryPanel
         catalogItems={catalogItems}
+        locale={locale}
         copy={{
           detail: copy.farmSummaryDetail,
           preview: copy.farmSummaryPreview,

@@ -91,8 +91,23 @@ describe("removed public guide pages", () => {
     const sitemapXml = readFileSync(join(outputDirectory, "sitemap.xml"), "utf8");
     const llmsText = readFileSync(join(outputDirectory, "llms.txt"), "utf8");
     const exportedHtmlFiles = listHtmlFiles(outputDirectory);
+    const sitemapLocationValues = Array.from(
+      sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g),
+      ([, sitemapLocationValue]) => sitemapLocationValue,
+    );
+    const indexableRegistryCount = getLocalizedIndexablePublicRouteEntries().length;
+    const russianHomepageUrl = "https://stardewvalleyplanner.art/ru";
+    const russianSitemapUrls = sitemapLocationValues.filter(
+      (sitemapLocationValue) =>
+        sitemapLocationValue === russianHomepageUrl
+        || sitemapLocationValue.startsWith(`${russianHomepageUrl}/`),
+    );
 
-    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(71);
+    expect(
+      sitemapLocationValues,
+      `Sitemap URL count mismatch. Received: ${sitemapLocationValues.length}. Expected registry length plus Japanese and Russian homepages: ${indexableRegistryCount + 2}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
+    ).toHaveLength(indexableRegistryCount + 2);
+    expect(russianSitemapUrls).toEqual([russianHomepageUrl]);
     expect(sitemapXml).toContain("<loc>https://stardewvalleyplanner.art/ja</loc>");
     expect(sitemapXml).not.toContain("https://stardewvalleyplanner.art/ja/");
 

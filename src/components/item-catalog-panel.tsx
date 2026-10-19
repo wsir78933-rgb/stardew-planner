@@ -210,7 +210,7 @@ export function ItemCatalogPanel({
       category,
     });
 
-    void loadCatalogPanelState(category).then((nextCatalogPanelLoadState) => {
+    void loadCatalogPanelState(category, undefined, locale).then((nextCatalogPanelLoadState) => {
       if (hasUnmounted) {
         return;
       }
@@ -224,7 +224,7 @@ export function ItemCatalogPanel({
     return () => {
       hasUnmounted = true;
     };
-  }, [category, categoryLoadAttempt, onReadyCatalogItems]);
+  }, [category, categoryLoadAttempt, locale, onReadyCatalogItems]);
 
   useEffect(() => {
     if (!shouldLoadFullCatalog || hasLoadedFullCatalogReference.current) {
@@ -235,7 +235,7 @@ export function ItemCatalogPanel({
 
     setFullCatalogLoadState({ kind: "loading", scope: "all" });
 
-    void loadFullCatalogPanelState().then((nextFullCatalogLoadState) => {
+    void loadFullCatalogPanelState(undefined, locale).then((nextFullCatalogLoadState) => {
       if (hasUnmounted) {
         return;
       }
@@ -251,7 +251,7 @@ export function ItemCatalogPanel({
     return () => {
       hasUnmounted = true;
     };
-  }, [fullCatalogLoadAttempt, onReadyCatalogItems, shouldLoadFullCatalog]);
+  }, [fullCatalogLoadAttempt, locale, onReadyCatalogItems, shouldLoadFullCatalog]);
 
   useEffect(() => {
     if (previousCategoryReference.current === category) {
@@ -818,8 +818,10 @@ export function CatalogItemGrid({
       catalogItem,
       catalogPresentationChoicesByItemId,
     );
-    const englishDisplayName = getCatalogSidebarDisplayName(catalogItem);
-    const displayName = readLocalizedCatalogItemLabel(locale, englishDisplayName);
+    const englishDisplayName = getCatalogSidebarDisplayName(catalogItem, "en");
+    const displayName = locale === "ru"
+      ? getCatalogSidebarDisplayName(catalogItem, "ru")
+      : readLocalizedCatalogItemLabel(locale, englishDisplayName);
     const unavailableReason = availability === "available"
       ? null
       : copy.sceneAvailabilityReason(availability);
@@ -1660,24 +1662,27 @@ function throwUnsupportedCatalogItemControl(
 
 export async function loadCatalogPanelState(
   category: EditorCatalogCategory,
-  catalogPanelLoader: CatalogPanelLoader = () =>
-    loadSidebarCatalogCategory(category),
+  catalogPanelLoader?: CatalogPanelLoader,
+  locale: HomepageLocale = "en",
 ): Promise<CatalogPanelLoadState> {
   validateCatalogPanelCategory(category);
+  assertCatalogPanelLocale(locale);
+  const resolvedCatalogPanelLoader = catalogPanelLoader ?? (() =>
+    loadSidebarCatalogCategory(category));
 
   try {
     return {
       kind: "ready",
       scope: "category",
       category,
-      catalog: await catalogPanelLoader(),
+      catalog: await resolvedCatalogPanelLoader(),
     };
   } catch (caughtError) {
     return {
       kind: "error",
       scope: "category",
       category,
-      message: formatCatalogLoadError(caughtError),
+      message: formatCatalogLoadError(caughtError, locale),
     };
   }
 }
@@ -1711,19 +1716,23 @@ function getActiveCatalogPanelLoadState(
 }
 
 export async function loadFullCatalogPanelState(
-  catalogPanelLoader: CatalogPanelLoader = loadSidebarCatalog,
+  catalogPanelLoader?: CatalogPanelLoader,
+  locale: HomepageLocale = "en",
 ): Promise<FullCatalogLoadState> {
+  assertCatalogPanelLocale(locale);
+  const resolvedCatalogPanelLoader = catalogPanelLoader ?? loadSidebarCatalog;
+
   try {
     return {
       kind: "ready",
       scope: "all",
-      catalog: await catalogPanelLoader(),
+      catalog: await resolvedCatalogPanelLoader(),
     };
   } catch (caughtError) {
     return {
       kind: "error",
       scope: "all",
-      message: formatCatalogLoadError(caughtError),
+      message: formatCatalogLoadError(caughtError, locale),
     };
   }
 }
@@ -1824,10 +1833,12 @@ export function getCatalogItemsForPanel(
   category: EditorCatalogCategory,
   searchQuery: string,
   filterId = "all",
+  locale: HomepageLocale = "en",
 ): readonly CatalogItem[] {
   validateCatalogPanelCategory(category);
   validateCatalogSearchQuery(searchQuery);
   validateCatalogFilterId(filterId);
+  assertCatalogPanelLocale(locale);
 
   if (!Array.isArray(catalog.items)) {
     throw new TypeError(
@@ -1835,7 +1846,7 @@ export function getCatalogItemsForPanel(
     );
   }
 
-  return getCatalogSidebarItems(catalog.items, category, searchQuery, filterId);
+  return getCatalogSidebarItems(catalog.items, category, searchQuery, filterId, locale);
 }
 
 export function getCatalogItemThumbnailStyle(
@@ -2199,13 +2210,38 @@ function getCatalogSpriteSize(
   return { height: 16, width: 16 };
 }
 
-function formatCatalogLoadError(caughtError: unknown): string {
+function assertCatalogPanelLocale(
+  locale: HomepageLocale,
+): asserts locale is HomepageLocale {
+  if (locale === "en" || locale === "zh-CN" || locale === "ru") {
+    return;
+  }
+  throw new TypeError(
+    `Catalog panel locale must be "en", "zh-CN", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function formatCatalogLoadError(
+  caughtError: unknown,
+  locale: HomepageLocale,
+): string {
+  assertCatalogPanelLocale(locale);
   if (caughtError instanceof Error) {
     const causeMessage = formatCatalogLoadErrorCause(caughtError.cause);
+
+    if (locale === "ru") {
+      return causeMessage === null
+        ? `Не удалось загрузить локальный каталог предметов: ${caughtError.message}`
+        : `Не удалось загрузить локальный каталог предметов: ${caughtError.message} Причина: ${causeMessage}`;
+    }
 
     return causeMessage === null
       ? `Unable to load the local item catalog: ${caughtError.message}`
       : `Unable to load the local item catalog: ${caughtError.message} Cause: ${causeMessage}`;
+  }
+
+  if (locale === "ru") {
+    return `Не удалось загрузить локальный каталог предметов: ${describeCatalogPanelValue(caughtError)}`;
   }
 
   return `Unable to load the local item catalog: ${describeCatalogPanelValue(caughtError)}`;

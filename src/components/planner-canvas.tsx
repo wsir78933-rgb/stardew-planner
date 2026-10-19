@@ -5786,6 +5786,10 @@ function formatPlannerCanvasError(
     return `Unable to render mapId ${JSON.stringify(mapId)}. ${errorMessage}`;
   }
 
+  if (locale === "ru") {
+    return `Не удалось отобразить карту. Причина: ${errorMessage}`;
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot format planner canvas error because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -5799,6 +5803,10 @@ function readPlannerCanvasAriaLabel(locale: PlannerChromeLocale, mapId: string):
 
   if (locale === "en" || locale === "zh") {
     return `Farm map canvas for ${mapId}`;
+  }
+
+  if (locale === "ru") {
+    return `Холст карты фермы для ${mapId}`;
   }
 
   const unsupportedLocale: never = locale;
@@ -5816,6 +5824,10 @@ function readPlannerCanvasLoadingMessage(locale: PlannerChromeLocale, mapId: str
     return `Loading local map ${mapId}…`;
   }
 
+  if (locale === "ru") {
+    return `Загрузка локальной карты ${mapId}…`;
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read planner canvas loading message because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -5831,6 +5843,10 @@ function readUnavailableFullMapCopyMessage(locale: PlannerChromeLocale, mapId: s
 
   if (locale === "en" || locale === "zh") {
     return `Copy full map is unavailable for map ID ${mapIdText} because the canvas context-menu copy action is null.`;
+  }
+
+  if (locale === "ru") {
+    return `Копирование всей карты недоступно для идентификатора карты ${mapIdText}, потому что действие копирования контекстного меню равно null.`;
   }
 
   const unsupportedLocale: never = locale;

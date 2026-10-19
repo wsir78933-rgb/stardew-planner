@@ -39,72 +39,94 @@ export type CatalogPanelCopy = Readonly<{
   variantLabels: Readonly<Record<string, string>>;
 }>;
 
-const catalogPanelLocales = ["en", "zh-CN", "ja"] as const;
+function formatRussianCountedNoun(
+  count: number,
+  one: string,
+  few: string,
+  many: string,
+): string {
+  const absoluteCount = Math.abs(count);
+  const lastTwoDigits = absoluteCount % 100;
+  const lastDigit = absoluteCount % 10;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return `${String(count)} ${many}`;
+  }
+  if (lastDigit === 1) {
+    return `${String(count)} ${one}`;
+  }
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${String(count)} ${few}`;
+  }
+  return `${String(count)} ${many}`;
+}
+
+const catalogPanelLocales = ["en", "zh-CN", "ja", "ru"] as const;
 
 type CatalogPanelLocale = (typeof catalogPanelLocales)[number];
 
 const sharedFilterLabels = {
-  animal: { en: "Animals", "zh-CN": "动物", ja: "動物" },
-  production: { en: "Production", "zh-CN": "生产", ja: "生産" },
-  storage: { en: "Storage", "zh-CN": "储存", ja: "収納" },
-  utility: { en: "Utility", "zh-CN": "实用设施", ja: "実用" },
-  luxury: { en: "Luxury", "zh-CN": "豪华", ja: "高級" },
-  cabins: { en: "Cabins", "zh-CN": "小屋", ja: "小屋" },
-  structures: { en: "Structures", "zh-CN": "建筑结构", ja: "構造物" },
-  spring: { en: "Spring", "zh-CN": "春季", ja: "春" },
-  summer: { en: "Summer", "zh-CN": "夏季", ja: "夏" },
-  fall: { en: "Fall", "zh-CN": "秋季", ja: "秋" },
-  winter: { en: "Winter", "zh-CN": "冬季", ja: "冬" },
-  "multi-season": { en: "Multi-season", "zh-CN": "跨季节", ja: "複数の季節" },
-  "giant-crops": { en: "Giant crops", "zh-CN": "巨型作物", ja: "巨大な作物" },
-  saplings: { en: "Saplings", "zh-CN": "树苗", ja: "苗木" },
-  "wild-trees": { en: "Wild trees", "zh-CN": "野树", ja: "野生の木" },
-  "fruit-trees": { en: "Fruit trees", "zh-CN": "果树", ja: "果樹" },
-  machines: { en: "Machines", "zh-CN": "机器", ja: "加工設備" },
-  chairs: { en: "Chairs", "zh-CN": "椅子", ja: "椅子" },
-  benches: { en: "Benches", "zh-CN": "长椅", ja: "ベンチ" },
-  couches: { en: "Couches", "zh-CN": "沙发", ja: "ソファ" },
-  cushions: { en: "Cushions", "zh-CN": "垫子", ja: "クッション" },
-  armchairs: { en: "Armchairs", "zh-CN": "扶手椅", ja: "アームチェア" },
-  tables: { en: "Tables", "zh-CN": "桌子", ja: "テーブル" },
-  "long-tables": { en: "Long tables", "zh-CN": "长桌", ja: "長いテーブル" },
-  bookcases: { en: "Bookcases", "zh-CN": "书柜", ja: "本棚" },
-  dressers: { en: "Dressers", "zh-CN": "梳妆台", ja: "ドレッサー" },
-  beds: { en: "Beds", "zh-CN": "床", ja: "ベッド" },
-  fireplaces: { en: "Fireplaces", "zh-CN": "壁炉", ja: "暖炉" },
-  rugs: { en: "Rugs", "zh-CN": "地毯", ja: "ラグ" },
-  tvs: { en: "TVs", "zh-CN": "电视", ja: "テレビ" },
-  "fish-tanks": { en: "Fish tanks", "zh-CN": "鱼缸", ja: "水槽" },
-  functional: { en: "Functional", "zh-CN": "功能性", ja: "機能" },
-  plants: { en: "Plants", "zh-CN": "植物", ja: "植物" },
-  paintings: { en: "Paintings", "zh-CN": "画作", ja: "絵画" },
-  "wall-hangings": { en: "Wall hangings", "zh-CN": "墙面装饰", ja: "壁飾り" },
-  "windows-doors": { en: "Windows & Doors", "zh-CN": "门窗", ja: "窓とドア" },
-  "large-decor": { en: "Large decor", "zh-CN": "大型装饰", ja: "大型の装飾" },
-  "small-decor": { en: "Small decor", "zh-CN": "小型装饰", ja: "小型の装飾" },
-  special: { en: "Special", "zh-CN": "特殊物品", ja: "特殊" },
-  flooring: { en: "Flooring", "zh-CN": "地板", ja: "フローリング" },
-  wallpaper: { en: "Wallpaper", "zh-CN": "墙纸", ja: "壁紙" },
-  bushes: { en: "Bushes", "zh-CN": "灌木", ja: "低木" },
-  other: { en: "Other", "zh-CN": "其他", ja: "その他" },
+  animal: { en: "Animals", "zh-CN": "动物", ja: "動物", ru: "Животные"},
+  production: { en: "Production", "zh-CN": "生产", ja: "生産", ru: "Производство"},
+  storage: { en: "Storage", "zh-CN": "储存", ja: "収納", ru: "Хранение"},
+  utility: { en: "Utility", "zh-CN": "实用设施", ja: "実用", ru: "Хозяйственные"},
+  luxury: { en: "Luxury", "zh-CN": "豪华", ja: "高級", ru: "Роскошные"},
+  cabins: { en: "Cabins", "zh-CN": "小屋", ja: "小屋", ru: "Хижины"},
+  structures: { en: "Structures", "zh-CN": "建筑结构", ja: "構造物", ru: "Конструкции"},
+  spring: { en: "Spring", "zh-CN": "春季", ja: "春", ru: "Весна"},
+  summer: { en: "Summer", "zh-CN": "夏季", ja: "夏", ru: "Лето"},
+  fall: { en: "Fall", "zh-CN": "秋季", ja: "秋", ru: "Осень"},
+  winter: { en: "Winter", "zh-CN": "冬季", ja: "冬", ru: "Зима"},
+  "multi-season": { en: "Multi-season", "zh-CN": "跨季节", ja: "複数の季節", ru: "Несколько сезонов"},
+  "giant-crops": { en: "Giant crops", "zh-CN": "巨型作物", ja: "巨大な作物", ru: "Гигантские культуры"},
+  saplings: { en: "Saplings", "zh-CN": "树苗", ja: "苗木", ru: "Саженцы"},
+  "wild-trees": { en: "Wild trees", "zh-CN": "野树", ja: "野生の木", ru: "Дикие деревья"},
+  "fruit-trees": { en: "Fruit trees", "zh-CN": "果树", ja: "果樹", ru: "Фруктовые деревья"},
+  machines: { en: "Machines", "zh-CN": "机器", ja: "加工設備", ru: "Машины"},
+  chairs: { en: "Chairs", "zh-CN": "椅子", ja: "椅子", ru: "Стулья"},
+  benches: { en: "Benches", "zh-CN": "长椅", ja: "ベンチ", ru: "Скамьи"},
+  couches: { en: "Couches", "zh-CN": "沙发", ja: "ソファ", ru: "Диваны"},
+  cushions: { en: "Cushions", "zh-CN": "垫子", ja: "クッション", ru: "Подушки"},
+  armchairs: { en: "Armchairs", "zh-CN": "扶手椅", ja: "アームチェア", ru: "Кресла"},
+  tables: { en: "Tables", "zh-CN": "桌子", ja: "テーブル", ru: "Столы"},
+  "long-tables": { en: "Long tables", "zh-CN": "长桌", ja: "長いテーブル", ru: "Длинные столы"},
+  bookcases: { en: "Bookcases", "zh-CN": "书柜", ja: "本棚", ru: "Книжные шкафы"},
+  dressers: { en: "Dressers", "zh-CN": "梳妆台", ja: "ドレッサー", ru: "Комоды"},
+  beds: { en: "Beds", "zh-CN": "床", ja: "ベッド", ru: "Кровати"},
+  fireplaces: { en: "Fireplaces", "zh-CN": "壁炉", ja: "暖炉", ru: "Камины"},
+  rugs: { en: "Rugs", "zh-CN": "地毯", ja: "ラグ", ru: "Ковры"},
+  tvs: { en: "TVs", "zh-CN": "电视", ja: "テレビ", ru: "Телевизоры"},
+  "fish-tanks": { en: "Fish tanks", "zh-CN": "鱼缸", ja: "水槽", ru: "Аквариумы"},
+  functional: { en: "Functional", "zh-CN": "功能性", ja: "機能", ru: "Функциональные"},
+  plants: { en: "Plants", "zh-CN": "植物", ja: "植物", ru: "Растения"},
+  paintings: { en: "Paintings", "zh-CN": "画作", ja: "絵画", ru: "Картины"},
+  "wall-hangings": { en: "Wall hangings", "zh-CN": "墙面装饰", ja: "壁飾り", ru: "Настенные украшения"},
+  "windows-doors": { en: "Windows & Doors", "zh-CN": "门窗", ja: "窓とドア", ru: "Окна и двери"},
+  "large-decor": { en: "Large decor", "zh-CN": "大型装饰", ja: "大型の装飾", ru: "Крупный декор"},
+  "small-decor": { en: "Small decor", "zh-CN": "小型装饰", ja: "小型の装飾", ru: "Мелкий декор"},
+  special: { en: "Special", "zh-CN": "特殊物品", ja: "特殊", ru: "Особые"},
+  "special-items": { en: "Special items", "zh-CN": "Special items", ja: "特殊", ru: "Особые"},
+  flooring: { en: "Flooring", "zh-CN": "地板", ja: "フローリング", ru: "Полы"},
+  wallpaper: { en: "Wallpaper", "zh-CN": "墙纸", ja: "壁紙", ru: "Обои"},
+  bushes: { en: "Bushes", "zh-CN": "灌木", ja: "低木", ru: "Кусты"},
+  other: { en: "Other", "zh-CN": "其他", ja: "その他", ru: "Другое"},
 } as const;
 
 const sharedVariantLabels = {
-  "Normal": { en: "Normal", "zh-CN": "普通", ja: "通常" },
-  "Moss": { en: "Moss", "zh-CN": "苔藓", ja: "コケ" },
-  "No Fruit": { en: "No Fruit", "zh-CN": "无果", ja: "実なし" },
-  "Fruit": { en: "Fruit", "zh-CN": "有果", ja: "実あり" },
-  "Net 1": { en: "Net 1", "zh-CN": "网 1", ja: "網 1" },
-  "Net 2": { en: "Net 2", "zh-CN": "网 2", ja: "網 2" },
-  "Net 3": { en: "Net 3", "zh-CN": "网 3", ja: "網 3" },
-  "None": { en: "None", "zh-CN": "无网", ja: "網なし" },
-  "Dry": { en: "Dry", "zh-CN": "未浇水", ja: "未水やり" },
-  "Watered": { en: "Watered", "zh-CN": "已浇水", ja: "水やり済み" },
-  "Base": { en: "Base", "zh-CN": "基础", ja: "基本" },
-  "Pressure": { en: "Pressure", "zh-CN": "加压喷头", ja: "圧力ノズル" },
-  "Enricher": { en: "Enricher", "zh-CN": "施肥器", ja: "エンリッチ施肥装置" },
-  "Lit": { en: "Lit", "zh-CN": "已点燃", ja: "点灯" },
-  "Unlit": { en: "Unlit", "zh-CN": "未点燃", ja: "消灯" },
+  "Normal": { en: "Normal", "zh-CN": "普通", ja: "通常", ru: "Обычный"},
+  "Moss": { en: "Moss", "zh-CN": "苔藓", ja: "コケ", ru: "Мох"},
+  "No Fruit": { en: "No Fruit", "zh-CN": "无果", ja: "実なし", ru: "Без плодов"},
+  "Fruit": { en: "Fruit", "zh-CN": "有果", ja: "実あり", ru: "С плодами"},
+  "Net 1": { en: "Net 1", "zh-CN": "网 1", ja: "網 1", ru: "Сеть 1"},
+  "Net 2": { en: "Net 2", "zh-CN": "网 2", ja: "網 2", ru: "Сеть 2"},
+  "Net 3": { en: "Net 3", "zh-CN": "网 3", ja: "網 3", ru: "Сеть 3"},
+  "None": { en: "None", "zh-CN": "无网", ja: "網なし", ru: "Без сети"},
+  "Dry": { en: "Dry", "zh-CN": "未浇水", ja: "未水やり", ru: "Не полито"},
+  "Watered": { en: "Watered", "zh-CN": "已浇水", ja: "水やり済み", ru: "Полито"},
+  "Base": { en: "Base", "zh-CN": "基础", ja: "基本", ru: "Основа"},
+  "Pressure": { en: "Pressure", "zh-CN": "加压喷头", ja: "圧力ノズル", ru: "Нагнетательное сопло"},
+  "Enricher": { en: "Enricher", "zh-CN": "施肥器", ja: "エンリッチ施肥装置", ru: "Обогатитель"},
+  "Lit": { en: "Lit", "zh-CN": "已点燃", ja: "点灯", ru: "Зажжено"},
+  "Unlit": { en: "Unlit", "zh-CN": "未点燃", ja: "消灯", ru: "Не зажжено"},
 } as const;
 
 function createFilterLabels(
@@ -178,6 +200,13 @@ function createUnavailableGroupLabel(
       : `ここには置けないアイテムが${String(count)}件あります`;
   }
 
+  if (locale === "ru") {
+    if (isSearch) {
+      return `${formatRussianCountedNoun(count, "результат", "результата", "результатов")} нельзя разместить здесь`;
+    }
+    return `${formatRussianCountedNoun(count, "предмет", "предмета", "предметов")} нельзя разместить здесь`;
+  }
+
   const unsupportedLocale: never = locale;
   throw new TypeError(
     `Unsupported catalog-panel locale. Received: ${JSON.stringify(unsupportedLocale)}.`,
@@ -208,6 +237,11 @@ function createSceneAvailabilityReason(
     return availability === "indoor-only"
       ? "このアイテムは屋内にのみ配置できます。"
       : "このアイテムは屋外にのみ配置できます。";
+  }
+  if (locale === "ru") {
+    return availability === "indoor-only"
+      ? "Этот предмет можно разместить только в помещении."
+      : "Этот предмет можно разместить только на улице.";
   }
 
   const unsupportedLocale: never = locale;
@@ -374,6 +408,55 @@ const catalogPanelCopyByLocale = {
     variant: "バリエーション",
     variantLabels: createVariantLabels("ja"),
   },
+  ru: {
+    all: "Все",
+    brand: "Stardew Planner",
+    browseItems: "Обзор предметов",
+    cancelPlacement: "Отменить размещение (Esc)",
+    catalogLabel: "Каталог предметов",
+    categories: {
+      buildings: "Постройки",
+      crops: "Культуры",
+      trees: "Деревья",
+      equipment: "Оборудование",
+      paths: "Заборы и дорожки",
+      lighting: "Освещение",
+      furniture: "Мебель",
+      decor: "Декор",
+    },
+    clearSearch: "Очистить поиск",
+    collapseItems: "Свернуть каталог предметов",
+    cycleVariant: (name: string, currentLabel: string) =>
+      `Сменить вариант «${name}», сейчас: ${currentLabel}`,
+    filterLabels: createFilterLabels("ru"),
+    filterItems: "Фильтр предметов",
+    flip: "Отразить",
+    fillItemHint: "Перетащите, чтобы заполнить · Esc — отмена",
+    fillingItem: (name: string) => `Заполнение: ${name}`,
+    gridView: "Вид плиткой",
+    help: "Справка и информация",
+    keyboardShortcuts: "Горячие клавиши",
+    listView: "Вид списком",
+    loadFailed: "Не удалось загрузить предметы.",
+    loading: "Загрузка предметов…",
+    noResults: "Предметы не найдены.",
+    placeItemHint: "Нажмите, чтобы разместить · Esc — отмена",
+    placingItem: (name: string) => `Размещение: ${name}`,
+    retry: "Повторить",
+    rotate: "Повернуть",
+    searchAllItems: "Искать среди всех предметов",
+    searchResults: "Результаты поиска",
+    sceneAvailabilityReason: (availability) =>
+      createSceneAvailabilityReason("ru", availability),
+    unavailableGroup: (count, isSearch) =>
+      createUnavailableGroupLabel("ru", count, isSearch),
+    selectItem: (name: string, width: number, height: number) =>
+      `Выбрать ${name}, ${width} × ${height} клеток`,
+    unflip: "Отменить отражение",
+    variant: "Вариант",
+    variantLabels: createVariantLabels("ru"),
+  },
+
 } satisfies Readonly<Record<CatalogPanelLocale, CatalogPanelCopy>>;
 
 export function getCatalogPanelCopy(locale: HomepageLocale): CatalogPanelCopy {

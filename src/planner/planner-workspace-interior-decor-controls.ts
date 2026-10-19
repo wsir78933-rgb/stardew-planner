@@ -88,9 +88,15 @@ export function applyPlannerWorkspaceInteriorDecor(
 export function getInteriorDecorRejectionMessage(
   mapId: string,
   interiorDecorKind: InteriorDecorKind,
+  locale: PlannerChromeLocale = "en",
 ): string {
   assertMapId(mapId);
   assertInteriorDecorKind(interiorDecorKind);
+  assertInteriorDecorLocale(locale);
+
+  if (locale === "ru") {
+    return `Нельзя применить ${readRussianInteriorDecorKind(interiorDecorKind)} на карте ${JSON.stringify(mapId)} в этом месте.`;
+  }
 
   return `Cannot apply ${interiorDecorKind} on map ${JSON.stringify(mapId)} at this location.`;
 }
@@ -127,6 +133,12 @@ function readUnavailableInteriorDecorMessage(
       : "フローリングは屋内にだけ使えます。";
   }
 
+  if (locale === "ru") {
+    return interiorDecorKind === "wallpaper"
+      ? "Обои можно применять только внутри."
+      : "Настил можно применять только внутри.";
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read interior decor message because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -136,12 +148,24 @@ function readUnavailableInteriorDecorMessage(
 function assertInteriorDecorLocale(
   locale: string,
 ): asserts locale is PlannerChromeLocale {
-  if (locale === "en" || locale === "zh" || locale === "ja") {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return;
   }
 
   throw new TypeError(
-    `Interior decor locale must be "en", "zh", or "ja"; received ${JSON.stringify(locale)}.`,
+    `Interior decor locale must be "en", "zh", "ja", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readRussianInteriorDecorKind(interiorDecorKind: InteriorDecorKind): string {
+  if (interiorDecorKind === "wallpaper") {
+    return "обои";
+  }
+  if (interiorDecorKind === "flooring") {
+    return "настил";
+  }
+  throw new TypeError(
+    `Interior decor kind must be "wallpaper" or "flooring"; received ${JSON.stringify(interiorDecorKind)}.`,
   );
 }
 

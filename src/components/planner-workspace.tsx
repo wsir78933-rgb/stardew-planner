@@ -171,6 +171,10 @@ import {
   type HomepageLocale,
   type PlannerChromeLocale,
 } from "../homepage/homepage-locale";
+import {
+  readVisibleProjectMapLabel,
+  type ProjectMapLabelLocale,
+} from "../i18n/planner-project-map-label";
 import { readPlannerMapDisplayLabel } from "./planner-map-picker";
 import {
   getEditorModalCopy,
@@ -649,7 +653,7 @@ export function PlannerWorkspace({
           return;
         }
         dispatchPlannerWorkspaceAction({
-          message: getPlannerWorkspaceErrorMessage(caughtError),
+          message: getPlannerWorkspaceErrorMessage(caughtError, locale),
           resourceGeneration,
           type: "complete-runtime-error",
         });
@@ -801,7 +805,7 @@ function readStaticWorkspaceProjectName(
     return "Untitled Project";
   }
 
-  if (locale === "zh-CN" || locale === "ja") {
+  if (locale === "zh-CN" || locale === "ja" || locale === "ru") {
     return saveModalCopy.localProjects.defaultProjectName;
   }
 
@@ -1031,6 +1035,7 @@ function PreparedPlannerWorkspaceContent({
   } = usePreparedWorkspaceInitialization({
     dispatchPlannerWorkspaceAction,
     loadBuildingMetadata,
+    locale,
     preparedWorkspace,
     selectedPlannerMapId: plannerWorkspaceState.selectedPlannerMapId,
   });
@@ -1596,11 +1601,13 @@ function createProjectMapPanelContent({
 function usePreparedWorkspaceInitialization({
   dispatchPlannerWorkspaceAction,
   loadBuildingMetadata,
+  locale,
   preparedWorkspace,
   selectedPlannerMapId,
 }: Readonly<{
   dispatchPlannerWorkspaceAction: PlannerWorkspaceStateController["dispatchPlannerWorkspaceAction"];
   loadBuildingMetadata: () => Promise<BuildingPlacementMetadataById>;
+  locale: HomepageLocale;
   preparedWorkspace: PreparedPlannerWorkspace;
   selectedPlannerMapId: string;
 }>) {
@@ -1638,7 +1645,7 @@ function usePreparedWorkspaceInitialization({
           return;
         }
         dispatchPlannerWorkspaceAction({
-          message: getPlannerWorkspaceErrorMessage(caughtError),
+          message: getPlannerWorkspaceErrorMessage(caughtError, locale),
           resourceGeneration: preparedWorkspace.resourceGeneration,
           type: "complete-runtime-error",
         });
@@ -1653,6 +1660,7 @@ function usePreparedWorkspaceInitialization({
   }, [
     loadBuildingMetadata,
     dispatchPlannerWorkspaceAction,
+    locale,
     preparedWorkspace.resourceGeneration,
   ]);
 
@@ -2483,6 +2491,12 @@ function readPlannerStartupLoadingMessage(
       : currentMessage;
   }
 
+  if (locale === "ru") {
+    return currentMessage === startupLoadingMessage
+      ? "Загрузка локальных ресурсов планировщика…"
+      : currentMessage;
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read planner startup message because locale is ${JSON.stringify(unsupportedLocale)}.`,
@@ -2754,9 +2768,36 @@ function readSelectedPlacementNameFields(
   };
 }
 
-function getPlannerWorkspaceErrorMessage(caughtError: unknown): string {
-  if (caughtError instanceof Error) {
-    return caughtError.message;
+export function readVisibleCurrentProjectMapInstanceName(
+  activeSession: Readonly<{ sourceMap: { mapFile: string; label: string } }> | null,
+  locale: ProjectMapLabelLocale,
+): string | null {
+  if (activeSession === null) {
+    return null;
   }
-  return String(caughtError);
+  if (typeof activeSession !== "object") {
+    throw new TypeError(
+      `Active project session must be an object or null; received ${JSON.stringify(activeSession)}.`,
+    );
+  }
+  return readVisibleProjectMapLabel(activeSession.sourceMap, locale);
+}
+
+function getPlannerWorkspaceErrorMessage(
+  caughtError: unknown,
+  locale: HomepageLocale = "en",
+): string {
+  const diagnosticDetail = caughtError instanceof Error
+    ? caughtError.message
+    : String(caughtError);
+  if (locale === "ru") {
+    return `Не удалось подготовить планировщик. Причина: ${diagnosticDetail}`;
+  }
+  if (locale === "en" || locale === "zh-CN" || locale === "ja") {
+    return diagnosticDetail;
+  }
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner workspace error because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

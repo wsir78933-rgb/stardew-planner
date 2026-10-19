@@ -173,6 +173,68 @@ describe("project map instance panel", () => {
     ]);
   });
 
+  it("shows Russian catalog default map labels and keeps stored labels and custom names", () => {
+    const defaultFarmhouse = createProjectMapInstance(
+      "map-farmhouse",
+      "FarmHouse.tmx",
+      "Farmhouse",
+    );
+    const customFarmhouse = createProjectMapInstance(
+      "map-custom-farmhouse",
+      "FarmHouse.tmx",
+      "Мой дом",
+    );
+    const copiedFarmhouse = createProjectMapInstance(
+      "map-copied-farmhouse",
+      "FarmHouse.tmx",
+      "Farmhouse Copy",
+    );
+    const defaultStandardFarm = createProjectMapInstance(
+      "map-standard",
+      "Farm.tmx",
+      "Standard Farm",
+    );
+    const storedMapInstances = [
+      defaultFarmhouse,
+      customFarmhouse,
+      copiedFarmhouse,
+      defaultStandardFarm,
+    ];
+    const storedMapInstancesBeforeRender = JSON.stringify(storedMapInstances);
+    const russianPanelMarkup = renderProjectMapInstancePanel(storedMapInstances, "ru");
+    const englishPanelMarkup = renderProjectMapInstancePanel(storedMapInstances, "en");
+    const chinesePanelMarkup = renderProjectMapInstancePanel(storedMapInstances, "zh");
+
+    expect(russianPanelMarkup).toContain("<strong>Дом</strong><span>FarmHouse.tmx</span>");
+    expect(russianPanelMarkup).toContain("<strong>Мой дом</strong><span>FarmHouse.tmx</span>");
+    expect(russianPanelMarkup).toContain(
+      "<strong>Farmhouse Copy</strong><span>FarmHouse.tmx</span>",
+    );
+    expect(russianPanelMarkup).toContain(
+      "<strong>Стандартная ферма</strong><span>Farm.tmx</span>",
+    );
+    expect(russianPanelMarkup).not.toContain("<strong>Farmhouse</strong>");
+    expect(russianPanelMarkup).not.toContain("<strong>Standard Farm</strong>");
+    expect(englishPanelMarkup).toContain("<strong>Farmhouse</strong><span>FarmHouse.tmx</span>");
+    expect(englishPanelMarkup).toContain("<strong>Мой дом</strong><span>FarmHouse.tmx</span>");
+    expect(englishPanelMarkup).toContain(
+      "<strong>Farmhouse Copy</strong><span>FarmHouse.tmx</span>",
+    );
+    expect(englishPanelMarkup).toContain(
+      "<strong>Standard Farm</strong><span>Farm.tmx</span>",
+    );
+    expect(chinesePanelMarkup).toContain("<strong>Farmhouse</strong><span>FarmHouse.tmx</span>");
+    expect(chinesePanelMarkup).toContain(
+      "<strong>Standard Farm</strong><span>Farm.tmx</span>",
+    );
+    expect(JSON.stringify(storedMapInstances)).toBe(storedMapInstancesBeforeRender);
+    expect(defaultFarmhouse).toMatchObject({
+      id: "map-farmhouse",
+      mapFile: "FarmHouse.tmx",
+      label: "Farmhouse",
+    });
+  });
+
   it("renders Japanese project-map chrome and passes the locale into the map picker", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(ProjectMapInstancePanel, {
@@ -210,6 +272,45 @@ describe("project map instance panel", () => {
     expect(panelMarkup).not.toContain("Standard Farm");
   });
 });
+
+function createProjectMapInstance(
+  id: string,
+  mapFile: string,
+  label: string,
+): ReferenceProjectMap {
+  return {
+    id,
+    mapFile,
+    label,
+    season: "spring",
+    state: {},
+    decor: { wallpapers: {}, floors: {} },
+    renovations: [],
+    thumbnail: "",
+  };
+}
+
+function renderProjectMapInstancePanel(
+  mapInstances: readonly ReferenceProjectMap[],
+  locale: "en" | "zh" | "ru",
+): string {
+  return renderToStaticMarkup(
+    createElement(ProjectMapInstancePanel, {
+      locale,
+      activeMapInstanceId: mapInstances[0]?.id ?? null,
+      mapInstances,
+      mapChoices: availablePlannerMaps,
+      projectChoices: destinationProjects,
+      onAddMap: ignoreProjectMapInstanceAction,
+      onCopyMapInstance: ignoreProjectMapInstanceAction,
+      onDeleteMapInstance: ignoreProjectMapInstanceAction,
+      onDuplicateMapInstance: ignoreProjectMapInstanceAction,
+      onMoveMapInstance: ignoreProjectMapInstanceAction,
+      onOpenMapInstance: ignoreProjectMapInstanceAction,
+      onRenameMapInstance: ignoreProjectMapInstanceAction,
+    }),
+  );
+}
 
 function expectTextInOrder(markup: string, expectedTexts: readonly string[]): void {
   let previousTextIndex = -1;

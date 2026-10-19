@@ -166,16 +166,53 @@ const plannerFeedbackCopy = {
       invalidToken: "迷惑行為チェックのトークンがないか、無効です。",
     },
   },
+  ru: {
+    typeLabel: "Тип",
+    typeOptions: {
+      bug: "Сообщить об ошибке",
+      feature: "Предложить функцию",
+      other: "Другое",
+    },
+    subjectLabel: "Тема",
+    descriptionLabel: "Описание",
+    descriptionHint:
+      "Есть скриншот или видео? Вставьте ссылку на YouTube или изображение в описание.",
+    submitLabel: "Отправить отзыв",
+    submittingLabel: "Отправка…",
+    verifyingLabel: "Проверка…",
+    successMessage: "Спасибо, отзыв отправлен.",
+    unavailableConfigurationMessage: "Отзывы временно недоступны.",
+    unavailableMessage: "Не удалось отправить отзыв. Повторите попытку позже.",
+    verificationLoadingMessage:
+      "Проверка на спам ещё загружается. Повторите попытку через мгновение.",
+    verificationFailedMessage:
+      "Проверку на спам не удалось завершить. Отправьте форму ещё раз.",
+    invalidResponseMessage:
+      "Отзыв не принят. Проверьте поля и повторите попытку.",
+    fieldMessages: {
+      form: "Отправленная форма недействительна.",
+      expectedObject: "Ожидалась форма отзыва.",
+      unexpectedField: "Неподдерживаемое поле: {value}.",
+      missingField: "Это поле обязательно.",
+      invalidType: "Ожидался текст; получено {value}.",
+      unsupportedOption: "Выберите ошибку, предложение или другое; получено {value}.",
+      empty: "Это поле не может быть пустым.",
+      tooLong: "Поле слишком длинное ({value}; предел {limit}).",
+      lineBreak: "Тема должна быть одной строкой; получено {value}.",
+      invalidToken: "Токен проверки на спам отсутствует или недействителен.",
+    },
+  },
+
 } as const;
 
 function readPlannerFeedbackCopy(locale: PlannerFeedbackLocale) {
-  if (locale === "en" || locale === "zh" || locale === "ja") {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return plannerFeedbackCopy[locale];
   }
 
   const unsupportedLocale: never = locale;
-  throw new Error(
-    `Cannot read planner feedback copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  throw new TypeError(
+    `Planner feedback locale must be "en", "zh", or "ru"; received ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 

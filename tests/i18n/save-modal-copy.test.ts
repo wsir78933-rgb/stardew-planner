@@ -11,6 +11,12 @@ describe("save modal copy", () => {
   it.each([
     ["en", "Save tools", "Loading Local projects…", 'Cannot load save tool branch "projects": import failed'],
     ["zh-CN", "保存工具", "正在加载本地项目…", '无法加载保存工具分支 "projects"：import failed'],
+    [
+      "ru",
+      "Инструменты сохранения",
+      "Загрузка: Локальные проекты…",
+      'Не удалось загрузить ветку инструментов сохранения "projects": import failed',
+    ],
   ] as const)(
     "preserves branch identifiers and raw loader errors in %s",
     (locale, saveToolsLabel, loadingMessage, failureMessage) => {
@@ -228,6 +234,61 @@ describe("save modal copy", () => {
     expect(copy.farmSummaryDetail.season("summer")).toBe("Summer");
     expect(copy.farmSummaryDetail.season("fall")).toBe("Fall");
     expect(copy.farmSummaryDetail.title).toBe("Farm Summary");
+  });
+
+  it("formats Russian dates, seasons, search, import, and export without an English or Chinese fallback", () => {
+    const copy = getSaveModalCopy("ru");
+
+    expect(copy.localProjects.dateTimeLocale).toBe("ru");
+    expect(copy.localProjects.searchProjects).toBe("Искать планы");
+    expect(copy.localProjects.noSearchResults).toBe(
+      "Нет локальных проектов по этому запросу.",
+    );
+    expect(copy.localProjects.exportJson).toBe("Экспорт JSON");
+    expect(copy.localProjects.importJson).toBe("Импорт JSON");
+    expect(copy.localProjects.projectMapCount(1)).toBe("1 карта");
+    expect(copy.localProjects.projectMapCount(2)).toBe("2 карты");
+    expect(copy.localProjects.projectMapCount(5)).toBe("5 карт");
+    expect(copy.localProjects.exportedProject("River / Лето")).toBe(
+      "Проект «River / Лето» экспортирован.",
+    );
+    expect(copy.localProjects.importedProject("farm.JSON")).toBe(
+      "Импорт «farm.JSON» выполнен.",
+    );
+    expect(copy.localProjects.actionFailure("disk full")).toBe(
+      "Не удалось выполнить действие с локальным проектом: disk full",
+    );
+    expect(copy.gameSave.chooseFile).toBe("Выбрать файл сохранения");
+    expect(copy.gameSave.importing("Farm_123")).toBe("Импорт Farm_123…");
+    expect(copy.gameSave.importFailure("bad xml")).toBe(
+      "Не удалось импортировать сохранение: bad xml",
+    );
+    expect(copy.gameSave.unmappedItems(1)).toBe(
+      "1 предмет не удалось сопоставить (вероятно, из модов).",
+    );
+    expect(copy.imageExport.screenshot).toBe("Скриншот");
+    expect(copy.imageExport.exportFailure("canvas failed")).toBe(
+      "Не удалось экспортировать скриншот: canvas failed",
+    );
+    expect(copy.farmSummaryPreview.seasonLabel).toBe("Сезон");
+    expect(copy.farmSummaryPreview.season("spring")).toBe("Весна");
+    expect(copy.farmSummaryPreview.season("summer")).toBe("Лето");
+    expect(copy.farmSummaryPreview.season("fall")).toBe("Осень");
+    expect(copy.farmSummaryPreview.season("winter")).toBe("Зима");
+    expect(copy.farmSummaryPreview.itemsPlaced(0)).toBe("0 предметов размещено");
+    expect(copy.farmSummaryPreview.itemsPlaced(1)).toBe("1 предмет размещён");
+    expect(copy.farmSummaryPreview.itemsPlaced(2)).toBe("2 предмета размещены");
+    expect(copy.farmSummaryDetail.season("spring")).toBe("Весна");
+    expect(copy.cloudProjects.dateTimeLocale).toBe("ru");
+    expect(copy.cloudProjects.localSaveRetirementCountdown(7, 3, 15)).toBe(
+      "Локальное сохранение завершится через 7 д 3 ч 15 мин. Синхронизируйте проекты, которые хотите оставить в облаке. Облачные копии хранятся, пока вы их не удалите.",
+    );
+    expect(copy.localProjects.searchProjects).not.toBe("Search plans");
+    expect(copy.localProjects.searchProjects).not.toBe("搜索方案");
+    expect(copy.farmSummaryPreview.season("spring")).not.toBe("Spring");
+    expect(copy.farmSummaryPreview.season("spring")).not.toBe("春季");
+    expect(copy.gameSave.chooseFile).not.toBe("Choose save file");
+    expect(copy.gameSave.chooseFile).not.toBe("选择存档文件");
   });
 
   it("fails fast with the unsupported runtime locale value", () => {

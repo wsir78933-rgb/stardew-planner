@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { readVisibleProjectMapLabel } from "../i18n/planner-project-map-label";
 import type { PlannerMap } from "../maps/map-catalog";
 import type { ReferenceProjectMap } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
@@ -67,9 +68,7 @@ export function ProjectMapInstancePanel({
 
   function getRequiredDestinationProjectId(): string {
     if (availableDestinationProjectId.length === 0) {
-      throw new Error(
-        "Cannot transfer a local map instance because no destination project is selected.",
-      );
+      throw new Error(readMissingDestinationProjectMessage(locale));
     }
 
     return availableDestinationProjectId;
@@ -112,7 +111,7 @@ export function ProjectMapInstancePanel({
               key={mapInstance.id}
             >
               <div className="project-map-instance-panel__instance-summary">
-                <strong>{mapInstance.label}</strong>
+                <strong>{readProjectMapInstanceVisibleLabel(mapInstance, locale)}</strong>
                 <span>{mapInstance.mapFile}</span>
                 {isActiveMapInstance ? <span>{panelCopy.current}</span> : null}
               </div>
@@ -276,6 +275,40 @@ const japaneseProjectMapInstanceCopy = {
   addMap: "マップを追加",
 } as const satisfies ProjectMapInstanceCopy;
 
+
+const russianProjectMapInstanceCopy = {
+  projectMaps: "Карты проекта",
+  transferDestination: "Куда перенести",
+  createProjectFirst: "Сначала создайте ещё один локальный проект",
+  current: "Текущая",
+  newMapName: "Новое название карты",
+  saveName: "Сохранить название",
+  cancelRename: "Отменить переименование",
+  open: "Открыть",
+  rename: "Переименовать",
+  duplicate: "Дублировать",
+  copyToProject: "Копировать в проект",
+  moveToProject: "Переместить в проект",
+  deleteMap: "Удалить",
+  addMap: "Добавить карту",
+} as const satisfies ProjectMapInstanceCopy;
+
+function readProjectMapInstanceVisibleLabel(
+  mapInstance: ReferenceProjectMap,
+  locale: PlannerChromeLocale,
+): string {
+  if (locale === "ru") {
+    return readVisibleProjectMapLabel(mapInstance, "ru");
+  }
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return mapInstance.label;
+  }
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read project map instance label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
 function readProjectMapInstanceCopy(locale: PlannerChromeLocale): ProjectMapInstanceCopy {
   if (locale === "en" || locale === "zh") {
     return englishProjectMapInstanceCopy;
@@ -285,8 +318,25 @@ function readProjectMapInstanceCopy(locale: PlannerChromeLocale): ProjectMapInst
     return japaneseProjectMapInstanceCopy;
   }
 
+  if (locale === "ru") {
+    return russianProjectMapInstanceCopy;
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read project map instance copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readMissingDestinationProjectMessage(locale: PlannerChromeLocale): string {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return "Cannot transfer a local map instance because no destination project is selected.";
+  }
+  if (locale === "ru") {
+    return "Нельзя перенести локальную карту: проект назначения не выбран.";
+  }
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read missing destination message because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

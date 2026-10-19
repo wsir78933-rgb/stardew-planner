@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Dock, DockIconButton } from "@/components/ui/dock";
-import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import type { HomepageDisplayLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 import { ToolsNavigationMenu } from "../tools-navigation/tools-navigation-menu";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
@@ -15,7 +15,7 @@ export type SiteNavigationDockProps = Readonly<{
   blogLabel: string;
   brandHref: string;
   brandLabel: string;
-  currentLocale: HomepageLocale;
+  currentLocale: HomepageDisplayLocale;
   languageLabel: string;
   languageMode: "browser" | "static";
   localeHrefByLocale?: HomepageLocaleHrefByLocale;
@@ -40,7 +40,7 @@ function requireSiteNavigationDockNonEmptyString(
 }
 
 function renderSiteNavigationLanguageSwitcher(input: Readonly<{
-  currentLocale: HomepageLocale;
+  currentLocale: HomepageDisplayLocale;
   languageLabel: string;
   languageMode: "browser" | "static";
   languageSwitcher: ReactNode;

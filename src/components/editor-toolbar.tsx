@@ -104,6 +104,21 @@ const editorToolbarCopyByLocale = {
     undo: "元に戻す",
     redo: "やり直す",
   },
+  ru: {
+    toolbar: "Инструменты редактора",
+    select: "Выбор",
+    multi: "Несколько",
+    fill: "Заливка",
+    erase: "Стирание",
+    selectTooltip: "Выбрать и переместить предметы (V)",
+    multiTooltip: "Щёлкните или выделите рамкой несколько предметов (M)",
+    fillTooltip: "Проведите прямоугольник, чтобы залить предметами (F)",
+    eraseTooltip: "Щёлкните или выделите рамкой, чтобы стереть предметы (E)",
+    zoom: "Масштаб",
+    zoomTooltip: "Нажмите, чтобы включить или выключить масштаб колесом и выровнять планировщик в окне: вверх — увеличить, вниз — уменьшить",
+    undo: "Отменить",
+    redo: "Повторить",
+  },
 } as const satisfies Record<EditorToolbarLocale, {
   toolbar: string;
   select: string;
@@ -252,13 +267,13 @@ function getEditorToolbarButtonClassName(
 }
 
 function readEditorToolbarCopy(locale: EditorToolbarLocale) {
-  if (locale === "en" || locale === "zh" || locale === "ja") {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return editorToolbarCopyByLocale[locale];
   }
 
   const unsupportedLocale: never = locale;
-  throw new Error(
-    `Cannot read editor toolbar copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  throw new TypeError(
+    `Editor toolbar locale must be "en", "zh", "ja", or "ru"; received ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 
@@ -269,6 +284,10 @@ function readHistoryGroupLabel(locale: EditorToolbarLocale): string {
 
   if (locale === "ja") {
     return "履歴";
+  }
+
+  if (locale === "ru") {
+    return "История";
   }
 
   const unsupportedLocale: never = locale;
@@ -291,6 +310,10 @@ function getHistoryTitle(
 
   if (locale === "ja") {
     return action === "undo" ? "元に戻す（Ctrl+Z）" : "やり直す（Ctrl+Y）";
+  }
+
+  if (locale === "ru") {
+    return action === "undo" ? "Отменить (Ctrl+Z)" : "Повторить (Ctrl+Y)";
   }
 
   const unsupportedLocale: never = locale;

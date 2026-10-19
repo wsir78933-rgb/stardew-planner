@@ -281,6 +281,13 @@ function readCanvasContextMenuCopy(locale: PlannerChromeLocale): Readonly<{
     };
   }
 
+  if (locale === "ru") {
+    return {
+      copyFullMap: "Копировать всю карту",
+      menuLabel: "Действия с картой",
+    };
+  }
+
   const unsupportedLocale: never = locale;
   throw new Error(
     `Cannot read canvas context menu copy because locale is ${JSON.stringify(unsupportedLocale)}.`,

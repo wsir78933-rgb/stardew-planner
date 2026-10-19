@@ -6,10 +6,11 @@ import { HomepageLocaleSwitcher } from "@/src/components/homepage-locale-switche
 import { HomepageNavigationDock } from "@/src/components/homepage-navigation-dock";
 import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
 
-const englishLocaleHrefByLocale = {
+const homepageLocaleHrefByLocale = {
   en: "/",
   ja: "/ja",
   "zh-CN": "/zh",
+  ru: "/ru",
 } as const;
 
 function readHomepageHeaderMarkup(markup: string): string {
@@ -27,19 +28,19 @@ function readHomepageHeaderMarkup(markup: string): string {
 }
 
 function renderHomepageNavigationDockMarkup(input: Readonly<{
-  currentLocale: "en" | "zh-CN";
+  currentLocale: "en" | "zh-CN" | "ru";
   plannerHref: string;
 }>): string {
   return renderToStaticMarkup(
     <HomepageNavigationDock
       copy={homepageCopyByLocale[input.currentLocale]}
       currentLocale={input.currentLocale}
-      localeHrefByLocale={englishLocaleHrefByLocale}
+      localeHrefByLocale={homepageLocaleHrefByLocale}
       localeSwitcher={
         <HomepageLocaleSwitcher
           key="homepage-dock-language"
           label={homepageCopyByLocale[input.currentLocale].navigation.languageLabel}
-          localeHrefByLocale={englishLocaleHrefByLocale}
+          localeHrefByLocale={homepageLocaleHrefByLocale}
         />
       }
       plannerHref={input.plannerHref}
@@ -48,14 +49,14 @@ function renderHomepageNavigationDockMarkup(input: Readonly<{
 }
 
 function renderHomepageContentMarkup(input: Readonly<{
-  currentLocale: "en" | "zh-CN";
+  currentLocale: "en" | "zh-CN" | "ru";
   plannerHref: string;
 }>): string {
   return renderToStaticMarkup(
     createElement(HomepageContent, {
       copy: homepageCopyByLocale[input.currentLocale],
       currentLocale: input.currentLocale,
-      localeHrefByLocale: englishLocaleHrefByLocale,
+      localeHrefByLocale: homepageLocaleHrefByLocale,
       plannerHref: input.plannerHref,
       plannerWorkspace: createElement("div", {
         "data-test-planner-workspace": true,
@@ -134,6 +135,37 @@ test("uses localized blog and planner labels for zh-CN", () => {
   expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
   expect(headerMarkup).toContain("<span>打开规划器</span>");
   expect(headerMarkup).not.toContain("<svg");
+});
+
+test("keeps Russian homepage navigation on /ru and English blog and legal paths", () => {
+  const markup = renderHomepageContentMarkup({
+    currentLocale: "ru",
+    plannerHref: "#planner",
+  });
+  const headerMarkup = readHomepageHeaderMarkup(markup);
+
+  expect(headerMarkup).toMatch(
+    /<a[^>]*data-homepage-brand[^>]*href="\/ru"|<a[^>]*href="\/ru"[^>]*data-homepage-brand/,
+  );
+  expect(headerMarkup).toMatch(/<a[^>]*href="\/blog"/);
+  expect(headerMarkup).not.toContain('href="/ru/blog"');
+  expect(headerMarkup).not.toContain('href="/zh/blog"');
+  expect(headerMarkup).toContain("<span>Блог</span>");
+  expect(headerMarkup).toContain("<span>Язык</span>");
+  expect(headerMarkup).toContain("<span>Открыть планировщик</span>");
+  expect(headerMarkup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
+  );
+  expect(markup).toContain('href="/privacy"');
+  expect(markup).toContain('href="/terms"');
+  expect(markup).toContain('href="/contact"');
+  expect(markup).toContain('href="/ru#capabilities"');
+  expect(markup).toContain('href="/ru#faq"');
+  expect(markup).not.toContain('href="/ru/privacy"');
+  expect(markup).not.toContain('href="/ru/terms"');
+  expect(markup).not.toContain('href="/ru/contact"');
+  expect(markup).toContain("Планировщик фермы Stardew Valley");
+  expect(markup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
 });
 
 test("throws when plannerHref is empty", () => {

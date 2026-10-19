@@ -1153,7 +1153,7 @@ export function readLocalizedCatalogItemLabel(
   englishName: string,
 ): string {
   const catalogDisplayName = requireCatalogDisplayName(englishName);
-  if (locale === "en" || locale === "zh-CN") {
+  if (locale === "en" || locale === "zh-CN" || locale === "ru") {
     return catalogDisplayName;
   }
   if (locale === "ja") {
@@ -1176,7 +1176,7 @@ export function readSelectionEntityDisplayName(
   const lookupName = catalogDisplayName === undefined
     ? validatedEntityName
     : requireCatalogDisplayName(catalogDisplayName);
-  if (homepageLocale === "en" || homepageLocale === "zh-CN") {
+  if (homepageLocale === "en" || homepageLocale === "zh-CN" || homepageLocale === "ru") {
     return readLocalizedCatalogItemLabel(homepageLocale, validatedEntityName);
   }
   if (homepageLocale === "ja") {
@@ -1203,6 +1203,9 @@ function readSelectionHomepageLocale(
   }
   if (plannerChromeLocale === "ja") {
     return "ja";
+  }
+  if (plannerChromeLocale === "ru") {
+    return "ru";
   }
 
   const unsupportedPlannerChromeLocale: never = plannerChromeLocale;

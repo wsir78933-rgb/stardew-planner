@@ -77,6 +77,45 @@ describe("editor modal copy", () => {
     });
   });
 
+  it("delivers Russian settings, view labels, and English legal paths", () => {
+    const copy = getEditorModalCopy("ru");
+
+    expect(copy.modalTitles).toEqual({
+      save: "Сохранение",
+      settings: "Настройки",
+      view: "Вид",
+    });
+    expect(copy.stateLabel(true)).toBe("Вкл");
+    expect(copy.stateLabel(false)).toBe("Выкл");
+    expect(copy.settings.freePlacement.label).toBe("Свободное размещение");
+    expect(copy.settings.warningActions).toEqual({
+      cancel: "Отмена",
+      confirm: "Включить свободное размещение",
+    });
+    expect(copy.settings.privacyPolicy).toEqual({
+      href: "/privacy",
+      label: "Политика конфиденциальности",
+    });
+    expect(copy.settings.termsOfService).toEqual({
+      href: "/terms",
+      label: "Условия использования",
+    });
+    expect(copy.settings.privacyPolicy.href).not.toBe("/ru/privacy");
+    expect(copy.view.catalogPosition.heading).toBe("Положение каталога");
+    const sprinklerOption = copy.view.optionGroups[0]?.options[1];
+    if (sprinklerOption === undefined) {
+      throw new Error(
+        "Russian view copy is missing the sprinkler radius option.",
+      );
+    }
+    expect(sprinklerOption.label).toBe("Радиус спринклера");
+    expect(copy.view.npcPaths.label).toBe("Маршруты NPC");
+    expect(copy.settings.freePlacement.label).not.toBe("Free placement");
+    expect(copy.settings.freePlacement.label).not.toBe("自由放置");
+    expect(copy.stateLabel(true)).not.toBe("On");
+    expect(copy.stateLabel(true)).not.toBe("开");
+  });
+
   it("fails fast with the unsupported runtime locale value", () => {
     expect(() => getEditorModalCopy("fr" as never)).toThrow(
       'Unsupported editor-modal locale. Received: "fr".',

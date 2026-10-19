@@ -1,3 +1,5 @@
+import { getRussianCatalogItemDisplayName } from "../i18n/planner-russian-display-names";
+import type { HomepageLocale } from "../homepage/homepage-locale";
 import { catalogItemCategories, type CatalogItem } from "./catalog-types";
 import { referencePlaceableCatalogItemIds } from "./reference-placeable-order";
 import {
@@ -301,10 +303,12 @@ export function getCatalogSidebarItems(
   category: CatalogSidebarCategory,
   searchQuery: string,
   filterId = "all",
+  locale: HomepageLocale = "en",
 ): CatalogItem[] {
   validateCatalogSidebarCategory(category);
   validateCatalogSearchQuery(searchQuery);
   validateCatalogSidebarFilter(category, filterId);
+  assertHomepageLocale(locale);
   const uniqueCatalogItems = deduplicateCatalogItems(catalogItems);
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
@@ -317,9 +321,15 @@ export function getCatalogSidebarItems(
       const displayName = normalizeCatalogDisplayName(
         referenceEntry?.displayName ?? catalogItem.name,
       );
-      return catalogItem.name.toLowerCase().includes(normalizedSearchQuery) ||
+      const matchesEnglishNameOrId = catalogItem.name.toLowerCase().includes(normalizedSearchQuery) ||
         displayName.toLowerCase().includes(normalizedSearchQuery) ||
         catalogItem.id.toLowerCase().includes(normalizedSearchQuery);
+      if (locale !== "ru") {
+        return matchesEnglishNameOrId;
+      }
+      const russianDisplayName = readRussianCatalogSidebarDisplayName(catalogItem);
+      return matchesEnglishNameOrId ||
+        russianDisplayName.toLowerCase().includes(normalizedSearchQuery);
     }));
   }
 
@@ -332,8 +342,15 @@ export function getCatalogSidebarItems(
     }));
 }
 
-export function getCatalogSidebarDisplayName(catalogItem: CatalogItem): string {
+export function getCatalogSidebarDisplayName(
+  catalogItem: CatalogItem,
+  locale: HomepageLocale = "en",
+): string {
   validateCatalogItem(catalogItem);
+  assertHomepageLocale(locale);
+  if (locale === "ru") {
+    return readRussianCatalogSidebarDisplayName(catalogItem);
+  }
   const referenceEntry = findCatalogSidebarReferenceEntry(catalogItem.id);
   return normalizeCatalogDisplayName(referenceEntry?.displayName ?? catalogItem.name);
 }
@@ -418,6 +435,40 @@ function isInteriorPattern(
 ): catalogItem is CatalogItem & { interiorDecorKind: "wallpaper" | "flooring" } {
   return catalogItem.interiorDecorKind === "wallpaper" ||
     catalogItem.interiorDecorKind === "flooring";
+}
+
+function assertHomepageLocale(locale: HomepageLocale): void {
+  if (locale !== "en" && locale !== "zh-CN" && locale !== "ja" && locale !== "ru") {
+    throw new TypeError(
+      `Homepage locale must be "en", "zh-CN", "ja", or "ru"; received ${describeValue(locale)}.`,
+    );
+  }
+}
+
+function readRussianCatalogSidebarDisplayName(catalogItem: CatalogItem): string {
+  if (isInteriorPattern(catalogItem)) {
+    return readRussianInteriorPatternDisplayName(catalogItem);
+  }
+  return getRussianCatalogItemDisplayName(catalogItem.id);
+}
+
+function readRussianInteriorPatternDisplayName(
+  catalogItem: CatalogItem & { interiorDecorKind: "wallpaper" | "flooring" },
+): string {
+  const englishPrefix = catalogItem.interiorDecorKind === "wallpaper" ? "Wallpaper " : "Flooring ";
+  if (!catalogItem.name.startsWith(englishPrefix)) {
+    throw new Error(
+      `Interior ${catalogItem.interiorDecorKind} item ${JSON.stringify(catalogItem.id)} has name ${JSON.stringify(catalogItem.name)}, which does not start with ${JSON.stringify(englishPrefix)}.`,
+    );
+  }
+  const patternId = catalogItem.name.slice(englishPrefix.length);
+  if (patternId.length === 0) {
+    throw new Error(
+      `Interior ${catalogItem.interiorDecorKind} item ${JSON.stringify(catalogItem.id)} is missing a pattern id in name ${JSON.stringify(catalogItem.name)}.`,
+    );
+  }
+  const russianKind = catalogItem.interiorDecorKind === "wallpaper" ? "Обои" : "Пол";
+  return `${russianKind} ${patternId}`;
 }
 
 function normalizeCatalogDisplayName(displayName: string): string {

@@ -78,13 +78,13 @@ export function forgetEditorMenuModalFocusTarget(triggerElement: HTMLElement | n
 }
 
 function readEditorMenuCopy(locale: EditorMenuBarLocale) {
-  if (locale === "en" || locale === "zh" || locale === "ja") {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return editorMenuCopyByLocale[locale];
   }
 
   const unsupportedLocale: never = locale;
-  throw new Error(
-    `Cannot read editor menu copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  throw new TypeError(
+    `Editor menu locale must be "en", "zh", "ja", or "ru"; received ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 
@@ -174,6 +174,24 @@ const editorMenuCopyByLocale = {
     view: "表示",
     settings: "設定",
   },
+  ru: {
+    navigation: "Навигация редактора",
+    brand: "Планировщик Stardew",
+    utilities: "Справка и отзывы",
+    help: "Справка",
+    keyboard: "Сочетания клавиш",
+    feedback: "Отзыв",
+    library: "Библиотека",
+    currentMap: "Текущая карта",
+    features: "Параметры редактора",
+    menu: "Меню",
+    ambience: "Атмосфера",
+    farmSettings: "Настройки фермы",
+    map: "Карта",
+    view: "Вид",
+    settings: "Настройки",
+  },
+
 } as const satisfies Record<EditorMenuBarLocale, {
   navigation: string;
   brand: string;

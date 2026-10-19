@@ -1,4 +1,5 @@
 import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
+import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
 
@@ -104,6 +105,7 @@ export type PairedPublicLanguageAlternates = Readonly<{
 export type HomepagePublicLanguageAlternates = Readonly<
   PairedPublicLanguageAlternates & {
     ja: string;
+    ru: string;
   }
 >;
 
@@ -131,6 +133,29 @@ export function createPublicLanguageAlternates(
 
   return {
     ...pairedAlternates,
-    ja: createCanonicalUrl("/ja"),
+    ja: createCanonicalUrl(getHomepageDisplayPath("ja")),
+    ru: createCanonicalUrl(getHomepageDisplayPath("ru")),
   };
+}
+
+const homepageDisplayPathByLocale = {
+  en: "/",
+  "zh-CN": "/zh",
+  ja: "/ja",
+  ru: "/ru",
+} as const satisfies Readonly<Record<HomepageDisplayLocale, string>>;
+
+export function getHomepageDisplayPath(locale: HomepageDisplayLocale): string {
+  const homepagePath = homepageDisplayPathByLocale[locale];
+  if (homepagePath === undefined) {
+    throw new Error(
+      `Unsupported homepage display locale. Received: ${JSON.stringify(locale)}.`,
+    );
+  }
+
+  return homepagePath;
+}
+
+export function createHomepageLanguageAlternates(): HomepagePublicLanguageAlternates {
+  return createPublicLanguageAlternates("/");
 }

@@ -2289,8 +2289,8 @@ function expectStaticHomepageContent(
     ),
     'id="capabilities"',
     'id="how-to"',
-    'data-homepage-closing-cta="true"',
     'id="faq"',
+    'data-homepage-closing-cta="true"',
   ] as const;
   let previousHomepageSectionPosition = staticPageHtml.indexOf(
     homepageSectionMarkers[0],
@@ -2345,7 +2345,7 @@ function expectStaticHomepageContent(
       "@id": "https://stardewvalleyplanner.art/#website",
       name: "Stardew Valley Planner",
       url: "https://stardewvalleyplanner.art",
-      inLanguage: ["en", "zh-CN", "ja"],
+      inLanguage: ["en", "zh-CN", "ja", "ru"],
     });
   } else {
     expect(websites).toHaveLength(0);
@@ -2477,7 +2477,9 @@ describe("static public pages", () => {
       expect(staticPageHtml).toContain(
         `hrefLang="x-default" href="${expectedCanonicalUrl(englishPathname)}"`,
       );
+      expect(staticPageHtml).not.toContain('hrefLang="ru"');
       expect(staticPageHtml).not.toContain('hrefLang="ja"');
+      expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(3);
       expect(staticPageHtml).toContain(
         `<meta name="robots" content="${shouldIndex ? "index" : "noindex"}, follow"`,
       );
@@ -2556,6 +2558,70 @@ describe("static public pages", () => {
     }
   });
 
+  it("exports the Russian homepage with confirmed copy, four alternates, and no Russian subpages", () => {
+    const russianStaticPageFile = "ru.html";
+    const russianStaticPagePath = join(process.cwd(), "out", russianStaticPageFile);
+    expect(
+      existsSync(russianStaticPagePath),
+      `Russian homepage static file is missing. Received path: ${russianStaticPagePath}.`,
+    ).toBe(true);
+    const staticPageHtml = readStaticPageHtml(russianStaticPageFile);
+    const confirmedRussianTitle =
+      "Планировщик фермы Stardew Valley — бесплатно онлайн";
+    const confirmedRussianDescription =
+      "Планировщик для Stardew Valley: создавайте планировку фермы онлайн. 8 типов ферм, здания и посевы, смена сезонов, зоны действия и импорт сохранений.";
+
+    expect(
+      readInitialDocumentLanguage(staticPageHtml, "/ru", russianStaticPageFile),
+    ).toBe("ru");
+    expect(staticPageHtml).toContain(`<title>${confirmedRussianTitle}</title>`);
+    expect(staticPageHtml).toContain(
+      `<meta name="description" content="${confirmedRussianDescription}"/>`,
+    );
+    expect(staticPageHtml).not.toContain('<meta name="keywords"');
+    expect(staticPageHtml.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+    expect(staticPageHtml).toContain("Планировщик фермы ");
+    expect(staticPageHtml).toContain(">Stardew Valley</em>");
+    expect(staticPageHtml).toContain(
+      "Бесплатный онлайн-инструмент для планировки фермы",
+    );
+    expect(staticPageHtml).toContain(
+      `<link rel="canonical" href="${expectedCanonicalUrl("/ru")}"`,
+    );
+    expect(staticPageHtml).toContain(
+      `hrefLang="en" href="${expectedCanonicalUrl("/")}"`,
+    );
+    expect(staticPageHtml).toContain(
+      `hrefLang="zh-CN" href="${expectedCanonicalUrl("/zh")}"`,
+    );
+    expect(staticPageHtml).toContain(
+      `hrefLang="ru" href="${expectedCanonicalUrl("/ru")}"`,
+    );
+    expect(staticPageHtml).toContain(
+      `hrefLang="ja" href="${expectedCanonicalUrl("/ja")}"`,
+    );
+    expect(staticPageHtml).toContain(
+      `hrefLang="x-default" href="${expectedCanonicalUrl("/")}"`,
+    );
+    expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(5);
+    expect(staticPageHtml).toContain('href="/blog"');
+    expect(staticPageHtml).not.toContain('href="/ru/blog"');
+    expect(staticPageHtml).not.toContain('href="/ru/privacy"');
+    expect(staticPageHtml).not.toContain('href="/ru/terms"');
+    expect(staticPageHtml).not.toContain('href="/ru/contact"');
+    const structuredDataEntries = readJsonLdStructuredData(
+      staticPageHtml,
+      russianStaticPageFile,
+    );
+    expect(findStructuredDataByType(structuredDataEntries, "WebSite")).toHaveLength(0);
+    expect(findStructuredDataByType(structuredDataEntries, "WebApplication")).toEqual([
+      expect.objectContaining({
+        inLanguage: "ru",
+        url: "https://stardewvalleyplanner.art/ru",
+      }),
+    ]);
+  });
+
   it("exports all bilingual public pages with static metadata and paired language alternates", () => {
     for (const [
       pathname,
@@ -2608,10 +2674,16 @@ describe("static public pages", () => {
       );
       if (englishPathname === "/") {
         expect(staticPageHtml).toContain(
+          `hrefLang="ru" href="${expectedCanonicalUrl("/ru")}"`,
+        );
+        expect(staticPageHtml).toContain(
           'hrefLang="ja" href="https://stardewvalleyplanner.art/ja"',
         );
+        expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(5);
       } else {
+        expect(staticPageHtml).not.toContain('hrefLang="ru"');
         expect(staticPageHtml).not.toContain('hrefLang="ja"');
+        expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(3);
       }
 
       expect(staticPageHtml).toContain('href="https://discord.gg/GGfUJZsMN"');

@@ -366,6 +366,10 @@ function restoreModalTriggerFocus(
 }
 
 function HelpInfoPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
+  if (locale === "ru") {
+    return <RussianHelpInfoPanel />;
+  }
+
   if (locale === "ja") {
     return (
       <div className="editor-reference-info">
@@ -431,42 +435,48 @@ function HelpInfoPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
 }
 
 function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
-  const shortcutText = (text: Readonly<{ en: string; zh: string; ja: string }>) =>
+  const shortcutText = (text: Readonly<{ en: string; zh: string; ja: string; ru: string }>) =>
     readEditorModalText(locale, text);
   const shortcutGroups = [
-    { heading: shortcutText({ en: "Tools", zh: "工具", ja: "ツール" }), entries: [
-      ["V", shortcutText({ en: "Switch to cursor mode", zh: "切换到选择模式", ja: "選択モードに切り替え" })],
-      ["M", shortcutText({ en: "Switch to multi-select mode", zh: "切换到多选模式", ja: "複数選択モードに切り替え" })],
-      ["E", shortcutText({ en: "Switch to erase mode", zh: "切换到擦除模式", ja: "消去モードに切り替え" })],
-      ["F", shortcutText({ en: "Switch to fill mode", zh: "切换到填充模式", ja: "塗りつぶしモードに切り替え" })],
-      ["Q", shortcutText({ en: "Rotate or cycle variant on selected/placed item", zh: "旋转或切换所选 / 待放置物品外观", ja: "選択中または配置予定のアイテムの向きや種類を切り替え" })],
-      ["C", shortcutText({ en: "Duplicate selected item or building", zh: "复制选中物品或建筑", ja: "選択したアイテムまたは建物を複製" })],
-      ["Del", shortcutText({ en: "Delete selected item or building", zh: "删除选中物品或建筑", ja: "選択したアイテムまたは建物を削除" })],
-      ["Esc", shortcutText({ en: "Cancel placement or deselect", zh: "取消放置或取消选择", ja: "配置または選択をキャンセル" })],
-      ["RMB", shortcutText({ en: "Cancel placement or deselect (right-click)", zh: "右键取消放置或取消选择", ja: "右クリックで配置または選択をキャンセル" })],
+    { heading: shortcutText({ en: "Tools", zh: "工具", ja: "ツール", ru: "Инструменты" }), entries: [
+      ["V", shortcutText({ en: "Switch to cursor mode", zh: "切换到选择模式", ja: "選択モードに切り替え", ru: "Переключить режим выбора" })],
+      ["M", shortcutText({ en: "Switch to multi-select mode", zh: "切换到多选模式", ja: "複数選択モードに切り替え", ru: "Переключить режим множественного выбора" })],
+      ["E", shortcutText({ en: "Switch to erase mode", zh: "切换到擦除模式", ja: "消去モードに切り替え", ru: "Переключить режим стирания" })],
+      ["F", shortcutText({ en: "Switch to fill mode", zh: "切换到填充模式", ja: "塗りつぶしモードに切り替え", ru: "Переключить режим заливки" })],
+      ["Q", shortcutText({ en: "Rotate or cycle variant on selected/placed item", zh: "旋转或切换所选 / 待放置物品外观", ja: "選択中または配置予定のアイテムの向きや種類を切り替え", ru: "Повернуть или сменить вариант выбранного или размещаемого предмета" })],
+      ["C", shortcutText({ en: "Duplicate selected item or building", zh: "复制选中物品或建筑", ja: "選択したアイテムまたは建物を複製", ru: "Дублировать выбранный предмет или постройку" })],
+      ["Del", shortcutText({ en: "Delete selected item or building", zh: "删除选中物品或建筑", ja: "選択したアイテムまたは建物を削除", ru: "Удалить выбранный предмет или постройку" })],
+      ["Esc", shortcutText({ en: "Cancel placement or deselect", zh: "取消放置或取消选择", ja: "配置または選択をキャンセル", ru: "Отменить размещение или снять выделение" })],
+      ["RMB", shortcutText({ en: "Cancel placement or deselect (right-click)", zh: "右键取消放置或取消选择", ja: "右クリックで配置または選択をキャンセル", ru: "Отменить размещение или снять выделение (правая кнопка)" })],
     ] },
-    { heading: shortcutText({ en: "Navigation", zh: "导航", ja: "移動" }), entries: [
-      ["W A S D", shortcutText({ en: "Pan the canvas", zh: "平移画布", ja: "キャンバスを移動" })],
-      ["↑ ← ↓ →", shortcutText({ en: "Pan the canvas (alternative)", zh: "平移画布（方向键）", ja: "キャンバスを移動（方向キー）" })],
-      ["R", shortcutText({ en: "Zoom in", zh: "放大", ja: "拡大" })],
-      ["T", shortcutText({ en: "Zoom out", zh: "缩小", ja: "縮小" })],
-      ["Ctrl / ⌘", shortcutText({ en: "X-ray: hold to see behind overlapping sprites", zh: "按住透视重叠的物品", ja: "透視: 押し続けると重なったスプライトの奥が見える" })],
-      ["Space", shortcutText({ en: "Hold for X-ray (alternative)", zh: "按住透视（原有快捷键）", ja: "押し続けると透視（別のショートカット）" })],
+    { heading: shortcutText({ en: "Navigation", zh: "导航", ja: "移動", ru: "Навигация" }), entries: [
+      ["W A S D", shortcutText({ en: "Pan the canvas", zh: "平移画布", ja: "キャンバスを移動", ru: "Перемещать холст" })],
+      ["↑ ← ↓ →", shortcutText({ en: "Pan the canvas (alternative)", zh: "平移画布（方向键）", ja: "キャンバスを移動（方向キー）", ru: "Перемещать холст (клавиши со стрелками)" })],
+      ["R", shortcutText({ en: "Zoom in", zh: "放大", ja: "拡大", ru: "Увеличить" })],
+      ["T", shortcutText({ en: "Zoom out", zh: "缩小", ja: "縮小", ru: "Уменьшить" })],
+      ["Ctrl / ⌘", shortcutText({ en: "X-ray: hold to see behind overlapping sprites", zh: "按住透视重叠的物品", ja: "透視: 押し続けると重なったスプライトの奥が見える", ru: "Рентген: удерживайте, чтобы видеть перекрытые спрайты" })],
+      ["Space", shortcutText({ en: "Hold for X-ray (alternative)", zh: "按住透视（原有快捷键）", ja: "押し続けると透視（別のショートカット）", ru: "Удерживайте для рентгена (запасной вариант)" })],
     ] },
-    { heading: shortcutText({ en: "History", zh: "历史", ja: "履歴" }), entries: [
-      ["Ctrl / ⌘ Z", shortcutText({ en: "Undo last action", zh: "撤销上一次操作", ja: "直前の操作を元に戻す" })],
-      ["Ctrl / ⌘ Y", shortcutText({ en: "Redo last action", zh: "重做上一次撤销的操作", ja: "元に戻した操作をやり直す" })],
-      ["Ctrl / ⌘ ⇧ Z", shortcutText({ en: "Redo (alternative)", zh: "重做（备用快捷键）", ja: "やり直す（別のショートカット）" })],
+    { heading: shortcutText({ en: "History", zh: "历史", ja: "履歴", ru: "История" }), entries: [
+      ["Ctrl / ⌘ Z", shortcutText({ en: "Undo last action", zh: "撤销上一次操作", ja: "直前の操作を元に戻す", ru: "Отменить последнее действие" })],
+      ["Ctrl / ⌘ Y", shortcutText({ en: "Redo last action", zh: "重做上一次撤销的操作", ja: "元に戻した操作をやり直す", ru: "Вернуть отменённое действие" })],
+      ["Ctrl / ⌘ ⇧ Z", shortcutText({ en: "Redo (alternative)", zh: "重做（备用快捷键）", ja: "やり直す（別のショートカット）", ru: "Вернуть (запасной вариант)" })],
     ] },
   ];
   return (
     <div className="editor-reference-info editor-reference-info--shortcuts">
-      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{shortcutText({ en: "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works.", zh: "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放", ja: "ホイールでズームするには、下の「ズーム」ボタンを先にオンにしてください。2本指のピンチはそのまま使えます。" })}</p> : null}</section>)}
+      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{shortcutText({ en: "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works.", zh: "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放", ja: "ホイールでズームするには、下の「ズーム」ボタンを先にオンにしてください。2本指のピンチはそのまま使えます。", ru: "Чтобы масштабировать колесом, включите нижнюю кнопку «Масштаб»; жест двумя пальцами по-прежнему работает." })}</p> : null}</section>)}
     </div>
   );
 }
 
-function WhatsNewPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
+function WhatsNewPanel({
+  locale,
+}: Readonly<{ locale: PlannerChromeLocale }>) {
+  if (locale === "ru") {
+    return <RussianWhatsNewPanel />;
+  }
+
   if (locale === "ja") {
     return (
       <div className="editor-reference-info">
@@ -567,11 +577,11 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
 }
 
 function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: PlannerChromeLocale): string {
-  if (modalId === "ambience-panel") return readEditorModalText(locale, { en: "Ambience", zh: "氛围", ja: "雰囲気" });
-  if (modalId === "farm-settings") return readEditorModalText(locale, { en: "Farm Settings", zh: "农场设置", ja: "牧場の設定" });
-  if (modalId === "feedback") return readEditorModalText(locale, { en: "Send feedback", zh: "发送反馈", ja: "フィードバックを送信" });
+  if (modalId === "ambience-panel") return readEditorModalText(locale, { en: "Ambience", zh: "氛围", ja: "雰囲気", ru: "Атмосфера" });
+  if (modalId === "farm-settings") return readEditorModalText(locale, { en: "Farm Settings", zh: "农场设置", ja: "牧場の設定", ru: "Настройки фермы" });
+  if (modalId === "feedback") return readEditorModalText(locale, { en: "Send feedback", zh: "发送反馈", ja: "フィードバックを送信", ru: "Отправить отзыв" });
   if (modalId === "map-picker") {
-    return readEditorModalText(locale, { en: "Choose map", zh: "选择地图", ja: "マップを選ぶ" });
+    return readEditorModalText(locale, { en: "Choose map", zh: "选择地图", ja: "マップを選ぶ", ru: "Выбор карты" });
   }
 
   if (modalId === "view-panel") {
@@ -579,19 +589,19 @@ function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: Pl
   }
 
   if (modalId === "save-panel") {
-    return readEditorModalText(locale, { en: "Library", zh: "本地项目", ja: "ライブラリ" });
+    return readEditorModalText(locale, { en: "Library", zh: "本地项目", ja: "ライブラリ", ru: "Библиотека" });
   }
 
   if (modalId === "help-info") {
-    return readEditorModalText(locale, { en: "Help & Info", zh: "帮助与说明", ja: "ヘルプと説明" });
+    return readEditorModalText(locale, { en: "Help & Info", zh: "帮助与说明", ja: "ヘルプと説明", ru: "Справка" });
   }
 
   if (modalId === "keyboard-shortcuts") {
-    return readEditorModalText(locale, { en: "Keyboard Shortcuts", zh: "键盘快捷键", ja: "キーボードショートカット" });
+    return readEditorModalText(locale, { en: "Keyboard Shortcuts", zh: "键盘快捷键", ja: "キーボードショートカット", ru: "Сочетания клавиш" });
   }
 
   if (modalId === "whats-new") {
-    return readEditorModalText(locale, { en: "What's New", zh: "What's New", ja: "更新情報" });
+    return readEditorModalText(locale, { en: "What's New", zh: "What's New", ja: "更新情報", ru: "Что нового" });
   }
 
   if (modalId === "settings-panel") {
@@ -606,9 +616,9 @@ function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: Pl
 
 function readEditorModalText(
   locale: PlannerChromeLocale,
-  text: Readonly<{ en: string; zh: string; ja: string }>,
+  text: Readonly<{ en: string; zh: string; ja: string; ru: string }>,
 ): string {
-  if (locale === "en" || locale === "zh" || locale === "ja") {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return text[locale];
   }
 
@@ -623,4 +633,57 @@ function getModalCloseDialogLabel(
   copy: EditorModalCopy,
 ): string {
   return copy.closeDialogLabel;
+}
+
+function RussianHelpInfoPanel() {
+  return (
+    <div className="editor-reference-info">
+      <section>
+        <h3>Возможности</h3>
+        <ul>
+          <li><strong>Переключение щелчком</strong> · Щёлкайте одну клетку несколько раз, чтобы перебирать перекрывающиеся предметы.</li>
+          <li><strong>Рентген</strong> · Удерживайте пробел, чтобы видеть сквозь размещённые спрайты.</li>
+          <li><strong>Перетаскивание</strong> · Перетащите выбранную постройку или предмет, чтобы переместить их.</li>
+          <li><strong>Окраска</strong> · Перекрашивайте поддерживаемые постройки, сундуки и воду в пруду.</li>
+          <li><strong>Зоны действия</strong> · Показывает покрытие спринклеров, пугал, ульев и хижины Джунимо.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Полезно знать</h3>
+        <ul>
+          <li>Проекты сохраняются только в этом браузере. Экспортируйте JSON, чтобы оставить переносимую копию.</li>
+          <li>Свободное размещение включайте только для раскладки, которую игра может не разрешить.</li>
+          <li>Обои и настил можно применять только к подходящим внутренним областям.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Карты</h3>
+        <p>Кнопка «Карта» переключает ферму, интерьер, экстерьер и закрытые карты сообщества. В одном локальном проекте можно хранить отдельные раскладки для нескольких карт.</p>
+      </section>
+    </div>
+  );
+}
+
+function RussianWhatsNewPanel() {
+  return (
+    <div className="editor-reference-info">
+      <p className="editor-reference-info__version">v0.1.1 · апрель 2026</p>
+      <section>
+        <h3>Карты сообщества</h3>
+        <p>Карты сообщества открываются на вкладке сообщества и по-прежнему входят в этот планировщик локально.</p>
+      </section>
+      <section>
+        <h3>Декор стола</h3>
+        <p>Ставьте лампы, растения и другие подходящие предметы на столы и тумбы.</p>
+      </section>
+      <section>
+        <h3>Зимние культуры</h3>
+        <p>Пороховая дыня доступна в выборе культур.</p>
+      </section>
+      <section>
+        <h3>Тени спринклеров</h3>
+        <p>Спринклеры отображаются с тенью на земле, как в игре.</p>
+      </section>
+    </div>
+  );
 }
