@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import { getToolsPageCopy } from "../../src/i18n/tools-page-copy";
+import { seasonProfitRankingHasRows } from "../../src/tools-pages/crop-profit-tool";
 import { ToolsHomePage } from "../../src/tools-pages/tools-home-page";
 
 it("links the Chinese tools homepage planting card to both planting tools", () => {
@@ -36,4 +37,10 @@ it("renders the Chinese season-profit form labels", async () => {
   expect(markup).toContain("夏");
   expect(markup).toContain("秋");
   expect(markup).toContain("冬");
+});
+
+it("treats a season-profit row count of zero as no ranking rows", () => {
+  expect(seasonProfitRankingHasRows(0)).toBe(false);
+  expect(seasonProfitRankingHasRows(1)).toBe(true);
+  expect(() => seasonProfitRankingHasRows(-1)).toThrow("Received: -1");
 });

@@ -31,10 +31,14 @@ export function PlantingToolFrame({
     <article className={styles.toolsPage}>
       <header className={styles.pageHeader}>
         <p className="public-breadcrumbs">{copy.frame.breadcrumb}</p>
-        <h1>{title}</h1>
-        {saveLabel === null ? null : (
-          <p role={saveStatus === "failed" ? "alert" : undefined}>{saveLabel}</p>
-        )}
+        <div className={styles.titleRow}>
+          <h1>{title}</h1>
+          {saveLabel === null ? null : (
+            <p className={styles.saveStatus} role={saveStatus === "failed" ? "alert" : undefined}>
+              {saveLabel}
+            </p>
+          )}
+        </div>
       </header>
       <div className={styles.frame}>
         <nav aria-label={copy.frame.allTools} className={styles.sidebar}>
