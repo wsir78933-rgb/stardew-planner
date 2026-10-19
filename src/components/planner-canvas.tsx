@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import type {
   BuildingPlacementMetadataById,
   CatalogItem,
@@ -1340,6 +1342,9 @@ export function PlannerCanvas({
   gameCursors,
   onCancelEditingInteraction,
 }: PlannerCanvasProperties) {
+  const canvasLocale = usePlannerChromeLocale();
+  const canvasLocaleReference = useRef(canvasLocale);
+  canvasLocaleReference.current = canvasLocale;
   const canvasRootElementReference = useRef<HTMLElement>(null);
   const canvasHostElementReference = useRef<HTMLDivElement>(null);
   const onMapPlacementGridReadyReference = useRef(onMapPlacementGridReady);
@@ -1965,7 +1970,7 @@ export function PlannerCanvas({
         const requestPlacementOverlayRender = (): void => {
           void renderPlacementOverlay().catch((caughtError: unknown) => {
             reportPlacementRenderError(
-              formatPlannerCanvasError(mapId, caughtError),
+              formatPlannerCanvasError(mapId, caughtError, canvasLocaleReference.current),
             );
           });
         };
@@ -2206,7 +2211,7 @@ export function PlannerCanvas({
         const requestPlacementPreviewOverlayRender = (): void => {
           void renderPlacementPreviewOverlay().catch((caughtError: unknown) => {
             reportPlacementRenderError(
-              formatPlannerCanvasError(mapId, caughtError),
+              formatPlannerCanvasError(mapId, caughtError, canvasLocaleReference.current),
             );
           });
         };
@@ -2627,7 +2632,7 @@ export function PlannerCanvas({
         cleanUpPlannerCanvas();
 
         if (!wasUnmountedBeforeFailure) {
-          const errorMessage = formatPlannerCanvasError(mapId, caughtError);
+          const errorMessage = formatPlannerCanvasError(mapId, caughtError, canvasLocaleReference.current);
           setPlannerCanvasStatus({
             kind: "error",
             message: errorMessage,
@@ -2647,7 +2652,7 @@ export function PlannerCanvas({
   return (
     <section
       aria-busy={plannerCanvasStatus.kind === "loading"}
-      aria-label={`Farm map canvas for ${mapId}`}
+      aria-label={readPlannerCanvasAriaLabel(canvasLocale, mapId)}
       className={`planner-canvas canvas-container ${
         pointerInteractionMode === "navigate" ? "cursor-mode" : "placement-active"
       } ${gameCursors === false ? atmosphereStyles.systemCursor : ""}`}
@@ -2675,8 +2680,7 @@ export function PlannerCanvas({
               return copyFullMap();
             }
 
-            const unavailableCopyMessage =
-              `Copy full map is unavailable for map ID ${JSON.stringify(mapId)} because the canvas context-menu copy action is null.`;
+            const unavailableCopyMessage = readUnavailableFullMapCopyMessage(canvasLocale, mapId);
             setPlannerCanvasStatus({
               kind: "error",
               message: unavailableCopyMessage,
@@ -2707,7 +2711,7 @@ export function PlannerCanvas({
       ) : null}
       {plannerCanvasStatus.kind === "loading" ? (
         <p className="planner-canvas__status" role="status">
-          Loading local map {mapId}…
+          {readPlannerCanvasLoadingMessage(canvasLocale, mapId)}
         </p>
       ) : null}
       {plannerCanvasStatus.kind === "error" ? (
@@ -5766,9 +5770,71 @@ function destroyPixiApplication(pixiApplication: PixiApplication): void {
   );
 }
 
-function formatPlannerCanvasError(mapId: string, caughtError: unknown): string {
+function formatPlannerCanvasError(
+  mapId: string,
+  caughtError: unknown,
+  locale: PlannerChromeLocale = "en",
+): string {
   const errorMessage =
     caughtError instanceof Error ? caughtError.message : String(caughtError);
 
-  return `Unable to render mapId ${JSON.stringify(mapId)}. ${errorMessage}`;
+  if (locale === "ja") {
+    return `マップ ID ${JSON.stringify(mapId)} を表示できません。${errorMessage}`;
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return `Unable to render mapId ${JSON.stringify(mapId)}. ${errorMessage}`;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot format planner canvas error because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerCanvasAriaLabel(locale: PlannerChromeLocale, mapId: string): string {
+  if (locale === "ja") {
+    return `${mapId} の牧場マップキャンバス`;
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return `Farm map canvas for ${mapId}`;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner canvas label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerCanvasLoadingMessage(locale: PlannerChromeLocale, mapId: string): string {
+  if (locale === "ja") {
+    return `ローカルマップ ${mapId} を読み込んでいます…`;
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return `Loading local map ${mapId}…`;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner canvas loading message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readUnavailableFullMapCopyMessage(locale: PlannerChromeLocale, mapId: string): string {
+  const mapIdText = JSON.stringify(mapId);
+
+  if (locale === "ja") {
+    return `マップ ID ${mapIdText} のマップ全体はコピーできません。キャンバスの右クリックコピー操作がありません。`;
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return `Copy full map is unavailable for map ID ${mapIdText} because the canvas context-menu copy action is null.`;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read full-map copy message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

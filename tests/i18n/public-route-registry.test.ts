@@ -286,6 +286,17 @@ it("returns absolute paired language alternates", () => {
     "zh-CN": "https://stardewvalleyplanner.art/zh/privacy",
     "x-default": "https://stardewvalleyplanner.art/privacy",
   });
+  expect(createPublicLanguageAlternates("/privacy")).not.toHaveProperty("ja");
+  expect(createPublicLanguageAlternates("/blog")).not.toHaveProperty("ja");
+});
+
+it("adds Japanese only to the homepage language alternates", () => {
+  expect(createPublicLanguageAlternates("/")).toEqual({
+    en: "https://stardewvalleyplanner.art",
+    "zh-CN": "https://stardewvalleyplanner.art/zh",
+    ja: "https://stardewvalleyplanner.art/ja",
+    "x-default": "https://stardewvalleyplanner.art",
+  });
 });
 
 it("rejects locale and canonical path values outside the public registry", () => {

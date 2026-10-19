@@ -23,35 +23,79 @@ function createSocialImageUrl(socialImagePath: string): string {
   return new URL(socialImagePath, publicSiteUrl).toString();
 }
 
-export function createPublicPageMetadata(
-  input: PublicPageMetadataInput,
+function createSharedPublicMetadata(
+  input: Readonly<{
+    title: string;
+    description: string;
+    canonicalUrl: string;
+    languages: ReturnType<typeof createPublicLanguageAlternates>;
+    openGraphType: "article" | "website";
+    socialImageUrl: string;
+    robots?: Metadata["robots"];
+  }>,
 ): Metadata {
-  const canonicalUrl = createCanonicalUrl(
-    getLocalizedPublicPath(input.locale, input.canonicalPath),
-  );
-  const openGraphType = input.openGraphType ?? "website";
-  const languages = createPublicLanguageAlternates(input.canonicalPath);
-  const socialImageUrl = createSocialImageUrl(
-    input.socialImagePath ?? sharedSocialImagePath,
-  );
-
   return {
     title: input.title,
     description: input.description,
-    alternates: { canonical: canonicalUrl, languages },
+    alternates: { canonical: input.canonicalUrl, languages: input.languages },
     openGraph: {
       title: input.title,
       description: input.description,
-      type: openGraphType,
-      url: canonicalUrl,
-      images: [socialImageUrl],
+      type: input.openGraphType,
+      url: input.canonicalUrl,
+      images: [input.socialImageUrl],
     },
     twitter: {
       card: "summary_large_image",
       title: input.title,
       description: input.description,
-      images: [socialImageUrl],
+      images: [input.socialImageUrl],
     },
     robots: input.robots,
   };
+}
+
+export function createPublicPageMetadata(
+  input: PublicPageMetadataInput,
+): Metadata {
+  return createSharedPublicMetadata({
+    title: input.title,
+    description: input.description,
+    canonicalUrl: createCanonicalUrl(
+      getLocalizedPublicPath(input.locale, input.canonicalPath),
+    ),
+    languages: createPublicLanguageAlternates(input.canonicalPath),
+    openGraphType: input.openGraphType ?? "website",
+    socialImageUrl: createSocialImageUrl(
+      input.socialImagePath ?? sharedSocialImagePath,
+    ),
+    robots: input.robots,
+  });
+}
+
+export function createJapaneseHomepageMetadata(
+  input: Readonly<{
+    title: string;
+    description: string;
+  }>,
+): Metadata {
+  if (input.title.trim().length === 0) {
+    throw new Error(
+      `Japanese homepage title must be a non-empty string. Received: ${JSON.stringify(input.title)}.`,
+    );
+  }
+  if (input.description.trim().length === 0) {
+    throw new Error(
+      `Japanese homepage description must be a non-empty string. Received: ${JSON.stringify(input.description)}.`,
+    );
+  }
+
+  return createSharedPublicMetadata({
+    title: input.title,
+    description: input.description,
+    canonicalUrl: createCanonicalUrl("/ja"),
+    languages: createPublicLanguageAlternates("/"),
+    openGraphType: "website",
+    socialImageUrl: createSocialImageUrl(sharedSocialImagePath),
+  });
 }

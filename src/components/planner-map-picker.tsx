@@ -6,11 +6,14 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import {
   getPlannerMapById,
+  plannerMaps,
   type PlannerMap,
   type PlannerMapCategory,
 } from "../maps/map-catalog";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 export type PlannerMapPickerTopLevelTab =
   | "farm"
@@ -26,6 +29,7 @@ export type PlannerMapPickerState = Readonly<{
 }>;
 
 type PlannerMapPickerProperties = Readonly<{
+  locale?: PlannerChromeLocale;
   maps: readonly PlannerMap[];
   selectedMapId: string | null;
   onMapSelect: (mapId: string) => void;
@@ -57,11 +61,14 @@ const communityTabDefinitions = [
 ] as const satisfies readonly CommunityTabDefinition[];
 
 export function PlannerMapPicker({
+  locale,
   maps,
   selectedMapId,
   onMapSelect,
   mapIdDataAttribute,
 }: PlannerMapPickerProperties) {
+  const chromeLocale = usePlannerChromeLocale();
+  const resolvedLocale = locale ?? chromeLocale;
   const initialPickerState = getInitialPlannerMapPickerState(selectedMapId);
   const [activeTopLevelTab, setActiveTopLevelTab] = useState(
     initialPickerState.activeTopLevelTab,
@@ -150,7 +157,7 @@ export function PlannerMapPicker({
 
   return (
     <div className="planner-map-picker">
-      <div aria-label="Map categories" className="planner-map-picker__tabs" role="tablist">
+      <div aria-label={readPlannerMapPickerGroupLabel(resolvedLocale, "categories")} className="planner-map-picker__tabs" role="tablist">
         {topLevelTabDefinitions.map((topLevelTabDefinition) => {
           const isActiveTab = topLevelTabDefinition.id === activeTopLevelTab;
           const tabId = `${pickerId}-tab-${topLevelTabDefinition.id}`;
@@ -173,14 +180,14 @@ export function PlannerMapPicker({
               tabIndex={isActiveTab ? 0 : -1}
               type="button"
             >
-              {topLevelTabDefinition.label}
+              {readPlannerMapTabLabel(resolvedLocale, topLevelTabDefinition.id)}
             </button>
           );
         })}
       </div>
       {activeTopLevelTab === "community" ? (
         <div
-          aria-label="Community map categories"
+          aria-label={readPlannerMapPickerGroupLabel(resolvedLocale, "community")}
           className="planner-map-picker__community-tabs"
           role="tablist"
         >
@@ -206,7 +213,7 @@ export function PlannerMapPicker({
                 tabIndex={isActiveTab ? 0 : -1}
                 type="button"
               >
-                {communityTabDefinition.label}
+                {readPlannerMapTabLabel(resolvedLocale, communityTabDefinition.id)}
               </button>
             );
           })}
@@ -233,7 +240,7 @@ export function PlannerMapPicker({
                 aria-hidden="true"
                 src={`/game-assets/1.6.15/${plannerMap.previewOutputPath}`}
               />
-              <span>{plannerMap.displayName}</span>
+              <span>{readPlannerMapDisplayLabel(resolvedLocale, plannerMap.id, plannerMap.displayName)}</span>
             </button>
           ))}
         </div>
@@ -389,4 +396,125 @@ function getCommunityTabDefinition(
   }
 
   return communityTabDefinition;
+}
+
+const japaneseVanillaMapLabels = {
+  standard: "スタンダード",
+  riverland: "リバーランド",
+  forest: "フォレスト",
+  hilltop: "ヒルトップ",
+  wilderness: "ワイルド",
+  "four-corners": "4コーナーズファーム",
+  beach: "ビーチの牧場",
+  meadowlands: "メドウランズ牧場",
+  "ginger-island": "ジンジャーアイランド",
+  "farmhouse-0": "家",
+  "farmhouse-1": "家のアップグレード1",
+  "farmhouse-2": "家のアップグレード2",
+  "farmhouse-cellar": "地下室",
+  shed: "納屋",
+  "big-shed": "ビッグシェッド",
+  barn: "家畜小屋",
+  "big-barn": "大型の家畜小屋",
+  "deluxe-barn": "デラックス家畜小屋",
+  coop: "小屋",
+  "big-coop": "大型の小屋",
+  "deluxe-coop": "デラックス小屋",
+  "slime-hutch": "スライムハッチ",
+  greenhouse: "温室",
+  "farm-cave": "農場の洞窟",
+  "island-farmhouse": "島の家",
+  "ginger-island-north": "島北部",
+  "ginger-island-south": "島南部",
+  "ginger-island-south-east": "島南東部",
+  "ginger-island-east": "島東部",
+  railroad: "線路",
+  backwoods: "裏の森",
+  "secret-woods": "秘密の森",
+  summit: "山の頂上",
+  "pelican-town": "ペリカンタウン",
+  "cindersap-forest": "シンダーサップの森",
+  mountain: "山",
+  "pelican-beach": "ペリカンビーチ",
+  "calico-desert": "カリコ砂漠",
+  "bus-stop": "バス停",
+  quarry: "石切場",
+} as const;
+
+export function readPlannerMapDisplayLabel(
+  locale: PlannerChromeLocale,
+  mapId: string,
+  englishDisplayName: string,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return englishDisplayName;
+  }
+
+  if (locale === "ja") {
+    const japaneseLabel = japaneseVanillaMapLabels[mapId as keyof typeof japaneseVanillaMapLabels];
+    if (japaneseLabel !== undefined) {
+      return japaneseLabel;
+    }
+
+    const plannerMap = plannerMaps.find((candidateMap) => candidateMap.id === mapId);
+    if (plannerMap !== undefined && "modId" in plannerMap) {
+      return englishDisplayName;
+    }
+
+    throw new Error(
+      `Cannot read Japanese map label because map id is ${JSON.stringify(mapId)}.`,
+    );
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner map label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerMapTabLabel(
+  locale: PlannerChromeLocale,
+  tabId: PlannerMapPickerTopLevelTab | PlannerMapPickerCommunityTab,
+): string {
+  if (locale === "en" || locale === "zh") {
+    if (tabId === "farm") return "Farm";
+    if (tabId === "interiors") return "Interiors";
+    if (tabId === "exteriors") return "Exteriors";
+    if (tabId === "community") return "Community";
+    if (tabId === "farms") return "Farms";
+    const unsupportedTab: never = tabId;
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
+  }
+
+  if (locale === "ja") {
+    if (tabId === "farm" || tabId === "farms") return "牧場";
+    if (tabId === "interiors") return "屋内";
+    if (tabId === "exteriors") return "屋外";
+    if (tabId === "community") return "コミュニティ";
+    const unsupportedTab: never = tabId;
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner map tab label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerMapPickerGroupLabel(
+  locale: PlannerChromeLocale,
+  group: "categories" | "community",
+): string {
+  if (locale === "en" || locale === "zh") {
+    return group === "categories" ? "Map categories" : "Community map categories";
+  }
+
+  if (locale === "ja") {
+    return group === "categories" ? "マップの分類" : "コミュニティマップの分類";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner map group label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

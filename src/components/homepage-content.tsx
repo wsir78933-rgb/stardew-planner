@@ -2,7 +2,10 @@ import type { ReactNode } from "react";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
-import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
+import {
+  createSiteFooterContent,
+  type SiteFooterContent,
+} from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
 import { HomepageCaseStudySections } from "./homepage-case-study-sections";
 import { HomepageClosingCta } from "./homepage-closing-cta";
@@ -73,7 +76,54 @@ export function HomepageContent({
           primaryActionLabel={copy.hero.primaryActionLabel}
         />
       </main>
-      <SiteFooter content={createSiteFooterContent(copy.footer, currentLocale)} />
+      <SiteFooter
+        content={readHomepageFooterContent(copy, currentLocale)}
+        locale={currentLocale}
+      />
     </>
+  );
+}
+
+function readHomepageFooterContent(
+  copy: HomepageCopy,
+  currentLocale: HomepageLocale,
+): SiteFooterContent {
+  if (currentLocale === "en" || currentLocale === "zh-CN") {
+    return createSiteFooterContent(copy.footer, currentLocale);
+  }
+
+  if (currentLocale === "ja") {
+    return {
+      identity: {
+        brandName: copy.footer.brandName,
+        description: copy.footer.description,
+        copyright: copy.footer.copyright,
+      },
+      planner: {
+        title: copy.footer.planner.title,
+        links: [{ label: copy.footer.planner.home, href: "/ja" }],
+      },
+      explore: {
+        title: copy.footer.explore.title,
+        links: [
+          { label: copy.footer.explore.blog, href: "/blog" },
+          { label: copy.footer.explore.capabilities, href: "/ja#capabilities" },
+          { label: copy.footer.explore.faq, href: "/ja#faq" },
+        ],
+      },
+      legal: {
+        title: copy.footer.legal.title,
+        links: [
+          { label: copy.footer.legal.privacy, href: "/privacy" },
+          { label: copy.footer.legal.terms, href: "/terms" },
+          { label: copy.footer.legal.contact, href: "/contact" },
+        ],
+      },
+    };
+  }
+
+  const unsupportedLocale: never = currentLocale;
+  throw new Error(
+    `Cannot build homepage footer because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

@@ -5,6 +5,7 @@ import {
   isInteriorDecorSupportedMapId,
   type InteriorDecorCatalogPattern,
 } from "../interior-decor/interior-decor-catalog";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import type { InteriorDecorKind } from "../interior-decor/interior-decor-state";
 import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
 import type { PlacementHistory } from "../placement/placement-history";
@@ -97,17 +98,51 @@ export function getInteriorDecorRejectionMessage(
 export function getUnavailableInteriorDecorMessage(
   mapId: string,
   interiorDecorKind: InteriorDecorKind,
+  locale: PlannerChromeLocale = "en",
 ): string | null {
   assertMapId(mapId);
   assertInteriorDecorKind(interiorDecorKind);
+  assertInteriorDecorLocale(locale);
 
   if (isInteriorDecorSupportedMapId(mapId)) {
     return null;
   }
 
-  return interiorDecorKind === "wallpaper"
-    ? "Wallpaper can only be applied inside."
-    : "Flooring can only be applied inside.";
+  return readUnavailableInteriorDecorMessage(locale, interiorDecorKind);
+}
+
+function readUnavailableInteriorDecorMessage(
+  locale: PlannerChromeLocale,
+  interiorDecorKind: InteriorDecorKind,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return interiorDecorKind === "wallpaper"
+      ? "Wallpaper can only be applied inside."
+      : "Flooring can only be applied inside.";
+  }
+
+  if (locale === "ja") {
+    return interiorDecorKind === "wallpaper"
+      ? "壁紙は屋内にだけ使えます。"
+      : "フローリングは屋内にだけ使えます。";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read interior decor message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function assertInteriorDecorLocale(
+  locale: string,
+): asserts locale is PlannerChromeLocale {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return;
+  }
+
+  throw new TypeError(
+    `Interior decor locale must be "en", "zh", or "ja"; received ${JSON.stringify(locale)}.`,
+  );
 }
 
 function assertMapId(mapId: unknown): asserts mapId is string {

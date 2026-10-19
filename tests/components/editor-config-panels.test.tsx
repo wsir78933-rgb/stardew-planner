@@ -390,7 +390,7 @@ it("explains maps without a spouse patio or farm cave and omits island and renov
   expect(onMapRenderOptionsChange).not.toHaveBeenCalled();
 });
 
-it("rejects a farm settings locale outside en and zh", () => {
+it("rejects a farm settings locale outside en, zh, and ja", () => {
   expect(() =>
     FarmSettingsPanel({
       locale: "zh-CN" as "en",
@@ -398,7 +398,7 @@ it("rejects a farm settings locale outside en and zh", () => {
       mapRenderOptions: createInitialMapRenderOptions(),
       onMapRenderOptionsChange: vi.fn(),
     }),
-  ).toThrow('Farm settings locale must be "en" or "zh"; received "zh-CN".');
+  ).toThrow('Farm settings locale must be "en", "zh", or "ja"; received "zh-CN".');
 });
 
 it("dispatches free placement only after confirmation and supports cancellation", () => {

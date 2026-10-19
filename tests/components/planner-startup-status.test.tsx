@@ -4,11 +4,31 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import {
   PlannerStartupStatus,
+  type PlannerStartupStatusProps,
   type PlannerStartupStatusState,
 } from "../../src/components/planner-startup-status";
 
 function renderStartupStatus(state: PlannerStartupStatusState): string {
   return renderToStaticMarkup(createElement(PlannerStartupStatus, { state }));
+}
+
+function capturePlannerStartupStatusTree(
+  startupStatusProperties: PlannerStartupStatusProps,
+): ReturnType<typeof PlannerStartupStatus> {
+  let renderedStatus: ReturnType<typeof PlannerStartupStatus> = null;
+  let didRender = false;
+
+  function CapturePlannerStartupStatus(): ReturnType<typeof PlannerStartupStatus> {
+    didRender = true;
+    renderedStatus = PlannerStartupStatus(startupStatusProperties);
+    return renderedStatus;
+  }
+
+  renderToStaticMarkup(createElement(CapturePlannerStartupStatus));
+  if (!didRender) {
+    throw new Error("React did not render PlannerStartupStatus.");
+  }
+  return renderedStatus;
 }
 
 describe("planner startup status", () => {
@@ -37,7 +57,7 @@ describe("planner startup status", () => {
 
   it("wires retry to the supplied callback", () => {
     const onRetry = vi.fn();
-    const startupStatusElement = PlannerStartupStatus({
+    const startupStatusElement = capturePlannerStartupStatusTree({
       state: {
         kind: "error",
         message: "Could not load Standard Farm",

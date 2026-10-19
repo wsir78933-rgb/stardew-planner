@@ -22,6 +22,8 @@ import {
   type EditorBehaviorOptionKey,
   type EditorBehaviorOptions,
 } from "../editor/editor-behavior-options";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { readLocalizedCatalogItemLabel } from "@/src/homepage/japanese-game-display-labels";
 import { MapConfigurationPanel } from "./map-configuration-panel";
 import {
   createInitialMapRenderOptions,
@@ -38,7 +40,7 @@ import { forgetEditorMenuModalFocusTarget, readEditorMenuModalFocusTarget } from
 import { PlannerFeedbackForm } from "../contact/planner-feedback-form";
 
 type EditorModalProperties = Readonly<{
-  locale?: "en" | "zh";
+  locale?: PlannerChromeLocale;
   season?: TilesheetSeason;
   ambienceOptions?: PlannerAmbienceOptions;
   onSeasonChange?: (season: TilesheetSeason) => void;
@@ -231,6 +233,7 @@ export function EditorModal({
           <>
             {projectMapPanelContent ?? (
               <PlannerMapPicker
+                locale={locale}
                 mapIdDataAttribute="data-editor-map-id"
                 maps={plannerMaps}
                 onMapSelect={onMapChange}
@@ -238,6 +241,7 @@ export function EditorModal({
               />
             )}
             <MapConfigurationPanel
+              locale={locale}
               mapRenderOptions={mapRenderOptions}
               onMapRenderOptionsChange={onMapRenderOptionsChange}
               selectedMapId={selectedMapId}
@@ -265,9 +269,9 @@ export function EditorModal({
             onBehaviorChange={onBehaviorOptionChange}
           />
         ) : null}
-        {modalId === "help-info" ? <HelpInfoPanel /> : null}
+        {modalId === "help-info" ? <HelpInfoPanel locale={locale} /> : null}
         {modalId === "keyboard-shortcuts" ? <KeyboardShortcutsPanel locale={locale} /> : null}
-        {modalId === "whats-new" ? <WhatsNewPanel /> : null}
+        {modalId === "whats-new" ? <WhatsNewPanel locale={locale} /> : null}
       </section>
     </div>
   );
@@ -361,91 +365,159 @@ function restoreModalTriggerFocus(
   }
 }
 
-function HelpInfoPanel() {
-  return (
-    <div className="editor-reference-info">
-      <section>
-        <h3>Features</h3>
-        <ul>
-          <li><strong>Click Cycling</strong> · Click the same tile repeatedly to cycle through overlapping items.</li>
-          <li><strong>X-ray</strong> · Hold Space to see through placed sprites.</li>
-          <li><strong>Drag to Move</strong> · Drag a selected building or item to reposition it.</li>
-          <li><strong>Paint</strong> · Recolour supported buildings, chests, and fish pond water.</li>
-          <li><strong>Radius Overlays</strong> · Preview sprinkler, scarecrow, bee house, and Junimo Hut coverage.</li>
-        </ul>
-      </section>
-      <section>
-        <h3>Good to Know</h3>
-        <ul>
-          <li>Projects are saved only in this browser. Export JSON to keep a portable copy.</li>
-          <li>Use Free Placement only when you intentionally want a layout the game may not allow.</li>
-          <li>Wallpaper and flooring can only be applied to compatible interior regions.</li>
-        </ul>
-      </section>
-      <section>
-        <h3>Maps</h3>
-        <p>Use Map to switch among farm, interior, exterior, and locked community maps. Each local project can keep separate layouts for multiple maps.</p>
-      </section>
-    </div>
+function HelpInfoPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
+  if (locale === "ja") {
+    return (
+      <div className="editor-reference-info">
+        <section>
+          <h3>機能</h3>
+          <ul>
+            <li><strong>クリックで切り替え</strong> · 同じマスを繰り返しクリックすると、重なったアイテムを順に切り替えます。</li>
+            <li><strong>透視</strong> · Space を押し続けると、配置したスプライトの奥が見えます。</li>
+            <li><strong>ドラッグで移動</strong> · 選択した建物やアイテムをドラッグして位置を変えます。</li>
+            <li><strong>ペイント</strong> · 対応する建物、チェスト、魚のいる池の水の色を変えられます。</li>
+            <li><strong>範囲表示</strong> · スプリンクラー、かかし、ハチの巣箱、ジュニモ小屋の範囲を確認できます。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>知っておくこと</h3>
+          <ul>
+            <li>プロジェクトはこのブラウザだけに保存されます。持ち出すには JSON を書き出してください。</li>
+            <li>自由配置は、ゲームが許可しない配置を意図するときだけ使ってください。</li>
+            <li>壁紙とフローリングは、対応する屋内だけに使えます。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>マップ</h3>
+          <p>マップから牧場、屋内、屋外、ロックされたコミュニティマップを切り替えます。ローカルプロジェクトごとに、複数マップの配置を別に保存できます。</p>
+        </section>
+      </div>
+    );
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return (
+      <div className="editor-reference-info">
+        <section>
+          <h3>Features</h3>
+          <ul>
+            <li><strong>Click Cycling</strong> · Click the same tile repeatedly to cycle through overlapping items.</li>
+            <li><strong>X-ray</strong> · Hold Space to see through placed sprites.</li>
+            <li><strong>Drag to Move</strong> · Drag a selected building or item to reposition it.</li>
+            <li><strong>Paint</strong> · Recolour supported buildings, chests, and fish pond water.</li>
+            <li><strong>Radius Overlays</strong> · Preview sprinkler, scarecrow, bee house, and Junimo Hut coverage.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Good to Know</h3>
+          <ul>
+            <li>Projects are saved only in this browser. Export JSON to keep a portable copy.</li>
+            <li>Use Free Placement only when you intentionally want a layout the game may not allow.</li>
+            <li>Wallpaper and flooring can only be applied to compatible interior regions.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Maps</h3>
+          <p>Use Map to switch among farm, interior, exterior, and locked community maps. Each local project can keep separate layouts for multiple maps.</p>
+        </section>
+      </div>
+    );
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read help panel because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 
-function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: "en" | "zh" }>) {
-  const isChinese = locale === "zh";
+function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
+  const shortcutText = (text: Readonly<{ en: string; zh: string; ja: string }>) =>
+    readEditorModalText(locale, text);
   const shortcutGroups = [
-    { heading: isChinese ? "工具" : "Tools", entries: [
-      ["V", isChinese ? "切换到选择模式" : "Switch to cursor mode"],
-      ["M", isChinese ? "切换到多选模式" : "Switch to multi-select mode"],
-      ["E", isChinese ? "切换到擦除模式" : "Switch to erase mode"],
-      ["F", isChinese ? "切换到填充模式" : "Switch to fill mode"],
-      ["Q", isChinese ? "旋转或切换所选 / 待放置物品外观" : "Rotate or cycle variant on selected/placed item"],
-      ["C", isChinese ? "复制选中物品或建筑" : "Duplicate selected item or building"],
-      ["Del", isChinese ? "删除选中物品或建筑" : "Delete selected item or building"],
-      ["Esc", isChinese ? "取消放置或取消选择" : "Cancel placement or deselect"],
-      ["RMB", isChinese ? "右键取消放置或取消选择" : "Cancel placement or deselect (right-click)"],
+    { heading: shortcutText({ en: "Tools", zh: "工具", ja: "ツール" }), entries: [
+      ["V", shortcutText({ en: "Switch to cursor mode", zh: "切换到选择模式", ja: "選択モードに切り替え" })],
+      ["M", shortcutText({ en: "Switch to multi-select mode", zh: "切换到多选模式", ja: "複数選択モードに切り替え" })],
+      ["E", shortcutText({ en: "Switch to erase mode", zh: "切换到擦除模式", ja: "消去モードに切り替え" })],
+      ["F", shortcutText({ en: "Switch to fill mode", zh: "切换到填充模式", ja: "塗りつぶしモードに切り替え" })],
+      ["Q", shortcutText({ en: "Rotate or cycle variant on selected/placed item", zh: "旋转或切换所选 / 待放置物品外观", ja: "選択中または配置予定のアイテムの向きや種類を切り替え" })],
+      ["C", shortcutText({ en: "Duplicate selected item or building", zh: "复制选中物品或建筑", ja: "選択したアイテムまたは建物を複製" })],
+      ["Del", shortcutText({ en: "Delete selected item or building", zh: "删除选中物品或建筑", ja: "選択したアイテムまたは建物を削除" })],
+      ["Esc", shortcutText({ en: "Cancel placement or deselect", zh: "取消放置或取消选择", ja: "配置または選択をキャンセル" })],
+      ["RMB", shortcutText({ en: "Cancel placement or deselect (right-click)", zh: "右键取消放置或取消选择", ja: "右クリックで配置または選択をキャンセル" })],
     ] },
-    { heading: isChinese ? "导航" : "Navigation", entries: [
-      ["W A S D", isChinese ? "平移画布" : "Pan the canvas"],
-      ["↑ ← ↓ →", isChinese ? "平移画布（方向键）" : "Pan the canvas (alternative)"],
-      ["R", isChinese ? "放大" : "Zoom in"],
-      ["T", isChinese ? "缩小" : "Zoom out"],
-      ["Ctrl / ⌘", isChinese ? "按住透视重叠的物品" : "X-ray: hold to see behind overlapping sprites"],
-      ["Space", isChinese ? "按住透视（原有快捷键）" : "Hold for X-ray (alternative)"],
+    { heading: shortcutText({ en: "Navigation", zh: "导航", ja: "移動" }), entries: [
+      ["W A S D", shortcutText({ en: "Pan the canvas", zh: "平移画布", ja: "キャンバスを移動" })],
+      ["↑ ← ↓ →", shortcutText({ en: "Pan the canvas (alternative)", zh: "平移画布（方向键）", ja: "キャンバスを移動（方向キー）" })],
+      ["R", shortcutText({ en: "Zoom in", zh: "放大", ja: "拡大" })],
+      ["T", shortcutText({ en: "Zoom out", zh: "缩小", ja: "縮小" })],
+      ["Ctrl / ⌘", shortcutText({ en: "X-ray: hold to see behind overlapping sprites", zh: "按住透视重叠的物品", ja: "透視: 押し続けると重なったスプライトの奥が見える" })],
+      ["Space", shortcutText({ en: "Hold for X-ray (alternative)", zh: "按住透视（原有快捷键）", ja: "押し続けると透視（別のショートカット）" })],
     ] },
-    { heading: isChinese ? "历史" : "History", entries: [
-      ["Ctrl / ⌘ Z", isChinese ? "撤销上一次操作" : "Undo last action"],
-      ["Ctrl / ⌘ Y", isChinese ? "重做上一次撤销的操作" : "Redo last action"],
-      ["Ctrl / ⌘ ⇧ Z", isChinese ? "重做（备用快捷键）" : "Redo (alternative)"],
+    { heading: shortcutText({ en: "History", zh: "历史", ja: "履歴" }), entries: [
+      ["Ctrl / ⌘ Z", shortcutText({ en: "Undo last action", zh: "撤销上一次操作", ja: "直前の操作を元に戻す" })],
+      ["Ctrl / ⌘ Y", shortcutText({ en: "Redo last action", zh: "重做上一次撤销的操作", ja: "元に戻した操作をやり直す" })],
+      ["Ctrl / ⌘ ⇧ Z", shortcutText({ en: "Redo (alternative)", zh: "重做（备用快捷键）", ja: "やり直す（別のショートカット）" })],
     ] },
   ];
   return (
     <div className="editor-reference-info editor-reference-info--shortcuts">
-      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{isChinese ? "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放" : "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works."}</p> : null}</section>)}
+      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{shortcutText({ en: "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works.", zh: "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放", ja: "ホイールでズームするには、下の「ズーム」ボタンを先にオンにしてください。2本指のピンチはそのまま使えます。" })}</p> : null}</section>)}
     </div>
   );
 }
 
-function WhatsNewPanel() {
-  return (
-    <div className="editor-reference-info">
-      <p className="editor-reference-info__version">v0.1.1 · April 2026</p>
-      <section>
-        <h3>Community Maps</h3>
-        <p>Community farm maps are available from the Community map tab and remain bundled locally with this planner.</p>
-      </section>
-      <section>
-        <h3>Table Decor</h3>
-        <p>Place lamps, plants, and other compatible objects on tables and end tables.</p>
-      </section>
-      <section>
-        <h3>Winter Crops</h3>
-        <p>Powdermelon is available from the crop picker.</p>
-      </section>
-      <section>
-        <h3>Sprinkler Shadows</h3>
-        <p>Sprinklers render with a ground shadow matching the in-game appearance.</p>
-      </section>
-    </div>
+function WhatsNewPanel({ locale }: Readonly<{ locale: PlannerChromeLocale }>) {
+  if (locale === "ja") {
+    return (
+      <div className="editor-reference-info">
+        <p className="editor-reference-info__version">v0.1.1 · 2026年4月</p>
+        <section>
+          <h3>コミュニティマップ</h3>
+          <p>コミュニティの牧場マップは、マップのコミュニティタブから使えます。このプランナーに同梱されています。</p>
+        </section>
+        <section>
+          <h3>テーブルの装飾</h3>
+          <p>ランプ、植物、その他の対応アイテムをテーブルやエンドテーブルに置けます。</p>
+        </section>
+        <section>
+          <h3>冬の作物</h3>
+          <p>{readLocalizedCatalogItemLabel("ja", "Powdermelon")} を作物選択から使えます。</p>
+        </section>
+        <section>
+          <h3>スプリンクラーの影</h3>
+          <p>スプリンクラーに、ゲーム内と同じ地面の影が付きます。</p>
+        </section>
+      </div>
+    );
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return (
+      <div className="editor-reference-info">
+        <p className="editor-reference-info__version">v0.1.1 · April 2026</p>
+        <section>
+          <h3>Community Maps</h3>
+          <p>Community farm maps are available from the Community map tab and remain bundled locally with this planner.</p>
+        </section>
+        <section>
+          <h3>Table Decor</h3>
+          <p>Place lamps, plants, and other compatible objects on tables and end tables.</p>
+        </section>
+        <section>
+          <h3>Winter Crops</h3>
+          <p>Powdermelon is available from the crop picker.</p>
+        </section>
+        <section>
+          <h3>Sprinkler Shadows</h3>
+          <p>Sprinklers render with a ground shadow matching the in-game appearance.</p>
+        </section>
+      </div>
+    );
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read what's new panel because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 
@@ -494,12 +566,12 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
   return "editor-modal__backdrop";
 }
 
-function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: "en" | "zh"): string {
-  if (modalId === "ambience-panel") return locale === "zh" ? "氛围" : "Ambience";
-  if (modalId === "farm-settings") return locale === "zh" ? "农场设置" : "Farm Settings";
-  if (modalId === "feedback") return locale === "zh" ? "发送反馈" : "Send feedback";
+function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: PlannerChromeLocale): string {
+  if (modalId === "ambience-panel") return readEditorModalText(locale, { en: "Ambience", zh: "氛围", ja: "雰囲気" });
+  if (modalId === "farm-settings") return readEditorModalText(locale, { en: "Farm Settings", zh: "农场设置", ja: "牧場の設定" });
+  if (modalId === "feedback") return readEditorModalText(locale, { en: "Send feedback", zh: "发送反馈", ja: "フィードバックを送信" });
   if (modalId === "map-picker") {
-    return locale === "zh" ? "选择地图" : "Choose map";
+    return readEditorModalText(locale, { en: "Choose map", zh: "选择地图", ja: "マップを選ぶ" });
   }
 
   if (modalId === "view-panel") {
@@ -507,22 +579,43 @@ function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: "e
   }
 
   if (modalId === "save-panel") {
-    return locale === "zh" ? "本地项目" : "Library";
+    return readEditorModalText(locale, { en: "Library", zh: "本地项目", ja: "ライブラリ" });
   }
 
   if (modalId === "help-info") {
-    return locale === "zh" ? "帮助与说明" : "Help & Info";
+    return readEditorModalText(locale, { en: "Help & Info", zh: "帮助与说明", ja: "ヘルプと説明" });
   }
 
   if (modalId === "keyboard-shortcuts") {
-    return locale === "zh" ? "键盘快捷键" : "Keyboard Shortcuts";
+    return readEditorModalText(locale, { en: "Keyboard Shortcuts", zh: "键盘快捷键", ja: "キーボードショートカット" });
   }
 
   if (modalId === "whats-new") {
-    return "What's New";
+    return readEditorModalText(locale, { en: "What's New", zh: "What's New", ja: "更新情報" });
   }
 
-  return copy.modalTitles.settings;
+  if (modalId === "settings-panel") {
+    return copy.modalTitles.settings;
+  }
+
+  const unsupportedModalId: never = modalId;
+  throw new Error(
+    `Cannot read editor modal label because modal id is ${JSON.stringify(unsupportedModalId)}.`,
+  );
+}
+
+function readEditorModalText(
+  locale: PlannerChromeLocale,
+  text: Readonly<{ en: string; zh: string; ja: string }>,
+): string {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return text[locale];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read editor modal text because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
 
 function getModalCloseDialogLabel(

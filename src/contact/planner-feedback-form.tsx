@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import {
   plannerFeedbackLimits,
   validatePlannerFeedbackFields,
@@ -18,7 +19,7 @@ import {
 } from "./planner-feedback-request-validation";
 import styles from "./planner-feedback-form.module.css";
 
-type PlannerFeedbackLocale = "en" | "zh";
+type PlannerFeedbackLocale = PlannerChromeLocale;
 
 type PlannerFeedbackFormProperties = Readonly<{
   locale: PlannerFeedbackLocale;
@@ -129,7 +130,54 @@ const plannerFeedbackCopy = {
       invalidToken: "反垃圾验证令牌缺失或无效。",
     },
   },
+  ja: {
+    typeLabel: "種類",
+    typeOptions: {
+      bug: "不具合を報告",
+      feature: "機能の提案",
+      other: "その他",
+    },
+    subjectLabel: "件名",
+    descriptionLabel: "内容",
+    descriptionHint:
+      "スクリーンショットや動画がある場合は、YouTube または画像のリンクを内容に貼ってください。",
+    submitLabel: "フィードバックを送信",
+    submittingLabel: "送信しています…",
+    verifyingLabel: "確認しています…",
+    successMessage: "フィードバックを送信しました。",
+    unavailableConfigurationMessage: "フィードバックは一時的に利用できません。",
+    unavailableMessage: "フィードバックを送信できませんでした。しばらくしてからもう一度お試しください。",
+    verificationLoadingMessage:
+      "迷惑行為チェックを読み込んでいます。少し待ってからもう一度お試しください。",
+    verificationFailedMessage:
+      "迷惑行為チェックを完了できませんでした。もう一度送信してください。",
+    invalidResponseMessage:
+      "フィードバックを受け付けられませんでした。入力内容を確認してもう一度お試しください。",
+    fieldMessages: {
+      form: "送信されたフォームが無効です。",
+      expectedObject: "フィードバックフォームを送信してください。",
+      unexpectedField: "未対応の項目です: {value}。",
+      missingField: "この項目は必須です。",
+      invalidType: "テキストが必要です。受け取った値は {value} です。",
+      unsupportedOption: "不具合、機能提案、その他のいずれかを選んでください。受け取った値は {value} です。",
+      empty: "この項目は空にできません。",
+      tooLong: "内容が長すぎます（{value}、上限 {limit}）。",
+      lineBreak: "件名は1行で入力してください。受け取った値は {value} です。",
+      invalidToken: "迷惑行為チェックのトークンがないか、無効です。",
+    },
+  },
 } as const;
+
+function readPlannerFeedbackCopy(locale: PlannerFeedbackLocale) {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return plannerFeedbackCopy[locale];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner feedback copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
 
 function getWindowTurnstile(): TurnstileApi | undefined {
   return (window as Window & { turnstile?: TurnstileApi }).turnstile;
@@ -164,7 +212,7 @@ function getPlannerFeedbackIssueForField(
 export function PlannerFeedbackForm({
   locale,
 }: PlannerFeedbackFormProperties) {
-  const copy = plannerFeedbackCopy[locale];
+  const copy = readPlannerFeedbackCopy(locale);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
   const [feedbackFields, setFeedbackFields] = useState<PlannerFeedbackFields>(
     initialPlannerFeedbackFields,

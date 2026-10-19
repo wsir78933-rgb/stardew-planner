@@ -1089,6 +1089,24 @@ export function readLibraryChromeCopy(dateTimeLocale: HomepageLocale): LibraryCh
     };
   }
 
+  if (dateTimeLocale === "ja") {
+    return {
+      blankFolderName: (folderName) => `フォルダー名を空にできません。受け取った名前は ${JSON.stringify(folderName)} です。`,
+      createdFolder: "フォルダーを作成しました。",
+      emptyFolder: "このフォルダーには計画がありません。",
+      folderNameLabel: "フォルダー名",
+      importGameSave: "セーブデータを取り込む",
+      moreActions: "その他の操作",
+      move: "移動",
+      movedProject: "プロジェクトを移動しました。",
+      myPlans: "マイプラン",
+      newFolder: "新しいフォルダー",
+      projectGroups: "プロジェクトグループ",
+      renameFolder: "フォルダー名を変更",
+      tools: "ツール",
+    };
+  }
+
   throw new Error(
     `Cannot read library labels because dateTimeLocale is ${JSON.stringify(dateTimeLocale)}.`,
   );

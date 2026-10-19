@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import type { EditorModalId } from "../editor/editor-view-state";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
 import {
@@ -8,7 +9,7 @@ import {
   type PlannerReferenceIconName,
 } from "./planner-reference-icon";
 
-type EditorMenuBarLocale = "en" | "zh";
+type EditorMenuBarLocale = PlannerChromeLocale;
 
 type EditorMenuBarProperties = Readonly<{
   activeModalId: EditorModalId | null;
@@ -74,6 +75,17 @@ export function readEditorMenuModalFocusTarget(
 export function forgetEditorMenuModalFocusTarget(triggerElement: HTMLElement | null): void {
   const editorRoot = triggerElement?.closest<HTMLElement>(".planner-editor-shell");
   if (editorRoot !== null && editorRoot !== undefined) menuModalFocusTargets.delete(editorRoot);
+}
+
+function readEditorMenuCopy(locale: EditorMenuBarLocale) {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return editorMenuCopyByLocale[locale];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read editor menu copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
 
 function rememberMenuControlFocusTarget(
@@ -145,7 +157,40 @@ const editorMenuCopyByLocale = {
     view: "视图",
     settings: "设置",
   },
-} as const;
+  ja: {
+    navigation: "エディターナビゲーション",
+    brand: "Stardew Planner",
+    utilities: "ヘルプとフィードバック",
+    help: "ヘルプ",
+    keyboard: "ショートカット",
+    feedback: "フィードバック",
+    library: "ライブラリ",
+    currentMap: "現在のマップ",
+    features: "エディターオプション",
+    menu: "メニュー",
+    ambience: "雰囲気",
+    farmSettings: "牧場の設定",
+    map: "マップ",
+    view: "表示",
+    settings: "設定",
+  },
+} as const satisfies Record<EditorMenuBarLocale, {
+  navigation: string;
+  brand: string;
+  utilities: string;
+  help: string;
+  keyboard: string;
+  feedback: string;
+  library: string;
+  currentMap: string;
+  features: string;
+  menu: string;
+  ambience: string;
+  farmSettings: string;
+  map: string;
+  view: string;
+  settings: string;
+}>;
 
 export function EditorMenuBar({
   activeModalId,
@@ -157,7 +202,7 @@ export function EditorMenuBar({
   const [isCompactMenuExpanded, setIsCompactMenuExpanded] = useState(false);
   const compactMenuToggleReference = useRef<HTMLButtonElement>(null);
   const menuControlsId = useId();
-  const editorMenuCopy = editorMenuCopyByLocale[locale];
+  const editorMenuCopy = readEditorMenuCopy(locale);
 
   return (
     <nav

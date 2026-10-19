@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import type { HomepageLocale, PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import type { EditorBehaviorOptionKey, EditorBehaviorOptions } from "../editor/editor-behavior-options";
 import type { EditorDisplayOptionKey, EditorDisplayOptions } from "../editor/editor-display-options";
 import type { EditorPanelPosition } from "../editor/editor-view-state";
@@ -18,7 +19,7 @@ import { isNpcPathSupportedMapFile } from "../rendering/npc-paths";
 import { getEditorModalCopy, type EditorModalCopy } from "../i18n/editor-modal-copy";
 import { PlannerReferenceIcon } from "./planner-reference-icon";
 
-type Locale = "en" | "zh";
+type Locale = PlannerChromeLocale;
 type BehaviorChange = (option: EditorBehaviorOptionKey, enabled: boolean) => void;
 
 function ConfigSection({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
@@ -32,7 +33,7 @@ function OptionSwitch({ locale, label, enabled, onToggle, disabled = false, titl
     <button className="editor-config-switch" type="button" aria-pressed={enabled} disabled={disabled} onClick={onToggle} title={title}>
       {color ? <span aria-hidden="true" className="editor-config-dot" style={{ background: color }} /> : null}
       <span className="editor-config-switch__label">{label}</span>
-      <span aria-hidden="true" className="editor-config-switch__state">{getEditorModalCopy(locale === "zh" ? "zh-CN" : "en").stateLabel(enabled)}</span>
+      <span aria-hidden="true" className="editor-config-switch__state">{getEditorModalCopy(readEditorModalHomepageLocale(locale)).stateLabel(enabled)}</span>
       <span aria-hidden="true" className="editor-config-switch__track"><span /></span>
     </button>
   );
@@ -46,26 +47,33 @@ export function AmbienceConfigPanel({ locale, season, ambienceOptions, nightMode
   locale: Locale; season: TilesheetSeason; ambienceOptions: PlannerAmbienceOptions; nightMode: boolean;
   onSeasonChange: (season: TilesheetSeason) => void; onAmbienceChange: (options: PlannerAmbienceOptions) => void; onNightModeToggle: () => void;
 }>) {
-  const isChinese = locale === "zh";
-  const seasonLabels = isChinese ? ["春季", "夏季", "秋季", "冬季"] : ["Spring", "Summer", "Fall", "Winter"];
-  const weatherLabels = isChinese ? ["晴天", "雨天", "雷暴", "绿雨", "下雪"] : ["Clear", "Rain", "Storm", "Green rain", "Snow"];
+  const seasonLabels = readConfigLabels(locale, {
+    en: ["Spring", "Summer", "Fall", "Winter"],
+    zh: ["春季", "夏季", "秋季", "冬季"],
+    ja: ["春", "夏", "秋", "冬"],
+  });
+  const weatherLabels = readConfigLabels(locale, {
+    en: ["Clear", "Rain", "Storm", "Green rain", "Snow"],
+    zh: ["晴天", "雨天", "雷暴", "绿雨", "下雪"],
+    ja: ["晴れ", "雨", "嵐", "緑の雨", "雪"],
+  });
   return (
     <div className="editor-config-panels">
-      <ConfigSection title={isChinese ? "季节" : "Season"}>
+      <ConfigSection title={readConfigLabel(locale, { en: "Season", zh: "季节", ja: "季節" })}>
         <p className="editor-config-current-season">{seasonLabels[seasons.indexOf(season)]}</p>
         <div className="editor-config-seasons">
           {seasons.map((choice, index) => <button type="button" key={choice} aria-label={seasonLabels[index]} aria-pressed={season === choice} onClick={() => onSeasonChange(choice)}><PlannerReferenceIcon name={seasonIcons[index]} size={22} /></button>)}
         </div>
       </ConfigSection>
-      <ConfigSection title={isChinese ? "夜间" : "Night"}>
-        <OptionSwitch locale={locale} label={isChinese ? "夜间模式" : "Night mode"} enabled={nightMode} onToggle={onNightModeToggle} />
+      <ConfigSection title={readConfigLabel(locale, { en: "Night", zh: "夜间", ja: "夜" })}>
+        <OptionSwitch locale={locale} label={readConfigLabel(locale, { en: "Night mode", zh: "夜间模式", ja: "夜間モード" })} enabled={nightMode} onToggle={onNightModeToggle} />
       </ConfigSection>
-      <ConfigSection title={isChinese ? "氛围" : "Atmosphere"}>
-        <OptionSwitch locale={locale} label={isChinese ? "夏日云朵" : "Summer clouds"} enabled={ambienceOptions.showClouds} onToggle={() => onAmbienceChange(setPlannerAmbienceClouds(ambienceOptions, !ambienceOptions.showClouds))} />
-        <OptionSwitch locale={locale} label={isChinese ? "蝴蝶与飘落物" : "Butterflies & debris"} enabled={ambienceOptions.showDebris} onToggle={() => onAmbienceChange(setPlannerAmbienceDebris(ambienceOptions, !ambienceOptions.showDebris))} />
-        <OptionSwitch locale={locale} label={isChinese ? "动画" : "Animations"} enabled={ambienceOptions.animationsEnabled} onToggle={() => onAmbienceChange(setPlannerAmbienceAnimationsEnabled(ambienceOptions, !ambienceOptions.animationsEnabled))} />
+      <ConfigSection title={readConfigLabel(locale, { en: "Atmosphere", zh: "氛围", ja: "雰囲気" })}>
+        <OptionSwitch locale={locale} label={readConfigLabel(locale, { en: "Summer clouds", zh: "夏日云朵", ja: "夏の雲" })} enabled={ambienceOptions.showClouds} onToggle={() => onAmbienceChange(setPlannerAmbienceClouds(ambienceOptions, !ambienceOptions.showClouds))} />
+        <OptionSwitch locale={locale} label={readConfigLabel(locale, { en: "Butterflies & debris", zh: "蝴蝶与飘落物", ja: "蝶と落ち葉" })} enabled={ambienceOptions.showDebris} onToggle={() => onAmbienceChange(setPlannerAmbienceDebris(ambienceOptions, !ambienceOptions.showDebris))} />
+        <OptionSwitch locale={locale} label={readConfigLabel(locale, { en: "Animations", zh: "动画", ja: "アニメーション" })} enabled={ambienceOptions.animationsEnabled} onToggle={() => onAmbienceChange(setPlannerAmbienceAnimationsEnabled(ambienceOptions, !ambienceOptions.animationsEnabled))} />
       </ConfigSection>
-      <ConfigSection title={isChinese ? "天气" : "Weather"}>
+      <ConfigSection title={readConfigLabel(locale, { en: "Weather", zh: "天气", ja: "天気" })}>
         <div className="editor-config-segmented editor-config-weather">
           {weatherChoices.map((choice, index) => <button type="button" key={choice} aria-pressed={ambienceOptions.weather === choice} onClick={() => onAmbienceChange(setPlannerAmbienceWeather(ambienceOptions, choice))}>{weatherLabels[index]}</button>)}
         </div>
@@ -78,47 +86,91 @@ export function ViewConfigPanel({ locale, behaviorOptions, displayOptions, selec
   locale: Locale; behaviorOptions: EditorBehaviorOptions; displayOptions: EditorDisplayOptions; selectedMapId: string; panelPosition: EditorPanelPosition;
   onBehaviorChange: BehaviorChange; onDisplayToggle: (option: EditorDisplayOptionKey) => void; onPanelPositionChange: (position: EditorPanelPosition) => void;
 }>) {
-  const isChinese = locale === "zh";
-  const viewCopy = getEditorModalCopy(isChinese ? "zh-CN" : "en").view;
+  const viewCopy = getEditorModalCopy(readEditorModalHomepageLocale(locale)).view;
   const rangeKeys = ["showSprinklerRadius", "showScarecrowRadius", "showBeeHouseRadius", "showJunimoHutRadius"] as const;
-  const rangeLabels = isChinese ? ["洒水器", "稻草人", "蜂房", "祝尼魔小屋"] : ["Sprinkler", "Scarecrow", "Bee house", "Junimo hut"];
+  const rangeLabels = readConfigLabels(locale, {
+    en: ["Sprinkler", "Scarecrow", "Bee house", "Junimo hut"],
+    zh: ["洒水器", "稻草人", "蜂房", "祝尼魔小屋"],
+    ja: ["スプリンクラー", "かかし", "ハチの巣箱", "ジュニモ小屋"],
+  });
   const colors = ["#08bde4", "#ff591c", "#fbbb21", "#12d960"];
   const blockedKeys = ["showBuildableTiles", "showCropTiles", "showTreeTiles"] as const;
-  const blockedLabels = isChinese ? ["建筑", "作物", "树木"] : ["Buildings", "Crops", "Trees"];
+  const blockedLabels = readConfigLabels(locale, {
+    en: ["Buildings", "Crops", "Trees"],
+    zh: ["建筑", "作物", "树木"],
+    ja: ["建物", "作物", "樹木"],
+  });
   const npcPathsSupported = isNpcPathSupportedMapFile(getPlannerMapById(selectedMapId).mapFile);
   return <div className="editor-config-panels">
-    <ConfigSection title={isChinese ? "覆盖范围" : "Ranges"}>{rangeKeys.map((key, index) => <OptionSwitch locale={locale} key={key} color={colors[index]} title={viewCopy.optionGroups[0].options[index + 1].title} label={rangeLabels[index]} enabled={displayOptions[key]} onToggle={() => onDisplayToggle(key)} />)}</ConfigSection>
-    <ConfigSection title={isChinese ? "辅助线" : "Guides"}>
-      <OptionSwitch locale={locale} title={viewCopy.optionGroups[0].options[0].title} label={isChinese ? "网格" : "Grid"} enabled={displayOptions.showGrid} onToggle={() => onDisplayToggle("showGrid")} />
-      <OptionSwitch locale={locale} title={isChinese ? "显示地图上的资源巨块生成位置" : "Show resource-clump spawn locations on the map"} label={isChinese ? "资源巨块" : "Resource clumps"} enabled={behaviorOptions.autoShowResourceClumps} onToggle={() => onBehaviorChange("autoShowResourceClumps", !behaviorOptions.autoShowResourceClumps)} />
-      <OptionSwitch locale={locale} label={isChinese ? "NPC 路径" : "NPC paths"} enabled={displayOptions.showNpcPaths} disabled={!npcPathsSupported} title={npcPathsSupported ? viewCopy.npcPaths.title : isChinese ? "当前地图没有 NPC 路径数据" : "NPC paths are unavailable on this map"} onToggle={() => onDisplayToggle("showNpcPaths")} />
+    <ConfigSection title={readConfigLabel(locale, { en: "Ranges", zh: "覆盖范围", ja: "範囲" })}>{rangeKeys.map((key, index) => <OptionSwitch locale={locale} key={key} color={colors[index]} title={viewCopy.optionGroups[0].options[index + 1].title} label={rangeLabels[index]} enabled={displayOptions[key]} onToggle={() => onDisplayToggle(key)} />)}</ConfigSection>
+    <ConfigSection title={readConfigLabel(locale, { en: "Guides", zh: "辅助线", ja: "ガイド" })}>
+      <OptionSwitch locale={locale} title={viewCopy.optionGroups[0].options[0].title} label={readConfigLabel(locale, { en: "Grid", zh: "网格", ja: "グリッド" })} enabled={displayOptions.showGrid} onToggle={() => onDisplayToggle("showGrid")} />
+      <OptionSwitch locale={locale} title={readConfigLabel(locale, { en: "Show resource-clump spawn locations on the map", zh: "显示地图上的资源巨块生成位置", ja: "マップ上の資源の塊の出現位置を表示" })} label={readConfigLabel(locale, { en: "Resource clumps", zh: "资源巨块", ja: "資源の塊" })} enabled={behaviorOptions.autoShowResourceClumps} onToggle={() => onBehaviorChange("autoShowResourceClumps", !behaviorOptions.autoShowResourceClumps)} />
+      <OptionSwitch locale={locale} label={readConfigLabel(locale, { en: "NPC paths", zh: "NPC 路径", ja: "NPCの経路" })} enabled={displayOptions.showNpcPaths} disabled={!npcPathsSupported} title={npcPathsSupported ? viewCopy.npcPaths.title : readConfigLabel(locale, { en: "NPC paths are unavailable on this map", zh: "当前地图没有 NPC 路径数据", ja: "このマップにはNPCの経路データがありません" })} onToggle={() => onDisplayToggle("showNpcPaths")} />
     </ConfigSection>
-    <ConfigSection title={isChinese ? "禁放格" : "Blocked tiles"}>{blockedKeys.map((key, index) => <OptionSwitch locale={locale} key={key} color="#dc1818" title={viewCopy.optionGroups[1].options[index].title} label={blockedLabels[index]} enabled={displayOptions[key]} onToggle={() => onDisplayToggle(key)} />)}</ConfigSection>
-    <ConfigSection title={isChinese ? "目录位置" : "Catalog position"}><div className="editor-config-segmented">{(["left", "bottom"] as const).map((position) => <button type="button" key={position} aria-pressed={panelPosition === position} onClick={() => onPanelPositionChange(position)}>{position === "left" ? isChinese ? "左侧" : "Left" : isChinese ? "底部" : "Bottom"}</button>)}</div></ConfigSection>
+    <ConfigSection title={readConfigLabel(locale, { en: "Blocked tiles", zh: "禁放格", ja: "設置できないマス" })}>{blockedKeys.map((key, index) => <OptionSwitch locale={locale} key={key} color="#dc1818" title={viewCopy.optionGroups[1].options[index].title} label={blockedLabels[index]} enabled={displayOptions[key]} onToggle={() => onDisplayToggle(key)} />)}</ConfigSection>
+    <ConfigSection title={readConfigLabel(locale, { en: "Catalog position", zh: "目录位置", ja: "カタログの位置" })}><div className="editor-config-segmented">{(["left", "bottom"] as const).map((position) => <button type="button" key={position} aria-pressed={panelPosition === position} onClick={() => onPanelPositionChange(position)}>{position === "left" ? readConfigLabel(locale, { en: "Left", zh: "左侧", ja: "左" }) : readConfigLabel(locale, { en: "Bottom", zh: "底部", ja: "下" })}</button>)}</div></ConfigSection>
   </div>;
 }
 
 export function SettingsConfigPanel({ locale, behaviorOptions, copy, onBehaviorChange }: Readonly<{ locale: Locale; behaviorOptions: EditorBehaviorOptions; copy: EditorModalCopy["settings"]; onBehaviorChange: BehaviorChange }>) {
   const [isConfirmingFreePlacement, setIsConfirmingFreePlacement] = useState(false);
-  const isChinese = locale === "zh";
   function toggleFreePlacement() {
     if (behaviorOptions.freePlacement) { onBehaviorChange("freePlacement", false); return; }
     setIsConfirmingFreePlacement(true);
   }
   return <div className="editor-config-panels">
-    <ConfigSection title={isChinese ? "界面" : "Interface"}>
-      <p className="editor-config-label">{isChinese ? "光标" : "Cursor"}</p>
-      <div className="editor-config-segmented">{([false, true] as const).map((enabled) => <button type="button" key={String(enabled)} title={copy.optionGroups[2].options[0].title} aria-pressed={behaviorOptions.gameCursors === enabled} onClick={() => onBehaviorChange("gameCursors", enabled)}>{enabled ? isChinese ? "游戏" : "Game" : isChinese ? "系统" : "System"}</button>)}</div>
-      <OptionSwitch locale={locale} title={copy.optionGroups[1].options[0].title} label={isChinese ? "提示通知" : "Toast notifications"} enabled={behaviorOptions.showToasts} onToggle={() => onBehaviorChange("showToasts", !behaviorOptions.showToasts)} />
+    <ConfigSection title={readConfigLabel(locale, { en: "Interface", zh: "界面", ja: "インターフェース" })}>
+      <p className="editor-config-label">{readConfigLabel(locale, { en: "Cursor", zh: "光标", ja: "カーソル" })}</p>
+      <div className="editor-config-segmented">{([false, true] as const).map((enabled) => <button type="button" key={String(enabled)} title={copy.optionGroups[2].options[0].title} aria-pressed={behaviorOptions.gameCursors === enabled} onClick={() => onBehaviorChange("gameCursors", enabled)}>{enabled ? readConfigLabel(locale, { en: "Game", zh: "游戏", ja: "ゲーム" }) : readConfigLabel(locale, { en: "System", zh: "系统", ja: "システム" })}</button>)}</div>
+      <OptionSwitch locale={locale} title={copy.optionGroups[1].options[0].title} label={readConfigLabel(locale, { en: "Toast notifications", zh: "提示通知", ja: "通知" })} enabled={behaviorOptions.showToasts} onToggle={() => onBehaviorChange("showToasts", !behaviorOptions.showToasts)} />
     </ConfigSection>
     <ConfigSection title={copy.placementHeading}>
       <OptionSwitch locale={locale} label={copy.freePlacement.label} enabled={behaviorOptions.freePlacement} onToggle={toggleFreePlacement} title={copy.freePlacement.title} />
       {isConfirmingFreePlacement ? <div className="editor-modal__free-placement-warning" role="alert"><p>{copy.freePlacementWarning}</p><div><button type="button" onClick={() => setIsConfirmingFreePlacement(false)}>{copy.warningActions.cancel}</button><button type="button" onClick={() => { onBehaviorChange("freePlacement", true); setIsConfirmingFreePlacement(false); }}>{copy.warningActions.confirm}</button></div></div> : null}
     </ConfigSection>
-    <ConfigSection title={isChinese ? "触屏" : "Touch controls"}>
-      <OptionSwitch locale={locale} title={copy.optionGroups[0].options[0].title} label={isChinese ? "显示摇杆" : "Show joystick"} enabled={behaviorOptions.showJoystick} onToggle={() => onBehaviorChange("showJoystick", !behaviorOptions.showJoystick)} />
-      <OptionSwitch locale={locale} title={copy.optionGroups[0].options[1].title} label={isChinese ? "左手模式" : "Left-hand mode"} enabled={behaviorOptions.leftHandMode} onToggle={() => onBehaviorChange("leftHandMode", !behaviorOptions.leftHandMode)} />
+    <ConfigSection title={readConfigLabel(locale, { en: "Touch controls", zh: "触屏", ja: "タッチ操作" })}>
+      <OptionSwitch locale={locale} title={copy.optionGroups[0].options[0].title} label={readConfigLabel(locale, { en: "Show joystick", zh: "显示摇杆", ja: "ジョイスティックを表示" })} enabled={behaviorOptions.showJoystick} onToggle={() => onBehaviorChange("showJoystick", !behaviorOptions.showJoystick)} />
+      <OptionSwitch locale={locale} title={copy.optionGroups[0].options[1].title} label={readConfigLabel(locale, { en: "Left-hand mode", zh: "左手模式", ja: "左手モード" })} enabled={behaviorOptions.leftHandMode} onToggle={() => onBehaviorChange("leftHandMode", !behaviorOptions.leftHandMode)} />
     </ConfigSection>
     <div className="editor-config-legal"><a href={copy.privacyPolicy.href} target="_blank" rel="noreferrer">{copy.privacyPolicy.label}</a><span aria-hidden="true"> · </span><a href={copy.termsOfService.href} target="_blank" rel="noreferrer">{copy.termsOfService.label}</a></div>
   </div>;
+}
+
+function readEditorModalHomepageLocale(locale: Locale): HomepageLocale {
+  if (locale === "en") return "en";
+  if (locale === "zh") return "zh-CN";
+  if (locale === "ja") return "ja";
+  const unsupportedLocale: never = locale;
+  throw new TypeError(
+    `Editor config locale must be "en", "zh", or "ja"; received ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readConfigLabel(
+  locale: Locale,
+  labels: Readonly<Record<Locale, string>>,
+): string {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return labels[locale];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new TypeError(
+    `Editor config locale must be "en", "zh", or "ja"; received ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readConfigLabels(
+  locale: Locale,
+  labels: Readonly<Record<Locale, readonly string[]>>,
+): readonly string[] {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return labels[locale];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new TypeError(
+    `Editor config locale must be "en", "zh", or "ja"; received ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
