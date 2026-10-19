@@ -1,8 +1,10 @@
 import { expect, expectTypeOf, it } from "vitest";
 import type { Metadata } from "next";
+import { metadata as japanesePlannerMetadata } from "../../app/ja/page";
 import type { PublicLocale } from "../../src/i18n/public-locale";
 import type { PublicCanonicalPath } from "../../src/i18n/public-route-registry";
 import {
+  createJapaneseHomepageMetadata,
   createPublicPageMetadata,
   createRussianHomepageMetadata,
   type PublicPageMetadataInput,
@@ -11,6 +13,7 @@ import {
 const homepageLanguageAlternates = {
   en: "https://stardewvalleyplanner.art",
   "zh-CN": "https://stardewvalleyplanner.art/zh",
+  ja: "https://stardewvalleyplanner.art/ja",
   ru: "https://stardewvalleyplanner.art/ru",
   "x-default": "https://stardewvalleyplanner.art",
 } as const;
@@ -132,7 +135,7 @@ it("creates Chinese metadata from a locale-neutral public identity", () => {
   });
 });
 
-it("publishes four homepage language alternates and keeps the Russian canonical on /ru", () => {
+it("publishes homepage language alternates and keeps the Russian canonical on /ru", () => {
   const englishHomepageMetadata = createPublicPageMetadata({
     locale: "en",
     canonicalPath: "/",
@@ -175,4 +178,79 @@ it("publishes four homepage language alternates and keeps the Russian canonical 
       description: confirmedRussianDescription,
     }),
   ).toThrow('Received: "   "');
+});
+
+it("adds Japanese and Russian only to homepage language alternates", () => {
+  const homepageMetadata = createPublicPageMetadata({
+    locale: "en",
+    canonicalPath: "/",
+    title: "Home",
+    description: "Home description",
+  });
+  const privacyMetadata = createPublicPageMetadata({
+    locale: "zh-CN",
+    canonicalPath: "/privacy",
+    title: "隐私政策",
+    description: "了解浏览器本地项目和站点数据的处理方式。",
+  });
+
+  expect(homepageMetadata.alternates?.languages).toEqual({
+    en: "https://stardewvalleyplanner.art",
+    "zh-CN": "https://stardewvalleyplanner.art/zh",
+    ja: "https://stardewvalleyplanner.art/ja",
+    ru: "https://stardewvalleyplanner.art/ru",
+    "x-default": "https://stardewvalleyplanner.art",
+  });
+  expect(privacyMetadata.alternates?.languages).not.toHaveProperty("ja");
+  expect(privacyMetadata.alternates?.languages).not.toHaveProperty("ru");
+});
+
+it("rejects an empty Japanese homepage title or description", () => {
+  expect(() =>
+    createJapaneseHomepageMetadata({
+      title: " ",
+      description: "牧場を計画。",
+    }),
+  ).toThrow('Received: " "');
+  expect(() =>
+    createJapaneseHomepageMetadata({
+      title: "スターデューバレー プランナー",
+      description: "",
+    }),
+  ).toThrow('Received: ""');
+});
+
+it("publishes the confirmed Japanese homepage title, description, and alternates", () => {
+  const japanesePlannerTitle =
+    "スターデューバレー プランナー｜無料のオンライン牧場レイアウトツール";
+  const japanesePlannerDescription =
+    "スタバレのレイアウトツールで、ゲーム内で建てる前に牧場を計画。8種類の牧場から選び、建物や作物を配置できます。季節の切り替え、スプリンクラーの範囲確認、セーブデータの読み込みにも対応。";
+
+  expect(japanesePlannerMetadata).toMatchObject({
+    title: japanesePlannerTitle,
+    description: japanesePlannerDescription,
+    alternates: {
+      canonical: "https://stardewvalleyplanner.art/ja",
+      languages: {
+        en: "https://stardewvalleyplanner.art",
+        "zh-CN": "https://stardewvalleyplanner.art/zh",
+        ja: "https://stardewvalleyplanner.art/ja",
+        ru: "https://stardewvalleyplanner.art/ru",
+        "x-default": "https://stardewvalleyplanner.art",
+      },
+    },
+    openGraph: {
+      title: japanesePlannerTitle,
+      description: japanesePlannerDescription,
+      type: "website",
+      url: "https://stardewvalleyplanner.art/ja",
+      images: [expectedSocialImageUrl],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: japanesePlannerTitle,
+      description: japanesePlannerDescription,
+      images: [expectedSocialImageUrl],
+    },
+  });
 });

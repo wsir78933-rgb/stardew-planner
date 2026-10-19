@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import sitemap from "../../app/sitemap";
 import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
 
+const japaneseHomepageUrl = "https://stardewvalleyplanner.art/ja";
 const russianHomepageUrl = "https://stardewvalleyplanner.art/ru";
 const forbiddenRussianUrls = [
   "https://stardewvalleyplanner.art/ru/blog",
@@ -11,10 +12,15 @@ const forbiddenRussianUrls = [
 ];
 
 describe("Russian homepage sitemap", () => {
-  it("appends exactly one Russian homepage URL after the bilingual registry", () => {
+  it("appends the Japanese and Russian homepage URLs after the bilingual registry", () => {
     const sitemapEntries = sitemap();
     const sitemapUrls = sitemapEntries.map((sitemapEntry) => sitemapEntry.url);
     const registryCount = getLocalizedIndexablePublicRouteEntries().length;
+    const japaneseSitemapUrls = sitemapUrls.filter(
+      (sitemapUrl) =>
+        sitemapUrl === japaneseHomepageUrl
+        || sitemapUrl.startsWith(`${japaneseHomepageUrl}/`),
+    );
     const russianSitemapUrls = sitemapUrls.filter(
       (sitemapUrl) =>
         sitemapUrl === russianHomepageUrl
@@ -23,9 +29,11 @@ describe("Russian homepage sitemap", () => {
 
     expect(
       sitemapUrls,
-      `Sitemap must be the registry plus one Russian homepage. Received count: ${sitemapUrls.length}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
-    ).toHaveLength(registryCount + 1);
+      `Sitemap must be the registry plus the Japanese and Russian homepages. Received count: ${sitemapUrls.length}. Japanese URLs: ${JSON.stringify(japaneseSitemapUrls)}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
+    ).toHaveLength(registryCount + 2);
+    expect(japaneseSitemapUrls).toEqual([japaneseHomepageUrl]);
     expect(russianSitemapUrls).toEqual([russianHomepageUrl]);
+    expect(sitemapUrls.at(-2)).toBe(japaneseHomepageUrl);
     expect(sitemapUrls.at(-1)).toBe(russianHomepageUrl);
     for (const forbiddenRussianUrl of forbiddenRussianUrls) {
       expect(sitemapUrls).not.toContain(forbiddenRussianUrl);

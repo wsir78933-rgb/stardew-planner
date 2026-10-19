@@ -1,33 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import { readVisibleProjectMapLabel } from "../i18n/planner-project-map-label";
 import type { PlannerMap } from "../maps/map-catalog";
 import type { ReferenceProjectMap } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 import { PlannerMapPicker } from "./planner-map-picker";
 
-type ProjectMapInstanceLocale = "en" | "zh" | "ru";
-
-type ProjectMapInstancePanelCopy = Readonly<{
-  addMap: string;
-  cancelRename: string;
-  copyToProject: string;
-  current: string;
-  deleteMap: string;
-  duplicate: string;
-  emptyDestination: string;
-  moveToProject: string;
-  newMapName: string;
-  open: string;
-  projectMaps: string;
-  rename: string;
-  saveName: string;
-  transferDestination: string;
-}>;
-
 type ProjectMapInstancePanelProperties = Readonly<{
-  locale?: ProjectMapInstanceLocale;
+  locale?: PlannerChromeLocale;
   activeMapInstanceId: string | null;
   mapInstances: readonly ReferenceProjectMap[];
   mapChoices: readonly PlannerMap[];
@@ -48,7 +30,7 @@ type ProjectMapInstancePanelProperties = Readonly<{
 }>;
 
 export function ProjectMapInstancePanel({
-  locale,
+  locale = "en",
   activeMapInstanceId,
   mapInstances,
   mapChoices,
@@ -61,8 +43,6 @@ export function ProjectMapInstancePanel({
   onOpenMapInstance,
   onRenameMapInstance,
 }: ProjectMapInstancePanelProperties) {
-  const panelLocale = readProjectMapInstanceLocale(locale);
-  const panelCopy = readProjectMapInstancePanelCopy(panelLocale);
   const [renamingMapInstanceId, setRenamingMapInstanceId] = useState<string | null>(
     null,
   );
@@ -74,6 +54,7 @@ export function ProjectMapInstancePanel({
     destinationProjectId,
     projectChoices,
   );
+  const panelCopy = readProjectMapInstanceCopy(locale);
 
   function startRenamingMapInstance(mapInstance: ReferenceProjectMap): void {
     setRenamingMapInstanceId(mapInstance.id);
@@ -87,7 +68,7 @@ export function ProjectMapInstancePanel({
 
   function getRequiredDestinationProjectId(): string {
     if (availableDestinationProjectId.length === 0) {
-      throw new Error(readMissingDestinationProjectMessage(panelLocale));
+      throw new Error(readMissingDestinationProjectMessage(locale));
     }
 
     return availableDestinationProjectId;
@@ -107,7 +88,7 @@ export function ProjectMapInstancePanel({
             value={availableDestinationProjectId}
           >
             {projectChoices.length === 0 ? (
-              <option value="">{panelCopy.emptyDestination}</option>
+              <option value="">{panelCopy.createProjectFirst}</option>
             ) : (
               projectChoices.map((projectChoice) => (
                 <option key={projectChoice.id} value={projectChoice.id}>
@@ -130,7 +111,7 @@ export function ProjectMapInstancePanel({
               key={mapInstance.id}
             >
               <div className="project-map-instance-panel__instance-summary">
-                <strong>{readVisibleProjectMapLabel(mapInstance, panelLocale)}</strong>
+                <strong>{readProjectMapInstanceVisibleLabel(mapInstance, locale)}</strong>
                 <span>{mapInstance.mapFile}</span>
                 {isActiveMapInstance ? <span>{panelCopy.current}</span> : null}
               </div>
@@ -217,7 +198,7 @@ export function ProjectMapInstancePanel({
       <section aria-label={panelCopy.addMap} className="project-map-instance-panel__add-map">
         <h3>{panelCopy.addMap}</h3>
         <PlannerMapPicker
-          locale={panelLocale}
+          locale={locale}
           mapIdDataAttribute="data-project-add-map-id"
           maps={mapChoices}
           onMapSelect={onAddMap}
@@ -225,74 +206,6 @@ export function ProjectMapInstancePanel({
         />
       </section>
     </section>
-  );
-}
-
-function readProjectMapInstanceLocale(
-  locale: ProjectMapInstanceLocale | undefined,
-): ProjectMapInstanceLocale {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
-    return resolvedLocale;
-  }
-  throw new TypeError(
-    `Project map instance locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
-  );
-}
-
-function readProjectMapInstancePanelCopy(
-  locale: ProjectMapInstanceLocale,
-): ProjectMapInstancePanelCopy {
-  if (locale === "en" || locale === "zh") {
-    return {
-      addMap: "Add map",
-      cancelRename: "Cancel rename",
-      copyToProject: "Copy to project",
-      current: "Current",
-      deleteMap: "Delete",
-      duplicate: "Duplicate",
-      emptyDestination: "Create another local project first",
-      moveToProject: "Move to project",
-      newMapName: "New map name",
-      open: "Open",
-      projectMaps: "Project maps",
-      rename: "Rename",
-      saveName: "Save name",
-      transferDestination: "Transfer destination",
-    };
-  }
-  if (locale === "ru") {
-    return {
-      addMap: "Добавить карту",
-      cancelRename: "Отменить переименование",
-      copyToProject: "Копировать в проект",
-      current: "Текущая",
-      deleteMap: "Удалить",
-      duplicate: "Дублировать",
-      emptyDestination: "Сначала создайте ещё один локальный проект",
-      moveToProject: "Переместить в проект",
-      newMapName: "Новое название карты",
-      open: "Открыть",
-      projectMaps: "Карты проекта",
-      rename: "Переименовать",
-      saveName: "Сохранить название",
-      transferDestination: "Куда перенести",
-    };
-  }
-  throw new TypeError(
-    `Project map instance locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readMissingDestinationProjectMessage(locale: ProjectMapInstanceLocale): string {
-  if (locale === "en" || locale === "zh") {
-    return "Cannot transfer a local map instance because no destination project is selected.";
-  }
-  if (locale === "ru") {
-    return "Нельзя перенести локальную карту: проект назначения не выбран.";
-  }
-  throw new TypeError(
-    `Project map instance locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -309,4 +222,121 @@ export function deriveAvailableDestinationProjectId(
   }
 
   return projectChoices[0]?.id ?? "";
+}
+
+type ProjectMapInstanceCopy = Readonly<{
+  projectMaps: string;
+  transferDestination: string;
+  createProjectFirst: string;
+  current: string;
+  newMapName: string;
+  saveName: string;
+  cancelRename: string;
+  open: string;
+  rename: string;
+  duplicate: string;
+  copyToProject: string;
+  moveToProject: string;
+  deleteMap: string;
+  addMap: string;
+}>;
+
+const englishProjectMapInstanceCopy = {
+  projectMaps: "Project maps",
+  transferDestination: "Transfer destination",
+  createProjectFirst: "Create another local project first",
+  current: "Current",
+  newMapName: "New map name",
+  saveName: "Save name",
+  cancelRename: "Cancel rename",
+  open: "Open",
+  rename: "Rename",
+  duplicate: "Duplicate",
+  copyToProject: "Copy to project",
+  moveToProject: "Move to project",
+  deleteMap: "Delete",
+  addMap: "Add map",
+} as const satisfies ProjectMapInstanceCopy;
+
+const japaneseProjectMapInstanceCopy = {
+  projectMaps: "プロジェクトのマップ",
+  transferDestination: "移動先",
+  createProjectFirst: "先に別のローカルプロジェクトを作成してください",
+  current: "現在",
+  newMapName: "新しいマップ名",
+  saveName: "名前を保存",
+  cancelRename: "名前の変更をやめる",
+  open: "開く",
+  rename: "名前を変更",
+  duplicate: "複製",
+  copyToProject: "プロジェクトにコピー",
+  moveToProject: "プロジェクトに移動",
+  deleteMap: "削除",
+  addMap: "マップを追加",
+} as const satisfies ProjectMapInstanceCopy;
+
+
+const russianProjectMapInstanceCopy = {
+  projectMaps: "Карты проекта",
+  transferDestination: "Куда перенести",
+  createProjectFirst: "Сначала создайте ещё один локальный проект",
+  current: "Текущая",
+  newMapName: "Новое название карты",
+  saveName: "Сохранить название",
+  cancelRename: "Отменить переименование",
+  open: "Открыть",
+  rename: "Переименовать",
+  duplicate: "Дублировать",
+  copyToProject: "Копировать в проект",
+  moveToProject: "Переместить в проект",
+  deleteMap: "Удалить",
+  addMap: "Добавить карту",
+} as const satisfies ProjectMapInstanceCopy;
+
+function readProjectMapInstanceVisibleLabel(
+  mapInstance: ReferenceProjectMap,
+  locale: PlannerChromeLocale,
+): string {
+  if (locale === "ru") {
+    return readVisibleProjectMapLabel(mapInstance, "ru");
+  }
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return mapInstance.label;
+  }
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read project map instance label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readProjectMapInstanceCopy(locale: PlannerChromeLocale): ProjectMapInstanceCopy {
+  if (locale === "en" || locale === "zh") {
+    return englishProjectMapInstanceCopy;
+  }
+
+  if (locale === "ja") {
+    return japaneseProjectMapInstanceCopy;
+  }
+
+  if (locale === "ru") {
+    return russianProjectMapInstanceCopy;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read project map instance copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readMissingDestinationProjectMessage(locale: PlannerChromeLocale): string {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return "Cannot transfer a local map instance because no destination project is selected.";
+  }
+  if (locale === "ru") {
+    return "Нельзя перенести локальную карту: проект назначения не выбран.";
+  }
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read missing destination message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

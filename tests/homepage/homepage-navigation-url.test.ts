@@ -22,6 +22,7 @@ describe("homepage navigation URLs", () => {
         localeHrefByLocale: {
           en: expectedEnglishHref,
           "zh-CN": expectedChineseHref,
+          ja: `/ja?farmType=${farmType}#planner`,
           ru: expectedEnglishHref.replace(/^\//, "/ru"),
         },
         plannerHref: "#planner",
@@ -45,6 +46,7 @@ describe("homepage navigation URLs", () => {
         localeHrefByLocale: {
           en: "/#planner",
           "zh-CN": "/zh#planner",
+          ja: "/ja#planner",
           ru: "/ru#planner",
         },
         plannerHref: "#planner",
@@ -63,6 +65,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/",
         "zh-CN": "/zh",
+        ja: "/ja",
         ru: "/ru",
       },
       plannerHref: "#planner",
@@ -88,6 +91,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/?farmType=forest",
         "zh-CN": "/zh?farmType=forest",
+        ja: "/ja?farmType=forest",
         ru: "/ru?farmType=forest",
       },
       plannerHref: "#planner",
@@ -105,6 +109,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/?farmType=forest#planner",
         "zh-CN": "/zh?farmType=forest#planner",
+        ja: "/ja?farmType=forest#planner",
         ru: "/ru?farmType=forest#planner",
       },
       plannerHref: "#planner",
@@ -122,6 +127,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/#planner",
         "zh-CN": "/zh#planner",
+        ja: "/ja#planner",
         ru: "/ru#planner",
       },
       plannerHref: "#planner",

@@ -26,6 +26,14 @@ const expectedComparisonDimensionsByLocale = {
     "PNG export",
   ],
   "zh-CN": ["使用费用", "上手与操作", "多方案保存", "中英文操作", "方案文件备份", "PNG 导出"],
+  ja: [
+    "料金",
+    "操作のしやすさ",
+    "複数の計画の保存",
+    "英語と中国語の画面",
+    "プロジェクトファイルのバックアップ",
+    "PNG書き出し",
+  ],
   ru: [
     "Стоимость",
     "Удобство использования",
@@ -39,6 +47,7 @@ const expectedComparisonDimensionsByLocale = {
 const expectedComparisonHeadingByLocale = {
   en: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
   "zh-CN": "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
+  ja: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
   ru: "Stardew Valley Planner vs StardewPlan vs Stardew Planner V3",
 } as const;
 
@@ -59,6 +68,14 @@ const expectedPlannerBenefitPatternsByLocale = {
     [/单个项目/, /JSON/, /全部地图/],
     [/PNG/, /1×/, /2×/],
   ],
+  ja: [
+    [/無料/, /有料会員/],
+    [/ラベルが明確/, /グループ/, /検索/, /同じ保存ウィンドウ/],
+    [/複数の計画/, /固定の枠/, /件数/, /ブラウザ/],
+    [/英語/, /中国語/],
+    [/1つのプロジェクト/, /JSON/, /地図/],
+    [/PNG/, /1×/, /2×/],
+  ],
   ru: [
     [/бесплатн/, /платных тарифов/],
     [/Понятные названия/, /сгруппированные/],
@@ -74,10 +91,12 @@ test("ships every approved locale with the same top-level homepage sections", ()
     Object.keys(homepageCopyByLocale),
     `Homepage copy locales must match the display locales. Received: ${JSON.stringify(Object.keys(homepageCopyByLocale))}.`,
   ).toEqual([...HOMEPAGE_DISPLAY_LOCALES]);
-  expect([...HOMEPAGE_LOCALES]).toEqual(["en", "zh-CN", "ru"]);
+  expect([...HOMEPAGE_LOCALES]).toEqual(["en", "zh-CN", "ja", "ru"]);
+  expect(Object.keys(homepageCopyByLocale)).toEqual([...HOMEPAGE_LOCALES]);
   expect(Object.keys(homepageCopyByLocale.en)).toEqual(
     Object.keys(homepageCopyByLocale["zh-CN"]),
   );
+  expect(Object.keys(homepageCopyByLocale.en)).toEqual(Object.keys(homepageCopyByLocale.ja));
   expect(Object.keys(homepageCopyByLocale.ru)).toEqual(
     Object.keys(homepageCopyByLocale.en),
   );
@@ -620,6 +639,9 @@ test("provides bilingual planner preview image alt text", () => {
   expect(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt).toBe(
     "像素风标准农场地图，中央是空地，含农舍、温室和两处水塘",
   );
+  expect(homepageCopyByLocale.ja.plannerPreview.imageAlt).toBe(
+    "中央に土の空き地があり、牧場の家、温室、池が2つある、スタンダード牧場のドット絵地図",
+  );
   expect(homepageCopyByLocale.ru.plannerPreview.imageAlt).toBe(
     "Пиксельная карта Стандартной фермы с центральным участком земли, домом, теплицей и двумя прудами",
   );
@@ -801,6 +823,36 @@ test("keeps localized import and screenshot claims synchronized", () => {
       privacy: "隐私政策",
       terms: "服务条款",
       contact: "联系我们",
+    },
+  });
+});
+
+test("provides the Japanese homepage contract for navigation, planner preview, and FAQ", () => {
+  const japaneseCopy = homepageCopyByLocale.ja;
+
+  expect(Object.keys(japaneseCopy)).toEqual(Object.keys(homepageCopyByLocale.en));
+  expect(japaneseCopy.navigation.languageLabel).toBe("言語");
+  expect(japaneseCopy.navigation.productName).toBe("スターデューバレー プランナー");
+  expect(japaneseCopy.whatIs.heading).toBe("スターデューバレー プランナーとは？");
+  expect(japaneseCopy.faq.heading).toBe("よくある質問");
+  expect(japaneseCopy.faq.eyebrow).toBe("質問");
+  expect(japaneseCopy.caseStudies).toHaveLength(3);
+  expect(japaneseCopy.faq.items).toHaveLength(5);
+  expect(japaneseCopy.closingCta.heading).toBe(
+    "このページで配置を終えてから、ゲーム内で建てる。",
+  );
+  expect(japaneseCopy.footer).toMatchObject({
+    brandName: "スターデューバレー プランナー",
+    planner: { home: "プランナー" },
+    explore: {
+      blog: "ブログ",
+      capabilities: "牧場の例",
+      faq: "よくある質問",
+    },
+    legal: {
+      privacy: "プライバシーポリシー",
+      terms: "利用規約",
+      contact: "お問い合わせ",
     },
   });
 });

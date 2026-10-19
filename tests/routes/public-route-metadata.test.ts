@@ -37,6 +37,7 @@ function createExpectedLanguageAlternates(pathname: string) {
 
 const homepageLanguageAlternates = {
   ...createExpectedLanguageAlternates("/"),
+  ja: "https://stardewvalleyplanner.art/ja",
   ru: "https://stardewvalleyplanner.art/ru",
 };
 
@@ -63,7 +64,7 @@ describe("public route metadata", () => {
     });
   });
 
-  it("publishes four homepage alternates and three alternates for contact", () => {
+  it("publishes homepage alternates for Japanese and Russian and three alternates for contact", () => {
     expect(plannerMetadata.alternates).toEqual({
       canonical: "https://stardewvalleyplanner.art",
       languages: homepageLanguageAlternates,
@@ -202,6 +203,10 @@ describe("public route metadata", () => {
           ],
         },
       });
+      expect(
+        (await generateBlogMetadata({ params: Promise.resolve({ slug }) }))
+          .alternates?.languages,
+      ).not.toHaveProperty("ja");
 
       const chineseArticleMetadata = await generateChineseBlogMetadata({
         params: Promise.resolve({ slug }),
@@ -229,6 +234,10 @@ describe("public route metadata", () => {
           ],
         },
       });
+      expect(
+        (await generateChineseBlogMetadata({ params: Promise.resolve({ slug }) }))
+          .alternates?.languages,
+      ).not.toHaveProperty("ja");
     }
   });
 });

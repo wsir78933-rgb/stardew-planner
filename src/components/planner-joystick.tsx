@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ChevronDown,
   ChevronLeft,
@@ -5,6 +7,8 @@ import {
   ChevronUp,
   type LucideIcon,
 } from "lucide-react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 export type PlannerJoystickDirection =
   | "ArrowDown"
@@ -17,12 +21,9 @@ type PlannerJoystickIntentHandlers = Readonly<{
   onPan: (direction: PlannerJoystickDirection) => void;
 }>;
 
-type PlannerJoystickLocale = "en" | "zh" | "ru";
-
 type PlannerJoystickProperties = PlannerJoystickIntentHandlers &
   Readonly<{
     isLeftHanded: boolean;
-    locale?: PlannerJoystickLocale;
   }>;
 
 const joystickControls: readonly Readonly<{
@@ -50,16 +51,18 @@ export function dispatchPlannerJoystickDirection(
 
 export function PlannerJoystick({
   isLeftHanded,
-  locale,
   onNudge,
   onPan,
 }: PlannerJoystickProperties) {
-  const joystickLocale = readPlannerJoystickLocale(locale);
+  const locale = usePlannerChromeLocale();
   const hasNudgeIntent = onNudge !== undefined;
+  const joystickCopy = readJoystickCopy(locale);
 
   return (
     <div
-      aria-label={readPlannerJoystickGroupLabel(hasNudgeIntent, joystickLocale)}
+      aria-label={
+        hasNudgeIntent ? joystickCopy.selectionGroup : joystickCopy.cameraGroup
+      }
       className={`joystick-outer planner-joystick planner-joystick--${
         isLeftHanded ? "left" : "right"
       }`}
@@ -68,11 +71,11 @@ export function PlannerJoystick({
       <div aria-hidden="true" className="joystick-ring" />
       {joystickControls.map((joystickControl) => (
         <button
-          aria-label={readPlannerJoystickControlLabel(
-            joystickControl.direction,
-            hasNudgeIntent ? "nudge" : "pan",
-            joystickLocale,
-          )}
+          aria-label={
+            hasNudgeIntent
+              ? joystickCopy.nudge[joystickControl.direction]
+              : joystickCopy.pan[joystickControl.direction]
+          }
           className={`arrow-btn arrow-btn-${joystickControl.position} planner-joystick__button planner-joystick__button--${joystickControl.direction.toLowerCase()}`}
           key={joystickControl.direction}
           onClick={() =>
@@ -91,65 +94,71 @@ export function PlannerJoystick({
   );
 }
 
-function readPlannerJoystickLocale(
-  locale: PlannerJoystickLocale | undefined,
-): PlannerJoystickLocale {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
-    return resolvedLocale;
-  }
-  throw new TypeError(
-    `Planner joystick locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
-  );
-}
-
-function readPlannerJoystickGroupLabel(
-  hasNudgeIntent: boolean,
-  locale: PlannerJoystickLocale,
-): string {
+function readJoystickCopy(locale: PlannerChromeLocale): Readonly<{
+  cameraGroup: string;
+  nudge: Readonly<Record<PlannerJoystickDirection, string>>;
+  pan: Readonly<Record<PlannerJoystickDirection, string>>;
+  selectionGroup: string;
+}> {
   if (locale === "en" || locale === "zh") {
-    return hasNudgeIntent ? "Selection movement controls" : "Map camera controls";
+    return {
+      cameraGroup: "Map camera controls",
+      nudge: {
+        ArrowDown: "Move selection down",
+        ArrowLeft: "Move selection left",
+        ArrowRight: "Move selection right",
+        ArrowUp: "Move selection up",
+      },
+      pan: {
+        ArrowDown: "Pan map down",
+        ArrowLeft: "Pan map left",
+        ArrowRight: "Pan map right",
+        ArrowUp: "Pan map up",
+      },
+      selectionGroup: "Selection movement controls",
+    };
   }
-  if (locale === "ru") {
-    return hasNudgeIntent ? "Перемещение выбранного" : "Камера карты";
-  }
-  throw new TypeError(
-    `Planner joystick locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
 
-function readPlannerJoystickControlLabel(
-  direction: PlannerJoystickDirection,
-  intent: "nudge" | "pan",
-  locale: PlannerJoystickLocale,
-): string {
+  if (locale === "ja") {
+    return {
+      cameraGroup: "マップのカメラ操作",
+      nudge: {
+        ArrowDown: "選択を下へ移動",
+        ArrowLeft: "選択を左へ移動",
+        ArrowRight: "選択を右へ移動",
+        ArrowUp: "選択を上へ移動",
+      },
+      pan: {
+        ArrowDown: "マップを下へ移動",
+        ArrowLeft: "マップを左へ移動",
+        ArrowRight: "マップを右へ移動",
+        ArrowUp: "マップを上へ移動",
+      },
+      selectionGroup: "選択の移動操作",
+    };
+  }
+
   if (locale === "ru") {
-    if (intent === "pan" && direction === "ArrowUp") return "Сдвинуть карту вверх";
-    if (intent === "pan" && direction === "ArrowLeft") return "Сдвинуть карту влево";
-    if (intent === "pan" && direction === "ArrowRight") return "Сдвинуть карту вправо";
-    if (intent === "pan" && direction === "ArrowDown") return "Сдвинуть карту вниз";
-    if (intent === "nudge" && direction === "ArrowUp") return "Сдвинуть выбранное вверх";
-    if (intent === "nudge" && direction === "ArrowLeft") return "Сдвинуть выбранное влево";
-    if (intent === "nudge" && direction === "ArrowRight") return "Сдвинуть выбранное вправо";
-    if (intent === "nudge" && direction === "ArrowDown") return "Сдвинуть выбранное вниз";
-    throw new TypeError(
-      `Planner joystick control must be a pan or nudge cardinal direction; received intent ${JSON.stringify(intent)} and direction ${JSON.stringify(direction)}.`,
-    );
+    return {
+      cameraGroup: "Камера карты",
+      nudge: {
+        ArrowDown: "Сдвинуть выбранное вниз",
+        ArrowLeft: "Сдвинуть выбранное влево",
+        ArrowRight: "Сдвинуть выбранное вправо",
+        ArrowUp: "Сдвинуть выбранное вверх",
+      },
+      pan: {
+        ArrowDown: "Сдвинуть карту вниз",
+        ArrowLeft: "Сдвинуть карту влево",
+        ArrowRight: "Сдвинуть карту вправо",
+        ArrowUp: "Сдвинуть карту вверх",
+      },
+      selectionGroup: "Перемещение выбранного",
+    };
   }
-  if (locale === "en" || locale === "zh") {
-    if (intent === "pan" && direction === "ArrowUp") return "Pan map up";
-    if (intent === "pan" && direction === "ArrowLeft") return "Pan map left";
-    if (intent === "pan" && direction === "ArrowRight") return "Pan map right";
-    if (intent === "pan" && direction === "ArrowDown") return "Pan map down";
-    if (intent === "nudge" && direction === "ArrowUp") return "Move selection up";
-    if (intent === "nudge" && direction === "ArrowLeft") return "Move selection left";
-    if (intent === "nudge" && direction === "ArrowRight") return "Move selection right";
-    if (intent === "nudge" && direction === "ArrowDown") return "Move selection down";
-    throw new TypeError(
-      `Planner joystick control must be a pan or nudge cardinal direction; received intent ${JSON.stringify(intent)} and direction ${JSON.stringify(direction)}.`,
-    );
-  }
-  throw new TypeError(
-    `Planner joystick locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read joystick labels because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

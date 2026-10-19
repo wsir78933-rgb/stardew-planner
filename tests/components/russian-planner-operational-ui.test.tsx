@@ -383,9 +383,9 @@ describe("Russian planner operational UI", () => {
       "Пиксельная карта Стандартной фермы с центральным участком земли, домом, теплицей и двумя прудами",
     );
     expect(homepageMarkup).toMatch(
-      /<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
+      /<a[^>]*data-homepage-language-option[^>]*href="\/"[^>]*>English<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/zh"[^>]*>中文<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ja"[^>]*>日本語<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
     );
-    expect(homepageMarkup.match(/data-homepage-language-option/g)).toHaveLength(3);
+    expect(homepageMarkup.match(/data-homepage-language-option/g)).toHaveLength(4);
     expect(homepageMarkup).toMatch(/<a[^>]*href="#planner"[^>]*>Начать планирование<\/a>/);
     expect(homepageMarkup).not.toContain("开始规划");
     expect(homepageMarkup).not.toContain("Start planning");

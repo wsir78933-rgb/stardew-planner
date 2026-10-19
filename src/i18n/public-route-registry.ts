@@ -93,19 +93,52 @@ export function getLocalizedIndexablePublicRouteEntries(): readonly LocalizedPub
   );
 }
 
+export type PairedPublicLanguageAlternates = Readonly<{
+  en: string;
+  "zh-CN": string;
+  "x-default": string;
+}>;
+
+export type HomepagePublicLanguageAlternates = Readonly<
+  PairedPublicLanguageAlternates & {
+    ja: string;
+    ru: string;
+  }
+>;
+
+export function createPublicLanguageAlternates(
+  canonicalPath: "/",
+): HomepagePublicLanguageAlternates;
+export function createPublicLanguageAlternates(
+  canonicalPath: Exclude<PublicCanonicalPath, "/">,
+): PairedPublicLanguageAlternates;
 export function createPublicLanguageAlternates(
   canonicalPath: PublicCanonicalPath,
-): Readonly<Record<PublicLocale | "x-default", string>> {
-  return {
+): PairedPublicLanguageAlternates | HomepagePublicLanguageAlternates;
+export function createPublicLanguageAlternates(
+  canonicalPath: PublicCanonicalPath,
+): PairedPublicLanguageAlternates | HomepagePublicLanguageAlternates {
+  const pairedAlternates: PairedPublicLanguageAlternates = {
     en: createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
     "zh-CN": createCanonicalUrl(getLocalizedPublicPath("zh-CN", canonicalPath)),
     "x-default": createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
+  };
+
+  if (canonicalPath !== "/") {
+    return pairedAlternates;
+  }
+
+  return {
+    ...pairedAlternates,
+    ja: createCanonicalUrl(getHomepageDisplayPath("ja")),
+    ru: createCanonicalUrl(getHomepageDisplayPath("ru")),
   };
 }
 
 const homepageDisplayPathByLocale = {
   en: "/",
   "zh-CN": "/zh",
+  ja: "/ja",
   ru: "/ru",
 } as const satisfies Readonly<Record<HomepageDisplayLocale, string>>;
 
@@ -120,13 +153,6 @@ export function getHomepageDisplayPath(locale: HomepageDisplayLocale): string {
   return homepagePath;
 }
 
-export function createHomepageLanguageAlternates(): Readonly<
-  Record<HomepageDisplayLocale | "x-default", string>
-> {
-  return {
-    en: createCanonicalUrl(getHomepageDisplayPath("en")),
-    "zh-CN": createCanonicalUrl(getHomepageDisplayPath("zh-CN")),
-    ru: createCanonicalUrl(getHomepageDisplayPath("ru")),
-    "x-default": createCanonicalUrl(getHomepageDisplayPath("en")),
-  };
+export function createHomepageLanguageAlternates(): HomepagePublicLanguageAlternates {
+  return createPublicLanguageAlternates("/");
 }

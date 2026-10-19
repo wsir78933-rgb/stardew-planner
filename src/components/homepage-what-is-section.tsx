@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PublicPicture } from "./public-picture";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
 
 type HomepageWhatIsSectionProps = Readonly<{
@@ -22,11 +22,12 @@ export function HomepageWhatIsSection({ copy }: HomepageWhatIsSectionProps) {
           ))}
         </div>
         <figure data-homepage-what-is-media>
-          <Image
+          <PublicPicture
             alt={copy.imageAlt}
+            decoding="async"
             height={788}
-            src="/homepage/what-is/farm-layout-overview.png"
-            unoptimized
+            loading="lazy"
+            src="/homepage/what-is/farm-layout-overview.webp"
             width={1076}
           />
         </figure>

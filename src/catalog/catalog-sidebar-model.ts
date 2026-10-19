@@ -438,9 +438,9 @@ function isInteriorPattern(
 }
 
 function assertHomepageLocale(locale: HomepageLocale): void {
-  if (locale !== "en" && locale !== "zh-CN" && locale !== "ru") {
+  if (locale !== "en" && locale !== "zh-CN" && locale !== "ja" && locale !== "ru") {
     throw new TypeError(
-      `Homepage locale must be "en", "zh-CN", or "ru"; received ${describeValue(locale)}.`,
+      `Homepage locale must be "en", "zh-CN", "ja", or "ru"; received ${describeValue(locale)}.`,
     );
   }
 }

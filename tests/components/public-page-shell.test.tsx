@@ -25,11 +25,12 @@ it("renders a shared static navigation frame around route content", () => {
   expect(markup).toContain("Blog");
   expect(markup).toContain("data-homepage-language-switcher");
   expect(markup).toContain('href="/zh"');
+  expect(markup).toContain('href="/ja"');
   expect(markup).toContain('href="/ru"');
   expect(markup).toMatch(
-    /<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
+    /<a[^>]*data-homepage-language-option[^>]*href="\/"[^>]*>English<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/zh"[^>]*>中文<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ja"[^>]*>日本語<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
   );
-  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(4);
   expect(markup).not.toContain('href="/ru/blog"');
   expect(markup).not.toContain('href="/ru/privacy"');
   expect(markup).toContain('href="/#planner"');
@@ -71,11 +72,12 @@ it("keeps every Chinese public homepage link on /zh", () => {
   expect(markup).toContain("博客");
   expect(markup).toContain("data-homepage-language-switcher");
   expect(markup).toContain('href="/"');
+  expect(markup).toContain('href="/ja"');
   expect(markup).toContain('href="/ru"');
   expect(markup).toMatch(
-    /<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
+    /<a[^>]*data-homepage-language-option[^>]*href="\/"[^>]*>English<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/zh"[^>]*>中文<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ja"[^>]*>日本語<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
   );
-  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(4);
   expect(markup).not.toContain('href="/ru/privacy"');
   expect(markup).toContain('href="/zh#planner"');
   expect(markup).toContain("打开规划器");
@@ -107,8 +109,9 @@ it("keeps the planner destination localized on a Chinese information page", () =
   expect(markup).toContain('href="/privacy"');
   expect(markup).toContain('href="/zh/privacy"');
   expect(markup).toMatch(
-    /<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
+    /<a[^>]*data-homepage-language-option[^>]*href="\/privacy"[^>]*>English<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/zh\/privacy"[^>]*>中文<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ja"[^>]*>日本語<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
   );
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(4);
   expect(markup).not.toContain('href="/ru/privacy"');
   expect(markup).not.toContain('href="/ru/blog"');
   expect(markup).not.toContain('href="/zh/farm-comparison"');

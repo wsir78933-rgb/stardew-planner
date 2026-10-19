@@ -65,6 +65,7 @@ test("renders a closed language disclosure with real English and Chinese route a
       label="Language"
       localeHrefByLocale={{
         en: "/?farmType=forest#planner",
+        ja: "/ja?farmType=forest#planner",
         "zh-CN": "/zh?farmType=forest#planner",
         ru: "/ru?farmType=forest#planner",
       }}
@@ -78,6 +79,7 @@ test("renders a closed language disclosure with real English and Chinese route a
   expect(markup).not.toContain("<svg");
   expect(markup).toContain("中文");
   expect(markup).toContain("English");
+  expect(markup).toContain("日本語");
   expect(markup).toContain('aria-expanded="false"');
   expect(markup).toContain("aria-controls=");
   expect(markup).toContain("<ul");
@@ -89,9 +91,12 @@ test("renders a closed language disclosure with real English and Chinese route a
     /<a[^>]*data-homepage-language-option[^>]*href="\/zh\?farmType=forest#planner"[^>]*>中文<\/a>/,
   );
   expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/ja\?farmType=forest#planner"[^>]*>日本語<\/a>/,
+  );
+  expect(markup).toMatch(
     /<a[^>]*data-homepage-language-option[^>]*href="\/ru\?farmType=forest#planner"[^>]*>Русский<\/a>/,
   );
-  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(4);
   expect(markup).not.toMatch(/<button[^>]*data-homepage-language-option/);
   expect(markup).not.toContain("aria-current");
   expect(markup).not.toContain("aria-pressed");
@@ -197,6 +202,7 @@ test("text trigger keeps the language accessible name, visible label, caret, and
       label="Language"
       localeHrefByLocale={{
         en: "/?farmType=forest#planner",
+        ja: "/ja?farmType=forest#planner",
         "zh-CN": "/zh?farmType=forest#planner",
         ru: "/ru?farmType=forest#planner",
       }}
@@ -217,7 +223,10 @@ test("text trigger keeps the language accessible name, visible label, caret, and
     /<a[^>]*data-homepage-language-option[^>]*href="\/zh\?farmType=forest#planner"[^>]*>中文<\/a>/,
   );
   expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/ja\?farmType=forest#planner"[^>]*>日本語<\/a>/,
+  );
+  expect(markup).toMatch(
     /<a[^>]*data-homepage-language-option[^>]*href="\/ru\?farmType=forest#planner"[^>]*>Русский<\/a>/,
   );
-  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(4);
 });

@@ -6,6 +6,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import { getRussianPlannerMapDisplayName } from "../i18n/planner-russian-display-names";
 import {
   getPlannerMapById,
@@ -13,8 +14,7 @@ import {
   type PlannerMap,
   type PlannerMapCategory,
 } from "../maps/map-catalog";
-
-type PlannerMapPickerLocale = "en" | "zh" | "ru";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 export type PlannerMapPickerTopLevelTab =
   | "farm"
@@ -30,7 +30,7 @@ export type PlannerMapPickerState = Readonly<{
 }>;
 
 type PlannerMapPickerProperties = Readonly<{
-  locale?: PlannerMapPickerLocale;
+  locale?: PlannerChromeLocale;
   maps: readonly PlannerMap[];
   selectedMapId: string | null;
   onMapSelect: (mapId: string) => void;
@@ -39,24 +39,26 @@ type PlannerMapPickerProperties = Readonly<{
 
 type TopLevelTabDefinition = Readonly<{
   id: PlannerMapPickerTopLevelTab;
+  label: string;
   mapCategory: Exclude<PlannerMapCategory, "community-farm" | "community-interior"> | null;
 }>;
 
 type CommunityTabDefinition = Readonly<{
   id: PlannerMapPickerCommunityTab;
+  label: string;
   mapCategory: Extract<PlannerMapCategory, "community-farm" | "community-interior">;
 }>;
 
 const topLevelTabDefinitions = [
-  { id: "farm", mapCategory: "farm" },
-  { id: "interiors", mapCategory: "interior" },
-  { id: "exteriors", mapCategory: "exterior" },
-  { id: "community", mapCategory: null },
+  { id: "farm", label: "Farm", mapCategory: "farm" },
+  { id: "interiors", label: "Interiors", mapCategory: "interior" },
+  { id: "exteriors", label: "Exteriors", mapCategory: "exterior" },
+  { id: "community", label: "Community", mapCategory: null },
 ] as const satisfies readonly TopLevelTabDefinition[];
 
 const communityTabDefinitions = [
-  { id: "farms", mapCategory: "community-farm" },
-  { id: "interiors", mapCategory: "community-interior" },
+  { id: "farms", label: "Farms", mapCategory: "community-farm" },
+  { id: "interiors", label: "Interiors", mapCategory: "community-interior" },
 ] as const satisfies readonly CommunityTabDefinition[];
 
 export function PlannerMapPicker({
@@ -66,7 +68,8 @@ export function PlannerMapPicker({
   onMapSelect,
   mapIdDataAttribute,
 }: PlannerMapPickerProperties) {
-  const pickerLocale = readPlannerMapPickerLocale(locale);
+  const chromeLocale = usePlannerChromeLocale();
+  const resolvedLocale = locale ?? chromeLocale;
   const initialPickerState = getInitialPlannerMapPickerState(selectedMapId);
   const [activeTopLevelTab, setActiveTopLevelTab] = useState(
     initialPickerState.activeTopLevelTab,
@@ -155,7 +158,7 @@ export function PlannerMapPicker({
 
   return (
     <div className="planner-map-picker">
-      <div aria-label={readPlannerMapPickerGroupLabel("map-categories", pickerLocale)} className="planner-map-picker__tabs" role="tablist">
+      <div aria-label={readPlannerMapPickerGroupLabel(resolvedLocale, "categories")} className="planner-map-picker__tabs" role="tablist">
         {topLevelTabDefinitions.map((topLevelTabDefinition) => {
           const isActiveTab = topLevelTabDefinition.id === activeTopLevelTab;
           const tabId = `${pickerId}-tab-${topLevelTabDefinition.id}`;
@@ -178,14 +181,14 @@ export function PlannerMapPicker({
               tabIndex={isActiveTab ? 0 : -1}
               type="button"
             >
-              {readPlannerMapPickerTabLabel(topLevelTabDefinition.id, pickerLocale)}
+              {readPlannerMapTabLabel(resolvedLocale, topLevelTabDefinition.id)}
             </button>
           );
         })}
       </div>
       {activeTopLevelTab === "community" ? (
         <div
-          aria-label={readPlannerMapPickerGroupLabel("community-map-categories", pickerLocale)}
+          aria-label={readPlannerMapPickerGroupLabel(resolvedLocale, "community")}
           className="planner-map-picker__community-tabs"
           role="tablist"
         >
@@ -211,7 +214,7 @@ export function PlannerMapPicker({
                 tabIndex={isActiveTab ? 0 : -1}
                 type="button"
               >
-                {readPlannerMapPickerTabLabel(communityTabDefinition.id, pickerLocale)}
+                {readPlannerMapTabLabel(resolvedLocale, communityTabDefinition.id)}
               </button>
             );
           })}
@@ -238,89 +241,12 @@ export function PlannerMapPicker({
                 aria-hidden="true"
                 src={`/game-assets/1.6.15/${plannerMap.previewOutputPath}`}
               />
-              <span>{readPlannerMapPickerMapLabel(plannerMap, pickerLocale)}</span>
+              <span>{readPlannerMapDisplayLabel(resolvedLocale, plannerMap.id, plannerMap.displayName)}</span>
             </button>
           ))}
         </div>
       </div>
     </div>
-  );
-}
-
-function readPlannerMapPickerLocale(
-  locale: PlannerMapPickerLocale | undefined,
-): PlannerMapPickerLocale {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
-    return resolvedLocale;
-  }
-  throw new TypeError(
-    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
-  );
-}
-
-function readPlannerMapPickerGroupLabel(
-  group: "map-categories" | "community-map-categories",
-  locale: PlannerMapPickerLocale,
-): string {
-  if (locale === "en" || locale === "zh") {
-    return group === "map-categories" ? "Map categories" : "Community map categories";
-  }
-  if (locale === "ru") {
-    return group === "map-categories" ? "Категории карт" : "Категории карт сообщества";
-  }
-  throw new TypeError(
-    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readPlannerMapPickerTabLabel(
-  tabId: PlannerMapPickerTopLevelTab | PlannerMapPickerCommunityTab,
-  locale: PlannerMapPickerLocale,
-): string {
-  if (locale === "ru") {
-    if (tabId === "farm") return "Ферма";
-    if (tabId === "interiors") return "Интерьеры";
-    if (tabId === "exteriors") return "Экстерьеры";
-    if (tabId === "community") return "Сообщество";
-    if (tabId === "farms") return "Фермы";
-    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(tabId)}.`);
-  }
-  if (locale === "en" || locale === "zh") {
-    if (tabId === "farm") return "Farm";
-    if (tabId === "interiors") return "Interiors";
-    if (tabId === "exteriors") return "Exteriors";
-    if (tabId === "community") return "Community";
-    if (tabId === "farms") return "Farms";
-    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(tabId)}.`);
-  }
-  throw new TypeError(
-    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readPlannerMapCatalogId(mapId: string): (typeof plannerMaps)[number]["id"] {
-  const catalogPlannerMap = plannerMaps.find(
-    (candidatePlannerMap) => candidatePlannerMap.id === mapId,
-  );
-  if (catalogPlannerMap === undefined) {
-    throw new Error(`Unknown planner map id: ${JSON.stringify(mapId)}.`);
-  }
-  return catalogPlannerMap.id;
-}
-
-function readPlannerMapPickerMapLabel(
-  plannerMap: PlannerMap,
-  locale: PlannerMapPickerLocale,
-): string {
-  if (locale === "en" || locale === "zh") {
-    return plannerMap.displayName;
-  }
-  if (locale === "ru") {
-    return getRussianPlannerMapDisplayName(readPlannerMapCatalogId(plannerMap.id));
-  }
-  throw new TypeError(
-    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -471,4 +397,149 @@ function getCommunityTabDefinition(
   }
 
   return communityTabDefinition;
+}
+
+const japaneseVanillaMapLabels = {
+  standard: "スタンダード",
+  riverland: "リバーランド",
+  forest: "フォレスト",
+  hilltop: "ヒルトップ",
+  wilderness: "ワイルド",
+  "four-corners": "4コーナーズファーム",
+  beach: "ビーチの牧場",
+  meadowlands: "メドウランズ牧場",
+  "ginger-island": "ジンジャーアイランド",
+  "farmhouse-0": "家",
+  "farmhouse-1": "家のアップグレード1",
+  "farmhouse-2": "家のアップグレード2",
+  "farmhouse-cellar": "地下室",
+  shed: "納屋",
+  "big-shed": "ビッグシェッド",
+  barn: "家畜小屋",
+  "big-barn": "大型の家畜小屋",
+  "deluxe-barn": "デラックス家畜小屋",
+  coop: "小屋",
+  "big-coop": "大型の小屋",
+  "deluxe-coop": "デラックス小屋",
+  "slime-hutch": "スライムハッチ",
+  greenhouse: "温室",
+  "farm-cave": "農場の洞窟",
+  "island-farmhouse": "島の家",
+  "ginger-island-north": "島北部",
+  "ginger-island-south": "島南部",
+  "ginger-island-south-east": "島南東部",
+  "ginger-island-east": "島東部",
+  railroad: "線路",
+  backwoods: "裏の森",
+  "secret-woods": "秘密の森",
+  summit: "山の頂上",
+  "pelican-town": "ペリカンタウン",
+  "cindersap-forest": "シンダーサップの森",
+  mountain: "山",
+  "pelican-beach": "ペリカンビーチ",
+  "calico-desert": "カリコ砂漠",
+  "bus-stop": "バス停",
+  quarry: "石切場",
+} as const;
+
+export function readPlannerMapDisplayLabel(
+  locale: PlannerChromeLocale,
+  mapId: string,
+  englishDisplayName: string,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return englishDisplayName;
+  }
+
+  if (locale === "ja") {
+    const japaneseLabel = japaneseVanillaMapLabels[mapId as keyof typeof japaneseVanillaMapLabels];
+    if (japaneseLabel !== undefined) {
+      return japaneseLabel;
+    }
+
+    const plannerMap = plannerMaps.find((candidateMap) => candidateMap.id === mapId);
+    if (plannerMap !== undefined && "modId" in plannerMap) {
+      return englishDisplayName;
+    }
+
+    throw new Error(
+      `Cannot read Japanese map label because map id is ${JSON.stringify(mapId)}.`,
+    );
+  }
+
+  if (locale === "ru") {
+    const plannerMap = plannerMaps.find((candidateMap) => candidateMap.id === mapId);
+    if (plannerMap === undefined) {
+      throw new Error(
+        `Cannot read Russian map label because map id is ${JSON.stringify(mapId)}.`,
+      );
+    }
+    return getRussianPlannerMapDisplayName(plannerMap.id);
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner map label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerMapTabLabel(
+  locale: PlannerChromeLocale,
+  tabId: PlannerMapPickerTopLevelTab | PlannerMapPickerCommunityTab,
+): string {
+  if (locale === "en" || locale === "zh") {
+    if (tabId === "farm") return "Farm";
+    if (tabId === "interiors") return "Interiors";
+    if (tabId === "exteriors") return "Exteriors";
+    if (tabId === "community") return "Community";
+    if (tabId === "farms") return "Farms";
+    const unsupportedTab: never = tabId;
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
+  }
+
+  if (locale === "ja") {
+    if (tabId === "farm" || tabId === "farms") return "牧場";
+    if (tabId === "interiors") return "屋内";
+    if (tabId === "exteriors") return "屋外";
+    if (tabId === "community") return "コミュニティ";
+    const unsupportedTab: never = tabId;
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
+  }
+
+  if (locale === "ru") {
+    if (tabId === "farm") return "Ферма";
+    if (tabId === "interiors") return "Интерьеры";
+    if (tabId === "exteriors") return "Экстерьеры";
+    if (tabId === "community") return "Сообщество";
+    if (tabId === "farms") return "Фермы";
+    const unsupportedTab: never = tabId;
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(unsupportedTab)}.`);
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner map tab label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerMapPickerGroupLabel(
+  locale: PlannerChromeLocale,
+  group: "categories" | "community",
+): string {
+  if (locale === "en" || locale === "zh") {
+    return group === "categories" ? "Map categories" : "Community map categories";
+  }
+
+  if (locale === "ja") {
+    return group === "categories" ? "マップの分類" : "コミュニティマップの分類";
+  }
+
+  if (locale === "ru") {
+    return group === "categories" ? "Категории карт" : "Категории карт сообщества";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner map group label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

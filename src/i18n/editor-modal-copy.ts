@@ -1,11 +1,21 @@
 import type { HomepageLocale } from "../homepage/homepage-locale";
-import { isHomepageLocale } from "../homepage/homepage-locale";
 import { getLocalizedPublicPath } from "./public-route-registry";
 
-type EditorModalLocale = HomepageLocale | "ru";
+const editorModalLocales = ["en", "zh-CN", "ja", "ru"] as const;
 
-function isEditorModalLocale(locale: string): locale is EditorModalLocale {
-  return locale === "ru" || isHomepageLocale(locale);
+type EditorModalLocale = (typeof editorModalLocales)[number];
+
+function readEditorModalLocale(locale: HomepageLocale): EditorModalLocale {
+  const localeValue: string = locale;
+  for (const editorModalLocale of editorModalLocales) {
+    if (localeValue === editorModalLocale) {
+      return editorModalLocale;
+    }
+  }
+
+  throw new Error(
+    `Unsupported editor-modal locale. Received: ${JSON.stringify(localeValue)}.`,
+  );
 }
 
 export type EditorModalOptionCopy = Readonly<{
@@ -272,6 +282,106 @@ const editorModalCopyByLocale = {
       warningActions: { cancel: "取消", confirm: "启用自由放置" },
     },
   },
+  ja: {
+    closeDialogLabel: "ダイアログを閉じる",
+    modalTitles: {
+      save: "保存",
+      settings: "設定",
+      view: "表示",
+    },
+    stateLabel: (isEnabled: boolean) => isEnabled ? "オン" : "オフ",
+    view: {
+      optionGroups: [
+        {
+          heading: "オーバーレイ",
+          options: [
+            { label: "グリッド", title: "マップにタイルのグリッド線を表示します" },
+            { label: "スプリンクラーの範囲", title: "各スプリンクラーが水をやるタイルを強調表示します" },
+            { label: "カカシの範囲", title: "カラスから守られるタイルを強調表示します" },
+            { label: "ハチの巣箱の範囲", title: "ハチミツ生産に使う花の範囲を強調表示します" },
+            { label: "ジュニモ小屋の範囲", title: "ジュニモ小屋の収穫範囲を強調表示します" },
+          ],
+        },
+        {
+          heading: "マップオーバーレイ",
+          options: [
+            { label: "建物を置けない場所", title: "建物を配置できない場所を表示します" },
+            { label: "作物を植えられない場所", title: "作物を植えられない場所を表示します" },
+            { label: "木が育たない場所", title: "木が育たない場所を表示します" },
+          ],
+        },
+        {
+          heading: "外観",
+          options: [
+            { label: "夜間モード", title: "光源を含めて、夜の牧場をプレビューします" },
+          ],
+        },
+      ],
+      npcPaths: { label: "NPCの経路", title: "NPCが歩くタイルを表示します" },
+      mapObjects: {
+        heading: "マップ上のオブジェクト",
+        option: {
+          label: "資源の塊を表示",
+          title: "資源の塊を選んでいるあいだ、出現位置を表示します",
+        },
+      },
+      unavailableWeather: {
+        heading: "利用不可",
+        label: "天気",
+        statusLabel: "利用不可",
+        title: "雨や雪などの天候効果をシミュレートします",
+      },
+      catalogPosition: {
+        bottomPanel: "下パネル",
+        description: "このブラウザでアイテムカタログを表示する位置を選びます。",
+        heading: "カタログの位置",
+        leftPanel: "左パネル",
+      },
+    },
+    settings: {
+      community: {
+        heading: "コミュニティ",
+        manageMods: { label: "Modを管理", title: "Content PatcherのModを追加・管理します" },
+      },
+      optionGroups: [
+        {
+          heading: "モバイル",
+          options: [
+            { label: "ジョイスティック", title: "タッチ端末で、アイテムを正確に置くための方向パッドを表示します" },
+            { label: "左手モード", title: "操作部を画面の左側に移します" },
+          ],
+        },
+        {
+          heading: "通知",
+          options: [
+            { label: "トースト通知", title: "道具の切り替え、元に戻す/やり直す、操作の短い通知を表示します" },
+          ],
+        },
+        {
+          heading: "インターフェース",
+          options: [
+            { label: "ゲーム風カーソル", title: "OSのカーソルではなく、ドット絵のゲーム風カーソルを使います" },
+          ],
+        },
+      ],
+      freePlacement: {
+        label: "自由配置",
+        title: "配置ルールを無効にし、マップの任意の場所にアイテムを置けます",
+      },
+      freePlacementWarning: "自由配置はマップの配置ルールを無効にします。一部のレイアウトはゲーム内で再現できないことがあります。",
+      legalHeading: "法務",
+      placementHeading: "配置",
+      privacyPolicy: {
+        href: getLocalizedPublicPath("en", "/privacy"),
+        label: "プライバシーポリシー",
+      },
+      termsOfService: {
+        href: getLocalizedPublicPath("en", "/terms"),
+        label: "利用規約",
+      },
+      warningActions: { cancel: "キャンセル", confirm: "自由配置を有効にする" },
+    },
+  },
   ru: {
     closeDialogLabel: "Закрыть диалог",
     modalTitles: {
@@ -387,12 +497,10 @@ const editorModalCopyByLocale = {
       warningActions: { cancel: "Отмена", confirm: "Включить свободное размещение" },
     },
   },
+
 } as const satisfies Readonly<Record<EditorModalLocale, EditorModalCopy>>;
 
-export function getEditorModalCopy(locale: EditorModalLocale): EditorModalCopy {
-  if (!isEditorModalLocale(locale)) {
-    throw new Error(`Unsupported editor-modal locale. Received: ${JSON.stringify(locale)}.`);
-  }
-
-  return editorModalCopyByLocale[locale];
+export function getEditorModalCopy(locale: HomepageLocale): EditorModalCopy {
+  const editorModalLocale = readEditorModalLocale(locale);
+  return editorModalCopyByLocale[editorModalLocale];
 }

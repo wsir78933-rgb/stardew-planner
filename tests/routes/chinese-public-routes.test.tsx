@@ -88,12 +88,13 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   expect(markup).not.toContain("data-sveltekit-");
 });
 
-it("assigns Chinese root canonical and four homepage language alternates", () => {
+it("assigns Chinese root canonical and homepage language alternates for Japanese and Russian", () => {
   expect(chinesePlannerMetadata.alternates).toEqual({
     canonical: "https://stardewvalleyplanner.art/zh",
     languages: {
       en: "https://stardewvalleyplanner.art",
       "zh-CN": "https://stardewvalleyplanner.art/zh",
+      ja: "https://stardewvalleyplanner.art/ja",
       ru: "https://stardewvalleyplanner.art/ru",
       "x-default": "https://stardewvalleyplanner.art",
     },

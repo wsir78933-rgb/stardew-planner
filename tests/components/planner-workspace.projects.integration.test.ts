@@ -2566,7 +2566,23 @@ function createPlannerWorkspaceSeasonHarness() {
       observation.workspaceController = readSeasonWorkspaceController(props);
       return;
     }
-    if (!plannerWorkspaceSeasonComponentNames.has(componentName)) return;
+    if (!plannerWorkspaceSeasonComponentNames.has(componentName)) {
+      if (componentName === "PlannerChromeLocaleProvider") {
+        const providerChildren = readSeasonWorkspaceChildren(element);
+        if (providerChildren === null || providerChildren === undefined) {
+          throw new Error(
+            `PlannerChromeLocaleProvider at ${path} has no children for the season harness to observe.`,
+          );
+        }
+        walkSeasonWorkspaceNode(
+          providerChildren,
+          `${path}/${componentName}`,
+          visitedFiberKeys,
+          observation,
+        );
+      }
+      return;
+    }
     if (componentName === "PlannerWorkspaceRenderedBoundary") {
       const plannerWorkspaceStateController = readSeasonWorkspaceStateController(props);
       observation.plannerWorkspaceStateController = plannerWorkspaceStateController;

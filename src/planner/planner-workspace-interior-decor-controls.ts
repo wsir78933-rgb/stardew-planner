@@ -5,6 +5,7 @@ import {
   isInteriorDecorSupportedMapId,
   type InteriorDecorCatalogPattern,
 } from "../interior-decor/interior-decor-catalog";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import type { InteriorDecorKind } from "../interior-decor/interior-decor-state";
 import type { PlacementSelectionKey } from "../editor/editor-selection-controller";
 import type { PlacementHistory } from "../placement/placement-history";
@@ -84,16 +85,14 @@ export function applyPlannerWorkspaceInteriorDecor(
   };
 }
 
-type InteriorDecorMessageLocale = "en" | "zh" | "ru";
-
 export function getInteriorDecorRejectionMessage(
   mapId: string,
   interiorDecorKind: InteriorDecorKind,
-  locale: InteriorDecorMessageLocale = "en",
+  locale: PlannerChromeLocale = "en",
 ): string {
   assertMapId(mapId);
   assertInteriorDecorKind(interiorDecorKind);
-  assertInteriorDecorMessageLocale(locale);
+  assertInteriorDecorLocale(locale);
 
   if (locale === "ru") {
     return `Нельзя применить ${readRussianInteriorDecorKind(interiorDecorKind)} на карте ${JSON.stringify(mapId)} в этом месте.`;
@@ -105,14 +104,33 @@ export function getInteriorDecorRejectionMessage(
 export function getUnavailableInteriorDecorMessage(
   mapId: string,
   interiorDecorKind: InteriorDecorKind,
-  locale: InteriorDecorMessageLocale = "en",
+  locale: PlannerChromeLocale = "en",
 ): string | null {
   assertMapId(mapId);
   assertInteriorDecorKind(interiorDecorKind);
-  assertInteriorDecorMessageLocale(locale);
+  assertInteriorDecorLocale(locale);
 
   if (isInteriorDecorSupportedMapId(mapId)) {
     return null;
+  }
+
+  return readUnavailableInteriorDecorMessage(locale, interiorDecorKind);
+}
+
+function readUnavailableInteriorDecorMessage(
+  locale: PlannerChromeLocale,
+  interiorDecorKind: InteriorDecorKind,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return interiorDecorKind === "wallpaper"
+      ? "Wallpaper can only be applied inside."
+      : "Flooring can only be applied inside.";
+  }
+
+  if (locale === "ja") {
+    return interiorDecorKind === "wallpaper"
+      ? "壁紙は屋内にだけ使えます。"
+      : "フローリングは屋内にだけ使えます。";
   }
 
   if (locale === "ru") {
@@ -121,25 +139,31 @@ export function getUnavailableInteriorDecorMessage(
       : "Настил можно применять только внутри.";
   }
 
-  return interiorDecorKind === "wallpaper"
-    ? "Wallpaper can only be applied inside."
-    : "Flooring can only be applied inside.";
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read interior decor message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
 
-function assertInteriorDecorMessageLocale(
-  locale: InteriorDecorMessageLocale,
-): asserts locale is InteriorDecorMessageLocale {
-  if (locale === "en" || locale === "zh" || locale === "ru") {
+function assertInteriorDecorLocale(
+  locale: string,
+): asserts locale is PlannerChromeLocale {
+  if (locale === "en" || locale === "zh" || locale === "ja" || locale === "ru") {
     return;
   }
+
   throw new TypeError(
-    `Interior decor message locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+    `Interior decor locale must be "en", "zh", "ja", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 
 function readRussianInteriorDecorKind(interiorDecorKind: InteriorDecorKind): string {
-  if (interiorDecorKind === "wallpaper") return "обои";
-  if (interiorDecorKind === "flooring") return "настил";
+  if (interiorDecorKind === "wallpaper") {
+    return "обои";
+  }
+  if (interiorDecorKind === "flooring") {
+    return "настил";
+  }
   throw new TypeError(
     `Interior decor kind must be "wallpaper" or "flooring"; received ${JSON.stringify(interiorDecorKind)}.`,
   );

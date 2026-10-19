@@ -102,9 +102,11 @@ describe("removed public guide pages", () => {
 
     expect(
       sitemapLocationValues,
-      `Sitemap URL count mismatch. Received: ${sitemapLocationValues.length}. Expected registry length plus the Russian homepage: ${indexableRegistryCount + 1}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
-    ).toHaveLength(indexableRegistryCount + 1);
+      `Sitemap URL count mismatch. Received: ${sitemapLocationValues.length}. Expected registry length plus Japanese and Russian homepages: ${indexableRegistryCount + 2}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
+    ).toHaveLength(indexableRegistryCount + 2);
     expect(russianSitemapUrls).toEqual([russianHomepageUrl]);
+    expect(sitemapXml).toContain("<loc>https://stardewvalleyplanner.art/ja</loc>");
+    expect(sitemapXml).not.toContain("https://stardewvalleyplanner.art/ja/");
 
     for (const removedLocalizedPath of removedLocalizedPaths) {
       const removedStaticPagePath = join(

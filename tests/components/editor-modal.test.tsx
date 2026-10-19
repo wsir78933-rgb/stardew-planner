@@ -230,7 +230,9 @@ describe("farm settings and map selection integration", () => {
 
     const fallbackMapModal = renderEditorModalTree(properties);
     const mapPicker = requireModalElement(fallbackMapModal, PlannerMapPicker);
-    const pickerTree = PlannerMapPicker(mapPicker.props as Parameters<typeof PlannerMapPicker>[0]);
+    const pickerTree = capturePlannerMapPickerTree(
+      mapPicker.props as Parameters<typeof PlannerMapPicker>[0],
+    );
     const currentMapButton = requireModalElement(pickerTree, "button",
       (element) => element.props["data-editor-map-id"] === "ginger-island");
     activateModalControl(currentMapButton);
@@ -681,6 +683,31 @@ function renderEditorModalTree(properties: Parameters<typeof EditorModal>[0]): R
   modalHookState.referenceCursor = 0;
   modalHookState.effects = [];
   return EditorModal(properties);
+}
+
+function capturePlannerMapPickerTree(
+  pickerProperties: Parameters<typeof PlannerMapPicker>[0],
+): ReactNode {
+  const wasModalHookMockEnabled = modalHookState.isEnabled;
+  modalHookState.isEnabled = false;
+  let renderedPicker: ReactNode = null;
+  let didRender = false;
+
+  function CapturePlannerMapPicker(): ReactNode {
+    didRender = true;
+    renderedPicker = PlannerMapPicker(pickerProperties);
+    return renderedPicker;
+  }
+
+  try {
+    renderToStaticMarkup(createElement(CapturePlannerMapPicker));
+  } finally {
+    modalHookState.isEnabled = wasModalHookMockEnabled;
+  }
+  if (!didRender) {
+    throw new Error("React did not render PlannerMapPicker.");
+  }
+  return renderedPicker;
 }
 
 function getModalElements(modalNode: ReactNode): ModalElement[] {

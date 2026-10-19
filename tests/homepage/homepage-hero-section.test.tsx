@@ -95,6 +95,64 @@ test("renders one Russian hero heading from the confirmed homepage copy", () => 
   expect(markup).toContain("Примеры ферм");
 });
 
+
+const heroFanImageSources = [
+  "/homepage/hero/spring-crops.webp",
+  "/homepage/hero/beach-farm.webp",
+  "/homepage/hero/forest-farm.webp",
+] as const;
+
+const heroSideImageSizes = "(max-width: 700px) calc(0.34 * min(22rem, 100vw - 2 * clamp(1.25rem, 3vw, 3rem)) - 2px), calc(0.38 * min(48rem, min(100vw, 1280px) - 2 * clamp(1.25rem, 3vw, 3rem)) - 2px)";
+const heroCenterImageSizes = "(max-width: 700px) calc(0.42 * min(22rem, 100vw - 2 * clamp(1.25rem, 3vw, 3rem)) - 2px), calc(0.42 * min(48rem, min(100vw, 1280px) - 2 * clamp(1.25rem, 3vw, 3rem)) - 2px)";
+
+function heroFanDisplayedWidth(viewportPx: number, frameRatio: number): number {
+  const paddingPx = Math.min(48, Math.max(20, viewportPx * 0.03));
+  const sectionPx = Math.min(viewportPx, 1280);
+  const fanCapPx = viewportPx <= 700 ? 22 * 16 : 48 * 16;
+  const fanPx = Math.min(fanCapPx, sectionPx - paddingPx * 2);
+  return frameRatio * fanPx - 2;
+}
+
+function heroFanChosenResourceWidth(viewportPx: number, devicePixelRatio: number, frameRatio: number): 480 | 864 {
+  const neededPx = heroFanDisplayedWidth(viewportPx, frameRatio) * devicePixelRatio;
+  return neededPx <= 480 ? 480 : 864;
+}
+
+test("offers 480 and 864 candidates sized to the hero fan frames", () => {
+  const copy = homepageCopyByLocale.en;
+  const markup = renderToStaticMarkup(
+    createElement(HomepageHeroSection, {
+      copy: copy.hero,
+      capabilitiesHref: "#capabilities",
+      capabilitiesLabel: copy.navigation.capabilitiesLabel,
+      plannerHref: "/#planner",
+    }),
+  );
+
+  expect(markup).not.toContain('loading="lazy"');
+  expect(markup.match(/width="864"/g)).toHaveLength(3);
+  expect(markup.match(/height="1152"/g)).toHaveLength(3);
+  expect(markup.match(/decoding="async"/g)).toHaveLength(3);
+  expect(markup.split(`sizes="${heroSideImageSizes}"`).length - 1).toBe(4);
+  expect(markup.split(`sizes="${heroCenterImageSizes}"`).length - 1).toBe(2);
+
+  for (const heroFanImageSource of heroFanImageSources) {
+    const imageStem = heroFanImageSource.slice(0, -".webp".length);
+    expect(markup).toContain(`src="${heroFanImageSource}"`);
+    expect(markup).toContain(
+      `srcSet="${imageStem}-480.webp 480w, ${heroFanImageSource} 864w"`,
+    );
+    expect(markup).toContain(
+      `srcSet="${imageStem}-480.avif 480w, ${imageStem}.avif 864w"`,
+    );
+  }
+
+  expect(heroFanChosenResourceWidth(390, 3, 0.34)).toBe(480);
+  expect(heroFanChosenResourceWidth(390, 3, 0.42)).toBe(480);
+  expect(heroFanChosenResourceWidth(1440, 2, 0.38)).toBe(864);
+  expect(heroFanChosenResourceWidth(1440, 2, 0.42)).toBe(864);
+});
+
 test("ships the three hero fan images as public WebP files", () => {
   for (const heroFanImagePath of heroFanImagePaths) {
     const absoluteImagePath = resolve(process.cwd(), heroFanImagePath);

@@ -1772,7 +1772,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "Finish the layout on this page, then build in-game.",
     closingCtaSupportLine: "Plan without an account; sign in to sync projects you choose.",
     sectionImageSources: [
-      "/homepage/what-is/farm-layout-overview.png",
+      "/homepage/what-is/farm-layout-overview.webp",
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
@@ -1865,7 +1865,7 @@ const staticHomepageExpectations: readonly StaticHomepageExpectation[] = [
     closingCtaHeading: "先在这页摆完，再进游戏建。",
     closingCtaSupportLine: "不用登录也能规划；登录后可同步你选择的项目。",
     sectionImageSources: [
-      "/homepage/what-is/farm-layout-overview.png",
+      "/homepage/what-is/farm-layout-overview.webp",
       "/homepage/hero/spring-crops.webp",
       "/homepage/hero/beach-farm.webp",
       "/homepage/hero/forest-farm.webp",
@@ -2257,6 +2257,9 @@ function expectStaticHomepageContent(
   for (const sectionImageSource of expectedHomepage.sectionImageSources) {
     expect(staticPageHtml).toContain(`src="${sectionImageSource}"`);
   }
+  expect(staticPageHtml).toContain(
+    '<source srcSet="/homepage/what-is/farm-layout-overview.avif" type="image/avif"/>',
+  );
   expect(staticPageHtml).not.toContain("/homepage/how-to-pixel-farm.webp");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guides");
   expect(staticPageHtml).not.toContain("data-homepage-farm-guide-links");
@@ -2286,8 +2289,8 @@ function expectStaticHomepageContent(
     ),
     'id="capabilities"',
     'id="how-to"',
-    'data-homepage-closing-cta="true"',
     'id="faq"',
+    'data-homepage-closing-cta="true"',
   ] as const;
   let previousHomepageSectionPosition = staticPageHtml.indexOf(
     homepageSectionMarkers[0],
@@ -2342,7 +2345,7 @@ function expectStaticHomepageContent(
       "@id": "https://stardewvalleyplanner.art/#website",
       name: "Stardew Valley Planner",
       url: "https://stardewvalleyplanner.art",
-      inLanguage: ["en", "zh-CN", "ru"],
+      inLanguage: ["en", "zh-CN", "ja", "ru"],
     });
   } else {
     expect(websites).toHaveLength(0);
@@ -2475,6 +2478,7 @@ describe("static public pages", () => {
         `hrefLang="x-default" href="${expectedCanonicalUrl(englishPathname)}"`,
       );
       expect(staticPageHtml).not.toContain('hrefLang="ru"');
+      expect(staticPageHtml).not.toContain('hrefLang="ja"');
       expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(3);
       expect(staticPageHtml).toContain(
         `<meta name="robots" content="${shouldIndex ? "index" : "noindex"}, follow"`,
@@ -2594,9 +2598,12 @@ describe("static public pages", () => {
       `hrefLang="ru" href="${expectedCanonicalUrl("/ru")}"`,
     );
     expect(staticPageHtml).toContain(
+      `hrefLang="ja" href="${expectedCanonicalUrl("/ja")}"`,
+    );
+    expect(staticPageHtml).toContain(
       `hrefLang="x-default" href="${expectedCanonicalUrl("/")}"`,
     );
-    expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(4);
+    expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(5);
     expect(staticPageHtml).toContain('href="/blog"');
     expect(staticPageHtml).not.toContain('href="/ru/blog"');
     expect(staticPageHtml).not.toContain('href="/ru/privacy"');
@@ -2665,13 +2672,17 @@ describe("static public pages", () => {
       expect(staticPageHtml).toContain(
         `hrefLang="x-default" href="${expectedCanonicalUrl(englishPathname)}"`,
       );
-      if (pathname === "/" || pathname === "/zh") {
+      if (englishPathname === "/") {
         expect(staticPageHtml).toContain(
           `hrefLang="ru" href="${expectedCanonicalUrl("/ru")}"`,
         );
-        expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(4);
+        expect(staticPageHtml).toContain(
+          'hrefLang="ja" href="https://stardewvalleyplanner.art/ja"',
+        );
+        expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(5);
       } else {
         expect(staticPageHtml).not.toContain('hrefLang="ru"');
+        expect(staticPageHtml).not.toContain('hrefLang="ja"');
         expect(staticPageHtml.match(/hrefLang="/g)).toHaveLength(3);
       }
 
@@ -2753,6 +2764,54 @@ describe("static public pages", () => {
     ]) {
       expect(existsSync(join(process.cwd(), "out", staticPageFile))).toBe(true);
     }
+  });
+
+  it("exports the Japanese homepage head with the confirmed title and reciprocal alternates", () => {
+    const japanesePlannerTitle =
+      "スターデューバレー プランナー｜無料のオンライン牧場レイアウトツール";
+    const japanesePlannerDescription =
+      "スタバレのレイアウトツールで、ゲーム内で建てる前に牧場を計画。8種類の牧場から選び、建物や作物を配置できます。季節の切り替え、スプリンクラーの範囲確認、セーブデータの読み込みにも対応。";
+    const staticPageHtml = readStaticPageHtml("ja.html");
+    const structuredDataEntries = readJsonLdStructuredData(
+      staticPageHtml,
+      "ja.html",
+    );
+    const webApplications = findStructuredDataByType(
+      structuredDataEntries,
+      "WebApplication",
+    );
+
+    expect(
+      readInitialDocumentLanguage(staticPageHtml, "/ja", "ja.html"),
+    ).toBe("ja");
+    expect(staticPageHtml).toContain(`<title>${japanesePlannerTitle}</title>`);
+    expect(staticPageHtml).toContain(
+      `<meta name="description" content="${escapeHtmlAttributeValue(japanesePlannerDescription)}"/>`,
+    );
+    expect(staticPageHtml).toContain(
+      '<link rel="canonical" href="https://stardewvalleyplanner.art/ja"',
+    );
+    expect(staticPageHtml).toContain(
+      'hrefLang="en" href="https://stardewvalleyplanner.art"',
+    );
+    expect(staticPageHtml).toContain(
+      'hrefLang="zh-CN" href="https://stardewvalleyplanner.art/zh"',
+    );
+    expect(staticPageHtml).toContain(
+      'hrefLang="ja" href="https://stardewvalleyplanner.art/ja"',
+    );
+    expect(staticPageHtml).toContain(
+      'hrefLang="x-default" href="https://stardewvalleyplanner.art"',
+    );
+    expect(staticPageHtml).not.toContain('hrefLang="ja" href="https://stardewvalleyplanner.art/ja/');
+    expect(webApplications).toHaveLength(1);
+    expect(webApplications[0]).toMatchObject({
+      name: japanesePlannerTitle,
+      description: japanesePlannerDescription,
+      url: "https://stardewvalleyplanner.art/ja",
+      inLanguage: "ja",
+    });
+    expect(findStructuredDataByType(structuredDataEntries, "WebSite")).toHaveLength(0);
   });
 
   it("exports global 404 artifacts with the English root document shell", () => {

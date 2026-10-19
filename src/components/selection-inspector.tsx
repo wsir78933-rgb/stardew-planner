@@ -1,18 +1,14 @@
 "use client";
 
 import { fishPondWaterColors, paintableChestPalette } from "../catalog";
-import {
-  getRussianChestColorDisplayName,
-  getRussianFishPondWaterColorDisplayName,
-} from "../i18n/planner-russian-display-names";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { readSelectionEntityDisplayName } from "@/src/homepage/japanese-game-display-labels";
 import type { BuildingPaintColors } from "../paint/building-paint";
 import { Copy, MoreHorizontal, Trash2, X } from "lucide-react";
-
-type SelectionInspectorLocale = "en" | "zh" | "ru";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 type SingleSelectionInspectorActionProperties = Readonly<{
   kind: "single";
-  locale?: SelectionInspectorLocale;
   onCopy: () => void;
   onDelete: () => void;
   onDismiss: () => void;
@@ -27,6 +23,7 @@ type SelectedItemInspectorProperties =
       selection: Readonly<{
         canCycleAppearance: boolean;
         canPaint?: boolean;
+        catalogDisplayName?: string;
         entityName: string;
         isNightLight: boolean;
         kind: "item";
@@ -43,6 +40,7 @@ type PaintableBuildingInspectorProperties =
         canCycleAppearance: false;
         canPaint: true;
         canSetWaterColor?: false;
+        catalogDisplayName?: string;
         entityName: string;
         kind: "building";
         paintColors: BuildingPaintColors;
@@ -56,6 +54,7 @@ type NonPaintableBuildingInspectorProperties =
         canCycleAppearance: boolean;
         canPaint: false;
         canSetWaterColor?: false;
+        catalogDisplayName?: string;
         entityName: string;
         kind: "building";
       }>;
@@ -69,6 +68,7 @@ type FishPondWaterBuildingInspectorProperties =
         canCycleAppearance: boolean;
         canPaint: false;
         canSetWaterColor: true;
+        catalogDisplayName?: string;
         entityName: string;
         kind: "building";
         waterColor: number | undefined;
@@ -79,6 +79,7 @@ type SelectedCropInspectorProperties = SingleSelectionInspectorActionProperties 
   Readonly<{
     selection: Readonly<{
       canCycleAppearance: false;
+      catalogDisplayName?: string;
       entityName: string;
       kind: "crop";
     }>;
@@ -93,7 +94,6 @@ type SingleSelectionInspectorProperties =
 
 type MultipleSelectionInspectorProperties = Readonly<{
   kind: "multiple";
-  locale?: SelectionInspectorLocale;
   onCopy: () => void;
   onDelete: () => void;
   onDismiss: () => void;
@@ -109,11 +109,17 @@ type SelectionInspectorProperties =
 export function SelectionInspector(
   selectionInspectorProperties: SelectionInspectorProperties,
 ) {
-  const locale = readSelectionInspectorLocale(selectionInspectorProperties.locale);
-  const copy = readSelectionInspectorCopy(locale);
+  const selectionLocale = usePlannerChromeLocale();
+  const selectionCopy = readSelectionInspectorCopy(selectionLocale);
+
   if (selectionInspectorProperties.kind === "single") {
     const { onCopy, onCycleAppearance, onDelete, onDismiss, selection } =
       selectionInspectorProperties;
+    const selectedPlacementTitle = readSelectionEntityDisplayName(
+      selectionLocale,
+      selection.entityName,
+      selection.catalogDisplayName,
+    );
     const selectedChestTintColor = isSelectedItemInspector(selectionInspectorProperties)
       ? selectionInspectorProperties.selection.tintColor
       : null;
@@ -123,15 +129,11 @@ export function SelectionInspector(
     const tintControl = isSelectedItemInspector(selectionInspectorProperties)
       && selectionInspectorProperties.selection.canPaint ? (
         <label>
-          {copy.paint}
-          <select aria-label={copy.chestPaintColor} onChange={(changeEvent) => selectionInspectorProperties.onTintChange(changeEvent.currentTarget.value)} value={selectionInspectorProperties.selection.tintColor}>
-            <option value="#ffffff">{copy.defaultColor}</option>
-            {isCustomChestTintColor ? <option value={selectedChestTintColor}>{copy.customColor}</option> : null}
-            {paintableChestPalette.map(([label, tintColor]) => (
-              <option key={tintColor} value={tintColor}>
-                {readChestPaintOptionLabel(label, locale)}
-              </option>
-            ))}
+          {selectionCopy.paint}
+          <select aria-label={selectionCopy.chestPaintColor} onChange={(changeEvent) => selectionInspectorProperties.onTintChange(changeEvent.currentTarget.value)} value={selectionInspectorProperties.selection.tintColor}>
+            <option value="#ffffff">{selectionCopy.defaultOption}</option>
+            {isCustomChestTintColor ? <option value={selectedChestTintColor}>{selectionCopy.customOption}</option> : null}
+            {paintableChestPalette.map(([label, tintColor]) => <option key={tintColor} value={tintColor}>{readChestColorLabel(selectionLocale, label)}</option>)}
           </select>
         </label>
       ) : null;
@@ -141,8 +143,8 @@ export function SelectionInspector(
         <button
           aria-label={
             selectionInspectorProperties.selection.nightLightState === "off"
-              ? copy.lightSelectedLight
-              : copy.extinguishSelectedLight
+              ? selectionCopy.lightSelected
+              : selectionCopy.extinguishSelected
           }
           onClick={() =>
             selectionInspectorProperties.onNightLightStateChange(
@@ -154,8 +156,8 @@ export function SelectionInspector(
           type="button"
         >
           {selectionInspectorProperties.selection.nightLightState === "off"
-            ? copy.light
-            : copy.extinguish}
+            ? selectionCopy.light
+            : selectionCopy.extinguish}
         </button>
       ) : null;
     const buildingPaintControls = isPaintableBuildingInspector(
@@ -163,9 +165,9 @@ export function SelectionInspector(
     ) ? (
       <div className="selection-inspector__building-paint">
         <label>
-          {copy.building}
+          {selectionCopy.building}
           <input
-            aria-label={copy.buildingColor}
+            aria-label={selectionCopy.buildingColor}
             onChange={(changeEvent) =>
               selectionInspectorProperties.onBuildingPaintChange({
                 ...selectionInspectorProperties.selection.paintColors,
@@ -177,9 +179,9 @@ export function SelectionInspector(
           />
         </label>
         <label>
-          {copy.roof}
+          {selectionCopy.roof}
           <input
-            aria-label={copy.roofColor}
+            aria-label={selectionCopy.roofColor}
             onChange={(changeEvent) =>
               selectionInspectorProperties.onBuildingPaintChange({
                 ...selectionInspectorProperties.selection.paintColors,
@@ -191,9 +193,9 @@ export function SelectionInspector(
           />
         </label>
         <label>
-          {copy.trim}
+          {selectionCopy.trim}
           <input
-            aria-label={copy.trimColor}
+            aria-label={selectionCopy.trimColor}
             onChange={(changeEvent) =>
               selectionInspectorProperties.onBuildingPaintChange({
                 ...selectionInspectorProperties.selection.paintColors,
@@ -210,9 +212,9 @@ export function SelectionInspector(
       selectionInspectorProperties,
     ) ? (
       <label className="selection-inspector__fish-pond-water-color">
-        {copy.water}
+        {selectionCopy.water}
         <select
-          aria-label={copy.fishPondWaterColor}
+          aria-label={selectionCopy.fishPondWaterColor}
           onChange={(changeEvent) =>
             selectionInspectorProperties.onBuildingWaterColorChange(
               changeEvent.currentTarget.value === "default"
@@ -222,13 +224,13 @@ export function SelectionInspector(
           }
           value={selectionInspectorProperties.selection.waterColor?.toString() ?? "default"}
         >
-          <option value="default">{readFishPondWaterOptionLabel("Default", locale)}</option>
+          <option value="default">{selectionCopy.defaultOption}</option>
           {fishPondWaterColors.slice(1).map((waterColorOption) => (
             <option
               key={waterColorOption.value}
               value={waterColorOption.value}
             >
-              {readFishPondWaterOptionLabel(waterColorOption.label, locale)}
+              {readFishPondWaterColorLabel(selectionLocale, waterColorOption.label)}
             </option>
           ))}
         </select>
@@ -237,11 +239,11 @@ export function SelectionInspector(
 
     return (
       <aside
-        aria-label={copy.selectedPlacement}
+        aria-label={selectionCopy.selectedPlacement}
         className="selection-pill selection-inspector"
       >
         <button
-          aria-label={copy.dismissSelection}
+          aria-label={selectionCopy.dismissSelection}
           className="pill-dismiss selection-inspector__dismiss"
           onClick={onDismiss}
           type="button"
@@ -249,7 +251,7 @@ export function SelectionInspector(
           <X aria-hidden="true" size={14} strokeWidth={2} />
         </button>
         <span className="pill-name selection-inspector__name">
-          {selection.entityName}
+          {selectedPlacementTitle}
         </span>
         <div className="selection-inspector__actions">
           {tintControl}
@@ -257,29 +259,29 @@ export function SelectionInspector(
           {buildingPaintControls}
           {fishPondWaterColorControl}
           <button
-            aria-label={copy.cycleAppearance}
+            aria-label={selectionCopy.cycleAppearance}
             className="pill-more"
             disabled={!selection.canCycleAppearance}
             onClick={onCycleAppearance}
-            title={copy.cycleAppearanceTitle}
+            title={selectionCopy.cycleAppearanceShortcut}
             type="button"
           >
             <MoreHorizontal aria-hidden="true" size={16} strokeWidth={2} />
           </button>
           <button
-            aria-label={copy.copyPlacement}
+            aria-label={selectionCopy.copyPlacement}
             className="pill-copy"
             onClick={onCopy}
-            title={copy.copyPlacementTitle}
+            title={selectionCopy.copyPlacementShortcut}
             type="button"
           >
             <Copy aria-hidden="true" size={15} strokeWidth={2} />
           </button>
           <button
-            aria-label={copy.deletePlacement}
+            aria-label={selectionCopy.deletePlacement}
             className="pill-delete"
             onClick={onDelete}
-            title={copy.deletePlacementTitle}
+            title={selectionCopy.deletePlacementShortcut}
             type="button"
           >
             <Trash2 aria-hidden="true" size={15} strokeWidth={2} />
@@ -290,15 +292,15 @@ export function SelectionInspector(
   }
 
   const { onCopy, onDelete, onDismiss, selection } = selectionInspectorProperties;
-  const selectionLabel = copy.selectedPlacementCount(selection.count);
+  const selectionLabel = selectionCopy.selectedPlacementCount(selection.count);
 
   return (
     <aside
-      aria-label={copy.selectedPlacements}
+      aria-label={selectionCopy.selectedPlacements}
       className="selection-pill selection-inspector"
     >
       <button
-        aria-label="Dismiss selection"
+        aria-label={selectionCopy.dismissSelection}
         className="pill-dismiss selection-inspector__dismiss"
         onClick={onDismiss}
         type="button"
@@ -308,19 +310,19 @@ export function SelectionInspector(
       <span className="pill-name selection-inspector__name">{selectionLabel}</span>
       <div className="selection-inspector__actions">
         <button
-          aria-label={copy.copyPlacements}
+          aria-label={selectionCopy.copyPlacements}
           className="pill-copy"
           onClick={onCopy}
-          title={copy.copyPlacementsTitle}
+          title={selectionCopy.copyPlacementsShortcut}
           type="button"
         >
           <Copy aria-hidden="true" size={15} strokeWidth={2} />
         </button>
         <button
-          aria-label={copy.deletePlacements}
+          aria-label={selectionCopy.deletePlacements}
           className="pill-delete"
           onClick={onDelete}
-          title={copy.deletePlacementsTitle}
+          title={selectionCopy.deletePlacementsShortcut}
           type="button"
         >
           <Trash2 aria-hidden="true" size={15} strokeWidth={2} />
@@ -330,28 +332,125 @@ export function SelectionInspector(
   );
 }
 
-type SelectionInspectorCopy = Readonly<{
+const japaneseChestColorLabels = {
+  Blue: "青",
+  "Sky Blue": "空色",
+  Teal: "青緑",
+  Aqua: "水色",
+  Green: "緑",
+  Lime: "黄緑",
+  Yellow: "黄色",
+  "Light Orange": "薄いオレンジ",
+  Orange: "オレンジ",
+  Red: "赤",
+  "Dark Red": "暗い赤",
+  "Light Pink": "薄いピンク",
+  "Hot Pink": "鮮やかなピンク",
+  Purple: "紫",
+  "Bright Purple": "明るい紫",
+  "Dark Purple": "暗い紫",
+  "Dark Gray": "暗い灰色",
+  Gray: "灰色",
+  "Light Gray": "薄い灰色",
+  White: "白",
+} as const;
+
+function readChestColorLabel(locale: PlannerChromeLocale, englishLabel: string): string {
+  if (locale === "en" || locale === "zh") {
+    return englishLabel;
+  }
+
+  if (locale === "ja") {
+    if (!Object.prototype.hasOwnProperty.call(japaneseChestColorLabels, englishLabel)) {
+      throw new Error(
+        `Cannot read Japanese chest color label because label is ${JSON.stringify(englishLabel)}.`,
+      );
+    }
+    return japaneseChestColorLabels[englishLabel as keyof typeof japaneseChestColorLabels];
+  }
+
+  if (locale === "ru") {
+    return englishLabel;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read chest color label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+const japaneseFishPondColorLabels: Readonly<Record<string, string>> = {
+  Angler: "ツリビトアンコウ",
+  "Crimson Fish": "クリムゾンフィッシュ",
+  "Glacier Fish": "アイスフィッシュ",
+  Legend: "レジェンド",
+  "Lava Eel": "溶岩ウナギ",
+  "Ms. Angler": "ミズ・ツリビトアンコウ",
+  "Mutant Carp": "ミュータントゴイ",
+  Slimejack: "スライムジャック",
+  "Super Cucumber": "スーパーナマコ",
+  "Void Salmon": "闇サーモン",
+};
+
+function readFishPondWaterColorLabel(
+  locale: PlannerChromeLocale,
+  englishLabel: string,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return englishLabel;
+  }
+
+  if (locale === "ja") {
+    if (englishLabel === "Default") {
+      return "デフォルト";
+    }
+
+    const japaneseLabel = japaneseFishPondColorLabels[englishLabel];
+    if (japaneseLabel !== undefined) {
+      return japaneseLabel;
+    }
+
+    if (englishLabel === "Legendary") {
+      return "伝説級";
+    }
+
+    throw new Error(
+      `Cannot read Japanese fish pond color label because label is ${JSON.stringify(englishLabel)}.`,
+    );
+  }
+
+  if (locale === "ru") {
+    return englishLabel;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read fish pond color label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readSelectionInspectorCopy(locale: PlannerChromeLocale): Readonly<{
   building: string;
   buildingColor: string;
   chestPaintColor: string;
   copyPlacement: string;
-  copyPlacementTitle: string;
+  copyPlacementShortcut: string;
   copyPlacements: string;
-  copyPlacementsTitle: string;
-  customColor: string;
+  copyPlacementsShortcut: string;
+  customOption: string;
   cycleAppearance: string;
-  cycleAppearanceTitle: string;
-  defaultColor: string;
+  cycleAppearanceShortcut: string;
+  defaultOption: string;
   deletePlacement: string;
-  deletePlacementTitle: string;
+  deletePlacementShortcut: string;
   deletePlacements: string;
-  deletePlacementsTitle: string;
+  deletePlacementsShortcut: string;
   dismissSelection: string;
   extinguish: string;
-  extinguishSelectedLight: string;
+  extinguishSelected: string;
   fishPondWaterColor: string;
   light: string;
-  lightSelectedLight: string;
+  lightSelected: string;
   paint: string;
   roof: string;
   roofColor: string;
@@ -361,44 +460,30 @@ type SelectionInspectorCopy = Readonly<{
   trim: string;
   trimColor: string;
   water: string;
-}>;
-
-function readSelectionInspectorLocale(
-  locale: SelectionInspectorLocale | undefined,
-): SelectionInspectorLocale {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
-    return resolvedLocale;
-  }
-  throw new TypeError(
-    `Selection inspector locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
-  );
-}
-
-function readSelectionInspectorCopy(locale: SelectionInspectorLocale): SelectionInspectorCopy {
+}> {
   if (locale === "en" || locale === "zh") {
     return {
       building: "Building",
       buildingColor: "Selected building building color",
       chestPaintColor: "Selected chest paint color",
       copyPlacement: "Copy selected placement",
-      copyPlacementTitle: "Copy selected placement (C)",
+      copyPlacementShortcut: "Copy selected placement (C)",
       copyPlacements: "Copy selected placements",
-      copyPlacementsTitle: "Copy selected placements (C)",
-      customColor: "Custom",
+      copyPlacementsShortcut: "Copy selected placements (C)",
+      customOption: "Custom",
       cycleAppearance: "Cycle selected item appearance",
-      cycleAppearanceTitle: "Cycle selected item appearance (Q)",
-      defaultColor: "Default",
+      cycleAppearanceShortcut: "Cycle selected item appearance (Q)",
+      defaultOption: "Default",
       deletePlacement: "Delete selected placement",
-      deletePlacementTitle: "Delete selected placement (Delete)",
+      deletePlacementShortcut: "Delete selected placement (Delete)",
       deletePlacements: "Delete selected placements",
-      deletePlacementsTitle: "Delete selected placements (Delete)",
+      deletePlacementsShortcut: "Delete selected placements (Delete)",
       dismissSelection: "Dismiss selection",
       extinguish: "Extinguish",
-      extinguishSelectedLight: "Extinguish selected light",
+      extinguishSelected: "Extinguish selected light",
       fishPondWaterColor: "Selected Fish Pond water color",
       light: "Light",
-      lightSelectedLight: "Light selected light",
+      lightSelected: "Light selected light",
       paint: "Paint",
       roof: "Roof",
       roofColor: "Selected building roof color",
@@ -410,29 +495,66 @@ function readSelectionInspectorCopy(locale: SelectionInspectorLocale): Selection
       water: "Water",
     };
   }
+
+  if (locale === "ja") {
+    return {
+      building: "建物",
+      buildingColor: "選択した建物の本体色",
+      chestPaintColor: "選択したチェストの色",
+      copyPlacement: "選択した配置をコピー",
+      copyPlacementShortcut: "選択した配置をコピー（C）",
+      copyPlacements: "選択した配置をコピー",
+      copyPlacementsShortcut: "選択した配置をコピー（C）",
+      customOption: "カスタム",
+      cycleAppearance: "選択したアイテムの見た目を切り替え",
+      cycleAppearanceShortcut: "選択したアイテムの見た目を切り替え（Q）",
+      defaultOption: "デフォルト",
+      deletePlacement: "選択した配置を削除",
+      deletePlacementShortcut: "選択した配置を削除（Delete）",
+      deletePlacements: "選択した配置を削除",
+      deletePlacementsShortcut: "選択した配置を削除（Delete）",
+      dismissSelection: "選択を解除",
+      extinguish: "消灯",
+      extinguishSelected: "選択した照明を消す",
+      fishPondWaterColor: "選択した魚のいる池の水の色",
+      light: "点灯",
+      lightSelected: "選択した照明をつける",
+      paint: "ペイント",
+      roof: "屋根",
+      roofColor: "選択した建物の屋根色",
+      selectedPlacement: "選択した配置",
+      selectedPlacementCount: (count) => `${String(count)}件の配置を選択中`,
+      selectedPlacements: "選択した配置",
+      trim: "縁取り",
+      trimColor: "選択した建物の縁取り色",
+      water: "水",
+    };
+  }
+
+
   if (locale === "ru") {
     return {
       building: "Здание",
       buildingColor: "Цвет здания у выбранной постройки",
       chestPaintColor: "Цвет покраски выбранного сундука",
       copyPlacement: "Копировать выбранный объект",
-      copyPlacementTitle: "Копировать выбранный объект (C)",
+      copyPlacementShortcut: "Копировать выбранный объект (C)",
       copyPlacements: "Копировать выбранные объекты",
-      copyPlacementsTitle: "Копировать выбранные объекты (C)",
-      customColor: "Свой",
+      copyPlacementsShortcut: "Копировать выбранные объекты (C)",
+      customOption: "Свой",
       cycleAppearance: "Сменить вид выбранного предмета",
-      cycleAppearanceTitle: "Сменить вид выбранного предмета (Q)",
-      defaultColor: "По умолчанию",
+      cycleAppearanceShortcut: "Сменить вид выбранного предмета (Q)",
+      defaultOption: "По умолчанию",
       deletePlacement: "Удалить выбранный объект",
-      deletePlacementTitle: "Удалить выбранный объект (Delete)",
+      deletePlacementShortcut: "Удалить выбранный объект (Delete)",
       deletePlacements: "Удалить выбранные объекты",
-      deletePlacementsTitle: "Удалить выбранные объекты (Delete)",
+      deletePlacementsShortcut: "Удалить выбранные объекты (Delete)",
       dismissSelection: "Закрыть выбор",
       extinguish: "Погасить",
-      extinguishSelectedLight: "Погасить выбранный светильник",
+      extinguishSelected: "Погасить выбранный светильник",
       fishPondWaterColor: "Цвет воды выбранного рыбного пруда",
       light: "Зажечь",
-      lightSelectedLight: "Зажечь выбранный светильник",
+      lightSelected: "Зажечь выбранный светильник",
       paint: "Покраска",
       roof: "Крыша",
       roofColor: "Цвет крыши у выбранной постройки",
@@ -444,51 +566,10 @@ function readSelectionInspectorCopy(locale: SelectionInspectorLocale): Selection
       water: "Вода",
     };
   }
-  throw new TypeError(
-    `Selection inspector locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
 
-function readRussianSelectedPlacementCount(count: number): string {
-  if (!Number.isInteger(count)) {
-    throw new TypeError(
-      `Selected placement count must be an integer; received ${JSON.stringify(count)}.`,
-    );
-  }
-  const absoluteCount = Math.abs(count);
-  const lastTwoDigits = absoluteCount % 100;
-  const lastDigit = absoluteCount % 10;
-  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-    return `${String(count)} выбранных объектов`;
-  }
-  if (lastDigit === 1) {
-    return `${String(count)} выбранный объект`;
-  }
-  if (lastDigit >= 2 && lastDigit <= 4) {
-    return `${String(count)} выбранных объекта`;
-  }
-  return `${String(count)} выбранных объектов`;
-}
-
-function readChestPaintOptionLabel(
-  label: (typeof paintableChestPalette)[number][0],
-  locale: SelectionInspectorLocale,
-): string {
-  if (locale === "en" || locale === "zh") return label;
-  if (locale === "ru") return getRussianChestColorDisplayName(label);
-  throw new TypeError(
-    `Selection inspector locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readFishPondWaterOptionLabel(
-  label: (typeof fishPondWaterColors)[number]["label"],
-  locale: SelectionInspectorLocale,
-): string {
-  if (locale === "en" || locale === "zh") return label;
-  if (locale === "ru") return getRussianFishPondWaterColorDisplayName(label);
-  throw new TypeError(
-    `Selection inspector locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read selection inspector copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 
@@ -514,4 +595,25 @@ function isFishPondWaterBuildingInspector(
     selectionInspectorProperties.selection.kind === "building" &&
     selectionInspectorProperties.selection.canSetWaterColor === true
   );
+}
+
+function readRussianSelectedPlacementCount(count: number): string {
+  if (!Number.isInteger(count)) {
+    throw new TypeError(
+      `Selected placement count must be an integer; received ${JSON.stringify(count)}.`,
+    );
+  }
+  const absoluteCount = Math.abs(count);
+  const lastTwoDigits = absoluteCount % 100;
+  const lastDigit = absoluteCount % 10;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return `${String(count)} выбранных объектов`;
+  }
+  if (lastDigit === 1) {
+    return `${String(count)} выбранный объект`;
+  }
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${String(count)} выбранных объекта`;
+  }
+  return `${String(count)} выбранных объектов`;
 }

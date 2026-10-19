@@ -21,6 +21,7 @@ const expectedStaticPageFiles = [
   "terms.html",
   "contact.html",
   "zh.html",
+  "ja.html",
   "zh/privacy.html",
   "zh/terms.html",
   "zh/contact.html",

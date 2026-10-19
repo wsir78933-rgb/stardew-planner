@@ -2,6 +2,8 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 export type CanvasContextMenuPoint = Readonly<{ x: number; y: number }>;
 
@@ -114,11 +116,8 @@ export async function handlePlannerCanvasContextMenuCopyAction(
   await onCopyFullMap();
 }
 
-type PlannerCanvasContextMenuLocale = "en" | "zh" | "ru";
-
 export function PlannerCanvasContextMenu(
   properties: Readonly<{
-    locale?: PlannerCanvasContextMenuLocale;
     onClose: () => void;
     onCopyFullMap: () => Promise<void>;
     canvasHostElement: HTMLElement | null;
@@ -127,7 +126,6 @@ export function PlannerCanvasContextMenu(
     position: CanvasContextMenuPoint;
   }>,
 ) {
-  const menuLocale = readPlannerCanvasContextMenuLocale(properties.locale);
   const menuElementReference = useRef<HTMLDivElement>(null);
   const [rootPosition, setRootPosition] = useState(properties.position);
 
@@ -236,9 +234,10 @@ export function PlannerCanvasContextMenu(
     );
   }
 
+  const contextMenuCopy = readCanvasContextMenuCopy(usePlannerChromeLocale());
   const menu = (
     <div
-      aria-label={readPlannerCanvasContextMenuLabel("map-actions", menuLocale)}
+      aria-label={contextMenuCopy.menuLabel}
       data-planner-canvas-context-menu="true"
       data-planner-canvas-context-menu-layer="editor-root"
       ref={menuElementReference}
@@ -252,7 +251,7 @@ export function PlannerCanvasContextMenu(
       }}
     >
       <button onClick={handleCopyFullMap} role="menuitem" type="button">
-        {readPlannerCanvasContextMenuLabel("copy-full-map", menuLocale)}
+        {contextMenuCopy.copyFullMap}
       </button>
     </div>
   );
@@ -264,29 +263,33 @@ export function PlannerCanvasContextMenu(
   return createPortal(menu, properties.editorRootElement);
 }
 
-function readPlannerCanvasContextMenuLocale(
-  locale: PlannerCanvasContextMenuLocale | undefined,
-): PlannerCanvasContextMenuLocale {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
-    return resolvedLocale;
-  }
-  throw new TypeError(
-    `Planner canvas context menu locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
-  );
-}
-
-function readPlannerCanvasContextMenuLabel(
-  labelId: "map-actions" | "copy-full-map",
-  locale: PlannerCanvasContextMenuLocale,
-): string {
+function readCanvasContextMenuCopy(locale: PlannerChromeLocale): Readonly<{
+  copyFullMap: string;
+  menuLabel: string;
+}> {
   if (locale === "en" || locale === "zh") {
-    return labelId === "map-actions" ? "Map actions" : "Copy full map";
+    return {
+      copyFullMap: "Copy full map",
+      menuLabel: "Map actions",
+    };
   }
+
+  if (locale === "ja") {
+    return {
+      copyFullMap: "マップ全体をコピー",
+      menuLabel: "マップの操作",
+    };
+  }
+
   if (locale === "ru") {
-    return labelId === "map-actions" ? "Действия с картой" : "Копировать всю карту";
+    return {
+      copyFullMap: "Копировать всю карту",
+      menuLabel: "Действия с картой",
+    };
   }
-  throw new TypeError(
-    `Planner canvas context menu locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read canvas context menu copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

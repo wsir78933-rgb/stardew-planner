@@ -54,7 +54,44 @@ export function createWebSiteStructuredData(): StructuredData {
     "@id": publicWebsiteId,
     name: "Stardew Valley Planner",
     url: createCanonicalUrl("/"),
-    inLanguage: ["en", "zh-CN", "ru"],
+    inLanguage: ["en", "zh-CN", "ja", "ru"],
+  };
+}
+
+export function createJapaneseHomepageWebApplicationStructuredData(
+  input: Readonly<{
+    name: string;
+    description: string;
+    pathname: string;
+  }>,
+): StructuredData {
+  if (input.pathname !== "/ja") {
+    throw new Error(
+      `Japanese homepage structured data pathname must be "/ja". Received: ${JSON.stringify(input.pathname)}.`,
+    );
+  }
+  if (input.name.trim().length === 0) {
+    throw new Error(
+      `Japanese homepage structured data name must be a non-empty string. Received: ${JSON.stringify(input.name)}.`,
+    );
+  }
+  if (input.description.trim().length === 0) {
+    throw new Error(
+      `Japanese homepage structured data description must be a non-empty string. Received: ${JSON.stringify(input.description)}.`,
+    );
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": `${createCanonicalUrl(input.pathname)}#webapplication`,
+    name: input.name,
+    description: input.description,
+    url: createCanonicalUrl(input.pathname),
+    inLanguage: "ja",
+    isPartOf: { "@id": publicWebsiteId },
+    isAccessibleForFree: true,
+    browserRequirements: "Requires a modern web browser with JavaScript enabled.",
   };
 }
 

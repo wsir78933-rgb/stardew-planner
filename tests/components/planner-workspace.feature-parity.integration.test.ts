@@ -572,7 +572,7 @@ function extinguishLightingSelection(
     throw new Error(`Expected night-light metadata for placed ${catalogItem.id}.`);
   }
   let requestedNightLightState: "off" | undefined | null = null;
-  const inspector = SelectionInspector({
+  const inspector = captureSelectionInspectorTree({
     kind: "single",
     onCopy: () => undefined,
     onCycleAppearance: () => undefined,
@@ -609,6 +609,25 @@ function extinguishLightingSelection(
     placementHistory,
     selectedPlacementKeys: [selectedPlacementKey],
   }).placementHistory;
+}
+
+function captureSelectionInspectorTree(
+  inspectorProperties: Parameters<typeof SelectionInspector>[0],
+): ReactNode {
+  let renderedInspector: ReactNode = null;
+  let didRender = false;
+
+  function CaptureSelectionInspector(): ReactNode {
+    didRender = true;
+    renderedInspector = SelectionInspector(inspectorProperties);
+    return renderedInspector;
+  }
+
+  renderToStaticMarkup(createElement(CaptureSelectionInspector));
+  if (!didRender) {
+    throw new Error("React did not render SelectionInspector.");
+  }
+  return renderedInspector;
 }
 
 function findLightingButtonByAriaLabel(

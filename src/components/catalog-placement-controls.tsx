@@ -7,6 +7,7 @@ import type {
 import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
 import type { EditorTool } from "../editor/editor-view-state";
 import type { HomepageLocale } from "../homepage/homepage-locale";
+import { readLocalizedCatalogItemLabel } from "../homepage/japanese-game-display-labels";
 import {
   getCatalogPanelCopy,
   type CatalogPanelCopy,
@@ -72,7 +73,10 @@ export function CatalogPlacementControls({
 
   const copy = getCatalogPanelCopy(locale);
   const pendingCatalogControl = getPendingCatalogControl(catalogItem);
-  const itemName = getCatalogSidebarDisplayName(catalogItem, locale);
+  const englishDisplayName = getCatalogSidebarDisplayName(catalogItem, "en");
+  const itemName = locale === "ru"
+    ? getCatalogSidebarDisplayName(catalogItem, "ru")
+    : readLocalizedCatalogItemLabel(locale, englishDisplayName);
   const placementStatus = getCatalogPlacementStatus(
     copy,
     itemName,

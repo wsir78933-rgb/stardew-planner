@@ -1,11 +1,12 @@
 import { getHomepageDisplayPath } from "../i18n/public-route-registry";
 import { getPlannerMapIdFromSearch } from "../maps/planner-map-query";
 import {
-  isHomepageDisplayLocale,
-  type HomepageDisplayLocale,
+  HOMEPAGE_LOCALES,
+  isHomepageLocale,
+  type HomepageLocale,
 } from "./homepage-locale";
 
-export type HomepageLocaleHrefByLocale = Readonly<Record<HomepageDisplayLocale, string>>;
+export type HomepageLocaleHrefByLocale = Readonly<Record<HomepageLocale, string>>;
 
 export type HomepageNavigationUrls = Readonly<{
   localeHrefByLocale: HomepageLocaleHrefByLocale;
@@ -27,13 +28,13 @@ function readPreservedHomepageSuffix(hash: string, search: string): string {
 }
 
 export function createHomepageNavigationUrls(input: Readonly<{
-  currentLocale: HomepageDisplayLocale;
+  currentLocale: HomepageLocale;
   hash: string;
   search: string;
 }>): HomepageNavigationUrls {
-  if (!isHomepageDisplayLocale(input.currentLocale)) {
+  if (!isHomepageLocale(input.currentLocale)) {
     throw new Error(
-      `Unsupported homepage display locale. Received: ${JSON.stringify(input.currentLocale)}.`,
+      `Unsupported homepage locale. Received: ${JSON.stringify(input.currentLocale)}.`,
     );
   }
 
@@ -41,8 +42,15 @@ export function createHomepageNavigationUrls(input: Readonly<{
   const localeHrefByLocale = {
     en: `${getHomepageDisplayPath("en")}${preservedSuffix}`,
     "zh-CN": `${getHomepageDisplayPath("zh-CN")}${preservedSuffix}`,
+    ja: `${getHomepageDisplayPath("ja")}${preservedSuffix}`,
     ru: `${getHomepageDisplayPath("ru")}${preservedSuffix}`,
   } as const satisfies HomepageLocaleHrefByLocale;
+
+  if (Object.keys(localeHrefByLocale).length !== HOMEPAGE_LOCALES.length) {
+    throw new Error(
+      `Homepage navigation is missing a locale href. Expected ${JSON.stringify(HOMEPAGE_LOCALES)}.`,
+    );
+  }
 
   return {
     localeHrefByLocale,

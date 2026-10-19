@@ -3,6 +3,7 @@ import {
   createArticleStructuredData,
   createBreadcrumbListStructuredData,
   createCollectionPageStructuredData,
+  createJapaneseHomepageWebApplicationStructuredData,
   createRussianHomepageWebApplicationStructuredData,
   createWebApplicationStructuredData,
   createWebSiteStructuredData,
@@ -55,7 +56,7 @@ it("builds schema data exclusively from explicit visible fields", () => {
     "@id": "https://stardewvalleyplanner.art/#website",
     name: "Stardew Valley Planner",
     url: "https://stardewvalleyplanner.art",
-    inLanguage: ["en", "zh-CN", "ru"],
+    inLanguage: ["en", "zh-CN", "ja", "ru"],
   });
   expect(webApplication).toMatchObject({
     "@context": "https://schema.org",
@@ -151,4 +152,72 @@ it("describes the Russian homepage as a Russian web application without widening
       description: "описание",
     }),
   ).toThrow('Received: "   "');
+});
+
+it("builds Japanese homepage WebApplication fields from the confirmed copy", () => {
+  const japanesePlannerTitle =
+    "スターデューバレー プランナー｜無料のオンライン牧場レイアウトツール";
+  const japanesePlannerDescription =
+    "スタバレのレイアウトツールで、ゲーム内で建てる前に牧場を計画。8種類の牧場から選び、建物や作物を配置できます。季節の切り替え、スプリンクラーの範囲確認、セーブデータの読み込みにも対応。";
+  const japaneseWebApplication = createJapaneseHomepageWebApplicationStructuredData({
+    name: japanesePlannerTitle,
+    description: japanesePlannerDescription,
+    pathname: "/ja",
+  });
+
+  expect(japaneseWebApplication).toEqual({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": "https://stardewvalleyplanner.art/ja#webapplication",
+    name: japanesePlannerTitle,
+    description: japanesePlannerDescription,
+    url: "https://stardewvalleyplanner.art/ja",
+    inLanguage: "ja",
+    isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
+    isAccessibleForFree: true,
+    browserRequirements: "Requires a modern web browser with JavaScript enabled.",
+  });
+  for (const forbiddenProperty of [
+    "author",
+    "reviewedBy",
+    "datePublished",
+    "dateModified",
+    "aggregateRating",
+    "review",
+    "offers",
+    "price",
+    "priceCurrency",
+    "publisher",
+    "operatingSystem",
+    "applicationCategory",
+  ]) {
+    expect(japaneseWebApplication).not.toHaveProperty(forbiddenProperty);
+  }
+});
+
+it("rejects a Japanese homepage structured data pathname other than /ja", () => {
+  expect(() =>
+    createJapaneseHomepageWebApplicationStructuredData({
+      name: "スターデューバレー プランナー",
+      description: "牧場を計画。",
+      pathname: "/ja/blog",
+    }),
+  ).toThrow('Received: "/ja/blog"');
+});
+
+it("rejects an empty Japanese homepage structured data name or description", () => {
+  expect(() =>
+    createJapaneseHomepageWebApplicationStructuredData({
+      name: "   ",
+      description: "牧場を計画。",
+      pathname: "/ja",
+    }),
+  ).toThrow('Received: "   "');
+  expect(() =>
+    createJapaneseHomepageWebApplicationStructuredData({
+      name: "スターデューバレー プランナー",
+      description: "",
+      pathname: "/ja",
+    }),
+  ).toThrow('Received: ""');
 });

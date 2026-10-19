@@ -1,4 +1,12 @@
-const plannerEntryPathnames = new Set(["/", "/zh", "/zh/", "/ru", "/ru/"]);
+const plannerEntryPathnames = new Set([
+  "/",
+  "/zh",
+  "/zh/",
+  "/ja",
+  "/ja/",
+  "/ru",
+  "/ru/",
+]);
 
 export function isPlannerEntryPathname(pathname: string): boolean {
   if (typeof pathname !== "string") {

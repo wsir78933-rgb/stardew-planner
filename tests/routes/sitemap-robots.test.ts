@@ -76,7 +76,9 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
   const russianHomepageUrl = "https://stardewvalleyplanner.art/ru";
-  const expectedIndexablePublicRouteCount = localizedPublicRouteEntries.length + 1;
+  const japaneseHomepageUrl = createCanonicalUrl("/ja");
+  const expectedIndexablePublicRouteCount = localizedPublicRouteEntries.length;
+  const expectedSitemapUrlCount = expectedIndexablePublicRouteCount + 2;
   const russianSitemapUrls = sitemapLocationValues.filter(
     (sitemapLocationValue) =>
       sitemapLocationValue === russianHomepageUrl
@@ -85,8 +87,8 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
 
   expect(
     sitemapUrlCount,
-    `Sitemap URL count mismatch. Received: ${sitemapUrlCount}. Expected registry length plus the Russian homepage: ${expectedIndexablePublicRouteCount}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
-  ).toBe(expectedIndexablePublicRouteCount);
+    `Sitemap URL count mismatch. Received: ${sitemapUrlCount}. Expected registry length plus Japanese and Russian homepages: ${expectedSitemapUrlCount}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
+  ).toBe(expectedSitemapUrlCount);
   expect(russianSitemapUrls).toEqual([russianHomepageUrl]);
   expect(sitemapLocationValues).not.toContain(
     "https://stardewvalleyplanner.art/ru/blog",
@@ -114,6 +116,7 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
       `Indexable public registry must not include a Russian path. Received: ${JSON.stringify(routeEntry.pathname)}.`,
     ).toBe(false);
   }
+  expect(localizedPublicRouteEntries).toHaveLength(expectedIndexablePublicRouteCount);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,
@@ -125,6 +128,8 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   expect(sitemapText).toContain("/privacy");
   expect(sitemapText).toContain("/terms");
   expect(sitemapText).not.toContain("/contact");
+  expect(sitemapText).toContain(`<loc>${japaneseHomepageUrl}</loc>`);
+  expect(sitemapText).not.toContain("https://stardewvalleyplanner.art/ja/");
 
   for (const pathname of expectedBlogSitemapPathnames) {
     expect(sitemapText).toContain(

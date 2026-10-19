@@ -101,6 +101,7 @@ it("keeps Russian footer labels on the Russian homepage and English legal pages"
   const footerMarkup = renderToStaticMarkup(
     <SiteFooter
       content={createSiteFooterContent(russianHomepageCopy.footer, "ru")}
+      locale="ru"
     />,
   );
 
@@ -121,4 +122,29 @@ it("keeps Russian footer labels on the Russian homepage and English legal pages"
   expect(footerMarkup).not.toContain('href="/ru/terms"');
   expect(footerMarkup).not.toContain('href="/ru/contact"');
   expect(footerMarkup).not.toContain('href="/zh/privacy"');
+  expect(footerMarkup).toContain('aria-label="Подписаться на @wsir1139 в X (Twitter)"');
+  expect(footerMarkup).toContain(
+    'aria-label="Присоединиться к Discord планировщика Stardew Valley"',
+  );
+});
+
+it("uses Japanese social labels while keeping the account and planner brand", () => {
+  const footerMarkup = renderToStaticMarkup(
+    <SiteFooter
+      content={createSiteFooterContent(footerCopy, "en")}
+      locale="ja"
+    />,
+  );
+
+  expect(footerMarkup).toContain(
+    'aria-label="X（Twitter）で @wsir1139 をフォロー"',
+  );
+  expect(footerMarkup).toContain(
+    'aria-label="Stardew Valley Planner の Discord に参加"',
+  );
+  expect(footerMarkup).toContain('href="https://x.com/wsir1139"');
+  expect(footerMarkup).toContain("Stardew Valley Planner");
+  expect(footerMarkup).not.toContain(
+    'aria-label="Follow @wsir1139 on X (Twitter)"',
+  );
 });

@@ -289,6 +289,20 @@ it("returns absolute paired language alternates", () => {
     "zh-CN": "https://stardewvalleyplanner.art/zh/privacy",
     "x-default": "https://stardewvalleyplanner.art/privacy",
   });
+  expect(createPublicLanguageAlternates("/privacy")).not.toHaveProperty("ja");
+  expect(createPublicLanguageAlternates("/blog")).not.toHaveProperty("ja");
+});
+
+it("adds Japanese and Russian only to the homepage language alternates", () => {
+  expect(createPublicLanguageAlternates("/")).toEqual({
+    en: "https://stardewvalleyplanner.art",
+    "zh-CN": "https://stardewvalleyplanner.art/zh",
+    ja: "https://stardewvalleyplanner.art/ja",
+    ru: "https://stardewvalleyplanner.art/ru",
+    "x-default": "https://stardewvalleyplanner.art",
+  });
+  expect(createPublicLanguageAlternates("/privacy")).not.toHaveProperty("ru");
+  expect(createPublicLanguageAlternates("/blog")).not.toHaveProperty("ru");
 });
 
 it("rejects locale and canonical path values outside the public registry", () => {
@@ -313,19 +327,17 @@ it("keeps site locales bilingual and limits Russian alternates to the homepage",
   expect(publicLocales).toEqual(["en", "zh-CN"]);
   expect(getHomepageDisplayPath("en")).toBe("/");
   expect(getHomepageDisplayPath("zh-CN")).toBe("/zh");
+  expect(getHomepageDisplayPath("ja")).toBe("/ja");
   expect(getHomepageDisplayPath("ru")).toBe("/ru");
   expect(createHomepageLanguageAlternates()).toEqual({
     en: "https://stardewvalleyplanner.art",
     "zh-CN": "https://stardewvalleyplanner.art/zh",
+    ja: "https://stardewvalleyplanner.art/ja",
     ru: "https://stardewvalleyplanner.art/ru",
     "x-default": "https://stardewvalleyplanner.art",
   });
-  expect(createPublicLanguageAlternates("/")).toEqual({
-    en: "https://stardewvalleyplanner.art",
-    "zh-CN": "https://stardewvalleyplanner.art/zh",
-    "x-default": "https://stardewvalleyplanner.art",
-  });
-  expect(createPublicLanguageAlternates("/")).not.toHaveProperty("ru");
+  expect(createPublicLanguageAlternates("/")).toEqual(createHomepageLanguageAlternates());
+  expect(createPublicLanguageAlternates("/blog")).not.toHaveProperty("ja");
   expect(createPublicLanguageAlternates("/blog")).not.toHaveProperty("ru");
   expect(() => getHomepageDisplayPath("fr" as never)).toThrow(
     'Received: "fr"',

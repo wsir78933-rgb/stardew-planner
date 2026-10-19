@@ -441,6 +441,12 @@ describe("catalog sidebar model", () => {
       .toContainEqual(expect.objectContaining({ id: "furniture_JojaColaPainting" }));
     expect(getCatalogSidebarDisplayName(getItemById("furniture_JojaColaPainting")))
       .toBe("Joja Cola Painting");
+    expect(getCatalogSidebarDisplayName(getItemById("furniture_JojaColaPainting"), "ja"))
+      .toBe("Joja Cola Painting");
+    expect(getCatalogSidebarDisplayName(getItemById("furniture_JojaColaPainting"), "ru"))
+      .toBe("Картина Joja Cola");
+    expect(getCatalogSidebarDisplayName(getItemById("big-craftable:113"), "ru"))
+      .toBe("Редкое пугало 2");
     expect(getCatalogSidebarItems(items, "buildings", "crop:496_398"))
       .toContainEqual(expect.objectContaining({ id: "crop:496_398" }));
     expect(getCatalogSidebarItems(items, "crops", "grape").map(({ id }) => id))

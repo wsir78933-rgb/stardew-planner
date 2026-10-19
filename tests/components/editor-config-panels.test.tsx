@@ -437,7 +437,7 @@ it("renders Russian spouse names from the public getter and Russian cave labels"
   );
 });
 
-it("rejects a farm settings locale outside en, zh, and ru", () => {
+it("rejects a farm settings locale outside en, zh, ja, and ru", () => {
   expect(() =>
     FarmSettingsPanel({
       locale: "zh-CN" as "en",
@@ -445,7 +445,7 @@ it("rejects a farm settings locale outside en, zh, and ru", () => {
       mapRenderOptions: createInitialMapRenderOptions(),
       onMapRenderOptionsChange: vi.fn(),
     }),
-  ).toThrow('Farm settings locale must be "en", "zh", or "ru"; received "zh-CN".');
+  ).toThrow('Farm settings locale must be "en", "zh", "ja", or "ru"; received "zh-CN".');
 });
 
 it("dispatches free placement only after confirmation and supports cancellation", () => {

@@ -18,6 +18,7 @@ import {
 import {
   getCatalogItemSceneAvailability,
 } from "../catalog/catalog-scene-availability";
+import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
 import type { EditorPreferences } from "../editor/browser-editor-preferences";
 import {
   getPlacementSelectionDetails,
@@ -25,14 +26,6 @@ import {
   type PlacementSelectionDetails,
   type PlacementSelectionKey,
 } from "../editor/editor-selection-controller";
-import {
-  getRussianCatalogItemDisplayName,
-  getRussianPlannerMapDisplayName,
-} from "../i18n/planner-russian-display-names";
-import {
-  readVisibleProjectMapLabel,
-  type ProjectMapLabelLocale,
-} from "../i18n/planner-project-map-label";
 import { getPlannerMapById, plannerMaps } from "../maps/map-catalog";
 import {
   interiorFlooringPatterns,
@@ -164,6 +157,7 @@ import {
   PlannerStartupStatus,
   type PlannerStartupStatusState,
 } from "./planner-startup-status";
+import { PlannerChromeLocaleProvider } from "@/src/i18n/planner-chrome-locale";
 import type { EditorPerformanceMarker } from "../performance/editor-performance-marks";
 import {
   copyPngImageToClipboard,
@@ -172,7 +166,16 @@ import type { ScreenshotResolution } from "../projects/map-image-export";
 import { SelectionInspector } from "./selection-inspector";
 import { ProjectMapInstancePanel } from "./project-map-instance-panel";
 import { usePlannerWorkspacePersistenceControls } from "./use-planner-workspace-persistence-controls";
-import type { HomepageLocale } from "../homepage/homepage-locale";
+import {
+  readPlannerChromeLocale,
+  type HomepageLocale,
+  type PlannerChromeLocale,
+} from "../homepage/homepage-locale";
+import {
+  readVisibleProjectMapLabel,
+  type ProjectMapLabelLocale,
+} from "../i18n/planner-project-map-label";
+import { readPlannerMapDisplayLabel } from "./planner-map-picker";
 import {
   getEditorModalCopy,
   type EditorModalCopy,
@@ -214,13 +217,11 @@ export function copyPlannerWorkspaceCleanMapImage(
 
 export function persistPlannerWorkspacePreferences({
   dispatchPlannerWorkspaceAction,
-  locale = "en",
   preferencePersistence,
   preferences,
   resourceGeneration,
 }: Readonly<{
   dispatchPlannerWorkspaceAction: (plannerWorkspaceAction: PlannerWorkspaceAction) => void;
-  locale?: HomepageLocale;
   preferencePersistence: PlannerWorkspacePreferencePersistence;
   preferences: EditorPreferences;
   resourceGeneration: number;
@@ -229,7 +230,7 @@ export function persistPlannerWorkspacePreferences({
     preferencePersistence.observePreferences(preferences);
   } catch (caughtError) {
     dispatchPlannerWorkspaceAction({
-      message: getPlannerWorkspaceErrorMessage(caughtError, locale),
+      message: getPlannerWorkspaceErrorMessage(caughtError),
       resourceGeneration,
       type: "complete-runtime-error",
     });
@@ -246,6 +247,7 @@ export type PlannerWorkspaceProperties = Readonly<{
 }>;
 
 type PlannerWorkspaceStaticBoundaryProperties = Readonly<{
+  locale?: HomepageLocale;
   plannerWorkspaceRenderState: PlannerWorkspaceRenderState;
   plannerWorkspaceStateController?: PlannerWorkspaceStateController;
 }>;
@@ -557,28 +559,7 @@ export function processPlannerWorkspaceSelectionMove(
   }
 }
 
-function readPlannerChromeLocale(
-  locale: HomepageLocale,
-): "en" | "zh" | "ru" {
-  if (locale === "en") return "en";
-  if (locale === "zh-CN") return "zh";
-  if (locale === "ru") return "ru";
-  throw new Error(
-    `Unsupported planner locale. Received: ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readPlannerWorkspaceStartupMessage(locale: HomepageLocale): string {
-  if (locale === "en" || locale === "zh-CN") {
-    return "Loading local planner resources…";
-  }
-  if (locale === "ru") {
-    return "Загрузка локальных ресурсов планировщика…";
-  }
-  throw new Error(
-    `Unsupported planner locale. Received: ${JSON.stringify(locale)}.`,
-  );
-}
+const startupLoadingMessage = "Loading local planner resources…";
 
 const interiorDecorPatternByCatalogItemId = new Map<string, InteriorDecorCatalogPattern>([
   ...interiorWallpaperPatterns,
@@ -689,7 +670,6 @@ export function PlannerWorkspace({
     plannerWorkspaceState.season,
     plannerWorkspaceState.selectedPlannerMapId,
     dispatchPlannerWorkspaceAction,
-    locale,
     workspaceResourceState,
   ]);
 
@@ -706,7 +686,6 @@ export function PlannerWorkspace({
     preparedWorkspace !== null &&
     !shouldPreparePlannerWorkspaceRequest(workspaceResourceState, mapRequest);
   const plannerWorkspaceRenderState = createPlannerWorkspaceRenderState({
-    locale,
     preparedWorkspace: isPreparedWorkspaceCurrent ? preparedWorkspace : null,
     plannerWorkspaceState,
     onRetry: () =>
@@ -744,12 +723,14 @@ export function PlannerWorkspace({
 }
 
 export function PlannerWorkspaceStaticBoundary({
+  locale = "en",
   plannerWorkspaceRenderState,
   plannerWorkspaceStateController,
 }: PlannerWorkspaceStaticBoundaryProperties) {
   if (plannerWorkspaceRenderState.kind === "prepared") {
     return (
       <StaticPreparedPlannerWorkspace
+        locale={locale}
         preparedWorkspace={plannerWorkspaceRenderState.preparedWorkspace}
         plannerWorkspaceStateController={plannerWorkspaceStateController}
         runtimeStatus={plannerWorkspaceRenderState.runtimeStatus}
@@ -759,17 +740,19 @@ export function PlannerWorkspaceStaticBoundary({
 
   return (
     <PlannerWorkspaceGeometry
-      locale="en"
+      locale={locale}
       plannerWorkspaceRenderState={plannerWorkspaceRenderState}
     />
   );
 }
 
 function StaticPreparedPlannerWorkspace({
+  locale,
   preparedWorkspace,
   plannerWorkspaceStateController,
   runtimeStatus,
 }: Readonly<{
+  locale: HomepageLocale;
   preparedWorkspace: PreparedPlannerWorkspace;
   plannerWorkspaceStateController?: PlannerWorkspaceStateController;
   runtimeStatus: "loading" | "ready" | "interactive";
@@ -790,13 +773,16 @@ function StaticPreparedPlannerWorkspace({
     projectLifecycle.workspaceController,
   );
 
+  const editorModalCopy = getEditorModalCopy(locale);
+  const saveModalCopy = getSaveModalCopy(locale);
+
   return (
     <PlannerWorkspaceRenderedBoundary
-      editorModalCopy={getEditorModalCopy("en")}
-      locale="en"
+      editorModalCopy={editorModalCopy}
+      locale={locale}
       loadBuildingMetadata={loadBuildingPlacementMetadata}
       loadRequiredCatalogCategory={loadCatalogCategory}
-      newProjectName="Untitled Project"
+      newProjectName={readStaticWorkspaceProjectName(locale, saveModalCopy)}
       onImportedGameSaveResult={ignoreImportedGameSave}
       performanceMarker={undefined}
       plannerWorkspaceRenderState={{
@@ -806,8 +792,26 @@ function StaticPreparedPlannerWorkspace({
       }}
       plannerWorkspaceStateController={resolvedPlannerWorkspaceStateController}
       projectWorkspace={projectWorkspace}
-      saveModalCopy={getSaveModalCopy("en")}
+      saveModalCopy={saveModalCopy}
     />
+  );
+}
+
+function readStaticWorkspaceProjectName(
+  locale: HomepageLocale,
+  saveModalCopy: SaveModalCopy,
+): string {
+  if (locale === "en") {
+    return "Untitled Project";
+  }
+
+  if (locale === "zh-CN" || locale === "ja" || locale === "ru") {
+    return saveModalCopy.localProjects.defaultProjectName;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read static workspace project name because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }
 
@@ -915,7 +919,6 @@ function PlannerWorkspacePersistenceBoundary({
   } = plannerWorkspaceStateController;
   const workspacePersistenceControls = usePlannerWorkspacePersistenceControls({
     dispatchPlannerWorkspaceAction,
-    locale,
     newProjectName,
     plannerWorkspaceState,
     workspaceController: projectWorkspace.workspaceController,
@@ -957,18 +960,17 @@ function PlannerWorkspaceGeometry({
   plannerWorkspaceRenderState: PlannerWorkspaceRenderState;
 }>) {
   return (
-    <section
-      className="planner-workspace planner-editor-shell"
-      data-planner-workspace-state={plannerWorkspaceRenderState.kind}
-    >
-      <PlannerStartupStatus
-        locale={locale}
-        state={toPlannerStartupStatusState(plannerWorkspaceRenderState, locale)}
-      />
-      <div className="planner-workspace__reserved-geometry planner-editor-canvas-area">
-        {children}
-      </div>
-    </section>
+    <PlannerChromeLocaleProvider locale={readPlannerChromeLocale(locale)}>
+      <section
+        className="planner-workspace planner-editor-shell"
+        data-planner-workspace-state={plannerWorkspaceRenderState.kind}
+      >
+        <PlannerStartupStatus state={toPlannerStartupStatusState(plannerWorkspaceRenderState, locale)} />
+        <div className="planner-workspace__reserved-geometry planner-editor-canvas-area">
+          {children}
+        </div>
+      </section>
+    </PlannerChromeLocaleProvider>
   );
 }
 
@@ -1007,7 +1009,6 @@ function PreparedPlannerWorkspaceContent({
   useEffect(() => {
     persistPlannerWorkspacePreferences({
       dispatchPlannerWorkspaceAction,
-      locale,
       preferencePersistence,
       preferences: {
         behaviorOptions: plannerWorkspaceState.behaviorOptions,
@@ -1017,7 +1018,6 @@ function PreparedPlannerWorkspaceContent({
     });
   }, [
     dispatchPlannerWorkspaceAction,
-    locale,
     plannerWorkspaceState.behaviorOptions,
     plannerWorkspaceState.displayOptions,
     preferencePersistence,
@@ -1132,7 +1132,6 @@ function PreparedPlannerWorkspaceContent({
   }, [plannerWorkspaceState.modalId]);
   const workspaceEditingControls = useWorkspaceEditingControls({
     activeInteriorDecorPattern,
-    locale,
     advanceSelectedCatalogPlacementAttempt,
     applyPlacementEditResult,
     buildingMetadataById,
@@ -1205,10 +1204,10 @@ function PreparedPlannerWorkspaceContent({
   const handleInteriorDecorRejected = useCallback(
     (mapId: string, interiorDecorKind: InteriorDecorCatalogPattern["kind"]) => {
       showInteriorDecorRejectionMessage(
-        getInteriorDecorRejectionMessage(mapId, interiorDecorKind, editorLocale),
+        getInteriorDecorRejectionMessage(mapId, interiorDecorKind),
       );
     },
-    [editorLocale, showInteriorDecorRejectionMessage],
+    [showInteriorDecorRejectionMessage],
   );
   const handleOrdinaryCatalogItemSelect = useCallback(
     (
@@ -1302,9 +1301,10 @@ function PreparedPlannerWorkspaceContent({
         locale={editorLocale}
         activeModalId={plannerWorkspaceState.modalId}
         leftHandMode={plannerWorkspaceState.behaviorOptions.leftHandMode}
-        mapDisplayName={readVisiblePlannerMenuMapLabel(
-          plannerWorkspaceState.selectedPlannerMapId,
+        mapDisplayName={readPlannerMapDisplayLabel(
           editorLocale,
+          plannerWorkspaceState.selectedPlannerMapId,
+          getPlannerMapById(plannerWorkspaceState.selectedPlannerMapId).displayName,
         )}
         onCycleSeason={() =>
           plannerWorkspaceStateController.dispatchPlannerWorkspaceAction({
@@ -1380,10 +1380,9 @@ function PreparedPlannerWorkspaceContent({
           )}
         </p>
       )}
-      <PlannerRequiredCatalogGate locale={locale} state={requiredPlacementCatalogGate}>
+      <PlannerRequiredCatalogGate state={requiredPlacementCatalogGate}>
         <PlannerCanvas
           ambienceOptions={plannerAmbienceOptions}
-          locale={editorLocale}
           gameCursors={plannerWorkspaceState.behaviorOptions.gameCursors}
           onCancelEditingInteraction={workspaceEditingControls.cancelEditingInteraction}
           activeInteriorDecorPattern={activeInteriorDecorPattern}
@@ -1499,7 +1498,7 @@ function PreparedPlannerWorkspaceContent({
         projectMapPanelContent={createProjectMapPanelContent({
           activeProject: workspaceState.activeProject,
           cancelInteriorDecor: handleCancelInteriorDecor,
-          locale: editorLocale,
+          editorLocale,
           projectSummaries: workspaceState.projectSummaries,
           season: plannerWorkspaceState.season,
           workspaceController,
@@ -1508,19 +1507,19 @@ function PreparedPlannerWorkspaceContent({
           <PlannerSaveModalLoader
             catalogItems={readyCatalogItems}
             copy={saveModalCopy}
-            locale={editorLocale}
             currentProjectId={workspaceState.activeProject?.id ?? null}
             currentProjectMapInstanceCount={
               workspaceState.activeProject?.project.maps.length ?? null
             }
-            currentProjectMapInstanceName={readVisibleCurrentProjectMapInstanceName(
-              workspaceState.activeSession,
-              editorLocale,
-            )}
-            currentProjectName={workspaceState.activeProject?.title ?? null}
-            mapDisplayName={
-              getPlannerMapById(plannerWorkspaceState.selectedPlannerMapId).displayName
+            currentProjectMapInstanceName={
+              workspaceState.activeSession?.sourceMap.label ?? null
             }
+            currentProjectName={workspaceState.activeProject?.title ?? null}
+            mapDisplayName={readPlannerMapDisplayLabel(
+              editorLocale,
+              plannerWorkspaceState.selectedPlannerMapId,
+              getPlannerMapById(plannerWorkspaceState.selectedPlannerMapId).displayName,
+            )}
             mapFile={getPlannerMapById(plannerWorkspaceState.selectedPlannerMapId).mapFile}
             onCaptureScreenshot={workspacePersistenceControls.captureScreenshot}
             onImportGameSave={(importedGameSaveState) =>
@@ -1556,14 +1555,14 @@ function PreparedPlannerWorkspaceContent({
 function createProjectMapPanelContent({
   activeProject,
   cancelInteriorDecor,
-  locale,
+  editorLocale,
   projectSummaries,
   season,
   workspaceController,
 }: Readonly<{
   activeProject: ReturnType<typeof useReferenceProjectWorkspace>["workspaceState"]["activeProject"];
   cancelInteriorDecor: () => void;
-  locale: "en" | "zh" | "ru";
+  editorLocale: PlannerChromeLocale;
   projectSummaries: ReturnType<typeof useReferenceProjectWorkspace>["workspaceState"]["projectSummaries"];
   season: PlannerWorkspaceStateController["plannerWorkspaceState"]["season"];
   workspaceController: ReturnType<typeof useReferenceProjectWorkspace>["workspaceController"];
@@ -1589,11 +1588,11 @@ function createProjectMapPanelContent({
   return (
     <ProjectMapInstancePanel
       activeMapInstanceId={activeProject.project.activeMapId}
-      locale={locale}
       mapChoices={plannerMaps}
       mapInstances={activeProject.project.maps}
       projectChoices={destinationProjectSummaries}
       {...projectMapActions}
+      locale={editorLocale}
       onOpenMapInstance={handleOpenMapInstance}
     />
   );
@@ -1718,12 +1717,12 @@ function usePreparedWorkspaceInitialization({
   const handleCanvasError = useCallback(
     (message: string) => {
       dispatchPlannerWorkspaceAction({
-        message: readPlannerCanvasErrorMessage(message, locale),
+        message,
         resourceGeneration: preparedWorkspace.resourceGeneration,
         type: "complete-runtime-error",
       });
     },
-    [dispatchPlannerWorkspaceAction, locale, preparedWorkspace.resourceGeneration],
+    [dispatchPlannerWorkspaceAction, preparedWorkspace.resourceGeneration],
   );
   const handleCanvasInteractive = useCallback(() => {
     canvasInteractiveGenerationReference.current = preparedWorkspace.resourceGeneration;
@@ -1907,7 +1906,6 @@ function useWorkspaceEditingControls({
   getCurrentMapPlacementGrid,
   getRequiredCurrentMapPlacementGrid,
   isRequiredPlacementCatalogReady,
-  locale,
   plannerWorkspaceState,
   readyCatalogItems,
   selectedCatalogItem,
@@ -1918,7 +1916,6 @@ function useWorkspaceEditingControls({
 }: Readonly<{
   activeInteriorDecorPattern: InteriorDecorCatalogPattern | null;
   advanceSelectedCatalogPlacementAttempt: () => void;
-  locale: HomepageLocale;
   applyPlacementEditResult: PlannerWorkspaceStateController["applyPlacementEditResult"];
   buildingMetadataById: BuildingPlacementMetadataById | null;
   clearSelectedCatalogItem: () => void;
@@ -2407,7 +2404,6 @@ function useWorkspaceEditingControls({
         plannerWorkspaceState.placementHistory.currentState,
         plannerWorkspaceState.selectedPlacementKeys,
         readyCatalogItems,
-        locale,
         handleDeleteSelection,
         handleCycleSelectedAppearance,
         handleCopySelection,
@@ -2441,12 +2437,10 @@ function useWorkspaceEditingControls({
 }
 
 export function createPlannerWorkspaceRenderState({
-  locale,
   preparedWorkspace,
   plannerWorkspaceState,
   onRetry,
 }: Readonly<{
-  locale?: HomepageLocale;
   preparedWorkspace: PreparedPlannerWorkspace | null;
   plannerWorkspaceState: PlannerWorkspaceStateController["plannerWorkspaceState"];
   onRetry: () => void;
@@ -2462,19 +2456,7 @@ export function createPlannerWorkspaceRenderState({
       runtimeStatus: runtimeState.status,
     };
   }
-  return {
-    kind: "loading",
-    message: resolvePlannerWorkspaceStartupMessage(locale),
-  };
-}
-
-function resolvePlannerWorkspaceStartupMessage(
-  locale: HomepageLocale | undefined,
-): string {
-  if (locale === undefined) {
-    return "Loading local planner resources…";
-  }
-  return readPlannerWorkspaceStartupMessage(locale);
+  return { kind: "loading", message: startupLoadingMessage };
 }
 
 function toPlannerStartupStatusState(
@@ -2482,14 +2464,43 @@ function toPlannerStartupStatusState(
   locale: HomepageLocale,
 ): PlannerStartupStatusState {
   if (plannerWorkspaceRenderState.kind === "loading") {
-    return { kind: "loading", message: plannerWorkspaceRenderState.message } as const;
+    return {
+      kind: "loading",
+      message: readPlannerStartupLoadingMessage(locale, plannerWorkspaceRenderState.message),
+    } as const;
   }
   if (plannerWorkspaceRenderState.kind === "error") {
     return plannerWorkspaceRenderState;
   }
   return plannerWorkspaceRenderState.runtimeStatus === "interactive"
     ? { kind: "interactive" }
-    : { kind: "loading", message: readPlannerWorkspaceStartupMessage(locale) };
+    : { kind: "loading", message: readPlannerStartupLoadingMessage(locale, startupLoadingMessage) };
+}
+
+function readPlannerStartupLoadingMessage(
+  locale: HomepageLocale,
+  currentMessage: string,
+): string {
+  if (locale === "en" || locale === "zh-CN") {
+    return currentMessage;
+  }
+
+  if (locale === "ja") {
+    return currentMessage === startupLoadingMessage
+      ? "ローカルのプランナー資源を読み込んでいます…"
+      : currentMessage;
+  }
+
+  if (locale === "ru") {
+    return currentMessage === startupLoadingMessage
+      ? "Загрузка локальных ресурсов планировщика…"
+      : currentMessage;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner startup message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
 
 function mergeReadyCatalogItem(
@@ -2531,7 +2542,6 @@ function createSelectionInspector(
   placementSnapshot: Parameters<typeof getPlacementSelectionDetails>[0]["placementSnapshot"],
   selectedPlacementKeys: readonly PlacementSelectionKey[],
   catalogItems: readonly CatalogItem[],
-  locale: HomepageLocale,
   onDelete: () => void,
   onCycleAppearance: () => void,
   onCopySelection: (
@@ -2562,7 +2572,6 @@ function createSelectionInspector(
     return (
       <SelectionInspector
         kind="multiple"
-        locale={readPlannerChromeLocale(locale)}
         onCopy={() => onCopySelection(selectedPlacementKeys)}
         onDelete={onDelete}
         onDismiss={onDismiss}
@@ -2585,7 +2594,6 @@ function createSelectionInspector(
   return createSingleSelectionInspector(
     selectionDetails,
     catalogItems,
-    locale,
     onDelete,
     onCycleAppearance,
     onCopySelection,
@@ -2600,7 +2608,6 @@ function createSelectionInspector(
 function createSingleSelectionInspector(
   selectionDetails: PlacementSelectionDetails,
   catalogItems: readonly CatalogItem[],
-  locale: HomepageLocale,
   onDelete: () => void,
   onCycleAppearance: () => void,
   onCopySelection: (
@@ -2624,18 +2631,15 @@ function createSingleSelectionInspector(
     waterColor: number | undefined,
   ) => void,
 ): ReactNode {
-  const inspectorLocale = readPlannerChromeLocale(locale);
-  const entityName = readSelectedCatalogEntityName(
+  const selectedPlacementNameFields = readSelectedPlacementNameFields(
     catalogItems,
     selectionDetails.catalogItemId,
-    locale,
   );
   if (selectionDetails.kind === "building") {
     if (selectionDetails.canSetWaterColor) {
       return (
         <SelectionInspector
           kind="single"
-          locale={inspectorLocale}
           onBuildingWaterColorChange={(waterColor) =>
             onBuildingWaterColorChange(
               selectionDetails.selectedPlacementKey,
@@ -2650,7 +2654,7 @@ function createSingleSelectionInspector(
             canCycleAppearance: selectionDetails.canCycleAppearance,
             canPaint: false,
             canSetWaterColor: true,
-            entityName,
+            ...selectedPlacementNameFields,
             kind: "building",
             waterColor: selectionDetails.waterColor,
           }}
@@ -2667,7 +2671,6 @@ function createSingleSelectionInspector(
       return (
         <SelectionInspector
           kind="single"
-          locale={inspectorLocale}
           onBuildingPaintChange={(paintColors) =>
             onBuildingPaintChange(selectionDetails.selectedPlacementKey, paintColors)
           }
@@ -2678,7 +2681,7 @@ function createSingleSelectionInspector(
           selection={{
             canPaint: true,
             canCycleAppearance: false,
-            entityName,
+            ...selectedPlacementNameFields,
             kind: "building",
             paintColors,
           }}
@@ -2688,14 +2691,13 @@ function createSingleSelectionInspector(
     return (
       <SelectionInspector
         kind="single"
-        locale={inspectorLocale}
         onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
         onDelete={onDelete}
         onDismiss={onDismiss}
         onCycleAppearance={onCycleAppearance}
         selection={{
           canCycleAppearance: selectionDetails.canCycleAppearance,
-          entityName,
+          ...selectedPlacementNameFields,
           kind: "building",
           canPaint: false,
         }}
@@ -2706,19 +2708,21 @@ function createSingleSelectionInspector(
     return (
       <SelectionInspector
         kind="single"
-        locale={inspectorLocale}
         onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
         onDelete={onDelete}
         onDismiss={onDismiss}
         onCycleAppearance={onCycleAppearance}
-        selection={{ canCycleAppearance: false, entityName, kind: "crop" }}
+        selection={{
+          canCycleAppearance: false,
+          ...selectedPlacementNameFields,
+          kind: "crop",
+        }}
       />
     );
   }
   return (
     <SelectionInspector
       kind="single"
-      locale={inspectorLocale}
       onCopy={() => onCopySelection([selectionDetails.selectedPlacementKey])}
       onDelete={onDelete}
       onDismiss={onDismiss}
@@ -2735,7 +2739,7 @@ function createSingleSelectionInspector(
       selection={{
         canCycleAppearance: selectionDetails.canCycleAppearance,
         canPaint: catalogItems.some((catalogItem) => catalogItem.id === selectionDetails.catalogItemId && catalogItem.paintableChest !== undefined),
-        entityName,
+        ...selectedPlacementNameFields,
         isNightLight: catalogItems.some(
           (catalogItem) => catalogItem.id === selectionDetails.catalogItemId && catalogItem.nightLight !== undefined,
         ),
@@ -2747,14 +2751,21 @@ function createSingleSelectionInspector(
   );
 }
 
-function readPlannerMapCatalogId(mapId: string): (typeof plannerMaps)[number]["id"] {
-  const catalogPlannerMap = plannerMaps.find(
-    (candidatePlannerMap) => candidatePlannerMap.id === mapId,
+function readSelectedPlacementNameFields(
+  catalogItems: readonly CatalogItem[],
+  catalogItemId: string,
+): Readonly<{ catalogDisplayName?: string; entityName: string }> {
+  const selectedCatalogItem = catalogItems.find(
+    (catalogItem) => catalogItem.id === catalogItemId,
   );
-  if (catalogPlannerMap === undefined) {
-    throw new Error(`Unknown planner map id: ${JSON.stringify(mapId)}.`);
+  if (selectedCatalogItem === undefined) {
+    return { entityName: catalogItemId };
   }
-  return catalogPlannerMap.id;
+
+  return {
+    catalogDisplayName: getCatalogSidebarDisplayName(selectedCatalogItem),
+    entityName: selectedCatalogItem.name,
+  };
 }
 
 export function readVisibleCurrentProjectMapInstanceName(
@@ -2772,78 +2783,21 @@ export function readVisibleCurrentProjectMapInstanceName(
   return readVisibleProjectMapLabel(activeSession.sourceMap, locale);
 }
 
-function readVisiblePlannerMenuMapLabel(
-  mapId: string,
-  locale: "en" | "zh" | "ru",
-): string {
-  const plannerMap = getPlannerMapById(mapId);
-  if (locale === "en" || locale === "zh") {
-    return plannerMap.displayName;
-  }
-  if (locale === "ru") {
-    return getRussianPlannerMapDisplayName(readPlannerMapCatalogId(plannerMap.id));
-  }
-  throw new Error(
-    `Unsupported planner locale. Received: ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readSelectedCatalogEntityName(
-  catalogItems: readonly CatalogItem[],
-  catalogItemId: string,
-  locale: HomepageLocale,
-): string {
-  const catalogItem = catalogItems.find(
-    (candidateCatalogItem) => candidateCatalogItem.id === catalogItemId,
-  );
-  if (catalogItem === undefined) {
-    return catalogItemId;
-  }
-  if (locale === "en" || locale === "zh-CN") {
-    return catalogItem.name;
-  }
-  if (locale === "ru") {
-    return getRussianCatalogItemDisplayName(catalogItem.id);
-  }
-  throw new Error(
-    `Unsupported planner locale. Received: ${JSON.stringify(locale)}.`,
-  );
-}
-
 function getPlannerWorkspaceErrorMessage(
   caughtError: unknown,
-  locale: HomepageLocale,
+  locale: HomepageLocale = "en",
 ): string {
-  if (locale !== "en" && locale !== "zh-CN" && locale !== "ru") {
-    throw new Error(
-      `Unsupported planner locale. Received: ${JSON.stringify(locale)}.`,
-    );
-  }
   const diagnosticDetail = caughtError instanceof Error
     ? caughtError.message
     : String(caughtError);
   if (locale === "ru") {
     return `Не удалось подготовить планировщик. Причина: ${diagnosticDetail}`;
   }
-  return diagnosticDetail;
-}
-
-function readPlannerCanvasErrorMessage(
-  message: string,
-  locale: HomepageLocale,
-): string {
-  if (typeof message !== "string") {
-    throw new TypeError(
-      `Planner canvas error message must be a string; received ${JSON.stringify(message)}.`,
-    );
+  if (locale === "en" || locale === "zh-CN" || locale === "ja") {
+    return diagnosticDetail;
   }
-  if (locale === "en" || locale === "zh-CN") {
-    return message;
-  }
-  if (locale === "ru") {
-    return `Не удалось подготовить планировщик. Причина: ${message}`;
-  }
+  const unsupportedLocale: never = locale;
   throw new Error(
-    `Unsupported planner locale. Received: ${JSON.stringify(locale)}.`,
+    `Cannot read planner workspace error because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

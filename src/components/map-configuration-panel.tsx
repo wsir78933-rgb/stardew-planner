@@ -1,16 +1,17 @@
 "use client";
 
 import {
+  farmhouse2Composite,
+  gingerIslandOverlays,
+  spouseRoomLayouts,
+} from "../maps/map-catalog";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import {
   getRussianFarmhouseRenovationDisplayName,
   getRussianGingerIslandOverlayDisplayName,
   getRussianPlannerMapDisplayName,
   getRussianSpouseRoomDisplayName,
 } from "../i18n/planner-russian-display-names";
-import {
-  farmhouse2Composite,
-  gingerIslandOverlays,
-  spouseRoomLayouts,
-} from "../maps/map-catalog";
 import {
   setFarmhouse2MarriageMapEnabled,
   setFarmhouse2RenovationEnabled,
@@ -19,27 +20,28 @@ import {
   type MapRenderOptions,
 } from "../maps/map-render-options";
 
-type MapConfigurationLocale = "en" | "zh" | "ru";
-
 type MapConfigurationPanelProperties = Readonly<{
-  locale?: MapConfigurationLocale;
+  locale?: PlannerChromeLocale;
   mapRenderOptions: MapRenderOptions;
   selectedMapId: string;
   onMapRenderOptionsChange: (nextMapRenderOptions: MapRenderOptions) => void;
 }>;
 
 export function MapConfigurationPanel({
-  locale,
+  locale = "en",
   mapRenderOptions,
   selectedMapId,
   onMapRenderOptionsChange,
 }: MapConfigurationPanelProperties) {
-  const configurationLocale = readMapConfigurationLocale(locale);
   if (selectedMapId === "ginger-island") {
     return (
       <section className="editor-modal__map-configuration">
-        <h3>{readGingerIslandHeading(configurationLocale)}</h3>
-        <p>{readGingerIslandHelp(configurationLocale)}</p>
+        <h3>{readMapConfigurationText(locale, { en: "Ginger Island", ja: "ジンジャーアイランド", ru: getRussianPlannerMapDisplayName("ginger-island") })}</h3>
+        <p>{readMapConfigurationText(locale, {
+          en: "Choose which restored island features appear on this map.",
+          ja: "このマップに表示する、修復済みの島の設備を選んでください。",
+          ru: "Выберите, какие восстановленные объекты острова показывать на этой карте.",
+        })}</p>
         <div className="editor-modal__map-configuration-options">
           {gingerIslandOverlays.map((gingerIslandOverlay) => (
             <label key={gingerIslandOverlay.id}>
@@ -57,7 +59,7 @@ export function MapConfigurationPanel({
                 }
                 type="checkbox"
               />
-              {readGingerIslandOverlayLabel(gingerIslandOverlay, configurationLocale)}
+              {readGingerIslandOverlayLabel(locale, gingerIslandOverlay.id, gingerIslandOverlay.displayName)}
             </label>
           ))}
         </div>
@@ -75,7 +77,7 @@ export function MapConfigurationPanel({
 
   return (
     <section className="editor-modal__map-configuration">
-      <h3>{readFarmhouseUpgradeHeading(configurationLocale)}</h3>
+      <h3>{readMapConfigurationText(locale, { en: "Farmhouse (Upgrade 2)", ja: "家のアップグレード2", ru: getRussianPlannerMapDisplayName("farmhouse-2") })}</h3>
       <div className="editor-modal__map-configuration-options">
         <label>
           <input
@@ -90,10 +92,10 @@ export function MapConfigurationPanel({
             }
             type="checkbox"
           />
-          {readMarriedLayoutLabel(configurationLocale)}
+          {readMapConfigurationText(locale, { en: "Married layout", ja: "結婚後の間取り", ru: "Планировка после свадьбы" })}
         </label>
         <label>
-          {readSpouseRoomLabel(configurationLocale)}
+          {readMapConfigurationText(locale, { en: "Spouse room", ja: "配偶者の部屋", ru: "Комната супруга" })}
           <select
             disabled={!mapRenderOptions.farmhouse2.marriageMapEnabled}
             onChange={(changeEvent) =>
@@ -108,18 +110,18 @@ export function MapConfigurationPanel({
             }
             value={mapRenderOptions.farmhouse2.spouseId ?? ""}
           >
-            <option value="">{readSpouseRoomNoneLabel(configurationLocale)}</option>
+            <option value="">{readMapConfigurationText(locale, { en: "None", ja: "なし", ru: "Нет" })}</option>
             {spouseRoomLayouts.map((spouseRoomLayout) => (
               <option
                 key={spouseRoomLayout.spouseId}
                 value={spouseRoomLayout.spouseId}
               >
-                {readSpouseRoomOptionLabel(spouseRoomLayout, configurationLocale)}
+                {readSpouseRoomLabel(locale, spouseRoomLayout.spouseId, spouseRoomLayout.displayName)}
               </option>
             ))}
           </select>
         </label>
-        <span className="editor-modal__map-configuration-label">{readRenovationsLabel(configurationLocale)}</span>
+        <span className="editor-modal__map-configuration-label">{readMapConfigurationText(locale, { en: "Renovations", ja: "改装", ru: "Перестройки" })}</span>
         {farmhouse2Composite.renovations.map((farmhouseRenovation) => (
           <label key={farmhouseRenovation.id}>
             <input
@@ -142,116 +144,11 @@ export function MapConfigurationPanel({
               }
               type="checkbox"
             />
-            {readFarmhouseRenovationLabel(farmhouseRenovation, configurationLocale)}
+            {readFarmhouseRenovationLabel(locale, farmhouseRenovation.id, farmhouseRenovation.displayName)}
           </label>
         ))}
       </div>
     </section>
-  );
-}
-
-function readMapConfigurationLocale(
-  locale: MapConfigurationLocale | undefined,
-): MapConfigurationLocale {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
-    return resolvedLocale;
-  }
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
-  );
-}
-
-function readGingerIslandHeading(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") return "Ginger Island";
-  if (locale === "ru") return getRussianPlannerMapDisplayName("ginger-island");
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readGingerIslandHelp(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") {
-    return "Choose which restored island features appear on this map.";
-  }
-  if (locale === "ru") {
-    return "Выберите, какие восстановленные объекты острова показывать на этой карте.";
-  }
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readGingerIslandOverlayLabel(
-  gingerIslandOverlay: (typeof gingerIslandOverlays)[number],
-  locale: MapConfigurationLocale,
-): string {
-  if (locale === "en" || locale === "zh") return gingerIslandOverlay.displayName;
-  if (locale === "ru") return getRussianGingerIslandOverlayDisplayName(gingerIslandOverlay.id);
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readFarmhouseUpgradeHeading(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") return "Farmhouse (Upgrade 2)";
-  if (locale === "ru") return getRussianPlannerMapDisplayName("farmhouse-2");
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readMarriedLayoutLabel(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") return "Married layout";
-  if (locale === "ru") return "Планировка после свадьбы";
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readSpouseRoomLabel(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") return "Spouse room";
-  if (locale === "ru") return "Комната супруга";
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readSpouseRoomNoneLabel(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") return "None";
-  if (locale === "ru") return "Нет";
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readSpouseRoomOptionLabel(
-  spouseRoomLayout: (typeof spouseRoomLayouts)[number],
-  locale: MapConfigurationLocale,
-): string {
-  if (locale === "en" || locale === "zh") return spouseRoomLayout.displayName;
-  if (locale === "ru") return getRussianSpouseRoomDisplayName(spouseRoomLayout.spouseId);
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readRenovationsLabel(locale: MapConfigurationLocale): string {
-  if (locale === "en" || locale === "zh") return "Renovations";
-  if (locale === "ru") return "Перестройки";
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
-  );
-}
-
-function readFarmhouseRenovationLabel(
-  farmhouseRenovation: (typeof farmhouse2Composite.renovations)[number],
-  locale: MapConfigurationLocale,
-): string {
-  if (locale === "en" || locale === "zh") return farmhouseRenovation.displayName;
-  if (locale === "ru") return getRussianFarmhouseRenovationDisplayName(farmhouseRenovation.id);
-  throw new TypeError(
-    `Map configuration locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -267,4 +164,173 @@ function readSpouseId(rawSpouseId: string): (typeof spouseRoomLayouts)[number]["
   }
 
   return spouseRoomLayout.spouseId;
+}
+
+function readMapConfigurationText(
+  locale: PlannerChromeLocale,
+  text: Readonly<{ en: string; ja: string; ru: string }>,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return text.en;
+  }
+
+  if (locale === "ja") {
+    return text.ja;
+  }
+
+  if (locale === "ru") {
+    return text.ru;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read map configuration text because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+const japaneseGingerIslandOverlayLabels = {
+  restored: "修復済み",
+  bin: "出荷箱",
+  cave: "洞窟",
+  obelisk: "オベリスク",
+} as const;
+
+const japaneseSpouseRoomLabels = {
+  abigail: "アビゲイル",
+  penny: "ペニー",
+  leah: "リア",
+  haley: "ヘイリー",
+  maru: "マル",
+  sebastian: "セバスチャン",
+  alex: "アレックス",
+  harvey: "ハーヴィー",
+  elliott: "エリオット",
+  sam: "サム",
+  shane: "シェーン",
+  emily: "エミリー",
+  krobus: "クロバス",
+} as const;
+
+const japaneseFarmhouseRenovationLabels = {
+  bedroom: "開いた寝室",
+  "southern-room": "南側の部屋",
+  "corner-room": "角の部屋",
+  "extended-corner-room": "広げた角の部屋",
+  "dining-room": "食事室",
+  "dining-room-wall": "食事室の壁",
+  cubby: "小部屋",
+  "far-upper-room": "奥の上の部屋",
+  crib: "ベビーベッド",
+  cellar: "地下室",
+} as const;
+
+function readGingerIslandOverlayLabel(
+  locale: PlannerChromeLocale,
+  overlayId: string,
+  englishLabel: string,
+): string {
+  return readKeyedJapaneseLabel(
+    locale,
+    overlayId,
+    englishLabel,
+    japaneseGingerIslandOverlayLabels,
+    "Ginger Island overlay",
+  );
+}
+
+function readSpouseRoomLabel(
+  locale: PlannerChromeLocale,
+  spouseId: string,
+  englishLabel: string,
+): string {
+  return readKeyedJapaneseLabel(
+    locale,
+    spouseId,
+    englishLabel,
+    japaneseSpouseRoomLabels,
+    "spouse room",
+  );
+}
+
+function readFarmhouseRenovationLabel(
+  locale: PlannerChromeLocale,
+  renovationId: string,
+  englishLabel: string,
+): string {
+  return readKeyedJapaneseLabel(
+    locale,
+    renovationId,
+    englishLabel,
+    japaneseFarmhouseRenovationLabels,
+    "farmhouse renovation",
+  );
+}
+
+function readKeyedJapaneseLabel(
+  locale: PlannerChromeLocale,
+  optionId: string,
+  englishLabel: string,
+  japaneseLabels: Readonly<Record<string, string>>,
+  optionKind: string,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return englishLabel;
+  }
+
+  if (locale === "ja") {
+    if (!Object.prototype.hasOwnProperty.call(japaneseLabels, optionId)) {
+      throw new Error(
+        `Cannot read Japanese ${optionKind} label because id is ${JSON.stringify(optionId)}.`,
+      );
+    }
+    const japaneseLabel = japaneseLabels[optionId];
+    if (japaneseLabel === undefined) {
+      throw new Error(
+        `Cannot read Japanese ${optionKind} label because id is ${JSON.stringify(optionId)}.`,
+      );
+    }
+    return japaneseLabel;
+  }
+
+  if (locale === "ru") {
+    return readRussianMapConfigurationLabel(optionKind, optionId);
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read ${optionKind} label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readRussianMapConfigurationLabel(optionKind: string, optionId: string): string {
+  if (optionKind === "Ginger Island overlay") {
+    const overlay = gingerIslandOverlays.find((candidate) => candidate.id === optionId);
+    if (overlay === undefined) {
+      throw new Error(
+        `Cannot read Russian Ginger Island overlay label because id is ${JSON.stringify(optionId)}.`,
+      );
+    }
+    return getRussianGingerIslandOverlayDisplayName(overlay.id);
+  }
+  if (optionKind === "spouse room") {
+    const spouseRoom = spouseRoomLayouts.find((candidate) => candidate.spouseId === optionId);
+    if (spouseRoom === undefined) {
+      throw new Error(
+        `Cannot read Russian spouse room label because id is ${JSON.stringify(optionId)}.`,
+      );
+    }
+    return getRussianSpouseRoomDisplayName(spouseRoom.spouseId);
+  }
+  if (optionKind === "farmhouse renovation") {
+    const renovation = farmhouse2Composite.renovations.find((candidate) => candidate.id === optionId);
+    if (renovation === undefined) {
+      throw new Error(
+        `Cannot read Russian farmhouse renovation label because id is ${JSON.stringify(optionId)}.`,
+      );
+    }
+    return getRussianFarmhouseRenovationDisplayName(renovation.id);
+  }
+  throw new Error(
+    `Cannot read Russian map configuration label because option kind is ${JSON.stringify(optionKind)} and id is ${JSON.stringify(optionId)}.`,
+  );
 }

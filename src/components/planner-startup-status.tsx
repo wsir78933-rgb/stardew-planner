@@ -1,4 +1,11 @@
-import type { HomepageLocale } from "../homepage/homepage-locale";
+"use client";
+
+import type { ReactElement } from "react";
+import {
+  type HomepageLocale,
+  type PlannerChromeLocale,
+} from "@/src/homepage/homepage-locale";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 export type PlannerStartupStatusState =
   | {
@@ -22,7 +29,10 @@ export interface PlannerStartupStatusProps {
 export function PlannerStartupStatus({
   locale,
   state,
-}: PlannerStartupStatusProps): React.ReactElement | null {
+}: PlannerStartupStatusProps): ReactElement | null {
+  const chromeLocale = usePlannerChromeLocale();
+  const retryLocale = locale === undefined ? chromeLocale : readPlannerStartupLocale(locale);
+
   if (state.kind === "interactive") {
     return null;
   }
@@ -43,21 +53,46 @@ export function PlannerStartupStatus({
     <div className="planner-startup-status" role="alert">
       <span>{state.message}</span>
       <button onClick={state.onRetry} type="button">
-        {readPlannerStartupRetryLabel(locale)}
+        {readPlannerRetryLabel(retryLocale)}
       </button>
     </div>
   );
 }
 
-function readPlannerStartupRetryLabel(locale: HomepageLocale | undefined): string {
-  const resolvedLocale = locale ?? "en";
-  if (resolvedLocale === "en" || resolvedLocale === "zh-CN") {
+function readPlannerStartupLocale(locale: HomepageLocale): PlannerChromeLocale {
+  if (locale === "en") {
+    return "en";
+  }
+  if (locale === "zh-CN") {
+    return "zh";
+  }
+  if (locale === "ja") {
+    return "ja";
+  }
+  if (locale === "ru") {
+    return "ru";
+  }
+  const unsupportedLocale: never = locale;
+  throw new TypeError(
+    `Planner startup locale must be "en", "zh-CN", or "ru"; received ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlannerRetryLabel(locale: PlannerChromeLocale): string {
+  if (locale === "en" || locale === "zh") {
     return "Retry";
   }
-  if (resolvedLocale === "ru") {
+
+  if (locale === "ja") {
+    return "再試行";
+  }
+
+  if (locale === "ru") {
     return "Повторить";
   }
-  throw new TypeError(
-    `Planner startup locale must be "en", "zh-CN", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner retry label because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

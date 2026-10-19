@@ -234,6 +234,43 @@ describe("project map instance panel", () => {
       label: "Farmhouse",
     });
   });
+
+  it("renders Japanese project-map chrome and passes the locale into the map picker", () => {
+    const panelMarkup = renderToStaticMarkup(
+      createElement(ProjectMapInstancePanel, {
+        locale: "ja",
+        activeMapInstanceId: "map-standard-winter",
+        mapInstances: referenceProjectMaps,
+        mapChoices: availablePlannerMaps,
+        projectChoices: destinationProjects,
+        onAddMap: ignoreProjectMapInstanceAction,
+        onCopyMapInstance: ignoreProjectMapInstanceAction,
+        onDeleteMapInstance: ignoreProjectMapInstanceAction,
+        onDuplicateMapInstance: ignoreProjectMapInstanceAction,
+        onMoveMapInstance: ignoreProjectMapInstanceAction,
+        onOpenMapInstance: ignoreProjectMapInstanceAction,
+        onRenameMapInstance: ignoreProjectMapInstanceAction,
+      }),
+    );
+
+    expect(panelMarkup).toContain('aria-label="プロジェクトのマップ"');
+    expect(panelMarkup).toContain("移動先");
+    expect(panelMarkup).toContain("現在");
+    expect(panelMarkup).toContain("開く");
+    expect(panelMarkup).toContain("名前を変更");
+    expect(panelMarkup).toContain("複製");
+    expect(panelMarkup).toContain("プロジェクトにコピー");
+    expect(panelMarkup).toContain("プロジェクトに移動");
+    expect(panelMarkup).toContain("削除");
+    expect(panelMarkup).toContain('aria-label="マップを追加"');
+    expect(panelMarkup).toContain('aria-label="マップの分類"');
+    expect(panelMarkup).toContain("スタンダード");
+    expect(panelMarkup).toContain("Spring Layout");
+    expect(panelMarkup).toContain("Farm");
+    expect(panelMarkup).toContain("Other local project");
+    expect(panelMarkup).not.toContain('aria-label="Project maps"');
+    expect(panelMarkup).not.toContain("Standard Farm");
+  });
 });
 
 function createProjectMapInstance(

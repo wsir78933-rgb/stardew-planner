@@ -18,6 +18,7 @@ const confirmedRussianHomepageDescription =
 const homepageLanguageAlternates = {
   en: "https://stardewvalleyplanner.art",
   "zh-CN": "https://stardewvalleyplanner.art/zh",
+  ja: "https://stardewvalleyplanner.art/ja",
   ru: "https://stardewvalleyplanner.art/ru",
   "x-default": "https://stardewvalleyplanner.art",
 };
@@ -54,9 +55,9 @@ describe("Russian homepage document", () => {
     expect(markup).toContain(confirmedRussianHeadlineAfter);
     expect(markup).toContain(confirmedRussianSupportingCopy);
     expect(markup).toMatch(
-      /<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
+      /<a[^>]*data-homepage-language-option[^>]*href="\/"[^>]*>English<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/zh"[^>]*>中文<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ja"[^>]*>日本語<\/a>[\s\S]*<a[^>]*data-homepage-language-option[^>]*href="\/ru"[^>]*>Русский<\/a>/,
     );
-    expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
+    expect(markup.match(/data-homepage-language-option/g)).toHaveLength(4);
     expect(markup).toContain('href="/blog"');
     expect(markup).toContain('href="/privacy"');
     expect(markup).toContain('href="/terms"');
@@ -72,7 +73,7 @@ describe("Russian homepage document", () => {
     expect(markup).not.toContain('<meta name="keywords"');
   });
 
-  it("publishes the Russian canonical and four homepage alternates", () => {
+  it("publishes the Russian canonical and homepage alternates for Japanese and Russian", () => {
     expect(russianPlannerMetadata.alternates).toEqual({
       canonical: "https://stardewvalleyplanner.art/ru",
       languages: homepageLanguageAlternates,

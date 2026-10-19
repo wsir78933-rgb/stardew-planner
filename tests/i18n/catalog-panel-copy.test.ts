@@ -299,4 +299,110 @@ describe("catalog panel copy", () => {
       'Unavailable catalog search flag must be a boolean; received "true".',
     );
   });
+
+  it("provides Japanese controls without translating caller-supplied item names", () => {
+    const japaneseCopy = getCatalogPanelCopy("ja" as HomepageLocale);
+    const englishCopy = getCatalogPanelCopy("en");
+    const chineseCopy = getCatalogPanelCopy("zh-CN");
+
+    expect(collectCopyKeyPaths(japaneseCopy)).toEqual(collectCopyKeyPaths(englishCopy));
+    expect(japaneseCopy.brand).toBe("Stardew Planner");
+    expect(japaneseCopy.catalogLabel).toBe("アイテムカタログ");
+    expect(japaneseCopy.filterItems).toBe("アイテムを絞り込む");
+    expect(japaneseCopy.all).toBe("すべて");
+    expect(japaneseCopy.placingItem("Oak Chair")).toBe("「Oak Chair」を配置しています");
+    expect(japaneseCopy.fillingItem("Oak Chair")).toBe("「Oak Chair」を塗りつぶしています");
+    expect(japaneseCopy.placeItemHint).toBe("クリックして配置 · Escでキャンセル");
+    expect(japaneseCopy.fillItemHint).toBe("ドラッグして塗りつぶす · Escでキャンセル");
+    expect(japaneseCopy.sceneAvailabilityReason("indoor-only")).toBe(
+      "このアイテムは屋内にのみ配置できます。",
+    );
+    expect(japaneseCopy.sceneAvailabilityReason("outdoor-only")).toBe(
+      "このアイテムは屋外にのみ配置できます。",
+    );
+    expect(japaneseCopy.unavailableGroup(1)).toBe("ここには置けないアイテムが1件あります");
+    expect(japaneseCopy.unavailableGroup(3, true)).toBe(
+      "ここには置けない検索結果が3件あります",
+    );
+    expect(japaneseCopy.unavailableGroup(3)).not.toBe(englishCopy.unavailableGroup(3));
+    expect(japaneseCopy.unavailableGroup(3)).not.toBe(chineseCopy.unavailableGroup(3));
+    expect(japaneseCopy.categories).toEqual({
+      buildings: "建物",
+      crops: "作物",
+      trees: "樹木",
+      equipment: "設備",
+      paths: "柵と小道",
+      lighting: "照明",
+      furniture: "家具",
+      decor: "装飾",
+    });
+    expect(Object.keys(japaneseCopy.filterLabels).sort()).toEqual(
+      [...catalogPanelFilterLabelIds].sort(),
+    );
+    expect(japaneseCopy.filterLabels).toMatchObject({
+      spring: "春",
+      summer: "夏",
+      fall: "秋",
+      winter: "冬",
+      "giant-crops": "巨大な作物",
+      "fruit-trees": "果樹",
+      saplings: "苗木",
+      "wild-trees": "野生の木",
+      machines: "加工設備",
+      flooring: "フローリング",
+      wallpaper: "壁紙",
+    });
+    for (const filterLabelId of catalogPanelFilterLabelIds) {
+      expect(japaneseCopy.filterLabels[filterLabelId]).not.toBe(
+        englishCopy.filterLabels[filterLabelId],
+      );
+      expect(japaneseCopy.filterLabels[filterLabelId]?.length).toBeGreaterThan(0);
+    }
+    expect(japaneseCopy.selectItem("Keg", 2, 1)).toBe(
+      "「Keg」を選択します。2×1マス",
+    );
+    expect(japaneseCopy.cycleVariant("Chair", "Carved")).toBe(
+      "「Chair」のバリエーションを切り替えます。現在はCarvedです",
+    );
+    expect(japaneseCopy.variantLabels).toEqual({
+      Normal: "通常",
+      Moss: "コケ",
+      "No Fruit": "実なし",
+      Fruit: "実あり",
+      "Net 1": "網 1",
+      "Net 2": "網 2",
+      "Net 3": "網 3",
+      None: "網なし",
+      Dry: "未水やり",
+      Watered: "水やり済み",
+      Base: "基本",
+      Pressure: "圧力ノズル",
+      Enricher: "エンリッチ施肥装置",
+      Lit: "点灯",
+      Unlit: "消灯",
+    });
+    expect(() => japaneseCopy.unavailableGroup(-2)).toThrow(
+      "Unavailable catalog item count must be a non-negative integer; received -2.",
+    );
+    expect(() =>
+      japaneseCopy.sceneAvailabilityReason("roof" as "indoor-only"),
+    ).toThrow('Unsupported catalog scene availability. Received: "roof".');
+  });
 });
+
+function collectCopyKeyPaths(value: unknown, prefix = ""): string[] {
+  if (typeof value !== "object" || value === null) {
+    return [];
+  }
+
+  const keyPaths: string[] = [];
+  for (const key of Object.keys(value).sort()) {
+    const keyPath = prefix.length === 0 ? key : `${prefix}.${key}`;
+    keyPaths.push(keyPath);
+    const child = (value as Record<string, unknown>)[key];
+    if (typeof child === "object" && child !== null) {
+      keyPaths.push(...collectCopyKeyPaths(child, keyPath));
+    }
+  }
+  return keyPaths;
+}
