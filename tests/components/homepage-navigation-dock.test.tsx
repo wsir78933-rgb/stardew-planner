@@ -8,6 +8,7 @@ import { homepageCopyByLocale } from "@/src/homepage/homepage-copy";
 
 const englishLocaleHrefByLocale = {
   en: "/",
+  ja: "/ja",
   "zh-CN": "/zh",
 } as const;
 

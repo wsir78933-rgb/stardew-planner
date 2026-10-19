@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import type { PlannerMap } from "../maps/map-catalog";
 import type { ReferenceProjectMap } from "../reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../reference-runtime/reference-project-repository";
 import { PlannerMapPicker } from "./planner-map-picker";
 
 type ProjectMapInstancePanelProperties = Readonly<{
+  locale?: PlannerChromeLocale;
   activeMapInstanceId: string | null;
   mapInstances: readonly ReferenceProjectMap[];
   mapChoices: readonly PlannerMap[];
@@ -27,6 +29,7 @@ type ProjectMapInstancePanelProperties = Readonly<{
 }>;
 
 export function ProjectMapInstancePanel({
+  locale = "en",
   activeMapInstanceId,
   mapInstances,
   mapChoices,
@@ -50,6 +53,7 @@ export function ProjectMapInstancePanel({
     destinationProjectId,
     projectChoices,
   );
+  const panelCopy = readProjectMapInstanceCopy(locale);
 
   function startRenamingMapInstance(mapInstance: ReferenceProjectMap): void {
     setRenamingMapInstanceId(mapInstance.id);
@@ -72,11 +76,11 @@ export function ProjectMapInstancePanel({
   }
 
   return (
-    <section aria-label="Project maps" className="project-map-instance-panel">
-      <h3>Project maps</h3>
+    <section aria-label={panelCopy.projectMaps} className="project-map-instance-panel">
+      <h3>{panelCopy.projectMaps}</h3>
       <div className="project-map-instance-panel__transfer-destination">
         <label>
-          <span>Transfer destination</span>
+          <span>{panelCopy.transferDestination}</span>
           <select
             disabled={projectChoices.length === 0}
             onChange={(changeEvent) =>
@@ -85,7 +89,7 @@ export function ProjectMapInstancePanel({
             value={availableDestinationProjectId}
           >
             {projectChoices.length === 0 ? (
-              <option value="">Create another local project first</option>
+              <option value="">{panelCopy.createProjectFirst}</option>
             ) : (
               projectChoices.map((projectChoice) => (
                 <option key={projectChoice.id} value={projectChoice.id}>
@@ -110,12 +114,12 @@ export function ProjectMapInstancePanel({
               <div className="project-map-instance-panel__instance-summary">
                 <strong>{mapInstance.label}</strong>
                 <span>{mapInstance.mapFile}</span>
-                {isActiveMapInstance ? <span>Current</span> : null}
+                {isActiveMapInstance ? <span>{panelCopy.current}</span> : null}
               </div>
               {isRenamingMapInstance ? (
                 <div className="project-map-instance-panel__rename-form">
                   <label>
-                    <span className="sr-only">New map name</span>
+                    <span className="sr-only">{panelCopy.newMapName}</span>
                     <input
                       onChange={(changeEvent) =>
                         setRequestedMapInstanceName(changeEvent.target.value)
@@ -127,13 +131,13 @@ export function ProjectMapInstancePanel({
                     onClick={() => submitMapInstanceRename(mapInstance.id)}
                     type="button"
                   >
-                    Save name
+                    {panelCopy.saveName}
                   </button>
                   <button
                     onClick={() => setRenamingMapInstanceId(null)}
                     type="button"
                   >
-                    Cancel rename
+                    {panelCopy.cancelRename}
                   </button>
                 </div>
               ) : (
@@ -142,19 +146,19 @@ export function ProjectMapInstancePanel({
                     onClick={() => onOpenMapInstance(mapInstance.id)}
                     type="button"
                   >
-                    Open
+                    {panelCopy.open}
                   </button>
                   <button
                     onClick={() => startRenamingMapInstance(mapInstance)}
                     type="button"
                   >
-                    Rename
+                    {panelCopy.rename}
                   </button>
                   <button
                     onClick={() => onDuplicateMapInstance(mapInstance.id)}
                     type="button"
                   >
-                    Duplicate
+                    {panelCopy.duplicate}
                   </button>
                   <button
                     disabled={projectChoices.length === 0}
@@ -166,7 +170,7 @@ export function ProjectMapInstancePanel({
                     }
                     type="button"
                   >
-                    Copy to project
+                    {panelCopy.copyToProject}
                   </button>
                   <button
                     disabled={projectChoices.length === 0}
@@ -178,13 +182,13 @@ export function ProjectMapInstancePanel({
                     }
                     type="button"
                   >
-                    Move to project
+                    {panelCopy.moveToProject}
                   </button>
                   <button
                     onClick={() => onDeleteMapInstance(mapInstance.id)}
                     type="button"
                   >
-                    Delete
+                    {panelCopy.deleteMap}
                   </button>
                 </div>
               )}
@@ -192,9 +196,10 @@ export function ProjectMapInstancePanel({
           );
         })}
       </ul>
-      <section aria-label="Add map" className="project-map-instance-panel__add-map">
-        <h3>Add map</h3>
+      <section aria-label={panelCopy.addMap} className="project-map-instance-panel__add-map">
+        <h3>{panelCopy.addMap}</h3>
         <PlannerMapPicker
+          locale={locale}
           mapIdDataAttribute="data-project-add-map-id"
           maps={mapChoices}
           onMapSelect={onAddMap}
@@ -218,4 +223,70 @@ export function deriveAvailableDestinationProjectId(
   }
 
   return projectChoices[0]?.id ?? "";
+}
+
+type ProjectMapInstanceCopy = Readonly<{
+  projectMaps: string;
+  transferDestination: string;
+  createProjectFirst: string;
+  current: string;
+  newMapName: string;
+  saveName: string;
+  cancelRename: string;
+  open: string;
+  rename: string;
+  duplicate: string;
+  copyToProject: string;
+  moveToProject: string;
+  deleteMap: string;
+  addMap: string;
+}>;
+
+const englishProjectMapInstanceCopy = {
+  projectMaps: "Project maps",
+  transferDestination: "Transfer destination",
+  createProjectFirst: "Create another local project first",
+  current: "Current",
+  newMapName: "New map name",
+  saveName: "Save name",
+  cancelRename: "Cancel rename",
+  open: "Open",
+  rename: "Rename",
+  duplicate: "Duplicate",
+  copyToProject: "Copy to project",
+  moveToProject: "Move to project",
+  deleteMap: "Delete",
+  addMap: "Add map",
+} as const satisfies ProjectMapInstanceCopy;
+
+const japaneseProjectMapInstanceCopy = {
+  projectMaps: "プロジェクトのマップ",
+  transferDestination: "移動先",
+  createProjectFirst: "先に別のローカルプロジェクトを作成してください",
+  current: "現在",
+  newMapName: "新しいマップ名",
+  saveName: "名前を保存",
+  cancelRename: "名前の変更をやめる",
+  open: "開く",
+  rename: "名前を変更",
+  duplicate: "複製",
+  copyToProject: "プロジェクトにコピー",
+  moveToProject: "プロジェクトに移動",
+  deleteMap: "削除",
+  addMap: "マップを追加",
+} as const satisfies ProjectMapInstanceCopy;
+
+function readProjectMapInstanceCopy(locale: PlannerChromeLocale): ProjectMapInstanceCopy {
+  if (locale === "en" || locale === "zh") {
+    return englishProjectMapInstanceCopy;
+  }
+
+  if (locale === "ja") {
+    return japaneseProjectMapInstanceCopy;
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read project map instance copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

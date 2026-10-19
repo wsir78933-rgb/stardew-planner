@@ -1,6 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 export type PlannerRequiredCatalogStatusState =
   | Readonly<{ kind: "loading" }>
@@ -28,10 +30,12 @@ export function PlannerRequiredCatalogGate({
 export function PlannerRequiredCatalogStatus({
   state,
 }: Readonly<{ state: PlannerRequiredCatalogStatusState }>) {
+  const locale = usePlannerChromeLocale();
+
   if (state.kind === "loading") {
     return (
       <p aria-live="polite" role="status">
-        Loading placed item catalog…
+        {readPlacedCatalogLoadingMessage(locale)}
       </p>
     );
   }
@@ -41,9 +45,39 @@ export function PlannerRequiredCatalogStatus({
       <p>{state.message}</p>
       {state.onRetry === undefined ? null : (
         <button onClick={state.onRetry} type="button">
-          Retry
+          {readPlacedCatalogRetryLabel(locale)}
         </button>
       )}
     </div>
+  );
+}
+
+function readPlacedCatalogLoadingMessage(locale: PlannerChromeLocale): string {
+  if (locale === "en" || locale === "zh") {
+    return "Loading placed item catalog…";
+  }
+
+  if (locale === "ja") {
+    return "配置済みアイテムのカタログを読み込んでいます…";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read placed catalog loading message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readPlacedCatalogRetryLabel(locale: PlannerChromeLocale): string {
+  if (locale === "en" || locale === "zh") {
+    return "Retry";
+  }
+
+  if (locale === "ja") {
+    return "再試行";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read placed catalog retry label because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

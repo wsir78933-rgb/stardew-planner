@@ -89,7 +89,9 @@ describe("removed public guide pages", () => {
     const llmsText = readFileSync(join(outputDirectory, "llms.txt"), "utf8");
     const exportedHtmlFiles = listHtmlFiles(outputDirectory);
 
-    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(64);
+    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(65);
+    expect(sitemapXml).toContain("<loc>https://stardewvalleyplanner.art/ja</loc>");
+    expect(sitemapXml).not.toContain("https://stardewvalleyplanner.art/ja/");
 
     for (const removedLocalizedPath of removedLocalizedPaths) {
       const removedStaticPagePath = join(

@@ -12,7 +12,8 @@ import type {
   PlannerWorkspaceStartup,
 } from "./planner-workspace";
 import { PlannerStartupStatus } from "./planner-startup-status";
-import type { HomepageLocale } from "../homepage/homepage-locale";
+import { PlannerChromeLocaleProvider } from "@/src/i18n/planner-chrome-locale";
+import { readPlannerChromeLocale, type HomepageLocale } from "../homepage/homepage-locale";
 
 export function createPlannerWorkspaceModuleReadyBoundary(
   LoadedPlannerWorkspace: ComponentType<PlannerWorkspaceProperties>,
@@ -134,18 +135,37 @@ export function ReactPlannerHost({
     );
   }, [performanceMarker]);
 
-  if (plannerHostStartup === null) {
-    return (
-      <PlannerStartupStatus
-        state={{ kind: "loading", message: "Loading planner…" }}
-      />
-    );
+  const plannerHostContent = plannerHostStartup === null ? (
+    <PlannerStartupStatus
+      state={{ kind: "loading", message: readPlannerHostLoadingMessage(locale) }}
+    />
+  ) : (
+    <ReactPlannerHostWorkspace
+      locale={locale}
+      onAlignPlanner={onAlignPlanner}
+      performanceMarker={performanceMarker}
+      plannerHostStartup={plannerHostStartup}
+    />
+  );
+
+  return (
+    <PlannerChromeLocaleProvider locale={readPlannerChromeLocale(locale)}>
+      {plannerHostContent}
+    </PlannerChromeLocaleProvider>
+  );
+}
+
+function readPlannerHostLoadingMessage(locale: HomepageLocale): string {
+  if (locale === "ja") {
+    return "プランナーを読み込んでいます…";
   }
 
-  return <ReactPlannerHostWorkspace
-    locale={locale}
-    onAlignPlanner={onAlignPlanner}
-    performanceMarker={performanceMarker}
-    plannerHostStartup={plannerHostStartup}
-  />;
+  if (locale === "en" || locale === "zh-CN") {
+    return "Loading planner…";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner host loading message because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

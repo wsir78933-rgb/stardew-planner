@@ -70,9 +70,9 @@ export function HomepageNavigationDock({
 
   return (
     <SiteNavigationDock
-      blogHref={getLocalizedPublicPath(currentLocale, "/blog")}
+      blogHref={readHomepageBlogHref(currentLocale)}
       blogLabel={navigationCopy.blogLabel}
-      brandHref={getLocalizedPublicPath(currentLocale, "/")}
+      brandHref={readHomepageBrandHref(currentLocale)}
       brandLabel={navigationCopy.productName}
       currentLocale={currentLocale}
       languageLabel={navigationCopy.languageLabel}
@@ -82,5 +82,35 @@ export function HomepageNavigationDock({
       plannerLabel={navigationCopy.plannerActionLabel}
       surface="homepage"
     />
+  );
+}
+
+function readHomepageBrandHref(currentLocale: HomepageLocale): string {
+  if (currentLocale === "ja") {
+    return "/ja";
+  }
+
+  if (currentLocale === "en" || currentLocale === "zh-CN") {
+    return getLocalizedPublicPath(currentLocale, "/");
+  }
+
+  const unsupportedLocale: never = currentLocale;
+  throw new Error(
+    `Cannot build homepage brand href because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readHomepageBlogHref(currentLocale: HomepageLocale): string {
+  if (currentLocale === "ja") {
+    return "/blog";
+  }
+
+  if (currentLocale === "en" || currentLocale === "zh-CN") {
+    return getLocalizedPublicPath(currentLocale, "/blog");
+  }
+
+  const unsupportedLocale: never = currentLocale;
+  throw new Error(
+    `Cannot build homepage blog href because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

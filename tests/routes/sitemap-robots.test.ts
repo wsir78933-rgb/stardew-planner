@@ -76,11 +76,13 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
   const expectedIndexablePublicRouteCount = localizedPublicRouteEntries.length;
+  const japaneseHomepageUrl = createCanonicalUrl("/ja");
+  const expectedSitemapUrlCount = expectedIndexablePublicRouteCount + 1;
 
   expect(
     sitemapUrlCount,
-    `Sitemap URL count mismatch. Received: ${sitemapUrlCount}. Expected from identities/indexable routes: ${expectedIndexablePublicRouteCount}.`,
-  ).toBe(expectedIndexablePublicRouteCount);
+    `Sitemap URL count mismatch. Received: ${sitemapUrlCount}. Expected from identities/indexable routes plus the Japanese homepage: ${expectedSitemapUrlCount}.`,
+  ).toBe(expectedSitemapUrlCount);
   expect(localizedPublicRouteEntries).toHaveLength(expectedIndexablePublicRouteCount);
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
@@ -93,6 +95,8 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   expect(sitemapText).toContain("/privacy");
   expect(sitemapText).toContain("/terms");
   expect(sitemapText).not.toContain("/contact");
+  expect(sitemapText).toContain(`<loc>${japaneseHomepageUrl}</loc>`);
+  expect(sitemapText).not.toContain("https://stardewvalleyplanner.art/ja/");
 
   for (const pathname of expectedBlogSitemapPathnames) {
     expect(sitemapText).toContain(

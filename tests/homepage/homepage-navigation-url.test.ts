@@ -22,6 +22,7 @@ describe("homepage navigation URLs", () => {
         localeHrefByLocale: {
           en: expectedEnglishHref,
           "zh-CN": expectedChineseHref,
+          ja: `/ja?farmType=${farmType}#planner`,
         },
         plannerHref: "#planner",
       });
@@ -44,6 +45,7 @@ describe("homepage navigation URLs", () => {
         localeHrefByLocale: {
           en: "/#planner",
           "zh-CN": "/zh#planner",
+          ja: "/ja#planner",
         },
         plannerHref: "#planner",
       });
@@ -61,6 +63,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/",
         "zh-CN": "/zh",
+        ja: "/ja",
       },
       plannerHref: "#planner",
     });
@@ -85,6 +88,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/?farmType=forest",
         "zh-CN": "/zh?farmType=forest",
+        ja: "/ja?farmType=forest",
       },
       plannerHref: "#planner",
     });

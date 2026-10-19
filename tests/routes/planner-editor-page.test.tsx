@@ -188,7 +188,7 @@ describe("planner editor page", () => {
       const homepageContentProps = {
         copy: homepageCopyByLocale[currentLocale],
         currentLocale,
-        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        localeHrefByLocale: { en: "/", ja: "/ja", "zh-CN": "/zh" },
         plannerHref:
           currentLocale === "en" ? "/#planner" : "/zh#planner",
         plannerWorkspace: createElement("div", {
@@ -213,7 +213,7 @@ describe("planner editor page", () => {
         createElement(HomepageContent, {
           copy: homepageCopy,
           currentLocale,
-          localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+          localeHrefByLocale: { en: "/", ja: "/ja", "zh-CN": "/zh" },
           plannerHref: currentLocale === "en" ? "/#planner" : "/zh#planner",
           plannerWorkspace: createElement("div", {
             "data-test-planner-workspace": true,
@@ -511,7 +511,7 @@ describe("planner editor page", () => {
       const homepageContentProps = {
         copy: homepageCopyByLocale[currentLocale],
         currentLocale,
-        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        localeHrefByLocale: { en: "/", ja: "/ja", "zh-CN": "/zh" },
         plannerHref:
           currentLocale === "en" ? "/#planner" : "/zh#planner",
         plannerWorkspace: null,
@@ -586,7 +586,7 @@ describe("planner editor page", () => {
       const homepageContentProps = {
         copy: homepageCopyByLocale[currentLocale],
         currentLocale,
-        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        localeHrefByLocale: { en: "/", ja: "/ja", "zh-CN": "/zh" },
         plannerHref:
           currentLocale === "en" ? "/#planner" : "/zh#planner",
         plannerWorkspace: null,
@@ -666,6 +666,50 @@ describe("planner editor page", () => {
     expect(homepageMarkup).toContain("打开规划器");
     expect(homepageMarkup).toMatch(
       /<a[^>]*href="#planner"[^>]*>开始规划<\/a>/,
+    );
+  });
+
+  it("sends the Japanese homepage language menu and footer to the existing /ja routes", () => {
+    const homepageCopy = homepageCopyByLocale.ja;
+    const homepageMarkup = renderToStaticMarkup(
+      createElement(HomepageContent, {
+        copy: homepageCopy,
+        currentLocale: "ja",
+        localeHrefByLocale: { en: "/", ja: "/ja", "zh-CN": "/zh" },
+        plannerHref: "/ja#planner",
+        plannerWorkspace: null,
+      }),
+    );
+
+    expect(homepageMarkup).toMatch(
+      /<a[^>]*data-homepage-language-option[^>]*href="\/ja"[^>]*>日本語<\/a>/,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/ja">${homepageCopy.footer.planner.home}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/ja#capabilities">${homepageCopy.footer.explore.capabilities}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/ja#faq">${homepageCopy.footer.explore.faq}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/blog">${homepageCopy.footer.explore.blog}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/privacy">${homepageCopy.footer.legal.privacy}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/terms">${homepageCopy.footer.legal.terms}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      `<a href="/contact">${homepageCopy.footer.legal.contact}</a>`,
+    );
+    expect(homepageMarkup).toContain(
+      'aria-label="X（Twitter）で @wsir1139 をフォロー"',
+    );
+    expect(homepageMarkup).toContain(
+      'aria-label="Stardew Valley Planner の Discord に参加"',
     );
   });
 });

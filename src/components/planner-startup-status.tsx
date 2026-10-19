@@ -1,3 +1,9 @@
+"use client";
+
+import type { ReactElement } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
+
 export type PlannerStartupStatusState =
   | {
       kind: "loading";
@@ -18,7 +24,9 @@ export interface PlannerStartupStatusProps {
 
 export function PlannerStartupStatus({
   state,
-}: PlannerStartupStatusProps): React.ReactElement | null {
+}: PlannerStartupStatusProps): ReactElement | null {
+  const locale = usePlannerChromeLocale();
+
   if (state.kind === "interactive") {
     return null;
   }
@@ -39,8 +47,23 @@ export function PlannerStartupStatus({
     <div className="planner-startup-status" role="alert">
       <span>{state.message}</span>
       <button onClick={state.onRetry} type="button">
-        Retry
+        {readPlannerRetryLabel(locale)}
       </button>
     </div>
+  );
+}
+
+function readPlannerRetryLabel(locale: PlannerChromeLocale): string {
+  if (locale === "en" || locale === "zh") {
+    return "Retry";
+  }
+
+  if (locale === "ja") {
+    return "再試行";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read planner retry label because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

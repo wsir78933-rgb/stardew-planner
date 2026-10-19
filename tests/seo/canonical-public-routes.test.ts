@@ -1,5 +1,8 @@
 import { expect, it } from "vitest";
-import { canonicalPublicPaths } from "../../src/seo/canonical-public-routes";
+import {
+  canonicalPublicPaths,
+  japaneseHomepagePathname,
+} from "../../src/seo/canonical-public-routes";
 
 const expectedBlogCanonicalPaths = [
   "/blog",
@@ -47,4 +50,6 @@ it("derives the remaining content and legal paths without planner query URLs", (
   expect(canonicalPublicPaths.every((pathname) => !/[?#]/.test(pathname))).toBe(
     true,
   );
+  expect(japaneseHomepagePathname).toBe("/ja");
+  expect(canonicalPublicPaths).not.toContain(japaneseHomepagePathname);
 });

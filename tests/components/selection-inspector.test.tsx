@@ -1,8 +1,11 @@
-import { createElement } from "react";
+import { createElement, type ReactElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { paintableChestPalette, type CatalogItem } from "../../src/catalog";
+import { getCatalogSidebarDisplayName } from "../../src/catalog/catalog-sidebar-model";
 import { SelectionInspector } from "../../src/components/selection-inspector";
-import { paintableChestPalette } from "../../src/catalog";
+import type { PlannerChromeLocale } from "../../src/homepage/homepage-locale";
+import { PlannerChromeLocaleProvider } from "../../src/i18n/planner-chrome-locale";
 
 describe("selection inspector", () => {
   it("keeps the frozen chest palette order and distinct default white values", () => {
@@ -303,4 +306,261 @@ describe("selection inspector", () => {
     expect(markup).not.toContain("Cycle selected item appearance");
     expect(markup).not.toContain('aria-label="Copy selected placement"');
   });
+
+  it("shows Japanese titles for a fish pond, chest, and crop through the normalized catalog name", () => {
+    const fishPondMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onBuildingWaterColorChange: () => undefined,
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: true,
+        canPaint: false,
+        canSetWaterColor: true,
+        catalogDisplayName: "Fish Pond",
+        entityName: "Fish Pond",
+        kind: "building",
+        waterColor: 16_391_710,
+      },
+    });
+    const chestMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      onNightLightStateChange: () => undefined,
+      onTintChange: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: true,
+        catalogDisplayName: "Chest",
+        entityName: "Chest",
+        isNightLight: false,
+        kind: "item",
+        nightLightState: undefined,
+        tintColor: "#ffffff",
+      },
+    });
+    const parsnipMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        catalogDisplayName: "Parsnip",
+        entityName: "Parsnip",
+        kind: "crop",
+      },
+    });
+
+    expect(readSelectionTitle(fishPondMarkup)).toBe("魚のいる池");
+    expect(fishPondMarkup).toContain('aria-label="選択した魚のいる池の水の色"');
+    expect(fishPondMarkup).toContain('value="16391710" selected=""');
+    expect(fishPondMarkup).toContain(">伝説級<");
+    expect(readSelectionTitle(chestMarkup)).toBe("箱");
+    expect(chestMarkup).toContain('aria-label="選択したチェストの色"');
+    expect(chestMarkup).toContain(">青<");
+    expect(readSelectionTitle(parsnipMarkup)).toBe("パースニップ");
+    expect(parsnipMarkup).toContain('aria-label="選択した配置をコピー"');
+    expect(parsnipMarkup).toContain('aria-label="選択した配置を削除"');
+  });
+
+  it("keeps English and Chinese selection titles and uses the normalized name only for Japanese", () => {
+    const suffixedOakTree = createSuffixedOakTreeCatalogItem();
+    const oakTreeDisplayName = getCatalogSidebarDisplayName(suffixedOakTree);
+    expect(oakTreeDisplayName).toBe("Oak Tree");
+
+    const englishMarkup = renderSelectionInspector("en", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        catalogDisplayName: oakTreeDisplayName,
+        entityName: suffixedOakTree.name,
+        kind: "building",
+      },
+    });
+    const chineseMarkup = renderSelectionInspector("zh", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        catalogDisplayName: "Rarecrow 2",
+        entityName: "Rarecrow",
+        kind: "building",
+      },
+    });
+    const japaneseMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        catalogDisplayName: oakTreeDisplayName,
+        entityName: suffixedOakTree.name,
+        kind: "building",
+      },
+    });
+    const ownedNameMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        entityName: "My Custom Shed",
+        kind: "building",
+      },
+    });
+    const multipleMarkup = renderSelectionInspector("ja", {
+      kind: "multiple",
+      onCopy: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: { count: 3 },
+    });
+
+    expect(readSelectionTitle(englishMarkup)).toBe("Oak Tree (Normal)");
+    expect(englishMarkup).toContain('aria-label="Copy selected placement"');
+    expect(readSelectionTitle(chineseMarkup)).toBe("Rarecrow");
+    expect(chineseMarkup).toContain('aria-label="Copy selected placement"');
+    expect(readSelectionTitle(japaneseMarkup)).toBe("オークの木");
+    expect(japaneseMarkup).not.toContain("(Normal)");
+    expect(readSelectionTitle(ownedNameMarkup)).toBe("My Custom Shed");
+    expect(readSelectionTitle(multipleMarkup)).toBe("3件の配置を選択中");
+  });
+
+  it("shows Japanese for newly covered catalog names and throws when a resolved name is missing", () => {
+    const tallTorchMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      onNightLightStateChange: () => undefined,
+      onTintChange: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        catalogDisplayName: "Tall Torch",
+        entityName: "Tall Torch",
+        isNightLight: false,
+        kind: "item",
+        nightLightState: undefined,
+        tintColor: "#ffffff",
+      },
+    });
+    const woodChairMarkup = renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      onNightLightStateChange: () => undefined,
+      onTintChange: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        catalogDisplayName: "Wood Chair 2",
+        entityName: "Wood Chair 2",
+        isNightLight: false,
+        kind: "item",
+        nightLightState: undefined,
+        tintColor: "#ffffff",
+      },
+    });
+    const englishWoodChairMarkup = renderSelectionInspector("en", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      onNightLightStateChange: () => undefined,
+      onTintChange: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        canPaint: false,
+        catalogDisplayName: "Wood Chair 2",
+        entityName: "Wood Chair 2",
+        isNightLight: false,
+        kind: "item",
+        nightLightState: undefined,
+        tintColor: "#ffffff",
+      },
+    });
+
+    expect(readSelectionTitle(tallTorchMarkup)).toBe("ロングトーチ");
+    expect(readSelectionTitle(woodChairMarkup)).toBe("木のイス 2");
+    expect(tallTorchMarkup).toContain('aria-label="選択した配置をコピー"');
+    expect(readSelectionTitle(englishWoodChairMarkup)).toBe("Wood Chair 2");
+    expect(() => renderSelectionInspector("ja", {
+      kind: "single",
+      onCopy: () => undefined,
+      onCycleAppearance: () => undefined,
+      onDelete: () => undefined,
+      onDismiss: () => undefined,
+      selection: {
+        canCycleAppearance: false,
+        catalogDisplayName: "Not A Catalog Display",
+        entityName: "Not A Catalog Display",
+        kind: "crop",
+      },
+    })).toThrow(
+      'Japanese catalog display name is missing for "Not A Catalog Display". Received: "Not A Catalog Display".',
+    );
+  });
 });
+
+function renderSelectionInspector(
+  locale: PlannerChromeLocale,
+  selectionInspectorProperties: Parameters<typeof SelectionInspector>[0],
+): string {
+  const inspector: ReactElement = createElement(
+    PlannerChromeLocaleProvider,
+    {
+      locale,
+      children: createElement(SelectionInspector, selectionInspectorProperties),
+    },
+  );
+  return renderToStaticMarkup(inspector);
+}
+
+function readSelectionTitle(markup: string): string {
+  const titleMatch = markup.match(
+    /<span class="pill-name selection-inspector__name">([^<]*)<\/span>/,
+  );
+  if (titleMatch?.[1] === undefined) {
+    throw new Error(`Selection inspector markup has no title span. Received: ${markup}`);
+  }
+  return titleMatch[1];
+}
+
+function createSuffixedOakTreeCatalogItem(): CatalogItem {
+  return {
+    id: "placeable:oak-tree-normal-source",
+    name: "Oak Tree (Normal)",
+    category: "placeable",
+    tileSize: { width: 1, height: 1 },
+    textureLocalPath: "/test.png",
+    sprite: { kind: "source-rect", x: 0, y: 0, width: 16, height: 16 },
+    allowedTools: ["cursor", "erase"],
+  };
+}

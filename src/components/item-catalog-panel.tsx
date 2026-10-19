@@ -23,6 +23,7 @@ import {
 } from "react";
 import { Select } from "radix-ui";
 import {
+  catalogSidebarCategories,
   createDefaultCatalogItemPresentationChoice,
   getBuildingThumbnailCompositionLayers,
   getCatalogSidebarFilters,
@@ -50,6 +51,7 @@ import {
   type PlannerTextureFrame,
 } from "../rendering/planner-texture-frame-resolution";
 import type { HomepageLocale } from "../homepage/homepage-locale";
+import { readLocalizedCatalogItemLabel } from "../homepage/japanese-game-display-labels";
 import {
   getCatalogPanelCopy,
   type CatalogPanelCopy,
@@ -350,11 +352,12 @@ export function ItemCatalogPanel({
     : getCatalogFilterOptionLabel(activeCatalogFilter, copy);
   const visibleCatalogItems = mapVisibleCatalogItems === null
     ? null
-    : getCatalogSidebarItems(
+    : readLocalizedCatalogSidebarItems(
         mapVisibleCatalogItems,
         category,
         searchQuery,
         activeFilterId,
+        locale,
       );
   const visibleCatalogItemCount = visibleCatalogItems?.length ?? null;
 
@@ -815,7 +818,8 @@ export function CatalogItemGrid({
       catalogItem,
       catalogPresentationChoicesByItemId,
     );
-    const displayName = getCatalogSidebarDisplayName(catalogItem);
+    const englishDisplayName = getCatalogSidebarDisplayName(catalogItem);
+    const displayName = readLocalizedCatalogItemLabel(locale, englishDisplayName);
     const unavailableReason = availability === "available"
       ? null
       : copy.sceneAvailabilityReason(availability);
@@ -1730,6 +1734,89 @@ export function getReadyCatalogItems(
   return fullCatalogLoadState.kind === "ready"
     ? fullCatalogLoadState.catalog.items
     : null;
+}
+
+function readLocalizedCatalogSidebarItems(
+  catalogItems: readonly CatalogItem[],
+  category: EditorCatalogCategory,
+  searchQuery: string,
+  filterId: string,
+  locale: HomepageLocale,
+): CatalogItem[] {
+  const englishMatchedCatalogItems = getCatalogSidebarItems(
+    catalogItems,
+    category,
+    searchQuery,
+    filterId,
+  );
+  if (locale !== "ja" || searchQuery.trim().length === 0) {
+    return englishMatchedCatalogItems;
+  }
+
+  const japaneseSearchText = searchQuery.trim().toLowerCase();
+  const englishMatchedCatalogItemIds = new Set(
+    englishMatchedCatalogItems.map((catalogItem) => catalogItem.id),
+  );
+  const matchedCatalogItems = listSearchableCatalogSidebarItems(catalogItems)
+    .filter((catalogItem) => {
+      if (englishMatchedCatalogItemIds.has(catalogItem.id)) {
+        return true;
+      }
+      const englishDisplayName = getCatalogSidebarDisplayName(catalogItem);
+      const japaneseDisplayName = readLocalizedCatalogItemLabel(
+        "ja",
+        englishDisplayName,
+      );
+      return japaneseDisplayName.toLowerCase().includes(japaneseSearchText);
+    });
+
+  return appendCatalogItemsMissingById(
+    matchedCatalogItems,
+    englishMatchedCatalogItems,
+  );
+}
+
+function listSearchableCatalogSidebarItems(
+  catalogItems: readonly CatalogItem[],
+): CatalogItem[] {
+  const searchableCatalogItems: CatalogItem[] = [];
+  const seenCatalogItemIds = new Set<string>();
+
+  for (const sidebarCategory of catalogSidebarCategories) {
+    for (const catalogItem of getCatalogSidebarItems(
+      catalogItems,
+      sidebarCategory,
+      "",
+      "all",
+    )) {
+      if (seenCatalogItemIds.has(catalogItem.id)) {
+        continue;
+      }
+      seenCatalogItemIds.add(catalogItem.id);
+      searchableCatalogItems.push(catalogItem);
+    }
+  }
+
+  return searchableCatalogItems;
+}
+
+function appendCatalogItemsMissingById(
+  matchedCatalogItems: readonly CatalogItem[],
+  requiredCatalogItems: readonly CatalogItem[],
+): CatalogItem[] {
+  const matchedCatalogItemIds = new Set(
+    matchedCatalogItems.map((catalogItem) => catalogItem.id),
+  );
+  const combinedCatalogItems = [...matchedCatalogItems];
+
+  for (const catalogItem of requiredCatalogItems) {
+    if (matchedCatalogItemIds.has(catalogItem.id)) {
+      continue;
+    }
+    combinedCatalogItems.push(catalogItem);
+  }
+
+  return combinedCatalogItems;
 }
 
 export function getCatalogItemsForPanel(

@@ -1,5 +1,6 @@
 "use client";
 
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import {
   editorToolAvailability,
   type EditorTool,
@@ -9,7 +10,7 @@ import {
   type PlannerReferenceIconName,
 } from "./planner-reference-icon";
 
-type EditorToolbarLocale = "en" | "zh";
+type EditorToolbarLocale = PlannerChromeLocale;
 
 type EditorToolbarProperties = Readonly<{
   tool: EditorTool | null;
@@ -88,7 +89,36 @@ const editorToolbarCopyByLocale = {
     undo: "撤销",
     redo: "重做",
   },
-} as const;
+  ja: {
+    toolbar: "編集ツール",
+    select: "選択",
+    multi: "複数選択",
+    fill: "塗りつぶし",
+    erase: "消去",
+    selectTooltip: "アイテムを選択して移動（V）",
+    multiTooltip: "クリックまたはドラッグで複数選択（M）",
+    fillTooltip: "矩形をドラッグして配置（F）",
+    eraseTooltip: "クリックまたは矩形ドラッグで消去（E）",
+    zoom: "ズーム",
+    zoomTooltip: "クリックでホイールズームのオン／オフを切り替え、プランナーを画面に合わせます。上にスクロールで拡大、下にスクロールで縮小",
+    undo: "元に戻す",
+    redo: "やり直す",
+  },
+} as const satisfies Record<EditorToolbarLocale, {
+  toolbar: string;
+  select: string;
+  multi: string;
+  fill: string;
+  erase: string;
+  selectTooltip: string;
+  multiTooltip: string;
+  fillTooltip: string;
+  eraseTooltip: string;
+  zoom: string;
+  zoomTooltip: string;
+  undo: string;
+  redo: string;
+}>;
 
 export function getEditorToolbarToolSelectionAfterClick(
   requestedTool: EditorToolbarControl["tool"],
@@ -108,7 +138,7 @@ export function EditorToolbar({
   locale = "en",
   isToolDisabled,
 }: EditorToolbarProperties) {
-  const editorToolbarCopy = editorToolbarCopyByLocale[locale];
+  const editorToolbarCopy = readEditorToolbarCopy(locale);
   const renderToolButton = (editorToolbarControl: EditorToolbarControl) => {
     const isSelected = tool === editorToolbarControl.tool;
     const isAvailable =
@@ -164,7 +194,7 @@ export function EditorToolbar({
           </button>
         </div>
         <span aria-hidden="true" className="separator editor-toolbar__divider" />
-        <div aria-label="History" className="tool-group editor-toolbar__history-group" role="group">
+        <div aria-label={readHistoryGroupLabel(locale)} className="tool-group editor-toolbar__history-group" role="group">
           <button
             aria-label={editorToolbarCopy.undo}
             className="tool-btn editor-toolbar__button editor-toolbar__history-button"
@@ -221,6 +251,32 @@ function getEditorToolbarButtonClassName(
   return className + (isSelected ? " active" : "");
 }
 
+function readEditorToolbarCopy(locale: EditorToolbarLocale) {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
+    return editorToolbarCopyByLocale[locale];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read editor toolbar copy because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readHistoryGroupLabel(locale: EditorToolbarLocale): string {
+  if (locale === "en" || locale === "zh") {
+    return "History";
+  }
+
+  if (locale === "ja") {
+    return "履歴";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read history group label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
 function getHistoryTitle(
   locale: EditorToolbarLocale,
   action: "undo" | "redo",
@@ -229,5 +285,16 @@ function getHistoryTitle(
     return action === "undo" ? "撤销（Ctrl+Z）" : "重做（Ctrl+Y）";
   }
 
-  return action === "undo" ? "Undo (Ctrl+Z)" : "Redo (Ctrl+Y)";
+  if (locale === "en") {
+    return action === "undo" ? "Undo (Ctrl+Z)" : "Redo (Ctrl+Y)";
+  }
+
+  if (locale === "ja") {
+    return action === "undo" ? "元に戻す（Ctrl+Z）" : "やり直す（Ctrl+Y）";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read history title because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }

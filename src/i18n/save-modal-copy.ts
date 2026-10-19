@@ -1,5 +1,21 @@
 import type { HomepageLocale } from "../homepage/homepage-locale";
-import { isHomepageLocale } from "../homepage/homepage-locale";
+
+const saveModalLocales = ["en", "zh-CN", "ja"] as const;
+
+type SaveModalLocale = (typeof saveModalLocales)[number];
+
+function readSaveModalLocale(locale: HomepageLocale): SaveModalLocale {
+  const localeValue: string = locale;
+  for (const saveModalLocale of saveModalLocales) {
+    if (localeValue === saveModalLocale) {
+      return saveModalLocale;
+    }
+  }
+
+  throw new Error(
+    `Unsupported save-modal locale. Received: ${JSON.stringify(localeValue)}.`,
+  );
+}
 
 export type SaveModalBranch = "farm-summary" | "game-save" | "projects" | "tools";
 export type FarmSummarySeason = "fall" | "spring" | "summer" | "winter";
@@ -246,6 +262,29 @@ function createSeasonFormatter(
   seasonNames: Readonly<Record<FarmSummarySeason, string>>,
 ): (season: FarmSummarySeason) => string {
   return (season) => seasonNames[season];
+}
+
+function readJapaneseSeasonName(season: FarmSummarySeason): string {
+  if (season === "spring") return "春";
+  if (season === "summer") return "夏";
+  if (season === "fall") return "秋";
+  if (season === "winter") return "冬";
+  const unsupportedSeason: never = season;
+  throw new TypeError(
+    `Unsupported farm summary season. Received: ${JSON.stringify(unsupportedSeason)}.`,
+  );
+}
+
+function readJapaneseCloudProjectStatus(status: CloudProjectSyncStatus): string {
+  if (status === "none") return "この端末のみ";
+  if (status === "pending") return "同期待ち";
+  if (status === "synced") return "同期済み";
+  if (status === "conflict") return "選択が必要";
+  if (status === "error") return "同期失敗";
+  const unsupportedStatus: never = status;
+  throw new TypeError(
+    `Unsupported cloud project sync status. Received: ${JSON.stringify(unsupportedStatus)}.`,
+  );
 }
 
 const saveModalCopyByLocale = {
@@ -658,14 +697,209 @@ const saveModalCopyByLocale = {
       title: "农场摘要",
     },
   },
-} as const satisfies Readonly<Record<HomepageLocale, SaveModalCopy>>;
+  ja: {
+    saveTools: {
+      branchLoadFailure: (branch: SaveModalBranch, rawError: string) =>
+        `保存ツールの分岐 ${JSON.stringify(branch)} を読み込めません：${rawError}`,
+      farmSummary: "牧場の概要",
+      gameSave: "ゲームセーブをインポート",
+      label: "保存ツール",
+      loadingBranch: (branch: SaveModalBranch) => `「${getJapaneseBranchLabel(branch)}」を読み込んでいます…`,
+      localProjects: "ローカルプロジェクト",
+      myPlans: "マイプラン",
+      planGroupLabel: "プラン",
+      retryBranch: (branch: SaveModalBranch) => `「${getJapaneseBranchLabel(branch)}」を再読み込み`,
+      tools: "ツール",
+    },
+    localProjects: {
+      actionFailure: (rawError: string) => `ローカルプロジェクトの操作に失敗しました：${rawError}`,
+      applyName: "名前を適用",
+      cancelRename: "名前の変更をキャンセル",
+      createdProject: "ローカルプロジェクトを作成しました。",
+      current: "現在",
+      currentMap: "現在のマップ",
+      currentMapCount: (count: number) => `${String(count)}枚の地図`,
+      currentProject: "現在のプロジェクト",
+      dateTimeLocale: "ja",
+      defaultProjectName: "無題のプロジェクト",
+      delete: "削除",
+      deviceTools: "端末ツール",
+      deletedProject: "ローカルプロジェクトを削除しました。",
+      downloadedImage: (projectName: string) =>
+        `「${projectName}」のプレビュー画像をダウンロードしました。`,
+      downloadImage: (projectName?: string) =>
+        projectName ? `画像をダウンロード：${projectName}` : "画像をダウンロード",
+      duplicate: "複製",
+      duplicatedProject: "ローカルプロジェクトを複製しました。",
+      emptyState: "ローカルプロジェクトはまだありません。保存すると「無題のプロジェクト」が作られ、現在のマップが保存されます。",
+      emptyFolder: "このフォルダにはまだプランがありません。",
+      exportedProject: (projectName: string) => `「${projectName}」をエクスポートしました。`,
+      exportJson: "JSONをエクスポート",
+      folderCreated: "フォルダを作成しました。",
+      folderGroupLabel: "フォルダ",
+      folderMoved: (folderName: string) => `プランを「${folderName}」へ移動しました。`,
+      folderName: "フォルダ名",
+      importedProject: (filename: string) => `「${filename}」をインポートしました。`,
+      importJson: "JSONをインポート",
+      localProjects: "ローカルプロジェクト",
+      myPlansFolder: "マイプラン",
+      mapPreviewAlt: (projectName: string) => `「${projectName}」のマッププレビュー`,
+      noDownloadablePreview: "このプロジェクトにはダウンロードできるプレビューがありません",
+      noMapPreview: "保存済みのマッププレビューはありません",
+      noSearchResults: "一致するローカルプロジェクトはありません。",
+      newProject: "新しいプラン",
+      newProjectName: "新しいプランの名前",
+      newFolder: "+ 新しいフォルダ",
+      newFolderName: "新しいフォルダの名前",
+      createFolder: "フォルダを作成",
+      cancelCreateFolder: "キャンセル",
+      moveToFolder: "フォルダへ移動",
+      none: "なし",
+      open: "開く",
+      openedProject: (projectName: string) => `「${projectName}」を開きました。`,
+      openingBrowserStorage: "ブラウザの保存領域を開いています…",
+      projectMapCount: (count: number) => `${String(count)}枚の地図`,
+      rename: "名前を変更",
+      renamedProject: "ローカルプロジェクトの名前を変更しました。",
+      saveToDevice: "この端末に保存",
+      savedLocalProjects: "保存済みのローカルプロジェクト",
+      savedToBrowser: "このブラウザに保存しました。",
+      searchProjects: "プランを検索",
+      storedInBrowser: "このブラウザに保存されています。",
+    },
+    cloudProjects: {
+      extras: "その他",
+      account: "アカウント",
+      accountLoading: "アカウントを確認しています…",
+      cloudStatusLoading: "クラウド同期の状態を確認しています…",
+      cloudStatusReady: "クラウド同期の準備ができました。",
+      cloudProjects: "クラウドプロジェクト",
+      cloudProjectsEmpty: "クラウド上のコピーはまだありません。現在のプロジェクトを保存すると自動で同期されます。",
+      cloudProjectsLoading: "クラウドプロジェクトを読み込んでいます…",
+      cloudProjectsSignInRequired: "クラウド上のコピーとプロジェクトごとの同期を見るには、サイドバーでGoogleにログインしてください。",
+      cloudStatusError: (rawError: string) => `クラウド同期エラー：${rawError}`,
+      cloudStatusErrorSummary: "クラウド同期は利用できません。",
+      conflictDescription: "クラウド上により新しいコピーがあります。ローカル版を残すか、クラウド版から新しいローカルプロジェクトを作れます。",
+      currentProject: "現在",
+      dateTimeLocale: "ja",
+      deleteCloudCopy: "クラウド上のコピーを削除",
+      deletingCloudCopy: "クラウド上のコピーを削除しています…",
+      deleteProject: {
+        confirm: "クラウド上のコピーを削除",
+        descriptionPrefix: "クラウドアカウントから「",
+        descriptionSuffix: "」を削除しますか？ローカルプロジェクトはこの端末に残ります。",
+        dismiss: "クラウド上のコピーを残す",
+        title: "クラウド上のコピーを削除しますか？",
+      },
+      imagesStayLocal: "同期されるのはレイアウトデータだけです。マップのプレビュー画像はこの端末に残ります。クラウド上のコピーは、削除するまで残ります。",
+      keepLocalVersion: "ローカル版を残す",
+      loadMoreCloudProjects: "クラウドプロジェクトをさらに読み込む",
+      loadingMoreCloudProjects: "クラウドプロジェクトをさらに読み込んでいます…",
+      localProjects: "ローカルプロジェクトの同期状態",
+      localProjectStatus: readJapaneseCloudProjectStatus,
+      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
+        `ローカル保存は残り${String(daysRemaining)}日${String(hoursRemaining)}時間${String(minutesRemaining)}分で終了します。クラウドに残したいプロジェクトは先に同期してください。クラウド上のコピーは、削除するまで残ります。`,
+      localSaveRetirementEnded: "ローカル保存の移行期間は終了しました。既存のローカルプロジェクトはそのままで、データは自動削除されていません。クラウド上のコピーは、削除するまで残ります。",
+      localSaveRetirementLoading: "ローカル保存の移行期限を確認しています…",
+      localSaveRetirementNotConfigured: "7日間のローカル保存の移行はまだ始まっていません。終了日は未定です。",
+      mapCount: (count: number) => `${String(count)}枚の地図`,
+      noLocalProjects: "同期する前に、この端末へプロジェクトを保存してください。",
+      openCloudCopy: "クラウド上のコピーを開く",
+      refreshCloudProjects: "クラウドプロジェクトを更新",
+      refreshingCloudProjects: "クラウドプロジェクトを更新しています…",
+      retrySync: "同期を再試行",
+      signInBusy: "Googleに接続しています…",
+      signInGoogle: "Googleで続行",
+      signOut: "ログアウト",
+      signOutBusy: "ログアウトしています…",
+      signedInAs: (accountName: string) => `ログイン中のアカウント：${accountName}。`,
+      signedOut: "ログインしていません。ローカルプロジェクトはこの端末に残ります。",
+      syncAllSignInDescription: "ログインしてもプロジェクトは自動ではアップロードされません。ここに戻り、「すべてのローカルプロジェクトを同期」を押すと始まります。",
+      syncAllLocalProjects: "すべてのローカルプロジェクトを同期",
+      syncAllSignedOut: "ログインしてすべてのローカルプロジェクトを同期",
+      syncAllProgress: (completed, total, currentProjectName) =>
+        currentProjectName === null
+          ? `${String(total)}件中${String(completed)}件のローカルプロジェクトを処理しました…`
+          : `${String(total)}件中${String(completed)}件のローカルプロジェクトを処理しました。「${currentProjectName}」を同期しています…`,
+      syncAllProgressLabel: "クラウド同期の進捗",
+      syncAllCompleted: (total) => `${String(total)}件のローカルプロジェクトをすべて同期しました。`,
+      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
+        const failedProjects = failedProjectNames.length === 0
+          ? "個別の失敗プロジェクトは記録されていません。"
+          : `確認が必要なプロジェクトは${String(failedProjectNames.length)}件です：${failedProjectNames.join("、")}。`;
+        return `${String(total)}件中${String(completed)}件のローカルプロジェクトを処理したところで停止しました。${failedProjects}${errorMessage}`;
+      },
+      syncButtonBusy: "プロジェクトを同期しています…",
+      syncThisProject: "クラウドへ同期",
+      title: "クラウド同期",
+      useCloudVersion: "クラウド版を新しいローカルプロジェクトとして使う",
+    },
+    deleteProject: {
+      confirm: "プロジェクトを削除",
+      descriptionPrefix: "このブラウザから「",
+      descriptionSuffix: "」を削除しますか？この操作は元に戻せません。",
+      dismiss: "プロジェクトを残す",
+      title: "ローカルプロジェクトを削除しますか？",
+    },
+    imageExport: {
+      exportFailure: (rawError: string) => `スクリーンショットをエクスポートできませんでした：${rawError}`,
+      exportLabel: "エクスポート",
+      screenshot: "スクリーンショット",
+      screenshotHighQuality: "スクリーンショット（高画質）",
+      screenshotHighQualityTitle: "2倍解像度、より高い画質",
+      screenshotTitle: "1倍解像度、ファイルサイズは小さめ",
+    },
+    thumbnail: {
+      saveFailure: (rawError: string) => `サムネイルを保存できませんでした：${rawError}`,
+      saveLabel: "サムネイルを保存",
+      saved: "サムネイルをこのブラウザに保存しました。",
+      title: "サムネイル",
+    },
+    gameSave: {
+      ariaLabel: "ゲームセーブをインポート",
+      chooseFile: "セーブファイルを選択",
+      close: "閉じる",
+      description: "スターデューバレーのセーブファイルを選ぶと、このプランナーで牧場をプレビューできます。",
+      experimentalNotice: "ゲームセーブのインポートは実験的機能です。未対応のアイテムはマップに配置されません。",
+      importFailure: (rawError: string) => `ゲームセーブをインポートできませんでした：${rawError}`,
+      importing: (filename: string) => `「${filename}」をインポートしています…`,
+      localOnlyNotice: "インポートしたマップは、この端末に保存するまでこのブラウザ内だけにあります。",
+      resultCloseLabel: "ゲームセーブのインポート結果を閉じる",
+      resultImportedAll: "認識できたマップ配置はすべてインポートしました。",
+      resultTitle: (farmName: string) => `「${farmName}牧場」`,
+      tooltip: "スターデューバレーのセーブファイルをインポートして、牧場のレイアウトを表示します",
+      unmappedItems: (count: number) => `${String(count)}件のアイテムを対応付けできませんでした（Mod由来の可能性があります）。`,
+    },
+    gameSaveResultLoader: {
+      loadFailure: (rawError: string) => `インポートしたゲームセーブの結果を読み込めませんでした：${rawError}`,
+      loading: "インポートしたゲームセーブの結果を読み込んでいます…",
+      retry: "結果の読み込みを再試行",
+    },
+    farmSummaryPreview: {
+      ariaLabel: "牧場の概要",
+      itemsPlaced: (count: number) => `${String(count)}個のアイテムを配置済み`,
+      map: "マップ",
+      season: readJapaneseSeasonName,
+      seasonLabel: "季節",
+      viewDetails: "詳細な概要を見る",
+    },
+    farmSummaryDetail: {
+      closeLabel: "牧場の概要を閉じる",
+      empty: "まだアイテムは配置されていません。",
+      exportCsv: "CSVをエクスポート",
+      exportFailure: (rawError: string) => `牧場の概要をエクスポートできませんでした：${rawError}`,
+      itemsPlaced: (count: number) => `${String(count)}個のアイテムを配置済み`,
+      map: "マップ",
+      season: readJapaneseSeasonName,
+      seasonLabel: "季節",
+      title: "牧場の概要",
+    },
+  },
+} as const satisfies Readonly<Record<SaveModalLocale, SaveModalCopy>>;
 
 export function getSaveModalCopy(locale: HomepageLocale): SaveModalCopy {
-  if (!isHomepageLocale(locale)) {
-    throw new Error(`Unsupported save-modal locale. Received: ${JSON.stringify(locale)}.`);
-  }
-
-  return saveModalCopyByLocale[locale];
+  const saveModalLocale = readSaveModalLocale(locale);
+  return saveModalCopyByLocale[saveModalLocale];
 }
 
 function getEnglishBranchLabel(branch: SaveModalBranch): string {
@@ -681,5 +915,13 @@ function getChineseBranchLabel(branch: SaveModalBranch): string {
   if (branch === "game-save") return "导入游戏存档";
   if (branch === "farm-summary") return "农场摘要";
   if (branch === "tools") return "工具";
+  throw new Error(`Unsupported save-modal branch ${JSON.stringify(branch)}.`);
+}
+
+function getJapaneseBranchLabel(branch: SaveModalBranch): string {
+  if (branch === "projects") return "ローカルプロジェクト";
+  if (branch === "game-save") return "ゲームセーブのインポート";
+  if (branch === "farm-summary") return "牧場の概要";
+  if (branch === "tools") return "ツール";
   throw new Error(`Unsupported save-modal branch ${JSON.stringify(branch)}.`);
 }

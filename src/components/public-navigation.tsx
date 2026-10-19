@@ -23,6 +23,7 @@ function createPublicPageHeaderHrefs(
     plannerHref: `${homepagePath}#planner`,
     localeHrefByLocale: {
       en: getLocalizedPublicPath("en", canonicalPath),
+      ja: "/ja",
       "zh-CN": getLocalizedPublicPath("zh-CN", canonicalPath),
     },
   };

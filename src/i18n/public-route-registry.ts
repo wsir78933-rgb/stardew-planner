@@ -92,12 +92,42 @@ export function getLocalizedIndexablePublicRouteEntries(): readonly LocalizedPub
   );
 }
 
+export type PairedPublicLanguageAlternates = Readonly<{
+  en: string;
+  "zh-CN": string;
+  "x-default": string;
+}>;
+
+export type HomepagePublicLanguageAlternates = Readonly<
+  PairedPublicLanguageAlternates & {
+    ja: string;
+  }
+>;
+
+export function createPublicLanguageAlternates(
+  canonicalPath: "/",
+): HomepagePublicLanguageAlternates;
+export function createPublicLanguageAlternates(
+  canonicalPath: Exclude<PublicCanonicalPath, "/">,
+): PairedPublicLanguageAlternates;
 export function createPublicLanguageAlternates(
   canonicalPath: PublicCanonicalPath,
-): Readonly<Record<PublicLocale | "x-default", string>> {
-  return {
+): PairedPublicLanguageAlternates | HomepagePublicLanguageAlternates;
+export function createPublicLanguageAlternates(
+  canonicalPath: PublicCanonicalPath,
+): PairedPublicLanguageAlternates | HomepagePublicLanguageAlternates {
+  const pairedAlternates: PairedPublicLanguageAlternates = {
     en: createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
     "zh-CN": createCanonicalUrl(getLocalizedPublicPath("zh-CN", canonicalPath)),
     "x-default": createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
+  };
+
+  if (canonicalPath !== "/") {
+    return pairedAlternates;
+  }
+
+  return {
+    ...pairedAlternates,
+    ja: createCanonicalUrl("/ja"),
   };
 }

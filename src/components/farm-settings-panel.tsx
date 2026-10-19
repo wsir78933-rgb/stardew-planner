@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import {
   farmSpouseDefinitions,
   supportsFarmCaveChoice,
@@ -13,7 +14,7 @@ import {
   type MapRenderOptions,
 } from "../maps/map-render-options";
 
-type FarmSettingsLocale = "en" | "zh";
+type FarmSettingsLocale = PlannerChromeLocale;
 
 type FarmSettingsPanelProps = Readonly<{
   locale: FarmSettingsLocale;
@@ -30,12 +31,12 @@ const unsupportedFarmSettingsMessage =
   "This map has no spouse patio or farm cave. 这张地图没有配偶庭院或农场洞穴。";
 
 function readFarmSettingsLocale(locale: string): FarmSettingsLocale {
-  if (locale === "en" || locale === "zh") {
+  if (locale === "en" || locale === "zh" || locale === "ja") {
     return locale;
   }
 
   throw new TypeError(
-    `Farm settings locale must be "en" or "zh"; received ${JSON.stringify(locale)}.`,
+    `Farm settings locale must be "en", "zh", or "ja"; received ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -69,7 +70,7 @@ function SpousePatioChoices({
         aria-pressed={!selectedSpouseId}
         onClick={() => onMapRenderOptionsChange(setFarmSpouseId(mapRenderOptions, null))}
       >
-        {locale === "zh" ? "无" : "None"}
+        {readSpouseNoneLabel(locale)}
       </button>
       {farmSpouseDefinitions.map((spouseDefinition) => (
         <button
@@ -80,7 +81,7 @@ function SpousePatioChoices({
             onMapRenderOptionsChange(setFarmSpouseId(mapRenderOptions, spouseDefinition.id))
           }
         >
-          {spouseDefinition.label}
+          {readSpouseChoiceLabel(locale, spouseDefinition.id, spouseDefinition.label)}
         </button>
       ))}
     </div>
@@ -97,10 +98,7 @@ function FarmCaveChoices({
   onMapRenderOptionsChange: FarmSettingsChange;
 }>) {
   const selectedCaveChoice = mapRenderOptions.farm?.caveChoice ?? "none";
-  const caveLabels =
-    locale === "zh"
-      ? (["未选择", "蘑菇", "蝙蝠"] as const)
-      : (["Not chosen", "Mushrooms", "Bats"] as const);
+  const caveLabels = readFarmCaveLabels(locale);
 
   return (
     <div className="editor-config-chips">
@@ -128,7 +126,7 @@ export function FarmSettingsPanel(props: FarmSettingsPanelProps) {
   return (
     <div className="editor-config-panels">
       {showsSpousePatio ? (
-        <FarmSettingsSection title={locale === "zh" ? "配偶" : "Spouse"}>
+        <FarmSettingsSection title={readFarmSettingsSectionTitle(locale, "spouse")}>
           <SpousePatioChoices
             locale={locale}
             mapRenderOptions={props.mapRenderOptions}
@@ -137,7 +135,7 @@ export function FarmSettingsPanel(props: FarmSettingsPanelProps) {
         </FarmSettingsSection>
       ) : null}
       {showsFarmCave ? (
-        <FarmSettingsSection title={locale === "zh" ? "洞穴" : "Cave"}>
+        <FarmSettingsSection title={readFarmSettingsSectionTitle(locale, "cave")}>
           <FarmCaveChoices
             locale={locale}
             mapRenderOptions={props.mapRenderOptions}
@@ -146,8 +144,95 @@ export function FarmSettingsPanel(props: FarmSettingsPanelProps) {
         </FarmSettingsSection>
       ) : null}
       {showsSpousePatio || showsFarmCave ? null : (
-        <p className="editor-config-label">{unsupportedFarmSettingsMessage}</p>
+        <p className="editor-config-label">{readUnsupportedFarmSettingsMessage(locale)}</p>
       )}
     </div>
+  );
+}
+
+const japaneseSpouseLabels = {
+  Abigail: "アビゲイル",
+  Alex: "アレックス",
+  Elliott: "エリオット",
+  Emily: "エミリー",
+  Haley: "ヘイリー",
+  Harvey: "ハーヴィー",
+  Leah: "リア",
+  Maru: "マル",
+  Penny: "ペニー",
+  Sam: "サム",
+  Sebastian: "セバスチャン",
+  Shane: "シェーン",
+} as const;
+
+function readSpouseNoneLabel(locale: FarmSettingsLocale): string {
+  if (locale === "zh") return "无";
+  if (locale === "en") return "None";
+  if (locale === "ja") return "なし";
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read spouse none label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readSpouseChoiceLabel(
+  locale: FarmSettingsLocale,
+  spouseId: string,
+  englishLabel: string,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return englishLabel;
+  }
+
+  if (locale === "ja") {
+    if (!Object.prototype.hasOwnProperty.call(japaneseSpouseLabels, spouseId)) {
+      throw new Error(
+        `Cannot read Japanese spouse label because spouse id is ${JSON.stringify(spouseId)}.`,
+      );
+    }
+    return japaneseSpouseLabels[spouseId as keyof typeof japaneseSpouseLabels];
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read spouse label because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readFarmCaveLabels(locale: FarmSettingsLocale): readonly [string, string, string] {
+  if (locale === "zh") return ["未选择", "蘑菇", "蝙蝠"];
+  if (locale === "en") return ["Not chosen", "Mushrooms", "Bats"];
+  if (locale === "ja") return ["未選択", "キノコ", "コウモリ"];
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read farm cave labels because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readFarmSettingsSectionTitle(
+  locale: FarmSettingsLocale,
+  section: "spouse" | "cave",
+): string {
+  if (locale === "zh") return section === "spouse" ? "配偶" : "洞穴";
+  if (locale === "en") return section === "spouse" ? "Spouse" : "Cave";
+  if (locale === "ja") return section === "spouse" ? "配偶者" : "洞窟";
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read farm settings section title because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readUnsupportedFarmSettingsMessage(locale: FarmSettingsLocale): string {
+  if (locale === "en" || locale === "zh") {
+    return unsupportedFarmSettingsMessage;
+  }
+
+  if (locale === "ja") {
+    return "このマップには配偶者の庭も農場の洞窟もありません。";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot read unsupported farm settings message because locale is ${JSON.stringify(unsupportedLocale)}.`,
   );
 }

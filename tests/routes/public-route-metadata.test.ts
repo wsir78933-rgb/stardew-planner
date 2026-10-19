@@ -67,8 +67,21 @@ describe("public route metadata", () => {
 
       expect(pageMetadata.alternates).toMatchObject({
         canonical: localizedCanonical,
-        languages: createExpectedLanguageAlternates(pathname),
+        languages: pathname === "/"
+          ? {
+              ...createExpectedLanguageAlternates("/"),
+              ja: "https://stardewvalleyplanner.art/ja",
+            }
+          : createExpectedLanguageAlternates(pathname),
       });
+      if (pathname === "/") {
+        expect(pageMetadata.alternates?.languages).toHaveProperty(
+          "ja",
+          "https://stardewvalleyplanner.art/ja",
+        );
+      } else {
+        expect(pageMetadata.alternates?.languages).not.toHaveProperty("ja");
+      }
       expect(pageMetadata.openGraph).toMatchObject({
         images: [expectedSocialImageUrl],
       });
@@ -156,6 +169,10 @@ describe("public route metadata", () => {
           ],
         },
       });
+      expect(
+        (await generateBlogMetadata({ params: Promise.resolve({ slug }) }))
+          .alternates?.languages,
+      ).not.toHaveProperty("ja");
 
       await expect(
         generateChineseBlogMetadata({ params: Promise.resolve({ slug }) }),
@@ -179,6 +196,10 @@ describe("public route metadata", () => {
           ],
         },
       });
+      expect(
+        (await generateChineseBlogMetadata({ params: Promise.resolve({ slug }) }))
+          .alternates?.languages,
+      ).not.toHaveProperty("ja");
     }
   });
 });

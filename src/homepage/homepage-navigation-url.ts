@@ -30,7 +30,7 @@ export function createHomepageNavigationUrls(input: Readonly<{
   const localeHrefByLocale = Object.fromEntries(
     HOMEPAGE_LOCALES.map((locale) => [
       locale,
-      `${getLocalizedPublicPath(locale, "/")}${supportedNavigationSearch}${editorHash}`,
+      `${readHomepageLocaleRootPath(locale)}${supportedNavigationSearch}${editorHash}`,
     ]),
   ) as Record<HomepageLocale, string>;
 
@@ -38,4 +38,19 @@ export function createHomepageNavigationUrls(input: Readonly<{
     localeHrefByLocale,
     plannerHref: "#planner",
   };
+}
+
+function readHomepageLocaleRootPath(locale: HomepageLocale): string {
+  if (locale === "ja") {
+    return "/ja";
+  }
+
+  if (locale === "en" || locale === "zh-CN") {
+    return getLocalizedPublicPath(locale, "/");
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Cannot build homepage navigation href because locale is ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
