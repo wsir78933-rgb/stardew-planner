@@ -8,7 +8,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(33);
+  expect(canonicalPublicPaths).toHaveLength(36);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -19,6 +19,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/terms")).toBe("/zh/terms");
   expect(getLocalizedPublicPath("en", "/contact")).toBe("/contact");
   expect(getLocalizedPublicPath("zh-CN", "/contact")).toBe("/zh/contact");
+  expect(getLocalizedPublicPath("en", "/tools")).toBe("/tools");
+  expect(getLocalizedPublicPath("zh-CN", "/tools")).toBe("/zh/tools");
+  expect(getLocalizedPublicPath("en", "/tools/crop-profit")).toBe("/tools/crop-profit");
+  expect(getLocalizedPublicPath("zh-CN", "/tools/crop-profit")).toBe("/zh/tools/crop-profit");
+  expect(getLocalizedPublicPath("en", "/tools/crop-growth")).toBe("/tools/crop-growth");
+  expect(getLocalizedPublicPath("zh-CN", "/tools/crop-growth")).toBe("/zh/tools/crop-growth");
   expect(getLocalizedPublicPath("en", "/blog")).toBe("/blog");
   expect(getLocalizedPublicPath("zh-CN", "/blog")).toBe("/zh/blog");
   expect(getLocalizedPublicPath("en", "/blog/archive")).toBe("/blog/archive");
@@ -178,13 +184,19 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(66);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(64);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(72);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(70);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
   expect(indexablePathnames).not.toContain("/contact");
   expect(indexablePathnames).not.toContain("/zh/contact");
+  expect(indexablePathnames).toContain("/tools");
+  expect(indexablePathnames).toContain("/zh/tools");
+  expect(indexablePathnames).toContain("/tools/crop-profit");
+  expect(indexablePathnames).toContain("/zh/tools/crop-profit");
+  expect(indexablePathnames).toContain("/tools/crop-growth");
+  expect(indexablePathnames).toContain("/zh/tools/crop-growth");
   expect(indexablePathnames).toContain("/blog");
   expect(indexablePathnames).toContain("/zh/blog");
   expect(indexablePathnames).toContain("/carpenter-stardew");
@@ -276,6 +288,9 @@ it("registers the direct-entry blog routes", () => {
       "/how-to-harvest-stardew-valley",
       "/how-to-get-gold-star-crops-stardew-valley",
       "/house-upgrade-stardew",
+      "/tools",
+      "/tools/crop-profit",
+      "/tools/crop-growth",
     ]),
   );
 });

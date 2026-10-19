@@ -1,0 +1,147 @@
+.toolsNavigation {
+  display: inline-flex;
+  position: relative;
+}
+
+.flyout {
+  left: 0;
+  min-width: 100%;
+  padding-top: 0.4rem;
+  pointer-events: none;
+  position: absolute;
+  top: 100%;
+  z-index: 30;
+}
+
+.toolsNavigation:not([data-suppress-hover="true"]):hover .flyout,
+.toolsNavigation[data-category-panel="open"] .flyout,
+.toolsNavigation[data-mobile-tools="true"] .flyout {
+  pointer-events: auto;
+}
+
+.categoryColumn {
+  position: relative;
+  width: max-content;
+}
+
+.categoryPanel,
+.toolPanelInner {
+  background: var(--background);
+  border: 1px solid rgb(36 42 34 / 22%);
+  border-radius: 0.45rem;
+  box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%);
+  color: var(--foreground);
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 15rem;
+  padding: 0.35rem;
+}
+
+.categoryPanel {
+  display: none;
+}
+
+.toolPanel {
+  display: none;
+  left: calc(100% - 1px);
+  padding-left: 0.45rem;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+.toolPanelInner {
+  display: flex;
+}
+
+.panelTitle,
+.backButton,
+.row {
+  margin: 0;
+}
+
+.panelTitle {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.7rem 0.2rem;
+}
+
+.row,
+.backButton {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0.3rem;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.7rem;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.row:hover,
+.row:focus-visible,
+.backButton:hover,
+.backButton:focus-visible {
+  background: var(--secondary);
+}
+
+.row[aria-disabled="true"] {
+  cursor: default;
+}
+
+.chevron {
+  color: var(--muted-foreground);
+  flex: 0 0 auto;
+}
+
+.toolsNavigation[data-category-panel="open"]:not([data-mobile-tools="true"]) .categoryPanel {
+  display: flex;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):hover .categoryPanel {
+    display: flex;
+  }
+
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has([data-tools-category="planting"]:hover) .toolPanel[data-tools-tool-panel="planting"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has(.toolPanel[data-tools-tool-panel="planting"]:hover) .toolPanel[data-tools-tool-panel="planting"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has([data-tools-category="processing"]:hover) .toolPanel[data-tools-tool-panel="processing"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has(.toolPanel[data-tools-tool-panel="processing"]:hover) .toolPanel[data-tools-tool-panel="processing"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has([data-tools-category="production"]:hover) .toolPanel[data-tools-tool-panel="production"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has(.toolPanel[data-tools-tool-panel="production"]:hover) .toolPanel[data-tools-tool-panel="production"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has([data-tools-category="workshop"]:hover) .toolPanel[data-tools-tool-panel="workshop"],
+  .toolsNavigation:not([data-suppress-hover="true"]):not([data-mobile-tools="true"]):has(.toolPanel[data-tools-tool-panel="workshop"]:hover) .toolPanel[data-tools-tool-panel="workshop"] {
+    display: flex;
+  }
+}
+
+.toolsNavigation:not([data-mobile-tools="true"]) .toolPanel[data-tools-tool-panel-open="true"] {
+  display: flex;
+}
+
+.toolsNavigation[data-mobile-tools="true"][data-category-panel="open"] .categoryPanel,
+.toolsNavigation[data-mobile-tools="true"]:hover .categoryPanel {
+  display: none;
+}
+
+.toolsNavigation[data-mobile-tools="true"] .toolPanel {
+  left: auto;
+  padding-left: 0;
+  position: relative;
+  top: auto;
+}
+
+.toolsNavigation[data-mobile-tools="true"] .toolPanel[data-tools-tool-panel-open="true"] {
+  display: flex;
+}

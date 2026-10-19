@@ -1,0 +1,280 @@
+.toolsPage {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.pageHeader p,
+.note {
+  color: #52604e;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pageHeader h1 {
+  color: #1c211b;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+
+.categoryGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card,
+.panel,
+.dialog {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 72%);
+  border-radius: 0.5rem;
+  min-width: 0;
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.card h2,
+.panel h2,
+.dialog h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.toolList {
+  display: grid;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toolList a {
+  color: #3f6414;
+  font-weight: 700;
+}
+
+.frame {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  min-width: 0;
+}
+
+.sidebar {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+}
+
+.sidebar button,
+.sidebar a,
+.tabRow a {
+  color: #1c211b;
+  text-decoration: none;
+}
+
+.workspace {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  min-width: 0;
+}
+
+.panel,
+.dialog {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+}
+
+.seasonRow,
+.tabRow,
+.actionRow,
+.resumeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fieldGrid,
+.machineGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.field label {
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.manualCopy {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  font: inherit;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+}
+
+.fieldError,
+.alert {
+  color: #b13a28;
+  margin: 0;
+}
+
+.summaryGrid,
+.calendar {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.summaryGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summaryGrid article {
+  background: #f1f7e7;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+.summaryGrid p,
+.rankingList p {
+  margin: 0;
+}
+
+.rankingTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.rankingTable th,
+.rankingTable td {
+  border-bottom: 1px solid rgb(36 42 34 / 24%);
+  padding: 0.55rem 0.35rem;
+  text-align: left;
+}
+
+.rankingTable button {
+  background: transparent;
+  border: 0;
+  color: #1c211b;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0;
+  text-align: left;
+}
+
+.selectedRow {
+  background: #f1f7e7;
+}
+
+.rankingList {
+  display: none;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rankingList button {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  color: #1c211b;
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  gap: 0.2rem;
+  padding: 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+
+.calendar {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar li {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.35rem;
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.35rem 0.1rem;
+  text-align: center;
+}
+
+.calendar ol {
+  display: contents;
+  margin: 0;
+  padding: 0;
+}
+
+.markedDay {
+  background: #c9fb45;
+  border-color: #1c211b;
+}
+
+.action,
+.action:disabled {
+  font: inherit;
+  text-decoration: none;
+}
+
+.action:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.manualCopy {
+  min-height: 6rem;
+}
+
+@media (max-width: 700px) {
+  .categoryGrid,
+  .frame,
+  .workspace,
+  .fieldGrid,
+  .machineGrid,
+  .summaryGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .rankingTable {
+    display: none;
+  }
+
+  .rankingList {
+    display: grid;
+  }
+}

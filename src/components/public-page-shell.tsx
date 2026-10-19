@@ -10,10 +10,12 @@ type PublicPageShellProperties = Readonly<{
   children: ReactNode;
   locale: PublicLocale;
   canonicalPath: PublicCanonicalPath;
+  headerTrailing?: ReactNode;
 }>;
 
 export function PublicPageShell({
   children,
+  headerTrailing,
   locale,
   canonicalPath,
 }: PublicPageShellProperties) {
@@ -22,7 +24,11 @@ export function PublicPageShell({
   return (
     <div data-public-page-shell="true">
       <header data-public-page-header>
-        <PublicNavigation canonicalPath={canonicalPath} locale={locale} />
+        <PublicNavigation
+          canonicalPath={canonicalPath}
+          headerTrailing={headerTrailing}
+          locale={locale}
+        />
       </header>
       <main>{children}</main>
       <SiteFooter content={createSiteFooterContent(pageCopy.footer, locale)} />

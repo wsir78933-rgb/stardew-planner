@@ -74,9 +74,12 @@ describe("removed public guide pages", () => {
       .map(({ id }) => id);
 
     expect(plannerFarmMapIds).toEqual(expectedPlannerFarmMapIds);
-    expect(canonicalPublicPaths).toHaveLength(33);
-    expect(getLocalizedPublicRouteEntries()).toHaveLength(66);
-    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(64);
+    expect(canonicalPublicPaths).toHaveLength(36);
+    expect(canonicalPublicPaths).toContain("/tools");
+    expect(canonicalPublicPaths).toContain("/tools/crop-profit");
+    expect(canonicalPublicPaths).toContain("/tools/crop-growth");
+    expect(getLocalizedPublicRouteEntries()).toHaveLength(72);
+    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(70);
 
     for (const removedCanonicalPath of removedCanonicalPaths) {
       expect(canonicalPublicPaths).not.toContain(removedCanonicalPath);
@@ -89,7 +92,7 @@ describe("removed public guide pages", () => {
     const llmsText = readFileSync(join(outputDirectory, "llms.txt"), "utf8");
     const exportedHtmlFiles = listHtmlFiles(outputDirectory);
 
-    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(65);
+    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(71);
     expect(sitemapXml).toContain("<loc>https://stardewvalleyplanner.art/ja</loc>");
     expect(sitemapXml).not.toContain("https://stardewvalleyplanner.art/ja/");
 

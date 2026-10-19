@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Dock, DockIconButton } from "@/components/ui/dock";
 import type { HomepageLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
+import { ToolsNavigationMenu } from "../tools-navigation/tools-navigation-menu";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 import { HomepageLocaleSwitcherWithBrowserNavigation } from "./homepage-locale-switcher-with-browser-navigation";
 
@@ -19,6 +20,7 @@ export type SiteNavigationDockProps = Readonly<{
   languageMode: "browser" | "static";
   localeHrefByLocale?: HomepageLocaleHrefByLocale;
   languageSwitcher?: ReactNode;
+  headerTrailing?: ReactNode;
   plannerHref: string;
   plannerLabel: string;
   surface: SiteNavigationDockSurface;
@@ -79,6 +81,7 @@ export function SiteNavigationDock({
   currentLocale,
   languageLabel,
   languageMode,
+  headerTrailing,
   languageSwitcher,
   localeHrefByLocale,
   plannerHref,
@@ -145,6 +148,7 @@ export function SiteNavigationDock({
             href={resolvedBlogHref}
             label={resolvedBlogLabel}
           />
+          <ToolsNavigationMenu locale={currentLocale} />
         </div>
         <div
           key="site-dock-actions"
@@ -169,6 +173,7 @@ export function SiteNavigationDock({
             href={resolvedPlannerHref}
             label={resolvedPlannerLabel}
           />
+          {headerTrailing}
         </div>
       </Dock>
     </nav>

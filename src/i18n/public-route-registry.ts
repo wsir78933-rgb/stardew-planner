@@ -7,6 +7,9 @@ const fixedCanonicalPublicPaths = [
   "/privacy",
   "/terms",
   "/contact",
+  "/tools",
+  "/tools/crop-profit",
+  "/tools/crop-growth",
 ] as const;
 
 type BlogCanonicalPublicPath =

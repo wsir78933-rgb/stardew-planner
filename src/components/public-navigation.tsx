@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { getPublicPageCopy } from "../i18n/public-page-content";
 import type { PublicLocale } from "../i18n/public-locale";
 import {
@@ -9,6 +10,7 @@ import { SiteNavigationDock } from "./site-navigation-dock";
 type PublicNavigationProperties = Readonly<{
   locale: PublicLocale;
   canonicalPath: PublicCanonicalPath;
+  headerTrailing?: ReactNode;
 }>;
 
 function createPublicPageHeaderHrefs(
@@ -30,6 +32,7 @@ function createPublicPageHeaderHrefs(
 }
 
 export function PublicNavigation({
+  headerTrailing,
   locale,
   canonicalPath,
 }: PublicNavigationProperties) {
@@ -44,6 +47,7 @@ export function PublicNavigation({
       brandLabel={pageCopy.navigation.productName}
       currentLocale={locale}
       languageLabel={pageCopy.navigation.languageLabel}
+      headerTrailing={headerTrailing}
       languageMode="static"
       localeHrefByLocale={headerHrefs.localeHrefByLocale}
       plannerHref={headerHrefs.plannerHref}
