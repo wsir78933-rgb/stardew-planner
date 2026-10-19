@@ -72,7 +72,7 @@ export function CatalogPlacementControls({
 
   const copy = getCatalogPanelCopy(locale);
   const pendingCatalogControl = getPendingCatalogControl(catalogItem);
-  const itemName = getCatalogSidebarDisplayName(catalogItem);
+  const itemName = getCatalogSidebarDisplayName(catalogItem, locale);
   const placementStatus = getCatalogPlacementStatus(
     copy,
     itemName,

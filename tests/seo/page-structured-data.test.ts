@@ -3,6 +3,7 @@ import {
   createArticleStructuredData,
   createBreadcrumbListStructuredData,
   createCollectionPageStructuredData,
+  createRussianHomepageWebApplicationStructuredData,
   createWebApplicationStructuredData,
   createWebSiteStructuredData,
   serializeJsonLd,
@@ -54,7 +55,7 @@ it("builds schema data exclusively from explicit visible fields", () => {
     "@id": "https://stardewvalleyplanner.art/#website",
     name: "Stardew Valley Planner",
     url: "https://stardewvalleyplanner.art",
-    inLanguage: ["en", "zh-CN"],
+    inLanguage: ["en", "zh-CN", "ru"],
   });
   expect(webApplication).toMatchObject({
     "@context": "https://schema.org",
@@ -127,4 +128,27 @@ it("builds schema data exclusively from explicit visible fields", () => {
   }
 
   expect(article).not.toHaveProperty("image");
+});
+
+it("describes the Russian homepage as a Russian web application without widening the site locale", () => {
+  const russianWebApplication = createRussianHomepageWebApplicationStructuredData({
+    name: "Планировщик фермы Stardew Valley",
+    description:
+      "Планируйте свою ферму в Stardew Valley до того, как начнете строить в игре. Выбирайте из 8 типов ферм, расставляйте здания и посевы, переключайте сезоны, проверяйте зоны действия и импортируйте сохранения.",
+  });
+
+  expect(russianWebApplication).toMatchObject({
+    "@type": "WebApplication",
+    name: "Планировщик фермы Stardew Valley",
+    url: "https://stardewvalleyplanner.art/ru",
+    inLanguage: "ru",
+    isPartOf: { "@id": "https://stardewvalleyplanner.art/#website" },
+  });
+  expect(russianWebApplication["@type"]).not.toBe("WebSite");
+  expect(() =>
+    createRussianHomepageWebApplicationStructuredData({
+      name: "   ",
+      description: "описание",
+    }),
+  ).toThrow('Received: "   "');
 });

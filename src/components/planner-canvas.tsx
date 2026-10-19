@@ -345,6 +345,7 @@ export type PlannerCanvasProperties = Readonly<{
     mapId: string,
     interiorDecorKind: InteriorDecorKind,
   ) => void;
+  locale?: "en" | "zh" | "ru";
 }>;
 
 export function handlePlannerCanvasContextMenuEvent(
@@ -574,6 +575,7 @@ type PlannerCameraControlsProperties = Readonly<{
   ) => void;
   onMoveSelectedPlacements?: (tileDelta: Readonly<{ x: number; y: number }>) => void;
   setCameraState: (cameraState: CameraState) => void;
+  locale?: "en" | "zh" | "ru";
 }>;
 
 type PlannerCameraControls = Readonly<{
@@ -1338,6 +1340,7 @@ export function PlannerCanvas({
   onPlacementSelectionClick,
   ambienceOptions,
   gameCursors,
+  locale = "en",
   onCancelEditingInteraction,
 }: PlannerCanvasProperties) {
   const canvasRootElementReference = useRef<HTMLElement>(null);
@@ -2332,6 +2335,7 @@ export function PlannerCanvas({
           {
             attachCameraControls: () =>
               attachPlannerCameraControls({
+                locale,
                 canvasElement: pixiApplication.canvas,
                 getCameraGeometry(): CameraGeometry {
                   if (currentCameraGeometry === null) {
@@ -2647,7 +2651,7 @@ export function PlannerCanvas({
   return (
     <section
       aria-busy={plannerCanvasStatus.kind === "loading"}
-      aria-label={`Farm map canvas for ${mapId}`}
+      aria-label={readPlannerCanvasSectionLabel(mapId, locale)}
       className={`planner-canvas canvas-container ${
         pointerInteractionMode === "navigate" ? "cursor-mode" : "placement-active"
       } ${gameCursors === false ? atmosphereStyles.systemCursor : ""}`}
@@ -2665,6 +2669,7 @@ export function PlannerCanvas({
       {canvasContextMenuPoint !== null ? (
         <PlannerCanvasContextMenu
           canvasHostElement={canvasHostElementReference.current}
+          locale={readPlannerCanvasLocale(locale)}
           editorRootElement={canvasContextMenuEditorRootReference.current}
           focusRestoreElement={canvasContextMenuFocusRestoreReference.current}
           onClose={() => setCanvasContextMenuPoint(null)}
@@ -2675,8 +2680,10 @@ export function PlannerCanvas({
               return copyFullMap();
             }
 
-            const unavailableCopyMessage =
-              `Copy full map is unavailable for map ID ${JSON.stringify(mapId)} because the canvas context-menu copy action is null.`;
+            const unavailableCopyMessage = readUnavailableCopyFullMapMessage(
+              mapId,
+              locale,
+            );
             setPlannerCanvasStatus({
               kind: "error",
               message: unavailableCopyMessage,
@@ -2691,6 +2698,7 @@ export function PlannerCanvas({
       plannerCanvasStatus.kind === "ready" ? (
         <PlannerJoystick
           isLeftHanded={leftHandMode}
+          locale={readPlannerCanvasLocale(locale)}
           onNudge={onNudgeSelectedPlacements}
           onPan={(direction) => {
             const panMapWithJoystick = joystickCameraPanReference.current;
@@ -2707,21 +2715,97 @@ export function PlannerCanvas({
       ) : null}
       {plannerCanvasStatus.kind === "loading" ? (
         <p className="planner-canvas__status" role="status">
-          Loading local map {mapId}…
+          {readPlannerCanvasLoadingStatus(mapId, locale)}
         </p>
       ) : null}
       {plannerCanvasStatus.kind === "error" ? (
         <p className="planner-canvas__error" role="alert">
-          {plannerCanvasStatus.message}
+          {readVisiblePlannerCanvasErrorMessage(
+            plannerCanvasStatus.message,
+            locale,
+          )}
         </p>
       ) : null}
       {knownUnavailableTilesheetWarnings.map((warningMessage) => (
         <p className="planner-canvas__warning" key={warningMessage} role="status">
-          {warningMessage}
+          {readVisiblePlannerCanvasWarningMessage(warningMessage, locale)}
         </p>
       ))}
     </section>
   );
+}
+
+function readPlannerCanvasLocale(
+  locale: "en" | "zh" | "ru",
+): "en" | "zh" | "ru" {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
+    return locale;
+  }
+  throw new TypeError(
+    `Planner canvas locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readPlannerCanvasSectionLabel(
+  mapId: string,
+  locale: "en" | "zh" | "ru",
+): string {
+  if (readPlannerCanvasLocale(locale) === "ru") {
+    return `Холст карты фермы для ${mapId}`;
+  }
+  return `Farm map canvas for ${mapId}`;
+}
+
+function readPlannerCanvasLoadingStatus(
+  mapId: string,
+  locale: "en" | "zh" | "ru",
+): string {
+  if (readPlannerCanvasLocale(locale) === "ru") {
+    return `Загрузка локальной карты ${mapId}…`;
+  }
+  return `Loading local map ${mapId}…`;
+}
+
+function readUnavailableCopyFullMapMessage(
+  mapId: string,
+  locale: "en" | "zh" | "ru",
+): string {
+  if (readPlannerCanvasLocale(locale) === "ru") {
+    return `Копирование всей карты недоступно для идентификатора карты ${JSON.stringify(mapId)}, потому что действие копирования контекстного меню равно null.`;
+  }
+  return `Copy full map is unavailable for map ID ${JSON.stringify(mapId)} because the canvas context-menu copy action is null.`;
+}
+
+function readPlannerCanvasCameraLabel(locale: "en" | "zh" | "ru"): string {
+  if (readPlannerCanvasLocale(locale) === "ru") {
+    return "Интерактивная камера карты фермы";
+  }
+  return "Interactive farm map camera";
+}
+
+const plannerCanvasTechnicalRenderErrorPrefix = "Unable to render mapId ";
+
+function readVisiblePlannerCanvasErrorMessage(
+  message: string,
+  locale: "en" | "zh" | "ru",
+): string {
+  if (readPlannerCanvasLocale(locale) !== "ru") {
+    return message;
+  }
+  if (!message.startsWith(plannerCanvasTechnicalRenderErrorPrefix)) {
+    return message;
+  }
+  return `Не удалось отобразить карту. Причина: ${message}`;
+}
+
+function readVisiblePlannerCanvasWarningMessage(
+  warningMessage: string,
+  locale: "en" | "zh" | "ru",
+): string {
+  if (readPlannerCanvasLocale(locale) !== "ru") {
+    return warningMessage;
+  }
+  return `На локальной карте пропущен недоступный лист тайлов. Причина: ${warningMessage}`;
 }
 
 function describeValue(value: unknown): string {
@@ -4842,6 +4926,7 @@ export function attachPlannerCameraControls(
     onPlacementSelectionClick,
     onMoveSelectedPlacements,
     setCameraState,
+    locale = "en",
   } = plannerCameraControlsProperties;
   const activePointerCoordinates = new Map<number, PointerCoordinates>();
   const placementClickSuppressedPointerIds = new Set<number>();
@@ -4853,7 +4938,7 @@ export function attachPlannerCameraControls(
   let lastReportedMapTileHover: MapPointerTile | null | undefined;
 
   canvasElement.tabIndex = 0;
-  canvasElement.setAttribute("aria-label", "Interactive farm map camera");
+  canvasElement.setAttribute("aria-label", readPlannerCanvasCameraLabel(locale));
 
   function handleWheel(wheelEvent: WheelEvent): void {
     if (!getWheelZoomEnabled()) {

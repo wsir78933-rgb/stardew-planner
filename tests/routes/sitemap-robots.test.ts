@@ -75,13 +75,45 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   );
   const sitemapUrlCount = sitemapLocationValues.length;
   const localizedPublicRouteEntries = getLocalizedIndexablePublicRouteEntries();
-  const expectedIndexablePublicRouteCount = localizedPublicRouteEntries.length;
+  const russianHomepageUrl = "https://stardewvalleyplanner.art/ru";
+  const expectedIndexablePublicRouteCount = localizedPublicRouteEntries.length + 1;
+  const russianSitemapUrls = sitemapLocationValues.filter(
+    (sitemapLocationValue) =>
+      sitemapLocationValue === russianHomepageUrl
+      || sitemapLocationValue.startsWith(`${russianHomepageUrl}/`),
+  );
 
   expect(
     sitemapUrlCount,
-    `Sitemap URL count mismatch. Received: ${sitemapUrlCount}. Expected from identities/indexable routes: ${expectedIndexablePublicRouteCount}.`,
+    `Sitemap URL count mismatch. Received: ${sitemapUrlCount}. Expected registry length plus the Russian homepage: ${expectedIndexablePublicRouteCount}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
   ).toBe(expectedIndexablePublicRouteCount);
-  expect(localizedPublicRouteEntries).toHaveLength(expectedIndexablePublicRouteCount);
+  expect(russianSitemapUrls).toEqual([russianHomepageUrl]);
+  expect(sitemapLocationValues).not.toContain(
+    "https://stardewvalleyplanner.art/ru/blog",
+  );
+  expect(sitemapLocationValues).not.toContain(
+    "https://stardewvalleyplanner.art/ru/privacy",
+  );
+  expect(sitemapLocationValues).not.toContain(
+    "https://stardewvalleyplanner.art/ru/terms",
+  );
+  expect(sitemapLocationValues).not.toContain(
+    "https://stardewvalleyplanner.art/ru/contact",
+  );
+  const indexableRegistryPathnames = localizedPublicRouteEntries.map(
+    (routeEntry) => routeEntry.pathname,
+  );
+  expect(indexableRegistryPathnames).not.toContain("/ru");
+  for (const routeEntry of localizedPublicRouteEntries) {
+    expect(
+      routeEntry.locale,
+      `Indexable public route locale must be en or zh-CN. Received: ${JSON.stringify(routeEntry.locale)} for ${JSON.stringify(routeEntry.pathname)}.`,
+    ).toMatch(/^(en|zh-CN)$/);
+    expect(
+      routeEntry.pathname === "/ru" || routeEntry.pathname.startsWith("/ru/"),
+      `Indexable public registry must not include a Russian path. Received: ${JSON.stringify(routeEntry.pathname)}.`,
+    ).toBe(false);
+  }
   for (const { pathname } of localizedPublicRouteEntries) {
     expect(sitemapText).toContain(
       `<loc>${createCanonicalUrl(pathname)}</loc>`,

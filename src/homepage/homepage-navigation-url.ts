@@ -1,23 +1,19 @@
+import { getHomepageDisplayPath } from "../i18n/public-route-registry";
 import { getPlannerMapIdFromSearch } from "../maps/planner-map-query";
-import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 import {
-  HOMEPAGE_LOCALES,
-  type HomepageLocale,
+  isHomepageDisplayLocale,
+  type HomepageDisplayLocale,
 } from "./homepage-locale";
 
-export type HomepageLocaleHrefByLocale = Readonly<Record<HomepageLocale, string>>;
+export type HomepageLocaleHrefByLocale = Readonly<Record<HomepageDisplayLocale, string>>;
 
 export type HomepageNavigationUrls = Readonly<{
   localeHrefByLocale: HomepageLocaleHrefByLocale;
   plannerHref: string;
 }>;
 
-export function createHomepageNavigationUrls(input: Readonly<{
-  currentLocale: HomepageLocale;
-  hash: string;
-  search: string;
-}>): HomepageNavigationUrls {
-  const plannerMapId = getPlannerMapIdFromSearch(input.search);
+function readPreservedHomepageSuffix(hash: string, search: string): string {
+  const plannerMapId = getPlannerMapIdFromSearch(search);
   const supportedNavigationParameters = new URLSearchParams();
   if (plannerMapId !== null) {
     supportedNavigationParameters.set("farmType", plannerMapId);
@@ -26,13 +22,27 @@ export function createHomepageNavigationUrls(input: Readonly<{
   const supportedNavigationSearch = serializedNavigationParameters.length === 0
     ? ""
     : `?${serializedNavigationParameters}`;
-  const editorHash = input.hash === "#planner" ? "#planner" : "";
-  const localeHrefByLocale = Object.fromEntries(
-    HOMEPAGE_LOCALES.map((locale) => [
-      locale,
-      `${getLocalizedPublicPath(locale, "/")}${supportedNavigationSearch}${editorHash}`,
-    ]),
-  ) as Record<HomepageLocale, string>;
+  const editorHash = hash === "#planner" ? "#planner" : "";
+  return `${supportedNavigationSearch}${editorHash}`;
+}
+
+export function createHomepageNavigationUrls(input: Readonly<{
+  currentLocale: HomepageDisplayLocale;
+  hash: string;
+  search: string;
+}>): HomepageNavigationUrls {
+  if (!isHomepageDisplayLocale(input.currentLocale)) {
+    throw new Error(
+      `Unsupported homepage display locale. Received: ${JSON.stringify(input.currentLocale)}.`,
+    );
+  }
+
+  const preservedSuffix = readPreservedHomepageSuffix(input.hash, input.search);
+  const localeHrefByLocale = {
+    en: `${getHomepageDisplayPath("en")}${preservedSuffix}`,
+    "zh-CN": `${getHomepageDisplayPath("zh-CN")}${preservedSuffix}`,
+    ru: `${getHomepageDisplayPath("ru")}${preservedSuffix}`,
+  } as const satisfies HomepageLocaleHrefByLocale;
 
   return {
     localeHrefByLocale,

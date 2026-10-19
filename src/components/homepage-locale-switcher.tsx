@@ -6,8 +6,8 @@ import {
   subscribeToHomepageLanguageMenuDismissal,
 } from "@/src/homepage/homepage-language-menu-behavior";
 import {
+  HOMEPAGE_DISPLAY_LOCALES,
   HOMEPAGE_LOCALE_LABELS,
-  HOMEPAGE_LOCALES,
 } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 
@@ -89,7 +89,7 @@ export function HomepageLocaleSwitcher({
         hidden={!isLanguageMenuOpen}
         id={languageMenuId}
       >
-        {HOMEPAGE_LOCALES.map((homepageLocale) => (
+        {HOMEPAGE_DISPLAY_LOCALES.map((homepageLocale) => (
           <li key={homepageLocale}>
             <a
               data-homepage-language-option

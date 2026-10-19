@@ -6,11 +6,15 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { getRussianPlannerMapDisplayName } from "../i18n/planner-russian-display-names";
 import {
   getPlannerMapById,
+  plannerMaps,
   type PlannerMap,
   type PlannerMapCategory,
 } from "../maps/map-catalog";
+
+type PlannerMapPickerLocale = "en" | "zh" | "ru";
 
 export type PlannerMapPickerTopLevelTab =
   | "farm"
@@ -26,6 +30,7 @@ export type PlannerMapPickerState = Readonly<{
 }>;
 
 type PlannerMapPickerProperties = Readonly<{
+  locale?: PlannerMapPickerLocale;
   maps: readonly PlannerMap[];
   selectedMapId: string | null;
   onMapSelect: (mapId: string) => void;
@@ -34,34 +39,34 @@ type PlannerMapPickerProperties = Readonly<{
 
 type TopLevelTabDefinition = Readonly<{
   id: PlannerMapPickerTopLevelTab;
-  label: string;
   mapCategory: Exclude<PlannerMapCategory, "community-farm" | "community-interior"> | null;
 }>;
 
 type CommunityTabDefinition = Readonly<{
   id: PlannerMapPickerCommunityTab;
-  label: string;
   mapCategory: Extract<PlannerMapCategory, "community-farm" | "community-interior">;
 }>;
 
 const topLevelTabDefinitions = [
-  { id: "farm", label: "Farm", mapCategory: "farm" },
-  { id: "interiors", label: "Interiors", mapCategory: "interior" },
-  { id: "exteriors", label: "Exteriors", mapCategory: "exterior" },
-  { id: "community", label: "Community", mapCategory: null },
+  { id: "farm", mapCategory: "farm" },
+  { id: "interiors", mapCategory: "interior" },
+  { id: "exteriors", mapCategory: "exterior" },
+  { id: "community", mapCategory: null },
 ] as const satisfies readonly TopLevelTabDefinition[];
 
 const communityTabDefinitions = [
-  { id: "farms", label: "Farms", mapCategory: "community-farm" },
-  { id: "interiors", label: "Interiors", mapCategory: "community-interior" },
+  { id: "farms", mapCategory: "community-farm" },
+  { id: "interiors", mapCategory: "community-interior" },
 ] as const satisfies readonly CommunityTabDefinition[];
 
 export function PlannerMapPicker({
+  locale,
   maps,
   selectedMapId,
   onMapSelect,
   mapIdDataAttribute,
 }: PlannerMapPickerProperties) {
+  const pickerLocale = readPlannerMapPickerLocale(locale);
   const initialPickerState = getInitialPlannerMapPickerState(selectedMapId);
   const [activeTopLevelTab, setActiveTopLevelTab] = useState(
     initialPickerState.activeTopLevelTab,
@@ -150,7 +155,7 @@ export function PlannerMapPicker({
 
   return (
     <div className="planner-map-picker">
-      <div aria-label="Map categories" className="planner-map-picker__tabs" role="tablist">
+      <div aria-label={readPlannerMapPickerGroupLabel("map-categories", pickerLocale)} className="planner-map-picker__tabs" role="tablist">
         {topLevelTabDefinitions.map((topLevelTabDefinition) => {
           const isActiveTab = topLevelTabDefinition.id === activeTopLevelTab;
           const tabId = `${pickerId}-tab-${topLevelTabDefinition.id}`;
@@ -173,14 +178,14 @@ export function PlannerMapPicker({
               tabIndex={isActiveTab ? 0 : -1}
               type="button"
             >
-              {topLevelTabDefinition.label}
+              {readPlannerMapPickerTabLabel(topLevelTabDefinition.id, pickerLocale)}
             </button>
           );
         })}
       </div>
       {activeTopLevelTab === "community" ? (
         <div
-          aria-label="Community map categories"
+          aria-label={readPlannerMapPickerGroupLabel("community-map-categories", pickerLocale)}
           className="planner-map-picker__community-tabs"
           role="tablist"
         >
@@ -206,7 +211,7 @@ export function PlannerMapPicker({
                 tabIndex={isActiveTab ? 0 : -1}
                 type="button"
               >
-                {communityTabDefinition.label}
+                {readPlannerMapPickerTabLabel(communityTabDefinition.id, pickerLocale)}
               </button>
             );
           })}
@@ -233,12 +238,89 @@ export function PlannerMapPicker({
                 aria-hidden="true"
                 src={`/game-assets/1.6.15/${plannerMap.previewOutputPath}`}
               />
-              <span>{plannerMap.displayName}</span>
+              <span>{readPlannerMapPickerMapLabel(plannerMap, pickerLocale)}</span>
             </button>
           ))}
         </div>
       </div>
     </div>
+  );
+}
+
+function readPlannerMapPickerLocale(
+  locale: PlannerMapPickerLocale | undefined,
+): PlannerMapPickerLocale {
+  const resolvedLocale = locale ?? "en";
+  if (resolvedLocale === "en" || resolvedLocale === "zh" || resolvedLocale === "ru") {
+    return resolvedLocale;
+  }
+  throw new TypeError(
+    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
+  );
+}
+
+function readPlannerMapPickerGroupLabel(
+  group: "map-categories" | "community-map-categories",
+  locale: PlannerMapPickerLocale,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return group === "map-categories" ? "Map categories" : "Community map categories";
+  }
+  if (locale === "ru") {
+    return group === "map-categories" ? "Категории карт" : "Категории карт сообщества";
+  }
+  throw new TypeError(
+    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readPlannerMapPickerTabLabel(
+  tabId: PlannerMapPickerTopLevelTab | PlannerMapPickerCommunityTab,
+  locale: PlannerMapPickerLocale,
+): string {
+  if (locale === "ru") {
+    if (tabId === "farm") return "Ферма";
+    if (tabId === "interiors") return "Интерьеры";
+    if (tabId === "exteriors") return "Экстерьеры";
+    if (tabId === "community") return "Сообщество";
+    if (tabId === "farms") return "Фермы";
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(tabId)}.`);
+  }
+  if (locale === "en" || locale === "zh") {
+    if (tabId === "farm") return "Farm";
+    if (tabId === "interiors") return "Interiors";
+    if (tabId === "exteriors") return "Exteriors";
+    if (tabId === "community") return "Community";
+    if (tabId === "farms") return "Farms";
+    throw new Error(`Unknown planner map picker tab: ${JSON.stringify(tabId)}.`);
+  }
+  throw new TypeError(
+    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readPlannerMapCatalogId(mapId: string): (typeof plannerMaps)[number]["id"] {
+  const catalogPlannerMap = plannerMaps.find(
+    (candidatePlannerMap) => candidatePlannerMap.id === mapId,
+  );
+  if (catalogPlannerMap === undefined) {
+    throw new Error(`Unknown planner map id: ${JSON.stringify(mapId)}.`);
+  }
+  return catalogPlannerMap.id;
+}
+
+function readPlannerMapPickerMapLabel(
+  plannerMap: PlannerMap,
+  locale: PlannerMapPickerLocale,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return plannerMap.displayName;
+  }
+  if (locale === "ru") {
+    return getRussianPlannerMapDisplayName(readPlannerMapCatalogId(plannerMap.id));
+  }
+  throw new TypeError(
+    `Planner map picker locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 

@@ -1,7 +1,10 @@
 import { expect, it } from "vitest";
+import { publicLocales } from "../../src/i18n/public-locale";
 import {
   canonicalPublicPaths,
+  createHomepageLanguageAlternates,
   createPublicLanguageAlternates,
+  getHomepageDisplayPath,
   getLocalizedPublicPath,
   getLocalizedIndexablePublicRouteEntries,
   getLocalizedPublicRouteEntries,
@@ -292,7 +295,39 @@ it("rejects locale and canonical path values outside the public registry", () =>
   expect(() => getLocalizedPublicPath("fr" as never, "/privacy")).toThrow(
     'Received: "fr"',
   );
+  expect(() => getLocalizedPublicPath("ru" as never, "/")).toThrow(
+    'Received: "ru"',
+  );
+  expect(() => getLocalizedPublicPath("ru" as never, "/blog")).toThrow(
+    'Received: "ru"',
+  );
+  expect(() => getLocalizedPublicPath("ru" as never, "/privacy")).toThrow(
+    'Received: "ru"',
+  );
   expect(() => getLocalizedPublicPath("en", "/missing" as never)).toThrow(
     'Received: "/missing"',
+  );
+});
+
+it("keeps site locales bilingual and limits Russian alternates to the homepage", () => {
+  expect(publicLocales).toEqual(["en", "zh-CN"]);
+  expect(getHomepageDisplayPath("en")).toBe("/");
+  expect(getHomepageDisplayPath("zh-CN")).toBe("/zh");
+  expect(getHomepageDisplayPath("ru")).toBe("/ru");
+  expect(createHomepageLanguageAlternates()).toEqual({
+    en: "https://stardewvalleyplanner.art",
+    "zh-CN": "https://stardewvalleyplanner.art/zh",
+    ru: "https://stardewvalleyplanner.art/ru",
+    "x-default": "https://stardewvalleyplanner.art",
+  });
+  expect(createPublicLanguageAlternates("/")).toEqual({
+    en: "https://stardewvalleyplanner.art",
+    "zh-CN": "https://stardewvalleyplanner.art/zh",
+    "x-default": "https://stardewvalleyplanner.art",
+  });
+  expect(createPublicLanguageAlternates("/")).not.toHaveProperty("ru");
+  expect(createPublicLanguageAlternates("/blog")).not.toHaveProperty("ru");
+  expect(() => getHomepageDisplayPath("fr" as never)).toThrow(
+    'Received: "fr"',
   );
 });

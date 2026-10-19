@@ -83,3 +83,9 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷物语怎么收作物：徒手、镰刀或斧头](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。
 - [星露谷物语如何种出金星作物](https://stardewvalleyplanner.art/zh/how-to-get-gold-star-crops-stardew-valley): 选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。
 - [星露谷房屋升级：第二档是65,000金和100硬木](https://stardewvalleyplanner.art/zh/house-upgrade-stardew): 第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。
+
+## Русский
+
+Планировщик фермы Stardew Valley помогает спланировать ферму в браузере. Проекты сохраняются локально, а выбранные планировки можно синхронизировать. Превью карт остаются на устройстве.
+
+- [Планировщик фермы Stardew Valley](https://stardewvalleyplanner.art/ru): Бесплатный онлайн-инструмент для планировки фермы. Сохраняйте проекты локально или синхронизируйте выбранные планировки.

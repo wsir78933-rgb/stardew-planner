@@ -84,12 +84,20 @@ export function applyPlannerWorkspaceInteriorDecor(
   };
 }
 
+type InteriorDecorMessageLocale = "en" | "zh" | "ru";
+
 export function getInteriorDecorRejectionMessage(
   mapId: string,
   interiorDecorKind: InteriorDecorKind,
+  locale: InteriorDecorMessageLocale = "en",
 ): string {
   assertMapId(mapId);
   assertInteriorDecorKind(interiorDecorKind);
+  assertInteriorDecorMessageLocale(locale);
+
+  if (locale === "ru") {
+    return `Нельзя применить ${readRussianInteriorDecorKind(interiorDecorKind)} на карте ${JSON.stringify(mapId)} в этом месте.`;
+  }
 
   return `Cannot apply ${interiorDecorKind} on map ${JSON.stringify(mapId)} at this location.`;
 }
@@ -97,17 +105,44 @@ export function getInteriorDecorRejectionMessage(
 export function getUnavailableInteriorDecorMessage(
   mapId: string,
   interiorDecorKind: InteriorDecorKind,
+  locale: InteriorDecorMessageLocale = "en",
 ): string | null {
   assertMapId(mapId);
   assertInteriorDecorKind(interiorDecorKind);
+  assertInteriorDecorMessageLocale(locale);
 
   if (isInteriorDecorSupportedMapId(mapId)) {
     return null;
   }
 
+  if (locale === "ru") {
+    return interiorDecorKind === "wallpaper"
+      ? "Обои можно применять только внутри."
+      : "Настил можно применять только внутри.";
+  }
+
   return interiorDecorKind === "wallpaper"
     ? "Wallpaper can only be applied inside."
     : "Flooring can only be applied inside.";
+}
+
+function assertInteriorDecorMessageLocale(
+  locale: InteriorDecorMessageLocale,
+): asserts locale is InteriorDecorMessageLocale {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
+    return;
+  }
+  throw new TypeError(
+    `Interior decor message locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readRussianInteriorDecorKind(interiorDecorKind: InteriorDecorKind): string {
+  if (interiorDecorKind === "wallpaper") return "обои";
+  if (interiorDecorKind === "flooring") return "настил";
+  throw new TypeError(
+    `Interior decor kind must be "wallpaper" or "flooring"; received ${JSON.stringify(interiorDecorKind)}.`,
+  );
 }
 
 function assertMapId(mapId: unknown): asserts mapId is string {

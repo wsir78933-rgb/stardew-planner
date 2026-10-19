@@ -12,6 +12,7 @@ import {
 } from "../planner/planner-workspace-persistence-runtime";
 import type { PlannerWorkspaceState } from "../planner/planner-workspace-state";
 import type { PlannerWorkspaceStateController } from "../planner/use-planner-workspace-state";
+import type { HomepageLocale } from "../homepage/homepage-locale";
 import type {
   ReferenceProjectWorkspaceController,
   ReferenceProjectWorkspaceState,
@@ -19,6 +20,7 @@ import type {
 
 type PlannerWorkspacePersistenceControlsInput = Readonly<{
   dispatchPlannerWorkspaceAction: PlannerWorkspaceStateController["dispatchPlannerWorkspaceAction"];
+  locale?: HomepageLocale;
   newProjectName: string;
   plannerWorkspaceState: PlannerWorkspaceState;
   workspaceController: ReferenceProjectWorkspaceController;
@@ -27,6 +29,7 @@ type PlannerWorkspacePersistenceControlsInput = Readonly<{
 
 export function usePlannerWorkspacePersistenceControls({
   dispatchPlannerWorkspaceAction,
+  locale = "en",
   newProjectName,
   plannerWorkspaceState,
   workspaceController,
@@ -50,8 +53,9 @@ export function usePlannerWorkspacePersistenceControls({
   const settleAutomaticSaveRef = useRef<(caughtError: unknown | null) => void>(
     () => undefined,
   );
+  assertPlannerPersistenceLocale(locale);
   settleAutomaticSaveRef.current = (caughtError) => {
-    setAutomaticSaveErrorMessage(describeAutomaticSaveError(caughtError));
+    setAutomaticSaveErrorMessage(describeAutomaticSaveError(caughtError, locale));
   };
   const persistenceRuntimeReference = useRef<
     PlannerWorkspacePersistenceRuntime | null
@@ -117,8 +121,29 @@ export function usePlannerWorkspacePersistenceControls({
   };
 }
 
-function describeAutomaticSaveError(caughtError: unknown | null): string | null {
+function assertPlannerPersistenceLocale(
+  locale: HomepageLocale,
+): asserts locale is HomepageLocale {
+  if (locale === "en" || locale === "zh-CN" || locale === "ru") {
+    return;
+  }
+  throw new TypeError(
+    `Planner persistence locale must be "en", "zh-CN", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function describeAutomaticSaveError(
+  caughtError: unknown | null,
+  locale: HomepageLocale,
+): string | null {
+  assertPlannerPersistenceLocale(locale);
   if (caughtError === null) return null;
+  if (locale === "ru") {
+    if (caughtError instanceof Error) {
+      return `Не удалось автоматически сохранить карту. Причина: ${caughtError.message}`;
+    }
+    return `Не удалось автоматически сохранить карту: ${JSON.stringify(String(caughtError))}.`;
+  }
   if (caughtError instanceof Error) return caughtError.message;
   return `Automatic map save failed: ${JSON.stringify(String(caughtError))}.`;
 }

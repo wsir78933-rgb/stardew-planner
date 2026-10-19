@@ -1,10 +1,25 @@
 import type { CatalogItem } from "../catalog";
+import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
 import {
   createPersistentPlacementSnapshot,
   type PlacementItem,
   type PlacementSnapshot,
 } from "../placement/placement-snapshot";
 import type { TilesheetSeason } from "../rendering/tilesheet-asset-resolver";
+
+type FarmSummaryLocale = "en" | "zh" | "ru";
+
+const farmSummaryCategoryIds = [
+  "Buildings",
+  "Crops",
+  "Paths",
+  "Fences",
+  "Furniture",
+  "Trees",
+  "Items",
+] as const;
+
+type FarmSummaryCategoryId = (typeof farmSummaryCategoryIds)[number];
 
 export type FarmSummaryRow = Readonly<{
   category: string;
@@ -40,7 +55,9 @@ export function createFarmSummary(
   placementSnapshot: PlacementSnapshot,
   catalogItems: readonly CatalogItem[],
   farmSummaryMapContext: FarmSummaryMapContext,
+  locale: FarmSummaryLocale = "en",
 ): FarmSummary {
+  const summaryLocale = readFarmSummaryLocale(locale);
   const validatedFarmSummaryMapContext = createFarmSummaryMapContext(
     farmSummaryMapContext,
   );
@@ -57,8 +74,12 @@ export function createFarmSummary(
     appendFarmSummaryRow(
       summaryRowsById,
       placementBuilding.buildingId,
-      buildingCatalogItem?.name ?? formatUnknownCatalogItemName(placementBuilding.buildingId),
-      "Buildings",
+      readFarmSummaryItemName(
+        buildingCatalogItem,
+        placementBuilding.buildingId,
+        summaryLocale,
+      ),
+      readFarmSummaryCategoryLabel("Buildings", summaryLocale),
     );
   }
 
@@ -71,8 +92,11 @@ export function createFarmSummary(
     appendFarmSummaryRow(
       summaryRowsById,
       placementItem.itemId,
-      catalogItem?.name ?? formatUnknownCatalogItemName(placementItem.itemId),
-      getFarmSummaryItemCategory(placementItem),
+      readFarmSummaryItemName(catalogItem, placementItem.itemId, summaryLocale),
+      readFarmSummaryCategoryLabel(
+        getFarmSummaryItemCategory(placementItem),
+        summaryLocale,
+      ),
     );
   }
 
@@ -81,8 +105,8 @@ export function createFarmSummary(
     appendFarmSummaryRow(
       summaryRowsById,
       placementCrop.cropId,
-      cropCatalogItem?.name ?? formatUnknownCatalogItemName(placementCrop.cropId),
-      "Crops",
+      readFarmSummaryItemName(cropCatalogItem, placementCrop.cropId, summaryLocale),
+      readFarmSummaryCategoryLabel("Crops", summaryLocale),
     );
   }
 
@@ -103,10 +127,12 @@ export function createFarmSummary(
 export function createFarmSummaryCsvFile(
   farmSummaryRows: readonly FarmSummaryRow[],
   dateStamp: string,
+  locale: FarmSummaryLocale = "en",
 ): FarmSummaryCsvFile {
+  const summaryLocale = readFarmSummaryLocale(locale);
   assertFarmSummaryRows(farmSummaryRows);
   assertDateStamp(dateStamp);
-  const csvHeader = "Category,Item,Count";
+  const csvHeader = readFarmSummaryCsvHeader(summaryLocale);
   const csvRows = farmSummaryRows.map(
     (farmSummaryRow) =>
       `${farmSummaryRow.category},"${farmSummaryRow.name.replace(/"/g, '""')}",${String(farmSummaryRow.count)}`,
@@ -224,7 +250,117 @@ function appendFarmSummaryRow(
   summaryRowsById.set(summaryItemId, { category, count: 1, name });
 }
 
-function getFarmSummaryItemCategory(placementItem: PlacementItem): string {
+function readFarmSummaryLocale(locale: FarmSummaryLocale): FarmSummaryLocale {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
+    return locale;
+  }
+
+  throw new TypeError(
+    `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readFarmSummaryItemName(
+  catalogItem: CatalogItem | undefined,
+  catalogItemId: string,
+  locale: FarmSummaryLocale,
+): string {
+  if (catalogItem === undefined) {
+    return readUnknownFarmSummaryItemName(catalogItemId, locale);
+  }
+
+  if (locale === "ru") {
+    return getCatalogSidebarDisplayName(catalogItem, "ru");
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return catalogItem.name;
+  }
+
+  throw new TypeError(
+    `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readUnknownFarmSummaryItemName(
+  catalogItemId: string,
+  locale: FarmSummaryLocale,
+): string {
+  if (locale === "ru") {
+    return `Неизвестный предмет: ${catalogItemId}`;
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return formatUnknownCatalogItemName(catalogItemId);
+  }
+
+  throw new TypeError(
+    `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readFarmSummaryCategoryLabel(
+  categoryId: FarmSummaryCategoryId,
+  locale: FarmSummaryLocale,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return categoryId;
+  }
+
+  if (locale !== "ru") {
+    throw new TypeError(
+      `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+    );
+  }
+
+  if (categoryId === "Buildings") {
+    return "Постройки";
+  }
+
+  if (categoryId === "Crops") {
+    return "Культуры";
+  }
+
+  if (categoryId === "Paths") {
+    return "Дорожки";
+  }
+
+  if (categoryId === "Fences") {
+    return "Заборы";
+  }
+
+  if (categoryId === "Furniture") {
+    return "Мебель";
+  }
+
+  if (categoryId === "Trees") {
+    return "Деревья";
+  }
+
+  if (categoryId === "Items") {
+    return "Предметы";
+  }
+
+  throw new TypeError(
+    `Farm summary category must be one of ${farmSummaryCategoryIds.join(", ")}; received ${JSON.stringify(categoryId)}.`,
+  );
+}
+
+function readFarmSummaryCsvHeader(locale: FarmSummaryLocale): string {
+  if (locale === "ru") {
+    return "Категория,Предмет,Количество";
+  }
+
+  if (locale === "en" || locale === "zh") {
+    return "Category,Item,Count";
+  }
+
+  throw new TypeError(
+    `Farm summary locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function getFarmSummaryItemCategory(placementItem: PlacementItem): FarmSummaryCategoryId {
   if (placementItem.layer === "path") {
     return "Paths";
   }

@@ -1,11 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { getRussianFarmSpouseDisplayName } from "../i18n/planner-russian-display-names";
 import {
   farmSpouseDefinitions,
   supportsFarmCaveChoice,
   supportsFarmSpousePatio,
   type FarmCaveChoice,
+  type FarmSpouseId,
 } from "../maps/farm-map-rendering";
 import {
   setFarmCaveChoice,
@@ -13,7 +15,7 @@ import {
   type MapRenderOptions,
 } from "../maps/map-render-options";
 
-type FarmSettingsLocale = "en" | "zh";
+type FarmSettingsLocale = "en" | "zh" | "ru";
 
 type FarmSettingsPanelProps = Readonly<{
   locale: FarmSettingsLocale;
@@ -26,16 +28,113 @@ type FarmSettingsChange = FarmSettingsPanelProps["onMapRenderOptionsChange"];
 
 const farmCaveChoices = ["none", "mushrooms", "bats"] as const satisfies readonly FarmCaveChoice[];
 
-const unsupportedFarmSettingsMessage =
+const bilingualUnsupportedFarmSettingsMessage =
   "This map has no spouse patio or farm cave. 这张地图没有配偶庭院或农场洞穴。";
 
 function readFarmSettingsLocale(locale: string): FarmSettingsLocale {
-  if (locale === "en" || locale === "zh") {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
     return locale;
   }
 
   throw new TypeError(
-    `Farm settings locale must be "en" or "zh"; received ${JSON.stringify(locale)}.`,
+    `Farm settings locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readUnsupportedFarmSettingsMessage(locale: FarmSettingsLocale): string {
+  if (locale === "en" || locale === "zh") {
+    return bilingualUnsupportedFarmSettingsMessage;
+  }
+
+  if (locale === "ru") {
+    return "На этой карте нет дворика супруга и фермерской пещеры.";
+  }
+
+  throw new TypeError(
+    `Farm settings locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readNoneSpouseLabel(locale: FarmSettingsLocale): string {
+  if (locale === "zh") {
+    return "无";
+  }
+
+  if (locale === "en") {
+    return "None";
+  }
+
+  if (locale === "ru") {
+    return "Нет";
+  }
+
+  throw new TypeError(
+    `Farm settings locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readSpouseButtonLabel(
+  locale: FarmSettingsLocale,
+  spouseId: FarmSpouseId,
+  englishLabel: string,
+): string {
+  if (locale === "en" || locale === "zh") {
+    return englishLabel;
+  }
+
+  if (locale === "ru") {
+    return getRussianFarmSpouseDisplayName(spouseId);
+  }
+
+  throw new TypeError(
+    `Farm settings locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readFarmSettingsSectionTitle(
+  locale: FarmSettingsLocale,
+  section: "spouse" | "cave",
+): string {
+  if (section !== "spouse" && section !== "cave") {
+    throw new TypeError(
+      `Farm settings section must be "spouse" or "cave"; received ${JSON.stringify(section)}.`,
+    );
+  }
+
+  if (locale === "zh") {
+    return section === "spouse" ? "配偶" : "洞穴";
+  }
+
+  if (locale === "en") {
+    return section === "spouse" ? "Spouse" : "Cave";
+  }
+
+  if (locale === "ru") {
+    return section === "spouse" ? "Супруг" : "Пещера";
+  }
+
+  throw new TypeError(
+    `Farm settings locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
+function readCaveLabels(
+  locale: FarmSettingsLocale,
+): Readonly<Record<FarmCaveChoice, string>> {
+  if (locale === "zh") {
+    return { none: "未选择", mushrooms: "蘑菇", bats: "蝙蝠" };
+  }
+
+  if (locale === "en") {
+    return { none: "Not chosen", mushrooms: "Mushrooms", bats: "Bats" };
+  }
+
+  if (locale === "ru") {
+    return { none: "Не выбрано", mushrooms: "Грибы", bats: "Летучие мыши" };
+  }
+
+  throw new TypeError(
+    `Farm settings locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -69,7 +168,7 @@ function SpousePatioChoices({
         aria-pressed={!selectedSpouseId}
         onClick={() => onMapRenderOptionsChange(setFarmSpouseId(mapRenderOptions, null))}
       >
-        {locale === "zh" ? "无" : "None"}
+        {readNoneSpouseLabel(locale)}
       </button>
       {farmSpouseDefinitions.map((spouseDefinition) => (
         <button
@@ -80,7 +179,7 @@ function SpousePatioChoices({
             onMapRenderOptionsChange(setFarmSpouseId(mapRenderOptions, spouseDefinition.id))
           }
         >
-          {spouseDefinition.label}
+          {readSpouseButtonLabel(locale, spouseDefinition.id, spouseDefinition.label)}
         </button>
       ))}
     </div>
@@ -97,14 +196,11 @@ function FarmCaveChoices({
   onMapRenderOptionsChange: FarmSettingsChange;
 }>) {
   const selectedCaveChoice = mapRenderOptions.farm?.caveChoice ?? "none";
-  const caveLabels =
-    locale === "zh"
-      ? (["未选择", "蘑菇", "蝙蝠"] as const)
-      : (["Not chosen", "Mushrooms", "Bats"] as const);
+  const caveLabels = readCaveLabels(locale);
 
   return (
     <div className="editor-config-chips">
-      {farmCaveChoices.map((caveChoice, caveChoiceIndex) => (
+      {farmCaveChoices.map((caveChoice) => (
         <button
           type="button"
           key={caveChoice}
@@ -113,7 +209,7 @@ function FarmCaveChoices({
             onMapRenderOptionsChange(setFarmCaveChoice(mapRenderOptions, caveChoice))
           }
         >
-          {caveLabels[caveChoiceIndex]}
+          {caveLabels[caveChoice]}
         </button>
       ))}
     </div>
@@ -128,7 +224,7 @@ export function FarmSettingsPanel(props: FarmSettingsPanelProps) {
   return (
     <div className="editor-config-panels">
       {showsSpousePatio ? (
-        <FarmSettingsSection title={locale === "zh" ? "配偶" : "Spouse"}>
+        <FarmSettingsSection title={readFarmSettingsSectionTitle(locale, "spouse")}>
           <SpousePatioChoices
             locale={locale}
             mapRenderOptions={props.mapRenderOptions}
@@ -137,7 +233,7 @@ export function FarmSettingsPanel(props: FarmSettingsPanelProps) {
         </FarmSettingsSection>
       ) : null}
       {showsFarmCave ? (
-        <FarmSettingsSection title={locale === "zh" ? "洞穴" : "Cave"}>
+        <FarmSettingsSection title={readFarmSettingsSectionTitle(locale, "cave")}>
           <FarmCaveChoices
             locale={locale}
             mapRenderOptions={props.mapRenderOptions}
@@ -146,7 +242,7 @@ export function FarmSettingsPanel(props: FarmSettingsPanelProps) {
         </FarmSettingsSection>
       ) : null}
       {showsSpousePatio || showsFarmCave ? null : (
-        <p className="editor-config-label">{unsupportedFarmSettingsMessage}</p>
+        <p className="editor-config-label">{readUnsupportedFarmSettingsMessage(locale)}</p>
       )}
     </div>
   );

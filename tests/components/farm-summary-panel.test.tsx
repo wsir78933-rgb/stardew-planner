@@ -113,4 +113,99 @@ describe("farm summary panel", () => {
     expect(modalMarkup).toContain("导出 CSV");
     expect(modalMarkup).toContain('role="dialog"');
   });
+
+  it("passes Russian locale into summary creation", () => {
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        {
+          instanceId: 1,
+          itemId: "object:390",
+          x: 2,
+          y: 3,
+          layer: "item" as const,
+          rotation: 0,
+          footprint: { width: 1, height: 1 },
+          variant: 0,
+          tintColor: "#ffffff",
+          locked: false,
+          isRug: false,
+          isGrass: false,
+          isTable: false,
+          isLongTable: false,
+          flipped: false,
+          bedType: null,
+        },
+      ],
+      nextItemId: 2,
+    };
+
+    expect(() =>
+      renderToStaticMarkup(
+        createElement(FarmSummaryPanel, {
+          catalogItems,
+          copy: {
+            detail: getSaveModalCopy("ru").farmSummaryDetail,
+            preview: getSaveModalCopy("ru").farmSummaryPreview,
+          },
+          locale: "ru",
+          mapContext: standardFarmSummaryMapContext,
+          placementSnapshot,
+        }),
+      ),
+    ).toThrow('Catalog item ID "object:390" has no Russian display name.');
+  });
+
+  it("shows the Russian map name when every placed item has a Russian name", () => {
+    const furnitureCatalogItems: readonly CatalogItem[] = [
+      {
+        id: "furniture_0",
+        name: "Oak Chair",
+        category: "decor",
+        tileSize: { width: 1, height: 1 },
+        textureLocalPath: "/game-assets/furniture.png",
+        sprite: { kind: "sprite-index", index: 0 },
+        allowedTools: ["cursor"],
+      },
+    ];
+    const placementSnapshot = {
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        {
+          instanceId: 1,
+          itemId: "furniture_0",
+          x: 2,
+          y: 3,
+          layer: "item" as const,
+          rotation: 0,
+          footprint: { width: 1, height: 1 },
+          variant: 0,
+          tintColor: "#ffffff",
+          locked: false,
+          isRug: false,
+          isGrass: false,
+          isTable: false,
+          isLongTable: false,
+          flipped: false,
+          bedType: null,
+        },
+      ],
+      nextItemId: 2,
+    };
+    const markup = renderToStaticMarkup(
+      createElement(FarmSummaryPanel, {
+        catalogItems: furnitureCatalogItems,
+        copy: {
+          detail: getSaveModalCopy("ru").farmSummaryDetail,
+          preview: getSaveModalCopy("ru").farmSummaryPreview,
+        },
+        locale: "ru",
+        mapContext: standardFarmSummaryMapContext,
+        placementSnapshot,
+      }),
+    );
+
+    expect(markup).toContain("Карта: Стандартная ферма");
+    expect(markup).toContain("1 предмет размещён");
+  });
 });

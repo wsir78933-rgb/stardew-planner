@@ -4,8 +4,16 @@ import type { PublicLocale } from "../../src/i18n/public-locale";
 import type { PublicCanonicalPath } from "../../src/i18n/public-route-registry";
 import {
   createPublicPageMetadata,
+  createRussianHomepageMetadata,
   type PublicPageMetadataInput,
 } from "../../src/seo/page-metadata";
+
+const homepageLanguageAlternates = {
+  en: "https://stardewvalleyplanner.art",
+  "zh-CN": "https://stardewvalleyplanner.art/zh",
+  ru: "https://stardewvalleyplanner.art/ru",
+  "x-default": "https://stardewvalleyplanner.art",
+} as const;
 
 const expectedSocialImageUrl =
   "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.webp";
@@ -122,4 +130,49 @@ it("creates Chinese metadata from a locale-neutral public identity", () => {
   expect(metadata.twitter).toMatchObject({
     images: [expectedSocialImageUrl],
   });
+});
+
+it("publishes four homepage language alternates and keeps the Russian canonical on /ru", () => {
+  const englishHomepageMetadata = createPublicPageMetadata({
+    locale: "en",
+    canonicalPath: "/",
+    title: "Stardew Valley Planner – Free Online Farm Layout Tool",
+    description: "Plan your Stardew Valley farm before building in-game.",
+  });
+  const chineseHomepageMetadata = createPublicPageMetadata({
+    locale: "zh-CN",
+    canonicalPath: "/",
+    title: "星露谷农场规划器",
+    description: "使用本地地图、物品和项目规划你的星露谷农场布局。",
+  });
+  const confirmedRussianDescription =
+    "Планировщик для Stardew Valley: создавайте планировку фермы онлайн. 8 типов ферм, здания и посевы, смена сезонов, зоны действия и импорт сохранений.";
+  const confirmedRussianTitle =
+    "Планировщик фермы Stardew Valley — бесплатно онлайн";
+  const russianHomepageMetadata = createRussianHomepageMetadata({
+    title: confirmedRussianTitle,
+    description: confirmedRussianDescription,
+  });
+
+  expect(englishHomepageMetadata.alternates).toEqual({
+    canonical: "https://stardewvalleyplanner.art",
+    languages: homepageLanguageAlternates,
+  });
+  expect(chineseHomepageMetadata.alternates).toEqual({
+    canonical: "https://stardewvalleyplanner.art/zh",
+    languages: homepageLanguageAlternates,
+  });
+  expect(russianHomepageMetadata.alternates).toEqual({
+    canonical: "https://stardewvalleyplanner.art/ru",
+    languages: homepageLanguageAlternates,
+  });
+  expect(russianHomepageMetadata.title).toBe(confirmedRussianTitle);
+  expect(russianHomepageMetadata.description).toBe(confirmedRussianDescription);
+  expect(russianHomepageMetadata).not.toHaveProperty("keywords");
+  expect(() =>
+    createRussianHomepageMetadata({
+      title: "   ",
+      description: confirmedRussianDescription,
+    }),
+  ).toThrow('Received: "   "');
 });

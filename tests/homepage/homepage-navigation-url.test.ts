@@ -22,6 +22,7 @@ describe("homepage navigation URLs", () => {
         localeHrefByLocale: {
           en: expectedEnglishHref,
           "zh-CN": expectedChineseHref,
+          ru: expectedEnglishHref.replace(/^\//, "/ru"),
         },
         plannerHref: "#planner",
       });
@@ -44,6 +45,7 @@ describe("homepage navigation URLs", () => {
         localeHrefByLocale: {
           en: "/#planner",
           "zh-CN": "/zh#planner",
+          ru: "/ru#planner",
         },
         plannerHref: "#planner",
       });
@@ -61,6 +63,7 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/",
         "zh-CN": "/zh",
+        ru: "/ru",
       },
       plannerHref: "#planner",
     });
@@ -85,8 +88,53 @@ describe("homepage navigation URLs", () => {
       localeHrefByLocale: {
         en: "/?farmType=forest",
         "zh-CN": "/zh?farmType=forest",
+        ru: "/ru?farmType=forest",
       },
       plannerHref: "#planner",
     });
+  });
+
+  it("keeps a supported farm type on the Russian homepage path", () => {
+    expect(
+      createHomepageNavigationUrls({
+        currentLocale: "ru",
+        hash: "#planner",
+        search: "?farmType=forest",
+      }),
+    ).toEqual({
+      localeHrefByLocale: {
+        en: "/?farmType=forest#planner",
+        "zh-CN": "/zh?farmType=forest#planner",
+        ru: "/ru?farmType=forest#planner",
+      },
+      plannerHref: "#planner",
+    });
+  });
+
+  it("drops an unknown farm type from the Russian homepage instead of forwarding it", () => {
+    expect(
+      createHomepageNavigationUrls({
+        currentLocale: "ru",
+        hash: "#planner",
+        search: "?farmType=unknown",
+      }),
+    ).toEqual({
+      localeHrefByLocale: {
+        en: "/#planner",
+        "zh-CN": "/zh#planner",
+        ru: "/ru#planner",
+      },
+      plannerHref: "#planner",
+    });
+  });
+
+  it("rejects a display locale outside English, Chinese, and Russian", () => {
+    expect(() =>
+      createHomepageNavigationUrls({
+        currentLocale: "fr" as never,
+        hash: "",
+        search: "",
+      }),
+    ).toThrow('Received: "fr"');
   });
 });

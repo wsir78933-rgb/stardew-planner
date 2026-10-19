@@ -1,5 +1,12 @@
+import {
+  isHomepageDisplayLocale,
+  type HomepageDisplayLocale,
+} from "../homepage/homepage-locale";
 import type { PublicLocale } from "../i18n/public-locale";
-import { getLocalizedPublicPath } from "../i18n/public-route-registry";
+import {
+  getHomepageDisplayPath,
+  getLocalizedPublicPath,
+} from "../i18n/public-route-registry";
 
 export const discordInviteUrl = "https://discord.gg/GGfUJZsMN";
 
@@ -46,11 +53,31 @@ export type SiteFooterContent = Readonly<{
   legal: SiteFooterGroup;
 }>;
 
+function readFooterSubpageLocale(locale: HomepageDisplayLocale): PublicLocale {
+  if (locale === "ru") {
+    return "en";
+  }
+  if (locale === "en" || locale === "zh-CN") {
+    return locale;
+  }
+
+  throw new Error(
+    `Unsupported footer locale. Received: ${JSON.stringify(locale)}.`,
+  );
+}
+
 export function createSiteFooterContent(
   footerCopy: SiteFooterCopy,
-  locale: PublicLocale,
+  locale: HomepageDisplayLocale,
 ): SiteFooterContent {
-  const localizedHomepagePath = getLocalizedPublicPath(locale, "/");
+  if (!isHomepageDisplayLocale(locale)) {
+    throw new Error(
+      `Unsupported footer locale. Received: ${JSON.stringify(locale)}.`,
+    );
+  }
+
+  const localizedHomepagePath = getHomepageDisplayPath(locale);
+  const subpageLocale = readFooterSubpageLocale(locale);
 
   return {
     identity: {
@@ -69,7 +96,7 @@ export function createSiteFooterContent(
       links: [
         {
           label: footerCopy.explore.blog,
-          href: getLocalizedPublicPath(locale, "/blog"),
+          href: getLocalizedPublicPath(subpageLocale, "/blog"),
         },
         {
           label: footerCopy.explore.capabilities,
@@ -83,15 +110,15 @@ export function createSiteFooterContent(
       links: [
         {
           label: footerCopy.legal.privacy,
-          href: getLocalizedPublicPath(locale, "/privacy"),
+          href: getLocalizedPublicPath(subpageLocale, "/privacy"),
         },
         {
           label: footerCopy.legal.terms,
-          href: getLocalizedPublicPath(locale, "/terms"),
+          href: getLocalizedPublicPath(subpageLocale, "/terms"),
         },
         {
           label: footerCopy.legal.contact,
-          href: getLocalizedPublicPath(locale, "/contact"),
+          href: getLocalizedPublicPath(subpageLocale, "/contact"),
         },
       ],
     },

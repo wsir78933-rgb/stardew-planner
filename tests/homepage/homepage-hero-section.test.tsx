@@ -69,6 +69,32 @@ test("keeps the Chinese hero title and description strings unchanged", () => {
   expect(markup).toContain("免费玩家规划器。可本地保存，也可同步所选项目。");
 });
 
+test("renders one Russian hero heading from the confirmed homepage copy", () => {
+  const copy = homepageCopyByLocale.ru;
+  const markup = renderToStaticMarkup(
+    createElement(HomepageHeroSection, {
+      copy: copy.hero,
+      capabilitiesHref: "#capabilities",
+      capabilitiesLabel: copy.navigation.capabilitiesLabel,
+      plannerHref: "/ru#planner",
+    }),
+  );
+
+  expect(markup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+  expect(markup).toContain("Планировщик фермы ");
+  expect(markup).toContain(
+    '<em data-homepage-hero-emphasis="true">Stardew Valley</em>',
+  );
+  expect(markup).toContain("Бесплатный онлайн-инструмент для планировки фермы");
+  expect(markup).toContain(
+    "Планируйте свою ферму в Stardew Valley до того, как начнете строить в игре. Выбирайте из 8 типов ферм, расставляйте здания и посевы, переключайте сезоны, проверяйте зоны действия и импортируйте сохранения.",
+  );
+  expect(markup).toMatch(
+    /<a[^>]*href="\/ru#planner"[^>]*>Начать планирование<\/a>/,
+  );
+  expect(markup).toContain("Примеры ферм");
+});
+
 test("ships the three hero fan images as public WebP files", () => {
   for (const heroFanImagePath of heroFanImagePaths) {
     const absoluteImagePath = resolve(process.cwd(), heroFanImagePath);

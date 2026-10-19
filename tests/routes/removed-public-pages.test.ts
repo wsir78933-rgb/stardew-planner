@@ -88,8 +88,23 @@ describe("removed public guide pages", () => {
     const sitemapXml = readFileSync(join(outputDirectory, "sitemap.xml"), "utf8");
     const llmsText = readFileSync(join(outputDirectory, "llms.txt"), "utf8");
     const exportedHtmlFiles = listHtmlFiles(outputDirectory);
+    const sitemapLocationValues = Array.from(
+      sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g),
+      ([, sitemapLocationValue]) => sitemapLocationValue,
+    );
+    const indexableRegistryCount = getLocalizedIndexablePublicRouteEntries().length;
+    const russianHomepageUrl = "https://stardewvalleyplanner.art/ru";
+    const russianSitemapUrls = sitemapLocationValues.filter(
+      (sitemapLocationValue) =>
+        sitemapLocationValue === russianHomepageUrl
+        || sitemapLocationValue.startsWith(`${russianHomepageUrl}/`),
+    );
 
-    expect([...sitemapXml.matchAll(/<loc>/g)]).toHaveLength(64);
+    expect(
+      sitemapLocationValues,
+      `Sitemap URL count mismatch. Received: ${sitemapLocationValues.length}. Expected registry length plus the Russian homepage: ${indexableRegistryCount + 1}. Russian URLs: ${JSON.stringify(russianSitemapUrls)}.`,
+    ).toHaveLength(indexableRegistryCount + 1);
+    expect(russianSitemapUrls).toEqual([russianHomepageUrl]);
 
     for (const removedLocalizedPath of removedLocalizedPaths) {
       const removedStaticPagePath = join(

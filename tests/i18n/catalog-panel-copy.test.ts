@@ -42,6 +42,7 @@ const catalogPanelFilterLabelIds = [
   "large-decor",
   "small-decor",
   "special",
+  "special-items",
   "wallpaper",
   "flooring",
   "bushes",
@@ -110,6 +111,8 @@ describe("catalog panel copy", () => {
       wallpaper: "Wallpaper",
       cushions: "Cushions",
       bushes: "Bushes",
+      special: "Special",
+      "special-items": "Special items",
     });
     expect(Object.keys(englishCopy.filterLabels).sort()).toEqual(
       [...catalogPanelFilterLabelIds].sort(),
@@ -177,6 +180,8 @@ describe("catalog panel copy", () => {
       wallpaper: "墙纸",
       cushions: "垫子",
       bushes: "灌木",
+      special: "特殊物品",
+      "special-items": "Special items",
     });
     expect(Object.keys(chineseCopy.filterLabels).sort()).toEqual(
       [...catalogPanelFilterLabelIds].sort(),
@@ -207,6 +212,70 @@ describe("catalog panel copy", () => {
       Lit: "已点燃",
       Unlit: "未点燃",
     });
+  });
+
+  it("provides Russian categories, search, errors, and dynamic labels", () => {
+    const russianCopy = getCatalogPanelCopy("ru");
+
+    expect(russianCopy.catalogLabel).toBe("Каталог предметов");
+    expect(russianCopy.browseItems).toBe("Обзор предметов");
+    expect(russianCopy.searchAllItems).toBe("Искать среди всех предметов");
+    expect(russianCopy.searchResults).toBe("Результаты поиска");
+    expect(russianCopy.clearSearch).toBe("Очистить поиск");
+    expect(russianCopy.categories).toEqual({
+      buildings: "Постройки",
+      crops: "Культуры",
+      trees: "Деревья",
+      equipment: "Оборудование",
+      paths: "Заборы и дорожки",
+      lighting: "Освещение",
+      furniture: "Мебель",
+      decor: "Декор",
+    });
+    expect(russianCopy.filterLabels.spring).toBe("Весна");
+    expect(russianCopy.filterLabels.machines).toBe("Машины");
+    expect(russianCopy.filterLabels.flooring).toBe("Полы");
+    expect(russianCopy.filterLabels.special).toBe("Особые");
+    expect(russianCopy.filterLabels["special-items"]).toBe("Особые");
+    expect(russianCopy.filterLabels["special-items"]).not.toBe("Special items");
+    expect(russianCopy.variantLabels.Lit).toBe("Зажжено");
+    expect(russianCopy.variantLabels.Watered).toBe("Полито");
+    expect(russianCopy.placingItem("Oak Chair")).toBe("Размещение: Oak Chair");
+    expect(russianCopy.fillingItem("Oak Chair")).toBe("Заполнение: Oak Chair");
+    expect(russianCopy.placeItemHint).toBe(
+      "Нажмите, чтобы разместить · Esc — отмена",
+    );
+    expect(russianCopy.selectItem("Keg", 2, 1)).toBe("Выбрать Keg, 2 × 1 клеток");
+    expect(russianCopy.cycleVariant("Chair", "Carved")).toBe(
+      "Сменить вариант «Chair», сейчас: Carved",
+    );
+    expect(russianCopy.sceneAvailabilityReason("indoor-only")).toBe(
+      "Этот предмет можно разместить только в помещении.",
+    );
+    expect(russianCopy.sceneAvailabilityReason("outdoor-only")).toBe(
+      "Этот предмет можно разместить только на улице.",
+    );
+    expect(russianCopy.unavailableGroup(1)).toBe(
+      "1 предмет нельзя разместить здесь",
+    );
+    expect(russianCopy.unavailableGroup(2)).toBe(
+      "2 предмета нельзя разместить здесь",
+    );
+    expect(russianCopy.unavailableGroup(5)).toBe(
+      "5 предметов нельзя разместить здесь",
+    );
+    expect(russianCopy.unavailableGroup(3, true)).toBe(
+      "3 результата нельзя разместить здесь",
+    );
+    expect(russianCopy.loadFailed).toBe("Не удалось загрузить предметы.");
+    expect(russianCopy.loading).toBe("Загрузка предметов…");
+    expect(russianCopy.noResults).toBe("Предметы не найдены.");
+    expect(russianCopy.placingItem("Oak Chair")).not.toContain("Placing");
+    expect(russianCopy.placingItem("Oak Chair")).not.toContain("正在放置");
+    expect(russianCopy.searchAllItems).not.toBe("Search all items");
+    expect(russianCopy.searchAllItems).not.toBe("搜索全部物品");
+    expect(russianCopy.categories.crops).not.toBe("Crops");
+    expect(russianCopy.categories.crops).not.toBe("作物");
   });
 
   it("rejects a locale outside the supported set and includes its value", () => {

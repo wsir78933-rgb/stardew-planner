@@ -66,6 +66,7 @@ test("renders a closed language disclosure with real English and Chinese route a
       localeHrefByLocale={{
         en: "/?farmType=forest#planner",
         "zh-CN": "/zh?farmType=forest#planner",
+        ru: "/ru?farmType=forest#planner",
       }}
     />,
   );
@@ -87,6 +88,10 @@ test("renders a closed language disclosure with real English and Chinese route a
   expect(markup).toMatch(
     /<a[^>]*data-homepage-language-option[^>]*href="\/zh\?farmType=forest#planner"[^>]*>中文<\/a>/,
   );
+  expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/ru\?farmType=forest#planner"[^>]*>Русский<\/a>/,
+  );
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
   expect(markup).not.toMatch(/<button[^>]*data-homepage-language-option/);
   expect(markup).not.toContain("aria-current");
   expect(markup).not.toContain("aria-pressed");
@@ -193,6 +198,7 @@ test("text trigger keeps the language accessible name, visible label, caret, and
       localeHrefByLocale={{
         en: "/?farmType=forest#planner",
         "zh-CN": "/zh?farmType=forest#planner",
+        ru: "/ru?farmType=forest#planner",
       }}
     />,
   );
@@ -210,4 +216,8 @@ test("text trigger keeps the language accessible name, visible label, caret, and
   expect(markup).toMatch(
     /<a[^>]*data-homepage-language-option[^>]*href="\/zh\?farmType=forest#planner"[^>]*>中文<\/a>/,
   );
+  expect(markup).toMatch(
+    /<a[^>]*data-homepage-language-option[^>]*href="\/ru\?farmType=forest#planner"[^>]*>Русский<\/a>/,
+  );
+  expect(markup.match(/data-homepage-language-option/g)).toHaveLength(3);
 });

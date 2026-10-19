@@ -9,7 +9,7 @@ import {
   type PlannerReferenceIconName,
 } from "./planner-reference-icon";
 
-type EditorToolbarLocale = "en" | "zh";
+type EditorToolbarLocale = "en" | "zh" | "ru";
 
 type EditorToolbarProperties = Readonly<{
   tool: EditorTool | null;
@@ -72,6 +72,7 @@ const editorToolbarCopyByLocale = {
     zoomTooltip: "Toggle scroll wheel zoom and align the planner in view: scroll up to zoom in, down to zoom out",
     undo: "Undo",
     redo: "Redo",
+    history: "History",
   },
   zh: {
     toolbar: "编辑工具",
@@ -87,6 +88,23 @@ const editorToolbarCopyByLocale = {
     zoomTooltip: "点击开启/关闭滚轮缩放，并将规划器对齐到窗口：上滚放大，下滚缩小",
     undo: "撤销",
     redo: "重做",
+    history: "History",
+  },
+  ru: {
+    toolbar: "Инструменты редактора",
+    select: "Выбор",
+    multi: "Несколько",
+    fill: "Заливка",
+    erase: "Стирание",
+    selectTooltip: "Выбрать и переместить предметы (V)",
+    multiTooltip: "Щёлкните или выделите рамкой несколько предметов (M)",
+    fillTooltip: "Проведите прямоугольник, чтобы залить предметами (F)",
+    eraseTooltip: "Щёлкните или выделите рамкой, чтобы стереть предметы (E)",
+    zoom: "Масштаб",
+    zoomTooltip: "Нажмите, чтобы включить или выключить масштаб колесом и выровнять планировщик в окне: вверх — увеличить, вниз — уменьшить",
+    undo: "Отменить",
+    redo: "Повторить",
+    history: "История",
   },
 } as const;
 
@@ -108,7 +126,7 @@ export function EditorToolbar({
   locale = "en",
   isToolDisabled,
 }: EditorToolbarProperties) {
-  const editorToolbarCopy = editorToolbarCopyByLocale[locale];
+  const editorToolbarCopy = readEditorToolbarCopy(locale);
   const renderToolButton = (editorToolbarControl: EditorToolbarControl) => {
     const isSelected = tool === editorToolbarControl.tool;
     const isAvailable =
@@ -164,7 +182,7 @@ export function EditorToolbar({
           </button>
         </div>
         <span aria-hidden="true" className="separator editor-toolbar__divider" />
-        <div aria-label="History" className="tool-group editor-toolbar__history-group" role="group">
+        <div aria-label={editorToolbarCopy.history} className="tool-group editor-toolbar__history-group" role="group">
           <button
             aria-label={editorToolbarCopy.undo}
             className="tool-btn editor-toolbar__button editor-toolbar__history-button"
@@ -221,13 +239,39 @@ function getEditorToolbarButtonClassName(
   return className + (isSelected ? " active" : "");
 }
 
+function readEditorToolbarCopy(locale: EditorToolbarLocale) {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
+    return editorToolbarCopyByLocale[locale];
+  }
+
+  throw new TypeError(
+    `Editor toolbar locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
+
 function getHistoryTitle(
   locale: EditorToolbarLocale,
   action: "undo" | "redo",
 ): string {
+  if (action !== "undo" && action !== "redo") {
+    throw new TypeError(
+      `Editor toolbar history action must be "undo" or "redo"; received ${JSON.stringify(action)}.`,
+    );
+  }
+
   if (locale === "zh") {
     return action === "undo" ? "撤销（Ctrl+Z）" : "重做（Ctrl+Y）";
   }
 
-  return action === "undo" ? "Undo (Ctrl+Z)" : "Redo (Ctrl+Y)";
+  if (locale === "en") {
+    return action === "undo" ? "Undo (Ctrl+Z)" : "Redo (Ctrl+Y)";
+  }
+
+  if (locale === "ru") {
+    return action === "undo" ? "Отменить (Ctrl+Z)" : "Повторить (Ctrl+Y)";
+  }
+
+  throw new TypeError(
+    `Editor toolbar locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
 }

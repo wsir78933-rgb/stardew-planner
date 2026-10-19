@@ -57,6 +57,7 @@ const expectedPublicHtmlPathnames = [
   ...expectedCanonicalPublicPathnames.map((canonicalPathname) =>
     canonicalPathname === "/" ? "/zh" : `/zh${canonicalPathname}`,
   ),
+  "/ru",
 ];
 
 const expectedBlogPathnamesForFixture = [
@@ -128,23 +129,25 @@ function createExpectedAbsoluteUrl(pathname) {
 }
 
 function getExpectedLocalizedPathContract(pathname) {
-  const isChinesePathname = pathname === "/zh" || pathname.startsWith("/zh/");
-  const canonicalPathname = isChinesePathname
-    ? pathname === "/zh"
-      ? "/"
-      : pathname.slice(3)
-    : pathname;
-  const englishPathname = canonicalPathname;
-  const chinesePathname =
-    canonicalPathname === "/" ? "/zh" : `/zh${canonicalPathname}`;
+  const pathContract = expectedPublicHtmlPathContracts.find(
+    (candidatePathContract) => candidatePathContract.pathname === pathname,
+  );
+  if (pathContract === undefined) {
+    throw new Error(
+      `Production SEO fixture pathname is missing from the contract. Received: ${JSON.stringify(pathname)}.`,
+    );
+  }
+
+  const languageAlternates = {};
+  for (const [language, alternatePathname] of Object.entries(
+    pathContract.languageAlternatePathnames,
+  )) {
+    languageAlternates[language] = createExpectedAbsoluteUrl(alternatePathname);
+  }
 
   return {
     canonicalUrl: createExpectedAbsoluteUrl(pathname),
-    languageAlternates: {
-      en: createExpectedAbsoluteUrl(englishPathname),
-      "zh-CN": createExpectedAbsoluteUrl(chinesePathname),
-      "x-default": createExpectedAbsoluteUrl(englishPathname),
-    },
+    languageAlternates,
   };
 }
 
@@ -161,12 +164,15 @@ function createPublicHtml(pathname, htmlOverrides = {}) {
   const staticAssetUrl = htmlOverrides.staticAssetUrl
     ?? hashedStaticAssetPathname;
 
+  const languageAlternateLinks = Object.entries(languageAlternates).map(
+    ([language, alternateUrl]) =>
+      `<link href="${alternateUrl}" hreflang="${language}" rel="alternate">`,
+  );
+
   return [
     "<!doctype html><html><head>",
     `<link href="${canonicalUrl}" rel="canonical">`,
-    `<link href="${languageAlternates.en}" hrefLang="en" rel="alternate">`,
-    `<link rel="alternate" hreflang="zh-CN" href="${languageAlternates["zh-CN"]}">`,
-    `<link hreflang="x-default" href="${languageAlternates["x-default"]}" rel="alternate">`,
+    ...languageAlternateLinks,
     `<meta content="${robotsContent}" name="robots">`,
     `<script src="${staticAssetUrl}"></script>`,
     "</head><body>Production SEO fixture</body></html>",
@@ -392,8 +398,8 @@ describe("production SEO smoke arguments", () => {
 });
 
 describe("production SEO smoke static contract", () => {
-  it("declares all 32 localized public HTML paths", () => {
-    expect(expectedPublicHtmlPathContracts).toHaveLength(32);
+  it("declares all 33 localized public HTML paths", () => {
+    expect(expectedPublicHtmlPathContracts).toHaveLength(33);
     expect(
       expectedPublicHtmlPathContracts.map(({ pathname }) => pathname),
     ).toEqual(expectedPublicHtmlPathnames);
@@ -405,8 +411,8 @@ describe("production SEO smoke static contract", () => {
     ).toBe(true);
   });
 
-  it("declares the exact 30 indexable sitemap pathnames", () => {
-    expect(expectedSitemapPathnames).toHaveLength(30);
+  it("declares the exact 31 indexable sitemap pathnames", () => {
+    expect(expectedSitemapPathnames).toHaveLength(31);
     expect(expectedSitemapPathnames).toEqual(
       expectedPublicHtmlPathnames.filter(
         (pathname) => !expectedNoindexContactPathnamesForFixture.includes(pathname),
@@ -426,6 +432,37 @@ describe("production SEO smoke static contract", () => {
     );
     for (const contactPathname of expectedNoindexContactPathnames) {
       expect(expectedSitemapPathnames).not.toContain(contactPathname);
+    }
+  });
+
+  it("adds exactly one Russian homepage and four homepage alternates", () => {
+    expect(
+      expectedPublicHtmlPathContracts
+        .map(({ pathname }) => pathname)
+        .filter((pathname) => pathname === "/ru" || pathname.startsWith("/ru/")),
+    ).toEqual(["/ru"]);
+    expect(
+      expectedSitemapPathnames.filter(
+        (pathname) => pathname === "/ru" || pathname.startsWith("/ru/"),
+      ),
+    ).toEqual(["/ru"]);
+
+    for (const pathContract of expectedPublicHtmlPathContracts) {
+      if (pathContract.canonicalPathname === "/") {
+        expect(pathContract.languageAlternatePathnames).toEqual({
+          en: "/",
+          "zh-CN": "/zh",
+          ru: "/ru",
+          "x-default": "/",
+        });
+      } else {
+        expect(pathContract.languageAlternatePathnames).toEqual({
+          en: pathContract.canonicalPathname,
+          "zh-CN": `/zh${pathContract.canonicalPathname}`,
+          "x-default": pathContract.canonicalPathname,
+        });
+        expect(pathContract.languageAlternatePathnames).not.toHaveProperty("ru");
+      }
     }
   });
 
@@ -463,12 +500,12 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
 
     expect(summary).toMatchObject({
-      publicHtmlPageCount: 32,
-      sitemapUrlCount: 30,
+      publicHtmlPageCount: 33,
+      sitemapUrlCount: 31,
       noindexContactPageCount: 2,
       missingPageCount: 1,
     });
-    expect(requests).toHaveLength(38);
+    expect(requests).toHaveLength(39);
     expect(requests[0]).toEqual({
       requestUrl:
         "http://stardewvalleyplanner.art/privacy?seo_https_probe=1",
@@ -481,7 +518,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
     });
     expect(
       requests
-        .slice(2, 34)
+        .slice(2, 35)
         .map(({ requestUrl }) => new URL(requestUrl).pathname),
     ).toEqual(expectedPublicHtmlPathnames);
   });
@@ -725,8 +762,8 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "30 unique sitemap URLs",
-      "29",
+      "31 unique sitemap URLs",
+      "30",
     ]);
   });
 
@@ -778,7 +815,7 @@ describe("production SEO smoke HTTP and HTML checks", () => {
 
     await expectSmokeFailure(fetchResponse, [
       sitemapUrl,
-      "30 unique sitemap URLs",
+      "31 unique sitemap URLs",
       "0",
     ]);
   });
@@ -858,13 +895,13 @@ describe("production SEO smoke security headers and static caching", () => {
     });
 
     expect(summary).toEqual({
-      publicHtmlPageCount: 32,
-      sitemapUrlCount: 30,
+      publicHtmlPageCount: 33,
+      sitemapUrlCount: 31,
       noindexContactPageCount: 2,
       missingPageCount: 1,
-      securityHeaderResponseCount: 33,
+      securityHeaderResponseCount: 34,
       cachedStaticAssetCount: 1,
-      totalRequestCount: 38,
+      totalRequestCount: 39,
     });
     expect(Object.isFrozen(summary)).toBe(true);
     expect(requests.at(-1)).toEqual({
@@ -917,7 +954,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 33 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 34 });
   });
 
   it("rejects missing CSP and missing enforced frame protection", async () => {
@@ -1025,7 +1062,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 33 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 34 });
   });
 
   it("rejects a quoted zero HSTS max-age", async () => {
@@ -1166,7 +1203,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 33 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 34 });
   });
 
   it("accepts multiple declared policies when their combined frame ancestors are restrictive", async () => {
@@ -1187,7 +1224,7 @@ describe("production SEO smoke security headers and static caching", () => {
 
     await expect(
       runProductionSeoSmoke({ fetchResponse, origin: productionOrigin }),
-    ).resolves.toMatchObject({ securityHeaderResponseCount: 33 });
+    ).resolves.toMatchObject({ securityHeaderResponseCount: 34 });
   });
 
   it("checks security headers on the missing-page HTML response", async () => {

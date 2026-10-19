@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import { SiteFooter } from "../../src/components/site-footer";
+import { russianHomepageCopy } from "../../src/homepage/homepage-copy.ru";
 import {
   createSiteFooterContent,
   type SiteFooterCopy,
@@ -94,4 +95,30 @@ it("uses Chinese homepage destinations throughout the Chinese footer", () => {
   expect(footerMarkup).not.toContain('href="/"');
   expect(footerMarkup).not.toContain('href="/#capabilities"');
   expect(footerMarkup).not.toContain('href="/#faq"');
+});
+
+it("keeps Russian footer labels on the Russian homepage and English legal pages", () => {
+  const footerMarkup = renderToStaticMarkup(
+    <SiteFooter
+      content={createSiteFooterContent(russianHomepageCopy.footer, "ru")}
+    />,
+  );
+
+  expect(footerMarkup).toContain("Планировщик фермы Stardew Valley");
+  expect(footerMarkup).toContain("Политика конфиденциальности");
+  expect(footerMarkup).toContain("Условия обслуживания");
+  expect(footerMarkup).toContain("Связаться с нами");
+  expect(footerMarkup).toContain("Блог");
+  expect(footerMarkup).toContain('href="/ru"');
+  expect(footerMarkup).toContain('href="/blog"');
+  expect(footerMarkup).toContain('href="/ru#capabilities"');
+  expect(footerMarkup).toContain('href="/ru#faq"');
+  expect(footerMarkup).toContain('href="/privacy"');
+  expect(footerMarkup).toContain('href="/terms"');
+  expect(footerMarkup).toContain('href="/contact"');
+  expect(footerMarkup).not.toContain('href="/ru/blog"');
+  expect(footerMarkup).not.toContain('href="/ru/privacy"');
+  expect(footerMarkup).not.toContain('href="/ru/terms"');
+  expect(footerMarkup).not.toContain('href="/ru/contact"');
+  expect(footerMarkup).not.toContain('href="/zh/privacy"');
 });

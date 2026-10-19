@@ -8,7 +8,7 @@ import {
   type PlannerReferenceIconName,
 } from "./planner-reference-icon";
 
-type EditorMenuBarLocale = "en" | "zh";
+type EditorMenuBarLocale = "en" | "zh" | "ru";
 
 type EditorMenuBarProperties = Readonly<{
   activeModalId: EditorModalId | null;
@@ -145,6 +145,23 @@ const editorMenuCopyByLocale = {
     view: "视图",
     settings: "设置",
   },
+  ru: {
+    navigation: "Навигация редактора",
+    brand: "Планировщик Stardew",
+    utilities: "Справка и отзывы",
+    help: "Справка",
+    keyboard: "Сочетания клавиш",
+    feedback: "Отзыв",
+    library: "Библиотека",
+    currentMap: "Текущая карта",
+    features: "Параметры редактора",
+    menu: "Меню",
+    ambience: "Атмосфера",
+    farmSettings: "Настройки фермы",
+    map: "Карта",
+    view: "Вид",
+    settings: "Настройки",
+  },
 } as const;
 
 export function EditorMenuBar({
@@ -157,7 +174,7 @@ export function EditorMenuBar({
   const [isCompactMenuExpanded, setIsCompactMenuExpanded] = useState(false);
   const compactMenuToggleReference = useRef<HTMLButtonElement>(null);
   const menuControlsId = useId();
-  const editorMenuCopy = editorMenuCopyByLocale[locale];
+  const editorMenuCopy = readEditorMenuCopy(locale);
 
   return (
     <nav
@@ -295,6 +312,16 @@ export function EditorMenuBar({
         })}
       </div>
     </nav>
+  );
+}
+
+function readEditorMenuCopy(locale: EditorMenuBarLocale) {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
+    return editorMenuCopyByLocale[locale];
+  }
+
+  throw new TypeError(
+    `Editor menu locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
   );
 }
 

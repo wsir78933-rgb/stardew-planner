@@ -37,8 +37,10 @@ import { FarmSettingsPanel } from "./farm-settings-panel";
 import { forgetEditorMenuModalFocusTarget, readEditorMenuModalFocusTarget } from "./editor-menu-bar";
 import { PlannerFeedbackForm } from "../contact/planner-feedback-form";
 
+type EditorModalLocale = "en" | "zh" | "ru";
+
 type EditorModalProperties = Readonly<{
-  locale?: "en" | "zh";
+  locale?: EditorModalLocale;
   season?: TilesheetSeason;
   ambienceOptions?: PlannerAmbienceOptions;
   onSeasonChange?: (season: TilesheetSeason) => void;
@@ -231,6 +233,7 @@ export function EditorModal({
           <>
             {projectMapPanelContent ?? (
               <PlannerMapPicker
+                locale={locale}
                 mapIdDataAttribute="data-editor-map-id"
                 maps={plannerMaps}
                 onMapSelect={onMapChange}
@@ -238,6 +241,7 @@ export function EditorModal({
               />
             )}
             <MapConfigurationPanel
+              locale={locale}
               mapRenderOptions={mapRenderOptions}
               onMapRenderOptionsChange={onMapRenderOptionsChange}
               selectedMapId={selectedMapId}
@@ -265,9 +269,9 @@ export function EditorModal({
             onBehaviorChange={onBehaviorOptionChange}
           />
         ) : null}
-        {modalId === "help-info" ? <HelpInfoPanel /> : null}
+        {modalId === "help-info" ? <HelpInfoPanel locale={locale} /> : null}
         {modalId === "keyboard-shortcuts" ? <KeyboardShortcutsPanel locale={locale} /> : null}
-        {modalId === "whats-new" ? <WhatsNewPanel /> : null}
+        {modalId === "whats-new" ? <WhatsNewPanel locale={locale} /> : null}
       </section>
     </div>
   );
@@ -361,7 +365,19 @@ function restoreModalTriggerFocus(
   }
 }
 
-function HelpInfoPanel() {
+function HelpInfoPanel({ locale }: Readonly<{ locale: EditorModalLocale }>) {
+  if (locale === "ru") {
+    return <RussianHelpInfoPanel />;
+  }
+  if (locale === "en" || locale === "zh") {
+    return <EnglishHelpInfoPanel />;
+  }
+  throw new Error(
+    `Unsupported editor modal locale. Received: ${JSON.stringify(locale)}.`,
+  );
+}
+
+function EnglishHelpInfoPanel() {
   return (
     <div className="editor-reference-info">
       <section>
@@ -390,42 +406,28 @@ function HelpInfoPanel() {
   );
 }
 
-function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: "en" | "zh" }>) {
-  const isChinese = locale === "zh";
-  const shortcutGroups = [
-    { heading: isChinese ? "工具" : "Tools", entries: [
-      ["V", isChinese ? "切换到选择模式" : "Switch to cursor mode"],
-      ["M", isChinese ? "切换到多选模式" : "Switch to multi-select mode"],
-      ["E", isChinese ? "切换到擦除模式" : "Switch to erase mode"],
-      ["F", isChinese ? "切换到填充模式" : "Switch to fill mode"],
-      ["Q", isChinese ? "旋转或切换所选 / 待放置物品外观" : "Rotate or cycle variant on selected/placed item"],
-      ["C", isChinese ? "复制选中物品或建筑" : "Duplicate selected item or building"],
-      ["Del", isChinese ? "删除选中物品或建筑" : "Delete selected item or building"],
-      ["Esc", isChinese ? "取消放置或取消选择" : "Cancel placement or deselect"],
-      ["RMB", isChinese ? "右键取消放置或取消选择" : "Cancel placement or deselect (right-click)"],
-    ] },
-    { heading: isChinese ? "导航" : "Navigation", entries: [
-      ["W A S D", isChinese ? "平移画布" : "Pan the canvas"],
-      ["↑ ← ↓ →", isChinese ? "平移画布（方向键）" : "Pan the canvas (alternative)"],
-      ["R", isChinese ? "放大" : "Zoom in"],
-      ["T", isChinese ? "缩小" : "Zoom out"],
-      ["Ctrl / ⌘", isChinese ? "按住透视重叠的物品" : "X-ray: hold to see behind overlapping sprites"],
-      ["Space", isChinese ? "按住透视（原有快捷键）" : "Hold for X-ray (alternative)"],
-    ] },
-    { heading: isChinese ? "历史" : "History", entries: [
-      ["Ctrl / ⌘ Z", isChinese ? "撤销上一次操作" : "Undo last action"],
-      ["Ctrl / ⌘ Y", isChinese ? "重做上一次撤销的操作" : "Redo last action"],
-      ["Ctrl / ⌘ ⇧ Z", isChinese ? "重做（备用快捷键）" : "Redo (alternative)"],
-    ] },
-  ];
+function KeyboardShortcutsPanel({ locale }: Readonly<{ locale: EditorModalLocale }>) {
+  const shortcutCopy = readKeyboardShortcutCopy(locale);
   return (
     <div className="editor-reference-info editor-reference-info--shortcuts">
-      {shortcutGroups.map((group) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{group === shortcutGroups[1] ? <p className="editor-shortcuts-hint">{isChinese ? "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放" : "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works."}</p> : null}</section>)}
+      {shortcutCopy.groups.map((group, groupIndex) => <section key={group.heading}><h3>{group.heading}</h3><dl>{group.entries.map(([key, description]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{description}</dd></div>)}</dl>{groupIndex === 1 ? <p className="editor-shortcuts-hint">{shortcutCopy.navigationHint}</p> : null}</section>)}
     </div>
   );
 }
 
-function WhatsNewPanel() {
+function WhatsNewPanel({ locale }: Readonly<{ locale: EditorModalLocale }>) {
+  if (locale === "ru") {
+    return <RussianWhatsNewPanel />;
+  }
+  if (locale === "en" || locale === "zh") {
+    return <EnglishWhatsNewPanel />;
+  }
+  throw new Error(
+    `Unsupported editor modal locale. Received: ${JSON.stringify(locale)}.`,
+  );
+}
+
+function EnglishWhatsNewPanel() {
   return (
     <div className="editor-reference-info">
       <p className="editor-reference-info__version">v0.1.1 · April 2026</p>
@@ -446,6 +448,168 @@ function WhatsNewPanel() {
         <p>Sprinklers render with a ground shadow matching the in-game appearance.</p>
       </section>
     </div>
+  );
+}
+
+function RussianHelpInfoPanel() {
+  return (
+    <div className="editor-reference-info">
+      <section>
+        <h3>Возможности</h3>
+        <ul>
+          <li><strong>Переключение щелчком</strong> · Щёлкайте одну клетку несколько раз, чтобы перебирать перекрывающиеся предметы.</li>
+          <li><strong>Рентген</strong> · Удерживайте пробел, чтобы видеть сквозь размещённые спрайты.</li>
+          <li><strong>Перетаскивание</strong> · Перетащите выбранную постройку или предмет, чтобы переместить их.</li>
+          <li><strong>Окраска</strong> · Перекрашивайте поддерживаемые постройки, сундуки и воду в пруду.</li>
+          <li><strong>Зоны действия</strong> · Показывает покрытие спринклеров, пугал, ульев и хижины Джунимо.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Полезно знать</h3>
+        <ul>
+          <li>Проекты сохраняются только в этом браузере. Экспортируйте JSON, чтобы оставить переносимую копию.</li>
+          <li>Свободное размещение включайте только для раскладки, которую игра может не разрешить.</li>
+          <li>Обои и настил можно применять только к подходящим внутренним областям.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Карты</h3>
+        <p>Кнопка «Карта» переключает ферму, интерьер, экстерьер и закрытые карты сообщества. В одном локальном проекте можно хранить отдельные раскладки для нескольких карт.</p>
+      </section>
+    </div>
+  );
+}
+
+function RussianWhatsNewPanel() {
+  return (
+    <div className="editor-reference-info">
+      <p className="editor-reference-info__version">v0.1.1 · апрель 2026</p>
+      <section>
+        <h3>Карты сообщества</h3>
+        <p>Карты сообщества открываются на вкладке сообщества и по-прежнему входят в этот планировщик локально.</p>
+      </section>
+      <section>
+        <h3>Декор стола</h3>
+        <p>Ставьте лампы, растения и другие подходящие предметы на столы и тумбы.</p>
+      </section>
+      <section>
+        <h3>Зимние культуры</h3>
+        <p>Пороховая дыня доступна в выборе культур.</p>
+      </section>
+      <section>
+        <h3>Тени спринклеров</h3>
+        <p>Спринклеры отображаются с тенью на земле, как в игре.</p>
+      </section>
+    </div>
+  );
+}
+
+type KeyboardShortcutGroup = Readonly<{
+  entries: readonly (readonly [string, string])[];
+  heading: string;
+}>;
+
+type KeyboardShortcutCopy = Readonly<{
+  groups: readonly KeyboardShortcutGroup[];
+  navigationHint: string;
+}>;
+
+const englishKeyboardShortcutCopy: KeyboardShortcutCopy = {
+  groups: [
+    { heading: "Tools", entries: [
+      ["V", "Switch to cursor mode"],
+      ["M", "Switch to multi-select mode"],
+      ["E", "Switch to erase mode"],
+      ["F", "Switch to fill mode"],
+      ["Q", "Rotate or cycle variant on selected/placed item"],
+      ["C", "Duplicate selected item or building"],
+      ["Del", "Delete selected item or building"],
+      ["Esc", "Cancel placement or deselect"],
+      ["RMB", "Cancel placement or deselect (right-click)"],
+    ] },
+    { heading: "Navigation", entries: [
+      ["W A S D", "Pan the canvas"],
+      ["↑ ← ↓ →", "Pan the canvas (alternative)"],
+      ["R", "Zoom in"],
+      ["T", "Zoom out"],
+      ["Ctrl / ⌘", "X-ray: hold to see behind overlapping sprites"],
+      ["Space", "Hold for X-ray (alternative)"],
+    ] },
+    { heading: "History", entries: [
+      ["Ctrl / ⌘ Z", "Undo last action"],
+      ["Ctrl / ⌘ Y", "Redo last action"],
+      ["Ctrl / ⌘ ⇧ Z", "Redo (alternative)"],
+    ] },
+  ],
+  navigationHint: "Enable the bottom Zoom button to zoom with the scroll wheel; two-finger pinch still works.",
+};
+
+const chineseKeyboardShortcutCopy: KeyboardShortcutCopy = {
+  groups: [
+    { heading: "工具", entries: [
+      ["V", "切换到选择模式"],
+      ["M", "切换到多选模式"],
+      ["E", "切换到擦除模式"],
+      ["F", "切换到填充模式"],
+      ["Q", "旋转或切换所选 / 待放置物品外观"],
+      ["C", "复制选中物品或建筑"],
+      ["Del", "删除选中物品或建筑"],
+      ["Esc", "取消放置或取消选择"],
+      ["RMB", "右键取消放置或取消选择"],
+    ] },
+    { heading: "导航", entries: [
+      ["W A S D", "平移画布"],
+      ["↑ ← ↓ →", "平移画布（方向键）"],
+      ["R", "放大"],
+      ["T", "缩小"],
+      ["Ctrl / ⌘", "按住透视重叠的物品"],
+      ["Space", "按住透视（原有快捷键）"],
+    ] },
+    { heading: "历史", entries: [
+      ["Ctrl / ⌘ Z", "撤销上一次操作"],
+      ["Ctrl / ⌘ Y", "重做上一次撤销的操作"],
+      ["Ctrl / ⌘ ⇧ Z", "重做（备用快捷键）"],
+    ] },
+  ],
+  navigationHint: "滚轮缩放需先开启底部“缩放”按钮；双指捏合仍可缩放",
+};
+
+const russianKeyboardShortcutCopy: KeyboardShortcutCopy = {
+  groups: [
+    { heading: "Инструменты", entries: [
+      ["V", "Переключить режим выбора"],
+      ["M", "Переключить режим множественного выбора"],
+      ["E", "Переключить режим стирания"],
+      ["F", "Переключить режим заливки"],
+      ["Q", "Повернуть или сменить вариант выбранного или размещаемого предмета"],
+      ["C", "Дублировать выбранный предмет или постройку"],
+      ["Del", "Удалить выбранный предмет или постройку"],
+      ["Esc", "Отменить размещение или снять выделение"],
+      ["RMB", "Отменить размещение или снять выделение (правая кнопка)"],
+    ] },
+    { heading: "Навигация", entries: [
+      ["W A S D", "Перемещать холст"],
+      ["↑ ← ↓ →", "Перемещать холст (клавиши со стрелками)"],
+      ["R", "Увеличить"],
+      ["T", "Уменьшить"],
+      ["Ctrl / ⌘", "Рентген: удерживайте, чтобы видеть перекрытые спрайты"],
+      ["Space", "Удерживайте для рентгена (запасной вариант)"],
+    ] },
+    { heading: "История", entries: [
+      ["Ctrl / ⌘ Z", "Отменить последнее действие"],
+      ["Ctrl / ⌘ Y", "Вернуть отменённое действие"],
+      ["Ctrl / ⌘ ⇧ Z", "Вернуть (запасной вариант)"],
+    ] },
+  ],
+  navigationHint: "Чтобы масштабировать колесом, включите нижнюю кнопку «Масштаб»; жест двумя пальцами по-прежнему работает.",
+};
+
+function readKeyboardShortcutCopy(locale: EditorModalLocale): KeyboardShortcutCopy {
+  if (locale === "en") return englishKeyboardShortcutCopy;
+  if (locale === "zh") return chineseKeyboardShortcutCopy;
+  if (locale === "ru") return russianKeyboardShortcutCopy;
+  throw new Error(
+    `Unsupported editor modal locale. Received: ${JSON.stringify(locale)}.`,
   );
 }
 
@@ -494,35 +658,60 @@ function getEditorModalBackdropClassName(modalId: EditorModalId): string {
   return "editor-modal__backdrop";
 }
 
-function getModalLabel(modalId: EditorModalId, copy: EditorModalCopy, locale: "en" | "zh"): string {
-  if (modalId === "ambience-panel") return locale === "zh" ? "氛围" : "Ambience";
-  if (modalId === "farm-settings") return locale === "zh" ? "农场设置" : "Farm Settings";
-  if (modalId === "feedback") return locale === "zh" ? "发送反馈" : "Send feedback";
-  if (modalId === "map-picker") {
-    return locale === "zh" ? "选择地图" : "Choose map";
+function getModalLabel(
+  modalId: EditorModalId,
+  copy: EditorModalCopy,
+  locale: EditorModalLocale,
+): string {
+  if (modalId === "ambience-panel") {
+    return readFixedEditorModalLabel(locale, { en: "Ambience", zh: "氛围", ru: "Атмосфера" });
   }
-
+  if (modalId === "farm-settings") {
+    return readFixedEditorModalLabel(locale, { en: "Farm Settings", zh: "农场设置", ru: "Настройки фермы" });
+  }
+  if (modalId === "feedback") {
+    return readFixedEditorModalLabel(locale, { en: "Send feedback", zh: "发送反馈", ru: "Отправить отзыв" });
+  }
+  if (modalId === "map-picker") {
+    return readFixedEditorModalLabel(locale, { en: "Choose map", zh: "选择地图", ru: "Выбор карты" });
+  }
   if (modalId === "view-panel") {
     return copy.modalTitles.view;
   }
-
   if (modalId === "save-panel") {
-    return locale === "zh" ? "本地项目" : "Library";
+    return readFixedEditorModalLabel(locale, { en: "Library", zh: "本地项目", ru: "Библиотека" });
   }
-
   if (modalId === "help-info") {
-    return locale === "zh" ? "帮助与说明" : "Help & Info";
+    return readFixedEditorModalLabel(locale, { en: "Help & Info", zh: "帮助与说明", ru: "Справка" });
   }
-
   if (modalId === "keyboard-shortcuts") {
-    return locale === "zh" ? "键盘快捷键" : "Keyboard Shortcuts";
+    return readFixedEditorModalLabel(locale, {
+      en: "Keyboard Shortcuts",
+      zh: "键盘快捷键",
+      ru: "Сочетания клавиш",
+    });
   }
-
   if (modalId === "whats-new") {
-    return "What's New";
+    return readFixedEditorModalLabel(locale, {
+      en: "What's New",
+      zh: "What's New",
+      ru: "Что нового",
+    });
   }
-
   return copy.modalTitles.settings;
+}
+
+function readFixedEditorModalLabel(
+  locale: EditorModalLocale,
+  labels: Readonly<Record<EditorModalLocale, string>>,
+): string {
+  const label = labels[locale];
+  if (label === undefined) {
+    throw new Error(
+      `Unsupported editor modal locale. Received: ${JSON.stringify(locale)}.`,
+    );
+  }
+  return label;
 }
 
 function getModalCloseDialogLabel(

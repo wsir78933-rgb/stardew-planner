@@ -18,7 +18,7 @@ import {
 } from "./planner-feedback-request-validation";
 import styles from "./planner-feedback-form.module.css";
 
-type PlannerFeedbackLocale = "en" | "zh";
+type PlannerFeedbackLocale = "en" | "zh" | "ru";
 
 type PlannerFeedbackFormProperties = Readonly<{
   locale: PlannerFeedbackLocale;
@@ -129,7 +129,53 @@ const plannerFeedbackCopy = {
       invalidToken: "反垃圾验证令牌缺失或无效。",
     },
   },
+  ru: {
+    typeLabel: "Тип",
+    typeOptions: {
+      bug: "Сообщить об ошибке",
+      feature: "Предложить функцию",
+      other: "Другое",
+    },
+    subjectLabel: "Тема",
+    descriptionLabel: "Описание",
+    descriptionHint:
+      "Есть скриншот или видео? Вставьте ссылку на YouTube или изображение в описание.",
+    submitLabel: "Отправить отзыв",
+    submittingLabel: "Отправка…",
+    verifyingLabel: "Проверка…",
+    successMessage: "Спасибо, отзыв отправлен.",
+    unavailableConfigurationMessage: "Отзывы временно недоступны.",
+    unavailableMessage: "Не удалось отправить отзыв. Повторите попытку позже.",
+    verificationLoadingMessage:
+      "Проверка на спам ещё загружается. Повторите попытку через мгновение.",
+    verificationFailedMessage:
+      "Проверку на спам не удалось завершить. Отправьте форму ещё раз.",
+    invalidResponseMessage:
+      "Отзыв не принят. Проверьте поля и повторите попытку.",
+    fieldMessages: {
+      form: "Отправленная форма недействительна.",
+      expectedObject: "Ожидалась форма отзыва.",
+      unexpectedField: "Неподдерживаемое поле: {value}.",
+      missingField: "Это поле обязательно.",
+      invalidType: "Ожидался текст; получено {value}.",
+      unsupportedOption: "Выберите ошибку, предложение или другое; получено {value}.",
+      empty: "Это поле не может быть пустым.",
+      tooLong: "Поле слишком длинное ({value}; предел {limit}).",
+      lineBreak: "Тема должна быть одной строкой; получено {value}.",
+      invalidToken: "Токен проверки на спам отсутствует или недействителен.",
+    },
+  },
 } as const;
+
+function readPlannerFeedbackLocale(locale: string): PlannerFeedbackLocale {
+  if (locale === "en" || locale === "zh" || locale === "ru") {
+    return locale;
+  }
+
+  throw new TypeError(
+    `Planner feedback locale must be "en", "zh", or "ru"; received ${JSON.stringify(locale)}.`,
+  );
+}
 
 function getWindowTurnstile(): TurnstileApi | undefined {
   return (window as Window & { turnstile?: TurnstileApi }).turnstile;
@@ -164,7 +210,8 @@ function getPlannerFeedbackIssueForField(
 export function PlannerFeedbackForm({
   locale,
 }: PlannerFeedbackFormProperties) {
-  const copy = plannerFeedbackCopy[locale];
+  const feedbackLocale = readPlannerFeedbackLocale(locale);
+  const copy = plannerFeedbackCopy[feedbackLocale];
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
   const [feedbackFields, setFeedbackFields] = useState<PlannerFeedbackFields>(
     initialPlannerFeedbackFields,
@@ -407,7 +454,7 @@ export function PlannerFeedbackForm({
         </select>
         {typeIssue ? (
           <p className={styles.fieldError} id="planner-feedback-type-error">
-            {getPlannerFeedbackValidationMessage(typeIssue, locale)}
+            {getPlannerFeedbackValidationMessage(typeIssue, feedbackLocale)}
           </p>
         ) : null}
       </div>
@@ -432,7 +479,7 @@ export function PlannerFeedbackForm({
         />
         {subjectIssue ? (
           <p className={styles.fieldError} id="planner-feedback-subject-error">
-            {getPlannerFeedbackValidationMessage(subjectIssue, locale)}
+            {getPlannerFeedbackValidationMessage(subjectIssue, feedbackLocale)}
           </p>
         ) : null}
       </div>
@@ -464,7 +511,7 @@ export function PlannerFeedbackForm({
             className={styles.fieldError}
             id="planner-feedback-description-error"
           >
-            {getPlannerFeedbackValidationMessage(descriptionIssue, locale)}
+            {getPlannerFeedbackValidationMessage(descriptionIssue, feedbackLocale)}
           </p>
         ) : null}
         <p className={styles.hint} id="planner-feedback-description-hint">
@@ -506,7 +553,7 @@ export function PlannerFeedbackForm({
           role={fieldStatusRole}
         >
           {formIssue
-            ? getPlannerFeedbackValidationMessage(formIssue, locale)
+            ? getPlannerFeedbackValidationMessage(formIssue, feedbackLocale)
             : visibleSubmissionState.message}
         </p>
       </div>

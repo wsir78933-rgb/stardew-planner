@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { HomepageLocale } from "../homepage/homepage-locale";
 
 export type PlannerRequiredCatalogStatusState =
   | Readonly<{ kind: "loading" }>
@@ -16,22 +17,28 @@ export type PlannerRequiredCatalogGateState =
 
 export function PlannerRequiredCatalogGate({
   children,
+  locale,
   state,
 }: Readonly<{
   children?: ReactNode;
+  locale?: HomepageLocale;
   state: PlannerRequiredCatalogGateState;
 }>) {
   if (state.kind === "ready") return children;
-  return <PlannerRequiredCatalogStatus state={state} />;
+  return <PlannerRequiredCatalogStatus locale={locale} state={state} />;
 }
 
 export function PlannerRequiredCatalogStatus({
+  locale,
   state,
-}: Readonly<{ state: PlannerRequiredCatalogStatusState }>) {
+}: Readonly<{
+  locale?: HomepageLocale;
+  state: PlannerRequiredCatalogStatusState;
+}>) {
   if (state.kind === "loading") {
     return (
       <p aria-live="polite" role="status">
-        Loading placed item catalog…
+        {readRequiredCatalogLoadingLabel(locale)}
       </p>
     );
   }
@@ -41,9 +48,35 @@ export function PlannerRequiredCatalogStatus({
       <p>{state.message}</p>
       {state.onRetry === undefined ? null : (
         <button onClick={state.onRetry} type="button">
-          Retry
+          {readRequiredCatalogRetryLabel(locale)}
         </button>
       )}
     </div>
   );
+}
+
+function readRequiredCatalogLocale(locale: HomepageLocale | undefined): HomepageLocale {
+  const resolvedLocale = locale ?? "en";
+  if (resolvedLocale === "en" || resolvedLocale === "zh-CN" || resolvedLocale === "ru") {
+    return resolvedLocale;
+  }
+  throw new TypeError(
+    `Required catalog locale must be "en", "zh-CN", or "ru"; received ${JSON.stringify(resolvedLocale)}.`,
+  );
+}
+
+function readRequiredCatalogLoadingLabel(locale: HomepageLocale | undefined): string {
+  const resolvedLocale = readRequiredCatalogLocale(locale);
+  if (resolvedLocale === "en" || resolvedLocale === "zh-CN") {
+    return "Loading placed item catalog…";
+  }
+  return "Загрузка каталога размещённых предметов…";
+}
+
+function readRequiredCatalogRetryLabel(locale: HomepageLocale | undefined): string {
+  const resolvedLocale = readRequiredCatalogLocale(locale);
+  if (resolvedLocale === "en" || resolvedLocale === "zh-CN") {
+    return "Retry";
+  }
+  return "Повторить";
 }

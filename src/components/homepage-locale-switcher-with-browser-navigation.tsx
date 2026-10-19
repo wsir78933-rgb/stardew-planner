@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { HomepageLocale } from "../homepage/homepage-locale";
+import type { HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createHomepageNavigationUrls } from "../homepage/homepage-navigation-url";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 
 type HomepageLocaleSwitcherWithBrowserNavigationProps = Readonly<{
-  currentLocale: HomepageLocale;
+  currentLocale: HomepageDisplayLocale;
   label: string;
 }>;
 

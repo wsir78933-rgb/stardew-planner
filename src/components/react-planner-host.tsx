@@ -137,7 +137,8 @@ export function ReactPlannerHost({
   if (plannerHostStartup === null) {
     return (
       <PlannerStartupStatus
-        state={{ kind: "loading", message: "Loading planner…" }}
+        locale={locale}
+        state={{ kind: "loading", message: readReactPlannerHostLoadingMessage(locale) }}
       />
     );
   }
@@ -148,4 +149,16 @@ export function ReactPlannerHost({
     performanceMarker={performanceMarker}
     plannerHostStartup={plannerHostStartup}
   />;
+}
+
+function readReactPlannerHostLoadingMessage(locale: HomepageLocale): string {
+  if (locale === "en" || locale === "zh-CN") {
+    return "Loading planner…";
+  }
+  if (locale === "ru") {
+    return "Загрузка планировщика…";
+  }
+  throw new Error(
+    `Unsupported planner host locale. Received: ${JSON.stringify(locale)}.`,
+  );
 }

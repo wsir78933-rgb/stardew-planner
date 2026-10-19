@@ -1,6 +1,33 @@
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { isHomepageLocale } from "../homepage/homepage-locale";
 
+type SaveModalLocale = HomepageLocale | "ru";
+
+function isSaveModalLocale(locale: string): locale is SaveModalLocale {
+  return locale === "ru" || isHomepageLocale(locale);
+}
+
+function formatRussianCountedNoun(
+  count: number,
+  one: string,
+  few: string,
+  many: string,
+): string {
+  const absoluteCount = Math.abs(count);
+  const lastTwoDigits = absoluteCount % 100;
+  const lastDigit = absoluteCount % 10;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return `${String(count)} ${many}`;
+  }
+  if (lastDigit === 1) {
+    return `${String(count)} ${one}`;
+  }
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${String(count)} ${few}`;
+  }
+  return `${String(count)} ${many}`;
+}
+
 export type SaveModalBranch = "farm-summary" | "game-save" | "projects" | "tools";
 export type FarmSummarySeason = "fall" | "spring" | "summer" | "winter";
 
@@ -26,7 +53,7 @@ export type LocalProjectsCopy = Readonly<{
   currentMap: string;
   currentMapCount: (count: number) => string;
   currentProject: string;
-  dateTimeLocale: HomepageLocale;
+  dateTimeLocale: SaveModalLocale;
   defaultProjectName: string;
   delete: string;
   deviceTools: string;
@@ -97,7 +124,7 @@ export type CloudProjectsCopy = Readonly<{
   cloudStatusErrorSummary: string;
   conflictDescription: string;
   currentProject: string;
-  dateTimeLocale: HomepageLocale;
+  dateTimeLocale: SaveModalLocale;
   deleteCloudCopy: string;
   deletingCloudCopy: string;
   deleteProject: CloudProjectDeleteCopy;
@@ -240,6 +267,13 @@ const chineseSeasonNames: Readonly<Record<FarmSummarySeason, string>> = {
   spring: "春季",
   summer: "夏季",
   winter: "冬季",
+};
+
+const russianSeasonNames: Readonly<Record<FarmSummarySeason, string>> = {
+  fall: "Осень",
+  spring: "Весна",
+  summer: "Лето",
+  winter: "Зима",
 };
 
 function createSeasonFormatter(
@@ -658,10 +692,218 @@ const saveModalCopyByLocale = {
       title: "农场摘要",
     },
   },
-} as const satisfies Readonly<Record<HomepageLocale, SaveModalCopy>>;
+  ru: {
+    saveTools: {
+      branchLoadFailure: (branch: SaveModalBranch, rawError: string) =>
+        `Не удалось загрузить ветку инструментов сохранения ${JSON.stringify(branch)}: ${rawError}`,
+      farmSummary: "Сводка фермы",
+      gameSave: "Импорт сохранения",
+      label: "Инструменты сохранения",
+      loadingBranch: (branch: SaveModalBranch) => `Загрузка: ${getRussianBranchLabel(branch)}…`,
+      localProjects: "Локальные проекты",
+      myPlans: "Мои планы",
+      planGroupLabel: "Планы",
+      retryBranch: (branch: SaveModalBranch) => `Повторить: ${getRussianBranchLabel(branch)}`,
+      tools: "Инструменты",
+    },
+    localProjects: {
+      actionFailure: (rawError: string) => `Не удалось выполнить действие с локальным проектом: ${rawError}`,
+      applyName: "Применить имя",
+      cancelRename: "Отменить переименование",
+      createdProject: "Локальный проект создан.",
+      current: "Текущий",
+      currentMap: "Текущая карта",
+      currentMapCount: (count: number) => formatRussianCountedNoun(count, "карта", "карты", "карт"),
+      currentProject: "Текущий проект",
+      dateTimeLocale: "ru",
+      defaultProjectName: "Проект без названия",
+      delete: "Удалить",
+      deviceTools: "Инструменты устройства",
+      deletedProject: "Локальный проект удалён.",
+      downloadedImage: (projectName: string) =>
+        `Скачано превью «${projectName}».`,
+      downloadImage: (projectName?: string) =>
+        projectName ? `Скачать изображение: ${projectName}` : "Скачать изображение",
+      duplicate: "Дублировать",
+      duplicatedProject: "Локальный проект дублирован.",
+      emptyState: "Локальных проектов пока нет. Сохранение создаёт проект «Проект без названия» и сохраняет текущую карту.",
+      emptyFolder: "Эта папка пуста.",
+      exportedProject: (projectName: string) => `Проект «${projectName}» экспортирован.`,
+      exportJson: "Экспорт JSON",
+      folderCreated: "Папка создана.",
+      folderGroupLabel: "Папки",
+      folderMoved: (folderName: string) => `План перемещён в папку «${folderName}».`,
+      folderName: "Имя папки",
+      importedProject: (filename: string) => `Импорт «${filename}» выполнен.`,
+      importJson: "Импорт JSON",
+      localProjects: "Локальные проекты",
+      myPlansFolder: "Мои планы",
+      mapPreviewAlt: (projectName: string) => `Превью карты «${projectName}»`,
+      noDownloadablePreview: "У этого проекта нет превью для скачивания",
+      noMapPreview: "Нет сохранённого превью карты",
+      noSearchResults: "Нет локальных проектов по этому запросу.",
+      newProject: "Новый план",
+      newProjectName: "Название нового плана",
+      newFolder: "+ Новая папка",
+      newFolderName: "Название новой папки",
+      createFolder: "Создать папку",
+      cancelCreateFolder: "Отмена",
+      moveToFolder: "Переместить в папку",
+      none: "Нет",
+      open: "Открыть",
+      openedProject: (projectName: string) => `Проект «${projectName}» открыт.`,
+      openingBrowserStorage: "Открывается хранилище браузера…",
+      projectMapCount: (count: number) => formatRussianCountedNoun(count, "карта", "карты", "карт"),
+      rename: "Переименовать",
+      renamedProject: "Локальный проект переименован.",
+      saveToDevice: "Сохранить на этом устройстве",
+      savedLocalProjects: "Сохранённые локальные проекты",
+      savedToBrowser: "Сохранено в этом браузере.",
+      searchProjects: "Искать планы",
+      storedInBrowser: "Хранится в этом браузере.",
+    },
+    cloudProjects: {
+      extras: "Дополнительно",
+      account: "Аккаунт",
+      accountLoading: "Проверка аккаунта…",
+      cloudStatusLoading: "Проверка состояния облака…",
+      cloudStatusReady: "Облачная синхронизация готова.",
+      cloudProjects: "Облачные проекты",
+      cloudProjectsEmpty: "Облачных копий пока нет. Сохранение текущего проекта синхронизирует его автоматически.",
+      cloudProjectsLoading: "Загрузка облачных проектов…",
+      cloudProjectsSignInRequired: "Войдите через Google на боковой панели, чтобы видеть облачные копии и действия синхронизации.",
+      cloudStatusError: (rawError: string) => `Ошибка облачной синхронизации: ${rawError}`,
+      cloudStatusErrorSummary: "Облачная синхронизация недоступна.",
+      conflictDescription: "В облаке есть более новая копия. Оставьте локальную версию или создайте из облачной новый локальный проект.",
+      currentProject: "Текущий",
+      dateTimeLocale: "ru",
+      deleteCloudCopy: "Удалить облачную копию",
+      deletingCloudCopy: "Удаление облачной копии…",
+      deleteProject: {
+        confirm: "Удалить облачную копию",
+        descriptionPrefix: "Удалить «",
+        descriptionSuffix: "» из облачного аккаунта? Локальный проект останется на этом устройстве.",
+        dismiss: "Оставить облачную копию",
+        title: "Удалить облачную копию?",
+      },
+      imagesStayLocal: "Синхронизируются только данные планировки. Превью карт остаются на этом устройстве. Облачные копии хранятся, пока вы их не удалите.",
+      keepLocalVersion: "Оставить локальную версию",
+      loadMoreCloudProjects: "Загрузить ещё облачные проекты",
+      loadingMoreCloudProjects: "Загрузка других облачных проектов…",
+      localProjects: "Статус синхронизации локальных проектов",
+      localProjectStatus: (status: CloudProjectSyncStatus) => ({
+        none: "Только на этом устройстве",
+        pending: "Ожидает синхронизации",
+        synced: "Синхронизировано",
+        conflict: "Нужно выбрать версию",
+        error: "Синхронизация не удалась",
+      })[status],
+      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
+        `Локальное сохранение завершится через ${daysRemaining} д ${hoursRemaining} ч ${minutesRemaining} мин. Синхронизируйте проекты, которые хотите оставить в облаке. Облачные копии хранятся, пока вы их не удалите.`,
+      localSaveRetirementEnded: "Переходный период локального сохранения завершён. Существующие локальные проекты остаются доступны, данные не удалялись. Облачные копии хранятся, пока вы их не удалите.",
+      localSaveRetirementLoading: "Проверка срока перехода на локальное сохранение…",
+      localSaveRetirementNotConfigured: "7-дневный переходный период локального сохранения ещё не начался. Дата окончания пока не назначена.",
+      mapCount: (count: number) => formatRussianCountedNoun(count, "карта", "карты", "карт"),
+      noLocalProjects: "Сначала сохраните проект на этом устройстве, затем синхронизируйте его.",
+      openCloudCopy: "Открыть облачную копию",
+      refreshCloudProjects: "Обновить облачные проекты",
+      refreshingCloudProjects: "Обновление облачных проектов…",
+      retrySync: "Повторить синхронизацию",
+      signInBusy: "Подключение к Google…",
+      signInGoogle: "Продолжить с Google",
+      signOut: "Выйти",
+      signOutBusy: "Выход…",
+      signedInAs: (accountName: string) => `Вы вошли как ${accountName}.`,
+      signedOut: "Вы не вошли. Локальные проекты остаются на этом устройстве.",
+      syncAllSignInDescription: "Вход не загружает проекты. Вернитесь сюда и нажмите «Синхронизировать все локальные проекты», чтобы начать.",
+      syncAllLocalProjects: "Синхронизировать все локальные проекты",
+      syncAllSignedOut: "Войдите, чтобы синхронизировать все локальные проекты",
+      syncAllProgress: (completed, total, currentProjectName) =>
+        currentProjectName === null
+          ? `Обработано ${completed} из ${total} локальных проектов…`
+          : `Обработано ${completed} из ${total} локальных проектов. Синхронизация «${currentProjectName}»…`,
+      syncAllProgressLabel: "Прогресс облачной синхронизации",
+      syncAllCompleted: (total) =>
+        `Все локальные проекты синхронизированы (${total}).`,
+      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
+        const failedProjects = failedProjectNames.length === 0
+          ? "Отдельные проекты с ошибкой не записаны."
+          : `${formatRussianCountedNoun(failedProjectNames.length, "проект требует внимания", "проекта требуют внимания", "проектов требуют внимания")}: ${failedProjectNames.join(", ")}.`;
+        return `Остановка после обработки ${completed} из ${total} локальных проектов. ${failedProjects} ${errorMessage}`;
+      },
+      syncButtonBusy: "Синхронизация проекта…",
+      syncThisProject: "Синхронизировать с облаком",
+      title: "Облачная синхронизация",
+      useCloudVersion: "Сохранить облачную версию как новый локальный проект",
+    },
+    deleteProject: {
+      confirm: "Удалить проект",
+      descriptionPrefix: "Удалить «",
+      descriptionSuffix: "» из этого браузера? Это нельзя отменить.",
+      dismiss: "Оставить проект",
+      title: "Удалить локальный проект?",
+    },
+    imageExport: {
+      exportFailure: (rawError: string) => `Не удалось экспортировать скриншот: ${rawError}`,
+      exportLabel: "Экспорт",
+      screenshot: "Скриншот",
+      screenshotHighQuality: "Скриншот (HQ)",
+      screenshotHighQualityTitle: "Разрешение 2×, выше качество",
+      screenshotTitle: "Разрешение 1×, компактный файл",
+    },
+    thumbnail: {
+      saveFailure: (rawError: string) => `Не удалось сохранить миниатюру: ${rawError}`,
+      saveLabel: "Сохранить миниатюру",
+      saved: "Миниатюра сохранена в этом браузере.",
+      title: "Миниатюра",
+    },
+    gameSave: {
+      ariaLabel: "Импорт сохранения",
+      chooseFile: "Выбрать файл сохранения",
+      close: "Закрыть",
+      description: "Выберите файл сохранения Stardew Valley, чтобы посмотреть ферму в этом планировщике.",
+      experimentalNotice: "Импорт сохранений экспериментальный. Неподдерживаемые предметы на карту не ставятся.",
+      importFailure: (rawError: string) => `Не удалось импортировать сохранение: ${rawError}`,
+      importing: (filename: string) => `Импорт ${filename}…`,
+      localOnlyNotice: "Импортированная карта есть только в этом браузере, пока вы не сохраните её на этом устройстве.",
+      resultCloseLabel: "Закрыть результат импорта сохранения",
+      resultImportedAll: "Все распознанные объекты на карте импортированы.",
+      resultTitle: (farmName: string) => `«Ферма ${farmName}»`,
+      tooltip: "Импортируйте файл сохранения Stardew Valley, чтобы увидеть планировку фермы",
+      unmappedItems: (count: number) =>
+        `${formatRussianCountedNoun(count, "предмет", "предмета", "предметов")} не удалось сопоставить (вероятно, из модов).`,
+    },
+    gameSaveResultLoader: {
+      loadFailure: (rawError: string) => `Не удалось загрузить результат импорта сохранения: ${rawError}`,
+      loading: "Загрузка результата импорта сохранения…",
+      retry: "Повторить загрузку результата",
+    },
+    farmSummaryPreview: {
+      ariaLabel: "Сводка фермы",
+      itemsPlaced: (count: number) =>
+        formatRussianCountedNoun(count, "предмет размещён", "предмета размещены", "предметов размещено"),
+      map: "Карта",
+      season: createSeasonFormatter(russianSeasonNames),
+      seasonLabel: "Сезон",
+      viewDetails: "Подробная сводка",
+    },
+    farmSummaryDetail: {
+      closeLabel: "Закрыть сводку фермы",
+      empty: "Пока ничего не размещено.",
+      exportCsv: "Экспорт CSV",
+      exportFailure: (rawError: string) => `Не удалось экспортировать сводку фермы: ${rawError}`,
+      itemsPlaced: (count: number) =>
+        formatRussianCountedNoun(count, "предмет размещён", "предмета размещены", "предметов размещено"),
+      map: "Карта",
+      season: createSeasonFormatter(russianSeasonNames),
+      seasonLabel: "Сезон",
+      title: "Сводка фермы",
+    },
+  },
+} as const satisfies Readonly<Record<SaveModalLocale, SaveModalCopy>>;
 
-export function getSaveModalCopy(locale: HomepageLocale): SaveModalCopy {
-  if (!isHomepageLocale(locale)) {
+export function getSaveModalCopy(locale: SaveModalLocale): SaveModalCopy {
+  if (!isSaveModalLocale(locale)) {
     throw new Error(`Unsupported save-modal locale. Received: ${JSON.stringify(locale)}.`);
   }
 
@@ -681,5 +923,13 @@ function getChineseBranchLabel(branch: SaveModalBranch): string {
   if (branch === "game-save") return "导入游戏存档";
   if (branch === "farm-summary") return "农场摘要";
   if (branch === "tools") return "工具";
+  throw new Error(`Unsupported save-modal branch ${JSON.stringify(branch)}.`);
+}
+
+function getRussianBranchLabel(branch: SaveModalBranch): string {
+  if (branch === "projects") return "Локальные проекты";
+  if (branch === "game-save") return "Импорт сохранения";
+  if (branch === "farm-summary") return "Сводка фермы";
+  if (branch === "tools") return "Инструменты";
   throw new Error(`Unsupported save-modal branch ${JSON.stringify(branch)}.`);
 }

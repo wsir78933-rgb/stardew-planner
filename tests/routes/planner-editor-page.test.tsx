@@ -188,7 +188,7 @@ describe("planner editor page", () => {
       const homepageContentProps = {
         copy: homepageCopyByLocale[currentLocale],
         currentLocale,
-        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        localeHrefByLocale: { en: "/", "zh-CN": "/zh", ru: "/ru" },
         plannerHref:
           currentLocale === "en" ? "/#planner" : "/zh#planner",
         plannerWorkspace: createElement("div", {
@@ -213,7 +213,7 @@ describe("planner editor page", () => {
         createElement(HomepageContent, {
           copy: homepageCopy,
           currentLocale,
-          localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+          localeHrefByLocale: { en: "/", "zh-CN": "/zh", ru: "/ru" },
           plannerHref: currentLocale === "en" ? "/#planner" : "/zh#planner",
           plannerWorkspace: createElement("div", {
             "data-test-planner-workspace": true,
@@ -511,7 +511,7 @@ describe("planner editor page", () => {
       const homepageContentProps = {
         copy: homepageCopyByLocale[currentLocale],
         currentLocale,
-        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        localeHrefByLocale: { en: "/", "zh-CN": "/zh", ru: "/ru" },
         plannerHref:
           currentLocale === "en" ? "/#planner" : "/zh#planner",
         plannerWorkspace: null,
@@ -586,7 +586,7 @@ describe("planner editor page", () => {
       const homepageContentProps = {
         copy: homepageCopyByLocale[currentLocale],
         currentLocale,
-        localeHrefByLocale: { en: "/", "zh-CN": "/zh" },
+        localeHrefByLocale: { en: "/", "zh-CN": "/zh", ru: "/ru" },
         plannerHref:
           currentLocale === "en" ? "/#planner" : "/zh#planner",
         plannerWorkspace: null,

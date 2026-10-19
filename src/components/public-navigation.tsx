@@ -1,6 +1,7 @@
 import { getPublicPageCopy } from "../i18n/public-page-content";
 import type { PublicLocale } from "../i18n/public-locale";
 import {
+  getHomepageDisplayPath,
   getLocalizedPublicPath,
   type PublicCanonicalPath,
 } from "../i18n/public-route-registry";
@@ -24,6 +25,7 @@ function createPublicPageHeaderHrefs(
     localeHrefByLocale: {
       en: getLocalizedPublicPath("en", canonicalPath),
       "zh-CN": getLocalizedPublicPath("zh-CN", canonicalPath),
+      ru: getHomepageDisplayPath("ru"),
     },
   };
 }

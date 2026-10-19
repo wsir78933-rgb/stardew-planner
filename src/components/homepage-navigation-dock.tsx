@@ -2,9 +2,15 @@
 
 import type { ReactNode } from "react";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
-import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import {
+  isHomepageDisplayLocale,
+  type HomepageDisplayLocale,
+} from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
-import { getLocalizedPublicPath } from "@/src/i18n/public-route-registry";
+import {
+  getHomepageDisplayPath,
+  getLocalizedPublicPath,
+} from "@/src/i18n/public-route-registry";
 import { SiteNavigationDock } from "./site-navigation-dock";
 
 const HOMEPAGE_NAVIGATION_COPY_FIELD_NAMES = [
@@ -18,7 +24,7 @@ const HOMEPAGE_NAVIGATION_COPY_FIELD_NAMES = [
 
 type HomepageNavigationDockProps = Readonly<{
   copy: HomepageCopy;
-  currentLocale: HomepageLocale;
+  currentLocale: HomepageDisplayLocale;
   localeHrefByLocale: HomepageLocaleHrefByLocale;
   localeSwitcher?: ReactNode;
   plannerHref: string;
@@ -35,6 +41,19 @@ function requireHomepageDockNonEmptyString(
   }
 
   return fieldValue;
+}
+
+function readHomepageBlogPath(locale: HomepageDisplayLocale): string {
+  if (locale === "ru") {
+    return getLocalizedPublicPath("en", "/blog");
+  }
+  if (locale === "en" || locale === "zh-CN") {
+    return getLocalizedPublicPath(locale, "/blog");
+  }
+
+  throw new TypeError(
+    `Unsupported homepage navigation locale. Received: ${JSON.stringify(locale)}.`,
+  );
 }
 
 function requireHomepageNavigationCopy(
@@ -62,6 +81,12 @@ export function HomepageNavigationDock({
   localeSwitcher,
   plannerHref,
 }: HomepageNavigationDockProps) {
+  if (!isHomepageDisplayLocale(currentLocale)) {
+    throw new TypeError(
+      `HomepageNavigationDock currentLocale must be a homepage display locale. Received: ${JSON.stringify(currentLocale)}.`,
+    );
+  }
+
   const navigationCopy = requireHomepageNavigationCopy(copy.navigation);
   const resolvedPlannerHref = requireHomepageDockNonEmptyString(
     "plannerHref",
@@ -70,9 +95,9 @@ export function HomepageNavigationDock({
 
   return (
     <SiteNavigationDock
-      blogHref={getLocalizedPublicPath(currentLocale, "/blog")}
+      blogHref={readHomepageBlogPath(currentLocale)}
       blogLabel={navigationCopy.blogLabel}
-      brandHref={getLocalizedPublicPath(currentLocale, "/")}
+      brandHref={getHomepageDisplayPath(currentLocale)}
       brandLabel={navigationCopy.productName}
       currentLocale={currentLocale}
       languageLabel={navigationCopy.languageLabel}

@@ -49,6 +49,7 @@ import {
 } from "../../src/maps/map-render-options";
 import type { MapRenderOptions } from "../../src/maps/map-render-options";
 import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
+import { getRussianFarmSpouseDisplayName } from "../../src/i18n/planner-russian-display-names";
 import {
   AmbienceConfigPanel,
   SettingsConfigPanel,
@@ -390,7 +391,53 @@ it("explains maps without a spouse patio or farm cave and omits island and renov
   expect(onMapRenderOptionsChange).not.toHaveBeenCalled();
 });
 
-it("rejects a farm settings locale outside en and zh", () => {
+it("renders Russian spouse names from the public getter and Russian cave labels", () => {
+  const mapRenderOptions = setFarmCaveChoice(
+    setFarmSpouseId(createInitialMapRenderOptions(), "Abigail"),
+    "bats",
+  );
+  const russianAbigailName = getRussianFarmSpouseDisplayName("Abigail");
+  const russianPanel = expandPanelComponents(
+    FarmSettingsPanel({
+      locale: "ru",
+      selectedMapId: "standard",
+      mapRenderOptions,
+      onMapRenderOptionsChange: vi.fn(),
+    }),
+  );
+  const unsupportedMapPanel = expandPanelComponents(
+    FarmSettingsPanel({
+      locale: "ru",
+      selectedMapId: "ginger-island",
+      mapRenderOptions: createInitialMapRenderOptions(),
+      onMapRenderOptionsChange: vi.fn(),
+    }),
+  );
+
+  if (russianAbigailName === "Abigail") {
+    throw new Error(
+      'Russian farm spouse name for "Abigail" is still the English label.',
+    );
+  }
+
+  expect(textContent(russianPanel)).toContain("Супруг");
+  expect(textContent(russianPanel)).toContain("Пещера");
+  expect(requireButton(russianPanel, "Нет").props["aria-pressed"]).toBe(false);
+  expect(requireButton(russianPanel, russianAbigailName).props["aria-pressed"]).toBe(true);
+  expect(requireButton(russianPanel, "Не выбрано").props["aria-pressed"]).toBe(false);
+  expect(requireButton(russianPanel, "Летучие мыши").props["aria-pressed"]).toBe(true);
+  expect(requireButton(russianPanel, "Грибы").props["aria-pressed"]).toBe(false);
+  expect(textContent(russianPanel)).not.toContain("Spouse");
+  expect(textContent(russianPanel)).not.toContain("配偶");
+  expect(textContent(unsupportedMapPanel)).toBe(
+    "На этой карте нет дворика супруга и фермерской пещеры.",
+  );
+  expect(textContent(unsupportedMapPanel)).not.toContain(
+    "This map has no spouse patio or farm cave.",
+  );
+});
+
+it("rejects a farm settings locale outside en, zh, and ru", () => {
   expect(() =>
     FarmSettingsPanel({
       locale: "zh-CN" as "en",
@@ -398,7 +445,7 @@ it("rejects a farm settings locale outside en and zh", () => {
       mapRenderOptions: createInitialMapRenderOptions(),
       onMapRenderOptionsChange: vi.fn(),
     }),
-  ).toThrow('Farm settings locale must be "en" or "zh"; received "zh-CN".');
+  ).toThrow('Farm settings locale must be "en", "zh", or "ru"; received "zh-CN".');
 });
 
 it("dispatches free placement only after confirmation and supports cancellation", () => {

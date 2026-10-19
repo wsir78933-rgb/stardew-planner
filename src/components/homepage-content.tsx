@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { HomepageCopy } from "@/src/homepage/homepage-copy";
-import type { HomepageLocale } from "@/src/homepage/homepage-locale";
+import type { HomepageDisplayLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
 import { createSiteFooterContent } from "@/src/site-footer/site-footer-content";
 import { HomepageFaqList } from "./homepage-faq-list";
@@ -16,7 +16,7 @@ import { SiteFooter } from "./site-footer";
 
 type HomepageContentProps = {
   copy: HomepageCopy;
-  currentLocale: HomepageLocale;
+  currentLocale: HomepageDisplayLocale;
   localeHrefByLocale: HomepageLocaleHrefByLocale;
   localeSwitcher?: ReactNode;
   plannerHref: string;
@@ -73,7 +73,10 @@ export function HomepageContent({
           primaryActionLabel={copy.hero.primaryActionLabel}
         />
       </main>
-      <SiteFooter content={createSiteFooterContent(copy.footer, currentLocale)} />
+      <SiteFooter
+        content={createSiteFooterContent(copy.footer, currentLocale)}
+        locale={currentLocale}
+      />
     </>
   );
 }

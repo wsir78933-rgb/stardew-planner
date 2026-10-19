@@ -373,7 +373,10 @@ export function LocalProjectPanel({
     ) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(copy.actionFailure(
-        `Cannot select folder ${JSON.stringify(folderId)} because it is not in the folder list. Received folder IDs: ${JSON.stringify(folders.map((projectFolder) => projectFolder.id))}.`,
+        readLibraryOperationFailure(copy.dateTimeLocale, {
+          en: `Cannot select folder ${JSON.stringify(folderId)} because it is not in the folder list. Received folder IDs: ${JSON.stringify(folders.map((projectFolder) => projectFolder.id))}.`,
+          ru: `Нельзя выбрать папку ${JSON.stringify(folderId)}: её нет в списке папок. Полученные идентификаторы: ${JSON.stringify(folders.map((projectFolder) => projectFolder.id))}.`,
+        }),
       ));
       return;
     }
@@ -388,7 +391,10 @@ export function LocalProjectPanel({
     if (folderName.length === 0) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(copy.actionFailure(
-        `Folder name must not be empty. Received: ${JSON.stringify(requestedFolderName)}.`,
+        readLibraryOperationFailure(copy.dateTimeLocale, {
+          en: `Folder name must not be empty. Received: ${JSON.stringify(requestedFolderName)}.`,
+          ru: `Название папки не должно быть пустым. Получено: ${JSON.stringify(requestedFolderName)}.`,
+        }),
       ));
       return;
     }
@@ -427,7 +433,10 @@ export function LocalProjectPanel({
     if (!isStorageReady) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(copy.actionFailure(
-        `Cannot rename folder ${JSON.stringify(projectFolder.id)} because storage status is ${JSON.stringify(storageStatus)}.`,
+        readLibraryOperationFailure(copy.dateTimeLocale, {
+          en: `Cannot rename folder ${JSON.stringify(projectFolder.id)} because storage status is ${JSON.stringify(storageStatus)}.`,
+          ru: `Нельзя переименовать папку ${JSON.stringify(projectFolder.id)}: состояние хранилища ${JSON.stringify(storageStatus)}.`,
+        }),
       ));
       return;
     }
@@ -556,7 +565,10 @@ export function LocalProjectPanel({
     if (onOpenImportGameSave === undefined) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(copy.actionFailure(
-        "Cannot open Import Game Save because onOpenImportGameSave is missing.",
+        readLibraryOperationFailure(copy.dateTimeLocale, {
+          en: "Cannot open Import Game Save because onOpenImportGameSave is missing.",
+          ru: "Нельзя открыть импорт сохранения: не передан onOpenImportGameSave.",
+        }),
       ));
       return;
     }
@@ -568,7 +580,10 @@ export function LocalProjectPanel({
     if (onOpenTools === undefined) {
       setProjectActionNotice(null);
       setProjectActionErrorMessage(copy.actionFailure(
-        "Cannot open Tools because onOpenTools is missing.",
+        readLibraryOperationFailure(copy.dateTimeLocale, {
+          en: "Cannot open Tools because onOpenTools is missing.",
+          ru: "Нельзя открыть инструменты: не передан onOpenTools.",
+        }),
       ));
       return;
     }
@@ -834,7 +849,10 @@ export function LocalProjectPanel({
           {selectedFolderIsMissing ? (
             <p className="local-project-panel__error" role="alert">
               {copy.actionFailure(
-                `Cannot show folder ${JSON.stringify(selectedFolderId)} because it is not in the folder list. Received folder IDs: ${JSON.stringify(folders.map((projectFolder) => projectFolder.id))}.`,
+                readLibraryOperationFailure(copy.dateTimeLocale, {
+                  en: `Cannot show folder ${JSON.stringify(selectedFolderId)} because it is not in the folder list. Received folder IDs: ${JSON.stringify(folders.map((projectFolder) => projectFolder.id))}.`,
+                  ru: `Нельзя показать папку ${JSON.stringify(selectedFolderId)}: её нет в списке папок. Полученные идентификаторы: ${JSON.stringify(folders.map((projectFolder) => projectFolder.id))}.`,
+                }),
               )}
             </p>
           ) : null}
@@ -1089,6 +1107,39 @@ export function readLibraryChromeCopy(dateTimeLocale: HomepageLocale): LibraryCh
     };
   }
 
+  if (dateTimeLocale === "ru") {
+    return {
+      blankFolderName: (folderName) => `Название папки не может быть пустым. Получено название: ${JSON.stringify(folderName)}.`,
+      createdFolder: "Папка создана.",
+      emptyFolder: "В этой папке нет планов.",
+      folderNameLabel: "Название папки",
+      importGameSave: "Импортировать сохранение игры",
+      moreActions: "Другие действия",
+      move: "Переместить",
+      movedProject: "Проект перемещён.",
+      myPlans: "Мои планы",
+      newFolder: "Новая папка",
+      projectGroups: "Группы проектов",
+      renameFolder: "Переименовать папку",
+      tools: "Инструменты",
+    };
+  }
+
+  throw new Error(
+    `Cannot read library labels because dateTimeLocale is ${JSON.stringify(dateTimeLocale)}.`,
+  );
+}
+
+function readLibraryOperationFailure(
+  dateTimeLocale: HomepageLocale,
+  messageByLocale: Readonly<{ en: string; ru: string }>,
+): string {
+  if (dateTimeLocale === "en" || dateTimeLocale === "zh-CN") {
+    return messageByLocale.en;
+  }
+  if (dateTimeLocale === "ru") {
+    return messageByLocale.ru;
+  }
   throw new Error(
     `Cannot read library labels because dateTimeLocale is ${JSON.stringify(dateTimeLocale)}.`,
   );

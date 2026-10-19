@@ -1,4 +1,5 @@
 import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
+import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
 
@@ -99,5 +100,33 @@ export function createPublicLanguageAlternates(
     en: createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
     "zh-CN": createCanonicalUrl(getLocalizedPublicPath("zh-CN", canonicalPath)),
     "x-default": createCanonicalUrl(getLocalizedPublicPath("en", canonicalPath)),
+  };
+}
+
+const homepageDisplayPathByLocale = {
+  en: "/",
+  "zh-CN": "/zh",
+  ru: "/ru",
+} as const satisfies Readonly<Record<HomepageDisplayLocale, string>>;
+
+export function getHomepageDisplayPath(locale: HomepageDisplayLocale): string {
+  const homepagePath = homepageDisplayPathByLocale[locale];
+  if (homepagePath === undefined) {
+    throw new Error(
+      `Unsupported homepage display locale. Received: ${JSON.stringify(locale)}.`,
+    );
+  }
+
+  return homepagePath;
+}
+
+export function createHomepageLanguageAlternates(): Readonly<
+  Record<HomepageDisplayLocale | "x-default", string>
+> {
+  return {
+    en: createCanonicalUrl(getHomepageDisplayPath("en")),
+    "zh-CN": createCanonicalUrl(getHomepageDisplayPath("zh-CN")),
+    ru: createCanonicalUrl(getHomepageDisplayPath("ru")),
+    "x-default": createCanonicalUrl(getHomepageDisplayPath("en")),
   };
 }
