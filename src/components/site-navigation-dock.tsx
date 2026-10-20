@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Dock, DockIconButton } from "@/components/ui/dock";
 import type { HomepageDisplayLocale } from "@/src/homepage/homepage-locale";
 import type { HomepageLocaleHrefByLocale } from "@/src/homepage/homepage-navigation-url";
+import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigation";
 import { ToolsNavigationMenu } from "../tools-navigation/tools-navigation-menu";
 import { HomepageLocaleSwitcher } from "./homepage-locale-switcher";
 import { HomepageLocaleSwitcherWithBrowserNavigation } from "./homepage-locale-switcher-with-browser-navigation";
@@ -136,7 +137,7 @@ export function SiteNavigationDock({
         />
         <span>{resolvedBrandLabel}</span>
       </a>
-      <Dock>
+      <Dock className="max-[700px]:col-span-full max-[700px]:min-w-0 max-[700px]:[&>div]:max-w-full max-[700px]:[&>div]:flex-wrap max-[700px]:[&>div]:justify-center">
         <div
           key="site-dock-links"
           data-homepage-navigation-links={isHomepageSurface ? true : undefined}
@@ -152,9 +153,11 @@ export function SiteNavigationDock({
         </div>
         <div
           key="site-dock-actions"
+          className="max-[700px]:max-w-full max-[700px]:flex-wrap max-[700px]:justify-center"
           data-homepage-header-actions={isHomepageSurface ? true : undefined}
           data-public-page-header-actions={isHomepageSurface ? undefined : true}
         >
+          <FarmLayoutsNavigation locale={currentLocale} />
           <div key="site-dock-language" className="contents">
             {renderSiteNavigationLanguageSwitcher({
               currentLocale,

@@ -11,6 +11,7 @@ const fixedCanonicalPublicPaths = [
   "/tools",
   "/tools/crop-profit",
   "/tools/crop-growth",
+  "/stardew-valley-beach-farm-layout",
 ] as const;
 
 type BlogCanonicalPublicPath =

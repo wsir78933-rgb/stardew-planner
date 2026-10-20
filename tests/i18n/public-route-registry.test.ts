@@ -11,7 +11,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(36);
+  expect(canonicalPublicPaths).toHaveLength(37);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -28,6 +28,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/tools/crop-profit")).toBe("/zh/tools/crop-profit");
   expect(getLocalizedPublicPath("en", "/tools/crop-growth")).toBe("/tools/crop-growth");
   expect(getLocalizedPublicPath("zh-CN", "/tools/crop-growth")).toBe("/zh/tools/crop-growth");
+  expect(getLocalizedPublicPath("en", "/stardew-valley-beach-farm-layout")).toBe(
+    "/stardew-valley-beach-farm-layout",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/stardew-valley-beach-farm-layout")).toBe(
+    "/zh/stardew-valley-beach-farm-layout",
+  );
   expect(getLocalizedPublicPath("en", "/blog")).toBe("/blog");
   expect(getLocalizedPublicPath("zh-CN", "/blog")).toBe("/zh/blog");
   expect(getLocalizedPublicPath("en", "/blog/archive")).toBe("/blog/archive");
@@ -187,8 +193,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(72);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(70);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(74);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(72);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -200,6 +206,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/tools/crop-profit");
   expect(indexablePathnames).toContain("/tools/crop-growth");
   expect(indexablePathnames).toContain("/zh/tools/crop-growth");
+  expect(indexablePathnames).toContain("/stardew-valley-beach-farm-layout");
+  expect(indexablePathnames).toContain("/zh/stardew-valley-beach-farm-layout");
   expect(indexablePathnames).toContain("/blog");
   expect(indexablePathnames).toContain("/zh/blog");
   expect(indexablePathnames).toContain("/carpenter-stardew");

@@ -12,6 +12,10 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn how local projects, selected cloud-synced layout data, and site data are handled.
 - [Terms of service](https://stardewvalleyplanner.art/terms): Read the terms for local projects, optional cloud sync, JSON import and export, and the fan-made status.
 
+### Farm Layouts
+
+- [Stardew Valley Beach Farm Layout](https://stardewvalleyplanner.art/stardew-valley-beach-farm-layout): Explore nine Beach Farm layout ideas for crop patches, shore access, fish ponds, animal yards, orchards, greenhouses, and decorating. View the full plans or import a project into the planner.
+
 ### Planning guides
 
 - [Stardew Valley Planning Guides](https://stardewvalleyplanner.art/blog): Browse practical guides for planning a clearer, more flexible farm.
@@ -58,6 +62,10 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷农场规划器](https://stardewvalleyplanner.art/zh): 在浏览器中规划《星露谷物语》农场布局。
 - [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解本地项目、所选云端布局数据和站点数据的处理方式。
 - [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读本地项目、可选云端同步、JSON 导入导出和同人创作相关条款。
+
+### 农场布局
+
+- [星露谷物语海滩农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-beach-farm-layout): 查看 9 个星露谷物语海滩农场布局案例，涵盖作物区、海岸通道、鱼塘、牧场、果园、温室和装饰规划。可查看完整地图或下载项目到规划器继续编辑。
 
 ### 农场规划指南
 

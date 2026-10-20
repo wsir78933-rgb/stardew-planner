@@ -27,6 +27,29 @@ function readHomepageHeaderMarkup(markup: string): string {
   return homepageHeaderMarkup;
 }
 
+function expectFarmLayoutsNavigationTriggerToBeTextOnly(markup: string): void {
+  const triggerMarkup = markup.match(
+    /<button\b[^>]*data-farm-layouts-navigation-trigger=""[^>]*>[\s\S]*?<\/button>/,
+  )?.[0];
+
+  if (triggerMarkup === undefined) {
+    throw new Error(
+      `Farm Layouts navigation trigger markup was not found. Received: ${markup}`,
+    );
+  }
+
+  expect(triggerMarkup).toContain("<span>Farm Layouts</span>");
+  expect(triggerMarkup).not.toContain("<svg");
+
+  const dockControlMarkup = markup.match(
+    /<(?:a|button)\b[^>]*data-slot="dock-icon-button"[^>]*>[\s\S]*?<\/(?:a|button)>/g,
+  );
+  expect(dockControlMarkup).not.toBeNull();
+  for (const controlMarkup of dockControlMarkup ?? []) {
+    expect(controlMarkup).not.toContain("<svg");
+  }
+}
+
 function renderHomepageNavigationDockMarkup(input: Readonly<{
   currentLocale: "en" | "zh-CN" | "ru";
   plannerHref: string;
@@ -90,7 +113,7 @@ test("renders homepage dock brand, section, blog, and planner anchors without a 
   expect(markup).toContain("<span>Language</span>");
   expect(markup).toContain('<span aria-hidden="true">▾</span>');
   expect(markup).toContain("<span>Open planner</span>");
-  expect(markup).not.toContain("<svg");
+  expectFarmLayoutsNavigationTriggerToBeTextOnly(markup);
   expect(markup).not.toContain('data-slot="navigation-menu"');
 });
 
@@ -118,7 +141,7 @@ test("HomepageContent keeps the header contract and drops NavigationMenu from th
   expect(headerMarkup).toContain("<span>Language</span>");
   expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
   expect(headerMarkup).toContain("<span>Open planner</span>");
-  expect(headerMarkup).not.toContain("<svg");
+  expectFarmLayoutsNavigationTriggerToBeTextOnly(headerMarkup);
   expect(headerMarkup).not.toContain('data-slot="navigation-menu"');
 });
 
@@ -134,7 +157,7 @@ test("uses localized blog and planner labels for zh-CN", () => {
   expect(headerMarkup).toContain("<span>语言</span>");
   expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
   expect(headerMarkup).toContain("<span>打开规划器</span>");
-  expect(headerMarkup).not.toContain("<svg");
+  expectFarmLayoutsNavigationTriggerToBeTextOnly(headerMarkup);
 });
 
 test("keeps Russian homepage navigation on /ru and English blog and legal paths", () => {
