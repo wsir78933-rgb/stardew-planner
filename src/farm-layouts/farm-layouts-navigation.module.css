@@ -5,7 +5,8 @@
 
 .flyout {
   width: max-content;
-  padding-top: 0.4rem;
+  /* Keep the visible gap inside the flyout's pointer area. */
+  padding-top: calc(0.4rem + 4px);
   pointer-events: none;
   position: absolute;
   z-index: 30;

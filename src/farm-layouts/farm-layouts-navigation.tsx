@@ -144,7 +144,7 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
 
       setFlyoutPosition({
         left: leftInViewport - navigationBounds.left,
-        top: triggerBounds.bottom + 4 - navigationBounds.top,
+        top: navigationBounds.height,
       });
     }
 
