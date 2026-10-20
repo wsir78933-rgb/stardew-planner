@@ -1,4 +1,5 @@
 import { beachFarmCanonicalPath } from "./beach-farm-content";
+import { meadowlandsFarmCanonicalPath } from "./meadowlands-farm-content";
 import {
   isHomepageDisplayLocale,
   type HomepageDisplayLocale,
@@ -15,7 +16,7 @@ export const FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS = [
 export type FarmLayoutsNavigationCategoryId =
   (typeof FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS)[number];
 
-export type FarmLayoutsNavigationPageId = "beach-farm";
+export type FarmLayoutsNavigationPageId = "beach-farm" | "meadowlands-farm";
 
 export type FarmLayoutsNavigationPage = Readonly<{
   href: string;
@@ -67,6 +68,12 @@ export function isFarmLayoutsNavigationCategoryId(
   return FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS.some(
     (supportedCategoryId) => supportedCategoryId === categoryId,
   );
+}
+
+export function isFarmLayoutsNavigationPageId(
+  pageId: string,
+): pageId is FarmLayoutsNavigationPageId {
+  return pageId === "beach-farm" || pageId === "meadowlands-farm";
 }
 
 export function readFarmLayoutsNavigationCategory(
@@ -130,17 +137,28 @@ function createFarmLayoutsNavigationCategories(
           "planting-layouts": "Planting Layouts",
           "layout-ideas": "Layout Ideas",
         };
-  const beachFarmPage: FarmLayoutsNavigationPage = {
-    href: locale === "zh-CN"
-      ? `/zh${beachFarmCanonicalPath}`
-      : beachFarmCanonicalPath,
-    id: "beach-farm",
-    label: locale === "zh-CN" ? "海滩农场布局" : "Beach Farm Layouts",
-  };
+  const farmMapPages: readonly FarmLayoutsNavigationPage[] = [
+    {
+      href: locale === "zh-CN"
+        ? `/zh${beachFarmCanonicalPath}`
+        : beachFarmCanonicalPath,
+      id: "beach-farm",
+      label: locale === "zh-CN" ? "海滩农场布局" : "Beach Farm Layouts",
+    },
+    {
+      href: locale === "zh-CN"
+        ? `/zh${meadowlandsFarmCanonicalPath}`
+        : meadowlandsFarmCanonicalPath,
+      id: "meadowlands-farm",
+      label: locale === "zh-CN"
+        ? "草原农场布局"
+        : "Meadowlands Farm layout",
+    },
+  ];
 
   return FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS.map((categoryId) => ({
     id: categoryId,
     label: categoryLabels[categoryId],
-    pages: categoryId === "farm-maps" ? [beachFarmPage] : [],
+    pages: categoryId === "farm-maps" ? farmMapPages : [],
   }));
 }

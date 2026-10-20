@@ -1,11 +1,11 @@
 import {
   isFarmLayoutsNavigationCategoryId,
+  isFarmLayoutsNavigationPageId,
   readFarmLayoutsNavigationCategory,
   readFarmLayoutsNavigationPage,
   type FarmLayoutsNavigationCategory,
   type FarmLayoutsNavigationCategoryId,
   type FarmLayoutsNavigationModel,
-  type FarmLayoutsNavigationPageId,
 } from "./farm-layouts-navigation-model";
 
 export const FARM_LAYOUTS_NAVIGATION_TRIGGER_FOCUS_KEY = "trigger";
@@ -51,9 +51,9 @@ export function getFarmLayoutsNavigationCategoryFocusKey(
 }
 
 export function getFarmLayoutsNavigationPageFocusKey(
-  pageId: FarmLayoutsNavigationPageId,
+  pageId: string,
 ): string {
-  if (pageId !== "beach-farm") {
+  if (!isFarmLayoutsNavigationPageId(pageId)) {
     throw new Error(
       `Unknown Farm Layouts navigation page ${JSON.stringify(pageId)}.`,
     );
@@ -331,10 +331,48 @@ function moveFocusFromPage(
   pageId: string,
 ): FarmLayoutsNavigationInteraction {
   const category = readOpenFarmLayoutsCategory(input.interaction, input.model);
-  readFarmLayoutsNavigationPage(input.model, category.id, pageId);
+  const currentPage = readFarmLayoutsNavigationPage(
+    input.model,
+    category.id,
+    pageId,
+  );
 
-  if (input.key === "ArrowLeft" || input.key === "ArrowUp") {
+  if (input.key === "ArrowLeft") {
     return returnFarmLayoutsNavigationToCategories(input.interaction);
+  }
+
+  if (input.key === "ArrowUp" || input.key === "ArrowDown") {
+    const pageCount = category.pages.length;
+    if (pageCount === 0) {
+      throw new Error(
+        `Farm Layouts navigation category ${JSON.stringify(category.id)} has no pages while focused on ${JSON.stringify(pageId)}.`,
+      );
+    }
+
+    const currentPageIndex = category.pages.findIndex(
+      (farmLayoutsPage) => farmLayoutsPage.id === currentPage.id,
+    );
+    if (currentPageIndex === -1) {
+      throw new Error(
+        `Farm Layouts navigation page ${JSON.stringify(currentPage.id)} is missing from category ${JSON.stringify(category.id)} pages ${JSON.stringify(category.pages.map((farmLayoutsPage) => farmLayoutsPage.id))}.`,
+      );
+    }
+
+    const direction = input.key === "ArrowDown" ? 1 : -1;
+    const nextPageIndex = (currentPageIndex + direction + pageCount) % pageCount;
+    const nextPage = category.pages[nextPageIndex];
+    if (nextPage === undefined) {
+      throw new Error(
+        `Farm Layouts navigation page index ${JSON.stringify(nextPageIndex)} is missing from category ${JSON.stringify(category.id)} pages ${JSON.stringify(category.pages)}.`,
+      );
+    }
+
+    return {
+      focusKey: getFarmLayoutsNavigationPageFocusKey(nextPage.id),
+      openCategoryId: category.id,
+      panel: "category",
+      suppressPointerHover: false,
+    };
   }
 
   return input.interaction;
