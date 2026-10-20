@@ -1,4 +1,4 @@
-export type ToolsNavigationLocale = "en" | "zh-CN" | "ja";
+export type ToolsNavigationLocale = "en" | "zh-CN" | "ja" | "ru";
 
 export type ToolsNavigationTool = Readonly<{
   href: string | null;
@@ -134,7 +134,12 @@ export function readToolsNavigationTool(
 }
 
 function readToolsNavigationLocale(locale: string): ToolsNavigationLocale {
-  if (locale === "en" || locale === "zh-CN" || locale === "ja") {
+  if (
+    locale === "en" ||
+    locale === "zh-CN" ||
+    locale === "ja" ||
+    locale === "ru"
+  ) {
     return locale;
   }
 
@@ -146,7 +151,7 @@ function readToolsNavigationLocale(locale: string): ToolsNavigationLocale {
 function readToolsNavigationPathPrefix(
   locale: ToolsNavigationLocale,
 ): "" | "/zh" {
-  if (locale === "en" || locale === "ja") {
+  if (locale === "en" || locale === "ja" || locale === "ru") {
     return "";
   }
 
@@ -183,7 +188,7 @@ function readToolsNavigationToolLabel(
     return tool.label;
   }
 
-  if (locale === "en" || locale === "ja") {
+  if (locale === "en" || locale === "ja" || locale === "ru") {
     return readEnglishToolsNavigationToolLabel(tool);
   }
 

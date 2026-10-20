@@ -26,6 +26,7 @@ import {
 const localeHrefByLocale = {
   en: "/",
   ja: "/ja",
+  ru: "/ru",
   "zh-CN": "/zh",
 } as const;
 
@@ -137,6 +138,37 @@ test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => 
   expect(readPlantingFlyoutMarkup(chineseMarkup).match(/<a\b/g)?.length).toBe(2);
 });
 
+test("uses English labels and unprefixed tool paths for Russian", () => {
+  const russianModel = getToolsNavigationModel("ru");
+  const russianMarkup = renderHomepageDock("ru");
+  const russianPlantingFlyoutMarkup = readPlantingFlyoutMarkup(russianMarkup);
+
+  expect(russianModel.locale).toBe("ru");
+  expect(russianModel.allToolsHref).toBe("/tools");
+  expect(russianModel.toolsHomeHref).toBe("/tools");
+  expect(readToolsNavigationTool(russianModel, "crop-profit")).toEqual({
+    href: "/tools/crop-profit",
+    id: "crop-profit",
+    label: "Season profit",
+  });
+  expect(readToolsNavigationTool(russianModel, "crop-growth")).toEqual({
+    href: "/tools/crop-profit?tool=growth",
+    id: "crop-growth",
+    label: "Growth calendar",
+  });
+  expect(russianMarkup).toContain("<span>Stardew Valley tools</span>");
+  expect(readToolsNavigationTriggerMarkup(russianMarkup)).toContain(
+    'href="/tools"',
+  );
+  expect(russianMarkup).not.toContain('href="/ru/tools');
+  expect(russianPlantingFlyoutMarkup).toContain('href="/tools/crop-profit"');
+  expect(russianPlantingFlyoutMarkup).toContain(
+    'href="/tools/crop-profit?tool=growth"',
+  );
+  expect(russianPlantingFlyoutMarkup).toContain("Season profit");
+  expect(russianPlantingFlyoutMarkup).toContain("Growth calendar");
+});
+
 test("shows an optional dock trailing slot only when a page passes one", () => {
   const markup = renderToStaticMarkup(
     <SiteNavigationDock
@@ -224,6 +256,7 @@ test("opens planting from the desktop hover path and rejects unknown ids", () =>
     "/tools/crop-profit",
   );
   expect(() => getToolsNavigationModel("fr")).toThrow('"fr"');
+  expect(() => getToolsNavigationModel("ru-RU")).toThrow('"ru-RU"');
   expect(() => readToolsNavigationCategory(model, "nope")).toThrow('"nope"');
   expect(() => readToolsNavigationTool(model, "missing-tool")).toThrow(
     '"missing-tool"',
