@@ -15,6 +15,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 ### Farm Layouts
 
 - [Stardew Valley Beach Farm Layout](https://stardewvalleyplanner.art/stardew-valley-beach-farm-layout): Explore nine Beach Farm layout ideas for crop patches, shore access, fish ponds, animal yards, orchards, greenhouses, and decorating. View the full plans or import a project into the planner.
+- [Stardew Valley Fish Farm Layout](https://stardewvalleyplanner.art/stardew-valley-fish-farm-layout): Explore six Stardew Valley fish farm layouts for Riverland Farm: a pond grid, island zones, a crab-pot village, a central crop island, livestock islands, and a riverside retreat. Preview each plan or download its JSON project.
 - [Stardew Valley Meadowlands Farm Layout](https://stardewvalleyplanner.art/meadowlands-farm-layout): Explore ten Stardew Valley Meadowlands farm layout ideas for coops, pastures, crop beds, greenhouse paths, fish ponds, and late-game buildings. View each plan or download its JSON project for the planner.
 
 ### Planning guides
@@ -67,6 +68,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 ### 农场布局
 
 - [星露谷物语海滩农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-beach-farm-layout): 查看 9 个星露谷物语海滩农场布局案例，涵盖作物区、海岸通道、鱼塘、牧场、果园、温室和装饰规划。可查看完整地图或下载项目到规划器继续编辑。
+- [星露谷物语鱼塘农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-fish-farm-layout): 查看 6 套为 Riverland Farm（河流农场）规划的星露谷物语鱼塘农场布局：鱼塘网格、一岛一职、蟹笼渔村、中岛作物田、西南畜牧区与水岸漫步。可预览完整地图或下载 JSON 项目。
 - [星露谷物语草原农场布局](https://stardewvalleyplanner.art/zh/meadowlands-farm-layout): 查看 10 个星露谷物语草原农场布局案例，涵盖鸡舍牧场、紧凑作物田、温室周边道路、鱼塘和后期建筑分区。可浏览完整地图，或下载 JSON 项目到规划器继续调整。
 
 ### 农场规划指南

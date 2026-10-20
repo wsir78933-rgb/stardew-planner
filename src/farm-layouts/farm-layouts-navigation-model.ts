@@ -1,4 +1,5 @@
 import { beachFarmCanonicalPath } from "./beach-farm-content";
+import { fishFarmCanonicalPath } from "./fish-farm-content";
 import { meadowlandsFarmCanonicalPath } from "./meadowlands-farm-content";
 import {
   isHomepageDisplayLocale,
@@ -16,7 +17,10 @@ export const FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS = [
 export type FarmLayoutsNavigationCategoryId =
   (typeof FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS)[number];
 
-export type FarmLayoutsNavigationPageId = "beach-farm" | "meadowlands-farm";
+export type FarmLayoutsNavigationPageId =
+  | "beach-farm"
+  | "fish-farm"
+  | "meadowlands-farm";
 
 export type FarmLayoutsNavigationPage = Readonly<{
   href: string;
@@ -73,7 +77,11 @@ export function isFarmLayoutsNavigationCategoryId(
 export function isFarmLayoutsNavigationPageId(
   pageId: string,
 ): pageId is FarmLayoutsNavigationPageId {
-  return pageId === "beach-farm" || pageId === "meadowlands-farm";
+  return (
+    pageId === "beach-farm" ||
+    pageId === "fish-farm" ||
+    pageId === "meadowlands-farm"
+  );
 }
 
 export function readFarmLayoutsNavigationCategory(
@@ -144,6 +152,13 @@ function createFarmLayoutsNavigationCategories(
         : beachFarmCanonicalPath,
       id: "beach-farm",
       label: locale === "zh-CN" ? "海滩农场布局" : "Beach Farm Layouts",
+    },
+    {
+      href: locale === "zh-CN"
+        ? `/zh${fishFarmCanonicalPath}`
+        : fishFarmCanonicalPath,
+      id: "fish-farm",
+      label: locale === "zh-CN" ? "河流农场布局" : "Fish Farm Layouts",
     },
     {
       href: locale === "zh-CN"

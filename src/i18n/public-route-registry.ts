@@ -1,4 +1,5 @@
 import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
+import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
@@ -12,6 +13,7 @@ const fixedCanonicalPublicPaths = [
   "/tools/crop-profit",
   "/tools/crop-growth",
   "/stardew-valley-beach-farm-layout",
+  fishFarmCanonicalPath,
   "/meadowlands-farm-layout",
 ] as const;
 
