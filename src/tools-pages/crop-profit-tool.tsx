@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
+import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 import { getToolsPageCopy } from "../i18n/tools-page-copy";
 import {
   isBrowserStorageFailure,
@@ -23,8 +24,7 @@ import {
   serializeCropProfitForm,
   type CropProfitForm,
 } from "./crop-profit-form";
-import { PlantingToolFrame } from "./planting-tool-frame";
-import { createCropGrowthHref } from "./planting-tool-href";
+import { PlantingToolFrame, type PlantingToolId } from "./planting-tool-frame";
 import { formatHarvestDate, parsePlantingDay, parseSpeedGroOption } from "./planting-field-values";
 import {
   loadPurchasableFieldCrops,
@@ -52,6 +52,7 @@ import styles from "./tools-page.module.css";
 
 type CropProfitToolProperties = Readonly<{
   locale: PublicLocale;
+  onSelectTool?: (tool: PlantingToolId, cropId?: string) => void;
 }>;
 
 type FieldDraft = Readonly<Partial<Record<ProfitNumberField, string>>>;
@@ -77,7 +78,16 @@ export function seasonProfitRankingHasRows(rowCount: number): boolean {
   return rowCount > 0;
 }
 
-export function CropProfitTool({ locale }: CropProfitToolProperties) {
+function createProfitGrowthCalendarHref(locale: PublicLocale, cropId: string): string {
+  if (cropId.trim().length === 0) {
+    throw new Error(`Crop id must be a non-empty string. Received: ${JSON.stringify(cropId)}.`);
+  }
+
+  const pathname = getLocalizedPublicPath(locale, "/tools/crop-profit");
+  return `${pathname}?tool=growth&crop=${encodeURIComponent(cropId)}`;
+}
+
+export function CropProfitTool({ locale, onSelectTool }: CropProfitToolProperties) {
   const copy = getToolsPageCopy(locale);
   const crops = useMemo(() => loadPurchasableFieldCrops(), []);
   const [form, setForm] = useState<CropProfitForm>(createDefaultCropProfitForm);
@@ -277,6 +287,7 @@ export function CropProfitTool({ locale }: CropProfitToolProperties) {
     <PlantingToolFrame
       currentTool="crop-profit"
       locale={locale}
+      onSelectTool={onSelectTool === undefined ? undefined : (tool) => onSelectTool(tool)}
       saveStatus={saveStatus}
       title={copy.profit.title}
     >
@@ -484,10 +495,18 @@ export function CropProfitTool({ locale }: CropProfitToolProperties) {
                 <button className={`public-secondary-cta ${styles.action}`} disabled type="button">
                   {copy.profit.viewGrowth}
                 </button>
-              ) : (
-                <a className="public-secondary-cta" href={createCropGrowthHref(locale, activeCropId)}>
+              ) : onSelectTool === undefined ? (
+                <a className="public-secondary-cta" href={createProfitGrowthCalendarHref(locale, activeCropId)}>
                   {copy.profit.viewGrowth}
                 </a>
+              ) : (
+                <button
+                  className="public-secondary-cta"
+                  onClick={() => onSelectTool("crop-growth", activeCropId)}
+                  type="button"
+                >
+                  {copy.profit.viewGrowth}
+                </button>
               )}
               <button className="public-primary-cta" onClick={openPlanDialog} type="button">
                 {copy.profit.transferHarvest}

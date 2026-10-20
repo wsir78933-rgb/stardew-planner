@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
 import { getToolsPageCopy, type ToolsPageCopy } from "../i18n/tools-page-copy";
 import { createCropProfitHref, createToolsHomeHref } from "./planting-tool-href";
-import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 import { ProductionPlanSummary } from "./production-plan-summary";
 import styles from "./tools-page.module.css";
 
@@ -13,7 +12,7 @@ type ToolsHomePageProperties = Readonly<{
 export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
   const copy = getToolsPageCopy(locale);
   const profitHref = createCropProfitHref(locale);
-  const growthHref = getLocalizedPublicPath(locale, "/tools/crop-growth");
+  const growthHref = `${profitHref}?tool=growth`;
 
   return (
     <article className={styles.toolsPage} data-tools-home="true">
@@ -43,10 +42,10 @@ export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
           title={copy.categories.planting.title}
         >
           <li>
-            <a href={profitHref}>{requireCategoryTool(copy.categories.planting.tools, 0)}</a>
+            <a href={profitHref}>{readPlantingToolName(copy.categories.planting.tools, 0)}</a>
           </li>
           <li>
-            <a href={growthHref}>{requireCategoryTool(copy.categories.planting.tools, 1)}</a>
+            <a href={growthHref}>{readPlantingToolName(copy.categories.planting.tools, 1)}</a>
           </li>
         </CategoryCard>
         <UnavailableCategoryCard category={copy.categories.processing} />
@@ -80,11 +79,11 @@ function CategoryCard({
   );
 }
 
-function requireCategoryTool(toolNames: readonly string[], index: number): string {
+function readPlantingToolName(toolNames: readonly string[], index: 0 | 1): string {
   const toolName = toolNames[index];
-  if (toolName === undefined) {
+  if (toolNames.length !== 2 || toolName === undefined) {
     throw new Error(
-      `Tool category is missing tool index ${index}. Received: ${JSON.stringify(toolNames)}.`,
+      `Planting category must list season profit and growth calendar. Received: ${JSON.stringify(toolNames)}.`,
     );
   }
 

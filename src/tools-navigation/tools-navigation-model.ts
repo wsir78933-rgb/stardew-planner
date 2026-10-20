@@ -48,7 +48,7 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
       {
         id: "crop-growth",
         label: "生长与收获日历",
-        path: "/tools/crop-growth",
+        path: "/tools/crop-profit",
       },
     ],
   },
@@ -91,7 +91,7 @@ export function getToolsNavigationModel(locale: string): ToolsNavigationModel {
     allToolsHref: `${pathPrefix}/tools`,
     allToolsLabel: "全部工具",
     backToCategoriesLabel: "返回工具分类",
-    categories: createToolsNavigationCategories(pathPrefix),
+    categories: createToolsNavigationCategories(toolsNavigationLocale, pathPrefix),
     categoryPanelTitle: "工具分类",
     locale: toolsNavigationLocale,
     toolsHomeHref: `${pathPrefix}/tools`,
@@ -161,6 +161,7 @@ function readToolsNavigationPathPrefix(
 }
 
 function createToolsNavigationCategories(
+  locale: ToolsNavigationLocale,
   pathPrefix: "" | "/zh",
 ): readonly ToolsNavigationCategory[] {
   return TOOLS_NAVIGATION_CATALOG.map((category) => ({
@@ -169,9 +170,41 @@ function createToolsNavigationCategories(
     tools: category.tools.map((tool) => ({
       href: readToolsNavigationToolHref(pathPrefix, tool),
       id: tool.id,
-      label: tool.label,
+      label: readToolsNavigationToolLabel(locale, tool),
     })),
   }));
+}
+
+function readToolsNavigationToolLabel(
+  locale: ToolsNavigationLocale,
+  tool: ToolsNavigationCatalogTool,
+): string {
+  if (locale === "zh-CN") {
+    return tool.label;
+  }
+
+  if (locale === "en" || locale === "ja") {
+    return readEnglishToolsNavigationToolLabel(tool);
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Unknown tools navigation locale ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readEnglishToolsNavigationToolLabel(
+  tool: ToolsNavigationCatalogTool,
+): string {
+  if (tool.id === "crop-profit") {
+    return "Season profit";
+  }
+
+  if (tool.id === "crop-growth") {
+    return "Growth calendar";
+  }
+
+  return tool.label;
 }
 
 function readToolsNavigationToolHref(
@@ -186,5 +219,10 @@ function readToolsNavigationToolHref(
     throw new Error(`Unknown tools navigation tool ${JSON.stringify(tool.id)}.`);
   }
 
-  return `${pathPrefix}${tool.path}`;
+  const href = `${pathPrefix}${tool.path}`;
+  if (tool.id === "crop-growth") {
+    return `${href}?tool=growth`;
+  }
+
+  return href;
 }

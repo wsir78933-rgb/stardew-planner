@@ -8,10 +8,11 @@ it("links the Chinese tools homepage planting card to both planting tools", () =
   const markup = renderToStaticMarkup(<ToolsHomePage locale="zh-CN" />);
 
   expect(markup).toContain('href="/zh/tools/crop-profit"');
-  expect(markup).toContain('href="/zh/tools/crop-growth"');
-  expect(markup).toContain("季节作物收益");
-  expect(markup).toContain("生长与收获日历");
+  expect(markup).toContain('href="/zh/tools/crop-profit?tool=growth"');
+  expect(markup).toMatch(/<a\b[^>]*>\s*季节作物收益\s*<\/a>/);
+  expect(markup).toMatch(/<a\b[^>]*>\s*生长与收获日历\s*<\/a>/);
   expect(markup).toContain("进入种植规划");
+  expect(markup).not.toContain('href="/zh/tools/crop-growth"');
   expect(markup).not.toContain('href="/zh/tools/processing"');
 });
 

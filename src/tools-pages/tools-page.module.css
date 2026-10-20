@@ -145,6 +145,21 @@
   min-width: 0;
 }
 
+.plantingSplit {
+  display: grid;
+  gap: 1rem;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 1fr);
+  min-width: 0;
+}
+
+.plantingColumn {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  min-width: 0;
+}
+
 .panel,
 .dialog {
   display: grid;
@@ -341,6 +356,7 @@
   .categoryGrid,
   .frame,
   .workspace,
+  .plantingSplit,
   .fieldGrid,
   .machineGrid,
   .summaryGrid {
@@ -357,17 +373,5 @@
 
   .rankingList {
     display: grid;
-  }
-
-  .seasonRow {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .panel .seasonRow > button {
-    flex: 0 1 auto;
-    min-width: max-content;
-    padding-inline: 1rem;
-    width: auto;
   }
 }

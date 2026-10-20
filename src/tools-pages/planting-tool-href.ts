@@ -6,8 +6,8 @@ export function createCropGrowthHref(locale: PublicLocale, cropId: string): stri
     throw new Error(`Crop id must be a non-empty string. Received: ${JSON.stringify(cropId)}.`);
   }
 
-  const pathname = getLocalizedPublicPath(locale, "/tools/crop-growth");
-  return `${pathname}?crop=${encodeURIComponent(cropId)}`;
+  const pathname = getLocalizedPublicPath(locale, "/tools/crop-profit");
+  return `${pathname}?tool=growth&crop=${encodeURIComponent(cropId)}`;
 }
 
 export function createCropProfitHref(locale: PublicLocale): string {

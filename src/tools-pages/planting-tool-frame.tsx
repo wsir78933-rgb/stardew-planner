@@ -2,14 +2,16 @@ import type { ReactNode } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
 import { getToolsPageCopy } from "../i18n/tools-page-copy";
 import { createCropProfitHref, createToolsHomeHref } from "./planting-tool-href";
-import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 import styles from "./tools-page.module.css";
+
+export type PlantingToolId = "crop-profit" | "crop-growth";
 
 type PlantingToolFrameProperties = Readonly<{
   locale: PublicLocale;
-  currentTool: "crop-profit" | "crop-growth";
+  currentTool: PlantingToolId;
   title: string;
   saveStatus: "empty" | "saved" | "failed";
+  onSelectTool?: (tool: PlantingToolId) => void;
   children: ReactNode;
 }>;
 
@@ -18,12 +20,13 @@ export function PlantingToolFrame({
   currentTool,
   title,
   saveStatus,
+  onSelectTool,
   children,
 }: PlantingToolFrameProperties) {
   const copy = getToolsPageCopy(locale);
   const toolsHomeHref = createToolsHomeHref(locale);
   const profitHref = createCropProfitHref(locale);
-  const growthHref = getLocalizedPublicPath(locale, "/tools/crop-growth");
+  const growthHref = `${profitHref}?tool=growth`;
   const saveLabel =
     saveStatus === "failed" ? copy.frame.saveFailed : saveStatus === "saved" ? copy.frame.saved : null;
 
@@ -57,24 +60,55 @@ export function PlantingToolFrame({
         </nav>
         <div>
           <div className={styles.tabRow}>
-            <a
-              aria-current={currentTool === "crop-profit" ? "page" : undefined}
-              className={currentTool === "crop-profit" ? "public-primary-cta" : "public-secondary-cta"}
+            <PlantingToolTab
+              current={currentTool === "crop-profit"}
               href={profitHref}
-            >
-              {copy.frame.profitTab}
-            </a>
-            <a
-              aria-current={currentTool === "crop-growth" ? "page" : undefined}
-              className={currentTool === "crop-growth" ? "public-primary-cta" : "public-secondary-cta"}
+              label={copy.frame.profitTab}
+              onSelect={onSelectTool === undefined ? undefined : () => onSelectTool("crop-profit")}
+            />
+            <PlantingToolTab
+              current={currentTool === "crop-growth"}
               href={growthHref}
-            >
-              {copy.frame.growthTab}
-            </a>
+              label={copy.frame.growthTab}
+              onSelect={onSelectTool === undefined ? undefined : () => onSelectTool("crop-growth")}
+            />
           </div>
           <div className={styles.workspace}>{children}</div>
         </div>
       </div>
     </article>
+  );
+}
+
+function PlantingToolTab({
+  current,
+  href,
+  label,
+  onSelect,
+}: Readonly<{
+  current: boolean;
+  href: string;
+  label: string;
+  onSelect: (() => void) | undefined;
+}>) {
+  const className = current ? "public-primary-cta" : "public-secondary-cta";
+
+  if (onSelect === undefined) {
+    return (
+      <a aria-current={current ? "page" : undefined} className={className} href={href}>
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      aria-current={current ? "page" : undefined}
+      className={className}
+      onClick={onSelect}
+      type="button"
+    >
+      {label}
+    </button>
   );
 }

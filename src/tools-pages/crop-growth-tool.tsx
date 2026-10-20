@@ -23,7 +23,7 @@ import {
   serializeCropGrowthForm,
   type CropGrowthForm,
 } from "./crop-growth-form";
-import { PlantingToolFrame } from "./planting-tool-frame";
+import { PlantingToolFrame, type PlantingToolId } from "./planting-tool-frame";
 import { createCropProfitHref } from "./planting-tool-href";
 import {
   formatHarvestDate,
@@ -42,11 +42,12 @@ import styles from "./tools-page.module.css";
 type CropGrowthToolProperties = Readonly<{
   locale: PublicLocale;
   requestedCropId: string | null;
+  onSelectTool?: (tool: PlantingToolId) => void;
 }>;
 
 type SaveStatus = "empty" | "saved" | "failed";
 
-export function CropGrowthTool({ locale, requestedCropId }: CropGrowthToolProperties) {
+export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGrowthToolProperties) {
   const copy = getToolsPageCopy(locale);
   const crops = useMemo(() => loadPurchasableFieldCrops(), []);
   const defaultCropId = chooseDefaultGrowthCropId(crops);
@@ -146,6 +147,7 @@ export function CropGrowthTool({ locale, requestedCropId }: CropGrowthToolProper
     <PlantingToolFrame
       currentTool="crop-growth"
       locale={locale}
+      onSelectTool={onSelectTool}
       saveStatus={saveStatus}
       title={copy.growth.title}
     >
@@ -404,9 +406,15 @@ export function CropGrowthTool({ locale, requestedCropId }: CropGrowthToolProper
           </>
         )}
         <div className={styles.actionRow}>
-          <a className="public-secondary-cta" href={createCropProfitHref(locale)}>
-            {copy.growth.compareProfit}
-          </a>
+          {onSelectTool === undefined ? (
+            <a className="public-secondary-cta" href={createCropProfitHref(locale)}>
+              {copy.growth.compareProfit}
+            </a>
+          ) : (
+            <button className="public-secondary-cta" onClick={() => onSelectTool("crop-profit")} type="button">
+              {copy.growth.compareProfit}
+            </button>
+          )}
           <button className="public-primary-cta" onClick={() => void copyCalendar()} type="button">
             {copy.growth.copyCalendar}
           </button>

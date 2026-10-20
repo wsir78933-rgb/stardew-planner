@@ -173,7 +173,7 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       planting: {
         title: "Planting",
         description: "Compare crop profit and harvest timing",
-        tools: ["Season crop profit", "Growth and harvest calendar"],
+        tools: ["Season profit", "Growth calendar"],
         enter: "Open planting tools",
       },
       processing: {
