@@ -12,23 +12,26 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import { DockIconButton } from "@/components/ui/dock";
 import type { HomepageDisplayLocale } from "../homepage/homepage-locale";
 import {
-  activateFarmMapsCategory,
+  activateFarmLayoutsCategory,
   createClosedFarmLayoutsNavigationInteraction,
+  getFarmLayoutsNavigationCategoryFocusKey,
+  getFarmLayoutsNavigationPageFocusKey,
   isFarmLayoutsNavigationKey,
   moveFarmLayoutsNavigationFocus,
+  openFarmLayoutsCategoryFromPointerHover,
   openFarmLayoutsNavigationFromPointerHover,
-  openFarmMapsFromPointerHover,
   readCompactFarmLayoutsNavigation,
   readFineFarmLayoutsPointer,
   returnFarmLayoutsNavigationToCategories,
   toggleFarmLayoutsNavigation,
   FARM_LAYOUTS_NAVIGATION_BACK_FOCUS_KEY,
-  FARM_LAYOUTS_NAVIGATION_CATEGORY_FOCUS_KEY,
-  FARM_LAYOUTS_NAVIGATION_PAGE_FOCUS_KEY,
   FARM_LAYOUTS_NAVIGATION_TRIGGER_FOCUS_KEY,
   type FarmLayoutsNavigationInteraction,
 } from "./farm-layouts-navigation-interaction";
-import { getFarmLayoutsNavigationModel } from "./farm-layouts-navigation-model";
+import {
+  getFarmLayoutsNavigationModel,
+  readFarmLayoutsNavigationCategory,
+} from "./farm-layouts-navigation-model";
 import styles from "./farm-layouts-navigation.module.css";
 
 type FarmLayoutsNavigationProps = Readonly<{
@@ -49,9 +52,14 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
   );
   const [flyoutPosition, setFlyoutPosition] =
     useState<FarmLayoutsFlyoutPosition | null>(null);
+  const isFlyoutPositioned = flyoutPosition !== null;
 
   useEffect(() => {
-    if (interaction.focusKey === null) {
+    if (
+      interaction.focusKey === null ||
+      (interaction.focusKey !== FARM_LAYOUTS_NAVIGATION_TRIGGER_FOCUS_KEY &&
+        !isFlyoutPositioned)
+    ) {
       return;
     }
 
@@ -72,7 +80,7 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
     }
 
     focusTarget.focus({ preventScroll: true });
-  }, [interaction.focusKey]);
+  }, [interaction.focusKey, isFlyoutPositioned]);
 
   useEffect(() => {
     function closeOnOutsidePointerDown(event: PointerEvent) {
@@ -129,7 +137,9 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
 
       const triggerBounds = trigger.getBoundingClientRect();
       const navigationBounds = navigation.getBoundingClientRect();
-      const compact = readCompactFarmLayoutsNavigation(readFarmLayoutsMatchMedia());
+      const compact = readCompactFarmLayoutsNavigation(
+        readFarmLayoutsMatchMedia(),
+      );
       const sidePadding = Math.min(12, viewportWidth / 2);
       const availableWidth = Math.max(1, viewportWidth - sidePadding * 2);
       const flyoutWidth = compact ? Math.min(352, availableWidth) : 520;
@@ -239,6 +249,7 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
       currentFocusKey,
       interaction,
       key: event.key,
+      model,
     });
 
     if (nextInteraction === interaction) {
@@ -262,26 +273,45 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
     setFlyoutPosition(null);
   }
 
-  function onFarmMapsPointerEnter() {
+  function onCategoryPointerEnter(categoryId: string) {
     if (!readFineFarmLayoutsPointer(readFarmLayoutsMatchMedia())) {
       return;
     }
 
-    setInteraction((current) => openFarmMapsFromPointerHover(current));
+    setInteraction((current) =>
+      openFarmLayoutsCategoryFromPointerHover(current, categoryId),
+    );
   }
 
-  function onFarmMapsClick() {
-    const compact = readCompactFarmLayoutsNavigation(readFarmLayoutsMatchMedia());
-    setInteraction((current) => activateFarmMapsCategory(current, compact));
+  function onCategoryClick(categoryId: string) {
+    const compact = readCompactFarmLayoutsNavigation(
+      readFarmLayoutsMatchMedia(),
+    );
+    setInteraction((current) =>
+      activateFarmLayoutsCategory(current, categoryId, compact),
+    );
   }
 
   function onBackToCategories() {
-    setInteraction(returnFarmLayoutsNavigationToCategories());
+    setInteraction((current) =>
+      returnFarmLayoutsNavigationToCategories(current),
+    );
   }
 
   const isNavigationOpen = interaction.panel !== "closed";
-  const isCategoryPanelVisible = isNavigationOpen;
-  const isBeachFarmPanelVisible = interaction.panel === "beach-farm";
+  const isCompactNavigation = readCompactFarmLayoutsNavigation(
+    readFarmLayoutsMatchMedia(),
+  );
+  const isCategoryPanelVisible =
+    isNavigationOpen &&
+    !(isCompactNavigation && interaction.panel === "category");
+  const isPagePanelVisible = interaction.panel === "category";
+  const selectedCategory =
+    interaction.openCategoryId === null
+      ? null
+      : readFarmLayoutsNavigationCategory(model, interaction.openCategoryId);
+  const renderedCategory =
+    selectedCategory ?? readFarmLayoutsNavigationCategory(model, "farm-maps");
   const positionStyle =
     flyoutPosition === null
       ? undefined
@@ -333,46 +363,55 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
             >
               {model.categoryPanelTitle}
             </p>
-            <button
-              aria-controls={`${navigationPanelId}-beach-farm`}
-              aria-expanded={isBeachFarmPanelVisible}
-              aria-haspopup="true"
-              className={styles.row}
-              data-farm-layouts-focus-key={
-                FARM_LAYOUTS_NAVIGATION_CATEGORY_FOCUS_KEY
-              }
-              data-farm-layouts-category="farm-maps"
-              onClick={onFarmMapsClick}
-              onPointerEnter={onFarmMapsPointerEnter}
-              tabIndex={-1}
-              type="button"
-            >
-              <span>{model.farmMapsLabel}</span>
-              <ChevronRight
-                aria-hidden="true"
-                className={styles.chevron}
-                size={16}
-                strokeWidth={2}
-              />
-            </button>
+            {model.categories.map((category) => {
+              const isSelectedCategory =
+                interaction.panel === "category" &&
+                interaction.openCategoryId === category.id;
+
+              return (
+                <button
+                  aria-controls={`${navigationPanelId}-page`}
+                  aria-expanded={isSelectedCategory}
+                  aria-haspopup="true"
+                  className={styles.row}
+                  data-farm-layouts-focus-key={
+                    getFarmLayoutsNavigationCategoryFocusKey(category.id)
+                  }
+                  data-farm-layouts-category={category.id}
+                  key={category.id}
+                  onClick={() => onCategoryClick(category.id)}
+                  onPointerEnter={() => onCategoryPointerEnter(category.id)}
+                  tabIndex={-1}
+                  type="button"
+                >
+                  <span>{category.label}</span>
+                  <ChevronRight
+                    aria-hidden="true"
+                    className={styles.chevron}
+                    size={16}
+                    strokeWidth={2}
+                  />
+                </button>
+              );
+            })}
           </div>
           <div
-            aria-hidden={isBeachFarmPanelVisible ? undefined : true}
-            aria-labelledby={`${navigationPanelId}-beach-farm-title`}
+            aria-hidden={isPagePanelVisible ? undefined : true}
+            aria-labelledby={`${navigationPanelId}-page-title`}
             className={styles.pagePanel}
-            data-farm-layouts-page-panel="beach-farm"
+            data-farm-layouts-page-panel={renderedCategory.id}
             data-farm-layouts-page-panel-open={
-              isBeachFarmPanelVisible ? "true" : "false"
+              isPagePanelVisible ? "true" : "false"
             }
-            id={`${navigationPanelId}-beach-farm`}
+            id={`${navigationPanelId}-page`}
             role="group"
           >
             <div className={styles.pagePanelInner}>
               <p
                 className={styles.panelTitle}
-                id={`${navigationPanelId}-beach-farm-title`}
+                id={`${navigationPanelId}-page-title`}
               >
-                {model.farmMapsLabel}
+                {renderedCategory.label}
               </p>
               <button
                 className={styles.backButton}
@@ -388,23 +427,35 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
                   {model.backToCategoriesLabel}
                 </span>
               </button>
-              <a
-                className={styles.row}
-                data-farm-layouts-focus-key={
-                  FARM_LAYOUTS_NAVIGATION_PAGE_FOCUS_KEY
-                }
-                data-farm-layouts-page="beach-farm"
-                href={model.beachFarmHref}
-                tabIndex={-1}
-              >
-                <span>{model.beachFarmLabel}</span>
-                <ChevronRight
-                  aria-hidden="true"
-                  className={styles.chevron}
-                  size={16}
-                  strokeWidth={2}
-                />
-              </a>
+              {renderedCategory.pages.length === 0 ? (
+                <p
+                  className={styles.emptyState}
+                  data-farm-layouts-empty-state={renderedCategory.id}
+                >
+                  {model.emptyStateLabel}
+                </p>
+              ) : (
+                renderedCategory.pages.map((page) => (
+                  <a
+                    className={styles.row}
+                    data-farm-layouts-focus-key={
+                      getFarmLayoutsNavigationPageFocusKey(page.id)
+                    }
+                    data-farm-layouts-page={page.id}
+                    href={page.href}
+                    key={page.id}
+                    tabIndex={-1}
+                  >
+                    <span>{page.label}</span>
+                    <ChevronRight
+                      aria-hidden="true"
+                      className={styles.chevron}
+                      size={16}
+                      strokeWidth={2}
+                    />
+                  </a>
+                ))
+              )}
             </div>
           </div>
         </div>

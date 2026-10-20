@@ -106,8 +106,16 @@
   display: flex;
 }
 
-.farmLayoutsNavigation[data-panel="beach-farm"] .pagePanel {
+.farmLayoutsNavigation[data-panel="category"] .pagePanel {
   display: flex;
+}
+
+.emptyState {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0.55rem 0.7rem;
 }
 
 .backButton {
@@ -136,7 +144,7 @@
     top: auto;
   }
 
-  .farmLayoutsNavigation[data-panel="beach-farm"] .categoryPanel {
+  .farmLayoutsNavigation[data-panel="category"] .categoryPanel {
     display: none;
   }
 

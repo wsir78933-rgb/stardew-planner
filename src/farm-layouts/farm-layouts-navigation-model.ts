@@ -4,13 +4,37 @@ import {
   type HomepageDisplayLocale,
 } from "../homepage/homepage-locale";
 
+export const FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS = [
+  "farm-maps",
+  "greenhouse-layouts",
+  "buildings-interiors",
+  "planting-layouts",
+  "layout-ideas",
+] as const;
+
+export type FarmLayoutsNavigationCategoryId =
+  (typeof FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS)[number];
+
+export type FarmLayoutsNavigationPageId = "beach-farm";
+
+export type FarmLayoutsNavigationPage = Readonly<{
+  href: string;
+  id: FarmLayoutsNavigationPageId;
+  label: string;
+}>;
+
+export type FarmLayoutsNavigationCategory = Readonly<{
+  id: FarmLayoutsNavigationCategoryId;
+  label: string;
+  pages: readonly FarmLayoutsNavigationPage[];
+}>;
+
 export type FarmLayoutsNavigationModel = Readonly<{
   backToCategoriesLabel: string;
-  beachFarmHref: string;
-  beachFarmLabel: string;
-  farmMapsLabel: string;
-  triggerLabel: "Farm Layouts";
+  categories: readonly FarmLayoutsNavigationCategory[];
   categoryPanelTitle: string;
+  emptyStateLabel: string;
+  triggerLabel: "Farm Layouts";
 }>;
 
 export function getFarmLayoutsNavigationModel(
@@ -22,23 +46,101 @@ export function getFarmLayoutsNavigationModel(
     );
   }
 
-  if (locale === "zh-CN") {
-    return {
-      backToCategoriesLabel: "返回布局分类",
-      beachFarmHref: `/zh${beachFarmCanonicalPath}`,
-      beachFarmLabel: "海滩农场布局",
-      farmMapsLabel: "农场地图",
-      triggerLabel: "Farm Layouts",
-      categoryPanelTitle: "布局分类",
-    };
-  }
+  const usesChineseCopy = locale === "zh-CN";
 
   return {
-    backToCategoriesLabel: "Back to layout categories",
-    beachFarmHref: beachFarmCanonicalPath,
-    beachFarmLabel: "Beach Farm Layouts",
-    farmMapsLabel: "Farm maps",
+    backToCategoriesLabel: usesChineseCopy
+      ? "返回布局分类"
+      : "Back to layout categories",
+    categories: createFarmLayoutsNavigationCategories(locale),
+    categoryPanelTitle: usesChineseCopy ? "布局分类" : "Layout categories",
+    emptyStateLabel: usesChineseCopy
+      ? "暂无布局案例。"
+      : "No layouts yet.",
     triggerLabel: "Farm Layouts",
-    categoryPanelTitle: "Layout categories",
   };
+}
+
+export function isFarmLayoutsNavigationCategoryId(
+  categoryId: string,
+): categoryId is FarmLayoutsNavigationCategoryId {
+  return FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS.some(
+    (supportedCategoryId) => supportedCategoryId === categoryId,
+  );
+}
+
+export function readFarmLayoutsNavigationCategory(
+  model: FarmLayoutsNavigationModel,
+  categoryId: string,
+): FarmLayoutsNavigationCategory {
+  if (!isFarmLayoutsNavigationCategoryId(categoryId)) {
+    throw new Error(
+      `Unknown Farm Layouts navigation category ${JSON.stringify(categoryId)}.`,
+    );
+  }
+
+  const category = model.categories.find(
+    (farmLayoutsCategory) => farmLayoutsCategory.id === categoryId,
+  );
+  if (category === undefined) {
+    throw new Error(
+      `Missing Farm Layouts navigation category ${JSON.stringify(categoryId)} from the model.`,
+    );
+  }
+
+  return category;
+}
+
+export function readFarmLayoutsNavigationPage(
+  model: FarmLayoutsNavigationModel,
+  categoryId: string,
+  pageId: string,
+): FarmLayoutsNavigationPage {
+  const category = readFarmLayoutsNavigationCategory(model, categoryId);
+  const page = category.pages.find(
+    (farmLayoutsPage) => farmLayoutsPage.id === pageId,
+  );
+  if (page === undefined) {
+    throw new Error(
+      `Unknown Farm Layouts navigation page ${JSON.stringify(pageId)} in category ${JSON.stringify(categoryId)}.`,
+    );
+  }
+
+  return page;
+}
+
+function createFarmLayoutsNavigationCategories(
+  locale: HomepageDisplayLocale,
+): readonly FarmLayoutsNavigationCategory[] {
+  const categoryLabels: Readonly<
+    Record<FarmLayoutsNavigationCategoryId, string>
+  > =
+    locale === "zh-CN"
+      ? {
+          "farm-maps": "农场地图",
+          "greenhouse-layouts": "温室布局",
+          "buildings-interiors": "建筑与室内",
+          "planting-layouts": "种植布局",
+          "layout-ideas": "布局灵感",
+        }
+      : {
+          "farm-maps": "Farm Maps",
+          "greenhouse-layouts": "Greenhouse Layouts",
+          "buildings-interiors": "Buildings & Interiors",
+          "planting-layouts": "Planting Layouts",
+          "layout-ideas": "Layout Ideas",
+        };
+  const beachFarmPage: FarmLayoutsNavigationPage = {
+    href: locale === "zh-CN"
+      ? `/zh${beachFarmCanonicalPath}`
+      : beachFarmCanonicalPath,
+    id: "beach-farm",
+    label: locale === "zh-CN" ? "海滩农场布局" : "Beach Farm Layouts",
+  };
+
+  return FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS.map((categoryId) => ({
+    id: categoryId,
+    label: categoryLabels[categoryId],
+    pages: categoryId === "farm-maps" ? [beachFarmPage] : [],
+  }));
 }
