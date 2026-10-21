@@ -1,6 +1,8 @@
 import { beachFarmCanonicalPath } from "./beach-farm-content";
 import { fishFarmCanonicalPath } from "./fish-farm-content";
 import { forestFarmCanonicalPath } from "./forest-farm-content";
+import { fourCornersFarmCanonicalPath } from "./four-corners-farm-content";
+import { frontierFarmCanonicalPath } from "./frontier-farm-content";
 import { meadowlandsFarmCanonicalPath } from "./meadowlands-farm-content";
 import {
   isHomepageDisplayLocale,
@@ -22,7 +24,9 @@ export type FarmLayoutsNavigationPageId =
   | "beach-farm"
   | "fish-farm"
   | "meadowlands-farm"
-  | "forest-farm";
+  | "forest-farm"
+  | "four-corners-farm"
+  | "frontier-farm";
 
 export type FarmLayoutsNavigationPage = Readonly<{
   href: string;
@@ -83,7 +87,9 @@ export function isFarmLayoutsNavigationPageId(
     pageId === "beach-farm" ||
     pageId === "fish-farm" ||
     pageId === "meadowlands-farm" ||
-    pageId === "forest-farm"
+    pageId === "forest-farm" ||
+    pageId === "four-corners-farm" ||
+    pageId === "frontier-farm"
   );
 }
 
@@ -178,6 +184,20 @@ function createFarmLayoutsNavigationCategories(
         : forestFarmCanonicalPath,
       id: "forest-farm",
       label: locale === "zh-CN" ? "森林农场布局" : "Forest Farm Layouts",
+    },
+    {
+      href: locale === "zh-CN"
+        ? `/zh${fourCornersFarmCanonicalPath}`
+        : fourCornersFarmCanonicalPath,
+      id: "four-corners-farm",
+      label: locale === "zh-CN" ? "四角农场布局" : "Four Corners Farm Layouts",
+    },
+    {
+      href: locale === "zh-CN"
+        ? `/zh${frontierFarmCanonicalPath}`
+        : frontierFarmCanonicalPath,
+      id: "frontier-farm",
+      label: locale === "zh-CN" ? "边境农场布局" : "Frontier Farm Layouts",
     },
   ];
 

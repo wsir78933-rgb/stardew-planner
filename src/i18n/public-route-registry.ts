@@ -16,6 +16,8 @@ const fixedCanonicalPublicPaths = [
   fishFarmCanonicalPath,
   "/meadowlands-farm-layout",
   "/stardew-valley-forest-farm-layout",
+  "/stardew-valley-four-corners-farm-layout",
+  "/stardew-valley-frontier-farm-layout",
 ] as const;
 
 type BlogCanonicalPublicPath =

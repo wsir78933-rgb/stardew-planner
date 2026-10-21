@@ -93,7 +93,7 @@ test("keeps the five first-level categories ordered and localized with English f
   }
 });
 
-test("provides Beach, Fish, Meadowlands, and Forest pages in order with localized hrefs", () => {
+test("provides all six Farm Maps pages in order with localized hrefs", () => {
   const expectedFarmMapPagesByLocale = {
     en: [
       {
@@ -115,6 +115,16 @@ test("provides Beach, Fish, Meadowlands, and Forest pages in order with localize
         href: "/stardew-valley-forest-farm-layout",
         id: "forest-farm",
         label: "Forest Farm Layouts",
+      },
+      {
+        href: "/stardew-valley-four-corners-farm-layout",
+        id: "four-corners-farm",
+        label: "Four Corners Farm Layouts",
+      },
+      {
+        href: "/stardew-valley-frontier-farm-layout",
+        id: "frontier-farm",
+        label: "Frontier Farm Layouts",
       },
     ],
     ja: [
@@ -138,6 +148,16 @@ test("provides Beach, Fish, Meadowlands, and Forest pages in order with localize
         id: "forest-farm",
         label: "Forest Farm Layouts",
       },
+      {
+        href: "/stardew-valley-four-corners-farm-layout",
+        id: "four-corners-farm",
+        label: "Four Corners Farm Layouts",
+      },
+      {
+        href: "/stardew-valley-frontier-farm-layout",
+        id: "frontier-farm",
+        label: "Frontier Farm Layouts",
+      },
     ],
     ru: [
       {
@@ -159,6 +179,16 @@ test("provides Beach, Fish, Meadowlands, and Forest pages in order with localize
         href: "/stardew-valley-forest-farm-layout",
         id: "forest-farm",
         label: "Forest Farm Layouts",
+      },
+      {
+        href: "/stardew-valley-four-corners-farm-layout",
+        id: "four-corners-farm",
+        label: "Four Corners Farm Layouts",
+      },
+      {
+        href: "/stardew-valley-frontier-farm-layout",
+        id: "frontier-farm",
+        label: "Frontier Farm Layouts",
       },
     ],
     "zh-CN": [
@@ -182,6 +212,16 @@ test("provides Beach, Fish, Meadowlands, and Forest pages in order with localize
         id: "forest-farm",
         label: "森林农场布局",
       },
+      {
+        href: "/zh/stardew-valley-four-corners-farm-layout",
+        id: "four-corners-farm",
+        label: "四角农场布局",
+      },
+      {
+        href: "/zh/stardew-valley-frontier-farm-layout",
+        id: "frontier-farm",
+        label: "边境农场布局",
+      },
     ],
   } as const;
 
@@ -201,7 +241,7 @@ test("provides Beach, Fish, Meadowlands, and Forest pages in order with localize
     );
 
     const markup = renderFarmLayoutsNavigation(locale);
-    expect(markup.match(/<a\b/g) ?? []).toHaveLength(4);
+    expect(markup.match(/<a\b/g) ?? []).toHaveLength(6);
     for (const page of expectedFarmMapPagesByLocale[locale]) {
       expect(markup).toContain(`href="${page.href}"`);
       expect(markup).toContain(`<span>${page.label}</span>`);
@@ -368,10 +408,22 @@ test("uses a compact back step for empty and populated categories, then restores
     interaction: meadowlandsPage,
     key: "ArrowDown",
   });
-  const returnedFromPage = moveNavigationFocus({
+  const fourCornersPage = moveNavigationFocus({
     compact: true,
     currentFocusKey: getFarmLayoutsNavigationPageFocusKey("forest-farm"),
     interaction: forestPage,
+    key: "ArrowDown",
+  });
+  const frontierPage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("four-corners-farm"),
+    interaction: fourCornersPage,
+    key: "ArrowDown",
+  });
+  const returnedFromPage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("frontier-farm"),
+    interaction: frontierPage,
     key: "ArrowLeft",
   });
   const escaped = moveNavigationFocus({
@@ -406,6 +458,16 @@ test("uses a compact back step for empty and populated categories, then restores
     openCategoryId: "farm-maps",
     panel: "category",
   });
+  expect(fourCornersPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("four-corners-farm"),
+    openCategoryId: "farm-maps",
+    panel: "category",
+  });
+  expect(frontierPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("frontier-farm"),
+    openCategoryId: "farm-maps",
+    panel: "category",
+  });
   expect(returnedFromPage).toMatchObject({
     focusKey: getFarmLayoutsNavigationCategoryFocusKey("farm-maps"),
     panel: "categories",
@@ -424,6 +486,10 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
     "meadowlands-farm",
   );
   const forestPageFocusKey = getFarmLayoutsNavigationPageFocusKey("forest-farm");
+  const fourCornersPageFocusKey = getFarmLayoutsNavigationPageFocusKey(
+    "four-corners-farm",
+  );
+  const frontierPageFocusKey = getFarmLayoutsNavigationPageFocusKey("frontier-farm");
   const beachPageInteraction = {
     focusKey: beachPageFocusKey,
     openCategoryId: "farm-maps",
@@ -441,6 +507,14 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
   const forestPageInteraction = {
     ...beachPageInteraction,
     focusKey: forestPageFocusKey,
+  };
+  const fourCornersPageInteraction = {
+    ...beachPageInteraction,
+    focusKey: fourCornersPageFocusKey,
+  };
+  const frontierPageInteraction = {
+    ...beachPageInteraction,
+    focusKey: frontierPageFocusKey,
   };
 
   const downFromBeach = moveNavigationFocus({
@@ -461,11 +535,35 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
     interaction: meadowlandsPageInteraction,
     key: "ArrowDown",
   });
-  const downAtLastPage = moveNavigationFocus({
+  const downFromForest = moveNavigationFocus({
     compact: false,
     currentFocusKey: forestPageFocusKey,
     interaction: forestPageInteraction,
     key: "ArrowDown",
+  });
+  const downFromFourCorners = moveNavigationFocus({
+    compact: false,
+    currentFocusKey: fourCornersPageFocusKey,
+    interaction: fourCornersPageInteraction,
+    key: "ArrowDown",
+  });
+  const downAtLastPage = moveNavigationFocus({
+    compact: false,
+    currentFocusKey: frontierPageFocusKey,
+    interaction: frontierPageInteraction,
+    key: "ArrowDown",
+  });
+  const upFromFrontier = moveNavigationFocus({
+    compact: false,
+    currentFocusKey: frontierPageFocusKey,
+    interaction: frontierPageInteraction,
+    key: "ArrowUp",
+  });
+  const upFromFourCorners = moveNavigationFocus({
+    compact: false,
+    currentFocusKey: fourCornersPageFocusKey,
+    interaction: fourCornersPageInteraction,
+    key: "ArrowUp",
   });
   const upFromForest = moveNavigationFocus({
     compact: false,
@@ -495,11 +593,15 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
   expect(downFromBeach.focusKey).toBe(fishPageFocusKey);
   expect(downFromFish.focusKey).toBe(meadowlandsPageFocusKey);
   expect(downFromMeadowlands.focusKey).toBe(forestPageFocusKey);
+  expect(downFromForest.focusKey).toBe(fourCornersPageFocusKey);
+  expect(downFromFourCorners.focusKey).toBe(frontierPageFocusKey);
   expect(downAtLastPage.focusKey).toBe(beachPageFocusKey);
+  expect(upFromFrontier.focusKey).toBe(fourCornersPageFocusKey);
+  expect(upFromFourCorners.focusKey).toBe(forestPageFocusKey);
   expect(upFromForest.focusKey).toBe(meadowlandsPageFocusKey);
   expect(upFromMeadowlands.focusKey).toBe(fishPageFocusKey);
   expect(upFromFish.focusKey).toBe(beachPageFocusKey);
-  expect(upAtFirstPage.focusKey).toBe(forestPageFocusKey);
+  expect(upAtFirstPage.focusKey).toBe(frontierPageFocusKey);
 });
 
 test("changes the selected category on desktop hover", () => {

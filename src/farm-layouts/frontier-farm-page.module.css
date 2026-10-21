@@ -1,0 +1,121 @@
+.frontierPage {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.frontierPage .frontierHero {
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.frontierPage .frontierHeroVisual {
+  align-self: center;
+  max-width: none;
+  min-width: 0;
+  width: 100%;
+}
+
+.frontierPage .frontierCase {
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.frontierPage .frontierCase:nth-child(even) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.frontierPage .frontierCaseVisual {
+  grid-column: 1;
+  grid-row: 1;
+  margin-inline: 0;
+  max-width: none;
+  min-width: 0;
+  width: 100%;
+}
+
+.frontierPage .frontierCaseDetails {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.frontierPage .frontierCase:nth-child(even) .frontierCaseVisual {
+  grid-column: 2;
+}
+
+.frontierPage .frontierCase:nth-child(even) .frontierCaseDetails {
+  grid-column: 1;
+}
+
+.frontierPage [data-layout-image-trigger="true"] {
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+}
+
+.frontierPage [data-layout-image-trigger="true"] picture,
+.frontierPage [data-layout-image-trigger="true"] img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.frontierPage [data-layout-image-dialog="true"] {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-sizing: border-box;
+  margin: auto;
+  max-height: 85dvh;
+  max-width: min(90vw, 72rem);
+  overflow: visible;
+  padding: 0;
+}
+
+.frontierPage [data-layout-image-dialog="true"] img {
+  display: block;
+  height: auto;
+  max-height: 85dvh;
+  max-width: min(90vw, 72rem);
+  object-fit: contain;
+  width: auto;
+}
+
+@media (max-width: 850px) {
+  .frontierPage .frontierHero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .frontierPage .frontierHeroCopy,
+  .frontierPage .frontierHeroVisual {
+    justify-self: center;
+    max-width: 36rem;
+    width: 100%;
+  }
+
+  .frontierPage .frontierCase,
+  .frontierPage .frontierCase:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .frontierPage .frontierCaseVisual,
+  .frontierPage .frontierCaseDetails {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: center;
+    max-width: 36rem;
+    width: 100%;
+  }
+
+  .frontierPage .frontierCase:nth-child(even) .frontierCaseVisual,
+  .frontierPage .frontierCase:nth-child(even) .frontierCaseDetails {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
