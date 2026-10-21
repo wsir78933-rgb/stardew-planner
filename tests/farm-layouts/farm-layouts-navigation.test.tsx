@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, test } from "vitest";
 import { SiteNavigationDock } from "@/src/components/site-navigation-dock";
 import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigation";
+import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-content";
 import {
   activateFarmLayoutsCategory,
   closeFarmLayoutsNavigationOnEscape,
@@ -93,7 +94,7 @@ test("keeps the five first-level categories ordered and localized with English f
   }
 });
 
-test("provides all six Farm Maps pages in order with localized hrefs", () => {
+test("provides all seven Farm Maps pages in order with localized hrefs", () => {
   const expectedFarmMapPagesByLocale = {
     en: [
       {
@@ -125,6 +126,11 @@ test("provides all six Farm Maps pages in order with localized hrefs", () => {
         href: "/stardew-valley-frontier-farm-layout",
         id: "frontier-farm",
         label: "Frontier Farm Layouts",
+      },
+      {
+        href: expandedFarmCanonicalPath,
+        id: "expanded-farm",
+        label: "Expanded Farm Layouts",
       },
     ],
     ja: [
@@ -158,6 +164,11 @@ test("provides all six Farm Maps pages in order with localized hrefs", () => {
         id: "frontier-farm",
         label: "Frontier Farm Layouts",
       },
+      {
+        href: expandedFarmCanonicalPath,
+        id: "expanded-farm",
+        label: "Expanded Farm Layouts",
+      },
     ],
     ru: [
       {
@@ -189,6 +200,11 @@ test("provides all six Farm Maps pages in order with localized hrefs", () => {
         href: "/stardew-valley-frontier-farm-layout",
         id: "frontier-farm",
         label: "Frontier Farm Layouts",
+      },
+      {
+        href: expandedFarmCanonicalPath,
+        id: "expanded-farm",
+        label: "Expanded Farm Layouts",
       },
     ],
     "zh-CN": [
@@ -222,6 +238,11 @@ test("provides all six Farm Maps pages in order with localized hrefs", () => {
         id: "frontier-farm",
         label: "边境农场布局",
       },
+      {
+        href: `/zh${expandedFarmCanonicalPath}`,
+        id: "expanded-farm",
+        label: "扩展农场布局",
+      },
     ],
   } as const;
 
@@ -241,7 +262,7 @@ test("provides all six Farm Maps pages in order with localized hrefs", () => {
     );
 
     const markup = renderFarmLayoutsNavigation(locale);
-    expect(markup.match(/<a\b/g) ?? []).toHaveLength(6);
+    expect(markup.match(/<a\b/g) ?? []).toHaveLength(7);
     for (const page of expectedFarmMapPagesByLocale[locale]) {
       expect(markup).toContain(`href="${page.href}"`);
       expect(markup).toContain(`<span>${page.label}</span>`);
@@ -420,10 +441,16 @@ test("uses a compact back step for empty and populated categories, then restores
     interaction: fourCornersPage,
     key: "ArrowDown",
   });
-  const returnedFromPage = moveNavigationFocus({
+  const expandedPage = moveNavigationFocus({
     compact: true,
     currentFocusKey: getFarmLayoutsNavigationPageFocusKey("frontier-farm"),
     interaction: frontierPage,
+    key: "ArrowDown",
+  });
+  const returnedFromPage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("expanded-farm"),
+    interaction: expandedPage,
     key: "ArrowLeft",
   });
   const escaped = moveNavigationFocus({
@@ -443,13 +470,18 @@ test("uses a compact back step for empty and populated categories, then restores
     openCategoryId: null,
     panel: "categories",
   });
-  expect(meadowlandsPage).toMatchObject({
-    focusKey: getFarmLayoutsNavigationPageFocusKey("meadowlands-farm"),
+  expect(beachPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("beach-farm"),
     openCategoryId: "farm-maps",
     panel: "category",
   });
   expect(fishPage).toMatchObject({
     focusKey: getFarmLayoutsNavigationPageFocusKey("fish-farm"),
+    openCategoryId: "farm-maps",
+    panel: "category",
+  });
+  expect(meadowlandsPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("meadowlands-farm"),
     openCategoryId: "farm-maps",
     panel: "category",
   });
@@ -468,6 +500,11 @@ test("uses a compact back step for empty and populated categories, then restores
     openCategoryId: "farm-maps",
     panel: "category",
   });
+  expect(expandedPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("expanded-farm"),
+    openCategoryId: "farm-maps",
+    panel: "category",
+  });
   expect(returnedFromPage).toMatchObject({
     focusKey: getFarmLayoutsNavigationCategoryFocusKey("farm-maps"),
     panel: "categories",
@@ -479,129 +516,65 @@ test("uses a compact back step for empty and populated categories, then restores
   });
 });
 
-test("moves Up and Down through all Farm Maps pages and wraps at both ends", () => {
-  const beachPageFocusKey = getFarmLayoutsNavigationPageFocusKey("beach-farm");
-  const fishPageFocusKey = getFarmLayoutsNavigationPageFocusKey("fish-farm");
-  const meadowlandsPageFocusKey = getFarmLayoutsNavigationPageFocusKey(
+test("moves Up and Down through all seven Farm Maps pages and wraps at both ends", () => {
+  const farmMapPageIds = [
+    "beach-farm",
+    "fish-farm",
     "meadowlands-farm",
-  );
-  const forestPageFocusKey = getFarmLayoutsNavigationPageFocusKey("forest-farm");
-  const fourCornersPageFocusKey = getFarmLayoutsNavigationPageFocusKey(
+    "forest-farm",
     "four-corners-farm",
+    "frontier-farm",
+    "expanded-farm",
+  ] as const;
+  const expectedDownPageIds = [
+    "fish-farm",
+    "meadowlands-farm",
+    "forest-farm",
+    "four-corners-farm",
+    "frontier-farm",
+    "expanded-farm",
+    "beach-farm",
+  ] as const;
+  const expectedUpPageIds = [
+    "expanded-farm",
+    "beach-farm",
+    "fish-farm",
+    "meadowlands-farm",
+    "forest-farm",
+    "four-corners-farm",
+    "frontier-farm",
+  ] as const;
+  const moveFromFarmMapPage = (
+    pageId: (typeof farmMapPageIds)[number],
+    key: "ArrowDown" | "ArrowUp",
+  ) => {
+    const focusKey = getFarmLayoutsNavigationPageFocusKey(pageId);
+
+    return moveNavigationFocus({
+      compact: false,
+      currentFocusKey: focusKey,
+      interaction: {
+        focusKey,
+        openCategoryId: "farm-maps",
+        panel: "category",
+        suppressPointerHover: false,
+      },
+      key,
+    });
+  };
+  const movedDownFocusKeys = farmMapPageIds.map((pageId) =>
+    moveFromFarmMapPage(pageId, "ArrowDown").focusKey,
   );
-  const frontierPageFocusKey = getFarmLayoutsNavigationPageFocusKey("frontier-farm");
-  const beachPageInteraction = {
-    focusKey: beachPageFocusKey,
-    openCategoryId: "farm-maps",
-    panel: "category",
-    suppressPointerHover: false,
-  } as const;
-  const fishPageInteraction = {
-    ...beachPageInteraction,
-    focusKey: fishPageFocusKey,
-  };
-  const meadowlandsPageInteraction = {
-    ...beachPageInteraction,
-    focusKey: meadowlandsPageFocusKey,
-  };
-  const forestPageInteraction = {
-    ...beachPageInteraction,
-    focusKey: forestPageFocusKey,
-  };
-  const fourCornersPageInteraction = {
-    ...beachPageInteraction,
-    focusKey: fourCornersPageFocusKey,
-  };
-  const frontierPageInteraction = {
-    ...beachPageInteraction,
-    focusKey: frontierPageFocusKey,
-  };
+  const movedUpFocusKeys = farmMapPageIds.map((pageId) =>
+    moveFromFarmMapPage(pageId, "ArrowUp").focusKey,
+  );
 
-  const downFromBeach = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: beachPageFocusKey,
-    interaction: beachPageInteraction,
-    key: "ArrowDown",
-  });
-  const downFromFish = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: fishPageFocusKey,
-    interaction: fishPageInteraction,
-    key: "ArrowDown",
-  });
-  const downFromMeadowlands = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: meadowlandsPageFocusKey,
-    interaction: meadowlandsPageInteraction,
-    key: "ArrowDown",
-  });
-  const downFromForest = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: forestPageFocusKey,
-    interaction: forestPageInteraction,
-    key: "ArrowDown",
-  });
-  const downFromFourCorners = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: fourCornersPageFocusKey,
-    interaction: fourCornersPageInteraction,
-    key: "ArrowDown",
-  });
-  const downAtLastPage = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: frontierPageFocusKey,
-    interaction: frontierPageInteraction,
-    key: "ArrowDown",
-  });
-  const upFromFrontier = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: frontierPageFocusKey,
-    interaction: frontierPageInteraction,
-    key: "ArrowUp",
-  });
-  const upFromFourCorners = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: fourCornersPageFocusKey,
-    interaction: fourCornersPageInteraction,
-    key: "ArrowUp",
-  });
-  const upFromForest = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: forestPageFocusKey,
-    interaction: forestPageInteraction,
-    key: "ArrowUp",
-  });
-  const upFromMeadowlands = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: meadowlandsPageFocusKey,
-    interaction: meadowlandsPageInteraction,
-    key: "ArrowUp",
-  });
-  const upFromFish = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: fishPageFocusKey,
-    interaction: fishPageInteraction,
-    key: "ArrowUp",
-  });
-  const upAtFirstPage = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: beachPageFocusKey,
-    interaction: beachPageInteraction,
-    key: "ArrowUp",
-  });
-
-  expect(downFromBeach.focusKey).toBe(fishPageFocusKey);
-  expect(downFromFish.focusKey).toBe(meadowlandsPageFocusKey);
-  expect(downFromMeadowlands.focusKey).toBe(forestPageFocusKey);
-  expect(downFromForest.focusKey).toBe(fourCornersPageFocusKey);
-  expect(downFromFourCorners.focusKey).toBe(frontierPageFocusKey);
-  expect(downAtLastPage.focusKey).toBe(beachPageFocusKey);
-  expect(upFromFrontier.focusKey).toBe(fourCornersPageFocusKey);
-  expect(upFromFourCorners.focusKey).toBe(forestPageFocusKey);
-  expect(upFromForest.focusKey).toBe(meadowlandsPageFocusKey);
-  expect(upFromMeadowlands.focusKey).toBe(fishPageFocusKey);
-  expect(upFromFish.focusKey).toBe(beachPageFocusKey);
-  expect(upAtFirstPage.focusKey).toBe(frontierPageFocusKey);
+  expect(movedDownFocusKeys).toEqual(
+    expectedDownPageIds.map(getFarmLayoutsNavigationPageFocusKey),
+  );
+  expect(movedUpFocusKeys).toEqual(
+    expectedUpPageIds.map(getFarmLayoutsNavigationPageFocusKey),
+  );
 });
 
 test("changes the selected category on desktop hover", () => {

@@ -1,4 +1,5 @@
 import { beachFarmCanonicalPath } from "./beach-farm-content";
+import { expandedFarmCanonicalPath } from "./expanded-farm-content";
 import { fishFarmCanonicalPath } from "./fish-farm-content";
 import { forestFarmCanonicalPath } from "./forest-farm-content";
 import { fourCornersFarmCanonicalPath } from "./four-corners-farm-content";
@@ -26,7 +27,8 @@ export type FarmLayoutsNavigationPageId =
   | "meadowlands-farm"
   | "forest-farm"
   | "four-corners-farm"
-  | "frontier-farm";
+  | "frontier-farm"
+  | "expanded-farm";
 
 export type FarmLayoutsNavigationPage = Readonly<{
   href: string;
@@ -89,7 +91,8 @@ export function isFarmLayoutsNavigationPageId(
     pageId === "meadowlands-farm" ||
     pageId === "forest-farm" ||
     pageId === "four-corners-farm" ||
-    pageId === "frontier-farm"
+    pageId === "frontier-farm" ||
+    pageId === "expanded-farm"
   );
 }
 
@@ -198,6 +201,13 @@ function createFarmLayoutsNavigationCategories(
         : frontierFarmCanonicalPath,
       id: "frontier-farm",
       label: locale === "zh-CN" ? "边境农场布局" : "Frontier Farm Layouts",
+    },
+    {
+      href: locale === "zh-CN"
+        ? `/zh${expandedFarmCanonicalPath}`
+        : expandedFarmCanonicalPath,
+      id: "expanded-farm",
+      label: locale === "zh-CN" ? "扩展农场布局" : "Expanded Farm Layouts",
     },
   ];
 

@@ -20,6 +20,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley Forest Farm Layout](https://stardewvalleyplanner.art/stardew-valley-forest-farm-layout): Explore six Stardew Valley Forest Farm layout ideas for long crop fields, wooded paths, animal buildings, and fish ponds. View each map or download its JSON project to adjust in the planner.
 - [Stardew Valley Four Corners Farm Layout](https://stardewvalleyplanner.art/stardew-valley-four-corners-farm-layout): Explore seven Stardew Valley Four Corners Farm layout ideas, from formal gardens and mushroom-lined paths to fish-pond clusters, bee rows, and crop fields. View each map or download its JSON project to adjust in the planner.
 - [Stardew Valley Frontier Farm Layout](https://stardewvalleyplanner.art/stardew-valley-frontier-farm-layout): Explore six Stardew Valley Expanded Frontier Farm layouts, from cottagecore terraces and river-split fields to Junimo farms, ranch buildings, and fish ponds.
+- [Stardew Valley Expanded Farm Layout Ideas](https://stardewvalleyplanner.art/stardew-valley-expanded-farm-layout): Browse seven SVE farm layout projects for Immersive Farm 2 Remastered and Grandpa's Farm. Compare crop fields, wooded paths, livestock areas, ponds, and other zones, then open a matching JSON plan in the planner.
 
 ### Planning guides
 
@@ -76,6 +77,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷物语森林农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-forest-farm-layout): 查看 6 个星露谷物语森林农场布局案例，涵盖长条作物田、林间道路、畜牧建筑和鱼塘规划。可浏览完整地图，或下载 JSON 项目到规划器继续调整。
 - [星露谷物语四角农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-four-corners-farm-layout): 查看 7 个星露谷物语四角农场布局案例，从对称花园、蘑菇村到鱼塘与作物分区。可浏览地图，或下载 JSON 项目到规划器中继续调整。
 - [星露谷物语边境农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-frontier-farm-layout): 浏览 Stardew Valley Expanded（SVE）边境农场的六套布局，比较田园阶地、作物与畜牧分区、祝尼魔农田和鱼塘安排。
+- [星露谷物语扩展农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-expanded-farm-layout): 查看 7 套为 IF2R（Immersive Farm 2 Remastered）和 Grandpa's Farm 规划的 SVE 农场布局，比较田地、树林、畜牧、鱼塘与道路分区，并下载对应 JSON 项目到规划器中调整。
 
 ### 农场规划指南
 

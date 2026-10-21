@@ -150,15 +150,15 @@
 }
 
 .imageDialog {
-  background: #fdfff8;
-  border: 1px solid rgb(253 255 248 / 45%);
+  background: transparent;
+  border: 0;
   border-radius: 0.5rem;
   box-sizing: border-box;
   max-height: 94dvh;
   max-width: 96vw;
   margin: auto;
   overflow: visible;
-  padding: 0.65rem;
+  padding: 0;
   position: relative;
 }
 
@@ -169,8 +169,8 @@
 .dialogImage {
   display: block;
   height: auto;
-  max-height: calc(94dvh - 1.3rem);
-  max-width: calc(96vw - 1.3rem);
+  max-height: 94dvh;
+  max-width: 96vw;
   object-fit: contain;
   width: auto;
 }
@@ -455,16 +455,6 @@
 
   .caseDetails {
     gap: 1.15rem;
-  }
-
-  .imageDialog {
-    border-radius: 0.35rem;
-    padding: 0.4rem;
-  }
-
-  .dialogImage {
-    max-height: calc(94dvh - 0.8rem);
-    max-width: calc(96vw - 0.8rem);
   }
 
   .dialogCloseButton {

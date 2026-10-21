@@ -1,4 +1,5 @@
 import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
+import { expandedFarmCanonicalPath } from "../farm-layouts/expanded-farm-content";
 import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
@@ -18,6 +19,7 @@ const fixedCanonicalPublicPaths = [
   "/stardew-valley-forest-farm-layout",
   "/stardew-valley-four-corners-farm-layout",
   "/stardew-valley-frontier-farm-layout",
+  expandedFarmCanonicalPath,
 ] as const;
 
 type BlogCanonicalPublicPath =
