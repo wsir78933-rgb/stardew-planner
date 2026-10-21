@@ -11,7 +11,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(40);
+  expect(canonicalPublicPaths).toHaveLength(41);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -52,6 +52,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(
     getLocalizedPublicPath("zh-CN", "/stardew-valley-forest-farm-layout"),
   ).toBe("/zh/stardew-valley-forest-farm-layout");
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-expanded-farm-layout"),
+  ).toBe("/stardew-valley-expanded-farm-layout");
+  expect(
+    getLocalizedPublicPath("zh-CN", "/stardew-valley-expanded-farm-layout"),
+  ).toBe("/zh/stardew-valley-expanded-farm-layout");
   expect(getLocalizedPublicPath("en", "/blog")).toBe("/blog");
   expect(getLocalizedPublicPath("zh-CN", "/blog")).toBe("/zh/blog");
   expect(getLocalizedPublicPath("en", "/blog/archive")).toBe("/blog/archive");
@@ -211,8 +217,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(80);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(78);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(82);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(80);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -232,6 +238,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/meadowlands-farm-layout");
   expect(indexablePathnames).toContain("/stardew-valley-forest-farm-layout");
   expect(indexablePathnames).toContain("/zh/stardew-valley-forest-farm-layout");
+  expect(indexablePathnames).toContain("/stardew-valley-expanded-farm-layout");
+  expect(indexablePathnames).toContain("/zh/stardew-valley-expanded-farm-layout");
   expect(indexablePathnames).toContain("/blog");
   expect(indexablePathnames).toContain("/zh/blog");
   expect(indexablePathnames).toContain("/carpenter-stardew");
