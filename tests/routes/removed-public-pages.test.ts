@@ -74,12 +74,13 @@ describe("removed public guide pages", () => {
       .map(({ id }) => id);
 
     expect(plannerFarmMapIds).toEqual(expectedPlannerFarmMapIds);
-    expect(canonicalPublicPaths).toHaveLength(43);
+    expect(canonicalPublicPaths).toHaveLength(44);
     expect(canonicalPublicPaths).toContain("/tools");
     expect(canonicalPublicPaths).toContain("/tools/crop-profit");
     expect(canonicalPublicPaths).toContain("/tools/crop-growth");
     expect(canonicalPublicPaths).toContain("/stardew-valley-beach-farm-layout");
     expect(canonicalPublicPaths).toContain("/stardew-valley-fish-farm-layout");
+    expect(canonicalPublicPaths).toContain("/stardew-valley-river-farm-layout");
     expect(canonicalPublicPaths).toContain("/meadowlands-farm-layout");
     expect(canonicalPublicPaths).toContain("/stardew-valley-forest-farm-layout");
     expect(canonicalPublicPaths).toContain(
@@ -89,8 +90,8 @@ describe("removed public guide pages", () => {
       "/stardew-valley-frontier-farm-layout",
     );
     expect(canonicalPublicPaths).toContain("/stardew-valley-expanded-farm-layout");
-    expect(getLocalizedPublicRouteEntries()).toHaveLength(86);
-    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(84);
+    expect(getLocalizedPublicRouteEntries()).toHaveLength(88);
+    expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(86);
 
     for (const removedCanonicalPath of removedCanonicalPaths) {
       expect(canonicalPublicPaths).not.toContain(removedCanonicalPath);

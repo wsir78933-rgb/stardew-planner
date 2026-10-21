@@ -94,7 +94,7 @@ test("keeps the five first-level categories ordered and localized with English f
   }
 });
 
-test("provides all seven Farm Maps pages in order with localized hrefs", () => {
+test("provides all eight Farm Maps pages in order with localized hrefs", () => {
   const expectedFarmMapPagesByLocale = {
     en: [
       {
@@ -106,6 +106,11 @@ test("provides all seven Farm Maps pages in order with localized hrefs", () => {
         href: "/stardew-valley-fish-farm-layout",
         id: "fish-farm",
         label: "Fish Farm Layouts",
+      },
+      {
+        href: "/stardew-valley-river-farm-layout",
+        id: "river-farm",
+        label: "River Farm Layouts",
       },
       {
         href: "/meadowlands-farm-layout",
@@ -145,6 +150,11 @@ test("provides all seven Farm Maps pages in order with localized hrefs", () => {
         label: "Fish Farm Layouts",
       },
       {
+        href: "/stardew-valley-river-farm-layout",
+        id: "river-farm",
+        label: "River Farm Layouts",
+      },
+      {
         href: "/meadowlands-farm-layout",
         id: "meadowlands-farm",
         label: "Meadowlands Farm layout",
@@ -182,6 +192,11 @@ test("provides all seven Farm Maps pages in order with localized hrefs", () => {
         label: "Fish Farm Layouts",
       },
       {
+        href: "/stardew-valley-river-farm-layout",
+        id: "river-farm",
+        label: "River Farm Layouts",
+      },
+      {
         href: "/meadowlands-farm-layout",
         id: "meadowlands-farm",
         label: "Meadowlands Farm layout",
@@ -216,6 +231,11 @@ test("provides all seven Farm Maps pages in order with localized hrefs", () => {
       {
         href: "/zh/stardew-valley-fish-farm-layout",
         id: "fish-farm",
+        label: "鱼塘农场布局",
+      },
+      {
+        href: "/zh/stardew-valley-river-farm-layout",
+        id: "river-farm",
         label: "河流农场布局",
       },
       {
@@ -262,7 +282,7 @@ test("provides all seven Farm Maps pages in order with localized hrefs", () => {
     );
 
     const markup = renderFarmLayoutsNavigation(locale);
-    expect(markup.match(/<a\b/g) ?? []).toHaveLength(7);
+    expect(markup.match(/<a\b/g) ?? []).toHaveLength(8);
     for (const page of expectedFarmMapPagesByLocale[locale]) {
       expect(markup).toContain(`href="${page.href}"`);
       expect(markup).toContain(`<span>${page.label}</span>`);
@@ -417,10 +437,16 @@ test("uses a compact back step for empty and populated categories, then restores
     interaction: beachPage,
     key: "ArrowDown",
   });
-  const meadowlandsPage = moveNavigationFocus({
+  const riverPage = moveNavigationFocus({
     compact: true,
     currentFocusKey: getFarmLayoutsNavigationPageFocusKey("fish-farm"),
     interaction: fishPage,
+    key: "ArrowDown",
+  });
+  const meadowlandsPage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("river-farm"),
+    interaction: riverPage,
     key: "ArrowDown",
   });
   const forestPage = moveNavigationFocus({
@@ -480,6 +506,11 @@ test("uses a compact back step for empty and populated categories, then restores
     openCategoryId: "farm-maps",
     panel: "category",
   });
+  expect(riverPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("river-farm"),
+    openCategoryId: "farm-maps",
+    panel: "category",
+  });
   expect(meadowlandsPage).toMatchObject({
     focusKey: getFarmLayoutsNavigationPageFocusKey("meadowlands-farm"),
     openCategoryId: "farm-maps",
@@ -516,10 +547,11 @@ test("uses a compact back step for empty and populated categories, then restores
   });
 });
 
-test("moves Up and Down through all seven Farm Maps pages and wraps at both ends", () => {
+test("moves Up and Down through all eight Farm Maps pages and wraps at both ends", () => {
   const farmMapPageIds = [
     "beach-farm",
     "fish-farm",
+    "river-farm",
     "meadowlands-farm",
     "forest-farm",
     "four-corners-farm",
@@ -528,6 +560,7 @@ test("moves Up and Down through all seven Farm Maps pages and wraps at both ends
   ] as const;
   const expectedDownPageIds = [
     "fish-farm",
+    "river-farm",
     "meadowlands-farm",
     "forest-farm",
     "four-corners-farm",
@@ -539,6 +572,7 @@ test("moves Up and Down through all seven Farm Maps pages and wraps at both ends
     "expanded-farm",
     "beach-farm",
     "fish-farm",
+    "river-farm",
     "meadowlands-farm",
     "forest-farm",
     "four-corners-farm",

@@ -1,6 +1,7 @@
 import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
 import { expandedFarmCanonicalPath } from "../farm-layouts/expanded-farm-content";
 import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
+import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
@@ -15,6 +16,7 @@ const fixedCanonicalPublicPaths = [
   "/tools/crop-growth",
   "/stardew-valley-beach-farm-layout",
   fishFarmCanonicalPath,
+  riverFarmCanonicalPath,
   "/meadowlands-farm-layout",
   "/stardew-valley-forest-farm-layout",
   "/stardew-valley-four-corners-farm-layout",

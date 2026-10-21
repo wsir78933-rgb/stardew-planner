@@ -35,7 +35,7 @@ const expectedBlogCanonicalPaths = [
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(43);
+  expect(canonicalPublicPaths).toHaveLength(44);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );
@@ -51,6 +51,7 @@ it("derives the remaining content and legal paths without planner query URLs", (
   expect(canonicalPublicPaths).toContain("/tools/crop-growth");
   expect(canonicalPublicPaths).toContain("/stardew-valley-beach-farm-layout");
   expect(canonicalPublicPaths).toContain("/stardew-valley-fish-farm-layout");
+  expect(canonicalPublicPaths).toContain("/stardew-valley-river-farm-layout");
   expect(canonicalPublicPaths).toContain("/meadowlands-farm-layout");
   expect(canonicalPublicPaths).toContain("/stardew-valley-forest-farm-layout");
   expect(canonicalPublicPaths).toContain(
