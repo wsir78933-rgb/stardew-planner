@@ -11,7 +11,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(42);
+  expect(canonicalPublicPaths).toHaveLength(45);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -40,6 +40,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(
     getLocalizedPublicPath("zh-CN", "/stardew-valley-fish-farm-layout"),
   ).toBe("/zh/stardew-valley-fish-farm-layout");
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-river-farm-layout"),
+  ).toBe("/stardew-valley-river-farm-layout");
+  expect(
+    getLocalizedPublicPath("zh-CN", "/stardew-valley-river-farm-layout"),
+  ).toBe("/zh/stardew-valley-river-farm-layout");
   expect(getLocalizedPublicPath("en", "/meadowlands-farm-layout")).toBe(
     "/meadowlands-farm-layout",
   );
@@ -52,6 +58,21 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(
     getLocalizedPublicPath("zh-CN", "/stardew-valley-forest-farm-layout"),
   ).toBe("/zh/stardew-valley-forest-farm-layout");
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-four-corners-farm-layout"),
+  ).toBe("/stardew-valley-four-corners-farm-layout");
+  expect(
+    getLocalizedPublicPath(
+      "zh-CN",
+      "/stardew-valley-four-corners-farm-layout",
+    ),
+  ).toBe("/zh/stardew-valley-four-corners-farm-layout");
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-frontier-farm-layout"),
+  ).toBe("/stardew-valley-frontier-farm-layout");
+  expect(
+    getLocalizedPublicPath("zh-CN", "/stardew-valley-frontier-farm-layout"),
+  ).toBe("/zh/stardew-valley-frontier-farm-layout");
   expect(
     getLocalizedPublicPath("en", "/stardew-valley-expanded-farm-layout"),
   ).toBe("/stardew-valley-expanded-farm-layout");
@@ -223,8 +244,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(84);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(82);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(90);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(88);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -240,10 +261,20 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/stardew-valley-beach-farm-layout");
   expect(indexablePathnames).toContain("/stardew-valley-fish-farm-layout");
   expect(indexablePathnames).toContain("/zh/stardew-valley-fish-farm-layout");
+  expect(indexablePathnames).toContain("/stardew-valley-river-farm-layout");
+  expect(indexablePathnames).toContain("/zh/stardew-valley-river-farm-layout");
   expect(indexablePathnames).toContain("/meadowlands-farm-layout");
   expect(indexablePathnames).toContain("/zh/meadowlands-farm-layout");
   expect(indexablePathnames).toContain("/stardew-valley-forest-farm-layout");
   expect(indexablePathnames).toContain("/zh/stardew-valley-forest-farm-layout");
+  expect(indexablePathnames).toContain("/stardew-valley-four-corners-farm-layout");
+  expect(indexablePathnames).toContain(
+    "/zh/stardew-valley-four-corners-farm-layout",
+  );
+  expect(indexablePathnames).toContain("/stardew-valley-frontier-farm-layout");
+  expect(indexablePathnames).toContain(
+    "/zh/stardew-valley-frontier-farm-layout",
+  );
   expect(indexablePathnames).toContain("/stardew-valley-expanded-farm-layout");
   expect(indexablePathnames).toContain("/zh/stardew-valley-expanded-farm-layout");
   expect(indexablePathnames).toContain("/stardew-valley-hilltop-farm-layout");
