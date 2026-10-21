@@ -93,7 +93,7 @@ test("keeps the five first-level categories ordered and localized with English f
   }
 });
 
-test("provides Beach, Fish, and Meadowlands pages in order with localized hrefs", () => {
+test("provides Beach, Fish, Meadowlands, and Forest pages in order with localized hrefs", () => {
   const expectedFarmMapPagesByLocale = {
     en: [
       {
@@ -110,6 +110,11 @@ test("provides Beach, Fish, and Meadowlands pages in order with localized hrefs"
         href: "/meadowlands-farm-layout",
         id: "meadowlands-farm",
         label: "Meadowlands Farm layout",
+      },
+      {
+        href: "/stardew-valley-forest-farm-layout",
+        id: "forest-farm",
+        label: "Forest Farm Layouts",
       },
     ],
     ja: [
@@ -128,6 +133,11 @@ test("provides Beach, Fish, and Meadowlands pages in order with localized hrefs"
         id: "meadowlands-farm",
         label: "Meadowlands Farm layout",
       },
+      {
+        href: "/stardew-valley-forest-farm-layout",
+        id: "forest-farm",
+        label: "Forest Farm Layouts",
+      },
     ],
     ru: [
       {
@@ -145,6 +155,11 @@ test("provides Beach, Fish, and Meadowlands pages in order with localized hrefs"
         id: "meadowlands-farm",
         label: "Meadowlands Farm layout",
       },
+      {
+        href: "/stardew-valley-forest-farm-layout",
+        id: "forest-farm",
+        label: "Forest Farm Layouts",
+      },
     ],
     "zh-CN": [
       {
@@ -161,6 +176,11 @@ test("provides Beach, Fish, and Meadowlands pages in order with localized hrefs"
         href: "/zh/meadowlands-farm-layout",
         id: "meadowlands-farm",
         label: "草原农场布局",
+      },
+      {
+        href: "/zh/stardew-valley-forest-farm-layout",
+        id: "forest-farm",
+        label: "森林农场布局",
       },
     ],
   } as const;
@@ -181,7 +201,7 @@ test("provides Beach, Fish, and Meadowlands pages in order with localized hrefs"
     );
 
     const markup = renderFarmLayoutsNavigation(locale);
-    expect(markup.match(/<a\b/g) ?? []).toHaveLength(3);
+    expect(markup.match(/<a\b/g) ?? []).toHaveLength(4);
     for (const page of expectedFarmMapPagesByLocale[locale]) {
       expect(markup).toContain(`href="${page.href}"`);
       expect(markup).toContain(`<span>${page.label}</span>`);
@@ -342,10 +362,16 @@ test("uses a compact back step for empty and populated categories, then restores
     interaction: fishPage,
     key: "ArrowDown",
   });
-  const returnedFromPage = moveNavigationFocus({
+  const forestPage = moveNavigationFocus({
     compact: true,
     currentFocusKey: getFarmLayoutsNavigationPageFocusKey("meadowlands-farm"),
     interaction: meadowlandsPage,
+    key: "ArrowDown",
+  });
+  const returnedFromPage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("forest-farm"),
+    interaction: forestPage,
     key: "ArrowLeft",
   });
   const escaped = moveNavigationFocus({
@@ -375,6 +401,11 @@ test("uses a compact back step for empty and populated categories, then restores
     openCategoryId: "farm-maps",
     panel: "category",
   });
+  expect(forestPage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("forest-farm"),
+    openCategoryId: "farm-maps",
+    panel: "category",
+  });
   expect(returnedFromPage).toMatchObject({
     focusKey: getFarmLayoutsNavigationCategoryFocusKey("farm-maps"),
     panel: "categories",
@@ -392,6 +423,7 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
   const meadowlandsPageFocusKey = getFarmLayoutsNavigationPageFocusKey(
     "meadowlands-farm",
   );
+  const forestPageFocusKey = getFarmLayoutsNavigationPageFocusKey("forest-farm");
   const beachPageInteraction = {
     focusKey: beachPageFocusKey,
     openCategoryId: "farm-maps",
@@ -406,6 +438,10 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
     ...beachPageInteraction,
     focusKey: meadowlandsPageFocusKey,
   };
+  const forestPageInteraction = {
+    ...beachPageInteraction,
+    focusKey: forestPageFocusKey,
+  };
 
   const downFromBeach = moveNavigationFocus({
     compact: false,
@@ -419,11 +455,23 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
     interaction: fishPageInteraction,
     key: "ArrowDown",
   });
-  const downAtLastPage = moveNavigationFocus({
+  const downFromMeadowlands = moveNavigationFocus({
     compact: false,
     currentFocusKey: meadowlandsPageFocusKey,
     interaction: meadowlandsPageInteraction,
     key: "ArrowDown",
+  });
+  const downAtLastPage = moveNavigationFocus({
+    compact: false,
+    currentFocusKey: forestPageFocusKey,
+    interaction: forestPageInteraction,
+    key: "ArrowDown",
+  });
+  const upFromForest = moveNavigationFocus({
+    compact: false,
+    currentFocusKey: forestPageFocusKey,
+    interaction: forestPageInteraction,
+    key: "ArrowUp",
   });
   const upFromMeadowlands = moveNavigationFocus({
     compact: false,
@@ -446,10 +494,12 @@ test("moves Up and Down through all Farm Maps pages and wraps at both ends", () 
 
   expect(downFromBeach.focusKey).toBe(fishPageFocusKey);
   expect(downFromFish.focusKey).toBe(meadowlandsPageFocusKey);
+  expect(downFromMeadowlands.focusKey).toBe(forestPageFocusKey);
   expect(downAtLastPage.focusKey).toBe(beachPageFocusKey);
+  expect(upFromForest.focusKey).toBe(meadowlandsPageFocusKey);
   expect(upFromMeadowlands.focusKey).toBe(fishPageFocusKey);
   expect(upFromFish.focusKey).toBe(beachPageFocusKey);
-  expect(upAtFirstPage.focusKey).toBe(meadowlandsPageFocusKey);
+  expect(upAtFirstPage.focusKey).toBe(forestPageFocusKey);
 });
 
 test("changes the selected category on desktop hover", () => {
