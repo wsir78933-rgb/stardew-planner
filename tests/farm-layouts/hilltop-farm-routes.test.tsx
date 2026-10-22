@@ -66,9 +66,9 @@ it("registers both localized Hilltop Farm URLs as indexable and in the sitemap",
   expect(hilltopFarmCanonicalPath).toBe(
     "/stardew-valley-hilltop-farm-layout",
   );
-  expect(canonicalPublicPaths).toHaveLength(47);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(94);
-  expect(indexableEntries).toHaveLength(92);
+  expect(canonicalPublicPaths).toHaveLength(48);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(96);
+  expect(indexableEntries).toHaveLength(94);
   expect(
     indexableEntries.filter(
       ({ canonicalPath }) => canonicalPath === hilltopFarmCanonicalPath,

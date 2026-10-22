@@ -11,7 +11,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(47);
+  expect(canonicalPublicPaths).toHaveLength(48);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -100,6 +100,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
       "/stardew-valley-iridium-sprinkler-layout",
     ),
   ).toBe("/zh/stardew-valley-iridium-sprinkler-layout");
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-fruit-tree-layout"),
+  ).toBe("/stardew-valley-fruit-tree-layout");
+  expect(
+    getLocalizedPublicPath("zh-CN", "/stardew-valley-fruit-tree-layout"),
+  ).toBe("/zh/stardew-valley-fruit-tree-layout");
   expect(getLocalizedPublicPath("en", "/blog")).toBe("/blog");
   expect(getLocalizedPublicPath("zh-CN", "/blog")).toBe("/zh/blog");
   expect(getLocalizedPublicPath("en", "/blog/archive")).toBe("/blog/archive");
@@ -259,8 +265,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(94);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(92);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(96);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(94);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -359,6 +365,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   );
   expect(indexablePathnames).toContain(
     "/zh/stardew-valley-iridium-sprinkler-layout",
+  );
+  expect(indexablePathnames).toContain(
+    "/stardew-valley-fruit-tree-layout",
+  );
+  expect(indexablePathnames).toContain(
+    "/zh/stardew-valley-fruit-tree-layout",
   );
 });
 
