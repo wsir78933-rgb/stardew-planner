@@ -1,0 +1,332 @@
+.guide {
+  --guide-border: rgb(36 42 34 / 24%);
+  border-top: 1px solid var(--guide-border);
+  color: var(--foreground, #1c211b);
+  display: grid;
+  gap: 6rem;
+  min-width: 0;
+  padding-top: 4.5rem;
+  width: 100%;
+}
+
+.sectionHeading,
+.centeredBlock {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.centeredBlock {
+  justify-items: center;
+  text-align: center;
+}
+
+.narrowBlock {
+  margin-inline: auto;
+  max-width: 45.35rem;
+}
+
+.sectionHeading h2,
+.centeredBlock h2,
+.featureTitle {
+  color: var(--foreground, #1c211b);
+  font-weight: 700;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sectionHeading h2,
+.centeredBlock h2 {
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  line-height: 1.25;
+}
+
+.introCard h3,
+.whyCard h3 {
+  color: var(--foreground, #1c211b);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.28;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.eyebrow,
+.featureMeta,
+.cardNumber {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.overviewLayout {
+  display: grid;
+  gap: 2rem clamp(1.5rem, 11.614%, 8.54375rem);
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: 4.5rem;
+}
+
+.overviewCopy {
+  display: grid;
+  gap: 1.375rem;
+  min-width: 0;
+}
+
+.overviewCopy p,
+.centeredDescription,
+.whyDescription,
+.comparisonDescription,
+.featureBody,
+.cardBody {
+  font-size: 0.9375rem;
+  line-height: 1.48;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.centeredDescription,
+.whyDescription,
+.comparisonDescription,
+.featureBody,
+.cardBody {
+  color: var(--muted-foreground, #5d6659);
+}
+
+.overviewAside {
+  border-left: 1px solid var(--guide-border);
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding-left: 1.375rem;
+}
+
+.featureList {
+  display: grid;
+  gap: 6rem;
+  min-width: 0;
+}
+
+.feature {
+  align-items: center;
+  display: grid;
+  gap: 4.3125rem;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.featureCopy {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.featureMeta {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  font-weight: 700;
+  gap: 0.75rem 3.5rem;
+}
+
+.featureNumber {
+  font-variant-numeric: tabular-nums;
+}
+
+.featureTitle {
+  font-size: 1.375rem;
+  line-height: 1.28;
+}
+
+.featureMedia {
+  aspect-ratio: 4 / 3;
+  min-width: 0;
+  width: 100%;
+}
+
+.featureMedia picture,
+.featureImage {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.featureImage {
+  object-fit: contain;
+}
+
+.introGrid,
+.whyGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 2rem 0 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.whyGrid {
+  margin-top: 2rem;
+}
+
+.introCard,
+.whyCard {
+  align-content: start;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--guide-border);
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+.cardBody {
+  font-size: 0.90625rem;
+}
+
+.cardNumber {
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.whyDescription {
+  margin-inline: auto;
+  max-width: 36.2125rem;
+}
+
+.comparisonDescription {
+  margin-inline: auto;
+  max-width: 35rem;
+}
+
+.tableScroller {
+  margin-top: 2.8125rem;
+  max-width: 64rem;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  width: 100%;
+}
+
+.narrowBlock + .tableScroller,
+.comparison .tableScroller {
+  margin-inline: auto;
+}
+
+.tableScroller:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+.comparisonTable {
+  border-collapse: collapse;
+  font-size: 0.84375rem;
+  line-height: 1.32;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.comparisonLabelColumn {
+  width: calc(236.5 / 1024 * 100%);
+}
+
+.comparisonProductColumn {
+  width: calc(262.5 / 1024 * 100%);
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  border-bottom: 1px solid var(--guide-border);
+  overflow-wrap: anywhere;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparisonTable thead th {
+  background: var(--card, #ffffff);
+  font-weight: 700;
+}
+
+.comparisonTable tbody th[scope="row"] {
+  font-weight: 700;
+}
+
+.comparisonTable tbody tr:last-child th,
+.comparisonTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.currentToolHeader,
+.currentToolValue {
+  background: var(--secondary, #f1f7e7);
+}
+
+.comparisonTable .currentToolHeader {
+  box-shadow: inset 0 3px var(--primary, #c9fb45);
+}
+
+.comparisonTable a {
+  color: #3f6414;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.faqSlot {
+  min-width: 0;
+}
+
+.faq {
+  color: var(--foreground, #1c211b);
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .comparisonTable {
+    width: calc(100% * 1024 / 499);
+  }
+}
+
+@media (min-width: 701px) {
+  .overviewLayout {
+    align-items: start;
+    grid-template-columns: minmax(0, 604.6fr) minmax(0, 435.8fr);
+  }
+
+  .feature {
+    column-gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .feature[data-feature-media="start"] .featureMedia {
+    order: -1;
+  }
+
+  .introGrid {
+    gap: 1.25rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .whyGrid {
+    gap: 1.25rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin-top: 3.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq svg,
+  .faq p,
+  .faq button {
+    animation: none;
+    transition: none;
+  }
+}

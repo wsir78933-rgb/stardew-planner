@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
-import { getLocalizedPublicPath } from "../i18n/public-route-registry";
 import { getToolsPageCopy } from "../i18n/tools-page-copy";
 import {
   isBrowserStorageFailure,
@@ -24,8 +23,18 @@ import {
   serializeCropProfitForm,
   type CropProfitForm,
 } from "./crop-profit-form";
+import { createProfitGrowthForm } from "./planting-tool-handoff";
+import { createCropGrowthHref } from "./planting-tool-href";
+import type { CropGrowthForm } from "./crop-growth-form";
 import { PlantingToolFrame, type PlantingToolId } from "./planting-tool-frame";
-import { formatHarvestDate, parsePlantingDay, parseSpeedGroOption } from "./planting-field-values";
+import { PlantingSelect } from "./planting-select";
+import {
+  formatHarvestDate,
+  parsePlantingDay,
+  parseSpeedGroOption,
+  type CropSeason,
+} from "./planting-field-values";
+import { createProfitTopFiveCopy } from "./planting-tool-copy";
 import {
   loadPurchasableFieldCrops,
   readCropDisplayName,
@@ -53,6 +62,7 @@ import styles from "./tools-page.module.css";
 type CropProfitToolProperties = Readonly<{
   locale: PublicLocale;
   onSelectTool?: (tool: PlantingToolId, cropId?: string) => void;
+  onViewGrowth?: (form: CropGrowthForm) => void;
 }>;
 
 type FieldDraft = Readonly<Partial<Record<ProfitNumberField, string>>>;
@@ -79,15 +89,10 @@ export function seasonProfitRankingHasRows(rowCount: number): boolean {
 }
 
 function createProfitGrowthCalendarHref(locale: PublicLocale, cropId: string): string {
-  if (cropId.trim().length === 0) {
-    throw new Error(`Crop id must be a non-empty string. Received: ${JSON.stringify(cropId)}.`);
-  }
-
-  const pathname = getLocalizedPublicPath(locale, "/tools/crop-profit");
-  return `${pathname}?tool=growth&crop=${encodeURIComponent(cropId)}`;
+  return createCropGrowthHref(locale, cropId);
 }
 
-export function CropProfitTool({ locale, onSelectTool }: CropProfitToolProperties) {
+export function CropProfitTool({ locale, onSelectTool, onViewGrowth }: CropProfitToolProperties) {
   const copy = getToolsPageCopy(locale);
   const crops = useMemo(() => loadPurchasableFieldCrops(), []);
   const [form, setForm] = useState<CropProfitForm>(createDefaultCropProfitForm);
@@ -151,15 +156,17 @@ export function CropProfitTool({ locale, onSelectTool }: CropProfitToolPropertie
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [planOpen]);
 
-  const rankingResult = readProfitRanking(form);
+  const hasInvalidDraft = Object.keys(fieldErrors).length > 0;
+  const rankingResult = hasInvalidDraft
+    ? { ranking: null, errorMessage: copy.profit.invalidDraft }
+    : readProfitRanking(form);
   const ranking = rankingResult.ranking;
   const activeCropId = resolveSelectedCropId(ranking, selectedCropId);
   const activeRow = ranking?.rows.find((row) => row.cropId === activeCropId) ?? null;
   const firstRow = ranking?.rows[0] ?? null;
-  let showRankingChrome = true;
-  if (ranking !== null) {
-    showRankingChrome = seasonProfitRankingHasRows(ranking.rows.length);
-  }
+  const showRankingChrome = ranking === null
+    ? !hasInvalidDraft
+    : seasonProfitRankingHasRows(ranking.rows.length);
 
   function commitNumber(fieldName: ProfitNumberField, rawValue: string, parse: (value: string) => number) {
     try {
@@ -261,7 +268,7 @@ export function CropProfitTool({ locale, onSelectTool }: CropProfitToolPropertie
 
     let text: string;
     try {
-      text = createTopFiveCopy(ranking, crops, locale);
+      text = createProfitTopFiveCopy(ranking, form, crops, locale);
     } catch (error) {
       if (error instanceof Error) {
         setCopyState({ message: error.message, text: "" });
@@ -283,6 +290,19 @@ export function CropProfitTool({ locale, onSelectTool }: CropProfitToolPropertie
     }
   }
 
+  function viewGrowthCalendar() {
+    if (activeCropId === null || hasInvalidDraft) {
+      return;
+    }
+
+    if (onViewGrowth !== undefined) {
+      onViewGrowth(createProfitGrowthForm(form, activeCropId));
+      return;
+    }
+
+    onSelectTool?.("crop-growth", activeCropId);
+  }
+
   return (
     <PlantingToolFrame
       currentTool="crop-profit"
@@ -291,10 +311,11 @@ export function CropProfitTool({ locale, onSelectTool }: CropProfitToolPropertie
       saveStatus={saveStatus}
       title={copy.profit.title}
     >
-      <form
+      <div
+        aria-label={copy.profit.settingsHeading}
         className={styles.panel}
         data-crop-profit-form="true"
-        onSubmit={(event) => event.preventDefault()}
+        role="group"
       >
         <h2>{copy.profit.settingsHeading}</h2>
         <div className={styles.seasonRow}>
@@ -411,14 +432,14 @@ export function CropProfitTool({ locale, onSelectTool }: CropProfitToolPropertie
           />
         </div>
         <p className="public-note">{copy.profit.qualityNote}</p>
-      </form>
+      </div>
       <section className={styles.panel}>
         {rankingResult.errorMessage !== null ? (
           <p className={styles.alert} role="alert">
             {rankingResult.errorMessage}
           </p>
         ) : null}
-        {firstRow === null ? (
+        {hasInvalidDraft ? null : firstRow === null ? (
           <p>{copy.profit.emptyRanking}</p>
         ) : (
           <div className={styles.summaryGrid}>
@@ -485,33 +506,36 @@ export function CropProfitTool({ locale, onSelectTool }: CropProfitToolPropertie
             </ol>
             <SelectedHarvestDetail
               crops={crops}
+              form={form}
               locale={locale}
               ranking={ranking}
               selectedCropId={activeCropId}
             />
             <p className="public-note">{copy.profit.expectationNote}</p>
+            <p className="public-note">{copy.profit.dailyAverageNote}</p>
+            <p className="public-note">{copy.profit.currentSeasonCutoffNote}</p>
             <div className={styles.actionRow}>
-              {activeCropId === null ? (
+              {activeCropId === null || hasInvalidDraft ? (
                 <button className={`public-secondary-cta ${styles.action}`} disabled type="button">
                   {copy.profit.viewGrowth}
                 </button>
-              ) : onSelectTool === undefined ? (
-                <a className="public-secondary-cta" href={createProfitGrowthCalendarHref(locale, activeCropId)}>
-                  {copy.profit.viewGrowth}
-                </a>
-              ) : (
+              ) : onViewGrowth !== undefined || onSelectTool !== undefined ? (
                 <button
                   className="public-secondary-cta"
-                  onClick={() => onSelectTool("crop-growth", activeCropId)}
+                  onClick={viewGrowthCalendar}
                   type="button"
                 >
                   {copy.profit.viewGrowth}
                 </button>
+              ) : (
+                <a className="public-secondary-cta" href={createProfitGrowthCalendarHref(locale, activeCropId)}>
+                  {copy.profit.viewGrowth}
+                </a>
               )}
-              <button className="public-primary-cta" onClick={openPlanDialog} type="button">
+              <button className="public-primary-cta" disabled={ranking === null} onClick={openPlanDialog} type="button">
                 {copy.profit.transferHarvest}
               </button>
-              <button className="public-secondary-cta" onClick={() => void copyTopFive()} type="button">
+              <button className="public-secondary-cta" disabled={ranking === null} onClick={() => void copyTopFive()} type="button">
                 {copy.profit.copyTopFive}
               </button>
             </div>
@@ -587,24 +611,6 @@ function clearField(current: FieldDraft, fieldName: ProfitNumberField): FieldDra
   return next;
 }
 
-function createTopFiveCopy(
-  ranking: SeasonCropRanking,
-  crops: ReturnType<typeof loadPurchasableFieldCrops>,
-  locale: PublicLocale,
-): string {
-  const copy = getToolsPageCopy(locale);
-  const lines = ranking.rows.slice(0, 5).map((row, index) => {
-    const cropName = readCropDisplayName(requirePurchasableFieldCrop(crops, row.cropId), locale);
-    return `${index + 1}. ${cropName} | ${row.harvestCount} | ${formatGoldAmount(row.expectedUnits)} | ${copy.profit.routes[row.routeId]} | ${formatGoldAmount(row.netGold)}`;
-  });
-
-  if (lines.length === 0) {
-    throw new Error(`No ranked crops to copy. Received: ${JSON.stringify(ranking.rows.length)}.`);
-  }
-
-  return lines.join("\n");
-}
-
 function createProductionPlanIncoming(
   form: CropProfitForm,
   row: SeasonCropProfitRow,
@@ -671,14 +677,16 @@ function SelectField<Value extends string>({
 }>) {
   return (
     <div className={styles.field}>
-      <label htmlFor={inputId}>{label}</label>
-      <select id={inputId} onChange={(event) => onValue(event.target.value)} value={value}>
-        {(Object.entries(options) as [Value, string][]).map(([optionValue, optionLabel]) => (
-          <option key={optionValue} value={optionValue}>
-            {optionLabel}
-          </option>
-        ))}
-      </select>
+      <PlantingSelect
+        inputId={inputId}
+        label={label}
+        onValueChange={onValue}
+        options={(Object.entries(options) as [Value, string][]).map(([optionValue, optionLabel]) => ({
+          value: optionValue,
+          label: optionLabel,
+        }))}
+        value={value}
+      />
     </div>
   );
 }
@@ -718,11 +726,13 @@ function SelectedHarvestDetail({
   selectedCropId,
   locale,
   crops,
+  form,
 }: Readonly<{
   ranking: SeasonCropRanking | null;
   selectedCropId: string | null;
   locale: PublicLocale;
   crops: ReturnType<typeof loadPurchasableFieldCrops>;
+  form: CropProfitForm;
 }>) {
   const copy = getToolsPageCopy(locale);
   if (ranking === null || selectedCropId === null) {
@@ -749,19 +759,59 @@ function SelectedHarvestDetail({
   return (
     <div>
       <h2>{copy.profit.selectedHeading}</h2>
-      <p>
-        {cropName}
-        {" / "}
-        {copy.profit.firstHarvest} {formatHarvestDate(detail.firstHarvest, copy.profit.seasons)}
-        {" / "}
-        {copy.profit.lastHarvest} {formatHarvestDate(detail.lastHarvest, copy.profit.seasons)}
-        {" / "}
-        {copy.profit.seedCost} {formatGoldAmount(detail.seedCost)}
-        {" / "}
-        {copy.profit.fertilizerSpent} {formatGoldAmount(detail.fertilizerCost)}
-      </p>
+      <p>{cropName}</p>
+      <dl className={styles.resultDetails}>
+        <div>
+          <dt>{copy.profit.firstHarvest}</dt>
+          <dd>{formatProfitHarvestDate(detail.firstHarvest, copy.profit.seasons, copy.profit.noHarvestDate)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.lastHarvest}</dt>
+          <dd>{formatProfitHarvestDate(detail.lastHarvest, copy.profit.seasons, copy.profit.noHarvestDate)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.seedCost}</dt>
+          <dd>{formatGoldAmount(detail.seedCost)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.fertilizerSpent}</dt>
+          <dd>{formatGoldAmount(detail.fertilizerCost)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.netGold}</dt>
+          <dd>{formatGoldAmount(detail.netGold)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.columns.route}</dt>
+          <dd>{copy.profit.routes[detail.routeId]}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.processedUnits}</dt>
+          <dd>{formatGoldAmount(detail.processedUnits)}</dd>
+        </div>
+        <div>
+          <dt>{detail.routeId === "sell-raw" ? copy.profit.rawSold : copy.profit.backlogUnits}</dt>
+          <dd>{formatGoldAmount(detail.backlogUnits)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.columns.expectedUnits}</dt>
+          <dd>{formatGoldAmount(detail.expectedUnits)}</dd>
+        </div>
+        <div>
+          <dt>{copy.profit.tileCount}</dt>
+          <dd>{formatGoldAmount(form.tileCount)}</dd>
+        </div>
+      </dl>
     </div>
   );
+}
+
+function formatProfitHarvestDate(
+  date: SeasonCropProfitRow["firstHarvest"],
+  seasons: Readonly<Record<CropSeason, string>>,
+  noHarvestDate: string,
+): string {
+  return date === null ? noHarvestDate : formatHarvestDate(date, seasons);
 }
 
 function PlanConfirmDialog({

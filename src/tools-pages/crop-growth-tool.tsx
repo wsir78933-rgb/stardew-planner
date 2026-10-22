@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
 import { getToolsPageCopy } from "../i18n/tools-page-copy";
+import { getCropCatalogEntry } from "../crop-tools/catalog/crop-catalog";
 import {
   isBrowserStorageFailure,
   readBrowserToolStorage,
@@ -10,7 +11,7 @@ import {
 } from "./browser-tool-storage";
 import { copyToolText } from "./copy-tool-text";
 import {
-  listHarvestCalendarMarks,
+  listHarvestCalendarMonths,
   projectCropGrowthForm,
   type CropHarvestProjection,
 } from "./crop-harvest-calendar";
@@ -18,19 +19,28 @@ import {
   createDefaultCropGrowthForm,
   cropGrowthStorageKey,
   loadCropGrowthForm,
+  normalizeCropGrowthForm,
   parseAfterHarvestOption,
   parseGrowthLocation,
   serializeCropGrowthForm,
+  type AfterHarvestOption,
   type CropGrowthForm,
 } from "./crop-growth-form";
 import { PlantingToolFrame, type PlantingToolId } from "./planting-tool-frame";
 import { createCropProfitHref } from "./planting-tool-href";
+import { CropSelect } from "./crop-select";
+import { PlantingSelect } from "./planting-select";
 import {
-  formatHarvestDate,
   parseMissedWateringDays,
   parsePlantingDay,
   parseSpeedGroOption,
 } from "./planting-field-values";
+import {
+  createGrowthCalendarCopy,
+  formatGrowthCalendarDate,
+  formatGrowthMonthLabel,
+  formatProjectedHarvestDate,
+} from "./planting-tool-copy";
 import {
   chooseDefaultGrowthCropId,
   loadPurchasableFieldCrops,
@@ -42,12 +52,18 @@ import styles from "./tools-page.module.css";
 type CropGrowthToolProperties = Readonly<{
   locale: PublicLocale;
   requestedCropId: string | null;
+  requestedGrowthForm?: CropGrowthForm | null;
   onSelectTool?: (tool: PlantingToolId) => void;
 }>;
 
 type SaveStatus = "empty" | "saved" | "failed";
 
-export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGrowthToolProperties) {
+export function CropGrowthTool({
+  locale,
+  requestedCropId,
+  requestedGrowthForm = null,
+  onSelectTool,
+}: CropGrowthToolProperties) {
   const copy = getToolsPageCopy(locale);
   const crops = useMemo(() => loadPurchasableFieldCrops(), []);
   const defaultCropId = chooseDefaultGrowthCropId(crops);
@@ -60,6 +76,8 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("empty");
   const [storageReady, setStorageReady] = useState(false);
   const [copyState, setCopyState] = useState<Readonly<{ message: string; text: string }> | null>(null);
+  const calendarHeadingRef = useRef<HTMLHeadingElement>(null);
+  const pendingCalendarFocus = useRef(false);
 
   useEffect(() => {
     let nextForm = createDefaultCropGrowthForm(defaultCropId);
@@ -80,18 +98,49 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
       nextForm = createDefaultCropGrowthForm(defaultCropId);
     }
 
-    if (requestedCropId !== null) {
-      if (crops.some((crop) => crop.id === requestedCropId)) {
-        nextForm = { ...nextForm, cropId: requestedCropId };
-        setCropIdError(null);
-      } else {
-        setCropIdError(`Unknown crop id. Received: ${JSON.stringify(requestedCropId)}.`);
-      }
-    }
-
     setForm(nextForm);
     setStorageReady(true);
-  }, [crops, defaultCropId, requestedCropId]);
+  }, [crops, defaultCropId]);
+
+  useEffect(() => {
+    if (requestedGrowthForm === null) {
+      return;
+    }
+
+    const transferredForm = normalizeCropGrowthForm(requestedGrowthForm);
+    if (!crops.some((crop) => crop.id === transferredForm.cropId)) {
+      setCropIdError(`Unknown crop id. Received: ${JSON.stringify(transferredForm.cropId)}.`);
+      return;
+    }
+
+    setForm(transferredForm);
+    setPlantingDayDraft(null);
+    setPlantingDayError(null);
+    setMissedWateringDraft(null);
+    setMissedWateringError(null);
+    setCropIdError(null);
+    setCopyState(null);
+    pendingCalendarFocus.current = true;
+  }, [crops, requestedGrowthForm]);
+
+  useEffect(() => {
+    if (requestedCropId === null) {
+      return;
+    }
+
+    if (!crops.some((crop) => crop.id === requestedCropId)) {
+      setCropIdError(`Unknown crop id. Received: ${JSON.stringify(requestedCropId)}.`);
+      return;
+    }
+
+    setForm((current) => normalizeCropGrowthForm({ ...current, cropId: requestedCropId }));
+    setPlantingDayDraft(null);
+    setPlantingDayError(null);
+    setMissedWateringDraft(null);
+    setMissedWateringError(null);
+    setCropIdError(null);
+    setCopyState(null);
+  }, [crops, requestedCropId]);
 
   useEffect(() => {
     if (!storageReady) {
@@ -110,10 +159,54 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
     }
   }, [form, storageReady]);
 
-  const projectionResult = readGrowthProjection(form);
+  useEffect(() => {
+    setCopyState(null);
+  }, [form, missedWateringDraft, plantingDayDraft]);
+
+  const hasInvalidDraft =
+    plantingDayDraft !== null ||
+    plantingDayError !== null ||
+    missedWateringDraft !== null ||
+    missedWateringError !== null ||
+    cropIdError !== null;
+  const projectionResult = hasInvalidDraft
+    ? { projection: null, errorMessage: copy.growth.invalidDraft }
+    : readGrowthProjection(form);
   const projection = projectionResult.projection;
-  const marks =
-    projection === null ? [] : listHarvestCalendarMarks(form.season, form.plantingDay, projection.harvests);
+  const months = projection === null ? [] : listHarvestCalendarMonths(form, projection);
+  const cropRegrowsNaturally = getCropCatalogEntry(form.cropId).regrowDays !== null;
+  const afterHarvestValues: readonly AfterHarvestOption[] = cropRegrowsNaturally
+    ? ["regrow"]
+    : ["replant-same-day", "no-replant"];
+  const seasonOptions = [
+    { value: "spring", label: copy.growth.seasons.spring },
+    { value: "summer", label: copy.growth.seasons.summer },
+    { value: "fall", label: copy.growth.seasons.fall },
+    { value: "winter", label: copy.growth.seasons.winter },
+  ];
+  const speedGroOptions = (
+    Object.entries(copy.growth.speedGros) as [CropGrowthForm["speedGro"], string][]
+  ).map(([speedGro, label]) => ({ value: speedGro, label }));
+  const professionOptions = [
+    { value: "none", label: copy.growth.professions.none },
+    { value: "agriculturist", label: copy.growth.professions.agriculturist },
+  ];
+  const locationOptions = (
+    Object.entries(copy.growth.locations) as [CropGrowthForm["location"], string][]
+  ).map(([location, label]) => ({ value: location, label }));
+  const afterHarvestOptions = afterHarvestValues.map((afterHarvest) => ({
+    value: afterHarvest,
+    label: copy.growth.afterHarvestOptions[afterHarvest],
+  }));
+
+  useEffect(() => {
+    if (!pendingCalendarFocus.current || calendarHeadingRef.current === null) {
+      return;
+    }
+
+    calendarHeadingRef.current.focus();
+    pendingCalendarFocus.current = false;
+  }, [form]);
 
   async function copyCalendar() {
     if (projection === null) {
@@ -124,12 +217,7 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
       return;
     }
 
-    const text = marks
-      .map((mark, index) => {
-        const day = index + 1;
-        return mark === null ? String(day) : `${day} ${copy.growth.marks[mark]}`;
-      })
-      .join("\n");
+    const text = createGrowthCalendarCopy(form, projection, crops, locale);
 
     try {
       await copyToolText(text);
@@ -143,6 +231,16 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
     }
   }
 
+  function handleCropSelection(cropId: string) {
+    if (!crops.some((crop) => crop.id === cropId)) {
+      setCropIdError(`Unknown crop id. Received: ${JSON.stringify(cropId)}.`);
+      return;
+    }
+
+    setCropIdError(null);
+    setForm((current) => normalizeCropGrowthForm({ ...current, cropId }));
+  }
+
   return (
     <PlantingToolFrame
       currentTool="crop-growth"
@@ -151,42 +249,28 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
       saveStatus={saveStatus}
       title={copy.growth.title}
     >
-      <form className={styles.panel} data-crop-growth-form="true" onSubmit={(event) => event.preventDefault()}>
+      <div
+        aria-label={copy.growth.title}
+        className={styles.panel}
+        data-crop-growth-form="true"
+        role="group"
+      >
         <div className={styles.field}>
-          <label htmlFor="crop-growth-crop">{copy.growth.crop}</label>
-          <select
-            id="crop-growth-crop"
-            onChange={(event) => {
-              const cropId = event.target.value;
-              if (!crops.some((crop) => crop.id === cropId)) {
-                setCropIdError(`Unknown crop id. Received: ${JSON.stringify(cropId)}.`);
-                return;
-              }
-
-              setCropIdError(null);
-              setForm((current) => ({ ...current, cropId }));
-            }}
-            value={form.cropId}
-          >
-            {crops.map((crop) => (
-              <option key={crop.id} value={crop.id}>
-                {readCropDisplayName(crop, locale)}
-              </option>
-            ))}
-          </select>
-          {cropIdError === null ? null : (
-            <p className={styles.fieldError} role="alert">
-              {cropIdError}
-            </p>
-          )}
+          <CropSelect
+            crops={crops}
+            errorMessage={cropIdError}
+            label={copy.growth.crop}
+            locale={locale}
+            onCropChange={handleCropSelection}
+            selectedCropId={form.cropId}
+          />
         </div>
         <div className={styles.fieldGrid}>
           <div className={styles.field}>
-            <label htmlFor="crop-growth-season">{copy.growth.season}</label>
-            <select
-              id="crop-growth-season"
-              onChange={(event) => {
-                const season = event.target.value;
+            <PlantingSelect
+              inputId="crop-growth-season"
+              label={copy.growth.season}
+              onValueChange={(season) => {
                 if (season !== "spring" && season !== "summer" && season !== "fall" && season !== "winter") {
                   throw new Error(
                     `Season must be spring, summer, fall, or winter. Received: ${JSON.stringify(season)}.`,
@@ -195,14 +279,9 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
 
                 setForm((current) => ({ ...current, season }));
               }}
+              options={seasonOptions}
               value={form.season}
-            >
-              {(["spring", "summer", "fall", "winter"] as const).map((season) => (
-                <option key={season} value={season}>
-                  {copy.growth.seasons[season]}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div className={styles.field}>
             <label htmlFor="crop-growth-planting-day">{copy.growth.plantingDay}</label>
@@ -234,32 +313,24 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
             )}
           </div>
           <div className={styles.field}>
-            <label htmlFor="crop-growth-speed">{copy.growth.speedGro}</label>
-            <select
-              id="crop-growth-speed"
-              onChange={(event) =>
+            <PlantingSelect
+              inputId="crop-growth-speed"
+              label={copy.growth.speedGro}
+              onValueChange={(speedGro) =>
                 setForm((current) => ({
                   ...current,
-                  speedGro: parseSpeedGroOption(event.target.value),
+                  speedGro: parseSpeedGroOption(speedGro),
                 }))
               }
+              options={speedGroOptions}
               value={form.speedGro}
-            >
-              {(Object.entries(copy.growth.speedGros) as [CropGrowthForm["speedGro"], string][]).map(
-                ([speedGro, label]) => (
-                  <option key={speedGro} value={speedGro}>
-                    {label}
-                  </option>
-                ),
-              )}
-            </select>
+            />
           </div>
           <div className={styles.field}>
-            <label htmlFor="crop-growth-profession">{copy.growth.profession}</label>
-            <select
-              id="crop-growth-profession"
-              onChange={(event) => {
-                const profession = event.target.value;
+            <PlantingSelect
+              inputId="crop-growth-profession"
+              label={copy.growth.profession}
+              onValueChange={(profession) => {
                 if (profession !== "agriculturist" && profession !== "none") {
                   throw new Error(
                     `Profession must be agriculturist or none. Received: ${JSON.stringify(profession)}.`,
@@ -268,11 +339,9 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
 
                 setForm((current) => ({ ...current, agriculturist: profession === "agriculturist" }));
               }}
+              options={professionOptions}
               value={form.agriculturist ? "agriculturist" : "none"}
-            >
-              <option value="none">{copy.growth.professions.none}</option>
-              <option value="agriculturist">{copy.growth.professions.agriculturist}</option>
-            </select>
+            />
           </div>
           <div className={styles.field}>
             <label htmlFor="crop-growth-missed-watering">{copy.growth.missedWatering}</label>
@@ -304,50 +373,36 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
             )}
           </div>
           <div className={styles.field}>
-            <label htmlFor="crop-growth-location">{copy.growth.location}</label>
-            <select
-              id="crop-growth-location"
-              onChange={(event) =>
+            <PlantingSelect
+              inputId="crop-growth-location"
+              label={copy.growth.location}
+              onValueChange={(location) =>
                 setForm((current) => ({
                   ...current,
-                  location: parseGrowthLocation(event.target.value),
+                  location: parseGrowthLocation(location),
                 }))
               }
+              options={locationOptions}
               value={form.location}
-            >
-              {(Object.entries(copy.growth.locations) as [CropGrowthForm["location"], string][]).map(
-                ([location, label]) => (
-                  <option key={location} value={location}>
-                    {label}
-                  </option>
-                ),
-              )}
-            </select>
+            />
           </div>
           <div className={styles.field}>
-            <label htmlFor="crop-growth-after-harvest">{copy.growth.afterHarvest}</label>
-            <select
-              id="crop-growth-after-harvest"
-              onChange={(event) =>
+            <PlantingSelect
+              inputId="crop-growth-after-harvest"
+              label={copy.growth.afterHarvest}
+              onValueChange={(afterHarvest) =>
                 setForm((current) => ({
                   ...current,
-                  afterHarvest: parseAfterHarvestOption(event.target.value),
+                  afterHarvest: parseAfterHarvestOption(afterHarvest),
                 }))
               }
+              options={afterHarvestOptions}
               value={form.afterHarvest}
-            >
-              {(
-                Object.entries(copy.growth.afterHarvestOptions) as [CropGrowthForm["afterHarvest"], string][]
-              ).map(([afterHarvest, label]) => (
-                <option key={afterHarvest} value={afterHarvest}>
-                  {label}
-                </option>
-              ))}
-            </select>
+            />
           </div>
         </div>
         <p className="public-note">{copy.growth.speedNote}</p>
-      </form>
+      </div>
       <section className={styles.panel}>
         {projectionResult.errorMessage === null ? null : (
           <p className={styles.alert} role="alert">
@@ -364,7 +419,7 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
             <div className={styles.summaryGrid}>
               <article>
                 <h2>{copy.growth.firstMature}</h2>
-                <p>{formatHarvestDate(projection.firstHarvest, copy.growth.seasons)}</p>
+                <p>{formatProjectedHarvestDate(projection.firstHarvest, months, copy.growth)}</p>
               </article>
               <article>
                 <h2>{copy.growth.harvestCount}</h2>
@@ -372,11 +427,7 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
               </article>
               <article>
                 <h2>{copy.growth.lastSafePlanting}</h2>
-                <p>
-                  {projection.lastSafePlantingDay === null
-                    ? copy.growth.noneValue
-                    : `${copy.growth.seasons[form.season]} ${projection.lastSafePlantingDay}`}
-                </p>
+                <p>{formatGrowthCalendarDate(projection.lastSafePlanting, copy.growth.seasons, copy.growth)}</p>
               </article>
             </div>
             <p className="public-note">
@@ -385,24 +436,61 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
               {copy.growth.regrowInterval}{" "}
               {projection.regrowIntervalDays === null ? copy.growth.noneValue : projection.regrowIntervalDays}
               {" / "}
-              {copy.growth.outdoorDeadline}{" "}
-              {projection.outdoorSeasonDeadlineDay === null
-                ? copy.growth.noneValue
-                : projection.outdoorSeasonDeadlineDay}
+              {copy.growth.outdoorDeadlineDate}{" "}
+              {formatGrowthCalendarDate(projection.outdoorDeadline, copy.growth.seasons, copy.growth)}
             </p>
-            <h2>{copy.growth.calendarHeading}</h2>
-            <ol className={styles.calendar}>
-              {marks.map((mark, index) => {
-                const day = index + 1;
-                return (
-                  <li className={mark === null ? undefined : styles.markedDay} key={day}>
-                    <div>{day}</div>
-                    <div>{mark === null ? "\u00a0" : copy.growth.marks[mark]}</div>
+            <h2>{copy.growth.harvestDatesHeading}</h2>
+            {projection.harvests.length === 0 ? (
+              <p>{copy.growth.noneValue}</p>
+            ) : (
+              <ol className={styles.harvestDateList}>
+                {projection.harvests.map((harvest, index) => (
+                  <li key={`${harvest.season}:${harvest.day}:${index}`}>
+                    {formatProjectedHarvestDate(harvest, months, copy.growth)}
+                    {harvest.replantedSameDay ? ` · ${copy.growth.marks.replant}` : ""}
                   </li>
-                );
-              })}
-            </ol>
+                ))}
+              </ol>
+            )}
+            <h2 id="crop-growth-calendar-heading" ref={calendarHeadingRef} tabIndex={-1}>
+              {copy.growth.calendarHeading}
+            </h2>
+            {months.length === 0 ? (
+              <p>{copy.growth.emptyHarvestCalendar}</p>
+            ) : (
+              <div className={styles.calendarMonths}>
+                {months.map((month) => (
+                  <section className={styles.calendarMonth} key={`${month.season}:${month.yearOffset}`}>
+                    <h3>{formatGrowthMonthLabel(month, copy.growth.seasons, copy.growth)}</h3>
+                    <ol className={styles.calendar}>
+                      {month.marks.map((mark, index) => {
+                        const day = index + 1;
+                        const monthLabel = formatGrowthMonthLabel(month, copy.growth.seasons, copy.growth);
+                        const dateLabel = `${monthLabel} ${day}`;
+                        const accessibleDayLabel = mark === null
+                          ? dateLabel
+                          : copy.growth.calendarEventLabel
+                              .replace("{date}", dateLabel)
+                              .replace("{event}", copy.growth.calendarMarkNames[mark]);
+                        return (
+                          <li
+                            aria-label={accessibleDayLabel}
+                            className={mark === null ? undefined : styles.markedDay}
+                            key={day}
+                            title={mark === null ? undefined : accessibleDayLabel}
+                          >
+                            <div>{day}</div>
+                            <div>{mark === null ? "\u00a0" : copy.growth.shortMarks[mark]}</div>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </section>
+                ))}
+              </div>
+            )}
             <p className="public-note">{copy.growth.legend}</p>
+            <p className="public-note">{copy.growth.fullScheduleNote}</p>
           </>
         )}
         <div className={styles.actionRow}>
@@ -415,7 +503,7 @@ export function CropGrowthTool({ locale, requestedCropId, onSelectTool }: CropGr
               {copy.growth.compareProfit}
             </button>
           )}
-          <button className="public-primary-cta" onClick={() => void copyCalendar()} type="button">
+          <button className="public-primary-cta" disabled={projection === null} onClick={() => void copyCalendar()} type="button">
             {copy.growth.copyCalendar}
           </button>
           <span className="public-note">{copy.growth.calculationNote}</span>

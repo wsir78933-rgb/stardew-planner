@@ -1,0 +1,176 @@
+.section {
+  background: transparent;
+  box-sizing: border-box;
+  color: inherit;
+  padding: 0;
+  width: 100%;
+}
+
+.container {
+  margin-inline: auto;
+  max-width: none;
+  padding-inline: 0;
+  width: 100%;
+}
+
+.headingBlock {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem;
+  margin-bottom: 4.5rem;
+  text-align: center;
+}
+
+.eyebrow {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.section .heading {
+  color: var(--foreground, #1c211b);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.25;
+  margin: 0;
+  max-width: 45.35rem;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.stepsTrack {
+  position: relative;
+}
+
+.steps {
+  display: grid;
+  gap: 3.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.desktopConnector {
+  background: rgb(36 42 34 / 24%);
+  display: none;
+  height: 1px;
+  inset-inline: 0;
+  position: absolute;
+  top: 1.5rem;
+}
+
+.step {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  text-align: center;
+}
+
+.numberCircle {
+  align-items: center;
+  background: var(--card, #ffffff);
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  height: 3rem;
+  justify-content: center;
+  position: relative;
+  width: 3rem;
+  z-index: 1;
+}
+
+.stepNumber {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stepCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 18.33125rem;
+  min-width: 0;
+}
+
+.section .stepTitle {
+  color: var(--foreground, #1c211b);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.section .stepBody {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.90625rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.mobileArrow {
+  color: rgb(82 96 78 / 55%);
+  height: 1rem;
+  width: 1rem;
+}
+
+.ctaRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.section .ctaButton {
+  background: var(--primary, #c9fb45);
+  border: 1px solid #1c211b;
+  border-radius: 0;
+  color: var(--primary-foreground, #171a16);
+  font-weight: 700;
+  min-height: 2.75rem;
+  padding-inline: 1.5rem;
+}
+
+.section .ctaButton:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+.ctaArrow {
+  flex: none;
+  height: 1rem;
+  width: 1rem;
+}
+
+@media (min-width: 701px) {
+  .steps {
+    gap: 1.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .desktopConnector {
+    display: block;
+  }
+
+  .mobileArrow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaButton {
+    transition: none;
+  }
+}

@@ -48,7 +48,7 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
       {
         id: "crop-growth",
         label: "生长与收获日历",
-        path: "/tools/crop-profit",
+        path: "/tools/crop-growth",
       },
     ],
   },
@@ -220,9 +220,5 @@ function readToolsNavigationToolHref(
   }
 
   const href = `${pathPrefix}${tool.path}`;
-  if (tool.id === "crop-growth") {
-    return `${href}?tool=growth`;
-  }
-
   return href;
 }

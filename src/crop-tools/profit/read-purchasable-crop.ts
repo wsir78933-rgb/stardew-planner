@@ -11,12 +11,17 @@ export function selectSeedUnitPrice(
   crop: CropCatalogEntry,
   seedShop: SeedShop,
   farmYear: number,
+  plantingDay: number,
 ): number | null {
   const pierrePrice = farmYear === 1 ? crop.pierreYear1SeedPrice : crop.pierreYear2SeedPrice;
   if (seedShop === "pierre") return pierrePrice;
-  if (pierrePrice === null) return crop.oasisOrFestivalSeedPrice;
-  if (crop.oasisOrFestivalSeedPrice === null) return pierrePrice;
-  return Math.min(pierrePrice, crop.oasisOrFestivalSeedPrice);
+  const alternateShopPrice =
+    plantingDay >= crop.oasisOrFestivalSeedAvailableFromDay
+      ? crop.oasisOrFestivalSeedPrice
+      : null;
+  if (pierrePrice === null) return alternateShopPrice;
+  if (alternateShopPrice === null) return pierrePrice;
+  return Math.min(pierrePrice, alternateShopPrice);
 }
 
 export function readKegBatch(crop: CropCatalogEntry): PricedMachineBatch | null {

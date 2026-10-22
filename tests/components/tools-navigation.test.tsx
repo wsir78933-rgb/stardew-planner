@@ -94,10 +94,10 @@ test("renders Stardew Valley tools and the desktop planting flyout for en", () =
   expect(markup.indexOf("工坊建设")).toBeLessThan(markup.indexOf("全部工具"));
   expect(markup.match(/data-tools-navigation-chevron/g)?.length).toBe(4);
   expect(plantingFlyoutMarkup).toContain('href="/tools/crop-profit"');
-  expect(plantingFlyoutMarkup).toContain('href="/tools/crop-profit?tool=growth"');
+  expect(plantingFlyoutMarkup).toContain('href="/tools/crop-growth"');
   expect(plantingFlyoutMarkup).toMatch(/<a\b[^>]*>\s*Season profit\s*<\/a>/);
   expect(plantingFlyoutMarkup).toMatch(/<a\b[^>]*>\s*Growth calendar\s*<\/a>/);
-  expect(plantingFlyoutMarkup).not.toContain('href="/tools/crop-growth"');
+  expect(plantingFlyoutMarkup).not.toContain('href="/tools/crop-profit?tool=growth"');
   expect(plantingFlyoutMarkup.match(/<a\b/g)?.length).toBe(2);
   expect(markup).toContain('aria-disabled="true"');
   expect(markup).not.toContain(">基础加工收益</a>");
@@ -117,23 +117,23 @@ test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => 
   expect(japaneseMarkup).not.toContain('href="/ja/tools"');
   expect(readPlantingFlyoutMarkup(japaneseMarkup)).toContain('href="/tools/crop-profit"');
   expect(readPlantingFlyoutMarkup(japaneseMarkup)).toContain(
-    'href="/tools/crop-profit?tool=growth"',
+    'href="/tools/crop-growth"',
   );
   expect(readPlantingFlyoutMarkup(japaneseMarkup)).toMatch(/<a\b[^>]*>\s*Season profit\s*<\/a>/);
   expect(readPlantingFlyoutMarkup(japaneseMarkup)).toMatch(
     /<a\b[^>]*>\s*Growth calendar\s*<\/a>/,
   );
-  expect(readPlantingFlyoutMarkup(japaneseMarkup)).not.toContain('href="/tools/crop-growth"');
+  expect(readPlantingFlyoutMarkup(japaneseMarkup)).not.toContain('href="/tools/crop-profit?tool=growth"');
   expect(readToolsNavigationTriggerMarkup(chineseMarkup)).toContain('href="/zh/tools"');
   expect(readPlantingFlyoutMarkup(chineseMarkup)).toContain(
     'href="/zh/tools/crop-profit"',
   );
   expect(readPlantingFlyoutMarkup(chineseMarkup)).toContain(
-    'href="/zh/tools/crop-profit?tool=growth"',
+    'href="/zh/tools/crop-growth"',
   );
   expect(readPlantingFlyoutMarkup(chineseMarkup)).toMatch(/<a\b[^>]*>\s*季节作物收益\s*<\/a>/);
   expect(readPlantingFlyoutMarkup(chineseMarkup)).toMatch(/<a\b[^>]*>\s*生长与收获日历\s*<\/a>/);
-  expect(readPlantingFlyoutMarkup(chineseMarkup)).not.toContain('href="/zh/tools/crop-growth"');
+  expect(readPlantingFlyoutMarkup(chineseMarkup)).not.toContain('href="/zh/tools/crop-profit?tool=growth"');
   expect(readPlantingFlyoutMarkup(chineseMarkup).match(/<a\b/g)?.length).toBe(2);
 });
 
@@ -201,7 +201,7 @@ test("opens planting from the desktop hover path and rejects unknown ids", () =>
       label: "Season profit",
     },
     {
-      href: "/tools/crop-profit?tool=growth",
+      href: "/tools/crop-growth",
       id: "crop-growth",
       label: "Growth calendar",
     },
@@ -229,7 +229,7 @@ test("opens planting from the desktop hover path and rejects unknown ids", () =>
     '"missing-tool"',
   );
   expect(readToolsNavigationTool(model, "crop-growth").href).toBe(
-    "/tools/crop-profit?tool=growth",
+    "/tools/crop-growth",
   );
 });
 
@@ -274,7 +274,7 @@ test("moves the keyboard into the first planting tool without trapping on Escape
   );
   expect(readToolsNavigationTool(model, "crop-profit").label).toBe("季节作物收益");
   expect(readToolsNavigationTool(model, "crop-growth").href).toBe(
-    "/zh/tools/crop-profit?tool=growth",
+    "/zh/tools/crop-growth",
   );
   expect(readToolsNavigationTool(model, "crop-growth").label).toBe("生长与收获日历");
   expect(nextPlantingTool.showsMobileToolList).toBe(false);

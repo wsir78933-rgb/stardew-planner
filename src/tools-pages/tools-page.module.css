@@ -11,19 +11,19 @@
   margin: 0;
 }
 
-.titleRow {
-  align-items: baseline;
-  display: flex;
+.toolArea {
+  display: grid;
   gap: 1rem;
-  justify-content: space-between;
+  min-width: 0;
 }
 
-.pageHeader h1 {
-  color: #1c211b;
-  font-size: 1.75rem;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-  margin: 0;
+.pageHeader {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  min-width: 0;
 }
 
 .saveStatus {
@@ -139,10 +139,18 @@
 }
 
 .workspace {
+  align-items: start;
   display: grid;
   gap: 1rem;
   grid-template-columns: minmax(16rem, 25rem) minmax(0, 1fr);
   min-width: 0;
+  scroll-margin-block-start: 1.25rem;
+}
+
+.workspace:focus {
+  border-radius: 0.5rem;
+  outline: 3px solid #628b1b;
+  outline-offset: 4px;
 }
 
 .plantingSplit {
@@ -209,6 +217,7 @@
 
 .field input,
 .field select,
+.field .plantingSelectTrigger,
 .manualCopy {
   background: #ffffff;
   border: 1px solid rgb(36 42 34 / 35%);
@@ -220,6 +229,80 @@
   min-width: 0;
   padding: 0.65rem 0.75rem;
   width: 100%;
+}
+
+.field .plantingSelectTrigger {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  text-align: left;
+}
+
+.field .plantingSelectTrigger:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.plantingSelectValue {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plantingSelectIcon {
+  flex: none;
+  margin-inline-start: 0.5rem;
+}
+
+.plantingSelectContent {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 72%);
+  border-radius: 0.45rem;
+  box-shadow: 0 0.35rem 1rem rgb(28 33 27 / 18%);
+  max-height: min(16rem, var(--radix-select-content-available-height, 16rem));
+  max-width: calc(100vw - 1rem);
+  overflow: hidden;
+  width: var(--radix-select-trigger-width);
+  z-index: 20;
+}
+
+.plantingSelectViewport {
+  max-height: min(16rem, var(--radix-select-content-available-height, 16rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.25rem;
+}
+
+.plantingSelectItem {
+  align-items: center;
+  border-radius: 0.3rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  min-height: 2rem;
+  outline: none;
+  padding: 0.35rem 0.55rem;
+  user-select: none;
+}
+
+.plantingSelectItem[data-state="checked"] {
+  background: #e7f3d5;
+  font-weight: 700;
+}
+
+.plantingSelectItem[data-highlighted] {
+  outline: 2px solid #628b1b;
+  outline-offset: -2px;
+}
+
+.plantingSelectItemIndicator {
+  display: inline-flex;
+  flex: none;
 }
 
 .fieldError,
@@ -249,6 +332,29 @@
 .summaryGrid p,
 .rankingList p {
   margin: 0;
+}
+
+.resultDetails {
+  display: grid;
+  gap: 0.6rem 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  min-width: 0;
+}
+
+.resultDetails div {
+  min-width: 0;
+}
+
+.resultDetails dt {
+  color: #52604e;
+  font-size: 0.9rem;
+}
+
+.resultDetails dd {
+  font-weight: 700;
+  margin: 0.15rem 0 0;
+  overflow-wrap: anywhere;
 }
 
 .rankingTable {
@@ -304,6 +410,36 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
+.calendarMonths {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.calendarMonth {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.calendarMonth h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.harvestDateList {
+  display: grid;
+  gap: 0.3rem;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  margin: 0;
+  padding-inline-start: 1.5rem;
+}
+
+.harvestDateList li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .calendar li {
   background: #ffffff;
   border: 1px solid rgb(36 42 34 / 35%);
@@ -316,13 +452,19 @@
   text-align: center;
 }
 
+.calendar li > div + div {
+  font-size: 0.75rem;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
 .calendar ol {
   display: contents;
   margin: 0;
   padding: 0;
 }
 
-.markedDay {
+.calendar li.markedDay {
   background: #c9fb45;
   border-color: #1c211b;
 }
@@ -343,12 +485,6 @@
 }
 
 @media (max-width: 700px) {
-  .titleRow {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
   .saveStatus {
     white-space: normal;
   }
@@ -359,7 +495,8 @@
   .plantingSplit,
   .fieldGrid,
   .machineGrid,
-  .summaryGrid {
+  .summaryGrid,
+  .resultDetails {
     grid-template-columns: minmax(0, 1fr);
   }
 

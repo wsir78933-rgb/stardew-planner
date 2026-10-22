@@ -12,6 +12,8 @@ export type SeasonCropProfitRow = Readonly<{
   cropId: string;
   harvestCount: number;
   expectedUnits: number;
+  processedUnits: number;
+  backlogUnits: number;
   routeId: ProfitRouteId;
   netGold: number;
   goldPerTilePerDay: number;
@@ -86,6 +88,8 @@ function readSeasonCropProfitRow(rawValue: unknown, rowIndex: number): SeasonCro
     cropId,
     harvestCount: readFiniteNumber(record.harvestCount, "harvestCount"),
     expectedUnits: readFiniteNumber(record.expectedUnits, "expectedUnits"),
+    processedUnits: readFiniteNumber(record.processedUnits, "processedUnits"),
+    backlogUnits: readFiniteNumber(record.backlogUnits, "backlogUnits"),
     routeId: parseProfitRouteId(record.routeId),
     netGold: readFiniteNumber(record.netGold, "netGold"),
     goldPerTilePerDay: readFiniteNumber(record.goldPerTilePerDay, "goldPerTilePerDay"),
