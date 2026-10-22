@@ -5,6 +5,14 @@ import type { CropSeason, SpeedGroOption } from "../tools-pages/planting-field-v
 import type { ProfitRouteId } from "../tools-pages/profit-route";
 import type { HarvestCalendarMark } from "../tools-pages/crop-harvest-calendar";
 
+export type ToolsPageHeroCopy = Readonly<{
+  titleBefore: string;
+  accent: string;
+  titleAfter: string;
+  description: string;
+  actionLabel: string;
+}>;
+
 export type ToolsPageCopy = Readonly<{
   home: Readonly<{
     metaTitle: string;
@@ -43,6 +51,7 @@ export type ToolsPageCopy = Readonly<{
     metaTitle: string;
     metaDescription: string;
     title: string;
+    hero: ToolsPageHeroCopy;
     settingsHeading: string;
     plantingDay: string;
     farmYear: string;
@@ -67,6 +76,7 @@ export type ToolsPageCopy = Readonly<{
     goldPerTilePerDay: string;
     singleRouteNote: string;
     separateMachinesNote: string;
+    dailyAverageNote: string;
     rankingHeading: string;
     columns: Readonly<{
       crop: string;
@@ -81,12 +91,17 @@ export type ToolsPageCopy = Readonly<{
     lastHarvest: string;
     seedCost: string;
     fertilizerSpent: string;
+    processedUnits: string;
+    backlogUnits: string;
+    rawSold: string;
     noHarvestDate: string;
     viewGrowth: string;
     transferHarvest: string;
     copyTopFive: string;
     qualityNote: string;
     expectationNote: string;
+    currentSeasonCutoffNote: string;
+    invalidDraft: string;
     emptyRanking: string;
     copied: string;
     copyFailed: string;
@@ -111,6 +126,7 @@ export type ToolsPageCopy = Readonly<{
     metaTitle: string;
     metaDescription: string;
     title: string;
+    hero: ToolsPageHeroCopy;
     crop: string;
     season: string;
     plantingDay: string;
@@ -127,6 +143,7 @@ export type ToolsPageCopy = Readonly<{
     firstMature: string;
     harvestCount: string;
     lastSafePlanting: string;
+    outdoorDeadlineDate: string;
     seasonCheckHarvestable: string;
     seasonCheckLate: string;
     growthDays: string;
@@ -134,8 +151,17 @@ export type ToolsPageCopy = Readonly<{
     outdoorDeadline: string;
     noneValue: string;
     calendarHeading: string;
+    emptyHarvestCalendar: string;
+    harvestDatesHeading: string;
+    nextYear: string;
+    yearsLater: string;
     marks: Readonly<Record<HarvestCalendarMark, string>>;
+    shortMarks: Readonly<Record<HarvestCalendarMark, string>>;
+    calendarMarkNames: Readonly<Record<HarvestCalendarMark, string>>;
+    calendarEventLabel: string;
     legend: string;
+    fullScheduleNote: string;
+    invalidDraft: string;
     speedNote: string;
     compareProfit: string;
     copyCalendar: string;
@@ -214,9 +240,16 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       saveFailed: "Settings could not be saved on this device",
     },
     profit: {
-      metaTitle: "Season crop profit | Stardew Valley tools",
-      metaDescription: "Rank this season's crops by net gold after seed and fertilizer, one processing route at a time.",
-      title: "Season crop profit",
+      metaTitle: "Stardew Valley Crop Profit Calculator",
+      metaDescription: "Compare Stardew Valley crop profits after seed and fertilizer costs. Adjust planting day, profession, and machine capacity to plan what to grow.",
+      title: "Stardew Valley Crop Profit Calculator",
+      hero: {
+        titleBefore: "Stardew Valley",
+        accent: "Crop Profit",
+        titleAfter: "Calculator",
+        description: "Compare Stardew Valley crop profits after seed and fertilizer costs. Adjust planting day, profession, and machine capacity to plan what to grow.",
+        actionLabel: "Calculate crop profit",
+      },
       settingsHeading: "Planting settings",
       plantingDay: "Planting day",
       farmYear: "Farm year",
@@ -263,6 +296,7 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       goldPerTilePerDay: "Gold per tile per day",
       singleRouteNote: "This is the best single route.",
       separateMachinesNote: "Machines are calculated separately.",
+      dailyAverageNote: "Daily gold per tile is averaged over the remaining days through day 28.",
       rankingHeading: "Crop ranking",
       columns: {
         crop: "Crop / seed",
@@ -277,13 +311,18 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       lastHarvest: "Last harvest",
       seedCost: "Seed cost",
       fertilizerSpent: "Fertilizer cost",
+      processedUnits: "Processed units",
+      backlogUnits: "Remaining raw",
+      rawSold: "Sold raw",
       noHarvestDate: "No harvest date",
       viewGrowth: "View growth calendar",
       transferHarvest: "Send harvest to the production plan",
       copyTopFive: "Copy top five",
       qualityNote: "Normal quality. Seed and fertilizer are already deducted.",
       expectationNote: "Random yields use the expected amount.",
-      emptyRanking: "No crop finishes a harvest with these settings.",
+      currentSeasonCutoffNote: "The profit ranking counts this season's harvests; processing can continue to the selected deadline, and the growth calendar shows later legal harvests.",
+      invalidDraft: "Fix the highlighted fields to refresh this ranking.",
+      emptyRanking: "No crops can be ranked with this seed source and these planting settings.",
       copied: "Copied the top five.",
       copyFailed: "Automatic copy was blocked. Select the text and copy it manually.",
       manualCopy: "Text to copy",
@@ -304,9 +343,16 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       lineCount: "lines",
     },
     growth: {
-      metaTitle: "Crop growth calendar | Stardew Valley tools",
-      metaDescription: "See the first harvest, harvest count, last safe planting day, and a 28-day calendar.",
-      title: "Growth and harvest calendar",
+      metaTitle: "Stardew Valley Crop Growth Calculator",
+      metaDescription: "Find Stardew Valley crop harvest dates with Speed-Gro and Agriculturist. Check repeat harvests and the last safe day to plant.",
+      title: "Stardew Valley Crop Growth Calculator",
+      hero: {
+        titleBefore: "Stardew Valley",
+        accent: "Crop Growth",
+        titleAfter: "Calculator",
+        description: "Find Stardew Valley crop harvest dates with Speed-Gro and Agriculturist. Check repeat harvests and the last safe day to plant.",
+        actionLabel: "Plan crop growth",
+      },
       crop: "Crop",
       season: "Season",
       plantingDay: "Planting day",
@@ -336,21 +382,43 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       firstMature: "First mature date",
       harvestCount: "Harvest count",
       lastSafePlanting: "Last safe planting day",
+      outdoorDeadlineDate: "Outdoor harvest deadline",
       seasonCheckHarvestable: "This planting can be harvested.",
       seasonCheckLate: "This planting is past the season deadline.",
       growthDays: "Growth days",
       regrowInterval: "Regrow interval",
       outdoorDeadline: "Outdoor season deadline",
       noneValue: "None",
-      calendarHeading: "28-day harvest calendar",
+      calendarHeading: "Season-by-season harvest calendar",
+      emptyHarvestCalendar: "No legal harvest dates in this schedule.",
+      harvestDatesHeading: "Harvest dates",
+      nextYear: "next year",
+      yearsLater: "{count} years later",
       marks: {
         plant: "Plant",
         harvest: "Harvest",
-        replant: "Replant",
+        replant: "Harvest + replant",
         "plant-and-harvest": "Plant / harvest",
-        "plant-and-replant": "Plant / replant",
+        "plant-and-replant": "Plant / harvest / replant",
       },
-      legend: "Plant, harvest, and replant marks use the planting season's 28 days.",
+      shortMarks: {
+        plant: "P",
+        harvest: "H",
+        replant: "R",
+        "plant-and-harvest": "P+H",
+        "plant-and-replant": "P+R",
+      },
+      calendarMarkNames: {
+        plant: "Planting",
+        harvest: "Harvest",
+        replant: "Harvest and replanting",
+        "plant-and-harvest": "Planting and harvest",
+        "plant-and-replant": "Planting, harvest, and replanting",
+      },
+      calendarEventLabel: "{date}: {event}",
+      legend: "P = plant · H = harvest · R = harvest + replant · P+H = plant + harvest · P+R = plant + harvest + replant.",
+      fullScheduleNote: "This calendar follows legal harvests across seasons; the profit ranking counts harvests only through the selected season's end.",
+      invalidDraft: "Fix the highlighted fields to refresh this calendar.",
       speedNote: "Speed changes the first maturity only. The regrow interval is separate.",
       compareProfit: "Compare planting profit",
       copyCalendar: "Copy harvest calendar",
@@ -415,9 +483,16 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       saveFailed: "设置未能保存在本机",
     },
     profit: {
-      metaTitle: "季节种植收益 | Stardew Valley tools",
-      metaDescription: "按净收益排列本季作物。已经扣掉种子和肥料，机器路线分开计算。",
-      title: "季节种植收益",
+      metaTitle: "星露谷物语作物收益计算器",
+      metaDescription: "比较不同季节作物扣除种子和肥料后的净收益，结合播种日期、职业与加工机器数量，选择适合你的种植方案。",
+      title: "星露谷物语作物收益计算器",
+      hero: {
+        titleBefore: "星露谷物语",
+        accent: "作物收益",
+        titleAfter: "计算器",
+        description: "比较不同季节作物扣除种子和肥料后的净收益，结合播种日期、职业与加工机器数量，选择适合你的种植方案。",
+        actionLabel: "计算作物收益",
+      },
       settingsHeading: "种植设置",
       plantingDay: "种植日",
       farmYear: "农场年份",
@@ -464,6 +539,7 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       goldPerTilePerDay: "每格 / 每日",
       singleRouteNote: "此处比较最佳单一路线。",
       separateMachinesNote: "机器分别计算；混合分配可进入生产计划。",
+      dailyAverageNote: "每格每日收益按剩余种植季天数平均，统计到第 28 天。",
       rankingHeading: "可种植作物排名",
       columns: {
         crop: "作物 / 种子",
@@ -478,13 +554,18 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       lastHarvest: "末收日期",
       seedCost: "种子支出",
       fertilizerSpent: "肥料支出",
+      processedUnits: "已加工数量",
+      backlogUnits: "剩余原料",
+      rawSold: "直接出售原料",
       noHarvestDate: "没有收获日",
       viewGrowth: "查看生长日历",
       transferHarvest: "把收获转入生产计划",
       copyTopFive: "复制前五名",
       qualityNote: "原料按普通品质；种子与肥料已扣除。",
       expectationNote: "随机产量使用期望值。",
-      emptyRanking: "没有可完成的盈利批次。",
+      currentSeasonCutoffNote: "收益排名只统计本季收获；加工可按所选截止日继续，生长日历会显示之后合法的收获。",
+      invalidDraft: "请修正标出的输入，再查看更新后的排名。",
+      emptyRanking: "当前种子来源和种植条件下，没有可参与排名的作物。",
       copied: "已复制前五名。",
       copyFailed: "自动复制未获允许。请选中下面的文本手动复制。",
       manualCopy: "可手动复制的文本",
@@ -505,9 +586,16 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       lineCount: "行",
     },
     growth: {
-      metaTitle: "生长与收获日历 | Stardew Valley tools",
-      metaDescription: "查看首次成熟、收获次数、最晚安全播种日和 28 天日历。",
-      title: "生长与收获日历",
+      metaTitle: "星露谷物语作物生长计算器与收获日历",
+      metaDescription: "根据播种日期、生长激素、职业和种植地点，计算作物成熟日期、重复收获时间与最晚安全播种日，安排你的种植日历。",
+      title: "星露谷物语作物生长计算器与收获日历",
+      hero: {
+        titleBefore: "星露谷物语",
+        accent: "作物生长",
+        titleAfter: "计算器与收获日历",
+        description: "根据播种日期、生长激素、职业和种植地点，计算作物成熟日期、重复收获时间与最晚安全播种日，安排你的种植日历。",
+        actionLabel: "规划作物生长",
+      },
       crop: "作物",
       season: "种植季节",
       plantingDay: "种植日",
@@ -537,21 +625,43 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       firstMature: "首次成熟",
       harvestCount: "收获次数",
       lastSafePlanting: "最晚安全播种",
+      outdoorDeadlineDate: "室外收获截止日",
       seasonCheckHarvestable: "当前种植安排可收获。",
       seasonCheckLate: "晚于截止日。可以改种植日，或改到温室、姜岛。",
       growthDays: "生长天数",
       regrowInterval: "再生间隔",
       outdoorDeadline: "室外季节截止日",
       noneValue: "无",
-      calendarHeading: "28 天收获日历",
+      calendarHeading: "按季节排列的收获日历",
+      emptyHarvestCalendar: "此安排下没有合法的收获日期。",
+      harvestDatesHeading: "收获日期",
+      nextYear: "次年",
+      yearsLater: "{count} 年后",
       marks: {
         plant: "种",
         harvest: "收",
-        replant: "↻",
+        replant: "收获并补种",
         "plant-and-harvest": "种 收",
-        "plant-and-replant": "种 ↻",
+        "plant-and-replant": "种 收获并补种",
       },
-      legend: "种：播种    收：收获    ↻：收获并补种",
+      shortMarks: {
+        plant: "种",
+        harvest: "收",
+        replant: "补",
+        "plant-and-harvest": "种收",
+        "plant-and-replant": "种补",
+      },
+      calendarMarkNames: {
+        plant: "播种",
+        harvest: "收获",
+        replant: "收获并补种",
+        "plant-and-harvest": "播种并收获",
+        "plant-and-replant": "播种、收获并补种",
+      },
+      calendarEventLabel: "{date}：{event}",
+      legend: "种 = 播种 · 收 = 收获 · 补 = 收获并补种；种收 = 同日播种并收获，种补 = 同日播种、收获并补种。",
+      fullScheduleNote: "此日历会跨季节显示仍能合法收获的日期；收益排名的收获数量只统计到所选季节结束。",
+      invalidDraft: "请修正标出的输入，再查看更新后的日历。",
       speedNote: "生长加速影响首次成熟；再生间隔单独显示。",
       compareProfit: "比较种植收益",
       copyCalendar: "复制收获日历",

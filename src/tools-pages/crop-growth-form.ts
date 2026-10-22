@@ -4,6 +4,10 @@ import {
   type CropSeason,
   type SpeedGroOption,
 } from "./planting-field-values";
+import {
+  getFieldCrop,
+  listPurchasableFieldCrops,
+} from "@/src/crop-tools/catalog/field-crops";
 
 export const cropGrowthStorageKey = "stardew-tools:crop-growth";
 
@@ -55,7 +59,7 @@ export function parseCropId(rawValue: unknown): string {
 }
 
 export function createDefaultCropGrowthForm(cropId = "parsnip"): CropGrowthForm {
-  return {
+  return normalizeCropGrowthForm({
     cropId: parseCropId(cropId),
     season: "spring",
     plantingDay: 1,
@@ -64,20 +68,10 @@ export function createDefaultCropGrowthForm(cropId = "parsnip"): CropGrowthForm 
     missedWateringDays: 0,
     location: "outdoor",
     afterHarvest: "no-replant",
-  };
+  });
 }
 
-function readRequiredField(record: Record<string, unknown>, fieldName: string): unknown {
-  if (!Object.hasOwn(record, fieldName)) {
-    throw new Error(
-      `Crop growth settings are missing ${fieldName}. Received: ${JSON.stringify(record)}.`,
-    );
-  }
-
-  return record[fieldName];
-}
-
-export function readCropGrowthForm(rawValue: unknown): CropGrowthForm {
+function readCropGrowthFormFields(rawValue: unknown): CropGrowthForm {
   if (typeof rawValue !== "object" || rawValue === null || Array.isArray(rawValue)) {
     throw new Error(
       `Crop growth settings must be an object. Received: ${JSON.stringify(rawValue)}.`,
@@ -127,6 +121,42 @@ export function readCropGrowthForm(rawValue: unknown): CropGrowthForm {
   };
 }
 
+export function normalizeCropGrowthForm(form: CropGrowthForm): CropGrowthForm {
+  const validatedForm = readCropGrowthFormFields(form);
+  const crop = getFieldCrop(validatedForm.cropId);
+
+  if (crop.regrowIntervalDays !== null) {
+    if (validatedForm.afterHarvest !== "regrow") {
+      return { ...validatedForm, afterHarvest: "regrow" };
+    }
+    return validatedForm;
+  }
+
+  if (validatedForm.afterHarvest === "regrow") {
+    return { ...validatedForm, afterHarvest: "no-replant" };
+  }
+  return validatedForm;
+}
+
+function readRequiredField(record: Record<string, unknown>, fieldName: string): unknown {
+  if (!Object.hasOwn(record, fieldName)) {
+    throw new Error(
+      `Crop growth settings are missing ${fieldName}. Received: ${JSON.stringify(record)}.`,
+    );
+  }
+
+  return record[fieldName];
+}
+
+export function readCropGrowthForm(rawValue: unknown): CropGrowthForm {
+  return normalizeCropGrowthForm(readCropGrowthFormFields(rawValue));
+}
+
+function normalizeStoredCropGrowthForm(form: CropGrowthForm): CropGrowthForm {
+  const isKnownCrop = listPurchasableFieldCrops().some((crop) => crop.cropId === form.cropId);
+  return isKnownCrop ? normalizeCropGrowthForm(form) : form;
+}
+
 export function parseCropGrowthForm(storageText: string): CropGrowthForm {
   let parsed: unknown;
   try {
@@ -142,7 +172,7 @@ export function parseCropGrowthForm(storageText: string): CropGrowthForm {
     throw error;
   }
 
-  return readCropGrowthForm(parsed);
+  return normalizeStoredCropGrowthForm(readCropGrowthFormFields(parsed));
 }
 
 export function loadCropGrowthForm(storageText: string | null, fallbackCropId: string): CropGrowthForm {

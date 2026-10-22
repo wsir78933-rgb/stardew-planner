@@ -65,6 +65,7 @@ export type CropHarvestProjection = {
   readonly harvests: readonly ListedHarvest[];
   readonly harvestCount: number;
   readonly outdoorSeasonDeadlineDay: number | null;
+  readonly outdoorDeadline: CalendarPosition | null;
   readonly lastSafePlantingDay: number | null;
   readonly lastSafePlant: CalendarPosition | null;
   readonly seasonCheck: "harvestable" | "past-deadline";
@@ -444,6 +445,7 @@ export function projectCropHarvests(input: CropHarvestInput): CropHarvestProject
     harvests,
     harvestCount: harvests.length,
     outdoorSeasonDeadlineDay: outdoorDeadlinePosition?.day ?? null,
+    outdoorDeadline: outdoorDeadlinePosition,
     lastSafePlantingDay: lastSafePlant?.day ?? null,
     lastSafePlant,
     markers: buildMarkers(

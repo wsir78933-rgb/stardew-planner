@@ -36,6 +36,8 @@ export type SeasonCropProfitRow = {
   readonly growthDays: number;
   readonly harvestCount: number;
   readonly expectedUnits: number;
+  readonly processedUnits: number;
+  readonly backlogUnits: number;
   readonly routeId: SeasonProfitRouteId;
   readonly netGold: number;
   readonly goldPerTilePerDay: number;
@@ -80,7 +82,7 @@ export function projectRankedSeasonCrop(input: SeasonCropProfitInput, cropId: st
 
 function rankPurchasableCrop(crop: CropCatalogEntry, input: SeasonCropProfitInput): SeasonCropProfitRow | null {
   if (!crop.seasons.includes(input.season)) return null;
-  const seedPrice = selectSeedUnitPrice(crop, input.seedShop, input.farmYear);
+  const seedPrice = selectSeedUnitPrice(crop, input.seedShop, input.farmYear, input.plantingDay);
   if (seedPrice === null) return null;
 
   const projection = readHarvestProjection(
@@ -144,9 +146,15 @@ function buildSeasonCropProfitRow(
     growthDays,
     harvestCount,
     expectedUnits,
+    processedUnits: winningRoute.processedUnits,
+    backlogUnits: winningRoute.backlogUnits,
     routeId: winningRoute.routeId,
     netGold: winningRoute.netGold,
-    goldPerTilePerDay: roundGoldPerTilePerDay(winningRoute.netGold, input.tileCount),
+    goldPerTilePerDay: roundGoldPerTilePerDay(
+      winningRoute.netGold,
+      input.tileCount,
+      SEASON_LENGTH_DAYS - input.plantingDay + 1,
+    ),
     seedPrice,
     seedCost,
     fertilizerCost,
@@ -205,8 +213,12 @@ function listedMachineRoutes(
   ].filter((route) => route !== null);
 }
 
-function roundGoldPerTilePerDay(netGold: number, tileCount: number): number {
-  return Math.round((netGold / tileCount / SEASON_LENGTH_DAYS) * 10) / 10;
+function roundGoldPerTilePerDay(
+  netGold: number,
+  tileCount: number,
+  remainingPlantingSeasonDays: number,
+): number {
+  return Math.round((netGold / tileCount / remainingPlantingSeasonDays) * 10) / 10;
 }
 
 function compareSeasonProfitRows(left: SeasonCropProfitRow, right: SeasonCropProfitRow): number {

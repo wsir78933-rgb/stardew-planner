@@ -1,13 +1,16 @@
-"use client";
+import type { Metadata } from "next";
+import { getToolsPageCopy } from "../../../../src/i18n/tools-page-copy";
+import { createPublicPageMetadata } from "../../../../src/seo/page-metadata";
 
-import { useEffect } from "react";
-import { createCropGrowthRedirectHref } from "../../../../src/tools-pages/crop-growth-redirect";
+const toolsPageCopy = getToolsPageCopy("zh-CN");
+
+export const metadata: Metadata = createPublicPageMetadata({
+  locale: "zh-CN",
+  canonicalPath: "/tools/crop-growth",
+  title: toolsPageCopy.growth.metaTitle,
+  description: toolsPageCopy.growth.metaDescription,
+});
 
 export default function ChineseCropGrowthPage() {
-  useEffect(() => {
-    const cropId = new URLSearchParams(window.location.search).get("crop");
-    window.location.replace(createCropGrowthRedirectHref("zh-CN", cropId));
-  }, []);
-
-  return <p>正在打开种植规划。</p>;
+  return null;
 }

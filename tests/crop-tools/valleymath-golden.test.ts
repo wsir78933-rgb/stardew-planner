@@ -17,6 +17,21 @@ const VALLEYMATH_SPRING_PROFIT_INPUT = {
   processingDeadline: "plus-28",
 } as const;
 
+const AUTUMN_ARTISAN_PROFIT_INPUT = {
+  season: "fall",
+  plantingDay: 15,
+  farmYear: 2,
+  tileCount: 80,
+  seedShop: "pierre",
+  profession: "artisan",
+  speedGro: "speed-gro",
+  fertilizerCostPerTile: 0,
+  kegCount: 12,
+  jarCount: 12,
+  dehydratorCount: 4,
+  processingDeadline: "plus-14",
+} as const;
+
 const PARSNIP_NO_REPLANT_INPUT = {
   cropId: "parsnip",
   season: "spring",
@@ -180,6 +195,50 @@ describe("valleymath planting golden cases", () => {
       expect(cropIdentities[2]).toContain("greenbean");
       expect(cropIdentities[3]).toContain("kale");
       expect(cropIdentities[4]).toContain("parsnip");
+    }
+  });
+
+  it("conserves crop units and applies Tiller inheritance to unfinished fall batches", () => {
+    const rankedRows = rankSeasonCrops(AUTUMN_ARTISAN_PROFIT_INPUT).rows;
+    const rankedRowsById = new Map(rankedRows.map((row) => [row.cropId, row]));
+    const pumpkin = rankedRowsById.get("pumpkin");
+    const amaranth = rankedRowsById.get("amaranth");
+    const wheat = rankedRowsById.get("wheat");
+    const cranberries = rankedRowsById.get("cranberries");
+
+    if (!pumpkin || !amaranth || !wheat || !cranberries) {
+      throw new Error("Autumn ranking is missing a golden-case crop.");
+    }
+
+    expect(pumpkin).toMatchObject({
+      routeId: "jar",
+      netGold: 57000,
+      processedUnits: 60,
+      backlogUnits: 20,
+      goldPerTilePerDay: 50.9,
+    });
+    expect(amaranth).toMatchObject({
+      routeId: "jar",
+      netGold: 42500,
+      processedUnits: 84,
+      backlogUnits: 76,
+    });
+    expect(wheat).toMatchObject({
+      routeId: "keg",
+      netGold: 41872,
+      processedUnits: 144,
+      backlogUnits: 176,
+    });
+    expect(cranberries).toMatchObject({
+      routeId: "dehydrator",
+      netGold: 33344,
+      processedUnits: 320,
+      backlogUnits: 0,
+    });
+    expect((cranberries.netGold + cranberries.seedCost) / (cranberries.processedUnits / 5)).toBe(821);
+
+    for (const row of [pumpkin, amaranth, wheat, cranberries]) {
+      expect(row.processedUnits + row.backlogUnits).toBe(row.expectedUnits);
     }
   });
 

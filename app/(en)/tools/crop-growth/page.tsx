@@ -1,13 +1,16 @@
-"use client";
+import type { Metadata } from "next";
+import { getToolsPageCopy } from "../../../../src/i18n/tools-page-copy";
+import { createPublicPageMetadata } from "../../../../src/seo/page-metadata";
 
-import { useEffect } from "react";
-import { createCropGrowthRedirectHref } from "../../../../src/tools-pages/crop-growth-redirect";
+const toolsPageCopy = getToolsPageCopy("en");
+
+export const metadata: Metadata = createPublicPageMetadata({
+  locale: "en",
+  canonicalPath: "/tools/crop-growth",
+  title: toolsPageCopy.growth.metaTitle,
+  description: toolsPageCopy.growth.metaDescription,
+});
 
 export default function CropGrowthPage() {
-  useEffect(() => {
-    const cropId = new URLSearchParams(window.location.search).get("crop");
-    window.location.replace(createCropGrowthRedirectHref("en", cropId));
-  }, []);
-
-  return <p>Opening planting.</p>;
+  return null;
 }

@@ -1,37 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useStaticLocationSearch } from "../components/blog/use-static-location-search";
 import type { PublicLocale } from "../i18n/public-locale";
 import { CropGrowthTool } from "./crop-growth-tool";
 import { CropProfitTool } from "./crop-profit-tool";
+import type { CropGrowthForm } from "./crop-growth-form";
+import {
+  createCropGrowthHref,
+  createCropGrowthToolHref,
+  createCropProfitHref,
+} from "./planting-tool-href";
 import type { PlantingToolId } from "./planting-tool-frame";
 
-type CropGrowthToolQueryProperties = Readonly<{
+export type PlantingToolsWorkspaceProperties = Readonly<{
   locale: PublicLocale;
-  requestedCropId?: string | null;
-  onSelectTool?: (tool: PlantingToolId) => void;
+  currentTool: PlantingToolId;
 }>;
 
-export function CropGrowthToolQuery({
-  locale,
-  requestedCropId,
-  onSelectTool,
-}: CropGrowthToolQueryProperties) {
-  const searchParams = useSearchParams();
-  const cropParameter = requestedCropId === undefined ? searchParams.get("crop") : requestedCropId;
-
-  return (
-    <CropGrowthTool
-      locale={locale}
-      onSelectTool={onSelectTool}
-      requestedCropId={cropParameter}
-    />
-  );
-}
-
-function readPlantingToolFromSearch(locationSearch: string): PlantingToolId {
+function readLegacyToolFromSearch(locationSearch: string): PlantingToolId {
   const toolParameter = new URLSearchParams(locationSearch).get("tool");
   if (toolParameter === null || toolParameter === "profit") {
     return "crop-profit";
@@ -44,48 +32,94 @@ function readPlantingToolFromSearch(locationSearch: string): PlantingToolId {
   throw new Error(`Unknown planting tool. Received: ${JSON.stringify(toolParameter)}.`);
 }
 
-export function CropProfitPathTool({ locale }: CropGrowthToolQueryProperties) {
+function readCropIdFromSearch(locationSearch: string): string | null {
+  return new URLSearchParams(locationSearch).get("crop");
+}
+
+function createGrowthDestination(locale: PublicLocale, cropId: string | null): string {
+  if (cropId === null || cropId === "") {
+    return createCropGrowthToolHref(locale);
+  }
+
+  return createCropGrowthHref(locale, cropId);
+}
+
+export function PlantingToolsWorkspace({
+  locale,
+  currentTool,
+}: PlantingToolsWorkspaceProperties) {
+  const router = useRouter();
   const locationSearch = useStaticLocationSearch();
-  const [selectedTool, setSelectedTool] = useState<PlantingToolId | null>(null);
   const [requestedCropId, setRequestedCropId] = useState<string | null>(null);
-  const visibleTool = selectedTool ?? readPlantingToolFromSearch(locationSearch);
+  const [requestedGrowthForm, setRequestedGrowthForm] = useState<CropGrowthForm | null>(null);
+  const [selectedToolOverride, setSelectedToolOverride] = useState<PlantingToolId | null>(null);
+  const legacyTool = currentTool === "crop-profit"
+    ? readLegacyToolFromSearch(locationSearch)
+    : currentTool;
+  const routeTool = currentTool === "crop-profit" && legacyTool === "crop-growth"
+    ? "crop-growth"
+    : currentTool;
+  const activeTool = selectedToolOverride ?? routeTool;
+  const cropIdFromSearch = readCropIdFromSearch(locationSearch);
 
   useEffect(() => {
-    function clearSelectedToolAfterPopState() {
-      setSelectedTool(null);
+    if (currentTool !== "crop-profit" || legacyTool !== "crop-growth") {
+      return;
     }
 
-    window.addEventListener("popstate", clearSelectedToolAfterPopState);
-    return () => window.removeEventListener("popstate", clearSelectedToolAfterPopState);
-  }, []);
+    window.location.replace(createGrowthDestination(locale, cropIdFromSearch));
+  }, [currentTool, cropIdFromSearch, legacyTool, locale, router]);
+
+  useEffect(() => {
+    setRequestedCropId(cropIdFromSearch);
+  }, [cropIdFromSearch]);
+
+  useEffect(() => {
+    if (selectedToolOverride === currentTool) {
+      setSelectedToolOverride(null);
+    }
+  }, [currentTool, selectedToolOverride]);
 
   function selectTool(tool: PlantingToolId, cropId?: string) {
-    const pathname = window.location.pathname;
+    setSelectedToolOverride(tool);
+
     if (tool === "crop-growth") {
-      const nextSearch = new URLSearchParams();
-      nextSearch.set("tool", "growth");
       if (cropId !== undefined && cropId !== "") {
-        nextSearch.set("crop", cropId);
         setRequestedCropId(cropId);
+      } else {
+        setRequestedCropId(null);
       }
-      window.history.replaceState(null, "", `${pathname}?${nextSearch.toString()}`);
-    } else {
-      window.history.replaceState(null, "", pathname);
+
+      router.push(createGrowthDestination(locale, cropId ?? null), { scroll: false });
+      return;
     }
 
-    setSelectedTool(tool);
+    setRequestedCropId(null);
+    router.push(createCropProfitHref(locale), { scroll: false });
+  }
+
+  function viewGrowthCalendar(form: CropGrowthForm) {
+    setSelectedToolOverride("crop-growth");
+    setRequestedGrowthForm(form);
+    setRequestedCropId(null);
+    router.push(createCropGrowthHref(locale, form.cropId), { scroll: false });
   }
 
   return (
     <>
-      <div hidden={visibleTool !== "crop-profit"}>
-        <CropProfitTool locale={locale} onSelectTool={selectTool} />
+      <div hidden={activeTool !== "crop-profit"}>
+        <CropProfitTool
+          locale={locale}
+          onSelectTool={selectTool}
+          onViewGrowth={viewGrowthCalendar}
+        />
       </div>
-      <div hidden={visibleTool !== "crop-growth"}>
+      <div hidden={activeTool !== "crop-growth"}>
         <CropGrowthTool
           locale={locale}
           onSelectTool={selectTool}
           requestedCropId={requestedCropId}
+          requestedGrowthForm={requestedGrowthForm}
         />
       </div>
     </>

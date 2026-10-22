@@ -1,7 +1,13 @@
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
 import { getToolsPageCopy } from "../i18n/tools-page-copy";
-import { createCropProfitHref, createToolsHomeHref } from "./planting-tool-href";
+import {
+  createCropGrowthToolHref,
+  createCropProfitHref,
+  createToolsHomeHref,
+} from "./planting-tool-href";
+import { SimpleHero } from "./simple-hero";
+import { PlantingToolGuide } from "./planting-tool-guide";
 import styles from "./tools-page.module.css";
 
 export type PlantingToolId = "crop-profit" | "crop-growth";
@@ -26,56 +32,67 @@ export function PlantingToolFrame({
   const copy = getToolsPageCopy(locale);
   const toolsHomeHref = createToolsHomeHref(locale);
   const profitHref = createCropProfitHref(locale);
-  const growthHref = `${profitHref}?tool=growth`;
+  const growthHref = createCropGrowthToolHref(locale);
+  const heroCopy = currentTool === "crop-profit" ? copy.profit.hero : copy.growth.hero;
+  const calculatorId = `${currentTool}-calculator`;
+  const heroTitleId = `${currentTool}-hero-title`;
   const saveLabel =
     saveStatus === "failed" ? copy.frame.saveFailed : saveStatus === "saved" ? copy.frame.saved : null;
 
   return (
     <article className={styles.toolsPage}>
-      <header className={styles.pageHeader}>
-        <p className="public-breadcrumbs">{copy.frame.breadcrumb}</p>
-        <div className={styles.titleRow}>
-          <h1>{title}</h1>
+      <SimpleHero
+        actionHref={`#${calculatorId}`}
+        copy={heroCopy}
+        locale={locale}
+        titleId={heroTitleId}
+      />
+      <section aria-label={title} className={styles.toolArea}>
+        <header className={styles.pageHeader}>
+          <p className="public-breadcrumbs">{copy.frame.breadcrumb}</p>
           {saveLabel === null ? null : (
             <p className={styles.saveStatus} role={saveStatus === "failed" ? "alert" : undefined}>
               {saveLabel}
             </p>
           )}
-        </div>
-      </header>
-      <div className={styles.frame}>
-        <nav aria-label={copy.frame.allTools} className={styles.sidebar}>
-          <a href={toolsHomeHref}>{copy.frame.allTools}</a>
-          <span aria-current="page">{copy.frame.planting}</span>
-          <button className={styles.action} disabled type="button">
-            {copy.frame.processing}
-          </button>
-          <button className={styles.action} disabled type="button">
-            {copy.frame.production}
-          </button>
-          <button className={styles.action} disabled type="button">
-            {copy.frame.workshop}
-          </button>
-          <p className={styles.note}>{copy.frame.versionNote}</p>
-        </nav>
-        <div>
-          <div className={styles.tabRow}>
-            <PlantingToolTab
-              current={currentTool === "crop-profit"}
-              href={profitHref}
-              label={copy.frame.profitTab}
-              onSelect={onSelectTool === undefined ? undefined : () => onSelectTool("crop-profit")}
-            />
-            <PlantingToolTab
-              current={currentTool === "crop-growth"}
-              href={growthHref}
-              label={copy.frame.growthTab}
-              onSelect={onSelectTool === undefined ? undefined : () => onSelectTool("crop-growth")}
-            />
+        </header>
+        <div className={styles.frame}>
+          <nav aria-label={copy.frame.allTools} className={styles.sidebar}>
+            <a href={toolsHomeHref}>{copy.frame.allTools}</a>
+            <span aria-current="page">{copy.frame.planting}</span>
+            <button className={styles.action} disabled type="button">
+              {copy.frame.processing}
+            </button>
+            <button className={styles.action} disabled type="button">
+              {copy.frame.production}
+            </button>
+            <button className={styles.action} disabled type="button">
+              {copy.frame.workshop}
+            </button>
+            <p className={styles.note}>{copy.frame.versionNote}</p>
+          </nav>
+          <div>
+            <div className={styles.tabRow}>
+              <PlantingToolTab
+                current={currentTool === "crop-profit"}
+                href={profitHref}
+                label={copy.frame.profitTab}
+                onSelect={onSelectTool === undefined ? undefined : () => onSelectTool("crop-profit")}
+              />
+              <PlantingToolTab
+                current={currentTool === "crop-growth"}
+                href={growthHref}
+                label={copy.frame.growthTab}
+                onSelect={onSelectTool === undefined ? undefined : () => onSelectTool("crop-growth")}
+              />
+            </div>
+            <div className={styles.workspace} id={calculatorId} tabIndex={-1}>
+              {children}
+            </div>
           </div>
-          <div className={styles.workspace}>{children}</div>
         </div>
-      </div>
+      </section>
+      <PlantingToolGuide currentTool={currentTool} locale={locale} />
     </article>
   );
 }
@@ -93,22 +110,34 @@ function PlantingToolTab({
 }>) {
   const className = current ? "public-primary-cta" : "public-secondary-cta";
 
-  if (onSelect === undefined) {
-    return (
-      <a aria-current={current ? "page" : undefined} className={className} href={href}>
-        {label}
-      </a>
-    );
-  }
-
   return (
-    <button
+    <a
       aria-current={current ? "page" : undefined}
       className={className}
-      onClick={onSelect}
-      type="button"
+      href={href}
+      onClick={(event) => handlePlantingToolTabClick(event, onSelect)}
     >
       {label}
-    </button>
+    </a>
   );
+}
+
+function handlePlantingToolTabClick(
+  event: MouseEvent<HTMLAnchorElement>,
+  onSelect: (() => void) | undefined,
+): void {
+  if (
+    onSelect === undefined ||
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return;
+  }
+
+  event.preventDefault();
+  onSelect();
 }

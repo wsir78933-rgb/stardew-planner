@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
 import { getToolsPageCopy, type ToolsPageCopy } from "../i18n/tools-page-copy";
-import { createCropProfitHref, createToolsHomeHref } from "./planting-tool-href";
+import {
+  createCropGrowthToolHref,
+  createCropProfitHref,
+  createToolsHomeHref,
+} from "./planting-tool-href";
 import { ProductionPlanSummary } from "./production-plan-summary";
 import styles from "./tools-page.module.css";
 
@@ -12,7 +16,7 @@ type ToolsHomePageProperties = Readonly<{
 export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
   const copy = getToolsPageCopy(locale);
   const profitHref = createCropProfitHref(locale);
-  const growthHref = `${profitHref}?tool=growth`;
+  const growthHref = createCropGrowthToolHref(locale);
 
   return (
     <article className={styles.toolsPage} data-tools-home="true">

@@ -5,12 +5,15 @@ const MACHINE_DAY_MINUTES = 1600;
 
 export type FinishedBatchCount = {
   readonly processedBatches: number;
+  readonly processedUnits: number;
   readonly backlogUnits: number;
 };
 
 export type QuotedCropRoute = {
   readonly routeId: SeasonProfitRouteId;
   readonly netGold: number;
+  readonly processedUnits: number;
+  readonly backlogUnits: number;
 };
 
 export function processingDurationDays(routeId: Exclude<SeasonProfitRouteId, "sell-raw">, processingMinutes: number): number {
@@ -24,7 +27,7 @@ export function processingDurationDays(routeId: Exclude<SeasonProfitRouteId, "se
 }
 
 export function rawCropUnitPrice(sellPrice: number, profession: FarmingProfession): number {
-  if (profession === "tiller") return scaleGold(sellPrice, 1.1);
+  if (profession !== "none") return scaleGold(sellPrice, 1.1);
   return sellPrice;
 }
 
@@ -41,10 +44,34 @@ export function countFinishedMachineBatches(
   machineCount: number,
   deadlineAbsoluteDay: number,
 ): FinishedBatchCount {
+  if (!Array.isArray(harvestAbsoluteDays)) {
+    throw new Error(`harvestAbsoluteDays is invalid: ${String(harvestAbsoluteDays)}`);
+  }
+  for (const [index, absoluteDay] of harvestAbsoluteDays.entries()) {
+    if (!Number.isSafeInteger(absoluteDay) || absoluteDay < 1) {
+      throw new Error(`harvestAbsoluteDays[${index}] is invalid: ${String(absoluteDay)}`);
+    }
+  }
+  if (!Number.isFinite(unitsPerHarvest) || unitsPerHarvest <= 0) {
+    throw new Error(`unitsPerHarvest is invalid: ${String(unitsPerHarvest)}`);
+  }
+  if (!Number.isSafeInteger(batchSize) || batchSize <= 0) {
+    throw new Error(`batchSize is invalid: ${String(batchSize)}`);
+  }
+  if (!Number.isSafeInteger(durationDays) || durationDays <= 0) {
+    throw new Error(`durationDays is invalid: ${String(durationDays)}`);
+  }
+  if (!Number.isSafeInteger(machineCount) || machineCount < 0) {
+    throw new Error(`machineCount is invalid: ${String(machineCount)}`);
+  }
+  if (!Number.isSafeInteger(deadlineAbsoluteDay) || deadlineAbsoluteDay < 1) {
+    throw new Error(`deadlineAbsoluteDay is invalid: ${String(deadlineAbsoluteDay)}`);
+  }
+
   const orderedHarvestDays = [...harvestAbsoluteDays].sort((leftDay, rightDay) => leftDay - rightDay);
   const totalUnits = orderedHarvestDays.length * unitsPerHarvest;
   if (machineCount === 0 || orderedHarvestDays.length === 0) {
-    return { processedBatches: 0, backlogUnits: totalUnits };
+    return { processedBatches: 0, processedUnits: 0, backlogUnits: totalUnits };
   }
 
   const arrivals = new Map<number, number>();
@@ -58,7 +85,7 @@ export function countFinishedMachineBatches(
   let processedBatches = 0;
   const firstHarvestDay = orderedHarvestDays[0];
   if (firstHarvestDay === undefined) {
-    return { processedBatches: 0, backlogUnits: totalUnits };
+    return { processedBatches: 0, processedUnits: 0, backlogUnits: totalUnits };
   }
 
   for (let absoluteDay = firstHarvestDay; absoluteDay <= deadlineAbsoluteDay; absoluteDay += 1) {
@@ -77,6 +104,7 @@ export function countFinishedMachineBatches(
   const processedUnits = processedBatches * batchSize;
   return {
     processedBatches,
+    processedUnits,
     backlogUnits: Math.max(0, totalUnits - processedUnits),
   };
 }
@@ -90,6 +118,8 @@ export function quoteSellRawRoute(
   return {
     routeId: "sell-raw",
     netGold: expectedUnits * rawUnitPrice - seedCost - fertilizerCost,
+    processedUnits: 0,
+    backlogUnits: expectedUnits,
   };
 }
 
@@ -119,6 +149,8 @@ export function quoteMachineRoute(
   return {
     routeId,
     netGold: processedRevenue + rawRevenue - seedCost - fertilizerCost,
+    processedUnits: finished.processedUnits,
+    backlogUnits: finished.backlogUnits,
   };
 }
 

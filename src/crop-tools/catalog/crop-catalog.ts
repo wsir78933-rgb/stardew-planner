@@ -24,6 +24,7 @@ export type CropCatalogEntry = {
   readonly pierreYear1SeedPrice: number | null;
   readonly pierreYear2SeedPrice: number | null;
   readonly oasisOrFestivalSeedPrice: number | null;
+  readonly oasisOrFestivalSeedAvailableFromDay: number;
   readonly keg: CropMachineOutput | null;
   readonly jar: CropMachineOutput | null;
   readonly dehydrator: CropDehydratorOutput | null;
@@ -44,6 +45,7 @@ type PurchasableCropSource = {
   readonly pierreYear1SeedPrice: number | null;
   readonly pierreYear2SeedPrice: number | null;
   readonly oasisOrFestivalSeedPrice: number | null;
+  readonly oasisOrFestivalSeedAvailableFromDay?: number;
   readonly route: CropProcessingRoute;
 };
 
@@ -462,6 +464,7 @@ const purchasableCropSources: readonly PurchasableCropSource[] = [
     pierreYear1SeedPrice: null,
     pierreYear2SeedPrice: null,
     oasisOrFestivalSeedPrice: 100,
+    oasisOrFestivalSeedAvailableFromDay: 13,
     route: "fruit",
   },
   {
@@ -600,6 +603,16 @@ function createCropMachineOutputs(
 }
 
 function createCropCatalogEntry(source: PurchasableCropSource): CropCatalogEntry {
+  const oasisOrFestivalSeedAvailableFromDay = source.oasisOrFestivalSeedAvailableFromDay ?? 1;
+  if (
+    !Number.isInteger(oasisOrFestivalSeedAvailableFromDay) ||
+    oasisOrFestivalSeedAvailableFromDay < 1 ||
+    oasisOrFestivalSeedAvailableFromDay > 28
+  ) {
+    throw new Error(
+      `Crop "${source.id}" has invalid oasisOrFestivalSeedAvailableFromDay: ${JSON.stringify(oasisOrFestivalSeedAvailableFromDay)}`,
+    );
+  }
   return {
     id: source.id,
     englishName: source.englishName,
@@ -613,6 +626,7 @@ function createCropCatalogEntry(source: PurchasableCropSource): CropCatalogEntry
     pierreYear1SeedPrice: source.pierreYear1SeedPrice,
     pierreYear2SeedPrice: source.pierreYear2SeedPrice,
     oasisOrFestivalSeedPrice: source.oasisOrFestivalSeedPrice,
+    oasisOrFestivalSeedAvailableFromDay,
     ...createCropMachineOutputs(source.route, source.sellPrice),
   };
 }

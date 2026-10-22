@@ -1,0 +1,140 @@
+.hero {
+  --hero-background: oklch(1 0 0);
+  --hero-foreground: oklch(0.145 0 0);
+  --hero-muted: oklch(0.556 0 0);
+
+  align-items: center;
+  background: var(--hero-background);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 8rem 1rem 6rem;
+  text-align: center;
+  width: 100%;
+}
+
+.content {
+  margin-inline: auto;
+  max-width: 56rem;
+  width: 100%;
+}
+
+.hero .heading {
+  animation: simpleHeroFadeUp 0.6s ease-out both;
+  color: var(--hero-foreground);
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.accent {
+  display: inline-block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  position: relative;
+}
+
+.underline {
+  height: 30px;
+  left: 0;
+  margin-top: -5px;
+  overflow: visible;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+
+.hero .description {
+  animation: simpleHeroFadeUp 0.6s ease-out 0.2s both;
+  color: var(--hero-muted);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+  margin: 1.5rem auto 0;
+  max-width: 42rem;
+  overflow-wrap: anywhere;
+}
+
+.hero .action {
+  align-items: center;
+  animation: simpleHeroFadeUp 0.6s ease-out 0.4s both;
+  background: var(--hero-foreground);
+  border: 1px solid var(--hero-foreground);
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: var(--hero-background);
+  display: inline-flex;
+  font-size: 1rem;
+  font-weight: 500;
+  justify-content: center;
+  margin-top: 1.75rem;
+  min-height: 2.75rem;
+  padding: 0.7rem 2rem;
+  text-decoration: none;
+  transition: transform 0.3s ease, background-color 0.2s ease;
+}
+
+.hero .action:active {
+  transform: scale(0.95);
+}
+
+.hero .action:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 4px;
+}
+
+@keyframes simpleHeroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 640px) {
+  .hero .heading {
+    font-size: 3rem;
+  }
+
+  .accent {
+    font-size: 3.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 10rem 1.5rem 8rem;
+  }
+
+  .hero .heading {
+    font-size: 3.75rem;
+  }
+
+  .accent {
+    font-size: 4.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .heading,
+  .hero .description,
+  .hero .action {
+    animation: none;
+  }
+
+  .hero .action {
+    transition: none;
+  }
+}
