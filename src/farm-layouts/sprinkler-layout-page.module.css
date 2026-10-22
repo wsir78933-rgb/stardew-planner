@@ -1,0 +1,135 @@
+.sprinklerPage {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.sprinklerPage .sprinklerHero {
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.sprinklerPage .sprinklerHeroCopy {
+  min-width: 0;
+}
+
+.sprinklerPage .sprinklerHeroCopy h1 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.sprinklerPage .sprinklerHeroVisual,
+.sprinklerPage .sprinklerCaseVisual {
+  align-self: center;
+  justify-self: center;
+  margin-inline: auto;
+  max-width: min(100%, 448px);
+  min-width: 0;
+  width: min(100%, 448px);
+}
+
+.sprinklerPage .sprinklerHeroCaption {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.sprinklerPage .sprinklerCase,
+.sprinklerPage .sprinklerCase:nth-child(even) {
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.sprinklerPage .sprinklerCaseVisual {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.sprinklerPage .sprinklerCaseDetails {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.sprinklerPage .sprinklerCase:nth-child(even) .sprinklerCaseVisual {
+  grid-column: 2;
+}
+
+.sprinklerPage .sprinklerCase:nth-child(even) .sprinklerCaseDetails {
+  grid-column: 1;
+}
+
+.sprinklerPage [data-layout-image-trigger="true"] {
+  aspect-ratio: 2560 / 2080;
+  box-sizing: border-box;
+  height: auto;
+  max-height: 364px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.sprinklerPage [data-layout-image-trigger="true"] picture,
+.sprinklerPage [data-layout-image-trigger="true"] img {
+  aspect-ratio: 2560 / 2080;
+  display: block;
+  height: auto;
+  max-height: 364px;
+  max-width: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.sprinklerPage [data-layout-image-dialog="true"] {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+  margin: auto;
+  max-height: 85dvh;
+  max-width: min(90vw, 72rem);
+  overflow: visible;
+  padding: 0;
+}
+
+.sprinklerPage [data-layout-image-dialog="true"] img {
+  background: transparent;
+  display: block;
+  height: auto;
+  max-height: 85dvh;
+  max-width: min(90vw, 72rem);
+  object-fit: contain;
+  width: auto;
+}
+
+@media (max-width: 850px) {
+  .sprinklerPage .sprinklerHero,
+  .sprinklerPage .sprinklerCase,
+  .sprinklerPage .sprinklerCase:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sprinklerPage .sprinklerHeroCopy,
+  .sprinklerPage .sprinklerCaseDetails,
+  .sprinklerPage .sprinklerCase:nth-child(even) .sprinklerCaseDetails {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: 40rem;
+    width: 100%;
+  }
+
+  .sprinklerPage .sprinklerHeroVisual,
+  .sprinklerPage .sprinklerCaseVisual,
+  .sprinklerPage .sprinklerCase:nth-child(even) .sprinklerCaseVisual {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: center;
+    max-width: min(100%, 448px);
+    width: min(100%, 448px);
+  }
+}
