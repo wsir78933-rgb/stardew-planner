@@ -3,7 +3,9 @@ import { expect, test } from "vitest";
 import { SiteNavigationDock } from "@/src/components/site-navigation-dock";
 import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigation";
 import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-content";
+import { fruitTreeLayoutCanonicalPath } from "@/src/farm-layouts/fruit-tree-layout-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
+import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
 import { sprinklerLayoutCanonicalPath } from "@/src/farm-layouts/sprinkler-layout-content";
 import {
@@ -321,13 +323,21 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
   }
 });
 
-test("places both sprinkler layout pages under Planting Layouts for each display locale", () => {
+test("places Quality Sprinkler, Iridium Sprinkler, and Fruit Tree pages in order under Planting Layouts", () => {
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(qualitySprinklerLayoutCanonicalPath).toBe(
     "/stardew-valley-quality-sprinkler-layout",
   );
+  expect(iridiumSprinklerLayoutCanonicalPath).toBe(
+    "/stardew-valley-iridium-sprinkler-layout",
+  );
+  expect(fruitTreeLayoutCanonicalPath).toBe(
+    "/stardew-valley-fruit-tree-layout",
+  );
   expect(isFarmLayoutsNavigationPageId("sprinkler-layout")).toBe(true);
   expect(isFarmLayoutsNavigationPageId("quality-sprinkler-layout")).toBe(true);
+  expect(isFarmLayoutsNavigationPageId("iridium-sprinkler-layout")).toBe(true);
+  expect(isFarmLayoutsNavigationPageId("fruit-tree-layout")).toBe(true);
 
   for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
     const model = getFarmLayoutsNavigationModel(locale);
@@ -340,11 +350,6 @@ test("places both sprinkler layout pages under Planting Layouts for each display
         ? `/zh${sprinklerLayoutCanonicalPath}`
         : sprinklerLayoutCanonicalPath;
     const label = locale === "zh-CN" ? "洒水器布局" : "Sprinkler Layouts";
-    const sprinklerPage = {
-      href,
-      id: "sprinkler-layout",
-      label,
-    } as const;
     const qualitySprinklerHref =
       locale === "zh-CN"
         ? `/zh${qualitySprinklerLayoutCanonicalPath}`
@@ -355,11 +360,42 @@ test("places both sprinkler layout pages under Planting Layouts for each display
       label:
         locale === "zh-CN" ? "优质洒水器布局" : "Quality Sprinkler Layouts",
     } as const;
+    const iridiumHref =
+      locale === "zh-CN"
+        ? `/zh${iridiumSprinklerLayoutCanonicalPath}`
+        : iridiumSprinklerLayoutCanonicalPath;
+    const iridiumLabel =
+      locale === "zh-CN" ? "铱金洒水器布局" : "Iridium Sprinkler Layouts";
+    const fruitTreeHref =
+      locale === "zh-CN"
+        ? `/zh${fruitTreeLayoutCanonicalPath}`
+        : fruitTreeLayoutCanonicalPath;
+    const fruitTreeLabel = locale === "zh-CN" ? "果树布局" : "Fruit Tree Layouts";
+    const sprinklerPage = {
+      href,
+      id: "sprinkler-layout",
+      label,
+    } as const;
+    const iridiumSprinklerPage = {
+      href: iridiumHref,
+      id: "iridium-sprinkler-layout",
+      label: iridiumLabel,
+    } as const;
+    const fruitTreePage = {
+      href: fruitTreeHref,
+      id: "fruit-tree-layout",
+      label: fruitTreeLabel,
+    } as const;
 
     expect(plantingLayouts.label).toBe(
       locale === "zh-CN" ? "种植布局" : "Planting Layouts",
     );
-    expect(plantingLayouts.pages).toEqual([sprinklerPage, qualitySprinklerPage]);
+    expect(plantingLayouts.pages).toEqual([
+      sprinklerPage,
+      qualitySprinklerPage,
+      iridiumSprinklerPage,
+      fruitTreePage,
+    ]);
     expect(
       readFarmLayoutsNavigationPage(
         model,
@@ -374,6 +410,16 @@ test("places both sprinkler layout pages under Planting Layouts for each display
         "quality-sprinkler-layout",
       ),
     ).toEqual(qualitySprinklerPage);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "planting-layouts",
+        "iridium-sprinkler-layout",
+      ),
+    ).toEqual(iridiumSprinklerPage);
+    expect(
+      readFarmLayoutsNavigationPage(model, "planting-layouts", "fruit-tree-layout"),
+    ).toEqual(fruitTreePage);
     expect(
       readFarmLayoutsNavigationCategory(model, "farm-maps").pages.map(
         (farmMapPage) => farmMapPage.id,
@@ -392,7 +438,7 @@ test("places both sprinkler layout pages under Planting Layouts for each display
   }
 });
 
-test("moves between both sprinkler layouts from Planting Layouts with desktop and compact keys", () => {
+test("moves through all four Planting Layouts pages with desktop and compact keys", () => {
   const plantingFocusKey = getFarmLayoutsNavigationCategoryFocusKey(
     "planting-layouts",
   );
@@ -401,6 +447,12 @@ test("moves between both sprinkler layouts from Planting Layouts with desktop an
   );
   const qualitySprinklerFocusKey = getFarmLayoutsNavigationPageFocusKey(
     "quality-sprinkler-layout",
+  );
+  const iridiumSprinklerFocusKey = getFarmLayoutsNavigationPageFocusKey(
+    "iridium-sprinkler-layout",
+  );
+  const fruitTreeFocusKey = getFarmLayoutsNavigationPageFocusKey(
+    "fruit-tree-layout",
   );
   const categories = {
     focusKey: plantingFocusKey,
@@ -417,14 +469,42 @@ test("moves between both sprinkler layouts from Planting Layouts with desktop an
       key: "ArrowRight",
       locale,
     });
-    const movedDown = moveNavigationFocus({
+    const movedDownFromSprinkler = moveNavigationFocus({
       compact: false,
       currentFocusKey: sprinklerFocusKey,
       interaction: opened,
       key: "ArrowDown",
       locale,
     });
-    const movedUp = moveNavigationFocus({
+    const movedDownFromQualitySprinkler = moveNavigationFocus({
+      compact: false,
+      currentFocusKey: qualitySprinklerFocusKey,
+      interaction: opened,
+      key: "ArrowDown",
+      locale,
+    });
+    const movedDownFromIridiumSprinkler = moveNavigationFocus({
+      compact: false,
+      currentFocusKey: iridiumSprinklerFocusKey,
+      interaction: opened,
+      key: "ArrowDown",
+      locale,
+    });
+    const movedUpFromFruitTree = moveNavigationFocus({
+      compact: false,
+      currentFocusKey: fruitTreeFocusKey,
+      interaction: opened,
+      key: "ArrowUp",
+      locale,
+    });
+    const movedUpFromIridiumSprinkler = moveNavigationFocus({
+      compact: false,
+      currentFocusKey: iridiumSprinklerFocusKey,
+      interaction: opened,
+      key: "ArrowUp",
+      locale,
+    });
+    const wrappedUpFromSprinkler = moveNavigationFocus({
       compact: false,
       currentFocusKey: sprinklerFocusKey,
       interaction: opened,
@@ -452,10 +532,24 @@ test("moves between both sprinkler layouts from Planting Layouts with desktop an
       key: "ArrowDown",
       locale,
     });
-    const compactNextPage = moveNavigationFocus({
+    const compactQualitySprinklerPage = moveNavigationFocus({
       compact: true,
       currentFocusKey: sprinklerFocusKey,
-      interaction: compactPage,
+      interaction: compactCategory,
+      key: "ArrowDown",
+      locale,
+    });
+    const compactIridiumSprinklerPage = moveNavigationFocus({
+      compact: true,
+      currentFocusKey: qualitySprinklerFocusKey,
+      interaction: compactCategory,
+      key: "ArrowDown",
+      locale,
+    });
+    const compactFruitTreePage = moveNavigationFocus({
+      compact: true,
+      currentFocusKey: iridiumSprinklerFocusKey,
+      interaction: compactCategory,
       key: "ArrowDown",
       locale,
     });
@@ -465,8 +559,16 @@ test("moves between both sprinkler layouts from Planting Layouts with desktop an
       openCategoryId: "planting-layouts",
       panel: "category",
     });
-    expect(movedDown.focusKey).toBe(qualitySprinklerFocusKey);
-    expect(movedUp.focusKey).toBe(qualitySprinklerFocusKey);
+    expect(movedDownFromSprinkler.focusKey).toBe(qualitySprinklerFocusKey);
+    expect(movedDownFromQualitySprinkler.focusKey).toBe(
+      iridiumSprinklerFocusKey,
+    );
+    expect(movedDownFromIridiumSprinkler.focusKey).toBe(fruitTreeFocusKey);
+    expect(movedUpFromFruitTree.focusKey).toBe(iridiumSprinklerFocusKey);
+    expect(movedUpFromIridiumSprinkler.focusKey).toBe(
+      qualitySprinklerFocusKey,
+    );
+    expect(wrappedUpFromSprinkler.focusKey).toBe(fruitTreeFocusKey);
     expect(returned).toMatchObject({
       focusKey: plantingFocusKey,
       openCategoryId: null,
@@ -482,8 +584,18 @@ test("moves between both sprinkler layouts from Planting Layouts with desktop an
       openCategoryId: "planting-layouts",
       panel: "category",
     });
-    expect(compactNextPage).toMatchObject({
+    expect(compactQualitySprinklerPage).toMatchObject({
       focusKey: qualitySprinklerFocusKey,
+      openCategoryId: "planting-layouts",
+      panel: "category",
+    });
+    expect(compactIridiumSprinklerPage).toMatchObject({
+      focusKey: iridiumSprinklerFocusKey,
+      openCategoryId: "planting-layouts",
+      panel: "category",
+    });
+    expect(compactFruitTreePage).toMatchObject({
+      focusKey: fruitTreeFocusKey,
       openCategoryId: "planting-layouts",
       panel: "category",
     });

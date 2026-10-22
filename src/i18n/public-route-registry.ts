@@ -2,6 +2,8 @@ import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
 import { expandedFarmCanonicalPath } from "../farm-layouts/expanded-farm-content";
 import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { hilltopFarmCanonicalPath } from "../farm-layouts/hilltop-farm-content";
+import { fruitTreeLayoutCanonicalPath } from "../farm-layouts/fruit-tree-layout-content";
+import { iridiumSprinklerLayoutCanonicalPath } from "../farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../farm-layouts/quality-sprinkler-layout-content";
 import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
 import { sprinklerLayoutCanonicalPath } from "../farm-layouts/sprinkler-layout-content";
@@ -28,6 +30,8 @@ const fixedCanonicalPublicPaths = [
   hilltopFarmCanonicalPath,
   sprinklerLayoutCanonicalPath,
   qualitySprinklerLayoutCanonicalPath,
+  iridiumSprinklerLayoutCanonicalPath,
+  fruitTreeLayoutCanonicalPath,
 ] as const;
 
 type BlogCanonicalPublicPath =

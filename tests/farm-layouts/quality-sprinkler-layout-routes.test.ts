@@ -13,6 +13,11 @@ import ChineseQualitySprinklerLayoutsPage, {
 } from "../../app/zh/stardew-valley-quality-sprinkler-layout/page";
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
+import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { iridiumSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/iridium-sprinkler-layout-content";
+import {
+  sprinklerLayoutCanonicalPath,
+} from "../../src/farm-layouts/sprinkler-layout-content";
 import {
   getQualitySprinklerLayoutPageCopy,
   qualitySprinklerLayoutCanonicalPath,
@@ -71,7 +76,7 @@ it("registers the English and Chinese Quality Sprinkler routes in the index and 
   expect(qualitySprinklerLayoutCanonicalPath).toBe(
     "/stardew-valley-quality-sprinkler-layout",
   );
-  expect(canonicalPublicPaths).toHaveLength(47);
+  expect(canonicalPublicPaths).toHaveLength(49);
   expect(canonicalPublicPaths.indexOf(qualitySprinklerLayoutCanonicalPath)).toBe(
     canonicalPublicPaths.indexOf("/stardew-valley-sprinkler-layout") + 1,
   );
@@ -104,20 +109,29 @@ it("keeps Quality Sprinkler Layouts after Sprinkler Layouts in all navigation fa
         : qualitySprinklerLayoutCanonicalPath;
     const expectedLabel =
       locale === "zh-CN" ? "优质洒水器布局" : "Quality Sprinkler Layouts";
+    const localizedPath = (canonicalPath: string) =>
+      locale === "zh-CN" ? `/zh${canonicalPath}` : canonicalPath;
 
     expect(plantingLayouts?.pages).toEqual([
       {
         id: "sprinkler-layout",
-        href:
-          locale === "zh-CN"
-            ? "/zh/stardew-valley-sprinkler-layout"
-            : "/stardew-valley-sprinkler-layout",
+        href: localizedPath(sprinklerLayoutCanonicalPath),
         label: locale === "zh-CN" ? "洒水器布局" : "Sprinkler Layouts",
       },
       {
         id: "quality-sprinkler-layout",
         href: expectedHref,
         label: expectedLabel,
+      },
+      {
+        id: "iridium-sprinkler-layout",
+        href: localizedPath(iridiumSprinklerLayoutCanonicalPath),
+        label: locale === "zh-CN" ? "铱金洒水器布局" : "Iridium Sprinkler Layouts",
+      },
+      {
+        id: "fruit-tree-layout",
+        href: localizedPath(fruitTreeLayoutCanonicalPath),
+        label: locale === "zh-CN" ? "果树布局" : "Fruit Tree Layouts",
       },
     ]);
   }

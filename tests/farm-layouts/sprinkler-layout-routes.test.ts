@@ -13,6 +13,11 @@ import ChineseSprinklerLayoutsPage, {
 } from "../../app/zh/stardew-valley-sprinkler-layout/page";
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
+import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
+import {
+  iridiumSprinklerLayoutCanonicalPath,
+} from "../../src/farm-layouts/iridium-sprinkler-layout-content";
 import {
   getSprinklerLayoutPageCopy,
   sprinklerLayoutCanonicalPath,
@@ -168,6 +173,15 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
     "/stardew-valley-hilltop-farm-layout",
   );
   const sprinklerIndex = canonicalPublicPaths.indexOf(sprinklerLayoutCanonicalPath);
+  const qualitySprinklerIndex = canonicalPublicPaths.indexOf(
+    qualitySprinklerLayoutCanonicalPath,
+  );
+  const iridiumSprinklerIndex = canonicalPublicPaths.indexOf(
+    iridiumSprinklerLayoutCanonicalPath,
+  );
+  const fruitTreeIndex = canonicalPublicPaths.indexOf(
+    fruitTreeLayoutCanonicalPath,
+  );
   const blogIndex = canonicalPublicPaths.indexOf("/blog");
   const sprinklerEntries = getLocalizedIndexablePublicRouteEntries().filter(
     ({ canonicalPath }) => canonicalPath === sprinklerLayoutCanonicalPath,
@@ -179,20 +193,22 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(47);
-  expect(indexableEntries).toHaveLength(92);
+  expect(canonicalPublicPaths).toHaveLength(49);
+  expect(indexableEntries).toHaveLength(96);
   expect(sprinklerIndex).toBe(hilltopIndex + 1);
-  const qualitySprinklerIndex = canonicalPublicPaths.indexOf(
-    "/stardew-valley-quality-sprinkler-layout",
-  );
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
-  expect(blogIndex).toBe(qualitySprinklerIndex + 1);
+  expect(iridiumSprinklerIndex).toBe(qualitySprinklerIndex + 1);
+  expect(fruitTreeIndex).toBe(iridiumSprinklerIndex + 1);
+  expect(blogIndex).toBe(fruitTreeIndex + 1);
   for (const farmMapPath of farmMapCanonicalPaths) {
     const farmMapIndex = canonicalPublicPaths.indexOf(farmMapPath);
     expect(farmMapIndex).toBeGreaterThan(previousFarmMapIndex);
     previousFarmMapIndex = farmMapIndex;
   }
   expect(sprinklerIndex).toBeGreaterThan(previousFarmMapIndex);
+  expect(canonicalPublicPaths).toContain(qualitySprinklerLayoutCanonicalPath);
+  expect(canonicalPublicPaths).toContain(iridiumSprinklerLayoutCanonicalPath);
+  expect(canonicalPublicPaths).toContain(fruitTreeLayoutCanonicalPath);
   expect(sprinklerEntries).toEqual([
     {
       locale: "en",
@@ -243,8 +259,18 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
       },
       {
         id: "quality-sprinkler-layout",
-        href: "/stardew-valley-quality-sprinkler-layout",
+        href: qualitySprinklerLayoutCanonicalPath,
         label: "Quality Sprinkler Layouts",
+      },
+      {
+        id: "iridium-sprinkler-layout",
+        href: iridiumSprinklerLayoutCanonicalPath,
+        label: "Iridium Sprinkler Layouts",
+      },
+      {
+        id: "fruit-tree-layout",
+        href: fruitTreeLayoutCanonicalPath,
+        label: "Fruit Tree Layouts",
       },
     ],
   });
@@ -262,8 +288,18 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
       },
       {
         id: "quality-sprinkler-layout",
-        href: "/zh/stardew-valley-quality-sprinkler-layout",
+        href: `/zh${qualitySprinklerLayoutCanonicalPath}`,
         label: "优质洒水器布局",
+      },
+      {
+        id: "iridium-sprinkler-layout",
+        href: `/zh${iridiumSprinklerLayoutCanonicalPath}`,
+        label: "铱金洒水器布局",
+      },
+      {
+        id: "fruit-tree-layout",
+        href: `/zh${fruitTreeLayoutCanonicalPath}`,
+        label: "果树布局",
       },
     ],
   });
