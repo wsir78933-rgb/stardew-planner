@@ -11,7 +11,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(46);
+  expect(canonicalPublicPaths).toHaveLength(47);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -91,6 +91,15 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/stardew-valley-sprinkler-layout")).toBe(
     "/zh/stardew-valley-sprinkler-layout",
   );
+  expect(
+    getLocalizedPublicPath("en", "/stardew-valley-iridium-sprinkler-layout"),
+  ).toBe("/stardew-valley-iridium-sprinkler-layout");
+  expect(
+    getLocalizedPublicPath(
+      "zh-CN",
+      "/stardew-valley-iridium-sprinkler-layout",
+    ),
+  ).toBe("/zh/stardew-valley-iridium-sprinkler-layout");
   expect(getLocalizedPublicPath("en", "/blog")).toBe("/blog");
   expect(getLocalizedPublicPath("zh-CN", "/blog")).toBe("/zh/blog");
   expect(getLocalizedPublicPath("en", "/blog/archive")).toBe("/blog/archive");
@@ -250,8 +259,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(92);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(90);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(94);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(92);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -345,6 +354,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   );
   expect(indexablePathnames).toContain("/house-upgrade-stardew");
   expect(indexablePathnames).toContain("/zh/house-upgrade-stardew");
+  expect(indexablePathnames).toContain(
+    "/stardew-valley-iridium-sprinkler-layout",
+  );
+  expect(indexablePathnames).toContain(
+    "/zh/stardew-valley-iridium-sprinkler-layout",
+  );
 });
 
 it("registers the direct-entry blog routes", () => {
