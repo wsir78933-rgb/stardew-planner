@@ -81,11 +81,11 @@ it("registers both Wilderness Farm routes as indexable with canonical metadata a
   expect(wildernessFarmCanonicalPath).toBe(
     "/stardew-valley-wilderness-farm-layout",
   );
-  expect(canonicalPublicPaths).toHaveLength(49);
+  expect(canonicalPublicPaths).toHaveLength(50);
   expect(wildernessPathIndex).toBe(hilltopPathIndex + 1);
   expect(sprinklerPathIndex).toBe(wildernessPathIndex + 1);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(98);
-  expect(indexableEntries).toHaveLength(96);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(100);
+  expect(indexableEntries).toHaveLength(98);
   expect(localizedWildernessEntries).toEqual([
     {
       locale: "en",

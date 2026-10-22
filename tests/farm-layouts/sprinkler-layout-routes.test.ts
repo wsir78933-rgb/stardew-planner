@@ -14,6 +14,7 @@ import ChineseSprinklerLayoutsPage, {
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
 } from "../../src/farm-layouts/iridium-sprinkler-layout-content";
@@ -176,6 +177,9 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
     "/stardew-valley-wilderness-farm-layout",
   );
   const sprinklerIndex = canonicalPublicPaths.indexOf(sprinklerLayoutCanonicalPath);
+  const qualitySprinklerIndex = canonicalPublicPaths.indexOf(
+    qualitySprinklerLayoutCanonicalPath,
+  );
   const iridiumSprinklerIndex = canonicalPublicPaths.indexOf(
     iridiumSprinklerLayoutCanonicalPath,
   );
@@ -193,11 +197,12 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(49);
-  expect(indexableEntries).toHaveLength(96);
+  expect(canonicalPublicPaths).toHaveLength(50);
+  expect(indexableEntries).toHaveLength(98);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   expect(sprinklerIndex).toBe(wildernessIndex + 1);
-  expect(iridiumSprinklerIndex).toBe(sprinklerIndex + 1);
+  expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
+  expect(iridiumSprinklerIndex).toBe(qualitySprinklerIndex + 1);
   expect(fruitTreeIndex).toBe(iridiumSprinklerIndex + 1);
   expect(blogIndex).toBe(fruitTreeIndex + 1);
   for (const farmMapPath of farmMapCanonicalPaths) {
@@ -206,6 +211,7 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
     previousFarmMapIndex = farmMapIndex;
   }
   expect(sprinklerIndex).toBeGreaterThan(previousFarmMapIndex);
+  expect(canonicalPublicPaths).toContain(qualitySprinklerLayoutCanonicalPath);
   expect(canonicalPublicPaths).toContain(iridiumSprinklerLayoutCanonicalPath);
   expect(canonicalPublicPaths).toContain(fruitTreeLayoutCanonicalPath);
   expect(sprinklerEntries).toEqual([
@@ -258,6 +264,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         label: "Sprinkler Layouts",
       },
       {
+        id: "quality-sprinkler-layout",
+        href: qualitySprinklerLayoutCanonicalPath,
+        label: "Quality Sprinkler Layouts",
+      },
+      {
         id: "iridium-sprinkler-layout",
         href: iridiumSprinklerLayoutCanonicalPath,
         label: "Iridium Sprinkler Layouts",
@@ -280,6 +291,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         id: "sprinkler-layout",
         href: `/zh${sprinklerLayoutCanonicalPath}`,
         label: "洒水器布局",
+      },
+      {
+        id: "quality-sprinkler-layout",
+        href: `/zh${qualitySprinklerLayoutCanonicalPath}`,
+        label: "优质洒水器布局",
       },
       {
         id: "iridium-sprinkler-layout",

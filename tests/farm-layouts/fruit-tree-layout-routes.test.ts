@@ -56,11 +56,11 @@ it("registers both localized page paths, canonical metadata, and sitemap entries
   );
   const blogIndex = canonicalPublicPaths.indexOf("/blog");
 
-  expect(canonicalPublicPaths).toHaveLength(49);
+  expect(canonicalPublicPaths).toHaveLength(50);
   expect(fruitTreeLayoutIndex).toBe(iridiumLayoutIndex + 1);
   expect(blogIndex).toBe(fruitTreeLayoutIndex + 1);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(98);
-  expect(indexableEntries).toHaveLength(96);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(100);
+  expect(indexableEntries).toHaveLength(98);
   expect(localizedFruitTreeEntries).toEqual([
     {
       locale: "en",
