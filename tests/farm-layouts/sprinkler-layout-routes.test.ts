@@ -179,10 +179,14 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(46);
-  expect(indexableEntries).toHaveLength(90);
+  expect(canonicalPublicPaths).toHaveLength(47);
+  expect(indexableEntries).toHaveLength(92);
   expect(sprinklerIndex).toBe(hilltopIndex + 1);
-  expect(blogIndex).toBe(sprinklerIndex + 1);
+  const qualitySprinklerIndex = canonicalPublicPaths.indexOf(
+    "/stardew-valley-quality-sprinkler-layout",
+  );
+  expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
+  expect(blogIndex).toBe(qualitySprinklerIndex + 1);
   for (const farmMapPath of farmMapCanonicalPaths) {
     const farmMapIndex = canonicalPublicPaths.indexOf(farmMapPath);
     expect(farmMapIndex).toBeGreaterThan(previousFarmMapIndex);
@@ -237,6 +241,11 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
         href: sprinklerLayoutCanonicalPath,
         label: "Sprinkler Layouts",
       },
+      {
+        id: "quality-sprinkler-layout",
+        href: "/stardew-valley-quality-sprinkler-layout",
+        label: "Quality Sprinkler Layouts",
+      },
     ],
   });
   expect(
@@ -250,6 +259,11 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
         id: "sprinkler-layout",
         href: `/zh${sprinklerLayoutCanonicalPath}`,
         label: "洒水器布局",
+      },
+      {
+        id: "quality-sprinkler-layout",
+        href: "/zh/stardew-valley-quality-sprinkler-layout",
+        label: "优质洒水器布局",
       },
     ],
   });

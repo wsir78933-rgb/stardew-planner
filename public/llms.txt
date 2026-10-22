@@ -24,6 +24,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley Expanded Farm Layout Ideas](https://stardewvalleyplanner.art/stardew-valley-expanded-farm-layout): Browse seven SVE farm layout projects for Immersive Farm 2 Remastered and Grandpa's Farm. Compare crop fields, wooded paths, livestock areas, ponds, and other zones, then open a matching JSON plan in the planner.
 - [Hilltop Farm Layout Ideas](https://stardewvalleyplanner.art/stardew-valley-hilltop-farm-layout): Browse seven hilltop farm layout projects: a cabin village, a river homestead, a ranch below the upper buildings, sprinkler fields among pines, linked paths, a quarry barn row, and a fall apiary. Download a JSON file and import it in the planner.
 - [Stardew Valley Sprinkler Layout](https://stardewvalleyplanner.art/stardew-valley-sprinkler-layout): A stardew valley sprinkler layout comparison of six Standard Farm studies: knight-move basic sprinklers, quality and iridium grids, two scarecrow placements, and a greenhouse reference on open ground.
+- [Stardew Valley Quality Sprinkler Layout](https://stardewvalleyplanner.art/stardew-valley-quality-sprinkler-layout): Compare six Stardew Valley quality sprinkler layout examples, from patchwork crop blocks and scarecrow placements to an outdoor nozzle study and a greenhouse reference.
 
 ### Planning guides
 
@@ -84,6 +85,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷物语扩展农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-expanded-farm-layout): 查看 7 套为 IF2R（Immersive Farm 2 Remastered）和 Grandpa's Farm 规划的 SVE 农场布局，比较田地、树林、畜牧、鱼塘与道路分区，并下载对应 JSON 项目到规划器中调整。
 - [星露谷物语山顶农场布局](https://stardewvalleyplanner.art/zh/stardew-valley-hilltop-farm-layout): 查看 7 套山顶农场规划：河边小屋村落、河畔宅院、高处到牧场、松林里的洒水器田、连成网的道路、采石场旁的畜棚，以及秋季蜂园。可下载 JSON 并导入规划器。
 - [星露谷物语洒水器布局](https://stardewvalleyplanner.art/zh/stardew-valley-sprinkler-layout): 比较六套标准农场上的星露谷物语洒水器布局：骑士步普通洒水器、优质与铱金方格、两例稻草人放置，以及温室参考示意。
+- [星露谷物语优质洒水器布局](https://stardewvalleyplanner.art/zh/stardew-valley-quality-sprinkler-layout): 比较六套星露谷物语优质洒水器布局，查看拼布式作物田、稻草人摆位、户外加压喷头案例和温室参考示意。
 
 ### 农场规划指南
 

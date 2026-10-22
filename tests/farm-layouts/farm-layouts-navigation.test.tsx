@@ -4,6 +4,7 @@ import { SiteNavigationDock } from "@/src/components/site-navigation-dock";
 import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigation";
 import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
+import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
 import { sprinklerLayoutCanonicalPath } from "@/src/farm-layouts/sprinkler-layout-content";
 import {
   activateFarmLayoutsCategory,
@@ -320,9 +321,13 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
   }
 });
 
-test("places one Sprinkler Layouts page under Planting Layouts for each display locale", () => {
+test("places both sprinkler layout pages under Planting Layouts for each display locale", () => {
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
+  expect(qualitySprinklerLayoutCanonicalPath).toBe(
+    "/stardew-valley-quality-sprinkler-layout",
+  );
   expect(isFarmLayoutsNavigationPageId("sprinkler-layout")).toBe(true);
+  expect(isFarmLayoutsNavigationPageId("quality-sprinkler-layout")).toBe(true);
 
   for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
     const model = getFarmLayoutsNavigationModel(locale);
@@ -340,11 +345,21 @@ test("places one Sprinkler Layouts page under Planting Layouts for each display 
       id: "sprinkler-layout",
       label,
     } as const;
+    const qualitySprinklerHref =
+      locale === "zh-CN"
+        ? `/zh${qualitySprinklerLayoutCanonicalPath}`
+        : qualitySprinklerLayoutCanonicalPath;
+    const qualitySprinklerPage = {
+      href: qualitySprinklerHref,
+      id: "quality-sprinkler-layout",
+      label:
+        locale === "zh-CN" ? "优质洒水器布局" : "Quality Sprinkler Layouts",
+    } as const;
 
     expect(plantingLayouts.label).toBe(
       locale === "zh-CN" ? "种植布局" : "Planting Layouts",
     );
-    expect(plantingLayouts.pages).toEqual([sprinklerPage]);
+    expect(plantingLayouts.pages).toEqual([sprinklerPage, qualitySprinklerPage]);
     expect(
       readFarmLayoutsNavigationPage(
         model,
@@ -352,6 +367,13 @@ test("places one Sprinkler Layouts page under Planting Layouts for each display 
         "sprinkler-layout",
       ),
     ).toEqual(sprinklerPage);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "planting-layouts",
+        "quality-sprinkler-layout",
+      ),
+    ).toEqual(qualitySprinklerPage);
     expect(
       readFarmLayoutsNavigationCategory(model, "farm-maps").pages.map(
         (farmMapPage) => farmMapPage.id,
@@ -370,12 +392,15 @@ test("places one Sprinkler Layouts page under Planting Layouts for each display 
   }
 });
 
-test("reaches Sprinkler Layouts from Planting Layouts with desktop and compact keys", () => {
+test("moves between both sprinkler layouts from Planting Layouts with desktop and compact keys", () => {
   const plantingFocusKey = getFarmLayoutsNavigationCategoryFocusKey(
     "planting-layouts",
   );
   const sprinklerFocusKey = getFarmLayoutsNavigationPageFocusKey(
     "sprinkler-layout",
+  );
+  const qualitySprinklerFocusKey = getFarmLayoutsNavigationPageFocusKey(
+    "quality-sprinkler-layout",
   );
   const categories = {
     focusKey: plantingFocusKey,
@@ -427,14 +452,21 @@ test("reaches Sprinkler Layouts from Planting Layouts with desktop and compact k
       key: "ArrowDown",
       locale,
     });
+    const compactNextPage = moveNavigationFocus({
+      compact: true,
+      currentFocusKey: sprinklerFocusKey,
+      interaction: compactPage,
+      key: "ArrowDown",
+      locale,
+    });
 
     expect(opened).toMatchObject({
       focusKey: sprinklerFocusKey,
       openCategoryId: "planting-layouts",
       panel: "category",
     });
-    expect(movedDown.focusKey).toBe(sprinklerFocusKey);
-    expect(movedUp.focusKey).toBe(sprinklerFocusKey);
+    expect(movedDown.focusKey).toBe(qualitySprinklerFocusKey);
+    expect(movedUp.focusKey).toBe(qualitySprinklerFocusKey);
     expect(returned).toMatchObject({
       focusKey: plantingFocusKey,
       openCategoryId: null,
@@ -447,6 +479,11 @@ test("reaches Sprinkler Layouts from Planting Layouts with desktop and compact k
     });
     expect(compactPage).toMatchObject({
       focusKey: sprinklerFocusKey,
+      openCategoryId: "planting-layouts",
+      panel: "category",
+    });
+    expect(compactNextPage).toMatchObject({
+      focusKey: qualitySprinklerFocusKey,
       openCategoryId: "planting-layouts",
       panel: "category",
     });
