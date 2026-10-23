@@ -84,11 +84,11 @@ it("registers paired static Greenhouse Layout routes with canonical metadata and
   );
 
   expect(greenhouseLayoutCanonicalPath).toBe("/stardew-greenhouse-layout");
-  expect(canonicalPublicPaths).toHaveLength(59);
+  expect(canonicalPublicPaths).toHaveLength(60);
   expect(greenhouseIndex).toBe(wildernessIndex + 1);
   expect(sprinklerIndex).toBe(greenhouseIndex + 1);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(118);
-  expect(indexableEntries).toHaveLength(116);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(120);
+  expect(indexableEntries).toHaveLength(118);
   expect(localizedGreenhouseEntries).toEqual([
     {
       locale: "en",

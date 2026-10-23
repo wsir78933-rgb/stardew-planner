@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
+import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { publicLocales } from "../../src/i18n/public-locale";
 import {
   PROCESSING_TOOL_IDS,
@@ -18,7 +19,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(59);
+  expect(canonicalPublicPaths).toHaveLength(60);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -120,6 +121,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/stardew-greenhouse-layout")).toBe(
     "/zh/stardew-greenhouse-layout",
   );
+  expect(
+    getLocalizedPublicPath("en", greenhouseSprinklerLayoutCanonicalPath),
+  ).toBe(greenhouseSprinklerLayoutCanonicalPath);
+  expect(
+    getLocalizedPublicPath("zh-CN", greenhouseSprinklerLayoutCanonicalPath),
+  ).toBe(`/zh${greenhouseSprinklerLayoutCanonicalPath}`);
   expect(getLocalizedPublicPath("en", "/stardew-valley-sprinkler-layout")).toBe(
     "/stardew-valley-sprinkler-layout",
   );
@@ -312,8 +319,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(118);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(116);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(120);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(118);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -344,6 +351,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/stardew-valley-wilderness-farm-layout");
   expect(indexablePathnames).toContain("/stardew-greenhouse-layout");
   expect(indexablePathnames).toContain("/zh/stardew-greenhouse-layout");
+  expect(indexablePathnames).toContain(greenhouseSprinklerLayoutCanonicalPath);
+  expect(indexablePathnames).toContain(`/zh${greenhouseSprinklerLayoutCanonicalPath}`);
   expect(indexablePathnames).toContain("/stardew-valley-four-corners-farm-layout");
   expect(indexablePathnames).toContain(
     "/zh/stardew-valley-four-corners-farm-layout",

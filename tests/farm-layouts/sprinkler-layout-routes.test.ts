@@ -16,6 +16,7 @@ import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layou
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
 import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
+import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
@@ -199,8 +200,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(59);
-  expect(indexableEntries).toHaveLength(116);
+  expect(canonicalPublicPaths).toHaveLength(60);
+  expect(indexableEntries).toHaveLength(118);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
   expect(greenhouseIndex).toBe(wildernessIndex + 1);
@@ -297,6 +298,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         label: "Greenhouse Tree Layouts",
       },
       {
+        id: "greenhouse-sprinkler-layout",
+        href: greenhouseSprinklerLayoutCanonicalPath,
+        label: "Greenhouse Sprinkler Layouts",
+      },
+      {
         id: "greenhouse-layout",
         href: greenhouseLayoutCanonicalPath,
         label: "Greenhouse Layouts",
@@ -343,6 +349,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         id: "greenhouse-tree-layout",
         href: `/zh${greenhouseTreeLayoutCanonicalPath}`,
         label: "温室果树布局",
+      },
+      {
+        id: "greenhouse-sprinkler-layout",
+        href: `/zh${greenhouseSprinklerLayoutCanonicalPath}`,
+        label: "温室洒水器布局",
       },
       {
         id: "greenhouse-layout",
