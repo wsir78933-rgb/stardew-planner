@@ -6,6 +6,7 @@ import { fourCornersFarmCanonicalPath } from "./four-corners-farm-content";
 import { frontierFarmCanonicalPath } from "./frontier-farm-content";
 import { hilltopFarmCanonicalPath } from "./hilltop-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "./fruit-tree-layout-content";
+import { greenhouseTreeLayoutCanonicalPath } from "./greenhouse-tree-layout-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "./iridium-sprinkler-layout-content";
 import { meadowlandsFarmCanonicalPath } from "./meadowlands-farm-content";
 import { qualitySprinklerLayoutCanonicalPath } from "./quality-sprinkler-layout-content";
@@ -42,7 +43,8 @@ export type FarmLayoutsNavigationPageId =
   | "sprinkler-layout"
   | "quality-sprinkler-layout"
   | "iridium-sprinkler-layout"
-  | "fruit-tree-layout";
+  | "fruit-tree-layout"
+  | "greenhouse-tree-layout";
 
 export type FarmLayoutsNavigationPage = Readonly<{
   href: string;
@@ -113,7 +115,8 @@ export function isFarmLayoutsNavigationPageId(
     pageId === "sprinkler-layout" ||
     pageId === "quality-sprinkler-layout" ||
     pageId === "iridium-sprinkler-layout" ||
-    pageId === "fruit-tree-layout"
+    pageId === "fruit-tree-layout" ||
+    pageId === "greenhouse-tree-layout"
   );
 }
 
@@ -288,6 +291,16 @@ function createFarmLayoutsNavigationCategories(
       label: locale === "zh-CN" ? "果树布局" : "Fruit Tree Layouts",
     },
   ];
+  const greenhouseLayoutPages: readonly FarmLayoutsNavigationPage[] = [
+    {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseTreeLayoutCanonicalPath}`
+          : greenhouseTreeLayoutCanonicalPath,
+      id: "greenhouse-tree-layout",
+      label: locale === "zh-CN" ? "温室果树布局" : "Greenhouse Tree Layouts",
+    },
+  ];
 
   return FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS.map((categoryId) => ({
     id: categoryId,
@@ -295,6 +308,7 @@ function createFarmLayoutsNavigationCategories(
     pages: pagesForFarmLayoutsNavigationCategory(
       categoryId,
       farmMapPages,
+      greenhouseLayoutPages,
       plantingLayoutPages,
     ),
   }));
@@ -303,16 +317,19 @@ function createFarmLayoutsNavigationCategories(
 function pagesForFarmLayoutsNavigationCategory(
   categoryId: FarmLayoutsNavigationCategoryId,
   farmMapPages: readonly FarmLayoutsNavigationPage[],
+  greenhouseLayoutPages: readonly FarmLayoutsNavigationPage[],
   plantingLayoutPages: readonly FarmLayoutsNavigationPage[],
 ): readonly FarmLayoutsNavigationPage[] {
   if (categoryId === "farm-maps") {
     return farmMapPages;
   }
+  if (categoryId === "greenhouse-layouts") {
+    return greenhouseLayoutPages;
+  }
   if (categoryId === "planting-layouts") {
     return plantingLayoutPages;
   }
   if (
-    categoryId === "greenhouse-layouts" ||
     categoryId === "buildings-interiors" ||
     categoryId === "layout-ideas"
   ) {

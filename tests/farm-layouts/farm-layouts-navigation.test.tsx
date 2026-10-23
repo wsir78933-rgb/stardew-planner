@@ -4,6 +4,7 @@ import { SiteNavigationDock } from "@/src/components/site-navigation-dock";
 import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigation";
 import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "@/src/farm-layouts/fruit-tree-layout-content";
+import { greenhouseTreeLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-tree-layout-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
@@ -29,7 +30,6 @@ import {
 } from "@/src/farm-layouts/farm-layouts-navigation-model";
 
 const emptyFarmLayoutsCategoryIds = [
-  "greenhouse-layouts",
   "buildings-interiors",
   "layout-ideas",
 ] as const;
@@ -460,6 +460,51 @@ test("places Quality Sprinkler, Iridium Sprinkler, and Fruit Tree pages in order
   }
 });
 
+test("places Greenhouse Tree Layouts first under Greenhouse Layouts with locale fallbacks", () => {
+  expect(greenhouseTreeLayoutCanonicalPath).toBe(
+    "/stardew-greenhouse-tree-layout",
+  );
+  expect(isFarmLayoutsNavigationPageId("greenhouse-tree-layout")).toBe(true);
+
+  for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
+    const model = getFarmLayoutsNavigationModel(locale);
+    const greenhouseLayouts = readFarmLayoutsNavigationCategory(
+      model,
+      "greenhouse-layouts",
+    );
+    const greenhousePage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseTreeLayoutCanonicalPath}`
+          : greenhouseTreeLayoutCanonicalPath,
+      id: "greenhouse-tree-layout",
+      label: locale === "zh-CN" ? "温室果树布局" : "Greenhouse Tree Layouts",
+    } as const;
+
+    expect(greenhouseLayouts.label).toBe(
+      locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
+    );
+    expect(greenhouseLayouts.pages).toEqual([greenhousePage]);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "greenhouse-layouts",
+        "greenhouse-tree-layout",
+      ),
+    ).toEqual(greenhousePage);
+    expect(
+      readFarmLayoutsNavigationCategory(model, "planting-layouts").pages.map(
+        ({ id }) => id,
+      ),
+    ).toEqual([
+      "sprinkler-layout",
+      "quality-sprinkler-layout",
+      "iridium-sprinkler-layout",
+      "fruit-tree-layout",
+    ]);
+  }
+});
+
 test("moves through all four Planting Layouts pages with desktop and compact keys", () => {
   const plantingFocusKey = getFarmLayoutsNavigationCategoryFocusKey(
     "planting-layouts",
@@ -737,10 +782,10 @@ test("uses a compact back step for empty and populated categories, then restores
   const emptyCategory = moveNavigationFocus({
     compact: true,
     currentFocusKey: getFarmLayoutsNavigationCategoryFocusKey(
-      "greenhouse-layouts",
+      "layout-ideas",
     ),
     interaction: {
-      focusKey: getFarmLayoutsNavigationCategoryFocusKey("greenhouse-layouts"),
+      focusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
       openCategoryId: null,
       panel: "categories",
       suppressPointerHover: false,
@@ -827,11 +872,11 @@ test("uses a compact back step for empty and populated categories, then restores
 
   expect(emptyCategory).toMatchObject({
     focusKey: "back",
-    openCategoryId: "greenhouse-layouts",
+    openCategoryId: "layout-ideas",
     panel: "category",
   });
   expect(returnedFromEmpty).toMatchObject({
-    focusKey: getFarmLayoutsNavigationCategoryFocusKey("greenhouse-layouts"),
+    focusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
     openCategoryId: null,
     panel: "categories",
   });
