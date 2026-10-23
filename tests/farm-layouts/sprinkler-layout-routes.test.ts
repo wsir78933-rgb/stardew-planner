@@ -15,6 +15,7 @@ import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
+import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
@@ -198,8 +199,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(51);
-  expect(indexableEntries).toHaveLength(100);
+  expect(canonicalPublicPaths).toHaveLength(52);
+  expect(indexableEntries).toHaveLength(102);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   expect(sprinklerIndex).toBe(wildernessIndex + 1);
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
@@ -293,6 +294,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         href: greenhouseTreeLayoutCanonicalPath,
         label: "Greenhouse Tree Layouts",
       },
+      {
+        id: "greenhouse-sprinkler-layout",
+        href: greenhouseSprinklerLayoutCanonicalPath,
+        label: "Greenhouse Sprinkler Layouts",
+      },
     ],
   });
   expect(
@@ -335,6 +341,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         id: "greenhouse-tree-layout",
         href: `/zh${greenhouseTreeLayoutCanonicalPath}`,
         label: "温室果树布局",
+      },
+      {
+        id: "greenhouse-sprinkler-layout",
+        href: `/zh${greenhouseSprinklerLayoutCanonicalPath}`,
+        label: "温室洒水器布局",
       },
     ],
   });

@@ -5,6 +5,7 @@ import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigatio
 import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "@/src/farm-layouts/fruit-tree-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-tree-layout-content";
+import { greenhouseSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
@@ -460,11 +461,12 @@ test("places Quality Sprinkler, Iridium Sprinkler, and Fruit Tree pages in order
   }
 });
 
-test("places Greenhouse Tree Layouts first under Greenhouse Layouts with locale fallbacks", () => {
+test("places greenhouse topics in order under Greenhouse Layouts with locale fallbacks", () => {
   expect(greenhouseTreeLayoutCanonicalPath).toBe(
     "/stardew-greenhouse-tree-layout",
   );
   expect(isFarmLayoutsNavigationPageId("greenhouse-tree-layout")).toBe(true);
+  expect(isFarmLayoutsNavigationPageId("greenhouse-sprinkler-layout")).toBe(true);
 
   for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
     const model = getFarmLayoutsNavigationModel(locale);
@@ -480,11 +482,24 @@ test("places Greenhouse Tree Layouts first under Greenhouse Layouts with locale 
       id: "greenhouse-tree-layout",
       label: locale === "zh-CN" ? "温室果树布局" : "Greenhouse Tree Layouts",
     } as const;
+    const greenhouseSprinklerPage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseSprinklerLayoutCanonicalPath}`
+          : greenhouseSprinklerLayoutCanonicalPath,
+      id: "greenhouse-sprinkler-layout",
+      label: locale === "zh-CN"
+        ? "温室洒水器布局"
+        : "Greenhouse Sprinkler Layouts",
+    } as const;
 
     expect(greenhouseLayouts.label).toBe(
       locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
     );
-    expect(greenhouseLayouts.pages).toEqual([greenhousePage]);
+    expect(greenhouseLayouts.pages).toEqual([
+      greenhousePage,
+      greenhouseSprinklerPage,
+    ]);
     expect(
       readFarmLayoutsNavigationPage(
         model,
@@ -492,6 +507,13 @@ test("places Greenhouse Tree Layouts first under Greenhouse Layouts with locale 
         "greenhouse-tree-layout",
       ),
     ).toEqual(greenhousePage);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "greenhouse-layouts",
+        "greenhouse-sprinkler-layout",
+      ),
+    ).toEqual(greenhouseSprinklerPage);
     expect(
       readFarmLayoutsNavigationCategory(model, "planting-layouts").pages.map(
         ({ id }) => id,

@@ -16,6 +16,7 @@ import {
   getGreenhouseTreeLayoutPageCopy,
   greenhouseTreeLayoutCanonicalPath,
 } from "../../src/farm-layouts/greenhouse-tree-layout-content";
+import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { createGreenhouseTreeLayoutPageStructuredData } from "../../src/farm-layouts/greenhouse-tree-layout-structured-data";
 import {
   canonicalPublicPaths,
@@ -74,15 +75,19 @@ it("registers both localized routes after existing farm layout topics and adds t
   const greenhouseTreeIndex = canonicalPublicPaths.indexOf(
     greenhouseTreeLayoutCanonicalPath,
   );
+  const greenhouseSprinklerIndex = canonicalPublicPaths.indexOf(
+    greenhouseSprinklerLayoutCanonicalPath,
+  );
 
   expect(greenhouseTreeLayoutCanonicalPath).toBe(
     "/stardew-greenhouse-tree-layout",
   );
-  expect(canonicalPublicPaths).toHaveLength(51);
-  expect(greenhouseTreeIndex).toBe(canonicalPublicPaths.length - 1);
+  expect(canonicalPublicPaths).toHaveLength(52);
+  expect(greenhouseTreeIndex).toBe(canonicalPublicPaths.length - 2);
+  expect(greenhouseSprinklerIndex).toBe(canonicalPublicPaths.length - 1);
   expect(fruitTreeIndex).toBeLessThan(greenhouseTreeIndex);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(102);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(100);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(104);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(102);
   expect(localizedEntries).toEqual([
     {
       locale: "en",
@@ -97,7 +102,7 @@ it("registers both localized routes after existing farm layout topics and adds t
   ]);
   expect(sitemapPathnames).toContain(greenhouseTreeLayoutCanonicalPath);
   expect(sitemapPathnames).toContain(`/zh${greenhouseTreeLayoutCanonicalPath}`);
-  expect(sitemapPathnames).toHaveLength(102);
+  expect(sitemapPathnames).toHaveLength(104);
   expect(englishGreenhouseTreeLayoutDynamic).toBe("force-static");
   expect(chineseGreenhouseTreeLayoutDynamic).toBe("force-static");
 });
