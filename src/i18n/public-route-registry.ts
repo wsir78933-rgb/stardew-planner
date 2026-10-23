@@ -4,6 +4,7 @@ import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { hilltopFarmCanonicalPath } from "../farm-layouts/hilltop-farm-content";
 import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
 import { sprinklerLayoutCanonicalPath } from "../farm-layouts/sprinkler-layout-content";
+import { PROCESSING_TOOL_CANONICAL_PATHS } from "../tools-pages/processing/processing-tool-definition";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
@@ -16,6 +17,7 @@ const fixedCanonicalPublicPaths = [
   "/tools",
   "/tools/crop-profit",
   "/tools/crop-growth",
+  ...PROCESSING_TOOL_CANONICAL_PATHS,
   "/stardew-valley-beach-farm-layout",
   fishFarmCanonicalPath,
   riverFarmCanonicalPath,

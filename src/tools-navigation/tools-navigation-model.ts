@@ -1,3 +1,9 @@
+import {
+  getProcessingToolDefinition,
+  isProcessingToolId,
+  type ProcessingToolId,
+} from "../tools-pages/processing/processing-tool-definition";
+
 export type ToolsNavigationLocale = "en" | "zh-CN" | "ja" | "ru";
 
 export type ToolsNavigationTool = Readonly<{
@@ -56,13 +62,41 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
     id: "processing",
     label: "加工计算",
     tools: [
-      { id: "basic-processing-profit", label: "基础加工收益", path: null },
-      { id: "machine-comparison", label: "三种机器比较", path: null },
-      { id: "keg-processing", label: "Keg 加工", path: null },
-      { id: "preserves-jar-processing", label: "罐头瓶加工", path: null },
-      { id: "dehydrator-processing", label: "烘干机加工", path: null },
-      { id: "keg-ingredient-ranking", label: "Keg 原料排行", path: null },
-      { id: "cask-aging", label: "酒窖陈酿", path: null },
+      {
+        id: "basic-processing-profit",
+        label: "基础加工收益",
+        path: getProcessingToolDefinition("basic-processing-profit").canonicalPath,
+      },
+      {
+        id: "machine-comparison",
+        label: "三种机器比较",
+        path: getProcessingToolDefinition("machine-comparison").canonicalPath,
+      },
+      {
+        id: "keg-processing",
+        label: "Keg 加工",
+        path: getProcessingToolDefinition("keg-processing").canonicalPath,
+      },
+      {
+        id: "preserves-jar-processing",
+        label: "罐头瓶加工",
+        path: getProcessingToolDefinition("preserves-jar-processing").canonicalPath,
+      },
+      {
+        id: "dehydrator-processing",
+        label: "烘干机加工",
+        path: getProcessingToolDefinition("dehydrator-processing").canonicalPath,
+      },
+      {
+        id: "keg-ingredient-ranking",
+        label: "Keg 原料排行",
+        path: getProcessingToolDefinition("keg-ingredient-ranking").canonicalPath,
+      },
+      {
+        id: "cask-aging",
+        label: "酒窖陈酿",
+        path: getProcessingToolDefinition("cask-aging").canonicalPath,
+      },
     ],
   },
   {
@@ -209,8 +243,22 @@ function readEnglishToolsNavigationToolLabel(
     return "Growth calendar";
   }
 
+  if (isProcessingToolId(tool.id)) {
+    return PROCESSING_TOOL_ENGLISH_LABELS[tool.id];
+  }
+
   return tool.label;
 }
+
+const PROCESSING_TOOL_ENGLISH_LABELS: Readonly<Record<ProcessingToolId, string>> = {
+  "basic-processing-profit": "Basic processing profit",
+  "machine-comparison": "Three-machine comparison",
+  "keg-processing": "Keg processing",
+  "preserves-jar-processing": "Preserves jar processing",
+  "dehydrator-processing": "Dehydrator processing",
+  "keg-ingredient-ranking": "Keg ingredient ranking",
+  "cask-aging": "Cask aging",
+};
 
 function readToolsNavigationToolHref(
   pathPrefix: "" | "/zh",

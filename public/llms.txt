@@ -61,6 +61,13 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley tools](https://stardewvalleyplanner.art/tools): Start from the decision in front of you.
 - [Season crop profit](https://stardewvalleyplanner.art/tools/crop-profit): Rank this season's crops by net gold after seed and fertilizer, one processing route at a time.
 - [Crop growth calendar](https://stardewvalleyplanner.art/tools/crop-growth): See the first harvest, harvest count, last safe planting day, and a 28-day calendar.
+- [Basic processing profit](https://stardewvalleyplanner.art/tools/basic-processing-profit): Use this Stardew Valley profit calculator to compare artisan goods profit across Kegs, Jars and Dehydrators against selling the same ingredients raw.
+- [Three-machine comparison](https://stardewvalleyplanner.art/tools/machine-comparison): Compare your crop stack with this Stardew Valley Keg vs Jar vs Dehydrator calculator. Check added profit, processing time, capacity and leftovers.
+- [Keg processing](https://stardewvalleyplanner.art/tools/keg-processing): Use the Stardew Valley Keg calculator to compare keg profit, processing time and keg capacity. Check finished batches and raw leftovers by your deadline.
+- [Preserves jar processing](https://stardewvalleyplanner.art/tools/preserves-jar-processing): Use the Stardew Valley preserves jar calculator to decide what to put in jars. Compare jelly and pickles profit, batch times and remaining ingredients.
+- [Dehydrator processing](https://stardewvalleyplanner.art/tools/dehydrator-processing): Use the Stardew Valley dehydrator calculator to compare batch profit for dried fruit, dried mushrooms and raisins, including capacity and five-item remainders.
+- [Keg ingredient ranking](https://stardewvalleyplanner.art/tools/keg-ingredient-ranking): Browse the Stardew Valley keg price list to choose what to put in kegs. Use the keg input calculator to check added value, batch times and your actual stock.
+- [Cellar aging](https://stardewvalleyplanner.art/tools/cask-aging): How long does wine take to age? Use the wine aging calculator to compare silver, gold and iridium targets, collection dates, added value and Cask capacity.
 
 ## 简体中文
 
@@ -121,6 +128,13 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley tools](https://stardewvalleyplanner.art/zh/tools): 从你当前要做的决定开始。
 - [季节种植收益](https://stardewvalleyplanner.art/zh/tools/crop-profit): 按净收益排列本季作物。已经扣掉种子和肥料，机器路线分开计算。
 - [生长与收获日历](https://stardewvalleyplanner.art/zh/tools/crop-growth): 查看首次成熟、收获次数、最晚安全播种日和 28 天日历。
+- [基础加工收益](https://stardewvalleyplanner.art/zh/tools/basic-processing-profit): 比较同一批作物直接出售、Keg、罐头瓶和烘干机加工后的收益。
+- [三种机器比较](https://stardewvalleyplanner.art/zh/tools/machine-comparison): 比较 Keg、罐头瓶和烘干机的加工结果、周期与未加工原料。
+- [Keg 加工](https://stardewvalleyplanner.art/zh/tools/keg-processing): 估算星露谷作物经 Keg 加工后的结果、周期和加工增值。
+- [罐头瓶加工](https://stardewvalleyplanner.art/zh/tools/preserves-jar-processing): 估算同一批作物经罐头瓶加工后的结果、周期和加工增值。
+- [烘干机加工](https://stardewvalleyplanner.art/zh/tools/dehydrator-processing): 估算星露谷作物使用烘干机后的产出、批次数量和加工增值。
+- [Keg 原料排行](https://stardewvalleyplanner.art/zh/tools/keg-ingredient-ranking): 按单件增值或机器周期增值比较适合 Keg 加工的原料。
+- [酒窖陈酿](https://stardewvalleyplanner.art/zh/tools/cask-aging): 估算成品酒的剩余陈酿时间、收取日期和本轮陈酿增值。
 
 ## Русский
 
