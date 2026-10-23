@@ -4302,10 +4302,12 @@ export function createPlacementSprite(
     placementRenderEntry.tintColor,
     isSelected,
   );
+  const isSpriteMotion = placementRenderEntry.animation?.kind === "sprite-motion";
   const placementFrameTexture = getPlacementFrameTexture(
     pixi,
     placementTexture,
     placementRenderEntry.frame,
+    isSpriteMotion,
   );
   let placementSprite: import("pixi.js").Sprite | null = null;
   let animationResources: PlacementSpriteAnimationResources | null = null;
@@ -4503,28 +4505,13 @@ function createPlacementSpriteAnimationResources(
   }
 
   if (animation.kind === "sprite-motion") {
-    const animationTextures: PixiTexture[] = [placementFrameTexture.texture];
-    const animationFrameTextures: PixiTexture[] = [];
-    let motionBaseline: PlacementSpriteMotionBaseline | null = null;
-
-    try {
-      for (const animationFrame of animation.frames.slice(1)) {
-        const animationFrameTexture = getPlacementFrameTexture(
-          pixi,
-          placementTexture,
-          animationFrame,
-        );
-        animationTextures.push(animationFrameTexture.texture);
-        if (animationFrameTexture.frameTexture !== null) {
-          animationFrameTextures.push(animationFrameTexture.frameTexture);
-        }
-      }
-    } catch (caughtError) {
-      for (const animationFrameTexture of animationFrameTextures) {
-        animationFrameTexture.destroy();
-      }
-      throw caughtError;
+    const motionFrameTexture = placementFrameTexture.frameTexture;
+    if (motionFrameTexture === null) {
+      throw new Error(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion requires an owned frame texture.`,
+      );
     }
+    let motionBaseline: PlacementSpriteMotionBaseline | null = null;
 
     return {
       animation: {
@@ -4533,20 +4520,25 @@ function createPlacementSpriteAnimationResources(
           validatePlacementSpriteMotionSample(
             placementRenderEntry.key,
             motionSample,
-            animationTextures.length,
+            animation.frames.length,
           );
           motionBaseline ??= capturePlacementSpriteMotionBaseline(placementSprite);
           let didChangeVisualState = false;
 
           const frameIndex = motionSample.frameIndex ?? 0;
-          const motionFrameTexture = animationTextures[frameIndex];
-          if (motionFrameTexture === undefined) {
+          const motionFrame = animation.frames[frameIndex];
+          if (motionFrame === undefined) {
             throw new RangeError(
-              `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion frame index ${frameIndex} has no texture out of ${animationTextures.length} frames.`,
+              `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion frame index ${frameIndex} has no frame out of ${animation.frames.length} frames.`,
             );
           }
-          if (placementSprite.texture !== motionFrameTexture) {
-            placementSprite.texture = motionFrameTexture;
+
+          if (!arePlacementFramesEqual(motionFrameTexture.frame, motionFrame)) {
+            motionFrameTexture.frame.x = motionFrame.x;
+            motionFrameTexture.frame.y = motionFrame.y;
+            motionFrameTexture.frame.width = motionFrame.width;
+            motionFrameTexture.frame.height = motionFrame.height;
+            motionFrameTexture.update();
             didChangeVisualState = true;
           }
 
@@ -4601,7 +4593,7 @@ function createPlacementSpriteAnimationResources(
           return didChangeVisualState;
         },
       },
-      animationFrameTextures,
+      animationFrameTextures: [],
     };
   }
 
@@ -5016,6 +5008,7 @@ function getPlacementFrameTexture(
   pixi: PixiModule,
   placementTexture: PixiTexture,
   placementFrame: PlacementRenderEntry["frame"],
+  dynamic = false,
 ): Readonly<{ texture: PixiTexture; frameTexture: PixiTexture | null }> {
   if (placementFrame === null) {
     return { texture: placementTexture, frameTexture: null };
@@ -5029,6 +5022,7 @@ function getPlacementFrameTexture(
       placementFrame.height,
     ),
     source: placementTexture.source,
+    dynamic,
   });
 
   return { texture: frameTexture, frameTexture };
