@@ -224,7 +224,7 @@ describe("PlannerCanvas placement animation", () => {
     ]);
   });
 
-  it("uses no timer for static entries and one shared 100ms timer for every animation", () => {
+  it("uses no timer for static entries and one shared 60Hz timer for every animation", () => {
     vi.useFakeTimers();
     let currentTimeMilliseconds = 1000;
     const performanceNowSpy = vi.spyOn(performance, "now").mockImplementation(
@@ -246,14 +246,18 @@ describe("PlannerCanvas placement animation", () => {
         secondAnimation,
       ]);
       expect(vi.getTimerCount()).toBe(1);
-      vi.advanceTimersByTime(100);
+      vi.advanceTimersByTime(17);
+      expect(firstAnimation.update).toHaveBeenCalledTimes(2);
+      expect(secondAnimation.update).toHaveBeenCalledTimes(2);
       expect(firstAnimation.update).toHaveBeenCalledWith(1000);
       expect(secondAnimation.update).toHaveBeenCalledWith(1000);
       expect(render).toHaveBeenCalledTimes(1);
 
       firstAnimation.update.mockReturnValue(false);
-      currentTimeMilliseconds = 1100;
-      vi.advanceTimersByTime(100);
+      currentTimeMilliseconds = 1017;
+      vi.advanceTimersByTime(17);
+      expect(firstAnimation.update).toHaveBeenCalledTimes(4);
+      expect(secondAnimation.update).toHaveBeenCalledTimes(4);
       expect(render).toHaveBeenCalledTimes(1);
 
       animationController.replaceAnimations([firstAnimation]);
@@ -268,6 +272,87 @@ describe("PlannerCanvas placement animation", () => {
     } finally {
       animationController.dispose();
       performanceNowSpy.mockRestore();
+      vi.useRealTimers();
+    }
+  });
+
+  it("shares scheduling per active animation and isolates canvas renders", () => {
+    vi.useFakeTimers();
+    const renderStage = vi.fn();
+    const renderOtherStage = vi.fn();
+    const animations = Array.from({ length: 4 }, () => ({
+      update: vi.fn((_currentTimeMilliseconds: number) => true),
+    }));
+    const animationControllers = animations.map(() =>
+      createPlacementAnimationController(renderStage),
+    );
+    const otherCanvasAnimation = {
+      update: vi.fn((_currentTimeMilliseconds: number) => true),
+    };
+    const otherCanvasController = createPlacementAnimationController(
+      renderOtherStage,
+    );
+
+    try {
+      animationControllers.forEach((animationController, animationIndex) => {
+        const animation = animations[animationIndex];
+        if (animation === undefined) {
+          throw new Error(
+            `Animation ${animationIndex} is unavailable in the scheduler regression test.`,
+          );
+        }
+        animationController.replaceAnimations([animation]);
+      });
+
+      expect(vi.getTimerCount()).toBe(1);
+      vi.advanceTimersByTime(17);
+      for (const animation of animations) {
+        expect(animation.update).toHaveBeenCalledOnce();
+      }
+      const initialUpdateTimes = animations.map(
+        (animation) => animation.update.mock.calls[0]?.[0],
+      );
+      expect([...new Set(initialUpdateTimes)]).toHaveLength(1);
+      expect(renderStage).toHaveBeenCalledOnce();
+
+      otherCanvasController.replaceAnimations([otherCanvasAnimation]);
+      expect(vi.getTimerCount()).toBe(1);
+      vi.advanceTimersByTime(17);
+      for (const animation of animations) {
+        expect(animation.update).toHaveBeenCalledTimes(2);
+      }
+      expect(otherCanvasAnimation.update).toHaveBeenCalledOnce();
+      expect(renderStage).toHaveBeenCalledTimes(2);
+      expect(renderOtherStage).toHaveBeenCalledOnce();
+
+      animationControllers[0]?.setEnabled(false);
+      expect(vi.getTimerCount()).toBe(1);
+      vi.advanceTimersByTime(17);
+      expect(animations[0]?.update).toHaveBeenCalledTimes(2);
+      for (const animation of animations.slice(1)) {
+        expect(animation.update).toHaveBeenCalledTimes(3);
+      }
+      expect(otherCanvasAnimation.update).toHaveBeenCalledTimes(2);
+      expect(renderStage).toHaveBeenCalledTimes(3);
+      expect(renderOtherStage).toHaveBeenCalledTimes(2);
+
+      animationControllers.forEach((animationController) =>
+        animationController.dispose(),
+      );
+      expect(vi.getTimerCount()).toBe(1);
+      vi.advanceTimersByTime(17);
+      expect(animations[1]?.update).toHaveBeenCalledTimes(3);
+      expect(otherCanvasAnimation.update).toHaveBeenCalledTimes(3);
+      expect(renderStage).toHaveBeenCalledTimes(3);
+      expect(renderOtherStage).toHaveBeenCalledTimes(3);
+
+      otherCanvasController.dispose();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      animationControllers.forEach((animationController) =>
+        animationController.dispose(),
+      );
+      otherCanvasController.dispose();
       vi.useRealTimers();
     }
   });
@@ -287,7 +372,7 @@ describe("PlannerCanvas placement animation", () => {
 
       animationController.setEnabled(true);
       expect(vi.getTimerCount()).toBe(1);
-      vi.advanceTimersByTime(100);
+      vi.advanceTimersByTime(17);
       expect(animation.update).toHaveBeenCalledOnce();
       expect(render).toHaveBeenCalledOnce();
 

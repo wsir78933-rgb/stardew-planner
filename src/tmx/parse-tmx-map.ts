@@ -4,6 +4,7 @@ import type {
   TmxObject,
   TmxObjectLayer,
   TmxProperties,
+  TmxTileAnimationFrame,
   TmxTileLayer,
   TmxTileset,
 } from "./tmx-types";
@@ -155,6 +156,11 @@ function parseInlineTileset(tilesetElement: Element): TmxTileset {
     imageHeight: parsePositiveIntegerAttribute(imageElement, "height", `image in tileset "${tilesetName}"`),
     properties: readDirectProperties(tilesetElement, tilesetContext),
     tileProperties: parseInlineTileProperties(tilesetChildElements, tilesetName),
+    tileAnimations: parseInlineTileAnimations(
+      tilesetChildElements,
+      tilesetName,
+      tileCount,
+    ),
   };
 }
 
@@ -205,6 +211,95 @@ function parseInlineTileProperties(
   }
 
   return tileProperties;
+}
+
+function parseInlineTileAnimations(
+  tilesetChildElements: readonly Element[],
+  tilesetName: string,
+  tileCount: number,
+): ReadonlyMap<number, readonly TmxTileAnimationFrame[]> {
+  const tileAnimations = new Map<number, readonly TmxTileAnimationFrame[]>();
+
+  for (const tileElement of tilesetChildElements) {
+    if (tileElement.tagName !== "tile") {
+      continue;
+    }
+
+    const tileId = parseNonNegativeIntegerAttribute(
+      tileElement,
+      "id",
+      `tile in tileset "${tilesetName}"`,
+    );
+    const animationElements = readDirectChildElements(tileElement).filter(
+      (tileChildElement) => tileChildElement.tagName === "animation",
+    );
+
+    if (animationElements.length === 0) {
+      continue;
+    }
+    if (animationElements.length > 1) {
+      throw new Error(
+        `TMX tileset ${JSON.stringify(tilesetName)} declares animation tile ID ${tileId} ${animationElements.length} times.`,
+      );
+    }
+    if (tileId >= tileCount) {
+      throw new RangeError(
+        `TMX animation tile ID ${tileId} in tileset ${JSON.stringify(tilesetName)} is outside declared tile count ${tileCount}.`,
+      );
+    }
+    if (tileAnimations.has(tileId)) {
+      throw new Error(
+        `TMX tileset ${JSON.stringify(tilesetName)} declares animation tile ID ${tileId} more than once.`,
+      );
+    }
+
+    const animationElement = animationElements[0];
+    if (animationElement === undefined) {
+      throw new Error(
+        `TMX animation tile ID ${tileId} in tileset ${JSON.stringify(tilesetName)} has no animation element.`,
+      );
+    }
+
+    const animationFrames: TmxTileAnimationFrame[] = [];
+    for (const frameElement of readDirectChildElements(animationElement)) {
+      if (frameElement.tagName !== "frame") {
+        throw new Error(
+          `TMX animation tile ID ${tileId} in tileset ${JSON.stringify(tilesetName)} has unsupported child element ${JSON.stringify(frameElement.tagName)}.`,
+        );
+      }
+
+      const frameContext = `frame in animation tile ID ${tileId} in tileset ${JSON.stringify(tilesetName)}`;
+      const frameTileId = parseNonNegativeIntegerAttribute(
+        frameElement,
+        "tileid",
+        frameContext,
+      );
+      if (frameTileId >= tileCount) {
+        throw new RangeError(
+          `TMX animation frame tile ID ${frameTileId} in tileset ${JSON.stringify(tilesetName)} animation tile ID ${tileId} is outside declared tile count ${tileCount}.`,
+        );
+      }
+
+      animationFrames.push({
+        tileId: frameTileId,
+        durationMilliseconds: parsePositiveIntegerAttribute(
+          frameElement,
+          "duration",
+          frameContext,
+        ),
+      });
+    }
+
+    if (animationFrames.length === 0) {
+      throw new Error(
+        `TMX animation tile ID ${tileId} in tileset ${JSON.stringify(tilesetName)} must contain at least one frame.`,
+      );
+    }
+
+    tileAnimations.set(tileId, animationFrames);
+  }
+
+  return tileAnimations;
 }
 
 function validateInlineTileDirectChildren(

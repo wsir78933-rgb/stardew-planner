@@ -2044,7 +2044,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   {
     Article: PineTreeStardewEnglishArticle,
     checkedLabel:
-      "The following public pages support the specific Pine identity, planting, growth, Tapper, map-limit, and use claims in this draft. The current Pine references disagree on an unfertilized growth median, so this draft preserves that conflict instead of selecting one number.",
+      "The public pages below cover Pine identity, planting, growth, Tapper, map limits, and uses. The Pine Tree, Pine Cone, and Trees pages disagree on the unfertilized growth median, so no single number should be treated as a universal Pine growth time.",
     heading: "Sources",
     name: "English pine tree article",
     sources: [
@@ -2114,7 +2114,7 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   {
     Article: PineTreeStardewChineseArticle,
     checkedLabel:
-      "下列公开页面分别支撑本文的游戏规则和工具边界；涉及具体条件时，正文已链接到对应条目。中文 Stardew Valley Wiki 负责松树、松果、普通树、采集器、树肥和松焦油的游戏规则，官方 1.6 更新说明负责城镇与海滩农场隧道的种树限制，本站中文树木页和规划器负责说明布局工具的能力边界。",
+      "下列公开页面可用来查阅松树、松果、普通树、采集器、树肥和松焦油的游戏规则与布局工具边界：中文 Stardew Valley Wiki 介绍这些游戏对象和规则，官方 1.6 更新说明列出城镇与海滩农场隧道的种树限制，本站中文树木页和规划器说明布局工具可以做什么、不能做什么。",
     heading: "来源",
     name: "Chinese pine tree article",
     sources: [
@@ -2158,30 +2158,29 @@ const articleSourceExpectations: readonly ArticleSourceExpectation[] = [
   },
   {
     Article: ProfitMarginStardewChineseArticle,
-    checkedLabel:
-      "Checked 2026-09-22 against Stardew Valley Wiki: Options and Multiplayer. This review also checked the Chinese Options and Getting Started pages listed below.",
-    heading: "Sources",
+    checkedLabel: "资料查阅于2026年9月22日。",
+    heading: "资料来源",
     name: "Chinese profit-margin article",
     sources: [
       {
         href: "https://zh.stardewvalleywiki.com/选项",
-        label: "Stardew Valley Wiki：选项",
-        note: "：中文高级游戏设置、利润率档位与新游戏入口。",
+        label: "星露谷物语维基：选项（中文）",
+        note: "：高级游戏设置、利润率档位与新游戏入口。",
       },
       {
         href: "https://stardewvalleywiki.com/Options",
-        label: "Stardew Valley Wiki：Options",
-        note: "：Profit Margin 的价格倍数、种子价格、整数截断与 1g 下限。",
+        label: "星露谷物语维基：选项（英文）",
+        note: "：利润率的价格倍数、种子价格、整数截断与 1g 下限。",
       },
       {
         href: "https://stardewvalleywiki.com/Multiplayer#Profit_margins",
-        label: "Stardew Valley Wiki：Multiplayer — Profit margins",
-        note: "：多人再平衡、受影响范围与明确不受影响类别。",
+        label: "星露谷物语维基：多人模式的利润率",
+        note: "：多人经济平衡、受影响的价格与保持不变的费用。",
       },
       {
         href: "https://stardewvalleywiki.com/Getting_Started",
-        label: "Stardew Valley Wiki：Getting Started",
-        note: "：角色创建界面的高级选项路径。",
+        label: "星露谷物语维基：新手入门",
+        note: "：角色创建界面的高级选项入口。",
       },
     ],
   },

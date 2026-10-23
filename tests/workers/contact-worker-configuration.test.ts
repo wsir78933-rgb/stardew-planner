@@ -30,6 +30,7 @@ it("publishes the static export while retaining the Contact Worker contract", ()
       directory: string;
       html_handling: string;
       not_found_handling: string;
+      run_worker_first: readonly string[];
     }>;
     d1_databases: readonly Readonly<{
       binding: string;
@@ -38,7 +39,11 @@ it("publishes the static export while retaining the Contact Worker contract", ()
       migrations_dir: string;
     }>[];
     routes: readonly Readonly<{ custom_domain: boolean; pattern: string }>[];
-    send_email: readonly Readonly<{ name: string }>[];
+    send_email: readonly Readonly<{
+      name: string;
+      allowed_sender_addresses: readonly string[];
+      destination_address: string;
+    }>[];
     vars: Readonly<Record<string, string>>;
   }>;
 
@@ -68,21 +73,39 @@ it("publishes the static export while retaining the Contact Worker contract", ()
   expect(workerConfiguration.main).toBe("workers/planner-worker.ts");
   expect(workerConfiguration.compatibility_date).toBe("2026-08-08");
   expect(workerConfiguration.compatibility_flags).toContain("nodejs_compat");
-  expect(workerConfiguration.d1_databases).toEqual([
-    {
-      binding: "DB",
-      database_name: "stardew-planner-local",
-      database_id: "00000000-0000-0000-0000-000000000000",
-      migrations_dir: "./migrations",
-    },
-  ]);
+  expect(workerConfiguration.d1_databases).toHaveLength(1);
+  const [d1DatabaseBinding] = workerConfiguration.d1_databases;
+  if (d1DatabaseBinding === undefined) {
+    throw new Error(
+      `Expected one local D1 binding, received ${JSON.stringify(workerConfiguration.d1_databases)}.`,
+    );
+  }
+  expect(d1DatabaseBinding.binding).toBe("DB");
+  expect(d1DatabaseBinding.database_name).toBe("stardew-planner");
+  expect(d1DatabaseBinding.database_id).toBe("6cf9f831-c7b6-4349-b1ff-8c6c0f1ff9a5");
+  expect(d1DatabaseBinding.migrations_dir).toBe("./migrations");
   expect(workerConfiguration.assets).toEqual({
     binding: "STATIC_ASSETS",
     directory: "./out",
     html_handling: "auto-trailing-slash",
     not_found_handling: "404-page",
+    run_worker_first: ["/api/*"],
   });
-  expect(workerConfiguration.send_email).toEqual([{ name: "CONTACT_EMAIL" }]);
+  expect(workerConfiguration.send_email).toHaveLength(1);
+  const [contactEmailBinding] = workerConfiguration.send_email;
+  if (contactEmailBinding === undefined) {
+    throw new Error(
+      `Expected one Contact Email Sending binding, received ${JSON.stringify(workerConfiguration.send_email.map(({ name }) => name))}.`,
+    );
+  }
+  expect(contactEmailBinding.name).toBe("CONTACT_EMAIL");
+  expect(contactEmailBinding.allowed_sender_addresses).toHaveLength(1);
+  expect(contactEmailBinding.allowed_sender_addresses[0]).toMatch(
+    /^[^@\s]+@stardewvalleyplanner\.art$/,
+  );
+  expect(contactEmailBinding.destination_address).toMatch(
+    /^[^@\s]+@[^@\s.]+(?:\.[^@\s.]+)+$/,
+  );
   expect(workerConfiguration.vars).toEqual({
     CONTACT_ALLOWED_ORIGIN: "https://stardewvalleyplanner.art",
     CONTACT_EXPECTED_TURNSTILE_HOSTNAME: "stardewvalleyplanner.art",

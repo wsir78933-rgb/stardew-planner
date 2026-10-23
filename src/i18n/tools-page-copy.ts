@@ -4,6 +4,7 @@ import type { FarmingProfession, ProcessingDeadline, SeedShop } from "../tools-p
 import type { CropSeason, SpeedGroOption } from "../tools-pages/planting-field-values";
 import type { ProfitRouteId } from "../tools-pages/profit-route";
 import type { HarvestCalendarMark } from "../tools-pages/crop-harvest-calendar";
+import type { ProcessingToolId } from "../tools-pages/processing/processing-tool-definition";
 
 export type ToolsPageHeroCopy = Readonly<{
   titleBefore: string;
@@ -30,7 +31,7 @@ export type ToolsPageCopy = Readonly<{
   }>;
   categories: Readonly<{
     planting: ToolsCategoryCopy;
-    processing: ToolsCategoryCopy;
+    processing: ToolsProcessingCategoryCopy;
     production: ToolsCategoryCopy;
     workshop: ToolsCategoryCopy;
   }>;
@@ -179,6 +180,13 @@ type ToolsCategoryCopy = Readonly<{
   enter: string;
 }>;
 
+type ToolsProcessingCategoryCopy = Readonly<{
+  title: string;
+  description: string;
+  tools: Readonly<Record<ProcessingToolId, string>>;
+  enter: string;
+}>;
+
 const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
   en: {
     home: {
@@ -205,12 +213,15 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       processing: {
         title: "Processing",
         description: "Compare processing profit and plan cellar aging",
-        tools: [
-          "Basic profit / three-machine comparison",
-          "Keg / preserves jar / dehydrator",
-          "Keg ingredient ranking",
-          "Cellar aging",
-        ],
+        tools: {
+          "basic-processing-profit": "Basic processing profit",
+          "machine-comparison": "Three-machine comparison",
+          "keg-processing": "Keg processing",
+          "preserves-jar-processing": "Preserves jar processing",
+          "dehydrator-processing": "Dehydrator processing",
+          "keg-ingredient-ranking": "Keg ingredient ranking",
+          "cask-aging": "Cask aging",
+        },
         enter: "Open processing tools",
       },
       production: {
@@ -453,7 +464,15 @@ const toolsPageCopyByLocale: Readonly<Record<PublicLocale, ToolsPageCopy>> = {
       processing: {
         title: "加工计算",
         description: "比较加工收益，安排酒窖陈酿",
-        tools: ["基础收益 / 三种机器比较", "Keg / 罐头瓶 / 烘干机", "Keg 原料排行", "酒窖陈酿"],
+        tools: {
+          "basic-processing-profit": "基础加工收益",
+          "machine-comparison": "三种机器比较",
+          "keg-processing": "Keg 加工",
+          "preserves-jar-processing": "罐头瓶加工",
+          "dehydrator-processing": "烘干机加工",
+          "keg-ingredient-ranking": "Keg 原料排行",
+          "cask-aging": "酒窖陈酿",
+        },
         enter: "进入加工计算",
       },
       production: {

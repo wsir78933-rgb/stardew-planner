@@ -4,11 +4,13 @@ import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { hilltopFarmCanonicalPath } from "../farm-layouts/hilltop-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "../farm-layouts/fruit-tree-layout-content";
 import { greenhouseLayoutCanonicalPath } from "../farm-layouts/greenhouse-layout-content";
+import { greenhouseTreeLayoutCanonicalPath } from "../farm-layouts/greenhouse-tree-layout-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "../farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../farm-layouts/quality-sprinkler-layout-content";
 import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
 import { sprinklerLayoutCanonicalPath } from "../farm-layouts/sprinkler-layout-content";
 import { wildernessFarmCanonicalPath } from "../farm-layouts/wilderness-farm-content";
+import { PROCESSING_TOOL_CANONICAL_PATHS } from "../tools-pages/processing/processing-tool-definition";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
@@ -21,6 +23,7 @@ const fixedCanonicalPublicPaths = [
   "/tools",
   "/tools/crop-profit",
   "/tools/crop-growth",
+  ...PROCESSING_TOOL_CANONICAL_PATHS,
   "/stardew-valley-beach-farm-layout",
   fishFarmCanonicalPath,
   riverFarmCanonicalPath,
@@ -45,7 +48,8 @@ type BlogCanonicalPublicPath =
 
 export type PublicCanonicalPath =
   | (typeof fixedCanonicalPublicPaths)[number]
-  | BlogCanonicalPublicPath;
+  | BlogCanonicalPublicPath
+  | typeof greenhouseTreeLayoutCanonicalPath;
 
 const blogCanonicalPublicPaths: readonly BlogCanonicalPublicPath[] = [
   "/blog",
@@ -56,6 +60,7 @@ const blogCanonicalPublicPaths: readonly BlogCanonicalPublicPath[] = [
 export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
   ...fixedCanonicalPublicPaths,
   ...blogCanonicalPublicPaths,
+  greenhouseTreeLayoutCanonicalPath,
 ];
 
 const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>([

@@ -61,10 +61,12 @@ function readToolsNavigationTriggerMarkup(markup: string): string {
   return triggerMarkup;
 }
 
-function readPlantingFlyoutMarkup(markup: string): string {
-  const panelStart = markup.indexOf('data-tools-tool-panel="planting"');
+function readToolsCategoryFlyoutMarkup(markup: string, categoryId: string): string {
+  const panelStart = markup.indexOf(`data-tools-tool-panel="${categoryId}"`);
   if (panelStart === -1) {
-    throw new Error(`Planting tool panel was not found. Received: ${markup}`);
+    throw new Error(
+      `Tools panel ${JSON.stringify(categoryId)} was not found. Received: ${markup}`,
+    );
   }
 
   const nextPanelStart = markup.indexOf(
@@ -80,7 +82,8 @@ function readPlantingFlyoutMarkup(markup: string): string {
 
 test("renders Stardew Valley tools and the desktop planting flyout for en", () => {
   const markup = renderHomepageDock("en");
-  const plantingFlyoutMarkup = readPlantingFlyoutMarkup(markup);
+  const plantingFlyoutMarkup = readToolsCategoryFlyoutMarkup(markup, "planting");
+  const processingFlyoutMarkup = readToolsCategoryFlyoutMarkup(markup, "processing");
   const blogIndex = markup.indexOf("<span>Blog</span>");
   const toolsIndex = markup.indexOf("<span>Stardew Valley tools</span>");
   const languageIndex = markup.indexOf("<span>Language</span>");
@@ -101,7 +104,19 @@ test("renders Stardew Valley tools and the desktop planting flyout for en", () =
   expect(plantingFlyoutMarkup).not.toContain('href="/tools/crop-profit?tool=growth"');
   expect(plantingFlyoutMarkup.match(/<a\b/g)?.length).toBe(2);
   expect(markup).toContain('aria-disabled="true"');
-  expect(markup).not.toContain(">基础加工收益</a>");
+  for (const [toolPath, toolLabel] of [
+    ["basic-processing-profit", "Basic processing profit"],
+    ["machine-comparison", "Three-machine comparison"],
+    ["keg-processing", "Keg processing"],
+    ["preserves-jar-processing", "Preserves jar processing"],
+    ["dehydrator-processing", "Dehydrator processing"],
+    ["keg-ingredient-ranking", "Keg ingredient ranking"],
+    ["cask-aging", "Cask aging"],
+  ] as const) {
+    expect(processingFlyoutMarkup).toContain(`href="/tools/${toolPath}"`);
+    expect(processingFlyoutMarkup).toContain(`>${toolLabel}</a>`);
+  }
+  expect(processingFlyoutMarkup.match(/<a\b/g)?.length).toBe(7);
   expect(markup).not.toContain("本机保存");
   expect(blogIndex).toBeGreaterThan(-1);
   expect(blogIndex).toBeLessThan(toolsIndex);
@@ -112,36 +127,50 @@ test("renders Stardew Valley tools and the desktop planting flyout for en", () =
 test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => {
   const japaneseMarkup = renderHomepageDock("ja");
   const chineseMarkup = renderHomepageDock("zh-CN");
+  const japaneseProcessingFlyoutMarkup = readToolsCategoryFlyoutMarkup(
+    japaneseMarkup,
+    "processing",
+  );
+  const chineseProcessingFlyoutMarkup = readToolsCategoryFlyoutMarkup(
+    chineseMarkup,
+    "processing",
+  );
 
   expect(japaneseMarkup).toContain("<span>Stardew Valley tools</span>");
   expect(readToolsNavigationTriggerMarkup(japaneseMarkup)).toContain('href="/tools"');
   expect(japaneseMarkup).not.toContain('href="/ja/tools"');
-  expect(readPlantingFlyoutMarkup(japaneseMarkup)).toContain('href="/tools/crop-profit"');
-  expect(readPlantingFlyoutMarkup(japaneseMarkup)).toContain(
+  expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).toContain('href="/tools/crop-profit"');
+  expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).toContain(
     'href="/tools/crop-growth"',
   );
-  expect(readPlantingFlyoutMarkup(japaneseMarkup)).toMatch(/<a\b[^>]*>\s*Season profit\s*<\/a>/);
-  expect(readPlantingFlyoutMarkup(japaneseMarkup)).toMatch(
+  expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).toMatch(/<a\b[^>]*>\s*Season profit\s*<\/a>/);
+  expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).toMatch(
     /<a\b[^>]*>\s*Growth calendar\s*<\/a>/,
   );
-  expect(readPlantingFlyoutMarkup(japaneseMarkup)).not.toContain('href="/tools/crop-profit?tool=growth"');
+  expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).not.toContain('href="/tools/crop-profit?tool=growth"');
+  expect(japaneseProcessingFlyoutMarkup).toContain('href="/tools/cask-aging"');
+  expect(japaneseProcessingFlyoutMarkup).toContain("Cask aging");
   expect(readToolsNavigationTriggerMarkup(chineseMarkup)).toContain('href="/zh/tools"');
-  expect(readPlantingFlyoutMarkup(chineseMarkup)).toContain(
+  expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).toContain(
     'href="/zh/tools/crop-profit"',
   );
-  expect(readPlantingFlyoutMarkup(chineseMarkup)).toContain(
+  expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).toContain(
     'href="/zh/tools/crop-growth"',
   );
-  expect(readPlantingFlyoutMarkup(chineseMarkup)).toMatch(/<a\b[^>]*>\s*季节作物收益\s*<\/a>/);
-  expect(readPlantingFlyoutMarkup(chineseMarkup)).toMatch(/<a\b[^>]*>\s*生长与收获日历\s*<\/a>/);
-  expect(readPlantingFlyoutMarkup(chineseMarkup)).not.toContain('href="/zh/tools/crop-profit?tool=growth"');
-  expect(readPlantingFlyoutMarkup(chineseMarkup).match(/<a\b/g)?.length).toBe(2);
+  expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).toMatch(/<a\b[^>]*>\s*季节作物收益\s*<\/a>/);
+  expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).toMatch(/<a\b[^>]*>\s*生长与收获日历\s*<\/a>/);
+  expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).not.toContain('href="/zh/tools/crop-profit?tool=growth"');
+  expect(chineseProcessingFlyoutMarkup).toContain('href="/zh/tools/basic-processing-profit"');
+  expect(chineseProcessingFlyoutMarkup).toContain("基础加工收益");
+  expect(chineseProcessingFlyoutMarkup).toContain('href="/zh/tools/cask-aging"');
+  expect(chineseProcessingFlyoutMarkup).toContain("酒窖陈酿");
 });
 
 test("uses English labels and unprefixed tool paths for Russian", () => {
   const russianModel = getToolsNavigationModel("ru");
   const russianMarkup = renderHomepageDock("ru");
-  const russianPlantingFlyoutMarkup = readPlantingFlyoutMarkup(russianMarkup);
+  const russianPlantingFlyoutMarkup = readToolsCategoryFlyoutMarkup(russianMarkup, "planting");
+  const russianProcessingFlyoutMarkup = readToolsCategoryFlyoutMarkup(russianMarkup, "processing");
 
   expect(russianModel.locale).toBe("ru");
   expect(russianModel.allToolsHref).toBe("/tools");
@@ -156,6 +185,11 @@ test("uses English labels and unprefixed tool paths for Russian", () => {
     id: "crop-growth",
     label: "Growth calendar",
   });
+  expect(readToolsNavigationTool(russianModel, "machine-comparison")).toEqual({
+    href: "/tools/machine-comparison",
+    id: "machine-comparison",
+    label: "Three-machine comparison",
+  });
   expect(russianMarkup).toContain("<span>Stardew Valley tools</span>");
   expect(readToolsNavigationTriggerMarkup(russianMarkup)).toContain(
     'href="/tools"',
@@ -167,6 +201,8 @@ test("uses English labels and unprefixed tool paths for Russian", () => {
   );
   expect(russianPlantingFlyoutMarkup).toContain("Season profit");
   expect(russianPlantingFlyoutMarkup).toContain("Growth calendar");
+  expect(russianProcessingFlyoutMarkup).toContain('href="/tools/keg-ingredient-ranking"');
+  expect(russianProcessingFlyoutMarkup).toContain("Keg ingredient ranking");
 });
 
 test("shows an optional dock trailing slot only when a page passes one", () => {
@@ -247,6 +283,16 @@ test("opens planting from the desktop hover path and rejects unknown ids", () =>
   expect(mobileTools.showsMobileToolList).toBe(true);
   expect(
     readToolsNavigationCategory(model, "processing").tools.every(
+      (tool) => tool.href !== null,
+    ),
+  ).toBe(true);
+  expect(
+    readToolsNavigationCategory(model, "production").tools.every(
+      (tool) => tool.href === null,
+    ),
+  ).toBe(true);
+  expect(
+    readToolsNavigationCategory(model, "workshop").tools.every(
       (tool) => tool.href === null,
     ),
   ).toBe(true);

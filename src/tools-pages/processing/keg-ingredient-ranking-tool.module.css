@@ -1,0 +1,371 @@
+.kegRanking {
+  color: #1c211b;
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.heading {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.heading h2,
+.panel h3 {
+  margin: 0;
+}
+
+.heading h2 {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  line-height: 1.2;
+}
+
+.panel h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.heading p,
+.note,
+.status {
+  color: #52604e;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.controls,
+.inventoryFields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.field label {
+  font-weight: 700;
+}
+
+.optionalConditions {
+  border-top: 1px solid rgb(36 42 34 / 18%);
+  min-width: 0;
+  padding-top: 0.75rem;
+}
+
+.optionalConditions summary {
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1.5;
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+}
+
+.optionalConditions summary:focus-visible,
+.checkboxField input:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.optionalConditionFields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.checkboxField {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  min-width: 0;
+}
+
+.checkboxField input {
+  flex: 0 0 auto;
+  height: 1.15rem;
+  width: 1.15rem;
+}
+
+.field [role="combobox"] {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  font: inherit;
+  max-width: 100%;
+  min-height: 2.75rem;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+}
+
+.field [role="combobox"] {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.field [role="combobox"]:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.field input,
+.field textarea {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  font: inherit;
+  min-height: 2.75rem;
+  min-width: 0;
+  padding: 0.55rem 0.7rem;
+  width: 100%;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible,
+.rowButton:focus-visible,
+.action:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 72%);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.toolbar,
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.tableWrap {
+  max-height: 24rem;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.rankingTable {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.rankingTable th,
+.rankingTable td {
+  border-bottom: 1px solid rgb(36 42 34 / 24%);
+  overflow-wrap: anywhere;
+  padding: 0.5rem 0.4rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.rankingTable th {
+  background: #ffffff;
+  font-size: 0.9rem;
+}
+
+.rankingTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.rankingTable th:first-child {
+  width: 31%;
+}
+
+.selectedRow {
+  background: #f1f7e7;
+}
+
+.rowButton,
+.action {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #1c211b;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 700;
+  justify-content: flex-start;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0.25rem 0.35rem;
+  text-align: left;
+}
+
+.rowButton[aria-pressed="true"] {
+  color: #3f6414;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.mobileRankingList {
+  display: none;
+  gap: 0.5rem;
+  list-style: none;
+  max-height: 32rem;
+  margin: 0;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.mobileRankingList li {
+  min-width: 0;
+}
+
+.mobileRankingList .rowButton {
+  align-items: flex-start;
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.3rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+}
+
+.rowTitle {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.rowMetrics {
+  color: #52604e;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.inventoryResult {
+  background: #f1f7e7;
+  border: 1px solid rgb(36 42 34 / 35%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+  margin: 0;
+  padding: 0.75rem;
+}
+
+.inventoryResult div {
+  min-width: 0;
+}
+
+.inventoryResult dt {
+  color: #52604e;
+  font-size: 0.9rem;
+}
+
+.inventoryResult dd {
+  font-weight: 700;
+  margin: 0.15rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  background: #3f6414;
+  border: 1px solid #3f6414;
+  border-radius: 0.45rem;
+  color: #ffffff;
+  justify-content: center;
+  padding: 0.55rem 0.8rem;
+  text-decoration: none;
+}
+
+.action:disabled {
+  background: #e8ebe5;
+  border-color: #7d8778;
+  color: #465143;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #b13a28;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.visuallyHidden {
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@media (max-width: 700px) {
+  .controls,
+  .inventoryFields,
+  .inventoryResult,
+  .optionalConditionFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tableWrap {
+    display: none;
+  }
+
+  .mobileRankingList {
+    display: grid;
+  }
+
+  .toolbar,
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actions {
+    background: #fdfff8;
+    border-top: 1px solid rgb(36 42 34 / 24%);
+    bottom: 0;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0.25rem;
+    padding: 0.65rem 0 max(0.65rem, env(safe-area-inset-bottom));
+    position: sticky;
+    z-index: 5;
+  }
+
+  .action {
+    box-sizing: border-box;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: center;
+    width: 100%;
+  }
+}

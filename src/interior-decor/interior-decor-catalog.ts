@@ -29,7 +29,11 @@ const supportedInteriorDecorMapIds = new Set([
   "farmhouse-2",
   "shed",
   "big-shed",
+  "slime-hutch",
   "island-farmhouse",
+  "sve-winery",
+  "sve-grandpas-shed-1",
+  "sve-grandpas-shed-2",
 ]);
 
 export const interiorWallpaperPatterns = [

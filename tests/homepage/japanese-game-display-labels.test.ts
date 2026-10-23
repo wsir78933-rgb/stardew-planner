@@ -73,7 +73,7 @@ describe("Japanese catalog display labels", () => {
   });
 
   it("covers every visible catalog display name and leaves English and Chinese unchanged", () => {
-    expect(visibleCatalogDisplayNames).toHaveLength(1121);
+    expect(visibleCatalogDisplayNames).toHaveLength(1124);
     expect(visibleCatalogDisplayNames).toEqual([...visibleCatalogDisplayNames].sort());
     expect(readLocalizedCatalogItemLabel("ru", "Parsnip")).toBe("Parsnip");
     expect(readSelectionEntityDisplayName("ru", "Parsnip")).toBe("Parsnip");

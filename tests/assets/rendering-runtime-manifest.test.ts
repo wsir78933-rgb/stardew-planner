@@ -9,9 +9,9 @@ import {
 
 describe("rendering runtime asset manifest", () => {
   it("provides the complete locked rendering output path set without source URLs", () => {
-    expect(renderingRuntimeAssetEntries).toHaveLength(231);
-    expect(renderingRuntimeAssetOutputPaths).toHaveLength(231);
-    expect(new Set(renderingRuntimeAssetOutputPaths)).toHaveLength(231);
+    expect(renderingRuntimeAssetEntries).toHaveLength(278);
+    expect(renderingRuntimeAssetOutputPaths).toHaveLength(278);
+    expect(new Set(renderingRuntimeAssetOutputPaths)).toHaveLength(278);
     expect(renderingRuntimeAssetOutputPaths).toEqual(
       renderingSourceAssets.map((sourceAsset) => sourceAsset.outputPath),
     );

@@ -4,8 +4,14 @@ import { getToolsPageCopy } from "../../src/i18n/tools-page-copy";
 import { CropProfitTool, seasonProfitRankingHasRows } from "../../src/tools-pages/crop-profit-tool";
 import { CropGrowthTool } from "../../src/tools-pages/crop-growth-tool";
 import { CropSelect } from "../../src/tools-pages/crop-select";
+import { createCropGrowthToolHref, createCropProfitHref } from "../../src/tools-pages/planting-tool-href";
 import { loadPurchasableFieldCrops } from "../../src/tools-pages/purchasable-field-crops";
+import { PlantingToolFrame } from "../../src/tools-pages/planting-tool-frame";
 import { ToolsHomePage } from "../../src/tools-pages/tools-home-page";
+import {
+  getProcessingToolDefinition,
+  PROCESSING_TOOL_IDS,
+} from "../../src/tools-pages/processing/processing-tool-definition";
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -31,7 +37,22 @@ function assertLabelledCombobox(markup: string, inputId: string, label: string):
   expect(markup).toMatch(triggerPattern);
 }
 
-it("links the Chinese tools homepage planting card to both planting tools", () => {
+function assertLinkWithHrefAndText(
+  markup: string,
+  href: string,
+  label: string,
+  isCurrentPage = false,
+): void {
+  const currentPagePattern = isCurrentPage ? '(?=[^>]*aria-current="page")' : "";
+  const linkPattern = new RegExp(
+    `<a\\b(?=[^>]*href="${escapeRegExp(href)}")${currentPagePattern}[^>]*>\\s*${escapeRegExp(label)}\\s*</a>`,
+  );
+
+  expect(markup).toMatch(linkPattern);
+}
+
+it("links the Chinese tools homepage to both planting tools and all processing tools", () => {
+  const copy = getToolsPageCopy("zh-CN");
   const markup = renderToStaticMarkup(<ToolsHomePage locale="zh-CN" />);
 
   expect(markup).toContain('href="/zh/tools/crop-profit"');
@@ -39,9 +60,64 @@ it("links the Chinese tools homepage planting card to both planting tools", () =
   expect(markup).toMatch(/<a\b[^>]*>\s*季节作物收益\s*<\/a>/);
   expect(markup).toMatch(/<a\b[^>]*>\s*生长与收获日历\s*<\/a>/);
   expect(markup).toContain("进入种植规划");
+  expect(markup).toContain("进入加工计算");
+  for (const toolId of PROCESSING_TOOL_IDS) {
+    const canonicalPath = getProcessingToolDefinition(toolId).canonicalPath;
+    expect(markup).toContain(`href="/zh${canonicalPath}"`);
+    expect(markup).toContain(copy.categories.processing.tools[toolId]);
+  }
   expect(markup).not.toContain('href="/zh/tools/crop-profit?tool=growth"');
   expect(markup).not.toContain('href="/zh/tools/processing"');
 });
+
+it.each(["en", "zh-CN"] as const)(
+  "keeps both planting tabs and the calculator action without a tools sidebar in %s",
+  (locale) => {
+    const copy = getToolsPageCopy(locale);
+    const tabs = [
+      {
+        id: "crop-profit",
+        href: createCropProfitHref(locale),
+        label: copy.frame.profitTab,
+        actionLabel: copy.profit.hero.actionLabel,
+      },
+      {
+        id: "crop-growth",
+        href: createCropGrowthToolHref(locale),
+        label: copy.frame.growthTab,
+        actionLabel: copy.growth.hero.actionLabel,
+      },
+    ] as const;
+
+    for (const currentTab of tabs) {
+      const markup = renderToStaticMarkup(
+        <PlantingToolFrame
+          currentTool={currentTab.id}
+          locale={locale}
+          saveStatus="empty"
+          title={currentTab.label}
+        >
+          <div>Planting calculator workspace</div>
+        </PlantingToolFrame>,
+      );
+      const calculatorId = `${currentTab.id}-calculator`;
+
+      expect(markup).not.toMatch(
+        new RegExp(`<nav\\b(?=[^>]*aria-label="${escapeRegExp(copy.frame.allTools)}")`),
+      );
+      for (const tab of tabs) {
+        assertLinkWithHrefAndText(
+          markup,
+          tab.href,
+          tab.label,
+          tab.id === currentTab.id,
+        );
+      }
+      assertLinkWithHrefAndText(markup, `#${calculatorId}`, currentTab.actionLabel);
+      expect(markup).toContain(`id="${calculatorId}"`);
+    }
+  },
+);
 
 it("renders the Chinese season-profit form labels", () => {
   const copy = getToolsPageCopy("zh-CN");

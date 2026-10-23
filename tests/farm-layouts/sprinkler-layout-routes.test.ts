@@ -15,6 +15,7 @@ import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
 import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
+import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
@@ -198,8 +199,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(51);
-  expect(indexableEntries).toHaveLength(100);
+  expect(canonicalPublicPaths).toHaveLength(59);
+  expect(indexableEntries).toHaveLength(116);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
   expect(greenhouseIndex).toBe(wildernessIndex + 1);
@@ -284,6 +285,25 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
     ],
   });
   expect(
+    englishNavigation.categories.find(
+      (category) => category.id === "greenhouse-layouts",
+    ),
+  ).toMatchObject({
+    label: "Greenhouse Layouts",
+    pages: [
+      {
+        id: "greenhouse-tree-layout",
+        href: greenhouseTreeLayoutCanonicalPath,
+        label: "Greenhouse Tree Layouts",
+      },
+      {
+        id: "greenhouse-layout",
+        href: greenhouseLayoutCanonicalPath,
+        label: "Greenhouse Layouts",
+      },
+    ],
+  });
+  expect(
     chineseNavigation.categories.find(
       (category) => category.id === "planting-layouts",
     ),
@@ -313,25 +333,24 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
     ],
   });
   expect(
-    englishNavigation.categories.find((category) => category.id === "greenhouse-layouts")
-      ?.pages,
-  ).toEqual([
-    {
-      id: "greenhouse-layout",
-      href: greenhouseLayoutCanonicalPath,
-      label: "Greenhouse Layouts",
-    },
-  ]);
-  expect(
-    chineseNavigation.categories.find((category) => category.id === "greenhouse-layouts")
-      ?.pages,
-  ).toEqual([
-    {
-      id: "greenhouse-layout",
-      href: `/zh${greenhouseLayoutCanonicalPath}`,
-      label: "温室布局",
-    },
-  ]);
+    chineseNavigation.categories.find(
+      (category) => category.id === "greenhouse-layouts",
+    ),
+  ).toMatchObject({
+    label: "温室布局",
+    pages: [
+      {
+        id: "greenhouse-tree-layout",
+        href: `/zh${greenhouseTreeLayoutCanonicalPath}`,
+        label: "温室果树布局",
+      },
+      {
+        id: "greenhouse-layout",
+        href: `/zh${greenhouseLayoutCanonicalPath}`,
+        label: "温室布局",
+      },
+    ],
+  });
   for (const emptyCategoryId of [
     "buildings-interiors",
     "layout-ideas",

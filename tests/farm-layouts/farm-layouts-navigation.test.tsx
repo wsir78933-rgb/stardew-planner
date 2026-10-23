@@ -4,6 +4,8 @@ import { SiteNavigationDock } from "@/src/components/site-navigation-dock";
 import { FarmLayoutsNavigation } from "@/src/farm-layouts/farm-layouts-navigation";
 import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "@/src/farm-layouts/fruit-tree-layout-content";
+import { greenhouseLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-layout-content";
+import { greenhouseTreeLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-tree-layout-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
@@ -328,15 +330,26 @@ test("provides all ten Farm Maps pages in order with localized hrefs", () => {
       model,
       "greenhouse-layouts",
     );
+    const expectedGreenhouseTreeLayout = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseTreeLayoutCanonicalPath}`
+          : greenhouseTreeLayoutCanonicalPath,
+      id: "greenhouse-tree-layout",
+      label: locale === "zh-CN" ? "温室果树布局" : "Greenhouse Tree Layouts",
+    } as const;
     const expectedGreenhouseLayout = {
       href:
         locale === "zh-CN"
-          ? "/zh/stardew-greenhouse-layout"
-          : "/stardew-greenhouse-layout",
+          ? `/zh${greenhouseLayoutCanonicalPath}`
+          : greenhouseLayoutCanonicalPath,
       id: "greenhouse-layout",
       label: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
     } as const;
-    expect(greenhouseLayouts.pages).toEqual([expectedGreenhouseLayout]);
+    expect(greenhouseLayouts.pages).toEqual([
+      expectedGreenhouseTreeLayout,
+      expectedGreenhouseLayout,
+    ]);
     expect(isFarmLayoutsNavigationPageId("greenhouse-layout")).toBe(true);
     expect(
       readFarmLayoutsNavigationPage(
@@ -477,6 +490,70 @@ test("places Quality Sprinkler, Iridium Sprinkler, and Fruit Tree pages in order
       "expanded-farm",
       "hilltop-farm",
       "wilderness-farm",
+    ]);
+  }
+});
+
+test("places Greenhouse Tree Layouts first under Greenhouse Layouts with locale fallbacks", () => {
+  expect(greenhouseTreeLayoutCanonicalPath).toBe(
+    "/stardew-greenhouse-tree-layout",
+  );
+  expect(isFarmLayoutsNavigationPageId("greenhouse-tree-layout")).toBe(true);
+
+  for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
+    const model = getFarmLayoutsNavigationModel(locale);
+    const greenhouseLayouts = readFarmLayoutsNavigationCategory(
+      model,
+      "greenhouse-layouts",
+    );
+    const greenhousePage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseTreeLayoutCanonicalPath}`
+          : greenhouseTreeLayoutCanonicalPath,
+      id: "greenhouse-tree-layout",
+      label: locale === "zh-CN" ? "温室果树布局" : "Greenhouse Tree Layouts",
+    } as const;
+
+    expect(greenhouseLayouts.label).toBe(
+      locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
+    );
+    const greenhouseLayoutPage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseLayoutCanonicalPath}`
+          : greenhouseLayoutCanonicalPath,
+      id: "greenhouse-layout",
+      label: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
+    } as const;
+
+    expect(greenhouseLayouts.pages).toEqual([
+      greenhousePage,
+      greenhouseLayoutPage,
+    ]);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "greenhouse-layouts",
+        "greenhouse-tree-layout",
+      ),
+    ).toEqual(greenhousePage);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "greenhouse-layouts",
+        "greenhouse-layout",
+      ),
+    ).toEqual(greenhouseLayoutPage);
+    expect(
+      readFarmLayoutsNavigationCategory(model, "planting-layouts").pages.map(
+        ({ id }) => id,
+      ),
+    ).toEqual([
+      "sprinkler-layout",
+      "quality-sprinkler-layout",
+      "iridium-sprinkler-layout",
+      "fruit-tree-layout",
     ]);
   }
 });
@@ -757,11 +834,9 @@ test("opens an empty desktop category without page focus and returns to that cat
 test("uses a compact back step for empty and populated categories, then restores trigger focus on Escape", () => {
   const emptyCategory = moveNavigationFocus({
     compact: true,
-    currentFocusKey: getFarmLayoutsNavigationCategoryFocusKey(
-      "buildings-interiors",
-    ),
+    currentFocusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
     interaction: {
-      focusKey: getFarmLayoutsNavigationCategoryFocusKey("buildings-interiors"),
+      focusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
       openCategoryId: null,
       panel: "categories",
       suppressPointerHover: false,
@@ -779,11 +854,17 @@ test("uses a compact back step for empty and populated categories, then restores
     "greenhouse-layouts",
     true,
   );
-  const greenhousePage = moveNavigationFocus({
+  const greenhouseTreePage = moveNavigationFocus({
     compact: true,
     currentFocusKey: "back",
     interaction: greenhouseCategory,
     key: "ArrowRight",
+  });
+  const greenhousePage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("greenhouse-tree-layout"),
+    interaction: greenhouseTreePage,
+    key: "ArrowDown",
   });
   const returnedFromGreenhouse = moveNavigationFocus({
     compact: true,
@@ -865,13 +946,18 @@ test("uses a compact back step for empty and populated categories, then restores
 
   expect(emptyCategory).toMatchObject({
     focusKey: "back",
-    openCategoryId: "buildings-interiors",
+    openCategoryId: "layout-ideas",
     panel: "category",
   });
   expect(returnedFromEmpty).toMatchObject({
-    focusKey: getFarmLayoutsNavigationCategoryFocusKey("buildings-interiors"),
+    focusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
     openCategoryId: null,
     panel: "categories",
+  });
+  expect(greenhouseTreePage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("greenhouse-tree-layout"),
+    openCategoryId: "greenhouse-layouts",
+    panel: "category",
   });
   expect(greenhousePage).toMatchObject({
     focusKey: getFarmLayoutsNavigationPageFocusKey("greenhouse-layout"),

@@ -7,6 +7,10 @@ import {
   type PlacementSnapshot,
 } from "../placement/placement-snapshot";
 import {
+  restorePlacementAnimationOptions,
+  type PlacementAnimationOptions,
+} from "../animations/placement-animation-options";
+import {
   assertPlacementBedType,
   type PlacementBedType,
 } from "../placement/bed-placement-semantics";
@@ -815,6 +819,13 @@ function mergeReferenceBuildingEnvelope(
     originalBuilding?.waterColor,
     editedBuilding.waterColor,
   );
+  if (editedBuilding.animationOptions === undefined) {
+    delete mergedBuildingEnvelope.animationOptions;
+  } else {
+    mergedBuildingEnvelope.animationOptions = serializePlacementAnimationOptions(
+      editedBuilding.animationOptions,
+    );
+  }
 
   return mergedBuildingEnvelope;
 }
@@ -1169,8 +1180,76 @@ function mergeReferenceItemEnvelope(
   } else {
     mergedItemEnvelope.growthStage = editedItem.growthStage;
   }
+  if (editedItem.animationOptions === undefined) {
+    delete mergedItemEnvelope.animationOptions;
+  } else {
+    mergedItemEnvelope.animationOptions = serializePlacementAnimationOptions(
+      editedItem.animationOptions,
+    );
+  }
 
   return mergedItemEnvelope;
+}
+
+function serializePlacementAnimationOptions(
+  animationOptions: PlacementAnimationOptions,
+): ReferenceJsonValue {
+  return {
+    ...(animationOptions.spriteState === undefined
+      ? {}
+      : { spriteState: animationOptions.spriteState }),
+    ...(animationOptions.readyProduct === undefined
+      ? {}
+      : { readyProduct: animationOptions.readyProduct }),
+    ...(animationOptions.fireplaceLit === undefined
+      ? {}
+      : { fireplaceLit: animationOptions.fireplaceLit }),
+    ...(animationOptions.clockOff === undefined
+      ? {}
+      : { clockOff: animationOptions.clockOff }),
+    ...(animationOptions.millLoaded === undefined
+      ? {}
+      : { millLoaded: animationOptions.millLoaded }),
+    ...(animationOptions.millOutput === undefined
+      ? {}
+      : { millOutput: animationOptions.millOutput }),
+    ...(animationOptions.millProduct === undefined
+      ? {}
+      : { millProduct: animationOptions.millProduct }),
+    ...(animationOptions.fishId === undefined
+      ? {}
+      : { fishId: animationOptions.fishId }),
+    ...(animationOptions.population === undefined
+      ? {}
+      : { population: animationOptions.population }),
+    ...(animationOptions.produce === undefined
+      ? {}
+      : { produce: animationOptions.produce }),
+    ...(animationOptions.tankFish === undefined
+      ? {}
+      : { tankFish: [...animationOptions.tankFish] }),
+    ...(animationOptions.animals === undefined
+      ? {}
+      : { animals: animationOptions.animals.map((animal) => ({ animalId: animal.animalId })) }),
+    ...(animationOptions.petId === undefined
+      ? {}
+      : { petId: animationOptions.petId }),
+    ...(animationOptions.horse === undefined
+      ? {}
+      : { horse: animationOptions.horse }),
+    ...(animationOptions.junimos === undefined
+      ? {}
+      : { junimos: animationOptions.junimos }),
+    ...(animationOptions.hatId === undefined
+      ? {}
+      : { hatId: animationOptions.hatId }),
+    ...(animationOptions.shirtId === undefined
+      ? {}
+      : { shirtId: animationOptions.shirtId }),
+    ...(animationOptions.pantsId === undefined
+      ? {}
+      : { pantsId: animationOptions.pantsId }),
+  };
 }
 
 function mergeReferenceCrops(
@@ -1405,6 +1484,14 @@ function projectReferenceBuilding(
           ),
         }
       : {}),
+    ...(Object.hasOwn(buildingEnvelope, "animationOptions")
+      ? {
+          animationOptions: restorePlacementAnimationOptions(
+            buildingEnvelope.animationOptions,
+            `state.buildings[${String(buildingIndex)}].animationOptions`,
+          ),
+        }
+      : {}),
   };
 }
 
@@ -1470,6 +1557,14 @@ function projectReferenceItem(
       : {}),
     ...(Object.hasOwn(itemEnvelope, "nightLightState")
       ? { nightLightState: itemEnvelope.nightLightState as "off" }
+      : {}),
+    ...(Object.hasOwn(itemEnvelope, "animationOptions")
+      ? {
+          animationOptions: restorePlacementAnimationOptions(
+            itemEnvelope.animationOptions,
+            `state.items[${String(itemIndex)}].animationOptions`,
+          ),
+        }
       : {}),
   };
 }

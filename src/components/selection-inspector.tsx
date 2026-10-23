@@ -4,10 +4,12 @@ import { fishPondWaterColors, paintableChestPalette } from "../catalog";
 import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
 import { readSelectionEntityDisplayName } from "@/src/homepage/japanese-game-display-labels";
 import type { BuildingPaintColors } from "../paint/building-paint";
+import type { ReactNode } from "react";
 import { Copy, MoreHorizontal, Trash2, X } from "lucide-react";
 import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 
 type SingleSelectionInspectorActionProperties = Readonly<{
+  animationControls?: ReactNode;
   kind: "single";
   onCopy: () => void;
   onDelete: () => void;
@@ -113,7 +115,14 @@ export function SelectionInspector(
   const selectionCopy = readSelectionInspectorCopy(selectionLocale);
 
   if (selectionInspectorProperties.kind === "single") {
-    const { onCopy, onCycleAppearance, onDelete, onDismiss, selection } =
+    const {
+      animationControls,
+      onCopy,
+      onCycleAppearance,
+      onDelete,
+      onDismiss,
+      selection,
+    } =
       selectionInspectorProperties;
     const selectedPlacementTitle = readSelectionEntityDisplayName(
       selectionLocale,
@@ -258,6 +267,7 @@ export function SelectionInspector(
           {nightLightControl}
           {buildingPaintControls}
           {fishPondWaterColorControl}
+          {animationControls}
           <button
             aria-label={selectionCopy.cycleAppearance}
             className="pill-more"

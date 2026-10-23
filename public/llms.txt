@@ -29,6 +29,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley Quality Sprinkler Layout](https://stardewvalleyplanner.art/stardew-valley-quality-sprinkler-layout): Compare six Stardew Valley quality sprinkler layout examples, from patchwork crop blocks and scarecrow placements to an outdoor nozzle study and a greenhouse reference.
 - [Stardew Valley Iridium Sprinkler Layout](https://stardewvalleyplanner.art/stardew-valley-iridium-sprinkler-layout): Compare seven Standard Farm projects, including a 5×5 Starfruit grid, scarecrow placements, greenhouse references, Pressure Nozzle coverage, and a Junimo Hut field.
 - [A Fruit Tree Layout Stardew Valley Players Can Adapt](https://stardewvalleyplanner.art/stardew-valley-fruit-tree-layout): Compare seven Stardew Valley fruit tree plans: an 18-tree greenhouse reference, outdoor orchard spacing, seasonal rows, a mature paved orchard, and Bee House or Farmhouse examples.
+- [Stardew Greenhouse Tree Layout Ideas](https://stardewvalleyplanner.art/stardew-greenhouse-tree-layout): Compare six greenhouse fruit tree plans with 9 to 18 trees, crop combinations, and sprinkler placements in Stardew Valley.
 
 ### Planning guides
 
@@ -56,6 +57,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar](https://stardewvalleyplanner.art/pine-tree-stardew): Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.
 - [Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change](https://stardewvalleyplanner.art/profit-margin-stardew): Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.
 - [What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting](https://stardewvalleyplanner.art/what-to-grow-in-greenhouse-stardew): Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.
+- [Stardew Fruit: Find Its Source Before Buying Seeds](https://stardewvalleyplanner.art/stardew-fruit): Find Stardew Valley fruit by crop, tree, or forage source. Check seasons, seed and sapling access, and the inputs needed for Jelly, Wine, or drying.
 - [Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree](https://stardewvalleyplanner.art/oak-tree-vs-maple-stardew): Acorn or Oak Resin means oak, and Maple Seed or Maple Syrup means maple. If a Tapper or Heavy Tapper is already on the mature tree, read that product. Otherwise shake or chop once. Wood 12–16 does not name the tree.
 - [How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe](https://stardewvalleyplanner.art/how-to-harvest-stardew-valley): Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.
 - [how to get gold star crops stardew valley](https://stardewvalleyplanner.art/how-to-get-gold-star-crops-stardew-valley): Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.
@@ -66,6 +68,13 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley tools](https://stardewvalleyplanner.art/tools): Start from the decision in front of you.
 - [Season crop profit](https://stardewvalleyplanner.art/tools/crop-profit): Rank this season's crops by net gold after seed and fertilizer, one processing route at a time.
 - [Crop growth calendar](https://stardewvalleyplanner.art/tools/crop-growth): See the first harvest, harvest count, last safe planting day, and a 28-day calendar.
+- [Basic processing profit](https://stardewvalleyplanner.art/tools/basic-processing-profit): Use this Stardew Valley profit calculator to compare artisan goods profit across Kegs, Jars and Dehydrators against selling the same ingredients raw.
+- [Three-machine comparison](https://stardewvalleyplanner.art/tools/machine-comparison): Compare your crop stack with this Stardew Valley Keg vs Jar vs Dehydrator calculator. Check added profit, processing time, capacity and leftovers.
+- [Keg processing](https://stardewvalleyplanner.art/tools/keg-processing): Use the Stardew Valley Keg calculator to compare keg profit, processing time and keg capacity. Check finished batches and raw leftovers by your deadline.
+- [Preserves jar processing](https://stardewvalleyplanner.art/tools/preserves-jar-processing): Use the Stardew Valley preserves jar calculator to decide what to put in jars. Compare jelly and pickles profit, batch times and remaining ingredients.
+- [Dehydrator processing](https://stardewvalleyplanner.art/tools/dehydrator-processing): Use the Stardew Valley dehydrator calculator to compare batch profit for dried fruit, dried mushrooms and raisins, including capacity and five-item remainders.
+- [Keg ingredient ranking](https://stardewvalleyplanner.art/tools/keg-ingredient-ranking): Browse the Stardew Valley keg price list to choose what to put in kegs. Use the keg input calculator to check added value, batch times and your actual stock.
+- [Cellar aging](https://stardewvalleyplanner.art/tools/cask-aging): How long does wine take to age? Use the wine aging calculator to compare silver, gold and iridium targets, collection dates, added value and Cask capacity.
 
 ## 简体中文
 
@@ -94,6 +103,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷物语优质洒水器布局](https://stardewvalleyplanner.art/zh/stardew-valley-quality-sprinkler-layout): 比较六套星露谷物语优质洒水器布局，查看拼布式作物田、稻草人摆位、户外加压喷头案例和温室参考示意。
 - [星露谷物语铱金洒水器布局](https://stardewvalleyplanner.art/zh/stardew-valley-iridium-sprinkler-layout): 查看 7 套标准农场项目，包含 5×5 杨桃网格、稻草人防护、温室参考示意、压力喷嘴覆盖和祝尼魔屋田区。
 - [星露谷物语果树布局：7 套规划方案](https://stardewvalleyplanner.art/zh/stardew-valley-fruit-tree-layout): 浏览 7 套星露谷物语果树项目：18 棵树的温室参考示意、户外果园间距、季节行列、成熟后铺路，以及蜂房和农舍布局。
+- [星露谷物语温室果树布局方案](https://stardewvalleyplanner.art/zh/stardew-greenhouse-tree-layout): 对比六套温室果树方案，查看 9 至 18 棵果树、作物组合和洒水器在温室地图中的摆放。
 
 ### 农场规划指南
 
@@ -121,6 +131,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷松树种植先看格子，不浇水也不能随便种](https://stardewvalleyplanner.art/zh/pine-tree-stardew): 松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。
 - [Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选](https://stardewvalleyplanner.art/zh/profit-margin-stardew): Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。
 - [星露谷温室种什么？按手头种源、等待时间与收获节奏选择](https://stardewvalleyplanner.art/zh/what-to-grow-in-greenhouse-stardew): 星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。
+- [星露谷物语水果清单：辣椒也在列，按来源查找](https://stardewvalleyplanner.art/zh/stardew-fruit): 按原版 1.6 系列的 27 项水果清单，查作物、果树与采集来源、季节和取得条件；对照普通品质基础售价及果酱、果酒、果干路线，并辨清葡萄干、齐瓜任务与烘干投料限制。
 - [星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树](https://stardewvalleyplanner.art/zh/oak-tree-vs-maple-stardew): 小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。
 - [星露谷物语怎么收作物：徒手、镰刀或斧头](https://stardewvalleyplanner.art/zh/how-to-harvest-stardew-valley): 防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。
 - [星露谷物语如何种出金星作物](https://stardewvalleyplanner.art/zh/how-to-get-gold-star-crops-stardew-valley): 选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。
@@ -131,6 +142,13 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Stardew Valley tools](https://stardewvalleyplanner.art/zh/tools): 从你当前要做的决定开始。
 - [季节种植收益](https://stardewvalleyplanner.art/zh/tools/crop-profit): 按净收益排列本季作物。已经扣掉种子和肥料，机器路线分开计算。
 - [生长与收获日历](https://stardewvalleyplanner.art/zh/tools/crop-growth): 查看首次成熟、收获次数、最晚安全播种日和 28 天日历。
+- [基础加工收益](https://stardewvalleyplanner.art/zh/tools/basic-processing-profit): 比较同一批作物直接出售、Keg、罐头瓶和烘干机加工后的收益。
+- [三种机器比较](https://stardewvalleyplanner.art/zh/tools/machine-comparison): 比较 Keg、罐头瓶和烘干机的加工结果、周期与未加工原料。
+- [Keg 加工](https://stardewvalleyplanner.art/zh/tools/keg-processing): 估算星露谷作物经 Keg 加工后的结果、周期和加工增值。
+- [罐头瓶加工](https://stardewvalleyplanner.art/zh/tools/preserves-jar-processing): 估算同一批作物经罐头瓶加工后的结果、周期和加工增值。
+- [烘干机加工](https://stardewvalleyplanner.art/zh/tools/dehydrator-processing): 估算星露谷作物使用烘干机后的产出、批次数量和加工增值。
+- [Keg 原料排行](https://stardewvalleyplanner.art/zh/tools/keg-ingredient-ranking): 按单件增值或机器周期增值比较适合 Keg 加工的原料。
+- [酒窖陈酿](https://stardewvalleyplanner.art/zh/tools/cask-aging): 估算成品酒的剩余陈酿时间、收取日期和本轮陈酿增值。
 
 ## Русский
 

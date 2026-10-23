@@ -22,6 +22,7 @@ import {
   setSelectedPlacementBuildingPaint,
   setSelectedPlacementBuildingWaterColor,
   setSelectedPlacementNightLightState,
+  setSelectedPlacementAnimationOptions,
   setSelectedPlacementItemTint,
   selectPlacementAtTile,
   selectPlacementByKey,
@@ -1312,6 +1313,10 @@ describe("editor selection controller", () => {
           buildingId: "Barn",
           variant: 99,
           waterColor: 42,
+          animationOptions: {
+            horse: true,
+            animals: [{ animalId: "Cow" }],
+          },
           x: 1,
           y: 1,
         },
@@ -1344,6 +1349,10 @@ describe("editor selection controller", () => {
     expect(moveResult.placementHistory.currentState.buildings[0]).toMatchObject({
       variant: 99,
       waterColor: 42,
+      animationOptions: {
+        horse: true,
+        animals: [{ animalId: "Cow" }],
+      },
       x: 2,
     });
 
@@ -1358,6 +1367,10 @@ describe("editor selection controller", () => {
     expect(duplicateResult.placementHistory.currentState.buildings[1]).toMatchObject({
       variant: 99,
       waterColor: 42,
+      animationOptions: {
+        horse: true,
+        animals: [{ animalId: "Cow" }],
+      },
       x: 6,
       y: 6,
     });
@@ -1979,12 +1992,176 @@ describe("editor selection controller", () => {
     });
   });
 
+  it("sets, clears, and histories animation options without sharing UI arrays", () => {
+    const catalogItem = createCatalogItem("animation-options:test");
+    const initialOptions = {
+      tankFish: ["128"],
+      animals: [{ animalId: "Cow" }],
+    };
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [
+        createPlacementItem({
+          itemId: catalogItem.id,
+          animationOptions: initialOptions,
+        }),
+      ],
+      nextItemId: 2,
+    });
+    const replacementOptions = {
+      tankFish: ["129"],
+      animals: [{ animalId: "Goat" }],
+      horse: true,
+    };
+
+    const setResult = setSelectedPlacementAnimationOptions({
+      animationOptions: replacementOptions,
+      placementHistory,
+      selectedPlacementKey: "item:1",
+    });
+    replacementOptions.tankFish.push("130");
+    replacementOptions.animals[0]!.animalId = "Sheep";
+
+    expect(setResult.placementHistory.currentState.items[0]?.animationOptions)
+      .toEqual({
+        tankFish: ["129"],
+        animals: [{ animalId: "Goat" }],
+        horse: true,
+      });
+    const selectionDetails = getPlacementSelectionDetails({
+      catalogItems: [catalogItem],
+      placementSnapshot: setResult.placementHistory.currentState,
+      selectedPlacementKey: "item:1",
+    });
+    expect(selectionDetails).toMatchObject({
+      kind: "item",
+      animationOptions: {
+        tankFish: ["129"],
+        animals: [{ animalId: "Goat" }],
+        horse: true,
+      },
+    });
+    if (
+      selectionDetails.kind !== "item" ||
+      selectionDetails.animationOptions?.tankFish === undefined
+    ) {
+      throw new Error("Expected item selection animation options.");
+    }
+    (selectionDetails.animationOptions.tankFish as string[]).push("130");
+    expect(setResult.placementHistory.currentState.items[0]?.animationOptions)
+      .toEqual({
+        tankFish: ["129"],
+        animals: [{ animalId: "Goat" }],
+        horse: true,
+      });
+
+    const undoneHistory = undoPlacementHistory(setResult.placementHistory);
+    expect(undoneHistory.currentState.items[0]?.animationOptions).toEqual({
+      tankFish: ["128"],
+      animals: [{ animalId: "Cow" }],
+    });
+    const redoneHistory = redoPlacementHistory(undoneHistory);
+    expect(redoneHistory.currentState.items[0]?.animationOptions).toEqual({
+      tankFish: ["129"],
+      animals: [{ animalId: "Goat" }],
+      horse: true,
+    });
+
+    const clearResult = setSelectedPlacementAnimationOptions({
+      animationOptions: undefined,
+      placementHistory: redoneHistory,
+      selectedPlacementKey: "item:1",
+    });
+    expect(clearResult.placementHistory.currentState.items[0])
+      .not.toHaveProperty("animationOptions");
+    expect(undoPlacementHistory(clearResult.placementHistory)
+      .currentState.items[0]?.animationOptions).toEqual({
+      tankFish: ["129"],
+      animals: [{ animalId: "Goat" }],
+      horse: true,
+    });
+  });
+
+  it("sets animation options on buildings and attached held items", () => {
+    const placementHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      buildings: [{
+        instanceId: 1,
+        buildingId: "Mill",
+        x: 2,
+        y: 3,
+        animationOptions: { millLoaded: false, millOutput: false, millProduct: "245" },
+      }],
+      items: [createTableWithHeldItem({
+        animationOptions: { clockOff: true },
+        heldItem: {
+          bedType: null,
+          flipped: false,
+          footprint: { width: 1, height: 1 },
+          instanceId: 7,
+          isGrass: false,
+          isLongTable: false,
+          isRug: false,
+          isTable: false,
+          itemId: "furniture_0",
+          layer: "item",
+          locked: false,
+          rotation: 0,
+          tintColor: "#ffffff",
+          variant: 0,
+          x: 4,
+          y: 5,
+          animationOptions: { hatId: "1" },
+        },
+      })],
+      nextBuildingId: 2,
+      nextItemId: 8,
+    });
+
+    const buildingResult = setSelectedPlacementAnimationOptions({
+      animationOptions: { millOutput: true, millProduct: "246" },
+      placementHistory,
+      selectedPlacementKey: "building:1",
+    });
+    expect(buildingResult.placementHistory.currentState.buildings[0]?.animationOptions)
+      .toEqual({ millOutput: true, millProduct: "246" });
+    const undoneBuildingHistory = undoPlacementHistory(buildingResult.placementHistory);
+    expect(undoneBuildingHistory.currentState.buildings[0]?.animationOptions)
+      .toEqual({ millLoaded: false, millOutput: false, millProduct: "245" });
+    expect(redoPlacementHistory(undoneBuildingHistory).currentState.buildings[0]?.animationOptions)
+      .toEqual({ millOutput: true, millProduct: "246" });
+
+    const clearedBuildingResult = setSelectedPlacementAnimationOptions({
+      animationOptions: undefined,
+      placementHistory: redoPlacementHistory(undoneBuildingHistory),
+      selectedPlacementKey: "building:1",
+    });
+    expect(clearedBuildingResult.placementHistory.currentState.buildings[0])
+      .not.toHaveProperty("animationOptions");
+    expect(undoPlacementHistory(clearedBuildingResult.placementHistory)
+      .currentState.buildings[0]?.animationOptions)
+      .toEqual({ millOutput: true, millProduct: "246" });
+
+    const heldItemResult = setSelectedPlacementAnimationOptions({
+      animationOptions: { petId: "Dog:1" },
+      placementHistory: buildingResult.placementHistory,
+      selectedPlacementKey: "item:7",
+    });
+    expect(heldItemResult.placementHistory.currentState.items[0]?.heldItem?.animationOptions)
+      .toEqual({ petId: "Dog:1" });
+  });
+
   it("preserves a FreeCactus composite variant through Q, move, undo, redo, and copy", () => {
     const freeCactusCatalogItem = createCatalogItem("furniture_FreeCactus");
     const placementHistory = createPlacementHistory({
       ...createEmptyPlacementSnapshot(),
       items: [
         createPlacementItem({
+          animationOptions: {
+            spriteState: "ready",
+            tankFish: ["128"],
+            animals: [{ animalId: "Cow" }],
+          },
           itemId: freeCactusCatalogItem.id,
           variant: 4375,
           x: 1,
@@ -2018,11 +2195,26 @@ describe("editor selection controller", () => {
       variant: 4375,
       x: 2,
       y: 1,
+      animationOptions: {
+        spriteState: "ready",
+        tankFish: ["128"],
+        animals: [{ animalId: "Cow" }],
+      },
     });
     const undoneHistory = undoPlacementHistory(moveResult.placementHistory);
     const redoneHistory = redoPlacementHistory(undoneHistory);
     expect(undoneHistory.currentState.items[0]?.variant).toBe(4375);
+    expect(undoneHistory.currentState.items[0]?.animationOptions).toEqual({
+      spriteState: "ready",
+      tankFish: ["128"],
+      animals: [{ animalId: "Cow" }],
+    });
     expect(redoneHistory.currentState.items[0]?.variant).toBe(4375);
+    expect(redoneHistory.currentState.items[0]?.animationOptions).toEqual({
+      spriteState: "ready",
+      tankFish: ["128"],
+      animals: [{ animalId: "Cow" }],
+    });
 
     const duplicateResult = duplicateSelectedPlacementAtTile({
       buildingMetadataById: createBuildingMetadataById(),
@@ -2035,8 +2227,28 @@ describe("editor selection controller", () => {
 
     expect(duplicateResult).toMatchObject({ applied: true });
     expect(duplicateResult.placementHistory.currentState.items).toEqual([
-      expect.objectContaining({ instanceId: 1, variant: 4375, x: 2, y: 1 }),
-      expect.objectContaining({ instanceId: 2, variant: 4375, x: 4, y: 4 }),
+      expect.objectContaining({
+        instanceId: 1,
+        variant: 4375,
+        x: 2,
+        y: 1,
+        animationOptions: {
+          spriteState: "ready",
+          tankFish: ["128"],
+          animals: [{ animalId: "Cow" }],
+        },
+      }),
+      expect.objectContaining({
+        instanceId: 2,
+        variant: 4375,
+        x: 4,
+        y: 4,
+        animationOptions: {
+          spriteState: "ready",
+          tankFish: ["128"],
+          animals: [{ animalId: "Cow" }],
+        },
+      }),
     ]);
   });
 

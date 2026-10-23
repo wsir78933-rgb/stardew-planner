@@ -12,6 +12,7 @@ import {
   fireGlowFrame,
   resolveFireAnimationTimeOffset,
   resolveFireGlowPhaseOffset,
+  smallFireAnimationFrames,
 } from "./fire-rendering-primitives";
 
 const cursorTextureLocalPath = resolveLocalGameAssetPath("sprites/Cursors.png");
@@ -30,6 +31,12 @@ export function createFurnitureFirePlacementRenderLayers(
   catalogItem: CatalogItem,
   placementItem: PlacementItem,
 ): readonly FurnitureFirePlacementRenderLayer[] | null {
+  if (catalogItem.id === "object:93") {
+    return placementItem.variant === 1
+      ? []
+      : [createOrdinaryTorchFlameLayer(placementItem)];
+  }
+
   const recordId = getFurnitureRecordId(catalogItem.id);
   const lockedRenderingMetadata = recordId === null
     ? undefined
@@ -75,29 +82,52 @@ function createTorchFlameLayer(
   return createFlameLayer(placementItem, 3, -18, 0);
 }
 
+function createOrdinaryTorchFlameLayer(
+  placementItem: PlacementItem,
+): FurnitureFirePlacementRenderLayer {
+  return createFlameLayer(
+    placementItem,
+    6,
+    2,
+    0,
+    smallFireAnimationFrames,
+    0.75,
+    0.75,
+    700,
+  );
+}
+
 function createFlameLayer(
   placementItem: PlacementItem,
   offsetX: number,
   offsetY: number,
   timeOffsetMilliseconds: number,
+  frames: readonly Exclude<PlacementRenderFrame, null>[] = fireAnimationFrames,
+  scale = 1,
+  opacity?: number,
+  animationDurationMilliseconds = 400,
 ): FurnitureFirePlacementRenderLayer {
   return {
     animation: {
       frameDurationMilliseconds: 100,
-      frames: fireAnimationFrames,
+      frames,
       kind: "frame-cycle",
       timeOffsetMilliseconds:
-        resolveFireAnimationTimeOffset(placementItem.x, placementItem.y)
-        + timeOffsetMilliseconds,
+        resolveFireAnimationTimeOffset(
+          placementItem.x,
+          placementItem.y,
+          animationDurationMilliseconds,
+        ) + timeOffsetMilliseconds,
     },
-    frame: fireAnimationFrames[0],
+    frame: frames[0],
     pixelGeometry: createPixelGeometry(
       placementItem.x * 16 + offsetX,
       placementItem.y * 16 + offsetY,
       0,
       0,
-      1,
+      scale,
     ),
+    ...(opacity === undefined ? {} : { opacity }),
     shouldApplySelectionTint: false,
     textureLocalPath: cursorTextureLocalPath,
     tintColor: "#ffffff",

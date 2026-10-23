@@ -12,6 +12,7 @@ import {
   previewPlannerWorkspaceFillRectangle,
   previewPlannerWorkspaceEraseAtTile,
   previewPlannerWorkspaceEraseRectangle,
+  setPlannerWorkspaceSelectedAnimationOptions,
 } from "../../src/planner/planner-workspace-editing-controller";
 import type { CatalogItem } from "../../src/catalog";
 import { createPlacementHistory, undoPlacementHistory } from "../../src/placement/placement-history";
@@ -69,6 +70,38 @@ function createCopyInput() {
 }
 
 describe("planner workspace editing parity", () => {
+  it("routes animation options through history only for one selected placement", () => {
+    const sourceHistory = createPlacementHistory({
+      ...createEmptyPlacementSnapshot(),
+      items: [createFloor(1, 1, 1), createFloor(2, 3, 2)],
+      nextItemId: 3,
+    });
+    const options = { spriteState: "working", readyProduct: "348" };
+
+    const transition = setPlannerWorkspaceSelectedAnimationOptions({
+      animationOptions: options,
+      placementHistory: sourceHistory,
+      selectedPlacementKeys: ["item:1"],
+    });
+
+    expect(transition.selectedPlacementKeys).toEqual(["item:1"]);
+    expect(transition.placementHistory.currentState.items[0]?.animationOptions)
+      .toEqual(options);
+    expect(transition.placementHistory.undoStates).toEqual([
+      sourceHistory.currentState,
+    ]);
+
+    const multipleSelectionTransition = setPlannerWorkspaceSelectedAnimationOptions({
+      animationOptions: { spriteState: "ready" },
+      placementHistory: sourceHistory,
+      selectedPlacementKeys: ["item:1", "item:2"],
+    });
+    expect(multipleSelectionTransition).toEqual({
+      placementHistory: sourceHistory,
+      selectedPlacementKeys: ["item:1", "item:2"],
+    });
+  });
+
   it("previews and commits only valid fill tiles without editing the source during hover", () => {
     const copyInput = createCopyInput();
     const selectedCatalogItem: CatalogItem = {
