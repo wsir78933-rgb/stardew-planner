@@ -4,8 +4,11 @@ import { getToolsPageCopy, type ToolsPageCopy } from "../i18n/tools-page-copy";
 import {
   createCropGrowthToolHref,
   createCropProfitHref,
-  createToolsHomeHref,
 } from "./planting-tool-href";
+import {
+  getProcessingToolHref,
+  PROCESSING_TOOL_IDS,
+} from "./processing/processing-tool-definition";
 import { ProductionPlanSummary } from "./production-plan-summary";
 import styles from "./tools-page.module.css";
 
@@ -17,6 +20,15 @@ export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
   const copy = getToolsPageCopy(locale);
   const profitHref = createCropProfitHref(locale);
   const growthHref = createCropGrowthToolHref(locale);
+  const processingToolLinks = PROCESSING_TOOL_IDS.map((toolId) => ({
+    href: getProcessingToolHref(locale, toolId),
+    label: copy.categories.processing.tools[toolId],
+    toolId,
+  }));
+  const firstProcessingToolHref = getProcessingToolHref(
+    locale,
+    "basic-processing-profit",
+  );
 
   return (
     <article className={styles.toolsPage} data-tools-home="true">
@@ -52,7 +64,21 @@ export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
             <a href={growthHref}>{readPlantingToolName(copy.categories.planting.tools, 1)}</a>
           </li>
         </CategoryCard>
-        <UnavailableCategoryCard category={copy.categories.processing} />
+        <CategoryCard
+          description={copy.categories.processing.description}
+          enter={
+            <a className="public-primary-cta" href={firstProcessingToolHref}>
+              {copy.categories.processing.enter}
+            </a>
+          }
+          title={copy.categories.processing.title}
+        >
+          {processingToolLinks.map((processingToolLink) => (
+            <li key={processingToolLink.toolId}>
+              <a href={processingToolLink.href}>{processingToolLink.label}</a>
+            </li>
+          ))}
+        </CategoryCard>
         <UnavailableCategoryCard category={copy.categories.production} />
         <UnavailableCategoryCard category={copy.categories.workshop} />
       </div>
@@ -97,7 +123,7 @@ function readPlantingToolName(toolNames: readonly string[], index: 0 | 1): strin
 function UnavailableCategoryCard({
   category,
 }: Readonly<{
-  category: ToolsPageCopy["categories"]["processing"];
+  category: ToolsPageCopy["categories"]["production"];
 }>) {
   return (
     <CategoryCard

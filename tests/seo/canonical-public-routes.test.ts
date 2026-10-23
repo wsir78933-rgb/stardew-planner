@@ -35,7 +35,7 @@ const expectedBlogCanonicalPaths = [
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(52);
+  expect(canonicalPublicPaths).toHaveLength(59);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );
@@ -49,6 +49,13 @@ it("derives the remaining content and legal paths without planner query URLs", (
   expect(canonicalPublicPaths).toContain("/tools");
   expect(canonicalPublicPaths).toContain("/tools/crop-profit");
   expect(canonicalPublicPaths).toContain("/tools/crop-growth");
+  expect(canonicalPublicPaths).toContain("/tools/basic-processing-profit");
+  expect(canonicalPublicPaths).toContain("/tools/machine-comparison");
+  expect(canonicalPublicPaths).toContain("/tools/keg-processing");
+  expect(canonicalPublicPaths).toContain("/tools/preserves-jar-processing");
+  expect(canonicalPublicPaths).toContain("/tools/dehydrator-processing");
+  expect(canonicalPublicPaths).toContain("/tools/keg-ingredient-ranking");
+  expect(canonicalPublicPaths).toContain("/tools/cask-aging");
   expect(canonicalPublicPaths).toContain("/stardew-valley-beach-farm-layout");
   expect(canonicalPublicPaths).toContain("/stardew-valley-fish-farm-layout");
   expect(canonicalPublicPaths).toContain("/stardew-valley-river-farm-layout");

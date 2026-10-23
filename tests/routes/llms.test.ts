@@ -2,7 +2,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
 import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
+import { getProcessingToolRouteCopy } from "../../src/i18n/processing-tool-route-copy";
 import { createCanonicalUrl } from "../../src/seo/public-site-url";
+import {
+  getProcessingToolHref,
+  PROCESSING_TOOL_IDS,
+} from "../../src/tools-pages/processing/processing-tool-definition";
 
 it("exports a bilingual LLM site guide with every indexable public route", () => {
   const llmsText = readFileSync(join(process.cwd(), "out", "llms.txt"), "utf8");
@@ -165,5 +170,20 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
     const publicUrl = createCanonicalUrl(pathname);
 
     expect(llmsText).toContain(`](${publicUrl})`);
+  }
+});
+
+it("lists all seven processing tools in English and Simplified Chinese", () => {
+  const llmsText = readFileSync(join(process.cwd(), "out", "llms.txt"), "utf8");
+
+  for (const locale of ["en", "zh-CN"] as const) {
+    for (const toolId of PROCESSING_TOOL_IDS) {
+      const routeCopy = getProcessingToolRouteCopy(locale, toolId);
+      const publicUrl = createCanonicalUrl(getProcessingToolHref(locale, toolId));
+
+      expect(llmsText).toContain(
+        `[${routeCopy.title}](${publicUrl}): ${routeCopy.metaDescription}`,
+      );
+    }
   }
 });

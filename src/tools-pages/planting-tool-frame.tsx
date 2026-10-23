@@ -4,7 +4,6 @@ import { getToolsPageCopy } from "../i18n/tools-page-copy";
 import {
   createCropGrowthToolHref,
   createCropProfitHref,
-  createToolsHomeHref,
 } from "./planting-tool-href";
 import { SimpleHero } from "./simple-hero";
 import { PlantingToolGuide } from "./planting-tool-guide";
@@ -30,7 +29,6 @@ export function PlantingToolFrame({
   children,
 }: PlantingToolFrameProperties) {
   const copy = getToolsPageCopy(locale);
-  const toolsHomeHref = createToolsHomeHref(locale);
   const profitHref = createCropProfitHref(locale);
   const growthHref = createCropGrowthToolHref(locale);
   const heroCopy = currentTool === "crop-profit" ? copy.profit.hero : copy.growth.hero;
@@ -57,20 +55,6 @@ export function PlantingToolFrame({
           )}
         </header>
         <div className={styles.frame}>
-          <nav aria-label={copy.frame.allTools} className={styles.sidebar}>
-            <a href={toolsHomeHref}>{copy.frame.allTools}</a>
-            <span aria-current="page">{copy.frame.planting}</span>
-            <button className={styles.action} disabled type="button">
-              {copy.frame.processing}
-            </button>
-            <button className={styles.action} disabled type="button">
-              {copy.frame.production}
-            </button>
-            <button className={styles.action} disabled type="button">
-              {copy.frame.workshop}
-            </button>
-            <p className={styles.note}>{copy.frame.versionNote}</p>
-          </nav>
           <div>
             <div className={styles.tabRow}>
               <PlantingToolTab

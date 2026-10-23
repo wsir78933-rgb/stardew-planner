@@ -27,9 +27,12 @@ import {
 } from "../../src/rendering/resolved-placement-texture";
 import {
   createEmptyPlacementSnapshot,
+  type PlacementBuilding,
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
 import { createPlannerCameraStateRetention } from "../../src/planner/planner-camera-state-retention";
+import { animateFishPondWaterEntries } from "../../src/rendering/building-animation-rendering";
+import { createBuildingMultilayerPlacementRenderEntries } from "../../src/rendering/building-multilayer-placement-rendering";
 
 const {
   applyPlacementSnapshotInteriorDecor,
@@ -4311,11 +4314,32 @@ describe("layered placement sprite rendering", () => {
   });
   it("applies initial sprite motion and restores omitted fields to the static geometry", () => {
     vi.useFakeTimers();
+    class MotionRectangle {
+      constructor(
+        public x: number,
+        public y: number,
+        public width: number,
+        public height: number,
+      ) {}
+    }
     class MotionTexture {
       destroyed = false;
-      constructor(public readonly options: unknown) {}
+      destroyCount = 0;
+      dynamic: boolean;
+      updateCount = 0;
+      constructor(
+        public readonly options: Readonly<{
+          dynamic?: boolean;
+          frame: MotionRectangle;
+        }>,
+      ) {
+        this.dynamic = options.dynamic ?? false;
+      }
+      get frame(): MotionRectangle { return this.options.frame; }
+      update(): void { this.updateCount += 1; }
       destroy(): void {
         this.destroyed = true;
+        this.destroyCount += 1;
       }
     }
     class MotionSprite extends TestLayerSprite {
@@ -4348,14 +4372,7 @@ describe("layered placement sprite rendering", () => {
       }
     }
     const motionPixi = {
-      Rectangle: class MotionRectangle {
-        constructor(
-          public readonly x: number,
-          public readonly y: number,
-          public readonly width: number,
-          public readonly height: number,
-        ) {}
-      },
+      Rectangle: MotionRectangle,
       Sprite: MotionSprite,
       Texture: MotionTexture,
     } as unknown as typeof import("pixi.js");
@@ -4426,6 +4443,10 @@ describe("layered placement sprite rendering", () => {
         false,
       );
       const motionSprite = placementSprite.sprite as unknown as MotionSprite;
+      const dynamicMotionTexture = placementSprite.frameTexture as MotionTexture | null;
+      if (dynamicMotionTexture === null) {
+        throw new Error("Sprite-motion must own one dynamic frame texture.");
+      }
 
       expect(sample).toHaveBeenCalledExactlyOnceWith(0);
       expect(motionSprite.position).toMatchObject({ x: 44, y: 68 });
@@ -4435,7 +4456,10 @@ describe("layered placement sprite rendering", () => {
       expect(motionSprite.scale).toMatchObject({ x: -1, y: 1.5 });
       expect(motionSprite.tint).toBe(0x12abef);
       expect(motionSprite.zIndex).toBe(68);
-      expect(motionSprite.texture).not.toBe(placementSprite.animationFrameTextures[0]);
+      expect(motionSprite.texture).toBe(dynamicMotionTexture);
+      expect(dynamicMotionTexture.dynamic).toBe(true);
+      expect(dynamicMotionTexture.frame).toMatchObject(motionFrames[0]);
+      expect(placementSprite.animationFrameTextures).toHaveLength(0);
 
       animationController.replaceAnimations([placementSprite.animation!]);
       expect(vi.getTimerCount()).toBe(0);
@@ -4450,7 +4474,8 @@ describe("layered placement sprite rendering", () => {
       expect(motionSprite.scale).toMatchObject({ x: 0.75, y: 0.75 });
       expect(motionSprite.tint).toBe(0xffffff);
       expect(motionSprite.zIndex).toBe(0);
-      expect(motionSprite.texture).not.toBe(placementSprite.animationFrameTextures[0]);
+      expect(motionSprite.texture).toBe(dynamicMotionTexture);
+      expect(dynamicMotionTexture.frame).toMatchObject(motionFrames[0]);
 
       expect(placementSprite.animation?.update(250)).toBe(true);
       expect(motionSprite.position).toMatchObject({ x: 54, y: 78 });
@@ -4460,7 +4485,8 @@ describe("layered placement sprite rendering", () => {
       expect(motionSprite.scale).toMatchObject({ x: -2, y: 2 });
       expect(motionSprite.tint).toBe(0xabcdef);
       expect(motionSprite.zIndex).toBe(78);
-      expect(motionSprite.texture).toBe(placementSprite.animationFrameTextures[0]);
+      expect(motionSprite.texture).toBe(dynamicMotionTexture);
+      expect(dynamicMotionTexture.frame).toMatchObject(motionFrames[1]);
 
       expect(placementSprite.animation?.update(350)).toBe(true);
       expect(motionSprite.position).toMatchObject({ x: 35, y: 46 });
@@ -4470,7 +4496,9 @@ describe("layered placement sprite rendering", () => {
       expect(motionSprite.scale).toMatchObject({ x: 0.75, y: 0.75 });
       expect(motionSprite.tint).toBe(0xffffff);
       expect(motionSprite.zIndex).toBe(0);
-      expect(motionSprite.texture).not.toBe(placementSprite.animationFrameTextures[0]);
+      expect(motionSprite.texture).toBe(dynamicMotionTexture);
+      expect(dynamicMotionTexture.frame).toMatchObject(motionFrames[0]);
+      expect(dynamicMotionTexture.updateCount).toBe(2);
       expect(sample).toHaveBeenCalledTimes(4);
 
       const ownedMotionTextures = [
@@ -4482,18 +4510,218 @@ describe("layered placement sprite rendering", () => {
       );
       destroyPlacementSprites([placementSprite]);
       expect(motionSprite.destroyed).toBe(true);
-      expect(ownedMotionTextures.every(
-        (ownedMotionTexture) =>
-          (ownedMotionTexture as unknown as MotionTexture).destroyed,
-      ))
-        .toBe(true);
+      expect(ownedMotionTextures).toEqual([dynamicMotionTexture]);
+      expect(dynamicMotionTexture.destroyed).toBe(true);
+      expect(dynamicMotionTexture.destroyCount).toBe(1);
     } finally {
       animationController.dispose();
       vi.useRealTimers();
     }
   });
 
-  it("fails fast when a sprite-motion sample requests a frame outside its descriptor", () => {
+  it("uses one independently updated dynamic texture per Fish Pond water tile", async () => {
+    class PondRectangle {
+      constructor(
+        public x: number,
+        public y: number,
+        public width: number,
+        public height: number,
+      ) {}
+    }
+    type PondTextureOptions = Readonly<{
+      dynamic?: boolean;
+      frame?: PondRectangle;
+      source?: unknown;
+    }>;
+    class PondTexture {
+      readonly frame: PondRectangle;
+      dynamic: boolean;
+      updateCount = 0;
+      destroyCount = 0;
+      constructor(public readonly options: PondTextureOptions) {
+        if (options.frame === undefined) {
+          throw new Error("Fish Pond sprite requested a texture without a frame.");
+        }
+        this.frame = options.frame;
+        this.dynamic = options.dynamic ?? false;
+        pondTextures.push(this);
+      }
+      update(): void { this.updateCount += 1; }
+      destroy(): void { this.destroyCount += 1; }
+    }
+    class PondSprite {
+      alpha = 1;
+      anchor = { set: (_x: number, _y: number) => undefined };
+      blendMode = "normal";
+      destroyCount = 0;
+      position = {
+        x: 0,
+        y: 0,
+        set: (x: number, y: number) => {
+          this.position.x = x;
+          this.position.y = y;
+        },
+      };
+      rotation = 0;
+      scale = {
+        x: 1,
+        y: 1,
+        set: (x: number, y = x) => {
+          this.scale.x = x;
+          this.scale.y = y;
+        },
+      };
+      texture: unknown;
+      tint = 0xffffff;
+      visible = true;
+      zIndex = 0;
+      constructor(input: Readonly<{ texture: unknown }>) {
+        this.texture = input.texture;
+        pondSprites.push(this);
+      }
+      destroy(): void { this.destroyCount += 1; }
+    }
+    const pondTextures: PondTexture[] = [];
+    const pondSprites: PondSprite[] = [];
+    const pondPixi = {
+      Rectangle: PondRectangle,
+      Sprite: PondSprite,
+      Texture: PondTexture,
+    } as unknown as typeof import("pixi.js");
+    const animationCatalog = await loadPlannerAnimationCatalog(
+      createLocalAnimationJsonFetcher(),
+    );
+    const fishPondCatalogItem = loadLockedBuildingCatalog().find(
+      (catalogItem) => catalogItem.id === "building:Fish Pond",
+    );
+    if (fishPondCatalogItem === undefined) {
+      throw new Error("Locked Buildings.json is missing building:Fish Pond.");
+    }
+    const fishPond: PlacementBuilding = {
+      instanceId: 19,
+      buildingId: "Fish Pond",
+      x: 2,
+      y: 3,
+    };
+    const fishPondBaseEntries = createBuildingMultilayerPlacementRenderEntries(
+      fishPondCatalogItem,
+      fishPond,
+      "spring",
+    );
+    const fishPondAnimatedEntries = animateFishPondWaterEntries(
+      fishPond,
+      fishPondBaseEntries,
+      animationCatalog,
+    );
+    const fishPondWaterEntries = fishPondAnimatedEntries.filter(
+      (entry) => entry.layerId?.startsWith("FishPondWaterTile_") === true,
+    );
+    expect(fishPondWaterEntries).toHaveLength(20);
+    expect(fishPondWaterEntries.every(
+      (entry) => entry.animation?.kind === "sprite-motion"
+        && entry.animation.frames.length === 320,
+    )).toBe(true);
+
+    const borrowedSource = {};
+    const borrowedPlacementTexture = {
+      source: borrowedSource,
+      destroy: vi.fn(),
+    } as unknown as import("pixi.js").Texture;
+    const pondPlacementSprites = fishPondWaterEntries.map((entry) =>
+      createPlacementSprite(
+        pondPixi,
+        entry,
+        borrowedPlacementTexture,
+        null,
+        16,
+        16,
+        false,
+      ),
+    );
+
+    expect(pondPlacementSprites).toHaveLength(20);
+    expect(pondSprites).toHaveLength(20);
+    expect(pondTextures).toHaveLength(20);
+    expect(pondPlacementSprites.every(
+      (placementSprite) => placementSprite.animationFrameTextures.length === 0,
+    )).toBe(true);
+    expect(pondTextures.every((pondTexture) => pondTexture.dynamic)).toBe(true);
+
+    const findPondPlacementSprite = (layerId: string) => {
+      const entryIndex = fishPondWaterEntries.findIndex(
+        (entry) => entry.layerId === layerId,
+      );
+      if (entryIndex < 0) {
+        throw new Error(`Fish Pond render entries are missing ${JSON.stringify(layerId)}.`);
+      }
+      const placementSprite = pondPlacementSprites[entryIndex];
+      if (placementSprite === undefined) {
+        throw new Error(`Fish Pond sprite batch is missing index ${String(entryIndex)}.`);
+      }
+      if (placementSprite.animation === null) {
+        throw new Error(`Fish Pond sprite ${JSON.stringify(layerId)} has no animation.`);
+      }
+      const texture = placementSprite.frameTexture as PondTexture | null;
+      if (texture === null) {
+        throw new Error(`Fish Pond sprite ${JSON.stringify(layerId)} has no owned frame texture.`);
+      }
+      return { placementSprite, texture };
+    };
+    const topEven = findPondPlacementSprite("FishPondWaterTile_0_0");
+    const bottomEven = findPondPlacementSprite("FishPondWaterTile_4_0");
+    if (
+      topEven.placementSprite.animation === null
+      || bottomEven.placementSprite.animation === null
+    ) {
+      throw new Error("Fish Pond water animation was lost after sprite creation.");
+    }
+    const topTextureIdentity = topEven.placementSprite.sprite.texture;
+    const bottomTextureIdentity = bottomEven.placementSprite.sprite.texture;
+    const topFrameIdentity = topEven.texture.frame;
+    const bottomFrameIdentity = bottomEven.texture.frame;
+    const bottomInitialFrame = { ...bottomEven.texture.frame };
+    const bottomInitialUpdateCount = bottomEven.texture.updateCount;
+    const topInitialUpdateCount = topEven.texture.updateCount;
+
+    expect(topTextureIdentity).toBe(topEven.texture);
+    expect(bottomTextureIdentity).toBe(bottomEven.texture);
+    expect(topTextureIdentity).not.toBe(bottomTextureIdentity);
+    expect(topFrameIdentity).not.toBe(bottomFrameIdentity);
+    expect(topEven.texture.options.source).toBe(borrowedSource);
+    expect(bottomEven.texture.options.source).toBe(borrowedSource);
+    expect(topEven.texture.frame).toMatchObject({ x: 0, y: 2_064, width: 64, height: 64 });
+    expect(bottomEven.texture.frame).toMatchObject({ x: 0, y: 2_064, width: 64, height: 27 });
+
+    topEven.placementSprite.animation.update(667);
+    expect(topEven.placementSprite.sprite.texture).toBe(topTextureIdentity);
+    expect(topEven.texture.frame).toBe(topFrameIdentity);
+    expect(topEven.texture.frame).toMatchObject({ x: 192, y: 2_068, width: 64, height: 60 });
+    expect(topEven.texture.updateCount).toBe(topInitialUpdateCount + 1);
+    expect(bottomEven.placementSprite.sprite.texture).toBe(bottomTextureIdentity);
+    expect(bottomEven.texture.frame).toMatchObject(bottomInitialFrame);
+    expect(bottomEven.texture.updateCount).toBe(bottomInitialUpdateCount);
+
+    topEven.placementSprite.animation.update(0);
+    expect(topEven.placementSprite.sprite.texture).toBe(topTextureIdentity);
+    expect(topEven.texture.frame).toMatchObject({ x: 0, y: 2_064, width: 64, height: 64 });
+    expect(topEven.texture.updateCount).toBe(topInitialUpdateCount + 2);
+
+    bottomEven.placementSprite.animation.update(667);
+    expect(bottomEven.placementSprite.sprite.texture).toBe(bottomTextureIdentity);
+    expect(bottomEven.texture.frame).toBe(bottomFrameIdentity);
+    expect(bottomEven.texture.frame).toMatchObject({ x: 192, y: 2_064, width: 64, height: 31 });
+    expect(bottomEven.texture.updateCount).toBe(bottomInitialUpdateCount + 1);
+    bottomEven.placementSprite.animation.update(0);
+    expect(bottomEven.texture.frame).toMatchObject({ x: 0, y: 2_064, width: 64, height: 27 });
+    expect(bottomEven.texture.updateCount).toBe(bottomInitialUpdateCount + 2);
+
+    destroyPlacementSprites(pondPlacementSprites);
+    expect(pondSprites.every((pondSprite) => pondSprite.destroyCount === 1)).toBe(true);
+    expect(pondTextures.every((pondTexture) => pondTexture.destroyCount === 1)).toBe(true);
+    expect(borrowedPlacementTexture.destroy).not.toHaveBeenCalled();
+  });
+
+  it("fails fast and releases sprite-motion resources when the initial frame index is invalid", () => {
     const motionFrames = [{ x: 0, y: 0, width: 16, height: 16 }];
     const spriteMotionEntry = {
       ...createLayerRenderEntry(false),
@@ -4504,19 +4732,44 @@ describe("layered placement sprite rendering", () => {
       },
       frame: motionFrames[0],
     } as PlacementRenderEntry;
+    class InvalidMotionRectangle {
+      constructor(
+        public x: number,
+        public y: number,
+        public width: number,
+        public height: number,
+      ) {}
+    }
+    class InvalidMotionTexture {
+      destroyCount = 0;
+      constructor(public readonly options: Readonly<{ frame: InvalidMotionRectangle }>) {}
+      destroy(): void { this.destroyCount += 1; }
+    }
+    class InvalidMotionSprite extends TestLayerSprite {
+      destroyCount = 0;
+      texture: unknown;
+      constructor(input: Readonly<{ texture: unknown }>) {
+        super();
+        this.texture = input.texture;
+      }
+      destroy(): void { this.destroyCount += 1; }
+    }
+    const failedTextures: InvalidMotionTexture[] = [];
+    const failedSprites: InvalidMotionSprite[] = [];
     expect(() => createPlacementSprite(
       {
-        Rectangle: class MotionRectangle {},
-        Sprite: class MotionSprite extends TestLayerSprite {
+        Rectangle: InvalidMotionRectangle,
+        Sprite: class extends InvalidMotionSprite {
           constructor(input: Readonly<{ texture: unknown }>) {
-            super();
-            this.texture = input.texture;
+            super(input);
+            failedSprites.push(this);
           }
-          texture: unknown;
-          destroy(): void {}
         },
-        Texture: class MotionTexture {
-          destroy(): void {}
+        Texture: class extends InvalidMotionTexture {
+          constructor(input: Readonly<{ frame: InvalidMotionRectangle }>) {
+            super(input);
+            failedTextures.push(this);
+          }
         },
       } as unknown as typeof import("pixi.js"),
       spriteMotionEntry,
@@ -4528,6 +4781,13 @@ describe("layered placement sprite rendering", () => {
     )).toThrow(
       /frameIndex must be an integer from 0 through 0; received 2/,
     );
+    const failedTexture = failedTextures[0];
+    const failedSprite = failedSprites[0];
+    if (failedTexture === undefined || failedSprite === undefined) {
+      throw new Error("Invalid initial frame sample must fail after allocating sprite resources.");
+    }
+    expect(failedTexture.destroyCount).toBe(1);
+    expect(failedSprite.destroyCount).toBe(1);
   });
 });
 

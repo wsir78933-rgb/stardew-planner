@@ -1,0 +1,77 @@
+.processingPage {
+  min-width: 0;
+}
+
+.workspaceBreakout {
+  box-sizing: border-box;
+  left: 50%;
+  max-width: 90rem;
+  position: relative;
+  transform: translateX(-50%);
+  width: calc(100vw - 2rem);
+}
+
+.mainColumn {
+  align-content: start;
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.breadcrumb {
+  color: #52604e;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.relatedToolLink {
+  align-items: center;
+  background: #f6f8ee;
+  border: 1px solid #c9d4c1;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: #41543b;
+  display: inline-flex;
+  font-weight: 650;
+  justify-self: start;
+  line-height: 1.4;
+  max-width: 100%;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+  padding: 0.55rem 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  white-space: normal;
+}
+
+.relatedToolLink:hover {
+  background: #f1f7e7;
+}
+
+.relatedToolLink:focus-visible {
+  outline: 2px solid #628b1b;
+  outline-offset: 3px;
+}
+
+.workspace {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  scroll-margin-top: 1rem;
+}
+
+.workspace:focus {
+  outline: 3px solid #628b1b;
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .mainColumn {
+    gap: 0.75rem;
+  }
+
+  .workspace {
+    padding-bottom: calc(7rem + env(safe-area-inset-bottom));
+  }
+}
