@@ -54,6 +54,7 @@ const farmMapCanonicalPaths = [
   "/stardew-valley-frontier-farm-layout",
   "/stardew-valley-expanded-farm-layout",
   "/stardew-valley-hilltop-farm-layout",
+  "/stardew-valley-wilderness-farm-layout",
 ] as const;
 const englishBlogSprinklerEntry =
   "[Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails](https://stardewvalleyplanner.art/sprinkler-stardew): Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.";
@@ -168,9 +169,12 @@ function expectGreenhouseReferenceCopy(
   ).toBe(true);
 }
 
-it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog guide", () => {
+it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog guide", () => {
   const hilltopIndex = canonicalPublicPaths.indexOf(
     "/stardew-valley-hilltop-farm-layout",
+  );
+  const wildernessIndex = canonicalPublicPaths.indexOf(
+    "/stardew-valley-wilderness-farm-layout",
   );
   const sprinklerIndex = canonicalPublicPaths.indexOf(sprinklerLayoutCanonicalPath);
   const qualitySprinklerIndex = canonicalPublicPaths.indexOf(
@@ -193,9 +197,10 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(49);
-  expect(indexableEntries).toHaveLength(96);
-  expect(sprinklerIndex).toBe(hilltopIndex + 1);
+  expect(canonicalPublicPaths).toHaveLength(50);
+  expect(indexableEntries).toHaveLength(98);
+  expect(wildernessIndex).toBe(hilltopIndex + 1);
+  expect(sprinklerIndex).toBe(wildernessIndex + 1);
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
   expect(iridiumSprinklerIndex).toBe(qualitySprinklerIndex + 1);
   expect(fruitTreeIndex).toBe(iridiumSprinklerIndex + 1);
@@ -244,6 +249,7 @@ it("registers Sprinkler Layouts after the nine Farm Map pages and keeps the blog
     "frontier-farm",
     "expanded-farm",
     "hilltop-farm",
+    "wilderness-farm",
   ]);
   expect(
     englishNavigation.categories.find(

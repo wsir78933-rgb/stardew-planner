@@ -8,6 +8,7 @@ import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-conten
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
 import { sprinklerLayoutCanonicalPath } from "@/src/farm-layouts/sprinkler-layout-content";
+import { wildernessFarmCanonicalPath } from "@/src/farm-layouts/wilderness-farm-content";
 import {
   activateFarmLayoutsCategory,
   closeFarmLayoutsNavigationOnEscape,
@@ -106,7 +107,7 @@ test("keeps the five first-level categories ordered and localized with English f
   }
 });
 
-test("provides all nine Farm Maps pages in order with localized hrefs", () => {
+test("provides all ten Farm Maps pages in order with localized hrefs", () => {
   const expectedFarmMapPagesByLocale = {
     en: [
       {
@@ -153,6 +154,11 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
         href: hilltopFarmCanonicalPath,
         id: "hilltop-farm",
         label: "Hilltop Farm Layouts",
+      },
+      {
+        href: wildernessFarmCanonicalPath,
+        id: "wilderness-farm",
+        label: "Wilderness Farm Layouts",
       },
     ],
     ja: [
@@ -201,6 +207,11 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
         id: "hilltop-farm",
         label: "Hilltop Farm Layouts",
       },
+      {
+        href: wildernessFarmCanonicalPath,
+        id: "wilderness-farm",
+        label: "Wilderness Farm Layouts",
+      },
     ],
     ru: [
       {
@@ -247,6 +258,11 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
         href: hilltopFarmCanonicalPath,
         id: "hilltop-farm",
         label: "Hilltop Farm Layouts",
+      },
+      {
+        href: wildernessFarmCanonicalPath,
+        id: "wilderness-farm",
+        label: "Wilderness Farm Layouts",
       },
     ],
     "zh-CN": [
@@ -295,6 +311,11 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
         id: "hilltop-farm",
         label: "山顶农场布局",
       },
+      {
+        href: `/zh${wildernessFarmCanonicalPath}`,
+        id: "wilderness-farm",
+        label: "荒野农场布局",
+      },
     ],
   } as const;
 
@@ -314,7 +335,7 @@ test("provides all nine Farm Maps pages in order with localized hrefs", () => {
     );
 
     const markup = renderFarmLayoutsNavigation(locale);
-    expect(markup.match(/<a\b/g) ?? []).toHaveLength(9);
+    expect(markup.match(/<a\b/g) ?? []).toHaveLength(10);
     for (const page of expectedFarmMapPagesByLocale[locale]) {
       expect(markup).toContain(`href="${page.href}"`);
       expect(markup).toContain(`<span>${page.label}</span>`);
@@ -434,6 +455,7 @@ test("places Quality Sprinkler, Iridium Sprinkler, and Fruit Tree pages in order
       "frontier-farm",
       "expanded-farm",
       "hilltop-farm",
+      "wilderness-farm",
     ]);
   }
 });
@@ -869,7 +891,7 @@ test("uses a compact back step for empty and populated categories, then restores
   });
 });
 
-test("moves Up and Down through all nine Farm Maps pages and wraps at both ends", () => {
+test("moves Up and Down through all ten Farm Maps pages and wraps at both ends", () => {
   const farmMapPageIds = [
     "beach-farm",
     "fish-farm",
@@ -880,6 +902,7 @@ test("moves Up and Down through all nine Farm Maps pages and wraps at both ends"
     "frontier-farm",
     "expanded-farm",
     "hilltop-farm",
+    "wilderness-farm",
   ] as const;
   const expectedDownPageIds = [
     "fish-farm",
@@ -890,10 +913,11 @@ test("moves Up and Down through all nine Farm Maps pages and wraps at both ends"
     "frontier-farm",
     "expanded-farm",
     "hilltop-farm",
+    "wilderness-farm",
     "beach-farm",
   ] as const;
   const expectedUpPageIds = [
-    "hilltop-farm",
+    "wilderness-farm",
     "beach-farm",
     "fish-farm",
     "river-farm",
@@ -902,6 +926,7 @@ test("moves Up and Down through all nine Farm Maps pages and wraps at both ends"
     "four-corners-farm",
     "frontier-farm",
     "expanded-farm",
+    "hilltop-farm",
   ] as const;
   const moveFromFarmMapPage = (
     pageId: (typeof farmMapPageIds)[number],

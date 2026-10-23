@@ -7,6 +7,7 @@ import { iridiumSprinklerLayoutCanonicalPath } from "../farm-layouts/iridium-spr
 import { qualitySprinklerLayoutCanonicalPath } from "../farm-layouts/quality-sprinkler-layout-content";
 import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
 import { sprinklerLayoutCanonicalPath } from "../farm-layouts/sprinkler-layout-content";
+import { wildernessFarmCanonicalPath } from "../farm-layouts/wilderness-farm-content";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
 import { publicLocales, type PublicLocale } from "./public-locale";
@@ -28,6 +29,7 @@ const fixedCanonicalPublicPaths = [
   "/stardew-valley-frontier-farm-layout",
   expandedFarmCanonicalPath,
   hilltopFarmCanonicalPath,
+  wildernessFarmCanonicalPath,
   sprinklerLayoutCanonicalPath,
   qualitySprinklerLayoutCanonicalPath,
   iridiumSprinklerLayoutCanonicalPath,
