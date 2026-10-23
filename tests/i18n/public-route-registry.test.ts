@@ -11,7 +11,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(50);
+  expect(canonicalPublicPaths).toHaveLength(51);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -91,6 +91,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(
     getLocalizedPublicPath("zh-CN", "/stardew-valley-wilderness-farm-layout"),
   ).toBe("/zh/stardew-valley-wilderness-farm-layout");
+  expect(getLocalizedPublicPath("en", "/stardew-greenhouse-layout")).toBe(
+    "/stardew-greenhouse-layout",
+  );
+  expect(getLocalizedPublicPath("zh-CN", "/stardew-greenhouse-layout")).toBe(
+    "/zh/stardew-greenhouse-layout",
+  );
   expect(getLocalizedPublicPath("en", "/stardew-valley-sprinkler-layout")).toBe(
     "/stardew-valley-sprinkler-layout",
   );
@@ -277,8 +283,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(100);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(98);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(102);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(100);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -302,6 +308,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(indexablePathnames).toContain("/zh/stardew-valley-forest-farm-layout");
   expect(indexablePathnames).toContain("/stardew-valley-wilderness-farm-layout");
   expect(indexablePathnames).toContain("/zh/stardew-valley-wilderness-farm-layout");
+  expect(indexablePathnames).toContain("/stardew-greenhouse-layout");
+  expect(indexablePathnames).toContain("/zh/stardew-greenhouse-layout");
   expect(indexablePathnames).toContain("/stardew-valley-four-corners-farm-layout");
   expect(indexablePathnames).toContain(
     "/zh/stardew-valley-four-corners-farm-layout",

@@ -1,0 +1,23 @@
+.greenhousePage [data-greenhouse-layout-hero] > figure {
+  justify-self: end;
+  max-width: 30rem;
+  width: 100%;
+}
+
+.greenhousePage :global([data-layout-image-trigger="true"]) {
+  background: transparent;
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0;
+}
+
+.greenhousePage :global([data-layout-image-trigger="true"]) img {
+  background: transparent;
+}
+
+@media (max-width: 850px) {
+  .greenhousePage [data-greenhouse-layout-hero] > figure {
+    justify-self: start;
+    max-width: 30rem;
+  }
+}

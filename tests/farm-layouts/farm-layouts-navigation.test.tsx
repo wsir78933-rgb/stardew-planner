@@ -29,7 +29,6 @@ import {
 } from "@/src/farm-layouts/farm-layouts-navigation-model";
 
 const emptyFarmLayoutsCategoryIds = [
-  "greenhouse-layouts",
   "buildings-interiors",
   "layout-ideas",
 ] as const;
@@ -324,6 +323,28 @@ test("provides all ten Farm Maps pages in order with localized hrefs", () => {
     const farmMaps = readFarmLayoutsNavigationCategory(model, "farm-maps");
 
     expect(farmMaps.pages).toEqual(expectedFarmMapPagesByLocale[locale]);
+
+    const greenhouseLayouts = readFarmLayoutsNavigationCategory(
+      model,
+      "greenhouse-layouts",
+    );
+    const expectedGreenhouseLayout = {
+      href:
+        locale === "zh-CN"
+          ? "/zh/stardew-greenhouse-layout"
+          : "/stardew-greenhouse-layout",
+      id: "greenhouse-layout",
+      label: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
+    } as const;
+    expect(greenhouseLayouts.pages).toEqual([expectedGreenhouseLayout]);
+    expect(isFarmLayoutsNavigationPageId("greenhouse-layout")).toBe(true);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "greenhouse-layouts",
+        "greenhouse-layout",
+      ),
+    ).toEqual(expectedGreenhouseLayout);
 
     for (const categoryId of emptyFarmLayoutsCategoryIds) {
       expect(readFarmLayoutsNavigationCategory(model, categoryId).pages).toEqual(
@@ -737,10 +758,10 @@ test("uses a compact back step for empty and populated categories, then restores
   const emptyCategory = moveNavigationFocus({
     compact: true,
     currentFocusKey: getFarmLayoutsNavigationCategoryFocusKey(
-      "greenhouse-layouts",
+      "buildings-interiors",
     ),
     interaction: {
-      focusKey: getFarmLayoutsNavigationCategoryFocusKey("greenhouse-layouts"),
+      focusKey: getFarmLayoutsNavigationCategoryFocusKey("buildings-interiors"),
       openCategoryId: null,
       panel: "categories",
       suppressPointerHover: false,
@@ -753,8 +774,25 @@ test("uses a compact back step for empty and populated categories, then restores
     interaction: emptyCategory,
     key: "ArrowLeft",
   });
-  const beachCategory = activateFarmLayoutsCategory(
+  const greenhouseCategory = activateFarmLayoutsCategory(
     returnedFromEmpty,
+    "greenhouse-layouts",
+    true,
+  );
+  const greenhousePage = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: "back",
+    interaction: greenhouseCategory,
+    key: "ArrowRight",
+  });
+  const returnedFromGreenhouse = moveNavigationFocus({
+    compact: true,
+    currentFocusKey: getFarmLayoutsNavigationPageFocusKey("greenhouse-layout"),
+    interaction: greenhousePage,
+    key: "ArrowLeft",
+  });
+  const beachCategory = activateFarmLayoutsCategory(
+    returnedFromGreenhouse,
     "farm-maps",
     true,
   );
@@ -827,10 +865,20 @@ test("uses a compact back step for empty and populated categories, then restores
 
   expect(emptyCategory).toMatchObject({
     focusKey: "back",
-    openCategoryId: "greenhouse-layouts",
+    openCategoryId: "buildings-interiors",
     panel: "category",
   });
   expect(returnedFromEmpty).toMatchObject({
+    focusKey: getFarmLayoutsNavigationCategoryFocusKey("buildings-interiors"),
+    openCategoryId: null,
+    panel: "categories",
+  });
+  expect(greenhousePage).toMatchObject({
+    focusKey: getFarmLayoutsNavigationPageFocusKey("greenhouse-layout"),
+    openCategoryId: "greenhouse-layouts",
+    panel: "category",
+  });
+  expect(returnedFromGreenhouse).toMatchObject({
     focusKey: getFarmLayoutsNavigationCategoryFocusKey("greenhouse-layouts"),
     openCategoryId: null,
     panel: "categories",

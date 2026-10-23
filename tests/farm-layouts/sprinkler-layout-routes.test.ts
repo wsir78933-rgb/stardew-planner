@@ -14,6 +14,7 @@ import ChineseSprinklerLayoutsPage, {
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
@@ -197,10 +198,12 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(50);
-  expect(indexableEntries).toHaveLength(98);
+  expect(canonicalPublicPaths).toHaveLength(51);
+  expect(indexableEntries).toHaveLength(100);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
-  expect(sprinklerIndex).toBe(wildernessIndex + 1);
+  const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
+  expect(greenhouseIndex).toBe(wildernessIndex + 1);
+  expect(sprinklerIndex).toBe(greenhouseIndex + 1);
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
   expect(iridiumSprinklerIndex).toBe(qualitySprinklerIndex + 1);
   expect(fruitTreeIndex).toBe(iridiumSprinklerIndex + 1);
@@ -309,8 +312,27 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
       },
     ],
   });
+  expect(
+    englishNavigation.categories.find((category) => category.id === "greenhouse-layouts")
+      ?.pages,
+  ).toEqual([
+    {
+      id: "greenhouse-layout",
+      href: greenhouseLayoutCanonicalPath,
+      label: "Greenhouse Layouts",
+    },
+  ]);
+  expect(
+    chineseNavigation.categories.find((category) => category.id === "greenhouse-layouts")
+      ?.pages,
+  ).toEqual([
+    {
+      id: "greenhouse-layout",
+      href: `/zh${greenhouseLayoutCanonicalPath}`,
+      label: "温室布局",
+    },
+  ]);
   for (const emptyCategoryId of [
-    "greenhouse-layouts",
     "buildings-interiors",
     "layout-ideas",
   ] as const) {
