@@ -6,6 +6,7 @@ import { expandedFarmCanonicalPath } from "@/src/farm-layouts/expanded-farm-cont
 import { fruitTreeLayoutCanonicalPath } from "@/src/farm-layouts/fruit-tree-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-sprinkler-layout-content";
+import { houseDesignCanonicalPath } from "@/src/farm-layouts/house-design-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
@@ -31,7 +32,6 @@ import {
 } from "@/src/farm-layouts/farm-layouts-navigation-model";
 
 const emptyFarmLayoutsCategoryIds = [
-  "buildings-interiors",
   "layout-ideas",
 ] as const;
 
@@ -527,6 +527,40 @@ test("places greenhouse topics in order under Greenhouse Layouts with locale fal
   }
 });
 
+test("places House Design in Buildings & Interiors with localized hrefs", () => {
+  expect(houseDesignCanonicalPath).toBe("/stardew-valley-house-design");
+  expect(isFarmLayoutsNavigationPageId("house-design")).toBe(true);
+
+  for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
+    const model = getFarmLayoutsNavigationModel(locale);
+    const buildingsCategory = readFarmLayoutsNavigationCategory(
+      model,
+      "buildings-interiors",
+    );
+    const houseDesignPage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${houseDesignCanonicalPath}`
+          : houseDesignCanonicalPath,
+      id: "house-design",
+      label: locale === "zh-CN" ? "房屋设计" : "House Design",
+    } as const;
+
+    expect(buildingsCategory.label).toBe(
+      locale === "zh-CN" ? "建筑与室内" : "Buildings & Interiors",
+    );
+    expect(buildingsCategory.pages).toEqual([houseDesignPage]);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "buildings-interiors",
+        "house-design",
+      ),
+    ).toEqual(houseDesignPage);
+    expect(isFarmLayoutsNavigationPageId("house-design-missing")).toBe(false);
+  }
+});
+
 test("moves through all four Planting Layouts pages with desktop and compact keys", () => {
   const plantingFocusKey = getFarmLayoutsNavigationCategoryFocusKey(
     "planting-layouts",
@@ -767,7 +801,7 @@ test("moves keyboard focus through all five categories and wraps at both ends", 
 
 test("opens an empty desktop category without page focus and returns to that category on Left", () => {
   const selectedCategory = getFarmLayoutsNavigationCategoryFocusKey(
-    "buildings-interiors",
+    "layout-ideas",
   );
   const categories = {
     focusKey: selectedCategory,
@@ -790,7 +824,7 @@ test("opens an empty desktop category without page focus and returns to that cat
 
   expect(emptyCategoryPanel).toMatchObject({
     focusKey: selectedCategory,
-    openCategoryId: "buildings-interiors",
+    openCategoryId: "layout-ideas",
     panel: "category",
   });
   expect(returnedToCategories).toMatchObject({

@@ -1,0 +1,1625 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "hd07-stardew-valley-house-design-wizard-mystic-16",
+      "title": "stardew valley house design wizard mystic 1.6",
+      "created_at": "2026-10-23T12:00:00.000Z",
+      "updated_at": "2026-10-23T18:00:00.000Z",
+      "project": {
+        "version": 4,
+        "gameVersion": "1.6.15",
+        "projectName": "stardew valley house design wizard mystic 1.6",
+        "season": "spring",
+        "activeMapId": "hd07-stardew-valley-house-design-wizard-mystic-16map",
+        "maps": [
+          {
+            "id": "hd07-stardew-valley-house-design-wizard-mystic-16map",
+            "mapFile": "FarmHouse2.tmx",
+            "label": "Farmhouse (Upgrade 2)",
+            "season": "spring",
+            "state": {
+              "buildings": [],
+              "crops": [],
+              "items": [
+                {
+                  "instanceId": "i1",
+                  "itemId": "furniture_StarryMoonRug",
+                  "x": 26,
+                  "y": 24,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 5,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i2",
+                  "itemId": "furniture_528",
+                  "x": 26,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i3",
+                  "itemId": "furniture_64",
+                  "x": 30,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i4",
+                  "itemId": "furniture_WizardTeaTable",
+                  "x": 28,
+                  "y": 24,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i5",
+                  "itemId": "furniture_WizardFireplace",
+                  "x": 32,
+                  "y": 21,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i6",
+                  "itemId": "furniture_WizardLamp",
+                  "x": 25,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i7",
+                  "itemId": "furniture_WizardCatalogue",
+                  "x": 34,
+                  "y": 27,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i8",
+                  "itemId": "furniture_1664",
+                  "x": 27,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i9",
+                  "itemId": "furniture_WizardTable",
+                  "x": 18,
+                  "y": 25,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i10",
+                  "itemId": "furniture_WizardChair",
+                  "x": 17,
+                  "y": 25,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i11",
+                  "itemId": "furniture_WizardChair",
+                  "x": 20,
+                  "y": 25,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i12",
+                  "itemId": "furniture_Cauldron",
+                  "x": 16,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i13",
+                  "itemId": "furniture_ElixirShelf",
+                  "x": 22,
+                  "y": 21,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i14",
+                  "itemId": "furniture_PottedRedMushroom",
+                  "x": 21,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i15",
+                  "itemId": "furniture_LongElixirTable",
+                  "x": 4,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i16",
+                  "itemId": "furniture_WizardStool",
+                  "x": 3,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i17",
+                  "itemId": "furniture_WizardStool",
+                  "x": 7,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i18",
+                  "itemId": "furniture_StackedElixirShelf",
+                  "x": 2,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i19",
+                  "itemId": "furniture_CrystalBall",
+                  "x": 6,
+                  "y": 25,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i20",
+                  "itemId": "furniture_RuneRug",
+                  "x": 5,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i21",
+                  "itemId": "furniture_WizardBed",
+                  "x": 42,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "double"
+                },
+                {
+                  "instanceId": "i22",
+                  "itemId": "furniture_WizardDresser",
+                  "x": 39,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i23",
+                  "itemId": "furniture_WizardEndTable",
+                  "x": 45,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i24",
+                  "itemId": "furniture_CurlyTree",
+                  "x": 47,
+                  "y": 22,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i25",
+                  "itemId": "furniture_SwirlRug",
+                  "x": 41,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i26",
+                  "itemId": "furniture_1914",
+                  "x": 40,
+                  "y": 21,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i27",
+                  "itemId": "furniture_1915",
+                  "x": 44,
+                  "y": 21,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i28",
+                  "itemId": "furniture_2076",
+                  "x": 32,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "child"
+                },
+                {
+                  "instanceId": "i29",
+                  "itemId": "furniture_2076",
+                  "x": 36,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "child"
+                },
+                {
+                  "instanceId": "i30",
+                  "itemId": "furniture_AmethystCrystalBall",
+                  "x": 34,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i31",
+                  "itemId": "furniture_TopazCrystalBall",
+                  "x": 35,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i32",
+                  "itemId": "furniture_1664",
+                  "x": 33,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i33",
+                  "itemId": "furniture_WizardStudy",
+                  "x": 18,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i34",
+                  "itemId": "furniture_LargeWizardBookcase",
+                  "x": 16,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i35",
+                  "itemId": "furniture_BookStack",
+                  "x": 22,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i36",
+                  "itemId": "furniture_WizardBookshelf",
+                  "x": 24,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i44",
+                  "itemId": "furniture_VoidSwirls",
+                  "x": 46,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i45",
+                  "itemId": "furniture_WizardChair",
+                  "x": 49,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i46",
+                  "itemId": "furniture_RubyCrystalBall",
+                  "x": 51,
+                  "y": 13,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i47",
+                  "itemId": "furniture_1914",
+                  "x": 21,
+                  "y": 3,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i48",
+                  "itemId": "furniture_1915",
+                  "x": 25,
+                  "y": 3,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i49",
+                  "itemId": "furniture_1916",
+                  "x": 29,
+                  "y": 3,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i50",
+                  "itemId": "furniture_StarryMoonRug",
+                  "x": 22,
+                  "y": 5,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 5,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i51",
+                  "itemId": "furniture_131",
+                  "x": 24,
+                  "y": 6,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i52",
+                  "itemId": "furniture_AquamarineCrystalBall",
+                  "x": 27,
+                  "y": 6,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i53",
+                  "itemId": "furniture_DecorativeWizardDoor",
+                  "x": 57,
+                  "y": 5,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i54",
+                  "itemId": "furniture_WitchBroom",
+                  "x": 56,
+                  "y": 8,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i55",
+                  "itemId": "furniture_StoneFlooring",
+                  "x": 58,
+                  "y": 10,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 4,
+                    "h": 4
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i56",
+                  "itemId": "furniture_LargeBookPile",
+                  "x": 56,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i57",
+                  "itemId": "furniture_PurpleBook",
+                  "x": 17,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i58",
+                  "itemId": "furniture_YellowBook",
+                  "x": 29,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i59",
+                  "itemId": "furniture_RedBook",
+                  "x": 8,
+                  "y": 31,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i60",
+                  "itemId": "furniture_GreenBook",
+                  "x": 35,
+                  "y": 27,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i61",
+                  "itemId": "furniture_BrownBook",
+                  "x": 41,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i62",
+                  "itemId": "furniture_FallenPurpleBook",
+                  "x": 19,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i63",
+                  "itemId": "furniture_SmallBookPile",
+                  "x": 33,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i64",
+                  "itemId": "furniture_EmeraldCrystalBall",
+                  "x": 58,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i65",
+                  "itemId": "furniture_PurpleBook",
+                  "x": 17,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i66",
+                  "itemId": "furniture_BlueBook",
+                  "x": 20,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i67",
+                  "itemId": "furniture_YellowBook",
+                  "x": 24,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i68",
+                  "itemId": "furniture_RedBook",
+                  "x": 28,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i69",
+                  "itemId": "furniture_GreenBook",
+                  "x": 34,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i70",
+                  "itemId": "furniture_BrownBook",
+                  "x": 7,
+                  "y": 30,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i71",
+                  "itemId": "furniture_FallenBlueBook",
+                  "x": 10,
+                  "y": 30,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i72",
+                  "itemId": "furniture_LeafyPlant",
+                  "x": 40,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i73",
+                  "itemId": "furniture_PottedRedMushroom",
+                  "x": 44,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i74",
+                  "itemId": "furniture_WizardCushion",
+                  "x": 18,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i75",
+                  "itemId": "furniture_DarkWizardCushion",
+                  "x": 22,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i78",
+                  "itemId": "furniture_SmallBookStack",
+                  "x": 57,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i79",
+                  "itemId": "furniture_BookPile",
+                  "x": 59,
+                  "y": 13,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i80",
+                  "itemId": "furniture_CoupleElixirs",
+                  "x": 23,
+                  "y": 7,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i81",
+                  "itemId": "furniture_ElixirBundle",
+                  "x": 27,
+                  "y": 7,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i82",
+                  "itemId": "furniture_CrystalBall",
+                  "x": 29,
+                  "y": 5,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                }
+              ],
+              "nextBuildingId": 1,
+              "nextItemId": 83,
+              "mapRenderOptions": {
+                "gingerIslandOverlayIds": [
+                  "restored",
+                  "bin",
+                  "cave",
+                  "obelisk"
+                ],
+                "farmhouse2": {
+                  "marriageMapEnabled": false,
+                  "renovationIds": [
+                    "bedroom",
+                    "corner-room",
+                    "extended-corner-room",
+                    "dining-room",
+                    "dining-room-wall",
+                    "cubby",
+                    "far-upper-room",
+                    "crib"
+                  ],
+                  "spouseId": null
+                },
+                "farm": {
+                  "spouseId": null,
+                  "caveChoice": "none"
+                }
+              }
+            },
+            "decor": {
+              "wallpapers": {
+                "Kitchen": "MoreWalls:10",
+                "LivingRoom": "MoreWalls:10",
+                "Bedroom": "MoreWalls:10",
+                "Nursery": "MoreWalls:10",
+                "UpperRoom": "MoreWalls:10",
+                "Hallway_Bedroom": "MoreWalls:10",
+                "Hallway_Nursery": "MoreWalls:10"
+              },
+              "floors": {
+                "Kitchen": "52",
+                "LivingRoom": "52",
+                "Bedroom": "52",
+                "Nursery": "52",
+                "UpperRoom": "52",
+                "Hallway_Bedroom": "52",
+                "Hallway_Nursery": "52"
+              }
+            },
+            "renovations": [
+              "bedroom",
+              "corner-room",
+              "extended-corner-room",
+              "dining-room",
+              "dining-room-wall",
+              "cubby",
+              "far-upper-room",
+              "crib"
+            ],
+            "thumbnail": "/api/projects/hd07-stardew-valley-house-design-wizard-mystic-16/maps/hd07-stardew-valley-house-design-wizard-mystic-16map/thumbnail"
+          }
+        ]
+      },
+      "thumbnailsByMapId": {}
+    }
+  ]
+}

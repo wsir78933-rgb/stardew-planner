@@ -101,11 +101,11 @@ it("registers both localized greenhouse routes after the tree layout and in the 
   expect(greenhouseSprinklerLayoutCanonicalPath).toBe(
     "/greenhouse-sprinkler-layout-stardew",
   );
-  expect(canonicalPublicPaths).toHaveLength(59);
+  expect(canonicalPublicPaths).toHaveLength(60);
   expect(greenhouseTreeIndex).toBeLessThan(greenhouseSprinklerIndex);
-  expect(greenhouseSprinklerIndex).toBe(canonicalPublicPaths.length - 1);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(118);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(116);
+  expect(greenhouseSprinklerIndex).toBe(canonicalPublicPaths.length - 2);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(120);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(118);
   expect(localizedEntries).toEqual([
     {
       locale: "en",
@@ -122,7 +122,7 @@ it("registers both localized greenhouse routes after the tree layout and in the 
   expect(sitemapPathnames).toContain(
     `/zh${greenhouseSprinklerLayoutCanonicalPath}`,
   );
-  expect(sitemapPathnames).toHaveLength(118);
+  expect(sitemapPathnames).toHaveLength(120);
   expect(englishGreenhouseSprinklerLayoutDynamic).toBe("force-static");
   expect(chineseGreenhouseSprinklerLayoutDynamic).toBe("force-static");
 

@@ -16,6 +16,7 @@ import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layou
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
+import { houseDesignCanonicalPath } from "../../src/farm-layouts/house-design-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
@@ -199,8 +200,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(59);
-  expect(indexableEntries).toHaveLength(116);
+  expect(canonicalPublicPaths).toHaveLength(60);
+  expect(indexableEntries).toHaveLength(118);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   expect(sprinklerIndex).toBe(wildernessIndex + 1);
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
@@ -349,10 +350,29 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
       },
     ],
   });
-  for (const emptyCategoryId of [
-    "buildings-interiors",
-    "layout-ideas",
-  ] as const) {
+  expect(
+    englishNavigation.categories.find(
+      (category) => category.id === "buildings-interiors",
+    )?.pages,
+  ).toEqual([
+    {
+      href: houseDesignCanonicalPath,
+      id: "house-design",
+      label: "House Design",
+    },
+  ]);
+  expect(
+    chineseNavigation.categories.find(
+      (category) => category.id === "buildings-interiors",
+    )?.pages,
+  ).toEqual([
+    {
+      href: `/zh${houseDesignCanonicalPath}`,
+      id: "house-design",
+      label: "房屋设计",
+    },
+  ]);
+  for (const emptyCategoryId of ["layout-ideas"] as const) {
     expect(
       englishNavigation.categories.find((category) => category.id === emptyCategoryId)
         ?.pages,

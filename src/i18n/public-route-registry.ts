@@ -5,6 +5,7 @@ import { hilltopFarmCanonicalPath } from "../farm-layouts/hilltop-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "../farm-layouts/fruit-tree-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../farm-layouts/greenhouse-sprinkler-layout-content";
+import { houseDesignCanonicalPath } from "../farm-layouts/house-design-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "../farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../farm-layouts/quality-sprinkler-layout-content";
 import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
@@ -49,7 +50,8 @@ export type PublicCanonicalPath =
   | (typeof fixedCanonicalPublicPaths)[number]
   | BlogCanonicalPublicPath
   | typeof greenhouseTreeLayoutCanonicalPath
-  | typeof greenhouseSprinklerLayoutCanonicalPath;
+  | typeof greenhouseSprinklerLayoutCanonicalPath
+  | typeof houseDesignCanonicalPath;
 
 const blogCanonicalPublicPaths: readonly BlogCanonicalPublicPath[] = [
   "/blog",
@@ -62,6 +64,7 @@ export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
   ...blogCanonicalPublicPaths,
   greenhouseTreeLayoutCanonicalPath,
   greenhouseSprinklerLayoutCanonicalPath,
+  houseDesignCanonicalPath,
 ];
 
 const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>([

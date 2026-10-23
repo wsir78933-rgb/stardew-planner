@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
+import { houseDesignCanonicalPath } from "../../src/farm-layouts/house-design-content";
 import { publicLocales } from "../../src/i18n/public-locale";
 import {
   PROCESSING_TOOL_IDS,
@@ -18,7 +19,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(59);
+  expect(canonicalPublicPaths).toHaveLength(60);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -147,6 +148,12 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(
     getLocalizedPublicPath("zh-CN", greenhouseTreeLayoutCanonicalPath),
   ).toBe("/zh/stardew-greenhouse-tree-layout");
+  expect(getLocalizedPublicPath("en", houseDesignCanonicalPath)).toBe(
+    "/stardew-valley-house-design",
+  );
+  expect(getLocalizedPublicPath("zh-CN", houseDesignCanonicalPath)).toBe(
+    "/zh/stardew-valley-house-design",
+  );
   expect(getLocalizedPublicPath("en", "/blog")).toBe("/blog");
   expect(getLocalizedPublicPath("zh-CN", "/blog")).toBe("/zh/blog");
   expect(getLocalizedPublicPath("en", "/blog/archive")).toBe("/blog/archive");
@@ -306,8 +313,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(118);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(116);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(120);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(118);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );
@@ -358,6 +365,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   );
   expect(indexablePathnames).toContain(greenhouseTreeLayoutCanonicalPath);
   expect(indexablePathnames).toContain(`/zh${greenhouseTreeLayoutCanonicalPath}`);
+  expect(indexablePathnames).toContain(houseDesignCanonicalPath);
+  expect(indexablePathnames).toContain(`/zh${houseDesignCanonicalPath}`);
   expect(indexablePathnames).toContain("/blog");
   expect(indexablePathnames).toContain("/zh/blog");
   expect(indexablePathnames).toContain("/carpenter-stardew");
