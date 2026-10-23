@@ -91,6 +91,10 @@ describe("parseTmxMap", () => {
     expect(parsedFarmMap.tileDataProperties.get("Back:69,10")).toEqual({
       Buildable: "f",
     });
+    expect(parsedFarmMap.tilesets[2]?.tileAnimations?.get(208)).toEqual([
+      { tileId: 208, durationMilliseconds: 1000 },
+      { tileId: 1207, durationMilliseconds: 1000 },
+    ]);
   });
 
   it("expands FarmHouse TileData objects into per-tile property entries", async () => {
@@ -168,6 +172,43 @@ describe("parseTmxMap", () => {
     await expect(parseTmxMap(negativeTileIdXml)).rejects.toThrow('"-1"');
     await expect(parseTmxMap(unknownTileChildXml)).rejects.toThrow('"unsupported"');
     await expect(parseTmxMap(invalidTileDataShapeXml)).rejects.toThrow('"x" value "1"');
+  });
+
+  it.each([
+    ["negative frame tile ID", '<frame tileid="-1" duration="100" />', 'non-negative integer "tileid"'],
+    ["missing frame duration", '<frame tileid="0" />', 'requires non-empty "duration"'],
+    ["zero frame duration", '<frame tileid="0" duration="0" />', 'positive integer "duration"'],
+    ["out-of-range frame tile ID", '<frame tileid="1" duration="100" />', "outside declared tile count 1"],
+  ])("rejects %s in a tileset animation", async (_, animationFrame, expectedError) => {
+    const invalidAnimationXml = `
+      <map orientation="orthogonal" infinite="0" width="1" height="1" tilewidth="16" tileheight="16">
+        <tileset firstgid="1" name="single" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+          <image source="single-tile" width="16" height="16" />
+          <tile id="0"><animation>${animationFrame}</animation></tile>
+        </tileset>
+      </map>`;
+
+    await expect(parseTmxMap(invalidAnimationXml)).rejects.toThrow(expectedError);
+  });
+
+  it("rejects empty or unsupported tileset animation frame lists", async () => {
+    const emptyAnimationXml = `
+      <map orientation="orthogonal" infinite="0" width="1" height="1" tilewidth="16" tileheight="16">
+        <tileset firstgid="1" name="single" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+          <image source="single-tile" width="16" height="16" />
+          <tile id="0"><animation /></tile>
+        </tileset>
+      </map>`;
+    const unsupportedAnimationChildXml = `
+      <map orientation="orthogonal" infinite="0" width="1" height="1" tilewidth="16" tileheight="16">
+        <tileset firstgid="1" name="single" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+          <image source="single-tile" width="16" height="16" />
+          <tile id="0"><animation><unsupported /></animation></tile>
+        </tileset>
+      </map>`;
+
+    await expect(parseTmxMap(emptyAnimationXml)).rejects.toThrow("at least one frame");
+    await expect(parseTmxMap(unsupportedAnimationChildXml)).rejects.toThrow('"unsupported"');
   });
 
   it.each([

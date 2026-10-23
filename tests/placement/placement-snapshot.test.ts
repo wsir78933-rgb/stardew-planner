@@ -100,6 +100,182 @@ describe("placement snapshot", () => {
 
     expect(restoredSnapshot.items[0].footprint).toEqual({ width: 1, height: 1 });
     expect(restoredSnapshot).toEqual(createStoredSnapshot());
+    expect(restoredSnapshot.items[0]?.animationOptions).toBeUndefined();
+  });
+
+  it("round-trips building, item, and held-item animation options without sharing arrays", () => {
+    const storedSnapshot = {
+      buildings: [
+        {
+          instanceId: 1,
+          buildingId: "Fish Pond",
+          x: 2,
+          y: 3,
+          animationOptions: { fishId: "128", population: 4, millLoaded: true },
+        },
+      ],
+      crops: [],
+      items: [
+        {
+          instanceId: 2,
+          itemId: "furniture_724",
+          x: 4,
+          y: 5,
+          layer: "item" as const,
+          rotation: 0,
+          footprint: { width: 2, height: 2 },
+          variant: 0,
+          tintColor: "#ffffff",
+          locked: false,
+          isRug: false,
+          isGrass: false,
+          isTable: true,
+          isLongTable: false,
+          flipped: false,
+          bedType: null,
+          animationOptions: {
+            tankFish: ["128"],
+            animals: [{ animalId: "Cow" }],
+          },
+          heldItem: {
+            instanceId: 3,
+            itemId: "furniture_0",
+            x: 4,
+            y: 5,
+            layer: "item" as const,
+            rotation: 0,
+            footprint: { width: 1, height: 1 },
+            variant: 0,
+            tintColor: "#ffffff",
+            locked: false,
+            isRug: false,
+            isGrass: false,
+            isTable: false,
+            isLongTable: false,
+            flipped: false,
+            bedType: null,
+            animationOptions: { hatId: "11" },
+          },
+        },
+      ],
+      nextBuildingId: 2,
+      nextItemId: 4,
+    };
+
+    const restoredSnapshot = restorePlacementSnapshot(
+      JSON.parse(JSON.stringify(storedSnapshot)),
+    );
+    storedSnapshot.buildings[0].animationOptions.fishId = "129";
+    storedSnapshot.items[0].animationOptions.tankFish.push("130");
+    storedSnapshot.items[0].animationOptions.animals[0].animalId = "Sheep";
+
+    expect(restoredSnapshot.buildings[0]?.animationOptions).toEqual({
+      fishId: "128",
+      population: 4,
+      millLoaded: true,
+    });
+    expect(restoredSnapshot.items[0]?.animationOptions).toEqual({
+      tankFish: ["128"],
+      animals: [{ animalId: "Cow" }],
+    });
+    expect(restoredSnapshot.items[0]?.heldItem?.animationOptions).toEqual({
+      hatId: "11",
+    });
+  });
+
+  it("round-trips Mill output controls through JSON restoration", () => {
+    const storedSnapshot = {
+      buildings: [
+        {
+          instanceId: 1,
+          buildingId: "Mill",
+          x: 2,
+          y: 3,
+          animationOptions: { millOutput: true, millProduct: "246" },
+        },
+      ],
+      crops: [],
+      items: [],
+      nextBuildingId: 2,
+      nextItemId: 1,
+    };
+
+    const restoredSnapshot = restorePlacementSnapshot(
+      JSON.parse(JSON.stringify(storedSnapshot)),
+    );
+
+    expect(restoredSnapshot.buildings[0]?.animationOptions).toEqual({
+      millOutput: true,
+      millProduct: "246",
+    });
+  });
+
+  it("preserves animation options on new building, item, and held-item actions", () => {
+    const buildingSnapshot = applyPlacementSnapshotAction(
+      createEmptyPlacementSnapshot(),
+      {
+        type: "add-building",
+        building: {
+          buildingId: "Fish Pond",
+          x: 1,
+          y: 2,
+          animationOptions: {
+            fishId: "128",
+            population: 3,
+            produce: "812",
+          },
+        },
+      },
+    );
+    const itemSnapshot = applyPlacementSnapshotAction(buildingSnapshot, {
+      type: "add-item",
+      item: {
+        ...createNewItem(),
+        itemId: "furniture_724",
+        layer: "item",
+        isTable: true,
+        animationOptions: { clockOff: true },
+      },
+    });
+    const heldItemSnapshot = applyPlacementSnapshotAction(itemSnapshot, {
+      type: "attach-held-item",
+      parentInstanceId: 1,
+      item: {
+        ...createNewItem(),
+        itemId: "furniture_0",
+        layer: "item",
+        animationOptions: { hatId: "11" },
+      },
+    });
+
+    expect(heldItemSnapshot.buildings[0]?.animationOptions).toEqual({
+      fishId: "128",
+      population: 3,
+      produce: "812",
+    });
+    expect(heldItemSnapshot.items[0]?.animationOptions).toEqual({
+      clockOff: true,
+    });
+    expect(heldItemSnapshot.items[0]?.heldItem?.animationOptions).toEqual({
+      hatId: "11",
+    });
+
+    const workingOptions = { animals: [{ animalId: "Cow" }] };
+    const workingSnapshot = createWorkingPlacementSnapshot(
+      createEmptyPlacementSnapshot(),
+    );
+    applyWorkingPlacementSnapshotAction(workingSnapshot, {
+      type: "add-building",
+      building: {
+        buildingId: "Barn",
+        x: 0,
+        y: 0,
+        animationOptions: workingOptions,
+      },
+    });
+    workingOptions.animals[0]!.animalId = "Sheep";
+    expect(commitWorkingPlacementSnapshot(workingSnapshot).buildings[0]?.animationOptions)
+      .toEqual({ animals: [{ animalId: "Cow" }] });
   });
 
   it("fails fast when a stored placement bedType is outside the typed bed domain", () => {

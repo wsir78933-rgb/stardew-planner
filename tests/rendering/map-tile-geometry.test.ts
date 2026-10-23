@@ -5,6 +5,7 @@ import type {
 } from "../../src/rendering/map-rendering-contract";
 import {
   createLayerTileGeometryResolver,
+  createTilesetTileFrameResolver,
   decodeTiledTileTransform,
   resolveLayerTileGeometry,
 } from "../../src/rendering/map-tile-geometry";
@@ -216,6 +217,41 @@ describe("createLayerTileGeometryResolver", () => {
       }),
     ).toThrow(
       /99.*farmhouse-2/,
+    );
+  });
+});
+
+describe("createTilesetTileFrameResolver", () => {
+  it("resolves animated GIDs to frame rectangles while stripping legal Tiled flip flags", () => {
+    const tilesetTileFrameResolver = createTilesetTileFrameResolver({
+      mapId: "standard",
+      tilesets: [
+        createTestTileset(1, 16, 4, 64, 64),
+        createTestTileset(17, 8, 4, 64, 32),
+      ],
+    });
+
+    expect(
+      tilesetTileFrameResolver.resolveTileFrame(
+        toUnsignedRawGid(horizontalFlipFlag | 22),
+      ),
+    ).toEqual({
+      frameX: 16,
+      frameY: 16,
+      frameWidth: 16,
+      frameHeight: 16,
+      tilesetIndex: 1,
+    });
+  });
+
+  it("fails with the animation GID when it is outside all tilesets", () => {
+    const tilesetTileFrameResolver = createTilesetTileFrameResolver({
+      mapId: "standard",
+      tilesets: [createTestTileset(1, 16, 4, 64, 64)],
+    });
+
+    expect(() => tilesetTileFrameResolver.resolveTileFrame(99)).toThrow(
+      "GID 99",
     );
   });
 });

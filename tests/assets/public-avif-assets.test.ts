@@ -50,14 +50,13 @@ function readAvifHeader(relativeImagePath: string): Buffer {
 }
 
 describe("public AVIF derivatives", () => {
-  it("provides AVIF derivatives for every opaque public WebP image", () => {
+  it("provides AVIF derivatives for every public WebP image", () => {
     const webpRelativePaths = publicImageDirectories
       .flatMap((directory) => collectWebpRelativePaths(resolve(projectRoot, directory)))
       .sort();
-    const opaqueWebpRelativePaths = webpRelativePaths;
 
-    expect(opaqueWebpRelativePaths).toHaveLength(81);
-    for (const relativeImagePath of opaqueWebpRelativePaths) {
+    expect(webpRelativePaths).toHaveLength(115);
+    for (const relativeImagePath of webpRelativePaths) {
       const avifHeader = readAvifHeader(relativeImagePath);
       expect(avifHeader.includes(Buffer.from("ftypavif"))).toBe(true);
       expect(

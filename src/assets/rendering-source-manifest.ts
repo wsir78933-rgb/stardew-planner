@@ -1,5 +1,6 @@
 import {
   additionalFurnitureTilesheetOutputPaths,
+  animationSpriteOutputPaths,
   buildingPaintMaskOutputPaths,
   buildingSpriteOutputPaths,
   modNonSeasonalTilesheetOutputPaths,
@@ -46,6 +47,10 @@ export const buildingPaintMaskSourceAssets = createImageSourceAssets(
 );
 
 export const spriteSourceAssets = createImageSourceAssets(spriteOutputPaths);
+
+export const animationSpriteSourceAssets = createImageSourceAssets(
+  animationSpriteOutputPaths,
+);
 
 export const terrainSourceAssets = createImageSourceAssets(terrainOutputPaths);
 

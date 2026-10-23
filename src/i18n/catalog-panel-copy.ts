@@ -1,4 +1,5 @@
 import type { CatalogSidebarCategory } from "../catalog";
+import type { CatalogItemSceneAvailability } from "../catalog/catalog-scene-availability";
 import type { HomepageLocale } from "../homepage/homepage-locale";
 
 export type CatalogPanelCopy = Readonly<{
@@ -30,7 +31,7 @@ export type CatalogPanelCopy = Readonly<{
   searchAllItems: string;
   searchResults: string;
   sceneAvailabilityReason: (
-    availability: "indoor-only" | "outdoor-only",
+    availability: Exclude<CatalogItemSceneAvailability, "available">,
   ) => string;
   unavailableGroup: (count: number, isSearch?: boolean) => string;
   selectItem: (name: string, width: number, height: number) => string;
@@ -215,33 +216,87 @@ function createUnavailableGroupLabel(
 
 function createSceneAvailabilityReason(
   locale: CatalogPanelLocale,
-  availability: "indoor-only" | "outdoor-only",
+  availability: Exclude<CatalogItemSceneAvailability, "available">,
 ): string {
-  if (availability !== "indoor-only" && availability !== "outdoor-only") {
-    throw new TypeError(
-      `Unsupported catalog scene availability. Received: ${JSON.stringify(availability)}.`,
-    );
+  switch (availability) {
+    case "indoor-only":
+      return readSceneAvailabilityText(locale, "indoor-only");
+    case "outdoor-only":
+      return readSceneAvailabilityText(locale, "outdoor-only");
+    case "not-buildable-here":
+      return readSceneAvailabilityText(locale, "not-buildable-here");
+    case "not-plantable-here":
+      return readSceneAvailabilityText(locale, "not-plantable-here");
+    case "not-placeable-here":
+      return readSceneAvailabilityText(locale, "not-placeable-here");
+    default: {
+      const unexpectedAvailability: never = availability;
+      throw new TypeError(
+        `Unsupported catalog scene availability. Received: ${JSON.stringify(unexpectedAvailability)}.`,
+      );
+    }
   }
+}
 
+function readSceneAvailabilityText(
+  locale: CatalogPanelLocale,
+  availability: Exclude<CatalogItemSceneAvailability, "available">,
+): string {
   if (locale === "en") {
-    return availability === "indoor-only"
-      ? "This item can only be placed indoors."
-      : "This item can only be placed outdoors.";
+    switch (availability) {
+      case "indoor-only":
+        return "This item can only be placed indoors.";
+      case "outdoor-only":
+        return "This item can only be placed outdoors.";
+      case "not-buildable-here":
+        return "Buildings cannot be placed on this map.";
+      case "not-plantable-here":
+        return "Crops cannot be planted on this map.";
+      case "not-placeable-here":
+        return "This item can't be placed here.";
+    }
   }
   if (locale === "zh-CN") {
-    return availability === "indoor-only"
-      ? "该物品只能放置在室内。"
-      : "该物品只能放置在室外。";
+    switch (availability) {
+      case "indoor-only":
+        return "该物品只能放置在室内。";
+      case "outdoor-only":
+        return "该物品只能放置在室外。";
+      case "not-buildable-here":
+        return "此地图不允许放置建筑。";
+      case "not-plantable-here":
+        return "此地图不能种植作物。";
+      case "not-placeable-here":
+        return "此处无法放置该物品。";
+    }
   }
   if (locale === "ja") {
-    return availability === "indoor-only"
-      ? "このアイテムは屋内にのみ配置できます。"
-      : "このアイテムは屋外にのみ配置できます。";
+    switch (availability) {
+      case "indoor-only":
+        return "このアイテムは屋内にのみ配置できます。";
+      case "outdoor-only":
+        return "このアイテムは屋外にのみ配置できます。";
+      case "not-buildable-here":
+        return "このマップでは建物を配置できません。";
+      case "not-plantable-here":
+        return "このマップでは作物を植えられません。";
+      case "not-placeable-here":
+        return "ここにはこのアイテムを配置できません。";
+    }
   }
   if (locale === "ru") {
-    return availability === "indoor-only"
-      ? "Этот предмет можно разместить только в помещении."
-      : "Этот предмет можно разместить только на улице.";
+    switch (availability) {
+      case "indoor-only":
+        return "Этот предмет можно разместить только в помещении.";
+      case "outdoor-only":
+        return "Этот предмет можно разместить только на улице.";
+      case "not-buildable-here":
+        return "На этой карте нельзя размещать постройки.";
+      case "not-plantable-here":
+        return "На этой карте нельзя сажать культуры.";
+      case "not-placeable-here":
+        return "Этот предмет нельзя разместить здесь.";
+    }
   }
 
   const unsupportedLocale: never = locale;

@@ -1,5 +1,10 @@
 import { getPlannerMapById } from "../maps/map-catalog";
-import type { TmxMap, TmxTileLayer, TmxTileset } from "../tmx/tmx-types";
+import type {
+  TmxMap,
+  TmxTileAnimationFrame,
+  TmxTileLayer,
+  TmxTileset,
+} from "../tmx/tmx-types";
 import {
   isKnownUnavailableTilesheetAsset,
   resolveTilesheetAsset,
@@ -82,7 +87,19 @@ export type MapRenderingContract = Readonly<{
   tileWidth: number;
   tileHeight: number;
   tilesets: readonly RenderingTileset[];
+  tileAnimationsByGid: ReadonlyMap<number, RenderingTileAnimation>;
+  waterTileGids: ReadonlySet<number>;
   visibleTileLayers: readonly RenderingTileLayer[];
+}>;
+
+export type RenderingTileAnimationFrame = Readonly<{
+  gid: number;
+  durationMilliseconds: number;
+}>;
+
+export type RenderingTileAnimation = Readonly<{
+  frames: readonly RenderingTileAnimationFrame[];
+  durationMilliseconds: number;
 }>;
 
 function createRenderingTileset(
@@ -135,6 +152,13 @@ export function createMapRenderingContract(
     mapRenderingContractRequest.requestedSeason,
     mapRenderingContractRequest.mapId,
   );
+  const tileAnimationsByGid = createTileAnimationsByGid(
+    mapRenderingContractRequest.parsedMap.tilesets,
+    mapRenderingContractRequest.mapId,
+  );
+  const waterTileGids = createWaterTileGids(
+    mapRenderingContractRequest.parsedMap.tilesets,
+  );
 
   return {
     mapId: mapRenderingContractRequest.mapId,
@@ -152,10 +176,115 @@ export function createMapRenderingContract(
         modId,
       ),
     ),
+    tileAnimationsByGid,
+    waterTileGids,
     visibleTileLayers: mapRenderingContractRequest.parsedMap.tileLayers
       .filter((tileLayer) => tileLayer.visible && tileLayer.name !== "Paths")
       .map(createRenderingTileLayer),
   };
+}
+
+function createTileAnimationsByGid(
+  tilesets: readonly TmxTileset[],
+  mapId: string,
+): ReadonlyMap<number, RenderingTileAnimation> {
+  const tileAnimationsByGid = new Map<number, RenderingTileAnimation>();
+
+  for (const tileset of tilesets) {
+    for (const [tileId, tileAnimationFrames] of tileset.tileAnimations ?? []) {
+      const animatedTileGid = tileset.firstGid + tileId;
+      if (tileAnimationsByGid.has(animatedTileGid)) {
+        throw new Error(
+          `Map rendering contract has duplicate animation GID ${animatedTileGid} in mapId ${formatValue(mapId)}.`,
+        );
+      }
+
+      const frames = createRenderingTileAnimationFrames(
+        tileAnimationFrames,
+        tileset,
+        tileId,
+        mapId,
+      );
+      const durationMilliseconds = frames.reduce(
+        (totalDurationMilliseconds, frame) =>
+          totalDurationMilliseconds + frame.durationMilliseconds,
+        0,
+      );
+      if (!Number.isSafeInteger(durationMilliseconds) || durationMilliseconds <= 0) {
+        throw new RangeError(
+          `Map rendering contract animation GID ${animatedTileGid} in mapId ${formatValue(mapId)} has invalid total duration ${formatValue(durationMilliseconds)}.`,
+        );
+      }
+
+      tileAnimationsByGid.set(animatedTileGid, {
+        frames,
+        durationMilliseconds,
+      });
+    }
+  }
+
+  return tileAnimationsByGid;
+}
+
+function createRenderingTileAnimationFrames(
+  tileAnimationFrames: readonly TmxTileAnimationFrame[],
+  tileset: TmxTileset,
+  animationTileId: number,
+  mapId: string,
+): readonly RenderingTileAnimationFrame[] {
+  if (!Array.isArray(tileAnimationFrames) || tileAnimationFrames.length === 0) {
+    throw new Error(
+      `Map rendering contract animation GID ${tileset.firstGid + animationTileId} in mapId ${formatValue(mapId)} must contain at least one frame.`,
+    );
+  }
+
+  return tileAnimationFrames.map((tileAnimationFrame, frameIndex) => {
+    if (
+      typeof tileAnimationFrame !== "object" ||
+      tileAnimationFrame === null ||
+      !Number.isSafeInteger(tileAnimationFrame.tileId) ||
+      tileAnimationFrame.tileId < 0 ||
+      tileAnimationFrame.tileId >= tileset.tileCount ||
+      !Number.isSafeInteger(tileAnimationFrame.durationMilliseconds) ||
+      tileAnimationFrame.durationMilliseconds <= 0
+    ) {
+      throw new TypeError(
+        `Map rendering contract animation frame ${frameIndex} for tileset ${JSON.stringify(tileset.name)} tile ID ${animationTileId} in mapId ${formatValue(mapId)} has invalid tileId or duration: ${formatValue(tileAnimationFrame)}.`,
+      );
+    }
+
+    return {
+      gid: tileset.firstGid + tileAnimationFrame.tileId,
+      durationMilliseconds: tileAnimationFrame.durationMilliseconds,
+    };
+  });
+}
+
+function createWaterTileGids(
+  tilesets: readonly TmxTileset[],
+): ReadonlySet<number> {
+  const waterTileGids = new Set<number>();
+
+  for (const tileset of tilesets) {
+    for (const [tileId, tileProperties] of tileset.tileProperties) {
+      if (tileId >= tileset.tileCount || !isWaterMarker(tileProperties.Water)) {
+        continue;
+      }
+
+      waterTileGids.add(tileset.firstGid + tileId);
+    }
+  }
+
+  return waterTileGids;
+}
+
+function isWaterMarker(waterMarker: string | undefined): boolean {
+  if (waterMarker === undefined || waterMarker.length === 0) {
+    return false;
+  }
+
+  const normalizedWaterMarker = waterMarker.toLowerCase();
+  return normalizedWaterMarker !== "false" && normalizedWaterMarker !== "f";
 }
 
 export function assertLocalGameAssetPath(assetPath: string): void {
