@@ -16,6 +16,7 @@ import {
   getGreenhouseSprinklerLayoutPageCopy,
   greenhouseSprinklerLayoutCanonicalPath,
 } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
+import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { createGreenhouseSprinklerLayoutPageStructuredData } from "../../src/farm-layouts/greenhouse-sprinkler-layout-structured-data";
 import {
   getFarmLayoutsNavigationModel,
@@ -101,11 +102,11 @@ it("registers both localized greenhouse routes after the tree layout and in the 
   expect(greenhouseSprinklerLayoutCanonicalPath).toBe(
     "/greenhouse-sprinkler-layout-stardew",
   );
-  expect(canonicalPublicPaths).toHaveLength(60);
+  expect(canonicalPublicPaths).toHaveLength(61);
   expect(greenhouseTreeIndex).toBeLessThan(greenhouseSprinklerIndex);
   expect(greenhouseSprinklerIndex).toBe(canonicalPublicPaths.length - 2);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(120);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(118);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(122);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(120);
   expect(localizedEntries).toEqual([
     {
       locale: "en",
@@ -122,7 +123,7 @@ it("registers both localized greenhouse routes after the tree layout and in the 
   expect(sitemapPathnames).toContain(
     `/zh${greenhouseSprinklerLayoutCanonicalPath}`,
   );
-  expect(sitemapPathnames).toHaveLength(120);
+  expect(sitemapPathnames).toHaveLength(122);
   expect(englishGreenhouseSprinklerLayoutDynamic).toBe("force-static");
   expect(chineseGreenhouseSprinklerLayoutDynamic).toBe("force-static");
 
@@ -135,6 +136,7 @@ it("registers both localized greenhouse routes after the tree layout and in the 
     expect(greenhouseCategory.pages.map(({ id }) => id)).toEqual([
       "greenhouse-tree-layout",
       "greenhouse-sprinkler-layout",
+      "greenhouse-layout",
     ]);
     expect(greenhouseCategory.pages[1]).toEqual({
       href:
@@ -146,6 +148,14 @@ it("registers both localized greenhouse routes after the tree layout and in the 
         locale === "zh-CN"
           ? "温室洒水器布局"
           : "Greenhouse Sprinkler Layouts",
+    });
+    expect(greenhouseCategory.pages[2]).toEqual({
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseLayoutCanonicalPath}`
+          : greenhouseLayoutCanonicalPath,
+      id: "greenhouse-layout",
+      label: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
     });
   }
 });

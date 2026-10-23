@@ -14,6 +14,7 @@ import ChineseSprinklerLayoutsPage, {
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { houseDesignCanonicalPath } from "../../src/farm-layouts/house-design-content";
@@ -200,10 +201,12 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(60);
-  expect(indexableEntries).toHaveLength(118);
+  expect(canonicalPublicPaths).toHaveLength(61);
+  expect(indexableEntries).toHaveLength(120);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
-  expect(sprinklerIndex).toBe(wildernessIndex + 1);
+  const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
+  expect(greenhouseIndex).toBe(wildernessIndex + 1);
+  expect(sprinklerIndex).toBe(greenhouseIndex + 1);
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);
   expect(iridiumSprinklerIndex).toBe(qualitySprinklerIndex + 1);
   expect(fruitTreeIndex).toBe(iridiumSprinklerIndex + 1);
@@ -300,6 +303,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         href: greenhouseSprinklerLayoutCanonicalPath,
         label: "Greenhouse Sprinkler Layouts",
       },
+      {
+        id: "greenhouse-layout",
+        href: greenhouseLayoutCanonicalPath,
+        label: "Greenhouse Layouts",
+      },
     ],
   });
   expect(
@@ -347,6 +355,11 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         id: "greenhouse-sprinkler-layout",
         href: `/zh${greenhouseSprinklerLayoutCanonicalPath}`,
         label: "温室洒水器布局",
+      },
+      {
+        id: "greenhouse-layout",
+        href: `/zh${greenhouseLayoutCanonicalPath}`,
+        label: "温室布局",
       },
     ],
   });

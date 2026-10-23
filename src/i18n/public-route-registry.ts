@@ -3,6 +3,7 @@ import { expandedFarmCanonicalPath } from "../farm-layouts/expanded-farm-content
 import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { hilltopFarmCanonicalPath } from "../farm-layouts/hilltop-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "../farm-layouts/fruit-tree-layout-content";
+import { greenhouseLayoutCanonicalPath } from "../farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../farm-layouts/greenhouse-sprinkler-layout-content";
 import { houseDesignCanonicalPath } from "../farm-layouts/house-design-content";
@@ -35,6 +36,7 @@ const fixedCanonicalPublicPaths = [
   expandedFarmCanonicalPath,
   hilltopFarmCanonicalPath,
   wildernessFarmCanonicalPath,
+  greenhouseLayoutCanonicalPath,
   sprinklerLayoutCanonicalPath,
   qualitySprinklerLayoutCanonicalPath,
   iridiumSprinklerLayoutCanonicalPath,

@@ -6,6 +6,7 @@ import { fourCornersFarmCanonicalPath } from "./four-corners-farm-content";
 import { frontierFarmCanonicalPath } from "./frontier-farm-content";
 import { hilltopFarmCanonicalPath } from "./hilltop-farm-content";
 import { fruitTreeLayoutCanonicalPath } from "./fruit-tree-layout-content";
+import { greenhouseLayoutCanonicalPath } from "./greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "./greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "./greenhouse-sprinkler-layout-content";
 import { houseDesignCanonicalPath } from "./house-design-content";
@@ -42,6 +43,7 @@ export type FarmLayoutsNavigationPageId =
   | "expanded-farm"
   | "hilltop-farm"
   | "wilderness-farm"
+  | "greenhouse-layout"
   | "sprinkler-layout"
   | "quality-sprinkler-layout"
   | "iridium-sprinkler-layout"
@@ -116,6 +118,7 @@ export function isFarmLayoutsNavigationPageId(
     pageId === "expanded-farm" ||
     pageId === "hilltop-farm" ||
     pageId === "wilderness-farm" ||
+    pageId === "greenhouse-layout" ||
     pageId === "sprinkler-layout" ||
     pageId === "quality-sprinkler-layout" ||
     pageId === "iridium-sprinkler-layout" ||
@@ -315,6 +318,14 @@ function createFarmLayoutsNavigationCategories(
       label: locale === "zh-CN"
         ? "温室洒水器布局"
         : "Greenhouse Sprinkler Layouts",
+    },
+    {
+      href:
+        locale === "zh-CN"
+          ? `/zh${greenhouseLayoutCanonicalPath}`
+          : greenhouseLayoutCanonicalPath,
+      id: "greenhouse-layout",
+      label: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
     },
   ];
   const houseDesignPages: readonly FarmLayoutsNavigationPage[] = [
