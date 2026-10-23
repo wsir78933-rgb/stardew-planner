@@ -29,8 +29,13 @@ import {
   setSelectedPlacementBuildingWaterColor,
   setSelectedPlacementItemTint,
   setSelectedPlacementNightLightState,
+  setSelectedPlacementAnimationOptions,
   type PlacementSelectionKey,
 } from "../editor/editor-selection-controller";
+import {
+  restorePlacementAnimationOptions,
+  type PlacementAnimationOptions,
+} from "../animations/placement-animation-options";
 import type {
   MapPlacementGrid,
   MapTileCoordinates,
@@ -156,6 +161,12 @@ export type PlannerWorkspaceSetSelectedBuildingWaterColorInput = Readonly<{
 export type PlannerWorkspaceSetSelectedNightLightStateInput = Readonly<{
   catalogItems: readonly Pick<CatalogItem, "id" | "nightLight">[];
   nightLightState: "off" | undefined;
+  placementHistory: PlacementHistory<PlacementSnapshot>;
+  selectedPlacementKeys: readonly PlacementSelectionKey[];
+}>;
+
+export type PlannerWorkspaceSetSelectedAnimationOptionsInput = Readonly<{
+  animationOptions: PlacementAnimationOptions | undefined;
   placementHistory: PlacementHistory<PlacementSnapshot>;
   selectedPlacementKeys: readonly PlacementSelectionKey[];
 }>;
@@ -608,6 +619,36 @@ export function setPlannerWorkspaceSelectedNightLightState(
   };
 }
 
+export function setPlannerWorkspaceSelectedAnimationOptions(
+  plannerWorkspaceSetSelectedAnimationOptionsInput: PlannerWorkspaceSetSelectedAnimationOptionsInput,
+): PlannerWorkspaceEditingTransition {
+  assertPlannerWorkspaceSetSelectedAnimationOptionsInput(
+    plannerWorkspaceSetSelectedAnimationOptionsInput,
+  );
+  const selectedPlacementKey = getSingleSelectedPlacementKey(
+    plannerWorkspaceSetSelectedAnimationOptionsInput.selectedPlacementKeys,
+  );
+
+  if (selectedPlacementKey === null) {
+    return createUnchangedTransition(
+      plannerWorkspaceSetSelectedAnimationOptionsInput,
+    );
+  }
+
+  const animationOptionsResult = setSelectedPlacementAnimationOptions({
+    animationOptions:
+      plannerWorkspaceSetSelectedAnimationOptionsInput.animationOptions,
+    placementHistory:
+      plannerWorkspaceSetSelectedAnimationOptionsInput.placementHistory,
+    selectedPlacementKey,
+  });
+
+  return {
+    placementHistory: animationOptionsResult.placementHistory,
+    selectedPlacementKeys: [animationOptionsResult.selectedPlacementKey],
+  };
+}
+
 function applyCursorTileClick(
   plannerWorkspaceMapTileClickInput: PlannerWorkspaceMapTileClickInput,
 ): PlannerWorkspaceEditingTransition {
@@ -941,6 +982,20 @@ function assertPlannerWorkspaceSetSelectedNightLightStateInput(
   assertPlannerWorkspaceTransitionInput(
     plannerWorkspaceSetSelectedNightLightStateInput,
   );
+}
+
+function assertPlannerWorkspaceSetSelectedAnimationOptionsInput(
+  plannerWorkspaceSetSelectedAnimationOptionsInput: PlannerWorkspaceSetSelectedAnimationOptionsInput,
+): void {
+  assertPlannerWorkspaceTransitionInput(
+    plannerWorkspaceSetSelectedAnimationOptionsInput,
+  );
+  if (plannerWorkspaceSetSelectedAnimationOptionsInput.animationOptions !== undefined) {
+    restorePlacementAnimationOptions(
+      plannerWorkspaceSetSelectedAnimationOptionsInput.animationOptions,
+      "planner workspace animationOptions",
+    );
+  }
 }
 
 function getSingleSelectedPlacementKey(

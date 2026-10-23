@@ -39,6 +39,23 @@ export type LayerTileGeometryResolver = Readonly<{
   resolveTile(tileIndex: number): LayerTileGeometry | null;
 }>;
 
+export type TilesetTileFrame = Readonly<{
+  frameX: number;
+  frameY: number;
+  frameWidth: number;
+  frameHeight: number;
+  tilesetIndex: number;
+}>;
+
+export type TilesetTileFrameResolverRequest = Readonly<{
+  mapId: string;
+  tilesets: readonly RenderingTileset[];
+}>;
+
+export type TilesetTileFrameResolver = Readonly<{
+  resolveTileFrame(gid: number): TilesetTileFrame;
+}>;
+
 type ValidatedTileset = Readonly<{
   firstGid: number;
   tileWidth: number;
@@ -57,6 +74,58 @@ type CachedTileFrame = Readonly<{
   frameHeight: number;
   tilesetIndex: number;
 }>;
+
+export function createTilesetTileFrameResolver(
+  tilesetTileFrameResolverRequest: TilesetTileFrameResolverRequest,
+): TilesetTileFrameResolver {
+  const { mapId, tilesets } = tilesetTileFrameResolverRequest;
+
+  if (typeof mapId !== "string" || mapId.length === 0) {
+    throw new TypeError(
+      `Tileset tile frame resolver mapId must be a non-empty string. Received mapId: ${formatValue(mapId)}.`,
+    );
+  }
+  if (!Array.isArray(tilesets)) {
+    throw new TypeError(
+      `Tileset tile frame resolver tilesets must be an array for mapId ${formatValue(mapId)}. Received tilesets: ${formatValue(tilesets)}.`,
+    );
+  }
+
+  const validatedTilesets = createValidatedTilesets(tilesets, mapId);
+
+  return {
+    resolveTileFrame(gid): TilesetTileFrame {
+      const baseGid = getBaseTileGid(gid);
+      if (baseGid === 0) {
+        throw new RangeError(
+          `Tileset tile frame GID must be non-zero for mapId ${formatValue(mapId)}. Received GID: ${formatValue(gid)}.`,
+        );
+      }
+
+      const tilesetMatch = findValidatedTilesetMatch(
+        baseGid,
+        validatedTilesets,
+        mapId,
+        "animation frame",
+      );
+      const tilesetLocalTileId = baseGid - tilesetMatch.tileset.firstGid;
+      const tileFrame = getTilesetTileFrame(
+        tilesetMatch.tileset,
+        tilesetLocalTileId,
+        mapId,
+        "animation frame",
+      );
+
+      return {
+        frameX: tileFrame.x,
+        frameY: tileFrame.y,
+        frameWidth: tilesetMatch.tileset.tileWidth,
+        frameHeight: tilesetMatch.tileset.tileHeight,
+        tilesetIndex: tilesetMatch.tileset.index,
+      };
+    },
+  };
+}
 
 export function decodeTiledTileTransform(rawGid: number): TiledTileTransform {
   validateRawGid(rawGid);

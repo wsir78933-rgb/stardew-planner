@@ -1,0 +1,150 @@
+.greenhouseTreeLayoutPage {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutHero {
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutHeroCopy {
+  min-width: 0;
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutHeroCopy h1 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutHeroVisual,
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutCaseVisual {
+  align-self: center;
+  justify-self: center;
+  margin-inline: auto;
+  max-width: min(100%, 320px);
+  min-width: 0;
+  width: min(100%, 320px);
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutHeroCaption {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutCase,
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutCase:nth-child(even) {
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.greenhouseTreeLayoutPage
+  .greenhouseTreeLayoutCase:nth-child(even)
+  .greenhouseTreeLayoutCaseVisual {
+  grid-column: 2;
+}
+
+.greenhouseTreeLayoutPage
+  .greenhouseTreeLayoutCase:nth-child(even)
+  .greenhouseTreeLayoutCaseDetails {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.greenhouseTreeLayoutPage .greenhouseTreeLayoutCaseDetails {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.greenhouseTreeLayoutPage [data-layout-image-trigger="true"] {
+  aspect-ratio: 5 / 6;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-sizing: border-box;
+  cursor: zoom-in;
+  display: block;
+  height: auto;
+  line-height: 0;
+  max-height: 384px;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.greenhouseTreeLayoutPage [data-layout-image-trigger="true"] picture,
+.greenhouseTreeLayoutPage [data-layout-image-trigger="true"] img {
+  aspect-ratio: 5 / 6;
+  background: transparent;
+  display: block;
+  height: 100%;
+  max-height: 384px;
+  max-width: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.greenhouseTreeLayoutPage [data-layout-image-dialog="true"] {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+  margin: auto;
+  max-height: 85dvh;
+  max-width: 90vw;
+  overflow: visible;
+  padding: 0;
+}
+
+.greenhouseTreeLayoutPage [data-layout-image-dialog="true"] img {
+  background: transparent;
+  display: block;
+  height: auto;
+  max-height: 85dvh;
+  max-width: 90vw;
+  object-fit: contain;
+  width: auto;
+}
+
+@media (max-width: 850px) {
+  .greenhouseTreeLayoutPage .greenhouseTreeLayoutHero,
+  .greenhouseTreeLayoutPage .greenhouseTreeLayoutCase,
+  .greenhouseTreeLayoutPage
+    .greenhouseTreeLayoutCase:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .greenhouseTreeLayoutPage .greenhouseTreeLayoutHeroCopy,
+  .greenhouseTreeLayoutPage .greenhouseTreeLayoutCaseDetails,
+  .greenhouseTreeLayoutPage
+    .greenhouseTreeLayoutCase:nth-child(even)
+    .greenhouseTreeLayoutCaseDetails {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: 40rem;
+    width: 100%;
+  }
+
+  .greenhouseTreeLayoutPage .greenhouseTreeLayoutHeroVisual,
+  .greenhouseTreeLayoutPage .greenhouseTreeLayoutCaseVisual,
+  .greenhouseTreeLayoutPage
+    .greenhouseTreeLayoutCase:nth-child(even)
+    .greenhouseTreeLayoutCaseVisual {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: center;
+    max-width: min(100%, 320px);
+    width: min(100%, 320px);
+  }
+}

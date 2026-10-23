@@ -10,6 +10,14 @@ export const fireAnimationFrames: readonly FireRenderFrame[] = [0, 1, 2, 3]
     height: 11,
   }));
 
+export const smallFireAnimationFrames: readonly FireRenderFrame[] = [0, 1, 2, 3, 4, 5, 6]
+  .map((frameIndex) => ({
+    x: 276 + frameIndex * 8,
+    y: 1965,
+    width: 8,
+    height: 8,
+  }));
+
 export const fireGlowFrame: FireRenderFrame = {
   x: 88,
   y: 1779,
@@ -17,8 +25,12 @@ export const fireGlowFrame: FireRenderFrame = {
   height: 30,
 };
 
-export function resolveFireAnimationTimeOffset(x: number, y: number): number {
-  return ((x * 3047 + y * 88 + x * y * 31) ^ 1502) % 400;
+export function resolveFireAnimationTimeOffset(
+  x: number,
+  y: number,
+  animationDurationMilliseconds = 400,
+): number {
+  return ((x * 3047 + y * 88 + x * y * 31) ^ 1502) % animationDurationMilliseconds;
 }
 
 export function resolveFireGlowPhaseOffset(x: number, y: number): number {

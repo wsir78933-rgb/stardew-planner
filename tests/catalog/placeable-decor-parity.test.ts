@@ -152,13 +152,16 @@ describe("frozen Placeables and Decor catalog parity", () => {
     expect(getSeasonalFrameSelector()).toBeTypeOf("function");
   });
 
-  it("preserves the 149 frozen placeables and checks the four explicit additions", async () => {
+  it("preserves the 149 frozen placeables and checks the seven explicit additions", async () => {
     const getSeasonalPlaceableFrame = getSeasonalFrameSelector();
     expect(getSeasonalPlaceableFrame).toBeTypeOf("function");
     if (getSeasonalPlaceableFrame === undefined) return;
 
     const { placeableItems } = await createLockedRuntimeCatalogs();
     const addedPlaceableCatalogIds = [
+      "big-craftable:155",
+      "big-craftable:161",
+      "big-craftable:162",
       "big-craftable:56",
       "bush:small",
       "bush:medium",
@@ -172,7 +175,7 @@ describe("frozen Placeables and Decor catalog parity", () => {
       (catalogItem) => addedPlaceableCatalogIdSet.has(catalogItem.id),
     );
 
-    expect(placeableItems).toHaveLength(153);
+    expect(placeableItems).toHaveLength(156);
     expect(frozenPlaceableItems).toHaveLength(149);
     expect(newlyAddedPlaceableItems.map((catalogItem) => catalogItem.id)).toEqual(
       addedPlaceableCatalogIds,

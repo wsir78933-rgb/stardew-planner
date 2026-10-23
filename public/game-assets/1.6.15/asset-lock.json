@@ -2297,6 +2297,288 @@
       "outputPath": "tilesheets/winter_monsterGraveTiles.png",
       "mediaType": "image/png",
       "sha256": "aed1507cb2866f38ac2f45edef5f8241fbb19b19394a73e1e1911f310378cef2"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/AquariumFish.json",
+      "outputPath": "data/AquariumFish.json",
+      "mediaType": "application/json",
+      "sha256": "8ef6b017d4e40dc8d9546b5b601c052d4bd822e9f4c0eba6857aa05241243a1e"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/FarmAnimals.json",
+      "outputPath": "data/FarmAnimals.json",
+      "mediaType": "application/json",
+      "sha256": "22d103621feda48bb144fb3019cde3a14d4c737954bff1427fa31fc563e441c9"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/Fish.json",
+      "outputPath": "data/Fish.json",
+      "mediaType": "application/json",
+      "sha256": "b0d4cb4e12c06eefb041461e84c3da5feef45eb41815ff6cf6865e82dbe055e4"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/FishPondData.json",
+      "outputPath": "data/FishPondData.json",
+      "mediaType": "application/json",
+      "sha256": "24d4b1b2b135a3c9232e7e4e614b0faae7f0a3ef45cf1a44bc158c35c81ca935"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/hats.json",
+      "outputPath": "data/hats.json",
+      "mediaType": "application/json",
+      "sha256": "05b455d49407f16d269833b75dec4e35bbf905c158bb16969cf46d6b01bce426"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/Pants.json",
+      "outputPath": "data/Pants.json",
+      "mediaType": "application/json",
+      "sha256": "ac0d8d7329aa40c86f4dbdfc7438cfc18cff1a9718f26f49b00189f632ac3b14"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/Pets.json",
+      "outputPath": "data/Pets.json",
+      "mediaType": "application/json",
+      "sha256": "323932fc9e434565f8d8ffff186a1d5e49e5411056989b226fa52e039efd3710"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/data/Shirts.json",
+      "outputPath": "data/Shirts.json",
+      "mediaType": "application/json",
+      "sha256": "63198efe017838c4fa96dbf12ddd012e527718636223c48b9fdc9e4caa7c3580"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/Junimo.png",
+      "outputPath": "sprites/Junimo.png",
+      "mediaType": "image/png",
+      "sha256": "56fb3f4c3046ef2496bfc6e37d8b2e0ebdd8f54a3aa468a1c9944ecc6ac1fed4"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Blue%20Chicken.png",
+      "outputPath": "animals/Blue Chicken.png",
+      "mediaType": "image/png",
+      "sha256": "8a7bcdde20e5503a8b415aa3a43c999c31a56a62f5e4f6269ca1a361f5cea44f"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Brown%20Chicken.png",
+      "outputPath": "animals/Brown Chicken.png",
+      "mediaType": "image/png",
+      "sha256": "2bad0fed335a5868a40bf3393043b2c0271465c9e5e539d25d7ce8b78b772fc0"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Brown%20Cow.png",
+      "outputPath": "animals/Brown Cow.png",
+      "mediaType": "image/png",
+      "sha256": "f6b91671e6098b1a457ce7f5e466a0e279c0ae21c8bc09d93f677894161fab9e"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Dinosaur.png",
+      "outputPath": "animals/Dinosaur.png",
+      "mediaType": "image/png",
+      "sha256": "d061b5dfe8ab7c9b4aa9dfff134d45d185b5c22f4b6885f829f31e6a83ecf0fa"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Duck.png",
+      "outputPath": "animals/Duck.png",
+      "mediaType": "image/png",
+      "sha256": "2d99217f65cd568fc1177fe6e9184745e0c62cf5a173640014b99e6ce9918b89"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Goat.png",
+      "outputPath": "animals/Goat.png",
+      "mediaType": "image/png",
+      "sha256": "8f882022617462e5e45fa1ed485578bb2be6e4709e8fbf33e65afc0839ed1ae3"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Golden%20Chicken.png",
+      "outputPath": "animals/Golden Chicken.png",
+      "mediaType": "image/png",
+      "sha256": "22c6488fd4d8de32f5596ead8df8aff1c10479da4cb17eb2fc28ff95be5ac4cb"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Ostrich.png",
+      "outputPath": "animals/Ostrich.png",
+      "mediaType": "image/png",
+      "sha256": "048f7f5ba039e614ecc9133270bbe979c3e7b12cba743e1dcf034c311bf5a948"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Pig.png",
+      "outputPath": "animals/Pig.png",
+      "mediaType": "image/png",
+      "sha256": "b2bfb5c85290c00ffbc719fa0be3c1334cf5977b37891b597b2cda169b199a88"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Rabbit.png",
+      "outputPath": "animals/Rabbit.png",
+      "mediaType": "image/png",
+      "sha256": "fd81535e8df1dc42b346055801f303f5274f1f5c9046ffbe1393da614d42f160"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Sheep.png",
+      "outputPath": "animals/Sheep.png",
+      "mediaType": "image/png",
+      "sha256": "82f6a8e76347cfe3979ed9cd3f09a8f1570ff71f192fdf960bbf12cf23a15173"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/Void%20Chicken.png",
+      "outputPath": "animals/Void Chicken.png",
+      "mediaType": "image/png",
+      "sha256": "865847995c92ea0de68dfe0b4f0e44d302babde00ee1a904f8a6af5c8326720a"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/White%20Chicken.png",
+      "outputPath": "animals/White Chicken.png",
+      "mediaType": "image/png",
+      "sha256": "73cb475f0175457101694bee3703e775d4dbcbfec246d04bf46386a89f632a34"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/White%20Cow.png",
+      "outputPath": "animals/White Cow.png",
+      "mediaType": "image/png",
+      "sha256": "5e2968ed3fd19ce61fead12011e2c6ca5a424b32758fdd7fda09de79d70f03c3"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/cat.png",
+      "outputPath": "animals/cat.png",
+      "mediaType": "image/png",
+      "sha256": "ee0c5c5db6c61f7a6988dfe108d170454bb29add234626b30e292edbc2bc2329"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/cat1.png",
+      "outputPath": "animals/cat1.png",
+      "mediaType": "image/png",
+      "sha256": "0ff3115a884c86e05874c8ab6da76e857d10fff919411ac3c5ed774b0c7cd1e1"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/cat2.png",
+      "outputPath": "animals/cat2.png",
+      "mediaType": "image/png",
+      "sha256": "eda1e7300de93ddddf94732e556cbe927711580b5ceb77abc744135647904693"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/cat3.png",
+      "outputPath": "animals/cat3.png",
+      "mediaType": "image/png",
+      "sha256": "00f0af48c722f3ba61833a4ca28162b3ce491cbf4e63bc96f40e891cd5a0c35f"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/cat4.png",
+      "outputPath": "animals/cat4.png",
+      "mediaType": "image/png",
+      "sha256": "662533e5a15cf20dfc2ee6e3aecede4f701c4f32636dceb0f950323c2676a76e"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/dog.png",
+      "outputPath": "animals/dog.png",
+      "mediaType": "image/png",
+      "sha256": "103b23279a5bcf5cfb294f62c34b64de74590d3d274d5b02e862a7fb5f877191"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/dog1.png",
+      "outputPath": "animals/dog1.png",
+      "mediaType": "image/png",
+      "sha256": "7d706ed75899ab48c3e98ffb6148c61581e65c4d9208249ccbcb56bf4e53f65c"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/dog2.png",
+      "outputPath": "animals/dog2.png",
+      "mediaType": "image/png",
+      "sha256": "ebe229260a1307ea6652010c3b6fbfd2fc91e6f5b0809776eff6e81bc24a5ece"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/dog3.png",
+      "outputPath": "animals/dog3.png",
+      "mediaType": "image/png",
+      "sha256": "d4db6084dea16e5e5442afeb6bbfb83fd21f1283c3082e3d99bbee6e9b82dadb"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/dog4.png",
+      "outputPath": "animals/dog4.png",
+      "mediaType": "image/png",
+      "sha256": "775c27cff64dca013dc128adad7f0222a63a8979bc34f49fdeb1c70b8f5c8a61"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/horse.png",
+      "outputPath": "animals/horse.png",
+      "mediaType": "image/png",
+      "sha256": "746166e6759579a0b5e2f1893de60f8fec82cf79ceda40d043d90923a49b0a85"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/turtle.png",
+      "outputPath": "animals/turtle.png",
+      "mediaType": "image/png",
+      "sha256": "9918d371e497adf1992349de730167901284b4a06c04ea0d0a9d109e71d6f633"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/animals/turtle1.png",
+      "outputPath": "animals/turtle1.png",
+      "mediaType": "image/png",
+      "sha256": "319f46d19a0a13de38be25fd5e9023ea82573ac91b4a41e0edb419b942a7f70b"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/animations.png",
+      "outputPath": "tilesheets/animations.png",
+      "mediaType": "image/png",
+      "sha256": "64938392d90e9b4b35d2d7d701fdcbcb71f43515b10a6fe64a2ad1594348af7d"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/farmer/farmer_base_mannequin.png",
+      "outputPath": "farmer/farmer_base_mannequin.png",
+      "mediaType": "image/png",
+      "sha256": "672798c41fc3fa5b5d94c0ea9cb642b2dc98bf3979a0e8429c5565f51cbcae49"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/farmer/farmer_base_mannequin_cursed.png",
+      "outputPath": "farmer/farmer_base_mannequin_cursed.png",
+      "mediaType": "image/png",
+      "sha256": "6088e4ccb9e211491fb4e5b1628ac9db420aed1a5de5919dea0bab9106ab63e5"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/farmer/farmer_girl_mannequin.png",
+      "outputPath": "farmer/farmer_girl_mannequin.png",
+      "mediaType": "image/png",
+      "sha256": "fd4f77e82de1b1236c618214a9a95185ef15d246ac28a9f7f3a5e7deee2dbec8"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/farmer/farmer_girl_mannequin_cursed.png",
+      "outputPath": "farmer/farmer_girl_mannequin_cursed.png",
+      "mediaType": "image/png",
+      "sha256": "389edffb2a6b66c26248a4653434ba33223b89952df8f5e987ab322bb7e33c0d"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/farmer/pants.png",
+      "outputPath": "farmer/pants.png",
+      "mediaType": "image/png",
+      "sha256": "a9bd341673056bd1e3457c7f23e57f2986c5ca5fa594e2bb39252faa4e8b324c"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/farmer/shirts.png",
+      "outputPath": "farmer/shirts.png",
+      "mediaType": "image/png",
+      "sha256": "15c4ba90946be78be468d387afb7b20bfb2382e65acef88ddf22b8509f864fc8"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/sprites/AquariumFish.png",
+      "outputPath": "sprites/AquariumFish.png",
+      "mediaType": "image/png",
+      "sha256": "3b4bfc7f3ac56f7769d3deed04e80a4b06044fe7a4dcb03c06cfeec9c8c36e95"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/hats.png",
+      "outputPath": "tilesheets/hats.png",
+      "mediaType": "image/png",
+      "sha256": "607ed46619110ae10e3812d324962243388c1c839b710110f959e8410d075434"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/hats_animals.png",
+      "outputPath": "tilesheets/hats_animals.png",
+      "mediaType": "image/png",
+      "sha256": "d8f96b8d42d3cd67e15958a8b01ce30834ee03f926cacb2b68232c07273707c4"
+    },
+    {
+      "sourceUrl": "https://assets.stardewplan.com/assets/1.6.15/tilesheets/Objects_2.png",
+      "outputPath": "tilesheets/Objects_2.png",
+      "mediaType": "image/png",
+      "sha256": "5d1509056a5a6497c3bc1509a724b5399e288adc087811638af29d481985a94a"
     }
   ]
 }

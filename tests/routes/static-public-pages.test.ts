@@ -6,10 +6,25 @@ import {
   type Element as XmlElement,
 } from "@xmldom/xmldom";
 import { describe, expect, it } from "vitest";
+import { getBlogHomeState } from "../../src/blog/blog-home-state";
+import { getAllBlogPostMeta } from "../../src/blog/blog-post-registry";
 import { homepageCopyByLocale } from "../../src/homepage/homepage-copy";
 
 const expectedSocialImageUrl =
   "https://stardewvalleyplanner.art/social-images/stardew-valley-farm-planner.webp";
+const defaultBlogHomeState = getBlogHomeState(getAllBlogPostMeta("en"), {});
+const defaultBlogHomepageCoverImages = [
+  ...defaultBlogHomeState.posts,
+  ...defaultBlogHomeState.topicCarouselPosts,
+].map((blogPost) => blogPost.coverImage);
+const defaultChineseBlogHomeState = getBlogHomeState(
+  getAllBlogPostMeta("zh-CN"),
+  {},
+);
+const defaultChineseBlogHomepageCoverImages = [
+  ...defaultChineseBlogHomeState.posts,
+  ...defaultChineseBlogHomeState.topicCarouselPosts,
+].map((blogPost) => blogPost.coverImage);
 
 function escapeRegularExpression(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -39,6 +54,7 @@ type StaticBlogPageExpectation = Readonly<{
   shouldIndex: boolean;
   coverImages: readonly Readonly<{ src: string; alt: string }>[];
   requiredBodyPhrases?: readonly string[];
+  requiredFigureImageAlts?: readonly string[];
   requiredHrefs?: readonly string[];
 }>;
 
@@ -186,84 +202,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     documentLanguage: "en",
     schemaType: "CollectionPage",
     shouldIndex: true,
-    coverImages: [
-      {
-        src: "/blog/carpenter-stardew-cover.webp",
-        alt: "Illustration of Robin's mountain workshop with a farm-building plan",
-      },
-      {
-        src: "/blog/where-is-robin-stardew-valley-cover.webp",
-        alt: "Mountain path leading toward Robin's carpenter workshop",
-      },
-      {
-        src: "/blog/stardew-valley-npc-cover.webp",
-        alt: "Original illustration of Stardew Valley townspeople meeting in a mountain village square",
-      },
-      {
-        src: "/blog/stardew-valley-town-map-cover.webp",
-        alt: "Original illustrated map of a riverside town with roads, bridges, and landmarks",
-      },
-      {
-        src: "/blog/where-is-stardew-valley-located-cover.webp",
-        alt: "Original illustration of a quiet rural valley with a small town, mountains, and a farm road",
-      },
-      {
-        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
-        alt: "Original illustration of seven villagers at a vineyard and town square, no copyrighted sprites",
-      },
-      {
-        src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "Top-down farm illustration of three sprinklers: a 4-tile plus/cross, an 8-tile ring, and a 24-tile square of watered crops.",
-      },
-      {
-        src: "/blog/glasshouse-stardew-valley-cover.webp",
-        alt: "Original illustration of a glass farm building interior with an empty 10-by-12 crop rectangle and a wood border",
-      },
-      {
-        src: "/blog/oak-tree-stardew-cover.webp",
-        alt: "Original illustration of spaced oak trees on a farm road, with a wooden bucket on one trunk and acorns on the soil",
-      },
-      {
-        src: "/blog/stardew-valley-trees-cover.webp",
-        alt: "Top-down farm illustration: a keep grove of trees with tapper buckets on the left, a fruit orchard with space between trunks in the middle, and empty cleared dirt on the right.",
-      },
-      {
-        src: "/blog/maple-tree-stardew-cover.webp",
-        alt: "Spaced maple trees with a wooden bucket on one trunk and winged maple seeds on the soil",
-      },
-      {
-        src: "/blog/best-spring-crop-stardew-cover.webp",
-        alt: "Spring farm watercolor with a 3-by-3 cauliflower block, strawberry rows, and a small potato patch",
-      },
-      {
-        src: "/blog/how-to-earn-money-stardew-cover.webp",
-        alt: "Sunrise farm with a small potato patch, a fishing rod on a crate with coins, a pier, and a general store",
-      },
-      {
-        src: "/blog/rancher-or-tiller-stardew-cover.webp",
-        alt: "Watercolor farm path that splits: vegetable beds and a produce crate on the left, a barn, coop, milk pail, and egg basket on the right.",
-      },
-      {
-        src: "/blog/summer-crops-stardew-cover.webp",
-        alt: "Outdoor summer field with blueberry bushes on the left, a 3-by-3 melon block in the center, hops trellis on the right, and a watering can in the dirt.",
-      },
-      {
-        src: "/blog/fall-crops-stardew-cover.webp",
-        alt: "Outdoor fall field with cranberry bushes on the left, a pumpkin block in the center, grape trellis on the right, a watering can on the dirt, and a farmhouse and windmill under an autumn sky.",
-      },
-      {
-        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
-        alt: "Watercolor illustration of a farmer in a straw hat pulling a leafy root crop from a small stone-edged bed, with a drawn circular Farming sprout badge rising nearby and a farmhouse in the distance.",
-      },
-      {
-        src: "/blog/last-day-to-plant-stardew-cover.webp",
-        alt: "Watercolor of an outdoor vegetable patch with cabbages and leafy rows, a metal watering can on the dirt, a farmhouse and windmill at sunset, and a wooden Spring board numbered 1 through 28 with day 28 marked.",
-      },
-      {
-        src: "/blog/pine-tree-stardew-cover.webp",
-        alt: "Illustrated Pine Tree landscape with a Tapper and amber Pine Tar on a mature Pine, plus Pine Cones in the foreground.",
-      },
-    ],
+    coverImages: defaultBlogHomepageCoverImages,
   },
   {
     pathname: "/blog/archive",
@@ -867,12 +806,15 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     coverImages: [
       {
         src: "/blog/profit-margin-stardew-cover.webp",
-        alt: "Original local illustration of an outdoor Stardew Valley field with cranberry rows, a pumpkin patch, and a grape trellis; it is not a game screenshot.",
+        alt: "Pixel-art farm scene with a crop-filled shipping crate, a coin pouch, and gold coins.",
       },
     ],
     requiredBodyPhrases: [
       "The four choices are multipliers for the prices covered by the setting.",
-      "This platform-neutral menu-path diagram is not a platform-specific screenshot.",
+      "Profit Margin has four settings: 100%, 75%, 50%, and 25%. Lower settings reduce the prices affected by Profit Margin.",
+    ],
+    requiredFigureImageAlts: [
+      "Four Profit Margin settings, 100%, 75%, 50%, and 25%, with decreasing groups of gold coins",
     ],
     requiredHrefs: [
       "/#planner",
@@ -949,84 +891,7 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     documentLanguage: "zh-CN",
     schemaType: "CollectionPage",
     shouldIndex: true,
-    coverImages: [
-      {
-        src: "/blog/carpenter-stardew-cover.webp",
-        alt: "罗宾山间木匠工坊与农场建筑规划示意插画",
-      },
-      {
-        src: "/blog/where-is-robin-stardew-valley-cover.webp",
-        alt: "通往罗宾山间木匠工坊的暖色山路插画",
-      },
-      {
-        src: "/blog/stardew-valley-npc-cover.webp",
-        alt: "星露谷山间小镇中不同村民相遇交谈的原创插画",
-      },
-      {
-        src: "/blog/stardew-valley-town-map-cover.webp",
-        alt: "原创河畔小镇地图插画，标出道路、桥梁与主要地标",
-      },
-      {
-        src: "/blog/where-is-stardew-valley-located-cover.webp",
-        alt: "原创乡村山谷插画，可见小镇、远山与通往农场的道路",
-      },
-      {
-        src: "/blog/stardew-valley-expanded-bachelors-and-bachelorettes-cover.webp",
-        alt: "葡萄园与小镇广场上七位村民相聚的原创插画，未使用受版权保护的游戏立绘",
-      },
-      {
-        src: "/blog/sprinkler-stardew-cover.webp",
-        alt: "俯视农田插画，三台洒水器并排：左侧洒水器浇上下左右 4 格十字，中间优质洒水器浇周围 8 格，右侧铱制洒水器浇 24 格。",
-      },
-      {
-        src: "/blog/glasshouse-stardew-valley-cover.webp",
-        alt: "玻璃墙温室内空耕地与一圈木框的原创插画",
-      },
-      {
-        src: "/blog/oak-tree-stardew-cover.webp",
-        alt: "农场土路上间隔种植的橡树原创插画，一棵树干挂着木桶，地面有橡子",
-      },
-      {
-        src: "/blog/stardew-valley-trees-cover.webp",
-        alt: "俯视农场插画：左侧是挂树液桶的保留树丛，中间是树干留空的果树区，右侧是已清空的空地。",
-      },
-      {
-        src: "/blog/maple-tree-stardew-cover.webp",
-        alt: "近处枫树树干挂着木桶，地面散落带翅种子，土路分叉通向农舍与风车的水彩插画",
-      },
-      {
-        src: "/blog/best-spring-crop-stardew-cover.webp",
-        alt: "春季农场水彩：中间九格花椰菜，一侧草莓垄，一侧小片土豆",
-      },
-      {
-        src: "/blog/how-to-earn-money-stardew-cover.webp",
-        alt: "日出农场水彩：小片土豆田通向码头，钓竿靠在带金币的木箱上，远处是杂货店",
-      },
-      {
-        src: "/blog/rancher-or-tiller-stardew-cover.webp",
-        alt: "水彩农场土路在前景分叉：左侧是菜畦和蔬菜箱，右侧是畜棚、鸡舍、奶桶和蛋篮。",
-      },
-      {
-        src: "/blog/summer-crops-stardew-cover.webp",
-        alt: "夏季室外田：左侧蓝莓丛，中间九格甜瓜，右侧啤酒花架子，前景一把喷壶。",
-      },
-      {
-        src: "/blog/fall-crops-stardew-cover.webp",
-        alt: "秋季室外田：左侧蔓越莓丛，中间南瓜畦，右侧葡萄架子，前景喷壶，远处农舍与风车。",
-      },
-      {
-        src: "/blog/how-to-level-up-farming-stardew-cover.webp",
-        alt: "水彩插画：戴草帽的农夫从石边小畦拔起带叶根菜，旁边是手绘圆形耕种嫩芽徽章，远处有农舍。",
-      },
-      {
-        src: "/blog/last-day-to-plant-stardew-cover.webp",
-        alt: "水彩插画：室外菜畦里种着卷心菜和绿叶作物，土路上放着喷壶，远处农舍和风车映着日落，右侧木牌写着 Spring，格子从 1 到 28，第 28 格标了出来。",
-      },
-      {
-        src: "/blog/pine-tree-stardew-cover.webp",
-        alt: "松树山林插画：成熟松树上可见树液采集器和琥珀色松焦油，前景有松果。",
-      },
-    ],
+    coverImages: defaultChineseBlogHomepageCoverImages,
   },
   {
     pathname: "/zh/blog/archive",
@@ -1623,12 +1488,15 @@ const staticBlogPageExpectations: readonly StaticBlogPageExpectation[] = [
     coverImages: [
       {
         src: "/blog/profit-margin-stardew-cover.webp",
-        alt: "原创本地插画：星露谷物语室外田地里有蔓越莓行、南瓜畦和葡萄架，不是游戏截图。",
+        alt: "像素风农场封面：装满作物的出货箱旁摆着钱袋和金币。",
       },
     ],
     requiredBodyPhrases: [
-      "普通/100%、75%、50%、25% 会调整来源明确列出的出售物品价格和种子价格。",
-      "这是一条根据公开 Wiki 整理的平台中立路径，不是逐平台截图实测。",
+      "普通/100%、75%、50%、25% 会改变大多数物品的售价、皮埃尔的种子价格和乔家的部分商品价格。",
+      "利润率有 100%、75%、50%、25% 四个档位；较低档位会降低受利润率影响的价格。",
+    ],
+    requiredFigureImageAlts: [
+      "100%、75%、50%、25% 四个利润率档位，分别配有四枚、三枚、两枚和一枚象征性金币。",
     ],
     requiredHrefs: [
       "/zh#planner",
@@ -2397,6 +2265,83 @@ describe("static public pages", () => {
     expect(existsSync(join(process.cwd(), "out", "sitemap.xml"))).toBe(true);
   });
 
+  it("exports six latest blog cards and page one of the twelve-card topic carousel in English and Chinese", () => {
+    const blogHomepageExpectations = [
+      {
+        locale: "en" as const,
+        staticPageFile: "blog.html",
+        sourcePosts: getAllBlogPostMeta("en"),
+        homeState: defaultBlogHomeState,
+      },
+      {
+        locale: "zh-CN" as const,
+        staticPageFile: "zh/blog.html",
+        sourcePosts: getAllBlogPostMeta("zh-CN"),
+        homeState: defaultChineseBlogHomeState,
+      },
+    ];
+
+    for (const { locale, staticPageFile, sourcePosts, homeState } of blogHomepageExpectations) {
+      expect(homeState.posts).toHaveLength(6);
+      expect(homeState.topicCarouselPosts).toHaveLength(12);
+      expect(homeState.topicArticlesPage).toBe(1);
+
+      const homepageCoverImages = [
+        ...homeState.posts,
+        ...homeState.topicCarouselPosts,
+      ].map((blogPost) => blogPost.coverImage);
+      const spotlightCoverImages = sourcePosts
+        .slice(0, 2)
+        .map((blogPost) => blogPost.coverImage);
+      const staticPageHtml = readStaticPageHtml(staticPageFile);
+      const staticPageDocument = parseStaticPageDocument(
+        staticPageHtml,
+        staticPageFile,
+      );
+      const renderedBlogCoverImages = Array.from(
+        staticPageDocument.getElementsByTagName("img"),
+      ).flatMap((imageElement) => {
+        const imageSource = imageElement.getAttribute("src");
+        const imageAlternativeText = imageElement.getAttribute("alt");
+        if (
+          imageSource === null ||
+          imageAlternativeText === null ||
+          !imageSource.startsWith("/blog/") ||
+          !/-cover(?:-zh)?\.webp$/.test(imageSource) ||
+          imageAlternativeText.length === 0
+        ) {
+          return [];
+        }
+
+        return [`${imageSource}\n${imageAlternativeText}`];
+      });
+      const expectedHomepageCoverImages = [
+        ...homepageCoverImages,
+        ...spotlightCoverImages,
+      ].map(({ src, alt }) => `${src}\n${alt}`);
+      const expectedSpotlightCoverPairs = spotlightCoverImages.map(
+        ({ src, alt }) => `${src}\n${alt}`,
+      );
+      const repeatedRenderedCoverPairs = renderedBlogCoverImages.filter(
+        (coverPair, index, allCoverPairs) =>
+          allCoverPairs.indexOf(coverPair) !== index,
+      );
+
+      expect(spotlightCoverImages).toHaveLength(2);
+      expect(new Set(expectedSpotlightCoverPairs)).toHaveLength(2);
+      expect(renderedBlogCoverImages).toHaveLength(20);
+      expect(repeatedRenderedCoverPairs).toHaveLength(2);
+      expect(
+        [...new Set(repeatedRenderedCoverPairs)].sort(),
+        `${locale} homepage should repeat only its two spotlight cover pairs.`,
+      ).toEqual([...new Set(expectedSpotlightCoverPairs)].sort());
+      expect(
+        [...new Set(renderedBlogCoverImages)].sort(),
+        `${locale} homepage cover src/alt pairs should match its six latest cards and twelve carousel cards.`,
+      ).toEqual([...new Set(expectedHomepageCoverImages)].sort());
+    }
+  });
+
   it("exports all bilingual blog pages with article discovery metadata and original covers", () => {
     for (const {
       articleOnlySchema,
@@ -2409,6 +2354,7 @@ describe("static public pages", () => {
       shouldIndex,
       coverImages,
       requiredBodyPhrases,
+      requiredFigureImageAlts,
       requiredHrefs,
     } of staticBlogPageExpectations) {
       const staticPageHtml = readStaticPageHtml(staticPageFile);
@@ -2493,6 +2439,11 @@ describe("static public pages", () => {
 
       for (const requiredBodyPhrase of requiredBodyPhrases ?? []) {
         expect(staticPageHtml).toContain(requiredBodyPhrase);
+      }
+      for (const requiredFigureImageAlt of requiredFigureImageAlts ?? []) {
+        expect(staticPageHtml).toContain(
+          `alt="${escapeHtmlAttributeValue(requiredFigureImageAlt)}"`,
+        );
       }
       for (const requiredHref of requiredHrefs ?? []) {
         expect(staticPageHtml).toContain(
@@ -2825,9 +2776,19 @@ describe("static public pages", () => {
           staticPageFile,
         ),
       ).toBe("en");
-      expect(staticPageHtml).toMatch(
-        /<link rel="stylesheet" href="\/_next\/static\/chunks\/[^"/]+\.css"/,
-      );
+      const stylesheetHref = staticPageHtml.match(
+        /<link rel="stylesheet" href="(\/_next\/static\/(?:chunks|css)\/[^\"]+\.css)"/,
+      )?.[1];
+      if (stylesheetHref === undefined) {
+        throw new Error(
+          `Expected ${staticPageFile} to link a stylesheet under /_next/static/css or /_next/static/chunks/.`,
+        );
+      }
+      const stylesheetPath = join(process.cwd(), "out", stylesheetHref.slice(1));
+      expect(
+        existsSync(stylesheetPath),
+        `Expected linked 404 stylesheet ${JSON.stringify(stylesheetHref)} at ${JSON.stringify(stylesheetPath)}.`,
+      ).toBe(true);
       expect(staticPageHtml).toContain('<link rel="icon" href="/favicon.ico"/>');
       expect(staticPageHtml).not.toContain("data-sveltekit-");
       expect(staticPageHtml).toContain(

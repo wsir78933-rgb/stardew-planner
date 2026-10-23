@@ -1,0 +1,5206 @@
+{
+  "source": {
+    "catalogAuditFilename": "catalog-remediation.json",
+    "catalogAuditSha256": "cba992a0d0b0c0b9b2c2391cd752590b7f9c2a217f8a1d81d33339392f31a475",
+    "generatedAt": "2026-10-23T00:26:33.574Z",
+    "runtimeUrl": "https://stardewplan.com/_app/immutable/chunks/DDtluy4L.js",
+    "runtimeSha256": "66ebea957081f645cfb8426ec98b7ca32522333230be5f234aae5ed0824f3985"
+  },
+  "categories": [
+    "buildings",
+    "crops",
+    "trees",
+    "equipment",
+    "paths",
+    "lighting",
+    "furniture",
+    "decor"
+  ],
+  "maps": [
+    {
+      "mapId": "standard",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "riverland",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "forest",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "hilltop",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "wilderness",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "four-corners",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "beach",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "meadowlands",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "ginger-island",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 19,
+            "sha256": "662cd6a19691e5489b0c80c499379837c1be4f269d946eb900887ace79cca8af"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "farmhouse-0",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "farmhouse-1",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "farmhouse-2",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "farmhouse-cellar",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 235,
+            "sha256": "43ed9f392bfc74e03acd172c174de68290d64e3f7fdcb4941c41fd4eb3a7332d"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "shed",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "big-shed",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "barn",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "big-barn",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "deluxe-barn",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "coop",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "big-coop",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "deluxe-coop",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "slime-hutch",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "greenhouse",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 19,
+            "sha256": "662cd6a19691e5489b0c80c499379837c1be4f269d946eb900887ace79cca8af"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "farm-cave",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 233,
+            "sha256": "b62c80fd88faecb5a5f233e0e3d16a18b70d4fe0ada5283a7f1b4fbc2ce37357"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "island-farmhouse",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 652,
+            "sha256": "4e21dc90d5e35b221777524f0799fa17f402edd39bfb5da771a7aa1d53e407c5"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "ginger-island-north",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "ginger-island-south",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "ginger-island-south-east",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "ginger-island-east",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "railroad",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 1,
+            "sha256": "77af3c7f60f1cc10fe3197a3c6a55b3bda1fb3198bcf45552eb5f7a313f65a60"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 19,
+            "sha256": "662cd6a19691e5489b0c80c499379837c1be4f269d946eb900887ace79cca8af"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "backwoods",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "secret-woods",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "summit",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "pelican-town",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "cindersap-forest",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "mountain",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "pelican-beach",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "calico-desert",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "bus-stop",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "quarry",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 11,
+            "sha256": "d42d15cd06beba934cab2142893f96c925d09c910ecacb2bc1195e735e943407"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "if2r",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "frontier",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "grandpas",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "capitalist-dream",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "capitalist-dream-2",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "overgrown-garden",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "yet-another",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "solo-four-corners",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "strawberry-fields",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "blackberry-fields",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "zenith",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "everfarm",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "sea-breeze-island",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "aimon-s-small-hilltop",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "aimon-s-small-forest",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "more-lively-meadowlands",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "modest-maps-standard",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "waterfall-forest",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          },
+          "eligible": {
+            "count": 49,
+            "sha256": "6bc3542da87f02aa120fbe35d86da11c26e9ac729a4c9270b6701c529e4da674"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 69,
+            "sha256": "a26e0bcf648ee3b17f5c6a705e1e2213e17e8376baca5aaad6d6c58dc758d4b3"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 17,
+            "sha256": "685416b2b23b9f439bb6bb4e78feb904d9f4f40ab4e537d9b66d906291323855"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 100,
+            "sha256": "3cf4367bd9e390024eaac124483c3282ed79f2ec5b253471ec6fadd48ea209e8"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 426,
+            "sha256": "ea36e350dd65547c3dbd2c25fce936240b8e173ace9cc2146c6d92728c70864a"
+          },
+          "eligible": {
+            "count": 240,
+            "sha256": "8bddee28d66909a9ba33f56be0e488602e3738a8862974eb159c8e52c0c60201"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "sve-winery",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 468,
+            "sha256": "8c305ec50ecefd11b0a0667db42235ee66980381cddee79f2435727fa786c188"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "sve-grandpas-shed-1",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 468,
+            "sha256": "8c305ec50ecefd11b0a0667db42235ee66980381cddee79f2435727fa786c188"
+          }
+        }
+      }
+    },
+    {
+      "mapId": "sve-grandpas-shed-2",
+      "categories": {
+        "buildings": {
+          "visibleCandidate": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "eligible": {
+            "count": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        },
+        "crops": {
+          "visibleCandidate": {
+            "count": 67,
+            "sha256": "2d4715da990a8a3cdfc8ec9f33e51dc80f601ce07dc3ee31755890fecdde7a1b"
+          },
+          "eligible": {
+            "count": 62,
+            "sha256": "47e08bd9c65e4f6e5bc3315dcb5a17b1ea63d2b8fcf493da5a3465b253f0f35b"
+          }
+        },
+        "trees": {
+          "visibleCandidate": {
+            "count": 22,
+            "sha256": "31b25f966c1a8957f1499149a7f438ce3c9e8dfed52b3d138d53d881b45a7661"
+          },
+          "eligible": {
+            "count": 19,
+            "sha256": "662cd6a19691e5489b0c80c499379837c1be4f269d946eb900887ace79cca8af"
+          }
+        },
+        "equipment": {
+          "visibleCandidate": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          },
+          "eligible": {
+            "count": 71,
+            "sha256": "37e7cbc3390d57a7f3efffa616b3fb0cae24988815fec895a532049a81e02e22"
+          }
+        },
+        "paths": {
+          "visibleCandidate": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          },
+          "eligible": {
+            "count": 21,
+            "sha256": "3c023ead8e23f6aa8856eb381e9e6ecf7c5fa58d82d6fc200e0cd67b9a55cd39"
+          }
+        },
+        "lighting": {
+          "visibleCandidate": {
+            "count": 39,
+            "sha256": "498c173c011b277e134f6cdec8af3878f3a014f6fda33404dd8abc684b08384c"
+          },
+          "eligible": {
+            "count": 31,
+            "sha256": "ebbb10d26d2c5d1f58b195111172dbb2298654a87427f124d132283b53435541"
+          }
+        },
+        "furniture": {
+          "visibleCandidate": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          },
+          "eligible": {
+            "count": 257,
+            "sha256": "77bd8a0bb2c0abd23e119c370ca025d7cf86116a5acba04cde855c494602c933"
+          }
+        },
+        "decor": {
+          "visibleCandidate": {
+            "count": 661,
+            "sha256": "1cd8446d4fd3baf162353481d82e95ff36bf47d5100a7027cb9f1c0a71afd46e"
+          },
+          "eligible": {
+            "count": 468,
+            "sha256": "8c305ec50ecefd11b0a0667db42235ee66980381cddee79f2435727fa786c188"
+          }
+        }
+      }
+    }
+  ]
+}

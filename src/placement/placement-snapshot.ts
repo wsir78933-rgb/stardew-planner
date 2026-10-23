@@ -11,6 +11,11 @@ import {
   placementBedTypes,
   type PlacementBedType,
 } from "./bed-placement-semantics";
+import {
+  clonePlacementAnimationOptions,
+  restorePlacementAnimationOptions,
+  type PlacementAnimationOptions,
+} from "../animations/placement-animation-options";
 
 export const placementItemLayers = ["item", "path", "fence"] as const;
 
@@ -33,6 +38,7 @@ export type PlacementBuilding = PlacementCoordinate &
     paintColors?: BuildingPaintColors;
     variant?: number;
     waterColor?: number;
+    animationOptions?: PlacementAnimationOptions;
   }>;
 
 export type NewPlacementBuilding = Omit<PlacementBuilding, "instanceId">;
@@ -62,6 +68,7 @@ export type PlacementItem = PlacementCoordinate &
     heldItem?: PlacementHeldItem;
     heldItemId?: string;
     nightLightState?: "off";
+    animationOptions?: PlacementAnimationOptions;
   }>;
 
 export type PlacementHeldItem = Readonly<{
@@ -83,6 +90,7 @@ export type PlacementHeldItem = Readonly<{
   bedType: PlacementBedType;
   growthStage?: number;
   nightLightState?: "off";
+  animationOptions?: PlacementAnimationOptions;
 }>;
 
 export type NewPlacementItem = Omit<PlacementItem, "instanceId">;
@@ -163,6 +171,7 @@ const optionalBuildingFields = [
   "paintColors",
   "variant",
   "waterColor",
+  "animationOptions",
 ] as const;
 const cropFields = ["cropId", "x", "y"] as const;
 const coordinateFields = ["x", "y"] as const;
@@ -192,6 +201,7 @@ const optionalItemFields = [
   "heldItem",
   "heldItemId",
   "nightLightState",
+  "animationOptions",
 ] as const;
 const footprintFields = ["width", "height"] as const;
 const heldItemFields = [
@@ -212,7 +222,11 @@ const heldItemFields = [
   "flipped",
   "bedType",
 ] as const;
-const optionalHeldItemFields = ["growthStage", "nightLightState"] as const;
+const optionalHeldItemFields = [
+  "growthStage",
+  "nightLightState",
+  "animationOptions",
+] as const;
 const trustedWorkingPlacementSnapshots = new WeakSet<object>();
 
 type MutableWorkingPlacementSnapshot = {
@@ -341,7 +355,17 @@ function pushWorkingBuilding(
   newBuilding: NewPlacementBuilding,
 ): void {
   const instanceId = workingSnapshot.nextBuildingId;
-  workingSnapshot.buildings.push({ ...newBuilding, instanceId });
+  workingSnapshot.buildings.push({
+    ...newBuilding,
+    ...(newBuilding.animationOptions === undefined
+      ? {}
+      : {
+          animationOptions: clonePlacementAnimationOptions(
+            newBuilding.animationOptions,
+          ),
+        }),
+    instanceId,
+  });
   workingSnapshot.nextBuildingId = incrementIdentifier(instanceId, "nextBuildingId");
 }
 
@@ -709,6 +733,13 @@ function attachHeldItem(
   const heldItem: PlacementHeldItem = {
     ...newHeldItem,
     footprint: { ...newHeldItem.footprint },
+    ...(newHeldItem.animationOptions === undefined
+      ? {}
+      : {
+          animationOptions: clonePlacementAnimationOptions(
+            newHeldItem.animationOptions,
+          ),
+        }),
     instanceId: childInstanceId,
   };
 
@@ -857,6 +888,12 @@ function readPlacementBuilding(
     buildingId,
     fieldPath,
   );
+  const animationOptions = hasOwn(buildingRecord, "animationOptions")
+    ? restorePlacementAnimationOptions(
+        buildingRecord.animationOptions,
+        `${fieldPath}.animationOptions`,
+      )
+    : undefined;
 
   return {
     instanceId: readPositiveSafeInteger(
@@ -868,6 +905,7 @@ function readPlacementBuilding(
     ...(paintColors === undefined ? {} : { paintColors }),
     ...(variant === undefined ? {} : { variant }),
     ...(waterColor === undefined ? {} : { waterColor }),
+    ...(animationOptions === undefined ? {} : { animationOptions }),
   };
 }
 
@@ -902,6 +940,12 @@ function readNewPlacementBuilding(
     buildingId,
     fieldPath,
   );
+  const animationOptions = hasOwn(buildingRecord, "animationOptions")
+    ? restorePlacementAnimationOptions(
+        buildingRecord.animationOptions,
+        `${fieldPath}.animationOptions`,
+      )
+    : undefined;
 
   return {
     buildingId,
@@ -909,6 +953,7 @@ function readNewPlacementBuilding(
     ...(paintColors === undefined ? {} : { paintColors }),
     ...(variant === undefined ? {} : { variant }),
     ...(waterColor === undefined ? {} : { waterColor }),
+    ...(animationOptions === undefined ? {} : { animationOptions }),
   };
 }
 
@@ -1060,6 +1105,12 @@ function readPlacementItemFields(
   const nightLightState = hasOwn(itemRecord, "nightLightState")
     ? readNightLightState(itemRecord.nightLightState, `${fieldPath}.nightLightState`)
     : undefined;
+  const animationOptions = hasOwn(itemRecord, "animationOptions")
+    ? restorePlacementAnimationOptions(
+        itemRecord.animationOptions,
+        `${fieldPath}.animationOptions`,
+      )
+    : undefined;
   const itemProperties = {
     itemId: readNonEmptyString(itemRecord.itemId, `${fieldPath}.itemId`),
     ...readPlacementCoordinate(itemRecord, fieldPath, false),
@@ -1079,6 +1130,7 @@ function readPlacementItemFields(
     ...(heldItem === undefined ? {} : { heldItem }),
     ...(heldItemId === undefined ? {} : { heldItemId }),
     ...(nightLightState === undefined ? {} : { nightLightState }),
+    ...(animationOptions === undefined ? {} : { animationOptions }),
   };
 
   if (heldItem !== undefined && heldItemId !== undefined) {
@@ -1151,6 +1203,12 @@ function readPlacementHeldItem(
   const nightLightState = hasOwn(heldItemRecord, "nightLightState")
     ? readNightLightState(heldItemRecord.nightLightState, `${fieldPath}.nightLightState`)
     : undefined;
+  const animationOptions = hasOwn(heldItemRecord, "animationOptions")
+    ? restorePlacementAnimationOptions(
+        heldItemRecord.animationOptions,
+        `${fieldPath}.animationOptions`,
+      )
+    : undefined;
 
   return {
     instanceId: readPositiveSafeInteger(heldItemRecord.instanceId, `${fieldPath}.instanceId`),
@@ -1171,6 +1229,7 @@ function readPlacementHeldItem(
     bedType: readPlacementBedType(heldItemRecord.bedType, `${fieldPath}.bedType`),
     ...(growthStage === undefined ? {} : { growthStage }),
     ...(nightLightState === undefined ? {} : { nightLightState }),
+    ...(animationOptions === undefined ? {} : { animationOptions }),
   };
 }
 
@@ -1655,7 +1714,16 @@ function clonePlacementSnapshot(
   placementSnapshot: PlacementSnapshot,
 ): PlacementSnapshot {
   return {
-    buildings: placementSnapshot.buildings.map((building) => ({ ...building })),
+    buildings: placementSnapshot.buildings.map((building) => ({
+      ...building,
+      ...(building.animationOptions === undefined
+        ? {}
+        : {
+            animationOptions: clonePlacementAnimationOptions(
+              building.animationOptions,
+            ),
+          }),
+    })),
     crops: placementSnapshot.crops.map((crop) => ({ ...crop })),
     items: placementSnapshot.items.map(clonePlacementItem),
     nextBuildingId: placementSnapshot.nextBuildingId,
@@ -1670,12 +1738,26 @@ function clonePlacementItem(placementItem: PlacementItem): PlacementItem {
   return {
     ...placementItem,
     footprint: { ...placementItem.footprint },
+    ...(placementItem.animationOptions === undefined
+      ? {}
+      : {
+          animationOptions: clonePlacementAnimationOptions(
+            placementItem.animationOptions,
+          ),
+        }),
     ...(placementItem.heldItem === undefined
       ? {}
       : {
           heldItem: {
             ...placementItem.heldItem,
             footprint: { ...placementItem.heldItem.footprint },
+            ...(placementItem.heldItem.animationOptions === undefined
+              ? {}
+              : {
+                  animationOptions: clonePlacementAnimationOptions(
+                    placementItem.heldItem.animationOptions,
+                  ),
+                }),
           },
         }),
   };

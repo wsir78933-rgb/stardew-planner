@@ -3,6 +3,7 @@ import { sourceAssets } from "../../src/assets/source-manifest";
 import { mapSourceAssets } from "../../src/assets/map-source-manifest";
 import {
   additionalFurnitureTilesheetSourceAssets,
+  animationSpriteSourceAssets,
   buildingPaintMaskSourceAssets,
   buildingSpriteSourceAssets,
   modNonSeasonalTilesheetSourceAssets,
@@ -224,14 +225,15 @@ describe("rendering source manifest", () => {
     expect(officialTilesheetSourceAssets).toHaveLength(49);
     expect(modNonSeasonalTilesheetSourceAssets).toHaveLength(23);
     expect(modSeasonalTilesheetSourceAssets).toHaveLength(43);
-    expect(renderingDataSourceAssets).toHaveLength(9);
+    expect(renderingDataSourceAssets).toHaveLength(17);
     expect(buildingSpriteSourceAssets).toHaveLength(34);
     expect(buildingPaintMaskSourceAssets).toHaveLength(12);
-    expect(spriteSourceAssets).toHaveLength(4);
+    expect(spriteSourceAssets).toHaveLength(5);
+    expect(animationSpriteSourceAssets).toHaveLength(38);
     expect(terrainSourceAssets).toHaveLength(35);
     expect(regularTilesheetSourceAssets).toHaveLength(15);
     expect(additionalFurnitureTilesheetSourceAssets).toHaveLength(7);
-    expect(renderingSourceAssets).toHaveLength(231);
+    expect(renderingSourceAssets).toHaveLength(278);
 
     expect(
       officialTilesheetSourceAssets.map(
@@ -276,7 +278,7 @@ describe("rendering source manifest", () => {
   it("keeps map and crop assets ordered before the rendering expansion", () => {
     const renderingSourceAssetStartIndex = 1 + mapSourceAssets.length;
 
-    expect(sourceAssets).toHaveLength(370);
+    expect(sourceAssets).toHaveLength(417);
     expect(sourceAssets.slice(1, renderingSourceAssetStartIndex)).toEqual(
       mapSourceAssets,
     );
@@ -287,7 +289,7 @@ describe("rendering source manifest", () => {
     const sourceAssetOutputPaths = sourceAssets.map(
       (sourceAsset) => sourceAsset.outputPath,
     );
-    expect(new Set(sourceAssetOutputPaths)).toHaveLength(370);
+    expect(new Set(sourceAssetOutputPaths)).toHaveLength(417);
   });
 
   it("locks the exact output path sequence for every verified tilesheet category", () => {

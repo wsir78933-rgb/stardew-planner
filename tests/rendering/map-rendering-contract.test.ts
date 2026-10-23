@@ -8,6 +8,8 @@ import {
   isLocalRenderingTileset,
   type RenderingTileset,
 } from "../../src/rendering/map-rendering-contract";
+import { createMapWaterTilePositions } from "../../src/rendering/map-water-animation";
+import { getBaseTileGid } from "../../src/tmx/decode-tile-layer-data";
 import { plannerMaps } from "../../src/maps/map-catalog";
 import { parseTmxMap } from "../../src/tmx/parse-tmx-map";
 
@@ -88,6 +90,21 @@ describe("createMapRenderingContract", () => {
         assetPath.startsWith(localAssetRoot),
       ),
     ).toBe(true);
+    const animatedTileset = parsedFarmMap.tilesets[2];
+
+    expect(animatedTileset).toBeDefined();
+    expect(animatedTileset?.tileAnimations?.get(208)).toEqual([
+      { tileId: 208, durationMilliseconds: 1000 },
+      { tileId: 1207, durationMilliseconds: 1000 },
+    ]);
+    expect(farmContract.tileAnimationsByGid.get((animatedTileset?.firstGid ?? 0) + 208)).toEqual({
+      frames: [
+        { gid: (animatedTileset?.firstGid ?? 0) + 208, durationMilliseconds: 1000 },
+        { gid: (animatedTileset?.firstGid ?? 0) + 1207, durationMilliseconds: 1000 },
+      ],
+      durationMilliseconds: 2000,
+    });
+    expect(farmContract.waterTileGids.has((animatedTileset?.firstGid ?? 0) + 209)).toBe(true);
   });
 
   it("uses the parsed map SeasonOverride instead of the requested season", async () => {
@@ -101,6 +118,88 @@ describe("createMapRenderingContract", () => {
     expect(
       getLocalAssetPaths(islandContract.tilesets),
     ).toContain(`${localAssetRoot}tilesheets/summer_outdoorsTileSheet.png`);
+  });
+
+  it("treats empty and false Water values as false and accepts other non-empty values", async () => {
+    const parsedFarmMap = await parseLockedMap("maps/Farm.tmx");
+    const firstTileset = parsedFarmMap.tilesets[0];
+    expect(firstTileset).toBeDefined();
+    if (firstTileset === undefined || firstTileset.tileCount < 5) {
+      throw new Error("Farm TMX must have a first tileset with at least five tiles.");
+    }
+
+    const tileProperties = new Map(firstTileset.tileProperties);
+    tileProperties.set(0, { Buildable: "T" });
+    tileProperties.set(1, { Water: "" });
+    tileProperties.set(2, { Water: "FALSE" });
+    tileProperties.set(3, { Water: "F" });
+    tileProperties.set(4, { Water: "t" });
+    tileProperties.set(5, { Water: "True" });
+    const parsedFarmMapWithWaterValues = {
+      ...parsedFarmMap,
+      tilesets: [
+        { ...firstTileset, tileProperties },
+        ...parsedFarmMap.tilesets.slice(1),
+      ],
+    };
+    const farmContract = createMapRenderingContract({
+      mapId: "standard",
+      parsedMap: parsedFarmMapWithWaterValues,
+      requestedSeason: "spring",
+    });
+
+    expect(farmContract.waterTileGids.has(firstTileset.firstGid + 0)).toBe(false);
+    expect(farmContract.waterTileGids.has(firstTileset.firstGid + 1)).toBe(false);
+    expect(farmContract.waterTileGids.has(firstTileset.firstGid + 2)).toBe(false);
+    expect(farmContract.waterTileGids.has(firstTileset.firstGid + 3)).toBe(false);
+    expect(farmContract.waterTileGids.has(firstTileset.firstGid + 4)).toBe(true);
+    expect(farmContract.waterTileGids.has(firstTileset.firstGid + 5)).toBe(true);
+  });
+
+  it("recognizes Grandpa's lowercase t marker but collects water only from Back", async () => {
+    const parsedGrandpasMap = await parseLockedMap(
+      "mods/flashshifter.GrandpasFarm/GrandpasFarm.tmx",
+    );
+    const grandpasContract = createMapRenderingContract({
+      mapId: "grandpas",
+      parsedMap: parsedGrandpasMap,
+      requestedSeason: "spring",
+    });
+    const markerX = 7;
+    const markerY = 92;
+    const backLayer = grandpasContract.visibleTileLayers.find(
+      (layer) => layer.name === "Back",
+    );
+    const alwaysFrontLayer = grandpasContract.visibleTileLayers.find(
+      (layer) => layer.name === "AlwaysFront",
+    );
+
+    expect(backLayer).toBeDefined();
+    expect(alwaysFrontLayer).toBeDefined();
+    if (backLayer === undefined || alwaysFrontLayer === undefined) {
+      throw new Error("Grandpa's Farm must contain Back and AlwaysFront layers.");
+    }
+
+    const markerIndex = markerY * alwaysFrontLayer.width + markerX;
+    const frontMarkerGid = getBaseTileGid(alwaysFrontLayer.rawGids[markerIndex] ?? 0);
+    const backGid = getBaseTileGid(backLayer.rawGids[markerIndex] ?? 0);
+    const waterTilePositions = createMapWaterTilePositions(grandpasContract);
+
+    expect(frontMarkerGid).toBe(11908);
+    expect(grandpasContract.waterTileGids.has(frontMarkerGid)).toBe(true);
+    expect(grandpasContract.waterTileGids.has(backGid)).toBe(false);
+    expect(
+      waterTilePositions.some(
+        (waterTilePosition) =>
+          waterTilePosition.tileX === markerX && waterTilePosition.tileY === markerY,
+      ),
+    ).toBe(false);
+    expect(
+      waterTilePositions.every(
+        (waterTilePosition) =>
+          grandpasContract.visibleTileLayers[waterTilePosition.layerIndex]?.name === "Back",
+      ),
+    ).toBe(true);
   });
 
   it("omits the known hidden Paths layer without changing the remaining XML order", async () => {

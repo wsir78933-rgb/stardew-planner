@@ -14,6 +14,12 @@ export interface TmxTileset {
   readonly imageHeight: number;
   readonly properties: TmxProperties;
   readonly tileProperties: ReadonlyMap<number, TmxProperties>;
+  readonly tileAnimations?: ReadonlyMap<number, readonly TmxTileAnimationFrame[]>;
+}
+
+export interface TmxTileAnimationFrame {
+  readonly tileId: number;
+  readonly durationMilliseconds: number;
 }
 
 export interface TmxTileLayer {

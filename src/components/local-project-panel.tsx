@@ -870,27 +870,6 @@ export function LocalProjectPanel({
             >
               {copy.newProject}
             </button>
-            <button
-              aria-pressed={isImportGameSaveOpen}
-              disabled={!isStorageReady}
-              onClick={handleOpenImportGameSave}
-              type="button"
-            >
-              {libraryChromeCopy.importGameSave}
-            </button>
-            <label
-              className={`local-project-panel__import${
-                isStorageReady ? "" : " local-project-panel__import--disabled"
-              }`}
-            >
-              <span>{copy.importJson}</span>
-              <input
-                accept="application/json,.json"
-                disabled={!isStorageReady}
-                onChange={handleImportFileChange}
-                type="file"
-              />
-            </label>
           </div>
           <nav aria-label={libraryChromeCopy.projectGroups} className={styles.folderList}>
             <details
@@ -994,6 +973,29 @@ export function LocalProjectPanel({
           >
             {libraryChromeCopy.tools}
           </button>
+          <div className={`local-project-panel__primary-actions ${styles.sidebarActions}`}>
+            <button
+              aria-pressed={isImportGameSaveOpen}
+              disabled={!isStorageReady}
+              onClick={handleOpenImportGameSave}
+              type="button"
+            >
+              {libraryChromeCopy.importGameSave}
+            </button>
+            <label
+              className={`local-project-panel__import${
+                isStorageReady ? "" : " local-project-panel__import--disabled"
+              }`}
+            >
+              <span>{copy.importJson}</span>
+              <input
+                accept="application/json,.json"
+                disabled={!isStorageReady}
+                onChange={handleImportFileChange}
+                type="file"
+              />
+            </label>
+          </div>
           <div className="local-project-panel__status">
             <p>
               {copy.currentProject}: <strong>{currentProjectName ?? copy.none}</strong>

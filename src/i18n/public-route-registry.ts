@@ -2,8 +2,13 @@ import { blogPostSlugs, type BlogPostSlug } from "../blog/blog-post-identities";
 import { expandedFarmCanonicalPath } from "../farm-layouts/expanded-farm-content";
 import { fishFarmCanonicalPath } from "../farm-layouts/fish-farm-content";
 import { hilltopFarmCanonicalPath } from "../farm-layouts/hilltop-farm-content";
+import { fruitTreeLayoutCanonicalPath } from "../farm-layouts/fruit-tree-layout-content";
+import { greenhouseTreeLayoutCanonicalPath } from "../farm-layouts/greenhouse-tree-layout-content";
+import { iridiumSprinklerLayoutCanonicalPath } from "../farm-layouts/iridium-sprinkler-layout-content";
+import { qualitySprinklerLayoutCanonicalPath } from "../farm-layouts/quality-sprinkler-layout-content";
 import { riverFarmCanonicalPath } from "../farm-layouts/river-farm-content";
 import { sprinklerLayoutCanonicalPath } from "../farm-layouts/sprinkler-layout-content";
+import { wildernessFarmCanonicalPath } from "../farm-layouts/wilderness-farm-content";
 import { PROCESSING_TOOL_CANONICAL_PATHS } from "../tools-pages/processing/processing-tool-definition";
 import { type HomepageDisplayLocale } from "../homepage/homepage-locale";
 import { createCanonicalUrl } from "../seo/public-site-url";
@@ -27,7 +32,11 @@ const fixedCanonicalPublicPaths = [
   "/stardew-valley-frontier-farm-layout",
   expandedFarmCanonicalPath,
   hilltopFarmCanonicalPath,
+  wildernessFarmCanonicalPath,
   sprinklerLayoutCanonicalPath,
+  qualitySprinklerLayoutCanonicalPath,
+  iridiumSprinklerLayoutCanonicalPath,
+  fruitTreeLayoutCanonicalPath,
 ] as const;
 
 type BlogCanonicalPublicPath =
@@ -37,7 +46,8 @@ type BlogCanonicalPublicPath =
 
 export type PublicCanonicalPath =
   | (typeof fixedCanonicalPublicPaths)[number]
-  | BlogCanonicalPublicPath;
+  | BlogCanonicalPublicPath
+  | typeof greenhouseTreeLayoutCanonicalPath;
 
 const blogCanonicalPublicPaths: readonly BlogCanonicalPublicPath[] = [
   "/blog",
@@ -48,6 +58,7 @@ const blogCanonicalPublicPaths: readonly BlogCanonicalPublicPath[] = [
 export const canonicalPublicPaths: readonly PublicCanonicalPath[] = [
   ...fixedCanonicalPublicPaths,
   ...blogCanonicalPublicPaths,
+  greenhouseTreeLayoutCanonicalPath,
 ];
 
 const noindexCanonicalPublicPaths = new Set<PublicCanonicalPath>([
