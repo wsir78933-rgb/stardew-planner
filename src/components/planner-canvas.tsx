@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { usePlannerChromeLocale } from "@/src/i18n/planner-chrome-locale";
 import type { PlannerChromeLocale } from "@/src/homepage/homepage-locale";
+import {
+  loadPlannerAnimationCatalog,
+  type AnimationCatalog,
+} from "../animations/animation-catalog";
 import type {
   BuildingPlacementMetadataById,
   CatalogItem,
@@ -58,9 +62,26 @@ import {
   createMapRenderingContract,
   isKnownUnavailableRenderingTileset,
   type MapRenderingContract,
+  type RenderingTileAnimation,
   type RenderingTileset,
 } from "../rendering/map-rendering-contract";
-import { createLayerTileGeometryResolver } from "../rendering/map-tile-geometry";
+import {
+  createLayerTileGeometryResolver,
+  createTilesetTileFrameResolver,
+} from "../rendering/map-tile-geometry";
+import {
+  createMapTileAnimationUpdate,
+} from "../rendering/map-tile-animation";
+import {
+  createMapWaterAnimationUpdate,
+  createMapWaterTilePositions,
+  getMapWaterOverlayInsertionIndex,
+  getMapWaterSeasonTint,
+  getMapWaterSurfaceFrameState,
+  type MapWaterTilePosition,
+  type WaterSurfaceAnimationFrame,
+  type WaterSurfaceSourceRect,
+} from "../rendering/map-water-animation";
 import {
   createInitialCameraState,
   getCameraKeyboardPan,
@@ -76,6 +97,7 @@ import {
   createPlacementRenderEntries,
   createTransientPlacementRenderEntries,
   type PlacementRenderEntry,
+  type PlacementSpriteMotionSample,
 } from "../rendering/placement-rendering";
 import {
   resolvePlacementTextureEntries,
@@ -241,6 +263,7 @@ function assertPlannerCanvasPreviewActions(
 }
 
 export function createPlannerCanvasPreviewRenderEntries(input: Readonly<{
+  animationCatalog?: AnimationCatalog;
   catalogItems: readonly CatalogItem[];
   isNightMode: boolean;
   mapId: string;
@@ -266,6 +289,7 @@ export function createPlannerCanvasPreviewRenderEntries(input: Readonly<{
       input.mapId,
       input.mapPlacementGrid,
       input.isNightMode,
+      input.animationCatalog,
     ).map((renderEntry, renderEntryIndex) => ({
       ...renderEntry,
       key: `placement-preview:${String(previewActionIndex)}:${String(renderEntryIndex)}`,
@@ -529,8 +553,15 @@ type PixiApplicationLifetime<Application> = Readonly<{
 }>;
 
 type MapContainerCreationResult = Readonly<{
+  animations: readonly PlacementSpriteAnimation[];
+  destroyFrameTextures(): void;
   mapContainer: import("pixi.js").Container;
   knownUnavailableTilesheetWarnings: readonly string[];
+}>;
+
+type MapWaterSurfaceAssets = Readonly<{
+  texture: PixiTexture;
+  frames: readonly WaterSurfaceAnimationFrame[];
 }>;
 
 type KnownUnavailableTilesheet = Readonly<{
@@ -808,7 +839,57 @@ export type PlacementAnimationController = Readonly<{
   replaceAnimations(animations: readonly PlacementSpriteAnimation[]): void;
 }>;
 
-const placementAnimationIntervalMilliseconds = 100;
+const placementAnimationIntervalMilliseconds = 1000 / 60;
+
+type PlacementAnimationFrameRegistration = Readonly<{
+  renderStage: () => void;
+  update(currentTimeMilliseconds: number): boolean;
+}>;
+
+const activePlacementAnimationFrameRegistrations =
+  new Set<PlacementAnimationFrameRegistration>();
+let sharedPlacementAnimationInterval: ReturnType<typeof setInterval> | null = null;
+
+function runActivePlacementAnimationFrames(): void {
+  const currentTimeMilliseconds = performance.now();
+  const changedStageRenderCallbacks = new Set<() => void>();
+
+  for (const frameRegistration of activePlacementAnimationFrameRegistrations) {
+    if (frameRegistration.update(currentTimeMilliseconds)) {
+      changedStageRenderCallbacks.add(frameRegistration.renderStage);
+    }
+  }
+
+  for (const renderStage of changedStageRenderCallbacks) {
+    renderStage();
+  }
+}
+
+function startSharedPlacementAnimationInterval(): void {
+  if (
+    sharedPlacementAnimationInterval !== null ||
+    activePlacementAnimationFrameRegistrations.size === 0
+  ) {
+    return;
+  }
+
+  sharedPlacementAnimationInterval = setInterval(
+    runActivePlacementAnimationFrames,
+    placementAnimationIntervalMilliseconds,
+  );
+}
+
+function stopSharedPlacementAnimationInterval(): void {
+  if (
+    sharedPlacementAnimationInterval === null ||
+    activePlacementAnimationFrameRegistrations.size > 0
+  ) {
+    return;
+  }
+
+  clearInterval(sharedPlacementAnimationInterval);
+  sharedPlacementAnimationInterval = null;
+}
 
 export function createPlacementAnimationController(
   renderAnimatedPlacements: () => void,
@@ -825,41 +906,43 @@ export function createPlacementAnimationController(
     );
   }
 
-  let animationInterval: ReturnType<typeof setInterval> | null = null;
   let currentAnimations: readonly PlacementSpriteAnimation[] = [];
   let hasDisposed = false;
   let animationsEnabled = initialAnimationsEnabled;
+  let isFrameRegistered = false;
 
-  const stopAnimationInterval = (): void => {
-    if (animationInterval !== null) {
-      clearInterval(animationInterval);
-      animationInterval = null;
-    }
-  };
+  const frameRegistration: PlacementAnimationFrameRegistration = {
+    renderStage: renderAnimatedPlacements,
+    update(currentTimeMilliseconds): boolean {
+      if (hasDisposed || !animationsEnabled || currentAnimations.length === 0) {
+        return false;
+      }
 
-  const startAnimationInterval = (): void => {
-    if (
-      hasDisposed ||
-      !animationsEnabled ||
-      animationInterval !== null ||
-      currentAnimations.length === 0
-    ) {
-      return;
-    }
-
-    animationInterval = setInterval(() => {
-      const currentTimeMilliseconds = performance.now();
       let didChangeVisualState = false;
-
       for (const animation of currentAnimations) {
         didChangeVisualState =
           animation.update(currentTimeMilliseconds) || didChangeVisualState;
       }
 
-      if (didChangeVisualState) {
-        renderAnimatedPlacements();
-      }
-    }, placementAnimationIntervalMilliseconds);
+      return didChangeVisualState;
+    },
+  };
+
+  const updateFrameRegistration = (): void => {
+    const shouldRegisterFrame =
+      !hasDisposed && animationsEnabled && currentAnimations.length > 0;
+    if (shouldRegisterFrame === isFrameRegistered) {
+      return;
+    }
+
+    isFrameRegistered = shouldRegisterFrame;
+    if (shouldRegisterFrame) {
+      activePlacementAnimationFrameRegistrations.add(frameRegistration);
+      startSharedPlacementAnimationInterval();
+    } else {
+      activePlacementAnimationFrameRegistrations.delete(frameRegistration);
+      stopSharedPlacementAnimationInterval();
+    }
   };
 
   return {
@@ -870,7 +953,7 @@ export function createPlacementAnimationController(
 
       hasDisposed = true;
       currentAnimations = [];
-      stopAnimationInterval();
+      updateFrameRegistration();
     },
     setEnabled(enabled): void {
       if (typeof enabled !== "boolean") {
@@ -888,11 +971,7 @@ export function createPlacementAnimationController(
       }
 
       animationsEnabled = enabled;
-      if (animationsEnabled) {
-        startAnimationInterval();
-      } else {
-        stopAnimationInterval();
-      }
+      updateFrameRegistration();
     },
     replaceAnimations(animations): void {
       if (hasDisposed) {
@@ -901,9 +980,8 @@ export function createPlacementAnimationController(
         );
       }
       assertPlacementSpriteAnimations(animations);
-      stopAnimationInterval();
       currentAnimations = animations;
-      startAnimationInterval();
+      updateFrameRegistration();
     },
   };
 }
@@ -1231,10 +1309,12 @@ export type PlannerCanvasCleanupOperations = Readonly<{
   disposeInteractionBinding(): void;
   disposeMapDisplayOverlay(): void;
   disposePlacementOverlay(): void;
+  disposeMapAnimation?(): void;
   disposePlacementPreview?(): void;
   disposeFarmMapDecorationRenderer?(): void;
   clearJoystickCameraPan(): void;
   clearMapImageExporter(): void;
+  destroyMapFrameTextures?(): void;
   destroyResourceClumpFrameTextures(): void;
   destroyPixiApplication(): void;
   clearCanvasHost(): void;
@@ -1253,10 +1333,12 @@ export function createPlannerCanvasCleanup(
     cleanupOperations.disposeInteractionBinding();
     cleanupOperations.disposeMapDisplayOverlay();
     cleanupOperations.disposePlacementOverlay();
+    cleanupOperations.disposeMapAnimation?.();
     cleanupOperations.disposePlacementPreview?.();
     cleanupOperations.disposeFarmMapDecorationRenderer?.();
     cleanupOperations.clearJoystickCameraPan();
     cleanupOperations.clearMapImageExporter();
+    cleanupOperations.destroyMapFrameTextures?.();
     cleanupOperations.destroyResourceClumpFrameTextures();
     cleanupOperations.destroyPixiApplication();
     cleanupOperations.clearCanvasHost();
@@ -1279,6 +1361,7 @@ export function commitPlannerCanvasExporterAndWarnings(
 
 export function createInitialResolvedPlacementTextureEntries(
   input: Readonly<{
+    animationCatalog?: AnimationCatalog;
     catalogItems: readonly CatalogItem[] | undefined;
     isNightMode: boolean;
     mapId: string;
@@ -1298,6 +1381,7 @@ export function createInitialResolvedPlacementTextureEntries(
     input.mapId,
     input.mapPlacementGrid,
     input.isNightMode,
+    input.animationCatalog,
   ));
 }
 
@@ -1392,6 +1476,8 @@ export function PlannerCanvas({
     useRef<MapDisplayOverlayRenderer | null>(null);
   const placementAnimationControllerReference =
     useRef<PlacementAnimationController | null>(null);
+  const mapAnimationControllerReference =
+    useRef<PlacementAnimationController | null>(null);
   const placementPreviewAnimationControllerReference =
     useRef<PlacementAnimationController | null>(null);
   const farmMapDecorationAnimationControllerReference =
@@ -1482,6 +1568,7 @@ export function PlannerCanvas({
 
   useEffect(() => {
     placementAnimationControllerReference.current?.setEnabled(animationsEnabled);
+    mapAnimationControllerReference.current?.setEnabled(animationsEnabled);
     placementPreviewAnimationControllerReference.current?.setEnabled(
       animationsEnabled,
     );
@@ -1551,6 +1638,8 @@ export function PlannerCanvas({
     let disposeMapDisplayOverlay: (() => void) | null = null;
     let disposePlacementOverlay: (() => void) | null = null;
     let disposePlacementPreview: (() => void) | null = null;
+    let mapAnimationController: PlacementAnimationController | null = null;
+    let destroyMapFrameTextures: (() => void) | null = null;
     let farmMapDecorationRenderer: FarmMapDecorationRenderer | null = null;
     let farmMapDecorationAnimationController: PlacementAnimationController | null =
       null;
@@ -1573,6 +1662,13 @@ export function PlannerCanvas({
       },
       disposeMapDisplayOverlay: () => disposeMapDisplayOverlay?.(),
       disposePlacementOverlay: () => disposePlacementOverlay?.(),
+      disposeMapAnimation: () => {
+        mapAnimationController?.dispose();
+        if (mapAnimationControllerReference.current === mapAnimationController) {
+          mapAnimationControllerReference.current = null;
+        }
+        mapAnimationController = null;
+      },
       disposePlacementPreview: () => disposePlacementPreview?.(),
       disposeFarmMapDecorationRenderer: () => {
         farmMapDecorationAnimationController?.dispose();
@@ -1593,6 +1689,10 @@ export function PlannerCanvas({
       },
       clearMapImageExporter: () =>
         onMapImageExporterReadyReference.current?.(mapId, null),
+      destroyMapFrameTextures: () => {
+        destroyMapFrameTextures?.();
+        destroyMapFrameTextures = null;
+      },
       destroyResourceClumpFrameTextures: () => {
         destroyResourceClumpFrameTextures(
           resourceClumpFrameTexturesByParentSheetIndex,
@@ -1694,7 +1794,16 @@ export function PlannerCanvas({
           },
         });
 
-        await initializePlannerTextureAssets(pixi);
+        const [animationCatalog] = await Promise.all([
+          loadPlannerAnimationCatalog(),
+          initializePlannerTextureAssets(pixi),
+        ]);
+        if (!isMapLifecycleCurrent()) {
+          cleanUpPlannerCanvas();
+          return;
+        }
+
+        const waterTilePositions = createMapWaterTilePositions(renderingContract);
 
         const placementTexturePromisesByResolvedUrl = new Map<
           string,
@@ -1702,6 +1811,7 @@ export function PlannerCanvas({
         >();
         const resolvedInitialPlacementTextureEntries =
           createInitialResolvedPlacementTextureEntries({
+            animationCatalog,
             catalogItems: catalogItemsReference.current,
             isNightMode: displayOptionsReference.current.showNightMode,
             mapId,
@@ -1710,13 +1820,22 @@ export function PlannerCanvas({
             season,
           });
         performanceMarkerReference.current?.mark("editor:initial-textures-started");
-        const { resourceClumpTilesheetTexture, tilesheetTextures } =
-          await loadPlannerCanvasInitialTextures(
+        const [initialPlannerTextures, waterSurfaceAssets] = await Promise.all([
+          loadPlannerCanvasInitialTextures(
             pixi,
             renderingContract.tilesets,
             resolvedInitialPlacementTextureEntries,
             placementTexturePromisesByResolvedUrl,
-          );
+          ),
+          loadMapWaterSurfaceAssets(
+            pixi,
+            waterTilePositions,
+            placementTexturePromisesByResolvedUrl,
+            animationCatalog,
+          ),
+        ]);
+        const { resourceClumpTilesheetTexture, tilesheetTextures } =
+          initialPlannerTextures;
         const farmMapDecorationPlan =
           preparedCanvasResources.preparedMap.farmMapDecorationPlan ?? {
             spouse: null,
@@ -1755,12 +1874,26 @@ export function PlannerCanvas({
           pixi,
           renderingContract,
           tilesheetTextures,
+          waterSurfaceAssets,
+          waterTilePositions,
         );
+        destroyMapFrameTextures = mapContainerCreationResult.destroyFrameTextures;
         performanceMarkerReference.current?.mark("editor:map-container-ready");
 
         pixiApplication.stage.eventMode = "none";
         mapContainerCreationResult.mapContainer.eventMode = "none";
         pixiApplication.stage.addChild(mapContainerCreationResult.mapContainer);
+        const renderAnimatedStage = (): void => {
+          pixiApplication.renderer.render(pixiApplication.stage);
+        };
+        if (mapContainerCreationResult.animations.length > 0) {
+          mapAnimationController = createPlacementAnimationController(
+            renderAnimatedStage,
+            ambienceOptionsReference.current?.animationsEnabled ?? true,
+          );
+          mapAnimationControllerReference.current = mapAnimationController;
+          mapAnimationController.replaceAnimations(mapContainerCreationResult.animations);
+        }
         if (
           farmMapDecorationPlan.spouse !== null ||
           farmMapDecorationPlan.caveObjects.length > 0
@@ -1776,9 +1909,10 @@ export function PlannerCanvas({
             farmMapDecorationRenderer.container,
           );
           farmMapDecorationAnimationController =
-            createPlacementAnimationController(() => {
-              pixiApplication.renderer.render(pixiApplication.stage);
-            }, ambienceOptionsReference.current?.animationsEnabled ?? true);
+            createPlacementAnimationController(
+              renderAnimatedStage,
+              ambienceOptionsReference.current?.animationsEnabled ?? true,
+            );
           farmMapDecorationAnimationControllerReference.current =
             farmMapDecorationAnimationController;
           farmMapDecorationAnimationController.replaceAnimations(
@@ -1870,9 +2004,10 @@ export function PlannerCanvas({
         const placementErasePreviewVisualUpdater =
           createPlacementErasePreviewVisualUpdater();
         const placementAnimationController =
-          createPlacementAnimationController(() => {
-            pixiApplication.renderer.render(pixiApplication.stage);
-          }, ambienceOptionsReference.current?.animationsEnabled ?? true);
+          createPlacementAnimationController(
+            renderAnimatedStage,
+            ambienceOptionsReference.current?.animationsEnabled ?? true,
+          );
         placementAnimationControllerReference.current =
           placementAnimationController;
 
@@ -1924,6 +2059,7 @@ export function PlannerCanvas({
             createPlacementSprites: () =>
               createPlacementSprites({
                 pixi,
+                animationCatalog,
                 catalogItems: currentCatalogItems,
                 mapId,
                 mapPlacementGrid,
@@ -2072,9 +2208,10 @@ export function PlannerCanvas({
         erasePreviewVisualSynchronizerReference.current =
           synchronizeErasePreviewVisuals;
         const placementPreviewAnimationController =
-          createPlacementAnimationController(() => {
-            pixiApplication.renderer.render(pixiApplication.stage);
-          }, ambienceOptionsReference.current?.animationsEnabled ?? true);
+          createPlacementAnimationController(
+            renderAnimatedStage,
+            ambienceOptionsReference.current?.animationsEnabled ?? true,
+          );
         placementPreviewAnimationControllerReference.current =
           placementPreviewAnimationController;
         const placementPreviewRenderer =
@@ -2163,6 +2300,7 @@ export function PlannerCanvas({
 
           const previewRenderEntries = hasInteractionPreview
             ? createPlannerCanvasPreviewRenderEntries({
+                animationCatalog,
                 catalogItems: currentCatalogItems,
                 isNightMode: displayOptionsReference.current.showNightMode,
                 mapId,
@@ -2182,6 +2320,7 @@ export function PlannerCanvas({
                   mapId,
                   mapPlacementGrid,
                   displayOptionsReference.current.showNightMode,
+                  animationCatalog,
                 );
 
           if (previewRenderEntries.length === 0) {
@@ -2193,6 +2332,7 @@ export function PlannerCanvas({
             createPlacementSprites: () =>
               createPlacementSprites({
                 pixi,
+                animationCatalog,
                 catalogItems: currentCatalogItems,
                 mapId,
                 mapPlacementGrid,
@@ -3547,18 +3687,45 @@ function replaceMapDisplayOverlayChildren(
   }
 }
 
-function createMapContainer(
+export function createMapContainer(
   pixi: PixiModule,
   renderingContract: MapRenderingContract,
   tilesheetTextures: ReadonlyMap<number, PixiTexture>,
+  waterSurfaceAssets: MapWaterSurfaceAssets | null,
+  waterTilePositions: readonly MapWaterTilePosition[],
 ): MapContainerCreationResult {
   const mapContainer = new pixi.Container();
   const tileTextureByFrame = new Map<string, PixiTexture>();
   const knownUnavailableTilesheetWarnings = new Set<string>();
+  const animations: PlacementSpriteAnimation[] = [];
+  const animatedTileSpritesByGid = new Map<
+    number,
+    Readonly<{
+      animation: RenderingTileAnimation;
+      sprites: import("pixi.js").Sprite[];
+    }>
+  >();
+  if (waterTilePositions.length > 0 && waterSurfaceAssets === null) {
+    throw new Error(
+      `Map ${JSON.stringify(renderingContract.mapId)} has ${waterTilePositions.length} visible Water tiles but no water surface texture catalog was loaded.`,
+    );
+  }
+  const waterSpritesByCoordinate = new Map<
+    string,
+    Readonly<{
+      surfaceSprite: import("pixi.js").Sprite;
+      fillSprite: import("pixi.js").Sprite | null;
+    }>
+  >();
+  const tilesetTileFrameResolver = createTilesetTileFrameResolver({
+    mapId: renderingContract.mapId,
+    tilesets: renderingContract.tilesets,
+  });
 
-  for (const renderingTileLayer of renderingContract.visibleTileLayers) {
+  for (const [layerIndex, renderingTileLayer] of renderingContract.visibleTileLayers.entries()) {
     const layerContainer = new pixi.Container();
 
+    layerContainer.label = `mapTileLayer:${renderingTileLayer.name}`;
     layerContainer.alpha = renderingTileLayer.opacity;
     layerContainer.position.set(
       renderingTileLayer.offsetX,
@@ -3602,16 +3769,29 @@ function createMapContainer(
         continue;
       }
 
+      const tileAnimation = renderingContract.tileAnimationsByGid.get(
+        resolvedTileGeometry.transform.baseGid,
+      );
+      const firstAnimationFrame = tileAnimation?.frames[0];
+      if (tileAnimation !== undefined && firstAnimationFrame === undefined) {
+        throw new Error(
+          `Map tile animation for GID ${resolvedTileGeometry.transform.baseGid} in mapId ${JSON.stringify(renderingContract.mapId)} has no first frame.`,
+        );
+      }
+      const initialTileFrame = firstAnimationFrame === undefined
+        ? resolvedTileGeometry
+        : tilesetTileFrameResolver.resolveTileFrame(firstAnimationFrame.gid);
+
       const tileTexture = getFrameTexture(
         pixi,
         tileTextureByFrame,
         tilesheetTextures,
         renderingContract.mapId,
-        resolvedTileGeometry.tilesetIndex,
-        resolvedTileGeometry.frameX,
-        resolvedTileGeometry.frameY,
-        resolvedTileGeometry.frameWidth,
-        resolvedTileGeometry.frameHeight,
+        initialTileFrame.tilesetIndex,
+        initialTileFrame.frameX,
+        initialTileFrame.frameY,
+        initialTileFrame.frameWidth,
+        initialTileFrame.frameHeight,
       );
       const tileSprite = new pixi.Sprite({
         roundPixels: false,
@@ -3620,8 +3800,8 @@ function createMapContainer(
 
       tileSprite.anchor.set(0.5);
       tileSprite.position.set(
-        resolvedTileGeometry.positionX + resolvedTileGeometry.frameWidth / 2,
-        resolvedTileGeometry.positionY + resolvedTileGeometry.frameHeight / 2,
+        resolvedTileGeometry.positionX + initialTileFrame.frameWidth / 2,
+        resolvedTileGeometry.positionY + initialTileFrame.frameHeight / 2,
       );
       tileSprite.rotation = resolvedTileGeometry.transform.rotationRadians;
       tileSprite.scale.set(
@@ -3629,18 +3809,187 @@ function createMapContainer(
         resolvedTileGeometry.transform.scaleY,
       );
       layerContainer.addChild(tileSprite);
+
+      if (tileAnimation !== undefined) {
+        const animatedTileSprites = animatedTileSpritesByGid.get(
+          resolvedTileGeometry.transform.baseGid,
+        );
+        if (animatedTileSprites === undefined) {
+          animatedTileSpritesByGid.set(
+            resolvedTileGeometry.transform.baseGid,
+            { animation: tileAnimation, sprites: [tileSprite] },
+          );
+        } else {
+          if (animatedTileSprites.animation !== tileAnimation) {
+            throw new Error(
+              `Map tile GID ${resolvedTileGeometry.transform.baseGid} resolves to multiple animation descriptors in mapId ${JSON.stringify(renderingContract.mapId)}.`,
+            );
+          }
+          animatedTileSprites.sprites.push(tileSprite);
+        }
+      }
     }
 
     mapContainer.addChild(layerContainer);
   }
 
+  if (waterTilePositions.length > 0) {
+    if (waterSurfaceAssets === null) {
+      throw new Error(
+        `Map ${JSON.stringify(renderingContract.mapId)} requires Cursors water textures after collecting Back-layer Water tiles.`,
+      );
+    }
+    const firstWaterTilePosition = waterTilePositions[0];
+    if (firstWaterTilePosition === undefined) {
+      throw new Error(
+        `Map ${JSON.stringify(renderingContract.mapId)} has a non-empty water tile list without a first position.`,
+      );
+    }
+    const backLayer = renderingContract.visibleTileLayers[firstWaterTilePosition.layerIndex];
+    if (backLayer === undefined || backLayer.name !== "Back") {
+      throw new Error(
+        `Map water overlay layer index ${firstWaterTilePosition.layerIndex} must identify Back in mapId ${JSON.stringify(renderingContract.mapId)}; received ${JSON.stringify(backLayer?.name)}.`,
+      );
+    }
+    const waterOverlayContainer = new pixi.Container();
+    waterOverlayContainer.label = "mapWaterSurfaceOverlay";
+    waterOverlayContainer.alpha = backLayer.opacity;
+    waterOverlayContainer.position.set(backLayer.offsetX, backLayer.offsetY);
+    for (const waterTilePosition of waterTilePositions) {
+      if (waterTilePosition.layerIndex !== firstWaterTilePosition.layerIndex) {
+        throw new Error(
+          `Map water overlay tile at ${waterTilePosition.tileX}:${waterTilePosition.tileY} uses layer index ${waterTilePosition.layerIndex}, expected Back layer index ${firstWaterTilePosition.layerIndex} in mapId ${JSON.stringify(renderingContract.mapId)}.`,
+        );
+      }
+      const waterTileSprites = createMapWaterTileSprites({
+        pixi,
+        mapId: renderingContract.mapId,
+        effectiveSeason: renderingContract.effectiveSeason,
+        mapTileWidth: renderingContract.tileWidth,
+        mapTileHeight: renderingContract.tileHeight,
+        waterSurfaceAssets,
+        waterTilePosition,
+        tileTextureByFrame,
+      });
+      const waterCoordinateKey = `${waterTilePosition.tileX}:${waterTilePosition.tileY}`;
+      waterSpritesByCoordinate.set(waterCoordinateKey, waterTileSprites);
+      waterOverlayContainer.addChild(waterTileSprites.surfaceSprite);
+      if (waterTileSprites.fillSprite !== null) {
+        waterOverlayContainer.addChild(waterTileSprites.fillSprite);
+      }
+    }
+    mapContainer.addChildAt(
+      waterOverlayContainer,
+      getMapWaterOverlayInsertionIndex(renderingContract),
+    );
+  }
+
+  for (const [tileGid, animatedTileSprites] of animatedTileSpritesByGid) {
+    animations.push(
+      createMapTileAnimationUpdate(
+        animatedTileSprites.animation,
+        (frameIndex) => {
+          const animationFrame = animatedTileSprites.animation.frames[frameIndex];
+          if (animationFrame === undefined) {
+            throw new Error(
+              `Map tile animation frame ${frameIndex} is unavailable for GID ${tileGid} in mapId ${JSON.stringify(renderingContract.mapId)}.`,
+            );
+          }
+          const frameGeometry = tilesetTileFrameResolver.resolveTileFrame(animationFrame.gid);
+          const frameTexture = getFrameTexture(
+            pixi,
+            tileTextureByFrame,
+            tilesheetTextures,
+            renderingContract.mapId,
+            frameGeometry.tilesetIndex,
+            frameGeometry.frameX,
+            frameGeometry.frameY,
+            frameGeometry.frameWidth,
+            frameGeometry.frameHeight,
+          );
+          for (const tileSprite of animatedTileSprites.sprites) {
+            tileSprite.texture = frameTexture;
+          }
+        },
+        renderingContract.mapId,
+        tileGid,
+      ),
+    );
+  }
+
+  if (waterTilePositions.length > 0) {
+    if (waterSurfaceAssets === null) {
+      throw new Error(
+        `Map ${JSON.stringify(renderingContract.mapId)} has Water tiles without a loaded water surface catalog.`,
+      );
+    }
+    animations.push(
+      createMapWaterAnimationUpdate(
+        waterTilePositions,
+        waterSurfaceAssets.frames,
+        renderingContract.tileHeight,
+        (waterTilePosition, frameState) => {
+          const waterCoordinateKey = `${waterTilePosition.tileX}:${waterTilePosition.tileY}`;
+          const waterTileSprites = waterSpritesByCoordinate.get(waterCoordinateKey);
+          if (waterTileSprites === undefined) {
+            throw new Error(
+              `Map water tile at ${waterCoordinateKey} has no Pixi sprites in mapId ${JSON.stringify(renderingContract.mapId)}.`,
+            );
+          }
+
+          const surfaceTexture = getWaterSurfaceTexture(
+            pixi,
+            tileTextureByFrame,
+            waterSurfaceAssets.texture,
+            frameState.textureRect,
+          );
+          waterTileSprites.surfaceSprite.texture = surfaceTexture;
+          waterTileSprites.surfaceSprite.position.set(
+            waterTilePosition.tileX * renderingContract.tileWidth,
+            waterTilePosition.tileY * renderingContract.tileHeight + frameState.tileOffsetY,
+          );
+
+          if (frameState.fillVisible) {
+            if (waterTileSprites.fillSprite === null || frameState.fillTextureRect === null) {
+              throw new Error(
+                `Map water bottom edge at ${waterCoordinateKey} has no fill sprite or texture in mapId ${JSON.stringify(renderingContract.mapId)}.`,
+              );
+            }
+            waterTileSprites.fillSprite.texture = getWaterSurfaceTexture(
+              pixi,
+              tileTextureByFrame,
+              waterSurfaceAssets.texture,
+              frameState.fillTextureRect,
+            );
+            waterTileSprites.fillSprite.position.set(
+              waterTilePosition.tileX * renderingContract.tileWidth,
+              waterTilePosition.tileY * renderingContract.tileHeight + frameState.fillOffsetY,
+            );
+            waterTileSprites.fillSprite.visible = true;
+          } else if (waterTileSprites.fillSprite !== null) {
+            waterTileSprites.fillSprite.visible = false;
+          }
+        },
+        renderingContract.mapId,
+      ),
+    );
+  }
+
   return {
     mapContainer,
+    animations,
+    destroyFrameTextures(): void {
+      for (const frameTexture of tileTextureByFrame.values()) {
+        frameTexture.destroy();
+      }
+      tileTextureByFrame.clear();
+    },
     knownUnavailableTilesheetWarnings: [...knownUnavailableTilesheetWarnings],
   };
 }
 
 type CreatePlacementSpritesBaseInput = Readonly<{
+  animationCatalog: AnimationCatalog;
   pixi: PixiModule;
   catalogItems: readonly CatalogItem[];
   isNightMode: boolean;
@@ -3676,6 +4025,7 @@ async function createPlacementSprites(
       createPlacementSpritesInput.mapId,
       createPlacementSpritesInput.mapPlacementGrid,
       createPlacementSpritesInput.isNightMode,
+      createPlacementSpritesInput.animationCatalog,
     );
   const resolvedPlacementTextureEntries = resolvePlacementTextureEntries(
     allPlacementRenderEntries,
@@ -3746,6 +4096,31 @@ export async function loadPlacementTextures(
   );
 
   return new Map(textureEntries);
+}
+
+async function loadMapWaterSurfaceAssets(
+  pixi: PixiModule,
+  waterTilePositions: readonly MapWaterTilePosition[],
+  texturePromisesByResolvedUrl: Map<string, Promise<PixiTexture>>,
+  animationCatalog: AnimationCatalog,
+): Promise<MapWaterSurfaceAssets | null> {
+  if (waterTilePositions.length === 0) {
+    return null;
+  }
+
+  const waterSurfaceTexturePath = resolveInitialPlannerTextureAssetPath(
+    animationCatalog.waterSurface.textureLocalPath,
+  );
+  const texture = await loadPlannerTextureWithResolvedUrlCache(
+    pixi,
+    waterSurfaceTexturePath,
+    texturePromisesByResolvedUrl,
+  );
+
+  return {
+    texture,
+    frames: animationCatalog.waterSurface.frames,
+  };
 }
 
 function loadPlannerTextureWithResolvedUrlCache(
@@ -3960,16 +4335,44 @@ export function createPlacementSprite(
       placementRenderEntry,
     );
 
-    const { catalogItem, tileX, tileY } = placementRenderEntry;
+    applyPlacementSpriteInitialGeometry(
+      placementSprite,
+      placementRenderEntry,
+      placementFrameTexture.texture,
+      tileWidth,
+      tileHeight,
+    );
+    if (placementRenderEntry.animation?.kind === "sprite-motion") {
+      placementSpriteResult.animation?.update(0);
+    }
+    return placementSpriteResult;
+  } catch (caughtError) {
+    placementSprite?.destroy();
+    placementFrameTexture.frameTexture?.destroy();
+    paintedTexture?.destroy();
+    for (const animationFrameTexture of animationResources?.animationFrameTextures ?? []) {
+      animationFrameTexture.destroy();
+    }
+    throw caughtError;
+  }
+}
 
-    if (placementRenderEntry.pixelGeometry !== undefined) {
+function applyPlacementSpriteInitialGeometry(
+  placementSprite: import("pixi.js").Sprite,
+  placementRenderEntry: PlacementRenderEntry,
+  placementFrameTexture: PixiTexture,
+  tileWidth: number,
+  tileHeight: number,
+): void {
+  const { catalogItem, tileX, tileY } = placementRenderEntry;
+
+  if (placementRenderEntry.pixelGeometry !== undefined) {
     const pixelGeometry = placementRenderEntry.pixelGeometry;
-    const mirroredPositionX =
-      pixelGeometry.horizontalMirrorCenterX === undefined
-        ? pixelGeometry.positionX
-        : 2 * pixelGeometry.horizontalMirrorCenterX
-          - pixelGeometry.positionX
-          - placementFrameTexture.texture.width;
+    const mirroredPositionX = pixelGeometry.horizontalMirrorCenterX === undefined
+      ? pixelGeometry.positionX
+      : 2 * pixelGeometry.horizontalMirrorCenterX
+        - pixelGeometry.positionX
+        - placementFrameTexture.width;
     placementSprite.anchor.set(pixelGeometry.anchorX, pixelGeometry.anchorY);
     placementSprite.position.set(mirroredPositionX, pixelGeometry.positionY);
     if (pixelGeometry.uniformScale === undefined) {
@@ -3978,28 +4381,28 @@ export function createPlacementSprite(
       placementSprite.scale.set(pixelGeometry.uniformScale);
       placementSprite.scale.x *= pixelGeometry.horizontalScale;
     }
-      return placementSpriteResult;
-    }
+    return;
+  }
 
-    if (catalogItem.category === "building") {
+  if (catalogItem.category === "building") {
     placementSprite.anchor.set(0, 1);
     placementSprite.position.set(
       tileX * tileWidth,
       (tileY + catalogItem.tileSize.height) * tileHeight,
     );
-      return placementSpriteResult;
-    }
+    return;
+  }
 
-    if (catalogItem.category === "crop") {
+  if (catalogItem.category === "crop") {
     placementSprite.anchor.set(0, 1);
     placementSprite.position.set(
       tileX * tileWidth,
       (tileY + placementRenderEntry.effectiveFootprint.height) * tileHeight,
     );
-      return placementSpriteResult;
-    }
+    return;
+  }
 
-    if (catalogItem.renderingMetadata?.kind === "furniture") {
+  if (catalogItem.renderingMetadata?.kind === "furniture") {
     if (placementRenderEntry.isFlipped) {
       placementSprite.anchor.set(0.5, 1);
       placementSprite.position.set(
@@ -4015,42 +4418,43 @@ export function createPlacementSprite(
         (tileY + placementRenderEntry.effectiveFootprint.height) * tileHeight,
       );
     }
+    return;
+  }
 
-      return placementSpriteResult;
-    }
-
-    if (
+  if (
     placementRenderEntry.rotationQuarterTurns !== 0 ||
     placementRenderEntry.isFlipped
   ) {
     placementSprite.anchor.set(0.5);
     placementSprite.position.set(
-      tileX * tileWidth + placementFrameTexture.texture.width / 2,
-      tileY * tileHeight + placementFrameTexture.texture.height / 2,
+      tileX * tileWidth + placementFrameTexture.width / 2,
+      tileY * tileHeight + placementFrameTexture.height / 2,
     );
     placementSprite.rotation =
       placementRenderEntry.rotationQuarterTurns * (Math.PI / 2);
     placementSprite.scale.x = placementRenderEntry.isFlipped ? -1 : 1;
-      return placementSpriteResult;
-    }
-
-    placementSprite.anchor.set(0, 0);
-    placementSprite.position.set(tileX * tileWidth, tileY * tileHeight);
-    return placementSpriteResult;
-  } catch (caughtError) {
-    placementSprite?.destroy();
-    placementFrameTexture.frameTexture?.destroy();
-    paintedTexture?.destroy();
-    for (const animationFrameTexture of animationResources?.animationFrameTextures ?? []) {
-      animationFrameTexture.destroy();
-    }
-    throw caughtError;
+    return;
   }
+
+  placementSprite.anchor.set(0, 0);
+  placementSprite.position.set(tileX * tileWidth, tileY * tileHeight);
 }
 
 type PlacementSpriteAnimationResources = Readonly<{
   animation: PlacementSpriteAnimation | null;
   animationFrameTextures: readonly PixiTexture[];
+}>;
+
+type PlacementSpriteMotionBaseline = Readonly<{
+  alpha: number;
+  positionX: number;
+  positionY: number;
+  rotation: number;
+  scaleX: number;
+  scaleY: number;
+  tint: number;
+  visible: boolean;
+  zIndex: number;
 }>;
 
 function createPlacementSpriteAnimationResources(
@@ -4098,6 +4502,109 @@ function createPlacementSpriteAnimationResources(
     };
   }
 
+  if (animation.kind === "sprite-motion") {
+    const animationTextures: PixiTexture[] = [placementFrameTexture.texture];
+    const animationFrameTextures: PixiTexture[] = [];
+    let motionBaseline: PlacementSpriteMotionBaseline | null = null;
+
+    try {
+      for (const animationFrame of animation.frames.slice(1)) {
+        const animationFrameTexture = getPlacementFrameTexture(
+          pixi,
+          placementTexture,
+          animationFrame,
+        );
+        animationTextures.push(animationFrameTexture.texture);
+        if (animationFrameTexture.frameTexture !== null) {
+          animationFrameTextures.push(animationFrameTexture.frameTexture);
+        }
+      }
+    } catch (caughtError) {
+      for (const animationFrameTexture of animationFrameTextures) {
+        animationFrameTexture.destroy();
+      }
+      throw caughtError;
+    }
+
+    return {
+      animation: {
+        update(currentTimeMilliseconds): boolean {
+          const motionSample = animation.sample(currentTimeMilliseconds);
+          validatePlacementSpriteMotionSample(
+            placementRenderEntry.key,
+            motionSample,
+            animationTextures.length,
+          );
+          motionBaseline ??= capturePlacementSpriteMotionBaseline(placementSprite);
+          let didChangeVisualState = false;
+
+          const frameIndex = motionSample.frameIndex ?? 0;
+          const motionFrameTexture = animationTextures[frameIndex];
+          if (motionFrameTexture === undefined) {
+            throw new RangeError(
+              `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion frame index ${frameIndex} has no texture out of ${animationTextures.length} frames.`,
+            );
+          }
+          if (placementSprite.texture !== motionFrameTexture) {
+            placementSprite.texture = motionFrameTexture;
+            didChangeVisualState = true;
+          }
+
+          const positionX = motionSample.positionX ?? motionBaseline.positionX;
+          if (placementSprite.position.x !== positionX) {
+            placementSprite.position.x = positionX;
+            didChangeVisualState = true;
+          }
+          const positionY = motionSample.positionY ?? motionBaseline.positionY;
+          if (placementSprite.position.y !== positionY) {
+            placementSprite.position.y = positionY;
+            didChangeVisualState = true;
+          }
+          const alpha = motionSample.opacity ?? motionBaseline.alpha;
+          if (placementSprite.alpha !== alpha) {
+            placementSprite.alpha = alpha;
+            didChangeVisualState = true;
+          }
+          const visible = motionSample.visible ?? motionBaseline.visible;
+          if (placementSprite.visible !== visible) {
+            placementSprite.visible = visible;
+            didChangeVisualState = true;
+          }
+          const rotation = motionSample.rotationRadians ?? motionBaseline.rotation;
+          if (placementSprite.rotation !== rotation) {
+            placementSprite.rotation = rotation;
+            didChangeVisualState = true;
+          }
+          const scaleX = motionSample.scaleX ?? motionBaseline.scaleX;
+          if (placementSprite.scale.x !== scaleX) {
+            placementSprite.scale.x = scaleX;
+            didChangeVisualState = true;
+          }
+          const scaleY = motionSample.scaleY ?? motionBaseline.scaleY;
+          if (placementSprite.scale.y !== scaleY) {
+            placementSprite.scale.y = scaleY;
+            didChangeVisualState = true;
+          }
+          const tint = motionSample.tintColor === undefined
+            ? motionBaseline.tint
+            : getPlacementTintColor(motionSample.tintColor);
+          if (placementSprite.tint !== tint) {
+            placementSprite.tint = tint;
+            didChangeVisualState = true;
+          }
+          const zIndex = motionSample.zIndex ?? motionBaseline.zIndex;
+          if (placementSprite.zIndex !== zIndex) {
+            placementSprite.zIndex = zIndex;
+            didChangeVisualState = true;
+          }
+
+          return didChangeVisualState;
+        },
+      },
+      animationFrameTextures,
+    };
+  }
+
   const animationTextures: PixiTexture[] = [placementFrameTexture.texture];
   const animationFrameTextures: PixiTexture[] = [];
 
@@ -4141,6 +4648,22 @@ function createPlacementSpriteAnimationResources(
       },
     },
     animationFrameTextures,
+  };
+}
+
+function capturePlacementSpriteMotionBaseline(
+  placementSprite: import("pixi.js").Sprite,
+): PlacementSpriteMotionBaseline {
+  return {
+    alpha: placementSprite.alpha,
+    positionX: placementSprite.position.x,
+    positionY: placementSprite.position.y,
+    rotation: placementSprite.rotation,
+    scaleX: placementSprite.scale.x,
+    scaleY: placementSprite.scale.y,
+    tint: placementSprite.tint,
+    visible: placementSprite.visible,
+    zIndex: placementSprite.zIndex,
   };
 }
 
@@ -4286,9 +4809,97 @@ function assertPlacementRenderEntryVisualProperties(
     return;
   }
 
+  if (animation.kind === "sprite-motion") {
+    if (!Array.isArray(animation.frames) || animation.frames.length === 0) {
+      throw new TypeError(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion frames must be a non-empty array; received ${describeValue(animation.frames)}.`,
+      );
+    }
+    if (typeof animation.sample !== "function") {
+      throw new TypeError(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion sample must be a function; received ${describeValue(animation.sample)}.`,
+      );
+    }
+
+    for (let frameIndex = 0; frameIndex < animation.frames.length; frameIndex += 1) {
+      assertPlacementAnimationFrame(
+        placementRenderEntry.key,
+        animation.frames[frameIndex],
+        frameIndex,
+      );
+    }
+    if (!arePlacementFramesEqual(placementRenderEntry.frame, animation.frames[0])) {
+      throw new Error(
+        `Placement render entry ${JSON.stringify(placementRenderEntry.key)} sprite-motion first frame must equal the render frame; received frame ${describeValue(placementRenderEntry.frame)} and first motion frame ${describeValue(animation.frames[0])}.`,
+      );
+    }
+    return;
+  }
+
   throw new TypeError(
     `Placement render entry ${JSON.stringify(placementRenderEntry.key)} animation kind is unsupported; received ${describeValue((animation as { kind?: unknown }).kind)}.`,
   );
+}
+
+function validatePlacementSpriteMotionSample(
+  placementKey: string,
+  motionSample: PlacementSpriteMotionSample,
+  animationFrameCount: number,
+): void {
+  if (typeof motionSample !== "object" || motionSample === null) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementKey)} sprite-motion sample must return an object; received ${describeValue(motionSample)}.`,
+    );
+  }
+  if (
+    motionSample.frameIndex !== undefined &&
+    (!Number.isSafeInteger(motionSample.frameIndex) ||
+      motionSample.frameIndex < 0 ||
+      motionSample.frameIndex >= animationFrameCount)
+  ) {
+    throw new RangeError(
+      `Placement render entry ${JSON.stringify(placementKey)} sprite-motion frameIndex must be an integer from 0 through ${animationFrameCount - 1}; received ${describeValue(motionSample.frameIndex)}.`,
+    );
+  }
+
+  for (const [fieldName, fieldValue] of [
+    ["positionX", motionSample.positionX],
+    ["positionY", motionSample.positionY],
+    ["rotationRadians", motionSample.rotationRadians],
+    ["scaleX", motionSample.scaleX],
+    ["scaleY", motionSample.scaleY],
+    ["zIndex", motionSample.zIndex],
+  ] as const) {
+    if (fieldValue !== undefined && !Number.isFinite(fieldValue)) {
+      throw new TypeError(
+        `Placement render entry ${JSON.stringify(placementKey)} sprite-motion ${fieldName} must be finite; received ${describeValue(fieldValue)}.`,
+      );
+    }
+  }
+  if (
+    motionSample.opacity !== undefined &&
+    (!Number.isFinite(motionSample.opacity) ||
+      motionSample.opacity < 0 ||
+      motionSample.opacity > 1)
+  ) {
+    throw new RangeError(
+      `Placement render entry ${JSON.stringify(placementKey)} sprite-motion opacity must be from 0 through 1; received ${describeValue(motionSample.opacity)}.`,
+    );
+  }
+  if (motionSample.visible !== undefined && typeof motionSample.visible !== "boolean") {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementKey)} sprite-motion visible must be a boolean; received ${describeValue(motionSample.visible)}.`,
+    );
+  }
+  if (
+    motionSample.tintColor !== undefined &&
+    (typeof motionSample.tintColor !== "string" ||
+      !/^#[0-9a-f]{6}$/i.test(motionSample.tintColor))
+  ) {
+    throw new TypeError(
+      `Placement render entry ${JSON.stringify(placementKey)} sprite-motion tintColor must be a six-digit hex string; received ${describeValue(motionSample.tintColor)}.`,
+    );
+  }
 }
 
 function assertPositiveFiniteAnimationNumber(
@@ -4492,6 +5103,115 @@ function getFrameTexture(
 
   tileTextureByFrame.set(frameKey, frameTexture);
 
+  return frameTexture;
+}
+
+function createMapWaterTileSprites(input: Readonly<{
+  pixi: PixiModule;
+  mapId: string;
+  effectiveSeason: TilesheetSeason;
+  mapTileWidth: number;
+  mapTileHeight: number;
+  tileTextureByFrame: Map<string, PixiTexture>;
+  waterSurfaceAssets: MapWaterSurfaceAssets;
+  waterTilePosition: MapWaterTilePosition;
+}>): Readonly<{
+  surfaceSprite: import("pixi.js").Sprite;
+  fillSprite: import("pixi.js").Sprite | null;
+}> {
+  const {
+    pixi,
+    mapId,
+    effectiveSeason,
+    mapTileWidth,
+    mapTileHeight,
+    tileTextureByFrame,
+    waterSurfaceAssets,
+    waterTilePosition,
+  } = input;
+  const initialFrameState = getMapWaterSurfaceFrameState(
+    waterTilePosition,
+    waterSurfaceAssets.frames,
+    0,
+    mapTileHeight,
+  );
+  const seasonTint = getMapWaterSeasonTint(effectiveSeason);
+  const surfaceSprite = new pixi.Sprite({
+    roundPixels: false,
+    texture: getWaterSurfaceTexture(
+      pixi,
+      tileTextureByFrame,
+      waterSurfaceAssets.texture,
+      initialFrameState.textureRect,
+    ),
+  });
+  surfaceSprite.label = `mapWaterSurface:${waterTilePosition.tileX}:${waterTilePosition.tileY}`;
+  surfaceSprite.anchor.set(0);
+  surfaceSprite.position.set(
+    waterTilePosition.tileX * mapTileWidth,
+    waterTilePosition.tileY * mapTileHeight,
+  );
+  surfaceSprite.scale.set(mapTileWidth / 64, mapTileHeight / 64);
+  surfaceSprite.alpha = 0.5;
+  surfaceSprite.tint = seasonTint;
+
+  if (!waterTilePosition.isBottomTile) {
+    return { surfaceSprite, fillSprite: null };
+  }
+
+  const waterSurfaceFrame = waterSurfaceAssets.frames[0];
+  if (waterSurfaceFrame === undefined) {
+    surfaceSprite.destroy();
+    throw new Error(
+      `Water surface atlas has no first frame for mapId ${JSON.stringify(mapId)}.`,
+    );
+  }
+  const fillPhaseIndex = ((waterTilePosition.parity + 1) % 2) as 0 | 1;
+  const fillSprite = new pixi.Sprite({
+    roundPixels: false,
+    texture: getWaterSurfaceTexture(
+      pixi,
+      tileTextureByFrame,
+      waterSurfaceAssets.texture,
+      waterSurfaceFrame.sourceRectsByFlip[fillPhaseIndex],
+    ),
+  });
+  fillSprite.label = `mapWaterSurfaceFill:${waterTilePosition.tileX}:${waterTilePosition.tileY}`;
+  fillSprite.anchor.set(0);
+  fillSprite.position.set(
+    waterTilePosition.tileX * mapTileWidth,
+    (waterTilePosition.tileY + 1) * mapTileHeight,
+  );
+  fillSprite.scale.set(mapTileWidth / 64, mapTileHeight / 64);
+  fillSprite.alpha = 0.5;
+  fillSprite.tint = seasonTint;
+  fillSprite.visible = false;
+
+  return { surfaceSprite, fillSprite };
+}
+
+function getWaterSurfaceTexture(
+  pixi: PixiModule,
+  tileTextureByFrame: Map<string, PixiTexture>,
+  waterSurfaceAtlasTexture: PixiTexture,
+  sourceRect: WaterSurfaceSourceRect,
+): PixiTexture {
+  const frameKey = `water-surface:${sourceRect.x}:${sourceRect.y}:${sourceRect.width}:${sourceRect.height}`;
+  const cachedTexture = tileTextureByFrame.get(frameKey);
+  if (cachedTexture !== undefined) {
+    return cachedTexture;
+  }
+
+  const frameTexture = new pixi.Texture({
+    frame: new pixi.Rectangle(
+      sourceRect.x,
+      sourceRect.y,
+      sourceRect.width,
+      sourceRect.height,
+    ),
+    source: waterSurfaceAtlasTexture.source,
+  });
+  tileTextureByFrame.set(frameKey, frameTexture);
   return frameTexture;
 }
 

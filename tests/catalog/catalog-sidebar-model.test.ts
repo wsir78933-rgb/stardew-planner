@@ -261,8 +261,15 @@ describe("catalog sidebar model", () => {
     );
     const selectedItems = selectCatalogSidebarPlaceableItems(placeableCatalog.items);
 
-    expect(selectedItems).toHaveLength(153);
-    expect(new Set(selectedItems.map(({ id }) => id)).size).toBe(153);
+    expect(selectedItems).toHaveLength(156);
+    expect(new Set(selectedItems.map(({ id }) => id)).size).toBe(156);
+    expect(selectedItems.map(({ id }) => id)).toEqual(
+      expect.arrayContaining([
+        "big-craftable:155",
+        "big-craftable:161",
+        "big-craftable:162",
+      ]),
+    );
     expect(selectedItems).toContainEqual(
       expect.objectContaining({ id: "object:251", name: "Tea Sapling" }),
     );
@@ -274,7 +281,7 @@ describe("catalog sidebar model", () => {
     );
   });
 
-  it("projects exactly 949 reference items into stable categories and facets", async () => {
+  it("projects exactly 952 reference items into stable categories and facets", async () => {
     const { items } = await createLockedSidebarCatalog();
     const referenceItems = items.filter(({ id }) =>
       getCatalogSidebarReferenceEntry(id) !== undefined,
@@ -288,10 +295,10 @@ describe("catalog sidebar model", () => {
       paths: 21,
       lighting: 39,
       furniture: 257,
-      decor: 423,
+      decor: 426,
     };
 
-    expect(referenceItems).toHaveLength(949);
+    expect(referenceItems).toHaveLength(952);
     expect(new Set(catalogItemIds).size).toBe(catalogItemIds.length);
 
     for (const category of catalogSidebarCategories) {
@@ -365,8 +372,8 @@ describe("catalog sidebar model", () => {
         tables: 51, "long-tables": 5, tvs: 1,
       },
       decor: {
-        all: 237, functional: 19, plants: 64,
-        "large-decor": 43, "small-decor": 80, "special-items": 31,
+        all: 240, functional: 19, plants: 64,
+        "large-decor": 43, "small-decor": 80, "special-items": 34,
       },
     };
 
@@ -403,9 +410,9 @@ describe("catalog sidebar model", () => {
         "fish-tanks": 6,
       },
       decor: {
-        all: 414, functional: 15, plants: 85, paintings: 89,
+        all: 417, functional: 15, plants: 85, paintings: 89,
         "wall-hangings": 56, "windows-doors": 18, "large-decor": 41,
-        "small-decor": 79, "special-items": 31,
+        "small-decor": 79, "special-items": 34,
       },
     };
 

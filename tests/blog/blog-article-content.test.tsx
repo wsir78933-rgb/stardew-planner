@@ -440,7 +440,7 @@ it("renders sourced English and Chinese Pine Tree guides with the locked growth 
     requiredPhrases: [
       "松果 → 种出普通松树 → 等树成熟 → 在成熟松树上挂采集器 → 得到松焦油。",
       "八个相邻格",
-      "本文不发布阶段数字",
+      "不要拿一个固定成熟天数硬套所有情况",
     ],
     scheduleBoundaryPhrases: [
       "普通采集器按 5 天、重型采集器按 2 天规划",

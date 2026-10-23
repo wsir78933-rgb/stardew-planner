@@ -46,6 +46,10 @@ import { createDaytimeWindowOverlayDescriptorForPlacementItem } from "./daytime-
 import { createCropPlacementRenderLayers } from "./crop-placement-rendering";
 import type { MapPlacementGrid } from "../placement/map-placement-grids";
 import { createGrassPlacementRenderLayers } from "./grass-placement-rendering";
+import type { AnimationCatalog } from "../animations/animation-catalog";
+import { createPlacementItemAnimationResult } from "./item-animation-rendering";
+import { animateFishPondWaterEntries, createPlacementBuildingAnimationEntries } from "./building-animation-rendering";
+import { createPlacementBuildingCharacterRenderEntries } from "./placement-character-animation-rendering";
 
 export type PlacementRenderFrame = Readonly<{
   x: number;
@@ -80,9 +84,29 @@ export type PlacementScalePulseAnimation = Readonly<{
   timeModuloMilliseconds: number;
 }>;
 
+export type PlacementSpriteMotionSample = Readonly<{
+  frameIndex?: number;
+  opacity?: number;
+  positionX?: number;
+  positionY?: number;
+  rotationRadians?: number;
+  scaleX?: number;
+  scaleY?: number;
+  tintColor?: string;
+  visible?: boolean;
+  zIndex?: number;
+}>;
+
+export type PlacementSpriteMotionAnimation = Readonly<{
+  frames: readonly Exclude<PlacementRenderFrame, null>[];
+  kind: "sprite-motion";
+  sample: (currentTimeMilliseconds: number) => PlacementSpriteMotionSample;
+}>;
+
 export type PlacementRenderAnimation =
   | PlacementFrameCycleAnimation
-  | PlacementScalePulseAnimation;
+  | PlacementScalePulseAnimation
+  | PlacementSpriteMotionAnimation;
 
 export type PlacementRenderEntry = Readonly<{
   animation?: PlacementRenderAnimation;
@@ -122,6 +146,7 @@ export function createPlacementRenderEntries(
   mapId = "standard",
   mapPlacementGrid?: MapPlacementGrid,
   isNightMode = false,
+  animationCatalog?: AnimationCatalog,
 ): readonly PlacementRenderEntry[] {
   const persistentPlacementSnapshot = createPersistentPlacementSnapshot(
     placementSnapshot,
@@ -134,6 +159,7 @@ export function createPlacementRenderEntries(
     mapId,
     mapPlacementGrid,
     isNightMode,
+    animationCatalog,
   );
 }
 
@@ -145,6 +171,7 @@ export function createTransientPlacementRenderEntries(
   mapId = "standard",
   mapPlacementGrid?: MapPlacementGrid,
   isNightMode = false,
+  animationCatalog?: AnimationCatalog,
 ): readonly PlacementRenderEntry[] {
   const persistentPlacementSnapshot = createPersistentPlacementSnapshot(
     placementSnapshot,
@@ -163,12 +190,38 @@ export function createTransientPlacementRenderEntries(
         catalogItemsById,
         `building:${transientBuilding.buildingId}`,
       );
-      transientRenderEntries = createBuildingMultilayerPlacementRenderEntries(
+      const buildingEntries = createBuildingMultilayerPlacementRenderEntries(
         catalogItem,
         transientBuilding,
         season,
         persistentPlacementSnapshot.items,
       );
+      transientRenderEntries = animationCatalog === undefined
+        ? buildingEntries
+        : [
+            ...animateFishPondWaterEntries(transientBuilding, buildingEntries, animationCatalog),
+            ...createPlacementBuildingAnimationEntries(
+              transientBuilding,
+              catalogItem,
+              buildingEntries,
+              animationCatalog,
+            ),
+            ...(mapPlacementGrid === undefined
+              ? []
+              : createPlacementBuildingCharacterRenderEntries({
+                  animationCatalog,
+                  building: transientBuilding,
+                  buildingCatalogItem: catalogItem,
+                  buildingEntries,
+                  placementBuildings: [...persistentPlacementSnapshot.buildings, transientBuilding],
+                  placementItems: persistentPlacementSnapshot.items,
+                  catalogItemsById,
+                  mapPlacementGrid,
+                  season,
+                  isNightMode,
+                  placementCrops: persistentPlacementSnapshot.crops,
+                })),
+          ];
       break;
     }
     case "add-crop": {
@@ -232,6 +285,7 @@ export function createTransientPlacementRenderEntries(
             mapPlacementGrid,
             [...persistentPlacementSnapshot.items, transientItem],
             !isNightMode,
+            animationCatalog,
           );
       break;
     }
@@ -254,6 +308,7 @@ export function createTransientPlacementRenderEntries(
         parentCatalogItem,
         { ...previewAction.item, instanceId: transientInstanceId },
         catalogItemsById,
+        animationCatalog,
       )];
       break;
     }
@@ -276,6 +331,7 @@ function createPlacementRenderEntriesFromSnapshot(
   mapId: string,
   mapPlacementGrid: MapPlacementGrid | undefined,
   isNightMode: boolean,
+  animationCatalog?: AnimationCatalog,
 ): readonly PlacementRenderEntry[] {
   const catalogItemsById = createCatalogItemsById(catalogItems);
 
@@ -292,7 +348,33 @@ function createPlacementRenderEntriesFromSnapshot(
           season,
           persistentPlacementSnapshot.items,
         );
-      return multilayerRenderEntries;
+      if (animationCatalog === undefined) {
+        return multilayerRenderEntries;
+      }
+      return [
+        ...animateFishPondWaterEntries(building, multilayerRenderEntries, animationCatalog),
+        ...createPlacementBuildingAnimationEntries(
+          building,
+          catalogItem,
+          multilayerRenderEntries,
+          animationCatalog,
+        ),
+        ...(mapPlacementGrid === undefined
+          ? []
+          : createPlacementBuildingCharacterRenderEntries({
+              animationCatalog,
+              building,
+              buildingCatalogItem: catalogItem,
+              buildingEntries: multilayerRenderEntries,
+              placementBuildings: persistentPlacementSnapshot.buildings,
+              placementItems: persistentPlacementSnapshot.items,
+              catalogItemsById,
+              mapPlacementGrid,
+              season,
+              isNightMode,
+              placementCrops: persistentPlacementSnapshot.crops,
+            })),
+      ];
     }),
     ...createHoeDirtPlacementRenderLayers(
       persistentPlacementSnapshot,
@@ -336,6 +418,7 @@ function createPlacementRenderEntriesFromSnapshot(
             mapPlacementGrid,
             persistentPlacementSnapshot.items,
             !isNightMode,
+            animationCatalog,
           ),
       ),
   ];
@@ -349,6 +432,7 @@ function createItemAndHeldPlacementRenderEntries(
   mapPlacementGrid: MapPlacementGrid | undefined,
   placementItems: readonly PlacementItem[],
   isDaytime: boolean,
+  animationCatalog?: AnimationCatalog,
 ): readonly PlacementRenderEntry[] {
   const parentRenderEntries = createItemPlacementRenderEntries(
     placementItem,
@@ -357,6 +441,7 @@ function createItemAndHeldPlacementRenderEntries(
     mapId,
     mapPlacementGrid,
     placementItems,
+    animationCatalog,
   );
 
   if (placementItem.heldItem === undefined) {
@@ -385,6 +470,7 @@ function createItemAndHeldPlacementRenderEntries(
       parentCatalogItem,
       placementItem.heldItem,
       catalogItemsById,
+      animationCatalog,
     ),
   ];
 }
@@ -426,6 +512,77 @@ function appendDaytimeWindowOverlayRenderEntry(
 }
 
 function createItemPlacementRenderEntries(
+  placementItem: PlacementItem,
+  catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  season: CatalogSeason,
+  mapId: string,
+  mapPlacementGrid: MapPlacementGrid | undefined,
+  placementItems: readonly PlacementItem[],
+  animationCatalog?: AnimationCatalog,
+): readonly PlacementRenderEntry[] {
+  const renderEntries = createItemPlacementRenderEntriesWithoutAnimations(
+    placementItem,
+    catalogItemsById,
+    season,
+    mapId,
+    mapPlacementGrid,
+    placementItems,
+  );
+  if (animationCatalog === undefined || renderEntries.length === 0) {
+    return renderEntries;
+  }
+
+  const baseRenderEntryIndex = renderEntries.findIndex((renderEntry) => renderEntry.layerId === undefined);
+  if (baseRenderEntryIndex < 0) {
+    return renderEntries;
+  }
+  const baseRenderEntry = renderEntries[baseRenderEntryIndex];
+  if (baseRenderEntry === undefined) {
+    throw new Error(`Placement animation base render entry is missing for item instanceId ${String(placementItem.instanceId)}.`);
+  }
+  const catalogItem = getRequiredCatalogItem(catalogItemsById, placementItem.itemId);
+  const animationResult = createPlacementItemAnimationResult(
+    catalogItem,
+    placementItem,
+    baseRenderEntry,
+    animationCatalog,
+    mapPlacementGrid,
+  );
+  if (
+    animationResult.baseAnimation === undefined &&
+    animationResult.baseFrame === undefined &&
+    animationResult.basePixelGeometry === undefined &&
+    animationResult.baseTextureLocalPath === undefined &&
+    animationResult.overlays.length === 0
+  ) {
+    return renderEntries;
+  }
+
+  return [
+    ...renderEntries.map((renderEntry, renderEntryIndex) =>
+      renderEntryIndex === baseRenderEntryIndex
+        ? {
+            ...renderEntry,
+            ...(animationResult.baseAnimation === undefined
+              ? {}
+              : { animation: animationResult.baseAnimation }),
+            ...(animationResult.baseFrame === undefined
+              ? {}
+              : { frame: animationResult.baseFrame }),
+            ...(animationResult.basePixelGeometry === undefined
+              ? {}
+              : { pixelGeometry: animationResult.basePixelGeometry }),
+            ...(animationResult.baseTextureLocalPath === undefined
+              ? {}
+              : { textureLocalPath: animationResult.baseTextureLocalPath }),
+          }
+        : renderEntry,
+    ),
+    ...animationResult.overlays,
+  ];
+}
+
+function createItemPlacementRenderEntriesWithoutAnimations(
   placementItem: PlacementItem,
   catalogItemsById: ReadonlyMap<string, CatalogItem>,
   season: CatalogSeason,
@@ -655,6 +812,7 @@ function createHeldItemPlacementRenderEntry(
   parentCatalogItem: CatalogItem,
   heldPlacementItem: PlacementHeldItem,
   catalogItemsById: ReadonlyMap<string, CatalogItem>,
+  animationCatalog?: AnimationCatalog,
 ): PlacementRenderEntry {
   const heldCatalogItem = getRequiredCatalogItem(
     catalogItemsById,

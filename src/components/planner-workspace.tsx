@@ -16,6 +16,13 @@ import {
   type CatalogPresentationChoice,
 } from "../catalog";
 import {
+  getAnimationControlsForCatalogItem,
+  isAnimationCatalogItemCandidate,
+  loadPlannerAnimationCatalog,
+  type AnimationCatalog,
+} from "../animations/animation-catalog";
+import type { PlacementAnimationOptions } from "../animations/placement-animation-options";
+import {
   getCatalogItemSceneAvailability,
 } from "../catalog/catalog-scene-availability";
 import { getCatalogSidebarDisplayName } from "../catalog/catalog-sidebar-model";
@@ -55,6 +62,7 @@ import {
   cyclePlannerWorkspaceSelectedAppearance,
   setPlannerWorkspaceSelectedBuildingPaint,
   setPlannerWorkspaceSelectedBuildingWaterColor,
+  setPlannerWorkspaceSelectedAnimationOptions,
   setPlannerWorkspaceSelectedItemTint,
   setPlannerWorkspaceSelectedNightLightState,
   type PlannerWorkspaceErasePreviewInput,
@@ -164,6 +172,7 @@ import {
 } from "../projects/browser-image-clipboard";
 import type { ScreenshotResolution } from "../projects/map-image-export";
 import { SelectionInspector } from "./selection-inspector";
+import { PlacementAnimationControls } from "./placement-animation-controls";
 import { ProjectMapInstancePanel } from "./project-map-instance-panel";
 import { usePlannerWorkspacePersistenceControls } from "./use-planner-workspace-persistence-controls";
 import {
@@ -998,6 +1007,31 @@ function PreparedPlannerWorkspaceContent({
     plannerWorkspaceState,
     setSelectedPlacementKeys,
   } = plannerWorkspaceStateController;
+  const [animationCatalog, setAnimationCatalog] = useState<AnimationCatalog | null>(null);
+  const [animationCatalogLoadFailed, setAnimationCatalogLoadFailed] = useState(false);
+  useEffect(() => {
+    let hasDisposed = false;
+
+    async function loadAnimationCatalog(): Promise<void> {
+      try {
+        const loadedAnimationCatalog = await loadPlannerAnimationCatalog();
+        if (!hasDisposed) {
+          setAnimationCatalog(loadedAnimationCatalog);
+        }
+      } catch (caughtError) {
+        console.error("Failed to load the local planner animation catalog.", caughtError);
+        if (!hasDisposed) {
+          setAnimationCatalogLoadFailed(true);
+        }
+      }
+    }
+
+    void loadAnimationCatalog();
+
+    return () => {
+      hasDisposed = true;
+    };
+  }, []);
   const { plannerAmbienceOptions, setPlannerAmbienceOptions } = usePlannerAmbienceOptions();
   const preferencePersistence = useMemo(
     () => createPlannerWorkspacePreferencePersistence({
@@ -1131,6 +1165,8 @@ function PreparedPlannerWorkspaceContent({
     );
   }, [plannerWorkspaceState.modalId]);
   const workspaceEditingControls = useWorkspaceEditingControls({
+    animationCatalog,
+    animationCatalogLoadFailed,
     activeInteriorDecorPattern,
     advanceSelectedCatalogPlacementAttempt,
     applyPlacementEditResult,
@@ -1898,6 +1934,8 @@ function useWorkspaceCatalogControls(
 }
 
 function useWorkspaceEditingControls({
+  animationCatalog,
+  animationCatalogLoadFailed,
   activeInteriorDecorPattern,
   advanceSelectedCatalogPlacementAttempt,
   applyPlacementEditResult,
@@ -1914,6 +1952,8 @@ function useWorkspaceEditingControls({
   onDismissInteriorDecor,
   onToolChange,
 }: Readonly<{
+  animationCatalog: AnimationCatalog | null;
+  animationCatalogLoadFailed: boolean;
   activeInteriorDecorPattern: InteriorDecorCatalogPattern | null;
   advanceSelectedCatalogPlacementAttempt: () => void;
   applyPlacementEditResult: PlannerWorkspaceStateController["applyPlacementEditResult"];
@@ -2295,6 +2335,40 @@ function useWorkspaceEditingControls({
       readyCatalogItems,
     ],
   );
+  const handleSelectedAnimationOptionsChange = useCallback(
+    (
+      selectedPlacementKey: PlacementSelectionKey,
+      animationOptions: PlacementAnimationOptions | undefined,
+    ) => {
+      const selectionDetails = getPlacementSelectionDetails({
+        catalogItems: readyCatalogItems,
+        placementSnapshot: plannerWorkspaceState.placementHistory.currentState,
+        selectedPlacementKey,
+      });
+      const nextAnimationOptions = animationCatalog === null
+        ? animationOptions
+        : normalizePlacementAnimationOptions({
+            animationCatalog,
+            animationOptions,
+            catalogItemId: selectionDetails.catalogItemId,
+          });
+      const editingTransition = setPlannerWorkspaceSelectedAnimationOptions({
+        animationOptions: nextAnimationOptions,
+        placementHistory: plannerWorkspaceState.placementHistory,
+        selectedPlacementKeys: [selectedPlacementKey],
+      });
+      applyEditingTransition(
+        editingTransition.placementHistory,
+        editingTransition.selectedPlacementKeys,
+      );
+    },
+    [
+      animationCatalog,
+      applyEditingTransition,
+      plannerWorkspaceState.placementHistory,
+      readyCatalogItems,
+    ],
+  );
   const handleDeleteSelection = useCallback(() => {
     const editingTransition = deletePlannerWorkspaceSelection({
       placementHistory: plannerWorkspaceState.placementHistory,
@@ -2412,6 +2486,9 @@ function useWorkspaceEditingControls({
         handleSelectedNightLightStateChange,
         handleSelectedBuildingPaintChange,
         handleSelectedBuildingWaterColorChange,
+        animationCatalog,
+        animationCatalogLoadFailed,
+        handleSelectedAnimationOptionsChange,
       )
     : null;
 
@@ -2564,6 +2641,12 @@ function createSelectionInspector(
     selectedPlacementKey: PlacementSelectionKey,
     waterColor: number | undefined,
   ) => void,
+  animationCatalog: AnimationCatalog | null,
+  animationCatalogLoadFailed: boolean,
+  onSelectedAnimationOptionsChange: (
+    selectedPlacementKey: PlacementSelectionKey,
+    animationOptions: PlacementAnimationOptions | undefined,
+  ) => void,
 ): ReactNode {
   if (selectedPlacementKeys.length === 0) {
     return null;
@@ -2602,6 +2685,9 @@ function createSelectionInspector(
     onNightLightStateChange,
     onBuildingPaintChange,
     onBuildingWaterColorChange,
+    animationCatalog,
+    animationCatalogLoadFailed,
+    onSelectedAnimationOptionsChange,
   );
 }
 
@@ -2630,11 +2716,27 @@ function createSingleSelectionInspector(
     selectedPlacementKey: PlacementSelectionKey,
     waterColor: number | undefined,
   ) => void,
+  animationCatalog: AnimationCatalog | null,
+  animationCatalogLoadFailed: boolean,
+  onSelectedAnimationOptionsChange: (
+    selectedPlacementKey: PlacementSelectionKey,
+    animationOptions: PlacementAnimationOptions | undefined,
+  ) => void,
 ): ReactNode {
   const selectedPlacementNameFields = readSelectedPlacementNameFields(
     catalogItems,
     selectionDetails.catalogItemId,
   );
+  const animationControls = createPlacementAnimationControls({
+    animationCatalog,
+    animationCatalogLoadFailed,
+    catalogItemId: selectionDetails.catalogItemId,
+    onChange: (animationOptions) => onSelectedAnimationOptionsChange(
+      selectionDetails.selectedPlacementKey,
+      animationOptions,
+    ),
+    options: selectionDetails.kind === "crop" ? undefined : selectionDetails.animationOptions,
+  });
   if (selectionDetails.kind === "building") {
     if (selectionDetails.canSetWaterColor) {
       return (
@@ -2650,6 +2752,7 @@ function createSingleSelectionInspector(
           onDelete={onDelete}
           onDismiss={onDismiss}
           onCycleAppearance={onCycleAppearance}
+          animationControls={animationControls}
           selection={{
             canCycleAppearance: selectionDetails.canCycleAppearance,
             canPaint: false,
@@ -2678,6 +2781,7 @@ function createSingleSelectionInspector(
           onDelete={onDelete}
           onDismiss={onDismiss}
           onCycleAppearance={onCycleAppearance}
+          animationControls={animationControls}
           selection={{
             canPaint: true,
             canCycleAppearance: false,
@@ -2695,6 +2799,7 @@ function createSingleSelectionInspector(
         onDelete={onDelete}
         onDismiss={onDismiss}
         onCycleAppearance={onCycleAppearance}
+        animationControls={animationControls}
         selection={{
           canCycleAppearance: selectionDetails.canCycleAppearance,
           ...selectedPlacementNameFields,
@@ -2733,6 +2838,7 @@ function createSingleSelectionInspector(
         )
       }
       onCycleAppearance={onCycleAppearance}
+      animationControls={animationControls}
       onTintChange={(tintColor) =>
         onItemTintChange(selectionDetails.selectedPlacementKey, tintColor)
       }
@@ -2749,6 +2855,228 @@ function createSingleSelectionInspector(
       }}
     />
   );
+}
+
+function createPlacementAnimationControls({
+  animationCatalog,
+  animationCatalogLoadFailed,
+  catalogItemId,
+  onChange,
+  options,
+}: Readonly<{
+  animationCatalog: AnimationCatalog | null;
+  animationCatalogLoadFailed: boolean;
+  catalogItemId: string;
+  onChange: (animationOptions: PlacementAnimationOptions | undefined) => void;
+  options: PlacementAnimationOptions | undefined;
+}>): ReactNode {
+  if (!isAnimationCatalogItemCandidate(catalogItemId)) {
+    return null;
+  }
+
+  if (animationCatalogLoadFailed) {
+    return (
+      <PlacementAnimationControls
+        controls={null}
+        loadError="local-animation-catalog"
+        onChange={onChange}
+        options={options}
+      />
+    );
+  }
+
+  if (animationCatalog === null) {
+    return (
+      <PlacementAnimationControls
+        controls={null}
+        onChange={onChange}
+        options={options}
+      />
+    );
+  }
+
+  const controls = getAnimationControlsForCatalogItem(
+    animationCatalog,
+    catalogItemId,
+    {
+      fishId: options?.fishId,
+      population: options?.population,
+      petId: options?.petId,
+      horse: options?.horse,
+      millOutput: options?.millOutput,
+    },
+  );
+  if (controls.length === 0) {
+    return null;
+  }
+
+  return (
+    <PlacementAnimationControls
+      controls={controls}
+      onChange={onChange}
+      options={options}
+    />
+  );
+}
+
+export function normalizeFishPondAnimationOptions({
+  animationCatalog,
+  animationOptions,
+  catalogItemId,
+}: Readonly<{
+  animationCatalog: AnimationCatalog;
+  animationOptions: PlacementAnimationOptions | undefined;
+  catalogItemId: string;
+}>): PlacementAnimationOptions | undefined {
+  const clampedAnimationOptions = clampFishPondPopulation({
+    animationOptions,
+    catalogItemId,
+    pondFishById: animationCatalog.pondFishById,
+  });
+  const normalizedPondOptions = retainValidFishPondProduce({
+    animationCatalog,
+    animationOptions: clampedAnimationOptions,
+    catalogItemId,
+  });
+  return normalizedPondOptions;
+}
+
+export function normalizePlacementAnimationOptions({
+  animationCatalog,
+  animationOptions,
+  catalogItemId,
+}: Readonly<{
+  animationCatalog: AnimationCatalog;
+  animationOptions: PlacementAnimationOptions | undefined;
+  catalogItemId: string;
+}>): PlacementAnimationOptions | undefined {
+  const normalizedFishPondOptions = normalizeFishPondAnimationOptions({
+    animationCatalog,
+    animationOptions,
+    catalogItemId,
+  });
+  return removeUnavailableConditionalAnimationOptions({
+    animationCatalog,
+    animationOptions: normalizedFishPondOptions,
+    catalogItemId,
+  });
+}
+
+function removeUnavailableConditionalAnimationOptions({
+  animationCatalog,
+  animationOptions,
+  catalogItemId,
+}: Readonly<{
+  animationCatalog: AnimationCatalog;
+  animationOptions: PlacementAnimationOptions | undefined;
+  catalogItemId: string;
+}>): PlacementAnimationOptions | undefined {
+  if (animationOptions === undefined) {
+    return animationOptions;
+  }
+
+  const availableControls = getAnimationControlsForCatalogItem(
+    animationCatalog,
+    catalogItemId,
+    {
+      fishId: animationOptions.fishId,
+      population: animationOptions.population,
+      petId: animationOptions.petId,
+      horse: animationOptions.horse,
+      millOutput: animationOptions.millOutput,
+    },
+  );
+  let nextAnimationOptions: PlacementAnimationOptions | undefined = animationOptions;
+  for (const conditionalOptionKey of ["hatId", "millProduct"] as const) {
+    if (nextAnimationOptions === undefined) {
+      break;
+    }
+    if (nextAnimationOptions[conditionalOptionKey] === undefined) {
+      continue;
+    }
+    const isControlAvailable = availableControls.some(
+      (controlDefinition) =>
+        controlDefinition.kind === "select" && controlDefinition.key === conditionalOptionKey,
+    );
+    if (!isControlAvailable) {
+      const { [conditionalOptionKey]: removedOption, ...optionsWithoutConditionalOption } = nextAnimationOptions;
+      if (removedOption !== undefined) {
+        nextAnimationOptions = Object.keys(optionsWithoutConditionalOption).length === 0
+          ? undefined
+          : optionsWithoutConditionalOption;
+      }
+    }
+  }
+  return nextAnimationOptions;
+}
+
+function clampFishPondPopulation({
+  animationOptions,
+  catalogItemId,
+  pondFishById,
+}: Readonly<{
+  animationOptions: PlacementAnimationOptions | undefined;
+  catalogItemId: string;
+  pondFishById: AnimationCatalog["pondFishById"];
+}>): PlacementAnimationOptions | undefined {
+  if (catalogItemId !== "building:Fish Pond" || animationOptions?.fishId === undefined) {
+    return animationOptions;
+  }
+
+  const selectedPondFish = pondFishById[animationOptions.fishId];
+  if (selectedPondFish === undefined) {
+    throw new RangeError(
+      `Fish Pond animation configuration received unknown fish ID ${JSON.stringify(animationOptions.fishId)}.`,
+    );
+  }
+
+  const currentPopulation = animationOptions.population ?? 0;
+  const clampedPopulation = Math.max(
+    0,
+    Math.min(currentPopulation, selectedPondFish.maxPopulation),
+  );
+  if (clampedPopulation === currentPopulation) {
+    return animationOptions;
+  }
+  return { ...animationOptions, population: clampedPopulation };
+}
+
+function retainValidFishPondProduce({
+  animationCatalog,
+  animationOptions,
+  catalogItemId,
+}: Readonly<{
+  animationCatalog: AnimationCatalog;
+  animationOptions: PlacementAnimationOptions | undefined;
+  catalogItemId: string;
+}>): PlacementAnimationOptions | undefined {
+  if (animationOptions?.produce === undefined) {
+    return animationOptions;
+  }
+
+  const produceControl = getAnimationControlsForCatalogItem(
+    animationCatalog,
+    catalogItemId,
+    {
+      fishId: animationOptions.fishId,
+      population: animationOptions.population,
+    },
+  ).find((controlDefinition) => controlDefinition.key === "produce");
+  const produceIsAvailable = produceControl?.kind === "select"
+    && produceControl.choices.some(
+      (produceChoice) => produceChoice.id === animationOptions.produce,
+    );
+  if (produceIsAvailable) {
+    return animationOptions;
+  }
+
+  const { produce: removedProduce, ...optionsWithoutProduce } = animationOptions;
+  if (removedProduce === undefined) {
+    return animationOptions;
+  }
+  return Object.keys(optionsWithoutProduce).length === 0
+    ? undefined
+    : optionsWithoutProduce;
 }
 
 function readSelectedPlacementNameFields(

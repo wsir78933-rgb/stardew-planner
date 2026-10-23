@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -14,6 +15,7 @@ import {
   getCatalogItemSceneAvailability,
   isCatalogItemVisibleOnMap,
 } from "../../src/catalog/catalog-scene-availability";
+import { plannerMaps } from "../../src/maps/map-catalog";
 
 describe("catalog scene availability", () => {
   it("uses furniture permissions for Standard Farm and interior maps", () => {
@@ -47,14 +49,38 @@ describe("catalog scene availability", () => {
     );
   });
 
-  it("keeps unlisted non-furniture items available", () => {
+  it("uses the buildable map capability for buildings", () => {
     const building = createCatalogItem({ category: "building" });
 
     expect(getCatalogItemSceneAvailability(building, "standard")).toBe(
       "available",
     );
     expect(getCatalogItemSceneAvailability(building, "farmhouse-0")).toBe(
+      "not-buildable-here",
+    );
+  });
+
+  it("keeps the crop rail visible when Tea Sapling is eligible", () => {
+    const crop = createCatalogItem({ category: "crop" });
+    const teaSapling = createCatalogItem({ id: "object:251" });
+
+    expect(isCatalogItemVisibleOnMap(crop, "railroad")).toBe(true);
+    expect(getCatalogItemSceneAvailability(teaSapling, "railroad")).toBe(
       "available",
+    );
+  });
+
+  it("only marks bushes eligible on buildable maps", () => {
+    const bush = createCatalogItem({ id: "bush:small" });
+
+    expect(getCatalogItemSceneAvailability(bush, "standard")).toBe(
+      "available",
+    );
+    expect(getCatalogItemSceneAvailability(bush, "ginger-island")).toBe(
+      "not-placeable-here",
+    );
+    expect(getCatalogItemSceneAvailability(bush, "railroad")).toBe(
+      "not-placeable-here",
     );
   });
 
@@ -85,7 +111,7 @@ describe("catalog scene availability", () => {
         "available",
       );
       expect(getCatalogItemSceneAvailability(smallBush, mapId)).toBe(
-        "outdoor-only",
+        "not-placeable-here",
       );
     }
     expect(getCatalogItemSceneAvailability(fruitTree, "farmhouse-0")).toBe(
@@ -106,8 +132,8 @@ describe("catalog scene availability", () => {
       isCatalogItemVisibleOnMap(catalogItem, "standard"),
     );
 
-    expect(standardFarmVisibleItems).toHaveLength(949);
-    expect(new Set(standardFarmVisibleItems.map(({ id }) => id)).size).toBe(949);
+    expect(standardFarmVisibleItems).toHaveLength(952);
+    expect(new Set(standardFarmVisibleItems.map(({ id }) => id)).size).toBe(952);
 
     const standardFarmUnavailableCounts = [
       ["equipment", 2],
@@ -186,7 +212,7 @@ describe("catalog scene availability", () => {
       "crop:giant_QiFruit",
     ]);
 
-    expect(visibleFarmhouseDecorReferenceItems).toHaveLength(423);
+    expect(visibleFarmhouseDecorReferenceItems).toHaveLength(426);
     const unavailableFarmhouseDecor = visibleFarmhouseDecorReferenceItems.filter(
       (catalogItem) =>
         getCatalogItemSceneAvailability(catalogItem, "farmhouse-0") !==
@@ -203,17 +229,23 @@ describe("catalog scene availability", () => {
       ),
     ).toHaveLength(5);
 
-    const unavailableBuildingAndTree = allSidebarItems.filter(
-      (catalogItem) =>
-        ["building:Coop", "wildtree_1"].includes(catalogItem.id) &&
-        isCatalogItemVisibleOnMap(catalogItem, "farmhouse-0") &&
-        getCatalogItemSceneAvailability(catalogItem, "farmhouse-0") !==
-          "available",
+    const coopBuilding = allSidebarItems.find(
+      ({ id }) => id === "building:Coop",
     );
-    expect(unavailableBuildingAndTree.map(({ id }) => id).sort()).toEqual([
-      "building:Coop",
-      "wildtree_1",
-    ]);
+    const wildTree = allSidebarItems.find(({ id }) => id === "wildtree_1");
+    if (coopBuilding === undefined || wildTree === undefined) {
+      throw new Error(
+        "Farmhouse building or tree candidate was not loaded from the reference catalog.",
+      );
+    }
+    expect(isCatalogItemVisibleOnMap(coopBuilding, "farmhouse-0")).toBe(false);
+    expect(getCatalogItemSceneAvailability(coopBuilding, "farmhouse-0")).toBe(
+      "not-buildable-here",
+    );
+    expect(isCatalogItemVisibleOnMap(wildTree, "farmhouse-0")).toBe(false);
+    expect(getCatalogItemSceneAvailability(wildTree, "farmhouse-0")).toBe(
+      "outdoor-only",
+    );
   });
 
   it("shows wallpaper and flooring only on their supported maps", () => {
@@ -230,6 +262,81 @@ describe("catalog scene availability", () => {
     expect(isCatalogItemVisibleOnMap(wallpaper, "farm-cave")).toBe(false);
     expect(isCatalogItemVisibleOnMap(ordinaryFurniture, "standard")).toBe(true);
     expect(isCatalogItemVisibleOnMap(ordinaryFurniture, "farm-cave")).toBe(true);
+  });
+
+  it("matches exact visible and eligible catalog ID sets for all 61 maps", async () => {
+    const sourceCatalogItems = await loadCurrentCatalogItems();
+    const sidebarItemsByCategory = new Map(
+      catalogSidebarCategories.map((category) => [
+        category,
+        getCatalogSidebarItems(sourceCatalogItems, category, ""),
+      ]),
+    );
+    const parityFixture = JSON.parse(
+      await readFile(
+        path.join(
+          process.cwd(),
+          "tests",
+          "catalog",
+          "fixtures",
+          "competitor-map-catalog-parity.json",
+        ),
+        "utf8",
+      ),
+    ) as CatalogParityFixture;
+
+    expect(plannerMaps).toHaveLength(61);
+    expect(parityFixture.maps).toHaveLength(plannerMaps.length);
+    expect(plannerMaps.map(({ id }) => id).sort()).toEqual(
+      parityFixture.maps.map(({ mapId }) => mapId).sort(),
+    );
+    expect(parityFixture.categories).toEqual(catalogSidebarCategories);
+
+    for (const plannerMap of plannerMaps) {
+      const fixtureMap = parityFixture.maps.find(
+        ({ mapId }) => mapId === plannerMap.id,
+      );
+      if (fixtureMap === undefined) {
+        throw new Error(
+          `Competitor parity fixture is missing map ID ${JSON.stringify(plannerMap.id)}.`,
+        );
+      }
+
+      for (const category of catalogSidebarCategories) {
+        const categoryItems = sidebarItemsByCategory.get(category);
+        if (categoryItems === undefined) {
+          throw new Error(
+            `Local sidebar category ${JSON.stringify(category)} was not loaded.`,
+          );
+        }
+
+        const visibleIds = categoryItems
+          .filter((catalogItem) =>
+            isCatalogItemVisibleOnMap(catalogItem, plannerMap.id),
+          )
+          .map(({ id }) => id);
+        const eligibleIds = categoryItems
+          .filter((catalogItem) =>
+            isCatalogItemVisibleOnMap(catalogItem, plannerMap.id),
+          )
+          .filter((catalogItem) =>
+            getCatalogItemSceneAvailability(catalogItem, plannerMap.id) ===
+            "available",
+          )
+          .map(({ id }) => id);
+        const visibleDigest = createCatalogItemIdDigest(visibleIds);
+        const eligibleDigest = createCatalogItemIdDigest(eligibleIds);
+
+        expect(
+          visibleDigest,
+          `${plannerMap.id}/${category} visible candidate set`,
+        ).toEqual(fixtureMap.categories[category].visibleCandidate);
+        expect(
+          eligibleDigest,
+          `${plannerMap.id}/${category} eligible set`,
+        ).toEqual(fixtureMap.categories[category].eligible);
+      }
+    }
   });
 
   it("rejects unknown map IDs and furniture with no allowed scene", () => {
@@ -253,6 +360,34 @@ describe("catalog scene availability", () => {
     );
   });
 });
+
+function createCatalogItemIdDigest(
+  catalogItemIds: readonly string[],
+): Readonly<{ count: number; sha256: string }> {
+  const sortedCatalogItemIds = [...catalogItemIds].sort();
+  return {
+    count: sortedCatalogItemIds.length,
+    sha256: createHash("sha256")
+      .update(JSON.stringify(sortedCatalogItemIds))
+      .digest("hex"),
+  };
+}
+
+type CatalogParityFixture = Readonly<{
+  categories: readonly CatalogSidebarCategory[];
+  maps: readonly Readonly<{
+    mapId: string;
+    categories: Readonly<
+      Record<
+        CatalogSidebarCategory,
+        Readonly<{
+          eligible: Readonly<{ count: number; sha256: string }>;
+          visibleCandidate: Readonly<{ count: number; sha256: string }>;
+        }>
+      >
+    >;
+  }>[];
+}>;
 
 function createCatalogItem(input: Readonly<{
   category?: CatalogItem["category"];

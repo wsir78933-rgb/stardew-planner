@@ -1650,4 +1650,141 @@ describe("reference project editor adapter", () => {
       { cropId: "crop_999", x: 5, y: 6 },
     ]);
   });
+
+  it("round-trips animation options and removes explicitly cleared source options", () => {
+    const sourceMap = createSupportedReferenceMap();
+    const sourceBuildings = sourceMap.state.buildings as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    const sourceItems = sourceMap.state.items as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    sourceBuildings[0]!.animationOptions = {
+      fishId: "128",
+      population: 5,
+      produce: "812",
+    };
+    sourceBuildings[1]!.animationOptions = { horse: false, millLoaded: true };
+    sourceItems[0]!.animationOptions = {
+      spriteState: "working",
+      readyProduct: "348",
+      tankFish: ["128"],
+      hatId: "1",
+    };
+    sourceItems[1]!.animationOptions = { pantsId: "2" };
+
+    const session = createReferenceOpenMapSession("project-alpha", sourceMap);
+    expect(session.placementSnapshot.buildings[0]?.animationOptions).toEqual({
+      fishId: "128",
+      population: 5,
+      produce: "812",
+    });
+    expect(session.placementSnapshot.buildings[1]?.animationOptions).toEqual({
+      horse: false,
+      millLoaded: true,
+    });
+    expect(session.placementSnapshot.items[0]?.animationOptions).toEqual({
+      spriteState: "working",
+      readyProduct: "348",
+      tankFish: ["128"],
+      hatId: "1",
+    });
+
+    const editedPlacementSnapshot = {
+      ...session.placementSnapshot,
+      buildings: session.placementSnapshot.buildings.map((building) => {
+        if (building.instanceId === 2) {
+          const { animationOptions: _clearedAnimationOptions, ...buildingWithoutOptions } =
+            building;
+          return buildingWithoutOptions;
+        }
+        return { ...building, animationOptions: { horse: true } };
+      }),
+      items: session.placementSnapshot.items.map((item) => {
+        if (item.instanceId === 1) {
+          const { animationOptions: _clearedAnimationOptions, ...itemWithoutOptions } = item;
+          return itemWithoutOptions;
+        }
+        return { ...item, animationOptions: { pantsId: "4" } };
+      }),
+    };
+    const savedMap = applyReferenceOpenMapEdits(session, {
+      placementSnapshot: editedPlacementSnapshot,
+    });
+    const savedBuildings = savedMap.state.buildings as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    const savedItems = savedMap.state.items as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    expect(savedBuildings[0]).not.toHaveProperty("animationOptions");
+    expect(savedBuildings[1]?.animationOptions).toEqual({ horse: true });
+    expect(savedItems[0]).not.toHaveProperty("animationOptions");
+    expect(savedItems[1]?.animationOptions).toEqual({ pantsId: "4" });
+
+    const reopenedSession = createReferenceOpenMapSession("project-alpha", savedMap);
+    expect(reopenedSession.placementSnapshot.buildings[0]?.animationOptions)
+      .toBeUndefined();
+    expect(reopenedSession.placementSnapshot.buildings[1]?.animationOptions)
+      .toEqual({ horse: true });
+    expect(reopenedSession.placementSnapshot.items[0]?.animationOptions)
+      .toBeUndefined();
+    expect(reopenedSession.placementSnapshot.items[1]?.animationOptions)
+      .toEqual({ pantsId: "4" });
+  });
+
+  it("round-trips and clears Mill output animation options", () => {
+    const sourceMap = createSupportedReferenceMap();
+    const sourceBuildings = sourceMap.state.buildings as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    sourceBuildings[0]!.animationOptions = {
+      millOutput: true,
+      millProduct: "246",
+    };
+
+    const session = createReferenceOpenMapSession("project-alpha", sourceMap);
+    expect(session.placementSnapshot.buildings[0]?.animationOptions).toEqual({
+      millOutput: true,
+      millProduct: "246",
+    });
+
+    const savedMap = applyReferenceOpenMapEdits(session, {
+      placementSnapshot: session.placementSnapshot,
+    });
+    const savedBuildings = savedMap.state.buildings as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    expect(savedBuildings[0]?.animationOptions).toEqual({
+      millOutput: true,
+      millProduct: "246",
+    });
+
+    const reopenedSession = createReferenceOpenMapSession("project-alpha", savedMap);
+    expect(reopenedSession.placementSnapshot.buildings[0]?.animationOptions).toEqual({
+      millOutput: true,
+      millProduct: "246",
+    });
+
+    const clearedPlacementSnapshot = {
+      ...reopenedSession.placementSnapshot,
+      buildings: reopenedSession.placementSnapshot.buildings.map((building, buildingIndex) => {
+        if (buildingIndex !== 0) {
+          return building;
+        }
+        const { animationOptions: _clearedAnimationOptions, ...buildingWithoutOptions } =
+          building;
+        return buildingWithoutOptions;
+      }),
+    };
+    const clearedMap = applyReferenceOpenMapEdits(reopenedSession, {
+      placementSnapshot: clearedPlacementSnapshot,
+    });
+    const clearedBuildings = clearedMap.state.buildings as Array<
+      Record<string, ReferenceJsonValue>
+    >;
+    expect(clearedBuildings[0]).not.toHaveProperty("animationOptions");
+    expect(createReferenceOpenMapSession("project-alpha", clearedMap)
+      .placementSnapshot.buildings[0]?.animationOptions).toBeUndefined();
+  });
 });

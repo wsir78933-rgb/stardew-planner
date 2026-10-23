@@ -15,6 +15,9 @@ import { getMapTileAtPointer } from "../../src/placement/map-pointer-tile";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
 import { interiorWallpaperPatterns } from "../../src/interior-decor/interior-decor-catalog";
 import type { TmxMap } from "../../src/tmx/tmx-types";
+import type { AnimationCatalog } from "../../src/animations/animation-catalog";
+import { loadPlannerAnimationCatalog } from "../../src/animations/animation-catalog";
+import type { CatalogJsonFetcher } from "../../src/catalog/catalog-types";
 import type { PlacementRenderEntry } from "../../src/rendering/placement-rendering";
 import type { PlacementSprite } from "../../src/components/planner-canvas";
 import { createPlacementRenderEntries } from "../../src/rendering/placement-rendering";
@@ -39,6 +42,7 @@ const {
   handlePlannerCanvasContextMenuEvent,
   bindPlannerCanvasInteractions,
   commitPlannerCanvasExporterAndWarnings,
+  createPlacementAnimationController,
   createPlacementSprite,
   createPlacementErasePreviewVisualUpdater,
   createPlacementSpriteBatch,
@@ -94,6 +98,7 @@ const loadResolvedPlacementTextures = (
 type InitialResolvedPlacementTextureEntriesCreator = (
   input: Readonly<{
     catalogItems: readonly CatalogItem[] | undefined;
+    animationCatalog?: AnimationCatalog;
     isNightMode: boolean;
     mapId: string;
     mapPlacementGrid?: MapPlacementGrid;
@@ -122,6 +127,21 @@ function loadLockedBuildingCatalog(): readonly CatalogItem[] {
     rawBuildings,
     catalogDatasetUrls.buildings,
   ).items;
+}
+
+function createLocalAnimationJsonFetcher(): CatalogJsonFetcher {
+  return async (requestedUrl) => {
+    const responseJson = JSON.parse(readFileSync(
+      new URL(`../../public${requestedUrl}`, import.meta.url),
+      "utf8",
+    )) as unknown;
+
+    return {
+      ok: true,
+      status: 200,
+      json: async () => responseJson,
+    };
+  };
 }
 
 const shouldRenderPlannerJoystick = (
@@ -1536,8 +1556,10 @@ describe("PlannerCanvas cleanup", () => {
       disposeInteractionBinding: () => cleanupOperationNames.push("interaction"),
       disposeMapDisplayOverlay: () => cleanupOperationNames.push("map overlay"),
       disposePlacementOverlay: () => cleanupOperationNames.push("placement overlay"),
+      disposeMapAnimation: () => cleanupOperationNames.push("map animation"),
       clearJoystickCameraPan: () => cleanupOperationNames.push("joystick"),
       clearMapImageExporter: () => cleanupOperationNames.push("exporter"),
+      destroyMapFrameTextures: () => cleanupOperationNames.push("map frame textures"),
       destroyResourceClumpFrameTextures: () => cleanupOperationNames.push("textures"),
       destroyPixiApplication: () => cleanupOperationNames.push("pixi"),
       clearCanvasHost: () => cleanupOperationNames.push("host"),
@@ -1550,8 +1572,10 @@ describe("PlannerCanvas cleanup", () => {
       "interaction",
       "map overlay",
       "placement overlay",
+      "map animation",
       "joystick",
       "exporter",
+      "map frame textures",
       "textures",
       "pixi",
       "host",
@@ -3389,6 +3413,66 @@ describe("layered placement sprite rendering", () => {
     );
   });
 
+  it("passes the animation catalog into initial placement entry creation", async () => {
+    if (createInitialResolvedPlacementTextureEntries === undefined) {
+      throw new Error("Initial placement texture entry creator is unavailable.");
+    }
+
+    const catalogItem: CatalogItem = {
+      allowedTools: ["cursor"],
+      category: "placeable",
+      id: "big-craftable:12",
+      name: "Keg",
+      sprite: { kind: "sprite-index", index: 12 },
+      textureLocalPath: "/game-assets/1.6.15/tilesheets/craftables.png",
+      tileSize: { height: 2, width: 1 },
+    };
+    const placementItem = {
+      bedType: null,
+      flipped: false,
+      footprint: { height: 2, width: 1 },
+      instanceId: 1,
+      isGrass: false,
+      isLongTable: false,
+      isRug: false,
+      isTable: false,
+      itemId: catalogItem.id,
+      layer: "item" as const,
+      locked: false,
+      rotation: 0,
+      tintColor: "#ffffff",
+      variant: 0,
+      x: 2,
+      y: 3,
+      animationOptions: { spriteState: "working" },
+    };
+    const animationCatalog = await loadPlannerAnimationCatalog(
+      createLocalAnimationJsonFetcher(),
+    );
+
+    const resolvedEntries = createInitialResolvedPlacementTextureEntries({
+      animationCatalog,
+      catalogItems: [catalogItem],
+      isNightMode: false,
+      mapId: "standard",
+      placementSnapshot: {
+        ...createEmptyPlacementSnapshot(),
+        items: [placementItem],
+        nextItemId: 2,
+      },
+      season: "spring",
+    });
+
+    const placementAnimation = resolvedEntries[0]?.placementRenderEntry.animation;
+    expect(placementAnimation?.kind).toBe("sprite-motion");
+    if (placementAnimation?.kind !== "sprite-motion") {
+      throw new Error(
+        `Expected sprite-motion animation; received ${String(placementAnimation?.kind)}.`,
+      );
+    }
+    expect(placementAnimation.sample(100).scaleX).not.toBe(1);
+  });
+
   it("creates Pixi child textures from atlas frames without changing placement geometry", async () => {
     const resolvedPlacementTextureEntry = resolvePlacementTextureEntries([
       {
@@ -4224,6 +4308,226 @@ describe("layered placement sprite rendering", () => {
     );
     expect(frameTextureAllocationCount).toBe(0);
     expect(spriteAllocationCount).toBe(0);
+  });
+  it("applies initial sprite motion and restores omitted fields to the static geometry", () => {
+    vi.useFakeTimers();
+    class MotionTexture {
+      destroyed = false;
+      constructor(public readonly options: unknown) {}
+      destroy(): void {
+        this.destroyed = true;
+      }
+    }
+    class MotionSprite extends TestLayerSprite {
+      alpha = 1;
+      destroyed = false;
+      visible = true;
+      texture: unknown;
+      position = {
+        x: 0,
+        y: 0,
+        set: (x: number, y: number) => {
+          this.position.x = x;
+          this.position.y = y;
+        },
+      };
+      scale = {
+        x: 1,
+        y: 1,
+        set: (x: number, y = x) => {
+          this.scale.x = x;
+          this.scale.y = y;
+        },
+      };
+      constructor(input: Readonly<{ texture: unknown }>) {
+        super();
+        this.texture = input.texture;
+      }
+      destroy(): void {
+        this.destroyed = true;
+      }
+    }
+    const motionPixi = {
+      Rectangle: class MotionRectangle {
+        constructor(
+          public readonly x: number,
+          public readonly y: number,
+          public readonly width: number,
+          public readonly height: number,
+        ) {}
+      },
+      Sprite: MotionSprite,
+      Texture: MotionTexture,
+    } as unknown as typeof import("pixi.js");
+    const motionFrames = [
+      { x: 0, y: 0, width: 16, height: 16 },
+      { x: 16, y: 0, width: 16, height: 16 },
+    ] as const;
+    const initialMotionSample = {
+      positionX: 44,
+      positionY: 68,
+      opacity: 0.75,
+      visible: false,
+      rotationRadians: Math.PI / 2,
+      scaleX: -1,
+      scaleY: 1.5,
+      tintColor: "#12abef",
+      zIndex: 68,
+    };
+    const laterMotionSample = {
+      frameIndex: 1,
+      positionX: 54,
+      positionY: 78,
+      opacity: 0.5,
+      visible: true,
+      rotationRadians: Math.PI,
+      scaleX: -2,
+      scaleY: 2,
+      tintColor: "#abcdef",
+      zIndex: 78,
+    };
+    const sample = vi.fn((currentTimeMilliseconds: number) => {
+      if (currentTimeMilliseconds === 0) {
+        return initialMotionSample;
+      }
+      if (currentTimeMilliseconds === 250) {
+        return laterMotionSample;
+      }
+      return {};
+    });
+    const baseRenderEntry = createLayerRenderEntry(false);
+    const spriteMotionEntry = {
+      ...baseRenderEntry,
+      animation: {
+        kind: "sprite-motion" as const,
+        frames: motionFrames,
+        sample,
+      },
+      frame: motionFrames[0],
+      pixelGeometry: {
+        anchorX: 0,
+        anchorY: 0,
+        horizontalScale: 1,
+        positionX: 35,
+        positionY: 46,
+        uniformScale: 0.75,
+      },
+    } as PlacementRenderEntry;
+    const animationController = createPlacementAnimationController(vi.fn(), false);
+
+    try {
+      const placementSprite = createPlacementSprite(
+        motionPixi,
+        spriteMotionEntry,
+        { source: {} } as import("pixi.js").Texture,
+        null,
+        16,
+        16,
+        false,
+      );
+      const motionSprite = placementSprite.sprite as unknown as MotionSprite;
+
+      expect(sample).toHaveBeenCalledExactlyOnceWith(0);
+      expect(motionSprite.position).toMatchObject({ x: 44, y: 68 });
+      expect(motionSprite.alpha).toBe(0.75);
+      expect(motionSprite.visible).toBe(false);
+      expect(motionSprite.rotation).toBe(Math.PI / 2);
+      expect(motionSprite.scale).toMatchObject({ x: -1, y: 1.5 });
+      expect(motionSprite.tint).toBe(0x12abef);
+      expect(motionSprite.zIndex).toBe(68);
+      expect(motionSprite.texture).not.toBe(placementSprite.animationFrameTextures[0]);
+
+      animationController.replaceAnimations([placementSprite.animation!]);
+      expect(vi.getTimerCount()).toBe(0);
+      vi.advanceTimersByTime(100);
+      expect(sample).toHaveBeenCalledTimes(1);
+
+      expect(placementSprite.animation?.update(1)).toBe(true);
+      expect(motionSprite.position).toMatchObject({ x: 35, y: 46 });
+      expect(motionSprite.alpha).toBe(1);
+      expect(motionSprite.visible).toBe(true);
+      expect(motionSprite.rotation).toBe(0);
+      expect(motionSprite.scale).toMatchObject({ x: 0.75, y: 0.75 });
+      expect(motionSprite.tint).toBe(0xffffff);
+      expect(motionSprite.zIndex).toBe(0);
+      expect(motionSprite.texture).not.toBe(placementSprite.animationFrameTextures[0]);
+
+      expect(placementSprite.animation?.update(250)).toBe(true);
+      expect(motionSprite.position).toMatchObject({ x: 54, y: 78 });
+      expect(motionSprite.alpha).toBe(0.5);
+      expect(motionSprite.visible).toBe(true);
+      expect(motionSprite.rotation).toBe(Math.PI);
+      expect(motionSprite.scale).toMatchObject({ x: -2, y: 2 });
+      expect(motionSprite.tint).toBe(0xabcdef);
+      expect(motionSprite.zIndex).toBe(78);
+      expect(motionSprite.texture).toBe(placementSprite.animationFrameTextures[0]);
+
+      expect(placementSprite.animation?.update(350)).toBe(true);
+      expect(motionSprite.position).toMatchObject({ x: 35, y: 46 });
+      expect(motionSprite.alpha).toBe(1);
+      expect(motionSprite.visible).toBe(true);
+      expect(motionSprite.rotation).toBe(0);
+      expect(motionSprite.scale).toMatchObject({ x: 0.75, y: 0.75 });
+      expect(motionSprite.tint).toBe(0xffffff);
+      expect(motionSprite.zIndex).toBe(0);
+      expect(motionSprite.texture).not.toBe(placementSprite.animationFrameTextures[0]);
+      expect(sample).toHaveBeenCalledTimes(4);
+
+      const ownedMotionTextures = [
+        placementSprite.frameTexture,
+        ...placementSprite.animationFrameTextures,
+      ].filter(
+        (ownedMotionTexture): ownedMotionTexture is import("pixi.js").Texture =>
+          ownedMotionTexture !== null,
+      );
+      destroyPlacementSprites([placementSprite]);
+      expect(motionSprite.destroyed).toBe(true);
+      expect(ownedMotionTextures.every(
+        (ownedMotionTexture) =>
+          (ownedMotionTexture as unknown as MotionTexture).destroyed,
+      ))
+        .toBe(true);
+    } finally {
+      animationController.dispose();
+      vi.useRealTimers();
+    }
+  });
+
+  it("fails fast when a sprite-motion sample requests a frame outside its descriptor", () => {
+    const motionFrames = [{ x: 0, y: 0, width: 16, height: 16 }];
+    const spriteMotionEntry = {
+      ...createLayerRenderEntry(false),
+      animation: {
+        kind: "sprite-motion" as const,
+        frames: motionFrames,
+        sample: () => ({ frameIndex: 2 }),
+      },
+      frame: motionFrames[0],
+    } as PlacementRenderEntry;
+    expect(() => createPlacementSprite(
+      {
+        Rectangle: class MotionRectangle {},
+        Sprite: class MotionSprite extends TestLayerSprite {
+          constructor(input: Readonly<{ texture: unknown }>) {
+            super();
+            this.texture = input.texture;
+          }
+          texture: unknown;
+          destroy(): void {}
+        },
+        Texture: class MotionTexture {
+          destroy(): void {}
+        },
+      } as unknown as typeof import("pixi.js"),
+      spriteMotionEntry,
+      { source: {} } as import("pixi.js").Texture,
+      null,
+      16,
+      16,
+      false,
+    )).toThrow(
+      /frameIndex must be an integer from 0 through 0; received 2/,
+    );
   });
 });
 

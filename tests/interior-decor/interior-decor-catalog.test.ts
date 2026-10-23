@@ -52,14 +52,31 @@ describe("interior decor catalog", () => {
     });
   });
 
-  it("only enables interior decor for maps with verified WallID or FloorID data", () => {
-    expect(isInteriorDecorSupportedMapId("farmhouse-0")).toBe(true);
-    expect(isInteriorDecorSupportedMapId("farmhouse-1")).toBe(true);
-    expect(isInteriorDecorSupportedMapId("farmhouse-2")).toBe(true);
-    expect(isInteriorDecorSupportedMapId("shed")).toBe(true);
-    expect(isInteriorDecorSupportedMapId("big-shed")).toBe(true);
-    expect(isInteriorDecorSupportedMapId("island-farmhouse")).toBe(true);
-    expect(isInteriorDecorSupportedMapId("standard")).toBe(false);
-    expect(isInteriorDecorSupportedMapId("barn")).toBe(false);
+  it("matches competitor wallpaper and flooring selector maps", () => {
+    const paperedMapIds = [
+      "farmhouse-0",
+      "farmhouse-1",
+      "farmhouse-2",
+      "shed",
+      "big-shed",
+      "slime-hutch",
+      "island-farmhouse",
+      "sve-winery",
+      "sve-grandpas-shed-1",
+      "sve-grandpas-shed-2",
+    ];
+    const unsupportedMapIds = [
+      "standard",
+      "farm-cave",
+      "barn",
+      "farmhouse-cellar",
+    ];
+
+    expect(paperedMapIds.filter(isInteriorDecorSupportedMapId)).toEqual(
+      paperedMapIds,
+    );
+    expect(unsupportedMapIds.filter(isInteriorDecorSupportedMapId)).toEqual(
+      [],
+    );
   });
 });
