@@ -31,6 +31,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [A Fruit Tree Layout Stardew Valley Players Can Adapt](https://stardewvalleyplanner.art/stardew-valley-fruit-tree-layout): Compare seven Stardew Valley fruit tree plans: an 18-tree greenhouse reference, outdoor orchard spacing, seasonal rows, a mature paved orchard, and Bee House or Farmhouse examples.
 - [Stardew Greenhouse Tree Layout Ideas](https://stardewvalleyplanner.art/stardew-greenhouse-tree-layout): Compare six greenhouse fruit tree plans with 9 to 18 trees, crop combinations, and sprinkler placements in Stardew Valley.
 - [Greenhouse Sprinkler Layout Stardew: 6 Plans](https://stardewvalleyplanner.art/greenhouse-sprinkler-layout-stardew): Compare six Stardew Valley greenhouse sprinkler layouts with Iridium and Quality Sprinklers, crop counts, and downloadable planner projects.
+- [Stardew Valley House Design Ideas for Every Room](https://stardewvalleyplanner.art/stardew-valley-house-design): Explore six Stardew Valley farmhouse interiors, from plant-filled cottagecore rooms to a wizard’s study, and download editable planner projects.
 - [Stardew Valley Bedroom Design](https://stardewvalleyplanner.art/stardew-valley-bedroom-design): Explore six Stardew Valley bedroom design ideas, from ocean-inspired rooms and book-lined spaces to leafy decor and wizard-themed details. View the full farmhouse plans and download their JSON projects.
 
 ### Planning guides
@@ -107,6 +108,7 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [星露谷物语果树布局：7 套规划方案](https://stardewvalleyplanner.art/zh/stardew-valley-fruit-tree-layout): 浏览 7 套星露谷物语果树项目：18 棵树的温室参考示意、户外果园间距、季节行列、成熟后铺路，以及蜂房和农舍布局。
 - [星露谷物语温室果树布局方案](https://stardewvalleyplanner.art/zh/stardew-greenhouse-tree-layout): 对比六套温室果树方案，查看 9 至 18 棵果树、作物组合和洒水器在温室地图中的摆放。
 - [星露谷物语温室洒水器布局：六套案例](https://stardewvalleyplanner.art/zh/greenhouse-sprinkler-layout-stardew): 对比六套星露谷物语温室洒水器布局，查看铱制与优质洒水器、作物数量和可下载的规划器项目。
+- [星露谷物语房屋设计：六套农舍室内灵感](https://stardewvalleyplanner.art/zh/stardew-valley-house-design): 浏览六套星露谷物语农舍室内设计，从绿植乡村风到巫师书房，并下载可编辑的规划器项目。
 - [星露谷物语卧室设计](https://stardewvalleyplanner.art/zh/stardew-valley-bedroom-design): 浏览 6 套星露谷物语卧室设计案例，涵盖海洋配色、书架环绕、柔和休息区、温暖木色、绿植装饰和巫师主题。查看完整农舍布局并下载 JSON 项目。
 
 ### 农场规划指南

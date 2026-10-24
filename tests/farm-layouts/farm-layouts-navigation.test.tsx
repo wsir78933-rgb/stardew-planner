@@ -8,6 +8,7 @@ import { greenhouseLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-lay
 import { greenhouseTreeLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { bedroomDesignCanonicalPath } from "@/src/farm-layouts/bedroom-design-content";
+import { houseDesignCanonicalPath } from "@/src/farm-layouts/house-design-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
@@ -375,6 +376,14 @@ test("provides all ten Farm Maps pages in order with localized hrefs", () => {
       model,
       "buildings-interiors",
     );
+    const expectedHouseDesign = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${houseDesignCanonicalPath}`
+          : houseDesignCanonicalPath,
+      id: "house-design",
+      label: locale === "zh-CN" ? "房屋设计" : "House Design",
+    } as const;
     const expectedBedroomDesign = {
       href:
         locale === "zh-CN"
@@ -387,8 +396,19 @@ test("provides all ten Farm Maps pages in order with localized hrefs", () => {
     expect(buildingsInteriors.label).toBe(
       locale === "zh-CN" ? "建筑与室内" : "Buildings & Interiors",
     );
-    expect(buildingsInteriors.pages).toEqual([expectedBedroomDesign]);
+    expect(buildingsInteriors.pages).toEqual([
+      expectedHouseDesign,
+      expectedBedroomDesign,
+    ]);
+    expect(isFarmLayoutsNavigationPageId("house-design")).toBe(true);
     expect(isFarmLayoutsNavigationPageId("bedroom-design")).toBe(true);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "buildings-interiors",
+        "house-design",
+      ),
+    ).toEqual(expectedHouseDesign);
     expect(
       readFarmLayoutsNavigationPage(
         model,
@@ -612,6 +632,58 @@ test("places greenhouse topics in order under Greenhouse Layouts with locale fal
       "iridium-sprinkler-layout",
       "fruit-tree-layout",
     ]);
+  }
+});
+
+test("places House Design in Buildings & Interiors with localized hrefs", () => {
+  expect(houseDesignCanonicalPath).toBe("/stardew-valley-house-design");
+  expect(isFarmLayoutsNavigationPageId("house-design")).toBe(true);
+
+  for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
+    const model = getFarmLayoutsNavigationModel(locale);
+    const buildingsCategory = readFarmLayoutsNavigationCategory(
+      model,
+      "buildings-interiors",
+    );
+    const houseDesignPage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${houseDesignCanonicalPath}`
+          : houseDesignCanonicalPath,
+      id: "house-design",
+      label: locale === "zh-CN" ? "房屋设计" : "House Design",
+    } as const;
+    const bedroomDesignPage = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${bedroomDesignCanonicalPath}`
+          : bedroomDesignCanonicalPath,
+      id: "bedroom-design",
+      label: locale === "zh-CN" ? "卧室设计" : "Bedroom Design",
+    } as const;
+
+    expect(buildingsCategory.label).toBe(
+      locale === "zh-CN" ? "建筑与室内" : "Buildings & Interiors",
+    );
+    expect(buildingsCategory.pages).toEqual([
+      houseDesignPage,
+      bedroomDesignPage,
+    ]);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "buildings-interiors",
+        "house-design",
+      ),
+    ).toEqual(houseDesignPage);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "buildings-interiors",
+        "bedroom-design",
+      ),
+    ).toEqual(bedroomDesignPage);
+    expect(isFarmLayoutsNavigationPageId("house-design-missing")).toBe(false);
   }
 });
 

@@ -10,6 +10,7 @@ import { greenhouseLayoutCanonicalPath } from "./greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "./greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "./greenhouse-sprinkler-layout-content";
 import { bedroomDesignCanonicalPath } from "./bedroom-design-content";
+import { houseDesignCanonicalPath } from "./house-design-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "./iridium-sprinkler-layout-content";
 import { meadowlandsFarmCanonicalPath } from "./meadowlands-farm-content";
 import { qualitySprinklerLayoutCanonicalPath } from "./quality-sprinkler-layout-content";
@@ -50,6 +51,7 @@ export type FarmLayoutsNavigationPageId =
   | "fruit-tree-layout"
   | "greenhouse-tree-layout"
   | "greenhouse-sprinkler-layout"
+  | "house-design"
   | "bedroom-design";
 
 export type FarmLayoutsNavigationPage = Readonly<{
@@ -125,6 +127,7 @@ export function isFarmLayoutsNavigationPageId(
     pageId === "fruit-tree-layout" ||
     pageId === "greenhouse-tree-layout" ||
     pageId === "greenhouse-sprinkler-layout" ||
+    pageId === "house-design" ||
     pageId === "bedroom-design"
   );
 }
@@ -328,7 +331,15 @@ function createFarmLayoutsNavigationCategories(
       label: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",
     },
   ];
-  const bedroomDesignPages: readonly FarmLayoutsNavigationPage[] = [
+  const buildingsInteriorPages: readonly FarmLayoutsNavigationPage[] = [
+    {
+      href:
+        locale === "zh-CN"
+          ? `/zh${houseDesignCanonicalPath}`
+          : houseDesignCanonicalPath,
+      id: "house-design",
+      label: locale === "zh-CN" ? "房屋设计" : "House Design",
+    },
     {
       href:
         locale === "zh-CN"
@@ -346,7 +357,7 @@ function createFarmLayoutsNavigationCategories(
       categoryId,
       farmMapPages,
       greenhouseLayoutPages,
-      bedroomDesignPages,
+      buildingsInteriorPages,
       plantingLayoutPages,
     ),
   }));
@@ -356,7 +367,7 @@ function pagesForFarmLayoutsNavigationCategory(
   categoryId: FarmLayoutsNavigationCategoryId,
   farmMapPages: readonly FarmLayoutsNavigationPage[],
   greenhouseLayoutPages: readonly FarmLayoutsNavigationPage[],
-  bedroomDesignPages: readonly FarmLayoutsNavigationPage[],
+  buildingsInteriorPages: readonly FarmLayoutsNavigationPage[],
   plantingLayoutPages: readonly FarmLayoutsNavigationPage[],
 ): readonly FarmLayoutsNavigationPage[] {
   if (categoryId === "farm-maps") {
@@ -366,7 +377,7 @@ function pagesForFarmLayoutsNavigationCategory(
     return greenhouseLayoutPages;
   }
   if (categoryId === "buildings-interiors") {
-    return bedroomDesignPages;
+    return buildingsInteriorPages;
   }
   if (categoryId === "planting-layouts") {
     return plantingLayoutPages;

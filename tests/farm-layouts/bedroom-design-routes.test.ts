@@ -92,10 +92,10 @@ it("registers paired Bedroom Design routes with canonical metadata, navigation, 
   );
 
   expect(bedroomDesignCanonicalPath).toBe("/stardew-valley-bedroom-design");
-  expect(canonicalPublicPaths).toHaveLength(61);
+  expect(canonicalPublicPaths).toHaveLength(62);
   expect(bedroomDesignIndex).toBe(canonicalPublicPaths.length - 1);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(122);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(120);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(124);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(122);
   expect(localizedBedroomDesignEntries).toEqual([
     {
       locale: "en",
@@ -110,7 +110,7 @@ it("registers paired Bedroom Design routes with canonical metadata, navigation, 
   ]);
   expect(sitemapPathnames).toContain(bedroomDesignCanonicalPath);
   expect(sitemapPathnames).toContain(`/zh${bedroomDesignCanonicalPath}`);
-  expect(sitemapPathnames).toHaveLength(122);
+  expect(sitemapPathnames).toHaveLength(124);
   expect(englishBedroomDesignDynamic).toBe("force-static");
   expect(chineseBedroomDesignDynamic).toBe("force-static");
 

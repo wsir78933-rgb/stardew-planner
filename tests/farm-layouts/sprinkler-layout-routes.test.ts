@@ -18,6 +18,7 @@ import { bedroomDesignCanonicalPath } from "../../src/farm-layouts/bedroom-desig
 import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
+import { houseDesignCanonicalPath } from "../../src/farm-layouts/house-design-content";
 import { qualitySprinklerLayoutCanonicalPath } from "../../src/farm-layouts/quality-sprinkler-layout-content";
 import {
   iridiumSprinklerLayoutCanonicalPath,
@@ -201,8 +202,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(61);
-  expect(indexableEntries).toHaveLength(120);
+  expect(canonicalPublicPaths).toHaveLength(62);
+  expect(indexableEntries).toHaveLength(122);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
   expect(greenhouseIndex).toBe(wildernessIndex + 1);
@@ -377,12 +378,18 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
     englishNavigation.categories.find(
       (category) => category.id === "buildings-interiors",
     ),
-  ).toMatchObject({
+  ).toEqual({
+    id: "buildings-interiors",
     label: "Buildings & Interiors",
     pages: [
       {
-        id: "bedroom-design",
+        href: houseDesignCanonicalPath,
+        id: "house-design",
+        label: "House Design",
+      },
+      {
         href: bedroomDesignCanonicalPath,
+        id: "bedroom-design",
         label: "Bedroom Design",
       },
     ],
@@ -391,12 +398,18 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
     chineseNavigation.categories.find(
       (category) => category.id === "buildings-interiors",
     ),
-  ).toMatchObject({
+  ).toEqual({
+    id: "buildings-interiors",
     label: "建筑与室内",
     pages: [
       {
-        id: "bedroom-design",
+        href: `/zh${houseDesignCanonicalPath}`,
+        id: "house-design",
+        label: "房屋设计",
+      },
+      {
         href: `/zh${bedroomDesignCanonicalPath}`,
+        id: "bedroom-design",
         label: "卧室设计",
       },
     ],
