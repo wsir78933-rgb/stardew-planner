@@ -14,6 +14,7 @@ import ChineseSprinklerLayoutsPage, {
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { bedroomDesignCanonicalPath } from "../../src/farm-layouts/bedroom-design-content";
 import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
@@ -201,8 +202,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(61);
-  expect(indexableEntries).toHaveLength(120);
+  expect(canonicalPublicPaths).toHaveLength(62);
+  expect(indexableEntries).toHaveLength(122);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
   expect(greenhouseIndex).toBe(wildernessIndex + 1);
@@ -363,28 +364,6 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
       },
     ],
   });
-  expect(
-    englishNavigation.categories.find(
-      (category) => category.id === "buildings-interiors",
-    )?.pages,
-  ).toEqual([
-    {
-      href: houseDesignCanonicalPath,
-      id: "house-design",
-      label: "House Design",
-    },
-  ]);
-  expect(
-    chineseNavigation.categories.find(
-      (category) => category.id === "buildings-interiors",
-    )?.pages,
-  ).toEqual([
-    {
-      href: `/zh${houseDesignCanonicalPath}`,
-      id: "house-design",
-      label: "房屋设计",
-    },
-  ]);
   for (const emptyCategoryId of ["layout-ideas"] as const) {
     expect(
       englishNavigation.categories.find((category) => category.id === emptyCategoryId)
@@ -395,6 +374,44 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         ?.pages,
     ).toEqual([]);
   }
+  expect(
+    englishNavigation.categories.find(
+      (category) => category.id === "buildings-interiors",
+    ),
+  ).toMatchObject({
+    label: "Buildings & Interiors",
+    pages: [
+      {
+        id: "house-design",
+        href: houseDesignCanonicalPath,
+        label: "House Design",
+      },
+      {
+        id: "bedroom-design",
+        href: bedroomDesignCanonicalPath,
+        label: "Bedroom Design",
+      },
+    ],
+  });
+  expect(
+    chineseNavigation.categories.find(
+      (category) => category.id === "buildings-interiors",
+    ),
+  ).toMatchObject({
+    label: "建筑与室内",
+    pages: [
+      {
+        id: "house-design",
+        href: `/zh${houseDesignCanonicalPath}`,
+        label: "房屋设计",
+      },
+      {
+        id: "bedroom-design",
+        href: `/zh${bedroomDesignCanonicalPath}`,
+        label: "卧室设计",
+      },
+    ],
+  });
 });
 
 it("publishes force-static metadata with hreflang and the measured cover preview", () => {

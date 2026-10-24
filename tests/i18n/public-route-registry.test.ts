@@ -2,6 +2,7 @@ import { expect, it } from "vitest";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
 import { houseDesignCanonicalPath } from "../../src/farm-layouts/house-design-content";
+import { bedroomDesignCanonicalPath } from "../../src/farm-layouts/bedroom-design-content";
 import { publicLocales } from "../../src/i18n/public-locale";
 import {
   PROCESSING_TOOL_IDS,
@@ -20,7 +21,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(61);
+  expect(canonicalPublicPaths).toHaveLength(62);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -326,8 +327,15 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", "/house-upgrade-stardew")).toBe(
     "/zh/house-upgrade-stardew",
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(122);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(120);
+  expect(canonicalPublicPaths).toContain(bedroomDesignCanonicalPath);
+  expect(getLocalizedPublicPath("en", bedroomDesignCanonicalPath)).toBe(
+    bedroomDesignCanonicalPath,
+  );
+  expect(getLocalizedPublicPath("zh-CN", bedroomDesignCanonicalPath)).toBe(
+    `/zh${bedroomDesignCanonicalPath}`,
+  );
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(124);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(122);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );

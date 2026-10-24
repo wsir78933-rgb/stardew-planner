@@ -76,7 +76,7 @@ it("registers the English and Chinese Quality Sprinkler routes in the index and 
   expect(qualitySprinklerLayoutCanonicalPath).toBe(
     "/stardew-valley-quality-sprinkler-layout",
   );
-  expect(canonicalPublicPaths).toHaveLength(61);
+  expect(canonicalPublicPaths).toHaveLength(62);
   expect(canonicalPublicPaths.indexOf(qualitySprinklerLayoutCanonicalPath)).toBe(
     canonicalPublicPaths.indexOf("/stardew-valley-sprinkler-layout") + 1,
   );
