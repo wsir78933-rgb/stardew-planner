@@ -1,0 +1,1498 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "bd04-stardew-valley-bedroom-design-cozy-kids-loft",
+      "title": "stardew valley bedroom design cozy kids loft",
+      "created_at": "2026-10-23T12:00:00.000Z",
+      "updated_at": "2026-10-23T13:30:00.000Z",
+      "project": {
+        "version": 4,
+        "gameVersion": "1.6.15",
+        "projectName": "stardew valley bedroom design cozy kids loft",
+        "season": "spring",
+        "activeMapId": "bd04-stardew-valley-bedroom-design-cozy-kids-loftmap",
+        "maps": [
+          {
+            "id": "bd04-stardew-valley-bedroom-design-cozy-kids-loftmap",
+            "mapFile": "FarmHouse2.tmx",
+            "label": "Farmhouse (Upgrade 2)",
+            "season": "spring",
+            "state": {
+              "buildings": [],
+              "crops": [],
+              "items": [
+                {
+                  "instanceId": "i1",
+                  "itemId": "furniture_1623",
+                  "x": 33,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i2",
+                  "itemId": "furniture_2488",
+                  "x": 37,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i3",
+                  "itemId": "furniture_2076",
+                  "x": 33,
+                  "y": 13,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "child"
+                },
+                {
+                  "instanceId": "i4",
+                  "itemId": "furniture_2076",
+                  "x": 38,
+                  "y": 13,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "child"
+                },
+                {
+                  "instanceId": "i5",
+                  "itemId": "furniture_1285",
+                  "x": 31,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i6",
+                  "itemId": "furniture_1283",
+                  "x": 20,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i7",
+                  "itemId": "furniture_1285",
+                  "x": 24,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i8",
+                  "itemId": "furniture_1287",
+                  "x": 40,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i9",
+                  "itemId": "furniture_85",
+                  "x": 35,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i10",
+                  "itemId": "furniture_91",
+                  "x": 36,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i11",
+                  "itemId": "furniture_1365",
+                  "x": 35,
+                  "y": 17,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i12",
+                  "itemId": "furniture_1367",
+                  "x": 36,
+                  "y": 18,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i15",
+                  "itemId": "furniture_1376",
+                  "x": 33,
+                  "y": 18,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i16",
+                  "itemId": "furniture_1380",
+                  "x": 34,
+                  "y": 18,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i19",
+                  "itemId": "furniture_BirdHouse",
+                  "x": 39,
+                  "y": 18,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i20",
+                  "itemId": "furniture_SmallBookStack",
+                  "x": 37,
+                  "y": 18,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i21",
+                  "itemId": "furniture_GreenBook",
+                  "x": 38,
+                  "y": 18,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i22",
+                  "itemId": "furniture_2784",
+                  "x": 46,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 4,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i23",
+                  "itemId": "furniture_2076",
+                  "x": 51,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "child"
+                },
+                {
+                  "instanceId": "i24",
+                  "itemId": "furniture_85",
+                  "x": 48,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i25",
+                  "itemId": "furniture_1365",
+                  "x": 50,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i26",
+                  "itemId": "furniture_1285",
+                  "x": 58,
+                  "y": 13,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i27",
+                  "itemId": "furniture_1216",
+                  "x": 47,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i28",
+                  "itemId": "furniture_0",
+                  "x": 46,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i30",
+                  "itemId": "furniture_1294",
+                  "x": 56,
+                  "y": 12,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i31",
+                  "itemId": "furniture_JunimoMat",
+                  "x": 45,
+                  "y": 17,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i32",
+                  "itemId": "furniture_GreenSleepingJunimo",
+                  "x": 45,
+                  "y": 17,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i33",
+                  "itemId": "furniture_YellowSleepingJunimo",
+                  "x": 46,
+                  "y": 17,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i34",
+                  "itemId": "furniture_1623",
+                  "x": 41,
+                  "y": 25,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i35",
+                  "itemId": "furniture_2052",
+                  "x": 42,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "double"
+                },
+                {
+                  "instanceId": "i36",
+                  "itemId": "furniture_1391",
+                  "x": 40,
+                  "y": 24,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i37",
+                  "itemId": "furniture_1391",
+                  "x": 45,
+                  "y": 24,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i38",
+                  "itemId": "furniture_1443",
+                  "x": 40,
+                  "y": 30,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i39",
+                  "itemId": "furniture_1449",
+                  "x": 47,
+                  "y": 30,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i40",
+                  "itemId": "furniture_704",
+                  "x": 47,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i41",
+                  "itemId": "furniture_1376",
+                  "x": 38,
+                  "y": 31,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i44",
+                  "itemId": "furniture_1623",
+                  "x": 22,
+                  "y": 7,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i45",
+                  "itemId": "furniture_2048",
+                  "x": 23,
+                  "y": 4,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "single"
+                },
+                {
+                  "instanceId": "i46",
+                  "itemId": "furniture_1285",
+                  "x": 20,
+                  "y": 4,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i47",
+                  "itemId": "furniture_1285",
+                  "x": 26,
+                  "y": 4,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i48",
+                  "itemId": "furniture_1365",
+                  "x": 25,
+                  "y": 7,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i49",
+                  "itemId": "furniture_1445",
+                  "x": 22,
+                  "y": 4,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i50",
+                  "itemId": "furniture_1377",
+                  "x": 28,
+                  "y": 5,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i51",
+                  "itemId": "furniture_1623",
+                  "x": 57,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i52",
+                  "itemId": "furniture_2076",
+                  "x": 57,
+                  "y": 7,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": "child"
+                },
+                {
+                  "instanceId": "i53",
+                  "itemId": "furniture_1365",
+                  "x": 56,
+                  "y": 6,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i54",
+                  "itemId": "furniture_1443",
+                  "x": 60,
+                  "y": 15,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i55",
+                  "itemId": "furniture_1378",
+                  "x": 61,
+                  "y": 17,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i56",
+                  "itemId": "furniture_2784",
+                  "x": 26,
+                  "y": 24,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 4,
+                    "h": 3
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i57",
+                  "itemId": "furniture_432",
+                  "x": 26,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i58",
+                  "itemId": "furniture_300",
+                  "x": 30,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i59",
+                  "itemId": "furniture_724",
+                  "x": 27,
+                  "y": 25,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i60",
+                  "itemId": "furniture_1468",
+                  "x": 33,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i61",
+                  "itemId": "furniture_1365",
+                  "x": 28,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i62",
+                  "itemId": "furniture_1376",
+                  "x": 22,
+                  "y": 31,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i64",
+                  "itemId": "furniture_814",
+                  "x": 6,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 5,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": true,
+                  "isLongTable": true,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i65",
+                  "itemId": "furniture_9",
+                  "x": 5,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i66",
+                  "itemId": "furniture_9",
+                  "x": 5,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i67",
+                  "itemId": "furniture_9",
+                  "x": 11,
+                  "y": 26,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i68",
+                  "itemId": "furniture_9",
+                  "x": 11,
+                  "y": 28,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i69",
+                  "itemId": "furniture_1280",
+                  "x": 5,
+                  "y": 23,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i70",
+                  "itemId": "furniture_1623",
+                  "x": 8,
+                  "y": 29,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 3,
+                    "h": 2
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": true,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i71",
+                  "itemId": "furniture_1376",
+                  "x": 11,
+                  "y": 24,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i72",
+                  "itemId": "furniture_1285",
+                  "x": 16,
+                  "y": 14,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 2,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i73",
+                  "itemId": "furniture_1365",
+                  "x": 19,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i74",
+                  "itemId": "furniture_85",
+                  "x": 23,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                },
+                {
+                  "instanceId": "i75",
+                  "itemId": "furniture_1449",
+                  "x": 26,
+                  "y": 16,
+                  "layer": "item",
+                  "rotation": 0,
+                  "footprint": {
+                    "w": 1,
+                    "h": 1
+                  },
+                  "variant": 0,
+                  "tintColor": "#ffffff",
+                  "locked": false,
+                  "isRug": false,
+                  "isGrass": false,
+                  "isTable": false,
+                  "isLongTable": false,
+                  "flipped": false,
+                  "bedType": null
+                }
+              ],
+              "mapRenderOptions": {
+                "gingerIslandOverlayIds": [
+                  "restored",
+                  "bin",
+                  "cave",
+                  "obelisk"
+                ],
+                "farmhouse2": {
+                  "marriageMapEnabled": false,
+                  "renovationIds": [
+                    "bedroom",
+                    "corner-room",
+                    "extended-corner-room",
+                    "dining-room",
+                    "dining-room-wall",
+                    "cubby",
+                    "far-upper-room",
+                    "crib"
+                  ],
+                  "spouseId": null
+                },
+                "farm": {
+                  "spouseId": null,
+                  "caveChoice": "none"
+                }
+              },
+              "nextBuildingId": 1,
+              "nextItemId": 76
+            },
+            "decor": {
+              "wallpapers": {
+                "Kitchen": "37",
+                "LivingRoom": "37",
+                "Bedroom": "61",
+                "Nursery": "61",
+                "UpperRoom": "61",
+                "Hallway_Bedroom": "61",
+                "Hallway_Nursery": "61"
+              },
+              "floors": {
+                "Kitchen": "18",
+                "LivingRoom": "1",
+                "Bedroom": "31",
+                "Nursery": "31",
+                "UpperRoom": "31",
+                "Hallway_Bedroom": "31",
+                "Hallway_Nursery": "31"
+              }
+            },
+            "renovations": [
+              "bedroom",
+              "corner-room",
+              "extended-corner-room",
+              "dining-room",
+              "dining-room-wall",
+              "cubby",
+              "far-upper-room",
+              "crib"
+            ],
+            "thumbnail": "/api/projects/bd04-stardew-valley-bedroom-design-cozy-kids-loft/maps/bd04-stardew-valley-bedroom-design-cozy-kids-loftmap/thumbnail"
+          }
+        ]
+      }
+    }
+  ]
+}

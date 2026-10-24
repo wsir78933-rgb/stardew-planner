@@ -7,6 +7,7 @@ import { fruitTreeLayoutCanonicalPath } from "@/src/farm-layouts/fruit-tree-layo
 import { greenhouseLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/greenhouse-sprinkler-layout-content";
+import { bedroomDesignCanonicalPath } from "@/src/farm-layouts/bedroom-design-content";
 import { hilltopFarmCanonicalPath } from "@/src/farm-layouts/hilltop-farm-content";
 import { iridiumSprinklerLayoutCanonicalPath } from "@/src/farm-layouts/iridium-sprinkler-layout-content";
 import { qualitySprinklerLayoutCanonicalPath } from "@/src/farm-layouts/quality-sprinkler-layout-content";
@@ -32,7 +33,6 @@ import {
 } from "@/src/farm-layouts/farm-layouts-navigation-model";
 
 const emptyFarmLayoutsCategoryIds = [
-  "buildings-interiors",
   "layout-ideas",
 ] as const;
 
@@ -370,6 +370,32 @@ test("provides all ten Farm Maps pages in order with localized hrefs", () => {
         "greenhouse-layout",
       ),
     ).toEqual(expectedGreenhouseLayout);
+
+    const buildingsInteriors = readFarmLayoutsNavigationCategory(
+      model,
+      "buildings-interiors",
+    );
+    const expectedBedroomDesign = {
+      href:
+        locale === "zh-CN"
+          ? `/zh${bedroomDesignCanonicalPath}`
+          : bedroomDesignCanonicalPath,
+      id: "bedroom-design",
+      label: locale === "zh-CN" ? "卧室设计" : "Bedroom Design",
+    } as const;
+
+    expect(buildingsInteriors.label).toBe(
+      locale === "zh-CN" ? "建筑与室内" : "Buildings & Interiors",
+    );
+    expect(buildingsInteriors.pages).toEqual([expectedBedroomDesign]);
+    expect(isFarmLayoutsNavigationPageId("bedroom-design")).toBe(true);
+    expect(
+      readFarmLayoutsNavigationPage(
+        model,
+        "buildings-interiors",
+        "bedroom-design",
+      ),
+    ).toEqual(expectedBedroomDesign);
 
     for (const categoryId of emptyFarmLayoutsCategoryIds) {
       expect(readFarmLayoutsNavigationCategory(model, categoryId).pages).toEqual(
@@ -829,7 +855,7 @@ test("moves keyboard focus through all five categories and wraps at both ends", 
 
 test("opens an empty desktop category without page focus and returns to that category on Left", () => {
   const selectedCategory = getFarmLayoutsNavigationCategoryFocusKey(
-    "buildings-interiors",
+    "layout-ideas",
   );
   const categories = {
     focusKey: selectedCategory,
@@ -852,7 +878,7 @@ test("opens an empty desktop category without page focus and returns to that cat
 
   expect(emptyCategoryPanel).toMatchObject({
     focusKey: selectedCategory,
-    openCategoryId: "buildings-interiors",
+    openCategoryId: "layout-ideas",
     panel: "category",
   });
   expect(returnedToCategories).toMatchObject({

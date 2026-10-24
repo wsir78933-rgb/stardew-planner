@@ -14,6 +14,7 @@ import ChineseSprinklerLayoutsPage, {
 import sitemap from "../../app/sitemap";
 import { getFarmLayoutsNavigationModel } from "../../src/farm-layouts/farm-layouts-navigation-model";
 import { fruitTreeLayoutCanonicalPath } from "../../src/farm-layouts/fruit-tree-layout-content";
+import { bedroomDesignCanonicalPath } from "../../src/farm-layouts/bedroom-design-content";
 import { greenhouseLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-layout-content";
 import { greenhouseTreeLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-tree-layout-content";
 import { greenhouseSprinklerLayoutCanonicalPath } from "../../src/farm-layouts/greenhouse-sprinkler-layout-content";
@@ -200,8 +201,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(60);
-  expect(indexableEntries).toHaveLength(118);
+  expect(canonicalPublicPaths).toHaveLength(61);
+  expect(indexableEntries).toHaveLength(120);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   const greenhouseIndex = canonicalPublicPaths.indexOf(greenhouseLayoutCanonicalPath);
   expect(greenhouseIndex).toBe(wildernessIndex + 1);
@@ -362,10 +363,7 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
       },
     ],
   });
-  for (const emptyCategoryId of [
-    "buildings-interiors",
-    "layout-ideas",
-  ] as const) {
+  for (const emptyCategoryId of ["layout-ideas"] as const) {
     expect(
       englishNavigation.categories.find((category) => category.id === emptyCategoryId)
         ?.pages,
@@ -375,6 +373,34 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
         ?.pages,
     ).toEqual([]);
   }
+  expect(
+    englishNavigation.categories.find(
+      (category) => category.id === "buildings-interiors",
+    ),
+  ).toMatchObject({
+    label: "Buildings & Interiors",
+    pages: [
+      {
+        id: "bedroom-design",
+        href: bedroomDesignCanonicalPath,
+        label: "Bedroom Design",
+      },
+    ],
+  });
+  expect(
+    chineseNavigation.categories.find(
+      (category) => category.id === "buildings-interiors",
+    ),
+  ).toMatchObject({
+    label: "建筑与室内",
+    pages: [
+      {
+        id: "bedroom-design",
+        href: `/zh${bedroomDesignCanonicalPath}`,
+        label: "卧室设计",
+      },
+    ],
+  });
 });
 
 it("publishes force-static metadata with hreflang and the measured cover preview", () => {

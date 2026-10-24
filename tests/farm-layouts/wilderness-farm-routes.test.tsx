@@ -85,12 +85,12 @@ it("registers both Wilderness Farm routes as indexable with canonical metadata a
     "/stardew-greenhouse-layout",
   );
 
-  expect(canonicalPublicPaths).toHaveLength(60);
+  expect(canonicalPublicPaths).toHaveLength(61);
   expect(wildernessPathIndex).toBe(hilltopPathIndex + 1);
   expect(greenhousePathIndex).toBe(wildernessPathIndex + 1);
   expect(sprinklerPathIndex).toBe(greenhousePathIndex + 1);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(120);
-  expect(indexableEntries).toHaveLength(118);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(122);
+  expect(indexableEntries).toHaveLength(120);
   expect(localizedWildernessEntries).toEqual([
     {
       locale: "en",

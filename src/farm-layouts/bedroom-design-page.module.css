@@ -1,0 +1,28 @@
+.bedroomDesignPage [data-bedroom-design-hero] > figure {
+  justify-self: end;
+  max-width: 34rem;
+  width: 100%;
+}
+
+.caseList > article > figure {
+  aspect-ratio: 2240 / 1472;
+  max-width: 34rem;
+  width: 100%;
+}
+
+.caseList > article :global([data-layout-image-trigger="true"]) {
+  aspect-ratio: 2240 / 1472;
+  width: 100%;
+}
+
+.caseList > article :global([data-layout-image-trigger="true"] img) {
+  height: auto;
+  width: 100%;
+}
+
+@media (max-width: 850px) {
+  .bedroomDesignPage [data-bedroom-design-hero] > figure {
+    justify-self: start;
+    max-width: 34rem;
+  }
+}
