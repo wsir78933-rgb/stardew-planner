@@ -19,7 +19,7 @@ const kegRankingLocaleCases = [
     sortLabel: "Rank by",
     deadlineLabel: "Days available",
     planButton: "Add to production plan",
-    disabledNote: "Production-plan transfer is not available yet.",
+    disabledNote: "Select an ingredient and enter your stock, Kegs and deadline to prepare a plan.",
     sortHeader: "Added value per cycle",
     processingMinuteSort: "Per processing minute",
     processingMinuteUnit: "g / game min",
@@ -42,7 +42,7 @@ const kegRankingLocaleCases = [
     sortLabel: "排行口径",
     deadlineLabel: "可用天数",
     planButton: "转入生产计划",
-    disabledNote: "生产计划转入功能尚未开放。",
+    disabledNote: "选择原料并填写库存、Keg 数量和期限，即可转入确认。",
     sortHeader: "每个机器周期增值",
     processingMinuteSort: "每个加工分钟",
     processingMinuteUnit: "金币 / 游戏分钟",
@@ -139,7 +139,7 @@ describe.each(kegRankingLocaleCases)("Keg ingredient ranking in $locale", (testC
     expect(renderedMarkup).toContain('type="checkbox"');
   });
 
-  it("connects selected ingredient feedback, inventory inputs, sorting semantics, and the disabled plan action", () => {
+  it("connects selected ingredient feedback, inventory inputs, sorting semantics, and the production plan action", () => {
     const renderedMarkup = renderToStaticMarkup(
       <KegIngredientRankingTool locale={testCase.locale} />,
     );
@@ -161,7 +161,7 @@ describe.each(kegRankingLocaleCases)("Keg ingredient ranking in $locale", (testC
       testCase.locale === "en" ? 'aria-label="Select rank 1:' : 'aria-label="选择第 1 名：',
     );
     expect(renderedMarkup).toMatch(
-      /<button\b(?=[^>]*\bdisabled="")(?=[^>]*\baria-describedby="keg-plan-disabled-note")[^>]*>/,
+      /<button\b(?![^>]*\bdisabled="")(?=[^>]*\baria-describedby="keg-plan-disabled-note")[^>]*>/,
     );
     expect(renderedMarkup).toContain(testCase.planButton);
     expect(renderedMarkup).toContain('id="keg-plan-disabled-note">' + testCase.disabledNote + "</p>");

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createProcessingProductionPlan } from "../planning-tool-handoff";
+import { createProductionPlanIncomingHref } from "../production/production-plan-handoff";
 import type { PublicLocale } from "../../i18n/public-locale";
 import { PlantingSelect } from "../planting-select";
 import {
@@ -219,7 +221,7 @@ const kegRankingCopy: Readonly<Record<PublicLocale, KegRankingCopy>> = {
     copyFailure: (reason) => `Could not copy the result. ${reason}`,
     copyFieldLabel: "Copy result manually",
     productionPlanButton: "Add to production plan",
-    productionPlanDisabled: "Production-plan transfer is not available yet.",
+    productionPlanDisabled: "Select an ingredient and enter your stock, Kegs and deadline to prepare a plan.",
     selectedIngredientLabel: "Selected ingredient",
     rowButtonLabel: (rank, ingredientName, productName) => `Select rank ${rank}: ${ingredientName} processed as ${productName}`,
     rankingCount: (count) => `${count} Keg-compatible ingredients`,
@@ -301,7 +303,7 @@ const kegRankingCopy: Readonly<Record<PublicLocale, KegRankingCopy>> = {
     copyFailure: (reason) => `无法复制结果。${reason}`,
     copyFieldLabel: "手动复制结果",
     productionPlanButton: "转入生产计划",
-    productionPlanDisabled: "生产计划转入功能尚未开放。",
+    productionPlanDisabled: "选择原料并填写库存、Keg 数量和期限，即可转入确认。",
     selectedIngredientLabel: "选中的原料",
     rowButtonLabel: (rank, ingredientName, productName) => `选择第 ${rank} 名：${ingredientName} 加工为 ${productName}`,
     rankingCount: (count) => `${count} 种可用 Keg 加工原料`,
@@ -360,6 +362,24 @@ export function KegIngredientRankingTool({ locale }: KegIngredientRankingToolPro
           kegCount: kegCountField.value,
           deadlineDays: Number(draft.deadlineDays) as 7 | 14 | 28,
         });
+
+  function transferCurrentInventory() {
+    if (selectedDisplayRow === null || quantityField.value === null || kegCountField.value === null) {
+      throw new Error(`Cannot transfer Keg inventory: ingredient=${JSON.stringify(draft.selectedIngredientId)}, quantity=${JSON.stringify(draft.quantity)}, kegCount=${JSON.stringify(draft.kegCount)}.`);
+    }
+    const input = createProcessingProductionPlan({
+      ingredientId: selectedDisplayRow.rankingRow.ingredient.id,
+      quantity: quantityField.value,
+      quality: draft.quality,
+      profession: draft.profession,
+      hasBearsKnowledge: draft.hasBearsKnowledge,
+      coconutSource: draft.coconutSource,
+      machineCounts: { keg: kegCountField.value, jar: 0, dehydrator: 0 },
+      deadlineDays: Number(draft.deadlineDays),
+      mode: "capacity",
+    });
+    window.location.assign(createProductionPlanIncomingHref(locale, input));
+  }
 
   useEffect(() => {
     try {
@@ -734,7 +754,7 @@ export function KegIngredientRankingTool({ locale }: KegIngredientRankingToolPro
       </section>
 
       <div className={styles.actions}>
-        <button aria-describedby="keg-plan-disabled-note" className={styles.action} disabled type="button">
+        <button aria-describedby="keg-plan-disabled-note" className={styles.action} disabled={inventoryEstimate === null} onClick={transferCurrentInventory} type="button">
           {copy.productionPlanButton}
         </button>
         <button className={styles.action} disabled={displayRows.length === 0} onClick={copyCurrentResults} type="button">

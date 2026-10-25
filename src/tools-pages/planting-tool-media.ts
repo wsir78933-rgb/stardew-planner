@@ -305,6 +305,32 @@ const plantingToolGuideMediaByLocale: Readonly<
   },
 };
 
+const PLANTING_TOOL_CASE_IMAGE_WIDTH = 556;
+const PLANTING_TOOL_CASE_IMAGE_HEIGHT = 417;
+
+export function getPlantingToolGuideCaseImage(
+  locale: PublicLocale,
+  tool: PlantingToolId,
+): PlantingToolGuideImage {
+  if (!publicLocales.includes(locale)) {
+    throw new Error(
+      `Unsupported planting tool case image locale. Received: ${JSON.stringify(locale)}.`,
+    );
+  }
+
+  if (tool !== "crop-profit" && tool !== "crop-growth") {
+    throw new Error(
+      `Unsupported planting tool case image. Received: ${JSON.stringify(tool)}.`,
+    );
+  }
+
+  return {
+    src: `/images/planting-tool-guides/${tool}/${locale}/case.png`,
+    width: PLANTING_TOOL_CASE_IMAGE_WIDTH,
+    height: PLANTING_TOOL_CASE_IMAGE_HEIGHT,
+  };
+}
+
 export function getPlantingToolGuideMedia(
   locale: PublicLocale,
   tool: PlantingToolId,

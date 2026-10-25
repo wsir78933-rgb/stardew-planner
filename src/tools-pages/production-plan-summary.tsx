@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ToolsPageCopy } from "../i18n/tools-page-copy";
+import { isProductionPlanStateValidationError, parseProductionPlanState, productionPlanStateStorageKey } from "../production-tools/production-plan-state";
 import { isBrowserStorageFailure, readBrowserToolStorage } from "./browser-tool-storage";
 import {
   parseProductionPlanStorage,
@@ -19,6 +20,13 @@ export function ProductionPlanSummary({ copy }: ProductionPlanSummaryProperties)
 
   useEffect(() => {
     try {
+      const currentStateText = readBrowserToolStorage(productionPlanStateStorageKey);
+      if (currentStateText !== null) {
+        const state = parseProductionPlanState(currentStateText);
+        setSummary(`${state.current.input.inventory.length} ${copy.planConfirm.lineCount}`);
+        setFailed(false);
+        return;
+      }
       const storageText = readBrowserToolStorage(productionPlanStorageKey);
       if (storageText === null) {
         setSummary(copy.home.noCurrentPlan);
@@ -36,7 +44,7 @@ export function ProductionPlanSummary({ copy }: ProductionPlanSummaryProperties)
         return;
       }
 
-      if (error instanceof Error && error.message.includes("Received:")) {
+      if (isProductionPlanStateValidationError(error) || (error instanceof Error && error.message.includes("Received:"))) {
         setSummary(error.message);
         setFailed(true);
         return;

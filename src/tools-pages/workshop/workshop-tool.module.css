@@ -1,0 +1,601 @@
+.tool {
+  color: #1c211b;
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.heading {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.heading h2 {
+  font-size: clamp(1.6rem, 3vw, 2.15rem);
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.heading p,
+.note,
+.status,
+.help,
+.resultText {
+  color: #52604e;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.workspace {
+  align-items: start;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 2fr);
+  min-width: 0;
+}
+
+.toolNavigation {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.toolTab {
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgb(36 42 34 / 72%);
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  display: flex;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.3;
+  min-height: 2.75rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 0.55rem 0.7rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.toolTab[aria-current="page"] {
+  background: #f1f7e7;
+  box-shadow: inset 0 -2px #628b1b;
+}
+
+.panel {
+  align-content: start;
+  background: #fff;
+  border: 1px solid rgb(36 42 34 / 72%);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.panel h3 {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.settingsGrid,
+.resultGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.settingsGrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.scenarioGroup {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.scenarioGroup h4 {
+  font-size: 1rem;
+  line-height: 1.3;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.scenarioChoices {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.scenarioButton {
+  background: #fff;
+  border: 1px solid rgb(36 42 34 / 58%);
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.35;
+  min-height: 2.75rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 0.55rem 0.7rem;
+  text-align: center;
+}
+
+.scenarioButton[aria-pressed="true"] {
+  background: #f1f7e7;
+  border-color: #628b1b;
+  box-shadow: inset 0 -2px #628b1b;
+}
+
+.resultGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.primaryResultGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.primaryResultGrid .resultValue {
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+}
+
+.materialsLayout {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.materialsGoalRow {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr);
+  min-width: 0;
+}
+
+.goalFields {
+  align-content: start;
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.goalInputGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.inventoryGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.buildResultGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.resinInputGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.resetConfirmation {
+  background: #f1f7e7;
+  border: 1px solid rgb(36 42 34 / 30%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0.8rem;
+}
+
+.resetConfirmation p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.field {
+  align-content: start;
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.field label {
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.field input,
+.field [role="combobox"] {
+  background: #fff;
+  border: 1px solid rgb(36 42 34 / 45%);
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  font: inherit;
+  min-height: 2.75rem;
+  min-width: 0;
+  padding: 0.55rem 0.7rem;
+  width: 100%;
+}
+
+.field [role="combobox"] {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.field input:focus-visible,
+.field [role="combobox"]:focus-visible,
+.scenarioButton:focus-visible,
+.detailsSummary:focus-visible,
+.action:focus-visible,
+.secondaryAction:focus-visible,
+.link:focus-visible,
+.toolTab:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.field input[aria-invalid="true"] {
+  border-color: #b13a28;
+}
+
+.fieldError,
+.alert {
+  color: #9e2f21;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.fieldError {
+  font-size: 0.82rem;
+}
+
+.note {
+  font-size: 0.84rem;
+}
+
+.status {
+  font-size: 0.84rem;
+}
+
+.status[role="alert"] {
+  color: #9e2f21;
+}
+
+.resultCard {
+  background: #f1f7e7;
+  border: 1px solid rgb(36 42 34 / 30%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.8rem;
+}
+
+.shedSpace {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.detailsSummary {
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1.4;
+  min-height: 2.75rem;
+  overflow-wrap: anywhere;
+  padding-block: 0.35rem;
+}
+
+.materialShortageSummary {
+  background: #f1f7e7;
+  border: 1px solid rgb(36 42 34 / 30%);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.materialShortageSummary h3 {
+  font-size: 1.05rem;
+  line-height: 1.3;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.materialShortageSummary ul {
+  display: grid;
+  gap: 0.35rem 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding-inline-start: 1.2rem;
+}
+
+.materialShortageSummary li {
+  overflow-wrap: anywhere;
+}
+
+.shedSpaceGrid {
+  align-items: start;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.shedSpaceMetric {
+  color: #52604e;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.metricTable {
+  border-collapse: collapse;
+  min-width: 0;
+  width: 100%;
+}
+
+.metricTable th,
+.metricTable td {
+  border-bottom: 1px solid rgb(36 42 34 / 20%);
+  padding: 0.55rem 0.45rem;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.metricTable th {
+  font-size: 0.85rem;
+  font-weight: 700;
+  width: 66%;
+}
+
+.resultLabel {
+  color: #52604e;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.resultValue {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.resultDetail {
+  color: #52604e;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.action,
+.secondaryAction,
+.link {
+  align-items: center;
+  border: 1px solid #1c211b;
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.3;
+  min-height: 2.75rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 0.55rem 0.8rem;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+}
+
+.action {
+  background: #c9fb45;
+  color: #1c211b;
+}
+
+.secondaryAction,
+.link {
+  background: #fff;
+  color: #1c211b;
+}
+
+.action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.copyFallback {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.copyFallback label {
+  font-weight: 700;
+}
+
+.copyFallback textarea {
+  box-sizing: border-box;
+  font: inherit;
+  max-width: 100%;
+  min-height: 8rem;
+  min-width: 0;
+  padding: 0.55rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.tableScroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.desktopMaterialsTable {
+  display: block;
+}
+
+.mobileMaterialTable {
+  display: none;
+}
+
+.materialTable {
+  border-collapse: collapse;
+  min-width: 38rem;
+  width: 100%;
+}
+
+.materialTable th,
+.materialTable td {
+  border-bottom: 1px solid rgb(36 42 34 / 20%);
+  padding: 0.55rem 0.45rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.materialTable th {
+  font-size: 0.85rem;
+}
+
+.materialTable td {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 56rem) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .inventoryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resinInputGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 38rem) {
+  .settingsGrid,
+  .resultGrid,
+  .primaryResultGrid,
+  .buildResultGrid,
+  .resinInputGrid,
+  .shedSpaceGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goalInputGrid,
+  .inventoryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .materialsGoalRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .materialShortageSummary ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel {
+    padding: 0.85rem;
+  }
+
+  .materialTable {
+    min-width: 35rem;
+  }
+
+  .desktopMaterialsTable {
+    display: none;
+  }
+
+  .mobileMaterialTable {
+    border-collapse: collapse;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .mobileMaterialTable th,
+  .mobileMaterialTable td {
+    border-bottom: 1px solid rgb(36 42 34 / 20%);
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+    padding: 0.5rem 0.35rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .mobileMaterialTable th:first-child {
+    width: 30%;
+  }
+
+  .mobileMaterialTable th:nth-child(2) {
+    width: 42%;
+  }
+
+  .mobileMaterialTable th:nth-child(3) {
+    width: 28%;
+  }
+}

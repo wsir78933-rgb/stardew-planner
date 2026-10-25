@@ -21,7 +21,7 @@ import {
 } from "../../src/i18n/public-route-registry";
 
 it("maps public identities, including contact-only noindex routes, to Chinese paths", () => {
-  expect(canonicalPublicPaths).toHaveLength(62);
+  expect(canonicalPublicPaths).toHaveLength(66);
   expect(canonicalPublicPaths).toContain("/privacy");
   expect(canonicalPublicPaths).toContain("/terms");
   expect(canonicalPublicPaths).toContain("/contact");
@@ -334,8 +334,8 @@ it("maps public identities, including contact-only noindex routes, to Chinese pa
   expect(getLocalizedPublicPath("zh-CN", bedroomDesignCanonicalPath)).toBe(
     `/zh${bedroomDesignCanonicalPath}`,
   );
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(124);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(122);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(132);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(130);
   const indexablePathnames = getLocalizedIndexablePublicRouteEntries().map(
     ({ pathname }) => pathname,
   );

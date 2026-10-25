@@ -103,7 +103,8 @@ test("renders Stardew Valley tools and the desktop planting flyout for en", () =
   expect(plantingFlyoutMarkup).toMatch(/<a\b[^>]*>\s*Growth calendar\s*<\/a>/);
   expect(plantingFlyoutMarkup).not.toContain('href="/tools/crop-profit?tool=growth"');
   expect(plantingFlyoutMarkup.match(/<a\b/g)?.length).toBe(2);
-  expect(markup).toContain('aria-disabled="true"');
+  expect(markup).toContain('href="/tools/today-processing-list"');
+  expect(markup).toContain('href="/tools/materials-and-resin"');
   for (const [toolPath, toolLabel] of [
     ["basic-processing-profit", "Basic processing profit"],
     ["machine-comparison", "Three-machine comparison"],
@@ -122,6 +123,20 @@ test("renders Stardew Valley tools and the desktop planting flyout for en", () =
   expect(blogIndex).toBeLessThan(toolsIndex);
   expect(toolsIndex).toBeLessThan(languageIndex);
   expect(languageIndex).toBeLessThan(plannerIndex);
+});
+
+test("connects the tools trigger and every category to a unique controlled panel", () => {
+  for (const locale of ["en", "zh-CN"] as const) {
+    const markup = renderHomepageDock(locale);
+    const categoryButtons = markup.match(/<button\b[^>]*data-tools-category="[^"]+"[^>]*>/g) ?? [];
+    expect(categoryButtons).toHaveLength(4);
+
+    for (const control of [readToolsNavigationTriggerMarkup(markup), ...categoryButtons]) {
+      const panelId = control.match(/aria-controls="([^"]+)"/)?.[1];
+      expect(panelId).toBeDefined();
+      expect(markup.split(` id="${panelId}"`)).toHaveLength(2);
+    }
+  }
 });
 
 test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => {
@@ -288,12 +303,12 @@ test("opens planting from the desktop hover path and rejects unknown ids", () =>
   ).toBe(true);
   expect(
     readToolsNavigationCategory(model, "production").tools.every(
-      (tool) => tool.href === null,
+      (tool) => tool.href === `/tools/${tool.id}`,
     ),
   ).toBe(true);
   expect(
     readToolsNavigationCategory(model, "workshop").tools.every(
-      (tool) => tool.href === null,
+      (tool) => tool.href === `/tools/${tool.id}`,
     ),
   ).toBe(true);
   expect(backToCategories.showsMobileToolList).toBe(false);

@@ -1,0 +1,399 @@
+.page {
+  min-width: 0;
+  width: 100%;
+}
+
+.guide {
+  --guide-border: rgb(36 42 34 / 24%);
+  border-top: 1px solid var(--guide-border);
+  color: var(--foreground, #1c211b);
+  display: grid;
+  gap: 6rem;
+  min-width: 0;
+  padding-top: 4.5rem;
+  width: 100%;
+}
+
+.calculator {
+  margin-bottom: 48px;
+  min-width: 0;
+  scroll-margin-top: 1rem;
+}
+
+.calculator:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 4px;
+}
+
+.hero,
+.caseStudy,
+.featureSection,
+.stepsBlock,
+.comparison,
+.caseRow,
+.caseCopy,
+.introCard,
+.finalCallToAction {
+  min-width: 0;
+}
+
+.hero,
+.caseStudy {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.sectionHeading,
+.centeredBlock,
+.ctaCopy {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.centeredBlock,
+.ctaCopy {
+  justify-items: center;
+  text-align: center;
+}
+
+.narrowBlock,
+.ctaCopy {
+  margin-inline: auto;
+  max-width: 45.35rem;
+}
+
+.guide .sectionHeading h2,
+.guide .centeredBlock h2,
+.guide .finalCallToAction h2 {
+  color: var(--foreground, #1c211b);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.eyebrow {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.lede,
+.caseDescription,
+.centeredDescription,
+.comparisonDescription,
+.stepsDescription,
+.ctaDescription,
+.resultList,
+.cardBody {
+  font-size: 0.9375rem;
+  line-height: 1.48;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.centeredDescription,
+.comparisonDescription,
+.stepsDescription,
+.cardBody,
+.note {
+  color: var(--muted-foreground, #5d6659);
+}
+
+.note {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.comparisonDescription {
+  margin-inline: auto;
+  max-width: 35rem;
+}
+
+.stepsDescription {
+  margin-inline: auto;
+  max-width: 45.35rem;
+  text-align: center;
+}
+
+.stepsBlock {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.caseRows {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 1.6rem;
+  min-width: 0;
+}
+
+.caseRow {
+  align-items: center;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.caseImage {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  object-fit: contain;
+  width: min(100%, 512px);
+}
+
+.caseCopy {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.resultTitle {
+  color: var(--foreground, #1c211b);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.28;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.resultList {
+  display: grid;
+  gap: 0.35rem;
+  list-style: none;
+  padding: 0;
+}
+
+.caseFeatureTitle {
+  color: var(--foreground, #1c211b);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.caseFeatureBody {
+  font-size: 0.9375rem;
+  line-height: 1.48;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.disclaimer {
+  color: #666666;
+  font-size: 11px;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.featureGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 2rem 0 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.introCard {
+  align-content: start;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--guide-border);
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.5rem;
+}
+
+.introCard h3 {
+  color: var(--foreground, #1c211b);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.28;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cardBody {
+  font-size: 0.90625rem;
+}
+
+.tableScroller {
+  margin-inline: auto;
+  margin-top: 2.8125rem;
+  max-width: 64rem;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  width: 100%;
+}
+
+.tableScroller:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+.comparisonTable {
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.32;
+  width: 100%;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  border-bottom: 1px solid var(--guide-border);
+  overflow-wrap: anywhere;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparisonTable thead th {
+  background: var(--card, #ffffff);
+  font-weight: 700;
+}
+
+.comparisonTable tbody th[scope="row"] {
+  font-weight: 700;
+}
+
+.comparisonTable tbody tr:last-child th,
+.comparisonTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.sources {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  margin: 0.75rem auto 0;
+  max-width: 64rem;
+  overflow-wrap: anywhere;
+  width: 100%;
+}
+
+.sources a {
+  color: #3f6414;
+  font-weight: 700;
+}
+
+.faqSlot {
+  min-width: 0;
+}
+
+.faq {
+  color: var(--foreground, #1c211b);
+  width: 100%;
+}
+
+.guide .faq h2 {
+  line-height: 1.25;
+}
+
+.finalCallToAction {
+  align-items: center;
+  display: grid;
+  gap: 1.75rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.ctaDescription {
+  color: var(--muted-foreground, #5d6659);
+}
+
+.guide a.ctaAction {
+  align-items: center;
+  background: #c9fb45;
+  border: 1px solid #1c211b;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: #171a16;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.32;
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding-inline: 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+}
+
+.guide a.ctaAction:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+.mobileText {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .caseRow .caseImage,
+  .caseRow .caseCopy {
+    order: 0;
+  }
+
+  .comparisonTable {
+    width: calc(100% * 1024 / 499);
+  }
+
+  .desktopText {
+    display: none;
+  }
+
+  .mobileText {
+    display: block;
+  }
+}
+
+@media (min-width: 701px) {
+  .caseRow {
+    column-gap: 5.25rem;
+    grid-template-columns: minmax(0, 512px) minmax(0, 1fr);
+  }
+
+  .caseRow[data-case-image="end"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 512px);
+  }
+
+  .caseRow[data-case-image="end"] .caseImage {
+    order: 2;
+  }
+
+  .featureGrid {
+    gap: 1.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calculator {
+    scroll-behavior: auto;
+  }
+
+  .faq svg,
+  .faq p,
+  .faq button {
+    animation: none;
+    transition: none;
+  }
+
+  .guide a.ctaAction {
+    transition: none;
+  }
+}

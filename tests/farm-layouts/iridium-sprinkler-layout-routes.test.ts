@@ -44,7 +44,7 @@ it("registers paired static routes, canonical metadata, and sitemap entries", ()
   );
   const sitemapPathnames = sitemap().map(({ url }) => new URL(url).pathname);
 
-  expect(canonicalPublicPaths).toHaveLength(62);
+  expect(canonicalPublicPaths).toHaveLength(66);
   expect(canonicalPublicPaths).toContain(iridiumSprinklerLayoutCanonicalPath);
   expect(routeEntries).toEqual([
     {
@@ -58,7 +58,7 @@ it("registers paired static routes, canonical metadata, and sitemap entries", ()
       pathname: `/zh${iridiumSprinklerLayoutCanonicalPath}`,
     },
   ]);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(122);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(130);
   expect(sitemapPathnames).toContain(iridiumSprinklerLayoutCanonicalPath);
   expect(sitemapPathnames).toContain(`/zh${iridiumSprinklerLayoutCanonicalPath}`);
   expect(englishIridiumSprinklerDynamic).toBe("force-static");

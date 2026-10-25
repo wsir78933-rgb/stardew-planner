@@ -867,6 +867,11 @@ function PlanConfirmDialog({
         </p>
       )}
       {planMessage === null ? null : <p role="status">{planMessage}</p>}
+      {storedPlan === null ? null : (
+        <a className="public-secondary-cta" href={`${locale === "zh-CN" ? "/zh" : ""}/tools/today-processing-list#crop-profit-review`}>
+          {locale === "zh-CN" ? "核对收获并安排生产" : "Review harvests and schedule production"}
+        </a>
+      )}
       <div className={styles.actionRow}>
         <button className="public-primary-cta" disabled={blocked} onClick={onAppend} type="button">
           {copy.planConfirm.append}

@@ -41,6 +41,10 @@
   display: none;
 }
 
+.categoryItem {
+  position: relative;
+}
+
 .toolPanel {
   display: none;
   left: calc(100% - 1px);

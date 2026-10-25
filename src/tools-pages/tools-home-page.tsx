@@ -10,6 +10,7 @@ import {
   PROCESSING_TOOL_IDS,
 } from "./processing/processing-tool-definition";
 import { ProductionPlanSummary } from "./production-plan-summary";
+import { getPlanningToolHref, type PlanningToolId } from "./planning-tool-definition";
 import styles from "./tools-page.module.css";
 
 type ToolsHomePageProperties = Readonly<{
@@ -43,12 +44,12 @@ export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
           <a className="public-secondary-cta" href={profitHref}>
             {copy.home.resumeProfit}
           </a>
-          <button className={`public-secondary-cta ${styles.action}`} disabled type="button">
+          <a className="public-secondary-cta" href={getPlanningToolHref(locale, "today-processing-list")}>
             {copy.home.resumeProduction}
-          </button>
-          <button className={`public-secondary-cta ${styles.action}`} disabled type="button">
+          </a>
+          <a className="public-secondary-cta" href={`${getPlanningToolHref(locale, "today-processing-list")}#import-save`}>
             {copy.home.importSave}
-          </button>
+          </a>
         </div>
       </section>
       <div className={styles.categoryGrid}>
@@ -79,8 +80,8 @@ export function ToolsHomePage({ locale }: ToolsHomePageProperties) {
             </li>
           ))}
         </CategoryCard>
-        <UnavailableCategoryCard category={copy.categories.production} />
-        <UnavailableCategoryCard category={copy.categories.workshop} />
+        <PlanningCategoryCard locale={locale} category={copy.categories.production} toolIds={["today-processing-list", "production-schedule"]} />
+        <PlanningCategoryCard locale={locale} category={copy.categories.workshop} toolIds={["keg-count", "materials-and-resin"]} />
       </div>
       <p className="public-note">{copy.home.scopeNote}</p>
       <p className="public-note">{copy.home.versionLabel}</p>
@@ -120,26 +121,30 @@ function readPlantingToolName(toolNames: readonly string[], index: 0 | 1): strin
   return toolName;
 }
 
-function UnavailableCategoryCard({
+function PlanningCategoryCard({
   category,
+  locale,
+  toolIds,
 }: Readonly<{
   category: ToolsPageCopy["categories"]["production"];
+  locale: PublicLocale;
+  toolIds: readonly [PlanningToolId, PlanningToolId];
 }>) {
   return (
     <CategoryCard
       description={category.description}
       enter={
-        <button className={`public-primary-cta ${styles.action}`} disabled type="button">
+        <a className="public-primary-cta" href={getPlanningToolHref(locale, toolIds[0])}>
           {category.enter}
-        </button>
+        </a>
       }
       title={category.title}
     >
-      {category.tools.map((toolName) => (
+      {category.tools.map((toolName, index) => (
         <li key={toolName}>
-          <button className={styles.action} disabled type="button">
+          <a href={getPlanningToolHref(locale, toolIds[index])}>
             {toolName}
-          </button>
+          </a>
         </li>
       ))}
     </CategoryCard>

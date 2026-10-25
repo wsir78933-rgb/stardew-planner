@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { PublicLocale } from "../../i18n/public-locale";
 import { copyToolText } from "../copy-tool-text";
+import { createProcessingProductionPlan } from "../planning-tool-handoff";
+import { createProductionPlanIncomingHref } from "../production/production-plan-handoff";
 import {
   isBrowserStorageFailure,
   removeBrowserToolStorage,
@@ -259,7 +261,7 @@ const processingComparisonCopy: Readonly<Record<PublicLocale, ProcessingComparis
     machineDayExplanation:
       "Added value per machine day divides one recipe batch's added value by one active machine's cycle mornings; idle days in the selected window are excluded.",
     planButton: "Send to production plan",
-    planUnavailable: "Production planning is not available yet.",
+    planUnavailable: "Review inventory, machine counts and the deadline before adding to your plan.",
     copyButton: "Copy results and assumptions",
     copied: "Results and assumptions copied.",
     copyFailed: "Copy failed. Select and copy the result text manually.",
@@ -393,7 +395,7 @@ const processingComparisonCopy: Readonly<Record<PublicLocale, ProcessingComparis
     machineDayExplanation:
       "每机器加工日增值 = 一个配方批次的增值 ÷ 单台机器完成该周期所经历的早晨次数；不计期限内的空闲日。",
     planButton: "转入生产计划",
-    planUnavailable: "生产排程暂未开放。",
+    planUnavailable: "转入前核对库存、机器数量和截止日，再选择追加或新建计划。",
     copyButton: "复制结果与假设",
     copied: "已复制结果与假设。",
     copyFailed: "复制失败，请手动选择并复制结果文本。",
@@ -1113,6 +1115,11 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
   const currentToolTitle = readToolTitle(toolId, locale);
   const rawValue = routes?.[0]?.rawValue ?? null;
 
+  function transferCurrentInventory() {
+    const input = createProcessingProductionPlan(form, activeMachineFilter);
+    window.location.assign(createProductionPlanIncomingHref(locale, input));
+  }
+
   function commitNumericValue(field: ProcessingComparisonNumericField, rawValue: string) {
     const label = field === "quantity" ? copy.inputLabels.quantity : copy.inputLabels.machineCounts[field];
     setFieldDrafts((currentDrafts) => ({ ...currentDrafts, [field]: rawValue }));
@@ -1451,7 +1458,7 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
             </>
           )}
           <div className={styles.actionArea}>
-            <button aria-describedby="processing-comparison-plan-note" className={styles.disabledAction} disabled type="button">
+            <button aria-describedby="processing-comparison-plan-note" className={styles.actionButton} disabled={routes === null} onClick={transferCurrentInventory} type="button">
               {copy.planButton}
             </button>
             <button className={styles.actionButton} disabled={routes === null} onClick={() => void copyCurrentResults()} type="button">
@@ -1480,7 +1487,7 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
         </section>
       </div>
       <div className={styles.mobileActions}>
-        <button aria-describedby="processing-comparison-mobile-plan-note" className={styles.disabledAction} disabled type="button">
+        <button aria-describedby="processing-comparison-mobile-plan-note" className={styles.actionButton} disabled={routes === null} onClick={transferCurrentInventory} type="button">
           {copy.planButton}
         </button>
         <button className={styles.actionButton} disabled={routes === null} onClick={() => void copyCurrentResults()} type="button">

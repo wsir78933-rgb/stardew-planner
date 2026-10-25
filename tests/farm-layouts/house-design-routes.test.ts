@@ -92,10 +92,10 @@ it("registers House Design in both locales, Buildings & Interiors, and the sitem
   const houseDesignIndex = canonicalPublicPaths.indexOf(houseDesignCanonicalPath);
 
   expect(houseDesignCanonicalPath).toBe("/stardew-valley-house-design");
-  expect(canonicalPublicPaths).toHaveLength(62);
+  expect(canonicalPublicPaths).toHaveLength(66);
   expect(houseDesignIndex).toBe(canonicalPublicPaths.length - 2);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(124);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(122);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(132);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(130);
   expect(localizedEntries).toEqual([
     {
       locale: "en",
@@ -110,7 +110,7 @@ it("registers House Design in both locales, Buildings & Interiors, and the sitem
   ]);
   expect(sitemapPathnames).toContain(houseDesignCanonicalPath);
   expect(sitemapPathnames).toContain(`/zh${houseDesignCanonicalPath}`);
-  expect(sitemapPathnames).toHaveLength(124);
+  expect(sitemapPathnames).toHaveLength(132);
   expect(englishHouseDesignDynamic).toBe("force-static");
   expect(chineseHouseDesignDynamic).toBe("force-static");
 
