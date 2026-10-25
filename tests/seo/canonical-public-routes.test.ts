@@ -35,7 +35,7 @@ const expectedBlogCanonicalPaths = [
 ] as const;
 
 it("derives the remaining content and legal paths without planner query URLs", () => {
-  expect(canonicalPublicPaths).toHaveLength(58);
+  expect(canonicalPublicPaths).toHaveLength(62);
   expect(canonicalPublicPaths).toEqual(
     expect.arrayContaining([...expectedBlogCanonicalPaths]),
   );

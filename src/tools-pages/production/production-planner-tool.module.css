@@ -1,0 +1,939 @@
+.planner {
+  color: #1c211b;
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.heading {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.description,
+.note,
+.status,
+.error,
+.emptyState,
+.taskSummary {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.description,
+.note,
+.taskSummary {
+  color: #52604e;
+}
+
+.viewNavigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.viewLink,
+.viewLinkCurrent {
+  align-items: center;
+  border: 1px solid rgb(36 42 34 / 52%);
+  border-radius: 0.4rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.85rem;
+  text-decoration: none;
+}
+
+.viewLinkCurrent {
+  background: #c9fb45;
+  border-color: #1c211b;
+  font-weight: 700;
+}
+
+.workspace {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.sharedControls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.sharedControls > .status,
+.sharedControls > .error {
+  flex: 1 1 16rem;
+}
+
+.moreActions {
+  min-width: 0;
+}
+
+.moreActionsSummary {
+  align-items: center;
+  border: 1px solid rgb(36 42 34 / 42%);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.8rem;
+}
+
+.moreActionsSummary:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.moreActionsPanel {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  max-width: min(28rem, calc(100vw - 2rem));
+  padding: 0.75rem;
+}
+
+.moreActionsPanel > * {
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+.actionToolbar {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+.actionToolbar > p {
+  margin: 0;
+}
+
+.settingsGrid {
+  align-items: start;
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: minmax(10rem, 1.1fr) minmax(10rem, 1.1fr) repeat(3, minmax(7rem, 0.9fr));
+  min-width: 0;
+  padding: 0.9rem;
+}
+
+.planSetup {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  min-width: 0;
+  padding: 0.35rem 0.85rem 0.85rem;
+}
+
+.planSummary,
+.importDetails {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  min-width: 0;
+  padding: 0.35rem 0.85rem 0.85rem;
+}
+
+.summaryContent {
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+  padding-top: 0.5rem;
+}
+
+.scheduleValueSummary {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.planSetupSummary,
+.scheduleDateSummary {
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1.4;
+  min-height: 2.75rem;
+  overflow-wrap: anywhere;
+  padding: 0.65rem 0.15rem;
+}
+
+.scheduleDateSummary > span:last-child {
+  color: #52604e;
+  float: right;
+  font-size: 0.875rem;
+  font-weight: 400;
+  margin-left: 0.75rem;
+}
+
+.scheduleDateSummary::after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.planSetupSummary:focus-visible,
+.scheduleDateSummary:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.planSetupContent {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.machineSettings {
+  border: 0;
+  display: grid;
+  grid-column: 3 / -1;
+  gap: 0.35rem;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.machineSettings legend {
+  float: left;
+  padding: 0;
+  width: 100%;
+}
+
+.inventorySection {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.9rem;
+}
+
+.desktopInventory {
+  display: block;
+  min-width: 0;
+}
+
+.mobileInventory {
+  display: none;
+}
+
+.inventoryTable {
+  min-width: 64rem;
+}
+
+.inventoryTable .field {
+  min-width: 6rem;
+}
+
+.tableNumericField {
+  min-width: 5.3rem;
+}
+
+.inventoryTable .tableNumericField label {
+  font-size: 0.76rem;
+}
+
+.inventoryTable tbody label:not(.checkboxLabel) {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.savePreview {
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.saveSummary {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.saveSummary p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.saveItemName {
+  margin-bottom: 0.4rem;
+}
+
+.filePicker {
+  align-items: center;
+  background: #c9fb45;
+  border: 1px solid #1c211b;
+  border-radius: 0.4rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 2.75rem;
+  max-width: 100%;
+  padding: 0.55rem 0.8rem;
+  position: relative;
+}
+
+.filePickerGroup {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.filePicker:focus-within {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.filePicker input {
+  cursor: pointer;
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.todayTaskColumns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.todayTaskColumnsSingle {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.taskEmptyMessages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  min-width: 0;
+}
+
+.scheduleSection {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.scheduleDateGroups {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.scheduleDateDetails {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  min-width: 0;
+}
+
+.scheduleDateSummary {
+  padding: 0.25rem 0.75rem;
+}
+
+.scheduleDateDetails[open] > .scheduleDateSummary {
+  border-bottom: 1px solid rgb(36 42 34 / 20%);
+}
+
+.scheduleDateDetails > .tableScroller,
+.scheduleDateDetails > .mobileScheduleCards {
+  margin: 0.75rem;
+}
+
+.scheduleMetrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scheduleActions {
+  margin-top: 0.25rem;
+}
+
+.controls,
+.results {
+  align-content: start;
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 65%);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.fieldGrid,
+.metricGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.machineGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.machineSettings .machineGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+}
+
+.field label,
+.inventoryLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.field input,
+.numericInput,
+.textArea {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 42%);
+  border-radius: 0.4rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  font: inherit;
+  min-height: 2.75rem;
+  min-width: 0;
+  padding: 0.6rem 0.7rem;
+  width: 100%;
+}
+
+.field input[aria-invalid="true"],
+.numericInput[aria-invalid="true"] {
+  border-color: #a52e21;
+}
+
+.field input:focus-visible,
+.numericInput:focus-visible,
+.textArea:focus-visible,
+.button:focus-visible,
+.buttonSecondary:focus-visible,
+.taskCheckbox:focus-visible,
+.dayButton:focus-visible,
+.viewLink:focus-visible,
+.viewLinkCurrent:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.fieldError,
+.error {
+  color: #a52e21;
+}
+
+.fieldError {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.inventoryList,
+.taskList,
+.dayList,
+.plainList {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.desktopInventory + .inventoryList.mobileInventory {
+  display: none;
+}
+
+.desktopScheduleTable {
+  min-width: 0;
+}
+
+.mobileScheduleCards {
+  display: none;
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.inventoryRow,
+.importPreview,
+.taskCard,
+.scheduleCard,
+.dayCard,
+.statusCard,
+.metricCard {
+  background: #ffffff;
+  border: 1px solid rgb(36 42 34 / 24%);
+  border-radius: 0.45rem;
+  min-width: 0;
+  padding: 0.8rem;
+}
+
+.inventoryRow {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.scheduleCard {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.scheduleCardDetails {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.scheduleCardDetails > div {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: minmax(6rem, 0.75fr) minmax(0, 1fr);
+  min-width: 0;
+}
+
+.scheduleCardDetails dt {
+  color: #52604e;
+  font-size: 0.875rem;
+}
+
+.scheduleCardDetails dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.inventoryRowHeading,
+.sectionHeading,
+.taskHeading,
+.dayHeading,
+.buttonRow,
+.dayNavigation,
+.storageLine {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.inventoryRowTitle,
+.taskTitle,
+.dayTitle {
+  font-size: 0.98rem;
+  line-height: 1.3;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.inventoryFields {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.button,
+.buttonSecondary,
+.dayButton {
+  align-items: center;
+  background: #c9fb45;
+  border: 1px solid #1c211b;
+  border-radius: 0.4rem;
+  box-sizing: border-box;
+  color: #1c211b;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.3;
+  min-height: 2.75rem;
+  max-width: 100%;
+  padding: 0.55rem 0.8rem;
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.buttonSecondary,
+.dayButton {
+  background: #ffffff;
+}
+
+.button:disabled,
+.buttonSecondary:disabled,
+.dayButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.removeButton {
+  color: #8c281d;
+  font-size: 0.875rem;
+  min-height: 2.5rem;
+}
+
+.machineField {
+  min-width: 0;
+}
+
+.note {
+  font-size: 0.875rem;
+}
+
+.status {
+  color: #425d20;
+}
+
+.error {
+  overflow-wrap: anywhere;
+}
+
+.statusCard {
+  background: #f1f7e7;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.metricGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metricGrid.scheduleMetrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metricCard {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.metricLabel {
+  color: #52604e;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.metricValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.tableScroller {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: #a2aa9a #f1f7e7;
+}
+
+.table {
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  min-width: 40rem;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid rgb(36 42 34 / 20%);
+  padding: 0.65rem 0.55rem;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.table th {
+  background: #f1f7e7;
+  font-weight: 700;
+}
+
+.dayNavigation {
+  justify-content: flex-start;
+}
+
+.dayStepper,
+.mobileDayPicker {
+  display: none;
+}
+
+.planSummaryHighlights > span {
+  display: block;
+}
+
+.summaryHighlights {
+  color: #52604e;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.45;
+  margin-top: 0.35rem;
+  overflow-wrap: anywhere;
+}
+
+.dayButtonCurrent {
+  background: #c9fb45;
+}
+
+.taskCard {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.taskCheckboxLabel {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.6rem;
+  line-height: 1.45;
+  min-width: 0;
+}
+
+.taskCheckbox {
+  accent-color: #628b1b;
+  flex: none;
+  height: 1.15rem;
+  margin: 0.15rem 0 0;
+  width: 1.15rem;
+}
+
+.taskCheckboxLabel:has(input:focus-visible) {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.taskDetail {
+  color: #52604e;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.importPreview {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.textArea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.fileInput {
+  display: block;
+  max-width: 100%;
+  min-height: 2.75rem;
+}
+
+.checkboxLabel {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.6rem;
+  line-height: 1.45;
+}
+
+.checkboxLabel input {
+  accent-color: #628b1b;
+  flex: none;
+  height: 1.15rem;
+  margin: 0.16rem 0 0;
+  width: 1.15rem;
+}
+
+.checkboxLabel input:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 2px;
+}
+
+.manualCopy {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.manualCopy label {
+  font-weight: 700;
+}
+
+.sectionDivider {
+  border: 0;
+  border-top: 1px solid rgb(36 42 34 / 20%);
+  margin: 0;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .settingsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .machineSettings {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .controls,
+  .results {
+    padding: 0.8rem;
+  }
+
+  .inventoryFields,
+  .todayTaskColumns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .desktopDayTitle,
+  .desktopDayNavigation {
+    display: none;
+  }
+
+  .dayHeading {
+    display: block;
+  }
+
+  .dayStepper {
+    align-items: end;
+    display: grid;
+    gap: 0.45rem;
+    grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+    min-width: 0;
+  }
+
+  .dayStepper > .dayButton {
+    min-width: 2.75rem;
+    padding-inline: 0.4rem;
+  }
+
+  .mobileDayPicker {
+    display: grid;
+    min-width: 0;
+  }
+
+  .mobileDayPicker > button {
+    width: 100%;
+  }
+
+  .filePickerGroup {
+    justify-content: flex-start;
+  }
+
+  .metricGrid,
+  .metricGrid.scheduleMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .desktopInventory {
+    display: none;
+  }
+
+  .desktopInventory + .inventoryList.mobileInventory {
+    display: grid;
+  }
+
+  .desktopScheduleTable {
+    display: none;
+  }
+
+  .mobileScheduleCards {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .settingsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .machineSettings {
+    grid-column: auto;
+  }
+
+  .machineGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .buttonRow > .button,
+  .buttonRow > .buttonSecondary {
+    flex: 1 1 100%;
+  }
+
+  .table {
+    min-width: 35rem;
+  }
+}

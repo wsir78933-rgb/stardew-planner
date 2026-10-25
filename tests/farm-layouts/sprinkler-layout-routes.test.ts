@@ -198,8 +198,8 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
   expect(sprinklerLayoutCanonicalPath).toBe("/stardew-valley-sprinkler-layout");
   expect(sprinklerLayoutCanonicalPath).not.toBe("/sprinkler-stardew");
   expect(canonicalPublicPaths).toContain("/sprinkler-stardew");
-  expect(canonicalPublicPaths).toHaveLength(58);
-  expect(indexableEntries).toHaveLength(114);
+  expect(canonicalPublicPaths).toHaveLength(62);
+  expect(indexableEntries).toHaveLength(122);
   expect(wildernessIndex).toBe(hilltopIndex + 1);
   expect(sprinklerIndex).toBe(wildernessIndex + 1);
   expect(qualitySprinklerIndex).toBe(sprinklerIndex + 1);

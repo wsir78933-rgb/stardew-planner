@@ -91,9 +91,9 @@ it.each(plantingGuideCases)(
     );
 
     expect(markup.match(/<h1\b/g) ?? []).toHaveLength(0);
-    expect(markup.match(/<h2\b/g) ?? []).toHaveLength(11);
-    expect(markup.match(/<h3\b/g) ?? []).toHaveLength(12);
-    expect(markup.match(/<section\b/g) ?? []).toHaveLength(5);
+    expect(markup.match(/<h2\b/g) ?? []).toHaveLength(13);
+    expect(markup.match(/<h3\b/g) ?? []).toHaveLength(13);
+    expect(markup.match(/<section\b/g) ?? []).toHaveLength(7);
     expect(markup.match(/<article\b/g) ?? []).toHaveLength(5);
     expect(copy.overview.paragraphs).toHaveLength(3);
     expect(copy.features.items).toHaveLength(5);
@@ -150,13 +150,20 @@ it.each(plantingGuideCases)(
       }
     }
 
-    assertTextFollows(markup, copy.overview.title, copy.features.items[0].title);
+    assertTextFollows(markup, copy.overview.title, copy.caseStudy.title);
+    assertTextFollows(markup, copy.caseStudy.title, copy.caseStudy.focusTitle);
+    assertTextFollows(markup, copy.caseStudy.focusTitle, copy.features.items[0].title);
+    expect(markup).toContain(escapeHtmlText(copy.caseStudy.caption));
+    expect(markup).toContain(`/images/planting-tool-guides/${tool}/${locale}/case.png`);
     assertTextFollows(markup, copy.features.items[0].title, copy.features.items[4].title);
     assertTextFollows(markup, copy.features.items[4].title, copy.featureIntro.title);
     assertTextFollows(markup, copy.featureIntro.title, copy.howToUse.title);
     assertTextFollows(markup, copy.howToUse.title, copy.whyChoose.title);
     assertTextFollows(markup, copy.whyChoose.title, copy.comparison.title);
     assertTextFollows(markup, copy.comparison.title, copy.faq.title);
+    assertTextFollows(markup, copy.faq.title, `${tool}-guide-closing`);
+    expect(markup).toContain(escapeHtmlText(copy.closing.description));
+    expect(markup).toContain(escapeHtmlText(copy.closing.actionLabel));
 
     expect(markup).toContain(escapeHtmlText(copy.overview.eyebrow));
     expect(markup).toContain(escapeHtmlText(copy.overview.aside));

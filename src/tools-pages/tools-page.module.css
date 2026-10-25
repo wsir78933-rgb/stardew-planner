@@ -167,7 +167,7 @@
 
 .field input,
 .field select,
-.field .plantingSelectTrigger,
+.plantingSelectTrigger,
 .manualCopy {
   background: #ffffff;
   border: 1px solid rgb(36 42 34 / 35%);
@@ -181,7 +181,7 @@
   width: 100%;
 }
 
-.field .plantingSelectTrigger {
+.plantingSelectTrigger {
   align-items: center;
   cursor: pointer;
   display: flex;
@@ -190,7 +190,7 @@
   text-align: left;
 }
 
-.field .plantingSelectTrigger:focus-visible {
+.plantingSelectTrigger:focus-visible {
   outline: 3px solid #628b1b;
   outline-offset: 2px;
 }

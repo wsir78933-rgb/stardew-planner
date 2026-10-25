@@ -1,0 +1,700 @@
+.page {
+  --guide-ink: var(--foreground, #1c211b);
+  --guide-note: #666666;
+  --guide-card-border: #999999;
+  --guide-frame-border: #888888;
+  --guide-rule: #bbbbbb;
+  --guide-connector: #999999;
+  --guide-surface: #ffffff;
+  color: var(--guide-ink);
+  min-width: 0;
+  width: 100%;
+}
+
+.guide {
+  max-width: 1177px;
+  min-width: 0;
+  width: 100%;
+}
+
+.guide :is(h1, h2, h3, p, li, dt, dd) {
+  overflow-wrap: anywhere;
+}
+
+.heroTitle,
+.sectionTitle,
+.featureCard h3,
+.stepTitle,
+.caseResultTitle,
+.faqItem h3,
+.callToActionTitle {
+  font-weight: 700;
+  margin: 0;
+}
+
+.heroTitle {
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+.heroBody,
+.heroNote,
+.sectionDescription,
+.caseExample,
+.caseCaption,
+.caseResults,
+.caseDisclaimer,
+.featureCard p,
+.stepBody,
+.faqItem p,
+.comparisonSources,
+.callToActionBody {
+  margin: 0;
+}
+
+.heroBody {
+  font-size: 13.5px;
+  line-height: 1.25;
+  margin-top: 22px;
+}
+
+.heroNote,
+.caseCaption,
+.caseDisclaimer,
+.faqItem p,
+.comparisonSources {
+  color: var(--guide-note);
+}
+
+.heroNote {
+  font-size: 11px;
+  line-height: 1.25;
+  margin-top: 29px;
+}
+
+.caseStudy {
+  margin-top: 136px;
+}
+
+.features {
+  margin-top: 37px;
+}
+
+.steps {
+  margin-top: 35px;
+}
+
+.comparison {
+  margin-top: 70px;
+}
+
+.faq {
+  margin-top: 141px;
+}
+
+.callToAction {
+  margin-top: 180px;
+}
+
+.sectionIntro {
+  display: grid;
+  row-gap: 10px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+.sectionDescription,
+.caseExample {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.caseExample {
+  font-size: 13px;
+}
+
+.caseIntro {
+  margin-bottom: 4px;
+}
+
+.featureIntro,
+.stepIntro,
+.comparisonIntro {
+  margin-bottom: 12px;
+}
+
+.comparisonIntro .sectionTitle {
+  font-size: 18px;
+}
+
+.faqIntro {
+  margin-bottom: 10px;
+}
+
+.caseLayout,
+.featureGrid,
+.stepList,
+.faqList,
+.comparisonCards {
+  display: grid;
+  min-width: 0;
+}
+
+.caseLayout {
+  gap: 10px;
+}
+
+.caseMedia,
+.caseMedia picture,
+.caseImage {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.caseImage {
+  aspect-ratio: 556 / 417;
+  height: auto;
+  width: 312px;
+}
+
+.caseResult {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+}
+
+.caseCaption {
+  font-size: 11px;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+
+.caseResultTitle {
+  font-size: 16px;
+  line-height: 1.25;
+  margin-bottom: 19px;
+}
+
+.caseResults {
+  display: grid;
+  font-size: 12px;
+  gap: 0;
+  line-height: 1.25;
+  list-style: none;
+  padding: 0;
+}
+
+.caseDisclaimer {
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.featureGrid {
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.featureCard,
+.faqItem,
+.comparisonCard,
+.step {
+  background: var(--guide-surface);
+  border: 1px solid var(--guide-card-border);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.featureCard {
+  align-content: start;
+  display: grid;
+  gap: 16px;
+  min-height: 152px;
+  padding: 13px 12px;
+}
+
+.featureCard h3 {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.featureCard p {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.stepBoard {
+  position: relative;
+}
+
+.stepConnector {
+  display: none;
+}
+
+.stepList {
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  align-content: start;
+  column-gap: 4px;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  min-height: 145px;
+  padding: 10px 12px;
+}
+
+.stepNumber {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.stepTitle {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.stepBody {
+  font-size: 11.5px;
+  grid-column: 2;
+  line-height: 1.25;
+  margin-top: 16px;
+}
+
+.comparisonTableRegion {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.comparisonTable {
+  border: 1px solid var(--guide-frame-border);
+  border-collapse: collapse;
+  font-size: 11.5px;
+  line-height: 1.25;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.comparisonTaskColumn {
+  width: 12.32%;
+}
+
+.comparisonOurColumn {
+  width: 29.74%;
+}
+
+.comparisonValleyColumn {
+  width: 28.89%;
+}
+
+.comparisonManualColumn {
+  width: 29.05%;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  border-bottom: 1px solid var(--guide-rule);
+  border-right: 1px solid var(--guide-rule);
+  overflow-wrap: anywhere;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparisonTable th:last-child,
+.comparisonTable td:last-child {
+  border-right: 0;
+}
+
+.comparisonTable thead th {
+  font-weight: 700;
+  height: 46px;
+  padding: 13px 8px 0;
+}
+
+.comparisonTable tbody th,
+.comparisonTable tbody td {
+  height: 94px;
+  padding: 11px 8px 0;
+}
+
+.comparisonTable tbody th {
+  font-weight: 700;
+}
+
+.comparisonTable tbody tr:last-child th,
+.comparisonTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.comparisonCards {
+  display: none;
+  gap: 10px;
+}
+
+.comparisonCard {
+  align-content: start;
+  display: grid;
+  gap: 12px;
+  min-height: 204px;
+  padding: 9px 10px;
+}
+
+.comparisonRowLabel {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.comparisonFacts {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+
+.comparisonFact {
+  column-gap: 3px;
+  display: grid;
+  grid-template-columns: 75px minmax(0, 1fr);
+}
+
+.comparisonFact dt,
+.comparisonFact dd {
+  font-size: 10.5px;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.comparisonFact dt {
+  font-weight: 700;
+}
+
+.comparisonSources {
+  font-size: 8.5px;
+  line-height: 1.25;
+  margin-top: 9px;
+}
+
+.comparisonSources a {
+  color: var(--guide-ink);
+  font-weight: 700;
+}
+
+.faqList {
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.faqItem {
+  align-content: start;
+  display: grid;
+  gap: 8px;
+  min-height: 117.5px;
+  padding: 9px 10px;
+}
+
+.faqItem h3 {
+  font-size: 12.5px;
+  line-height: 1.25;
+}
+
+.faqItem p {
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.callToAction {
+  align-items: center;
+  display: grid;
+  gap: 1.75rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.callToActionCopy {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: center;
+  max-width: 45.35rem;
+}
+
+.callToActionTitle {
+  color: var(--foreground, #1c211b);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  line-height: 1.25;
+}
+
+.callToActionBody {
+  font-size: 0.9375rem;
+  line-height: 1.48;
+}
+
+.callToActionButton {
+  align-items: center;
+  background: #c9fb45;
+  border: 1px solid #1c211b;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: #171a16;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding-inline: 1.5rem;
+  text-align: center;
+  white-space: normal;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.calculator {
+  margin-bottom: 48px;
+  min-width: 0;
+  scroll-margin-top: 1rem;
+}
+
+.calculator:focus-visible,
+.comparisonTableRegion:focus-visible,
+.callToActionButton:focus-visible {
+  outline: 2px solid var(--guide-ink);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .desktopOnly,
+  .stepConnector,
+  .comparisonTableRegion {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+  }
+
+  .comparisonCards {
+    display: grid;
+  }
+
+  .caseImage {
+    width: 312px;
+  }
+}
+
+@media (min-width: 701px) {
+  .heroTitle {
+    font-size: 24px;
+  }
+
+  .heroBody {
+    font-size: 15px;
+    margin-top: 18px;
+  }
+
+  .heroNote {
+    margin-top: 63px;
+  }
+
+  .caseStudy {
+    margin-top: 45px;
+  }
+
+  .features {
+    margin-top: 73px;
+  }
+
+  .steps {
+    margin-top: 88px;
+  }
+
+  .comparison {
+    margin-top: 212px;
+  }
+
+  .faq {
+    margin-top: 63px;
+  }
+
+  .callToAction {
+    margin-top: 234px;
+  }
+
+  .caseIntro {
+    margin-bottom: 36px;
+  }
+
+  .featureIntro {
+    margin-bottom: 29px;
+  }
+
+  .comparisonIntro {
+    margin-bottom: 27px;
+  }
+
+  .faqIntro {
+    margin-bottom: 12px;
+  }
+
+  .sectionTitle,
+  .faqIntro .sectionTitle {
+    font-size: 22px;
+  }
+
+  .comparisonIntro .sectionTitle {
+    font-size: 21px;
+  }
+
+  .caseLayout {
+    align-items: start;
+    column-gap: 40px;
+    grid-template-columns: minmax(0, 556px) minmax(0, 1fr);
+  }
+
+  .caseImage {
+    max-width: 556px;
+    width: 100%;
+  }
+
+  .caseResult {
+    min-height: 417px;
+    position: relative;
+  }
+
+  .caseResults {
+    font-size: 13px;
+  }
+
+  .caseDisclaimer {
+    margin-top: 146px;
+  }
+
+  .featureGrid,
+  .stepList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .featureGrid {
+    gap: 22px;
+  }
+
+  .featureCard {
+    gap: 17px;
+    min-height: 180px;
+    padding: 17px 15px;
+  }
+
+  .featureCard h3 {
+    font-size: 15px;
+  }
+
+  .featureCard p {
+    font-size: 13px;
+  }
+
+  .stepIntro {
+    margin-bottom: 33px;
+  }
+
+  .stepList {
+    column-gap: 56px;
+  }
+
+  .step {
+    background: transparent;
+    border: 0;
+    display: block;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .stepNumber {
+    align-items: center;
+    background: var(--guide-surface);
+    border: 1px solid var(--guide-frame-border);
+    box-sizing: border-box;
+    display: flex;
+    height: 48px;
+    justify-content: center;
+    margin: 0 0 14px 5px;
+    position: relative;
+    width: 48px;
+    z-index: 1;
+  }
+
+  .stepTitle {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .stepBody {
+    font-size: 12px;
+    margin-top: 0;
+  }
+
+  .stepConnector {
+    background: var(--guide-connector);
+    display: block;
+    height: 1px;
+    left: 29px;
+    position: absolute;
+    top: 24px;
+    transform: translateY(-50%);
+    width: calc(2 * ((100% - 112px) / 3 + 56px));
+  }
+
+  .comparisonTable {
+    height: 422px;
+  }
+
+  .comparisonSources {
+    font-size: 9.5px;
+    margin-top: 12px;
+  }
+
+  .faqList {
+    gap: 10px;
+  }
+
+  .faqItem {
+    gap: 10px;
+    min-height: 96px;
+    padding: 10px 14px;
+  }
+
+  .faqItem h3 {
+    font-size: 14px;
+  }
+
+  .faqItem p {
+    font-size: 12px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calculator,
+  .callToActionButton {
+    scroll-behavior: auto;
+  }
+}

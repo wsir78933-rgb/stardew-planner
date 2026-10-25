@@ -1,0 +1,392 @@
+.page {
+  color: #555555;
+  display: grid;
+  gap: 0;
+  min-width: 0;
+}
+
+.guide {
+  --guide-border: rgb(36 42 34 / 24%);
+  border-top: 1px solid rgb(36 42 34 / 24%);
+  color: var(--foreground, #1c211b);
+  display: grid;
+  gap: 6rem;
+  min-width: 0;
+  padding-top: 4.5rem;
+  width: 100%;
+}
+
+.calculator {
+  margin-bottom: 48px;
+  min-width: 0;
+  scroll-margin-top: 1rem;
+}
+
+.calculator:focus-visible {
+  outline: 3px solid #628b1b;
+  outline-offset: 4px;
+}
+
+.hero,
+.sectionHeading,
+.centeredBlock {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.centeredBlock {
+  justify-items: center;
+  text-align: center;
+}
+
+.narrowBlock {
+  margin-inline: auto;
+  max-width: 45.35rem;
+}
+
+.eyebrow {
+  color: var(--muted-foreground, #5d6659);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.guide h2.heroTitle,
+.guide h2.sectionTitle,
+.guide h2.ctaTitle,
+.guide .finalCallToAction h2 {
+  color: var(--foreground, #1c211b);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.lede,
+.caseDescription,
+.description,
+.resultList,
+.stepsDescription,
+.caseBody {
+  font-size: 0.9375rem;
+  line-height: 1.48;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.description,
+.stepsDescription,
+.note,
+.cardBody,
+.caseBody,
+.factBody,
+.sources {
+  color: var(--muted-foreground, #5d6659);
+}
+
+.note,
+.sources {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.caseSection,
+.featureSection,
+.comparisonSection {
+  display: grid;
+  min-width: 0;
+}
+
+.caseSection,
+.comparisonSection {
+  gap: 1.5rem;
+}
+
+.featureSection {
+  gap: 2rem;
+}
+
+.caseRows {
+  display: grid;
+  gap: 40px;
+  min-width: 0;
+}
+
+.caseRow {
+  align-items: center;
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.caseRowImage {
+  min-width: 0;
+}
+
+.caseImage {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  width: min(100%, 512px);
+}
+
+.caseCopy {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.guide h3.resultTitle,
+.guide h3.cardTitle,
+.guide h3.comparisonCardTitle {
+  color: var(--foreground, #1c211b);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.28;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.resultList {
+  display: grid;
+  gap: 0.35rem;
+  list-style: none;
+  padding: 0;
+}
+
+.disclaimer {
+  color: #666666;
+  font-size: 11px;
+  line-height: 1.32;
+  margin: 1.5rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.featureGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.card,
+.comparisonCard {
+  align-content: start;
+  background: var(--card, #ffffff);
+  border: 1px solid rgb(36 42 34 / 24%);
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+.cardBody,
+.factBody {
+  font-size: 0.90625rem;
+  line-height: 1.48;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.stepsSection {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.stepsDescription {
+  margin-inline: auto;
+  max-width: 45.35rem;
+  text-align: center;
+}
+
+.tableScroller {
+  margin-inline: auto;
+  max-width: 64rem;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  width: 100%;
+}
+
+.tableScroller:focus-visible,
+.guide a.ctaAction:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
+.comparisonTable {
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.32;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.comparisonLabelColumn {
+  width: calc(236.5 / 1024 * 100%);
+}
+
+.comparisonValueColumn {
+  width: calc(262.5 / 1024 * 100%);
+}
+
+.guide .comparisonTable th,
+.guide .comparisonTable td {
+  border-bottom: 1px solid rgb(36 42 34 / 24%);
+  font-weight: 400;
+  overflow-wrap: anywhere;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.guide .comparisonTable thead th,
+.guide .comparisonTable tbody th {
+  font-weight: 700;
+}
+
+.comparisonTable thead th {
+  background: var(--card, #ffffff);
+}
+
+.comparisonTable tbody tr:last-child th,
+.comparisonTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.fact {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.factLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.sources {
+  margin-inline: auto;
+  max-width: 64rem;
+  width: 100%;
+}
+
+.guide .sources a {
+  color: #3f6414;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.faqSlot {
+  min-width: 0;
+}
+
+.faq {
+  color: var(--foreground, #1c211b);
+  width: 100%;
+}
+
+.guide .faq h2 {
+  line-height: 1.25;
+}
+
+.finalCallToAction {
+  align-items: center;
+  display: grid;
+  gap: 1.75rem;
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.ctaCopy {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: center;
+  max-width: 45.35rem;
+}
+
+.guide a.ctaAction {
+  align-items: center;
+  background: #c9fb45;
+  border: 1px solid #1c211b;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: #171a16;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding-inline: 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+}
+
+.mobileText,
+.comparisonCards {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .desktopText {
+    display: none;
+  }
+
+  .mobileText {
+    display: block;
+  }
+
+  .comparisonTable {
+    width: calc(100% * 1024 / 499);
+  }
+}
+
+@media (min-width: 701px) {
+  .caseRow {
+    column-gap: 40px;
+    grid-template-columns: minmax(0, 512px) minmax(0, 1fr);
+  }
+
+  .caseRow[data-image-side="right"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 512px);
+  }
+
+  .caseRow[data-image-side="right"] .caseCopy {
+    order: -1;
+  }
+
+  .featureGrid {
+    gap: 1.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calculator {
+    scroll-behavior: auto;
+  }
+
+  .faq svg,
+  .faq p,
+  .faq button {
+    animation: none;
+    transition: none;
+  }
+
+  .guide a.ctaAction {
+    transition: none;
+  }
+}

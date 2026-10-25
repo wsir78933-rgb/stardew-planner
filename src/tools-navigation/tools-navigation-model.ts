@@ -3,6 +3,7 @@ import {
   isProcessingToolId,
   type ProcessingToolId,
 } from "../tools-pages/processing/processing-tool-definition";
+import { getPlanningToolPath, isPlanningToolId } from "../tools-pages/planning-tool-definition";
 
 export type ToolsNavigationLocale = "en" | "zh-CN" | "ja" | "ru";
 
@@ -103,16 +104,16 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
     id: "production",
     label: "生产计划",
     tools: [
-      { id: "today-processing-list", label: "今日加工清单", path: null },
-      { id: "production-schedule", label: "综合生产排程", path: null },
+      { id: "today-processing-list", label: "今日加工清单", path: getPlanningToolPath("today-processing-list") },
+      { id: "production-schedule", label: "综合生产排程", path: getPlanningToolPath("production-schedule") },
     ],
   },
   {
     id: "workshop",
     label: "工坊建设",
     tools: [
-      { id: "keg-count", label: "需要多少 Keg", path: null },
-      { id: "materials-and-resin", label: "材料与树脂时间", path: null },
+      { id: "keg-count", label: "需要多少 Keg", path: getPlanningToolPath("keg-count") },
+      { id: "materials-and-resin", label: "材料与树脂时间", path: getPlanningToolPath("materials-and-resin") },
     ],
   },
 ];
@@ -245,6 +246,15 @@ function readEnglishToolsNavigationToolLabel(
 
   if (isProcessingToolId(tool.id)) {
     return PROCESSING_TOOL_ENGLISH_LABELS[tool.id];
+  }
+
+  if (isPlanningToolId(tool.id)) {
+    return {
+      "today-processing-list": "Today's processing list",
+      "production-schedule": "Production schedule",
+      "keg-count": "How many Kegs?",
+      "materials-and-resin": "Materials and resin timing",
+    }[tool.id];
   }
 
   return tool.label;

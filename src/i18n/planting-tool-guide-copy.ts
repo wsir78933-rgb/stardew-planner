@@ -11,6 +11,14 @@ export type PlantingToolGuideCopy = Readonly<{
     paragraphs: readonly string[];
     aside: string;
   }>;
+  caseStudy: Readonly<{
+    eyebrow: string;
+    title: string;
+    description: string;
+    focusTitle: string;
+    focusItems: readonly [string, string, string, string, string];
+    caption: string;
+  }>;
   features: Readonly<{
     eyebrow: string;
     title: string;
@@ -56,6 +64,11 @@ export type PlantingToolGuideCopy = Readonly<{
     description: string;
     items: readonly Readonly<{ question: string; answer: string }>[];
   }>;
+  closing: Readonly<{
+    title: string;
+    description: string;
+    actionLabel: string;
+  }>;
 }>;
 
 export type PlantingToolGuideId = "crop-profit" | "crop-growth";
@@ -74,6 +87,20 @@ const plantingToolGuideCopyByLocale: Readonly<
           "The Stardew Valley Crop Profit Calculator reports expected units, net gold, daily gold per tile, and best single route. It uses normal-quality base prices and average yields; random bonuses may change results.",
         ],
         aside: "Harvests stop at the season boundary; processing can continue through your selected deadline.",
+      },
+      caseStudy: {
+        eyebrow: "Case study",
+        title: "Compare this season’s crop returns",
+        description: "Set a season, seed source, and planting day to compare net returns after seed and fertilizer costs.",
+        focusTitle: "What the example shows",
+        focusItems: [
+          "Crops available for the selected season",
+          "Expected harvests and net gold after costs",
+          "Compare raw sale and processing routes",
+          "Check batches completed by the deadline",
+          "Unprocessed crops retain raw-sale value",
+        ],
+        caption: "Example interface; results vary with crop and settings.",
       },
       features: {
         eyebrow: "What you can compare",
@@ -309,6 +336,11 @@ const plantingToolGuideCopyByLocale: Readonly<
           },
         ],
       },
+      closing: {
+        title: "Compare this season’s crop returns",
+        description: "Set your season, seed source, and planting day to see returns after seed and fertilizer costs.",
+        actionLabel: "Calculate crop profit",
+      },
     },
     "crop-growth": {
       overview: {
@@ -320,6 +352,20 @@ const plantingToolGuideCopyByLocale: Readonly<
           "Outdoors, the Stardew Valley Crop Growth Calculator follows consecutive legal seasons; Greenhouse and Ginger Island show a 28-day window after planting. It projects dates and counts, not gold.",
         ],
         aside: "See the last safe outdoor planting date when applicable in Stardew Valley Crop Growth Calculator.",
+      },
+      caseStudy: {
+        eyebrow: "Case study",
+        title: "See dates after missed watering",
+        description: "Add missed watering and a location to see how maturity and later harvest dates move.",
+        focusTitle: "What the example shows",
+        focusItems: [
+          "Missed watering shifts first maturity",
+          "Regrowing crops keep fixed intervals",
+          "Check the last safe outdoor planting day",
+          "Greenhouse and Ginger Island show 28 days",
+          "Dates depend on the selected crop and location",
+        ],
+        caption: "Example interface; dates vary with crop and location.",
       },
       features: {
         eyebrow: "What you can plan",
@@ -555,6 +601,11 @@ const plantingToolGuideCopyByLocale: Readonly<
           },
         ],
       },
+      closing: {
+        title: "Review your harvest schedule",
+        description: "Choose a crop, planting date, and location to review first maturity and expected harvests.",
+        actionLabel: "Plan crop growth",
+      },
     },
   },
   "zh-CN": {
@@ -568,6 +619,20 @@ const plantingToolGuideCopyByLocale: Readonly<
           "排名显示本季预计收获、净金币与每格每日收益，并为每种作物挑出收益最高的一条销售或加工路线。模型按基础售价与平均预期产量估算；随机额外收获会让实际数字不同。",
         ],
         aside: "加工截止日可延到季末后；作物收获统计仍止于本季。",
+      },
+      caseStudy: {
+        eyebrow: "案例展示",
+        title: "比较本季作物净收益",
+        description: "设置季节、种子来源与播种日，比较扣除种子和肥料成本后的本季净收益。",
+        focusTitle: "案例查看重点",
+        focusItems: [
+          "筛出当前设置下本季可种的作物",
+          "查看预计收获次数与净金币",
+          "比较原售、小桶、罐头瓶和脱水机",
+          "检查截止日前可完成的加工数量",
+          "未加工余量按原作物售价估算",
+        ],
+        caption: "案例界面；结果随所选作物与条件变化。",
       },
       features: {
         eyebrow: "可以比较什么",
@@ -803,6 +868,11 @@ const plantingToolGuideCopyByLocale: Readonly<
           },
         ],
       },
+      closing: {
+        title: "比较本季作物净收益",
+        description: "选择季节、种子来源和播种日，查看扣除种子和肥料后的收益。",
+        actionLabel: "计算作物收益",
+      },
     },
     "crop-growth": {
       overview: {
@@ -814,6 +884,20 @@ const plantingToolGuideCopyByLocale: Readonly<
           "选露天、温室或姜岛后，日历按地点展开：露天遵循作物连续允许种植的季节，受保护地点查看播种后28天。你看到的是预计日期和次数，不是金币收益或收益排名。",
         ],
         aside: "先看首收日期，再对照最晚安全播种日，判断这次种植还能不能赶上。",
+      },
+      caseStudy: {
+        eyebrow: "案例展示",
+        title: "漏浇水后收获日期如何变化？",
+        description: "输入漏浇水天数和种植地点，观察首次成熟与后续收获日期的变化。",
+        focusTitle: "案例查看重点",
+        focusItems: [
+          "漏浇水天数会推迟本轮成熟",
+          "再生作物继续按固定间隔收获",
+          "露天场景核对最晚安全播种日",
+          "温室和姜岛显示播种后28天",
+          "日历显示预计日期，不代表游戏内时间",
+        ],
+        caption: "案例界面；日期随所选作物与地点变化。",
       },
       features: {
         eyebrow: "可以规划什么",
@@ -1048,6 +1132,11 @@ const plantingToolGuideCopyByLocale: Readonly<
             answer: "收益→生长时会带入作物、季节、播种日、生长激素和农业学家；漏浇水归零，地点从露天开始。返回收益不反传生长修改；本工具不算金币收益。",
           },
         ],
+      },
+      closing: {
+        title: "查看本轮收获日程",
+        description: "选择作物、播种日与地点，查看首收日期和本季预计收获次数。",
+        actionLabel: "规划生长日期",
       },
     },
   },

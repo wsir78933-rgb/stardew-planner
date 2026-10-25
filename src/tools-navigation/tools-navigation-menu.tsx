@@ -67,6 +67,10 @@ export function ToolsNavigationMenu({ locale }: ToolsNavigationMenuProps) {
   }
 
   function onNavigationPointerLeave() {
+    if (!readFineHoverPointer(readToolsNavigationMatchMedia())) {
+      return;
+    }
+
     setInteraction(closeToolsNavigationOnPointerLeave());
   }
 
@@ -252,25 +256,30 @@ function ToolsNavigationFlyout({
   onCategoryPointerEnter: (categoryId: string) => void;
 }>) {
   return (
-    <div className={styles.flyout}>
+    <div className={styles.flyout} id={categoryPanelId}>
       <div className={styles.categoryColumn}>
-        <ToolsNavigationCategoryPanel
-          categoryPanelId={categoryPanelId}
-          interaction={interaction}
-          model={model}
-          onAllToolsPointerEnter={onAllToolsPointerEnter}
-          onCategoryClick={onCategoryClick}
-          onCategoryPointerEnter={onCategoryPointerEnter}
-        />
-        {model.categories.map((category) => (
-          <ToolsNavigationToolPanel
-            category={category}
+        {interaction.showsMobileToolList ? (
+          model.categories.map((category) => (
+            <ToolsNavigationToolPanel
+              category={category}
+              categoryPanelId={categoryPanelId}
+              interaction={interaction}
+              key={category.id}
+              model={model}
+              onBackToCategories={onBackToCategories}
+            />
+          ))
+        ) : (
+          <ToolsNavigationCategoryPanel
+            categoryPanelId={categoryPanelId}
             interaction={interaction}
-            key={category.id}
             model={model}
+            onAllToolsPointerEnter={onAllToolsPointerEnter}
             onBackToCategories={onBackToCategories}
+            onCategoryClick={onCategoryClick}
+            onCategoryPointerEnter={onCategoryPointerEnter}
           />
-        ))}
+        )}
       </div>
     </div>
   );
@@ -281,6 +290,7 @@ function ToolsNavigationCategoryPanel({
   interaction,
   model,
   onAllToolsPointerEnter,
+  onBackToCategories,
   onCategoryClick,
   onCategoryPointerEnter,
 }: Readonly<{
@@ -288,6 +298,7 @@ function ToolsNavigationCategoryPanel({
   interaction: ToolsNavigationInteraction;
   model: ToolsNavigationModel;
   onAllToolsPointerEnter: () => void;
+  onBackToCategories: () => void;
   onCategoryClick: (categoryId: string) => void;
   onCategoryPointerEnter: (categoryId: string) => void;
 }>) {
@@ -300,36 +311,43 @@ function ToolsNavigationCategoryPanel({
       aria-labelledby={`${categoryPanelId}-title`}
       className={styles.categoryPanel}
       data-tools-category-panel=""
-      id={categoryPanelId}
       role="group"
     >
       <p className={styles.panelTitle} id={`${categoryPanelId}-title`}>
         {model.categoryPanelTitle}
       </p>
       {model.categories.map((category) => (
-        <button
-          aria-controls={`${categoryPanelId}-${category.id}`}
-          aria-expanded={interaction.openCategoryId === category.id}
-          aria-haspopup="true"
-          className={styles.row}
-          data-tools-category={category.id}
-          data-tools-focus-key={readToolsNavigationCategoryFocusKey(category.id)}
-          key={category.id}
-          onClick={() => onCategoryClick(category.id)}
-          onMouseDown={preventToolsNavigationPointerFocus}
-          onPointerEnter={() => onCategoryPointerEnter(category.id)}
-          tabIndex={-1}
-          type="button"
-        >
-          <span>{category.label}</span>
-          <span
-            aria-hidden="true"
-            className={styles.chevron}
-            data-tools-navigation-chevron=""
+        <div className={styles.categoryItem} key={category.id}>
+          <button
+            aria-controls={`${categoryPanelId}-${category.id}`}
+            aria-expanded={interaction.openCategoryId === category.id}
+            aria-haspopup="true"
+            className={styles.row}
+            data-tools-category={category.id}
+            data-tools-focus-key={readToolsNavigationCategoryFocusKey(category.id)}
+            onClick={() => onCategoryClick(category.id)}
+            onMouseDown={preventToolsNavigationPointerFocus}
+            onPointerEnter={() => onCategoryPointerEnter(category.id)}
+            tabIndex={-1}
+            type="button"
           >
-            {">"}
-          </span>
-        </button>
+            <span>{category.label}</span>
+            <span
+              aria-hidden="true"
+              className={styles.chevron}
+              data-tools-navigation-chevron=""
+            >
+              {">"}
+            </span>
+          </button>
+          <ToolsNavigationToolPanel
+            category={category}
+            categoryPanelId={categoryPanelId}
+            interaction={interaction}
+            model={model}
+            onBackToCategories={onBackToCategories}
+          />
+        </div>
       ))}
       <a
         className={styles.row}
@@ -347,11 +365,13 @@ function ToolsNavigationCategoryPanel({
 
 function ToolsNavigationToolPanel({
   category,
+  categoryPanelId,
   interaction,
   model,
   onBackToCategories,
 }: Readonly<{
   category: ToolsNavigationCategory;
+  categoryPanelId: string;
   interaction: ToolsNavigationInteraction;
   model: ToolsNavigationModel;
   onBackToCategories: () => void;
@@ -365,6 +385,7 @@ function ToolsNavigationToolPanel({
       className={styles.toolPanel}
       data-tools-tool-panel={category.id}
       data-tools-tool-panel-open={isOpen ? "true" : "false"}
+      id={`${categoryPanelId}-${category.id}`}
     >
       <div
         aria-label={category.label}

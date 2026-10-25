@@ -74,6 +74,10 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [Dehydrator processing](https://stardewvalleyplanner.art/tools/dehydrator-processing): Use the Stardew Valley dehydrator calculator to compare batch profit for dried fruit, dried mushrooms and raisins, including capacity and five-item remainders.
 - [Keg ingredient ranking](https://stardewvalleyplanner.art/tools/keg-ingredient-ranking): Browse the Stardew Valley keg price list to choose what to put in kegs. Use the keg input calculator to check added value, batch times and your actual stock.
 - [Cellar aging](https://stardewvalleyplanner.art/tools/cask-aging): How long does wine take to age? Use the wine aging calculator to compare silver, gold and iridium targets, collection dates, added value and Cask capacity.
+- [Daily processing planner](https://stardewvalleyplanner.art/tools/today-processing-list): Plan daily loading and collection tasks from available inventory.
+- [Production schedule](https://stardewvalleyplanner.art/tools/production-schedule): Schedule Kegs, Jars and Dehydrators within a deadline.
+- [Keg capacity calculator](https://stardewvalleyplanner.art/tools/keg-count): Estimate Keg requirements for current stock and repeating harvests.
+- [Keg materials and resin calculator](https://stardewvalleyplanner.art/tools/materials-and-resin): Check material shortages and oak resin production time.
 
 ## 简体中文
 
@@ -147,6 +151,10 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 - [烘干机加工](https://stardewvalleyplanner.art/zh/tools/dehydrator-processing): 估算星露谷作物使用烘干机后的产出、批次数量和加工增值。
 - [Keg 原料排行](https://stardewvalleyplanner.art/zh/tools/keg-ingredient-ranking): 按单件增值或机器周期增值比较适合 Keg 加工的原料。
 - [酒窖陈酿](https://stardewvalleyplanner.art/zh/tools/cask-aging): 估算成品酒的剩余陈酿时间、收取日期和本轮陈酿增值。
+- [今日加工清单](https://stardewvalleyplanner.art/zh/tools/today-processing-list): 按库存、预留数量和到货日安排每天的装料与收取。
+- [综合生产排程](https://stardewvalleyplanner.art/zh/tools/production-schedule): 安排三种机器的加工批次，查看增值、余料和每日任务。
+- [需要多少 Keg](https://stardewvalleyplanner.art/zh/tools/keg-count): 计算单批与持续收获所需小桶、现有产能和积压。
+- [材料与树脂时间](https://stardewvalleyplanner.art/zh/tools/materials-and-resin): 核对小桶建造材料缺口与橡树树脂采集时间。
 
 ## Русский
 

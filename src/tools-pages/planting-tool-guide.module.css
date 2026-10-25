@@ -61,6 +61,49 @@
   margin: 0;
 }
 
+.caseDescription,
+.caseCaption,
+.caseFocusList {
+  margin: 0;
+}
+
+.caseLayout {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.caseImage {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  width: min(100%, 556px);
+}
+
+.caseFocusTitle {
+  margin: 0 0 0.75rem;
+}
+
+.caseFocus {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.caseFocusList {
+  display: grid;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.caseCaption {
+  color: #666666;
+  font-size: 11px;
+  margin-top: 1.5rem;
+}
+
 .overviewLayout {
   display: grid;
   gap: 2rem clamp(1.5rem, 11.614%, 8.54375rem);
@@ -279,6 +322,61 @@
   white-space: normal;
 }
 
+.closing {
+  align-items: center;
+  display: grid;
+  gap: 1.75rem;
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.closingCopy {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: center;
+  max-width: 45.35rem;
+}
+
+.closingTitle {
+  color: var(--foreground, #1c211b);
+  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.closingDescription {
+  font-size: 0.9375rem;
+  line-height: 1.48;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.closingAction {
+  align-items: center;
+  background: #c9fb45;
+  border: 1px solid #1c211b;
+  border-radius: 0;
+  color: #171a16;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding-inline: 1.5rem;
+  text-align: center;
+  white-space: normal;
+}
+
+.closingAction:focus-visible {
+  outline: 2px solid #1c211b;
+  outline-offset: 3px;
+}
+
 .faqSlot {
   min-width: 0;
 }
@@ -295,6 +393,12 @@
 }
 
 @media (min-width: 701px) {
+  .caseLayout {
+    align-items: start;
+    column-gap: 40px;
+    grid-template-columns: minmax(0, 556px) minmax(0, 1fr);
+  }
+
   .overviewLayout {
     align-items: start;
     grid-template-columns: minmax(0, 604.6fr) minmax(0, 435.8fr);

@@ -12,6 +12,7 @@ import { HowItWorks09 } from "./how-it-works-09";
 import type { PlantingToolId } from "./planting-tool-frame";
 import { createCropGrowthToolHref, createCropProfitHref } from "./planting-tool-href";
 import {
+  getPlantingToolGuideCaseImage,
   getPlantingToolGuideMedia,
   type PlantingToolGuideFeatureMedia,
   type PlantingToolGuideFeatureMediaList,
@@ -20,6 +21,7 @@ import {
 import styles from "./planting-tool-guide.module.css";
 
 const OVERVIEW_PARAGRAPH_COUNT = 3;
+const CASE_FOCUS_COUNT = 5;
 const FEATURE_COUNT = 5;
 const INTRO_CARD_COUNT = 4;
 const WHY_CARD_COUNT = 5;
@@ -85,6 +87,16 @@ function assertGuideContent(
   requireCount(copy.overview.paragraphs.length, OVERVIEW_PARAGRAPH_COUNT, "overview.paragraphs");
   copy.overview.paragraphs.forEach((paragraph, paragraphIndex) => {
     requireNonEmpty(paragraph, `overview.paragraphs[${paragraphIndex}]`);
+  });
+
+  requireNonEmpty(copy.caseStudy.eyebrow, "caseStudy.eyebrow");
+  requireNonEmpty(copy.caseStudy.title, "caseStudy.title");
+  requireNonEmpty(copy.caseStudy.description, "caseStudy.description");
+  requireNonEmpty(copy.caseStudy.focusTitle, "caseStudy.focusTitle");
+  requireNonEmpty(copy.caseStudy.caption, "caseStudy.caption");
+  requireCount(copy.caseStudy.focusItems.length, CASE_FOCUS_COUNT, "caseStudy.focusItems");
+  copy.caseStudy.focusItems.forEach((item, itemIndex) => {
+    requireNonEmpty(item, `caseStudy.focusItems[${itemIndex}]`);
   });
 
   requireCount(copy.features.items.length, FEATURE_COUNT, "features.items");
@@ -153,6 +165,9 @@ function assertGuideContent(
   requireNonEmpty(copy.faq.title, "faq.title");
   requireNonEmpty(copy.faq.description, "faq.description");
   requireCount(copy.faq.items.length, FAQ_COUNT, "faq.items");
+  requireNonEmpty(copy.closing.title, "closing.title");
+  requireNonEmpty(copy.closing.description, "closing.description");
+  requireNonEmpty(copy.closing.actionLabel, "closing.actionLabel");
 }
 
 function focusCalculator(calculatorId: string): void {
@@ -189,6 +204,48 @@ function OverviewSection({
           ))}
         </div>
         <aside className={styles.overviewAside}>{copy.aside}</aside>
+      </div>
+    </section>
+  );
+}
+
+function CaseStudySection({
+  copy,
+  currentTool,
+  locale,
+}: Readonly<{
+  copy: PlantingToolGuideCopy["caseStudy"];
+  currentTool: PlantingToolId;
+  locale: PublicLocale;
+}>): JSX.Element {
+  const headingId = `${currentTool}-guide-case`;
+  const caseImage = getPlantingToolGuideCaseImage(locale, currentTool);
+
+  return (
+    <section aria-labelledby={headingId} className={styles.caseStudy}>
+      <div className={styles.sectionHeading}>
+        <p className={styles.eyebrow}>{copy.eyebrow}</p>
+        <h2 id={headingId}>{copy.title}</h2>
+      </div>
+      <p className={styles.caseDescription}>{copy.description}</p>
+      <div className={styles.caseLayout}>
+        <img
+          alt=""
+          className={styles.caseImage}
+          height={caseImage.height}
+          loading="lazy"
+          src={caseImage.src}
+          width={caseImage.width}
+        />
+        <div className={styles.caseFocus}>
+          <h3 className={styles.caseFocusTitle}>{copy.focusTitle}</h3>
+          <ul className={styles.caseFocusList}>
+            {copy.focusItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p className={styles.caseCaption}>{copy.caption}</p>
+        </div>
       </div>
     </section>
   );
@@ -421,6 +478,7 @@ export function PlantingToolGuide({
   return (
     <div className={styles.guide}>
       <OverviewSection copy={copy.overview} headingId={`${currentTool}-guide-overview`} />
+      <CaseStudySection copy={copy.caseStudy} currentTool={currentTool} locale={locale} />
       <FeatureList currentTool={currentTool} features={copy.features.items} media={media} />
       <FeatureIntroSection copy={copy.featureIntro} currentTool={currentTool} />
       <HowItWorks09
@@ -441,6 +499,21 @@ export function PlantingToolGuide({
       <div className={styles.faqSlot}>
         <Faq1 {...copy.faq} className={styles.faq} />
       </div>
+      <section aria-labelledby={`${currentTool}-guide-closing`} className={styles.closing}>
+        <div className={styles.closingCopy}>
+          <h2 className={styles.closingTitle} id={`${currentTool}-guide-closing`}>
+            {copy.closing.title}
+          </h2>
+          <p className={styles.closingDescription}>{copy.closing.description}</p>
+        </div>
+        <button
+          className={styles.closingAction}
+          onClick={() => focusCalculator(calculatorId)}
+          type="button"
+        >
+          {copy.closing.actionLabel}
+        </button>
+      </section>
     </div>
   );
 }

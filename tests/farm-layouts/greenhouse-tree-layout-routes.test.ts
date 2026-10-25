@@ -78,11 +78,11 @@ it("registers both localized routes after existing farm layout topics and adds t
   expect(greenhouseTreeLayoutCanonicalPath).toBe(
     "/stardew-greenhouse-tree-layout",
   );
-  expect(canonicalPublicPaths).toHaveLength(58);
+  expect(canonicalPublicPaths).toHaveLength(62);
   expect(greenhouseTreeIndex).toBe(canonicalPublicPaths.length - 1);
   expect(fruitTreeIndex).toBeLessThan(greenhouseTreeIndex);
-  expect(getLocalizedPublicRouteEntries()).toHaveLength(116);
-  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(114);
+  expect(getLocalizedPublicRouteEntries()).toHaveLength(124);
+  expect(getLocalizedIndexablePublicRouteEntries()).toHaveLength(122);
   expect(localizedEntries).toEqual([
     {
       locale: "en",
@@ -97,7 +97,7 @@ it("registers both localized routes after existing farm layout topics and adds t
   ]);
   expect(sitemapPathnames).toContain(greenhouseTreeLayoutCanonicalPath);
   expect(sitemapPathnames).toContain(`/zh${greenhouseTreeLayoutCanonicalPath}`);
-  expect(sitemapPathnames).toHaveLength(116);
+  expect(sitemapPathnames).toHaveLength(124);
   expect(englishGreenhouseTreeLayoutDynamic).toBe("force-static");
   expect(chineseGreenhouseTreeLayoutDynamic).toBe("force-static");
 });
