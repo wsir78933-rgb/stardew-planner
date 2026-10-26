@@ -364,16 +364,6 @@ it("registers Sprinkler Layouts after the ten Farm Map pages and keeps the blog 
       },
     ],
   });
-  for (const emptyCategoryId of ["layout-ideas"] as const) {
-    expect(
-      englishNavigation.categories.find((category) => category.id === emptyCategoryId)
-        ?.pages,
-    ).toEqual([]);
-    expect(
-      chineseNavigation.categories.find((category) => category.id === emptyCategoryId)
-        ?.pages,
-    ).toEqual([]);
-  }
   expect(
     englishNavigation.categories.find(
       (category) => category.id === "buildings-interiors",

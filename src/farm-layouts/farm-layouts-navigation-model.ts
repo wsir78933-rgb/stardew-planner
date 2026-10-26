@@ -27,7 +27,6 @@ export const FARM_LAYOUTS_NAVIGATION_CATEGORY_IDS = [
   "greenhouse-layouts",
   "buildings-interiors",
   "planting-layouts",
-  "layout-ideas",
 ] as const;
 
 export type FarmLayoutsNavigationCategoryId =
@@ -184,14 +183,12 @@ function createFarmLayoutsNavigationCategories(
           "greenhouse-layouts": "温室布局",
           "buildings-interiors": "建筑与室内",
           "planting-layouts": "种植布局",
-          "layout-ideas": "布局灵感",
         }
       : {
           "farm-maps": "Farm Maps",
           "greenhouse-layouts": "Greenhouse Layouts",
           "buildings-interiors": "Buildings & Interiors",
           "planting-layouts": "Planting Layouts",
-          "layout-ideas": "Layout Ideas",
         };
   const farmMapPages: readonly FarmLayoutsNavigationPage[] = [
     {
@@ -385,11 +382,9 @@ function pagesForFarmLayoutsNavigationCategory(
   if (categoryId === "planting-layouts") {
     return plantingLayoutPages;
   }
-  if (categoryId === "layout-ideas") {
-    return [];
-  }
 
+  const unsupportedCategoryId: never = categoryId;
   throw new Error(
-    `Unknown Farm Layouts navigation category ${JSON.stringify(categoryId)}.`,
+    `Unknown Farm Layouts navigation category ${JSON.stringify(unsupportedCategoryId)}.`,
   );
 }

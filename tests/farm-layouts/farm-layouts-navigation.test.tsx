@@ -33,10 +33,6 @@ import {
   readFarmLayoutsNavigationPage,
 } from "@/src/farm-layouts/farm-layouts-navigation-model";
 
-const emptyFarmLayoutsCategoryIds = [
-  "layout-ideas",
-] as const;
-
 const localeHrefByLocale = {
   en: "/",
   ja: "/ja",
@@ -50,28 +46,24 @@ const categoryLabelsByLocale = {
     "Greenhouse Layouts",
     "Buildings & Interiors",
     "Planting Layouts",
-    "Layout Ideas",
   ],
   ja: [
     "Farm Maps",
     "Greenhouse Layouts",
     "Buildings & Interiors",
     "Planting Layouts",
-    "Layout Ideas",
   ],
   ru: [
     "Farm Maps",
     "Greenhouse Layouts",
     "Buildings & Interiors",
     "Planting Layouts",
-    "Layout Ideas",
   ],
   "zh-CN": [
     "农场地图",
     "温室布局",
     "建筑与室内",
     "种植布局",
-    "布局灵感",
   ],
 } as const;
 
@@ -97,7 +89,7 @@ function moveNavigationFocus(input: Readonly<{
   });
 }
 
-test("keeps the five first-level categories ordered and localized with English fallbacks", () => {
+test("keeps the four first-level categories ordered and localized with English fallbacks", () => {
   for (const locale of ["en", "zh-CN", "ja", "ru"] as const) {
     const model = getFarmLayoutsNavigationModel(locale);
 
@@ -417,11 +409,6 @@ test("provides all ten Farm Maps pages in order with localized hrefs", () => {
       ),
     ).toEqual(expectedBedroomDesign);
 
-    for (const categoryId of emptyFarmLayoutsCategoryIds) {
-      expect(readFarmLayoutsNavigationCategory(model, categoryId).pages).toEqual(
-        [],
-      );
-    }
     expect(model.emptyStateLabel).toBe(
       locale === "zh-CN" ? "暂无布局案例。" : "No layouts yet.",
     );
@@ -869,7 +856,7 @@ test("keeps Farm Layouts immediately before the language control in the dock", (
   expect(languageControlIndex).toBeGreaterThan(farmLayoutsIndex);
 });
 
-test("moves keyboard focus through all five categories and wraps at both ends", () => {
+test("moves keyboard focus through all four categories and wraps at both ends", () => {
   const model = getFarmLayoutsNavigationModel("en");
   let interaction = toggleFarmLayoutsNavigation(
     createClosedFarmLayoutsNavigationInteraction(),
@@ -914,65 +901,18 @@ test("moves keyboard focus through all five categories and wraps at both ends", 
     key: "ArrowUp",
   });
   expect(interaction.focusKey).toBe(
-    getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
+    getFarmLayoutsNavigationCategoryFocusKey("planting-layouts"),
   );
 });
 
-test("opens an empty desktop category without page focus and returns to that category on Left", () => {
-  const selectedCategory = getFarmLayoutsNavigationCategoryFocusKey(
-    "layout-ideas",
-  );
-  const categories = {
-    focusKey: selectedCategory,
-    openCategoryId: null,
-    panel: "categories",
-    suppressPointerHover: false,
-  } as const;
-  const emptyCategoryPanel = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: selectedCategory,
-    interaction: categories,
-    key: "ArrowRight",
-  });
-  const returnedToCategories = moveNavigationFocus({
-    compact: false,
-    currentFocusKey: emptyCategoryPanel.focusKey ?? "",
-    interaction: emptyCategoryPanel,
-    key: "ArrowLeft",
-  });
-
-  expect(emptyCategoryPanel).toMatchObject({
-    focusKey: selectedCategory,
-    openCategoryId: "layout-ideas",
-    panel: "category",
-  });
-  expect(returnedToCategories).toMatchObject({
-    focusKey: selectedCategory,
-    openCategoryId: null,
-    panel: "categories",
-  });
-});
-
-test("uses a compact back step for empty and populated categories, then restores trigger focus on Escape", () => {
-  const emptyCategory = moveNavigationFocus({
-    compact: true,
-    currentFocusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
-    interaction: {
-      focusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
+test("uses a compact back step for populated categories, then restores trigger focus on Escape", () => {
+  const greenhouseCategory = activateFarmLayoutsCategory(
+    {
+      focusKey: getFarmLayoutsNavigationCategoryFocusKey("greenhouse-layouts"),
       openCategoryId: null,
       panel: "categories",
       suppressPointerHover: false,
     },
-    key: "ArrowRight",
-  });
-  const returnedFromEmpty = moveNavigationFocus({
-    compact: true,
-    currentFocusKey: "back",
-    interaction: emptyCategory,
-    key: "ArrowLeft",
-  });
-  const greenhouseCategory = activateFarmLayoutsCategory(
-    returnedFromEmpty,
     "greenhouse-layouts",
     true,
   );
@@ -1072,16 +1012,6 @@ test("uses a compact back step for empty and populated categories, then restores
     key: "Escape",
   });
 
-  expect(emptyCategory).toMatchObject({
-    focusKey: "back",
-    openCategoryId: "layout-ideas",
-    panel: "category",
-  });
-  expect(returnedFromEmpty).toMatchObject({
-    focusKey: getFarmLayoutsNavigationCategoryFocusKey("layout-ideas"),
-    openCategoryId: null,
-    panel: "categories",
-  });
   expect(greenhouseTreePage).toMatchObject({
     focusKey: getFarmLayoutsNavigationPageFocusKey("greenhouse-tree-layout"),
     openCategoryId: "greenhouse-layouts",
@@ -1234,11 +1164,11 @@ test("changes the selected category on desktop hover", () => {
   );
   const selectedCategory = openFarmLayoutsCategoryFromPointerHover(
     categories,
-    "layout-ideas",
+    "planting-layouts",
   );
 
   expect(selectedCategory).toMatchObject({
-    openCategoryId: "layout-ideas",
+    openCategoryId: "planting-layouts",
     panel: "category",
   });
 });
