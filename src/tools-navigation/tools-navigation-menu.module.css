@@ -1,4 +1,20 @@
 .toolsNavigation {
+  --tools-nav-border-width: 1px;
+  --tools-nav-panel-padding: 0.35rem;
+  --tools-nav-stack-gap: 0.1rem;
+  --tools-nav-title-font-size: 0.75rem;
+  --tools-nav-title-line-height: 1.5;
+  --tools-nav-title-padding-top: 0.35rem;
+  --tools-nav-title-padding-bottom: 0.2rem;
+  --tools-nav-title-block: calc(
+    var(--tools-nav-title-padding-top) +
+      (var(--tools-nav-title-font-size) * var(--tools-nav-title-line-height)) +
+      var(--tools-nav-title-padding-bottom)
+  );
+  --tools-nav-first-row-offset: calc(
+    var(--tools-nav-border-width) + var(--tools-nav-panel-padding) +
+      var(--tools-nav-title-block) + var(--tools-nav-stack-gap)
+  );
   display: inline-flex;
   position: relative;
 }
@@ -27,14 +43,14 @@
 .categoryPanel,
 .toolPanelInner {
   background: var(--background);
-  border: 1px solid rgb(36 42 34 / 22%);
+  border: var(--tools-nav-border-width) solid rgb(36 42 34 / 22%);
   border-radius: 0.45rem;
   box-shadow: 0 0.35rem 0.85rem rgb(36 42 34 / 16%);
   color: var(--foreground);
   flex-direction: column;
-  gap: 0.1rem;
+  gap: var(--tools-nav-stack-gap);
   min-width: 15rem;
-  padding: 0.35rem;
+  padding: var(--tools-nav-panel-padding);
 }
 
 .categoryPanel {
@@ -50,7 +66,7 @@
   left: calc(100% - 1px);
   padding-left: 0.45rem;
   position: absolute;
-  top: 0;
+  top: calc(-1 * var(--tools-nav-first-row-offset));
   z-index: 1;
 }
 
@@ -66,9 +82,11 @@
 
 .panelTitle {
   color: var(--muted-foreground);
-  font-size: 0.75rem;
+  font-size: var(--tools-nav-title-font-size);
   font-weight: 700;
-  padding: 0.35rem 0.7rem 0.2rem;
+  line-height: var(--tools-nav-title-line-height);
+  padding: var(--tools-nav-title-padding-top) 0.7rem
+    var(--tools-nav-title-padding-bottom);
 }
 
 .row,
@@ -83,6 +101,7 @@
   font: inherit;
   font-size: 0.875rem;
   font-weight: 700;
+  line-height: 1.5;
   gap: 1rem;
   justify-content: space-between;
   min-height: 2.25rem;

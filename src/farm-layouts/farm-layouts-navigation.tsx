@@ -5,6 +5,7 @@ import {
   useId,
   useRef,
   useState,
+  type CSSProperties,
   type FocusEvent,
   type KeyboardEvent,
 } from "react";
@@ -31,6 +32,7 @@ import {
 import {
   getFarmLayoutsNavigationModel,
   readFarmLayoutsNavigationCategory,
+  type FarmLayoutsNavigationCategory,
 } from "./farm-layouts-navigation-model";
 import styles from "./farm-layouts-navigation.module.css";
 
@@ -312,6 +314,13 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
       : readFarmLayoutsNavigationCategory(model, interaction.openCategoryId);
   const renderedCategory =
     selectedCategory ?? readFarmLayoutsNavigationCategory(model, "farm-maps");
+  const renderedCategoryIndex = readFarmLayoutsNavigationCategoryIndex(
+    model.categories,
+    renderedCategory.id,
+  );
+  const pagePanelStyle = {
+    "--farm-layouts-category-index": renderedCategoryIndex,
+  } as CSSProperties;
   const positionStyle =
     flyoutPosition === null
       ? undefined
@@ -405,6 +414,7 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
             }
             id={`${navigationPanelId}-page`}
             role="group"
+            style={pagePanelStyle}
           >
             <div className={styles.pagePanelInner}>
               <p
@@ -462,6 +472,22 @@ export function FarmLayoutsNavigation({ locale }: FarmLayoutsNavigationProps) {
       </div>
     </div>
   );
+}
+
+function readFarmLayoutsNavigationCategoryIndex(
+  categories: readonly FarmLayoutsNavigationCategory[],
+  categoryId: string,
+): number {
+  const categoryIndex = categories.findIndex(
+    (category) => category.id === categoryId,
+  );
+  if (categoryIndex < 0) {
+    throw new Error(
+      `Farm Layouts navigation category ${JSON.stringify(categoryId)} is missing from ${JSON.stringify(categories.map((category) => category.id))}.`,
+    );
+  }
+
+  return categoryIndex;
 }
 
 function readFarmLayoutsMatchMedia():
