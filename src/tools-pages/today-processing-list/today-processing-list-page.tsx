@@ -21,7 +21,6 @@ const STEP_COUNT = 3;
 const STEP_NUMBERS = ["01", "02", "03"] as const;
 const COMPARISON_PRODUCT_COUNT = 3;
 const COMPARISON_ROW_COUNT = 4;
-const COMPARISON_SOURCE_COUNT = 5;
 const FAQ_COUNT = 4;
 const DESKTOP_CASE_IMAGE_WIDTH = 556;
 const DESKTOP_CASE_IMAGE_HEIGHT = 417;
@@ -57,14 +56,6 @@ function requireCount(actualCount: number, expectedCount: number, fieldPath: str
   if (actualCount !== expectedCount) {
     throw new Error(
       `TodayProcessingListPage ${fieldPath} must contain ${expectedCount} items, received ${actualCount}.`,
-    );
-  }
-}
-
-function requireHttpsUrl(value: string, fieldPath: string): void {
-  if (!value.startsWith("https://")) {
-    throw new Error(
-      `TodayProcessingListPage ${fieldPath} must be an https URL, received ${JSON.stringify(value)}.`,
     );
   }
 }
@@ -187,11 +178,9 @@ function assertComparisonCopy(comparison: TodayProcessingListPageCopy["compariso
   requireNonEmpty(comparison.mobileDescription, "comparison.mobileDescription");
   requireDifferentText(comparison.mobileDescription, comparison.description, "comparison.mobileDescription");
   requireNonEmpty(comparison.cornerLabel, "comparison.cornerLabel");
-  requireNonEmpty(comparison.sourceSeparator, "comparison.sourceSeparator");
   requireNonEmpty(comparison.mobileSourceLine, "comparison.mobileSourceLine");
   requireCount(comparison.products.length, COMPARISON_PRODUCT_COUNT, "comparison.products");
   requireCount(comparison.rows.length, COMPARISON_ROW_COUNT, "comparison.rows");
-  requireCount(comparison.sources.length, COMPARISON_SOURCE_COUNT, "comparison.sources");
   comparison.products.forEach((product, productIndex) => {
     requireNonEmpty(product, `comparison.products[${productIndex}]`);
   });
@@ -201,13 +190,8 @@ function assertComparisonCopy(comparison: TodayProcessingListPageCopy["compariso
       requireNonEmpty(value, `comparison.rows[${rowIndex}].values[${valueIndex}]`);
     });
   });
-  comparison.sources.forEach((source, sourceIndex) => {
-    requireNonEmpty(source.label, `comparison.sources[${sourceIndex}].label`);
-    requireHttpsUrl(source.href, `comparison.sources[${sourceIndex}].href`);
-  });
   requireUniqueLabels(comparison.products, "comparison.products");
   requireUniqueLabels(comparison.rows.map((row) => row.label), "comparison.rows.label");
-  requireUniqueLabels(comparison.sources.map((source) => source.href), "comparison.sources.href");
   assertComparisonRowsMatchProducts(comparison);
 }
 
@@ -415,27 +399,6 @@ function StepsSection({
   );
 }
 
-function ComparisonSources({
-  separator,
-  sources,
-}: Readonly<{
-  separator: string;
-  sources: TodayProcessingListPageCopy["comparison"]["sources"];
-}>): JSX.Element {
-  return (
-    <p className={`${styles.comparisonSources} ${styles.desktopOnly}`}>
-      {sources.map((source, sourceIndex) => (
-        <span key={source.href}>
-          {sourceIndex > 0 ? separator : null}
-          <a href={source.href} rel="noreferrer noopener" target="_blank">
-            {source.label}
-          </a>
-        </span>
-      ))}
-    </p>
-  );
-}
-
 function ComparisonTable({
   copy,
 }: Readonly<{ copy: TodayProcessingListPageCopy["comparison"] }>): JSX.Element {
@@ -515,7 +478,6 @@ function ComparisonSection({
       </div>
       <ComparisonTable copy={copy} />
       <ComparisonCards copy={copy} />
-      <ComparisonSources separator={copy.sourceSeparator} sources={copy.sources} />
       <p className={`${styles.comparisonSources} ${styles.mobileOnly}`}>{copy.mobileSourceLine}</p>
     </section>
   );

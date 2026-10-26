@@ -211,10 +211,10 @@ it.each(expectedPages)(
     expected.comparisonCells.forEach((cell) => {
       expect(markup).toContain(escapeHtmlText(cell));
     });
-    expect(markup).toContain("https://valleymath.com/stardew/keg-cost-calculator");
-    expect(markup).toContain("https://stardewvalleywiki.com/Keg");
-    expect(markup).toContain("https://stardewvalleywiki.com/Oak_Resin");
-    expect(markup).toContain("https://stardewvalleywiki.com/Tapper");
+    expect(markup).not.toContain("https://valleymath.com/stardew/keg-cost-calculator");
+    expect(markup).not.toContain("https://stardewvalleywiki.com/Keg");
+    expect(markup).not.toContain("https://stardewvalleywiki.com/Oak_Resin");
+    expect(markup).not.toContain("https://stardewvalleywiki.com/Tapper");
     expect(markup).toContain('alt=""');
     expect(markup.match(new RegExp(escapeRegExp(imagePath), "g")) ?? []).toHaveLength(4);
     expect(markup).toContain('width="512"');

@@ -35,6 +35,17 @@ const expectedHeadings = {
   },
 } as const satisfies Readonly<Record<PublicLocale, Readonly<Record<string, string>>>>;
 
+const removedComparisonSourceTexts = [
+  "https://valleymath.com/stardew/what-to-process-today",
+  "https://valleymath.com/stardew/artisan-production-planner",
+  "/artisan-production-planner",
+  "https://stardewvalleywiki.com/Keg",
+  "https://stardewvalleywiki.com/Preserves_Jar",
+  "/Preserves_Jar",
+  "https://stardewvalleywiki.com/Dehydrator",
+  "/Dehydrator",
+] as const;
+
 const routePages = {
   en: EnglishTodayProcessingListRoute,
   "zh-CN": ChineseTodayProcessingListRoute,
@@ -85,10 +96,8 @@ function visibleCopyStrings(copy: TodayProcessingListPageCopy): readonly string[
     copy.comparison.title,
     copy.comparison.description,
     copy.comparison.cornerLabel,
-    copy.comparison.sourceSeparator,
     ...copy.comparison.products,
     ...copy.comparison.rows.flatMap((row) => [row.label, ...row.values]),
-    ...copy.comparison.sources.map((source) => source.label),
     copy.comparison.mobileDescription,
     copy.comparison.mobileSourceLine,
     copy.faq.eyebrow,
@@ -184,10 +193,16 @@ it.each(["en", "zh-CN"] as const)("renders the today processing list guide in %s
     expect(markup).toContain(escapeHtmlText(visibleText));
   }
 
-  for (const source of copy.comparison.sources) {
-    expect(markup).toContain(`href="${source.href}"`);
-    expect(markup).toContain(`>${escapeHtmlText(source.label)}</a>`);
+  const markupWithoutMobileSourceLine = markup.replaceAll(
+    escapeHtmlText(copy.comparison.mobileSourceLine),
+    "",
+  );
+
+  for (const removedComparisonSourceText of removedComparisonSourceTexts) {
+    expect(markupWithoutMobileSourceLine).not.toContain(removedComparisonSourceText);
   }
+
+  expect(markup).toContain(escapeHtmlText(copy.comparison.mobileSourceLine));
 
   expect(markup).toMatch(
     new RegExp(

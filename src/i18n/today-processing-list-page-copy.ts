@@ -34,8 +34,6 @@ export type TodayProcessingListPageCopy = Readonly<{
     cornerLabel: string;
     products: readonly string[];
     rows: readonly Readonly<{ label: string; values: readonly string[] }>[];
-    sourceSeparator: string;
-    sources: readonly Readonly<{ label: string; href: string }>[];
     mobileDescription: string;
     mobileSourceLine: string;
   }>;
@@ -51,29 +49,6 @@ export type TodayProcessingListPageCopy = Readonly<{
     actionLabel: string;
   }>;
 }>;
-
-const comparisonSources = [
-  {
-    label: "https://valleymath.com/stardew/what-to-process-today",
-    href: "https://valleymath.com/stardew/what-to-process-today",
-  },
-  {
-    label: "/artisan-production-planner",
-    href: "https://valleymath.com/stardew/artisan-production-planner",
-  },
-  {
-    label: "https://stardewvalleywiki.com/Keg",
-    href: "https://stardewvalleywiki.com/Keg",
-  },
-  {
-    label: "/Preserves_Jar",
-    href: "https://stardewvalleywiki.com/Preserves_Jar",
-  },
-  {
-    label: "/Dehydrator",
-    href: "https://stardewvalleywiki.com/Dehydrator",
-  },
-] as const;
 
 const todayProcessingListPageCopy = {
   en: {
@@ -176,8 +151,6 @@ const todayProcessingListPageCopy = {
           ],
         },
       ],
-      sourceSeparator: " \u00b7 ",
-      sources: comparisonSources,
       mobileDescription: "Daily tasks, stock limits & schedule length",
       mobileSourceLine: "Sources: ValleyMath Today / Full Planner \u00b7 Stardew Wiki Keg/Jar/Dehydrator",
     },
@@ -310,8 +283,6 @@ const todayProcessingListPageCopy = {
           ],
         },
       ],
-      sourceSeparator: " \u00b7 ",
-      sources: comparisonSources,
       mobileDescription: "看装收任务、库存条件与计划跨度",
       mobileSourceLine: "来源：ValleyMath What to Process Today / Full Planner \u00b7 Wiki Keg/Jar/Dehydrator",
     },

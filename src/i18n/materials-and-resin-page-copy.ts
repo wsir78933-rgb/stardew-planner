@@ -42,7 +42,6 @@ export type MaterialsAndResinPageCopy = Readonly<{
     cornerLabel: string;
     columns: readonly [string, string, string];
     rows: readonly MaterialsAndResinComparisonRow[];
-    desktopSources: readonly Readonly<{ label: string; href: string }>[];
     mobileSources: string;
   }>;
   faq: Readonly<{
@@ -57,18 +56,6 @@ export type MaterialsAndResinPageCopy = Readonly<{
     actionLabel: string;
   }>;
 }>;
-
-const valleyMathKegCostHref = "https://valleymath.com/stardew/keg-cost-calculator";
-const wikiKegHref = "https://stardewvalleywiki.com/Keg";
-const wikiOakResinHref = "https://stardewvalleywiki.com/Oak_Resin";
-const wikiTapperHref = "https://stardewvalleywiki.com/Tapper";
-
-const sharedDesktopSources = [
-  { label: valleyMathKegCostHref, href: valleyMathKegCostHref },
-  { label: wikiKegHref, href: wikiKegHref },
-  { label: "/Oak_Resin", href: wikiOakResinHref },
-  { label: "/Tapper", href: wikiTapperHref },
-] as const;
 
 const materialsAndResinPageCopyByLocale: Readonly<Record<PublicLocale, MaterialsAndResinPageCopy>> = {
   "zh-CN": {
@@ -157,7 +144,6 @@ const materialsAndResinPageCopyByLocale: Readonly<Record<PublicLocale, Materials
           values: ["中英双语，分开复制材料和树脂", "英文计算器，可复制清单", "只查配方和周期，自己盘点"],
         },
       ],
-      desktopSources: sharedDesktopSources,
       mobileSources: "来源：ValleyMath Keg Cost · Stardew Wiki Keg/Oak Resin/Tapper",
     },
     faq: {
@@ -291,7 +277,6 @@ const materialsAndResinPageCopyByLocale: Readonly<Record<PublicLocale, Materials
           ],
         },
       ],
-      desktopSources: sharedDesktopSources,
       mobileSources: "Sources: ValleyMath Keg Cost · Stardew Wiki Keg/Oak Resin/Tapper",
     },
     faq: {

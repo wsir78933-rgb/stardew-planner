@@ -22,23 +22,9 @@ const COMPARISON_COLUMN_COUNT = 3;
 const COMPARISON_ROW_COUNT = 4;
 const FAQ_COUNT = 4;
 const CASE_RESULT_COUNT = 2;
-const SOURCE_COUNT = 4;
 const MATERIALS_CALCULATOR_ID = "materials-and-resin-calculator";
 const CASE_IMAGE_WIDTH = 512;
 const CASE_IMAGE_HEIGHT = 652;
-const SOURCE_SEPARATOR = " · ";
-const DESKTOP_SOURCE_LABELS = [
-  "https://valleymath.com/stardew/keg-cost-calculator",
-  "https://stardewvalleywiki.com/Keg",
-  "/Oak_Resin",
-  "/Tapper",
-] as const;
-const DESKTOP_SOURCE_HREFS = [
-  "https://valleymath.com/stardew/keg-cost-calculator",
-  "https://stardewvalleywiki.com/Keg",
-  "https://stardewvalleywiki.com/Oak_Resin",
-  "https://stardewvalleywiki.com/Tapper",
-] as const;
 
 export type MaterialsAndResinPageProperties = Readonly<{
   locale: PublicLocale;
@@ -56,14 +42,6 @@ function requireCount(actualCount: number, expectedCount: number, fieldPath: str
   if (actualCount !== expectedCount) {
     throw new Error(
       `MaterialsAndResinPage ${fieldPath} must contain ${expectedCount} items, received ${actualCount}.`,
-    );
-  }
-}
-
-function requireHttpsHref(href: string, fieldPath: string): void {
-  if (!href.startsWith("https://")) {
-    throw new Error(
-      `MaterialsAndResinPage ${fieldPath} must be an https URL, received ${JSON.stringify(href)}.`,
     );
   }
 }
@@ -86,21 +64,6 @@ function assertComparisonRow(row: MaterialsAndResinComparisonRow, rowIndex: numb
   );
   row.mobileValues.forEach((value, valueIndex) => {
     requireText(value, `comparison.rows[${rowIndex}].mobileValues[${valueIndex}]`);
-  });
-}
-
-function assertDesktopSources(sources: MaterialsAndResinPageCopy["comparison"]["desktopSources"]): void {
-  requireCount(sources.length, SOURCE_COUNT, "comparison.desktopSources");
-  sources.forEach((source, sourceIndex) => {
-    const expectedLabel = DESKTOP_SOURCE_LABELS[sourceIndex];
-    const expectedHref = DESKTOP_SOURCE_HREFS[sourceIndex];
-    requireText(source.label, `comparison.desktopSources[${sourceIndex}].label`);
-    requireHttpsHref(source.href, `comparison.desktopSources[${sourceIndex}].href`);
-    if (source.label !== expectedLabel || source.href !== expectedHref) {
-      throw new Error(
-        `MaterialsAndResinPage comparison.desktopSources[${sourceIndex}] must be label ${JSON.stringify(expectedLabel)} and href ${JSON.stringify(expectedHref)}, received label ${JSON.stringify(source.label)} and href ${JSON.stringify(source.href)}.`,
-      );
-    }
   });
 }
 
@@ -160,7 +123,6 @@ function assertMaterialsAndResinPage(copy: MaterialsAndResinPageCopy, locale: Pu
     requireText(column, `comparison.columns[${columnIndex}]`);
   });
   copy.comparison.rows.forEach(assertComparisonRow);
-  assertDesktopSources(copy.comparison.desktopSources);
 
   requireText(copy.faq.eyebrow, "faq.eyebrow");
   requireText(copy.faq.title, "faq.title");
@@ -478,21 +440,7 @@ function ComparisonCards({
 function ComparisonSources({
   comparison,
 }: Readonly<{ comparison: MaterialsAndResinPageCopy["comparison"] }>): JSX.Element {
-  return (
-    <>
-      <p className={`${styles.sources} ${styles.desktopText}`}>
-        {comparison.desktopSources.map((source, sourceIndex) => (
-          <span key={source.href}>
-            {sourceIndex === 0 ? null : SOURCE_SEPARATOR}
-            <a href={source.href} rel="noreferrer noopener" target="_blank">
-              {source.label}
-            </a>
-          </span>
-        ))}
-      </p>
-      <p className={`${styles.sources} ${styles.mobileText}`}>{comparison.mobileSources}</p>
-    </>
-  );
+  return <p className={`${styles.sources} ${styles.mobileText}`}>{comparison.mobileSources}</p>;
 }
 
 function ComparisonSection({
