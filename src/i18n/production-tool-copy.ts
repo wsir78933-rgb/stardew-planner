@@ -186,7 +186,7 @@ export type ProductionToolCopy = Readonly<{
 const productionToolCopy: Readonly<Record<PublicLocale, ProductionToolCopy>> = {
   en: {
     title: { today: "Today's processing list", schedule: "Production schedule" },
-    plannerTitle: "Production plan",
+    plannerTitle: "Daily tasks",
     description:
       "Plan what to load and collect from the inventory you have, with reserved stock and arrival days kept visible.",
     navigation: {

@@ -25,10 +25,10 @@ const processingToolFrameCopyByLocale: Readonly<
   en: {
     allToolsLabel: "All tools",
     categoryLabels: {
-      planting: "Crop planning",
+      planting: "Crops",
       processing: "Processing",
-      production: "Production plan",
-      workshop: "Workshop",
+      production: "Daily tasks",
+      workshop: "Shed",
     },
     toolLabels: {
       "crop-profit": "Season crop profit",

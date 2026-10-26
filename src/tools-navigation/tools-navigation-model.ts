@@ -21,10 +21,10 @@ export type ToolsNavigationCategory = Readonly<{
 
 export type ToolsNavigationModel = Readonly<{
   allToolsHref: string;
-  allToolsLabel: "全部工具";
-  backToCategoriesLabel: "返回工具分类";
+  allToolsLabel: string;
+  backToCategoriesLabel: string;
   categories: readonly ToolsNavigationCategory[];
-  categoryPanelTitle: "工具分类";
+  categoryPanelTitle: string;
   locale: ToolsNavigationLocale;
   toolsHomeHref: string;
   triggerLabel: "Stardew Valley tools";
@@ -38,14 +38,18 @@ type ToolsNavigationCatalogTool = Readonly<{
 
 type ToolsNavigationCatalogCategory = Readonly<{
   id: string;
-  label: string;
   tools: readonly ToolsNavigationCatalogTool[];
+}>;
+
+type ToolsNavigationChromeLabels = Readonly<{
+  allToolsLabel: string;
+  backToCategoriesLabel: string;
+  categoryPanelTitle: string;
 }>;
 
 const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
   {
     id: "planting",
-    label: "种植规划",
     tools: [
       {
         id: "crop-profit",
@@ -61,7 +65,6 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
   },
   {
     id: "processing",
-    label: "加工计算",
     tools: [
       {
         id: "basic-processing-profit",
@@ -102,7 +105,6 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
   },
   {
     id: "production",
-    label: "生产计划",
     tools: [
       { id: "today-processing-list", label: "今日加工清单", path: getPlanningToolPath("today-processing-list") },
       { id: "production-schedule", label: "综合生产排程", path: getPlanningToolPath("production-schedule") },
@@ -110,7 +112,6 @@ const TOOLS_NAVIGATION_CATALOG: readonly ToolsNavigationCatalogCategory[] = [
   },
   {
     id: "workshop",
-    label: "工坊建设",
     tools: [
       { id: "keg-count", label: "需要多少 Keg", path: getPlanningToolPath("keg-count") },
       { id: "materials-and-resin", label: "材料与树脂时间", path: getPlanningToolPath("materials-and-resin") },
@@ -122,12 +123,16 @@ export function getToolsNavigationModel(locale: string): ToolsNavigationModel {
   const toolsNavigationLocale = readToolsNavigationLocale(locale);
   const pathPrefix = readToolsNavigationPathPrefix(toolsNavigationLocale);
 
+  const toolsNavigationChromeLabels = readToolsNavigationChromeLabels(
+    toolsNavigationLocale,
+  );
+
   return {
     allToolsHref: `${pathPrefix}/tools`,
-    allToolsLabel: "全部工具",
-    backToCategoriesLabel: "返回工具分类",
+    allToolsLabel: toolsNavigationChromeLabels.allToolsLabel,
+    backToCategoriesLabel: toolsNavigationChromeLabels.backToCategoriesLabel,
     categories: createToolsNavigationCategories(toolsNavigationLocale, pathPrefix),
-    categoryPanelTitle: "工具分类",
+    categoryPanelTitle: toolsNavigationChromeLabels.categoryPanelTitle,
     locale: toolsNavigationLocale,
     toolsHomeHref: `${pathPrefix}/tools`,
     triggerLabel: "Stardew Valley tools",
@@ -206,13 +211,108 @@ function createToolsNavigationCategories(
 ): readonly ToolsNavigationCategory[] {
   return TOOLS_NAVIGATION_CATALOG.map((category) => ({
     id: category.id,
-    label: category.label,
+    label: readToolsNavigationCategoryLabel(locale, category.id),
     tools: category.tools.map((tool) => ({
       href: readToolsNavigationToolHref(pathPrefix, tool),
       id: tool.id,
       label: readToolsNavigationToolLabel(locale, tool),
     })),
   }));
+}
+
+function readToolsNavigationChromeLabels(
+  locale: ToolsNavigationLocale,
+): ToolsNavigationChromeLabels {
+  if (locale === "zh-CN") {
+    return readChineseToolsNavigationChromeLabels();
+  }
+
+  if (locale === "en" || locale === "ja" || locale === "ru") {
+    return readEnglishToolsNavigationChromeLabels();
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Unknown tools navigation locale ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readChineseToolsNavigationChromeLabels(): ToolsNavigationChromeLabels {
+  return {
+    allToolsLabel: "全部工具",
+    backToCategoriesLabel: "返回工具分类",
+    categoryPanelTitle: "工具分类",
+  };
+}
+
+function readEnglishToolsNavigationChromeLabels(): ToolsNavigationChromeLabels {
+  return {
+    allToolsLabel: "All tools",
+    backToCategoriesLabel: "Back to tool categories",
+    categoryPanelTitle: "Tool categories",
+  };
+}
+
+function readToolsNavigationCategoryLabel(
+  locale: ToolsNavigationLocale,
+  categoryId: string,
+): string {
+  if (locale === "zh-CN") {
+    return readChineseToolsNavigationCategoryLabel(categoryId);
+  }
+
+  if (locale === "en" || locale === "ja" || locale === "ru") {
+    return readEnglishToolsNavigationCategoryLabel(categoryId);
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Unknown tools navigation locale ${JSON.stringify(unsupportedLocale)}.`,
+  );
+}
+
+function readChineseToolsNavigationCategoryLabel(categoryId: string): string {
+  if (categoryId === "planting") {
+    return "种植规划";
+  }
+
+  if (categoryId === "processing") {
+    return "加工计算";
+  }
+
+  if (categoryId === "production") {
+    return "生产计划";
+  }
+
+  if (categoryId === "workshop") {
+    return "工坊建设";
+  }
+
+  throw new Error(
+    `Unknown tools navigation category ${JSON.stringify(categoryId)}.`,
+  );
+}
+
+function readEnglishToolsNavigationCategoryLabel(categoryId: string): string {
+  if (categoryId === "planting") {
+    return "Crops";
+  }
+
+  if (categoryId === "processing") {
+    return "Processing";
+  }
+
+  if (categoryId === "production") {
+    return "Daily tasks";
+  }
+
+  if (categoryId === "workshop") {
+    return "Shed";
+  }
+
+  throw new Error(
+    `Unknown tools navigation category ${JSON.stringify(categoryId)}.`,
+  );
 }
 
 function readToolsNavigationToolLabel(

@@ -22,7 +22,7 @@ import { createProductionPlanIncomingHref } from "../../src/tools-pages/producti
 describe.each([
   {
     locale: "en" as const,
-    title: "Production plan",
+    title: "Daily tasks",
     navToday: "Today’s tasks",
     navSchedule: "Full schedule",
     settings: "Processing window",

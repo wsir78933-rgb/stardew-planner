@@ -82,6 +82,7 @@ function readToolsCategoryFlyoutMarkup(markup: string, categoryId: string): stri
 
 test("renders Stardew Valley tools and the desktop planting flyout for en", () => {
   const markup = renderHomepageDock("en");
+  const model = getToolsNavigationModel("en");
   const plantingFlyoutMarkup = readToolsCategoryFlyoutMarkup(markup, "planting");
   const processingFlyoutMarkup = readToolsCategoryFlyoutMarkup(markup, "processing");
   const blogIndex = markup.indexOf("<span>Blog</span>");
@@ -90,12 +91,16 @@ test("renders Stardew Valley tools and the desktop planting flyout for en", () =
   const plannerIndex = markup.indexOf("<span>Open planner</span>");
 
   expect(readToolsNavigationTriggerMarkup(markup)).toContain('href="/tools"');
-  expect(markup).toContain("工具分类");
-  expect(markup).toContain("种植规划");
-  expect(markup.indexOf("种植规划")).toBeLessThan(markup.indexOf("加工计算"));
-  expect(markup.indexOf("加工计算")).toBeLessThan(markup.indexOf("生产计划"));
-  expect(markup.indexOf("生产计划")).toBeLessThan(markup.indexOf("工坊建设"));
-  expect(markup.indexOf("工坊建设")).toBeLessThan(markup.indexOf("全部工具"));
+  expect(model.categoryPanelTitle).toBe("Tool categories");
+  expect(model.allToolsLabel).toBe("All tools");
+  expect(model.backToCategoriesLabel).toBe("Back to tool categories");
+  expect(readToolsNavigationCategory(model, "planting").label).toBe("Crops");
+  expect(markup).toContain("Tool categories");
+  expect(markup).toContain("Crops");
+  expect(markup.indexOf("Crops")).toBeLessThan(markup.indexOf("Processing"));
+  expect(markup.indexOf("Processing")).toBeLessThan(markup.indexOf("Daily tasks"));
+  expect(markup.indexOf("Daily tasks")).toBeLessThan(markup.indexOf("Shed"));
+  expect(markup.indexOf("Shed")).toBeLessThan(markup.indexOf("All tools"));
   expect(markup.match(/data-tools-navigation-chevron/g)?.length).toBe(4);
   expect(plantingFlyoutMarkup).toContain('href="/tools/crop-profit"');
   expect(plantingFlyoutMarkup).toContain('href="/tools/crop-growth"');
@@ -140,6 +145,8 @@ test("connects the tools trigger and every category to a unique controlled panel
 });
 
 test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => {
+  const japaneseModel = getToolsNavigationModel("ja");
+  const chineseModel = getToolsNavigationModel("zh-CN");
   const japaneseMarkup = renderHomepageDock("ja");
   const chineseMarkup = renderHomepageDock("zh-CN");
   const japaneseProcessingFlyoutMarkup = readToolsCategoryFlyoutMarkup(
@@ -151,6 +158,37 @@ test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => 
     "processing",
   );
 
+  expect(japaneseModel.categoryPanelTitle).toBe("Tool categories");
+  expect(japaneseModel.allToolsLabel).toBe("All tools");
+  expect(japaneseModel.backToCategoriesLabel).toBe("Back to tool categories");
+  expect(readToolsNavigationCategory(japaneseModel, "planting").label).toBe("Crops");
+  expect(readToolsNavigationCategory(japaneseModel, "processing").label).toBe(
+    "Processing",
+  );
+  expect(readToolsNavigationCategory(japaneseModel, "production").label).toBe(
+    "Daily tasks",
+  );
+  expect(readToolsNavigationCategory(japaneseModel, "workshop").label).toBe("Shed");
+  expect(japaneseMarkup).toContain("Tool categories");
+  expect(japaneseMarkup.indexOf("Crops")).toBeLessThan(
+    japaneseMarkup.indexOf("Processing"),
+  );
+  expect(japaneseMarkup.indexOf("Processing")).toBeLessThan(
+    japaneseMarkup.indexOf("Daily tasks"),
+  );
+  expect(japaneseMarkup.indexOf("Daily tasks")).toBeLessThan(
+    japaneseMarkup.indexOf("Shed"),
+  );
+  expect(japaneseMarkup.indexOf("Shed")).toBeLessThan(
+    japaneseMarkup.indexOf("All tools"),
+  );
+  expect(japaneseMarkup).not.toContain("工具分类");
+  expect(japaneseMarkup).not.toContain("种植规划");
+  expect(japaneseMarkup).not.toContain("加工计算");
+  expect(japaneseMarkup).not.toContain("生产计划");
+  expect(japaneseMarkup).not.toContain("工坊建设");
+  expect(japaneseMarkup).not.toContain("全部工具");
+  expect(japaneseMarkup).not.toContain("返回工具分类");
   expect(japaneseMarkup).toContain("<span>Stardew Valley tools</span>");
   expect(readToolsNavigationTriggerMarkup(japaneseMarkup)).toContain('href="/tools"');
   expect(japaneseMarkup).not.toContain('href="/ja/tools"');
@@ -165,6 +203,34 @@ test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => 
   expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).not.toContain('href="/tools/crop-profit?tool=growth"');
   expect(japaneseProcessingFlyoutMarkup).toContain('href="/tools/cask-aging"');
   expect(japaneseProcessingFlyoutMarkup).toContain("Cask aging");
+  expect(chineseModel.categoryPanelTitle).toBe("工具分类");
+  expect(chineseModel.allToolsLabel).toBe("全部工具");
+  expect(chineseModel.backToCategoriesLabel).toBe("返回工具分类");
+  expect(readToolsNavigationCategory(chineseModel, "planting").label).toBe(
+    "种植规划",
+  );
+  expect(readToolsNavigationCategory(chineseModel, "processing").label).toBe(
+    "加工计算",
+  );
+  expect(readToolsNavigationCategory(chineseModel, "production").label).toBe(
+    "生产计划",
+  );
+  expect(readToolsNavigationCategory(chineseModel, "workshop").label).toBe(
+    "工坊建设",
+  );
+  expect(chineseMarkup).toContain("工具分类");
+  expect(chineseMarkup.indexOf("种植规划")).toBeLessThan(
+    chineseMarkup.indexOf("加工计算"),
+  );
+  expect(chineseMarkup.indexOf("加工计算")).toBeLessThan(
+    chineseMarkup.indexOf("生产计划"),
+  );
+  expect(chineseMarkup.indexOf("生产计划")).toBeLessThan(
+    chineseMarkup.indexOf("工坊建设"),
+  );
+  expect(chineseMarkup.indexOf("工坊建设")).toBeLessThan(
+    chineseMarkup.indexOf("全部工具"),
+  );
   expect(readToolsNavigationTriggerMarkup(chineseMarkup)).toContain('href="/zh/tools"');
   expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).toContain(
     'href="/zh/tools/crop-profit"',
@@ -188,6 +254,37 @@ test("uses English labels and unprefixed tool paths for Russian", () => {
   const russianProcessingFlyoutMarkup = readToolsCategoryFlyoutMarkup(russianMarkup, "processing");
 
   expect(russianModel.locale).toBe("ru");
+  expect(russianModel.categoryPanelTitle).toBe("Tool categories");
+  expect(russianModel.allToolsLabel).toBe("All tools");
+  expect(russianModel.backToCategoriesLabel).toBe("Back to tool categories");
+  expect(readToolsNavigationCategory(russianModel, "planting").label).toBe("Crops");
+  expect(readToolsNavigationCategory(russianModel, "processing").label).toBe(
+    "Processing",
+  );
+  expect(readToolsNavigationCategory(russianModel, "production").label).toBe(
+    "Daily tasks",
+  );
+  expect(readToolsNavigationCategory(russianModel, "workshop").label).toBe("Shed");
+  expect(russianMarkup).toContain("Tool categories");
+  expect(russianMarkup.indexOf("Crops")).toBeLessThan(
+    russianMarkup.indexOf("Processing"),
+  );
+  expect(russianMarkup.indexOf("Processing")).toBeLessThan(
+    russianMarkup.indexOf("Daily tasks"),
+  );
+  expect(russianMarkup.indexOf("Daily tasks")).toBeLessThan(
+    russianMarkup.indexOf("Shed"),
+  );
+  expect(russianMarkup.indexOf("Shed")).toBeLessThan(
+    russianMarkup.indexOf("All tools"),
+  );
+  expect(russianMarkup).not.toContain("工具分类");
+  expect(russianMarkup).not.toContain("种植规划");
+  expect(russianMarkup).not.toContain("加工计算");
+  expect(russianMarkup).not.toContain("生产计划");
+  expect(russianMarkup).not.toContain("工坊建设");
+  expect(russianMarkup).not.toContain("全部工具");
+  expect(russianMarkup).not.toContain("返回工具分类");
   expect(russianModel.allToolsHref).toBe("/tools");
   expect(russianModel.toolsHomeHref).toBe("/tools");
   expect(readToolsNavigationTool(russianModel, "crop-profit")).toEqual({
@@ -276,7 +373,7 @@ test("opens planting from the desktop hover path and rejects unknown ids", () =>
 
   expect(hovered.isCategoryPanelOpen).toBe(true);
   expect(hovered.openCategoryId).toBe("planting");
-  expect(planting.label).toBe("种植规划");
+  expect(planting.label).toBe("Crops");
   expect(planting.tools).toEqual([
     {
       href: "/tools/crop-profit",

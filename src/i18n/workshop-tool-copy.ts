@@ -146,7 +146,7 @@ export type WorkshopToolCopy = Readonly<{
 const workshopToolCopy: Readonly<Record<PublicLocale, WorkshopToolCopy>> = {
   en: {
     navigation: {
-      label: "Workshop tools",
+      label: "Shed tools",
       kegCapacity: "Keg capacity",
       kegMaterials: "Materials and resin",
     },

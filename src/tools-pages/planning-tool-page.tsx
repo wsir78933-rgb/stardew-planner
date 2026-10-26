@@ -85,11 +85,27 @@ function PlanningToolComparison({
   );
 }
 
+function readPlanningToolCategoryLabel(locale: PublicLocale, isProductionCategory: boolean): string {
+  if (locale === "zh-CN") {
+    if (isProductionCategory) {
+      return "生产计划";
+    }
+    return "工坊建设";
+  }
+  if (locale === "en") {
+    if (isProductionCategory) {
+      return "Daily tasks";
+    }
+    return "Shed";
+  }
+  throw new Error(`Planning tool category locale is unsupported. Received locale=${JSON.stringify(locale)}.`);
+}
+
 export function PlanningToolPage({ locale, toolId }: Readonly<{ locale: PublicLocale; toolId: PlanningToolId }>) {
   const copy = getPlanningToolRouteCopy(locale, toolId);
   const calculatorId = `${toolId}-calculator`;
   const isProduction = toolId === "today-processing-list" || toolId === "production-schedule";
-  const categoryLabel = locale === "zh-CN" ? (isProduction ? "生产计划" : "工坊建设") : (isProduction ? "Production plan" : "Workshop");
+  const categoryLabel = readPlanningToolCategoryLabel(locale, isProduction);
   function testCurrentStock(handoff: KegCapacityPlanHandoff) {
     const input = createKegCapacityProductionPlan(handoff);
     window.location.assign(createProductionPlanIncomingHref(locale, input));
