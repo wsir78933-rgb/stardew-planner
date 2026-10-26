@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  applyIslandNorthPlacementBan,
   createMapPlacementGrid,
   getMapPlacementCapabilities,
   isTmxPropertyTruthy,
@@ -7,7 +8,7 @@ import {
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
 import { validatePlacement } from "../../src/placement/placement-validation";
 import { tiledFlipFlags } from "../../src/tmx/decode-tile-layer-data";
-import type { TmxMap, TmxProperties, TmxTileLayer } from "../../src/tmx/tmx-types";
+import type { TmxMap, TmxProperties, TmxTileLayer, TmxTileset } from "../../src/tmx/tmx-types";
 
 function createPlacementTestMap(overrides: Partial<TmxMap> = {}): TmxMap {
   return {
@@ -129,6 +130,61 @@ function createCrabPotTestMap(overrides: Partial<TmxMap> = {}): TmxMap {
   };
 }
 
+function createOneTileTileset(
+  firstGid: number,
+  name: string,
+  imageSource: string,
+  tileProperties: TmxProperties,
+): TmxTileset {
+  return {
+    firstGid,
+    name,
+    tileWidth: 16,
+    tileHeight: 16,
+    tileCount: 1,
+    columns: 1,
+    imageSource,
+    imageWidth: 16,
+    imageHeight: 16,
+    properties: {},
+    tileProperties: new Map<number, TmxProperties>([[0, tileProperties]]),
+  };
+}
+
+function createOpenGrassPlacementMap(): TmxMap {
+  return createPlacementTestMap({
+    tilesets: [
+      createOneTileTileset(1, "grass tilesheet", "test.png", { Type: "Grass" }),
+    ],
+    tileLayers: [
+      createTileLayer("Back", 3, 1, [1, 1, 1]),
+      createTileLayer("Buildings", 3, 1, [0, 0, 0]),
+    ],
+    tileDataProperties: new Map(),
+  });
+}
+
+function createDiggableDirtPlacementMap(width: number, height: number): TmxMap {
+  const tileCount = width * height;
+
+  return createPlacementTestMap({
+    width,
+    height,
+    tilesets: [
+      createOneTileTileset(1, "dirt tilesheet", "test.png", {
+        Type: "Dirt",
+        Diggable: "T",
+        Buildable: "T",
+      }),
+    ],
+    tileLayers: [
+      createTileLayer("Back", width, height, new Array<number>(tileCount).fill(1)),
+      createTileLayer("Buildings", width, height, new Array<number>(tileCount).fill(0)),
+    ],
+    tileDataProperties: new Map(),
+  });
+}
+
 describe("createMapPlacementGrid", () => {
   it("uses merged Back TileData only for buildability while crop diggability stays tileset-based", () => {
     const placementGrid = createMapPlacementGrid(createPlacementTestMap());
@@ -146,6 +202,7 @@ describe("createMapPlacementGrid", () => {
       water: false,
       crabPot: false,
       wall: false,
+      islandGardenPotCropAllowed: true,
     });
   });
 
@@ -165,6 +222,7 @@ describe("createMapPlacementGrid", () => {
       water: true,
       crabPot: false,
       wall: false,
+      islandGardenPotCropAllowed: true,
     });
     expect(getMapPlacementCapabilities(placementGrid, { x: 2, y: 0 })).toEqual({
       buildable: true,
@@ -179,6 +237,7 @@ describe("createMapPlacementGrid", () => {
       water: false,
       crabPot: false,
       wall: false,
+      islandGardenPotCropAllowed: true,
     });
   });
 
@@ -573,7 +632,7 @@ describe("createMapPlacementGrid", () => {
     });
   });
 
-  it("rejects Ginger Island diggable tiles that are not on the outdoors sheet", () => {
+  it("rejects Ginger Island diggable tiles that are not outdoors untitled tile sheet2", () => {
     const islandMap = createPlacementTestMap({
       tilesets: [
         {
@@ -620,10 +679,214 @@ describe("createMapPlacementGrid", () => {
     ).toBe(false);
     expect(
       getMapPlacementCapabilities(createMapPlacementGrid(islandMap, "Island_W.tmx"), { x: 1, y: 0 }).diggable,
-    ).toBe(true);
+    ).toBe(false);
     expect(
       getMapPlacementCapabilities(createMapPlacementGrid(islandMap), { x: 0, y: 0 }).diggable,
     ).toBe(true);
+  });
+
+  it("requires Ginger Island diggable tiles to use outdoors untitled tile sheet2", () => {
+    const islandMap = createPlacementTestMap({
+      width: 5,
+      tilesets: [
+        createOneTileTileset(1, "untitled tile sheet2", "spring_outdoorsTileSheet.png", {
+          Diggable: "T",
+        }),
+        createOneTileTileset(2, "untitled tile sheet3", "summer_outdoorsTileSheet2.png", {
+          Diggable: "T",
+        }),
+        createOneTileTileset(3, "untitled tile sheet2", "spring_outdoorsTileSheet.png", {}),
+        createOneTileTileset(4, "untitled tile sheet2", "island_tilesheet_1.png", {
+          Diggable: "T",
+        }),
+      ],
+      tileLayers: [
+        createTileLayer("Back", 5, 1, [1, 2, 3, 4, 0]),
+        createTileLayer("Buildings", 5, 1, [0, 0, 0, 0, 0]),
+      ],
+      tileDataProperties: new Map(),
+    });
+    const islandGrid = createMapPlacementGrid(islandMap, "Island_W.tmx");
+    const farmGrid = createMapPlacementGrid(islandMap, "Farm.tmx");
+
+    expect(getMapPlacementCapabilities(islandGrid, { x: 0, y: 0 })).toMatchObject({
+      diggable: true,
+      islandGardenPotCropAllowed: true,
+    });
+    expect(getMapPlacementCapabilities(islandGrid, { x: 1, y: 0 })).toMatchObject({
+      diggable: false,
+      islandGardenPotCropAllowed: false,
+    });
+    expect(getMapPlacementCapabilities(islandGrid, { x: 2, y: 0 })).toMatchObject({
+      diggable: false,
+      islandGardenPotCropAllowed: true,
+    });
+    expect(getMapPlacementCapabilities(islandGrid, { x: 3, y: 0 })).toMatchObject({
+      diggable: false,
+      islandGardenPotCropAllowed: true,
+    });
+    expect(getMapPlacementCapabilities(islandGrid, { x: 4, y: 0 })).toMatchObject({
+      diggable: false,
+      islandGardenPotCropAllowed: false,
+    });
+    expect(getMapPlacementCapabilities(farmGrid, { x: 1, y: 0 })).toMatchObject({
+      diggable: true,
+      islandGardenPotCropAllowed: true,
+    });
+    expect(getMapPlacementCapabilities(farmGrid, { x: 4, y: 0 })).toMatchObject({
+      diggable: false,
+      islandGardenPotCropAllowed: true,
+    });
+  });
+
+  it("keeps winery and grandpa shed 1 grass closed to trees", () => {
+    const grassMap = createOpenGrassPlacementMap();
+
+    for (const mapFile of ["winery.tmx", "grandpas-shed-1.tmx"] as const) {
+      expect(
+        getMapPlacementCapabilities(createMapPlacementGrid(grassMap, mapFile), { x: 0, y: 0 }),
+      ).toMatchObject({
+        treePlantable: false,
+        fruitTreePlantable: false,
+        water: false,
+      });
+    }
+  });
+
+  it("keeps grandpa shed 2 and greenhouse grass closed to fruit trees", () => {
+    const grassMap = createOpenGrassPlacementMap();
+
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(grassMap, "grandpas-shed-2.tmx"), { x: 0, y: 0 }),
+    ).toMatchObject({
+      treePlantable: false,
+      fruitTreePlantable: false,
+    });
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(grassMap, "Greenhouse.tmx"), { x: 0, y: 0 }),
+    ).toMatchObject({
+      treePlantable: false,
+      fruitTreePlantable: false,
+    });
+  });
+
+  it("applies Ginger Island North bans only inside the listed rectangles", () => {
+    const openTerrain = {
+      buildable: true,
+      diggable: true,
+      passable: true,
+      treePlantable: true,
+      treePlantableOnDirt: true,
+      fruitTreePlantable: true,
+      fruitTreesRestricted: true,
+      objectPlaceable: true,
+      noFurniture: true,
+      wall: true,
+      water: true,
+      crabPot: true,
+      islandGardenPotCropAllowed: true,
+    };
+    const bannedTerrain = {
+      ...openTerrain,
+      buildable: false,
+      diggable: false,
+      objectPlaceable: false,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      fruitTreePlantable: false,
+      crabPot: false,
+    };
+    const bannedTiles = [
+      { x: 37, y: 39 },
+      { x: 44, y: 39 },
+      { x: 59, y: 15 },
+      { x: 61, y: 16 },
+      { x: 4, y: 47 },
+      { x: 6, y: 48 },
+    ] as const;
+    const openTiles = [
+      { x: 36, y: 39 },
+      { x: 37, y: 40 },
+      { x: 58, y: 15 },
+      { x: 59, y: 14 },
+      { x: 62, y: 15 },
+      { x: 59, y: 17 },
+      { x: 3, y: 47 },
+      { x: 7, y: 47 },
+      { x: 4, y: 49 },
+      { x: 80, y: 80 },
+    ] as const;
+
+    for (const bannedTile of bannedTiles) {
+      expect(applyIslandNorthPlacementBan(openTerrain, bannedTile)).toEqual(bannedTerrain);
+    }
+
+    expect(openTerrain).toEqual({
+      buildable: true,
+      diggable: true,
+      passable: true,
+      treePlantable: true,
+      treePlantableOnDirt: true,
+      fruitTreePlantable: true,
+      fruitTreesRestricted: true,
+      objectPlaceable: true,
+      noFurniture: true,
+      wall: true,
+      water: true,
+      crabPot: true,
+      islandGardenPotCropAllowed: true,
+    });
+
+    for (const openTile of openTiles) {
+      expect(applyIslandNorthPlacementBan(openTerrain, openTile)).toBe(openTerrain);
+    }
+  });
+
+  it("blocks in-bounds Ginger Island North tiles and skips ban rectangles outside the map", () => {
+    const placementGrid = createMapPlacementGrid(
+      createDiggableDirtPlacementMap(7, 49),
+      "Island_N.tmx",
+    );
+
+    expect(getMapPlacementCapabilities(placementGrid, { x: 4, y: 47 })).toMatchObject({
+      buildable: false,
+      diggable: false,
+      objectPlaceable: false,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      fruitTreePlantable: false,
+      passable: true,
+      water: false,
+      crabPot: false,
+      wall: false,
+      noFurniture: false,
+      islandGardenPotCropAllowed: true,
+    });
+    expect(getMapPlacementCapabilities(placementGrid, { x: 6, y: 48 })).toMatchObject({
+      buildable: false,
+      diggable: false,
+      objectPlaceable: false,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      fruitTreePlantable: false,
+      passable: true,
+    });
+    expect(getMapPlacementCapabilities(placementGrid, { x: 3, y: 47 })).toMatchObject({
+      buildable: true,
+      diggable: true,
+      objectPlaceable: true,
+      treePlantable: true,
+      treePlantableOnDirt: true,
+      fruitTreePlantable: true,
+      passable: true,
+      islandGardenPotCropAllowed: true,
+    });
+    expect(getMapPlacementCapabilities(placementGrid, { x: 4, y: 46 })).toMatchObject({
+      buildable: true,
+      diggable: true,
+      treePlantable: true,
+      fruitTreePlantable: true,
+    });
   });
 
   it("lets greenhouse fruit trees use non-diggable stone while wild trees cannot", () => {

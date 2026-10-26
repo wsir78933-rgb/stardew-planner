@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type {
   BuildingPlacementMetadataById,
 } from "../../src/catalog/building-placement-metadata";
+import { gardenPotCatalogItemId } from "../../src/placement/garden-pot-placement";
 import type { MapPlacementGrid } from "../../src/placement/map-placement-grids";
 import {
   createEmptyPlacementSnapshot,
@@ -12,6 +13,27 @@ import {
   type PlacementSnapshot,
 } from "../../src/placement/placement-snapshot";
 import { validatePlacement } from "../../src/placement/placement-validation";
+
+function createIslandGardenPotCropGrid(
+  islandGardenPotCropAllowed: boolean,
+): MapPlacementGrid {
+  return {
+    width: 1,
+    height: 1,
+    capabilitiesByTile: [
+      {
+        buildable: true,
+        diggable: false,
+        passable: true,
+        treePlantable: false,
+        treePlantableOnDirt: false,
+        wall: false,
+        crabPot: false,
+        islandGardenPotCropAllowed,
+      },
+    ],
+  };
+}
 
 function createPlacementGrid(
   capabilities: readonly Readonly<{
@@ -379,6 +401,42 @@ describe("placement validation", () => {
       reason: "not-diggable",
       tile: { x: 0, y: 0 },
     });
+  });
+
+  it("rejects a garden pot crop when the tile disallows island garden pot crops", () => {
+    const validation = validatePlacement({
+      mapPlacementGrid: createIslandGardenPotCropGrid(false),
+      placementSnapshot: createPlacementSnapshot({
+        items: [createPlacementItem({ itemId: gardenPotCatalogItemId })],
+      }),
+      buildingMetadataById: createBuildingMetadataById(),
+      candidate: {
+        kind: "crop",
+        crop: { cropId: "crop:parsnip", x: 0, y: 0 },
+      },
+    });
+
+    expect(validation).toEqual({
+      valid: false,
+      reason: "not-diggable",
+      tile: { x: 0, y: 0 },
+    });
+  });
+
+  it("allows a garden pot crop on a non-diggable tile when island garden pot crops are allowed", () => {
+    const validation = validatePlacement({
+      mapPlacementGrid: createIslandGardenPotCropGrid(true),
+      placementSnapshot: createPlacementSnapshot({
+        items: [createPlacementItem({ itemId: gardenPotCatalogItemId })],
+      }),
+      buildingMetadataById: createBuildingMetadataById(),
+      candidate: {
+        kind: "crop",
+        crop: { cropId: "crop:parsnip", x: 0, y: 0 },
+      },
+    });
+
+    expect(validation).toEqual({ valid: true });
   });
 
   it("rejects crops that overlap crops, buildings, ordinary items, or fences", () => {

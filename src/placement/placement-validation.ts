@@ -254,7 +254,11 @@ function validateCropPlacement(
     candidateTile,
   );
 
-  if (!cropIsInGardenPot && !capabilities.diggable) {
+  if (cropIsInGardenPot) {
+    if (!acceptsIslandGardenPotCrop(capabilities)) {
+      return rejectPlacement("not-diggable", candidateTile);
+    }
+  } else if (!capabilities.diggable) {
     return rejectPlacement("not-diggable", candidateTile);
   }
 
@@ -268,6 +272,24 @@ function validateCropPlacement(
   }
 
   return { valid: true };
+}
+
+function acceptsIslandGardenPotCrop(
+  capabilities: MapPlacementCapabilities,
+): boolean {
+  const islandGardenPotCropAllowed = capabilities.islandGardenPotCropAllowed;
+
+  if (islandGardenPotCropAllowed === undefined) {
+    return true;
+  }
+
+  if (typeof islandGardenPotCropAllowed !== "boolean") {
+    throw new TypeError(
+      `Placement validation capability islandGardenPotCropAllowed must be a boolean when present; received ${describeValue(islandGardenPotCropAllowed)}.`,
+    );
+  }
+
+  return islandGardenPotCropAllowed;
 }
 
 function validateItemPlacement(

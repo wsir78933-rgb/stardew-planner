@@ -19,6 +19,7 @@ export type MapPlacementCapabilities = Readonly<{
   wall: boolean;
   water?: boolean;
   crabPot: boolean;
+  islandGardenPotCropAllowed?: boolean;
 }>;
 
 export type MapPlacementGrid = Readonly<{
@@ -40,6 +41,7 @@ const emptyMapPlacementCapabilities: MapPlacementCapabilities = {
   wall: false,
   water: false,
   crabPot: false,
+  islandGardenPotCropAllowed: false,
 };
 
 type MapTilePlacementFacts = Readonly<{
@@ -54,6 +56,7 @@ type MapTilePlacementFacts = Readonly<{
   isBackTileWater: boolean;
   isBuildingsTilePassable: boolean;
   backTilesetImageSource: string | null;
+  backTilesetName: string | null;
 }>;
 
 export function createMapPlacementGrid(
@@ -82,7 +85,7 @@ export function createMapPlacementGrid(
 
   const treePlacementPolicy = createTreePlacementPolicy(tmxMap, mapFile);
   const blockedObjectTileKeys = createBlockedObjectTileKeys(tmxMap, mapFile);
-  const islandDiggableRequiresOutdoorsSheet = mapFile === "Island_W.tmx";
+  const islandWestMap = mapFile === "Island_W.tmx";
   const capabilitiesByTile = placementFactsByTile.map(
     (mapTilePlacementFacts, tileIndex) =>
       createTilePlacementCapabilities(
@@ -95,14 +98,16 @@ export function createMapPlacementGrid(
         ),
         treePlacementPolicy,
         blockedObjectTileKeys,
-        islandDiggableRequiresOutdoorsSheet,
+        islandWestMap,
       ),
   );
 
   return {
     width: tmxMap.width,
     height: tmxMap.height,
-    capabilitiesByTile,
+    capabilitiesByTile: mapFile === "Island_N.tmx"
+      ? applyIslandNorthPlacementBans(capabilitiesByTile, placementFactsByTile)
+      : capabilitiesByTile,
   };
 }
 
@@ -168,11 +173,7 @@ function createMapTilePlacementFacts(
     buildingsLayer,
     tileCoordinates,
   );
-  const backTilesetImageSource = getLayerTilesetImageSource(
-    tmxMap,
-    backLayer,
-    tileCoordinates,
-  );
+  const backTileset = getLayerTileset(tmxMap, backLayer, tileCoordinates);
   const isBackTilePresent = getLayerBaseGid(backLayer, tileCoordinates) !== 0;
   const isBuildingsTilePresent =
     getLayerBaseGid(buildingsLayer, tileCoordinates) !== 0;
@@ -197,7 +198,8 @@ function createMapTilePlacementFacts(
     isBuildingsTilePassable: isTmxPropertyTruthy(
       buildingsTileProperties.Passable,
     ),
-    backTilesetImageSource,
+    backTilesetImageSource: backTileset?.imageSource ?? null,
+    backTilesetName: backTileset?.name ?? null,
   };
 }
 
@@ -245,12 +247,21 @@ const greenhouseTreeMapFiles = new Set([
 
 const islandWestBlockedObjectTiles = ["96,31", "96,32"] as const;
 
+const islandWestNamedTilesetName = "untitled tile sheet2";
+
+const islandNorthBannedRectangles = [
+  { x: 37, y: 39, width: 1, height: 1 },
+  { x: 44, y: 39, width: 1, height: 1 },
+  { x: 59, y: 15, width: 3, height: 2 },
+  { x: 4, y: 47, width: 3, height: 2 },
+] as const;
+
 function createTilePlacementCapabilities(
   mapTilePlacementFacts: MapTilePlacementFacts,
   crabPot: boolean,
   treePlacementPolicy: TreePlacementPolicy,
   blockedObjectTileKeys: ReadonlySet<string>,
-  islandDiggableRequiresOutdoorsSheet: boolean,
+  islandWestMap: boolean,
 ): MapPlacementCapabilities {
   const { mergedBackProperties } = mapTilePlacementFacts;
   const isBuildabilityWater = isTmxPropertyTruthy(mergedBackProperties.Water);
@@ -277,8 +288,9 @@ function createTilePlacementCapabilities(
     !mapTilePlacementFacts.isBuildingsTilePresent &&
     isDiggable &&
     islandDiggableTilesetAllowed(
-      islandDiggableRequiresOutdoorsSheet,
+      islandWestMap,
       mapTilePlacementFacts.backTilesetImageSource,
+      mapTilePlacementFacts.backTilesetName,
     );
   const treePlantable = treePlacementPolicy.greenhouseTrees
     ? diggable
@@ -326,6 +338,10 @@ function createTilePlacementCapabilities(
     wall: mapTilePlacementFacts.hasTileDataWallAnchor,
     water: mapTilePlacementFacts.isBackTileWater,
     crabPot,
+    islandGardenPotCropAllowed: isIslandGardenPotCropAllowed(
+      islandWestMap,
+      mapTilePlacementFacts.backTilesetName,
+    ),
   };
 }
 
@@ -403,16 +419,17 @@ function createTreePlacementPolicy(
     };
   }
 
-  const listedFarmMap = anywhereTreeMapFiles.has(mapFile);
+  const listedAnywhereTreeMap = anywhereTreeMapFiles.has(mapFile);
+  const greenhouseTreeMap = greenhouseTreeMapFiles.has(mapFile);
   const forceAllowTreePlanting = isTmxPropertyTruthy(
     tmxMap.properties.ForceAllowTreePlanting,
   );
 
   return {
-    allowTreesAnywhere: listedFarmMap || forceAllowTreePlanting,
-    greenhouseTrees: greenhouseTreeMapFiles.has(mapFile),
-    fruitTreesUseFarmRule: listedFarmMap &&
-      !greenhouseTreeMapFiles.has(mapFile) &&
+    allowTreesAnywhere: listedAnywhereTreeMap || forceAllowTreePlanting,
+    greenhouseTrees: greenhouseTreeMap,
+    fruitTreesUseFarmRule: listedAnywhereTreeMap &&
+      !greenhouseTreeMap &&
       mapFile !== "Island_W.tmx",
   };
 }
@@ -682,15 +699,85 @@ function getRequiredTileLayer(tmxMap: TmxMap, layerName: string): TmxTileLayer {
 }
 
 function islandDiggableTilesetAllowed(
-  islandDiggableRequiresOutdoorsSheet: boolean,
+  islandWestMap: boolean,
   backTilesetImageSource: string | null,
+  backTilesetName: string | null,
 ): boolean {
-  if (!islandDiggableRequiresOutdoorsSheet) {
+  if (!islandWestMap) {
     return true;
   }
 
   return backTilesetImageSource !== null &&
-    backTilesetImageSource.includes("outdoorsTileSheet");
+    backTilesetImageSource.includes("outdoorsTileSheet") &&
+    backTilesetName === islandWestNamedTilesetName;
+}
+
+function isIslandGardenPotCropAllowed(
+  islandWestMap: boolean,
+  backTilesetName: string | null,
+): boolean {
+  if (!islandWestMap) {
+    return true;
+  }
+
+  return backTilesetName === islandWestNamedTilesetName;
+}
+
+export function applyIslandNorthPlacementBan(
+  capabilities: MapPlacementCapabilities,
+  tileCoordinates: MapTileCoordinates,
+): MapPlacementCapabilities {
+  if (typeof capabilities !== "object" || capabilities === null) {
+    throw new TypeError(
+      `Island North placement ban requires capabilities; received ${describeValue(capabilities)}.`,
+    );
+  }
+
+  assertTileCoordinates(tileCoordinates);
+
+  if (!isIslandNorthBannedTile(tileCoordinates)) {
+    return capabilities;
+  }
+
+  return {
+    ...capabilities,
+    buildable: false,
+    diggable: false,
+    objectPlaceable: false,
+    treePlantable: false,
+    treePlantableOnDirt: false,
+    fruitTreePlantable: false,
+    crabPot: false,
+  };
+}
+
+function applyIslandNorthPlacementBans(
+  capabilitiesByTile: readonly MapPlacementCapabilities[],
+  placementFactsByTile: readonly MapTilePlacementFacts[],
+): MapPlacementCapabilities[] {
+  return capabilitiesByTile.map((capabilities, tileIndex) => {
+    const mapTilePlacementFacts = placementFactsByTile[tileIndex];
+
+    if (mapTilePlacementFacts === undefined) {
+      throw new Error(
+        `Map placement facts are missing tile index ${String(tileIndex)} while applying the Island North placement ban.`,
+      );
+    }
+
+    return applyIslandNorthPlacementBan(
+      capabilities,
+      mapTilePlacementFacts.tileCoordinates,
+    );
+  });
+}
+
+function isIslandNorthBannedTile(tileCoordinates: MapTileCoordinates): boolean {
+  return islandNorthBannedRectangles.some((bannedRectangle) =>
+    tileCoordinates.x >= bannedRectangle.x &&
+    tileCoordinates.y >= bannedRectangle.y &&
+    tileCoordinates.x < bannedRectangle.x + bannedRectangle.width &&
+    tileCoordinates.y < bannedRectangle.y + bannedRectangle.height,
+  );
 }
 
 function getLayerTileProperties(
@@ -705,14 +792,6 @@ function getLayerTileProperties(
 
   const baseGid = getLayerBaseGid(tileLayer, tileCoordinates);
   return tileset.tileProperties.get(baseGid - tileset.firstGid) ?? {};
-}
-
-function getLayerTilesetImageSource(
-  tmxMap: TmxMap,
-  tileLayer: TmxTileLayer,
-  tileCoordinates: MapTileCoordinates,
-): string | null {
-  return getLayerTileset(tmxMap, tileLayer, tileCoordinates)?.imageSource ?? null;
 }
 
 function getLayerTileset(
