@@ -184,6 +184,8 @@ function validateBuildingPlacement(
   const candidateTileRequirements = createBuildingTileRequirements(
     candidateBuilding,
     candidateMetadata,
+    createCandidateTile,
+    mapPlacementGrid,
   );
 
   for (const tileRequirement of candidateTileRequirements) {
@@ -207,7 +209,7 @@ function validateBuildingPlacement(
 
     if (
       tileRequirement.mapRequirement === "passable" &&
-      !capabilities.passable
+      !acceptsObjectPlacement(capabilities)
     ) {
       return rejectPlacement("not-passable", tileRequirement.tile);
     }
@@ -296,19 +298,14 @@ function validateItemPlacement(
       return capabilitiesOrRejection;
     }
 
-    if (candidateItem.itemId === crabPotCatalogItemId) {
-      if (!capabilitiesOrRejection.crabPot) {
-        return rejectPlacement("not-crab-pot-tile", candidateTile);
-      }
-    } else if (placementRequirement === "wall" && !capabilitiesOrRejection.wall) {
-      return rejectPlacement("not-wall", candidateTile);
-    } else if (
-      placementRequirement === "diggable"
-      && !capabilitiesOrRejection.diggable
-    ) {
-      return rejectPlacement("not-diggable", candidateTile);
-    } else if (!capabilitiesOrRejection.passable) {
-      return rejectPlacement("not-passable", candidateTile);
+    const terrainRejection = rejectItemTerrain(
+      candidateItem,
+      placementRequirement,
+      capabilitiesOrRejection,
+      candidateTile,
+    );
+    if (terrainRejection !== null) {
+      return terrainRejection;
     }
 
     if (
@@ -356,6 +353,7 @@ function validateBedPlacement(
   );
 
   const rowMajorValidation = validateBedRowMajorRequirements(
+    candidateBed,
     bedTileRequirements,
     placementSnapshot,
     buildingMetadataById,
@@ -442,6 +440,7 @@ function createBedTileRequirements(
 }
 
 function validateBedRowMajorRequirements(
+  candidateBed: NewPlacementItem,
   bedTileRequirements: readonly BedTileRequirement[],
   placementSnapshot: PlacementSnapshot,
   buildingMetadataById: BuildingPlacementMetadataById,
@@ -462,7 +461,14 @@ function validateBedRowMajorRequirements(
       continue;
     }
 
-    if (!capabilitiesOrRejection.passable) {
+    if (!acceptsObjectPlacement(capabilitiesOrRejection)) {
+      return rejectPlacement("not-passable", bedTileRequirement.tile);
+    }
+
+    if (
+      blocksFurniture(capabilitiesOrRejection) &&
+      !itemIgnoresNoFurniture(candidateBed)
+    ) {
       return rejectPlacement("not-passable", bedTileRequirement.tile);
     }
 
@@ -683,7 +689,10 @@ function validateFloorPlacement(
       return rejectPlacement("not-diggable", candidateTile);
     }
 
-    if (mapRequirement === "passable" && !capabilitiesOrRejection.passable) {
+    if (
+      mapRequirement === "passable" &&
+      !acceptsObjectPlacement(capabilitiesOrRejection)
+    ) {
       return rejectPlacement("not-passable", candidateTile);
     }
   }
@@ -722,7 +731,11 @@ function validateFencePlacement(
       return capabilitiesOrRejection;
     }
 
-    if (!capabilitiesOrRejection.passable) {
+    if (!acceptsObjectPlacement(capabilitiesOrRejection)) {
+      return rejectPlacement("not-passable", candidateTile);
+    }
+
+    if (blocksFurniture(capabilitiesOrRejection)) {
       return rejectPlacement("not-passable", candidateTile);
     }
   }
@@ -747,6 +760,7 @@ function createBuildingTileRequirements(
   building: NewPlacementBuilding,
   buildingMetadata: BuildingPlacementMetadata,
   createTile: (x: number, y: number) => MapTileCoordinates = createCandidateTile,
+  mapBounds?: Readonly<{ width: number; height: number }>,
 ): readonly BuildingPlacementTileRequirement[] {
   const tileRequirements: BuildingPlacementTileRequirement[] = [];
 
@@ -790,7 +804,47 @@ function createBuildingTileRequirements(
     });
   }
 
+  appendInMapHumanDoorFrontRequirement(
+    tileRequirements,
+    building,
+    buildingMetadata,
+    createTile,
+    mapBounds,
+  );
+
   return tileRequirements;
+}
+
+function appendInMapHumanDoorFrontRequirement(
+  tileRequirements: BuildingPlacementTileRequirement[],
+  building: NewPlacementBuilding,
+  buildingMetadata: BuildingPlacementMetadata,
+  createTile: (x: number, y: number) => MapTileCoordinates,
+  mapBounds: Readonly<{ width: number; height: number }> | undefined,
+): void {
+  if (mapBounds === undefined) {
+    return;
+  }
+
+  if (buildingMetadata.humanDoor.x < 0 || buildingMetadata.humanDoor.y < 0) {
+    return;
+  }
+
+  const doorFrontX = building.x + buildingMetadata.humanDoor.x;
+  const doorFrontY = building.y + buildingMetadata.humanDoor.y + 1;
+  if (
+    doorFrontX < 0 ||
+    doorFrontY < 0 ||
+    doorFrontX >= mapBounds.width ||
+    doorFrontY >= mapBounds.height
+  ) {
+    return;
+  }
+
+  tileRequirements.push({
+    tile: createTile(doorFrontX, doorFrontY),
+    mapRequirement: "buildable",
+  });
 }
 
 function createBuildingBlockingOccupancy(
@@ -1032,6 +1086,140 @@ function getRequiredBuildingMetadata(
   }
 
   return buildingMetadata;
+}
+
+const teaSaplingCatalogItemId = "object:251";
+const torchCatalogItemId = "object:93";
+
+function rejectItemTerrain(
+  candidateItem: NewPlacementItem,
+  placementRequirement: CatalogItemPlacementRequirement,
+  capabilities: MapPlacementCapabilities,
+  candidateTile: MapTileCoordinates,
+): PlacementValidationResult | null {
+  if (candidateItem.itemId === crabPotCatalogItemId) {
+    if (!capabilities.crabPot) {
+      return rejectPlacement("not-crab-pot-tile", candidateTile);
+    }
+    return null;
+  }
+
+  if (isWildTreeItemId(candidateItem.itemId)) {
+    if (!readRequiredBoolean(capabilities.treePlantable, "treePlantable")) {
+      return rejectPlacement("not-passable", candidateTile);
+    }
+    return null;
+  }
+
+  if (isFruitTreeItemId(candidateItem.itemId)) {
+    if (!acceptsFruitTree(capabilities)) {
+      return rejectPlacement("not-passable", candidateTile);
+    }
+    return null;
+  }
+
+  if (candidateItem.itemId === teaSaplingCatalogItemId) {
+    if (
+      readOptionalBoolean(
+        capabilities.fruitTreesRestricted,
+        "fruitTreesRestricted",
+      ) === true &&
+      !acceptsFruitTree(capabilities)
+    ) {
+      return rejectPlacement("not-passable", candidateTile);
+    }
+    if (!acceptsObjectPlacement(capabilities)) {
+      return rejectPlacement("not-passable", candidateTile);
+    }
+    return null;
+  }
+
+  if (placementRequirement === "wall") {
+    if (!capabilities.wall) {
+      return rejectPlacement("not-wall", candidateTile);
+    }
+    return null;
+  }
+
+  if (placementRequirement === "diggable") {
+    if (!capabilities.diggable) {
+      return rejectPlacement("not-diggable", candidateTile);
+    }
+    return null;
+  }
+
+  if (!acceptsObjectPlacement(capabilities)) {
+    return rejectPlacement("not-passable", candidateTile);
+  }
+
+  if (
+    blocksFurniture(capabilities) &&
+    !itemIgnoresNoFurniture(candidateItem)
+  ) {
+    return rejectPlacement("not-passable", candidateTile);
+  }
+
+  return null;
+}
+
+function acceptsFruitTree(capabilities: MapPlacementCapabilities): boolean {
+  const fruitTreePlantable = readOptionalBoolean(
+    capabilities.fruitTreePlantable,
+    "fruitTreePlantable",
+  );
+
+  return fruitTreePlantable ?? readRequiredBoolean(
+    capabilities.treePlantable,
+    "treePlantable",
+  );
+}
+
+function acceptsObjectPlacement(capabilities: MapPlacementCapabilities): boolean {
+  const objectPlaceable = readOptionalBoolean(
+    capabilities.objectPlaceable,
+    "objectPlaceable",
+  );
+
+  return objectPlaceable ?? capabilities.passable;
+}
+
+function blocksFurniture(capabilities: MapPlacementCapabilities): boolean {
+  return readOptionalBoolean(capabilities.noFurniture, "noFurniture") === true;
+}
+
+function itemIgnoresNoFurniture(candidateItem: NewPlacementItem): boolean {
+  return candidateItem.isGrass ||
+    candidateItem.isRug ||
+    candidateItem.itemId === torchCatalogItemId;
+}
+
+function isWildTreeItemId(itemId: string): boolean {
+  return itemId.startsWith("wildtree_");
+}
+
+function isFruitTreeItemId(itemId: string): boolean {
+  return itemId.startsWith("fruittree_");
+}
+
+function readRequiredBoolean(value: unknown, capabilityName: string): boolean {
+  if (typeof value !== "boolean") {
+    throw new TypeError(
+      `Placement validation capability ${capabilityName} must be boolean; received ${describeValue(value)}.`,
+    );
+  }
+
+  return value;
+}
+
+function readOptionalBoolean(
+  value: unknown,
+  capabilityName: string,
+): boolean | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return readRequiredBoolean(value, capabilityName);
 }
 
 function rejectPlacement(

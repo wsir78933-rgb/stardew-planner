@@ -1719,7 +1719,7 @@ export function PlannerCanvas({
           placementSnapshot?.interiorDecor,
         );
         const mapFile = getPlannerMapById(mapId).mapFile;
-        const mapPlacementGrid = createMapPlacementGrid(parsedMap);
+        const mapPlacementGrid = createMapPlacementGrid(parsedMap, mapFile);
 
         notifyMapPlacementGridReady({
           isMapLifecycleCurrent: () =>
@@ -2925,7 +2925,10 @@ export function notifyMapPlacementGridReady(
     return;
   }
 
-  const mapPlacementGrid = createMapPlacementGrid(parsedMap);
+  const mapPlacementGrid = createMapPlacementGrid(
+    parsedMap,
+    getPlannerMapById(mapId).mapFile,
+  );
 
   if (!isMapLifecycleCurrent()) {
     return;

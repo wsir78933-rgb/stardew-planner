@@ -4,6 +4,8 @@ import {
   getMapPlacementCapabilities,
   isTmxPropertyTruthy,
 } from "../../src/placement/map-placement-grids";
+import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
+import { validatePlacement } from "../../src/placement/placement-validation";
 import { tiledFlipFlags } from "../../src/tmx/decode-tile-layer-data";
 import type { TmxMap, TmxProperties, TmxTileLayer } from "../../src/tmx/tmx-types";
 
@@ -137,6 +139,10 @@ describe("createMapPlacementGrid", () => {
       passable: true,
       treePlantable: true,
       treePlantableOnDirt: false,
+      fruitTreePlantable: true,
+      fruitTreesRestricted: false,
+      objectPlaceable: true,
+      noFurniture: false,
       water: false,
       crabPot: false,
       wall: false,
@@ -152,6 +158,10 @@ describe("createMapPlacementGrid", () => {
       passable: false,
       treePlantable: false,
       treePlantableOnDirt: false,
+      fruitTreePlantable: false,
+      fruitTreesRestricted: false,
+      objectPlaceable: false,
+      noFurniture: false,
       water: true,
       crabPot: false,
       wall: false,
@@ -162,6 +172,10 @@ describe("createMapPlacementGrid", () => {
       passable: true,
       treePlantable: true,
       treePlantableOnDirt: false,
+      fruitTreePlantable: true,
+      fruitTreesRestricted: false,
+      objectPlaceable: true,
+      noFurniture: false,
       water: false,
       crabPot: false,
       wall: false,
@@ -422,6 +436,292 @@ describe("createMapPlacementGrid", () => {
     expect(getMapPlacementCapabilities(placementGrid, { x: 1, y: 1 })).toMatchObject({
       crabPot: false,
     });
+  });
+
+  it("keeps ordinary objects off Buildings-layer tiles, NoFurniture tiles, and the farm-cave mouth", () => {
+    const placementGrid = createMapPlacementGrid(
+      createPlacementTestMap({
+        properties: { Warp: "2 0 FarmCave 8 11" },
+        tilesets: [
+          {
+            firstGid: 1,
+            name: "object tilesheet",
+            tileWidth: 16,
+            tileHeight: 16,
+            tileCount: 3,
+            columns: 3,
+            imageSource: "test.png",
+            imageWidth: 48,
+            imageHeight: 16,
+            properties: {},
+            tileProperties: new Map<number, TmxProperties>([
+              [0, { NoFurniture: "f" }],
+              [1, { Passable: "T" }],
+              [2, { Buildable: "T" }],
+            ]),
+          },
+        ],
+        tileLayers: [
+          createTileLayer("Back", 3, 1, [1, 1, 3]),
+          createTileLayer("Buildings", 3, 1, [0, 2, 0]),
+        ],
+        tileDataProperties: new Map(),
+      }),
+    );
+
+    expect(getMapPlacementCapabilities(placementGrid, { x: 0, y: 0 })).toMatchObject({
+      noFurniture: true,
+      objectPlaceable: true,
+      passable: true,
+    });
+    expect(getMapPlacementCapabilities(placementGrid, { x: 1, y: 0 })).toMatchObject({
+      objectPlaceable: false,
+      passable: true,
+    });
+    expect(getMapPlacementCapabilities(placementGrid, { x: 2, y: 0 })).toMatchObject({
+      objectPlaceable: false,
+      passable: true,
+    });
+  });
+
+  it("uses farm, greenhouse, and off-farm tree masks when the map file is known", () => {
+    const grassMap = createPlacementTestMap({
+      tilesets: [
+        {
+          firstGid: 1,
+          name: "grass tilesheet",
+          tileWidth: 16,
+          tileHeight: 16,
+          tileCount: 1,
+          columns: 1,
+          imageSource: "test.png",
+          imageWidth: 16,
+          imageHeight: 16,
+          properties: {},
+          tileProperties: new Map<number, TmxProperties>([
+            [0, { Type: "Grass" }],
+          ]),
+        },
+      ],
+      tileLayers: [
+        createTileLayer("Back", 3, 1, [1, 1, 1]),
+        createTileLayer("Buildings", 3, 1, [0, 0, 0]),
+      ],
+      tileDataProperties: new Map(),
+    });
+
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(grassMap, "BusStop.tmx"), { x: 0, y: 0 }),
+    ).toMatchObject({
+      treePlantable: false,
+      fruitTreePlantable: false,
+      fruitTreesRestricted: false,
+    });
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(grassMap, "Farm.tmx"), { x: 0, y: 0 }),
+    ).toMatchObject({
+      treePlantable: true,
+      fruitTreePlantable: true,
+      fruitTreesRestricted: true,
+    });
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(grassMap, "Greenhouse.tmx"), { x: 0, y: 0 }),
+    ).toMatchObject({
+      treePlantable: false,
+      fruitTreePlantable: false,
+      fruitTreesRestricted: false,
+    });
+  });
+
+  it("lets farm fruit trees use diggable or stone tiles that block ordinary trees", () => {
+    const placementGrid = createMapPlacementGrid(
+      createPlacementTestMap({
+        tilesets: [
+          {
+            firstGid: 1,
+            name: "fruit tilesheet",
+            tileWidth: 16,
+            tileHeight: 16,
+            tileCount: 2,
+            columns: 2,
+            imageSource: "test.png",
+            imageWidth: 32,
+            imageHeight: 16,
+            properties: {},
+            tileProperties: new Map<number, TmxProperties>([
+              [0, { Diggable: "T", NoSpawn: "All", Type: "Dirt" }],
+              [1, { Type: "Wood" }],
+            ]),
+          },
+        ],
+        tileLayers: [
+          createTileLayer("Back", 3, 1, [1, 2, 1]),
+          createTileLayer("Buildings", 3, 1, [0, 0, 0]),
+        ],
+        tileDataProperties: new Map(),
+      }),
+      "Farm.tmx",
+    );
+
+    expect(getMapPlacementCapabilities(placementGrid, { x: 0, y: 0 })).toMatchObject({
+      fruitTreePlantable: true,
+      treePlantable: false,
+    });
+    expect(getMapPlacementCapabilities(placementGrid, { x: 1, y: 0 })).toMatchObject({
+      fruitTreePlantable: false,
+      treePlantable: true,
+    });
+  });
+
+  it("rejects Ginger Island diggable tiles that are not on the outdoors sheet", () => {
+    const islandMap = createPlacementTestMap({
+      tilesets: [
+        {
+          firstGid: 1,
+          name: "island tilesheet",
+          tileWidth: 16,
+          tileHeight: 16,
+          tileCount: 2,
+          columns: 2,
+          imageSource: "island_tilesheet_1.png",
+          imageWidth: 32,
+          imageHeight: 16,
+          properties: {},
+          tileProperties: new Map<number, TmxProperties>([
+            [0, { Diggable: "T" }],
+            [1, { Diggable: "T" }],
+          ]),
+        },
+        {
+          firstGid: 3,
+          name: "outdoors",
+          tileWidth: 16,
+          tileHeight: 16,
+          tileCount: 1,
+          columns: 1,
+          imageSource: "spring_outdoorsTileSheet.png",
+          imageWidth: 16,
+          imageHeight: 16,
+          properties: {},
+          tileProperties: new Map<number, TmxProperties>([
+            [0, { Diggable: "T" }],
+          ]),
+        },
+      ],
+      tileLayers: [
+        createTileLayer("Back", 3, 1, [1, 3, 1]),
+        createTileLayer("Buildings", 3, 1, [0, 0, 0]),
+      ],
+      tileDataProperties: new Map(),
+    });
+
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(islandMap, "Island_W.tmx"), { x: 0, y: 0 }).diggable,
+    ).toBe(false);
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(islandMap, "Island_W.tmx"), { x: 1, y: 0 }).diggable,
+    ).toBe(true);
+    expect(
+      getMapPlacementCapabilities(createMapPlacementGrid(islandMap), { x: 0, y: 0 }).diggable,
+    ).toBe(true);
+  });
+
+  it("lets greenhouse fruit trees use non-diggable stone while wild trees cannot", () => {
+    const stoneMap = createPlacementTestMap({
+      tilesets: [
+        {
+          firstGid: 1,
+          name: "stone tilesheet",
+          tileWidth: 16,
+          tileHeight: 16,
+          tileCount: 1,
+          columns: 1,
+          imageSource: "test.png",
+          imageWidth: 16,
+          imageHeight: 16,
+          properties: {},
+          tileProperties: new Map<number, TmxProperties>([
+            [0, { Type: "Stone" }],
+          ]),
+        },
+      ],
+      tileLayers: [
+        createTileLayer("Back", 3, 1, [1, 1, 1]),
+        createTileLayer("Buildings", 3, 1, [0, 0, 0]),
+      ],
+      tileDataProperties: new Map(),
+    });
+    const placementSnapshot = createEmptyPlacementSnapshot();
+
+    for (const mapFile of ["Greenhouse.tmx", "grandpas-shed-2.tmx"] as const) {
+      const mapPlacementGrid = createMapPlacementGrid(stoneMap, mapFile);
+
+      expect(getMapPlacementCapabilities(mapPlacementGrid, { x: 0, y: 0 })).toMatchObject({
+        diggable: false,
+        treePlantable: false,
+        fruitTreePlantable: true,
+      });
+      expect(validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot,
+        buildingMetadataById: {},
+        candidate: {
+          kind: "item",
+          item: {
+            itemId: "wildtree_1",
+            x: 0,
+            y: 0,
+            layer: "item",
+            rotation: 0,
+            footprint: { width: 1, height: 1 },
+            variant: 0,
+            tintColor: "#ffffff",
+            locked: false,
+            isRug: false,
+            isGrass: false,
+            isTable: false,
+            isLongTable: false,
+            flipped: false,
+            bedType: null,
+          },
+        },
+      })).toEqual({
+        valid: false,
+        reason: "not-passable",
+        tile: { x: 0, y: 0 },
+      });
+      expect(validatePlacement({
+        mapPlacementGrid,
+        placementSnapshot,
+        buildingMetadataById: {},
+        candidate: {
+          kind: "item",
+          item: {
+            itemId: "fruittree_628",
+            x: 0,
+            y: 0,
+            layer: "item",
+            rotation: 0,
+            footprint: { width: 1, height: 1 },
+            variant: 0,
+            tintColor: "#ffffff",
+            locked: false,
+            isRug: false,
+            isGrass: false,
+            isTable: false,
+            isLongTable: false,
+            flipped: false,
+            bedType: null,
+          },
+        },
+      })).toEqual({ valid: true });
+    }
+  });
+
+  it("rejects a map file that is not a tmx name", () => {
+    expect(() => createMapPlacementGrid(createPlacementTestMap(), "Farm")).toThrow(
+      'received "Farm"',
+    );
   });
 
   it("keeps whitespace-wrapped false property values truthy, matching the original map rule", () => {

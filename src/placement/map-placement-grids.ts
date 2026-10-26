@@ -12,6 +12,10 @@ export type MapPlacementCapabilities = Readonly<{
   passable: boolean;
   treePlantable: boolean;
   treePlantableOnDirt: boolean;
+  fruitTreePlantable?: boolean;
+  fruitTreesRestricted?: boolean;
+  objectPlaceable?: boolean;
+  noFurniture?: boolean;
   wall: boolean;
   water?: boolean;
   crabPot: boolean;
@@ -29,6 +33,10 @@ const emptyMapPlacementCapabilities: MapPlacementCapabilities = {
   passable: false,
   treePlantable: false,
   treePlantableOnDirt: false,
+  fruitTreePlantable: false,
+  fruitTreesRestricted: false,
+  objectPlaceable: false,
+  noFurniture: false,
   wall: false,
   water: false,
   crabPot: false,
@@ -45,10 +53,17 @@ type MapTilePlacementFacts = Readonly<{
   hasTileDataWallAnchor: boolean;
   isBackTileWater: boolean;
   isBuildingsTilePassable: boolean;
+  backTilesetImageSource: string | null;
 }>;
 
-export function createMapPlacementGrid(tmxMap: TmxMap): MapPlacementGrid {
+export function createMapPlacementGrid(
+  tmxMap: TmxMap,
+  mapFile?: string,
+): MapPlacementGrid {
   assertMapDimensions(tmxMap);
+  if (mapFile !== undefined) {
+    assertMapFile(mapFile);
+  }
 
   const backLayer = getRequiredTileLayer(tmxMap, "Back");
   const buildingsLayer = getRequiredTileLayer(tmxMap, "Buildings");
@@ -65,6 +80,9 @@ export function createMapPlacementGrid(tmxMap: TmxMap): MapPlacementGrid {
     }
   }
 
+  const treePlacementPolicy = createTreePlacementPolicy(tmxMap, mapFile);
+  const blockedObjectTileKeys = createBlockedObjectTileKeys(tmxMap, mapFile);
+  const islandDiggableRequiresOutdoorsSheet = mapFile === "Island_W.tmx";
   const capabilitiesByTile = placementFactsByTile.map(
     (mapTilePlacementFacts, tileIndex) =>
       createTilePlacementCapabilities(
@@ -75,6 +93,9 @@ export function createMapPlacementGrid(tmxMap: TmxMap): MapPlacementGrid {
           tmxMap.height,
           tileIndex,
         ),
+        treePlacementPolicy,
+        blockedObjectTileKeys,
+        islandDiggableRequiresOutdoorsSheet,
       ),
   );
 
@@ -147,6 +168,11 @@ function createMapTilePlacementFacts(
     buildingsLayer,
     tileCoordinates,
   );
+  const backTilesetImageSource = getLayerTilesetImageSource(
+    tmxMap,
+    backLayer,
+    tileCoordinates,
+  );
   const isBackTilePresent = getLayerBaseGid(backLayer, tileCoordinates) !== 0;
   const isBuildingsTilePresent =
     getLayerBaseGid(buildingsLayer, tileCoordinates) !== 0;
@@ -171,12 +197,60 @@ function createMapTilePlacementFacts(
     isBuildingsTilePassable: isTmxPropertyTruthy(
       buildingsTileProperties.Passable,
     ),
+    backTilesetImageSource,
   };
 }
+
+type TreePlacementPolicy = Readonly<{
+  allowTreesAnywhere: boolean;
+  greenhouseTrees: boolean;
+  fruitTreesUseFarmRule: boolean;
+}>;
+
+const anywhereTreeMapFiles = new Set([
+  "Farm.tmx",
+  "Farm_Fishing.tmx",
+  "Farm_Foraging.tmx",
+  "Farm_Mining.tmx",
+  "Farm_Combat.tmx",
+  "Farm_FourCorners.tmx",
+  "Farm_Island.tmx",
+  "Farm_Ranching.tmx",
+  "Island_W.tmx",
+  "Greenhouse.tmx",
+  "IF2R.tmx",
+  "FrontierFarm.tmx",
+  "GrandpasFarm.tmx",
+  "capitalist-dream.tmx",
+  "capitalist-dream-2.tmx",
+  "overgrown-garden.tmx",
+  "yet-another.tmx",
+  "solo-four-corners.tmx",
+  "strawberry-fields.tmx",
+  "blackberry-fields.tmx",
+  "zenith.tmx",
+  "everfarm.tmx",
+  "sea-breeze-island.tmx",
+  "aimon-s-small-hilltop.tmx",
+  "aimon-s-small-forest.tmx",
+  "more-lively-meadowlands.tmx",
+  "modest-maps-standard.tmx",
+  "waterfall-forest.tmx",
+]);
+
+const greenhouseTreeMapFiles = new Set([
+  "Greenhouse.tmx",
+  "grandpas-shed-2.tmx",
+]);
+
+const islandWestBlockedObjectTiles = ["96,31", "96,32"] as const;
 
 function createTilePlacementCapabilities(
   mapTilePlacementFacts: MapTilePlacementFacts,
   crabPot: boolean,
+  treePlacementPolicy: TreePlacementPolicy,
+  blockedObjectTileKeys: ReadonlySet<string>,
+  islandDiggableRequiresOutdoorsSheet: boolean,
 ): MapPlacementCapabilities {
   const { mergedBackProperties } = mapTilePlacementFacts;
   const isBuildabilityWater = isTmxPropertyTruthy(mergedBackProperties.Water);
@@ -193,15 +267,41 @@ function createTilePlacementCapabilities(
   const isTreeBlockedByNoSpawn = mapTilePlacementFacts.hasTileDataNoSpawn
     ? isNoSpawnTree
     : isNoSpawnTree && !canPlantTrees;
-  const treePlantable = mapTilePlacementFacts.isBackTilePresent &&
+  const treePlantableAnywhere = mapTilePlacementFacts.isBackTilePresent &&
     !mapTilePlacementFacts.isBuildingsTilePresent &&
     !isBuildabilityWater &&
     !isTmxPropertyTruthy(mergedBackProperties.AllSpawn) &&
     !isTreeBlockedByNoSpawn;
-  const treePlantableOnDirt = treePlantable &&
+  const mergedDiggable = isTmxPropertyTruthy(mergedBackProperties.Diggable);
+  const diggable = mapTilePlacementFacts.isBackTilePresent &&
+    !mapTilePlacementFacts.isBuildingsTilePresent &&
+    isDiggable &&
+    islandDiggableTilesetAllowed(
+      islandDiggableRequiresOutdoorsSheet,
+      mapTilePlacementFacts.backTilesetImageSource,
+    );
+  const treePlantable = treePlacementPolicy.greenhouseTrees
+    ? diggable
+    : resolveWildTreePlantable(
+        treePlantableAnywhere,
+        mergedBackProperties,
+        mergedDiggable,
+        canPlantTrees,
+        treePlacementPolicy,
+      );
+  const treePlantableOnDirt = treePlantableAnywhere &&
     (canPlantTrees ||
       (mergedBackProperties.Type?.toLowerCase() === "dirt" &&
-        isTmxPropertyTruthy(mergedBackProperties.Diggable)));
+        mergedDiggable));
+  const fruitTreePlantable = treePlacementPolicy.fruitTreesUseFarmRule
+    ? isFarmFruitTreeTile(mapTilePlacementFacts, mergedBackProperties, isBuildabilityWater)
+    : treePlacementPolicy.greenhouseTrees
+      ? diggable || isGreenhouseStoneFruitTile(
+          treePlantableAnywhere,
+          mergedBackProperties,
+        )
+      : treePlantable;
+  const tileKey = `${String(mapTilePlacementFacts.tileCoordinates.x)},${String(mapTilePlacementFacts.tileCoordinates.y)}`;
 
   return {
     buildable: mapTilePlacementFacts.isBackTilePresent &&
@@ -209,19 +309,211 @@ function createTilePlacementCapabilities(
       !isBuildabilityWater &&
       !hasExplicitlyBlockedBuildability &&
       (isBuildable || isTmxPropertyTruthy(mergedBackProperties.Diggable)),
-    diggable: mapTilePlacementFacts.isBackTilePresent &&
-      !mapTilePlacementFacts.isBuildingsTilePresent &&
-      isDiggable,
+    diggable,
     passable: mapTilePlacementFacts.isBackTilePresent &&
       !mapTilePlacementFacts.isBackTileWater &&
       (!mapTilePlacementFacts.isBuildingsTilePresent ||
         mapTilePlacementFacts.isBuildingsTilePassable),
     treePlantable,
     treePlantableOnDirt,
+    fruitTreePlantable,
+    fruitTreesRestricted: treePlacementPolicy.fruitTreesUseFarmRule,
+    objectPlaceable: mapTilePlacementFacts.isBackTilePresent &&
+      !mapTilePlacementFacts.isBackTileWater &&
+      !mapTilePlacementFacts.isBuildingsTilePresent &&
+      !blockedObjectTileKeys.has(tileKey),
+    noFurniture: Object.hasOwn(mergedBackProperties, "NoFurniture"),
     wall: mapTilePlacementFacts.hasTileDataWallAnchor,
     water: mapTilePlacementFacts.isBackTileWater,
     crabPot,
   };
+}
+
+function isGreenhouseStoneFruitTile(
+  treePlantableAnywhere: boolean,
+  mergedBackProperties: TmxProperties,
+): boolean {
+  return treePlantableAnywhere &&
+    mergedBackProperties.Type?.toLowerCase() === "stone";
+}
+
+function resolveWildTreePlantable(
+  treePlantableAnywhere: boolean,
+  mergedBackProperties: TmxProperties,
+  mergedDiggable: boolean,
+  canPlantTrees: boolean,
+  treePlacementPolicy: TreePlacementPolicy,
+): boolean {
+  if (!treePlacementPolicy.allowTreesAnywhere) {
+    return treePlantableAnywhere &&
+      mergedBackProperties.Type?.toLowerCase() === "dirt" &&
+      (mergedDiggable || canPlantTrees);
+  }
+
+  return treePlantableAnywhere;
+}
+
+function isFarmFruitTreeTile(
+  mapTilePlacementFacts: MapTilePlacementFacts,
+  mergedBackProperties: TmxProperties,
+  isBuildabilityWater: boolean,
+): boolean {
+  if (
+    !mapTilePlacementFacts.isBackTilePresent ||
+    mapTilePlacementFacts.isBuildingsTilePresent ||
+    isBuildabilityWater
+  ) {
+    return false;
+  }
+
+  if (
+    Object.hasOwn(mergedBackProperties, "Diggable") ||
+    mergedBackProperties.Type === "Stone"
+  ) {
+    return true;
+  }
+
+  const canPlantTreesExactly = mergedBackProperties.CanPlantTrees === "T";
+  if (
+    mergedBackProperties.Type !== "Grass" &&
+    mergedBackProperties.Type !== "Dirt" &&
+    !canPlantTreesExactly
+  ) {
+    return false;
+  }
+
+  const noSpawn = mergedBackProperties.NoSpawn ??
+    (isTmxPropertyTruthy(mergedBackProperties.AllSpawn) ? "All" : undefined);
+  const noSpawnBlocksFruitTree = noSpawn !== undefined &&
+    noSpawn !== "Grass" &&
+    noSpawn.toLowerCase() !== "false";
+
+  return !noSpawnBlocksFruitTree || canPlantTreesExactly;
+}
+
+function createTreePlacementPolicy(
+  tmxMap: TmxMap,
+  mapFile: string | undefined,
+): TreePlacementPolicy {
+  if (mapFile === undefined) {
+    return {
+      allowTreesAnywhere: true,
+      greenhouseTrees: false,
+      fruitTreesUseFarmRule: false,
+    };
+  }
+
+  const listedFarmMap = anywhereTreeMapFiles.has(mapFile);
+  const forceAllowTreePlanting = isTmxPropertyTruthy(
+    tmxMap.properties.ForceAllowTreePlanting,
+  );
+
+  return {
+    allowTreesAnywhere: listedFarmMap || forceAllowTreePlanting,
+    greenhouseTrees: greenhouseTreeMapFiles.has(mapFile),
+    fruitTreesUseFarmRule: listedFarmMap &&
+      !greenhouseTreeMapFiles.has(mapFile) &&
+      mapFile !== "Island_W.tmx",
+  };
+}
+
+function createBlockedObjectTileKeys(
+  tmxMap: TmxMap,
+  mapFile: string | undefined,
+): ReadonlySet<string> {
+  const blockedObjectTileKeys = new Set<string>();
+
+  for (const farmCaveTile of readFarmCaveObjectTiles(tmxMap)) {
+    blockedObjectTileKeys.add(
+      `${String(farmCaveTile.x)},${String(farmCaveTile.y)}`,
+    );
+  }
+
+  if (mapFile === "Island_W.tmx") {
+    for (const islandWestBlockedObjectTile of islandWestBlockedObjectTiles) {
+      blockedObjectTileKeys.add(islandWestBlockedObjectTile);
+    }
+  }
+
+  return blockedObjectTileKeys;
+}
+
+function readFarmCaveObjectTiles(
+  tmxMap: TmxMap,
+): readonly MapTileCoordinates[] {
+  const warpProperty = tmxMap.properties.Warp;
+  if (warpProperty === undefined) {
+    return [];
+  }
+
+  const warpTokens = warpProperty.trim().split(/\s+/).filter(
+    (warpToken) => warpToken.length > 0,
+  );
+
+  for (let tokenIndex = 0; tokenIndex + 4 < warpTokens.length; tokenIndex += 5) {
+    const warpTarget = warpTokens[tokenIndex + 2];
+    if (warpTarget === undefined || warpTarget.toLowerCase() !== "farmcave") {
+      continue;
+    }
+
+    const warpX = warpTokens[tokenIndex];
+    const warpY = warpTokens[tokenIndex + 1];
+    const warpTile = readIntegerCoordinate(warpX, warpY);
+    if (warpTile === null) {
+      continue;
+    }
+
+    const farmCaveEntry = readFarmCaveEntry(tmxMap.properties.FarmCaveEntry);
+    return [
+      warpTile,
+      farmCaveEntry ?? { x: warpTile.x, y: warpTile.y + 1 },
+    ];
+  }
+
+  return [];
+}
+
+function readFarmCaveEntry(
+  farmCaveEntryProperty: string | undefined,
+): MapTileCoordinates | null {
+  if (farmCaveEntryProperty === undefined) {
+    return null;
+  }
+
+  const entryTokens = farmCaveEntryProperty.trim().split(/\s+/).filter(
+    (entryToken) => entryToken.length > 0,
+  );
+
+  return readIntegerCoordinate(entryTokens[0], entryTokens[1]);
+}
+
+function readIntegerCoordinate(
+  rawX: string | undefined,
+  rawY: string | undefined,
+): MapTileCoordinates | null {
+  if (rawX === undefined || rawY === undefined) {
+    return null;
+  }
+
+  if (!/^-?\d+$/.test(rawX) || !/^-?\d+$/.test(rawY)) {
+    return null;
+  }
+
+  const x = Number(rawX);
+  const y = Number(rawY);
+  if (!Number.isSafeInteger(x) || !Number.isSafeInteger(y)) {
+    return null;
+  }
+
+  return { x, y };
+}
+
+function assertMapFile(mapFile: string): void {
+  if (typeof mapFile !== "string" || !mapFile.endsWith(".tmx") || mapFile.length <= ".tmx".length) {
+    throw new TypeError(
+      `Map placement map file must be a non-empty .tmx name; received ${describeValue(mapFile)}.`,
+    );
+  }
 }
 
 function isTreeBlockingNoSpawn(noSpawnPropertyValue: string | undefined): boolean {
@@ -389,21 +681,51 @@ function getRequiredTileLayer(tmxMap: TmxMap, layerName: string): TmxTileLayer {
   return matchingLayer;
 }
 
+function islandDiggableTilesetAllowed(
+  islandDiggableRequiresOutdoorsSheet: boolean,
+  backTilesetImageSource: string | null,
+): boolean {
+  if (!islandDiggableRequiresOutdoorsSheet) {
+    return true;
+  }
+
+  return backTilesetImageSource !== null &&
+    backTilesetImageSource.includes("outdoorsTileSheet");
+}
+
 function getLayerTileProperties(
   tmxMap: TmxMap,
   tileLayer: TmxTileLayer,
   tileCoordinates: MapTileCoordinates,
 ): TmxProperties {
-  const baseGid = getLayerBaseGid(tileLayer, tileCoordinates);
-
-  if (baseGid === 0) {
+  const tileset = getLayerTileset(tmxMap, tileLayer, tileCoordinates);
+  if (tileset === null) {
     return {};
   }
 
-  const tileset = getTilesetForBaseGid(tmxMap.tilesets, baseGid, tileLayer.name);
-  const tileLocalId = baseGid - tileset.firstGid;
+  const baseGid = getLayerBaseGid(tileLayer, tileCoordinates);
+  return tileset.tileProperties.get(baseGid - tileset.firstGid) ?? {};
+}
 
-  return tileset.tileProperties.get(tileLocalId) ?? {};
+function getLayerTilesetImageSource(
+  tmxMap: TmxMap,
+  tileLayer: TmxTileLayer,
+  tileCoordinates: MapTileCoordinates,
+): string | null {
+  return getLayerTileset(tmxMap, tileLayer, tileCoordinates)?.imageSource ?? null;
+}
+
+function getLayerTileset(
+  tmxMap: TmxMap,
+  tileLayer: TmxTileLayer,
+  tileCoordinates: MapTileCoordinates,
+): TmxTileset | null {
+  const baseGid = getLayerBaseGid(tileLayer, tileCoordinates);
+  if (baseGid === 0) {
+    return null;
+  }
+
+  return getTilesetForBaseGid(tmxMap.tilesets, baseGid, tileLayer.name);
 }
 
 function getLayerBaseGid(

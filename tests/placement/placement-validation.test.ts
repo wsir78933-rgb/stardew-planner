@@ -1389,6 +1389,63 @@ describe("placement validation", () => {
     }
   });
 
+  it("rejects a building when the in-map tile in front of the human door is not buildable", () => {
+    const buildingMetadataById: BuildingPlacementMetadataById = {
+      doorShed: {
+        size: { width: 1, height: 1 },
+        collisionMap: [[{ requiresBuildable: true }]],
+        additionalPlacementTiles: [],
+        humanDoor: { x: 0, y: 0 },
+        tilePropertyGrid: [],
+      },
+    };
+
+    const validation = validatePlacement({
+      mapPlacementGrid: createPlacementGrid([
+        { buildable: true, diggable: false, passable: true },
+        { buildable: false, diggable: false, passable: false },
+      ], 1),
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "building",
+        building: { buildingId: "doorShed", x: 0, y: 0 },
+      },
+    });
+
+    expect(validation).toEqual({
+      valid: false,
+      reason: "not-buildable",
+      tile: { x: 0, y: 1 },
+    });
+  });
+
+  it("does not reject a human door whose front tile is outside the map", () => {
+    const buildingMetadataById: BuildingPlacementMetadataById = {
+      doorShed: {
+        size: { width: 1, height: 1 },
+        collisionMap: [[{ requiresBuildable: true }]],
+        additionalPlacementTiles: [],
+        humanDoor: { x: 0, y: 0 },
+        tilePropertyGrid: [],
+      },
+    };
+
+    const validation = validatePlacement({
+      mapPlacementGrid: createPlacementGrid([
+        { buildable: true, diggable: false, passable: true },
+      ]),
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "building",
+        building: { buildingId: "doorShed", x: 0, y: 0 },
+      },
+    });
+
+    expect(validation).toEqual({ valid: true });
+  });
+
   it("requires a HumanDoor tile to be buildable even when its collision cell is O", () => {
     const buildingMetadataById: BuildingPlacementMetadataById = {
       doorShed: {
@@ -1510,6 +1567,156 @@ describe("placement validation", () => {
     })).toEqual({
       valid: false,
       reason: "not-crab-pot-tile",
+      tile: { x: 0, y: 0 },
+    });
+  });
+
+  it("rejects trees, fruit trees, chests, and floors that the competitor masks reject", () => {
+    const buildingMetadataById = createBuildingMetadataById();
+    const restrictedTile = {
+      buildable: true,
+      diggable: false,
+      passable: true,
+      treePlantable: false,
+      treePlantableOnDirt: false,
+      fruitTreePlantable: false,
+      fruitTreesRestricted: true,
+      objectPlaceable: true,
+      noFurniture: false,
+      wall: false,
+      crabPot: false,
+    };
+    const mapPlacementGrid = {
+      width: 1,
+      height: 1,
+      capabilitiesByTile: [restrictedTile],
+    };
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ itemId: "wildtree_1" }),
+      },
+    })).toEqual({
+      valid: false,
+      reason: "not-passable",
+      tile: { x: 0, y: 0 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ itemId: "fruittree_628" }),
+      },
+    })).toEqual({
+      valid: false,
+      reason: "not-passable",
+      tile: { x: 0, y: 0 },
+    });
+
+    const treeTile = {
+      ...restrictedTile,
+      passable: false,
+      treePlantable: true,
+      fruitTreePlantable: true,
+      objectPlaceable: false,
+    };
+    expect(validatePlacement({
+      mapPlacementGrid: {
+        width: 1,
+        height: 1,
+        capabilitiesByTile: [treeTile],
+      },
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ itemId: "wildtree_1" }),
+      },
+    })).toEqual({ valid: true });
+
+    const blockedObjectTile = {
+      ...restrictedTile,
+      objectPlaceable: false,
+      noFurniture: true,
+    };
+    const blockedObjectGrid = {
+      width: 1,
+      height: 1,
+      capabilitiesByTile: [blockedObjectTile],
+    };
+
+    expect(validatePlacement({
+      mapPlacementGrid: blockedObjectGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ itemId: "object:130" }),
+      },
+    })).toEqual({
+      valid: false,
+      reason: "not-passable",
+      tile: { x: 0, y: 0 },
+    });
+
+    expect(validatePlacement({
+      mapPlacementGrid: blockedObjectGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "floor",
+        item: createNewPlacementItem({ itemId: "floor:wood", layer: "path" }),
+      },
+    })).toEqual({
+      valid: false,
+      reason: "not-passable",
+      tile: { x: 0, y: 0 },
+    });
+
+    const noFurnitureOnlyGrid = {
+      width: 1,
+      height: 1,
+      capabilitiesByTile: [{
+        ...restrictedTile,
+        noFurniture: true,
+      }],
+    };
+    expect(validatePlacement({
+      mapPlacementGrid: noFurnitureOnlyGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "floor",
+        item: createNewPlacementItem({ itemId: "floor:wood", layer: "path" }),
+      },
+    })).toEqual({ valid: true });
+    expect(validatePlacement({
+      mapPlacementGrid: noFurnitureOnlyGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ itemId: "object:93" }),
+      },
+    })).toEqual({ valid: true });
+    expect(validatePlacement({
+      mapPlacementGrid: noFurnitureOnlyGrid,
+      placementSnapshot: createPlacementSnapshot(),
+      buildingMetadataById,
+      candidate: {
+        kind: "item",
+        item: createNewPlacementItem({ itemId: "object:130" }),
+      },
+    })).toEqual({
+      valid: false,
+      reason: "not-passable",
       tile: { x: 0, y: 0 },
     });
   });

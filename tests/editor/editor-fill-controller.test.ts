@@ -1562,12 +1562,21 @@ describe("applyEditorFill", () => {
   it("keeps a wild tree flip and variant on every filled origin", () => {
     const wildTree = withFillTool(requireLockedPlaceableCatalogItem("wildtree_1"));
     const placementHistory = createPlacementHistory(createEmptyPlacementSnapshot());
+    const treePlacementGrid = createPlacementGrid(2, 1);
     const fillResult = applyEditorFill({
       selectedCatalogItem: wildTree,
       catalogPresentationChoice: { flipped: true, rotation: 0, variant: 1 },
       firstTile: { x: 0, y: 0 },
       secondTile: { x: 1, y: 0 },
-      mapPlacementGrid: createPlacementGrid(2, 1),
+      mapPlacementGrid: {
+        ...treePlacementGrid,
+        capabilitiesByTile: treePlacementGrid.capabilitiesByTile.map(
+          (tileCapabilities) => ({
+            ...tileCapabilities,
+            treePlantable: true,
+          }),
+        ),
+      },
       buildingMetadataById: createBuildingMetadataById(),
       placementHistory,
     });
