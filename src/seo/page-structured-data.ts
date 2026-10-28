@@ -172,6 +172,44 @@ export function createCollectionPageStructuredData(
   };
 }
 
+function assertNonEmptyWebPageText(
+  fieldName: "name" | "description" | "pathname",
+  fieldValue: string,
+): void {
+  if (fieldValue.trim().length === 0) {
+    throw new Error(
+      `Web page structured data ${fieldName} must be a non-empty string. Received: ${JSON.stringify(fieldValue)}.`,
+    );
+  }
+}
+
+function assertWebPageStructuredDataInput(input: CollectionPageStructuredDataInput): void {
+  assertNonEmptyWebPageText("name", input.name);
+  assertNonEmptyWebPageText("description", input.description);
+  assertNonEmptyWebPageText("pathname", input.pathname);
+}
+
+function buildWebPageStructuredData(input: CollectionPageStructuredDataInput): StructuredData {
+  const pageUrl = createCanonicalUrl(input.pathname);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    name: input.name,
+    description: input.description,
+    url: pageUrl,
+    ...createLocalizedCreativeWorkFields(input.locale),
+  };
+}
+
+export function createWebPageStructuredData(
+  input: CollectionPageStructuredDataInput,
+): StructuredData {
+  assertWebPageStructuredDataInput(input);
+  return buildWebPageStructuredData(input);
+}
+
 export function createBreadcrumbListStructuredData(
   input: BreadcrumbListStructuredDataInput,
 ): StructuredData {
