@@ -54,7 +54,7 @@ export function HowToEarnMoneyStardewEnglishArticle() {
         />
         <figcaption>
           Three Year 1 gold jobs on one morning: a rod on the water, a potato
-          rectangle the starter can can finish, and the Large Pack on Pierre&apos;s
+          rectangle the starter can finish, and the Large Pack on Pierre&apos;s
           counter.
         </figcaption>
       </figure>
@@ -65,7 +65,7 @@ export function HowToEarnMoneyStardewEnglishArticle() {
         finished. The Large Pack is already on the right side of his counter for
         2,000g: 12 slots become 24. You cannot buy it with the 500g in your pocket.
         The first twelve days exist to turn that 500g, plus whatever you ship or
-        sell, into a named target without planting a field the starter can cannot
+        sell, into a named target without planting a field the starter cannot
         keep wet.
       </p>
       <p>

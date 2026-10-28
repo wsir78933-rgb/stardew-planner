@@ -1,13 +1,24 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { getToolsPageCopy } from "../../src/i18n/tools-page-copy";
+import { PlantingToolsWorkspace } from "../../src/tools-pages/crop-growth-tool-query";
 import { CropProfitTool, seasonProfitRankingHasRows } from "../../src/tools-pages/crop-profit-tool";
 import { CropGrowthTool } from "../../src/tools-pages/crop-growth-tool";
 import { CropSelect } from "../../src/tools-pages/crop-select";
 import { createCropGrowthToolHref, createCropProfitHref } from "../../src/tools-pages/planting-tool-href";
 import { loadPurchasableFieldCrops } from "../../src/tools-pages/purchasable-field-crops";
-import { PlantingToolFrame } from "../../src/tools-pages/planting-tool-frame";
+import { PlantingToolFrame, type PlantingToolId } from "../../src/tools-pages/planting-tool-frame";
 import { ToolsHomePage } from "../../src/tools-pages/tools-home-page";
+
+vi.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      push() {
+        return undefined;
+      },
+    };
+  },
+}));
 import {
   getProcessingToolDefinition,
   PROCESSING_TOOL_IDS,
@@ -93,6 +104,7 @@ it.each(["en", "zh-CN"] as const)(
       const markup = renderToStaticMarkup(
         <PlantingToolFrame
           currentTool={currentTab.id}
+          documentHeading
           locale={locale}
           saveStatus="empty"
           title={currentTab.label}
@@ -118,6 +130,73 @@ it.each(["en", "zh-CN"] as const)(
     }
   },
 );
+
+it.each([
+  {
+    locale: "en",
+    currentTool: "crop-profit",
+    activeTitleId: "crop-profit-hero-title",
+    inactiveTitleId: "crop-growth-hero-title",
+  },
+  {
+    locale: "en",
+    currentTool: "crop-growth",
+    activeTitleId: "crop-growth-hero-title",
+    inactiveTitleId: "crop-profit-hero-title",
+  },
+  {
+    locale: "zh-CN",
+    currentTool: "crop-profit",
+    activeTitleId: "crop-profit-hero-title",
+    inactiveTitleId: "crop-growth-hero-title",
+  },
+  {
+    locale: "zh-CN",
+    currentTool: "crop-growth",
+    activeTitleId: "crop-growth-hero-title",
+    inactiveTitleId: "crop-profit-hero-title",
+  },
+] as const satisfies readonly Readonly<{
+  locale: "en" | "zh-CN";
+  currentTool: PlantingToolId;
+  activeTitleId: string;
+  inactiveTitleId: string;
+}>[])(
+  "server-renders one $currentTool h1 and a paragraph for the hidden hero in $locale",
+  ({ locale, currentTool, activeTitleId, inactiveTitleId }) => {
+    const markup = renderToStaticMarkup(
+      <PlantingToolsWorkspace currentTool={currentTool} locale={locale} />,
+    );
+
+    expect(markup.match(/<h1\b/g) ?? []).toHaveLength(1);
+    expect(markup).toMatch(new RegExp(`<h1\\b(?=[^>]*\\bid="${activeTitleId}")[^>]*>`));
+    expect(markup).not.toMatch(new RegExp(`<h1\\b(?=[^>]*\\bid="${inactiveTitleId}")[^>]*>`));
+    expect(markup).toMatch(new RegExp(`<p\\b(?=[^>]*\\bid="${inactiveTitleId}")[^>]*>`));
+    expect(markup).toContain(`<section aria-labelledby="${activeTitleId}"`);
+    expect(markup).toContain(`<section aria-labelledby="${inactiveTitleId}"`);
+    expect(markup).toContain('id="crop-profit-calculator"');
+    expect(markup).toContain('id="crop-growth-calculator"');
+    expect(markup).toMatch(/<div\b(?=[^>]*\bhidden="")[^>]*>/);
+  },
+);
+
+it("fails fast when the planting frame document heading flag is not boolean", () => {
+  const invalidDocumentHeading = "yes";
+
+  expect(() =>
+    renderToStaticMarkup(
+      <PlantingToolFrame
+        currentTool="crop-profit"
+        documentHeading={invalidDocumentHeading as unknown as boolean}
+        locale="en"
+        saveStatus="empty"
+        title="Crop profit"
+      >
+        <div>Planting calculator workspace</div>
+      </PlantingToolFrame>,
+    ),
+  ).toThrow(`documentHeading=${JSON.stringify(invalidDocumentHeading)}`);
+});
 
 it("renders the Chinese season-profit form labels", () => {
   const copy = getToolsPageCopy("zh-CN");

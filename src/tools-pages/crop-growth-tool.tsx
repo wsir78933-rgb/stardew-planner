@@ -51,6 +51,7 @@ import styles from "./tools-page.module.css";
 
 type CropGrowthToolProperties = Readonly<{
   locale: PublicLocale;
+  documentHeading?: boolean;
   requestedCropId: string | null;
   requestedGrowthForm?: CropGrowthForm | null;
   onSelectTool?: (tool: PlantingToolId) => void;
@@ -60,6 +61,7 @@ type SaveStatus = "empty" | "saved" | "failed";
 
 export function CropGrowthTool({
   locale,
+  documentHeading = true,
   requestedCropId,
   requestedGrowthForm = null,
   onSelectTool,
@@ -244,6 +246,7 @@ export function CropGrowthTool({
   return (
     <PlantingToolFrame
       currentTool="crop-growth"
+      documentHeading={documentHeading}
       locale={locale}
       onSelectTool={onSelectTool}
       saveStatus={saveStatus}

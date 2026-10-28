@@ -109,6 +109,7 @@ export function PlantingToolsWorkspace({
     <>
       <div hidden={activeTool !== "crop-profit"}>
         <CropProfitTool
+          documentHeading={activeTool === "crop-profit"}
           locale={locale}
           onSelectTool={selectTool}
           onViewGrowth={viewGrowthCalendar}
@@ -116,6 +117,7 @@ export function PlantingToolsWorkspace({
       </div>
       <div hidden={activeTool !== "crop-growth"}>
         <CropGrowthTool
+          documentHeading={activeTool === "crop-growth"}
           locale={locale}
           onSelectTool={selectTool}
           requestedCropId={requestedCropId}

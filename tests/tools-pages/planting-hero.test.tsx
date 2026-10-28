@@ -56,6 +56,33 @@ function readHeadingMarkup(markup: string): string {
   return headingMatch[0];
 }
 
+function readElementMarkup(markup: string, tagName: string, elementId: string): string {
+  const elementMatch = markup.match(
+    new RegExp(`<${tagName}\\b(?=[^>]*\\bid="${elementId}")[^>]*>[\\s\\S]*?</${tagName}>`),
+  );
+  if (elementMatch === null) {
+    throw new Error(`Expected <${tagName} id="${elementId}"> in rendered markup.`);
+  }
+
+  return elementMatch[0];
+}
+
+function readElementClass(markup: string, tagName: string, elementId: string): string {
+  const openingTag = readElementMarkup(markup, tagName, elementId).match(/^<[^>]+>/);
+  if (openingTag === null) {
+    throw new Error(`Expected <${tagName} id="${elementId}"> to have an opening tag.`);
+  }
+
+  const classMatch = openingTag[0].match(/\bclass="([^"]*)"/);
+  if (classMatch === null) {
+    throw new Error(
+      `Expected <${tagName} id="${elementId}"> to include a class. Received: ${openingTag[0]}.`,
+    );
+  }
+
+  return classMatch[1] ?? "";
+}
+
 it.each(plantingHeroCases)(
   "renders the localized $tool hero with an accessible calculator action in $locale",
   ({ locale, tool, calculatorId, expectedHeading }) => {
@@ -104,6 +131,69 @@ it.each(plantingHeroCases)(
     expect(readRenderedText(readHeadingMarkup(renderedMarkup))).toBe(expectedHeading);
     expect(renderedMarkup.match(new RegExp(`\\bid="${calculatorId}"`, "g")) ?? []).toHaveLength(1);
     expect(renderedMarkup).toMatch(actionPattern);
+  },
+);
+
+it.each(plantingHeroCases)(
+  "renders the inactive $tool hero as a paragraph with the same heading classes in $locale",
+  ({ locale, tool, calculatorId, expectedHeading }) => {
+    const heroCopy = getToolsPageCopy(locale)[tool].hero;
+    const titleId = `${tool}-hero-title`;
+    const activeMarkup = renderToStaticMarkup(
+      <SimpleHero
+        actionHref={`#${calculatorId}`}
+        copy={heroCopy}
+        locale={locale}
+        titleId={titleId}
+      />,
+    );
+    const inactiveMarkup = renderToStaticMarkup(
+      <SimpleHero
+        actionHref={`#${calculatorId}`}
+        copy={heroCopy}
+        documentHeading={false}
+        locale={locale}
+        titleId={titleId}
+      />,
+    );
+    const inactiveHeadingMarkup = readElementMarkup(inactiveMarkup, "p", titleId);
+
+    expect(inactiveMarkup.match(/<h1\b/g) ?? []).toHaveLength(0);
+    expect(inactiveMarkup).toContain(`<section aria-labelledby="${titleId}"`);
+    expect(readElementClass(inactiveMarkup, "p", titleId)).toBe(
+      readElementClass(activeMarkup, "h1", titleId),
+    );
+    expect(inactiveHeadingMarkup.match(/<br\s*\/?\s*>/g) ?? []).toHaveLength(1);
+    expect(inactiveHeadingMarkup).toContain(`<em class="`);
+    expect(readRenderedText(inactiveHeadingMarkup)).toBe(expectedHeading);
+    expect(inactiveMarkup).toContain(`>${heroCopy.description}</p>`);
+  },
+);
+
+it.each(plantingHeroCases)(
+  "keeps an h1 only when the $tool is the document heading in $locale",
+  ({ locale, tool, expectedHeading }) => {
+    const titleId = `crop-${tool}-hero-title`;
+    const activeMarkup =
+      tool === "profit"
+        ? renderToStaticMarkup(<CropProfitTool locale={locale} />)
+        : renderToStaticMarkup(<CropGrowthTool locale={locale} requestedCropId={null} />);
+    const inactiveMarkup =
+      tool === "profit"
+        ? renderToStaticMarkup(<CropProfitTool documentHeading={false} locale={locale} />)
+        : renderToStaticMarkup(
+            <CropGrowthTool documentHeading={false} locale={locale} requestedCropId={null} />,
+          );
+
+    expect(activeMarkup.match(/<h1\b/g) ?? []).toHaveLength(1);
+    expect(activeMarkup).toContain(`<h1 class="`);
+    expect(activeMarkup).toContain(`id="${titleId}"`);
+    expect(inactiveMarkup.match(/<h1\b/g) ?? []).toHaveLength(0);
+    expect(inactiveMarkup).toContain(`<section aria-labelledby="${titleId}"`);
+    expect(readRenderedText(readElementMarkup(inactiveMarkup, "p", titleId))).toBe(expectedHeading);
+    expect(readElementClass(inactiveMarkup, "p", titleId)).toBe(
+      readElementClass(activeMarkup, "h1", titleId),
+    );
   },
 );
 
@@ -185,4 +275,21 @@ it("fails fast with the received path action href", () => {
       />,
     ),
   ).toThrow(`actionHref=${JSON.stringify(invalidActionHref)}`);
+});
+
+it("fails fast with the received non-boolean document heading flag", () => {
+  const heroCopy = getToolsPageCopy("en").profit.hero;
+  const invalidDocumentHeading = "false";
+
+  expect(() =>
+    renderToStaticMarkup(
+      <SimpleHero
+        actionHref="#crop-profit-calculator"
+        copy={heroCopy}
+        documentHeading={invalidDocumentHeading as unknown as boolean}
+        locale="en"
+        titleId="crop-profit-hero-title"
+      />,
+    ),
+  ).toThrow(`documentHeading=${JSON.stringify(invalidDocumentHeading)}`);
 });

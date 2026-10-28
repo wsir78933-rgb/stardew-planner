@@ -61,6 +61,7 @@ import styles from "./tools-page.module.css";
 
 type CropProfitToolProperties = Readonly<{
   locale: PublicLocale;
+  documentHeading?: boolean;
   onSelectTool?: (tool: PlantingToolId, cropId?: string) => void;
   onViewGrowth?: (form: CropGrowthForm) => void;
 }>;
@@ -92,7 +93,12 @@ function createProfitGrowthCalendarHref(locale: PublicLocale, cropId: string): s
   return createCropGrowthHref(locale, cropId);
 }
 
-export function CropProfitTool({ locale, onSelectTool, onViewGrowth }: CropProfitToolProperties) {
+export function CropProfitTool({
+  locale,
+  documentHeading = true,
+  onSelectTool,
+  onViewGrowth,
+}: CropProfitToolProperties) {
   const copy = getToolsPageCopy(locale);
   const crops = useMemo(() => loadPurchasableFieldCrops(), []);
   const [form, setForm] = useState<CropProfitForm>(createDefaultCropProfitForm);
@@ -306,6 +312,7 @@ export function CropProfitTool({ locale, onSelectTool, onViewGrowth }: CropProfi
   return (
     <PlantingToolFrame
       currentTool="crop-profit"
+      documentHeading={documentHeading}
       locale={locale}
       onSelectTool={onSelectTool === undefined ? undefined : (tool) => onSelectTool(tool)}
       saveStatus={saveStatus}

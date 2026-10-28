@@ -7,6 +7,7 @@ import {
 } from "../../src/i18n/planting-tool-guide-copy";
 import type { PublicLocale } from "../../src/i18n/public-locale";
 import { PlantingToolGuide } from "../../src/tools-pages/planting-tool-guide";
+import { getPlantingToolGuideImageAlt } from "../../src/tools-pages/planting-tool-guide-alt";
 import { getPlantingToolGuideMedia } from "../../src/tools-pages/planting-tool-media";
 
 const plantingGuideCases = [
@@ -155,6 +156,14 @@ it.each(plantingGuideCases)(
     assertTextFollows(markup, copy.caseStudy.focusTitle, copy.features.items[0].title);
     expect(markup).toContain(escapeHtmlText(copy.caseStudy.caption));
     expect(markup).toContain(`/images/planting-tool-guides/${tool}/${locale}/case.png`);
+    const caseImageTag = extractMarkupOrThrow(
+      markup,
+      /<img\b[^>]*\bsrc="[^"]*\/case\.png"[^>]*>/,
+      "the case study image",
+    );
+    expect(caseImageTag).toContain(
+      `alt="${escapeHtmlText(getPlantingToolGuideImageAlt(locale, tool, "case"))}"`,
+    );
     assertTextFollows(markup, copy.features.items[0].title, copy.features.items[4].title);
     assertTextFollows(markup, copy.features.items[4].title, copy.featureIntro.title);
     assertTextFollows(markup, copy.featureIntro.title, copy.howToUse.title);
@@ -195,7 +204,9 @@ it.each(plantingGuideCases)(
       expect(featureArticle).toContain(`height="${featureMedia.desktop.height}"`);
       expect(featureArticle).toContain(`width="${featureMedia.mobile.width}"`);
       expect(featureArticle).toContain(`height="${featureMedia.mobile.height}"`);
-      expect(featureArticle).toContain('alt=""');
+      expect(featureArticle).toContain(
+        `alt="${escapeHtmlText(getPlantingToolGuideImageAlt(locale, tool, featureMedia.sourceId))}"`,
+      );
       expect(featureArticle).toContain('loading="lazy"');
     }
 

@@ -377,7 +377,7 @@ it("returns paired English and Chinese post metadata in canonical order", () => 
   expect(englishPosts[12]).toMatchObject({
     title: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
     description:
-      "Year 1 gold is not a bigger field. You start with 500g. Name the next spend, water only tiles the starter can can finish, then fish leftover energy from Spring 2. Shops pay immediately; the shipping box pays after you sleep.",
+      "Start with 500g. Name the next spend, water only tiles the starter can finish, then fish leftover energy. Shops pay now; the shipping box pays after sleep.",
     readTimeMinutes: 16,
     coverImage: {
       src: "/blog/how-to-earn-money-stardew-cover.webp",

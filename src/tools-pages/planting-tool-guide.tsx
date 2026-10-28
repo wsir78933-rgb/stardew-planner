@@ -9,6 +9,7 @@ import {
 } from "../i18n/planting-tool-guide-copy";
 import type { PublicLocale } from "../i18n/public-locale";
 import { HowItWorks09 } from "./how-it-works-09";
+import { getPlantingToolGuideImageAlt } from "./planting-tool-guide-alt";
 import type { PlantingToolId } from "./planting-tool-frame";
 import { createCropGrowthToolHref, createCropProfitHref } from "./planting-tool-href";
 import {
@@ -230,7 +231,7 @@ function CaseStudySection({
       <p className={styles.caseDescription}>{copy.description}</p>
       <div className={styles.caseLayout}>
         <img
-          alt=""
+          alt={getPlantingToolGuideImageAlt(locale, currentTool, "case")}
           className={styles.caseImage}
           height={caseImage.height}
           loading="lazy"
@@ -251,7 +252,13 @@ function CaseStudySection({
   );
 }
 
-function FeaturePicture({ featureMedia }: Readonly<{ featureMedia: PlantingToolGuideFeatureMedia }>): JSX.Element {
+function FeaturePicture({
+  alt,
+  featureMedia,
+}: Readonly<{
+  alt: string;
+  featureMedia: PlantingToolGuideFeatureMedia;
+}>): JSX.Element {
   return (
     <picture>
       <source
@@ -261,7 +268,7 @@ function FeaturePicture({ featureMedia }: Readonly<{ featureMedia: PlantingToolG
         width={featureMedia.mobile.width}
       />
       <img
-        alt=""
+        alt={alt}
         className={styles.featureImage}
         height={featureMedia.desktop.height}
         loading="lazy"
@@ -277,11 +284,13 @@ function FeatureArticle({
   feature,
   featureIndex,
   featureMedia,
+  locale,
 }: Readonly<{
   currentTool: PlantingToolId;
   feature: GuideFeature;
   featureIndex: number;
   featureMedia: PlantingToolGuideFeatureMedia;
+  locale: PublicLocale;
 }>): JSX.Element {
   const headingId = `${currentTool}-guide-feature-${featureIndex + 1}`;
   const mediaSide = featureIndex % 2 === 0 ? "end" : "start";
@@ -299,7 +308,10 @@ function FeatureArticle({
         <p className={styles.featureBody}>{feature.body}</p>
       </div>
       <div className={styles.featureMedia}>
-        <FeaturePicture featureMedia={featureMedia} />
+        <FeaturePicture
+          alt={getPlantingToolGuideImageAlt(locale, currentTool, featureMedia.sourceId)}
+          featureMedia={featureMedia}
+        />
       </div>
     </article>
   );
@@ -308,10 +320,12 @@ function FeatureArticle({
 function FeatureList({
   currentTool,
   features,
+  locale,
   media,
 }: Readonly<{
   currentTool: PlantingToolId;
   features: PlantingToolGuideCopy["features"]["items"];
+  locale: PublicLocale;
   media: PlantingToolGuideFeatureMediaList;
 }>): JSX.Element {
   return (
@@ -323,6 +337,7 @@ function FeatureList({
           featureIndex={featureIndex}
           featureMedia={media[featureIndex]}
           key={media[featureIndex].sourceId}
+          locale={locale}
         />
       ))}
     </div>
@@ -479,7 +494,12 @@ export function PlantingToolGuide({
     <div className={styles.guide}>
       <OverviewSection copy={copy.overview} headingId={`${currentTool}-guide-overview`} />
       <CaseStudySection copy={copy.caseStudy} currentTool={currentTool} locale={locale} />
-      <FeatureList currentTool={currentTool} features={copy.features.items} media={media} />
+      <FeatureList
+        currentTool={currentTool}
+        features={copy.features.items}
+        locale={locale}
+        media={media}
+      />
       <FeatureIntroSection copy={copy.featureIntro} currentTool={currentTool} />
       <HowItWorks09
         cta={{

@@ -14,20 +14,33 @@ export type PlantingToolId = "crop-profit" | "crop-growth";
 type PlantingToolFrameProperties = Readonly<{
   locale: PublicLocale;
   currentTool: PlantingToolId;
+  documentHeading: boolean;
   title: string;
   saveStatus: "empty" | "saved" | "failed";
   onSelectTool?: (tool: PlantingToolId) => void;
   children: ReactNode;
 }>;
 
+function requirePlantingToolDocumentHeading(documentHeading: unknown): boolean {
+  if (typeof documentHeading !== "boolean") {
+    throw new Error(
+      `Cannot render PlantingToolFrame: documentHeading=${JSON.stringify(documentHeading)} must be a boolean.`,
+    );
+  }
+
+  return documentHeading;
+}
+
 export function PlantingToolFrame({
   locale,
   currentTool,
+  documentHeading,
   title,
   saveStatus,
   onSelectTool,
   children,
 }: PlantingToolFrameProperties) {
+  const heroIsDocumentHeading = requirePlantingToolDocumentHeading(documentHeading);
   const copy = getToolsPageCopy(locale);
   const profitHref = createCropProfitHref(locale);
   const growthHref = createCropGrowthToolHref(locale);
@@ -42,6 +55,7 @@ export function PlantingToolFrame({
       <SimpleHero
         actionHref={`#${calculatorId}`}
         copy={heroCopy}
+        documentHeading={heroIsDocumentHeading}
         locale={locale}
         titleId={heroTitleId}
       />

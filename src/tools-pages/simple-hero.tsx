@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { PublicLocale } from "../i18n/public-locale";
 import type { ToolsPageHeroCopy } from "../i18n/tools-page-copy";
 import styles from "./simple-hero.module.css";
@@ -10,6 +11,7 @@ export type SimpleHeroProperties = Readonly<{
   locale: PublicLocale;
   actionHref: string;
   titleId: string;
+  documentHeading?: boolean;
 }>;
 
 function requireNonEmptySimpleHeroText(value: unknown, fieldPath: string): string {
@@ -59,10 +61,82 @@ function requireSimpleHeroTitleId(titleId: unknown): string {
   return titleId;
 }
 
-export function SimpleHero({ copy, locale, actionHref, titleId }: SimpleHeroProperties) {
+function requireSimpleHeroDocumentHeading(documentHeading: unknown): boolean {
+  if (typeof documentHeading !== "boolean") {
+    throw new Error(
+      `Cannot render SimpleHero: documentHeading=${JSON.stringify(documentHeading)} must be a boolean.`,
+    );
+  }
+
+  return documentHeading;
+}
+
+function renderSimpleHeroTitle(
+  title: Readonly<{
+    documentHeading: boolean;
+    titleId: string;
+    titleBefore: string;
+    accent: string;
+    titleAfter: string;
+    wordSeparator: string;
+  }>,
+): ReactNode {
+  const titleContent = (
+    <>
+      {title.titleBefore}
+      {title.wordSeparator}
+      <br />
+      <em className={styles.accent}>
+        {title.accent}
+        <svg
+          aria-hidden="true"
+          className={styles.underline}
+          fill="none"
+          preserveAspectRatio="none"
+          viewBox="0 0 170 30"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2 9C32.8203 5.34032 108.769 -0.881146 166 3.51047"
+            fill="none"
+            opacity="0.9"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="6"
+          />
+        </svg>
+      </em>
+      {title.wordSeparator}
+      {title.titleAfter}
+    </>
+  );
+
+  if (title.documentHeading) {
+    return (
+      <h1 className={styles.heading} id={title.titleId}>
+        {titleContent}
+      </h1>
+    );
+  }
+
+  return (
+    <p className={styles.heading} id={title.titleId}>
+      {titleContent}
+    </p>
+  );
+}
+
+export function SimpleHero({
+  copy,
+  locale,
+  actionHref,
+  titleId,
+  documentHeading = true,
+}: SimpleHeroProperties) {
   const heroCopy = requireSimpleHeroCopy(copy);
   const heroActionHref = requireSimpleHeroAnchorHref(actionHref);
   const heroTitleId = requireSimpleHeroTitleId(titleId);
+  const heroIsDocumentHeading = requireSimpleHeroDocumentHeading(documentHeading);
 
   if (locale !== "en" && locale !== "zh-CN") {
     throw new Error(`Cannot render SimpleHero: locale=${JSON.stringify(locale)} is unsupported.`);
@@ -73,33 +147,14 @@ export function SimpleHero({ copy, locale, actionHref, titleId }: SimpleHeroProp
   return (
     <section aria-labelledby={heroTitleId} className={styles.hero}>
       <div className={styles.content}>
-        <h1 className={styles.heading} id={heroTitleId}>
-          {heroCopy.titleBefore}
-          {wordSeparator}
-          <br />
-          <em className={styles.accent}>
-            {heroCopy.accent}
-            <svg
-              aria-hidden="true"
-              className={styles.underline}
-              fill="none"
-              preserveAspectRatio="none"
-              viewBox="0 0 170 30"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2 9C32.8203 5.34032 108.769 -0.881146 166 3.51047"
-                fill="none"
-                opacity="0.9"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeWidth="6"
-              />
-            </svg>
-          </em>
-          {wordSeparator}
-          {heroCopy.titleAfter}
-        </h1>
+        {renderSimpleHeroTitle({
+          accent: heroCopy.accent,
+          documentHeading: heroIsDocumentHeading,
+          titleAfter: heroCopy.titleAfter,
+          titleBefore: heroCopy.titleBefore,
+          titleId: heroTitleId,
+          wordSeparator,
+        })}
         <p className={styles.description}>{heroCopy.description}</p>
         <a className={styles.action} href={heroActionHref}>
           {heroCopy.actionLabel}
