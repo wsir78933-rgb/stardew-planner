@@ -50,6 +50,7 @@ function createLocalizedPost(
     description: `Description for ${slug}`,
     topic: "Stardew Valley Guides",
     author: "Stardew Valley Planner Team",
+    publishedOn: "2026-01-01",
     readTimeMinutes: 5,
     coverImage: {
       src: "/social-images/stardew-valley-farm-planner.png",

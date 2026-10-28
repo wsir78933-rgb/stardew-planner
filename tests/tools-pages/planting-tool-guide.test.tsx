@@ -113,7 +113,10 @@ it.each(plantingGuideCases)(
     expect(markup).not.toContain(escapeHtmlText(copy.features.title));
     expect(markup).not.toContain(copy.comparison.checkedOn);
     expect(markup).not.toContain(escapeHtmlText(copy.comparison.affiliation));
-    expect(markup).not.toContain("<time");
+    if (tool === "crop-growth") {
+      expect(markup).not.toContain("<time");
+      expect(markup).not.toContain("https://stardewvalleywiki.com/Crops");
+    }
 
     const approvedVisibleText = [
       copy.overview.eyebrow,
@@ -362,6 +365,60 @@ it("uses different localized guide content for the two tools", () => {
   expect(englishProfitCopy.overview.title).not.toBe(chineseProfitCopy.overview.title);
   expect(englishGrowthCopy.overview.title).not.toBe(chineseGrowthCopy.overview.title);
 });
+
+const expectedCropProfitPriceSourceSentence = {
+  en: "Prices come from this site's bundled Stardew Valley 1.6.15 game data (Crops.json). Crop reference: Stardew Valley Wiki.",
+  "zh-CN": "价格来自本站打包的星露谷 1.6.15 游戏数据（Crops.json）。作物说明见星露谷 Wiki。",
+} as const;
+
+const expectedCropProfitDateLabel = {
+  en: "October 28, 2026",
+  "zh-CN": "2026年10月28日",
+} as const;
+
+it.each([{ locale: "en" }, { locale: "zh-CN" }] as const)(
+  "shows the crop-profit price source and byline in $locale",
+  ({ locale }) => {
+    const copy = getPlantingToolGuideCopy(locale, "crop-profit");
+    const markup = renderToStaticMarkup(
+      <PlantingToolGuide currentTool="crop-profit" locale={locale} />,
+    );
+    const priceSource = copy.overview.priceSource;
+    const byline = copy.overview.byline;
+
+    if (priceSource === undefined || byline === undefined) {
+      throw new Error(
+        `Expected crop-profit overview attribution in ${JSON.stringify(locale)}, received priceSource ${JSON.stringify(priceSource)} and byline ${JSON.stringify(byline)}.`,
+      );
+    }
+
+    const overviewMarkup = extractMarkupOrThrow(
+      markup,
+      /<section\b(?=[^>]*aria-labelledby="crop-profit-guide-overview")[^>]*>[\s\S]*?<\/section>/,
+      "the crop-profit overview",
+    );
+    const sentence = `${priceSource.beforeLink}${priceSource.linkLabel}${priceSource.afterLink}`;
+    const firstParagraphIndex = overviewMarkup.indexOf(escapeHtmlText(copy.overview.paragraphs[0]));
+    const lastParagraphIndex = overviewMarkup.indexOf(escapeHtmlText(copy.overview.paragraphs[2]));
+    const authorIndex = overviewMarkup.indexOf(escapeHtmlText(byline.author));
+    const sourceIndex = overviewMarkup.indexOf(escapeHtmlText(priceSource.beforeLink));
+
+    expect(sentence).toBe(expectedCropProfitPriceSourceSentence[locale]);
+    expect(byline.author).toBe("Stardew Valley Planner Team");
+    expect(byline.dateTime).toBe("2026-10-28");
+    expect(byline.dateLabel).toBe(expectedCropProfitDateLabel[locale]);
+    expect(overviewMarkup).toContain(
+      `<a href="https://stardewvalleywiki.com/Crops">${escapeHtmlText(priceSource.linkLabel)}</a>`,
+    );
+    expect(overviewMarkup).toContain(
+      `<time dateTime="${byline.dateTime}">${escapeHtmlText(byline.dateLabel)}</time>`,
+    );
+    expect(authorIndex).toBeGreaterThan(-1);
+    expect(firstParagraphIndex).toBeGreaterThan(authorIndex);
+    expect(sourceIndex).toBeGreaterThan(lastParagraphIndex);
+    expect(overviewMarkup.indexOf(`<a href="https://stardewvalleywiki.com/Crops">`)).toBeGreaterThan(sourceIndex);
+  },
+);
 
 it("fails fast with the received unsupported locale", () => {
   const unsupportedLocale = "ru" as PublicLocale;

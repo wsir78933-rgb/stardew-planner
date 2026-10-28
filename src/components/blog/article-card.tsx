@@ -26,6 +26,18 @@ function assertArticleCardHeadingLevel(
   }
 }
 
+function assertArticleCardPublishedOn(
+  slug: string,
+  publishedOn: unknown,
+): asserts publishedOn is string {
+  if (typeof publishedOn !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(publishedOn)) {
+    const received = JSON.stringify(publishedOn) ?? String(publishedOn);
+    throw new Error(
+      `Invalid publishedOn for blog post ${slug}. Received: ${received}.`,
+    );
+  }
+}
+
 export function ArticleCard({
   copy,
   headingLevel = "h3",
@@ -33,6 +45,7 @@ export function ArticleCard({
   post,
 }: ArticleCardProperties) {
   assertArticleCardHeadingLevel(headingLevel);
+  assertArticleCardPublishedOn(post.slug, post.publishedOn);
   const articleHref = getLocalizedBlogPostHref(locale, post.slug);
   const HeadingTag = headingLevel;
 
@@ -55,6 +68,7 @@ export function ArticleCard({
         <p className="blog-article-card__metadata">
           {copy.authorLabel} {post.author} · {formatBlogReadTime(copy, post.readTimeMinutes)}
         </p>
+        <time dateTime={post.publishedOn}>{post.publishedOn}</time>
       </div>
     </article>
   );

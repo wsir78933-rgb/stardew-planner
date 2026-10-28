@@ -22,6 +22,8 @@ import {
 import styles from "./planting-tool-guide.module.css";
 
 const OVERVIEW_PARAGRAPH_COUNT = 3;
+const CROP_PROFIT_WIKI_CROPS_HREF = "https://stardewvalleywiki.com/Crops";
+const CROP_PROFIT_BYLINE_DATE_TIME = "2026-10-28";
 const CASE_FOCUS_COUNT = 5;
 const FEATURE_COUNT = 5;
 const INTRO_CARD_COUNT = 4;
@@ -78,9 +80,63 @@ function assertComparisonRowsMatchProducts(comparison: GuideComparison): void {
   });
 }
 
+function requireCropProfitByline(
+  byline: PlantingToolGuideCopy["overview"]["byline"],
+): NonNullable<PlantingToolGuideCopy["overview"]["byline"]> {
+  if (byline === undefined) {
+    throw new Error(
+      `PlantingToolGuide overview.byline must be set for crop-profit, received ${JSON.stringify(byline)}.`,
+    );
+  }
+
+  requireNonEmpty(byline.author, "overview.byline.author");
+  requireNonEmpty(byline.dateLabel, "overview.byline.dateLabel");
+
+  if (byline.dateTime !== CROP_PROFIT_BYLINE_DATE_TIME) {
+    throw new Error(
+      `PlantingToolGuide overview.byline.dateTime must be ${JSON.stringify(CROP_PROFIT_BYLINE_DATE_TIME)}, received ${JSON.stringify(byline.dateTime)}.`,
+    );
+  }
+
+  return byline;
+}
+
+function requireCropProfitPriceSource(
+  priceSource: PlantingToolGuideCopy["overview"]["priceSource"],
+): NonNullable<PlantingToolGuideCopy["overview"]["priceSource"]> {
+  if (priceSource === undefined) {
+    throw new Error(
+      `PlantingToolGuide overview.priceSource must be set for crop-profit, received ${JSON.stringify(priceSource)}.`,
+    );
+  }
+
+  requireNonEmpty(priceSource.beforeLink, "overview.priceSource.beforeLink");
+  requireNonEmpty(priceSource.linkLabel, "overview.priceSource.linkLabel");
+  requireNonEmpty(priceSource.afterLink, "overview.priceSource.afterLink");
+  return priceSource;
+}
+
+function assertOverviewAttribution(
+  currentTool: PlantingToolId,
+  overview: PlantingToolGuideCopy["overview"],
+): void {
+  if (currentTool === "crop-profit") {
+    requireCropProfitByline(overview.byline);
+    requireCropProfitPriceSource(overview.priceSource);
+    return;
+  }
+
+  if (overview.byline !== undefined || overview.priceSource !== undefined) {
+    throw new Error(
+      `PlantingToolGuide crop-growth overview must not include byline or priceSource, received byline ${JSON.stringify(overview.byline)} and priceSource ${JSON.stringify(overview.priceSource)}.`,
+    );
+  }
+}
+
 function assertGuideContent(
   copy: PlantingToolGuideCopy,
   media: PlantingToolGuideFeatureMediaList,
+  currentTool: PlantingToolId,
 ): void {
   requireNonEmpty(copy.overview.eyebrow, "overview.eyebrow");
   requireNonEmpty(copy.overview.title, "overview.title");
@@ -89,6 +145,7 @@ function assertGuideContent(
   copy.overview.paragraphs.forEach((paragraph, paragraphIndex) => {
     requireNonEmpty(paragraph, `overview.paragraphs[${paragraphIndex}]`);
   });
+  assertOverviewAttribution(currentTool, copy.overview);
 
   requireNonEmpty(copy.caseStudy.eyebrow, "caseStudy.eyebrow");
   requireNonEmpty(copy.caseStudy.title, "caseStudy.title");
@@ -185,13 +242,48 @@ function focusCalculator(calculatorId: string): void {
   calculatorTarget.scrollIntoView({ behavior: scrollBehavior, block: "start" });
 }
 
+function CropProfitOverviewTime({
+  dateTime,
+  dateLabel,
+}: Readonly<{
+  dateTime: string;
+  dateLabel: string;
+}>): JSX.Element {
+  return <time dateTime={dateTime}>{dateLabel}</time>;
+}
+
+function CropProfitOverviewByline({
+  byline,
+}: Readonly<{
+  byline: NonNullable<PlantingToolGuideCopy["overview"]["byline"]>;
+}>): JSX.Element {
+  return (
+    <p>{byline.author}{" "}<CropProfitOverviewTime dateLabel={byline.dateLabel} dateTime={byline.dateTime} /></p>
+  );
+}
+
+function CropProfitPriceSourceLine({
+  priceSource,
+}: Readonly<{
+  priceSource: NonNullable<PlantingToolGuideCopy["overview"]["priceSource"]>;
+}>): JSX.Element {
+  return (
+    <p>{priceSource.beforeLink}<a href={CROP_PROFIT_WIKI_CROPS_HREF}>{priceSource.linkLabel}</a>{priceSource.afterLink}</p>
+  );
+}
+
 function OverviewSection({
   copy,
+  currentTool,
   headingId,
 }: Readonly<{
   copy: PlantingToolGuideCopy["overview"];
+  currentTool: PlantingToolId;
   headingId: string;
 }>): JSX.Element {
+  const byline = currentTool === "crop-profit" ? requireCropProfitByline(copy.byline) : null;
+  const priceSource = currentTool === "crop-profit" ? requireCropProfitPriceSource(copy.priceSource) : null;
+
   return (
     <section aria-labelledby={headingId}>
       <div className={styles.sectionHeading}>
@@ -200,9 +292,11 @@ function OverviewSection({
       </div>
       <div className={styles.overviewLayout}>
         <div className={styles.overviewCopy}>
+          {byline === null ? null : <CropProfitOverviewByline byline={byline} />}
           {copy.paragraphs.map((paragraph, paragraphIndex) => (
             <p key={`overview-paragraph-${paragraphIndex}`}>{paragraph}</p>
           ))}
+          {priceSource === null ? null : <CropProfitPriceSourceLine priceSource={priceSource} />}
         </div>
         <aside className={styles.overviewAside}>{copy.aside}</aside>
       </div>
@@ -488,11 +582,15 @@ export function PlantingToolGuide({
     ? createCropProfitHref(locale)
     : createCropGrowthToolHref(locale);
 
-  assertGuideContent(copy, media);
+  assertGuideContent(copy, media, currentTool);
 
   return (
     <div className={styles.guide}>
-      <OverviewSection copy={copy.overview} headingId={`${currentTool}-guide-overview`} />
+      <OverviewSection
+        copy={copy.overview}
+        currentTool={currentTool}
+        headingId={`${currentTool}-guide-overview`}
+      />
       <CaseStudySection copy={copy.caseStudy} currentTool={currentTool} locale={locale} />
       <FeatureList
         currentTool={currentTool}

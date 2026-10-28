@@ -679,7 +679,7 @@ it("renders the paired gold-star crops routes with frozen metadata, canonical pa
   );
 
   expect(englishMarkup).toContain(
-    "how to get gold star crops stardew valley",
+    "How to Get Gold Star Crops in Stardew Valley",
   );
   expect(chineseMarkup).toContain(
     "星露谷物语如何种出金星作物",
@@ -720,7 +720,7 @@ it("renders the paired gold-star crops routes with frozen metadata, canonical pa
   expect(chineseMarkup).toContain('<figcaption class="whitespace-pre-line">');
 
   await expect(generateEnglishBlogPostMetadata(englishParameters)).resolves.toMatchObject({
-    title: "how to get gold star crops stardew valley",
+    title: "How to Get Gold Star Crops in Stardew Valley",
     description:
       "Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.",
     alternates: {

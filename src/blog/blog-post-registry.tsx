@@ -74,6 +74,7 @@ export type BlogPostMeta = Readonly<{
   description: string;
   topic: string;
   author: string;
+  publishedOn: string;
   readTimeMinutes: number;
   coverImage: Readonly<{
     src: string;
@@ -95,6 +96,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
   en: [
     {
       slug: "carpenter-stardew",
+      publishedOn: "2026-09-15",
       title: "Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades",
       description:
         "Use Robin's Carpenter's Shop for farm buildings, farmhouse upgrades, moves, demolition, and shop supplies, with a placement plan before you order.",
@@ -110,6 +112,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-robin-stardew-valley",
+      publishedOn: "2026-09-15",
       title: "Where Is Robin in Stardew Valley? Hours, Schedule, and Exceptions",
       description:
         "Find Robin at 24 Mountain Road, check Tuesday, Friday, rain, festival, clinic, and construction closures, and plan your Carpenter's Shop trip.",
@@ -125,6 +128,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-npc",
+      publishedOn: "2026-09-05",
       title: "Stardew Valley NPC List: Villagers, Marriage Candidates, and Services",
       description:
         "Sort the current Stardew Valley NPC list by marriage, giftable, and non-giftable roles, then plan gifts, schedules, and farm services.",
@@ -140,6 +144,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-town-map",
+      publishedOn: "2026-08-24",
       title: "Stardew Valley Town Map: Pelican Town Landmarks & Routes",
       description:
         "Use this Stardew Valley town map guide to find Pelican Town landmarks, exits, and a route back to your farm before you plan its layout.",
@@ -155,6 +160,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-stardew-valley-located",
+      publishedOn: "2026-09-05",
       title: "Where Is Stardew Valley Located? Ferngill Republic, Pelican Town, and the Real-World Theory",
       description:
         "Find Stardew Valley on the in-game map: separate Pelican Town, the Farm, and the Ferngill Republic, then test what Harvey's coordinates and Pacific Northwest influences do—and do not—prove.",
@@ -170,6 +176,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+      publishedOn: "2026-09-05",
       title: "Stardew Valley Expanded Marriage Candidates: All 7 SVE Bachelors and Bachelorettes",
       description:
         "Meet all 7 Stardew Valley Expanded marriage candidates, check who is available early, unlock Scarlett and Lance, and plan gifts and marriage steps.",
@@ -185,6 +192,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "sprinkler-stardew",
+      publishedOn: "2026-09-10",
       title: "Stardew Valley sprinklers: unlock the right tier, place it, and know where it fails",
       description:
         "Craft Farming 2, 6, or 9 sprinklers, place them for 6am watering, and check pots, Beach Farm sand, greenhouse rain, and island weather.",
@@ -200,6 +208,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "glasshouse-stardew-valley",
+      publishedOn: "2026-09-05",
       title: "Stardew Valley Greenhouse Layout: 120 Tiles & Sprinklers",
       description:
         "Repair the Stardew Valley Greenhouse, plan its 10×12 crop bed, save soil with border sprinklers, and place fruit trees without blocking growth.",
@@ -215,6 +224,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "oak-tree-stardew",
+      publishedOn: "2026-09-11",
       title: "Stardew Valley Oak Tree: Acorns, Tappers, and Oak Resin",
       description:
         "Identify an oak from an acorn, plant with wild-tree spacing, then tap Oak Resin every 7 nights or chop for wood after you sketch the trunks.",
@@ -230,6 +240,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-trees",
+      publishedOn: "2026-09-11",
       title: "Mark keep, orchard, and clear tiles before you chop Stardew Valley trees",
       description:
         "Outdoor farm only. Mark keep, orchard, and clear tiles, then plant or cut. Fruit trees need a 3×3 until mature; a planner 1×1 icon is not a growth check.",
@@ -245,6 +256,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "maple-tree-stardew",
+      publishedOn: "2026-09-15",
       title: "Plant a Maple Tree in Stardew With One-Tile Gaps, Then Tap Maple Syrup",
       description:
         "Match Maple Seed, not leaf shape. Collect seeds, tap Maple Syrup every 9 nights at Foraging 4 or chop. Sketch Maple Tree (Normal); it does not make syrup.",
@@ -260,6 +272,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "best-spring-crop-stardew",
+      publishedOn: "2026-09-15",
       title: "Best Spring Crop in Stardew: Year 1 Can’t Buy Strawberries on Spring 1",
       description:
         "There is no single best spring crop. Pierre sells potato at 50g and cauliflower at 80g that morning. Festival strawberries are 100g on Spring 13; buy for tiles you can water, because a giant 3-by-3 still occupies nine of them at 10pm.",
@@ -275,6 +288,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-earn-money-stardew",
+      publishedOn: "2026-10-28",
       title: "How to Earn Money in Stardew Valley: Year 1 Gold You Can Spend This Morning",
       description:
         "Start with 500g. Name the next spend, water only tiles the starter can finish, then fish leftover energy. Shops pay now; the shipping box pays after sleep.",
@@ -290,6 +304,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "rancher-or-tiller-stardew",
+      publishedOn: "2026-09-15",
       title: "Rancher or Tiller in Stardew: Farming 5 Also Locks Your Farming 10 Pair",
       description:
         "Tiller's 10% and Rancher's 20% multiply different goods. Name one shipped item and the Farming 10 pair that click locks, then pick Tiller or Rancher. Mayonnaise is 228g or 266g, not both.",
@@ -305,6 +320,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "summer-crops-stardew",
+      publishedOn: "2026-09-15",
       title: "Summer Crops in Stardew: Rank by the Shop You Can Open This Morning",
       description:
         "Starfruit sits at about 26.92g/day only after you can reach Oasis and pay 400g a seed. Year 1 at Pierre's is blueberry, melon, or hops by tile, not one crop on every hoe mark. Year 2 puts Red Cabbage on that same wiki gold/day table at about 17.78g/day.",
@@ -320,6 +336,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "fall-crops-stardew",
+      publishedOn: "2026-09-15",
       title: "Fall Crops in Stardew: 18.89g at Pierre's, 83.33g Needs a Rare Seed",
       description:
         "Year 1 at Pierre's is a tile choice among cranberries at about 18.89g/day, pumpkins at about 16.92g for one 13-day cycle, and grapes at 16.8g. Year 2 artichoke, Oasis beet, and a Traveling Cart Rare Seed sit on that same wiki gold/day table.",
@@ -335,6 +352,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "do-you-have-to-water-trees-stardew",
+      publishedOn: "2026-09-17",
       title:
         "Do You Have to Water Trees in Stardew Valley? Check Stage 4 and the Fruit-Tree 3×3",
       description:
@@ -351,6 +369,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-level-up-farming-stardew",
+      publishedOn: "2026-09-20",
       title:
         "How to Level Up Farming in Stardew: Watering and Hoeing Add 0 XP; Level 5 Needs 2,150",
       description:
@@ -367,6 +386,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "last-day-to-plant-stardew",
+      publishedOn: "2026-09-22",
       title: "Last Day to Plant in Stardew Valley: Parsnips by Spring 24",
       description:
         "Plant parsnips by Spring 24 if you want them ready on Spring 28. Water that day. For other outdoor crops, subtract grow time from 28. Tables cover spring through winter.",
@@ -382,6 +402,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "pine-tree-stardew",
+      publishedOn: "2026-09-23",
       title: "Pine Tree Stardew Valley: Fix Stage 4 and Tap Pine Tar",
       description:
         "Plant a Pine Cone on valid, untilled ground, skip watering, inspect all eight neighbors at stage 4, and use a normal or Heavy Tapper only after the Pine matures.",
@@ -397,6 +418,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "profit-margin-stardew",
+      publishedOn: "2026-09-24",
       title: "Stardew Valley Profit Margin: What 100%, 75%, 50%, and 25% Change",
       description:
         "Compare Normal, 75%, 50%, and 25% Profit Margin settings, including selected sale and seed prices, fixed costs, and how to choose one for a new farm.",
@@ -412,6 +434,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "what-to-grow-in-greenhouse-stardew",
+      publishedOn: "2026-09-26",
       title: "What to Grow in Greenhouse Stardew: Choose by Access, Harvest Rhythm, and Replanting",
       description:
         "Choose what to grow in Greenhouse Stardew by weighing seed or sapling access, first-harvest wait, repeat cycles, and how much replanting your routine can handle.",
@@ -427,6 +450,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-fruit",
+      publishedOn: "2026-09-26",
       title: "Stardew Fruit: Find Its Source Before Buying Seeds",
       description:
         "Find Stardew Valley fruit by crop, tree, or forage source. Check seasons, seed and sapling access, and the inputs needed for Jelly, Wine, or drying.",
@@ -442,6 +466,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "oak-tree-vs-maple-stardew",
+      publishedOn: "2026-09-27",
       title:
         "Stardew Valley Oak Tree vs Maple: The Seed or the Tapper Product Names the Tree",
       description:
@@ -458,6 +483,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-harvest-stardew-valley",
+      publishedOn: "2026-10-13",
       title: "How to Harvest Stardew Valley Crops by Hand, Scythe, or Axe",
       description:
         "Gather parsnips and pumpkins by hand with right-click or X, cut kale and wheat with a scythe, and strike giant crops three times with any axe.",
@@ -473,7 +499,8 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-get-gold-star-crops-stardew-valley",
-      title: "how to get gold star crops stardew valley",
+      publishedOn: "2026-10-15",
+      title: "How to Get Gold Star Crops in Stardew Valley",
       description:
         "Choose a fertilizer the crop can still take, time Farmer’s Lunch for harvest, and check whether you need exact Gold or Gold-or-better.",
       topic: "Stardew Valley Guides",
@@ -488,6 +515,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "house-upgrade-stardew",
+      publishedOn: "2026-10-17",
       title: "House Upgrade Stardew: 65,000g and 100 Hardwood for the Second Tier",
       description:
         "The first farmhouse upgrade is 10,000g and 450 Wood, the second is 65,000g and 100 Hardwood, and the third is 100,000g. In 1.6 the second payment replaced 50,000g and 150 Hardwood. Each upgrade takes three days. After the second upgrade, a renovation is a separate order and finishes immediately.",
@@ -505,6 +533,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
   "zh-CN": [
     {
       slug: "carpenter-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷物语木匠商店：罗宾位置、营业时间、建筑与升级",
       description: "了解罗宾木匠商店的营业时间、农场建筑、农舍升级、移动和拆除，并在下单前先规划放置位置。",
       topic: "星露谷物语指南",
@@ -519,6 +548,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-robin-stardew-valley",
+      publishedOn: "2026-09-15",
       title: "罗宾在星露谷物语哪里？木匠商店位置、营业时间与行程",
       description:
         "查找罗宾的 24 Mountain Road 木匠商店，核对周二、周五、雨天、节日、诊所和农场施工例外。",
@@ -534,6 +564,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-npc",
+      publishedOn: "2026-09-05",
       title: "星露谷 NPC 名单：可结婚角色、可送礼村民与服务",
       description:
         "按可结婚、可送礼和不可送礼分类整理星露谷 NPC，并核对送礼、好感度、商店服务与农场规划关系。",
@@ -549,6 +580,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-town-map",
+      publishedOn: "2026-09-05",
       title: "星露谷物语小镇地图：鹈鹕镇地点与路线",
       description:
         "用这份鹈鹕镇地点与出口指南，先找到商店、海滩、深山和回农场的路，再开始安排你的农场布局。",
@@ -564,6 +596,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "where-is-stardew-valley-located",
+      publishedOn: "2026-09-05",
       title: "星露谷物语位于哪里？芬吉尔共和国、鹈鹕镇与现实地点",
       description:
         "理清星露谷、鹈鹕镇、农场和芬吉尔共和国的关系，再看哈维坐标与太平洋西北地区影响能否证明现实地点。",
@@ -579,6 +612,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-expanded-bachelors-and-bachelorettes",
+      publishedOn: "2026-09-05",
       title: "星露谷 SVE 可结婚角色：7 位候选人、出现条件与礼物",
       description:
         "整理星露谷 SVE 当前 7 位可结婚角色，核对斯嘉丽与兰斯的出现条件、入门最爱礼物和原版结婚流程。",
@@ -594,6 +628,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "sprinkler-stardew",
+      publishedOn: "2026-09-10",
       title: "星露谷洒水器怎么选、怎么摆：按耕种等级覆盖田地",
       description:
         "说明三种官方洒水器的早晨浇水格数、耕种解锁，以及花盆、沙地等浇不到的情况。",
@@ -609,6 +644,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "glasshouse-stardew-valley",
+      publishedOn: "2026-09-05",
       title: "星露谷物语温室布局：120格耕地与洒水器摆放指南",
       description:
         "了解温室解锁、10×12耕地、洒水器占用和果树生长限制，再用温室地图检查布局后下种。",
@@ -624,6 +660,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "oak-tree-stardew",
+      publishedOn: "2026-09-11",
       title: "星露谷物语橡树：橡子种植、间距与树脂采集",
       description:
         "认清橡树和果树，按野树间距种下橡子，成熟后用树液采集器每 7 天收橡树树脂，或砍树取木材。",
@@ -639,6 +676,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-valley-trees",
+      publishedOn: "2026-09-11",
       title: "星露谷种树：先分普通树和果树，再在农场图上留间隔",
       description:
         "温室里的果树不是这篇的任务。果树要未开垦的 3×3；打开「树木不可生长区」。规划器能摆外观，没有果树 3×3 检查。",
@@ -654,6 +692,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "maple-tree-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷物语枫树：别靠树冠认，采集器 9 天出枫糖浆",
       description:
         "先确认是枫树种子，皮埃尔不卖。避开成年树邻格养成，采集 4 级挂采集器，普通 9 天出枫糖浆。规划器搜 Maple Tree。",
@@ -669,6 +708,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "best-spring-crop-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷物语春天种什么：第一年草莓种子春13才卖",
       description:
         "春1只种当天浇得完的土豆、花椰菜或防风草，金币留给蛋节。草莓种子平时不卖，皮埃尔摊位100金一粒。",
@@ -684,6 +724,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-earn-money-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷第一年怎么赚钱：下一步是2,000金背包，还是铜喷壶",
       description:
         "12格在扔鱼和种子就买2,000金大型背包；浇水已是体力瓶颈再升铜喷壶（另要5铜锭、两夜）。鱼店春2开门，鱼当天卖给威利就能花，田只种今晚浇得完的格子。",
@@ -699,6 +740,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "rancher-or-tiller-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷农耕人还是畜牧人：20%和10%加的不是一类货",
       description:
         "过夜弹窗先看出货箱。生鲜蛋奶走畜牧人；作物、果酒、果酱走农耕人。选完 5 级，10 级只剩对应那一对。白天技能栏选不了。",
@@ -714,6 +756,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "summer-crops-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷夏天种什么：按买得到的种子和浇得完的格子选",
       description:
         "夏 1 皮埃尔就卖蓝莓、甜瓜、啤酒花。杨桃要巴士进绿洲，红叶卷心菜第二年才上架。现卖走蓝莓，巨大留甜瓜 3×3，啤酒花按鲜卖看。",
@@ -729,6 +772,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "fall-crops-stardew",
+      publishedOn: "2026-09-15",
       title: "星露谷秋季作物：皮埃尔秋1就卖蔓越莓和南瓜，展览会不是种子摊",
       description:
         "现卖走蔓越莓，巨大留南瓜 3×3，葡萄先留过道。第一年没有洋蓟；甜菜要巴士。宝石甜莓 83.33 不是秋 1 默认货架。",
@@ -744,6 +788,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "do-you-have-to-water-trees-stardew",
+      publishedOn: "2026-09-17",
       title: "星露谷物语的树要浇水吗？普通树第4阶段查邻格，果树苗查3×3",
       description:
         "普通树和果树苗都不用浇水；普通树苗停在第4阶段时，查八个邻格有没有成熟树；果树苗没长，则查中心3×3里的会占空间的东西。作物再按耕地供水规则判断。",
@@ -759,6 +804,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-level-up-farming-stardew",
+      publishedOn: "2026-09-20",
       title: "星露谷耕种怎么升级：浇水和锄地不加经验，5级要2150",
       description:
         "收获、摸动物、读年历才加。蓝莓一株只记10点，品质星不加。10级一共15000；经验立刻到账，弹窗要睡觉。",
@@ -774,6 +820,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "last-day-to-plant-stardew",
+      publishedOn: "2026-09-22",
       title: "星露谷最晚播种日：春天防风草最晚在第 24 天种下",
       description:
         "春天想在第 28 天收到防风草，最晚在第 24 天种下，当天浇水。其他作物用 28 减去生长天数。文内有春夏秋冬查表。",
@@ -789,6 +836,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "pine-tree-stardew",
+      publishedOn: "2026-09-23",
       title: "星露谷松树种植先看格子，不浇水也不能随便种",
       description:
         "松果种下前先核对种植格和地图限制；树苗卡在第 4 阶段时查八邻格成熟树，再分季节、树肥和自然树条件。成熟后普通与重型树液采集器分别 5 天、2 天得到松焦油。",
@@ -804,6 +852,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "profit-margin-stardew",
+      publishedOn: "2026-09-24",
       title: "Profit Margin Stardew Valley：星露谷物语利润率是什么？四档怎么选",
       description:
         "Profit Margin Stardew Valley 讲的是星露谷物语新农场的价格倍率设置。本文解释 100%、75%、50%、25% 的差别、价格边界和小数取整规则，并按单人、多人或挑战目标说明如何选择。",
@@ -819,6 +868,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "what-to-grow-in-greenhouse-stardew",
+      publishedOn: "2026-09-26",
       title: "星露谷温室种什么？按手头种源、等待时间与收获节奏选择",
       description:
         "星露谷温室种什么？先看手头的种子或树苗，再比较首收等待、再生或结果间隔，并考虑多久回来收一次，按当前存档决定作物、果树，还是保留收获后换种的弹性。",
@@ -834,6 +884,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "stardew-fruit",
+      publishedOn: "2026-09-26",
       title: "星露谷物语水果清单：辣椒也在列，按来源查找",
       description:
         "按原版 1.6 系列的 27 项水果清单，查作物、果树与采集来源、季节和取得条件；对照普通品质基础售价及果酱、果酒、果干路线，并辨清葡萄干、齐瓜任务与烘干投料限制。",
@@ -849,6 +900,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "oak-tree-vs-maple-stardew",
+      publishedOn: "2026-09-27",
       title: "星露谷橡树还是枫树：缺橡树树脂就留橡树，缺枫糖浆就留枫树",
       description:
         "小桶、高级生长激素和魔法师收集包要橡树树脂，蜂房、枫糖棒和厨师收集包要枫糖浆。两样都要就两种都留。重型树液采集器上，两边都是 50 金一个间隔，不能写成枫树更赚。",
@@ -864,6 +916,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-harvest-stardew-valley",
+      publishedOn: "2026-10-13",
       title: "星露谷物语怎么收作物：徒手、镰刀或斧头",
       description:
         "防风草和南瓜用右键或 X 徒手收，甘蓝菜和小麦用镰刀割，巨大作物用任意斧头砍三下。",
@@ -879,6 +932,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "how-to-get-gold-star-crops-stardew-valley",
+      publishedOn: "2026-10-15",
       title: "星露谷物语如何种出金星作物",
       description:
         "选用作物当前仍可施用的肥料，收获时吃农夫午餐，并确认目标是恰好金星还是金星或更高品质。",
@@ -894,6 +948,7 @@ const blogPostsByLocale: LocalizedBlogPostRegistry = {
     },
     {
       slug: "house-upgrade-stardew",
+      publishedOn: "2026-10-17",
       title: "星露谷房屋升级：第二档是65,000金和100硬木",
       description:
         "第一次农舍升级是10,000金和450木材，第二次是65,000金和100硬木，第三次是100,000金。1.6里，第二次的费用换成现在的数额，不再是50,000金和150硬木。每次升级要三天。第二次升级之后，装修是另一笔订单，而且马上完成。",
@@ -926,6 +981,14 @@ function assertNonEmptyString(
   }
 }
 
+function assertPublishedOn(slug: string, value: unknown): asserts value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new Error(
+      `Invalid publishedOn for blog post ${slug}. Received: ${describeReceivedValue(value)}.`,
+    );
+  }
+}
+
 function assertMeaningfulCoverAlt(slug: string, value: unknown): asserts value is string {
   assertNonEmptyString(slug, "coverImage.alt", value);
 
@@ -954,6 +1017,7 @@ function assertValidLocalizedBlogPost(post: unknown, locale: PublicLocale): void
   assertNonEmptyString(slug, "description", candidatePost.description);
   assertNonEmptyString(slug, "topic", candidatePost.topic);
   assertNonEmptyString(slug, "author", candidatePost.author);
+  assertPublishedOn(slug, candidatePost.publishedOn);
 
   if (
     typeof candidatePost.readTimeMinutes !== "number" ||

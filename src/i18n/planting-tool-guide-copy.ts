@@ -10,6 +10,16 @@ export type PlantingToolGuideCopy = Readonly<{
     title: string;
     paragraphs: readonly string[];
     aside: string;
+    priceSource?: Readonly<{
+      beforeLink: string;
+      linkLabel: string;
+      afterLink: string;
+    }>;
+    byline?: Readonly<{
+      author: string;
+      dateTime: string;
+      dateLabel: string;
+    }>;
   }>;
   caseStudy: Readonly<{
     eyebrow: string;
@@ -87,6 +97,16 @@ const plantingToolGuideCopyByLocale: Readonly<
           "The Stardew Valley Crop Profit Calculator reports expected units, net gold, daily gold per tile, and best single route. It uses normal-quality base prices and average yields; random bonuses may change results.",
         ],
         aside: "Harvests stop at the season boundary; processing can continue through your selected deadline.",
+        priceSource: {
+          beforeLink: "Prices come from this site's bundled Stardew Valley 1.6.15 game data (Crops.json). Crop reference: ",
+          linkLabel: "Stardew Valley Wiki",
+          afterLink: ".",
+        },
+        byline: {
+          author: "Stardew Valley Planner Team",
+          dateTime: "2026-10-28",
+          dateLabel: "October 28, 2026",
+        },
       },
       caseStudy: {
         eyebrow: "Case study",
@@ -619,6 +639,16 @@ const plantingToolGuideCopyByLocale: Readonly<
           "排名显示本季预计收获、净金币与每格每日收益，并为每种作物挑出收益最高的一条销售或加工路线。模型按基础售价与平均预期产量估算；随机额外收获会让实际数字不同。",
         ],
         aside: "加工截止日可延到季末后；作物收获统计仍止于本季。",
+        priceSource: {
+          beforeLink: "价格来自本站打包的星露谷 1.6.15 游戏数据（Crops.json）。作物说明见",
+          linkLabel: "星露谷 Wiki",
+          afterLink: "。",
+        },
+        byline: {
+          author: "Stardew Valley Planner Team",
+          dateTime: "2026-10-28",
+          dateLabel: "2026年10月28日",
+        },
       },
       caseStudy: {
         eyebrow: "案例展示",
