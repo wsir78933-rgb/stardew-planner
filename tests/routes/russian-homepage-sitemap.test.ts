@@ -40,7 +40,16 @@ describe("Russian homepage sitemap", () => {
     }
     expect(sitemapUrls.some((sitemapUrl) => sitemapUrl.includes("?"))).toBe(false);
     expect(sitemapUrls.some((sitemapUrl) => sitemapUrl.includes("farmType="))).toBe(false);
-    expect(sitemapEntries.some((sitemapEntry) => "lastmod" in sitemapEntry)).toBe(false);
+    for (const sitemapEntry of sitemapEntries) {
+      const lastModifiedTime = sitemapEntry.lastModified;
+      const lastModifiedIsValidDate =
+        lastModifiedTime instanceof Date && !Number.isNaN(lastModifiedTime.getTime());
+
+      expect(
+        lastModifiedIsValidDate,
+        `Sitemap entry lacks a valid lastModified Date. Received URL: ${sitemapEntry.url}. Received lastModified: ${String(lastModifiedTime)}.`,
+      ).toBe(true);
+    }
     expect(sitemapUrls).not.toContain("https://stardewvalleyplanner.art/contact");
     expect(sitemapUrls).not.toContain("https://stardewvalleyplanner.art/zh/contact");
   });

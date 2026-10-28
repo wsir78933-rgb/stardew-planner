@@ -35,6 +35,16 @@ describe("Cloudflare static asset _headers", () => {
           },
         ],
       },
+      {
+        pattern: "/*",
+        headers: [
+          {
+            name: "Content-Security-Policy",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://challenges.cloudflare.com https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com https://static.cloudflareinsights.com https://challenges.cloudflare.com https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms https://c.bing.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+          },
+        ],
+      },
     ]);
   });
 
@@ -57,6 +67,7 @@ describe("Cloudflare static asset _headers", () => {
     expect(oneYearCachePatterns).toEqual(["/_next/static/*"]);
     expect(oneYearCachePatterns).not.toContain("/*.html");
     expect(oneYearCachePatterns).not.toContain("/");
+    expect(oneYearCachePatterns).not.toContain("/*");
     expect(
       oneYearCachePatterns.some((pattern) => pattern.startsWith("/game-assets/")),
     ).toBe(false);

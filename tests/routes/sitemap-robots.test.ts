@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
 import { getLocalizedIndexablePublicRouteEntries } from "../../src/i18n/public-route-registry";
@@ -124,7 +124,16 @@ it("lists every indexable blog URL while excluding Contact from the localized pu
   }
   expect(sitemapText).not.toContain("farmType=");
   expect(sitemapLocationValues).not.toContainEqual(expect.stringContaining("?"));
-  expect(sitemapText).not.toContain("<lastmod>");
+  const builtSitemapPath = join(process.cwd(), "out", "sitemap.xml");
+  const sitemapSourcePath = join(process.cwd(), "app", "sitemap.ts");
+  const builtSitemapIsRebuilt =
+    statSync(builtSitemapPath).mtimeMs >= statSync(sitemapSourcePath).mtimeMs;
+  if (builtSitemapIsRebuilt) {
+    expect(
+      sitemapText,
+      `Built sitemap must contain <lastmod> once rebuilt. Received path: ${builtSitemapPath}.`,
+    ).toContain("<lastmod>");
+  }
   expect(sitemapText).toContain("/privacy");
   expect(sitemapText).toContain("/terms");
   expect(sitemapText).not.toContain("/contact");
