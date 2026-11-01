@@ -569,7 +569,7 @@ describe("planner editor page", () => {
       ["en", {
         groupTitles: ["Planner", "Explore", "Legal"],
         description:
-          "A browser-based fan-made farm planner with local projects and optional cloud sync for selected layouts.",
+          "A fan-made farm planner. Projects stay in this browser. This project is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
         privacyHref: "/privacy",
         termsHref: "/terms",
         contactHref: "/contact",
@@ -578,7 +578,7 @@ describe("planner editor page", () => {
       }],
       ["zh-CN", {
         groupTitles: ["规划器", "探索", "法律"],
-        description: "用于规划《星露谷物语》农场布局的浏览器玩家工具，支持本地项目和可选的所选布局云端同步。",
+        description: "玩家自制农场规划器，项目仅保存在当前浏览器。本项目与 ConcernedApe 或《星露谷物语》无关联，也未获其认可。",
         privacyHref: "/zh/privacy",
         termsHref: "/zh/terms",
         contactHref: "/zh/contact",

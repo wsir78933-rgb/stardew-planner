@@ -20,48 +20,48 @@ const legalPageCopyByLocale: Readonly<
     privacy: {
       title: "Privacy Policy",
       description:
-        "Learn how Stardew Valley Planner stores projects locally unless you choose Google sign-in and sync selected layouts.",
+        "Learn how Stardew Valley Planner collects analytics data and handles contact messages. The planner interface stores projects in this browser and does not offer upload or cloud sync.",
       sections: [
         {
           heading: "What we collect",
           paragraphs: [
-            "An account is not required for local use. If you choose Google sign-in, your Google name, email address, and avatar are used to display your account; this site's cookie keeps the sign-in session.",
+            "Using the planner does not require an account or sign-in. The current planner interface stores projects in this browser and does not upload or sync them.",
           ],
         },
         {
           heading: "Farm data",
           paragraphs: [
-            "Projects are saved in this browser by default. After you sign in, saving the current project syncs its layout to this site's Cloudflare D1 database. Existing local projects stay in this browser until you choose to sync each one. Cloud copies remain until you delete them; map preview images stay on this device.",
-          ],
-        },
-        {
-          heading: "Online features",
-          paragraphs: [
-            "Optional cloud sync is available after Google sign-in for projects you choose. The service does not provide share links, payments, memberships, or supporter features.",
+            "Projects are saved in this browser. The current planner interface does not upload or synchronize project data.",
           ],
         },
         {
           heading: "Analytics",
           paragraphs: [
-            "This browser-local product does not provide analytics or tracking services.",
+            "This site uses Google Analytics 4 (ID G-SEKQT6DTT1) and Microsoft Clarity (ID xwledpd5pa). Google Analytics is configured to send standard page_view events; no custom events are configured in the site code. Microsoft Clarity collects interaction events such as clicks, scrolling, and pointer movement, plus page DOM information used to reconstruct session recordings and generate heatmaps; the page content it captures depends on Clarity's masking settings. The current site code does not gate these scripts behind a consent choice.",
+          ],
+        },
+        {
+          heading: "Advertising",
+          paragraphs: [
+            "This site does not currently serve advertisements or use advertising partners, personalized advertising, or advertising cookies. The site provides no Ads Settings link or ad opt-out control because it does not serve ads.",
           ],
         },
         {
           heading: "Cookies",
           paragraphs: [
-            "Google sign-in uses a session cookie to keep your account signed in. Local planning does not require sign-in.",
+            "Google Analytics and Microsoft Clarity may set measurement cookies when their scripts run. This site does not currently serve ads and therefore does not use advertising cookies.",
           ],
         },
         {
           heading: "Third parties",
           paragraphs: [
-            "Only layout data for projects you choose to sync is sent to this site's Cloudflare Worker and D1 database. Map preview images are not included in cloud copies. Google handles authentication when you choose to sign in.",
+            "Google Analytics (Google LLC) and Microsoft Clarity (Microsoft Corporation) receive analytics information when their scripts run. The planner interface does not send project data to these analytics providers.",
           ],
         },
         {
           heading: "Data deletion",
           paragraphs: [
-            "Cloud copies remain until you delete them from the cloud project list. Delete local data by deleting local projects or clearing this site's data in your browser; deleting one copy does not delete the other.",
+            "Delete local data by deleting local projects or clearing this site's data in your browser.",
           ],
         },
         {
@@ -79,30 +79,18 @@ const legalPageCopyByLocale: Readonly<
     terms: {
       title: "Terms of Service",
       description:
-        "Read the Stardew Valley Planner terms for local projects, optional Google sign-in and cloud sync, JSON import and export, and fan-made status.",
+        "Read the Stardew Valley Planner terms for local projects, JSON import and export, and fan-made status.",
       sections: [
         {
           heading: "What this is",
           paragraphs: [
-            "Stardew Valley Planner is a browser-based fan-made tool for planning farm layouts in Stardew Valley. Projects are saved locally unless you choose to sync them. It is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
-          ],
-        },
-        {
-          heading: "Accounts",
-          paragraphs: [
-            "An account is not required to plan or save locally. Google sign-in is optional and enables cloud sync for projects you choose.",
-          ],
-        },
-        {
-          heading: "Online features",
-          paragraphs: [
-            "Optional cloud sync is available for projects you choose. The service does not provide share links, payments, memberships, or supporter features.",
+            "Stardew Valley Planner is a browser-based fan-made tool for planning farm layouts in Stardew Valley. Projects are saved locally in your browser; the planner interface does not offer project upload or cloud synchronization. It is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
           ],
         },
         {
           heading: "Your data",
           paragraphs: [
-            "JSON import and export happen only when you choose them. You can delete local and cloud copies separately; deleting one copy does not delete the other.",
+            "JSON import and export happen only when you choose them. The planner interface keeps project data in this browser and does not upload or sync it.",
           ],
         },
         {
@@ -128,42 +116,48 @@ const legalPageCopyByLocale: Readonly<
     privacy: {
       title: "隐私政策",
       description:
-        "了解星露谷农场规划器如何默认在本地保存项目，以及你主动选择 Google 登录和同步布局时的数据处理方式。",
+        "了解星露谷农场规划器如何收集分析数据并处理联系消息。当前规划器界面将项目保存在此浏览器中，不提供上传或云端同步。",
       sections: [
         {
           heading: "我们收集什么",
           paragraphs: [
-            "本地使用无需账户。如果你选择使用 Google 登录，Google 返回的姓名、邮箱和头像会用于显示账户；本站通过 Cookie 保持登录会话。",
+            "使用规划器无需账户或登录。当前规划器界面将项目保存在此浏览器中，不会上传或同步。",
           ],
         },
         {
           heading: "农场数据",
           paragraphs: [
-            "项目默认保存在此浏览器中。登录后点击保存会自动将当前项目布局同步到本站 Cloudflare D1 数据库。已有本地项目仍保存在本地，只有你逐项选择同步后才会上传。云端副本会一直保留到你主动删除；地图预览图片仍保留在此设备上。",
-          ],
-        },
-        {
-          heading: "在线功能",
-          paragraphs: [
-            "使用 Google 登录后，可以选择同步项目。本产品不提供分享链接、支付、会员或支持者功能。",
+            "项目保存在此浏览器中；当前规划器界面不会上传或同步项目数据。",
           ],
         },
         {
           heading: "分析",
-          paragraphs: ["这款浏览器本地产品不提供分析或跟踪服务。"],
+          paragraphs: [
+            "本站使用 Google Analytics 4（ID：G-SEKQT6DTT1）和 Microsoft Clarity（ID：xwledpd5pa）。Google Analytics 配置为发送标准 page_view 事件；网站代码未配置自定义事件。Microsoft Clarity 会收集点击、滚动和指针移动等互动事件，以及用于重建会话回放、生成热图的页面 DOM 信息；其捕获的页面内容受 Clarity 项目的屏蔽设置影响。当前网站代码没有通过同意选择拦截这些脚本。",
+          ],
+        },
+        {
+          heading: "广告",
+          paragraphs: [
+            "本站目前不投放广告，也不使用广告合作方、个性化广告或广告 Cookie。由于本站不投放广告，因此不提供 Ads Settings 链接或广告退出控制。",
+          ],
         },
         {
           heading: "Cookie",
-          paragraphs: ["本站使用同源会话 Cookie 保持 Google 账户的登录状态。本地规划无需登录。"],
+          paragraphs: [
+            "Google Analytics 和 Microsoft Clarity 的脚本运行时可能会设置测量 Cookie。本站目前不投放广告，因此不使用广告 Cookie。",
+          ],
         },
         {
           heading: "第三方",
-          paragraphs: ["仅你选择同步的项目布局数据会发送到本站 Cloudflare Worker 和 D1 数据库。云端副本不包含地图预览图片。你选择登录时，Google 会处理身份验证。"],
+          paragraphs: [
+            "Google Analytics（Google LLC）和 Microsoft Clarity（Microsoft Corporation）会在其脚本运行时接收分析信息。当前规划器界面不会向这两家分析服务商发送项目数据。",
+          ],
         },
         {
           heading: "数据删除",
           paragraphs: [
-            "云端副本会保留到你从云端项目列表主动删除为止。删除本地项目或清除此网站数据可移除本地数据；删除一份副本不会删除另一份。",
+            "删除本地项目或清除此网站数据可移除本地数据。",
           ],
         },
         {
@@ -181,28 +175,18 @@ const legalPageCopyByLocale: Readonly<
     terms: {
       title: "服务条款",
       description:
-        "阅读星露谷农场规划器关于本地项目、可选 Google 登录和云端同步、JSON 导入导出及同人创作的服务条款。",
+        "阅读星露谷农场规划器关于本地项目、JSON 导入导出及同人创作的服务条款。",
       sections: [
         {
           heading: "这是什么",
           paragraphs: [
-            "星露谷农场规划器是一款用于规划《星露谷物语》农场布局的浏览器同人工具。项目默认保存在本地，除非你选择同步。它与 ConcernedApe 或《星露谷物语》没有关联，也未获其认可。",
-          ],
-        },
-        {
-          heading: "账户",
-          paragraphs: ["规划和本地保存无需账户。Google 登录为可选功能，可用于同步你选择的项目。"],
-        },
-        {
-          heading: "在线功能",
-          paragraphs: [
-            "你可以选择使用云端同步。本产品不提供分享链接、支付、会员或支持者功能。",
+            "星露谷农场规划器是一款用于规划《星露谷物语》农场布局的浏览器同人工具。项目保存在你的浏览器本地；当前规划器界面不提供项目上传或云端同步。它与 ConcernedApe 或《星露谷物语》没有关联，也未获其认可。",
           ],
         },
         {
           heading: "你的数据",
           paragraphs: [
-            "仅当你主动选择时，才会进行 JSON 导入和导出。你可以分别删除本地副本和云端副本；删除一份不会删除另一份。",
+            "仅当你主动选择时，才会进行 JSON 导入和导出。当前规划器界面将项目数据保存在此浏览器中，不会上传或同步。",
           ],
         },
         {

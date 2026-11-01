@@ -26,10 +26,13 @@ it("exports a bilingual LLM site guide with every indexable public route", () =>
   expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/privacy");
   expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/terms");
   expect(llmsText).not.toContain("https://stardewvalleyplanner.art/ru/contact");
-  expect(llmsText).toContain("local projects, and optional cloud sync for selected layouts");
-  expect(llmsText).toContain("Projects are saved locally unless you choose to sign in with Google");
-  expect(llmsText).toContain("项目默认保存在本地；使用 Google 登录后，可选择同步布局数据");
-  expect(llmsText).toContain("Map preview images stay on your device");
+  expect(llmsText).toContain("Projects stay in this browser; the planner interface does not offer upload or cloud sync");
+  expect(llmsText).toContain("Import or export JSON to move a project manually");
+  expect(llmsText).toContain("项目保存在当前浏览器；规划器界面不提供上传或云端同步");
+  expect(llmsText).toContain("通过 JSON 导入和导出手动迁移项目");
+  expect(llmsText).toContain("интерфейс планировщика не предлагает загрузку проектов или облачную синхронизацию");
+  expect(llmsText).not.toContain("optional cloud sync");
+  expect(llmsText).not.toContain("синхронизируйте выбранные планировки");
   expect(llmsText).toContain(
     "[Carpenter Stardew Valley: Robin’s Shop, Buildings, and Upgrades](https://stardewvalleyplanner.art/carpenter-stardew)",
   );

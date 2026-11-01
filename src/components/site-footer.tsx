@@ -1,4 +1,4 @@
-import { FaDiscord, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import type { ReactElement } from "react";
 import type { HomepageLocale } from "../homepage/homepage-locale";
@@ -49,8 +49,6 @@ export function SiteFooter({
         <p>{content.identity.description}</p>
       </div>
       <div data-site-footer-social-icons="true">
-        <span aria-hidden="true"><FaInstagram /></span>
-        <span aria-hidden="true"><FaFacebook /></span>
         <a
           aria-label={socialLabels.followOnX}
           href="https://x.com/wsir1139"
@@ -67,7 +65,6 @@ export function SiteFooter({
         >
           <FaDiscord aria-hidden="true" focusable="false" />
         </a>
-        <span aria-hidden="true"><FaLinkedin /></span>
       </div>
       <div data-site-footer-sections="true">
         <SiteFooterLinkGroup {...content.planner} />

@@ -185,7 +185,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
       supportingCopy:
         "Plan your Stardew Valley farm before building in-game. Choose from 8 farm types, place buildings and crops, switch seasons, check coverage, and import saves.",
       primaryActionLabel: "Start planning",
-      trustedBy: "Free fan-made planner. Save locally or sync selected projects.",
+      trustedBy: "Free fan-made planner. Projects stay in this browser.",
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
@@ -621,7 +621,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
     },
     closingCta: {
       heading: "Finish the layout on this page, then build in-game.",
-      supportLine: "Plan without an account; sign in to sync projects you choose.",
+      supportLine: "Projects stay in this browser. Export a JSON backup to keep a copy.",
     },
     faq: {
       eyebrow: "FAQ",
@@ -632,7 +632,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
         {
           question: "Will I lose my work?",
           answer:
-            "Projects stay in this browser unless you choose to sync them. Sign in to access synced layout data on another device; map preview images stay on this device.",
+            "Projects are saved in this browser. Export a JSON backup if you want to keep or move a project.",
         },
         {
           question: "Is my farm type here?",
@@ -657,7 +657,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
     footer: {
       brandName: "Stardew Valley Farm Planner",
       description:
-        "A browser-based fan-made farm planner with local projects and optional cloud sync for selected layouts.",
+        "A fan-made farm planner. Projects stay in this browser. This project is not affiliated with or endorsed by ConcernedApe or Stardew Valley.",
       copyright: "© Stardew Valley Farm Planner",
       planner: {
         title: "Planner",
@@ -693,7 +693,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
       supportingCopy:
         "别等建筑落地后才发现布局不顺。先在浏览器中试排 8 种农场，摆放建筑和作物、检查四季与覆盖范围，再照着方案进游戏建造。",
       primaryActionLabel: "开始规划",
-      trustedBy: "免费玩家规划器。可本地保存，也可同步所选项目。",
+      trustedBy: "免费玩家规划器。项目仅保存在当前浏览器。",
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
@@ -1125,7 +1125,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
     },
     closingCta: {
       heading: "先在这页摆完，再进游戏建。",
-      supportLine: "不用登录也能规划；登录后可同步你选择的项目。",
+      supportLine: "项目仅保存在当前浏览器。可导出 JSON 文件备份或手动迁移。",
     },
     faq: {
       eyebrow: "FAQ",
@@ -1135,7 +1135,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
         {
           question: "会丢吗？",
           answer:
-            "项目默认保存在当前浏览器；你可以登录后选择同步项目，在其他设备访问布局数据。地图预览图片仍保留在此设备上。",
+            "项目保存在当前浏览器。你可以导出 JSON 文件进行备份或手动迁移。",
         },
         {
           question: "我玩的农场有吗？",
@@ -1158,7 +1158,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
     },
     footer: {
       brandName: "星露谷物语农场规划器",
-      description: "用于规划《星露谷物语》农场布局的浏览器玩家工具，支持本地项目和可选的所选布局云端同步。",
+      description: "玩家自制农场规划器，项目仅保存在当前浏览器。本项目与 ConcernedApe 或《星露谷物语》无关联，也未获其认可。",
       copyright: "© 星露谷物语农场规划器",
       planner: {
         title: "规划器",
@@ -1194,7 +1194,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
       supportingCopy:
         "スターデューバレー プランナーで、ゲーム内で建てる前に牧場を計画できます。スタバレ レイアウト ツールでは、8種類の牧場から選び、建物や作物を配置できます。季節の切り替え、スプリンクラーなどの範囲確認、セーブデータの読み込みにも対応しています。",
       primaryActionLabel: "計画をはじめる",
-      trustedBy: "無料で使えるファンメイドのスターデューバレー プランナーです。スタバレ レイアウト ツールの計画は、このブラウザに保存でき、選んだプロジェクトは同期できます。",
+      trustedBy: "無料で使えるファンメイドのスターデューバレー プランナーです。プロジェクトはこのブラウザに保存されます。",
       fanImages: [
         {
           src: "/homepage/hero/spring-crops.webp",
@@ -1621,7 +1621,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
     },
     closingCta: {
       heading: "このページで配置を終えてから、ゲーム内で建てる。",
-      supportLine: "アカウントなしでも計画できます。ログインすると、選んだプロジェクトを同期できます。",
+      supportLine: "プロジェクトはこのブラウザに保存されます。JSONに書き出してバックアップできます。",
     },
     faq: {
       eyebrow: "質問",
@@ -1631,7 +1631,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
         {
           question: "スターデューバレー プランナーで作業は消えませんか？",
           answer:
-            "スターデューバレー プランナーのプロジェクトは、同期を選ばない限りこのブラウザに残ります。ログインすると、同期したレイアウトデータを別の端末から開けます。スタバレ レイアウト ツールの地図のプレビュー画像は、この端末に残ります。",
+            "プロジェクトはこのブラウザに保存されます。JSONに書き出してバックアップできます。",
         },
         {
           question: "スタバレ レイアウト ツールに自分の牧場はありますか？",
@@ -1656,7 +1656,7 @@ export const homepageCopyByLocale: Readonly<Record<HomepageDisplayLocale, Homepa
     footer: {
       brandName: "スターデューバレー プランナー",
       description:
-        "ブラウザで使うファンメイドの牧場プランナーです。プロジェクトはローカルに保存でき、選んだレイアウトはクラウド同期もできます。",
+        "ファンメイドの牧場プランナーです。プロジェクトはこのブラウザに保存されます。本プロジェクトはConcernedApeまたは『Stardew Valley』とは関係がなく、公式の承認も受けていません。",
       copyright: "© スターデューバレー プランナー",
       planner: {
         title: "プランナー",

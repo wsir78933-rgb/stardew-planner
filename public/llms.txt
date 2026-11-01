@@ -1,16 +1,16 @@
 # Stardew Valley Planner
 
-> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese planning articles, local projects, and optional cloud sync for selected layouts.
+> A browser-based Stardew Valley farm-layout planner with English and Simplified Chinese planning articles and projects stored locally in this browser.
 
 ## English
 
-Stardew Valley Planner helps you plan farm layouts in your browser. Projects are saved locally unless you choose to sign in with Google and sync selected layout data. Map preview images stay on your device.
+Stardew Valley Planner helps you plan farm layouts in your browser. Projects stay in this browser; the planner interface does not offer upload or cloud sync. Import or export JSON to move a project manually.
 
 ### Planner and reference
 
 - [Stardew Valley Planner](https://stardewvalleyplanner.art): Plan a Stardew Valley farm layout in your browser.
-- [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn how local projects, selected cloud-synced layout data, and site data are handled.
-- [Terms of service](https://stardewvalleyplanner.art/terms): Read the terms for local projects, optional cloud sync, JSON import and export, and the fan-made status.
+- [Privacy policy](https://stardewvalleyplanner.art/privacy): Learn about local project storage, analytics tools, and contact messages.
+- [Terms of service](https://stardewvalleyplanner.art/terms): Read the terms for browser-local projects, JSON import and export, and the fan-made status.
 
 ### Farm Layouts
 
@@ -85,13 +85,13 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 
 ## 简体中文
 
-星露谷农场规划器可帮助你在浏览器中规划农场布局。项目默认保存在本地；使用 Google 登录后，可选择同步布局数据。地图预览图片仍保留在你的设备上。
+星露谷农场规划器可帮助你在浏览器中规划农场布局。项目保存在当前浏览器；规划器界面不提供上传或云端同步。你可以通过 JSON 导入和导出手动迁移项目。
 
 ### 规划器与参考内容
 
 - [星露谷农场规划器](https://stardewvalleyplanner.art/zh): 在浏览器中规划《星露谷物语》农场布局。
-- [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解本地项目、所选云端布局数据和站点数据的处理方式。
-- [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读本地项目、可选云端同步、JSON 导入导出和同人创作相关条款。
+- [隐私政策](https://stardewvalleyplanner.art/zh/privacy): 了解本地项目存储、分析工具和联系消息的处理方式。
+- [服务条款](https://stardewvalleyplanner.art/zh/terms): 阅读浏览器本地项目、JSON 导入导出和同人创作相关条款。
 
 ### 农场布局
 
@@ -166,6 +166,6 @@ Stardew Valley Planner helps you plan farm layouts in your browser. Projects are
 
 ## Русский
 
-Планировщик фермы Stardew Valley помогает спланировать ферму в браузере. Проекты сохраняются локально, а выбранные планировки можно синхронизировать. Превью карт остаются на устройстве.
+Планировщик фермы Stardew Valley помогает спланировать ферму в браузере. Проекты хранятся в этом браузере; интерфейс планировщика не предлагает загрузку проектов или облачную синхронизацию. Для ручного переноса используйте JSON.
 
-- [Планировщик фермы Stardew Valley](https://stardewvalleyplanner.art/ru): Бесплатный онлайн-инструмент для планировки фермы. Сохраняйте проекты локально или синхронизируйте выбранные планировки.
+- [Планировщик фермы Stardew Valley](https://stardewvalleyplanner.art/ru): Бесплатный онлайн-инструмент для планировки фермы с локальным хранением проектов в браузере.

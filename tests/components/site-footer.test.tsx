@@ -62,7 +62,7 @@ it("renders every English footer destination, identity, copyright, and linked X 
     /<div data-site-footer-social-icons="true">([\s\S]*?)<\/div>/,
   );
   const socialIconMarkup = socialIconRegion?.[1] ?? "";
-  expect(socialIconMarkup.match(/<span aria-hidden="true">/g)).toHaveLength(3);
+  expect(socialIconMarkup.match(/<span aria-hidden="true">/g) ?? []).toHaveLength(0);
   expect(socialIconMarkup.match(/<a /g)).toHaveLength(2);
   expect(socialIconMarkup).toContain('href="https://x.com/wsir1139"');
   expect(socialIconMarkup).toContain('href="https://discord.gg/GGfUJZsMN"');
