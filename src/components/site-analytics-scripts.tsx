@@ -12,7 +12,10 @@ export function SiteAnalyticsScripts() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-SEKQT6DTT1');
+            gtag('config', 'G-SEKQT6DTT1', {
+              allow_google_signals: false,
+              allow_ad_personalization_signals: false
+            });
           `}
       </Script>
       <Script id="microsoft-clarity" strategy="afterInteractive">

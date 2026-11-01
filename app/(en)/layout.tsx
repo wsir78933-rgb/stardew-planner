@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   description:
     "Plan Stardew Valley farm layouts in your browser with an interactive map.",
   metadataBase: publicSiteUrl,
+  other: {
+    "google-adsense-account": "ca-pub-1560537840529504",
+  },
   icons: {
     icon: "/favicon.ico",
   },

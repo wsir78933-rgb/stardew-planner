@@ -37,19 +37,19 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Analytics",
           paragraphs: [
-            "This site uses Google Analytics 4 (ID G-SEKQT6DTT1) and Microsoft Clarity (ID xwledpd5pa). Google Analytics is configured to send standard page_view events; no custom events are configured in the site code. Microsoft Clarity collects interaction events such as clicks, scrolling, and pointer movement, plus page DOM information used to reconstruct session recordings and generate heatmaps; the page content it captures depends on Clarity's masking settings. The current site code does not gate these scripts behind a consent choice.",
+            "This site uses Google Analytics 4 (ID G-SEKQT6DTT1) and Microsoft Clarity (ID xwledpd5pa). Google Analytics is configured to send standard page_view events; no custom events are configured in the site code. Google Signals and ads-personalization signals are disabled for the GA4 tag and property. Microsoft Clarity collects interaction events such as clicks, scrolling, and pointer movement, plus page DOM information used to reconstruct session recordings and generate heatmaps; the page content it captures depends on Clarity's masking settings. The current site code does not gate these scripts behind a consent choice.",
           ],
         },
         {
           heading: "Advertising",
           paragraphs: [
-            "This site does not currently serve advertisements or use advertising partners, personalized advertising, or advertising cookies. The site provides no Ads Settings link or ad opt-out control because it does not serve ads.",
+            "AdSense ads are not currently enabled on this site. If Google AdSense is approved and enabled, Google and the ad technology providers selected for this site may use cookies or similar technologies to serve and measure ads based on your prior visits to this site or other sites. Depending on settings and consent, ads may be personalized. Manage Google personalized advertising at https://www.google.com/settings/ads; opt out of some third-party personalized advertising at https://www.aboutads.info/choices/. See Google's current ad technology provider list at https://support.google.com/admanager/answer/9012903?hl=en.",
           ],
         },
         {
           heading: "Cookies",
           paragraphs: [
-            "Google Analytics and Microsoft Clarity may set measurement cookies when their scripts run. This site does not currently serve ads and therefore does not use advertising cookies.",
+            "Google Analytics and Microsoft Clarity may set measurement cookies when their scripts run. If AdSense ads are enabled, Google and selected ad technology providers may also use advertising cookies or similar technologies as described above.",
           ],
         },
         {
@@ -133,19 +133,19 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "分析",
           paragraphs: [
-            "本站使用 Google Analytics 4（ID：G-SEKQT6DTT1）和 Microsoft Clarity（ID：xwledpd5pa）。Google Analytics 配置为发送标准 page_view 事件；网站代码未配置自定义事件。Microsoft Clarity 会收集点击、滚动和指针移动等互动事件，以及用于重建会话回放、生成热图的页面 DOM 信息；其捕获的页面内容受 Clarity 项目的屏蔽设置影响。当前网站代码没有通过同意选择拦截这些脚本。",
+            "本站使用 Google Analytics 4（ID：G-SEKQT6DTT1）和 Microsoft Clarity（ID：xwledpd5pa）。Google Analytics 配置为发送标准 page_view 事件；网站代码未配置自定义事件。GA4 标签和属性中的 Google Signals 与广告个性化信号均已关闭。Microsoft Clarity 会收集点击、滚动和指针移动等互动事件，以及用于重建会话回放、生成热图的页面 DOM 信息；其捕获的页面内容受 Clarity 项目的屏蔽设置影响。当前网站代码没有通过同意选择拦截这些脚本。",
           ],
         },
         {
           heading: "广告",
           paragraphs: [
-            "本站目前不投放广告，也不使用广告合作方、个性化广告或广告 Cookie。由于本站不投放广告，因此不提供 Ads Settings 链接或广告退出控制。",
+            "本站目前尚未启用 AdSense 广告。如果 Google AdSense 获批并启用，Google 和为本站选定的广告技术提供商可能会使用 Cookie 或类似技术，根据你过去访问本站或其他网站的情况投放和衡量广告。具体广告是否个性化取决于相关设置和同意状态。可通过 Google 广告设置 https://www.google.com/settings/ads 管理 Google 个性化广告；可通过 https://www.aboutads.info/choices/ 退出部分第三方个性化广告。当前 Google 广告技术提供商名单见 https://support.google.com/admanager/answer/9012903?hl=en。",
           ],
         },
         {
           heading: "Cookie",
           paragraphs: [
-            "Google Analytics 和 Microsoft Clarity 的脚本运行时可能会设置测量 Cookie。本站目前不投放广告，因此不使用广告 Cookie。",
+            "Google Analytics 和 Microsoft Clarity 的脚本运行时可能会设置测量 Cookie。若启用 AdSense 广告，Google 和选定的广告技术提供商也可能使用广告 Cookie 或类似技术，详见上文。",
           ],
         },
         {
