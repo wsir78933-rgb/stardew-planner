@@ -4,44 +4,8 @@ import { resolve } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
-const cloudProjectSyncHookMock = vi.hoisted(() => ({
-  useCloudProjectSync: vi.fn(() => ({
-    status: "ready" as const,
-    hasMoreCloudProjects: false,
-    isLoadingMoreCloudProjects: false,
-    authStatus: "signed-out" as const,
-    account: null,
-    cloudProjects: [],
-    localProjectSyncById: {},
-    errorMessage: null,
-    signInWithGoogle: vi.fn(async () => undefined),
-    signOut: vi.fn(async () => undefined),
-    refreshCloudProjects: vi.fn(async () => undefined),
-    loadMoreCloudProjects: vi.fn(async () => undefined),
-    uploadLocalProject: vi.fn(async () => undefined),
-    onLocalProjectSaved: vi.fn(async () => undefined),
-    openCloudProject: vi.fn(async () => ({ localProjectId: "local-copy" })),
-    deleteCloudCopy: vi.fn(async () => undefined),
-    retrySync: vi.fn(async () => undefined),
-    keepLocalVersion: vi.fn(async () => undefined),
-    useCloudVersion: vi.fn(async () => "local-copy"),
-  })),
-}));
-
 const recordedLocalProjectPanel = vi.hoisted(() => ({
   onCreateProject: undefined as (() => void | Promise<void>) | undefined,
-}));
-
-vi.mock("@/cloud-sync/use-cloud-project-sync", () => ({
-  CloudAuthError: class CloudAuthError extends Error {},
-  CloudProjectRequestError: class CloudProjectRequestError extends Error {},
-  useCloudProjectSync: cloudProjectSyncHookMock.useCloudProjectSync,
-}));
-
-vi.mock("@/src/cloud-sync/use-cloud-project-sync", () => ({
-  CloudAuthError: class CloudAuthError extends Error {},
-  CloudProjectRequestError: class CloudProjectRequestError extends Error {},
-  useCloudProjectSync: cloudProjectSyncHookMock.useCloudProjectSync,
 }));
 
 vi.mock("../../src/components/local-project-panel", async (importOriginal) => {
@@ -81,7 +45,6 @@ function renderPlannerSaveModalContent(
   onCreateProject: () => void | Promise<void> = () => undefined,
 ): string {
   recordedLocalProjectPanel.onCreateProject = undefined;
-  cloudProjectSyncHookMock.useCloudProjectSync.mockClear();
 
   return renderToStaticMarkup(
     createElement(PlannerSaveModalContent, {
@@ -130,7 +93,7 @@ describe("planner save modal content", () => {
     )).toBe('Thumbnail save failed: received "disk-full"');
   });
 
-  it("renders the closed library without cloud sync, Google sign-in, or a separate save button", async () => {
+  it("renders the local library without cloud actions or a separate save button", async () => {
     const onCreateProject = vi.fn();
     const markup = renderPlannerSaveModalContent(onCreateProject);
     const contentSource = readFileSync(
@@ -139,7 +102,6 @@ describe("planner save modal content", () => {
     );
 
     const newProjectLabel = getSaveModalCopy("zh-CN").localProjects.newProject;
-    expect(cloudProjectSyncHookMock.useCloudProjectSync).not.toHaveBeenCalled();
     expect(markup).not.toContain("保存到此设备");
     expect(markup).toContain(`>${newProjectLabel}</button>`);
     expect(markup).toContain("Forest Farm");
@@ -170,6 +132,5 @@ describe("planner save modal content", () => {
     await createProjectFromPanel();
 
     expect(onCreateProject).toHaveBeenCalledOnce();
-    expect(cloudProjectSyncHookMock.useCloudProjectSync).not.toHaveBeenCalled();
   });
 });

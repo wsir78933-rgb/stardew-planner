@@ -1,40 +1,8 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import {
-  deriveAvailableDestinationProjectId,
-  ProjectMapInstancePanel,
-} from "../../src/components/project-map-instance-panel";
+import { ProjectMapInstancePanel } from "../../src/components/project-map-instance-panel";
 import type { PlannerMap } from "../../src/maps/map-catalog";
-import type { ReferenceProjectMap } from "../../src/reference-runtime/local-project-api";
-import type {
-  ReferenceProjectSummary,
-} from "../../src/reference-runtime/reference-project-repository";
-
-function ignoreProjectMapInstanceAction(): void {}
-
-const referenceProjectMaps: readonly ReferenceProjectMap[] = [
-  {
-    id: "map-standard-spring",
-    mapFile: "Farm",
-    label: "Spring Layout",
-    season: "spring",
-    state: {},
-    decor: { wallpapers: {}, floors: {} },
-    renovations: [],
-    thumbnail: "",
-  },
-  {
-    id: "map-standard-winter",
-    mapFile: "Farm",
-    label: "Winter Layout",
-    season: "winter",
-    state: {},
-    decor: { wallpapers: {}, floors: {} },
-    renovations: [],
-    thumbnail: "",
-  },
-];
 
 const availablePlannerMaps: readonly PlannerMap[] = [
   {
@@ -60,60 +28,17 @@ const availablePlannerMaps: readonly PlannerMap[] = [
   },
 ];
 
-const destinationProjects: readonly ReferenceProjectSummary[] = [
-  {
-    id: "project-other",
-    title: "Other local project",
-    created_at: "2026-07-26T00:00:00.000Z",
-    updated_at: "2026-07-26T01:00:00.000Z",
-  },
-];
-
 describe("project map instance panel", () => {
-  it("keeps the selected transfer destination only while it remains available", () => {
-    expect(deriveAvailableDestinationProjectId("", destinationProjects)).toBe(
-      "project-other",
-    );
-    expect(
-      deriveAvailableDestinationProjectId("project-other", destinationProjects),
-    ).toBe("project-other");
-    expect(
-      deriveAvailableDestinationProjectId("project-removed", destinationProjects),
-    ).toBe("project-other");
-    expect(deriveAvailableDestinationProjectId("project-other", [])).toBe("");
-  });
-
-  it("renders local project instances, their current indicator, instance actions, and the categorized add-map picker", () => {
+  it("renders only the categorized map picker for the English locale", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(ProjectMapInstancePanel, {
-        activeMapInstanceId: "map-standard-winter",
-        mapInstances: referenceProjectMaps,
         mapChoices: availablePlannerMaps,
-        projectChoices: destinationProjects,
-        onAddMap: ignoreProjectMapInstanceAction,
-        onCopyMapInstance: ignoreProjectMapInstanceAction,
-        onDeleteMapInstance: ignoreProjectMapInstanceAction,
-        onDuplicateMapInstance: ignoreProjectMapInstanceAction,
-        onMoveMapInstance: ignoreProjectMapInstanceAction,
-        onOpenMapInstance: ignoreProjectMapInstanceAction,
-        onRenameMapInstance: ignoreProjectMapInstanceAction,
+        onAddMap: () => undefined,
       }),
     );
 
-    expect(panelMarkup).toContain('aria-label="Project maps"');
-    expect(panelMarkup).toContain("Spring Layout");
-    expect(panelMarkup).toContain("Winter Layout");
-    expect(panelMarkup).toContain("Standard Farm");
-    expect(panelMarkup).toContain('data-current-map-instance="true"');
-    expect(panelMarkup).toContain("Current");
-    expect(panelMarkup).toContain("Open");
-    expect(panelMarkup).toContain("Rename");
-    expect(panelMarkup).toContain("Duplicate");
-    expect(panelMarkup).toContain("Copy to project");
-    expect(panelMarkup).toContain("Move to project");
-    expect(panelMarkup).toContain("Other local project");
-    expect(panelMarkup).toContain("Delete");
-    expect(panelMarkup).toContain("Add map");
+    expect(panelMarkup).toContain('aria-label="Add map"');
+    expect(panelMarkup).not.toContain("<h3");
     expect(panelMarkup).toContain('aria-label="Map categories"');
     expect(panelMarkup.match(/role="tab"/g)).toHaveLength(4);
     expect(panelMarkup.match(/role="tabpanel"/g)).toHaveLength(1);
@@ -121,213 +46,47 @@ describe("project map instance panel", () => {
     expect(panelMarkup).toContain('data-project-add-map-id="standard"');
     expect(panelMarkup).toContain('data-project-add-map-id="forest"');
     expect(panelMarkup).not.toContain('data-project-add-map-id="farmhouse-2"');
-    expect(panelMarkup).not.toMatch(/account|login|member|premium|sync|share|feedback/i);
-    expectTextInOrder(panelMarkup, [
-      "Open",
-      "Rename",
-      "Duplicate",
-      "Copy to project",
-      "Move to project",
-      "Delete",
-    ]);
-    expectRequiredClassNames(panelMarkup, [
-      "project-map-instance-panel",
-      "project-map-instance-panel__transfer-destination",
-      "project-map-instance-panel__list",
-      "project-map-instance-panel__instance",
-      "project-map-instance-panel__instance-summary",
-      "project-map-instance-panel__instance-actions",
-      "project-map-instance-panel__add-map",
-      "planner-map-picker",
-      "editor-modal__map-grid",
-    ]);
-  });
-
-  it("renders an empty project with the existing add-map catalog and no current marker", () => {
-    const panelMarkup = renderToStaticMarkup(
-      createElement(ProjectMapInstancePanel, {
-        activeMapInstanceId: null,
-        mapInstances: [],
-        mapChoices: availablePlannerMaps,
-        projectChoices: destinationProjects,
-        onAddMap: ignoreProjectMapInstanceAction,
-        onCopyMapInstance: ignoreProjectMapInstanceAction,
-        onDeleteMapInstance: ignoreProjectMapInstanceAction,
-        onDuplicateMapInstance: ignoreProjectMapInstanceAction,
-        onMoveMapInstance: ignoreProjectMapInstanceAction,
-        onOpenMapInstance: ignoreProjectMapInstanceAction,
-        onRenameMapInstance: ignoreProjectMapInstanceAction,
-      }),
-    );
-
-    expect(panelMarkup).toContain('aria-label="Add map"');
-    expect(panelMarkup).toContain("Add map");
-    expect(panelMarkup).toContain("Standard Farm");
+    expect(panelMarkup).toContain('class="project-map-instance-panel"');
+    expect(panelMarkup).toContain('class="planner-map-picker"');
+    expect(panelMarkup).toContain('class="editor-modal__map-grid"');
+    expect(panelMarkup).not.toContain("Project maps");
+    expect(panelMarkup).not.toContain("Transfer destination");
+    expect(panelMarkup).not.toContain("Open");
+    expect(panelMarkup).not.toContain("Rename");
+    expect(panelMarkup).not.toContain("Duplicate");
+    expect(panelMarkup).not.toContain("Copy to project");
+    expect(panelMarkup).not.toContain("Move to project");
+    expect(panelMarkup).not.toContain("Delete");
     expect(panelMarkup).not.toContain("Current");
-    expect(panelMarkup).not.toContain('data-current-map-instance="true"');
-    expectRequiredClassNames(panelMarkup, [
-      "project-map-instance-panel",
-      "project-map-instance-panel__list",
-      "project-map-instance-panel__add-map",
-      "planner-map-picker",
-    ]);
+    expect(panelMarkup).not.toContain("Other local project");
+    expect(panelMarkup).not.toContain("project-map-instance-panel__list");
+    expect(panelMarkup).not.toContain("data-current-map-instance");
   });
 
-  it("shows Russian catalog default map labels and keeps stored labels and custom names", () => {
-    const defaultFarmhouse = createProjectMapInstance(
-      "map-farmhouse",
-      "FarmHouse.tmx",
-      "Farmhouse",
-    );
-    const customFarmhouse = createProjectMapInstance(
-      "map-custom-farmhouse",
-      "FarmHouse.tmx",
-      "Мой дом",
-    );
-    const copiedFarmhouse = createProjectMapInstance(
-      "map-copied-farmhouse",
-      "FarmHouse.tmx",
-      "Farmhouse Copy",
-    );
-    const defaultStandardFarm = createProjectMapInstance(
-      "map-standard",
-      "Farm.tmx",
-      "Standard Farm",
-    );
-    const storedMapInstances = [
-      defaultFarmhouse,
-      customFarmhouse,
-      copiedFarmhouse,
-      defaultStandardFarm,
-    ];
-    const storedMapInstancesBeforeRender = JSON.stringify(storedMapInstances);
-    const russianPanelMarkup = renderProjectMapInstancePanel(storedMapInstances, "ru");
-    const englishPanelMarkup = renderProjectMapInstancePanel(storedMapInstances, "en");
-    const chinesePanelMarkup = renderProjectMapInstancePanel(storedMapInstances, "zh");
-
-    expect(russianPanelMarkup).toContain("<strong>Дом</strong><span>FarmHouse.tmx</span>");
-    expect(russianPanelMarkup).toContain("<strong>Мой дом</strong><span>FarmHouse.tmx</span>");
-    expect(russianPanelMarkup).toContain(
-      "<strong>Farmhouse Copy</strong><span>FarmHouse.tmx</span>",
-    );
-    expect(russianPanelMarkup).toContain(
-      "<strong>Стандартная ферма</strong><span>Farm.tmx</span>",
-    );
-    expect(russianPanelMarkup).not.toContain("<strong>Farmhouse</strong>");
-    expect(russianPanelMarkup).not.toContain("<strong>Standard Farm</strong>");
-    expect(englishPanelMarkup).toContain("<strong>Farmhouse</strong><span>FarmHouse.tmx</span>");
-    expect(englishPanelMarkup).toContain("<strong>Мой дом</strong><span>FarmHouse.tmx</span>");
-    expect(englishPanelMarkup).toContain(
-      "<strong>Farmhouse Copy</strong><span>FarmHouse.tmx</span>",
-    );
-    expect(englishPanelMarkup).toContain(
-      "<strong>Standard Farm</strong><span>Farm.tmx</span>",
-    );
-    expect(chinesePanelMarkup).toContain("<strong>Farmhouse</strong><span>FarmHouse.tmx</span>");
-    expect(chinesePanelMarkup).toContain(
-      "<strong>Standard Farm</strong><span>Farm.tmx</span>",
-    );
-    expect(JSON.stringify(storedMapInstances)).toBe(storedMapInstancesBeforeRender);
-    expect(defaultFarmhouse).toMatchObject({
-      id: "map-farmhouse",
-      mapFile: "FarmHouse.tmx",
-      label: "Farmhouse",
-    });
-  });
-
-  it("renders Japanese project-map chrome and passes the locale into the map picker", () => {
+  it("renders Japanese map picker labels and map names", () => {
     const panelMarkup = renderToStaticMarkup(
       createElement(ProjectMapInstancePanel, {
         locale: "ja",
-        activeMapInstanceId: "map-standard-winter",
-        mapInstances: referenceProjectMaps,
         mapChoices: availablePlannerMaps,
-        projectChoices: destinationProjects,
-        onAddMap: ignoreProjectMapInstanceAction,
-        onCopyMapInstance: ignoreProjectMapInstanceAction,
-        onDeleteMapInstance: ignoreProjectMapInstanceAction,
-        onDuplicateMapInstance: ignoreProjectMapInstanceAction,
-        onMoveMapInstance: ignoreProjectMapInstanceAction,
-        onOpenMapInstance: ignoreProjectMapInstanceAction,
-        onRenameMapInstance: ignoreProjectMapInstanceAction,
+        onAddMap: () => undefined,
       }),
     );
 
-    expect(panelMarkup).toContain('aria-label="プロジェクトのマップ"');
-    expect(panelMarkup).toContain("移動先");
-    expect(panelMarkup).toContain("現在");
-    expect(panelMarkup).toContain("開く");
-    expect(panelMarkup).toContain("名前を変更");
-    expect(panelMarkup).toContain("複製");
-    expect(panelMarkup).toContain("プロジェクトにコピー");
-    expect(panelMarkup).toContain("プロジェクトに移動");
-    expect(panelMarkup).toContain("削除");
     expect(panelMarkup).toContain('aria-label="マップを追加"');
     expect(panelMarkup).toContain('aria-label="マップの分類"');
     expect(panelMarkup).toContain("スタンダード");
-    expect(panelMarkup).toContain("Spring Layout");
-    expect(panelMarkup).toContain("Farm");
-    expect(panelMarkup).toContain("Other local project");
-    expect(panelMarkup).not.toContain('aria-label="Project maps"');
     expect(panelMarkup).not.toContain("Standard Farm");
   });
+
+  it("renders the Russian add-map label", () => {
+    const panelMarkup = renderToStaticMarkup(
+      createElement(ProjectMapInstancePanel, {
+        locale: "ru",
+        mapChoices: availablePlannerMaps,
+        onAddMap: () => undefined,
+      }),
+    );
+
+    expect(panelMarkup).toContain('aria-label="Добавить карту"');
+  });
 });
-
-function createProjectMapInstance(
-  id: string,
-  mapFile: string,
-  label: string,
-): ReferenceProjectMap {
-  return {
-    id,
-    mapFile,
-    label,
-    season: "spring",
-    state: {},
-    decor: { wallpapers: {}, floors: {} },
-    renovations: [],
-    thumbnail: "",
-  };
-}
-
-function renderProjectMapInstancePanel(
-  mapInstances: readonly ReferenceProjectMap[],
-  locale: "en" | "zh" | "ru",
-): string {
-  return renderToStaticMarkup(
-    createElement(ProjectMapInstancePanel, {
-      locale,
-      activeMapInstanceId: mapInstances[0]?.id ?? null,
-      mapInstances,
-      mapChoices: availablePlannerMaps,
-      projectChoices: destinationProjects,
-      onAddMap: ignoreProjectMapInstanceAction,
-      onCopyMapInstance: ignoreProjectMapInstanceAction,
-      onDeleteMapInstance: ignoreProjectMapInstanceAction,
-      onDuplicateMapInstance: ignoreProjectMapInstanceAction,
-      onMoveMapInstance: ignoreProjectMapInstanceAction,
-      onOpenMapInstance: ignoreProjectMapInstanceAction,
-      onRenameMapInstance: ignoreProjectMapInstanceAction,
-    }),
-  );
-}
-
-function expectTextInOrder(markup: string, expectedTexts: readonly string[]): void {
-  let previousTextIndex = -1;
-
-  for (const expectedText of expectedTexts) {
-    const currentTextIndex = markup.indexOf(expectedText, previousTextIndex + 1);
-
-    expect(currentTextIndex).toBeGreaterThan(previousTextIndex);
-    previousTextIndex = currentTextIndex;
-  }
-}
-
-function expectRequiredClassNames(
-  markup: string,
-  requiredClassNames: readonly string[],
-): void {
-  for (const requiredClassName of requiredClassNames) {
-    expect(markup).toContain(requiredClassName);
-  }
-}

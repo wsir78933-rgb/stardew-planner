@@ -708,6 +708,13 @@ test("provides the approved bilingual planner hero content", () => {
     ],
   });
   expect(homepageCopyByLocale.ru.navigation.languageLabel).toBe("Язык");
+  expect(homepageCopyByLocale.ru.faq.items.map((faqItem) => faqItem.answer)).toEqual([
+    "Проекты хранятся в этом браузере. Экспортируйте JSON, чтобы создать резервную копию или перенести проект вручную.",
+    "Доступны Стандартная, Речная, Лесная, Горная, Ферма в глуши, Четыре угла, Пляжная и Луговая фермы, а также Имбирный остров.",
+    "Можно переключать весну, лето, осень и зиму, а также включать зоны действия спринклеров, пугал, ульев и хижин джунимо.",
+    "Импорт сохранения доступен в экспериментальном режиме; предметы из модов могут распознаться неверно.",
+    "Скриншоты можно скачать в стандартном или высоком качестве.",
+  ]);
   expect(homepageCopyByLocale.ru.hero).toMatchObject({
     headlineBefore: "Планировщик фермы ",
     headlineEmphasis: "Stardew Valley",
@@ -855,6 +862,13 @@ test("provides the Japanese homepage contract for navigation, planner preview, a
   expect(japaneseCopy.faq.eyebrow).toBe("質問");
   expect(japaneseCopy.caseStudies).toHaveLength(3);
   expect(japaneseCopy.faq.items).toHaveLength(5);
+  expect(japaneseCopy.faq.items.map((faqItem) => faqItem.answer)).toEqual([
+    "プロジェクトはこのブラウザに保存されます。JSONに書き出してバックアップできます。",
+    "スタンダード牧場、リバーランド牧場、フォレスト牧場、ヒルトップ牧場、ワイルド牧場、4コーナーズファーム、ビーチの牧場、メドウランズ牧場と、ジンジャーアイランドを選べます。",
+    "春・夏・秋・冬に切り替えられます。スプリンクラー、カカシ、ハチの巣箱、ジュニモ小屋の範囲も表示できます。",
+    "セーブデータを読み込めますが、実験的な機能です。モッドのアイテムは正しく対応しない場合があります。",
+    "標準画質と高画質のスクリーンショットをダウンロードできます。",
+  ]);
   expect(japaneseCopy.closingCta.heading).toBe(
     "このページで配置を終えてから、ゲーム内で建てる。",
   );

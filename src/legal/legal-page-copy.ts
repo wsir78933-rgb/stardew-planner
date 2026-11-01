@@ -55,7 +55,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Third parties",
           paragraphs: [
-            "Google Analytics (Google LLC) and Microsoft Clarity (Microsoft Corporation) receive analytics information when their scripts run. The planner interface does not send project data to these analytics providers.",
+            "Google Analytics (Google LLC) and Microsoft Clarity (Microsoft Corporation) receive analytics information when their scripts run. The site code does not send saved project JSON as custom analytics events. Microsoft Clarity collects page DOM, so project names or content visible on a page may be captured depending on the Clarity project's masking settings. The current masking configuration for this site has not been verified.",
           ],
         },
         {
@@ -151,7 +151,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "第三方",
           paragraphs: [
-            "Google Analytics（Google LLC）和 Microsoft Clarity（Microsoft Corporation）会在其脚本运行时接收分析信息。当前规划器界面不会向这两家分析服务商发送项目数据。",
+            "Google Analytics（Google LLC）和 Microsoft Clarity（Microsoft Corporation）会在其脚本运行时接收分析信息。网站代码不会将已保存的项目 JSON 作为自定义分析事件发送。Microsoft Clarity 会采集页面 DOM，因此页面上可见的项目名称或内容可能会根据 Clarity 项目的屏蔽设置被捕获。本站当前的屏蔽配置尚未核实。",
           ],
         },
         {

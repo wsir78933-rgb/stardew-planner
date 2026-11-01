@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import type { HomepageLocale } from "../../src/homepage/homepage-locale";
 import {
   getSaveModalCopy,
-  type CloudProjectSyncStatus,
   type FarmSummarySeason,
   type SaveModalBranch,
 } from "../../src/i18n/save-modal-copy";
@@ -46,40 +45,7 @@ describe("save modal copy", () => {
     expect(copy.localProjects.exportedProject("River / 夏季")).toBe('已导出“River / 夏季”。');
     expect(copy.localProjects.importedProject("farm.JSON")).toBe('已导入“farm.JSON”。');
     expect(copy.localProjects.actionFailure("disk full")).toBe("本地项目操作失败：disk full");
-    expect(copy.cloudProjects.extras).toBe("更多功能");
-    expect(copy.cloudProjects.signInGoogle).toBe("使用 Google 继续");
     expect(copy.localProjects.deviceTools).toBe("设备工具");
-    expect(copy.cloudProjects.cloudStatusErrorSummary).toBe("云同步暂不可用。");
-    expect(copy.cloudProjects.signedOut).toBe(
-      "尚未登录。本地项目仍保留在此设备上。",
-    );
-    expect(copy.cloudProjects.cloudProjectsEmpty).toBe(
-      "还没有云端副本。保存当前项目时会自动同步。",
-    );
-    expect(copy.cloudProjects.syncThisProject).toBe("同步到云端");
-    expect(copy.cloudProjects.localSaveRetirementCountdown(1, 2, 3)).toBe(
-      "本地保存将在 1天 2小时 3分钟后结束。需要保留到云端的项目请先同步；云端副本会一直保留，直到你主动删除。",
-    );
-    expect(copy.cloudProjects.localSaveRetirementNotConfigured).toBe(
-      "7 天本地保存过渡期尚未启动，截止日期待定。",
-    );
-    expect(copy.cloudProjects.localSaveRetirementEnded).toContain("没有自动删除");
-    expect(copy.cloudProjects.syncAllLocalProjects).toBe("同步全部本地项目");
-    expect(copy.cloudProjects.syncAllSignedOut).toBe("登录后同步全部本地项目");
-    expect(copy.cloudProjects.syncAllSignInDescription).toContain("登录不会自动上传项目");
-    expect(copy.cloudProjects.syncAllProgress(1, 2, "Forest Farm")).toContain("正在同步“Forest Farm”");
-    expect(copy.cloudProjects.syncAllCompleted(2)).toBe("已同步全部 2 个本地项目。");
-    expect(
-      copy.cloudProjects.syncAllFailed(1, 2, ["Forest Farm"], "revision conflict"),
-    ).toContain("Forest Farm");
-    expect(
-      copy.cloudProjects.syncAllFailed(1, 2, ["Forest Farm"], "revision conflict"),
-    ).toContain("revision conflict");
-    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("已同步");
-    expect(copy.cloudProjects.localProjectStatus("conflict")).toBe("需要选择版本");
-    expect(copy.cloudProjects.mapCount(2)).toBe("2 张地图");
-    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe("当前登录账户：Farm Planner。");
-    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain("本地项目会保留");
     expect(copy.saveTools.retryBranch("projects")).toBe("重试加载本地项目");
     expect(copy.deleteProject.descriptionPrefix).toBe("要从此浏览器删除“");
     expect(copy.deleteProject.descriptionSuffix).toBe("”吗？此操作无法撤销。");
@@ -122,43 +88,7 @@ describe("save modal copy", () => {
     expect(copy.localProjects.exportedProject("River Farm")).toBe("Exported River Farm.");
     expect(copy.localProjects.importedProject("farm.JSON")).toBe("Imported farm.JSON.");
     expect(copy.localProjects.actionFailure("disk full")).toBe("Local project action failed: disk full");
-    expect(copy.cloudProjects.extras).toBe("Extras");
-    expect(copy.cloudProjects.signInGoogle).toBe("Continue with Google");
     expect(copy.localProjects.deviceTools).toBe("Device tools");
-    expect(copy.cloudProjects.cloudStatusErrorSummary).toBe("Cloud sync is unavailable.");
-    expect(copy.cloudProjects.cloudStatusError("HTTP 404")).toBe("Cloud sync error: HTTP 404");
-    expect(copy.cloudProjects.signedOut).toBe(
-      "Not signed in. Local projects stay on this device.",
-    );
-    expect(copy.cloudProjects.cloudProjectsEmpty).toBe(
-      "No cloud copies yet. Saving the current project syncs it automatically.",
-    );
-    expect(copy.cloudProjects.syncThisProject).toBe("Sync to cloud");
-    expect(copy.cloudProjects.localSaveRetirementCountdown(1, 2, 3)).toBe(
-      "Local saving transitions out in 1d 2h 3m. Sync projects you want to keep in the cloud. Cloud copies remain until you delete them.",
-    );
-    expect(copy.cloudProjects.localSaveRetirementNotConfigured).toBe(
-      "The 7-day local-save transition has not started. Its cutoff date is pending.",
-    );
-    expect(copy.cloudProjects.localSaveRetirementEnded).toContain("no data was deleted");
-    expect(copy.cloudProjects.syncAllLocalProjects).toBe("Sync all local projects");
-    expect(copy.cloudProjects.syncAllSignedOut).toBe("Sign in to sync all local projects");
-    expect(copy.cloudProjects.syncAllSignInDescription).toContain("will not upload projects");
-    expect(copy.cloudProjects.syncAllProgress(1, 2, "Forest Farm")).toContain("Syncing Forest Farm");
-    expect(copy.cloudProjects.syncAllCompleted(2)).toBe("All 2 local projects synced.");
-    expect(
-      copy.cloudProjects.syncAllFailed(1, 2, ["Forest Farm"], "revision conflict"),
-    ).toContain("Forest Farm");
-    expect(
-      copy.cloudProjects.syncAllFailed(1, 2, ["Forest Farm"], "revision conflict"),
-    ).toContain("revision conflict");
-    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("Synced");
-    expect(copy.cloudProjects.localProjectStatus("pending")).toBe("Waiting to sync");
-    expect(copy.cloudProjects.mapCount(2)).toBe("2 maps");
-    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe("Signed in as Farm Planner.");
-    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain(
-      "local project will stay on this device",
-    );
     expect(copy.saveTools.loadingBranch("projects")).toBe("Loading Local projects…");
     expect(copy.saveTools.retryBranch("projects")).toBe("Retry Local projects");
     expect(copy.saveTools.branchLoadFailure("projects", "import failed")).toBe(
@@ -279,10 +209,6 @@ describe("save modal copy", () => {
     expect(copy.farmSummaryPreview.itemsPlaced(1)).toBe("1 предмет размещён");
     expect(copy.farmSummaryPreview.itemsPlaced(2)).toBe("2 предмета размещены");
     expect(copy.farmSummaryDetail.season("spring")).toBe("Весна");
-    expect(copy.cloudProjects.dateTimeLocale).toBe("ru");
-    expect(copy.cloudProjects.localSaveRetirementCountdown(7, 3, 15)).toBe(
-      "Локальное сохранение завершится через 7 д 3 ч 15 мин. Синхронизируйте проекты, которые хотите оставить в облаке. Облачные копии хранятся, пока вы их не удалите.",
-    );
     expect(copy.localProjects.searchProjects).not.toBe("Search plans");
     expect(copy.localProjects.searchProjects).not.toBe("搜索方案");
     expect(copy.farmSummaryPreview.season("spring")).not.toBe("Spring");
@@ -305,7 +231,6 @@ describe("save modal copy", () => {
     expect(copy.localProjects.defaultProjectName).toBe("無題のプロジェクト");
     expect(copy.localProjects.myPlansFolder).toBe("マイプラン");
     expect(copy.localProjects.dateTimeLocale).toBe("ja");
-    expect(copy.cloudProjects.dateTimeLocale).toBe("ja");
     expect(copy.localProjects.currentMapCount(1)).toBe("1枚の地図");
     expect(copy.localProjects.projectMapCount(2)).toBe("2枚の地図");
     expect(copy.localProjects.openedProject("River / 夏季")).toBe(
@@ -325,41 +250,6 @@ describe("save modal copy", () => {
     expect(copy.localProjects.actionFailure("disk full")).toBe(
       "ローカルプロジェクトの操作に失敗しました：disk full",
     );
-    expect(copy.cloudProjects.signInGoogle).toBe("Googleで続行");
-    expect(copy.cloudProjects.cloudStatusError("HTTP 404")).toBe(
-      "クラウド同期エラー：HTTP 404",
-    );
-    expect(copy.cloudProjects.localSaveRetirementCountdown(1, 2, 3)).toBe(
-      "ローカル保存は残り1日2時間3分で終了します。クラウドに残したいプロジェクトは先に同期してください。クラウド上のコピーは、削除するまで残ります。",
-    );
-    expect(copy.cloudProjects.localSaveRetirementNotConfigured).toContain("7日間");
-    expect(copy.cloudProjects.localSaveRetirementEnded).toContain("自動削除されていません");
-    expect(copy.cloudProjects.syncAllProgress(1, 2, "Forest Farm")).toContain(
-      "「Forest Farm」を同期しています…",
-    );
-    expect(copy.cloudProjects.syncAllProgress(1, 2, null)).toBe(
-      "2件中1件のローカルプロジェクトを処理しました…",
-    );
-    expect(copy.cloudProjects.syncAllCompleted(2)).toBe(
-      "2件のローカルプロジェクトをすべて同期しました。",
-    );
-    expect(copy.cloudProjects.syncAllFailed(1, 2, ["Forest Farm"], "revision conflict")).toBe(
-      "2件中1件のローカルプロジェクトを処理したところで停止しました。確認が必要なプロジェクトは1件です：Forest Farm。revision conflict",
-    );
-    expect(copy.cloudProjects.syncAllFailed(0, 1, [], "HTTP 503")).toBe(
-      "1件中0件のローカルプロジェクトを処理したところで停止しました。個別の失敗プロジェクトは記録されていません。HTTP 503",
-    );
-    expect(copy.cloudProjects.signedInAs("Farm Planner")).toBe(
-      "ログイン中のアカウント：Farm Planner。",
-    );
-    expect(copy.cloudProjects.localProjectStatus("none")).toBe("この端末のみ");
-    expect(copy.cloudProjects.localProjectStatus("pending")).toBe("同期待ち");
-    expect(copy.cloudProjects.localProjectStatus("synced")).toBe("同期済み");
-    expect(copy.cloudProjects.localProjectStatus("conflict")).toBe("選択が必要");
-    expect(copy.cloudProjects.localProjectStatus("error")).toBe("同期失敗");
-    expect(copy.cloudProjects.mapCount(2)).toBe("2枚の地図");
-    expect(copy.cloudProjects.deleteProject.descriptionPrefix).toBe("クラウドアカウントから「");
-    expect(copy.cloudProjects.deleteProject.descriptionSuffix).toContain("この端末に残ります");
     expect(copy.deleteProject.descriptionPrefix).toBe("このブラウザから「");
     expect(copy.deleteProject.descriptionSuffix).toBe(
       "」を削除しますか？この操作は元に戻せません。",
@@ -415,9 +305,6 @@ describe("save modal copy", () => {
     expect(() => copy.farmSummaryPreview.season("monsoon" as FarmSummarySeason)).toThrow(
       'Unsupported farm summary season. Received: "monsoon".',
     );
-    expect(() =>
-      copy.cloudProjects.localProjectStatus("later" as CloudProjectSyncStatus),
-    ).toThrow('Unsupported cloud project sync status. Received: "later".');
   });
 });
 

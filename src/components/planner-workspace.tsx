@@ -1533,9 +1533,7 @@ function PreparedPlannerWorkspaceContent({
         panelPosition={plannerWorkspaceState.panelPosition}
         projectMapPanelContent={createProjectMapPanelContent({
           activeProject: workspaceState.activeProject,
-          cancelInteriorDecor: handleCancelInteriorDecor,
           editorLocale,
-          projectSummaries: workspaceState.projectSummaries,
           season: plannerWorkspaceState.season,
           workspaceController,
         })}
@@ -1590,46 +1588,28 @@ function PreparedPlannerWorkspaceContent({
 
 function createProjectMapPanelContent({
   activeProject,
-  cancelInteriorDecor,
   editorLocale,
-  projectSummaries,
   season,
   workspaceController,
 }: Readonly<{
   activeProject: ReturnType<typeof useReferenceProjectWorkspace>["workspaceState"]["activeProject"];
-  cancelInteriorDecor: () => void;
   editorLocale: PlannerChromeLocale;
-  projectSummaries: ReturnType<typeof useReferenceProjectWorkspace>["workspaceState"]["projectSummaries"];
   season: PlannerWorkspaceStateController["plannerWorkspaceState"]["season"];
   workspaceController: ReturnType<typeof useReferenceProjectWorkspace>["workspaceController"];
 }>): ReactNode {
   if (activeProject === null) return null;
 
-  const destinationProjectSummaries = projectSummaries.filter(
-    (projectSummary) => projectSummary.id !== activeProject.id,
-  );
-  const projectMapActions = createPlannerProjectMapActions({
+  const { onAddMap } = createPlannerProjectMapActions({
     activeProjectId: activeProject.id,
     season,
     workspaceController,
   });
-  const handleOpenMapInstance = (mapInstanceId: string): void => {
-    cancelInteriorDecorBeforeOrdinaryWorkspaceAction({
-      cancelInteriorDecor,
-      performOrdinaryWorkspaceAction: () =>
-        projectMapActions.onOpenMapInstance(mapInstanceId),
-    });
-  };
 
   return (
     <ProjectMapInstancePanel
-      activeMapInstanceId={activeProject.project.activeMapId}
       mapChoices={plannerMaps}
-      mapInstances={activeProject.project.maps}
-      projectChoices={destinationProjectSummaries}
-      {...projectMapActions}
       locale={editorLocale}
-      onOpenMapInstance={handleOpenMapInstance}
+      onAddMap={onAddMap}
     />
   );
 }

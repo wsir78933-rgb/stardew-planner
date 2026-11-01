@@ -117,6 +117,28 @@ describe("getLegalPageCopy", () => {
     expect(chinesePrivacyText).toContain("重建会话回放、生成热图");
     expect(chinesePrivacyText).toContain("受 Clarity 项目的屏蔽设置影响");
     expect(chinesePrivacyText).toContain("脚本运行时可能会设置测量 Cookie");
+    expect(englishPrivacyText).toContain(
+      "does not send saved project JSON as custom analytics events",
+    );
+    expect(englishPrivacyText).toContain(
+      "project names or content visible on a page may be captured",
+    );
+    expect(englishPrivacyText).toContain(
+      "masking configuration for this site has not been verified",
+    );
+    expect(englishPrivacyText).not.toContain(
+      "does not send project data to these analytics providers",
+    );
+    expect(chinesePrivacyText).toContain(
+      "不会将已保存的项目 JSON 作为自定义分析事件发送",
+    );
+    expect(chinesePrivacyText).toContain(
+      "页面上可见的项目名称或内容可能会根据 Clarity 项目的屏蔽设置被捕获",
+    );
+    expect(chinesePrivacyText).toContain("本站当前的屏蔽配置尚未核实");
+    expect(chinesePrivacyText).not.toContain(
+      "当前规划器界面不会向这两家分析服务商发送项目数据",
+    );
     expect(chinesePrivacyText).not.toContain("本站不使用登录会话 Cookie");
     expect(chinesePrivacyText).toContain("本站目前不投放广告");
     expect(chinesePrivacyText).toContain("广告合作方");

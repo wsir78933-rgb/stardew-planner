@@ -32,12 +32,6 @@ it("publishes the static export while retaining the Contact Worker contract", ()
       not_found_handling: string;
       run_worker_first: readonly string[];
     }>;
-    d1_databases: readonly Readonly<{
-      binding: string;
-      database_id: string;
-      database_name: string;
-      migrations_dir: string;
-    }>[];
     routes: readonly Readonly<{ custom_domain: boolean; pattern: string }>[];
     send_email: readonly Readonly<{
       name: string;
@@ -57,14 +51,6 @@ it("publishes the static export while retaining the Contact Worker contract", ()
       pattern: "stardewvalleyplanner.art/api/feedback*",
     },
     {
-      custom_domain: false,
-      pattern: "stardewvalleyplanner.art/api/auth*",
-    },
-    {
-      custom_domain: false,
-      pattern: "stardewvalleyplanner.art/api/cloud-projects*",
-    },
-    {
       custom_domain: true,
       pattern: "stardewvalleyplanner.art",
     },
@@ -73,17 +59,7 @@ it("publishes the static export while retaining the Contact Worker contract", ()
   expect(workerConfiguration.main).toBe("workers/planner-worker.ts");
   expect(workerConfiguration.compatibility_date).toBe("2026-08-08");
   expect(workerConfiguration.compatibility_flags).toContain("nodejs_compat");
-  expect(workerConfiguration.d1_databases).toHaveLength(1);
-  const [d1DatabaseBinding] = workerConfiguration.d1_databases;
-  if (d1DatabaseBinding === undefined) {
-    throw new Error(
-      `Expected one local D1 binding, received ${JSON.stringify(workerConfiguration.d1_databases)}.`,
-    );
-  }
-  expect(d1DatabaseBinding.binding).toBe("DB");
-  expect(d1DatabaseBinding.database_name).toBe("stardew-planner");
-  expect(d1DatabaseBinding.database_id).toBe("6cf9f831-c7b6-4349-b1ff-8c6c0f1ff9a5");
-  expect(d1DatabaseBinding.migrations_dir).toBe("./migrations");
+  expect(workerConfiguration).not.toHaveProperty("d1_databases");
   expect(workerConfiguration.assets).toEqual({
     binding: "STATIC_ASSETS",
     directory: "./out",
@@ -110,7 +86,5 @@ it("publishes the static export while retaining the Contact Worker contract", ()
     CONTACT_ALLOWED_ORIGIN: "https://stardewvalleyplanner.art",
     CONTACT_EXPECTED_TURNSTILE_HOSTNAME: "stardewvalleyplanner.art",
     CONTACT_TURNSTILE_ACTION: "turnstile-spin-v2",
-    BETTER_AUTH_URL: "https://stardewvalleyplanner.art",
-    AUTH_ALLOWED_ORIGINS: "https://stardewvalleyplanner.art",
   });
 });

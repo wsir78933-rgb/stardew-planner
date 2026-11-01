@@ -5,8 +5,7 @@
   },
   "scripts": {
     "dev": "sh scripts/dev.sh",
-    "dev:cloud": "pnpm build && wrangler dev --local --ip 127.0.0.1 --port 8787 --compatibility-date 2026-06-10 --compatibility-flag nodejs_compat --var BETTER_AUTH_URL:http://localhost:8787 --var AUTH_ALLOWED_ORIGINS:http://localhost:8787",
-    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "dev:cloud": "pnpm build && wrangler dev --local --ip 127.0.0.1 --port 8787 --compatibility-date 2026-06-10 --compatibility-flag nodejs_compat",
     "wrangler:types": "wrangler types worker-configuration.d.ts",
     "build": "next build",
     "start": "serve out",
@@ -21,7 +20,6 @@
     "@radix-ui/react-accordion": "^1.2.20",
     "@radix-ui/react-icons": "^1.3.2",
     "@tabler/icons-react": "^3.46.0",
-    "better-auth": "1.6.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",

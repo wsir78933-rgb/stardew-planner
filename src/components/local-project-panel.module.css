@@ -677,3 +677,27 @@
   box-shadow: none;
   color: var(--foreground);
 }
+
+.layout .sidebar .sidebarActions > :is(button, label),
+.layout .sidebar .projectGroupsSummary,
+.layout .sidebar .toolsButton {
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .moreActions {
+  flex: 0 0 44px;
+  width: 44px;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel :is(.openProjectButton, .iconActionButton, .moreActionsSummary) {
+  border-radius: 8px;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal.editor-modal--save-panel) .panel .openProjectButton {
+  flex: 1 1 72px;
+  font-size: 13px;
+  font-weight: 600;
+  width: auto;
+}

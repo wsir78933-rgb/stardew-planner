@@ -3645,20 +3645,7 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .game-save-import-result,
 .planner-editor-shell .farm-summary-modal { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--lk-sm); color: var(--text); max-height: 80%; max-width: 90vw; padding: 0; width: min(560px, 90vw); }
 .planner-editor-shell .editor-modal--map-picker { display: flex; flex-direction: column; overflow: hidden; width: min(600px, 90vw); }
-.planner-editor-shell .editor-modal--map-picker > .project-map-instance-panel { display: grid; align-content: start; gap: var(--lk-sm); min-height: 0; overflow-x: hidden; overflow-y: auto; padding: var(--lk-sm) var(--lk-md); }
-.planner-editor-shell .project-map-instance-panel > h3 { margin: 0; }
-.planner-editor-shell .project-map-instance-panel__transfer-destination > label { display: grid; gap: var(--lk-3xs); min-width: 0; }
-.planner-editor-shell .project-map-instance-panel__transfer-destination select { box-sizing: border-box; min-width: 0; width: 100%; }
-.planner-editor-shell .project-map-instance-panel__list { display: grid; gap: var(--lk-xs); list-style: none; margin: 0; min-width: 0; padding: 0; }
-.planner-editor-shell .project-map-instance-panel__instance { display: grid; gap: var(--lk-xs); grid-template-columns: minmax(0, 1fr); min-width: 0; padding: var(--lk-xs); }
-.planner-editor-shell .project-map-instance-panel__instance-summary { display: grid; gap: var(--lk-3xs); min-width: 0; overflow-wrap: anywhere; }
-.planner-editor-shell .project-map-instance-panel__instance-summary > :is(strong, span) { min-width: 0; overflow-wrap: anywhere; }
-.planner-editor-shell .project-map-instance-panel__instance-actions { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(3, minmax(0, 1fr)); min-width: 0; }
-.planner-editor-shell .project-map-instance-panel__rename-form { display: grid; gap: var(--lk-3xs); grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; }
-.planner-editor-shell .project-map-instance-panel__rename-form label { grid-column: 1 / -1; min-width: 0; }
-.planner-editor-shell .project-map-instance-panel__rename-form input { box-sizing: border-box; min-width: 0; width: 100%; }
-.planner-editor-shell .project-map-instance-panel__instance-actions button,
-.planner-editor-shell .project-map-instance-panel__rename-form button { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
+.planner-editor-shell .editor-modal--map-picker > .project-map-instance-panel { display: grid; align-content: start; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 0; }
 .planner-editor-shell .editor-modal--save-panel { max-height: min(48rem, calc(100dvh - 2rem)); overflow-y: auto; width: min(680px, 90vw); }
 .planner-editor-shell .editor-modal--save-panel > .editor-modal__header > button { align-items: center; box-sizing: border-box; display: inline-flex; flex: 0 0 44px; height: 44px; justify-content: center; min-height: 44px; min-width: 44px; padding: 0; width: 44px; }
 .planner-editor-shell .editor-modal--save-panel button,
@@ -3768,10 +3755,6 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 .planner-editor-shell .editor-modal__map-grid button span { font-size: 14px; line-height: 20px; }
 .planner-editor-shell .editor-modal__map-grid button[aria-pressed="true"] { background: #c9fb45; }
 .planner-editor-shell .editor-modal__map-grid img { aspect-ratio: 1; object-fit: cover; width: 100%; }
-
-@media (max-width: 520px) {
-  .planner-editor-shell .project-map-instance-panel__instance-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 
 /* Editor modal content redesign: View, Settings, and Help only. */
 .planner-editor-shell .editor-modal--view-panel,
@@ -3996,7 +3979,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .local-project-panel__delete-alert-actions button,
 .local-project-panel__delete-alert-actions button,
 .planner-editor-shell .local-project-panel__project,
-.planner-editor-shell .project-map-instance-panel__instance,
 .planner-editor-shell .editor-modal__legal-links a,
 .planner-editor-shell .planner-startup-status,
 .planner-editor-shell .planner-canvas__status,
@@ -4102,7 +4084,6 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 .planner-editor-shell .local-project-panel__delete-alert-actions button:active:not(:disabled),
 .local-project-panel__delete-alert-actions button:active:not(:disabled),
 .planner-editor-shell .local-project-panel__project[data-current-project="true"],
-.planner-editor-shell .project-map-instance-panel__instance[data-current-map-instance="true"],
 .planner-editor-shell .editor-modal__legal-links a:active,
 .planner-editor-shell .planner-save-modal-loader__branches button[aria-pressed="true"]:not(:disabled) {
   box-shadow: var(--planner-neo-inset-shadow);
@@ -6012,4 +5993,13 @@ body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-co
   body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section#tool-comparison[data-homepage-tool-comparison] [data-homepage-comparison-table] :is(th, td) {
     padding: 0.875rem;
   }
+}
+
+/* Choose map modal polish. */
+.planner-editor-shell .editor-modal--map-picker .planner-map-picker__tabs { border-bottom: 1px solid color-mix(in srgb, var(--border-subtle) 25%, transparent); gap: var(--lk-3xs); }
+.planner-editor-shell .editor-modal--map-picker .planner-map-picker__tab { background: transparent; border-radius: var(--lk-xs) var(--lk-xs) 0 0; box-shadow: none; font-weight: 600; }
+.planner-editor-shell .editor-modal--map-picker .planner-map-picker__tab:hover:not(:disabled) { background: var(--bg-raised); box-shadow: none; }
+.planner-editor-shell .editor-modal--map-picker .planner-map-picker__tab[aria-selected="true"] { border-bottom-color: var(--accent) !important; color: var(--text-bright); }
+@media (max-width: 520px) {
+  .planner-editor-shell .editor-modal--map-picker .planner-map-picker__tab { font-size: 13px; padding-inline: 2px; }
 }

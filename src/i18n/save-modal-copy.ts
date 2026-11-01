@@ -116,82 +116,6 @@ export type LocalProjectsCopy = Readonly<{
   storedInBrowser: string;
 }>;
 
-export type CloudProjectSyncStatus = "none" | "pending" | "synced" | "conflict" | "error";
-
-export type CloudProjectDeleteCopy = Readonly<{
-  confirm: string;
-  descriptionPrefix: string;
-  descriptionSuffix: string;
-  dismiss: string;
-  title: string;
-}>;
-
-export type CloudProjectsCopy = Readonly<{
-  extras: string;
-  account: string;
-  accountLoading: string;
-  cloudStatusLoading: string;
-  cloudStatusReady: string;
-  title: string;
-  cloudProjects: string;
-  cloudProjectsEmpty: string;
-  cloudProjectsLoading: string;
-  cloudProjectsSignInRequired: string;
-  cloudStatusError: (rawError: string) => string;
-  cloudStatusErrorSummary: string;
-  conflictDescription: string;
-  currentProject: string;
-  dateTimeLocale: HomepageLocale;
-  deleteCloudCopy: string;
-  deletingCloudCopy: string;
-  deleteProject: CloudProjectDeleteCopy;
-  imagesStayLocal: string;
-  keepLocalVersion: string;
-  loadMoreCloudProjects: string;
-  loadingMoreCloudProjects: string;
-  localProjects: string;
-  localProjectStatus: (status: CloudProjectSyncStatus) => string;
-  localSaveRetirementCountdown: (
-    daysRemaining: number,
-    hoursRemaining: number,
-    minutesRemaining: number,
-  ) => string;
-  localSaveRetirementEnded: string;
-  localSaveRetirementLoading: string;
-  localSaveRetirementNotConfigured: string;
-  mapCount: (count: number) => string;
-  noLocalProjects: string;
-  openCloudCopy: string;
-  refreshCloudProjects: string;
-  refreshingCloudProjects: string;
-  retrySync: string;
-  signInBusy: string;
-  signInGoogle: string;
-  signOut: string;
-  signOutBusy: string;
-  signedInAs: (accountName: string) => string;
-  signedOut: string;
-  syncAllSignInDescription: string;
-  syncAllLocalProjects: string;
-  syncAllSignedOut: string;
-  syncAllProgress: (
-    completed: number,
-    total: number,
-    currentProjectName: string | null,
-  ) => string;
-  syncAllProgressLabel: string;
-  syncAllCompleted: (total: number) => string;
-  syncAllFailed: (
-    completed: number,
-    total: number,
-    failedProjectNames: readonly string[],
-    errorMessage: string,
-  ) => string;
-  syncButtonBusy: string;
-  syncThisProject: string;
-  useCloudVersion: string;
-}>;
-
 export type LocalProjectDeleteCopy = Readonly<{
   confirm: string;
   descriptionPrefix: string;
@@ -261,7 +185,6 @@ export type FarmSummaryDetailCopy = Readonly<{
 
 export type SaveModalCopy = Readonly<{
   deleteProject: LocalProjectDeleteCopy;
-  cloudProjects: CloudProjectsCopy;
   farmSummaryDetail: FarmSummaryDetailCopy;
   farmSummaryPreview: FarmSummaryPreviewCopy;
   gameSave: GameSaveCopy;
@@ -300,18 +223,6 @@ function readJapaneseSeasonName(season: FarmSummarySeason): string {
   const unsupportedSeason: never = season;
   throw new TypeError(
     `Unsupported farm summary season. Received: ${JSON.stringify(unsupportedSeason)}.`,
-  );
-}
-
-function readJapaneseCloudProjectStatus(status: CloudProjectSyncStatus): string {
-  if (status === "none") return "この端末のみ";
-  if (status === "pending") return "同期待ち";
-  if (status === "synced") return "同期済み";
-  if (status === "conflict") return "選択が必要";
-  if (status === "error") return "同期失敗";
-  const unsupportedStatus: never = status;
-  throw new TypeError(
-    `Unsupported cloud project sync status. Received: ${JSON.stringify(unsupportedStatus)}.`,
   );
 }
 
@@ -386,79 +297,6 @@ const saveModalCopyByLocale = {
       savedToBrowser: "Saved to this browser.",
       searchProjects: "Search plans",
       storedInBrowser: "Stored in this browser.",
-    },
-    cloudProjects: {
-      extras: "Extras",
-      account: "Account",
-      accountLoading: "Checking account…",
-      cloudStatusLoading: "Checking cloud status…",
-      cloudStatusReady: "Cloud sync is ready.",
-      cloudProjects: "Cloud projects",
-      cloudProjectsEmpty: "No cloud copies yet. Saving the current project syncs it automatically.",
-      cloudProjectsLoading: "Loading cloud projects…",
-      cloudProjectsSignInRequired: "Sign in with Google in the sidebar to view cloud copies and project sync actions.",
-      cloudStatusError: (rawError: string) => `Cloud sync error: ${rawError}`,
-      cloudStatusErrorSummary: "Cloud sync is unavailable.",
-      conflictDescription: "A newer cloud copy exists. Keep the local version or create a new local project from the cloud version.",
-      currentProject: "Current",
-      dateTimeLocale: "en",
-      deleteCloudCopy: "Delete cloud copy",
-      deletingCloudCopy: "Deleting cloud copy…",
-      deleteProject: {
-        confirm: "Delete cloud copy",
-        descriptionPrefix: "Delete ",
-        descriptionSuffix: " from your cloud account? The local project will stay on this device.",
-        dismiss: "Keep cloud copy",
-        title: "Delete cloud copy?",
-      },
-      imagesStayLocal: "Only layout data syncs. Map preview images stay on this device. Cloud copies stay until you delete them.",
-      keepLocalVersion: "Keep local version",
-      loadMoreCloudProjects: "Load more cloud projects",
-      loadingMoreCloudProjects: "Loading more cloud projects…",
-      localProjects: "Local project sync status",
-      localProjectStatus: (status: CloudProjectSyncStatus) => ({
-        none: "Only on this device",
-        pending: "Waiting to sync",
-        synced: "Synced",
-        conflict: "Needs your choice",
-        error: "Sync failed",
-      })[status],
-      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `Local saving transitions out in ${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m. Sync projects you want to keep in the cloud. Cloud copies remain until you delete them.`,
-      localSaveRetirementEnded: "The local-save transition has ended. Existing local projects remain available; no data was deleted. Cloud copies remain until you delete them.",
-      localSaveRetirementLoading: "Checking the local-save transition deadline…",
-      localSaveRetirementNotConfigured: "The 7-day local-save transition has not started. Its cutoff date is pending.",
-      mapCount: (count: number) => `${String(count)} ${count === 1 ? "map" : "maps"}`,
-      noLocalProjects: "Save a project on this device before syncing it.",
-      openCloudCopy: "Open cloud copy",
-      refreshCloudProjects: "Refresh cloud projects",
-      refreshingCloudProjects: "Refreshing cloud projects…",
-      retrySync: "Retry sync",
-      signInBusy: "Connecting to Google…",
-      signInGoogle: "Continue with Google",
-      signOut: "Sign out",
-      signOutBusy: "Signing out…",
-      signedInAs: (accountName: string) => `Signed in as ${accountName}.`,
-      signedOut: "Not signed in. Local projects stay on this device.",
-      syncAllSignInDescription: "Signing in will not upload projects. Return here and press Sync all local projects to start.",
-      syncAllLocalProjects: "Sync all local projects",
-      syncAllSignedOut: "Sign in to sync all local projects",
-      syncAllProgress: (completed, total, currentProjectName) =>
-        currentProjectName === null
-          ? `Processed ${completed} of ${total} local projects…`
-          : `Processed ${completed} of ${total} local projects. Syncing ${currentProjectName}…`,
-      syncAllProgressLabel: "Cloud sync progress",
-      syncAllCompleted: (total) => `All ${total} local projects synced.`,
-      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
-        const failedProjects = failedProjectNames.length === 0
-          ? "No individual project failure was recorded."
-          : `${failedProjectNames.length} project(s) need attention: ${failedProjectNames.join(", ")}.`;
-        return `Stopped after processing ${completed} of ${total} local projects. ${failedProjects} ${errorMessage}`;
-      },
-      syncButtonBusy: "Syncing project…",
-      syncThisProject: "Sync to cloud",
-      title: "Cloud sync",
-      useCloudVersion: "Use cloud version as a new local project",
     },
     deleteProject: {
       confirm: "Delete project",
@@ -591,79 +429,6 @@ const saveModalCopyByLocale = {
       searchProjects: "搜索方案",
       storedInBrowser: "保存在此浏览器中。",
     },
-    cloudProjects: {
-      extras: "更多功能",
-      account: "账户",
-      accountLoading: "正在检查账户…",
-      cloudStatusLoading: "正在检查云同步状态…",
-      cloudStatusReady: "云同步已就绪。",
-      cloudProjects: "云端项目",
-      cloudProjectsEmpty: "还没有云端副本。保存当前项目时会自动同步。",
-      cloudProjectsLoading: "正在加载云端项目…",
-      cloudProjectsSignInRequired: "请先在侧栏使用 Google 登录，再查看云端副本和逐项目同步操作。",
-      cloudStatusError: (rawError: string) => `云同步错误：${rawError}`,
-      cloudStatusErrorSummary: "云同步暂不可用。",
-      conflictDescription: "云端存在更新版本。你可以保留本地版本，或将云端版本另存为新的本地项目。",
-      currentProject: "当前",
-      dateTimeLocale: "zh-CN",
-      deleteCloudCopy: "删除云端副本",
-      deletingCloudCopy: "正在删除云端副本…",
-      deleteProject: {
-        confirm: "删除云端副本",
-        descriptionPrefix: "要从你的云端账户删除“",
-        descriptionSuffix: "”吗？本地项目会保留在此设备上。",
-        dismiss: "保留云端副本",
-        title: "删除云端副本？",
-      },
-      imagesStayLocal: "仅同步布局数据。地图预览图片保留在此设备上。云端副本会一直保留，直到你主动删除。",
-      keepLocalVersion: "保留本地版本",
-      loadMoreCloudProjects: "加载更多云端项目",
-      loadingMoreCloudProjects: "正在加载更多云端项目…",
-      localProjects: "本地项目同步状态",
-      localProjectStatus: (status: CloudProjectSyncStatus) => ({
-        none: "仅保存在此设备",
-        pending: "等待同步",
-        synced: "已同步",
-        conflict: "需要选择版本",
-        error: "同步失败",
-      })[status],
-      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `本地保存将在 ${daysRemaining}天 ${hoursRemaining}小时 ${minutesRemaining}分钟后结束。需要保留到云端的项目请先同步；云端副本会一直保留，直到你主动删除。`,
-      localSaveRetirementEnded: "本地保存过渡期已结束。现有本地项目仍保留，没有自动删除任何数据。云端副本会一直保留，直到你主动删除。",
-      localSaveRetirementLoading: "正在检查本地保存过渡安排…",
-      localSaveRetirementNotConfigured: "7 天本地保存过渡期尚未启动，截止日期待定。",
-      mapCount: (count: number) => `${String(count)} 张地图`,
-      noLocalProjects: "请先在此设备上保存项目，再进行同步。",
-      openCloudCopy: "打开云端副本",
-      refreshCloudProjects: "刷新云端项目",
-      refreshingCloudProjects: "正在刷新云端项目…",
-      retrySync: "重试同步",
-      signInBusy: "正在连接 Google…",
-      signInGoogle: "使用 Google 继续",
-      signOut: "退出登录",
-      signOutBusy: "正在退出登录…",
-      signedInAs: (accountName: string) => `当前登录账户：${accountName}。`,
-      signedOut: "尚未登录。本地项目仍保留在此设备上。",
-      syncAllSignInDescription: "登录不会自动上传项目。返回此处后再点击“同步全部本地项目”即可开始。",
-      syncAllLocalProjects: "同步全部本地项目",
-      syncAllSignedOut: "登录后同步全部本地项目",
-      syncAllProgress: (completed, total, currentProjectName) =>
-        currentProjectName === null
-          ? `已处理 ${completed}/${total} 个本地项目…`
-          : `已处理 ${completed}/${total} 个本地项目，正在同步“${currentProjectName}”…`,
-      syncAllProgressLabel: "云同步进度",
-      syncAllCompleted: (total) => `已同步全部 ${total} 个本地项目。`,
-      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
-        const failedProjects = failedProjectNames.length === 0
-          ? "没有记录到具体失败项目。"
-          : `${failedProjectNames.length} 个项目需要处理：${failedProjectNames.join("、")}。`;
-        return `已处理 ${completed}/${total} 个本地项目后停止。${failedProjects}${errorMessage}`;
-      },
-      syncButtonBusy: "正在同步项目…",
-      syncThisProject: "同步到云端",
-      title: "云端同步",
-      useCloudVersion: "将云端版本另存为新的本地项目",
-    },
     deleteProject: {
       confirm: "删除项目",
       descriptionPrefix: "要从此浏览器删除“",
@@ -795,73 +560,6 @@ const saveModalCopyByLocale = {
       searchProjects: "プランを検索",
       storedInBrowser: "このブラウザに保存されています。",
     },
-    cloudProjects: {
-      extras: "その他",
-      account: "アカウント",
-      accountLoading: "アカウントを確認しています…",
-      cloudStatusLoading: "クラウド同期の状態を確認しています…",
-      cloudStatusReady: "クラウド同期の準備ができました。",
-      cloudProjects: "クラウドプロジェクト",
-      cloudProjectsEmpty: "クラウド上のコピーはまだありません。現在のプロジェクトを保存すると自動で同期されます。",
-      cloudProjectsLoading: "クラウドプロジェクトを読み込んでいます…",
-      cloudProjectsSignInRequired: "クラウド上のコピーとプロジェクトごとの同期を見るには、サイドバーでGoogleにログインしてください。",
-      cloudStatusError: (rawError: string) => `クラウド同期エラー：${rawError}`,
-      cloudStatusErrorSummary: "クラウド同期は利用できません。",
-      conflictDescription: "クラウド上により新しいコピーがあります。ローカル版を残すか、クラウド版から新しいローカルプロジェクトを作れます。",
-      currentProject: "現在",
-      dateTimeLocale: "ja",
-      deleteCloudCopy: "クラウド上のコピーを削除",
-      deletingCloudCopy: "クラウド上のコピーを削除しています…",
-      deleteProject: {
-        confirm: "クラウド上のコピーを削除",
-        descriptionPrefix: "クラウドアカウントから「",
-        descriptionSuffix: "」を削除しますか？ローカルプロジェクトはこの端末に残ります。",
-        dismiss: "クラウド上のコピーを残す",
-        title: "クラウド上のコピーを削除しますか？",
-      },
-      imagesStayLocal: "同期されるのはレイアウトデータだけです。マップのプレビュー画像はこの端末に残ります。クラウド上のコピーは、削除するまで残ります。",
-      keepLocalVersion: "ローカル版を残す",
-      loadMoreCloudProjects: "クラウドプロジェクトをさらに読み込む",
-      loadingMoreCloudProjects: "クラウドプロジェクトをさらに読み込んでいます…",
-      localProjects: "ローカルプロジェクトの同期状態",
-      localProjectStatus: readJapaneseCloudProjectStatus,
-      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `ローカル保存は残り${String(daysRemaining)}日${String(hoursRemaining)}時間${String(minutesRemaining)}分で終了します。クラウドに残したいプロジェクトは先に同期してください。クラウド上のコピーは、削除するまで残ります。`,
-      localSaveRetirementEnded: "ローカル保存の移行期間は終了しました。既存のローカルプロジェクトはそのままで、データは自動削除されていません。クラウド上のコピーは、削除するまで残ります。",
-      localSaveRetirementLoading: "ローカル保存の移行期限を確認しています…",
-      localSaveRetirementNotConfigured: "7日間のローカル保存の移行はまだ始まっていません。終了日は未定です。",
-      mapCount: (count: number) => `${String(count)}枚の地図`,
-      noLocalProjects: "同期する前に、この端末へプロジェクトを保存してください。",
-      openCloudCopy: "クラウド上のコピーを開く",
-      refreshCloudProjects: "クラウドプロジェクトを更新",
-      refreshingCloudProjects: "クラウドプロジェクトを更新しています…",
-      retrySync: "同期を再試行",
-      signInBusy: "Googleに接続しています…",
-      signInGoogle: "Googleで続行",
-      signOut: "ログアウト",
-      signOutBusy: "ログアウトしています…",
-      signedInAs: (accountName: string) => `ログイン中のアカウント：${accountName}。`,
-      signedOut: "ログインしていません。ローカルプロジェクトはこの端末に残ります。",
-      syncAllSignInDescription: "ログインしてもプロジェクトは自動ではアップロードされません。ここに戻り、「すべてのローカルプロジェクトを同期」を押すと始まります。",
-      syncAllLocalProjects: "すべてのローカルプロジェクトを同期",
-      syncAllSignedOut: "ログインしてすべてのローカルプロジェクトを同期",
-      syncAllProgress: (completed, total, currentProjectName) =>
-        currentProjectName === null
-          ? `${String(total)}件中${String(completed)}件のローカルプロジェクトを処理しました…`
-          : `${String(total)}件中${String(completed)}件のローカルプロジェクトを処理しました。「${currentProjectName}」を同期しています…`,
-      syncAllProgressLabel: "クラウド同期の進捗",
-      syncAllCompleted: (total) => `${String(total)}件のローカルプロジェクトをすべて同期しました。`,
-      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
-        const failedProjects = failedProjectNames.length === 0
-          ? "個別の失敗プロジェクトは記録されていません。"
-          : `確認が必要なプロジェクトは${String(failedProjectNames.length)}件です：${failedProjectNames.join("、")}。`;
-        return `${String(total)}件中${String(completed)}件のローカルプロジェクトを処理したところで停止しました。${failedProjects}${errorMessage}`;
-      },
-      syncButtonBusy: "プロジェクトを同期しています…",
-      syncThisProject: "クラウドへ同期",
-      title: "クラウド同期",
-      useCloudVersion: "クラウド版を新しいローカルプロジェクトとして使う",
-    },
     deleteProject: {
       confirm: "プロジェクトを削除",
       descriptionPrefix: "このブラウザから「",
@@ -992,80 +690,6 @@ const saveModalCopyByLocale = {
       savedToBrowser: "Сохранено в этом браузере.",
       searchProjects: "Искать планы",
       storedInBrowser: "Хранится в этом браузере.",
-    },
-    cloudProjects: {
-      extras: "Дополнительно",
-      account: "Аккаунт",
-      accountLoading: "Проверка аккаунта…",
-      cloudStatusLoading: "Проверка состояния облака…",
-      cloudStatusReady: "Облачная синхронизация готова.",
-      cloudProjects: "Облачные проекты",
-      cloudProjectsEmpty: "Облачных копий пока нет. Сохранение текущего проекта синхронизирует его автоматически.",
-      cloudProjectsLoading: "Загрузка облачных проектов…",
-      cloudProjectsSignInRequired: "Войдите через Google на боковой панели, чтобы видеть облачные копии и действия синхронизации.",
-      cloudStatusError: (rawError: string) => `Ошибка облачной синхронизации: ${rawError}`,
-      cloudStatusErrorSummary: "Облачная синхронизация недоступна.",
-      conflictDescription: "В облаке есть более новая копия. Оставьте локальную версию или создайте из облачной новый локальный проект.",
-      currentProject: "Текущий",
-      dateTimeLocale: "ru",
-      deleteCloudCopy: "Удалить облачную копию",
-      deletingCloudCopy: "Удаление облачной копии…",
-      deleteProject: {
-        confirm: "Удалить облачную копию",
-        descriptionPrefix: "Удалить «",
-        descriptionSuffix: "» из облачного аккаунта? Локальный проект останется на этом устройстве.",
-        dismiss: "Оставить облачную копию",
-        title: "Удалить облачную копию?",
-      },
-      imagesStayLocal: "Синхронизируются только данные планировки. Превью карт остаются на этом устройстве. Облачные копии хранятся, пока вы их не удалите.",
-      keepLocalVersion: "Оставить локальную версию",
-      loadMoreCloudProjects: "Загрузить ещё облачные проекты",
-      loadingMoreCloudProjects: "Загрузка других облачных проектов…",
-      localProjects: "Статус синхронизации локальных проектов",
-      localProjectStatus: (status: CloudProjectSyncStatus) => ({
-        none: "Только на этом устройстве",
-        pending: "Ожидает синхронизации",
-        synced: "Синхронизировано",
-        conflict: "Нужно выбрать версию",
-        error: "Синхронизация не удалась",
-      })[status],
-      localSaveRetirementCountdown: (daysRemaining, hoursRemaining, minutesRemaining) =>
-        `Локальное сохранение завершится через ${daysRemaining} д ${hoursRemaining} ч ${minutesRemaining} мин. Синхронизируйте проекты, которые хотите оставить в облаке. Облачные копии хранятся, пока вы их не удалите.`,
-      localSaveRetirementEnded: "Переходный период локального сохранения завершён. Существующие локальные проекты остаются доступны, данные не удалялись. Облачные копии хранятся, пока вы их не удалите.",
-      localSaveRetirementLoading: "Проверка срока перехода на локальное сохранение…",
-      localSaveRetirementNotConfigured: "7-дневный переходный период локального сохранения ещё не начался. Дата окончания пока не назначена.",
-      mapCount: (count: number) => formatRussianCountedNoun(count, "карта", "карты", "карт"),
-      noLocalProjects: "Сначала сохраните проект на этом устройстве, затем синхронизируйте его.",
-      openCloudCopy: "Открыть облачную копию",
-      refreshCloudProjects: "Обновить облачные проекты",
-      refreshingCloudProjects: "Обновление облачных проектов…",
-      retrySync: "Повторить синхронизацию",
-      signInBusy: "Подключение к Google…",
-      signInGoogle: "Продолжить с Google",
-      signOut: "Выйти",
-      signOutBusy: "Выход…",
-      signedInAs: (accountName: string) => `Вы вошли как ${accountName}.`,
-      signedOut: "Вы не вошли. Локальные проекты остаются на этом устройстве.",
-      syncAllSignInDescription: "Вход не загружает проекты. Вернитесь сюда и нажмите «Синхронизировать все локальные проекты», чтобы начать.",
-      syncAllLocalProjects: "Синхронизировать все локальные проекты",
-      syncAllSignedOut: "Войдите, чтобы синхронизировать все локальные проекты",
-      syncAllProgress: (completed, total, currentProjectName) =>
-        currentProjectName === null
-          ? `Обработано ${completed} из ${total} локальных проектов…`
-          : `Обработано ${completed} из ${total} локальных проектов. Синхронизация «${currentProjectName}»…`,
-      syncAllProgressLabel: "Прогресс облачной синхронизации",
-      syncAllCompleted: (total) =>
-        `Все локальные проекты синхронизированы (${total}).`,
-      syncAllFailed: (completed, total, failedProjectNames, errorMessage) => {
-        const failedProjects = failedProjectNames.length === 0
-          ? "Отдельные проекты с ошибкой не записаны."
-          : `${formatRussianCountedNoun(failedProjectNames.length, "проект требует внимания", "проекта требуют внимания", "проектов требуют внимания")}: ${failedProjectNames.join(", ")}.`;
-        return `Остановка после обработки ${completed} из ${total} локальных проектов. ${failedProjects} ${errorMessage}`;
-      },
-      syncButtonBusy: "Синхронизация проекта…",
-      syncThisProject: "Синхронизировать с облаком",
-      title: "Облачная синхронизация",
-      useCloudVersion: "Сохранить облачную версию как новый локальный проект",
     },
     deleteProject: {
       confirm: "Удалить проект",

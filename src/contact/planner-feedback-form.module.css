@@ -2,7 +2,8 @@
   box-sizing: border-box;
   color: var(--text, #1c211b);
   display: grid;
-  gap: 1rem;
+  gap: 1.125rem;
+  padding: var(--lk-md, 1rem);
   width: 100%;
 }
 
@@ -14,7 +15,7 @@
 
 .label {
   color: var(--text, #1c211b);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -54,7 +55,7 @@
 .statusMessage,
 .statusError,
 .successMessage {
-  font-size: 12px;
+  font-size: 12.5px;
   line-height: 1.45;
   margin: 0;
 }
@@ -78,8 +79,10 @@
 }
 
 .actions {
+  border-top: 1px solid color-mix(in srgb, var(--border-subtle, #242a22) 18%, transparent);
   display: grid;
   gap: 0.625rem;
+  padding-top: 1rem;
 }
 
 .submit {
@@ -93,11 +96,26 @@
   display: inline-flex;
   font: inherit;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   justify-content: center;
   min-height: 2.75rem;
   padding: 0.625rem 1rem;
   width: 100%;
+}
+
+:global(.planner-editor-shell) :global(.editor-modal--feedback) .submit {
+  background: #c9fb45;
+  border-color: var(--border-subtle, #242a22);
+  color: var(--text-bright, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal--feedback) .submit:hover:not(:disabled) {
+  background: #bdf02f;
+  color: var(--text-bright, #1c211b);
+}
+
+:global(.planner-editor-shell) :global(.editor-modal--feedback) .submit:disabled {
+  background: var(--bg-raised, #f1f7e7);
 }
 
 .submit:focus-visible {

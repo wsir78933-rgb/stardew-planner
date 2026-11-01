@@ -1,3 +1,7 @@
+> **Retired as of 2026-10-31 — historical record, not current instructions.** The current source has removed account sign-in and cloud sync. Requests to the retired `/api/auth` and `/api/cloud-projects` endpoints return no-store HTTP 404 responses for all methods. Planner projects remain saved in the current browser.
+>
+> Everything below is a historical implementation and deployment record. **Do not use it as current setup or deployment guidance**, including the Better Auth, Google OAuth, and D1 steps. This update did not access or verify live Cloudflare or D1 state. Removing these features from source does not mean remote D1 data has been deleted.
+
 # Cloud sync development
 
 Cloud sync stores each user's validated planner document in D1 until that user deletes it. Cloud projects have no expiry or automatic deletion. It does not upload a preview image. Better Auth stores its users, sessions, and Google account records in the same D1 database. The seven-day reminder is only a transition notice for retiring local saves; it never expires a cloud project.
@@ -48,7 +52,7 @@ Keep the existing production service available until the new account passes ever
 
 The domain zone remains in the previous account. The test deployment did not change its domain routes, DNS, old Worker, old Builds connection, or shared GitHub authorization.
 
-The D1 boundary and migration checklist above describe the pre-cutover test phase; see “Production domain cutover on 2026-10-16” below for the current production state.
+The D1 boundary and migration checklist above describe the pre-cutover test phase; see “Production domain cutover on 2026-10-16” below for the production state recorded on 2026-10-16.
 
 Keep `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET` in local `.dev.vars` or Cloudflare Worker secrets. The app uses a dedicated Better Auth secret and D1 database; neither is shared with AI Image Editor.
 

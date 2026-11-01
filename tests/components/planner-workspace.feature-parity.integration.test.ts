@@ -75,9 +75,6 @@ describe("planner workspace Task5A feature-parity composition", () => {
     expect(workspaceSource).toContain("handleOrdinaryCatalogItemSelect");
     expect(workspaceSource).toContain("handleOrdinaryToolChange");
     expect(workspaceSource).toContain("handlePlannerMapChange");
-    expect(workspaceSource).toContain("handleOpenMapInstance");
-    expect(workspaceSource).toContain("onOpenMapInstance={handleOpenMapInstance}");
-    expect(workspaceSource).toContain("projectMapActions.onOpenMapInstance(mapInstanceId)");
     expect(workspaceSource).toContain("cancelInteriorDecorBeforeOrdinaryWorkspaceAction");
     expect(workspaceSource).toContain("getUnavailableInteriorDecorMessage");
     expect(workspaceSource).toContain(

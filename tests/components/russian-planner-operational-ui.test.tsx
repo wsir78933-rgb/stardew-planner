@@ -23,7 +23,6 @@ import {
 } from "../../src/components/local-project-panel";
 import { readVisibleCurrentProjectMapInstanceName } from "../../src/components/planner-workspace";
 import { PlannerHomepage } from "../../src/components/planner-homepage";
-import { ProjectMapInstancePanel } from "../../src/components/project-map-instance-panel";
 import { PlannerStartupStatus } from "../../src/components/planner-startup-status";
 import { ReactPlannerHost } from "../../src/components/react-planner-host";
 import { createInitialEditorBehaviorOptions } from "../../src/editor/editor-behavior-options";
@@ -33,7 +32,6 @@ import type { HomepageLocale } from "../../src/homepage/homepage-locale";
 import { getEditorModalCopy } from "../../src/i18n/editor-modal-copy";
 import { getRussianCatalogItemDisplayName } from "../../src/i18n/planner-russian-display-names";
 import { getSaveModalCopy } from "../../src/i18n/save-modal-copy";
-import type { PlannerMap } from "../../src/maps/map-catalog";
 import { createEmptyPlacementSnapshot } from "../../src/placement/placement-snapshot";
 import type { ReferenceProjectMap } from "../../src/reference-runtime/local-project-api";
 import type { ReferenceProjectSummary } from "../../src/reference-runtime/reference-project-repository";
@@ -472,13 +470,6 @@ describe("Russian planner operational UI", () => {
       "Farm.tmx",
       "Standard Farm",
     );
-    const storedProjectMaps = [
-      storedFarmhouse,
-      storedCustomFarmhouse,
-      storedCopiedFarmhouse,
-      storedStandardFarm,
-    ];
-    const storedProjectMapsBeforeRender = JSON.stringify(storedProjectMaps);
     const russianFarmhouseLabel = readVisibleCurrentProjectMapInstanceName(
       { sourceMap: storedFarmhouse },
       "ru",
@@ -503,23 +494,6 @@ describe("Russian planner operational UI", () => {
       { sourceMap: storedFarmhouse },
       "zh",
     );
-    const projectMapListMarkup = renderToStaticMarkup(
-      createElement(ProjectMapInstancePanel, {
-        locale: "ru",
-        activeMapInstanceId: storedFarmhouse.id,
-        mapInstances: storedProjectMaps,
-        mapChoices: [standardPlannerMapChoice],
-        projectChoices: [],
-        onAddMap: ignoreProjectMapInstanceAction,
-        onCopyMapInstance: ignoreProjectMapInstanceAction,
-        onDeleteMapInstance: ignoreProjectMapInstanceAction,
-        onDuplicateMapInstance: ignoreProjectMapInstanceAction,
-        onMoveMapInstance: ignoreProjectMapInstanceAction,
-        onOpenMapInstance: ignoreProjectMapInstanceAction,
-        onRenameMapInstance: ignoreProjectMapInstanceAction,
-      }),
-    );
-
     expect(readVisibleCurrentProjectMapInstanceName(null, "ru")).toBeNull();
     expect(russianFarmhouseLabel).toBe("Дом");
     expect(customFarmhouseLabel).toBe("Мой дом");
@@ -543,16 +517,6 @@ describe("Russian planner operational UI", () => {
       "当前地图: <strong>Farmhouse</strong> (1 张地图)",
     );
     expect(renderLibraryCurrentMapStatus(null, "ru")).not.toContain("Текущая карта:");
-    expect(projectMapListMarkup).toContain("<strong>Дом</strong><span>FarmHouse.tmx</span>");
-    expect(projectMapListMarkup).toContain("<strong>Мой дом</strong><span>FarmHouse.tmx</span>");
-    expect(projectMapListMarkup).toContain(
-      "<strong>Farmhouse Copy</strong><span>FarmHouse.tmx</span>",
-    );
-    expect(projectMapListMarkup).toContain(
-      "<strong>Стандартная ферма</strong><span>Farm.tmx</span>",
-    );
-    expect(projectMapListMarkup).not.toContain("<strong>Farmhouse</strong>");
-    expect(JSON.stringify(storedProjectMaps)).toBe(storedProjectMapsBeforeRender);
     expect(() =>
       readVisibleCurrentProjectMapInstanceName(
         { sourceMap: { mapFile: "not-a-map.tmx", label: "Farmhouse" } },
@@ -573,16 +537,6 @@ describe("Russian planner operational UI", () => {
     ).toBe("Farmhouse");
   });
 });
-
-const standardPlannerMapChoice: PlannerMap = {
-  id: "standard",
-  displayName: "Standard Farm",
-  category: "farm",
-  mapFile: "Farm.tmx",
-  previewOutputPath: "maps/previews/Farm.png",
-};
-
-function ignoreProjectMapInstanceAction(): void {}
 
 function createStoredProjectMap(
   id: string,
