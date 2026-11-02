@@ -34,6 +34,64 @@ function assertHomepagePlannerSlotNonEmptyString(
   }
 }
 
+export function loadPlannerHostWhenPlannerSectionIntersects(
+  plannerSection: HTMLElement,
+  loadPlannerHost: () => void,
+  intersectionObserverConstructor: typeof IntersectionObserver,
+): () => void {
+  if (typeof intersectionObserverConstructor !== "function") {
+    throw new TypeError(
+      `IntersectionObserver must be a function to watch the planner section. Received typeof ${typeof intersectionObserverConstructor}, value ${String(intersectionObserverConstructor)}.`,
+    );
+  }
+
+  if (plannerSection === null) {
+    throw new Error(
+      `Planner section ref is null. Received ${String(plannerSection)}.`,
+    );
+  }
+
+  let hasDisconnectedPlannerSectionObserver = false;
+  let hasLoadedPlannerHost = false;
+  const plannerSectionObserver = new intersectionObserverConstructor(
+    (plannerSectionEntries) => {
+      if (plannerSectionEntries.length === 0) {
+        throw new Error(
+          `IntersectionObserver reported no planner section entries. Received length ${String(plannerSectionEntries.length)}.`,
+        );
+      }
+
+      const isPlannerSectionIntersecting = plannerSectionEntries.some(
+        (plannerSectionEntry) => plannerSectionEntry.isIntersecting,
+      );
+      if (!isPlannerSectionIntersecting) {
+        return;
+      }
+
+      if (hasLoadedPlannerHost) {
+        return;
+      }
+
+      hasLoadedPlannerHost = true;
+      loadPlannerHost();
+      disconnectPlannerSectionObserver();
+    },
+  );
+
+  function disconnectPlannerSectionObserver(): void {
+    if (hasDisconnectedPlannerSectionObserver) {
+      return;
+    }
+
+    hasDisconnectedPlannerSectionObserver = true;
+    plannerSectionObserver.disconnect();
+  }
+
+  plannerSectionObserver.observe(plannerSection);
+
+  return disconnectPlannerSectionObserver;
+}
+
 export function HomepagePlannerSlot({
   locale,
   previewImageAlt,
@@ -58,8 +116,6 @@ export function HomepagePlannerSlot({
   }, []);
 
   useEffect(() => {
-    setShouldLoadPlannerHost(true);
-
     return subscribeToEditorInteractivePerformanceMark(
       () => {
         setIsEditorInteractive(true);
@@ -68,6 +124,24 @@ export function HomepagePlannerSlot({
         PerformanceObserverConstructor: PerformanceObserver,
         performanceTimeline: performance,
       },
+    );
+  }, []);
+
+  useEffect(() => {
+    const plannerSection = homepagePlannerSectionReference.current;
+
+    if (plannerSection === null) {
+      throw new Error(
+        "HomepagePlannerSlot cannot watch the planner section because its ref is null.",
+      );
+    }
+
+    return loadPlannerHostWhenPlannerSectionIntersects(
+      plannerSection,
+      () => {
+        setShouldLoadPlannerHost(true);
+      },
+      IntersectionObserver,
     );
   }, []);
 

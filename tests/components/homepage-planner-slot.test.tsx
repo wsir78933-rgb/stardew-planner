@@ -4,7 +4,10 @@ import { createElement, isValidElement, type ReactElement, type ReactNode } from
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPublicPreviewSource } from "../../src/assets/public-preview-source";
-import { HomepagePlannerSlot } from "../../src/components/homepage-planner-slot";
+import {
+  HomepagePlannerSlot,
+  loadPlannerHostWhenPlannerSectionIntersects,
+} from "../../src/components/homepage-planner-slot";
 import type { HomepageLocale } from "../../src/homepage/homepage-locale";
 
 const homepagePlannerSlotHookState = vi.hoisted(() => ({
@@ -61,11 +64,85 @@ const homepagePlannerSlotSource = readFileSync(
   "utf8",
 );
 
+class FakePlannerSectionIntersectionObserver {
+  static readonly createdObservers: FakePlannerSectionIntersectionObserver[] = [];
+
+  readonly observedPlannerSections: Element[] = [];
+  disconnectCount = 0;
+
+  constructor(
+    private readonly notifyPlannerSectionIntersection: IntersectionObserverCallback,
+  ) {
+    FakePlannerSectionIntersectionObserver.createdObservers.push(this);
+  }
+
+  observe(plannerSection: Element): void {
+    this.observedPlannerSections.push(plannerSection);
+  }
+
+  disconnect(): void {
+    this.disconnectCount += 1;
+  }
+
+  deliverPlannerSectionEntries(
+    plannerSectionEntries: IntersectionObserverEntry[],
+  ): void {
+    this.notifyPlannerSectionIntersection(
+      plannerSectionEntries,
+      this as unknown as IntersectionObserver,
+    );
+  }
+}
+
 afterEach(() => {
   homepagePlannerSlotHookState.isEnabled = false;
   homepagePlannerSlotHookState.stateIndex = 0;
   homepagePlannerSlotHookState.plannerSectionReference.current = null;
+  FakePlannerSectionIntersectionObserver.createdObservers.length = 0;
 });
+
+function createPlannerSectionElement(): HTMLElement {
+  return { id: "planner" } as HTMLElement;
+}
+
+function readCreatedPlannerSectionIntersectionObserver(): FakePlannerSectionIntersectionObserver {
+  const [plannerSectionObserver, ...unexpectedObservers] =
+    FakePlannerSectionIntersectionObserver.createdObservers;
+
+  if (plannerSectionObserver === undefined || unexpectedObservers.length > 0) {
+    throw new Error(
+      `Expected one planner section intersection observer; received ${FakePlannerSectionIntersectionObserver.createdObservers.length}.`,
+    );
+  }
+
+  return plannerSectionObserver;
+}
+
+function loadPlannerHostWithFakeObserver(
+  loadPlannerHost: () => void,
+): FakePlannerSectionIntersectionObserver {
+  const plannerSection = createPlannerSectionElement();
+
+  loadPlannerHostWhenPlannerSectionIntersects(
+    plannerSection,
+    loadPlannerHost,
+    FakePlannerSectionIntersectionObserver as unknown as typeof IntersectionObserver,
+  );
+
+  const plannerSectionObserver = readCreatedPlannerSectionIntersectionObserver();
+  if (plannerSectionObserver.observedPlannerSections.length !== 1) {
+    throw new Error(
+      `Expected the planner section to be observed once; received ${plannerSectionObserver.observedPlannerSections.length}.`,
+    );
+  }
+  if (plannerSectionObserver.observedPlannerSections[0] !== plannerSection) {
+    throw new Error(
+      "Planner section intersection observer did not observe the provided planner section.",
+    );
+  }
+
+  return plannerSectionObserver;
+}
 
 function readHomepagePlannerAlignmentCallback(
   homepagePlannerSlotElement: ReactElement<{ children?: ReactNode }>,
@@ -211,6 +288,89 @@ describe("HomepagePlannerSlot", () => {
       /from\s+["']\.\/react-planner-host["']/,
     );
     expect(homepagePlannerSlotSource).not.toMatch(/from\s+["']pixi\.js["']/);
-    expect(homepagePlannerSlotSource).not.toContain("IntersectionObserver");
+    expect(homepagePlannerSlotSource).toContain("IntersectionObserver");
+    expect(homepagePlannerSlotSource).not.toMatch(
+      /useEffect\(\(\)\s*=>\s*\{?\s*setShouldLoadPlannerHost\(true\)/,
+    );
+    expect(
+      homepagePlannerSlotSource.match(
+        /loadPlannerHostWhenPlannerSectionIntersects/g,
+      )?.length ?? 0,
+    ).toBeGreaterThanOrEqual(2);
+  });
+
+  it("rejects a non-function intersection observer constructor with the received value", () => {
+    const receivedIntersectionObserverConstructor = "viewport-observer";
+
+    expect(() =>
+      loadPlannerHostWhenPlannerSectionIntersects(
+        createPlannerSectionElement(),
+        () => undefined,
+        receivedIntersectionObserverConstructor as unknown as typeof IntersectionObserver,
+      ),
+    ).toThrow(TypeError);
+    expect(() =>
+      loadPlannerHostWhenPlannerSectionIntersects(
+        createPlannerSectionElement(),
+        () => undefined,
+        receivedIntersectionObserverConstructor as unknown as typeof IntersectionObserver,
+      ),
+    ).toThrow(/viewport-observer|string/);
+  });
+
+  it("rejects an empty planner section intersection entry list with its length", () => {
+    const loadPlannerHost = vi.fn();
+    const plannerSectionObserver = loadPlannerHostWithFakeObserver(loadPlannerHost);
+
+    expect(() => plannerSectionObserver.deliverPlannerSectionEntries([])).toThrow(
+      /0/,
+    );
+    expect(loadPlannerHost).not.toHaveBeenCalled();
+  });
+
+  it("does not load the planner host when the planner section is outside the viewport", () => {
+    const loadPlannerHost = vi.fn();
+    const plannerSectionObserver = loadPlannerHostWithFakeObserver(loadPlannerHost);
+
+    expect(() =>
+      plannerSectionObserver.deliverPlannerSectionEntries([
+        { isIntersecting: false } as IntersectionObserverEntry,
+      ]),
+    ).not.toThrow();
+    expect(loadPlannerHost).not.toHaveBeenCalled();
+    expect(plannerSectionObserver.disconnectCount).toBe(0);
+  });
+
+  it("loads the planner host once when the planner section intersects and disconnects", () => {
+    const loadPlannerHost = vi.fn();
+    const plannerSectionObserver = loadPlannerHostWithFakeObserver(loadPlannerHost);
+
+    plannerSectionObserver.deliverPlannerSectionEntries([
+      { isIntersecting: true } as IntersectionObserverEntry,
+    ]);
+
+    expect(loadPlannerHost).toHaveBeenCalledTimes(1);
+    expect(plannerSectionObserver.disconnectCount).toBe(1);
+  });
+
+  it("disconnects the planner section observer on cleanup and allows a second cleanup", () => {
+    const plannerSection = createPlannerSectionElement();
+    const disconnectPlannerSectionObserver =
+      loadPlannerHostWhenPlannerSectionIntersects(
+        plannerSection,
+        () => undefined,
+        FakePlannerSectionIntersectionObserver as unknown as typeof IntersectionObserver,
+      );
+    const plannerSectionObserver = readCreatedPlannerSectionIntersectionObserver();
+
+    expect(plannerSectionObserver.observedPlannerSections).toEqual([
+      plannerSection,
+    ]);
+    expect(plannerSectionObserver.disconnectCount).toBe(0);
+
+    disconnectPlannerSectionObserver();
+
+    expect(plannerSectionObserver.disconnectCount).toBe(1);
+    expect(() => disconnectPlannerSectionObserver()).not.toThrow();
   });
 });
