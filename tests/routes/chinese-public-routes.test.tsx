@@ -19,11 +19,15 @@ it("renders /zh as the Chinese homepage with the shared planner workspace", () =
   );
   expect(markup).toContain('data-homepage-shell="true"');
   expect(markup).toContain("data-homepage-workspace");
-  expect(markup).toContain("data-homepage-planner-preview");
-  expect(markup).toContain(
+  expect(markup).toContain('class="planner-startup-status"');
+  expect(markup).toContain('role="status"');
+  expect(markup).toContain('src="/homepage/loading/male-farmer-strip.png"');
+  expect(markup).toContain("Loading local planner resources…");
+  expect(markup).not.toContain("data-homepage-planner-preview");
+  expect(markup).not.toContain(
     'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
   );
-  expect(markup).toContain(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt);
+  expect(markup).not.toContain(homepageCopyByLocale["zh-CN"].plannerPreview.imageAlt);
   expect(markup).not.toContain("Loading planner…");
   expect(markup).not.toContain('data-homepage-features="true"');
   expect(markup).not.toContain('data-homepage-why-choose="true"');

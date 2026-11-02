@@ -3,7 +3,6 @@ import { join } from "node:path";
 import { createElement, isValidElement, type ReactElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createPublicPreviewSource } from "../../src/assets/public-preview-source";
 import {
   HomepagePlannerSlot,
   loadPlannerHostWhenPlannerSectionIntersects,
@@ -56,9 +55,6 @@ vi.mock("react", async (importOriginal) => {
   };
 });
 
-const homepagePlannerPreviewSource = createPublicPreviewSource(
-  "maps/previews/Farm.png",
-);
 const homepagePlannerSlotSource = readFileSync(
   join(process.cwd(), "src/components/homepage-planner-slot.tsx"),
   "utf8",
@@ -172,7 +168,7 @@ function readHomepagePlannerAlignmentCallback(
 }
 
 describe("HomepagePlannerSlot", () => {
-  it("renders only the farm preview on the first static frame", () => {
+  it("renders the planner startup status on the first static frame", () => {
     const homepagePlannerSlotMarkup = renderToStaticMarkup(
       createElement(HomepagePlannerSlot, {
         locale: "en",
@@ -181,23 +177,23 @@ describe("HomepagePlannerSlot", () => {
       }),
     );
 
-    expect(homepagePlannerSlotMarkup).toContain(
-      'id="planner"',
-    );
+    expect(homepagePlannerSlotMarkup).toContain('id="planner"');
     expect(homepagePlannerSlotMarkup).toContain("data-homepage-product-stage");
     expect(homepagePlannerSlotMarkup).toContain("data-homepage-workspace");
-    expect(homepagePlannerSlotMarkup).toContain("data-homepage-planner-preview");
+    expect(homepagePlannerSlotMarkup).toContain('class="planner-startup-status"');
+    expect(homepagePlannerSlotMarkup).toContain('role="status"');
     expect(homepagePlannerSlotMarkup).toContain(
-      `src="${homepagePlannerPreviewSource}"`,
+      'src="/homepage/loading/male-farmer-strip.png"',
     );
-    expect(homepagePlannerSlotMarkup).toContain('width="320"');
-    expect(homepagePlannerSlotMarkup).toContain('height="260"');
-    expect(homepagePlannerSlotMarkup).toContain('loading="lazy"');
-    expect(homepagePlannerSlotMarkup).toContain('decoding="async"');
-    expect(homepagePlannerSlotMarkup).not.toContain("fetchPriority");
-    expect(homepagePlannerSlotMarkup).not.toContain("Loading planner…");
+    expect(homepagePlannerSlotMarkup).toContain(
+      "Loading local planner resources…",
+    );
+    expect(homepagePlannerSlotMarkup).not.toContain(
+      "data-homepage-planner-preview",
+    );
     expect(homepagePlannerSlotMarkup).not.toContain("planner-canvas__viewport");
     expect(homepagePlannerSlotMarkup).not.toContain("<canvas");
+    expect(homepagePlannerSlotMarkup).not.toContain("maps/previews/Farm.png");
   });
 
   it("aligns the referenced planner section and fails fast when its ref is missing", () => {

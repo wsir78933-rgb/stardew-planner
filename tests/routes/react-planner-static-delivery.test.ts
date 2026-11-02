@@ -52,10 +52,17 @@ describe("planner static delivery", () => {
       }
     }
     expect(homepageStaticHtml).not.toContain("BAILOUT_TO_CLIENT_SIDE_RENDERING");
-    expect(homepageStaticHtml).toContain("data-homepage-planner-preview");
+    expect(homepageStaticHtml).toContain('class="planner-startup-status"');
+    expect(homepageStaticHtml).toContain('role="status"');
     expect(homepageStaticHtml).toContain(
+      'src="/homepage/loading/male-farmer-strip.png"',
+    );
+    expect(homepageStaticHtml).toContain("Loading local planner resources…");
+    expect(homepageStaticHtml).not.toContain("data-homepage-planner-preview");
+    expect(homepageStaticHtml).not.toContain(
       'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
     );
+    expect(homepageStaticHtml).not.toContain("maps/previews/Farm.png");
     expect(homepageStaticHtml).not.toContain("Loading planner…");
     expect(homepageStaticHtml).not.toContain("reference-runtime-root");
     expect(homepageStaticHtml).not.toContain("/reference-runtime/bootstrap.mjs");

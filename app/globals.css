@@ -431,21 +431,6 @@ body:has(> [data-homepage-shell]) [data-homepage-workspace] {
   position: relative;
 }
 
-body:has(> [data-homepage-shell]) [data-homepage-planner-preview] {
-  height: 260px;
-  image-rendering: pixelated;
-  left: 50%;
-  max-height: 260px;
-  max-width: 320px;
-  object-fit: contain;
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 320px;
-  z-index: 0;
-}
-
 body:has(> [data-homepage-shell]) [data-homepage-shell] > main > section[id]:not(
     [data-homepage-workspace]
   ) {
@@ -2692,11 +2677,11 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 
 .planner-startup-status {
   align-items: center;
-  background: rgb(16 59 41);
+  background: var(--background, #fdfff8);
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  color: var(--planner-text, #f4ffe8);
+  color: var(--foreground, #1c211b);
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
@@ -2744,7 +2729,7 @@ body:has(> [data-homepage-shell]) [data-homepage-navigation-links] [data-slot="n
 }
 
 .planner-startup-status__track {
-  background: rgb(118 138 124);
+  background: var(--secondary, #f1f7e7);
   border-radius: 999px;
   flex: 0 0 auto;
   height: 0.35rem;
@@ -4268,11 +4253,11 @@ body::-webkit-scrollbar-thumb { background: #097343; border-radius: 10px; }
 /* Shell neo rules repaint this layer; keep the full-bleed startup field. */
 .planner-editor-shell .planner-startup-status,
 .planner-editor-shell .planner-startup-status[role="alert"] {
-  background: rgb(16 59 41);
+  background: var(--background, #fdfff8);
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  color: var(--planner-text, #f4ffe8);
+  color: var(--foreground, #1c211b);
 }
 
 .game-save-import-result button:focus-visible,

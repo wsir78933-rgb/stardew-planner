@@ -2,13 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createPublicPreviewSource } from "../assets/public-preview-source";
 import type { HomepageLocale } from "../homepage/homepage-locale";
 import { subscribeToEditorInteractivePerformanceMark } from "../performance/subscribe-to-editor-interactive-performance-mark";
-
-const homepagePlannerPreviewSource = createPublicPreviewSource(
-  "maps/previews/Farm.png",
-);
+import { PlannerStartupStatus } from "./planner-startup-status";
 
 const HomepagePlannerReactHost = dynamic(
   () =>
@@ -162,14 +158,9 @@ export function HomepagePlannerSlot({
         />
       ) : null}
       {isEditorInteractive ? null : (
-        <img
-          alt={previewImageAlt}
-          data-homepage-planner-preview
-          decoding="async"
-          height={260}
-          loading="lazy"
-          src={homepagePlannerPreviewSource}
-          width={320}
+        <PlannerStartupStatus
+          locale={locale}
+          state={{ kind: "loading", message: "Loading local planner resources…" }}
         />
       )}
     </section>

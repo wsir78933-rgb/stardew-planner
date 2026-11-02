@@ -162,11 +162,19 @@ describe("planner editor page", () => {
     expect(plannerPageMarkup).not.toContain("pixi.js");
     expect(plannerPageMarkup).not.toContain(".tmx");
     expect(plannerPageMarkup).not.toContain("<iframe");
-    expect(plannerPageMarkup).toContain('data-homepage-planner-preview');
+    expect(plannerPageMarkup).toContain('class="planner-startup-status"');
+    expect(plannerPageMarkup).toContain('role="status"');
     expect(plannerPageMarkup).toContain(
+      'src="/homepage/loading/male-farmer-strip.png"',
+    );
+    expect(plannerPageMarkup).toContain("Loading local planner resources…");
+    expect(plannerPageMarkup).not.toContain("data-homepage-planner-preview");
+    expect(plannerPageMarkup).not.toContain(
       'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
     );
-    expect(plannerPageMarkup).toContain(homepageCopyByLocale.en.plannerPreview.imageAlt);
+    expect(plannerPageMarkup).not.toContain(
+      homepageCopyByLocale.en.plannerPreview.imageAlt,
+    );
     expect(plannerPageMarkup).not.toContain("Loading planner…");
   });
 

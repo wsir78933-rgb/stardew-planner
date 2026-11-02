@@ -694,20 +694,12 @@ test("uses the shared footer contract for a bounded desktop layout and a single 
   expect(mobileSectionsRule).toContain("grid-template-columns: 1fr;");
 });
 
-test("keeps the planner preview at its intrinsic size behind the live canvas", () => {
+test("omits the fixed 320 by 260 homepage planner preview rule", () => {
   const homepageStyles = readProjectFile("app/globals.css");
   const plannerPreviewRule = homepageStyles.match(
-    /body:has\(> \[data-homepage-shell\]\) \[data-homepage-planner-preview\]\s*\{([\s\S]*?)\n\}/,
+    /\[data-homepage-planner-preview\]\s*\{([^}]*)\}/,
   )?.[1];
 
-  expect(plannerPreviewRule).toBeDefined();
-  expect(plannerPreviewRule).toContain("height: 260px;");
-  expect(plannerPreviewRule).toContain("width: 320px;");
-  expect(plannerPreviewRule).toContain("max-height: 260px;");
-  expect(plannerPreviewRule).toContain("max-width: 320px;");
-  expect(plannerPreviewRule).toContain("z-index: 0;");
-  expect(plannerPreviewRule).not.toContain("width: 100%;");
-  expect(plannerPreviewRule).not.toContain("height: 100%;");
-  expect(plannerPreviewRule).not.toContain("z-index: 41;");
-  expect(plannerPreviewRule).not.toContain("inset: 0;");
+  expect(plannerPreviewRule ?? "").not.toContain("width: 320px;");
+  expect(plannerPreviewRule ?? "").not.toContain("height: 260px;");
 });

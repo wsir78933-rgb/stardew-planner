@@ -2140,10 +2140,17 @@ function expectStaticHomepageContent(
     "和 ConcernedApe、《星露谷物语》官方没有隶属或认可关系。",
   );
   expect(staticPageHtml).toContain('data-homepage-workspace="true"');
-  expect(staticPageHtml).toContain("data-homepage-planner-preview");
+  expect(staticPageHtml).toContain('class="planner-startup-status"');
+  expect(staticPageHtml).toContain('role="status"');
   expect(staticPageHtml).toContain(
+    'src="/homepage/loading/male-farmer-strip.png"',
+  );
+  expect(staticPageHtml).toContain("Loading local planner resources…");
+  expect(staticPageHtml).not.toContain("data-homepage-planner-preview");
+  expect(staticPageHtml).not.toContain(
     'src="/public-previews/1.6.15/maps/previews/Farm.webp"',
   );
+  expect(staticPageHtml).not.toContain("maps/previews/Farm.png");
   expect(staticPageHtml).not.toContain("Loading planner…");
   const homepageSectionMarkers = [
     'data-homepage-workspace="true"',
