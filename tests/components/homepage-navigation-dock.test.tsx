@@ -27,7 +27,10 @@ function readHomepageHeaderMarkup(markup: string): string {
   return homepageHeaderMarkup;
 }
 
-function expectFarmLayoutsNavigationTriggerToBeTextOnly(markup: string): void {
+function expectFarmLayoutsNavigationTriggerToBeTextOnly(
+  markup: string,
+  triggerLabel: string,
+): void {
   const triggerMarkup = markup.match(
     /<button\b[^>]*data-farm-layouts-navigation-trigger=""[^>]*>[\s\S]*?<\/button>/,
   )?.[0];
@@ -38,7 +41,7 @@ function expectFarmLayoutsNavigationTriggerToBeTextOnly(markup: string): void {
     );
   }
 
-  expect(triggerMarkup).toContain("<span>Farm Layouts</span>");
+  expect(triggerMarkup).toContain(`<span>${triggerLabel}</span>`);
   expect(triggerMarkup).not.toContain("<svg");
 
   const dockControlMarkup = markup.match(
@@ -113,7 +116,7 @@ test("renders homepage dock brand, section, blog, and planner anchors without a 
   expect(markup).toContain("<span>Language</span>");
   expect(markup).toContain('<span aria-hidden="true">▾</span>');
   expect(markup).toContain("<span>Open planner</span>");
-  expectFarmLayoutsNavigationTriggerToBeTextOnly(markup);
+  expectFarmLayoutsNavigationTriggerToBeTextOnly(markup, "Farm Layouts");
   expect(markup).not.toContain('data-slot="navigation-menu"');
 });
 
@@ -141,7 +144,7 @@ test("HomepageContent keeps the header contract and drops NavigationMenu from th
   expect(headerMarkup).toContain("<span>Language</span>");
   expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
   expect(headerMarkup).toContain("<span>Open planner</span>");
-  expectFarmLayoutsNavigationTriggerToBeTextOnly(headerMarkup);
+  expectFarmLayoutsNavigationTriggerToBeTextOnly(headerMarkup, "Farm Layouts");
   expect(headerMarkup).not.toContain('data-slot="navigation-menu"');
 });
 
@@ -157,7 +160,7 @@ test("uses localized blog and planner labels for zh-CN", () => {
   expect(headerMarkup).toContain("<span>语言</span>");
   expect(headerMarkup).toContain('<span aria-hidden="true">▾</span>');
   expect(headerMarkup).toContain("<span>打开规划器</span>");
-  expectFarmLayoutsNavigationTriggerToBeTextOnly(headerMarkup);
+  expectFarmLayoutsNavigationTriggerToBeTextOnly(headerMarkup, "农场布局");
 });
 
 test("keeps Russian homepage navigation on /ru and English blog and legal paths", () => {

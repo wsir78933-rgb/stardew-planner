@@ -27,7 +27,7 @@ export type ToolsNavigationModel = Readonly<{
   categoryPanelTitle: string;
   locale: ToolsNavigationLocale;
   toolsHomeHref: string;
-  triggerLabel: "Stardew Valley tools";
+  triggerLabel: string;
 }>;
 
 type ToolsNavigationCatalogTool = Readonly<{
@@ -135,7 +135,7 @@ export function getToolsNavigationModel(locale: string): ToolsNavigationModel {
     categoryPanelTitle: toolsNavigationChromeLabels.categoryPanelTitle,
     locale: toolsNavigationLocale,
     toolsHomeHref: `${pathPrefix}/tools`,
-    triggerLabel: "Stardew Valley tools",
+    triggerLabel: readToolsNavigationTriggerLabel(toolsNavigationLocale),
   };
 }
 
@@ -218,6 +218,29 @@ function createToolsNavigationCategories(
       label: readToolsNavigationToolLabel(locale, tool),
     })),
   }));
+}
+
+function readToolsNavigationTriggerLabel(locale: ToolsNavigationLocale): string {
+  if (locale === "en") {
+    return "Stardew Valley tools";
+  }
+
+  if (locale === "zh-CN") {
+    return "星露谷工具";
+  }
+
+  if (locale === "ja") {
+    return "スターデューバレーのツール";
+  }
+
+  if (locale === "ru") {
+    return "Инструменты Stardew Valley";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new Error(
+    `Unknown tools navigation locale ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
 
 function readToolsNavigationChromeLabels(

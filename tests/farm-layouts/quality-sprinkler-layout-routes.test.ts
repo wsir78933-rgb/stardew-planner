@@ -234,7 +234,7 @@ it("publishes localized page metadata and a CollectionPage for the separate cove
   ]);
   expect(chineseBreadcrumb.map(({ name }) => name)).toEqual([
     "星露谷物语农场规划器",
-    "Farm Layouts",
+    "农场布局",
     "种植布局",
     "优质洒水器布局",
   ]);

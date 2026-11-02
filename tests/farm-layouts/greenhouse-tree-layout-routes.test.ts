@@ -185,7 +185,10 @@ it("publishes bilingual metadata, Greenhouse breadcrumbs, and a six-case collect
     );
     expect(breadcrumb).toEqual([
       expect.objectContaining({ position: 1 }),
-      expect.objectContaining({ position: 2, name: "Farm Layouts" }),
+      expect.objectContaining({
+        position: 2,
+        name: locale === "zh-CN" ? "农场布局" : "Farm Layouts",
+      }),
       expect.objectContaining({
         position: 3,
         name: locale === "zh-CN" ? "温室布局" : "Greenhouse Layouts",

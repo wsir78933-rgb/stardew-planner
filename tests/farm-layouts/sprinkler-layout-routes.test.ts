@@ -593,7 +593,7 @@ it("describes a six-item CollectionPage whose cover image is case 07", () => {
       name: "星露谷物语农场规划器",
       item: "https://stardewvalleyplanner.art/zh",
     },
-    { "@type": "ListItem", position: 2, name: "Farm Layouts" },
+    { "@type": "ListItem", position: 2, name: "农场布局" },
     { "@type": "ListItem", position: 3, name: "种植布局" },
     {
       "@type": "ListItem",

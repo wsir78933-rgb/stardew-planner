@@ -254,7 +254,11 @@ it("publishes bilingual metadata, Greenhouse breadcrumbs, six case items, and ll
         position: 1,
         item: createCanonicalUrl(locale === "en" ? "/" : "/zh"),
       },
-      { "@type": "ListItem", position: 2, name: "Farm Layouts" },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "zh-CN" ? "农场布局" : "Farm Layouts",
+      },
       {
         "@type": "ListItem",
         position: 3,

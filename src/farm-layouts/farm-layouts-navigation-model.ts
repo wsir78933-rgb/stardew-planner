@@ -70,7 +70,7 @@ export type FarmLayoutsNavigationModel = Readonly<{
   categories: readonly FarmLayoutsNavigationCategory[];
   categoryPanelTitle: string;
   emptyStateLabel: string;
-  triggerLabel: "Farm Layouts";
+  triggerLabel: string;
 }>;
 
 export function getFarmLayoutsNavigationModel(
@@ -93,8 +93,33 @@ export function getFarmLayoutsNavigationModel(
     emptyStateLabel: usesChineseCopy
       ? "暂无布局案例。"
       : "No layouts yet.",
-    triggerLabel: "Farm Layouts",
+    triggerLabel: readFarmLayoutsNavigationTriggerLabel(locale),
   };
+}
+
+function readFarmLayoutsNavigationTriggerLabel(
+  locale: HomepageDisplayLocale,
+): string {
+  if (locale === "en") {
+    return "Farm Layouts";
+  }
+
+  if (locale === "zh-CN") {
+    return "农场布局";
+  }
+
+  if (locale === "ja") {
+    return "牧場のレイアウト";
+  }
+
+  if (locale === "ru") {
+    return "Планировки фермы";
+  }
+
+  const unsupportedLocale: never = locale;
+  throw new TypeError(
+    `Farm layouts navigation locale must be "en", "zh-CN", "ja", or "ru"; received ${JSON.stringify(unsupportedLocale)}.`,
+  );
 }
 
 export function isFarmLayoutsNavigationCategoryId(

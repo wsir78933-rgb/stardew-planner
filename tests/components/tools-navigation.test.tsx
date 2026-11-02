@@ -189,7 +189,7 @@ test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => 
   expect(japaneseMarkup).not.toContain("工坊建设");
   expect(japaneseMarkup).not.toContain("全部工具");
   expect(japaneseMarkup).not.toContain("返回工具分类");
-  expect(japaneseMarkup).toContain("<span>Stardew Valley tools</span>");
+  expect(japaneseMarkup).toContain("<span>スターデューバレーのツール</span>");
   expect(readToolsNavigationTriggerMarkup(japaneseMarkup)).toContain('href="/tools"');
   expect(japaneseMarkup).not.toContain('href="/ja/tools"');
   expect(readToolsCategoryFlyoutMarkup(japaneseMarkup, "planting")).toContain('href="/tools/crop-profit"');
@@ -231,6 +231,7 @@ test("keeps the tools label in Japanese and prefixes Chinese tool hrefs", () => 
   expect(chineseMarkup.indexOf("工坊建设")).toBeLessThan(
     chineseMarkup.indexOf("全部工具"),
   );
+  expect(chineseMarkup).toContain("<span>星露谷工具</span>");
   expect(readToolsNavigationTriggerMarkup(chineseMarkup)).toContain('href="/zh/tools"');
   expect(readToolsCategoryFlyoutMarkup(chineseMarkup, "planting")).toContain(
     'href="/zh/tools/crop-profit"',
@@ -302,7 +303,7 @@ test("uses English labels and unprefixed tool paths for Russian", () => {
     id: "machine-comparison",
     label: "Three-machine comparison",
   });
-  expect(russianMarkup).toContain("<span>Stardew Valley tools</span>");
+  expect(russianMarkup).toContain("<span>Инструменты Stardew Valley</span>");
   expect(readToolsNavigationTriggerMarkup(russianMarkup)).toContain(
     'href="/tools"',
   );
