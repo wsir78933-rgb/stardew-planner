@@ -41,6 +41,16 @@ describe("planner startup status", () => {
     expect(markup).toContain('role="status"');
     expect(markup).toContain('aria-live="polite"');
     expect(markup).toContain("Loading your farm map");
+    expect(markup).toContain("<img");
+    expect(markup).toContain('src="/homepage/loading/male-farmer-strip.png"');
+    expect(markup).toContain('alt=""');
+    expect(markup).toContain('width="192"');
+    expect(markup).toContain('height="96"');
+    expect(markup).toContain('class="planner-startup-status__farmer"');
+    expect(markup).toContain('class="planner-startup-status__track"');
+    expect(markup).toContain('aria-hidden="true"');
+    expect(markup).toContain('class="planner-startup-status__fill"');
+    expect(markup).not.toContain("<button");
   });
 
   it("renders a specific startup error with an actionable retry control", () => {
@@ -53,6 +63,8 @@ describe("planner startup status", () => {
     expect(markup).toContain('role="alert"');
     expect(markup).toContain("Could not load Standard Farm");
     expect(markup).toContain('<button type="button">Retry</button>');
+    expect(markup).not.toContain("male-farmer-strip.png");
+    expect(markup).not.toContain("planner-startup-status__track");
   });
 
   it("wires retry to the supplied callback", () => {

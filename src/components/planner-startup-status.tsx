@@ -38,21 +38,44 @@ export function PlannerStartupStatus({
   }
 
   if (state.kind === "loading") {
-    return (
-      <div
-        aria-live="polite"
-        className="planner-startup-status"
-        role="status"
-      >
-        {state.message}
-      </div>
-    );
+    return renderPlannerStartupLoadingStatus(state.message);
   }
 
+  return renderPlannerStartupErrorStatus(state.message, state.onRetry, retryLocale);
+}
+
+function renderPlannerStartupLoadingStatus(message: string): ReactElement {
+  return (
+    <div
+      aria-live="polite"
+      className="planner-startup-status"
+      role="status"
+    >
+      <img
+        alt=""
+        className="planner-startup-status__farmer"
+        decoding="async"
+        height={96}
+        src="/homepage/loading/male-farmer-strip.png"
+        width={192}
+      />
+      {message}
+      <div aria-hidden="true" className="planner-startup-status__track">
+        <div className="planner-startup-status__fill" />
+      </div>
+    </div>
+  );
+}
+
+function renderPlannerStartupErrorStatus(
+  message: string,
+  onRetry: () => void,
+  retryLocale: PlannerChromeLocale,
+): ReactElement {
   return (
     <div className="planner-startup-status" role="alert">
-      <span>{state.message}</span>
-      <button onClick={state.onRetry} type="button">
+      <span>{message}</span>
+      <button onClick={onRetry} type="button">
         {readPlannerRetryLabel(retryLocale)}
       </button>
     </div>
