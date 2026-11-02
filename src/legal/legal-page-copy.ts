@@ -2,9 +2,18 @@ import { publicLocales, type PublicLocale } from "../i18n/public-locale";
 
 export type LegalPageKind = "privacy" | "terms";
 
+export type LegalPageInlineLink = Readonly<{
+  href: string;
+  label: string;
+}>;
+
+export type LegalPageParagraph =
+  | string
+  | readonly (string | LegalPageInlineLink)[];
+
 type LegalPageSection = Readonly<{
   heading: string;
-  paragraphs: readonly string[];
+  paragraphs: readonly LegalPageParagraph[];
 }>;
 
 export type LegalPageCopy = Readonly<{
@@ -43,7 +52,24 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Advertising",
           paragraphs: [
-            "AdSense ads are not currently enabled on this site. If Google AdSense is approved and enabled, Google and the ad technology providers selected for this site may use cookies or similar technologies to serve and measure ads based on your prior visits to this site or other sites. Depending on settings and consent, ads may be personalized. Manage Google personalized advertising at https://www.google.com/settings/ads; opt out of some third-party personalized advertising at https://www.aboutads.info/choices/. See Google's current ad technology provider list at https://support.google.com/admanager/answer/9012903?hl=en.",
+            [
+              "AdSense ads are not currently enabled on this site. If Google AdSense is approved and enabled, Google and the ad technology providers selected for this site may use cookies or similar technologies to serve and measure ads based on your prior visits to this site or other sites. Depending on settings and consent, ads may be personalized. Manage Google personalized advertising at ",
+              {
+                href: "https://www.google.com/settings/ads",
+                label: "Google Ads Settings",
+              },
+              "; opt out of some third-party personalized advertising at ",
+              {
+                href: "https://www.aboutads.info/choices/",
+                label: "About Ads Choices",
+              },
+              ". See Google's current ad technology provider list at ",
+              {
+                href: "https://support.google.com/admanager/answer/9012903?hl=en",
+                label: "Google's ad technology provider list",
+              },
+              ".",
+            ],
           ],
         },
         {
@@ -139,7 +165,24 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "广告",
           paragraphs: [
-            "本站目前尚未启用 AdSense 广告。如果 Google AdSense 获批并启用，Google 和为本站选定的广告技术提供商可能会使用 Cookie 或类似技术，根据你过去访问本站或其他网站的情况投放和衡量广告。具体广告是否个性化取决于相关设置和同意状态。可通过 Google 广告设置 https://www.google.com/settings/ads 管理 Google 个性化广告；可通过 https://www.aboutads.info/choices/ 退出部分第三方个性化广告。当前 Google 广告技术提供商名单见 https://support.google.com/admanager/answer/9012903?hl=en。",
+            [
+              "本站目前尚未启用 AdSense 广告。如果 Google AdSense 获批并启用，Google 和为本站选定的广告技术提供商可能会使用 Cookie 或类似技术，根据你过去访问本站或其他网站的情况投放和衡量广告。具体广告是否个性化取决于相关设置和同意状态。你可以通过 ",
+              {
+                href: "https://www.google.com/settings/ads",
+                label: "Google 广告设置",
+              },
+              " 管理 Google 个性化广告；也可通过 ",
+              {
+                href: "https://www.aboutads.info/choices/",
+                label: "About Ads",
+              },
+              " 退出部分第三方个性化广告。当前 Google 广告技术提供商名单：",
+              {
+                href: "https://support.google.com/admanager/answer/9012903?hl=en",
+                label: "查看名单",
+              },
+              "。",
+            ],
           ],
         },
         {

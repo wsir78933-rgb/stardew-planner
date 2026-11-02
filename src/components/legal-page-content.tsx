@@ -1,4 +1,7 @@
-import type { LegalPageCopy } from "../legal/legal-page-copy";
+import type {
+  LegalPageCopy,
+  LegalPageParagraph,
+} from "../legal/legal-page-copy";
 
 type LegalPageContentProperties = Readonly<{
   legalPageCopy: LegalPageCopy;
@@ -16,11 +19,31 @@ export function LegalPageContent({
       {legalPageCopy.sections.map((section) => (
         <section key={section.heading}>
           <h2>{section.heading}</h2>
-          {section.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+          {section.paragraphs.map((paragraph, paragraphIndex) => (
+            <p key={`${section.heading}-${paragraphIndex}`}>
+              {renderLegalParagraphContent(paragraph)}
+            </p>
           ))}
         </section>
       ))}
     </article>
   );
+}
+
+function renderLegalParagraphContent(paragraph: LegalPageParagraph) {
+  if (typeof paragraph === "string") {
+    return paragraph;
+  }
+
+  return paragraph.map((segment, segmentIndex) => {
+    if (typeof segment === "string") {
+      return segment;
+    }
+
+    return (
+      <a key={`${segment.href}-${segmentIndex}`} href={segment.href}>
+        {segment.label}
+      </a>
+    );
+  });
 }
