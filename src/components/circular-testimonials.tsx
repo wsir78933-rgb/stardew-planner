@@ -311,10 +311,8 @@ function goToPreviousIndex(activeIndex: number, testimonialsLength: number): num
 }
 
 function CircularTestimonialImage({
-  isActive,
   testimonial,
 }: Readonly<{
-  isActive: boolean;
   testimonial: CircularTestimonial;
 }>) {
   const imageAlt = testimonial.alt ?? testimonial.name;
@@ -322,7 +320,7 @@ function CircularTestimonialImage({
     alt: imageAlt,
     decoding: "async" as const,
     draggable: false,
-    loading: isActive ? ("eager" as const) : ("lazy" as const),
+    loading: "lazy" as const,
   };
 
   if (testimonial.src.endsWith(".webp")) {
@@ -715,10 +713,7 @@ export function CircularTestimonials({
                   testimonialsLength,
                 })}
               >
-                <CircularTestimonialImage
-                  isActive={isActive}
-                  testimonial={testimonial}
-                />
+                <CircularTestimonialImage testimonial={testimonial} />
               </div>
             );
           })}

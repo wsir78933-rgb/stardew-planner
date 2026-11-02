@@ -133,4 +133,38 @@ describe("CircularTestimonials", () => {
     expect(activeImageStyle.transform).toContain("scale(1)");
     expect(activeImageStyle.transform).not.toContain("object-cover");
   });
+
+  it("lazy-loads every testimonial image, including the active slide and a png source", () => {
+    const markup = renderToStaticMarkup(
+      createElement(CircularTestimonials, {
+        nextLabel,
+        previousLabel,
+        testimonials,
+      }),
+    );
+
+    expect(markup).not.toContain('loading="eager"');
+    expect(markup.match(/loading="lazy"/g)).toHaveLength(testimonials.length);
+
+    const pngMarkup = renderToStaticMarkup(
+      createElement(CircularTestimonials, {
+        nextLabel,
+        previousLabel,
+        testimonials: [
+          {
+            alt: "Png farm layout",
+            designation: "Riverland farm",
+            name: "Keep the river clear",
+            quote: "Leave the river path open.",
+            src: "/homepage/why-choose/riverland-layout.png",
+          },
+        ],
+      }),
+    );
+
+    expect(pngMarkup).not.toContain('loading="eager"');
+    expect(pngMarkup).toContain(
+      '<img alt="Png farm layout" decoding="async" draggable="false" loading="lazy" src="/homepage/why-choose/riverland-layout.png"',
+    );
+  });
 });
