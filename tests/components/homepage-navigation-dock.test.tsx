@@ -1,5 +1,6 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { DOMParser, type Element as XmlElement } from "@xmldom/xmldom";
 import { expect, test } from "vitest";
 import { HomepageContent } from "@/src/components/homepage-content";
 import { HomepageLocaleSwitcher } from "@/src/components/homepage-locale-switcher";
@@ -72,6 +73,57 @@ function renderHomepageNavigationDockMarkup(input: Readonly<{
       plannerHref={input.plannerHref}
     />,
   );
+}
+
+function readHomepageBrandAnchor(markup: string): XmlElement {
+  // React can emit a preload link beside the dock, so the fragment needs one root.
+  const navigationDocument = new DOMParser({
+    onError(errorLevel, errorMessage) {
+      throw new Error(
+        `Could not parse homepage navigation markup: ${errorLevel}: ${errorMessage}. Received: ${markup}`,
+      );
+    },
+  }).parseFromString(
+    `<div id="homepage-navigation-parse-root">${markup}</div>`,
+    "text/html",
+  );
+  const brandAnchors = Array.from(
+    navigationDocument.getElementsByTagName("a"),
+  ).filter((anchor) => anchor.getAttribute("data-homepage-brand") !== null);
+
+  if (brandAnchors.length !== 1) {
+    throw new Error(
+      `Expected exactly one [data-homepage-brand] anchor; received ${brandAnchors.length}. Received markup: ${markup}`,
+    );
+  }
+
+  const brandAnchor = brandAnchors[0];
+  if (brandAnchor === undefined) {
+    throw new Error(
+      `Homepage brand anchor was missing after the length check. Received markup: ${markup}`,
+    );
+  }
+
+  return brandAnchor;
+}
+
+function readHomepageBrandVisibleLabel(brandAnchor: XmlElement): string {
+  const labelSpans = Array.from(brandAnchor.getElementsByTagName("span"));
+
+  if (labelSpans.length !== 1) {
+    throw new Error(
+      `Expected the homepage brand anchor to contain exactly one span; received ${labelSpans.length}. Anchor: ${brandAnchor.toString()}`,
+    );
+  }
+
+  const labelSpan = labelSpans[0];
+  if (labelSpan === undefined) {
+    throw new Error(
+      `Homepage brand label span was missing after the length check. Anchor: ${brandAnchor.toString()}`,
+    );
+  }
+
+  return labelSpan.textContent ?? "";
 }
 
 function renderHomepageContentMarkup(input: Readonly<{
@@ -192,6 +244,19 @@ test("keeps Russian homepage navigation on /ru and English blog and legal paths"
   expect(markup).not.toContain('href="/ru/contact"');
   expect(markup).toContain("Планировщик фермы Stardew Valley");
   expect(markup.match(/<h1(?:\s|>)/g)).toHaveLength(1);
+});
+
+test("gives the homepage brand link an accessible name that matches its visible label", () => {
+  const markup = renderHomepageNavigationDockMarkup({
+    currentLocale: "en",
+    plannerHref: "#planner",
+  });
+  const brandAnchor = readHomepageBrandAnchor(markup);
+  const visibleLabel = readHomepageBrandVisibleLabel(brandAnchor);
+  const accessibleName = brandAnchor.getAttribute("aria-label");
+
+  expect(visibleLabel).not.toBe("");
+  expect(accessibleName).toBe(visibleLabel);
 });
 
 test("throws when plannerHref is empty", () => {
