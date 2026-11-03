@@ -53,7 +53,7 @@ const legalPageCopyByLocale: Readonly<
           heading: "Advertising",
           paragraphs: [
             [
-              "AdSense ads are not currently enabled on this site. If Google AdSense is approved and enabled, Google and the ad technology providers selected for this site may use cookies or similar technologies to serve and measure ads based on your prior visits to this site or other sites. Depending on settings and consent, ads may be personalized. Manage Google personalized advertising at ",
+              "This site uses Google AdSense to show ads. Google and the ad technology providers selected for this site may use cookies or similar technologies to serve and measure ads based on your prior visits to this site or other sites. Depending on settings and consent, ads may be personalized. Manage Google personalized advertising at ",
               {
                 href: "https://www.google.com/settings/ads",
                 label: "Google Ads Settings",
@@ -75,7 +75,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Cookies",
           paragraphs: [
-            "Google Analytics and Microsoft Clarity may set measurement cookies when their scripts run. If AdSense ads are enabled, Google and selected ad technology providers may also use advertising cookies or similar technologies as described above.",
+            "Google Analytics and Microsoft Clarity may set measurement cookies when their scripts run. Google AdSense and selected ad technology providers may also use advertising cookies or similar technologies as described above.",
           ],
         },
         {
@@ -166,7 +166,7 @@ const legalPageCopyByLocale: Readonly<
           heading: "广告",
           paragraphs: [
             [
-              "本站目前尚未启用 AdSense 广告。如果 Google AdSense 获批并启用，Google 和为本站选定的广告技术提供商可能会使用 Cookie 或类似技术，根据你过去访问本站或其他网站的情况投放和衡量广告。具体广告是否个性化取决于相关设置和同意状态。你可以通过 ",
+              "本站使用 Google AdSense 投放广告。Google 和为本站选定的广告技术提供商可能会使用 Cookie 或类似技术，根据你过去访问本站或其他网站的情况投放和衡量广告。具体广告是否个性化取决于相关设置和同意状态。你可以通过 ",
               {
                 href: "https://www.google.com/settings/ads",
                 label: "Google 广告设置",
@@ -188,7 +188,7 @@ const legalPageCopyByLocale: Readonly<
         {
           heading: "Cookie",
           paragraphs: [
-            "Google Analytics 和 Microsoft Clarity 的脚本运行时可能会设置测量 Cookie。若启用 AdSense 广告，Google 和选定的广告技术提供商也可能使用广告 Cookie 或类似技术，详见上文。",
+            "Google Analytics 和 Microsoft Clarity 的脚本运行时可能会设置测量 Cookie。Google AdSense 和选定的广告技术提供商也可能使用广告 Cookie 或类似技术，详见上文。",
           ],
         },
         {

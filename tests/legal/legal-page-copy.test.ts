@@ -104,12 +104,18 @@ describe("getLegalPageCopy", () => {
     expect(englishPrivacyText).toContain("depends on Clarity's masking settings");
     expect(englishPrivacyText).toContain("may set measurement cookies");
     expect(englishPrivacyText).not.toContain("No sign-in session or advertising cookies are used");
-    expect(englishPrivacyText).toContain("does not currently serve advertisements");
-    expect(englishPrivacyText).toContain("advertising partners");
+    expect(englishPrivacyText).toContain("Google AdSense");
+    expect(englishPrivacyText).toContain("This site uses Google AdSense to show ads.");
+    expect(englishPrivacyText).not.toContain("not currently enabled");
+    expect(englishPrivacyText).toContain(
+      "ad technology providers selected for this site",
+    );
     expect(englishPrivacyText).toContain("personalized advertising");
     expect(englishPrivacyText).toContain("advertising cookies");
-    expect(englishPrivacyText).toContain("no Ads Settings link");
-    expect(englishPrivacyText).not.toContain("AdSense");
+    expect(englishPrivacyText).toContain(
+      "Google AdSense and selected ad technology providers may also use",
+    );
+    expect(englishPrivacyText).toContain("Manage Google personalized advertising at");
     expect(chinesePrivacyText).toContain("G-SEKQT6DTT1");
     expect(chinesePrivacyText).toContain("xwledpd5pa");
     expect(chinesePrivacyText).toContain("page_view");
@@ -140,12 +146,14 @@ describe("getLegalPageCopy", () => {
       "当前规划器界面不会向这两家分析服务商发送项目数据",
     );
     expect(chinesePrivacyText).not.toContain("本站不使用登录会话 Cookie");
-    expect(chinesePrivacyText).toContain("本站目前不投放广告");
-    expect(chinesePrivacyText).toContain("广告合作方");
+    expect(chinesePrivacyText).toContain("Google AdSense");
+    expect(chinesePrivacyText).toContain("本站使用 Google AdSense 投放广告。");
+    expect(chinesePrivacyText).not.toContain("尚未启用");
+    expect(chinesePrivacyText).toContain("为本站选定的广告技术提供商");
     expect(chinesePrivacyText).toContain("个性化广告");
     expect(chinesePrivacyText).toContain("广告 Cookie");
-    expect(chinesePrivacyText).toContain("不提供 Ads Settings 链接");
-    expect(chinesePrivacyText).not.toContain("AdSense");
+    expect(chinesePrivacyText).toContain("Google AdSense 和选定的广告技术提供商也可能使用");
+    expect(chinesePrivacyText).toContain("管理 Google 个性化广告");
   });
 
   it("rejects an unsupported locale with the rejected value", () => {

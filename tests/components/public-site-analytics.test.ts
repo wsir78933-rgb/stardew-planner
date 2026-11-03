@@ -21,6 +21,7 @@ vi.mock("next/script", async () => {
   return {
     default: function NextScript(properties: {
       children?: string;
+      crossOrigin?: string;
       id?: string;
       src?: string;
       strategy?: string;
@@ -28,6 +29,7 @@ vi.mock("next/script", async () => {
       return createScriptElement(
         "script",
         {
+          crossOrigin: properties.crossOrigin,
           "data-strategy": properties.strategy,
           id: properties.id,
           src: properties.src,
@@ -135,11 +137,17 @@ describe("public site analytics placement", () => {
     expect(siteAnalyticsScriptsSource).toContain(
       "https://www.googletagmanager.com/gtag/js?id=G-SEKQT6DTT1",
     );
+    expect(siteAnalyticsScriptsSource).toContain(
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1560537840529504",
+    );
     expect(siteAnalyticsScriptsSource).toContain("G-SEKQT6DTT1");
     expect(siteAnalyticsScriptsSource).toContain("xwledpd5pa");
     expect(siteAnalyticsScriptsSource).toContain('strategy="afterInteractive"');
     expect(siteAnalyticsScriptsSource).toContain('id="google-analytics"');
+    expect(siteAnalyticsScriptsSource).toContain('id="google-adsense"');
+    expect(siteAnalyticsScriptsSource).toContain('crossOrigin="anonymous"');
     expect(siteAnalyticsScriptsSource).toContain('id="microsoft-clarity"');
+    expect(siteAnalyticsScriptsSource).not.toContain("fundingchoicesmessages");
 
     expect(publicSiteAnalyticsSource).toContain('"use client"');
     expect(publicSiteAnalyticsSource).toContain("usePathname");
@@ -176,17 +184,31 @@ describe("public site analytics placement", () => {
 });
 
 describe("SiteAnalyticsScripts", () => {
-  it("renders the GA and Clarity afterInteractive scripts", () => {
+  it("renders the GA, Clarity, and AdSense afterInteractive scripts", () => {
     const markup = renderToStaticMarkup(createElement(SiteAnalyticsScripts));
 
     expect(markup).toContain(
       "https://www.googletagmanager.com/gtag/js?id=G-SEKQT6DTT1",
     );
+    expect(markup).toContain(
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1560537840529504",
+    );
     expect(markup).toContain("G-SEKQT6DTT1");
     expect(markup).toContain("xwledpd5pa");
     expect(markup).toContain('data-strategy="afterInteractive"');
     expect(markup).toContain('id="google-analytics"');
+    expect(markup).toContain('id="google-adsense"');
+    expect(markup).toContain('crossorigin="anonymous"');
     expect(markup).toContain('id="microsoft-clarity"');
+    expect(markup).not.toContain("fundingchoicesmessages");
+
+    const googleAdsenseScriptMarkup = markup.match(
+      /<script\b(?=[^>]*\bid="google-adsense")[^>]*>/,
+    )?.[0];
+    expect(googleAdsenseScriptMarkup).toBeDefined();
+    expect(googleAdsenseScriptMarkup).toContain(
+      'data-strategy="afterInteractive"',
+    );
   });
 });
 
@@ -211,6 +233,7 @@ describe("PublicSiteAnalytics", () => {
 
     expect(markup).toBe("");
     expect(markup).not.toContain("googletagmanager");
+    expect(markup).not.toContain("googlesyndication");
     expect(markup).not.toContain("clarity");
   });
 
@@ -220,6 +243,7 @@ describe("PublicSiteAnalytics", () => {
     const markup = renderToStaticMarkup(createElement(PublicSiteAnalytics));
 
     expect(markup).toBe("");
+    expect(markup).not.toContain("googlesyndication");
   });
 });
 
