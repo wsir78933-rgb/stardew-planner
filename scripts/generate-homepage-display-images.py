@@ -22,14 +22,22 @@ OVERVIEW_WIDTH = 1076
 OVERVIEW_HEIGHT = 788
 HERO_FILE_STEMS = ("spring-crops", "beach-farm", "forest-farm")
 
-WEBP_LOSSLESS_METHOD = 6
-AVIF_QUALITY = 90
+WEBP_QUALITY = 80
+WEBP_METHOD = 6
+AVIF_QUALITY = 50
 AVIF_SPEED = 6
 AVIF_SUBSAMPLING = "4:4:4"
 AVIF_CODEC = "aom"
 AVIF_MAX_THREADS = 1
-# q90 4:4:4 measured max channel error was 42. 64 still rejects the softer encodes.
-AVIF_MAX_CHANNEL_ERROR = 64
+# Max channel error stays about 170-200 from AVIF q40 4:2:0 through WebP q95 on
+# these pixel-art screenshots, so it cannot reject a softer encode. Mean absolute
+# channel error can. beach-farm-480 at the settings above measured 13.344 (WebP q80)
+# and 14.614 (AVIF q50 4:4:4). The next softer AVIF candidates measured 16.051
+# (q45 4:4:4) and 16.645 (q50 4:2:0). 15.5 sits in that gap. The other three
+# outputs measured lower: spring-crops AVIF 13.981, forest-farm AVIF 10.392,
+# overview AVIF 4.562. WebP q80 is the size knee on beach-farm-480: 152634 bytes
+# versus 201654 at q90, while mean only moved from 13.344 to 12.718.
+MEAN_CHANNEL_ERROR_CEILING = 15.5
 
 
 def sha256_file(path: Path) -> str:
@@ -88,7 +96,9 @@ def resize_hero_nearest(hero_image: Image.Image, source_path: Path) -> Image.Ima
     )
 
 
-def channel_max_abs(left: Image.Image, right: Image.Image, label: str) -> int:
+def channel_error_stats(
+    left: Image.Image, right: Image.Image, label: str
+) -> tuple[int, float]:
     if left.mode != "RGB" or right.mode != "RGB" or left.size != right.size:
         raise ValueError(
             f"{label}: cannot compare {left.mode} {left.size[0]}x{left.size[1]} "
@@ -97,16 +107,21 @@ def channel_max_abs(left: Image.Image, right: Image.Image, label: str) -> int:
 
     left_bytes = left.tobytes()
     right_bytes = right.tobytes()
-    max_abs = 0
-    for index in range(0, len(left_bytes), 3):
-        channel_abs = max(
-            abs(left_bytes[index] - right_bytes[index]),
-            abs(left_bytes[index + 1] - right_bytes[index + 1]),
-            abs(left_bytes[index + 2] - right_bytes[index + 2]),
+    if len(left_bytes) == 0 or len(left_bytes) % 3 != 0:
+        raise ValueError(f"{label}: RGB byte length must be a positive multiple of 3: {len(left_bytes)}")
+    if len(left_bytes) != len(right_bytes):
+        raise ValueError(
+            f"{label}: RGB byte length {len(left_bytes)} != {len(right_bytes)}"
         )
+
+    max_abs = 0
+    total_abs = 0
+    for index in range(len(left_bytes)):
+        channel_abs = abs(left_bytes[index] - right_bytes[index])
+        total_abs += channel_abs
         if channel_abs > max_abs:
             max_abs = channel_abs
-    return max_abs
+    return max_abs, total_abs / len(left_bytes)
 
 
 def replace_encoded_image(
@@ -133,15 +148,21 @@ def replace_encoded_image(
             partial_path.unlink()
 
 
-def encode_lossless_webp(
+def encode_webp(
     image: Image.Image,
     destination: Path,
     icc_profile: bytes | None,
 ) -> None:
+    if not isinstance(WEBP_QUALITY, int) or not 0 <= WEBP_QUALITY <= 100:
+        raise ValueError(f"WebP quality must be an int from 0 to 100: {WEBP_QUALITY!r}")
+    if not isinstance(WEBP_METHOD, int) or not 0 <= WEBP_METHOD <= 6:
+        raise ValueError(f"WebP method must be an int from 0 to 6: {WEBP_METHOD!r}")
+
     save_arguments: dict[str, object] = {
         "format": "WEBP",
-        "lossless": True,
-        "method": WEBP_LOSSLESS_METHOD,
+        "lossless": False,
+        "quality": WEBP_QUALITY,
+        "method": WEBP_METHOD,
     }
     if icc_profile is not None:
         save_arguments["icc_profile"] = icc_profile
@@ -187,49 +208,34 @@ def require_same_icc(path: Path, icc_profile: bytes | None) -> None:
         )
 
 
-def require_lossless_webp(
+def require_encoded_image(
     path: Path,
+    expected_format: str,
     reference: Image.Image,
     expected_size: tuple[int, int],
     icc_profile: bytes | None,
-) -> None:
+) -> tuple[int, float]:
+    if not isinstance(MEAN_CHANNEL_ERROR_CEILING, (int, float)) or MEAN_CHANNEL_ERROR_CEILING < 0:
+        raise ValueError(
+            f"Mean channel error ceiling must be a non-negative number: {MEAN_CHANNEL_ERROR_CEILING!r}"
+        )
     with Image.open(path) as decoded:
-        if decoded.format != "WEBP":
-            raise ValueError(f"Expected WEBP output: {path} (got {decoded.format})")
+        if decoded.format != expected_format:
+            raise ValueError(f"Expected {expected_format} output: {path} (got {decoded.format})")
         decoded_rgb = decoded.convert("RGB")
     if decoded_rgb.size != expected_size:
         raise ValueError(
-            f"{path}: WebP size is {decoded_rgb.size[0]}x{decoded_rgb.size[1]}, "
+            f"{path}: {expected_format} size is {decoded_rgb.size[0]}x{decoded_rgb.size[1]}, "
             f"expected {expected_size[0]}x{expected_size[1]}"
         )
-    if decoded_rgb.tobytes() != reference.tobytes():
-        raise ValueError(f"{path}: lossless WebP pixels differ from the reference image")
-    require_same_icc(path, icc_profile)
-
-
-def require_avif(
-    path: Path,
-    reference: Image.Image,
-    expected_size: tuple[int, int],
-    icc_profile: bytes | None,
-) -> int:
-    with Image.open(path) as decoded:
-        if decoded.format != "AVIF":
-            raise ValueError(f"Expected AVIF output: {path} (got {decoded.format})")
-        decoded_rgb = decoded.convert("RGB")
-    if decoded_rgb.size != expected_size:
+    max_abs, mean_abs = channel_error_stats(reference, decoded_rgb, str(path))
+    if mean_abs > MEAN_CHANNEL_ERROR_CEILING:
         raise ValueError(
-            f"{path}: AVIF size is {decoded_rgb.size[0]}x{decoded_rgb.size[1]}, "
-            f"expected {expected_size[0]}x{expected_size[1]}"
-        )
-    max_abs = channel_max_abs(reference, decoded_rgb, str(path))
-    if max_abs > AVIF_MAX_CHANNEL_ERROR:
-        raise ValueError(
-            f"{path}: AVIF max channel error is {max_abs}, "
-            f"ceiling is {AVIF_MAX_CHANNEL_ERROR}"
+            f"{path}: mean channel error is {mean_abs:.4f}, "
+            f"ceiling is {MEAN_CHANNEL_ERROR_CEILING}"
         )
     require_same_icc(path, icc_profile)
-    return max_abs
+    return max_abs, mean_abs
 
 
 def require_smaller_file(derived_path: Path, compared_path: Path) -> None:
@@ -269,16 +275,18 @@ def derive_hero_display(stem: str) -> None:
         (HERO_SOURCE_WIDTH, HERO_SOURCE_HEIGHT),
     )
     display_hero = resize_hero_nearest(hero_image, source_path)
-    encode_lossless_webp(display_hero, webp_path, icc_profile)
+    encode_webp(display_hero, webp_path, icc_profile)
     encode_avif(display_hero, avif_path, icc_profile)
-    require_lossless_webp(
+    webp_max_abs, webp_mean_abs = require_encoded_image(
         webp_path,
+        "WEBP",
         display_hero,
         (HERO_DISPLAY_WIDTH, HERO_DISPLAY_HEIGHT),
         icc_profile,
     )
-    max_abs = require_avif(
+    avif_max_abs, avif_mean_abs = require_encoded_image(
         avif_path,
+        "AVIF",
         display_hero,
         (HERO_DISPLAY_WIDTH, HERO_DISPLAY_HEIGHT),
         icc_profile,
@@ -290,7 +298,10 @@ def derive_hero_display(stem: str) -> None:
         f"{stem}: source_sha256={source_sha256} "
         f"webp_bytes={webp_path.stat().st_size} "
         f"avif_bytes={avif_path.stat().st_size} "
-        f"avif_max_channel_error={max_abs} "
+        f"webp_mean_channel_error={webp_mean_abs:.4f} "
+        f"webp_max_channel_error={webp_max_abs} "
+        f"avif_mean_channel_error={avif_mean_abs:.4f} "
+        f"avif_max_channel_error={avif_max_abs} "
         f"size={HERO_DISPLAY_WIDTH}x{HERO_DISPLAY_HEIGHT}"
     )
 
@@ -311,16 +322,18 @@ def derive_overview_display() -> None:
     if icc_profile is None:
         raise ValueError(f"Overview PNG is missing its ICC profile: {source_path}")
 
-    encode_lossless_webp(overview_image, webp_path, icc_profile)
+    encode_webp(overview_image, webp_path, icc_profile)
     encode_avif(overview_image, avif_path, icc_profile)
-    require_lossless_webp(
+    webp_max_abs, webp_mean_abs = require_encoded_image(
         webp_path,
+        "WEBP",
         overview_image,
         (OVERVIEW_WIDTH, OVERVIEW_HEIGHT),
         icc_profile,
     )
-    max_abs = require_avif(
+    avif_max_abs, avif_mean_abs = require_encoded_image(
         avif_path,
+        "AVIF",
         overview_image,
         (OVERVIEW_WIDTH, OVERVIEW_HEIGHT),
         icc_profile,
@@ -332,7 +345,10 @@ def derive_overview_display() -> None:
         f"farm-layout-overview: source_sha256={source_sha256} "
         f"webp_bytes={webp_path.stat().st_size} "
         f"avif_bytes={avif_path.stat().st_size} "
-        f"avif_max_channel_error={max_abs} "
+        f"webp_mean_channel_error={webp_mean_abs:.4f} "
+        f"webp_max_channel_error={webp_max_abs} "
+        f"avif_mean_channel_error={avif_mean_abs:.4f} "
+        f"avif_max_channel_error={avif_max_abs} "
         f"size={OVERVIEW_WIDTH}x{OVERVIEW_HEIGHT}"
     )
 
@@ -346,11 +362,11 @@ def main() -> None:
     print(
         "encoding "
         f"hero={HERO_DISPLAY_WIDTH}x{HERO_DISPLAY_HEIGHT} resample=nearest "
-        f"webp=lossless method={WEBP_LOSSLESS_METHOD} "
+        f"webp=lossy quality:{WEBP_QUALITY} method:{WEBP_METHOD} "
         f"avif=quality:{AVIF_QUALITY} speed:{AVIF_SPEED} "
         f"subsampling:{AVIF_SUBSAMPLING} codec:{AVIF_CODEC} "
         f"max_threads:{AVIF_MAX_THREADS} "
-        f"avif_max_channel_error:{AVIF_MAX_CHANNEL_ERROR}"
+        f"mean_channel_error_ceiling:{MEAN_CHANNEL_ERROR_CEILING}"
     )
     for stem in HERO_FILE_STEMS:
         derive_hero_display(stem)
