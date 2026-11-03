@@ -1320,6 +1320,22 @@ export type PlannerCanvasCleanupOperations = Readonly<{
   clearCanvasHost(): void;
 }>;
 
+export async function yieldPlannerCanvasMainThread(
+  isMapLifecycleCurrent: () => boolean,
+  cleanUpPlannerCanvas: () => void,
+): Promise<boolean> {
+  await new Promise<void>((resolve) => {
+    setTimeout(resolve, 0);
+  });
+
+  if (isMapLifecycleCurrent()) {
+    return true;
+  }
+
+  cleanUpPlannerCanvas();
+  return false;
+}
+
 export function createPlannerCanvasCleanup(
   cleanupOperations: PlannerCanvasCleanupOperations,
 ): () => void {
@@ -1869,6 +1885,13 @@ export function PlannerCanvas({
         );
         resourceClumpFrameTexturesByParentSheetIndex = resourceClumpFrameTextures;
 
+        if (!await yieldPlannerCanvasMainThread(
+          isMapLifecycleCurrent,
+          cleanUpPlannerCanvas,
+        )) {
+          return;
+        }
+
         performanceMarkerReference.current?.mark("editor:map-container-started");
         const mapContainerCreationResult = createMapContainer(
           pixi,
@@ -2019,6 +2042,12 @@ export function PlannerCanvas({
         };
 
         xRayRendererReference.current = renderXRay;
+        if (!await yieldPlannerCanvasMainThread(
+          isMapLifecycleCurrent,
+          cleanUpPlannerCanvas,
+        )) {
+          return;
+        }
         renderXRay();
 
         const reportPlacementRenderError = (message: string): void => {

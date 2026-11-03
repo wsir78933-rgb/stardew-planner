@@ -16,8 +16,8 @@ describe("planner texture assets", () => {
     expect(initializeAssets).toHaveBeenCalledTimes(1);
     expect(initializeAssets).toHaveBeenCalledWith({
       preferences: {
-        preferCreateImageBitmap: false,
-        preferWorkers: false,
+        preferCreateImageBitmap: true,
+        preferWorkers: true,
       },
       skipDetections: true,
       texturePreference: {

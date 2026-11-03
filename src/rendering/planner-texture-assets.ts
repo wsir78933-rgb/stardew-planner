@@ -1,7 +1,7 @@
 type PlannerTextureAssetInitializationOptions = Readonly<{
   preferences: Readonly<{
-    preferCreateImageBitmap: false;
-    preferWorkers: false;
+    preferCreateImageBitmap: true;
+    preferWorkers: true;
   }>;
   skipDetections: true;
   texturePreference: Readonly<{
@@ -21,8 +21,8 @@ const initializedTextureAssetRuntimes = new WeakSet<object>();
 
 const plannerTextureAssetInitializationOptions: PlannerTextureAssetInitializationOptions = {
   preferences: {
-    preferCreateImageBitmap: false,
-    preferWorkers: false,
+    preferCreateImageBitmap: true,
+    preferWorkers: true,
   },
   skipDetections: true,
   texturePreference: {

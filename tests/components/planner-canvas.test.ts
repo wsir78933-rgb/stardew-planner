@@ -38,6 +38,7 @@ const {
   applyPlacementSnapshotInteriorDecor,
   assertPreparedCanvasResourcesMatchRequestedMap,
   createPixiApplicationLifetime,
+  yieldPlannerCanvasMainThread,
   createNightModeOverlayContainer,
   createPlannerCanvasCleanup,
   createPlannerCanvasPreviewRenderEntries,
@@ -1549,6 +1550,84 @@ describe("prepared PlannerCanvas resources", () => {
 
     expect(secondDependencies).toEqual(firstDependencies);
     expect(changedDependencies).not.toEqual(firstDependencies);
+  });
+});
+
+describe("PlannerCanvas main-thread yield", () => {
+  it("resolves on a timer turn after the current microtasks", async () => {
+    vi.useRealTimers();
+    let yielded = false;
+    const yieldPromise = yieldPlannerCanvasMainThread(
+      () => true,
+      () => {
+        throw new Error("Cleanup ran while the map lifecycle was still current.");
+      },
+    ).then((mapLifecycleStillCurrent) => {
+      yielded = true;
+      return mapLifecycleStillCurrent;
+    });
+
+    await Promise.resolve();
+    expect(yielded).toBe(false);
+
+    await expect(yieldPromise).resolves.toBe(true);
+  });
+
+  it("does not continue initialization when the map lifecycle ends during the yield", async () => {
+    vi.useRealTimers();
+    const pixiApplicationLifetime = createPixiApplicationLifetime<string>(
+      () => undefined,
+    );
+    const cleanupOperationNames: string[] = [];
+    const cleanUpPlannerCanvas = createPlannerCanvasCleanup({
+      disposeInteractionBinding: () => cleanupOperationNames.push("interaction"),
+      disposeMapDisplayOverlay: () => cleanupOperationNames.push("map overlay"),
+      disposePlacementOverlay: () => cleanupOperationNames.push("placement overlay"),
+      clearJoystickCameraPan: () => cleanupOperationNames.push("joystick"),
+      clearMapImageExporter: () => cleanupOperationNames.push("exporter"),
+      destroyResourceClumpFrameTextures: () => cleanupOperationNames.push("textures"),
+      destroyPixiApplication: () => {
+        pixiApplicationLifetime.requestDestruction();
+        cleanupOperationNames.push("pixi");
+      },
+      clearCanvasHost: () => cleanupOperationNames.push("host"),
+    });
+    const renderedSteps: string[] = [];
+    const initializeMap = async (): Promise<void> => {
+      const mapLifecycleStillCurrent = await yieldPlannerCanvasMainThread(
+        () => !pixiApplicationLifetime.isDestructionRequested(),
+        cleanUpPlannerCanvas,
+      );
+      if (!mapLifecycleStillCurrent) {
+        return;
+      }
+      renderedSteps.push("create-map");
+      const stillCurrentBeforeRender = await yieldPlannerCanvasMainThread(
+        () => !pixiApplicationLifetime.isDestructionRequested(),
+        cleanUpPlannerCanvas,
+      );
+      if (!stillCurrentBeforeRender) {
+        return;
+      }
+      renderedSteps.push("render");
+    };
+
+    const initialization = initializeMap();
+    pixiApplicationLifetime.requestDestruction();
+    cleanUpPlannerCanvas();
+    await initialization;
+
+    expect(renderedSteps).toEqual([]);
+    expect(cleanupOperationNames).toEqual([
+      "interaction",
+      "map overlay",
+      "placement overlay",
+      "joystick",
+      "exporter",
+      "textures",
+      "pixi",
+      "host",
+    ]);
   });
 });
 
