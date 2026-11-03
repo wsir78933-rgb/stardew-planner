@@ -1,6 +1,12 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { listProcessingIngredients } from "../../src/processing-tools/processing-model";
+import {
+  calculateProcessingRoutes,
+  getProcessingIngredient,
+  listProcessingIngredients,
+  type ApplicableProcessingRouteQuote,
+  type CalculateProcessingRoutesInput,
+} from "../../src/processing-tools/processing-model";
 import {
   createDefaultProcessingComparisonForm,
   isProcessingComparisonFormValidationFailure,
@@ -18,6 +24,9 @@ import {
 import {
   canResetProcessingComparisonSavedSettings,
   createProcessingClipboardRecovery,
+  createProcessingCopyText,
+  findBestPerMachineDayProcessingRoute,
+  findBestPerUnitProcessingRoute,
   findBestProcessingRoute,
   formatProcessingNumericInputFailure,
   getActiveProcessingMachineFilter,
@@ -48,6 +57,171 @@ function getMachineRowOpenTag(markup: string, machine: string): string {
     throw new Error(`Rendered route row was not found. Received machine=${JSON.stringify(machine)}.`);
   }
   return row;
+}
+
+function getMachineRowMarkup(markup: string, machine: string): string {
+  const row = markup.match(
+    new RegExp(`<tr\\b(?=[^>]*data-machine="${machine}")[^>]*>[\\s\\S]*?<\\/tr>`),
+  )?.[0];
+  if (row === undefined) {
+    throw new Error(`Rendered route row was not found. Received machine=${JSON.stringify(machine)}.`);
+  }
+  return row;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getElementMarkupByAttribute(markup: string, attribute: string, value: string): string {
+  const attributePattern = new RegExp(
+    `<([a-z][a-z\\d-]*)\\b(?=[^>]*\\b${escapeRegExp(attribute)}="${escapeRegExp(value)}")[^>]*>`,
+  );
+  const openingTag = markup.match(attributePattern);
+  if (openingTag === null || openingTag.index === undefined) {
+    throw new Error(
+      `Rendered element was not found. Received ${attribute}=${JSON.stringify(value)}.`,
+    );
+  }
+
+  const elementName = openingTag[1];
+  const elementTags = new RegExp(`<\\/?${escapeRegExp(elementName)}\\b[^>]*>`, "g");
+  elementTags.lastIndex = openingTag.index + openingTag[0].length;
+  let depth = 1;
+  let closingIndex = -1;
+  let closingLength = 0;
+
+  for (const tag of markup.matchAll(elementTags)) {
+    const tagText = tag[0];
+    if (tagText.startsWith("</")) {
+      depth -= 1;
+      if (depth === 0) {
+        closingIndex = tag.index ?? -1;
+        closingLength = tagText.length;
+        break;
+      }
+    } else if (!tagText.endsWith("/>")) {
+      depth += 1;
+    }
+  }
+
+  if (closingIndex < 0) {
+    throw new Error(
+      `Rendered ${elementName} element has no matching closing tag. Received ${attribute}=${JSON.stringify(value)}.`,
+    );
+  }
+
+  return markup.slice(openingTag.index, closingIndex + closingLength);
+}
+
+function getMachineCardMarkup(markup: string, machine: string): string {
+  const machineElement = markup.match(
+    new RegExp(`<article\\b(?=[^>]*data-machine="${machine}")[^>]*>[\\s\\S]*?<\\/article>`),
+  )?.[0];
+  if (machineElement === undefined) {
+    throw new Error(
+      `Rendered machine card was not found. Received machine=${JSON.stringify(machine)}.`,
+    );
+  }
+  return machineElement;
+}
+
+function getButtonTexts(markup: string): readonly string[] {
+  return [...markup.matchAll(/<button\b[^>]*>([\s\S]*?)<\/button>/g)].map((match) =>
+    match[1].replace(/<[^>]+>/g, "").trim(),
+  );
+}
+
+function getMachineRowCellTexts(markup: string, machine: string): readonly string[] {
+  return [...getMachineRowMarkup(markup, machine).matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/g)].map(
+    (match) => match[1].replace(/<[^>]+>/g, "").trim(),
+  );
+}
+
+type ProcessingRouteOverrides = Partial<Omit<CalculateProcessingRoutesInput, "ingredientId">>;
+
+function calculateRoutesForIngredient(
+  ingredientId: string,
+  overrides: ProcessingRouteOverrides = {},
+) {
+  return calculateProcessingRoutes({
+    ingredientId,
+    quantity: 20,
+    quality: "normal",
+    profession: "none",
+    mode: "capacity",
+    deadlineDays: 7,
+    machineCounts: { keg: 1, jar: 1, dehydrator: 1 },
+    ...overrides,
+  });
+}
+
+type ProcessingCopyTextLabels = Parameters<typeof createProcessingCopyText>[6];
+
+function createProcessingCopyTextLabels(locale: "en" | "zh-CN"): ProcessingCopyTextLabels {
+  const english = locale === "en";
+  return {
+    modes: {
+      unlimited: english ? "Full-stock value" : "全部加工收益",
+      capacity: english ? "By machines and days" : "按机器与天数",
+    },
+    allMachines: english ? "All machines" : "全部机器",
+    machineNames: {
+      keg: "Keg",
+      jar: english ? "Preserves Jar" : "罐头瓶",
+      dehydrator: english ? "Dehydrator" : "烘干机",
+    },
+    inputLabels: {
+      ingredient: english ? "Raw ingredient" : "原料",
+      quantity: english ? "Quantity" : "数量",
+      quality: english ? "Quality" : "品质",
+      profession: english ? "Profession" : "职业",
+      mode: english ? "Estimate mode" : "估算方式",
+      deadline: english ? "Processing window" : "加工期限",
+      machineView: english ? "Show routes" : "显示路线",
+      machineCounts: {
+        keg: english ? "Kegs" : "Keg 数量",
+        jar: english ? "Preserves Jars" : "罐头瓶数量",
+        dehydrator: english ? "Dehydrators" : "烘干机数量",
+      },
+    },
+    qualities: {
+      normal: english ? "Normal" : "普通",
+      silver: english ? "Silver" : "银星",
+      gold: english ? "Gold" : "金星",
+      iridium: english ? "Iridium" : "铱星",
+    },
+    professions: {
+      none: english ? "No profession bonus" : "无职业加成",
+      tiller: english ? "Tiller" : "耕种者",
+      artisan: english ? "Artisan" : "工匠",
+    },
+    modeDescriptions: {
+      unlimited: english ? "Process all stock." : "加工全部库存。",
+      capacity: english ? "Use machines and days." : "按机器与天数计算。",
+    },
+    deadlines: {
+      7: english ? "7 days" : "7 天",
+      14: english ? "14 days" : "14 天",
+      28: english ? "28 days" : "28 天",
+    },
+    deadlineLabel: english ? "Processing window" : "加工期限",
+    machineCountsLabel: english ? "Machine counts" : "机器数量",
+    capacityAssumption: english ? "Capacity assumption." : "产能假设。",
+    bearsKnowledgeLabel: english ? "Bear's Knowledge" : "熊的知识",
+    bearsKnowledgeDescription: english ? "Raw prices change." : "直接售价会变化。",
+    bearsKnowledgeEnabled: english ? "On" : "开启",
+    bearsKnowledgeDisabled: english ? "Off" : "关闭",
+    assumptions: english ? "Assumptions" : "计算假设",
+    independentRoutes: english ? "Routes are independent." : "各路线独立计算。",
+    recipeNotSupported: english ? "No recipe." : "无配方。",
+    zeroMachineNote: english ? "No machines." : "没有机器。",
+    noCompleteBatchNote: english ? "No complete batch." : "没有完整批次。",
+    noBatchBeforeDeadline: english ? "No batch before deadline." : "期限内没有批次。",
+    completedLeftoverColumn: english ? "Processed / raw left" : "已加工 / 原料余量",
+    finalValueColumn: english ? "Final value" : "最终价值",
+    addedValueColumn: english ? "Added value" : "增值",
+  } as ProcessingCopyTextLabels;
 }
 
 describe("processing comparison form", () => {
@@ -319,7 +493,378 @@ describe("processing comparison form", () => {
   });
 });
 
+describe("processing route conclusions", () => {
+  it.each([
+    ["ancient-fruit", "keg", 1100],
+    ["starfruit", "keg", 1500],
+    ["melon", "keg", 500],
+    ["tomato", "jar", 110],
+    ["corn", "jar", 100],
+    ["hops", "keg", 275],
+    ["wheat", "keg", 175],
+    ["blueberry", "jar", 100],
+  ] as const)("chooses the best per-item route for %s", (ingredientId, expectedMachine, expectedValue) => {
+    const routes = calculateRoutesForIngredient(ingredientId);
+    const bestRoute = findBestPerUnitProcessingRoute(routes);
+
+    expect(bestRoute?.machine).toBe(expectedMachine);
+    expect(bestRoute?.valueAddedPerProcessedUnit).toBe(expectedValue);
+  });
+
+  it("chooses the faster jar when blueberry has equal per-item value", () => {
+    const routes = calculateRoutesForIngredient("blueberry");
+    const kegRoute = routes.find((route) => route.machine === "keg");
+    const jarRoute = routes.find((route) => route.machine === "jar");
+
+    expect(kegRoute?.valueAddedPerProcessedUnit).toBe(100);
+    expect(jarRoute?.valueAddedPerProcessedUnit).toBe(100);
+    expect(kegRoute?.processingMornings).toBe(7);
+    expect(jarRoute?.processingMornings).toBe(3);
+    expect(findBestPerUnitProcessingRoute(routes)?.machine).toBe("jar");
+  });
+
+  it("keeps the first machine when per-item value and processing mornings tie", () => {
+    const routes = calculateRoutesForIngredient("blueberry")
+      .filter((route): route is ApplicableProcessingRouteQuote => route.applicable)
+      .map((route) => ({
+        ...route,
+        valueAddedPerProcessedUnit: 100,
+        processingMornings: 3,
+      }));
+
+    expect(routes.map((route) => route.machine)).toEqual(["keg", "jar", "dehydrator"]);
+    expect(findBestPerUnitProcessingRoute(routes)?.machine).toBe("keg");
+  });
+
+  it.each([
+    ["ancient-fruit", "dehydrator"],
+    ["starfruit", "dehydrator"],
+    ["melon", "dehydrator"],
+    ["tomato", "jar"],
+  ] as const)("chooses the best per-machine-day route for %s", (ingredientId, expectedMachine) => {
+    expect(findBestPerMachineDayProcessingRoute(calculateRoutesForIngredient(ingredientId))?.machine)
+      .toBe(expectedMachine);
+  });
+
+  it("chooses the higher per-item value when per-machine-day values tie", () => {
+    const perItemValues = { keg: 100, jar: 200, dehydrator: 150 } as const;
+    const routes = calculateRoutesForIngredient("blueberry")
+      .filter((route): route is ApplicableProcessingRouteQuote => route.applicable)
+      .map((route) => ({
+        ...route,
+        valueAddedPerProcessedUnit: perItemValues[route.machine],
+        valueAddedPerMachineDay: 100,
+      }));
+
+    expect(findBestPerMachineDayProcessingRoute(routes)?.machine).toBe("jar");
+  });
+
+  it("keeps the first machine when per-machine-day and per-item values tie", () => {
+    const routes = calculateRoutesForIngredient("blueberry")
+      .filter((route): route is ApplicableProcessingRouteQuote => route.applicable)
+      .map((route) => ({
+        ...route,
+        valueAddedPerProcessedUnit: 100,
+        valueAddedPerMachineDay: 100,
+      }));
+
+    expect(routes.map((route) => route.machine)).toEqual(["keg", "jar", "dehydrator"]);
+    expect(findBestPerMachineDayProcessingRoute(routes)?.machine).toBe("keg");
+  });
+
+  it("returns no processing route when every blackberry route loses to raw sale", () => {
+    const routes = calculateRoutesForIngredient("blackberry", {
+      quality: "iridium",
+      profession: "tiller",
+      hasBearsKnowledge: true,
+    });
+
+    expect(routes[0]?.rawUnitPrice).toBe(132);
+    expect(routes.every((route) => route.applicable && route.valueAddedPerProcessedUnit < 0)).toBe(true);
+    expect(routes.every((route) => route.applicable && route.valueAddedPerMachineDay < 0)).toBe(true);
+    expect(findBestPerUnitProcessingRoute(routes)).toBeNull();
+    expect(findBestPerMachineDayProcessingRoute(routes)).toBeNull();
+  });
+
+  it("returns the same per-item and per-machine-day winners in either processing mode", () => {
+    const capacityRoutes = calculateRoutesForIngredient("ancient-fruit", { mode: "capacity" });
+    const unlimitedRoutes = calculateRoutesForIngredient("ancient-fruit", { mode: "unlimited" });
+
+    expect(findBestPerUnitProcessingRoute(capacityRoutes)?.machine).toBe("keg");
+    expect(findBestPerUnitProcessingRoute(unlimitedRoutes)?.machine).toBe("keg");
+    expect(findBestPerMachineDayProcessingRoute(capacityRoutes)?.machine).toBe("dehydrator");
+    expect(findBestPerMachineDayProcessingRoute(unlimitedRoutes)?.machine).toBe("dehydrator");
+  });
+});
+
+describe("processing comparison copy text", () => {
+  it.each(["en", "zh-CN"] as const)(
+    "copies both blueberry conclusions before the first route in %s",
+    (locale) => {
+      const form = createDefaultProcessingComparisonForm("machine-comparison");
+      const ingredient = getProcessingIngredient(form.ingredientId);
+      const routes = calculateProcessingRoutes(form);
+      const copy = createProcessingCopyTextLabels(locale);
+      const conclusionLines = locale === "en"
+        ? [
+            "Most per item: Preserves Jar (Jelly), +100g per input item",
+            "Most per machine per day: Dehydrator (Dried Fruit), +150g per machine per day",
+          ]
+        : [
+            "单件最赚: 罐头瓶 (果酱), 每个原料多赚 100 金币",
+            "每台机器每天最赚: 烘干机 (果干), 每台每天多赚 150 金币",
+          ];
+      const copyText = createProcessingCopyText(
+        form,
+        ingredient,
+        routes,
+        "all",
+        locale,
+        locale === "en" ? "Compare three machines" : "三种机器比较",
+        copy,
+        conclusionLines,
+      );
+      const copyLines = copyText.split("\n");
+      const firstRouteLine = locale === "en" ? "Keg (Wine)" : "Keg (葡萄酒)";
+
+      expect(routes.map((route) => route.machine)).toEqual(["keg", "jar", "dehydrator"]);
+      expect(copyText).toContain(conclusionLines.join("\n"));
+      expect(copyLines.indexOf(firstRouteLine)).toBeGreaterThan(copyLines.indexOf(conclusionLines[1]));
+    },
+  );
+
+  it.each(["en", "zh-CN"] as const)(
+    "copies raw-sale conclusions when every blackberry route loses in %s",
+    (locale) => {
+      const form = {
+        ...createDefaultProcessingComparisonForm("machine-comparison"),
+        ingredientId: "blackberry",
+        quality: "iridium" as const,
+        profession: "tiller" as const,
+        hasBearsKnowledge: true,
+      };
+      const ingredient = getProcessingIngredient(form.ingredientId);
+      const routes = calculateProcessingRoutes(form);
+      const bestPerUnitRoute = findBestPerUnitProcessingRoute(routes);
+      const bestPerMachineDayRoute = findBestPerMachineDayProcessingRoute(routes);
+      const copy = createProcessingCopyTextLabels(locale);
+      const conclusionLines = locale === "en"
+        ? [
+            "Most per item: Selling raw pays more",
+            "Most per machine per day: Selling raw pays more",
+          ]
+        : [
+            "单件最赚: 直接出售更划算",
+            "每台机器每天最赚: 直接出售更划算",
+          ];
+      const copyText = createProcessingCopyText(
+        form,
+        ingredient,
+        routes,
+        "all",
+        locale,
+        locale === "en" ? "Compare three machines" : "三种机器比较",
+        copy,
+        conclusionLines,
+      );
+
+      expect(bestPerUnitRoute).toBeNull();
+      expect(bestPerMachineDayRoute).toBeNull();
+      expect(copyText).toContain(conclusionLines.join("\n"));
+    },
+  );
+
+  it.each(["en", "zh-CN"] as const)(
+    "omits both conclusions when copying a single keg route in %s",
+    (locale) => {
+      const form = createDefaultProcessingComparisonForm("keg-processing");
+      const ingredient = getProcessingIngredient(form.ingredientId);
+      const routes = calculateProcessingRoutes(form).filter((route) => route.machine === "keg");
+      const copy = createProcessingCopyTextLabels(locale);
+      const copyText = createProcessingCopyText(
+        form,
+        ingredient,
+        routes,
+        "keg",
+        locale,
+        locale === "en" ? "Keg processing" : "Keg 加工",
+        copy,
+      );
+
+      expect(routes).toHaveLength(1);
+      expect(copyText).not.toMatch(/^Most per item:|^Most per machine per day:/m);
+      expect(copyText).not.toMatch(/^单件最赚:|^每台机器每天最赚:/m);
+    },
+  );
+});
+
 describe("processing comparison tool", () => {
+  it.each(["en", "zh-CN"] as const)(
+    "renders one grouped route-details disclosure after rows and cards in %s",
+    (locale) => {
+      const markup = renderToStaticMarkup(
+        <ProcessingComparisonTool locale={locale} toolId="machine-comparison" />,
+      );
+      const machines = ["keg", "jar", "dehydrator"] as const;
+      const detailsLabel = locale === "en" ? "Calculation details" : "计算明细";
+      const inputUnitsLabel = locale === "en" ? "Input units per batch" : "每批消耗原料";
+
+      expect(getMachineRows(markup)).toEqual(machines);
+      for (const machine of machines) {
+        expect(getMachineRowMarkup(markup, machine)).not.toContain("<details");
+        expect(getMachineCardMarkup(markup, machine)).not.toContain("<details");
+      }
+
+      expect([...markup.matchAll(/data-route-details-section="true"/g)]).toHaveLength(1);
+      const detailsSection = getElementMarkupByAttribute(markup, "data-route-details-section", "true");
+      expect(detailsSection.match(/<details\b/g)).toHaveLength(1);
+      expect(detailsSection).toContain(`<summary>${detailsLabel}</summary>`);
+      const lastMachineCard = getMachineCardMarkup(markup, "dehydrator");
+      expect(markup.indexOf(detailsSection)).toBeGreaterThan(
+        markup.indexOf(lastMachineCard) + lastMachineCard.length - 1,
+      );
+      const calculationExplanation = locale === "en"
+        ? "Final value = processed value + raw remainder value. Added value compares that final value with selling the full stack raw."
+        : "最终价值 = 加工成品价值 + 原料余量价值。增值是最终价值减去整批原料直接出售价值。";
+      expect(markup.indexOf(calculationExplanation)).toBeGreaterThan(
+        markup.indexOf(detailsSection) + detailsSection.length - 1,
+      );
+
+      let previousMachineIndex = -1;
+      for (const machine of machines) {
+        expect(
+          [...detailsSection.matchAll(new RegExp(`data-route-details-machine="${machine}"`, "g"))],
+        ).toHaveLength(1);
+        const machineDetails = getElementMarkupByAttribute(
+          detailsSection,
+          "data-route-details-machine",
+          machine,
+        );
+        const machineIndex = detailsSection.indexOf(`data-route-details-machine="${machine}"`);
+        expect(machineIndex).toBeGreaterThan(previousMachineIndex);
+        expect(machineDetails).toContain(inputUnitsLabel);
+        previousMachineIndex = machineIndex;
+      }
+    },
+  );
+
+  it.each(["en", "zh-CN"] as const)(
+    "orders basic settings, comparison results, and capacity settings in %s",
+    (locale) => {
+      const markup = renderToStaticMarkup(
+        <ProcessingComparisonTool locale={locale} toolId="machine-comparison" />,
+      );
+      const basicSettings = getElementMarkupByAttribute(markup, "data-settings-group", "basic");
+      const capacitySettings = getElementMarkupByAttribute(markup, "data-settings-group", "capacity");
+      const resultsPanel = getElementMarkupByAttribute(
+        markup,
+        "aria-labelledby",
+        "processing-comparison-results-title",
+      );
+      const modeLabels = locale === "en"
+        ? ["Full-stock value", "By machines and days"]
+        : ["全部加工收益", "按机器与天数"];
+      const capacityBasis = locale === "en"
+        ? "Calculated with Keg ×1, Preserves Jar ×1, Dehydrator ×1 over a 7-day window."
+        : "当前按Keg 1 台、罐头瓶 1 台、烘干机 1 台，加工期限 7 天计算。";
+
+      expect([...markup.matchAll(/data-settings-group="basic"/g)]).toHaveLength(1);
+      expect([...markup.matchAll(/data-settings-group="capacity"/g)]).toHaveLength(1);
+      expect(basicSettings).toContain('id="processing-comparison-ingredient"');
+      expect(basicSettings).toContain(locale === "en" ? "Blueberry" : "蓝莓");
+      expect(basicSettings).toMatch(
+        /<input\b(?=[^>]*id="processing-comparison-quantity")(?=[^>]*value="20")[^>]*>/,
+      );
+      expect(getButtonTexts(basicSettings)).not.toContain(modeLabels[0]);
+      expect(getButtonTexts(basicSettings)).not.toContain(modeLabels[1]);
+
+      const capacityButtons = getButtonTexts(capacitySettings);
+      expect(capacityButtons).toContain(modeLabels[0]);
+      expect(capacityButtons).toContain(modeLabels[1]);
+      expect(capacitySettings).toMatch(
+        new RegExp(
+          `<button\\b(?=[^>]*aria-pressed="true")[^>]*>\\s*${escapeRegExp(modeLabels[1])}\\s*<\\/button>`,
+        ),
+      );
+      for (const machine of ["keg", "jar", "dehydrator"] as const) {
+        expect(capacitySettings).toMatch(
+          new RegExp(
+            `<input\\b(?=[^>]*id="processing-comparison-${machine}-count")(?=[^>]*value="1")[^>]*>`,
+          ),
+        );
+      }
+      expect(capacitySettings).toContain('id="processing-comparison-deadline"');
+      expect(resultsPanel).toContain('data-processing-conclusion="per-unit"');
+      expect(resultsPanel).toContain('data-processing-conclusion="per-machine-day"');
+      expect(resultsPanel).toContain(capacityBasis);
+
+      const basicIndex = markup.indexOf('data-settings-group="basic"');
+      const resultsIndex = markup.indexOf('aria-labelledby="processing-comparison-results-title"');
+      const capacityIndex = markup.indexOf('data-settings-group="capacity"');
+      expect(basicIndex).toBeLessThan(resultsIndex);
+      expect(resultsIndex).toBeLessThan(capacityIndex);
+    },
+  );
+
+  it.each(["en", "zh-CN"] as const)(
+    "shows the desktop per-machine-day value after added value in %s",
+    (locale) => {
+      const markup = renderToStaticMarkup(
+        <ProcessingComparisonTool locale={locale} toolId="machine-comparison" />,
+      );
+      const tableHeader = markup.match(/<thead\b[^>]*>[\s\S]*?<\/thead>/)?.[0];
+      if (tableHeader === undefined) {
+        throw new Error("Rendered comparison table header was not found.");
+      }
+      const tableHeaderLabels = [...tableHeader.matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/g)].map(
+        (match) => match[1].replace(/<[^>]+>/g, "").trim(),
+      );
+      const addedValueLabel = locale === "en" ? "Added value" : "增值";
+      const machineDayLabel = locale === "en" ? "Added value per machine day" : "每机器加工日增值";
+      const expectedValues = locale === "en"
+        ? { dehydrator: "150g", keg: "14.29g" }
+        : { dehydrator: "150 金币", keg: "14.29 金币" };
+
+      expect(tableHeaderLabels.indexOf(machineDayLabel)).toBeGreaterThan(
+        tableHeaderLabels.indexOf(addedValueLabel),
+      );
+      expect(getMachineRowCellTexts(markup, "dehydrator")).toHaveLength(5);
+      expect(getMachineRowCellTexts(markup, "dehydrator")[4]).toBe(expectedValues.dehydrator);
+      expect(getMachineRowCellTexts(markup, "keg")).toHaveLength(5);
+      expect(getMachineRowCellTexts(markup, "keg")[4]).toBe(expectedValues.keg);
+    },
+  );
+
+  it.each(["en", "zh-CN"] as const)(
+    "keeps grouped route details and both settings groups on the keg route in %s",
+    (locale) => {
+      const markup = renderToStaticMarkup(
+        <ProcessingComparisonTool locale={locale} toolId="keg-processing" />,
+      );
+      const detailsLabel = locale === "en" ? "Calculation details" : "计算明细";
+      const inputUnitsLabel = locale === "en" ? "Input units per batch" : "每批消耗原料";
+      const detailsSection = getElementMarkupByAttribute(markup, "data-route-details-section", "true");
+
+      expect(getMachineRows(markup)).toEqual(["keg"]);
+      expect(getMachineRowMarkup(markup, "keg")).not.toContain("<details");
+      expect(getMachineCardMarkup(markup, "keg")).not.toContain("<details");
+      expect([...markup.matchAll(/data-route-details-section="true"/g)]).toHaveLength(1);
+      expect(detailsSection.match(/<details\b/g)).toHaveLength(1);
+      expect(detailsSection).toContain(`<summary>${detailsLabel}</summary>`);
+      expect(
+        [...detailsSection.matchAll(/data-route-details-machine="([^"]+)"/g)].map((match) => match[1]),
+      ).toEqual(["keg"]);
+      expect(getElementMarkupByAttribute(detailsSection, "data-route-details-machine", "keg"))
+        .toContain(inputUnitsLabel);
+      expect([...markup.matchAll(/data-settings-group="basic"/g)]).toHaveLength(1);
+      expect([...markup.matchAll(/data-settings-group="capacity"/g)]).toHaveLength(1);
+      expect(getElementMarkupByAttribute(markup, "data-settings-group", "basic"))
+        .toContain('id="processing-comparison-ingredient"');
+      expect(getElementMarkupByAttribute(markup, "data-settings-group", "capacity"))
+        .toContain('id="processing-comparison-keg-count"');
+    },
+  );
+
   it.each(["en", "zh-CN"] as const)("renders an accessible shared workspace in %s", (locale) => {
     const markup = renderToStaticMarkup(
       <ProcessingComparisonTool locale={locale} toolId="machine-comparison" />,
@@ -425,6 +970,7 @@ describe("processing comparison tool", () => {
     expect(unlimitedEnglish).toContain("Estimate with complete batches, independent of machine counts and the processing window.");
     expect(unlimitedEnglish).toContain("Items without a recipe or not enough to fill a batch keep their raw-sale value.");
     expect(unlimitedEnglish).toContain("Value after processing all stock");
+    expect(unlimitedEnglish).not.toContain("data-capacity-basis");
     expect(capacityEnglish).toContain("By machines and days");
     expect(capacityEnglish).toContain("Results within your processing window");
     expect(capacityEnglish.match(/Assumes finished goods are collected and machines are refilled once each morning/g))
@@ -433,6 +979,7 @@ describe("processing comparison tool", () => {
     expect(unlimitedChinese).toContain("全部加工收益");
     expect(unlimitedChinese).toContain("按完整批次估算，不受机器数量与期限限制；无法加工或不足一批的原料按直接售价计入。");
     expect(unlimitedChinese).toContain("全部加工后的收益");
+    expect(unlimitedChinese).not.toContain("data-capacity-basis");
     expect(capacityChinese).toContain("按机器与天数");
     expect(capacityChinese).toContain("所选天数内的加工结果");
     expect(capacityChinese.match(/假设每天早晨收取成品并为机器补料一次/g)).toHaveLength(2);
@@ -556,15 +1103,70 @@ describe("processing comparison tool", () => {
     expect(findBestProcessingRoute(routes ?? [])).toBeNull();
   });
 
-  it("highlights the calculated best route row instead of always highlighting the first row", () => {
+  it.each(["en", "zh-CN"] as const)("renders both route conclusions and badges in %s", (locale) => {
     const markup = renderToStaticMarkup(
+      <ProcessingComparisonTool locale={locale} toolId="machine-comparison" />,
+    );
+
+    expect(markup).toContain('data-processing-conclusion="per-unit"');
+    expect(markup).toContain('data-processing-conclusion="per-machine-day"');
+    expect(markup).toContain(locale === "en" ? "Preserves Jar" : "罐头瓶");
+    expect(markup).toContain(locale === "en" ? "Dehydrator" : "烘干机");
+    expect(markup).toContain(locale === "en" ? "Most per item" : "单件最赚");
+    expect(markup).toContain(locale === "en" ? "Most per machine per day" : "每台机器每天最赚");
+    expect(markup).not.toContain(locale === "en" ? "Current best route" : "当前建议路线");
+    expect(markup).not.toContain(locale === "en" ? "Added value vs. raw sale" : "相对直接出售的增值");
+    expect(markup).toContain(locale === "en" ? "Raw-sale baseline" : "直接出售基准");
+
+    const jarRow = getMachineRowMarkup(markup, "jar");
+    const dehydratorRow = getMachineRowMarkup(markup, "dehydrator");
+    const kegRow = getMachineRowMarkup(markup, "keg");
+    expect(jarRow).toContain('data-route-badge="per-unit"');
+    expect(dehydratorRow).toContain('data-route-badge="per-machine-day"');
+    expect(kegRow).not.toContain("data-route-badge");
+    for (const machine of getMachineRows(markup)) {
+      expect(getMachineRowOpenTag(markup, machine)).not.toMatch(/class="[^"]*bestRouteRow/);
+    }
+  });
+
+  it("shows the capacity calculation basis for every visible comparison machine", () => {
+    const englishMarkup = renderToStaticMarkup(
       <ProcessingComparisonTool locale="en" toolId="machine-comparison" />,
     );
-    const dehydratorRow = getMachineRowOpenTag(markup, "dehydrator");
-    const kegRow = getMachineRowOpenTag(markup, "keg");
+    const chineseMarkup = renderToStaticMarkup(
+      <ProcessingComparisonTool locale="zh-CN" toolId="machine-comparison" />,
+    );
 
-    expect(dehydratorRow).toMatch(/class="[^"]*bestRouteRow/);
-    expect(kegRow).not.toMatch(/class="[^"]*bestRouteRow/);
+    expect(englishMarkup).toContain('data-capacity-basis="true"');
+    expect(englishMarkup).toContain(
+      "Calculated with Keg ×1, Preserves Jar ×1, Dehydrator ×1 over a 7-day window.",
+    );
+    expect(chineseMarkup).toContain('data-capacity-basis="true"');
+    expect(chineseMarkup).toContain("当前按Keg 1 台、罐头瓶 1 台、烘干机 1 台，加工期限 7 天计算。");
+  });
+
+  it("keeps the single-route recommendation and capacity basis unchanged", () => {
+    const englishMarkup = renderToStaticMarkup(
+      <ProcessingComparisonTool locale="en" toolId="keg-processing" />,
+    );
+    const chineseMarkup = renderToStaticMarkup(
+      <ProcessingComparisonTool locale="zh-CN" toolId="keg-processing" />,
+    );
+
+    expect(englishMarkup).toContain("Current best route");
+    expect(englishMarkup).not.toContain("data-processing-conclusion");
+    expect(englishMarkup).toContain("Added value vs. raw sale");
+    expect(englishMarkup).toContain("Raw-sale baseline");
+    expect(englishMarkup).toContain('data-capacity-basis="true"');
+    expect(englishMarkup).toContain("Calculated with Keg ×1 over a 7-day window.");
+    expect(getMachineRowOpenTag(englishMarkup, "keg")).toMatch(/class="[^"]*bestRouteRow/);
+
+    expect(chineseMarkup).toContain("当前建议路线");
+    expect(chineseMarkup).not.toContain("data-processing-conclusion");
+    expect(chineseMarkup).toContain("相对直接出售的增值");
+    expect(chineseMarkup).toContain("直接出售基准");
+    expect(chineseMarkup).toContain("当前按Keg 1 台，加工期限 7 天计算。");
+    expect(getMachineRowOpenTag(chineseMarkup, "keg")).toMatch(/class="[^"]*bestRouteRow/);
   });
 
   it("hides computed routes while an invalid numeric draft is active", () => {

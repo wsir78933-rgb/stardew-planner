@@ -38,8 +38,10 @@ describe.each(locales)("workshop tools SSR in %s", (locale) => {
     expect(markup).not.toContain("<form");
     expect(markup).toContain('id="workshop-keg-capacity-deadline"');
     expect(markup).toContain('role="combobox"');
-    expect(markup).toContain(`href="${localePrefix}/tools/keg-count"`);
-    expect(markup).toContain(`href="${localePrefix}/tools/materials-and-resin"`);
+    expect(markup).toContain(`href="${localePrefix}/tools/keg-count#keg-count-calculator"`);
+    expect(markup).toContain(
+      `href="${localePrefix}/tools/materials-and-resin#materials-and-resin-calculator"`,
+    );
     expect(markup.match(/aria-current="page"/g)).toHaveLength(1);
     expect(markup.indexOf(copy.currentStockPlan)).toBeLessThan(markup.indexOf(copy.resultsTitle));
     expect(markup).toContain(copy.scenarios.currentStockHelp);
@@ -71,8 +73,10 @@ describe.each(locales)("workshop tools SSR in %s", (locale) => {
     expect(markup).toContain('id="workshop-keg-materials-tapper-type"');
     expect(markup).toContain(`title="${copy.tapperTypes.regular}"`);
     expect(markup).not.toContain("<form");
-    expect(markup).toContain(`href="${localePrefix}/tools/keg-count"`);
-    expect(markup).toContain(`href="${localePrefix}/tools/materials-and-resin"`);
+    expect(markup).toContain(`href="${localePrefix}/tools/keg-count#keg-count-calculator"`);
+    expect(markup).toContain(
+      `href="${localePrefix}/tools/materials-and-resin#materials-and-resin-calculator"`,
+    );
     expect(markup.match(/aria-current="page"/g)).toHaveLength(1);
     expect(materialSectionOrder.every((position) => position >= 0)).toBe(true);
     expect(materialSectionOrder).toEqual([...materialSectionOrder].sort((left, right) => left - right));

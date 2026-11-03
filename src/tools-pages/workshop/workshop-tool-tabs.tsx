@@ -32,7 +32,11 @@ export function WorkshopToolTabs({
 }
 
 function createWorkshopToolHref(locale: PublicLocale, toolId: WorkshopToolTabId): string {
-  const path = `/tools/${toolId}`;
+  const calculatorId = {
+    "keg-count": "keg-count-calculator",
+    "materials-and-resin": "materials-and-resin-calculator",
+  }[toolId];
+  const path = `/tools/${toolId}#${calculatorId}`;
   if (locale === "en") {
     return path;
   }

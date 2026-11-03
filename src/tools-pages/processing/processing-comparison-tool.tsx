@@ -50,6 +50,7 @@ type ProcessingComparisonToolProperties = Readonly<{
 }>;
 
 type ProcessingRouteFilter = ProcessingMachine | "all";
+type ProcessingConclusionType = "per-unit" | "per-machine-day";
 export type ProcessingComparisonFieldMessages = Partial<Record<ProcessingComparisonNumericField, string>>;
 type SaveStatus = "loading" | "saved" | "failed";
 type CopyStatus = Readonly<{ message: string; failed: boolean }> | null;
@@ -73,6 +74,7 @@ type ProcessingComparisonCopy = Readonly<{
   modes: Readonly<Record<ProcessingMode, string>>;
   modeDescriptions: Readonly<Record<ProcessingMode, string>>;
   capacityAssumption: string;
+  capacityBasis: string;
   bearsKnowledgeLabel: string;
   bearsKnowledgeDescription: string;
   bearsKnowledgeEnabled: string;
@@ -92,6 +94,13 @@ type ProcessingComparisonCopy = Readonly<{
   rawArtisanNote: string;
   bestRoute: string;
   sellRawRecommendation: string;
+  perUnitConclusionLabel: string;
+  perMachineDayConclusionLabel: string;
+  perUnitConclusionAmount: string;
+  perMachineDayConclusionAmount: string;
+  sellRawConclusion: string;
+  perUnitRouteBadge: string;
+  perMachineDayRouteBadge: string;
   valueAdded: string;
   rawSaleValue: string;
   independentRoutes: string;
@@ -195,6 +204,7 @@ const processingComparisonCopy: Readonly<Record<PublicLocale, ProcessingComparis
     },
     capacityAssumption:
       "Assumes finished goods are collected and machines are refilled once each morning; exact within-day timing is not modeled.",
+    capacityBasis: "Calculated with {machines} over a {days}-day window.",
     bearsKnowledgeLabel: "Bear's Knowledge",
     bearsKnowledgeDescription:
       "For eligible berries, this changes raw-sale value only; processed product prices stay the same.",
@@ -228,6 +238,13 @@ const processingComparisonCopy: Readonly<Record<PublicLocale, ProcessingComparis
     rawArtisanNote: "For this honey, Artisan also changes the raw-sale baseline.",
     bestRoute: "Current best route",
     sellRawRecommendation: "Sell the stack raw",
+    perUnitConclusionLabel: "Most per item",
+    perMachineDayConclusionLabel: "Most per machine per day",
+    perUnitConclusionAmount: "+{amount} per input item",
+    perMachineDayConclusionAmount: "+{amount} per machine per day",
+    sellRawConclusion: "Selling raw pays more",
+    perUnitRouteBadge: "Most per item",
+    perMachineDayRouteBadge: "Most per day",
     valueAdded: "Added value vs. raw sale",
     rawSaleValue: "Raw-sale baseline",
     independentRoutes:
@@ -332,6 +349,7 @@ const processingComparisonCopy: Readonly<Record<PublicLocale, ProcessingComparis
         "按当前机器数量与天数，估算期限内可完成的加工结果。原料可立即投料；7 天周期可在 7 天窗口内完成。每条路线都独立使用同一批原料。",
     },
     capacityAssumption: "假设每天早晨收取成品并为机器补料一次；不模拟早晨内的具体时刻。",
+    capacityBasis: "当前按{machines}，加工期限 {days} 天计算。",
     bearsKnowledgeLabel: "熊的知识",
     bearsKnowledgeDescription: "仅影响适用浆果的直接售价，不改变加工成品售价。",
     bearsKnowledgeEnabled: "开启",
@@ -362,6 +380,13 @@ const processingComparisonCopy: Readonly<Record<PublicLocale, ProcessingComparis
     rawArtisanNote: "该蜂蜜的工匠加成也会计入直接出售基准。",
     bestRoute: "当前建议路线",
     sellRawRecommendation: "直接出售整批原料",
+    perUnitConclusionLabel: "单件最赚",
+    perMachineDayConclusionLabel: "每台机器每天最赚",
+    perUnitConclusionAmount: "每个原料多赚 {amount}",
+    perMachineDayConclusionAmount: "每台每天多赚 {amount}",
+    sellRawConclusion: "直接出售更划算",
+    perUnitRouteBadge: "单件最赚",
+    perMachineDayRouteBadge: "每天最赚",
     valueAdded: "相对直接出售的增值",
     rawSaleValue: "直接出售基准",
     independentRoutes:
@@ -653,6 +678,50 @@ export function findBestProcessingRoute(routes: readonly ProcessingRouteQuote[])
   return bestRoute;
 }
 
+export function findBestPerUnitProcessingRoute(
+  routes: readonly ProcessingRouteQuote[],
+): ProcessingRouteQuote | null {
+  let bestRoute: ProcessingRouteQuote | null = null;
+  for (const route of routes) {
+    if (!route.applicable || route.valueAddedPerProcessedUnit <= 0) {
+      continue;
+    }
+    if (
+      bestRoute === null ||
+      route.valueAddedPerProcessedUnit > bestRoute.valueAddedPerProcessedUnit ||
+      (route.valueAddedPerProcessedUnit === bestRoute.valueAddedPerProcessedUnit &&
+        (route.processingMornings < bestRoute.processingMornings ||
+          (route.processingMornings === bestRoute.processingMornings &&
+            processingMachineOrder.indexOf(route.machine) < processingMachineOrder.indexOf(bestRoute.machine))))
+    ) {
+      bestRoute = route;
+    }
+  }
+  return bestRoute;
+}
+
+export function findBestPerMachineDayProcessingRoute(
+  routes: readonly ProcessingRouteQuote[],
+): ProcessingRouteQuote | null {
+  let bestRoute: ProcessingRouteQuote | null = null;
+  for (const route of routes) {
+    if (!route.applicable || route.valueAddedPerMachineDay <= 0) {
+      continue;
+    }
+    if (
+      bestRoute === null ||
+      route.valueAddedPerMachineDay > bestRoute.valueAddedPerMachineDay ||
+      (route.valueAddedPerMachineDay === bestRoute.valueAddedPerMachineDay &&
+        (route.valueAddedPerProcessedUnit > bestRoute.valueAddedPerProcessedUnit ||
+          (route.valueAddedPerProcessedUnit === bestRoute.valueAddedPerProcessedUnit &&
+            processingMachineOrder.indexOf(route.machine) < processingMachineOrder.indexOf(bestRoute.machine))))
+    ) {
+      bestRoute = route;
+    }
+  }
+  return bestRoute;
+}
+
 export function readProcessingClipboardFailure(error: unknown, fallbackMessage: string): string {
   if (!(error instanceof Error) || !error.message.startsWith("Clipboard write failed.")) {
     throw error;
@@ -719,6 +788,112 @@ function getMachineName(machine: ProcessingMachine, copy: ProcessingComparisonCo
   return machineName;
 }
 
+function getProcessingConclusionLabel(
+  conclusionType: ProcessingConclusionType,
+  copy: ProcessingComparisonCopy,
+): string {
+  return conclusionType === "per-unit" ? copy.perUnitConclusionLabel : copy.perMachineDayConclusionLabel;
+}
+
+function formatProcessingConclusionAmount(
+  route: ProcessingRouteQuote,
+  conclusionType: ProcessingConclusionType,
+  locale: PublicLocale,
+  copy: ProcessingComparisonCopy,
+): string {
+  if (!route.applicable) {
+    throw new Error(
+      "Processing conclusion route must be applicable. Received machine=" + JSON.stringify(route.machine) + ".",
+    );
+  }
+  const amountTemplate = conclusionType === "per-unit"
+    ? copy.perUnitConclusionAmount
+    : copy.perMachineDayConclusionAmount;
+  const amount = conclusionType === "per-unit"
+    ? route.valueAddedPerProcessedUnit
+    : route.valueAddedPerMachineDay;
+  return amountTemplate.replace("{amount}", formatGold(amount, locale));
+}
+
+function renderProcessingConclusionCard(
+  route: ProcessingRouteQuote | null,
+  conclusionType: ProcessingConclusionType,
+  locale: PublicLocale,
+  copy: ProcessingComparisonCopy,
+) {
+  const label = getProcessingConclusionLabel(conclusionType, copy);
+  if (route !== null && !route.applicable) {
+    throw new Error(
+      "Processing conclusion route must be applicable. Received machine=" + JSON.stringify(route.machine) + ".",
+    );
+  }
+  return (
+    <article className={styles.recommendation} data-processing-conclusion={conclusionType}>
+      <p className={styles.recommendationLabel}>{label}</p>
+      {route === null ? (
+        <p className={styles.recommendationValue}>{copy.sellRawConclusion}</p>
+      ) : (
+        <>
+          <h3 className={styles.recommendationTitle}>{getMachineName(route.machine, copy)}</h3>
+          <p className={styles.routeProduct}>{readProductName(route, locale, copy)}</p>
+          <p className={styles.recommendationValue}>
+            {formatProcessingConclusionAmount(route, conclusionType, locale, copy)}
+          </p>
+        </>
+      )}
+    </article>
+  );
+}
+
+function createProcessingConclusionCopyLine(
+  route: ProcessingRouteQuote | null,
+  conclusionType: ProcessingConclusionType,
+  locale: PublicLocale,
+  copy: ProcessingComparisonCopy,
+): string {
+  const label = getProcessingConclusionLabel(conclusionType, copy);
+  if (route === null) {
+    return label + ": " + copy.sellRawConclusion;
+  }
+  if (!route.applicable) {
+    throw new Error(
+      "Processing conclusion route must be applicable. Received machine=" + JSON.stringify(route.machine) + ".",
+    );
+  }
+  return label + ": " + getMachineName(route.machine, copy) + " (" +
+    readProductName(route, locale, copy) + "), " +
+    formatProcessingConclusionAmount(route, conclusionType, locale, copy);
+}
+
+function renderProcessingRouteBadges(
+  route: ProcessingRouteQuote,
+  bestPerUnitRoute: ProcessingRouteQuote | null,
+  bestPerMachineDayRoute: ProcessingRouteQuote | null,
+  showBadges: boolean,
+  copy: ProcessingComparisonCopy,
+) {
+  if (!showBadges) {
+    return null;
+  }
+  const isBestPerUnit = bestPerUnitRoute?.machine === route.machine;
+  const isBestPerMachineDay = bestPerMachineDayRoute?.machine === route.machine;
+  if (!isBestPerUnit && !isBestPerMachineDay) {
+    return null;
+  }
+  return (
+    <span className={styles.routeBadges}>
+      {isBestPerUnit ? (
+        <span className={styles.routeBadge} data-route-badge="per-unit">{copy.perUnitRouteBadge}</span>
+      ) : null}
+      {isBestPerMachineDay ? (
+        <span className={styles.routeBadge} data-route-badge="per-machine-day">
+          {copy.perMachineDayRouteBadge}
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
 function readUnavailableDescription(
   route: ProcessingRouteQuote,
   form: ProcessingComparisonForm,
@@ -753,7 +928,7 @@ function formatRouteAddedValue(route: ProcessingRouteQuote, locale: PublicLocale
   return formatGold(route.valueAdded, locale);
 }
 
-function createProcessingCopyText(
+export function createProcessingCopyText(
   form: ProcessingComparisonForm,
   ingredient: ProcessingIngredient,
   routes: readonly ProcessingRouteQuote[],
@@ -761,6 +936,7 @@ function createProcessingCopyText(
   locale: PublicLocale,
   toolTitle: string,
   copy: ProcessingComparisonCopy,
+  conclusionLines: readonly string[] = [],
 ): string {
   const modeName = copy.modes[form.mode];
   const filterName = machineFilter === "all" ? copy.allMachines : getMachineName(machineFilter, copy);
@@ -799,6 +975,7 @@ function createProcessingCopyText(
     `${copy.inputLabels.machineView}: ${filterName}`,
     "",
     copy.independentRoutes,
+    ...(conclusionLines.length > 0 ? ["", ...conclusionLines, ""] : []),
   ];
 
   for (const route of routes) {
@@ -816,6 +993,26 @@ function createProcessingCopyText(
   }
 
   return lines.join("\n");
+}
+
+function formatProcessingCapacityBasis(
+  form: ProcessingComparisonForm,
+  machineFilter: ProcessingRouteFilter,
+  locale: PublicLocale,
+  copy: ProcessingComparisonCopy,
+): string {
+  const machines = machineFilter === "all" ? processingMachineOrder : [machineFilter];
+  const machineLabels = machines.map((machine) => {
+    const machineName = getMachineName(machine, copy);
+    const machineCount = formatQuantity(form.machineCounts[machine], locale);
+    return locale === "en"
+      ? machineName + " ×" + machineCount
+      : machineName + " " + machineCount + " 台";
+  });
+  const machineSeparator = locale === "en" ? ", " : "、";
+  return copy.capacityBasis
+    .replace("{machines}", machineLabels.join(machineSeparator))
+    .replace("{days}", formatQuantity(form.deadlineDays, locale));
 }
 
 function clearFieldMessage(
@@ -887,12 +1084,45 @@ function createRouteDetails(
   return details;
 }
 
+function renderGroupedRouteDetails(
+  routes: readonly ProcessingRouteQuote[],
+  locale: PublicLocale,
+  copy: ProcessingComparisonCopy,
+) {
+  return (
+    <div className={styles.routeDetailsSection} data-route-details-section="true">
+      <details className={styles.routeDetails}>
+        <summary>{copy.details}</summary>
+        {routes.map((route) => (
+          <section
+            className={styles.routeDetailsMachine}
+            data-route-details-machine={route.machine}
+            key={route.machine}
+          >
+            <h3 className={styles.routeDetailsMachineTitle}>
+              {getMachineName(route.machine, copy)} — {readProductName(route, locale, copy)}
+            </h3>
+            <ul className={styles.routeDetailList}>
+              {createRouteDetails(route, locale, copy).map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </details>
+    </div>
+  );
+}
+
 function renderDesktopRouteTable(
   routes: readonly ProcessingRouteQuote[],
   form: ProcessingComparisonForm,
   locale: PublicLocale,
   copy: ProcessingComparisonCopy,
   bestRoute: ProcessingRouteQuote | null,
+  bestPerUnitRoute: ProcessingRouteQuote | null,
+  bestPerMachineDayRoute: ProcessingRouteQuote | null,
+  showBadges: boolean,
 ) {
   return (
     <div className={styles.tableWrapper}>
@@ -904,6 +1134,7 @@ function renderDesktopRouteTable(
             <th scope="col">{copy.completedLeftoverColumn}</th>
             <th scope="col">{copy.finalValueColumn}</th>
             <th scope="col">{copy.addedValueColumn}</th>
+            <th scope="col">{copy.machineDayValue}</th>
           </tr>
         </thead>
         <tbody>
@@ -919,16 +1150,17 @@ function renderDesktopRouteTable(
               >
                 <th scope="row">
                   <span className={styles.routeName}>
-                    <span>{getMachineName(route.machine, copy)}</span>
+                    <span>
+                      {getMachineName(route.machine, copy)}
+                      {renderProcessingRouteBadges(
+                        route,
+                        bestPerUnitRoute,
+                        bestPerMachineDayRoute,
+                        showBadges,
+                        copy,
+                      )}
+                    </span>
                     <span className={styles.routeProduct}>{productName}</span>
-                    <details className={styles.routeDetails}>
-                      <summary>{copy.details}</summary>
-                      <ul className={styles.routeDetailList}>
-                        {createRouteDetails(route, locale, copy).map((detail) => (
-                          <li key={detail}>{detail}</li>
-                        ))}
-                      </ul>
-                    </details>
                   </span>
                 </th>
                 <td>{formatCycle(route, locale)}</td>
@@ -942,6 +1174,11 @@ function renderDesktopRouteTable(
                 </td>
                 <td>{formatRouteValue(route, locale)}</td>
                 <td className={best ? styles.addedValue : undefined}>{formatRouteAddedValue(route, locale)}</td>
+                <td>
+                  {route.valueAddedPerMachineDay === null
+                    ? "—"
+                    : formatGold(route.valueAddedPerMachineDay, locale)}
+                </td>
               </tr>
             );
           })}
@@ -957,6 +1194,9 @@ function renderMobileRouteCards(
   locale: PublicLocale,
   copy: ProcessingComparisonCopy,
   bestRoute: ProcessingRouteQuote | null,
+  bestPerUnitRoute: ProcessingRouteQuote | null,
+  bestPerMachineDayRoute: ProcessingRouteQuote | null,
+  showBadges: boolean,
 ) {
   return (
     <div className={styles.mobileRouteCards}>
@@ -972,7 +1212,16 @@ function renderMobileRouteCards(
           >
             <div className={styles.routeCardHeader}>
               <div>
-                <h3 className={styles.routeCardTitle}>{getMachineName(route.machine, copy)}</h3>
+                <h3 className={styles.routeCardTitle}>
+                  {getMachineName(route.machine, copy)}
+                  {renderProcessingRouteBadges(
+                    route,
+                    bestPerUnitRoute,
+                    bestPerMachineDayRoute,
+                    showBadges,
+                    copy,
+                  )}
+                </h3>
                 <span className={styles.routeProduct}>{productName}</span>
               </div>
               <span className={styles.routeCardAddedValue}>
@@ -1006,14 +1255,6 @@ function renderMobileRouteCards(
             {unavailableDescription === null ? null : (
               <p className={styles.fieldNote}>{unavailableDescription}</p>
             )}
-            <details className={styles.routeDetails}>
-              <summary>{copy.details}</summary>
-              <ul className={styles.routeDetailList}>
-                {createRouteDetails(route, locale, copy).map((detail) => (
-                  <li key={detail}>{detail}</li>
-                ))}
-              </ul>
-            </details>
           </article>
         );
       })}
@@ -1112,6 +1353,9 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
   const numericFieldsInvalid = routes === null;
   const visibleRoutes = routes === null ? [] : getVisibleRoutes(routes, activeMachineFilter);
   const bestRoute = findBestProcessingRoute(visibleRoutes);
+  const bestPerUnitRoute = findBestPerUnitProcessingRoute(visibleRoutes);
+  const bestPerMachineDayRoute = findBestPerMachineDayProcessingRoute(visibleRoutes);
+  const hasMultipleVisibleRoutes = visibleRoutes.length >= 2;
   const currentToolTitle = readToolTitle(toolId, locale);
   const rawValue = routes?.[0]?.rawValue ?? null;
 
@@ -1179,6 +1423,12 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
       locale,
       currentToolTitle,
       copy,
+      hasMultipleVisibleRoutes
+        ? [
+            createProcessingConclusionCopyLine(bestPerUnitRoute, "per-unit", locale, copy),
+            createProcessingConclusionCopyLine(bestPerMachineDayRoute, "per-machine-day", locale, copy),
+          ]
+        : [],
     );
     try {
       await copyToolText(copyText);
@@ -1235,7 +1485,12 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
         <p className={styles.toolDescription}>{copy.descriptions[toolId]}</p>
       </header>
       <div className={styles.workspace}>
-        <div aria-labelledby={settingsTitleId} className={styles.settingsPanel} role="group">
+        <div
+          aria-labelledby={settingsTitleId}
+          className={styles.settingsPanel}
+          data-settings-group="basic"
+          role="group"
+        >
           <h2 className={styles.panelTitle} id={settingsTitleId}>{copy.settingsTitle}</h2>
           <div className={styles.fieldGrid}>
             <div className={`${styles.field} ${ingredientNeedsFullWidth ? styles.fieldFullWidth : ""}`}>
@@ -1340,6 +1595,149 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
               {qualityResetReason}
             </p>
           )}
+          {!ingredient.hasQualityTiers ? <p className={styles.fieldNote}>{copy.qualityUnavailable}</p> : null}
+          {form.profession === "tiller" ? (
+            <p className={styles.fieldNote}>
+              {tillerBonusEligible ? copy.tillerNote : copy.tillerUnavailable}
+            </p>
+          ) : null}
+          {ingredient.rawArtisanBonusEligible ? <p className={styles.fieldNote}>{copy.rawArtisanNote}</p> : null}
+          {storageError === null ? (
+            <p className={styles.storageStatus} role="status" aria-live="polite">{saveMessage}</p>
+          ) : (
+            <>
+              <p className={styles.storageError} id="processing-comparison-storage-error" role="alert">
+                {saveMessage}
+              </p>
+              {canResetSavedSettings ? (
+                <button
+                  aria-describedby="processing-comparison-storage-error"
+                  className={styles.actionButton}
+                  onClick={resetInvalidSavedSettings}
+                  type="button"
+                >
+                  {copy.resetSavedSettings}
+                </button>
+              ) : null}
+            </>
+          )}
+        </div>
+
+        <section aria-labelledby={routeTitleId} className={styles.resultsPanel}>
+          <h2 className={styles.panelTitle} id={routeTitleId}>{copy.resultsTitles[form.mode]}</h2>
+          {form.mode === "capacity" ? (
+            <>
+              <p className={styles.calculationNote} data-capacity-basis="true">
+                {formatProcessingCapacityBasis(form, activeMachineFilter, locale, copy)}
+              </p>
+              <p className={styles.calculationNote}>{copy.capacityAssumption}</p>
+            </>
+          ) : null}
+          {numericFieldsInvalid ? <p className={styles.calculationError} role="alert">{copy.invalidDraft}</p> : null}
+          {routes === null ? null : (
+            <>
+              {hasMultipleVisibleRoutes ? (
+                <>
+                  <div className={styles.summaryGrid}>
+                    {renderProcessingConclusionCard(bestPerUnitRoute, "per-unit", locale, copy)}
+                    {renderProcessingConclusionCard(bestPerMachineDayRoute, "per-machine-day", locale, copy)}
+                  </div>
+                  <div className={styles.summaryGrid}>
+                    <article className={styles.summaryMetric}>
+                      <p className={styles.metricLabel}>{copy.rawSaleValue}</p>
+                      <p className={styles.metricValue}>{formatGold(rawValue ?? 0, locale)}</p>
+                    </article>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className={styles.recommendation}>
+                    <p className={styles.recommendationLabel}>{copy.bestRoute}</p>
+                    <h3 className={styles.recommendationTitle}>
+                      {bestRoute === null ? copy.sellRawRecommendation : getMachineName(bestRoute.machine, copy)}
+                    </h3>
+                    {bestRoute === null ? null : (
+                      <p className={styles.recommendationValue}>
+                        {readProductName(bestRoute, locale, copy)} · {formatRouteAddedValue(bestRoute, locale)}
+                      </p>
+                    )}
+                    {bestRoute === null ? <p className={styles.fieldNote}>{copy.noRoutes}</p> : null}
+                  </div>
+                  <div className={styles.summaryGrid}>
+                    <article className={styles.summaryMetric}>
+                      <p className={styles.metricLabel}>{copy.valueAdded}</p>
+                      <p className={styles.metricValue}>
+                        {bestRoute === null ? formatGold(0, locale) : formatRouteAddedValue(bestRoute, locale)}
+                      </p>
+                    </article>
+                    <article className={styles.summaryMetric}>
+                      <p className={styles.metricLabel}>{copy.rawSaleValue}</p>
+                      <p className={styles.metricValue}>{formatGold(rawValue ?? 0, locale)}</p>
+                    </article>
+                  </div>
+                </>
+              )}
+              <p className={styles.independentNote}>{copy.independentRoutes}</p>
+              {renderDesktopRouteTable(
+                visibleRoutes,
+                form,
+                locale,
+                copy,
+                hasMultipleVisibleRoutes ? null : bestRoute,
+                bestPerUnitRoute,
+                bestPerMachineDayRoute,
+                hasMultipleVisibleRoutes,
+              )}
+              {renderMobileRouteCards(
+                visibleRoutes,
+                form,
+                locale,
+                copy,
+                hasMultipleVisibleRoutes ? null : bestRoute,
+                bestPerUnitRoute,
+                bestPerMachineDayRoute,
+                hasMultipleVisibleRoutes,
+              )}
+              {renderGroupedRouteDetails(visibleRoutes, locale, copy)}
+              <p className={styles.calculationNote}>{copy.calculationExplanation}</p>
+              <p className={styles.calculationNote}>{copy.minutesAndMorningsExplanation}</p>
+              <p className={styles.calculationNote}>{copy.machineDayExplanation}</p>
+            </>
+          )}
+          <div className={styles.actionArea}>
+            <button aria-describedby="processing-comparison-plan-note" className={styles.actionButton} disabled={routes === null} onClick={transferCurrentInventory} type="button">
+              {copy.planButton}
+            </button>
+            <button className={styles.actionButton} disabled={routes === null} onClick={() => void copyCurrentResults()} type="button">
+              {copy.copyButton}
+            </button>
+            <p className={styles.planNote} id="processing-comparison-plan-note">{copy.planUnavailable}</p>
+            {copyStatus === null ? null : (
+              <p className={copyStatus.failed ? styles.storageError : styles.copyStatus} role={copyStatus.failed ? "alert" : "status"}>
+                {copyStatus.message}
+              </p>
+            )}
+          </div>
+          {manualCopyText === null ? null : (
+            <div className={styles.manualCopyPanel}>
+              <label htmlFor="processing-comparison-manual-copy">{copy.manualCopyTextLabel}</label>
+              <textarea
+                className={styles.manualCopyText}
+                id="processing-comparison-manual-copy"
+                readOnly
+                rows={8}
+                spellCheck={false}
+                value={manualCopyText}
+              />
+            </div>
+          )}
+        </section>
+        <div
+          aria-label={copy.inputLabels.mode}
+          className={styles.settingsPanel}
+          data-settings-group="capacity"
+          role="group"
+        >
           <fieldset className={styles.modeFieldset}>
             <legend className={styles.modeLegend}>{copy.inputLabels.mode}</legend>
             <div className={styles.modeOptions}>
@@ -1391,100 +1789,7 @@ export function ProcessingComparisonTool({ locale, toolId }: ProcessingCompariso
               </div>
             </>
           ) : null}
-          {!ingredient.hasQualityTiers ? <p className={styles.fieldNote}>{copy.qualityUnavailable}</p> : null}
-          {form.profession === "tiller" ? (
-            <p className={styles.fieldNote}>
-              {tillerBonusEligible ? copy.tillerNote : copy.tillerUnavailable}
-            </p>
-          ) : null}
-          {ingredient.rawArtisanBonusEligible ? <p className={styles.fieldNote}>{copy.rawArtisanNote}</p> : null}
-          {storageError === null ? (
-            <p className={styles.storageStatus} role="status" aria-live="polite">{saveMessage}</p>
-          ) : (
-            <>
-              <p className={styles.storageError} id="processing-comparison-storage-error" role="alert">
-                {saveMessage}
-              </p>
-              {canResetSavedSettings ? (
-                <button
-                  aria-describedby="processing-comparison-storage-error"
-                  className={styles.actionButton}
-                  onClick={resetInvalidSavedSettings}
-                  type="button"
-                >
-                  {copy.resetSavedSettings}
-                </button>
-              ) : null}
-            </>
-          )}
         </div>
-
-        <section aria-labelledby={routeTitleId} className={styles.resultsPanel}>
-          <h2 className={styles.panelTitle} id={routeTitleId}>{copy.resultsTitles[form.mode]}</h2>
-          {form.mode === "capacity" ? <p className={styles.calculationNote}>{copy.capacityAssumption}</p> : null}
-          {numericFieldsInvalid ? <p className={styles.calculationError} role="alert">{copy.invalidDraft}</p> : null}
-          {routes === null ? null : (
-            <>
-              <div className={styles.recommendation}>
-                <p className={styles.recommendationLabel}>{copy.bestRoute}</p>
-                <h3 className={styles.recommendationTitle}>
-                  {bestRoute === null ? copy.sellRawRecommendation : getMachineName(bestRoute.machine, copy)}
-                </h3>
-                {bestRoute === null ? null : (
-                  <p className={styles.recommendationValue}>
-                    {readProductName(bestRoute, locale, copy)} · {formatRouteAddedValue(bestRoute, locale)}
-                  </p>
-                )}
-                {bestRoute === null ? <p className={styles.fieldNote}>{copy.noRoutes}</p> : null}
-              </div>
-              <div className={styles.summaryGrid}>
-                <article className={styles.summaryMetric}>
-                  <p className={styles.metricLabel}>{copy.valueAdded}</p>
-                  <p className={styles.metricValue}>
-                    {bestRoute === null ? formatGold(0, locale) : formatRouteAddedValue(bestRoute, locale)}
-                  </p>
-                </article>
-                <article className={styles.summaryMetric}>
-                  <p className={styles.metricLabel}>{copy.rawSaleValue}</p>
-                  <p className={styles.metricValue}>{formatGold(rawValue ?? 0, locale)}</p>
-                </article>
-              </div>
-              <p className={styles.independentNote}>{copy.independentRoutes}</p>
-              {renderDesktopRouteTable(visibleRoutes, form, locale, copy, bestRoute)}
-              {renderMobileRouteCards(visibleRoutes, form, locale, copy, bestRoute)}
-              <p className={styles.calculationNote}>{copy.calculationExplanation}</p>
-              <p className={styles.calculationNote}>{copy.minutesAndMorningsExplanation}</p>
-              <p className={styles.calculationNote}>{copy.machineDayExplanation}</p>
-            </>
-          )}
-          <div className={styles.actionArea}>
-            <button aria-describedby="processing-comparison-plan-note" className={styles.actionButton} disabled={routes === null} onClick={transferCurrentInventory} type="button">
-              {copy.planButton}
-            </button>
-            <button className={styles.actionButton} disabled={routes === null} onClick={() => void copyCurrentResults()} type="button">
-              {copy.copyButton}
-            </button>
-            <p className={styles.planNote} id="processing-comparison-plan-note">{copy.planUnavailable}</p>
-            {copyStatus === null ? null : (
-              <p className={copyStatus.failed ? styles.storageError : styles.copyStatus} role={copyStatus.failed ? "alert" : "status"}>
-                {copyStatus.message}
-              </p>
-            )}
-          </div>
-          {manualCopyText === null ? null : (
-            <div className={styles.manualCopyPanel}>
-              <label htmlFor="processing-comparison-manual-copy">{copy.manualCopyTextLabel}</label>
-              <textarea
-                className={styles.manualCopyText}
-                id="processing-comparison-manual-copy"
-                readOnly
-                rows={8}
-                spellCheck={false}
-                value={manualCopyText}
-              />
-            </div>
-          )}
-        </section>
       </div>
       <div className={styles.mobileActions}>
         <button aria-describedby="processing-comparison-mobile-plan-note" className={styles.actionButton} disabled={routes === null} onClick={transferCurrentInventory} type="button">
